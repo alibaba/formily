@@ -93,10 +93,10 @@ export const StateForm = createHOC((options, Form) => {
     onFieldChangeHandler(props) {
       return ({ formState }) => {
         if (props.onChange) {
-          const values = clone(formState.values)
+          const values = formState.values
           if (!isEqual(this.lastFormValues, values)) {
             props.onChange(values)
-            this.lastFormValues = values
+            this.lastFormValues = clone(values)
           }
         }
       }

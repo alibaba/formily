@@ -4,11 +4,6 @@
   "env": {
     "es6": true
   },
-  "settings": {
-    "react": {
-      "version": "16.8.2"
-    }
-  },
   "plugins": ["react", "react-hooks"],
   "parserOptions": {
     "ecmaVersion": 6,

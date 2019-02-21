@@ -89,7 +89,7 @@ export const FormButtonGroup = styled(
                   edge='bottom'
                   triggerDistance={this.props.triggerDistance}
                   offsetDistance={this.props.offsetDistance}
-                  zIndex={this.props.zIndex || 10}
+                  zIndex={this.props.zIndex}
                   getStickyBoundary={this.getStickyBoundaryHandler(FormRef)}
                   style={{
                     borderTop: '1px solid #eee',
