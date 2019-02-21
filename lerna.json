@@ -1,0 +1,14 @@
+{
+  "packages": ["packages/*"],
+  "version": "0.1.0",
+  "commands": {
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"]
+    },
+    "publish": {
+      "skipGit": true,
+      "allowBranch": "master",
+      "ignoreChanges": ["*.md"]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+const isType = type => obj =>
+  obj != null && Object.prototype.toString.call(obj) === `[object ${type}]`
+export const isFn = isType('Function')
+export const isArr = Array.isArray || isType('Array')
+export const isPlainObj = isType('Object')
+export const isStr = isType('String')
+export const isObj = val => typeof val === 'object'
+export const isRegExp = isType('RegExp')

@@ -1,0 +1,25 @@
+{
+  "name": "@uform/antd",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/uform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/uform/issues"
+  },
+  "homepage": "https://github.com/alibaba/uform#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "dependencies": {
+    "@uform/react": "^0.1.0",
+    "@uform/utils": "^0.1.0",
+    "classnames": "^2.2.6",
+    "moveto": "^1.7.4",
+    "react-stikky": "^0.1.15",
+    "styled-components": "^4.1.1"
+  }
+}
