@@ -22,5 +22,8 @@
     "react-stikky": "^0.1.15",
     "styled-components": "^4.1.1"
   },
-  "gitHead": "2d04e3720ae95a5044b328ee68925f5d62d75db9"
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
 }
