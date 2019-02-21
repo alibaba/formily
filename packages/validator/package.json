@@ -1,6 +1,6 @@
 {
   "name": "@uform/validator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
-    "@uform/utils": "^0.0.1"
+    "@uform/utils": "^0.0.2"
   },
   "gitHead": "7785026ab1421be7d8a689cac49437bb04bfa1ca"
 }
