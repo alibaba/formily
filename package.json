@@ -16,6 +16,9 @@
     "publish": "npm run build && npm run lint && npm run test && lerna publish",
     "lint": "eslint scripts/ packages/ --ext js,md"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.3.3",
