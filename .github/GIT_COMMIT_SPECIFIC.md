@@ -10,7 +10,6 @@
 
 All lines are wrapped at 100 characters !
 
-
 **Allowed `<type>`**
 
 - feat (A new feature)
