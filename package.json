@@ -13,7 +13,7 @@
     "test": "jest",
     "coverage": "npm run test -- --coverage",
     "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
-    "publish": "npm run build && npm run lint && npm run test && lerna publish",
+    "publish": "npm run build && npm run lint && npm run test && lerna publish -- --access=publish",
     "lint": "eslint scripts/ packages/ --ext js"
   },
   "publishConfig": {
