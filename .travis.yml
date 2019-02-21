@@ -13,5 +13,5 @@ before_script:
   - npm run setup
 
 script:
-  - npm run lint:nofix
+  - npm run lint
   - npm run test
