@@ -2,7 +2,11 @@
   "parser": "babel-eslint",
   "extends": ["standard", "standard-react"],
   "env": {
-    "es6": true
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true,
+    "commonjs": true
   },
   "plugins": ["react", "react-hooks"],
   "parserOptions": {

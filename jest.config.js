@@ -6,6 +6,10 @@
 module.exports = {
   collectCoverage: true,
   verbose: true,
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest'
+  },
   testPathIgnorePatterns: [
     '/node_modules/',
     '/fixtures/',
