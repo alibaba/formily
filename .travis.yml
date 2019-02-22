@@ -1,11 +1,17 @@
-language: node_js
 sudo: required
+
+language: node_js
+
+before_install:
+  - npm i -g npm@6
+
 node_js:
   - "8"
-  - "9"
-  - "10"
-script:
-  - npm install
+  - "11"
+
+before_script:
   - npm run bootstrap
+
+script:
   - npm run lint
   - npm run test
