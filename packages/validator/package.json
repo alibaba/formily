@@ -1,6 +1,6 @@
 {
   "name": "@uform/validator",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
-    "@uform/utils": "^0.1.0-alpha.2"
+    "@uform/utils": "^0.1.0-alpha.3"
   },
   "publishConfig": {
     "access": "public"

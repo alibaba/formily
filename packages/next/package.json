@@ -1,6 +1,6 @@
 {
   "name": "@uform/next",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "@alifd/next": "^1.13.1",
-    "@uform/react": "^0.1.0-alpha.2",
-    "@uform/utils": "^0.1.0-alpha.2",
+    "@uform/react": "^0.1.0-alpha.3",
+    "@uform/utils": "^0.1.0-alpha.3",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
     "react": "^16.8.3",
