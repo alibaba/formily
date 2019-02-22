@@ -4,11 +4,6 @@
   ],
   "version": "0.0.9",
   "command": {
-    "bootstrap": {
-      "npmClientArgs": [
-        "--no-package-lock"
-      ]
-    },
     "publish": {
       "skipGit": true,
       "allowBranch": "master",
