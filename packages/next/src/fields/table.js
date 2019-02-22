@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { registerFormField } from '@uform/react'
 import { isFn, toArr } from '@uform/utils'
-import { Icon } from '@alife/next'
+import { Icon } from '@alifd/next'
 import { ArrayField, CircleButton } from './array'
 import styled from 'styled-components'
 

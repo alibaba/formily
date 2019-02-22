@@ -1,5 +1,5 @@
 import { connect, registerFormField } from '@uform/react'
-import { Checkbox } from '@alife/next'
+import { Checkbox } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../utils'
 
 const { Group: CheckboxGroup } = Checkbox

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect, registerFormField } from '@uform/react'
-import { Input } from '@alife/next'
+import { Input } from '@alifd/next'
 import styled from 'styled-components'
 
 var isNum = function(c) {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { registerFormField } from '@uform/react'
 import { isFn } from '@uform/utils'
-import { Button, Icon } from '@alife/next'
+import { Button, Icon } from '@alifd/next'
 import styled from 'styled-components'
 
 export const CircleButton = styled.div`

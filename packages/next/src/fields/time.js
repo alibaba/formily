@@ -1,5 +1,5 @@
 import { connect, registerFormField } from '@uform/react'
-import { TimePicker } from '@alife/next'
+import { TimePicker } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../utils'
 
 registerFormField(

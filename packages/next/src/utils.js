@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select } from '@alife/next'
+import { Select } from '@alifd/next'
 import styled from 'styled-components'
 import { isFn } from '@uform/utils'
 import MoveTo from 'moveto'

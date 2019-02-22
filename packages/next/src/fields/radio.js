@@ -1,5 +1,5 @@
 import { connect, registerFormField } from '@uform/react'
-import { Radio } from '@alife/next'
+import { Radio } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../utils'
 
 const { Group: RadioGroup } = Radio

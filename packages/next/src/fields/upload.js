@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
-import { Button, Upload } from '@alife/next'
+import { Button, Upload } from '@alifd/next'
 const { Card: UploadCard, Dragger: UploadDragger } = Upload
 
 const exts = [

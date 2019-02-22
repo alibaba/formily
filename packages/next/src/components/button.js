@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormConsumer } from '@uform/react'
-import { Button } from '@alife/next'
+import { Button } from '@alifd/next'
 
 export const Submit = ({ showLoading, ...props }) => {
   return (

@@ -1,5 +1,5 @@
 import { connect, registerFormField } from '@uform/react'
-import { Range } from '@alife/next'
+import { Range } from '@alifd/next'
 import { mapStyledProps } from '../utils'
 
 registerFormField(

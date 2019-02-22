@@ -1,5 +1,5 @@
 import { connect, registerFormField } from '@uform/react'
-import { DatePicker } from '@alife/next'
+import { DatePicker } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../utils'
 
 const { RangePicker, MonthPicker, YearPicker } = DatePicker

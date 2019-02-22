@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Row, Col } from '@alife/next/lib/grid'
+import { Row, Col } from '@alifd/next/lib/grid'
 import { FormConsumer } from '../form'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
