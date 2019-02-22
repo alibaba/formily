@@ -473,8 +473,8 @@ function _existIn(obj, path) {
 
   return true
 }
-
 export const getIn = resolveGetIn(_getIn)
 export const setIn = resolveUpdateIn(_setIn, getIn)
 export const deleteIn = resolveUpdateIn(_deleteIn, getIn)
 export const existIn = resolveExistIn(_existIn)
+export { parseDesturctPath, parseDestruct, parsePaths }
