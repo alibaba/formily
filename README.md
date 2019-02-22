@@ -1,4 +1,14 @@
-# UForm
+<p align="center">
+<img src="https://img.alicdn.com/tfs/TB1NkS5IlLoK1RjSZFuXXXn0XXa-1400-886.png">
+<a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
+<a href="https://www.npmjs.com/package/@uform/antd"><img src="https://img.shields.io/npm/v/@uform/antd.svg"></a>
+<a href="https://www.npmjs.com/package/@uform/next"><img src="https://img.shields.io/npm/v/@uform/next.svg"></a>
+<a href="https://travis-ci.com/alibaba/uform"><img src="https://travis-ci.com/alibaba/uform.svg?branch=master"></a>
+<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
+</p>
+<p></p>
+---
+<p></p>
 
 > 面向复杂场景的中后台表单解决方案
 >
