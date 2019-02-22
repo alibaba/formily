@@ -104,7 +104,7 @@ const watchCompliePackages = async () => {
     })
 }
 
-if (process.argv.indexOf('--watch')) {
+if (process.argv.indexOf('--watch') > -1) {
   watchCompliePackages()
 } else {
   compliePackages()
