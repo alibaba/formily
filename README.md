@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://img.alicdn.com/tfs/TB1NkS5IlLoK1RjSZFuXXXn0XXa-1400-886.png">
+<img src="https://img.alicdn.com/tfs/TB1Tw1_ImzqK1RjSZFLXXcn2XXa-1400-797.png">
 <a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
 <a href="https://www.npmjs.com/package/@uform/antd"><img src="https://img.shields.io/npm/v/@uform/antd.svg"></a>
 <a href="https://www.npmjs.com/package/@uform/next"><img src="https://img.shields.io/npm/v/@uform/next.svg"></a>
