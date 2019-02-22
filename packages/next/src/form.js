@@ -248,15 +248,15 @@ registerFormWrapper(OriginForm => {
       background: none;
     }
     .next-rating-medium {
-      height: 28px;
+      min-height: 28px;
       line-height: 28px;
     }
     .next-rating-small {
-      height: 20px;
+      min-height: 20px;
       line-height: 20px;
     }
     .next-rating-large {
-      height: 40px;
+      min-height: 40px;
       line-height: 40px;
     }
   `

@@ -279,7 +279,7 @@ registerFormWrapper(OriginForm => {
       .ant-radio-group,
       .ant-checkbox-group {
         line-height: 24px;
-        height: 24px;
+        min-height: 24px;
       }
     }
     .ant-large {
@@ -289,7 +289,7 @@ registerFormWrapper(OriginForm => {
       .ant-radio-group,
       .ant-checkbox-group {
         line-height: 40px;
-        height: 40px;
+        min-height: 40px;
       }
     }
     .ant-form-item-label label[required]:before {
@@ -336,15 +336,15 @@ registerFormWrapper(OriginForm => {
       }
     }
     .ant-rating-medium {
-      height: 30px;
+      min-height: 30px;
       line-height: 30px;
     }
     .ant-rating-small {
-      height: 24px;
+      min-height: 24px;
       line-height: 24px;
     }
     .ant-rating-large {
-      height: 40px;
+      min-height: 40px;
       line-height: 40px;
     }
   `

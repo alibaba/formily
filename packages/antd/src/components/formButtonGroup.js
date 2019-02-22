@@ -6,6 +6,13 @@ import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
 
+const getAlign = align => {
+  if (align === 'start' || align === 'end') return align
+  if (align === 'left' || align === 'top') return 'start'
+  if (align === 'right' || align === 'bottom') return 'end'
+  return align
+}
+
 const isElementInViewport = (rect, { offset = 0, threshold = 0 } = {}) => {
   const { top, right, bottom, left, width, height } = rect
   const intersection = {
@@ -112,7 +119,7 @@ export const FormButtonGroup = styled(
   }
 )`
   ${props =>
-    props.align ? `display:flex;justify-content: ${props.align}` : ''}
+    props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : ''}
   &.is-inline {
     display: inline-block;
     flex-grow: 3;
