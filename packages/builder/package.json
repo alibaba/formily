@@ -1,0 +1,48 @@
+{
+  "name": "@uform/builder",
+  "version": "0.0.6",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/uform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/uform/issues"
+  },
+  "homepage": "https://github.com/alibaba/uform#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "dependencies": {
+    "react": "^16.8.2",
+    "react-dom": "^16.7.0",
+    "moment": "^2.24.0",
+    "@uform/react": "^0.0.9",
+    "@uform/utils": "^0.0.9",
+    "@uform/validator": "^0.0.9",
+    "pascal-case": "^2.0.1",
+    "react-eva": "^1.0.0",
+    "classnames": "^2.2.5",
+    "lodash.isequal": "^4.5.0",
+    "lodash.merge": "^4.6.1",
+    "lodash.pick": "^4.4.0",
+    "lodash.pickby": "^4.6.0",
+    "lodash.remove": "^4.7.0",
+    "lodash.uniqby": "^4.7.0",
+    "monaco-editor": "^0.15.6",
+    "prop-types": "^15.6.1",
+    "react-powerplug": "^1.0.0",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "styled-components": "^4.1.2",
+    "uuid": "^3.2.1",
+    "@alifd/next": "^1.13.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
+}
