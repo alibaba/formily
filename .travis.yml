@@ -1,13 +1,9 @@
-sudo: required
-
 language: node_js
-
-before_install:
-  - npm i -g npm@5
 
 node_js:
   - "8"
-  - "11"
+  - "9"
+  - "10"
 
 before_script:
   - npm run bootstrap
