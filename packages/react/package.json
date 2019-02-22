@@ -18,6 +18,8 @@
     "@uform/core": "^0.0.7",
     "@uform/utils": "^0.0.7",
     "pascal-case": "^2.0.1",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
     "react-eva": "^1.0.0"
   },
   "publishConfig": {

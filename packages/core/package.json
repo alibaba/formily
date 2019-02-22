@@ -19,6 +19,7 @@
     "@uform/validator": "^0.0.7",
     "dot-match": "^0.1.18",
     "immer": "^1.7.4",
+    "react-dom": "^16.8.3",
     "rxjs": "^6.3.3",
     "scheduler": "^0.11.2"
   },
