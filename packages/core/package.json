@@ -1,6 +1,6 @@
 {
   "name": "@uform/core",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -15,8 +15,8 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
-    "@uform/utils": "^0.1.0-alpha.1",
-    "@uform/validator": "^0.1.0-alpha.1",
+    "@uform/utils": "^0.1.0-alpha.2",
+    "@uform/validator": "^0.1.0-alpha.2",
     "dot-match": "^0.1.18",
     "immer": "^1.7.4",
     "react-dom": "^16.8.3",
