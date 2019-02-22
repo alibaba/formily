@@ -2,7 +2,7 @@
   "name": "@uform/utils",
   "version": "0.1.0-alpha.1",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
