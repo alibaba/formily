@@ -13,6 +13,5 @@ before_script:
   - npm run bootstrap
 
 script:
-  - npm run build
   - npm run lint
   - npm run test

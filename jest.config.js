@@ -6,18 +6,18 @@
 module.exports = {
   collectCoverage: true,
   verbose: true,
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.jsx?$': 'babel-jest'
   },
-  testPathIgnorePatterns: [
+  setupFilesAfterEnv: [
+    require.resolve('jest-dom/extend-expect'),
+    require.resolve('react-testing-library/cleanup-after-each'),
+    './scripts/global.js'
+  ],
+  coveragePathIgnorePatterns: [
     '/node_modules/',
-    '/fixtures/',
-    '/__modules__/',
-    '/__files__/',
-    '/lib/',
-    '/dist/',
-    'sfc-loader',
-    'atag'
+    'package.json',
+    'package-lock.json'
   ]
 }
