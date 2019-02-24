@@ -18,21 +18,21 @@ export default {
     zip: '%s is not a zip format'
   },
   zh: {
-    pattern: '%s 不是一个合法的字段',
-    required: '%s 是必填字段',
-    number: '%s 不是合法的数字',
-    integer: '%s 不是合法的整型数字',
-    url: '%s 不是合法的url',
-    email: '%s 不是合法的邮箱格式',
-    ipv6: '%s 不是合法的ipv6格式',
-    ipv4: '%s 不是合法的ipv4格式',
-    idcard: '%s 不是合法的身份证格式',
-    taodomain: '%s 不符合淘系域名规则',
-    qq: '%s 不符合QQ号格式',
-    phone: '%s 不是有效的手机号',
-    money: '%s 不是有效货币格式',
-    zh: '%s 不是合法的中文字符串',
-    date: '%s 不是合法的日期格式',
-    zip: '%s 不是合法的邮编格式'
+    pattern: '该字段不是一个合法的字段',
+    required: '该字段是必填字段',
+    number: '该字段不是合法的数字',
+    integer: '该字段不是合法的整型数字',
+    url: '该字段不是合法的url',
+    email: '该字段不是合法的邮箱格式',
+    ipv6: '该字段不是合法的ipv6格式',
+    ipv4: '该字段不是合法的ipv4格式',
+    idcard: '该字段不是合法的身份证格式',
+    taodomain: '该字段不符合淘系域名规则',
+    qq: '该字段不符合QQ号格式',
+    phone: '该字段不是有效的手机号',
+    money: '该字段不是有效货币格式',
+    zh: '该字段不是合法的中文字符串',
+    date: '该字段不是合法的日期格式',
+    zip: '该字段不是合法的邮编格式'
   }
 }

@@ -16,6 +16,9 @@
       "jsx": true
     }
   },
+  "globals": {
+    "sleep": true
+  },
   "rules": {
     // don't force es6 functions to include space before paren
     "space-before-function-paren": 0,

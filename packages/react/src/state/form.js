@@ -185,7 +185,11 @@ export const StateForm = createHOC((options, Form) => {
         e.stopPropagation()
         e.preventDefault()
       }
-      this.form.submit()
+      this.form.submit().catch(e => {
+        if (console && console.error) {
+          console.error(e)
+        }
+      })
     }
 
     getValues = () => {

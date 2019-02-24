@@ -562,13 +562,14 @@ export class Form {
   }
 
   submit() {
-    return this.validate().then(formState => {
-      this.triggerEffect('onFormSubmit', formState)
-      if (isFn(this.options.onSubmit)) {
-        this.options.onSubmit({ formState })
-      }
-      return formState
-    })
+    return this.validate()
+      .then(formState => {
+        this.triggerEffect('onFormSubmit', formState)
+        if (isFn(this.options.onSubmit)) {
+          this.options.onSubmit({ formState })
+        }
+        return formState
+      })
   }
 
   subscribe(callback) {

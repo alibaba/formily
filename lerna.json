@@ -2,13 +2,8 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.0.9",
+  "version": "0.1.0-alpha.3",
   "command": {
-    "bootstrap": {
-      "npmClientArgs": [
-        "--no-package-lock"
-      ]
-    },
     "publish": {
       "skipGit": true,
       "allowBranch": "master",

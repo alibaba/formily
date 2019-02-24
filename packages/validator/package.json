@@ -1,8 +1,8 @@
 {
   "name": "@uform/validator",
-  "version": "0.0.9",
+  "version": "0.1.0-alpha.3",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
-    "@uform/utils": "^0.0.9"
+    "@uform/utils": "^0.1.0-alpha.3"
   },
   "publishConfig": {
     "access": "public"
