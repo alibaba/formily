@@ -1,4 +1,4 @@
-import { normalizeSchema } from './lang'
+import { normalizeSchema } from '../utils/lang'
 
 test('should correct normalize schema', () => {
   var schema = {

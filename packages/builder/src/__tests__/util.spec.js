@@ -3,7 +3,7 @@ import {
   wrapSubmitSchema,
   flatObj,
   checkRepeatId
-} from './util'
+} from '../utils/util'
 
 test('should correct getCompDetailById', () => {
   var schema = {
