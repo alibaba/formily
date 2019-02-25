@@ -7,6 +7,7 @@ import { Header } from '../../utils/util'
 import { connect } from 'react-redux'
 import { addComponentAndEdit } from '../../actions'
 import styled from 'styled-components'
+import { layoutStyle } from './style'
 
 class Component extends React.Component {
   static propTypes = {
@@ -63,40 +64,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const StyledComponent = styled(Component)`
-  .layout-list {
-    margin-bottom: 15px;
-    padding: 0 8px;
-    font-size: 0;
-    li {
-      overflow: hidden;
-      margin-right: 7px;
-      width: 70px;
-      height: 90px;
-      line-height: 90px;
-      border-radius: 4px;
-      display: inline-block;
-      font-size: 12px;
-      text-align: center;
-      background: ${props => props.theme.compHoverBgColor};
-      color: ${props => props.theme.whiteColor};
-      border: 1px solid ${props => props.theme.compHoverBgColor};
-      box-sizing: border-box;
-      transition: all 0.1s ease;
-      cursor: pointer;
-      &:hover {
-        background: ${props => props.theme.compHoverBgColor};
-        border-color: ${props => props.theme.whiteColor};
-      }
-      &:nth-child(3n) {
-        margin-right: 0;
-      }
-      span {
-        display: block;
-        margin: auto;
-        word-break: break-all;
-      }
-    }
-  }
+  ${layoutStyle}
 `
 
 class StyledLayoutListComp extends React.Component {

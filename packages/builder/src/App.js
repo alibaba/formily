@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import cls from 'classnames'
 import PropTypes from 'prop-types'
-import { Button, Accordion } from '@alifd/next'
-import { SchemaForm, Field } from './utils/baseForm'
+import { SchemaForm } from './utils/baseForm'
 import { connect } from 'react-redux'
 import {
   changePreview,
@@ -12,17 +11,17 @@ import {
   changeComponent,
   editComponent
 } from './actions'
-import { wrapSubmitSchema, CustomIcon, Divider } from './utils/util'
-import defaultGlobalCfgList from './configs/supportGlobalCfgList'
+import { Divider } from './utils/util'
+
 import isEqual from 'lodash.isequal'
 import styled from 'styled-components'
-import { GLOBAL_BTN_ICON_URL } from './configs/theme'
-import merge from 'lodash.merge'
+import appStyle from './style'
 
 // components
 import FieldList from './components/fields/index'
 import Preview from './components/preview/index'
-import PropsSetting from './components/props/index'
+import AccordionList from './components/props/accordList'
+import generateGlobalBtnList from './components/globalBtnList/index'
 
 const noop = () => {}
 
@@ -30,15 +29,8 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      accordionList: [],
       systemError: false
     }
-  }
-
-  componentDidMount() {
-    this.setState({
-      accordionList: this.getAccordList()
-    })
   }
 
   componentWillMount() {
@@ -86,68 +78,6 @@ class App extends Component {
     this.setState({
       systemError: true
     })
-  }
-
-  generateGlobalCfgList = () => {
-    // Merge custom form global property configuration
-    const globalCfgList = [
-      ...defaultGlobalCfgList,
-      ...this.props.extraGlobalCfgList
-    ]
-    const _globalCfgList = []
-    for (let i = globalCfgList.length - 1; i >= 0; i--) {
-      if (
-        !_globalCfgList.find(cfgItem => cfgItem.name === globalCfgList[i].name)
-      ) {
-        _globalCfgList.unshift(globalCfgList[i])
-      }
-    }
-    return _globalCfgList
-  }
-
-  // global config
-  renderGlobalConfig = () => {
-    const globalCfgList = this.generateGlobalCfgList()
-    const content = (
-      <SchemaForm
-        onChange={value => {
-          this.props.changeGbConfig(value)
-        }}
-        defaultValue={this.props.gbConfig}
-        labelAlign='left'
-        labelTextAlign='left'
-      >
-        {globalCfgList.map(props => (
-          <Field {...props} key={props.name} x-item-props={{ labelCol: 10 }} />
-        ))}
-      </SchemaForm>
-    )
-
-    return content
-  }
-
-  getAccordList() {
-    const list = [
-      {
-        title: '组件配置',
-        content: (
-          <PropsSetting
-            supportConfigList={this.props.supportConfigList}
-            renderEngine={this.props.renderEngine}
-          />
-        ),
-        expanded: true
-      }
-    ]
-
-    if (this.props.showGlobalCfg) {
-      list.unshift({
-        title: '全局配置',
-        content: this.renderGlobalConfig(),
-        expanded: true
-      })
-    }
-    return list
   }
 
   // dynamic import layout component
@@ -204,113 +134,7 @@ class App extends Component {
   }
 
   renderGlobalBtnList() {
-    const {
-      preview,
-      codemode,
-      onSubmit,
-      themeStyle,
-      changeCodeMode: _changeCodeMode,
-      globalButtonList,
-      showPreviewBtn,
-      showSourceCodeBtn
-    } = this.props
-
-    // 获取主题下的默认icon图片地址
-    const globalBtnIconUrlWithTheme = GLOBAL_BTN_ICON_URL[themeStyle]
-
-    // 默认按钮
-    const defaultBtnList = [
-      {
-        key: 'preview',
-        show: showPreviewBtn,
-        title: preview ? '返回编辑' : '预览',
-        props: {
-          onClick: () => {
-            this.props.changePreview(!this.props.preview)
-          }
-        },
-        iconType: 'eye',
-        iconUrl: globalBtnIconUrlWithTheme.preview,
-        iconWidth: 16,
-        iconHeight: 16
-      },
-      {
-        key: 'submit',
-        title: '保存',
-        props: {
-          type: 'primary',
-          onClick: () => {
-            onSubmit &&
-              typeof onSubmit === 'function' &&
-              onSubmit({
-                schema: wrapSubmitSchema(this.props.initSchemaData),
-                globalCfg: this.props.gbConfig
-              })
-          }
-        },
-        iconType: 'save',
-        iconUrl: globalBtnIconUrlWithTheme.submit,
-        iconWidth: 15,
-        iconHeight: 15
-      },
-      {
-        key: 'code',
-        show: showSourceCodeBtn,
-        title: codemode ? '关闭源码' : '源码',
-        props: {
-          onClick: () => {
-            _changeCodeMode(!this.props.codemode)
-          }
-        },
-        iconUrl: globalBtnIconUrlWithTheme.code,
-        iconWidth: 21,
-        iconHeight: 16
-      }
-    ]
-
-    // 合并相同key的数据
-    const _globalButtonList = defaultBtnList.map(btnItem => {
-      const { key } = btnItem
-      const customBtnItem = globalButtonList.find(btn => btn.key === key)
-      return customBtnItem ? merge({}, btnItem, customBtnItem) : btnItem
-    })
-
-    // 注入额外的数据
-    globalButtonList.forEach(btnItem => {
-      if (['preview', 'submit', 'preview'].indexOf(btnItem.key) === -1) {
-        _globalButtonList.push(btnItem)
-      }
-    })
-
-    return _globalButtonList.map(btnItem => {
-      const {
-        props = {},
-        key,
-        show = true,
-        title,
-        iconUrl,
-        iconWidth,
-        iconHeight,
-        render
-      } = btnItem
-
-      if (!title || !show || !key) return null
-
-      const customIconTpl = iconUrl ? (
-        <CustomIcon iconUrl={iconUrl} width={iconWidth} height={iconHeight} />
-      ) : null
-
-      const originalBtn = (
-        <Button key={key} {...props}>
-          {customIconTpl}
-          <span>{title}</span>
-        </Button>
-      )
-
-      return render
-        ? React.createElement(render, btnItem, originalBtn)
-        : originalBtn
-    })
+    return generateGlobalBtnList(this.props)
   }
 
   render() {
@@ -349,14 +173,7 @@ class App extends Component {
             <Preview schema={initSchemaData} renderEngine={renderEngine} />
           </div>
           <div className='content-col content-col-right'>
-            <Accordion
-              dataSource={this.state.accordionList}
-              onChange={(status, list) => {
-                this.setState({
-                  accordionList: list
-                })
-              }}
-            />
+            <AccordionList {...this.props} />
           </div>
         </div>
         {this.getEditorTpl()}
@@ -365,7 +182,6 @@ class App extends Component {
   }
 }
 
-/* eslint-disable */
 App.propTypes = {
   // 左上角返回按钮事件绑定
   onBackBtnClick: PropTypes.func,
@@ -420,7 +236,6 @@ App.defaultProps = {
   showPreviewBtn: true,
   globalButtonList: []
 }
-/* eslint-enable */
 
 const mapStateToProps = state => state
 
@@ -435,168 +250,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const StyledApp = styled(App)`
-  position: relative;
-  min-width: 600px;
-  overflow: hidden;
-  .next-form-item {
-    margin-bottom: 0;
-  }
-  .next-checkbox-label {
-    color: ${props => props.theme.whiteColor};
-  }
-  .schemaform-header {
-    position: relative;
-    height: 64px;
-    background: ${props => props.theme.headerBgColor};
-    overflow: hidden;
-    &::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.15), 0 0 16px 0 rgba(0, 0, 0, 0.15);
-    z-index: 2;
-
-  }
-  .schemaform-back {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 64px;
-    height: 100%;
-    text-indent: -999em;
-    &::before {
-      content: "";
-      position: absolute;
-      left: 27px;
-      top: 24px;
-      width: 9px;
-      height: 17px;
-      background: url('${props =>
-    props.theme.backIconUrl}') no-repeat center center;
-      background-size: 9px 17px;
-    }
-    &::after {
-      content: "";
-      position: absolute;
-      top: 20px;
-      right: 0;
-      height: 24px;
-      width: 1px;
-      background: ${props => props.theme.backDividerBgColor};
-      box-shadow: ${props => props.theme.backDividerShadow};
-    }
-  }
-  h1 {
-    position: absolute;
-    left: 88px;
-    top: 0;
-    margin: 0;
-    font-size: 24px;
-    font-weight: normal;
-    line-height: 64px;
-    color: ${props => props.theme.whiteColor};
-  }
-  .schemaform-header-btns {
-    float: right;
-    margin: 14px 24px 0 0;
-    button {
-      margin-left: 24px;
-      height: 36px;
-      line-height: 36px;
-      background: ${props => props.theme.btnNormalBgColor};
-      color: ${props => props.theme.whiteColor};
-      border: none;
-      box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
-      &.next-btn-primary {
-        background: ${props => props.theme.btnPrimaryBgColor};
-        color: ${props => props.theme.btnPrimaryTxtColor};
-      }
-    }
-  }
-  .schamaform-content {
-    position: relative;
-    overflow: hidden;
-    padding: 0 340px 0 240px;
-    min-height: 700px;
-
-    &::after {
-      content: "";
-      clear: both;
-      display: table;      
-    }
-    .content-col-left {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 240px;
-      overflow-y: scroll;
-      background: ${props => props.theme.leftColBgColor};
-    }
-    .content-col-right {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 340px;
-      bottom: 0;
-      background: ${props => props.theme.rightColBgColor};
-      overflow-y: scroll;
-    }
-    .content-col-main {  
-      position: relative;
-      height: 100%;
-      background: ${props => props.theme.mainColBgColor};
-      overflow-y: scroll;
-    }
-  }
-  // 复写文件上传组件宽度
-  .next-upload-list-text .next-upload-list-item {
-    max-width: 200px;
-  }  
-  .schema-form-container .next-form-top .next-form-item-label {
-    margin-bottom: 0 !important;
-  }
-  .next-accordion {
-    border: none;
-  }
-  .next-accordion-section-title {
-    background: none;
-    user-select: none;
-    color: ${props => props.theme.whiteColor};
-    border: none;
-    &:hover {
-      background: none;
-    }
-  }
-  .next-accordion-section {
-    position: relative;
-    &::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-      height: 1px;
-      background: ${props => props.theme.dividerBgColor};
-      box-shadow: ${props => props.theme.dividerShadow};
-    }
-    &:last-child {
-      &::after {
-        display: none;
-      }
-    }
-  }
-  .next-accordion-section-content {
-    background: none;
-    .next-form-left .next-form-item-label, .next-radio-group .next-radio-label {
-      color: ${props => props.theme.whiteColor};
-      font-size: 12px;
-    }
-  }
-  .next-accordion .next-accordion-icon:before {
-    color: ${props => props.theme.whiteColor};
-  }  
+  ${appStyle}
 `
 
 class StyledAppComp extends React.Component {

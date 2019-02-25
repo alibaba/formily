@@ -10,11 +10,10 @@ import {
 import { State } from 'react-powerplug'
 import { getCompDetailById, flatObj } from '../../utils/util'
 import styled from 'styled-components'
+import propsStyle from './style'
 
-// 定制属性
 import FileSetting from './fileSetting'
 
-// 定制组件
 import './defaultValueCascader/index'
 import './dataSourceEditor/index'
 
@@ -26,7 +25,6 @@ class PropsSetting extends Component {
     componentId: PropTypes.string,
     editComponent: PropTypes.func,
     editComponentProps: PropTypes.func,
-    // eslint-disable-next-line
     componentProps: PropTypes.object
   }
 
@@ -101,16 +99,12 @@ class PropsSetting extends Component {
     return result
   }
 
-  /**
-   * 更新组件属性数据
-   */
   updateComponentPropsData = (componentId, propsData) => {
     const { layoutId } = this.props
     this.props.editComponent(componentId, propsData, layoutId)
     this.props.editComponentProps(componentId, propsData)
   }
 
-  // 生成form的schema
   generatePropsSchema() {
     const {
       initSchemaData = {},
@@ -161,7 +155,6 @@ class PropsSetting extends Component {
 
     if (!componentId) { return <p className='props-tips'>请选择待编辑的表单字段</p> }
 
-    /* eslint-disable */
     return (
       <State initial={{ visible: false }}>
         {({ state, setState }) => (
@@ -193,8 +186,8 @@ class PropsSetting extends Component {
             value={this.getSchemaValue()}
             onChange={this.onChangeHandler}
             schema={this.generatePropsSchema()}
-            labelAlign="left"
-            labelTextAlign="left"
+            labelAlign='left'
+            labelTextAlign='left'
             labelCol={8}
           >
             {' '}
@@ -202,7 +195,6 @@ class PropsSetting extends Component {
         )}
       </State>
     )
-    /* eslint-enable */
   }
 
   renderOptions() {
@@ -254,62 +246,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 const StyledPropsSetting = styled(PropsSetting)`
-  .schema-form-container .schema-form-content > .schema-form-field {
-    &.option-item {
-      padding: 10px !important;
-      border: 1px solid transparent;
-      white-space: nowrap;
-      .option-item-row {
-        &:last-child {
-          margin-bottom: 0 !important;
-        }
-      }
-      &.hover {
-        border-color: #ccc;
-      }
-      &.active {
-        border-color: #419bf9;
-        background: rgba(16, 141, 233, 0.1);
-      }
-    }
-    .option-action {
-      position: relative;
-      z-index: 1000;
-      display: inline-block;
-      padding: 3px 8px;
-      vertical-align: middle;
-      cursor: pointer;
-      &.option-del {
-        &::after {
-          content: '';
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translate3d(0, -50%, 0);
-          width: 1px;
-          height: 15px;
-          background: #ccc;
-        }
-      }
-    }
-  }
-
-  .props-tips {
-    padding-top: 60px;
-    text-align: center;
-    color: #999;
-  }
-
-  .schema-form-container
-    .schema-form-field.schema-object
-    .schema-object-item
-    > .next-form-item-label {
-    font-size: 14px !important;
-    font-weight: normal !important;
-    margin-top: 0 !important;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-  }
+  ${propsStyle}
 `
 
 class StyledPropsSettingComp extends React.Component {
