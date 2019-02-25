@@ -1,4 +1,4 @@
-import { runValidation } from '../'
+import { runValidation } from '../index'
 
 const testResponse = (response, tester) => {
   response.forEach(item => {

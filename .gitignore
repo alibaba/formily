@@ -11,3 +11,4 @@ coverage/
 node_modules/
 examples/test
 .idea/
+.vscode/
