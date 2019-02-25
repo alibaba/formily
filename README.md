@@ -127,8 +127,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/janryWang"><img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub></a><br /><a href="#design-janryWang" title="Design">🎨</a></td></tr></table>
-
+| [<img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub>](https://github.com/janryWang)<br />[🎨](#design-janryWang "Design") | [<img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub>](http://cnt1992.github.io)<br />[🎨](#design-cnt1992 "Design") |
+| :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
