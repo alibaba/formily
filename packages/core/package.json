@@ -15,8 +15,8 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
-    "@uform/utils": "^0.1.0-alpha.5",
-    "@uform/validator": "^0.1.0-alpha.5",
+    "@uform/utils": "^0.1.0-alpha.6",
+    "@uform/validator": "^0.1.0-alpha.6",
     "dot-match": "^0.1.18",
     "immer": "^1.7.4",
     "rxjs": "^6.3.3",
