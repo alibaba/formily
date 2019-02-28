@@ -7,15 +7,14 @@ import {
   toArr,
   isStr,
   hasRequired,
-  resolveFieldPath
+  resolveFieldPath,
+  isEmpty
 } from './utils'
 import produce, { setAutoFreeze } from 'immer'
 
 const filterSchema = (_, key) => key !== 'properties' && key !== 'items'
 
 setAutoFreeze(false)
-
-const isValid = val => val !== undefined
 
 export class Field {
   constructor(context, options) {
@@ -38,26 +37,25 @@ export class Field {
   initialize(options) {
     if (this.initialized) {
       this.value = options.value
-      if (isValid(options.initialValue)) {
+      if (!isEmpty(options.initialValue)) {
         this.initialValue = clone(options.initialValue)
       }
     } else {
       this.value = options.value
       this.initialValue = options.initialValue
     }
-    this.name = isValid(options.name) ? options.name : this.name
+    this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
     this.editable = this.getEditable(options.editable)
     this.path = resolveFieldPath(
-      isValid(options.path) ? options.path : this.path
+      !isEmpty(options.path) ? options.path : this.path || []
     )
-    this.rules = isValid(options.rules) ? clone(options.rules) : this.rules
+    this.rules = !isEmpty(options.rules) ? clone(options.rules) : this.rules
     this.required = hasRequired(this.rules)
 
-    this.props = clone(
-      isValid(options.props) ? options.props : this.props,
-      filterSchema
-    )
+    this.props = isEmpty(options.props)
+      ? clone(this.props, filterSchema)
+      : clone({ ...this.props, ...options.props }, filterSchema)
 
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
