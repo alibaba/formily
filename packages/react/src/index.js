@@ -13,12 +13,12 @@ import { SchemaField, SchemaMarkup } from './decorators/markup'
 import { setLocale, setLanguage } from '@uform/validator'
 import { FormPath } from '@uform/core'
 import { createActions } from 'react-eva'
-import './state'
-import './shared/object'
-import './shared/render'
+import initialize from './initialize'
 export * from './shared/virtualbox'
 export * from './decorators/connect'
 export * from './shared/broadcast'
+
+initialize()
 
 export const SchemaForm = SchemaMarkup()(
   React.forwardRef((props, ref) => {

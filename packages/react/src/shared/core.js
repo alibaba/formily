@@ -2,20 +2,28 @@ import React, { useContext } from 'react'
 import pascalCase from 'pascal-case'
 import { isFn, isStr, lowercase, each, compose } from '../utils'
 import { StateContext } from './context'
-let FIELD_WRAPPERS = []
-let FORM_FIELDS = {}
-let FIELD_PROPS_TRANSFORMERS = {}
+let FIELD_WRAPPERS
+let FORM_FIELDS
+let FIELD_PROPS_TRANSFORMERS
 let FIELD_RENDERER
-let FORM_COMPONENT = class extends React.Component {
-  render() {
-    const { formRef, ...props } = this.props
-    return React.createElement('form', {
-      ...props,
-      ref: formRef
-    })
+let FORM_COMPONENT
+
+export const initialContainer = () => {
+  FIELD_WRAPPERS = []
+  FORM_FIELDS = {}
+  FIELD_PROPS_TRANSFORMERS = {}
+  FIELD_RENDERER = undefined
+  FORM_COMPONENT = class extends React.Component {
+    render() {
+      const { formRef, ...props } = this.props
+      return React.createElement('form', {
+        ...props,
+        ref: formRef
+      })
+    }
   }
+  FORM_COMPONENT.displayName = 'Form'
 }
-FORM_COMPONENT.displayName = 'Form'
 
 export const registerFormField = (name, component, notWrapper) => {
   if (

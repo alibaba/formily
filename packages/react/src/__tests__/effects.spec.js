@@ -6,7 +6,7 @@ import SchemaForm, {
   registerFieldMiddleware,
   createFormActions
 } from '../index'
-import { render } from 'react-testing-library'
+import { render, fireEvent } from 'react-testing-library'
 
 beforeEach(() => {
   registerFieldMiddleware(Field => {
@@ -15,6 +15,11 @@ beforeEach(() => {
         <div>
           {props.schema.title}
           <Field {...props} />
+          {props.errors && props.errors.length ? (
+            <div data-testid={`test-errors`}>{props.errors}</div>
+          ) : (
+            ''
+          )}
         </div>
       )
     }
@@ -34,6 +39,12 @@ test('onFormInit setFieldState', async () => {
         $('onFormInit').subscribe(() => {
           setFieldState('aaa', state => {
             state.props.title = 'text'
+            state.rules = [
+              {
+                required: true,
+                message: 'field is required'
+              }
+            ]
           })
         })
       }}
@@ -45,8 +56,20 @@ test('onFormInit setFieldState', async () => {
     </SchemaForm>
   )
 
-  const { getByText } = render(<TestComponent />)
+  const { getByText, getAllByTestId, queryByText } = render(<TestComponent />)
 
   await sleep(100)
   expect(getByText('text')).toBeVisible()
+  await sleep(100)
+  fireEvent.click(getAllByTestId('btn')[1])
+  await sleep(100)
+  expect(getByText('field is required')).toBeVisible()
+  await sleep(100)
+  actions.setFieldState('aaa', state => {
+    state.rules = []
+  })
+  await sleep(100)
+  fireEvent.click(getAllByTestId('btn')[1])
+  await sleep(100)
+  expect(queryByText('field is required')).toBeNull()
 })

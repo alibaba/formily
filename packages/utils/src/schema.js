@@ -29,7 +29,7 @@ export const isVirtualBox = name => {
   return !!VIRTUAL_BOXES[name]
 }
 
-export const registerVirtualbox = name => {
+export const registerVirtualboxFlag = name => {
   VIRTUAL_BOXES[name] = true
 }
 

@@ -2,11 +2,11 @@ import React from 'react'
 import { registerFormField, FormField } from './core'
 import { SchemaField } from '../decorators/markup'
 import { StateField } from '../state/field'
-import { registerVirtualbox } from '../utils'
+import { registerVirtualboxFlag } from '../utils'
 import pascalCase from 'pascal-case'
 
 export const createVirtualBox = (name, component) => {
-  registerVirtualbox(name)
+  registerVirtualboxFlag(name)
   registerFormField(
     name,
     StateField()(
@@ -57,21 +57,6 @@ export const createVirtualBox = (name, component) => {
 
   return VirtualBox
 }
-
-registerVirtualbox('slot')
-
-registerFormField(
-  'slot',
-  StateField()(
-    class extends React.Component {
-      static displayName = 'VirtualBoxWrapper'
-      render() {
-        const { schema } = this.props
-        return <React.Fragment>{schema.renderChildren}</React.Fragment>
-      }
-    }
-  )
-)
 
 export const FormSlot = ({ name, children }) => {
   return (
