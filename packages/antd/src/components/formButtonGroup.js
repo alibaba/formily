@@ -8,8 +8,8 @@ import styled from 'styled-components'
 
 const getAlign = align => {
   if (align === 'start' || align === 'end') return align
-  if (align === 'left' || align === 'top') return 'start'
-  if (align === 'right' || align === 'bottom') return 'end'
+  if (align === 'left' || align === 'top') return 'flex-start'
+  if (align === 'right' || align === 'bottom') return 'flex-end'
   return align
 }
 
