@@ -246,12 +246,6 @@ export class Field {
       this.dirty = true
     }
 
-    if (published.editable !== this.editable) {
-      this.editable = published.editable
-      this.dirtyType = 'editable'
-      this.dirty = true
-    }
-
     if (!isEqual(published.visible, this.visible)) {
       this.visible = published.visible
       if (this.visible) {
