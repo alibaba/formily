@@ -1,4 +1,3 @@
-
 import React from 'react'
 import SchemaForm, {
   Field,
@@ -7,11 +6,14 @@ import SchemaForm, {
   registerFieldMiddleware,
   createFormActions
 } from '../index'
-import { render, fireEvent } from 'react-testing-library'
+import { render } from 'react-testing-library'
 
 beforeEach(() => {
   registerFieldMiddleware(Field => {
     return props => {
+      if (typeof props.editable === 'boolean') {
+        if (!props.editable) return <div>empty</div>
+      }
       return (
         <div>
           {props.schema.title}
@@ -31,7 +33,7 @@ beforeEach(() => {
   )
 })
 
-test('onFormInit setFieldState', async () => {
+test('update editable by setFieldState', async () => {
   const actions = createFormActions()
   const TestComponent = () => (
     <SchemaForm
@@ -46,6 +48,7 @@ test('onFormInit setFieldState', async () => {
                 message: 'field is required'
               }
             ]
+            state.props.editable = false
           })
         })
       }}
@@ -57,20 +60,14 @@ test('onFormInit setFieldState', async () => {
     </SchemaForm>
   )
 
-  const { getByText, getAllByTestId, queryByText } = render(<TestComponent />)
+  const { queryByText } = render(<TestComponent />)
 
   await sleep(100)
-  expect(getByText('text')).toBeVisible()
-  await sleep(100)
-  fireEvent.click(getAllByTestId('btn')[1])
-  await sleep(100)
-  expect(getByText('field is required')).toBeVisible()
+  expect(queryByText('text')).toBeNull()
   await sleep(100)
   actions.setFieldState('aaa', state => {
-    state.rules = []
+    state.editable = true
   })
   await sleep(100)
-  fireEvent.click(getAllByTestId('btn')[1])
-  await sleep(100)
-  expect(queryByText('field is required')).toBeNull()
+  expect(queryByText('text')).toBeVisible()
 })

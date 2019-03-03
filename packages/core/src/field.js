@@ -4,6 +4,7 @@ import {
   isEqual,
   clone,
   isFn,
+  isBool,
   toArr,
   isStr,
   hasRequired,
@@ -46,11 +47,13 @@ export class Field {
     }
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
-    this.editable = this.getEditable(options.editable)
+    const editable = this.getEditableFromProps(options.props)
+    this.editable = !isEmpty(editable) ? editable : this.editable
     this.path = resolveFieldPath(
       !isEmpty(options.path) ? options.path : this.path || []
     )
-    this.rules = !isEmpty(options.rules) ? clone(options.rules) : this.rules
+    const rules = this.getRulesFromProps(options.props)
+    this.rules = !isEmpty(rules) ? rules : this.rules
     this.required = hasRequired(this.rules)
 
     this.props = isEmpty(options.props)
@@ -62,9 +65,34 @@ export class Field {
     }
   }
 
+  getEditableFromProps(props) {
+    if (props) {
+      if (!isEmpty(props.editable)) {
+        return this.getEditable(props.editable)
+      } else {
+        if (props['x-props'] && !isEmpty(props['x-props'].editable)) {
+          return this.getEditable(props['x-props'].editable)
+        }
+      }
+    }
+    return this.editable
+  }
+
+  getRulesFromProps(props) {
+    if (props) {
+      const rules = toArr(props['x-rules'])
+      if (props.required && !rules.some(rule => rule.required)) {
+        rules.push({ required: true })
+      }
+      return clone(rules)
+    }
+    return this.rules
+  }
+
   getEditable(editable) {
     if (isFn(editable)) return editable(this.name)
-    return editable
+    if (isBool(editable)) return editable
+    return this.editable
   }
 
   onChange(fn) {
@@ -114,24 +142,6 @@ export class Field {
 
   unsubscribe() {
     this.fieldbrd.unsubscribe()
-  }
-
-  changeEditable(editable) {
-    editable = this.getEditable(editable)
-    if (editable !== undefined && this.editable !== editable) {
-      this.editable = editable
-      this.dirty = true
-      this.notify()
-    }
-  }
-
-  changeRules(rules) {
-    let lastRules = this.rules
-    if (!isEqual(lastRules, rules)) {
-      this.rules = clone(rules)
-      this.dirty = true
-      this.notify()
-    }
   }
 
   changeProps(props, force) {
@@ -202,6 +212,13 @@ export class Field {
       this.editable = editable
       this.dirtyType = 'editable'
       this.dirty = true
+    } else {
+      const propsEditable = this.getEditableFromProps(published.props)
+      if (!isEmpty(propsEditable) && !isEqual(propsEditable, this.editable)) {
+        this.editable = propsEditable
+        this.dirtyType = 'editable'
+        this.dirty = true
+      }
     }
 
     published.errors = toArr(published.errors).filter(v => !!v)
@@ -221,6 +238,16 @@ export class Field {
       this.invalid = false
       this.dirtyType = 'rules'
       this.dirty = true
+    } else {
+      const propsRules = this.getRulesFromProps(published.props)
+      if (!isEmpty(propsRules) && !isEqual(propsRules, this.rules)) {
+        this.rules = propsRules
+        this.errors = []
+        this.valid = true
+        this.invalid = false
+        this.dirtyType = 'rules'
+        this.dirty = true
+      }
     }
 
     if (!isEqual(published.required, this.required)) {

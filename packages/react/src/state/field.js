@@ -1,12 +1,5 @@
 import React, { Component, useContext } from 'react'
-import {
-  createHOC,
-  isEqual,
-  each,
-  schemaIs,
-  toArr,
-  filterSchema
-} from '../utils'
+import { createHOC, isEqual, each, schemaIs, filterSchema } from '../utils'
 import { createMutators } from '../shared/mutators'
 import { StateContext } from '../shared/context'
 import { FormField } from '../shared/core'
@@ -22,10 +15,8 @@ export const StateField = createHOC((options, Field) => {
       this.field = props.form.registerField(
         props.name || props.schemaPath.join('.'),
         {
-          rules: this.getValidateRules(props),
           path: props.schemaPath,
           onChange: this.onChangeHandler(props),
-          editable: this.getEditable(props),
           props: props.schema
         }
       )
@@ -42,18 +33,6 @@ export const StateField = createHOC((options, Field) => {
         return props.schema['x-props'].editable
       }
       return props.editable
-    }
-
-    getValidateRules(props) {
-      props = props || this.props
-      let rules = []
-      if (props && props.schema) {
-        rules = toArr(props.schema['x-rules'])
-        if (props.schema.required) {
-          rules.push({ required: true })
-        }
-      }
-      return rules
     }
 
     onChangeHandler() {
@@ -77,7 +56,6 @@ export const StateField = createHOC((options, Field) => {
       if (!isEqual(this.props.schema, prevProps.schema, filterSchema)) {
         this.field.changeProps(this.props.schema)
       }
-      this.field.changeEditable(this.getEditable(this.props))
     }
 
     renderField = (key, addReactKey) => {
