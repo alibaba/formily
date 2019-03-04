@@ -149,6 +149,8 @@ export class Field {
     let lastProps = this.props
     if (force || !isEqual(lastProps, props, filterSchema)) {
       this.props = clone(props, filterSchema)
+      this.editable = this.getEditableFromProps(this.props)
+      this.rules = this.getRulesFromProps(this.props)
       this.dirty = true
       this.notify()
     }
