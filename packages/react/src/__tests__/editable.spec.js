@@ -125,4 +125,7 @@ test('update editable in controlled', async () => {
   act(() => updateEditable(false))
   await sleep(100)
   expect(queryByText('text')).toBeNull()
+  act(() => updateEditable(true))
+  await sleep(100)
+  expect(queryByText('text')).toBeVisible()
 })
