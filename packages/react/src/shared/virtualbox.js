@@ -1,7 +1,8 @@
 import React from 'react'
-import { registerFormField, FormField } from './core'
+import { registerFormField } from './core'
 import { SchemaField } from '../decorators/markup'
 import { registerVirtualboxFlag } from '../utils'
+import { FormField } from '../state/field'
 import pascalCase from 'pascal-case'
 
 export const createVirtualBox = (name, component) => {
