@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SchemaForm, {
   Field,
   registerFormField,
@@ -6,7 +6,7 @@ import SchemaForm, {
   registerFieldMiddleware,
   createFormActions
 } from '../index'
-import { render } from 'react-testing-library'
+import { render, act } from 'react-testing-library'
 
 beforeEach(() => {
   registerFieldMiddleware(Field => {
@@ -105,4 +105,24 @@ test('update editable by setFieldState with initalState is not editable', async 
   })
   await sleep(100)
   expect(queryByText('text')).toBeVisible()
+})
+
+test('update editable in controlled', async () => {
+  let updateEditable
+  const TestComponent = () => {
+    const [editable, _updateEditable] = useState(true)
+    updateEditable = _updateEditable
+    return (
+      <SchemaForm editable={editable}>
+        <Field name='aaa' type='string' title='text' />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(100)
+  expect(queryByText('text')).toBeVisible()
+  act(() => updateEditable(false))
+  await sleep(100)
+  expect(queryByText('text')).toBeNull()
 })
