@@ -2,6 +2,7 @@ import React, { Component, useContext } from 'react'
 import {
   createHOC,
   isEqual,
+  isFn,
   each,
   schemaIs,
   filterSchema,
@@ -47,10 +48,22 @@ const StateField = createHOC((options, Field) => {
       this.field.removeValue()
     }
 
+    isEqualEditable(editable, prevEditable) {
+      if (!isEqual(editable, prevEditable)) return false
+      if (isFn(editable)) {
+        return editable(this.field.name) === prevEditable(this.field.name)
+      }
+      return true
+    }
+
     componentDidUpdate(prevProps) {
       this.unmounted = false
       if (!isEqual(this.props.schema, prevProps.schema, filterSchema)) {
         this.field.changeProps(this.props.schema)
+      } else {
+        if (!this.isEqualEditable(this.props.editable, prevProps.editable)) {
+          this.field.changeProps(this.props.schema)
+        }
       }
     }
 
@@ -91,13 +104,7 @@ const StateField = createHOC((options, Field) => {
     }
 
     render() {
-      const {
-        name,
-        path,
-        schemaPath,
-        locale,
-        getSchema
-      } = this.props
+      const { name, path, schemaPath, locale, getSchema } = this.props
       const {
         value,
         visible,
@@ -146,6 +153,7 @@ const StateField = createHOC((options, Field) => {
         name={name}
         path={path}
         form={form}
+        editable={editable}
         schema={schema}
         locale={locale}
         getSchema={getSchema}
