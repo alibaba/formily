@@ -1,7 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import pascalCase from 'pascal-case'
 import { isFn, isStr, lowercase, each, compose } from '../utils'
-import { StateContext } from './context'
 let FIELD_WRAPPERS
 let FORM_FIELDS
 let FIELD_PROPS_TRANSFORMERS
@@ -91,45 +90,11 @@ export const registerFormFieldPropsTransformer = (name, transformer) => {
 export const getFormFieldPropsTransformer = name =>
   FIELD_PROPS_TRANSFORMERS[name]
 
-export const FormField = props => {
-  const { getSchema } = useContext(StateContext)
-  const schema = getSchema(props.schemaPath || props.path) || {}
-  const fieldName = lowercase(schema['x-component'] || schema.type)
-  const component = schema['x-render'] ? FIELD_RENDERER : FORM_FIELDS[fieldName]
-  if (component) {
-    return React.createElement(component, {
-      ...props,
-      schema,
-      path: props.path,
-      name: props.name,
-      getSchema: getSchema,
-      renderComponent: schema['x-render']
-        ? $props => {
-          return React.createElement(FORM_FIELDS[fieldName], {
-            ...props,
-            ...$props,
-            schema,
-            path: props.path,
-            name: props.name
-          })
-        }
-        : undefined
-    })
-  } else {
-    if (console && console.error) {
-      if (fieldName) {
-        console.error(
-          `The schema field \`${fieldName}\`'s component is not found.`
-        )
-      } else {
-        console.error(
-          `The schema field's component is not found, or field's schema is not defined.`
-        )
-      }
-    }
-    return <React.Fragment />
-  }
+export const getFormField = name => {
+  return FORM_FIELDS[name]
 }
+
+export const getFieldRenderer = () => FIELD_RENDERER
 
 export const OriginForm = React.forwardRef((props, ref) =>
   React.createElement(FORM_COMPONENT, { ...props, ref })

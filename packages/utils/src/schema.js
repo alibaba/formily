@@ -8,6 +8,7 @@ const VIRTUAL_BOXES = {}
 export const getSchemaNodeFromPath = (schema, path) => {
   let res = schema
   let suc = 0
+  path = toArr(path)
   for (let i = 0; i < path.length; i++) {
     var key = path[i]
     if (res && res.properties) {

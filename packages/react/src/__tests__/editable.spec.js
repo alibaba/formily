@@ -11,7 +11,7 @@ import { render } from 'react-testing-library'
 beforeEach(() => {
   registerFieldMiddleware(Field => {
     return props => {
-      if (typeof props.editable === 'boolean') {
+      if (typeof props.editable === 'boolean' && props.name !== '') {
         if (!props.editable) return <div>empty</div>
       }
       return (
@@ -49,6 +49,41 @@ test('update editable by setFieldState', async () => {
               }
             ]
             state.props.editable = false
+          })
+        })
+      }}
+    >
+      <Field name='aaa' type='string' />
+      <button type='submit' data-testid='btn'>
+        Submit
+      </button>
+    </SchemaForm>
+  )
+
+  const { queryByText } = render(<TestComponent />)
+
+  await sleep(100)
+  expect(queryByText('text')).toBeNull()
+  await sleep(100)
+  actions.setFieldState('aaa', state => {
+    state.editable = true
+  })
+  await sleep(100)
+  expect(queryByText('text')).toBeVisible()
+})
+
+test('update editable by setFieldState with initalState is not editable', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => (
+    <SchemaForm
+      actions={actions}
+      editable={name => {
+        return false
+      }}
+      effects={($, { setFieldState }) => {
+        $('onFormInit').subscribe(() => {
+          setFieldState('aaa', state => {
+            state.props.title = 'text'
           })
         })
       }}

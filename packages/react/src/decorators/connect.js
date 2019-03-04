@@ -134,6 +134,11 @@ export const connect = opts => Target => {
       if (isArr(schema['enum']) && !props.dataSource) {
         props.dataSource = createEnum(schema['enum'], schema['enumNames'])
       }
+
+      if (props.editable !== undefined) {
+        delete props.editable
+      }
+
       return React.createElement(
         isFn(opts.getComponent)
           ? opts.getComponent(Target, props, this.props)
