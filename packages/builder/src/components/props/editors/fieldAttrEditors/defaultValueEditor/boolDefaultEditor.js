@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Switch } from '@alifd/next'
 import DefaultValueGenerator from './defaultValueGenerator'
 
 const ds = [
@@ -20,7 +19,7 @@ class Editor extends Component {
         ds={ds}
         {...this.props}
         customEditor={{
-          specify: <Switch style={{ marginLeft: 20 }} />
+          specify: <this.props.UI.Switch style={{ marginLeft: 20 }} />
         }}
       />
     )

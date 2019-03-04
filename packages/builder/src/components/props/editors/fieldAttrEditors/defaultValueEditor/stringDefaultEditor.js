@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Input } from '@alifd/next'
 import DefaultValueGenerator from './defaultValueGenerator'
 
 const ds = [
@@ -15,6 +14,8 @@ const ds = [
 
 class Editor extends Component {
   render() {
+    const { UI } = this.props
+
     return (
       <DefaultValueGenerator
         flag='string'
@@ -22,7 +23,7 @@ class Editor extends Component {
         {...this.props}
         customEditor={{
           specify: (
-            <Input
+            <UI.Input
               placeholder='请输入默认值'
               style={{
                 verticalAlign: 'top'

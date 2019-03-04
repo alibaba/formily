@@ -9,8 +9,8 @@ import {
 } from '../../actions'
 import { State } from 'react-powerplug'
 import { getCompDetailById, flatObj } from '../../utils/util'
-import styled from 'styled-components'
-import propsStyle from './style'
+
+import PropsStyle from './style'
 
 import FileSetting from './fileSetting'
 
@@ -109,7 +109,8 @@ class PropsSetting extends Component {
     const {
       initSchemaData = {},
       componentId = '',
-      componentProps = {}
+      componentProps = {},
+      UI
     } = this.props
 
     if (!componentId) {
@@ -135,7 +136,8 @@ class PropsSetting extends Component {
       ) {
         newXprops = {
           ...newXprops,
-          fieldStore: curComponentAttr
+          fieldStore: curComponentAttr,
+          UI
         }
       }
       finalSchema[configItem.name] = {
@@ -208,6 +210,7 @@ class PropsSetting extends Component {
       case 'upload':
         return (
           <FileSetting
+            UI={this.props.UI}
             xprops={curComponentAttr['x-props'] || {}}
             onChange={xprops => {
               this.props.editComponent(
@@ -227,10 +230,10 @@ class PropsSetting extends Component {
 
   render() {
     return (
-      <div className={this.props.className}>
+      <PropsStyle className={this.props.className}>
         {this.renderConfigList()}
         {this.renderOptions()}
-      </div>
+      </PropsStyle>
     )
   }
 }
@@ -245,13 +248,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(editComponent(id, propsData, containerId))
 })
 
-const StyledPropsSetting = styled(PropsSetting)`
-  ${propsStyle}
-`
-
 class StyledPropsSettingComp extends React.Component {
   render() {
-    return <StyledPropsSetting {...this.props} />
+    return <PropsSetting {...this.props} />
   }
 }
 

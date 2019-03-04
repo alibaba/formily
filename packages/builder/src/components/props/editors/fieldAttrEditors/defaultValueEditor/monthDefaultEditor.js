@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { NumberPicker, DatePicker } from '@alifd/next'
 import DefaultValueGenerator from './defaultValueGenerator'
-
-const { MonthPicker } = DatePicker
 
 const ds = [
   {
@@ -27,8 +24,10 @@ const ds = [
   }
 ]
 
-const MonthPickerDefault = props => (
-  <MonthPicker
+const MonthPickerDefault = props => {
+  const { UI } = props
+  const { MonthPicker } = UI.DatePicker
+  return <MonthPicker
     onChange={(v, vStr) => {
       props.onChange(vStr)
     }}
@@ -37,10 +36,11 @@ const MonthPickerDefault = props => (
       marginLeft: 20
     }}
   />
-)
+}
 
 class Editor extends Component {
   render() {
+    const { UI } = this.props
     return (
       <DefaultValueGenerator
         flag='month'
@@ -49,7 +49,7 @@ class Editor extends Component {
         customEditor={{
           now: <div />,
           future: (
-            <NumberPicker
+            <UI.NumberPicker
               addonAfter='月'
               inputWidth={100}
               style={{
@@ -59,7 +59,7 @@ class Editor extends Component {
             />
           ),
           past: (
-            <NumberPicker
+            <UI.NumberPicker
               addonAfter='月'
               inputWidth={100}
               style={{

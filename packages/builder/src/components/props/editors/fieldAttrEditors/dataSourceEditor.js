@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { Form, Input, Radio, Tab } from '@alifd/next'
 import DataSourceEnum from './dataSourceEnum'
 import styled from 'styled-components'
 
-const { Group: RadioGroup } = Radio
-const { TabPane } = Tab
 const LABEL_COL = { fixedSpan: 4 }
 const STYLE_W = { width: 220 }
 const JSON_EXAMPLE = `
@@ -147,11 +144,18 @@ class DataSourceEditor extends Component {
   }
 
   render() {
-    const { fieldStore = {} } = this.props
+    const { fieldStore = {}, UI } = this.props
     const { dataSourceType, error } = this.state
     const xProps = fieldStore['x-props'] || {}
     const { requestOptions = {} } = xProps
     const { data } = requestOptions
+    const { Form, Input, Radio, Tab } = UI
+
+    const { Group: RadioGroup } = Radio
+    const { TabPane } = Tab
+
+    this.RadioGroup = RadioGroup
+    this.TabPane = TabPane
 
     const dataSource = [
       {

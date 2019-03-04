@@ -12,8 +12,7 @@ import {
   addComponentAndEdit
 } from '../../actions'
 import uniqBy from 'lodash.uniqby'
-import styled from 'styled-components'
-import { indexStyle } from './style'
+import { indexStyle as IndexStyle } from './style'
 
 class FieldList extends Component {
   static propTypes = {
@@ -104,13 +103,13 @@ class FieldList extends Component {
 
   render() {
     return (
-      <div className={cls('col-card col-fields', this.props.className)}>
+      <IndexStyle className={cls('col-card col-fields', this.props.className)}>
         <Header>
           <h2>组件</h2>
           <p>可将选项拖动到主面板进行编辑</p>
         </Header>
         {this.renderFieldList()}
-      </div>
+      </IndexStyle>
     )
   }
 }
@@ -126,13 +125,9 @@ const mapDispatchToProps = dispatch => ({
   addComponentAndEdit: component => dispatch(addComponentAndEdit(component))
 })
 
-const StyledFieldList = styled(FieldList)`
-  ${indexStyle}
-`
-
 class StyledFieldListComp extends React.Component {
   render() {
-    return <StyledFieldList {...this.props} />
+    return <FieldList {...this.props} />
   }
 }
 

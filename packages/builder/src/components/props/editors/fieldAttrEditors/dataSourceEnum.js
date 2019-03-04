@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Input, Button, Icon } from '@alifd/next'
 
 class Component extends React.Component {
   state = {}
@@ -32,42 +31,44 @@ class Component extends React.Component {
 
   renderItemRow = (item = {}, idx) => {
     const { value = '', label = '' } = item
+    const { UI } = this.props
     return (
       <div className='source-row' key={`${idx}`}>
         <ul>
           <li>
             <label>字段名：</label>
-            <Input
+            <UI.Input
               defaultValue={label}
               onBlur={e => this.handleChangeItemRow(e, idx, 'label')}
             />
           </li>
           <li>
             <label>值：</label>
-            <Input
+            <UI.Input
               defaultValue={value}
               onBlur={e => this.handleChangeItemRow(e, idx, 'value')}
             />
           </li>
         </ul>
-        <Button
+        <UI.Button
           className='ashbin-btn'
           shape='text'
           onClick={() => this.handleDeleteItem(idx)}
         >
-          <Icon type='ashbin' />
-        </Button>
+          <UI.Icon type='ashbin' />
+        </UI.Button>
       </div>
     )
   }
 
   renderNewBtn() {
+    const { UI } = this.props
     return (
       <div className='source-btn-new'>
-        <Button size='small' onClick={this.handleAddNewItem}>
-          <Icon type='add' />
+        <UI.Button size='small' onClick={this.handleAddNewItem}>
+          <UI.Icon type='add' />
           添加
-        </Button>
+        </UI.Button>
       </div>
     )
   }
