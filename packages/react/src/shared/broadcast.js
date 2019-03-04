@@ -39,20 +39,31 @@ export class FormProvider extends Component {
   }
 }
 
-export const useForm = () => {
+export const useForm = ({ testingAct } = {}) => {
   let [value, setState] = useState({})
   let broadcast = useContext(BroadcastContext)
   let initialized = false
-  return useMemo(() => {
+  useMemo(() => {
     if (broadcast) {
       broadcast.subscribe(({ type, state, schema }) => {
         if (type !== 'submit' && type !== 'reset') {
           if (initialized) {
-            setState({
-              status: type,
-              state,
-              schema
-            })
+            if (testingAct) {
+              // just for test
+              testingAct(() =>
+                setState({
+                  status: type,
+                  state,
+                  schema
+                })
+              )
+            } else {
+              setState({
+                status: type,
+                state,
+                schema
+              })
+            }
           } else {
             value = {
               status: type,
@@ -63,33 +74,33 @@ export const useForm = () => {
         }
       })
       initialized = true
-      const { status, state, schema } = value
-      return {
-        status,
-        state,
-        schema,
-        submit: () => {
-          if (broadcast) {
-            broadcast.notify({ type: 'submit' })
-          }
-        },
-        reset: () => {
-          if (broadcast) {
-            broadcast.notify({ type: 'reset' })
-          }
-        },
-        dispatch: (name, payload) => {
-          if (broadcast) {
-            broadcast.notify({ type: 'dispatch', name, payload })
-          }
-        }
-      }
     }
   }, [broadcast])
+  const { status, state, schema } = value
+  return {
+    status,
+    state,
+    schema,
+    submit: () => {
+      if (broadcast) {
+        broadcast.notify({ type: 'submit' })
+      }
+    },
+    reset: () => {
+      if (broadcast) {
+        broadcast.notify({ type: 'reset' })
+      }
+    },
+    dispatch: (name, payload) => {
+      if (broadcast) {
+        broadcast.notify({ type: 'dispatch', name, payload })
+      }
+    }
+  }
 }
 
-export const FormConsumer = ({ children }) => {
-  const formApi = useForm()
+export const FormConsumer = ({ children, testingAct }) => {
+  const formApi = useForm({ testingAct })
   if (!formApi) return <React.Fragment />
   if (isFn(children)) {
     return children(formApi)
