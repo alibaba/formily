@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Checkbox } from '@alifd/next'
 import DefaultValueGenerator from './defaultValueGenerator'
 
 const ds = [
@@ -19,7 +18,7 @@ class Editor extends Component {
   }
 
   render() {
-    const { store } = this.props
+    const { store, UI } = this.props
     const { enums } = store
 
     return (
@@ -30,7 +29,7 @@ class Editor extends Component {
         customEditor={{
           specify: (
             <div>
-              <Checkbox.Group dataSource={enums || []} />
+              <UI.Checkbox.Group dataSource={enums || []} />
             </div>
           )
         }}

@@ -1,4 +1,6 @@
-export default `
+import styled from 'styled-components'
+
+export default styled.div`
   position: relative;
   height: 100%;
   .preview-main {

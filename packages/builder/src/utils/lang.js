@@ -17,29 +17,6 @@ export const isNum = isType('Number')
 
 export const isIter = obj => isArr(obj) || isObj(obj)
 
-export const { hasOwnProperty } = Object.prototype
-
-export const hasOwn = (target, key) => hasOwnProperty.call(target, key)
-
-export const each = (target, fn) => {
-  if (!isFn(fn)) return
-  if (isArr(target)) {
-    for (let i = 0, len = target.length; i < len; i++) {
-      if (fn(target[i], i) === false) {
-        break
-      }
-    }
-  } else {
-    for (const key in target) {
-      if (hasOwn(target, key)) {
-        if (fn(target[key], key) === false) {
-          break
-        }
-      }
-    }
-  }
-}
-
 const replaceSingleDefault = v => {
   if (!isFlagValue(v)) return v
 

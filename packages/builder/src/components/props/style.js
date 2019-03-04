@@ -1,4 +1,6 @@
-export default `
+import styled from 'styled-components'
+
+export default styled.div`
   .schema-form-container .schema-form-content > .schema-form-field {
     &.option-item {
       padding: 10px !important;

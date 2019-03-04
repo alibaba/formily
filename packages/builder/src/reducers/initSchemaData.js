@@ -135,6 +135,10 @@ export default (state = {}, action) => {
         newState.properties = _properties1
       }
 
+      if (!newState.type) {
+        newState.type = 'object'
+      }
+
       return newState
     case 'EDIT_COMPONENT':
       const _data_ =

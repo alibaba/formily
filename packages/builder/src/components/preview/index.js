@@ -15,8 +15,8 @@ import { normalizeSchema } from '../../utils/lang'
 import { isEmptyObj, Header } from '../../utils/util'
 import pick from 'lodash.pick'
 import registerPreviewFieldMiddleware from './fieldMiddleware'
-import styled from 'styled-components'
-import previewStyle from './style'
+
+import PreviewStyle from './style'
 
 const { Consumer: FormConsumer, Provider: FormProvider } = React.createContext()
 
@@ -187,7 +187,7 @@ class Preview extends Component {
         : {}
 
     return (
-      <div
+      <PreviewStyle
         className={cls('col-card preview-card', this.props.className)}
         {...dragProps}
       >
@@ -196,7 +196,7 @@ class Preview extends Component {
           <p>组件过多时可下拉查看更多</p>
         </Header>
         <div className='preview-main'>{this.renderPreviewList()}</div>
-      </div>
+      </PreviewStyle>
     )
   }
 }
@@ -215,13 +215,9 @@ const mapDispatchToProps = dispatch => ({
   changeComponent: componentId => dispatch(changeComponent(componentId))
 })
 
-const StyledPreview = styled(Preview)`
-  ${previewStyle}
-`
-
 class StyledPreviewComp extends React.Component {
   render() {
-    return <StyledPreview {...this.props} />
+    return <Preview {...this.props} />
   }
 }
 

@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { Feedback, Upload, Button } from '@alifd/next'
 import PropTypes from 'prop-types'
 import { SchemaForm, Field } from '../../utils/baseForm'
 import remove from 'lodash.remove'
-
-const Toast = Feedback.toast
 
 const showUploadListData = [
   { value: 'text', label: '文字' },
@@ -106,7 +103,7 @@ class fileSetting extends Component {
   }
 
   renderUploadComp() {
-    const { xprops = {} } = this.props
+    const { xprops = {}, UI } = this.props
     const { defaultFileList = [] } = xprops
     return (
       <div className='next-form'>
@@ -117,7 +114,7 @@ class fileSetting extends Component {
           <div className='next-form-item-control'>
             <div className='schema-inline-field'>
               <div className='schema-form-field'>
-                <Upload
+                <UI.Upload
                   name='file'
                   listType='text'
                   withCredentials
@@ -156,11 +153,11 @@ class fileSetting extends Component {
                     this.onChangeDefaultFile(newDefaultFileList)
                   }}
                   onError={() => {
-                    Toast.error('文件上传失败')
+                    this.props.UI.Toast.error('文件上传失败')
                   }}
                 >
-                  <Button>上传文件</Button>
-                </Upload>
+                  <UI.Button>上传文件</UI.Button>
+                </UI.Upload>
               </div>
             </div>
           </div>

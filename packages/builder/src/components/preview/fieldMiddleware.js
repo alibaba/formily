@@ -1,7 +1,6 @@
 import React from 'react'
 import cls from 'classnames'
 import { registerFieldMiddleware } from '../../utils/baseForm'
-import Icon from '@alifd/next/lib/icon'
 
 export default (FormConsumer) => {
   const hasRegisted = window.__hasRegisted__ || false
@@ -50,7 +49,15 @@ export default (FormConsumer) => {
               className='preview-line-layer-layout'
               title='编辑'
             >
-              <Icon type='edit' size='small' />
+              {
+                React.createElement(Field, {
+                  'x-component': 'Icon',
+                  'x-props': {
+                    type: 'edit',
+                    size: 'small'
+                  }
+                })
+              }
             </a>
             <a
               className='preview-line-del'
@@ -63,7 +70,15 @@ export default (FormConsumer) => {
               }}
               title='删除'
             >
-              <Icon type='ashbin' size='small' />
+              {
+                React.createElement(Field, {
+                  'x-component': 'Icon',
+                  'x-props': {
+                    type: 'ashbin',
+                    size: 'small'
+                  }
+                })
+              }
             </a>
           </div>
         </div>

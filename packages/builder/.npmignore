@@ -1,2 +1,6 @@
 node_modules
+config
+public
+scripts
 *.log
+src/demo
