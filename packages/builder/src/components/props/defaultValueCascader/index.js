@@ -16,13 +16,14 @@ class defaultValueCascader extends Component {
   }
 
   render() {
-    const { fieldStore = {}, value } = this.props
+    const { fieldStore = {}, value, UI } = this.props
 
     return (
       <DefaultValueEditor
         store={fieldStore}
         value={value}
         onChange={this.handleFieldAttrChange()}
+        UI={UI}
       />
     )
   }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { NumberPicker, DatePicker } from '@alifd/next'
 import DefaultValueGenerator from './defaultValueGenerator'
 
 const ds = [
@@ -26,7 +25,7 @@ const ds = [
 ]
 
 const DatePickerDefault = props => (
-  <DatePicker
+  <props.UI.DatePicker
     {...props}
     onChange={(v, vStr) => {
       props.onChange(vStr)
@@ -40,6 +39,7 @@ const DatePickerDefault = props => (
 
 class Editor extends Component {
   render() {
+    const { UI } = this.props
     return (
       <DefaultValueGenerator
         flag='date'
@@ -48,7 +48,7 @@ class Editor extends Component {
         customEditor={{
           now: <div />,
           future: (
-            <NumberPicker
+            <UI.NumberPicker
               addonAfter='天'
               inputWidth={100}
               style={{
@@ -58,7 +58,7 @@ class Editor extends Component {
             />
           ),
           past: (
-            <NumberPicker
+            <UI.NumberPicker
               addonAfter='天'
               inputWidth={100}
               style={{

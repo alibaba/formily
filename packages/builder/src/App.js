@@ -14,8 +14,7 @@ import {
 import { Divider } from './utils/util'
 
 import isEqual from 'lodash.isequal'
-import styled from 'styled-components'
-import appStyle from './style'
+import AppStyle from './style'
 
 // components
 import FieldList from './components/fields/index'
@@ -145,7 +144,7 @@ class App extends Component {
     return this.state.systemError ? (
       <p>系统发生异常</p>
     ) : (
-      <div className={cls('schemaform-app', this.props.className)}>
+      <AppStyle className={cls('schemaform-app', this.props.className)}>
         <div className='schemaform-header'>
           <a
             href='javascript:;'
@@ -177,7 +176,7 @@ class App extends Component {
           </div>
         </div>
         {this.getEditorTpl()}
-      </div>
+      </AppStyle>
     )
   }
 }
@@ -249,13 +248,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(editComponent(id, propsData, containerId))
 })
 
-const StyledApp = styled(App)`
-  ${appStyle}
-`
-
 class StyledAppComp extends React.Component {
   render() {
-    return <StyledApp {...this.props} />
+    return <App {...this.props} />
   }
 }
 
