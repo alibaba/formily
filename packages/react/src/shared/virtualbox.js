@@ -1,7 +1,6 @@
 import React from 'react'
 import { registerFormField, FormField } from './core'
 import { SchemaField } from '../decorators/markup'
-import { StateField } from '../state/field'
 import { registerVirtualboxFlag } from '../utils'
 import pascalCase from 'pascal-case'
 
@@ -9,31 +8,29 @@ export const createVirtualBox = (name, component) => {
   registerVirtualboxFlag(name)
   registerFormField(
     name,
-    StateField()(
-      class extends React.PureComponent {
-        static displayName = 'VirtualBoxWrapper'
+    class extends React.PureComponent {
+      static displayName = 'VirtualBoxWrapper'
 
-        render() {
-          const { schema, schemaPath, path, getOrderProperties } = this.props
-          const parentPath = path.slice(0, path.length - 1)
-          const properties = getOrderProperties(this.props)
-          const children = properties.map(({ key }) => {
-            const newPath = parentPath.concat(key)
-            const newName = newPath.join('.')
-            const newSchemaPath = schemaPath.concat(key)
-            return (
-              <FormField
-                key={newSchemaPath}
-                name={newName}
-                path={newPath}
-                schemaPath={newSchemaPath}
-              />
-            )
-          })
-          return React.createElement(component, schema['x-props'], children)
-        }
+      render() {
+        const { schema, schemaPath, path, getOrderProperties } = this.props
+        const parentPath = path.slice(0, path.length - 1)
+        const properties = getOrderProperties(this.props)
+        const children = properties.map(({ key }) => {
+          const newPath = parentPath.concat(key)
+          const newName = newPath.join('.')
+          const newSchemaPath = schemaPath.concat(key)
+          return (
+            <FormField
+              key={newSchemaPath}
+              name={newName}
+              path={newPath}
+              schemaPath={newSchemaPath}
+            />
+          )
+        })
+        return React.createElement(component, schema['x-props'], children)
       }
-    ),
+    },
     true
   )
 

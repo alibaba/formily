@@ -26,6 +26,7 @@ export class Field {
     this.valid = true
     this.invalid = false
     this.visible = true
+    this.editable = true
     this.destructed = false
     this.loading = false
     this.errors = []

@@ -1,10 +1,17 @@
 import React, { Component, useContext } from 'react'
-import { createHOC, isEqual, each, schemaIs, filterSchema } from '../utils'
+import {
+  createHOC,
+  isEqual,
+  each,
+  schemaIs,
+  filterSchema,
+  lowercase
+} from '../utils'
 import { createMutators } from '../shared/mutators'
 import { StateContext } from '../shared/context'
-import { FormField } from '../shared/core'
+import { getFieldRenderer, getFormField } from '../shared/core'
 
-export const StateField = createHOC((options, Field) => {
+const StateField = createHOC((options, Field) => {
   class StateField extends Component {
     static displayName = 'StateField'
 
@@ -22,17 +29,6 @@ export const StateField = createHOC((options, Field) => {
       )
       this.initialized = true
       this.mutators = createMutators(props)
-    }
-
-    getEditable(props) {
-      props = props || this.props
-      if (
-        props.schema['x-props'] &&
-        props.schema['x-props'].editable !== undefined
-      ) {
-        return props.schema['x-props'].editable
-      }
-      return props.editable
     }
 
     onChangeHandler() {
@@ -99,7 +95,6 @@ export const StateField = createHOC((options, Field) => {
         name,
         path,
         schemaPath,
-        renderComponent,
         locale,
         getSchema
       } = this.props
@@ -132,7 +127,6 @@ export const StateField = createHOC((options, Field) => {
           schemaPath={schemaPath}
           getSchema={getSchema}
           renderField={this.renderField}
-          renderComponent={renderComponent}
           getOrderProperties={this.getOrderProperties}
           mutators={this.mutators}
           schema={props}
@@ -141,20 +135,57 @@ export const StateField = createHOC((options, Field) => {
     }
   }
 
-  return ({ name, path, schemaPath, renderComponent }) => {
+  return props => {
+    const { name, path, schemaPath } = props
     const { form, getSchema, locale, editable } = useContext(StateContext)
+    const schema = getSchema(schemaPath || path)
+    schema['x-props'] = schema['x-props'] || {}
+    schema['x-props'].editable = editable
     return (
       <StateField
         name={name}
         path={path}
         form={form}
-        schemaPath={schemaPath}
-        getSchema={getSchema}
+        schema={schema}
         locale={locale}
-        editable={editable}
-        renderComponent={renderComponent}
-        schema={getSchema(schemaPath || path)}
+        getSchema={getSchema}
+        schemaPath={schemaPath}
       />
     )
+  }
+})
+
+export const FormField = StateField()(props => {
+  const schema = props.schema
+  const fieldComponentName = lowercase(schema['x-component'] || schema.type)
+  const renderComponent = schema['x-render']
+    ? $props => {
+      return React.createElement(getFormField(fieldComponentName), {
+        ...props,
+        ...$props,
+        schema,
+        path: props.path,
+        name: props.name
+      })
+    }
+    : undefined
+  const component = schema['x-render']
+    ? getFieldRenderer()
+    : getFormField(fieldComponentName)
+  if (component) {
+    return React.createElement(component, { ...props, renderComponent })
+  } else {
+    if (console && console.error) {
+      if (fieldComponentName) {
+        console.error(
+          `The schema field \`${fieldComponentName}\`'s component is not found.`
+        )
+      } else {
+        console.error(
+          `The schema field's component is not found, or field's schema is not defined.`
+        )
+      }
+    }
+    return <React.Fragment />
   }
 })

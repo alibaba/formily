@@ -1,13 +1,13 @@
 import React from 'react'
 import {
   OriginForm,
-  FormField,
   registerFieldMiddleware,
   registerFormFieldPropsTransformer,
   registerFormField,
   registerFormFields,
   registerFormWrapper
 } from './shared/core'
+import { FormField } from './state/field'
 import { caculateSchemaInitialValues } from './utils'
 import { SchemaField, SchemaMarkup } from './decorators/markup'
 import { setLocale, setLanguage } from '@uform/validator'
