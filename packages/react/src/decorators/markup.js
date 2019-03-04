@@ -51,16 +51,23 @@ export const SchemaMarkup = createHOC((options, SchemaForm) => {
         schema,
         ...others
       } = this.props
-      schema = schema || { type: 'object' }
+      let alreadyHasSchema = false
+      if (schema) {
+        alreadyHasSchema = true
+      } else {
+        schema = { type: 'object' }
+      }
 
       nonameId = 0
       return (
         <React.Fragment>
-          <template>
-            <MarkupContext.Provider value={schema}>
-              {children}
-            </MarkupContext.Provider>
-          </template>
+          {!alreadyHasSchema && (
+            <template>
+              <MarkupContext.Provider value={schema}>
+                {children}
+              </MarkupContext.Provider>
+            </template>
+          )}
           <SchemaForm
             {...others}
             defaultValue={value || defaultValue}
