@@ -2,7 +2,6 @@ import React from 'react'
 import { GLOBAL_BTN_ICON_URL } from '../../configs/theme'
 import { wrapSubmitSchema, CustomIcon } from '../../utils/util'
 import merge from 'lodash.merge'
-import { Button } from '@alifd/next'
 
 export default (props) => {
   const {
@@ -13,7 +12,8 @@ export default (props) => {
     changeCodeMode: _changeCodeMode,
     globalButtonList,
     showPreviewBtn,
-    showSourceCodeBtn
+    showSourceCodeBtn,
+    UI
   } = props
 
   // 获取主题下的默认icon图片地址
@@ -102,10 +102,13 @@ export default (props) => {
     ) : null
 
     const originalBtn = (
-      <Button key={key} {...props}>
+      <UI.Button
+        key={key}
+        {...props}
+      >
         {customIconTpl}
         <span>{title}</span>
-      </Button>
+      </UI.Button>
     )
 
     return render

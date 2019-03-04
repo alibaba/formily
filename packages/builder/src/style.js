@@ -1,4 +1,6 @@
-export default `
+import styled from 'styled-components'
+
+export default styled.div`
   position: relative;
   min-width: 600px;
   overflow: hidden;
@@ -36,8 +38,7 @@ export default `
       top: 24px;
       width: 9px;
       height: 17px;
-      background: url('${props =>
-    props.theme.backIconUrl}') no-repeat center center;
+      background: url('${props => props.theme.backIconUrl}') no-repeat center center;
       background-size: 9px 17px;
     }
     &::after {
@@ -121,10 +122,10 @@ export default `
   .schema-form-container .next-form-top .next-form-item-label {
     margin-bottom: 0 !important;
   }
-  .next-accordion {
+  .next-accordion, .next-collapse {
     border: none;
   }
-  .next-accordion-section-title {
+  .next-accordion-section-title, .next-collapse-panel-title {
     background: none;
     user-select: none;
     color: ${props => props.theme.whiteColor};
@@ -151,7 +152,7 @@ export default `
       }
     }
   }
-  .next-accordion-section-content {
+  .next-accordion-section-content, .next-collapse-panel-content {
     background: none;
     .next-form-left .next-form-item-label, .next-radio-group .next-radio-label {
       color: ${props => props.theme.whiteColor};

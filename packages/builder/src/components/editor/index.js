@@ -1,10 +1,9 @@
 import React from 'react'
 import cls from 'classnames'
-import Dialog from '@alifd/next/lib/dialog'
-import styled from 'styled-components'
+
 import { connect } from 'react-redux'
 import { initSchema, changeGbConfig, changeCodeMode } from '../../actions/index'
-import editorStyle from './style'
+import EditorStyle from './style'
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
 
 import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
@@ -48,7 +47,7 @@ class Component extends React.Component {
     const { className, codemode } = this.props
 
     return (
-      <div className={cls(className, codemode ? 'active' : '')}>
+      <EditorStyle className={cls(className, codemode ? 'active' : '')}>
         <div id='J_uformEditor' className='editor' />
         <a
           href='javascript:;'
@@ -67,28 +66,20 @@ class Component extends React.Component {
               _initSchema(schema)
               _changeGbConfig(gbConfig)
             } catch (e) {
-              Dialog.alert({
-                title: '提示',
-                content: '格式转换失败，请检查代码'
-              })
-              return false
+              throw new Error(`格式转换失败，请检查代码:  + ${e.message}`)
             }
           }}
         >
           保存源码
         </a>
-      </div>
+      </EditorStyle>
     )
   }
 }
 
-const StyledEditor = styled(Component)`
-  ${editorStyle}
-`
-
 class StyledEditorComp extends React.Component {
   render() {
-    return <StyledEditor {...this.props} />
+    return <Component {...this.props} />
   }
 }
 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { DatePicker } from '@alifd/next'
 import DefaultValueGenerator from './defaultValueGenerator'
 
 const ds = [
@@ -18,7 +17,7 @@ const ds = [
 ]
 
 const DatePickerDefault = props => (
-  <DatePicker
+  <props.UI.DatePicker
     showTime
     onChange={(v, vStr) => {
       props.onChange(vStr)

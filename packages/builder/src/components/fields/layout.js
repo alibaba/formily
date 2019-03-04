@@ -6,8 +6,8 @@ import supportLayoutList from '../../configs/supportLayoutList'
 import { Header } from '../../utils/util'
 import { connect } from 'react-redux'
 import { addComponentAndEdit } from '../../actions'
-import styled from 'styled-components'
-import { layoutStyle } from './style'
+
+import { layoutStyle as LayoutStyle } from './style'
 
 class Component extends React.Component {
   static propTypes = {
@@ -46,13 +46,13 @@ class Component extends React.Component {
 
   render() {
     return (
-      <div className={cls('col-card col-layout', this.props.className)}>
+      <LayoutStyle className={cls('col-card col-layout', this.props.className)}>
         <Header>
           <h2>布局</h2>
           <p>单击将布局添加入主面板</p>
         </Header>
         {this.renderList()}
-      </div>
+      </LayoutStyle>
     )
   }
 }
@@ -63,13 +63,9 @@ const mapDispatchToProps = dispatch => ({
   addComponentAndEdit: component => dispatch(addComponentAndEdit(component))
 })
 
-const StyledComponent = styled(Component)`
-  ${layoutStyle}
-`
-
 class StyledLayoutListComp extends React.Component {
   render() {
-    return <StyledComponent {...this.props} />
+    return <Component {...this.props} />
   }
 }
 

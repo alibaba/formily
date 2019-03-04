@@ -1,4 +1,6 @@
-export default `
+import styled from 'styled-components'
+
+export default styled.div`
   position: absolute;
   min-width: 500px;
   top: 64px;

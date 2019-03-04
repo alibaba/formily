@@ -18,6 +18,10 @@ module.exports = {
   coveragePathIgnorePatterns: [
     '/node_modules/',
     'package.json',
+    '/demo/',
+    '/packages/builder/src/__tests__/',
+    '/packages/builder/src/components/',
+    '/packages/builder/src/configs/',
     'package-lock.json'
   ]
 }

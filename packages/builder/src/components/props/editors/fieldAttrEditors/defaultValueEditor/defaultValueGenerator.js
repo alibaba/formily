@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Select, Input } from '@alifd/next'
 
 class DefaultValueGenerator extends Component {
   static defaultProps = {
@@ -64,7 +63,7 @@ class DefaultValueGenerator extends Component {
             verticalAlign: 'top'
           }}
         >
-          <Input
+          <this.props.UI.Input
             value={value}
             onChange={this.handleValueChange}
             placeholder='url上的key'
@@ -83,7 +82,7 @@ class DefaultValueGenerator extends Component {
     const { type, value, flag } = this.state
     return (
       <div>
-        <Select
+        <this.props.UI.Select
           value={type}
           dataSource={this.props.ds}
           onChange={this.handleValueTypeChange}

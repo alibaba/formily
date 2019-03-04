@@ -1,4 +1,6 @@
-export const indexStyle = `
+import styled from 'styled-components'
+
+export const indexStyle = styled.div`
   .field-list {
     font-size: 0;
     li {
@@ -42,7 +44,7 @@ export const indexStyle = `
   }
 `
 
-export const layoutStyle = `
+export const layoutStyle = styled.div`
   .layout-list {
     margin-bottom: 15px;
     padding: 0 8px;

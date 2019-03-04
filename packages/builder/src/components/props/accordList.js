@@ -1,16 +1,20 @@
 import React from 'react'
 import PropsSetting from './propsSetting'
-import { Accordion } from '@alifd/next'
-import { SchemaForm, Field } from './utils/baseForm'
+import { SchemaForm, Field } from '../../utils/baseForm'
 import defaultGlobalCfgList from '../../configs/supportGlobalCfgList'
 
 export default class extends React.Component {
-  state = {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      accordionList: this.getAccordionList()
+    }
+  }
 
   componentDidMount() {
-    this.setState({
-      accordionList: this.getAccordionList()
-    })
+    // this.setState({
+    //   accordionList: this.getAccordionList()
+    // })
   }
 
   generateGlobalCfgList = () => {
@@ -33,6 +37,7 @@ export default class extends React.Component {
   // global config
   renderGlobalConfig = () => {
     const globalCfgList = this.generateGlobalCfgList()
+
     const content = (
       <SchemaForm
         onChange={value => {
@@ -59,6 +64,7 @@ export default class extends React.Component {
           <PropsSetting
             supportConfigList={this.props.supportConfigList}
             renderEngine={this.props.renderEngine}
+            UI={this.props.UI}
           />
         ),
         expanded: true
@@ -76,13 +82,17 @@ export default class extends React.Component {
   }
 
   render() {
-    return <Accordion
-      dataSource={this.state.accordionList}
-      onChange={(status, list) => {
-        this.setState({
-          accordionList: list
-        })
-      }}
-    />
+    const { Accordtion } = this.props.UI
+
+    return (
+      <Accordtion
+        dataSource={this.state.accordionList}
+        onChange={(status, list) => {
+          this.setState({
+            accordionList: list
+          })
+        }}
+      />
+    )
   }
 }

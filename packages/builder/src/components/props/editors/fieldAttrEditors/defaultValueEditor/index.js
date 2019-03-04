@@ -84,17 +84,18 @@ class DefaultValueEditor extends Component {
 
   getEditor = editorType => {
     const props = this.createEditorProps(editorType)
+    const { UI } = this.props
     switch (editorType) {
       case 'string':
-        return <StringDefaultEditor {...props} />
+        return <StringDefaultEditor {...props} UI={UI} />
       case 'array':
-        return <ArrayDefaultEditor {...props} />
+        return <ArrayDefaultEditor {...props} UI={UI} />
       case 'boolean':
-        return <BoolDefaultEditor {...props} />
+        return <BoolDefaultEditor {...props} UI={UI} />
       case 'month':
-        return <MonthDefaultEditor {...props} />
+        return <MonthDefaultEditor {...props} UI={UI} />
       case 'date':
-        return <DateDefaultEditor {...props} />
+        return <DateDefaultEditor {...props} UI={UI} />
       case 'daterange':
         return <DateRangeDefaultEditor {...props} />
       case 'time':
