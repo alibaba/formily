@@ -7,7 +7,7 @@ import {
 } from 'scheduler'
 /* eslint-disable camelcase */
 
-import { isArr, isStr, getPathSegments, toArr } from '@uform/utils'
+import { isArr, isStr, getPathSegments, toArr, clone } from '@uform/utils'
 export * from '@uform/utils'
 
 const self = this || global || window
@@ -82,7 +82,7 @@ export const publishFieldState = state => {
     rules
   } = state
   return {
-    value,
+    value: clone(value),
     valid,
     invalid,
     editable,

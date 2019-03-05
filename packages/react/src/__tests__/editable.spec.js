@@ -129,3 +129,28 @@ test('update editable in controlled', async () => {
   await sleep(100)
   expect(queryByText('text')).toBeVisible()
 })
+
+test('editable with x-props', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm actions={actions}>
+        <Field
+          name='aaa'
+          x-props={{ editable: false }}
+          type='string'
+          title='text'
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(100)
+  expect(queryByText('text')).toBeNull()
+  actions.setFieldState('aaa', state => {
+    state.editable = true
+  })
+  await sleep(100)
+  expect(queryByText('text')).toBeVisible()
+})
