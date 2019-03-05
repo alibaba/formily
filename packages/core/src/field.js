@@ -37,15 +37,10 @@ export class Field {
   }
 
   initialize(options) {
-    if (this.initialized) {
-      this.value = options.value
-      if (!isEmpty(options.initialValue)) {
-        this.initialValue = clone(options.initialValue)
-      }
-    } else {
-      this.value = options.value
-      this.initialValue = options.initialValue
-    }
+    this.value = !isEmpty(options.value) ? clone(options.value) : this.value
+    this.initialValue = !isEmpty(options.initialValue)
+      ? options.initialValue
+      : this.initialValue
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
     const editable = this.getEditableFromProps(options.props)
@@ -156,39 +151,12 @@ export class Field {
     }
   }
 
-  changeValue(value) {
-    this.context.setValue(this.name, value)
-  }
-
-  setInitalValue() {
-    const lastValue = this.context.getValue(this.name)
-    if (
-      this.initialValue !== undefined &&
-      !isEqual(lastValue, this.initialValue)
-    ) {
-      const initialValue = clone(this.initialValue)
-      this.context.setIn(this.name, initialValue)
-      this.value = initialValue
-    }
-  }
-
   removeValue() {
     this.value = undefined
     if (!this.context) return
     this.context.deleteIn(this.name)
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
-    }
-  }
-
-  resetValue() {
-    if (this.initialValue !== undefined) {
-      const lastValue = this.value
-      if (!isEqual(lastValue, this.initialValue)) {
-        this.value = clone(this.initialValue)
-        this.context.setIn(this.name, this.value)
-        this.dirty = true
-      }
     }
   }
 

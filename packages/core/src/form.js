@@ -1,7 +1,7 @@
 import {
   Broadcast,
   each,
-  every,
+  reduce,
   isEqual,
   isFn,
   isStr,
@@ -158,7 +158,7 @@ export class Form {
   setFormState = reducer => {
     if (!isFn(reducer)) return
     return new Promise(resolve => {
-      const published = produce(clone(this.publishState()), reducer)
+      const published = produce(this.publishState(), reducer)
       this.checkState(published)
       resolve()
     })
@@ -288,11 +288,14 @@ export class Form {
         )
           .then(response => {
             const lastValid = this.state.valid
-            let _errors = []
-            this.state.valid = every(response, ({ valid, errors }) => {
-              _errors = _errors.concat(errors)
-              return valid
-            })
+            let _errors = reduce(
+              response,
+              (buf, { valid, errors }) => {
+                return buf.concat(errors)
+              },
+              []
+            )
+            this.state.valid = _errors.length === 0
             this.state.invalid = !this.state.valid
             this.state.errors = _errors
             if (this.state.valid !== lastValid) {
@@ -432,7 +435,7 @@ export class Form {
     if (this.state.dirty && this.initialized) {
       each(this.fields, (field, name) => {
         let newValue = this.getInitialValue(name)
-        field.initialValue = clone(newValue)
+        field.initialValue = newValue
       })
     }
   }
@@ -444,7 +447,7 @@ export class Form {
         each(this.fields, (field, name) => {
           let newValue = this.getValue(name)
           field.updateState(state => {
-            state.value = clone(newValue)
+            state.value = newValue
           })
           if (field.dirty) {
             raf(() => {
@@ -505,7 +508,7 @@ export class Form {
       const initialValue = this.getInitialValue(name, field.path)
       if (value === undefined && initialValue === undefined) return
       field.updateState(state => {
-        state.value = clone(initialValue)
+        state.value = initialValue
       })
       if (field.dirty) {
         raf(() => {
@@ -562,14 +565,13 @@ export class Form {
   }
 
   submit() {
-    return this.validate()
-      .then(formState => {
-        this.triggerEffect('onFormSubmit', formState)
-        if (isFn(this.options.onSubmit)) {
-          this.options.onSubmit({ formState })
-        }
-        return formState
-      })
+    return this.validate().then(formState => {
+      this.triggerEffect('onFormSubmit', formState)
+      if (isFn(this.options.onSubmit)) {
+        this.options.onSubmit({ formState })
+      }
+      return formState
+    })
   }
 
   subscribe(callback) {
