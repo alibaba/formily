@@ -26,7 +26,7 @@ beforeEach(() => {
   )
 })
 
-test('submit by form consumer', async () => {
+test('update value by ref', async () => {
   const actions = createFormActions()
   const TestComponent = () => (
     <SchemaForm defaultValue={{ mutator: [{ aaa: '123' }] }} actions={actions}>
