@@ -88,29 +88,31 @@ export const FormButtonGroup = styled(
 
       if (sticky) {
         return (
-          <FormConsumer>
-            {({ inline, FormRef } = {}) => {
-              if (!FormRef) return
-              return (
-                <Sticky
-                  edge='bottom'
-                  triggerDistance={this.props.triggerDistance}
-                  offsetDistance={this.props.offsetDistance}
-                  zIndex={this.props.zIndex}
-                  getStickyBoundary={this.getStickyBoundaryHandler(FormRef)}
-                  style={{
-                    borderTop: '1px solid #eee',
-                    background: (style && style.background) || '#fff',
-                    padding: (style && style.padding) || '20px 0'
-                  }}
-                >
-                  <div className={className} style={style}>
-                    {content}
-                  </div>
-                </Sticky>
-              )
-            }}
-          </FormConsumer>
+          <div>
+            <FormConsumer>
+              {({ inline, FormRef } = {}) => {
+                if (!FormRef) return
+                return (
+                  <Sticky
+                    edge='bottom'
+                    triggerDistance={this.props.triggerDistance}
+                    offsetDistance={this.props.offsetDistance}
+                    zIndex={this.props.zIndex}
+                    getStickyBoundary={this.getStickyBoundaryHandler(FormRef)}
+                    style={{
+                      borderTop: '1px solid #eee',
+                      background: (style && style.background) || '#fff',
+                      padding: (style && style.padding) || '20px 0'
+                    }}
+                  >
+                    <div className={className} style={style}>
+                      {content}
+                    </div>
+                  </Sticky>
+                )
+              }}
+            </FormConsumer>
+          </div>
         )
       }
 
