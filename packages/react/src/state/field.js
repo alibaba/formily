@@ -146,8 +146,10 @@ const StateField = createHOC((options, Field) => {
     const { name, path, schemaPath } = props
     const { form, getSchema, locale, editable } = useContext(StateContext)
     const schema = getSchema(schemaPath || path)
-    schema['x-props'] = schema['x-props'] || {}
-    schema['x-props'].editable = editable
+    if (schema) {
+      schema['x-props'] = schema['x-props'] || {}
+      schema['x-props'].editable = editable
+    }
     return (
       <StateField
         name={name}

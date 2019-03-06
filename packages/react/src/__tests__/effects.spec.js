@@ -60,7 +60,7 @@ test('onFormInit setFieldState', async () => {
   const { getByText, getAllByTestId, queryByText } = render(<TestComponent />)
 
   await sleep(100)
-  expect(getByText('text')).toBeVisible()
+  expect(queryByText('text')).toBeVisible()
   await sleep(100)
   fireEvent.click(getAllByTestId('btn')[1])
   await sleep(100)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import SchemaForm, {
   Field,
   registerFormField,
@@ -7,6 +7,7 @@ import SchemaForm, {
   createFormActions
 } from '../index'
 import { render, act } from 'react-testing-library'
+import { toArr } from '@uform/utils'
 
 beforeEach(() => {
   registerFieldMiddleware(Field => {
@@ -31,6 +32,28 @@ beforeEach(() => {
     'string',
     connect()(props => <input {...props} value={props.value || ''} />)
   )
+  registerFormField('array', props => {
+    const { value, mutators, renderField } = props
+    return (
+      <Fragment>
+        {toArr(value).map((item, index) => {
+          return (
+            <div data-testid='item' key={index}>
+              {renderField(index)}
+            </div>
+          )
+        })}
+        <button
+          type='button'
+          onClick={() => {
+            mutators.push()
+          }}
+        >
+          Add Field
+        </button>
+      </Fragment>
+    )
+  })
 })
 
 test('update editable by setFieldState', async () => {
@@ -153,4 +176,36 @@ test('editable with x-props', async () => {
   })
   await sleep(100)
   expect(queryByText('text')).toBeVisible()
+})
+
+test('editable with x-props in array field', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        defaultValue={{ array: [{ aa: '123123' }] }}
+        actions={actions}
+      >
+        <Field type='array' name='array'>
+          <Field type='object'>
+            <Field
+              name='aa'
+              x-props={{ editable: false }}
+              type='string'
+              title='text'
+            />
+          </Field>
+        </Field>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(100)
+  expect(queryByText('empty')).toBeVisible()
+  actions.setFieldState('array.0.aa', state => {
+    state.editable = true
+  })
+  await sleep(100)
+  expect(queryByText('empty')).toBeNull()
 })

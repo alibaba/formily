@@ -58,7 +58,7 @@ export class Form {
       errors: [],
       pristine: true,
       initialValues: clone(values) || {},
-      values: values || {},
+      values: clone(values) || {},
       dirty:
         lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     }
@@ -337,7 +337,6 @@ export class Form {
         value: value !== undefined ? value : initialValue,
         path: options.path,
         initialValue: initialValue,
-        rules: options.rules,
         props: options.props
       })
       let field = this.fields[name]

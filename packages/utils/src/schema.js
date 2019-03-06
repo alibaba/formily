@@ -34,9 +34,13 @@ export const registerVirtualboxFlag = name => {
   VIRTUAL_BOXES[name] = true
 }
 
+const isVirtualBoxSchema = schema => {
+  return isVirtualBox(schema['type']) || isVirtualBox(schema['x-component'])
+}
+
 const schemaTraverse = (schema, callback, path = [], schemaPath = []) => {
   if (schema) {
-    if (isVirtualBox(schema['type']) || isVirtualBox(schema['x-component'])) {
+    if (isVirtualBoxSchema(schema)) {
       path = path.slice(0, path.length - 1)
     }
     callback(schema, { path, schemaPath })
@@ -81,8 +85,11 @@ export const caculateSchemaInitialValues = (
         $path(index)
       })
     } else if ($path) {
-      const name = $path.path.join('.')
-      const path = $path.path
+      const isVirtualBox = isVirtualBoxSchema(schema)
+      const name = isVirtualBox
+        ? $path.schemaPath.join('.')
+        : $path.path.join('.')
+      const path = isVirtualBox ? $path.schemaPath : $path.path
       const schemaPath = $path.schemaPath
       const initialValue = getIn(initialValues, name)
       let value = !isEmpty(initialValue) ? initialValue : defaultValue
@@ -90,7 +97,11 @@ export const caculateSchemaInitialValues = (
         setIn(initialValues, name, value)
       }
       if (isFn(callback)) {
-        const _path = { name, path, schemaPath }
+        const _path = {
+          name,
+          path,
+          schemaPath
+        }
         callback(_path, schema, value)
       }
     }

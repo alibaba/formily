@@ -40,7 +40,6 @@ export const StateForm = createHOC((options, Form) => {
           })
         }
       })
-
       this.state = {}
       this.initialized = true
     }
