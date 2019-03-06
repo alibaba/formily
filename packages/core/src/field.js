@@ -51,11 +51,11 @@ export class Field {
     const rules = this.getRulesFromProps(options.props)
     this.rules = !isEmpty(rules) ? rules : this.rules
     this.required = hasRequired(this.rules)
-
-    this.props = isEmpty(options.props)
-      ? clone(this.props, filterSchema)
-      : clone({ ...this.props, ...options.props }, filterSchema)
-
+    this.props = !isEmpty(options.props)
+      ? !isEmpty(this.props)
+        ? { ...this.props, ...clone(options.props) }
+        : clone(options.props)
+      : this.props
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
     }

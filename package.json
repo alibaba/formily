@@ -64,6 +64,7 @@
     "json5": "^2.1.0",
     "lerna": "^3.10.1",
     "prettier-eslint-cli": "^4.7.1",
+    "pretty-format": "^24.0.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-testing-library": "^6.0.0",

@@ -251,7 +251,7 @@ const mapReduce = (obj, callback) => {
       if (isArr(item) || isPlainObj(item)) {
         return _traverse(item, _path, callback)
       } else {
-        return callback(_path, item)
+        return callback(_path, _path.slice(0, _path.length - 1).concat(item))
       }
     })
   }
@@ -303,7 +303,9 @@ const resolveGetIn = get => {
     if (!isArr(ast.destruct) && !isPlainObj(ast.destruct)) {
       return get(obj, path, value)
     }
-    return mapReduce(ast.destruct, (path, key) => get(obj, key))
+    return mapReduce(ast.destruct, (path, key) => {
+      return get(obj, ast.startPath.concat(key))
+    })
   }
 }
 
