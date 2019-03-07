@@ -350,3 +350,31 @@ test('dynamic remove field', async () => {
   expect(submitHandler).toHaveBeenCalledTimes(2)
   expect(validateFaildHandler).toHaveBeenCalledTimes(0)
 })
+
+test('dynamic default value', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm>
+        <Field
+          name='container'
+          type='array'
+          default={[{}]}
+          x-component='container'
+        >
+          <Field name='object' type='object'>
+            <FormCard>
+              <Field name='aa' required type='string' />
+              <Field name='bb' required type='string' />
+            </FormCard>
+          </Field>
+        </Field>
+        <button type='submit'>Submit</button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryAllByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryAllByTestId('item').length).toBe(1)
+  expect(queryAllByTestId('input').length).toBe(2)
+})
