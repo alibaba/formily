@@ -234,14 +234,24 @@ export const createArrayField = options => {
       }
     }
 
-    componentDidMount() {
+    validate() {
       const { value, mutators, schema, locale } = this.props
       const { maxItems, minItems } = schema
       if (value.length > maxItems) {
         mutators.errors(locale.array_invalid_maxItems, maxItems)
       } else if (value.length < minItems) {
         mutators.errors(locale.array_invalid_minItems, minItems)
+      } else {
+        mutators.errors()
       }
+    }
+
+    componentDidUpdate() {
+      this.validate()
+    }
+
+    componentDidMount() {
+      this.validate()
     }
   }
 }
