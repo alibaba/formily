@@ -17,7 +17,7 @@ import initialize from './initialize'
 export * from './shared/virtualbox'
 export * from './decorators/connect'
 export * from './shared/broadcast'
-
+export * from './shared/array'
 initialize()
 
 export const SchemaForm = SchemaMarkup()(

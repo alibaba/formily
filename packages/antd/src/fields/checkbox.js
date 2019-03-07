@@ -1,4 +1,4 @@
-import { connect, registerFormField } from 'uform/react'
+import { connect, registerFormField } from '@uform/react'
 import { Checkbox } from 'antd'
 import {
   transformDataSourceKey,
