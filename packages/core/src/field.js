@@ -56,6 +56,7 @@ export class Field {
         ? { ...this.props, ...clone(options.props) }
         : clone(options.props)
       : this.props
+    this.visible = true
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
     }

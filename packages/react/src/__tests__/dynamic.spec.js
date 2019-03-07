@@ -325,7 +325,9 @@ test('dynamic remove field', async () => {
     )
   }
 
-  const { queryAllByText, queryByText } = render(<TestComponent />)
+  const { queryAllByTestId, queryAllByText, queryByText } = render(
+    <TestComponent />
+  )
   await sleep(33)
   fireEvent.click(queryByText('Add Field'))
   await sleep(33)
@@ -334,5 +336,17 @@ test('dynamic remove field', async () => {
   fireEvent.click(queryAllByText('Submit')[1])
   await sleep(33)
   expect(submitHandler).toHaveBeenCalledTimes(1)
+  expect(validateFaildHandler).toHaveBeenCalledTimes(0)
+  await sleep(33)
+  fireEvent.click(queryByText('Add Field'))
+  await sleep(33)
+  expect(queryAllByTestId('item').length).toBe(1)
+  expect(queryAllByTestId('input').length).toBe(2)
+  await sleep(33)
+  fireEvent.click(queryByText('Remove Field'))
+  await sleep(33)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(33)
+  expect(submitHandler).toHaveBeenCalledTimes(2)
   expect(validateFaildHandler).toHaveBeenCalledTimes(0)
 })
