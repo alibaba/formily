@@ -98,14 +98,18 @@ export const createArrayField = options => {
       return (
         value.length === 0 &&
         this.renderWith('empty', ({ add, isActive }, text) => {
+          const active = isActive('empty', value)
           return (
-            <div className='array-empty-wrapper' onClick={add}>
+            <div
+              className={`array-empty-wrapper ${!active ? 'disabled' : ''}`}
+              onClick={active ? add : undefined}
+            >
               <div className='array-empty'>
                 <img
                   style={{ backgroundColor: 'transparent' }}
                   src='//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
                 />
-                {isActive('empty', value) && (
+                {active && (
                   <TextButton>
                     <AddIcon />
                     {text || locale.addItem || '添加'}
