@@ -114,9 +114,11 @@ export const connect = opts => Target => {
         if (isFn(editable)) {
           if (!editable(name)) {
             props.disabled = true
+            props.readOnly = true
           }
         } else if (editable === false) {
           props.disabled = true
+          props.readOnly = true
         }
       }
 
