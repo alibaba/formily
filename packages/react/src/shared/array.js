@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFn, getIn, camelCase } from '../utils'
+import { isFn, getIn, camelCase, isEqual } from '../utils'
 
 export const createArrayField = options => {
   const {
@@ -246,8 +246,10 @@ export const createArrayField = options => {
       }
     }
 
-    componentDidUpdate() {
-      this.validate()
+    componentDidUpdate(prevProps) {
+      if (!isEqual(prevProps.value, this.props.value)) {
+        this.validate()
+      }
     }
 
     componentDidMount() {
