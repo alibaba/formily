@@ -1,10 +1,11 @@
 import React from 'react'
 import { registerFormField } from '@uform/react'
-import { isFn } from '@uform/utils'
+import { isFn, getIn } from '@uform/utils'
 import { Icon } from 'antd'
+import camelCase from 'camel-case'
 import styled, { css } from 'styled-components'
 
-export const CircleButton = styled.div`
+export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
   width:30px;
   height:30px;
   margin-right:10px;
@@ -39,43 +40,148 @@ export const TextButton = styled.div`
 `
 
 export class ArrayField extends React.Component {
-  renderEmpty(disabled) {
-    const { locale, mutators } = this.props
-    return (
-      <div
-        className='array-empty-wrapper'
-        onClick={() => {
-          mutators.push()
-        }}
-      >
-        <div className='array-empty'>
-          <img src='//img.alicdn.com/tfs/TB1y2nwp_tYBeNjy1XdXXXXyVXa-200-200.png' />
-          {!disabled && (
-            <TextButton>
-              <Icon type='plus' />
-              {locale.addItem || '添加'}
-            </TextButton>
-          )}
-        </div>
-      </div>
-    )
+  isActive = (key, value) => {
+    const readOnly = this.getProps('readOnly')
+    const disabled = this.getDisabled()
+    if (isFn(disabled)) {
+      return disabled(key, value)
+    } else if (isFn(readOnly)) {
+      return readOnly(key, value)
+    } else {
+      return !readOnly && !disabled
+    }
+  }
+
+  getApi(index) {
+    const { value } = this.props
+    return {
+      index,
+      isActive: this.isActive,
+      dataSource: value,
+      record: value[index],
+      add: this.onAddHandler(),
+      remove: this.onRemoveHandler(index),
+      moveDown: e => {
+        return this.onMoveHandler(
+          index,
+          index + 1 > value.length - 1 ? 0 : index + 1
+        )(e)
+      },
+      moveUp: e => {
+        return this.onMoveHandler(
+          index,
+          index - 1 < 0 ? value.length - 1 : index - 1
+        )(e)
+      }
+    }
+  }
+
+  getProps(path) {
+    return getIn(this.props.schema, `x-props${path ? '.' + path : ''}`)
+  }
+
+  renderWith(name, index, defaultRender) {
+    const render = this.getProps(camelCase(`render-${name}`))
+    if (isFn(index)) {
+      defaultRender = index
+      index = 0
+    }
+    if (isFn(render)) {
+      return render(this.getApi(index))
+    } else {
+      return defaultRender(this.getApi(index))
+    }
   }
 
   renderAddition() {
     const { locale } = this.props
+    const { value } = this.props
     return (
-      <div className='array-item-addition'>
-        <TextButton inline={true} onClick={this.onAddHandler()}>
-          <Icon type='plus' />
-          {locale.addItem || '添加'}
-        </TextButton>
-      </div>
+      this.isActive('addition', value) &&
+      this.renderWith('addition', ({ add }) => {
+        return (
+          <div className='array-item-addition' onClick={add}>
+            <TextButton>
+              <Icon type='add' />
+              {locale.addItem || '添加'}
+            </TextButton>
+          </div>
+        )
+      })
+    )
+  }
+
+  renderEmpty(disabled) {
+    const { locale, value } = this.props
+    return (
+      value.length === 0 &&
+      this.renderWith('empty', ({ add, isActive }) => {
+        return (
+          <div className='array-empty-wrapper' onClick={add}>
+            <div className='array-empty'>
+              <img
+                style={{ backgroundColor: 'transparent' }}
+                src='//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
+              />
+              {isActive('empty', value) && (
+                <TextButton>
+                  <Icon type='add' />
+                  {locale.addItem || '添加'}
+                </TextButton>
+              )}
+            </div>
+          </div>
+        )
+      })
+    )
+  }
+
+  renderRemove(index, item) {
+    return (
+      this.isActive(`${index}.remove`, item) &&
+      this.renderWith('remove', index, ({ remove }) => {
+        return (
+          <CircleButton onClick={remove}>
+            <Icon size='xs' type='ashbin' />
+          </CircleButton>
+        )
+      })
+    )
+  }
+
+  renderMoveDown(index, item) {
+    const { value } = this.props
+    return (
+      value.length > 1 &&
+      this.isActive(`${index}.moveDown`, item) &&
+      this.renderWith('moveDown', index, ({ moveDown }) => {
+        return (
+          <CircleButton onClick={moveDown}>
+            <Icon size='xs' type='arrow-down' />
+          </CircleButton>
+        )
+      })
+    )
+  }
+
+  renderMoveUp(index, item) {
+    const { value } = this.props
+    return (
+      value.length > 1 &&
+      this.isActive(`${index}.moveUp`, value) &&
+      this.renderWith('moveUp', index, ({ moveUp }) => {
+        return (
+          <CircleButton onClick={moveUp}>
+            <Icon size='xs' type='arrow-up' />
+          </CircleButton>
+        )
+      })
     )
   }
 
   getDisabled() {
-    const { schema, editable, name } = this.props
-    const disabled = schema['x-props'] && schema['x-props'].disabled
+    const { editable, name } = this.props
+    const disabled = this.getProps('disabled')
     if (editable !== undefined) {
       if (isFn(editable)) {
         if (!editable(name)) {
@@ -86,19 +192,6 @@ export class ArrayField extends React.Component {
       }
     }
     return disabled
-  }
-
-  controllable(key, value) {
-    const { schema } = this.props
-    const readOnly = schema['x-props'] && schema['x-props'].readOnly
-    const disabled = this.getDisabled()
-    if (isFn(disabled)) {
-      return disabled(key, value)
-    } else if (isFn(readOnly)) {
-      return readOnly(key, value)
-    } else {
-      return !readOnly && !disabled
-    }
   }
 
   onRemoveHandler(index) {
@@ -180,41 +273,15 @@ registerFormField(
                   </div>
                   <div className='array-item-wrapper'>{renderField(index)}</div>
                   <div className='array-item-operator'>
-                    {this.controllable(`${index}.remove`, item) && (
-                      <CircleButton onClick={this.onRemoveHandler(index)}>
-                        <Icon size='xs' type='delete' />
-                      </CircleButton>
-                    )}
-                    {value.length > 1 &&
-                      this.controllable(`${index}.moveDown`, item) && (
-                      <CircleButton
-                        onClick={this.onMoveHandler(
-                          index,
-                          index + 1 > value.length - 1 ? 0 : index + 1
-                        )}
-                      >
-                        <Icon size='xs' type='down' />
-                      </CircleButton>
-                    )}
-                    {value.length > 1 &&
-                      this.controllable(`${index}.moveUp`, item) && (
-                      <CircleButton
-                        onClick={this.onMoveHandler(
-                          index,
-                          index - 1 < 0 ? value.length - 1 : index - 1
-                        )}
-                      >
-                        <Icon size='xs' type='up' />
-                      </CircleButton>
-                    )}
+                    {this.renderRemove(index, item)}
+                    {this.renderMoveDown(index, item)}
+                    {this.renderMoveUp(index, item)}
                   </div>
                 </div>
               )
             })}
-            {value.length === 0 && this.renderEmpty()}
-            {value.length > 0 &&
-              this.controllable('addition', value) &&
-              this.renderAddition()}
+            {this.renderEmpty()}
+            {value.length > 0 && this.renderAddition()}
           </div>
         )
       }

@@ -45,7 +45,7 @@ const StateField = createHOC((options, Field) => {
 
     componentWillUnmount() {
       this.unmounted = true
-      this.field.removeValue()
+      this.field.remove()
     }
 
     isEqualEditable(editable, prevEditable) {

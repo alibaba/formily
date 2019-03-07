@@ -17,5 +17,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
+  "dependencies": {
+    "camel-case": "^3.0.0"
+  }
 }

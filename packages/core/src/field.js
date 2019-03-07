@@ -151,8 +151,9 @@ export class Field {
     }
   }
 
-  removeValue() {
+  remove() {
     this.value = undefined
+    this.visible = false
     if (!this.context) return
     this.context.deleteIn(this.name)
     if (typeof this.value === 'object') {

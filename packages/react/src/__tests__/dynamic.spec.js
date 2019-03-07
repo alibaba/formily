@@ -28,6 +28,14 @@ beforeEach(() => {
           return (
             <div data-testid='item' key={index}>
               {renderField(index)}
+              <button
+                type='button'
+                onClick={() => {
+                  mutators.remove(index)
+                }}
+              >
+                Remove Field
+              </button>
             </div>
           )
         })}
@@ -293,4 +301,38 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
   expect(submitHandler).toHaveBeenCalledWith({
     container: [{ aa: '321' }, undefined]
   })
+})
+
+test('dynamic remove field', async () => {
+  const submitHandler = jest.fn()
+  const validateFaildHandler = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        onSubmit={submitHandler}
+        onValidateFailed={validateFaildHandler}
+      >
+        <Field name='container' type='array' x-component='container'>
+          <Field name='object' type='object'>
+            <FormCard>
+              <Field name='aa' required type='string' />
+              <Field name='bb' required type='string' />
+            </FormCard>
+          </Field>
+        </Field>
+        <button type='submit'>Submit</button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryAllByText, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.click(queryByText('Add Field'))
+  await sleep(33)
+  fireEvent.click(queryByText('Remove Field'))
+  await sleep(33)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(33)
+  expect(submitHandler).toHaveBeenCalledTimes(1)
+  expect(validateFaildHandler).toHaveBeenCalledTimes(0)
 })
