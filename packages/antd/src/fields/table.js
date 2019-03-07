@@ -296,6 +296,7 @@ registerFormField(
                             {this.renderRemove(index, item)}
                             {this.renderMoveDown(index, item)}
                             {this.renderMoveUp(index, item)}
+                            {this.renderExtraOperations(index)}
                           </div>
                         )
                       }}
