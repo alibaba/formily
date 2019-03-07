@@ -137,6 +137,9 @@ registerFormField(
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      &.disabled {
+        cursor: default;
+      }
       .array-empty {
         display: flex;
         flex-direction: column;
