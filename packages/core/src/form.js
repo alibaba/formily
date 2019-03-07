@@ -376,10 +376,10 @@ export class Form {
     }
   }
 
-  removeValue(name) {
+  removeField(name) {
     const field = this.fields[name]
     if (field) {
-      field.removeValue()
+      field.remove()
     }
   }
 

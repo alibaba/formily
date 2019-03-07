@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { registerFormField } from '@uform/react'
 import { isFn, toArr } from '@uform/utils'
-import { Icon } from 'antd'
-import { ArrayField, CircleButton } from './array'
+import { ArrayField } from './array'
 import styled from 'styled-components'
 
 /**
@@ -79,7 +78,7 @@ const Table = styled(
             <td className='ant-table-cell' colSpan={columns.length}>
               <div className='ant-table-empty' style={{ padding: 10 }}>
                 <img
-                  src='//img.alicdn.com/tfs/TB1y2nwp_tYBeNjy1XdXXXXyVXa-200-200.png'
+                  src='//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
                   style={{ height: 60 }}
                 />
               </div>
@@ -294,35 +293,9 @@ registerFormField(
                       cell={(item, index) => {
                         return (
                           <div className='array-item-operator'>
-                            {this.controllable(`${index}.remove`, item) && (
-                              <CircleButton
-                                onClick={this.onRemoveHandler(index)}
-                              >
-                                <Icon size='xs' type='delete' />
-                              </CircleButton>
-                            )}
-                            {value.length > 1 &&
-                              this.controllable(`${index}.moveDown`, item) && (
-                              <CircleButton
-                                onClick={this.onMoveHandler(
-                                  index,
-                                  index + 1 > value.length - 1 ? 0 : index + 1
-                                )}
-                              >
-                                <Icon size='xs' type='down' />
-                              </CircleButton>
-                            )}
-                            {value.length > 1 &&
-                              this.controllable(`${index}.moveUp`, item) && (
-                              <CircleButton
-                                onClick={this.onMoveHandler(
-                                  index,
-                                  index - 1 < 0 ? value.length - 1 : index - 1
-                                )}
-                              >
-                                <Icon size='xs' type='up' />
-                              </CircleButton>
-                            )}
+                            {this.renderRemove(index, item)}
+                            {this.renderMoveDown(index, item)}
+                            {this.renderMoveUp(index, item)}
                           </div>
                         )
                       }}
@@ -330,7 +303,7 @@ registerFormField(
                   )
                 })}
               </Table>
-              {this.controllable('addition', value) && this.renderAddition()}
+              {this.renderAddition()}
             </div>
           </div>
         )
