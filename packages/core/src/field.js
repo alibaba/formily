@@ -225,7 +225,6 @@ export class Field {
       this.dirtyType = 'errors'
       this.dirty = true
     }
-
     if (!isEqual(published.rules, this.rules)) {
       this.rules = published.rules
       this.errors = []
