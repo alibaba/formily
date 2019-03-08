@@ -137,3 +137,41 @@ test('validate in editable false', async () => {
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
   expect(queryByText('editable is required')).toBeNull()
 })
+
+test('modify validate rules by setFieldState', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm actions={actions}>
+        <Field name='bb' type='string' x-rules={{ required: true }} />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+  const {
+    queryByText,
+    queryAllByText,
+    queryByTestId
+  } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(33)
+  expect(queryByText('bb is required')).toBeVisible()
+  actions.setFieldState('bb', state => {
+    state.rules = [
+      { required: true },
+      {
+        pattern: /^\d{6}$/,
+        message: 'must have 6 numbers'
+      }
+    ]
+  })
+  await sleep(33)
+  fireEvent.change(queryByTestId('test-input'), {
+    target: { value: '123' }
+  })
+  await sleep(33)
+  expect(queryByText('must have 6 numbers')).toBeNull()
+})

@@ -206,7 +206,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     submit = () => {
-      this.form.submit()
+      return this.form.submit()
     }
 
     reset = () => {

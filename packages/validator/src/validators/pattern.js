@@ -8,7 +8,6 @@ export const patternValidate = (pattern, value, message) => {
     : isRegExp(pattern)
       ? pattern.test(String(value))
       : new RegExp(String(pattern)).test(String(value))
-
   return !valid ? message : ''
 }
 
