@@ -410,7 +410,7 @@ test('dynamic async default value', async () => {
       }, 33)
     }, [])
     return (
-      <SchemaForm schema={schema}>
+      <SchemaForm initialValues={{}} schema={schema}>
         <button type='submit'>Submit</button>
       </SchemaForm>
     )
