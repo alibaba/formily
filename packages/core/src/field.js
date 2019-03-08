@@ -24,6 +24,7 @@ export class Field {
     this.dirty = false
     this.pristine = true
     this.valid = true
+    this.removed = false
     this.invalid = false
     this.visible = true
     this.editable = true
@@ -37,18 +38,20 @@ export class Field {
   }
 
   initialize(options) {
+    const editable = this.getEditableFromProps(options.props)
+    const rules = this.getRulesFromProps(options.props)
     this.value = !isEmpty(options.value) ? clone(options.value) : this.value
     this.initialValue = !isEmpty(options.initialValue)
       ? options.initialValue
-      : this.initialValue
+      : !isEmpty(this.initialValue)
+        ? this.initialValue
+        : this.getInitialValueFromProps(options.props)
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
-    const editable = this.getEditableFromProps(options.props)
     this.editable = !isEmpty(editable) ? editable : this.editable
     this.path = resolveFieldPath(
       !isEmpty(options.path) ? options.path : this.path || []
     )
-    const rules = this.getRulesFromProps(options.props)
     this.rules = !isEmpty(rules) ? rules : this.rules
     this.required = hasRequired(this.rules)
     this.props = !isEmpty(options.props)
@@ -56,9 +59,27 @@ export class Field {
         ? { ...this.props, ...clone(options.props) }
         : clone(options.props)
       : this.props
-    this.visible = true
+    if (this.removed) {
+      this.removed = false
+      this.visible = true
+    }
+    if (!this.initialized) {
+      if (isEmpty(this.value) && !isEmpty(this.initialValue)) {
+        this.value = clone(this.initialValue)
+        this.context.setIn(this.name, this.value)
+        this.context.setInitialValueIn(this.name, this.initialValue)
+      }
+    }
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
+    }
+  }
+
+  getInitialValueFromProps(props) {
+    if (props) {
+      if (!isEmpty(props['default'])) {
+        return props['default']
+      }
     }
   }
 
@@ -155,6 +176,7 @@ export class Field {
   remove() {
     this.value = undefined
     this.visible = false
+    this.removed = true
     if (!this.context) return
     this.context.deleteIn(this.name)
     if (typeof this.value === 'object') {
