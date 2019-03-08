@@ -156,11 +156,10 @@ export const StateForm = createHOC((options, Form) => {
         this.form.changeValues(this.props.value)
       }
       if (
-        (this.props.initialValues &&
-          !isEqual(this.props.initialValues, prevProps.initialValues)) ||
-        (this.props.schema && !isEqual(this.props.schema, prevProps.schema))
+        this.props.initialValues &&
+        !isEqual(this.props.initialValues, prevProps.initialValues)
       ) {
-        this.form.initialize(this.props.initialValues, this.props.schema)
+        this.form.initialize(this.props.initialValues)
       }
     }
 
