@@ -119,12 +119,21 @@ export const StateForm = createHOC((options, Form) => {
               type: 'submitting',
               state: this.state
             })
-            promise.then(() => {
-              this.notify({
-                type: 'submitted',
-                state: this.state
-              })
-            })
+            promise.then(
+              () => {
+                this.notify({
+                  type: 'submitted',
+                  state: this.state
+                })
+              },
+              error => {
+                this.notify({
+                  type: 'submitted',
+                  state: this.state
+                })
+                throw error
+              }
+            )
           }
         }
       }
@@ -147,10 +156,11 @@ export const StateForm = createHOC((options, Form) => {
         this.form.changeValues(this.props.value)
       }
       if (
-        this.props.initialValues &&
-        !isEqual(this.props.initialValues, prevProps.initialValues)
+        (this.props.initialValues &&
+          !isEqual(this.props.initialValues, prevProps.initialValues)) ||
+        (this.props.schema && !isEqual(this.props.schema, prevProps.schema))
       ) {
-        this.form.initialize(this.props.initialValues)
+        this.form.initialize(this.props.initialValues, this.props.schema)
       }
     }
 

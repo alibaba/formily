@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import SchemaForm, {
   Field,
   registerFormField,
@@ -8,7 +8,7 @@ import SchemaForm, {
   createVirtualBox
 } from '../index'
 import { toArr } from '@uform/utils'
-import { render, fireEvent } from 'react-testing-library'
+import { render, fireEvent, act } from 'react-testing-library'
 
 let FormCard
 
@@ -375,6 +375,48 @@ test('dynamic default value', async () => {
 
   const { queryAllByTestId } = render(<TestComponent />)
   await sleep(33)
+  expect(queryAllByTestId('item').length).toBe(1)
+  expect(queryAllByTestId('input').length).toBe(2)
+})
+
+test('dynamic async default value', async () => {
+  const TestComponent = () => {
+    const [schema, setSchema] = useState()
+    useEffect(() => {
+      setTimeout(() => {
+        act(() => {
+          setSchema({
+            type: 'object',
+            properties: {
+              container: {
+                type: 'array',
+                default: [{}],
+                'x-component': 'container',
+                items: {
+                  type: 'object',
+                  properties: {
+                    aa: {
+                      type: 'string'
+                    },
+                    bb: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          })
+        })
+      }, 33)
+    }, [])
+    return (
+      <SchemaForm schema={schema}>
+        <button type='submit'>Submit</button>
+      </SchemaForm>
+    )
+  }
+  const { queryAllByTestId } = render(<TestComponent />)
+  await sleep(100)
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(2)
 })
