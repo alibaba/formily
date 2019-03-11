@@ -41,6 +41,7 @@ export class Form {
     this.subscribes = opts.subscribes || {}
     this.updateQueue = []
     this.updateBuffer = {}
+    this.editable = opts.editable
     this.schema = opts.schema || {}
     this.initialize(this.options.initialValues)
     this.initializeEffects()
@@ -78,6 +79,13 @@ export class Form {
     this.state.dirty =
       lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     this.updateFieldsValue()
+  }
+
+  changeEditable(editable) {
+    this.editable = editable
+    each(this.fields, (field, name) => {
+      field.changeEditable(editable)
+    })
   }
 
   initializeEffects() {

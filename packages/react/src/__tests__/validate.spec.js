@@ -143,22 +143,24 @@ test('modify validate rules by setFieldState', async () => {
   const TestComponent = () => {
     return (
       <SchemaForm actions={actions}>
-        <Field name='bb' type='string' x-rules={{ required: true }} />
+        <Field
+          name='bb'
+          type='string'
+          x-rules={[{ required: true, message: 'required' }]}
+        />
         <button type='submit' data-testid='btn'>
           Submit
         </button>
       </SchemaForm>
     )
   }
-  const {
-    queryByText,
-    queryAllByText,
-    queryByTestId
-  } = render(<TestComponent />)
+  const { queryByText, queryAllByText, queryByTestId } = render(
+    <TestComponent />
+  )
   await sleep(33)
   fireEvent.click(queryAllByText('Submit')[1])
   await sleep(33)
-  expect(queryByText('bb is required')).toBeVisible()
+  expect(queryByText('required')).toBeVisible()
   actions.setFieldState('bb', state => {
     state.rules = [
       { required: true },
@@ -173,5 +175,5 @@ test('modify validate rules by setFieldState', async () => {
     target: { value: '123' }
   })
   await sleep(33)
-  expect(queryByText('must have 6 numbers')).toBeNull()
+  expect(queryByText('must have 6 numbers')).toBeVisible()
 })

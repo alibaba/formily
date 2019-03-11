@@ -93,7 +93,7 @@ export class Field {
         }
       }
     }
-    return this.editable
+    return this.getEditable(this.context.editable)
   }
 
   getRulesFromProps(props) {
@@ -173,6 +173,16 @@ export class Field {
     }
   }
 
+  changeEditable(editable) {
+    if (!isEmpty(this.props.editable)) return
+    if (this.props['x-props'] && !isEmpty(this.props['x-props'].editable)) {
+      return
+    }
+    this.editable = this.getEditable(editable)
+    this.dirty = true
+    this.notify()
+  }
+
   remove() {
     this.value = undefined
     this.visible = false
@@ -233,8 +243,13 @@ export class Field {
       this.dirtyType = 'rules'
       this.dirty = true
     } else {
+      const prePropsRules = this.getRulesFromProps(this.props)
       const propsRules = this.getRulesFromProps(published.props)
-      if (!isEmpty(propsRules) && !isEqual(propsRules, this.rules)) {
+      if (
+        !isEmpty(propsRules) &&
+        !isEqual(prePropsRules, propsRules) &&
+        !isEqual(propsRules, this.rules)
+      ) {
         this.rules = propsRules
         this.errors = []
         this.valid = true
