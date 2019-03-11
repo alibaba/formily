@@ -2,7 +2,6 @@ import React, { Component, useContext } from 'react'
 import {
   createHOC,
   isEqual,
-  isFn,
   each,
   schemaIs,
   filterSchema,
@@ -48,22 +47,10 @@ const StateField = createHOC((options, Field) => {
       this.field.remove()
     }
 
-    isEqualEditable(editable, prevEditable) {
-      if (!isEqual(editable, prevEditable)) return false
-      if (isFn(editable)) {
-        return editable(this.field.name) === prevEditable(this.field.name)
-      }
-      return true
-    }
-
     componentDidUpdate(prevProps) {
       this.unmounted = false
       if (!isEqual(this.props.schema, prevProps.schema, filterSchema)) {
         this.field.changeProps(this.props.schema)
-      } else {
-        if (!this.isEqualEditable(this.props.editable, prevProps.editable)) {
-          this.field.changeProps(this.props.schema)
-        }
       }
     }
 
@@ -144,19 +131,13 @@ const StateField = createHOC((options, Field) => {
 
   return props => {
     const { name, path, schemaPath } = props
-    const { form, getSchema, locale, editable } = useContext(StateContext)
-    const schema = getSchema(schemaPath || path)
-    if (schema) {
-      schema['x-props'] = schema['x-props'] || {}
-      schema['x-props'].editable = editable
-    }
+    const { form, getSchema, locale } = useContext(StateContext)
     return (
       <StateField
         name={name}
         path={path}
         form={form}
-        editable={editable}
-        schema={schema}
+        schema={getSchema(schemaPath || path)}
         locale={locale}
         getSchema={getSchema}
         schemaPath={schemaPath}

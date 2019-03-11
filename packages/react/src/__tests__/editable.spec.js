@@ -209,3 +209,36 @@ test('editable with x-props in array field', async () => {
   await sleep(100)
   expect(queryByText('empty')).toBeNull()
 })
+
+test('editable with x-props is affected by global editable', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        editable={false}
+        defaultValue={{ array: [{ aa: '123123' }] }}
+        actions={actions}
+      >
+        <Field type='array' name='array' x-props={{ editable: true }}>
+          <Field type='object' x-props={{ editable: true }}>
+            <Field
+              name='aa'
+              x-props={{ editable: true }}
+              type='string'
+              title='text'
+            />
+          </Field>
+        </Field>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(100)
+  expect(queryByText('empty')).toBeNull()
+  actions.setFieldState('array.0.aa', state => {
+    state.editable = false
+  })
+  await sleep(100)
+  expect(queryByText('empty')).toBeVisible()
+})

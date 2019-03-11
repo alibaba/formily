@@ -14,6 +14,7 @@ export const createForm = ({
   onFieldChange,
   onFormWillInit,
   subscribes,
+  editable,
   effects,
   onValidateFailed
 }) => {
@@ -32,6 +33,7 @@ export const createForm = ({
     subscribes,
     onFormChange,
     onFieldChange,
+    editable,
     effects,
     onValidateFailed,
     schema

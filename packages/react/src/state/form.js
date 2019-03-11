@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import { createHOC, getSchemaNodeFromPath, isEqual, clone } from '../utils'
+import {
+  createHOC,
+  getSchemaNodeFromPath,
+  isEqual,
+  clone,
+  isEmpty
+} from '../utils'
 import { createForm } from '@uform/core'
 import { StateContext } from '../shared/context'
 import { getFormFieldPropsTransformer } from '../shared/core'
@@ -22,6 +28,7 @@ export const StateForm = createHOC((options, Form) => {
         effects: props.effects,
         subscribes: props.subscribes,
         schema: props.schema,
+        editable: props.editable,
         onSubmit: this.onSubmitHandler(props),
         onFormChange: this.onFormChangeHandler(props),
         onFieldChange: this.onFieldChangeHandler(props),
@@ -152,14 +159,15 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     componentDidUpdate(prevProps) {
-      if (this.props.value && !isEqual(this.props.value, prevProps.value)) {
-        this.form.changeValues(this.props.value)
+      const { value, editable, initialValues } = this.props
+      if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
+        this.form.changeValues(value)
       }
-      if (
-        this.props.initialValues &&
-        !isEqual(this.props.initialValues, prevProps.initialValues)
-      ) {
-        this.form.initialize(this.props.initialValues)
+      if (!isEmpty(initialValues) && !isEqual(initialValues, prevProps.initialValues)) {
+        this.form.initialize(initialValues)
+      }
+      if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
+        this.form.changeEditable(editable)
       }
     }
 
@@ -245,7 +253,6 @@ export const StateForm = createHOC((options, Form) => {
             form: this.form,
             getSchema: this.getSchema,
             locale,
-            editable,
             broadcast: this.broadcast
           }}
         >
