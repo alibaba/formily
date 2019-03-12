@@ -81,7 +81,7 @@ test('validate in init', async () => {
   })
   await sleep(100)
   const { queryAllByText, queryByText } = result
-  expect(queryByText('text is required')).toBeVisible()
+  expect(queryByText('text is required')).toBeNull()
   fireEvent.click(queryAllByText('Submit')[1])
   await sleep(100)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
@@ -121,7 +121,7 @@ test('validate in editable false', async () => {
   })
   await sleep(100)
   const { queryAllByText, queryByText } = result
-  expect(queryByText('editable is required')).toBeVisible()
+  expect(queryByText('editable is required')).toBeNull()
   fireEvent.click(queryAllByText('Submit')[1])
   await sleep(100)
   expect(handleSubmit).toHaveBeenCalledTimes(0)

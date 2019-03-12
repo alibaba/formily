@@ -69,7 +69,7 @@ export class Form {
         formState: this.publishState()
       })
     }
-    this.updateFieldsValue()
+    this.updateFieldsValue(false)
   }
 
   changeValues(values) {
@@ -447,23 +447,30 @@ export class Form {
     }
   }
 
-  updateFieldsValue() {
-    if (this.state.dirty && this.initialized) {
-      this.internalValidate(this.state.values, true).then(() => {
-        this.formNotify()
-        each(this.fields, (field, name) => {
-          let newValue = this.getValue(name)
-          field.updateState(state => {
-            state.value = newValue
-          })
-          if (field.dirty) {
-            raf(() => {
-              if (this.destructed) return
-              field.notify()
-            })
-          }
+  updateFieldsValue(validate = true) {
+    const update = () => {
+      each(this.fields, (field, name) => {
+        let newValue = this.getValue(name)
+        field.updateState(state => {
+          state.value = newValue
         })
+        if (field.dirty) {
+          raf(() => {
+            if (this.destructed) return
+            field.notify()
+          })
+        }
       })
+    }
+    if (this.state.dirty && this.initialized) {
+      if (validate) {
+        this.internalValidate(this.state.values, true).then(() => {
+          this.formNotify()
+          update()
+        })
+      } else {
+        update()
+      }
     }
   }
 
