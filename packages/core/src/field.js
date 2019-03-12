@@ -286,11 +286,9 @@ export class Field {
       }
       this.dirty = true
     } else {
-      const prePropsRequired = this.getRequiredFromProps(this.props)
       const propsRequired = this.getRequiredFromProps(published.props)
       if (
         !isEmpty(propsRequired) &&
-        !isEqual(prePropsRequired, propsRequired) &&
         !isEqual(propsRequired, this.required)
       ) {
         this.required = propsRequired
