@@ -171,6 +171,24 @@ test('modify required rules by setFieldState', async () => {
   expect(queryByText('kk is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(1)
   expect(handleValidateFailed).toBeCalledTimes(1)
+  actions.setFieldState('kk', state => {
+    state.required = false
+  })
+  await sleep(100)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(100)
+  expect(queryByText('kk is required')).toBeNull()
+  expect(handleSubmit).toBeCalledTimes(2)
+  expect(handleValidateFailed).toBeCalledTimes(1)
+  actions.setFieldState('kk', state => {
+    state.required = true
+  })
+  await sleep(100)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(100)
+  expect(queryByText('kk is required')).toBeVisible()
+  expect(handleSubmit).toBeCalledTimes(2)
+  expect(handleValidateFailed).toBeCalledTimes(2)
 })
 
 test('modify validate rules by setFieldState', async () => {
