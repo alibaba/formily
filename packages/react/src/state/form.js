@@ -43,7 +43,8 @@ export const StateForm = createHOC((options, Form) => {
             reset: this.reset,
             submit: this.submit,
             validate: this.validate,
-            getSchema: this.getSchema
+            getSchema: this.getSchema,
+            dispatch: this.dispatch
           })
         }
       })
@@ -163,7 +164,10 @@ export const StateForm = createHOC((options, Form) => {
       if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
         this.form.changeValues(value)
       }
-      if (!isEmpty(initialValues) && !isEqual(initialValues, prevProps.initialValues)) {
+      if (
+        !isEmpty(initialValues) &&
+        !isEqual(initialValues, prevProps.initialValues)
+      ) {
         this.form.initialize(initialValues)
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
@@ -222,6 +226,10 @@ export const StateForm = createHOC((options, Form) => {
 
     validate = () => {
       return this.form.validate()
+    }
+
+    dispatch = (type, payload) => {
+      this.form.triggerEffect(type, payload)
     }
 
     render() {
