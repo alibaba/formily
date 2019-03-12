@@ -138,6 +138,41 @@ test('validate in editable false', async () => {
   expect(queryByText('editable is required')).toBeNull()
 })
 
+test('modify required rules by setFieldState', async () => {
+  const actions = createFormActions()
+  const handleSubmit = jest.fn()
+  const handleValidateFailed = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        actions={actions}
+        onSubmit={handleSubmit}
+        onValidateFailed={handleValidateFailed}
+      >
+        <Field name='kk' type='string' />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+  const { queryByText, queryAllByText } = render(<TestComponent />)
+  await sleep(100)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(100)
+  expect(handleSubmit).toBeCalledTimes(1)
+  expect(handleValidateFailed).toBeCalledTimes(0)
+  actions.setFieldState('kk', state => {
+    state.props.required = true
+  })
+  await sleep(100)
+  fireEvent.click(queryAllByText('Submit')[1])
+  await sleep(100)
+  expect(queryByText('kk is required')).toBeVisible()
+  expect(handleSubmit).toBeCalledTimes(1)
+  expect(handleValidateFailed).toBeCalledTimes(1)
+})
+
 test('modify validate rules by setFieldState', async () => {
   const actions = createFormActions()
   const TestComponent = () => {

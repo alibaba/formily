@@ -107,6 +107,10 @@ export class Field {
     return this.rules
   }
 
+  getRequiredFromProps(props) {
+    return !isEmpty(props.required) ? props.required : this.required
+  }
+
   getEditable(editable) {
     if (isFn(editable)) return editable(this.name)
     if (isBool(editable)) return editable
@@ -239,6 +243,9 @@ export class Field {
       this.rules = published.rules
       this.errors = []
       this.valid = true
+      if (hasRequired(this.rules)) {
+        this.required = true
+      }
       this.invalid = false
       this.dirtyType = 'rules'
       this.dirty = true
@@ -252,6 +259,9 @@ export class Field {
       ) {
         this.rules = propsRules
         this.errors = []
+        if (hasRequired(this.rules)) {
+          this.required = true
+        }
         this.valid = true
         this.invalid = false
         this.dirtyType = 'rules'
@@ -274,6 +284,30 @@ export class Field {
         })
       }
       this.dirty = true
+    } else {
+      const prePropsRequired = this.getRequiredFromProps(this.props)
+      const propsRequired = this.getRequiredFromProps(published.props)
+      if (
+        !isEmpty(propsRequired) &&
+        !isEqual(prePropsRequired, propsRequired) &&
+        !isEqual(propsRequired, this.required)
+      ) {
+        this.required = propsRequired
+        this.errors = []
+        if (this.required) {
+          if (!hasRequired(this.rules)) {
+            this.rules = toArr(this.rules).concat({
+              required: true
+            })
+          }
+        } else {
+          this.rules = toArr(this.rules).filter(rule => {
+            if (rule && rule.required) return false
+            return true
+          })
+        }
+        this.dirty = true
+      }
     }
 
     if (published.loading !== this.loading) {
