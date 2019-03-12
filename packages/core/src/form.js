@@ -216,8 +216,12 @@ export class Form {
             if (this.syncUpdateMode) {
               field.dirty = false
             }
-            if (path.hasWildcard && !this.updateBuffer[path.string]) {
-              this.updateBuffer[path.string] = { path, callback }
+            if (path.hasWildcard) {
+              if (!this.updateBuffer[path.string]) {
+                this.updateBuffer[path.string] = { path, callbacks: [callback] }
+              } else {
+                this.updateBuffer[path.string].callbacks.push(callback)
+              }
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
@@ -237,14 +241,21 @@ export class Form {
             failed[i] = failed[i] || 0
             failed[i]++
             if (this.fieldSize <= failed[i] && (buffer || path.hasWildcard)) {
-              if (isStr(path) && !this.updateBuffer[path]) {
-                this.updateBuffer.set(path, { path, callback })
-              } else if (
-                isFn(path) &&
-                path.hasWildcard &&
-                !this.updateBuffer[path.string]
-              ) {
-                this.updateBuffer[path.string] = { path, callback }
+              if (isStr(path)) {
+                if (!this.updateBuffer[path]) {
+                  this.updateBuffer[path] = { path, callbacks: [callback] }
+                } else {
+                  this.updateBuffer[path].callbacks.push(callback)
+                }
+              } else if (isFn(path) && path.hasWildcard) {
+                if (!this.updateBuffer[path.string]) {
+                  this.updateBuffer[path.string] = {
+                    path,
+                    callbacks: [callback]
+                  }
+                } else {
+                  this.updateBuffer[path.string].callbacks.push(callback)
+                }
               }
             }
           }
@@ -256,9 +267,9 @@ export class Form {
 
   updateFieldStateFromBuffer(field) {
     const rafIdMap = {}
-    each(this.updateBuffer, ({ path, callback }, key) => {
+    each(this.updateBuffer, ({ path, callbacks }, key) => {
       if (isFn(path) ? path(field) : field.pathEqual(path)) {
-        field.updateState(callback)
+        callbacks.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
           field.dirty = false
         }
