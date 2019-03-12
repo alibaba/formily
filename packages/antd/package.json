@@ -1,6 +1,6 @@
 {
   "name": "@uform/antd",
-  "version": "0.1.0-beta.9",
+  "version": "0.1.0-beta.10",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -19,7 +19,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.0-beta.9",
+    "@uform/react": "^0.1.0-beta.10",
     "@uform/utils": "^0.1.0-beta-3",
     "antd": "^3.14.1",
     "classnames": "^2.2.6",
