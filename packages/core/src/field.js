@@ -277,20 +277,23 @@ export class Field {
           this.rules = toArr(this.rules).concat({
             required: true
           })
+          this.errors = []
+          this.valid = true
+          this.invalid = false
         }
       } else {
         this.rules = toArr(this.rules).filter(rule => {
           if (rule && rule.required) return false
           return true
         })
+        this.errors = []
+        this.valid = true
+        this.invalid = false
       }
       this.dirty = true
     } else {
       const propsRequired = this.getRequiredFromProps(published.props)
-      if (
-        !isEmpty(propsRequired) &&
-        !isEqual(propsRequired, this.required)
-      ) {
+      if (!isEmpty(propsRequired) && !isEqual(propsRequired, this.required)) {
         this.required = propsRequired
         this.errors = []
         if (this.required) {
@@ -298,12 +301,18 @@ export class Field {
             this.rules = toArr(this.rules).concat({
               required: true
             })
+            this.errors = []
+            this.valid = true
+            this.invalid = false
           }
         } else {
           this.rules = toArr(this.rules).filter(rule => {
             if (rule && rule.required) return false
             return true
           })
+          this.errors = []
+          this.valid = true
+          this.invalid = false
         }
         this.dirty = true
       }
