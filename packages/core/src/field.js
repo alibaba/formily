@@ -108,7 +108,7 @@ export class Field {
   }
 
   getRequiredFromProps(props) {
-    return !isEmpty(props.required) ? props.required : this.required
+    if (!isEmpty(props.required)) return props.required
   }
 
   getEditable(editable) {
@@ -245,6 +245,7 @@ export class Field {
       this.valid = true
       if (hasRequired(this.rules)) {
         this.required = true
+        published.required = true
       }
       this.invalid = false
       this.dirtyType = 'rules'
@@ -261,6 +262,7 @@ export class Field {
         this.errors = []
         if (hasRequired(this.rules)) {
           this.required = true
+          published.required = true
         }
         this.valid = true
         this.invalid = false
@@ -268,7 +270,6 @@ export class Field {
         this.dirty = true
       }
     }
-
     if (!isEqual(published.required, this.required)) {
       this.required = published.required
       if (this.required) {
