@@ -220,7 +220,12 @@ export class Form {
               if (!this.updateBuffer[path.string]) {
                 this.updateBuffer[path.string] = { path, callbacks: [callback] }
               } else {
-                this.updateBuffer[path.string].callbacks.push(callback)
+                if (
+                  this.updateBuffer[path.string].callbacks.indexOf(callback) ===
+                  -1
+                ) {
+                  this.updateBuffer[path.string].callbacks.push(callback)
+                }
               }
             }
             if (field.dirty) {
@@ -245,7 +250,11 @@ export class Form {
                 if (!this.updateBuffer[path]) {
                   this.updateBuffer[path] = { path, callbacks: [callback] }
                 } else {
-                  this.updateBuffer[path].callbacks.push(callback)
+                  if (
+                    this.updateBuffer[path].callbacks.indexOf(callback) === -1
+                  ) {
+                    this.updateBuffer[path].callbacks.push(callback)
+                  }
                 }
               } else if (isFn(path) && path.hasWildcard) {
                 if (!this.updateBuffer[path.string]) {
@@ -254,7 +263,13 @@ export class Form {
                     callbacks: [callback]
                   }
                 } else {
-                  this.updateBuffer[path.string].callbacks.push(callback)
+                  if (
+                    this.updateBuffer[path.string].callbacks.indexOf(
+                      callback
+                    ) === -1
+                  ) {
+                    this.updateBuffer[path.string].callbacks.push(callback)
+                  }
                 }
               }
             }
