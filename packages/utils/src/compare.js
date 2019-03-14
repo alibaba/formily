@@ -32,7 +32,9 @@ function equal(a, b, filter) {
     var regexpB = b instanceof RegExp
     if (regexpA != regexpB) return false
     if (regexpA && regexpB) return a.toString() == b.toString()
-
+    var urlA = a instanceof URL
+    var urlB = b instanceof URL
+    if (urlA && urlB) return urlA.href == urlB.href
     var keys = keyList(a)
     length = keys.length
 
