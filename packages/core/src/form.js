@@ -15,7 +15,8 @@ import {
   raf,
   caf,
   isChildField,
-  getSchemaNodeFromPath
+  getSchemaNodeFromPath,
+  BufferList
 } from './utils'
 import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
@@ -40,7 +41,7 @@ export class Form {
     this.fields = {}
     this.subscribes = opts.subscribes || {}
     this.updateQueue = []
-    this.updateBuffer = {}
+    this.updateBuffer = new BufferList()
     this.editable = opts.editable
     this.schema = opts.schema || {}
     this.initialize(this.options.initialValues)
@@ -217,16 +218,7 @@ export class Form {
               field.dirty = false
             }
             if (path.hasWildcard) {
-              if (!this.updateBuffer[path.string]) {
-                this.updateBuffer[path.string] = { path, callbacks: [callback] }
-              } else {
-                if (
-                  this.updateBuffer[path.string].callbacks.indexOf(callback) ===
-                  -1
-                ) {
-                  this.updateBuffer[path.string].callbacks.push(callback)
-                }
-              }
+              this.updateBuffer.push(path.string, callback, { path })
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
@@ -247,30 +239,9 @@ export class Form {
             failed[i]++
             if (this.fieldSize <= failed[i] && (buffer || path.hasWildcard)) {
               if (isStr(path)) {
-                if (!this.updateBuffer[path]) {
-                  this.updateBuffer[path] = { path, callbacks: [callback] }
-                } else {
-                  if (
-                    this.updateBuffer[path].callbacks.indexOf(callback) === -1
-                  ) {
-                    this.updateBuffer[path].callbacks.push(callback)
-                  }
-                }
+                this.updateBuffer.push(path, callback, { path })
               } else if (isFn(path) && path.hasWildcard) {
-                if (!this.updateBuffer[path.string]) {
-                  this.updateBuffer[path.string] = {
-                    path,
-                    callbacks: [callback]
-                  }
-                } else {
-                  if (
-                    this.updateBuffer[path.string].callbacks.indexOf(
-                      callback
-                    ) === -1
-                  ) {
-                    this.updateBuffer[path.string].callbacks.push(callback)
-                  }
-                }
+                this.updateBuffer.push(path.string, callback, { path })
               }
             }
           }
@@ -282,9 +253,9 @@ export class Form {
 
   updateFieldStateFromBuffer(field) {
     const rafIdMap = {}
-    each(this.updateBuffer, ({ path, callbacks }, key) => {
+    this.updateBuffer.forEach(({ path, values, key }) => {
       if (isFn(path) ? path(field) : field.pathEqual(path)) {
-        callbacks.forEach(callback => field.updateState(callback))
+        values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
           field.dirty = false
         }
@@ -303,7 +274,7 @@ export class Form {
           })
         }
         if (!path.hasWildcard) {
-          delete this.updateBuffer[key]
+          this.updateBuffer.remove(key)
         }
       }
     })
