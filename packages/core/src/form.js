@@ -10,6 +10,7 @@ import {
   getIn,
   deleteIn,
   clone,
+  isEmpty,
   toArr,
   publishFormState,
   raf,
@@ -513,13 +514,13 @@ export class Form {
     deleteIn(this.state.values, name)
   }
 
-  reset() {
+  reset(forceClear) {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
-      if (value === undefined && initialValue === undefined) return
+      if (isEmpty(value) && isEmpty(initialValue)) return
       field.updateState(state => {
-        state.value = initialValue
+        state.value = forceClear ? undefined : initialValue
       })
       if (field.dirty) {
         raf(() => {
