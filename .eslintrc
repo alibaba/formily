@@ -17,7 +17,8 @@
     }
   },
   "globals": {
-    "sleep": true
+    "sleep": true,
+    "prettyFormat": true
   },
   "rules": {
     // don't force es6 functions to include space before paren

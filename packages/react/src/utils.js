@@ -1,8 +1,6 @@
 import { reduce, isFn } from '@uform/utils'
 export * from '@uform/utils'
 
-export const lowercase = str => String(str || '').toLowerCase()
-
 export const isNum = val => typeof val === 'number'
 
 export const compose = (payload, args, revert) =>

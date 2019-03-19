@@ -1,23 +1,28 @@
 import React from 'react'
-import { registerFormField } from '@uform/react'
-import { isFn } from '@uform/utils'
+import { registerFormField, createArrayField } from '@uform/react'
 import { Icon } from 'antd'
 import styled, { css } from 'styled-components'
 
-export const CircleButton = styled.div`
-  width:30px;
-  height:30px;
+export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
+  ${props =>
+    !props.hasText
+      ? `width:30px;
+  height:30px;`
+      : ''}
   margin-right:10px;
-  border-radius: 100px;
-  border: 1px solid #eee;
+  border-radius: ${props => (!props.hasText ? '100px' : 'none')};
+  border: ${props => (!props.hasText ? '1px solid #eee' : 'none')};
   margin-bottom:20px;
   cursor:pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover{
+  ${props =>
+    !props.hasText
+      ? `&:hover{
     background:#f7f4f4;
-  }
+  }`
+      : ''}
 }
 `
 
@@ -37,127 +42,14 @@ export const TextButton = styled.div`
       width: auto;
     `}
 `
-
-export class ArrayField extends React.Component {
-  renderEmpty(disabled) {
-    const { locale, mutators } = this.props
-    return (
-      <div
-        className='array-empty-wrapper'
-        onClick={() => {
-          mutators.push()
-        }}
-      >
-        <div className='array-empty'>
-          <img src='//img.alicdn.com/tfs/TB1y2nwp_tYBeNjy1XdXXXXyVXa-200-200.png' />
-          {!disabled && (
-            <TextButton>
-              <Icon type='plus' />
-              {locale.addItem || '添加'}
-            </TextButton>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  renderAddition() {
-    const { locale } = this.props
-    return (
-      <div className='array-item-addition'>
-        <TextButton inline={true} onClick={this.onAddHandler()}>
-          <Icon type='plus' />
-          {locale.addItem || '添加'}
-        </TextButton>
-      </div>
-    )
-  }
-
-  getDisabled() {
-    const { schema, editable, name } = this.props
-    const disabled = schema['x-props'] && schema['x-props'].disabled
-    if (editable !== undefined) {
-      if (isFn(editable)) {
-        if (!editable(name)) {
-          return true
-        }
-      } else if (editable === false) {
-        return true
-      }
-    }
-    return disabled
-  }
-
-  controllable(key, value) {
-    const { schema } = this.props
-    const readOnly = schema['x-props'] && schema['x-props'].readOnly
-    const disabled = this.getDisabled()
-    if (isFn(disabled)) {
-      return disabled(key, value)
-    } else if (isFn(readOnly)) {
-      return readOnly(key, value)
-    } else {
-      return !readOnly && !disabled
-    }
-  }
-
-  onRemoveHandler(index) {
-    const { value, mutators, schema, locale } = this.props
-    const { minItems } = schema
-    return e => {
-      e.stopPropagation()
-      if (minItems >= 0 && value.length - 1 < minItems) {
-        mutators.errors(locale.array_invalid_minItems, minItems)
-      } else {
-        mutators.remove(index)
-      }
-    }
-  }
-
-  onMoveHandler(_from, to) {
-    const { mutators } = this.props
-    return e => {
-      e.stopPropagation()
-      mutators.move(_from, to)
-    }
-  }
-
-  onAddHandler() {
-    const { value, mutators, schema, locale } = this.props
-    const { maxItems } = schema
-    return e => {
-      e.stopPropagation()
-      if (maxItems >= 0 && value.length + 1 > maxItems) {
-        mutators.errors(locale.array_invalid_maxItems, maxItems)
-      } else {
-        mutators.push()
-      }
-    }
-  }
-
-  onClearErrorHandler() {
-    return () => {
-      const { value, mutators, schema } = this.props
-      const { maxItems, minItems } = schema
-      if (
-        (maxItems >= 0 && value.length <= maxItems) ||
-        (minItems >= 0 && value.length >= minItems)
-      ) {
-        mutators.errors()
-      }
-    }
-  }
-
-  componentDidMount() {
-    const { value, mutators, schema, locale } = this.props
-    const { maxItems, minItems } = schema
-    if (value.length > maxItems) {
-      mutators.errors(locale.array_invalid_maxItems, maxItems)
-    } else if (value.length < minItems) {
-      mutators.errors(locale.array_invalid_minItems, minItems)
-    }
-  }
-}
+export const ArrayField = createArrayField({
+  CircleButton,
+  TextButton,
+  AddIcon: () => <Icon type='plus' style={{ marginRight: 4 }} />,
+  RemoveIcon: () => <Icon type='delete' style={{ marginRight: 4 }} />,
+  MoveDownIcon: () => <Icon type='down' style={{ marginRight: 4 }} />,
+  MoveUpIcon: () => <Icon type='up' style={{ marginRight: 4 }} />
+})
 
 registerFormField(
   'array',
@@ -180,41 +72,16 @@ registerFormField(
                   </div>
                   <div className='array-item-wrapper'>{renderField(index)}</div>
                   <div className='array-item-operator'>
-                    {this.controllable(`${index}.remove`, item) && (
-                      <CircleButton onClick={this.onRemoveHandler(index)}>
-                        <Icon size='xs' type='delete' />
-                      </CircleButton>
-                    )}
-                    {value.length > 1 &&
-                      this.controllable(`${index}.moveDown`, item) && (
-                      <CircleButton
-                        onClick={this.onMoveHandler(
-                          index,
-                          index + 1 > value.length - 1 ? 0 : index + 1
-                        )}
-                      >
-                        <Icon size='xs' type='down' />
-                      </CircleButton>
-                    )}
-                    {value.length > 1 &&
-                      this.controllable(`${index}.moveUp`, item) && (
-                      <CircleButton
-                        onClick={this.onMoveHandler(
-                          index,
-                          index - 1 < 0 ? value.length - 1 : index - 1
-                        )}
-                      >
-                        <Icon size='xs' type='up' />
-                      </CircleButton>
-                    )}
+                    {this.renderRemove(index, item)}
+                    {this.renderMoveDown(index, item)}
+                    {this.renderMoveUp(index, item)}
+                    {this.renderExtraOperations(index)}
                   </div>
                 </div>
               )
             })}
-            {value.length === 0 && this.renderEmpty()}
-            {value.length > 0 &&
-              this.controllable('addition', value) &&
-              this.renderAddition()}
+            {this.renderEmpty()}
+            {value.length > 0 && this.renderAddition()}
           </div>
         )
       }
@@ -270,6 +137,9 @@ registerFormField(
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      &.disabled {
+        cursor: default;
+      }
       .array-empty {
         display: flex;
         flex-direction: column;

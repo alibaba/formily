@@ -24,6 +24,7 @@ export class Field {
     this.dirty = false
     this.pristine = true
     this.valid = true
+    this.removed = false
     this.invalid = false
     this.visible = true
     this.editable = true
@@ -37,32 +38,48 @@ export class Field {
   }
 
   initialize(options) {
-    if (this.initialized) {
-      this.value = options.value
-      if (!isEmpty(options.initialValue)) {
-        this.initialValue = clone(options.initialValue)
-      }
-    } else {
-      this.value = options.value
-      this.initialValue = options.initialValue
-    }
+    const editable = this.getEditableFromProps(options.props)
+    const rules = this.getRulesFromProps(options.props)
+    this.value = !isEmpty(options.value) ? clone(options.value) : this.value
+    this.initialValue = !isEmpty(options.initialValue)
+      ? options.initialValue
+      : !isEmpty(this.initialValue)
+        ? this.initialValue
+        : this.getInitialValueFromProps(options.props)
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
-    const editable = this.getEditableFromProps(options.props)
     this.editable = !isEmpty(editable) ? editable : this.editable
     this.path = resolveFieldPath(
       !isEmpty(options.path) ? options.path : this.path || []
     )
-    const rules = this.getRulesFromProps(options.props)
     this.rules = !isEmpty(rules) ? rules : this.rules
     this.required = hasRequired(this.rules)
-
-    this.props = isEmpty(options.props)
-      ? clone(this.props, filterSchema)
-      : clone({ ...this.props, ...options.props }, filterSchema)
-
+    this.props = !isEmpty(options.props)
+      ? !isEmpty(this.props)
+        ? { ...this.props, ...clone(options.props) }
+        : clone(options.props)
+      : this.props
+    if (this.removed) {
+      this.removed = false
+      this.visible = true
+    }
+    if (!this.initialized) {
+      if (isEmpty(this.value) && !isEmpty(this.initialValue)) {
+        this.value = clone(this.initialValue)
+        this.context.setIn(this.name, this.value)
+        this.context.setInitialValueIn(this.name, this.initialValue)
+      }
+    }
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
+    }
+  }
+
+  getInitialValueFromProps(props) {
+    if (props) {
+      if (!isEmpty(props['default'])) {
+        return props['default']
+      }
     }
   }
 
@@ -76,7 +93,7 @@ export class Field {
         }
       }
     }
-    return this.editable
+    return this.getEditable(this.context.editable)
   }
 
   getRulesFromProps(props) {
@@ -88,6 +105,10 @@ export class Field {
       return clone(rules)
     }
     return this.rules
+  }
+
+  getRequiredFromProps(props) {
+    if (!isEmpty(props.required)) return props.required
   }
 
   getEditable(editable) {
@@ -156,39 +177,24 @@ export class Field {
     }
   }
 
-  changeValue(value) {
-    this.context.setValue(this.name, value)
-  }
-
-  setInitalValue() {
-    const lastValue = this.context.getValue(this.name)
-    if (
-      this.initialValue !== undefined &&
-      !isEqual(lastValue, this.initialValue)
-    ) {
-      const initialValue = clone(this.initialValue)
-      this.context.setIn(this.name, initialValue)
-      this.value = initialValue
+  changeEditable(editable) {
+    if (!isEmpty(this.props.editable)) return
+    if (this.props['x-props'] && !isEmpty(this.props['x-props'].editable)) {
+      return
     }
+    this.editable = this.getEditable(editable)
+    this.dirty = true
+    this.notify()
   }
 
-  removeValue() {
+  remove() {
     this.value = undefined
+    this.visible = false
+    this.removed = true
     if (!this.context) return
     this.context.deleteIn(this.name)
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
-    }
-  }
-
-  resetValue() {
-    if (this.initialValue !== undefined) {
-      const lastValue = this.value
-      if (!isEqual(lastValue, this.initialValue)) {
-        this.value = clone(this.initialValue)
-        this.context.setIn(this.name, this.value)
-        this.dirty = true
-      }
     }
   }
 
@@ -233,26 +239,37 @@ export class Field {
       this.dirtyType = 'errors'
       this.dirty = true
     }
-
     if (!isEqual(published.rules, this.rules)) {
       this.rules = published.rules
       this.errors = []
       this.valid = true
+      if (hasRequired(this.rules)) {
+        this.required = true
+        published.required = true
+      }
       this.invalid = false
       this.dirtyType = 'rules'
       this.dirty = true
     } else {
+      const prePropsRules = this.getRulesFromProps(this.props)
       const propsRules = this.getRulesFromProps(published.props)
-      if (!isEmpty(propsRules) && !isEqual(propsRules, this.rules)) {
+      if (
+        !isEmpty(propsRules) &&
+        !isEqual(prePropsRules, propsRules) &&
+        !isEqual(propsRules, this.rules)
+      ) {
         this.rules = propsRules
         this.errors = []
+        if (hasRequired(this.rules)) {
+          this.required = true
+          published.required = true
+        }
         this.valid = true
         this.invalid = false
         this.dirtyType = 'rules'
         this.dirty = true
       }
     }
-
     if (!isEqual(published.required, this.required)) {
       this.required = published.required
       if (this.required) {
@@ -260,14 +277,45 @@ export class Field {
           this.rules = toArr(this.rules).concat({
             required: true
           })
+          this.errors = []
+          this.valid = true
+          this.invalid = false
         }
       } else {
         this.rules = toArr(this.rules).filter(rule => {
           if (rule && rule.required) return false
           return true
         })
+        this.errors = []
+        this.valid = true
+        this.invalid = false
       }
       this.dirty = true
+    } else {
+      const propsRequired = this.getRequiredFromProps(published.props)
+      if (!isEmpty(propsRequired) && !isEqual(propsRequired, this.required)) {
+        this.required = propsRequired
+        this.errors = []
+        if (this.required) {
+          if (!hasRequired(this.rules)) {
+            this.rules = toArr(this.rules).concat({
+              required: true
+            })
+            this.errors = []
+            this.valid = true
+            this.invalid = false
+          }
+        } else {
+          this.rules = toArr(this.rules).filter(rule => {
+            if (rule && rule.required) return false
+            return true
+          })
+          this.errors = []
+          this.valid = true
+          this.invalid = false
+        }
+        this.dirty = true
+      }
     }
 
     if (published.loading !== this.loading) {

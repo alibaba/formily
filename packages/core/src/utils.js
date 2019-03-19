@@ -7,7 +7,7 @@ import {
 } from 'scheduler'
 /* eslint-disable camelcase */
 
-import { isArr, isStr, getPathSegments, toArr } from '@uform/utils'
+import { isArr, isStr, getPathSegments, toArr, clone, isFn } from '@uform/utils'
 export * from '@uform/utils'
 
 const self = this || global || window
@@ -82,7 +82,7 @@ export const publishFieldState = state => {
     rules
   } = state
   return {
-    value,
+    value: clone(value),
     valid,
     invalid,
     editable,
@@ -96,5 +96,40 @@ export const publishFieldState = state => {
     props,
     required,
     rules
+  }
+}
+
+export class BufferList {
+  data = []
+  indexes = {}
+  push(key, value, extra) {
+    if (!this.indexes[key]) {
+      let index = this.data.length
+      this.data.push({ ...extra, key, values: [value] })
+      this.indexes[key] = index
+    } else {
+      let item = this.data[this.indexes[key]]
+      if (item.values.indexOf(value) === -1) item.values.push(value)
+    }
+  }
+
+  forEach(callback) {
+    for (let i = 0; i < this.data.length; i++) {
+      if (isFn(callback)) {
+        callback(this.data[i], this.data[i].key)
+      }
+    }
+  }
+
+  remove(key, value) {
+    this.data = this.data.reduce((buf, item, index) => {
+      if (item.key === key) {
+        delete this.indexes[key]
+        return buf
+      } else {
+        this.indexes[key] = buf.length
+        return buf.concat(item)
+      }
+    }, [])
   }
 }

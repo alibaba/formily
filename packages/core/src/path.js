@@ -8,7 +8,7 @@ const withFilter = (result, filter, payload) => {
   return result
 }
 
-const wildcardRE = /\.\s*\*\s*\.?/
+const wildcardRE = /\*/
 
 export const FormPath = {
   match(matchLanguage, matchRealPath, filter) {

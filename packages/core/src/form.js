@@ -1,7 +1,7 @@
 import {
   Broadcast,
   each,
-  every,
+  reduce,
   isEqual,
   isFn,
   isStr,
@@ -15,7 +15,8 @@ import {
   raf,
   caf,
   isChildField,
-  getSchemaNodeFromPath
+  getSchemaNodeFromPath,
+  BufferList
 } from './utils'
 import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
@@ -40,7 +41,8 @@ export class Form {
     this.fields = {}
     this.subscribes = opts.subscribes || {}
     this.updateQueue = []
-    this.updateBuffer = {}
+    this.updateBuffer = new BufferList()
+    this.editable = opts.editable
     this.schema = opts.schema || {}
     this.initialize(this.options.initialValues)
     this.initializeEffects()
@@ -58,7 +60,7 @@ export class Form {
       errors: [],
       pristine: true,
       initialValues: clone(values) || {},
-      values: values || {},
+      values: clone(values) || {},
       dirty:
         lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     }
@@ -68,7 +70,7 @@ export class Form {
         formState: this.publishState()
       })
     }
-    this.updateFieldsValue()
+    this.updateFieldsValue(false)
   }
 
   changeValues(values) {
@@ -78,6 +80,13 @@ export class Form {
     this.state.dirty =
       lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     this.updateFieldsValue()
+  }
+
+  changeEditable(editable) {
+    this.editable = editable
+    each(this.fields, (field, name) => {
+      field.changeEditable(editable)
+    })
   }
 
   initializeEffects() {
@@ -158,7 +167,7 @@ export class Form {
   setFormState = reducer => {
     if (!isFn(reducer)) return
     return new Promise(resolve => {
-      const published = produce(clone(this.publishState()), reducer)
+      const published = produce(this.publishState(), reducer)
       this.checkState(published)
       resolve()
     })
@@ -208,8 +217,8 @@ export class Form {
             if (this.syncUpdateMode) {
               field.dirty = false
             }
-            if (path.hasWildcard && !this.updateBuffer[path.string]) {
-              this.updateBuffer[path.string] = { path, callback }
+            if (path.hasWildcard) {
+              this.updateBuffer.push(path.string, callback, { path })
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
@@ -229,14 +238,10 @@ export class Form {
             failed[i] = failed[i] || 0
             failed[i]++
             if (this.fieldSize <= failed[i] && (buffer || path.hasWildcard)) {
-              if (isStr(path) && !this.updateBuffer[path]) {
-                this.updateBuffer.set(path, { path, callback })
-              } else if (
-                isFn(path) &&
-                path.hasWildcard &&
-                !this.updateBuffer[path.string]
-              ) {
-                this.updateBuffer[path.string] = { path, callback }
+              if (isStr(path)) {
+                this.updateBuffer.push(path, callback, { path })
+              } else if (isFn(path) && path.hasWildcard) {
+                this.updateBuffer.push(path.string, callback, { path })
               }
             }
           }
@@ -248,9 +253,9 @@ export class Form {
 
   updateFieldStateFromBuffer(field) {
     const rafIdMap = {}
-    each(this.updateBuffer, ({ path, callback }, key) => {
+    this.updateBuffer.forEach(({ path, values, key }) => {
       if (isFn(path) ? path(field) : field.pathEqual(path)) {
-        field.updateState(callback)
+        values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
           field.dirty = false
         }
@@ -269,7 +274,7 @@ export class Form {
           })
         }
         if (!path.hasWildcard) {
-          delete this.updateBuffer[key]
+          this.updateBuffer.remove(key)
         }
       }
     })
@@ -288,11 +293,14 @@ export class Form {
         )
           .then(response => {
             const lastValid = this.state.valid
-            let _errors = []
-            this.state.valid = every(response, ({ valid, errors }) => {
-              _errors = _errors.concat(errors)
-              return valid
-            })
+            let _errors = reduce(
+              response,
+              (buf, { valid, errors }) => {
+                return buf.concat(errors)
+              },
+              []
+            )
+            this.state.valid = _errors.length === 0
             this.state.invalid = !this.state.valid
             this.state.errors = _errors
             if (this.state.valid !== lastValid) {
@@ -334,7 +342,6 @@ export class Form {
         value: value !== undefined ? value : initialValue,
         path: options.path,
         initialValue: initialValue,
-        rules: options.rules,
         props: options.props
       })
       let field = this.fields[name]
@@ -374,10 +381,10 @@ export class Form {
     }
   }
 
-  removeValue(name) {
+  removeField(name) {
     const field = this.fields[name]
     if (field) {
-      field.removeValue()
+      field.remove()
     }
   }
 
@@ -432,28 +439,35 @@ export class Form {
     if (this.state.dirty && this.initialized) {
       each(this.fields, (field, name) => {
         let newValue = this.getInitialValue(name)
-        field.initialValue = clone(newValue)
+        field.initialValue = newValue
       })
     }
   }
 
-  updateFieldsValue() {
-    if (this.state.dirty && this.initialized) {
-      this.internalValidate(this.state.values, true).then(() => {
-        this.formNotify()
-        each(this.fields, (field, name) => {
-          let newValue = this.getValue(name)
-          field.updateState(state => {
-            state.value = clone(newValue)
-          })
-          if (field.dirty) {
-            raf(() => {
-              if (this.destructed) return
-              field.notify()
-            })
-          }
+  updateFieldsValue(validate = true) {
+    const update = () => {
+      each(this.fields, (field, name) => {
+        let newValue = this.getValue(name)
+        field.updateState(state => {
+          state.value = newValue
         })
+        if (field.dirty) {
+          raf(() => {
+            if (this.destructed) return
+            field.notify()
+          })
+        }
       })
+    }
+    if (this.state.dirty && this.initialized) {
+      if (validate) {
+        this.internalValidate(this.state.values, true).then(() => {
+          this.formNotify()
+          update()
+        })
+      } else {
+        update()
+      }
     }
   }
 
@@ -505,7 +519,7 @@ export class Form {
       const initialValue = this.getInitialValue(name, field.path)
       if (value === undefined && initialValue === undefined) return
       field.updateState(state => {
-        state.value = clone(initialValue)
+        state.value = initialValue
       })
       if (field.dirty) {
         raf(() => {
@@ -562,14 +576,13 @@ export class Form {
   }
 
   submit() {
-    return this.validate()
-      .then(formState => {
-        this.triggerEffect('onFormSubmit', formState)
-        if (isFn(this.options.onSubmit)) {
-          this.options.onSubmit({ formState })
-        }
-        return formState
-      })
+    return this.validate().then(formState => {
+      this.triggerEffect('onFormSubmit', formState)
+      if (isFn(this.options.onSubmit)) {
+        this.options.onSubmit({ formState })
+      }
+      return formState
+    })
   }
 
   subscribe(callback) {
