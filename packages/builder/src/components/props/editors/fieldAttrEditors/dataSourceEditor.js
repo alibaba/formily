@@ -149,7 +149,7 @@ class DataSourceEditor extends Component {
     const xProps = fieldStore['x-props'] || {}
     const { requestOptions = {} } = xProps
     const { data } = requestOptions
-    const { Form, Input, Radio, Tab, RadioGroup, TabPane, version: UIVersion } = UI
+    const { Form, Input, Tab, RadioGroup, TabPane, version: UIVersion } = UI
 
     const dataSource = [
       {
@@ -169,10 +169,10 @@ class DataSourceEditor extends Component {
     }
 
     const tabProps = {}
-    tabProps[UIVersion == '1.x' ? 'shape' : 'type'] = 'text'
+    tabProps[UIVersion === '1.x' ? 'shape' : 'type'] = 'text'
 
     const formItemProps = {}
-    formItemProps[UIVersion == '1.x' ? 'validateState' : 'validateStatus'] = error ? 'error' : 'success'
+    formItemProps[UIVersion === '1.x' ? 'validateState' : 'validateStatus'] = error ? 'error' : 'success'
 
     return (
       <Form.Item labelCol={LABEL_COL} className={this.props.className}>

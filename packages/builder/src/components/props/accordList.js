@@ -84,7 +84,7 @@ export default class extends React.Component {
   render() {
     const { Accordion, version: UIVersion } = this.props.UI
 
-    return UIVersion == '1.x' ? (
+    return UIVersion === '1.x' ? (
       <Accordion
         dataSource={this.state.accordionList}
         defaultExpandedKeys={['1']}
