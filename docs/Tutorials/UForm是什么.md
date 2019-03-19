@@ -40,7 +40,7 @@ UForm和核心特性：
 
 ## JSON Schema规范
 
-想要快速了解JSON Schema，可以移步 [JSON-SCHEMA规范地址](http://gitlab.alibaba-inc.com/river/spec/blob/master/JSON-Schema.md)
+想要快速了解JSON Schema，可以移步 [JSON-SCHEMA规范地址](https://json-schema.org/)
 
 
 
