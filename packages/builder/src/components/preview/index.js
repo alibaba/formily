@@ -30,7 +30,7 @@ class Preview extends Component {
   }
 
   componentDidMount() {
-    registerPreviewFieldMiddleware(FormConsumer)
+    registerPreviewFieldMiddleware(FormConsumer, this)
   }
 
   onMouseClick = (id, comp, type) => {

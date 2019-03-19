@@ -149,13 +149,7 @@ class DataSourceEditor extends Component {
     const xProps = fieldStore['x-props'] || {}
     const { requestOptions = {} } = xProps
     const { data } = requestOptions
-    const { Form, Input, Radio, Tab } = UI
-
-    const { Group: RadioGroup } = Radio
-    const { TabPane } = Tab
-
-    this.RadioGroup = RadioGroup
-    this.TabPane = TabPane
+    const { Form, Input, Radio, Tab, RadioGroup, TabPane, version: UIVersion } = UI
 
     const dataSource = [
       {
@@ -174,6 +168,12 @@ class DataSourceEditor extends Component {
       })
     }
 
+    const tabProps = {}
+    tabProps[UIVersion == '1.x' ? 'shape' : 'type'] = 'text'
+
+    const formItemProps = {}
+    formItemProps[UIVersion == '1.x' ? 'validateState' : 'validateStatus'] = error ? 'error' : 'success'
+
     return (
       <Form.Item labelCol={LABEL_COL} className={this.props.className}>
         <RadioGroup
@@ -183,14 +183,15 @@ class DataSourceEditor extends Component {
         />
         {dataSourceType === 'local' ? (
           <Form.Item
-            validateStatus={error ? 'error' : 'success'}
+            {...formItemProps}
             extra={<span style={{ color: 'red' }}>{error}</span>}
           >
-            <Tab type='text' size='small'>
+            <Tab {...tabProps} size='small'>
               <TabPane tab='可视化' key='visual'>
                 <DataSourceEnum
                   dataSource={defaultSource}
                   onChange={this.handleEnumValueChange}
+                  UI={UI}
                 />
               </TabPane>
               <TabPane tab='源码' key='code'>
@@ -211,7 +212,7 @@ class DataSourceEditor extends Component {
         ) : null}
         {dataSourceType === 'remote' ? (
           <Form.Item
-            validateStatus={error ? 'error' : 'success'}
+            {...formItemProps}
             extra={<span style={{ color: 'red' }}>{error}</span>}
           >
             <Input

@@ -32,6 +32,12 @@ class Component extends React.Component {
   renderItemRow = (item = {}, idx) => {
     const { value = '', label = '' } = item
     const { UI } = this.props
+    const btnProps = {}
+    if (UI.version == '1.x') {
+      btnProps.text = true
+    } else {
+      btnProps.shape = 'text'
+    }
     return (
       <div className='source-row' key={`${idx}`}>
         <ul>
@@ -52,7 +58,7 @@ class Component extends React.Component {
         </ul>
         <UI.Button
           className='ashbin-btn'
-          shape='text'
+          {...btnProps}
           onClick={() => this.handleDeleteItem(idx)}
         >
           <UI.Icon type='ashbin' />
