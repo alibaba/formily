@@ -33,7 +33,7 @@ export const setLanguage = lang => {
 }
 
 export const getMessage = path => {
-  return getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`)
+  return getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`) || 'field is not valid,but not found error message.'
 }
 
 setLocale(locales)
