@@ -140,6 +140,7 @@ class PropsSetting extends Component {
           UI
         }
       }
+
       finalSchema[configItem.name] = {
         ...configItem,
         'x-props': newXprops

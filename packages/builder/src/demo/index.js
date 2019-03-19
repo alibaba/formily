@@ -4,7 +4,7 @@ import SchemaForm from '@uform/next'
 import Index from '../index'
 import {
   Button,
-  Collapse,
+  Accordion,
   Message,
   Upload,
   Input,
@@ -12,18 +12,23 @@ import {
   DatePicker,
   Icon,
   Checkbox,
-  NumberPicker
-} from '@alifd/next'
+  NumberPicker,
+  Radio,
+  Form,
+  Tab
+} from '@alife/next'
 
 // style
-import '@alifd/next/dist/next.css'
+// import '@alifd/next/dist/next.css'
+import '@alife/next/dist/next.min.css'
 
 const renderSchema = {}
 
 const props = {
   UI: {
+    version: '0.x',
     Button,
-    Accordtion: Collapse,
+    Accordion,
     Toast: Message,
     Upload,
     Input,
@@ -31,7 +36,12 @@ const props = {
     Icon,
     DatePicker,
     Checkbox,
-    NumberPicker
+    NumberPicker,
+    Radio,
+    RadioGroup: Radio.Group,
+    TabPane: Tab.TabPane,
+    Form,
+    Tab
   },
   // 主题： dark/light,默认dark
   // themeStyle: 'light',

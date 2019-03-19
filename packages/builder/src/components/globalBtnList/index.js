@@ -27,7 +27,7 @@ export default (props) => {
       title: preview ? '返回编辑' : '预览',
       props: {
         onClick: () => {
-          this.props.changePreview(!this.props.preview)
+          props.changePreview(!props.preview)
         }
       },
       iconType: 'eye',
@@ -44,8 +44,8 @@ export default (props) => {
           onSubmit &&
             typeof onSubmit === 'function' &&
             onSubmit({
-              schema: wrapSubmitSchema(this.props.initSchemaData),
-              globalCfg: this.props.gbConfig
+              schema: wrapSubmitSchema(props.initSchemaData),
+              globalCfg: props.gbConfig
             })
         }
       },
@@ -60,7 +60,7 @@ export default (props) => {
       title: codemode ? '关闭源码' : '源码',
       props: {
         onClick: () => {
-          _changeCodeMode(!this.props.codemode)
+          _changeCodeMode(!props.codemode)
         }
       },
       iconUrl: globalBtnIconUrlWithTheme.code,
