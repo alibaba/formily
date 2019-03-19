@@ -220,8 +220,8 @@ export const StateForm = createHOC((options, Form) => {
       return this.form.submit()
     }
 
-    reset = () => {
-      this.form.reset()
+    reset = (forceClear) => {
+      this.form.reset(forceClear)
     }
 
     validate = () => {
