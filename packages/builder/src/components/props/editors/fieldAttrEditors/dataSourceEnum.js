@@ -33,7 +33,7 @@ class Component extends React.Component {
     const { value = '', label = '' } = item
     const { UI } = this.props
     const btnProps = {}
-    if (UI.version == '1.x') {
+    if (UI.version === '1.x') {
       btnProps.text = true
     } else {
       btnProps.shape = 'text'
