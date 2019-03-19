@@ -12,22 +12,24 @@ test('test accessor', () => {
   expect(getIn(value, 'a.b.c') === 1111).toBeTruthy()
 })
 
+test('test accessor with large path', () => {
+  const value = { array: [{ aa: 123, bb: 321 }] }
+  expect(isEqual(getIn(value, 'array.0.[aa,bb]'), [123, 321])).toBeTruthy()
+})
+
 test('destruct getIn', () => {
   // getIn 通过解构表达式从扁平数据转为复合嵌套数据
   const value = { a: { b: { c: 2, d: 333 } } }
   expect(
-    isEqual(getIn({ kk: 2, mm: 333 }, 'a.b.{c:kk,d:mm}'), { c: 2, d: 333 })
-  ).toBeTruthy()
-  expect(
-    isEqual(getIn({ c: 2, d: 333 }, 'a.b.{c,d}'), { c: 2, d: 333 })
-  ).toBeTruthy()
-  expect(
-    isEqual(getIn({ aa: 2, bb: 333 }, 'a.b.[ aa , bb ]'), [2, 333])
+    isEqual(getIn({ a: { b: { kk: 2, mm: 333 } } }, 'a.b.{c:kk,d:mm}'), {
+      c: 2,
+      d: 333
+    })
   ).toBeTruthy()
   expect(
     isEqual(
       getIn(
-        { kk: 2, mm: 333 },
+        { a: { b: { kk: 2, mm: 333 } } },
         `{
         a : {
           b : {

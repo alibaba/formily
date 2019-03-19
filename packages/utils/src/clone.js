@@ -10,6 +10,7 @@ const NATIVE_KEYS = [
   'FileList',
   'File',
   'URL',
+  'RegExp',
   [
     'Promise',
     promise => new Promise((resolve, reject) => promise.then(resolve, reject))

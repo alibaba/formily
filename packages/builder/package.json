@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.0-alpha.14",
+  "version": "0.1.0-beta.12",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -18,9 +18,10 @@
     "npm": ">=3.0.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.0-alpha.14",
-    "@uform/utils": "^0.1.0-alpha.3",
-    "@uform/validator": "^0.1.0-alpha.3",
+    "@alifd/next": "^1.13.1",
+    "@uform/react": "^0.1.0-beta.12",
+    "@uform/utils": "^0.1.0-beta.12",
+    "@uform/validator": "^0.1.0-beta.12",
     "classnames": "^2.2.5",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.1",
@@ -55,7 +56,7 @@
     "@babel/plugin-transform-runtime": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
-    "@uform/next": "^0.1.0-alpha.14",
+    "@uform/next": "^0.1.0-alpha.12",
     "autoprefixer": "7.1.6",
     "babel-loader": "^8.0.5",
     "case-sensitive-paths-webpack-plugin": "2.1.1",

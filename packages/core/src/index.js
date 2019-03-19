@@ -14,6 +14,7 @@ export const createForm = ({
   onFieldChange,
   onFormWillInit,
   subscribes,
+  editable,
   effects,
   onValidateFailed
 }) => {
@@ -32,6 +33,7 @@ export const createForm = ({
     subscribes,
     onFormChange,
     onFieldChange,
+    editable,
     effects,
     onValidateFailed,
     schema
@@ -43,7 +45,6 @@ export const createForm = ({
 
   fields = fields.map(({ name, path, schemaPath, schema, value }) => {
     return form.registerField(name || schemaPath.join('.'), {
-      rules: schema['x-rules'],
       path: schemaPath,
       props: schema
     })
