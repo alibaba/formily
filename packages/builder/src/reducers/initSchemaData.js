@@ -170,6 +170,17 @@ export default (state = {}, action) => {
             _data_[compId]['x-props'].enum = propsData['x-props'].enum
             _data_[compId].enum = propsData['x-props'].enum
           }
+          if (
+            propsData['x-props'] &&
+            propsData['x-props'].requestOptions &&
+            propsData['x-props'].requestOptions.data &&
+            (id === null || compId === id)
+          ) {
+            _data_[compId]['x-props'].requestOptions =
+              _data_[compId]['x-props'].requestOptions || {}
+            _data_[compId]['x-props'].requestOptions.data =
+              propsData['x-props'].requestOptions.data
+          }
         }
       })
       return newState

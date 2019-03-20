@@ -46,13 +46,14 @@ const props = {
   // 主题： dark/light,默认dark
   // themeStyle: 'light',
   // 是否展示布局组件，默认为false
-  showLayoutField: true,
+  showLayoutField: false,
   showPreviewBtn: true,
   showSourceCodeBtn: true,
   // 控制返回按钮点击事件
   onBackBtnClick: () => {
     alert('点击了返回')
   },
+  includeFieldListKeyList: ['input', 'number', 'radio', 'date', 'month'],
   // 额外全局按钮
   globalButtonList: [
     // {
@@ -103,8 +104,12 @@ class Comp extends React.Component {
   }
 
   render() {
-    return <Index {...props} schema={this.state.schema} />
+    return (
+      <div style={{ marginTop: -20 }}>
+        <Index {...props} schema={this.state.schema} />
+      </div>
+    )
   }
 }
 
-ReactDOM.render(<Comp />, document.getElementById('root'))
+export default Comp

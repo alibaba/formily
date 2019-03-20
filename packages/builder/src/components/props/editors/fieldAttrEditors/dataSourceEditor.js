@@ -67,6 +67,25 @@ class DataSourceEditor extends Component {
     }
   }
 
+  handleReqOptValueChange = v => {
+    const { onChange } = this.props
+
+    if (this.timer1) clearTimeout(this.timer1)
+    this.timer1 = setTimeout(() => {
+      if (!v) {
+        onChange({
+          requestOptions: {}
+        })
+      } else {
+        onChange({
+          requestOptions: {
+            data: this.transformData(v, false)
+          }
+        })
+      }
+    }, 10)
+  }
+
   handleReqOptChange = ev => {
     const { onChange } = this.props
     const v = ev.target.value
@@ -143,12 +162,39 @@ class DataSourceEditor extends Component {
     })
   }
 
+  /**
+   * 对象跟数组互转
+   * { a: 1, b: 2 } => [{value: 1, label: a}, {value: 2, label: b}]
+   */
+  transformData = (data, toArr = true) => {
+    if (toArr) {
+      return (
+        !!data &&
+        typeof data === 'object' &&
+        Object.keys(data).map(key => ({
+          value: data[key],
+          label: key
+        }))
+      )
+    } else {
+      const obj = {}
+      data &&
+        Array.isArray(data) &&
+        data.forEach(item => {
+          item.label !== undefined && (obj[item.label] = item.value)
+        })
+      return obj
+    }
+  }
+
   render() {
     const { fieldStore = {}, UI } = this.props
     const { dataSourceType, error } = this.state
     const xProps = fieldStore['x-props'] || {}
     const { requestOptions = {} } = xProps
-    const { data } = requestOptions
+    const { data = {} } = requestOptions
+
+    const reqDataArr = this.transformData(data, true)
     const { Form, Input, Tab, RadioGroup, TabPane, version: UIVersion } = UI
 
     const dataSource = [
@@ -172,7 +218,9 @@ class DataSourceEditor extends Component {
     tabProps[UIVersion === '1.x' ? 'shape' : 'type'] = 'text'
 
     const formItemProps = {}
-    formItemProps[UIVersion === '1.x' ? 'validateState' : 'validateStatus'] = error ? 'error' : 'success'
+    formItemProps[
+      UIVersion === '1.x' ? 'validateState' : 'validateStatus'
+    ] = error ? 'error' : 'success'
 
     return (
       <Form.Item labelCol={LABEL_COL} className={this.props.className}>
@@ -187,14 +235,14 @@ class DataSourceEditor extends Component {
             extra={<span style={{ color: 'red' }}>{error}</span>}
           >
             <Tab {...tabProps} size='small'>
-              <TabPane tab='可视化' key='visual'>
+              <TabPane title='可视化' tab='可视化' key='visual'>
                 <DataSourceEnum
                   dataSource={defaultSource}
                   onChange={this.handleEnumValueChange}
                   UI={UI}
                 />
               </TabPane>
-              <TabPane tab='源码' key='code'>
+              <TabPane title='可视化' tab='源码' key='code'>
                 <Input
                   key={`${Math.random()}-enum`}
                   multiple
@@ -204,7 +252,10 @@ class DataSourceEditor extends Component {
                     defaultSource ? JSON.stringify(defaultSource) : ''
                   }
                   onBlur={this.handleEnumChange}
-                  style={STYLE_W}
+                  style={{
+                    ...STYLE_W,
+                    height: 50
+                  }}
                 />
               </TabPane>
             </Tab>
@@ -222,15 +273,27 @@ class DataSourceEditor extends Component {
               onChange={this.handleUrlChange}
               style={STYLE_W}
             />
-            <Input
-              key={`${Math.random()}-requestOption`}
-              style={STYLE_W}
-              multiple
-              rows={6}
-              placeholder={`请输入额外请求参数JSON，e.g.\n ${REQ_OPT_EXAMPLE}`}
-              defaultValue={data ? JSON.stringify(data) : ''}
-              onBlur={this.handleReqOptChange}
-            />
+            <Tab {...tabProps} size='small'>
+              <TabPane title='可视化' tab='可视化' key='visual'>
+                <div style={{ marginTop: 10 }}>
+                  <DataSourceEnum
+                    dataSource={reqDataArr}
+                    onChange={this.handleReqOptValueChange}
+                  />
+                </div>
+              </TabPane>
+              <TabPane title='可视化' tab='源码' key='code'>
+                <Input
+                  key={`${Math.random()}-requestOption`}
+                  style={STYLE_W}
+                  multiple
+                  rows={6}
+                  placeholder={`请输入额外请求参数JSON，e.g.\n ${REQ_OPT_EXAMPLE}`}
+                  defaultValue={data ? JSON.stringify(data) : ''}
+                  onBlur={this.handleReqOptChange}
+                />
+              </TabPane>
+            </Tab>
           </Form.Item>
         ) : null}
       </Form.Item>

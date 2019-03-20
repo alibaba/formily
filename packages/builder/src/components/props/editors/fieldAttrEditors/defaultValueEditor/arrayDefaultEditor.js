@@ -20,6 +20,7 @@ class Editor extends Component {
   render() {
     const { store, UI } = this.props
     const { enums } = store
+    debugger;
 
     return (
       <DefaultValueGenerator
