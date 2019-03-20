@@ -1,4 +1,4 @@
-import { getIn, setIn } from '../accessor'
+import { getIn, setIn, getPathSegments } from '../accessor'
 import { Broadcast } from '../broadcast'
 import { isEqual } from '../compare'
 import { toArr } from '../array'
@@ -210,4 +210,8 @@ test('caculateSchemaInitialValues', () => {
       JSON.stringify({ startDate: undefined, endDate: undefined })
     )
   ).toBeTruthy()
+})
+
+test('getPathSegments', () => {
+  expect(isEqual(getPathSegments(0), [0])).toBeTruthy()
 })
