@@ -1,5 +1,4 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import SchemaForm from '@uform/next'
 import Index from '../index'
 import {
