@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.0-beta.12",
+  "version": "0.1.0-beta.13",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -22,9 +22,10 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.0-beta.12",
-    "@uform/utils": "^0.1.0-beta.12",
-    "@uform/validator": "^0.1.0-beta.12",
+    "@alifd/next": "^1.13.1",
+    "@uform/react": "^0.1.0-beta.13",
+    "@uform/utils": "^0.1.0-beta.13",
+    "@uform/validator": "^0.1.0-beta.13",
     "classnames": "^2.2.5",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.1",
@@ -51,8 +52,12 @@
   "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
   "devDependencies": {
     "@alifd/next": "^1.13.1",
-    "@alife/next": "^0.19.72",
-    "@uform/next": "^0.1.0-alpha.12",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@uform/next": "^0.1.0-beta.13",
     "autoprefixer": "7.1.6",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "css-loader": "0.28.7",
