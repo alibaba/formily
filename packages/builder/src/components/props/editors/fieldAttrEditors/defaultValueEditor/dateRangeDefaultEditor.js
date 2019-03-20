@@ -17,7 +17,7 @@ class Editor extends Component {
   }
 
   render() {
-    const { store = {}, value = [] } = this.props
+    const { store = {}, value = [], UI } = this.props
     const style = {
       fontSize: 12,
       marginBottom: 5
@@ -30,12 +30,14 @@ class Editor extends Component {
           onChange={this.handleStartDateChange}
           value={value[0]}
           store={store}
+          UI={UI}
         />
         <div style={style}>结束日期</div>
         <DateDefaultEditor
           onChange={this.handleEndDateChange}
           value={value[1]}
           store={store}
+          UI={UI}
         />
       </div>
     )

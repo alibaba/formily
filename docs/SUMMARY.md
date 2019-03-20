@@ -3,3 +3,5 @@
    - [UForm原理](./Tutorials/UForm原理.md)
    - [快速入门](./Tutorials/快速入门.md)
    - [Form Schema扩展规范](./Tutorials/FormSchema扩展规范.md)
+- [Playgroud](../packages/builder/src/demo/index-1-x.js)
+- [Playgroud next 0.x](../packages/builder/src/demo/index.js)

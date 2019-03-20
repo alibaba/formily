@@ -166,7 +166,9 @@ export const getOrderProperties = (schema = {}) => {
     const index = item['x-index']
     if (typeof index === 'number') {
       if (!newProperties[index]) {
-        newProperties[index > newProperties.length + 1 ? newProperties.length : index] = {
+        newProperties[
+          index > newProperties.length + 1 ? newProperties.length : index
+        ] = {
           ...item,
           id: key
         }
@@ -215,8 +217,12 @@ export const flatObj = (obj = {}) => {
     const _key = arr.shift()
     if (!arr.length) {
       if (value && typeof value === 'object') {
-        const tempValue = _obj[_key] || {}
-        _obj[_key] = merge({}, value, tempValue)
+        if (Array.isArray(value)) {
+          _obj[_key] = value
+        } else {
+          const tempValue = _obj[_key] || {}
+          _obj[_key] = merge({}, value, tempValue)
+        }
       } else {
         _obj[_key] = value
       }

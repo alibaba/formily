@@ -15,6 +15,15 @@ class DefaultValueGenerator extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const value = nextProps.value || {}
+    this.setState({
+      type: value.type || '',
+      value: value.value || '',
+      flag: value.flag || nextProps.flag
+    })
+  }
+
   handleValueTypeChange = v => {
     const { store } = this.props
     const { name } = store
@@ -68,7 +77,9 @@ class DefaultValueGenerator extends Component {
             onChange={this.handleValueChange}
             placeholder='url上的key'
             style={{
-              verticalAlign: 'top'
+              verticalAlign: 'top',
+              width: 75,
+              marginLeft: 0
             }}
           />
         </span>
