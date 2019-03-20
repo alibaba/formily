@@ -218,9 +218,8 @@ class DataSourceEditor extends Component {
     tabProps[UIVersion === '1.x' ? 'shape' : 'type'] = 'text'
 
     const formItemProps = {}
-    formItemProps[
-      UIVersion === '1.x' ? 'validateState' : 'validateStatus'
-    ] = error ? 'error' : 'success'
+    const _key = UIVersion === '1.x' ? 'validateState' : 'validateStatus'
+    formItemProps[_key] = error ? 'error' : 'success'
 
     return (
       <Form.Item labelCol={LABEL_COL} className={this.props.className}>
