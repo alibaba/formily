@@ -8,7 +8,8 @@
     "url": "git+https://github.com/alibaba/uform.git"
   },
   "scripts": {
-    "start": "node scripts/start.js"
+    "start": "node scripts/start.js",
+    "lib": "rm -rf lib && babel src --out-dir lib"
   },
   "bugs": {
     "url": "https://github.com/alibaba/uform/issues"
@@ -52,6 +53,9 @@
   "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
   "devDependencies": {
     "@alifd/next": "^1.13.1",
+    "@alife/next": "^0.x",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
@@ -81,6 +85,49 @@
     "style-loader": "0.19.0",
     "url-loader": "0.6.2",
     "webpack": "^4.29.6",
-    "webpack-dev-server": ">=3.1.11"
+    "webpack-dev-server": ">=3.1.11",
+    "@babel/plugin-proposal-export-default-from": "7.0.0",
+    "@babel/preset-flow": "7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.3.1",
+    "all-contributors-cli": "^6.1.2",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.1.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-dynamic-import-node": "^2.2.0",
+    "chalk": "^2.4.2",
+    "chokidar": "^2.1.2",
+    "concurrently": "^4.1.0",
+    "conventional-commit-types": "^2.2.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "doc-scripts": "^1.7.5",
+    "eslint": "^5.14.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-config-standard-react": "^7.0.2",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "execa": "^1.0.0",
+    "findup": "^0.1.5",
+    "fs-extra": "^7.0.1",
+    "ghooks": "^2.0.4",
+    "glob": "^7.1.3",
+    "istanbul-api": "^2.1.1",
+    "istanbul-lib-coverage": "^2.0.3",
+    "jest": "^24.1.0",
+    "jest-codemods": "^0.19.1",
+    "jest-dom": "^3.1.2",
+    "jest-localstorage-mock": "^2.3.0",
+    "json5": "^2.1.0",
+    "lerna": "^3.10.1",
+    "prettier-eslint-cli": "^4.7.1",
+    "pretty-format": "^24.0.0",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-testing-library": "^6.0.0",
+    "semver-regex": "^2.0.0",
+    "staged-git-files": "^1.1.2",
+    "user-event": "^1.4.4"
   }
 }
