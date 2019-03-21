@@ -3,7 +3,7 @@ import SchemaForm from '@uform/next'
 import Index from '../index'
 import {
   Button,
-  Accordion,
+  Collapse,
   Message,
   Upload,
   Input,
@@ -15,19 +15,18 @@ import {
   Radio,
   Form,
   Tab
-} from '@alife/next'
+} from '@alifd/next'
 
 // style
-// import '@alifd/next/dist/next.css'
-import '@alife/next/dist/next.min.css'
+import '@alifd/next/dist/next.css'
 
 const renderSchema = {}
 
 const props = {
   UI: {
-    version: '0.x',
+    version: '1.x',
     Button,
-    Accordion,
+    Accordion: Collapse,
     Toast: Message,
     Upload,
     Input,
@@ -38,7 +37,7 @@ const props = {
     NumberPicker,
     Radio,
     RadioGroup: Radio.Group,
-    TabPane: Tab.TabPane,
+    TabPane: Tab.Item,
     Form,
     Tab
   },
@@ -52,7 +51,6 @@ const props = {
   onBackBtnClick: () => {
     alert('点击了返回')
   },
-  includeFieldListKeyList: ['input', 'number', 'radio', 'date', 'month'],
   // 额外全局按钮
   globalButtonList: [
     // {
@@ -80,7 +78,7 @@ const props = {
   extraGlobalCfgList: [],
   globalCfg: {},
   supportFieldList: [],
-  // includeFieldListKeyList: ['input', 'select'],
+  includeFieldListKeyList: ['input', 'multipleInput', 'number', 'radio', 'checkbox', 'date', 'month', 'daterange', 'time'],
 
   // 渲染引擎
   renderEngine: SchemaForm,

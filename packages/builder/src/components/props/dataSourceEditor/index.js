@@ -16,7 +16,7 @@ class Component extends React.Component {
   }
 
   render() {
-    const { fieldStore = {}, value } = this.props
+    const { fieldStore = {}, value, UI } = this.props
 
     return (
       <div
@@ -25,6 +25,7 @@ class Component extends React.Component {
         }}
       >
         <DataSourceEditor
+          UI={UI}
           fieldStore={fieldStore}
           value={value}
           onChange={this.handleFieldAttrChange()}

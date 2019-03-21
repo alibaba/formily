@@ -82,10 +82,15 @@ export default class extends React.Component {
   }
 
   render() {
-    const { Accordtion } = this.props.UI
+    const { Accordion, version: UIVersion } = this.props.UI
 
-    return (
-      <Accordtion
+    return UIVersion === '1.x' ? (
+      <Accordion
+        dataSource={this.state.accordionList}
+        defaultExpandedKeys={['1']}
+      />
+    ) : (
+      <Accordion
         dataSource={this.state.accordionList}
         onChange={(status, list) => {
           this.setState({
