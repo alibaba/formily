@@ -2,7 +2,7 @@
 
 ## 核心架构
 
-![img](https://cdn.nlark.com/lark/0/2018/png/16211/1545062144497-af611eb2-8d7a-4831-b525-cdee05539235.png)
+![img](//img.alicdn.com/tfs/TB12hkLM8LoK1RjSZFuXXXn0XXa-922-538.png)
 
 目前UForm主要分为三层结构
 
