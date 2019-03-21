@@ -1,6 +1,17 @@
 import React from 'react'
 import SiteRenderer from 'react-site-renderer'
 
+window.codeSandBoxDependencies = {
+  '@alifd/next': 'latest',
+  '@uform/next': 'latest',
+  '@uform/antd': 'latest',
+  antd: 'latest'
+}
+
+window.codeSandBoxPeerDependencies = {
+  moment: 'latest'
+}
+
 export default ({ docs }) => {
   return (
     <SiteRenderer
