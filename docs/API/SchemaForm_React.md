@@ -104,7 +104,7 @@ registerFormField(
 )
 
 ReactDOM.render(
-   <SchemaForm defaultValue={{aa:'123'} onSubmit={values=>console.log(values)}>
+   <SchemaForm defaultValue={{aa:'123'}} onSubmit={values=>console.log(values)}>
      <Field name="aa" type="string"/>
      <button htmlType="submit">提交</button>
    </SchemaForm>
