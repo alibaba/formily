@@ -116,7 +116,7 @@ import SchemaForm, {
 
 
 ReactDOM.render(
-   <SchemaForm defaultValue={{aa:'123'} onSubmit={values=>console.log(values)}>
+   <SchemaForm defaultValue={{aa:'123'}} onSubmit={values=>console.log(values)}>
      <Field name="aa" type="string" title="AA"/>
      <FormButtonGroup>
         <Submit>提交</Submit>
