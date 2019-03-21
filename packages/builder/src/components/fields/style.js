@@ -22,7 +22,7 @@ export const indexStyle = styled.div`
       span {
         display: block;
         margin: auto;
-        max-width: 36px;
+        max-width: 50px;
         height: 32px;
         word-break: break-all;
       }

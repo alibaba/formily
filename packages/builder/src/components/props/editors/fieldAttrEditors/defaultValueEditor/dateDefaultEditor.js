@@ -30,9 +30,11 @@ const DatePickerDefault = props => (
     onChange={(v, vStr) => {
       props.onChange(vStr)
     }}
+    popupAlign={'tr br'}
     style={{
       verticalAlign: 'top',
-      marginLeft: 20
+      marginLeft: 10,
+      maxWidth: 90
     }}
   />
 )
@@ -50,20 +52,20 @@ class Editor extends Component {
           future: (
             <UI.NumberPicker
               addonAfter='天'
-              inputWidth={100}
+              inputWidth={75}
               style={{
                 verticalAlign: 'top',
-                marginLeft: 20
+                marginLeft: 10
               }}
             />
           ),
           past: (
             <UI.NumberPicker
               addonAfter='天'
-              inputWidth={100}
+              inputWidth={75}
               style={{
                 verticalAlign: 'top',
-                marginLeft: 20
+                marginLeft: 10
               }}
             />
           ),

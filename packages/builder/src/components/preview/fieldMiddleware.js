@@ -2,7 +2,7 @@ import React from 'react'
 import cls from 'classnames'
 import { registerFieldMiddleware } from '../../utils/baseForm'
 
-export default (FormConsumer) => {
+export default (FormConsumer, that) => {
   const hasRegisted = window.__hasRegisted__ || false
   if (hasRegisted) {
     return false
@@ -24,9 +24,9 @@ export default (FormConsumer) => {
         comp['x-props']._extra.__key__ === 'layout'
       const layoutDragProps = isLayoutWrapper
         ? {
-          onDragOver: ev => this.onDragOver(ev, 'layout'),
-          onDragLeave: ev => this.onDragLeave(ev, 'layout'),
-          onDrop: ev => this.onDrop(ev, null, 'layout', id)
+          onDragOver: ev => that.onDragOver(ev, 'layout'),
+          onDragLeave: ev => that.onDragLeave(ev, 'layout'),
+          onDrop: ev => that.onDrop(ev, null, 'layout', id)
         }
         : {}
 
@@ -43,7 +43,7 @@ export default (FormConsumer) => {
             <a
               onClick={ev => {
                 ev.preventDefault()
-                this.onMouseClick(id, comp, 'layout')
+                that.onMouseClick(id, comp, 'layout')
               }}
               href='javascript:;'
               className='preview-line-layer-layout'
@@ -65,8 +65,8 @@ export default (FormConsumer) => {
               size='small'
               href='javascript:;'
               onClick={() => {
-                this.props.changeComponent()
-                this.deleteComponent(id)
+                that.props.changeComponent()
+                that.deleteComponent(id)
               }}
               title='删除'
             >
@@ -86,10 +86,10 @@ export default (FormConsumer) => {
         <div key={id} className={'comp-item'}>
           <div
             className='preview-line-bar'
-            onDragOver={this.onDragOver}
-            onDragLeave={this.onDragLeave}
+            onDragOver={that.onDragOver}
+            onDragLeave={that.onDragLeave}
             onDrop={ev =>
-              this.onDrop(
+              that.onDrop(
                 ev,
                 id,
                 props.schemaPath.length > 1 ? 'layout' : '',
@@ -105,14 +105,14 @@ export default (FormConsumer) => {
             )}
             name={title}
             draggable
-            onDragStart={ev => this.onDragStart(ev, id, 'move')}
+            onDragStart={ev => that.onDragStart(ev, id, 'move')}
           >
             {React.createElement(Field, { ...props })}
             <div
               className='preview-line-layer'
               onClick={ev => {
                 ev.preventDefault()
-                this.onMouseClick(id, comp)
+                that.onMouseClick(id, comp)
               }}
             />
             <a
@@ -120,8 +120,8 @@ export default (FormConsumer) => {
               type='delete'
               size='small'
               onClick={() => {
-                this.props.changeComponent()
-                this.deleteComponent(id)
+                that.props.changeComponent()
+                that.deleteComponent(id)
               }}
             >
               删除

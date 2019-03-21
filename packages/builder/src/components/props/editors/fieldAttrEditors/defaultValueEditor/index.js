@@ -97,13 +97,13 @@ class DefaultValueEditor extends Component {
       case 'date':
         return <DateDefaultEditor {...props} UI={UI} />
       case 'daterange':
-        return <DateRangeDefaultEditor {...props} />
+        return <DateRangeDefaultEditor {...props} UI={UI} />
       case 'time':
-        return <DateTimeDefaultEditor {...props} />
+        return <DateTimeDefaultEditor {...props} UI={UI} />
       case 'datetimerange':
-        return <DateTimeRangeDefaultEditor {...props} />
+        return <DateTimeRangeDefaultEditor {...props} UI={UI} />
       default:
-        return <StringDefaultEditor {...props} />
+        return <StringDefaultEditor {...props} UI={UI} />
     }
   }
 

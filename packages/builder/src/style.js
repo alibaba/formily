@@ -134,7 +134,10 @@ export default styled.div`
       background: none;
     }
   }
-  .next-accordion-section {
+  .next-collapse-panel:not(:first-child) {
+    border-top: none;
+  }
+  .next-accordion-section, .next-collapse-panel {
     position: relative;
     &::after {
       content: "";
@@ -154,10 +157,13 @@ export default styled.div`
   }
   .next-accordion-section-content, .next-collapse-panel-content {
     background: none;
-    .next-form-left .next-form-item-label, .next-radio-group .next-radio-label {
+    .next-form .next-form-item-label, .next-radio-group .next-radio-label {
       color: ${props => props.theme.whiteColor};
       font-size: 12px;
     }
+  }
+  .next-collapse .next-collapse-panel-icon {
+    color: ${props => props.theme.whiteColor};
   }
   .next-accordion .next-accordion-icon:before {
     color: ${props => props.theme.whiteColor};

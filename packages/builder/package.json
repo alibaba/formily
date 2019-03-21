@@ -17,6 +17,11 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "@alife/next": "^0.x"
+  },
   "dependencies": {
     "@alifd/next": "^1.13.1",
     "@uform/react": "^0.1.0-beta.14",
@@ -31,9 +36,7 @@
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.24.0",
     "monaco-editor": "^0.15.6",
-    "pascal-case": "^2.0.1",
     "prop-types": "^15.6.1",
-    "react-eva": "^1.0.0",
     "react-powerplug": "^1.0.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
@@ -47,30 +50,7 @@
   },
   "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
   "devDependencies": {
-    "@alifd/next": "^1.13.1",
-    "@babel/plugin-proposal-class-properties": "^7.3.4",
-    "@babel/plugin-proposal-decorators": "^7.3.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-runtime": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
     "@uform/next": "^0.1.0-beta.14",
-    "autoprefixer": "7.1.6",
-    "case-sensitive-paths-webpack-plugin": "2.1.1",
-    "css-loader": "0.28.7",
-    "eslint-loader": "1.9.0",
-    "file-loader": "1.1.5",
-    "html-webpack-plugin": "2.29.0",
-    "less": "^3.0.4",
-    "less-loader": "^4.1.0",
-    "postcss-flexbugs-fixes": "3.2.0",
-    "postcss-loader": "2.0.8",
-    "raf": "3.4.0",
-    "react-dev-utils": "^5.0.1",
-    "react-test-renderer": "^16.8.3",
-    "redux-mock-store": "^1.5.3",
-    "style-loader": "0.19.0",
-    "url-loader": "0.6.2",
-    "webpack": "3.8.1",
-    "webpack-dev-server": ">=3.1.11"
+    "react-test-renderer": "*"
   }
 }
