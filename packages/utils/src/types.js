@@ -5,5 +5,6 @@ export const isArr = Array.isArray || isType('Array')
 export const isPlainObj = isType('Object')
 export const isStr = isType('String')
 export const isBool = isType('Boolean')
+export const isNum = isType('Number')
 export const isObj = val => typeof val === 'object'
 export const isRegExp = isType('RegExp')

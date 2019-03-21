@@ -62,7 +62,7 @@ UForm和核心特性：
 - 没能很好的解决表单布局，表单联动的各种复杂问题
 - 性能不行，内部数据管理走的React的全量rerender机制来做数据同步
 
-当然，还有集团内部的[noform解决方案](https://alibaba.github.io/noform)，该方案同样也存在几个问题
+当然，还有集团内部的[noform解决方案](https://alibaba.github.io/nopage)，该方案同样也存在几个问题
 
 - 单纯基于jsx描述表单，没办法数据驱动表单构建
 - 性能不行，基于React的全量rerender机制做数据同步与表单联动
