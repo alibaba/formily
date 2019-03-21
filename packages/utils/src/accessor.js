@@ -1,4 +1,4 @@
-import { isStr, isPlainObj, isArr, isObj } from './types'
+import { isStr, isNum, isPlainObj, isArr, isObj } from './types'
 import { map, each, every } from './array'
 import { LRUMap } from './lru'
 function whitespace(c) {
@@ -36,6 +36,7 @@ export function getPathSegments(path) {
     PathCache.set(path, parts)
     return parts
   }
+  if (isNum(path)) return [path]
   return []
 }
 
