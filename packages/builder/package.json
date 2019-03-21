@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.0-beta.14",
+  "version": "0.1.0-beta.15",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -18,9 +18,9 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
+    "@alife/next": "^0.x",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "@alife/next": "^0.x"
+    "react-dom": ">=16.8.0"
   },
   "dependencies": {
     "@alifd/next": "^1.13.1",
