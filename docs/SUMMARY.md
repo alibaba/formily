@@ -20,6 +20,7 @@
      - [registerFieldMiddleware](./API/registerFieldMiddleware.md)
      - [createVirtualBox](./API/createVirtualBox.md)
      - [connect](./API/connect.md)
+     - [createFormActions](./API/createFormActions.md)
    - @uform/next or antd
      - [<SchemaForm/>](./API/SchemaForm.md)
      - [<FormButtonGroup/>](./API/FormButtonGroup.md)
