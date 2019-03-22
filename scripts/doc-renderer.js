@@ -5,6 +5,7 @@ window.codeSandBoxDependencies = {
   '@alifd/next': 'latest',
   '@uform/next': 'latest',
   '@uform/antd': 'latest',
+  '@uform/react': 'latest',
   antd: 'latest'
 }
 
