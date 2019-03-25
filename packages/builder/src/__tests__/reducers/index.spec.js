@@ -66,9 +66,8 @@ describe('reducers', () => {
           name: '__id__',
           title: '唯一标识',
           type: 'string',
-          description: '发起请求时带过去的参数字段',
-          required: true,
-          value: '11111'
+          description: '唯一标识：发起请求时带上的参数id，必填，全局保证唯一。',
+          required: true
         },
         { name: 'description', title: '提示文案', type: 'string' },
         {
@@ -215,11 +214,14 @@ describe('reducers', () => {
   test('gbConfig reducers return initial state', () => {
     expect(gbConfigReducer(undefined, {})).toEqual({
       labelAlign: 'left',
-      labelTextAlign: 'left',
+      labelTextAlign: 'right',
       autoAddColon: true,
       needFormButtonGroup: false,
       inline: false,
-      size: 'medium'
+      size: 'medium',
+      labelCol: 8,
+      wrapperCol: 16,
+      editable: true
     })
   })
   test('gbConfig reducers return custom state', () => {
@@ -229,7 +231,9 @@ describe('reducers', () => {
       autoAddColon: true,
       needFormButtonGroup: false,
       inline: false,
-      size: 'small'
+      size: 'small',
+      labelCol: 8,
+      wrapperCol: 16
     }
 
     const action = {
@@ -248,7 +252,10 @@ describe('reducers', () => {
       needFormButtonGroup: false,
       inline: true,
       size: 'large',
-      extra: 'extra'
+      extra: 'extra',
+      labelCol: 8,
+      wrapperCol: 16,
+      editable: true
     }
 
     expect(gbConfigReducer(beforeState, action)).toEqual(afterState)
@@ -480,8 +487,7 @@ describe('reducers', () => {
           title: '单行文本框',
           placeholder: '请输入',
           'x-index': 0,
-          id: '111',
-          __id__: '111'
+          id: '111'
         }
       }
     }
@@ -491,7 +497,7 @@ describe('reducers', () => {
         '111': {
           type: 'object',
           id: '111',
-          __id__: '111',
+          'x-index': 0,
           'x-component': 'layout',
           properties: {},
           'x-props': {
@@ -533,8 +539,7 @@ describe('reducers', () => {
               title: '单行文本框',
               placeholder: '请输入',
               'x-index': 0,
-              id: '222',
-              __id__: '222'
+              id: '222'
             }
           }
         }
@@ -547,8 +552,7 @@ describe('reducers', () => {
           type: 'string',
           title: '111',
           'x-index': 0,
-          id: '111',
-          __id__: '111'
+          id: '111'
         },
         '222': {
           key: 'input',
@@ -560,15 +564,13 @@ describe('reducers', () => {
           title: '单行文本框',
           placeholder: '请输入',
           'x-index': 1,
-          id: '222',
-          __id__: '222'
+          id: '222'
         },
         '333': {
           type: 'string',
           title: '333',
           'x-index': 2,
-          id: '333',
-          __id__: '333'
+          id: '333'
         }
       }
     }

@@ -143,11 +143,15 @@ class Preview extends Component {
       )
 
     const globalCfg = pick(gbConfig, [
+      'labelCol',
+      'wrapperCol',
+      'action',
       'labelAlign',
       'labelTextAlign',
       'autoAddColon',
       'inline',
-      'size'
+      'size',
+      'editable'
     ])
 
     return (

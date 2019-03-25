@@ -1,5 +1,5 @@
 import React from 'react'
-import SchemaForm from '@uform/next'
+import SchemaForm, { FormButtonGroup, Submit, Reset } from '@uform/next'
 import Index from '../index'
 import {
   Button,
@@ -12,6 +12,7 @@ import {
   Icon,
   Checkbox,
   NumberPicker,
+  TimePicker,
   Radio,
   Form,
   Tab
@@ -19,6 +20,10 @@ import {
 
 // style
 import '@alifd/next/dist/next.css'
+
+SchemaForm.FormButtonGroup = FormButtonGroup
+SchemaForm.Submit = Submit
+SchemaForm.Reset = Reset
 
 const renderSchema = {}
 
@@ -33,6 +38,7 @@ const props = {
     Select,
     Icon,
     DatePicker,
+    TimePicker,
     Checkbox,
     NumberPicker,
     Radio,
@@ -44,7 +50,7 @@ const props = {
   // 主题： dark/light,默认dark
   // themeStyle: 'light',
   // 是否展示布局组件，默认为false
-  showLayoutField: false,
+  showLayoutField: true,
   showPreviewBtn: true,
   showSourceCodeBtn: true,
   // 控制返回按钮点击事件
@@ -75,10 +81,37 @@ const props = {
   // 是否展示全局配置
   showGlobalCfg: true,
   // 全局配置额外项
-  extraGlobalCfgList: [],
+  extraGlobalCfgList: [
+    {
+      name: 'labelCol',
+      title: 'label宽度占比',
+      type: 'string'
+    },
+    {
+      name: 'wrapperCol',
+      title: 'wrapper宽度占比',
+      type: 'string'
+    },
+    {
+      name: 'editable',
+      title: '表单是否可编辑',
+      description: '若设置为false，则可快速搭建出表单详情页，只需设置每个组件的默认值',
+      type: 'boolean'
+    }
+  ],
   globalCfg: {},
   supportFieldList: [],
-  includeFieldListKeyList: ['input', 'multipleInput', 'number', 'radio', 'checkbox', 'date', 'month', 'daterange', 'time'],
+  includeFieldListKeyList: [
+    'input',
+    'multipleInput',
+    'number',
+    'radio',
+    'checkbox',
+    'date',
+    'month',
+    'daterange',
+    'time'
+  ],
 
   // 渲染引擎
   renderEngine: SchemaForm,
