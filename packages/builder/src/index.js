@@ -26,8 +26,11 @@ const initialState = {
   codemode: false,
   componentProps: {},
   gbConfig: {
+    action: '',
+    labelCol: 8,
+    wrapperCol: 8,
     labelAlign: 'left',
-    labelTextAlign: 'left',
+    labelTextAlign: 'right',
     autoAddColon: true,
     needFormButtonGroup: false,
     inline: false,

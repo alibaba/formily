@@ -10,6 +10,9 @@ export default styled.div`
   .next-checkbox-label {
     color: ${props => props.theme.whiteColor};
   }
+  .preview-main .next-checkbox-label {
+    color: #333;
+  }
   .schemaform-header {
     position: relative;
     height: 64px;
@@ -38,7 +41,8 @@ export default styled.div`
       top: 24px;
       width: 9px;
       height: 17px;
-      background: url('${props => props.theme.backIconUrl}') no-repeat center center;
+      background: url('${props =>
+    props.theme.backIconUrl}') no-repeat center center;
       background-size: 9px 17px;
     }
     &::after {

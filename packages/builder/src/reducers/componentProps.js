@@ -13,11 +13,6 @@ export default (state = {}, action) => {
           return Object.assign(
             {},
             item,
-            name === '__id__'
-              ? {
-                value: id
-              }
-              : {},
             comp[name]
               ? {
                 value: comp[name]

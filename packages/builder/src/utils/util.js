@@ -142,7 +142,7 @@ export const wrapSubmitSchema = (schema, keepAll = false) => {
 /**
  * 根据schema获取有顺序的properties
  * @param {Object} schema
- * @param {Boolean} needFormat 是否需要转换返回数组，默认是
+ * @param {String} containerId 相对容器id
  */
 export const getOrderProperties = (schema = {}) => {
   const { properties = {} } = schema
@@ -166,7 +166,8 @@ export const getOrderProperties = (schema = {}) => {
     const index = item['x-index']
     if (typeof index === 'number') {
       if (!newProperties[index]) {
-        const _key = index > newProperties.length + 1 ? newProperties.length : index
+        const _key =
+          index > newProperties.length + 1 ? newProperties.length : index
         newProperties[_key] = {
           ...item,
           id: key

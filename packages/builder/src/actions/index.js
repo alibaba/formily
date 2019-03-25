@@ -28,7 +28,11 @@ export const addComponentAndEdit = (
   dispatch(addComponent(component, existId, id, type, containerId))
   dispatch(changeComponent(id))
   dispatch(showComponentProps(id, component, containerId))
-  dispatch(changeLayoutId(containerId))
+
+  if (component.__key__ === 'layout') {
+    dispatch(changeLayoutId(id))
+  }
+
   dispatch(
     editComponent(
       id,
