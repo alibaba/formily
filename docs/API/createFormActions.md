@@ -11,7 +11,7 @@ type createFormActions() : {
     setFormState(callback : (state : formState)=>void) : Promise, //设置表单状态，目前只支持设置formState.values
     getFormState(callback : (state : formState)=>any)), //获取表单状态
     setFieldState(name : String,callback : (state : fieldState)=>void) : Promise, //设置表单字段状态，目前支持设置fieldState的所有属性
-    getFieldState(name : String,callback : (state : fieldState)=>any)),//获取表单字段状态
+    getFieldState(name : String[,callback : (state : fieldState)=>any)]),//获取表单字段状态,callback为可选参数
     reset(),//重置表单
     submit(),//提交表单
     validate(),//校验表单
