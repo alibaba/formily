@@ -35,7 +35,6 @@
     "lodash.remove": "^4.7.0",
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.24.0",
-    "monaco-editor": "^0.15.6",
     "prop-types": "^15.6.1",
     "react-powerplug": "^1.0.0",
     "react-redux": "^5.0.7",
