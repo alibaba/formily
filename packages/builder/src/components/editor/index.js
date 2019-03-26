@@ -4,21 +4,64 @@ import cls from 'classnames'
 import { connect } from 'react-redux'
 import { initSchema, changeGbConfig, changeCodeMode } from '../../actions/index'
 import EditorStyle from './style'
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api'
-
-import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
-import 'monaco-editor/esm/vs/editor/contrib/find/findController'
 
 class Component extends React.Component {
   componentDidMount() {
-    this.monacoInstance = monaco.editor.create(
-      document.getElementById('J_uformEditor'),
-      {
-        value: this.getValueFromProps(),
-        language: 'javascript',
-        theme: this.props.themeStyle === 'dark' ? 'vs-dark' : 'vs'
-      }
-    )
+    /* eslint-disable */
+    const defaultValue = this.getValueFromProps()
+    const theme = this.props.themeStyle === 'dark' ? 'vs-dark' : 'vs'
+
+    if (window.loadedMonaco === true) {
+      self.monacoInstance = monaco.editor.create(
+        document.getElementById('J_uformEditor'),
+        {
+          language: 'javascript',
+          theme: theme,
+          value: defaultValue
+        }
+      )
+      return false
+    }
+
+    const script = document.createElement('script')
+    script.src =
+      '//g.alicdn.com/ascp-comp/common-monaco-editor/5.0.1/min/vs/loader.js'
+    document.head.appendChild(script)
+
+    const tpl1 = `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+      self.MonacoEnvironment = {
+        baseUrl: "https://g.alicdn.com/ascp-comp/common-monaco-editor/5.0.1/min/"
+      };
+      importScripts(
+        "https://g.alicdn.com/ascp-comp/common-monaco-editor/5.0.1/min/vs/base/worker/workerMain.js"
+      )`)}`
+
+    script.onload = () => {
+      const script2 = document.createElement('script')
+      const tpl = `
+        require.config({
+          paths: {
+            vs: "https://g.alicdn.com/ascp-comp/common-monaco-editor/5.0.1/min/vs" 
+          }
+        });
+        window.MonacoEnvironment = {
+          getWorkerUrl: function(workerId, label) {
+            return "${tpl1}"
+          }
+        };
+        require(["vs/editor/editor.main"], function() {
+          window.loadedMonaco = true;
+          self.monacoInstance = self.monacoInstance || monaco.editor.create(document.getElementById("J_uformEditor"), {
+            language: "javascript",
+            theme: "${theme}",
+            value: ${JSON.stringify(defaultValue)}
+          })
+        })
+      `
+      script2.innerHTML = tpl
+      document.head.appendChild(script2)
+    }
+    /* eslint-enable */
   }
 
   getValueFromProps() {
@@ -35,12 +78,9 @@ class Component extends React.Component {
     return val
   }
 
-  componentWillUnmount() {
-    this.monacoInstance.dispose()
-  }
-
   componentDidUpdate() {
-    this.monacoInstance.setValue(this.getValueFromProps())
+    window.monacoInstance &&
+      window.monacoInstance.setValue(this.getValueFromProps())
   }
 
   render() {
@@ -56,7 +96,7 @@ class Component extends React.Component {
             try {
               // eslint-disable-next-line
               const newValue = new Function(
-                `return ${this.monacoInstance.getValue()}`
+                `return ${window.monacoInstance.getValue()}`
               )()
               const { schema = {}, gbConfig = {} } = newValue
               const {
