@@ -63,7 +63,8 @@ class FieldList extends Component {
       : fieldItem
 
   renderFieldList() {
-    const _addComponent = this.props.addComponentAndEdit
+    const _addComponentAndEdit = this.props.addComponentAndEdit
+
     return (
       <ul className='field-list'>
         {this.fieldList.map((fieldItem, i) => {
@@ -80,7 +81,7 @@ class FieldList extends Component {
               draggable
               onDragStart={ev => this.onDragStart(ev, newFieldItem)}
               onClick={() => {
-                _addComponent && _addComponent(newFieldItem)
+                _addComponentAndEdit && _addComponentAndEdit(newFieldItem)
               }}
             >
               <i
@@ -114,7 +115,7 @@ class FieldList extends Component {
   }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
   addComponent: component => dispatch(addComponent(component)),
@@ -122,7 +123,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(editComponent(id, propsData, containerId)),
   showComponentProps: (id, comp) => dispatch(showComponentProps(id, comp)),
   changeComponent: componentId => dispatch(changeComponent(componentId)),
-  addComponentAndEdit: component => dispatch(addComponentAndEdit(component))
+  addComponentAndEdit: (component, existId, type, containerId) =>
+    dispatch(addComponentAndEdit(component, existId, type, containerId))
 })
 
 class StyledFieldListComp extends React.Component {

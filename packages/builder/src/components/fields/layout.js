@@ -33,7 +33,10 @@ class Component extends React.Component {
               // eslint-disable-next-line
               key={i}
               onClick={() => {
-                _addComponentAndEdit && _addComponentAndEdit(item)
+                _addComponentAndEdit &&
+                  _addComponentAndEdit(
+                    item
+                  )
               }}
             >
               {title}
@@ -57,10 +60,11 @@ class Component extends React.Component {
   }
 }
 
-const mapStateToProps = () => ({})
+const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
-  addComponentAndEdit: component => dispatch(addComponentAndEdit(component))
+  addComponentAndEdit: (component, existId, type, containerId) =>
+    dispatch(addComponentAndEdit(component, existId, type, containerId))
 })
 
 class StyledLayoutListComp extends React.Component {

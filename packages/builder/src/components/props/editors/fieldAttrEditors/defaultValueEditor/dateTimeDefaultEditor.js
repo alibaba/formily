@@ -17,20 +17,24 @@ const ds = [
 ]
 
 const DatePickerDefault = props => (
-  <props.UI.DatePicker
-    showTime
+  <props.UI.TimePicker
     onChange={(v, vStr) => {
-      props.onChange(vStr)
+      if (vStr) {
+        props.onChange(vStr)
+      } else {
+        props.onChange(v.format('HH:mm:ss'))
+      }
     }}
     style={{
       verticalAlign: 'top',
-      marginLeft: 20
+      marginLeft: 5
     }}
   />
 )
 
 class Editor extends Component {
   render() {
+    const { UI } = this.props
     return (
       <DefaultValueGenerator
         flag='time'
@@ -38,7 +42,7 @@ class Editor extends Component {
         {...this.props}
         customEditor={{
           now: <div />,
-          specify: <DatePickerDefault />
+          specify: <DatePickerDefault UI={UI} />
         }}
       />
     )

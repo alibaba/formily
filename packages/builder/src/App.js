@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import cls from 'classnames'
 import PropTypes from 'prop-types'
-import { SchemaForm } from './utils/baseForm'
 import { connect } from 'react-redux'
 import {
   changePreview,
@@ -19,8 +18,11 @@ import AppStyle from './style'
 // components
 import FieldList from './components/fields/index'
 import Preview from './components/preview/index'
-import AccordionList from './components/props/accordList'
 import generateGlobalBtnList from './components/globalBtnList/index'
+
+import PropsSetting from './components/props/propsSetting'
+import { SchemaForm, Field } from './utils/baseForm'
+import defaultGlobalCfgList from './configs/supportGlobalCfgList'
 
 const noop = () => {}
 
@@ -28,8 +30,73 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      systemError: false
+      systemError: false,
+      accordionList: []
     }
+  }
+
+  generateGlobalCfgList = () => {
+    // Merge custom form global property configuration
+    const globalCfgList = [
+      ...defaultGlobalCfgList,
+      ...this.props.extraGlobalCfgList
+    ]
+    const _globalCfgList = []
+    for (let i = globalCfgList.length - 1; i >= 0; i--) {
+      if (
+        !_globalCfgList.find(cfgItem => cfgItem.name === globalCfgList[i].name)
+      ) {
+        _globalCfgList.unshift(globalCfgList[i])
+      }
+    }
+    return _globalCfgList
+  }
+
+  // global config
+  renderGlobalConfig = () => {
+    const globalCfgList = this.generateGlobalCfgList()
+
+    const content = (
+      <SchemaForm
+        onChange={value => {
+          this.props.changeGbConfig(value)
+        }}
+        defaultValue={this.props.gbConfig}
+        labelAlign='left'
+        labelTextAlign='right'
+      >
+        {globalCfgList.map(props => (
+          <Field {...props} key={props.name} x-item-props={{ labelCol: 10 }} />
+        ))}
+      </SchemaForm>
+    )
+
+    return content
+  }
+
+  getAccordionList = () => {
+    const list = [
+      {
+        title: '组件配置',
+        content: (
+          <PropsSetting
+            supportConfigList={this.props.supportConfigList}
+            renderEngine={this.props.renderEngine}
+            UI={this.props.UI}
+          />
+        ),
+        expanded: true
+      }
+    ]
+
+    if (this.props.showGlobalCfg) {
+      list.unshift({
+        title: '全局配置',
+        content: this.renderGlobalConfig(),
+        expanded: true
+      })
+    }
+    return list
   }
 
   componentWillMount() {
@@ -42,6 +109,12 @@ class App extends Component {
 
     _changeGbConfig(globalCfg)
     _initSchema(schema)
+  }
+
+  componentDidMount() {
+    this.setState({
+      accordionList: this.getAccordionList()
+    })
   }
 
   componentWillUnmount() {
@@ -138,6 +211,7 @@ class App extends Component {
 
   render() {
     const { initSchemaData, renderEngine } = this.props
+    const { Accordion, version: UIVersion } = this.props.UI
 
     const contentHeight = window.innerHeight - 64
 
@@ -169,10 +243,28 @@ class App extends Component {
             />
           </div>
           <div className='content-col content-col-main'>
-            <Preview schema={initSchemaData} renderEngine={renderEngine} />
+            <Preview
+              schema={initSchemaData}
+              renderEngine={renderEngine}
+              UI={this.props.UI}
+            />
           </div>
           <div className='content-col content-col-right'>
-            <AccordionList {...this.props} />
+            {UIVersion === '1.x' ? (
+              <Accordion
+                dataSource={this.state.accordionList}
+                defaultExpandedKeys={['0', '1']}
+              />
+            ) : (
+              <Accordion
+                dataSource={this.state.accordionList}
+                onChange={(status, list) => {
+                  this.setState({
+                    accordionList: list
+                  })
+                }}
+              />
+            )}
           </div>
         </div>
         {this.getEditorTpl()}

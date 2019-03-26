@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { SchemaForm } from '../../utils/baseForm'
+import {
+  SchemaForm,
+  registerFormFields,
+  connect as formConnect
+} from '../../utils/baseForm'
 import { connect } from 'react-redux'
 import {
   showComponentProps,
@@ -16,6 +20,7 @@ import FileSetting from './fileSetting'
 
 import './defaultValueCascader/index'
 import './dataSourceEditor/index'
+import ColsDetail from './colsDetail'
 
 import pickBy from 'lodash.pickby'
 
@@ -26,6 +31,17 @@ class PropsSetting extends Component {
     editComponent: PropTypes.func,
     editComponentProps: PropTypes.func,
     componentProps: PropTypes.object
+  }
+
+  constructor(props) {
+    super(props)
+    registerFormFields({
+      colsDetail: formConnect({
+        defaultProps: {
+          UI: this.props.UI
+        }
+      })(ColsDetail)
+    })
   }
 
   onChangeHandler = formdata => {
@@ -156,7 +172,9 @@ class PropsSetting extends Component {
   renderConfigList() {
     const { componentId = '' } = this.props
 
-    if (!componentId) { return <p className='props-tips'>请选择待编辑的表单字段</p> }
+    if (!componentId) {
+      return <p className='props-tips'>请选择待编辑的表单字段</p>
+    }
 
     return (
       <State initial={{ visible: false }}>
@@ -190,7 +208,7 @@ class PropsSetting extends Component {
             onChange={this.onChangeHandler}
             schema={this.generatePropsSchema()}
             labelAlign='left'
-            labelTextAlign='left'
+            labelTextAlign='right'
             labelCol={8}
           >
             {' '}

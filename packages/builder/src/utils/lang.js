@@ -18,7 +18,7 @@ export const isNum = isType('Number')
 export const isIter = obj => isArr(obj) || isObj(obj)
 
 const replaceSingleDefault = v => {
-  if (!isFlagValue(v)) return v
+  if (!isFlagValue(v)) return ''
 
   const { type, flag, value } = v
 
@@ -41,7 +41,7 @@ const replaceSingleDefault = v => {
     if (type === 'specify') {
       return value
     } else if (type === 'now') {
-      return now.format('YYYY-MM-DD HH:MM:SS')
+      return now.format('HH:MM:SS')
     } else if (type === 'url') {
       return params[value]
     }
