@@ -69,7 +69,7 @@ class Editor extends Component {
               }}
             />
           ),
-          specify: <DatePickerDefault />
+          specify: <DatePickerDefault UI={UI} />
         }}
       />
     )

@@ -1,10 +1,11 @@
 import React from 'react'
-import SchemaForm from '@uform/next'
-import Index from '../index'
+import SchemaForm, { FormButtonGroup, Submit, Reset } from '@uform/next'
+import Builder from '@uform/builder'
+
 import {
   Button,
-  Accordion,
-  Feedback,
+  Collapse,
+  Message,
   Upload,
   Input,
   Select,
@@ -12,45 +13,53 @@ import {
   Icon,
   Checkbox,
   NumberPicker,
+  TimePicker,
   Radio,
   Form,
   Tab
-} from '@alife/next'
+} from '@alifd/next'
 
-import '@alife/next/dist/next.min.css'
+// style
+import '@alifd/next/dist/next.css'
+
+SchemaForm.FormButtonGroup = FormButtonGroup
+SchemaForm.Submit = Submit
+SchemaForm.Reset = Reset
 
 const renderSchema = {}
 
 const props = {
   UI: {
-    version: '0.x',
+    version: '1.x',
     Button,
-    Accordion,
-    Toast: Feedback.toast,
+    Accordion: Collapse,
+    Toast: Message,
     Upload,
     Input,
     Select,
     Icon,
     DatePicker,
+    TimePicker,
     Checkbox,
     NumberPicker,
     Radio,
     RadioGroup: Radio.Group,
-    TabPane: Tab.TabPane,
+    TabPane: Tab.Item,
     Form,
     Tab
   },
   // 主题： dark/light,默认dark
-  // themeStyle: 'light',
+  themeStyle: 'dark',
   // 是否展示布局组件，默认为false
-  showLayoutField: false,
+  showLayoutField: true,
+  // 是否展示预览按钮，默认为true
   showPreviewBtn: true,
+  // 是否展示源码按钮
   showSourceCodeBtn: true,
   // 控制返回按钮点击事件
   onBackBtnClick: () => {
     alert('点击了返回')
   },
-  includeFieldListKeyList: ['input', 'number', 'radio', 'date', 'month'],
   // 额外全局按钮
   globalButtonList: [
     // {
@@ -75,10 +84,31 @@ const props = {
   // 是否展示全局配置
   showGlobalCfg: true,
   // 全局配置额外项
-  extraGlobalCfgList: [],
+  extraGlobalCfgList: [
+    {
+      name: 'labelCol',
+      title: 'label宽度占比',
+      type: 'string'
+    },
+    {
+      name: 'wrapperCol',
+      title: 'wrapper宽度占比',
+      type: 'string'
+    }
+  ],
   globalCfg: {},
   supportFieldList: [],
-  // includeFieldListKeyList: ['input', 'select'],
+  includeFieldListKeyList: [
+    'input',
+    'multipleInput',
+    'number',
+    'radio',
+    'checkbox',
+    'date',
+    'month',
+    'daterange',
+    'time'
+  ],
 
   // 渲染引擎
   renderEngine: SchemaForm,
@@ -92,7 +122,7 @@ const props = {
   }
 }
 
-class Comp extends React.Component {
+class Component extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -103,10 +133,10 @@ class Comp extends React.Component {
   render() {
     return (
       <div style={{ marginTop: -20 }}>
-        <Index {...props} schema={this.state.schema} />
+        <Builder {...props} schema={this.state.schema} />
       </div>
     )
   }
 }
 
-export default Comp
+export default Component

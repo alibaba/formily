@@ -23,11 +23,14 @@ const sizeEnum = [
 // 默认全局配置值
 export const defaultGlobalCfgValue = {
   labelAlign: 'left',
-  labelTextAlign: 'left',
+  labelTextAlign: 'right',
   autoAddColon: true,
   needFormButtonGroup: false,
   inline: false,
-  size: 'medium'
+  size: 'medium',
+  labelCol: 8,
+  wrapperCol: 16,
+  editable: true
 }
 
 // 默认全局配置属性列表

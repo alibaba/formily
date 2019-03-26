@@ -4,7 +4,7 @@ const FIELDLIST = {
     name: '__id__',
     title: '唯一标识',
     type: 'string',
-    description: '发起请求时带过去的参数字段',
+    description: '唯一标识：发起请求时带上的参数id，必填，全局保证唯一。',
     required: true
   },
   PLACEHOLDER: {
@@ -133,6 +133,9 @@ export const getPropsByKey = key => {
         'PLACEHOLDER'
       ])
     case 'date':
+    case 'month':
+    case 'daterange':
+    case 'time':
       return generateProps(
         [
           'ID',
@@ -212,6 +215,27 @@ export const getPropsByKey = key => {
             name: 'x-props.title',
             title: '标题',
             type: 'string'
+          }
+        ]
+      )
+    case 'wrapper_card':
+      return generateProps(
+        ['ID'],
+        [
+          {
+            name: 'x-props.title',
+            title: '标题',
+            type: 'string'
+          },
+          {
+            name: 'x-props.subTitle',
+            title: '副标题',
+            type: 'string'
+          },
+          {
+            name: 'x-props.showHeadDivider',
+            title: '是否展示标题底部横线',
+            type: 'boolean'
           }
         ]
       )

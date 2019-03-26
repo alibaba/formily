@@ -7,11 +7,14 @@ export default (FormConsumer, that) => {
   if (hasRegisted) {
     return false
   }
+  const { UI } = that.props
   window.__hasRegisted__ = true
   registerFieldMiddleware(Field => props =>
     React.createElement(FormConsumer, {}, (obj = {}) => {
       const { type } = obj
-      if (props.path.length === 0 || type !== 'preview') { return React.createElement(Field, props) }
+      if (props.path.length === 0 || type !== 'preview') {
+        return React.createElement(Field, props)
+      }
       const { title = '', active = false } = props.schema
       const id = props.path[0]
       const comp = {
@@ -49,15 +52,7 @@ export default (FormConsumer, that) => {
               className='preview-line-layer-layout'
               title='编辑'
             >
-              {
-                React.createElement(Field, {
-                  'x-component': 'Icon',
-                  'x-props': {
-                    type: 'edit',
-                    size: 'small'
-                  }
-                })
-              }
+              <UI.Icon type='edit' size='small' />
             </a>
             <a
               className='preview-line-del'
@@ -70,15 +65,7 @@ export default (FormConsumer, that) => {
               }}
               title='删除'
             >
-              {
-                React.createElement(Field, {
-                  'x-component': 'Icon',
-                  'x-props': {
-                    type: 'ashbin',
-                    size: 'small'
-                  }
-                })
-              }
+              <UI.Icon type='ashbin' size='small' />
             </a>
           </div>
         </div>

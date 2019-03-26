@@ -75,21 +75,21 @@ export default (state = {}, action) => {
       }
       return newState
     case 'ADD_COMPONENT':
-      if (component.__key__ === 'layout') {
-        // 判断是否布局组件特殊处理
-        newState.properties[id] = {
-          type: 'object',
-          id,
-          __id__: id,
-          ...component.__key__data__,
-          properties: {},
-          'x-props': {
-            ...component.__key__data__['x-props'],
-            _extra: component
+      const _component_ =
+        component.__key__ === 'layout'
+          ? {
+            type: 'object',
+            id,
+            ...component.__key__data__,
+            properties: {},
+            'x-props': {
+              ...component.__key__data__['x-props'],
+              _extra: component
+            }
           }
-        }
-        return newState
-      }
+          : {
+            ...component
+          }
 
       const propertiesList1 =
         addType === 'layout'
@@ -108,14 +108,14 @@ export default (state = {}, action) => {
           }
         }
         propertiesList1[idx] = {
-          ...component,
+          ..._component_,
           id,
           'x-index': idx
         }
       } else {
         // 在最后插入新的组件
         propertiesList1[propertiesList1.length] = {
-          ...component,
+          ..._component_,
           id,
           'x-index': propertiesList1.length
         }
@@ -124,8 +124,7 @@ export default (state = {}, action) => {
       const _properties1 = {}
       propertiesList1.forEach(item => {
         _properties1[item.id] = {
-          ...item,
-          __id__: item.id
+          ...item
         }
       })
 

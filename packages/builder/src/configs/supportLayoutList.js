@@ -25,5 +25,19 @@ export default [
         gutter: 20
       }
     }
+  },
+  {
+    key: 'wrapper_card',
+    icon: 'clock-circle-o',
+    type: 'object',
+    title: 'FormCard卡片式布局',
+    __key__: 'layout',
+    __key__data__: {
+      'x-component': 'card',
+      'x-props': {
+        title: '卡片式布局',
+        showHeadDivider: true
+      }
+    }
   }
 ]
