@@ -45,7 +45,7 @@ export function isEmpty(val) {
   if (Array.isArray(val)) {
     if (val.length === 0) return true
     for (let i = 0; i < val.length; i++) {
-      if (val[i] !== undefined && val[i] !== null) {
+      if (val[i] !== undefined && val[i] !== null && val[i] !== '' && val[i] !== 0) {
         return false
       }
     }
