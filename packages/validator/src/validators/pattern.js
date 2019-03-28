@@ -3,6 +3,9 @@ import { getMessage } from '../message'
 
 export const patternValidate = (pattern, value, message) => {
   if (isEmpty(value)) return ''
+  if (isRegExp(pattern)) {
+    pattern.lastIndex = 0
+  }
   const valid = isFn(pattern)
     ? pattern(value)
     : isRegExp(pattern)

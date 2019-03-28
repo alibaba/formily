@@ -230,3 +230,35 @@ test('modify validate rules by setFieldState', async () => {
   await sleep(33)
   expect(queryByText('must have 6 numbers')).toBeVisible()
 })
+
+test('dynamic update values', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm>
+        <Field
+          name='bb'
+          type='string'
+          x-rules={{ pattern: /\d+(\.\d+)?/g, message: 'must be number' }}
+        />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+  const { queryByTestId, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryByTestId('test-input'), {
+    target: { value: '12332123' }
+  })
+  await sleep(133)
+  fireEvent.change(queryByTestId('test-input'), {
+    target: { value: '12332123a' }
+  })
+  await sleep(133)
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '123321' } })
+  await sleep(133)
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '12332' } })
+  await sleep(133)
+  expect(queryByText('must be number')).toBeNull()
+})
