@@ -238,7 +238,7 @@ test('dynamic update values', async () => {
         <Field
           name='bb'
           type='string'
-          x-rules={{ pattern: /\d+(\.\d+)?/g, message: 'must be number' }}
+          x-rules={{ pattern: /\d+(\.\d+)?$/g, message: 'must be number' }}
         />
         <button type='submit' data-testid='btn'>
           Submit
@@ -261,4 +261,7 @@ test('dynamic update values', async () => {
   fireEvent.change(queryByTestId('test-input'), { target: { value: '12332' } })
   await sleep(133)
   expect(queryByText('must be number')).toBeNull()
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '12332a' } })
+  await sleep(133)
+  expect(queryByText('must be number')).toBeVisible()
 })
