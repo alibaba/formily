@@ -13,6 +13,7 @@ import {
 } from '../../actions'
 import uniqBy from 'lodash.uniqby'
 import { indexStyle as IndexStyle } from './style'
+import Field from './field'
 
 class FieldList extends Component {
   static propTypes = {
@@ -50,52 +51,16 @@ class FieldList extends Component {
     ev.dataTransfer.dropEffect = 'copy'
   }
 
-  wrapFieldItem = fieldItem =>
-    typeof fieldItem === 'string'
-      ? {
-        type: fieldItem,
-        icon: '',
-        iconUrl: 'gw.alicdn.com/tfs/TB10xa4DbrpK1RjSZTEXXcWAVXa-116-60.png',
-        width: '58',
-        height: '30',
-        title: '自定义组件'
-      }
-      : fieldItem
-
   renderFieldList() {
-    const _addComponentAndEdit = this.props.addComponentAndEdit
-
     return (
       <ul className='field-list'>
         {this.fieldList.map((fieldItem, i) => {
-          const newFieldItem = this.wrapFieldItem(fieldItem)
-          const {
-            key,
-            iconUrl = '//gw.alicdn.com/tfs/TB10xa4DbrpK1RjSZTEXXcWAVXa-116-60.png',
-            width,
-            height
-          } = newFieldItem
           return (
-            <li
-              key={key}
-              draggable
-              onDragStart={ev => this.onDragStart(ev, newFieldItem)}
-              onClick={() => {
-                _addComponentAndEdit && _addComponentAndEdit(newFieldItem)
-              }}
-            >
-              <i
-                className='field-icon'
-                style={{
-                  backgroundImage: `url(${iconUrl})`,
-                  width: '100%',
-                  // width: `${width}px`,
-                  // height: `${height}px`,
-                  backgroundSize: `${width}px ${height}px`
-                }}
-              />
-              <span>{newFieldItem.title}</span>
-            </li>
+            <Field
+              fieldItem={fieldItem}
+              key={i}
+              addComponentAndEdit={this.props.addComponentAndEdit}
+            />
           )
         })}
       </ul>

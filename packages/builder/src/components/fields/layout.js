@@ -6,7 +6,7 @@ import supportLayoutList from '../../configs/supportLayoutList'
 import { Header } from '../../utils/util'
 import { connect } from 'react-redux'
 import { addComponentAndEdit } from '../../actions'
-
+import Field from './layoutField'
 import { layoutStyle as LayoutStyle } from './style'
 
 class Component extends React.Component {
@@ -23,24 +23,15 @@ class Component extends React.Component {
   }
 
   renderList() {
-    const { addComponentAndEdit: _addComponentAndEdit } = this.props
     return (
       <ul className='layout-list'>
         {this.layoutList.map((item, i) => {
-          const { title } = item
           return (
-            <li
-              // eslint-disable-next-line
+            <Field
+              fieldItem={item}
               key={i}
-              onClick={() => {
-                _addComponentAndEdit &&
-                  _addComponentAndEdit(
-                    item
-                  )
-              }}
-            >
-              {title}
-            </li>
+              addComponentAndEdit={this.props.addComponentAndEdit}
+            />
           )
         })}
       </ul>

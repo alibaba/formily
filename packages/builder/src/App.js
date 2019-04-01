@@ -115,6 +115,11 @@ class App extends Component {
     this.setState({
       accordionList: this.getAccordionList()
     })
+
+    const containerDom = document.querySelector('.schemaform-app')
+    if (containerDom.offsetTop !== 0) {
+      document.querySelector('.schamaform-content').style.height = `${window.innerHeight - containerDom.offsetTop - 64}px`
+    }
   }
 
   componentWillUnmount() {

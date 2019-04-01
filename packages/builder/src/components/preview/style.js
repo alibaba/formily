@@ -106,8 +106,10 @@ export default styled.div`
     outline-color: #e6e7ff;
   }
   .preview-tips {
-    margin-top: 0;
-    padding-top: 72px;
+    position: absolute;
+    left: 0;
+    top: 72px;
+    width: 100%;
     text-align: center;
     color: #999;
   }

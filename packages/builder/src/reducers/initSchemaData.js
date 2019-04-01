@@ -30,49 +30,81 @@ export default (state = {}, action) => {
       let _tmpNewState = {
         ...newState
       }
-      if (containerId) {
-        _tmpNewState = newState.properties[containerId]
-      }
-      const propertiesList = getOrderProperties(_tmpNewState)
-      const targetItem = propertiesList.find(_item => _item.id === targetId)
-      let targetIdx = targetItem
-        ? targetItem['x-index']
-        : propertiesList[propertiesList.length - 1]['x-index']
-      const sourceItem = propertiesList.find(_item => _item.id === id)
-      const sourceIdx = sourceItem
-        ? sourceItem['x-index']
-        : propertiesList[0]['x-index']
-      const len = propertiesList.length
-      if (targetIdx < 0) {
-        targetIdx = 0
-      }
-      propertiesList.splice(sourceIdx, 1)
-      for (let i = 0; i < targetIdx; i++) {
-        propertiesList[i] = {
-          ...propertiesList[i],
-          'x-index': i
-        }
-      }
-      for (let i = len - 1; i > targetIdx; i--) {
-        propertiesList[i] = {
-          ...propertiesList[i - 1],
-          'x-index': i
-        }
-      }
-      propertiesList[targetIdx] = {
-        ...sourceItem,
-        'x-index': targetIdx
-      }
-      const _properties = {}
-      propertiesList.forEach(item => {
-        _properties[item.id] = item
-      })
+      if (!targetId) {
+        if (containerId) {
+          // 没有targetId有containerId，则把sourceId丢进containerId里面
+          const outerPropertiesList = getOrderProperties(_tmpNewState)
+          const innerPropertiesList = getOrderProperties(
+            _tmpNewState.properties[containerId]
+          )
+          const sourceItem = outerPropertiesList.find(_item => _item.id === id)
+          const sourceIdx = sourceItem
+            ? sourceItem['x-index']
+            : outerPropertiesList[0]['x-index']
+          outerPropertiesList.splice(sourceIdx, 1)
 
-      if (containerId) {
-        newState.properties[containerId].properties = _properties
+          innerPropertiesList[innerPropertiesList.length] = {
+            ...sourceItem,
+            'x-index': innerPropertiesList.length
+          }
+
+          const _outerProperties = {}
+          const _innerProperties = {}
+          outerPropertiesList.forEach(item => {
+            _outerProperties[item.id] = item
+          })
+          innerPropertiesList.forEach(item => {
+            _innerProperties[item.id] = item
+          })
+          newState.properties = _outerProperties
+          newState.properties[containerId].properties = _innerProperties
+        }
       } else {
-        newState.properties = _properties
+        if (containerId) {
+          _tmpNewState = newState.properties[containerId]
+        }
+        const propertiesList = getOrderProperties(_tmpNewState)
+        const targetItem = propertiesList.find(_item => _item.id === targetId)
+        let targetIdx = targetItem
+          ? targetItem['x-index']
+          : propertiesList[propertiesList.length - 1]['x-index']
+        const sourceItem = propertiesList.find(_item => _item.id === id)
+        const sourceIdx = sourceItem
+          ? sourceItem['x-index']
+          : propertiesList[0]['x-index']
+        const len = propertiesList.length
+        if (targetIdx < 0) {
+          targetIdx = 0
+        }
+        propertiesList.splice(sourceIdx, 1)
+        for (let i = 0; i < targetIdx; i++) {
+          propertiesList[i] = {
+            ...propertiesList[i],
+            'x-index': i
+          }
+        }
+        for (let i = len - 1; i > targetIdx; i--) {
+          propertiesList[i] = {
+            ...propertiesList[i - 1],
+            'x-index': i
+          }
+        }
+        propertiesList[targetIdx] = {
+          ...sourceItem,
+          'x-index': targetIdx
+        }
+        const _properties = {}
+        propertiesList.forEach(item => {
+          _properties[item.id] = item
+        })
+
+        if (containerId) {
+          newState.properties[containerId].properties = _properties
+        } else {
+          newState.properties = _properties
+        }
       }
+
       return newState
     case 'ADD_COMPONENT':
       const _component_ =
