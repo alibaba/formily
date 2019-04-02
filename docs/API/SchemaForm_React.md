@@ -19,6 +19,7 @@ import SchemaForm from '@uform/react'
 | value | 表单值，受控态使用 | Object | {} |
 | initialValues | 表单值，受控态使用 | Object | {} |
 | locale | 表单国际化文案 | Object | {} |
+| component | 控制SchemaForm是以什么形式渲染，默认是渲染form标签，如果你希望嵌套使用SchemaForm,可以指定为div | String/Function | "form" |
 | schema | 表单json schema，具体参考 [扩展规范](#/MpI2Ij/1gSGSDf5) | Object | {type:"object",properties:{}} |
 | onChange | 表单变化事件回调 | `Function(values : Object){}` |  |
 | onSubmit | 表单提交事件回调 | `Function(values : Object){}` |  |

@@ -38,7 +38,8 @@ const isElementInViewport = (rect, { offset = 0, threshold = 0 } = {}) => {
 export const FormButtonGroup = styled(
   class FormButtonGroup extends Component {
     static defaultProps = {
-      span: 24
+      span: 24,
+      zIndex: 100
     }
 
     renderChildren() {

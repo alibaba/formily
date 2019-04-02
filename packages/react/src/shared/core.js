@@ -13,9 +13,12 @@ export const initialContainer = () => {
   FIELD_PROPS_TRANSFORMERS = {}
   FIELD_RENDERER = undefined
   FORM_COMPONENT = class extends React.Component {
+    static defaultProps = {
+      component: 'form'
+    }
     render() {
-      const { formRef, ...props } = this.props
-      return React.createElement('form', {
+      const { formRef, component, ...props } = this.props
+      return React.createElement(component, {
         ...props,
         ref: formRef
       })
