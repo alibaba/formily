@@ -10,7 +10,7 @@ import { MarkupContext } from '../shared/context'
 let nonameId = 0
 
 const getRadomName = () => {
-  return `RS_UFORM_NO_NAME_$${nonameId++}`
+  return `UFORM_NO_NAME_FIELD_$${nonameId++}`
 }
 
 export const SchemaField = (props, context) => {

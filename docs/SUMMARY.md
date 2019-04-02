@@ -31,4 +31,9 @@
      - [<FormBlock/>](./API/FormBlock.md)
      - [<FormItemGrid/>](./API/FormItemGrid.md)
      - [<FormSlot/>](./API/FormSlot.md)
+- 场景案例
+  - fusion next
+     - [简单场景](./Examples/next/Sample.md)
+     - [表单详情](./Examples/next/Detail.md)
+     - [表单List](./Examples/next/List.md)
 - [PlayGround](../packages/builder-next/src/index.js)
