@@ -320,9 +320,15 @@ registerFormField(
       .next-btn-text {
         color: #888;
       }
+      .next-icon:before {
+        width: 16px !important;
+        font-size: 16px !important;
+        margin-right: 5px;
+      }
     }
     .array-item-operator {
       display: flex;
+      margin-bottom:15px;
     }
   `
 )

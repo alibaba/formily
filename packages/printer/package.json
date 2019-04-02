@@ -1,0 +1,30 @@
+{
+  "name": "@uform/printer",
+  "version": "0.1.0-beta.17",
+  "license": "MIT",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/uform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/uform/issues"
+  },
+  "homepage": "https://github.com/alibaba/uform#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "@uform/react": "^0.1.0-beta.17",
+    "react-modal": "^3.8.1",
+    "styled-components": "^4.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
+}
