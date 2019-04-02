@@ -3,6 +3,27 @@
 > 数组场景，区块型数组，能解决大量字段的聚合输入，但是对于数据的对比化展示，区分
 > 度不够明显
 
+下面对于List场景我们主要封装了
+- Array类型组件
+- Table类型组件
+- Card类型组件
+
+这些组件你都可以对其做简单的定制来适应你当前的业务需求，比如
+
+```javascript
+<Field type="array" name="xxx" x-props={{
+  renderAddition:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
+  renderRemove:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
+  renderMoveDown:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
+  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon"
+}}>
+  <Field type="object" name="xxx">
+     ....
+  </Field>
+</Field>
+
+```
+
 #### Demo 示例
 
 ```jsx
@@ -37,6 +58,10 @@ const App = () => {
           name="array"
           maxItems={3}
           type="array"
+          x-props={{
+            renderAddition:'这是定制的添加文案',
+            renderRemove:'这是定制的删除文案'
+          }}
         >
           <Field type="object">
             <FormBlock title="基础信息">
@@ -159,7 +184,12 @@ import Preview from './preview'
 const App = () => (
   <Preview>
     <SchemaForm>
-      <Field name="array" maxItems={3} type="array" x-component="cards" x-props={{title:'这是卡片标题'}}>
+      <Field name="array" maxItems={3} type="array" x-component="cards" 
+          x-props={{
+            title:'这是卡片标题',
+            renderAddition:'这是定制的添加文案',
+            renderRemove:'这是定制的删除文案'
+          }}>
         <Field type="object">
           <FormLayout labelCol={6} wrapperCol={8}>
             <Field

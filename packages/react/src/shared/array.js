@@ -129,7 +129,7 @@ export const createArrayField = options => {
           return (
             <CircleButton onClick={remove} hasText={!!text}>
               <RemoveIcon />
-              <span className='op-name'>{text}</span>
+              {text && <span className='op-name'>{text}</span>}
             </CircleButton>
           )
         })
