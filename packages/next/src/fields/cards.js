@@ -125,9 +125,6 @@ const FormCardsField = styled(
   }
   .cricle-btn {
     margin-bottom: 0;
-    .op-name {
-      text-indent: 5px;
-    }
   }
   .next-card-extra {
     display: flex;
