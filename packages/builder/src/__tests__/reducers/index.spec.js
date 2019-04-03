@@ -69,7 +69,6 @@ describe('reducers', () => {
           description: '字段名称：发起请求时带上的参数id，必填，全局保证唯一。',
           required: true
         },
-        { name: 'description', title: '提示文案', type: 'string' },
         {
           name: 'title',
           title: '标题',
@@ -83,14 +82,16 @@ describe('reducers', () => {
           type: 'object',
           'x-component': 'defaultValueCascader'
         },
+        { name: 'description', title: '提示文案', type: 'string' },
+        { name: 'x-props.placeholder', title: '占位符', type: 'string' },
         { name: 'required', title: '是否必填', type: 'boolean' },
         { name: 'x-props.readOnly', title: '是否只读', type: 'boolean' },
         { name: 'x-props.disabled', title: '是否禁用', type: 'boolean' },
-        { name: 'x-props.htmltype', title: '是否隐藏', type: 'boolean' },
-        { name: 'x-props.placeholder', title: '占位符', type: 'string' }
+        { name: 'x-props.htmltype', title: '是否隐藏', type: 'boolean' }
       ]
     }
-    expect(componentPropsReducer(beforeState, action)).toEqual(afterState)
+    const result = componentPropsReducer(beforeState, action)
+    expect(result).toEqual(afterState)
   })
   test('componentProps reducers return custom state when DELETE_COMPONENT', () => {
     const beforeState = {
