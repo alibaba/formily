@@ -43,7 +43,7 @@ const props = {
   // 主题： dark/light,默认dark
   // themeStyle: 'light',
   // 是否展示布局组件，默认为false
-  showLayoutField: false,
+  showLayoutField: true,
   showPreviewBtn: true,
   showSourceCodeBtn: true,
   // 控制返回按钮点击事件

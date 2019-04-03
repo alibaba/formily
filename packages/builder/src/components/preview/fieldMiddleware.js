@@ -27,9 +27,7 @@ export default that => {
       return (
         <Card
           key={props.path[0]}
-          index={props.path[0]}
           id={props.path[0]}
-          text={props.path[0]}
           moveCard={moveCard}
           props={props}
           that={that}

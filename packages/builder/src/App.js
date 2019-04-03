@@ -93,7 +93,7 @@ class App extends Component {
       list.unshift({
         title: '全局配置',
         content: this.renderGlobalConfig(),
-        expanded: true
+        expanded: false
       })
     }
     return list
@@ -258,7 +258,7 @@ class App extends Component {
             {UIVersion === '1.x' ? (
               <Accordion
                 dataSource={this.state.accordionList}
-                defaultExpandedKeys={['0', '1']}
+                defaultExpandedKeys={['1']}
               />
             ) : (
               <Accordion

@@ -25,7 +25,7 @@ const Box = ({
 }
 
 export default DragSource(
-  ItemTypes.CARD,
+  ItemTypes.LAYOUT,
   {
     beginDrag: props => ({ fieldItem: props.fieldItem }),
     endDrag(props, monitor) {

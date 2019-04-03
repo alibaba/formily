@@ -52,7 +52,7 @@ const Box = ({
 }
 
 export default DragSource(
-  ItemTypes.CARD,
+  ItemTypes.FIELD,
   {
     beginDrag: props => {
       const { fieldItem } = props

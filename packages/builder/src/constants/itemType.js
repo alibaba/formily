@@ -1,4 +1,5 @@
 export default {
-  BOX: 'box',
-  CARD: 'card'
+  CARD: 'card',
+  FIELD: 'field',
+  LAYOUT: 'layout'
 }

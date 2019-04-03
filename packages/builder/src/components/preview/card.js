@@ -38,13 +38,12 @@ const Card = React.forwardRef(
       []
     )
 
-    // const isActive = canDrop && isOver
+    const isActive = canDrop && isOver
     let backgroundColor = '#fff'
-    // if (isActive) {
-    //   backgroundColor = 'green'
-    // }
-
-    const { UI } = that.props
+    if (isActive) {
+      backgroundColor = 'green'
+    }
+    console.log(isActive, 'isActive')
     const { type } = obj
 
     // 根节点或者非预览直接返回
@@ -52,7 +51,7 @@ const Card = React.forwardRef(
       return React.createElement(Field, props)
     }
 
-    const { title = '', active = false } = props.schema
+    const { active = false } = props.schema
     const id = props.path[0]
     const comp = {
       id,
@@ -68,7 +67,12 @@ const Card = React.forwardRef(
         isLayoutWrapper ? (
           <div
             key={id}
-            className={'comp-item-layout'}
+            className={cls(
+              'comp-item-layout',
+              'next-form-item next-row',
+              'preview-line',
+              active ? 'preview-line-active' : ''
+            )}
             style={Object.assign({}, style, { opacity, backgroundColor })}
           >
             {!Object.keys(props.schema.properties).length ? (
@@ -78,55 +82,45 @@ const Card = React.forwardRef(
             ) : (
               React.createElement(Field, { ...props, layoutId: id })
             )}
+            <div
+              className='preview-line-layer'
+              onClick={ev => {
+                ev.preventDefault()
+                that.onMouseClick(id, comp, 'layout')
+              }}
+            />
             <div className='comp-item-layout-tool'>
-              <a
-                onClick={ev => {
-                  ev.preventDefault()
-                  that.onMouseClick(id, comp, 'layout')
-                }}
-                href='javascript:;'
-                className='preview-line-layer-layout'
-                title='编辑'
-              >
-                <UI.Icon type='edit' size='small' />
-              </a>
               <a
                 className='preview-line-del'
                 type='delete'
                 size='small'
-                href='javascript:;'
                 onClick={() => {
                   that.props.changeComponent()
                   that.deleteComponent(id)
                 }}
-                title='删除'
-              >
-                <UI.Icon type='ashbin' size='small' />
-              </a>
+              />
             </div>
           </div>
         ) : (
           <div
             key={id}
-            className={'comp-item'}
+            className={cls(
+              'comp-item',
+              'next-form-item next-row',
+              'preview-line',
+              active ? 'preview-line-active' : ''
+            )}
             style={Object.assign({}, style, { opacity, backgroundColor })}
           >
+            {React.createElement(Field, { ...props })}
             <div
-              className={cls(
-                'next-form-item next-row',
-                'preview-line',
-                active ? 'preview-line-active' : ''
-              )}
-              name={title}
-            >
-              {React.createElement(Field, { ...props })}
-              <div
-                className='preview-line-layer'
-                onClick={ev => {
-                  ev.preventDefault()
-                  that.onMouseClick(id, comp)
-                }}
-              />
+              className='preview-line-layer'
+              onClick={ev => {
+                ev.preventDefault()
+                that.onMouseClick(id, comp)
+              }}
+            />
+            <div className='comp-item-layout-tool'>
               <a
                 className='preview-line-del'
                 type='delete'
@@ -135,9 +129,7 @@ const Card = React.forwardRef(
                   that.props.changeComponent()
                   that.deleteComponent(id)
                 }}
-              >
-                删除
-              </a>
+              />
             </div>
           </div>
         )
@@ -148,7 +140,7 @@ const Card = React.forwardRef(
 
 export default flow(
   DropTarget(
-    ItemTypes.CARD,
+    [ItemTypes.CARD, ItemTypes.FIELD, ItemTypes.LAYOUT],
     {
       // @todo: hover ui先不处理
       // hover(props, monitor, component) {
@@ -169,7 +161,7 @@ export default flow(
     })
   ),
   DragSource(
-    ItemTypes.CARD,
+    ItemTypes.FIELD,
     {
       beginDrag: props => {
         console.info('item beginDrap', props)

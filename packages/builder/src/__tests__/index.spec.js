@@ -10,6 +10,6 @@ test('shoud correct render APP', () => {
   }
   renderer.render(<Index {..._props} />)
   const result = renderer.getRenderOutput()
-  const matchProps = result.props.children.props.children.props
+  const matchProps = result.props.children.props
   expect(matchProps).toHaveProperty('renderEngine')
 })

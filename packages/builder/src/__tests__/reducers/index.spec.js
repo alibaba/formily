@@ -64,9 +64,9 @@ describe('reducers', () => {
       '11111': [
         {
           name: '__id__',
-          title: '唯一标识',
+          title: '字段名称',
           type: 'string',
-          description: '唯一标识：发起请求时带上的参数id，必填，全局保证唯一。',
+          description: '字段名称：发起请求时带上的参数id，必填，全局保证唯一。',
           required: true
         },
         { name: 'description', title: '提示文案', type: 'string' },
@@ -97,9 +97,9 @@ describe('reducers', () => {
       '11111': [
         {
           name: '__id__',
-          title: '唯一标识',
+          title: '字段名称',
           type: 'string',
-          description: '发起请求时带过去的参数字段',
+          description: '字段名称：发起请求时带上的参数id，必填，全局保证唯一。',
           required: true,
           value: '11111'
         },
@@ -139,9 +139,9 @@ describe('reducers', () => {
       '11111': [
         {
           name: '__id__',
-          title: '唯一标识',
+          title: '字段名称',
           type: 'string',
-          description: '发起请求时带过去的参数字段',
+          description: '字段名称：发起请求时带上的参数id，必填，全局保证唯一。',
           required: true,
           value: '11111'
         },
@@ -181,9 +181,9 @@ describe('reducers', () => {
         {
           name: '__id__',
           value: 'hello',
-          title: '唯一标识',
+          title: '字段名称',
           type: 'string',
-          description: '发起请求时带过去的参数字段',
+          description: '字段名称：发起请求时带上的参数id，必填，全局保证唯一。',
           required: true
         },
         { name: 'description', title: '提示文案', type: 'string' },

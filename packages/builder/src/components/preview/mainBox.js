@@ -82,7 +82,7 @@ const MainBox = ({ props, canDrop, isOver, connectDropTarget }) => {
   const isActive = canDrop && isOver
   let backgroundColor = '#fff'
   if (isActive) {
-    backgroundColor = '#f6f6f6'
+    backgroundColor = '#f1f1f1'
   }
 
   return (
@@ -101,7 +101,7 @@ const MainBox = ({ props, canDrop, isOver, connectDropTarget }) => {
 }
 
 export default DropTarget(
-  ItemTypes.CARD,
+  [ItemTypes.CARD, ItemTypes.FIELD, ItemTypes.LAYOUT],
   {
     drop: (props, monitor, component) => {
       console.info('mainbox ondrop', props)
