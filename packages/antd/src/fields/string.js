@@ -1,11 +1,11 @@
 import { connect, registerFormField } from '@uform/react'
 import { Input } from 'antd'
-import { acceptEnum, mapLoadingProps, mapTextComponent } from '../utils'
+import { acceptEnum, mapStyledProps, mapTextComponent } from '../utils'
 
 registerFormField(
   'string',
   connect({
-    getProps: mapLoadingProps,
+    getProps: mapStyledProps,
     getComponent: mapTextComponent
   })(acceptEnum(Input))
 )

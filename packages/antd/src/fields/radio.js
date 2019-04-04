@@ -2,7 +2,7 @@ import { connect, registerFormField } from '@uform/react'
 import { Radio } from 'antd'
 import {
   transformDataSourceKey,
-  mapLoadingProps,
+  mapStyledProps,
   mapTextComponent
 } from '../utils'
 
@@ -11,7 +11,7 @@ const { Group: RadioGroup } = Radio
 registerFormField(
   'radio',
   connect({
-    getProps: mapLoadingProps,
+    getProps: mapStyledProps,
     getComponent: mapTextComponent
   })(transformDataSourceKey(RadioGroup, 'options'))
 )
