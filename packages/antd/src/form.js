@@ -469,7 +469,7 @@ registerFieldMiddleware(Field => {
             size,
             ...schema['x-item-props'],
             label:
-              schema.title || (schema['x-props'] && schema['x-props'].title),
+              schema.title,
             noMinHeight: schema.type === 'object',
             isTableColItem: isTableColItem(
               path.slice(0, path.length - 2),

@@ -79,12 +79,24 @@ registerFormField(
   connect()(props => <input {...props} value={props.value || ''} />)
 )
 
+registerFormField(
+  'text',
+  connect()(props => <div>{props.value || ''}</div>)
+)
+
 const actions = createFormActions()
 
 ReactDOM.render(
   <div>
-    <SchemaForm actions={actions}>
+    <SchemaForm actions={actions} effects={($)=>{
+      $('onFieldChange','aa').subscribe(({value})=>{
+        actions.setFieldState('bb',state=>{
+          state.value = value
+        })
+      })
+    }} onSubmit={()=>alert('submited')}>
       <Field name="aa" type="string" />
+      <Field name="bb" type="text"/>
     </SchemaForm>
     <button
       onClick={() => {

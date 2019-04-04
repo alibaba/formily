@@ -1,7 +1,7 @@
 import { connect, registerFormField } from '@uform/react'
 import moment from 'moment'
 import { TimePicker } from 'antd'
-import { mapLoadingProps, mapTextComponent } from '../utils'
+import { mapStyledProps, mapTextComponent } from '../utils'
 
 registerFormField(
   'time',
@@ -18,7 +18,7 @@ registerFormField(
       } catch (e) {
         throw new Error(e)
       }
-      mapLoadingProps(props, others)
+      mapStyledProps(props, others)
     },
     getComponent: mapTextComponent
   })(TimePicker)

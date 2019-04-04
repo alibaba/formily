@@ -19,6 +19,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
+    "@babel/runtime": "^7.4.2",
     "@uform/react": "^0.1.0-beta.17",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"

@@ -29,17 +29,22 @@
 ```jsx
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   Field,
-  FormItemGrid,
   FormButtonGroup,
   Submit,
   Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
   FormBlock,
-  FormLayout
-} from '@uform/next'
-import '@alifd/next/dist/next.css'
+  FormLayout,
+  createFormActions
+} from '@uform/antd'
+import { Button } from 'antd'
 import Printer from '@uform/printer'
+import 'antd/dist/antd.css'
 
 const App = () => {
   const [value, setValues] = useState({})
@@ -116,17 +121,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   Field,
-  FormItemGrid,
   FormButtonGroup,
   Submit,
   Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
   FormBlock,
-  FormLayout
-} from '@uform/react'
-import '@alifd/next/dist/next.css'
+  FormLayout,
+  createFormActions
+} from '@uform/antd'
+import { Button } from 'antd'
 import Printer from '@uform/printer'
+import 'antd/dist/antd.css'
 
 const App = () => (
   <Printer>
@@ -169,17 +179,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   Field,
-  FormItemGrid,
   FormButtonGroup,
   Submit,
   Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
   FormBlock,
-  FormLayout
-} from '@uform/next'
-import '@alifd/next/dist/next.css'
+  FormLayout,
+  createFormActions
+} from '@uform/antd'
+import { Button } from 'antd'
 import Printer from '@uform/printer'
+import 'antd/dist/antd.css'
 
 const App = () => (
   <Printer>

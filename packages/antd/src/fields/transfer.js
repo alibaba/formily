@@ -1,10 +1,10 @@
 import { connect, registerFormField } from '@uform/react'
 import { Transfer } from 'antd'
-import { mapLoadingProps } from '../utils'
+import { mapStyledProps } from '../utils'
 
 registerFormField(
   'transfer',
   connect({
-    getProps: mapLoadingProps
+    getProps: mapStyledProps
   })(Transfer)
 )

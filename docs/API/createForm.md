@@ -83,7 +83,7 @@ type fieldState {
     initialValue     : Any,//字段初始值
     name             : String,//字段路径
     path,            : Array<String>//字段路径，数组形式
-    props            : Object,//字段附加属性
+    props            : Object,//字段schema对象
     rules            : Array<Object | Function | String>//字段校验规则
 }
 ```

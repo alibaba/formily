@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect, registerFormField } from '@uform/react'
-import { toArr, isArr, isEqual, mapLoadingProps } from '../utils'
+import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
 import { Button, Upload, Icon } from 'antd'
 import styled from 'styled-components'
 const { Dragger: UploadDragger } = Upload
@@ -136,11 +136,11 @@ const shallowClone = val => {
 registerFormField(
   'upload',
   connect({
-    getProps: mapLoadingProps
+    getProps: mapStyledProps
   })(
     class Uploader extends React.Component {
       static defaultProps = {
-        action: '//next-upload.shuttle.alibaba.net/upload',
+        action: '',
         listType: 'text',
         multiple: true,
         className: 'antd-uploader'

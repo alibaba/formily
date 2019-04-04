@@ -146,10 +146,9 @@ export const acceptEnum = component => {
   }
 }
 
-export const mapLoadingProps = (props, { loading, size }) => {
+export const mapStyledProps = (props, { loading, size }) => {
   if (loading) {
     props.state = props.state || 'loading'
-    props.loading = !!props.state
   }
   if (size) {
     props.size = size

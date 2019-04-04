@@ -2,7 +2,7 @@ import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import moment from 'moment'
 import { DatePicker as AntDatePicker } from 'antd'
-import { mapLoadingProps, mapTextComponent, StateLoading } from '../utils'
+import { mapStyledProps, mapTextComponent, StateLoading } from '../utils'
 
 const {
   RangePicker: AntRangePicker,
@@ -48,7 +48,7 @@ registerFormField(
       } catch (e) {
         throw new Error(e)
       }
-      mapLoadingProps(props, others)
+      mapStyledProps(props, others)
     },
     getComponent: mapTextComponent
   })(DatePicker)
@@ -88,7 +88,7 @@ registerFormField(
       } catch (e) {
         throw new Error(e)
       }
-      mapLoadingProps(props, others)
+      mapStyledProps(props, others)
     },
     getComponent: mapTextComponent
   })(RangePicker)
@@ -112,7 +112,7 @@ registerFormField(
       } catch (e) {
         throw new Error(e)
       }
-      mapLoadingProps(props, others)
+      mapStyledProps(props, others)
     },
     getComponent: mapTextComponent
   })(MonthPicker)
@@ -136,7 +136,7 @@ registerFormField(
       } catch (e) {
         throw new Error(e)
       }
-      mapLoadingProps(props, others)
+      mapStyledProps(props, others)
     },
     getComponent: mapTextComponent
   })(YearPicker)

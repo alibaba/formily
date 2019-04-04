@@ -1,39 +1,8 @@
-- 开发指南
-   - [UForm是什么?](./Tutorials/UForm是什么.md)
-   - [UForm原理](./Tutorials/UForm原理.md)
-   - [快速入门](./Tutorials/快速入门.md)
-   - [Form Schema扩展规范](./Tutorials/FormSchema扩展规范.md)
-- API文档
-   - @uform/core
-     - [createForm](./API/createForm.md)
-     - [setValidationLocale](./API/setValidationLocale.md)
-     - [setValidationLanguage](./API/setValidationLanguage.md)
-     - [FormPath](./API/FormPath.md)
-   - @uform/react
-     - [<SchemaForm/>](./API/SchemaForm_React.md)
-     - [<Field/>](./API/Field_React.md)
-     - [<FormProvider/>](./API/FormProvider.md)
-     - [<FormConsumer/>](./API/FormConsumer.md)
-     - [registerFormField](./API/registerFormField.md)
-     - [registerFormFields](./API/registerFormFields.md)
-     - [registerFormWrapper](./API/registerFormWrapper.md)
-     - [registerFieldMiddleware](./API/registerFieldMiddleware.md)
-     - [createVirtualBox](./API/createVirtualBox.md)
-     - [connect](./API/connect.md)
-     - [createFormActions](./API/createFormActions.md)
-   - @uform/next or antd
-     - [<SchemaForm/>](./API/SchemaForm.md)
-     - [<FormButtonGroup/>](./API/FormButtonGroup.md)
-     - [<Submit/>](./API/Submit.md)
-     - [<Reset/>](./API/Reset.md)
-     - [<FormLayout/>](./API/FormLayout.md)
-     - [<FormCard/>](./API/FormCard.md)
-     - [<FormBlock/>](./API/FormBlock.md)
-     - [<FormItemGrid/>](./API/FormItemGrid.md)
-     - [<FormSlot/>](./API/FormSlot.md)
 - 场景案例
-  - fusion next
-     - [简单场景](./Examples/next/Sample.md)
-     - [表单详情](./Examples/next/Detail.md)
-     - [表单List](./Examples/next/List.md)
-- [PlayGround](../packages/builder-next/src/index.js)
+  - ant design
+     - [简单场景](./Examples/antd/Sample.md)
+     - [表单详情](./Examples/antd/Detail.md)
+     - [表单List](./Examples/antd/List.md)
+     - [表单布局](./Examples/antd/Layout.md)
+     - [表单联动](./Examples/antd/Relations.md)
+     - [表单校验](./Examples/antd/Validation.md)

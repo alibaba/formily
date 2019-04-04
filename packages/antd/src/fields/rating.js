@@ -1,10 +1,10 @@
 import { connect, registerFormField } from '@uform/react'
 import { Rate } from 'antd'
-import { mapLoadingProps } from '../utils'
+import { mapStyledProps } from '../utils'
 
 registerFormField(
   'rating',
   connect({
-    getProps: mapLoadingProps
+    getProps: mapStyledProps
   })(Rate)
 )
