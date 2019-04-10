@@ -103,7 +103,7 @@ export const FormButtonGroup = styled(
                     style={{
                       borderTop: '1px solid #eee',
                       background: (style && style.background) || '#fff',
-                      padding: (style && style.padding) || '20px 0'
+                      padding: (style && style.padding) || '8px 0'
                     }}
                   >
                     <div className={className} style={style}>

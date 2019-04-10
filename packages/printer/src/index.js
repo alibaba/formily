@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { createFormActions } from '@uform/next'
+import { createFormActions } from '@uform/react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 
@@ -67,7 +67,7 @@ const createAlert = (config = {}) => {
   }
   document.body.appendChild(container)
   ReactDOM.render(
-    <Dialog {...config} afterClose={unMount}>
+    <Dialog {...config} appElement={container} afterClose={unMount}>
       {config.content}
     </Dialog>,
     container

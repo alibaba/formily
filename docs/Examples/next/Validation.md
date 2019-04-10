@@ -30,6 +30,7 @@ import {
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
 
 const App = () => (
   <Printer>
@@ -134,6 +135,7 @@ import {
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
 
 const App = () => (
   <Printer>

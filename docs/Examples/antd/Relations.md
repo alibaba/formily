@@ -11,7 +11,7 @@
 > action 汇总起来(onInit/onMount/onChange/onSubmit/onChangeEvent)，最终在一个统
 > 一的 effects 回调函数内做 reducer 处理，但是，为了提升 reducer 体验，我们还在
 >
-> 内部默认集成了 [immer.js](https://github.com/mweststrate/immer)，最终达到真正
+> 内部借鉴了 [immer.js](https://github.com/mweststrate/immer)的数据编辑模式，最终达到真正
 > 通用化的表单联动解决方案
 
 ### 简单数据联动
