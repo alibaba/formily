@@ -12,12 +12,44 @@
     </script>
     
     
+    <style>
+      .loading-svg {
+        position: absolute;
+        left: 0; right: 0; top: 0; bottom: 0;
+        margin: auto;
+        display: none;
+      }
+      
+      .loading-rect {
+        fill: none;
+        stroke-width: 8px;
+        stroke: black;
+        stroke-dasharray: 40;
+        stroke-dashoffset: 50%;
+      
+        animation: movedash 1.5s forwards 0s infinite;
+      }
+
+      @keyframes movedash {
+        to {
+          stroke-dashoffset: 250%;
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <svg width="40" height="40" viewbox="0 0 40 40" class="loading-svg">
+        <polygon points="0 0 0 40 40 40 40 0" class="loading-rect" />
+      </svg>  
+    </div>
     <script>
       var mountNode = document.getElementById('root')
+      setTimeout(()=>{
+        var svg = document.querySelector('.loading-svg')
+        if(svg) svg.style.display = 'block'
+      },1000)
     </script>
     <script
       src="https://unpkg.com/react@16/umd/react.production.min.js"
@@ -29,5 +61,5 @@
       src="https://unpkg.com/react-is@16/umd/react-is.production.min.js"
     ></script>
     
-  <script type="text/javascript" src="statics/bundle.index.4dee4b15bf841df962ae.js"></script></body>
+  <script type="text/javascript" src="statics/bundle.index.e1da38d0c2c3c64e7514.js"></script></body>
 </html>
