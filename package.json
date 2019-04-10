@@ -17,12 +17,12 @@
     "coverage": "npm run test -- --coverage",
     "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
     "prepublish": "npm run build && npm run lint && npm run test",
-    "publish:alpha": "npm run prepublish && lerna version prerelease  --exact --no-git-tag-version --force-publish *",
-    "publish:beta": "npm run prepublish && lerna version prerelease --preid beta --exact --no-git-tag-version --force-publish *",
-    "publish:rc": "npm run prepublish && lerna version prerelease --preid rc --exact --no-git-tag-version --force-publish *",
-    "publish:patch": "npm run prepublish && lerna version patch --message \"chore(release): publish %s\" --exact --force-publish *",
-    "publish:minor": "npm run prepublish && lerna version minor --message \"chore(release): publish %s\" --exact --force-publish *",
-    "publish:major": "npm run prepublish && lerna version major --message \"chore(release): publish %s\" --exact --force-publish *",
+    "publish:alpha": "npm run prepublish && lerna version prerelease  --exact --no-git-tag-version --force-publish * && lerna publish from-package --yes",
+    "publish:beta": "npm run prepublish && lerna version prerelease --preid beta --exact --no-git-tag-version --force-publish * && lerna publish from-package --yes",
+    "publish:rc": "npm run prepublish && lerna version prerelease --preid rc --exact --no-git-tag-version --force-publish * && lerna publish from-package --yes",
+    "publish:patch": "npm run prepublish && lerna version patch --message \"chore(release): publish %s\" --exact --force-publish * && lerna publish from-package --yes",
+    "publish:minor": "npm run prepublish && lerna version minor --message \"chore(release): publish %s\" --exact --force-publish * && lerna publish from-package --yes",
+    "publish:major": "npm run prepublish && lerna version major --message \"chore(release): publish %s\" --exact --force-publish * && lerna publish from-package --yes",
     "lint": "eslint scripts/ packages/ --ext js"
   },
   "devDependencies": {
