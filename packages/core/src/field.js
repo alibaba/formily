@@ -11,11 +11,8 @@ import {
   resolveFieldPath,
   isEmpty
 } from './utils'
-import produce, { setAutoFreeze } from 'immer'
 
 const filterSchema = (_, key) => key !== 'properties' && key !== 'items'
-
-setAutoFreeze(false)
 
 export class Field {
   constructor(context, options) {
@@ -348,25 +345,23 @@ export class Field {
 
   updateState(reducer) {
     if (!isFn(reducer)) return
-    const published = produce(
-      {
-        name: this.name,
-        path: this.path,
-        props: clone(this.props, filterSchema),
-        value: clone(this.value),
-        initialValue: clone(this.initialValue),
-        valid: this.valid,
-        loading: this.loading,
-        editable: this.editable,
-        invalid: this.invalid,
-        pristine: this.pristine,
-        rules: clone(this.rules),
-        errors: clone(this.effectErrors),
-        visible: this.visible,
-        required: this.required
-      },
-      reducer
-    )
+    const published = {
+      name: this.name,
+      path: this.path,
+      props: clone(this.props, filterSchema),
+      value: clone(this.value),
+      initialValue: clone(this.initialValue),
+      valid: this.valid,
+      loading: this.loading,
+      editable: this.editable,
+      invalid: this.invalid,
+      pristine: this.pristine,
+      rules: clone(this.rules),
+      errors: clone(this.effectErrors),
+      visible: this.visible,
+      required: this.required
+    }
+    reducer(published)
     this.checkState(published)
   }
 

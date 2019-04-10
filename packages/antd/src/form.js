@@ -335,7 +335,7 @@ registerFormWrapper(OriginForm => {
         table-layout: auto;
       }
     }
-    .ant-rating-medium {
+    .ant-rating-default {
       min-height: 30px;
       line-height: 30px;
     }
@@ -353,7 +353,7 @@ registerFormWrapper(OriginForm => {
     static defaultProps = {
       component: 'form',
       prefix: 'ant-',
-      size: 'medium',
+      size: 'default',
       labelAlign: 'left',
       locale: LOCALE,
       autoAddColon: true

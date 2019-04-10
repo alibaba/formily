@@ -41,5 +41,5 @@ ReactDOM.render(
     </FormButtonGroup>
   </SchemaForm>,
   document.getElementById('root')
-)``
+)
 ```
