@@ -1,6 +1,6 @@
 {
   "name": "@uform/printer",
-  "version": "0.1.0-beta.17",
+  "version": "0.1.0-beta.18",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.4.2",
-    "@uform/react": "^0.1.0-beta.17",
+    "@uform/react": "0.1.0-beta.18",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },
