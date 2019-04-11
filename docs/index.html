@@ -3,10 +3,18 @@
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-type" />
     <title>UForm</title>
+    <base target="_parent">
     <script>
       var process = {
         env: {
           NODE_ENV: ''
+        }
+      }
+      if (window.parent !== window) {
+        try {
+          window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = window.parent.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+        } catch (error) {
+          // The above line can throw if we do not have access to the parent frame -- i.e. cross origin
         }
       }
     </script>
@@ -61,5 +69,5 @@
       src="https://unpkg.com/react-is@16/umd/react-is.production.min.js"
     ></script>
     
-  <script type="text/javascript" src="statics/bundle.index.9b9f944978ce9fd2e786.js"></script></body>
+  <script type="text/javascript" src="statics/bundle.index.04be63d1b0972d2dd7c8.js"></script></body>
 </html>
