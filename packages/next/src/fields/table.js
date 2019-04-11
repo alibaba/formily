@@ -312,7 +312,7 @@ registerFormField(
   )`
     display: inline-block;
     .array-item-addition {
-      padding: 10px 20px;
+      padding: 10px;
       background: #fbfbfb;
       border-left: 1px solid #dcdee3;
       border-right: 1px solid #dcdee3;
@@ -325,6 +325,10 @@ registerFormField(
         font-size: 16px !important;
         margin-right: 5px;
       }
+    }
+
+    .next-table-cell-wrapper>.next-form-item{
+      margin-bottom:0;
     }
     .array-item-operator {
       display: flex;

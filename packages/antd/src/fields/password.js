@@ -257,7 +257,8 @@ const Password = styled(
 )`
   .ant-input-prefix,
   .ant-input-suffix {
-    z-index: 1000;
+    z-index: 10;
+    right:20px !important;
     .eye {
       position: absolute;
       max-width: initial;
@@ -273,9 +274,6 @@ const Password = styled(
         opacity: 0.6;
       }
     }
-  }
-  .ant-input-suffix {
-    right: 20px;
   }
   .ant-input {
     width: 100%;

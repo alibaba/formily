@@ -23,18 +23,22 @@ export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
     background:#f7f4f4;
   }`
       : ''}
+  .op-name{
+    margin-left:3px;
+  }
 }
 `
 
-export const TextButton = styled.div`
-  width: 100%;
-  height: 20px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const TextButton = styled.div.attrs({
+  className: 'ant-btn-text'
+})`
+  display: inline-block;
+  height:20px;
+  line-height: 20px;
   cursor: pointer;
-
+  .op-name {
+    margin-left: 4px;
+  }
   ${props =>
     props.inline &&
     css`
@@ -45,10 +49,10 @@ export const TextButton = styled.div`
 export const ArrayField = createArrayField({
   CircleButton,
   TextButton,
-  AddIcon: () => <Icon type='plus' style={{ marginRight: 4 }} />,
-  RemoveIcon: () => <Icon type='delete' style={{ marginRight: 4 }} />,
-  MoveDownIcon: () => <Icon type='down' style={{ marginRight: 4 }} />,
-  MoveUpIcon: () => <Icon type='up' style={{ marginRight: 4 }} />
+  AddIcon: () => <Icon type='plus' />,
+  RemoveIcon: () => <Icon type='delete' />,
+  MoveDownIcon: () => <Icon type='down' />,
+  MoveUpIcon: () => <Icon type='up' />
 })
 
 registerFormField(
@@ -152,6 +156,9 @@ registerFormField(
         }
         .ant-btn-text {
           color: #999;
+          i {
+            margin-right: 3px;
+          }
         }
       }
     }
@@ -164,6 +171,9 @@ registerFormField(
       background: #fbfbfb;
       .ant-btn-text {
         color: #888;
+        i {
+          margin-right: 3px;
+        }
       }
     }
   `

@@ -314,14 +314,20 @@ registerFormField(
     display: inline-block;
     .array-item-addition {
       line-height: normal !important;
-      padding: 10px 20px;
+      padding: 10px;
       background: #fbfbfb;
       border-left: 1px solid #dcdee3;
       border-right: 1px solid #dcdee3;
       border-bottom: 1px solid #dcdee3;
       .ant-btn-text {
         color: #888;
+        i{
+          margin-right: 3px;
+        }
       }
+    }
+    .ant-table-cell-wrapper>.ant-form-item{
+      margin-bottom:0;
     }
     .array-item-operator {
       display: flex;

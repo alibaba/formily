@@ -75,7 +75,13 @@ export const FormItem = styled(
         )
       }
 
-      return <div className={cls}>{ele}</div>
+      return (
+        <div className={cls}>
+          {ele}
+          {((extra && extra.length > 20) || React.isValidElement(extra)) &&
+            this.renderHelper()}
+        </div>
+      )
     }
 
     getItemWrapper() {
@@ -187,7 +193,7 @@ export const FormItem = styled(
     }
   }
 )`
-  margin-bottom: 6px;
+  margin-bottom: 4px !important;
   &.field-table {
     .next-form-item-control {
       overflow: auto;
@@ -210,12 +216,6 @@ export const FormItem = styled(
 `
 
 const toArr = val => (Array.isArray(val) ? val : val ? [val] : [])
-
-const hasRequired = schema => {
-  if (schema.required) return true
-  if (schema['x-rules'] && schema['x-rules'].required) return true
-  return toArr(schema['x-rules']).some(v => v && v.required)
-}
 
 registerFormWrapper(OriginForm => {
   OriginForm = styled(OriginForm)`
@@ -306,6 +306,8 @@ registerFormWrapper(OriginForm => {
           component,
           labelCol,
           wrapperCol,
+          getErrorScrollOffset,
+          errorScrollToElement,
           style,
           prefix,
           ...others
@@ -354,7 +356,7 @@ const isTableColItem = (path, getSchema) => {
 
 registerFieldMiddleware(Field => {
   return props => {
-    const { name, editable, errors, path, schema, getSchema } = props
+    const { name, editable, errors, path, schema, getSchema, required } = props
     if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
     return React.createElement(
       FormConsumer,
@@ -377,9 +379,8 @@ registerFieldMiddleware(Field => {
             autoAddColon,
             size,
             ...schema['x-item-props'],
-            label:
-              schema.title,
-            noMinHeight: schema.type === 'object',
+            label: schema.title,
+            noMinHeight: schema.type === 'object' && !schema['x-component'],
             isTableColItem: isTableColItem(
               path.slice(0, path.length - 2),
               getSchema
@@ -387,7 +388,7 @@ registerFieldMiddleware(Field => {
             type: schema['x-component'] || schema['type'],
             id: name,
             validateState: toArr(errors).length ? 'error' : undefined,
-            required: editable === false ? false : hasRequired(schema),
+            required: editable === false ? false : required,
             extra: schema.description,
             help:
               toArr(errors).join(' , ') ||
