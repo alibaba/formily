@@ -42,7 +42,7 @@ const App = () => {
               required
               title="字符串"
               x-props={{
-                addonTextAfter: '%'
+                addonAfter: '%'
               }}
             />
             <Field

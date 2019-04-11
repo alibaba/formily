@@ -28,28 +28,37 @@ const FormCardsField = styled(
 
     render() {
       const { value, className, schema, renderField } = this.props
-      const props = this.getProps() || {}
+      const {
+        title,
+        renderAddition,
+        renderRemove,
+        renderEmpty,
+        renderMoveDown,
+        renderMoveUp,
+        renderOperations,
+        ...others
+      } = this.getProps() || {}
       return (
         <div className={className} onClick={this.onClearErrorHandler()}>
           {toArr(value).map((item, index) => {
             return (
               <Card
-                {...props}
+                {...others}
                 title={
                   <span>
-                    {index + 1}. {props.title || schema.title}
+                    {index + 1}. {title || schema.title}
                   </span>
                 }
                 className='card-list'
                 key={index}
-                bodyHeight='auto'
+                contentHeight='auto'
                 extra={this.renderOperations(item, index)}
               >
                 {renderField(index)}
               </Card>
             )
           })}
-          {value.length === 0 && this.renderEmpty(props.title)}
+          {value.length === 0 && this.renderEmpty(title)}
           <div className='addition-wrapper'>
             {value.length > 0 && this.renderAddition()}
           </div>

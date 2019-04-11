@@ -80,7 +80,7 @@ const App = () => (
         name="money"
         x-rules="money"
         title="月薪"
-        x-props={{ placeholder: '¥100,000', addonTextAfter: '元' }}
+        x-props={{ placeholder: '¥100,000', addonAfter: '元' }}
         required
       />
       <Field

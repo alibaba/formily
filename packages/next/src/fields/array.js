@@ -17,6 +17,7 @@ export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1.3;
   ${props =>
     !props.hasText
       ? `&:hover{
@@ -153,7 +154,7 @@ registerFormField(
           .next-icon:before {
             width: 16px !important;
             font-size: 16px !important;
-            margin-right: 5px;
+            margin-right: 3px;
           }
         }
       }
@@ -169,7 +170,7 @@ registerFormField(
         .next-icon:before {
           width: 16px !important;
           font-size: 16px !important;
-          margin-right: 5px;
+          margin-right: 3px;
         }
       }
     }

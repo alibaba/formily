@@ -2,7 +2,7 @@
 
 ## 介绍
 
-声明表单 Actions，用于跨组件通讯
+声明表单 Actions，用于跨组件通讯，使用该方法创建的所有actions都存在调用时机限制，要求Form初始化完成之后才能调用，所以只能用在异步事件里调用
 
 ## 类型描述
 
@@ -11,11 +11,11 @@ type createFormActions() : {
     setFormState(callback : (state : formState)=>void) : Promise, //设置表单状态，目前只支持设置formState.values
     getFormState(callback : (state : formState)=>any)), //获取表单状态
     setFieldState(name : String,callback : (state : fieldState)=>void) : Promise, //设置表单字段状态，目前支持设置fieldState的所有属性
-    getFieldState(name : String[,callback : (state : fieldState)=>any)]),//获取表单字段状态,callback为可选参数
-    reset(),//重置表单
-    submit(),//提交表单
-    validate(),//校验表单
-    getSchema(name : String) //获取表单Schema
+    getFieldState(name : String[,callback : (state : fieldState)=>any)]) : any,//获取表单字段状态,callback为可选参数
+    reset() : void,//重置表单
+    submit() : Promise,//提交表单
+    validate() : Promise,//校验表单
+    getSchema(name : String) : Object //获取表单Schema
 }
 ```
 

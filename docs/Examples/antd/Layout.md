@@ -170,18 +170,19 @@ const App = () => (
         ​ <Field name="ccc" type="date" title="字段3" />​
       </FormCard>
       ​ <FormCard title="详细信息">
-        <FormItemGrid title="字段3" gutter={10} cols={[11, 15]}>
-          ​ <Field name="ddd" type="number" />
-          ​ <Field name="eee" type="date" />​
-        </FormItemGrid>
-        <Field type="object" name="mmm" title="对象字段">
-          <FormItemGrid gutter={10} cols={[11, 15]}>
-            ​ <Field name="ddd1" default={123} type="number" />
-            ​ <Field name="[startDate,endDate]" type="daterange" />​
+        <FormLayout labelCol={8} wrapperCol={12}>
+          <FormItemGrid title="字段3" gutter={10} cols={[6, 11]}>
+            ​ <Field name="ddd" type="number" />
+            ​ <Field name="eee" type="date" />​
           </FormItemGrid>
-        </Field>
-        <Field name="aas" type="string" title="字段4" />​
-        <FormBlock title="区块">
+          <Field type="object" name="mmm" title="对象字段">
+            <FormItemGrid gutter={10} cols={[6, 11]}>
+              ​ <Field name="ddd1" default={123} type="number" />
+              ​ <Field name="[startDate,endDate]" type="daterange" />​
+            </FormItemGrid>
+          </Field>
+        </FormLayout>
+        <Field name="aas" type="string" title="字段4" />​<FormBlock title="区块">
           ​ <Field name="ddd2" type="string" title="字段5" />​
           <Field name="eee2" type="string" title="字段6" />​
         </FormBlock>

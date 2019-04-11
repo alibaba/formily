@@ -104,11 +104,12 @@ const printSchema = schema => {
 export default class extends React.Component {
   actions = createFormActions()
 
-  onClickHandler = e => {
+  onClickHandler = async e => {
     e.preventDefault()
+    const schema = await this.actions.getSchema('')
     createAlert(
       <pre>
-        <code>{printSchema(this.actions.getSchema(''))}</code>
+        <code>{printSchema(schema)}</code>
       </pre>
     )
   }
