@@ -24,7 +24,7 @@
     "version:minor": "npm run prepublish && lerna version minor --message \"chore(release): publish %s\" --exact --force-publish *",
     "version:major": "npm run prepublish && lerna version major --message \"chore(release): publish %s\" --exact --force-publish *",
     "publish":"lerna publish from-package --yes",
-    "lint": "eslint \"*(scripts|packages)/!(docs)\" --ext js"
+    "lint": "eslint \"packages/!(docs)/**/*.js\" \"scripts/**/*.js\""
   },
   "devDependencies": {
     "@alifd/next": "^1.13.10",
