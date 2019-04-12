@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.0-beta.19",
+  "version": "0.1.0-beta.20",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@alifd/next": "^1.13.1",
-    "@uform/react": "0.1.0-beta.19",
+    "@uform/react": "0.1.0-beta.20",
     "@uform/utils": "^0.1.0-beta.16",
     "@uform/validator": "^0.1.0-beta.17",
     "classnames": "^2.2.5",
@@ -50,7 +50,7 @@
   },
   "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
   "devDependencies": {
-    "@uform/next": "0.1.0-beta.19",
+    "@uform/next": "0.1.0-beta.20",
     "react-test-renderer": "*"
   }
 }
