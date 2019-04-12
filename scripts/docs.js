@@ -22,16 +22,27 @@ const createDocs = async () => {
       title: 'UForm',
       renderer: path.resolve(__dirname, './doc-renderer.js')
     },
-    {
-      resolve: {
-        alias: {
-          ...alias,
-          '@alifd/next': path.resolve(
+    (webpackConfig, mode) => {
+      webpackConfig.output.filename = 'bundle.[name].js'
+      if (mode === 'production') {
+        webpackConfig.output.publicPath = '//unpkg.com/@uform/docs/'
+      }
+      webpackConfig.plugins.forEach(plugin => {
+        if (plugin.constructor.name === 'HtmlWebpackPlugin') {
+          plugin.options.filename = path.resolve(
             __dirname,
-            '../packages/next/node_modules/@alifd/next'
+            `../docs/${plugin.options.filename}`
           )
         }
-      }
+      })
+      Object.assign(webpackConfig.resolve.alias, {
+        ...alias,
+        '@alifd/next': path.resolve(
+          __dirname,
+          '../packages/next/node_modules/@alifd/next'
+        )
+      })
+      return webpackConfig
     }
   )
 }
