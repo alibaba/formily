@@ -9,7 +9,7 @@
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
     "build": "node ./scripts/build.js",
-    "build:docs": "rm -rf docs/statics && node ./scripts/docs.js build -i docs -o docs",
+    "build:docs": "node ./scripts/docs.js build -i docs -o packages/docs",
     "build:watch": "node ./scripts/build.js --watch",
     "start": "node ./scripts/docs.js start -i docs",
     "test": "npm run build && jest",
@@ -24,7 +24,7 @@
     "version:minor": "npm run prepublish && lerna version minor --message \"chore(release): publish %s\" --exact --force-publish *",
     "version:major": "npm run prepublish && lerna version major --message \"chore(release): publish %s\" --exact --force-publish *",
     "publish":"lerna publish from-package --yes",
-    "lint": "eslint scripts/ packages/ --ext js"
+    "lint": "eslint \"*(scripts|packages)/!(docs)\" --ext js"
   },
   "devDependencies": {
     "@alifd/next": "^1.13.10",
