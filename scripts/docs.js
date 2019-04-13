@@ -25,7 +25,7 @@ const createDocs = async () => {
     (webpackConfig, mode) => {
       webpackConfig.output.filename = 'bundle.[name].js'
       if (mode === 'production') {
-        webpackConfig.output.publicPath = '//unpkg.com/@uform/docs/'
+        webpackConfig.output.publicPath = '//unpkg.com/@uform/docs@latest/'
       }
       webpackConfig.plugins.forEach(plugin => {
         if (plugin.constructor.name === 'HtmlWebpackPlugin') {
