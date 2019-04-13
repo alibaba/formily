@@ -1,7 +1,7 @@
 # Field
 
 ## 介绍
-Rs UForm的核心组件，用于描述表单字段
+@uform/react 的核心组件，用于描述表单字段
 
 ## 依赖
 ```javascript

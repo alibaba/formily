@@ -1,7 +1,7 @@
 # SchemaForm
 
 ## 介绍
-基于Rs UForm的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
+基于@uform/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
 
 ## 依赖
 ```javascript

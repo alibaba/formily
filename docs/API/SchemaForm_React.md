@@ -1,7 +1,7 @@
 # SchemaForm
 
 ## 介绍
-Rs UForm的核心组件，用于构建表单
+@uform/react 的核心组件，用于构建表单
 
 ## 依赖
 ```javascript
