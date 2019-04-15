@@ -10,7 +10,6 @@
       ]
     },
     "publish": {
-      "skipGit": true,
       "allowBranch": "master",
       "ignoreChanges": [
         "*.md"
