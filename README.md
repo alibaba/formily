@@ -1,28 +1,25 @@
 <p align="center">
 <img src="https://img.alicdn.com/tfs/TB1Tw1_ImzqK1RjSZFLXXcn2XXa-1400-797.png">
-<a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
-<a href="https://www.npmjs.com/package/@uform/antd"><img src="https://img.shields.io/npm/v/@uform/antd.svg"></a>
-<a href="https://www.npmjs.com/package/@uform/next"><img src="https://img.shields.io/npm/v/@uform/next.svg"></a>
+<a href="https://www.npmjs.com/package/@uform/core"><img src="https://img.shields.io/npm/v/@uform/core.svg"></a>
 <a href="https://travis-ci.com/alibaba/uform"><img src="https://travis-ci.com/alibaba/uform.svg?branch=master"></a>
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
 </p>
-
 ---
 
 > 面向复杂场景的中后台表单解决方案
 >
 > UForm 谐音 Your Form , 代表，这才是你想要的 Form 解决方案
 >
-> 🚧 文档&单测持续完善中，目前暂时不能投入生产环境使用！
 
 ## 特性
 
-- 🚀 高性能，表单字段按需渲染，大大减轻 React 渲染压力
+- 🚀 高性能，字段分布式渲染，大大减轻 React 渲染压力
 - 🧩 支持 Ant Design/Fusion Next 组件体系
 - 🎨 JSX 标签化写法/JSON Schema 数据驱动方案无缝迁移过渡
 - 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
-
 - 🌯 支持各种表单复杂布局方案
+
+![](https://img.alicdn.com/tfs/TB1qL9dRXzqK1RjSZFvXXcB7VXa-2430-552.gif)
 
 ## 安装
 
@@ -31,6 +28,12 @@ npm install --save @uform/antd
 或者
 npm install --save @uform/next
 ```
+
+
+
+## 文档地址
+
+https://alibaba.github.io/uform
 
 ## 快速开始
 
