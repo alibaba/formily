@@ -15,6 +15,8 @@
 #### Demo 示例
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
@@ -120,6 +122,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 #### Demo 示例
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
