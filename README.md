@@ -20,8 +20,6 @@
 - 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
 - 🌯 支持各种表单复杂布局方案
 
-![](https://img.alicdn.com/tfs/TB1qL9dRXzqK1RjSZFvXXcB7VXa-2430-552.gif)
-
 ## 安装
 
 ```bash
