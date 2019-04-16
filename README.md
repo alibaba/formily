@@ -8,7 +8,7 @@
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
 </p>
 
-<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，UForm 谐音 Your Form , 代表，这才是你想要的 Form 解决方案</p>
+<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，UForm 谐音 Your Form，代表，这才是你想要的 Form 解决方案</p>
 
 ---
 
@@ -24,13 +24,17 @@
 
 ## 安装
 
+使用 Ant Design：
+
 ```bash
 npm install --save @uform/antd
-或者
-npm install --save @uform/next
 ```
 
+使用 Fusion Design：
 
+```bash
+npm install --save @uform/next
+```
 
 ## 文档地址
 
