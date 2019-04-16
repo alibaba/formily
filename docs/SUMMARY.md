@@ -1,9 +1,9 @@
 - 开发指南
-   - [UForm是什么?](./Tutorials/UForm是什么.md)
-   - [UForm原理](./Tutorials/UForm原理.md)
+   - [UForm 是什么?](./Tutorials/UForm是什么.md)
+   - [UForm 原理](./Tutorials/UForm原理.md)
    - [快速入门](./Tutorials/快速入门.md)
-   - [Form Schema扩展规范](./Tutorials/FormSchema扩展规范.md)
-- API文档
+   - [Form Schema 扩展规范](./Tutorials/FormSchema扩展规范.md)
+- API 文档
    - @uform/core
      - [createForm](./API/createForm.md)
      - [setValidationLocale](./API/setValidationLocale.md)
@@ -33,21 +33,21 @@
      - [<FormItemGrid/>](./API/FormItemGrid.md)
      - [<FormSlot/>](./API/FormSlot.md)
 - 场景案例
-  - fusion next
+  - Fusion Next
      - [简单场景](./Examples/next/Sample.md)
      - [表单详情](./Examples/next/Detail.md)
-     - [表单List](./Examples/next/List.md)
+     - [表单 List](./Examples/next/List.md)
      - [表单布局](./Examples/next/Layout.md)
      - [表单联动](./Examples/next/Relations.md)
      - [表单校验](./Examples/next/Validation.md)
      - [内外通讯联动](./Examples/next/Actions.md)
-  - ant design
+  - Ant Design
      - [简单场景](./Examples/antd/Sample.md)
      - [表单详情](./Examples/antd/Detail.md)
-     - [表单List](./Examples/antd/List.md)
+     - [表单 List](./Examples/antd/List.md)
      - [表单布局](./Examples/antd/Layout.md)
      - [表单联动](./Examples/antd/Relations.md)
      - [表单校验](./Examples/antd/Validation.md)
      - [内外通讯联动](./Examples/next/Actions.md)
 - [知乎专栏](https://zhuanlan.zhihu.com/uform)
-- [GITHUB](https://github.com/alibaba/uform)
+- [GitHub](https://github.com/alibaba/uform)
