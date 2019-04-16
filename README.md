@@ -129,8 +129,7 @@ Thanks goes to these wonderful people
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub>](https://github.com/janryWang)<br />[🎨](#design-janryWang "Design") | [<img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub>](http://cnt1992.github.io)<br />[🎨](#design-cnt1992 "Design") |
-| :---: | :---: |
+<table><tr><td align="center"><a href="https://github.com/janryWang"><img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub></a><br /><a href="#design-janryWang" title="Design">🎨</a></td><td align="center"><a href="http://cnt1992.github.io"><img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub></a><br /><a href="#design-cnt1992" title="Design">🎨</a></td><td align="center"><a href="https://www.linkedin.com/in/harry-yu-0a931a69/"><img src="https://avatars3.githubusercontent.com/u/2942913?v=4" width="100px;" alt="Harry Yu"/><br /><sub><b>Harry Yu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=yujiangshui" title="Documentation">📖</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
