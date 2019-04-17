@@ -38,84 +38,10 @@ npm install --save @uform/next
 
 https://alibaba.github.io/uform
 
-## 快速开始
+## Demo案例
 
-```jsx
-import React from 'react'
-import SchemaForm, { Field, FormButtonGroup, Submit, Reset } from '@uform/next'
-import '@alifd/next/dist/next.css'
+https://codesandbox.io/s/245o92lnzy
 
-export default () => (
-  <SchemaForm
-    defaultValue={{ aa: '123' }}
-    onSubmit={values => console.log(values)}
-  >
-    <Field
-      type="string"
-      enum={['1', '2', '3', '4']}
-      required
-      title="Radio"
-      x-component="radio"
-      name="radio"
-    />
-    <Field
-      type="string"
-      enum={['1', '2', '3', '4']}
-      required
-      title="Select"
-      name="select"
-    />
-    <Field
-      type="string"
-      enum={['1', '2', '3', '4']}
-      required
-      x-component="checkbox"
-      title="Checkbox"
-      name="checkbox"
-    />
-    <Field type="number" title="数字选择" name="number" />
-    <Field type="boolean" title="开关选择" name="boolean" />
-    <Field type="date" title="日期选择" name="date" />
-    <Field type="daterange" title="日期范围" name="daterange" />
-    <Field type="year" title="年份" name="year" />
-    <Field type="time" title="时间" name="time" />
-    <Field
-      type="array"
-      title="卡片上传文件"
-      name="upload"
-      x-component="upload"
-      x-props={{ listType: 'card' }}
-    />
-    <Field
-      type="array"
-      title="拖拽上传文件"
-      name="upload2"
-      x-component="upload"
-      x-props={{ listType: 'dragger' }}
-    />
-    <Field
-      type="array"
-      title="普通上传文件"
-      name="upload3"
-      x-component="upload"
-      x-props={{ listType: 'text' }}
-    />
-    <Field
-      type="number"
-      title="范围选择"
-      name="range"
-      x-component="range"
-      x-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-    />
-    <Field type="array" x-component="transfer" title="穿梭框" name="transfer" />
-    <Field type="number" x-component="rating" title="等级" name="rating" />
-    <FormButtonGroup offset={7}>
-      <Submit />
-      <Reset />
-    </FormButtonGroup>
-  </SchemaForm>
-)
-```
 
 ### LICENSE
 
