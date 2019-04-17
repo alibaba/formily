@@ -34,11 +34,11 @@ npm install --save @uform/antd
 npm install --save @uform/next
 ```
 
-## 文档地址
+## 文档
 
 https://alibaba.github.io/uform
 
-## Demo案例
+## Demo
 
 https://codesandbox.io/s/245o92lnzy
 
