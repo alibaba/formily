@@ -1,6 +1,7 @@
 import React from 'react'
 import { DragSource } from 'react-dnd'
 import ItemTypes from '../../constants/itemType'
+import uuid from 'uuid'
 
 const Box = ({
   addComponentAndEdit,
@@ -27,12 +28,16 @@ const Box = ({
 export default DragSource(
   ItemTypes.LAYOUT,
   {
-    beginDrag: props => ({ fieldItem: props.fieldItem }),
+    beginDrag: props => {
+      const { fieldItem } = props
+      const id = uuid()
+      return { fieldItem, id }
+    },
     endDrag(props, monitor) {
       if (!monitor.didDrop()) {
-        console.log('未准备好drop')
         return
       }
+
       const item = monitor.getItem()
       const dropResult = monitor.getDropResult()
       const { fieldItem } = item

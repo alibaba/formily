@@ -1,14 +1,11 @@
 {
-  "name": "@uform/builder",
-  "version": "0.1.0-beta.15",
+  "name": "@alife/cntbuilder",
+  "version": "0.1.0-beta.19",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
-  },
-  "scripts": {
-    "start": "node scripts/start.js"
   },
   "bugs": {
     "url": "https://github.com/alibaba/uform/issues"
@@ -49,7 +46,8 @@
     "uuid": "^3.2.1"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npm.alibaba-inc.com"
   },
   "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
   "devDependencies": {

@@ -12,18 +12,18 @@ export default that => {
   window.__hasRegisted__ = true
 
   const moveCard = (dragIndex, hoverIndex) => {
-    console.log('moveCard', dragIndex, hoverIndex)
     that.props.changeComponentOrder(dragIndex, hoverIndex)
-    // const dragCard = cards[dragIndex]
-    // setCards(
-    //   update(cards, {
-    //     $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]],
-    //   }),
-    // )
   }
 
   registerFieldMiddleware(Field => props =>
     React.createElement(FormConsumer, {}, (obj = {}) => {
+      const { type } = obj
+
+      // 根节点或者非预览直接返回
+      if (props.path.length === 0 || type !== 'preview') {
+        return React.createElement(Field, props)
+      }
+
       return (
         <Card
           key={props.path[0]}

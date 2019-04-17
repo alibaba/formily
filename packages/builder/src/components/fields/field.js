@@ -57,14 +57,13 @@ export default DragSource(
     beginDrag: props => {
       const { fieldItem } = props
       const id = uuid()
-      console.info('field beginDrap', props, id)
       return { fieldItem, id }
     },
     endDrag(props, monitor) {
       if (!monitor.didDrop()) {
-        console.log('未准备好drop')
         return
       }
+
       const item = monitor.getItem()
       const dropResult = monitor.getDropResult()
       const { fieldItem } = item
@@ -74,8 +73,6 @@ export default DragSource(
           delete fieldItem[key]
         })
       } catch (e) {}
-
-      console.info('dropResult', dropResult)
 
       if (dropResult) {
         if (dropResult.name === 'card') {

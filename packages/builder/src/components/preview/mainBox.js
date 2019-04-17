@@ -67,7 +67,6 @@ const RenderPreviewList = ({ props, _connectDropTarget }) => {
       }}
     >
       <SchemaForm
-        key={+new Date()}
         {...globalCfg}
         onChange={onChange}
         schema={normalizeSchema(schema)}
@@ -101,10 +100,9 @@ const MainBox = ({ props, canDrop, isOver, connectDropTarget }) => {
 }
 
 export default DropTarget(
-  [ItemTypes.CARD, ItemTypes.FIELD, ItemTypes.LAYOUT],
+  [ItemTypes.FIELD, ItemTypes.LAYOUT],
   {
     drop: (props, monitor, component) => {
-      console.info('mainbox ondrop', props)
       if (!component) {
         return
       }
