@@ -29,7 +29,10 @@ const compliePackages = async callback => {
         if (err) {
           console.log(err)
         } else {
-          await execa.shell(`rm -rf ${packagesDir}/${packagePath}/lib`)
+          try {
+            await fs.access(`${packagesDir}/${packagePath}/lib`)
+            await execa.shell(`rm -rf ${packagesDir}/${packagePath}/lib`)
+          } catch (e) {}
           for (let i = 0; i < results.length; i++) {
             const filename = results[i]
             const stat = await fs.stat(filename)
@@ -64,7 +67,7 @@ const watchCompliePackages = async () => {
       ignored: /(^|[/\\])\../,
       persistent: true
     })
-    .on('add', async (filename) => {
+    .on('add', async filename => {
       try {
         const contents = await transformFileAsync(filename, config)
         const newFilename = filename.replace(
@@ -77,7 +80,7 @@ const watchCompliePackages = async () => {
         console.error(e)
       }
     })
-    .on('change', async (filename) => {
+    .on('change', async filename => {
       try {
         const contents = await transformFileAsync(filename, config)
         const newFilename = filename.replace(
@@ -90,7 +93,7 @@ const watchCompliePackages = async () => {
         console.error(e)
       }
     })
-    .on('unlink', async (filename) => {
+    .on('unlink', async filename => {
       try {
         const newFilename = filename.replace(
           /packages\/([^/]+)\/src/,
