@@ -417,7 +417,6 @@ export class Form {
         if (!isEqual(field.value, newValue)) {
           field.dirty = true
           field.value = newValue
-          this.triggerEffect('onFieldChange', field.publishState())
         }
       }
     })
