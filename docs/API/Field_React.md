@@ -22,8 +22,8 @@ import {Field} from '@uform/react'
 | x-rules | 字段校验规则 | Object | Array<String | Object | Function> | String | Function |  |
 | x-component | 字段UI组件 | Object | {type:"object",properties:{}} |
 | x-index | 字段索引顺序 | Number |  |
-| x-render | 字段渲染函数 | Function(fieldProps : FieldRenderProps){} |  |
-| x-effect | 副作用事件绑定对象 | Function(dispatch : Function) : {<br />    [eventName](...arguemtns)<br />} |  |
+| x-render | 字段渲染函数 | `Function(fieldProps : FieldRenderProps){}` |  |
+| x-effect | 副作用事件绑定对象 | `Function(dispatch : Function) : {    [eventName](...arguemtns)}` |  |
 | x-props.editable | 字段是否可编辑 | Boolean | true |
 
 
