@@ -8,7 +8,7 @@
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
 </p>
 
-<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，UForm 谐音 Your Form , 代表，这才是你想要的 Form 解决方案</p>
+<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，UForm 谐音 Your Form，代表，这才是你想要的 Form 解决方案</p>
 
 ---
 
@@ -22,98 +22,28 @@
 
 ## 安装
 
+使用 Ant Design：
+
 ```bash
 npm install --save @uform/antd
-或者
+```
+
+使用 Fusion Design：
+
+```bash
 npm install --save @uform/next
 ```
 
-
-
-## 文档地址
+## 文档
 
 https://alibaba.github.io/uform
 
-## 快速开始
+## Demo
 
-```jsx
-import React from 'react'
-import SchemaForm, { Field, FormButtonGroup, Submit, Reset } from '@uform/next'
-import '@alifd/next/dist/next.css'
+https://codesandbox.io/s/245o92lnzy
 
-export default () => (
-  <SchemaForm
-    defaultValue={{ aa: '123' }}
-    onSubmit={values => console.log(values)}
-  >
-    <Field
-      type="string"
-      enum={['1', '2', '3', '4']}
-      required
-      title="Radio"
-      x-component="radio"
-      name="radio"
-    />
-    <Field
-      type="string"
-      enum={['1', '2', '3', '4']}
-      required
-      title="Select"
-      name="select"
-    />
-    <Field
-      type="string"
-      enum={['1', '2', '3', '4']}
-      required
-      x-component="checkbox"
-      title="Checkbox"
-      name="checkbox"
-    />
-    <Field type="number" title="数字选择" name="number" />
-    <Field type="boolean" title="开关选择" name="boolean" />
-    <Field type="date" title="日期选择" name="date" />
-    <Field type="daterange" title="日期范围" name="daterange" />
-    <Field type="year" title="年份" name="year" />
-    <Field type="time" title="时间" name="time" />
-    <Field
-      type="array"
-      title="卡片上传文件"
-      name="upload"
-      x-component="upload"
-      x-props={{ listType: 'card' }}
-    />
-    <Field
-      type="array"
-      title="拖拽上传文件"
-      name="upload2"
-      x-component="upload"
-      x-props={{ listType: 'dragger' }}
-    />
-    <Field
-      type="array"
-      title="普通上传文件"
-      name="upload3"
-      x-component="upload"
-      x-props={{ listType: 'text' }}
-    />
-    <Field
-      type="number"
-      title="范围选择"
-      name="range"
-      x-component="range"
-      x-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-    />
-    <Field type="array" x-component="transfer" title="穿梭框" name="transfer" />
-    <Field type="number" x-component="rating" title="等级" name="rating" />
-    <FormButtonGroup offset={7}>
-      <Submit />
-      <Reset />
-    </FormButtonGroup>
-  </SchemaForm>
-)
-```
 
-### LICENSE
+## LICENSE
 
 UForm is open source software licensed as
 [MIT.](https://github.com/alibaba/uform/blob/master/LICENSE.md)
@@ -125,8 +55,7 @@ Thanks goes to these wonderful people
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub>](https://github.com/janryWang)<br />[🎨](#design-janryWang "Design") | [<img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub>](http://cnt1992.github.io)<br />[🎨](#design-cnt1992 "Design") |
-| :---: | :---: |
+<table><tr><td align="center"><a href="https://github.com/janryWang"><img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub></a><br /><a href="#design-janryWang" title="Design">🎨</a></td><td align="center"><a href="http://cnt1992.github.io"><img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub></a><br /><a href="#design-cnt1992" title="Design">🎨</a></td><td align="center"><a href="https://www.linkedin.com/in/harry-yu-0a931a69/"><img src="https://avatars3.githubusercontent.com/u/2942913?v=4" width="100px;" alt="Harry Yu"/><br /><sub><b>Harry Yu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=yujiangshui" title="Documentation">📖</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
