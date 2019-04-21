@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder-next",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@alifd/next": "^1.13.1",
-    "@uform/builder": "0.1.2"
+    "@uform/builder": "0.1.3"
   },
   "publishConfig": {
     "access": "public"
