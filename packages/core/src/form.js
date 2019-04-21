@@ -455,6 +455,7 @@ export class Form {
           raf(() => {
             if (this.destructed) return
             field.notify()
+            this.triggerEffect('onFieldChange', field.publishState())
           })
         }
       })
