@@ -1,5 +1,4 @@
-
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import SchemaForm, {
   Field,
   registerFormField,
@@ -7,7 +6,7 @@ import SchemaForm, {
   registerFieldMiddleware,
   createFormActions
 } from '../index'
-import { render, fireEvent } from 'react-testing-library'
+import { render, fireEvent, act } from 'react-testing-library'
 
 beforeEach(() => {
   registerFieldMiddleware(Field => {
@@ -73,4 +72,40 @@ test('onFormInit setFieldState', async () => {
   fireEvent.click(getAllByTestId('btn')[1])
   await sleep(100)
   expect(queryByText('field is required')).toBeNull()
+})
+
+test('onFieldChange will trigger with initialValues', async () => {
+  const callback = jest.fn()
+  const TestComponent = () => {
+    const [values, setValues] = useState({})
+    useEffect(() => {
+      setTimeout(() => {
+        act(() => {
+          setValues({
+            aaa: 123
+          })
+        })
+      })
+    }, [])
+    return (
+      <SchemaForm
+        initialValues={values}
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'aaa').subscribe(callback)
+        }}
+      >
+        <Field name='aaa' type='string' />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+
+  render(<TestComponent />)
+  await sleep(33)
+  expect(callback).toHaveBeenCalledTimes(3)
+  expect(callback.mock.calls[0][0].value).toBe(undefined)
+  expect(callback.mock.calls[1][0].value).toBe(undefined)
+  expect(callback.mock.calls[2][0].value).toBe(123)
 })
