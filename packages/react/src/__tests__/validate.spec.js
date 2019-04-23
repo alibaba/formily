@@ -58,8 +58,10 @@ test('validate in init', async () => {
   const TestComponent = () => {
     const [state, setState] = useState()
     useEffect(() => {
-      setState({
-        text: ''
+      act(() => {
+        setState({
+          text: ''
+        })
       })
     }, [])
     return (
@@ -96,8 +98,10 @@ test('validate in editable false', async () => {
   const TestComponent = () => {
     const [state, setState] = useState()
     useEffect(() => {
-      setState({
-        editable: ''
+      act(() => {
+        setState({
+          editable: ''
+        })
       })
     }, [])
     return (
@@ -210,9 +214,9 @@ test('modify validate rules by setFieldState', async () => {
   const { queryByText, queryAllByText, queryByTestId } = render(
     <TestComponent />
   )
-  await sleep(33)
+  await sleep(100)
   fireEvent.click(queryAllByText('Submit')[1])
-  await sleep(33)
+  await sleep(100)
   expect(queryByText('required')).toBeVisible()
   actions.setFieldState('bb', state => {
     state.rules = [
@@ -223,11 +227,11 @@ test('modify validate rules by setFieldState', async () => {
       }
     ]
   })
-  await sleep(33)
+  await sleep(100)
   fireEvent.change(queryByTestId('test-input'), {
     target: { value: '123' }
   })
-  await sleep(33)
+  await sleep(100)
   expect(queryByText('must have 6 numbers')).toBeVisible()
 })
 

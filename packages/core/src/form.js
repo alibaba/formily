@@ -382,13 +382,6 @@ export class Form {
     }
   }
 
-  removeField(name) {
-    const field = this.fields[name]
-    if (field) {
-      field.remove()
-    }
-  }
-
   setErrors(name, errors, ...args) {
     errors = toArr(errors)
     const field = this.fields[name]

@@ -47,8 +47,12 @@ const StateField = createHOC((options, Field) => {
       this.field.remove()
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidMount() {
       this.unmounted = false
+      this.field.restore()
+    }
+
+    componentDidUpdate(prevProps) {
       if (!isEqual(this.props.schema, prevProps.schema, filterSchema)) {
         this.field.changeProps(this.props.schema)
       }
