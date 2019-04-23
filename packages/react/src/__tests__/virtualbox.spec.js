@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import SchemaForm, {
   Field,
   registerFormField,
@@ -6,7 +6,7 @@ import SchemaForm, {
   connect,
   registerFieldMiddleware
 } from '../index'
-import { render } from 'react-testing-library'
+import { render, fireEvent, act } from 'react-testing-library'
 
 let FormCard
 
@@ -33,6 +33,10 @@ beforeEach(() => {
     'string',
     connect()(props => <input {...props} value={props.value || ''} />)
   )
+  registerFormField(
+    'text',
+    connect()(props => <div>This is Text Component</div>)
+  )
   FormCard = createVirtualBox('card', ({ children }) => {
     return <div>card content{children}</div>
   })
@@ -54,4 +58,38 @@ test('createVirtualBox', async () => {
 
   await sleep(100)
   expect(queryByText('card content')).toBeVisible()
+})
+
+test('dynamic node', async () => {
+  const TestComponent = () => {
+    const [editable, setEditable] = useState(false)
+    return (
+      <SchemaForm editable={editable}>
+        {editable && (
+          <FormCard>
+            <Field name='aaa' type='string' />
+          </FormCard>
+        )}
+        <FormCard>
+          <Field name='bbb' type='text' />
+        </FormCard>
+        <button
+          onClick={() => {
+            act(() => {
+              setEditable(true)
+            })
+          }}
+        >
+          Change Editable
+        </button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryAllByText, queryByText } = render(<TestComponent />)
+
+  await sleep(33)
+  fireEvent.click(queryAllByText('Change Editable')[1])
+  await sleep(100)
+  expect(queryByText('This is Text Component')).toBeVisible()
 })

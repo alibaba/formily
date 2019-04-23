@@ -184,6 +184,12 @@ export class Field {
     this.notify()
   }
 
+  restore() {
+    if (this.removed) {
+      this.visible = true
+    }
+  }
+
   remove() {
     this.value = undefined
     this.visible = false
