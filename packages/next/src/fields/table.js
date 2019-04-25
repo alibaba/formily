@@ -332,7 +332,6 @@ registerFormField(
     }
     .array-item-operator {
       display: flex;
-      margin-bottom:15px;
     }
   `
 )
