@@ -24,7 +24,6 @@ import { runValidation, format } from '@uform/validator'
 import { Subject } from 'rxjs'
 import { filter } from 'rxjs/operators'
 import { FormPath } from './path'
-import produce from 'immer'
 
 const defaults = opts => ({
   initialValues: {},
@@ -168,7 +167,8 @@ export class Form {
   setFormState = reducer => {
     if (!isFn(reducer)) return
     return new Promise(resolve => {
-      const published = produce(this.publishState(), reducer)
+      const published = this.publishState()
+      reducer(published, reducer)
       this.checkState(published)
       resolve()
     })
