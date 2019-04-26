@@ -1,6 +1,6 @@
 {
   "name": "@uform/antd",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "main": "lib",
   "types": "./index.d.ts",
@@ -20,8 +20,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "0.1.5",
-    "@uform/utils": "0.1.1",
+    "@uform/react": "0.1.6",
+    "@uform/utils": "0.1.2",
     "antd": "^3.14.1",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
