@@ -17,7 +17,8 @@ import {
   caf,
   isChildField,
   getSchemaNodeFromPath,
-  BufferList
+  BufferList,
+  defer
 } from './utils'
 import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
@@ -166,24 +167,21 @@ export class Form {
 
   setFormState = reducer => {
     if (!isFn(reducer)) return
-    return new Promise(resolve => {
-      const published = this.publishState()
-      reducer(published, reducer)
-      this.checkState(published)
-      resolve()
-    })
+    const published = this.publishState()
+    reducer(published, reducer)
+    return Promise.resolve(this.checkState(published))
   }
 
   checkState(published) {
     if (!isEqual(this.state.values, published.values)) {
       this.state.values = published.values
       this.state.dirty = true
-      this.updateFieldsValue()
+      return this.updateFieldsValue()
     }
     if (!isEqual(this.state.initialValues, published.initialValues)) {
       this.state.initialValues = published.initialValues
       this.state.dirty = true
-      this.updateFieldInitialValue()
+      return this.updateFieldInitialValue()
     }
   }
 
@@ -438,20 +436,29 @@ export class Form {
   }
 
   updateFieldsValue(validate = true) {
+    const { promise, resolve } = defer()
+
     const update = () => {
+      const updateList = []
       each(this.fields, (field, name) => {
         let newValue = this.getValue(name)
         field.updateState(state => {
           state.value = newValue
         })
         if (field.dirty) {
-          raf(() => {
-            if (this.destructed) return
-            field.notify()
-            this.triggerEffect('onFieldChange', field.publishState())
-          })
+          updateList.push(
+            new Promise(resolve => {
+              raf(() => {
+                if (this.destructed) return
+                field.notify()
+                this.triggerEffect('onFieldChange', field.publishState())
+                resolve()
+              })
+            })
+          )
         }
       })
+      resolve(Promise.all(updateList))
     }
     if (this.state.dirty && this.initialized) {
       if (validate) {
@@ -463,6 +470,8 @@ export class Form {
         update()
       }
     }
+
+    return promise
   }
 
   updateChildrenVisible(parent, visible) {
