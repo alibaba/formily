@@ -74,6 +74,28 @@ test('onFormInit setFieldState', async () => {
   expect(queryByText('field is required')).toBeNull()
 })
 
+test('init triggers', async () => {
+  const callback = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'aaa').subscribe(callback)
+        }}
+      >
+        <Field name='aaa' type='string' />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+
+  render(<TestComponent />)
+  await sleep(33)
+  expect(callback).toHaveBeenCalledTimes(1)
+})
+
 test('onFieldChange will trigger with initialValues', async () => {
   const callback = jest.fn()
   const TestComponent = () => {
@@ -104,8 +126,7 @@ test('onFieldChange will trigger with initialValues', async () => {
 
   render(<TestComponent />)
   await sleep(33)
-  expect(callback).toHaveBeenCalledTimes(3)
+  expect(callback).toHaveBeenCalledTimes(2)
   expect(callback.mock.calls[0][0].value).toBe(undefined)
-  expect(callback.mock.calls[1][0].value).toBe(undefined)
-  expect(callback.mock.calls[2][0].value).toBe(123)
+  expect(callback.mock.calls[1][0].value).toBe(123)
 })
