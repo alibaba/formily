@@ -25,13 +25,13 @@
 使用 Ant Design：
 
 ```bash
-npm install --save @uform/antd
+npm install --save antd @uform/antd
 ```
 
 使用 Fusion Design：
 
 ```bash
-npm install --save @uform/next
+npm install --save @alifd/next @uform/next
 ```
 
 ## 文档

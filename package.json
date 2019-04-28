@@ -28,7 +28,7 @@
     "lint": "eslint \"packages/!(docs)/**/*.js\" \"scripts/**/*.js\""
   },
   "devDependencies": {
-    "@alifd/next": "^1.13.10",
+    "@alifd/next": "^1.14.1",
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
@@ -42,7 +42,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime-corejs3": "^7.2.0",
     "all-contributors-cli": "^6.1.2",
-    "antd": "^3.16.1",
+    "antd": "^3.16.6",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.4",
