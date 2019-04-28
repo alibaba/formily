@@ -90,7 +90,7 @@ const testOpts = (ext, options) => {
 const getImageByUrl = (url, options) => {
   for (let i = 0; i < exts.length; i++) {
     if (exts[i].ext.test(url) && testOpts(exts[i].ext, options)) {
-      return exts[i].icon
+      return exts[i].icon || url
     }
   }
 
@@ -101,10 +101,12 @@ const normalizeFileList = fileList => {
   if (fileList && fileList.length) {
     return fileList.map(file => {
       return {
+        uid: file.uid,
+        status: file.status,
         name: file.name,
-        downloadURL: file.downloadURL || file.imgURL,
+        url: file.downloadURL || file.imgURL || file.url,
         ...file.response,
-        imgURL: getImageByUrl(file.imgURL, {
+        thumbUrl: getImageByUrl(file.imgURL || file.downloadURL || file.url, {
           exclude: ['.png', '.jpg', '.jpeg', '.gif']
         })
       }
@@ -140,7 +142,7 @@ registerFormField(
   })(
     class Uploader extends React.Component {
       static defaultProps = {
-        action: '',
+        action: 'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
         listType: 'text',
         multiple: true,
         className: 'antd-uploader'
@@ -182,7 +184,7 @@ registerFormField(
               onChange(fileList.length > 0 ? fileList : undefined)
             }
           )
-        } else if (file.status !== 'error' && file.status !== 'uploading') {
+        } else {
           this.setState({
             value: fileList
           })

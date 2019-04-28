@@ -77,7 +77,9 @@ ReactDOM.render(
         type="upload"
         title="卡片上传文件"
         name="upload"
-        x-props={{ listType: 'card' }}
+        x-props={{
+          listType: 'card',
+        }}
       />
       <Field
         type="upload"
