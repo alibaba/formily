@@ -22,8 +22,9 @@ import {
 } from './utils'
 import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
-import { Subject } from 'rxjs'
-import { filter } from 'rxjs/operators'
+import { Subject } from 'rxjs/internal/Subject'
+import { filter } from 'rxjs/internal/operators/filter'
+import { debounceTime } from 'rxjs/internal/operators/debounceTime'
 import { FormPath } from './path'
 
 const defaults = opts => ({
@@ -98,6 +99,9 @@ export class Form {
           if (!this.subscribes[eventName]) {
             this.subscribes[eventName] = new Subject()
           }
+          this.subscribes[eventName] = this.subscribes[eventName].pipe(
+            debounceTime(0)
+          )
           if (isStr($filter) || isFn($filter)) {
             return this.subscribes[eventName].pipe(
               filter(isStr($filter) ? FormPath.match($filter) : $filter)
