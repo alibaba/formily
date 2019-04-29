@@ -24,7 +24,6 @@ import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
 import { Subject } from 'rxjs/internal/Subject'
 import { filter } from 'rxjs/internal/operators/filter'
-import { debounceTime } from 'rxjs/internal/operators/debounceTime'
 import { FormPath } from './path'
 
 const defaults = opts => ({
@@ -99,9 +98,6 @@ export class Form {
           if (!this.subscribes[eventName]) {
             this.subscribes[eventName] = new Subject()
           }
-          this.subscribes[eventName] = this.subscribes[eventName].pipe(
-            debounceTime(0)
-          )
           if (isStr($filter) || isFn($filter)) {
             return this.subscribes[eventName].pipe(
               filter(isStr($filter) ? FormPath.match($filter) : $filter)
@@ -332,7 +328,7 @@ export class Form {
     if (field) {
       field.initialize({
         ...options,
-        value: value,
+        value: !isEmpty(value) ? value : initialValue,
         initialValue: initialValue
       })
       this.asyncUpdate(() => {
@@ -342,7 +338,7 @@ export class Form {
     } else {
       this.fields[name] = new Field(this, {
         name,
-        value: value !== undefined ? value : initialValue,
+        value: !isEmpty(value) ? value : initialValue,
         path: options.path,
         initialValue: initialValue,
         props: options.props
@@ -405,13 +401,15 @@ export class Form {
   }
 
   updateChildrenValue(parent) {
-    if (!parent.path) return
+    if (!parent.path || this.batchUpdateField) return
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
         let newValue = this.getValue($name)
         if (!isEqual(field.value, newValue)) {
           field.dirty = true
           field.value = newValue
+          // TODO: 这里直接粗暴的触发onFieldChange有可能触发异常渲染，当父级数据删除时，子级数据还存在，导致删不掉
+          this.triggerEffect('onFieldChange', field.publishState())
         }
       }
     })
@@ -441,9 +439,9 @@ export class Form {
 
   updateFieldsValue(validate = true) {
     const { promise, resolve } = defer()
-
     const update = () => {
       const updateList = []
+      this.batchUpdateField = true
       each(this.fields, (field, name) => {
         let newValue = this.getValue(name)
         field.updateState(state => {
@@ -462,6 +460,7 @@ export class Form {
           )
         }
       })
+      this.batchUpdateField = false
       resolve(Promise.all(updateList))
     }
     if (this.state.dirty && this.initialized) {
@@ -518,6 +517,10 @@ export class Form {
 
   deleteIn(name) {
     deleteIn(this.state.values, name)
+  }
+
+  deleteInitialValues(name) {
+    deleteIn(this.state.initialValues, name)
   }
 
   reset(forceClear) {

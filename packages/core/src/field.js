@@ -187,15 +187,18 @@ export class Field {
   restore() {
     if (this.removed) {
       this.visible = true
+      this.removed = false
     }
   }
 
   remove() {
     this.value = undefined
+    this.initialValue = undefined
     this.visible = false
     this.removed = true
     if (!this.context) return
     this.context.deleteIn(this.name)
+    this.context.deleteInitialValues(this.name)
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
     }
