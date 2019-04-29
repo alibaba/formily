@@ -1,6 +1,6 @@
 {
   "name": "@uform/next",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -15,13 +15,13 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
+    "@alifd/next": "^1.13.1",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "@alifd/next": "^1.13.1"
+    "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "0.1.7",
-    "@uform/utils": "0.1.3",
+    "@uform/react": "0.1.8",
+    "@uform/utils": "0.1.4",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
     "react-stikky": "^0.1.15",
