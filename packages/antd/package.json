@@ -28,6 +28,9 @@
     "react-stikky": "^0.1.15",
     "styled-components": "^4.1.1"
   },
+  "devDependencies": {
+    "antd": "^3.14.1"
+  },
   "publishConfig": {
     "access": "public"
   },

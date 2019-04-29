@@ -22,6 +22,9 @@
   "dependencies": {
     "@uform/builder": "0.1.7"
   },
+  "devDependencies":{
+    "@alifd/next": "^1.13.1"
+  },
   "publishConfig": {
     "access": "public"
   },
