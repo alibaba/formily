@@ -42,6 +42,9 @@ https://alibaba.github.io/uform
 
 https://codesandbox.io/s/245o92lnzy
 
+## Community
+
+[gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage)
 
 ## LICENSE
 
