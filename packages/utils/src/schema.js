@@ -11,10 +11,10 @@ export const getSchemaNodeFromPath = (schema, path) => {
   path = toArr(path)
   for (let i = 0; i < path.length; i++) {
     var key = path[i]
-    if (res && res.properties) {
+    if (res && !isEmpty(res.properties)) {
       res = res.properties[key]
       suc++
-    } else if (res && res.items && numberRE.test(key)) {
+    } else if (res && !isEmpty(res.items) && numberRE.test(key)) {
       res = res.items
       suc++
     }

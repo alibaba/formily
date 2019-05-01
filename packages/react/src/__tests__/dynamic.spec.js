@@ -420,3 +420,48 @@ test('dynamic async default value', async () => {
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(2)
 })
+
+test('invalid schema', async () => {
+  const TestComponent = () => {
+    const [schema, setSchema] = useState()
+    useEffect(() => {
+      setTimeout(() => {
+        act(() => {
+          setSchema({
+            type: 'object',
+            properties: {
+              container: {
+                type: 'array',
+                default: [{}],
+                'x-component': 'container',
+                properties: {},
+                items: {
+                  type: 'object',
+                  properties: {
+                    aa: {
+                      type: 'string'
+                    },
+                    bb: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          })
+        })
+      }, 33)
+    }, [])
+    return (
+      <SchemaForm initialValues={{}} schema={schema}>
+        <button type='submit'>Submit</button>
+      </SchemaForm>
+    )
+  }
+  const { queryByText, queryAllByTestId } = render(<TestComponent />)
+  await sleep(100)
+  fireEvent.click(queryByText('Add Field'))
+  await sleep(33)
+  expect(queryAllByTestId('item').length).toBe(2)
+  expect(queryAllByTestId('input').length).toBe(4)
+})
