@@ -41,6 +41,7 @@
      - [表单联动](./Examples/next/Relations.md)
      - [表单校验](./Examples/next/Validation.md)
      - [内外通讯联动](./Examples/next/Actions.md)
+     - [国际化](./Examples/next/International.md)
   - Ant Design
      - [简单场景](./Examples/antd/Sample.md)
      - [表单详情](./Examples/antd/Detail.md)
@@ -48,6 +49,7 @@
      - [表单布局](./Examples/antd/Layout.md)
      - [表单联动](./Examples/antd/Relations.md)
      - [表单校验](./Examples/antd/Validation.md)
-     - [内外通讯联动](./Examples/next/Actions.md)
+     - [内外通讯联动](./Examples/antd/Actions.md)
+     - [国际化](./Examples/antd/International.md)
 - [知乎专栏](https://zhuanlan.zhihu.com/uform)
 - [GitHub](https://github.com/alibaba/uform)
