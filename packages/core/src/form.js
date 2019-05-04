@@ -408,7 +408,7 @@ export class Form {
         if (!isEqual(field.value, newValue)) {
           field.dirty = true
           field.value = newValue
-          // TODO: 这里直接粗暴的触发onFieldChange有可能触发异常渲染，当父级数据删除时，子级数据还存在，导致删不掉
+          field.notify()
           this.triggerEffect('onFieldChange', field.publishState())
         }
       }
