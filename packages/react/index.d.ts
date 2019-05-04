@@ -1,18 +1,33 @@
+type ParamsWithContext<P extends any = any, C extends any = any> = (
+  props: React.PropsWithChildren<P>,
+  context: React.Context<C>
+) => JSX.Element;
+
+type RegistedFormFieldsDescription = {
+  [type: string]: any;
+}
+
+type FieldConnectOptions = {
+  valueName?: string;
+  eventName?: string;
+  getValueFromEvent?: any;
+  getProps?: (schemaProps: object, xProps: object) => any;
+  getComponent?: (oldComponent: any, schemaProps: object, xProps: object) => any;
+}
+
 export type SchemaFormProps = {
   className?: string;
   [x: string]: any;
 };
 
-export const SchemaForm: React.SFC<SchemaFormProps>;
 
 export type SchemaFieldProps = {
   [x: string]: any;
 };
 
-type ParamsWithContext<P extends any = any, C extends any = any> = (
-  props: React.PropsWithChildren<P>,
-  context: React.Context<C>
-) => JSX.Element;
+
+export const SchemaForm: React.SFC<SchemaFormProps>;
+
 
 export const Field: ParamsWithContext<SchemaFieldProps>;
 
@@ -54,3 +69,8 @@ declare type FormAsyncActionType = {
 
 export const createAsyncFormActions: () => FormAsyncActionType;
 
+export const registerFormField: (type: string, component: any) => void;
+
+export const registerFormFields: (description: RegistedFormFieldsDescription) => void;
+
+export const connect: (options: FieldConnectOptions) => (component: any) => any;
