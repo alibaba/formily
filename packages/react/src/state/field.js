@@ -72,11 +72,11 @@ const StateField = createHOC((options, Field) => {
       )
     }
 
-    getOrderProperties = () => {
-      const { schema, path } = this.props
-      if (!schema) return []
+    getOrderProperties = outerSchema => {
+      const { schema: innerSchema, path } = this.props
+      if (!innerSchema && !outerSchema) return []
       const properties = []
-      each(schema.properties, (item, key) => {
+      each((outerSchema || innerSchema || {}).properties, (item, key) => {
         let index = item['x-index']
         let newPath = path.concat(key)
         let newName = newPath.join('.')
@@ -110,6 +110,7 @@ const StateField = createHOC((options, Field) => {
         : schemaIs(props, 'array')
           ? value || []
           : value
+
       return visible === false ? (
         <React.Fragment />
       ) : (

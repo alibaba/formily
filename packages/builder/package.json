@@ -20,7 +20,8 @@
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
     "@uform/react": "0.1.9",

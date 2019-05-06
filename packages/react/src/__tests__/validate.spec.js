@@ -41,11 +41,11 @@ test('basic validate', async () => {
     </SchemaForm>
   )
 
-  const { getAllByTestId, getByText } = render(<TestComponent />)
+  const { getByTestId, getByText } = render(<TestComponent />)
 
-  fireEvent.click(getAllByTestId('btn')[1])
+  fireEvent.click(getByTestId('btn'))
   await sleep(100)
-  fireEvent.click(getAllByTestId('btn')[1])
+  fireEvent.click(getByTestId('btn'))
   await sleep(300)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(2)
@@ -82,9 +82,9 @@ test('validate in init', async () => {
     result = render(<TestComponent />)
   })
   await sleep(100)
-  const { queryAllByText, queryByText } = result
+  const { queryByText } = result
   expect(queryByText('text is required')).toBeNull()
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
@@ -124,9 +124,9 @@ test('validate in editable false', async () => {
     result = render(<TestComponent />)
   })
   await sleep(100)
-  const { queryAllByText, queryByText } = result
+  const { queryByText } = result
   expect(queryByText('editable is required')).toBeNull()
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
@@ -135,7 +135,7 @@ test('validate in editable false', async () => {
     state.value = '123'
   })
   await sleep(100)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(handleSubmit).toHaveBeenCalledTimes(1)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
@@ -160,9 +160,9 @@ test('modify required rules by setFieldState', async () => {
       </SchemaForm>
     )
   }
-  const { queryByText, queryAllByText } = render(<TestComponent />)
+  const { queryByText } = render(<TestComponent />)
   await sleep(100)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(handleSubmit).toBeCalledTimes(1)
   expect(handleValidateFailed).toBeCalledTimes(0)
@@ -170,7 +170,7 @@ test('modify required rules by setFieldState', async () => {
     state.props.required = true
   })
   await sleep(100)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(queryByText('kk is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(1)
@@ -179,7 +179,7 @@ test('modify required rules by setFieldState', async () => {
     state.required = false
   })
   await sleep(100)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(queryByText('kk is required')).toBeNull()
   expect(handleSubmit).toBeCalledTimes(2)
@@ -188,7 +188,7 @@ test('modify required rules by setFieldState', async () => {
     state.required = true
   })
   await sleep(100)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(queryByText('kk is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(2)
@@ -211,11 +211,9 @@ test('modify validate rules by setFieldState', async () => {
       </SchemaForm>
     )
   }
-  const { queryByText, queryAllByText, queryByTestId } = render(
-    <TestComponent />
-  )
+  const { queryByText, queryByTestId } = render(<TestComponent />)
   await sleep(100)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(queryByText('required')).toBeVisible()
   actions.setFieldState('bb', state => {

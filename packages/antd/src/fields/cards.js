@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { registerFormField } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { ArrayField } from './array'
-import Card from 'antd/lib/card'
+import { Card } from 'antd'
 import styled from 'styled-components'
 
 const FormCardsField = styled(

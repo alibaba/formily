@@ -16,10 +16,10 @@
   },
   "peerDependencies": {
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.2",
     "@uform/react": "0.1.9",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"

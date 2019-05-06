@@ -55,7 +55,7 @@ export class Field {
       ? !isEmpty(this.props)
         ? { ...this.props, ...clone(options.props) }
         : clone(options.props)
-      : this.props
+      : this.props || {}
     if (this.removed) {
       this.removed = false
       this.visible = true
@@ -165,6 +165,7 @@ export class Field {
 
   changeProps(props, force) {
     let lastProps = this.props
+    if (isEmpty(props)) return
     if (force || !isEqual(lastProps, props, filterSchema)) {
       this.props = clone(props, filterSchema)
       this.editable = this.getEditableFromProps(this.props)
@@ -175,7 +176,7 @@ export class Field {
   }
 
   changeEditable(editable) {
-    if (!isEmpty(this.props.editable)) return
+    if (!this.props || !isEmpty(this.props.editable)) return
     if (this.props['x-props'] && !isEmpty(this.props['x-props'].editable)) {
       return
     }

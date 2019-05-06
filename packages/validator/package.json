@@ -14,6 +14,9 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "peerDependencies": {
+    "@babel/runtime": "^7.4.4"
+  },
   "dependencies": {
     "@uform/utils": "0.1.5"
   },

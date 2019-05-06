@@ -56,12 +56,12 @@ test('onFormInit setFieldState', async () => {
     </SchemaForm>
   )
 
-  const { getByText, getAllByTestId, queryByText } = render(<TestComponent />)
+  const { getByText, getByTestId, queryByText } = render(<TestComponent />)
 
   await sleep(100)
   expect(queryByText('text')).toBeVisible()
   await sleep(100)
-  fireEvent.click(getAllByTestId('btn')[1])
+  fireEvent.click(getByTestId('btn'))
   await sleep(100)
   expect(getByText('field is required')).toBeVisible()
   await sleep(100)
@@ -69,7 +69,7 @@ test('onFormInit setFieldState', async () => {
     state.rules = []
   })
   await sleep(100)
-  fireEvent.click(getAllByTestId('btn')[1])
+  fireEvent.click(getByTestId('btn'))
   await sleep(100)
   expect(queryByText('field is required')).toBeNull()
 })
