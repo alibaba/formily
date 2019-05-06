@@ -1,6 +1,6 @@
 {
   "name": "@uform/react",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "license": "MIT",
   "main": "lib",
   "types": "./index.d.ts",
@@ -16,14 +16,14 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
+    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "@babel/runtime": "^7.4.4"
+    "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/core": "0.1.9",
-    "@uform/utils": "0.1.5",
-    "@uform/validator": "0.1.5",
+    "@uform/core": "0.1.10",
+    "@uform/utils": "0.1.6",
+    "@uform/validator": "0.1.6",
     "pascal-case": "^2.0.1",
     "react-eva": "^1.0.0",
     "rxjs-compat": "^6.5.1"
