@@ -267,7 +267,6 @@ registerFormField(
               <Table dataSource={value}>
                 {getOrderProperties(schema.items).reduce(
                   (buf, { key, schema }) => {
-                    console.log(key, schema)
                     const filter = this.createFilter(key, schema)
                     const res = filter(
                       () => {
