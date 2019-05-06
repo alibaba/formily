@@ -8,7 +8,7 @@ export default () =>
     class ObjectField extends React.Component {
       renderProperties() {
         const { renderField, getOrderProperties } = this.props
-        const properties = getOrderProperties(this.props)
+        const properties = getOrderProperties()
         const children = []
         each(properties, ({ key } = {}) => {
           key && children.push(renderField(key, true))

@@ -14,13 +14,13 @@ import {Field} from '@uform/react'
 | type | 字段类型 | Object |  |
 | name | 字段名称 | Object | {} |
 | default | 默认值 | any |  |
-| enum | 枚举值，配置该值在默认情况下会显示Select形态，指定x-component会显示对应的组件形态 | Array<any> | [] |
-| maxItems | 最大条目数 | Number |  |
-| minItems | 最小条目数 | Number |  |
+| enum | 枚举值，配置该值在默认情况下会显示Select形态，指定x-component会显示对应的组件形态 | `Array< String | {label:String,value:any}>` | [] |
+| maxItems | 最大条目数，只有在type="array"时可以使用 | Number |  |
+| minItems | 最小条目数，只有在type="array"时可以使用 | Number |  |
 | required | 字段是否必填 | Boolean | false |
-| x-props | 字段UI组件属性 | Object | {} |
+| x-props | 字段UI组件属性，API请参考对应fusion next/ant design组件API | Object | {} |
 | x-rules | 字段校验规则 | Object | Array<String | Object | Function> | String | Function |  |
-| x-component | 字段UI组件 | Object | {type:"object",properties:{}} |
+| x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染 | Object | {type:"object",properties:{}} |
 | x-index | 字段索引顺序 | Number |  |
 | x-render | 字段渲染函数 | `Function(fieldProps : FieldRenderProps){}` |  |
 | x-effect | 副作用事件绑定对象 | `Function(dispatch : Function) : {    [eventName](...arguemtns)}` |  |

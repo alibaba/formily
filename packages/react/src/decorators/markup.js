@@ -1,4 +1,5 @@
 import React, { Component, useContext } from 'react'
+import { createPortal } from 'react-dom'
 import {
   createHOC,
   schemaIs,
@@ -42,6 +43,9 @@ export const SchemaField = (props, context) => {
 export const SchemaMarkup = createHOC((options, SchemaForm) => {
   return class extends Component {
     static displayName = 'SchemaMarkupParser'
+
+    portalRoot = document.createElement('div')
+
     render() {
       let {
         children,
@@ -61,13 +65,13 @@ export const SchemaMarkup = createHOC((options, SchemaForm) => {
       nonameId = 0
       return (
         <React.Fragment>
-          {!alreadyHasSchema && (
-            <template>
+          {!alreadyHasSchema &&
+            createPortal(
               <MarkupContext.Provider value={schema}>
                 {children}
-              </MarkupContext.Provider>
-            </template>
-          )}
+              </MarkupContext.Provider>,
+              this.portalRoot
+            )}
           <SchemaForm
             {...others}
             defaultValue={value || defaultValue}

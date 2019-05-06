@@ -59,9 +59,9 @@ test('setFieldState will trigger validate', async () => {
     </SchemaForm>
   )
 
-  const { getAllByTestId, getByTestId } = render(<TestComponent />)
+  const { getByTestId } = render(<TestComponent />)
 
-  fireEvent.click(getAllByTestId('btn')[1])
+  fireEvent.click(getByTestId('btn'))
   await sleep(100)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
