@@ -4,11 +4,16 @@
    - [快速入门](./Tutorials/快速入门.md)
    - [Form Schema 扩展规范](./Tutorials/FormSchema扩展规范.md)
 - API 文档
-   - @uform/core
-     - [createForm](./API/createForm.md)
-     - [setValidationLocale](./API/setValidationLocale.md)
-     - [setValidationLanguage](./API/setValidationLanguage.md)
-     - [FormPath](./API/FormPath.md)
+   - @uform/next or antd
+     - [<SchemaForm/>](./API/SchemaForm.md)
+     - [<FormButtonGroup/>](./API/FormButtonGroup.md)
+     - [<Submit/>](./API/Submit.md)
+     - [<Reset/>](./API/Reset.md)
+     - [<FormLayout/>](./API/FormLayout.md)
+     - [<FormCard/>](./API/FormCard.md)
+     - [<FormBlock/>](./API/FormBlock.md)
+     - [<FormItemGrid/>](./API/FormItemGrid.md)
+     - [<FormSlot/>](./API/FormSlot.md)
    - @uform/react
      - [<SchemaForm/>](./API/SchemaForm_React.md)
      - [<Field/>](./API/Field_React.md)
@@ -22,16 +27,11 @@
      - [connect](./API/connect.md)
      - [createFormActions](./API/createFormActions.md)
      - [createAsyncFormActions](./API/createAsyncFormActions.md)
-   - @uform/next or antd
-     - [<SchemaForm/>](./API/SchemaForm.md)
-     - [<FormButtonGroup/>](./API/FormButtonGroup.md)
-     - [<Submit/>](./API/Submit.md)
-     - [<Reset/>](./API/Reset.md)
-     - [<FormLayout/>](./API/FormLayout.md)
-     - [<FormCard/>](./API/FormCard.md)
-     - [<FormBlock/>](./API/FormBlock.md)
-     - [<FormItemGrid/>](./API/FormItemGrid.md)
-     - [<FormSlot/>](./API/FormSlot.md)
+   - @uform/core
+     - [createForm](./API/createForm.md)
+     - [setValidationLocale](./API/setValidationLocale.md)
+     - [setValidationLanguage](./API/setValidationLanguage.md)
+     - [FormPath](./API/FormPath.md)
 - 场景案例
   - Fusion Next
      - [简单场景](./Examples/next/Sample.md)
