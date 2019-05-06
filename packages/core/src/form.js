@@ -294,8 +294,9 @@ export class Form {
             const lastValid = this.state.valid
             let _errors = reduce(
               response,
-              (buf, { valid, errors }) => {
-                return buf.concat(errors)
+              (buf, { name, errors }) => {
+                if (!errors.length) return buf
+                return buf.concat({ name, errors })
               },
               []
             )
