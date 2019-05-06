@@ -265,30 +265,31 @@ registerFormField(
           >
             <div>
               <Table dataSource={value}>
-                {getOrderProperties(
-                  schema.items && schema.items.properties
-                ).reduce((buf, { key, schema }) => {
-                  const filter = this.createFilter(key, schema)
-                  const res = filter(
-                    () => {
-                      return buf.concat(
-                        <Column
-                          {...schema}
-                          key={key}
-                          title={schema.title}
-                          dataIndex={key}
-                          cell={(record, index) => {
-                            return renderField([index, key])
-                          }}
-                        />
-                      )
-                    },
-                    () => {
-                      return buf
-                    }
-                  )
-                  return res
-                }, [])}
+                {getOrderProperties(schema.items).reduce(
+                  (buf, { key, schema }) => {
+                    const filter = this.createFilter(key, schema)
+                    const res = filter(
+                      () => {
+                        return buf.concat(
+                          <Column
+                            {...schema}
+                            key={key}
+                            title={schema.title}
+                            dataIndex={key}
+                            cell={(record, index) => {
+                              return renderField([index, key])
+                            }}
+                          />
+                        )
+                      },
+                      () => {
+                        return buf
+                      }
+                    )
+                    return res
+                  },
+                  []
+                )}
                 {additionFilter(() => {
                   return (
                     <Column
