@@ -10,6 +10,7 @@ export const Submit = ({ showLoading, ...props }) => {
           <Button
             type='primary'
             htmlType='submit'
+            disabled={showLoading ? status === 'submitting' : undefined}
             {...props}
             loading={showLoading ? status === 'submitting' : undefined}
           >
