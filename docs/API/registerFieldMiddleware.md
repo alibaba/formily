@@ -1,6 +1,7 @@
 # registerFieldMiddleware
 
 ## 介绍
+
 注册一个表单字段包装组件，类似于HOC，但是它是先注册组件层级浅,后注册的组件层级深，所以起名middleware
 
 ## 类型描述
@@ -16,7 +17,6 @@ type Wrapper(FormComponent : Function) : ReactComponent
 ```javascript
 import {registerFieldMiddleware} from '@uform/react'
 ```
-
 
 ## 用例
 
