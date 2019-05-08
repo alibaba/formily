@@ -19,6 +19,12 @@ window.codeSandBoxPeerDependencies = {
 </script>
 `
 
+const FOOTER_HTML = `
+<script src="//unpkg.com/moment/min/moment-with-locales.js"></script>
+<script src="//unpkg.com/antd/dist/antd.min.js"></script>
+<script src="//unpkg.com/@alifd/next/dist/next.min.js"></script>
+`
+
 const createDocs = async () => {
   const packagesDir = path.resolve(process.cwd(), './packages')
   const packages = await fs.readdir(packagesDir)
@@ -38,12 +44,15 @@ const createDocs = async () => {
     {
       title: 'UForm',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
-      header: HEAD_HTML
+      header: HEAD_HTML,
+      footer: FOOTER_HTML
     },
     (webpackConfig, env) => {
       if (env === 'production') {
         webpackConfig.output.filename = 'bundle.[name].js'
-        webpackConfig.output.publicPath = `//unpkg.com/@uform/docs@${pkg.version}/`
+        webpackConfig.output.publicPath = `//unpkg.com/@uform/docs@${
+          pkg.version
+        }/`
         webpackConfig.plugins.forEach(plugin => {
           if (plugin.constructor.name === 'HtmlWebpackPlugin') {
             plugin.options.filename = path.resolve(
@@ -52,6 +61,13 @@ const createDocs = async () => {
             )
           }
         })
+      }
+      webpackConfig.devtool = 'none'
+      webpackConfig.externals = {
+        ...webpackConfig.externals,
+        '@alifd/next': 'Next',
+        antd: 'antd',
+        moment: 'moment'
       }
 
       Object.assign(webpackConfig.resolve.alias, {

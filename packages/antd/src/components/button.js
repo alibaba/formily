@@ -2,7 +2,7 @@ import React from 'react'
 import { FormConsumer } from '@uform/react'
 import { Button } from 'antd'
 
-export const Submit = props => {
+export const Submit = ({ showLoading, ...props }) => {
   return (
     <FormConsumer>
       {({ status, schema }) => {
@@ -10,8 +10,9 @@ export const Submit = props => {
           <Button
             type='primary'
             htmlType='submit'
+            disabled={showLoading ? status === 'submitting' : undefined}
             {...props}
-            loading={status === 'submitting'}
+            loading={showLoading ? status === 'submitting' : undefined}
           >
             {props.children || '提交'}
           </Button>

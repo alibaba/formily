@@ -15,19 +15,19 @@ import SchemaForm from '@uform/react'
 ## API
 | 属性名称 | 属性描述 | 属性类型 | 默认值 |
 | --- | --- | --- | --- |
+| --- | --- | --- | --- |
 | defaultValue | 表单默认值 | Object |  |
 | value | 表单值，受控态使用 | Object | {} |
 | initialValues | 表单值，受控态使用 | Object | {} |
 | locale | 表单国际化文案 | Object | {} |
-| component | 控制SchemaForm是以什么形式渲染，默认是渲染form标签，如果你希望嵌套使用SchemaForm,可以指定为div | String/Function | "form" |
-| schema | 表单json schema，具体参考 [扩展规范](#/MpI2Ij/1gSGSDf5) | Object | {type:"object",properties:{}} |
+| schema | 表单json schema，具体参考 [扩展规范](/#/MpI2Ij/DVSLSafN) | Object | {type:"object",properties:{}} |
 | onChange | 表单变化事件回调 | `Function(values : Object){}` |  |
 | onSubmit | 表单提交事件回调 | `Function(values : Object){}` |  |
 | onReset | 表单重置事件回调 | `Function(values : Object){}` |  |
 | onValidateFailed | 表单校验失败事件回调 | Function |  |
 | editable | 控制表单字段是否可编辑状态 | `Boolean | Function(name : String) : Boolean` |  |
-| actions | 需要握手的表单actions，只接收通过[createFormActions](#/aAUeUD/XEFAF7HoHV)创建出来的actions | Object |  |
-| effects | 副作用处理函数 | `Function( selector : Function, actions: FormActions){}` |  |
+| actions | 需要握手的表单actions，只接收通过[createFormActions](/#/97UlUl/XEFAF7HoHV)/[createAsyncFormActions](/#/97UlUl/leFLFGHMHK)创建出来的actions | Object |  |
+| effects | 副作用处理函数 | Function |  |
 
 
 ## 副作用处理

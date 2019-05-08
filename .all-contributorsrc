@@ -35,6 +35,34 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "zsirfs",
+      "name": "zsir",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22249411?v=4",
+      "profile": "https://www.luoyangfu.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "monkindey",
+      "name": "Kiho · Cham",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6913898?v=4",
+      "profile": "http://www.monkindey.xyz/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "whj1995",
+      "name": "Hongjiang Wu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22634735?v=4",
+      "profile": "http://whj1995.xyz",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7

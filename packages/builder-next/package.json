@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder-next",
-  "version": "0.1.2",
+  "version": "0.1.11",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -15,12 +15,16 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
+    "@alifd/next": "^1.13.1",
+    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@alifd/next": "^1.13.1",
-    "@uform/builder": "0.1.2"
+    "@uform/builder": "0.1.11"
+  },
+  "devDependencies": {
+    "@alifd/next": "^1.13.1"
   },
   "publishConfig": {
     "access": "public"

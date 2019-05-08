@@ -3,10 +3,11 @@
 > 数组场景，区块型数组，能解决大量字段的聚合输入，但是对于数据的对比化展示，区分
 > 度不够明显
 
-下面对于List场景我们主要封装了
-- Array类型组件
-- Table类型组件
-- Card类型组件
+下面对于 List 场景我们主要封装了
+
+- Array 类型组件
+- Table 类型组件
+- Card 类型组件
 
 这些组件你都可以对其做简单的定制来适应你当前的业务需求，比如
 
@@ -59,8 +60,8 @@ const App = () => {
           maxItems={3}
           type="array"
           x-props={{
-            renderAddition:'这是定制的添加文案',
-            renderRemove:'这是定制的删除文案'
+            renderAddition: '这是定制的添加文案',
+            renderRemove: '这是定制的删除文案'
           }}
         >
           <Field type="object">
@@ -75,11 +76,7 @@ const App = () => {
               </FormLayout>
             </FormBlock>
             <FormBlock title="嵌套数组">
-              <Field
-                name="array2"
-                maxItems={3}
-                type="array"
-              >
+              <Field name="array2" maxItems={3} type="array">
                 <Field type="object">
                   <FormLayout labelCol={9} wrapperCol={6}>
                     <Field name="aa" type="string" title="字段1" />
@@ -147,11 +144,11 @@ const App = () => (
           />
           <Field name="bb" type="string" title="字段2" />
           <Field name="cc" type="string" title="字段3" />
-          <Field name="dd" type="string" title="字段4" />
-          <Field name="dd" type="string" title="字段5" />
-          <Field name="ee" type="string" title="字段6" />
-          <Field name="ff" type="string" title="字段7" />
-          <Field name="gg" type="daterange" title="字段8" />
+          <Field name="dd" type="string" title="字段4" x-index={1} />
+          <Field name="ee" type="string" title="字段5" />
+          <Field name="ff" type="string" title="字段6" />
+          <Field name="gg" type="string" title="字段7" />
+          <Field name="hh" type="daterange" title="字段8" />
         </Field>
       </Field>
     </SchemaForm>
@@ -184,12 +181,17 @@ import Printer from '@uform/printer'
 const App = () => (
   <Printer>
     <SchemaForm>
-      <Field name="array" maxItems={3} type="array" x-component="cards" 
-          x-props={{
-            title:'这是卡片标题',
-            renderAddition:'这是定制的添加文案',
-            renderRemove:'这是定制的删除文案'
-          }}>
+      <Field
+        name="array"
+        maxItems={3}
+        type="array"
+        x-component="cards"
+        x-props={{
+          title: '这是卡片标题',
+          renderAddition: '这是定制的添加文案',
+          renderRemove: '这是定制的删除文案'
+        }}
+      >
         <Field type="object">
           <FormLayout labelCol={6} wrapperCol={8}>
             <Field
@@ -206,7 +208,13 @@ const App = () => (
             <Field name="ff" type="string" title="字段7" />
             <Field name="gg" type="daterange" title="字段8" />
           </FormLayout>
-          <Field name="array" maxItems={3} type="array" x-component="cards" x-props={{title:'这是卡片标题'}}>
+          <Field
+            name="array"
+            maxItems={3}
+            type="array"
+            x-component="cards"
+            x-props={{ title: '这是卡片标题' }}
+          >
             <Field type="object">
               <FormLayout labelCol={6} wrapperCol={8}>
                 <Field

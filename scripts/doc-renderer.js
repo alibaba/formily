@@ -1,6 +1,14 @@
 import React from 'react'
 import SiteRenderer from 'react-site-renderer'
 
+((window.gitter = {}).chat = {}).options = {
+  room: 'alibaba-uform/community'
+}
+
+const script = document.createElement('script')
+script.src = '//sidecar.gitter.im/dist/sidecar.v1.js'
+document.body.appendChild(script)
+
 export default ({ docs }) => {
   return (
     <SiteRenderer
