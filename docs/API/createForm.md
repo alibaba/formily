@@ -106,14 +106,14 @@ const form = createForm({
   }
 })
 
-const aa = form.registerField('aa', {
+form.registerField('aa', {
   onChange(fieldState) {
     console.log(fieldState)
   }
 })
 
 setTimeout(() => {
-  aa.changeValue(456)
+  form.setValue('aa', 456);
   setTimeout(() => {
     form.submit()
   }, 1000)

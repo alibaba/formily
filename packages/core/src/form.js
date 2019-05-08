@@ -17,14 +17,14 @@ import {
   caf,
   isChildField,
   getSchemaNodeFromPath,
-  BufferList
+  BufferList,
+  defer
 } from './utils'
 import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
-import { Subject } from 'rxjs'
-import { filter } from 'rxjs/operators'
+import { Subject } from 'rxjs/internal/Subject'
+import { filter } from 'rxjs/internal/operators/filter'
 import { FormPath } from './path'
-import produce from 'immer'
 
 const defaults = opts => ({
   initialValues: {},
@@ -167,23 +167,21 @@ export class Form {
 
   setFormState = reducer => {
     if (!isFn(reducer)) return
-    return new Promise(resolve => {
-      const published = produce(this.publishState(), reducer)
-      this.checkState(published)
-      resolve()
-    })
+    const published = this.publishState()
+    reducer(published, reducer)
+    return Promise.resolve(this.checkState(published))
   }
 
   checkState(published) {
     if (!isEqual(this.state.values, published.values)) {
       this.state.values = published.values
       this.state.dirty = true
-      this.updateFieldsValue()
+      return this.updateFieldsValue()
     }
     if (!isEqual(this.state.initialValues, published.initialValues)) {
       this.state.initialValues = published.initialValues
       this.state.dirty = true
-      this.updateFieldInitialValue()
+      return this.updateFieldInitialValue()
     }
   }
 
@@ -296,8 +294,9 @@ export class Form {
             const lastValid = this.state.valid
             let _errors = reduce(
               response,
-              (buf, { valid, errors }) => {
-                return buf.concat(errors)
+              (buf, { name, errors }) => {
+                if (!errors.length) return buf
+                return buf.concat({ name, errors })
               },
               []
             )
@@ -330,7 +329,7 @@ export class Form {
     if (field) {
       field.initialize({
         ...options,
-        value: value,
+        value: !isEmpty(value) ? value : initialValue,
         initialValue: initialValue
       })
       this.asyncUpdate(() => {
@@ -340,7 +339,7 @@ export class Form {
     } else {
       this.fields[name] = new Field(this, {
         name,
-        value: value !== undefined ? value : initialValue,
+        value: !isEmpty(value) ? value : initialValue,
         path: options.path,
         initialValue: initialValue,
         props: options.props
@@ -382,13 +381,6 @@ export class Form {
     }
   }
 
-  removeField(name) {
-    const field = this.fields[name]
-    if (field) {
-      field.remove()
-    }
-  }
-
   setErrors(name, errors, ...args) {
     errors = toArr(errors)
     const field = this.fields[name]
@@ -410,13 +402,15 @@ export class Form {
   }
 
   updateChildrenValue(parent) {
-    if (!parent.path) return
+    if (!parent.path || this.batchUpdateField) return
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
         let newValue = this.getValue($name)
         if (!isEqual(field.value, newValue)) {
           field.dirty = true
           field.value = newValue
+          field.notify()
+          this.triggerEffect('onFieldChange', field.publishState())
         }
       }
     })
@@ -445,19 +439,30 @@ export class Form {
   }
 
   updateFieldsValue(validate = true) {
+    const { promise, resolve } = defer()
     const update = () => {
+      const updateList = []
+      this.batchUpdateField = true
       each(this.fields, (field, name) => {
         let newValue = this.getValue(name)
         field.updateState(state => {
           state.value = newValue
         })
         if (field.dirty) {
-          raf(() => {
-            if (this.destructed) return
-            field.notify()
-          })
+          updateList.push(
+            new Promise(resolve => {
+              raf(() => {
+                if (this.destructed) return
+                field.notify()
+                this.triggerEffect('onFieldChange', field.publishState())
+                resolve()
+              })
+            })
+          )
         }
       })
+      this.batchUpdateField = false
+      resolve(Promise.all(updateList))
     }
     if (this.state.dirty && this.initialized) {
       if (validate) {
@@ -469,6 +474,8 @@ export class Form {
         update()
       }
     }
+
+    return promise
   }
 
   updateChildrenVisible(parent, visible) {
@@ -511,6 +518,10 @@ export class Form {
 
   deleteIn(name) {
     deleteIn(this.state.values, name)
+  }
+
+  deleteInitialValues(name) {
+    deleteIn(this.state.initialValues, name)
   }
 
   reset(forceClear) {

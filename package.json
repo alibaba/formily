@@ -23,12 +23,11 @@
     "version:patch": "npm run prevesion && lerna version patch --exact",
     "version:minor": "npm run prevesion && lerna version minor --exact",
     "version:major": "npm run prevesion && lerna version major --exact",
-    "release:force":"lerna publish from-package --yes",
-    "release":"lerna publish",
+    "release:force": "lerna publish from-package --yes",
+    "release": "lerna publish",
     "lint": "eslint \"packages/!(docs)/**/*.js\" \"scripts/**/*.js\""
   },
   "devDependencies": {
-    "@alifd/next": "^1.13.10",
     "@babel/cli": "^7.2.0",
     "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
@@ -42,7 +41,6 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime-corejs3": "^7.2.0",
     "all-contributors-cli": "^6.1.2",
-    "antd": "^3.16.1",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
     "babel-loader": "^8.0.4",

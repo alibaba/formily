@@ -159,7 +159,7 @@ const App = () => {
             name="gg"
             type="string"
             x-effect={dispatch => ({
-              onChange(value, option) {
+              onChange(value,type, option) {
                 dispatch('onChangeOption', option)
               },
               onSearch(value) {
@@ -358,7 +358,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 #### Demo 示例
 
 ```jsx
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
@@ -377,7 +377,25 @@ import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
 
-const App = () => (
+const App = () => {
+  const [values,setValues] = useState({})
+  useEffect(()=>{
+    setTimeout(()=>{
+      setValues({
+        aa: [
+          {
+            bb: 'aaaaa',
+            dd: [{ ee: '是', ff: '是' }]
+          },
+          {
+            bb: 'ccccc',
+            dd: [{ ee: '否', ff: '是' }]
+          }
+        ]
+      })
+    },1000)
+  },[])
+  return (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState, getFieldState }) => {
@@ -456,14 +474,7 @@ const App = () => (
         })
       }}
       onSubmit={v => console.log(v)}
-      defaultValue={{
-        aa: [
-          {
-            bb: 'aaaaa',
-            dd: [{ ee: '是', ff: '是' }]
-          }
-        ]
-      }}
+      initialValues={values}
     >
       <FormBlock title="Block1">
         <Field type="array" name="aa">
@@ -486,7 +497,7 @@ const App = () => (
               </FormLayout>
             </FormBlock>
             <FormBlock title="嵌套Array">
-              <Field type="array" name="dd">
+              <Field type="array" name="dd" x-component="cards">
                 <Field type="object">
                   <FormLayout inline style={{ marginLeft: 20 }}>
                     <Field
@@ -518,5 +529,7 @@ const App = () => (
     </SchemaForm>
   </Printer>
 )
+}
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+

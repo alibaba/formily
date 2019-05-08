@@ -108,7 +108,11 @@ const App = () => {
           type="upload"
           title="卡片上传文件"
           name="upload"
-          x-props={{ listType: 'card' }}
+          x-props={{
+            listType: 'card',
+            action:
+              'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload'
+          }}
         />
         <Field
           type="upload"

@@ -14,8 +14,8 @@
 
   - What is the current behavior?
   - What is the expected behavior?
-  - Which versions of Rax, and which browser / OS are affected by this issue?
-  - Did this work in previous versions of Rax?
+  - Which versions of UForm?
+  - Did this work in previous versions of UForm?
 
-3. If your issue is a bug, please provide the steps to reproduce and if possible a minimal demo of the problem via [Bug Report Template](http://codepen.io/taobaofed/pen/oByQGb) on CodePen
+3. If your issue is a bug, please provide the steps to reproduce and if possible a minimal demo of the problem via [Bug Report Template](https://codesandbox.io/s/1ry7zxv983) on CodeSandbox
 .

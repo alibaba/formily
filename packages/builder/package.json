@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.2",
+  "version": "0.1.11",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -18,15 +18,15 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
-    "@alife/next": "^0.x",
+    "@alifd/next": "^1.13.1",
+    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@alifd/next": "^1.13.1",
-    "@uform/react": "0.1.1",
-    "@uform/utils": "0.1.1",
-    "@uform/validator": "0.1.1",
+    "@uform/react": "0.1.11",
+    "@uform/utils": "0.1.7",
+    "@uform/validator": "0.1.7",
     "classnames": "^2.2.5",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.1",
@@ -50,7 +50,7 @@
   },
   "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050",
   "devDependencies": {
-    "@uform/next": "0.1.2",
+    "@alifd/next": "^1.13.1",
     "react-test-renderer": "*"
   }
 }

@@ -25,13 +25,13 @@
 使用 Ant Design：
 
 ```bash
-npm install --save @uform/antd
+npm install --save antd @uform/antd
 ```
 
 使用 Fusion Design：
 
 ```bash
-npm install --save @uform/next
+npm install --save @alifd/next @uform/next
 ```
 
 ## 文档
@@ -41,6 +41,15 @@ https://alibaba.github.io/uform
 ## Demo
 
 https://codesandbox.io/s/245o92lnzy
+
+## Community
+
+
+
+| Online Chat Room                                             | 微信                                                         | 钉钉 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
+| [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB14awEUzTpK1RjSZKPXXa3UpXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
+
 
 
 ## LICENSE
@@ -55,7 +64,7 @@ Thanks goes to these wonderful people
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/janryWang"><img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub></a><br /><a href="#design-janryWang" title="Design">🎨</a></td><td align="center"><a href="http://cnt1992.github.io"><img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub></a><br /><a href="#design-cnt1992" title="Design">🎨</a></td><td align="center"><a href="https://www.linkedin.com/in/harry-yu-0a931a69/"><img src="https://avatars3.githubusercontent.com/u/2942913?v=4" width="100px;" alt="Harry Yu"/><br /><sub><b>Harry Yu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=yujiangshui" title="Documentation">📖</a></td></tr></table>
+<table><tr><td align="center"><a href="https://github.com/janryWang"><img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub></a><br /><a href="#design-janryWang" title="Design">🎨</a></td><td align="center"><a href="http://cnt1992.github.io"><img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub></a><br /><a href="#design-cnt1992" title="Design">🎨</a></td><td align="center"><a href="https://www.linkedin.com/in/harry-yu-0a931a69/"><img src="https://avatars3.githubusercontent.com/u/2942913?v=4" width="100px;" alt="Harry Yu"/><br /><sub><b>Harry Yu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=yujiangshui" title="Documentation">📖</a></td><td align="center"><a href="https://www.luoyangfu.com"><img src="https://avatars2.githubusercontent.com/u/22249411?v=4" width="100px;" alt="zsir"/><br /><sub><b>zsir</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=zsirfs" title="Code">💻</a></td><td align="center"><a href="http://www.monkindey.xyz/"><img src="https://avatars0.githubusercontent.com/u/6913898?v=4" width="100px;" alt="Kiho · Cham"/><br /><sub><b>Kiho · Cham</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=monkindey" title="Code">💻</a> <a href="https://github.com/alibaba/uform/commits?author=monkindey" title="Documentation">📖</a></td><td align="center"><a href="http://whj1995.xyz"><img src="https://avatars2.githubusercontent.com/u/22634735?v=4" width="100px;" alt="Hongjiang Wu"/><br /><sub><b>Hongjiang Wu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=whj1995" title="Documentation">📖</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 

@@ -122,6 +122,7 @@ registerFormField(
   'year',
   connect({
     getValueFromEvent(_, value) {
+      console.log(_, value)
       return transformMoment(value)
     },
     getProps: props => {
