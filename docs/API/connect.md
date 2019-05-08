@@ -1,6 +1,7 @@
 # connect
 
 ## 介绍
+
 包装字段组件，让字段组件只需要支持value/defaultValue/onChange属性即可快速接入表单
 
 ## 类型描述
@@ -18,14 +19,11 @@ type connect({
 })(Target : ReactComponent)
 ```
 
-
-
 ## 依赖
 
 ```javascript
 import {connect} from '@alife/rs-uform'
 ```
-
 
 ## 用例
 
