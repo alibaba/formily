@@ -56,7 +56,7 @@ type Mutators {
 
 ## 用例
 
-```jsx
+```javascript
 import {registerFormFields,connect} from '@uform/react'
 
 registerFormFields({

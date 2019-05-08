@@ -3,7 +3,6 @@
   "version": "0.1.11",
   "license": "MIT",
   "main": "lib",
-  "types": "./index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
