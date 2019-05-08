@@ -1,6 +1,7 @@
 # createVirtualBox
 
 ## 介绍
+
 创建一个虚拟盒子组件，就是说这个组件可以作为schema节点描述，但是它并不占数据节点，我们可以使用该API来创建一些布局相关的组件。
 
 ## 类型描述
@@ -11,13 +12,11 @@ type createVirtualBox(name : String,component : Function)
 
 > 为什么需要传name，是因为如果要在json-schema对象中描述，需要可存储，就必须要有一个Key
 
-
 ## 依赖
 
 ```javascript
 import {createVirtualBox} from '@alife/rs-uform'
 ```
-
 
 ## 用例
 
