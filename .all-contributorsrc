@@ -54,6 +54,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "whj1995",
+      "name": "Hongjiang Wu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/22634735?v=4",
+      "profile": "http://whj1995.xyz",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
