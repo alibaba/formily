@@ -15,7 +15,7 @@
 ## 特性
 
 - 🚀 高性能，字段分布式渲染，大大减轻 React 渲染压力
-- 🧩 支持 Ant Design/Fusion Next 组件体系
+- 💡 支持 Ant Design/Fusion Next 组件体系
 - 🎨 JSX 标签化写法/JSON Schema 数据驱动方案无缝迁移过渡
 - 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
 - 🌯 支持各种表单复杂布局方案
