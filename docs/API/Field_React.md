@@ -27,7 +27,7 @@ import {Field} from '@uform/react'
 | x-props | 字段UI组件属性，API请参考对应fusion next/ant design组件API | Object | {} |
 | x-props.editable | 字段是否可编辑 | Boolean | true |
 | x-render | 字段渲染函数 | `Function(fieldProps : FieldRenderProps){}` |  |
-| x-rules | 字段校验规则 | `Object | Arra<String | Object | Function> | String | Function` |  |
+| x-rules | 字段校验规则 | `Object | Array<String | Object | Function> | String | Function` |  |
 
 ## x-rules详解
 
