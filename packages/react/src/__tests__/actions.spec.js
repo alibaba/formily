@@ -16,6 +16,7 @@ test('createFormActions', async () => {
   const TestComponent = () => (
     <SchemaForm actions={actions}>
       <Field name='aaa' type='string' />
+      <Field name='bbb' type='string' />
     </SchemaForm>
   )
 
@@ -25,4 +26,19 @@ test('createFormActions', async () => {
   expect(queryByText('123')).toBeVisible()
   await actions.setFieldState('aaa', state => (state.value = 'hello world'))
   expect(queryByText('hello world')).toBeVisible()
+  const schemaData = [
+    { name: 'aaa', value: 'value of aaa field' },
+    { name: 'bbb', value: 'value of bbb field' }
+  ]
+  const updateQueue = []
+  schemaData.forEach(({ name, value }) => {
+    updateQueue.push(
+      actions.setFieldState(name, state => {
+        state.value = value
+      })
+    )
+  })
+  await Promise.all(updateQueue)
+  expect(queryByText('value of aaa field')).toBeVisible()
+  expect(queryByText('value of bbb field')).toBeVisible()
 })
