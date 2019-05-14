@@ -8,9 +8,7 @@
 
 ## 依赖
 
-```
-import {FormLayout} from '@uform/next(antd)'
-```
+    import {FormLayout} from '@uform/next(antd)'
 
 ## API
 

@@ -1,6 +1,7 @@
 # registerFormFields
 
 ## 介绍
+
 批量注册一个表单字段组件
 
 ## 类型描述
@@ -17,10 +18,9 @@ type registerFormField(
 import {registerFormFields} from '@uform/react'
 ```
 
-
 ## API
-> 注册的组件将会接收以下属性列表
 
+> 注册的组件将会接收以下属性列表
 
 ```typescript
 type FieldRenderProps {

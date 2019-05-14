@@ -1,9 +1,11 @@
 # setValidationLanguage
 
 ## 介绍
+
 设置校验错误提示的国际化语言
 
 ## 类型描述
+
 ```typescript
 type setValidationLanguage(lang : String)
 ```
@@ -13,7 +15,6 @@ type setValidationLanguage(lang : String)
 ```javascript
 import {setValidationLanguage} from '@alife/uform'
 ```
-
 
 ## 用例
 

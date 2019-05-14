@@ -1,6 +1,7 @@
 # registerFormWrapper
 
 ## 介绍
+
 注册一个表单包装组件，类似于HOC，先注册的组件层级深，后注册的组件层级浅
 
 ## 类型描述
@@ -16,7 +17,6 @@ type Wrapper(FormComponent : Function) : ReactComponent
 ```javascript
 import {registerFormWrapper} from '@uform/react'
 ```
-
 
 ## 用例
 
