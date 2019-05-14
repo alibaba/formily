@@ -1,6 +1,7 @@
 # FormPath
 
 ## 介绍
+
 专注于解决表单字段的路径匹配问题
 
 ## 类型描述
@@ -28,58 +29,43 @@ type FormPath {
 import {FormPath} from '@alife/uform'
 ```
 
-
 ## Pattern路径匹配语法
 
 **全通配**
 
-```
-"*"
-```
+    "*"
 
 **扩展匹配**
 
-```
-"aaa~" or "~" or "aaa~.bbb.cc"
-```
+    "aaa~" or "~" or "aaa~.bbb.cc"
 
 **部分通配**
 
-```
-"a.b.*.c.*"
-```
+    "a.b.*.c.*"
 
 **分组通配**
 
-```
-"a.b.*(aa.bb.dd,cc,mm)"
-or 
-"a.b.*(!aa.bb.dd,cc,mm)"
-```
+    "a.b.*(aa.bb.dd,cc,mm)"
+    or 
+    "a.b.*(!aa.bb.dd,cc,mm)"
 
 **嵌套分组通配**
 
-```
-"a.b.*(aa.bb.*(aa.b,c),cc,mm)"
-or 
-"a.b.*(!aa.bb.*(aa.b,c),cc,mm)"
-```
+    "a.b.*(aa.bb.*(aa.b,c),cc,mm)"
+    or 
+    "a.b.*(!aa.bb.*(aa.b,c),cc,mm)"
 
 **范围通配**
 
-```
-"a.b.*[10:100]"
-or 
-"a.b.*[10:]"
-or 
-"a.b.*[:100]"
-```
+    "a.b.*[10:100]"
+    or 
+    "a.b.*[10:]"
+    or 
+    "a.b.*[:100]"
 
 **关键字通配**
 
-```
-"a.b.[[cc.uu()sss*\\[1222\\]]]"
-```
+    "a.b.[[cc.uu()sss*\\[1222\\]]]"
 
 ## 用例
 
