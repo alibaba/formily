@@ -9,7 +9,7 @@
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
     "build": "node ./scripts/build.js",
-    "build:docs": "node ./scripts/docs.js build -i docs -o packages/docs",
+    "build:docs": "node ./scripts/docs.js build -i docs -o docs",
     "build:watch": "node ./scripts/build.js --watch",
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",

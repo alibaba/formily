@@ -1,7 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
 const { command } = require('doc-scripts')
-const pkg = require('../packages/docs/package.json')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
@@ -48,20 +47,6 @@ const createDocs = async () => {
       footer: FOOTER_HTML
     },
     (webpackConfig, env) => {
-      if (env === 'production') {
-        webpackConfig.output.filename = 'bundle.[name].js'
-        webpackConfig.output.publicPath = `//unpkg.com/@uform/docs@${
-          pkg.version
-        }/`
-        webpackConfig.plugins.forEach(plugin => {
-          if (plugin.constructor.name === 'HtmlWebpackPlugin') {
-            plugin.options.filename = path.resolve(
-              __dirname,
-              `../docs/${plugin.options.filename}`
-            )
-          }
-        })
-      }
       webpackConfig.devtool = 'none'
       webpackConfig.externals = {
         ...webpackConfig.externals,
