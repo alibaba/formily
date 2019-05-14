@@ -136,12 +136,9 @@ export class Form {
         resolve()
       }
       if (this.updateQueue.length > 0) {
-        //if (this.updateRafId) caf(this.updateRafId)
-        //this.updateRafId = raf(() => {
-          if (this.destructed) return
-          this.updateFieldStateFromQueue(buffer)
-          resolve()
-        //})
+        if (this.destructed) return
+        this.updateFieldStateFromQueue(buffer)
+        resolve()
       }
     })
   }
