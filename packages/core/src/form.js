@@ -128,17 +128,21 @@ export class Form {
       buffer = false
     }
     return new Promise(resolve => {
+      let resolveInside = true
       if (isStr(path) || isArr(path) || isFn(path)) {
+        resolveInside = false
         this.updateQueue.push({ path, callback, resolve })
       }
       if (this.syncUpdateMode) {
         this.updateFieldStateFromQueue(buffer)
+        resolveInside && resolve()
       }
       if (this.updateQueue.length > 0) {
         if (this.updateRafId) caf(this.updateRafId)
         this.updateRafId = raf(() => {
           if (this.destructed) return
           this.updateFieldStateFromQueue(buffer)
+          resolveInside && resolve()
         })
       }
     })
@@ -229,9 +233,6 @@ export class Form {
                 } else {
                   this.formNotify(field.publishState())
                 }
-                if (resolve && isFn(resolve)) {
-                  resolve()
-                }
               })
             }
           } else {
@@ -247,6 +248,9 @@ export class Form {
           }
         }
       })
+      if (resolve && isFn(resolve)) {
+        resolve()
+      }
     })
     this.updateQueue = []
   }
