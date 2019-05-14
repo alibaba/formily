@@ -48,7 +48,7 @@ https://codesandbox.io/s/245o92lnzy
 
 | Online Chat Room                                             | 微信                                                         | 钉钉 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
-| [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB14awEUzTpK1RjSZKPXXa3UpXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
+| [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
 
 
 
