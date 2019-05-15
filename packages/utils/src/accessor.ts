@@ -72,7 +72,7 @@ class DestructTokenizer {
 
   private handlers: TokenizerHandlers
 
-  private state(char: string, prev?: string): void
+  private state: (char: string, prev?: string) => void
 
   private declareNameStart: number
 
