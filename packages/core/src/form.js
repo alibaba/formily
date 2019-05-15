@@ -127,20 +127,19 @@ export class Form {
       callback = buffer
       buffer = false
     }
-    if (isStr(path) || isArr(path) || isFn(path)) {
-      this.updateQueue.push({ path, callback })
-    }
     return new Promise(resolve => {
+      if (isStr(path) || isArr(path) || isFn(path)) {
+        this.updateQueue.push({ path, callback, resolve })
+      }
       if (this.syncUpdateMode) {
         this.updateFieldStateFromQueue(buffer)
-        resolve()
+        return resolve()
       }
       if (this.updateQueue.length > 0) {
         if (this.updateRafId) caf(this.updateRafId)
         this.updateRafId = raf(() => {
           if (this.destructed) return
           this.updateFieldStateFromQueue(buffer)
-          resolve()
         })
       }
     })
@@ -208,7 +207,7 @@ export class Form {
   updateFieldStateFromQueue(buffer) {
     const failed = {}
     const rafIdMap = {}
-    each(this.updateQueue, ({ path, callback }, i) => {
+    each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
         if (path && (isFn(path) || isArr(path) || isStr(path))) {
           if (isFn(path) ? path(field) : field.pathEqual(path)) {
@@ -217,7 +216,7 @@ export class Form {
               field.dirty = false
             }
             if (path.hasWildcard) {
-              this.updateBuffer.push(path.string, callback, { path })
+              this.updateBuffer.push(path.string, callback, { path, resolve })
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
@@ -233,14 +232,17 @@ export class Form {
                 }
               })
             }
+            if (resolve && isFn(resolve)) {
+              resolve()
+            }
           } else {
             failed[i] = failed[i] || 0
             failed[i]++
             if (this.fieldSize <= failed[i] && (buffer || path.hasWildcard)) {
               if (isStr(path)) {
-                this.updateBuffer.push(path, callback, { path })
+                this.updateBuffer.push(path, callback, { path, resolve })
               } else if (isFn(path) && path.hasWildcard) {
-                this.updateBuffer.push(path.string, callback, { path })
+                this.updateBuffer.push(path.string, callback, { path, resolve })
               }
             }
           }
@@ -252,7 +254,7 @@ export class Form {
 
   updateFieldStateFromBuffer(field) {
     const rafIdMap = {}
-    this.updateBuffer.forEach(({ path, values, key }) => {
+    this.updateBuffer.forEach(({ path, values, key, resolve }) => {
       if (isFn(path) ? path(field) : field.pathEqual(path)) {
         values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
@@ -274,6 +276,9 @@ export class Form {
         }
         if (!path.hasWildcard) {
           this.updateBuffer.remove(key)
+        }
+        if (resolve && isFn(resolve)) {
+          resolve()
         }
       }
     })
