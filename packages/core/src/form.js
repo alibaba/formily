@@ -133,7 +133,7 @@ export class Form {
       }
       if (this.syncUpdateMode) {
         this.updateFieldStateFromQueue(buffer)
-        return
+        return resolve()
       }
       if (this.updateQueue.length > 0) {
         if (this.updateRafId) caf(this.updateRafId)
