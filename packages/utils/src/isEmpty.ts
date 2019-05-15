@@ -1,31 +1,9 @@
-/**
- * copyright by https://github.com/ianstormtaylor/is-empty
- */
 
-/**
- * Has own property.
- *
- * @type {Function}
- */
+const has = Object.prototype.hasOwnProperty
 
-var has = Object.prototype.hasOwnProperty
+const toString = Object.prototype.toString
 
-/**
- * To string.
- *
- * @type {Function}
- */
-
-var toString = Object.prototype.toString
-
-/**
- * Test whether a value is "empty".
- *
- * @param {Mixed} val
- * @return {Boolean}
- */
-
-export function isEmpty(val) {
+export function isEmpty(val: any): boolean {
   // Null and Undefined...
   if (val == null) return true
 

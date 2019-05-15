@@ -2,6 +2,8 @@ import { isArr } from './types'
 
 type EachCallback = (item: any, key: string | number) => void | boolean
 
+type ReduceCallback = (buffer: any, item: any, key: string | number) => void | boolean
+
 type ArrayLike = object | Array<any>
 
 export const toArr = (val: any): Array<any> => (isArr(val) ? val : val ? [val] : [])
@@ -9,20 +11,21 @@ export const toArr = (val: any): Array<any> => (isArr(val) ? val : val ? [val] :
 export const each = (val: ArrayLike, callback: EachCallback, revert?: boolean) => {
   if (isArr(val)) {
     if (revert) {
-      for (let i = (val as Array<any>).length - 1; i >= 0; i--) {
+      for (let i: number = (val as Array<any>).length - 1; i >= 0; i--) {
         if (callback(val[i], i) === false) {
           return
         }
       }
     } else {
-      for (let i = 0, length = (val as Array<any>).length; i < length; i++) {
+      for (let i: number = 0, length = (val as Array<any>).length; i < length; i++) {
         if (callback(val[i], i) === false) {
           return
         }
       }
     }
   } else {
-    for (let key in val) {
+    let key: string
+    for (key in val) {
       if (Object.hasOwnProperty.call(val, key)) {
         if (callback(val[key], key) === false) {
           return
@@ -49,7 +52,7 @@ export const map = (val: ArrayLike, callback: EachCallback, revert?: boolean): A
   return res
 }
 
-export const reduce = (val: ArrayLike, callback: EachCallback, initial: any, revert?: boolean): any => {
+export const reduce = (val: ArrayLike, callback: ReduceCallback, initial: any, revert?: boolean): any => {
   let res = initial
   each(
     val,

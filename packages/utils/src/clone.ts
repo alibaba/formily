@@ -1,39 +1,41 @@
 import { isFn } from './types'
 
-const self = this || global || window
+type Filter = (value: any, key: string) => any
+
+const self: { [key: string]: any } = this || global || window
 
 const NATIVE_KEYS = [
-  ['Map', map => new Map(map)],
-  ['WeakMap', map => new WeakMap(map)],
-  ['WeakSet', set => new WeakSet(set)],
-  ['Set', set => new Set(set)],
+  ['Map', (map: any) => new Map(map)],
+  ['WeakMap', (map: any) => new WeakMap(map)],
+  ['WeakSet', (set: any) => new WeakSet(set)],
+  ['Set', (set: any) => new Set(set)],
   'FileList',
   'File',
   'URL',
   'RegExp',
   [
     'Promise',
-    promise => new Promise((resolve, reject) => promise.then(resolve, reject))
+    (promise: Promise<any>) => new Promise((resolve, reject) => promise.then(resolve, reject))
   ]
 ]
 
-const isNativeObject = values => {
+const isNativeObject = (values: any) : any => {
   for (let i = 0; i < NATIVE_KEYS.length; i++) {
     let item = NATIVE_KEYS[i]
     if (Array.isArray(item) && item[0]) {
-      if (self[item[0]] && values instanceof self[item[0]]) {
+      if (self[item[0] as string] && values instanceof self[item[0] as string]) {
         return item[1] ? item[1] : item[0]
       }
     } else {
-      if (self[item] && values instanceof self[item]) {
+      if (self[item as string] && values instanceof self[item as string]) {
         return item
       }
     }
   }
 }
 
-export const clone = (values, filter) => {
-  let _nativeClone
+export const clone = (values: any, filter: Filter) => {
+  let _nativeClone: (values: any) => any
   if (Array.isArray(values)) {
     return values.map(item => clone(item, filter))
   } else if ((_nativeClone = isNativeObject(values))) {

@@ -2,22 +2,25 @@ import { isFn, isArr } from './types'
 var isArray = isArr
 var keyList = Object.keys
 var hasProp = Object.prototype.hasOwnProperty
+
+type Filter = (comparies: { a: any, b: any }, key: string) => boolean
+
 /* eslint-disable */
-function equal(a, b, filter) {
+function equal(a: any, b: any, filter: Filter) {
   // fast-deep-equal index.js 2.0.1
   if (a === b) return true
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
     var arrA = isArray(a)
     var arrB = isArray(b)
-    var i
-    var length
-    var key
+    var i: number
+    var length: number
+    var key: string | number
 
     if (arrA && arrB) {
       length = a.length
       if (length !== b.length) return false
-      for (i = length; i-- !== 0; ) if (!equal(a[i], b[i], filter)) return false
+      for (i = length; i-- !== 0;) if (!equal(a[i], b[i], filter)) return false
       return true
     }
 
@@ -34,17 +37,17 @@ function equal(a, b, filter) {
     if (regexpA && regexpB) return a.toString() == b.toString()
     var urlA = a instanceof URL
     var urlB = b instanceof URL
-    if (urlA && urlB) return urlA.href == urlB.href
+    if (urlA && urlB) return a.href == b.href
     var keys = keyList(a)
     length = keys.length
 
     if (length !== keyList(b).length) return false
 
-    for (i = length; i-- !== 0; ) if (!hasProp.call(b, keys[i])) return false
+    for (i = length; i-- !== 0;) if (!hasProp.call(b, keys[i])) return false
     // end fast-deep-equal
 
     // Custom handling for React
-    for (i = length; i-- !== 0; ) {
+    for (i = length; i-- !== 0;) {
       key = keys[i]
       if (key === '_owner' && a.$$typeof) {
         // React-specific: avoid traversing React elements' _owner.
@@ -76,7 +79,7 @@ function equal(a, b, filter) {
 }
 // end fast-deep-equal
 
-export const isEqual = function exportedEqual(a, b, filter) {
+export const isEqual = function exportedEqual(a: any, b: any, filter: Filter) {
   try {
     return equal(a, b, filter)
   } catch (error) {

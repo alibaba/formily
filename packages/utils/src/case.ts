@@ -1,3 +1,5 @@
-export const camelCase = require('camel-case')
+import camelCase from 'camel-case'
+export { camelCase }
 
-export const lowercase = str => String(str || '').toLowerCase()
+
+export const lowercase = (str: any) => String(str || '').toLowerCase()
