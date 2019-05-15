@@ -1,6 +1,6 @@
 export const defer = () => {
-  let _resolve
-  let _reject
+  let _resolve: (payload: any) => void
+  let _reject: (error: any) => void
   const promise = new Promise((resolve, reject) => {
     _resolve = resolve
     _reject = reject

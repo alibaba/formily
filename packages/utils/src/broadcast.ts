@@ -1,11 +1,16 @@
 import { each } from './array'
 import { isFn } from './types'
 
-export class Broadcast {
-  entries = []
-  buffer = []
+type Subscriber = (notification: any) => void
 
-  subscribe(subscriber, subscription) {
+type Filter = (payload: any, subscription: any) => any
+
+export class Broadcast {
+  private entries = []
+  private buffer = []
+  private length: number
+
+  subscribe(subscriber: Subscriber, subscription: any) {
     if (!isFn(subscriber)) return () => { }
     let index = this.entries.length
     this.entries.push({
@@ -26,7 +31,7 @@ export class Broadcast {
   flushBuffer({ subscriber, subscription }) {
     each(this.buffer, ({ payload, filter }) => {
       if (isFn(filter)) {
-        let notification
+        let notification: any
         if ((notification = filter(payload, subscription))) {
           subscriber(notification)
         }
@@ -36,14 +41,14 @@ export class Broadcast {
     })
   }
 
-  notify(payload, filter) {
+  notify(payload: any, filter: Filter) {
     if (this.length === 0) {
       this.buffer.push({ payload, filter })
       return
     }
     each(this.entries, ({ subscriber, subscription }) => {
       if (isFn(filter)) {
-        let notification
+        let notification: any
         if ((notification = filter(payload, subscription))) {
           subscriber(notification)
         }

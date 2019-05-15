@@ -11,13 +11,13 @@ type TokenizerHandlers = {
   destructKey(str: string, isColon?: boolean): void
 }
 
+export type Path = Array<string | number> | string
+
 type Destruct = {
   [key: string]: string
 } | Path
 
 type TraverseCallback = (path: string[], item: any) => void
-
-type Path = Path
 
 type Getter = (obj: any, path: Path, value?: any) => any
 
@@ -274,7 +274,7 @@ const parseDestruct = (string: string | number) => {
 }
 
 const traverse = (obj: any, callback: TraverseCallback) => {
-  const _traverse = (obj: any, path: Path, callback: TraverseCallback) => {
+  const _traverse = (obj: any, path: string[], callback: TraverseCallback) => {
     if (isStr(obj)) return callback(obj, obj)
     each(obj, (item: any, key: string) => {
       const _path = path.concat(key)
@@ -290,7 +290,7 @@ const traverse = (obj: any, callback: TraverseCallback) => {
 }
 
 const mapReduce = (obj: any, callback: TraverseCallback) => {
-  const _traverse = (obj: any, path: Path, callback: TraverseCallback) => {
+  const _traverse = (obj: any, path: string[], callback: TraverseCallback) => {
     return map(obj, (item: any, key: string) => {
       const _path = path.concat(key)
       if (isArr(item) || isPlainObj(item)) {
@@ -304,7 +304,7 @@ const mapReduce = (obj: any, callback: TraverseCallback) => {
   return _traverse(obj, [], callback)
 }
 
-const parseDesturctPath = (path: Path) => {
+const parseDesturctPath = (path: Path): any => {
   const _path = getPathSegments(path)
   const lastKey = _path[_path.length - 1]
   const startPath = _path.slice(0, _path.length - 1)
@@ -317,7 +317,7 @@ const parseDesturctPath = (path: Path) => {
   }
 }
 
-const parsePaths = (path: Path) => {
+const parsePaths = (path: Path): any => {
   const result = []
   const parsed = parseDesturctPath(path)
   if (isStr(parsed.destruct)) {
@@ -339,7 +339,7 @@ const parsePaths = (path: Path) => {
 
 const resolveGetIn = (get: Getter) => {
   const cache = new Map()
-  return (obj: any, path: Path, value: any): any => {
+  return (obj: any, path: Path, value?: any): any => {
     let ast = null
     if (!(ast = cache.get(path))) {
       ast = parseDesturctPath(path)
@@ -401,7 +401,7 @@ function _getIn(obj: any, path: Path, value: any) {
   path = toString(path)
 
   if (path in obj) {
-    return obj[path]
+    return obj[path as string]
   }
 
   const pathArr = getPathSegments(path)
@@ -438,7 +438,7 @@ function _setIn(obj: any, path: Path, value: any) {
   path = toString(path)
 
   if (path in obj) {
-    obj[path] = value
+    obj[path as string] = value
     return
   }
 
@@ -467,7 +467,7 @@ function _deleteIn(obj: any, path: Path) {
   path = toString(path)
 
   if (path in obj) {
-    delete obj[path]
+    delete obj[path as string]
     return
   }
 

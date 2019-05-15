@@ -21,7 +21,7 @@
 const NEWER = Symbol('newer')
 const OLDER = Symbol('older')
 
-export function LRUMap(limit, entries) {
+export function LRUMap(limit: number, entries?: any) {
   if (typeof limit !== 'number') {
     // called as (entries)
     entries = limit
@@ -41,14 +41,14 @@ export function LRUMap(limit, entries) {
   }
 }
 
-function Entry(key, value) {
+function Entry(key: any, value: any) {
   this.key = key
   this.value = value
   this[NEWER] = undefined
   this[OLDER] = undefined
 }
 
-LRUMap.prototype._markEntryAsUsed = function(entry) {
+LRUMap.prototype._markEntryAsUsed = function (entry: any) {
   if (entry === this.newest) {
     // Already the most recenlty used entry, so no need to update the list
     return
@@ -74,8 +74,8 @@ LRUMap.prototype._markEntryAsUsed = function(entry) {
   this.newest = entry
 }
 
-LRUMap.prototype.assign = function(entries) {
-  let entry
+LRUMap.prototype.assign = function (entries: any) {
+  let entry: any
   let limit = this.limit || Number.MAX_VALUE
   this._keymap.clear()
   let it = entries[Symbol.iterator]()
@@ -97,7 +97,7 @@ LRUMap.prototype.assign = function(entries) {
   this.size = this._keymap.size
 }
 
-LRUMap.prototype.get = function(key) {
+LRUMap.prototype.get = function (key: any) {
   // First, find our cache entry
   var entry = this._keymap.get(key)
   if (!entry) return // Not cached. Sorry.
@@ -106,7 +106,7 @@ LRUMap.prototype.get = function(key) {
   return entry.value
 }
 
-LRUMap.prototype.set = function(key, value) {
+LRUMap.prototype.set = function (key: any, value: any) {
   var entry = this._keymap.get(key)
 
   if (entry) {
@@ -139,7 +139,7 @@ LRUMap.prototype.set = function(key, value) {
   return this
 }
 
-LRUMap.prototype.shift = function() {
+LRUMap.prototype.shift = function () {
   // todo: handle special case when limit == 1
   var entry = this.oldest
   if (entry) {
@@ -165,16 +165,16 @@ LRUMap.prototype.shift = function() {
 // Following code is optional and can be removed without breaking the core
 // functionality.
 
-LRUMap.prototype.find = function(key) {
+LRUMap.prototype.find = function (key: any) {
   let e = this._keymap.get(key)
   return e ? e.value : undefined
 }
 
-LRUMap.prototype.has = function(key) {
+LRUMap.prototype.has = function (key: any) {
   return this._keymap.has(key)
 }
 
-LRUMap.prototype['delete'] = function(key) {
+LRUMap.prototype['delete'] = function (key: any) {
   var entry = this._keymap.get(key)
   if (!entry) return
   this._keymap.delete(entry.key)
@@ -201,20 +201,20 @@ LRUMap.prototype['delete'] = function(key) {
   return entry.value
 }
 
-LRUMap.prototype.clear = function() {
+LRUMap.prototype.clear = function () {
   // Not clearing links should be safe, as we don't expose live links to user
   this.oldest = this.newest = undefined
   this.size = 0
   this._keymap.clear()
 }
 
-function EntryIterator(oldestEntry) {
+function EntryIterator(oldestEntry: any) {
   this.entry = oldestEntry
 }
-EntryIterator.prototype[Symbol.iterator] = function() {
+EntryIterator.prototype[Symbol.iterator] = function () {
   return this
 }
-EntryIterator.prototype.next = function() {
+EntryIterator.prototype.next = function () {
   let ent = this.entry
   if (ent) {
     this.entry = ent[NEWER]
@@ -227,10 +227,10 @@ EntryIterator.prototype.next = function() {
 function KeyIterator(oldestEntry) {
   this.entry = oldestEntry
 }
-KeyIterator.prototype[Symbol.iterator] = function() {
+KeyIterator.prototype[Symbol.iterator] = function () {
   return this
 }
-KeyIterator.prototype.next = function() {
+KeyIterator.prototype.next = function () {
   let ent = this.entry
   if (ent) {
     this.entry = ent[NEWER]
@@ -243,10 +243,10 @@ KeyIterator.prototype.next = function() {
 function ValueIterator(oldestEntry) {
   this.entry = oldestEntry
 }
-ValueIterator.prototype[Symbol.iterator] = function() {
+ValueIterator.prototype[Symbol.iterator] = function () {
   return this
 }
-ValueIterator.prototype.next = function() {
+ValueIterator.prototype.next = function () {
   let ent = this.entry
   if (ent) {
     this.entry = ent[NEWER]
@@ -256,23 +256,23 @@ ValueIterator.prototype.next = function() {
   }
 }
 
-LRUMap.prototype.keys = function() {
+LRUMap.prototype.keys = function () {
   return new KeyIterator(this.oldest)
 }
 
-LRUMap.prototype.values = function() {
+LRUMap.prototype.values = function () {
   return new ValueIterator(this.oldest)
 }
 
-LRUMap.prototype.entries = function() {
+LRUMap.prototype.entries = function () {
   return this
 }
 
-LRUMap.prototype[Symbol.iterator] = function() {
+LRUMap.prototype[Symbol.iterator] = function () {
   return new EntryIterator(this.oldest)
 }
 
-LRUMap.prototype.forEach = function(fun, thisObj) {
+LRUMap.prototype.forEach = function (fun: (value: any, key: any, ctx: object) => void, thisObj: any) {
   if (typeof thisObj !== 'object') {
     thisObj = this
   }
@@ -284,7 +284,7 @@ LRUMap.prototype.forEach = function(fun, thisObj) {
 }
 
 /** Returns a JSON (array) representation */
-LRUMap.prototype.toJSON = function() {
+LRUMap.prototype.toJSON = function () {
   var s = new Array(this.size)
   var i = 0
   var entry = this.oldest
@@ -296,7 +296,7 @@ LRUMap.prototype.toJSON = function() {
 }
 
 /** Returns a String representation */
-LRUMap.prototype.toString = function() {
+LRUMap.prototype.toString = function () {
   var s = ''
   var entry = this.oldest
   while (entry) {
