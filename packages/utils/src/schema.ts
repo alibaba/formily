@@ -13,11 +13,24 @@ type PathInfo = {
   schemaPath: string[]
 }
 
+type Dispatcher = (eventName: string, payload: any) => void
+
+type RuleDescription = {
+  required?: boolean
+  message?: string,
+  pattern?: RegExp | string,
+  validator?: RuleHandler
+}
+
+type RuleHandler = (value: any, rule: RuleDescription, values: object, name: string) => string | null
+
 export type Schema = {
   type?: string
   title?: string
   description?: string
   default?: any
+  required?: boolean
+  enum?: Array<{ label: string, value: any } | string | number>
   properties?: {
     [key: string]: Schema
   }
@@ -26,8 +39,9 @@ export type Schema = {
   maxItems?: number
   ['x-props']: object
   ['x-index']: number
+  ['x-rules']: RuleHandler | Array<RuleHandler | RuleDescription | string> | string | RuleDescription
   ['x-component']: string
-  ['x-effect']: (dispatch: any) => { [key: string]: any }
+  ['x-effect']: (dispatch: Dispatcher) => { [key: string]: any }
 }
 
 export const getSchemaNodeFromPath = (schema: Schema, path: Path) => {
@@ -51,7 +65,7 @@ export const schemaIs = (schema: Schema, type: string) => {
   return schema && schema.type === type
 }
 
-export const isVirtualBox = name => {
+export const isVirtualBox = (name: string) => {
   return !!VIRTUAL_BOXES[name]
 }
 

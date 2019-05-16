@@ -10,11 +10,19 @@ module.exports = {
   transform: {
     '^.+\\.jsx?$': 'babel-jest'
   },
+  preset: 'ts-jest',
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
     require.resolve('react-testing-library/cleanup-after-each'),
     './scripts/global.js'
   ],
+  globals: {
+    'ts-jest': {
+      babelConfig: true,
+      tsConfig: 'tsconfig.jest.json'
+    }
+  },
+  watchPlugins: ['jest-watch-lerna-packages'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     'package.json',
