@@ -1,0 +1,14 @@
+{
+  "preset": "ts-jest",
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es5",
+      "allowJs":false,
+      "noUnusedLocals":true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": false,
+      "declaration":true,
+      "outDir":"../lib"
+  }
+}
