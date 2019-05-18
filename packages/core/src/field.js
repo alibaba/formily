@@ -355,6 +355,7 @@ export class Field {
 
   updateState(reducer) {
     if (!isFn(reducer)) return
+    if (this.removed) return
     const published = {
       name: this.name,
       path: this.path,
