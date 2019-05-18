@@ -1,4 +1,4 @@
-import { isFn } from './types'
+import { isFn } from '@uform/types'
 
 type Filter = (value: any, key: string) => any
 
@@ -34,7 +34,7 @@ const isNativeObject = (values: any) : any => {
   }
 }
 
-export const clone = (values: any, filter: Filter) => {
+export const clone = (values: any, filter?: Filter) => {
   let _nativeClone: (values: any) => any
   if (Array.isArray(values)) {
     return values.map(item => clone(item, filter))

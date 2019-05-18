@@ -1,11 +1,9 @@
 import { each, toArr } from './array'
-import { getIn, setIn, Path } from './accessor'
-import { isFn } from './types'
+import { getIn, setIn } from './accessor'
+import { isFn, Path, Schema, ArrayPath } from '@uform/types'
 import { isEmpty } from './isEmpty'
 const numberRE = /^\d+$/
 const VIRTUAL_BOXES = {}
-
-type traverseCallback = (schema: Schema, payload: any, path?: Path) => void
 
 type PathInfo = {
   name: string
@@ -13,36 +11,6 @@ type PathInfo = {
   schemaPath: string[]
 }
 
-type Dispatcher = (eventName: string, payload: any) => void
-
-type RuleDescription = {
-  required?: boolean
-  message?: string,
-  pattern?: RegExp | string,
-  validator?: RuleHandler
-}
-
-type RuleHandler = (value: any, rule: RuleDescription, values: object, name: string) => string | null
-
-export type Schema = {
-  type?: string
-  title?: string
-  description?: string
-  default?: any
-  required?: boolean
-  enum?: Array<{ label: string, value: any } | string | number>
-  properties?: {
-    [key: string]: Schema
-  }
-  items?: Schema
-  minItems?: number
-  maxItems?: number
-  ['x-props']: object
-  ['x-index']: number
-  ['x-rules']: RuleHandler | Array<RuleHandler | RuleDescription | string> | string | RuleDescription
-  ['x-component']: string
-  ['x-effect']: (dispatch: Dispatcher) => { [key: string]: any }
-}
 
 export const getSchemaNodeFromPath = (schema: Schema, path: Path) => {
   let res = schema
@@ -77,7 +45,7 @@ const isVirtualBoxSchema = (schema: Schema) => {
   return isVirtualBox(schema['type']) || isVirtualBox(schema['x-component'])
 }
 
-const schemaTraverse = (schema: Schema, callback: traverseCallback, path: Array<number | string> = [], schemaPath = []) => {
+const schemaTraverse = (schema: Schema, callback: any, path: ArrayPath = [], schemaPath = []) => {
   if (schema) {
     if (isVirtualBoxSchema(schema)) {
       path = path.slice(0, path.length - 1)

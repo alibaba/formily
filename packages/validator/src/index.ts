@@ -10,9 +10,10 @@ import {
   format
 } from './utils'
 import { validate } from './validators'
+import { ValidateHandler, ValidateResponse, FieldMap } from '@uform/types'
 export * from './message'
 
-const flatArr = arr => {
+const flatArr = (arr: any[]) => {
   return reduce(
     arr,
     (buf, item) => {
@@ -28,10 +29,10 @@ const flatArr = arr => {
 
 export { format }
 
-export const runValidation = (values, fieldMap, forceUpdate, callback) => {
+export const runValidation = async (values: object, fieldMap: FieldMap, forceUpdate: boolean | ValidateHandler, callback: ValidateHandler): Promise<ValidateResponse[]> => {
   const queue = []
   if (isFn(forceUpdate)) {
-    callback = forceUpdate
+    callback = forceUpdate as ValidateHandler
     forceUpdate = false
   }
   each(fieldMap, (field, name) => {

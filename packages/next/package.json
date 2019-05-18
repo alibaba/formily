@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@uform/react": "0.1.12",
+    "@uform/types": "^0.1.12",
     "@uform/utils": "0.1.8",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",

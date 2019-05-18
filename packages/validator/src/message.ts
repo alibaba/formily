@@ -1,7 +1,15 @@
 import { getIn, each } from './utils'
 import locales from './locale'
 
-const self = this || global || window
+const self: any = this || global || window
+
+type LocaleMessages = {
+  [key: string]: string | LocaleMessages
+}
+
+type Locales = {
+  [lang: string]: LocaleMessages
+}
 
 const getBrowserlanguage = () => {
   if (!self.navigator) return 'en'
@@ -13,9 +21,9 @@ const LOCALE = {
   lang: getBrowserlanguage()
 }
 
-const getMatchLang = lang => {
+const getMatchLang = (lang: string) => {
   let find = LOCALE.lang
-  each(LOCALE.messages, (messages, key) => {
+  each(LOCALE.messages, (messages: LocaleMessages, key: string) => {
     if (key.indexOf(lang) > -1 || String(lang).indexOf(key) > -1) {
       find = key
       return false
@@ -24,15 +32,15 @@ const getMatchLang = lang => {
   return find
 }
 
-export const setLocale = locale => {
+export const setLocale = (locale: Locales) => {
   Object.assign(LOCALE.messages, locale)
 }
 
-export const setLanguage = lang => {
+export const setLanguage = (lang: string) => {
   LOCALE.lang = lang
 }
 
-export const getMessage = path => {
+export const getMessage = (path: string) => {
   return getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`) || 'field is not valid,but not found error message.'
 }
 

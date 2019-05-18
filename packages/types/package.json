@@ -1,8 +1,9 @@
 {
-  "name": "@uform/react",
+  "name": "@uform/types",
   "version": "0.1.12",
   "license": "MIT",
   "main": "lib",
+  "types":"lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
@@ -15,21 +16,10 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
-  },
-  "dependencies": {
-    "@uform/core": "0.1.12",
-    "@uform/types": "^0.1.12",
-    "@uform/utils": "0.1.8",
-    "@uform/validator": "0.1.8",
-    "pascal-case": "^2.0.1",
-    "react-eva": "^1.0.0",
-    "rxjs-compat": "^6.5.1"
+    "@babel/runtime": "^7.4.4"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050"
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
 }

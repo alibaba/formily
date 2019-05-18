@@ -1,6 +1,7 @@
-import { isStr, isNum, isPlainObj, isArr, isObj } from './types'
 import { map, each, every } from './array'
 import { LRUMap } from './lru'
+import { Path, PathNode, ArrayPath, isStr, isNum, isPlainObj, isArr, isObj } from '@uform/types'
+
 
 type TokenizerHandlers = {
   name(str: string): void
@@ -11,13 +12,9 @@ type TokenizerHandlers = {
   destructKey(str: string, isColon?: boolean): void
 }
 
-export type Path = Array<string | number> | string
-
 type Destruct = {
   [key: string]: string
 } | Path
-
-type TraverseCallback = (path: string[], item: any) => void
 
 type Getter = (obj: any, path: Path, value?: any) => any
 
@@ -39,7 +36,7 @@ function toString(val: Path | null) {
 
 const PathCache = new LRUMap(1000)
 
-export function getPathSegments(path: Array<string | number> | string | number | null): Array<string | number> {
+export function getPathSegments(path: Path): ArrayPath {
   if (isArr(path)) return path as Array<string>
   if (isStr(path) && path) {
     const cached = PathCache.get(path)
@@ -201,7 +198,7 @@ class DestructTokenizer {
 }
 
 
-const parseDestruct = (string: string | number) => {
+const parseDestruct = (string: PathNode) => {
   if (!isStr(string)) return string
 
   let destruct: Destruct
@@ -224,7 +221,7 @@ const parseDestruct = (string: string | number) => {
         return
       }
       if (isArr(destruct)) {
-        (destruct as Array<string>).push(key)
+        (destruct as string[]).push(key)
       } else if (isPlainObj(destruct)) {
         destruct[realKey && lastDestruct === destruct ? realKey : key] = key
       }
@@ -273,44 +270,44 @@ const parseDestruct = (string: string | number) => {
   return root
 }
 
-const traverse = (obj: any, callback: TraverseCallback) => {
-  const _traverse = (obj: any, path: string[], callback: TraverseCallback) => {
+const traverse = (obj: any, callback: any) => {
+  const visitor = (obj: any, path: string[]) => {
     if (isStr(obj)) return callback(obj, obj)
     each(obj, (item: any, key: string) => {
-      const _path = path.concat(key)
+      const newPath = path.concat(key)
       if (isArr(item) || isPlainObj(item)) {
-        _traverse(item, _path, callback)
+        visitor(item, newPath)
       } else {
-        callback(_path, item)
+        callback(newPath, item)
       }
     })
   }
 
-  return _traverse(obj, [], callback)
+  return visitor(obj, [])
 }
 
-const mapReduce = (obj: any, callback: TraverseCallback) => {
-  const _traverse = (obj: any, path: string[], callback: TraverseCallback) => {
+const mapReduce = (obj: any, callback: any) => {
+  const visitor = (obj: any, path: string[]) => {
     return map(obj, (item: any, key: string) => {
-      const _path = path.concat(key)
+      const newPath = path.concat(key)
       if (isArr(item) || isPlainObj(item)) {
-        return _traverse(item, _path, callback)
+        return visitor(item, newPath)
       } else {
-        return callback(_path, _path.slice(0, _path.length - 1).concat(item))
+        return callback(newPath, newPath.slice(0, newPath.length - 1).concat(item))
       }
     })
   }
 
-  return _traverse(obj, [], callback)
+  return visitor(obj, [])
 }
 
 const parseDesturctPath = (path: Path): any => {
-  const _path = getPathSegments(path)
-  const lastKey = _path[_path.length - 1]
-  const startPath = _path.slice(0, _path.length - 1)
+  const newPath = getPathSegments(path)
+  const lastKey = newPath[newPath.length - 1]
+  const startPath = newPath.slice(0, newPath.length - 1)
   const destruct = parseDestruct(lastKey)
   return {
-    path: _path,
+    path: newPath,
     lastKey,
     startPath,
     destruct
@@ -357,7 +354,7 @@ const resolveGetIn = (get: Getter) => {
 const resolveUpdateIn = (update: Setter, getIn: Getter) => {
   const cache = new Map()
   return (obj: any, path: Path, value: any) => {
-    let paths = []
+    let paths: any = []
     if (!(paths = cache.get(path))) {
       paths = parsePaths(path)
       cache.set(path, paths)
@@ -375,7 +372,7 @@ const resolveUpdateIn = (update: Setter, getIn: Getter) => {
 const resolveExistIn = (has: HasIn) => {
   const cache = new Map()
   return (obj: any, path: Path) => {
-    let paths = []
+    let paths: any = []
     if (!(paths = cache.get(path))) {
       paths = parsePaths(path)
       cache.set(path, paths)
@@ -478,7 +475,7 @@ function _deleteIn(obj: any, path: Path) {
 
     if (i === pathArr.length - 1) {
       if (isArr(obj)) {
-        obj.splice(p, 1)
+        obj.splice(p as number, 1)
       } else {
         delete obj[p]
       }
