@@ -1,4 +1,4 @@
-import { Validator, RuleDescription, DefaultPatternRule } from './rule'
+import { Rule } from './rule'
 import { Dispatcher } from './effects'
 
 
@@ -17,7 +17,7 @@ export type Schema = {
   maxItems?: number
   ['x-props']: object
   ['x-index']: number
-  ['x-rules']: Validator | Array<Validator | RuleDescription | DefaultPatternRule> | DefaultPatternRule | RuleDescription
+  ['x-rules']: Rule
   ['x-component']: string
   ['x-effect']: (dispatch: Dispatcher) => { [key: string]: any }
 }
