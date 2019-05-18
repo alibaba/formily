@@ -18,6 +18,7 @@
     "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
+    "@uform/types": "^0.1.12",
     "@uform/utils": "0.1.8",
     "@uform/validator": "0.1.8",
     "dot-match": "^0.1.18",

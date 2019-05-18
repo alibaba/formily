@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@uform/react": "0.1.12",
+    "@uform/types": "^0.1.12",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },

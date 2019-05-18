@@ -2,7 +2,7 @@ export * from '@uform/utils'
 
 const formatRegExp = /%[sdj%]/g
 
-export function format(...args) {
+export function format(...args: any[]) {
   let i = 1
   const f = args[0]
   const len = args.length
@@ -10,7 +10,7 @@ export function format(...args) {
     return f.apply(null, args.slice(1))
   }
   if (typeof f === 'string') {
-    let str = String(f).replace(formatRegExp, x => {
+    let str = String(f).replace(formatRegExp, (x: string) => {
       if (x === '%%') {
         return '%'
       }
@@ -21,7 +21,7 @@ export function format(...args) {
         case '%s':
           return String(args[i++])
         case '%d':
-          return Number(args[i++])
+          return Number(args[i++]) + ''
         case '%j':
           try {
             return JSON.stringify(args[i++])

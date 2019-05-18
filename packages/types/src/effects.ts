@@ -1,0 +1,1 @@
+export type Dispatcher = (eventName: string, payload: any) => void

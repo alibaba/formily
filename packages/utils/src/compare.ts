@@ -1,4 +1,4 @@
-import { isFn, isArr } from './types'
+import { isFn, isArr } from '@uform/types'
 var isArray = isArr
 var keyList = Object.keys
 var hasProp = Object.prototype.hasOwnProperty
@@ -79,7 +79,7 @@ function equal(a: any, b: any, filter: Filter) {
 }
 // end fast-deep-equal
 
-export const isEqual = function exportedEqual(a: any, b: any, filter: Filter) {
+export const isEqual = function exportedEqual(a: any, b: any, filter?: Filter) {
   try {
     return equal(a, b, filter)
   } catch (error) {
