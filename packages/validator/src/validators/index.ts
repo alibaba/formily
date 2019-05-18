@@ -3,7 +3,7 @@ import formatValidate from './format'
 import requiredValidate from './required'
 import patternValidate from './pattern'
 import customValidate from './custom'
-import { RuleDescription } from '@uform/types'
+import { RuleDescription, Rule } from '@uform/types'
 /*
  * rule : {
      format:"",
@@ -33,7 +33,7 @@ const batchValidate = (value: any, rule: RuleDescription, values: any, name: str
   )
 }
 
-export const validate = (value: any, rule: RuleDescription, values: any, name: string) => {
+export const validate = (value: any, rule: Rule, values: any, name: string) => {
   const newRule = isObj(rule)
     ? rule
     : isStr(rule)
@@ -41,5 +41,5 @@ export const validate = (value: any, rule: RuleDescription, values: any, name: s
       : isFn(rule)
         ? { validator: rule }
         : {}
-  return batchValidate(value, newRule, values, name)
+  return batchValidate(value, newRule as RuleDescription, values, name)
 }
