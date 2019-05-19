@@ -90,6 +90,8 @@
     "semver-regex": "^2.0.0",
     "staged-git-files": "^1.1.2",
     "ts-jest": "^24.0.2",
+    "tslint": "^5.16.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.5",
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
