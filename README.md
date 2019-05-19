@@ -11,24 +11,21 @@ English | [简体中文](./README.zh-cn.md)
 <a href="https://app.netlify.com/sites/uform/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
 
-<p align="center" style="color:#666;margin-top:10px;">React High Performance Form Solution For Complex Enterprise.</p>
+<p align="center" style="color:#666;margin-top:10px;">UFrom - a high-performance React form solution for handling complicated enterprise requirements.</p>
 
 ---
 
 ## Background
 
-In React, the whole tree rendering problem of the form is very obvious in controlled mode. Especially for the scene of data linkage, it is easy to cause the page to be stuck. In order to solve this problem, we have distributed management of the state of each form field, which greatly improves the performance of the form operation. At the same time, we deeply integrate the JSON Schema protocol to help you quickly solve the problem of back-end driven form rendering.
-
+In React, the whole tree rendering performance problem of the form is very obvious in the controlled mode. Especially for the scene of data linkage, it is easy to cause the page to be stuck. To solve this problem, we have distributed the management of the state of each form field, which significantly improves the performance of the form operations. At the same time, we deeply integrate the JSON Schema protocol to help you solve the problem of back-end driven form rendering quickly.
 
 ## Features
 
-- 🚀 High performance, Field independent management status, No whole tree rendering.
+- 🚀 High performance, fields managed independently, rather rerender the whole tree.
 - 💡 Integrated Aliabab Fusion and Ant Design components are guaranteed to work out of the box.
-- 🎨 JSON Schema for backend. JSchema for front-end.Two paradigms can be converted to each other.
+- 🎨 JSON Schema applied for BackEnd. JSchema applied for FrontEnd. Two paradigms can be converted to each other.
 - 🏅 Side effects are managed independently, making form data linkages easier than ever before.
-- 🌯 Override most complex form layout use cases.
-
-
+- 🌯 Override most complicated form layout use cases.
 
 ## Install
 
@@ -44,18 +41,14 @@ Use Fusion Design：
 npm install --save @alifd/next @uform/next
 ```
 
-
-
 ## Documents
 
 https://uformjs.org
 
 
-
 ## Demo
 
 https://codesandbox.io/s/245o92lnzy
-
 
 
 ## Community
@@ -65,15 +58,14 @@ https://codesandbox.io/s/245o92lnzy
 | [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
 
 
-
 ## LICENSE
 
 UForm is open source software licensed as
-[MIT.](https://github.com/alibaba/uform/blob/master/LICENSE.md)
+[MIT](https://github.com/alibaba/uform/blob/master/LICENSE.md).
 
 ## Contributors
 
-Thanks goes to these wonderful people
+Thanks for these passionate people
 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -84,4 +76,4 @@ Thanks goes to these wonderful people
 
 This project follows the
 [all-contributors](https://github.com/all-contributors/all-contributors)
-specification. Contributions of any kind welcome!
+Specification. Contributions of any kind are welcome!
