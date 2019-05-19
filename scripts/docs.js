@@ -9,6 +9,7 @@ window.codeSandBoxDependencies = {
   '@uform/antd': 'latest',
   '@uform/react': 'latest',
   '@uform/printer': 'latest',
+  '@babel/runtime':'latest',
   antd: 'latest'
 }
 
