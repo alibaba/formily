@@ -43,13 +43,13 @@ export function map(val: string, iterator: EachStringIterator, revert?: boolean)
 export function map<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): T[]
 export function map<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): object
 export function map(val: any, iterator: any, revert?: boolean): any {
-  let res = isArr(val) || isStr(val) ? [] : {}
+  const res = isArr(val) || isStr(val) ? [] : {}
   each(
     val,
     (item, key) => {
       const value = iterator(item, key)
       if (isArr(res)) {
-        res.push(value)
+        (res as any).push(value)
       } else {
         res[key] = value
       }
@@ -73,7 +73,6 @@ export function reduce(val: any, iterator: any, accumulator?: any, revert?: bool
   )
   return result
 }
-
 
 export function every(val: string, iterator: EachStringIterator, revert?: boolean): boolean
 export function every<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): boolean
@@ -153,5 +152,5 @@ export function find(val: any, iterator: any, revert?: boolean): any {
 
 export function includes(val: string[], searchElement: string, revert?: boolean): boolean
 export function includes<T>(val: T[], searchElement: T, revert?: boolean): boolean {
-  return some(val, item => item === searchElement, revert)
+  return some(val, (item) => item === searchElement, revert)
 }

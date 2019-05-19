@@ -1,4 +1,4 @@
-export type RuleDescription = {
+export interface RuleDescription {
   required?: boolean
   message?: string,
   pattern?: RegExp | string,

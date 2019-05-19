@@ -5,19 +5,27 @@ import { isEmpty } from './isEmpty'
 const numberRE = /^\d+$/
 const VIRTUAL_BOXES = {}
 
-type PathInfo = {
+interface IRuleDescription {
+  required?: boolean
+  message?: string,
+  pattern?: RegExp | string,
+  validator?: RuleHandler
+}
+
+interface PathInfo {
   name: string
   path: string[]
   schemaPath: string[]
 }
 
+type RuleHandler = (value: any, rule: IRuleDescription, values: object, name: string) => string | null
 
 export const getSchemaNodeFromPath = (schema: Schema, path: Path) => {
   let res = schema
   let suc = 0
   path = toArr(path)
   for (let i = 0; i < path.length; i++) {
-    var key = path[i]
+    const key = path[i]
     if (res && !isEmpty(res.properties)) {
       res = res.properties[key]
       suc++
@@ -42,7 +50,7 @@ export const registerVirtualboxFlag = (name: string) => {
 }
 
 const isVirtualBoxSchema = (schema: Schema) => {
-  return isVirtualBox(schema['type']) || isVirtualBox(schema['x-component'])
+  return isVirtualBox(schema.type) || isVirtualBox(schema['x-component'])
 }
 
 const schemaTraverse = (schema: Schema, callback: any, path: ArrayPath = [], schemaPath = []) => {
@@ -52,24 +60,25 @@ const schemaTraverse = (schema: Schema, callback: any, path: ArrayPath = [], sch
     }
     callback(schema, { path, schemaPath })
     if (schemaIs(schema, 'object') || schema.properties) {
-      each(schema.properties, (schema, key) => {
+      each(schema.properties, (subSchema, key) => {
         schemaTraverse(
-          schema,
+          subSchema,
           callback,
-          path.concat(key as string),
+          path.concat(key),
           schemaPath.concat(key)
         )
       })
     } else if (schemaIs(schema, 'array') || schema.items) {
       if (schema.items) {
+
         callback(
           schema.items,
-          (index: number | string) => {
+          (key) => {
             schemaTraverse(
               schema.items,
               callback,
-              path.concat(index),
-              schemaPath.concat(index)
+              path.concat(key),
+              schemaPath.concat(key)
             )
           },
           path
@@ -85,31 +94,32 @@ export const caculateSchemaInitialValues = (
   callback: (pathInfo: PathInfo, schema: Schema, value: any) => void
 ) => {
   initialValues = initialValues || schema.default || {}
-  schemaTraverse(schema, (schema, $path, parentPath) => {
-    const defaultValue = schema.default
+  schemaTraverse(schema, (subSchema, $path, parentPath) => {
+    const defaultValue = subSchema.default
     if (isFn($path) && parentPath) {
-      each(toArr(getIn(initialValues, parentPath)), function (value, index) {
+      each(toArr(getIn(initialValues, parentPath)), (value, index) => {
         $path(index)
       })
     } else if ($path) {
-      const isVirtualBox = isVirtualBoxSchema(schema)
-      const name = isVirtualBox
+
+      const isVirtualBoxInstance = isVirtualBoxSchema(subSchema)
+      const name = isVirtualBoxInstance
         ? $path.schemaPath.join('.')
         : $path.path.join('.')
-      const path = isVirtualBox ? $path.schemaPath : $path.path
+      const path = isVirtualBoxInstance ? $path.schemaPath : $path.path
       const schemaPath = $path.schemaPath
       const initialValue = getIn(initialValues, name)
-      let value = !isEmpty(initialValue) ? initialValue : defaultValue
+      const value = !isEmpty(initialValue) ? initialValue : defaultValue
       if (!isEmpty(value)) {
         setIn(initialValues, name, value)
       }
       if (isFn(callback)) {
-        const _path = {
+        const newPath = {
           name,
           path,
           schemaPath
         }
-        callback(_path, schema, value)
+        callback(newPath, subSchema, value)
       }
     }
   })

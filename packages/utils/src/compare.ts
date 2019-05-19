@@ -1,49 +1,49 @@
 import { isFn, isArr } from '@uform/types'
-var isArray = isArr
-var keyList = Object.keys
-var hasProp = Object.prototype.hasOwnProperty
+const isArray = isArr
+const keyList = Object.keys
+const hasProp = Object.prototype.hasOwnProperty
 
 type Filter = (comparies: { a: any, b: any }, key: string) => boolean
 
 /* eslint-disable */
 function equal(a: any, b: any, filter: Filter) {
   // fast-deep-equal index.js 2.0.1
-  if (a === b) return true
+  if (a === b) { return true }
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
-    var arrA = isArray(a)
-    var arrB = isArray(b)
-    var i: number
-    var length: number
-    var key: string | number
+    const arrA = isArray(a)
+    const arrB = isArray(b)
+    let i: number
+    let length: number
+    let key: string | number
 
     if (arrA && arrB) {
       length = a.length
-      if (length !== b.length) return false
-      for (i = length; i-- !== 0;) if (!equal(a[i], b[i], filter)) return false
+      if (length !== b.length) { return false }
+      for (i = length; i-- !== 0;) { if (!equal(a[i], b[i], filter)) { return false } }
       return true
     }
 
-    if (arrA != arrB) return false
+    if (arrA !== arrB) { return false }
 
-    var dateA = a instanceof Date
-    var dateB = b instanceof Date
-    if (dateA != dateB) return false
-    if (dateA && dateB) return a.getTime() == b.getTime()
+    const dateA = a instanceof Date
+    const dateB = b instanceof Date
+    if (dateA !== dateB) { return false }
+    if (dateA && dateB) { return a.getTime() === b.getTime() }
 
-    var regexpA = a instanceof RegExp
-    var regexpB = b instanceof RegExp
-    if (regexpA != regexpB) return false
-    if (regexpA && regexpB) return a.toString() == b.toString()
-    var urlA = a instanceof URL
-    var urlB = b instanceof URL
-    if (urlA && urlB) return a.href == b.href
-    var keys = keyList(a)
+    const regexpA = a instanceof RegExp
+    const regexpB = b instanceof RegExp
+    if (regexpA !== regexpB) { return false }
+    if (regexpA && regexpB) { return a.toString() === b.toString() }
+    const urlA = a instanceof URL
+    const urlB = b instanceof URL
+    if (urlA && urlB) { return a.href === b.href }
+    const keys = keyList(a)
     length = keys.length
 
-    if (length !== keyList(b).length) return false
+    if (length !== keyList(b).length) { return false }
 
-    for (i = length; i-- !== 0;) if (!hasProp.call(b, keys[i])) return false
+    for (i = length; i-- !== 0;) { if (!hasProp.call(b, keys[i])) { return false } }
     // end fast-deep-equal
 
     // Custom handling for React
@@ -58,11 +58,11 @@ function equal(a: any, b: any, filter: Filter) {
       } else {
         if (isFn(filter)) {
           if (filter({ a: a[key], b: b[key] }, key)) {
-            if (!equal(a[key], b[key], filter)) return false
+            if (!equal(a[key], b[key], filter)) { return false }
           }
         } else {
           // all other properties should be traversed as usual
-          if (!equal(a[key], b[key], filter)) return false
+          if (!equal(a[key], b[key], filter)) { return false }
         }
       }
     }

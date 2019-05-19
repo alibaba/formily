@@ -1,8 +1,7 @@
 import { Rule } from './rule'
 import { Dispatcher } from './effects'
 
-
-export type Schema = {
+export interface Schema {
   type?: string
   title?: string
   description?: string

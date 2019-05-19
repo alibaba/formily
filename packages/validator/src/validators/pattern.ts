@@ -3,7 +3,7 @@ import { getMessage } from '../message'
 import { RuleDescription } from '@uform/types'
 
 export const patternValidate = (pattern: string | RegExp | Function, value: any, message: string) => {
-  if (isEmpty(value)) return ''
+  if (isEmpty(value)) { return '' }
   if (isRegExp(pattern)) {
     pattern.lastIndex = 0
   }

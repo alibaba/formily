@@ -1,5 +1,5 @@
 import { FieldState } from './field'
-export type ValidateResponse = {
+export interface ValidateResponse {
   name: string
   value: any,
   field: FieldState

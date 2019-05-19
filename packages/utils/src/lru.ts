@@ -48,7 +48,7 @@ function Entry(key: any, value: any) {
   this[OLDER] = undefined
 }
 
-LRUMap.prototype._markEntryAsUsed = function (entry: any) {
+LRUMap.prototype._markEntryAsUsed = function(entry: any) {
   if (entry === this.newest) {
     // Already the most recenlty used entry, so no need to update the list
     return
@@ -74,13 +74,13 @@ LRUMap.prototype._markEntryAsUsed = function (entry: any) {
   this.newest = entry
 }
 
-LRUMap.prototype.assign = function (entries: any) {
+LRUMap.prototype.assign = function(entries: any) {
   let entry: any
   let limit = this.limit || Number.MAX_VALUE
   this._keymap.clear()
-  let it = entries[Symbol.iterator]()
+  const it = entries[Symbol.iterator]()
   for (let itv = it.next(); !itv.done; itv = it.next()) {
-    let e = new Entry(itv.value[0], itv.value[1])
+    const e = new Entry(itv.value[0], itv.value[1])
     this._keymap.set(e.key, e)
     if (!entry) {
       this.oldest = e
@@ -97,17 +97,17 @@ LRUMap.prototype.assign = function (entries: any) {
   this.size = this._keymap.size
 }
 
-LRUMap.prototype.get = function (key: any) {
+LRUMap.prototype.get = function(key: any) {
   // First, find our cache entry
-  var entry = this._keymap.get(key)
-  if (!entry) return // Not cached. Sorry.
+  const entry = this._keymap.get(key)
+  if (!entry) { return } // Not cached. Sorry.
   // As <key> was found in the cache, register it as being requested recently
   this._markEntryAsUsed(entry)
   return entry.value
 }
 
-LRUMap.prototype.set = function (key: any, value: any) {
-  var entry = this._keymap.get(key)
+LRUMap.prototype.set = function(key: any, value: any) {
+  let entry = this._keymap.get(key)
 
   if (entry) {
     // update existing
@@ -139,9 +139,9 @@ LRUMap.prototype.set = function (key: any, value: any) {
   return this
 }
 
-LRUMap.prototype.shift = function () {
+LRUMap.prototype.shift = function() {
   // todo: handle special case when limit == 1
-  var entry = this.oldest
+  const entry = this.oldest
   if (entry) {
     if (this.oldest[NEWER]) {
       // advance the list
@@ -165,18 +165,18 @@ LRUMap.prototype.shift = function () {
 // Following code is optional and can be removed without breaking the core
 // functionality.
 
-LRUMap.prototype.find = function (key: any) {
-  let e = this._keymap.get(key)
+LRUMap.prototype.find = function(key: any) {
+  const e = this._keymap.get(key)
   return e ? e.value : undefined
 }
 
-LRUMap.prototype.has = function (key: any) {
+LRUMap.prototype.has = function(key: any) {
   return this._keymap.has(key)
 }
 
-LRUMap.prototype['delete'] = function (key: any) {
-  var entry = this._keymap.get(key)
-  if (!entry) return
+LRUMap.prototype.delete = function(key: any) {
+  const entry = this._keymap.get(key)
+  if (!entry) { return }
   this._keymap.delete(entry.key)
   if (entry[NEWER] && entry[OLDER]) {
     // relink the older entry with the newer entry
@@ -201,7 +201,7 @@ LRUMap.prototype['delete'] = function (key: any) {
   return entry.value
 }
 
-LRUMap.prototype.clear = function () {
+LRUMap.prototype.clear = function() {
   // Not clearing links should be safe, as we don't expose live links to user
   this.oldest = this.newest = undefined
   this.size = 0
@@ -211,11 +211,11 @@ LRUMap.prototype.clear = function () {
 function EntryIterator(oldestEntry: any) {
   this.entry = oldestEntry
 }
-EntryIterator.prototype[Symbol.iterator] = function () {
+EntryIterator.prototype[Symbol.iterator] = function() {
   return this
 }
-EntryIterator.prototype.next = function () {
-  let ent = this.entry
+EntryIterator.prototype.next = function() {
+  const ent = this.entry
   if (ent) {
     this.entry = ent[NEWER]
     return { done: false, value: [ent.key, ent.value] }
@@ -227,11 +227,11 @@ EntryIterator.prototype.next = function () {
 function KeyIterator(oldestEntry) {
   this.entry = oldestEntry
 }
-KeyIterator.prototype[Symbol.iterator] = function () {
+KeyIterator.prototype[Symbol.iterator] = function() {
   return this
 }
-KeyIterator.prototype.next = function () {
-  let ent = this.entry
+KeyIterator.prototype.next = function() {
+  const ent = this.entry
   if (ent) {
     this.entry = ent[NEWER]
     return { done: false, value: ent.key }
@@ -243,11 +243,11 @@ KeyIterator.prototype.next = function () {
 function ValueIterator(oldestEntry) {
   this.entry = oldestEntry
 }
-ValueIterator.prototype[Symbol.iterator] = function () {
+ValueIterator.prototype[Symbol.iterator] = function() {
   return this
 }
-ValueIterator.prototype.next = function () {
-  let ent = this.entry
+ValueIterator.prototype.next = function() {
+  const ent = this.entry
   if (ent) {
     this.entry = ent[NEWER]
     return { done: false, value: ent.value }
@@ -256,23 +256,23 @@ ValueIterator.prototype.next = function () {
   }
 }
 
-LRUMap.prototype.keys = function () {
+LRUMap.prototype.keys = function() {
   return new KeyIterator(this.oldest)
 }
 
-LRUMap.prototype.values = function () {
+LRUMap.prototype.values = function() {
   return new ValueIterator(this.oldest)
 }
 
-LRUMap.prototype.entries = function () {
+LRUMap.prototype.entries = function() {
   return this
 }
 
-LRUMap.prototype[Symbol.iterator] = function () {
+LRUMap.prototype[Symbol.iterator] = function() {
   return new EntryIterator(this.oldest)
 }
 
-LRUMap.prototype.forEach = function (fun: (value: any, key: any, ctx: object) => void, thisObj: any) {
+LRUMap.prototype.forEach = function(fun: (value: any, key: any, ctx: object) => void, thisObj: any) {
   if (typeof thisObj !== 'object') {
     thisObj = this
   }
@@ -284,10 +284,10 @@ LRUMap.prototype.forEach = function (fun: (value: any, key: any, ctx: object) =>
 }
 
 /** Returns a JSON (array) representation */
-LRUMap.prototype.toJSON = function () {
-  var s = new Array(this.size)
-  var i = 0
-  var entry = this.oldest
+LRUMap.prototype.toJSON = function() {
+  const s = new Array(this.size)
+  let i = 0
+  let entry = this.oldest
   while (entry) {
     s[i++] = { key: entry.key, value: entry.value }
     entry = entry[NEWER]
@@ -296,9 +296,9 @@ LRUMap.prototype.toJSON = function () {
 }
 
 /** Returns a String representation */
-LRUMap.prototype.toString = function () {
-  var s = ''
-  var entry = this.oldest
+LRUMap.prototype.toString = function() {
+  let s = ''
+  let entry = this.oldest
   while (entry) {
     s += String(entry.key) + ':' + entry.value
     entry = entry[NEWER]
