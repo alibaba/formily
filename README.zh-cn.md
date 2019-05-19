@@ -1,4 +1,4 @@
-English | [简体中文](./README.zh-cn.md)
+[English](./README.md) | 简体中文
 
 <p align="center">
 <img src="https://img.alicdn.com/tfs/TB1VsOcRbrpK1RjSZTEXXcWAVXa-1400-689.png">
@@ -11,54 +11,47 @@ English | [简体中文](./README.zh-cn.md)
 <a href="https://app.netlify.com/sites/uform/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
 
-<p align="center" style="color:#666;margin-top:10px;">React High Performance Form Solution For Complex Enterprise.</p>
+<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，UForm 谐音 Your Form，代表，这才是你想要的 Form 解决方案</p>
 
 ---
 
-## Background
+## 背景
 
-In React, the whole tree rendering problem of the form is very obvious in controlled mode. Especially for the scene of data linkage, it is easy to cause the page to be stuck. In order to solve this problem, we have distributed management of the state of each form field, which greatly improves the performance of the form operation. At the same time, we deeply integrate the JSON Schema protocol to help you quickly solve the problem of back-end driven form rendering.
+在React中，在受控模式下，表单的整树渲染问题非常明显。特别是对于数据联动的场景，很容易导致页面卡顿，为了解决这个问题，我们将每个表单字段的状态做了分布式管理，从而大大提升了表单操作性能。同时，我们深度整合了JSON Schema协议，可以帮助您快速解决后端驱动表单渲染的问题。
 
+## 特性
 
-## Features
+- 🚀 高性能，字段分布式渲染，大大减轻 React 渲染压力
+- 💡 支持 Ant Design/Fusion Next 组件体系
+- 🎨 JSX 标签化写法/JSON Schema 数据驱动方案无缝迁移过渡
+- 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
+- 🌯 支持各种表单复杂布局方案
 
-- 🚀 High performance, Field independent management status, No whole tree rendering.
-- 💡 Integrated Aliabab Fusion and Ant Design components are guaranteed to work out of the box.
-- 🎨 JSON Schema for backend. JSchema for front-end.Two paradigms can be converted to each other.
-- 🏅 Side effects are managed independently, making form data linkages easier than ever before.
-- 🌯 Override most complex form layout use cases.
+## 安装
 
-
-
-## Install
-
-Use Ant Design：
+使用 Ant Design：
 
 ```bash
 npm install --save antd @uform/antd
 ```
 
-Use Fusion Design：
+使用 Fusion Design：
 
 ```bash
 npm install --save @alifd/next @uform/next
 ```
 
-
-
-## Documents
+## 文档
 
 https://uformjs.org
 
-
-
-## Demo
+## 入门案例
 
 https://codesandbox.io/s/245o92lnzy
 
+## 社区
 
 
-## Community
 
 | Online Chat Room                                             | 微信                                                         | 钉钉 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
@@ -71,7 +64,7 @@ https://codesandbox.io/s/245o92lnzy
 UForm is open source software licensed as
 [MIT.](https://github.com/alibaba/uform/blob/master/LICENSE.md)
 
-## Contributors
+## 贡献者
 
 Thanks goes to these wonderful people
 ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
