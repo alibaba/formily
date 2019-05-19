@@ -10,7 +10,7 @@ export function format(...args: any[]) {
     return f.apply(null, args.slice(1))
   }
   if (typeof f === 'string') {
-    let str = String(f).replace(formatRegExp, (x: string) => {
+    const str = String(f).replace(formatRegExp, (x: string) => {
       if (x === '%%') {
         return '%'
       }

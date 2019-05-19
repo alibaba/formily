@@ -1,13 +1,13 @@
 export const defer = <P, E>() => {
-  let _resolve: (payload: P) => void
-  let _reject: (error: E) => void
+  let internalResolve: (payload: P) => void
+  let internalReject: (error: E) => void
   const promise = new Promise((resolve, reject) => {
-    _resolve = resolve
-    _reject = reject
+    internalResolve = resolve
+    internalReject = reject
   })
   return {
     promise,
-    resolve: _resolve,
-    reject: _reject
+    resolve: internalResolve,
+    reject: internalReject
   }
 }

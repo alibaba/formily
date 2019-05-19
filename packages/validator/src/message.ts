@@ -3,16 +3,16 @@ import locales from './locale'
 
 const self: any = this || global || window
 
-type LocaleMessages = {
+interface LocaleMessages {
   [key: string]: string | LocaleMessages
 }
 
-type Locales = {
+interface Locales {
   [lang: string]: LocaleMessages
 }
 
 const getBrowserlanguage = () => {
-  if (!self.navigator) return 'en'
+  if (!self.navigator) { return 'en' }
   return self.navigator.browserlanguage || self.navigator.language || 'en'
 }
 

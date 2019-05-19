@@ -21,8 +21,7 @@ export interface Field {
   __lastValidateValue: any
 }
 
-
-export type FieldState = {
+export interface FieldState {
   value: any
   valid: boolean
   invalid: boolean
@@ -39,6 +38,6 @@ export type FieldState = {
   rules: RuleDescription[]
 }
 
-export type FieldMap = {
+export interface FieldMap {
   [name: string]: Field
 }

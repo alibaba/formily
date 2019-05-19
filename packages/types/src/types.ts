@@ -1,7 +1,7 @@
 const isType = <T>(type: string) => (obj: unknown): obj is T =>
   obj != null && Object.prototype.toString.call(obj) === `[object ${type}]`
 export const isFn = isType<Function>('Function')
-export const isArr = Array.isArray || isType<Array<unknown>>('Array')
+export const isArr = Array.isArray || isType<unknown[]>('Array')
 export const isPlainObj = isType<object>('Object')
 export const isStr = isType<string>('String')
 export const isBool = isType<boolean>('Boolean')

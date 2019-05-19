@@ -5,14 +5,18 @@ type Subscriber<N> = (notification: N) => void
 
 type Filter<P, S> = (payload: P, subscription: S) => any
 
+const noop = () => undefined
+
 export class Broadcast<P, S, N> {
   private entries = []
   private buffer = []
   private length: number
 
-  subscribe(subscriber: Subscriber<N>, subscription: any) {
-    if (!isFn(subscriber)) return () => { }
-    let index = this.entries.length
+  public subscribe(subscriber: Subscriber<N>, subscription: any) {
+    if (!isFn(subscriber)) {
+      return noop
+    }
+    const index = this.entries.length
     this.entries.push({
       subscriber,
       subscription
@@ -23,16 +27,17 @@ export class Broadcast<P, S, N> {
     }
   }
 
-  unsubscribe() {
+  public unsubscribe() {
     this.entries.length = 0
     this.buffer.length = 0
   }
 
-  flushBuffer({ subscriber, subscription }) {
+  public flushBuffer({ subscriber, subscription }) {
     each(this.buffer, ({ payload, filter }) => {
       if (isFn(filter)) {
         let notification: N
-        if ((notification = filter(payload, subscription))) {
+        if (filter(payload, subscription)) {
+          notification = filter(payload, subscription)
           subscriber(notification)
         }
       } else {
@@ -41,7 +46,7 @@ export class Broadcast<P, S, N> {
     })
   }
 
-  notify(payload: P, filter: Filter<P, S>) {
+  public notify(payload: P, filter: Filter<P, S>) {
     if (this.length === 0) {
       this.buffer.push({ payload, filter })
       return
@@ -49,7 +54,8 @@ export class Broadcast<P, S, N> {
     each(this.entries, ({ subscriber, subscription }) => {
       if (isFn(filter)) {
         let notification: N
-        if ((notification = filter(payload, subscription))) {
+        if (filter(payload, subscription)) {
+          notification = filter(payload, subscription)
           subscriber(notification)
         }
       } else {

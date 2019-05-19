@@ -18,7 +18,7 @@ import { RuleDescription, Rule } from '@uform/types'
 
 const batchInvoke = (...fns: Function[]) => {
   return (...args: any[]) => {
-    return fns.map(fn => Promise.resolve(fn(...args)))
+    return fns.map((fn) => Promise.resolve(fn(...args)))
   }
 }
 
