@@ -1,7 +1,7 @@
 English | [简体中文](./README.zh-cn.md)
 
 <p align="center">
-<img src="https://img.alicdn.com/tfs/TB1VsOcRbrpK1RjSZTEXXcWAVXa-1400-689.png">
+<img src="https://img.alicdn.com/tfs/TB19uf2XBGw3KVjSZFwXXbQ2FXa-1400-689.png">
 <a href="https://www.npmjs.com/package/@uform/core"><img src="https://img.shields.io/npm/v/@uform/core.svg"></a>
 <a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
 <a href="https://www.npmjs.com/package/@uform/next"><img src="https://img.shields.io/npm/v/@uform/next.svg"></a>
