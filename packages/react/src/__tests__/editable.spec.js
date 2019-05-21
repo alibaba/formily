@@ -4,9 +4,10 @@ import SchemaForm, {
   registerFormField,
   connect,
   registerFieldMiddleware,
-  createFormActions
+  createFormActions,
+  FormPath
 } from '../index'
-import { render, act } from 'react-testing-library'
+import { render, act, fireEvent } from 'react-testing-library'
 import { toArr } from '@uform/utils'
 
 beforeEach(() => {
@@ -241,4 +242,138 @@ test('editable with x-props is affected by global editable', async () => {
   })
   await sleep(100)
   expect(queryByText('empty')).toBeVisible()
+})
+
+test('editable conflicts that global editable props with setFieldState', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        editable={FormPath.match('*(!bbb)')}
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'ccc').subscribe(() => {
+            setFieldState('bbb', state => {
+              state.editable = true
+            })
+          })
+        }}
+      >
+        <Field
+          type='string'
+          name='aaa'
+          x-props={{ 'data-testid': 'this is aaa' }}
+        />
+        <Field
+          type='string'
+          name='bbb'
+          x-props={{ 'data-testid': 'this is bbb' }}
+        />
+        <Field
+          type='string'
+          name='ccc'
+          x-props={{ 'data-testid': 'this is ccc' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+})
+
+test('editable conflicts that props editable props with setFieldState', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'ccc').subscribe(() => {
+            setFieldState('bbb', state => {
+              state.editable = true
+            })
+          })
+        }}
+      >
+        <Field
+          type='string'
+          name='aaa'
+          x-props={{ 'data-testid': 'this is aaa' }}
+        />
+        <Field
+          type='string'
+          name='bbb'
+          editable={false}
+          x-props={{ 'data-testid': 'this is bbb' }}
+        />
+        <Field
+          type='string'
+          name='ccc'
+          x-props={{ 'data-testid': 'this is ccc' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+})
+
+test('editable conflicts that x-props editable props with setFieldState', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'ccc').subscribe(() => {
+            setFieldState('bbb', state => {
+              state.editable = true
+            })
+          })
+        }}
+      >
+        <Field
+          type='string'
+          name='aaa'
+          x-props={{ 'data-testid': 'this is aaa' }}
+        />
+        <Field
+          type='string'
+          name='bbb'
+          x-props={{ 'data-testid': 'this is bbb', editable: false }}
+        />
+        <Field
+          type='string'
+          name='ccc'
+          x-props={{ 'data-testid': 'this is ccc' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
 })

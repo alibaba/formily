@@ -45,7 +45,11 @@ export class Field {
         : this.getInitialValueFromProps(options.props)
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
-    this.editable = !isEmpty(editable) ? editable : this.editable
+    this.editable = !isEmpty(editable)
+      ? editable
+      : isEmpty(this.editable)
+        ? this.editable
+        : this.getContextEditable()
     this.path = resolveFieldPath(
       !isEmpty(options.path) ? options.path : this.path || []
     )
@@ -80,6 +84,10 @@ export class Field {
     }
   }
 
+  getContextEditable() {
+    return this.getEditable(this.context.editable)
+  }
+
   getEditableFromProps(props) {
     if (props) {
       if (!isEmpty(props.editable)) {
@@ -90,7 +98,6 @@ export class Field {
         }
       }
     }
-    return this.getEditable(this.context.editable)
   }
 
   getRulesFromProps(props) {
@@ -229,8 +236,13 @@ export class Field {
       this.dirtyType = 'editable'
       this.dirty = true
     } else {
+      const prevEditable = this.getEditableFromProps(this.props)
       const propsEditable = this.getEditableFromProps(published.props)
-      if (!isEmpty(propsEditable) && !isEqual(propsEditable, this.editable)) {
+      if (
+        !isEmpty(propsEditable) &&
+        !isEqual(propsEditable, this.editable) &&
+        !isEqual(prevEditable, propsEditable)
+      ) {
         this.editable = propsEditable
         this.dirtyType = 'editable'
         this.dirty = true
@@ -355,6 +367,7 @@ export class Field {
 
   updateState(reducer) {
     if (!isFn(reducer)) return
+    if (this.removed) return
     const published = {
       name: this.name,
       path: this.path,
