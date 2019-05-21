@@ -1,8 +1,8 @@
 import { isRegExp, format, isFn, isEmpty } from '../utils'
 import { getMessage } from '../message'
-import { RuleDescription } from '@uform/types'
+import { IRuleDescription } from '@uform/types'
 
-export const patternValidate = (pattern: string | RegExp | Function, value: any, message: string) => {
+export const patternValidate = (pattern: string | RegExp | ((...args: any[]) => boolean), value: any, message: string) => {
   if (isEmpty(value)) { return '' }
   if (isRegExp(pattern)) {
     pattern.lastIndex = 0
@@ -15,7 +15,7 @@ export const patternValidate = (pattern: string | RegExp | Function, value: any,
   return !valid ? message : ''
 }
 
-export default (value: any, rule: RuleDescription, values: any, name: string) => {
+export default (value: any, rule: IRuleDescription, values: any, name: string) => {
   if (rule.pattern) {
     return patternValidate(
       rule.pattern,

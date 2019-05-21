@@ -1,12 +1,13 @@
-export interface RuleDescription {
+export interface IRuleDescription {
   required?: boolean
   message?: string,
   pattern?: RegExp | string,
-  validator?: Validator
+  validator?: Validator,
+  format?: DefaultPatternRule
 }
 
-export type Validator = (value: any, rule: RuleDescription, values: object, name: string) => string | null
+export type Validator = (value: any, rule: IRuleDescription, values: object, name: string) => string | null
 
 export type DefaultPatternRule = 'url' | 'email' | 'ipv6' | 'ipv4' | 'number' | 'integer' | 'qq' | 'phone' | 'idcard' | 'taodomain' | 'money' | 'zh' | 'date' | 'zip'
 
-export type Rule = Validator | Array<Validator | RuleDescription | DefaultPatternRule> | DefaultPatternRule | RuleDescription
+export type Rule = Validator | Array<Validator | IRuleDescription | DefaultPatternRule> | DefaultPatternRule | IRuleDescription

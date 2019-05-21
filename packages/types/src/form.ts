@@ -1,4 +1,4 @@
-export interface FormState {
+export interface IFormState {
   values: any // 表单数据
   valid: boolean // 是否合法
   invalid: boolean // 是否不合法

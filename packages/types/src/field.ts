@@ -1,7 +1,7 @@
-import { RuleDescription } from './rule'
-import { Schema } from './schema'
+import { IRuleDescription } from './rule'
+import { ISchema } from './schema'
 
-export interface Field {
+export interface IField {
   value: any
   valid: boolean
   dirty: boolean
@@ -15,13 +15,13 @@ export interface Field {
   initialValue: any
   name: string
   path: string[]
-  props: Schema
-  rules: RuleDescription[]
+  props: ISchema
+  rules: IRuleDescription[]
   notify: (forceUpdate?: boolean) => void
   __lastValidateValue: any
 }
 
-export interface FieldState {
+export interface IFieldState {
   value: any
   valid: boolean
   invalid: boolean
@@ -34,10 +34,10 @@ export interface FieldState {
   initialValue: any
   name: string
   path: string[]
-  props: Schema
-  rules: RuleDescription[]
+  props: ISchema
+  rules: IRuleDescription[]
 }
 
-export interface FieldMap {
-  [name: string]: Field
+export interface IFieldMap {
+  [name: string]: IField
 }

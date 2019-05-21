@@ -10,13 +10,13 @@ import {
   format
 } from './utils'
 import { validate } from './validators'
-import { ValidateHandler, ValidateResponse, FieldMap } from '@uform/types'
+import { ValidateHandler, IValidateResponse, IFieldMap } from '@uform/types'
 export * from './message'
 
 const flatArr = (arr: any[]) => {
   return reduce(
     arr,
-    (buf, item) => {
+    (buf : any, item : any) => {
       return isArr(item)
         ? buf.concat(flatArr(item))
         : item
@@ -29,7 +29,7 @@ const flatArr = (arr: any[]) => {
 
 export { format }
 
-export const runValidation = async (values: object, fieldMap: FieldMap, forceUpdate: boolean | ValidateHandler, callback: ValidateHandler): Promise<ValidateResponse[]> => {
+export const runValidation = async (values: object, fieldMap: IFieldMap, forceUpdate: boolean | ValidateHandler, callback: ValidateHandler): Promise<IValidateResponse[]> => {
   const queue = []
   if (isFn(forceUpdate)) {
     callback = forceUpdate as ValidateHandler

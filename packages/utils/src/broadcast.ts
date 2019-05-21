@@ -35,9 +35,8 @@ export class Broadcast<P, S, N> {
   public flushBuffer({ subscriber, subscription }) {
     each(this.buffer, ({ payload, filter }) => {
       if (isFn(filter)) {
-        let notification: N
-        if (filter(payload, subscription)) {
-          notification = filter(payload, subscription)
+        const notification = filter(payload, subscription)
+        if (notification !== undefined) {
           subscriber(notification)
         }
       } else {
@@ -53,9 +52,8 @@ export class Broadcast<P, S, N> {
     }
     each(this.entries, ({ subscriber, subscription }) => {
       if (isFn(filter)) {
-        let notification: N
-        if (filter(payload, subscription)) {
-          notification = filter(payload, subscription)
+        const notification = filter(payload, subscription)
+        if (notification !== undefined) {
           subscriber(notification)
         }
       } else {
