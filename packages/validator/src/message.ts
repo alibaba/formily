@@ -3,12 +3,12 @@ import locales from './locale'
 
 const self: any = this || global || window
 
-interface LocaleMessages {
-  [key: string]: string | LocaleMessages
+interface ILocaleMessages {
+  [key: string]: string | ILocaleMessages
 }
 
-interface Locales {
-  [lang: string]: LocaleMessages
+interface ILocales {
+  [lang: string]: ILocaleMessages
 }
 
 const getBrowserlanguage = () => {
@@ -23,7 +23,7 @@ const LOCALE = {
 
 const getMatchLang = (lang: string) => {
   let find = LOCALE.lang
-  each(LOCALE.messages, (messages: LocaleMessages, key: string) => {
+  each(LOCALE.messages, (messages: ILocaleMessages, key: string) => {
     if (key.indexOf(lang) > -1 || String(lang).indexOf(key) > -1) {
       find = key
       return false
@@ -32,7 +32,7 @@ const getMatchLang = (lang: string) => {
   return find
 }
 
-export const setLocale = (locale: Locales) => {
+export const setLocale = (locale: ILocales) => {
   Object.assign(LOCALE.messages, locale)
 }
 

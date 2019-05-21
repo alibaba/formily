@@ -1,11 +1,11 @@
-import { FieldState } from './field'
-export interface ValidateResponse {
+import { IFieldState } from './field'
+export interface IValidateResponse {
   name: string
   value: any,
-  field: FieldState
+  field: IFieldState
   invalid: boolean
   valid: boolean
   errors: string[]
 }
 
-export type ValidateHandler = (response: ValidateResponse[]) => void
+export type ValidateHandler = (response: IValidateResponse[]) => void

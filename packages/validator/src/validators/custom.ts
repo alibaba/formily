@@ -1,6 +1,6 @@
 import { isFn } from '../utils'
-
-export default (value, rule, values, name) => {
+import { IRuleDescription } from '@uform/types'
+export default (value: any, rule: IRuleDescription, values: any, name: string) => {
   if (isFn(rule.validator)) {
     return rule.validator(value, rule, values, name)
   }

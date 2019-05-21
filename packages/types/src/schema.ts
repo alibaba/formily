@@ -1,7 +1,7 @@
 import { Rule } from './rule'
 import { Dispatcher } from './effects'
 
-export interface Schema {
+export interface ISchema {
   type?: string
   title?: string
   description?: string
@@ -9,9 +9,9 @@ export interface Schema {
   required?: boolean
   enum?: Array<{ label: string, value: unknown } | string | number>
   properties?: {
-    [key: string]: Schema
+    [key: string]: ISchema
   }
-  items?: Schema
+  items?: ISchema
   minItems?: number
   maxItems?: number
   ['x-props']: object

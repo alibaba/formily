@@ -3,7 +3,7 @@ import formatValidate from './format'
 import requiredValidate from './required'
 import patternValidate from './pattern'
 import customValidate from './custom'
-import { RuleDescription, Rule } from '@uform/types'
+import { IRuleDescription, Rule } from '@uform/types'
 /*
  * rule : {
      format:"",
@@ -16,13 +16,13 @@ import { RuleDescription, Rule } from '@uform/types'
  *
 **/
 
-const batchInvoke = (...fns: Function[]) => {
+const batchInvoke = (...fns: Array<(...args: any[]) => void>) => {
   return (...args: any[]) => {
     return fns.map((fn) => Promise.resolve(fn(...args)))
   }
 }
 
-const batchValidate = (value: any, rule: RuleDescription, values: any, name: string) => {
+const batchValidate = (value: any, rule: IRuleDescription, values: any, name: string) => {
   return Promise.all(
     batchInvoke(
       formatValidate,
@@ -41,5 +41,5 @@ export const validate = (value: any, rule: Rule, values: any, name: string) => {
       : isFn(rule)
         ? { validator: rule }
         : {}
-  return batchValidate(value, newRule as RuleDescription, values, name)
+  return batchValidate(value, newRule as IRuleDescription, values, name)
 }

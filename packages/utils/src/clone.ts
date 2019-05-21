@@ -1,6 +1,6 @@
 import { isFn } from '@uform/types'
 
-type Filter = (value: any, key: string) => any
+type Filter = (value: any, key: string) => boolean
 
 const self: { [key: string]: any } = this || global || window
 

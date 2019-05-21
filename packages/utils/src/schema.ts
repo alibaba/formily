@@ -1,6 +1,6 @@
 import { each, toArr } from './array'
 import { getIn, setIn } from './accessor'
-import { isFn, Path, Schema, ArrayPath } from '@uform/types'
+import { isFn, Path, ISchema, ArrayPath } from '@uform/types'
 import { isEmpty } from './isEmpty'
 const numberRE = /^\d+$/
 const VIRTUAL_BOXES = {}
@@ -12,7 +12,7 @@ interface IRuleDescription {
   validator?: RuleHandler
 }
 
-interface PathInfo {
+interface IPathInfo {
   name: string
   path: string[]
   schemaPath: string[]
@@ -20,7 +20,7 @@ interface PathInfo {
 
 type RuleHandler = (value: any, rule: IRuleDescription, values: object, name: string) => string | null
 
-export const getSchemaNodeFromPath = (schema: Schema, path: Path) => {
+export const getSchemaNodeFromPath = (schema: ISchema, path: Path) => {
   let res = schema
   let suc = 0
   path = toArr(path)
@@ -37,7 +37,7 @@ export const getSchemaNodeFromPath = (schema: Schema, path: Path) => {
   return suc === path.length ? res : undefined
 }
 
-export const schemaIs = (schema: Schema, type: string) => {
+export const schemaIs = (schema: ISchema, type: string) => {
   return schema && schema.type === type
 }
 
@@ -49,11 +49,11 @@ export const registerVirtualboxFlag = (name: string) => {
   VIRTUAL_BOXES[name] = true
 }
 
-const isVirtualBoxSchema = (schema: Schema) => {
+const isVirtualBoxSchema = (schema: ISchema) => {
   return isVirtualBox(schema.type) || isVirtualBox(schema['x-component'])
 }
 
-const schemaTraverse = (schema: Schema, callback: any, path: ArrayPath = [], schemaPath = []) => {
+const schemaTraverse = (schema: ISchema, callback: any, path: ArrayPath = [], schemaPath = []) => {
   if (schema) {
     if (isVirtualBoxSchema(schema)) {
       path = path.slice(0, path.length - 1)
@@ -89,9 +89,9 @@ const schemaTraverse = (schema: Schema, callback: any, path: ArrayPath = [], sch
 }
 
 export const caculateSchemaInitialValues = (
-  schema: Schema,
+  schema: ISchema,
   initialValues: any,
-  callback: (pathInfo: PathInfo, schema: Schema, value: any) => void
+  callback: (pathInfo: IPathInfo, schema: ISchema, value: any) => void
 ) => {
   initialValues = initialValues || schema.default || {}
   schemaTraverse(schema, (subSchema, $path, parentPath) => {
