@@ -220,14 +220,14 @@ export class Form {
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
-              field.notify()
               if (rafIdMap[field.name]) caf(rafIdMap[field.name])
               rafIdMap[field.name] = raf(() => {
-                if (dirtyType === 'value') {
+                if (dirtyType.value) {
                   this.internalValidate().then(() => {
                     this.formNotify(field.publishState())
                   })
                 } else {
+                  field.notify()
                   this.formNotify(field.publishState())
                 }
               })
@@ -262,14 +262,14 @@ export class Form {
         }
         if (field.dirty) {
           const dirtyType = field.dirtyType
-          field.notify()
           if (rafIdMap[field.name]) caf(rafIdMap[field.name])
           rafIdMap[field.name] = raf(() => {
-            if (dirtyType === 'value') {
+            if (dirtyType.value) {
               this.internalValidate().then(() => {
                 this.formNotify(field.publishState())
               })
             } else {
+              field.notify()
               this.formNotify(field.publishState())
             }
           })

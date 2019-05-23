@@ -163,7 +163,7 @@ export class Field {
     if (!this.dirty && !force) return
     this.fieldbrd.notify(this.publishState())
     this.dirty = false
-    this.dirtyType = ''
+    this.dirtyType = {}
   }
 
   unsubscribe() {
@@ -218,7 +218,7 @@ export class Field {
       this.pristine = false
       this.context.setIn(this.name, this.value)
       this.context.updateChildrenValue(this)
-      this.dirtyType = 'value'
+      this.dirtyType.value = true
       this.dirty = true
     }
 
@@ -226,14 +226,14 @@ export class Field {
       this.initialValue = published.initialValue
       this.context.setInitialValueIn(this.name, this.value)
       this.context.updateChildrenInitalValue(this)
-      this.dirtyType = 'initialValue'
+      this.dirtyType.initialValue = true
       this.dirty = true
     }
 
     const editable = this.getEditable(published.editable)
     if (!isEqual(editable, this.editable)) {
       this.editable = editable
-      this.dirtyType = 'editable'
+      this.dirtyType.editable = true
       this.dirty = true
     } else {
       const prevEditable = this.getEditableFromProps(this.props)
@@ -244,7 +244,7 @@ export class Field {
         !isEqual(prevEditable, propsEditable)
       ) {
         this.editable = propsEditable
-        this.dirtyType = 'editable'
+        this.dirtyType.editable = true
         this.dirty = true
       }
     }
@@ -255,7 +255,7 @@ export class Field {
       this.effectErrors = published.errors
       this.valid = this.effectErrors.length > 0 && this.errors.length > 0
       this.invalid = !this.valid
-      this.dirtyType = 'errors'
+      this.dirtyType.errors = true
       this.dirty = true
     }
     if (!isEqual(published.rules, this.rules)) {
@@ -267,7 +267,7 @@ export class Field {
         published.required = true
       }
       this.invalid = false
-      this.dirtyType = 'rules'
+      this.dirtyType.rules = true
       this.dirty = true
     } else {
       const prePropsRules = this.getRulesFromProps(this.props)
@@ -285,7 +285,7 @@ export class Field {
         }
         this.valid = true
         this.invalid = false
-        this.dirtyType = 'rules'
+        this.dirtyType.rules = true
         this.dirty = true
       }
     }
@@ -339,7 +339,7 @@ export class Field {
 
     if (published.loading !== this.loading) {
       this.loading = published.loading
-      this.dirtyType = 'loading'
+      this.dirtyType.loading = true
       this.dirty = true
     }
 
@@ -354,13 +354,13 @@ export class Field {
         this.context.deleteIn(this.name)
         this.context.updateChildrenVisible(this, false)
       }
-      this.dirtyType = 'visible'
+      this.dirtyType.visible = true
       this.dirty = true
     }
 
     if (!isEqual(published.props, this.props, filterSchema)) {
       this.props = clone(published.props, filterSchema)
-      this.dirtyType = 'props'
+      this.dirtyType.props = true
       this.dirty = true
     }
   }
