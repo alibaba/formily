@@ -45,12 +45,6 @@ class FieldList extends Component {
     }
   }
 
-  onDragStart = (ev, fieldItem) => {
-    ev.dataTransfer.setData('text/plain', JSON.stringify(fieldItem))
-    // eslint-disable-next-line
-    ev.dataTransfer.dropEffect = 'copy'
-  }
-
   renderFieldList() {
     return (
       <ul className='field-list'>

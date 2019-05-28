@@ -32,4 +32,4 @@
      - [<FormItemGrid/>](./API/FormItemGrid.md)
      - [<FormSlot/>](./API/FormSlot.md)
 - [PlayGround](../packages/builder-next/lib/index.js)
-- [PlayGround DEMO](../packages/builder/src/demo/index.js)
+- [PlayGround DEMO](../packages/builder/src/demo/index-1-x.js)

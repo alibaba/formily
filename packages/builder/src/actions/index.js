@@ -24,14 +24,14 @@ export const addComponentAndEdit = (
   type,
   containerId
 ) => dispatch => {
-  const id = uuid()
+  const id = component.id || uuid()
   dispatch(addComponent(component, existId, id, type, containerId))
   dispatch(changeComponent(id))
   dispatch(showComponentProps(id, component, containerId))
 
-  if (component.__key__ === 'layout') {
-    dispatch(changeLayoutId(id))
-  }
+  // if (component.__key__ === 'layout') {
+  //   dispatch(changeLayoutId(id))
+  // }
 
   dispatch(
     editComponent(
@@ -43,6 +43,14 @@ export const addComponentAndEdit = (
     )
   )
 }
+
+export const moveComponent = (sourceId, targetId) => ({
+  type: 'MOVE_COMOPNENT',
+  data: {
+    id: sourceId,
+    targetId
+  }
+})
 
 export const changeComponentOrder = (sourceId, targetId, containerId) => ({
   type: 'CHANGE_COMPONENT_ORDER',

@@ -144,7 +144,12 @@ export const wrapSubmitSchema = (schema, keepAll = false) => {
  * @param {Object} schema
  * @param {String} containerId 相对容器id
  */
-export const getOrderProperties = (schema = {}) => {
+export const getOrderProperties = (schema = {}, containerId = []) => {
+  if (containerId.length) {
+    const id = containerId.shift()
+    return getOrderProperties(schema.properties[id], containerId)
+  }
+
   const { properties = {} } = schema
   if (isEmptyObj(properties)) return []
 

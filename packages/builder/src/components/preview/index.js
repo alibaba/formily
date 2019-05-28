@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import {
   addComponentAndEdit,
   changeComponentOrder,
+  moveComponent,
   editComponent,
   deleteComponent,
   showComponentProps,
@@ -65,6 +66,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(addComponentAndEdit(component, existId, type, containerId)),
   changeComponentOrder: (sourceId, targetId, containerId) =>
     dispatch(changeComponentOrder(sourceId, targetId, containerId)),
+  moveComponent: (sourceId, targetId) => dispatch(moveComponent(sourceId, targetId)),
   editComponent: (id, propsData, containerId) =>
     dispatch(editComponent(id, propsData, containerId)),
   deleteComponent: id => dispatch(deleteComponent(id)),

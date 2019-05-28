@@ -92,6 +92,7 @@ const MainBox = ({ props, canDrop, isOver, connectDropTarget }) => {
       <RenderPreviewList props={props} _connectDropTarget={connectDropTarget} />
       {connectDropTarget(
         <div
+          className='main-drop'
           style={{ position: 'absolute', left: 0, right: 0, height: '100%' }}
         />
       )}

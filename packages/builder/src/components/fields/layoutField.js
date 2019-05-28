@@ -16,7 +16,19 @@ const Box = ({
       ref={connectDragSource}
       key={key}
       onClick={() => {
-        addComponentAndEdit(fieldItem)
+        const id = uuid()
+        const newFieldItem = {
+          type: 'object',
+          key: fieldItem.key,
+          id,
+          ...fieldItem.__key__data__,
+          properties: {},
+          'x-props': {
+            ...fieldItem.__key__data__['x-props'],
+            _extra: fieldItem
+          }
+        }
+        addComponentAndEdit(newFieldItem)
       }}
       style={Object.assign({}, { opacity })}
     >
@@ -40,7 +52,7 @@ export default DragSource(
 
       const item = monitor.getItem()
       const dropResult = monitor.getDropResult()
-      const { fieldItem } = item
+      const { fieldItem, id } = item
       const { addComponentAndEdit } = props
       try {
         ;['height', 'icon', 'iconUrl', 'width'].forEach(key => {
@@ -49,7 +61,19 @@ export default DragSource(
       } catch (e) {}
 
       if (dropResult) {
-        addComponentAndEdit(fieldItem)
+        const newFieldItem = {
+          type: 'object',
+          key: fieldItem.key,
+          id,
+          ...fieldItem.__key__data__,
+          properties: {},
+          'x-props': {
+            ...fieldItem.__key__data__['x-props'],
+            _extra: fieldItem
+          }
+        }
+
+        addComponentAndEdit(newFieldItem)
       }
     }
   },

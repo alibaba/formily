@@ -341,19 +341,23 @@ describe('reducers', () => {
       properties: {
         a: {
           type: 'string',
-          title: 'a'
+          id: 'a',
+          title: 'a',
+          'x-index': 0
         },
         b: {
           type: 'string',
-          title: 'b'
+          id: 'b',
+          title: 'b',
+          'x-index': 1
         }
       }
     }
     const action = {
       type: 'CHANGE_COMPONENT_ORDER',
       data: {
-        id: 'a',
-        targetId: 'b'
+        id: ['a'],
+        targetId: ['b']
       }
     }
     const afterState = {
@@ -373,8 +377,11 @@ describe('reducers', () => {
         }
       }
     }
-    expect(initSchemaDataReducer(beforeState, action)).toEqual(afterState)
+    const result = initSchemaDataReducer(beforeState, action)
+
+    expect(result).toEqual(afterState)
   })
+
   test('initSchemaData reducers return custom state when ADD_COMPONENT', () => {
     const beforeState = {
       type: 'object',
@@ -443,8 +450,7 @@ describe('reducers', () => {
       type: 'ADD_COMPONENT',
       data: {
         id: '222',
-        addType: 'layout',
-        containerId: '111',
+        containerId: ['111'],
         component: {
           key: 'input',
           icon: 'info',
@@ -496,29 +502,17 @@ describe('reducers', () => {
       type: 'object',
       properties: {
         '111': {
+          key: 'wrapper_layout',
+          icon: 'clock-circle-o',
           type: 'object',
+          title: 'Layout布局',
+          __key__: 'layout',
+          __key__data__: {
+            'x-component': 'layout',
+            'x-props': { labelCol: 8, wrapperCol: 6 }
+          },
           id: '111',
-          'x-index': 0,
-          'x-component': 'layout',
-          properties: {},
-          'x-props': {
-            labelCol: 8,
-            wrapperCol: 6,
-            _extra: {
-              key: 'wrapper_layout',
-              icon: 'clock-circle-o',
-              type: 'object',
-              title: 'Layout布局',
-              __key__: 'layout',
-              __key__data__: {
-                'x-component': 'layout',
-                'x-props': {
-                  labelCol: 8,
-                  wrapperCol: 6
-                }
-              }
-            }
-          }
+          'x-index': 0
         }
       }
     }
@@ -575,6 +569,7 @@ describe('reducers', () => {
         }
       }
     }
+
     expect(initSchemaDataReducer(beforeState, action1)).toEqual(afterState1)
     expect(initSchemaDataReducer(beforeState, action2)).toEqual(afterState2)
     expect(initSchemaDataReducer(beforeStateWithLayout, action3)).toEqual(
@@ -606,6 +601,7 @@ describe('reducers', () => {
     }
     expect(initSchemaDataReducer(beforeState, action)).toEqual(afterState)
   })
+
   test('initSchemaData reducers return custom state when EDIT_COMPONENT', () => {
     const beforeState = {
       type: 'object',
@@ -644,7 +640,7 @@ describe('reducers', () => {
       type: 'EDIT_COMPONENT',
       data: {
         id: '222',
-        containerId: '111',
+        containerId: ['111'],
         propsData: {
           __id__: '333',
           'x-props': {

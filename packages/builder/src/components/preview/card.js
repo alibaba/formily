@@ -9,7 +9,6 @@ const style = {
 const Card = React.forwardRef(
   (
     {
-      obj,
       Field,
       props,
       canDrop,
@@ -76,6 +75,7 @@ const Card = React.forwardRef(
               }}
             />
           </div>
+          { isActive ? <div style={{ position: 'absolute', left: 0, width: '100%', height: 2, background: '#000' }}>---</div> : null }
         </div>
       )
       : connectDragSource(
@@ -134,8 +134,13 @@ export default flow(
         const dropResult = monitor.getDropResult()
         const { id: droppedId } = props
         if (dropResult) {
-          const { targetId } = dropResult
-          props.moveCard(droppedId, targetId)
+          const { targetId, targetType } = dropResult
+
+          if (targetType === 'layout') {
+            props.move(droppedId, targetId)
+          } else {
+            props.moveCard(droppedId, targetId, targetType)
+          }
         }
       }
     },
@@ -145,12 +150,19 @@ export default flow(
     })
   ),
   DropTarget(
-    [ItemTypes.CARD, ItemTypes.FIELD, ItemTypes.LAYOUT],
+    [ItemTypes.CARD, ItemTypes.FIELD],
     {
       drop(props, monitor) {
+        const comp = props.props.schema
+        const isLayoutWrapper =
+          comp['x-props'] &&
+          comp['x-props']._extra &&
+          comp['x-props']._extra.__key__ === 'layout'
+
         return {
           name: 'card',
-          targetId: props.id
+          targetId: props.id,
+          targetType: isLayoutWrapper ? 'layout' : ''
         }
       }
     },

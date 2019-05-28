@@ -15,6 +15,10 @@ export default that => {
     that.props.changeComponentOrder(dragIndex, hoverIndex)
   }
 
+  const move = (sourceId, targetId) => {
+    that.props.moveComponent(sourceId, targetId)
+  }
+
   registerFieldMiddleware(Field => props =>
     React.createElement(FormConsumer, {}, (obj = {}) => {
       const { type } = obj
@@ -26,9 +30,10 @@ export default that => {
 
       return (
         <Card
-          key={props.path[0]}
-          id={props.path[0]}
+          key={props.schemaPath}
+          id={props.schemaPath}
           moveCard={moveCard}
+          move={move}
           props={props}
           that={that}
           obj={obj}

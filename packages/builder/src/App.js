@@ -117,8 +117,15 @@ class App extends Component {
     })
 
     const containerDom = document.querySelector('.schemaform-app')
+    const headerHeight = document.querySelector('.schemaform-header')
+      .offsetHeight
+
     if (containerDom.offsetTop !== 0) {
-      document.querySelector('.schamaform-content').style.height = `${window.innerHeight - containerDom.offsetTop - 64}px`
+      document.querySelector(
+        '.schamaform-content'
+      ).style.height = `${window.innerHeight -
+        containerDom.offsetTop -
+        headerHeight}px`
     }
   }
 
@@ -218,7 +225,7 @@ class App extends Component {
     const { initSchemaData, renderEngine } = this.props
     const { Accordion, version: UIVersion } = this.props.UI
 
-    const contentHeight = window.innerHeight - 64
+    const contentHeight = window.innerHeight
 
     return this.state.systemError ? (
       <p>系统发生异常</p>

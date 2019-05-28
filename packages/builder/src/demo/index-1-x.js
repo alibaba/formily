@@ -121,6 +121,7 @@ const props = {
   //   console.info('index onChange data', data);
   // },
   onSubmit: data => {
+    alert(`保存数据：${JSON.stringify(data)}`)
     console.info('index onSubmit data', data)
   }
 }

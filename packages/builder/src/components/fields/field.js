@@ -75,7 +75,7 @@ export default DragSource(
       } catch (e) {}
 
       if (dropResult) {
-        if (dropResult.name === 'card') {
+        if (dropResult.targetType === 'layout') {
           addComponentAndEdit(fieldItem, '', 'layout', dropResult.targetId)
         } else {
           addComponentAndEdit(fieldItem)
