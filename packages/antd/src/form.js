@@ -1,8 +1,7 @@
 import React from 'react'
 import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
 import classNames from 'classnames'
-import { Popover, Icon } from 'antd'
-import { Row, Col } from './components/grid'
+import { Popover, Icon, Row, Col } from 'antd'
 import LOCALE from './locale'
 import styled from 'styled-components'
 import { isFn, moveTo } from './utils'
@@ -62,7 +61,7 @@ export const FormItem = styled(
 
       const cls = classNames({
         [`${prefix}form-item-label`]: true,
-        [`${prefix}left`]: labelTextAlign === 'left'
+        [`${prefix}${labelTextAlign}`]: !!labelTextAlign
       })
 
       if ((wrapperCol || labelCol) && labelAlign !== 'top') {
@@ -75,7 +74,13 @@ export const FormItem = styled(
         )
       }
 
-      return <div className={cls}>{ele}</div>
+      return (
+        <div className={cls}>
+          {ele}
+          {((extra && extra.length > 20) || React.isValidElement(extra)) &&
+            this.renderHelper()}
+        </div>
+      )
     }
 
     getItemWrapper() {
@@ -182,7 +187,7 @@ export const FormItem = styled(
     }
   }
 )`
-  margin-bottom: 6px;
+  margin-bottom: 0 !important;
   .ant-form-item-control {
     display: block;
     line-height: 32px;
@@ -197,7 +202,7 @@ export const FormItem = styled(
   }
   .ant-form-item-msg {
     &.ant-form-item-space {
-      min-height: 20px;
+      min-height: 24px;
       .ant-form-item-help,
       .ant-form-item-extra {
         margin-top: 0;
@@ -235,15 +240,18 @@ export const FormItem = styled(
       }
     }
   }
+  .ant-left {
+    text-align: left;
+  }
+  .ant-right {
+    text-align: right;
+  }
+  .ant-center {
+    text-align: center;
+  }
 `
 
 const toArr = val => (Array.isArray(val) ? val : val ? [val] : [])
-
-const hasRequired = schema => {
-  if (schema.required) return true
-  if (schema['x-rules'] && schema['x-rules'].required) return true
-  return toArr(schema['x-rules']).some(v => v && v.required)
-}
 
 registerFormWrapper(OriginForm => {
   OriginForm = styled(OriginForm)`
@@ -335,7 +343,7 @@ registerFormWrapper(OriginForm => {
         table-layout: auto;
       }
     }
-    .ant-rating-medium {
+    .ant-rating-default {
       min-height: 30px;
       line-height: 30px;
     }
@@ -353,7 +361,7 @@ registerFormWrapper(OriginForm => {
     static defaultProps = {
       component: 'form',
       prefix: 'ant-',
-      size: 'medium',
+      size: 'default',
       labelAlign: 'left',
       locale: LOCALE,
       autoAddColon: true
@@ -445,7 +453,7 @@ const isTableColItem = (path, getSchema) => {
 
 registerFieldMiddleware(Field => {
   return props => {
-    const { name, errors, path, editable, schema, getSchema } = props
+    const { name, errors, editable, path, required, schema, getSchema } = props
     if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
     return React.createElement(
       FormConsumer,
@@ -468,9 +476,8 @@ registerFieldMiddleware(Field => {
             autoAddColon,
             size,
             ...schema['x-item-props'],
-            label:
-              schema.title || (schema['x-props'] && schema['x-props'].title),
-            noMinHeight: schema.type === 'object',
+            label: schema.title,
+            noMinHeight: schema.type === 'object' && !schema['x-component'],
             isTableColItem: isTableColItem(
               path.slice(0, path.length - 2),
               getSchema
@@ -478,7 +485,7 @@ registerFieldMiddleware(Field => {
             type: schema['x-component'] || schema['type'],
             id: name,
             validateState: toArr(errors).length ? 'error' : undefined,
-            required: editable === false ? false : hasRequired(schema),
+            required: editable === false ? false : required,
             extra: schema.description,
             help:
               toArr(errors).join(' , ') ||

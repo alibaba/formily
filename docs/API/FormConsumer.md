@@ -1,13 +1,14 @@
 # FormConsumer
 
 ## 介绍
+
 用于表单的跨组件通讯提交重置状态同步等操作，它主要与FormProvider一起使用
 
 ## 依赖
+
 ```javascript
 import {FormConsumer} from '@uform/react'
 ```
-
 
 ## API
 
@@ -23,7 +24,6 @@ import {FormConsumer} from '@uform/react'
     })=>ReactElement)
 </FormConsumer>
 ```
-
 
 ## 用例
 
@@ -45,7 +45,7 @@ registerFormField(
 
 ReactDOM.render(
    <FormProvider>
-       <SchemaForm defaultValue={{aa:'123'}} onSubmit={values=>console.log(values)}>
+       <SchemaForm defaultValue={{aa:'123'}} onSubmit={values=>alert(JSON.stringify(values))}>
          <Field name="aa" type="string"/>
          <button htmlType="submit">内部提交</button>
        </SchemaForm>

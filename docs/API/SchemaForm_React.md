@@ -1,9 +1,11 @@
 # SchemaForm
 
 ## 介绍
-Rs UForm的核心组件，用于构建表单
+
+@uform/react 的核心组件，用于构建表单
 
 ## 依赖
+
 ```javascript
 import {SchemaForm} from '@uform/react'
 
@@ -13,28 +15,28 @@ import SchemaForm from '@uform/react'
 ```
 
 ## API
+
 | 属性名称 | 属性描述 | 属性类型 | 默认值 |
+| ---- | ---- | ---- | --- |
 | --- | --- | --- | --- |
+| actions | 需要握手的表单actions，只接收通过[createFormActions](#/97UlUl/XEFAF7HoHV)/[createAsyncFormActions](#/97UlUl/leFLFGHMHK)创建出来的actions | Object |  |
 | defaultValue | 表单默认值 | Object |  |
-| value | 表单值，受控态使用 | Object | {} |
+| editable | 控制表单字段是否可编辑状态 | `Boolean | Function(name : String) : Boolean` |  |
+| effects | 副作用处理函数 | Function |  |
 | initialValues | 表单值，受控态使用 | Object | {} |
 | locale | 表单国际化文案 | Object | {} |
-| schema | 表单json schema，具体参考 [扩展规范](#/MpI2Ij/1gSGSDf5) | Object | {type:"object",properties:{}} |
+| schema | 表单json schema，具体参考 [扩展规范](#/MpI2Ij/DVSLSafN) | Object | {type:"object",properties:{}} |
 | onChange | 表单变化事件回调 | `Function(values : Object){}` |  |
-| onSubmit | 表单提交事件回调 | `Function(values : Object){}` |  |
 | onReset | 表单重置事件回调 | `Function(values : Object){}` |  |
+| onSubmit | 表单提交事件回调 | `Function(values : Object){}` |  |
 | onValidateFailed | 表单校验失败事件回调 | Function |  |
-| editable | 控制表单字段是否可编辑状态 | `Boolean | Function(name : String) : Boolean` |  |
-| actions | 需要握手的表单actions，只接收通过[createFormActions](#/aAUeUD/XEFAF7HoHV)创建出来的actions | Object |  |
-| effects | 副作用处理函数 | `Function( selector : Function, actions: FormActions){}` |  |
-
 
 ## 副作用处理
 
 > 表单副作用，也就是由表单字段的内部事件所产生的联动，校验，异步逻辑，如何更好的管理和维护副作用逻辑，恰好就是rxjs的最大优势，所以，我们采用了rxjs来管理副作用逻辑
 
-
 前面API介绍中有讲到effects，这个effects是一个回调函数，它也是一个非常强大的回调函数，它接收了一个selector函数作为参数，我们可以用selector来选择表单内的任意一个字段，对其做状态修改，即便存在异步逻辑，也是可以很方便的在各种异步环境下对字段的状态做修改，所以，我们的表单联动，是不限于时空的。下面可以看一个简单的例子：
+
 ```jsx
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
@@ -71,8 +73,8 @@ ReactDOM.render(
 上面的例子是实现aa在值改变的时候将bb的值设置为aa的值。
 
 ## 副作用事件
-> 在上面的例子中使用到了事件选择器，事件源主要是以下几种类型
 
+> 在上面的例子中使用到了事件选择器，事件源主要是以下几种类型
 
 ```javascript
 <SchemaForm
@@ -87,8 +89,8 @@ ReactDOM.render(
 />
 ```
 
-
 ## 用例
+
 ```javascript
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'

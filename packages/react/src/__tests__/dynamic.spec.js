@@ -262,9 +262,7 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
     )
   }
 
-  const { queryAllByTestId, queryAllByText, queryByText } = render(
-    <TestComponent />
-  )
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
   await sleep(100)
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(1)
@@ -296,7 +294,7 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
   await sleep(33)
   expect(queryAllByTestId('item').length).toBe(2)
   expect(queryAllByTestId('input').length).toBe(2)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(100)
   expect(submitHandler).toHaveBeenCalledWith({
     container: [{ aa: '321' }, undefined]
@@ -325,15 +323,13 @@ test('dynamic remove field', async () => {
     )
   }
 
-  const { queryAllByTestId, queryAllByText, queryByText } = render(
-    <TestComponent />
-  )
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
   await sleep(33)
   fireEvent.click(queryByText('Add Field'))
   await sleep(33)
   fireEvent.click(queryByText('Remove Field'))
   await sleep(33)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(33)
   expect(submitHandler).toHaveBeenCalledTimes(1)
   expect(validateFaildHandler).toHaveBeenCalledTimes(0)
@@ -345,7 +341,7 @@ test('dynamic remove field', async () => {
   await sleep(33)
   fireEvent.click(queryByText('Remove Field'))
   await sleep(33)
-  fireEvent.click(queryAllByText('Submit')[1])
+  fireEvent.click(queryByText('Submit'))
   await sleep(33)
   expect(submitHandler).toHaveBeenCalledTimes(2)
   expect(validateFaildHandler).toHaveBeenCalledTimes(0)
@@ -419,4 +415,49 @@ test('dynamic async default value', async () => {
   await sleep(100)
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(2)
+})
+
+test('invalid schema', async () => {
+  const TestComponent = () => {
+    const [schema, setSchema] = useState()
+    useEffect(() => {
+      setTimeout(() => {
+        act(() => {
+          setSchema({
+            type: 'object',
+            properties: {
+              container: {
+                type: 'array',
+                default: [{}],
+                'x-component': 'container',
+                properties: {},
+                items: {
+                  type: 'object',
+                  properties: {
+                    aa: {
+                      type: 'string'
+                    },
+                    bb: {
+                      type: 'string'
+                    }
+                  }
+                }
+              }
+            }
+          })
+        })
+      }, 33)
+    }, [])
+    return (
+      <SchemaForm initialValues={{}} schema={schema}>
+        <button type='submit'>Submit</button>
+      </SchemaForm>
+    )
+  }
+  const { queryByText, queryAllByTestId } = render(<TestComponent />)
+  await sleep(100)
+  fireEvent.click(queryByText('Add Field'))
+  await sleep(33)
+  expect(queryAllByTestId('item').length).toBe(2)
+  expect(queryAllByTestId('input').length).toBe(4)
 })

@@ -116,7 +116,7 @@ registerFormField(
     class Uploader extends React.Component {
       static defaultProps = {
         action:
-          '//www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
+          'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
         listType: 'text',
         multiple: true
       }

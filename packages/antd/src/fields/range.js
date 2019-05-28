@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import { Slider } from 'antd'
-import { mapLoadingProps } from '../utils'
+import { mapStyledProps } from '../utils'
 
 registerFormField(
   'range',
@@ -11,7 +11,7 @@ registerFormField(
         width: 320
       }
     },
-    getProps: mapLoadingProps
+    getProps: mapStyledProps
   })(
     class Component extends React.Component {
       render() {

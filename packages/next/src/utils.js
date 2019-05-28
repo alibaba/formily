@@ -17,11 +17,13 @@ const Text = styled(props => {
   } else {
     value = Array.isArray(props.value)
       ? props.value.join(' ~ ')
-      : String(props.value || '')
+      : String(props.value === undefined || props.value === null ? '' : props.value)
   }
   return (
     <div className={`${props.className} ${props.size || ''} text-field`}>
-      {value || 'N/A'}
+      {!value ? 'N/A' : value}
+      {props.addonTextAfter ? ' ' + props.addonTextAfter : ''}
+      {props.addonAfter ? ' ' + props.addonAfter : ''}
     </div>
   )
 })`

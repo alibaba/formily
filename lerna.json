@@ -2,7 +2,7 @@
   "packages": [
     "packages/*"
   ],
-  "version": "0.1.0-beta.15",
+  "version": "independent",
   "command": {
     "bootstrap": {
       "npmClientArgs": [
@@ -10,7 +10,6 @@
       ]
     },
     "publish": {
-      "skipGit": true,
       "allowBranch": "master",
       "ignoreChanges": [
         "*.md"

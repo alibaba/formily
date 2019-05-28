@@ -4,21 +4,36 @@ import { Button, Icon } from '@alifd/next'
 import styled from 'styled-components'
 
 export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
-  width:30px;
-  height:30px;
+  ${props =>
+    !props.hasText
+      ? `width:30px;
+  height:30px;`
+      : ''}
   margin-right:10px;
-  border-radius: 100px;
-  border: 1px solid #eee;
+  border-radius: ${props => (!props.hasText ? '100px' : 'none')};
+  border: ${props => (!props.hasText ? '1px solid #eee' : 'none')};
   margin-bottom:20px;
   cursor:pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover{
+  line-height: 1.3;
+  ${props =>
+    !props.hasText
+      ? `&:hover{
     background:#f7f4f4;
+  }`
+      : ''}
+      .next-icon{
+    display:flex;
+    align-items:'center'
+  }
+  .op-name{
+    margin-left:3px;
   }
 }
 `
+
 export const ArrayField = createArrayField({
   CircleButton,
   TextButton: props => (
@@ -137,6 +152,11 @@ registerFormField(
         }
         .next-btn-text {
           color: #999;
+          .next-icon:before {
+            width: 16px !important;
+            font-size: 16px !important;
+            margin-right: 3px;
+          }
         }
       }
     }
@@ -148,6 +168,11 @@ registerFormField(
       background: #fbfbfb;
       .next-btn-text {
         color: #888;
+        .next-icon:before {
+          width: 16px !important;
+          font-size: 16px !important;
+          margin-right: 3px;
+        }
       }
     }
   `

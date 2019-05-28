@@ -247,7 +247,14 @@ registerFormField(
       }
 
       render() {
-        const { value, schema, locale, className, renderField } = this.props
+        const {
+          value,
+          schema,
+          locale,
+          className,
+          renderField,
+          getOrderProperties
+        } = this.props
         const style = schema['x-props'] && schema['x-props'].style
         const additionFilter = this.createFilter('addition', schema)
         return (
@@ -258,31 +265,31 @@ registerFormField(
           >
             <div>
               <Table dataSource={value}>
-                {Object.keys(
-                  (schema.items && schema.items.properties) || {}
-                ).reduce((buf, key) => {
-                  const itemSchema = schema.items.properties[key]
-                  const filter = this.createFilter(key, itemSchema)
-                  const res = filter(
-                    () => {
-                      return buf.concat(
-                        <Column
-                          {...itemSchema}
-                          key={key}
-                          title={itemSchema.title}
-                          dataIndex={key}
-                          cell={(record, index) => {
-                            return renderField([index, key])
-                          }}
-                        />
-                      )
-                    },
-                    () => {
-                      return buf
-                    }
-                  )
-                  return res
-                }, [])}
+                {getOrderProperties(schema.items).reduce(
+                  (buf, { key, schema }) => {
+                    const filter = this.createFilter(key, schema)
+                    const res = filter(
+                      () => {
+                        return buf.concat(
+                          <Column
+                            {...schema}
+                            key={key}
+                            title={schema.title}
+                            dataIndex={key}
+                            cell={(record, index) => {
+                              return renderField([index, key])
+                            }}
+                          />
+                        )
+                      },
+                      () => {
+                        return buf
+                      }
+                    )
+                    return res
+                  },
+                  []
+                )}
                 {additionFilter(() => {
                   return (
                     <Column
@@ -312,7 +319,7 @@ registerFormField(
   )`
     display: inline-block;
     .array-item-addition {
-      padding: 10px 20px;
+      padding: 10px;
       background: #fbfbfb;
       border-left: 1px solid #dcdee3;
       border-right: 1px solid #dcdee3;
@@ -320,6 +327,15 @@ registerFormField(
       .next-btn-text {
         color: #888;
       }
+      .next-icon:before {
+        width: 16px !important;
+        font-size: 16px !important;
+        margin-right: 5px;
+      }
+    }
+
+    .next-table-cell-wrapper > .next-form-item {
+      margin-bottom: 0;
     }
     .array-item-operator {
       display: flex;

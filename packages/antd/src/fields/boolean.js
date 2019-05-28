@@ -1,11 +1,11 @@
 import { connect, registerFormField } from '@uform/react'
-import { acceptEnum, mapLoadingProps } from '../utils'
+import { acceptEnum, mapStyledProps } from '../utils'
 import { Switch } from 'antd'
 
 registerFormField(
   'boolean',
   connect({
     valueName: 'checked',
-    getProps: mapLoadingProps
+    getProps: mapStyledProps
   })(acceptEnum(Switch))
 )

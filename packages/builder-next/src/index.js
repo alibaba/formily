@@ -131,11 +131,7 @@ class Component extends React.Component {
   }
 
   render() {
-    return (
-      <div style={{ marginTop: -20 }}>
-        <Builder {...props} schema={this.state.schema} />
-      </div>
-    )
+    return <Builder {...props} schema={this.state.schema} />
   }
 }
 

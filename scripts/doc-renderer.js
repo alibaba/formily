@@ -1,17 +1,13 @@
 import React from 'react'
 import SiteRenderer from 'react-site-renderer'
 
-window.codeSandBoxDependencies = {
-  '@alifd/next': 'latest',
-  '@uform/next': 'latest',
-  '@uform/antd': 'latest',
-  '@uform/react': 'latest',
-  antd: 'latest'
+((window.gitter = {}).chat = {}).options = {
+  room: 'alibaba-uform/community'
 }
 
-window.codeSandBoxPeerDependencies = {
-  moment: 'latest'
-}
+const script = document.createElement('script')
+script.src = '//sidecar.gitter.im/dist/sidecar.v1.js'
+document.body.appendChild(script)
 
 export default ({ docs }) => {
   return (

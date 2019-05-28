@@ -10,8 +10,9 @@ export const Submit = ({ showLoading, ...props }) => {
           <Button
             type='primary'
             htmlType='submit'
+            disabled={showLoading ? status === 'submitting' : undefined}
             {...props}
-            loading={props.showLoading ? status === 'submitting' : undefined}
+            loading={showLoading ? status === 'submitting' : undefined}
           >
             {props.children || '提交'}
           </Button>

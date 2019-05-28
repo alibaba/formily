@@ -17,14 +17,14 @@ import {
   caf,
   isChildField,
   getSchemaNodeFromPath,
-  BufferList
+  BufferList,
+  defer
 } from './utils'
 import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
-import { Subject } from 'rxjs'
-import { filter } from 'rxjs/operators'
+import { Subject } from 'rxjs/internal/Subject'
+import { filter } from 'rxjs/internal/operators/filter'
 import { FormPath } from './path'
-import produce from 'immer'
 
 const defaults = opts => ({
   initialValues: {},
@@ -127,20 +127,19 @@ export class Form {
       callback = buffer
       buffer = false
     }
-    if (isStr(path) || isArr(path) || isFn(path)) {
-      this.updateQueue.push({ path, callback })
-    }
     return new Promise(resolve => {
+      if (isStr(path) || isArr(path) || isFn(path)) {
+        this.updateQueue.push({ path, callback, resolve })
+      }
       if (this.syncUpdateMode) {
         this.updateFieldStateFromQueue(buffer)
-        resolve()
+        return resolve()
       }
       if (this.updateQueue.length > 0) {
         if (this.updateRafId) caf(this.updateRafId)
         this.updateRafId = raf(() => {
           if (this.destructed) return
           this.updateFieldStateFromQueue(buffer)
-          resolve()
         })
       }
     })
@@ -167,23 +166,21 @@ export class Form {
 
   setFormState = reducer => {
     if (!isFn(reducer)) return
-    return new Promise(resolve => {
-      const published = produce(this.publishState(), reducer)
-      this.checkState(published)
-      resolve()
-    })
+    const published = this.publishState()
+    reducer(published, reducer)
+    return Promise.resolve(this.checkState(published))
   }
 
   checkState(published) {
     if (!isEqual(this.state.values, published.values)) {
       this.state.values = published.values
       this.state.dirty = true
-      this.updateFieldsValue()
+      return this.updateFieldsValue()
     }
     if (!isEqual(this.state.initialValues, published.initialValues)) {
       this.state.initialValues = published.initialValues
       this.state.dirty = true
-      this.updateFieldInitialValue()
+      return this.updateFieldInitialValue()
     }
   }
 
@@ -210,7 +207,7 @@ export class Form {
   updateFieldStateFromQueue(buffer) {
     const failed = {}
     const rafIdMap = {}
-    each(this.updateQueue, ({ path, callback }, i) => {
+    each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
         if (path && (isFn(path) || isArr(path) || isStr(path))) {
           if (isFn(path) ? path(field) : field.pathEqual(path)) {
@@ -219,7 +216,7 @@ export class Form {
               field.dirty = false
             }
             if (path.hasWildcard) {
-              this.updateBuffer.push(path.string, callback, { path })
+              this.updateBuffer.push(path.string, callback, { path, resolve })
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
@@ -235,14 +232,17 @@ export class Form {
                 }
               })
             }
+            if (resolve && isFn(resolve)) {
+              resolve()
+            }
           } else {
             failed[i] = failed[i] || 0
             failed[i]++
             if (this.fieldSize <= failed[i] && (buffer || path.hasWildcard)) {
               if (isStr(path)) {
-                this.updateBuffer.push(path, callback, { path })
+                this.updateBuffer.push(path, callback, { path, resolve })
               } else if (isFn(path) && path.hasWildcard) {
-                this.updateBuffer.push(path.string, callback, { path })
+                this.updateBuffer.push(path.string, callback, { path, resolve })
               }
             }
           }
@@ -254,7 +254,7 @@ export class Form {
 
   updateFieldStateFromBuffer(field) {
     const rafIdMap = {}
-    this.updateBuffer.forEach(({ path, values, key }) => {
+    this.updateBuffer.forEach(({ path, values, key, resolve }) => {
       if (isFn(path) ? path(field) : field.pathEqual(path)) {
         values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
@@ -277,6 +277,9 @@ export class Form {
         if (!path.hasWildcard) {
           this.updateBuffer.remove(key)
         }
+        if (resolve && isFn(resolve)) {
+          resolve()
+        }
       }
     })
   }
@@ -296,8 +299,9 @@ export class Form {
             const lastValid = this.state.valid
             let _errors = reduce(
               response,
-              (buf, { valid, errors }) => {
-                return buf.concat(errors)
+              (buf, { name, errors }) => {
+                if (!errors.length) return buf
+                return buf.concat({ name, errors })
               },
               []
             )
@@ -330,7 +334,7 @@ export class Form {
     if (field) {
       field.initialize({
         ...options,
-        value: value,
+        value: !isEmpty(value) ? value : initialValue,
         initialValue: initialValue
       })
       this.asyncUpdate(() => {
@@ -340,7 +344,7 @@ export class Form {
     } else {
       this.fields[name] = new Field(this, {
         name,
-        value: value !== undefined ? value : initialValue,
+        value: !isEmpty(value) ? value : initialValue,
         path: options.path,
         initialValue: initialValue,
         props: options.props
@@ -382,13 +386,6 @@ export class Form {
     }
   }
 
-  removeField(name) {
-    const field = this.fields[name]
-    if (field) {
-      field.remove()
-    }
-  }
-
   setErrors(name, errors, ...args) {
     errors = toArr(errors)
     const field = this.fields[name]
@@ -410,13 +407,14 @@ export class Form {
   }
 
   updateChildrenValue(parent) {
-    if (!parent.path) return
+    if (!parent.path || this.batchUpdateField) return
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
         let newValue = this.getValue($name)
         if (!isEqual(field.value, newValue)) {
           field.dirty = true
           field.value = newValue
+          field.notify()
           this.triggerEffect('onFieldChange', field.publishState())
         }
       }
@@ -446,19 +444,30 @@ export class Form {
   }
 
   updateFieldsValue(validate = true) {
+    const { promise, resolve } = defer()
     const update = () => {
+      const updateList = []
+      this.batchUpdateField = true
       each(this.fields, (field, name) => {
         let newValue = this.getValue(name)
         field.updateState(state => {
           state.value = newValue
         })
         if (field.dirty) {
-          raf(() => {
-            if (this.destructed) return
-            field.notify()
-          })
+          updateList.push(
+            new Promise(resolve => {
+              raf(() => {
+                if (this.destructed) return
+                field.notify()
+                this.triggerEffect('onFieldChange', field.publishState())
+                resolve()
+              })
+            })
+          )
         }
       })
+      this.batchUpdateField = false
+      resolve(Promise.all(updateList))
     }
     if (this.state.dirty && this.initialized) {
       if (validate) {
@@ -470,6 +479,8 @@ export class Form {
         update()
       }
     }
+
+    return promise
   }
 
   updateChildrenVisible(parent, visible) {
@@ -512,6 +523,10 @@ export class Form {
 
   deleteIn(name) {
     deleteIn(this.state.values, name)
+  }
+
+  deleteInitialValues(name) {
+    deleteIn(this.state.initialValues, name)
   }
 
   reset(forceClear) {

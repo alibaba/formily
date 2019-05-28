@@ -11,11 +11,8 @@ import {
   resolveFieldPath,
   isEmpty
 } from './utils'
-import produce, { setAutoFreeze } from 'immer'
 
 const filterSchema = (_, key) => key !== 'properties' && key !== 'items'
-
-setAutoFreeze(false)
 
 export class Field {
   constructor(context, options) {
@@ -48,7 +45,11 @@ export class Field {
         : this.getInitialValueFromProps(options.props)
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
-    this.editable = !isEmpty(editable) ? editable : this.editable
+    this.editable = !isEmpty(editable)
+      ? editable
+      : isEmpty(this.editable)
+        ? this.editable
+        : this.getContextEditable()
     this.path = resolveFieldPath(
       !isEmpty(options.path) ? options.path : this.path || []
     )
@@ -58,7 +59,7 @@ export class Field {
       ? !isEmpty(this.props)
         ? { ...this.props, ...clone(options.props) }
         : clone(options.props)
-      : this.props
+      : this.props || {}
     if (this.removed) {
       this.removed = false
       this.visible = true
@@ -83,6 +84,10 @@ export class Field {
     }
   }
 
+  getContextEditable() {
+    return this.getEditable(this.context.editable)
+  }
+
   getEditableFromProps(props) {
     if (props) {
       if (!isEmpty(props.editable)) {
@@ -93,7 +98,6 @@ export class Field {
         }
       }
     }
-    return this.getEditable(this.context.editable)
   }
 
   getRulesFromProps(props) {
@@ -168,6 +172,7 @@ export class Field {
 
   changeProps(props, force) {
     let lastProps = this.props
+    if (isEmpty(props)) return
     if (force || !isEqual(lastProps, props, filterSchema)) {
       this.props = clone(props, filterSchema)
       this.editable = this.getEditableFromProps(this.props)
@@ -178,7 +183,7 @@ export class Field {
   }
 
   changeEditable(editable) {
-    if (!isEmpty(this.props.editable)) return
+    if (!this.props || !isEmpty(this.props.editable)) return
     if (this.props['x-props'] && !isEmpty(this.props['x-props'].editable)) {
       return
     }
@@ -187,12 +192,21 @@ export class Field {
     this.notify()
   }
 
+  restore() {
+    if (this.removed) {
+      this.visible = true
+      this.removed = false
+    }
+  }
+
   remove() {
     this.value = undefined
+    this.initialValue = undefined
     this.visible = false
     this.removed = true
     if (!this.context) return
     this.context.deleteIn(this.name)
+    this.context.deleteInitialValues(this.name)
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
     }
@@ -222,8 +236,13 @@ export class Field {
       this.dirtyType = 'editable'
       this.dirty = true
     } else {
+      const prevEditable = this.getEditableFromProps(this.props)
       const propsEditable = this.getEditableFromProps(published.props)
-      if (!isEmpty(propsEditable) && !isEqual(propsEditable, this.editable)) {
+      if (
+        !isEmpty(propsEditable) &&
+        !isEqual(propsEditable, this.editable) &&
+        !isEqual(prevEditable, propsEditable)
+      ) {
         this.editable = propsEditable
         this.dirtyType = 'editable'
         this.dirty = true
@@ -348,25 +367,24 @@ export class Field {
 
   updateState(reducer) {
     if (!isFn(reducer)) return
-    const published = produce(
-      {
-        name: this.name,
-        path: this.path,
-        props: clone(this.props, filterSchema),
-        value: clone(this.value),
-        initialValue: clone(this.initialValue),
-        valid: this.valid,
-        loading: this.loading,
-        editable: this.editable,
-        invalid: this.invalid,
-        pristine: this.pristine,
-        rules: clone(this.rules),
-        errors: clone(this.effectErrors),
-        visible: this.visible,
-        required: this.required
-      },
-      reducer
-    )
+    if (this.removed) return
+    const published = {
+      name: this.name,
+      path: this.path,
+      props: clone(this.props, filterSchema),
+      value: clone(this.value),
+      initialValue: clone(this.initialValue),
+      valid: this.valid,
+      loading: this.loading,
+      editable: this.editable,
+      invalid: this.invalid,
+      pristine: this.pristine,
+      rules: clone(this.rules),
+      errors: clone(this.effectErrors),
+      visible: this.visible,
+      required: this.required
+    }
+    reducer(published)
     this.checkState(published)
   }
 

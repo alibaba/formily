@@ -1,6 +1,6 @@
 {
   "name": "@uform/utils",
-  "version": "0.1.0-beta.14",
+  "version": "0.1.14",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -18,6 +18,9 @@
     "access": "public"
   },
   "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
+  "peerDependencies": {
+    "@babel/runtime": "^7.4.4"
+  },
   "dependencies": {
     "camel-case": "^3.0.0"
   }

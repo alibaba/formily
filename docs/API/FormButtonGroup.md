@@ -12,14 +12,14 @@ import { FormButtonGroup } from '@uform/next(antd)'
 
 ## API
 
-| 属性名称  | 属性描述             | 属性类型 | 默认值 |
-| --------- | -------------------- | -------- | ------ |
-| align     | 按钮内容的定位       | string   |        |
-| sticky    | 是否洗底             | boolean  | false  |
-| style     | 大容器样式           | object   | {}     |
-| itemStyle | 按钮组容器样式       | object   | {}     |
-| offset    | 按钮组容器左偏移距离 | number   |        |
-| span      | 按钮组容器宽度       | number   |        |
+| 属性名称 | 属性描述 | 属性类型 | 默认值 |
+| ---- | ---- | ---- | --- |
+| align | 按钮内容的定位 | string |  |
+| itemStyle | 按钮组容器样式 | object | {} |
+| offset | 按钮组容器左偏移距离 | number |  |
+| span | 按钮组容器宽度 | number |  |
+| sticky | 是否洗底 | boolean | false |
+| style | 大容器样式 | object | {} |
 
 ## 用例
 
@@ -41,5 +41,5 @@ ReactDOM.render(
     </FormButtonGroup>
   </SchemaForm>,
   document.getElementById('root')
-)``
+)
 ```

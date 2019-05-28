@@ -4,3 +4,5 @@ public
 scripts
 *.log
 src/demo
+build
+__tests__

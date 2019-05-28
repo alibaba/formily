@@ -15,7 +15,7 @@ export const createVirtualBox = (name, component) => {
       render() {
         const { schema, schemaPath, path, getOrderProperties } = this.props
         const parentPath = path.slice(0, path.length - 1)
-        const properties = getOrderProperties(this.props)
+        const properties = getOrderProperties(schema)
         const children = properties.map(({ key }) => {
           const newPath = parentPath.concat(key)
           const newName = newPath.join('.')
