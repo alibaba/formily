@@ -4,7 +4,9 @@ import {
   setLanguage as setValidationLanguage
 } from '@uform/validator'
 import { caculateSchemaInitialValues, isFn } from './utils'
+import { IFormOptions } from '@uform/types'
 export * from './path'
+
 export const createForm = ({
   initialValues,
   onSubmit,
@@ -17,12 +19,12 @@ export const createForm = ({
   editable,
   effects,
   onValidateFailed
-}) => {
+}: IFormOptions) => {
   let fields = []
   initialValues = caculateSchemaInitialValues(
     schema,
     initialValues,
-    ({ name, path, schemaPath }, schema, value) => {
+    ({ name, path, schemaPath }, schema, value: any) => {
       fields.push({ name, path, schemaPath, schema, value })
     }
   )
@@ -43,7 +45,7 @@ export const createForm = ({
     onFormWillInit(form)
   }
 
-  fields = fields.map(({ name, path, schemaPath, schema, value }) => {
+  fields = fields.map(({ name, schemaPath, schema }) => {
     return form.registerField(name || schemaPath.join('.'), {
       path: schemaPath,
       props: schema

@@ -14,9 +14,9 @@ export interface ISchema {
   items?: ISchema
   minItems?: number
   maxItems?: number
-  ['x-props']: object
-  ['x-index']: number
-  ['x-rules']: Rule
-  ['x-component']: string
-  ['x-effect']: (dispatch: Dispatcher) => { [key: string]: any }
+  ['x-props']?: object
+  ['x-index']?: number
+  ['x-rules']?: Rule
+  ['x-component']?: string
+  ['x-effect']?: (dispatch: Dispatcher) => { [key: string]: any }
 }

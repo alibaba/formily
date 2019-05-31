@@ -12,7 +12,7 @@ export class Broadcast<P, S, N> {
   private buffer = []
   private length: number
 
-  public subscribe(subscriber: Subscriber<N>, subscription: any) {
+  public subscribe(subscriber: Subscriber<N>, subscription?: any) {
     if (!isFn(subscriber)) {
       return noop
     }
@@ -45,7 +45,7 @@ export class Broadcast<P, S, N> {
     })
   }
 
-  public notify(payload: P, filter: Filter<P, S>) {
+  public notify(payload: P, filter?: Filter<P, S>) {
     if (this.length === 0) {
       this.buffer.push({ payload, filter })
       return

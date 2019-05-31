@@ -5,12 +5,13 @@ import {
   unstable_cancelCallback,
   cancelCallback
 } from 'scheduler'
+import { Path, IFormPathMatcher } from '@uform/types'
 /* eslint-disable camelcase */
 
 import { isArr, isStr, getPathSegments, toArr, clone, isFn } from '@uform/utils'
 export * from '@uform/utils'
 
-const self = this || global || window
+const self = window
 
 export const raf =
   (self.requestAnimationFrame &&
@@ -24,7 +25,7 @@ export const caf =
     (cancelCallback || unstable_cancelCallback || self.cancelAnimationFrame)) ||
   self.clearTimeout
 
-export const resolveFieldPath = path => {
+export const resolveFieldPath = (path: Path | IFormPathMatcher): string[] => {
   if (!isArr(path)) {
     return isStr(path) ? resolveFieldPath(getPathSegments(path)) : undefined
   }
@@ -52,14 +53,15 @@ export const hasRequired = rules => {
 }
 
 export const publishFormState = state => {
-  const { values, valid, invalid, errors, pristine, dirty } = state
+  const { values, valid, invalid, initialValues, errors, pristine, dirty } = state
   return {
     values,
     valid,
     invalid,
     errors,
     pristine,
-    dirty
+    dirty,
+    initialValues
   }
 }
 
@@ -100,20 +102,20 @@ export const publishFieldState = state => {
 }
 
 export class BufferList {
-  data = []
-  indexes = {}
-  push(key, value, extra) {
+  public data = []
+  public indexes = {}
+  public push(key: string, value: any, extra: any) {
     if (!this.indexes[key]) {
-      let index = this.data.length
+      const index = this.data.length
       this.data.push({ ...extra, key, values: [value] })
       this.indexes[key] = index
     } else {
-      let item = this.data[this.indexes[key]]
-      if (item.values.indexOf(value) === -1) item.values.push(value)
+      const item = this.data[this.indexes[key]]
+      if (item.values.indexOf(value) === -1) { item.values.push(value) }
     }
   }
 
-  forEach(callback) {
+  public forEach(callback) {
     for (let i = 0; i < this.data.length; i++) {
       if (isFn(callback)) {
         callback(this.data[i], this.data[i].key)
@@ -121,7 +123,7 @@ export class BufferList {
     }
   }
 
-  remove(key, value) {
+  public remove(key: string, value?: any) {
     this.data = this.data.reduce((buf, item, index) => {
       if (item.key === key) {
         delete this.indexes[key]

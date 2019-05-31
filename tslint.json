@@ -11,6 +11,8 @@
       "single",
       "jsx-double"
     ],
+    "no-empty":false,
+    "no-shadowed-variable":false,
     "semicolon": [
       true,
       "never"

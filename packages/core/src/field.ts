@@ -11,12 +11,64 @@ import {
   resolveFieldPath,
   isEmpty
 } from './utils'
+import { IFieldOptions, IRuleDescription, Path, IField, IFormPathMatcher, IFieldState } from '@uform/types'
+import { Form } from './form'
+const filterSchema = (value: any, key: string): boolean => key !== 'properties' && key !== 'items'
 
-const filterSchema = (_, key) => key !== 'properties' && key !== 'items'
+export class Field implements IField {
 
-export class Field {
-  constructor(context, options) {
-    this.fieldbrd = new Broadcast()
+  public dirty: boolean
+
+  public dirtyType: string
+
+  public pristine: boolean
+
+  public valid: boolean
+
+  public invalid: boolean
+
+  public visible: boolean
+
+  public editable: boolean
+
+  public loading: boolean
+
+  public errors: string[]
+
+  public name: string
+
+  public value: any
+
+  public initialValue: any
+
+  public namePath: string[]
+
+  public path: string[]
+
+  public rules: IRuleDescription[]
+
+  public required: boolean
+
+  public props: any
+
+  public lastValidateValue: any
+
+  private publisher: Broadcast<any, any, any>
+
+  private context: Form
+
+  private removed: boolean
+
+  private destructed: boolean
+
+  private effectErrors: string[]
+
+  private initialized: boolean
+
+  private unSubscribeOnChange: () => void
+
+  constructor(context: Form, options: IFieldOptions) {
+    this.publisher = new Broadcast()
     this.context = context
     this.dirty = false
     this.pristine = true
@@ -34,7 +86,7 @@ export class Field {
     this.initialized = true
   }
 
-  initialize(options) {
+  public initialize(options: IFieldOptions) {
     const editable = this.getEditableFromProps(options.props)
     const rules = this.getRulesFromProps(options.props)
     this.value = !isEmpty(options.value) ? clone(options.value) : this.value
@@ -76,19 +128,19 @@ export class Field {
     }
   }
 
-  getInitialValueFromProps(props) {
+  public getInitialValueFromProps(props: any) {
     if (props) {
-      if (!isEmpty(props['default'])) {
-        return props['default']
+      if (!isEmpty(props.default)) {
+        return props.default
       }
     }
   }
 
-  getContextEditable() {
+  public getContextEditable() {
     return this.getEditable(this.context.editable)
   }
 
-  getEditableFromProps(props) {
+  public getEditableFromProps(props: any) {
     if (props) {
       if (!isEmpty(props.editable)) {
         return this.getEditable(props.editable)
@@ -100,7 +152,7 @@ export class Field {
     }
   }
 
-  getRulesFromProps(props) {
+  public getRulesFromProps(props: any) {
     if (props) {
       const rules = toArr(props['x-rules'])
       if (props.required && !rules.some(rule => rule.required)) {
@@ -111,39 +163,42 @@ export class Field {
     return this.rules
   }
 
-  getRequiredFromProps(props) {
-    if (!isEmpty(props.required)) return props.required
+  public getRequiredFromProps(props: any) {
+    if (!isEmpty(props.required)) { return props.required }
   }
 
-  getEditable(editable) {
-    if (isFn(editable)) return editable(this.name)
-    if (isBool(editable)) return editable
+  public getEditable(editable: boolean | ((name: string) => boolean)): boolean {
+    if (isFn(editable)) { return editable(this.name) }
+    if (isBool(editable)) { return editable }
     return this.editable
   }
 
-  onChange(fn) {
+  public onChange(fn: (payload: any) => void) {
     if (isFn(fn)) {
-      if (this.unSubscribeOnChange) this.unSubscribeOnChange()
+      if (this.unSubscribeOnChange) { this.unSubscribeOnChange() }
       fn(this.publishState())
       this.unSubscribeOnChange = this.subscribe(fn)
     }
   }
 
-  pathEqual(path) {
+  public match(path: Path | IFormPathMatcher) {
+    if (isFn(path)) {
+      return path(this)
+    }
     if (isStr(path)) {
-      if (path === this.name) return true
+      if (path === this.name) { return true }
     }
 
     path = resolveFieldPath(path)
 
     if (path.length === this.path.length) {
       for (let i = 0; i < path.length; i++) {
-        if (path[i] !== this.path[i]) return false
+        if (path[i] !== this.path[i]) { return false }
       }
       return true
     } else if (path.length === this.namePath.length) {
       for (let i = 0; i < path.length; i++) {
-        if (path[i] !== this.namePath[i]) return false
+        if (path[i] !== this.namePath[i]) { return false }
       }
       return true
     }
@@ -151,28 +206,28 @@ export class Field {
     return false
   }
 
-  publishState() {
+  public publishState() {
     return publishFieldState(this)
   }
 
-  subscribe(callback) {
-    return this.fieldbrd.subscribe(callback)
+  public subscribe(callback: (payload: any) => void) {
+    return this.publisher.subscribe(callback)
   }
 
-  notify(force) {
-    if (!this.dirty && !force) return
-    this.fieldbrd.notify(this.publishState())
+  public notify(force?: boolean) {
+    if (!this.dirty && !force) { return }
+    this.publisher.notify(this.publishState())
     this.dirty = false
     this.dirtyType = ''
   }
 
-  unsubscribe() {
-    this.fieldbrd.unsubscribe()
+  public unsubscribe() {
+    this.publisher.unsubscribe()
   }
 
-  changeProps(props, force) {
-    let lastProps = this.props
-    if (isEmpty(props)) return
+  public changeProps(props: any, force?: boolean) {
+    const lastProps = this.props
+    if (isEmpty(props)) { return }
     if (force || !isEqual(lastProps, props, filterSchema)) {
       this.props = clone(props, filterSchema)
       this.editable = this.getEditableFromProps(this.props)
@@ -182,8 +237,8 @@ export class Field {
     }
   }
 
-  changeEditable(editable) {
-    if (!this.props || !isEmpty(this.props.editable)) return
+  public changeEditable(editable: boolean) {
+    if (!this.props || !isEmpty(this.props.editable)) { return }
     if (this.props['x-props'] && !isEmpty(this.props['x-props'].editable)) {
       return
     }
@@ -192,19 +247,19 @@ export class Field {
     this.notify()
   }
 
-  restore() {
+  public restore() {
     if (this.removed) {
       this.visible = true
       this.removed = false
     }
   }
 
-  remove() {
+  public remove() {
     this.value = undefined
     this.initialValue = undefined
     this.visible = false
     this.removed = true
-    if (!this.context) return
+    if (!this.context) { return }
     this.context.deleteIn(this.name)
     this.context.deleteInitialValues(this.name)
     if (typeof this.value === 'object') {
@@ -212,7 +267,7 @@ export class Field {
     }
   }
 
-  checkState(published = this.publishState()) {
+  public checkState(published = this.publishState()) {
     if (!isEqual(published.value, this.value)) {
       this.value = published.value
       this.pristine = false
@@ -302,7 +357,7 @@ export class Field {
         }
       } else {
         this.rules = toArr(this.rules).filter(rule => {
-          if (rule && rule.required) return false
+          if (rule && rule.required) { return false }
           return true
         })
         this.errors = []
@@ -326,7 +381,7 @@ export class Field {
           }
         } else {
           this.rules = toArr(this.rules).filter(rule => {
-            if (rule && rule.required) return false
+            if (rule && rule.required) { return false }
             return true
           })
           this.errors = []
@@ -348,7 +403,7 @@ export class Field {
       if (this.visible) {
         this.value =
           this.value !== undefined ? this.value : clone(this.initialValue)
-        if (this.value !== undefined) this.context.setIn(this.name, this.value)
+        if (this.value !== undefined) { this.context.setIn(this.name, this.value) }
         this.context.updateChildrenVisible(this, true)
       } else {
         this.context.deleteIn(this.name)
@@ -365,9 +420,9 @@ export class Field {
     }
   }
 
-  updateState(reducer) {
-    if (!isFn(reducer)) return
-    if (this.removed) return
+  public updateState(reducer: (fieldStte: IFieldState) => void) {
+    if (!isFn(reducer)) { return }
+    if (this.removed) { return }
     const published = {
       name: this.name,
       path: this.path,
@@ -388,8 +443,8 @@ export class Field {
     this.checkState(published)
   }
 
-  destructor() {
-    if (this.destructed) return
+  public destructor() {
+    if (this.destructed) { return }
     this.destructed = true
     if (this.value !== undefined) {
       this.value = undefined
@@ -398,6 +453,6 @@ export class Field {
     this.context.updateChildrenVisible(this, false)
     delete this.context
     this.unsubscribe()
-    delete this.fieldbrd
+    delete this.publisher
   }
 }

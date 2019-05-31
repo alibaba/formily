@@ -1,6 +1,7 @@
 import { IRuleDescription } from './rule'
 import { ISchema } from './schema'
-
+import { Path } from './path'
+import { IFormPathMatcher } from './form'
 export interface IField {
   value: any
   valid: boolean
@@ -17,8 +18,25 @@ export interface IField {
   path: string[]
   props: ISchema
   rules: IRuleDescription[]
+  dirtyType: string
+  lastValidateValue: any
   notify: (forceUpdate?: boolean) => void
-  __lastValidateValue: any
+  changeEditable: (editable: boolean | ((name: string) => boolean)) => void
+  match: (path: Path | IFormPathMatcher) => boolean
+  initialize: (options: IFieldOptions) => void
+  publishState: () => IFieldState
+  onChange: (fn: () => void) => void
+  updateState: (fn: (state: IFieldState) => void) => void
+  destructor: () => void
+}
+
+export interface IFieldOptions {
+  path: Path
+  name?: string
+  props: any
+  value?: any
+  initialValue?: any
+  onChange?: (...args: any[]) => void
 }
 
 export interface IFieldState {
