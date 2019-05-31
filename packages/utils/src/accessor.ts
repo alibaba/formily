@@ -354,7 +354,7 @@ const resolveGetIn = (get: Getter) => {
 
 const resolveUpdateIn = (update: Setter, internalGetIn: Getter) => {
   const cache = new Map()
-  return (obj: any, path: Path, value: any) => {
+  return (obj: any, path: Path, value?: any) => {
     let paths: any = []
     if (!cache.get(path)) {
       paths = parsePaths(path)

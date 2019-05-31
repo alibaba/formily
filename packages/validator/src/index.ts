@@ -29,7 +29,7 @@ const flatArr = (arr: any[]) => {
 
 export { format }
 
-export const runValidation = async (values: object, fieldMap: IFieldMap, forceUpdate: boolean | ValidateHandler, callback: ValidateHandler): Promise<IValidateResponse[]> => {
+export const runValidation = async (values: object, fieldMap: IFieldMap, forceUpdate?: boolean | ValidateHandler, callback?: ValidateHandler): Promise<IValidateResponse[]> => {
   const queue = []
   if (isFn(forceUpdate)) {
     callback = forceUpdate as ValidateHandler
@@ -38,7 +38,7 @@ export const runValidation = async (values: object, fieldMap: IFieldMap, forceUp
   each(fieldMap, (field, name) => {
     const value = getIn(values, name)
     if (field.visible === false || field.editable === false) { return }
-    if (isEqual(field.__lastValidateValue, value) && !forceUpdate) { return }
+    if (isEqual(field.lastValidateValue, value) && !forceUpdate) { return }
     const title = field.props && field.props.title
     const rafId = setTimeout(() => {
       field.loading = true
@@ -94,7 +94,7 @@ export const runValidation = async (values: object, fieldMap: IFieldMap, forceUp
         if (field.dirty && field.notify) {
           field.notify()
         }
-        field.__lastValidateValue = clone(value)
+        field.lastValidateValue = clone(value)
         return {
           name,
           value,
