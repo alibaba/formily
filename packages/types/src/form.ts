@@ -1,7 +1,7 @@
 import { Path } from './path'
 import { IFieldState, IField } from './field'
 import { ISchema } from './schema'
-import { Subject } from 'rxjs'
+import { Subject } from 'rxjs/internal/Subject'
 import { IEffects } from './effects'
 export interface IFormPayload { formState: IFormState }
 

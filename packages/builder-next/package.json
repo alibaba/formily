@@ -21,8 +21,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/builder": "0.1.12",
-    "@uform/types": "^0.1.12"
+    "@uform/builder": "^0.1.14",
+    "@uform/types": "^0.1.14"
   },
   "devDependencies": {
     "@alifd/next": "^1.13.1"

@@ -20,10 +20,10 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/core": "0.1.14",
-    "@uform/utils": "0.1.8",
-    "@uform/types": "^0.1.12",
-    "@uform/validator": "0.1.8",
+    "@uform/core": "^0.1.14",
+    "@uform/utils": "^0.1.14",
+    "@uform/types": "^0.1.14",
+    "@uform/validator": "^0.1.14",
     "pascal-case": "^2.0.1",
     "react-eva": "^1.0.0",
     "rxjs-compat": "^6.5.1"

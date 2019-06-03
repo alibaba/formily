@@ -7,6 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
   },
+  "types":"lib/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/uform/issues"
   },
@@ -15,12 +16,13 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
+    "@babel/runtime": "^7.4.4",
+    "rxjs": "^6.3.3"
   },
   "dependencies": {
-    "@uform/types": "^0.1.12",
-    "@uform/utils": "0.1.8",
-    "@uform/validator": "0.1.8",
+    "@uform/types": "^0.1.14",
+    "@uform/utils": "^0.1.14",
+    "@uform/validator": "^0.1.14",
     "dot-match": "^0.1.18",
     "rxjs": "^6.3.3",
     "scheduler": "^0.11.2"

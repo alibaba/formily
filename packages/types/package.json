@@ -1,6 +1,6 @@
 {
   "name": "@uform/types",
-  "version": "0.1.12",
+  "version": "0.1.14",
   "license": "MIT",
   "main": "lib",
   "types":"lib/index.d.ts",
@@ -16,7 +16,11 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
+    "@babel/runtime": "^7.4.4",
+    "rxjs": "^6.3.3"
+  },
+  "dependencies": {
+    "rxjs": "^6.3.3"
   },
   "publishConfig": {
     "access": "public"

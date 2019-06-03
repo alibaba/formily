@@ -24,6 +24,7 @@ import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
 import { Subject } from 'rxjs/internal/Subject'
 import { filter } from 'rxjs/internal/operators/filter'
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged'
 import { FormPath } from './path'
 import { IFormOptions, IFieldOptions, IFieldState, IFormPathMatcher, IFormState, ISchema, Path, IFieldMap, ISubscribers } from '@uform/types'
 
@@ -218,7 +219,7 @@ export class Form {
     }
   }
 
-  public setErrors(name, errors, ...args) {
+  public setErrors(name: string, errors: string[] | string, ...args: string[]) {
     errors = toArr(errors)
     const field = this.fields[name]
     if (field) {
@@ -238,7 +239,7 @@ export class Form {
     }
   }
 
-  public updateChildrenValue(parent) {
+  public updateChildrenValue(parent: Field) {
     if (!parent.path || this.batchUpdateField) { return }
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
@@ -253,7 +254,7 @@ export class Form {
     })
   }
 
-  public updateChildrenInitalValue(parent) {
+  public updateChildrenInitalValue(parent: Field) {
     if (!parent.path) { return }
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
@@ -316,7 +317,7 @@ export class Form {
     return promise
   }
 
-  public updateChildrenVisible(parent, visible) {
+  public updateChildrenVisible(parent: Field, visible?: boolean) {
     if (!parent.path) { return }
     each(this.fields, (field, $name) => {
       if ($name === parent.name) { return }
@@ -337,7 +338,8 @@ export class Form {
 
   public getInitialValue(name: string, path?: Path) {
     const initialValue = getIn(this.state.initialValues, name)
-    let schema, schemaDefault
+    let schema: ISchema
+    let schemaDefault: any
     if (initialValue === undefined) {
       schema = path ? getSchemaNodeFromPath(this.schema, path) : undefined
       schemaDefault = schema && schema.default
@@ -454,6 +456,22 @@ export class Form {
     delete this.publisher
   }
 
+  public triggerEffect = (eventName: string, ...args: any[]) => {
+    if (this.subscribes[eventName]) {
+      this.subscribes[eventName].next(...args)
+    }
+  }
+
+
+  public syncUpdate(fn: (() => void)) {
+    if (isFn(fn)) {
+      this.syncUpdateMode = true
+      fn()
+      this.syncUpdateMode = false
+    }
+  }
+
+
   private initialize(values = this.state.initialValues) {
     const lastValues = this.state.values
     const lastDirty = this.state.dirty
@@ -484,6 +502,9 @@ export class Form {
           if (!this.subscribes[eventName]) {
             this.subscribes[eventName] = new Subject()
           }
+          this.subscribes[eventName] = this.subscribes[eventName].pipe(
+            distinctUntilChanged(isEqual)
+          ) as Subject<any>
           if (isStr(eventFilter) || isFn(eventFilter)) {
             return this.subscribes[eventName].pipe(
               filter(isStr(eventFilter) ? FormPath.match(eventFilter) : eventFilter)
@@ -501,12 +522,6 @@ export class Form {
     }
   }
 
-  public triggerEffect = (eventName, ...args) => {
-    if (this.subscribes[eventName]) {
-      this.subscribes[eventName].next(...args)
-    }
-  }
-
   private checkState(published): Promise<any> {
     if (!isEqual(this.state.values, published.values)) {
       this.state.values = published.values
@@ -520,14 +535,6 @@ export class Form {
     }
 
     return Promise.resolve()
-  }
-
-  public syncUpdate(fn) {
-    if (isFn(fn)) {
-      this.syncUpdateMode = true
-      fn()
-      this.syncUpdateMode = false
-    }
   }
 
   private asyncUpdate(fn) {
