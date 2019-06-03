@@ -24,7 +24,6 @@ import { Field } from './field'
 import { runValidation, format } from '@uform/validator'
 import { Subject } from 'rxjs/internal/Subject'
 import { filter } from 'rxjs/internal/operators/filter'
-import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged'
 import { FormPath } from './path'
 import { IFormOptions, IFieldOptions, IFieldState, IFormPathMatcher, IFormState, ISchema, Path, IFieldMap, ISubscribers } from '@uform/types'
 
@@ -107,10 +106,10 @@ export class Form {
   }
 
 
-  public setFieldState = (path: Path | IFormPathMatcher, buffer: boolean | (() => boolean), callback: (() => boolean)) => {
+  public setFieldState = (path: Path | IFormPathMatcher, buffer: boolean | (() => boolean), callback: (() => void)) => {
     if (this.destructed) { return }
     if (isFn(buffer)) {
-      callback = buffer as (() => boolean)
+      callback = buffer as (() => void)
       buffer = false
     }
     return new Promise(resolve => {
@@ -502,13 +501,11 @@ export class Form {
           if (!this.subscribes[eventName]) {
             this.subscribes[eventName] = new Subject()
           }
-          this.subscribes[eventName] = this.subscribes[eventName].pipe(
-            distinctUntilChanged(isEqual)
-          ) as Subject<any>
           if (isStr(eventFilter) || isFn(eventFilter)) {
+            const predicate = isStr(eventFilter) ? FormPath.match(eventFilter as string) : (eventFilter as IFormPathMatcher)
             return this.subscribes[eventName].pipe(
-              filter(isStr(eventFilter) ? FormPath.match(eventFilter) : eventFilter)
-            )
+              filter(predicate)
+            ) as Subject<any>
           }
           return this.subscribes[eventName]
         },

@@ -31,7 +31,7 @@ export interface IFormOptions {
   onReset: (payload: IFormPayload) => void
   schema: ISchema | {}
   onFormChange: (payload: IFormPayload) => void
-  onFieldChange: (fieldState: IFieldState) => void
+  onFieldChange: (fieldState: IFieldState, formState?: IFormState) => void
   onValidateFailed: (fieldErrors: IFieldError[]) => void
   onFormWillInit?: (form: any) => void
   editable: boolean | ((nam: string) => boolean)
