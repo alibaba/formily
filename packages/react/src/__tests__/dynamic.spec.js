@@ -20,6 +20,24 @@ beforeEach(() => {
     ))
   )
 
+  registerFormField(
+    'radio',
+    connect()(props =>
+      props.dataSource.map(item => (
+        <label htmlFor={item.value} key={`${item.label}-${item.value}`}>
+          <input
+            onChange={() => props.onChange(item.value)}
+            type='radio'
+            checked={item.value === props.value}
+            id={item.value}
+            data-testid={`radio-${item.value}`}
+          />
+          {props.id}
+        </label>
+      ))
+    )
+  )
+
   registerFormField('container', props => {
     const { value, mutators, renderField } = props
     return (
@@ -460,4 +478,102 @@ test('invalid schema', async () => {
   await sleep(33)
   expect(queryAllByTestId('item').length).toBe(2)
   expect(queryAllByTestId('input').length).toBe(4)
+})
+
+test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    const [state, setState] = useState({ testA: '123' })
+    const constState = { ...state }
+    useEffect(() => {
+      setTimeout(() => {
+        act(() => setState({ testA: `${Math.random()}` }))
+      }, 100)
+    }, [])
+    return (
+      <Fragment>
+        <SchemaForm
+          actions={actions}
+          defaultValue={constState}
+          onChange={() => {
+            if (constState.testA !== '123') {
+              act(() => setState({ testB: '456' }))
+            }
+          }}
+          onReset={() => {
+            if (constState.testA !== '123') {
+              act(() => setState({ testC: '456' }))
+            }
+          }}
+          onSubmit={() => {
+            if (constState.testA !== '123') {
+              act(() => setState({ testD: '456' }))
+            }
+          }}
+          onValidateFailed={() => {
+            if (constState.testA !== '123') {
+              act(() => setState({ testE: '456' }))
+            }
+          }}
+        >
+          <Field
+            type='radio'
+            enum={[
+              {
+                label: 'a1',
+                value: 'a1'
+              },
+              {
+                label: 'a2',
+                value: 'a2'
+              }
+            ]}
+            name='a'
+          />
+          <Field
+            type='radio'
+            enum={[
+              {
+                label: 'b1',
+                value: 'b1'
+              },
+              {
+                label: 'b2',
+                value: 'b2'
+              }
+            ]}
+            required
+            name='b'
+          />
+          <button type='submit'>Submit</button>
+        </SchemaForm>
+        <div>valueB-{constState.testB}</div>
+        <div>valueC-{constState.testC}</div>
+        <div>valueD-{constState.testD}</div>
+        <div>valueE-{constState.testE}</div>
+      </Fragment>
+    )
+  }
+  const { queryByTestId, queryAllByText, queryByText } = render(
+    <TestComponent />
+  )
+  await sleep(100)
+  fireEvent.click(queryByTestId('radio-a2'))
+  await sleep(100)
+  // onChange
+  expect(queryAllByText('valueB-456').length).toBe(1)
+  actions.reset()
+  await sleep(100)
+  // onReset
+  expect(queryAllByText('valueC-456').length).toBe(1)
+  fireEvent.click(queryByText('Submit'))
+  await sleep(100)
+  // onValidateFailed
+  expect(queryAllByText('valueE-456').length).toBe(1)
+  fireEvent.click(queryByTestId('radio-b2'))
+  await sleep(100)
+  fireEvent.click(queryByText('Submit'))
+  await sleep(100)
+  // onSubmit
+  expect(queryAllByText('valueD-456').length).toBe(1)
 })
