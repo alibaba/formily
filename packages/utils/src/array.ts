@@ -78,15 +78,13 @@ export function every(val: string, iterator: EachStringIterator, revert?: boolea
 export function every<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): boolean
 export function every<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): boolean
 export function every(val: any, iterator: any, revert?: boolean): boolean {
-  let res = false
+  let res = true
   each(
     val,
     (item, key) => {
       if (!iterator(item, key)) {
         res = false
         return false
-      } else {
-        res = true
       }
     },
     revert
@@ -98,15 +96,13 @@ export function some(val: string, iterator: EachStringIterator, revert?: boolean
 export function some<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): boolean
 export function some<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): boolean
 export function some(val: any, iterator: any, revert?: boolean): boolean {
-  let res = true
+  let res = false
   each(
     val,
     (item, key) => {
       if (iterator(item, key)) {
         res = true
         return false
-      } else {
-        res = false
       }
     },
     revert
