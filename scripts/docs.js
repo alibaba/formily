@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const { command } = require('doc-scripts')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
@@ -55,7 +56,6 @@ const createDocs = async () => {
         antd: 'antd',
         moment: 'moment'
       }
-
       Object.assign(webpackConfig.resolve.alias, {
         ...alias,
         '@alifd/next': path.resolve(
@@ -63,6 +63,11 @@ const createDocs = async () => {
           '../packages/next/node_modules/@alifd/next'
         )
       })
+      webpackConfig.resolve.plugins = [
+        new TsconfigPathsPlugin({
+          configFile: path.resolve(__dirname, '../tsconfig.docs.json')
+        })
+      ]
       return webpackConfig
     }
   )

@@ -20,8 +20,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "0.1.12",
-    "@uform/types": "^0.1.12",
+    "@uform/react": "^0.1.14",
+    "@uform/types": "^0.1.14",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },
