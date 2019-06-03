@@ -9,6 +9,10 @@
       "preserveConstEnums": true,
       "sourceMap": false,
       "declaration":true,
-      "outDir":"../lib"
+      "outDir":"../lib",
+      "baseUrl": ".",
+      "paths": {
+        "rxjs/*": ["./node_modules/rxjs/*"]
+      }
   }
 }
