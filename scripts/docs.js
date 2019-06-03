@@ -65,7 +65,7 @@ const createDocs = async () => {
       })
       webpackConfig.resolve.plugins = [
         new TsconfigPathsPlugin({
-          configFile: path.resolve(__dirname, '../tsconfig.docs.json')
+          configFile: path.resolve(__dirname, '../tsconfig.json')
         })
       ]
       return webpackConfig
