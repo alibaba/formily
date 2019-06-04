@@ -1,6 +1,6 @@
 {
   "name": "@uform/antd",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -21,9 +21,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.14",
-    "@uform/types": "^0.1.14",
-    "@uform/utils": "^0.1.14",
+    "@uform/react": "^0.1.15",
+    "@uform/utils": "^0.1.15",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
     "react-stikky": "^0.1.15",

@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -24,10 +24,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.14",
-    "@uform/types": "^0.1.14",
-    "@uform/utils": "^0.1.14",
-    "@uform/validator": "^0.1.14",
+    "@uform/react": "^0.1.15",
+    "@uform/utils": "^0.1.15",
+    "@uform/validator": "^0.1.15",
     "classnames": "^2.2.5",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.1",

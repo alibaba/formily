@@ -80,42 +80,42 @@ export class Field implements IField {
     this.destructed = false
     this.loading = false
     this.errors = []
+    this.props = {}
     this.effectErrors = []
     this.initialized = false
     this.initialize(options)
     this.initialized = true
   }
 
-  public initialize(options: IFieldOptions) {
-    const editable = this.getEditableFromProps(options.props)
+  public initialize(options : IFieldOptions) {
     const rules = this.getRulesFromProps(options.props)
     this.value = !isEmpty(options.value) ? clone(options.value) : this.value
-    this.initialValue = !isEmpty(options.initialValue)
-      ? options.initialValue
-      : !isEmpty(this.initialValue)
-        ? this.initialValue
-        : this.getInitialValueFromProps(options.props)
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
-    this.editable = !isEmpty(editable)
-      ? editable
-      : isEmpty(this.editable)
-        ? this.editable
-        : this.getContextEditable()
+
     this.path = resolveFieldPath(
       !isEmpty(options.path) ? options.path : this.path || []
     )
     this.rules = !isEmpty(rules) ? rules : this.rules
     this.required = hasRequired(this.rules)
-    this.props = !isEmpty(options.props)
-      ? !isEmpty(this.props)
+
+    if (isEmpty(options.props)) {
+      this.initialValue = !isEmpty(options.initialValue)
+        ? options.initialValue
+        : this.initialValue
+    } else {
+      this.initialValue = !isEmpty(options.initialValue)
+        ? options.initialValue
+        : !isEmpty(this.initialValue)
+          ? this.initialValue
+          : this.getInitialValueFromProps(options.props)
+      this.props = !isEmpty(this.props)
         ? { ...this.props, ...clone(options.props) }
         : clone(options.props)
-      : this.props || {}
-    if (this.removed) {
-      this.removed = false
-      this.visible = true
+      const editable = this.getEditableFromProps(options.props)
+      this.editable = !isEmpty(editable) ? editable : this.getContextEditable()
     }
+
     if (!this.initialized) {
       if (isEmpty(this.value) && !isEmpty(this.initialValue)) {
         this.value = clone(this.initialValue)
@@ -123,6 +123,13 @@ export class Field implements IField {
         this.context.setInitialValueIn(this.name, this.initialValue)
       }
     }
+
+    if (this.removed) {
+      this.removed = false
+      this.visible = true
+      this.context.triggerEffect('onFieldChange', this.publishState())
+    }
+
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
     }
@@ -247,14 +254,15 @@ export class Field implements IField {
     this.notify()
   }
 
-  public restore() {
+  mount() {
     if (this.removed) {
       this.visible = true
       this.removed = false
+      this.context.triggerEffect('onFieldChange', this.publishState())
     }
   }
 
-  public remove() {
+  unmount() {
     this.value = undefined
     this.initialValue = undefined
     this.visible = false
