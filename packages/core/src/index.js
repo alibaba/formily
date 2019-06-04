@@ -52,6 +52,9 @@ export const createForm = ({
 
   form.syncUpdate(() => {
     form.triggerEffect('onFormInit', form.publishState())
+    fields.forEach(field => {
+      form.triggerEffect('onFieldChange', field.publishState())
+    })
   })
   return form
 }

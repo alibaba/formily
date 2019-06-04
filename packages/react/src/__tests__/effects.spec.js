@@ -26,7 +26,13 @@ beforeEach(() => {
   })
   registerFormField(
     'string',
-    connect()(props => <input {...props} value={props.value || ''} />)
+    connect()(props =>
+      props.disabled ? (
+        'Disabled'
+      ) : (
+        <input {...props} value={props.value || ''} />
+      )
+    )
   )
 })
 
@@ -129,4 +135,29 @@ test('onFieldChange will trigger with initialValues', async () => {
   expect(callback).toHaveBeenCalledTimes(2)
   expect(callback.mock.calls[0][0].value).toBe(undefined)
   expect(callback.mock.calls[1][0].value).toBe(123)
+})
+
+test('setFieldState x-props with onFormInit', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFormInit').subscribe(() => {
+            setFieldState('aaa', state => {
+              state.props['x-props'].disabled = true
+            })
+          })
+        }}
+      >
+        <Field name='aaa' type='string' x-props={{ disabled: false }} />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByText('Disabled')).toBeVisible()
 })
