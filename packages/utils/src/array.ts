@@ -85,8 +85,6 @@ export function every(val: any, iterator: any, revert?: boolean): boolean {
       if (!iterator(item, key)) {
         res = false
         return false
-      } else {
-        res = true
       }
     },
     revert
@@ -105,8 +103,6 @@ export function some(val: any, iterator: any, revert?: boolean): boolean {
       if (iterator(item, key)) {
         res = true
         return false
-      } else {
-        res = false
       }
     },
     revert
