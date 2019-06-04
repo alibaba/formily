@@ -1,6 +1,6 @@
 {
   "name": "@uform/printer",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -20,8 +20,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.14",
-    "@uform/types": "^0.1.14",
+    "@uform/react": "^0.1.15",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },

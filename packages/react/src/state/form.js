@@ -32,7 +32,7 @@ export const StateForm = createHOC((options, Form) => {
         onSubmit: this.onSubmitHandler(props),
         onFormChange: this.onFormChangeHandler(props),
         onFieldChange: this.onFieldChangeHandler(props),
-        onValidateFailed: props.onValidateFailed,
+        onValidateFailed: this.onValidateFailed(props),
         onReset: this.onResetHandler(props),
         onFormWillInit: form => {
           props.implementActions({
@@ -57,6 +57,15 @@ export const StateForm = createHOC((options, Form) => {
       if (broadcast) {
         payload.schema = schema
         broadcast.notify(payload)
+      }
+    }
+
+    onValidateFailed = $props => {
+      return (...args) => {
+        const props = this.props || $props
+        if (props.onValidateFailed) {
+          return props.onValidateFailed(...args)
+        }
       }
     }
 
@@ -97,8 +106,9 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onFieldChangeHandler(props) {
+    onFieldChangeHandler = $props => {
       return ({ formState }) => {
+        const props = this.props || $props
         if (props.onChange) {
           const values = formState.values
           if (!isEqual(this.lastFormValues, values)) {
@@ -118,8 +128,9 @@ export const StateForm = createHOC((options, Form) => {
       return transformer ? transformer(result) : result
     }
 
-    onSubmitHandler(props) {
+    onSubmitHandler = $props => {
       return ({ formState }) => {
+        const props = this.props || $props
         if (props.onSubmit) {
           const promise = props.onSubmit(clone(formState.values))
           if (promise && promise.then) {
@@ -147,8 +158,9 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onResetHandler(props) {
+    onResetHandler($props) {
       return ({ formState }) => {
+        const props = this.props || $props
         if (props.onReset) {
           props.onReset(clone(formState.values))
         }
@@ -220,7 +232,7 @@ export const StateForm = createHOC((options, Form) => {
       return this.form.submit()
     }
 
-    reset = (forceClear) => {
+    reset = forceClear => {
       this.form.reset(forceClear)
     }
 

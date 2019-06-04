@@ -1,6 +1,6 @@
 {
   "name": "@uform/react",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -14,6 +14,7 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "types": "lib/index.d.ts",
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",

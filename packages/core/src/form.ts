@@ -165,14 +165,14 @@ export class Form {
     const field = this.fields[name]
     if (field) {
       field.initialize({
-        ...options,
+        path: options.path,
+        onChange: options.onChange,
         value: !isEmpty(value) ? value : initialValue,
         initialValue
       } as IFieldOptions)
       this.asyncUpdate(() => {
         this.updateFieldStateFromBuffer(field)
       })
-      this.triggerEffect('onFieldChange', field.publishState())
     } else {
       this.fields[name] = new Field(this, {
         name,
