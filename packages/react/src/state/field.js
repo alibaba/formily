@@ -44,12 +44,12 @@ const StateField = createHOC((options, Field) => {
 
     componentWillUnmount() {
       this.unmounted = true
-      this.field.remove()
+      this.field.unmount()
     }
 
     componentDidMount() {
       this.unmounted = false
-      this.field.restore()
+      this.field.mount()
     }
 
     componentDidUpdate(prevProps) {
