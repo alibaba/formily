@@ -6,7 +6,7 @@ export interface IRuleDescription {
   format?: DefaultPatternRule
 }
 
-export type Validator = (value: any, rule: IRuleDescription, values: object, name: string) => string | null
+export type Validator = (value: any, rule: IRuleDescription, values: any, name: string) => string | Promise<string>
 
 export type DefaultPatternRule = 'url' | 'email' | 'ipv6' | 'ipv4' | 'number' | 'integer' | 'qq' | 'phone' | 'idcard' | 'taodomain' | 'money' | 'zh' | 'date' | 'zip'
 
