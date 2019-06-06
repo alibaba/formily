@@ -589,13 +589,10 @@ export class Form {
       })
 
       if (resolve && isFn(resolve)) {
-        matchResolves.push(resolve)
+        resolve()
       }
     })
     this.updateQueue = []
-    raf(() => {
-      each(matchResolves, resolve => resolve())
-    })
   }
 
   private updateFieldStateFromBuffer(field: IField) {
