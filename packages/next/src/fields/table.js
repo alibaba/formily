@@ -29,16 +29,15 @@ const Table = styled(
       return (
         <div className='next-table-body'>
           <table>
-            <colgroup>
-              {columns.map((col, index) => {
-                return <col key={index} style={{ width: col.width }} />
-              })}
-            </colgroup>
             <thead>
               <tr>
                 {columns.map((col, index) => {
                   return (
-                    <th key={index} className='next-table-header-node'>
+                    <th
+                      key={index}
+                      className='next-table-header-node'
+                      style={{ minWidth: col.width }}
+                    >
                       <div className='next-table-cell-wrapper'>{col.title}</div>
                     </th>
                   )
@@ -256,7 +255,7 @@ registerFormField(
           getOrderProperties
         } = this.props
         const style = schema['x-props'] && schema['x-props'].style
-        const additionFilter = this.createFilter('addition', schema)
+        const operationsWidth = schema['x-props'] && schema['x-props'].operationsWidth
         return (
           <div
             className={className}
@@ -290,25 +289,22 @@ registerFormField(
                   },
                   []
                 )}
-                {additionFilter(() => {
-                  return (
-                    <Column
-                      key='operations'
-                      title={locale.operations}
-                      dataIndex='operations'
-                      width={180}
-                      cell={(item, index) => {
-                        return (
-                          <div className='array-item-operator'>
-                            {this.renderRemove(index, item)}
-                            {this.renderMoveDown(index, item)}
-                            {this.renderMoveUp(index, item)}
-                          </div>
-                        )
-                      }}
-                    />
-                  )
-                })}
+                <Column
+                  key='operations'
+                  title={locale.operations}
+                  dataIndex='operations'
+                  width={operationsWidth}
+                  cell={(item, index) => {
+                    return (
+                      <div className='array-item-operator'>
+                        {this.renderRemove(index, item)}
+                        {this.renderMoveDown(index, item)}
+                        {this.renderMoveUp(index, item)}
+                        {this.renderExtraOperations(index, item)}
+                      </div>
+                    )
+                  }}
+                />
               </Table>
               {this.renderAddition()}
             </div>
