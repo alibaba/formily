@@ -25,7 +25,7 @@ import { runValidation, format } from '@uform/validator'
 import { Subject } from 'rxjs/internal/Subject'
 import { filter } from 'rxjs/internal/operators/filter'
 import { FormPath } from './path'
-import { IFormOptions, IFieldOptions, IFieldState, IFormPathMatcher, IFormState, ISchema, Path, IFieldMap, ISubscribers } from '@uform/types'
+import { IFormOptions, IFieldOptions, IFieldState, IField, IFormPathMatcher, IFormState, ISchema, Path, IFieldMap, ISubscribers } from '@uform/types'
 
 type Editable = boolean | ((name: string) => boolean)
 
@@ -106,32 +106,30 @@ export class Form {
   }
 
 
-  public setFieldState = (path: Path | IFormPathMatcher, buffer: boolean | (() => boolean), callback: (() => void)) => {
+  public setFieldState = (path: Path | IFormPathMatcher, callback?: (() => void)) => {
     if (this.destructed) { return }
-    if (isFn(buffer)) {
-      callback = buffer as (() => void)
-      buffer = false
-    }
     return new Promise(resolve => {
       if (isStr(path) || isArr(path) || isFn(path)) {
         this.updateQueue.push({ path, callback, resolve })
       }
       if (this.syncUpdateMode) {
-        this.updateFieldStateFromQueue(buffer)
+        this.updateFieldStateFromQueue()
         return resolve()
-      }
-      if (this.updateQueue.length > 0) {
+      } else if (this.updateQueue.length > 0) {
         if (this.updateRafId !== undefined) { caf(this.updateRafId) }
         this.updateRafId = raf(() => {
           if (this.destructed) { return }
-          this.updateFieldStateFromQueue(buffer)
+          this.updateFieldStateFromQueue()
         })
+      } else {
+        return resolve()
       }
+
     })
   }
 
   public getFieldState = (path: Path | IFormPathMatcher, callback: (fieldState: IFieldState) => any) => {
-    let field
+    let field: IField
     each(this.fields, innerField => {
       if (innerField.match(path)) {
         field = innerField
@@ -363,7 +361,7 @@ export class Form {
     deleteIn(this.state.initialValues, name)
   }
 
-  public reset(forceClear) {
+  public reset(forceClear?: boolean) {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
@@ -519,7 +517,7 @@ export class Form {
     }
   }
 
-  private checkState(published): Promise<any> {
+  private checkState(published: any): Promise<any> {
     if (!isEqual(this.state.values, published.values)) {
       this.state.values = published.values
       this.state.dirty = true
@@ -534,7 +532,7 @@ export class Form {
     return Promise.resolve()
   }
 
-  private asyncUpdate(fn) {
+  private asyncUpdate(fn: () => void) {
     if (isFn(fn)) {
       if (this.syncUpdateMode) {
         this.syncUpdateMode = false
@@ -546,9 +544,10 @@ export class Form {
     }
   }
 
-  private updateFieldStateFromQueue(buffer) {
+  private updateFieldStateFromQueue() {
     const failed = {}
     const rafIdMap = {}
+    const matchResolves = []
     each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
         if (field.match(path)) {
@@ -573,29 +572,35 @@ export class Form {
               }
             })
           }
-          if (resolve && isFn(resolve)) {
-            resolve()
-          }
         } else {
           failed[i] = failed[i] || 0
           failed[i]++
-          if (this.fieldSize <= failed[i] && (buffer || (path as IFormPathMatcher).hasWildcard)) {
-            if (isStr(path)) {
+          if (this.fieldSize <= failed[i]) {
+            if (isArr(path)) {
+              this.updateBuffer.push(path.join('.'), callback, { path, resolve })
+            } else if (isStr(path)) {
               this.updateBuffer.push(path, callback, { path, resolve })
-            } else if (isFn(path) && (path as IFormPathMatcher).hasWildcard) {
-              this.updateBuffer.push((path as IFormPathMatcher).string, callback, { path, resolve })
+            } else if (isFn(path) && (path as IFormPathMatcher).pattern) {
+              this.updateBuffer.push((path as IFormPathMatcher).pattern, callback, { path, resolve })
             }
           }
         }
 
       })
+
+      if (resolve && isFn(resolve)) {
+        matchResolves.push(resolve)
+      }
     })
     this.updateQueue = []
+    raf(() => {
+      each(matchResolves, resolve => resolve())
+    })
   }
 
-  private updateFieldStateFromBuffer(field) {
+  private updateFieldStateFromBuffer(field: IField) {
     const rafIdMap = {}
-    this.updateBuffer.forEach(({ path, values, key, resolve }) => {
+    this.updateBuffer.forEach(({ path, values, key }) => {
       if (field.match(path)) {
         values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
@@ -618,9 +623,6 @@ export class Form {
         if (!path.hasWildcard) {
           this.updateBuffer.remove(key)
         }
-        if (resolve && isFn(resolve)) {
-          resolve()
-        }
       }
     })
   }
@@ -638,7 +640,7 @@ export class Form {
         )
           .then(response => {
             const lastValid = this.state.valid
-            const _errors = reduce(
+            const newErrors = reduce(
               response,
               (buf, { name, errors }) => {
                 if (!errors.length) { return buf }
@@ -646,9 +648,9 @@ export class Form {
               },
               []
             )
-            this.state.valid = _errors.length === 0
+            this.state.valid = newErrors.length === 0
             this.state.invalid = !this.state.valid
-            this.state.errors = _errors
+            this.state.errors = newErrors
             if (this.state.valid !== lastValid) {
               this.state.dirty = true
             }

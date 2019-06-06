@@ -49,5 +49,5 @@ export interface IFormActions {
 export interface IFormPathMatcher {
   (payload: IField | Path | { fieldState: IFieldState }): boolean
   hasWildcard: boolean
-  string: string
+  pattern: string
 }
