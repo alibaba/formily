@@ -254,7 +254,7 @@ export class Field implements IField {
     this.notify()
   }
 
-  mount() {
+  public mount() {
     if (this.removed) {
       this.visible = true
       this.removed = false
@@ -262,7 +262,7 @@ export class Field implements IField {
     }
   }
 
-  unmount() {
+  public unmount() {
     this.value = undefined
     this.initialValue = undefined
     this.visible = false
