@@ -121,26 +121,23 @@ export class Form {
     }
   }
 
-  setFieldState = (path, buffer, callback) => {
+  setFieldState = (path, callback) => {
     if (this.destructed) return
-    if (isFn(buffer)) {
-      callback = buffer
-      buffer = false
-    }
     return new Promise(resolve => {
       if (isStr(path) || isArr(path) || isFn(path)) {
         this.updateQueue.push({ path, callback, resolve })
       }
       if (this.syncUpdateMode) {
-        this.updateFieldStateFromQueue(buffer)
-        return resolve()
-      }
-      if (this.updateQueue.length > 0) {
+        this.updateFieldStateFromQueue()
+        resolve()
+      } else if (this.updateQueue.length > 0) {
         if (this.updateRafId) caf(this.updateRafId)
         this.updateRafId = raf(() => {
           if (this.destructed) return
-          this.updateFieldStateFromQueue(buffer)
+          this.updateFieldStateFromQueue()
         })
+      } else {
+        resolve()
       }
     })
   }
@@ -204,9 +201,10 @@ export class Form {
     }
   }
 
-  updateFieldStateFromQueue(buffer) {
+  updateFieldStateFromQueue() {
     const failed = {}
     const rafIdMap = {}
+    const matchResolves = []
     each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
         if (path && (isFn(path) || isArr(path) || isStr(path))) {
@@ -238,23 +236,31 @@ export class Form {
           } else {
             failed[i] = failed[i] || 0
             failed[i]++
-            if (this.fieldSize <= failed[i] && (buffer || path.hasWildcard)) {
-              if (isStr(path)) {
+            if (this.fieldSize <= failed[i]) {
+              if (isArr(path)) {
+                this.updateBuffer.push(path.join('.'), callback, { path, resolve })
+              } else if (isStr(path)) {
                 this.updateBuffer.push(path, callback, { path, resolve })
-              } else if (isFn(path) && path.hasWildcard) {
-                this.updateBuffer.push(path.string, callback, { path, resolve })
+              } else if (isFn(path) && path.pattern) {
+                this.updateBuffer.push(path.pattern, callback, { path, resolve })
               }
             }
           }
         }
       })
+      if (resolve && isFn(resolve)) {
+        matchResolves.push(resolve)
+      }
     })
     this.updateQueue = []
+    raf(() => {
+      each(matchResolves, resolve => resolve())
+    })
   }
 
   updateFieldStateFromBuffer(field) {
     const rafIdMap = {}
-    this.updateBuffer.forEach(({ path, values, key, resolve }) => {
+    this.updateBuffer.forEach(({ path, values, key }) => {
       if (isFn(path) ? path(field) : field.pathEqual(path)) {
         values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
@@ -277,9 +283,6 @@ export class Form {
         if (!path.hasWildcard) {
           this.updateBuffer.remove(key)
         }
-        if (resolve && isFn(resolve)) {
-          resolve()
-        }
       }
     })
   }
@@ -297,7 +300,7 @@ export class Form {
         )
           .then(response => {
             const lastValid = this.state.valid
-            let _errors = reduce(
+            let newErrors = reduce(
               response,
               (buf, { name, errors }) => {
                 if (!errors.length) return buf
@@ -305,9 +308,9 @@ export class Form {
               },
               []
             )
-            this.state.valid = _errors.length === 0
+            this.state.valid = newErrors.length === 0
             this.state.invalid = !this.state.valid
-            this.state.errors = _errors
+            this.state.errors = newErrors
             if (this.state.valid !== lastValid) {
               this.state.dirty = true
             }
