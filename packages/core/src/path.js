@@ -46,7 +46,7 @@ export const FormPath = {
     }
 
     matcher.hasWildcard = wildcardRE.test(matchLanguage)
-    matcher.string = matchLanguage
+    matcher.pattern = matchLanguage
 
     return matcher
   },

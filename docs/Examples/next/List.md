@@ -16,7 +16,9 @@
   renderAddition:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
   renderRemove:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
   renderMoveDown:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
-  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon"
+  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
+  renderExtraOperations:()=><div>通过渲染函数做完全内容定制</div>,
+  operationsWidth:300 //控制操作区域宽度，只针对x-component="table"时生效
 }}>
   <Field type="object" name="xxx">
      ....
@@ -121,36 +123,44 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/react'
+} from '@uform/next'
 import '@alifd/next/dist/next.css'
 import Printer from '@uform/printer'
 
 const App = () => (
   <Printer>
     <SchemaForm>
-      <Field
-        title="数组"
-        name="array"
-        maxItems={3}
-        type="array"
-        x-component="table"
-      >
-        <Field type="object">
-          <Field
-            name="aa"
-            type="string"
-            description="hello world"
-            title="字段1"
-          />
-          <Field name="bb" type="string" title="字段2" />
-          <Field name="cc" type="string" title="字段3" />
-          <Field name="dd" type="string" title="字段4" x-index={1} />
-          <Field name="ee" type="string" title="字段5" />
-          <Field name="ff" type="string" title="字段6" />
-          <Field name="gg" type="string" title="字段7" />
-          <Field name="hh" type="daterange" title="字段8" />
+      <FormLayout>
+        <Field
+          title="数组"
+          name="array"
+          maxItems={3}
+          type="array"
+          x-component="table"
+          x-props={{
+            renderExtraOperations() {
+              return <div>Hello worldasdasdasdasd</div>
+            },
+            operationsWidth: 300
+          }}
+        >
+          <Field type="object">
+            <Field
+              name="aa"
+              type="string"
+              description="hello world"
+              title="字段1"
+            />
+            <Field name="bb" type="string" title="字段2" />
+            <Field name="cc" type="string" title="字段3" />
+            <Field name="dd" type="string" title="字段4" x-index={1} />
+            <Field name="ee" type="string" title="字段5" />
+            <Field name="ff" type="string" title="字段6" />
+            <Field name="gg" type="string" title="字段7" />
+            <Field name="hh" type="daterange" title="字段8" />
+          </Field>
         </Field>
-      </Field>
+      </FormLayout>
     </SchemaForm>
   </Printer>
 )
