@@ -230,9 +230,6 @@ export class Form {
                 }
               })
             }
-            if (resolve && isFn(resolve)) {
-              resolve()
-            }
           } else {
             failed[i] = failed[i] || 0
             failed[i]++
