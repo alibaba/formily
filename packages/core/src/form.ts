@@ -547,7 +547,6 @@ export class Form {
   private updateFieldStateFromQueue() {
     const failed = {}
     const rafIdMap = {}
-    const matchResolves = []
     each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
         if (field.match(path)) {
