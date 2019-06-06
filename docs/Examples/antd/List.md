@@ -15,7 +15,9 @@
   renderAddition:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
   renderRemove:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
   renderMoveDown:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
-  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon"
+  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
+  renderExtraOperations:()=><div>通过渲染函数做完全内容定制</div>,
+  operationsWidth:300 //控制操作区域宽度，只针对x-component="table"时生效
 }}>
   <Field type="object" name="xxx">
      ....
@@ -147,6 +149,12 @@ const App = () => (
         maxItems={3}
         type="array"
         x-component="table"
+         x-props={{
+          renderExtraOperations(){
+            return <div>Hello worldasdasdasdasd</div>
+          },
+          operationsWidth:400
+        }}
       >
         <Field type="object">
           <Field
@@ -161,7 +169,7 @@ const App = () => (
           <Field name="dd" type="string" title="字段5" />
           <Field name="ee" type="string" title="字段6" />
           <Field name="ff" type="string" title="字段7" />
-          <Field name="gg" type="daterange" title="字段8" />
+          <Field name="gg" type="daterange" title="字段8" width={400}  />
         </Field>
       </Field>
     </SchemaForm>
@@ -219,7 +227,7 @@ const App = () => (
             <Field name="dd" type="string" title="字段5" />
             <Field name="ee" type="string" title="字段6" />
             <Field name="ff" type="string" title="字段7" />
-            <Field name="gg" type="daterange" title="字段8" />
+            <Field name="gg" type="daterange" title="字段8"/>
           </FormLayout>
           <Field name="array" maxItems={3} type="array" x-component="cards" x-props={{title:'这是卡片标题'}}>
             <Field type="object">
