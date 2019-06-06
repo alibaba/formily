@@ -16,7 +16,8 @@
   renderAddition:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
   renderRemove:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
   renderMoveDown:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
-  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon"
+  renderMoveUp:()=><div>通过渲染函数做完全内容定制</div> or "直接传渲染文案，会默认带上icon",
+  renderExtraOperations:()=><div>通过渲染函数做完全内容定制</div>
 }}>
   <Field type="object" name="xxx">
      ....
@@ -121,7 +122,7 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/react'
+} from '@uform/next'
 import '@alifd/next/dist/next.css'
 import Printer from '@uform/printer'
 
