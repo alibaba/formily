@@ -204,7 +204,6 @@ export class Form {
   updateFieldStateFromQueue() {
     const failed = {}
     const rafIdMap = {}
-    const matchResolves = []
     each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
         if (path && (isFn(path) || isArr(path) || isStr(path))) {
@@ -246,13 +245,10 @@ export class Form {
         }
       })
       if (resolve && isFn(resolve)) {
-        matchResolves.push(resolve)
+        resolve()
       }
     })
     this.updateQueue = []
-    raf(() => {
-      each(matchResolves, resolve => resolve())
-    })
   }
 
   updateFieldStateFromBuffer(field) {
