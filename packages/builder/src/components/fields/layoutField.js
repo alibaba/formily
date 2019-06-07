@@ -52,7 +52,8 @@ export default DragSource(
 
       const item = monitor.getItem()
       const dropResult = monitor.getDropResult()
-      const { fieldItem, id } = item
+      const { id } = item
+      const fieldItem = { ...item.fieldItem }
       const { addComponentAndEdit } = props
       try {
         ;['height', 'icon', 'iconUrl', 'width'].forEach(key => {

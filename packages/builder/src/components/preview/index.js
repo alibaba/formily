@@ -3,41 +3,27 @@ import cls from 'classnames'
 
 import { connect } from 'react-redux'
 import {
-  addComponentAndEdit,
   changeComponentOrder,
   moveComponent,
-  editComponent,
   deleteComponent,
   showComponentProps,
   changeComponent
 } from '../../actions'
 
-import { Header } from '../../utils/util'
+import { Header, wrapComp2Class } from '../../utils/util'
 import registerPreviewFieldMiddleware from './fieldMiddleware'
 import MainBox from './mainBox'
 
 import PreviewStyle from './style'
 
 class Preview extends Component {
-  static propTypes = {
-  }
-
   componentDidMount() {
     registerPreviewFieldMiddleware(this)
   }
 
-  onMouseClick = (id, comp, type) => {
-    const { layoutId } = this.props
+  onMouseClick = (id, comp) => {
     this.props.changeComponent(id)
     this.props.showComponentProps(id, comp)
-
-    this.props.editComponent(
-      id,
-      {
-        active: true
-      },
-      type === 'layout' ? '' : layoutId
-    )
   }
 
   deleteComponent = id => {
@@ -62,25 +48,16 @@ class Preview extends Component {
 const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
-  addComponentAndEdit: (component, existId, type, containerId) =>
-    dispatch(addComponentAndEdit(component, existId, type, containerId)),
   changeComponentOrder: (sourceId, targetId, containerId) =>
     dispatch(changeComponentOrder(sourceId, targetId, containerId)),
-  moveComponent: (sourceId, targetId) => dispatch(moveComponent(sourceId, targetId)),
-  editComponent: (id, propsData, containerId) =>
-    dispatch(editComponent(id, propsData, containerId)),
+  moveComponent: (sourceId, targetId) =>
+    dispatch(moveComponent(sourceId, targetId)),
   deleteComponent: id => dispatch(deleteComponent(id)),
   showComponentProps: (id, comp) => dispatch(showComponentProps(id, comp)),
   changeComponent: componentId => dispatch(changeComponent(componentId))
 })
 
-class StyledPreviewComp extends React.Component {
-  render() {
-    return <Preview {...this.props} />
-  }
-}
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(StyledPreviewComp)
+)(wrapComp2Class(Preview))

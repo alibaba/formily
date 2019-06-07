@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, forwardRef } from 'react'
 import { DropTarget } from 'react-dnd'
 import ItemTypes from '../../constants/itemType'
 import { SchemaForm } from '../../utils/baseForm'
@@ -7,16 +7,14 @@ import pick from 'lodash.pick'
 import { normalizeSchema } from '../../utils/lang'
 import { FormProvider } from '../../constants/context'
 
-const RenderPreviewList = ({ props, _connectDropTarget }) => {
+const RenderPreviewList = ({ props }) => {
   const { preview, gbConfig = {}, schema = {}, renderEngine, onChange } = props
   const { properties = {} } = schema
   const { FormButtonGroup, Submit, Reset } = renderEngine
   const { needFormButtonGroup } = gbConfig
 
   if (isEmptyObj(properties)) {
-    return _connectDropTarget(
-      <p className='preview-tips'>请从左边字段添加组件进来吧</p>
-    )
+    return <p className='preview-tips'>请从左边字段添加组件进来吧</p>
   }
 
   let children = ' '
@@ -77,33 +75,44 @@ const RenderPreviewList = ({ props, _connectDropTarget }) => {
   )
 }
 
-const MainBox = ({ props, canDrop, isOver, connectDropTarget }) => {
-  const isActive = canDrop && isOver
-  let backgroundColor = '#fff'
-  if (isActive) {
-    backgroundColor = '#f1f1f1'
-  }
+const MainBox = forwardRef(
+  ({ props, canDrop, isOver, connectDropTarget }, ref) => {
+    const elementRef = useRef(null)
+    connectDropTarget(elementRef)
 
-  return (
-    <div
-      className='preview-main'
-      style={Object.assign({}, { backgroundColor })}
-    >
-      <RenderPreviewList props={props} _connectDropTarget={connectDropTarget} />
-      {connectDropTarget(
+    const isActive = canDrop && isOver
+    let backgroundColor = '#fff'
+    if (isActive) {
+      backgroundColor = '#f1f1f1'
+    }
+
+    return (
+      <div
+        className='preview-main'
+        style={Object.assign({}, { backgroundColor })}
+      >
+        <RenderPreviewList props={props} />
         <div
+          ref={elementRef}
           className='main-drop'
-          style={{ position: 'absolute', left: 0, right: 0, height: '100%' }}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%'
+          }}
         />
-      )}
-    </div>
-  )
-}
+      </div>
+    )
+  }
+)
 
 export default DropTarget(
   [ItemTypes.FIELD, ItemTypes.LAYOUT],
   {
     drop: (props, monitor, component) => {
+      console.log('drop', component)
       if (!component) {
         return
       }
@@ -111,7 +120,7 @@ export default DropTarget(
       if (hasDroppedOnChild) {
         return
       }
-
+      console.log('drop child')
       component.onDrop(hasDroppedOnChild)
     }
   },

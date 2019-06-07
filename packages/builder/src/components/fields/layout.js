@@ -3,19 +3,13 @@ import React from 'react'
 import cls from 'classnames'
 import PropTypes from 'prop-types'
 import supportLayoutList from '../../configs/supportLayoutList'
-import { Header } from '../../utils/util'
+import { Header, wrapComp2Class } from '../../utils/util'
 import { connect } from 'react-redux'
 import { addComponentAndEdit } from '../../actions'
 import Field from './layoutField'
 import { layoutStyle as LayoutStyle } from './style'
 
 class Component extends React.Component {
-  static propTypes = {
-    addComponentAndEdit: PropTypes.func
-  }
-
-  static defaultProps = {}
-
   constructor(props) {
     super(props)
 
@@ -51,20 +45,19 @@ class Component extends React.Component {
   }
 }
 
+Component.propTypes = {
+  addComponentAndEdit: PropTypes.func
+}
+
+Component.defaultProps = {}
+
 const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
-  addComponentAndEdit: (component, existId, type, containerId) =>
-    dispatch(addComponentAndEdit(component, existId, type, containerId))
+  addComponentAndEdit: (...args) => dispatch(addComponentAndEdit(...args))
 })
-
-class StyledLayoutListComp extends React.Component {
-  render() {
-    return <Component {...this.props} />
-  }
-}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(StyledLayoutListComp)
+)(wrapComp2Class(Component))

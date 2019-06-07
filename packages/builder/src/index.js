@@ -22,8 +22,7 @@ const middleware = [
 ].filter(Boolean)
 
 const initialState = {
-  componentId: '',
-  layoutId: '',
+  componentId: [],
   preview: false,
   codemode: false,
   componentProps: {},

@@ -6,7 +6,6 @@ export default (state = {}, action) => {
     ...state
   }
   const { data = {} } = action
-  // eslint-disable-next-line
   const {
     component,
     id,
@@ -17,32 +16,36 @@ export default (state = {}, action) => {
   } = data
 
   const loop = (obj, idArr = []) => {
-    const _id = idArr.shift()
-    if (!idArr.length) return obj.properties[_id]
-    return loop(obj.properties[_id], idArr)
+    const _idArr = [...idArr]
+    const _id = _idArr.shift()
+    if (!_idArr.length) return obj.properties[_id]
+    return loop(obj.properties[_id], _idArr)
   }
 
   const getProperties = (obj, idArr = []) => {
-    if (!idArr.length) return obj.properties
-    const _id = idArr.shift()
-    return getProperties(obj.properties[_id], idArr)
+    const _idArr = [...idArr]
+    const _id = _idArr.shift()
+    if (!_idArr.length) return obj.properties
+    return getProperties(obj.properties[_id], _idArr)
   }
 
   const setProperties = (obj, idArr = [], prop) => {
-    if (!idArr.length) {
+    const _idArr = [...idArr]
+    if (!_idArr.length) {
       obj.properties = prop
     } else {
-      const _id = idArr.shift()
-      setProperties(obj.properties[_id], idArr, prop)
+      const _id = _idArr.shift()
+      setProperties(obj.properties[_id], _idArr, prop)
     }
   }
 
   const deleteItem = (obj, idArr = []) => {
-    const _id = idArr.shift()
-    if (!idArr.length) {
+    const _idArr = [...idArr]
+    const _id = _idArr.shift()
+    if (!_idArr.length) {
       delete obj.properties[_id]
     } else {
-      deleteItem(obj.properties[_id], idArr)
+      deleteItem(obj.properties[_id], _idArr)
     }
   }
 
@@ -138,14 +141,17 @@ export default (state = {}, action) => {
 
       return newState
     case 'EDIT_COMPONENT':
-      const _data_ = getProperties(newState, containerId)
+      const _data_ = getProperties(newState, id)
+      const lastId = [...id].pop()
+
       Object.keys(_data_).forEach(compId => {
         if (compId) {
           _data_[compId] = merge(
             {},
             _data_[compId],
-            id === null || compId === id
+            id === null || compId === lastId
               ? {
+                active: true,
                 ...propsData
               }
               : {
@@ -158,7 +164,7 @@ export default (state = {}, action) => {
             propsData['x-props'] &&
             propsData['x-props'].enum &&
             Array.isArray(propsData['x-props'].enum) &&
-            (id === null || compId === id)
+            (id === null || compId === lastId)
           ) {
             _data_[compId]['x-props'] = _data_[compId]['x-props'] || {}
             _data_[compId]['x-props'].enum = propsData['x-props'].enum
@@ -168,7 +174,7 @@ export default (state = {}, action) => {
             propsData['x-props'] &&
             propsData['x-props'].requestOptions &&
             propsData['x-props'].requestOptions.data &&
-            (id === null || compId === id)
+            (id === null || compId === lastId)
           ) {
             _data_[compId]['x-props'].requestOptions =
               _data_[compId]['x-props'].requestOptions || {}
