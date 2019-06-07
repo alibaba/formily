@@ -50,7 +50,7 @@ const props = {
   // 主题： dark/light,默认dark
   // themeStyle: 'light',
   // 是否展示布局组件，默认为false
-  showLayoutField: true,
+  showLayoutField: false,
   showPreviewBtn: true,
   showSourceCodeBtn: true,
   // 控制返回按钮点击事件
@@ -95,7 +95,8 @@ const props = {
     {
       name: 'editable',
       title: '表单是否可编辑',
-      description: '若设置为false，则可快速搭建出表单详情页，只需设置每个组件的默认值',
+      description:
+        '若设置为false，则可快速搭建出表单详情页，只需设置每个组件的默认值',
       type: 'boolean'
     }
   ],
@@ -121,6 +122,7 @@ const props = {
   //   console.info('index onChange data', data);
   // },
   onSubmit: data => {
+    alert(`保存数据：${JSON.stringify(data)}`)
     console.info('index onSubmit data', data)
   }
 }

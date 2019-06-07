@@ -26,12 +26,12 @@ class DataSourceEditor extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps, prevState) {
     const _dataSourceType = this.getDefaultDataSourceType(
-      nextProps,
-      this.state.dataSourceType
+      this.props,
+      prevState.dataSourceType
     )
-    if (_dataSourceType !== this.state.dataSourceType) {
+    if (_dataSourceType !== prevState.dataSourceType) {
       this.setState({
         dataSourceType: _dataSourceType
       })

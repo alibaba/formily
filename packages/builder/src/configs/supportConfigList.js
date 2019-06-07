@@ -2,9 +2,9 @@
 const FIELDLIST = {
   ID: {
     name: '__id__',
-    title: '唯一标识',
+    title: '字段名称',
     type: 'string',
-    description: '唯一标识：发起请求时带上的参数id，必填，全局保证唯一。',
+    description: '字段名称：发起请求时带上的参数id，必填，全局保证唯一。',
     required: true
   },
   PLACEHOLDER: {
@@ -98,14 +98,14 @@ export const getPropsByKey = key => {
       return generateProps(
         [
           'ID',
-          'DESCRIPTION',
           'TITLE',
           'DEFAULT',
+          'DESCRIPTION',
+          'PLACEHOLDER',
           'REQUIRED',
           'READONLY',
           'DISABLED',
-          'HIDDEN',
-          'PLACEHOLDER'
+          'HIDDEN'
         ],
         [
           {
@@ -123,14 +123,14 @@ export const getPropsByKey = key => {
     case 'number':
       return generateProps([
         'ID',
-        'DESCRIPTION',
         'TITLE',
         'DEFAULT',
+        'DESCRIPTION',
+        'PLACEHOLDER',
         'REQUIRED',
         'READONLY',
         'DISABLED',
-        'HIDDEN',
-        'PLACEHOLDER'
+        'HIDDEN'
       ])
     case 'date':
     case 'month':
@@ -139,9 +139,9 @@ export const getPropsByKey = key => {
       return generateProps(
         [
           'ID',
-          'DESCRIPTION',
           'TITLE',
           'DEFAULT',
+          'DESCRIPTION',
           'REQUIRED',
           'READONLY',
           'DISABLED',
@@ -161,8 +161,8 @@ export const getPropsByKey = key => {
       return generateProps(
         [
           'ID',
-          'DESCRIPTION',
           'TITLE',
+          'DESCRIPTION',
           'REQUIRED',
           'READONLY',
           'DISABLED',
@@ -240,7 +240,17 @@ export const getPropsByKey = key => {
         ]
       )
     default:
-      return defaultProps
+      return generateProps([
+        'ID',
+        'TITLE',
+        'DEFAULT',
+        'DESCRIPTION',
+        'PLACEHOLDER',
+        'REQUIRED',
+        'READONLY',
+        'DISABLED',
+        'HIDDEN'
+      ])
   }
 }
 

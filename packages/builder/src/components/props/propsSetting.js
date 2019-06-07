@@ -27,7 +27,7 @@ import pickBy from 'lodash.pickby'
 // 属性设置
 class PropsSetting extends Component {
   static propTypes = {
-    componentId: PropTypes.string,
+    componentId: PropTypes.arrayOf(PropTypes.string),
     editComponent: PropTypes.func,
     editComponentProps: PropTypes.func,
     componentProps: PropTypes.object
@@ -45,14 +45,13 @@ class PropsSetting extends Component {
   }
 
   onChangeHandler = formdata => {
-    const { componentId = '' } = this.props
-    if (!componentId) return false
+    const { componentId = [] } = this.props
+    if (!componentId.length) return false
 
     const propsData = pickBy(formdata, x => x !== undefined)
 
     // 是否隐藏属性
     propsData['x-props'] = propsData['x-props'] || {}
-    propsData['x-item-props'] = propsData['x-item-props'] || {}
     propsData['x-props'].style = propsData['x-props'].style || {}
 
     if (propsData['x-props.htmltype'] === true) {
@@ -78,30 +77,22 @@ class PropsSetting extends Component {
   }
 
   getSchemaValue() {
-    const {
-      componentId = '',
-      componentProps = {},
-      initSchemaData = {}
-    } = this.props
+    const { componentId, componentProps = {}, initSchemaData = {} } = this.props
 
-    if (!componentId) return {}
+    if (!componentId.length) return {}
 
-    const curComponentProps = componentProps[componentId] || []
+    const curComponentProps = componentProps[componentId.toString()] || []
 
     const result = {}
     curComponentProps.forEach(compProp => {
       const { name, value } = compProp
-      if (name !== 'x-item-props') {
-        result[name] = value
-      }
+      result[name] = value
     })
 
-    if (
-      initSchemaData.properties &&
-      initSchemaData.properties[componentId] &&
-      initSchemaData.properties[componentId]['x-props']
-    ) {
-      result['x-props'] = initSchemaData.properties[componentId]['x-props']
+    const curComponentAttr = getCompDetailById(componentId, initSchemaData)
+
+    if (curComponentAttr['x-props']) {
+      result['x-props'] = curComponentAttr['x-props']
       Object.keys(result['x-props']).forEach(key => {
         if (
           Object.hasOwnProperty.call(result, `x-props.${key}`) &&
@@ -116,27 +107,26 @@ class PropsSetting extends Component {
   }
 
   updateComponentPropsData = (componentId, propsData) => {
-    const { layoutId } = this.props
-    this.props.editComponent(componentId, propsData, layoutId)
+    this.props.editComponent(componentId, propsData)
     this.props.editComponentProps(componentId, propsData)
   }
 
   generatePropsSchema() {
     const {
       initSchemaData = {},
-      componentId = '',
+      componentId,
       componentProps = {},
       UI
     } = this.props
 
-    if (!componentId) {
+    if (!componentId.length) {
       return {
         type: 'object',
         properties: {}
       }
     }
 
-    const curComponentProps = componentProps[componentId] || []
+    const curComponentProps = componentProps[componentId.toString()] || []
     const curComponentAttr = getCompDetailById(componentId, initSchemaData)
 
     const finalSchema = {}
@@ -170,9 +160,9 @@ class PropsSetting extends Component {
   }
 
   renderConfigList() {
-    const { componentId = '' } = this.props
+    const { componentId } = this.props
 
-    if (!componentId) {
+    if (!componentId.length) {
       return <p className='props-tips'>请选择待编辑的表单字段</p>
     }
 
@@ -219,9 +209,9 @@ class PropsSetting extends Component {
   }
 
   renderOptions() {
-    const { componentId = '', initSchemaData = {}, layoutId } = this.props
+    const { componentId, initSchemaData = {} } = this.props
 
-    if (!componentId) return null
+    if (!componentId.length) return null
 
     const curComponentAttr = getCompDetailById(componentId, initSchemaData)
 
@@ -232,13 +222,9 @@ class PropsSetting extends Component {
             UI={this.props.UI}
             xprops={curComponentAttr['x-props'] || {}}
             onChange={xprops => {
-              this.props.editComponent(
-                componentId,
-                {
-                  'x-props': xprops
-                },
-                layoutId
-              )
+              this.props.editComponent(componentId, {
+                'x-props': xprops
+              })
             }}
           />
         )
@@ -261,10 +247,8 @@ const mapStateToProps = state => state
 
 const mapDispatchToProps = dispatch => ({
   showComponentProps: (id, comp) => dispatch(showComponentProps(id, comp)),
-  editComponentProps: (id, propsData) =>
-    dispatch(editComponentProps(id, propsData)),
-  editComponent: (id, propsData, containerId) =>
-    dispatch(editComponent(id, propsData, containerId))
+  editComponentProps: (...args) => dispatch(editComponentProps(...args)),
+  editComponent: (...args) => dispatch(editComponent(...args))
 })
 
 class StyledPropsSettingComp extends React.Component {
