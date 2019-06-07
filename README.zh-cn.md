@@ -57,24 +57,38 @@ https://codesandbox.io/s/245o92lnzy
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
 | [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
 
+## 贡献者
+
+This project exists thanks to all the people who contribute. 
+<a href="https://github.com/alibaba/uform/graphs/contributors"><img src="https://opencollective.com/uform/contributors.svg?width=890&button=false" /></a>
+
+
+## 点个赞
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/uform#backer)]
+
+<a href="https://opencollective.com/uform#backers" target="_blank"><img src="https://opencollective.com/uform/backers.svg?width=890"></a>
+
+
+## 捐献我们
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/uform#sponsor)]
+
+<a href="https://opencollective.com/uform/sponsor/0/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/1/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/2/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/3/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/4/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/5/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/6/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/7/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/8/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/uform/sponsor/9/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/9/avatar.svg"></a>
+
+
 
 
 ## LICENSE
 
 UForm is open source software licensed as
 [MIT.](https://github.com/alibaba/uform/blob/master/LICENSE.md)
-
-## 贡献者
-
-Thanks goes to these wonderful people
-([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/janryWang"><img src="https://avatars0.githubusercontent.com/u/4060976?v=4" width="100px;" alt="Janry"/><br /><sub><b>Janry</b></sub></a><br /><a href="#design-janryWang" title="Design">🎨</a></td><td align="center"><a href="http://cnt1992.github.io"><img src="https://avatars1.githubusercontent.com/u/3118988?v=4" width="100px;" alt="SkyCai"/><br /><sub><b>SkyCai</b></sub></a><br /><a href="#design-cnt1992" title="Design">🎨</a></td><td align="center"><a href="https://www.linkedin.com/in/harry-yu-0a931a69/"><img src="https://avatars3.githubusercontent.com/u/2942913?v=4" width="100px;" alt="Harry Yu"/><br /><sub><b>Harry Yu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=yujiangshui" title="Documentation">📖</a></td><td align="center"><a href="https://www.luoyangfu.com"><img src="https://avatars2.githubusercontent.com/u/22249411?v=4" width="100px;" alt="zsir"/><br /><sub><b>zsir</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=zsirfs" title="Code">💻</a></td><td align="center"><a href="http://www.monkindey.xyz/"><img src="https://avatars0.githubusercontent.com/u/6913898?v=4" width="100px;" alt="Kiho · Cham"/><br /><sub><b>Kiho · Cham</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=monkindey" title="Code">💻</a> <a href="https://github.com/alibaba/uform/commits?author=monkindey" title="Documentation">📖</a></td><td align="center"><a href="http://whj1995.xyz"><img src="https://avatars2.githubusercontent.com/u/22634735?v=4" width="100px;" alt="Hongjiang Wu"/><br /><sub><b>Hongjiang Wu</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=whj1995" title="Documentation">📖</a></td><td align="center"><a href="https://github.com/anyuxuan"><img src="https://avatars3.githubusercontent.com/u/24931869?v=4" width="100px;" alt="合木"/><br /><sub><b>合木</b></sub></a><br /><a href="https://github.com/alibaba/uform/commits?author=anyuxuan" title="Code">💻</a></td></tr></table>
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
-This project follows the
-[all-contributors](https://github.com/all-contributors/all-contributors)
-specification. Contributions of any kind welcome!
