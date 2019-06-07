@@ -22,13 +22,13 @@ type connect({
 ## 依赖
 
 ```javascript
-import {connect} from '@alife/rs-uform'
+import {connect} from '@uform/react'
 ```
 
 ## 用例
 
 ```javascript
-import {registerFormField,connect} from '@alife/rs-uform'
+import {registerFormField,connect} from '@uform/react'
 
 registerFormField(
   'string',

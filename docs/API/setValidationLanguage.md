@@ -13,13 +13,13 @@ type setValidationLanguage(lang : String)
 ## 依赖
 
 ```javascript
-import {setValidationLanguage} from '@alife/uform'
+import {setValidationLanguage} from '@uform/core'
 ```
 
 ## 用例
 
 ```javascript
-import {setValidationLanguage} from '@alife/uform'
+import {setValidationLanguage} from '@uform/core'
 
 setValidationLanguage("en")
 ```
