@@ -26,7 +26,8 @@
     "version:major": "npm run prevesion && lerna version major --exact",
     "release:force": "lerna publish from-package --yes",
     "release": "lerna publish",
-    "lint": "eslint \"packages/!(docs)/**/*.js\" \"scripts/**/*.js\""
+    "lint": "eslint \"packages/!(docs)/**/*.js\" \"scripts/**/*.js\"",
+    "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
     "@alifd/next": "^1.14.2",
@@ -98,5 +99,13 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "opencollective-postinstall": "^2.0.2",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/uform"
   }
 }
