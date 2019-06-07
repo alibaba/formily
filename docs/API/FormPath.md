@@ -26,7 +26,7 @@ type FormPath {
 ## 依赖
 
 ```javascript
-import {FormPath} from '@alife/uform'
+import {FormPath} from '@uform/core'
 ```
 
 ## Pattern路径匹配语法
@@ -70,7 +70,7 @@ import {FormPath} from '@alife/uform'
 ## 用例
 
 ```javascript
-import {FormPath} from '@alife/uform'
+import {FormPath} from '@uform/core'
 
 FormPath.match('aa')('aa') // true
 FormPath.match('*')('aa')  //true
