@@ -15,13 +15,13 @@ type createVirtualBox(name : String,component : Function)
 ## 依赖
 
 ```javascript
-import {createVirtualBox} from '@alife/rs-uform'
+import {createVirtualBox} from '@uform/react'
 ```
 
 ## 用例
 
 ```javascript
-import {createVirtualBox,SchemaForm} from '@alife/rs-uform'
+import {createVirtualBox,SchemaForm} from '@uform/react'
 
 const Card = createVirtualBox('card',(props)=>{
    return <div>这是一个卡片{props.children}</div>
