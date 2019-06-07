@@ -58,15 +58,13 @@ export const reduce = (val, callback, initial, revert) => {
 }
 
 export const every = (val, callback, revert) => {
-  let res = false
+  let res = true
   each(
     val,
     (item, key) => {
       if (!callback(item, key)) {
         res = false
         return false
-      } else {
-        res = true
       }
     },
     revert
@@ -75,15 +73,13 @@ export const every = (val, callback, revert) => {
 }
 
 export const some = (val, callback, revert) => {
-  let res = true
+  let res = false
   each(
     val,
     (item, key) => {
       if (callback(item, key)) {
         res = true
         return false
-      } else {
-        res = false
       }
     },
     revert
