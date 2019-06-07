@@ -1,11 +1,10 @@
-export default (state = '', action) => {
-  let newState = state
-  const { data = {} } = action
-  const _componentId = data.componentId || ''
+export default (state = [], action) => {
+  let newState = [...state]
+  const { data: { componentId = [] } = {}, type } = action
 
-  switch (action.type) {
+  switch (type) {
     case 'CHANGE_COMPONENT':
-      newState = _componentId
+      newState = Array.isArray(componentId) ? componentId : [componentId]
       return newState
     default:
       return state

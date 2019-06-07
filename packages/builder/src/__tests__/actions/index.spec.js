@@ -1,20 +1,20 @@
 import * as actions from '../../actions/index'
 
 describe('test actions', () => {
-  test('changeLayoutId action', () => {
-    expect(actions.changeLayoutId('111')).toEqual({
-      type: 'CHANGE_LAYOUTID',
-      data: {
-        id: '111'
-      }
-    })
-  })
-
+  // addComponent actions
   test('addComponent action', () => {
-    expect(actions.addComponent({
-      type: 'string',
-      title: '111'
-    }, '222', '333', 'layout', '444')).toEqual({
+    expect(
+      actions.addComponent(
+        {
+          type: 'string',
+          title: '111'
+        },
+        '222',
+        '333',
+        'layout',
+        '444'
+      )
+    ).toEqual({
       type: 'ADD_COMPONENT',
       data: {
         id: '333',
@@ -41,50 +41,57 @@ describe('test actions', () => {
   })
 
   test('editComponent action', () => {
-    expect(actions.editComponent('111', {
-      __id__: 222
-    }, '333')).toEqual({
+    expect(
+      actions.editComponent('111', {
+        __id__: 222
+      })
+    ).toEqual({
       type: 'EDIT_COMPONENT',
       data: {
         id: '111',
         propsData: {
           __id__: 222
-        },
-        containerId: '333'
+        }
       }
     })
   })
 
   test('deleteComponent action', () => {
-    expect(actions.deleteComponent('111')).toEqual({
+    expect(actions.deleteComponent(['111'])).toEqual({
       type: 'DELETE_COMPONENT',
       data: {
-        id: '111'
+        id: ['111']
       }
     })
   })
 
   test('showComponentProps action', () => {
-    expect(actions.showComponentProps('111', {
-      type: 'string',
-      title: '222'
-    }, '333')).toEqual({
+    expect(
+      actions.showComponentProps(
+        ['111'],
+        {
+          type: 'string',
+          title: '222'
+        }
+      )
+    ).toEqual({
       type: 'SHOW_COMPONENT_PROPS',
       data: {
-        id: '111',
+        id: ['111'],
         comp: {
           type: 'string',
           title: '222'
-        },
-        containerId: '333'
+        }
       }
     })
   })
 
   test('editComponentProps action', () => {
-    expect(actions.editComponentProps('111', {
-      __id__: '222'
-    })).toEqual({
+    expect(
+      actions.editComponentProps('111', {
+        __id__: '222'
+      })
+    ).toEqual({
       type: 'EDIT_COMPONENT_PROPS',
       data: {
         id: '111',
@@ -123,9 +130,11 @@ describe('test actions', () => {
   })
 
   test('changeGbConfig action', () => {
-    expect(actions.changeGbConfig({
-      aaa: 1
-    })).toEqual({
+    expect(
+      actions.changeGbConfig({
+        aaa: 1
+      })
+    ).toEqual({
       type: 'CHANGE_GB_CONFIG',
       data: {
         aaa: 1
@@ -134,9 +143,11 @@ describe('test actions', () => {
   })
 
   test('initSchema action', () => {
-    expect(actions.initSchema({
-      aaa: 1
-    })).toEqual({
+    expect(
+      actions.initSchema({
+        aaa: 1
+      })
+    ).toEqual({
       type: 'INIT_SCHEMA',
       data: {
         aaa: 1
