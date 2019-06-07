@@ -87,7 +87,6 @@ export default styled.div`
     position: relative;
     overflow: hidden;
     padding: 0 340px 0 240px;
-    min-height: 700px;
 
     &::after {
       content: "";

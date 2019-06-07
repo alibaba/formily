@@ -30,32 +30,15 @@ export default styled.div`
     border-radius: 2px;
     transition: all 0.1s ease;
     user-select: none;
-    &:hover {
-      .preview-line-del {
-        opacity: 1;
-      }
-    }
     .preview-line-del {
       cursor: pointer;
-      position: absolute;
-      right: 0px;
-      top: 50%;
-      transform: translate3d(0, -50%, 0);
       z-index: 101;
       opacity: 0;
+      width: 30px;
+      height: 16px;
       font-size: 12px;
       color: #333;
-      width: 64px;
       text-align: center;
-      &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        bottom: 2px;
-        width: 1px;
-        background: #eee;
-      }
       &::before {
         content: '';
         display: block;
@@ -66,11 +49,16 @@ export default styled.div`
         height: 16px;
       }
     }
+    &:hover {
+      > .comp-item-layout-tool .preview-line-del {
+        opacity: 1;
+      }
+    }
     .preview-line-layer {
       position: absolute;
       left: 0;
       top: 0;
-      right: 40px;
+      right: 0;
       bottom: 0;
       z-index: 100;
       cursor: move;
@@ -106,21 +94,44 @@ export default styled.div`
     outline-color: #e6e7ff;
   }
   .preview-tips {
-    margin-top: 0;
-    padding-top: 72px;
+    position: absolute;
+    left: 0;
+    top: 72px;
+    width: 100%;
     text-align: center;
     color: #999;
   }
 
   .comp-item,
   .comp-item-layout {
+    position: relative;
     width: 100%;
     .next-row {
       width: 100%;
     }
   }
+  .comp-item {
+    z-index: 110;
+    &.is-over-half {
+      &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 10px;
+        background: #222;
+      }
+    }
+    &.is-not-over-half {
+      &::before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 10px;
+        background: #222;
+      }
+    }
+  }
   .comp-item-layout {
-    position: relative;
     margin: 10px 0;
     padding: 20px 10px;
     min-height: 200px;
@@ -129,20 +140,22 @@ export default styled.div`
     &.active {
       border-color: #3f486b;
     }
-    .comp-item-layout-tool {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      > * {
-        float: right;
-        margin-left: 8px;
-      }
+  }
+  .comp-item-layout-tool {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 101;
+    > * {
+      float: right;
+      margin-left: 8px;
     }
-    .comp-item-layout-empty {
-      margin-top: 0;
-      padding-top: 20px;
-      text-align: center;
-      color: #999;
-    }
+  }
+  .comp-item-layout-empty {
+    margin-top: 0;
+    padding-top: 20px;
+    width: 100%;
+    text-align: center;
+    color: #999;
   }
 `
