@@ -18,14 +18,22 @@ export const isNum = isType('Number')
 export const isIter = obj => isArr(obj) || isObj(obj)
 
 const replaceSingleDefault = v => {
-  if (!isFlagValue(v)) return ''
+  if (!isFlagValue(v)) return v
 
   const { type, flag, value } = v
 
   const now = moment(Date.now())
   const params = Arg.all()
 
-  if (flag === 'date') {
+  if (flag === 'weekRange') {
+    if (type === 'pastStart') {
+      return now.subtract(value, 'weeks').format('YYYY-MM-DD')
+    } else if (type === 'future') {
+      return now.add(value, 'weeks').format('YYYY-MM-DD')
+    } else if (type === 'specify') {
+      return value
+    }
+  } else if (flag === 'date') {
     if (type === 'past') {
       return now.subtract(value, 'days').format('YYYY-MM-DD')
     } else if (type === 'future') {

@@ -24,10 +24,14 @@ class fileSetting extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      xprops: nextProps.xprops || {}
-    })
+  componentDidUpdate(prevProps) {
+    const preXprops = prevProps.xprops || {}
+    const curXprops = this.props.xprops || {}
+    if (JSON.stringify(preXprops) !== JSON.stringify(curXprops)) {
+      this.setState({
+        xprops: curXprops
+      })
+    }
   }
 
   onChangeDefaultFile(newDefaultFileList) {

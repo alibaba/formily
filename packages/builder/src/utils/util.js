@@ -1,3 +1,4 @@
+import React from 'react'
 import merge from 'lodash.merge'
 
 export * from './comp'
@@ -38,37 +39,24 @@ export const wrapEnums = enums =>
 
 /**
  * 根据组件id获取组件信息
- * @param {String} componentId 组件的id
+ * @param {Array} componentIdList 组件的id list
  * @param {Array} schema 组件schema
  */
-export const getCompDetailById = (componentId, schema = {}) => {
+export const getCompDetailById = (componentIdList = [], schema = {}) => {
+  const _componentIdList = [...componentIdList]
+  const _componentId = _componentIdList.shift()
   const { properties = {} } = schema
 
-  if (properties[componentId]) {
-    return {
-      ...properties[componentId],
-      id: componentId
-    }
+  if (!_componentIdList.length) {
+    return properties[_componentId]
+      ? {
+        id: _componentId,
+        ...properties[_componentId]
+      }
+      : {}
   }
 
-  if (!Object.keys(properties).length) {
-    return {}
-  } else {
-    for (const key in properties) {
-      if (Object.hasOwnProperty.call(properties, key)) {
-        const childProps = properties[key].properties
-        if (childProps && typeof childProps === 'object') {
-          if (childProps[componentId]) {
-            return {
-              ...childProps[componentId],
-              id: componentId
-            }
-          }
-        }
-      }
-    }
-    return {}
-  }
+  return getCompDetailById(_componentIdList, properties[_componentId])
 }
 
 /**
@@ -144,7 +132,12 @@ export const wrapSubmitSchema = (schema, keepAll = false) => {
  * @param {Object} schema
  * @param {String} containerId 相对容器id
  */
-export const getOrderProperties = (schema = {}) => {
+export const getOrderProperties = (schema = {}, containerId = []) => {
+  if (containerId.length) {
+    const id = containerId.shift()
+    return getOrderProperties(schema.properties[id], containerId)
+  }
+
   const { properties = {} } = schema
   if (isEmptyObj(properties)) return []
 
@@ -260,3 +253,15 @@ export const checkRepeatId = (schema = {}) => {
   loop(schema)
   return !!Object.keys(result).length
 }
+
+export const wrapComp2Class = Comp =>
+  class extends React.Component {
+    render() {
+      return <Comp {...this.props} />
+    }
+  }
+
+export const isLayoutWrapper = comp =>
+  comp['x-props'] &&
+  comp['x-props']._extra &&
+  comp['x-props']._extra.__key__ === 'layout'
