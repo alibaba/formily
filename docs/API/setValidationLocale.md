@@ -17,7 +17,7 @@ type setValidationLocale({
 ## 依赖
 
 ```javascript
-import {setValidationLocale} from '@alife/uform'
+import {setValidationLocale} from '@uform/core'
 ```
 
 ## 默认配置
