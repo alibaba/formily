@@ -15,13 +15,16 @@ class DefaultValueGenerator extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    const value = nextProps.value || {}
-    this.setState({
-      type: value.type || '',
-      value: value.value || '',
-      flag: value.flag || nextProps.flag
-    })
+  componentDidUpdate(prevProps, prevState) {
+    const value = this.props.value || {}
+    const preValue = prevProps.value || {}
+    if (JSON.stringify(value) !== JSON.stringify(preValue)) {
+      this.setState({
+        type: value.type || '',
+        value: value.value || '',
+        flag: value.flag || this.props.flag
+      })
+    }
   }
 
   handleValueTypeChange = v => {

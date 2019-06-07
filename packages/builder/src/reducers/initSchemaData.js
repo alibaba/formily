@@ -6,15 +6,48 @@ export default (state = {}, action) => {
     ...state
   }
   const { data = {} } = action
-  // eslint-disable-next-line
   const {
     component,
     id,
+    targetId,
     propsData = {},
     existId = null,
-    addType,
-    containerId
+    containerId = []
   } = data
+
+  const loop = (obj, idArr = []) => {
+    const _idArr = [...idArr]
+    const _id = _idArr.shift()
+    if (!_idArr.length) return obj.properties[_id]
+    return loop(obj.properties[_id], _idArr)
+  }
+
+  const getProperties = (obj, idArr = []) => {
+    const _idArr = [...idArr]
+    const _id = _idArr.shift()
+    if (!_idArr.length) return obj.properties
+    return getProperties(obj.properties[_id], _idArr)
+  }
+
+  const setProperties = (obj, idArr = [], prop) => {
+    const _idArr = [...idArr]
+    if (!_idArr.length) {
+      obj.properties = prop
+    } else {
+      const _id = _idArr.shift()
+      setProperties(obj.properties[_id], _idArr, prop)
+    }
+  }
+
+  const deleteItem = (obj, idArr = []) => {
+    const _idArr = [...idArr]
+    const _id = _idArr.shift()
+    if (!_idArr.length) {
+      delete obj.properties[_id]
+    } else {
+      deleteItem(obj.properties[_id], _idArr)
+    }
+  }
 
   switch (action.type) {
     case 'INIT_SCHEMA':
@@ -25,76 +58,48 @@ export default (state = {}, action) => {
         ...newSchema
       }
       return newState
+    case 'MOVE_COMOPNENT':
+      const sourceItem = loop(newState, [...id])
+      const targetItem = loop(newState, [...targetId])
+
+      deleteItem(newState, [...id])
+
+      targetItem.properties[sourceItem.id] = sourceItem
+
+      return newState
     case 'CHANGE_COMPONENT_ORDER':
-      const { targetId } = data
-      let _tmpNewState = {
-        ...newState
+      const _propertiesList = getOrderProperties(newState, [...containerId])
+      const _sourceItem = loop(newState, [...id])
+      const _targetItem = loop(newState, [...targetId])
+      const targetIdx = _targetItem['x-index']
+      const sourceIdx = _sourceItem['x-index']
+
+      if (id.length !== targetId.length) {
+        alert('目前只支持同级别组件的顺序替换')
+        return newState
       }
-      if (containerId) {
-        _tmpNewState = newState.properties[containerId]
-      }
-      const propertiesList = getOrderProperties(_tmpNewState)
-      const targetItem = propertiesList.find(_item => _item.id === targetId)
-      let targetIdx = targetItem
-        ? targetItem['x-index']
-        : propertiesList[propertiesList.length - 1]['x-index']
-      const sourceItem = propertiesList.find(_item => _item.id === id)
-      const sourceIdx = sourceItem
-        ? sourceItem['x-index']
-        : propertiesList[0]['x-index']
-      const len = propertiesList.length
-      if (targetIdx < 0) {
-        targetIdx = 0
-      }
-      propertiesList.splice(sourceIdx, 1)
-      for (let i = 0; i < targetIdx; i++) {
-        propertiesList[i] = {
-          ...propertiesList[i],
-          'x-index': i
-        }
-      }
-      for (let i = len - 1; i > targetIdx; i--) {
-        propertiesList[i] = {
-          ...propertiesList[i - 1],
-          'x-index': i
-        }
-      }
-      propertiesList[targetIdx] = {
-        ...sourceItem,
+
+      _propertiesList[targetIdx] = {
+        ..._sourceItem,
         'x-index': targetIdx
       }
-      const _properties = {}
-      propertiesList.forEach(item => {
-        _properties[item.id] = item
+      _propertiesList[sourceIdx] = {
+        ..._targetItem,
+        'x-index': sourceIdx
+      }
+
+      const _properties11 = {}
+      _propertiesList.forEach(item => {
+        _properties11[item.id] = {
+          ...item
+        }
       })
 
-      if (containerId) {
-        newState.properties[containerId].properties = _properties
-      } else {
-        newState.properties = _properties
-      }
+      setProperties(newState, containerId, _properties11)
+
       return newState
     case 'ADD_COMPONENT':
-      const _component_ =
-        component.__key__ === 'layout'
-          ? {
-            type: 'object',
-            id,
-            ...component.__key__data__,
-            properties: {},
-            'x-props': {
-              ...component.__key__data__['x-props'],
-              _extra: component
-            }
-          }
-          : {
-            ...component
-          }
-
-      const propertiesList1 =
-        addType === 'layout'
-          ? getOrderProperties(newState.properties[containerId])
-          : getOrderProperties(newState)
+      const propertiesList1 = getOrderProperties(newState, [...containerId])
 
       if (existId) {
         // 在特定的existId之前插入新的组件
@@ -108,14 +113,14 @@ export default (state = {}, action) => {
           }
         }
         propertiesList1[idx] = {
-          ..._component_,
+          ...component,
           id,
           'x-index': idx
         }
       } else {
         // 在最后插入新的组件
         propertiesList1[propertiesList1.length] = {
-          ..._component_,
+          ...component,
           id,
           'x-index': propertiesList1.length
         }
@@ -128,11 +133,7 @@ export default (state = {}, action) => {
         }
       })
 
-      if (addType === 'layout') {
-        newState.properties[containerId].properties = _properties1
-      } else {
-        newState.properties = _properties1
-      }
+      setProperties(newState, containerId, _properties1)
 
       if (!newState.type) {
         newState.type = 'object'
@@ -140,17 +141,17 @@ export default (state = {}, action) => {
 
       return newState
     case 'EDIT_COMPONENT':
-      const _data_ =
-        containerId && containerId !== id
-          ? state.properties[containerId].properties
-          : state.properties
+      const _data_ = getProperties(newState, id)
+      const lastId = [...id].pop()
+
       Object.keys(_data_).forEach(compId => {
         if (compId) {
           _data_[compId] = merge(
             {},
             _data_[compId],
-            id === null || compId === id
+            id === null || compId === lastId
               ? {
+                active: true,
                 ...propsData
               }
               : {
@@ -163,7 +164,7 @@ export default (state = {}, action) => {
             propsData['x-props'] &&
             propsData['x-props'].enum &&
             Array.isArray(propsData['x-props'].enum) &&
-            (id === null || compId === id)
+            (id === null || compId === lastId)
           ) {
             _data_[compId]['x-props'] = _data_[compId]['x-props'] || {}
             _data_[compId]['x-props'].enum = propsData['x-props'].enum
@@ -173,7 +174,7 @@ export default (state = {}, action) => {
             propsData['x-props'] &&
             propsData['x-props'].requestOptions &&
             propsData['x-props'].requestOptions.data &&
-            (id === null || compId === id)
+            (id === null || compId === lastId)
           ) {
             _data_[compId]['x-props'].requestOptions =
               _data_[compId]['x-props'].requestOptions || {}
@@ -184,39 +185,7 @@ export default (state = {}, action) => {
       })
       return newState
     case 'DELETE_COMPONENT':
-      const newProp = {
-        ...newState.properties
-      }
-
-      Object.keys(newState.properties).forEach(_key => {
-        if (_key === id) {
-          delete newProp[_key]
-        }
-        if (
-          newState.properties[_key].type === 'object' &&
-          newState.properties[_key].properties
-        ) {
-          Object.keys(newState.properties[_key].properties).forEach(__key => {
-            if (__key === id) {
-              delete newState.properties[_key].properties[__key]
-            }
-          })
-        }
-      })
-
-      const _propertiesList_ = getOrderProperties({
-        properties: newProp
-      }).filter(item => !!item)
-      const _properties_ = {}
-      _propertiesList_.forEach((item, idx) => {
-        if (item && item.id) {
-          _properties_[item.id] = {
-            ...item,
-            'x-index': idx
-          }
-        }
-      })
-      newState.properties = _properties_
+      deleteItem(newState, [...id])
       return newState
     default:
       return state
