@@ -1,33 +1,29 @@
 import React, { Component, useContext } from 'react'
-import {
-  createHOC,
-  isEqual,
-  each,
-  schemaIs,
-  filterSchema,
-  lowercase
-} from '../utils'
+import { createHOC, isEqual, each, schemaIs, filterSchema, lowercase } from '../utils'
 import { createMutators } from '../shared/mutators'
 import { StateContext } from '../shared/context'
 import { getFieldRenderer, getFormField } from '../shared/core'
+import { StateFieldProps, StateFieldState, FieldProps } from '../type'
 
 const StateField = createHOC((options, Field) => {
-  class StateField extends Component {
+  class StateField extends Component<StateFieldProps, StateFieldState> {
     static displayName = 'StateField'
+
+    private initialized: boolean
+    private unmounted: boolean
+    private field: any
+    // TODO mutators 文件应该暴露出来 interface
+    private mutators: any
 
     constructor(props) {
       super(props)
-      this.initialized = false
-      this.state = {}
-      this.field = props.form.registerField(
-        props.name || props.schemaPath.join('.'),
-        {
-          path: props.schemaPath,
-          onChange: this.onChangeHandler(props),
-          props: props.schema
-        }
-      )
       this.initialized = true
+      this.state = {}
+      this.field = props.form.registerField(props.name || props.schemaPath.join('.'), {
+        path: props.schemaPath,
+        onChange: this.onChangeHandler(),
+        props: props.schema
+      })
       this.mutators = createMutators(props)
     }
 
@@ -62,6 +58,7 @@ const StateField = createHOC((options, Field) => {
       const path = this.props.path.concat(key)
       const schemaPath = this.props.schemaPath.concat(key)
       const name = path.join('.')
+
       return (
         <FormField
           key={addReactKey ? name : undefined}
@@ -75,6 +72,7 @@ const StateField = createHOC((options, Field) => {
     getOrderProperties = outerSchema => {
       const { schema: innerSchema, path } = this.props
       if (!innerSchema && !outerSchema) return []
+
       const properties = []
       each((outerSchema || innerSchema || {}).properties, (item, key) => {
         let index = item['x-index']
@@ -96,15 +94,7 @@ const StateField = createHOC((options, Field) => {
 
     render() {
       const { name, path, schemaPath, locale, getSchema } = this.props
-      const {
-        value,
-        visible,
-        props,
-        errors,
-        loading,
-        editable,
-        required
-      } = this.state
+      const { value, visible, props, errors, loading, editable, required } = this.state
       const newValue = schemaIs(props, 'object')
         ? value || {}
         : schemaIs(props, 'array')
@@ -151,7 +141,7 @@ const StateField = createHOC((options, Field) => {
   }
 })
 
-export const FormField = StateField()(props => {
+export const FormField = StateField()((props: FieldProps) => {
   const schema = props.schema
   const fieldComponentName = lowercase(schema['x-component'] || schema.type)
   const renderComponent = schema['x-render']
@@ -165,17 +155,15 @@ export const FormField = StateField()(props => {
       })
     }
     : undefined
-  const component = schema['x-render']
-    ? getFieldRenderer()
-    : getFormField(fieldComponentName)
+
+  const component = schema['x-render'] ? getFieldRenderer() : getFormField(fieldComponentName)
+
   if (component) {
     return React.createElement(component, { ...props, renderComponent })
   } else {
     if (console && console.error) {
       if (fieldComponentName) {
-        console.error(
-          `The schema field \`${fieldComponentName}\`'s component is not found.`
-        )
+        console.error(`The schema field \`${fieldComponentName}\`'s component is not found.`)
       } else {
         console.error(
           `The schema field's component is not found, or field's schema is not defined.`

@@ -1,10 +1,12 @@
-import { Form } from './form'
+import { IFormOptions } from '@uform/types'
 import {
   setLocale as setValidationLocale,
   setLanguage as setValidationLanguage
 } from '@uform/validator'
+
+import { Form } from './form'
 import { caculateSchemaInitialValues, isFn } from './utils'
-import { IFormOptions } from '@uform/types'
+
 export * from './path'
 
 export const createForm = ({
@@ -61,6 +63,6 @@ export const createForm = ({
   return form
 }
 
-export { setValidationLocale, setValidationLanguage }
+export { setValidationLocale, setValidationLanguage, Form }
 
 export default createForm

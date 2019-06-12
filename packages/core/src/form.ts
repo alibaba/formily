@@ -347,7 +347,7 @@ export class Form {
     return initialValue !== undefined ? initialValue : schemaDefault
   }
 
-  public getValue(name: string, copy?: boolean) {
+  public getValue(name?: string, copy?: boolean) {
     return copy
       ? clone(getIn(this.state.values, name))
       : getIn(this.state.values, name)
@@ -469,7 +469,7 @@ export class Form {
   }
 
 
-  private initialize(values = this.state.initialValues) {
+  public initialize(values = this.state.initialValues) {
     const lastValues = this.state.values
     const lastDirty = this.state.dirty
     this.state = {

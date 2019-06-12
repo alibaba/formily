@@ -3,11 +3,11 @@ import locales from './locale'
 
 const self: any = this || global || window
 
-interface ILocaleMessages {
+export interface ILocaleMessages {
   [key: string]: string | ILocaleMessages
 }
 
-interface ILocales {
+export interface ILocales {
   [lang: string]: ILocaleMessages
 }
 
