@@ -1,11 +1,13 @@
-import { each } from './array'
 import { isFn } from '@uform/types'
+import { each } from './array'
 
 type Subscriber<N> = (notification: N) => void
 
 type Filter<P, S> = (payload: P, subscription: S) => any
 
 const noop = () => undefined
+
+export interface IBroadcast extends Broadcast<any, any, any> {}
 
 export class Broadcast<P, S, N> {
   private entries = []

@@ -1,4 +1,9 @@
-import React from 'react'
+import * as React from 'react'
+import { setLocale, setLanguage } from '@uform/validator'
+import { FormPath } from '@uform/core'
+import { IFormActions } from '@uform/types'
+import { createActions, createAsyncActions } from 'react-eva'
+
 import {
   OriginForm,
   registerFieldMiddleware,
@@ -10,25 +15,21 @@ import {
 import { FormField } from './state/field'
 import { caculateSchemaInitialValues } from './utils'
 import { SchemaField, SchemaMarkup } from './decorators/markup'
-import { setLocale, setLanguage } from '@uform/validator'
-import { FormPath } from '@uform/core'
-import { createActions, createAsyncActions } from 'react-eva'
 import initialize from './initialize'
+import { SchemaFormProps } from './type'
+
 export * from './shared/virtualbox'
 export * from './decorators/connect'
 export * from './shared/broadcast'
 export * from './shared/array'
+
 initialize()
 
 export const SchemaForm = SchemaMarkup()(
-  React.forwardRef((props, ref) => {
+  React.forwardRef((props: SchemaFormProps, ref: React.Ref<any>) => {
     const { children, className, ...others } = props
     return (
-      <OriginForm
-        className={`rs-uform ${className || ''}`}
-        {...others}
-        ref={ref}
-      >
+      <OriginForm className={`rs-uform ${className || ''}`} {...others} ref={ref}>
         <div className='rs-uform-content'>
           <FormField name='' path={[]} schemaPath={[]} />
         </div>
@@ -44,7 +45,7 @@ export const setValidationLocale = setLocale
 
 export const setValidationLanguage = setLanguage
 
-export const createFormActions = () =>
+export const createFormActions = (): IFormActions =>
   createActions(
     'getFormState',
     'getFieldState',
@@ -56,7 +57,8 @@ export const createFormActions = () =>
     'validate',
     'dispatch'
   )
-export const createAsyncFormActions = () =>
+
+export const createAsyncFormActions = (): IFormActions =>
   createAsyncActions(
     'getFormState',
     'getFieldState',

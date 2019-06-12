@@ -1,15 +1,23 @@
 import React from 'react'
-import { registerFormField } from './core'
+import pascalCase from 'pascal-case'
+import {
+  registerFormField,
+  ComponentClassWithStyleComponent,
+  FunctionComponentWithStyleComponent
+} from './core'
 import { SchemaField } from '../decorators/markup'
 import { registerVirtualboxFlag } from '../utils'
 import { FormField } from '../state/field'
-import pascalCase from 'pascal-case'
+import { FieldProps } from '../type'
 
-export const createVirtualBox = (name, component) => {
+export const createVirtualBox = (
+  name: string,
+  component: FunctionComponentWithStyleComponent | ComponentClassWithStyleComponent
+) => {
   registerVirtualboxFlag(name)
   registerFormField(
     name,
-    class extends React.PureComponent {
+    class extends React.PureComponent<FieldProps> {
       static displayName = 'VirtualBoxWrapper'
 
       render() {
@@ -57,12 +65,5 @@ export const createVirtualBox = (name, component) => {
 }
 
 export const FormSlot = ({ name, children }) => {
-  return (
-    <SchemaField
-      type='object'
-      name={name}
-      x-component='slot'
-      renderChildren={children}
-    />
-  )
+  return <SchemaField type='object' name={name} x-component='slot' renderChildren={children} />
 }

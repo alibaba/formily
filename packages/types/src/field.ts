@@ -2,6 +2,7 @@ import { IRuleDescription } from './rule'
 import { ISchema } from './schema'
 import { Path } from './path'
 import { IFormPathMatcher } from './form'
+
 export interface IField {
   value: any
   valid: boolean

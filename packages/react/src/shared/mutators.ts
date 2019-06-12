@@ -1,40 +1,41 @@
-import { isArr, isNum, toArr } from '../utils'
-
-const flatArr = arr =>
-  arr.reduce((buf, item) => {
-    return isArr(item) ? buf.concat(flatArr(item)) : buf.concat(item)
-  }, [])
+import { isArr, flatArr, isNum, toArr } from '../utils'
 
 export const createMutators = props => {
   return {
-    change(value) {
+    change(value: any): void {
       props.form.setValue(props.name, value)
     },
-    dispatch(name, payload) {
+
+    dispatch(name: string, payload: any) {
       props.form.triggerEffect(name, {
         name: props.name,
         path: props.path,
         payload
       })
     },
-    errors(errors, ...args) {
+
+    errors(errors: string[] | string, ...args) {
       props.form.setErrors(props.name, flatArr(toArr(errors)), ...args)
     },
-    push(value) {
+
+    push(value: any): void {
       const arr = toArr(props.form.getValue(props.name))
       props.form.setValue(props.name, arr.concat(value))
     },
-    pop() {
+
+    pop(): void {
       const arr = [].concat(toArr(props.form.getValue(props.name)))
       arr.pop()
       props.form.setValue(props.name, arr)
     },
-    insert(index, value) {
+
+    insert(index: number, value: any): void {
       const arr = [].concat(toArr(props.form.getValue(props.name)))
       arr.splice(index, 0, value)
       props.form.setValue(props.name, arr)
     },
-    remove(index) {
+
+    remove(index: number): void {
       let val = props.form.getValue(props.name)
       if (isNum(index) && isArr(val)) {
         val = [].concat(val)
@@ -44,17 +45,20 @@ export const createMutators = props => {
         props.form.removeValue(props.name)
       }
     },
-    unshift(value) {
+
+    unshift(value: any): void {
       const arr = [].concat(toArr(props.form.getValue(props.name)))
       arr.unshift(value)
       props.form.setValue(props.name, arr)
     },
-    shift() {
+
+    shift(): void {
       const arr = [].concat(toArr(props.form.getValue(props.name)))
       arr.shift()
       props.form.setValue(props.name, arr)
     },
-    move($from, $to) {
+
+    move($from: number, $to: number): void {
       const arr = [].concat(toArr(props.form.getValue(props.name)))
       const item = arr[$from]
       arr.splice($from, 1)

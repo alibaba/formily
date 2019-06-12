@@ -1,29 +1,20 @@
 import React, { Component, useContext, useMemo, useState } from 'react'
+import { IBroadcast } from '@uform/utils'
 import { Broadcast, isFn } from '../utils'
 import { BroadcastContext } from './context'
 
-export const FormBridge = () => Target => {
-  const Broadcast = props => {
-    const broadcast = useContext(BroadcastContext)
-    if (!broadcast) {
-      return (
-        <FormProvider>
-          {broadcast => <Target {...props} broadcast={broadcast} />}
-        </FormProvider>
-      )
-    }
-    return <Target {...props} broadcast={broadcast} />
-  }
-
-  Broadcast.displayName = 'FormBroadcast'
-
-  return Broadcast
+interface ChildrenFunction {
+  (broadcast: IBroadcast): React.ReactNode
 }
 
-export class FormProvider extends Component {
-  broadcast = new Broadcast()
+interface FormProviderProps {
+  children?: React.ReactNode | ChildrenFunction
+}
 
+export class FormProvider extends Component<FormProviderProps> {
   static displayName = 'FormProvider'
+
+  broadcast = new Broadcast()
 
   componentWillUnmount() {
     this.broadcast.unsubscribe()
@@ -39,7 +30,31 @@ export class FormProvider extends Component {
   }
 }
 
-export const useForm = ({ testingAct } = {}) => {
+export const FormBridge = () => (Target: React.ComponentType) => {
+  const Broadcast = props => {
+    const broadcast = useContext(BroadcastContext)
+    if (!broadcast) {
+      return <FormProvider>{broadcast => <Target {...props} broadcast={broadcast} />}</FormProvider>
+    }
+    return <Target {...props} broadcast={broadcast} />
+  }
+
+  Broadcast.displayName = 'FormBroadcast'
+
+  return Broadcast
+}
+
+export interface Option {
+  testingAct?(callback): void
+}
+
+export interface FormState {
+  status?: any
+  state?: Object
+  schema?: Object
+}
+
+export const useForm = (options: Option = {}) => {
   let [value, setState] = useState({})
   let broadcast = useContext(BroadcastContext)
   let initialized = false
@@ -48,9 +63,9 @@ export const useForm = ({ testingAct } = {}) => {
       broadcast.subscribe(({ type, state, schema }) => {
         if (type !== 'submit' && type !== 'reset') {
           if (initialized) {
-            if (testingAct) {
+            if (options.testingAct) {
               // just for test
-              testingAct(() =>
+              options.testingAct(() =>
                 setState({
                   status: type,
                   state,
@@ -76,7 +91,9 @@ export const useForm = ({ testingAct } = {}) => {
       initialized = true
     }
   }, [broadcast])
-  const { status, state, schema } = value
+
+  const { status, state, schema } = value as FormState
+
   return {
     status,
     state,

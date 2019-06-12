@@ -1,24 +1,28 @@
 import React, { Component } from 'react'
-import {
-  createHOC,
-  getSchemaNodeFromPath,
-  isEqual,
-  clone,
-  isEmpty
-} from '../utils'
-import { createForm } from '@uform/core'
+import { connect } from 'react-eva'
+import { createForm, Form } from '@uform/core'
+import { IFormState } from '@uform/types'
+
+import { createHOC, getSchemaNodeFromPath, isEqual, clone, isEmpty } from '../utils'
 import { StateContext } from '../shared/context'
 import { getFormFieldPropsTransformer } from '../shared/core'
-import { connect } from 'react-eva'
 import { FormBridge } from '../shared/broadcast'
+import { StateFormProps } from '../type'
 
 export const StateForm = createHOC((options, Form) => {
-  class StateForm extends Component {
+  class StateForm extends Component<StateFormProps, IFormState> {
     static displayName = 'StateForm'
 
     static defaultProps = {
       locale: {}
     }
+
+    private timerId: number
+    private unmounted: boolean
+    private initialized: boolean
+    private lastFormValues: IFormState
+    private form: Form
+    private unsubscribe: Function
 
     constructor(props) {
       super(props)
@@ -48,7 +52,7 @@ export const StateForm = createHOC((options, Form) => {
           })
         }
       })
-      this.state = {}
+      this.state = {} as IFormState
       this.initialized = true
     }
 
@@ -88,10 +92,11 @@ export const StateForm = createHOC((options, Form) => {
         }
 
         lastState = formState
+
         if (this.initialized) {
           if (formState.dirty) {
             clearTimeout(this.timerId)
-            this.timerId = setTimeout(() => {
+            this.timerId = window.setTimeout(() => {
               clearTimeout(this.timerId)
               this.setState(formState)
             }, 60)
@@ -123,8 +128,7 @@ export const StateForm = createHOC((options, Form) => {
       const { schema } = this.props
       const result = getSchemaNodeFromPath(schema, path)
       const transformer =
-        result &&
-        getFormFieldPropsTransformer(result['x-component'] || result['type'])
+        result && getFormFieldPropsTransformer(result['x-component'] || result['type'])
       return transformer ? transformer(result) : result
     }
 
@@ -176,10 +180,7 @@ export const StateForm = createHOC((options, Form) => {
       if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
         this.form.changeValues(value)
       }
-      if (
-        !isEmpty(initialValues) &&
-        !isEqual(initialValues, prevProps.initialValues)
-      ) {
+      if (!isEmpty(initialValues) && !isEqual(initialValues, prevProps.initialValues)) {
         this.form.initialize(initialValues)
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
@@ -190,17 +191,15 @@ export const StateForm = createHOC((options, Form) => {
     componentDidMount() {
       this.unmounted = false
       this.form.triggerEffect('onFormMount', this.form.publishState())
-      this.unsubscribe = this.props.broadcast.subscribe(
-        ({ type, name, payload }) => {
-          if (type === 'submit') {
-            this.submit()
-          } else if (type === 'reset') {
-            this.reset()
-          } else if (type === 'dispatch') {
-            this.form.triggerEffect(name, payload)
-          }
+      this.unsubscribe = this.props.broadcast.subscribe(({ type, name, payload }) => {
+        if (type === 'submit') {
+          this.submit()
+        } else if (type === 'reset') {
+          this.reset()
+        } else if (type === 'dispatch') {
+          this.form.triggerEffect(name, payload)
         }
-      )
+      })
     }
 
     componentWillUnmount() {
@@ -232,7 +231,7 @@ export const StateForm = createHOC((options, Form) => {
       return this.form.submit()
     }
 
-    reset = forceClear => {
+    reset = (forceClear?: boolean) => {
       this.form.reset(forceClear)
     }
 
@@ -252,12 +251,10 @@ export const StateForm = createHOC((options, Form) => {
         onValidateFailed,
         initialValues,
         defaultValue,
-        actions,
         effects,
         implementActions,
         dispatch,
         editable,
-        createEvents,
         subscribes,
         subscription,
         children,
@@ -267,13 +264,14 @@ export const StateForm = createHOC((options, Form) => {
         value,
         ...others
       } = this.props
+
       return (
         <StateContext.Provider
           value={{
+            locale,
             form: this.form,
             getSchema: this.getSchema,
-            locale,
-            broadcast: this.broadcast
+            broadcast
           }}
         >
           <Form {...others} onSubmit={this.onNativeSubmitHandler}>
