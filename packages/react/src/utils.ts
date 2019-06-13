@@ -21,9 +21,9 @@ export const compose = (payload: any, args: any[], revert: boolean) =>
     revert
   )
 
-export const createHOC = (wrapper?: Function) => (options?: Object) => (
-  Target: React.ComponentType
-) => {
+export const createHOC = (wrapper?: (options: object, Target) => any) => (
+  options?: object
+) => (Target: React.ComponentType) => {
   return wrapper({ ...options }, Target)
 }
 

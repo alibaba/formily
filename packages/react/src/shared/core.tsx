@@ -1,25 +1,25 @@
 import * as React from 'react'
 import pascalCase from 'pascal-case'
 
-import { SchemaFormProps } from '../type'
+import { ISchemaFormProps } from '../type'
 import { isFn, isNotEmptyStr, lowercase, each, compose } from '../utils'
 
 // 最原生的 Form，用到了 DOM 的 form 标签
-export interface NativeFormProps {
+export interface INativeFormProps {
   component: string
   formRef?: React.Ref<any>
 }
 
-export interface RegisteredFieldsMap {
+export interface IRegisteredFieldsMap {
   [name: string]: React.ComponentType
 }
 
 // TODO 下面两个接口能不能合并成一个
-export interface FunctionComponentWithStyleComponent extends React.FunctionComponent {
+export interface IFunctionComponentWithStyleComponent extends React.FunctionComponent {
   styledComponentId?: string
 }
 
-export interface ComponentClassWithStyleComponent extends React.ComponentClass {
+export interface IComponentClassWithStyleComponent extends React.ComponentClass {
   styledComponentId?: string
 }
 
@@ -34,14 +34,14 @@ export const initialContainer = () => {
   FORM_FIELDS = {}
   FIELD_PROPS_TRANSFORMERS = {}
   FIELD_RENDERER = undefined
-  FORM_COMPONENT = class extends React.Component<NativeFormProps> {
-    static defaultProps = {
+  FORM_COMPONENT = class extends React.Component<INativeFormProps> {
+    public static defaultProps = {
       component: 'form'
     }
 
-    static displayName = 'Form'
+    public static displayName = 'Form'
 
-    render() {
+    public render() {
       const { formRef, component, ...props } = this.props
       return React.createElement(component, {
         ...props,
@@ -53,7 +53,7 @@ export const initialContainer = () => {
 
 export const registerFormField = (
   name: string,
-  component: FunctionComponentWithStyleComponent | ComponentClassWithStyleComponent,
+  component: IFunctionComponentWithStyleComponent | IComponentClassWithStyleComponent,
   notWrapper?: boolean
 ) => {
   if (isNotEmptyStr(name) && (isFn(component) || typeof component.styledComponentId === 'string')) {
@@ -72,7 +72,7 @@ export const registerFormField = (
   }
 }
 
-export const registerFormFields = (fields: RegisteredFieldsMap) => {
+export const registerFormFields = (fields: IRegisteredFieldsMap) => {
   each(fields, (component, name) => {
     registerFormField(name, component)
   })
@@ -94,7 +94,7 @@ export const registerFieldMiddleware = (...wrappers: any[]) => {
 
 export const registerFormWrapper = (...wrappers: any[]) => {
   FORM_COMPONENT = wrappers.reduce((buf, fn, index) => {
-    let comp = isFn(fn) ? fn(buf) : buf
+    const comp = isFn(fn) ? fn(buf) : buf
     comp.displayName = `FormWrapperLevel${index}`
     return comp
   }, FORM_COMPONENT)
@@ -119,6 +119,6 @@ export const getFormField = (name: string) => {
 
 export const getFieldRenderer = () => FIELD_RENDERER
 
-export const OriginForm = React.forwardRef((props: SchemaFormProps, ref: React.Ref<any>) =>
+export const OriginForm = React.forwardRef((props: ISchemaFormProps, ref: React.Ref<any>) =>
   React.createElement(FORM_COMPONENT, { ...props, ref })
 )

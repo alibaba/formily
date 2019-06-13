@@ -7,13 +7,13 @@ import { createHOC, getSchemaNodeFromPath, isEqual, clone, isEmpty } from '../ut
 import { StateContext } from '../shared/context'
 import { getFormFieldPropsTransformer } from '../shared/core'
 import { FormBridge } from '../shared/broadcast'
-import { StateFormProps } from '../type'
+import { IStateFormProps } from '../type'
 
 export const StateForm = createHOC((options, Form) => {
-  class StateForm extends Component<StateFormProps, IFormState> {
-    static displayName = 'StateForm'
+  class StateForm extends Component<IStateFormProps, IFormState> {
+    public static displayName = 'StateForm'
 
-    static defaultProps = {
+    public static defaultProps = {
       locale: {}
     }
 
@@ -22,7 +22,7 @@ export const StateForm = createHOC((options, Form) => {
     private initialized: boolean
     private lastFormValues: IFormState
     private form: Form
-    private unsubscribe: Function
+    private unsubscribe: () => void
 
     constructor(props) {
       super(props)
@@ -56,7 +56,7 @@ export const StateForm = createHOC((options, Form) => {
       this.initialized = true
     }
 
-    notify(payload) {
+    public notify(payload) {
       const { broadcast, schema } = this.props
       if (broadcast) {
         payload.schema = schema
@@ -64,7 +64,7 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onValidateFailed = $props => {
+    public onValidateFailed = $props => {
       return (...args) => {
         const props = this.props || $props
         if (props.onValidateFailed) {
@@ -73,10 +73,10 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onFormChangeHandler(props) {
+    public onFormChangeHandler(props) {
       let lastState = this.state
       return ({ formState }) => {
-        if (this.unmounted) return
+        if (this.unmounted) { return }
         if (lastState && lastState.pristine !== formState.pristine) {
           if (lastState.pristine) {
             this.notify({
@@ -111,7 +111,7 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onFieldChangeHandler = $props => {
+    public onFieldChangeHandler = $props => {
       return ({ formState }) => {
         const props = this.props || $props
         if (props.onChange) {
@@ -124,15 +124,15 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    getSchema = path => {
+    public getSchema = path => {
       const { schema } = this.props
       const result = getSchemaNodeFromPath(schema, path)
       const transformer =
-        result && getFormFieldPropsTransformer(result['x-component'] || result['type'])
+        result && getFormFieldPropsTransformer(result['x-component'] || result.type)
       return transformer ? transformer(result) : result
     }
 
-    onSubmitHandler = $props => {
+    public onSubmitHandler = $props => {
       return ({ formState }) => {
         const props = this.props || $props
         if (props.onSubmit) {
@@ -162,7 +162,7 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onResetHandler($props) {
+    public onResetHandler($props) {
       return ({ formState }) => {
         const props = this.props || $props
         if (props.onReset) {
@@ -171,11 +171,11 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    shouldComponentUpdate(nextProps) {
+    public shouldComponentUpdate(nextProps) {
       return !isEqual(nextProps, this.props)
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps) {
       const { value, editable, initialValues } = this.props
       if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
         this.form.changeValues(value)
@@ -188,7 +188,7 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    componentDidMount() {
+    public componentDidMount() {
       this.unmounted = false
       this.form.triggerEffect('onFormMount', this.form.publishState())
       this.unsubscribe = this.props.broadcast.subscribe(({ type, name, payload }) => {
@@ -202,7 +202,7 @@ export const StateForm = createHOC((options, Form) => {
       })
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
       this.unmounted = true
       if (this.form) {
         this.form.destructor()
@@ -211,7 +211,7 @@ export const StateForm = createHOC((options, Form) => {
       }
     }
 
-    onNativeSubmitHandler = e => {
+    public onNativeSubmitHandler = e => {
       if (e.preventDefault) {
         e.stopPropagation()
         e.preventDefault()
@@ -223,27 +223,27 @@ export const StateForm = createHOC((options, Form) => {
       })
     }
 
-    getValues = () => {
+    public getValues = () => {
       return this.form.getValue()
     }
 
-    submit = () => {
+    public submit = () => {
       return this.form.submit()
     }
 
-    reset = (forceClear?: boolean) => {
+    public reset = (forceClear?: boolean) => {
       this.form.reset(forceClear)
     }
 
-    validate = () => {
+    public validate = () => {
       return this.form.validate()
     }
 
-    dispatch = (type, payload) => {
+    public dispatch = (type, payload) => {
       this.form.triggerEffect(type, payload)
     }
 
-    render() {
+    public render() {
       const {
         onSubmit,
         onChange,

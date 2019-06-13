@@ -16,7 +16,7 @@ import { FormField } from './state/field'
 import { caculateSchemaInitialValues } from './utils'
 import { SchemaField, SchemaMarkup } from './decorators/markup'
 import initialize from './initialize'
-import { SchemaFormProps } from './type'
+import { ISchemaFormProps } from './type'
 
 export * from './shared/virtualbox'
 export * from './decorators/connect'
@@ -26,12 +26,12 @@ export * from './shared/array'
 initialize()
 
 export const SchemaForm = SchemaMarkup()(
-  React.forwardRef((props: SchemaFormProps, ref: React.Ref<any>) => {
+  React.forwardRef((props: ISchemaFormProps, ref: React.Ref<any>) => {
     const { children, className, ...others } = props
     return (
       <OriginForm className={`rs-uform ${className || ''}`} {...others} ref={ref}>
-        <div className='rs-uform-content'>
-          <FormField name='' path={[]} schemaPath={[]} />
+        <div className="rs-uform-content">
+          <FormField name="" path={[]} schemaPath={[]} />
         </div>
         {children}
       </OriginForm>
