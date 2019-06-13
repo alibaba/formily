@@ -8,6 +8,7 @@ export interface ISchema {
   default?: unknown
   required?: boolean
   enum?: Array<{ label: string, value: unknown } | string | number>
+  enumNames?: string[]
   properties?: {
     [key: string]: ISchema
   }
@@ -18,5 +19,5 @@ export interface ISchema {
   ['x-index']?: number
   ['x-rules']?: Rule
   ['x-component']?: string
-  ['x-effect']?: (dispatch: Dispatcher) => { [key: string]: any }
+  ['x-effect']?: (dispatch: Dispatcher, option?: object) => { [key: string]: any }
 }

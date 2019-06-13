@@ -2,25 +2,25 @@ import React from 'react'
 import pascalCase from 'pascal-case'
 import {
   registerFormField,
-  ComponentClassWithStyleComponent,
-  FunctionComponentWithStyleComponent
+  IComponentClassWithStyleComponent,
+  IFunctionComponentWithStyleComponent
 } from './core'
 import { SchemaField } from '../decorators/markup'
 import { registerVirtualboxFlag } from '../utils'
 import { FormField } from '../state/field'
-import { FieldProps } from '../type'
+import { IFieldProps } from '../type'
 
 export const createVirtualBox = (
   name: string,
-  component: FunctionComponentWithStyleComponent | ComponentClassWithStyleComponent
+  component: IFunctionComponentWithStyleComponent | IComponentClassWithStyleComponent
 ) => {
   registerVirtualboxFlag(name)
   registerFormField(
     name,
-    class extends React.PureComponent<FieldProps> {
-      static displayName = 'VirtualBoxWrapper'
+    class extends React.PureComponent<IFieldProps> {
+      public static displayName = 'VirtualBoxWrapper'
 
-      render() {
+      public render() {
         const { schema, schemaPath, path, getOrderProperties } = this.props
         const parentPath = path.slice(0, path.length - 1)
         const properties = getOrderProperties(schema)
@@ -45,7 +45,7 @@ export const createVirtualBox = (
 
   const VirtualBox = ({ children, name: fieldName, render, ...props }) => (
     <SchemaField
-      type='object'
+      type="object"
       name={fieldName}
       x-component={name}
       x-props={props}
@@ -65,5 +65,5 @@ export const createVirtualBox = (
 }
 
 export const FormSlot = ({ name, children }) => {
-  return <SchemaField type='object' name={name} x-component='slot' renderChildren={children} />
+  return <SchemaField type="object" name={name} x-component="slot" renderChildren={children} />
 }

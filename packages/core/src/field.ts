@@ -254,11 +254,7 @@ export class Field implements IField {
     this.notify()
   }
 
-<<<<<<< HEAD:packages/core/src/field.ts
   public mount() {
-=======
-  mount() {
->>>>>>> 58d6b0fc1a31fa059058d11135ff67a70e975d86:packages/core/src/field.js
     if (this.removed) {
       this.visible = true
       this.removed = false
@@ -266,11 +262,7 @@ export class Field implements IField {
     }
   }
 
-<<<<<<< HEAD:packages/core/src/field.ts
   public unmount() {
-=======
-  unmount() {
->>>>>>> 58d6b0fc1a31fa059058d11135ff67a70e975d86:packages/core/src/field.js
     this.value = undefined
     this.initialValue = undefined
     this.visible = false

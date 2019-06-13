@@ -1,13 +1,15 @@
 import React, { Component, useContext } from 'react'
+import { ISchema } from '@uform/types'
+
 import { createHOC, isEqual, each, schemaIs, filterSchema, lowercase } from '../utils'
 import { createMutators } from '../shared/mutators'
 import { StateContext } from '../shared/context'
 import { getFieldRenderer, getFormField } from '../shared/core'
-import { StateFieldProps, StateFieldState, FieldProps } from '../type'
+import { IStateFieldProps, IStateFieldState, IFieldProps } from '../type'
 
 const StateField = createHOC((options, Field) => {
-  class StateField extends Component<StateFieldProps, StateFieldState> {
-    static displayName = 'StateField'
+  class StateField extends Component<IStateFieldProps, IStateFieldState> {
+    public static displayName = 'StateField'
 
     private initialized: boolean
     private unmounted: boolean
@@ -17,7 +19,7 @@ const StateField = createHOC((options, Field) => {
 
     constructor(props) {
       super(props)
-      this.initialized = true
+      this.initialized = false
       this.state = {}
       this.field = props.form.registerField(props.name || props.schemaPath.join('.'), {
         path: props.schemaPath,
@@ -25,12 +27,15 @@ const StateField = createHOC((options, Field) => {
         props: props.schema
       })
       this.mutators = createMutators(props)
+      this.initialized = true
     }
 
-    onChangeHandler() {
+    public onChangeHandler() {
       return fieldState => {
         if (this.initialized) {
-          if (this.unmounted) return
+          if (this.unmounted) {
+            return
+          }
           this.setState(fieldState)
         } else {
           this.state = fieldState
@@ -38,23 +43,23 @@ const StateField = createHOC((options, Field) => {
       }
     }
 
-    componentWillUnmount() {
+    public componentWillUnmount() {
       this.unmounted = true
       this.field.unmount()
     }
 
-    componentDidMount() {
+    public componentDidMount() {
       this.unmounted = false
       this.field.mount()
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps) {
       if (!isEqual(this.props.schema, prevProps.schema, filterSchema)) {
         this.field.changeProps(this.props.schema)
       }
     }
 
-    renderField = (key, addReactKey) => {
+    public renderField = (key: string, addReactKey: boolean) => {
       const path = this.props.path.concat(key)
       const schemaPath = this.props.schemaPath.concat(key)
       const name = path.join('.')
@@ -69,15 +74,17 @@ const StateField = createHOC((options, Field) => {
       )
     }
 
-    getOrderProperties = outerSchema => {
+    public getOrderProperties = (outerSchema?: ISchema) => {
       const { schema: innerSchema, path } = this.props
-      if (!innerSchema && !outerSchema) return []
+      if (!innerSchema && !outerSchema) {
+        return []
+      }
 
       const properties = []
       each((outerSchema || innerSchema || {}).properties, (item, key) => {
-        let index = item['x-index']
-        let newPath = path.concat(key)
-        let newName = newPath.join('.')
+        const index = item['x-index']
+        const newPath = path.concat(key)
+        const newName = newPath.join('.')
         if (typeof index === 'number') {
           properties[index] = {
             schema: item,
@@ -92,7 +99,7 @@ const StateField = createHOC((options, Field) => {
       return properties
     }
 
-    render() {
+    public render() {
       const { name, path, schemaPath, locale, getSchema } = this.props
       const { value, visible, props, errors, loading, editable, required } = this.state
       const newValue = schemaIs(props, 'object')
@@ -141,7 +148,7 @@ const StateField = createHOC((options, Field) => {
   }
 })
 
-export const FormField = StateField()((props: FieldProps) => {
+export const FormField = StateField()((props: IFieldProps) => {
   const schema = props.schema
   const fieldComponentName = lowercase(schema['x-component'] || schema.type)
   const renderComponent = schema['x-render']

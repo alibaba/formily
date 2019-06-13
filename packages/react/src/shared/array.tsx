@@ -1,15 +1,23 @@
 import React from 'react'
 import { isFn, getIn, camelCase, isEqual } from '../utils'
+import { IFieldProps } from '../type'
 
-export const createArrayField = options => {
-  const {
-    TextButton,
-    CircleButton,
-    AddIcon,
-    RemoveIcon,
-    MoveDownIcon,
-    MoveUpIcon
-  } = {
+export interface ICircleButtonProps {
+  onClick: React.MouseEvent
+  hasText: boolean
+}
+
+export interface IArrayFieldOptions {
+  TextButton: React.ComponentType
+  CircleButton: React.ComponentType<ICircleButtonProps>
+  AddIcon: React.ComponentType
+  RemoveIcon: React.ComponentType
+  MoveDownIcon: React.ComponentType
+  MoveUpIcon: React.ComponentType
+}
+
+export const createArrayField = (options: IArrayFieldOptions) => {
+  const { TextButton, CircleButton, AddIcon, RemoveIcon, MoveDownIcon, MoveUpIcon } = {
     TextButton: () => <div>You Should Pass The TextButton.</div>,
     CircleButton: () => <div>You Should Pass The CircleButton.</div>,
     AddIcon: () => <div>You Should Pass The AddIcon.</div>,
@@ -19,9 +27,9 @@ export const createArrayField = options => {
     ...options
   }
 
-  return class ArrayField extends React.Component {
-    isActive = (key, value) => {
-      const readOnly = this.getProps('readOnly')
+  return class ArrayField extends React.Component<IFieldProps> {
+    public isActive = (key: string, value: any): boolean => {
+      const readOnly: boolean | ((key: string, value: any) => boolean) = this.getProps('readOnly')
       const disabled = this.getDisabled()
       if (isFn(disabled)) {
         return disabled(key, value)
@@ -32,7 +40,7 @@ export const createArrayField = options => {
       }
     }
 
-    getApi(index) {
+    public getApi(index: number) {
       const { value } = this.props
       return {
         index,
@@ -42,25 +50,19 @@ export const createArrayField = options => {
         add: this.onAddHandler(),
         remove: this.onRemoveHandler(index),
         moveDown: e => {
-          return this.onMoveHandler(
-            index,
-            index + 1 > value.length - 1 ? 0 : index + 1
-          )(e)
+          return this.onMoveHandler(index, index + 1 > value.length - 1 ? 0 : index + 1)(e)
         },
         moveUp: e => {
-          return this.onMoveHandler(
-            index,
-            index - 1 < 0 ? value.length - 1 : index - 1
-          )(e)
+          return this.onMoveHandler(index, index - 1 < 0 ? value.length - 1 : index - 1)(e)
         }
       }
     }
 
-    getProps(path) {
+    public getProps(path: string) {
       return getIn(this.props.schema, `x-props${path ? '.' + path : ''}`)
     }
 
-    renderWith(name, index, defaultRender) {
+    public renderWith(name: string, index, defaultRender?) {
       const render = this.getProps(camelCase(`render-${name}`))
       if (isFn(index)) {
         defaultRender = index
@@ -69,31 +71,35 @@ export const createArrayField = options => {
       if (isFn(render)) {
         return render(this.getApi(index))
       } else if (defaultRender) {
-        return isFn(defaultRender)
-          ? defaultRender(this.getApi(index), render)
-          : defaultRender
+        return isFn(defaultRender) ? defaultRender(this.getApi(index), render) : defaultRender
       }
     }
 
-    renderAddition() {
+    public renderAddition() {
       const { locale } = this.props
       const { value } = this.props
       return (
         this.isActive('addition', value) &&
-        this.renderWith('addition', ({ add }, text) => {
-          return (
-            <div className='array-item-addition' onClick={add}>
-              <TextButton>
-                <AddIcon />
-                {text || locale.addItem || '添加'}
-              </TextButton>
-            </div>
-          )
-        })
+        this.renderWith(
+          'addition',
+          (
+            { add }: { add?: (event: React.MouseEvent<HTMLDivElement>) => void } = {},
+            text: string
+          ) => {
+            return (
+              <div className="array-item-addition" onClick={add}>
+                <TextButton>
+                  <AddIcon />
+                  {text || locale.addItem || '添加'}
+                </TextButton>
+              </div>
+            )
+          }
+        )
       )
     }
 
-    renderEmpty(disabled) {
+    public renderEmpty() {
       const { locale, value } = this.props
       return (
         value.length === 0 &&
@@ -104,10 +110,10 @@ export const createArrayField = options => {
               className={`array-empty-wrapper ${!active ? 'disabled' : ''}`}
               onClick={active ? add : undefined}
             >
-              <div className='array-empty'>
+              <div className="array-empty">
                 <img
                   style={{ backgroundColor: 'transparent' }}
-                  src='//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
+                  src="//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg"
                 />
                 {active && (
                   <TextButton>
@@ -122,21 +128,21 @@ export const createArrayField = options => {
       )
     }
 
-    renderRemove(index, item) {
+    public renderRemove(index: number, item: any) {
       return (
         this.isActive(`${index}.remove`, item) &&
         this.renderWith('remove', index, ({ remove }, text) => {
           return (
             <CircleButton onClick={remove} hasText={!!text}>
               <RemoveIcon />
-              {text && <span className='op-name'>{text}</span>}
+              {text && <span className="op-name">{text}</span>}
             </CircleButton>
           )
         })
       )
     }
 
-    renderMoveDown(index, item) {
+    public renderMoveDown(index: number, item: any) {
       const { value } = this.props
       return (
         value.length > 1 &&
@@ -145,14 +151,14 @@ export const createArrayField = options => {
           return (
             <CircleButton onClick={moveDown} hasText={!!text}>
               <MoveDownIcon />
-              <span className='op-name'>{text}</span>
+              <span className="op-name">{text}</span>
             </CircleButton>
           )
         })
       )
     }
 
-    renderMoveUp(index, item) {
+    public renderMoveUp(index: number) {
       const { value } = this.props
       return (
         value.length > 1 &&
@@ -161,18 +167,18 @@ export const createArrayField = options => {
           return (
             <CircleButton onClick={moveUp} hasText={!!text}>
               <MoveUpIcon />
-              <span className='op-name'>{text}</span>
+              <span className="op-name">{text}</span>
             </CircleButton>
           )
         })
       )
     }
 
-    renderExtraOperations(index) {
+    public renderExtraOperations(index: number) {
       return this.renderWith('extraOperations', index)
     }
 
-    getDisabled() {
+    public getDisabled(): boolean | ((key: string, value: any) => boolean) {
       const { editable, name } = this.props
       const disabled = this.getProps('disabled')
       if (editable !== undefined) {
@@ -187,7 +193,8 @@ export const createArrayField = options => {
       return disabled
     }
 
-    onRemoveHandler(index) {
+    // TODO e 类型
+    public onRemoveHandler(index: number): ((e: any) => void) {
       const { value, mutators, schema, locale } = this.props
       const { minItems } = schema
       return e => {
@@ -200,15 +207,15 @@ export const createArrayField = options => {
       }
     }
 
-    onMoveHandler(_from, to) {
+    public onMoveHandler(from: number, to: number): ((e: any) => void) {
       const { mutators } = this.props
       return e => {
         e.stopPropagation()
-        mutators.move(_from, to)
+        mutators.move(from, to)
       }
     }
 
-    onAddHandler() {
+    public onAddHandler() {
       const { value, mutators, schema, locale } = this.props
       const { maxItems } = schema
       return e => {
@@ -221,7 +228,7 @@ export const createArrayField = options => {
       }
     }
 
-    onClearErrorHandler() {
+    public onClearErrorHandler() {
       return () => {
         const { value, mutators, schema } = this.props
         const { maxItems, minItems } = schema
@@ -234,7 +241,7 @@ export const createArrayField = options => {
       }
     }
 
-    validate() {
+    public validate() {
       const { value, mutators, schema, locale } = this.props
       const { maxItems, minItems } = schema
       if (value.length > maxItems) {
@@ -246,13 +253,13 @@ export const createArrayField = options => {
       }
     }
 
-    componentDidUpdate(prevProps) {
+    public componentDidUpdate(prevProps) {
       if (!isEqual(prevProps.value, this.props.value)) {
         this.validate()
       }
     }
 
-    componentDidMount() {
+    public componentDidMount() {
       this.validate()
     }
   }

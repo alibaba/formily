@@ -2,23 +2,36 @@ import { IFormOptions, IFormPayload, ISchema, IField } from '@uform/types'
 import { Form } from '@uform/core'
 import { IBroadcast } from '@uform/utils'
 
-export interface FieldProps extends IField, StateFieldProps {
-  children?: React.ReactNode
-  schema: ISchema
-  getOrderProperties: Function
+export interface IEventTargetOption {
+  selected: boolean
+  value: any
 }
 
-export interface StateFieldProps {
+export interface IEnhanceSchema extends ISchema {
+  renderChildren?: React.ReactElement
+}
+
+export interface IFieldProps extends Omit<IField, 'editable'>, IStateFieldProps {
+  children?: React.ReactNode
+  schema: IEnhanceSchema
+  getOrderProperties: (schema?: ISchema) => any
+  renderField: (key: string, addReactKey: boolean) => React.ReactElement
+  editable: boolean | ((name: string) => boolean)
+}
+
+export interface IStateFieldProps {
   name: string
   schema: ISchema
   path: string[]
   schemaPath: any
-  locale: Object
-  getSchema: Function
+  locale: { [key: string]: any }
+  getSchema: (path: string) => ISchema
   form: Form
+  // TODO mutators 文件应该暴露出来 interface
+  mutators?: any
 }
 
-export interface StateFieldState {
+export interface IStateFieldState {
   value?: any
   props?: any
   errors?: any
@@ -28,21 +41,21 @@ export interface StateFieldState {
   required?: boolean
 }
 
-export interface SchemaFormProps extends IFormOptions {
+export interface ISchemaFormProps extends IFormOptions {
   className?: string
   children?: React.ReactNode
   value?: any
   onChange?: (payload: IFormPayload) => void
 }
 
-export interface StateFormProps extends SchemaFormProps {
+export interface IStateFormProps extends ISchemaFormProps {
   broadcast: IBroadcast
 
   // eva
-  implementActions: (actions: Object) => Object
+  implementActions: (actions: object) => object
   dispatch: (type: string, ...args: any) => void
-  subscription: Function
+  subscription: () => void
 
   // ConfigProvider
-  locale: Object
+  locale: { [key: string]: any }
 }

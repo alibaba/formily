@@ -3,24 +3,22 @@ import { IBroadcast } from '@uform/utils'
 import { Broadcast, isFn } from '../utils'
 import { BroadcastContext } from './context'
 
-interface ChildrenFunction {
-  (broadcast: IBroadcast): React.ReactNode
-}
+type ChildrenFunction = (broadcast: IBroadcast) => React.ReactNode
 
-interface FormProviderProps {
+interface IFormProviderProps {
   children?: React.ReactNode | ChildrenFunction
 }
 
-export class FormProvider extends Component<FormProviderProps> {
-  static displayName = 'FormProvider'
+export class FormProvider extends Component<IFormProviderProps> {
+  public static displayName = 'FormProvider'
 
-  broadcast = new Broadcast()
+  public broadcast = new Broadcast()
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     this.broadcast.unsubscribe()
   }
 
-  render() {
+  public render() {
     const { children } = this.props
     return (
       <BroadcastContext.Provider value={this.broadcast}>
@@ -44,20 +42,22 @@ export const FormBridge = () => (Target: React.ComponentType) => {
   return Broadcast
 }
 
-export interface Option {
+export interface IOption {
   testingAct?(callback): void
 }
 
-export interface FormState {
+export interface IFormState {
   status?: any
-  state?: Object
-  schema?: Object
+  state?: object
+  schema?: object
 }
 
-export const useForm = (options: Option = {}) => {
-  let [value, setState] = useState({})
-  let broadcast = useContext(BroadcastContext)
+export const useForm = (options: IOption = {}) => {
+  const [value, setState] = useState({})
+  const broadcast = useContext(BroadcastContext)
   let initialized = false
+  let finalValue = value
+
   useMemo(() => {
     if (broadcast) {
       broadcast.subscribe(({ type, state, schema }) => {
@@ -80,7 +80,7 @@ export const useForm = (options: Option = {}) => {
               })
             }
           } else {
-            value = {
+            finalValue = {
               status: type,
               state,
               schema
@@ -92,7 +92,7 @@ export const useForm = (options: Option = {}) => {
     }
   }, [broadcast])
 
-  const { status, state, schema } = value as FormState
+  const { status, state, schema } = finalValue as IFormState
 
   return {
     status,
@@ -118,7 +118,7 @@ export const useForm = (options: Option = {}) => {
 
 export const FormConsumer = ({ children, testingAct }) => {
   const formApi = useForm({ testingAct })
-  if (!formApi) return <React.Fragment />
+  if (!formApi) { return <React.Fragment /> }
   if (isFn(children)) {
     return children(formApi)
   } else {

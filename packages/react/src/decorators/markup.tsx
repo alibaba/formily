@@ -1,7 +1,7 @@
 import React, { Component, useContext } from 'react'
 import { createPortal } from 'react-dom'
 
-import { SchemaFormProps } from '../type'
+import { ISchemaFormProps } from '../type'
 import { createHOC, schemaIs, clone, filterSchemaPropertiesAndReactChildren } from '../utils'
 import { MarkupContext } from '../shared/context'
 
@@ -14,7 +14,7 @@ const getRadomName = () => {
 export const SchemaField = (props, context) => {
   const parent = useContext(MarkupContext)
   if (schemaIs(parent, 'object')) {
-    let name = props.name || getRadomName()
+    const name = props.name || getRadomName()
     parent.properties = parent.properties || {}
     parent.properties[name] = clone(props, filterSchemaPropertiesAndReactChildren)
     return (
@@ -31,19 +31,21 @@ export const SchemaField = (props, context) => {
 }
 
 export const SchemaMarkup = createHOC((options, SchemaForm) => {
-  return class extends Component<SchemaFormProps> {
-    static displayName = 'SchemaMarkupParser'
+  return class extends Component<ISchemaFormProps> {
+    public static displayName = 'SchemaMarkupParser'
 
-    portalRoot = document.createElement('div')
+    public portalRoot = document.createElement('div')
 
-    render() {
-      let { children, initialValues, defaultValue, value, schema, ...others } = this.props
+    public render() {
+      const { children, initialValues, defaultValue, value, schema, ...others } = this.props
 
       let alreadyHasSchema = false
+      let finalSchema = {}
       if (schema) {
         alreadyHasSchema = true
+        finalSchema = schema
       } else {
-        schema = { type: 'object' }
+        finalSchema = { type: 'object' }
       }
 
       nonameId = 0
@@ -52,7 +54,7 @@ export const SchemaMarkup = createHOC((options, SchemaForm) => {
         <React.Fragment>
           {!alreadyHasSchema &&
             createPortal(
-              <MarkupContext.Provider value={schema}>{children}</MarkupContext.Provider>,
+              <MarkupContext.Provider value={finalSchema}>{children}</MarkupContext.Provider>,
               this.portalRoot
             )}
           <SchemaForm
@@ -60,7 +62,7 @@ export const SchemaMarkup = createHOC((options, SchemaForm) => {
             defaultValue={value || defaultValue}
             value={value}
             initialValues={initialValues}
-            schema={schema}
+            schema={finalSchema}
           >
             {children}
           </SchemaForm>
