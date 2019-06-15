@@ -20,7 +20,7 @@ const FormCardsField = styled(
 
     renderEmpty(title) {
       return (
-        <Card title={title} className='card-list' contentHeight='auto'>
+        <Card style={this.getProps('style')} title={title} className='card-list' contentHeight='auto'>
           {super.renderEmpty()}
         </Card>
       )
