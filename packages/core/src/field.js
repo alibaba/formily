@@ -208,13 +208,10 @@ export class Field {
   }
 
   unmount() {
-    this.value = undefined
-    this.initialValue = undefined
     this.visible = false
     this.removed = true
     if (!this.context) return
     this.context.deleteIn(this.name)
-    this.context.deleteInitialValues(this.name)
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
     }
