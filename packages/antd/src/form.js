@@ -453,7 +453,16 @@ const isTableColItem = (path, getSchema) => {
 
 registerFieldMiddleware(Field => {
   return props => {
-    const { name, errors, editable, path, required, schema, getSchema } = props
+    const {
+      name,
+      errors,
+      editable,
+      path,
+      required,
+      schema,
+      schemaPath,
+      getSchema
+    } = props
     if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
     return React.createElement(
       FormConsumer,
@@ -479,7 +488,7 @@ registerFieldMiddleware(Field => {
             label: schema.title,
             noMinHeight: schema.type === 'object' && !schema['x-component'],
             isTableColItem: isTableColItem(
-              path.slice(0, path.length - 2),
+              schemaPath.slice(0, schemaPath.length - 2),
               getSchema
             ),
             type: schema['x-component'] || schema['type'],
