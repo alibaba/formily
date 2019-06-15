@@ -54,6 +54,7 @@ ReactDOM.render(
         required
         title="Select"
         name="select"
+        x-props={{ style: { maxWidth: 300 } }}
       />
       <Field
         type="checkbox"

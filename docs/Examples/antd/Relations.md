@@ -170,7 +170,7 @@ const App = () => {
             title="GG"
             x-props={{ showSearch: true, filterLocal: false }}
           />
-          <Field name="hh" type="string" title="HH" enum={[]} />
+          <Field name="hh" type="string" title="HH" enum={[]} x-props={{ style: { maxWidth: 300 } }} />
           {state.visible && <Field name="mm" type="string" title="MM" />}
         </FormBlock>
         <FormButtonGroup offset={6}>

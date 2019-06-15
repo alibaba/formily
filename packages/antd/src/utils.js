@@ -25,8 +25,7 @@ const WrapSelect = styled(
     }
   }
 )`
-  min-width: 200px;
-  max-width: 300px;
+  width: 100%;
 `
 
 const Text = styled(props => {
@@ -41,7 +40,9 @@ const Text = styled(props => {
   } else {
     value = Array.isArray(props.value)
       ? props.value.join(' ~ ')
-      : String(props.value === undefined || props.value === null ? '' : props.value)
+      : String(
+        props.value === undefined || props.value === null ? '' : props.value
+      )
   }
   return (
     <div className={`${props.className} ${props.size || ''} text-field`}>
