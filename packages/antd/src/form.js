@@ -132,10 +132,12 @@ export const FormItem = styled(
         return (
           <Col
             {...normalizeCol(wrapperCol)}
-            className={`${prefix}form-item-control`}
+            className={`${prefix}form-item-control-wrapper`}
             key='item'
           >
-            {React.cloneElement(children, { size })}
+            <div className={`${prefix}item-control`}>
+              {React.cloneElement(children, { size })}
+            </div>
             {message}
           </Col>
         )
@@ -152,7 +154,7 @@ export const FormItem = styled(
     renderHelper() {
       return (
         <Popover closable={false} placement='top' content={this.props.extra}>
-          <Icon type='question-circle' size='small' />
+          <Icon type='question-circle' className={`${this.props.prefix}form-tips`} size='small' />
         </Popover>
       )
     }
@@ -201,8 +203,7 @@ export const FormItem = styled(
   }
 )`
   margin-bottom: 0 !important;
-  .ant-form-item-control {
-    display: block;
+  .ant-form-item-control-wrapper {
     line-height: 32px;
   }
   &.field-table {
@@ -215,7 +216,7 @@ export const FormItem = styled(
   }
   .ant-form-item-msg {
     &.ant-form-item-space {
-      min-height: 24px;
+      min-height: 20px;
       .ant-form-item-help,
       .ant-form-item-extra {
         margin-top: 0;
@@ -223,13 +224,15 @@ export const FormItem = styled(
       }
     }
   }
+  .ant-form-tips{
+    margin-left: -5px;
+    margin-right: 10px;
+    transform:translateY(1px);
+  }
   .ant-form-item-extra {
     color: #888;
     font-size: 12px;
     line-height: 1.7;
-  }
-  &.ant-form-item.ant-row {
-    display: flex;
   }
   .ant-col {
     padding-right: 0;
@@ -253,23 +256,14 @@ export const FormItem = styled(
       }
     }
   }
-  .ant-left {
-    text-align: left;
-  }
-  .ant-right {
-    text-align: right;
-  }
-  .ant-center {
-    text-align: center;
-  }
 `
 
 const toArr = val => (Array.isArray(val) ? val : val ? [val] : [])
 
 registerFormWrapper(OriginForm => {
   OriginForm = styled(OriginForm)`
-    &.ant-inline,
-    .ant-inline {
+    &.ant-form-inline,
+    .ant-form-inline {
       display: flex;
       .rs-uform-content {
         margin-right: 15px;
@@ -281,6 +275,7 @@ registerFormWrapper(OriginForm => {
       .ant-form-item:not(:last-child) {
         margin-right: 20px;
       }
+      
       .ant-form-item.ant-left .ant-form-item-control {
         display: inline-block;
         display: table-cell\0;
@@ -290,28 +285,6 @@ registerFormWrapper(OriginForm => {
     }
     .ant-form-item-label {
       line-height: 32px;
-      padding-right: 12px;
-      text-align: right;
-    }
-    .ant-small {
-      .ant-form-item-label {
-        line-height: 24px;
-      }
-      .ant-radio-group,
-      .ant-checkbox-group {
-        line-height: 24px;
-        min-height: 24px;
-      }
-    }
-    .ant-large {
-      .ant-form-item-label {
-        line-height: 40px;
-      }
-      .ant-radio-group,
-      .ant-checkbox-group {
-        line-height: 40px;
-        min-height: 40px;
-      }
     }
     .ant-form-item-label label[required]:before {
       margin-right: 4px;
@@ -327,46 +300,11 @@ registerFormWrapper(OriginForm => {
     .ant-form-item.has-error .ant-form-item-help {
       color: #ff3000;
     }
-    .ant-radio-group,
-    .ant-checkbox-group {
-      line-height: 32px;
-      & > label {
-        margin-right: 15px;
-      }
-    }
-    .ant-range {
-      margin-top: 10px;
-    }
-    .ant-number-picker-normal {
-      min-width: 62px;
-      width: 100px;
-      .ant-number-picker-input-wrap {
-        width: calc(100% - 22px);
-        .ant-number-picker-input {
-          width: 100%;
-          input {
-            text-align: left;
-            padding: 0 8px;
-          }
-        }
-      }
-    }
+
     .ant-table {
       table {
         table-layout: auto;
       }
-    }
-    .ant-rating-default {
-      min-height: 30px;
-      line-height: 30px;
-    }
-    .ant-rating-small {
-      min-height: 24px;
-      line-height: 24px;
-    }
-    .ant-rating-large {
-      min-height: 40px;
-      line-height: 40px;
     }
   `
 
@@ -423,8 +361,7 @@ registerFormWrapper(OriginForm => {
       const isInline = inline || layout === 'line'
       const formClassName = classNames({
         [`${prefix}form`]: true,
-        [`${prefix}form-${layout}`]: true,
-        [`${prefix}inline`]: isInline, // 内联
+        [`${prefix}form-${isInline ? 'inline' : layout}`]: true,
         [`${prefix}${size}`]: size,
         [`${prefix}form-${labelAlign}`]: !!labelAlign,
         [className]: !!className
