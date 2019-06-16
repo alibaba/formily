@@ -35,6 +35,7 @@ ReactDOM.render(
           type="string"
           enum={['1', '2', '3', '4']}
           required
+          x-props={{ style: { maxWidth: 300 } }}
           title="Select"
           name="select"
         />
@@ -122,6 +123,7 @@ ReactDOM.render(
           type="string"
           enum={['1', '2', '3', '4']}
           required
+          x-props={{ style: { maxWidth: 300 } }}
           title="Select"
           name="select"
         />
