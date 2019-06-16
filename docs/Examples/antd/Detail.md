@@ -66,6 +66,7 @@ const App = () => {
                 { label: '选项4', value: '4' }
               ]}
               required
+              x-props={{ style: { maxWidth: 300 } }}
               title="Select单选"
               name="select"
             />
@@ -82,7 +83,7 @@ const App = () => {
             ]}
             required
             title="Select多选"
-            x-props={{ multiple: true }}
+            x-props={{ multiple: true, style: { maxWidth: 300 } }}
             name="multiselect"
           />
           <Field
