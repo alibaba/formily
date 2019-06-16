@@ -20,6 +20,7 @@ import {Field} from '@uform/react'
 | minItems | 最小条目数，只有在type="array"时可以使用 | Number |  |  |
 | name | 字段名称 | Object | {} |  |
 | required | 字段是否必填 | Boolean | false |  |
+| description | 字段描述，如果字符串字数超过20字或内容是ReactNode，会自动以pop形式展示 | String/React Node | '' |  |
 | type | 字段类型 | Object |  |  |
 | x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染 | Object | {type:"object",properties:{}} |  |
 | x-effect | 副作用事件绑定对象 | `Function(dispatch : Function) : {    [eventName](...arguemtns)}` |  |  |

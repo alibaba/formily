@@ -4,7 +4,8 @@ import classNames from 'classnames'
 import { Popover, Icon, Row, Col } from 'antd'
 import LOCALE from './locale'
 import styled from 'styled-components'
-import { isFn, moveTo } from './utils'
+import { isFn, moveTo, isStr } from './utils'
+import stringLength from 'string-length'
 /**
  * 轻量级 Form，不包含任何数据管理能力
  *
@@ -24,6 +25,14 @@ const getParentNode = (node, selector) => {
   if (node.matches(selector)) return node
   else {
     return getParentNode(node.parentNode || node.parentElement, selector)
+  }
+}
+
+const isPopDescription = description => {
+  if (isStr(description)) {
+    return stringLength(description) > 20
+  } else {
+    return React.isValidElement(description)
   }
 }
 
@@ -74,8 +83,7 @@ export const FormItem = styled(
         return (
           <Col {...normalizeCol(labelCol)} className={cls}>
             {ele}
-            {((extra && extra.length > 20) || React.isValidElement(extra)) &&
-              this.renderHelper()}
+            {isPopDescription(extra) && this.renderHelper()}
           </Col>
         )
       }
@@ -83,8 +91,7 @@ export const FormItem = styled(
       return (
         <div className={cls}>
           {ele}
-          {((extra && extra.length > 20) || React.isValidElement(extra)) &&
-            this.renderHelper()}
+          {isPopDescription(extra) && this.renderHelper()}
         </div>
       )
     }
@@ -111,7 +118,7 @@ export const FormItem = styled(
           }`}
         >
           {help && <div className={`${prefix}form-item-help`}>{help}</div>}
-          {!help && extra && extra.length <= 20 && (
+          {!help && !isPopDescription(extra) && (
             <div className={`${prefix}form-item-extra`}>{extra}</div>
           )}
         </div>
