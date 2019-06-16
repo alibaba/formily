@@ -4,7 +4,8 @@ import classNames from 'classnames'
 import { Popover, Icon, Row, Col } from 'antd'
 import LOCALE from './locale'
 import styled from 'styled-components'
-import { isFn, moveTo } from './utils'
+import { isFn, moveTo, isStr } from './utils'
+import stringLength from 'string-length'
 /**
  * 轻量级 Form，不包含任何数据管理能力
  *
@@ -24,6 +25,14 @@ const getParentNode = (node, selector) => {
   if (node.matches(selector)) return node
   else {
     return getParentNode(node.parentNode || node.parentElement, selector)
+  }
+}
+
+const isPopDescription = description => {
+  if (isStr(description)) {
+    return stringLength(description) > 20
+  } else {
+    return React.isValidElement(description)
   }
 }
 
@@ -53,9 +62,15 @@ export const FormItem = styled(
       }
 
       const ele = (
-        <label htmlFor={id} required={required} key='label'>
+        <label
+          htmlFor={id}
+          required={required}
+          key='label'
+          className={classNames({
+            'no-colon': !autoAddColon
+          })}
+        >
           {label}
-          {label === ' ' ? '' : autoAddColon ? '：' : ''}
         </label>
       )
 
@@ -68,8 +83,7 @@ export const FormItem = styled(
         return (
           <Col {...normalizeCol(labelCol)} className={cls}>
             {ele}
-            {((extra && extra.length > 20) || React.isValidElement(extra)) &&
-              this.renderHelper()}
+            {isPopDescription(extra) && this.renderHelper()}
           </Col>
         )
       }
@@ -77,8 +91,7 @@ export const FormItem = styled(
       return (
         <div className={cls}>
           {ele}
-          {((extra && extra.length > 20) || React.isValidElement(extra)) &&
-            this.renderHelper()}
+          {isPopDescription(extra) && this.renderHelper()}
         </div>
       )
     }
@@ -105,7 +118,7 @@ export const FormItem = styled(
           }`}
         >
           {help && <div className={`${prefix}form-item-help`}>{help}</div>}
-          {!help && extra && extra.length <= 20 && (
+          {!help && !isPopDescription(extra) && (
             <div className={`${prefix}form-item-extra`}>{extra}</div>
           )}
         </div>
@@ -224,12 +237,12 @@ export const FormItem = styled(
   .ant-card-head {
     background: none;
   }
-  .ant-form-item-label label:after {
-    content: '';
-  }
   .ant-form-item-label label {
     color: #666;
     font-size: 12px;
+    &.no-colon:after {
+      content: '';
+    }
   }
   ul {
     padding: 0;
@@ -363,6 +376,7 @@ registerFormWrapper(OriginForm => {
       prefix: 'ant-',
       size: 'default',
       labelAlign: 'left',
+      layout: 'horizontal',
       locale: LOCALE,
       autoAddColon: true
     }
@@ -400,14 +414,17 @@ registerFormWrapper(OriginForm => {
         children,
         component,
         labelCol,
+        layout,
         wrapperCol,
         style,
         prefix,
         ...others
       } = this.props
+      const isInline = inline || layout === 'line'
       const formClassName = classNames({
         [`${prefix}form`]: true,
-        [`${prefix}inline`]: inline, // 内联
+        [`${prefix}form-${layout}`]: true,
+        [`${prefix}inline`]: isInline, // 内联
         [`${prefix}${size}`]: size,
         [`${prefix}form-${labelAlign}`]: !!labelAlign,
         [className]: !!className
@@ -419,7 +436,7 @@ registerFormWrapper(OriginForm => {
             labelTextAlign,
             labelCol,
             wrapperCol,
-            inline,
+            inline: isInline,
             size,
             autoAddColon,
             FormRef: this.FormRef
@@ -453,7 +470,16 @@ const isTableColItem = (path, getSchema) => {
 
 registerFieldMiddleware(Field => {
   return props => {
-    const { name, errors, editable, path, required, schema, getSchema } = props
+    const {
+      name,
+      errors,
+      editable,
+      path,
+      required,
+      schema,
+      schemaPath,
+      getSchema
+    } = props
     if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
     return React.createElement(
       FormConsumer,
@@ -479,7 +505,7 @@ registerFieldMiddleware(Field => {
             label: schema.title,
             noMinHeight: schema.type === 'object' && !schema['x-component'],
             isTableColItem: isTableColItem(
-              path.slice(0, path.length - 2),
+              schemaPath.slice(0, schemaPath.length - 2),
               getSchema
             ),
             type: schema['x-component'] || schema['type'],
