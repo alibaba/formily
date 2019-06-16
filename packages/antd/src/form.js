@@ -53,9 +53,15 @@ export const FormItem = styled(
       }
 
       const ele = (
-        <label htmlFor={id} required={required} key='label'>
+        <label
+          htmlFor={id}
+          required={required}
+          key='label'
+          className={classNames({
+            'no-colon': !autoAddColon
+          })}
+        >
           {label}
-          {label === ' ' ? '' : autoAddColon ? '：' : ''}
         </label>
       )
 
@@ -224,12 +230,12 @@ export const FormItem = styled(
   .ant-card-head {
     background: none;
   }
-  .ant-form-item-label label:after {
-    content: '';
-  }
   .ant-form-item-label label {
     color: #666;
     font-size: 12px;
+    &.no-colon:after {
+      content: '';
+    }
   }
   ul {
     padding: 0;
@@ -363,6 +369,7 @@ registerFormWrapper(OriginForm => {
       prefix: 'ant-',
       size: 'default',
       labelAlign: 'left',
+      layout: 'horizontal',
       locale: LOCALE,
       autoAddColon: true
     }
@@ -400,14 +407,17 @@ registerFormWrapper(OriginForm => {
         children,
         component,
         labelCol,
+        layout,
         wrapperCol,
         style,
         prefix,
         ...others
       } = this.props
+      const isInline = inline || layout === 'line'
       const formClassName = classNames({
         [`${prefix}form`]: true,
-        [`${prefix}inline`]: inline, // 内联
+        [`${prefix}form-${layout}`]: true,
+        [`${prefix}inline`]: isInline, // 内联
         [`${prefix}${size}`]: size,
         [`${prefix}form-${labelAlign}`]: !!labelAlign,
         [className]: !!className
@@ -419,7 +429,7 @@ registerFormWrapper(OriginForm => {
             labelTextAlign,
             labelCol,
             wrapperCol,
-            inline,
+            inline: isInline,
             size,
             autoAddColon,
             FormRef: this.FormRef
