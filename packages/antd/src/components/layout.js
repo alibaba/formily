@@ -22,7 +22,7 @@ export const FormLayout = createVirtualBox(
             newValue.inline || newValue.className || newValue.style ? (
               <div
                 className={cls(newValue.className, {
-                  'ant-form ant-inline': !!newValue.inline
+                  'ant-form ant-form-inline': !!newValue.inline
                 })}
                 style={newValue.style}
               >
