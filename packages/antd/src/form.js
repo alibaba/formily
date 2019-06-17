@@ -123,7 +123,12 @@ export const FormItem = styled(
           )}
         </div>
       )
-      const ele = <div className={`${prefix}form-item-control`}>{React.cloneElement(children, { size }) }</div>
+      const ele = (
+        <div className={`${prefix}form-item-control`}>
+          {React.cloneElement(children, { size })}
+          {message}
+        </div>
+      )
       if (
         (wrapperCol || labelCol) &&
         labelAlign !== 'top' &&
@@ -131,22 +136,13 @@ export const FormItem = styled(
         label
       ) {
         return (
-          <Col
-            {...normalizeCol(wrapperCol)}
-            key='item'
-          >
+          <Col {...normalizeCol(wrapperCol)} key='item'>
             {ele}
-            {message}
           </Col>
         )
       }
 
-      return (
-        <React.Fragment>
-          {ele}
-          {message}
-        </React.Fragment>
-      )
+      return <React.Fragment>{ele}</React.Fragment>
     }
 
     renderHelper() {
