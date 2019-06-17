@@ -14,6 +14,7 @@
      - [<FormBlock/>](./API/FormBlock.md)
      - [<FormItemGrid/>](./API/FormItemGrid.md)
      - [<FormSlot/>](./API/FormSlot.md)
+     - [<FormTextBox/>](./API/FormTextBox.md)
    - @uform/react
      - [<SchemaForm/>](./API/SchemaForm_React.md)
      - [<Field/>](./API/Field_React.md)
