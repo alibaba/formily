@@ -2,7 +2,14 @@ import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import moment from 'moment'
 import { DatePicker as AntDatePicker } from 'antd'
-import { mapStyledProps, mapTextComponent, StateLoading } from '../utils'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  StateLoading,
+  compose,
+  isStr,
+  isArr
+} from '../utils'
 
 const {
   RangePicker: AntRangePicker,
@@ -26,6 +33,30 @@ const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
   return value && value.format ? value.format(format) : value
 }
 
+const mapMomentValue = props => {
+  const { value, showTime = false, disabled = false } = props
+  try {
+    if (!disabled) {
+      if (isStr(value) && value) {
+        props.value = moment(
+          value,
+          showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+        )
+      } else if (isArr(value) && value.length) {
+        props.value = value.map(
+          item =>
+            (item &&
+              moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
+            ''
+        )
+      }
+    }
+  } catch (e) {
+    throw new Error(e)
+  }
+  return props
+}
+
 registerFormField(
   'date',
   connect({
@@ -36,20 +67,10 @@ registerFormField(
         props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
       )
     },
-    getProps: props => {
-      const { value, showTime = false, disabled = false, ...others } = props
-      try {
-        if (!disabled && value) {
-          props.value = moment(
-            value,
-            showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-          )
-        }
-      } catch (e) {
-        throw new Error(e)
-      }
-      mapStyledProps(props, others)
-    },
+    getProps: compose(
+      mapStyledProps,
+      mapMomentValue
+    ),
     getComponent: mapTextComponent
   })(DatePicker)
 )
@@ -65,31 +86,10 @@ registerFormField(
         transformMoment(endDate, format)
       ]
     },
-    getProps: props => {
-      const {
-        value = [],
-        showTime = false,
-        disabled = false,
-        ...others
-      } = props
-      try {
-        if (!disabled && value.length) {
-          props.value = value.map(item => {
-            return (
-              (item &&
-                moment(
-                  item,
-                  showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-                )) ||
-              ''
-            )
-          })
-        }
-      } catch (e) {
-        throw new Error(e)
-      }
-      mapStyledProps(props, others)
-    },
+    getProps: compose(
+      mapStyledProps,
+      mapMomentValue
+    ),
     getComponent: mapTextComponent
   })(RangePicker)
 )
@@ -100,20 +100,10 @@ registerFormField(
     getValueFromEvent(_, value) {
       return transformMoment(value)
     },
-    getProps: props => {
-      const { value, showTime = false, disabled = false, ...others } = props
-      try {
-        if (!disabled && value) {
-          props.value = moment(
-            value,
-            showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM'
-          )
-        }
-      } catch (e) {
-        throw new Error(e)
-      }
-      mapStyledProps(props, others)
-    },
+    getProps: compose(
+      mapStyledProps,
+      mapMomentValue
+    ),
     getComponent: mapTextComponent
   })(MonthPicker)
 )
@@ -125,20 +115,10 @@ registerFormField(
       console.log(_, value)
       return transformMoment(value)
     },
-    getProps: props => {
-      const { value, showTime = false, disabled = false, ...others } = props
-      try {
-        if (!disabled && value) {
-          props.value = moment(
-            value,
-            showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM'
-          )
-        }
-      } catch (e) {
-        throw new Error(e)
-      }
-      mapStyledProps(props, others)
-    },
+    getProps: compose(
+      mapStyledProps,
+      mapMomentValue
+    ),
     getComponent: mapTextComponent
   })(YearPicker)
 )
