@@ -2,6 +2,7 @@ import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import { Input } from '@alifd/next'
 import styled from 'styled-components'
+import { mapStyledProps } from '../utils'
 
 var isNum = function(c) {
   return c >= 48 && c <= 57
@@ -314,4 +315,9 @@ const Password = styled(
   }
 `
 
-registerFormField('password', connect()(Password))
+registerFormField(
+  'password',
+  connect({
+    getProps: mapStyledProps
+  })(Password)
+)

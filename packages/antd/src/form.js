@@ -123,6 +123,7 @@ export const FormItem = styled(
           )}
         </div>
       )
+      const ele = <div className={`${prefix}form-item-control`}>{React.cloneElement(children, { size }) }</div>
       if (
         (wrapperCol || labelCol) &&
         labelAlign !== 'top' &&
@@ -132,29 +133,30 @@ export const FormItem = styled(
         return (
           <Col
             {...normalizeCol(wrapperCol)}
-            className={`${prefix}form-item-control-wrapper`}
             key='item'
           >
-            <div className={`${prefix}item-control`}>
-              {React.cloneElement(children, { size })}
-            </div>
+            {ele}
             {message}
           </Col>
         )
       }
 
       return (
-        <div className={`${prefix}form-item-control`}>
-          {React.cloneElement(children, { size })}
+        <React.Fragment>
+          {ele}
           {message}
-        </div>
+        </React.Fragment>
       )
     }
 
     renderHelper() {
       return (
         <Popover closable={false} placement='top' content={this.props.extra}>
-          <Icon type='question-circle' className={`${this.props.prefix}form-tips`} size='small' />
+          <Icon
+            type='question-circle'
+            className={`${this.props.prefix}form-tips`}
+            size='small'
+          />
         </Popover>
       )
     }
@@ -206,6 +208,9 @@ export const FormItem = styled(
   .ant-form-item-control-wrapper {
     line-height: 32px;
   }
+  .ant-form-item-control {
+    line-height: 32px;
+  }
   &.field-table {
     .ant-form-item-control {
       overflow: auto;
@@ -224,10 +229,10 @@ export const FormItem = styled(
       }
     }
   }
-  .ant-form-tips{
+  .ant-form-tips {
     margin-left: -5px;
     margin-right: 10px;
-    transform:translateY(1px);
+    transform: translateY(1px);
   }
   .ant-form-item-extra {
     color: #888;
@@ -275,7 +280,7 @@ registerFormWrapper(OriginForm => {
       .ant-form-item:not(:last-child) {
         margin-right: 20px;
       }
-      
+
       .ant-form-item.ant-left .ant-form-item-control {
         display: inline-block;
         display: table-cell\0;

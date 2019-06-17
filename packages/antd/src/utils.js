@@ -1,5 +1,5 @@
 import React from 'react'
-import { Select as AntSelect } from 'antd'
+import { Select as AntSelect, Icon } from 'antd'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import MoveTo from 'moveto'
@@ -159,6 +159,9 @@ export const acceptEnum = component => {
 export const mapStyledProps = (props, { loading, size }) => {
   if (loading) {
     props.state = props.state || 'loading'
+    props.suffix = (
+      <Icon type='loading' style={{ color: 'rgba(0, 0, 0, 0.25)' }} />
+    )
   }
   if (size) {
     props.size = size
