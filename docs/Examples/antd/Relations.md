@@ -490,9 +490,10 @@ const App = () => {
                   type="string"
                   name="bb"
                   enum={['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee']}
+                  x-props={{ style: { maxWidth: 300 } }}
                   title="BB"
                 />
-                <Field type="string" name="cc" enum={[]} title="CC" />
+                <Field type="string" name="cc" enum={[]} x-props={{ style: { maxWidth: 300 } }} title="CC" />
                 <Field
                   type="string"
                   name="gg"
@@ -509,6 +510,7 @@ const App = () => {
                       type="string"
                       name="ee"
                       enum={['是', '否']}
+                      x-props={{ style: { maxWidth: 300 } }}
                       title="EE"
                       description="是否显示GG"
                     />
@@ -517,6 +519,7 @@ const App = () => {
                       name="ff"
                       default="是"
                       enum={['是', '否']}
+                      x-props={{ style: { maxWidth: 300 } }}
                       title="FF"
                       description="是否显示EE"
                     />
