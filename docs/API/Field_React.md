@@ -122,15 +122,15 @@ type Mutators {
 x-effect属于一个非常高级的API，它是为了解决在某些场景，我们的数据联动不是基于字段的onChange事件来做的联动或者依赖onChange事件的其他参数来做的联动，它的解决方案是将dispatch函数给x-effect函数，然后让x-effect函数返回对应的事件处理器，然后再传递给具体的组件，比如：
 
 ```javascript
-import {declareFormActions} from '@uform/react'
+import {createFormActions} from '@uform/react'
 
-const actions = declareFormActions()
+const actions = createFormActions()
 
 <SchemaForm effects={($)=>{
    $('selectOptions','aa')
     .subscribe(({payload:options})=>{
       actions.setFieldState('bb',state=>{
-         state.enum = options.extra
+         state.props.enum = options.extra
       })
     })
  }}>
