@@ -25,7 +25,7 @@ import { FormTextBox } from '@uform/next(antd)'
 ```javascript
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormCard, FormItemGrid } from '@uform/next(antd)'
+import { SchemaForm, Field, FormCard, FormTextBox } from '@uform/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>
