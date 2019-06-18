@@ -161,3 +161,33 @@ test('setFieldState x-props with onFormInit', async () => {
   await sleep(33)
   expect(queryByText('Disabled')).toBeVisible()
 })
+
+test('getFieldState with onFieldChange', async () => {
+  let aaValue
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        onSubmit={values => console.log(values)}
+        initialValues={{ obj: { aa: 123 } }}
+        effects={($, { getFieldState }) => {
+          $('onFieldChange', 'obj.aa').subscribe(() => {
+            aaValue = getFieldState('obj', state => state.value.aa)
+          })
+        }}
+      >
+        <Field type='object' name='obj'>
+          <Field
+            type='string'
+            name='aa'
+            x-props={{ 'data-testid': 'this is aa' }}
+          />
+        </Field>
+      </SchemaForm>
+    )
+  }
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryByTestId('this is aa'), { target: { value: '333' } })
+  await sleep(33)
+  expect(aaValue).toBe('333')
+})

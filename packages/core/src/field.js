@@ -159,6 +159,16 @@ export class Field {
   }
 
   publishState() {
+    if (this.visible) {
+      const contextValue = this.context.getValue(this.name, true)
+      const contextInitialValue = this.context.getInitialValue(this.name)
+      if (!isEqual(this.value, contextValue)) {
+        this.value = contextValue
+      }
+      if (!isEqual(this.initialValue, contextInitialValue)) {
+        this.value = contextInitialValue
+      }
+    }
     return publishFieldState(this)
   }
 
