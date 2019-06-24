@@ -37,7 +37,7 @@ export const runValidation = (values, fieldMap, forceUpdate, callback) => {
   each(fieldMap, (field, name) => {
     const value = getIn(values, name)
     if (field.visible === false || field.editable === false) return
-    if (isEqual(field.__lastValidateValue, value) && !forceUpdate) return
+    if (isEqual(field.lastValidateValue, value) && !forceUpdate) return
     const title = field.props && field.props.title
     let rafId = setTimeout(() => {
       field.loading = true
@@ -51,26 +51,26 @@ export const runValidation = (values, fieldMap, forceUpdate, callback) => {
         })
       ).then(errors => {
         clearTimeout(rafId)
-        let lastFieldErrors = field.errors
+        const lastFieldErrors = toArr(field.errors)
         const lastValid = field.valid
         const lastLoading = field.loading
+        const newErrors = flatArr(toArr(errors))
+        const effectErrors = flatArr(toArr(field.effectErrors))
         field.loading = false
+        field.errors = newErrors
+        field.effectErrors = effectErrors
         if (forceUpdate) {
-          if (errors) field.errors = flatArr(toArr(errors))
-          if (field.errors.length) {
+          if (newErrors.length || effectErrors.length) {
             field.valid = false
             field.invalid = true
           } else {
             field.valid = true
             field.invalid = false
           }
-          if (field.errors && field.errors.length) {
-            field.dirty = true
-          }
+          field.dirty = true
         } else {
           if (!field.pristine) {
-            if (errors) field.errors = flatArr(toArr(errors))
-            if (field.errors.length) {
+            if (newErrors.length || effectErrors.length) {
               field.valid = false
               field.invalid = true
             } else {
@@ -93,14 +93,14 @@ export const runValidation = (values, fieldMap, forceUpdate, callback) => {
         if (field.dirty && field.notify) {
           field.notify()
         }
-        field.__lastValidateValue = clone(value)
+        field.lastValidateValue = clone(value)
         return {
           name,
           value,
           field,
           invalid: field.invalid,
           valid: field.valid,
-          errors: field.errors
+          errors: newErrors.concat(effectErrors)
         }
       })
     )

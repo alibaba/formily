@@ -5,7 +5,7 @@ import SchemaForm, {
   connect,
   createAsyncFormActions
 } from '../index'
-import { render } from 'react-testing-library'
+import { render } from '@testing-library/react'
 
 beforeEach(() => {
   registerFormField('string', connect()(props => <div>{props.value}</div>))
