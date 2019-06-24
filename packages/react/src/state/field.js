@@ -33,8 +33,8 @@ const StateField = createHOC((options, Field) => {
 
     onChangeHandler() {
       return fieldState => {
+        if (this.unmounted) return
         if (this.initialized) {
-          if (this.unmounted) return
           this.setState(fieldState)
         } else {
           this.state = fieldState

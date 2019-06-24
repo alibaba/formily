@@ -93,6 +93,7 @@ export const StateForm = createHOC((options, Form) => {
             clearTimeout(this.timerId)
             this.timerId = setTimeout(() => {
               clearTimeout(this.timerId)
+              if (this.unmounted) return
               this.setState(formState)
             }, 60)
           }
@@ -192,6 +193,7 @@ export const StateForm = createHOC((options, Form) => {
       this.form.triggerEffect('onFormMount', this.form.publishState())
       this.unsubscribe = this.props.broadcast.subscribe(
         ({ type, name, payload }) => {
+          if (this.unmounted) return
           if (type === 'submit') {
             this.submit()
           } else if (type === 'reset') {
