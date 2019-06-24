@@ -27,6 +27,7 @@
     // allow specifying true explicitly for boolean props
     "react/jsx-boolean-value": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react/no-did-update-set-state": 0
+    "react/no-did-update-set-state": 0,
+    "jsx-quotes":"off"
   }
 }

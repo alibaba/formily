@@ -218,12 +218,13 @@ export const FormTextBox = createVirtualBox(
     }) => {
       const arrChildren = toArr(children)
       const split = text.split('%s')
+      let index = 0
       const newChildren = split.reduce((buf, item, key) => {
         return buf.concat(
-          <span key={key} className='text-box-words'>
+          <span key={index++} className='text-box-words'>
             {item}
           </span>,
-          <div key={key + 1} className='text-box-field'>
+          <div key={index++} className='text-box-field'>
             {arrChildren[key]}
           </div>
         )
@@ -258,17 +259,15 @@ export const FormTextBox = createVirtualBox(
               extra: description,
               help
             },
-            <div className={className}>
-              {newChildren}
-            </div>
+            <div className={className}>{newChildren}</div>
           )
         }
       )
     }
   )`
     .text-box-words {
-      font-size:12px;
-      color:#333;
+      font-size: 12px;
+      color: #333;
     }
     .text-box-field {
       display: inline-block;
