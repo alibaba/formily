@@ -82,7 +82,7 @@
     "pretty-format": "^24.0.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-testing-library": "^6.0.0",
+    "@testing-library/react": "^8.0.0",
     "remark-parse": "^6.0.3",
     "remark-stringify": "^6.0.4",
     "semver-regex": "^2.0.0",

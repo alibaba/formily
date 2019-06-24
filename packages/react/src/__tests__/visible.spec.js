@@ -1,10 +1,8 @@
 import React from 'react'
 import SchemaForm, { Field, registerFormField, connect } from '../index'
-import { render } from 'react-testing-library'
+import { render } from '@testing-library/react'
 
-beforeEach(() => {
-  registerFormField('string', connect()(props => <div>{props.value}</div>))
-})
+registerFormField('string', connect()(props => <div>{props.value}</div>))
 
 test('set visible by setFieldState', async () => {
   const TestComponent = () => {
@@ -18,7 +16,7 @@ test('set visible by setFieldState', async () => {
           })
         }}
       >
-        <Field type='string' name='aa' default='123321' />
+        <Field type="string" name="aa" default="123321" />
       </SchemaForm>
     )
   }

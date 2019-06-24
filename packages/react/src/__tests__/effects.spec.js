@@ -6,35 +6,29 @@ import SchemaForm, {
   registerFieldMiddleware,
   createFormActions
 } from '../index'
-import { render, fireEvent, act } from 'react-testing-library'
+import { render, fireEvent, act } from '@testing-library/react'
 
-beforeEach(() => {
-  registerFieldMiddleware(Field => {
-    return props => {
-      return (
-        <div>
-          {props.schema.title}
-          <Field {...props} />
-          {props.errors && props.errors.length ? (
-            <div data-testid={`test-errors`}>{props.errors}</div>
-          ) : (
-            ''
-          )}
-        </div>
-      )
-    }
-  })
-  registerFormField(
-    'string',
-    connect()(props =>
-      props.disabled ? (
-        'Disabled'
-      ) : (
-        <input {...props} value={props.value || ''} />
-      )
+registerFieldMiddleware(Field => {
+  return props => {
+    return (
+      <div>
+        {props.schema.title}
+        <Field {...props} />
+        {props.errors && props.errors.length ? (
+          <div data-testid={`test-errors`}>{props.errors}</div>
+        ) : (
+          ''
+        )}
+      </div>
     )
-  )
+  }
 })
+registerFormField(
+  'string',
+  connect()(props =>
+    props.disabled ? 'Disabled' : <input {...props} value={props.value || ''} />
+  )
+)
 
 test('onFormInit setFieldState', async () => {
   const actions = createFormActions()
@@ -55,8 +49,8 @@ test('onFormInit setFieldState', async () => {
         })
       }}
     >
-      <Field name='aaa' type='string' />
-      <button type='submit' data-testid='btn'>
+      <Field name="aaa" type="string" />
+      <button type="submit" data-testid="btn">
         Submit
       </button>
     </SchemaForm>
@@ -89,8 +83,8 @@ test('init triggers', async () => {
           $('onFieldChange', 'aaa').subscribe(callback)
         }}
       >
-        <Field name='aaa' type='string' />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -122,8 +116,8 @@ test('onFieldChange will trigger with initialValues', async () => {
           $('onFieldChange', 'aaa').subscribe(callback)
         }}
       >
-        <Field name='aaa' type='string' />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -149,8 +143,8 @@ test('setFieldState x-props with onFormInit', async () => {
           })
         }}
       >
-        <Field name='aaa' type='string' x-props={{ disabled: false }} />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" x-props={{ disabled: false }} />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -175,10 +169,10 @@ test('getFieldState with onFieldChange', async () => {
           })
         }}
       >
-        <Field type='object' name='obj'>
+        <Field type="object" name="obj">
           <Field
-            type='string'
-            name='aa'
+            type="string"
+            name="aa"
             x-props={{ 'data-testid': 'this is aa' }}
           />
         </Field>
@@ -206,8 +200,8 @@ test('set errors in effects', async () => {
         }}
         onSubmit={callback}
       >
-        <Field name='aaa' type='string' />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
