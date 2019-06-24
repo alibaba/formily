@@ -72,11 +72,7 @@ export class Field {
       }
     }
 
-    if (this.removed) {
-      this.removed = false
-      this.visible = true
-      this.context.triggerEffect('onFieldChange', this.publishState())
-    }
+    this.mount()
 
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
@@ -214,13 +210,18 @@ export class Field {
 
   mount() {
     if (this.removed) {
-      this.visible = true
+      if (!this.alreadyHiddenBeforeUnmount && !this.visible) this.visible = true
       this.removed = false
       this.context.triggerEffect('onFieldChange', this.publishState())
     }
   }
 
   unmount() {
+    if (!this.visible) {
+      this.alreadyHiddenBeforeUnmount = true
+    } else {
+      this.alreadyHiddenBeforeUnmount = false
+    }
     this.visible = false
     this.removed = true
     if (!this.context) return

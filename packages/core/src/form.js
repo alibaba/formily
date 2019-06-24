@@ -491,8 +491,17 @@ export class Form {
           if (field.value !== undefined) this.setIn($name, value)
         }
         if (field.visible !== visible) {
-          field.visible = visible
-          field.dirty = true
+          if (visible) {
+            if (field.hiddenFromParent) {
+              field.visible = visible
+              field.hiddenFromParent = false
+              field.dirty = true
+            }
+          } else {
+            field.visible = visible
+            field.hiddenFromParent = true
+            field.dirty = true
+          }
         }
       }
     })
