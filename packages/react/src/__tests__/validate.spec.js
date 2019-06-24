@@ -7,27 +7,25 @@ import SchemaForm, {
   FormPath,
   createFormActions
 } from '../index'
-import { render, fireEvent, act } from 'react-testing-library'
+import { render, fireEvent, act } from '@testing-library/react'
 
-beforeEach(() => {
-  registerFieldMiddleware(Field => {
-    return props => {
-      return (
-        <div>
-          <Field {...props} />
-          {props.errors}
-        </div>
-      )
-    }
-  })
-
-  registerFormField(
-    'string',
-    connect()(props => (
-      <input {...props} data-testid='test-input' value={props.value || ''} />
-    ))
-  )
+registerFieldMiddleware(Field => {
+  return props => {
+    return (
+      <div>
+        <Field {...props} />
+        {props.errors}
+      </div>
+    )
+  }
 })
+
+registerFormField(
+  'string',
+  connect()(props => (
+    <input {...props} data-testid='test-input' value={props.value || ''} />
+  ))
+)
 
 test('basic validate', async () => {
   const handleSubmit = jest.fn()
