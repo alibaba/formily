@@ -191,3 +191,32 @@ test('getFieldState with onFieldChange', async () => {
   await sleep(33)
   expect(aaValue).toBe('333')
 })
+
+test('set errors in effects', async () => {
+  const callback = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFormInit').subscribe(() => {
+            setFieldState('aaa', state => {
+              state.errors = ['validate failed']
+            })
+          })
+        }}
+        onSubmit={callback}
+      >
+        <Field name='aaa' type='string' />
+        <button type='submit' data-testid='btn'>
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.click(queryByTestId('btn'))
+  await sleep(33)
+  expect(callback).toHaveBeenCalledTimes(0)
+})
