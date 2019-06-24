@@ -46,8 +46,7 @@
     "uuid": "^3.2.1"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "access": "public"
   },
   "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050",
   "devDependencies": {
