@@ -162,6 +162,7 @@ export class Form {
   }
 
   setFormState = reducer => {
+    if (this.destructed) return
     if (!isFn(reducer)) return
     const published = this.publishState()
     reducer(published, reducer)
@@ -220,6 +221,7 @@ export class Form {
               field.notify()
               if (rafIdMap[field.name]) caf(rafIdMap[field.name])
               rafIdMap[field.name] = raf(() => {
+                if (this.destructed) return
                 if (dirtyType === 'value') {
                   this.internalValidate().then(() => {
                     this.formNotify(field.publishState())
@@ -234,11 +236,17 @@ export class Form {
             failed[i]++
             if (this.fieldSize <= failed[i]) {
               if (isArr(path)) {
-                this.updateBuffer.push(path.join('.'), callback, { path, resolve })
+                this.updateBuffer.push(path.join('.'), callback, {
+                  path,
+                  resolve
+                })
               } else if (isStr(path)) {
                 this.updateBuffer.push(path, callback, { path, resolve })
               } else if (isFn(path) && path.pattern) {
-                this.updateBuffer.push(path.pattern, callback, { path, resolve })
+                this.updateBuffer.push(path.pattern, callback, {
+                  path,
+                  resolve
+                })
               }
             }
           }
@@ -264,6 +272,7 @@ export class Form {
           field.notify()
           if (rafIdMap[field.name]) caf(rafIdMap[field.name])
           rafIdMap[field.name] = raf(() => {
+            if (this.destructed) return
             if (dirtyType === 'value') {
               this.internalValidate().then(() => {
                 this.formNotify(field.publishState())
@@ -552,6 +561,7 @@ export class Form {
     this.internalValidate(this.state.values, true).then(() => {
       this.formNotify()
       raf(() => {
+        if (this.destructed) return
         const formState = this.publishState()
         this.triggerEffect('onFormReset', formState)
         if (isFn(this.options.onReset)) {
@@ -583,6 +593,7 @@ export class Form {
       return new Promise((resolve, reject) => {
         this.formNotify()
         raf(() => {
+          if (this.destructed) return
           if (this.state.valid) {
             resolve(this.publishState())
           } else {
