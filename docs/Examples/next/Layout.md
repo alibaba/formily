@@ -176,9 +176,9 @@ const App = () => (
         </Field>
         <FormLayout labelCol={8} wrapperCol={16}>
           <FormTextBox title="文本串联" text="订%s元/票 退%s元/票 改%s元/票" gutter={8}>
-            <Field type="number" name="aa1" description="简单描述" />
-            <Field type="number" name="aa2" description="简单描述" />
-            <Field type="number" name="aa3" description="简单描述" />
+            <Field type="string" required name="aa1" x-props={{style:{width:80}}} description="简单描述" />
+            <Field type="number" required name="aa2" description="简单描述" />
+            <Field type="number" required name="aa3" description="简单描述" />
           </FormTextBox>
         </FormLayout>
         <Field name="aas" type="string" title="字段4" />​<FormBlock title="区块">
