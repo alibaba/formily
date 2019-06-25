@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useRef } from 'react'
 import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Row, Col } from '@alifd/next/lib/grid'
@@ -203,9 +203,23 @@ export const FormTextBox = createVirtualBox(
       children,
       ...props
     }) => {
+      const ref = useRef()
       const arrChildren = toArr(children)
       const split = text.split('%s')
       let index = 0
+      useEffect(() => {
+        if (ref.current) {
+          const eles = ref.current.querySelectorAll('.text-box-field')
+          eles.forEach(el => {
+            const ctrl = el.querySelector(
+              '.next-form-item-control>*:not(.next-form-item-space)'
+            )
+            if (ctrl) {
+              el.style.width = getComputedStyle(ctrl).width
+            }
+          })
+        }
+      }, [])
       const newChildren = split.reduce((buf, item, key) => {
         return buf.concat(
           <span key={index++} className='text-box-words'>
@@ -217,7 +231,7 @@ export const FormTextBox = createVirtualBox(
         )
       }, [])
 
-      if (!title) return <div className={className}>{newChildren}</div>
+      if (!title) return <div className={className} ref={ref}>{newChildren}</div>
 
       return React.createElement(
         FormConsumer,
@@ -246,14 +260,16 @@ export const FormTextBox = createVirtualBox(
               extra: description,
               help
             },
-            <div className={className}>{newChildren}</div>
+            <div className={className} ref={ref}>{newChildren}</div>
           )
         }
       )
     }
   )`
+    display:flex;
     .text-box-words {
       font-size: 12px;
+      line-height: 28px;
       color: #333;
     }
     .text-box-field {

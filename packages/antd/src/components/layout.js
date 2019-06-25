@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useRef } from 'react'
 import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Card, Row, Col } from 'antd'
@@ -216,21 +216,41 @@ export const FormTextBox = createVirtualBox(
       children,
       ...props
     }) => {
+      const ref = useRef()
       const arrChildren = toArr(children)
       const split = text.split('%s')
+      useEffect(() => {
+        if (ref.current) {
+          const eles = ref.current.querySelectorAll('.text-box-field')
+          eles.forEach(el => {
+            const ctrl = el.querySelector(
+              '.ant-form-item-control>*:not(.ant-form-item-space)'
+            )
+            if (ctrl) {
+              el.style.width = getComputedStyle(ctrl).width
+            }
+          })
+        }
+      }, [])
       let index = 0
       const newChildren = split.reduce((buf, item, key) => {
         return buf.concat(
-          <span key={index++} className='text-box-words'>
+          <span key={index++} className="text-box-words">
             {item}
           </span>,
-          <div key={index++} className='text-box-field'>
+          <div key={index++} className="text-box-field">
             {arrChildren[key]}
           </div>
         )
       }, [])
 
-      if (!title) return <div className={className}>{newChildren}</div>
+      if (!title) {
+        return (
+          <div className={className} ref={ref}>
+            {newChildren}
+          </div>
+        )
+      }
 
       return React.createElement(
         FormConsumer,
@@ -259,14 +279,18 @@ export const FormTextBox = createVirtualBox(
               extra: description,
               help
             },
-            <div className={className}>{newChildren}</div>
+            <div className={className} ref={ref}>
+              {newChildren}
+            </div>
           )
         }
       )
     }
   )`
+    display: flex;
     .text-box-words {
       font-size: 12px;
+      line-height: 34px;
       color: #333;
     }
     .text-box-field {
