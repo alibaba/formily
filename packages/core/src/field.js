@@ -155,6 +155,10 @@ export class Field {
   }
 
   publishState() {
+    return publishFieldState(this)
+  }
+
+  syncContextValue() {
     if (this.visible) {
       const contextValue = this.context.getValue(this.name, true)
       const contextInitialValue = this.context.getInitialValue(
@@ -168,7 +172,6 @@ export class Field {
         this.initialValue = contextInitialValue
       }
     }
-    return publishFieldState(this)
   }
 
   subscribe(callback) {
