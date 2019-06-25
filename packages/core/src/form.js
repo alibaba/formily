@@ -151,6 +151,7 @@ export class Form {
       }
     })
     if (field) {
+      field.syncContextValue()
       return isFn(callback)
         ? callback(field.publishState())
         : field.publishState()
