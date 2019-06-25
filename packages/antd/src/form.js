@@ -217,7 +217,8 @@ export const FormItem = styled(
   }
   .ant-form-item-msg {
     &.ant-form-item-space {
-      min-height: 20px;
+      min-height: 18px;
+      margin-bottom:2px;
       .ant-form-item-help,
       .ant-form-item-extra {
         margin-top: 0;
