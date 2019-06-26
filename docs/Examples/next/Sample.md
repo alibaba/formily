@@ -57,6 +57,12 @@ ReactDOM.render(
         title="Checkbox"
         name="checkbox"
       />
+      <Field 
+        type="string" 
+        title="TextArea" 
+        name="textarea" 
+        x-component="textarea" 
+      />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
       <Field type="date" title="日期选择" name="date" />

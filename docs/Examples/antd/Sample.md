@@ -48,6 +48,7 @@ ReactDOM.render(
         title="Radio"
         name="radio"
       />
+    
       <Field
         type="string"
         enum={['1', '2', '3', '4']}
@@ -62,6 +63,12 @@ ReactDOM.render(
         required
         title="Checkbox"
         name="checkbox"
+      />      
+      <Field 
+        type="string" 
+        title="TextArea" 
+        name="textarea" 
+        x-component="textarea" 
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
