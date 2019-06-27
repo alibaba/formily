@@ -95,6 +95,8 @@ ReactDOM.render(
 | autoAddColon | 是否自动添加冒号 | Boolean |  |  |
 | className | className | String |  |  |
 | inline | 是否是单行布局 | Boolean | false |  |
+| layout | 表单布局(horizontal/vertical/inline)，只有@uform/antd支持 | String | horizontal|
+| maxTipsNum | 针对Field description的最大提示字符数，如果超出该字符数，则会以PopTips的形式展示 | Number | 30 |
 | labelAlign | 标签的位置<br /><br />可选值:<br />'top'(上)<br />'left'(左)<br />'inset'(内) | String | 'left' |  |
 | labelCol | 控制所有子节点的labelCol | Number | Object |  |
 | labelTextAlign | 标签的左右对齐方式<br /><br />可选值:<br />'left'(左)<br />'right'(右) | String |  |  |

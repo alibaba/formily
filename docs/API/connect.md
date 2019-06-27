@@ -10,6 +10,7 @@
 type connect({
   valueName : String, //控制表单组件
   eventName : String, //事件名称
+  getValueFromEvent(args: any[]): any //取值函数，有些场景我们的事件函数取值并不是事件回调的第一个参数，需要做进一步的定制
   getProps(outputProps : Object,fieldProps : FieldRenderProps) : Object //字段组件props transformer
   getComponent( //字段组件component transformer
     target : ReactComponent , 
