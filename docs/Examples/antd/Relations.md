@@ -69,6 +69,7 @@ const App = () => {
               state.visible = !fieldState.value
             })
           })
+          
           $('onFieldChange', 'cc').subscribe(fieldState => {
             setFieldState('dd', state => {
               state.visible = !fieldState.value
@@ -85,6 +86,11 @@ const App = () => {
                 state.value = '123333'
                 state.props.enum = ['123333', '333333']
               }
+            })
+          })
+          $('onFieldChange', 'mm').subscribe(fieldState => {
+            setFieldState('ff', state => {
+              state.visible = !fieldState.value
             })
           })
           $('onFieldChange', 'gg')
@@ -153,6 +159,14 @@ const App = () => {
         </FormBlock>
         <FormBlock name="dd" title="Block2">
           <Field name="ee" type="date" title="EE" />
+          <Field
+            name="mm"
+            type="boolean"
+            x-component="radio"
+            default={true}
+            enum={[{ label: '是', value: true }, { label: '否', value: false }]}
+            title="是否隐藏FF"
+          />
           <Field name="ff" type="number" title="FF" />
         </FormBlock>
         <FormBlock name="kk" title="Block3">
