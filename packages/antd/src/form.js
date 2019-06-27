@@ -28,9 +28,9 @@ const getParentNode = (node, selector) => {
   }
 }
 
-const isPopDescription = description => {
+const isPopDescription = (description, maxTipsNum = 30) => {
   if (isStr(description)) {
-    return stringLength(description) > 20
+    return stringLength(description) > maxTipsNum
   } else {
     return React.isValidElement(description)
   }
@@ -54,7 +54,8 @@ export const FormItem = styled(
         labelAlign,
         labelTextAlign,
         autoAddColon,
-        isTableColItem
+        isTableColItem,
+        maxTipsNum
       } = this.props
 
       if (!label || isTableColItem) {
@@ -65,7 +66,7 @@ export const FormItem = styled(
         <label
           htmlFor={id}
           required={required}
-          key='label'
+          key="label"
           className={classNames({
             'no-colon': !autoAddColon
           })}
@@ -83,7 +84,7 @@ export const FormItem = styled(
         return (
           <Col {...normalizeCol(labelCol)} className={cls}>
             {ele}
-            {isPopDescription(extra) && this.renderHelper()}
+            {isPopDescription(extra, maxTipsNum) && this.renderHelper()}
           </Col>
         )
       }
@@ -91,7 +92,7 @@ export const FormItem = styled(
       return (
         <div className={cls}>
           {ele}
-          {isPopDescription(extra) && this.renderHelper()}
+          {isPopDescription(extra, maxTipsNum) && this.renderHelper()}
         </div>
       )
     }
@@ -108,7 +109,8 @@ export const FormItem = styled(
         prefix,
         noMinHeight,
         size,
-        isTableColItem
+        isTableColItem,
+        maxTipsNum
       } = this.props
 
       const message = (
@@ -118,7 +120,7 @@ export const FormItem = styled(
           }`}
         >
           {help && <div className={`${prefix}form-item-help`}>{help}</div>}
-          {!help && !isPopDescription(extra) && (
+          {!help && !isPopDescription(extra, maxTipsNum) && (
             <div className={`${prefix}form-item-extra`}>{extra}</div>
           )}
         </div>
@@ -136,7 +138,7 @@ export const FormItem = styled(
         label
       ) {
         return (
-          <Col {...normalizeCol(wrapperCol)} key='item'>
+          <Col {...normalizeCol(wrapperCol)} key="item">
             {ele}
           </Col>
         )
@@ -147,11 +149,11 @@ export const FormItem = styled(
 
     renderHelper() {
       return (
-        <Popover closable={false} placement='top' content={this.props.extra}>
+        <Popover closable={false} placement="top" content={this.props.extra}>
           <Icon
-            type='question-circle'
+            type="question-circle"
             className={`${this.props.prefix}form-tips`}
-            size='small'
+            size="small"
           />
         </Popover>
       )
@@ -218,7 +220,7 @@ export const FormItem = styled(
   .ant-form-item-msg {
     &.ant-form-item-space {
       min-height: 18px;
-      margin-bottom:2px;
+      margin-bottom: 2px;
       .ant-form-item-help,
       .ant-form-item-extra {
         margin-top: 0;
@@ -356,6 +358,7 @@ registerFormWrapper(OriginForm => {
         labelCol,
         layout,
         wrapperCol,
+        maxTipsNum,
         style,
         prefix,
         ...others
@@ -375,6 +378,7 @@ registerFormWrapper(OriginForm => {
             labelTextAlign,
             labelCol,
             wrapperCol,
+            maxTipsNum,
             inline: isInline,
             size,
             autoAddColon,
@@ -427,6 +431,7 @@ registerFieldMiddleware(Field => {
         labelAlign,
         labelTextAlign,
         labelCol,
+        maxTipsNum,
         wrapperCol,
         size,
         autoAddColon
@@ -437,6 +442,7 @@ registerFieldMiddleware(Field => {
             labelAlign,
             labelTextAlign,
             labelCol,
+            maxTipsNum,
             wrapperCol,
             autoAddColon,
             size,
