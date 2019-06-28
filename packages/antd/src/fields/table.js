@@ -254,11 +254,12 @@ registerFormField(
           renderField,
           getOrderProperties
         } = this.props
-        const style = schema['x-props'] && schema['x-props'].style
-        const operationsWidth = schema['x-props'] && schema['x-props'].operationsWidth
+        const cls = this.getProps('className')
+        const style = this.getProps('style')
+        const operationsWidth = this.getProps('operationsWidth')
         return (
           <div
-            className={className}
+            className={`${className} ${cls}`}
             style={style}
             onClick={this.onClearErrorHandler()}
           >

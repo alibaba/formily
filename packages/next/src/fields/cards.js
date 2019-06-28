@@ -20,7 +20,12 @@ const FormCardsField = styled(
 
     renderEmpty(title) {
       return (
-        <Card style={this.getProps('style')} title={title} className='card-list' contentHeight='auto'>
+        <Card
+          style={this.getProps('style')}
+          title={title}
+          className="card-list"
+          contentHeight="auto"
+        >
           {super.renderEmpty()}
         </Card>
       )
@@ -30,6 +35,8 @@ const FormCardsField = styled(
       const { value, className, schema, renderField } = this.props
       const {
         title,
+        style,
+        className: cls,
         renderAddition,
         renderRemove,
         renderEmpty,
@@ -39,7 +46,11 @@ const FormCardsField = styled(
         ...others
       } = this.getProps() || {}
       return (
-        <div className={className} onClick={this.onClearErrorHandler()}>
+        <div
+          className={`${className} ${cls}`}
+          style={style}
+          onClick={this.onClearErrorHandler()}
+        >
           {toArr(value).map((item, index) => {
             return (
               <Card
@@ -49,9 +60,9 @@ const FormCardsField = styled(
                     {index + 1}. {title || schema.title}
                   </span>
                 }
-                className='card-list'
+                className="card-list"
                 key={index}
-                contentHeight='auto'
+                contentHeight="auto"
                 extra={this.renderOperations(item, index)}
               >
                 {renderField(index)}
@@ -59,7 +70,7 @@ const FormCardsField = styled(
             )
           })}
           {value.length === 0 && this.renderEmpty(title)}
-          <div className='addition-wrapper'>
+          <div className="addition-wrapper">
             {value.length > 0 && this.renderAddition()}
           </div>
         </div>
