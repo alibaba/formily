@@ -215,7 +215,7 @@ export class Form {
               field.dirty = false
             }
             if (path.hasWildcard) {
-              this.updateBuffer.push(path.string, callback, { path, resolve })
+              this.updateBuffer.push(path.pattern, callback, { path, resolve })
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
