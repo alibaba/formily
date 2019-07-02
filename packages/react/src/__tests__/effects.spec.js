@@ -244,9 +244,6 @@ test('setFieldState from buffer', async () => {
           title="String"
           x-props={{ 'data-testid': 'test' }}
         />
-        <button type="submit" data-testid="btn">
-          Submit
-        </button>
       </SchemaForm>
     )
   }
