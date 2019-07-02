@@ -83,7 +83,7 @@ type Validator = (value: any, rule: IRuleDescription, values: any, name: string)
 
 type DefaultPatternRule = 'url' | 'email' | 'ipv6' | 'ipv4' | 'number' | 'integer' | 'qq' | 'phone' | 'idcard' | 'taodomain' | 'money' | 'zh' | 'date' | 'zip'
 
-type Rule = Validator | Array<Validator | IRuleDescription | DefaultPatternRule> | DefaultPatternRule | IRuleDescrip
+type Rule = Validator | Array<Validator | IRuleDescription | DefaultPatternRule> | DefaultPatternRule | IRuleDescription
 
 //该回调函数直接return错误文案字符串代表响应错误，如果返回Promise对象，
 //代表是异步校验，resolve错误文案的时候代表错误响应，resolve为空的时候代表正确响应
