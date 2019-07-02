@@ -176,6 +176,7 @@ export const FormItem = styled(
         validateState,
         autoAddColon,
         required,
+        maxTipsNum,
         type,
         schema,
         ...others

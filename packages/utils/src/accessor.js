@@ -404,6 +404,7 @@ function _setIn(obj, path, value) {
     const p = pathArr[i]
 
     if (!isObj(obj[p])) {
+      if (obj[p] === undefined && value === undefined) return
       obj[p] = {}
     }
 
