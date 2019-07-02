@@ -175,6 +175,7 @@ export const FormItem = styled(
         isTableColItem,
         validateState,
         autoAddColon,
+        maxTipsNum,
         required,
         type,
         schema,

@@ -4,7 +4,8 @@ import SchemaForm, {
   registerFormField,
   connect,
   registerFieldMiddleware,
-  createFormActions
+  createFormActions,
+  FormPath
 } from '../index'
 import { render, fireEvent, act } from '@testing-library/react'
 
@@ -213,4 +214,41 @@ test('set errors in effects', async () => {
   fireEvent.click(queryByTestId('btn'))
   await sleep(33)
   expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('setFieldState from buffer', async () => {
+  const callback = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFormInit').subscribe(() => {
+            setFieldState(FormPath.match('*'), state => {
+              state.title = '1123'
+            })
+          })
+          $('onFieldChange', 'kkk').subscribe(() => {
+            setFieldState(FormPath.match('dd.*'), state => {
+              state.visible = false
+            })
+          })
+        }}
+        onSubmit={callback}
+      >
+        <Field type="object" name="dd" title="DD">
+          <Field type="string" name="bbb" title="ccc" />
+        </Field>
+        <Field
+          type="string"
+          name="kkk"
+          title="String"
+          x-props={{ 'data-testid': 'test' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('test')).toBeVisible()
 })
