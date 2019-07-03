@@ -15,14 +15,14 @@
     "npm": ">=3.0.0"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
+    "@babel/runtime": "^7.4.4",
+    "scheduler": ">=0.11.2"
   },
   "dependencies": {
     "@uform/utils": "^0.2.2",
     "@uform/validator": "^0.2.2",
     "dot-match": "^0.1.18",
-    "rxjs": "^6.3.3",
-    "scheduler": "^0.11.2"
+    "rxjs": "^6.3.3"
   },
   "publishConfig": {
     "access": "public"
