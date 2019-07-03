@@ -57,11 +57,11 @@ ReactDOM.render(
         title="Checkbox"
         name="checkbox"
       />
-      <Field 
-        type="string" 
-        title="TextArea" 
-        name="textarea" 
-        x-component="textarea" 
+      <Field
+        type="string"
+        title="TextArea"
+        name="textarea"
+        x-component="textarea"
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
@@ -98,7 +98,12 @@ ReactDOM.render(
         name="range"
         x-props={{ min: 0, max: 1024, marks: [0, 1024] }}
       />
-      <Field type="transfer" title="穿梭框" name="transfer" />
+      <Field
+        type="transfer"
+        enum={[{ value: 1, label: '选项1' }, { value: 2, label: '选项2' }]}
+        title="穿梭框"
+        name="transfer"
+      />
       <Field type="rating" title="等级" name="rating" />
       <FormButtonGroup offset={7} sticky>
         <Submit />
