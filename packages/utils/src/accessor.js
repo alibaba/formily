@@ -402,10 +402,9 @@ function _setIn(obj, path, value) {
 
   for (let i = 0; i < pathArr.length; i++) {
     const p = pathArr[i]
-    const next = pathArr[i + 1]
     if (!isObj(obj[p])) {
       if (obj[p] === undefined && value === undefined) return
-      obj[p] = /^\d+$/.test(next) ? [] : {}
+      obj[p] = /^\d+$/.test(pathArr[i + 1]) ? [] : {}
     }
 
     if (i === pathArr.length - 1) {
