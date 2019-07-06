@@ -4,11 +4,7 @@ import { Icon } from 'antd'
 import styled, { css } from 'styled-components'
 
 export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
-  ${props =>
-    !props.hasText
-      ? `width:30px;
-  height:30px;`
-      : ''}
+  ${props => (!props.hasText ? `width:30px; height:30px;` : '')}
   margin-right:10px;
   border-radius: ${props => (!props.hasText ? '100px' : 'none')};
   border: ${props => (!props.hasText ? '1px solid #eee' : 'none')};
@@ -20,8 +16,8 @@ export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
   ${props =>
     !props.hasText
       ? `&:hover{
-    background:#f7f4f4;
-  }`
+        background:#f7f4f4;
+      }`
       : ''}
   .op-name{
     margin-left:3px;
@@ -33,7 +29,7 @@ export const TextButton = styled.div.attrs({
   className: 'ant-btn-text'
 })`
   display: inline-block;
-  height:20px;
+  height: 20px;
   line-height: 20px;
   cursor: pointer;
   .op-name {
@@ -46,39 +42,41 @@ export const TextButton = styled.div.attrs({
       width: auto;
     `}
 `
+
 export const ArrayField = createArrayField({
   CircleButton,
   TextButton,
-  AddIcon: () => <Icon type='plus' />,
-  RemoveIcon: () => <Icon type='delete' />,
-  MoveDownIcon: () => <Icon type='down' />,
-  MoveUpIcon: () => <Icon type='up' />
+  AddIcon: () => <Icon type="plus" />,
+  RemoveIcon: () => <Icon type="delete" />,
+  MoveDownIcon: () => <Icon type="down" />,
+  MoveUpIcon: () => <Icon type="up" />
 })
 
 registerFormField(
   'array',
   styled(
     class extends ArrayField {
-      render() {
-        const { className, name, schema, value, renderField } = this.props
-        const style = (schema['x-props'] && schema['x-props'].style) || {}
+      public render() {
+        const { className, name, value, renderField } = this.props
+        const cls = this.getProps('className')
+        const style = this.getProps('style')
         return (
           <div
-            className={className}
+            className={`${className} ${cls}`}
             style={style}
             onClick={this.onClearErrorHandler()}
           >
             {value.map((item, index) => {
               return (
-                <div className='array-item' key={`${name}.${index}`}>
-                  <div className='array-index'>
+                <div className="array-item" key={`${name}.${index}`}>
+                  <div className="array-index">
                     <span>{index + 1}</span>
                   </div>
-                  <div className='array-item-wrapper'>{renderField(index)}</div>
-                  <div className='array-item-operator'>
+                  <div className="array-item-wrapper">{renderField(index)}</div>
+                  <div className="array-item-operator">
                     {this.renderRemove(index, item)}
                     {this.renderMoveDown(index, item)}
-                    {this.renderMoveUp(index, item)}
+                    {this.renderMoveUp(index)}
                     {this.renderExtraOperations(index)}
                   </div>
                 </div>

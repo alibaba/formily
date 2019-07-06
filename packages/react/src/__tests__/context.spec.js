@@ -7,7 +7,7 @@ import SchemaForm, {
   FormConsumer,
   createFormActions
 } from '../index'
-import { render, fireEvent, act } from 'react-testing-library'
+import { render, fireEvent, act } from '@testing-library/react'
 
 beforeEach(() => {
   registerFormField(

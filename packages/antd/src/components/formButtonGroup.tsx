@@ -7,13 +7,35 @@ import cls from 'classnames'
 import styled from 'styled-components'
 
 const getAlign = align => {
-  if (align === 'start' || align === 'end') return align
-  if (align === 'left' || align === 'top') return 'flex-start'
-  if (align === 'right' || align === 'bottom') return 'flex-end'
+  if (align === 'start' || align === 'end') {
+    return align
+  }
+  if (align === 'left' || align === 'top') {
+    return 'flex-start'
+  }
+  if (align === 'right' || align === 'bottom') {
+    return 'flex-end'
+  }
   return align
 }
 
-const isElementInViewport = (rect, { offset = 0, threshold = 0 } = {}) => {
+export interface IOffset {
+  top: number | string
+  right: number | string
+  bottom: number | string
+  left: number | string
+}
+
+const isElementInViewport = (
+  rect: ClientRect,
+  {
+    offset = 0,
+    threshold = 0
+  }: {
+  offset?: IOffset | number
+  threshold?: number
+  } = {}
+) => {
   const { top, right, bottom, left, width, height } = rect
   const intersection = {
     t: bottom,
@@ -28,47 +50,35 @@ const isElementInViewport = (rect, { offset = 0, threshold = 0 } = {}) => {
   }
 
   return (
-    intersection.t >= (offset.top || offset + elementThreshold.y) &&
-    intersection.r >= (offset.right || offset + elementThreshold.x) &&
-    intersection.b >= (offset.bottom || offset + elementThreshold.y) &&
-    intersection.l >= (offset.left || offset + elementThreshold.x)
+    intersection.t >= ((offset as IOffset).top || offset as number + elementThreshold.y) &&
+    intersection.r >= ((offset as IOffset).right || offset as number + elementThreshold.x) &&
+    intersection.b >= ((offset as IOffset).bottom || offset as number + elementThreshold.y) &&
+    intersection.l >= ((offset as IOffset).left || offset as number + elementThreshold.x)
   )
 }
 
+export interface IFormButtonGroupProps {
+  sticky?: boolean
+  style?: React.CSSProperties
+  itemStyle?: React.CSSProperties
+  className?: string
+
+  triggerDistance?: any
+  offsetDistance?: any
+  zIndex?: number
+  span?: number
+  offset?: number
+}
+
 export const FormButtonGroup = styled(
-  class FormButtonGroup extends Component {
-    static defaultProps = {
+  class FormButtonGroup extends Component<IFormButtonGroupProps> {
+    public static defaultProps = {
       span: 24
     }
 
-    renderChildren() {
-      const { children, itemStyle, offset, span } = this.props
-      return (
-        <div className='button-group'>
-          <Row>
-            <Col span={span}>
-              <Col offset={offset} className='inline'>
-                <div className='inline-view' style={itemStyle}>
-                  {children}
-                </div>
-              </Col>
-            </Col>
-          </Row>
-        </div>
-      )
-    }
+    private formNode: HTMLElement
 
-    getStickyBoundaryHandler(ref) {
-      return () => {
-        this.formNode = this.formNode || ReactDOM.findDOMNode(ref.current)
-        if (this.formNode) {
-          return isElementInViewport(this.formNode.getBoundingClientRect())
-        }
-        return true
-      }
-    }
-
-    render() {
+    public render() {
       const { sticky, style, className } = this.props
 
       const content = (
@@ -90,11 +100,13 @@ export const FormButtonGroup = styled(
         return (
           <div>
             <FormConsumer>
-              {({ inline, FormRef } = {}) => {
-                if (!FormRef) return
+              {({ FormRef } = {}) => {
+                if (!FormRef) {
+                  return
+                }
                 return (
                   <Sticky
-                    edge='bottom'
+                    edge={'bottom'}
                     triggerDistance={this.props.triggerDistance}
                     offsetDistance={this.props.offsetDistance}
                     zIndex={this.props.zIndex}
@@ -118,10 +130,36 @@ export const FormButtonGroup = styled(
 
       return content
     }
+
+    private renderChildren() {
+      const { children, itemStyle, offset, span } = this.props
+      return (
+        <div className={'button-group'}>
+          <Row>
+            <Col span={span}>
+              <Col offset={offset} className={'inline'}>
+                <div className={'inline-view'} style={itemStyle}>
+                  {children}
+                </div>
+              </Col>
+            </Col>
+          </Row>
+        </div>
+      )
+    }
+
+    private getStickyBoundaryHandler(ref) {
+      return () => {
+        this.formNode = this.formNode || ReactDOM.findDOMNode(ref.current)
+        if (this.formNode) {
+          return isElementInViewport(this.formNode.getBoundingClientRect())
+        }
+        return true
+      }
+    }
   }
 )`
-  ${props =>
-    props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : ''}
+  ${props => (props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : '')}
   &.is-inline {
     display: inline-block;
     flex-grow: 3;

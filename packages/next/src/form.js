@@ -30,9 +30,9 @@ const getParentNode = (node, selector) => {
   }
 }
 
-const isPopDescription = description => {
+const isPopDescription = (description, maxTipsNum = 30) => {
   if (isStr(description)) {
-    return stringLength(description) > 20
+    return stringLength(description) > maxTipsNum
   } else {
     return React.isValidElement(description)
   }
@@ -56,7 +56,8 @@ export const FormItem = styled(
         labelAlign,
         labelTextAlign,
         autoAddColon,
-        isTableColItem
+        isTableColItem,
+        maxTipsNum
       } = this.props
 
       if (!label || isTableColItem) {
@@ -64,7 +65,7 @@ export const FormItem = styled(
       }
 
       const ele = (
-        <label htmlFor={id} required={required} key='label'>
+        <label htmlFor={id} required={required} key="label">
           {label}
           {label === ' ' ? '' : autoAddColon ? '：' : ''}
         </label>
@@ -79,7 +80,7 @@ export const FormItem = styled(
         return (
           <Col {...normalizeCol(labelCol)} className={cls}>
             {ele}
-            {isPopDescription(extra) && this.renderHelper()}
+            {isPopDescription(extra, maxTipsNum) && this.renderHelper()}
           </Col>
         )
       }
@@ -87,7 +88,7 @@ export const FormItem = styled(
       return (
         <div className={cls}>
           {ele}
-          {isPopDescription(extra) && this.renderHelper()}
+          {isPopDescription(extra, maxTipsNum) && this.renderHelper()}
         </div>
       )
     }
@@ -104,7 +105,8 @@ export const FormItem = styled(
         size,
         prefix,
         noMinHeight,
-        isTableColItem
+        isTableColItem,
+        maxTipsNum
       } = this.props
 
       const message = (
@@ -114,7 +116,7 @@ export const FormItem = styled(
           }`}
         >
           {help && <div className={`${prefix}form-item-help`}>{help}</div>}
-          {!help && !isPopDescription(extra) && (
+          {!help && !isPopDescription(extra, maxTipsNum) && (
             <div className={`${prefix}form-item-extra`}>{extra}</div>
           )}
         </div>
@@ -129,7 +131,7 @@ export const FormItem = styled(
           <Col
             {...normalizeCol(wrapperCol)}
             className={`${prefix}form-item-control`}
-            key='item'
+            key="item"
           >
             {React.cloneElement(children, { size })}
             {message}
@@ -149,8 +151,8 @@ export const FormItem = styled(
       return (
         <Balloon
           closable={false}
-          align='t'
-          trigger={<Icon type='help' size='small' />}
+          align="t"
+          trigger={<Icon type="help" size="small" />}
         >
           {this.props.extra}
         </Balloon>
@@ -174,6 +176,7 @@ export const FormItem = styled(
         validateState,
         autoAddColon,
         required,
+        maxTipsNum,
         type,
         schema,
         ...others
@@ -318,6 +321,7 @@ registerFormWrapper(OriginForm => {
           errorScrollToElement,
           style,
           prefix,
+          maxTipsNum,
           ...others
         } = this.props
         const formClassName = classNames({
@@ -333,6 +337,7 @@ registerFormWrapper(OriginForm => {
               labelTextAlign,
               labelCol,
               wrapperCol,
+              maxTipsNum,
               inline,
               size,
               autoAddColon,
@@ -383,6 +388,7 @@ registerFieldMiddleware(Field => {
         labelTextAlign,
         labelCol,
         wrapperCol,
+        maxTipsNum,
         size,
         autoAddColon
       }) => {
@@ -394,6 +400,7 @@ registerFieldMiddleware(Field => {
             labelCol,
             wrapperCol,
             autoAddColon,
+            maxTipsNum,
             size,
             ...schema['x-item-props'],
             label: schema.title,

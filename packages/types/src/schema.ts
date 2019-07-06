@@ -7,7 +7,7 @@ export interface ISchema {
   description?: string
   default?: unknown
   required?: boolean
-  enum?: Array<{ label: string, value: unknown } | string | number>
+  enum?: Array<{ label: string; value: unknown } | string | number>
   enumNames?: string[]
   properties?: {
     [key: string]: ISchema
@@ -15,7 +15,7 @@ export interface ISchema {
   items?: ISchema
   minItems?: number
   maxItems?: number
-  ['x-props']?: object
+  ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: Rule
   ['x-component']?: string

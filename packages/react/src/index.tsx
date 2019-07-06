@@ -18,6 +18,7 @@ import { SchemaField, SchemaMarkup } from './decorators/markup'
 import initialize from './initialize'
 import { ISchemaFormProps } from './type'
 
+export * from './type'
 export * from './shared/virtualbox'
 export * from './decorators/connect'
 export * from './shared/broadcast'
@@ -27,6 +28,7 @@ initialize()
 
 export const SchemaForm = SchemaMarkup()(
   React.forwardRef((props: ISchemaFormProps, ref: React.Ref<any>) => {
+    // 这个时候就有 schema 数据
     const { children, className, ...others } = props
     return (
       <OriginForm className={`rs-uform ${className || ''}`} {...others} ref={ref}>

@@ -1,29 +1,26 @@
-/* eslint-disable camelcase */
-import {
-  unstable_scheduleCallback,
-  scheduleCallback,
-  unstable_cancelCallback,
-  cancelCallback
-} from 'scheduler'
 import { Path, IFormPathMatcher } from '@uform/types'
-/* eslint-disable camelcase */
-
 import { isArr, isStr, getPathSegments, toArr, clone, isFn } from '@uform/utils'
+
 export * from '@uform/utils'
 
 const self = window
 
-export const raf =
-  (self.requestAnimationFrame &&
-    (scheduleCallback ||
-      unstable_scheduleCallback ||
-      self.requestAnimationFrame)) ||
-  self.setTimeout
+const getScheduler = () => {
+  if (!self.requestAnimationFrame) {
+    return [ self.setTimeout, self.clearTimeout ]
+  }
+  try {
+    const scheduler = require('scheduler')
+    return [
+      scheduler.scheduleCallback || scheduler.unstable_scheduleCallback,
+      scheduler.cancelCallback || scheduler.unstable_cancelCallback
+    ]
+  } catch (err) {
+    return [ self.requestAnimationFrame, self.cancelAnimationFrame ]
+  }
+}
 
-export const caf =
-  (self.requestAnimationFrame &&
-    (cancelCallback || unstable_cancelCallback || self.cancelAnimationFrame)) ||
-  self.clearTimeout
+export const [ raf, caf ] = getScheduler()
 
 export const resolveFieldPath = (path: Path | IFormPathMatcher): string[] => {
   if (!isArr(path)) {

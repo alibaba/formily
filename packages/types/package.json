@@ -1,6 +1,6 @@
 {
   "name": "@uform/types",
-  "version": "0.1.15",
+  "version": "0.2.3",
   "license": "MIT",
   "main": "lib",
   "types":"lib/index.d.ts",

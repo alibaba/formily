@@ -13,7 +13,7 @@ module.exports = {
   preset: 'ts-jest',
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
-    require.resolve('react-testing-library/cleanup-after-each'),
+    require.resolve('@testing-library/react/cleanup-after-each'),
     './scripts/global.js'
   ],
   globals: {

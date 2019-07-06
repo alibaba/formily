@@ -92,22 +92,29 @@ const bindEffects = (props: IConnectProps, effect: ISchema['x-effect'], dispatch
   return props
 }
 
+// 这个不枚举了，因为是 x-props 的
 export interface IConnectProps extends IFieldProps {
   disabled?: boolean
   readOnly?: boolean
+  showTime?: boolean
   dataSource?: any[]
+  [name: string]: any
 }
 
 export interface IConnectOptions {
-  valueName: string
-  eventName: string
-  defaultProps: object
-  getValueFromEvent: () => void
-  getProps: (props: IConnectProps, componentProps: IFieldProps) => IConnectProps
-  getComponent: () => void
+  valueName?: string
+  eventName?: string
+  defaultProps?: object
+  getValueFromEvent?: (event?: string, value?: any) => any
+  getProps?: (props: IConnectProps, componentProps: IFieldProps) => IConnectProps | void
+  getComponent?: (
+    Target: React.ComponentClass,
+    props,
+    { editable, name }: { editable: boolean | ((name: string) => boolean); name: string }
+  ) => React.ComponentClass
 }
 
-export const connect = (opts: IConnectOptions) => Target => {
+export const connect = (opts?: IConnectOptions) => Target => {
   opts = {
     valueName: 'value',
     eventName: 'onChange',
@@ -149,6 +156,7 @@ export const connect = (opts: IConnectOptions) => Target => {
       if (isFn(opts.getProps)) {
         const newProps = opts.getProps(props, this.props)
         if (newProps !== undefined) {
+          // @ts-ignore TODO
           props = newProps
         }
       }

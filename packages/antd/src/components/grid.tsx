@@ -1,9 +1,10 @@
 import React, { Component, Children, cloneElement } from 'react'
 import cx from 'classnames'
 import { toArr } from '@uform/utils'
+import { IColProps, IRowProps } from '../type'
 
-export class Row extends Component {
-  static defaultProps = {
+export class Row extends Component<IRowProps> {
+  public static defaultProps = {
     prefix: 'ant-',
     pure: false,
     fixed: false,
@@ -12,7 +13,7 @@ export class Row extends Component {
     component: 'div'
   }
 
-  render() {
+  public render() {
     /* eslint-disable no-unused-vars */
     const {
       prefix,
@@ -63,18 +64,14 @@ export class Row extends Component {
         marginRight: `-${halfGutterString}`,
         ...(others.style || {})
       }
-      newChildren = Children.map(children, (child, index) => {
-        if (
-          child &&
-          child.type &&
-          typeof child.type === 'function' &&
-          child.type.isNextCol
-        ) {
+      newChildren = Children.map(children, (child: React.ReactElement) => {
+        // @ts-ignore
+        if (child && child.type && typeof child.type === 'function' && child.type.isNextCol) {
           const newChild = cloneElement(child, {
             style: {
               paddingLeft: halfGutterString,
               paddingRight: halfGutterString,
-              ...(child.style || {})
+              ...(child.props.style || {})
             }
           })
           return newChild
@@ -85,7 +82,7 @@ export class Row extends Component {
     }
 
     return (
-      <Tag role='row' className={newClassName} {...others}>
+      <Tag role={'row'} className={newClassName} {...others}>
         {newChildren}
       </Tag>
     )
@@ -94,17 +91,16 @@ export class Row extends Component {
 
 const breakPoints = ['xxs', 'xs', 's', 'm', 'l', 'xl']
 
-export class Col extends Component {
-  static isNextCol = true
+export class Col extends Component<IColProps> {
+  public static isNextCol = true
 
-  static defaultProps = {
+  public static defaultProps = {
     prefix: 'ant-',
     pure: false,
     component: 'div'
   }
 
-  render() {
-    /* eslint-disable no-unused-vars */
+  public render() {
     const {
       prefix,
       pure,
@@ -125,10 +121,9 @@ export class Col extends Component {
       children,
       ...others
     } = this.props
-    /* eslint-enable no-unused-vars */
 
     const pointClassObj = breakPoints.reduce((ret, point) => {
-      let pointProps = {}
+      let pointProps: { span?: string; offset?: string } = {}
       if (typeof this.props[point] === 'object') {
         pointProps = this.props[point]
       } else {
@@ -165,7 +160,7 @@ export class Col extends Component {
     })
 
     return (
-      <Tag role='gridcell' className={classes} {...others}>
+      <Tag role={'gridcell'} className={classes} {...others}>
         {children}
       </Tag>
     )

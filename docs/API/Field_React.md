@@ -20,9 +20,9 @@ import {Field} from '@uform/react'
 | minItems | 最小条目数，只有在type="array"时可以使用 | Number |  |  |
 | name | 字段名称 | Object | {} |  |
 | required | 字段是否必填 | Boolean | false |  |
-| description | 字段描述，如果字符串字数超过20字或内容是ReactNode，会自动以pop形式展示 | String/React Node | '' |  |
-| type | 字段类型 | Object |  |  |
-| x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染 | Object | {type:"object",properties:{}} |  |
+| description | 字段描述，如果字符串字数超过30字或内容是ReactNode，会自动以pop形式展示 | String/React Node | '' |  |
+| type | 字段类型，具体类型枚举参考 [fields](https://github.com/alibaba/uform/tree/master/packages/antd/src/fields) | String | "" |  |
+| x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染，具体类型枚举参考 [fields](https://github.com/alibaba/uform/tree/master/packages/antd/src/fields) | String | "" |  |
 | x-effect | 副作用事件绑定对象 | `Function(dispatch : Function) : {    [eventName](...arguemtns)}` |  |  |
 | x-index | 字段索引顺序 | Number |  |  |
 | x-props | 字段UI组件属性，API请参考对应fusion next/ant design组件API | Object | {} |  |
@@ -71,14 +71,23 @@ import {Field} from '@uform/react'
 - 自定义校验，在x-rules中可以通过传函数来描述，下面是该函数的类型描述
 
 ```typescript
-type RuleCallback(
-  value : any,
-  rule : Object,
-  values : Object,
-  name : String) : String | Promise
+interface IRuleDescription {
+  required?: boolean
+  message?: string,
+  pattern?: RegExp | string,
+  validator?: Validator,
+  format?: DefaultPatternRule
+}
 
-该回调函数直接return错误文案字符串代表响应错误，如果返回Promise对象，
-代表是异步校验，resolve错误文案的时候代表错误响应，resolve为空的时候代表正确响应
+type Validator = (value: any, rule: IRuleDescription, values: any, name: string) => string | Promise<string>
+
+type DefaultPatternRule = 'url' | 'email' | 'ipv6' | 'ipv4' | 'number' | 'integer' | 'qq' | 'phone' | 'idcard' | 'taodomain' | 'money' | 'zh' | 'date' | 'zip'
+
+type Rule = Validator | Array<Validator | IRuleDescription | DefaultPatternRule> | DefaultPatternRule | IRuleDescription
+
+//该回调函数直接return错误文案字符串代表响应错误，如果返回Promise对象，
+//代表是异步校验，resolve错误文案的时候代表错误响应，resolve为空的时候代表正确响应
+
 ```
 
 ## x-render详解
@@ -122,15 +131,15 @@ type Mutators {
 x-effect属于一个非常高级的API，它是为了解决在某些场景，我们的数据联动不是基于字段的onChange事件来做的联动或者依赖onChange事件的其他参数来做的联动，它的解决方案是将dispatch函数给x-effect函数，然后让x-effect函数返回对应的事件处理器，然后再传递给具体的组件，比如：
 
 ```javascript
-import {declareFormActions} from '@uform/react'
+import {createFormActions} from '@uform/react'
 
-const actions = declareFormActions()
+const actions = createFormActions()
 
 <SchemaForm effects={($)=>{
    $('selectOptions','aa')
     .subscribe(({payload:options})=>{
       actions.setFieldState('bb',state=>{
-         state.enum = options.extra
+         state.props.enum = options.extra
       })
     })
  }}>

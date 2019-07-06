@@ -69,6 +69,7 @@ const App = () => {
               state.visible = !fieldState.value
             })
           })
+          
           $('onFieldChange', 'cc').subscribe(fieldState => {
             setFieldState('dd', state => {
               state.visible = !fieldState.value
@@ -85,6 +86,11 @@ const App = () => {
                 state.value = '123333'
                 state.props.enum = ['123333', '333333']
               }
+            })
+          })
+          $('onFieldChange', 'mm').subscribe(fieldState => {
+            setFieldState('ff', state => {
+              state.visible = !fieldState.value
             })
           })
           $('onFieldChange', 'gg')
@@ -153,6 +159,14 @@ const App = () => {
         </FormBlock>
         <FormBlock name="dd" title="Block2">
           <Field name="ee" type="date" title="EE" />
+          <Field
+            name="mm"
+            type="boolean"
+            x-component="radio"
+            default={true}
+            enum={[{ label: '是', value: true }, { label: '否', value: false }]}
+            title="是否隐藏FF"
+          />
           <Field name="ff" type="number" title="FF" />
         </FormBlock>
         <FormBlock name="kk" title="Block3">
@@ -171,7 +185,7 @@ const App = () => {
             x-props={{ showSearch: true, filterLocal: false }}
           />
           <Field name="hh" type="string" title="HH" enum={[]} x-props={{ style: { maxWidth: 300 } }} />
-          {state.visible && <Field name="mm" type="string" title="MM" />}
+          {state.visible && <Field name="MM" type="string" title="MM" />}
         </FormBlock>
         <FormButtonGroup offset={6}>
           <Submit />
@@ -490,9 +504,10 @@ const App = () => {
                   type="string"
                   name="bb"
                   enum={['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee']}
+                  x-props={{ style: { maxWidth: 300 } }}
                   title="BB"
                 />
-                <Field type="string" name="cc" enum={[]} title="CC" />
+                <Field type="string" name="cc" enum={[]} x-props={{ style: { maxWidth: 300 } }} title="CC" />
                 <Field
                   type="string"
                   name="gg"
@@ -509,6 +524,7 @@ const App = () => {
                       type="string"
                       name="ee"
                       enum={['是', '否']}
+                      x-props={{ style: { maxWidth: 300 } }}
                       title="EE"
                       description="是否显示GG"
                     />
@@ -517,6 +533,7 @@ const App = () => {
                       name="ff"
                       default="是"
                       enum={['是', '否']}
+                      x-props={{ style: { maxWidth: 300 } }}
                       title="FF"
                       description="是否显示EE"
                     />

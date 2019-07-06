@@ -116,9 +116,18 @@ export const useForm = (options: IOption = {}) => {
   }
 }
 
-export const FormConsumer = ({ children, testingAct }) => {
+export const FormConsumer = ({
+  children,
+  testingAct
+}: {
+// TODO formApi
+children: React.ReactElement | ((formApi: any) => React.ReactElement)
+testingAct?: IOption['testingAct']
+}): React.ReactElement => {
   const formApi = useForm({ testingAct })
-  if (!formApi) { return <React.Fragment /> }
+  if (!formApi) {
+    return <React.Fragment />
+  }
   if (isFn(children)) {
     return children(formApi)
   } else {

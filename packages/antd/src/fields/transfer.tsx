@@ -5,6 +5,7 @@ import { mapStyledProps } from '../utils'
 registerFormField(
   'transfer',
   connect({
-    getProps: mapStyledProps
+    getProps: mapStyledProps,
+    valueName: 'targetKeys'
   })(Transfer)
 )

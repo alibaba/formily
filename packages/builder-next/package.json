@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder-next",
-  "version": "0.1.16",
+  "version": "0.2.3",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -21,7 +21,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/builder": "^0.1.16"
+    "@uform/builder": "^0.2.3"
   },
   "devDependencies": {
     "@alifd/next": "^1.13.1"

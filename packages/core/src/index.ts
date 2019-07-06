@@ -5,7 +5,7 @@ import {
 } from '@uform/validator'
 
 import { Form } from './form'
-import { caculateSchemaInitialValues, isFn } from './utils'
+import { caculateSchemaInitialValues, isFn, each } from './utils'
 
 export * from './path'
 
@@ -56,9 +56,13 @@ export const createForm = ({
 
   form.syncUpdate(() => {
     form.triggerEffect('onFormInit', form.publishState())
-    fields.forEach(field => {
-      form.triggerEffect('onFieldChange', field.publishState())
-    })
+    each(
+      fields,
+      field => {
+        form.triggerEffect('onFieldChange', field.publishState())
+      },
+      true
+    )
   })
   return form
 }

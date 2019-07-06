@@ -1,23 +1,24 @@
 import React, { Component } from 'react'
+import styled from 'styled-components'
 import { registerFormField } from '@uform/react'
 import { isFn, toArr } from '@uform/utils'
 import { ArrayField } from './array'
-import styled from 'styled-components'
+
+export interface ITableProps {
+  className?: string
+  dataSource: any
+}
 
 /**
  * 轻量级Table
- **/
+ */
 const Table = styled(
-  class Table extends Component {
-    renderCell({ record, col, rowIndex, colIndex }) {
+  class Table extends Component<ITableProps> {
+    public renderCell({ record, col, rowIndex }) {
       return (
-        <div className='ant-table-cell-wrapper'>
+        <div className={'ant-table-cell-wrapper'}>
           {isFn(col.cell)
-            ? col.cell(
-              record ? record[col.dataIndex] : undefined,
-              rowIndex,
-              record
-            )
+            ? col.cell(record ? record[col.dataIndex] : undefined, rowIndex, record)
             : record
               ? record[col.dataIndex]
               : undefined}
@@ -25,9 +26,9 @@ const Table = styled(
       )
     }
 
-    renderTable(columns, dataSource) {
+    public renderTable(columns, dataSource) {
       return (
-        <div className='ant-table-body'>
+        <div className={'ant-table-body'}>
           <table>
             <thead>
               <tr>
@@ -35,10 +36,10 @@ const Table = styled(
                   return (
                     <th
                       key={index}
-                      className='ant-table-header-node'
+                      className={'ant-table-header-node'}
                       style={{ minWidth: col.width }}
                     >
-                      <div className='ant-table-cell-wrapper'>{col.title}</div>
+                      <div className={'ant-table-cell-wrapper'}>{col.title}</div>
                     </th>
                   )
                 })}
@@ -47,15 +48,14 @@ const Table = styled(
             <tbody>
               {dataSource.map((record, rowIndex) => {
                 return (
-                  <tr key={rowIndex} className='ant-table-row'>
+                  <tr key={rowIndex} className={'ant-table-row'}>
                     {columns.map((col, colIndex) => {
                       return (
-                        <td key={colIndex} className='ant-table-cell'>
+                        <td key={colIndex} className={'ant-table-cell'}>
                           {this.renderCell({
                             record,
                             col,
-                            rowIndex,
-                            colIndex
+                            rowIndex
                           })}
                         </td>
                       )
@@ -70,14 +70,14 @@ const Table = styled(
       )
     }
 
-    renderPlacehodler(dataSource, columns) {
+    public renderPlacehodler(dataSource, columns) {
       if (dataSource.length === 0) {
         return (
-          <tr className='ant-table-row'>
-            <td className='ant-table-cell' colSpan={columns.length}>
-              <div className='ant-table-empty' style={{ padding: 10 }}>
+          <tr className={'ant-table-row'}>
+            <td className={'ant-table-cell'} colSpan={columns.length}>
+              <div className={'ant-table-empty'} style={{ padding: 10 }}>
                 <img
-                  src='//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
+                  src={'//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'}
                   style={{ height: 60 }}
                 />
               </div>
@@ -87,14 +87,11 @@ const Table = styled(
       }
     }
 
-    getColumns(children) {
+    public getColumns(children) {
       const columns = []
       React.Children.forEach(children, child => {
-        if (React.isValidElement(child)) {
-          if (
-            child.type === Column ||
-            child.type.displayName === '@schema-table-column'
-          ) {
+        if (React.isValidElement(child as React.ReactElement)) {
+          if (child.type === Column || child.type.displayName === '@schema-table-column') {
             columns.push(child.props)
           }
         }
@@ -103,15 +100,13 @@ const Table = styled(
       return columns
     }
 
-    render() {
+    public render() {
       const columns = this.getColumns(this.props.children)
       const dataSource = toArr(this.props.dataSource)
       return (
         <div className={this.props.className}>
-          <div className='ant-table zebra'>
-            <div className='ant-table-inner'>
-              {this.renderTable(columns, dataSource)}
-            </div>
+          <div className={'ant-table zebra'}>
+            <div className={'ant-table-inner'}>{this.renderTable(columns, dataSource)}</div>
           </div>
         </div>
       )
@@ -216,9 +211,16 @@ const Table = styled(
   }
 `
 
-class Column extends Component {
-  static displayName = '@schema-table-column'
-  render() {
+export interface IColumnProps {
+  title?: string
+  dataIndex?: string
+  width?: string | number
+  cell: (item?: any, index?: number) => React.ReactElement
+}
+
+class Column extends Component<IColumnProps> {
+  public static displayName = '@schema-table-column'
+  public render() {
     return this.props.children
   }
 }
@@ -227,9 +229,11 @@ registerFormField(
   'table',
   styled(
     class extends ArrayField {
-      createFilter(key, payload) {
+      public createFilter(key, payload) {
         const { schema } = this.props
-        const columnFilter = schema['x-props'] && schema['x-props'].columnFilter
+        const columnFilter: (key: string, payload: any) => boolean =
+          schema['x-props'] && schema['x-props'].columnFilter
+
         return (render, otherwise) => {
           if (isFn(columnFilter)) {
             return columnFilter(key, payload)
@@ -245,7 +249,7 @@ registerFormField(
         }
       }
 
-      render() {
+      public render() {
         const {
           value,
           schema,
@@ -254,53 +258,52 @@ registerFormField(
           renderField,
           getOrderProperties
         } = this.props
-        const style = schema['x-props'] && schema['x-props'].style
-        const operationsWidth = schema['x-props'] && schema['x-props'].operationsWidth
+        const cls = this.getProps('className')
+        const style = this.getProps('style')
+        const operationsWidth = this.getProps('operationsWidth')
         return (
           <div
-            className={className}
+            className={`${className} ${cls}`}
             style={style}
             onClick={this.onClearErrorHandler()}
           >
             <div>
               <Table dataSource={value}>
-                {getOrderProperties(schema.items).reduce(
-                  (buf, { key, schema }) => {
-                    const filter = this.createFilter(key, schema)
-                    const res = filter(
-                      () => {
-                        return buf.concat(
-                          <Column
-                            {...schema}
-                            key={key}
-                            title={schema.title}
-                            dataIndex={key}
-                            cell={(record, index) => {
-                              return renderField([index, key])
-                            }}
-                          />
-                        )
-                      },
-                      () => {
-                        return buf
-                      }
-                    )
-                    return res
-                  },
-                  []
-                )}
+                {getOrderProperties(schema.items).reduce((buf, { key, schema }) => {
+                  const filter = this.createFilter(key, schema)
+                  const res = filter(
+                    () => {
+                      return buf.concat(
+                        <Column
+                          {...schema}
+                          key={key}
+                          title={schema.title}
+                          dataIndex={key}
+                          cell={(record, index) => {
+                            return renderField([index, key])
+                          }}
+                        />
+                      )
+                    },
+                    () => {
+                      return buf
+                    }
+                  )
+                  return res
+                }, [])}
+
                 <Column
-                  key='operations'
+                  key={'operations'}
                   title={locale.operations}
-                  dataIndex='operations'
+                  dataIndex={'operations'}
                   width={operationsWidth}
                   cell={(item, index) => {
                     return (
-                      <div className='array-item-operator'>
+                      <div className={'array-item-operator'}>
                         {this.renderRemove(index, item)}
                         {this.renderMoveDown(index, item)}
-                        {this.renderMoveUp(index, item)}
-                        {this.renderExtraOperations(index, item)}
+                        {this.renderMoveUp(index)}
+                        {this.renderExtraOperations(index)}
                       </div>
                     )
                   }}

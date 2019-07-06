@@ -5,11 +5,11 @@ import { Button } from 'antd'
 export const Submit = ({ showLoading, ...props }) => {
   return (
     <FormConsumer>
-      {({ status, schema }) => {
+      {({ status }) => {
         return (
           <Button
-            type='primary'
-            htmlType='submit'
+            type={'primary'}
+            htmlType={'submit'}
             disabled={showLoading ? status === 'submitting' : undefined}
             {...props}
             loading={showLoading ? status === 'submitting' : undefined}
@@ -25,7 +25,7 @@ export const Submit = ({ showLoading, ...props }) => {
 export const Reset = props => {
   return (
     <FormConsumer>
-      {({ status, reset }) => {
+      {({ reset }) => {
         return (
           <Button {...props} onClick={reset}>
             {props.children || '重置'}
