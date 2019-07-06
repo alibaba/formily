@@ -1,6 +1,6 @@
 {
   "name": "@uform/builder",
-  "version": "0.1.16",
+  "version": "0.2.3",
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
@@ -21,9 +21,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.1.16",
-    "@uform/utils": "^0.1.16",
-    "@uform/validator": "^0.1.16",
+    "@uform/react": "^0.2.3",
+    "@uform/utils": "^0.2.3",
+    "@uform/validator": "^0.2.3",
     "classnames": "^2.2.5",
     "immutability-helper": "^3.0.0",
     "lodash.flow": "^3.5.0",
@@ -46,8 +46,7 @@
     "uuid": "^3.2.1"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npm.alibaba-inc.com"
+    "access": "public"
   },
   "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050",
   "devDependencies": {

@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect, registerFormField } from '@uform/react'
-import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
 import { Button, Upload, Icon } from 'antd'
 import styled from 'styled-components'
+import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
+
 const { Dragger: UploadDragger } = Upload
 
 const exts = [
@@ -71,7 +72,7 @@ const exts = [
 const UploadPlaceholder = styled(props => (
   <div>
     <Icon type={props.loading ? 'loading' : 'plus'} />
-    <div className='ant-upload-text'>上传</div>
+    <div className={'ant-upload-text'}>上传</div>
   </div>
 ))``
 
@@ -116,11 +117,7 @@ const normalizeFileList = fileList => {
 }
 
 const shallowClone = val => {
-  let result = isArr(val)
-    ? [...val]
-    : typeof val === 'object'
-      ? { ...val }
-      : val
+  let result = isArr(val) ? [...val] : typeof val === 'object' ? { ...val } : val
   if (isArr(result)) {
     result = result.map(item => ({
       ...item,
@@ -135,13 +132,27 @@ const shallowClone = val => {
   return result
 }
 
+export interface IUploaderState {
+  value: any[]
+}
+
+// TODO 能不能直接引用 antd 里面的接口定义呢 ?
+export declare type UploadListType = 'text' | 'picture' | 'picture-card';
+
+export interface IUploaderProps {
+  onChange: (value: any[]) => void
+  locale: { [name: string]: any }
+  value: any[]
+  listType?: UploadListType
+}
+
 registerFormField(
   'upload',
   connect({
     getProps: mapStyledProps
   })(
-    class Uploader extends React.Component {
-      static defaultProps = {
+    class Uploader extends React.Component<IUploaderProps, IUploaderState> {
+      public static defaultProps = {
         action: 'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
         listType: 'text',
         multiple: true,
@@ -155,7 +166,7 @@ registerFormField(
         }
       }
 
-      onRemoveHandler = file => {
+      public onRemoveHandler = file => {
         const { value } = this.state
         const fileList = []
         value.forEach(item => {
@@ -166,13 +177,11 @@ registerFormField(
         this.props.onChange(fileList)
       }
 
-      onChangeHandler = ({ fileList, file }) => {
+      public onChangeHandler = ({ fileList, file }) => {
         const { onChange } = this.props
         fileList = toArr(fileList)
         if (
-          fileList.every(
-            file => file.status === 'done' || file.imgURL || file.downloadURL
-          ) &&
+          fileList.every(file => file.status === 'done' || file.imgURL || file.downloadURL) &&
           fileList.length
         ) {
           fileList = normalizeFileList(fileList)
@@ -191,7 +200,7 @@ registerFormField(
         }
       }
 
-      componentDidUpdate(preProps) {
+      public componentDidUpdate(preProps) {
         if (this.props.value && !isEqual(this.props.value, preProps.value)) {
           this.setState({
             value: shallowClone(this.props.value)
@@ -199,8 +208,9 @@ registerFormField(
         }
       }
 
-      render() {
+      public render() {
         const { listType, locale, onChange, value, ...others } = this.props
+
         if (listType.indexOf('card') > -1) {
           return (
             <Upload
@@ -208,7 +218,7 @@ registerFormField(
               fileList={this.state.value}
               onChange={this.onChangeHandler}
               onRemove={this.onRemoveHandler}
-              listType='picture-card'
+              listType={'picture-card'}
             >
               <UploadPlaceholder />
             </Upload>
@@ -221,12 +231,13 @@ registerFormField(
               fileList={this.state.value}
               onChange={this.onChangeHandler}
               onRemove={this.onRemoveHandler}
-              listType={listType.indexOf('image') > -1 ? 'image' : 'text'}
+              // TODO image 类型是跟 picture 一样 ?
+              listType={listType.indexOf('image') > -1 ? 'picture' : 'text'}
             >
-              <p className='ant-upload-drag-icon'>
-                <Icon type='inbox' />
+              <p className={'ant-upload-drag-icon'}>
+                <Icon type={'inbox'} />
               </p>
-              <p className='ant-upload-text'>拖拽上传</p>
+              <p className={'ant-upload-text'}>拖拽上传</p>
             </UploadDragger>
           )
         }
@@ -239,7 +250,7 @@ registerFormField(
             listType={listType}
           >
             <Button style={{ margin: '0 0 10px' }}>
-              <Icon type='upload' />
+              <Icon type={'upload'} />
               {(locale && locale.uploadText) || '上传文件'}
             </Button>
           </Upload>

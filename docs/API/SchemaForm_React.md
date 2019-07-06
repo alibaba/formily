@@ -18,7 +18,6 @@ import SchemaForm from '@uform/react'
 
 | 属性名称 | 属性描述 | 属性类型 | 默认值 |
 | ---- | ---- | ---- | --- |
-| --- | --- | --- | --- |
 | actions | 需要握手的表单actions，只接收通过[createFormActions](#/97UlUl/XEFAF7HoHV)/[createAsyncFormActions](#/97UlUl/leFLFGHMHK)创建出来的actions | Object |  |
 | defaultValue | 表单默认值 | Object |  |
 | editable | 控制表单字段是否可编辑状态 | `Boolean | Function(name : String) : Boolean` |  |

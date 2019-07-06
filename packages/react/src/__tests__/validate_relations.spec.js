@@ -6,31 +6,29 @@ import SchemaForm, {
   registerFieldMiddleware,
   createFormActions
 } from '../index'
-import { render, fireEvent } from 'react-testing-library'
+import { render, fireEvent } from '@testing-library/react'
 
-beforeEach(() => {
-  registerFieldMiddleware(Field => {
-    return props => {
-      const index = props.schema['x-props'] && props.schema['x-props'].index
-      return (
-        <div>
-          <Field {...props} />
-          <div data-testid={`test-errors-${index}`}>{props.errors}</div>
-        </div>
-      )
-    }
-  })
-  registerFormField(
-    'string',
-    connect()(props => (
-      <input
-        {...props}
-        data-testid={`test-input-${props.index}`}
-        value={props.value || ''}
-      />
-    ))
-  )
+registerFieldMiddleware(Field => {
+  return props => {
+    const index = props.schema['x-props'] && props.schema['x-props'].index
+    return (
+      <div>
+        <Field {...props} />
+        <div data-testid={`test-errors-${index}`}>{props.errors}</div>
+      </div>
+    )
+  }
 })
+registerFormField(
+  'string',
+  connect()(props => (
+    <input
+      {...props}
+      data-testid={`test-input-${props.index}`}
+      value={props.value || ''}
+    />
+  ))
+)
 
 test('setFieldState will trigger validate', async () => {
   const handleSubmit = jest.fn()
@@ -51,9 +49,9 @@ test('setFieldState will trigger validate', async () => {
       onSubmit={handleSubmit}
       onValidateFailed={handleValidateFailed}
     >
-      <Field name='text-1' type='string' x-props={{ index: 1 }} />
-      <Field name='text-2' type='string' required x-props={{ index: 2 }} />
-      <button type='submit' data-testid='btn'>
+      <Field name="text-1" type="string" x-props={{ index: 1 }} />
+      <Field name="text-2" type="string" required x-props={{ index: 2 }} />
+      <button type="submit" data-testid="btn">
         Submit
       </button>
     </SchemaForm>

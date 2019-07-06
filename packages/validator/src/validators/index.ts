@@ -1,9 +1,9 @@
+import { IRuleDescription, Rule } from '@uform/types'
 import { isObj, isStr, isFn } from '../utils'
 import formatValidate from './format'
 import requiredValidate from './required'
 import patternValidate from './pattern'
 import customValidate from './custom'
-import { IRuleDescription, Rule } from '@uform/types'
 /*
  * rule : {
      format:"",

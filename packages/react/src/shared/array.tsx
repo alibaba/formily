@@ -16,7 +16,25 @@ export interface IArrayFieldOptions {
   MoveUpIcon: React.ComponentType
 }
 
-export const createArrayField = (options: IArrayFieldOptions) => {
+export interface IArrayFieldProps extends IFieldProps {
+  className?: string
+}
+
+export class ArrayFieldComponent<P> extends React.Component<P> {
+  public isActive: (key: string, value: any) => boolean
+  public onClearErrorHandler: () => () => void
+  public renderRemove: (index: number, item: any) => React.ReactElement
+  public renderMoveDown: (index: number, item: any) => React.ReactElement
+  public renderMoveUp: (index: number) => React.ReactElement
+  public renderExtraOperations: (index: number) => React.ReactElement
+  public renderEmpty: (title?: string) => React.ReactElement
+  public renderAddition: () => React.ReactElement
+  public getProps: (path?: string) => any
+}
+
+export type TypeArrayField<P> = new (props: P, context) => ArrayFieldComponent<P>
+
+export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IArrayFieldProps> => {
   const { TextButton, CircleButton, AddIcon, RemoveIcon, MoveDownIcon, MoveUpIcon } = {
     TextButton: () => <div>You Should Pass The TextButton.</div>,
     CircleButton: () => <div>You Should Pass The CircleButton.</div>,
@@ -27,7 +45,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
     ...options
   }
 
-  return class ArrayField extends React.Component<IFieldProps> {
+  return class ArrayFieldComponent extends React.Component<IFieldProps> {
     public isActive = (key: string, value: any): boolean => {
       const readOnly: boolean | ((key: string, value: any) => boolean) = this.getProps('readOnly')
       const disabled = this.getDisabled()
@@ -58,7 +76,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
       }
     }
 
-    public getProps(path: string) {
+    public getProps(path?: string): any {
       return getIn(this.props.schema, `x-props${path ? '.' + path : ''}`)
     }
 
@@ -87,7 +105,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
             text: string
           ) => {
             return (
-              <div className="array-item-addition" onClick={add}>
+              <div className={'array-item-addition'} onClick={add}>
                 <TextButton>
                   <AddIcon />
                   {text || locale.addItem || '添加'}
@@ -110,10 +128,10 @@ export const createArrayField = (options: IArrayFieldOptions) => {
               className={`array-empty-wrapper ${!active ? 'disabled' : ''}`}
               onClick={active ? add : undefined}
             >
-              <div className="array-empty">
+              <div className={'array-empty'}>
                 <img
                   style={{ backgroundColor: 'transparent' }}
-                  src="//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg"
+                  src={'//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'}
                 />
                 {active && (
                   <TextButton>
@@ -128,14 +146,14 @@ export const createArrayField = (options: IArrayFieldOptions) => {
       )
     }
 
-    public renderRemove(index: number, item: any) {
+    public renderRemove(index: number, item: any): React.ReactElement {
       return (
         this.isActive(`${index}.remove`, item) &&
         this.renderWith('remove', index, ({ remove }, text) => {
           return (
             <CircleButton onClick={remove} hasText={!!text}>
               <RemoveIcon />
-              {text && <span className="op-name">{text}</span>}
+              {text && <span className={'op-name'}>{text}</span>}
             </CircleButton>
           )
         })
@@ -151,7 +169,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
           return (
             <CircleButton onClick={moveDown} hasText={!!text}>
               <MoveDownIcon />
-              <span className="op-name">{text}</span>
+              <span className={'op-name'}>{text}</span>
             </CircleButton>
           )
         })
@@ -167,7 +185,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
           return (
             <CircleButton onClick={moveUp} hasText={!!text}>
               <MoveUpIcon />
-              <span className="op-name">{text}</span>
+              <span className={'op-name'}>{text}</span>
             </CircleButton>
           )
         })
@@ -194,7 +212,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
     }
 
     // TODO e 类型
-    public onRemoveHandler(index: number): ((e: any) => void) {
+    public onRemoveHandler(index: number): (e: any) => void {
       const { value, mutators, schema, locale } = this.props
       const { minItems } = schema
       return e => {
@@ -207,7 +225,7 @@ export const createArrayField = (options: IArrayFieldOptions) => {
       }
     }
 
-    public onMoveHandler(from: number, to: number): ((e: any) => void) {
+    public onMoveHandler(from: number, to: number): (e: any) => void {
       const { mutators } = this.props
       return e => {
         e.stopPropagation()

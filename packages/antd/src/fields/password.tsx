@@ -1,7 +1,7 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
-import { Input } from 'antd'
 import styled from 'styled-components'
+import { Input } from 'antd'
+import { connect, registerFormField } from '@uform/react'
 
 var isNum = function(c) {
   return c >= 48 && c <= 57
@@ -20,7 +20,9 @@ var isLetter = function(c) {
 }
 
 const getStrength = val => {
-  if (!val) return 0
+  if (!val) {
+    return 0
+  }
   let num = 0
   let lower = 0
   let upper = 0
@@ -148,19 +150,33 @@ const getStrength = val => {
   }
 }
 
+export interface IPasswordProps {
+  value: any
+  defaultValue: any
+  className: string
+  // TODO 不知道下面三个是什么东西
+  checkStrength: any
+  htmlType: any
+  innerAfter: any
+  onChange: (value: any) => void
+}
+
+export interface IPasswordState {
+  value: any
+  strength: number
+  eye: boolean
+}
+
 const Password = styled(
-  class Password extends React.Component {
-    state = {
+  class Password extends React.Component<IPasswordProps, IPasswordState> {
+    public state = {
       value: this.props.value || this.props.defaultValue,
       strength: 0,
       eye: false
     }
 
-    componentDidUpdate(prevProps, prevState) {
-      if (
-        prevProps.value !== this.props.value &&
-        this.props.value !== this.state.value
-      ) {
+    public componentDidUpdate(prevProps) {
+      if (prevProps.value !== this.props.value && this.props.value !== this.state.value) {
         this.setState({
           value: this.props.value,
           strength: getStrength(this.props.value)
@@ -168,7 +184,7 @@ const Password = styled(
       }
     }
 
-    onChangeHandler = e => {
+    public onChangeHandler = e => {
       const value = e.target.value
       this.setState(
         {
@@ -183,16 +199,16 @@ const Password = styled(
       )
     }
 
-    renderStrength() {
+    public renderStrength() {
       const { strength } = this.state
       return (
-        <div className='password-strength-wrapper'>
-          <div className='div-1 div' />
-          <div className='div-2 div' />
-          <div className='div-3 div' />
-          <div className='div-4 div' />
+        <div className={'password-strength-wrapper'}>
+          <div className={'div-1 div'} />
+          <div className={'div-2 div'} />
+          <div className={'div-3 div'} />
+          <div className={'div-4 div'} />
           <div
-            className='password-strength-bar'
+            className={'password-strength-bar'}
             style={{
               clipPath: `polygon(0 0,${strength}% 0,${strength}% 100%,0 100%)`
             }}
@@ -201,7 +217,7 @@ const Password = styled(
       )
     }
 
-    switchEye() {
+    public switchEye() {
       return () => {
         this.setState({
           eye: !this.state.eye
@@ -209,27 +225,27 @@ const Password = styled(
       }
     }
 
-    renderEye() {
+    public renderEye() {
       if (!this.state.eye) {
         return (
           <img
-            className='eye'
+            className={'eye'}
             onClick={this.switchEye()}
-            src='//img.alicdn.com/tfs/TB1wyXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'
+            src={'//img.alicdn.com/tfs/TB1wyXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'}
           />
         )
       } else {
         return (
           <img
-            className='eye'
+            className={'eye'}
             onClick={this.switchEye()}
-            src='//img.alicdn.com/tfs/TB1xiXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'
+            src={'//img.alicdn.com/tfs/TB1xiXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'}
           />
         )
       }
     }
 
-    render() {
+    public render() {
       const {
         className,
         checkStrength,
@@ -239,6 +255,7 @@ const Password = styled(
         innerAfter,
         ...others
       } = this.props
+
       return (
         <div className={className}>
           <Input
@@ -258,7 +275,7 @@ const Password = styled(
   .ant-input-prefix,
   .ant-input-suffix {
     z-index: 10;
-    right:20px !important;
+    right: 20px !important;
     .eye {
       position: absolute;
       max-width: initial;

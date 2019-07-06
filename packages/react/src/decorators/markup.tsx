@@ -11,7 +11,7 @@ const getRadomName = () => {
   return `UFORM_NO_NAME_FIELD_$${nonameId++}`
 }
 
-export const SchemaField = (props, context) => {
+export const SchemaField = (props) => {
   const parent = useContext(MarkupContext)
   if (schemaIs(parent, 'object')) {
     const name = props.name || getRadomName()
@@ -53,6 +53,7 @@ export const SchemaMarkup = createHOC((options, SchemaForm) => {
       return (
         <React.Fragment>
           {!alreadyHasSchema &&
+            // 只是为了去收集 schema 数据
             createPortal(
               <MarkupContext.Provider value={finalSchema}>{children}</MarkupContext.Provider>,
               this.portalRoot

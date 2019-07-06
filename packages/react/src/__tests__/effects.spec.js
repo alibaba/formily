@@ -4,37 +4,32 @@ import SchemaForm, {
   registerFormField,
   connect,
   registerFieldMiddleware,
-  createFormActions
+  createFormActions,
+  FormPath
 } from '../index'
-import { render, fireEvent, act } from 'react-testing-library'
+import { render, fireEvent, act } from '@testing-library/react'
 
-beforeEach(() => {
-  registerFieldMiddleware(Field => {
-    return props => {
-      return (
-        <div>
-          {props.schema.title}
-          <Field {...props} />
-          {props.errors && props.errors.length ? (
-            <div data-testid={`test-errors`}>{props.errors}</div>
-          ) : (
-            ''
-          )}
-        </div>
-      )
-    }
-  })
-  registerFormField(
-    'string',
-    connect()(props =>
-      props.disabled ? (
-        'Disabled'
-      ) : (
-        <input {...props} value={props.value || ''} />
-      )
+registerFieldMiddleware(Field => {
+  return props => {
+    return (
+      <div>
+        {props.schema.title}
+        <Field {...props} />
+        {props.errors && props.errors.length ? (
+          <div data-testid={`test-errors`}>{props.errors}</div>
+        ) : (
+          ''
+        )}
+      </div>
     )
-  )
+  }
 })
+registerFormField(
+  'string',
+  connect()(props =>
+    props.disabled ? 'Disabled' : <input {...props} value={props.value || ''} />
+  )
+)
 
 test('onFormInit setFieldState', async () => {
   const actions = createFormActions()
@@ -55,8 +50,8 @@ test('onFormInit setFieldState', async () => {
         })
       }}
     >
-      <Field name='aaa' type='string' />
-      <button type='submit' data-testid='btn'>
+      <Field name="aaa" type="string" />
+      <button type="submit" data-testid="btn">
         Submit
       </button>
     </SchemaForm>
@@ -89,8 +84,8 @@ test('init triggers', async () => {
           $('onFieldChange', 'aaa').subscribe(callback)
         }}
       >
-        <Field name='aaa' type='string' />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -122,8 +117,8 @@ test('onFieldChange will trigger with initialValues', async () => {
           $('onFieldChange', 'aaa').subscribe(callback)
         }}
       >
-        <Field name='aaa' type='string' />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -149,8 +144,8 @@ test('setFieldState x-props with onFormInit', async () => {
           })
         }}
       >
-        <Field name='aaa' type='string' x-props={{ disabled: false }} />
-        <button type='submit' data-testid='btn'>
+        <Field name="aaa" type="string" x-props={{ disabled: false }} />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -160,4 +155,100 @@ test('setFieldState x-props with onFormInit', async () => {
   const { queryByText } = render(<TestComponent />)
   await sleep(33)
   expect(queryByText('Disabled')).toBeVisible()
+})
+
+test('getFieldState with onFieldChange', async () => {
+  let aaValue
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        onSubmit={values => console.log(values)}
+        initialValues={{ obj: { aa: 123 } }}
+        effects={($, { getFieldState }) => {
+          $('onFieldChange', 'obj.aa').subscribe(() => {
+            aaValue = getFieldState('obj', state => state.value.aa)
+          })
+        }}
+      >
+        <Field type="object" name="obj">
+          <Field
+            type="string"
+            name="aa"
+            x-props={{ 'data-testid': 'this is aa' }}
+          />
+        </Field>
+      </SchemaForm>
+    )
+  }
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryByTestId('this is aa'), { target: { value: '333' } })
+  await sleep(33)
+  expect(aaValue).toBe('333')
+})
+
+test('set errors in effects', async () => {
+  const callback = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFormInit').subscribe(() => {
+            setFieldState('aaa', state => {
+              state.errors = ['validate failed']
+            })
+          })
+        }}
+        onSubmit={callback}
+      >
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.click(queryByTestId('btn'))
+  await sleep(33)
+  expect(callback).toHaveBeenCalledTimes(0)
+})
+
+test('setFieldState from buffer', async () => {
+  const callback = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFormInit').subscribe(() => {
+            setFieldState(FormPath.match('*'), state => {
+              state.title = '1123'
+            })
+          })
+          $('onFieldChange', 'kkk').subscribe(() => {
+            setFieldState(FormPath.match('dd.*'), state => {
+              state.visible = false
+            })
+          })
+        }}
+        onSubmit={callback}
+      >
+        <Field type="object" name="dd" title="DD">
+          <Field type="string" name="bbb" title="ccc" />
+        </Field>
+        <Field
+          type="string"
+          name="kkk"
+          title="String"
+          x-props={{ 'data-testid': 'test' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('test')).toBeVisible()
 })

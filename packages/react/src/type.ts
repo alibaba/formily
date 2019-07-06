@@ -12,10 +12,12 @@ export interface IEnhanceSchema extends ISchema {
 }
 
 export interface IFieldProps extends Omit<IField, 'editable'>, IStateFieldProps {
+  state?: string
+  size?: string
   children?: React.ReactNode
   schema: IEnhanceSchema
   getOrderProperties: (schema?: ISchema) => any
-  renderField: (key: string, addReactKey: boolean) => React.ReactElement
+  renderField: (key, addReactKey?: boolean) => React.ReactElement
   editable: boolean | ((name: string) => boolean)
 }
 

@@ -450,6 +450,7 @@ function _setIn(obj: any, path: Path, value: any) {
     const p = pathArr[i]
 
     if (!isObj(obj[p])) {
+      if (obj[p] === undefined && value === undefined) return
       obj[p] = {}
     }
 

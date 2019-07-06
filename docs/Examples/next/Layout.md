@@ -132,6 +132,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > 1. 使用 FormCard 实现卡片式分离表单模块
 > 1. 使用 FormBlock 实现在卡片内部的区块化分割
 > 1. 使用 FormItemGrid 实现表单字段的局部网格布局能力
+> 1. 使用 FormTextBox 实现表单文本化串联
 
 #### Demo 示例
 
@@ -145,6 +146,7 @@ import {
   Submit,
   Reset,
   FormItemGrid,
+  FormTextBox,
   FormCard,
   FormBlock,
   FormLayout
@@ -172,8 +174,14 @@ const App = () => (
             ​ <Field name="[startDate,endDate]" type="daterange" />​
           </FormItemGrid>
         </Field>
-        <Field name="aas" type="string" title="字段4" />​
-        <FormBlock title="区块">
+        <FormLayout labelCol={8} wrapperCol={16}>
+          <FormTextBox title="文本串联" text="订%s元/票 退%s元/票 改%s元/票" gutter={8}>
+            <Field type="string" required name="aa1" x-props={{style:{width:80}}} description="简单描述" />
+            <Field type="number" required name="aa2" description="简单描述" />
+            <Field type="number" required name="aa3" description="简单描述" />
+          </FormTextBox>
+        </FormLayout>
+        <Field name="aas" type="string" title="字段4" />​<FormBlock title="区块">
           ​ <Field name="ddd2" type="string" title="字段5" />​
           <Field name="eee2" type="string" title="字段6" />​
         </FormBlock>

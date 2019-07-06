@@ -9,8 +9,8 @@ registerFormField(
     getValueFromEvent(_, value) {
       return value
     },
-    getProps: props => {
-      const { value, disabled = false, ...others } = props
+    getProps: (props, fieldProps) => {
+      const { value, disabled = false } = props
       try {
         if (!disabled && value) {
           props.value = moment(value, 'HH:mm:ss')
@@ -18,7 +18,7 @@ registerFormField(
       } catch (e) {
         throw new Error(e)
       }
-      mapStyledProps(props, others)
+      mapStyledProps(props, fieldProps)
     },
     getComponent: mapTextComponent
   })(TimePicker)

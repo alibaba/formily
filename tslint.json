@@ -13,6 +13,7 @@
     ],
     "no-empty":false,
     "no-shadowed-variable":false,
+    "max-classes-per-file": false,
     "semicolon": [
       true,
       "never"

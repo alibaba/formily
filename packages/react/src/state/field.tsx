@@ -32,10 +32,8 @@ const StateField = createHOC((options, Field) => {
 
     public onChangeHandler() {
       return fieldState => {
+        if (this.unmounted) {return}
         if (this.initialized) {
-          if (this.unmounted) {
-            return
-          }
           this.setState(fieldState)
         } else {
           this.state = fieldState
@@ -59,7 +57,7 @@ const StateField = createHOC((options, Field) => {
       }
     }
 
-    public renderField = (key: string, addReactKey: boolean) => {
+    public renderField = (key, addReactKey: boolean) => {
       const path = this.props.path.concat(key)
       const schemaPath = this.props.schemaPath.concat(key)
       const name = path.join('.')

@@ -8,70 +8,68 @@ import SchemaForm, {
   createVirtualBox
 } from '../index'
 import { toArr } from '@uform/utils'
-import { render, fireEvent, act } from 'react-testing-library'
+import { render, fireEvent, act } from '@testing-library/react'
 
 let FormCard
 
-beforeEach(() => {
-  registerFormField(
-    'string',
-    connect()(props => (
-      <input data-testid='input' {...props} value={props.value || ''} />
+registerFormField(
+  'string',
+  connect()(props => (
+    <input data-testid="input" {...props} value={props.value || ''} />
+  ))
+)
+
+registerFormField(
+  'radio',
+  connect()(props =>
+    props.dataSource.map(item => (
+      <label htmlFor={item.value} key={`${item.label}-${item.value}`}>
+        <input
+          onChange={() => props.onChange(item.value)}
+          type="radio"
+          checked={item.value === props.value}
+          id={item.value}
+          data-testid={`radio-${item.value}`}
+        />
+        {props.id}
+      </label>
     ))
   )
+)
 
-  registerFormField(
-    'radio',
-    connect()(props =>
-      props.dataSource.map(item => (
-        <label htmlFor={item.value} key={`${item.label}-${item.value}`}>
-          <input
-            onChange={() => props.onChange(item.value)}
-            type='radio'
-            checked={item.value === props.value}
-            id={item.value}
-            data-testid={`radio-${item.value}`}
-          />
-          {props.id}
-        </label>
-      ))
-    )
+registerFormField('container', props => {
+  const { value, mutators, renderField } = props
+  return (
+    <Fragment>
+      {toArr(value).map((item, index) => {
+        return (
+          <div data-testid="item" key={index}>
+            {renderField(index)}
+            <button
+              type="button"
+              onClick={() => {
+                mutators.remove(index)
+              }}
+            >
+              Remove Field
+            </button>
+          </div>
+        )
+      })}
+      <button
+        type="button"
+        onClick={() => {
+          mutators.push()
+        }}
+      >
+        Add Field
+      </button>
+    </Fragment>
   )
+})
 
-  registerFormField('container', props => {
-    const { value, mutators, renderField } = props
-    return (
-      <Fragment>
-        {toArr(value).map((item, index) => {
-          return (
-            <div data-testid='item' key={index}>
-              {renderField(index)}
-              <button
-                type='button'
-                onClick={() => {
-                  mutators.remove(index)
-                }}
-              >
-                Remove Field
-              </button>
-            </div>
-          )
-        })}
-        <button
-          type='button'
-          onClick={() => {
-            mutators.push()
-          }}
-        >
-          Add Field
-        </button>
-      </Fragment>
-    )
-  })
-
-  FormCard = createVirtualBox('card', ({ children }) => {
-    return <div>card content{children}</div>
-  })
+FormCard = createVirtualBox('card', ({ children }) => {
+  return <div>card content{children}</div>
 })
 
 test('dynaimc add field', async () => {
@@ -103,10 +101,10 @@ test('dynaimc add field', async () => {
           )
         }}
       >
-        <Field name='container' type='array' x-component='container'>
-          <Field name='object' type='object'>
-            <Field name='aa' type='string' />
-            <Field name='bb' type='string' />
+        <Field name="container" type="array" x-component="container">
+          <Field name="object" type="object">
+            <Field name="aa" type="string" />
+            <Field name="bb" type="string" />
           </Field>
         </Field>
       </SchemaForm>
@@ -180,10 +178,10 @@ test('dynaimc add field with initialValue', async () => {
           )
         }}
       >
-        <Field name='container' type='array' x-component='container'>
-          <Field name='object' type='object'>
-            <Field name='aa' type='string' />
-            <Field name='bb' type='string' />
+        <Field name="container" type="array" x-component="container">
+          <Field name="object" type="object">
+            <Field name="aa" type="string" />
+            <Field name="bb" type="string" />
           </Field>
         </Field>
       </SchemaForm>
@@ -267,15 +265,15 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
           )
         }}
       >
-        <Field name='container' type='array' x-component='container'>
-          <Field name='object' type='object'>
+        <Field name="container" type="array" x-component="container">
+          <Field name="object" type="object">
             <FormCard>
-              <Field name='aa' type='string' />
-              <Field name='bb' type='string' />
+              <Field name="aa" type="string" />
+              <Field name="bb" type="string" />
             </FormCard>
           </Field>
         </Field>
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </SchemaForm>
     )
   }
@@ -328,15 +326,15 @@ test('dynamic remove field', async () => {
         onSubmit={submitHandler}
         onValidateFailed={validateFaildHandler}
       >
-        <Field name='container' type='array' x-component='container'>
-          <Field name='object' type='object'>
+        <Field name="container" type="array" x-component="container">
+          <Field name="object" type="object">
             <FormCard>
-              <Field name='aa' required type='string' />
-              <Field name='bb' required type='string' />
+              <Field name="aa" required type="string" />
+              <Field name="bb" required type="string" />
             </FormCard>
           </Field>
         </Field>
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </SchemaForm>
     )
   }
@@ -370,19 +368,19 @@ test('dynamic default value', async () => {
     return (
       <SchemaForm>
         <Field
-          name='container'
-          type='array'
+          name="container"
+          type="array"
           default={[{}]}
-          x-component='container'
+          x-component="container"
         >
-          <Field name='object' type='object'>
+          <Field name="object" type="object">
             <FormCard>
-              <Field name='aa' required type='string' />
-              <Field name='bb' required type='string' />
+              <Field name="aa" required type="string" />
+              <Field name="bb" required type="string" />
             </FormCard>
           </Field>
         </Field>
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </SchemaForm>
     )
   }
@@ -425,7 +423,7 @@ test('dynamic async default value', async () => {
     }, [])
     return (
       <SchemaForm initialValues={{}} schema={schema}>
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </SchemaForm>
     )
   }
@@ -468,7 +466,7 @@ test('invalid schema', async () => {
     }, [])
     return (
       <SchemaForm initialValues={{}} schema={schema}>
-        <button type='submit'>Submit</button>
+        <button type="submit">Submit</button>
       </SchemaForm>
     )
   }
@@ -517,7 +515,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
           }}
         >
           <Field
-            type='radio'
+            type="radio"
             enum={[
               {
                 label: 'a1',
@@ -528,10 +526,10 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
                 value: 'a2'
               }
             ]}
-            name='a'
+            name="a"
           />
           <Field
-            type='radio'
+            type="radio"
             enum={[
               {
                 label: 'b1',
@@ -543,9 +541,9 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
               }
             ]}
             required
-            name='b'
+            name="b"
           />
-          <button type='submit'>Submit</button>
+          <button type="submit">Submit</button>
         </SchemaForm>
         <div>valueB-{constState.testB}</div>
         <div>valueC-{constState.testC}</div>

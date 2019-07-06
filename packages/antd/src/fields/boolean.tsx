@@ -1,6 +1,6 @@
+import { Switch } from 'antd'
 import { connect, registerFormField } from '@uform/react'
 import { acceptEnum, mapStyledProps } from '../utils'
-import { Switch } from 'antd'
 
 registerFormField(
   'boolean',

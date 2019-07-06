@@ -25,19 +25,30 @@ import { runValidation, format } from '@uform/validator'
 import { Subject } from 'rxjs/internal/Subject'
 import { filter } from 'rxjs/internal/operators/filter'
 import { FormPath } from './path'
-import { IFormOptions, IFieldOptions, IFieldState, IField, IFormPathMatcher, IFormState, ISchema, Path, IFieldMap, ISubscribers } from '@uform/types'
+import {
+  IFormOptions,
+  IFieldOptions,
+  IFieldState,
+  IField,
+  IFormPathMatcher,
+  IFormState,
+  ISchema,
+  Path,
+  IFieldMap,
+  ISubscribers
+} from '@uform/types'
 
 type Editable = boolean | ((name: string) => boolean)
 
-const defaults = <T>(opts: T): T => ({
-  initialValues: {},
-  onSubmit: (values: any) => { },
-  effects: ($: any) => { },
-  ...opts
-} as T)
+const defaults = <T>(opts: T): T =>
+  ({
+    initialValues: {},
+    onSubmit: (values: any) => {},
+    effects: ($: any) => {},
+    ...opts
+  } as T)
 
 export class Form {
-
   public editable: Editable
 
   private options: IFormOptions
@@ -88,13 +99,11 @@ export class Form {
     this.fieldSize = 0
   }
 
-
   public changeValues(values: any) {
     const lastValues = this.state.values
     const lastDirty = this.state.dirty
     this.state.values = values || {}
-    this.state.dirty =
-      lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
+    this.state.dirty = lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     this.updateFieldsValue()
   }
 
@@ -105,9 +114,10 @@ export class Form {
     })
   }
 
-
-  public setFieldState = (path: Path | IFormPathMatcher, callback?: (() => void)) => {
-    if (this.destructed) { return }
+  public setFieldState = (path: Path | IFormPathMatcher, callback?: () => void) => {
+    if (this.destructed) {
+      return
+    }
     return new Promise(resolve => {
       if (isStr(path) || isArr(path) || isFn(path)) {
         this.updateQueue.push({ path, callback, resolve })
@@ -116,19 +126,25 @@ export class Form {
         this.updateFieldStateFromQueue()
         return resolve()
       } else if (this.updateQueue.length > 0) {
-        if (this.updateRafId !== undefined) { caf(this.updateRafId) }
+        if (this.updateRafId !== undefined) {
+          caf(this.updateRafId)
+        }
         this.updateRafId = raf(() => {
-          if (this.destructed) { return }
+          if (this.destructed) {
+            return
+          }
           this.updateFieldStateFromQueue()
         })
       } else {
         return resolve()
       }
-
     })
   }
 
-  public getFieldState = (path: Path | IFormPathMatcher, callback: (fieldState: IFieldState) => any) => {
+  public getFieldState = (
+    path: Path | IFormPathMatcher,
+    callback: (fieldState: IFieldState) => any
+  ) => {
     let field: IField
     each(this.fields, innerField => {
       if (innerField.match(path)) {
@@ -137,9 +153,8 @@ export class Form {
       }
     })
     if (field) {
-      return isFn(callback)
-        ? callback(field.publishState())
-        : field.publishState()
+      field.syncContextValue()
+      return isFn(callback) ? callback(field.publishState()) : field.publishState()
     }
   }
 
@@ -147,17 +162,19 @@ export class Form {
     return isFn(callback) ? callback(this.publishState()) : this.publishState()
   }
 
-  public setFormState = (reducer: any): Promise<any> => {
+  public setFormState = reducer => {
+    if (this.destructed) {
+      return
+    }
     if (!isFn(reducer)) {
-      return Promise.resolve()
+      return
     }
     const published = this.publishState()
     reducer(published, reducer)
     return Promise.resolve(this.checkState(published))
   }
 
-
-  public registerField(name: string, options: IFieldOptions) {
+  public registerField(name, options) {
     const value = this.getValue(name)
     const initialValue = this.getInitialValue(name, options.path)
     const field = this.fields[name]
@@ -237,7 +254,9 @@ export class Form {
   }
 
   public updateChildrenValue(parent: Field) {
-    if (!parent.path || this.batchUpdateField) { return }
+    if (!parent.path || this.batchUpdateField) {
+      return
+    }
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
         const newValue = this.getValue($name)
@@ -252,7 +271,9 @@ export class Form {
   }
 
   public updateChildrenInitalValue(parent: Field) {
-    if (!parent.path) { return }
+    if (!parent.path) {
+      return
+    }
     each(this.fields, (field, $name) => {
       if (isChildField(field, parent)) {
         const newValue = this.getInitialValue($name)
@@ -288,7 +309,9 @@ export class Form {
           updateList.push(
             new Promise(resolve => {
               raf(() => {
-                if (this.destructed) { return }
+                if (this.destructed) {
+                  return
+                }
                 field.notify()
                 this.triggerEffect('onFieldChange', field.publishState())
                 resolve()
@@ -315,19 +338,34 @@ export class Form {
   }
 
   public updateChildrenVisible(parent: Field, visible?: boolean) {
-    if (!parent.path) { return }
+    if (!parent.path) {
+      return
+    }
     each(this.fields, (field, $name) => {
-      if ($name === parent.name) { return }
+      if ($name === parent.name) {
+        return
+      }
       if (isChildField(field, parent)) {
-        if (!visible) { this.deleteIn($name) }
-        else {
-          const value =
-            field.value !== undefined ? field.value : clone(field.initialValue)
-          if (field.value !== undefined) { this.setIn($name, value) }
+        if (!visible) {
+          this.deleteIn($name)
+        } else {
+          const value = field.value !== undefined ? field.value : clone(field.initialValue)
+          if (field.value !== undefined) {
+            this.setIn($name, value)
+          }
         }
         if (field.visible !== visible) {
-          field.visible = visible
-          field.dirty = true
+          if (visible) {
+            if (field.hiddenFromParent) {
+              field.visible = visible
+              field.hiddenFromParent = false
+              field.dirty = true
+            }
+          } else {
+            field.visible = visible
+            field.hiddenFromParent = true
+            field.dirty = true
+          }
         }
       }
     })
@@ -348,9 +386,7 @@ export class Form {
   }
 
   public getValue(name?: string, copy?: boolean) {
-    return copy
-      ? clone(getIn(this.state.values, name))
-      : getIn(this.state.values, name)
+    return copy ? clone(getIn(this.state.values, name)) : getIn(this.state.values, name)
   }
 
   public deleteIn(name: string) {
@@ -365,13 +401,17 @@ export class Form {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
-      if (isEmpty(value) && isEmpty(initialValue)) { return }
+      if (isEmpty(value) && isEmpty(initialValue)) {
+        return
+      }
       field.updateState(state => {
         state.value = forceClear ? undefined : initialValue
       })
       if (field.dirty) {
         raf(() => {
-          if (this.destructed) { return }
+          if (this.destructed) {
+            return
+          }
           field.notify()
         })
       }
@@ -379,6 +419,9 @@ export class Form {
     this.internalValidate(this.state.values, true).then(() => {
       this.formNotify()
       raf(() => {
+        if (this.destructed) {
+          return
+        }
         const formState = this.publishState()
         this.triggerEffect('onFormReset', formState)
         if (isFn(this.options.onReset)) {
@@ -397,7 +440,9 @@ export class Form {
     if (isFn(this.options.onFieldChange)) {
       this.options.onFieldChange({ formState, fieldState })
     }
-    if (fieldState) { this.triggerEffect('onFieldChange', fieldState) }
+    if (fieldState) {
+      this.triggerEffect('onFieldChange', fieldState)
+    }
     if (this.state.dirty) {
       this.publisher.notify({ formState, fieldState })
     }
@@ -410,6 +455,9 @@ export class Form {
       return new Promise((resolve, reject) => {
         this.formNotify()
         raf(() => {
+          if (this.destructed) {
+            return
+          }
           if (this.state.valid) {
             resolve(this.publishState())
           } else {
@@ -438,7 +486,9 @@ export class Form {
   }
 
   public destructor() {
-    if (this.destructed) { return }
+    if (this.destructed) {
+      return
+    }
     this.destructed = true
     this.publisher.unsubscribe()
     each(this.subscribes, effect => {
@@ -459,15 +509,13 @@ export class Form {
     }
   }
 
-
-  public syncUpdate(fn: (() => void)) {
+  public syncUpdate(fn: () => void) {
     if (isFn(fn)) {
       this.syncUpdateMode = true
       fn()
       this.syncUpdateMode = false
     }
   }
-
 
   public initialize(values = this.state.initialValues) {
     const lastValues = this.state.values
@@ -479,8 +527,7 @@ export class Form {
       pristine: true,
       initialValues: clone(values) || {},
       values: clone(values) || {},
-      dirty:
-        lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
+      dirty: lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     }
     if (this.options.onFormChange && !this.initialized) {
       this.subscribe(this.options.onFormChange)
@@ -500,10 +547,10 @@ export class Form {
             this.subscribes[eventName] = new Subject()
           }
           if (isStr(eventFilter) || isFn(eventFilter)) {
-            const predicate = isStr(eventFilter) ? FormPath.match(eventFilter as string) : (eventFilter as IFormPathMatcher)
-            return this.subscribes[eventName].pipe(
-              filter(predicate)
-            ) as Subject<any>
+            const predicate = isStr(eventFilter)
+              ? FormPath.match(eventFilter as string)
+              : (eventFilter as IFormPathMatcher)
+            return this.subscribes[eventName].pipe(filter(predicate)) as Subject<any>
           }
           return this.subscribes[eventName]
         },
@@ -549,44 +596,55 @@ export class Form {
     const rafIdMap = {}
     each(this.updateQueue, ({ path, callback, resolve }, i) => {
       each(this.fields, field => {
-        if (field.match(path)) {
-          field.updateState(callback)
-          if (this.syncUpdateMode) {
-            field.dirty = false
-          }
-          if (path.hasWildcard) {
-            this.updateBuffer.push(path.string, callback, { path, resolve })
-          }
-          if (field.dirty) {
-            const dirtyType = field.dirtyType
-            field.notify()
-            if (rafIdMap[field.name]) { caf(rafIdMap[field.name]) }
-            rafIdMap[field.name] = raf(() => {
-              if (dirtyType === 'value') {
-                this.internalValidate().then(() => {
-                  this.formNotify(field.publishState())
-                })
-              } else {
-                this.formNotify(field.publishState())
-              }
-            })
-          }
-        } else {
-          failed[i] = failed[i] || 0
-          failed[i]++
-          if (this.fieldSize <= failed[i]) {
-            if (isArr(path)) {
-              this.updateBuffer.push(path.join('.'), callback, { path, resolve })
-            } else if (isStr(path)) {
-              this.updateBuffer.push(path, callback, { path, resolve })
-            } else if (isFn(path) && (path as IFormPathMatcher).pattern) {
+        if (path && (isFn(path) || isArr(path) || isStr(path))) {
+          if (isFn(path) ? path(field) : field.pathEqual(path)) {
+            field.updateState(callback)
+            if (this.syncUpdateMode) {
+              field.dirty = false
+            }
+            if ((path as IFormPathMatcher).hasWildcard) {
               this.updateBuffer.push((path as IFormPathMatcher).pattern, callback, { path, resolve })
+            }
+            if (field.dirty) {
+              const dirtyType = field.dirtyType
+              field.notify()
+              if (rafIdMap[field.name]) {
+                caf(rafIdMap[field.name])
+              }
+              rafIdMap[field.name] = raf(() => {
+                if (this.destructed) {
+                  return
+                }
+                if (dirtyType === 'value') {
+                  this.internalValidate().then(() => {
+                    this.formNotify(field.publishState())
+                  })
+                } else {
+                  this.formNotify(field.publishState())
+                }
+              })
+            }
+          } else {
+            failed[i] = failed[i] || 0
+            failed[i]++
+            if (this.fieldSize <= failed[i]) {
+              if (isArr(path)) {
+                this.updateBuffer.push(path.join('.'), callback, {
+                  path,
+                  resolve
+                })
+              } else if (isStr(path)) {
+                this.updateBuffer.push(path, callback, { path, resolve })
+              } else if (isFn(path) && (path as IFormPathMatcher).pattern) {
+                this.updateBuffer.push((path as IFormPathMatcher).pattern, callback, {
+                  path,
+                  resolve
+                })
+              }
             }
           }
         }
-
       })
-
       if (resolve && isFn(resolve)) {
         resolve()
       }
@@ -597,7 +655,7 @@ export class Form {
   private updateFieldStateFromBuffer(field: IField) {
     const rafIdMap = {}
     this.updateBuffer.forEach(({ path, values, key }) => {
-      if (field.match(path)) {
+      if (isFn(path) ? path(field) : field.pathEqual(path)) {
         values.forEach(callback => field.updateState(callback))
         if (this.syncUpdateMode) {
           field.dirty = false
@@ -605,8 +663,13 @@ export class Form {
         if (field.dirty) {
           const dirtyType = field.dirtyType
           field.notify()
-          if (rafIdMap[field.name]) { caf(rafIdMap[field.name]) }
+          if (rafIdMap[field.name]) {
+            caf(rafIdMap[field.name])
+          }
           rafIdMap[field.name] = raf(() => {
+            if (this.destructed) {
+              return
+            }
             if (dirtyType === 'value') {
               this.internalValidate().then(() => {
                 this.formNotify(field.publishState())
@@ -624,23 +687,28 @@ export class Form {
   }
 
   private internalValidate(values: any = this.state.values, forceUpdate?: boolean) {
-    if (this.destructed) { return }
+    if (this.destructed) {
+      return
+    }
     return new Promise(resolve => {
-      if (this.rafValidateId) { caf(this.rafValidateId) }
+      if (this.rafValidateId) {
+        caf(this.rafValidateId)
+      }
       this.rafValidateId = raf(() => {
-        if (this.destructed) { return resolve() }
-        return runValidation(
-          values || this.state.values,
-          this.fields,
-          forceUpdate
-        )
+        if (this.destructed) {
+          return resolve()
+        }
+        return runValidation(values || this.state.values, this.fields, forceUpdate)
           .then(response => {
             const lastValid = this.state.valid
             const newErrors = reduce(
               response,
               (buf, { name, errors }) => {
-                if (!errors.length) { return buf }
-                return buf.concat({ name, errors })
+                if (!errors.length) {
+                  return buf
+                } else {
+                  return buf.concat({ name, errors })
+                }
               },
               []
             )

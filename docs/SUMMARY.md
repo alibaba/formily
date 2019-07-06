@@ -3,6 +3,7 @@
    - [UForm 原理](./Tutorials/UForm原理.md)
    - [快速入门](./Tutorials/快速入门.md)
    - [Form Schema 扩展规范](./Tutorials/FormSchema扩展规范.md)
+   - [常见问题](./Tutorials/Questions.md)
 - API 文档
    - @uform/next or antd
      - [<SchemaForm/>](./API/SchemaForm.md)
@@ -14,6 +15,7 @@
      - [<FormBlock/>](./API/FormBlock.md)
      - [<FormItemGrid/>](./API/FormItemGrid.md)
      - [<FormSlot/>](./API/FormSlot.md)
+     - [<FormTextBox/>](./API/FormTextBox.md)
    - @uform/react
      - [<SchemaForm/>](./API/SchemaForm_React.md)
      - [<Field/>](./API/Field_React.md)

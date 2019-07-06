@@ -4,7 +4,7 @@
     "esModuleInterop": true,
     "jsx": "react",
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "allowJs": false,
     "noUnusedLocals": true,
     "removeComments": true,

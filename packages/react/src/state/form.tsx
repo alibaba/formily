@@ -76,7 +76,9 @@ export const StateForm = createHOC((options, Form) => {
     public onFormChangeHandler(props) {
       let lastState = this.state
       return ({ formState }) => {
-        if (this.unmounted) { return }
+        if (this.unmounted) {
+          return
+        }
         if (lastState && lastState.pristine !== formState.pristine) {
           if (lastState.pristine) {
             this.notify({
@@ -98,6 +100,9 @@ export const StateForm = createHOC((options, Form) => {
             clearTimeout(this.timerId)
             this.timerId = window.setTimeout(() => {
               clearTimeout(this.timerId)
+              if (this.unmounted) {
+                return
+              }
               this.setState(formState)
             }, 60)
           }
@@ -191,7 +196,11 @@ export const StateForm = createHOC((options, Form) => {
     public componentDidMount() {
       this.unmounted = false
       this.form.triggerEffect('onFormMount', this.form.publishState())
+
       this.unsubscribe = this.props.broadcast.subscribe(({ type, name, payload }) => {
+        if (this.unmounted) {
+          return
+        }
         if (type === 'submit') {
           this.submit()
         } else if (type === 'reset') {

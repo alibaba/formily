@@ -9,10 +9,12 @@ export interface IField {
   dirty: boolean
   invalid: boolean
   visible: boolean
+  hiddenFromParent: boolean
   required: boolean
   editable: boolean
   loading: boolean
   errors: string[]
+  effectErrors: string[]
   pristine: boolean
   initialValue: any
   name: string
@@ -29,6 +31,8 @@ export interface IField {
   onChange: (fn: () => void) => void
   updateState: (fn: (state: IFieldState) => void) => void
   destructor: () => void
+  syncContextValue: () => void
+  pathEqual: (path: Path | IFormPathMatcher) => boolean
 }
 
 export interface IFieldOptions {
