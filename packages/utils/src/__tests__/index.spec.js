@@ -31,6 +31,33 @@ test('test setIn auto create array', () => {
   ).toBeTruthy()
 })
 
+test('test setIn dose not affect other items', () => {
+  const value = {
+    aa: [
+      {
+        dd: [
+          {
+            ee: '是'
+          }
+        ],
+        cc: '1111'
+      }
+    ]
+  }
+
+  setIn(value, 'aa.1.dd.0.ee', '否')
+  expect(
+    isEqual(value.aa[0], {
+      dd: [
+        {
+          ee: '是'
+        }
+      ],
+      cc: '1111'
+    })
+  ).toBeTruthy()
+})
+
 test('destruct getIn', () => {
   // getIn 通过解构表达式从扁平数据转为复合嵌套数据
   const value = { a: { b: { c: 2, d: 333 } } }

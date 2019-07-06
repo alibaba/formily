@@ -575,3 +575,53 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   // onSubmit
   expect(queryAllByText('valueD-456').length).toBe(1)
 })
+
+test('dynamic remove field and relationship needs to be retained', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        initialValues={{
+          container: [{ bb: '123' }, { bb: '123' }]
+        }}
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'bb').subscribe(({ value }) => {
+            setFieldState('aa', state => {
+              state.visible = value === '123'
+            })
+          })
+        }}
+      >
+        <Field name="container" type="array" x-component="container">
+          <Field name="object" type="object">
+            <FormCard>
+              <Field name="aa" required type="string" />
+              <Field name="bb" required type="string" />
+            </FormCard>
+          </Field>
+        </Field>
+        <button type="submit">Submit</button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryAllByTestId, queryByText, queryAllByText } = render(
+    <TestComponent />
+  )
+  expect(queryAllByTestId('input').length).toBe(4)
+  let removes
+  await sleep(33)
+  removes = queryAllByText('Remove Field')
+  fireEvent.click(removes[removes.length - 1])
+  await sleep(33)
+  removes = queryAllByText('Remove Field')
+  fireEvent.click(removes[removes.length - 1])
+  await sleep(33)
+  expect(queryAllByTestId('input').length).toBe(0)
+  await sleep(33)
+  fireEvent.click(queryByText('Add Field'))
+  await sleep(33)
+  fireEvent.click(queryByText('Add Field'))
+  expect(queryAllByTestId('input').length).toBe(4)
+  expect(queryAllByTestId('input')[1].value).toBe('123')
+  expect(queryAllByTestId('input')[3].value).toBe('123')
+})
