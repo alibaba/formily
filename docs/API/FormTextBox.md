@@ -15,10 +15,10 @@ import { FormTextBox } from '@uform/next(antd)'
 
 | 属性名称 | 属性描述 | 属性类型 | 默认值 |
 | ---- | ---- | ---- | --- |
-| text | 字符串文本，以%s来代表字段的位置，同时这种方式对国际化也比较友好 | string | '' |
-| description | 描述文案 | string/JSX |  |
-| gutter | 间距 | number | 10 |
-| title | 标题 | string/JSX |  |
+| text | 字符串文本，以%s来代表字段的位置，同时这种方式对国际化也比较友好 | `string` | '' |
+| description | 描述文案 | `string|JSX.Element|null` |  |
+| gutter | 间距 | `number` | 10 |
+| title | 标题 | `string|JSX.Element|null` |  |
 
 ## 用例
 
