@@ -3,10 +3,11 @@ import {
   setLocale as setValidationLocale,
   setLanguage as setValidationLanguage
 } from '@uform/validator'
-import { caculateSchemaInitialValues, isFn, each } from './utils'
+import { caculateSchemaInitialValues, isFn, each, isEmpty } from './utils'
 export * from './path'
 export const createForm = ({
   initialValues,
+  values,
   onSubmit,
   onReset,
   schema,
@@ -19,15 +20,26 @@ export const createForm = ({
   onValidateFailed
 }) => {
   let fields = []
-  initialValues = caculateSchemaInitialValues(
-    schema,
-    initialValues,
-    ({ name, path, schemaPath }, schema, value) => {
-      fields.push({ name, path, schemaPath, schema, value })
-    }
-  )
+  if (isEmpty(values)) {
+    initialValues = caculateSchemaInitialValues(
+      schema,
+      initialValues,
+      ({ name, path, schemaPath }, schema, value) => {
+        fields.push({ name, path, schemaPath, schema, value })
+      }
+    )
+  } else {
+    values = caculateSchemaInitialValues(
+      schema,
+      values,
+      ({ name, path, schemaPath }, schema, value) => {
+        fields.push({ name, path, schemaPath, schema, value })
+      }
+    )
+  }
   const form = new Form({
     initialValues,
+    values,
     onSubmit,
     onReset,
     subscribes,

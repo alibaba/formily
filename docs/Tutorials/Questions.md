@@ -43,7 +43,7 @@ json-schema作为数据描述语言，它并不属于逻辑描述语言，所以
 
 ## 8. value和initialValues和defaultValue的差别是什么？
 
-value和initialValues的差别核心在于：重复给initialValues传值不会触发校验，因为是初始态同步
+value和initialValues的差别核心在于：重复给initialValues传值不会触发校验，因为是初始态同步,同时initialValues同步值之后，调用reset方法是会恢复至initialValues的值，如果是用value的话，那么调用reset，value的值会被抛弃
 
 defaultValue和initialValues的差别核心在于：defaultValue传值只能一次生效，initialValues传值可以多次生效
 

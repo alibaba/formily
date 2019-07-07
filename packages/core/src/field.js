@@ -65,10 +65,18 @@ export class Field {
     }
 
     if (!this.initialized) {
+      // sync default value in initialization
       if (isEmpty(this.value) && !isEmpty(this.initialValue)) {
         this.value = clone(this.initialValue)
         this.context.setIn(this.name, this.value)
-        this.context.setInitialValueIn(this.name, this.initialValue)
+      }
+    } else {
+      // sync default value in rereneder after removed
+      if (this.removed && !this.shownFromParent) {
+        if (!isEmpty(this.initialValue)) {
+          this.value = clone(this.initialValue)
+          this.context.setIn(this.name, this.value)
+        }
       }
     }
 

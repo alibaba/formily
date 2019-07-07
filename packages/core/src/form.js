@@ -28,6 +28,7 @@ import { FormPath } from './path'
 
 const defaults = opts => ({
   initialValues: {},
+  values: {},
   onSubmit: values => {},
   effects: $ => {},
   ...opts
@@ -45,25 +46,36 @@ export class Form {
     this.updateBuffer = new BufferList()
     this.editable = opts.editable
     this.schema = opts.schema || {}
-    this.initialize(this.options.initialValues)
+    this.initialize({
+      values: this.options.values,
+      initialValues: this.options.initialValues
+    })
     this.initializeEffects()
     this.initialized = true
     this.destructed = false
     this.fieldSize = 0
   }
 
-  initialize(values = this.state.initialValues) {
+  initialize({
+    initialValues = this.state.initialValues,
+    values = this.state.values
+  }) {
     const lastValues = this.state.values
     const lastDirty = this.state.dirty
+    const currentInitialValues = clone(initialValues) || {}
+    const currentValues = isEmpty(values)
+      ? clone(currentInitialValues)
+      : clone(values) || {}
     this.state = {
       valid: true,
       invalid: false,
       errors: [],
       pristine: true,
-      initialValues: clone(values) || {},
-      values: clone(values) || {},
+      initialValues: currentInitialValues,
+      values: currentValues,
       dirty:
-        lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
+        lastDirty ||
+        (this.initialized ? !isEqual(currentValues, lastValues) : false)
     }
     if (this.options.onFormChange && !this.initialized) {
       this.subscribe(this.options.onFormChange)
@@ -341,7 +353,7 @@ export class Form {
       field.initialize({
         path: options.path,
         onChange: options.onChange,
-        value: !isEmpty(value) ? value : initialValue,
+        value,
         initialValue: initialValue
       })
       this.asyncUpdate(() => {
@@ -350,7 +362,7 @@ export class Form {
     } else {
       this.fields[name] = new Field(this, {
         name,
-        value: !isEmpty(value) ? value : initialValue,
+        value,
         path: options.path,
         initialValue: initialValue,
         props: options.props
@@ -505,11 +517,13 @@ export class Form {
             if (field.hiddenFromParent) {
               field.visible = visible
               field.hiddenFromParent = false
+              field.shownFromParent = true
               field.dirty = true
             }
           } else {
             field.visible = visible
             field.hiddenFromParent = true
+            field.shownFromParent = false
             field.dirty = true
           }
         }
