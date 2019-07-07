@@ -83,7 +83,7 @@ ReactDOM.render(
        $("onFormMount").subscribe((formState)=>{})
        $("onFormReset").subscribe((formState)=>{})
        $("onFormSubmit").subscribe((formState)=>{})
-       $("onXXX").subscribe((xxx)=>{}) //自定义事件，主要通过dispatch函数来触发，后面都会提到哪里可以使用dispatch，比如Field组件的x-effect属性，FormConsumer里，FieldRenderProps里
+       $("onXXX").subscribe((xxx)=>{}) //自定义事件，主要通过dispatch函数来触发，后面都会提到哪里可以使用dispatch，比如Field组件的x-effect属性，FormConsumer里，IFieldProps里
     }}
 />
 ```

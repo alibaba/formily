@@ -49,6 +49,7 @@ import {createForm} from '@uform/core'
 | ---------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------- | ------ |
 | effects          | 副作用处理函数                                                                    | `Effects`                       |        |
 | initialValues    | 初始值                                                                            | `any`                                                    |        |
+| values | 表单数据 | `any`| | |
 | schema           | json schema对象，用于搜索json schema中的default属性值，同时merge至initialValues中 | `ISchema`                                                    |        |
 | subscribes       | 观察者对象                                                                        | `{ [eventName: string]: Observable<any> }`                         |        |
 | onFieldChange    | FieldChange事件处理器                                                             | `(payload: IFieldPayload) => void` |        |

@@ -93,7 +93,7 @@ type Rule = Validator  | DefaultPatternRule | IRuleDescription
 
 ## x-render详解
 
-上面API List中可以看到x-render函数会接收FieldRenderProps类型的参数，下面是它的具体描述
+上面API List中可以看到x-render函数会接收IFieldProps类型的参数，下面是它的具体描述
 
 ```typescript
 interface IFieldProps<V = any> {
