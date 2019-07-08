@@ -20,6 +20,7 @@ import SchemaForm from '@uform/react'
 | ---- | ---- | ---- | --- |
 | actions | 需要握手的表单actions，只接收通过[createFormActions](#/97UlUl/XEFAF7HoHV)/[createAsyncFormActions](#/97UlUl/leFLFGHMHK)创建出来的actions | `FormActions|AsyncFormActions` |  |
 | defaultValue | 表单默认值 | `any` |  |
+| value | 表单值 | `any` | |
 | editable | 控制表单字段是否可编辑状态 | `boolean|(name: string) => boolean` |  |
 | effects | 副作用处理函数 | `Effects` |  |
 | initialValues | 表单值，受控态使用 | `any` | {} |

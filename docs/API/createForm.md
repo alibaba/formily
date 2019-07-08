@@ -13,7 +13,7 @@
 interface CreateForm = {
   editable        : boolean | ((name: string) => boolean)
   effects         : Effects
-  defaultValue?   : any
+  values?         : any
   initialValues?  : any
   schema          : ISchema
   subscribes      : { [eventName: string]: Observable<any> }
