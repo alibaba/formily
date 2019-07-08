@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect, useRef } from 'react'
 import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Row, Col } from '@alifd/next/lib/grid'
@@ -184,6 +184,97 @@ export const FormBlock = createVirtualBox(
       border: none;
       padding: 0 15px;
       padding-bottom: 15px;
+    }
+  `
+)
+
+export const FormTextBox = createVirtualBox(
+  'text-box',
+  styled(
+    ({
+      title,
+      description,
+      help,
+      gutter,
+      className,
+      text,
+      name,
+      extra,
+      children,
+      ...props
+    }) => {
+      const ref = useRef()
+      const arrChildren = toArr(children)
+      const split = text.split('%s')
+      let index = 0
+      useEffect(() => {
+        if (ref.current) {
+          const eles = ref.current.querySelectorAll('.text-box-field')
+          eles.forEach(el => {
+            const ctrl = el.querySelector(
+              '.next-form-item-control>*:not(.next-form-item-space)'
+            )
+            if (ctrl) {
+              el.style.width = getComputedStyle(ctrl).width
+            }
+          })
+        }
+      }, [])
+      const newChildren = split.reduce((buf, item, key) => {
+        return buf.concat(
+          <span key={index++} className='text-box-words'>
+            {item}
+          </span>,
+          <div key={index++} className='text-box-field'>
+            {arrChildren[key]}
+          </div>
+        )
+      }, [])
+
+      if (!title) return <div className={className} ref={ref}>{newChildren}</div>
+
+      return React.createElement(
+        FormConsumer,
+        {},
+        ({
+          labelAlign,
+          labelTextAlign,
+          labelCol,
+          wrapperCol,
+          size,
+          autoAddColon
+        }) => {
+          return React.createElement(
+            FormItem,
+            {
+              labelAlign,
+              labelTextAlign,
+              labelCol,
+              wrapperCol,
+              autoAddColon,
+              size,
+              ...props,
+              label: title,
+              noMinHeight: true,
+              id: name,
+              extra: description,
+              help
+            },
+            <div className={className} ref={ref}>{newChildren}</div>
+          )
+        }
+      )
+    }
+  )`
+    display:flex;
+    .text-box-words {
+      font-size: 12px;
+      line-height: 28px;
+      color: #333;
+    }
+    .text-box-field {
+      display: inline-block;
+      margin: 0 ${props => props.gutter || 10}px;
     }
   `
 )

@@ -88,11 +88,11 @@ const cleanSchema = schema => {
     enum: schema.enum,
     title: schema.title,
     required: schema.required,
-
     properties: Object.keys(schema.properties || {}).reduce((buf, key) => {
+      buf = buf || {}
       buf[key] = cleanSchema(schema.properties[key])
       return buf
-    }, {}),
+    }, undefined),
     items: cleanSchema(schema.items)
   }
 }

@@ -11,7 +11,7 @@ const Table = styled(
   class Table extends Component {
     renderCell({ record, col, rowIndex, colIndex }) {
       return (
-        <div className='next-table-cell-wrapper'>
+        <div className="next-table-cell-wrapper">
           {isFn(col.cell)
             ? col.cell(
               record ? record[col.dataIndex] : undefined,
@@ -27,19 +27,18 @@ const Table = styled(
 
     renderTable(columns, dataSource) {
       return (
-        <div className='next-table-body'>
+        <div className="next-table-body">
           <table>
-            <colgroup>
-              {columns.map((col, index) => {
-                return <col key={index} style={{ width: col.width }} />
-              })}
-            </colgroup>
             <thead>
               <tr>
                 {columns.map((col, index) => {
                   return (
-                    <th key={index} className='next-table-header-node'>
-                      <div className='next-table-cell-wrapper'>{col.title}</div>
+                    <th
+                      key={index}
+                      className="next-table-header-node"
+                      style={{ minWidth: col.width }}
+                    >
+                      <div className="next-table-cell-wrapper">{col.title}</div>
                     </th>
                   )
                 })}
@@ -48,10 +47,10 @@ const Table = styled(
             <tbody>
               {dataSource.map((record, rowIndex) => {
                 return (
-                  <tr key={rowIndex} className='next-table-row'>
+                  <tr key={rowIndex} className="next-table-row">
                     {columns.map((col, colIndex) => {
                       return (
-                        <td key={colIndex} className='next-table-cell'>
+                        <td key={colIndex} className="next-table-cell">
                           {this.renderCell({
                             record,
                             col,
@@ -74,11 +73,11 @@ const Table = styled(
     renderPlacehodler(dataSource, columns) {
       if (dataSource.length === 0) {
         return (
-          <tr className='next-table-row'>
-            <td className='next-table-cell' colSpan={columns.length}>
-              <div className='next-table-empty' style={{ padding: 10 }}>
+          <tr className="next-table-row">
+            <td className="next-table-cell" colSpan={columns.length}>
+              <div className="next-table-empty" style={{ padding: 10 }}>
                 <img
-                  src='//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
+                  src="//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg"
                   style={{ height: 60 }}
                 />
               </div>
@@ -109,8 +108,8 @@ const Table = styled(
       const dataSource = toArr(this.props.dataSource)
       return (
         <div className={this.props.className}>
-          <div className='next-table zebra'>
-            <div className='next-table-inner'>
+          <div className="next-table zebra">
+            <div className="next-table-inner">
               {this.renderTable(columns, dataSource)}
             </div>
           </div>
@@ -255,11 +254,12 @@ registerFormField(
           renderField,
           getOrderProperties
         } = this.props
-        const style = schema['x-props'] && schema['x-props'].style
-        const additionFilter = this.createFilter('addition', schema)
+        const cls = this.getProps('className')
+        const style = this.getProps('style')
+        const operationsWidth = this.getProps('operationsWidth')
         return (
           <div
-            className={className}
+            className={`${className} ${cls}`}
             style={style}
             onClick={this.onClearErrorHandler()}
           >
@@ -290,25 +290,22 @@ registerFormField(
                   },
                   []
                 )}
-                {additionFilter(() => {
-                  return (
-                    <Column
-                      key='operations'
-                      title={locale.operations}
-                      dataIndex='operations'
-                      width={180}
-                      cell={(item, index) => {
-                        return (
-                          <div className='array-item-operator'>
-                            {this.renderRemove(index, item)}
-                            {this.renderMoveDown(index, item)}
-                            {this.renderMoveUp(index, item)}
-                          </div>
-                        )
-                      }}
-                    />
-                  )
-                })}
+                <Column
+                  key="operations"
+                  title={locale.operations}
+                  dataIndex="operations"
+                  width={operationsWidth}
+                  cell={(item, index) => {
+                    return (
+                      <div className="array-item-operator">
+                        {this.renderRemove(index, item)}
+                        {this.renderMoveDown(index, item)}
+                        {this.renderMoveUp(index, item)}
+                        {this.renderExtraOperations(index, item)}
+                      </div>
+                    )
+                  }}
+                />
               </Table>
               {this.renderAddition()}
             </div>

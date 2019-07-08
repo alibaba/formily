@@ -23,7 +23,7 @@ type createForm({
 ## 依赖
 
 ```javascript
-import {createForm} from '@alife/uform'
+import {createForm} from '@uform/core'
 ```
 
 ## API

@@ -5,7 +5,9 @@ import { ConfigProvider, Balloon, Icon } from '@alifd/next'
 import { Row, Col } from '@alifd/next/lib/grid'
 import LOCALE from './locale'
 import styled from 'styled-components'
-import { isFn, moveTo } from './utils'
+import { isFn, moveTo, isStr } from './utils'
+import stringLength from 'string-length'
+
 /**
  * 轻量级Next Form，不包含任何数据管理能力
  *
@@ -28,6 +30,14 @@ const getParentNode = (node, selector) => {
   }
 }
 
+const isPopDescription = (description, maxTipsNum = 30) => {
+  if (isStr(description)) {
+    return stringLength(description) > maxTipsNum
+  } else {
+    return React.isValidElement(description)
+  }
+}
+
 export const FormItem = styled(
   class FormItem extends React.Component {
     static defaultProps = {
@@ -46,7 +56,8 @@ export const FormItem = styled(
         labelAlign,
         labelTextAlign,
         autoAddColon,
-        isTableColItem
+        isTableColItem,
+        maxTipsNum
       } = this.props
 
       if (!label || isTableColItem) {
@@ -54,7 +65,7 @@ export const FormItem = styled(
       }
 
       const ele = (
-        <label htmlFor={id} required={required} key='label'>
+        <label htmlFor={id} required={required} key="label">
           {label}
           {label === ' ' ? '' : autoAddColon ? '：' : ''}
         </label>
@@ -69,8 +80,7 @@ export const FormItem = styled(
         return (
           <Col {...normalizeCol(labelCol)} className={cls}>
             {ele}
-            {((extra && extra.length > 20) || React.isValidElement(extra)) &&
-              this.renderHelper()}
+            {isPopDescription(extra, maxTipsNum) && this.renderHelper()}
           </Col>
         )
       }
@@ -78,8 +88,7 @@ export const FormItem = styled(
       return (
         <div className={cls}>
           {ele}
-          {((extra && extra.length > 20) || React.isValidElement(extra)) &&
-            this.renderHelper()}
+          {isPopDescription(extra, maxTipsNum) && this.renderHelper()}
         </div>
       )
     }
@@ -96,7 +105,8 @@ export const FormItem = styled(
         size,
         prefix,
         noMinHeight,
-        isTableColItem
+        isTableColItem,
+        maxTipsNum
       } = this.props
 
       const message = (
@@ -106,7 +116,7 @@ export const FormItem = styled(
           }`}
         >
           {help && <div className={`${prefix}form-item-help`}>{help}</div>}
-          {!help && extra && extra.length <= 20 && (
+          {!help && !isPopDescription(extra, maxTipsNum) && (
             <div className={`${prefix}form-item-extra`}>{extra}</div>
           )}
         </div>
@@ -121,7 +131,7 @@ export const FormItem = styled(
           <Col
             {...normalizeCol(wrapperCol)}
             className={`${prefix}form-item-control`}
-            key='item'
+            key="item"
           >
             {React.cloneElement(children, { size })}
             {message}
@@ -141,8 +151,8 @@ export const FormItem = styled(
       return (
         <Balloon
           closable={false}
-          align='t'
-          trigger={<Icon type='help' size='small' />}
+          align="t"
+          trigger={<Icon type="help" size="small" />}
         >
           {this.props.extra}
         </Balloon>
@@ -166,6 +176,7 @@ export const FormItem = styled(
         validateState,
         autoAddColon,
         required,
+        maxTipsNum,
         type,
         schema,
         ...others
@@ -310,6 +321,7 @@ registerFormWrapper(OriginForm => {
           errorScrollToElement,
           style,
           prefix,
+          maxTipsNum,
           ...others
         } = this.props
         const formClassName = classNames({
@@ -325,6 +337,7 @@ registerFormWrapper(OriginForm => {
               labelTextAlign,
               labelCol,
               wrapperCol,
+              maxTipsNum,
               inline,
               size,
               autoAddColon,
@@ -356,7 +369,16 @@ const isTableColItem = (path, getSchema) => {
 
 registerFieldMiddleware(Field => {
   return props => {
-    const { name, editable, errors, path, schema, getSchema, required } = props
+    const {
+      name,
+      editable,
+      errors,
+      path,
+      schemaPath,
+      schema,
+      getSchema,
+      required
+    } = props
     if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
     return React.createElement(
       FormConsumer,
@@ -366,6 +388,7 @@ registerFieldMiddleware(Field => {
         labelTextAlign,
         labelCol,
         wrapperCol,
+        maxTipsNum,
         size,
         autoAddColon
       }) => {
@@ -377,12 +400,13 @@ registerFieldMiddleware(Field => {
             labelCol,
             wrapperCol,
             autoAddColon,
+            maxTipsNum,
             size,
             ...schema['x-item-props'],
             label: schema.title,
             noMinHeight: schema.type === 'object' && !schema['x-component'],
             isTableColItem: isTableColItem(
-              path.slice(0, path.length - 2),
+              schemaPath.slice(0, schemaPath.length - 2),
               getSchema
             ),
             type: schema['x-component'] || schema['type'],

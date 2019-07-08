@@ -4,56 +4,55 @@ import SchemaForm, {
   registerFormField,
   connect,
   registerFieldMiddleware,
-  createFormActions
+  createFormActions,
+  FormPath
 } from '../index'
-import { render, act } from 'react-testing-library'
+import { render, act, fireEvent } from '@testing-library/react'
 import { toArr } from '@uform/utils'
 
-beforeEach(() => {
-  registerFieldMiddleware(Field => {
-    return props => {
-      if (typeof props.editable === 'boolean' && props.name !== '') {
-        if (!props.editable) return <div>empty</div>
-      }
-      return (
-        <div>
-          {props.schema.title}
-          <Field {...props} />
-          {props.errors && props.errors.length ? (
-            <div data-testid={`test-errors`}>{props.errors}</div>
-          ) : (
-            ''
-          )}
-        </div>
-      )
+registerFieldMiddleware(Field => {
+  return props => {
+    if (typeof props.editable === 'boolean' && props.name !== '') {
+      if (!props.editable) return <div>empty</div>
     }
-  })
-  registerFormField(
-    'string',
-    connect()(props => <input {...props} value={props.value || ''} />)
-  )
-  registerFormField('array', props => {
-    const { value, mutators, renderField } = props
     return (
-      <Fragment>
-        {toArr(value).map((item, index) => {
-          return (
-            <div data-testid='item' key={index}>
-              {renderField(index)}
-            </div>
-          )
-        })}
-        <button
-          type='button'
-          onClick={() => {
-            mutators.push()
-          }}
-        >
-          Add Field
-        </button>
-      </Fragment>
+      <div>
+        {props.schema.title}
+        <Field {...props} />
+        {props.errors && props.errors.length ? (
+          <div data-testid={`test-errors`}>{props.errors}</div>
+        ) : (
+          ''
+        )}
+      </div>
     )
-  })
+  }
+})
+registerFormField(
+  'string',
+  connect()(props => <input {...props} value={props.value || ''} />)
+)
+registerFormField('array', props => {
+  const { value, mutators, renderField } = props
+  return (
+    <Fragment>
+      {toArr(value).map((item, index) => {
+        return (
+          <div data-testid="item" key={index}>
+            {renderField(index)}
+          </div>
+        )
+      })}
+      <button
+        type="button"
+        onClick={() => {
+          mutators.push()
+        }}
+      >
+        Add Field
+      </button>
+    </Fragment>
+  )
 })
 
 test('update editable by setFieldState', async () => {
@@ -76,8 +75,8 @@ test('update editable by setFieldState', async () => {
         })
       }}
     >
-      <Field name='aaa' type='string' />
-      <button type='submit' data-testid='btn'>
+      <Field name="aaa" type="string" />
+      <button type="submit" data-testid="btn">
         Submit
       </button>
     </SchemaForm>
@@ -111,8 +110,8 @@ test('update editable by setFieldState with initalState is not editable', async 
         })
       }}
     >
-      <Field name='aaa' type='string' />
-      <button type='submit' data-testid='btn'>
+      <Field name="aaa" type="string" />
+      <button type="submit" data-testid="btn">
         Submit
       </button>
     </SchemaForm>
@@ -137,7 +136,7 @@ test('update editable in controlled', async () => {
     updateEditable = _updateEditable
     return (
       <SchemaForm editable={editable}>
-        <Field name='aaa' type='string' title='text' />
+        <Field name="aaa" type="string" title="text" />
       </SchemaForm>
     )
   }
@@ -159,10 +158,10 @@ test('editable with x-props', async () => {
     return (
       <SchemaForm actions={actions}>
         <Field
-          name='aaa'
+          name="aaa"
           x-props={{ editable: false }}
-          type='string'
-          title='text'
+          type="string"
+          title="text"
         />
       </SchemaForm>
     )
@@ -186,13 +185,13 @@ test('editable with x-props in array field', async () => {
         defaultValue={{ array: [{ aa: '123123' }] }}
         actions={actions}
       >
-        <Field type='array' name='array'>
-          <Field type='object'>
+        <Field type="array" name="array">
+          <Field type="object">
             <Field
-              name='aa'
+              name="aa"
               x-props={{ editable: false }}
-              type='string'
-              title='text'
+              type="string"
+              title="text"
             />
           </Field>
         </Field>
@@ -219,13 +218,13 @@ test('editable with x-props is affected by global editable', async () => {
         defaultValue={{ array: [{ aa: '123123' }] }}
         actions={actions}
       >
-        <Field type='array' name='array' x-props={{ editable: true }}>
-          <Field type='object' x-props={{ editable: true }}>
+        <Field type="array" name="array" x-props={{ editable: true }}>
+          <Field type="object" x-props={{ editable: true }}>
             <Field
-              name='aa'
+              name="aa"
               x-props={{ editable: true }}
-              type='string'
-              title='text'
+              type="string"
+              title="text"
             />
           </Field>
         </Field>
@@ -241,4 +240,138 @@ test('editable with x-props is affected by global editable', async () => {
   })
   await sleep(100)
   expect(queryByText('empty')).toBeVisible()
+})
+
+test('editable conflicts that global editable props with setFieldState', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        editable={FormPath.match('*(!bbb)')}
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'ccc').subscribe(() => {
+            setFieldState('bbb', state => {
+              state.editable = true
+            })
+          })
+        }}
+      >
+        <Field
+          type="string"
+          name="aaa"
+          x-props={{ 'data-testid': 'this is aaa' }}
+        />
+        <Field
+          type="string"
+          name="bbb"
+          x-props={{ 'data-testid': 'this is bbb' }}
+        />
+        <Field
+          type="string"
+          name="ccc"
+          x-props={{ 'data-testid': 'this is ccc' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+})
+
+test('editable conflicts that props editable props with setFieldState', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'ccc').subscribe(() => {
+            setFieldState('bbb', state => {
+              state.editable = true
+            })
+          })
+        }}
+      >
+        <Field
+          type="string"
+          name="aaa"
+          x-props={{ 'data-testid': 'this is aaa' }}
+        />
+        <Field
+          type="string"
+          name="bbb"
+          editable={false}
+          x-props={{ 'data-testid': 'this is bbb' }}
+        />
+        <Field
+          type="string"
+          name="ccc"
+          x-props={{ 'data-testid': 'this is ccc' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+})
+
+test('editable conflicts that x-props editable props with setFieldState', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'ccc').subscribe(() => {
+            setFieldState('bbb', state => {
+              state.editable = true
+            })
+          })
+        }}
+      >
+        <Field
+          type="string"
+          name="aaa"
+          x-props={{ 'data-testid': 'this is aaa' }}
+        />
+        <Field
+          type="string"
+          name="bbb"
+          x-props={{ 'data-testid': 'this is bbb', editable: false }}
+        />
+        <Field
+          type="string"
+          name="ccc"
+          x-props={{ 'data-testid': 'this is ccc' }}
+        />
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
+  await sleep(100)
+  expect(queryByTestId('this is bbb')).toBeVisible()
 })

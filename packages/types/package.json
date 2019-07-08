@@ -1,0 +1,29 @@
+{
+  "name": "@uform/types",
+  "version": "0.2.3",
+  "license": "MIT",
+  "main": "lib",
+  "types":"lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/uform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/uform/issues"
+  },
+  "homepage": "https://github.com/alibaba/uform#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "peerDependencies": {
+    "@babel/runtime": "^7.4.4",
+    "rxjs": "^6.3.3"
+  },
+  "dependencies": {
+    "rxjs": "^6.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
+}
