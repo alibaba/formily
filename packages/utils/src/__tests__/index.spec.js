@@ -1,7 +1,7 @@
 import { getIn, setIn, getPathSegments } from '../accessor'
 import { Broadcast } from '../broadcast'
 import { isEqual } from '../compare'
-import { toArr } from '../array'
+import { toArr, every, some, findIndex, find, includes } from '../array'
 import { clone } from '../clone'
 import { caculateSchemaInitialValues } from '../schema'
 
@@ -214,4 +214,55 @@ test('caculateSchemaInitialValues', () => {
 
 test('getPathSegments', () => {
   expect(isEqual(getPathSegments(0), [0])).toBeTruthy()
+})
+
+test('some', () => {
+  const values1 = [1, 2, 3, 4, 5]
+  const values2 = []
+  const values3 = { a: 1, b: 2, c: 3 }
+  const values4 = {}
+  expect(some(values1, item => item === 3)).toBeTruthy()
+  expect(some(values1, item => item === 6)).toBeFalsy()
+  expect(some(values2, () => true)).toBeFalsy()
+  expect(some(values2, () => false)).toBeFalsy()
+  expect(some(values3, item => item === 3)).toBeTruthy()
+  expect(some(values3, item => item === 6)).toBeFalsy()
+  expect(some(values4, () => true)).toBeFalsy()
+  expect(some(values4, () => false)).toBeFalsy()
+})
+
+test('every', () => {
+  const values1 = [1, 2, 3, 4, 5]
+  const values2 = []
+  const values3 = { a: 1, b: 2, c: 3 }
+  const values4 = {}
+  expect(every(values1, item => item < 6)).toBeTruthy()
+  expect(every(values1, item => item < 3)).toBeFalsy()
+  expect(every(values2, () => true)).toBeTruthy()
+  expect(every(values2, () => false)).toBeTruthy()
+  expect(every(values2, () => false)).toBeTruthy()
+  expect(every(values3, item => item < 6)).toBeTruthy()
+  expect(every(values3, item => item < 3)).toBeFalsy()
+  expect(every(values4, () => false)).toBeTruthy()
+  expect(every(values4, () => false)).toBeTruthy()
+})
+
+test('findIndex', () => {
+  const value = [1, 2, 3, 4, 5]
+  expect(isEqual(findIndex(value, item => item > 3), 3)).toBeTruthy()
+  expect(isEqual(findIndex(value, item => item < 3, true), 1)).toBeTruthy()
+  expect(isEqual(findIndex(value, item => item > 6), -1)).toBeTruthy()
+})
+
+test('find', () => {
+  const value = [1, 2, 3, 4, 5]
+  expect(isEqual(find(value, item => item > 3), 4)).toBeTruthy()
+  expect(isEqual(find(value, item => item < 3, true), 2)).toBeTruthy()
+  expect(isEqual(find(value, item => item > 6), void 0)).toBeTruthy()
+})
+
+test('includes', () => {
+  const value = [1, 2, 3, 4, 5]
+  expect(includes(value, 3)).toBeTruthy()
+  expect(includes(value, 6)).toBeFalsy()
 })

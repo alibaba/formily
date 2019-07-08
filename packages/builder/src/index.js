@@ -8,6 +8,8 @@ import rootReducer from './reducers'
 import App from './App'
 import ThemeList, { THEME_ENUM, DEFAULT_THEME } from './configs/theme'
 import { ThemeProvider } from 'styled-components'
+import { DragDropContext } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 const logger = createLogger({
   collapsed: true
@@ -20,8 +22,7 @@ const middleware = [
 ].filter(Boolean)
 
 const initialState = {
-  componentId: '',
-  layoutId: '',
+  componentId: [],
   preview: false,
   codemode: false,
   componentProps: {},
@@ -48,7 +49,7 @@ const store = createStore(
   applyMiddleware(...middleware)
 )
 
-export default class Component extends React.Component {
+class Component extends React.Component {
   static propTypes = {
     themeStyle: PropTypes.string
   }
@@ -82,3 +83,5 @@ export default class Component extends React.Component {
     )
   }
 }
+
+export default DragDropContext(HTML5Backend)(Component)

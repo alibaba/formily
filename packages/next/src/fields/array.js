@@ -37,19 +37,19 @@ export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
 export const ArrayField = createArrayField({
   CircleButton,
   TextButton: props => (
-    <Button text size='large'>
+    <Button text size="large">
       {props.children}
     </Button>
   ),
-  AddIcon: () => <Icon type='add' className='next-icon-first' />,
+  AddIcon: () => <Icon type="add" className="next-icon-first" />,
   RemoveIcon: () => (
-    <Icon size='xs' type='ashbin' className='next-icon-first' />
+    <Icon size="xs" type="ashbin" className="next-icon-first" />
   ),
   MoveDownIcon: () => (
-    <Icon size='xs' type='arrow-down' className='next-icon-first' />
+    <Icon size="xs" type="arrow-down" className="next-icon-first" />
   ),
   MoveUpIcon: () => (
-    <Icon size='xs' type='arrow-up' className='next-icon-first' />
+    <Icon size="xs" type="arrow-up" className="next-icon-first" />
   )
 })
 
@@ -58,22 +58,23 @@ registerFormField(
   styled(
     class extends ArrayField {
       render() {
-        const { className, name, schema, value, renderField } = this.props
-        const style = (schema['x-props'] && schema['x-props'].style) || {}
+        const { className, name, value, renderField } = this.props
+        const cls = this.getProps('className')
+        const style = this.getProps('style')
         return (
           <div
-            className={className}
+            className={`${className} ${cls}`}
             style={style}
             onClick={this.onClearErrorHandler()}
           >
             {value.map((item, index) => {
               return (
-                <div className='array-item' key={`${name}.${index}`}>
-                  <div className='array-index'>
+                <div className="array-item" key={`${name}.${index}`}>
+                  <div className="array-index">
                     <span>{index + 1}</span>
                   </div>
-                  <div className='array-item-wrapper'>{renderField(index)}</div>
-                  <div className='array-item-operator'>
+                  <div className="array-item-wrapper">{renderField(index)}</div>
+                  <div className="array-item-operator">
                     {this.renderRemove(index, item)}
                     {this.renderMoveDown(index, item)}
                     {this.renderMoveUp(index, item)}

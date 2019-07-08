@@ -48,12 +48,14 @@ ReactDOM.render(
         title="Radio"
         name="radio"
       />
+
       <Field
         type="string"
         enum={['1', '2', '3', '4']}
         required
         title="Select"
         name="select"
+        x-props={{ style: { maxWidth: 300 } }}
       />
       <Field
         type="checkbox"
@@ -61,6 +63,12 @@ ReactDOM.render(
         required
         title="Checkbox"
         name="checkbox"
+      />
+      <Field
+        type="string"
+        title="TextArea"
+        name="textarea"
+        x-component="textarea"
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
@@ -78,7 +86,7 @@ ReactDOM.render(
         title="卡片上传文件"
         name="upload"
         x-props={{
-          listType: 'card',
+          listType: 'card'
         }}
       />
       <Field
@@ -99,7 +107,13 @@ ReactDOM.render(
         name="range"
         x-props={{ min: 0, max: 1024, marks: [0, 1024] }}
       />
-      <Field type="transfer" title="穿梭框" name="transfer" />
+      <Field
+        type="transfer"
+        enum={[{ key: 1, title: '选项1' }, { key: 2, title: '选项2' }]}
+        x-props={{ render: item => item.title }}
+        title="穿梭框"
+        name="transfer"
+      />
       <Field type="rating" title="等级" name="rating" />
       <FormButtonGroup offset={7} sticky>
         <Submit />

@@ -17,7 +17,9 @@ const Text = styled(props => {
   } else {
     value = Array.isArray(props.value)
       ? props.value.join(' ~ ')
-      : String(props.value === undefined || props.value === null ? '' : props.value)
+      : String(
+        props.value === undefined || props.value === null ? '' : props.value
+      )
   }
   return (
     <div className={`${props.className} ${props.size || ''} text-field`}>
@@ -52,9 +54,11 @@ export const acceptEnum = component => {
   }
 }
 
-export const mapStyledProps = (props, { loading, size }) => {
+export const mapStyledProps = (props, { loading, size, errors }) => {
   if (loading) {
     props.state = props.state || 'loading'
+  } else if (errors && errors.length) {
+    props.state = 'error'
   }
   if (size) {
     props.size = size
