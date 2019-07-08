@@ -7,6 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
   },
+  "types":"lib/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/uform/issues"
   },
@@ -18,6 +19,7 @@
     "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
+    "@uform/types": "^0.2.3",
     "@uform/utils": "^0.2.3"
   },
   "publishConfig": {
