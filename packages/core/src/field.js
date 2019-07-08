@@ -64,20 +64,12 @@ export class Field {
       this.editable = !isEmpty(editable) ? editable : this.getContextEditable()
     }
 
-    if (!this.initialized) {
-      // sync default value in initialization
-      if (isEmpty(this.value) && !isEmpty(this.initialValue)) {
-        this.value = clone(this.initialValue)
-        this.context.setIn(this.name, this.value)
-      }
-    } else {
-      // sync default value in rereneder after removed
-      if (this.removed && !this.shownFromParent) {
-        if (!isEmpty(this.initialValue)) {
-          this.value = clone(this.initialValue)
-          this.context.setIn(this.name, this.value)
-        }
-      }
+    if (
+      !isEmpty(this.initialValue) &&
+      (isEmpty(this.value) || (this.removed && !this.shownFromParent))
+    ) {
+      this.value = clone(this.initialValue)
+      this.context.setIn(this.name, this.value)
     }
 
     this.mount()
