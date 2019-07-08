@@ -2,9 +2,10 @@ const fs = require('fs-extra')
 const path = require('path')
 const glob = require('glob')
 const chalk = require('chalk')
-const ts = require('typescript')
-const { transformFileAsync: complieBabel } = require('@babel/core')
+const { transformFileAsync } = require('@babel/core')
 const json5 = require('json5')
+const execa = require('execa')
+const chokidar = require('chokidar')
 const cwd = process.cwd()
 
 const getBabelConfig = async () => {
@@ -16,35 +17,28 @@ const getBabelConfig = async () => {
   }
 }
 
-const getTypeScriptConfig = async () => {
-  try {
-    return json5.parse(
-      await fs.readFile(path.resolve(cwd, 'tsconfig.json'), 'utf8')
-    )
-  } catch (e) {
-    console.log(e)
-    return {}
-  }
-}
-
-const complieJSPackages = async callback => {
+const compliePackages = async callback => {
   const packagesDir = path.resolve(cwd, './packages')
   const config = await getBabelConfig()
   const packages = await fs.readdir(packagesDir)
   packages.forEach(packagePath => {
     glob(
-      `${packagesDir}/${packagePath}/src/**/*.js`,
+      `${packagesDir}/${packagePath}/src/**`,
       { cwd },
       async (err, results) => {
         if (err) {
           console.log(err)
         } else {
+          try {
+            await fs.access(`${packagesDir}/${packagePath}/lib`)
+            await execa.shell(`rm -rf ${packagesDir}/${packagePath}/lib`)
+          } catch (e) {}
           for (let i = 0; i < results.length; i++) {
             const filename = results[i]
             const stat = await fs.stat(filename)
             if (!/__test__|\.spec\.js/.test(filename) && stat.isFile()) {
               try {
-                const contents = await complieBabel(filename, config)
+                const contents = await transformFileAsync(filename, config)
                 const newFilename = filename.replace(
                   new RegExp(`(${packagePath})/src`),
                   '$1/lib'
@@ -64,58 +58,57 @@ const complieJSPackages = async callback => {
   })
 }
 
-const transformFilesAsync = async (fileNames, options) => {
-  let program = ts.createProgram(fileNames, options.compilerOptions)
-  let emitResult = program.emit()
-
-  let allDiagnostics = ts
-    .getPreEmitDiagnostics(program)
-    .concat(emitResult.diagnostics)
-
-  allDiagnostics.forEach(diagnostic => {
-    if (diagnostic.file) {
-      let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-        diagnostic.start
-      )
-      let message = ts.flattenDiagnosticMessageText(
-        diagnostic.messageText,
-        '\n'
-      )
-      console.log(
-        `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
-      )
-    } else {
-      console.log(
-        `${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`
-      )
-    }
-  })
-}
-
-const complieTSPackages = async callback => {
-  const packagesDir = path.resolve(cwd, './packages')
-  const config = await getTypeScriptConfig()
-  const packages = await fs.readdir(packagesDir)
-  packages.forEach(packagePath => {
-    glob(
-      `${packagesDir}/${packagePath}/src/**/*.{ts,tsx}`,
-      { cwd },
-      async (err, filenames) => {
-        if (err) {
-          console.log(err)
-        } else {
-          config.compilerOptions.outDir = `${packagesDir}/${packagePath}/lib`
-          transformFilesAsync(filenames, config)
-          if (filenames.length > 0) {
-            console.log(
-              chalk.green(`UForm Task: ${packagePath} package build complete!`)
-            )
-          }
-        }
+const watchCompliePackages = async () => {
+  const config = await getBabelConfig()
+  console.log(chalk.green('Build Watching....'))
+  chokidar
+    .watch(path.resolve(cwd, './packages/*/src/**.js'), {
+      ignoreInitial: true,
+      ignored: /(^|[/\\])\../,
+      persistent: true
+    })
+    .on('add', async filename => {
+      try {
+        const contents = await transformFileAsync(filename, config)
+        const newFilename = filename.replace(
+          /packages\/([^/]+)\/src/,
+          'packages/$1/lib'
+        )
+        await fs.outputFile(newFilename, contents.code)
+        console.log(chalk.green(`New File: ${filename}`))
+      } catch (e) {
+        console.error(e)
       }
-    )
-  })
+    })
+    .on('change', async filename => {
+      try {
+        const contents = await transformFileAsync(filename, config)
+        const newFilename = filename.replace(
+          /packages\/([^/]+)\/src/,
+          'packages/$1/lib'
+        )
+        await fs.outputFile(newFilename, contents.code)
+        console.log(chalk.green(`File build success : ${filename}`))
+      } catch (e) {
+        console.error(e)
+      }
+    })
+    .on('unlink', async filename => {
+      try {
+        const newFilename = filename.replace(
+          /packages\/([^/]+)\/src/,
+          'packages/$1/lib'
+        )
+        await fs.remove(newFilename)
+        console.log(chalk.green(`Remove File: ${filename}`))
+      } catch (e) {
+        console.error(e)
+      }
+    })
 }
 
-complieTSPackages()
-complieJSPackages()
+if (process.argv.indexOf('--watch') > -1) {
+  watchCompliePackages()
+} else {
+  compliePackages()
+}
