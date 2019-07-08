@@ -14,6 +14,7 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "types": "lib/index.d.ts",
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
@@ -23,6 +24,7 @@
     "@uform/core": "^0.2.3",
     "@uform/utils": "^0.2.3",
     "@uform/validator": "^0.2.3",
+    "@uform/types": "^0.2.3",
     "pascal-case": "^2.0.1",
     "react-eva": "^1.0.0",
     "rxjs-compat": "^6.5.1"
