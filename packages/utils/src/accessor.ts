@@ -1,6 +1,6 @@
+import { Path, PathNode, ArrayPath, isStr, isNum, isPlainObj, isArr, isObj } from '@uform/types'
 import { map, each, every } from './array'
 import { LRUMap } from './lru'
-import { Path, PathNode, ArrayPath, isStr, isNum, isPlainObj, isArr, isObj } from '@uform/types'
 
 interface ITokenizerHandlers {
   name(str: string): void
@@ -11,9 +11,11 @@ interface ITokenizerHandlers {
   destructKey(str: string, isColon?: boolean): void
 }
 
-type Destruct = {
-  [key: string]: string
-} | Path
+type Destruct =
+  | {
+      [key: string]: string
+    }
+  | Path
 
 type Getter = (obj: any, path: Path, value?: any) => any
 
@@ -26,7 +28,9 @@ function whitespace(c: string) {
 }
 
 function toString(val: Path | null) {
-  if (!val) { return '' }
+  if (!val) {
+    return ''
+  }
   if (isArr(val)) {
     return (val as string[]).join('.')
   }
@@ -36,10 +40,14 @@ function toString(val: Path | null) {
 const PathCache = new LRUMap(1000)
 
 export function getPathSegments(path: Path): ArrayPath {
-  if (isArr(path)) { return path as string[] }
+  if (isArr(path)) {
+    return path as string[]
+  }
   if (isStr(path) && path) {
     const cached = PathCache.get(path)
-    if (cached) { return cached }
+    if (cached) {
+      return cached
+    }
     const pathArr = (path as string).split('.')
     const parts = []
 
@@ -56,12 +64,13 @@ export function getPathSegments(path: Path): ArrayPath {
     PathCache.set(path, parts)
     return parts
   }
-  if (isNum(path)) { return [path as number] }
+  if (isNum(path)) {
+    return [path as number]
+  }
   return []
 }
 
 class DestructTokenizer {
-
   private text: string
 
   private index: number
@@ -149,10 +158,7 @@ class DestructTokenizer {
         this.state = this.processDestructStart
       }
       if (!whitespace(prev)) {
-        this.destructKey = this.text.substring(
-          this.destructKeyStart,
-          this.index
-        )
+        this.destructKey = this.text.substring(this.destructKeyStart, this.index)
       }
 
       this.handlers.destructKey(this.destructKey)
@@ -167,10 +173,7 @@ class DestructTokenizer {
         this.state = this.processDestructStart
       }
       if (!whitespace(prev)) {
-        this.destructKey = this.text.substring(
-          this.destructKeyStart,
-          this.index
-        )
+        this.destructKey = this.text.substring(this.destructKeyStart, this.index)
       }
       this.handlers.destructKey(this.destructKey)
       this.handlers.destructArrayEnd()
@@ -179,10 +182,7 @@ class DestructTokenizer {
       }
     } else if (whitespace(char) || char === ':' || char === ',') {
       if (!whitespace(prev)) {
-        this.destructKey = this.text.substring(
-          this.destructKeyStart,
-          this.index
-        )
+        this.destructKey = this.text.substring(this.destructKeyStart, this.index)
       }
       if (!whitespace(char)) {
         this.state = this.processDestructStart
@@ -197,7 +197,9 @@ class DestructTokenizer {
 }
 
 const parseDestruct = (str: PathNode) => {
-  if (!isStr(str)) { return str }
+  if (!isStr(str)) {
+    return str
+  }
 
   let destruct: Destruct
   const stack = []
@@ -211,7 +213,9 @@ const parseDestruct = (str: PathNode) => {
       root = key
     },
     destructKey(key, readyReplace) {
-      if (!key) { return }
+      if (!key) {
+        return
+      }
       token = key
       if (readyReplace) {
         realKey = key
@@ -219,7 +223,7 @@ const parseDestruct = (str: PathNode) => {
         return
       }
       if (isArr(destruct)) {
-        (destruct as string[]).push(key)
+        ;(destruct as string[]).push(key)
       } else if (isPlainObj(destruct)) {
         destruct[realKey && lastDestruct === destruct ? realKey : key] = key
       }
@@ -270,7 +274,9 @@ const parseDestruct = (str: PathNode) => {
 
 const traverse = (obj: any, callback: any) => {
   const internalTraverse = (internalObj: any, path: string[]) => {
-    if (isStr(internalObj)) { return callback(internalObj, internalObj) }
+    if (isStr(internalObj)) {
+      return callback(internalObj, internalObj)
+    }
     each(internalObj, (item: any, key: string) => {
       const newPath = path.concat(key)
       if (isArr(item) || isPlainObj(item)) {
@@ -362,7 +368,9 @@ const resolveUpdateIn = (update: Setter, internalGetIn: Getter) => {
     } else {
       paths = cache.get(path)
     }
-    if (!isArr(paths)) { return update(obj, path, value) }
+    if (!isArr(paths)) {
+      return update(obj, path, value)
+    }
     if (paths && paths.length) {
       each(paths, ({ mapPath, key, startPath, endPath }) => {
         update(obj, startPath.concat(key), internalGetIn(value, endPath))
@@ -450,7 +458,9 @@ function _setIn(obj: any, path: Path, value: any) {
     const p = pathArr[i]
 
     if (!isObj(obj[p])) {
-      if (obj[p] === undefined && value === undefined) return
+      if (obj[p] === undefined && value === undefined) {
+        return
+      }
       obj[p] = {}
     }
 

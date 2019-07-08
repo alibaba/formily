@@ -1,3 +1,4 @@
+import React from 'react'
 import { reduce, isFn, isStr, isArr } from '@uform/utils'
 
 export * from '@uform/utils'

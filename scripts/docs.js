@@ -56,12 +56,22 @@ const createDocs = async () => {
         antd: 'antd',
         moment: 'moment'
       }
+
+      webpackConfig.module.rules = webpackConfig.module.rules.map(rule => {
+        if (rule.test.test('.tsx')) {
+          return {
+            ...rule,
+            use: [require.resolve('ts-loader')]
+          }
+        } else {
+          return rule
+        }
+      })
+
       Object.assign(webpackConfig.resolve.alias, {
         ...alias,
-        '@alifd/next': path.resolve(
-          __dirname,
-          '../packages/next/node_modules/@alifd/next'
-        )
+        '@alifd/next': path.resolve(__dirname, '../packages/next/node_modules/@alifd/next'),
+        antd: path.resolve(__dirname, '../packages/antd/node_modules/antd')
       })
       webpackConfig.resolve.plugins = [
         new TsconfigPathsPlugin({
