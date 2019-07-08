@@ -7,7 +7,6 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
   },
-  "types":"lib/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/uform/issues"
   },
@@ -22,7 +21,6 @@
   "dependencies": {
     "@uform/utils": "^0.2.3",
     "@uform/validator": "^0.2.3",
-    "@uform/types": "^0.2.3",
     "dot-match": "^0.1.18",
     "rxjs": "^6.3.3"
   },
