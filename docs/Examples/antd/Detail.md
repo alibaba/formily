@@ -1,9 +1,11 @@
 # 表单详情
 
+> 该案例默认不显示数据，用来体现缺省状态，如果想查看有数据的形式，点击加载详情数据按钮即可
+
 #### Demo 示例
 
 ```jsx
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
@@ -25,25 +27,6 @@ const actions = createFormActions()
 
 const App = () => {
   const [state, setState] = useState({ editable: false })
-  useEffect(() => {
-    setState({
-      value: {
-        string: 100,
-        radio: '',
-        select: '1',
-        checkbox: ['3', '4'],
-        number: 1024,
-        boolean: false,
-        date: '2019-09-10',
-        daterange: ['2019-09-10', '2020-09-10'],
-        year: '2019',
-        time: '23:16:00',
-        range: 500,
-        rating: 5
-      }
-    })
-  }, [])
-  
   return (
     <Printer>
       <SchemaForm
