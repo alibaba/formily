@@ -14,7 +14,7 @@ import { IFormItemProps, IFormProps } from './type'
  *
  */
 
-export const { Provider: FormProvider, Consumer: FormConsumer } = React.createContext(null)
+export const { Provider: FormProvider, Consumer: FormConsumer } = React.createContext(undefined)
 
 const normalizeCol = col => {
   return typeof col === 'object' ? col : { span: col }
