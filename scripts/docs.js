@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs-extra')
 const { command } = require('doc-scripts')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
@@ -56,13 +57,27 @@ const createDocs = async () => {
         moment: 'moment'
       }
 
+      webpackConfig.module.rules = webpackConfig.module.rules.map(rule => {
+        if (rule.test.test('.tsx')) {
+          return {
+            ...rule,
+            use: [require.resolve('ts-loader')]
+          }
+        } else {
+          return rule
+        }
+      })
+
       Object.assign(webpackConfig.resolve.alias, {
         ...alias,
-        '@alifd/next': path.resolve(
-          __dirname,
-          '../packages/next/node_modules/@alifd/next'
-        )
+        '@alifd/next': path.resolve(__dirname, '../packages/next/node_modules/@alifd/next'),
+        antd: path.resolve(__dirname, '../packages/antd/node_modules/antd')
       })
+      webpackConfig.resolve.plugins = [
+        new TsconfigPathsPlugin({
+          configFile: path.resolve(__dirname, '../tsconfig.json')
+        })
+      ]
       return webpackConfig
     }
   )
