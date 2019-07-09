@@ -57,7 +57,7 @@ interface IFormState<V> {
 用于描述表单字段状态的模型对象
 
 ```typescript
-interface IFieldState<V>{
+interface IFieldState<V = any>{
   value       : V                   //字段值
   valid       : boolean             //字段是否合法
   invalid     : boolean             //字段是否非法

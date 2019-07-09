@@ -14,8 +14,8 @@ import {FormConsumer} from '@uform/react'
 
 ```typescript
 type FormConsumer = React.Consumer<{
-  status  : "changed" | "resetd" | "initialize" | "submitting" | "submitted", //表单活动状态
-  state   : FormState,//表单状态模型
+  status  : "changed" | "reseted" | "initialize" | "submitting" | "submitted", //表单活动状态
+  state   : IFormState,//表单状态模型
   schema  : ISchema,//表单schema
   submit  : () => void,//表单提交
   reset   : () => void,//表单重置

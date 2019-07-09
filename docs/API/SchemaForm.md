@@ -94,18 +94,18 @@ ReactDOM.render(
 
 | 属性名称 | 属性描述 | 属性类型 | 默认值 |  |
 | ---- | ---- | ---- | --- | --- |
-| autoAddColon | 是否自动添加冒号 | Boolean |  |  |
-| className | className | String |  |  |
-| inline | 是否是单行布局 | Boolean | false |  |
-| layout | 表单布局(horizontal/vertical/inline)，只有@uform/antd支持 | String | horizontal|
-| maxTipsNum | 针对Field description的最大提示字符数，如果超出该字符数，则会以PopTips的形式展示 | Number | 30 |
-| labelAlign | 标签的位置<br /><br />可选值:<br />'top'(上)<br />'left'(左)<br />'inset'(内) | String | 'left' |  |
-| labelCol | 控制所有子节点的labelCol | Number | Object |  |
-| labelTextAlign | 标签的左右对齐方式<br /><br />可选值:<br />'left'(左)<br />'right'(右) | String |  |  |
-| prefix | className前缀 | String | 'next-' | 'antd-' |
-| size | 表单尺寸 <br /><br />可选值:<br />'large'(大)<br />'medium'(中)<br />'small'(小) | String | 'medium' |  |
-| style | 样式对象 | Object |  |  |
-| wrapperCol | 控制所有子节点wrapperCol | Number | Object |  |
+| autoAddColon | 是否自动添加冒号 | `boolean` |  |  |
+| className | className | `string` |  |  |
+| inline | 是否是单行布局 | `boolean` | false |  |
+| layout | 表单布局(horizontal/vertical/inline)，只有@uform/antd支持 | `'horizontal'|'vertical'|'inline'`  | horizontal|
+| maxTipsNum | 针对Field description的最大提示字符数，如果超出该字符数，则会以PopTips的形式展示 | `number` | 30 |
+| labelAlign | 标签的位置<br /><br />可选值:<br />'top'(上)<br />'left'(左)<br />'inset'(内) | `'top'|'left'|'inset'` | 'left' |  |
+| labelCol | 控制所有子节点的labelCol | `number|{span: number, offset: number}` |  | |
+| labelTextAlign | 标签的左右对齐方式<br /><br />可选值:<br />'left'(左)<br />'right'(右) | `'left'|'right'` |  |  |
+| prefix | className前缀 | string | 'next-' | 'antd-' |
+| size | 表单尺寸 <br /><br />可选值:<br />'large'(大)<br />'medium'(中)<br />'small'(小) | `'large'|'medium'|'small'` | 'medium' |  |
+| style | 样式对象 | `React.CSSProperties` |  |  |
+| wrapperCol | 控制所有子节点wrapperCol |  `number|{span: number, offset: number}`  |  | |
 
 ## 用例
 

@@ -14,7 +14,7 @@ import { FormButtonGroup } from '@uform/next(antd)'
 
 | 属性名称 | 属性描述 | 属性类型 | 默认值 |
 | ---- | ---- | ---- | --- |
-| align | 按钮内容的定位 | `string` |  |
+| align | 按钮内容的定位 | `'left'|'right'|'start'|'end'|'top'|'bottom'|'center'` |  |
 | itemStyle | 按钮组容器样式 | `React.CSSProperties` | {} |
 | offset | 按钮组容器左偏移距离 | `number` |  |
 | span | 按钮组容器宽度 | `number` |  |

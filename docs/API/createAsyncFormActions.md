@@ -42,7 +42,7 @@ type createAsyncFormActions: () => AsyncFormActions
 用于描述整个表单状态的模型对象
 
 ```typescript
-interface IFormState<V> {
+interface IFormState<V = any> {
   values       : V                                     // 表单数据
   initialValues: V                                     // 初始化数据
   valid        : boolean                               // 是否合法
@@ -58,7 +58,7 @@ interface IFormState<V> {
 用于描述表单字段状态的模型对象
 
 ```typescript
-interface IFieldState<V>{
+interface IFieldState<V = any>{
   value       : V                   //字段值
   valid       : boolean             //字段是否合法
   invalid     : boolean             //字段是否非法

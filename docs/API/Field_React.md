@@ -25,7 +25,7 @@ import {Field} from '@uform/react'
 | x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染，具体类型枚举参考 [fields](https://github.com/alibaba/uform/tree/master/packages/antd/src/fields) | `string` |  |  |
 | x-effect | 副作用事件绑定对象 | `(dispatch: (eventName: string, ...params: any[]) => void) => void` |  |  |
 | x-index | 字段索引顺序 | `number` |  |  |
-| x-props | 字段UI组件属性，API请参考对应fusion next/ant design组件API | `any` | {} | |
+| x-props | 字段UI组件属性，API请参考对应fusion next/ant design组件API | `{[key: string]: any}` | {} | |
 | x-props.editable | 字段是否可编辑 | `boolean` | true |  |
 | x-render | 字段渲染函数 | `(fieldProps : IFieldProps) => string | JSX.Element | null` |  |  |
 | x-rules | 字段校验规则 | `Rule | Rule[]` |  |  |

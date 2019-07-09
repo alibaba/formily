@@ -12,7 +12,7 @@
 type registerFormField(
    name        : string,                             //类型名称
    component   : React.ComponentType<IFieldProps>,   //类型组件
-   noMiddleware: Boolean                             //是否被middleware包装
+   noMiddleware: boolean                             //是否被middleware包装
 )
 ```
 

@@ -16,7 +16,7 @@ import { FormLayout } from '@uform/next(antd)'
 | ---- | ---- | ---- | --- | --- |
 | className | 容器自定义类名 | `string` | "" |  |
 | inline | 内部是否采用行内排列 | `boolean` | false |  |
-| labelAlign | 按钮组容器样式 | `'left'|'right'` | | "left" | "left"/"top" |
+| labelAlign | 按钮组容器样式 | `'left'|'top'|'inset'` | | "left" | "left"/"top"/"inset" |
 | labelCol | 标签宽度占比 | `number` |  |  |
 | labelTextAlign | 按钮组容器左偏移距离 | `'left'|'right'` | "right" | "left"/"right" |
 | size | 容器大小 | `'small'|'medium'|'large'` | medium | "small"/"medium"/"large" |
