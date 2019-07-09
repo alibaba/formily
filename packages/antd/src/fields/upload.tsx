@@ -159,6 +159,8 @@ registerFormField(
         className: 'antd-uploader'
       }
 
+      readonly state: IUploaderState
+      
       constructor(props) {
         super(props)
         this.state = {

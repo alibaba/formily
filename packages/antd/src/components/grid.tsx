@@ -14,7 +14,7 @@ export class Row extends Component<IRowProps> {
   }
 
   public render() {
-    /* eslint-disable no-unused-vars */
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const {
       prefix,
       pure,
@@ -30,7 +30,7 @@ export class Row extends Component<IRowProps> {
       children,
       ...others
     } = this.props
-    /* eslint-enable no-unused-vars */
+    /* eslint-enable @typescript-eslint/no-unused-vars */
 
     let hiddenClassObj
     if (hidden === true) {

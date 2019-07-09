@@ -107,6 +107,7 @@ export const StateForm = createHOC((options, Form) => {
             }, 60)
           }
         } else {
+          // eslint-disable-next-line react/no-direct-mutation-state
           this.state = formState
           this.notify({
             type: 'initialize',
@@ -253,6 +254,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public render() {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
         onSubmit,
         onChange,
@@ -273,6 +275,7 @@ export const StateForm = createHOC((options, Form) => {
         value,
         ...others
       } = this.props
+      /* eslint-enable @typescript-eslint/no-unused-vars */
 
       return (
         <StateContext.Provider

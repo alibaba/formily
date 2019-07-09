@@ -165,7 +165,7 @@ registerFormField(
               {...others}
               value={shallowClone(this.state.value)}
               onChange={this.onChangeHandler}
-              listType='card'
+              listType="card"
             />
           )
         }

@@ -5,11 +5,11 @@ import { mapStyledProps } from '../utils'
 
 export interface ISliderMarks {
   [key: number]:
-    | React.ReactNode
-    | {
-        style: React.CSSProperties
-        label: React.ReactNode
-      }
+  | React.ReactNode
+  | {
+    style: React.CSSProperties
+    label: React.ReactNode
+  }
 }
 
 export declare type SliderValue = number | [number, number]

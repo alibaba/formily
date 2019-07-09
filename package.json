@@ -25,9 +25,7 @@
     "version:major": "npm run prevesion && lerna version major --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "release:force": "lerna publish from-package --yes",
     "release": "lerna publish",
-    "lint": "eslint \"packages/!(docs)/**/*.js\" \"scripts/**/*.js\"",
-    "tslint": "npm run tslint:once && onchange 'packages/**/*.ts' -- npm run tslint:once",
-    "tslint:once": "tslint --fix --project ./ ",
+    "lint": "eslint --ext .js,.ts,.tsx \"packages/!(docs)/**/*.@(ts|tsx|js)\" \"scripts/**/*.@(ts|tsx|js)\"",
     "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
@@ -44,6 +42,9 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime-corejs3": "^7.2.0",
+    "@testing-library/react": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
     "all-contributors-cli": "^6.1.2",
     "antd": "^3.17.0",
     "babel-eslint": "^10.0.1",
@@ -57,13 +58,12 @@
     "cz-conventional-changelog": "^2.1.0",
     "doc-scripts": "^1.7.24",
     "eslint": "^5.16.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-config-standard-react": "^7.0.2",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-react": "^7.13.0",
-    "eslint-plugin-react-hooks": "^1.0.2",
+    "eslint-plugin-react": "^7.14.2",
+    "eslint-plugin-react-hooks": "^1.6.1",
     "eslint-plugin-standard": "^4.0.0",
     "execa": "^1.0.0",
     "findup": "^0.1.5",
@@ -85,7 +85,6 @@
     "pretty-format": "^24.0.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "@testing-library/react": "^8.0.0",
     "remark-parse": "^6.0.3",
     "remark-stringify": "^6.0.4",
     "semver-regex": "^2.0.0",
@@ -109,8 +108,8 @@
     }
   },
   "dependencies": {
-    "opencollective-postinstall": "^2.0.2",
-    "opencollective": "^1.0.3"
+    "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.2"
   },
   "collective": {
     "type": "opencollective",

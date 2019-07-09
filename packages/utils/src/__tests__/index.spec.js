@@ -77,13 +77,13 @@ test('destruct setIn', () => {
     )
   ).toBeTruthy()
   expect(
-    isEqual(setIn({}, `aa.bb.ddd.[aa,bb]`, [123, 444]), {
+    isEqual(setIn({}, 'aa.bb.ddd.[aa,bb]', [123, 444]), {
       aa: { bb: { ddd: { aa: 123, bb: 444 } } }
     })
   ).toBeTruthy()
 
   expect(
-    isEqual(setIn({}, `aa.bb.ddd.[{cc:aa,bb}]`, [{ cc: 123, bb: 444 }]), {
+    isEqual(setIn({}, 'aa.bb.ddd.[{cc:aa,bb}]', [{ cc: 123, bb: 444 }]), {
       aa: { bb: { ddd: { aa: 123, bb: 444 } } }
     })
   ).toBeTruthy()
@@ -117,6 +117,7 @@ test('clone form data', () => {
     aa: 123123,
     bb: [{ bb: 111 }, { bb: 222 }],
     cc: () => {
+      // eslint-disable-next-line no-console
       console.log('123')
     },
     dd

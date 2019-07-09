@@ -36,6 +36,7 @@ const StateField = createHOC((options, Field) => {
         if (this.initialized) {
           this.setState(fieldState)
         } else {
+          // eslint-disable-next-line react/no-direct-mutation-state
           this.state = fieldState
         }
       }
@@ -171,7 +172,7 @@ export const FormField = StateField()((props: IFieldProps) => {
         console.error(`The schema field \`${fieldComponentName}\`'s component is not found.`)
       } else {
         console.error(
-          `The schema field's component is not found, or field's schema is not defined.`
+          'The schema field\'s component is not found, or field\'s schema is not defined.'
         )
       }
     }

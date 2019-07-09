@@ -13,8 +13,8 @@ interface ITokenizerHandlers {
 
 type Destruct =
   | {
-      [key: string]: string
-    }
+    [key: string]: string
+  }
   | Path
 
 type Getter = (obj: any, path: Path, value?: any) => any

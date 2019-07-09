@@ -16,14 +16,14 @@ const Dialog = styled(props => {
       }}
     >
       <div
-        className='close-btn'
+        className="close-btn"
         onClick={() => {
           setVisible(false)
         }}
       >
-        <img src='//img.alicdn.com/tfs/TB1KikcO5rpK1RjSZFhXXXSdXXa-200-200.svg' />
+        <img src="//img.alicdn.com/tfs/TB1KikcO5rpK1RjSZFhXXXSdXXa-200-200.svg" />
       </div>
-      <div className='dialog-content' style={{ overflow: 'auto' }}>
+      <div className="dialog-content" style={{ overflow: 'auto' }}>
         {props.children}
       </div>
     </Modal>
@@ -125,7 +125,7 @@ export default class extends React.Component {
           actions: this.actions
         })}
         <a
-          href=''
+          href=""
           style={{
             fontSize: 12,
             textDecoration: 'none',

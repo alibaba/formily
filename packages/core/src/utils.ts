@@ -10,6 +10,7 @@ const getScheduler = () => {
     return [ self.setTimeout, self.clearTimeout ]
   }
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const scheduler = require('scheduler')
     return [
       scheduler.scheduleCallback || scheduler.unstable_scheduleCallback,

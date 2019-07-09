@@ -1,7 +1,7 @@
 import React from 'react'
 import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
 import classNames from 'classnames'
-import { Popover, Icon, Row, Col } from 'antd'
+import { Row, Col, Popover, Icon  } from 'antd'
 import styled from 'styled-components'
 import stringLength from 'string-length'
 
@@ -46,6 +46,7 @@ export const FormItem = styled(
     }
 
     public render() {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
         className,
         labelAlign,
@@ -67,7 +68,7 @@ export const FormItem = styled(
         schema,
         ...others
       } = this.props
-
+      /* eslint-enable @typescript-eslint/no-unused-vars */
       const itemClassName = classNames({
         [`${prefix}form-item`]: true,
         [`${prefix}${labelAlign}`]: labelAlign,
@@ -329,6 +330,7 @@ registerFormWrapper(OriginForm => {
         labelTextAlign,
         autoAddColon,
         children,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         component,
         labelCol,
         layout,

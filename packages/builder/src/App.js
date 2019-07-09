@@ -66,9 +66,9 @@ class App extends Component {
           this.props.changeGbConfig(value)
         }}
         defaultValue={this.props.gbConfig}
-        labelAlign='left'
+        labelAlign="left"
         labelCol={10}
-        labelTextAlign='right'
+        labelTextAlign="right"
       >
         {globalCfgList.map(props => (
           <Field {...props} key={props.name} />
@@ -234,10 +234,10 @@ class App extends Component {
         ref={this.appRef}
         className={cls('schemaform-app', this.props.className)}
       >
-        <div ref={this.appHeaderRef} className='schemaform-header'>
+        <div ref={this.appHeaderRef} className="schemaform-header">
           <a
-            href='javascript:;'
-            className='schemaform-back'
+            href="javascript:;"
+            className="schemaform-back"
             onClick={() => {
               this.props.onBackBtnClick()
             }}
@@ -245,26 +245,26 @@ class App extends Component {
             后退
           </a>
           <h1>编辑表单</h1>
-          <div className='schemaform-header-btns'>
+          <div className="schemaform-header-btns">
             <GlobalBtnList {...this.props} />
           </div>
         </div>
-        <div className='schamaform-content' style={{ height: contentHeight }}>
-          <div className='content-col content-col-left'>
+        <div className="schamaform-content" style={{ height: contentHeight }}>
+          <div className="content-col content-col-left">
             {this.getLayoutTpl()}
             <FieldList
               supportFieldList={this.props.supportFieldList}
               includeFieldListKeyList={this.props.includeFieldListKeyList}
             />
           </div>
-          <div className='content-col content-col-main'>
+          <div className="content-col content-col-main">
             <Preview
               schema={initSchemaData}
               renderEngine={renderEngine}
               UI={this.props.UI}
             />
           </div>
-          <div className='content-col content-col-right'>
+          <div className="content-col content-col-right">
             {UIVersion === '1.x' ? (
               <Accordion
                 dataSource={this.state.accordionList}

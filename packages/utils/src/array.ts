@@ -21,7 +21,7 @@ export function each(val: any, iterator: any, revert?: boolean): object {
         }
       }
     } else {
-      for (let i: number = 0, length = val.length; i < length; i++) {
+      for (let i = 0, length = val.length; i < length; i++) {
         if (iterator(val[i], i) === false) {
           return
         }

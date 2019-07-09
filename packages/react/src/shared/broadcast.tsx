@@ -121,8 +121,8 @@ export const FormConsumer = ({
   testingAct
 }: {
 // TODO formApi
-children: React.ReactElement | ((formApi: any) => React.ReactElement)
-testingAct?: IOption['testingAct']
+  children: React.ReactElement | ((formApi: any) => React.ReactElement)
+  testingAct?: IOption['testingAct']
 }): React.ReactElement => {
   const formApi = useForm({ testingAct })
   if (!formApi) {

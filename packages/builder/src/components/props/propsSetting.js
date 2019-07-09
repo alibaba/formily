@@ -163,7 +163,7 @@ class PropsSetting extends Component {
     const { componentId } = this.props
 
     if (!componentId.length) {
-      return <p className='props-tips'>请选择待编辑的表单字段</p>
+      return <p className="props-tips">请选择待编辑的表单字段</p>
     }
 
     return (
@@ -197,8 +197,8 @@ class PropsSetting extends Component {
             value={this.getSchemaValue()}
             onChange={this.onChangeHandler}
             schema={this.generatePropsSchema()}
-            labelAlign='left'
-            labelTextAlign='right'
+            labelAlign="left"
+            labelTextAlign="right"
             labelCol={8}
           >
             {' '}

@@ -32,8 +32,8 @@ const isElementInViewport = (
     offset = 0,
     threshold = 0
   }: {
-  offset?: IOffset | number
-  threshold?: number
+    offset?: IOffset | number
+    threshold?: number
   } = {}
 ) => {
   const { top, right, bottom, left, width, height } = rect
@@ -150,6 +150,7 @@ export const FormButtonGroup = styled(
 
     private getStickyBoundaryHandler(ref) {
       return () => {
+        // eslint-disable-next-line react/no-find-dom-node
         this.formNode = this.formNode || ReactDOM.findDOMNode(ref.current)
         if (this.formNode) {
           return isElementInViewport(this.formNode.getBoundingClientRect())

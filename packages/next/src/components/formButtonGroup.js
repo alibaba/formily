@@ -45,11 +45,11 @@ export const FormButtonGroup = styled(
     renderChildren() {
       const { children, itemStyle, offset, span } = this.props
       return (
-        <div className='button-group'>
+        <div className="button-group">
           <Row>
             <Col span={span}>
-              <Col offset={offset} className='inline'>
-                <div className='inline-view' style={itemStyle}>
+              <Col offset={offset} className="inline">
+                <div className="inline-view" style={itemStyle}>
                   {children}
                 </div>
               </Col>
@@ -95,7 +95,7 @@ export const FormButtonGroup = styled(
                 if (!FormRef) return
                 return (
                   <Sticky
-                    edge='bottom'
+                    edge="bottom"
                     triggerDistance={this.props.triggerDistance}
                     offsetDistance={this.props.offsetDistance}
                     zIndex={this.props.zIndex}
