@@ -7,19 +7,19 @@
 ## 类型描述
 
 ```typescript
-type FormPath {
-   match : (
-      pattern : String, //匹配模式字符串
-      matchRealPath : Boolean, //是否匹配真实路径，该属性是用于处理path为FormField时，是否匹配完整路径
-      filter : Function //过滤器，相当于是基于pattern所匹配的结果再进行一次过滤操作
+interface FormPath {
+   match: (
+      pattern      : string,                       //匹配模式字符串
+      matchRealPath: boolean,                      //是否匹配真实路径，该属性是用于处理path为FormField时，是否匹配完整路径
+      filter       : (pattern: string) => boolean  //过滤器，相当于是基于pattern所匹配的结果再进行一次过滤操作
    )=>(
-          path : String | Array<String> | FormField
-      )=>Boolean,
+          path: string | Array<string> | FormField
+      )=>boolean,
    transform:(
-      path : String | Array<String>,//要改变的路径
-      regexp : RegExp, //提取正则，该正则会在路径遍历过程中将某个路径节点按照该正则提取出来，然后以参数形式放到callback中
-      operator : Function //路径处理器，根据正则提取出来的路径节点，做一些转换处理，并返回最终路径
-   ) : Any
+      path    : string | Array<string>,          //要改变的路径
+      regexp  : RegExp,                          //提取正则，该正则会在路径遍历过程中将某个路径节点按照该正则提取出来，然后以参数形式放到callback中
+      operator: (...paths: string[]) => string;  //路径处理器，根据正则提取出来的路径节点，做一些转换处理，并返回最终路径
+   )=> string
 }
 ```
 
