@@ -3,10 +3,9 @@ import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
 import classNames from 'classnames'
 import { Popover, Icon, Row, Col } from 'antd'
 import styled from 'styled-components'
-import stringLength from 'string-length'
 
 import LOCALE from './locale'
-import { isFn, moveTo, isStr } from './utils'
+import { isFn, moveTo, isStr, stringLength } from './utils'
 import { IFormItemProps, IFormProps } from './type'
 
 /**
