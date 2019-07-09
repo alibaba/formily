@@ -5,8 +5,7 @@ import { ConfigProvider, Balloon, Icon } from '@alifd/next'
 import { Row, Col } from '@alifd/next/lib/grid'
 import LOCALE from './locale'
 import styled from 'styled-components'
-import { isFn, moveTo, isStr } from './utils'
-import stringLength from 'string-length'
+import { isFn, moveTo, isStr, stringLength } from './utils'
 
 /**
  * 轻量级Next Form，不包含任何数据管理能力
