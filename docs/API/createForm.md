@@ -8,10 +8,10 @@
 
 ```typescript
 
+type createForm = (options: IFormOptions) => Form
 
-
-interface CreateForm = {
-  editable        : boolean | ((name: string) => boolean)
+interface IFormOptions = {
+  editable        : Editable
   effects         : Effects
   values?         : any
   initialValues?  : any
@@ -24,6 +24,57 @@ interface CreateForm = {
   onReset         : (payload: IFormPayload) => void
   onSubmit        : (values: any) => Promise<any> | void
 }
+type Editable = boolean | ((name: string) => boolean)
+
+type Form = {
+  editable: Editable
+  changeValues(values: any): void;
+  changeEditable(editable: Editable): void;
+
+  getFieldState(name: Path | IFormPathMatcher, callback: (fieldState: IFieldState) => void) => void
+  getFieldState(name: Path | IFormPathMatcher) => IFieldState
+  setFieldState: (
+    name: Path | IFormPathMatcher,
+    callback: (fieldState: IFieldState) => void
+  ) => Promise<void>
+  
+  getFormState: (callback: (fieldState: IFormState) => void) => void
+  getFormState: () => IFormState
+  setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
+
+  registerField(name: string, options: {
+    path: Path, 
+    props: any, 
+    onChange: (fieldState:IFieldState) => void 
+  }): IField;
+  setIn(name: string, value: any): void;
+  setInitialValueIn(name: string, value: any): void;
+  setValue(name: string, value: any): void;
+  setErrors(name: string, errors: string[] | string, ...args: string[]): void;
+  updateChildrenValue(parent: IField): void;
+  updateChildrenInitalValue(parent: IField): void;
+  updateFieldInitialValue(): Promise<any>;
+  updateFieldsValue(validate?: boolean): Promise<any>;
+  updateChildrenVisible(parent: IField, visible?: boolean): void;
+  getInitialValue(name: string, path?: Path): any;
+  getValue(name?: string, copy?: boolean): any;
+  deleteIn(name: string): void;
+  deleteInitialValues(name: string): void;
+  reset(forceClear?: boolean): void;
+  publishState(): IFormState;
+  formNotify(fieldState?: IFieldState): IFormState;
+  validate(): Promise<IFormState>;
+  submit(): Promise<IFormState>;
+  subscribe(callback: (payload: {
+    formState: IFormState, 
+    fieldState: IFieldState
+  }) => void): () => void;
+  destructor(): void;
+  triggerEffect: (eventName: string, ...args: any[]) => void;
+  syncUpdate(fn: () => void): void;
+  initialize(values?: any): void;
+}
+
 interface IFormPayload {
   formState: IFormState
 }
