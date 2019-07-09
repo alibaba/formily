@@ -17,7 +17,7 @@ import { Submit } from '@uform/next(antd)'
 
 扩展属性
 
-- showLoading : Boolean
+- showLoading : boolean
 
 > 主要用于控制Submit组件是否自动展示loading图标，要求SchemaForm的onSubmit回调必须返回Promise对象才会生效。
 

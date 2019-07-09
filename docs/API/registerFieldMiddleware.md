@@ -7,9 +7,8 @@
 ## 类型描述
 
 ```typescript
-type registerFieldMiddleware(...wrappers : Wrapper)
+type registerFieldMiddleware = (...wrappers : React.ComponentType<any>) => React.ComponentType<any>
 
-type Wrapper(FormComponent : Function) : ReactComponent
 ```
 
 ## 依赖

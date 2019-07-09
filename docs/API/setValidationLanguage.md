@@ -7,7 +7,7 @@
 ## 类型描述
 
 ```typescript
-type setValidationLanguage(lang : String)
+type setValidationLanguage = (lang: string) => void
 ```
 
 ## 依赖

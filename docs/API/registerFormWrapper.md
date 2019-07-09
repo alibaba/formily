@@ -7,9 +7,9 @@
 ## 类型描述
 
 ```typescript
-type registerFormField(...wrappers : Wrapper)
+type registerFormWrapper = (...wrappers : Wrapper) => FormComponent 
 
-type Wrapper(FormComponent : Function) : ReactComponent
+type Wrapper = (component: FormComponent) => FormComponent
 ```
 
 ## 依赖
