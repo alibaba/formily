@@ -46,8 +46,7 @@ https://uformjs.org
 
 ## Demo
 
-https://codesandbox.io/s/245o92lnzy
-
+[codesandbox](https://codesandbox.io/s/o5up7)
 
 ## Community
 
