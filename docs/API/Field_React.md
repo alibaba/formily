@@ -106,7 +106,7 @@ interface IFieldProps<V = any> {
    loading             : boolean //是否处于加载态
    schemaPath          : Array<string> //schema path,考虑到有些schema其实是不占数据路径的，所以这个路径是真实路径
    getSchema           : (path: string) => ISchema //根据路径获取schema
-   renderField         : (childKey: string, reactKey: string | number) => JSX.Element | string | nul //根据childKey渲染当前字段的子字段
+   renderField         : (childKey: string, reactKey: string | number) => JSX.Element | string | null //根据childKey渲染当前字段的子字段
    renderComponent     : React.FunctionComponent<Partial<IFieldProps>> | undefined>,//渲染当前字段的组件，对于x-render来说，可以借助它快速实现渲染包装功能
    getOrderProperties  : () => Array<{schema: ISchema, key: number, path: string, name: string }>,//根据properties里字段的x-index值求出排序后的properties
    mutators            : Mutators,//数据操作对象
