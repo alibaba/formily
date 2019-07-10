@@ -100,7 +100,8 @@ export class Field implements IField {
 
   public initialize(options: IFieldOptions) {
     const rules = this.getRulesFromProps(options.props)
-    this.value = !isEmpty(options.value) ? clone(options.value) : this.value
+    this.value = clone(options.value)
+
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
 
