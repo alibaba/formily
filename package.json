@@ -79,7 +79,7 @@
     "jest-watch-lerna-packages": "^1.1.0",
     "json5": "^2.1.0",
     "lerna": "^3.10.1",
-    "lint-staged": "^9.1.0",
+    "lint-staged": "^8.2.1",
     "majo": "^0.7.1",
     "onchange": "^5.2.0",
     "prettier": "^1.18.2",
