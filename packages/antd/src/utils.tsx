@@ -45,13 +45,17 @@ const Text = styled(props => {
   let value
   if (props.dataSource && props.dataSource.length) {
     const find = props.dataSource.filter(({ value }) =>
-      Array.isArray(props.value) ? props.value.indexOf(value) > -1 : props.value === value
+      Array.isArray(props.value)
+        ? props.value.indexOf(value) > -1
+        : props.value === value
     )
     value = find.map(item => item.label).join(' , ')
   } else {
     value = Array.isArray(props.value)
       ? props.value.join(' ~ ')
-      : String(props.value === undefined || props.value === null ? '' : props.value)
+      : String(
+          props.value === undefined || props.value === null ? '' : props.value
+        )
   }
   return (
     <div className={`${props.className} ${props.size || ''} text-field`}>
@@ -80,7 +84,8 @@ export interface IStateLoadingProps {
   dataSource: any[]
 }
 
-const loadingSvg = '<svg viewBox="0 0 1024 1024" class="anticon-spin" data-icon="loading" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 0 0-94.3-139.9 437.71 437.71 0 0 0-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z"></path></svg>'
+const loadingSvg =
+  '<svg viewBox="0 0 1024 1024" class="anticon-spin" data-icon="loading" width="1em" height="1em" fill="currentColor" aria-hidden="true" focusable="false"><path d="M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 0 0-94.3-139.9 437.71 437.71 0 0 0-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z"></path></svg>'
 
 export const StateLoading = (Target: React.ComponentClass) => {
   return class Select extends React.Component<IStateLoadingProps> {
@@ -115,7 +120,16 @@ export const StateLoading = (Target: React.ComponentClass) => {
     public mapState() {
       const { state } = this.props
       const loadingName = 'anticon-spin'
-      const iconSizeClassNames = ['xxs', 'xs', 'small', 'medium', 'large', 'xl', 'xxl', 'xxxl']
+      const iconSizeClassNames = [
+        'xxs',
+        'xs',
+        'small',
+        'medium',
+        'large',
+        'xl',
+        'xxl',
+        'xxxl'
+      ]
       this.classList = this.classList || []
 
       if (this.wrapperDOM) {
@@ -170,10 +184,15 @@ export const acceptEnum = component => {
   }
 }
 
-export const mapStyledProps = (props: IConnectProps, { loading, size }: IFieldProps) => {
+export const mapStyledProps = (
+  props: IConnectProps,
+  { loading, size }: IFieldProps
+) => {
   if (loading) {
     props.state = props.state || 'loading'
-    props.suffix = <Icon type="loading" style={{ color: 'rgba(0, 0, 0, 0.25)' }} />
+    props.suffix = (
+      <Icon type="loading" style={{ color: 'rgba(0, 0, 0, 0.25)' }} />
+    )
   }
   if (size) {
     props.size = size
@@ -183,7 +202,10 @@ export const mapStyledProps = (props: IConnectProps, { loading, size }: IFieldPr
 export const mapTextComponent = (
   Target: React.ComponentClass,
   props,
-  { editable, name }: { editable: boolean | ((name: string) => boolean); name: string }
+  {
+    editable,
+    name
+  }: { editable: boolean | ((name: string) => boolean); name: string }
 ): React.ComponentClass => {
   if (editable !== undefined) {
     if (isFn(editable)) {

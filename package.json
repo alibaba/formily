@@ -25,7 +25,7 @@
     "version:major": "npm run prevesion && lerna version major --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "release:force": "lerna publish from-package --yes",
     "release": "lerna publish",
-    "lint": "eslint --ext .js,.ts,.tsx \"packages/!(docs)/**/*.@(ts|tsx|js)\" \"scripts/**/*.@(ts|tsx|js)\"",
+    "lint": "eslint --ext .ts,.tsx,.js \"packages/!(docs)/**/*.@(ts|tsx)\" \"scripts/**/*.js\" --fix",
     "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
@@ -61,10 +61,10 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-react": "^7.14.2",
     "eslint-plugin-react-hooks": "^1.6.1",
-    "eslint-plugin-standard": "^4.0.0",
     "execa": "^1.0.0",
     "findup": "^0.1.5",
     "fs-extra": "^7.0.1",
@@ -79,9 +79,10 @@
     "jest-watch-lerna-packages": "^1.1.0",
     "json5": "^2.1.0",
     "lerna": "^3.10.1",
+    "lint-staged": "^9.1.0",
     "majo": "^0.7.1",
     "onchange": "^5.2.0",
-    "prettier-eslint-cli": "^4.7.1",
+    "prettier": "^1.18.2",
     "pretty-format": "^24.0.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
@@ -91,8 +92,6 @@
     "staged-git-files": "^1.1.2",
     "ts-jest": "^24.0.2",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "tslint": "^5.16.0",
-    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.5",
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
@@ -100,12 +99,22 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "prettier-eslint \"./(packages|scripts)/**.js\" --write && npm run lint",
+      "pre-commit": "lint-staged",
       "commit-msg": "node ./scripts/validate-commit-msg.js"
     },
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "lint-staged": {
+    "packages/!(docs)/**/*.@(ts|tsx)": [
+      "eslint --ext .ts,.tsx --fix",
+      "git add"
+    ],
+    "scripts/**/*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "opencollective": "^1.0.3",

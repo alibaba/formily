@@ -1,7 +1,14 @@
 import React, { Component, useContext } from 'react'
 import { ISchema } from '@uform/types'
 
-import { createHOC, isEqual, each, schemaIs, filterSchema, lowercase } from '../utils'
+import {
+  createHOC,
+  isEqual,
+  each,
+  schemaIs,
+  filterSchema,
+  lowercase
+} from '../utils'
 import { createMutators } from '../shared/mutators'
 import { StateContext } from '../shared/context'
 import { getFieldRenderer, getFormField } from '../shared/core'
@@ -21,18 +28,23 @@ const StateField = createHOC((options, Field) => {
       super(props)
       this.initialized = false
       this.state = {}
-      this.field = props.form.registerField(props.name || props.schemaPath.join('.'), {
-        path: props.schemaPath,
-        onChange: this.onChangeHandler(),
-        props: props.schema
-      })
+      this.field = props.form.registerField(
+        props.name || props.schemaPath.join('.'),
+        {
+          path: props.schemaPath,
+          onChange: this.onChangeHandler(),
+          props: props.schema
+        }
+      )
       this.mutators = createMutators(props)
       this.initialized = true
     }
 
     public onChangeHandler() {
       return fieldState => {
-        if (this.unmounted) {return}
+        if (this.unmounted) {
+          return
+        }
         if (this.initialized) {
           this.setState(fieldState)
         } else {
@@ -100,12 +112,20 @@ const StateField = createHOC((options, Field) => {
 
     public render() {
       const { name, path, schemaPath, locale, getSchema } = this.props
-      const { value, visible, props, errors, loading, editable, required } = this.state
+      const {
+        value,
+        visible,
+        props,
+        errors,
+        loading,
+        editable,
+        required
+      } = this.state
       const newValue = schemaIs(props, 'object')
         ? value || {}
         : schemaIs(props, 'array')
-          ? value || []
-          : value
+        ? value || []
+        : value
 
       return visible === false ? (
         <React.Fragment />
@@ -152,27 +172,31 @@ export const FormField = StateField()((props: IFieldProps) => {
   const fieldComponentName = lowercase(schema['x-component'] || schema.type)
   const renderComponent = schema['x-render']
     ? $props => {
-      return React.createElement(getFormField(fieldComponentName), {
-        ...props,
-        ...$props,
-        schema,
-        path: props.path,
-        name: props.name
-      })
-    }
+        return React.createElement(getFormField(fieldComponentName), {
+          ...props,
+          ...$props,
+          schema,
+          path: props.path,
+          name: props.name
+        })
+      }
     : undefined
 
-  const component = schema['x-render'] ? getFieldRenderer() : getFormField(fieldComponentName)
+  const component = schema['x-render']
+    ? getFieldRenderer()
+    : getFormField(fieldComponentName)
 
   if (component) {
     return React.createElement(component, { ...props, renderComponent })
   } else {
     if (console && console.error) {
       if (fieldComponentName) {
-        console.error(`The schema field \`${fieldComponentName}\`'s component is not found.`)
+        console.error(
+          `The schema field \`${fieldComponentName}\`'s component is not found.`
+        )
       } else {
         console.error(
-          'The schema field\'s component is not found, or field\'s schema is not defined.'
+          "The schema field's component is not found, or field's schema is not defined."
         )
       }
     }

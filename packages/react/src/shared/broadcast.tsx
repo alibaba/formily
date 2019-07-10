@@ -32,7 +32,11 @@ export const FormBridge = () => (Target: React.ComponentType) => {
   const Broadcast = props => {
     const broadcast = useContext(BroadcastContext)
     if (!broadcast) {
-      return <FormProvider>{broadcast => <Target {...props} broadcast={broadcast} />}</FormProvider>
+      return (
+        <FormProvider>
+          {broadcast => <Target {...props} broadcast={broadcast} />}
+        </FormProvider>
+      )
     }
     return <Target {...props} broadcast={broadcast} />
   }
@@ -120,7 +124,7 @@ export const FormConsumer = ({
   children,
   testingAct
 }: {
-// TODO formApi
+  // TODO formApi
   children: React.ReactElement | ((formApi: any) => React.ReactElement)
   testingAct?: IOption['testingAct']
 }): React.ReactElement => {

@@ -7,7 +7,7 @@ const self = window
 
 const getScheduler = () => {
   if (!self.requestAnimationFrame) {
-    return [ self.setTimeout, self.clearTimeout ]
+    return [self.setTimeout, self.clearTimeout]
   }
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -17,11 +17,11 @@ const getScheduler = () => {
       scheduler.cancelCallback || scheduler.unstable_cancelCallback
     ]
   } catch (err) {
-    return [ self.requestAnimationFrame, self.cancelAnimationFrame ]
+    return [self.requestAnimationFrame, self.cancelAnimationFrame]
   }
 }
 
-export const [ raf, caf ] = getScheduler()
+export const [raf, caf] = getScheduler()
 
 export const resolveFieldPath = (path: Path | IFormPathMatcher): string[] => {
   if (!isArr(path)) {
@@ -51,7 +51,15 @@ export const hasRequired = rules => {
 }
 
 export const publishFormState = state => {
-  const { values, valid, invalid, initialValues, errors, pristine, dirty } = state
+  const {
+    values,
+    valid,
+    invalid,
+    initialValues,
+    errors,
+    pristine,
+    dirty
+  } = state
   return {
     values,
     valid,
@@ -109,7 +117,9 @@ export class BufferList {
       this.indexes[key] = index
     } else {
       const item = this.data[this.indexes[key]]
-      if (item.values.indexOf(value) === -1) { item.values.push(value) }
+      if (item.values.indexOf(value) === -1) {
+        item.values.push(value)
+      }
     }
   }
 

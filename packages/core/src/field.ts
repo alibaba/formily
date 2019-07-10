@@ -21,7 +21,8 @@ import {
 } from '@uform/types'
 import { Form } from './form'
 
-const filterSchema = (value: any, key: string): boolean => key !== 'properties' && key !== 'items'
+const filterSchema = (value: any, key: string): boolean =>
+  key !== 'properties' && key !== 'items'
 
 export class Field implements IField {
   public dirty: boolean
@@ -104,18 +105,22 @@ export class Field implements IField {
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
 
-    this.path = resolveFieldPath(!isEmpty(options.path) ? options.path : this.path || [])
+    this.path = resolveFieldPath(
+      !isEmpty(options.path) ? options.path : this.path || []
+    )
     this.rules = !isEmpty(rules) ? rules : this.rules
     this.required = hasRequired(this.rules)
 
     if (isEmpty(options.props)) {
-      this.initialValue = !isEmpty(options.initialValue) ? options.initialValue : this.initialValue
+      this.initialValue = !isEmpty(options.initialValue)
+        ? options.initialValue
+        : this.initialValue
     } else {
       this.initialValue = !isEmpty(options.initialValue)
         ? options.initialValue
         : !isEmpty(this.initialValue)
-          ? this.initialValue
-          : this.getInitialValueFromProps(options.props)
+        ? this.initialValue
+        : this.getInitialValueFromProps(options.props)
       this.props = !isEmpty(this.props)
         ? { ...this.props, ...clone(options.props) }
         : clone(options.props)
@@ -265,7 +270,10 @@ export class Field implements IField {
   public syncContextValue() {
     if (this.visible) {
       const contextValue = this.context.getValue(this.name, true)
-      const contextInitialValue = this.context.getInitialValue(this.name, this.path)
+      const contextInitialValue = this.context.getInitialValue(
+        this.name,
+        this.path
+      )
       if (!isEqual(this.value, contextValue)) {
         this.value = contextValue
       }
@@ -483,7 +491,8 @@ export class Field implements IField {
     if (!isEqual(published.visible, this.visible)) {
       this.visible = published.visible
       if (this.visible) {
-        this.value = this.value !== undefined ? this.value : clone(this.initialValue)
+        this.value =
+          this.value !== undefined ? this.value : clone(this.initialValue)
         if (this.value !== undefined) {
           this.context.setIn(this.name, this.value)
         }

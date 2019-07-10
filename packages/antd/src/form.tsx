@@ -1,7 +1,7 @@
 import React from 'react'
 import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
 import classNames from 'classnames'
-import { Row, Col, Popover, Icon  } from 'antd'
+import { Row, Col, Popover, Icon } from 'antd'
 import styled from 'styled-components'
 import stringLength from 'string-length'
 
@@ -14,7 +14,10 @@ import { IFormItemProps, IFormProps } from './type'
  *
  */
 
-export const { Provider: FormProvider, Consumer: FormConsumer } = React.createContext(undefined)
+export const {
+  Provider: FormProvider,
+  Consumer: FormConsumer
+} = React.createContext(undefined)
 
 const normalizeCol = col => {
   return typeof col === 'object' ? col : { span: col }
@@ -162,7 +165,11 @@ export const FormItem = styled(
       } = this.props
 
       const message = (
-        <div className={`${prefix}form-item-msg ${!noMinHeight ? `${prefix}form-item-space` : ''}`}>
+        <div
+          className={`${prefix}form-item-msg ${
+            !noMinHeight ? `${prefix}form-item-space` : ''
+          }`}
+        >
           {help && <div className={`${prefix}form-item-help`}>{help}</div>}
           {!help && !isPopDescription(extra, maxTipsNum) && (
             <div className={`${prefix}form-item-extra`}>{extra}</div>
@@ -175,7 +182,12 @@ export const FormItem = styled(
           {message}
         </div>
       )
-      if ((wrapperCol || labelCol) && labelAlign !== 'top' && !isTableColItem && label) {
+      if (
+        (wrapperCol || labelCol) &&
+        labelAlign !== 'top' &&
+        !isTableColItem &&
+        label
+      ) {
         return (
           <Col {...normalizeCol(wrapperCol)} key="item">
             {ele}
@@ -190,7 +202,10 @@ export const FormItem = styled(
       return (
         <Popover placement="top" content={this.props.extra}>
           {/* TODO antd 没有 size 属性 */}
-          <Icon type="question-circle" className={`${this.props.prefix}form-tips`} />
+          <Icon
+            type="question-circle"
+            className={`${this.props.prefix}form-tips`}
+          />
         </Popover>
       )
     }
@@ -366,7 +381,9 @@ registerFormWrapper(OriginForm => {
           <OriginForm
             {...others}
             formRef={this.FormRef}
-            onValidateFailed={this.validateFailedHandler(others.onValidateFailed)}
+            onValidateFailed={this.validateFailedHandler(
+              others.onValidateFailed
+            )}
             className={formClassName}
             style={style}
           >
@@ -407,7 +424,16 @@ const isTableColItem = (path, getSchema) => {
 
 registerFieldMiddleware(Field => {
   return props => {
-    const { name, errors, editable, path, required, schema, schemaPath, getSchema } = props
+    const {
+      name,
+      errors,
+      editable,
+      path,
+      required,
+      schema,
+      schemaPath,
+      getSchema
+    } = props
     if (path.length === 0) {
       // 根节点是不需要包FormItem的
       return React.createElement(Field, props)
@@ -415,7 +441,15 @@ registerFieldMiddleware(Field => {
     return React.createElement(
       FormConsumer,
       {},
-      ({ labelAlign, labelTextAlign, labelCol, maxTipsNum, wrapperCol, size, autoAddColon }) => {
+      ({
+        labelAlign,
+        labelTextAlign,
+        labelCol,
+        maxTipsNum,
+        wrapperCol,
+        size,
+        autoAddColon
+      }) => {
         return React.createElement(
           FormItem,
           {
@@ -429,14 +463,18 @@ registerFieldMiddleware(Field => {
             ...schema['x-item-props'],
             label: schema.title,
             noMinHeight: schema.type === 'object' && !schema['x-component'],
-            isTableColItem: isTableColItem(schemaPath.slice(0, schemaPath.length - 2), getSchema),
+            isTableColItem: isTableColItem(
+              schemaPath.slice(0, schemaPath.length - 2),
+              getSchema
+            ),
             type: schema['x-component'] || schema.type,
             id: name,
             validateState: toArr(errors).length ? 'error' : undefined,
             required: editable === false ? false : required,
             extra: schema.description,
             help:
-              toArr(errors).join(' , ') || (schema['x-item-props'] && schema['x-item-props'].help)
+              toArr(errors).join(' , ') ||
+              (schema['x-item-props'] && schema['x-item-props'].help)
           },
           React.createElement(Field, props)
         )

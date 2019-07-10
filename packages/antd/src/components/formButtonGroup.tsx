@@ -50,10 +50,14 @@ const isElementInViewport = (
   }
 
   return (
-    intersection.t >= ((offset as IOffset).top || offset as number + elementThreshold.y) &&
-    intersection.r >= ((offset as IOffset).right || offset as number + elementThreshold.x) &&
-    intersection.b >= ((offset as IOffset).bottom || offset as number + elementThreshold.y) &&
-    intersection.l >= ((offset as IOffset).left || offset as number + elementThreshold.x)
+    intersection.t >=
+      ((offset as IOffset).top || (offset as number) + elementThreshold.y) &&
+    intersection.r >=
+      ((offset as IOffset).right || (offset as number) + elementThreshold.x) &&
+    intersection.b >=
+      ((offset as IOffset).bottom || (offset as number) + elementThreshold.y) &&
+    intersection.l >=
+      ((offset as IOffset).left || (offset as number) + elementThreshold.x)
   )
 }
 
@@ -160,7 +164,8 @@ export const FormButtonGroup = styled(
     }
   }
 )`
-  ${props => (props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : '')}
+  ${props =>
+    props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : ''}
   &.is-inline {
     display: inline-block;
     flex-grow: 3;
