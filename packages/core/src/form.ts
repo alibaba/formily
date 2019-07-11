@@ -406,7 +406,7 @@ export class Form {
     deleteIn(this.state.initialValues, name)
   }
 
-  public reset(forceClear?: boolean) {
+  public reset(forceClear?: boolean, noValidate: boolean = false) {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
@@ -425,19 +425,27 @@ export class Form {
         })
       }
     })
-    this.internalValidate(this.state.values, true).then(() => {
-      this.formNotify()
-      raf(() => {
-        if (this.destructed) {
-          return
-        }
-        const formState = this.publishState()
-        this.triggerEffect('onFormReset', formState)
-        if (isFn(this.options.onReset)) {
-          this.options.onReset({ formState })
-        }
+    if (noValidate) {
+      const formState = this.publishState()
+      this.triggerEffect('onFormReset', formState)
+      if (isFn(this.options.onReset)) {
+        this.options.onReset({ formState })
+      }
+    } else {
+      this.internalValidate(this.state.values, true).then(() => {
+        this.formNotify()
+        raf(() => {
+          if (this.destructed) {
+            return
+          }
+          const formState = this.publishState()
+          this.triggerEffect('onFormReset', formState)
+          if (isFn(this.options.onReset)) {
+            this.options.onReset({ formState })
+          }
+        })
       })
-    })
+    }
   }
 
   public publishState() {
