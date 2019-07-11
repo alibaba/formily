@@ -183,7 +183,14 @@ const App = () => {
           >
             手动触发校验
           </Button>
-          <Reset />
+          <Reset >值重置</Reset>
+          <Button
+            onClick={() => {
+              actions.reset({validate:false})
+            }}
+          >
+            无错重置
+          </Button>
         </FormButtonGroup>
       </SchemaForm>
     </Printer>

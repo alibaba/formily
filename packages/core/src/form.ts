@@ -412,16 +412,25 @@ export class Form {
     deleteIn(this.state.initialValues, name)
   }
 
-  public reset(forceClear?: boolean) {
+  public reset(forceClear?: boolean, validate: boolean = true) {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
-      if (isEmpty(value) && isEmpty(initialValue)) {
-        return
+      if (!validate) {
+        if (field.errors.length > 0) {
+          field.errors = []
+          field.dirty = true
+        }
+        if (field.effectErrors.length > 0) {
+          field.effectErrors = []
+          field.dirty = true
+        }
       }
-      field.updateState(state => {
-        state.value = forceClear ? undefined : initialValue
-      })
+      if (!isEmpty(value) || !isEmpty(initialValue)) {
+        field.updateState(state => {
+          state.value = forceClear ? undefined : initialValue
+        })
+      }
       if (field.dirty) {
         raf(() => {
           if (this.destructed) {
@@ -431,19 +440,27 @@ export class Form {
         })
       }
     })
-    this.internalValidate(this.state.values, true).then(() => {
-      this.formNotify()
-      raf(() => {
-        if (this.destructed) {
-          return
-        }
-        const formState = this.publishState()
-        this.triggerEffect('onFormReset', formState)
-        if (isFn(this.options.onReset)) {
-          this.options.onReset({ formState })
-        }
+    if (!validate) {
+      const formState = this.publishState()
+      this.triggerEffect('onFormReset', formState)
+      if (isFn(this.options.onReset)) {
+        this.options.onReset({ formState })
+      }
+    } else {
+      this.internalValidate(this.state.values, true).then(() => {
+        this.formNotify()
+        raf(() => {
+          if (this.destructed) {
+            return
+          }
+          const formState = this.publishState()
+          this.triggerEffect('onFormReset', formState)
+          if (isFn(this.options.onReset)) {
+            this.options.onReset({ formState })
+          }
+        })
       })
-    })
+    }
   }
 
   public publishState() {

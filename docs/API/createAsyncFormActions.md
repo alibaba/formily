@@ -25,7 +25,7 @@ interface AsyncFormAction {
     //获取表单Schema
     getSchema: (path: Path) => Promise<ISchema>
     //重置表单
-    reset: (forceClear: boolean) => Promise<void>
+    reset: (forceClear?: boolean,noValidate: boolean=false) => Promise<void>
     //提交表单
     submit: () => Promise<IFormState>
     //校验表单
