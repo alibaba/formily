@@ -51,6 +51,8 @@ export class Field implements IField {
 
   public hiddenFromParent: boolean
 
+  public shownFromParent: boolean
+
   public initialValue: any
 
   public namePath: string[]
@@ -70,8 +72,6 @@ export class Field implements IField {
   private removed: boolean
 
   private destructed: boolean
-
-  private initialized: boolean
 
   private alreadyHiddenBeforeUnmount: boolean
 
@@ -94,9 +94,7 @@ export class Field implements IField {
     this.errors = []
     this.props = {}
     this.effectErrors = []
-    this.initialized = false
     this.initialize(options)
-    this.initialized = true
   }
 
   public initialize(options: IFieldOptions) {
@@ -128,12 +126,12 @@ export class Field implements IField {
       this.editable = !isEmpty(editable) ? editable : this.getContextEditable()
     }
 
-    if (!this.initialized) {
-      if (isEmpty(this.value) && !isEmpty(this.initialValue)) {
-        this.value = clone(this.initialValue)
-        this.context.setIn(this.name, this.value)
-        this.context.setInitialValueIn(this.name, this.initialValue)
-      }
+    if (
+      !isEmpty(this.initialValue) &&
+      (isEmpty(this.value) || (this.removed && !this.shownFromParent))
+    ) {
+      this.value = clone(this.initialValue)
+      this.context.setIn(this.name, this.value)
     }
 
     this.mount()

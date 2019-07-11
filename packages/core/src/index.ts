@@ -1,16 +1,17 @@
-import { IFormOptions } from '@uform/types'
+import { IFormOptions, ISchema } from '@uform/types'
 import {
   setLocale as setValidationLocale,
   setLanguage as setValidationLanguage
 } from '@uform/validator'
 
 import { Form } from './form'
-import { caculateSchemaInitialValues, isFn, each } from './utils'
+import { caculateSchemaInitialValues, isFn, each, isEmpty } from './utils'
 
 export * from './path'
 
 export const createForm = ({
   initialValues,
+  values,
   onSubmit,
   onReset,
   schema,
@@ -23,15 +24,23 @@ export const createForm = ({
   onValidateFailed
 }: IFormOptions) => {
   let fields = []
-  initialValues = caculateSchemaInitialValues(
+  let calculatedValues = caculateSchemaInitialValues(
     schema,
-    initialValues,
-    ({ name, path, schemaPath }, schema, value: any) => {
+    isEmpty(values) ? initialValues : values,
+    ({ name, path, schemaPath }, schema: ISchema, value: any) => {
       fields.push({ name, path, schemaPath, schema, value })
     }
   )
+
+  if (isEmpty(values)) {
+    initialValues = calculatedValues
+  } else {
+    values = calculatedValues
+  }
+
   const form = new Form({
     initialValues,
+    values,
     onSubmit,
     onReset,
     subscribes,
