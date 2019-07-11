@@ -2,7 +2,7 @@
 
 ## 介绍
 
-声明表单 Actions，用于跨组件通讯，使用该方法创建的所有actions都存在调用时机限制，要求Form初始化完成之后才能调用，所以只能用在异步事件里调用
+声明表单 Actions，用于跨组件通讯，使用该方法创建的所有 actions 都存在调用时机限制，要求 Form 初始化完成之后才能调用，所以只能用在异步事件里调用
 
 ## 类型描述
 
@@ -24,7 +24,7 @@ interface FormActions {
     //获取表单Schema
     getSchema: (path: Path) => ISchema
     //重置表单
-    reset: (forceClear: boolean) => void
+    reset: (forceClear?: boolean | { forceClear?: boolean; validate?: boolean },validate : boolean = true) => void
     //提交表单
     submit: () => Promise<IFormState>
     //校验表单
@@ -42,13 +42,13 @@ type createFormActions: () => FormActions
 
 ```typescript
 interface IFormState<V> {
-  values       : V                                     // 表单数据
-  initialValues: V                                     // 初始化数据
-  valid        : boolean                               // 是否合法
-  invalid      : boolean                               // 是否不合法
-  errors       : { name: string, errors: string[] }[]  // 错误提示集合
-  pristine     : boolean                               // 是否是原始态
-  dirty        : boolean                               // 是否存在变化
+  values: V // 表单数据
+  initialValues: V // 初始化数据
+  valid: boolean // 是否合法
+  invalid: boolean // 是否不合法
+  errors: { name: string; errors: string[] }[] // 错误提示集合
+  pristine: boolean // 是否是原始态
+  dirty: boolean // 是否存在变化
 }
 ```
 
@@ -57,20 +57,20 @@ interface IFormState<V> {
 用于描述表单字段状态的模型对象
 
 ```typescript
-interface IFieldState<V = any>{
-  value       : V                   //字段值
-  valid       : boolean             //字段是否合法
-  invalid     : boolean             //字段是否非法
-  visible     : boolean             //字段显示状态
-  editable    : boolean             //字段是否可编辑
-  loading     : boolean             //字段加载状态
-  errors      : string[]            //字段错误消息集合
-  pristine    : boolean             //字段是否处于原始态
-  initialValue: V                   //字段初始值
-  name        : string              //字段路径
-  path        : string[]            //字段路径，数组形式
-  props       : ISchema             //字段附加属性
-  rules       : IRuleDescription[]  //字段校验规则
+interface IFieldState<V = any> {
+  value: V //字段值
+  valid: boolean //字段是否合法
+  invalid: boolean //字段是否非法
+  visible: boolean //字段显示状态
+  editable: boolean //字段是否可编辑
+  loading: boolean //字段加载状态
+  errors: string[] //字段错误消息集合
+  pristine: boolean //字段是否处于原始态
+  initialValue: V //字段初始值
+  name: string //字段路径
+  path: string[] //字段路径，数组形式
+  props: ISchema //字段附加属性
+  rules: IRuleDescription[] //字段校验规则
 }
 ```
 
@@ -97,24 +97,25 @@ registerFormField(
   connect()(props => <input {...props} value={props.value || ''} />)
 )
 
-registerFormField(
-  'text',
-  connect()(props => <div>{props.value || ''}</div>)
-)
+registerFormField('text', connect()(props => <div>{props.value || ''}</div>))
 
 const actions = createFormActions()
 
 ReactDOM.render(
   <div>
-    <SchemaForm actions={actions} effects={($)=>{
-      $('onFieldChange','aa').subscribe(({value})=>{
-        actions.setFieldState('bb',state=>{
-          state.value = value
+    <SchemaForm
+      actions={actions}
+      effects={$ => {
+        $('onFieldChange', 'aa').subscribe(({ value }) => {
+          actions.setFieldState('bb', state => {
+            state.value = value
+          })
         })
-      })
-    }} onSubmit={()=>alert('submited')}>
+      }}
+      onSubmit={() => alert('submited')}
+    >
       <Field name="aa" type="string" />
-      <Field name="bb" type="text"/>
+      <Field name="bb" type="text" />
     </SchemaForm>
     <button
       onClick={() => {

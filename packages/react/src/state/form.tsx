@@ -7,6 +7,7 @@ import {
   createHOC,
   getSchemaNodeFromPath,
   isEqual,
+  isObj,
   clone,
   isEmpty
 } from '../utils'
@@ -254,8 +255,16 @@ export const StateForm = createHOC((options, Form) => {
       return this.form.submit()
     }
 
-    public reset = (forceClear?: boolean) => {
-      this.form.reset(forceClear)
+    public reset = (
+      params?: boolean | { forceClear?: boolean; validate?: boolean },
+      validate: boolean = true
+    ) => {
+      let forceClear: boolean
+      if (isObj(params)) {
+        forceClear = !!params.forceClear
+        validate = !isEmpty(params.validate) ? params.validate : validate
+      }
+      this.form.reset(forceClear, validate)
     }
 
     public validate = () => {
