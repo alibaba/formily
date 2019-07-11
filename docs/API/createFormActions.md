@@ -24,7 +24,7 @@ interface FormActions {
     //获取表单Schema
     getSchema: (path: Path) => ISchema
     //重置表单
-    reset: (forceClear: boolean) => void
+    reset: (forceClear?: boolean,noValidate: boolean=false) => void
     //提交表单
     submit: () => Promise<IFormState>
     //校验表单
