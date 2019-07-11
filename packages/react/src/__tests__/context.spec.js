@@ -41,9 +41,9 @@ test('submit by form consumer', async () => {
   )
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('Submitting')).toBeVisible()
   await sleep(300)
   expect(queryByText('Submitting')).toBeNull()

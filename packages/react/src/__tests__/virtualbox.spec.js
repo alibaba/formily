@@ -51,7 +51,7 @@ test('createVirtualBox', async () => {
 
   const { queryByText } = render(<TestComponent />)
 
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('card content')).toBeVisible()
 })
 
