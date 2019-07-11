@@ -33,6 +33,7 @@ const FormCardsField = styled(
 
     render() {
       const { value, className, schema, renderField } = this.props
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
         title,
         style,
@@ -45,6 +46,7 @@ const FormCardsField = styled(
         renderOperations,
         ...others
       } = this.getProps() || {}
+      /* eslint-enable @typescript-eslint/no-unused-vars */
       return (
         <div
           className={`${className} ${cls}`}

@@ -6,7 +6,12 @@ import RegExpPatterns from './regexp'
 
 const PatternKeys = Object.keys(RegExpPatterns)
 
-const batchValidate = (value: any, rule: IRuleDescription, values: any, name: string) => {
+const batchValidate = (
+  value: any,
+  rule: IRuleDescription,
+  values: any,
+  name: string
+) => {
   for (let i = 0; i < PatternKeys.length; i++) {
     if (PatternKeys[i] === rule.format) {
       return patternValidate(
@@ -18,6 +23,11 @@ const batchValidate = (value: any, rule: IRuleDescription, values: any, name: st
   }
 }
 
-export default (value: any, rule: IRuleDescription, values: any, name: string) => {
+export default (
+  value: any,
+  rule: IRuleDescription,
+  values: any,
+  name: string
+) => {
   return batchValidate(value, rule, values, name)
 }

@@ -7,7 +7,12 @@
 ## 类型描述
 
 ```typescript
-type createVirtualBox(name : String,component : Function)
+type createVirtualBox = <T = any>(name: string, component: React.ComponentType<T>) => 
+React.FunctionComponent<{
+  name?   : string,
+  render? : React.ComponentType<IRednerProps>,   // x-render参数，详见Field
+  ...props: T
+  }>
 ```
 
 > 为什么需要传name，是因为如果要在json-schema对象中描述，需要可存储，就必须要有一个Key

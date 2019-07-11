@@ -14,14 +14,14 @@ import { FormLayout } from '@uform/next(antd)'
 
 | 属性名称 | 属性描述 | 属性类型 | 默认值 | 可选值 |
 | ---- | ---- | ---- | --- | --- |
-| className | 容器自定义类名 | string | "" |  |
-| inline | 内部是否采用行内排列 | boolean | false |  |
-| labelAlign | 按钮组容器样式 | object | "left" | "left"/"top" |
-| labelCol | 标签宽度占比 | number |  |  |
-| labelTextAlign | 按钮组容器左偏移距离 | number | "right" | "left"/"right" |
-| size | 容器大小 | string | medium | "small"/"medium"/"large" |
-| style | 容器样式 | object | {} |  |
-| wrapperCol | 容器宽度占比 | number |  |  |
+| className | 容器自定义类名 | `string` | "" |  |
+| inline | 内部是否采用行内排列 | `boolean` | false |  |
+| labelAlign | 按钮组容器样式 | `'left'|'top'|'inset'` | | "left" | "left"/"top"/"inset" |
+| labelCol | 标签宽度占比 | `number` |  |  |
+| labelTextAlign | 按钮组容器左偏移距离 | `'left'|'right'` | "right" | "left"/"right" |
+| size | 容器大小 | `'small'|'medium'|'large'` | medium | "small"/"medium"/"large" |
+| style | 容器样式 | `React.CSSProperties` | {} |  |
+| wrapperCol | 容器宽度占比 | `number` |  |  |
 
 ## 用例
 

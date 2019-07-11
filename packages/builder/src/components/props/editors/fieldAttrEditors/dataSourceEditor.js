@@ -233,15 +233,15 @@ class DataSourceEditor extends Component {
             {...formItemProps}
             extra={<span style={{ color: 'red' }}>{error}</span>}
           >
-            <Tab {...tabProps} size='small'>
-              <TabPane title='可视化' tab='可视化' key='visual'>
+            <Tab {...tabProps} size="small">
+              <TabPane title="可视化" tab="可视化" key="visual">
                 <DataSourceEnum
                   dataSource={defaultSource}
                   onChange={this.handleEnumValueChange}
                   UI={UI}
                 />
               </TabPane>
-              <TabPane title='可视化' tab='源码' key='code'>
+              <TabPane title="可视化" tab="源码" key="code">
                 <Input
                   key={`${Math.random()}-enum`}
                   multiple
@@ -266,14 +266,14 @@ class DataSourceEditor extends Component {
             extra={<span style={{ color: 'red' }}>{error}</span>}
           >
             <Input
-              key='url'
-              placeholder='请输入接口url'
+              key="url"
+              placeholder="请输入接口url"
               value={xProps.url}
               onChange={this.handleUrlChange}
               style={STYLE_W}
             />
-            <Tab {...tabProps} size='small'>
-              <TabPane title='可视化' tab='可视化' key='visual'>
+            <Tab {...tabProps} size="small">
+              <TabPane title="可视化" tab="可视化" key="visual">
                 <div style={{ marginTop: 10 }}>
                   <DataSourceEnum
                     dataSource={reqDataArr}
@@ -281,7 +281,7 @@ class DataSourceEditor extends Component {
                   />
                 </div>
               </TabPane>
-              <TabPane title='可视化' tab='源码' key='code'>
+              <TabPane title="可视化" tab="源码" key="code">
                 <Input
                   key={`${Math.random()}-requestOption`}
                   style={STYLE_W}

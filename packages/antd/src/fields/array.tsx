@@ -4,7 +4,7 @@ import { Icon } from 'antd'
 import styled, { css } from 'styled-components'
 
 export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
-  ${props => (!props.hasText ? `width:30px; height:30px;` : '')}
+  ${props => (!props.hasText ? 'width:30px; height:30px;' : '')}
   margin-right:10px;
   border-radius: ${props => (!props.hasText ? '100px' : 'none')};
   border: ${props => (!props.hasText ? '1px solid #eee' : 'none')};

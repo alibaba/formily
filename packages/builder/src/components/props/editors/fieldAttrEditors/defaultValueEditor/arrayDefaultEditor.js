@@ -23,7 +23,7 @@ class Editor extends Component {
 
     return (
       <DefaultValueGenerator
-        flag='array'
+        flag="array"
         ds={ds}
         {...this.props}
         customEditor={{

@@ -11,7 +11,10 @@ import {
   isArr
 } from '../utils'
 
-const { RangePicker: AntRangePicker, MonthPicker: AntMonthPicker } = AntDatePicker
+const {
+  RangePicker: AntRangePicker,
+  MonthPicker: AntMonthPicker
+} = AntDatePicker
 
 class AntYearPicker extends React.Component {
   public render() {
@@ -57,7 +60,10 @@ registerFormField(
   connect({
     getValueFromEvent(_, value) {
       const props = this.props || {}
-      return transformMoment(value, props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
+      return transformMoment(
+        value,
+        props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+      )
     },
     getProps: compose(
       mapStyledProps,
@@ -73,7 +79,10 @@ registerFormField(
     getValueFromEvent(_, [startDate, endDate]) {
       const props = this.props || {}
       const format = props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-      return [transformMoment(startDate, format), transformMoment(endDate, format)]
+      return [
+        transformMoment(startDate, format),
+        transformMoment(endDate, format)
+      ]
     },
     getProps: compose(
       mapStyledProps,

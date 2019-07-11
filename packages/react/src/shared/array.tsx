@@ -32,10 +32,21 @@ export class ArrayFieldComponent<P> extends React.Component<P> {
   public getProps: (path?: string) => any
 }
 
-export type TypeArrayField<P> = new (props: P, context) => ArrayFieldComponent<P>
+export type TypeArrayField<P> = new (props: P, context) => ArrayFieldComponent<
+  P
+>
 
-export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IArrayFieldProps> => {
-  const { TextButton, CircleButton, AddIcon, RemoveIcon, MoveDownIcon, MoveUpIcon } = {
+export const createArrayField = (
+  options: IArrayFieldOptions
+): TypeArrayField<IArrayFieldProps> => {
+  const {
+    TextButton,
+    CircleButton,
+    AddIcon,
+    RemoveIcon,
+    MoveDownIcon,
+    MoveUpIcon
+  } = {
     TextButton: () => <div>You Should Pass The TextButton.</div>,
     CircleButton: () => <div>You Should Pass The CircleButton.</div>,
     AddIcon: () => <div>You Should Pass The AddIcon.</div>,
@@ -47,7 +58,9 @@ export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IA
 
   return class ArrayFieldComponent extends React.Component<IFieldProps> {
     public isActive = (key: string, value: any): boolean => {
-      const readOnly: boolean | ((key: string, value: any) => boolean) = this.getProps('readOnly')
+      const readOnly:
+        | boolean
+        | ((key: string, value: any) => boolean) = this.getProps('readOnly')
       const disabled = this.getDisabled()
       if (isFn(disabled)) {
         return disabled(key, value)
@@ -68,10 +81,16 @@ export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IA
         add: this.onAddHandler(),
         remove: this.onRemoveHandler(index),
         moveDown: e => {
-          return this.onMoveHandler(index, index + 1 > value.length - 1 ? 0 : index + 1)(e)
+          return this.onMoveHandler(
+            index,
+            index + 1 > value.length - 1 ? 0 : index + 1
+          )(e)
         },
         moveUp: e => {
-          return this.onMoveHandler(index, index - 1 < 0 ? value.length - 1 : index - 1)(e)
+          return this.onMoveHandler(
+            index,
+            index - 1 < 0 ? value.length - 1 : index - 1
+          )(e)
         }
       }
     }
@@ -89,7 +108,9 @@ export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IA
       if (isFn(render)) {
         return render(this.getApi(index))
       } else if (defaultRender) {
-        return isFn(defaultRender) ? defaultRender(this.getApi(index), render) : defaultRender
+        return isFn(defaultRender)
+          ? defaultRender(this.getApi(index), render)
+          : defaultRender
       }
     }
 
@@ -101,7 +122,9 @@ export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IA
         this.renderWith(
           'addition',
           (
-            { add }: { add?: (event: React.MouseEvent<HTMLDivElement>) => void } = {},
+            {
+              add
+            }: { add?: (event: React.MouseEvent<HTMLDivElement>) => void } = {},
             text: string
           ) => {
             return (
@@ -131,7 +154,9 @@ export const createArrayField = (options: IArrayFieldOptions): TypeArrayField<IA
               <div className={'array-empty'}>
                 <img
                   style={{ backgroundColor: 'transparent' }}
-                  src={'//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'}
+                  src={
+                    '//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
+                  }
                 />
                 {active && (
                   <TextButton>
