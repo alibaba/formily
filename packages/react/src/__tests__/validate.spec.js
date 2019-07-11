@@ -23,7 +23,7 @@ registerFieldMiddleware(Field => {
 registerFormField(
   'string',
   connect()(props => (
-    <input {...props} data-testid='test-input' value={props.value || ''} />
+    <input {...props} data-testid="test-input" value={props.value || ''} />
   ))
 )
 
@@ -32,8 +32,8 @@ test('basic validate', async () => {
   const handleValidateFailed = jest.fn()
   const TestComponent = () => (
     <SchemaForm onSubmit={handleSubmit} onValidateFailed={handleValidateFailed}>
-      <Field name='text' type='string' required />
-      <button type='submit' data-testid='btn'>
+      <Field name="text" type="string" required />
+      <button type="submit" data-testid="btn">
         Submit
       </button>
     </SchemaForm>
@@ -68,8 +68,8 @@ test('validate in init', async () => {
         onSubmit={handleSubmit}
         onValidateFailed={handleValidateFailed}
       >
-        <Field name='text' type='string' x-rules={{ required: true }} />
-        <button type='submit' data-testid='btn'>
+        <Field name="text" type="string" x-rules={{ required: true }} />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -110,8 +110,8 @@ test('validate in editable false', async () => {
         onSubmit={handleSubmit}
         onValidateFailed={handleValidateFailed}
       >
-        <Field name='editable' type='string' x-rules={{ required: true }} />
-        <button type='submit' data-testid='btn'>
+        <Field name="editable" type="string" x-rules={{ required: true }} />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -151,8 +151,8 @@ test('modify required rules by setFieldState', async () => {
         onSubmit={handleSubmit}
         onValidateFailed={handleValidateFailed}
       >
-        <Field name='kk' type='string' />
-        <button type='submit' data-testid='btn'>
+        <Field name="kk" type="string" />
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -199,11 +199,11 @@ test('modify validate rules by setFieldState', async () => {
     return (
       <SchemaForm actions={actions}>
         <Field
-          name='bb'
-          type='string'
+          name="bb"
+          type="string"
           x-rules={[{ required: true, message: 'required' }]}
         />
-        <button type='submit' data-testid='btn'>
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>
@@ -236,11 +236,11 @@ test('dynamic update values', async () => {
     return (
       <SchemaForm>
         <Field
-          name='bb'
-          type='string'
+          name="bb"
+          type="string"
           x-rules={{ pattern: /\d+(\.\d+)?$/g, message: 'must be number' }}
         />
-        <button type='submit' data-testid='btn'>
+        <button type="submit" data-testid="btn">
           Submit
         </button>
       </SchemaForm>

@@ -1,4 +1,14 @@
-import { each, reduce, isFn, toArr, getIn, isArr, isEqual, clone, format } from './utils'
+import {
+  each,
+  reduce,
+  isFn,
+  toArr,
+  getIn,
+  isArr,
+  isEqual,
+  clone,
+  format
+} from './utils'
 import { validate } from './validators'
 import { ValidateHandler, IValidateResponse, IFieldMap } from '@uform/types'
 export * from './message'
@@ -7,7 +17,11 @@ const flatArr = (arr: any[]) => {
   return reduce(
     arr,
     (buf: any, item: any) => {
-      return isArr(item) ? buf.concat(flatArr(item)) : item ? buf.concat(item) : buf
+      return isArr(item)
+        ? buf.concat(flatArr(item))
+        : item
+        ? buf.concat(item)
+        : buf
     },
     []
   )
@@ -75,7 +89,10 @@ export const runValidation = async (
               field.valid = true
               field.invalid = false
             }
-            if (!isEqual(lastValid, field.valid) || !isEqual(lastFieldErrors, field.errors)) {
+            if (
+              !isEqual(lastValid, field.valid) ||
+              !isEqual(lastFieldErrors, field.errors)
+            ) {
               field.dirty = true
             }
           }

@@ -16,7 +16,7 @@ registerFieldMiddleware(Field => {
         {props.schema.title}
         <Field {...props} />
         {props.errors && props.errors.length ? (
-          <div data-testid={`test-errors`}>{props.errors}</div>
+          <div data-testid={'test-errors'}>{props.errors}</div>
         ) : (
           ''
         )}
@@ -162,6 +162,7 @@ test('getFieldState with onFieldChange', async () => {
   const TestComponent = () => {
     return (
       <SchemaForm
+        // eslint-disable-next-line no-console
         onSubmit={values => console.log(values)}
         initialValues={{ obj: { aa: 123 } }}
         effects={($, { getFieldState }) => {

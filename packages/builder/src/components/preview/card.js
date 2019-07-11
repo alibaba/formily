@@ -54,24 +54,24 @@ const Card = forwardRef(
           style={Object.assign({}, style, { opacity, backgroundColor })}
         >
           {!Object.keys(props.schema.properties).length ? (
-            <p className='comp-item-layout-empty'>
+            <p className="comp-item-layout-empty">
               请从左边字段<strong>拖拽</strong>组件进来这里
             </p>
           ) : (
             React.createElement(Field, props)
           )}
           <div
-            className='preview-line-layer'
+            className="preview-line-layer"
             onClick={ev => {
               ev.preventDefault()
               that.onMouseClick(id, comp)
             }}
           />
-          <div className='comp-item-layout-tool'>
+          <div className="comp-item-layout-tool">
             <a
-              className='preview-line-del'
-              type='delete'
-              size='small'
+              className="preview-line-del"
+              type="delete"
+              size="small"
               onClick={() => {
                 that.props.changeComponent()
                 that.deleteComponent(id)
@@ -94,24 +94,24 @@ const Card = forwardRef(
       >
         {React.createElement(Field, { ...props })}
         <div
-          className='preview-line-layer'
+          className="preview-line-layer"
           onClick={ev => {
             ev.preventDefault()
             that.onMouseClick(id, comp)
           }}
         />
-        <div className='comp-item-layout-tool'>
+        <div className="comp-item-layout-tool">
           <a
-            className='preview-line-del'
-            type='delete'
-            size='small'
+            className="preview-line-del"
+            type="delete"
+            size="small"
             onClick={() => {
               that.props.changeComponent()
               that.deleteComponent(id)
             }}
           />
         </div>
-        <div className='comp-item-barline' />
+        <div className="comp-item-barline" />
       </div>
     )
   }

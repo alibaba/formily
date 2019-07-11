@@ -3,7 +3,13 @@ import { connect } from 'react-eva'
 import { createForm, Form } from '@uform/core'
 import { IFormState } from '@uform/types'
 
-import { createHOC, getSchemaNodeFromPath, isEqual, clone, isEmpty } from '../utils'
+import {
+  createHOC,
+  getSchemaNodeFromPath,
+  isEqual,
+  clone,
+  isEmpty
+} from '../utils'
 import { StateContext } from '../shared/context'
 import { getFormFieldPropsTransformer } from '../shared/core'
 import { FormBridge } from '../shared/broadcast'
@@ -29,6 +35,7 @@ export const StateForm = createHOC((options, Form) => {
       this.initialized = false
       this.form = createForm({
         initialValues: props.defaultValue || props.initialValues,
+        values: props.value,
         effects: props.effects,
         subscribes: props.subscribes,
         schema: props.schema,
@@ -107,6 +114,7 @@ export const StateForm = createHOC((options, Form) => {
             }, 60)
           }
         } else {
+          // eslint-disable-next-line react/no-direct-mutation-state
           this.state = formState
           this.notify({
             type: 'initialize',
@@ -133,7 +141,8 @@ export const StateForm = createHOC((options, Form) => {
       const { schema } = this.props
       const result = getSchemaNodeFromPath(schema, path)
       const transformer =
-        result && getFormFieldPropsTransformer(result['x-component'] || result.type)
+        result &&
+        getFormFieldPropsTransformer(result['x-component'] || result.type)
       return transformer ? transformer(result) : result
     }
 
@@ -185,8 +194,11 @@ export const StateForm = createHOC((options, Form) => {
       if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
         this.form.changeValues(value)
       }
-      if (!isEmpty(initialValues) && !isEqual(initialValues, prevProps.initialValues)) {
-        this.form.initialize(initialValues)
+      if (
+        !isEmpty(initialValues) &&
+        !isEqual(initialValues, prevProps.initialValues)
+      ) {
+        this.form.initialize({ initialValues })
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
         this.form.changeEditable(editable)
@@ -197,18 +209,20 @@ export const StateForm = createHOC((options, Form) => {
       this.unmounted = false
       this.form.triggerEffect('onFormMount', this.form.publishState())
 
-      this.unsubscribe = this.props.broadcast.subscribe(({ type, name, payload }) => {
-        if (this.unmounted) {
-          return
+      this.unsubscribe = this.props.broadcast.subscribe(
+        ({ type, name, payload }) => {
+          if (this.unmounted) {
+            return
+          }
+          if (type === 'submit') {
+            this.submit()
+          } else if (type === 'reset') {
+            this.reset()
+          } else if (type === 'dispatch') {
+            this.form.triggerEffect(name, payload)
+          }
         }
-        if (type === 'submit') {
-          this.submit()
-        } else if (type === 'reset') {
-          this.reset()
-        } else if (type === 'dispatch') {
-          this.form.triggerEffect(name, payload)
-        }
-      })
+      )
     }
 
     public componentWillUnmount() {
@@ -253,6 +267,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public render() {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
         onSubmit,
         onChange,
@@ -273,6 +288,7 @@ export const StateForm = createHOC((options, Form) => {
         value,
         ...others
       } = this.props
+      /* eslint-enable @typescript-eslint/no-unused-vars */
 
       return (
         <StateContext.Provider

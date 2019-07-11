@@ -31,7 +31,11 @@ export const SchemaForm = SchemaMarkup()(
     // 这个时候就有 schema 数据
     const { children, className, ...others } = props
     return (
-      <OriginForm className={`rs-uform ${className || ''}`} {...others} ref={ref}>
+      <OriginForm
+        className={`rs-uform ${className || ''}`}
+        {...others}
+        ref={ref}
+      >
         <div className="rs-uform-content">
           <FormField name="" path={[]} schemaPath={[]} />
         </div>

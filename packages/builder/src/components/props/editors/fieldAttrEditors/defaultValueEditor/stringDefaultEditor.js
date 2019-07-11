@@ -18,13 +18,13 @@ class Editor extends Component {
 
     return (
       <DefaultValueGenerator
-        flag='string'
+        flag="string"
         ds={ds}
         {...this.props}
         customEditor={{
           specify: (
             <UI.Input
-              placeholder='请输入默认值'
+              placeholder="请输入默认值"
               style={{
                 verticalAlign: 'top'
               }}

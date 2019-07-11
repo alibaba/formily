@@ -176,7 +176,10 @@ const Password = styled(
     }
 
     public componentDidUpdate(prevProps) {
-      if (prevProps.value !== this.props.value && this.props.value !== this.state.value) {
+      if (
+        prevProps.value !== this.props.value &&
+        this.props.value !== this.state.value
+      ) {
         this.setState({
           value: this.props.value,
           strength: getStrength(this.props.value)

@@ -43,14 +43,14 @@ class Editor extends Component {
     const { UI } = this.props
     return (
       <DefaultValueGenerator
-        flag='month'
+        flag="month"
         ds={ds}
         {...this.props}
         customEditor={{
           now: <div />,
           future: (
             <UI.NumberPicker
-              addonAfter='月'
+              addonAfter="月"
               inputWidth={100}
               style={{
                 verticalAlign: 'top',
@@ -60,7 +60,7 @@ class Editor extends Component {
           ),
           past: (
             <UI.NumberPicker
-              addonAfter='月'
+              addonAfter="月"
               inputWidth={100}
               style={{
                 verticalAlign: 'top',

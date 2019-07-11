@@ -26,9 +26,16 @@ const getSelectedValues = (options?: IEventTargetOption[]) => {
 }
 
 // TODO 需要 any ?
-const getValue = (event: React.SyntheticEvent | any, isReactNative: boolean) => {
+const getValue = (
+  event: React.SyntheticEvent | any,
+  isReactNative: boolean
+) => {
   if (isEvent(event)) {
-    if (!isReactNative && event.nativeEvent && event.nativeEvent.text !== undefined) {
+    if (
+      !isReactNative &&
+      event.nativeEvent &&
+      event.nativeEvent.text !== undefined
+    ) {
       return event.nativeEvent.text
     }
     if (isReactNative && event.nativeEvent !== undefined) {
@@ -77,7 +84,11 @@ const createEnum = (enums: any, enumNames: string | any[]) => {
   return []
 }
 
-const bindEffects = (props: IConnectProps, effect: ISchema['x-effect'], dispatch: Dispatcher) => {
+const bindEffects = (
+  props: IConnectProps,
+  effect: ISchema['x-effect'],
+  dispatch: Dispatcher
+) => {
   each(effect(dispatch, { ...props }), (event, key) => {
     const prevEvent = key === 'onChange' ? props[key] : undefined
     props[key] = (...args) => {
@@ -106,11 +117,17 @@ export interface IConnectOptions {
   eventName?: string
   defaultProps?: object
   getValueFromEvent?: (event?: string, value?: any) => any
-  getProps?: (props: IConnectProps, componentProps: IFieldProps) => IConnectProps | void
+  getProps?: (
+    props: IConnectProps,
+    componentProps: IFieldProps
+  ) => IConnectProps | void
   getComponent?: (
     Target: React.ComponentClass,
     props,
-    { editable, name }: { editable: boolean | ((name: string) => boolean); name: string }
+    {
+      editable,
+      name
+    }: { editable: boolean | ((name: string) => boolean); name: string }
   ) => React.ComponentClass
 }
 
@@ -131,7 +148,11 @@ export const connect = (opts?: IConnectOptions) => Target => {
         [opts.eventName]: (event, ...args) => {
           mutators.change(
             opts.getValueFromEvent
-              ? opts.getValueFromEvent.call({ props: schema['x-props'] || {} }, event, ...args)
+              ? opts.getValueFromEvent.call(
+                  { props: schema['x-props'] || {} },
+                  event,
+                  ...args
+                )
               : getValue(event, isReactNative)
           )
         }
@@ -170,7 +191,9 @@ export const connect = (opts?: IConnectOptions) => Target => {
       }
 
       return React.createElement(
-        isFn(opts.getComponent) ? opts.getComponent(Target, props, this.props) : Target,
+        isFn(opts.getComponent)
+          ? opts.getComponent(Target, props, this.props)
+          : Target,
         props
       )
     }

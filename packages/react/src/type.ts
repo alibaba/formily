@@ -11,7 +11,9 @@ export interface IEnhanceSchema extends ISchema {
   renderChildren?: React.ReactElement
 }
 
-export interface IFieldProps extends Omit<IField, 'editable'>, IStateFieldProps {
+export interface IFieldProps
+  extends Omit<IField, 'editable'>,
+    IStateFieldProps {
   state?: string
   size?: string
   children?: React.ReactNode

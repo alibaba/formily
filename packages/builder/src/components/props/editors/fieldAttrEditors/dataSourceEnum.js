@@ -39,7 +39,7 @@ class Component extends React.Component {
       btnProps.shape = 'text'
     }
     return (
-      <div className='source-row' key={`${idx}`}>
+      <div className="source-row" key={`${idx}`}>
         <ul>
           <li>
             <label>字段名：</label>
@@ -57,11 +57,11 @@ class Component extends React.Component {
           </li>
         </ul>
         <UI.Button
-          className='ashbin-btn'
+          className="ashbin-btn"
           {...btnProps}
           onClick={() => this.handleDeleteItem(idx)}
         >
-          <UI.Icon type='ashbin' />
+          <UI.Icon type="ashbin" />
         </UI.Button>
       </div>
     )
@@ -70,9 +70,9 @@ class Component extends React.Component {
   renderNewBtn() {
     const { UI } = this.props
     return (
-      <div className='source-btn-new'>
-        <UI.Button size='small' onClick={this.handleAddNewItem}>
-          <UI.Icon type='add' />
+      <div className="source-btn-new">
+        <UI.Button size="small" onClick={this.handleAddNewItem}>
+          <UI.Icon type="add" />
           添加
         </UI.Button>
       </div>

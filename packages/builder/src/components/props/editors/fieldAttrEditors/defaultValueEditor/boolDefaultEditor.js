@@ -15,7 +15,7 @@ class Editor extends Component {
   render() {
     return (
       <DefaultValueGenerator
-        flag='switch'
+        flag="switch"
         ds={ds}
         {...this.props}
         customEditor={{
