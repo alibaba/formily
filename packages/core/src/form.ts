@@ -412,11 +412,11 @@ export class Form {
     deleteIn(this.state.initialValues, name)
   }
 
-  public reset(forceClear?: boolean, noValidate: boolean = false) {
+  public reset(forceClear?: boolean, validate: boolean = true) {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
-      if (noValidate) {
+      if (!validate) {
         if (field.errors.length > 0) {
           field.errors = []
           field.dirty = true
@@ -440,7 +440,7 @@ export class Form {
         })
       }
     })
-    if (noValidate) {
+    if (!validate) {
       const formState = this.publishState()
       this.triggerEffect('onFormReset', formState)
       if (isFn(this.options.onReset)) {

@@ -186,7 +186,7 @@ const App = () => {
           <Reset >值重置</Reset>
           <Button
             onClick={() => {
-              actions.reset(false,true)
+              actions.reset({validate:false})
             }}
           >
             无错重置
