@@ -37,7 +37,7 @@ class Editor extends Component {
     const { UI } = this.props
     return (
       <DefaultValueGenerator
-        flag='time'
+        flag="time"
         ds={ds}
         {...this.props}
         customEditor={{

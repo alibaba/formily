@@ -18,7 +18,7 @@ class Component extends React.Component {
 
   renderList() {
     return (
-      <ul className='layout-list'>
+      <ul className="layout-list">
         {this.layoutList.map((item, i) => {
           return (
             <Field

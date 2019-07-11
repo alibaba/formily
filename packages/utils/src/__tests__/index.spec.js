@@ -17,6 +17,47 @@ test('test accessor with large path', () => {
   expect(isEqual(getIn(value, 'array.0.[aa,bb]'), [123, 321])).toBeTruthy()
 })
 
+test('test setIn auto create array', () => {
+  const value = {}
+  setIn(value, 'array.0.bb.2', 'hello world')
+  expect(
+    isEqual(value, {
+      array: [
+        {
+          bb: [undefined, undefined, 'hello world']
+        }
+      ]
+    })
+  ).toBeTruthy()
+})
+
+test('test setIn dose not affect other items', () => {
+  const value = {
+    aa: [
+      {
+        dd: [
+          {
+            ee: '是'
+          }
+        ],
+        cc: '1111'
+      }
+    ]
+  }
+
+  setIn(value, 'aa.1.dd.0.ee', '否')
+  expect(
+    isEqual(value.aa[0], {
+      dd: [
+        {
+          ee: '是'
+        }
+      ],
+      cc: '1111'
+    })
+  ).toBeTruthy()
+})
+
 test('destruct getIn', () => {
   // getIn 通过解构表达式从扁平数据转为复合嵌套数据
   const value = { a: { b: { c: 2, d: 333 } } }
@@ -77,13 +118,13 @@ test('destruct setIn', () => {
     )
   ).toBeTruthy()
   expect(
-    isEqual(setIn({}, `aa.bb.ddd.[aa,bb]`, [123, 444]), {
+    isEqual(setIn({}, 'aa.bb.ddd.[aa,bb]', [123, 444]), {
       aa: { bb: { ddd: { aa: 123, bb: 444 } } }
     })
   ).toBeTruthy()
 
   expect(
-    isEqual(setIn({}, `aa.bb.ddd.[{cc:aa,bb}]`, [{ cc: 123, bb: 444 }]), {
+    isEqual(setIn({}, 'aa.bb.ddd.[{cc:aa,bb}]', [{ cc: 123, bb: 444 }]), {
       aa: { bb: { ddd: { aa: 123, bb: 444 } } }
     })
   ).toBeTruthy()
@@ -117,6 +158,7 @@ test('clone form data', () => {
     aa: 123123,
     bb: [{ bb: 111 }, { bb: 222 }],
     cc: () => {
+      // eslint-disable-next-line no-console
       console.log('123')
     },
     dd

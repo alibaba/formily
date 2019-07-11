@@ -36,6 +36,7 @@ export interface IFormOptions {
   editable: boolean | ((nam: string) => boolean)
   effects: IEffects
   defaultValue?: object
+  values?: object
   initialValues?: object
   schema: ISchema | {}
   subscribes: ISubscribers
@@ -53,7 +54,10 @@ export interface IFormActions {
     name: Path | IFormPathMatcher,
     callback: (fieldState: IFieldState) => void
   ) => Promise<any>
-  getFieldState: (name: Path | IFormPathMatcher, callback: (fieldState: IFieldState) => any) => any
+  getFieldState: (
+    name: Path | IFormPathMatcher,
+    callback: (fieldState: IFieldState) => any
+  ) => any
   getFormState: (callback: (fieldState: IFormState) => any) => any
   setFormState: (callback: (fieldState: IFormState) => any) => Promise<any>
   getSchema: (path: Path) => object

@@ -14,14 +14,14 @@ const RenderPreviewList = ({ props }) => {
   const { needFormButtonGroup } = gbConfig
 
   if (isEmptyObj(properties)) {
-    return <p className='preview-tips'>请从左边字段添加组件进来吧</p>
+    return <p className="preview-tips">请从左边字段添加组件进来吧</p>
   }
 
   let children = ' '
   try {
     children =
       needFormButtonGroup === true || needFormButtonGroup === 'true' ? (
-        <FormButtonGroup align='center' sticky>
+        <FormButtonGroup align="center" sticky>
           <Submit>提交</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
@@ -88,13 +88,13 @@ const MainBox = forwardRef(
 
     return (
       <div
-        className='preview-main'
+        className="preview-main"
         style={Object.assign({}, { backgroundColor })}
       >
         <RenderPreviewList props={props} />
         <div
           ref={elementRef}
-          className='main-drop'
+          className="main-drop"
           style={{
             position: 'absolute',
             left: 0,
@@ -112,7 +112,7 @@ export default DropTarget(
   [ItemTypes.FIELD, ItemTypes.LAYOUT],
   {
     drop: (props, monitor, component) => {
-      console.log('drop', component)
+      // console.info('drop', component)
       if (!component) {
         return
       }
@@ -120,7 +120,7 @@ export default DropTarget(
       if (hasDroppedOnChild) {
         return
       }
-      console.log('drop child')
+      // console.info('drop child')
       component.onDrop(hasDroppedOnChild)
     }
   },

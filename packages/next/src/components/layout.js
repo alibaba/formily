@@ -222,10 +222,10 @@ export const FormTextBox = createVirtualBox(
       }, [])
       const newChildren = split.reduce((buf, item, key) => {
         return buf.concat(
-          <span key={index++} className='text-box-words'>
+          <span key={index++} className="text-box-words">
             {item}
           </span>,
-          <div key={index++} className='text-box-field'>
+          <div key={index++} className="text-box-field">
             {arrChildren[key]}
           </div>
         )

@@ -10,6 +10,7 @@ export interface IField {
   invalid: boolean
   visible: boolean
   hiddenFromParent: boolean
+  shownFromParent: boolean
   required: boolean
   editable: boolean
   loading: boolean

@@ -1,4 +1,13 @@
-import { Path, PathNode, ArrayPath, isStr, isNum, isPlainObj, isArr, isObj } from '@uform/types'
+import {
+  Path,
+  PathNode,
+  ArrayPath,
+  isStr,
+  isNum,
+  isPlainObj,
+  isArr,
+  isObj
+} from '@uform/types'
 import { map, each, every } from './array'
 import { LRUMap } from './lru'
 
@@ -158,7 +167,10 @@ class DestructTokenizer {
         this.state = this.processDestructStart
       }
       if (!whitespace(prev)) {
-        this.destructKey = this.text.substring(this.destructKeyStart, this.index)
+        this.destructKey = this.text.substring(
+          this.destructKeyStart,
+          this.index
+        )
       }
 
       this.handlers.destructKey(this.destructKey)
@@ -173,7 +185,10 @@ class DestructTokenizer {
         this.state = this.processDestructStart
       }
       if (!whitespace(prev)) {
-        this.destructKey = this.text.substring(this.destructKeyStart, this.index)
+        this.destructKey = this.text.substring(
+          this.destructKeyStart,
+          this.index
+        )
       }
       this.handlers.destructKey(this.destructKey)
       this.handlers.destructArrayEnd()
@@ -182,7 +197,10 @@ class DestructTokenizer {
       }
     } else if (whitespace(char) || char === ':' || char === ',') {
       if (!whitespace(prev)) {
-        this.destructKey = this.text.substring(this.destructKeyStart, this.index)
+        this.destructKey = this.text.substring(
+          this.destructKeyStart,
+          this.index
+        )
       }
       if (!whitespace(char)) {
         this.state = this.processDestructStart
@@ -297,7 +315,10 @@ const mapReduce = (obj: any, callback: any) => {
       if (isArr(item) || isPlainObj(item)) {
         return internalTraverse(item, newPath)
       } else {
-        return callback(newPath, newPath.slice(0, newPath.length - 1).concat(item))
+        return callback(
+          newPath,
+          newPath.slice(0, newPath.length - 1).concat(item)
+        )
       }
     })
   }
@@ -456,12 +477,11 @@ function _setIn(obj: any, path: Path, value: any) {
 
   for (let i = 0; i < pathArr.length; i++) {
     const p = pathArr[i]
-
     if (!isObj(obj[p])) {
       if (obj[p] === undefined && value === undefined) {
         return
       }
-      obj[p] = {}
+      obj[p] = /^\d+$/.test(pathArr[i + 1 + '']) ? [] : {}
     }
 
     if (i === pathArr.length - 1) {

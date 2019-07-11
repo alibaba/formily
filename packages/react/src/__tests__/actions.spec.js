@@ -24,8 +24,8 @@ test('createFormActions', async () => {
         })
       }}
     >
-      <Field name='aaa' type='string' />
-      <Field name='bbb' type='string' />
+      <Field name="aaa" type="string" />
+      <Field name="bbb" type="string" />
     </SchemaForm>
   )
 

@@ -3,7 +3,7 @@ const isArray = isArr
 const keyList = Object.keys
 const hasProp = Object.prototype.hasOwnProperty
 
-type Filter = (comparies: { a: any, b: any }, key: string) => boolean
+type Filter = (comparies: { a: any; b: any }, key: string) => boolean
 
 /* eslint-disable */
 function equal(a: any, b: any, filter: Filter) {

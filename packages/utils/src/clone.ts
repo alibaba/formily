@@ -9,13 +9,15 @@ const NATIVE_KEYS = [
   ['WeakMap', (map: any) => new WeakMap(map)],
   ['WeakSet', (set: any) => new WeakSet(set)],
   ['Set', (set: any) => new Set(set)],
+  ['Date', (date: any) => new Date(date)],
   'FileList',
   'File',
   'URL',
   'RegExp',
   [
     'Promise',
-    (promise: Promise<any>) => new Promise((resolve, reject) => promise.then(resolve, reject))
+    (promise: Promise<any>) =>
+      new Promise((resolve, reject) => promise.then(resolve, reject))
   ]
 ]
 
@@ -23,7 +25,10 @@ const isNativeObject = (values: any): any => {
   for (let i = 0; i < NATIVE_KEYS.length; i++) {
     const item = NATIVE_KEYS[i]
     if (Array.isArray(item) && item[0]) {
-      if (self[item[0] as string] && values instanceof self[item[0] as string]) {
+      if (
+        self[item[0] as string] &&
+        values instanceof self[item[0] as string]
+      ) {
         return item[1] ? item[1] : item[0]
       }
     } else {
@@ -37,7 +42,7 @@ const isNativeObject = (values: any): any => {
 export const clone = (values: any, filter?: Filter) => {
   let nativeClone: (values: any) => any
   if (Array.isArray(values)) {
-    return values.map((item) => clone(item, filter))
+    return values.map(item => clone(item, filter))
   } else if (isNativeObject(values)) {
     nativeClone = isNativeObject(values)
     return isFn(nativeClone) ? nativeClone(values) : values

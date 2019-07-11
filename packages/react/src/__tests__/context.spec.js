@@ -26,7 +26,7 @@ test('submit by form consumer', async () => {
           await sleep(200)
         }}
       >
-        <Field name='aaa' type='string' />
+        <Field name="aaa" type="string" />
       </SchemaForm>
       <FormConsumer testingAct={act}>
         {({ status, submit }) => {

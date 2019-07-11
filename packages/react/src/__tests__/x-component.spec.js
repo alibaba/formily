@@ -18,7 +18,7 @@ registerFieldMiddleware(Field => {
         {props.schema.title}
         <Field {...props} />
         {props.errors && props.errors.length ? (
-          <div data-testid={`test-errors`}>{props.errors}</div>
+          <div data-testid={'test-errors'}>{props.errors}</div>
         ) : (
           ''
         )}

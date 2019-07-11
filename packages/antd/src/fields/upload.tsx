@@ -117,7 +117,11 @@ const normalizeFileList = fileList => {
 }
 
 const shallowClone = val => {
-  let result = isArr(val) ? [...val] : typeof val === 'object' ? { ...val } : val
+  let result = isArr(val)
+    ? [...val]
+    : typeof val === 'object'
+    ? { ...val }
+    : val
   if (isArr(result)) {
     result = result.map(item => ({
       ...item,
@@ -137,7 +141,7 @@ export interface IUploaderState {
 }
 
 // TODO 能不能直接引用 antd 里面的接口定义呢 ?
-export declare type UploadListType = 'text' | 'picture' | 'picture-card';
+export declare type UploadListType = 'text' | 'picture' | 'picture-card'
 
 export interface IUploaderProps {
   onChange: (value: any[]) => void
@@ -153,11 +157,14 @@ registerFormField(
   })(
     class Uploader extends React.Component<IUploaderProps, IUploaderState> {
       public static defaultProps = {
-        action: 'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
+        action:
+          'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
         listType: 'text',
         multiple: true,
         className: 'antd-uploader'
       }
+
+      readonly state: IUploaderState
 
       constructor(props) {
         super(props)
@@ -181,7 +188,9 @@ registerFormField(
         const { onChange } = this.props
         fileList = toArr(fileList)
         if (
-          fileList.every(file => file.status === 'done' || file.imgURL || file.downloadURL) &&
+          fileList.every(
+            file => file.status === 'done' || file.imgURL || file.downloadURL
+          ) &&
           fileList.length
         ) {
           fileList = normalizeFileList(fileList)
