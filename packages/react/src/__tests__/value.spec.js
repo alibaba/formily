@@ -2,17 +2,15 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import SchemaForm, { Field, registerFormField, connect } from '../index'
 
-beforeEach(() => {
-  registerFormField(
-    'string',
-    connect()(props => <div data-testid="value">{typeof props.value}</div>)
-  )
-})
+registerFormField(
+  'test-string',
+  connect()(props => <div data-testid="value">{typeof props.value}</div>)
+)
 
 test('default value', async () => {
   const Component = () => (
     <SchemaForm defaultValue={{ foo: '' }}>
-      <Field name="foo" type="string" />
+      <Field name="foo" type="test-string" />
     </SchemaForm>
   )
 
@@ -24,7 +22,7 @@ test('default value', async () => {
 test('initialValues', async () => {
   const Component = () => (
     <SchemaForm initialValues={{ foo: '' }}>
-      <Field name="foo" type="string" />
+      <Field name="foo" type="test-string" />
     </SchemaForm>
   )
 

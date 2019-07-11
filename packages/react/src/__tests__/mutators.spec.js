@@ -33,9 +33,9 @@ test('update value by ref', async () => {
   )
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('123')).toBeVisible()
   fireEvent.click(queryByText('Change Value'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('321')).toBeVisible()
 })
