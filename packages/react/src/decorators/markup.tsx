@@ -81,7 +81,7 @@ export const SchemaMarkup = createHOC((options, SchemaForm) => {
             )}
           <SchemaForm
             {...others}
-            defaultValue={value || defaultValue}
+            defaultValue={defaultValue}
             value={value}
             initialValues={initialValues}
             schema={finalSchema}
