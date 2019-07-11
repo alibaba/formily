@@ -2,16 +2,43 @@ import { isArr, isObj, isStr } from '@uform/types'
 
 type EachArrayIterator<T> = (currentValue: T, key: number) => void | boolean
 type EachStringIterator = (currentValue: string, key: number) => void | boolean
-type EachObjectIterator<T> = (currentValue: T[keyof T], key: string) => void | boolean
-type MemoArrayIterator<T, U> = (previousValue: U, currentValue: T, key: number) => U
-type MemoStringIterator<T> = (previousValue: T, currentValue: string, key: number) => T
-type MemoObjectIterator<T, U> = (previousValue: U, currentValue: T[keyof T], key: string) => U
+type EachObjectIterator<T> = (
+  currentValue: T[keyof T],
+  key: string
+) => void | boolean
+type MemoArrayIterator<T, U> = (
+  previousValue: U,
+  currentValue: T,
+  key: number
+) => U
+type MemoStringIterator<T> = (
+  previousValue: T,
+  currentValue: string,
+  key: number
+) => T
+type MemoObjectIterator<T, U> = (
+  previousValue: U,
+  currentValue: T[keyof T],
+  key: string
+) => U
 
 export const toArr = (val: any): any[] => (isArr(val) ? val : val ? [val] : [])
 
-export function each(val: string, iterator: EachStringIterator, revert?: boolean): void
-export function each<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): void
-export function each<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): void
+export function each(
+  val: string,
+  iterator: EachStringIterator,
+  revert?: boolean
+): void
+export function each<T>(
+  val: T[],
+  iterator: EachArrayIterator<T>,
+  revert?: boolean
+): void
+export function each<T extends object>(
+  val: T,
+  iterator: EachObjectIterator<T>,
+  revert?: boolean
+): void
 export function each(val: any, iterator: any, revert?: boolean): object {
   if (isArr(val) || isStr(val)) {
     if (revert) {
@@ -21,7 +48,7 @@ export function each(val: any, iterator: any, revert?: boolean): object {
         }
       }
     } else {
-      for (let i: number = 0, length = val.length; i < length; i++) {
+      for (let i = 0, length = val.length; i < length; i++) {
         if (iterator(val[i], i) === false) {
           return
         }
@@ -39,9 +66,21 @@ export function each(val: any, iterator: any, revert?: boolean): object {
   }
 }
 
-export function map(val: string, iterator: EachStringIterator, revert?: boolean): string[]
-export function map<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): T[]
-export function map<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): object
+export function map(
+  val: string,
+  iterator: EachStringIterator,
+  revert?: boolean
+): string[]
+export function map<T>(
+  val: T[],
+  iterator: EachArrayIterator<T>,
+  revert?: boolean
+): T[]
+export function map<T extends object>(
+  val: T,
+  iterator: EachObjectIterator<T>,
+  revert?: boolean
+): object
 export function map(val: any, iterator: any, revert?: boolean): any {
   const res = isArr(val) || isStr(val) ? [] : {}
   each(
@@ -49,7 +88,7 @@ export function map(val: any, iterator: any, revert?: boolean): any {
     (item, key) => {
       const value = iterator(item, key)
       if (isArr(res)) {
-        (res as any).push(value)
+        ;(res as any).push(value)
       } else {
         res[key] = value
       }
@@ -59,10 +98,30 @@ export function map(val: any, iterator: any, revert?: boolean): any {
   return res
 }
 
-export function reduce<T, U>(val: T[], iterator: MemoArrayIterator<T, U>, accumulator?: U, revert?: boolean): U
-export function reduce<T>(val: string, iterator: MemoStringIterator<T>, accumulator?: T, revert?: boolean): T
-export function reduce<T extends object, U>(val: T, iterator: MemoObjectIterator<T, U>, accumulator?: U, revert?: boolean): U
-export function reduce(val: any, iterator: any, accumulator?: any, revert?: boolean): any {
+export function reduce<T, U>(
+  val: T[],
+  iterator: MemoArrayIterator<T, U>,
+  accumulator?: U,
+  revert?: boolean
+): U
+export function reduce<T>(
+  val: string,
+  iterator: MemoStringIterator<T>,
+  accumulator?: T,
+  revert?: boolean
+): T
+export function reduce<T extends object, U>(
+  val: T,
+  iterator: MemoObjectIterator<T, U>,
+  accumulator?: U,
+  revert?: boolean
+): U
+export function reduce(
+  val: any,
+  iterator: any,
+  accumulator?: any,
+  revert?: boolean
+): any {
   let result = accumulator
   each(
     val,
@@ -74,9 +133,21 @@ export function reduce(val: any, iterator: any, accumulator?: any, revert?: bool
   return result
 }
 
-export function every(val: string, iterator: EachStringIterator, revert?: boolean): boolean
-export function every<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): boolean
-export function every<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): boolean
+export function every(
+  val: string,
+  iterator: EachStringIterator,
+  revert?: boolean
+): boolean
+export function every<T>(
+  val: T[],
+  iterator: EachArrayIterator<T>,
+  revert?: boolean
+): boolean
+export function every<T extends object>(
+  val: T,
+  iterator: EachObjectIterator<T>,
+  revert?: boolean
+): boolean
 export function every(val: any, iterator: any, revert?: boolean): boolean {
   let res = true
   each(
@@ -92,9 +163,21 @@ export function every(val: any, iterator: any, revert?: boolean): boolean {
   return res
 }
 
-export function some(val: string, iterator: EachStringIterator, revert?: boolean): boolean
-export function some<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): boolean
-export function some<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): boolean
+export function some(
+  val: string,
+  iterator: EachStringIterator,
+  revert?: boolean
+): boolean
+export function some<T>(
+  val: T[],
+  iterator: EachArrayIterator<T>,
+  revert?: boolean
+): boolean
+export function some<T extends object>(
+  val: T,
+  iterator: EachObjectIterator<T>,
+  revert?: boolean
+): boolean
 export function some(val: any, iterator: any, revert?: boolean): boolean {
   let res = false
   each(
@@ -110,10 +193,26 @@ export function some(val: any, iterator: any, revert?: boolean): boolean {
   return res
 }
 
-export function findIndex(val: string, iterator: EachStringIterator, revert?: boolean): number
-export function findIndex<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): number
-export function findIndex<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): keyof T
-export function findIndex(val: any, iterator: any, revert?: boolean): string | number {
+export function findIndex(
+  val: string,
+  iterator: EachStringIterator,
+  revert?: boolean
+): number
+export function findIndex<T>(
+  val: T[],
+  iterator: EachArrayIterator<T>,
+  revert?: boolean
+): number
+export function findIndex<T extends object>(
+  val: T,
+  iterator: EachObjectIterator<T>,
+  revert?: boolean
+): keyof T
+export function findIndex(
+  val: any,
+  iterator: any,
+  revert?: boolean
+): string | number {
   let res: number | string = -1
   each(
     val,
@@ -128,9 +227,21 @@ export function findIndex(val: any, iterator: any, revert?: boolean): string | n
   return res
 }
 
-export function find(val: string, iterator: EachStringIterator, revert?: boolean): any
-export function find<T>(val: T[], iterator: EachArrayIterator<T>, revert?: boolean): T
-export function find<T extends object>(val: T, iterator: EachObjectIterator<T>, revert?: boolean): T[keyof T]
+export function find(
+  val: string,
+  iterator: EachStringIterator,
+  revert?: boolean
+): any
+export function find<T>(
+  val: T[],
+  iterator: EachArrayIterator<T>,
+  revert?: boolean
+): T
+export function find<T extends object>(
+  val: T,
+  iterator: EachObjectIterator<T>,
+  revert?: boolean
+): T[keyof T]
 export function find(val: any, iterator: any, revert?: boolean): any {
   let res: any
   each(
@@ -146,7 +257,15 @@ export function find(val: any, iterator: any, revert?: boolean): any {
   return res
 }
 
-export function includes(val: string[], searchElement: string, revert?: boolean): boolean
-export function includes<T>(val: T[], searchElement: T, revert?: boolean): boolean {
-  return some(val, (item) => item === searchElement, revert)
+export function includes(
+  val: string[],
+  searchElement: string,
+  revert?: boolean
+): boolean
+export function includes<T>(
+  val: T[],
+  searchElement: T,
+  revert?: boolean
+): boolean {
+  return some(val, item => item === searchElement, revert)
 }

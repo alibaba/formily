@@ -7,11 +7,11 @@
 ## 类型描述
 
 ```typescript
-type setValidationLocale({
-   [isoCode : String]:{
-      [patternName : String]:message : String
-   }
-})
+interface Locale {
+  [isoCode: string]: string
+}
+
+type setValidationLocale = (locale: Locale) => void
 ```
 
 ## 依赖

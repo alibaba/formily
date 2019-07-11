@@ -7,8 +7,8 @@ const VIRTUAL_BOXES = {}
 
 interface IRuleDescription {
   required?: boolean
-  message?: string,
-  pattern?: RegExp | string,
+  message?: string
+  pattern?: RegExp | string
   validator?: RuleHandler
 }
 
@@ -18,7 +18,12 @@ interface IPathInfo {
   schemaPath: string[]
 }
 
-type RuleHandler = (value: any, rule: IRuleDescription, values: object, name: string) => string | null
+type RuleHandler = (
+  value: any,
+  rule: IRuleDescription,
+  values: object,
+  name: string
+) => string | null
 
 export const getSchemaNodeFromPath = (schema: ISchema, path: Path) => {
   let res = schema
@@ -53,7 +58,12 @@ const isVirtualBoxSchema = (schema: ISchema) => {
   return isVirtualBox(schema.type) || isVirtualBox(schema['x-component'])
 }
 
-const schemaTraverse = (schema: ISchema, callback: any, path: ArrayPath = [], schemaPath = []) => {
+const schemaTraverse = (
+  schema: ISchema,
+  callback: any,
+  path: ArrayPath = [],
+  schemaPath = []
+) => {
   if (schema) {
     if (isVirtualBoxSchema(schema)) {
       path = path.slice(0, path.length - 1)
@@ -70,10 +80,9 @@ const schemaTraverse = (schema: ISchema, callback: any, path: ArrayPath = [], sc
       })
     } else if (schemaIs(schema, 'array') || schema.items) {
       if (schema.items) {
-
         callback(
           schema.items,
-          (key) => {
+          key => {
             schemaTraverse(
               schema.items,
               callback,
@@ -101,7 +110,6 @@ export const caculateSchemaInitialValues = (
         $path(index)
       })
     } else if ($path) {
-
       const isVirtualBoxInstance = isVirtualBoxSchema(subSchema)
       const name = isVirtualBoxInstance
         ? $path.schemaPath.join('.')

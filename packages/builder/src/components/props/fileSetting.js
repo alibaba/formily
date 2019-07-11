@@ -91,16 +91,16 @@ class fileSetting extends Component {
       <SchemaForm
         value={this.getSchemaValue()}
         onChange={this.onChangeHandler}
-        labelAlign='top'
+        labelAlign="top"
       >
-        <Field title='文件上传地址' type='string' name='action' />
-        <Field title='文件限制个数' type='number' name='limit' />
-        <Field title='展示文件列表' type='boolean' name='showUploadList' />
+        <Field title="文件上传地址" type="string" name="action" />
+        <Field title="文件限制个数" type="number" name="limit" />
+        <Field title="展示文件列表" type="boolean" name="showUploadList" />
         <Field
-          title='上传列表样式'
-          type='string'
+          title="上传列表样式"
+          type="string"
           enum={showUploadListData}
-          name='listType'
+          name="listType"
         />
       </SchemaForm>
     )
@@ -110,20 +110,21 @@ class fileSetting extends Component {
     const { xprops = {}, UI } = this.props
     const { defaultFileList = [] } = xprops
     return (
-      <div className='next-form'>
-        <div className='next-form-item'>
-          <label className='next-col-8 next-form-item-label'>
+      <div className="next-form">
+        <div className="next-form-item">
+          <label className="next-col-8 next-form-item-label">
             <span>模板文件：</span>
           </label>
-          <div className='next-form-item-control'>
-            <div className='schema-inline-field'>
-              <div className='schema-form-field'>
+          <div className="next-form-item-control">
+            <div className="schema-inline-field">
+              <div className="schema-form-field">
                 <UI.Upload
-                  name='file'
-                  listType='text'
+                  name="file"
+                  listType="text"
                   withCredentials
                   action={uploadUrl}
                   data={{
+                    // eslint-disable-next-line @typescript-eslint/camelcase
                     _scm_token_: window._scm_token_
                   }}
                   formatter={res => {
@@ -172,7 +173,7 @@ class fileSetting extends Component {
 
   render() {
     return (
-      <div className='file-setting'>
+      <div className="file-setting">
         {this.renderProps()}
         {this.renderUploadComp()}
       </div>

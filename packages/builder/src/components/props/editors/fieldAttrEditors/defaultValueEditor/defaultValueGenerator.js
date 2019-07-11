@@ -78,7 +78,7 @@ class DefaultValueGenerator extends Component {
           <this.props.UI.Input
             value={value}
             onChange={this.handleValueChange}
-            placeholder='url上的key'
+            placeholder="url上的key"
             style={{
               verticalAlign: 'top',
               width: 75,

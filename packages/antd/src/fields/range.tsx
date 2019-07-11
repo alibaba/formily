@@ -45,7 +45,15 @@ registerFormField(
         } else {
           newMarks = marks
         }
-        return <Slider onChange={onChange} value={value} min={min} max={max} marks={newMarks} />
+        return (
+          <Slider
+            onChange={onChange}
+            value={value}
+            min={min}
+            max={max}
+            marks={newMarks}
+          />
+        )
       }
     }
   )

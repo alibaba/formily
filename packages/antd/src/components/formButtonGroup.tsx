@@ -32,8 +32,8 @@ const isElementInViewport = (
     offset = 0,
     threshold = 0
   }: {
-  offset?: IOffset | number
-  threshold?: number
+    offset?: IOffset | number
+    threshold?: number
   } = {}
 ) => {
   const { top, right, bottom, left, width, height } = rect
@@ -50,10 +50,14 @@ const isElementInViewport = (
   }
 
   return (
-    intersection.t >= ((offset as IOffset).top || offset as number + elementThreshold.y) &&
-    intersection.r >= ((offset as IOffset).right || offset as number + elementThreshold.x) &&
-    intersection.b >= ((offset as IOffset).bottom || offset as number + elementThreshold.y) &&
-    intersection.l >= ((offset as IOffset).left || offset as number + elementThreshold.x)
+    intersection.t >=
+      ((offset as IOffset).top || (offset as number) + elementThreshold.y) &&
+    intersection.r >=
+      ((offset as IOffset).right || (offset as number) + elementThreshold.x) &&
+    intersection.b >=
+      ((offset as IOffset).bottom || (offset as number) + elementThreshold.y) &&
+    intersection.l >=
+      ((offset as IOffset).left || (offset as number) + elementThreshold.x)
   )
 }
 
@@ -150,6 +154,7 @@ export const FormButtonGroup = styled(
 
     private getStickyBoundaryHandler(ref) {
       return () => {
+        // eslint-disable-next-line react/no-find-dom-node
         this.formNode = this.formNode || ReactDOM.findDOMNode(ref.current)
         if (this.formNode) {
           return isElementInViewport(this.formNode.getBoundingClientRect())
@@ -159,7 +164,8 @@ export const FormButtonGroup = styled(
     }
   }
 )`
-  ${props => (props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : '')}
+  ${props =>
+    props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : ''}
   &.is-inline {
     display: inline-block;
     flex-grow: 3;

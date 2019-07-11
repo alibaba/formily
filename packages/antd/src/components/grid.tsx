@@ -14,7 +14,7 @@ export class Row extends Component<IRowProps> {
   }
 
   public render() {
-    /* eslint-disable no-unused-vars */
+    /* eslint-disable @typescript-eslint/no-unused-vars */
     const {
       prefix,
       pure,
@@ -30,7 +30,7 @@ export class Row extends Component<IRowProps> {
       children,
       ...others
     } = this.props
-    /* eslint-enable no-unused-vars */
+    /* eslint-enable @typescript-eslint/no-unused-vars */
 
     let hiddenClassObj
     if (hidden === true) {
@@ -65,8 +65,12 @@ export class Row extends Component<IRowProps> {
         ...(others.style || {})
       }
       newChildren = Children.map(children, (child: React.ReactElement) => {
-        // @ts-ignore
-        if (child && child.type && typeof child.type === 'function' && child.type.isNextCol) {
+        if (
+          child &&
+          child.type &&
+          typeof child.type === 'function' &&
+          (child.type as any).isNextCol
+        ) {
           const newChild = cloneElement(child, {
             style: {
               paddingLeft: halfGutterString,
@@ -131,7 +135,9 @@ export class Col extends Component<IColProps> {
       }
 
       ret[`${prefix}col-${point}-${pointProps.span}`] = !!pointProps.span
-      ret[`${prefix}col-${point}-offset-${pointProps.offset}`] = !!pointProps.offset
+      ret[
+        `${prefix}col-${point}-offset-${pointProps.offset}`
+      ] = !!pointProps.offset
       return ret
     }, {})
 

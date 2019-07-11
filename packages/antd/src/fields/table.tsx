@@ -4,6 +4,138 @@ import { registerFormField } from '@uform/react'
 import { isFn, toArr } from '@uform/utils'
 import { ArrayField } from './array'
 
+export interface IColumnProps {
+  title?: string
+  dataIndex?: string
+  width?: string | number
+  cell: (item?: any, index?: number) => React.ReactElement
+}
+
+class Column extends Component<IColumnProps> {
+  public static displayName = '@schema-table-column'
+  public render() {
+    return this.props.children
+  }
+}
+
+registerFormField(
+  'table',
+  styled(
+    class extends ArrayField {
+      public createFilter(key, payload) {
+        const { schema } = this.props
+        const columnFilter: (key: string, payload: any) => boolean =
+          schema['x-props'] && schema['x-props'].columnFilter
+
+        return (render, otherwise) => {
+          if (isFn(columnFilter)) {
+            return columnFilter(key, payload)
+              ? isFn(render)
+                ? render()
+                : render
+              : isFn(otherwise)
+              ? otherwise()
+              : otherwise
+          } else {
+            return render()
+          }
+        }
+      }
+
+      public render() {
+        const {
+          value,
+          schema,
+          locale,
+          className,
+          renderField,
+          getOrderProperties
+        } = this.props
+        const cls = this.getProps('className')
+        const style = this.getProps('style')
+        const operationsWidth = this.getProps('operationsWidth')
+        return (
+          <div
+            className={`${className} ${cls}`}
+            style={style}
+            onClick={this.onClearErrorHandler()}
+          >
+            <div>
+              <Table dataSource={value}>
+                {getOrderProperties(schema.items).reduce(
+                  (buf, { key, schema }) => {
+                    const filter = this.createFilter(key, schema)
+                    const res = filter(
+                      () => {
+                        return buf.concat(
+                          <Column
+                            {...schema}
+                            key={key}
+                            title={schema.title}
+                            dataIndex={key}
+                            cell={(record, index) => {
+                              return renderField([index, key])
+                            }}
+                          />
+                        )
+                      },
+                      () => {
+                        return buf
+                      }
+                    )
+                    return res
+                  },
+                  []
+                )}
+
+                <Column
+                  key={'operations'}
+                  title={locale.operations}
+                  dataIndex={'operations'}
+                  width={operationsWidth}
+                  cell={(item, index) => {
+                    return (
+                      <div className={'array-item-operator'}>
+                        {this.renderRemove(index, item)}
+                        {this.renderMoveDown(index, item)}
+                        {this.renderMoveUp(index)}
+                        {this.renderExtraOperations(index)}
+                      </div>
+                    )
+                  }}
+                />
+              </Table>
+              {this.renderAddition()}
+            </div>
+          </div>
+        )
+      }
+    }
+  )`
+    display: inline-block;
+    .array-item-addition {
+      line-height: normal !important;
+      padding: 10px;
+      background: #fbfbfb;
+      border-left: 1px solid #dcdee3;
+      border-right: 1px solid #dcdee3;
+      border-bottom: 1px solid #dcdee3;
+      .ant-btn-text {
+        color: #888;
+        i {
+          margin-right: 3px;
+        }
+      }
+    }
+    .ant-table-cell-wrapper > .ant-form-item {
+      margin-bottom: 0;
+    }
+    .array-item-operator {
+      display: flex;
+    }
+  `
+)
+
 export interface ITableProps {
   className?: string
   dataSource: any
@@ -18,10 +150,14 @@ const Table = styled(
       return (
         <div className={'ant-table-cell-wrapper'}>
           {isFn(col.cell)
-            ? col.cell(record ? record[col.dataIndex] : undefined, rowIndex, record)
+            ? col.cell(
+                record ? record[col.dataIndex] : undefined,
+                rowIndex,
+                record
+              )
             : record
-              ? record[col.dataIndex]
-              : undefined}
+            ? record[col.dataIndex]
+            : undefined}
         </div>
       )
     }
@@ -39,7 +175,9 @@ const Table = styled(
                       className={'ant-table-header-node'}
                       style={{ minWidth: col.width }}
                     >
-                      <div className={'ant-table-cell-wrapper'}>{col.title}</div>
+                      <div className={'ant-table-cell-wrapper'}>
+                        {col.title}
+                      </div>
                     </th>
                   )
                 })}
@@ -77,7 +215,9 @@ const Table = styled(
             <td className={'ant-table-cell'} colSpan={columns.length}>
               <div className={'ant-table-empty'} style={{ padding: 10 }}>
                 <img
-                  src={'//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'}
+                  src={
+                    '//img.alicdn.com/tfs/TB1cVncKAzoK1RjSZFlXXai4VXa-184-152.svg'
+                  }
                   style={{ height: 60 }}
                 />
               </div>
@@ -91,7 +231,10 @@ const Table = styled(
       const columns = []
       React.Children.forEach(children, child => {
         if (React.isValidElement(child as React.ReactElement)) {
-          if (child.type === Column || child.type.displayName === '@schema-table-column') {
+          if (
+            child.type === Column ||
+            child.type.displayName === '@schema-table-column'
+          ) {
             columns.push(child.props)
           }
         }
@@ -106,7 +249,9 @@ const Table = styled(
       return (
         <div className={this.props.className}>
           <div className={'ant-table zebra'}>
-            <div className={'ant-table-inner'}>{this.renderTable(columns, dataSource)}</div>
+            <div className={'ant-table-inner'}>
+              {this.renderTable(columns, dataSource)}
+            </div>
           </div>
         </div>
       )
@@ -210,132 +355,3 @@ const Table = styled(
     font-size: 12px;
   }
 `
-
-export interface IColumnProps {
-  title?: string
-  dataIndex?: string
-  width?: string | number
-  cell: (item?: any, index?: number) => React.ReactElement
-}
-
-class Column extends Component<IColumnProps> {
-  public static displayName = '@schema-table-column'
-  public render() {
-    return this.props.children
-  }
-}
-
-registerFormField(
-  'table',
-  styled(
-    class extends ArrayField {
-      public createFilter(key, payload) {
-        const { schema } = this.props
-        const columnFilter: (key: string, payload: any) => boolean =
-          schema['x-props'] && schema['x-props'].columnFilter
-
-        return (render, otherwise) => {
-          if (isFn(columnFilter)) {
-            return columnFilter(key, payload)
-              ? isFn(render)
-                ? render()
-                : render
-              : isFn(otherwise)
-                ? otherwise()
-                : otherwise
-          } else {
-            return render()
-          }
-        }
-      }
-
-      public render() {
-        const {
-          value,
-          schema,
-          locale,
-          className,
-          renderField,
-          getOrderProperties
-        } = this.props
-        const cls = this.getProps('className')
-        const style = this.getProps('style')
-        const operationsWidth = this.getProps('operationsWidth')
-        return (
-          <div
-            className={`${className} ${cls}`}
-            style={style}
-            onClick={this.onClearErrorHandler()}
-          >
-            <div>
-              <Table dataSource={value}>
-                {getOrderProperties(schema.items).reduce((buf, { key, schema }) => {
-                  const filter = this.createFilter(key, schema)
-                  const res = filter(
-                    () => {
-                      return buf.concat(
-                        <Column
-                          {...schema}
-                          key={key}
-                          title={schema.title}
-                          dataIndex={key}
-                          cell={(record, index) => {
-                            return renderField([index, key])
-                          }}
-                        />
-                      )
-                    },
-                    () => {
-                      return buf
-                    }
-                  )
-                  return res
-                }, [])}
-
-                <Column
-                  key={'operations'}
-                  title={locale.operations}
-                  dataIndex={'operations'}
-                  width={operationsWidth}
-                  cell={(item, index) => {
-                    return (
-                      <div className={'array-item-operator'}>
-                        {this.renderRemove(index, item)}
-                        {this.renderMoveDown(index, item)}
-                        {this.renderMoveUp(index)}
-                        {this.renderExtraOperations(index)}
-                      </div>
-                    )
-                  }}
-                />
-              </Table>
-              {this.renderAddition()}
-            </div>
-          </div>
-        )
-      }
-    }
-  )`
-    display: inline-block;
-    .array-item-addition {
-      line-height: normal !important;
-      padding: 10px;
-      background: #fbfbfb;
-      border-left: 1px solid #dcdee3;
-      border-right: 1px solid #dcdee3;
-      border-bottom: 1px solid #dcdee3;
-      .ant-btn-text {
-        color: #888;
-        i {
-          margin-right: 3px;
-        }
-      }
-    }
-    .ant-table-cell-wrapper > .ant-form-item {
-      margin-bottom: 0;
-    }
-    .array-item-operator {
-      display: flex;
-    }
-  `
-)

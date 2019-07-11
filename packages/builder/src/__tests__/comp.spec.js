@@ -8,10 +8,10 @@ test('shoud correct render comp', () => {
     <Comp.Divider />
   )
   const comp2 = renderer.create(
-    <Comp.Header className='aa' theme={{ whiteColor: '#fff' }}>hello</Comp.Header>
+    <Comp.Header className="aa" theme={{ whiteColor: '#fff' }}>hello</Comp.Header>
   )
   const comp3 = renderer.create(
-    <Comp.CustomIcon className='aaa' iconUrl='https://www.tmall.com' width='15' height='15' />
+    <Comp.CustomIcon className="aaa" iconUrl="https://www.tmall.com" width="15" height="15" />
   )
   let tree1 = comp1.toJSON()
   let tree2 = comp2.toJSON()

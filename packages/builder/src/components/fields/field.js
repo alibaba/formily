@@ -47,7 +47,7 @@ const Box = ({
       style={style}
     >
       <i
-        className='field-icon'
+        className="field-icon"
         style={{
           backgroundImage: `url(${iconUrl})`,
           width: '100%',
