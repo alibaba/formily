@@ -15,11 +15,13 @@ export interface IRegisteredFieldsMap {
 }
 
 // TODO 下面两个接口能不能合并成一个
-export interface IFunctionComponentWithStyleComponent extends React.FunctionComponent {
+export interface IFunctionComponentWithStyleComponent
+  extends React.FunctionComponent {
   styledComponentId?: string
 }
 
-export interface IComponentClassWithStyleComponent extends React.ComponentClass {
+export interface IComponentClassWithStyleComponent
+  extends React.ComponentClass {
   styledComponentId?: string
 }
 
@@ -53,10 +55,15 @@ export const initialContainer = () => {
 
 export const registerFormField = (
   name: string,
-  component: IFunctionComponentWithStyleComponent | IComponentClassWithStyleComponent,
+  component:
+    | IFunctionComponentWithStyleComponent
+    | IComponentClassWithStyleComponent,
   notWrapper?: boolean
 ) => {
-  if (isNotEmptyStr(name) && (isFn(component) || typeof component.styledComponentId === 'string')) {
+  if (
+    isNotEmptyStr(name) &&
+    (isFn(component) || typeof component.styledComponentId === 'string')
+  ) {
     if (notWrapper) {
       FORM_FIELDS[lowercase(name)] = component
       FORM_FIELDS[lowercase(name)].registerMiddlewares = []
@@ -81,7 +88,11 @@ export const registerFormFields = (fields: IRegisteredFieldsMap) => {
 export const registerFieldMiddleware = (...wrappers: any[]) => {
   FIELD_WRAPPERS = FIELD_WRAPPERS.concat(wrappers)
   each(FORM_FIELDS, (component, key) => {
-    if (!component.registerMiddlewares.some(wrapper => wrappers.indexOf(wrapper) > -1)) {
+    if (
+      !component.registerMiddlewares.some(
+        wrapper => wrappers.indexOf(wrapper) > -1
+      )
+    ) {
       FORM_FIELDS[key] = compose(
         FORM_FIELDS[key],
         wrappers,
@@ -105,13 +116,17 @@ export const registerFieldRenderer = (renderer: React.ComponentType) => {
 }
 
 // TODO transformer type
-export const registerFormFieldPropsTransformer = (name: string, transformer) => {
+export const registerFormFieldPropsTransformer = (
+  name: string,
+  transformer
+) => {
   if (isFn(transformer)) {
     FIELD_PROPS_TRANSFORMERS[name] = transformer
   }
 }
 
-export const getFormFieldPropsTransformer = (name: string) => FIELD_PROPS_TRANSFORMERS[name]
+export const getFormFieldPropsTransformer = (name: string) =>
+  FIELD_PROPS_TRANSFORMERS[name]
 
 export const getFormField = (name: string) => {
   return FORM_FIELDS[name]
@@ -119,6 +134,7 @@ export const getFormField = (name: string) => {
 
 export const getFieldRenderer = () => FIELD_RENDERER
 
-export const OriginForm = React.forwardRef((props: ISchemaFormProps, ref: React.Ref<any>) =>
-  React.createElement(FORM_COMPONENT, { ...props, ref })
+export const OriginForm = React.forwardRef(
+  (props: ISchemaFormProps, ref: React.Ref<any>) =>
+    React.createElement(FORM_COMPONENT, { ...props, ref })
 )

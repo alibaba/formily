@@ -12,7 +12,9 @@ export interface ILocales {
 }
 
 const getBrowserlanguage = () => {
-  if (!self.navigator) { return 'en' }
+  if (!self.navigator) {
+    return 'en'
+  }
   return self.navigator.browserlanguage || self.navigator.language || 'en'
 }
 
@@ -41,7 +43,10 @@ export const setLanguage = (lang: string) => {
 }
 
 export const getMessage = (path: string) => {
-  return getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`) || 'field is not valid,but not found error message.'
+  return (
+    getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`) ||
+    'field is not valid,but not found error message.'
+  )
 }
 
 setLocale(locales)

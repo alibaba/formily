@@ -31,7 +31,7 @@ function FieldList(props) {
         <h2>组件</h2>
         <p>可将选项拖动到主面板进行编辑</p>
       </Header>
-      <ul className='field-list'>
+      <ul className="field-list">
         {fieldList.map((fieldItem, i) => {
           return (
             <Field

@@ -103,7 +103,8 @@ export class Form {
     const lastValues = this.state.values
     const lastDirty = this.state.dirty
     this.state.values = values || {}
-    this.state.dirty = lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
+    this.state.dirty =
+      lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     this.updateFieldsValue()
   }
 
@@ -114,7 +115,10 @@ export class Form {
     })
   }
 
-  public setFieldState = (path: Path | IFormPathMatcher, callback?: () => void) => {
+  public setFieldState = (
+    path: Path | IFormPathMatcher,
+    callback?: () => void
+  ) => {
     if (this.destructed) {
       return
     }
@@ -154,7 +158,9 @@ export class Form {
     })
     if (field) {
       field.syncContextValue()
-      return isFn(callback) ? callback(field.publishState()) : field.publishState()
+      return isFn(callback)
+        ? callback(field.publishState())
+        : field.publishState()
     }
   }
 
@@ -349,7 +355,8 @@ export class Form {
         if (!visible) {
           this.deleteIn($name)
         } else {
-          const value = field.value !== undefined ? field.value : clone(field.initialValue)
+          const value =
+            field.value !== undefined ? field.value : clone(field.initialValue)
           if (field.value !== undefined) {
             this.setIn($name, value)
           }
@@ -386,7 +393,9 @@ export class Form {
   }
 
   public getValue(name?: string, copy?: boolean) {
-    return copy ? clone(getIn(this.state.values, name)) : getIn(this.state.values, name)
+    return copy
+      ? clone(getIn(this.state.values, name))
+      : getIn(this.state.values, name)
   }
 
   public deleteIn(name: string) {
@@ -527,7 +536,8 @@ export class Form {
       pristine: true,
       initialValues: clone(values) || {},
       values: clone(values) || {},
-      dirty: lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
+      dirty:
+        lastDirty || (this.initialized ? !isEqual(values, lastValues) : false)
     }
     if (this.options.onFormChange && !this.initialized) {
       this.subscribe(this.options.onFormChange)
@@ -550,7 +560,9 @@ export class Form {
             const predicate = isStr(eventFilter)
               ? FormPath.match(eventFilter as string)
               : (eventFilter as IFormPathMatcher)
-            return this.subscribes[eventName].pipe(filter(predicate)) as Subject<any>
+            return this.subscribes[eventName].pipe(
+              filter(predicate)
+            ) as Subject<any>
           }
           return this.subscribes[eventName]
         },
@@ -603,7 +615,11 @@ export class Form {
               field.dirty = false
             }
             if ((path as IFormPathMatcher).hasWildcard) {
-              this.updateBuffer.push((path as IFormPathMatcher).pattern, callback, { path, resolve })
+              this.updateBuffer.push(
+                (path as IFormPathMatcher).pattern,
+                callback,
+                { path, resolve }
+              )
             }
             if (field.dirty) {
               const dirtyType = field.dirtyType
@@ -636,10 +652,14 @@ export class Form {
               } else if (isStr(path)) {
                 this.updateBuffer.push(path, callback, { path, resolve })
               } else if (isFn(path) && (path as IFormPathMatcher).pattern) {
-                this.updateBuffer.push((path as IFormPathMatcher).pattern, callback, {
-                  path,
-                  resolve
-                })
+                this.updateBuffer.push(
+                  (path as IFormPathMatcher).pattern,
+                  callback,
+                  {
+                    path,
+                    resolve
+                  }
+                )
               }
             }
           }
@@ -686,7 +706,10 @@ export class Form {
     })
   }
 
-  private internalValidate(values: any = this.state.values, forceUpdate?: boolean) {
+  private internalValidate(
+    values: any = this.state.values,
+    forceUpdate?: boolean
+  ) {
     if (this.destructed) {
       return
     }
@@ -698,7 +721,11 @@ export class Form {
         if (this.destructed) {
           return resolve()
         }
-        return runValidation(values || this.state.values, this.fields, forceUpdate)
+        return runValidation(
+          values || this.state.values,
+          this.fields,
+          forceUpdate
+        )
           .then(response => {
             const lastValid = this.state.valid
             const newErrors = reduce(

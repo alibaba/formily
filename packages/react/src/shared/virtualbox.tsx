@@ -12,7 +12,9 @@ import { IFieldProps } from '../type'
 
 export const createVirtualBox = (
   name: string,
-  component: IFunctionComponentWithStyleComponent | IComponentClassWithStyleComponent
+  component:
+    | IFunctionComponentWithStyleComponent
+    | IComponentClassWithStyleComponent
 ) => {
   registerVirtualboxFlag(name)
   registerFormField(
@@ -65,5 +67,12 @@ export const createVirtualBox = (
 }
 
 export const FormSlot = ({ name, children }) => {
-  return <SchemaField type="object" name={name} x-component="slot" renderChildren={children} />
+  return (
+    <SchemaField
+      type="object"
+      name={name}
+      x-component="slot"
+      renderChildren={children}
+    />
+  )
 }

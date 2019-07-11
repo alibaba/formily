@@ -1,7 +1,7 @@
 import { IFieldState } from './field'
 export interface IValidateResponse {
   name: string
-  value: any,
+  value: any
   field: IFieldState
   invalid: boolean
   valid: boolean

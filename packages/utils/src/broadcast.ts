@@ -7,6 +7,7 @@ type Filter<P, S> = (payload: P, subscription: S) => any
 
 const noop = () => undefined
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IBroadcast extends Broadcast<any, any, any> {}
 
 export class Broadcast<P, S, N> {

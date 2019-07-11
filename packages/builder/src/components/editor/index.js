@@ -88,10 +88,10 @@ class Component extends React.Component {
 
     return (
       <EditorStyle className={cls(className, codemode ? 'active' : '')}>
-        <div id='J_uformEditor' className='editor' />
+        <div id="J_uformEditor" className="editor" />
         <a
-          href='javascript:;'
-          className='editor-btn'
+          href="javascript:;"
+          className="editor-btn"
           onClick={() => {
             try {
               // eslint-disable-next-line
