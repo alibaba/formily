@@ -477,12 +477,11 @@ function _setIn(obj: any, path: Path, value: any) {
 
   for (let i = 0; i < pathArr.length; i++) {
     const p = pathArr[i]
-
     if (!isObj(obj[p])) {
       if (obj[p] === undefined && value === undefined) {
         return
       }
-      obj[p] = {}
+      obj[p] = /^\d+$/.test(pathArr[i + 1 + '']) ? [] : {}
     }
 
     if (i === pathArr.length - 1) {

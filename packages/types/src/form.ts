@@ -36,6 +36,7 @@ export interface IFormOptions {
   editable: boolean | ((nam: string) => boolean)
   effects: IEffects
   defaultValue?: object
+  values?: object
   initialValues?: object
   schema: ISchema | {}
   subscribes: ISubscribers
