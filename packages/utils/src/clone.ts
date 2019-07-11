@@ -9,6 +9,7 @@ const NATIVE_KEYS = [
   ['WeakMap', (map: any) => new WeakMap(map)],
   ['WeakSet', (set: any) => new WeakSet(set)],
   ['Set', (set: any) => new Set(set)],
+  ['Date', (date: any) => new Date(date)],
   'FileList',
   'File',
   'URL',
