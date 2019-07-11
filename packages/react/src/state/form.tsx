@@ -254,8 +254,8 @@ export const StateForm = createHOC((options, Form) => {
       return this.form.submit()
     }
 
-    public reset = (forceClear?: boolean) => {
-      this.form.reset(forceClear)
+    public reset = (forceClear?: boolean, noValidate: boolean = false) => {
+      this.form.reset(forceClear, noValidate)
     }
 
     public validate = () => {
