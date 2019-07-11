@@ -40,7 +40,8 @@ interface IFieldProps<V = any> {
    renderComponent     : React.FunctionComponent<Partial<IFieldProps> | undefined>,//渲染当前字段的组件，对于x-render来说，可以借助它快速实现渲染包装功能
    getOrderProperties  : () => Array<{schema: ISchema, key: number, path: string, name: string }>,//根据properties里字段的x-index值求出排序后的properties
    mutators            : Mutators,//数据操作对象
-   schema              : ISchema
+   schema              : ISchema,
+   form                : Form //参考createForm中的Form API描述
 }
 
 interface Mutators<V = any> {

@@ -9,8 +9,7 @@
 ```typescript
 type createVirtualBox = <T = any>(name: string, component: React.ComponentType<T>) => 
 React.FunctionComponent<{
-  name?   : string,
-  render? : React.ComponentType<IRednerProps>,   // x-render参数，详见Field
+  children : ReactElement[],
   ...props: T
   }>
 ```

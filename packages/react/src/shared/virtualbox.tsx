@@ -14,7 +14,8 @@ export const createVirtualBox = (
   name: string,
   component:
     | IFunctionComponentWithStyleComponent
-    | IComponentClassWithStyleComponent
+    | IComponentClassWithStyleComponent,
+  isController: boolean
 ) => {
   registerVirtualboxFlag(name)
   registerFormField(
@@ -39,7 +40,11 @@ export const createVirtualBox = (
             />
           )
         })
-        return React.createElement(component, schema['x-props'], children)
+        return React.createElement(
+          component,
+          isController ? this.props : schema['x-props'],
+          children
+        )
       }
     },
     true
@@ -65,6 +70,13 @@ export const createVirtualBox = (
 
   return VirtualBox
 }
+
+export const createControllerBox = (
+  name: string,
+  component:
+    | IFunctionComponentWithStyleComponent
+    | IComponentClassWithStyleComponent
+) => createVirtualBox(name, component, true)
 
 export const FormSlot = ({ name, children }) => {
   return (
