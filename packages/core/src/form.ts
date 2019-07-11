@@ -416,12 +416,21 @@ export class Form {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
-      if (isEmpty(value) && isEmpty(initialValue)) {
-        return
+      if (noValidate) {
+        if (field.errors.length > 0) {
+          field.errors = []
+          field.dirty = true
+        }
+        if (field.effectErrors.length > 0) {
+          field.effectErrors = []
+          field.dirty = true
+        }
       }
-      field.updateState(state => {
-        state.value = forceClear ? undefined : initialValue
-      })
+      if (!isEmpty(value) || !isEmpty(initialValue)) {
+        field.updateState(state => {
+          state.value = forceClear ? undefined : initialValue
+        })
+      }
       if (field.dirty) {
         raf(() => {
           if (this.destructed) {
