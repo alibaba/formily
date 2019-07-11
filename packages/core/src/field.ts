@@ -99,7 +99,9 @@ export class Field implements IField {
 
   public initialize(options: IFieldOptions) {
     const rules = this.getRulesFromProps(options.props)
-    this.value = !isEmpty(options.value) ? clone(options.value) : this.value
+    this.value = !isEqual(this.value, options.value)
+      ? clone(options.value)
+      : this.value
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
 
@@ -114,7 +116,7 @@ export class Field implements IField {
         ? options.initialValue
         : this.initialValue
     } else {
-      this.initialValue = !isEmpty(options.initialValue)
+      this.initialValue = !isEqual(this.initialValue, options.initialValue)
         ? options.initialValue
         : !isEmpty(this.initialValue)
         ? this.initialValue
@@ -143,7 +145,7 @@ export class Field implements IField {
 
   public getInitialValueFromProps(props: any) {
     if (props) {
-      if (!isEmpty(props.default)) {
+      if (!isEqual(this.initialValue, props.default)) {
         return props.default
       }
     }

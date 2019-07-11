@@ -60,12 +60,12 @@ test('setFieldState will trigger validate', async () => {
   const { getByTestId } = render(<TestComponent />)
 
   fireEvent.click(getByTestId('btn'))
-  await sleep(100)
+  await sleep(33)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
   expect(getByTestId('test-errors-2')).toHaveTextContent('text-2 is required')
   fireEvent.change(getByTestId('test-input-1'), { target: { value: '123' } })
-  await sleep(100)
+  await sleep(33)
   expect(getByTestId('test-input-2')).toHaveAttribute('value', '123')
   expect(getByTestId('test-errors-2')).not.toHaveTextContent(
     'text-2 is required'
