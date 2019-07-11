@@ -159,6 +159,7 @@ export const FormItem = styled(
     }
 
     render() {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
         className,
         labelAlign,
@@ -180,6 +181,7 @@ export const FormItem = styled(
         schema,
         ...others
       } = this.props
+      /* eslint-enable @typescript-eslint/no-unused-vars */
 
       const itemClassName = classNames({
         [`${prefix}form-item`]: true,

@@ -13,7 +13,11 @@ const matchWithFilter = (result: boolean, filter: Filter, payload: any) => {
 const wildcardRE = /\*/
 
 export const FormPath = {
-  match(pattern: string, isRealPath?: boolean | Filter, filter?: Filter): IFormPathMatcher {
+  match(
+    pattern: string,
+    isRealPath?: boolean | Filter,
+    filter?: Filter
+  ): IFormPathMatcher {
     pattern = pattern + ''
     const match = createMatcher(pattern)
     if (isFn(isRealPath)) {
@@ -57,10 +61,14 @@ export const FormPath = {
       isFn(matcher)
         ? !matcher(path)
         : isStr(matcher)
-          ? !FormPath.match(matcher)(path)
-          : false
+        ? !FormPath.match(matcher)(path)
+        : false
   },
-  transform(path: string, regexp: RegExp, calllback: ((...args: string[]) => string)) {
+  transform(
+    path: string,
+    regexp: RegExp,
+    calllback: (...args: string[]) => string
+  ) {
     const args = reduce(
       resolveFieldPath(path),
       (buf: string[], key: string) => {

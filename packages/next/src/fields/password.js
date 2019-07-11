@@ -186,13 +186,13 @@ const Password = styled(
     renderStrength() {
       const { strength } = this.state
       return (
-        <div className='password-strength-wrapper'>
-          <div className='div-1 div' />
-          <div className='div-2 div' />
-          <div className='div-3 div' />
-          <div className='div-4 div' />
+        <div className="password-strength-wrapper">
+          <div className="div-1 div" />
+          <div className="div-2 div" />
+          <div className="div-3 div" />
+          <div className="div-4 div" />
           <div
-            className='password-strength-bar'
+            className="password-strength-bar"
             style={{
               clipPath: `polygon(0 0,${strength}% 0,${strength}% 100%,0 100%)`
             }}
@@ -213,17 +213,17 @@ const Password = styled(
       if (!this.state.eye) {
         return (
           <img
-            className='eye'
+            className="eye"
             onClick={this.switchEye()}
-            src='//img.alicdn.com/tfs/TB1wyXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'
+            src="//img.alicdn.com/tfs/TB1wyXlsVzqK1RjSZFvXXcB7VXa-200-200.svg"
           />
         )
       } else {
         return (
           <img
-            className='eye'
+            className="eye"
             onClick={this.switchEye()}
-            src='//img.alicdn.com/tfs/TB1xiXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'
+            src="//img.alicdn.com/tfs/TB1xiXlsVzqK1RjSZFvXXcB7VXa-200-200.svg"
           />
         )
       }

@@ -18,11 +18,16 @@ import customValidate from './custom'
 
 const batchInvoke = (...fns: Array<(...args: any[]) => void>) => {
   return (...args: any[]) => {
-    return fns.map((fn) => Promise.resolve(fn(...args)))
+    return fns.map(fn => Promise.resolve(fn(...args)))
   }
 }
 
-const batchValidate = (value: any, rule: IRuleDescription, values: any, name: string) => {
+const batchValidate = (
+  value: any,
+  rule: IRuleDescription,
+  values: any,
+  name: string
+) => {
   return Promise.all(
     batchInvoke(
       formatValidate,
@@ -37,9 +42,9 @@ export const validate = (value: any, rule: Rule, values: any, name: string) => {
   const newRule = isObj(rule)
     ? rule
     : isStr(rule)
-      ? { format: rule }
-      : isFn(rule)
-        ? { validator: rule }
-        : {}
+    ? { format: rule }
+    : isFn(rule)
+    ? { validator: rule }
+    : {}
   return batchValidate(value, newRule as IRuleDescription, values, name)
 }

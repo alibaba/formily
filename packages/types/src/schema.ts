@@ -19,5 +19,8 @@ export interface ISchema {
   ['x-index']?: number
   ['x-rules']?: Rule
   ['x-component']?: string
-  ['x-effect']?: (dispatch: Dispatcher, option?: object) => { [key: string]: any }
+  ['x-effect']?: (
+    dispatch: Dispatcher,
+    option?: object
+  ) => { [key: string]: any }
 }

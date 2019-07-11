@@ -88,6 +88,7 @@ const props = {
   //   console.info('index onChange data', data);
   // },
   onSubmit: data => {
+    // eslint-disable-next-line no-console
     console.info('index onSubmit data', data)
   }
 }

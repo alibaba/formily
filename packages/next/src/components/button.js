@@ -8,8 +8,8 @@ export const Submit = ({ showLoading, ...props }) => {
       {({ status, schema }) => {
         return (
           <Button
-            type='primary'
-            htmlType='submit'
+            type="primary"
+            htmlType="submit"
             disabled={showLoading ? status === 'submitting' : undefined}
             {...props}
             loading={showLoading ? status === 'submitting' : undefined}

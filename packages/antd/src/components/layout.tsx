@@ -19,29 +19,32 @@ const normalizeCol = (
   }
 }
 
-export const FormLayout = createVirtualBox('layout', ({ children, ...props }) => {
-  return (
-    <FormConsumer>
-      {value => {
-        const newValue = { ...value, ...props }
-        const child =
-          newValue.inline || newValue.className || newValue.style ? (
-            <div
-              className={cls(newValue.className, {
-                'ant-form ant-form-inline': !!newValue.inline
-              })}
-              style={newValue.style}
-            >
-              {children}
-            </div>
-          ) : (
-            children
-          )
-        return <FormProvider value={newValue}>{child}</FormProvider>
-      }}
-    </FormConsumer>
-  )
-})
+export const FormLayout = createVirtualBox(
+  'layout',
+  ({ children, ...props }) => {
+    return (
+      <FormConsumer>
+        {value => {
+          const newValue = { ...value, ...props }
+          const child =
+            newValue.inline || newValue.className || newValue.style ? (
+              <div
+                className={cls(newValue.className, {
+                  'ant-form ant-form-inline': !!newValue.inline
+                })}
+                style={newValue.style}
+              >
+                {children}
+              </div>
+            ) : (
+              children
+            )
+          return <FormProvider value={newValue}>{child}</FormProvider>
+        }}
+      </FormConsumer>
+    )
+  }
+)
 
 export const FormItemGrid = createVirtualBox(
   'grid',
@@ -60,7 +63,14 @@ export const FormItemGrid = createVirtualBox(
       return React.createElement(
         FormConsumer,
         {},
-        ({ labelAlign, labelTextAlign, labelCol, wrapperCol, size, autoAddColon }) => {
+        ({
+          labelAlign,
+          labelTextAlign,
+          labelCol,
+          wrapperCol,
+          size,
+          autoAddColon
+        }) => {
           return React.createElement(
             FormItem,
             {
@@ -103,7 +113,11 @@ export const FormItemGrid = createVirtualBox(
         const lastSpan: number =
           24 -
           cols.reduce((buf, col) => {
-            return buf + Number(col.span ? col.span : 0) + Number(col.offset ? col.offset : 0)
+            return (
+              buf +
+              Number(col.span ? col.span : 0) +
+              Number(col.offset ? col.offset : 0)
+            )
           }, 0)
 
         for (let i = 0; i < offset; i++) {
@@ -118,10 +132,10 @@ export const FormItemGrid = createVirtualBox(
           {children.reduce((buf, child, key) => {
             return child
               ? buf.concat(
-                <Col key={key} {...cols[key]}>
-                  {child}
-                </Col>
-              )
+                  <Col key={key} {...cols[key]}>
+                    {child}
+                  </Col>
+                )
               : buf
           }, [])}
         </Row>
@@ -203,7 +217,18 @@ export const FormBlock = createVirtualBox(
 export const FormTextBox = createVirtualBox(
   'text-box',
   styled(
-    ({ title, description, help, gutter, className, text, name, extra, children, ...props }) => {
+    ({
+      title,
+      description,
+      help,
+      gutter,
+      className,
+      text,
+      name,
+      extra,
+      children,
+      ...props
+    }) => {
       const ref: React.RefObject<HTMLDivElement> = useRef()
       const arrChildren = toArr(children)
       const split = text.split('%s')
@@ -212,7 +237,9 @@ export const FormTextBox = createVirtualBox(
         if (ref.current) {
           const eles = ref.current.querySelectorAll('.text-box-field')
           eles.forEach((el: HTMLElement) => {
-            const ctrl = el.querySelector('.ant-form-item-control>*:not(.ant-form-item-space)')
+            const ctrl = el.querySelector(
+              '.ant-form-item-control>*:not(.ant-form-item-space)'
+            )
             if (ctrl) {
               el.style.width = getComputedStyle(ctrl).width
             }
@@ -243,7 +270,14 @@ export const FormTextBox = createVirtualBox(
       return React.createElement(
         FormConsumer,
         {},
-        ({ labelAlign, labelTextAlign, labelCol, wrapperCol, size, autoAddColon }) => {
+        ({
+          labelAlign,
+          labelTextAlign,
+          labelCol,
+          wrapperCol,
+          size,
+          autoAddColon
+        }) => {
           return React.createElement(
             FormItem,
             {

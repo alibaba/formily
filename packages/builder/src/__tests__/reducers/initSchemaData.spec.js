@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import initSchemaDataReducer from '../../reducers/initSchemaData'
 
 describe('initSchemaData reducers', () => {
