@@ -35,6 +35,7 @@ export const StateForm = createHOC((options, Form) => {
       this.initialized = false
       this.form = createForm({
         initialValues: props.defaultValue || props.initialValues,
+        values: props.value,
         effects: props.effects,
         subscribes: props.subscribes,
         schema: props.schema,
@@ -197,7 +198,7 @@ export const StateForm = createHOC((options, Form) => {
         !isEmpty(initialValues) &&
         !isEqual(initialValues, prevProps.initialValues)
       ) {
-        this.form.initialize(initialValues)
+        this.form.initialize({ initialValues })
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
         this.form.changeEditable(editable)
