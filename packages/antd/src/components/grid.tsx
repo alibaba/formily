@@ -69,7 +69,7 @@ export class Row extends Component<IRowProps> {
           child &&
           child.type &&
           typeof child.type === 'function' &&
-          child.type['isNextCol']
+          (child.type as any).isNextCol
         ) {
           const newChild = cloneElement(child, {
             style: {
