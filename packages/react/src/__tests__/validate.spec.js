@@ -42,9 +42,9 @@ test('basic validate', async () => {
   const { getByTestId, getByText } = render(<TestComponent />)
 
   fireEvent.click(getByTestId('btn'))
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(getByTestId('btn'))
-  await sleep(300)
+  await sleep(33)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(2)
   expect(getByText('text is required')).toBeVisible()
@@ -79,11 +79,11 @@ test('validate in init', async () => {
   act(() => {
     result = render(<TestComponent />)
   })
-  await sleep(100)
+  await sleep(33)
   const { queryByText } = result
   expect(queryByText('text is required')).toBeNull()
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
   expect(queryByText('text is required')).toBeVisible()
@@ -121,20 +121,20 @@ test('validate in editable false', async () => {
   act(() => {
     result = render(<TestComponent />)
   })
-  await sleep(100)
+  await sleep(33)
   const { queryByText } = result
   expect(queryByText('editable is required')).toBeNull()
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
   expect(queryByText('editable is required')).toBeVisible()
   actions.setFieldState('editable', state => {
     state.value = '123'
   })
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(handleSubmit).toHaveBeenCalledTimes(1)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
   expect(queryByText('editable is required')).toBeNull()
@@ -159,35 +159,35 @@ test('modify required rules by setFieldState', async () => {
     )
   }
   const { queryByText } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(handleSubmit).toBeCalledTimes(1)
   expect(handleValidateFailed).toBeCalledTimes(0)
   actions.setFieldState('kk', state => {
     state.props.required = true
   })
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('kk is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(1)
   expect(handleValidateFailed).toBeCalledTimes(1)
   actions.setFieldState('kk', state => {
     state.required = false
   })
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('kk is required')).toBeNull()
   expect(handleSubmit).toBeCalledTimes(2)
   expect(handleValidateFailed).toBeCalledTimes(1)
   actions.setFieldState('kk', state => {
     state.required = true
   })
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('kk is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(2)
   expect(handleValidateFailed).toBeCalledTimes(2)
@@ -210,9 +210,9 @@ test('modify validate rules by setFieldState', async () => {
     )
   }
   const { queryByText, queryByTestId } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('required')).toBeVisible()
   actions.setFieldState('bb', state => {
     state.rules = [
@@ -223,11 +223,11 @@ test('modify validate rules by setFieldState', async () => {
       }
     ]
   })
-  await sleep(100)
+  await sleep(33)
   fireEvent.change(queryByTestId('test-input'), {
     target: { value: '123' }
   })
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('must have 6 numbers')).toBeVisible()
 })
 
@@ -251,17 +251,17 @@ test('dynamic update values', async () => {
   fireEvent.change(queryByTestId('test-input'), {
     target: { value: '12332123' }
   })
-  await sleep(133)
+  await sleep(33)
   fireEvent.change(queryByTestId('test-input'), {
     target: { value: '12332123a' }
   })
-  await sleep(133)
+  await sleep(33)
   fireEvent.change(queryByTestId('test-input'), { target: { value: '123321' } })
-  await sleep(133)
+  await sleep(33)
   fireEvent.change(queryByTestId('test-input'), { target: { value: '12332' } })
-  await sleep(133)
+  await sleep(33)
   expect(queryByText('must be number')).toBeNull()
   fireEvent.change(queryByTestId('test-input'), { target: { value: '12332a' } })
-  await sleep(133)
+  await sleep(33)
   expect(queryByText('must be number')).toBeVisible()
 })

@@ -189,7 +189,7 @@ test('dynaimc add field with initialValue', async () => {
   }
 
   const { queryAllByTestId, queryByText } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(1)
   fireEvent.click(queryByText('Add Field'))
@@ -279,7 +279,7 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
   }
 
   const { queryAllByTestId, queryByText } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(1)
   fireEvent.click(queryByText('Add Field'))
@@ -311,7 +311,7 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
   expect(queryAllByTestId('item').length).toBe(2)
   expect(queryAllByTestId('input').length).toBe(2)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   expect(submitHandler).toHaveBeenCalledWith({
     container: [{ aa: '321' }, undefined]
   })
@@ -428,7 +428,7 @@ test('dynamic async default value', async () => {
     )
   }
   const { queryAllByTestId } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   expect(queryAllByTestId('item').length).toBe(1)
   expect(queryAllByTestId('input').length).toBe(2)
 })
@@ -471,7 +471,7 @@ test('invalid schema', async () => {
     )
   }
   const { queryByText, queryAllByTestId } = render(<TestComponent />)
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Add Field'))
   await sleep(33)
   expect(queryAllByTestId('item').length).toBe(2)
@@ -486,7 +486,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
     useEffect(() => {
       setTimeout(() => {
         act(() => setState({ testA: `${Math.random()}` }))
-      }, 100)
+      }, 10)
     }, [])
     return (
       <Fragment>
@@ -555,23 +555,23 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   const { queryByTestId, queryAllByText, queryByText } = render(
     <TestComponent />
   )
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByTestId('radio-a2'))
-  await sleep(100)
+  await sleep(33)
   // onChange
   expect(queryAllByText('valueB-456').length).toBe(1)
   actions.reset()
-  await sleep(100)
+  await sleep(33)
   // onReset
   expect(queryAllByText('valueC-456').length).toBe(1)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   // onValidateFailed
   expect(queryAllByText('valueE-456').length).toBe(1)
   fireEvent.click(queryByTestId('radio-b2'))
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(queryByText('Submit'))
-  await sleep(100)
+  await sleep(33)
   // onSubmit
   expect(queryAllByText('valueD-456').length).toBe(1)
 })

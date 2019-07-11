@@ -59,19 +59,19 @@ test('onFormInit setFieldState', async () => {
 
   const { getByText, getByTestId, queryByText } = render(<TestComponent />)
 
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('text')).toBeVisible()
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(getByTestId('btn'))
-  await sleep(100)
+  await sleep(33)
   expect(getByText('field is required')).toBeVisible()
-  await sleep(100)
+  await sleep(33)
   actions.setFieldState('aaa', state => {
     state.rules = []
   })
-  await sleep(100)
+  await sleep(33)
   fireEvent.click(getByTestId('btn'))
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('field is required')).toBeNull()
 })
 

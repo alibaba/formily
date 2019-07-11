@@ -45,12 +45,12 @@ test('update x-component by setFieldState', async () => {
 
   const { queryByText } = render(<TestComponent />)
 
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('text component')).toBeNull()
-  await sleep(100)
+  await sleep(33)
   actions.setFieldState('aaa', state => {
     state.props['x-component'] = 'text'
   })
-  await sleep(100)
+  await sleep(33)
   expect(queryByText('text component')).toBeVisible()
 })
