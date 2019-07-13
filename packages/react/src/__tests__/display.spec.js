@@ -4,14 +4,14 @@ import { render, fireEvent } from '@testing-library/react'
 
 registerFormField('string', connect()(props => <div>{props.value}</div>))
 
-test('visible is false will remove react node', async () => {
+test('display is false will remove react node', async () => {
   const TestComponent = () => {
     return (
       <SchemaForm
         effects={($, { setFieldState }) => {
           $('onFormInit').subscribe(() => {
             setFieldState('aa', state => {
-              state.visible = false
+              state.display = false
             })
           })
         }}
@@ -27,14 +27,14 @@ test('visible is false will remove react node', async () => {
   expect(queryByText('123321')).toBeNull()
 })
 
-test('visible is false will remove react children node', async () => {
+test('display is false will remove react children node', async () => {
   const TestComponent = () => {
     return (
       <SchemaForm
         effects={($, { setFieldState }) => {
           $('onFormInit').subscribe(() => {
             setFieldState('obj', state => {
-              state.visible = false
+              state.display = false
             })
           })
         }}
@@ -52,7 +52,7 @@ test('visible is false will remove react children node', async () => {
   expect(queryByText('123321')).toBeNull()
 })
 
-test('visible is false will remove value(include default value)', async () => {
+test('display is false will not remove value(include default value)', async () => {
   const onSubmitHandler = jest.fn()
   const TestComponent = () => {
     return (
@@ -63,7 +63,7 @@ test('visible is false will remove value(include default value)', async () => {
           $('onFieldChange', 'bb').subscribe(({ value }) => {
             if (value === '123') {
               setFieldState('obj', state => {
-                state.visible = false
+                state.display = false
               })
             }
           })
@@ -85,11 +85,12 @@ test('visible is false will remove value(include default value)', async () => {
   fireEvent.click(queryByText('Submit'))
   await sleep(33)
   expect(onSubmitHandler).toHaveBeenCalledWith({
+    obj: { aa: '123321' },
     bb: '123'
   })
 })
 
-test('visible is false will not validate(include children)', async () => {
+test('display is false will not validate(include children)', async () => {
   const onSubmitHandler = jest.fn()
   const onValidateFailedHandler = jest.fn()
   const TestComponent = () => {
@@ -102,7 +103,7 @@ test('visible is false will not validate(include children)', async () => {
           $('onFieldChange', 'bb').subscribe(({ value }) => {
             if (value === '123') {
               setFieldState('obj', state => {
-                state.visible = false
+                state.display = false
               })
             }
           })
@@ -124,6 +125,7 @@ test('visible is false will not validate(include children)', async () => {
   fireEvent.click(queryByText('Submit'))
   await sleep(33)
   expect(onSubmitHandler).toHaveBeenCalledWith({
+    obj: { aa: '123321' },
     bb: '123'
   })
   expect(onValidateFailedHandler).toHaveBeenCalledTimes(0)

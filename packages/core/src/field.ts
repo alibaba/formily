@@ -37,6 +37,8 @@ export class Field implements IField {
 
   public visible: boolean
 
+  public display: boolean
+
   public editable: boolean
 
   public loading: boolean
@@ -88,6 +90,7 @@ export class Field implements IField {
     this.removed = false
     this.invalid = false
     this.visible = true
+    this.display = true
     this.editable = true
     this.destructed = false
     this.loading = false
@@ -130,7 +133,8 @@ export class Field implements IField {
 
     if (
       !isEmpty(this.initialValue) &&
-      (isEmpty(this.value) || (this.removed && !this.shownFromParent))
+      ((isEmpty(this.value) && this.visible) ||
+        (this.removed && !this.shownFromParent))
     ) {
       this.value = clone(this.initialValue)
       this.context.setIn(this.name, this.value)
@@ -347,7 +351,10 @@ export class Field implements IField {
     if (!this.context) {
       return
     }
-    this.context.deleteIn(this.name)
+    if (!this.hiddenFromParent) {
+      this.context.deleteIn(this.name)
+    }
+    //如果是卸载节点，会自动遍历树节点逐个卸载
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
     }
@@ -505,6 +512,17 @@ export class Field implements IField {
       this.dirty = true
     }
 
+    if (!isEqual(published.display, this.display)) {
+      this.display = published.display
+      if (this.display) {
+        this.context.updateChildrenDisplay(this, true)
+      } else {
+        this.context.updateChildrenDisplay(this, false)
+      }
+      this.dirtyType = 'display'
+      this.dirty = true
+    }
+
     if (!isEqual(published.props, this.props, filterSchema)) {
       this.props = clone(published.props, filterSchema)
       this.dirtyType = 'props'
@@ -533,6 +551,7 @@ export class Field implements IField {
       rules: clone(this.rules),
       errors: clone(this.effectErrors),
       visible: this.visible,
+      display: this.display,
       required: this.required
     }
     reducer(published)

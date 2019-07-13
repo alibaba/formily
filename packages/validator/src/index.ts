@@ -42,7 +42,11 @@ export const runValidation = async (
   }
   each(fieldMap, (field, name) => {
     const value = getIn(values, name)
-    if (field.visible === false || field.editable === false) {
+    if (
+      field.visible === false ||
+      field.display === false ||
+      field.editable === false
+    ) {
       return
     }
     if (isEqual(field.lastValidateValue, value) && !forceUpdate) {

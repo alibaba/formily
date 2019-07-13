@@ -115,6 +115,7 @@ const StateField = createHOC((options, Field) => {
       const {
         value,
         visible,
+        display,
         props,
         errors,
         loading,
@@ -127,7 +128,7 @@ const StateField = createHOC((options, Field) => {
         ? value || []
         : value
 
-      return visible === false ? (
+      return visible === false || display === false ? (
         <React.Fragment />
       ) : (
         <Field
