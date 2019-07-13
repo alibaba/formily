@@ -438,7 +438,7 @@ export class Field implements IField {
       }
     }
     if (!isEqual(published.required, this.required)) {
-      this.required = published.required
+      this.required = !!published.required
       if (this.required) {
         if (!hasRequired(this.rules)) {
           this.rules = toArr(this.rules).concat({
@@ -463,7 +463,7 @@ export class Field implements IField {
     } else {
       const propsRequired = this.getRequiredFromProps(published.props)
       if (!isEmpty(propsRequired) && !isEqual(propsRequired, this.required)) {
-        this.required = propsRequired
+        this.required = !!propsRequired
         this.errors = []
         if (this.required) {
           if (!hasRequired(this.rules)) {
@@ -496,7 +496,7 @@ export class Field implements IField {
     }
 
     if (!isEqual(published.visible, this.visible)) {
-      this.visible = published.visible
+      this.visible = !!published.visible
       if (this.visible) {
         this.value =
           this.value !== undefined ? this.value : clone(this.initialValue)
@@ -513,12 +513,8 @@ export class Field implements IField {
     }
 
     if (!isEqual(published.display, this.display)) {
-      this.display = published.display
-      if (this.display) {
-        this.context.updateChildrenDisplay(this, true)
-      } else {
-        this.context.updateChildrenDisplay(this, false)
-      }
+      this.display = !!published.display
+      this.context.updateChildrenDisplay(this, this.display)
       this.dirtyType = 'display'
       this.dirty = true
     }
