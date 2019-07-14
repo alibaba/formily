@@ -216,7 +216,7 @@ export class Form {
           this.updateFieldStateFromBuffer(field)
           field.onChange(options.onChange)
         })
-        this.triggerEffect('onFieldChange', field.publishState())
+        this.dispatchEffect('onFieldChange', field.publishState())
       }
       this.fieldSize++
     }
@@ -278,7 +278,7 @@ export class Form {
           field.dirty = true
           field.value = newValue
           field.notify()
-          this.triggerEffect('onFieldChange', field.publishState())
+          this.dispatchEffect('onFieldChange', field.publishState())
         }
       }
     })
@@ -327,7 +327,7 @@ export class Form {
                   return
                 }
                 field.notify()
-                this.triggerEffect('onFieldChange', field.publishState())
+                this.dispatchEffect('onFieldChange', field.publishState())
                 resolve()
               })
             })
@@ -474,7 +474,7 @@ export class Form {
     })
     if (!validate) {
       const formState = this.publishState()
-      this.triggerEffect('onFormReset', formState)
+      this.dispatchEffect('onFormReset', formState)
       if (isFn(this.options.onReset)) {
         this.options.onReset({ formState })
       }
@@ -486,7 +486,7 @@ export class Form {
             return
           }
           const formState = this.publishState()
-          this.triggerEffect('onFormReset', formState)
+          this.dispatchEffect('onFormReset', formState)
           if (isFn(this.options.onReset)) {
             this.options.onReset({ formState })
           }
@@ -505,7 +505,7 @@ export class Form {
       this.options.onFieldChange({ formState, fieldState })
     }
     if (fieldState) {
-      this.triggerEffect('onFieldChange', fieldState)
+      this.dispatchEffect('onFieldChange', fieldState)
     }
     if (this.state.dirty) {
       this.publisher.notify({ formState, fieldState })
@@ -537,7 +537,7 @@ export class Form {
 
   public submit() {
     return this.validate().then(formState => {
-      this.triggerEffect('onFormSubmit', formState)
+      this.dispatchEffect('onFormSubmit', formState)
       if (isFn(this.options.onSubmit)) {
         this.options.onSubmit({ formState })
       }
@@ -567,7 +567,7 @@ export class Form {
     delete this.publisher
   }
 
-  public triggerEffect = (eventName: string, ...args: any[]) => {
+  public dispatchEffect = (eventName: string, ...args: any[]) => {
     if (this.subscribes[eventName]) {
       this.subscribes[eventName].next(...args)
     }

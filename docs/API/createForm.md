@@ -70,7 +70,7 @@ type Form = {
   }) => void): () => void;
   destructor(): void;
   selectEffect: (eventName:string,formPathPattern: string | IFormPathMatcher)=>Observable<any>
-  triggerEffect: (eventName: string, ...args: any[]) => void;
+  dispatchEffect: (eventName: string, ...args: any[]) => void;
   syncUpdate(fn: () => void): void;
   initialize(values?: any): void;
 }
