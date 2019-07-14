@@ -384,6 +384,34 @@ export class Form {
     })
   }
 
+  public updateChildrenDisplay(parent: Field, display?: boolean) {
+    if (!parent.path) {
+      return
+    }
+    each(this.fields, (field, $name) => {
+      if ($name === parent.name) {
+        return
+      }
+      if (isChildField(field, parent)) {
+        if (field.display !== display) {
+          if (display) {
+            if (field.hiddenFromParent) {
+              field.display = display
+              field.hiddenFromParent = false
+              field.shownFromParent = true
+              field.dirty = true
+            }
+          } else {
+            field.display = display
+            field.hiddenFromParent = true
+            field.shownFromParent = false
+            field.dirty = true
+          }
+        }
+      }
+    })
+  }
+
   public getInitialValue(name: string, path?: Path) {
     const initialValue = getIn(this.state.initialValues, name)
     let schema: ISchema

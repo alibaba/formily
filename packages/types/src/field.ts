@@ -9,6 +9,7 @@ export interface IField {
   dirty: boolean
   invalid: boolean
   visible: boolean
+  display: boolean
   hiddenFromParent: boolean
   shownFromParent: boolean
   required: boolean
