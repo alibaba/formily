@@ -119,6 +119,10 @@ export class Form {
     })
   }
 
+  public isDirtyValues(values: any) {
+    return !isEmpty(values) && !isEqual(this.state.values, values)
+  }
+
   public setFieldState = (
     path: Path | IFormPathMatcher,
     callback?: () => void
