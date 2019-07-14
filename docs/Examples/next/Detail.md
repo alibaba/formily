@@ -31,6 +31,7 @@ const App = () => {
     <Printer>
       <SchemaForm
         actions={actions}
+        onChange={values=>setState(values)}
         initialValues={state.value}
         editable={state.editable}
         labelCol={7}
