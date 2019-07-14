@@ -40,6 +40,7 @@ export interface IStateFieldState {
   props?: any
   errors?: any
   visible?: boolean
+  display?: boolean
   loading?: boolean
   editable?: boolean
   required?: boolean
