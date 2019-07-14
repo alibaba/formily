@@ -253,6 +253,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ## Step
 
 > 分布表单，主要使用 FormStep 和 FormStepItem
+> 分布表单的核心特点有：汇总收集数据，只校验单视图字段，跨视图联动等，说的很容易，但是没有任何一个表单库可以很优雅的解决分布表单问题
 
 #### Demo 示例
 
@@ -316,7 +317,7 @@ const App = () => (
             >
               下一步
             </Button>
-            <Reset/>
+            <Reset />
           </FormButtonGroup>
         )}
       </FormConsumer>
