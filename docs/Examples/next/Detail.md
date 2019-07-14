@@ -34,6 +34,13 @@ const App = () => {
         onChange={values=>setState(values)}
         initialValues={state.value}
         editable={state.editable}
+        onSubmit={()=>{
+          return new Promise((resolve)=>{
+            setTimeout(()=>{
+              resolve()
+            },1000)
+          })
+        }}
         labelCol={7}
         wrapperCol={12}
       >

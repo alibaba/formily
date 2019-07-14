@@ -111,7 +111,15 @@ const StateField = createHOC((options, Field) => {
     }
 
     public render() {
-      const { name, path, schemaPath, locale, getSchema, form } = this.props
+      const {
+        name,
+        path,
+        schemaPath,
+        locale,
+        getSchema,
+        form,
+        broadcast
+      } = this.props
       const {
         value,
         visible,
@@ -136,6 +144,7 @@ const StateField = createHOC((options, Field) => {
           value={newValue}
           errors={errors}
           form={form}
+          broadcast={broadcast}
           required={required}
           path={path}
           editable={editable}
@@ -154,11 +163,12 @@ const StateField = createHOC((options, Field) => {
 
   return props => {
     const { name, path, schemaPath } = props
-    const { form, getSchema, locale } = useContext(StateContext)
+    const { form, getSchema, locale, broadcast } = useContext(StateContext)
     return (
       <StateField
         name={name}
         path={path}
+        broadcast={broadcast}
         form={form}
         schema={getSchema(schemaPath || path)}
         locale={locale}
@@ -173,10 +183,10 @@ export const FormField = StateField()((props: IFieldProps) => {
   const schema = props.schema
   const fieldComponentName = lowercase(schema['x-component'] || schema.type)
   const renderComponent = schema['x-render']
-    ? $props => {
+    ? (innerProps: any) => {
         return React.createElement(getFormField(fieldComponentName), {
           ...props,
-          ...$props,
+          ...innerProps,
           schema,
           path: props.path,
           name: props.name

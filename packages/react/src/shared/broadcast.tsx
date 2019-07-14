@@ -1,7 +1,7 @@
 import React, { Component, useContext, useMemo, useState } from 'react'
-import { IBroadcast } from '@uform/utils'
+import { IBroadcast, isArr, isFn, isStr } from '@uform/utils'
 import { ISelector, IFormActions } from '@uform/types'
-import { Broadcast, isFn } from '../utils'
+import { Broadcast } from '../utils'
 import { BroadcastContext, StateContext } from './context'
 
 type ChildrenFunction = (broadcast: IBroadcast) => React.ReactNode
@@ -48,7 +48,7 @@ export const FormBridge = () => (Target: React.ComponentType) => {
 }
 
 export interface IOption {
-  testingAct?(callback): void
+  selector?: ((payload: any) => boolean) | string[] | string
 }
 
 export interface IFormState {
@@ -68,15 +68,20 @@ export const useForm = (options: IOption = {}) => {
       broadcast.subscribe(({ type, state, schema }) => {
         if (type !== 'submit' && type !== 'reset') {
           if (initialized) {
-            if (options.testingAct) {
+            if (options.selector) {
               // just for test
-              options.testingAct(() =>
+              if (
+                (isFn(options.selector) && options.selector({ type, state })) ||
+                (isArr(options.selector) &&
+                  options.selector.indexOf(type) > -1) ||
+                (isStr(options.selector) && options.selector === type)
+              ) {
                 setState({
                   status: type,
                   state,
                   schema
                 })
-              )
+              }
             } else {
               setState({
                 status: type,
@@ -121,7 +126,7 @@ export const useForm = (options: IOption = {}) => {
   }
 }
 
-export const useFormEffect = (
+export const useFormController = (
   controller: (selector: ISelector, actions: IFormActions) => void
 ) => {
   const context = useContext(StateContext)
@@ -135,13 +140,13 @@ export const useFormEffect = (
 
 export const FormConsumer = ({
   children,
-  testingAct
+  selector
 }: {
   // TODO formApi
   children: React.ReactElement | ((formApi: any) => React.ReactElement)
-  testingAct?: IOption['testingAct']
+  selector?: IOption['selector']
 }): React.ReactElement => {
-  const formApi = useForm({ testingAct })
+  const formApi = useForm({ selector })
   if (!formApi) {
     return <React.Fragment />
   }

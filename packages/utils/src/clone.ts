@@ -46,6 +46,8 @@ export const clone = (values: any, filter?: Filter) => {
   } else if (isNativeObject(values)) {
     nativeClone = isNativeObject(values)
     return isFn(nativeClone) ? nativeClone(values) : values
+  } else if (Object.getOwnPropertySymbols(values || {}).length) {
+    return values
   } else if (typeof values === 'object' && !!values) {
     if ('$$typeof' in values && '_owner' in values) {
       return values

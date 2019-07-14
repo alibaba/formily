@@ -1,16 +1,51 @@
-import React, { Component, useEffect, useRef } from 'react'
-import { createVirtualBox } from '@uform/react'
+import React, { Component, useState, useEffect, useRef, Fragment } from 'react'
+import {
+  createVirtualBox,
+  useFormController,
+  createControllerBox,
+  FormPath
+} from '@uform/react'
 import { toArr } from '@uform/utils'
-import { Row, Col } from '@alifd/next/lib/grid'
-import Card from '@alifd/next/lib/card'
+import { Grid, Card, Step } from '@alifd/next'
 import { FormConsumer, FormItem, FormProvider } from '../form'
+import { useEva, createActions } from 'react-eva'
 import styled from 'styled-components'
 import cls from 'classnames'
+
+const { Row, Col } = Grid
 
 const normalizeCol = (col, _default = 0) => {
   if (!col) return _default
   return typeof col === 'object' ? col : { span: col }
 }
+
+export const FormLayoutItem = props =>
+  React.createElement(
+    FormConsumer,
+    {},
+    ({
+      labelAlign,
+      labelTextAlign,
+      labelCol,
+      wrapperCol,
+      size,
+      autoAddColon
+    }) => {
+      return React.createElement(
+        FormItem,
+        {
+          labelAlign,
+          labelTextAlign,
+          labelCol,
+          wrapperCol,
+          autoAddColon,
+          size,
+          ...props
+        },
+        props.children
+      )
+    }
+  )
 
 export const FormLayout = createVirtualBox(
   'layout',
@@ -45,35 +80,15 @@ export const FormItemGrid = createVirtualBox(
     renderFormItem(children) {
       const { title, description, help, name, extra, ...others } = this.props
       return React.createElement(
-        FormConsumer,
-        {},
-        ({
-          labelAlign,
-          labelTextAlign,
-          labelCol,
-          wrapperCol,
-          size,
-          autoAddColon
-        }) => {
-          return React.createElement(
-            FormItem,
-            {
-              labelAlign,
-              labelTextAlign,
-              labelCol,
-              wrapperCol,
-              autoAddColon,
-              size,
-              ...others,
-              label: title,
-              noMinHeight: true,
-              id: name,
-              extra: description,
-              help
-            },
-            children
-          )
-        }
+        FormLayoutItem,
+        {
+          label: title,
+          noMinHeight: true,
+          id: name,
+          extra: description,
+          help
+        },
+        children
       )
     }
 
@@ -112,10 +127,10 @@ export const FormItemGrid = createVirtualBox(
           {children.reduce((buf, child, key) => {
             return child
               ? buf.concat(
-                <Col key={key} {...cols[key]}>
-                  {child}
-                </Col>
-              )
+                  <Col key={key} {...cols[key]}>
+                    {child}
+                  </Col>
+                )
               : buf
           }, [])}
         </Row>
@@ -231,42 +246,29 @@ export const FormTextBox = createVirtualBox(
         )
       }, [])
 
-      if (!title) return <div className={className} ref={ref}>{newChildren}</div>
+      if (!title)
+        return (
+          <div className={className} ref={ref}>
+            {newChildren}
+          </div>
+        )
 
       return React.createElement(
-        FormConsumer,
-        {},
-        ({
-          labelAlign,
-          labelTextAlign,
-          labelCol,
-          wrapperCol,
-          size,
-          autoAddColon
-        }) => {
-          return React.createElement(
-            FormItem,
-            {
-              labelAlign,
-              labelTextAlign,
-              labelCol,
-              wrapperCol,
-              autoAddColon,
-              size,
-              ...props,
-              label: title,
-              noMinHeight: true,
-              id: name,
-              extra: description,
-              help
-            },
-            <div className={className} ref={ref}>{newChildren}</div>
-          )
-        }
+        FormLayoutItem,
+        {
+          label: title,
+          noMinHeight: true,
+          id: name,
+          extra: description,
+          help
+        },
+        <div className={className} ref={ref}>
+          {newChildren}
+        </div>
       )
     }
   )`
-    display:flex;
+    display: flex;
     .text-box-words {
       font-size: 12px;
       line-height: 28px;
@@ -278,3 +280,83 @@ export const FormTextBox = createVirtualBox(
     }
   `
 )
+
+export const FormStep = createControllerBox(
+  'form-step',
+  ({ schema, children, form, broadcast, getSchema }) => {
+    const names = children.map(({ props: { name } }) => name)
+    const { actions, ...props } = schema['x-props'] || {}
+    const ref = useRef()
+    const [current, setCurrent] = useState(names.indexOf(props.current))
+    const { implementActions } = useEva({ actions: actions })
+    ref.current = current
+    const setStep = index => {
+      const name = names[index]
+      if (name) {
+        setCurrent(index)
+        form.setFieldState(FormPath.match(`*(${names})`), state => {
+          state.display = name === state.name
+        })
+      }
+    }
+    const getStepState = index => {
+      if (index <= 0) return { type: 'step', state: -1 }
+      if (index >= names.length - 1) return { type: 'step', state: 1 }
+      return { type: 'step', state: 0 }
+    }
+    const setStepView = name => {
+      const index = names.indexOf(name)
+      setStep(index)
+      broadcast.notify(getStepState(index))
+    }
+    const nextStepView = () => {
+      setStep(ref.current + 1)
+      broadcast.notify(getStepState(ref.current + 1))
+    }
+    const previousStepView = () => {
+      setStep(ref.current - 1)
+      broadcast.notify(getStepState(ref.current - 1))
+    }
+    implementActions({
+      setStepView,
+      nextStepView,
+      previousStepView
+    })
+    const dispatch = useFormController(($, { setFieldState }) => {
+      $('onFormMount').subscribe(() => {
+        broadcast.notify(getStepState(ref.current))
+      })
+      $('onFieldInit', FormPath.match(`*(${names})`)).subscribe(() => {
+        setFieldState(FormPath.match(`*(${names})`), state => {
+          state.display = props.current === state.name
+        })
+      })
+    })
+    return (
+      <Fragment>
+        <Step {...props} current={current}>
+          {children.map(
+            ({ props: { name, schemaPath, children, ...props } }) => {
+              const schema = getSchema(schemaPath)
+              return (
+                <Step.Item
+                  {...schema['x-props']}
+                  key={name}
+                  onClick={() => dispatch('onStepClick', name)}
+                />
+              )
+            }
+          )}
+        </Step>
+        {children}
+      </Fragment>
+    )
+  }
+)
+
+FormStep.createActions = () =>
+  createActions('setStepView', 'nextStepView', 'previousStepView')
+
+export const FormStepItem = createVirtualBox('form-step-item', props => {
+  return <Fragment>{props.children}</Fragment>
+})

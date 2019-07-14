@@ -145,6 +145,9 @@ export class Field implements IField {
     if (isFn(options.onChange)) {
       this.onChange(options.onChange)
     }
+    this.context.syncUpdate(() => {
+      this.context.dispatchEffect('onFieldInit', this.publishState())
+    })
   }
 
   public getInitialValueFromProps(props: any) {

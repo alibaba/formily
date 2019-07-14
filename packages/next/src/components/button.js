@@ -4,7 +4,7 @@ import { Button } from '@alifd/next'
 
 export const Submit = ({ showLoading, ...props }) => {
   return (
-    <FormConsumer>
+    <FormConsumer selector={['submitting', 'submitted']}>
       {({ status, schema }) => {
         return (
           <Button

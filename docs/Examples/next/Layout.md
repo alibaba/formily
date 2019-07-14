@@ -175,8 +175,18 @@ const App = () => (
           </FormItemGrid>
         </Field>
         <FormLayout labelCol={8} wrapperCol={16}>
-          <FormTextBox title="文本串联" text="订%s元/票 退%s元/票 改%s元/票" gutter={8}>
-            <Field type="string" required name="aa1" x-props={{style:{width:80}}} description="简单描述" />
+          <FormTextBox
+            title="文本串联"
+            text="订%s元/票 退%s元/票 改%s元/票"
+            gutter={8}
+          >
+            <Field
+              type="string"
+              required
+              name="aa1"
+              x-props={{ style: { width: 80 } }}
+              description="简单描述"
+            />
             <Field type="number" required name="aa2" description="简单描述" />
             <Field type="number" required name="aa3" description="简单描述" />
           </FormTextBox>
@@ -234,6 +244,82 @@ const App = () => (
       <FormButtonGroup style={{ minWidth: 150 }}>
         ​<Submit>提交</Submit>​<Reset>重置</Reset>​
       </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## Step
+
+> 分布表单，主要使用 FormStep 和 FormStepItem
+
+#### Demo 示例
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormStep,
+  FormStepItem,
+  FormConsumer
+} from '@uform/next'
+import { Button } from '@alifd/next'
+import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
+
+const actions = FormStep.createActions()
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      effects={$ => {
+        $('onStepClick').subscribe(key => {
+          actions.setStepView(key)
+        })
+      }}
+      onSubmit={v => console.log(v)}
+    >
+      <FormStep labelPlacement="hoz" actions={actions} current="step1">
+        <FormStepItem name="step1" title="步骤1">
+          <Field type="string" name="aa" title="AA" />
+        </FormStepItem>
+        <FormStepItem name="step2" title="步骤2">
+          <Field type="string" name="bb" title="BB" />
+        </FormStepItem>
+        <FormStepItem name="step3" title="步骤3">
+          <Field type="string" name="cc" title="CC" />
+        </FormStepItem>
+      </FormStep>
+      <FormConsumer selector="step">
+        {({ state, submit }) => (
+          <FormButtonGroup align="center" style={{ minWidth: 150 }}>
+            <Button
+              disabled={state < 0}
+              onClick={() => actions.previousStepView()}
+            >
+              上一步
+            </Button>
+            ​<Button
+              onClick={() => {
+                if (state < 1) {
+                  actions.nextStepView()
+                } else {
+                  submit()
+                }
+              }}
+            >
+              下一步
+            </Button>
+            <Reset/>
+          </FormButtonGroup>
+        )}
+      </FormConsumer>
     </SchemaForm>
   </Printer>
 )
