@@ -37,6 +37,8 @@ export class Field implements IField {
 
   public visible: boolean
 
+  public display: boolean
+
   public editable: boolean
 
   public loading: boolean
@@ -88,6 +90,7 @@ export class Field implements IField {
     this.removed = false
     this.invalid = false
     this.visible = true
+    this.display = true
     this.editable = true
     this.destructed = false
     this.loading = false
@@ -99,7 +102,9 @@ export class Field implements IField {
 
   public initialize(options: IFieldOptions) {
     const rules = this.getRulesFromProps(options.props)
-    this.value = !isEmpty(options.value) ? clone(options.value) : this.value
+    this.value = !isEqual(this.value, options.value)
+      ? clone(options.value)
+      : this.value
     this.name = !isEmpty(options.name) ? options.name : this.name || ''
     this.namePath = resolveFieldPath(this.name)
 
@@ -114,7 +119,7 @@ export class Field implements IField {
         ? options.initialValue
         : this.initialValue
     } else {
-      this.initialValue = !isEmpty(options.initialValue)
+      this.initialValue = !isEqual(this.initialValue, options.initialValue)
         ? options.initialValue
         : !isEmpty(this.initialValue)
         ? this.initialValue
@@ -128,7 +133,8 @@ export class Field implements IField {
 
     if (
       !isEmpty(this.initialValue) &&
-      (isEmpty(this.value) || (this.removed && !this.shownFromParent))
+      ((isEmpty(this.value) && this.visible) ||
+        (this.removed && !this.shownFromParent))
     ) {
       this.value = clone(this.initialValue)
       this.context.setIn(this.name, this.value)
@@ -143,7 +149,7 @@ export class Field implements IField {
 
   public getInitialValueFromProps(props: any) {
     if (props) {
-      if (!isEmpty(props.default)) {
+      if (!isEqual(this.initialValue, props.default)) {
         return props.default
       }
     }
@@ -345,7 +351,10 @@ export class Field implements IField {
     if (!this.context) {
       return
     }
-    this.context.deleteIn(this.name)
+    if (!this.hiddenFromParent) {
+      this.context.deleteIn(this.name)
+    }
+    //如果是卸载节点，会自动遍历树节点逐个卸载
     if (typeof this.value === 'object') {
       this.context.updateChildrenVisible(this, false)
     }
@@ -429,7 +438,7 @@ export class Field implements IField {
       }
     }
     if (!isEqual(published.required, this.required)) {
-      this.required = published.required
+      this.required = !!published.required
       if (this.required) {
         if (!hasRequired(this.rules)) {
           this.rules = toArr(this.rules).concat({
@@ -454,7 +463,7 @@ export class Field implements IField {
     } else {
       const propsRequired = this.getRequiredFromProps(published.props)
       if (!isEmpty(propsRequired) && !isEqual(propsRequired, this.required)) {
-        this.required = propsRequired
+        this.required = !!propsRequired
         this.errors = []
         if (this.required) {
           if (!hasRequired(this.rules)) {
@@ -487,7 +496,7 @@ export class Field implements IField {
     }
 
     if (!isEqual(published.visible, this.visible)) {
-      this.visible = published.visible
+      this.visible = !!published.visible
       if (this.visible) {
         this.value =
           this.value !== undefined ? this.value : clone(this.initialValue)
@@ -500,6 +509,13 @@ export class Field implements IField {
         this.context.updateChildrenVisible(this, false)
       }
       this.dirtyType = 'visible'
+      this.dirty = true
+    }
+
+    if (!isEqual(published.display, this.display)) {
+      this.display = !!published.display
+      this.context.updateChildrenDisplay(this, this.display)
+      this.dirtyType = 'display'
       this.dirty = true
     }
 
@@ -531,6 +547,7 @@ export class Field implements IField {
       rules: clone(this.rules),
       errors: clone(this.effectErrors),
       visible: this.visible,
+      display: this.display,
       required: this.required
     }
     reducer(published)

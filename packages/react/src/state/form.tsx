@@ -7,6 +7,7 @@ import {
   createHOC,
   getSchemaNodeFromPath,
   isEqual,
+  isObj,
   clone,
   isEmpty
 } from '../utils'
@@ -191,14 +192,11 @@ export const StateForm = createHOC((options, Form) => {
 
     public componentDidUpdate(prevProps) {
       const { value, editable, initialValues } = this.props
-      if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
+      if (this.form.isDirtyValues(value)) {
         this.form.changeValues(value)
       }
-      if (
-        !isEmpty(initialValues) &&
-        !isEqual(initialValues, prevProps.initialValues)
-      ) {
-        this.form.initialize({ initialValues })
+      if (this.form.isDirtyValues(initialValues)) {
+        this.form.initialize({ values: initialValues })
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
         this.form.changeEditable(editable)
@@ -254,8 +252,16 @@ export const StateForm = createHOC((options, Form) => {
       return this.form.submit()
     }
 
-    public reset = (forceClear?: boolean) => {
-      this.form.reset(forceClear)
+    public reset = (
+      params?: boolean | { forceClear?: boolean; validate?: boolean },
+      validate: boolean = true
+    ) => {
+      let forceClear: boolean
+      if (isObj(params)) {
+        forceClear = !!params.forceClear
+        validate = !isEmpty(params.validate) ? params.validate : validate
+      }
+      this.form.reset(forceClear, validate)
     }
 
     public validate = () => {

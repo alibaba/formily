@@ -119,6 +119,10 @@ export class Form {
     })
   }
 
+  public isDirtyValues(values: any) {
+    return !isEmpty(values) && !isEqual(this.state.values, values)
+  }
+
   public setFieldState = (
     path: Path | IFormPathMatcher,
     callback?: () => void
@@ -384,6 +388,34 @@ export class Form {
     })
   }
 
+  public updateChildrenDisplay(parent: Field, display?: boolean) {
+    if (!parent.path) {
+      return
+    }
+    each(this.fields, (field, $name) => {
+      if ($name === parent.name) {
+        return
+      }
+      if (isChildField(field, parent)) {
+        if (field.display !== display) {
+          if (display) {
+            if (field.hiddenFromParent) {
+              field.display = display
+              field.hiddenFromParent = false
+              field.shownFromParent = true
+              field.dirty = true
+            }
+          } else {
+            field.display = display
+            field.hiddenFromParent = true
+            field.shownFromParent = false
+            field.dirty = true
+          }
+        }
+      }
+    })
+  }
+
   public getInitialValue(name: string, path?: Path) {
     const initialValue = getIn(this.state.initialValues, name)
     let schema: ISchema
@@ -412,16 +444,25 @@ export class Form {
     deleteIn(this.state.initialValues, name)
   }
 
-  public reset(forceClear?: boolean) {
+  public reset(forceClear?: boolean, validate: boolean = true) {
     each(this.fields, (field, name) => {
       const value = this.getValue(name)
       const initialValue = this.getInitialValue(name, field.path)
-      if (isEmpty(value) && isEmpty(initialValue)) {
-        return
+      if (!validate) {
+        if (field.errors.length > 0) {
+          field.errors = []
+          field.dirty = true
+        }
+        if (field.effectErrors.length > 0) {
+          field.effectErrors = []
+          field.dirty = true
+        }
       }
-      field.updateState(state => {
-        state.value = forceClear ? undefined : initialValue
-      })
+      if (!isEmpty(value) || !isEmpty(initialValue)) {
+        field.updateState(state => {
+          state.value = forceClear ? undefined : initialValue
+        })
+      }
       if (field.dirty) {
         raf(() => {
           if (this.destructed) {
@@ -431,19 +472,27 @@ export class Form {
         })
       }
     })
-    this.internalValidate(this.state.values, true).then(() => {
-      this.formNotify()
-      raf(() => {
-        if (this.destructed) {
-          return
-        }
-        const formState = this.publishState()
-        this.triggerEffect('onFormReset', formState)
-        if (isFn(this.options.onReset)) {
-          this.options.onReset({ formState })
-        }
+    if (!validate) {
+      const formState = this.publishState()
+      this.triggerEffect('onFormReset', formState)
+      if (isFn(this.options.onReset)) {
+        this.options.onReset({ formState })
+      }
+    } else {
+      this.internalValidate(this.state.values, true).then(() => {
+        this.formNotify()
+        raf(() => {
+          if (this.destructed) {
+            return
+          }
+          const formState = this.publishState()
+          this.triggerEffect('onFormReset', formState)
+          if (isFn(this.options.onReset)) {
+            this.options.onReset({ formState })
+          }
+        })
       })
-    })
+    }
   }
 
   public publishState() {
