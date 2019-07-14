@@ -52,6 +52,7 @@ export const StateForm = createHOC((options, Form) => {
             getFormState: form.getFormState,
             setFieldState: form.setFieldState,
             getFieldState: form.getFieldState,
+            selectEffect: form.selectEffect,
             reset: this.reset,
             submit: this.submit,
             validate: this.validate,

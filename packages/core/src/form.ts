@@ -188,7 +188,7 @@ export class Form {
     return Promise.resolve(this.checkState(published))
   }
 
-  public registerField(name, options) {
+  public registerField(name: string, options: IFieldOptions) {
     const value = this.getValue(name)
     const initialValue = this.getInitialValue(name, options.path)
     const field = this.fields[name]
@@ -611,31 +611,31 @@ export class Form {
     this.updateFieldsValue(false)
   }
 
+  public selectEffect = (
+    eventName: string,
+    eventFilter: string | IFormPathMatcher
+  ) => {
+    if (!this.subscribes[eventName]) {
+      this.subscribes[eventName] = new Subject()
+    }
+    if (isStr(eventFilter) || isFn(eventFilter)) {
+      const predicate = isStr(eventFilter)
+        ? FormPath.match(eventFilter as string)
+        : (eventFilter as IFormPathMatcher)
+      return this.subscribes[eventName].pipe(filter(predicate)) as Subject<any>
+    }
+    return this.subscribes[eventName]
+  }
+
   private initializeEffects() {
     const { effects } = this.options
     if (isFn(effects)) {
-      effects(
-        (eventName: string, eventFilter: string | IFormPathMatcher) => {
-          if (!this.subscribes[eventName]) {
-            this.subscribes[eventName] = new Subject()
-          }
-          if (isStr(eventFilter) || isFn(eventFilter)) {
-            const predicate = isStr(eventFilter)
-              ? FormPath.match(eventFilter as string)
-              : (eventFilter as IFormPathMatcher)
-            return this.subscribes[eventName].pipe(
-              filter(predicate)
-            ) as Subject<any>
-          }
-          return this.subscribes[eventName]
-        },
-        {
-          setFieldState: this.setFieldState,
-          getFieldState: this.getFieldState,
-          getFormState: this.getFormState,
-          setFormState: this.setFormState
-        }
-      )
+      effects(this.selectEffect, {
+        setFieldState: this.setFieldState,
+        getFieldState: this.getFieldState,
+        getFormState: this.getFormState,
+        setFormState: this.setFormState
+      })
     }
   }
 

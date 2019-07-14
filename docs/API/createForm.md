@@ -41,7 +41,6 @@ type Form = {
   getFormState: (callback: (fieldState: IFormState) => void) => void
   getFormState: () => IFormState
   setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
-
   registerField(name: string, options: {
     path: Path,
     props: any,
@@ -70,6 +69,7 @@ type Form = {
     fieldState: IFieldState
   }) => void): () => void;
   destructor(): void;
+  selectEffect: (eventName:string,formPathPattern: string | IFormPathMatcher)=>Observable<any>
   triggerEffect: (eventName: string, ...args: any[]) => void;
   syncUpdate(fn: () => void): void;
   initialize(values?: any): void;

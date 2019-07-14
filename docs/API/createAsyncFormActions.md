@@ -30,7 +30,7 @@ interface AsyncFormAction {
     submit: () => Promise<IFormState>
     //校验表单
     validate: () => Promise<IFormState>
-    //获取表单Schema
+    selectEffect: (eventName:string,formPathPattern: string | IFormPathMatcher)=>Observable<any>
     dispatch: <T = any>(type: string, payload: T) => Promise<void>
 }
 
