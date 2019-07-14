@@ -125,7 +125,7 @@ export class Form {
 
   public setFieldState = (
     path: Path | IFormPathMatcher,
-    callback?: () => void
+    callback?: (fieldState: IFieldState) => void
   ) => {
     if (this.destructed) {
       return

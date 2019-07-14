@@ -29,7 +29,6 @@ interface FormActions {
     submit: () => Promise<IFormState>
     //校验表单
     validate: () => Promise<IFormState>
-    selectEffect: (eventName:string,formPathPattern: string | IFormPathMatcher)=>Observable<any>
     dispatch: <T = any>(type: string, payload: T) => void
 }
 

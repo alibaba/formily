@@ -15,7 +15,7 @@ export const createVirtualBox = (
   component:
     | IFunctionComponentWithStyleComponent
     | IComponentClassWithStyleComponent,
-  isController: boolean
+  isController?: boolean
 ) => {
   registerVirtualboxFlag(name)
   registerFormField(

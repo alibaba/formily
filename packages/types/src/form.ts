@@ -52,7 +52,7 @@ export interface IFormOptions {
 export interface IFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
-    callback: (fieldState: IFieldState) => void
+    callback?: (fieldState: IFieldState) => void
   ) => Promise<any>
   getFieldState: (
     name: Path | IFormPathMatcher,

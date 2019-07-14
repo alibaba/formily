@@ -1,7 +1,8 @@
 import React, { Component, useContext, useMemo, useState } from 'react'
 import { IBroadcast } from '@uform/utils'
+import { ISelector, IFormActions } from '@uform/types'
 import { Broadcast, isFn } from '../utils'
-import { BroadcastContext } from './context'
+import { BroadcastContext, StateContext } from './context'
 
 type ChildrenFunction = (broadcast: IBroadcast) => React.ReactNode
 
@@ -118,6 +119,18 @@ export const useForm = (options: IOption = {}) => {
       }
     }
   }
+}
+
+export const useFormEffect = (
+  controller: (selector: ISelector, actions: IFormActions) => void
+) => {
+  const context = useContext(StateContext)
+  return useMemo(() => {
+    if (context && context.form) {
+      controller(context.form.selectEffect, context.actions)
+      return context.form.dispatchEffect
+    }
+  }, [])
 }
 
 export const FormConsumer = ({

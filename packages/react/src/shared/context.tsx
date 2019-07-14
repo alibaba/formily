@@ -1,11 +1,12 @@
 import React from 'react'
 import { Form } from '@uform/core'
-import { ISchema } from '@uform/types'
+import { ISchema, IFormActions } from '@uform/types'
 import { IBroadcast } from '@uform/utils'
 
 export interface IStateContext {
   getSchema: (path: string) => ISchema
   form: Form
+  actions: IFormActions
   locale: { [key: string]: any }
   broadcast: IBroadcast
 }

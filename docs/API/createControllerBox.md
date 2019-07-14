@@ -48,10 +48,15 @@ import { createVirtualBox } from '@uform/react'
 
 ## 用例
 
+主要使用 createControllerBox 创建逻辑占位组件，使用 useFormController 实现局部逻辑控制
+
 ```javascript
-import {createControllerBox,SchemaForm} from '@uform/react'
+import {createControllerBox,SchemaForm,useFormController} from '@uform/react'
 
 const Card = createControllerBox('card',(props)=>{
+   const dispatch = useFormController(($,{ setFieldState })=>{
+
+   })
    return <div>这是一个卡片{props.children}</div>
 })
 
