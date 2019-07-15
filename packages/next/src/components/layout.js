@@ -3,12 +3,12 @@ import {
   createVirtualBox,
   useFormController,
   createControllerBox,
+  FormConsumer,
   FormPath
 } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Grid, Card, Step } from '@alifd/next'
-import { FormConsumer, FormItem, FormProvider } from '../form'
-import { useEva, createActions } from 'react-eva'
+import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import styled from 'styled-components'
 import cls from 'classnames'
 
@@ -21,7 +21,7 @@ const normalizeCol = (col, _default = 0) => {
 
 export const FormLayoutItem = props =>
   React.createElement(
-    FormConsumer,
+    FormLayoutConsumer,
     {},
     ({
       labelAlign,
@@ -51,7 +51,7 @@ export const FormLayout = createVirtualBox(
   'layout',
   ({ children, ...props }) => {
     return (
-      <FormConsumer>
+      <FormLayoutConsumer>
         {value => {
           let newValue = { ...value, ...props }
           let child =
@@ -67,9 +67,11 @@ export const FormLayout = createVirtualBox(
             ) : (
               children
             )
-          return <FormProvider value={newValue}>{child}</FormProvider>
+          return (
+            <FormLayoutProvider value={newValue}>{child}</FormLayoutProvider>
+          )
         }}
-      </FormConsumer>
+      </FormLayoutConsumer>
     )
   }
 )
@@ -283,12 +285,11 @@ export const FormTextBox = createVirtualBox(
 
 export const FormStep = createControllerBox(
   'form-step',
-  ({ schema, children, form, broadcast, getSchema }) => {
+  ({ schema, name, children, form, broadcast, getSchema }) => {
     const names = children.map(({ props: { name } }) => name)
     const { actions, ...props } = schema['x-props'] || {}
     const ref = useRef()
     const [current, setCurrent] = useState(names.indexOf(props.current))
-    const { implementActions } = useEva({ actions: actions })
     ref.current = current
     const setStep = index => {
       const name = names[index]
@@ -298,39 +299,73 @@ export const FormStep = createControllerBox(
           state.display = name === state.name
         })
       }
-    }
-    const getStepState = index => {
-      if (index <= 0) return { type: 'step', state: -1 }
-      if (index >= names.length - 1) return { type: 'step', state: 1 }
-      return { type: 'step', state: 0 }
-    }
-    const setStepView = name => {
-      const index = names.indexOf(name)
-      setStep(index)
       broadcast.notify(getStepState(index))
     }
-    const nextStepView = () => {
-      setStep(ref.current + 1)
-      broadcast.notify(getStepState(ref.current + 1))
+    const getStepState = index => {
+      if (index <= 0)
+        return {
+          type: 'step',
+          state: FormStep.STEP_FIRST,
+          name,
+          key: names[index],
+          index,
+          names
+        }
+      if (index >= names.length - 1)
+        return {
+          type: 'step',
+          state: FormStep.STEP_LAST,
+          name,
+          key: names[index],
+          index,
+          names
+        }
+      return {
+        type: 'step',
+        state: FormStep.STEP_MIDDLE,
+        name,
+        key: names[index],
+        index,
+        names
+      }
     }
-    const previousStepView = () => {
-      setStep(ref.current - 1)
-      broadcast.notify(getStepState(ref.current - 1))
+    const cursorState = index => {
+      if (index > ref.current) {
+        return form.validate().then(() => setStep(index))
+      }
+      return Promise.resolve(setStep(index))
     }
-    implementActions({
-      setStepView,
-      nextStepView,
-      previousStepView
-    })
-    const dispatch = useFormController(($, { setFieldState }) => {
-      $('onFormMount').subscribe(() => {
-        broadcast.notify(getStepState(ref.current))
-      })
-      $('onFieldInit', FormPath.match(`*(${names})`)).subscribe(() => {
-        setFieldState(FormPath.match(`*(${names})`), state => {
-          state.display = props.current === state.name
+    const gotoStep = name => {
+      return cursorState(names.indexOf(name))
+    }
+    const nextStep = () => {
+      cursorState(ref.current + 1)
+    }
+    const prevStep = () => {
+      cursorState(ref.current - 1)
+    }
+    const getCurrentIndex = () => ref.current
+    const getCurrentName = () => names[ref.current]
+
+    const { dispatch, implementActions } = useFormController({
+      actions,
+      effects: ($, { setFieldState }) => {
+        $('onFormMount').subscribe(() => {
+          broadcast.notify(getStepState(ref.current))
         })
-      })
+        $('onFieldInit', FormPath.match(`*(${names})`)).subscribe(() => {
+          setFieldState(FormPath.match(`*(${names})`), state => {
+            state.display = props.current === state.name
+          })
+        })
+      }
+    })
+    implementActions({
+      gotoStep,
+      nextStep,
+      prevStep,
+      getCurrentIndex,
+      getCurrentName
     })
     return (
       <Fragment>
@@ -342,7 +377,9 @@ export const FormStep = createControllerBox(
                 <Step.Item
                   {...schema['x-props']}
                   key={name}
-                  onClick={() => dispatch('onStepClick', name)}
+                  onClick={() =>
+                    dispatch('onStepClick', getStepState(names.indexOf(name)))
+                  }
                 />
               )
             }
@@ -354,8 +391,24 @@ export const FormStep = createControllerBox(
   }
 )
 
+export const FormStepConsumer = props => (
+  <FormConsumer selector="step" {...props}>
+    {props.children}
+  </FormConsumer>
+)
+
+FormStep.STEP_FIRST = -1
+FormStep.STEP_MIDDLE = 0
+FormStep.STEP_LAST = 1
+
 FormStep.createActions = () =>
-  createActions('setStepView', 'nextStepView', 'previousStepView')
+  useFormController.createActions(
+    'gotoStep',
+    'nextStep',
+    'prevStep',
+    'getCurrentName',
+    'getCurrentIndex'
+  )
 
 export const FormStepItem = createVirtualBox('form-step-item', props => {
   return <Fragment>{props.children}</Fragment>

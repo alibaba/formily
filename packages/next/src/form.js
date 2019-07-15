@@ -13,8 +13,8 @@ import { isFn, moveTo, isStr, stringLength } from './utils'
  */
 
 export const {
-  Provider: FormProvider,
-  Consumer: FormConsumer
+  Provider: FormLayoutProvider,
+  Consumer: FormLayoutConsumer
 } = React.createContext()
 
 const normalizeCol = col => {
@@ -332,7 +332,7 @@ registerFormWrapper(OriginForm => {
           [className]: !!className
         })
         return (
-          <FormProvider
+          <FormLayoutProvider
             value={{
               labelAlign,
               labelTextAlign,
@@ -356,7 +356,7 @@ registerFormWrapper(OriginForm => {
             >
               {children}
             </OriginForm>
-          </FormProvider>
+          </FormLayoutProvider>
         )
       }
     }
@@ -382,7 +382,7 @@ registerFieldMiddleware(Field => {
     } = props
     if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
     return React.createElement(
-      FormConsumer,
+      FormLayoutConsumer,
       {},
       ({
         labelAlign,

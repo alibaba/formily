@@ -4,8 +4,7 @@ import { toArr } from '@uform/utils'
 import { Card, Row, Col } from 'antd'
 import styled from 'styled-components'
 import cls from 'classnames'
-
-import { FormConsumer, FormItem, FormProvider } from '../form'
+import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
 
 const normalizeCol = (
@@ -23,7 +22,7 @@ export const FormLayout = createVirtualBox(
   'layout',
   ({ children, ...props }) => {
     return (
-      <FormConsumer>
+      <FormLayoutConsumer>
         {value => {
           const newValue = { ...value, ...props }
           const child =
@@ -39,9 +38,11 @@ export const FormLayout = createVirtualBox(
             ) : (
               children
             )
-          return <FormProvider value={newValue}>{child}</FormProvider>
+          return (
+            <FormLayoutProvider value={newValue}>{child}</FormLayoutProvider>
+          )
         }}
-      </FormConsumer>
+      </FormLayoutConsumer>
     )
   }
 )
@@ -61,7 +62,7 @@ export const FormItemGrid = createVirtualBox(
     private renderFormItem(children) {
       const { title, description, name, help, extra, ...others } = this.props
       return React.createElement(
-        FormConsumer,
+        FormLayoutConsumer,
         {},
         ({
           labelAlign,
@@ -268,7 +269,7 @@ export const FormTextBox = createVirtualBox(
       }
 
       return React.createElement(
-        FormConsumer,
+        FormLayoutConsumer,
         {},
         ({
           labelAlign,
@@ -304,7 +305,7 @@ export const FormTextBox = createVirtualBox(
   )`
     display: flex;
     .text-box-words {
-      font-size: 12px;
+      font-size: 14px;
       line-height: 34px;
       color: #333;
     }

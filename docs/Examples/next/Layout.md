@@ -268,7 +268,7 @@ import {
   Reset,
   FormStep,
   FormStepItem,
-  FormConsumer
+  FormStepConsumer
 } from '@uform/next'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
@@ -280,36 +280,39 @@ const App = () => (
   <Printer>
     <SchemaForm
       effects={$ => {
-        $('onStepClick').subscribe(key => {
-          actions.setStepView(key)
+        $('onStepClick').subscribe(({ key, name }) => {
+          actions.gotoStep(key)
         })
       }}
       onSubmit={v => console.log(v)}
     >
       <FormStep labelPlacement="hoz" actions={actions} current="step1">
         <FormStepItem name="step1" title="步骤1">
-          <Field type="string" name="aa" title="AA" />
+          <Field type="string" name="aa" title="AA" required />
         </FormStepItem>
         <FormStepItem name="step2" title="步骤2">
-          <Field type="string" name="bb" title="BB" />
+          <Field type="string" name="bb" title="BB" required />
         </FormStepItem>
         <FormStepItem name="step3" title="步骤3">
-          <Field type="string" name="cc" title="CC" />
+          <Field type="string" name="cc" title="CC" required />
         </FormStepItem>
       </FormStep>
-      <FormConsumer selector="step">
+      <FormStepConsumer>
         {({ state, submit }) => (
           <FormButtonGroup align="center" style={{ minWidth: 150 }}>
             <Button
-              disabled={state < 0}
-              onClick={() => actions.previousStepView()}
+              disabled={state === FormStep.STEP_FIRST}
+              onClick={() => actions.prevStep()}
             >
               上一步
             </Button>
             ​<Button
               onClick={() => {
-                if (state < 1) {
-                  actions.nextStepView()
+                if (
+                  state === FormStep.STEP_MIDDLE ||
+                  state === FormStep.STEP_FIRST
+                ) {
+                  actions.nextStep()
                 } else {
                   submit()
                 }
@@ -320,7 +323,7 @@ const App = () => (
             <Reset />
           </FormButtonGroup>
         )}
-      </FormConsumer>
+      </FormStepConsumer>
     </SchemaForm>
   </Printer>
 )

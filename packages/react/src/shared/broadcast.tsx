@@ -1,6 +1,7 @@
 import React, { Component, useContext, useMemo, useState } from 'react'
 import { IBroadcast, isArr, isFn, isStr } from '@uform/utils'
 import { ISelector, IFormActions } from '@uform/types'
+import { useEva, createActions } from 'react-eva'
 import { Broadcast } from '../utils'
 import { BroadcastContext, StateContext } from './context'
 
@@ -65,11 +66,10 @@ export const useForm = (options: IOption = {}) => {
 
   useMemo(() => {
     if (broadcast) {
-      broadcast.subscribe(({ type, state, schema }) => {
+      broadcast.subscribe(({ type, state, schema, ...others }) => {
         if (type !== 'submit' && type !== 'reset') {
           if (initialized) {
             if (options.selector) {
-              // just for test
               if (
                 (isFn(options.selector) && options.selector({ type, state })) ||
                 (isArr(options.selector) &&
@@ -79,21 +79,24 @@ export const useForm = (options: IOption = {}) => {
                 setState({
                   status: type,
                   state,
-                  schema
+                  schema,
+                  ...others
                 })
               }
             } else {
               setState({
                 status: type,
                 state,
-                schema
+                schema,
+                ...others
               })
             }
           } else {
             finalValue = {
               status: type,
               state,
-              schema
+              schema,
+              ...others
             }
           }
         }
@@ -126,17 +129,30 @@ export const useForm = (options: IOption = {}) => {
   }
 }
 
-export const useFormController = (
-  controller: (selector: ISelector, actions: IFormActions) => void
-) => {
+interface IFormControllerOptions {
+  actions: IFormActions
+  effects: (selector: ISelector, actions: IFormActions) => void
+}
+
+export const useFormController = ({
+  actions,
+  effects
+}: IFormControllerOptions) => {
+  const { implementActions } = useEva({ actions })
   const context = useContext(StateContext)
-  return useMemo(() => {
+  const dispatch = useMemo(() => {
     if (context && context.form) {
-      controller(context.form.selectEffect, context.actions)
+      effects(context.form.selectEffect, context.actions)
       return context.form.dispatchEffect
     }
   }, [])
+  return {
+    dispatch,
+    implementActions
+  }
 }
+
+useFormController.createActions = createActions
 
 export const FormConsumer = ({
   children,
