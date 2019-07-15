@@ -7,7 +7,7 @@ export const createMutators = props => {
     },
 
     dispatch(name: string, payload: any) {
-      props.form.triggerEffect(name, {
+      props.form.dispatchEffect(name, {
         name: props.name,
         path: props.path,
         payload

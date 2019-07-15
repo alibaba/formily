@@ -28,7 +28,7 @@ test('submit by form consumer', async () => {
       >
         <Field name="aaa" type="string" />
       </SchemaForm>
-      <FormConsumer testingAct={act}>
+      <FormConsumer selector={['submitting','submitted']}>
         {({ status, submit }) => {
           if (status === 'submitting') {
             return <div>Submitting</div>
