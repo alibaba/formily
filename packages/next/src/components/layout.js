@@ -32,48 +32,59 @@ export const FormLayout = createVirtualBox(
             ) : (
               children
             )
-          return <FormLayoutProvider value={newValue}>{child}</FormLayoutProvider>
+          return (
+            <FormLayoutProvider value={newValue}>{child}</FormLayoutProvider>
+          )
         }}
       </FormLayoutConsumer>
     )
   }
 )
 
-export const FormItemGrid = createVirtualBox(
-  'grid',
-  class extends Component {
-    renderFormItem(children) {
-      const { title, description, help, name, extra, ...others } = this.props
+export const FormLayoutItem = props =>
+  React.createElement(
+    FormLayoutConsumer,
+    {},
+    ({
+      labelAlign,
+      labelTextAlign,
+      labelCol,
+      wrapperCol,
+      size,
+      autoAddColon
+    }) => {
       return React.createElement(
-        FormLayoutConsumer,
-        {},
-        ({
+        FormItem,
+        {
           labelAlign,
           labelTextAlign,
           labelCol,
           wrapperCol,
+          autoAddColon,
           size,
-          autoAddColon
-        }) => {
-          return React.createElement(
-            FormItem,
-            {
-              labelAlign,
-              labelTextAlign,
-              labelCol,
-              wrapperCol,
-              autoAddColon,
-              size,
-              ...others,
-              label: title,
-              noMinHeight: true,
-              id: name,
-              extra: description,
-              help
-            },
-            children
-          )
-        }
+          ...props
+        },
+        props.children
+      )
+    }
+  )
+
+export const FormItemGrid = createVirtualBox(
+  'grid',
+  class extends Component {
+    renderFormItem(children) {
+      const { title, description, help, name, extra, ...props } = this.props
+      return React.createElement(
+        FormLayoutItem,
+        {
+          label: title,
+          noMinHeight: true,
+          id: name,
+          extra: description,
+          help,
+          ...props
+        },
+        children
       )
     }
 
@@ -112,10 +123,10 @@ export const FormItemGrid = createVirtualBox(
           {children.reduce((buf, child, key) => {
             return child
               ? buf.concat(
-                <Col key={key} {...cols[key]}>
-                  {child}
-                </Col>
-              )
+                  <Col key={key} {...cols[key]}>
+                    {child}
+                  </Col>
+                )
               : buf
           }, [])}
         </Row>
@@ -231,42 +242,30 @@ export const FormTextBox = createVirtualBox(
         )
       }, [])
 
-      if (!title) return <div className={className} ref={ref}>{newChildren}</div>
+      if (!title)
+        return (
+          <div className={className} ref={ref}>
+            {newChildren}
+          </div>
+        )
 
       return React.createElement(
-        FormLayoutConsumer,
-        {},
-        ({
-          labelAlign,
-          labelTextAlign,
-          labelCol,
-          wrapperCol,
-          size,
-          autoAddColon
-        }) => {
-          return React.createElement(
-            FormItem,
-            {
-              labelAlign,
-              labelTextAlign,
-              labelCol,
-              wrapperCol,
-              autoAddColon,
-              size,
-              ...props,
-              label: title,
-              noMinHeight: true,
-              id: name,
-              extra: description,
-              help
-            },
-            <div className={className} ref={ref}>{newChildren}</div>
-          )
-        }
+        FormLayoutItem,
+        {
+          label: title,
+          noMinHeight: true,
+          id: name,
+          extra: description,
+          help,
+          ...props
+        },
+        <div className={className} ref={ref}>
+          {newChildren}
+        </div>
       )
     }
   )`
-    display:flex;
+    display: flex;
     .text-box-words {
       font-size: 12px;
       line-height: 28px;
