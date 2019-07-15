@@ -8,7 +8,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
-    "build": "node ./scripts/build.js",
+    "build": "node ./scripts/build.js && npm run build:ts",
+    "build:ts": "tsc -b packages/react packages/core packages/antd packages/validator packages/utils packages/types",
     "build:docs": "node ./scripts/docs.js build -i docs -o docs",
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",

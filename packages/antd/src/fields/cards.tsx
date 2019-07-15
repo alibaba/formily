@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, ReactElement } from 'react'
 import styled from 'styled-components'
 import { registerFormField } from '@uform/react'
 import { Card } from 'antd'
@@ -18,14 +18,14 @@ const FormCardsField = styled(
       )
     }
 
-    public renderEmpty = title => {
+    public renderCardEmpty = (title: string | ReactElement) => {
       return (
         <Card
           style={this.getProps('style')}
           title={title}
           className="card-list"
         >
-          {super.renderEmpty()}
+          {this.renderEmpty()}
         </Card>
       )
     }
@@ -68,7 +68,7 @@ const FormCardsField = styled(
               </Card>
             )
           })}
-          {value.length === 0 && this.renderEmpty(title)}
+          {value.length === 0 && this.renderCardEmpty(title)}
           <div className="addition-wrapper">
             {value.length > 0 && this.renderAddition()}
           </div>

@@ -1,0 +1,23 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "antd"
+    },
+    {
+      "path": "react"
+    },
+    {
+      "path": "core"
+    },
+    {
+      "path": "utils"
+    },
+    {
+      "path": "validator"
+    },
+    {
+      "path": "types"
+    }
+  ]
+}
