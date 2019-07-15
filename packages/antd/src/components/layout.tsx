@@ -90,14 +90,14 @@ export const FormItemGrid = createVirtualBox(
     }
 
     private renderFormItem(children) {
-      const { title, description, help, name, extra, ...props } = this.props
+      const { title, help, name, extra, ...props } = this.props
       return React.createElement(
         FormLayoutItem,
         {
           label: title,
           noMinHeight: true,
           id: name,
-          extra: description,
+          extra,
           help,
           ...props
         },
@@ -231,7 +231,6 @@ export const FormTextBox = createVirtualBox(
   styled(
     ({
       title,
-      description,
       help,
       gutter,
       className,
@@ -285,7 +284,7 @@ export const FormTextBox = createVirtualBox(
           label: title,
           noMinHeight: true,
           id: name,
-          extra: description,
+          extra,
           help,
           ...props
         },
