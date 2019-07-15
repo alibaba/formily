@@ -50,6 +50,9 @@ export const clone = (values: any, filter?: Filter) => {
     if ('$$typeof' in values && '_owner' in values) {
       return values
     }
+    if (Object.getOwnPropertySymbols(values || {}).length) {
+      return values
+    }
     const res = {}
     for (const key in values) {
       if (Object.hasOwnProperty.call(values, key)) {

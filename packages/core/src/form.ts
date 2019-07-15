@@ -125,7 +125,7 @@ export class Form {
 
   public setFieldState = (
     path: Path | IFormPathMatcher,
-    callback?: () => void
+    callback?: (fieldState: IFieldState) => void
   ) => {
     if (this.destructed) {
       return
@@ -188,7 +188,7 @@ export class Form {
     return Promise.resolve(this.checkState(published))
   }
 
-  public registerField(name, options) {
+  public registerField(name: string, options: IFieldOptions) {
     const value = this.getValue(name)
     const initialValue = this.getInitialValue(name, options.path)
     const field = this.fields[name]
