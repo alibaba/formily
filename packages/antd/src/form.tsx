@@ -14,8 +14,8 @@ import { IFormItemProps, IFormProps } from './type'
  */
 
 export const {
-  Provider: FormProvider,
-  Consumer: FormConsumer
+  Provider: FormLayoutProvider,
+  Consumer: FormLayoutConsumer
 } = React.createContext(undefined)
 
 const normalizeCol = col => {
@@ -364,7 +364,7 @@ registerFormWrapper(OriginForm => {
         [className]: !!className
       })
       return (
-        <FormProvider
+        <FormLayoutProvider
           value={{
             labelAlign,
             labelTextAlign,
@@ -388,7 +388,7 @@ registerFormWrapper(OriginForm => {
           >
             {children}
           </OriginForm>
-        </FormProvider>
+        </FormLayoutProvider>
       )
     }
 
@@ -438,7 +438,7 @@ registerFieldMiddleware(Field => {
       return React.createElement(Field, props)
     }
     return React.createElement(
-      FormConsumer,
+      FormLayoutConsumer,
       {},
       ({
         labelAlign,

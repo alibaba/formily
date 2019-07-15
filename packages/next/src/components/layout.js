@@ -3,7 +3,7 @@ import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Row, Col } from '@alifd/next/lib/grid'
 import Card from '@alifd/next/lib/card'
-import { FormConsumer, FormItem, FormProvider } from '../form'
+import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import styled from 'styled-components'
 import cls from 'classnames'
 
@@ -16,7 +16,7 @@ export const FormLayout = createVirtualBox(
   'layout',
   ({ children, ...props }) => {
     return (
-      <FormConsumer>
+      <FormLayoutConsumer>
         {value => {
           let newValue = { ...value, ...props }
           let child =
@@ -32,9 +32,9 @@ export const FormLayout = createVirtualBox(
             ) : (
               children
             )
-          return <FormProvider value={newValue}>{child}</FormProvider>
+          return <FormLayoutProvider value={newValue}>{child}</FormLayoutProvider>
         }}
-      </FormConsumer>
+      </FormLayoutConsumer>
     )
   }
 )
@@ -45,7 +45,7 @@ export const FormItemGrid = createVirtualBox(
     renderFormItem(children) {
       const { title, description, help, name, extra, ...others } = this.props
       return React.createElement(
-        FormConsumer,
+        FormLayoutConsumer,
         {},
         ({
           labelAlign,
@@ -234,7 +234,7 @@ export const FormTextBox = createVirtualBox(
       if (!title) return <div className={className} ref={ref}>{newChildren}</div>
 
       return React.createElement(
-        FormConsumer,
+        FormLayoutConsumer,
         {},
         ({
           labelAlign,
