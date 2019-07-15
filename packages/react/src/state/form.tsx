@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-eva'
 import { createForm, Form } from '@uform/core'
-import { IFormState } from '@uform/types'
+import { IFormState, IFormActions } from '@uform/types'
 
 import {
   createHOC,
@@ -47,21 +47,25 @@ export const StateForm = createHOC((options, Form) => {
         onValidateFailed: this.onValidateFailed(props),
         onReset: this.onResetHandler(props),
         onFormWillInit: form => {
-          props.implementActions({
-            setFormState: form.setFormState,
-            getFormState: form.getFormState,
-            setFieldState: form.setFieldState,
-            getFieldState: form.getFieldState,
-            reset: this.reset,
-            submit: this.submit,
-            validate: this.validate,
-            getSchema: this.getSchema,
-            dispatch: this.dispatch
-          })
+          props.implementActions(this.getActions(form))
         }
       })
       this.state = {} as IFormState
       this.initialized = true
+    }
+
+    public getActions(form: Form): IFormActions {
+      return {
+        setFormState: form.setFormState,
+        getFormState: form.getFormState,
+        setFieldState: form.setFieldState,
+        getFieldState: form.getFieldState,
+        reset: this.reset,
+        submit: this.submit,
+        validate: this.validate,
+        getSchema: this.getSchema,
+        dispatch: this.dispatch
+      }
     }
 
     public notify(payload) {
@@ -301,6 +305,7 @@ export const StateForm = createHOC((options, Form) => {
           value={{
             locale,
             form: this.form,
+            actions: this.getActions(this.form),
             getSchema: this.getSchema,
             broadcast
           }}
