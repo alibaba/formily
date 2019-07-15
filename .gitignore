@@ -14,3 +14,4 @@ examples/test
 .idea/
 .vscode/
 TODO.md
+tsconfig.tsbuildinfo

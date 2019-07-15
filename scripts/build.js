@@ -65,7 +65,23 @@ const complieJSPackages = async callback => {
 }
 
 const transformFilesAsync = async (fileNames, options) => {
-  let program = ts.createProgram(fileNames, options.compilerOptions)
+  let program = ts.createProgram(fileNames, {
+    "esModuleInterop": true,
+    "jsx": "react",
+    "module": "commonjs",
+    "target": "ES5",
+    "allowJs": false,
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": false,
+    "declaration": true,
+    "outDir": "../lib",
+    "baseUrl": ".",
+    "paths": {
+      "rxjs/*": ["./node_modules/rxjs/*"]
+    }
+  })
   let emitResult = program.emit()
 
   let allDiagnostics = ts
@@ -117,5 +133,5 @@ const complieTSPackages = async callback => {
   })
 }
 
-complieTSPackages()
+//complieTSPackages()
 complieJSPackages()

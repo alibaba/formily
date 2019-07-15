@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig.settings.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../utils"
+    },
+    {
+      "path": "../validator"
+    },
+    {
+      "path": "../types"
+    }
+  ]
+}
