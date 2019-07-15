@@ -336,7 +336,7 @@ export class Field implements IField {
         this.visible = true
       }
       this.removed = false
-      this.context.triggerEffect('onFieldChange', this.publishState())
+      this.context.dispatchEffect('onFieldChange', this.publishState())
     }
   }
 

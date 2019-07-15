@@ -70,7 +70,7 @@ type Form = {
     fieldState: IFieldState
   }) => void): () => void;
   destructor(): void;
-  triggerEffect: (eventName: string, ...args: any[]) => void;
+  dispatchEffect: (eventName: string, ...args: any[]) => void;
   syncUpdate(fn: () => void): void;
   initialize(values?: any): void;
 }

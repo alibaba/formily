@@ -1,7 +1,9 @@
 import React, { Component, useContext, useMemo, useState } from 'react'
-import { IBroadcast } from '@uform/utils'
-import { Broadcast, isFn } from '../utils'
-import { BroadcastContext } from './context'
+import { IBroadcast, isArr, isFn, isStr } from '@uform/utils'
+import { ISelector, IFormActions } from '@uform/types'
+import { useEva, createActions } from 'react-eva'
+import { Broadcast } from '../utils'
+import { BroadcastContext, StateContext } from './context'
 
 type ChildrenFunction = (broadcast: IBroadcast) => React.ReactNode
 
@@ -47,7 +49,7 @@ export const FormBridge = () => (Target: React.ComponentType) => {
 }
 
 export interface IOption {
-  testingAct?(callback): void
+  selector?: ((payload: any) => boolean) | string[] | string
 }
 
 export interface IFormState {
@@ -64,30 +66,30 @@ export const useForm = (options: IOption = {}) => {
 
   useMemo(() => {
     if (broadcast) {
-      broadcast.subscribe(({ type, state, schema }) => {
+      broadcast.subscribe(({ type, state, schema, ...others }) => {
         if (type !== 'submit' && type !== 'reset') {
           if (initialized) {
-            if (options.testingAct) {
-              // just for test
-              options.testingAct(() =>
+            if (options.selector) {
+              if (
+                (isFn(options.selector) && options.selector({ type, state })) ||
+                (isArr(options.selector) &&
+                  options.selector.indexOf(type) > -1) ||
+                (isStr(options.selector) && options.selector === type)
+              ) {
                 setState({
                   status: type,
                   state,
-                  schema
+                  schema,
+                  ...others
                 })
-              )
-            } else {
-              setState({
-                status: type,
-                state,
-                schema
-              })
+              }
             }
           } else {
             finalValue = {
               status: type,
               state,
-              schema
+              schema,
+              ...others
             }
           }
         }
@@ -120,15 +122,40 @@ export const useForm = (options: IOption = {}) => {
   }
 }
 
+interface IFormControllerOptions {
+  actions: IFormActions
+  effects: (selector: ISelector, actions: IFormActions) => void
+}
+
+export const useFormController = ({
+  actions,
+  effects
+}: IFormControllerOptions) => {
+  const { implementActions } = useEva({ actions })
+  const context = useContext(StateContext)
+  const dispatch = useMemo(() => {
+    if (context && context.form) {
+      effects(context.form.selectEffect, context.actions)
+      return context.form.dispatchEffect
+    }
+  }, [])
+  return {
+    dispatch,
+    implementActions
+  }
+}
+
+useFormController.createActions = createActions
+
 export const FormConsumer = ({
   children,
-  testingAct
+  selector
 }: {
   // TODO formApi
   children: React.ReactElement | ((formApi: any) => React.ReactElement)
-  testingAct?: IOption['testingAct']
+  selector?: IOption['selector']
 }): React.ReactElement => {
-  const formApi = useForm({ testingAct })
+  const formApi = useForm({ selector })
   if (!formApi) {
     return <React.Fragment />
   }
