@@ -111,7 +111,15 @@ const StateField = createHOC((options, Field) => {
     }
 
     public render() {
-      const { name, path, schemaPath, locale, getSchema } = this.props
+      const {
+        name,
+        path,
+        schemaPath,
+        broadcast,
+        form,
+        locale,
+        getSchema
+      } = this.props
       const {
         value,
         visible,
@@ -139,6 +147,8 @@ const StateField = createHOC((options, Field) => {
           path={path}
           editable={editable}
           locale={locale}
+          form={form}
+          broadcast={broadcast}
           loading={loading}
           schemaPath={schemaPath}
           getSchema={getSchema}
