@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { Row, Col } from './grid'
-import { FormConsumer } from '../form'
+import { FormLayoutConsumer } from '../form'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
@@ -86,7 +86,7 @@ export const FormButtonGroup = styled(
       const { sticky, style, className } = this.props
 
       const content = (
-        <FormConsumer>
+        <FormLayoutConsumer>
           {({ inline } = {}) => (
             <div
               className={cls(className, {
@@ -97,13 +97,13 @@ export const FormButtonGroup = styled(
               {this.renderChildren()}
             </div>
           )}
-        </FormConsumer>
+        </FormLayoutConsumer>
       )
 
       if (sticky) {
         return (
           <div>
-            <FormConsumer>
+            <FormLayoutConsumer>
               {({ FormRef } = {}) => {
                 if (!FormRef) {
                   return
@@ -127,7 +127,7 @@ export const FormButtonGroup = styled(
                   </Sticky>
                 )
               }}
-            </FormConsumer>
+            </FormLayoutConsumer>
           </div>
         )
       }
