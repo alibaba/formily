@@ -209,7 +209,7 @@ export const StateForm = createHOC((options, Form) => {
 
     public componentDidMount() {
       this.unmounted = false
-      this.form.triggerEffect('onFormMount', this.form.publishState())
+      this.form.dispatchEffect('onFormMount', this.form.publishState())
 
       this.unsubscribe = this.props.broadcast.subscribe(
         ({ type, name, payload }) => {
@@ -221,7 +221,7 @@ export const StateForm = createHOC((options, Form) => {
           } else if (type === 'reset') {
             this.reset()
           } else if (type === 'dispatch') {
-            this.form.triggerEffect(name, payload)
+            this.form.dispatchEffect(name, payload)
           }
         }
       )
@@ -273,7 +273,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public dispatch = (type, payload) => {
-      this.form.triggerEffect(type, payload)
+      this.form.dispatchEffect(type, payload)
     }
 
     public render() {

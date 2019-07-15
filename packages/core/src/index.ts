@@ -64,11 +64,11 @@ export const createForm = ({
   })
 
   form.syncUpdate(() => {
-    form.triggerEffect('onFormInit', form.publishState())
+    form.dispatchEffect('onFormInit', form.publishState())
     each(
       fields,
       field => {
-        form.triggerEffect('onFieldChange', field.publishState())
+        form.dispatchEffect('onFieldChange', field.publishState())
       },
       true
     )
