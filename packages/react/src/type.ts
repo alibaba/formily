@@ -30,6 +30,7 @@ export interface IStateFieldProps {
   schemaPath: any
   locale: { [key: string]: any }
   getSchema: (path: string) => ISchema
+  broadcast: IBroadcast
   form: Form
   // TODO mutators 文件应该暴露出来 interface
   mutators?: any

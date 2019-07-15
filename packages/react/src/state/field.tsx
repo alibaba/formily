@@ -153,12 +153,13 @@ const StateField = createHOC((options, Field) => {
 
   return props => {
     const { name, path, schemaPath } = props
-    const { form, getSchema, locale } = useContext(StateContext)
+    const { form, getSchema, locale, broadcast } = useContext(StateContext)
     return (
       <StateField
         name={name}
         path={path}
         form={form}
+        broadcast={broadcast}
         schema={getSchema(schemaPath || path)}
         locale={locale}
         getSchema={getSchema}
@@ -172,10 +173,10 @@ export const FormField = StateField()((props: IFieldProps) => {
   const schema = props.schema
   const fieldComponentName = lowercase(schema['x-component'] || schema.type)
   const renderComponent = schema['x-render']
-    ? $props => {
+    ? (innerProps: any) => {
         return React.createElement(getFormField(fieldComponentName), {
           ...props,
-          ...$props,
+          ...innerProps,
           schema,
           path: props.path,
           name: props.name
