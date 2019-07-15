@@ -3,7 +3,7 @@ import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Row, Col } from '@alifd/next/lib/grid'
 import Card from '@alifd/next/lib/card'
-import { FormConsumer, FormItem, FormProvider } from '../form'
+import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import styled from 'styled-components'
 import cls from 'classnames'
 
@@ -16,7 +16,7 @@ export const FormLayout = createVirtualBox(
   'layout',
   ({ children, ...props }) => {
     return (
-      <FormConsumer>
+      <FormLayoutConsumer>
         {value => {
           let newValue = { ...value, ...props }
           let child =
@@ -32,48 +32,59 @@ export const FormLayout = createVirtualBox(
             ) : (
               children
             )
-          return <FormProvider value={newValue}>{child}</FormProvider>
+          return (
+            <FormLayoutProvider value={newValue}>{child}</FormLayoutProvider>
+          )
         }}
-      </FormConsumer>
+      </FormLayoutConsumer>
     )
   }
 )
+
+export const FormLayoutItem = props =>
+  React.createElement(
+    FormLayoutConsumer,
+    {},
+    ({
+      labelAlign,
+      labelTextAlign,
+      labelCol,
+      wrapperCol,
+      size,
+      autoAddColon
+    }) => {
+      return React.createElement(
+        FormItem,
+        {
+          labelAlign,
+          labelTextAlign,
+          labelCol,
+          wrapperCol,
+          autoAddColon,
+          size,
+          ...props
+        },
+        props.children
+      )
+    }
+  )
 
 export const FormItemGrid = createVirtualBox(
   'grid',
   class extends Component {
     renderFormItem(children) {
-      const { title, description, help, name, extra, ...others } = this.props
+      const { title, help, name, extra, ...props } = this.props
       return React.createElement(
-        FormConsumer,
-        {},
-        ({
-          labelAlign,
-          labelTextAlign,
-          labelCol,
-          wrapperCol,
-          size,
-          autoAddColon
-        }) => {
-          return React.createElement(
-            FormItem,
-            {
-              labelAlign,
-              labelTextAlign,
-              labelCol,
-              wrapperCol,
-              autoAddColon,
-              size,
-              ...others,
-              label: title,
-              noMinHeight: true,
-              id: name,
-              extra: description,
-              help
-            },
-            children
-          )
-        }
+        FormLayoutItem,
+        {
+          label: title,
+          noMinHeight: true,
+          id: name,
+          extra,
+          help,
+          ...props
+        },
+        children
       )
     }
 
@@ -112,10 +123,10 @@ export const FormItemGrid = createVirtualBox(
           {children.reduce((buf, child, key) => {
             return child
               ? buf.concat(
-                <Col key={key} {...cols[key]}>
-                  {child}
-                </Col>
-              )
+                  <Col key={key} {...cols[key]}>
+                    {child}
+                  </Col>
+                )
               : buf
           }, [])}
         </Row>
@@ -193,7 +204,6 @@ export const FormTextBox = createVirtualBox(
   styled(
     ({
       title,
-      description,
       help,
       gutter,
       className,
@@ -231,42 +241,30 @@ export const FormTextBox = createVirtualBox(
         )
       }, [])
 
-      if (!title) return <div className={className} ref={ref}>{newChildren}</div>
+      if (!title)
+        return (
+          <div className={className} ref={ref}>
+            {newChildren}
+          </div>
+        )
 
       return React.createElement(
-        FormConsumer,
-        {},
-        ({
-          labelAlign,
-          labelTextAlign,
-          labelCol,
-          wrapperCol,
-          size,
-          autoAddColon
-        }) => {
-          return React.createElement(
-            FormItem,
-            {
-              labelAlign,
-              labelTextAlign,
-              labelCol,
-              wrapperCol,
-              autoAddColon,
-              size,
-              ...props,
-              label: title,
-              noMinHeight: true,
-              id: name,
-              extra: description,
-              help
-            },
-            <div className={className} ref={ref}>{newChildren}</div>
-          )
-        }
+        FormLayoutItem,
+        {
+          label: title,
+          noMinHeight: true,
+          id: name,
+          extra,
+          help,
+          ...props
+        },
+        <div className={className} ref={ref}>
+          {newChildren}
+        </div>
       )
     }
   )`
-    display:flex;
+    display: flex;
     .text-box-words {
       font-size: 12px;
       line-height: 28px;
