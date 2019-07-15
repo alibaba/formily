@@ -4,18 +4,22 @@
     "esModuleInterop": true,
     "jsx": "react",
     "module": "commonjs",
-    "target": "ES5",
+    "target": "es6",
     "allowJs": false,
     "noUnusedLocals": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": false,
     "declaration": true,
-    "composite": true,
     "outDir": "../lib",
     "baseUrl": ".",
     "paths": {
-      "rxjs/*": ["./node_modules/rxjs/*"]
+      "rxjs/*": [
+        "./node_modules/rxjs/*"
+      ],
+      "@uform/*": [
+        "./packages/*/src"
+      ]
     }
   }
 }
