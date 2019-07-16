@@ -38,10 +38,10 @@
     "lodash.uniqby": "^4.7.0",
     "moment": "^2.24.0",
     "prop-types": "^15.6.1",
-    "react-dnd": "^9.3.2",
+    "react-dnd": "^7.4.1",
     "react-dnd-html5-backend": "^7.4.0",
     "react-powerplug": "^1.0.0",
-    "react-redux": "^7.1.0",
+    "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
@@ -53,6 +53,7 @@
   },
   "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050",
   "devDependencies": {
+    "react-test-renderer": "^16.8.6",
     "typescript": "^3.5.2"
   }
 }
