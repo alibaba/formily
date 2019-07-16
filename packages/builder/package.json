@@ -53,6 +53,7 @@
   },
   "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050",
   "devDependencies": {
+    "react-test-renderer": "^16.8.6",
     "typescript": "^3.5.2"
   }
 }
