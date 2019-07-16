@@ -8,7 +8,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
-    "build": "node ./scripts/build.js",
+    "build": "rm -rf packages/*/lib && lerna run build",
     "build:docs": "node ./scripts/docs.js build -i docs -o docs",
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",
@@ -47,9 +47,10 @@
     "@typescript-eslint/parser": "^1.11.0",
     "all-contributors-cli": "^6.1.2",
     "antd": "^3.17.0",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
-    "babel-loader": "^8.0.4",
+    "babel-loader": "^8.0.6",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "chalk": "^2.4.2",
     "chokidar": "^2.1.2",
@@ -95,7 +96,7 @@
     "typescript": "^3.4.5",
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
-    "webpack": "^4.27.1"
+    "webpack": "^4.35.3"
   },
   "config": {
     "ghooks": {

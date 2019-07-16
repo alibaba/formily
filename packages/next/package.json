@@ -14,6 +14,9 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "scripts": {
+    "build": "tsc"
+  },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
     "@babel/runtime": "^7.4.4",
@@ -29,7 +32,7 @@
     "styled-components": "^4.1.1"
   },
   "devDependencies": {
-    "@alifd/next": "^1.13.1"
+    "typescript": "^3.5.2"
   },
   "publishConfig": {
     "access": "public"

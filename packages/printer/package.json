@@ -14,10 +14,16 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "scripts": {
+    "build":"tsc"
+  },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
   },
   "dependencies": {
     "@uform/react": "^0.2.3",
