@@ -14,6 +14,9 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "scripts": {
+    "build": "tsc"
+  },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
     "@babel/runtime": "^7.4.4",
@@ -50,7 +53,6 @@
   },
   "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050",
   "devDependencies": {
-    "@alifd/next": "^1.13.1",
-    "react-test-renderer": "*"
+    "typescript": "^3.5.2"
   }
 }

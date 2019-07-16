@@ -7,13 +7,19 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
   },
-  "types":"lib/index.d.ts",
+  "types": "lib/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/uform/issues"
   },
   "homepage": "https://github.com/alibaba/uform#readme",
   "engines": {
     "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "build": "tsc --declaration"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4"
