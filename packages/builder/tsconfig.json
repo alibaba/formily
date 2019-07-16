@@ -6,9 +6,7 @@
     "allowJs": true
   },
   "include": [
-    "./src/**/*.js",
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
+    "./src/**/*.js"
   ],
   "exclude": [
     "./src/__tests__/*"
