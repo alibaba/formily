@@ -18,7 +18,8 @@
     "build": "tsc --declaration"
   },
   "devDependencies": {
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "antd": "^3.14.1"
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",

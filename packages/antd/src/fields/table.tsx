@@ -348,10 +348,5 @@ const Table = styled(
   .ant-table-body,
   .ant-table-header {
     overflow: auto;
-    font-size: 12px;
-  }
-
-  .ant-table-body {
-    font-size: 12px;
   }
 `

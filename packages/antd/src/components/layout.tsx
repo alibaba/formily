@@ -296,7 +296,7 @@ export const FormTextBox = createVirtualBox(
   )`
     display: flex;
     .text-box-words {
-      font-size: 12px;
+      font-size: 14px;
       line-height: 34px;
       color: #333;
     }
