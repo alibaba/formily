@@ -1,6 +1,6 @@
 {
   "name": "@uform/printer",
-  "version": "0.2.3",
+  "version": "0.3.1",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build":"tsc"
+    "build": "tsc"
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
@@ -26,7 +26,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@uform/react": "^0.2.3",
+    "@uform/react": "^0.3.1",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },
