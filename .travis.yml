@@ -10,7 +10,7 @@ node_js:
   - "11"
 
 before_script:
-  - lerna bootstrap --hoist
+  - lerna bootstrap --no-ci
 
 script:
   - npm run lint
