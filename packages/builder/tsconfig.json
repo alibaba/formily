@@ -3,7 +3,9 @@
   "compilerOptions": {
     "outDir": "./lib",
     "declaration": false,
-    "allowJs": true
+    "allowJs": true,
+    "lib": ["es2015", "dom"],
+    "types": []
   },
   "include": [
     "./src/**/*.js"
