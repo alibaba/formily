@@ -254,7 +254,7 @@ export const FormItem = styled(
   }
   .ant-form-item-label label {
     color: #666;
-    font-size: 12px;
+    font-size: 14px;
     &.no-colon:after {
       content: '';
     }
