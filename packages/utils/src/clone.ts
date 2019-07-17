@@ -2,7 +2,8 @@ import { isFn } from '@uform/types'
 
 type Filter = (value: any, key: string) => boolean
 
-const self: { [key: string]: any } = window || global || this
+const _self: { [key: string]: any } =
+  self || window || global || Function('return this')()
 
 const NATIVE_KEYS = [
   ['Map', (map: any) => new Map(map)],
@@ -26,13 +27,13 @@ const isNativeObject = (values: any): any => {
     const item = NATIVE_KEYS[i]
     if (Array.isArray(item) && item[0]) {
       if (
-        self[item[0] as string] &&
-        values instanceof self[item[0] as string]
+        _self[item[0] as string] &&
+        values instanceof _self[item[0] as string]
       ) {
         return item[1] ? item[1] : item[0]
       }
     } else {
-      if (self[item as string] && values instanceof self[item as string]) {
+      if (_self[item as string] && values instanceof _self[item as string]) {
         return item
       }
     }
