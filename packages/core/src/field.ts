@@ -322,7 +322,7 @@ export class Field implements IField {
     }
   }
 
-  public changeEditable(editable: boolean) {
+  public changeEditable(editable: boolean | ((name: string) => boolean)): void {
     if (!this.props || !isEmpty(this.props.editable)) {
       return
     }
