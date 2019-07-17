@@ -374,7 +374,7 @@ const resolveGetIn = (get: Getter) => {
       return get(obj, path, value)
     }
     return mapReduce(ast.destruct, (mapPath, key) => {
-      return get(obj, ast.startPath.concat(key))
+      return get(obj, ast.startPath.concat(key[key.length - 1]))
     })
   }
 }

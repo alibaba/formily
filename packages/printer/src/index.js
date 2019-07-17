@@ -37,6 +37,8 @@ const Dialog = styled(props => {
   border: 1px solid #eee;
   background: #fff;
   outline: none;
+  box-shadow: 0 0 55px #555;
+  border-radius: 10px;
   .close-btn {
     position: absolute;
     top: 15px;
@@ -108,9 +110,18 @@ export default class extends React.Component {
     e.preventDefault()
     const schema = await this.actions.getSchema('')
     createAlert(
-      <pre>
-        <code>{printSchema(schema)}</code>
-      </pre>
+      <div>
+        <h1>JSON Schema</h1>
+        <pre>
+          <code>{printSchema(schema)}</code>
+        </pre>
+        <h1>UForm Usage</h1>
+        <pre>
+          <code>
+            {`<SchemaForm schema={${printSchema(schema)}} />`}
+          </code>
+        </pre>
+      </div>
     )
   }
 
@@ -122,7 +133,19 @@ export default class extends React.Component {
     return (
       <div className={className}>
         {React.cloneElement(children, {
-          actions: this.actions
+          actions: this.actions,
+          onSubmit:
+            children.props.onSubmit ||
+            (values => {
+              createAlert(
+                <div>
+                  <h1>Submit Result</h1>
+                  <pre>
+                    <code>{JSON.stringify(values,null,2)}</code>
+                  </pre>
+                </div>
+              )
+            })
         })}
         <a
           href=""
