@@ -1,9 +1,7 @@
 import { isFn } from '@uform/types'
+import { globalThisPolyfill } from './globalThis'
 
 type Filter = (value: any, key: string) => boolean
-
-const _self: { [key: string]: any } =
-  self || window || global || Function('return this')()
 
 const NATIVE_KEYS = [
   ['Map', (map: any) => new Map(map)],
@@ -27,13 +25,16 @@ const isNativeObject = (values: any): any => {
     const item = NATIVE_KEYS[i]
     if (Array.isArray(item) && item[0]) {
       if (
-        _self[item[0] as string] &&
-        values instanceof _self[item[0] as string]
+        globalThisPolyfill[item[0] as string] &&
+        values instanceof globalThisPolyfill[item[0] as string]
       ) {
         return item[1] ? item[1] : item[0]
       }
     } else {
-      if (_self[item as string] && values instanceof _self[item as string]) {
+      if (
+        globalThisPolyfill[item as string] &&
+        values instanceof globalThisPolyfill[item as string]
+      ) {
         return item
       }
     }

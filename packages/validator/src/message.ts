@@ -1,7 +1,7 @@
-import { getIn, each } from './utils'
+import { getIn, each, globalThisPolyfill } from './utils'
 import locales from './locale'
 
-const self: any = this || global || window
+const self: any = globalThisPolyfill
 
 export interface ILocaleMessages {
   [key: string]: string | ILocaleMessages
