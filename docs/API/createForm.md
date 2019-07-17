@@ -130,20 +130,21 @@ interface IFormState<V> {
 用于描述表单字段状态的模型对象
 
 ```typescript
-interface IFieldState<V> {
-  value: V //字段值
-  valid: boolean //字段是否合法
-  invalid: boolean //字段是否非法
-  visible: boolean //字段显示状态
-  editable: boolean //字段是否可编辑
-  loading: boolean //字段加载状态
-  errors: string[] //字段错误消息集合
-  pristine: boolean //字段是否处于原始态
-  initialValue: V //字段初始值
-  name: string //字段路径
-  path: string[] //字段路径，数组形式
-  props: ISchema //字段附加属性
-  rules: IRuleDescription[] //字段校验规则
+interface IFieldState<V = any>{
+  value       : V                   //字段值
+  valid       : boolean             //字段是否合法
+  invalid     : boolean             //字段是否非法
+  visible     : boolean             //字段显示状态
+  display     : boolean             //字段UI展示状态，与visible的差别是，visible会删值，display不会删值
+  editable    : boolean             //字段是否可编辑
+  loading     : boolean             //字段加载状态
+  errors      : string[]            //字段错误消息集合
+  pristine    : boolean             //字段是否处于原始态
+  initialValue: V                   //字段初始值
+  name        : string              //字段路径
+  path        : string[]            //字段路径，数组形式
+  props       : ISchema             //字段附加属性
+  rules       : IRuleDescription[]  //字段校验规则
 }
 ```
 
