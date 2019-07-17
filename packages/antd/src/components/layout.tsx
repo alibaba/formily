@@ -8,6 +8,18 @@ import cls from 'classnames'
 import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
 
+export interface IFormLayoutProps {
+  className?: string
+  inline?: boolean
+  labelAlign?: 'left' | 'top' | 'inset'
+  wrapperCol?: number
+  labelCol?: number
+  labelTextAlign?: 'left' | 'right'
+  size?: 'small' | 'medium' | 'large'
+  style?: React.CSSProperties
+  children: React.ReactNode
+}
+
 const normalizeCol = (
   col: { span: number; offset?: number } | number,
   defaultValue: { span: number } = { span: 0 }
@@ -75,7 +87,7 @@ export const FormLayout = createVirtualBox(
       </FormLayoutConsumer>
     )
   }
-)
+) as ({ children, ...props }: IFormLayoutProps) => JSX.Element
 
 export const FormItemGrid = createVirtualBox(
   'grid',

@@ -1,8 +1,13 @@
 import React from 'react'
 import { FormConsumer } from '@uform/react'
 import { Button } from 'antd'
+import { BaseButtonProps } from 'antd/lib/button/button'
 
-export const Submit = ({ showLoading, ...props }) => {
+export interface ISubmitProps extends Omit<BaseButtonProps, 'loading'> {
+  showLoading?: boolean
+}
+
+export const Submit = ({ showLoading, ...props }: ISubmitProps) => {
   return (
     <FormConsumer selector={['submitting', 'submitted']}>
       {({ status }) => {
