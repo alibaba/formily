@@ -152,7 +152,7 @@ const App = () => {
         </FormBlock>
         <FormBlock name="dd" title="Block2">
           <Field name="ee" type="date" title="EE" />
-          <Field name="ff" type="number" title="FF" />
+          <Field name="ff" type="number" required title="FF" />
         </FormBlock>
         <FormBlock name="kk" title="Block3">
           <Field
