@@ -2,7 +2,7 @@ import { isFn } from '@uform/types'
 
 type Filter = (value: any, key: string) => boolean
 
-const self: { [key: string]: any } = this || global || window
+const self: { [key: string]: any } = window || global || this
 
 const NATIVE_KEYS = [
   ['Map', (map: any) => new Map(map)],
