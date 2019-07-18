@@ -358,10 +358,7 @@ export class Field implements IField {
     if (!this.hiddenFromParent) {
       this.context.deleteIn(this.name)
     }
-    //如果是卸载节点，会自动遍历树节点逐个卸载
-    if (typeof this.value === 'object') {
-      this.context.updateChildrenVisible(this, false)
-    }
+
   }
 
   public checkState(published = this.publishState()) {
