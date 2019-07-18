@@ -7,6 +7,19 @@ import cls from 'classnames'
 
 import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
+import { TFormLayout } from '../types/components/layout'
+
+export interface IFormLayoutProps {
+  className?: string
+  inline?: boolean
+  labelAlign?: 'left' | 'top' | 'inset'
+  wrapperCol?: number
+  labelCol?: number
+  labelTextAlign?: 'left' | 'right'
+  size?: 'small' | 'medium' | 'large'
+  style?: React.CSSProperties
+  children: React.ReactNode
+}
 
 const normalizeCol = (
   col: { span: number; offset?: number } | number,
@@ -75,7 +88,7 @@ export const FormLayout = createVirtualBox(
       </FormLayoutConsumer>
     )
   }
-)
+) as TFormLayout
 
 export const FormItemGrid = createVirtualBox(
   'grid',
