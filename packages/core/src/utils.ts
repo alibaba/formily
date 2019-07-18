@@ -1,9 +1,17 @@
 import { Path, IFormPathMatcher } from '@uform/types'
-import { isArr, isStr, getPathSegments, toArr, clone, isFn } from '@uform/utils'
+import {
+  isArr,
+  isStr,
+  getPathSegments,
+  toArr,
+  clone,
+  isFn,
+  globalThisPolyfill
+} from '@uform/utils'
 
 export * from '@uform/utils'
 
-const self = window
+const self = globalThisPolyfill
 
 const getScheduler = () => {
   if (!self.requestAnimationFrame) {
