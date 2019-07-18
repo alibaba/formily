@@ -14,9 +14,9 @@ import { Submit } from '@uform/next(antd)'
 
 继承 [next-button](https://fusion.design/component/basic/button#button) /
 [ant-button](https://ant.design/components/button-cn/#API)
-> 原有组件的 loading 属性会被拓展的 showLoading 属性所替代
+> 原有组件的 loading 属性会被扩展的 showLoading 属性所替代
 
-扩展属性
+**扩展属性**
 | 属性名称 | 属性描述 | 属性类型 | 默认值 | 可选值 |
 | ---- | ---- | ---- | --- | --- |
 | showLoading | 主要用于控制Submit组件是否自动展示loading图标，要求SchemaForm的onSubmit回调必须返回Promise对象才会生效。 | `boolean` |  |  |
