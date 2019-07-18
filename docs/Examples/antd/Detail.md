@@ -85,7 +85,7 @@ const App = () => {
             ]}
             required
             title="Select多选"
-            x-props={{ multiple: true, style: { maxWidth: 300 } }}
+            x-props={{ mode: 'multiple', style: { maxWidth: 300 } }}
             name="multiselect"
           />
           <Field
