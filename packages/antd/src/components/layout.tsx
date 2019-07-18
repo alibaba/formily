@@ -7,6 +7,7 @@ import cls from 'classnames'
 
 import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
+import { TFormLayout } from '../types/components/layout'
 
 export interface IFormLayoutProps {
   className?: string
@@ -87,7 +88,7 @@ export const FormLayout = createVirtualBox(
       </FormLayoutConsumer>
     )
   }
-) as ({ children, ...props }: IFormLayoutProps) => JSX.Element
+) as TFormLayout
 
 export const FormItemGrid = createVirtualBox(
   'grid',
