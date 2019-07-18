@@ -1,4 +1,4 @@
-import { IFieldProps } from '../../../../react/lib/type'
+import { IFieldProps } from '@uform/react'
 
 export interface IFormLayoutProps {
   className: string
