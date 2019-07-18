@@ -1,8 +1,9 @@
 import React from 'react'
 import { FormConsumer } from '@uform/react'
 import { Button } from 'antd'
+import { ISubmitProps } from '../types/components/button'
 
-export const Submit = ({ showLoading, ...props }) => {
+export const Submit = ({ showLoading, ...props }: ISubmitProps) => {
   return (
     <FormConsumer selector={['submitting', 'submitted']}>
       {({ status }) => {
