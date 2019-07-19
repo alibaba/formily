@@ -69,13 +69,13 @@ export const publishFormState = state => {
     dirty
   } = state
   return {
-    values,
+    values: clone(values),
     valid,
     invalid,
     errors,
     pristine,
     dirty,
-    initialValues
+    initialValues: clone(initialValues)
   }
 }
 
@@ -108,7 +108,7 @@ export const publishFieldState = state => {
     loading,
     errors: errors.concat(effectErrors),
     pristine,
-    initialValue,
+    initialValue: clone(initialValue),
     name,
     path,
     props,
