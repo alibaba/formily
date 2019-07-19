@@ -52,3 +52,34 @@ test('createFormActions', async () => {
   expect(queryByText('value of aaa field')).toBeVisible()
   expect(queryByText('value of bbb field')).toBeVisible()
 })
+
+test('setFormState', async () => {
+  const actions = createAsyncFormActions()
+  const TestComponent = () => (
+    <SchemaForm
+      actions={actions}
+      effects={$ => {
+        $('onFieldChange', 'aaa').subscribe(({ value }) => {
+          if (value) {
+            actions.setFormState(state => {
+              state.values.bbb = '123'
+            })
+          }
+        })
+      }}
+    >
+      <Field name="aaa" type="string" />
+      <Field name="bbb" type="string" />
+    </SchemaForm>
+  )
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(33)
+  expect(queryByText('123')).toBeNull()
+  await actions.setFieldState('aaa',state=>{
+    state.value = 'hello'
+  })
+  await sleep(33)
+  expect(queryByText('hello')).toBeVisible()
+  expect(queryByText('123')).toBeVisible()
+})
