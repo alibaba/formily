@@ -74,6 +74,7 @@ test('controlled initialValues', async () => {
   await actions.setFieldState('foo', state => {
     state.value = '321'
   })
+  await sleep(33)
   act(() => {
     outerSetState({ foo: '123' })
   })
