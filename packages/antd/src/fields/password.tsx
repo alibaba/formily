@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Input } from 'antd'
+import { InputProps } from 'antd/es/input'
 import { connect, registerFormField } from '@uform/react'
+import { mapStyledProps } from '../utils'
 
 var isNum = function(c) {
   return c >= 48 && c <= 57
@@ -152,6 +154,7 @@ const getStrength = val => {
 
 export interface IPasswordProps {
   value: any
+  size: InputProps['size']
   defaultValue: any
   className: string
   // TODO 不知道下面三个是什么东西
@@ -342,4 +345,9 @@ const Password = styled(
   }
 `
 
-registerFormField('password', connect()(Password))
+registerFormField(
+  'password',
+  connect({
+    getProps: mapStyledProps,
+  })(Password)
+)
