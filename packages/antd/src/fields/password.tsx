@@ -287,7 +287,7 @@ const Password = styled(
       width: 20px;
       height: 20px;
       top: 50%;
-      left: -5px;
+      left: -10px;
       transform: translate(0, -50%);
       opacity: 0.3;
       cursor: pointer;
