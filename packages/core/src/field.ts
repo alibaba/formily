@@ -358,7 +358,6 @@ export class Field implements IField {
     if (!this.hiddenFromParent) {
       this.context.deleteIn(this.name)
     }
-
   }
 
   public checkState(published = this.publishState()) {
