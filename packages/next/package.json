@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "node ./build.js"
   },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
