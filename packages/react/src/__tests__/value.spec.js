@@ -55,7 +55,6 @@ test('controlled initialValues', async () => {
     return (
       <SchemaForm
         actions={actions}
-        onChange={outerSetState}
         initialValues={state}
       >
         <Field name="foo" type="test-string" />
