@@ -85,7 +85,7 @@ test('controlled initialValues', async () => {
   await sleep(33)
 })
 
-test('controlled with hooks', async () => {
+test('controlled with hooks by initalValues', async () => {
   const onChangeHandler = jest.fn()
   const Component = () => {
     const [total, setTotal] = useState(0)
@@ -121,4 +121,43 @@ test('controlled with hooks', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
   expect(onChangeHandler).toHaveBeenCalledTimes(2)
+})
+
+
+test('controlled with hooks by value', async () => {
+  const onChangeHandler = jest.fn()
+  const Component = () => {
+    const [total, setTotal] = useState(0)
+
+    return (
+      <div>
+        <SchemaForm
+          value={{ a3: 123 }}
+          effects={$ => {
+            $('onFieldChange', 'a3').subscribe(onChangeHandler)
+            $('onFieldChange', 'a3').subscribe(state => {
+              act(() => {
+                setTotal(state.value)
+              })
+            })
+          }}
+        >
+          <Field type="string" name="a3" />
+          <FormSlot>
+            <div data-testid="inner-result">Total is:{total}</div>
+          </FormSlot>
+        </SchemaForm>
+        <div data-testid="outer-result">Total is:{total}</div>
+      </div>
+    )
+  }
+
+  const { queryByTestId } = render(<Component />)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
+  await sleep(33)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  expect(onChangeHandler).toHaveBeenCalledTimes(3)
 })
