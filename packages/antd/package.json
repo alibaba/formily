@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "node ./build.js"
+    "build": "tsc --declaration"
   },
   "devDependencies": {
     "antd": "^3.14.1",
