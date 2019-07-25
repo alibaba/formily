@@ -182,10 +182,15 @@ export const StateForm = createHOC((options, Form) => {
 
     public componentDidUpdate(prevProps) {
       const { value, editable, initialValues } = this.props
-      if (this.form.isDirtyValues(value)) {
+      if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
+        this.form.changeValues(value)
+      } else if (this.form.isDirtyValues(value)) {
         this.form.changeValues(value)
       }
-      if (this.form.isDirtyValues(initialValues)) {
+      if (
+        !isEmpty(initialValues) &&
+        !isEqual(initialValues, prevProps.initialValues)
+      ) {
         this.form.initialize({ values: initialValues, initialValues })
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {

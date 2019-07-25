@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { render, act } from '@testing-library/react'
+import { render, act, fireEvent } from '@testing-library/react'
 import SchemaForm, {
   Field,
   registerFormField,
   connect,
-  createFormActions
+  createFormActions,
+  FormSlot
 } from '../index'
 
 registerFormField(
@@ -15,6 +16,11 @@ registerFormField(
       <div data-testid="type-value">{typeof props.value}</div>
     </React.Fragment>
   ))
+)
+
+registerFormField(
+  'string',
+  connect()(props => <input data-testid="test-input" value="" {...props} />)
 )
 
 test('default value', async () => {
@@ -53,10 +59,7 @@ test('controlled initialValues', async () => {
         setState(values)
       })
     return (
-      <SchemaForm
-        actions={actions}
-        initialValues={state}
-      >
+      <SchemaForm actions={actions} initialValues={state} value={state}>
         <Field name="foo" type="test-string" />
       </SchemaForm>
     )
@@ -80,4 +83,42 @@ test('controlled initialValues', async () => {
   await sleep(33)
   expect(getByTestId('value').textContent).toEqual('123')
   await sleep(33)
+})
+
+test('controlled with hooks', async () => {
+  const onChangeHandler = jest.fn()
+  const Component = () => {
+    const [total, setTotal] = useState(0)
+
+    return (
+      <div>
+        <SchemaForm
+          initialValues={{ a3: 123 }}
+          effects={$ => {
+            $('onFieldChange', 'a3').subscribe(onChangeHandler)
+            $('onFieldChange', 'a3').subscribe(state => {
+              act(() => {
+                setTotal(state.value)
+              })
+            })
+          }}
+        >
+          <Field type="string" name="a3" />
+          <FormSlot>
+            <div data-testid="inner-result">Total is:{total}</div>
+          </FormSlot>
+        </SchemaForm>
+        <div data-testid="outer-result">Total is:{total}</div>
+      </div>
+    )
+  }
+
+  const { queryByTestId } = render(<Component />)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
+  await sleep(33)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
+  expect(onChangeHandler).toHaveBeenCalledTimes(2)
 })
