@@ -21,7 +21,8 @@ export const createForm = ({
   subscribes,
   editable,
   effects,
-  onValidateFailed
+  onValidateFailed,
+  traverse
 }: IFormOptions) => {
   let fields = []
   let calculatedValues = caculateSchemaInitialValues(
@@ -49,7 +50,8 @@ export const createForm = ({
     editable,
     effects,
     onValidateFailed,
-    schema
+    schema,
+    traverse
   })
 
   if (isFn(onFormWillInit)) {

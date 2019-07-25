@@ -46,6 +46,7 @@ export interface IFormOptions {
   onFormWillInit?: (form: any) => void
   onReset: (payload: IFormPayload) => void
   onSubmit: (values: any) => Promise<any> | void
+  traverse?: (schema: ISchema) => ISchema
 }
 
 // 通过 createActions 或者 createAsyncActions 创建出来的 actions 接口

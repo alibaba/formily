@@ -41,6 +41,12 @@ export const StateForm = createHOC((options, Form) => {
         subscribes: props.subscribes,
         schema: props.schema,
         editable: props.editable,
+        traverse: schema => {
+          const traverse =
+            schema &&
+            getFormFieldPropsTransformer(schema['x-component'] || schema.type)
+          return traverse ? traverse(schema) : schema
+        },
         onSubmit: this.onSubmitHandler(props),
         onFormChange: this.onFormChangeHandler(props),
         onFieldChange: this.onFieldChangeHandler(props),
@@ -143,12 +149,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public getSchema = path => {
-      const { schema } = this.props
-      const result = getSchemaNodeFromPath(schema, path)
-      const transformer =
-        result &&
-        getFormFieldPropsTransformer(result['x-component'] || result.type)
-      return transformer ? transformer(result) : result
+      return getSchemaNodeFromPath(this.props.schema, path)
     }
 
     public onSubmitHandler = $props => {
