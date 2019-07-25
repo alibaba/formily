@@ -26,6 +26,13 @@ registerFormFieldPropsTransformer('test-string', schema => {
   return schema
 })
 
+registerFormFieldPropsTransformer('test-string', schema => {
+  schema['x-props'] = {
+    extra: 'this is extra props 2'
+  }
+  return schema
+})
+
 test('props traverse', async () => {
 
   const actions = createFormActions()
@@ -40,7 +47,7 @@ test('props traverse', async () => {
 
   const { getByTestId, baseElement } = render(<Component />)
   await sleep(33)
-  expect(getByTestId('extra-props').textContent).toEqual('this is extra props')
+  expect(getByTestId('extra-props').textContent).toEqual('this is extra props 2')
   actions.setFieldState('foo',state=>{
     state.props['x-props'].extra = 'modify props'
   })
