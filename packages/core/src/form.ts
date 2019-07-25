@@ -82,6 +82,8 @@ export class Form {
 
   private batchUpdateField: boolean
 
+  private traverse: (schema: ISchema) => ISchema
+
   constructor(opts: IFormOptions) {
     this.options = defaults<IFormOptions>(opts)
     this.publisher = new Broadcast()
@@ -93,6 +95,7 @@ export class Form {
     this.updateBuffer = new BufferList()
     this.editable = opts.editable
     this.schema = opts.schema || {}
+    this.traverse = opts.traverse
     this.initialize({
       values: this.options.values,
       initialValues: this.options.initialValues
@@ -208,7 +211,7 @@ export class Form {
         value,
         path: options.path,
         initialValue,
-        props: options.props
+        props: this.traverse ? this.traverse(options.props) : options.props
       })
       const field = this.fields[name]
       if (options.onChange) {
