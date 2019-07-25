@@ -135,7 +135,6 @@ const StateField = createHOC((options, Field) => {
         : schemaIs(props, 'array')
         ? value || []
         : value
-
       return visible === false || display === false ? (
         <React.Fragment />
       ) : (
