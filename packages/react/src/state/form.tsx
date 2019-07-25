@@ -27,6 +27,7 @@ export const StateForm = createHOC((options, Form) => {
     private unmounted: boolean
     private initialized: boolean
     private lastFormValues: IFormState
+    private formState: IFormState
     private form: Form
     private unsubscribe: () => void
 
@@ -49,7 +50,7 @@ export const StateForm = createHOC((options, Form) => {
           props.implementActions(this.getActions(form))
         }
       })
-      this.state = {} as IFormState
+      this.formState = {} as IFormState
       this.initialized = true
     }
 
@@ -85,7 +86,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public onFormChangeHandler(props) {
-      let lastState = this.state
+      let lastState = this.formState
       return ({ formState }) => {
         if (this.unmounted) {
           return
@@ -107,7 +108,7 @@ export const StateForm = createHOC((options, Form) => {
         lastState = formState
 
         // eslint-disable-next-line react/no-direct-mutation-state
-        this.state = formState
+        this.formState = formState
 
         if (!this.initialized) {
           this.notify({
@@ -148,19 +149,19 @@ export const StateForm = createHOC((options, Form) => {
           if (promise && promise.then) {
             this.notify({
               type: 'submitting',
-              state: this.state
+              state: this.formState
             })
             promise.then(
               () => {
                 this.notify({
                   type: 'submitted',
-                  state: this.state
+                  state: this.formState
                 })
               },
               error => {
                 this.notify({
                   type: 'submitted',
-                  state: this.state
+                  state: this.formState
                 })
                 throw error
               }
