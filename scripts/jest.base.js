@@ -1,7 +1,7 @@
 const fs = require('fs-extra')
 const path = require('path')
 const packagesDir = path.resolve(process.cwd(), './packages')
-const packages =  fs.readdirSync(packagesDir)
+const packages = fs.readdirSync(packagesDir)
 const alias = packages
   .map(v => path.join(packagesDir, v))
   .filter(v => {
@@ -14,8 +14,6 @@ const alias = packages
       [`@uform/${name}`]: `${_path}/src`
     }
   }, {})
-
-
 module.exports = {
   collectCoverage: true,
   verbose: true,
@@ -29,7 +27,7 @@ module.exports = {
     require.resolve('@testing-library/react/cleanup-after-each'),
     './scripts/global.js'
   ],
-  moduleNameMapper: alias,
+  moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
       babelConfig: true,
