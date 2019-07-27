@@ -103,12 +103,22 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "eslint --ext .ts,.tsx,.js --fix && git add",
+      "pre-commit": "lint-staged",
       "commit-msg": "node ./scripts/validate-commit-msg.js"
     },
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "lint-staged": {
+    "packages/**": [
+      "eslint --ext .ts,.tsx --fix",
+      "git add"
+    ],
+    "scripts/**": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "opencollective": "^1.0.3",
