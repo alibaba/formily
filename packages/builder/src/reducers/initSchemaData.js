@@ -151,12 +151,12 @@ export default (state = {}, action) => {
             _data_[compId],
             id === null || compId === lastId
               ? {
-                active: true,
-                ...propsData
-              }
+                  active: true,
+                  ...propsData
+                }
               : {
-                active: false
-              }
+                  active: false
+                }
           )
 
           // hack

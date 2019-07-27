@@ -273,7 +273,7 @@ test('submit with number name', async () => {
     )
   }
 
-  const { queryByTestId,baseElement,queryByText } = render(<Component />)
+  const { queryByTestId, baseElement, queryByText } = render(<Component />)
   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
   fireEvent.click(queryByText('Click'))
   await sleep(33)

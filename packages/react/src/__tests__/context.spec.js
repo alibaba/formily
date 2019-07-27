@@ -28,7 +28,7 @@ test('submit by form consumer', async () => {
       >
         <Field name="aaa" type="string" />
       </SchemaForm>
-      <FormConsumer selector={['submitting','submitted']}>
+      <FormConsumer selector={['submitting', 'submitted']}>
         {({ status, submit }) => {
           if (status === 'submitting') {
             return <div>Submitting</div>
@@ -42,7 +42,7 @@ test('submit by form consumer', async () => {
 
   const { queryByText } = render(<TestComponent />)
   await sleep(33)
-  act(()=>{
+  act(() => {
     fireEvent.click(queryByText('Submit'))
   })
   await sleep(33)

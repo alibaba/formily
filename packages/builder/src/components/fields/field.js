@@ -9,17 +9,17 @@ const DEFAULT_ICON_URL =
 const wrapFieldItem = fieldItem =>
   !!fieldItem && typeof fieldItem === 'object'
     ? {
-      iconUrl: DEFAULT_ICON_URL,
-      ...fieldItem
-    }
+        iconUrl: DEFAULT_ICON_URL,
+        ...fieldItem
+      }
     : {
-      type: fieldItem,
-      icon: '',
-      iconUrl: DEFAULT_ICON_URL,
-      width: '58',
-      height: '30',
-      title: '自定义组件'
-    }
+        type: fieldItem,
+        icon: '',
+        iconUrl: DEFAULT_ICON_URL,
+        width: '58',
+        height: '30',
+        title: '自定义组件'
+      }
 
 const Box = ({
   addComponentAndEdit,
