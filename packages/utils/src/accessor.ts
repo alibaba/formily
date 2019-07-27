@@ -28,7 +28,12 @@ type Destruct =
 
 type Getter = (obj: any, path: Path, value?: any) => any
 
-type Setter = (obj: any, path: Path, value?: any) => any
+type Setter = (
+  obj: any,
+  path: Path,
+  value?: any,
+  getSchema?: (path: string[] | number[]) => any
+) => any
 
 type HasIn = (obj: any, path: Path) => boolean
 
@@ -381,7 +386,12 @@ const resolveGetIn = (get: Getter) => {
 
 const resolveUpdateIn = (update: Setter, internalGetIn: Getter) => {
   const cache = new Map()
-  return (obj: any, path: Path, value?: any) => {
+  return (
+    obj: any,
+    path: Path,
+    value?: any,
+    getSchema?: (path: string[] | number[]) => any
+  ) => {
     let paths: any = []
     if (!cache.get(path)) {
       paths = parsePaths(path)
@@ -390,11 +400,16 @@ const resolveUpdateIn = (update: Setter, internalGetIn: Getter) => {
       paths = cache.get(path)
     }
     if (!isArr(paths)) {
-      return update(obj, path, value)
+      return update(obj, path, value, getSchema)
     }
     if (paths && paths.length) {
       each(paths, ({ mapPath, key, startPath, endPath }) => {
-        update(obj, startPath.concat(key), internalGetIn(value, endPath))
+        update(
+          obj,
+          startPath.concat(key),
+          internalGetIn(value, endPath),
+          getSchema
+        )
       })
     }
     return obj
@@ -461,7 +476,12 @@ function _getIn(obj: any, path: Path, value: any) {
   return obj
 }
 
-function _setIn(obj: any, path: Path, value: any) {
+function _setIn(
+  obj: any,
+  path: Path,
+  value: any,
+  getSchema?: (path: string[] | number[]) => any
+) {
   if (!isObj(obj) || !path) {
     return
   }
@@ -481,7 +501,20 @@ function _setIn(obj: any, path: Path, value: any) {
       if (obj[p] === undefined && value === undefined) {
         return
       }
-      obj[p] = /^\d+$/.test(pathArr[i + 1 + '']) ? [] : {}
+      if (/^\d+$/.test(pathArr[i + 1 + ''])) {
+        if (getSchema) {
+          const schema = getSchema(pathArr.slice(0, i) as string[])
+          if (schema.type === 'array') {
+            obj[p] = []
+          } else {
+            obj[p] = {}
+          }
+        } else {
+          obj[p] = []
+        }
+      } else {
+        obj[p] = {}
+      }
     }
 
     if (i === pathArr.length - 1) {
