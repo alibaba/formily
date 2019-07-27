@@ -3,7 +3,7 @@ import { GLOBAL_BTN_ICON_URL } from '../../configs/theme'
 import { wrapSubmitSchema, CustomIcon } from '../../utils/util'
 import merge from 'lodash.merge'
 
-export default (props) => {
+export default props => {
   const {
     preview,
     codemode,
@@ -102,10 +102,7 @@ export default (props) => {
     ) : null
 
     const originalBtn = (
-      <UI.Button
-        key={key}
-        {...props}
-      >
+      <UI.Button key={key} {...props}>
         {customIconTpl}
         <span>{title}</span>
       </UI.Button>

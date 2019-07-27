@@ -70,7 +70,7 @@ test('destruct getIn', () => {
   expect(
     isEqual(
       getIn(
-        {  kk: 2, mm: 333  },
+        { kk: 2, mm: 333 },
         `{
         a : {
           b : {

@@ -67,13 +67,10 @@ describe('test actions', () => {
 
   test('showComponentProps action', () => {
     expect(
-      actions.showComponentProps(
-        ['111'],
-        {
-          type: 'string',
-          title: '222'
-        }
-      )
+      actions.showComponentProps(['111'], {
+        type: 'string',
+        title: '222'
+      })
     ).toEqual({
       type: 'SHOW_COMPONENT_PROPS',
       data: {
