@@ -112,11 +112,11 @@
   },
   "lint-staged": {
     "packages/**": [
-      "eslint --ext .ts,.tsx --fix",
+      "npm run lint",
       "git add"
     ],
     "scripts/**": [
-      "eslint --fix",
+      "npm run lint",
       "git add"
     ]
   },
