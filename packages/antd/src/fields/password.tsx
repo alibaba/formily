@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Input } from 'antd'
+import { InputProps } from 'antd/es/input'
 import { connect, registerFormField } from '@uform/react'
+import { mapStyledProps } from '../utils'
 
 var isNum = function(c) {
   return c >= 48 && c <= 57
@@ -150,162 +152,30 @@ const getStrength = val => {
   }
 }
 
-export interface IPasswordProps {
-  value: any
-  defaultValue: any
-  className: string
-  // TODO 不知道下面三个是什么东西
-  checkStrength: any
-  htmlType: any
-  innerAfter: any
-  onChange: (value: any) => void
-}
-
-export interface IPasswordState {
-  value: any
+interface IStrengthProps {
   strength: number
-  eye: boolean
+  className?: string
 }
 
-const Password = styled(
-  class Password extends React.Component<IPasswordProps, IPasswordState> {
-    public state = {
-      value: this.props.value || this.props.defaultValue,
-      strength: 0,
-      eye: false
-    }
-
-    public componentDidUpdate(prevProps) {
-      if (
-        prevProps.value !== this.props.value &&
-        this.props.value !== this.state.value
-      ) {
-        this.setState({
-          value: this.props.value,
-          strength: getStrength(this.props.value)
-        })
-      }
-    }
-
-    public onChangeHandler = e => {
-      const value = e.target.value
-      this.setState(
-        {
-          value,
-          strength: getStrength(value)
-        },
-        () => {
-          if (this.props.onChange) {
-            this.props.onChange(value)
-          }
-        }
-      )
-    }
-
-    public renderStrength() {
-      const { strength } = this.state
-      return (
-        <div className={'password-strength-wrapper'}>
-          <div className={'div-1 div'} />
-          <div className={'div-2 div'} />
-          <div className={'div-3 div'} />
-          <div className={'div-4 div'} />
-          <div
-            className={'password-strength-bar'}
-            style={{
-              clipPath: `polygon(0 0,${strength}% 0,${strength}% 100%,0 100%)`
-            }}
-          />
-        </div>
-      )
-    }
-
-    public switchEye() {
-      return () => {
-        this.setState({
-          eye: !this.state.eye
-        })
-      }
-    }
-
-    public renderEye() {
-      if (!this.state.eye) {
-        return (
-          <img
-            className={'eye'}
-            onClick={this.switchEye()}
-            src={'//img.alicdn.com/tfs/TB1wyXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'}
-          />
-        )
-      } else {
-        return (
-          <img
-            className={'eye'}
-            onClick={this.switchEye()}
-            src={'//img.alicdn.com/tfs/TB1xiXlsVzqK1RjSZFvXXcB7VXa-200-200.svg'}
-          />
-        )
-      }
-    }
-
-    public render() {
-      const {
-        className,
-        checkStrength,
-        value,
-        onChange,
-        htmlType,
-        innerAfter,
-        ...others
-      } = this.props
-
-      return (
-        <div className={className}>
-          <Input
-            type={this.state.eye ? 'text' : 'password'}
-            className={`input-${this.state.eye ? 'text' : 'password'}`}
-            value={this.state.value}
-            onChange={this.onChangeHandler}
-            suffix={this.renderEye()}
-            {...others}
-          />
-          {checkStrength && this.renderStrength()}
-        </div>
-      )
-    }
-  }
+// 校验强度 UI
+const StrengthFC = styled(
+  ({ strength, className }: IStrengthProps) => (
+    <div {...{ className }}>
+      <div className={'password-strength-wrapper'}>
+        <div className={'div-1 div'} />
+        <div className={'div-2 div'} />
+        <div className={'div-3 div'} />
+        <div className={'div-4 div'} />
+        <div
+          className={'password-strength-bar'}
+          style={{
+            clipPath: `polygon(0 0,${strength}% 0,${strength}% 100%,0 100%)`
+          }}
+        />
+      </div>
+    </div>
+  )
 )`
-  .ant-input-prefix,
-  .ant-input-suffix {
-    z-index: 10;
-    right: 20px !important;
-    .eye {
-      position: absolute;
-      max-width: initial;
-      width: 20px;
-      height: 20px;
-      top: 50%;
-      left: -5px;
-      transform: translate(0, -50%);
-      opacity: 0.3;
-      cursor: pointer;
-      transition: all 0.15s ease-in-out;
-      &:hover {
-        opacity: 0.6;
-      }
-    }
-  }
-  .ant-input {
-    width: 100%;
-    position: relative;
-    &.input-password input {
-      font-size: 16px;
-      letter-spacing: 2px;
-    }
-    input {
-      padding-right: 25px;
-    }
-  }
   .password-strength-wrapper {
     background: #e0e0e0;
     margin-bottom: 3px;
@@ -342,4 +212,42 @@ const Password = styled(
   }
 `
 
-registerFormField('password', connect()(Password))
+export interface IPasswordProps extends Omit<InputProps, 'onChange'> {
+  checkStrength: boolean // 是否启用密码强度校验
+  onChange: (value: InputProps['value']) => void
+}
+
+const PasswordFC = (props: Partial<IPasswordProps>) => {
+  const [strength, setStrength] = useState(0)
+
+  const { checkStrength, ...others } = props
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+
+    // 开启才计算
+    checkStrength && setStrength(getStrength(value))
+
+    // 回调
+    props.onChange && props.onChange(value)
+  }
+
+  return (
+    <React.Fragment>
+      <Input.Password
+        {...others}
+        value={props.value || props.defaultValue}
+        onChange={onChangeHandler}
+      />
+
+      {checkStrength && <StrengthFC {...{ strength }} />}
+    </React.Fragment>
+  )
+}
+
+registerFormField(
+  'password',
+  connect({
+    getProps: mapStyledProps,
+  })(PasswordFC)
+)
