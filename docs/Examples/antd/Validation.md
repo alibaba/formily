@@ -138,9 +138,19 @@ import {
   FormLayout,
   createFormActions
 } from '@uform/antd'
-import { Button } from 'antd'
+import { Button, Icon } from 'antd'
 import Printer from '@uform/printer'
 import 'antd/dist/antd.css'
+
+const PasswordPrefixIcon = (
+  <Icon
+    type="lock"
+    style={{
+      color: 'rgba(0, 0, 0, 0.25)',
+      fontSize: 14
+    }}
+  />
+)
 
 const App = () => (
   <Printer>
@@ -175,7 +185,10 @@ const App = () => (
         type="password"
         name="password"
         title="密码"
-        x-props={{ checkStrength: true }}
+        x-props={{
+          checkStrength: true,
+          prefix: PasswordPrefixIcon,
+        }}
         description={
           <ul>
             <li>1. 长度不小于8个</li>
@@ -188,7 +201,10 @@ const App = () => (
         type="password"
         name="confirm"
         title="确认密码"
-        x-props={{ checkStrength: true }}
+        x-props={{
+          checkStrength: true,
+          prefix: PasswordPrefixIcon,
+        }}
         required
       />
       <FormButtonGroup offset={6}>
