@@ -1,5 +1,10 @@
 import React from 'react'
-import SchemaForm, { Field, registerFormField, connect,createFormActions } from '../index'
+import SchemaForm, {
+  Field,
+  registerFormField,
+  connect,
+  createFormActions
+} from '../index'
 import { render, fireEvent } from '@testing-library/react'
 
 registerFormField('string', connect()(props => <div>{props.value}</div>))
@@ -27,7 +32,7 @@ test('visible is false will remove react node', async () => {
 
   await sleep(33)
   expect(queryByText('123321')).toBeNull()
-  await actions.setFieldState('aa',state=>{
+  await actions.setFieldState('aa', state => {
     state.visible = true
   })
   expect(queryByText('123321')).toBeVisible()
@@ -149,7 +154,7 @@ test('visible is false will not validate(include children)', async () => {
   expect(onSubmitHandler).toHaveBeenCalledWith({
     bb: '123'
   })
-  await actions.setFieldState('obj',state=>{
+  await actions.setFieldState('obj', state => {
     state.visible = true
   })
   fireEvent.click(queryByText('Submit'))

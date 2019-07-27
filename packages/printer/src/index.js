@@ -117,9 +117,7 @@ export default class extends React.Component {
         </pre>
         <h1>UForm Usage</h1>
         <pre>
-          <code>
-            {`<SchemaForm schema={${printSchema(schema)}} />`}
-          </code>
+          <code>{`<SchemaForm schema={${printSchema(schema)}} />`}</code>
         </pre>
       </div>
     )
@@ -141,7 +139,7 @@ export default class extends React.Component {
                 <div>
                   <h1>Submit Result</h1>
                   <pre>
-                    <code>{JSON.stringify(values,null,2)}</code>
+                    <code>{JSON.stringify(values, null, 2)}</code>
                   </pre>
                 </div>
               )

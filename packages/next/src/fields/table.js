@@ -14,13 +14,13 @@ const Table = styled(
         <div className="next-table-cell-wrapper">
           {isFn(col.cell)
             ? col.cell(
-              record ? record[col.dataIndex] : undefined,
-              rowIndex,
-              record
-            )
+                record ? record[col.dataIndex] : undefined,
+                rowIndex,
+                record
+              )
             : record
-              ? record[col.dataIndex]
-              : undefined}
+            ? record[col.dataIndex]
+            : undefined}
         </div>
       )
     }
@@ -237,8 +237,8 @@ registerFormField(
                 ? render()
                 : render
               : isFn(otherwise)
-                ? otherwise()
-                : otherwise
+              ? otherwise()
+              : otherwise
           } else {
             return render()
           }

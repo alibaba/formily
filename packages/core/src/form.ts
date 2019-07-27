@@ -227,7 +227,9 @@ export class Form {
   }
 
   public setIn(name: string, value: any) {
-    setIn(this.state.values, name, value)
+    setIn(this.state.values, name, value, path => {
+      return getSchemaNodeFromPath(this.schema, path)
+    })
   }
 
   public setInitialValueIn(name: string, value: any) {

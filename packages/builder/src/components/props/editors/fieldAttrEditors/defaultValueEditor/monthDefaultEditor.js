@@ -27,15 +27,17 @@ const ds = [
 const MonthPickerDefault = props => {
   const { UI } = props
   const { MonthPicker } = UI.DatePicker
-  return <MonthPicker
-    onChange={(v, vStr) => {
-      props.onChange(vStr)
-    }}
-    style={{
-      verticalAlign: 'top',
-      marginLeft: 20
-    }}
-  />
+  return (
+    <MonthPicker
+      onChange={(v, vStr) => {
+        props.onChange(vStr)
+      }}
+      style={{
+        verticalAlign: 'top',
+        marginLeft: 20
+      }}
+    />
+  )
 }
 
 class Editor extends Component {
