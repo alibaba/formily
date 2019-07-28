@@ -20,7 +20,9 @@ registerFormField(
 
 registerFormField(
   'string',
-  connect()(props => <input data-testid="test-input" {...props} value={props.value || ''} />)
+  connect()(props => (
+    <input data-testid="test-input" {...props} value={props.value || ''} />
+  ))
 )
 
 test('default value', async () => {
@@ -123,7 +125,7 @@ test('controlled with hooks by initalValues', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
   expect(onChangeHandler).toHaveBeenCalledTimes(2)
-  await actions.setFieldState('a3',state=>{
+  await actions.setFieldState('a3', state => {
     state.value = '456'
   })
   await sleep(33)
@@ -138,7 +140,6 @@ test('controlled with hooks by initalValues', async () => {
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
 })
-
 
 test('controlled with hooks by static value', async () => {
   const onChangeHandler = jest.fn()
@@ -183,7 +184,7 @@ test('controlled with hooks by static value', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-  await actions.setFieldState('a3',state=>{
+  await actions.setFieldState('a3', state => {
     state.value = '456'
   })
   await sleep(33)
@@ -198,7 +199,6 @@ test('controlled with hooks by static value', async () => {
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
   expect(onChangeHandler).toHaveBeenCalledTimes(5)
 })
-
 
 test('controlled with hooks by dynamic value', async () => {
   const onChangeHandler = jest.fn()
@@ -244,7 +244,7 @@ test('controlled with hooks by dynamic value', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
   expect(onChangeHandler).toHaveBeenCalledTimes(2)
-  await actions.setFieldState('a3',state=>{
+  await actions.setFieldState('a3', state => {
     state.value = '456'
   })
   await sleep(33)
@@ -258,4 +258,28 @@ test('controlled with hooks by dynamic value', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
+})
+
+test('submit with number name', async () => {
+  const onSubmitHandler = jest.fn()
+  const Component = () => {
+    return (
+      <SchemaForm onSubmit={onSubmitHandler}>
+        <Field type="object" name="aaa">
+          <Field name="123" type="string" />
+        </Field>
+        <button type="submit">Click</button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByTestId, baseElement, queryByText } = render(<Component />)
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
+  fireEvent.click(queryByText('Click'))
+  await sleep(33)
+  expect(onSubmitHandler).toHaveBeenCalledWith({
+    aaa: {
+      '123': '333'
+    }
+  })
 })

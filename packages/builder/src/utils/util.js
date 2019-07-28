@@ -26,9 +26,9 @@ export const wrapEnums = enums =>
     typeof item === 'object'
       ? item
       : {
-        value: item,
-        label: item
-      }
+          value: item,
+          label: item
+        }
   )
 
 /**
@@ -50,9 +50,9 @@ export const getCompDetailById = (componentIdList = [], schema = {}) => {
   if (!_componentIdList.length) {
     return properties[_componentId]
       ? {
-        id: _componentId,
-        ...properties[_componentId]
-      }
+          id: _componentId,
+          ...properties[_componentId]
+        }
       : {}
   }
 

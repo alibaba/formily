@@ -76,7 +76,7 @@ test('setFormState', async () => {
   const { queryByText } = render(<TestComponent />)
   await sleep(33)
   expect(queryByText('123')).toBeNull()
-  await actions.setFieldState('aaa',state=>{
+  await actions.setFieldState('aaa', state => {
     state.value = 'hello'
   })
   await sleep(33)

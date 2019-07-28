@@ -15,8 +15,8 @@ export default (state = {}, action) => {
             item,
             comp[name]
               ? {
-                value: comp[name]
-              }
+                  value: comp[name]
+                }
               : {}
           )
         })
@@ -37,8 +37,8 @@ export default (state = {}, action) => {
             item,
             value !== undefined
               ? {
-                value
-              }
+                  value
+                }
               : {}
           )
         })
