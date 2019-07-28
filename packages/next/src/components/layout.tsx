@@ -1,13 +1,16 @@
 import React, { Component, useEffect, useRef } from 'react'
 import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
-import { Row, Col } from '@alifd/next/lib/grid'
+import { Grid } from '@alifd/next'
 import Card from '@alifd/next/lib/card'
 import styled from 'styled-components'
 import cls from 'classnames'
+import { IFormItemGridProps } from '@uform/types'
 
 import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
-import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
+import { IFormCardProps, IFormBlockProps } from '../type'
+
+const { Row, Col } = Grid
 
 const normalizeCol = (
   col: { span: number; offset?: number } | number,

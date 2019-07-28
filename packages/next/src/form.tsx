@@ -3,15 +3,17 @@ import classNames from 'classnames'
 import styled from 'styled-components'
 import { ConfigProvider, Balloon, Icon } from '@alifd/next'
 import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
+import { Grid } from '@alifd/next'
+import { IFormItemProps, IFormProps } from '@uform/types'
 
-import { Row, Col } from '@alifd/next/lib/grid'
 import LOCALE from './locale'
 import { isFn, moveTo, isStr, stringLength } from './utils'
-import { IFormItemProps, IFormProps } from './type'
 
 /**
  * 轻量级Next Form，不包含任何数据管理能力
  */
+
+const { Row, Col } = Grid
 
 export const {
   Provider: FormLayoutProvider,
@@ -183,8 +185,8 @@ export const FormItem = styled(
         schema,
         ...others
       } = this.props
-      /* eslint-enable @typescript-eslint/no-unused-vars */
 
+      /* eslint-enable @typescript-eslint/no-unused-vars */
       const itemClassName = classNames({
         [`${prefix}form-item`]: true,
         [`${prefix}${labelAlign}`]: labelAlign,

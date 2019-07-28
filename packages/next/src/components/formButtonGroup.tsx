@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { Row, Col } from '@alifd/next/lib/grid'
+import { Grid } from '@alifd/next'
 import { FormLayoutConsumer } from '../form'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
+
+const { Row, Col } = Grid
 
 export interface IOffset {
   top: number | string
