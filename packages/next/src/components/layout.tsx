@@ -3,13 +3,21 @@ import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Row, Col } from '@alifd/next/lib/grid'
 import Card from '@alifd/next/lib/card'
-import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import styled from 'styled-components'
 import cls from 'classnames'
 
-const normalizeCol = (col, _default = 0) => {
-  if (!col) return _default
-  return typeof col === 'object' ? col : { span: col }
+import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
+import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
+
+const normalizeCol = (
+  col: { span: number; offset?: number } | number,
+  defaultValue: { span: number } = { span: 0 }
+): { span: number; offset?: number } => {
+  if (!col) {
+    return defaultValue
+  } else {
+    return typeof col === 'object' ? col : { span: col }
+  }
 }
 
 export const FormLayout = createVirtualBox(
@@ -71,7 +79,7 @@ export const FormLayoutItem = props =>
 
 export const FormItemGrid = createVirtualBox(
   'grid',
-  class extends Component {
+  class extends Component<IFormItemGridProps> {
     renderFormItem(children) {
       const { title, help, name, extra, ...props } = this.props
       return React.createElement(
@@ -89,22 +97,23 @@ export const FormItemGrid = createVirtualBox(
     }
 
     renderGrid() {
-      let {
-        children,
-        cols,
+      const {
+        children: rawChildren,
+        cols: rawCols,
         title,
         description,
         help,
         extra,
         ...props
       } = this.props
-      children = toArr(children)
-      cols = toArr(cols).map(col => normalizeCol(col))
+
+      const children = toArr(rawChildren)
+      const cols = toArr(rawCols).map(col => normalizeCol(col))
       const childNum = children.length
 
       if (cols.length < childNum) {
-        let offset = childNum - cols.length
-        let lastSpan =
+        let offset: number = childNum - cols.length
+        let lastSpan: number =
           24 -
           cols.reduce((buf, col) => {
             return (
@@ -114,7 +123,7 @@ export const FormItemGrid = createVirtualBox(
             )
           }, 0)
         for (let i = 0; i < offset; i++) {
-          cols.push(parseInt(offset / lastSpan))
+          cols.push({ span: Math.floor(lastSpan / offset) })
         }
       }
 
@@ -147,7 +156,7 @@ export const FormItemGrid = createVirtualBox(
 export const FormCard = createVirtualBox(
   'card',
   styled(
-    class extends Component {
+    class extends Component<IFormCardProps> {
       static defaultProps = {
         contentHeight: 'auto'
       }
@@ -172,7 +181,7 @@ export const FormCard = createVirtualBox(
 export const FormBlock = createVirtualBox(
   'block',
   styled(
-    class extends Component {
+    class extends Component<IFormBlockProps> {
       static defaultProps = {
         contentHeight: 'auto'
       }
@@ -213,14 +222,14 @@ export const FormTextBox = createVirtualBox(
       children,
       ...props
     }) => {
-      const ref = useRef()
+      const ref: React.RefObject<HTMLDivElement> = useRef()
       const arrChildren = toArr(children)
       const split = text.split('%s')
       let index = 0
       useEffect(() => {
         if (ref.current) {
           const eles = ref.current.querySelectorAll('.text-box-field')
-          eles.forEach(el => {
+          eles.forEach((el: HTMLElement) => {
             const ctrl = el.querySelector(
               '.next-form-item-control>*:not(.next-form-item-space)'
             )

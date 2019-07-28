@@ -10,7 +10,6 @@ import { IFormItemProps, IFormProps } from './type'
 
 /**
  * 轻量级 Form，不包含任何数据管理能力
- *
  */
 
 export const {

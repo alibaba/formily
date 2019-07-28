@@ -1,15 +1,16 @@
 import React from 'react'
-import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
 import classNames from 'classnames'
+import styled from 'styled-components'
 import { ConfigProvider, Balloon, Icon } from '@alifd/next'
+import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
+
 import { Row, Col } from '@alifd/next/lib/grid'
 import LOCALE from './locale'
-import styled from 'styled-components'
 import { isFn, moveTo, isStr, stringLength } from './utils'
+import { IFormItemProps, IFormProps } from './type'
 
 /**
  * 轻量级Next Form，不包含任何数据管理能力
- *
  */
 
 export const {
@@ -38,12 +39,12 @@ const isPopDescription = (description, maxTipsNum = 30) => {
 }
 
 export const FormItem = styled(
-  class FormItem extends React.Component {
+  class FormItem extends React.Component<IFormItemProps> {
     static defaultProps = {
       prefix: 'next-'
     }
 
-    getItemLabel() {
+    private getItemLabel() {
       const {
         id,
         required,
@@ -64,6 +65,7 @@ export const FormItem = styled(
       }
 
       const ele = (
+        // @ts-ignore
         <label htmlFor={id} required={required} key="label">
           {label}
           {label === ' ' ? '' : autoAddColon ? '：' : ''}
@@ -92,7 +94,7 @@ export const FormItem = styled(
       )
     }
 
-    getItemWrapper() {
+    private getItemWrapper() {
       const {
         labelCol,
         wrapperCol,
@@ -146,7 +148,7 @@ export const FormItem = styled(
       )
     }
 
-    renderHelper() {
+    private renderHelper() {
       return (
         <Balloon
           closable={false}
@@ -158,7 +160,7 @@ export const FormItem = styled(
       )
     }
 
-    render() {
+    public render() {
       /* eslint-disable @typescript-eslint/no-unused-vars */
       const {
         className,
@@ -274,7 +276,7 @@ registerFormWrapper(OriginForm => {
   `
 
   return ConfigProvider.config(
-    class Form extends React.Component {
+    class Form extends React.Component<IFormProps> {
       static defaultProps = {
         component: 'form',
         prefix: 'next-',
@@ -293,7 +295,7 @@ registerFormWrapper(OriginForm => {
           if (isFn(onValidateFailed)) {
             onValidateFailed(...args)
           }
-          const container = this.FormRef.current
+          const container = this.FormRef.current as HTMLElement
           if (container) {
             const errors = container.querySelectorAll('.next-form-item-help')
             if (errors && errors.length) {
@@ -318,13 +320,12 @@ registerFormWrapper(OriginForm => {
           component,
           labelCol,
           wrapperCol,
-          getErrorScrollOffset,
-          errorScrollToElement,
           style,
           prefix,
           maxTipsNum,
           ...others
         } = this.props
+
         const formClassName = classNames({
           [`${prefix}form`]: true,
           [`${prefix}inline`]: inline, // 内联
@@ -359,7 +360,8 @@ registerFormWrapper(OriginForm => {
           </FormLayoutProvider>
         )
       }
-    }
+    },
+    {}
   )
 })
 
@@ -380,7 +382,12 @@ registerFieldMiddleware(Field => {
       getSchema,
       required
     } = props
-    if (path.length === 0) return React.createElement(Field, props) // 根节点是不需要包FormItem的
+
+    if (path.length === 0) {
+      // 根节点是不需要包FormItem的
+      return React.createElement(Field, props)
+    }
+
     return React.createElement(
       FormLayoutConsumer,
       {},

@@ -77,7 +77,7 @@ registerFormField(
                   <div className="array-item-operator">
                     {this.renderRemove(index, item)}
                     {this.renderMoveDown(index, item)}
-                    {this.renderMoveUp(index, item)}
+                    {this.renderMoveUp(index)}
                   </div>
                 </div>
               )

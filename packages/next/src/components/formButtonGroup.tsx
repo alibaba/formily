@@ -6,6 +6,13 @@ import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
 
+export interface IOffset {
+  top: number | string
+  right: number | string
+  bottom: number | string
+  left: number | string
+}
+
 const getAlign = align => {
   if (align === 'start' || align === 'end') return align
   if (align === 'left' || align === 'top') return 'flex-start'
@@ -13,7 +20,16 @@ const getAlign = align => {
   return align
 }
 
-const isElementInViewport = (rect, { offset = 0, threshold = 0 } = {}) => {
+const isElementInViewport = (
+  rect: ClientRect,
+  {
+    offset = 0,
+    threshold = 0
+  }: {
+    offset?: IOffset | number
+    threshold?: number
+  } = {}
+): boolean => {
   const { top, right, bottom, left, width, height } = rect
   const intersection = {
     t: bottom,
@@ -28,21 +44,40 @@ const isElementInViewport = (rect, { offset = 0, threshold = 0 } = {}) => {
   }
 
   return (
-    intersection.t >= (offset.top || offset + elementThreshold.y) &&
-    intersection.r >= (offset.right || offset + elementThreshold.x) &&
-    intersection.b >= (offset.bottom || offset + elementThreshold.y) &&
-    intersection.l >= (offset.left || offset + elementThreshold.x)
+    intersection.t >=
+      ((offset as IOffset).top || (offset as number) + elementThreshold.y) &&
+    intersection.r >=
+      ((offset as IOffset).right || (offset as number) + elementThreshold.x) &&
+    intersection.b >=
+      ((offset as IOffset).bottom || (offset as number) + elementThreshold.y) &&
+    intersection.l >=
+      ((offset as IOffset).left || (offset as number) + elementThreshold.x)
   )
 }
 
+export interface IFormButtonGroupProps {
+  sticky?: boolean
+  style?: React.CSSProperties
+  itemStyle?: React.CSSProperties
+  className?: string
+
+  triggerDistance?: any
+  offsetDistance?: any
+  zIndex?: number
+  span?: number
+  offset?: number
+}
+
 export const FormButtonGroup = styled(
-  class FormButtonGroup extends Component {
+  class FormButtonGroup extends Component<IFormButtonGroupProps> {
     static defaultProps = {
       span: 24,
       zIndex: 100
     }
 
-    renderChildren() {
+    private formNode: HTMLElement
+
+    private renderChildren() {
       const { children, itemStyle, offset, span } = this.props
       return (
         <div className="button-group">
@@ -91,7 +126,7 @@ export const FormButtonGroup = styled(
         return (
           <div>
             <FormLayoutConsumer>
-              {({ inline, FormRef } = {}) => {
+              {({ FormRef } = {}) => {
                 if (!FormRef) return
                 return (
                   <Sticky
