@@ -190,9 +190,11 @@ export const mapStyledProps = (
 ) => {
   if (loading) {
     props.state = props.state || 'loading'
-    props.suffix = (
+    props.suffix = props.suffix || (
       <Icon type="loading" style={{ color: 'rgba(0, 0, 0, 0.25)' }} />
     )
+  } else {
+    props.suffix = props.suffix || <span />
   }
   if (size) {
     props.size = size
