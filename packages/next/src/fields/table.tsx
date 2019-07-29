@@ -107,17 +107,20 @@ const Table = styled(
     }
 
     getColumns(children) {
-      const columns = []
-      React.Children.forEach(children, child => {
-        if (React.isValidElement(child as React.ReactElement)) {
-          if (
-            child.type === Column ||
-            child.type.displayName === '@schema-table-column'
-          ) {
-            columns.push(child.props)
+      const columns: IColumnProps[] = []
+      React.Children.forEach<React.ReactElement<IColumnProps, typeof Column>>(
+        children,
+        child => {
+          if (React.isValidElement(child)) {
+            if (
+              child.type === Column ||
+              child.type.displayName === '@schema-table-column'
+            ) {
+              columns.push(child.props)
+            }
           }
         }
-      })
+      )
 
       return columns
     }

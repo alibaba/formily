@@ -30,7 +30,7 @@ export interface IRowProps {
   hidden?: boolean
   className?: string
   fixedWidth?: string | number
-  style?: object
+  style?: React.CSSProperties
   component?: any
   gutter?: string
   align?: string | number
