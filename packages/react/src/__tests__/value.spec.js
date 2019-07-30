@@ -271,7 +271,7 @@ test('controlled with hooks by dynamic value', async () => {
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
 })
 
-test('At componentDidUpdate stage, form will re-cacaluteSchemaInitialValues', async () => {
+test('calculate initialValues when form update', async () => {
   const Component = () => {
     const [, setDisabled] = useState(false)
 
