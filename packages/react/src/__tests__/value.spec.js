@@ -25,6 +25,17 @@ registerFormField(
   ))
 )
 
+registerFormField(
+  'name-string',
+  connect()(props => (
+    <input
+      data-testid={`test-input-${props.name}`}
+      {...props}
+      value={props.value || ''}
+    />
+  ))
+)
+
 test('default value', async () => {
   const Component = () => (
     <SchemaForm defaultValue={{ foo: '' }}>
@@ -260,26 +271,66 @@ test('controlled with hooks by dynamic value', async () => {
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
 })
 
+test('At componentDidUpdate stage, form will re-cacaluteSchemaInitialValues', async () => {
+  const Component = () => {
+    const [, setDisabled] = useState(false)
+
+    return (
+      <div>
+        <SchemaForm
+          initialValues={{ a1: 'a1' }}
+          onSubmit={() => {
+            act(setDisabled)
+          }}
+        >
+          <Field type="name-string" x-props={{ name: 'a1' }} name="a1" />
+          <Field
+            type="name-string"
+            name="a2"
+            x-props={{ name: 'a2' }}
+            default={'a2'}
+          />
+          <Field type="name-string" name="a3" x-props={{ name: 'a3' }} />
+          <button type="submit">Click</button>
+        </SchemaForm>
+      </div>
+    )
+  }
+
+  const { queryByTestId, queryByText } = render(<Component />)
+  expect(queryByTestId('test-input-a1').value).toEqual('a1')
+  expect(queryByTestId('test-input-a2').value).toEqual('a2')
+  expect(queryByTestId('test-input-a3').value).toEqual('')
+
+  fireEvent.click(queryByText('Click'))
+  await sleep(33)
+
+  expect(queryByTestId('test-input-a1').value).toEqual('a1')
+  expect(queryByTestId('test-input-a2').value).toEqual('a2')
+  expect(queryByTestId('test-input-a3').value).toEqual('')
+})
+
 test('submit with number name', async () => {
   const onSubmitHandler = jest.fn()
   const Component = () => {
     return (
       <SchemaForm onSubmit={onSubmitHandler}>
         <Field type="object" name="aaa">
-          <Field name="123" type="string" />
+          <Field name="bbb" type="string" />
         </Field>
         <button type="submit">Click</button>
       </SchemaForm>
     )
   }
 
-  const { queryByTestId, baseElement, queryByText } = render(<Component />)
+  const { queryByTestId, queryByText } = render(<Component />)
   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
   fireEvent.click(queryByText('Click'))
+
   await sleep(33)
   expect(onSubmitHandler).toHaveBeenCalledWith({
     aaa: {
-      '123': '333'
+      bbb: '333'
     }
   })
 })

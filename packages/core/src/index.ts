@@ -78,6 +78,11 @@ export const createForm = ({
   return form
 }
 
-export { setValidationLocale, setValidationLanguage, Form }
+export {
+  setValidationLocale,
+  setValidationLanguage,
+  Form,
+  caculateSchemaInitialValues
+}
 
 export default createForm
