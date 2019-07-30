@@ -113,7 +113,7 @@ export interface IFormItemGridProps {
 
 export interface IFormProps extends IFormConsumerProps {
   className: string
-  style: object
+  style: React.CSSProperties
   layout: string
   children: React.ReactNode
   component: string
@@ -135,7 +135,7 @@ export interface IFormItemProps extends IFormConsumerProps {
   noMinHeight: boolean
   children: React.ReactElement
   className: string
-  style: object
+  style: React.CSSProperties
   type: string
   schema: ISchema
 }
