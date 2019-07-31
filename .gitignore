@@ -6,6 +6,7 @@ lerna-debug.log
 npm-debug.log*
 package-lock.json
 lib/
+esm/
 dist/
 build/
 coverage/
