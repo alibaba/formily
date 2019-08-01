@@ -8,11 +8,12 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
-    "build": "rm -rf packages/*/lib && lerna run build",
+    "build": "rm -rf packages/*/lib packages/*/esm && lerna run build",
     "build:docs": "node ./scripts/docs.js build -i docs -o docs",
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",
     "test": "jest",
+    "test:prod": "cross-env TEST_ENV=production npm run build && jest",
     "test:watch": "jest --watch",
     "coverage": "npm run test -- --coverage",
     "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
@@ -25,7 +26,7 @@
     "version:major": "npm run prevesion && lerna version major --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "release:force": "lerna publish from-package --yes",
     "release": "lerna publish",
-    "lint": "eslint --ext .ts,.tsx,.js \"packages/!(docs)/**/src/**/*.@(ts|tsx)\" \"scripts/**/*.js\" --fix",
+    "lint": "eslint --ext .ts,.tsx,.js \"packages/*/src/**.@(ts|tsx|js)\" \"scripts/**/*.js\" --fix",
     "postinstall": "opencollective-postinstall"
   },
   "devDependencies": {
@@ -43,6 +44,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime-corejs3": "^7.2.0",
     "@testing-library/react": "^8.0.0",
+    "@types/node": "^12.6.8",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
     "all-contributors-cli": "^6.1.2",
@@ -56,6 +58,7 @@
     "chokidar": "^2.1.2",
     "concurrently": "^4.1.0",
     "conventional-commit-types": "^2.2.0",
+    "cross-env": "^5.2.0",
     "cz-conventional-changelog": "^2.1.0",
     "doc-scripts": "^1.7.24",
     "eslint": "^5.16.0",
@@ -93,6 +96,7 @@
     "staged-git-files": "^1.1.2",
     "ts-import-plugin": "^1.6.1",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
     "typescript": "^3.5.2",
     "unified": "^7.1.0",
@@ -109,12 +113,12 @@
     }
   },
   "lint-staged": {
-    "packages/!(docs)/**/*.@(ts|tsx)": [
-      "eslint --ext .ts,.tsx --fix",
+    "packages/**": [
+      "npm run lint",
       "git add"
     ],
-    "scripts/**/*.js": [
-      "eslint --fix",
+    "scripts/**": [
+      "npm run lint",
       "git add"
     ]
   },

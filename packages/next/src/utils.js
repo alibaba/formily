@@ -18,8 +18,8 @@ const Text = styled(props => {
     value = Array.isArray(props.value)
       ? props.value.join(' ~ ')
       : String(
-        props.value === undefined || props.value === null ? '' : props.value
-      )
+          props.value === undefined || props.value === null ? '' : props.value
+        )
   }
   return (
     <div className={`${props.className} ${props.size || ''} text-field`}>

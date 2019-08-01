@@ -1,6 +1,6 @@
 {
   "name": "@uform/core",
-  "version": "0.3.5",
+  "version": "0.3.7",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -26,9 +26,9 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@uform/types": "^0.3.5",
-    "@uform/utils": "^0.3.5",
-    "@uform/validator": "^0.3.5",
+    "@uform/types": "^0.3.7",
+    "@uform/utils": "^0.3.7",
+    "@uform/validator": "^0.3.7",
     "dot-match": "^0.1.18",
     "rxjs": "^6.3.3"
   },

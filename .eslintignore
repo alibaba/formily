@@ -7,4 +7,4 @@ expected
 website
 gh-pages
 weex
-build.js
+build.ts
