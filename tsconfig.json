@@ -1,9 +1,9 @@
 {
-  "preset": "ts-jest",
   "compilerOptions": {
     "esModuleInterop": true,
+    "moduleResolution": "node",
     "jsx": "react",
-    "module": "commonjs",
+    "module": "esnext",
     "target": "es5",
     "allowJs": false,
     "noUnusedLocals": true,
@@ -15,7 +15,7 @@
     "paths": {
       "rxjs/*": [
         "./node_modules/rxjs/*"
-      ],
+      ]
     }
   }
 }

@@ -3,6 +3,7 @@
   "version": "0.3.7",
   "license": "MIT",
   "main": "lib",
+  "module": "esm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
@@ -15,7 +16,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
