@@ -116,6 +116,7 @@ const StateField = createHOC((options, Field) => {
         path,
         schemaPath,
         broadcast,
+        schema,
         form,
         locale,
         getSchema
@@ -135,6 +136,12 @@ const StateField = createHOC((options, Field) => {
         : schemaIs(props, 'array')
         ? value || []
         : value
+      //todo: 重置schema children，这里有点恶心，后面重构的时候需要想下怎么重置更合适
+      if (schema.properties) {
+        props.properties = schema.properties
+      } else if (schema.items) {
+        props.items = schema.items
+      }
       return visible === false || display === false ? (
         <React.Fragment />
       ) : (
