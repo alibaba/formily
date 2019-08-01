@@ -271,7 +271,7 @@ test('controlled with hooks by dynamic value', async () => {
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
 })
 
-test('calculate initialValues when form update', async () => {
+test('invariant initialValues will not be changed when form rerender', async () => {
   const Component = () => {
     const [, setDisabled] = useState(false)
 
@@ -302,6 +302,14 @@ test('calculate initialValues when form update', async () => {
   expect(queryByTestId('test-input-a2').value).toEqual('a2')
   expect(queryByTestId('test-input-a3').value).toEqual('')
 
+  fireEvent.click(queryByText('Click'))
+  await sleep(33)
+
+  expect(queryByTestId('test-input-a1').value).toEqual('a1')
+  expect(queryByTestId('test-input-a2').value).toEqual('a2')
+  expect(queryByTestId('test-input-a3').value).toEqual('')
+
+  // 重新设置 SchemaForm Rerender
   fireEvent.click(queryByText('Click'))
   await sleep(33)
 

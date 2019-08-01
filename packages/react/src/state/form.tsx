@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-eva'
-import { createForm, Form, caculateSchemaInitialValues } from '@uform/core'
+import { createForm, Form } from '@uform/core'
 import { IFormState, IFormActions } from '@uform/types'
 
 import {
@@ -182,23 +182,19 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public componentDidUpdate(prevProps) {
-      const { value, editable, initialValues, schema } = this.props
-      const calculatedInitialValues = caculateSchemaInitialValues(
-        schema,
-        initialValues
-      )
+      const { value, editable, initialValues } = this.props
       if (!isEmpty(value) && !isEqual(value, prevProps.value)) {
         this.form.changeValues(value)
       } else if (this.form.isDirtyValues(value)) {
         this.form.changeValues(value)
       }
       if (
-        !isEmpty(calculatedInitialValues) &&
-        !isEqual(calculatedInitialValues, prevProps.initialValues)
+        !isEmpty(initialValues) &&
+        !isEqual(initialValues, prevProps.initialValues)
       ) {
         this.form.initialize({
           values: initialValues,
-          initialValues: calculatedInitialValues
+          initialValues
         })
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
