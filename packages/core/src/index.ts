@@ -5,7 +5,13 @@ import {
 } from '@uform/validator'
 
 import { Form } from './form'
-import { caculateSchemaInitialValues, isFn, each, isEmpty } from './utils'
+import {
+  caculateSchemaInitialValues,
+  isFn,
+  each,
+  isEmpty,
+  clone
+} from './utils'
 
 export * from './path'
 
@@ -27,7 +33,7 @@ export const createForm = ({
   let fields = []
   let calculatedValues = caculateSchemaInitialValues(
     schema,
-    isEmpty(values) ? initialValues : values,
+    isEmpty(values) ? clone(initialValues) : clone(values),
     ({ name, path, schemaPath }, schema: ISchema, value: any) => {
       fields.push({ name, path, schemaPath, schema, value })
     }
@@ -78,6 +84,11 @@ export const createForm = ({
   return form
 }
 
-export { setValidationLocale, setValidationLanguage, Form }
+export {
+  setValidationLocale,
+  setValidationLanguage,
+  Form,
+  caculateSchemaInitialValues
+}
 
 export default createForm

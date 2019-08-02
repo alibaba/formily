@@ -23,6 +23,9 @@
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
+  "resolutions": {
+    "@types/react": "16.8.23"
+  },
   "dependencies": {
     "@uform/react": "^0.3.7",
     "@uform/utils": "^0.3.7",

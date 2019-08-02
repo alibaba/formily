@@ -100,7 +100,7 @@ const schemaTraverse = (
 export const caculateSchemaInitialValues = (
   schema: ISchema,
   initialValues: any,
-  callback: (pathInfo: IPathInfo, schema: ISchema, value: any) => void
+  callback?: (pathInfo: IPathInfo, schema: ISchema, value: any) => void
 ) => {
   initialValues = initialValues || schema.default || {}
   schemaTraverse(schema, (subSchema, $path, parentPath) => {
@@ -121,7 +121,7 @@ export const caculateSchemaInitialValues = (
       if (!isEmpty(value)) {
         setIn(initialValues, name, value)
       }
-      if (isFn(callback)) {
+      if (callback && isFn(callback)) {
         const newPath = {
           name,
           path,
