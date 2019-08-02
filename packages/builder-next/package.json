@@ -17,6 +17,9 @@
   "scripts": {
     "build": "tsc"
   },
+  "resolutions": {
+    "@types/react": "16.8.23"
+  },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
     "@babel/runtime": "^7.4.4",
