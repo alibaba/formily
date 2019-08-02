@@ -10,6 +10,7 @@ node_js:
   - "11"
 
 before_script:
+  - lerna clean --yes
   - lerna bootstrap --no-ci
 
 script:
