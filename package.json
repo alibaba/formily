@@ -29,6 +29,9 @@
     "lint": "eslint --ext .ts,.tsx,.js \"packages/*/src/**.@(ts|tsx|js)\" \"scripts/**/*.js\" --fix",
     "postinstall": "opencollective-postinstall"
   },
+  "resolutions": {
+    "@types/react": "16.8.23"
+  },
   "devDependencies": {
     "@alifd/next": "^1.14.2",
     "@babel/cli": "^7.2.0",

@@ -192,7 +192,10 @@ export const StateForm = createHOC((options, Form) => {
         !isEmpty(initialValues) &&
         !isEqual(initialValues, prevProps.initialValues)
       ) {
-        this.form.initialize({ values: initialValues, initialValues })
+        this.form.initialize({
+          values: initialValues,
+          initialValues
+        })
       }
       if (!isEmpty(editable) && !isEqual(editable, prevProps.editable)) {
         this.form.changeEditable(editable)
