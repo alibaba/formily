@@ -7,7 +7,13 @@ import SchemaForm, {
   FormPath,
   createFormActions
 } from '../index'
-import { render, fireEvent, act } from '@testing-library/react'
+import {
+  render,
+  fireEvent,
+  act,
+  waitForElement,
+  waitForDomChange
+} from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -264,4 +270,44 @@ test('dynamic update values', async () => {
   fireEvent.change(queryByTestId('test-input'), { target: { value: '12332a' } })
   await sleep(33)
   expect(queryByText('must be number')).toBeVisible()
+})
+
+test('test idcard rules', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm>
+        <Field name="idCard" type="string" x-rules="idcard" />
+      </SchemaForm>
+    )
+  }
+  const { queryByTestId, queryByText } = render(<TestComponent />)
+  // 14位数字
+  const value1 = '12345678912345'
+  // 15位数字
+  const value2 = '123456789123456'
+  // 17位数字
+  const value3 = '12345678912345678'
+  // 17位数字+x
+  const value4 = '12345678912345678x'
+  // 17位数字+X
+  const value5 = '12345678912345678X'
+  // 18位数字
+  const value6 = '123456789123456789'
+  const element = await waitForElement(() => queryByTestId('test-input'))
+  waitForDomChange({ container: element }).then(mutationsList => {
+    const mutation = mutationsList[0]
+    const { value } = mutation.target
+    const errorTipsElement = queryByText('idCard is not an idcard format')
+    if (value === value1 || value === value3) {
+      errorTipsElement.toBeVisible()
+    } else {
+      errorTipsElement.toBeNull()
+    }
+  })
+  fireEvent.change(element, { target: { value: value1 } })
+  fireEvent.change(element, { target: { value: value2 } })
+  fireEvent.change(element, { target: { value: value3 } })
+  fireEvent.change(element, { target: { value: value4 } })
+  fireEvent.change(element, { target: { value: value5 } })
+  fireEvent.change(element, { target: { value: value6 } })
 })
