@@ -9,7 +9,7 @@ English | [简体中文](./README.zh-cn.md)
 <a href="https://app.netlify.com/sites/uform/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
 
-<p align="center" style="color:#666;margin-top:10px;">UFrom - a high-performance React form solution for handling complicated enterprise requirements.</p>
+<p align="center" style="color:#666;margin-top:10px;">UForm - a high-performance React form solution for handling complicated enterprise requirements.</p>
 
 ---
 
