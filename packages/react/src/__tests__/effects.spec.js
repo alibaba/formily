@@ -7,6 +7,7 @@ import SchemaForm, {
   createFormActions,
   FormPath
 } from '../index'
+import { filter } from 'rxjs/operators'
 import { render, fireEvent, act } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
@@ -252,4 +253,28 @@ test('setFieldState from buffer', async () => {
   const { queryByTestId } = render(<TestComponent />)
   await sleep(33)
   expect(queryByTestId('test')).toBeVisible()
+})
+
+test('filter first onFieldChange', async () => {
+  const sub1 = jest.fn()
+  const sub2 = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'aaa')
+            .pipe(filter(state => !state.pristine))
+            .subscribe(sub1)
+          $('onFieldChange', 'aaa').subscribe(sub2)
+        }}
+      >
+        <Field type="string" name="aaa" title="aaa" />
+      </SchemaForm>
+    )
+  }
+
+  render(<TestComponent />)
+  await sleep(33)
+  expect(sub1).toHaveBeenCalledTimes(0)
+  expect(sub2).toHaveBeenCalledTimes(1)
 })
