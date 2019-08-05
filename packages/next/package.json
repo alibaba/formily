@@ -1,8 +1,9 @@
 {
   "name": "@uform/next",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "license": "MIT",
   "main": "lib",
+  "module": "esm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/uform.git"
@@ -15,7 +16,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
@@ -24,9 +25,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.3.6",
-    "@uform/utils": "^0.3.6",
-    "@uform/types": "^0.3.6",
+    "@uform/types": "^0.3.7",
+    "@uform/react": "^0.3.7",
+    "@uform/utils": "^0.3.7",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
     "react-stikky": "^0.1.15",

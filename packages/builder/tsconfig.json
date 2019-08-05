@@ -3,12 +3,9 @@
   "compilerOptions": {
     "outDir": "./lib",
     "declaration": false,
-    "allowJs": true
+    "allowJs": true,
+    "skipLibCheck": true
   },
-  "include": [
-    "./src/**/*.js"
-  ],
-  "exclude": [
-    "./src/__tests__/*"
-  ]
+  "include": ["./src/**/*.js"],
+  "exclude": ["./src/__tests__/*"]
 }
