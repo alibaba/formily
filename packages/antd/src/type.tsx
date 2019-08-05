@@ -31,7 +31,7 @@ export interface IRowProps {
   className?: string
   fixedWidth?: string | number
   style?: React.CSSProperties
-  component?: any
+  component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
   gutter?: string
   align?: string | number
   justify?: string | number
@@ -53,7 +53,7 @@ export interface IColProps extends ColProps {
   fixedOffset?: string | number
   hidden?: boolean
   align?: any
-  component?: any
+  component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
   children?: React.ReactNode
   xxs?: ColSpanType | ColSize
   xs?: ColSpanType | ColSize

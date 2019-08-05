@@ -92,16 +92,6 @@ export enum Size {
   SMALL = 'small'
 }
 
-export interface IFormConsumerProps {
-  labelCol: object | number
-  wrapperCol: object | number
-  autoAddColon: boolean
-  size: Size
-  inline: boolean
-  labelAlign: LabelAlign
-  labelTextAlign: LabelTextAlign
-}
-
 export interface IFormItemGridProps {
   name?: string
   help?: React.ReactNode
@@ -111,31 +101,37 @@ export interface IFormItemGridProps {
   cols?: any
 }
 
-export interface IFormProps extends IFormConsumerProps {
+export interface IFormSharedProps {
+  labelCol: object | number
+  wrapperCol: object | number
+  autoAddColon: boolean
+  size: Size
+  inline: boolean
+  labelAlign: LabelAlign
+  labelTextAlign: LabelTextAlign
   className: string
   style: React.CSSProperties
+  prefix: string
+  maxTipsNum: number
+}
+
+export interface IFormProps extends IFormSharedProps {
   layout: string
   children: React.ReactNode
   component: string
-  prefix: string
-  maxTipsNum: number
   onValidateFailed: () => void
 }
 
-export interface IFormItemProps extends IFormConsumerProps {
+export interface IFormItemProps extends IFormSharedProps {
   id: string
   required: boolean
   label: React.ReactNode
-  prefix: string
   extra: object
-  maxTipsNum: number
   validateState: any
   isTableColItem: boolean
   help: React.ReactNode
   noMinHeight: boolean
   children: React.ReactElement
-  className: string
-  style: React.CSSProperties
   type: string
   schema: ISchema
 }
