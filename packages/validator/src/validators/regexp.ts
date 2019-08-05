@@ -54,7 +54,7 @@ export default {
 
   phone: /^\d{3}-\d{8}$|^\d{4}-\d{7}$|^\d{11}$/,
 
-  idcard: /^\d{15}$|^\d{18}$/,
+  idcard: /^\d{15}$|^\d{17}(\d|x|X)$/,
 
   taodomain: /^(https?\:)?\/\/[a-zA-Z0-9\.\-]+\.(taobao|tmall|alitrip|yao\.95095)(\.daily)?\.(com|net|hk(\/hk)?)/,
 
