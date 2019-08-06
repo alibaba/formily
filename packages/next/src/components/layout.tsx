@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useRef } from 'react'
-import { createVirtualBox } from '@uform/react'
+import { createVirtualBox, createControllerBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { Grid } from '@alifd/next'
 import Card from '@alifd/next/lib/card'
@@ -211,80 +211,87 @@ export const FormBlock = createVirtualBox(
   `
 )
 
-export const FormTextBox = createVirtualBox(
+export const FormTextBox = createControllerBox(
   'text-box',
-  styled(
-    ({
-      title,
-      help,
-      gutter,
-      className,
-      text,
-      name,
-      extra,
-      children,
-      ...props
-    }) => {
-      const ref: React.RefObject<HTMLDivElement> = useRef()
-      const arrChildren = toArr(children)
-      const split = text.split('%s')
-      let index = 0
-      useEffect(() => {
-        if (ref.current) {
-          const eles = ref.current.querySelectorAll('.text-box-field')
-          eles.forEach((el: HTMLElement) => {
-            const ctrl = el.querySelector(
-              '.next-form-item-control>*:not(.next-form-item-space)'
-            )
-            if (ctrl) {
-              el.style.width = getComputedStyle(ctrl).width
-            }
-          })
-        }
-      }, [])
-      const newChildren = split.reduce((buf, item, key) => {
-        return buf.concat(
+  styled(({ children, schema, className }) => {
+    const { title, help, text, name, extra, ...props } = schema['x-props']
+    const ref: React.RefObject<HTMLDivElement> = useRef()
+    const arrChildren = toArr(children)
+    const split = text.split('%s')
+    let index = 0
+    useEffect(() => {
+      if (ref.current) {
+        const eles = ref.current.querySelectorAll('.text-box-field')
+        eles.forEach((el: HTMLElement) => {
+          const ctrl = el.querySelector(
+            '.next-form-item-control>*:not(.next-form-item-space)'
+          )
+          if (ctrl) {
+            el.style.width = getComputedStyle(ctrl).width
+          }
+        })
+      }
+    }, [])
+    const newChildren = split.reduce((buf, item, key) => {
+      return buf.concat(
+        item ? (
           <span key={index++} className="text-box-words">
             {item}
-          </span>,
+          </span>
+        ) : null,
+        arrChildren[key] ? (
           <div key={index++} className="text-box-field">
             {arrChildren[key]}
           </div>
-        )
-      }, [])
+        ) : null
+      )
+    }, [])
 
-      if (!title)
-        return (
-          <div className={className} ref={ref}>
-            {newChildren}
-          </div>
-        )
-
-      return React.createElement(
-        FormLayoutItem,
-        {
-          label: title,
-          noMinHeight: true,
-          id: name,
-          extra,
-          help,
-          ...props
-        },
+    if (!title)
+      return (
         <div className={className} ref={ref}>
           {newChildren}
         </div>
       )
-    }
-  )`
+
+    return React.createElement(
+      FormLayoutItem,
+      {
+        label: title,
+        noMinHeight: true,
+        id: name,
+        extra,
+        help,
+        ...props
+      },
+      <div className={className} ref={ref}>
+        {newChildren}
+      </div>
+    )
+  })`
     display: flex;
     .text-box-words {
       font-size: 12px;
       line-height: 28px;
       color: #333;
+      ${props => {
+        const { editable, schema } = props
+        const { gutter } = schema['x-props']
+        if (!editable) {
+          return {
+            margin: 0
+          }
+        }
+        return {
+          margin: `0 ${gutter === 0 || gutter ? gutter : 10}px`
+        }
+      }}
+    }
+    .text-box-words:nth-child(1) {
+      margin-left: 0;
     }
     .text-box-field {
       display: inline-block;
-      margin: 0 ${props => props.gutter || 10}px;
     }
   `
 )
