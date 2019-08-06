@@ -287,6 +287,9 @@ export const FormTextBox = createControllerBox(
         }
       }}
     }
+    .text-box-words:nth-child(1) {
+      margin-left: 0;
+    }
     .text-box-field {
       display: inline-block;
     }
