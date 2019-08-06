@@ -116,7 +116,7 @@ export interface IConnectOptions {
   valueName?: string
   eventName?: string
   defaultProps?: object
-  getValueFromEvent?: (event?: string, value?: any) => any
+  getValueFromEvent?: (event?: any, value?: any) => any
   getProps?: (
     props: IConnectProps,
     componentProps: IFieldProps

@@ -15,6 +15,7 @@ import './fields/cards'
 import './fields/table'
 import './fields/textarea'
 import './fields/password'
+
 import { mapStyledProps, mapTextComponent } from './utils'
 import { SchemaForm } from '@uform/react'
 export * from '@uform/react'

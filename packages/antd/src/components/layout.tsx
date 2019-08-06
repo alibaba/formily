@@ -1,25 +1,14 @@
 import React, { Component, useEffect, useRef } from 'react'
 import { createVirtualBox } from '@uform/react'
 import { toArr } from '@uform/utils'
+import { IFormItemGridProps } from '@uform/types'
 import { Card, Row, Col } from 'antd'
 import styled from 'styled-components'
 import cls from 'classnames'
 
 import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
-import { IFormItemGridProps, IFormCardProps, IFormBlockProps } from '../type'
-import { TFormLayout } from '../types/components/layout'
-
-export interface IFormLayoutProps {
-  className?: string
-  inline?: boolean
-  labelAlign?: 'left' | 'top' | 'inset'
-  wrapperCol?: number
-  labelCol?: number
-  labelTextAlign?: 'left' | 'right'
-  size?: 'small' | 'medium' | 'large'
-  style?: React.CSSProperties
-  children: React.ReactNode
-}
+import { IFormCardProps, IFormBlockProps } from '../type'
+import { TFormLayout } from '../type'
 
 const normalizeCol = (
   col: { span: number; offset?: number } | number,

@@ -57,6 +57,7 @@ export class Row extends Component<IRowProps> {
 
     let newChildren = toArr(children)
     const gutterNumber = parseInt(gutter, 10)
+
     if (gutterNumber !== 0) {
       const halfGutterString = `${gutterNumber / 2}px`
       others.style = {

@@ -1,33 +1,26 @@
-import { ISchema } from '@uform/utils'
-// import { ColProps } from 'antd/lib/grid/col'
+import { IFieldProps } from '@uform/react'
+import { ColProps } from 'antd/es/col'
+import { CardProps } from 'antd/es/card'
+import { BaseButtonProps } from 'antd/es/button/button'
 
-export enum LabelAlign {
-  TOP = 'top',
-  INSET = 'inset',
-  LEFT = 'left'
+export interface ISubmitProps extends Omit<BaseButtonProps, 'loading'> {
+  showLoading?: boolean
 }
 
-export enum LabelTextAlign {
-  LEFT = 'left',
-  RIGHT = 'right'
-}
-
-export enum Size {
-  LARGE = 'large',
-  MEDIUM = 'medium',
-  SMALL = 'small'
-}
-
-export interface IFormConsumerProps {
-  // labelCol: ColProps | number
-  labelCol: object | number
-  wrapperCol: object | number
-  autoAddColon: boolean
-  size: Size
+export interface IFormLayoutProps {
+  className: string
   inline: boolean
-  labelAlign: LabelAlign
-  labelTextAlign: LabelTextAlign
+  labelAlign: 'left' | 'top' | 'inset'
+  wrapperCol: number
+  labelCol: number
+  labelTextAlign: 'left' | 'right'
+  size: 'small' | 'medium' | 'large'
+  style: React.CSSProperties
+  name: string
+  render: (fieldProps: IFieldProps) => string | JSX.Element | null
 }
+
+export type TFormLayout = React.FunctionComponent<Partial<IFormLayoutProps>>
 
 export interface IRowProps {
   prefix?: string
@@ -35,85 +28,45 @@ export interface IRowProps {
   wrap?: boolean
   fixed?: boolean
   hidden?: boolean
-  gutter?: string
   className?: string
-
-  // TODO
   fixedWidth?: string | number
-  style?: object
+  style?: React.CSSProperties
+  component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
+  gutter?: string
   align?: string | number
   justify?: string | number
-  component?: any
   children: React.ReactNode
 }
 
-export interface IColProps {
+type ColSpanType = number | string
+
+export interface ColSize {
+  span?: ColSpanType
+  offset?: ColSpanType
+}
+
+export interface IColProps extends ColProps {
   prefix: string
   pure?: boolean
   className?: string
-  span?: string | number
-  offset?: string | number
   fixedSpan?: string | number
   fixedOffset?: string | number
   hidden?: boolean
-
-  // TODO
   align?: any
-  xxs?: any
-  xs?: any
-  s?: any
-  m?: any
-  l?: any
-  xl?: any
-  component?: any
+  component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
   children?: React.ReactNode
+  xxs?: ColSpanType | ColSize
+  xs?: ColSpanType | ColSize
+  s?: ColSpanType | ColSize
+  m?: ColSpanType | ColSize
+  l?: ColSpanType | ColSize
+  xl?: ColSpanType | ColSize
 }
 
-export interface IFormItemGridProps {
-  name?: string
-  help?: React.ReactNode
-  extra?: React.ReactNode
-  description?: string
-  title?: string
-  cols?: any
-}
-
-export interface IFormCardProps {
+export interface IFormCardProps extends CardProps {
   className?: string
 }
 
-export interface IFormBlockProps {
+export interface IFormBlockProps extends CardProps {
   className?: string
-}
-
-export interface IFormProps extends IFormConsumerProps {
-  className: string
-  style: object
-  layout: string
-  children: React.ReactNode
-  component: string
-  prefix: string
-  maxTipsNum: number
-  onValidateFailed: () => void
-}
-
-export interface IFormItemProps extends IFormConsumerProps {
-  id: string
-  required: boolean
-  label: React.ReactNode
-  prefix: string
-  extra: object
-  maxTipsNum: number
-
-  // TODO
-  validateState: any
-
-  isTableColItem: boolean
-  help: React.ReactNode
-  noMinHeight: boolean
-  children: React.ReactElement
-  className: string
-  style: object
-  type: string
-  schema: ISchema
 }
