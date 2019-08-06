@@ -7,7 +7,8 @@ import {
   isArr,
   isEqual,
   clone,
-  format
+  format,
+  isEmpty
 } from './utils'
 import { validate } from './validators'
 import { ValidateHandler, IValidateResponse, IFieldMap } from '@uform/types'
@@ -49,9 +50,13 @@ export const runValidation = async (
     ) {
       return
     }
-    if (isEqual(field.lastValidateValue, value) && !forceUpdate) {
-      return
+    if (!forceUpdate) {
+      if (isEmpty(field.lastValidateValue) && isEmpty(value)) return
+      if (isEqual(field.lastValidateValue, value)) {
+        return
+      }
     }
+
     const title = field.props && field.props.title
     const rafId = setTimeout(() => {
       field.loading = true
