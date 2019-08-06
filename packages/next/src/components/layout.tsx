@@ -1,15 +1,26 @@
 import React, { Component, useEffect, useRef } from 'react'
-import { createVirtualBox } from '@uform/react'
+import { createVirtualBox, createControllerBox } from '@uform/react'
 import { toArr } from '@uform/utils'
-import { Row, Col } from '@alifd/next/lib/grid'
+import { Grid } from '@alifd/next'
 import Card from '@alifd/next/lib/card'
-import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
 import styled from 'styled-components'
 import cls from 'classnames'
+import { IFormItemGridProps } from '@uform/types'
 
-const normalizeCol = (col, _default = 0) => {
-  if (!col) return _default
-  return typeof col === 'object' ? col : { span: col }
+import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
+import { IFormCardProps, IFormBlockProps } from '../type'
+
+const { Row, Col } = Grid
+
+const normalizeCol = (
+  col: { span: number; offset?: number } | number,
+  defaultValue: { span: number } = { span: 0 }
+): { span: number; offset?: number } => {
+  if (!col) {
+    return defaultValue
+  } else {
+    return typeof col === 'object' ? col : { span: col }
+  }
 }
 
 export const FormLayout = createVirtualBox(
@@ -71,7 +82,7 @@ export const FormLayoutItem = props =>
 
 export const FormItemGrid = createVirtualBox(
   'grid',
-  class extends Component {
+  class extends Component<IFormItemGridProps> {
     renderFormItem(children) {
       const { title, help, name, extra, ...props } = this.props
       return React.createElement(
@@ -89,22 +100,23 @@ export const FormItemGrid = createVirtualBox(
     }
 
     renderGrid() {
-      let {
-        children,
-        cols,
+      const {
+        children: rawChildren,
+        cols: rawCols,
         title,
         description,
         help,
         extra,
         ...props
       } = this.props
-      children = toArr(children)
-      cols = toArr(cols).map(col => normalizeCol(col))
+
+      const children = toArr(rawChildren)
+      const cols = toArr(rawCols).map(col => normalizeCol(col))
       const childNum = children.length
 
       if (cols.length < childNum) {
-        let offset = childNum - cols.length
-        let lastSpan =
+        let offset: number = childNum - cols.length
+        let lastSpan: number =
           24 -
           cols.reduce((buf, col) => {
             return (
@@ -114,7 +126,7 @@ export const FormItemGrid = createVirtualBox(
             )
           }, 0)
         for (let i = 0; i < offset; i++) {
-          cols.push(parseInt(offset / lastSpan))
+          cols.push({ span: Math.floor(lastSpan / offset) })
         }
       }
 
@@ -147,7 +159,7 @@ export const FormItemGrid = createVirtualBox(
 export const FormCard = createVirtualBox(
   'card',
   styled(
-    class extends Component {
+    class extends Component<IFormCardProps> {
       static defaultProps = {
         contentHeight: 'auto'
       }
@@ -172,7 +184,7 @@ export const FormCard = createVirtualBox(
 export const FormBlock = createVirtualBox(
   'block',
   styled(
-    class extends Component {
+    class extends Component<IFormBlockProps> {
       static defaultProps = {
         contentHeight: 'auto'
       }
@@ -199,80 +211,87 @@ export const FormBlock = createVirtualBox(
   `
 )
 
-export const FormTextBox = createVirtualBox(
+export const FormTextBox = createControllerBox(
   'text-box',
-  styled(
-    ({
-      title,
-      help,
-      gutter,
-      className,
-      text,
-      name,
-      extra,
-      children,
-      ...props
-    }) => {
-      const ref = useRef()
-      const arrChildren = toArr(children)
-      const split = text.split('%s')
-      let index = 0
-      useEffect(() => {
-        if (ref.current) {
-          const eles = ref.current.querySelectorAll('.text-box-field')
-          eles.forEach(el => {
-            const ctrl = el.querySelector(
-              '.next-form-item-control>*:not(.next-form-item-space)'
-            )
-            if (ctrl) {
-              el.style.width = getComputedStyle(ctrl).width
-            }
-          })
-        }
-      }, [])
-      const newChildren = split.reduce((buf, item, key) => {
-        return buf.concat(
+  styled(({ children, schema, className }) => {
+    const { title, help, text, name, extra, ...props } = schema['x-props']
+    const ref: React.RefObject<HTMLDivElement> = useRef()
+    const arrChildren = toArr(children)
+    const split = text.split('%s')
+    let index = 0
+    useEffect(() => {
+      if (ref.current) {
+        const eles = ref.current.querySelectorAll('.text-box-field')
+        eles.forEach((el: HTMLElement) => {
+          const ctrl = el.querySelector(
+            '.next-form-item-control>*:not(.next-form-item-space)'
+          )
+          if (ctrl) {
+            el.style.width = getComputedStyle(ctrl).width
+          }
+        })
+      }
+    }, [])
+    const newChildren = split.reduce((buf, item, key) => {
+      return buf.concat(
+        item ? (
           <span key={index++} className="text-box-words">
             {item}
-          </span>,
+          </span>
+        ) : null,
+        arrChildren[key] ? (
           <div key={index++} className="text-box-field">
             {arrChildren[key]}
           </div>
-        )
-      }, [])
+        ) : null
+      )
+    }, [])
 
-      if (!title)
-        return (
-          <div className={className} ref={ref}>
-            {newChildren}
-          </div>
-        )
-
-      return React.createElement(
-        FormLayoutItem,
-        {
-          label: title,
-          noMinHeight: true,
-          id: name,
-          extra,
-          help,
-          ...props
-        },
+    if (!title)
+      return (
         <div className={className} ref={ref}>
           {newChildren}
         </div>
       )
-    }
-  )`
+
+    return React.createElement(
+      FormLayoutItem,
+      {
+        label: title,
+        noMinHeight: true,
+        id: name,
+        extra,
+        help,
+        ...props
+      },
+      <div className={className} ref={ref}>
+        {newChildren}
+      </div>
+    )
+  })`
     display: flex;
     .text-box-words {
       font-size: 12px;
       line-height: 28px;
       color: #333;
+      ${props => {
+        const { editable, schema } = props
+        const { gutter } = schema['x-props']
+        if (!editable) {
+          return {
+            margin: 0
+          }
+        }
+        return {
+          margin: `0 ${gutter === 0 || gutter ? gutter : 10}px`
+        }
+      }}
+    }
+    .text-box-words:nth-child(1) {
+      margin-left: 0;
     }
     .text-box-field {
       display: inline-block;
-      margin: 0 ${props => props.gutter || 10}px;
     }
   `
 )

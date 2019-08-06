@@ -3,7 +3,7 @@ import { registerFormField, createArrayField } from '@uform/react'
 import { Button, Icon } from '@alifd/next'
 import styled from 'styled-components'
 
-export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
+export const CircleButton = styled['div'].attrs({ className: 'cricle-btn' })`
   ${props =>
     !props.hasText
       ? `width:30px;
@@ -77,7 +77,7 @@ registerFormField(
                   <div className="array-item-operator">
                     {this.renderRemove(index, item)}
                     {this.renderMoveDown(index, item)}
-                    {this.renderMoveUp(index, item)}
+                    {this.renderMoveUp(index)}
                   </div>
                 </div>
               )

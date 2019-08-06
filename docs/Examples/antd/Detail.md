@@ -106,6 +106,7 @@ const App = () => {
         <Field type="date" title="日期选择" name="date" />
         <Field type="daterange" title="日期范围" name="daterange" />
         <Field type="year" title="年份" name="year" />
+        <Field type="week" title="周" name="week" />
         <Field type="time" title="时间" name="time" />
         <Field
           type="upload"
@@ -155,6 +156,7 @@ const App = () => {
                   date: '2018-11-30',
                   daterange: ['2018-11-30', '2019-01-02'],
                   year: '2018',
+                  week: '2019-34th',
                   time: '22:00:00',
                   upload: [
                     {

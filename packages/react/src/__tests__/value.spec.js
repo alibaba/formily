@@ -342,3 +342,30 @@ test('submit with number name', async () => {
     }
   })
 })
+
+test('remove initial value by onFieldChange', async () => {
+  const Component = () => {
+    return (
+      <div>
+        <SchemaForm
+          initialValues={{ a1: 'a1' }}
+          effects={($, { setFieldState }) => {
+            $('onFieldChange', 'a2').subscribe(() => {
+              setFieldState('a1', state => {
+                state.value = undefined
+              })
+            })
+          }}
+        >
+          <Field type="string" name="a1" />
+          <Field type="string" name="a2" />
+        </SchemaForm>
+      </div>
+    )
+  }
+  const { queryAllByTestId } = render(<Component />)
+
+  await sleep(33)
+
+  expect(queryAllByTestId('test-input')[0].value).toEqual('')
+})

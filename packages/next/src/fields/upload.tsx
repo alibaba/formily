@@ -2,6 +2,7 @@ import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
 import { Button, Upload } from '@alifd/next'
+import { UploadProps, CardProps } from '@alifd/next/types/upload'
 const { Card: UploadCard, Dragger: UploadDragger } = Upload
 
 const exts = [
@@ -108,12 +109,16 @@ const normalizeFileList = fileList => {
 const shallowClone = val =>
   isArr(val) ? [...val] : typeof val === 'object' ? { ...val } : val
 
+export interface IUploaderProps extends UploadProps {
+  locale: { [name: string]: any }
+}
+
 registerFormField(
   'upload',
   connect({
     getProps: mapStyledProps
   })(
-    class Uploader extends React.Component {
+    class Uploader extends React.Component<IUploaderProps> {
       static defaultProps = {
         action:
           'https://www.easy-mock.com/mock/5b713974309d0d7d107a74a3/alifd/upload',
@@ -125,7 +130,7 @@ registerFormField(
         value: toArr(this.props.value)
       }
 
-      onChangeHandler = fileList => {
+      onChangeHandler = (fileList?: any) => {
         const { onChange } = this.props
         fileList = toArr(fileList)
         if (
@@ -159,10 +164,11 @@ registerFormField(
 
       render() {
         const { listType, locale, onChange, value, ...others } = this.props
+
         if (listType.indexOf('card') > -1) {
           return (
             <UploadCard
-              {...others}
+              {...(others as CardProps)}
               value={shallowClone(this.state.value)}
               onChange={this.onChangeHandler}
               listType="card"
@@ -171,6 +177,7 @@ registerFormField(
         }
         if (listType.indexOf('dragger') > -1) {
           return (
+            // @ts-ignore 感觉是 next 那边对于 Dragger 的 props 定义错了
             <UploadDragger
               {...others}
               value={shallowClone(this.state.value)}

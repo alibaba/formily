@@ -293,15 +293,16 @@ test('test idcard rules', async () => {
   const value5 = '12345678912345678X'
   // 18位数字
   const value6 = '123456789123456789'
+
   const element = await waitForElement(() => queryByTestId('test-input'))
   waitForDomChange({ container: element }).then(mutationsList => {
     const mutation = mutationsList[0]
     const { value } = mutation.target
     const errorTipsElement = queryByText('idCard is not an idcard format')
     if (value === value1 || value === value3) {
-      errorTipsElement.toBeVisible()
+      expect(errorTipsElement).toBeVisible()
     } else {
-      errorTipsElement.toBeNull()
+      expect(errorTipsElement).toBeNull()
     }
   })
   fireEvent.change(element, { target: { value: value1 } })
@@ -310,4 +311,39 @@ test('test idcard rules', async () => {
   fireEvent.change(element, { target: { value: value4 } })
   fireEvent.change(element, { target: { value: value5 } })
   fireEvent.change(element, { target: { value: value6 } })
+})
+
+test('dynamic switch visible', async () => {
+  const TestComponent = () => {
+    return (
+      <SchemaForm
+        initialValues={{ aa: '', bb: '' }}
+        effects={($, { setFieldState }) => {
+          $('onFieldChange', 'aa').subscribe(({ value }) => {
+            setFieldState('bb', state => {
+              state.visible = value == 'aa'
+            })
+          })
+        }}
+      >
+        <Field name="aa" type="string" />
+        <Field name="bb" type="string" required />
+      </SchemaForm>
+    )
+  }
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'aa' }
+  })
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'bb' }
+  })
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'aa' }
+  })
+  await sleep(33)
+  expect(queryByText('bb is required')).toBeNull()
 })

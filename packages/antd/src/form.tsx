@@ -1,16 +1,15 @@
 import React from 'react'
-import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
 import classNames from 'classnames'
 import { Row, Col, Popover, Icon } from 'antd'
 import styled from 'styled-components'
+import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
+import { IFormItemProps, IFormProps } from '@uform/types'
 
 import LOCALE from './locale'
 import { isFn, moveTo, isStr, stringLength } from './utils'
-import { IFormItemProps, IFormProps } from './type'
 
 /**
  * 轻量级 Form，不包含任何数据管理能力
- *
  */
 
 export const {

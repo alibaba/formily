@@ -132,6 +132,7 @@ export class Field implements IField {
     }
 
     if (
+      this.pristine &&
       !isEmpty(this.initialValue) &&
       ((isEmpty(this.value) && this.visible) ||
         (this.removed && !this.shownFromParent))

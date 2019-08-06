@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect, registerFormField } from '@uform/react'
 import { Input } from '@alifd/next'
+import { InputProps } from '@alifd/next/types/input'
 import styled from 'styled-components'
 import { mapStyledProps } from '../utils'
 
@@ -149,15 +150,19 @@ const getStrength = val => {
   }
 }
 
+export interface IPasswordProps extends InputProps {
+  checkStrength: boolean
+}
+
 const Password = styled(
-  class Password extends React.Component {
+  class Password extends React.Component<IPasswordProps> {
     state = {
       value: this.props.value || this.props.defaultValue,
       strength: 0,
       eye: false
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps) {
       if (
         prevProps.value !== this.props.value &&
         this.props.value !== this.state.value
@@ -169,7 +174,7 @@ const Password = styled(
       }
     }
 
-    onChangeHandler = value => {
+    onChangeHandler = (value, e) => {
       this.setState(
         {
           value,
@@ -177,7 +182,7 @@ const Password = styled(
         },
         () => {
           if (this.props.onChange) {
-            this.props.onChange(value)
+            this.props.onChange(value, e)
           }
         }
       )
@@ -239,6 +244,7 @@ const Password = styled(
         innerAfter,
         ...others
       } = this.props
+
       return (
         <div className={className}>
           <Input

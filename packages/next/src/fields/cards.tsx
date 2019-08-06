@@ -12,13 +12,13 @@ const FormCardsField = styled(
         <Fragment>
           {this.renderRemove(index, item)}
           {this.renderMoveDown(index, item)}
-          {this.renderMoveUp(index, item)}
+          {this.renderMoveUp(index)}
           {this.renderExtraOperations(index)}
         </Fragment>
       )
     }
 
-    renderEmpty(title) {
+    renderCardEmpty(title) {
       return (
         <Card
           style={this.getProps('style')}
@@ -26,7 +26,7 @@ const FormCardsField = styled(
           className="card-list"
           contentHeight="auto"
         >
-          {super.renderEmpty()}
+          {this.renderEmpty()}
         </Card>
       )
     }
@@ -45,7 +45,8 @@ const FormCardsField = styled(
         renderMoveUp,
         renderOperations,
         ...others
-      } = this.getProps() || {}
+      } = this.getProps() || ({} as any)
+
       /* eslint-enable @typescript-eslint/no-unused-vars */
       return (
         <div
@@ -71,7 +72,7 @@ const FormCardsField = styled(
               </Card>
             )
           })}
-          {value.length === 0 && this.renderEmpty(title)}
+          {value.length === 0 && this.renderCardEmpty(title)}
           <div className="addition-wrapper">
             {value.length > 0 && this.renderAddition()}
           </div>

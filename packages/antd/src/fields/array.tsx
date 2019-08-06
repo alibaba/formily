@@ -3,7 +3,7 @@ import { registerFormField, createArrayField } from '@uform/react'
 import { Icon } from 'antd'
 import styled, { css } from 'styled-components'
 
-export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
+export const CircleButton = styled['div'].attrs({ className: 'cricle-btn' })`
   ${props => (!props.hasText ? 'width:30px; height:30px;' : '')}
   margin-right:10px;
   border-radius: ${props => (!props.hasText ? '100px' : 'none')};
@@ -25,7 +25,7 @@ export const CircleButton = styled.div.attrs({ className: 'cricle-btn' })`
 }
 `
 
-export const TextButton = styled.div.attrs({
+export const TextButton = styled['div'].attrs({
   className: 'ant-btn-text'
 })`
   display: inline-block;

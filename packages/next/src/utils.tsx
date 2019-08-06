@@ -3,6 +3,8 @@ import { Select } from '@alifd/next'
 import styled from 'styled-components'
 import { isFn } from '@uform/utils'
 import MoveTo from 'moveto'
+import { IConnectProps, IFieldProps } from '@uform/react'
+
 export * from '@uform/utils'
 
 const Text = styled(props => {
@@ -54,7 +56,10 @@ export const acceptEnum = component => {
   }
 }
 
-export const mapStyledProps = (props, { loading, size, errors }) => {
+export const mapStyledProps = (
+  props: IConnectProps,
+  { loading, size, errors }: IFieldProps
+) => {
   if (loading) {
     props.state = props.state || 'loading'
   } else if (errors && errors.length) {
@@ -65,7 +70,14 @@ export const mapStyledProps = (props, { loading, size, errors }) => {
   }
 }
 
-export const mapTextComponent = (Target, props, { editable, name }) => {
+export const mapTextComponent = (
+  Target: React.ComponentClass,
+  props,
+  {
+    editable,
+    name
+  }: { editable: boolean | ((name: string) => boolean); name: string }
+): React.ComponentClass => {
   if (editable !== undefined) {
     if (isFn(editable)) {
       if (!editable(name)) {

@@ -33,6 +33,15 @@ ReactDOM.render(
       onSubmit={v => console.log(v)}
       actions={actions}
       labelCol={7}
+      initialValues={{
+        upload3:[{
+          downloadURL:
+            "//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png",
+          imgURL:
+            "//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png",
+          name: "doc.svg"
+        }]
+      }}
       wrapperCol={12}
       effects={($, { setFieldState }) => {
         $('onFormMount').subscribe(() => {
@@ -80,6 +89,7 @@ ReactDOM.render(
         name="daterange"
       />
       <Field type="year" title="年份" name="year" />
+      <Field type="week" title="周" name="week" />
       <Field type="time" title="时间" name="time" />
       <Field
         type="upload"
