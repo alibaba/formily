@@ -1,8 +1,13 @@
 import React from 'react'
 import { FormConsumer } from '@uform/react'
 import { Button } from '@alifd/next'
+import { ButtonProps } from '@alifd/next/types/button'
 
-export const Submit = ({ showLoading, ...props }) => {
+export interface ISubmitProps extends Omit<ButtonProps, 'loading'> {
+  showLoading?: boolean
+}
+
+export const Submit = ({ showLoading, ...props }: ISubmitProps) => {
   return (
     <FormConsumer selector={['submitting', 'submitted']}>
       {({ status }) => {
@@ -26,10 +31,10 @@ Submit.defaultProps = {
   showLoading: true
 }
 
-export const Reset = props => {
+export const Reset = (props: ButtonProps) => {
   return (
     <FormConsumer>
-      {({ status, reset }) => {
+      {({ reset }) => {
         return (
           <Button {...props} onClick={reset}>
             {props.children || '重置'}

@@ -7,9 +7,29 @@ import styled from 'styled-components'
 /**
  * 轻量级Table，用next table实在太重了
  **/
+
+export interface IColumnProps {
+  title?: string
+  dataIndex?: string
+  width?: string | number
+  cell: (item?: any, index?: number) => React.ReactElement
+}
+
+export interface ITableProps {
+  className?: string
+  dataSource: any[]
+}
+
+class Column extends Component<IColumnProps> {
+  static displayName = '@schema-table-column'
+  render() {
+    return this.props.children
+  }
+}
+
 const Table = styled(
-  class Table extends Component {
-    renderCell({ record, col, rowIndex, colIndex }) {
+  class Table extends Component<ITableProps> {
+    renderCell({ record, col, rowIndex }) {
       return (
         <div className="next-table-cell-wrapper">
           {isFn(col.cell)
@@ -54,8 +74,7 @@ const Table = styled(
                           {this.renderCell({
                             record,
                             col,
-                            rowIndex,
-                            colIndex
+                            rowIndex
                           })}
                         </td>
                       )
@@ -88,17 +107,20 @@ const Table = styled(
     }
 
     getColumns(children) {
-      const columns = []
-      React.Children.forEach(children, child => {
-        if (React.isValidElement(child)) {
-          if (
-            child.type === Column ||
-            child.type.displayName === '@schema-table-column'
-          ) {
-            columns.push(child.props)
+      const columns: IColumnProps[] = []
+      React.Children.forEach<React.ReactElement<IColumnProps, typeof Column>>(
+        children,
+        child => {
+          if (React.isValidElement(child)) {
+            if (
+              child.type === Column ||
+              child.type.displayName === '@schema-table-column'
+            ) {
+              columns.push(child.props)
+            }
           }
         }
-      })
+      )
 
       return columns
     }
@@ -216,20 +238,15 @@ const Table = styled(
   }
 `
 
-class Column extends Component {
-  static displayName = '@schema-table-column'
-  render() {
-    return this.props.children
-  }
-}
-
 registerFormField(
   'table',
   styled(
     class extends ArrayField {
       createFilter(key, payload) {
         const { schema } = this.props
-        const columnFilter = schema['x-props'] && schema['x-props'].columnFilter
+        const columnFilter: (key: string, payload: any) => boolean =
+          schema['x-props'] && schema['x-props'].columnFilter
+
         return (render, otherwise) => {
           if (isFn(columnFilter)) {
             return columnFilter(key, payload)
@@ -300,8 +317,8 @@ registerFormField(
                       <div className="array-item-operator">
                         {this.renderRemove(index, item)}
                         {this.renderMoveDown(index, item)}
-                        {this.renderMoveUp(index, item)}
-                        {this.renderExtraOperations(index, item)}
+                        {this.renderMoveUp(index)}
+                        {this.renderExtraOperations(index)}
                       </div>
                     )
                   }}

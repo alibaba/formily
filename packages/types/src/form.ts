@@ -73,3 +73,65 @@ export interface IFormPathMatcher {
   hasWildcard: boolean
   pattern: string
 }
+
+// next & antd 需要用到的
+export enum LabelAlign {
+  TOP = 'top',
+  INSET = 'inset',
+  LEFT = 'left'
+}
+
+export enum LabelTextAlign {
+  LEFT = 'left',
+  RIGHT = 'right'
+}
+
+export enum Size {
+  LARGE = 'large',
+  MEDIUM = 'medium',
+  SMALL = 'small'
+}
+
+export interface IFormItemGridProps {
+  name?: string
+  help?: React.ReactNode
+  extra?: React.ReactNode
+  description?: string
+  title?: string
+  cols?: any
+}
+
+export interface IFormSharedProps {
+  labelCol: object | number
+  wrapperCol: object | number
+  autoAddColon: boolean
+  size: Size
+  inline: boolean
+  labelAlign: LabelAlign
+  labelTextAlign: LabelTextAlign
+  className: string
+  style: React.CSSProperties
+  prefix: string
+  maxTipsNum: number
+}
+
+export interface IFormProps extends IFormSharedProps {
+  layout: string
+  children: React.ReactNode
+  component: string
+  onValidateFailed: () => void
+}
+
+export interface IFormItemProps extends IFormSharedProps {
+  id: string
+  required: boolean
+  label: React.ReactNode
+  extra: object
+  validateState: any
+  isTableColItem: boolean
+  help: React.ReactNode
+  noMinHeight: boolean
+  children: React.ReactElement
+  type: string
+  schema: ISchema
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormConsumer } from '@uform/react'
 import { Button } from 'antd'
-import { ISubmitProps } from '../types/components/button'
+import { ISubmitProps } from '../type'
 
 export const Submit = ({ showLoading, ...props }: ISubmitProps) => {
   return (
