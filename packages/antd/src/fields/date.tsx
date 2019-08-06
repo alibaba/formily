@@ -13,8 +13,8 @@ import {
 
 const {
   RangePicker: AntRangePicker,
-  MonthPicker: AntMonthPicker,
-  WeekPicker: AntWeekPicker
+  WeekPicker: AntWeekPicker,
+  MonthPicker: AntMonthPicker
 } = AntDatePicker
 
 class AntYearPicker extends React.Component {
