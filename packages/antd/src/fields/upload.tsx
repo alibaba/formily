@@ -188,9 +188,26 @@ registerFormField(
         const { onChange } = this.props
         fileList = toArr(fileList)
         if (
-          fileList.every(
-            file => file.status === 'done' || file.imgURL || file.downloadURL
-          ) &&
+          fileList.every(file => {
+            if (
+              file.status === 'done' ||
+              file.imgURL ||
+              file.downloadURL ||
+              file.url ||
+              file.thumbUrl
+            )
+              return true
+            if (file.response) {
+              if (
+                file.response.imgURL ||
+                file.response.downloadURL ||
+                file.response.url ||
+                file.response.thumbUrl
+              )
+                return true
+            }
+            return false
+          }) &&
           fileList.length
         ) {
           fileList = normalizeFileList(fileList)
