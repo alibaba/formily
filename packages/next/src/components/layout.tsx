@@ -244,12 +244,16 @@ export const FormTextBox = createVirtualBox(
       }, [])
       const newChildren = split.reduce((buf, item, key) => {
         return buf.concat(
-          <span key={index++} className="text-box-words">
-            {item}
-          </span>,
-          <div key={index++} className="text-box-field">
-            {arrChildren[key]}
-          </div>
+          item ? (
+            <span key={index++} className="text-box-words">
+              {item}
+            </span>
+          ) : null,
+          arrChildren[key] ? (
+            <div key={index++} className="text-box-field">
+              {arrChildren[key]}
+            </div>
+          ) : null
         )
       }, [])
 
@@ -281,10 +285,10 @@ export const FormTextBox = createVirtualBox(
       font-size: 12px;
       line-height: 28px;
       color: #333;
+      margin: 0 ${({ gutter }) => (gutter === 0 || gutter ? gutter : 10)}px;
     }
     .text-box-field {
       display: inline-block;
-      margin: 0 ${props => props.gutter || 10}px;
     }
   `
 )
