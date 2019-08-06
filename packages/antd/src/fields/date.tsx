@@ -13,6 +13,7 @@ import {
 
 const {
   RangePicker: AntRangePicker,
+  WeekPicker: AntWeekPicker,
   MonthPicker: AntMonthPicker
 } = AntDatePicker
 
@@ -25,6 +26,7 @@ class AntYearPicker extends React.Component {
 const DatePicker = StateLoading(AntDatePicker)
 const RangePicker = StateLoading(AntRangePicker)
 const MonthPicker = StateLoading(AntMonthPicker)
+const WeekPicker = StateLoading(AntWeekPicker)
 const YearPicker = StateLoading(AntYearPicker)
 
 const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
@@ -104,6 +106,20 @@ registerFormField(
     ),
     getComponent: mapTextComponent
   })(MonthPicker)
+)
+
+registerFormField(
+  'week',
+  connect({
+    getValueFromEvent(_, value) {
+      return transformMoment(value)
+    },
+    getProps: compose(
+      mapStyledProps,
+      mapMomentValue
+    ),
+    getComponent: mapTextComponent
+  })(WeekPicker)
 )
 
 registerFormField(
