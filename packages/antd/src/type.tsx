@@ -1,26 +1,32 @@
-import { IFieldProps } from '@uform/react'
 import { ColProps } from 'antd/es/col'
 import { CardProps } from 'antd/es/card'
 import { BaseButtonProps } from 'antd/es/button/button'
+
+export type TTextAlign = 'left' | 'right'
+export type TSize = 'small' | 'medium' | 'large'
+export type TTextEl = string | JSX.Element | null
 
 export interface ISubmitProps extends Omit<BaseButtonProps, 'loading'> {
   showLoading?: boolean
 }
 
 export interface IFormLayoutProps {
-  className: string
-  inline: boolean
-  labelAlign: 'left' | 'top' | 'inset'
-  wrapperCol: number
-  labelCol: number
-  labelTextAlign: 'left' | 'right'
-  size: 'small' | 'medium' | 'large'
-  style: React.CSSProperties
-  name: string
-  render: (fieldProps: IFieldProps) => string | JSX.Element | null
+  className?: string
+  inline?: boolean
+  labelAlign?: 'left' | 'top' | 'inset'
+  wrapperCol?: number
+  labelCol?: number
+  labelTextAlign?: TTextAlign
+  size?: TSize
+  style?: React.CSSProperties
 }
 
-export type TFormLayout = React.FunctionComponent<Partial<IFormLayoutProps>>
+export interface IFormItemGridProps {
+  cols?: Array<number | { span: number; offset: number }>
+  description?: TTextEl
+  gutter?: number
+  title?: TTextEl
+}
 
 export interface IRowProps {
   prefix?: string
@@ -69,4 +75,13 @@ export interface IFormCardProps extends CardProps {
 
 export interface IFormBlockProps extends CardProps {
   className?: string
+}
+
+export type TFormCardOrFormBlockProps = Omit<CardProps, 'children'>
+
+export interface IFormTextBox {
+  text?: string
+  title?: TTextEl
+  description?: TTextEl
+  gutter?: number
 }
