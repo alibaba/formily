@@ -126,7 +126,7 @@ export interface IFormItemProps extends IFormSharedProps {
   id: string
   required: boolean
   label: React.ReactNode
-  extra: object
+  extra: React.ReactNode
   validateState: any
   isTableColItem: boolean
   help: React.ReactNode
