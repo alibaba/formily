@@ -27,7 +27,7 @@ const normalizeCol = (
   }
 }
 
-export const FormLayoutItem: React.SFC<Partial<IFormItemProps>> = function(
+export const FormLayoutItem: React.FC<Partial<IFormItemProps>> = function(
   props
 ) {
   return React.createElement(
@@ -110,7 +110,7 @@ export const FormItemGrid = createVirtualBox<IFormItemGridPropsAlias>(
           extra,
           help,
           ...props
-        },
+        } as IFormItemGridProps,
         children
       )
     }
