@@ -13,6 +13,10 @@ export * from '@uform/utils'
 
 const self = globalThisPolyfill
 
+const compactScheduler = ([raf, caf, priority]) => {
+  return [callback => raf(priority, callback), caf]
+}
+
 const getScheduler = () => {
   if (!self.requestAnimationFrame) {
     return [self.setTimeout, self.clearTimeout]
@@ -20,10 +24,11 @@ const getScheduler = () => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const scheduler = require('scheduler')
-    return [
+    return compactScheduler([
       scheduler.scheduleCallback || scheduler.unstable_scheduleCallback,
-      scheduler.cancelCallback || scheduler.unstable_cancelCallback
-    ]
+      scheduler.cancelCallback || scheduler.unstable_cancelCallback,
+      scheduler.NormalPriority || scheduler.unstable_NormalPriority
+    ])
   } catch (err) {
     return [self.requestAnimationFrame, self.cancelAnimationFrame]
   }
