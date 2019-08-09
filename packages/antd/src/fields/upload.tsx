@@ -259,7 +259,12 @@ registerFormField(
               onRemove={this.onRemoveHandler}
               // TODO image 类型是跟 picture 一样 ?
               listType={listType.indexOf('image') > -1 ? 'picture' : 'text'}
-            />
+            >
+              <p className={'ant-upload-drag-icon'}>
+                <Icon type={'inbox'} />
+              </p>
+              <p className={'ant-upload-text'}>拖拽上传</p>
+            </UploadDragger>
           )
         }
         return (
