@@ -13,8 +13,8 @@ export * from '@uform/utils'
 
 const self = globalThisPolyfill
 
-const compactScheduler = ([raf, caf, priority], compact: boolean) => {
-  return [compact ? callback => raf(priority, callback) : raf, caf]
+const compactScheduler = ([raf, caf, priority], fresh: boolean) => {
+  return [fresh ? callback => raf(priority, callback) : raf, caf]
 }
 
 const getScheduler = () => {
