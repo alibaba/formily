@@ -14,7 +14,7 @@ export * from '@uform/utils'
 const self = globalThisPolyfill
 
 const bridgeScheduler = ([raf, caf, priority]) => {
-  return [callback => raf(priority, callback), callback => caf(callback)]
+  return [callback => raf(priority, callback), caf]
 }
 
 const getScheduler = () => {
