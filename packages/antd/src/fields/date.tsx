@@ -119,7 +119,7 @@ registerFormField(
       props => {
         if (isStr(props.value) && props.value) {
           const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || ['', '', '']
-          props.value = moment(parsed[1], 'YYYY').add(parsed[2], 'weeks')
+          props.value = moment(parsed[1], 'YYYY').add(parsed[2] - 1, 'weeks')
         }
         return props
       }
