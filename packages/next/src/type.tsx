@@ -49,6 +49,33 @@ export interface ISchemaFormProps<V = unknown> {
   onValidateFailed?: (fieldErrors: IFieldError[]) => void
 }
 
+export interface IFormLayoutProps {
+  className?: string
+  inline?: boolean
+  labelAlign?: TLabelAlign
+  wrapperCol?: number
+  labelCol?: number
+  labelTextAlign?: TTextAlign
+  size?: TSize
+  style?: React.CSSProperties
+}
+
+export interface IFormItemGridProps {
+  cols?: Array<number | { span: number; offset: number }>
+  description?: TTextEl
+  gutter?: number
+  title?: TTextEl
+}
+
+export type TFormCardOrFormBlockProps = Omit<CardProps, 'children'>
+
+export interface IFormTextBox {
+  text?: string
+  title?: TTextEl
+  description?: TTextEl
+  gutter?: number
+}
+
 export interface IRowProps extends RowProps {
   prefix?: string
   pure?: boolean
