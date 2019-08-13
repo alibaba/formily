@@ -23,7 +23,7 @@ export const Submit = ({ showLoading, ...props }: ISubmitProps) => {
   )
 }
 
-export const Reset = props => {
+export const Reset: React.FC<Omit<ISubmitProps, 'showLoading'>> = props => {
   return (
     <FormConsumer>
       {({ reset }) => {
