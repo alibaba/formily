@@ -70,7 +70,7 @@ export interface IFormButtonGroupProps {
   offset?: number
 }
 
-export const FormButtonGroup = styled(
+export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
   class FormButtonGroup extends Component<IFormButtonGroupProps> {
     static defaultProps = {
       span: 24,
