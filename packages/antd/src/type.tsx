@@ -1,19 +1,59 @@
 import { ColProps } from 'antd/es/col'
 import { CardProps } from 'antd/es/card'
 import { BaseButtonProps } from 'antd/es/button/button'
+import { IFormActions, ISchema, IEffects, IFieldError } from '@uform/types'
 
 export type TTextAlign = 'left' | 'right'
 export type TSize = 'small' | 'medium' | 'large'
+export type TLayout = 'horizontal' | 'vertical' | 'inline'
 export type TTextEl = string | JSX.Element | null
+export type TLabelAlign = 'left' | 'top' | 'inset'
 
-export interface ISubmitProps extends Omit<BaseButtonProps, 'loading'> {
-  showLoading?: boolean
+type ColSpanType = number | string
+
+export interface ColSize {
+  span?: ColSpanType
+  offset?: ColSpanType
+}
+
+export interface ISchemaFormExpandProps {
+  autoAddColon?: boolean
+  className?: string
+  inline?: boolean
+  layout?: TLayout
+  maxTipsNum?: number
+  labelAlign?: TLabelAlign
+  labelTextAlign?: TTextAlign
+  labelCol?: ColSize | number
+  wrapperCol?: ColSize | number
+  size?: TSize
+  style?: React.CSSProperties
+  prefix?: string
+}
+
+export interface ISchemaFormProps<V = any> {
+  actions?: IFormActions
+  initialValues?: V
+  defaultValue?: V
+  value?: V
+  editable?: (name: string) => boolean | boolean
+  effects?: IEffects
+  locale?: {
+    [key: string]: {
+      [k in string]: string | number
+    }
+  }
+  schema?: ISchema
+  onChange?: (values: V) => void
+  onReset?: (values: V) => void
+  onSubmit?: (values: V) => void
+  onValidateFailed?: (fieldErrors: IFieldError[]) => void
 }
 
 export interface IFormLayoutProps {
   className?: string
   inline?: boolean
-  labelAlign?: 'left' | 'top' | 'inset'
+  labelAlign?: TLabelAlign
   wrapperCol?: number
   labelCol?: number
   labelTextAlign?: TTextAlign
@@ -42,13 +82,6 @@ export interface IRowProps {
   align?: string | number
   justify?: string | number
   children: React.ReactNode
-}
-
-type ColSpanType = number | string
-
-export interface ColSize {
-  span?: ColSpanType
-  offset?: ColSpanType
 }
 
 export interface IColProps extends ColProps {
@@ -97,4 +130,8 @@ export interface IFormButtonGroupProps {
   zIndex?: number
   span?: number
   offset?: number
+}
+
+export interface ISubmitProps extends Omit<BaseButtonProps, 'loading'> {
+  showLoading?: boolean
 }
