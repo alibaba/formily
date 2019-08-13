@@ -90,6 +90,12 @@ ReactDOM.render(
       />
       <Field type="year" title="年份" name="year" />
       <Field type="week" title="周" name="week" />
+      <Field
+        type="week"
+        title="周(自定义显示格式)"
+        name="week1"
+        style={{ format: "gggg年 第w周" }}
+      />
       <Field type="time" title="时间" name="time" />
       <Field
         type="upload"
