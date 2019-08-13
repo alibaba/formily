@@ -94,7 +94,7 @@ ReactDOM.render(
         type="week"
         title="周(自定义显示格式)"
         name="week1"
-        style={{ format: "gggg年 第w周" }}
+        style={{ format: 'gggg年 第w周' }}
       />
       <Field type="time" title="时间" name="time" />
       <Field
