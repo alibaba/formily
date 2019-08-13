@@ -54,18 +54,20 @@ export interface IFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
     callback?: (fieldState: IFieldState) => void
-  ) => Promise<any>
+  ) => Promise<void>
   getFieldState: (
     name: Path | IFormPathMatcher,
-    callback: (fieldState: IFieldState) => any
-  ) => any
-  getFormState: (callback: (fieldState: IFormState) => any) => any
-  setFormState: (callback: (fieldState: IFormState) => any) => Promise<any>
-  getSchema: (path: Path) => object
-  reset: (forceClear: boolean) => void
-  submit: () => Promise<any>
-  validate: () => Promise<any>
-  dispatch: (type: string, payload: any) => void
+    callback?: (fieldState: IFieldState) => void
+  ) => Promise<IFieldState | void>
+  getFormState: (
+    callback?: (fieldState: IFormState) => void
+  ) => Promise<IFormState | void>
+  setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
+  getSchema: (path: Path) => Promise<ISchema>
+  reset: (forceClear?: boolean, noValidate?: boolean) => Promise<void>
+  submit: () => Promise<IFormState>
+  validate: () => Promise<IFormState>
+  dispatch: <T = any>(type: string, payload: T) => Promise<void>
 }
 
 export interface IFormPathMatcher {
