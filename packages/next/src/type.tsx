@@ -1,3 +1,4 @@
+import { ButtonProps } from '@alifd/next/types/button'
 import { CardProps } from '@alifd/next/types/card'
 import { RowProps, ColProps } from '@alifd/next/types/grid'
 import { IFormActions, ISchema, IEffects, IFieldError } from '@uform/types'
@@ -95,4 +96,8 @@ export interface IFormCardProps extends CardProps {
 
 export interface IFormBlockProps extends CardProps {
   className?: string
+}
+
+export interface ISubmitProps extends Omit<ButtonProps, 'loading'> {
+  showLoading?: boolean
 }
