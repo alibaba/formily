@@ -85,3 +85,16 @@ export interface IFormTextBox {
   description?: TTextEl
   gutter?: number
 }
+
+export interface IFormButtonGroupProps {
+  sticky?: boolean
+  style?: React.CSSProperties
+  itemStyle?: React.CSSProperties
+  className?: string
+
+  triggerDistance?: number
+  offsetDistance?: any
+  zIndex?: number
+  span?: number
+  offset?: number
+}
