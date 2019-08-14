@@ -12,25 +12,25 @@ interface FormActions {
     setFieldState: (
       name: Path | IFormPathMatcher,
       callback: (fieldState: IFieldState) => void
-    ) => Promise<void>
-    //获取表单字段状态,callback为可选参数
-    getFieldState: (name: Path | IFormPathMatcher, callback: (fieldState: IFieldState) => void) => void
-    getFieldState: (name: Path | IFormPathMatcher) => IFieldState
+    ) => Promise<void> | void
+    //获取表单字段状态
+    getFieldState: (
+      name: Path | IFormPathMatcher, callback?: (fieldState: IFieldState) => void
+    ) => Promise<IFieldState | void> | IFieldState | void
     //设置表单状态，目前只支持设置formState.values
-    setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
+    setFormState: (callback: (fieldState: IFormState) => void) => Promise<void> | void
     //获取表单状态
-    getFormState: (callback: (fieldState: IFormState) => void) => void
-    getFormState: () => IFormState
+    getFormState: (callback?: (fieldState: IFormState) => void) => Promise<IFormState | void> | (IFormState | void)
     //获取表单Schema
-    getSchema: (path: Path) => ISchema
+    getSchema: (path: Path) => Promise<ISchema> | ISchema
     //重置表单
-    reset: (forceClear?: boolean | { forceClear?: boolean; validate?: boolean },validate : boolean = true) => void
+    reset: (forceClear?: boolean | { forceClear?: boolean; validate?: boolean },validate : boolean = true) => Promise<void> | void
     //提交表单
-    submit: () => Promise<IFormState>
+    submit: () => Promise<IFormState> | IFormState
     //校验表单
-    validate: () => Promise<IFormState>
+    validate: () => Promise<IFormState | IFormState['errors']> | (IFormState | IFormState['errors'])
     //获取表单Schema
-    dispatch: <T = any>(type: string, payload: T) => void
+    dispatch: <T = any>(type: string, payload: T) => Promise<void> | void
 }
 
 type createFormActions: () => FormActions
