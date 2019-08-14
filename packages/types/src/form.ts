@@ -49,8 +49,33 @@ export interface IFormOptions {
   traverse?: (schema: ISchema) => ISchema
 }
 
+type TUnionType<T> = T | Promise<T>
+
 // 通过 createActions 或者 createAsyncActions 创建出来的 actions 接口
 export interface IFormActions {
+  setFieldState: (
+    name: Path | IFormPathMatcher,
+    callback?: (fieldState: IFieldState) => void
+  ) => TUnionType<void>
+  getFieldState: (
+    name: Path | IFormPathMatcher,
+    callback?: (fieldState: IFieldState) => void
+  ) => TUnionType<IFieldState | void>
+  getFormState: (
+    callback?: (fieldState: IFormState) => void
+  ) => TUnionType<IFormState | void>
+  setFormState: (callback: (fieldState: IFormState) => void) => TUnionType<void>
+  getSchema: (path: Path) => TUnionType<ISchema>
+  reset: (
+    forceClear?: boolean | { forceClear?: boolean; validate?: boolean },
+    validate?: boolean
+  ) => TUnionType<void>
+  submit: () => TUnionType<IFormState>
+  validate: () => TUnionType<IFormState | IFormState['errors']>
+  dispatch: <T = any>(type: string, payload: T) => TUnionType<void>
+}
+
+export interface IAsyncFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
     callback?: (fieldState: IFieldState) => void
@@ -64,9 +89,12 @@ export interface IFormActions {
   ) => Promise<IFormState | void>
   setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
   getSchema: (path: Path) => Promise<ISchema>
-  reset: (forceClear?: boolean, noValidate?: boolean) => Promise<void>
+  reset: (
+    forceClear?: boolean | { forceClear?: boolean; validate?: boolean },
+    validate?: boolean
+  ) => Promise<void>
   submit: () => Promise<IFormState>
-  validate: () => Promise<IFormState>
+  validate: () => Promise<IFormState | IFormState['errors']>
   dispatch: <T = any>(type: string, payload: T) => Promise<void>
 }
 
