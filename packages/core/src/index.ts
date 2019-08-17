@@ -6,7 +6,7 @@ import {
 
 import { Form } from './form'
 import {
-  caculateSchemaInitialValues,
+  calculateSchemaInitialValues,
   isFn,
   each,
   isEmpty,
@@ -31,7 +31,7 @@ export const createForm = ({
   traverse
 }: IFormOptions) => {
   let fields = []
-  let calculatedValues = caculateSchemaInitialValues(
+  let calculatedValues = calculateSchemaInitialValues(
     schema,
     isEmpty(values) ? clone(initialValues) : clone(values),
     ({ name, path, schemaPath }, schema: ISchema, value: any) => {
@@ -88,7 +88,7 @@ export {
   setValidationLocale,
   setValidationLanguage,
   Form,
-  caculateSchemaInitialValues
+  calculateSchemaInitialValues
 }
 
 export default createForm

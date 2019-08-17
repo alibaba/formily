@@ -97,7 +97,7 @@ const schemaTraverse = (
   }
 }
 
-export const caculateSchemaInitialValues = (
+export const calculateSchemaInitialValues = (
   schema: ISchema,
   initialValues: any,
   callback?: (pathInfo: IPathInfo, schema: ISchema, value: any) => void
