@@ -31,6 +31,21 @@ test('test setIn auto create array', () => {
   ).toBeTruthy()
 })
 
+test('getSchema return null', () => {
+  const value = {}
+  setIn(value, 'array.0.bb.2', 'hello world', () => {})
+
+  expect(
+    isEqual(value, {
+      array: [
+        {
+          bb: [undefined, undefined, 'hello world']
+        }
+      ]
+    })
+  ).toBeTruthy()
+})
+
 test('test setIn dose not affect other items', () => {
   const value = {
     aa: [
