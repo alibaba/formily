@@ -13,7 +13,7 @@ import {
   registerFormWrapper
 } from './shared/core'
 import { FormField } from './state/field'
-import { caculateSchemaInitialValues } from './utils'
+import { calculateSchemaInitialValues } from './utils'
 import { SchemaField, SchemaMarkup } from './decorators/markup'
 import initialize from './initialize'
 import { ISchemaFormProps } from './type'
@@ -83,7 +83,7 @@ export {
   registerFormWrapper,
   registerFieldMiddleware,
   registerFormFieldPropsTransformer,
-  caculateSchemaInitialValues,
+  calculateSchemaInitialValues,
   FormPath
 }
 

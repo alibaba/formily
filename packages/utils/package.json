@@ -1,6 +1,6 @@
 {
   "name": "@uform/utils",
-  "version": "0.3.8",
+  "version": "0.3.11",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -29,7 +29,7 @@
     "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
-    "@uform/types": "^0.3.8",
+    "@uform/types": "^0.3.11",
     "camel-case": "^3.0.0"
   }
 }

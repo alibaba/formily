@@ -3,7 +3,7 @@ import { Broadcast } from '../broadcast'
 import { isEqual } from '../compare'
 import { toArr, every, some, findIndex, find, includes } from '../array'
 import { clone } from '../clone'
-import { caculateSchemaInitialValues } from '../schema'
+import { calculateSchemaInitialValues } from '../schema'
 
 test('test accessor', () => {
   const value = { a: { b: { c: 2, d: 333 } } }
@@ -211,7 +211,7 @@ test('setIn', () => {
   expect(isEqual(values.a, '123232323')).toBeTruthy()
 })
 
-test('caculateSchemaInitialValues', () => {
+test('calculateSchemaInitialValues', () => {
   var values1 = JSON.parse(
     '{"type":"object","properties":{"[startDate,endDate]":{"type":"daterange","default":["2019-01-24","2019-01-30"],"z-index":0,"id":"[startDate,endDate]","x-index":0}}}'
   )
@@ -224,10 +224,10 @@ test('caculateSchemaInitialValues', () => {
   var values4 = JSON.parse(
     '{"type":"object","properties":{"[startDate,endDate]":{"type":"daterange","z-index":0,"id":"[startDate,endDate]","x-index":0}}}'
   )
-  var result1 = caculateSchemaInitialValues(values1)
-  var result2 = caculateSchemaInitialValues(values2)
-  var result3 = caculateSchemaInitialValues(values3)
-  var result4 = caculateSchemaInitialValues(values4)
+  var result1 = calculateSchemaInitialValues(values1)
+  var result2 = calculateSchemaInitialValues(values2)
+  var result3 = calculateSchemaInitialValues(values3)
+  var result4 = calculateSchemaInitialValues(values4)
   expect(
     isEqual(
       JSON.stringify(result1),

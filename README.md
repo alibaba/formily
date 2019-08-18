@@ -20,7 +20,7 @@ In React, the whole tree rendering performance problem of the form is very obvio
 ## Features
 
 - 🚀 High performance, fields managed independently, rather rerender the whole tree.
-- 💡 Integrated Aliabab Fusion and Ant Design components are guaranteed to work out of the box.
+- 💡 Integrated Alibaba Fusion and Ant Design components are guaranteed to work out of the box.
 - 🎨 JSON Schema applied for BackEnd. JSchema applied for FrontEnd. Two paradigms can be converted to each other.
 - 🏅 Side effects are managed independently, making form data linkages easier than ever before.
 - 🌯 Override most complicated form layout use cases.

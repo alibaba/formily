@@ -112,11 +112,17 @@ registerFormField(
   'week',
   connect({
     getValueFromEvent(_, value) {
-      return transformMoment(value)
+      return transformMoment(value, 'gggg-wo')
     },
     getProps: compose(
       mapStyledProps,
-      mapMomentValue
+      props => {
+        if (isStr(props.value) && props.value) {
+          const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || ['', '', '']
+          props.value = moment(parsed[1], 'YYYY').add(parsed[2] - 1, 'weeks')
+        }
+        return props
+      }
     ),
     getComponent: mapTextComponent
   })(WeekPicker)
