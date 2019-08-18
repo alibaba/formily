@@ -31,7 +31,7 @@ test('test setIn auto create array', () => {
   ).toBeTruthy()
 })
 
-test('getSchema return null', () => {
+test('getSchema return undefined', () => {
   const value = {}
   setIn(value, 'array.0.bb.2', 'hello world', () => {})
 
