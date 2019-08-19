@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { Grid } from '@alifd/next'
-import { FormLayoutConsumer } from '../form'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
+
+import { FormLayoutConsumer } from '../form'
+import { IFormButtonGroupProps } from '../type'
 
 const { Row, Col } = Grid
 
@@ -57,20 +59,7 @@ const isElementInViewport = (
   )
 }
 
-export interface IFormButtonGroupProps {
-  sticky?: boolean
-  style?: React.CSSProperties
-  itemStyle?: React.CSSProperties
-  className?: string
-
-  triggerDistance?: any
-  offsetDistance?: any
-  zIndex?: number
-  span?: number
-  offset?: number
-}
-
-export const FormButtonGroup = styled(
+export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
   class FormButtonGroup extends Component<IFormButtonGroupProps> {
     static defaultProps = {
       span: 24,
@@ -134,7 +123,6 @@ export const FormButtonGroup = styled(
                   <Sticky
                     edge="bottom"
                     triggerDistance={this.props.triggerDistance}
-                    offsetDistance={this.props.offsetDistance}
                     zIndex={this.props.zIndex}
                     getStickyBoundary={this.getStickyBoundaryHandler(FormRef)}
                     style={{

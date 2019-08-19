@@ -10,7 +10,12 @@ import { registerVirtualboxFlag } from '../utils'
 import { FormField } from '../state/field'
 import { IFieldProps } from '../type'
 
-export const createVirtualBox = (
+export type TVirtualBoxProps = React.PropsWithChildren<{
+  name?: string
+  render?: (fieldProps: IFieldProps) => string | JSX.Element | null
+}>
+
+export const createVirtualBox = <P extends unknown>(
   name: string,
   component:
     | IFunctionComponentWithStyleComponent
@@ -50,7 +55,12 @@ export const createVirtualBox = (
     true
   )
 
-  const VirtualBox = ({ children, name: fieldName, render, ...props }) => (
+  const VirtualBox = ({
+    children,
+    name: fieldName,
+    render,
+    ...props
+  }: P & TVirtualBoxProps) => (
     <SchemaField
       type="object"
       name={fieldName}
@@ -71,12 +81,12 @@ export const createVirtualBox = (
   return VirtualBox
 }
 
-export const createControllerBox = (
+export const createControllerBox = <P extends unknown>(
   name: string,
   component:
     | IFunctionComponentWithStyleComponent
     | IComponentClassWithStyleComponent
-) => createVirtualBox(name, component, true)
+) => createVirtualBox<P>(name, component, true)
 
 export const FormSlot = ({ name, children }) => {
   return (

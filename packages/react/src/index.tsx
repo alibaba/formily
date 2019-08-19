@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { setLocale, setLanguage } from '@uform/validator'
 import { FormPath } from '@uform/core'
-import { IFormActions } from '@uform/types'
+import { IFormActions, IAsyncFormActions } from '@uform/types'
 import { createActions, createAsyncActions } from 'react-eva'
 
 import {
@@ -64,7 +64,7 @@ export const createFormActions = (): IFormActions =>
     'dispatch'
   )
 
-export const createAsyncFormActions = (): IFormActions =>
+export const createAsyncFormActions = (): IAsyncFormActions =>
   createAsyncActions(
     'getFormState',
     'getFieldState',
