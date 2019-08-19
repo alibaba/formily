@@ -1,14 +1,20 @@
 import React, { Component, useEffect, useRef } from 'react'
 import { createVirtualBox, createControllerBox } from '@uform/react'
 import { toArr } from '@uform/utils'
-import { IFormItemGridProps } from '@uform/types'
+import { IFormItemGridProps, IFormItemProps } from '@uform/types'
 import { Card, Row, Col } from 'antd'
 import styled from 'styled-components'
 import cls from 'classnames'
 
 import { FormLayoutConsumer, FormItem, FormLayoutProvider } from '../form'
-import { IFormCardProps, IFormBlockProps } from '../type'
-import { TFormLayout } from '../type'
+import {
+  IFormTextBox,
+  IFormCardProps,
+  IFormBlockProps,
+  IFormLayoutProps,
+  TFormCardOrFormBlockProps,
+  IFormItemGridProps as IFormItemGridPropsAlias
+} from '../type'
 
 const normalizeCol = (
   col: { span: number; offset?: number } | number,
@@ -21,7 +27,9 @@ const normalizeCol = (
   }
 }
 
-export const FormLayoutItem = function(props: any) {
+export const FormLayoutItem: React.FC<Partial<IFormItemProps>> = function(
+  props
+) {
   return React.createElement(
     FormLayoutConsumer,
     {},
@@ -50,7 +58,7 @@ export const FormLayoutItem = function(props: any) {
   )
 }
 
-export const FormLayout = createVirtualBox(
+export const FormLayout = createVirtualBox<IFormLayoutProps>(
   'layout',
   ({ children, ...props }) => {
     return (
@@ -77,9 +85,9 @@ export const FormLayout = createVirtualBox(
       </FormLayoutConsumer>
     )
   }
-) as TFormLayout
+)
 
-export const FormItemGrid = createVirtualBox(
+export const FormItemGrid = createVirtualBox<IFormItemGridPropsAlias>(
   'grid',
   class extends Component<IFormItemGridProps> {
     public render() {
@@ -102,7 +110,7 @@ export const FormItemGrid = createVirtualBox(
           extra,
           help,
           ...props
-        },
+        } as IFormItemGridProps,
         children
       )
     }
@@ -158,7 +166,7 @@ export const FormItemGrid = createVirtualBox(
   }
 )
 
-export const FormCard = createVirtualBox(
+export const FormCard = createVirtualBox<TFormCardOrFormBlockProps>(
   'card',
   styled(
     class extends Component<IFormCardProps> {
@@ -187,7 +195,7 @@ export const FormCard = createVirtualBox(
   `
 )
 
-export const FormBlock = createVirtualBox(
+export const FormBlock = createVirtualBox<TFormCardOrFormBlockProps>(
   'block',
   styled(
     class extends Component<IFormBlockProps> {
@@ -228,7 +236,7 @@ export const FormBlock = createVirtualBox(
   `
 )
 
-export const FormTextBox = createControllerBox(
+export const FormTextBox = createControllerBox<IFormTextBox>(
   'text-box',
   styled(({ children, schema, className }) => {
     const { title, help, text, name, extra, ...props } = schema['x-props']
