@@ -33,7 +33,8 @@ import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
 
-actions.setFieldState('aa', state => { //同步调用会出错
+actions.setFieldState('aa', state => {
+  //同步调用会出错
   state.value = '123'
 })
 actions.submit() //同步调用会出错
@@ -48,24 +49,23 @@ const App = () => (
     >
       <Field name="aa" type="string" required title="AA" />
       <FormButtonGroup offset={6}>
-        <Button onClick={()=>{
+        <Button
+          onClick={() => {
             //异步调用没问题
             actions.setFieldState('aa', state => {
               state.value = 'hello world'
             })
             actions.submit()
-        }}>修改AA的值并提交表单</Button>
+          }}
+        >
+          修改AA的值并提交表单
+        </Button>
       </FormButtonGroup>
     </SchemaForm>
   </Printer>
 )
-console.log(React.unstable_ConcurrentMode)
-ReactDOM.render(
-  <React.unstable_ConcurrentMode>
-      <App />
-  </React.unstable_ConcurrentMode>,
-  document.getElementById('root')
-)
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### 使用 createAsyncFormActions 做通讯
