@@ -18,9 +18,9 @@ export interface IFieldError {
   errors: string[]
 }
 
-export interface IFormState {
-  values: any // 表单数据
-  initialValues: any // 初始化数据
+export interface IFormState<V = any> {
+  values: V // 表单数据
+  initialValues: V // 初始化数据
   valid: boolean // 是否合法
   invalid: boolean // 是否不合法
   errors: IFieldError[] // 错误提示集合
@@ -49,44 +49,56 @@ export interface IFormOptions {
   traverse?: (schema: ISchema) => ISchema
 }
 
-type TUnionType<T> = T | Promise<T>
-
 // 通过 createActions 或者 createAsyncActions 创建出来的 actions 接口
 export interface IFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
-    callback?: (fieldState: IFieldState) => void
-  ) => TUnionType<void>
-  getFieldState: (
-    name: Path | IFormPathMatcher,
-    callback?: (fieldState: IFieldState) => void
-  ) => TUnionType<IFieldState | void>
-  getFormState: (
-    callback?: (fieldState: IFormState) => void
-  ) => TUnionType<IFormState | void>
-  setFormState: (callback: (fieldState: IFormState) => void) => TUnionType<void>
-  getSchema: (path: Path) => TUnionType<ISchema>
+    callback: (fieldState: IFieldState) => void
+  ) => Promise<void>
+
+  getFieldState: {
+    (
+      name: Path | IFormPathMatcher,
+      callback: (fieldState: IFieldState) => void
+    ): void
+    (name: Path | IFormPathMatcher): IFieldState
+  }
+
+  getFormState: {
+    (): IFormState
+    (callback: (formState: IFormState) => void): void
+  }
+
+  setFormState: (callback: (formState: IFormState) => void) => Promise<void>
+  getSchema: (path: Path) => ISchema
   reset: (
     forceClear?: boolean | { forceClear?: boolean; validate?: boolean },
     validate?: boolean
-  ) => TUnionType<void>
-  submit: () => TUnionType<IFormState>
-  validate: () => TUnionType<IFormState | IFormState['errors']>
-  dispatch: <T = any>(type: string, payload: T) => TUnionType<void>
+  ) => void
+  submit: () => Promise<IFormState>
+  validate: () => Promise<IFormState> // error will be IFormState['errors']
+  dispatch: <T = any>(type: string, payload: T) => void
 }
 
 export interface IAsyncFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
-    callback?: (fieldState: IFieldState) => void
+    callback: (fieldState: IFieldState) => void
   ) => Promise<void>
-  getFieldState: (
-    name: Path | IFormPathMatcher,
-    callback?: (fieldState: IFieldState) => void
-  ) => Promise<IFieldState | void>
-  getFormState: (
-    callback?: (fieldState: IFormState) => void
-  ) => Promise<IFormState | void>
+
+  getFieldState: {
+    (
+      name: Path | IFormPathMatcher,
+      callback: (fieldState: IFieldState) => void
+    ): Promise<void>
+    (name: Path | IFormPathMatcher): Promise<IFieldState>
+  }
+
+  getFormState: {
+    (): Promise<IFormState>
+    (callback: (formState: IFormState) => void): Promise<void>
+  }
+
   setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
   getSchema: (path: Path) => Promise<ISchema>
   reset: (
@@ -94,7 +106,7 @@ export interface IAsyncFormActions {
     validate?: boolean
   ) => Promise<void>
   submit: () => Promise<IFormState>
-  validate: () => Promise<IFormState | IFormState['errors']>
+  validate: () => Promise<IFormState> //reject err will be IFormState['errors']
   dispatch: <T = any>(type: string, payload: T) => Promise<void>
 }
 
