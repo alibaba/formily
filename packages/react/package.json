@@ -1,6 +1,6 @@
 {
   "name": "@uform/react",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -27,10 +27,10 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/core": "^0.3.10",
-    "@uform/types": "^0.3.10",
-    "@uform/utils": "^0.3.10",
-    "@uform/validator": "^0.3.10",
+    "@uform/core": "^0.3.11",
+    "@uform/types": "^0.3.11",
+    "@uform/utils": "^0.3.11",
+    "@uform/validator": "^0.3.11",
     "pascal-case": "^2.0.1",
     "react-eva": "^1.0.0",
     "rxjs-compat": "^6.5.1"
