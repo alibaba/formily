@@ -35,7 +35,7 @@ export interface ILocaleMessages {
   [key: string]: string | ILocaleMessages
 }
 
-export interface ISchemaFormProps<V> {
+export interface ISchemaFormProps<V = unknown> {
   actions?: IFormActions
   initialValues?: V
   defaultValue?: V
