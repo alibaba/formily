@@ -36,12 +36,10 @@ export interface ISchemaFormProps<V = unknown> {
   initialValues?: V
   defaultValue?: V
   value?: V
-  editable?: (name: string) => boolean | boolean
+  editable?: boolean | ((name: string) => boolean)
   effects?: IEffects
   locale?: {
-    [key: string]: {
-      [k in string]: string | number
-    }
+    [k in string]: any
   }
   schema?: ISchema
   onChange?: (values: V) => void
@@ -100,4 +98,16 @@ export interface IFormBlockProps extends CardProps {
 
 export interface ISubmitProps extends Omit<ButtonProps, 'loading'> {
   showLoading?: boolean
+}
+
+export interface IFormButtonGroupProps {
+  sticky?: boolean
+  style?: React.CSSProperties
+  itemStyle?: React.CSSProperties
+  className?: string
+
+  triggerDistance?: number
+  zIndex?: number
+  span?: number
+  offset?: number
 }

@@ -100,7 +100,6 @@ export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
                   <Sticky
                     edge={'bottom'}
                     triggerDistance={this.props.triggerDistance}
-                    offsetDistance={this.props.offsetDistance}
                     zIndex={this.props.zIndex}
                     getStickyBoundary={this.getStickyBoundaryHandler(FormRef)}
                     style={{
