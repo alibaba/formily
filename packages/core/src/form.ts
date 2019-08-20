@@ -85,6 +85,8 @@ export class Form {
   private traverse: (schema: ISchema) => ISchema
 
   constructor(opts: IFormOptions) {
+    this.getFieldState = this.getFieldState.bind(this)
+    this.getFormState = this.getFormState.bind(this)
     this.options = defaults<IFormOptions>(opts)
     this.publisher = new Broadcast()
     this.initialized = false
@@ -104,7 +106,6 @@ export class Form {
     this.initialized = true
     this.destructed = false
     this.fieldSize = 0
-    this.getFieldState = this.getFieldState.bind(this)
   }
 
   public changeValues(values: any) {
@@ -132,7 +133,7 @@ export class Form {
     callback: (fieldState: IFieldState) => void
   ): Promise<void> => {
     if (this.destructed) {
-      return Promise.reject(new Error('form is destructed'))
+      return
     }
     return new Promise((resolve, reject) => {
       if (isStr(path) || isArr(path) || isFn(path)) {
@@ -147,7 +148,7 @@ export class Form {
         }
         this.updateRafId = raf(() => {
           if (this.destructed) {
-            return reject(new Error('form is destructed'))
+            return
           }
           this.updateFieldStateFromQueue()
         })
@@ -190,10 +191,10 @@ export class Form {
 
   public setFormState = (callback: (formState: IFormState) => void) => {
     if (this.destructed) {
-      return Promise.reject(new Error('form is destructed'))
+      return
     }
     if (!isFn(callback)) {
-      return Promise.reject(new Error('callback is not a function'))
+      return
     }
     const published = this.publishState()
     callback(published, callback)
@@ -534,7 +535,7 @@ export class Form {
         this.formNotify()
         raf(() => {
           if (this.destructed) {
-            return reject(new Error('form is destructed'))
+            return
           }
           if (this.state.valid) {
             resolve(this.publishState())
