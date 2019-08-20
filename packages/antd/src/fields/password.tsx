@@ -158,24 +158,22 @@ interface IStrengthProps {
 }
 
 // 校验强度 UI
-const StrengthFC = styled(
-  ({ strength, className }: IStrengthProps) => (
-    <div {...{ className }}>
-      <div className={'password-strength-wrapper'}>
-        <div className={'div-1 div'} />
-        <div className={'div-2 div'} />
-        <div className={'div-3 div'} />
-        <div className={'div-4 div'} />
-        <div
-          className={'password-strength-bar'}
-          style={{
-            clipPath: `polygon(0 0,${strength}% 0,${strength}% 100%,0 100%)`
-          }}
-        />
-      </div>
+const StrengthFC = styled(({ strength, className }: IStrengthProps) => (
+  <div {...{ className }}>
+    <div className={'password-strength-wrapper'}>
+      <div className={'div-1 div'} />
+      <div className={'div-2 div'} />
+      <div className={'div-3 div'} />
+      <div className={'div-4 div'} />
+      <div
+        className={'password-strength-bar'}
+        style={{
+          clipPath: `polygon(0 0,${strength}% 0,${strength}% 100%,0 100%)`
+        }}
+      />
     </div>
-  )
-)`
+  </div>
+))`
   .password-strength-wrapper {
     background: #e0e0e0;
     margin-bottom: 3px;
@@ -248,6 +246,6 @@ const PasswordFC = (props: Partial<IPasswordProps>) => {
 registerFormField(
   'password',
   connect({
-    getProps: mapStyledProps,
+    getProps: mapStyledProps
   })(PasswordFC)
 )

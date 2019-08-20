@@ -44,8 +44,8 @@ const defaults = <T>(opts: T): T =>
   ({
     initialValues: {},
     values: {},
-    onSubmit: (values: any) => {},
-    effects: ($: any) => {},
+    onSubmit: () => {},
+    effects: () => {},
     ...opts
   } as T)
 
@@ -104,6 +104,7 @@ export class Form {
     this.initialized = true
     this.destructed = false
     this.fieldSize = 0
+    this.getFieldState = this.getFieldState.bind(this)
   }
 
   public changeValues(values: any) {
@@ -117,7 +118,7 @@ export class Form {
 
   public changeEditable(editable: Editable) {
     this.editable = editable
-    each(this.fields, (field, name) => {
+    each(this.fields, field => {
       field.changeEditable(editable)
     })
   }
@@ -128,12 +129,12 @@ export class Form {
 
   public setFieldState = (
     path: Path | IFormPathMatcher,
-    callback?: (fieldState: IFieldState) => void
+    callback: (fieldState: IFieldState) => void
   ): Promise<void> => {
     if (this.destructed) {
-      return
+      return Promise.reject(new Error('form is destructed'))
     }
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (isStr(path) || isArr(path) || isFn(path)) {
         this.updateQueue.push({ path, callback, resolve })
       }
@@ -146,7 +147,7 @@ export class Form {
         }
         this.updateRafId = raf(() => {
           if (this.destructed) {
-            return
+            return reject(new Error('form is destructed'))
           }
           this.updateFieldStateFromQueue()
         })
@@ -156,10 +157,16 @@ export class Form {
     })
   }
 
-  public getFieldState = (
+  public getFieldState(
     path: Path | IFormPathMatcher,
-    callback: (fieldState: IFieldState) => any
-  ) => {
+    callback: (fieldState: IFieldState) => void
+  ): void
+  public getFieldState(path: Path | IFormPathMatcher): IFieldState
+
+  public getFieldState(
+    path: Path | IFormPathMatcher,
+    callback?: (fieldState: IFieldState) => void
+  ): any {
     let field: IField
     each(this.fields, innerField => {
       if (innerField.match(path)) {
@@ -175,19 +182,21 @@ export class Form {
     }
   }
 
-  public getFormState = (callback: any) => {
+  public getFormState(callback: (formState: IFormState) => void): void
+  public getFormState(): IFormState
+  public getFormState(callback?: any): any {
     return isFn(callback) ? callback(this.publishState()) : this.publishState()
   }
 
-  public setFormState = reducer => {
+  public setFormState = (callback: (formState: IFormState) => void) => {
     if (this.destructed) {
-      return
+      return Promise.reject(new Error('form is destructed'))
     }
-    if (!isFn(reducer)) {
-      return
+    if (!isFn(callback)) {
+      return Promise.reject(new Error('callback is not a function'))
     }
     const published = this.publishState()
-    reducer(published, reducer)
+    callback(published, callback)
     return Promise.resolve(this.checkState(published))
   }
 
@@ -519,13 +528,13 @@ export class Form {
     return formState
   }
 
-  public validate(): Promise<IFormState | IFormState['errors']> {
+  public validate(): Promise<IFormState> {
     return this.internalValidate(this.state.values, true).then(() => {
       return new Promise((resolve, reject) => {
         this.formNotify()
         raf(() => {
           if (this.destructed) {
-            return
+            return reject(new Error('form is destructed'))
           }
           if (this.state.valid) {
             resolve(this.publishState())

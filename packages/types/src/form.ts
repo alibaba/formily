@@ -117,28 +117,36 @@ export interface IFormPathMatcher {
   pattern: string
 }
 
-// next & antd 需要用到的
-// export enum LabelAlign {
-//   TOP = 'top',
-//   INSET = 'inset',
-//   LEFT = 'left'
-// }
-export type LabelAlign = 'top' | 'inset' | 'left'
+export type TextAlign = 'left' | 'right'
+export type Size = 'small' | 'medium' | 'large'
+export type Layout = 'horizontal' | 'vertical' | 'inline'
+export type TextEl = string | JSX.Element | null
+export type LabelAlign = 'left' | 'top' | 'inset'
 
-// export enum LabelTextAlign {
-//   LEFT = 'left',
-//   RIGHT = 'right'
-// }
+type ColSpanType = number | string
+export interface ColSize {
+  span?: ColSpanType
+  order?: ColSpanType
+  offset?: ColSpanType
+  push?: ColSpanType
+  pull?: ColSpanType
+}
 
-export type LabelTextAlign = 'left' | 'right'
-
-// export enum Size {
-//   LARGE = 'large',
-//   MEDIUM = 'medium',
-//   SMALL = 'small'
-// }
-
-export type Size = 'large' | 'medium' | 'small'
+export interface ColProps extends React.HTMLAttributes<HTMLDivElement> {
+  span?: ColSpanType
+  order?: ColSpanType
+  offset?: ColSpanType
+  push?: ColSpanType
+  pull?: ColSpanType
+  xs?: ColSpanType | ColSize
+  sm?: ColSpanType | ColSize
+  md?: ColSpanType | ColSize
+  lg?: ColSpanType | ColSize
+  xl?: ColSpanType | ColSize
+  xxl?: ColSpanType | ColSize
+  prefixCls?: string
+}
+// export type ColProps = { span: number; offset?: number } | number
 
 export interface IFormItemGridProps {
   name?: string
@@ -150,13 +158,13 @@ export interface IFormItemGridProps {
 }
 
 interface IFormSharedProps {
-  labelCol?: object | number
-  wrapperCol?: object | number
+  labelCol?: ColProps | number
+  wrapperCol?: ColProps | number
   autoAddColon?: boolean
   size?: Size
   inline?: boolean
   labelAlign?: LabelAlign
-  labelTextAlign?: LabelTextAlign
+  labelTextAlign?: TextAlign
   className?: string
   style?: React.CSSProperties
   prefix?: string

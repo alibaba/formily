@@ -59,7 +59,7 @@ export const FormLayout = createVirtualBox<IFormLayoutProps>(
   }
 )
 
-export const FormLayoutItem: React.FC<Partial<IFormItemProps>> = props =>
+export const FormLayoutItem: React.FC<IFormItemProps> = props =>
   React.createElement(
     FormLayoutConsumer,
     {},
@@ -110,9 +110,13 @@ export const FormItemGrid = createVirtualBox<IFormItemGridPropsAlias>(
       const {
         children: rawChildren,
         cols: rawCols,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         title,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         description,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         help,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         extra,
         ...props
       } = this.props

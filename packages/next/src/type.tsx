@@ -85,7 +85,7 @@ export interface IRowProps extends RowProps {
 }
 
 export interface IColProps extends ColProps {
-  prefix: string
+  prefix?: string
   pure?: boolean
   className?: string
 }
