@@ -31,6 +31,10 @@ export interface ISchemaFormExpandProps {
   prefix?: string
 }
 
+export interface ILocaleMessages {
+  [key: string]: string | ILocaleMessages
+}
+
 export interface ISchemaFormProps<V = unknown> {
   actions?: IFormActions
   initialValues?: V
@@ -38,9 +42,7 @@ export interface ISchemaFormProps<V = unknown> {
   value?: V
   editable?: boolean | ((name: string) => boolean)
   effects?: IEffects
-  locale?: {
-    [k in string]: any
-  }
+  locale?: ILocaleMessages
   schema?: ISchema
   onChange?: (values: V) => void
   onReset?: (values: V) => void

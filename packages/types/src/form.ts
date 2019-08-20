@@ -32,13 +32,13 @@ export interface ISubscribers {
   [eventName: string]: Subject<any>
 }
 
-export interface IFormOptions {
-  editable: boolean | ((nam: string) => boolean)
+export interface IFormOptions<V = any> {
+  editable: boolean | ((name: string) => boolean)
   effects: IEffects
-  defaultValue?: object
-  values?: object
-  initialValues?: object
-  schema: ISchema | {}
+  defaultValue?: V
+  values?: V
+  initialValues?: V
+  schema: ISchema
   subscribes: ISubscribers
   onFormChange: (payload: IFormPayload) => void
   onFieldChange: (payload: IFieldPayload) => void
@@ -49,7 +49,7 @@ export interface IFormOptions {
   traverse?: (schema: ISchema) => ISchema
 }
 
-// 通过 createActions 或者 createAsyncActions 创建出来的 actions 接口
+// 通过 createActions  创建出来的 actions 接口
 export interface IFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
@@ -80,6 +80,7 @@ export interface IFormActions {
   dispatch: <T = any>(type: string, payload: T) => void
 }
 
+// 通过 createAsyncActions 创建出来的 actions 接口
 export interface IAsyncFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
@@ -117,22 +118,27 @@ export interface IFormPathMatcher {
 }
 
 // next & antd 需要用到的
-export enum LabelAlign {
-  TOP = 'top',
-  INSET = 'inset',
-  LEFT = 'left'
-}
+// export enum LabelAlign {
+//   TOP = 'top',
+//   INSET = 'inset',
+//   LEFT = 'left'
+// }
+export type LabelAlign = 'top' | 'inset' | 'left'
 
-export enum LabelTextAlign {
-  LEFT = 'left',
-  RIGHT = 'right'
-}
+// export enum LabelTextAlign {
+//   LEFT = 'left',
+//   RIGHT = 'right'
+// }
 
-export enum Size {
-  LARGE = 'large',
-  MEDIUM = 'medium',
-  SMALL = 'small'
-}
+export type LabelTextAlign = 'left' | 'right'
+
+// export enum Size {
+//   LARGE = 'large',
+//   MEDIUM = 'medium',
+//   SMALL = 'small'
+// }
+
+export type Size = 'large' | 'medium' | 'small'
 
 export interface IFormItemGridProps {
   name?: string
@@ -143,37 +149,37 @@ export interface IFormItemGridProps {
   cols?: any
 }
 
-export interface IFormSharedProps {
-  labelCol: object | number
-  wrapperCol: object | number
-  autoAddColon: boolean
-  size: Size
-  inline: boolean
-  labelAlign: LabelAlign
-  labelTextAlign: LabelTextAlign
-  className: string
-  style: React.CSSProperties
-  prefix: string
-  maxTipsNum: number
+interface IFormSharedProps {
+  labelCol?: object | number
+  wrapperCol?: object | number
+  autoAddColon?: boolean
+  size?: Size
+  inline?: boolean
+  labelAlign?: LabelAlign
+  labelTextAlign?: LabelTextAlign
+  className?: string
+  style?: React.CSSProperties
+  prefix?: string
+  maxTipsNum?: number
 }
 
 export interface IFormProps extends IFormSharedProps {
-  layout: string
-  children: React.ReactNode
-  component: string
-  onValidateFailed: () => void
+  layout?: string
+  children?: React.ReactNode
+  component?: string
+  onValidateFailed?: () => void
 }
 
 export interface IFormItemProps extends IFormSharedProps {
-  id: string
-  required: boolean
-  label: React.ReactNode
-  extra: React.ReactNode
-  validateState: any
-  isTableColItem: boolean
-  help: React.ReactNode
-  noMinHeight: boolean
-  children: React.ReactElement
-  type: string
-  schema: ISchema
+  id?: string
+  required?: boolean
+  label?: React.ReactNode
+  extra?: React.ReactNode
+  validateState?: any
+  isTableColItem?: boolean
+  help?: React.ReactNode
+  noMinHeight?: boolean
+  children?: React.ReactElement
+  type?: string
+  schema?: ISchema
 }
