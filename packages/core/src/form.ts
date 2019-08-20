@@ -135,7 +135,7 @@ export class Form {
     if (this.destructed) {
       return
     }
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (isStr(path) || isArr(path) || isFn(path)) {
         this.updateQueue.push({ path, callback, resolve })
       }
@@ -197,7 +197,7 @@ export class Form {
       return
     }
     const published = this.publishState()
-    callback(published, callback)
+    callback(published)
     return Promise.resolve(this.checkState(published))
   }
 

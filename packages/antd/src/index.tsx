@@ -25,64 +25,14 @@ import {
   SchemaForm as InternalSchemaForm,
   Field as InternalField
 } from '@uform/react'
-import { mapStyledProps, mapTextComponent } from './utils'
-import { ISchemaFormProps, ISchemaFormExpandProps } from './type'
-import { ISchema } from '@uform/types'
-import { SwitchProps } from 'antd/lib/switch'
-import { CheckboxGroupProps } from 'antd/lib/checkbox'
-import {
-  DatePickerProps,
-  RangePickerProps,
-  MonthPickerProps,
-  WeekPickerProps
-} from 'antd/lib/date-picker/interface'
-import { InputNumberProps } from 'antd/lib/input-number'
-import { IPasswordProps } from './fields/password'
-import { RadioGroupProps } from 'antd/lib/radio'
-import { ISliderProps } from './fields/range'
-import { RateProps } from 'antd/lib/rate'
-import { InputProps } from 'antd/lib/input'
-import { TextAreaProps } from 'antd/es/input'
-import { TimePickerProps } from 'antd/lib/time-picker'
-import { TransferProps } from 'antd/lib/transfer'
-import { IUploaderProps } from './fields/upload'
-import { SelectProps } from 'antd/lib/select'
+import { SchemaFormProps, FieldProps } from './type'
 
-export { mapStyledProps, mapTextComponent }
-
-export type SchemaFormProps<V> = ISchemaFormProps<V> & ISchemaFormExpandProps
+export { mapStyledProps, mapTextComponent } from './utils'
 
 export default class SchemaForm<V> extends React.Component<SchemaFormProps<V>> {
   render() {
     return <InternalSchemaForm {...this.props} />
   }
-}
-
-interface InternalFieldTypes {
-  boolean: SwitchProps | SelectProps
-  checkbox: CheckboxGroupProps
-  date: DatePickerProps
-  daterange: RangePickerProps
-  month: MonthPickerProps
-  week: WeekPickerProps
-  year: DatePickerProps
-  number: InputNumberProps | SelectProps
-  password: IPasswordProps
-  radio: RadioGroupProps
-  range: ISliderProps
-  rating: RateProps
-  string: InputProps | SelectProps
-  textarea: TextAreaProps | SelectProps
-  time: TimePickerProps
-  transfer: TransferProps
-  upload: IUploaderProps
-}
-
-export interface FieldProps<V, T extends string> extends ISchema<V> {
-  type?: T
-  name?: string
-  editable?: boolean
-  ['x-props']?: T extends keyof InternalFieldTypes ? InternalFieldTypes[T] : any
 }
 
 export class Field<V, T extends string> extends React.Component<

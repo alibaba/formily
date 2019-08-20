@@ -13,6 +13,25 @@ import {
   LabelAlign,
   IAsyncFormActions
 } from '@uform/types'
+import { SwitchProps } from 'antd/lib/switch'
+import { CheckboxGroupProps } from 'antd/lib/checkbox'
+import {
+  DatePickerProps,
+  RangePickerProps,
+  MonthPickerProps,
+  WeekPickerProps
+} from 'antd/lib/date-picker/interface'
+import { InputNumberProps } from 'antd/lib/input-number'
+import { IPasswordProps } from './fields/password'
+import { RadioGroupProps } from 'antd/lib/radio'
+import { ISliderProps } from './fields/range'
+import { RateProps } from 'antd/lib/rate'
+import { InputProps } from 'antd/lib/input'
+import { TextAreaProps } from 'antd/es/input'
+import { TimePickerProps } from 'antd/lib/time-picker'
+import { TransferProps } from 'antd/lib/transfer'
+import { IUploaderProps } from './fields/upload'
+import { SelectProps } from 'antd/lib/select'
 
 type ColSpanType = number | string
 
@@ -21,38 +40,8 @@ export interface ColSize {
   offset?: ColSpanType
 }
 
-export interface ISchemaFormExpandProps {
-  autoAddColon?: boolean
-  className?: string
-  inline?: boolean
-  layout?: Layout
-  maxTipsNum?: number
-  labelAlign?: LabelAlign
-  labelTextAlign?: TextAlign
-  labelCol?: ColSize | number
-  wrapperCol?: ColSize | number
-  size?: Size
-  style?: React.CSSProperties
-  prefix?: string
-}
-
 export interface ILocaleMessages {
   [key: string]: string | ILocaleMessages
-}
-
-export interface ISchemaFormProps<V = unknown> {
-  actions?: IFormActions | IAsyncFormActions
-  initialValues?: V
-  defaultValue?: V
-  value?: V
-  editable?: boolean | ((name: string) => boolean)
-  effects?: IEffects
-  locale?: ILocaleMessages
-  schema?: ISchema
-  onChange?: (values: V) => void
-  onReset?: (values: V) => void
-  onSubmit?: (values: V) => void
-  onValidateFailed?: (fieldErrors: IFieldError[]) => void
 }
 
 export interface IFormLayoutProps {
@@ -140,4 +129,58 @@ export interface IFormButtonGroupProps {
 
 export interface ISubmitProps extends Omit<BaseButtonProps, 'loading'> {
   showLoading?: boolean
+}
+
+export interface SchemaFormProps<V = unknown> {
+  actions?: IFormActions | IAsyncFormActions
+  initialValues?: V
+  defaultValue?: V
+  value?: V
+  editable?: boolean | ((name: string) => boolean)
+  effects?: IEffects
+  locale?: ILocaleMessages
+  schema?: ISchema
+  onChange?: (values: V) => void
+  onReset?: (values: V) => void
+  onSubmit?: (values: V) => void
+  onValidateFailed?: (fieldErrors: IFieldError[]) => void
+  autoAddColon?: boolean
+  className?: string
+  inline?: boolean
+  layout?: Layout
+  maxTipsNum?: number
+  labelAlign?: LabelAlign
+  labelTextAlign?: TextAlign
+  labelCol?: ColSize | number
+  wrapperCol?: ColSize | number
+  size?: Size
+  style?: React.CSSProperties
+  prefix?: string
+}
+
+interface InternalFieldTypes {
+  boolean: SwitchProps | SelectProps
+  checkbox: CheckboxGroupProps
+  date: DatePickerProps
+  daterange: RangePickerProps
+  month: MonthPickerProps
+  week: WeekPickerProps
+  year: DatePickerProps
+  number: InputNumberProps | SelectProps
+  password: IPasswordProps
+  radio: RadioGroupProps
+  range: ISliderProps
+  rating: RateProps
+  string: InputProps | SelectProps
+  textarea: TextAreaProps | SelectProps
+  time: TimePickerProps
+  transfer: TransferProps
+  upload: IUploaderProps
+}
+
+export interface FieldProps<V, T extends string> extends ISchema<V> {
+  type?: T
+  name?: string
+  editable?: boolean
+  ['x-props']?: T extends keyof InternalFieldTypes ? InternalFieldTypes[T] : any
 }
