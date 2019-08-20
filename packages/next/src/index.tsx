@@ -11,15 +11,16 @@ import './fields/radio'
 import './fields/rating'
 import './fields/transfer'
 import './fields/array'
+import './fields/cards'
 import './fields/table'
 import './fields/textarea'
 import './fields/password'
-import './fields/cards'
 
 export * from '@uform/react'
 export * from './components/formButtonGroup'
 export * from './components/button'
 export * from './components/layout'
+
 import React from 'react'
 import {
   SchemaForm as InternalSchemaForm,
@@ -28,25 +29,24 @@ import {
 import { mapStyledProps, mapTextComponent } from './utils'
 import { ISchemaFormProps, ISchemaFormExpandProps } from './type'
 import { ISchema } from '@uform/types'
-import { SwitchProps } from 'antd/lib/switch'
-import { CheckboxGroupProps } from 'antd/lib/checkbox'
+import { SwitchProps } from '@alifd/next/types/switch'
+import { GroupProps as CheckboxGroupProps } from '@alifd/next/types/checkbox'
+import { GroupProps as RadioGroupProps } from '@alifd/next/types/radio'
 import {
   DatePickerProps,
   RangePickerProps,
   MonthPickerProps,
-  WeekPickerProps
-} from 'antd/lib/date-picker/interface'
-import { InputNumberProps } from 'antd/lib/input-number'
+  YearPickerProps
+} from '@alifd/next/types/date-picker'
+import { NumberPickerProps } from '@alifd/next/types/number-picker'
 import { IPasswordProps } from './fields/password'
-import { RadioGroupProps } from 'antd/lib/radio'
-import { ISliderProps } from './fields/range'
-import { RateProps } from 'antd/lib/rate'
-import { InputProps } from 'antd/lib/input'
-import { TextAreaProps } from 'antd/es/input'
-import { TimePickerProps } from 'antd/lib/time-picker'
-import { TransferProps } from 'antd/lib/transfer'
+import { RangeProps } from '@alifd/next/types/range'
+import { RatingProps } from '@alifd/next/types/rating'
+import { InputProps, TextAreaProps } from '@alifd/next/types/input'
+import { TimePickerProps } from '@alifd/next/types/time-picker'
+import { TransferProps } from '@alifd/next/types/transfer'
 import { IUploaderProps } from './fields/upload'
-import { SelectProps } from 'antd/lib/select'
+import { SelectProps } from '@alifd/next/types/select'
 
 export { mapStyledProps, mapTextComponent }
 
@@ -64,13 +64,13 @@ interface InternalFieldTypes {
   date: DatePickerProps
   daterange: RangePickerProps
   month: MonthPickerProps
-  week: WeekPickerProps
-  year: DatePickerProps
-  number: InputNumberProps | SelectProps
+  // week: WeekPickerProps
+  year: YearPickerProps
+  number: NumberPickerProps | SelectProps
   password: IPasswordProps
   radio: RadioGroupProps
-  range: ISliderProps
-  rating: RateProps
+  range: RangeProps
+  rating: RatingProps
   string: InputProps | SelectProps
   textarea: TextAreaProps | SelectProps
   time: TimePickerProps

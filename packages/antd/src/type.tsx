@@ -1,13 +1,18 @@
 import { ColProps } from 'antd/es/col'
 import { CardProps } from 'antd/es/card'
 import { BaseButtonProps } from 'antd/es/button/button'
-import { IFormActions, ISchema, IEffects, IFieldError } from '@uform/types'
-
-export type TTextAlign = 'left' | 'right'
-export type TSize = 'small' | 'medium' | 'large'
-export type TLayout = 'horizontal' | 'vertical' | 'inline'
-export type TTextEl = string | JSX.Element | null
-export type TLabelAlign = 'left' | 'top' | 'inset'
+import {
+  IFormActions,
+  ISchema,
+  IEffects,
+  IFieldError,
+  TextAlign,
+  Size,
+  Layout,
+  TextEl,
+  LabelAlign,
+  IAsyncFormActions
+} from '@uform/types'
 
 type ColSpanType = number | string
 
@@ -20,13 +25,13 @@ export interface ISchemaFormExpandProps {
   autoAddColon?: boolean
   className?: string
   inline?: boolean
-  layout?: TLayout
+  layout?: Layout
   maxTipsNum?: number
-  labelAlign?: TLabelAlign
-  labelTextAlign?: TTextAlign
+  labelAlign?: LabelAlign
+  labelTextAlign?: TextAlign
   labelCol?: ColSize | number
   wrapperCol?: ColSize | number
-  size?: TSize
+  size?: Size
   style?: React.CSSProperties
   prefix?: string
 }
@@ -36,7 +41,7 @@ export interface ILocaleMessages {
 }
 
 export interface ISchemaFormProps<V = unknown> {
-  actions?: IFormActions
+  actions?: IFormActions | IAsyncFormActions
   initialValues?: V
   defaultValue?: V
   value?: V
@@ -53,19 +58,19 @@ export interface ISchemaFormProps<V = unknown> {
 export interface IFormLayoutProps {
   className?: string
   inline?: boolean
-  labelAlign?: TLabelAlign
-  wrapperCol?: number
-  labelCol?: number
-  labelTextAlign?: TTextAlign
-  size?: TSize
+  labelAlign?: LabelAlign
+  wrapperCol?: ColProps | number
+  labelCol?: ColProps | number
+  labelTextAlign?: TextAlign
+  size?: Size
   style?: React.CSSProperties
 }
 
 export interface IFormItemGridProps {
   cols?: Array<number | { span: number; offset: number }>
-  description?: TTextEl
+  description?: TextEl
   gutter?: number
-  title?: TTextEl
+  title?: TextEl
 }
 
 export interface IRowProps {
@@ -85,7 +90,7 @@ export interface IRowProps {
 }
 
 export interface IColProps extends ColProps {
-  prefix: string
+  prefix?: string
   pure?: boolean
   className?: string
   fixedSpan?: string | number
@@ -114,9 +119,11 @@ export type TFormCardOrFormBlockProps = Omit<CardProps, 'children'>
 
 export interface IFormTextBox {
   text?: string
-  title?: TTextEl
-  description?: TTextEl
+  name?: string
+  title?: TextEl
+  description?: TextEl
   gutter?: number
+  required?: boolean
 }
 
 export interface IFormButtonGroupProps {

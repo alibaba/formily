@@ -8,8 +8,8 @@ export const CircleButton = styled['div'].attrs({ className: 'cricle-btn' })`
   margin-right:10px;
   border-radius: ${props => (!props.hasText ? '100px' : 'none')};
   border: ${props => (!props.hasText ? '1px solid #eee' : 'none')};
-  margin-bottom:20px;
-  cursor:pointer;
+  margin-bottom: 20px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,10 +19,9 @@ export const CircleButton = styled['div'].attrs({ className: 'cricle-btn' })`
         background:#f7f4f4;
       }`
       : ''}
-  .op-name{
-    margin-left:3px;
+  .op-name {
+    margin-left: 3px;
   }
-}
 `
 
 export const TextButton = styled['div'].attrs({

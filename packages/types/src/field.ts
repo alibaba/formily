@@ -3,8 +3,8 @@ import { ISchema } from './schema'
 import { Path } from './path'
 import { IFormPathMatcher } from './form'
 
-export interface IField {
-  value: any
+export interface IField<V = any> {
+  value: V
   valid: boolean
   dirty: boolean
   invalid: boolean
@@ -18,13 +18,13 @@ export interface IField {
   errors: string[]
   effectErrors: string[]
   pristine: boolean
-  initialValue: any
+  initialValue: V
   name: string
   path: string[]
   props: ISchema
   rules: IRuleDescription[]
   dirtyType: string
-  lastValidateValue: any
+  lastValidateValue: V
   notify: (forceUpdate?: boolean) => void
   changeEditable: (editable: boolean | ((name: string) => boolean)) => void
   match: (path: Path | IFormPathMatcher) => boolean

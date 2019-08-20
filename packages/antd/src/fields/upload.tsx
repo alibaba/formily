@@ -184,7 +184,7 @@ registerFormField(
         this.props.onChange(fileList)
       }
 
-      public onChangeHandler = ({ fileList, file }) => {
+      public onChangeHandler = ({ fileList }) => {
         const { onChange } = this.props
         fileList = toArr(fileList)
         if (
@@ -235,6 +235,7 @@ registerFormField(
       }
 
       public render() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { listType, locale, onChange, value, ...others } = this.props
 
         if (listType.indexOf('card') > -1) {
