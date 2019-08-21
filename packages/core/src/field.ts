@@ -131,6 +131,10 @@ export class Field implements IField {
       this.editable = !isEmpty(editable) ? editable : this.getContextEditable()
     }
 
+    if (options.initialValue) {
+      this.lastValidateValue = options.initialValue
+    }
+
     if (
       this.pristine &&
       !isEmpty(this.initialValue) &&
