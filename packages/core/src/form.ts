@@ -129,7 +129,7 @@ export class Form {
   public setFieldState = (
     path: Path | IFormPathMatcher,
     callback?: (fieldState: IFieldState) => void
-  ) => {
+  ): Promise<void> => {
     if (this.destructed) {
       return
     }
@@ -519,7 +519,7 @@ export class Form {
     return formState
   }
 
-  public validate() {
+  public validate(): Promise<IFormState | IFormState['errors']> {
     return this.internalValidate(this.state.values, true).then(() => {
       return new Promise((resolve, reject) => {
         this.formNotify()
@@ -541,7 +541,7 @@ export class Form {
   }
 
   public submit() {
-    return this.validate().then(formState => {
+    return this.validate().then((formState: IFormState) => {
       this.dispatchEffect('onFormSubmit', formState)
       if (isFn(this.options.onSubmit)) {
         this.options.onSubmit({ formState })

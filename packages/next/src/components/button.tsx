@@ -66,16 +66,14 @@ Submit.defaultProps = {
   showLoading: true
 }
 
-export const Reset: React.FC<Omit<ISubmitProps, 'showLoading'>> = props => {
-  return (
-    <FormConsumer>
-      {({ reset }) => {
-        return (
-          <Button {...props} onClick={reset}>
-            {props.children || '重置'}
-          </Button>
-        )
-      }}
-    </FormConsumer>
-  )
-}
+export const Reset: React.FC<Omit<ISubmitProps, 'showLoading'>> = props => (
+  <FormConsumer>
+    {({ reset }) => {
+      return (
+        <Button {...props} onClick={reset}>
+          {props.children || '重置'}
+        </Button>
+      )
+    }}
+  </FormConsumer>
+)

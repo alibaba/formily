@@ -49,23 +49,53 @@ export interface IFormOptions {
   traverse?: (schema: ISchema) => ISchema
 }
 
+type TUnionType<T> = T | Promise<T>
+
 // 通过 createActions 或者 createAsyncActions 创建出来的 actions 接口
 export interface IFormActions {
   setFieldState: (
     name: Path | IFormPathMatcher,
     callback?: (fieldState: IFieldState) => void
-  ) => Promise<any>
+  ) => TUnionType<void>
   getFieldState: (
     name: Path | IFormPathMatcher,
-    callback: (fieldState: IFieldState) => any
-  ) => any
-  getFormState: (callback: (fieldState: IFormState) => any) => any
-  setFormState: (callback: (fieldState: IFormState) => any) => Promise<any>
-  getSchema: (path: Path) => object
-  reset: (forceClear: boolean) => void
-  submit: () => Promise<any>
-  validate: () => Promise<any>
-  dispatch: (type: string, payload: any) => void
+    callback?: (fieldState: IFieldState) => void
+  ) => TUnionType<IFieldState | void>
+  getFormState: (
+    callback?: (fieldState: IFormState) => void
+  ) => TUnionType<IFormState | void>
+  setFormState: (callback: (fieldState: IFormState) => void) => TUnionType<void>
+  getSchema: (path: Path) => TUnionType<ISchema>
+  reset: (
+    forceClear?: boolean | { forceClear?: boolean; validate?: boolean },
+    validate?: boolean
+  ) => TUnionType<void>
+  submit: () => TUnionType<IFormState>
+  validate: () => TUnionType<IFormState | IFormState['errors']>
+  dispatch: <T = any>(type: string, payload: T) => TUnionType<void>
+}
+
+export interface IAsyncFormActions {
+  setFieldState: (
+    name: Path | IFormPathMatcher,
+    callback?: (fieldState: IFieldState) => void
+  ) => Promise<void>
+  getFieldState: (
+    name: Path | IFormPathMatcher,
+    callback?: (fieldState: IFieldState) => void
+  ) => Promise<IFieldState | void>
+  getFormState: (
+    callback?: (fieldState: IFormState) => void
+  ) => Promise<IFormState | void>
+  setFormState: (callback: (fieldState: IFormState) => void) => Promise<void>
+  getSchema: (path: Path) => Promise<ISchema>
+  reset: (
+    forceClear?: boolean | { forceClear?: boolean; validate?: boolean },
+    validate?: boolean
+  ) => Promise<void>
+  submit: () => Promise<IFormState>
+  validate: () => Promise<IFormState | IFormState['errors']>
+  dispatch: <T = any>(type: string, payload: T) => Promise<void>
 }
 
 export interface IFormPathMatcher {
@@ -126,7 +156,7 @@ export interface IFormItemProps extends IFormSharedProps {
   id: string
   required: boolean
   label: React.ReactNode
-  extra: object
+  extra: React.ReactNode
   validateState: any
   isTableColItem: boolean
   help: React.ReactNode

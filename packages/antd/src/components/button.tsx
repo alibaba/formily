@@ -62,16 +62,14 @@ export const Submit = (props: ISubmitProps) => (
   </FormConsumer>
 )
 
-export const Reset = props => {
-  return (
-    <FormConsumer>
-      {({ reset }) => {
-        return (
-          <Button {...props} onClick={reset}>
-            {props.children || '重置'}
-          </Button>
-        )
-      }}
-    </FormConsumer>
-  )
-}
+export const Reset: React.FC<Omit<ISubmitProps, 'showLoading'>> = props => (
+  <FormConsumer>
+    {({ reset }) => {
+      return (
+        <Button {...props} onClick={reset}>
+          {props.children || '重置'}
+        </Button>
+      )
+    }}
+  </FormConsumer>
+)
