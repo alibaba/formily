@@ -1,6 +1,6 @@
 import React, { Component, useContext, useMemo, useState } from 'react'
 import { IBroadcast, isArr, isFn, isStr } from '@uform/utils'
-import { ISelector, IFormActions } from '@uform/types'
+import { ISelector, IFormActions, ISchema } from '@uform/types'
 import { useEva, createActions } from 'react-eva'
 import { Broadcast } from '../utils'
 import { BroadcastContext, StateContext } from './context'
@@ -56,6 +56,15 @@ export interface IFormState {
   status?: any
   state?: object
   schema?: object
+}
+
+export interface IUseFormState {
+  status: 'changed' | 'reseted' | 'initialize' | 'submitting' | 'submitted'
+  state: IFormState
+  schema: ISchema
+  submit: () => void
+  reset: () => void
+  dispatch: (name: string, payload: any) => void
 }
 
 export const useForm = (options: IOption = {}) => {
