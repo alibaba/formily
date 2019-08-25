@@ -27,9 +27,7 @@ const normalizeCol = (
   }
 }
 
-export const FormLayoutItem: React.FC<Partial<IFormItemProps>> = function(
-  props
-) {
+export const FormLayoutItem: React.FC<IFormItemProps> = function(props) {
   return React.createElement(
     FormLayoutConsumer,
     {},
@@ -119,9 +117,13 @@ export const FormItemGrid = createVirtualBox<IFormItemGridPropsAlias>(
       const {
         children: rawChildren,
         cols: rawCols,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         title,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         description,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         help,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         extra,
         ...props
       } = this.props
