@@ -1,13 +1,15 @@
 import { Rule } from './rule'
 import { Dispatcher } from './effects'
 
-export interface ISchema {
+type MayBeArray<V> = V | (V[])
+
+export interface ISchema<V = any> {
   type?: string
   title?: string
   description?: string
-  default?: unknown
+  default?: MayBeArray<V>
   required?: boolean
-  enum?: Array<{ label: string; value: unknown } | string | number>
+  enum?: Array<{ label: string; value: V } | string | number>
   enumNames?: string[]
   properties?: {
     [key: string]: ISchema

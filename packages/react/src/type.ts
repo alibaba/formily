@@ -47,10 +47,10 @@ export interface IStateFieldState {
   required?: boolean
 }
 
-export interface ISchemaFormProps extends IFormOptions {
+export interface ISchemaFormProps<V = any> extends IFormOptions<V> {
   className?: string
   children?: React.ReactNode
-  value?: any
+  value?: V
   onChange?: (payload: IFormPayload) => void
 }
 
