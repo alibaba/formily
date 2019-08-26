@@ -23,7 +23,7 @@ const getScheduler = () => {
   }
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const scheduler = require('scheduler')
+    const scheduler = require('scheduler') as any
     return compactScheduler(
       [
         scheduler.scheduleCallback || scheduler.unstable_scheduleCallback,

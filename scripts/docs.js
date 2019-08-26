@@ -61,7 +61,14 @@ const createDocs = async () => {
         if (rule.test.test('.tsx')) {
           return {
             ...rule,
-            use: [require.resolve('ts-loader')]
+            use: [
+              {
+                loader: require.resolve('ts-loader'),
+                options: {
+                  transpileOnly: true
+                }
+              }
+            ]
           }
         } else {
           return rule
@@ -70,7 +77,10 @@ const createDocs = async () => {
 
       Object.assign(webpackConfig.resolve.alias, {
         ...alias,
-        '@alifd/next': path.resolve(__dirname, '../packages/next/node_modules/@alifd/next'),
+        '@alifd/next': path.resolve(
+          __dirname,
+          '../packages/next/node_modules/@alifd/next'
+        ),
         antd: path.resolve(__dirname, '../packages/antd/node_modules/antd')
       })
       webpackConfig.resolve.plugins = [
