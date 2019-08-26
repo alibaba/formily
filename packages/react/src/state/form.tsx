@@ -246,11 +246,7 @@ export const StateForm = createHOC((options, Form) => {
         return
       }
 
-      this.submit().catch(e => {
-        if (console && console.error) {
-          console.error(e)
-        }
-      })
+      this.submit()
     }
 
     public getValues = () => {
@@ -264,7 +260,20 @@ export const StateForm = createHOC((options, Form) => {
         state: this.formState
       })
 
-      return this.form.submit()
+      return this.form.submit().catch(e => {
+        this.notify({
+          type: 'submitted',
+          state: this.formState
+        })
+
+        this.form.setSubmitting(false)
+
+        if (console && console.error) {
+          console.error(e)
+        }
+
+        return e
+      })
     }
 
     public reset = (
