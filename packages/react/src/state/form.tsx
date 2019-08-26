@@ -158,12 +158,17 @@ export const StateForm = createHOC((options, Form) => {
                   type: 'submitted',
                   state: this.formState
                 })
+
+                this.form.setSubmitting(false)
               },
               error => {
                 this.notify({
                   type: 'submitted',
                   state: this.formState
                 })
+
+                this.form.setSubmitting(false)
+
                 throw error
               }
             )
@@ -236,7 +241,12 @@ export const StateForm = createHOC((options, Form) => {
         e.stopPropagation()
         e.preventDefault()
       }
-      this.form.submit().catch(e => {
+
+      if (this.form.getSubmitting()) {
+        return
+      }
+
+      this.submit().catch(e => {
         if (console && console.error) {
           console.error(e)
         }
@@ -248,6 +258,12 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public submit = () => {
+      // 生成 submitStart 状态，用于 Submit 组件呈现正确的 UI 反馈
+      this.notify({
+        type: 'submitStart',
+        state: this.formState
+      })
+
       return this.form.submit()
     }
 
