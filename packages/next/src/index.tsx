@@ -21,14 +21,25 @@ export * from './components/formButtonGroup'
 export * from './components/button'
 export * from './components/layout'
 
-import { SchemaForm as ReactSchemaForm } from '@uform/react'
-import { mapStyledProps, mapTextComponent } from './utils'
-import { ISchemaFormProps, ISchemaFormExpandProps } from './type'
+import React from 'react'
+import {
+  SchemaForm as InternalSchemaForm,
+  Field as InternalField
+} from '@uform/react'
+import { SchemaFormProps, FieldProps } from './type'
 
-export { mapStyledProps, mapTextComponent }
+export { mapStyledProps, mapTextComponent } from './utils'
 
-export const SchemaForm: React.ComponentClass<
-  ISchemaFormProps & ISchemaFormExpandProps
-> = ReactSchemaForm
+export default class SchemaForm<V> extends React.Component<SchemaFormProps<V>> {
+  render() {
+    return <InternalSchemaForm {...this.props} />
+  }
+}
 
-export default SchemaForm
+export class Field<V, T extends string> extends React.Component<
+  FieldProps<V, T>
+> {
+  render() {
+    return <InternalField {...this.props} />
+  }
+}

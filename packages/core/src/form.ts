@@ -44,8 +44,8 @@ const defaults = <T>(opts: T): T =>
   ({
     initialValues: {},
     values: {},
-    onSubmit: (values: any) => {},
-    effects: ($: any) => {},
+    onSubmit: () => {},
+    effects: () => {},
     ...opts
   } as T)
 
@@ -88,6 +88,8 @@ export class Form {
   private traverse: (schema: ISchema) => ISchema
 
   constructor(opts: IFormOptions) {
+    this.getFieldState = this.getFieldState.bind(this)
+    this.getFormState = this.getFormState.bind(this)
     this.options = defaults<IFormOptions>(opts)
     this.publisher = new Broadcast()
     this.initialized = false
@@ -128,7 +130,7 @@ export class Form {
 
   public changeEditable(editable: Editable) {
     this.editable = editable
-    each(this.fields, (field, name) => {
+    each(this.fields, field => {
       field.changeEditable(editable)
     })
   }
@@ -139,7 +141,7 @@ export class Form {
 
   public setFieldState = (
     path: Path | IFormPathMatcher,
-    callback?: (fieldState: IFieldState) => void
+    callback: (fieldState: IFieldState) => void
   ): Promise<void> => {
     if (this.destructed) {
       return
@@ -167,10 +169,16 @@ export class Form {
     })
   }
 
-  public getFieldState = (
+  public getFieldState(
     path: Path | IFormPathMatcher,
-    callback: (fieldState: IFieldState) => any
-  ) => {
+    callback: (fieldState: IFieldState) => void
+  ): void
+  public getFieldState(path: Path | IFormPathMatcher): IFieldState
+
+  public getFieldState(
+    path: Path | IFormPathMatcher,
+    callback?: (fieldState: IFieldState) => void
+  ): any {
     let field: IField
     each(this.fields, innerField => {
       if (innerField.match(path)) {
@@ -186,19 +194,21 @@ export class Form {
     }
   }
 
-  public getFormState = (callback: any) => {
+  public getFormState(callback: (formState: IFormState) => void): void
+  public getFormState(): IFormState
+  public getFormState(callback?: any): any {
     return isFn(callback) ? callback(this.publishState()) : this.publishState()
   }
 
-  public setFormState = reducer => {
+  public setFormState = (callback: (formState: IFormState) => void) => {
     if (this.destructed) {
       return
     }
-    if (!isFn(reducer)) {
+    if (!isFn(callback)) {
       return
     }
     const published = this.publishState()
-    reducer(published, reducer)
+    callback(published)
     return Promise.resolve(this.checkState(published))
   }
 
@@ -530,7 +540,7 @@ export class Form {
     return formState
   }
 
-  public validate(): Promise<IFormState | IFormState['errors']> {
+  public validate(): Promise<IFormState> {
     return this.internalValidate(this.state.values, true).then(() => {
       return new Promise((resolve, reject) => {
         this.formNotify()
