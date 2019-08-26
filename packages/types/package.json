@@ -3,7 +3,6 @@
   "version": "0.3.11",
   "license": "MIT",
   "main": "lib",
-  "module": "src",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
