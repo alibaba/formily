@@ -82,6 +82,9 @@ export class Form {
 
   private batchUpdateField: boolean
 
+  // submit 提交中的状态
+  private submitting: boolean = false
+
   private traverse: (schema: ISchema) => ISchema
 
   constructor(opts: IFormOptions) {
@@ -104,6 +107,14 @@ export class Form {
     this.initialized = true
     this.destructed = false
     this.fieldSize = 0
+  }
+
+  public getSubmitting() {
+    return this.submitting
+  }
+
+  public setSubmitting(type: boolean) {
+    this.submitting = type
   }
 
   public changeValues(values: any) {
@@ -541,6 +552,13 @@ export class Form {
   }
 
   public submit() {
+    if (this.getSubmitting()) {
+      return Promise.resolve(this.publishState())
+    }
+
+    // 标记正在处理 submit 处理流程
+    this.setSubmitting(true)
+
     return this.validate().then((formState: IFormState) => {
       this.dispatchEffect('onFormSubmit', formState)
       if (isFn(this.options.onSubmit)) {
