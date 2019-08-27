@@ -569,13 +569,21 @@ export class Form {
     // 标记正在处理 submit 处理流程
     this.setSubmitting(true)
 
-    return this.validate().then((formState: IFormState) => {
-      this.dispatchEffect('onFormSubmit', formState)
-      if (isFn(this.options.onSubmit)) {
-        this.options.onSubmit({ formState })
-      }
-      return formState
-    })
+    return this.validate()
+      .then((formState: IFormState) => {
+        this.dispatchEffect('onFormSubmit', formState)
+
+        if (isFn(this.options.onSubmit)) {
+          this.options.onSubmit({ formState })
+        }
+
+        return formState
+      })
+      .catch(e => {
+        this.setSubmitting(false)
+
+        throw e
+      })
   }
 
   public subscribe(callback: (payload: any) => void) {

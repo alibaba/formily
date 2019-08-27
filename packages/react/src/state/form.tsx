@@ -145,6 +145,9 @@ export const StateForm = createHOC((options, Form) => {
     public onSubmitHandler = $props => {
       return ({ formState }) => {
         const props = this.props || $props
+
+        const closeSubmitting = () => this.form.setSubmitting(false)
+
         if (props.onSubmit) {
           const promise = props.onSubmit(clone(formState.values))
           if (promise && promise.then) {
@@ -159,7 +162,7 @@ export const StateForm = createHOC((options, Form) => {
                   state: this.formState
                 })
 
-                this.form.setSubmitting(false)
+                closeSubmitting()
               },
               error => {
                 this.notify({
@@ -167,13 +170,17 @@ export const StateForm = createHOC((options, Form) => {
                   state: this.formState
                 })
 
-                this.form.setSubmitting(false)
+                closeSubmitting()
 
                 throw error
               }
             )
+
+            return
           }
         }
+
+        closeSubmitting()
       }
     }
 
@@ -246,7 +253,11 @@ export const StateForm = createHOC((options, Form) => {
         return
       }
 
-      this.submit()
+      this.submit().catch(e => {
+        if (console && console.error) {
+          console.error(e)
+        }
+      })
     }
 
     public getValues = () => {
@@ -254,26 +265,7 @@ export const StateForm = createHOC((options, Form) => {
     }
 
     public submit = () => {
-      // 生成 submitStart 状态，用于 Submit 组件呈现正确的 UI 反馈
-      this.notify({
-        type: 'submitStart',
-        state: this.formState
-      })
-
-      return this.form.submit().catch(e => {
-        this.notify({
-          type: 'submitted',
-          state: this.formState
-        })
-
-        this.form.setSubmitting(false)
-
-        if (console && console.error) {
-          console.error(e)
-        }
-
-        return e
-      })
+      return this.form.submit()
     }
 
     public reset = (
