@@ -4,16 +4,12 @@ import { Button } from 'antd'
 import { ISubmitProps } from '../type'
 
 export const Submit = ({ showLoading, ...props }: ISubmitProps) => (
-  <FormConsumer selector={['submitStarted', 'submitting', 'submitted']}>
+  <FormConsumer selector={['submitting', 'submitted']}>
     {({ status }: IUseFormState) => (
       <Button
         type="primary"
         htmlType="submit"
-        disabled={
-          showLoading
-            ? ['submitStarted', 'submitting'].includes(status)
-            : undefined
-        }
+        disabled={showLoading ? status === 'submitting' : undefined}
         {...props}
         loading={showLoading ? status === 'submitting' : undefined}
       >
