@@ -1,11 +1,7 @@
 import React from 'react'
 import { FormConsumer } from '@uform/react'
 import { Button } from '@alifd/next'
-import { ButtonProps } from '@alifd/next/types/button'
-
-export interface ISubmitProps extends Omit<ButtonProps, 'loading'> {
-  showLoading?: boolean
-}
+import { ISubmitProps } from '../type'
 
 export const Submit = ({ showLoading, ...props }: ISubmitProps) => {
   return (
@@ -31,7 +27,7 @@ Submit.defaultProps = {
   showLoading: true
 }
 
-export const Reset = (props: ButtonProps) => {
+export const Reset: React.FC<Omit<ISubmitProps, 'showLoading'>> = props => {
   return (
     <FormConsumer>
       {({ reset }) => {

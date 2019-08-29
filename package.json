@@ -23,6 +23,7 @@
     "version:rc": "npm run prevesion && lerna version prerelease --preid rc --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "version:patch": "npm run prevesion && lerna version patch --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "version:minor": "npm run prevesion && lerna version minor --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
+    "version:preminor": "npm run prevesion && lerna version preminor --preid beta --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "version:major": "npm run prevesion && lerna version major --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "release:force": "lerna publish from-package --yes",
     "release": "lerna publish",

@@ -504,7 +504,8 @@ function _setIn(
       if (/^\d+$/.test(pathArr[i + 1 + ''])) {
         if (getSchema) {
           const schema = getSchema(pathArr.slice(0, i) as string[])
-          if (schema.type === 'array') {
+
+          if (!schema || schema.type === 'array') {
             obj[p] = []
           } else {
             obj[p] = {}
