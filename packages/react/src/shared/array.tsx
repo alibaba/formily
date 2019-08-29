@@ -238,13 +238,17 @@ export const createArrayField = (
 
     // TODO e 类型
     public onRemoveHandler(index: number): (e: any) => void {
-      const { value, mutators, schema, locale } = this.props
+      const { value, mutators, schema, locale, schemaPath, form } = this.props
       const { minItems } = schema
       return e => {
         e.stopPropagation()
         if (minItems >= 0 && value.length - 1 < minItems) {
           mutators.errors(locale.array_invalid_minItems, minItems)
         } else {
+          Object.keys(schema.items.properties).forEach(k => {
+            form.unloadField([...schemaPath, index, k].join('.'))
+          })
+
           mutators.remove(index)
         }
       }
