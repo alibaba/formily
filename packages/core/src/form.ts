@@ -554,6 +554,12 @@ export class Form {
     return this.publisher.subscribe(callback)
   }
 
+  public unloadField(name: string) {
+    if (this.fields[name]) {
+      delete this.fields[name]
+    }
+  }
+
   public destructor() {
     if (this.destructed) {
       return
