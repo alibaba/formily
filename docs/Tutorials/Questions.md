@@ -55,3 +55,5 @@ effects函数其实有点类似于vue3.0的setup函数，它只在函数构造�
 
 可以的，@uform/react拥有完全的json-schema扩展能力，你只要每次registerFormField的时候不要用connect包装器对自定义组件包装，就能针对json-schema的各种属性做功能扩展了，而不是单纯的x-props
 
+## 11. 如何自定义action?
+目前，通过createFormActions或者createAsyncFormActions方法可以获取11种基础的表单操作方法。如果你需要根据业务场景自定义action，可以结合[react/eva](https://github.com/liuqiao1/react-eva)实现
