@@ -15,13 +15,13 @@ export interface IRegisteredFieldsMap {
 }
 
 // TODO 下面两个接口能不能合并成一个
-export interface IFunctionComponentWithStyleComponent
-  extends React.FunctionComponent {
+export interface IFunctionComponentWithStyleComponent<ComponentProps>
+  extends React.FunctionComponent<ComponentProps> {
   styledComponentId?: string
 }
 
-export interface IComponentClassWithStyleComponent
-  extends React.ComponentClass {
+export interface IComponentClassWithStyleComponent<ComponentProps>
+  extends React.ComponentClass<ComponentProps> {
   styledComponentId?: string
 }
 
@@ -53,11 +53,11 @@ export const initialContainer = () => {
   }
 }
 
-export const registerFormField = (
+export const registerFormField = <ComponentProps extends any>(
   name: string,
   component:
-    | IFunctionComponentWithStyleComponent
-    | IComponentClassWithStyleComponent,
+    | IFunctionComponentWithStyleComponent<ComponentProps>
+    | IComponentClassWithStyleComponent<ComponentProps>,
   notWrapper?: boolean
 ) => {
   if (
