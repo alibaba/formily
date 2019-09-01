@@ -5,7 +5,6 @@ import { SchemaField } from '../decorators/markup'
 import { registerVirtualboxFlag } from '../utils'
 import { FormField } from '../state/field'
 import { IFieldProps } from '../type'
-import { ISchema } from '@uform/types'
 
 export type TVirtualBoxProps = React.PropsWithChildren<{
   name?: string
@@ -20,7 +19,7 @@ export const createVirtualBox = <P extends unknown>(
   registerVirtualboxFlag(name)
   registerFormField(
     name,
-    class extends React.PureComponent<IFieldProps | ISchema['x-props']> {
+    class extends React.PureComponent<IFieldProps> {
       public static displayName = 'VirtualBoxWrapper'
 
       public render() {
@@ -42,11 +41,11 @@ export const createVirtualBox = <P extends unknown>(
         })
         return React.createElement(
           component,
-          isController ? this.props : schema['x-props'],
+          isController ? this.props : (schema['x-props'] as any),
           children
         )
       }
-    } as any,
+    },
     true
   )
 
