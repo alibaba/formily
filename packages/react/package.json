@@ -24,7 +24,8 @@
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "@types/react": "^16.8.23"
   },
   "dependencies": {
     "@uform/core": "^0.4.0-beta.0",

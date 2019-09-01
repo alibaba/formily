@@ -112,7 +112,7 @@ export interface IConnectProps extends IFieldProps {
   [name: string]: any
 }
 
-export interface IConnectOptions {
+export interface IConnectOptions<T> {
   valueName?: string
   eventName?: string
   defaultProps?: object
@@ -122,23 +122,25 @@ export interface IConnectOptions {
     componentProps: IFieldProps
   ) => IConnectProps | void
   getComponent?: (
-    Target: React.ComponentClass,
+    Target: T,
     props,
     {
       editable,
       name
     }: { editable: boolean | ((name: string) => boolean); name: string }
-  ) => React.ComponentClass
+  ) => T
 }
 
-export const connect = (opts?: IConnectOptions) => Target => {
+export const connect = <T extends React.ComponentType<IFieldProps>>(
+  opts?: IConnectOptions<T>
+) => (Target: T): React.ComponentClass<IFieldProps> => {
   opts = {
     valueName: 'value',
     eventName: 'onChange',
     ...opts
   }
   return class extends PureComponent<IFieldProps> {
-    public render() {
+    render() {
       const { value, name, mutators, schema, editable } = this.props
 
       let props = {
