@@ -9,6 +9,7 @@ import { SchemaField } from '../decorators/markup'
 import { registerVirtualboxFlag } from '../utils'
 import { FormField } from '../state/field'
 import { IFieldProps } from '../type'
+import { ISchema } from '@uform/types'
 
 export type TVirtualBoxProps = React.PropsWithChildren<{
   name?: string
@@ -18,14 +19,14 @@ export type TVirtualBoxProps = React.PropsWithChildren<{
 export const createVirtualBox = <P extends unknown>(
   name: string,
   component:
-    | IFunctionComponentWithStyleComponent
-    | IComponentClassWithStyleComponent,
+    | IFunctionComponentWithStyleComponent<IFieldProps>
+    | IComponentClassWithStyleComponent<IFieldProps>,
   isController?: boolean
 ) => {
   registerVirtualboxFlag(name)
   registerFormField(
     name,
-    class extends React.PureComponent<IFieldProps> {
+    class extends React.PureComponent<IFieldProps | ISchema['x-props']> {
       public static displayName = 'VirtualBoxWrapper'
 
       public render() {
@@ -84,8 +85,8 @@ export const createVirtualBox = <P extends unknown>(
 export const createControllerBox = <P extends unknown>(
   name: string,
   component:
-    | IFunctionComponentWithStyleComponent
-    | IComponentClassWithStyleComponent
+    | IFunctionComponentWithStyleComponent<IFieldProps>
+    | IComponentClassWithStyleComponent<IFieldProps>
 ) => createVirtualBox<P>(name, component, true)
 
 export const FormSlot = ({ name, children }) => {
