@@ -1,10 +1,6 @@
 import React from 'react'
 import pascalCase from 'pascal-case'
-import {
-  registerFormField,
-  IComponentClassWithStyleComponent,
-  IFunctionComponentWithStyleComponent
-} from './core'
+import { registerFormField, ComponentWithStyleComponent } from './core'
 import { SchemaField } from '../decorators/markup'
 import { registerVirtualboxFlag } from '../utils'
 import { FormField } from '../state/field'
@@ -18,9 +14,7 @@ export type TVirtualBoxProps = React.PropsWithChildren<{
 
 export const createVirtualBox = <P extends unknown>(
   name: string,
-  component:
-    | IFunctionComponentWithStyleComponent<IFieldProps>
-    | IComponentClassWithStyleComponent<IFieldProps>,
+  component: ComponentWithStyleComponent<IFieldProps>,
   isController?: boolean
 ) => {
   registerVirtualboxFlag(name)
@@ -52,7 +46,7 @@ export const createVirtualBox = <P extends unknown>(
           children
         )
       }
-    },
+    } as any,
     true
   )
 
@@ -84,9 +78,7 @@ export const createVirtualBox = <P extends unknown>(
 
 export const createControllerBox = <P extends unknown>(
   name: string,
-  component:
-    | IFunctionComponentWithStyleComponent<IFieldProps>
-    | IComponentClassWithStyleComponent<IFieldProps>
+  component: ComponentWithStyleComponent<IFieldProps>
 ) => createVirtualBox<P>(name, component, true)
 
 export const FormSlot = ({ name, children }) => {

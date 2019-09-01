@@ -1,7 +1,7 @@
 import * as React from 'react'
 import pascalCase from 'pascal-case'
 
-import { ISchemaFormProps } from '../type'
+import { ISchemaFormProps, IFieldProps } from '../type'
 import { isFn, isNotEmptyStr, lowercase, each, compose } from '../utils'
 
 // 最原生的 Form，用到了 DOM 的 form 标签
@@ -11,17 +11,12 @@ export interface INativeFormProps {
 }
 
 export interface IRegisteredFieldsMap {
-  [name: string]: React.ComponentType
+  [name: string]: ComponentWithStyleComponent<any>
 }
 
-// TODO 下面两个接口能不能合并成一个
-export interface IFunctionComponentWithStyleComponent<ComponentProps>
-  extends React.FunctionComponent<ComponentProps> {
-  styledComponentId?: string
-}
-
-export interface IComponentClassWithStyleComponent<ComponentProps>
-  extends React.ComponentClass<ComponentProps> {
+export type ComponentWithStyleComponent<ComponentProps> = React.ComponentType<
+  ComponentProps
+> & {
   styledComponentId?: string
 }
 
@@ -53,11 +48,9 @@ export const initialContainer = () => {
   }
 }
 
-export const registerFormField = <ComponentProps extends any>(
+export const registerFormField = (
   name: string,
-  component:
-    | IFunctionComponentWithStyleComponent<ComponentProps>
-    | IComponentClassWithStyleComponent<ComponentProps>,
+  component: ComponentWithStyleComponent<IFieldProps>,
   notWrapper?: boolean
 ) => {
   if (
