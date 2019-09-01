@@ -347,3 +347,49 @@ test('dynamic switch visible', async () => {
   await sleep(33)
   expect(queryByText('bb is required')).toBeNull()
 })
+
+test('async validate prevent submit', async () => {
+  const onSubmitHandler = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm initialValues={{ aa: '' }} onSubmit={onSubmitHandler}>
+        <Field
+          name="aa"
+          type="string"
+          x-rules={val => {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                if (val === '123') {
+                  resolve('can not input 123')
+                } else {
+                  resolve()
+                }
+              }, 100)
+            })
+          }}
+        />
+        <button type="submit">Submit</button>
+      </SchemaForm>
+    )
+  }
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: '444' }
+  })
+  await sleep(33)
+  fireEvent.click(queryByText('Submit'))
+  fireEvent.click(queryByText('Submit'))
+  fireEvent.click(queryByText('Submit'))
+  await sleep(300)
+  expect(queryByText('can not input 123')).toBeNull()
+  expect(onSubmitHandler).toBeCalledTimes(1)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: '123' }
+  })
+  await sleep(33)
+  fireEvent.click(queryByText('Submit'))
+  await sleep(200)
+  expect(queryByText('can not input 123')).toBeVisible()
+  expect(onSubmitHandler).toBeCalledTimes(1)
+})
