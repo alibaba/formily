@@ -393,3 +393,47 @@ test('async validate prevent submit', async () => {
   expect(queryByText('can not input 123')).toBeVisible()
   expect(onSubmitHandler).toBeCalledTimes(1)
 })
+
+test('async validate side effect', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm actions={actions}>
+        <Field name="aa" type="string" required />
+        <Field name="bb" type="string" required />
+        <button
+          onClick={e => {
+            e.preventDefault()
+            actions.reset(false, false)
+          }}
+        >
+          Cancel
+        </button>
+      </SchemaForm>
+    )
+  }
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'aaaaa' }
+  })
+  fireEvent.change(queryAllByTestId('test-input')[1], {
+    target: { value: 'bbbbb' }
+  })
+  await sleep(33)
+  fireEvent.click(queryByText('Cancel'))
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'aaaaa' }
+  })
+  await sleep(33)
+  expect(queryByText('aa is required')).toBeNull()
+  expect(queryByText('bb is required')).toBeNull()
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: '' }
+  })
+  await sleep(33)
+  expect(queryByText('aa is required')).toBeVisible()
+  expect(queryByText('bb is required')).toBeNull()
+})

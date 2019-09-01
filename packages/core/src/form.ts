@@ -479,12 +479,14 @@ export class Form {
         field.updateState(state => {
           state.value = forceClear ? undefined : initialValue
         })
+        field.pristine = true
       }
       if (field.dirty) {
         raf(() => {
           if (this.destructed) {
             return
           }
+          field.pristine = true
           field.notify()
         })
       }
