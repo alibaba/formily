@@ -20,8 +20,7 @@
     "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "devDependencies": {
-    "antd": "^3.14.1",
-    "typescript": "^3.5.2"
+    "antd": "^3.14.1"
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
