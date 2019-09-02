@@ -82,6 +82,8 @@ export class Form {
 
   private batchUpdateField: boolean
 
+  private validating: boolean
+
   private traverse: (schema: ISchema) => ISchema
 
   constructor(opts: IFormOptions) {
@@ -477,12 +479,14 @@ export class Form {
         field.updateState(state => {
           state.value = forceClear ? undefined : initialValue
         })
+        field.pristine = true
       }
       if (field.dirty) {
         raf(() => {
           if (this.destructed) {
             return
           }
+          field.pristine = true
           field.notify()
         })
       }
@@ -530,10 +534,12 @@ export class Form {
   }
 
   public validate(): Promise<IFormState> {
+    this.validating = true
     return this.internalValidate(this.state.values, true).then(() => {
       return new Promise((resolve, reject) => {
         this.formNotify()
         raf(() => {
+          this.validating = false
           if (this.destructed) {
             return
           }
@@ -551,6 +557,10 @@ export class Form {
   }
 
   public submit() {
+    if (this.validating)
+      return new Promise<IFormState>(resolve => {
+        resolve(this.publishState())
+      })
     return this.validate().then((formState: IFormState) => {
       this.dispatchEffect('onFormSubmit', formState)
       if (isFn(this.options.onSubmit)) {

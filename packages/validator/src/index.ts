@@ -51,6 +51,7 @@ export const runValidation = async (
       return
     }
     if (!forceUpdate) {
+      if (field.pristine) return
       if (isEmpty(field.lastValidateValue) && isEmpty(value)) return
       if (isEqual(field.lastValidateValue, value)) {
         return

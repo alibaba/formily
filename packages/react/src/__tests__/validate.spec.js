@@ -347,3 +347,93 @@ test('dynamic switch visible', async () => {
   await sleep(33)
   expect(queryByText('bb is required')).toBeNull()
 })
+
+test('async validate prevent submit', async () => {
+  const onSubmitHandler = jest.fn()
+  const TestComponent = () => {
+    return (
+      <SchemaForm initialValues={{ aa: '' }} onSubmit={onSubmitHandler}>
+        <Field
+          name="aa"
+          type="string"
+          x-rules={val => {
+            return new Promise(resolve => {
+              setTimeout(() => {
+                if (val === '123') {
+                  resolve('can not input 123')
+                } else {
+                  resolve()
+                }
+              }, 100)
+            })
+          }}
+        />
+        <button type="submit">Submit</button>
+      </SchemaForm>
+    )
+  }
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: '444' }
+  })
+  await sleep(33)
+  fireEvent.click(queryByText('Submit'))
+  fireEvent.click(queryByText('Submit'))
+  fireEvent.click(queryByText('Submit'))
+  await sleep(300)
+  expect(queryByText('can not input 123')).toBeNull()
+  expect(onSubmitHandler).toBeCalledTimes(1)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: '123' }
+  })
+  await sleep(33)
+  fireEvent.click(queryByText('Submit'))
+  await sleep(200)
+  expect(queryByText('can not input 123')).toBeVisible()
+  expect(onSubmitHandler).toBeCalledTimes(1)
+})
+
+test('async validate side effect', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm actions={actions}>
+        <Field name="aa" type="string" required />
+        <Field name="bb" type="string" required />
+        <button
+          onClick={e => {
+            e.preventDefault()
+            actions.reset(false, false)
+          }}
+        >
+          Cancel
+        </button>
+      </SchemaForm>
+    )
+  }
+  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'aaaaa' }
+  })
+  fireEvent.change(queryAllByTestId('test-input')[1], {
+    target: { value: 'bbbbb' }
+  })
+  await sleep(33)
+  fireEvent.click(queryByText('Cancel'))
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: 'aaaaa' }
+  })
+  await sleep(33)
+  expect(queryByText('aa is required')).toBeNull()
+  expect(queryByText('bb is required')).toBeNull()
+  await sleep(33)
+  fireEvent.change(queryAllByTestId('test-input')[0], {
+    target: { value: '' }
+  })
+  await sleep(33)
+  expect(queryByText('aa is required')).toBeVisible()
+  expect(queryByText('bb is required')).toBeNull()
+})

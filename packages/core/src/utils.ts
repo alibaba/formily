@@ -3,6 +3,7 @@ import {
   isArr,
   isStr,
   getPathSegments,
+  isEqual,
   toArr,
   clone,
   isFn,
@@ -135,7 +136,7 @@ export class BufferList {
       this.indexes[key] = index
     } else {
       const item = this.data[this.indexes[key]]
-      if (item.values.indexOf(value) === -1) {
+      if (!item.values.some(callback => isEqual(callback, value))) {
         item.values.push(value)
       }
     }
