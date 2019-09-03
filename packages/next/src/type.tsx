@@ -99,11 +99,11 @@ export interface IFormButtonGroupProps {
   style?: React.CSSProperties
   itemStyle?: React.CSSProperties
   className?: string
-
+  align?: 'left' | 'right' | 'start' | 'end' | 'top' | 'bottom' | 'center'
   triggerDistance?: number
   zIndex?: number
-  span?: number
-  offset?: number
+  span?: ColSpanType
+  offset?: ColSpanType
 }
 
 export interface SchemaFormProps<V = unknown> {
