@@ -56,8 +56,12 @@ export class FormGraph<NodeType = any> {
     }
   }
 
+  getNode = (path : FormPath | string)=>{
+    return this.nodes[path as string]
+  }
+
   selectParent = (path: FormPathPattern) => {
-    return this.nodes[FormPath.getPath(path).parent()]
+    return this.getNode(FormPath.getPath(path).parent())
   }
 
   selectChildren = (path: FormPathPattern) => {
@@ -66,7 +70,7 @@ export class FormGraph<NodeType = any> {
       return reduce(
         ref.children,
         (buf, path) => {
-          return buf.concat(this.nodes[path]).concat(this.selectChildren(path))
+          return buf.concat(this.getNode(path)).concat(this.selectChildren(path))
         },
         []
       )
@@ -75,7 +79,7 @@ export class FormGraph<NodeType = any> {
   }
 
   exist = (path: FormPathPattern) => {
-    return !!this.nodes[FormPath.getPath(path)]
+    return !!this.getNode(FormPath.getPath(path))
   }
 
   /**
@@ -86,7 +90,7 @@ export class FormGraph<NodeType = any> {
     if (ref && ref.children) {
       return each(ref.children, path => {
         if (isFn(eacher)) {
-          eacher(this.nodes[path], path)
+          eacher(this.getNode(path), path)
           this.eachChildren(path, eacher)
         }
       })
@@ -100,7 +104,7 @@ export class FormGraph<NodeType = any> {
     const selfPath = FormPath.getPath(path)
     const ref = this.refrences[selfPath]
     if (isFn(eacher)) {
-      eacher(this.nodes[selfPath], selfPath)
+      eacher(this.getNode(selfPath), selfPath)
       if (ref.parent) {
         this.eachParent(ref.parent.path, eacher)
       }
@@ -124,8 +128,8 @@ export class FormGraph<NodeType = any> {
       path: selfPath,
       children: []
     }
-    if (this.nodes[selfPath]) return
-    this.nodes[selfPath] = node
+    if (this.getNode(selfPath)) return
+    this.nodes[selfPath as string] = node
     this.refrences[selfPath] = selfRef
     if (parentRef) {
       parentRef.children.push(selfPath)
@@ -167,7 +171,7 @@ export class FormGraph<NodeType = any> {
         this.remove(path)
       })
     }
-    delete this.nodes[selfPath]
+    delete this.nodes[selfPath as string]
     delete this.refrences[selfPath]
     if (selfRef.parent) {
       selfRef.parent.children.forEach((path, index) => {
@@ -194,7 +198,7 @@ export class FormGraph<NodeType = any> {
       if (isFn(visitor)) {
         visitor(node, {
           path: newPath,
-          exsist: !!this.nodes[newPath],
+          exsist: !!this.getNode(newPath),
           append: (newNode = node) => this.appendNode(newPath, newNode)
         })
       } else {

@@ -1,14 +1,11 @@
 import {
   isFn,
-  setIn,
-  getIn,
   isEmpty,
   isEqual,
   toArr,
   isNum,
   isArr,
   clone,
-  deleteIn,
   isValid,
   FormPath,
   FormPathPattern
@@ -281,13 +278,13 @@ export const createForm = (options = {}) => {
     silent?: boolean
   ) {
     state.setState(state => {
-      setIn(state[key], transformDataPath(path), value)
+      FormPath.setIn(state[key], transformDataPath(path), value)
     }, silent)
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
     state.setState(state => {
-      deleteIn(state[key], transformDataPath(path))
+      FormPath.deleteIn(state[key], transformDataPath(path))
     }, silent)
   }
 
@@ -312,7 +309,9 @@ export const createForm = (options = {}) => {
   }
 
   function getFormIn(path: FormPathPattern, key?: string) {
-    return state.getState(state => getIn(state[key], transformDataPath(path)))
+    return state.getState(state =>
+      FormPath.getIn(state[key], transformDataPath(path))
+    )
   }
 
   function getFormValuesIn(path: FormPathPattern) {
@@ -427,7 +426,7 @@ export const createForm = (options = {}) => {
             onSubmit(state.getState(state => state.values))
           ).then(payload => ({ validated, payload }))
         }
-        return { validated }
+        return { validated, payload: undefined }
       })
       .then(({ validated: { errors, warnings }, payload }) => {
         state.setState(state => {

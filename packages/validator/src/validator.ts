@@ -10,7 +10,15 @@ import {
   ValidateFieldOptions,
   ValidateCalculator
 } from './types'
-import { isFn, isStr, isArr, isObj, each, getIn, FormPath } from '@uform/shared'
+import {
+  isFn,
+  isStr,
+  isArr,
+  isObj,
+  each,
+  FormPath,
+  FormPathPattern
+} from '@uform/shared'
 import { getMessage } from './message'
 import defaultFormats from './formats'
 import defaultRules from './rules'
@@ -28,7 +36,7 @@ const template = (message: ValidateResponse, context: any): string => {
       return FormValidator.template(message, context)
     }
     return message.replace(/\{\{\s*(\w+)\s*\}\}/, (_, $0) => {
-      return getIn(context, $0)
+      return FormPath.getIn(context, $0)
     })
   } else if (isObj(message)) {
     return template(message.message, context)
@@ -79,7 +87,7 @@ class FormValidator {
     return []
   }
 
-  internalValidate(
+  async internalValidate(
     value: any,
     rules: ValidateRules,
     options: ValidateFieldOptions = {}
@@ -179,12 +187,12 @@ class FormValidator {
     return promise.catch(console.error) // eslint-disable-line
   }
 
-  validate = (path: string | string[], options: ValidateFieldOptions) => {
+  validate = (path: FormPathPattern, options: ValidateFieldOptions) => {
     const pattern = FormPath.getPath(path || '*')
     return this.validateNodes(pattern, options)
   }
 
-  register = (path, calculator: ValidateCalculator) => {
+  register = (path: FormPathPattern, calculator: ValidateCalculator) => {
     const newPath = FormPath.getPath(path)
     if (isFn(calculator) && !this.nodes[newPath]) {
       this.nodes[newPath] = (options: ValidateFieldOptions) => {

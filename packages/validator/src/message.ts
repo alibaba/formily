@@ -1,5 +1,7 @@
-import { getIn, each, globalThisPolyfill } from '@uform/shared'
+import { FormPath, each, globalThisPolyfill } from '@uform/shared'
 import locales from './locale'
+
+const getIn = FormPath.getIn
 
 const self: any = globalThisPolyfill
 

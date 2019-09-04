@@ -69,5 +69,8 @@ export type ValidateCalculator = (
   validate: (
     value: any,
     rules: ValidatePatternRules
-  ) => Promise<ValidateResponse>
+  ) => Promise<{
+    errors: string[]
+    warnings: string[]
+  }>
 ) => void

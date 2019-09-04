@@ -92,12 +92,7 @@ export class FormHeart<Payload = any> {
 export const createLifeCycleHandlers = <T>(types: FormLifeCycleTypes<T>) => {
   Object.keys(types).forEach(key => {
     if (!isFn(types[types[key] as string])) {
-      types[types[key] as string] = function(path, handler) {
-        if (isFn(path)) {
-          handler = path
-          path = '*'
-        }
-        path = FormPath.getPath(path)
+      types[types[key] as string] = function(handler) {
         return new FormLifeCycle(types[key], handler)
       }
     }
