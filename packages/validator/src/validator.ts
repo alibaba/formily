@@ -35,7 +35,7 @@ const template = (message: ValidateResponse, context: any): string => {
     if (isFn(FormValidator.template)) {
       return FormValidator.template(message, context)
     }
-    return message.replace(/\{\{\s*(\w+)\s*\}\}/, (_, $0) => {
+    return message.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, $0) => {
       return FormPath.getIn(context, $0)
     })
   } else if (isObj(message)) {
@@ -49,7 +49,7 @@ class FormValidator {
   private validateFirst: boolean
   private nodes: ValidateNodeMap
 
-  constructor(options: ValidatorOptions) {
+  constructor(options: ValidatorOptions = {}) {
     this.validateFirst = options.validateFirst
     this.nodes = {}
   }
@@ -111,15 +111,15 @@ class FormValidator {
                     key: options.key
                   })
                   if (isStr(payload)) {
-                    errors.push(message)
+                    if (message) errors.push(message)
                     if (first) {
                       return Promise.reject(message)
                     }
                   } else if (isObj(payload)) {
                     if (payload.type === 'warning') {
-                      warnings.push(message)
+                      if (message) warnings.push(message)
                     } else {
-                      errors.push(message)
+                      if (message) errors.push(message)
                       if (first) {
                         return Promise.reject(message)
                       }
@@ -187,7 +187,7 @@ class FormValidator {
     return promise.catch(console.error) // eslint-disable-line
   }
 
-  validate = (path: FormPathPattern, options: ValidateFieldOptions) => {
+  validate = (path?: FormPathPattern, options?: ValidateFieldOptions) => {
     const pattern = FormPath.getPath(path || '*')
     return this.validateNodes(pattern, options)
   }

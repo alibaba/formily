@@ -16,9 +16,9 @@ export default {
     zh: 'This field is not a chinese string',
     date: 'This field is not a valid date format',
     zip: 'This field is not a zip format',
-    len: '{{value}} must be exactly {{len}} characters',
-    min: '{{value}} must be at least {{min}} characters',
-    max: '{{value}} cannot be longer than {{max}} characters',
+    len: 'The length of {{value}} must be {{len}}',
+    min: 'The length of {{value}} must be at least {{min}}',
+    max: 'The length of {{value}} must be at most {{max}}',
     whitespace: 'This field cannot be empty'
   },
   zh: {
