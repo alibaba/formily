@@ -443,7 +443,7 @@ export const createForm = (options = {}) => {
       })
   }
 
-  function validate(path?: FormPathPattern, options?: {}) {
+  async function validate(path?: FormPathPattern, options?: {}) {
     clearTimeout(env.validateTimer)
     env.validateTimer = setTimeout(() => {
       state.setState(state => {

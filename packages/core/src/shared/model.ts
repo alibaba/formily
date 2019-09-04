@@ -83,7 +83,7 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         return callback(this.getState())
       } else {
-        if (!hasProxy) {
+        if (!hasProxy || this.props.useDirty) {
           if (isFn(this.controller.publishState)) {
             return this.controller.publishState(this.state)
           }
@@ -113,7 +113,7 @@ export const createStateModel = <State = {}, Props = {}>(
       silent = false
     ) => {
       if (isFn(callback)) {
-        if (!hasProxy) {
+        if (!hasProxy || this.props.useDirty) {
           const draft = this.getState()
           this.dirtyNum = 0
           this.dirtyMap = {}
@@ -176,10 +176,10 @@ export const createStateModel = <State = {}, Props = {}>(
       key ? !!this.dirtyMap[key] : this.dirtyNum > 0
 
     getChanged = () => {
-      if (hasProxy) {
-        return produce(this.dirtyMap, () => nothing)
-      } else {
+      if (!hasProxy || this.props.useDirty) {
         return clone(this.dirtyMap)
+      } else {
+        return produce(this.dirtyMap, () => nothing)
       }
     }
   }

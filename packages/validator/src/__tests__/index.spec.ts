@@ -116,20 +116,19 @@ test('pattern', async () => {
   ])
 })
 
-
 test('max', async () => {
   await batchTestRules([
     {
       value: '123',
       rules: {
-        max:2
+        max: 2
       },
       errors: ['The length of 123 must be at most 2']
     },
     {
       value: '123',
       rules: {
-        max:3,
+        max: 3,
         message: 'The length of 123 must be at most 3'
       },
       errors: []
@@ -137,15 +136,29 @@ test('max', async () => {
   ])
 })
 
-
 test('whitespace', async () => {
   await batchTestRules([
     {
       value: '   ',
       rules: {
-        whitespace:true
+        whitespace: true
       },
       errors: ['This field cannot be empty']
     }
   ])
+})
+
+//内置正则库测试
+test('formats', async () => {
+  //todo
+})
+
+//模板引擎测试
+test('template', async () => {
+  //todo
+})
+
+//自定义规则测试
+test('custom rules', async () => {
+  //todo
 })

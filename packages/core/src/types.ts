@@ -141,16 +141,3 @@ export interface IVFieldStateProps {
   path: FormPathPattern
   props?: {}
 }
-
-export interface IModelAPI {
-  subscribe()
-  unsubscribe()
-  hasChanged()
-  getChanged()
-  setState()
-  getState()
-  setSourceState()
-  getSourceState()
-  batch()
-  displayName: string
-}
