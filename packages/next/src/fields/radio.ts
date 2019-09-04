@@ -1,4 +1,4 @@
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { Radio } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../utils'
 

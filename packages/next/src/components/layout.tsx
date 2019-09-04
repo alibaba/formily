@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef } from 'react'
-import { createVirtualBox, createControllerBox } from '@uform/react'
-import { toArr } from '@uform/utils'
+import { createVirtualBox, createControllerBox } from '@uform/react-schema-form'
+import { toArr } from '@uform/shared'
 import { Grid } from '@alifd/next'
 import Card from '@alifd/next/lib/card'
 import styled from 'styled-components'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
 import { Button, Upload } from '@alifd/next'
 import { UploadProps, CardProps } from '@alifd/next/types/upload'

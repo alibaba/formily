@@ -1,6 +1,6 @@
 import React, { Component, Children, cloneElement } from 'react'
 import cx from 'classnames'
-import { toArr } from '@uform/utils'
+import { toArr } from '@uform/shared'
 import { IColProps, IRowProps } from '../type'
 
 export class Row extends Component<IRowProps> {

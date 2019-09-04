@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { Button, Upload, Icon } from 'antd'
 import styled from 'styled-components'
 import { toArr, isArr, isEqual, mapStyledProps } from '../utils'

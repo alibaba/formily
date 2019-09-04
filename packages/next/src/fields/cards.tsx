@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
-import { registerFormField } from '@uform/react'
-import { toArr } from '@uform/utils'
+import { registerFormField } from '@uform/react-schema-form'
+import { toArr } from '@uform/shared'
 import { ArrayField } from './array'
 import { Card } from '@alifd/next'
 import styled from 'styled-components'

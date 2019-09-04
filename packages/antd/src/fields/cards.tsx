@@ -1,8 +1,8 @@
 import React, { Fragment, ReactElement } from 'react'
 import styled from 'styled-components'
-import { registerFormField } from '@uform/react'
+import { registerFormField } from '@uform/react-schema-form'
 import { Card } from 'antd'
-import { toArr } from '@uform/utils'
+import { toArr } from '@uform/shared'
 import { ArrayField } from './array'
 
 const FormCardsField = styled(

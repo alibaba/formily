@@ -12,7 +12,7 @@
     "build:docs": "node ./scripts/docs.js build -i docs -o docs",
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",
-    "test": "jest",
+    "test": "npm run lint && jest",
     "test:prod": "cross-env TEST_ENV=production npm run build && jest",
     "test:watch": "jest --watch",
     "coverage": "npm run test -- --coverage",
@@ -119,11 +119,11 @@
     }
   },
   "lint-staged": {
-    "packages/**": [
+    "packages/*/src/**.@(ts|tsx|js)": [
       "npm run lint",
       "git add"
     ],
-    "scripts/**": [
+    "scripts/**.@(ts|tsx|js)": [
       "npm run lint",
       "git add"
     ]

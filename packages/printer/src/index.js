@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { createFormActions } from '@uform/react'
+import { createFormActions } from '@uform/react-schema-form'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 

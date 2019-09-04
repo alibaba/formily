@@ -3,10 +3,10 @@ import { Select as AntSelect, Icon } from 'antd'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 import MoveTo from 'moveto'
-import { isFn } from '@uform/utils'
-import { IConnectProps, IFieldProps } from '@uform/react'
+import { isFn } from '@uform/shared'
+import { IConnectProps, IFieldProps } from '@uform/react-schema-form'
 
-export * from '@uform/utils'
+export * from '@uform/shared'
 
 export interface ISelectProps {
   dataSource: any[]

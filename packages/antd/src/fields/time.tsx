@@ -1,4 +1,4 @@
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import moment from 'moment'
 import { TimePicker } from 'antd'
 import { mapStyledProps, mapTextComponent } from '../utils'

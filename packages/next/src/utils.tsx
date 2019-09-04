@@ -1,11 +1,11 @@
 import React from 'react'
 import { Select } from '@alifd/next'
 import styled from 'styled-components'
-import { isFn } from '@uform/utils'
+import { isFn } from '@uform/shared'
 import MoveTo from 'moveto'
-import { IConnectProps, IFieldProps } from '@uform/react'
+import { IConnectProps, IFieldProps } from '@uform/react-schema-form'
 
-export * from '@uform/utils'
+export * from '@uform/shared'
 
 const Text = styled(props => {
   let value

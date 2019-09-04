@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@uform/types": "^0.4.0",
-    "@uform/utils": "^0.4.0"
+    "@uform/shared": "^0.4.0"
   },
   "publishConfig": {
     "access": "public"

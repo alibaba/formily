@@ -16,7 +16,7 @@ import './fields/table'
 import './fields/textarea'
 import './fields/password'
 
-export * from '@uform/react'
+export * from '@uform/react-schema-form'
 export * from './components/formButtonGroup'
 export * from './components/button'
 export * from './components/layout'
@@ -25,7 +25,7 @@ import React from 'react'
 import {
   SchemaForm as InternalSchemaForm,
   Field as InternalField
-} from '@uform/react'
+} from '@uform/react-schema-form'
 import { SchemaFormProps, FieldProps } from './type'
 
 export { mapStyledProps, mapTextComponent } from './utils'

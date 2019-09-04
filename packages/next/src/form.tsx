@@ -2,7 +2,10 @@ import React from 'react'
 import classNames from 'classnames'
 import styled from 'styled-components'
 import { ConfigProvider, Balloon, Icon } from '@alifd/next'
-import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
+import {
+  registerFormWrapper,
+  registerFieldMiddleware
+} from '@uform/react-schema-form'
 import { Grid } from '@alifd/next'
 import { IFormItemProps, IFormProps } from '@uform/types'
 

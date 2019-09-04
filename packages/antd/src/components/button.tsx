@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormConsumer } from '@uform/react'
+import { FormConsumer } from '@uform/react-schema-form'
 import { Button } from 'antd'
 import { ISubmitProps } from '../type'
 

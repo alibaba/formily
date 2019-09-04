@@ -1,4 +1,4 @@
-import { getIn, each, globalThisPolyfill } from './utils'
+import { getIn, each, globalThisPolyfill } from '@uform/shared'
 import locales from './locale'
 
 const self: any = globalThisPolyfill
@@ -34,13 +34,16 @@ const getMatchLang = (lang: string) => {
   return find
 }
 
-export const setLocale = (locale: ILocales) => {
+export const setValidationLocale = (locale: ILocales) => {
   Object.assign(LOCALE.messages, locale)
 }
+export const setLocale = setValidationLocale
 
-export const setLanguage = (lang: string) => {
+export const setValidationLanguage = (lang: string) => {
   LOCALE.lang = lang
 }
+
+export const setLanguage = setValidationLanguage
 
 export const getMessage = (path: string) => {
   return (
@@ -49,4 +52,4 @@ export const getMessage = (path: string) => {
   )
 }
 
-setLocale(locales)
+setValidationLocale(locales)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import moment from 'moment'
 import { DatePicker as AntDatePicker } from 'antd'
 import {
@@ -118,7 +118,11 @@ registerFormField(
       mapStyledProps,
       props => {
         if (isStr(props.value) && props.value) {
-          const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || ['', '', '']
+          const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || [
+            '',
+            '',
+            ''
+          ]
           props.value = moment(parsed[1], 'YYYY').add(parsed[2] - 1, 'weeks')
         }
         return props

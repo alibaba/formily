@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Input } from 'antd'
 import { InputProps } from 'antd/es/input'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { mapStyledProps } from '../utils'
 
 var isNum = function(c) {

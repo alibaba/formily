@@ -1,6 +1,6 @@
 import React, { Component, useEffect, useRef } from 'react'
-import { createVirtualBox, createControllerBox } from '@uform/react'
-import { toArr } from '@uform/utils'
+import { createVirtualBox, createControllerBox } from '@uform/react-schema-form'
+import { toArr } from '@uform/shared'
 import { IFormItemGridProps, IFormItemProps } from '@uform/types'
 import { Card, Row, Col } from 'antd'
 import styled from 'styled-components'

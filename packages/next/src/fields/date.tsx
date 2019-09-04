@@ -1,4 +1,4 @@
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { DatePicker } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../utils'
 

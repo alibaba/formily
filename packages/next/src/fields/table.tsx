@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { registerFormField } from '@uform/react'
-import { isFn, toArr } from '@uform/utils'
+import { registerFormField } from '@uform/react-schema-form'
+import { isFn, toArr } from '@uform/shared'
 import { ArrayField } from './array'
 import styled from 'styled-components'
 

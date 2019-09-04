@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { Input } from '@alifd/next'
 import { InputProps } from '@alifd/next/types/input'
 import styled from 'styled-components'

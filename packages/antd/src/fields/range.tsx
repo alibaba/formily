@@ -1,6 +1,6 @@
 import React from 'react'
 import { Slider } from 'antd'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-form'
 import { mapStyledProps } from '../utils'
 
 export interface ISliderMarks {

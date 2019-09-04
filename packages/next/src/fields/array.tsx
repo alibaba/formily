@@ -1,5 +1,5 @@
 import React from 'react'
-import { registerFormField, createArrayField } from '@uform/react'
+import { registerFormField, createArrayField } from '@uform/react-schema-form'
 import { Button, Icon } from '@alifd/next'
 import styled from 'styled-components'
 
