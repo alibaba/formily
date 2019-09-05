@@ -12,7 +12,11 @@ import {
   each,
   deprecate
 } from '@uform/shared'
-import { FormValidator } from '@uform/validator'
+import {
+  FormValidator,
+  setValidationLanguage,
+  setValidationLocale
+} from '@uform/validator'
 import { FormHeart, LifeCycleTypes } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
 import { FormState } from './state/form'
@@ -691,3 +695,5 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   })
   return formApi
 }
+
+export { setValidationLanguage, setValidationLocale }
