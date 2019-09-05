@@ -15,9 +15,12 @@ export interface FormGraphVisitorOptions<T> {
   append: (node: T) => void
 }
 
-export interface FormGraphOptions<T> {
-  visitor?: (node: T, options: FormGraphVisitorOptions<T>) => void
-}
+export type FormGraph<T> = (
+  node: T,
+  options: FormGraphVisitorOptions<T>
+) => void
+
+export type FormGrpahJSONParser<T> = (json: {}) => T
 
 export interface FormGraphNodeRef {
   parent?: FormGraphNodeRef

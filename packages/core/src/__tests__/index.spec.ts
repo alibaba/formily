@@ -48,7 +48,7 @@ describe('createForm', () => {
       lifecycles: [
         new FormLifeCycle(LifeCycleTypes.ON_FORM_INIT, onFormInit),
         new FormLifeCycle(LifeCycleTypes.ON_FIELD_INIT, onFieldInit),
-        new FormLifeCycle(LifeCycleTypes.ON_FIELD_CHANGE,onFieldChange)
+        new FormLifeCycle(LifeCycleTypes.ON_FIELD_CHANGE, onFieldChange)
       ]
     })
 
@@ -69,10 +69,10 @@ describe('createForm', () => {
       aa: '123',
       bb: '321'
     })
-    aa.setState(state=>{
+    aa.setState(state => {
       state.value = 'change aa'
     })
-    bb.setState(state=>{
+    bb.setState(state => {
       state.value = 'change bb'
     })
     expect(onFieldChange).toBeCalledTimes(4)
@@ -83,53 +83,145 @@ describe('createForm', () => {
     expect(aa.getState(state => state.value)).toEqual('change aa')
     expect(bb.getState(state => state.value)).toEqual('change bb')
   })
-
 })
 
-test('submit', () => {
+describe('graph', () => {
+  test('getFormGraph', () => {
+    const form = createForm({
+      initialValues: {
+        aa: '123',
+        bb: '321'
+      }
+    })
+
+    form.registerField({
+      path: 'aa',
+      value: 'hello aa'
+    })
+
+    form.registerField({
+      path: 'bb',
+      value: 'hello bb'
+    })
+
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: true,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: { aa: 'hello aa', bb: 'hello bb' },
+        initialValues: { aa: '123', bb: '321' },
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: undefined,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: ['hello aa'],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 'hello aa',
+        initialValue: '123',
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: undefined
+      },
+      bb: {
+        name: 'bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: undefined,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: ['hello bb'],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 'hello bb',
+        initialValue: '321',
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: undefined
+      }
+    })
+  })
+
+  test('setFormGraph', () => {})
+})
+
+describe('submit', () => {
   //todo
 })
 
-test('reset', () => {
+describe('reset', () => {
   //todo
 })
 
-test('validate', () => {
+describe('validate', () => {
   //todo
 })
 
-test('setState', () => {
+describe('setState', () => {
   //todo
 })
 
-test('getState', () => {
+describe('getState', () => {
   //todo
 })
 
-test('subscribe', () => {
+describe('subscribe', () => {
   //todo
 })
 
-test('unsubscribe', () => {
+describe('unsubscribe', () => {
   //todo
 })
 
-test('setFieldState', () => {
+describe('setFieldState', () => {
   //todo
 })
 
-test('getFieldState', () => {
+describe('getFieldState', () => {
   //todo
 })
 
-test('registerField', () => {
+describe('registerField', () => {
   //todo
 })
 
-test('registerVField', () => {
+describe('registerVField', () => {
   //todo
 })
 
-test('createMutators', () => {
+describe('createMutators', () => {
   //todo
 })

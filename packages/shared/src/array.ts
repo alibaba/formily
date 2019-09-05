@@ -6,6 +6,15 @@ type EachObjectIterator<T = any> = (
   currentValue: T,
   key: string
 ) => void | boolean
+type MapArrayIterator<TItem, TResult> = (
+  currentValue: TItem,
+  key: number
+) => TResult
+type MapStringIterator<TResult> = (currentValue: string, key: number) => TResult
+type MapObjectIterator<TItem, TResult> = (
+  currentValue: TItem,
+  key: string
+) => TResult
 type MemoArrayIterator<T, U> = (
   previousValue: U,
   currentValue: T,
@@ -66,19 +75,19 @@ export function each(val: any, iterator: any, revert?: boolean): void {
   }
 }
 
-export function map(
-  val: string,
-  iterator: EachStringIterator,
-  revert?: boolean
-): string[]
 export function map<T>(
-  val: T[],
-  iterator: EachArrayIterator<T>,
+  val: string,
+  iterator: MapStringIterator<T>,
   revert?: boolean
-): T[]
-export function map<T extends {}, TValue>(
+): any
+export function map<TItem, TResult>(
+  val: TItem[],
+  iterator: MapArrayIterator<TItem, TResult>,
+  revert?: boolean
+): any
+export function map<T extends {}, TResult>(
   val: T,
-  iterator: EachObjectIterator<TValue>,
+  iterator: MapObjectIterator<T[keyof T], TResult>,
   revert?: boolean
 ): any
 export function map(val: any, iterator: any, revert?: boolean): any {

@@ -57,7 +57,7 @@ export const FieldState = createStateModel(
     parseValues({ value, values }: IFieldStateProps) {
       if (isValid(values)) {
         if (isValid(value)) {
-          values = clone(values)
+          values = clone(toArr(values))
           value = clone(value)
           values[0] = value
         } else {
@@ -105,7 +105,9 @@ export const FieldState = createStateModel(
       draft.effectWarnings = toArr(draft.effectWarnings).filter(v => !!v)
       draft.errors = toArr(draft.errors).filter(v => !!v)
       draft.effectErrors = toArr(draft.effectErrors).filter(v => !!v)
-      draft.values = toArr(draft.values)
+      const { value, values } = this.parseValues(draft)
+      draft.value = value
+      draft.values = values
       if (draft.errors.length) {
         draft.invalid = true
         draft.valid = false
@@ -134,15 +136,6 @@ export const FieldState = createStateModel(
       if (dirtys.value) {
         if (!dirtys.initialized) {
           this.state.pristine = false
-        }
-      }
-      if (dirtys.value) {
-        this.state.values[0] = this.state.value
-        dirtys.values = true
-      } else {
-        if (dirtys.values) {
-          this.state.value = this.state.values[0]
-          dirtys.value = true
         }
       }
     }

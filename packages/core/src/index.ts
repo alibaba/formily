@@ -8,7 +8,8 @@ import {
   clone,
   isValid,
   FormPath,
-  FormPathPattern
+  FormPathPattern,
+  each
 } from '@uform/shared'
 import { FormValidator } from '@uform/validator'
 import { FormHeart, LifeCycleTypes } from './shared/lifecycle'
@@ -38,6 +39,13 @@ import {
  */
 
 export const createForm = (options: FormCreatorOptions = {}) => {
+  function changeGraph() {
+    clearTimeout(env.graphChangeTimer)
+    setTimeout(() => {
+      heart.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
+    })
+  }
+
   function onFormChange(published: IFormState) {
     heart.notify(LifeCycleTypes.ON_FORM_CHANGE, state)
     const valuesChanged = state.hasChanged('values')
@@ -80,6 +88,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     if (mountedChanged && published.mounted) {
       heart.notify(LifeCycleTypes.ON_FORM_MOUNT, state)
     }
+    changeGraph()
   }
 
   function onFieldChange({ onChange, fieldState, path }) {
@@ -149,10 +158,11 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         setFormValuesIn(path, published.value)
         heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, fieldState)
       }
-      if (initialValueChanged && !published.pristine) {
+      if (initialValueChanged) {
         setFormInitialValuesIn(path, published.initialValue)
         heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, fieldState)
       }
+      changeGraph()
     }
   }
 
@@ -197,6 +207,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       if (mountedChanged && published.mounted) {
         heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldState)
       }
+      changeGraph()
     }
   }
 
@@ -252,6 +263,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         path,
         useDirty: options.useDirty
       })
+      heart.notify(LifeCycleTypes.ON_FIELD_WILL_INIT, fieldState)
       graph.appendNode(path, fieldState)
       graph.appendNode(transformDataPath(path), fieldState)
       fieldState.subscribe(onFieldChange({ onChange, fieldState, path }))
@@ -588,12 +600,27 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     return fieldState && fieldState.getState(callback)
   }
 
+  function getFormGraph() {
+    return graph.map(node => {
+      return node.getState()
+    })
+  }
+
+  function setFormGraph(nodes: {}) {
+    each(nodes, (node, key) => {
+      if (graph.exist(key)) {
+        graph.select(key).setState(state => {
+          Object.assign(state, node)
+        })
+      }
+    })
+  }
+
   const state = new FormState(options)
   const validator = new FormValidator(options)
   const graph = new FormGraph()
   const taskQueue = []
   const taskIndexes = {}
-
   const formApi = {
     submit,
     reset,
@@ -606,11 +633,14 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     getFieldState,
     registerField,
     registerVField,
-    createMutators
+    createMutators,
+    getFormGraph,
+    setFormGraph
   }
   const heart = new FormHeart({ ...options, context: formApi })
   const env = {
-    validateTimer: null
+    validateTimer: null,
+    graphChangeTimer: null
   }
   heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscribe(onFormChange)

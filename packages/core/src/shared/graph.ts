@@ -1,11 +1,12 @@
-import { each, reduce, isFn, FormPath, FormPathPattern } from '@uform/shared'
 import {
-  FormGraphNodeMap,
-  FormGraphNodeRef,
-  FormGraphOptions,
-  FormGraphMatcher,
-  FormGraphEacher
-} from '../types'
+  each,
+  reduce,
+  map,
+  isFn,
+  FormPath,
+  FormPathPattern
+} from '@uform/shared'
+import { FormGraphNodeRef, FormGraphMatcher, FormGraphEacher } from '../types'
 /**
  * Form & Field 其实是属于一种图的关系，我们可以进一步抽象
  * 要求FormGraph是Immutable的，所以它可以很容易的支持时间旅行的能力
@@ -30,11 +31,10 @@ export class FormGraph<NodeType = any> {
     }
   }[]
 
-  constructor(
-    nodes?: FormGraphNodeMap<NodeType>,
-    { visitor }: FormGraphOptions<NodeType> = {}
-  ) {
-    this.fromJSON(nodes, visitor)
+  constructor() {
+    this.refrences = {}
+    this.nodes = {}
+    this.buffer = []
   }
 
   select = (path: FormPathPattern, matcher?: FormGraphMatcher<NodeType>) => {
@@ -56,7 +56,7 @@ export class FormGraph<NodeType = any> {
     }
   }
 
-  getNode = (path : FormPath | string)=>{
+  getNode = (path: FormPath | string) => {
     return this.nodes[path as string]
   }
 
@@ -70,7 +70,9 @@ export class FormGraph<NodeType = any> {
       return reduce(
         ref.children,
         (buf, path) => {
-          return buf.concat(this.getNode(path)).concat(this.selectChildren(path))
+          return buf
+            .concat(this.getNode(path))
+            .concat(this.selectChildren(path))
         },
         []
       )
@@ -120,7 +122,18 @@ export class FormGraph<NodeType = any> {
     return this.getLatestParent(parentPath)
   }
 
-  appendNode = (path: FormPathPattern, node: any) => {
+  map = (mapper: (node: NodeType) => any) => {
+    return map(this.nodes, mapper)
+  }
+
+  reduce = <T>(
+    reducer: (buffer: T, node: NodeType, key: string) => T,
+    initial: T
+  ) => {
+    return reduce(this.nodes, reducer, initial)
+  }
+
+  appendNode = (path: FormPathPattern, node: NodeType) => {
     const selfPath = FormPath.getPath(path)
     const parentPath = selfPath.parent()
     const parentRef = this.refrences[parentPath]
@@ -180,30 +193,5 @@ export class FormGraph<NodeType = any> {
         }
       })
     }
-  }
-
-  toJSON = () => {
-    return this.nodes
-  }
-
-  fromJSON = (
-    nodes: FormGraphNodeMap<NodeType>,
-    visitor: FormGraphOptions<NodeType>['visitor']
-  ) => {
-    this.refrences = {}
-    this.nodes = {}
-    this.buffer = []
-    each(nodes, (node, path) => {
-      const newPath = FormPath.getPath(path)
-      if (isFn(visitor)) {
-        visitor(node, {
-          path: newPath,
-          exsist: !!this.getNode(newPath),
-          append: (newNode = node) => this.appendNode(newPath, newNode)
-        })
-      } else {
-        this.appendNode(newPath, node)
-      }
-    })
   }
 }

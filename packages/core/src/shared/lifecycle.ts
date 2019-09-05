@@ -124,6 +124,12 @@ export const LifeCycleTypes = {
   ON_FORM_SUBMIT_END: 'onFormSubmitEnd',
   ON_FORM_VALUES_CHANGE: 'onFormValuesChange',
   ON_FORM_INITIAL_VALUES_CHANGE: 'onFormInitialValueChange',
+
+  /**
+   * FormGraph LifeCycle
+   **/
+  ON_FORM_GRAPH_CHANGE: 'onFormGraphChange',
+
   /**
    * Field LifeCycle
    **/
