@@ -697,3 +697,5 @@ export const createForm = (options: FormCreatorOptions = {}) => {
 }
 
 export { setValidationLanguage, setValidationLocale }
+
+export default createForm
