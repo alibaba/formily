@@ -1,9 +1,8 @@
 import { FormPath, FormPathPattern } from '@uform/shared'
 import { ValidateArrayRules } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
-import { FieldState } from './state/field'
-import { VFieldState } from './state/vfield'
 import { Draft } from 'immer'
+import { Model } from './shared/model'
 
 export type FormGraphNodeMap<T> = {
   [key in string]: T
@@ -33,10 +32,7 @@ export type FormGraphMatcher<T> = (node: T, path: FormPath) => void
 export type FormGraphEacher<T> = (node: T, path: FormPath) => void
 
 export type FormLifeCyclePayload<T> = (
-  {
-    type,
-    payload
-  }: {
+  params: {
     type: string
     payload: T
   },
@@ -106,11 +102,11 @@ export interface IFieldStateProps {
 }
 
 export interface IFieldProps extends IFieldStateProps {
-  onChange?: (fieldState: typeof FieldState.prototype) => void
+  onChange?: (fieldState: Model) => void
 }
 
 export interface IVFieldProps extends IVFieldStateProps {
-  onChange?: (fieldState: typeof VFieldState.prototype) => void
+  onChange?: (fieldState: Model) => void
 }
 
 export interface IFormState {

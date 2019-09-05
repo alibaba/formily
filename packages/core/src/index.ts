@@ -26,6 +26,7 @@ import {
   IFieldProps,
   IVFieldProps
 } from './types'
+import { Model } from './shared/model'
 
 /**
  *
@@ -58,7 +59,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
     }
     if (valuesChanged || initialValuesChanged) {
-      graph.eachChildren('', (fieldState: typeof FieldState.prototype) => {
+      graph.eachChildren('', (fieldState: Model) => {
         fieldState.setState((state: IFieldState) => {
           if (state.visible) {
             if (valuesChanged) {
