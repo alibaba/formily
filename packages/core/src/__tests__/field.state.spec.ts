@@ -1,4 +1,4 @@
-import { FieldState } from '../state/field'
+//import { FieldState } from '../state/field'
 
 test('subscribe', () => {
   //todo

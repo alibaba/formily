@@ -1,7 +1,7 @@
 import { FormValidator } from '../index'
 
-const batchTestRules = async (rules: any[], response?: any) => {
-  const validator = new FormValidator()
+const batchTestRules = async (rules: any[], options?: any) => {
+  const validator = new FormValidator(options)
   rules.forEach(({ value, rules, errors = [], warnings = [] }, index) => {
     validator.register(`$${index}`, validate =>
       validate(value, rules).then(t => {
@@ -10,8 +10,7 @@ const batchTestRules = async (rules: any[], response?: any) => {
       })
     )
   })
-  const result = await validator.validate()
-  if (response) expect(result).toEqual(response)
+  await validator.validate()
 }
 
 test('register', async () => {
@@ -146,6 +145,28 @@ test('whitespace', async () => {
       errors: ['This field cannot be empty']
     }
   ])
+})
+
+test('validateFirst', async () => {
+  const secondValidator = jest.fn()
+  await batchTestRules(
+    [
+      {
+        value: '   ',
+        rules: [
+          {
+            whitespace: true
+          },
+          secondValidator
+        ],
+        errors: ['This field cannot be empty']
+      }
+    ],
+    {
+      validateFirst: true
+    }
+  )
+  expect(secondValidator).toBeCalledTimes(0)
 })
 
 //内置正则库测试

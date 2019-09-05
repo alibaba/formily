@@ -2,7 +2,10 @@ import { isArr, isObj, isStr } from '@uform/types'
 
 type EachArrayIterator<T> = (currentValue: T, key: number) => void | boolean
 type EachStringIterator = (currentValue: string, key: number) => void | boolean
-type EachObjectIterator = (currentValue: any, key: string) => void | boolean
+type EachObjectIterator<T = any> = (
+  currentValue: T,
+  key: string
+) => void | boolean
 type MemoArrayIterator<T, U> = (
   previousValue: U,
   currentValue: T,
@@ -13,11 +16,11 @@ type MemoStringIterator<T> = (
   currentValue: string,
   key: number
 ) => T
-type MemoObjectIterator<T> = (
-  previousValue: T,
-  currentValue: any,
+type MemoObjectIterator<TValue, TResult> = (
+  previousValue: TResult,
+  currentValue: TValue,
   key: string
-) => T
+) => TResult
 
 export const toArr = (val: any): any[] => (isArr(val) ? val : val ? [val] : [])
 
@@ -33,7 +36,7 @@ export function each<T>(
 ): void
 export function each<T extends {}, TValue>(
   val: T,
-  iterator: EachObjectIterator,
+  iterator: EachObjectIterator<TValue>,
   revert?: boolean
 ): void
 export function each(val: any, iterator: any, revert?: boolean): void {
@@ -75,7 +78,7 @@ export function map<T>(
 ): T[]
 export function map<T extends {}, TValue>(
   val: T,
-  iterator: EachObjectIterator,
+  iterator: EachObjectIterator<TValue>,
   revert?: boolean
 ): any
 export function map(val: any, iterator: any, revert?: boolean): any {
@@ -107,9 +110,9 @@ export function reduce<T>(
   accumulator?: T,
   revert?: boolean
 ): T
-export function reduce<T extends {}, TResult>(
+export function reduce<T extends {}, TValue, TResult = any>(
   val: T,
-  iterator: MemoObjectIterator<TResult>,
+  iterator: MemoObjectIterator<TValue, TResult>,
   accumulator?: TResult,
   revert?: boolean
 ): TResult

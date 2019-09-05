@@ -1,10 +1,10 @@
-import { createStateModel } from '../shared/model'
+//import { createStateModel } from '../shared/model'
 
 test('createStateModel', () => {
   //todo
 })
 
-test('proxy model', () => {
+describe('proxy model', () => {
   test('subscribe', () => {
     //todo
   })
@@ -37,7 +37,7 @@ test('proxy model', () => {
   })
 })
 
-test('dirty model', () => {
+describe('dirty model', () => {
   test('subscribe', () => {
     //todo
   })

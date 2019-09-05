@@ -1,4 +1,4 @@
-import { VFieldState } from '../state/vfield'
+//import { VFieldState } from '../state/vfield'
 
 test('subscribe', () => {
   //todo

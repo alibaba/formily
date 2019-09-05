@@ -8,7 +8,8 @@ import {
   ValidateResponse,
   ValidateDescription,
   ValidateFieldOptions,
-  ValidateCalculator
+  ValidateCalculator,
+  ValidateNode
 } from './types'
 import {
   isFn,
@@ -91,75 +92,65 @@ class FormValidator {
     value: any,
     rules: ValidateRules,
     options: ValidateFieldOptions = {}
-  ) {
-    const first = options.first ? !!options.first : !!this.validateFirst
+  ): Promise<{
+    errors: string[]
+    warnings: string[]
+  }> {
+    const first =
+      options.first !== undefined ? !!options.first : !!this.validateFirst
     const errors: string[] = []
     const warnings = []
-    const tasks: Promise<ValidateResponse>[] = []
-    for (let i = 0; i < rules.length; i++) {
-      const ruleObj = rules[i]
-      for (let key in ruleObj) {
-        if (ruleObj.hasOwnProperty(key) && ruleObj[key] !== undefined) {
-          const rule = ValidatorRules[key]
-          if (rule) {
-            tasks.push(
-              Promise.resolve(rule(value, ruleObj)).then(
-                payload => {
-                  const message = template(payload, {
-                    ...ruleObj,
-                    value,
-                    key: options.key
-                  })
-                  if (isStr(payload)) {
-                    if (message) errors.push(message)
-                    if (first) {
-                      return Promise.reject(message)
-                    }
-                  } else if (isObj(payload)) {
-                    if (payload.type === 'warning') {
-                      if (message) warnings.push(message)
-                    } else {
-                      if (message) errors.push(message)
-                      if (first) {
-                        return Promise.reject(message)
-                      }
-                    }
-                  }
-                  return payload
-                },
-                payload => {
-                  const message = template(payload, {
-                    ...ruleObj,
-                    value,
-                    key: options.key
-                  })
-                  if (isStr(payload)) {
-                    errors.push(message)
-                    if (first) {
-                      return Promise.reject(message)
-                    }
-                  }
-                  return Promise.resolve(message)
+    try {
+      for (let i = 0; i < rules.length; i++) {
+        const ruleObj = rules[i]
+        for (let key in ruleObj) {
+          if (ruleObj.hasOwnProperty(key) && ruleObj[key] !== undefined) {
+            const rule = ValidatorRules[key]
+            if (rule) {
+              const payload = await rule(value, ruleObj)
+              const message = template(payload, {
+                ...ruleObj,
+                value,
+                key: options.key
+              })
+              if (isStr(payload)) {
+                if (first) {
+                  if (message) errors.push(message)
+                  throw new Error(message)
                 }
-              )
-            )
+                if (message) errors.push(message)
+              } else if (isObj(payload)) {
+                if (payload.type === 'warning') {
+                  if (message) warnings.push(message)
+                } else {
+                  if (first) {
+                    if (message) errors.push(message)
+                    throw new Error(message)
+                  }
+                  if (message) errors.push(message)
+                }
+              }
+            }
           }
         }
       }
-    }
-    return Promise.all(tasks).then(() => {
       return {
         errors,
         warnings
       }
-    })
+    } catch (e) {
+      return {
+        errors,
+        warnings
+      }
+    }
   }
 
   validateNodes(pattern: FormPath, options: ValidateFieldOptions) {
     const errors = []
     const warnings = []
     let promise = Promise.resolve({ errors, warnings })
-    each(this.nodes, (validator, path) => {
+    each<ValidateNodeMap, ValidateNode>(this.nodes, (validator, path) => {
       if (pattern.match(path)) {
         promise = promise.then(async ({ errors, warnings }) => {
           const result = await validator(options)

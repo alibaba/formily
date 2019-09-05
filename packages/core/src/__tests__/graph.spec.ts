@@ -1,4 +1,4 @@
-import { FormGraph } from '../shared/graph'
+//import { FormGraph } from '../shared/graph'
 
 test('constructor',()=>{
   //todo

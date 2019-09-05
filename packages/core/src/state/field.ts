@@ -8,7 +8,6 @@ export const FieldState = createStateModel(
   class FieldState {
     static displayName = 'FieldState'
     static defaultState = {
-      path: FormPath.getPath(),
       name: '',
       initialized: false,
       pristine: true,
@@ -38,10 +37,12 @@ export const FieldState = createStateModel(
 
     private state: IFieldState
 
+    private path: FormPath
+
     constructor(state: IFieldState, props: IFieldStateProps) {
       this.state = state
-      this.state.path = FormPath.getPath(props.path)
-      this.state.name = this.state.path.entire
+      this.path = FormPath.getPath(props.path)
+      this.state.name = this.path.entire
       const { values, value } = this.parseValues(props)
       this.state.value = value
       this.state.values = values
@@ -94,35 +95,6 @@ export const FieldState = createStateModel(
       }
     }
 
-    publishState() {
-      return {
-        name: this.state.name,
-        path: FormPath.getPath(this.state.path),
-        initialized: this.state.initialized,
-        pristine: this.state.pristine,
-        valid: this.state.valid,
-        invalid: this.state.invalid,
-        visible: this.state.visible,
-        touched: this.state.touched,
-        display: this.state.display,
-        editable: this.state.editable,
-        loading: this.state.loading,
-        validating: this.state.validating,
-        required: this.state.required,
-        mounted: this.state.mounted,
-        unmounted: this.state.unmounted,
-        errors: clone(this.state.errors),
-        effectErrors: clone(this.state.effectErrors),
-        warnings: clone(this.state.warnings),
-        effectWarnings: clone(this.state.effectWarnings),
-        value: clone(this.state.value),
-        values: clone(this.state.values),
-        initialValue: clone(this.state.initialValue),
-        rules: clone(this.state.rules),
-        props: clone(this.state.props)
-      }
-    }
-
     computeState(draft: IFieldState) {
       if (!draft.visible || draft.unmounted) {
         draft.value = this.state.value
@@ -160,7 +132,9 @@ export const FieldState = createStateModel(
 
     dirtyCheck(dirtys: FieldStateDirtyMap) {
       if (dirtys.value) {
-        this.state.pristine = false
+        if (!dirtys.initialized) {
+          this.state.pristine = false
+        }
       }
       if (dirtys.value) {
         this.state.values[0] = this.state.value

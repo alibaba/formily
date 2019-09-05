@@ -1,4 +1,4 @@
-import { FormHeart, FormLifeCycle, LifeCycleTypes } from '../shared/lifecycle'
+//import { FormHeart, FormLifeCycle, LifeCycleTypes } from '../shared/lifecycle'
 
 test('create lifecycle',()=>{
   //todo

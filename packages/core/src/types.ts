@@ -1,6 +1,8 @@
 import { FormPath, FormPathPattern } from '@uform/shared'
 import { ValidateArrayRules } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
+import { FieldState } from './state/field'
+import { VFieldState } from './state/vfield'
 import { Draft } from 'immer'
 
 export type FormGraphNodeMap<T> = {
@@ -100,6 +102,14 @@ export interface IFieldStateProps {
   editable?: boolean
 }
 
+export interface IFieldProps extends IFieldStateProps {
+  onChange?: (fieldState: typeof FieldState.prototype) => void
+}
+
+export interface IVFieldProps extends IVFieldStateProps {
+  onChange?: (fieldState: typeof VFieldState.prototype) => void
+}
+
 export interface IFormState {
   pristine: boolean
   valid: boolean
@@ -107,6 +117,7 @@ export interface IFormState {
   loading: boolean
   validating: boolean
   submitting: boolean
+  initialized: boolean
   editable: boolean
   errors: string[]
   warnings: string[]
@@ -123,6 +134,11 @@ export interface IFormStateProps {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
+}
+
+export type FormCreatorOptions = IFormStateProps & {
+  useDirty?: boolean
+  validateFirst?: boolean
 }
 
 export interface IVFieldState {

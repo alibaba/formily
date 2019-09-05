@@ -6,7 +6,7 @@ import {
   isEmpty,
   globalThisPolyfill
 } from '@uform/shared'
-import produce, { nothing, Draft } from 'immer'
+import produce, { Draft } from 'immer'
 import {
   IStateModelFactory,
   StateModelProps,
@@ -89,7 +89,7 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           return clone(this.state)
         } else {
-          return produce(this.state, () => nothing)
+          return produce(this.state, () => {})
         }
       }
     }
@@ -145,7 +145,7 @@ export const createStateModel = <State = {}, Props = {}>(
           this.dirtyNum = 0
           this.dirtyMap = {}
           //用proxy解决脏检查计算属性问题
-          produce(
+          this.state = produce(
             this.state,
             draft => {
               callback(draft)
@@ -154,20 +154,33 @@ export const createStateModel = <State = {}, Props = {}>(
               }
             },
             patches => {
-              patches.forEach(({ path }) => {
+              patches.forEach(({ path, op, value }) => {
                 if (!this.dirtyMap[path[0]]) {
-                  this.dirtyMap[path[0]] = true
-                  this.dirtyNum++
+                  if (op === 'replace') {
+                    if (!isEqual(this.state[path[0]], value)) {
+                      this.dirtyMap[path[0]] = true
+                      this.dirtyNum++
+                    }
+                  } else {
+                    this.dirtyMap[path[0]] = true
+                    this.dirtyNum++
+                  }
                 }
               })
-              if (this.dirtyNum > 0 && !silent) {
-                if (this.batching) return
-                this.notify(this.getState())
-                this.dirtyMap = {}
-                this.dirtyNum = 0
-              }
             }
           )
+          if (isFn(this.controller.dirtyCheck)) {
+            const result = this.controller.dirtyCheck(this.dirtyMap)
+            if (result !== undefined) {
+              Object.assign(this.dirtyMap, result)
+            }
+          }
+          if (this.dirtyNum > 0 && !silent) {
+            if (this.batching) return
+            this.notify(this.getState())
+            this.dirtyMap = {}
+            this.dirtyNum = 0
+          }
         }
       }
     }
@@ -179,7 +192,7 @@ export const createStateModel = <State = {}, Props = {}>(
       if (!hasProxy || this.props.useDirty) {
         return clone(this.dirtyMap)
       } else {
-        return produce(this.dirtyMap, () => nothing)
+        return produce(this.dirtyMap, () => {})
       }
     }
   }

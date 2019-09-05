@@ -1,10 +1,15 @@
 import { isFn, isStr, isArr, isObj, each, FormPath } from '@uform/shared'
 import { FormLifeCyclePayload } from '../types'
 
-type FormLifeCycleTypes<T = any> = {
-  [key in string]: (
-    | string
-    | ((path: FormPath, handler: FormLifeCycleHandler<T>) => FormLifeCycle<T>))
+type FormLifeCycleTypes = {
+  [key in string]: string
+}
+
+type FormLifeCycleHooks<T = any> = {
+  [key in string]: ((
+    path: FormPath,
+    handler: FormLifeCycleHandler<T>
+  ) => FormLifeCycle<T>)
 }
 
 type FormLifeCycleHandler<T> = (payload: T, context: any) => void
@@ -89,18 +94,21 @@ export class FormHeart<Payload = any> {
   }
 }
 
-export const createLifeCycleHandlers = <T>(types: FormLifeCycleTypes<T>) => {
+export const createLifeCycleHooks = <Payload>(
+  types: FormLifeCycleTypes
+): FormLifeCycleHooks<Payload> => {
+  const result: FormLifeCycleHooks<Payload> = {}
   Object.keys(types).forEach(key => {
     if (!isFn(types[types[key] as string])) {
-      types[types[key] as string] = function(handler) {
+      result[types[key] as string] = function(handler) {
         return new FormLifeCycle(types[key], handler)
       }
     }
   })
-  return types
+  return result
 }
 
-export const LifeCycleTypes = createLifeCycleHandlers({
+export const LifeCycleTypes = {
   /**
    * Form LifeCycle
    **/
@@ -112,7 +120,10 @@ export const LifeCycleTypes = createLifeCycleHandlers({
   ON_FORM_UNMOUNT: 'onFormUnmount',
   ON_FORM_SUBMIT: 'onFormSubmit',
   ON_FORM_RESET: 'onFormReset',
-
+  ON_FORM_SUBMIT_START: 'onFormSubmitStart',
+  ON_FORM_SUBMIT_END: 'onFormSubmitEnd',
+  ON_FORM_VALUES_CHANGE: 'onFormValuesChange',
+  ON_FORM_INITIAL_VALUES_CHANGE: 'onFormInitialValueChange',
   /**
    * Field LifeCycle
    **/
@@ -124,4 +135,6 @@ export const LifeCycleTypes = createLifeCycleHandlers({
   ON_FIELD_INITIAL_VALUE_CHANGE: 'onFieldInitialValueChange',
   ON_FIELD_MOUNT: 'onFieldMount',
   ON_FIELD_UNMOUNT: 'onFieldUnmount'
-})
+}
+
+export const LifeCycleHooks = createLifeCycleHooks(LifeCycleTypes)

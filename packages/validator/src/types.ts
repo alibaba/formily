@@ -2,13 +2,15 @@ export interface ValidatorOptions {
   validateFirst?: boolean
 }
 
+export type ValidateNode = (
+  options: ValidateFieldOptions
+) => Promise<{
+  errors: string[]
+  warnings: string[]
+}>
+
 export type ValidateNodeMap = {
-  [key in string]: (
-    options: ValidateFieldOptions
-  ) => Promise<{
-    errors: string[]
-    warnings: string[]
-  }>
+  [key in string]: ValidateNode
 }
 
 export type ValidateFormatsMap = {
