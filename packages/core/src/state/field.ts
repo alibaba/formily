@@ -108,6 +108,12 @@ export const FieldState = createStateModel(
       const { value, values } = this.parseValues(draft)
       draft.value = value
       draft.values = values
+      if(!draft.editable){
+        draft.errors = []
+        draft.effectErrors = []
+        draft.warnings = []
+        draft.effectWarnings = []
+      }
       if (draft.errors.length) {
         draft.invalid = true
         draft.valid = false
