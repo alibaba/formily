@@ -696,6 +696,12 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   return formApi
 }
 
+export const registerValidationFormats = FormValidator.registerFormats
+
+export const registerValidationRules = FormValidator.registerRules
+
+export const registerValidationMTEngine = FormValidator.registerMTEngine
+
 export { setValidationLanguage, setValidationLocale }
 
 export default createForm
