@@ -9,31 +9,88 @@ describe('createForm', () => {
         bb: 222
       }
     })
-    expect(form.getState(state => state.values)).toEqual({
+    expect(form.getFormState(state => state.values)).toEqual({
       aa: 111,
       bb: 222
     })
-    expect(form.getState(state => state.pristine)).toEqual(true)
-    expect(form.getState(state => state.initialized)).toEqual(true)
+    expect(form.getFormState(state => state.pristine)).toEqual(true)
+    expect(form.getFormState(state => state.initialized)).toEqual(true)
   })
 
-  test('initialValues', () => {
+  test('initialValues on init', () => {
     const form = createForm({
       initialValues: {
         aa: 111,
         bb: 222
       }
     })
-    expect(form.getState(state => state.values)).toEqual({
+    const aa = form.registerField({
+      path: 'aa'
+    })
+
+    const bb = form.registerField({
+      path: 'bb'
+    })
+    expect(form.getFormState(state => state.values)).toEqual({
       aa: 111,
       bb: 222
     })
-    expect(form.getState(state => state.initialValues)).toEqual({
+    expect(form.getFormState(state => state.initialValues)).toEqual({
       aa: 111,
       bb: 222
     })
-    expect(form.getState(state => state.pristine)).toEqual(true)
-    expect(form.getState(state => state.initialized)).toEqual(true)
+    expect(form.getFormState(state => state.pristine)).toEqual(true)
+    expect(form.getFormState(state => state.initialized)).toEqual(true)
+    expect(aa.getState(state => state.value)).toEqual(111)
+    expect(bb.getState(state => state.value)).toEqual(222)
+  })
+
+  test('initialValues after init', () => {
+    const form = createForm()
+    const aa = form.registerField({
+      path: 'aa'
+    })
+
+    const bb = form.registerField({
+      path: 'bb'
+    })
+    form.setFormState(state=>{
+      state.initialValues = {
+        aa: 111,
+        bb: 222
+      }
+    })
+    expect(form.getFormState(state => state.values)).toEqual({
+      aa: 111,
+      bb: 222
+    })
+    expect(form.getFormState(state => state.initialValues)).toEqual({
+      aa: 111,
+      bb: 222
+    })
+    expect(form.getFormState(state => state.pristine)).toEqual(true)
+    expect(form.getFormState(state => state.initialized)).toEqual(true)
+    expect(aa.getState(state => state.value)).toEqual(111)
+    expect(bb.getState(state => state.value)).toEqual(222)
+  })
+
+  test('initialValue', () => {
+    const form = createForm({
+      initialValues: {
+        aa: 111,
+        bb: 222
+      }
+    })
+    expect(form.getFormState(state => state.values)).toEqual({
+      aa: 111,
+      bb: 222
+    })
+    expect(form.getFormState(state => state.initialValues)).toEqual({
+      aa: 111,
+      bb: 222
+    })
+    expect(form.getFormState(state => state.pristine)).toEqual(true)
+    expect(form.getFormState(state => state.initialized)).toEqual(true)
   })
 
   test('lifecycles', () => {
@@ -65,7 +122,7 @@ describe('createForm', () => {
     expect(onFormInit).toBeCalledTimes(1)
     expect(onFieldInit).toBeCalledTimes(2)
     expect(onFieldChange).toBeCalledTimes(2)
-    expect(form.getState(state => state.values)).toEqual({
+    expect(form.getFormState(state => state.values)).toEqual({
       aa: '123',
       bb: '321'
     })
@@ -76,7 +133,7 @@ describe('createForm', () => {
       state.value = 'change bb'
     })
     expect(onFieldChange).toBeCalledTimes(4)
-    expect(form.getState(state => state.values)).toEqual({
+    expect(form.getFormState(state => state.values)).toEqual({
       aa: 'change aa',
       bb: 'change bb'
     })

@@ -50,7 +50,6 @@
     "@testing-library/react": "^8.0.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.6.8",
-    "@types/react": "^16.8.23",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
     "all-contributors-cli": "^6.1.2",

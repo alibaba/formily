@@ -1,4 +1,4 @@
-import { isFn } from '@uform/types'
+import { isFn } from './types'
 import { globalThisPolyfill } from './globalThis'
 
 type Filter = (value: any, key: string) => boolean

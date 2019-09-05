@@ -1,4 +1,4 @@
-import { isArr, isObj, isStr } from '@uform/types'
+import { isArr, isObj, isStr } from './types'
 
 type EachArrayIterator<T> = (currentValue: T, key: number) => void | boolean
 type EachStringIterator = (currentValue: string, key: number) => void | boolean

@@ -9,7 +9,8 @@ import {
   isValid,
   FormPath,
   FormPathPattern,
-  each
+  each,
+  deprecate
 } from '@uform/shared'
 import { FormValidator } from '@uform/validator'
 import { FormHeart, LifeCycleTypes } from './shared/lifecycle'
@@ -70,6 +71,9 @@ export const createForm = (options: FormCreatorOptions = {}) => {
               const initialValue = getFormInitialValuesIn(state.name)
               if (!isEqual(initialValue, state.initialValue)) {
                 state.initialValue = initialValue
+                if (!isValid(state.value)) {
+                  state.value = initialValue
+                }
               }
             }
           }
@@ -506,11 +510,11 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     })
   }
 
-  function setState(callback?: (state: IFormState) => any) {
+  function setFormState(callback?: (state: IFormState) => any) {
     state.setState(computeUserFormState(callback, state))
   }
 
-  function getState(callback?: (state: IFormState) => any) {
+  function getFormState(callback?: (state: IFormState) => any) {
     return state.getState(callback)
   }
 
@@ -558,6 +562,26 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         })
       }
     }
+  }
+
+  function setFieldValue(path: FormPathPattern, value?: any) {
+    setFieldState(path, state => {
+      state.value = value
+    })
+  }
+
+  function getFieldValue(path?: FormPathPattern) {
+    return getFormValuesIn(path)
+  }
+
+  function setFieldInitialValue(path?: FormPathPattern, value?: any) {
+    setFieldState(path, state => {
+      state.initialValue = value
+    })
+  }
+
+  function getFieldInitialValue(path?: FormPathPattern) {
+    return getFormInitialValuesIn(path)
   }
 
   function computeUserState(
@@ -625,8 +649,8 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     submit,
     reset,
     validate,
-    setState,
-    getState,
+    setFormState,
+    getFormState,
     subscribe,
     unsubscribe,
     setFieldState,
@@ -635,7 +659,23 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     registerVField,
     createMutators,
     getFormGraph,
-    setFormGraph
+    setFormGraph,
+    setFieldValue,
+    setValue: deprecate(setValue, 'setValue', 'Please use the setFieldValue.'),
+    getFieldValue,
+    getValue: deprecate(getValue, 'getValue', 'Please use the getFieldValue.'),
+    setFieldInitialValue,
+    setInitialValue: deprecate(
+      setValue,
+      'setInitialValue',
+      'Please use the setFieldInitialValue.'
+    ),
+    getFieldInitialValue,
+    getInitialValue: deprecate(
+      getFieldInitialValue,
+      'getInitialValue',
+      'Please use the getFieldInitialValue.'
+    )
   }
   const heart = new FormHeart({ ...options, context: formApi })
   const env = {

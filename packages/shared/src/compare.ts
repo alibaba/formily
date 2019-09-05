@@ -1,4 +1,4 @@
-import { isFn, isArr } from '@uform/types'
+import { isFn, isArr } from './types'
 const isArray = isArr
 const keyList = Object.keys
 const hasProp = Object.prototype.hasOwnProperty

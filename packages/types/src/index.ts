@@ -1,5 +1,4 @@
 export * from './schema'
-export * from './types'
 export * from './validator'
 export * from './effects'
 export * from './path'
