@@ -17,6 +17,12 @@ const hasProxy = !!globalThisPolyfill.Proxy
 
 type Subscriber<S> = (payload: S) => void
 
+type Inner<T> = T extends (...args: any[]) => new (...args: any[]) => infer P
+  ? P
+  : never
+
+export type Model = Inner<typeof createStateModel>
+
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
 ) => {
