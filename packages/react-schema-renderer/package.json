@@ -1,5 +1,5 @@
 {
-  "name": "@uform/react-schema-form",
+  "name": "@uform/react-schema-renderer",
   "version": "0.4.0",
   "license": "MIT",
   "main": "lib",
