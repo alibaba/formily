@@ -47,7 +47,7 @@ import { Model } from './shared/model'
 export const createForm = (options: FormCreatorOptions = {}) => {
   function changeGraph() {
     clearTimeout(env.graphChangeTimer)
-    setTimeout(() => {
+    env.graphChangeTimer = setTimeout(() => {
       heart.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
     })
   }
@@ -67,7 +67,16 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         fieldState.setState((state: IFieldState) => {
           if (state.visible) {
             if (valuesChanged) {
+              const path = FormPath.parse(state.name)
+              const parentValue = getFormValuesIn(path.parent())
               const value = getFormValuesIn(state.name)
+              /**
+               * https://github.com/alibaba/uform/issues/267 dynamic remove node
+               */
+              if (!isValid(value) && isArr(parentValue)) {
+                graph.remove(state.name)
+                return
+              }
               if (!isEqual(value, state.value)) {
                 state.value = value
               }
@@ -97,6 +106,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     if (mountedChanged && published.mounted) {
       heart.notify(LifeCycleTypes.ON_FORM_MOUNT, state)
     }
+
     changeGraph()
   }
 
@@ -383,6 +393,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     const fieldState = graph.select(path)
     if (fieldState) {
       fieldState.setState((state: IFieldState) => {
+        state.value = values[0]
         state.values = values
       })
     }

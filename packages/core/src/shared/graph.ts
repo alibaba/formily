@@ -92,8 +92,11 @@ export class FormGraph<NodeType = any> {
     if (ref && ref.children) {
       return each(ref.children, path => {
         if (isFn(eacher)) {
-          eacher(this.getNode(path), path)
-          this.eachChildren(path, eacher)
+          const node = this.getNode(path)
+          if (node) {
+            eacher(node, path)
+            this.eachChildren(path, eacher)
+          }
         }
       })
     }

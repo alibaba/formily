@@ -54,7 +54,7 @@ describe('createForm', () => {
     const bb = form.registerField({
       path: 'bb'
     })
-    form.setFormState(state=>{
+    form.setFormState(state => {
       state.initialValues = {
         aa: 111,
         bb: 222
@@ -281,4 +281,158 @@ describe('registerVField', () => {
 
 describe('createMutators', () => {
   //todo
+})
+
+describe('major sences', () => {
+  test('dynamic remove with intialValues', async () => {
+    const form = createForm({
+      initialValues: {
+        aa: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }]
+      }
+    })
+    form.registerField({
+      path: 'aa'
+    })
+    form.registerField({
+      path: 'aa.0'
+    })
+    form.registerField({
+      path: 'aa.0.aa'
+    })
+    form.registerField({
+      path: 'aa.0.bb'
+    })
+    form.registerField({
+      path: 'aa.1'
+    })
+    form.registerField({
+      path: 'aa.1.aa'
+    })
+    form.registerField({
+      path: 'aa.1.bb'
+    })
+    const mutators = form.createMutators('aa')
+    mutators.remove(0)
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: true,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: { aa: [{ aa: 345, bb: 678 }] },
+        initialValues: { aa: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }] },
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: undefined,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [[{ aa: 345, bb: 678 }]],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: [{ aa: 345, bb: 678 }],
+        initialValue: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }],
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: undefined
+      },
+      'aa.0': {
+        name: 'aa.0',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: undefined,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ aa: 345, bb: 678 }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { aa: 345, bb: 678 },
+        initialValue: { aa: 123, bb: 321 },
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: undefined
+      },
+      'aa.0.aa': {
+        name: 'aa.0.aa',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: undefined,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [345],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 345,
+        initialValue: 123,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: undefined
+      },
+      'aa.0.bb': {
+        name: 'aa.0.bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: undefined,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [678],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 678,
+        initialValue: 321,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: undefined
+      }
+    })
+  })
+
+  test('nested dynamic remove', () => {})
 })

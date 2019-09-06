@@ -227,7 +227,13 @@ class FormValidator {
       }
     })
   }
-
+  /**
+   * https://github.com/alibaba/uform/issues/215
+   *
+   * @static
+   * @param {ValidateFormatsMap} formats
+   * @memberof FormValidator
+   */
   static registerFormats(formats: ValidateFormatsMap) {
     each(formats, (pattern, key) => {
       if (isStr(pattern) || pattern instanceof RegExp) {

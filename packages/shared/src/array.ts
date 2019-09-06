@@ -57,7 +57,7 @@ export function each(val: any, iterator: any, revert?: boolean): void {
         }
       }
     } else {
-      for (let i = 0, length = val.length; i < length; i++) {
+      for (let i = 0; i < val.length; i++) {
         if (iterator(val[i], i) === false) {
           return
         }
@@ -142,8 +142,8 @@ export function reduce(
   return result
 }
 
-export function every(
-  val: string,
+export function every<T extends string>(
+  val: T,
   iterator: EachStringIterator,
   revert?: boolean
 ): boolean
@@ -172,8 +172,8 @@ export function every(val: any, iterator: any, revert?: boolean): boolean {
   return res
 }
 
-export function some(
-  val: string,
+export function some<T extends string>(
+  val: T,
   iterator: EachStringIterator,
   revert?: boolean
 ): boolean
@@ -202,8 +202,8 @@ export function some(val: any, iterator: any, revert?: boolean): boolean {
   return res
 }
 
-export function findIndex(
-  val: string,
+export function findIndex<T extends string>(
+  val: T,
   iterator: EachStringIterator,
   revert?: boolean
 ): number
@@ -236,8 +236,8 @@ export function findIndex(
   return res
 }
 
-export function find(
-  val: string,
+export function find<T extends string>(
+  val: T,
   iterator: EachStringIterator,
   revert?: boolean
 ): any
@@ -266,8 +266,8 @@ export function find(val: any, iterator: any, revert?: boolean): any {
   return res
 }
 
-export function includes(
-  val: string[],
+export function includes<T extends string>(
+  val: T,
   searchElement: string,
   revert?: boolean
 ): boolean
@@ -275,6 +275,8 @@ export function includes<T>(
   val: T[],
   searchElement: T,
   revert?: boolean
-): boolean {
+): boolean
+export function includes(val: any, searchElement: any, revert?: boolean) {
+  if (isStr(val)) return val.includes(searchElement)
   return some(val, item => item === searchElement, revert)
 }
