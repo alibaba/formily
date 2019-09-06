@@ -324,6 +324,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
           })
         }, 60)
         validate(value, rules).then(({ errors, warnings }) => {
+          clearTimeout((fieldState as any).validateTimer)
           fieldState.setState((state: IFieldState) => {
             state.validating = false
             state.errors = errors
