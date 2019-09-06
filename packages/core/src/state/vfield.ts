@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { clone, FormPath } from '@uform/shared'
+import { clone, FormPath, isValid } from '@uform/shared'
 import { IVFieldState, IVFieldStateProps } from '../types'
 
 /**
@@ -21,7 +21,10 @@ export const VFieldState = createStateModel(
       props: {}
     }
 
-    static defaultProps = {}
+    static defaultProps = {
+      path: '',
+      props: {}
+    }
 
     private state: IVFieldState
 
@@ -34,9 +37,12 @@ export const VFieldState = createStateModel(
       this.state.props = clone(props.props)
     }
 
-    computeState(draft: IVFieldState) {
+    computeState(draft: IVFieldState, prevState: IVFieldState) {
       if (draft.mounted === true) {
         draft.unmounted = false
+      }
+      if (!isValid(draft.props)) {
+        draft.props = prevState.props
       }
       if (draft.unmounted === true) {
         draft.mounted = false

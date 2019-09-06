@@ -41,8 +41,6 @@ import { Model } from './shared/model'
  *    validateFirst:boolean,
  *    useDirty:boolean
  * }
- * todo: pristine 同步问题
- * todo: graph新增节点同步问题
  */
 
 export const createForm = (options: FormCreatorOptions = {}) => {
@@ -69,7 +67,9 @@ export const createForm = (options: FormCreatorOptions = {}) => {
        */
       shadowUpdate(() => {
         graph.eachChildren('', (fieldState: Model) => {
-          if (fieldState.displayName === 'VFieldState') return
+          if (fieldState.displayName === 'VFieldState') {
+            return
+          }
           fieldState.setState((state: IFieldState) => {
             if (state.visible) {
               if (valuesChanged) {
@@ -138,15 +138,6 @@ export const createForm = (options: FormCreatorOptions = {}) => {
               state.initialValue = getFormInitialValuesIn(state.name)
           }, true)
         }
-      } else {
-        if (valueChanged) {
-          fieldState.setState((state: IFieldState) => {
-            state.pristine = false
-          }, true)
-          state.setState(state => {
-            state.pristine = false
-          }, true)
-        }
       }
 
       if (visibleChanged) {
@@ -206,7 +197,9 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, fieldState)
       }
       changeGraph()
-      if (isFn(onChange) && !env.shadowStage) onChange(fieldState)
+      if (isFn(onChange) && (!env.shadowStage || env.leadingStage)) {
+        onChange(fieldState)
+      }
       heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, fieldState)
     }
   }
@@ -270,12 +263,12 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       )
     } else {
       fieldState = new VFieldState({
-        newPath,
+        path: newPath,
         useDirty: options.useDirty
       })
       graph.appendNode(newPath, fieldState)
       fieldState.subscribe(
-        onFieldChange({ onChange, fieldState, path: newPath })
+        onVFieldChange({ onChange, fieldState, path: newPath })
       )
       fieldState.batch(() => {
         batchRunTaskQueue(fieldState)
@@ -493,17 +486,18 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   }
 
   function reset({ forceClear = false, validate = true } = {}) {
-    state.setState(state => {
-      state.pristine = true
-      if (forceClear) {
-        state.values = {}
-      } else {
-        state.values = clone(state.initialValues)
+    leadingUpdate(() => {
+      state.setState(state => {
+        if (forceClear) {
+          state.values = {}
+        } else {
+          state.values = clone(state.initialValues)
+        }
+      })
+      if (validate) {
+        formApi.validate()
       }
     })
-    if (validate) {
-      formApi.validate()
-    }
   }
 
   function submit(onSubmit: (values: IFormState['values']) => Promise<any>) {
@@ -552,7 +546,9 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   }
 
   function setFormState(callback?: (state: IFormState) => any) {
-    state.setState(computeUserFormState(callback, state))
+    leadingUpdate(() => {
+      state.setState(computeUserFormState(callback, state))
+    })
   }
 
   function getFormState(callback?: (state: IFormState) => any) {
@@ -560,17 +556,17 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   }
 
   function batchRunTaskQueue(fieldState: typeof FieldState.prototype) {
-    taskQueue.forEach((task, index) => {
+    env.taskQueue.forEach((task, index) => {
       const { path, callbacks } = task
-      if (path.match(fieldState.getSourceState(state => state.name))) {
+      if (path.match(fieldState.unsafe_getSourceState(state => state.name))) {
         callbacks.forEach(callback => {
           fieldState.setState(computeUserState(callback, fieldState))
         })
         if (!path.isWildMatchPattern && !path.isMatchPattern) {
-          taskQueue.splice(index, 1)
-          taskQueue.forEach(({ path: newPath }, index) => {
+          env.taskQueue.splice(index, 1)
+          env.taskQueue.forEach(({ path: newPath }, index) => {
             if (newPath.toString() === path.toString()) {
-              taskIndexes[path] = index
+              env.taskIndexes[path] = index
             }
           })
         }
@@ -590,14 +586,16 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       matchCount++
     })
     if (matchCount === 0 || newPath.isWildMatchPattern) {
-      let taskIndex = taskIndexes[newPath]
+      let taskIndex = env.taskIndexes[newPath]
       if (isValid(taskIndex)) {
-        if (!taskQueue[taskIndex].callbacks.some(fn => isEqual(fn, callback))) {
-          taskQueue[taskIndex].callbacks.push(callback)
+        if (
+          !env.taskQueue[taskIndex].callbacks.some(fn => isEqual(fn, callback))
+        ) {
+          env.taskQueue[taskIndex].callbacks.push(callback)
         }
       } else {
-        taskIndexes[newPath] = taskQueue.length
-        taskQueue.push({
+        env.taskIndexes[newPath] = env.taskQueue.length
+        env.taskQueue.push({
           path: newPath,
           callbacks: [callback]
         })
@@ -632,8 +630,10 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     return (draft: IFieldState) => {
       if (isFn(callback)) {
         callback(draft)
-        const errors = fieldState.getSourceState(state => state.errors)
-        const warnings = fieldState.getSourceState(state => state.warnings)
+        const errors = fieldState.unsafe_getSourceState(state => state.errors)
+        const warnings = fieldState.unsafe_getSourceState(
+          state => state.warnings
+        )
         draft.effectErrors = draft.errors
         draft.effectWarnings = draft.warnings
         draft.errors = errors
@@ -649,8 +649,8 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     return (draft: IFormState) => {
       if (isFn(callback)) {
         callback(draft)
-        const errors = state.getSourceState(state => state.errors)
-        const warnings = state.getSourceState(state => state.warnings)
+        const errors = state.unsafe_getSourceState(state => state.errors)
+        const warnings = state.unsafe_getSourceState(state => state.warnings)
         draft.errors = errors
         draft.warnings = warnings
       }
@@ -672,11 +672,32 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   }
 
   function setFormGraph(nodes: {}) {
-    each(nodes, (node, key) => {
+    each(nodes, (node: IFieldState | IVFieldState, key) => {
+      let nodeState: any
       if (graph.exist(key)) {
-        graph.select(key).setState(state => {
+        nodeState = graph.select(key)
+        nodeState.unsafe_setSourceState(state => {
           Object.assign(state, node)
         })
+      } else {
+        if (node.displayName === 'VFieldState') {
+          nodeState = registerVField({
+            path: key
+          })
+          nodeState.unsafe_setSourceState(state => {
+            Object.assign(state, node)
+          })
+        } else if (node.displayName === 'FieldState') {
+          nodeState = registerField({
+            path: key
+          })
+          nodeState.unsafe_setSourceState(state => {
+            Object.assign(state, node)
+          })
+        }
+      }
+      if (nodeState) {
+        nodeState.notify(state.getState())
       }
     })
   }
@@ -689,11 +710,17 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     env.shadowStage = false
   }
 
+  function leadingUpdate(callback: () => void) {
+    env.leadingStage = true
+    if (isFn(callback)) {
+      callback()
+    }
+    env.leadingStage = false
+  }
+
   const state = new FormState(options)
   const validator = new FormValidator(options)
   const graph = new FormGraph()
-  const taskQueue = []
-  const taskIndexes = {}
   const formApi = {
     submit,
     reset,
@@ -733,7 +760,10 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
-    shadowStage: false
+    shadowStage: false,
+    leadingStage: false,
+    taskQueue: [],
+    taskIndexes: {}
   }
   heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscribe(onFormChange)

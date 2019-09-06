@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { toArr, clone } from '@uform/shared'
+import { toArr, clone,isEqual } from '@uform/shared'
 import { IFormState, IFormStateProps } from '../types'
 /**
  * 核心数据结构，描述Form级别状态
@@ -46,6 +46,11 @@ export const FormState = createStateModel(
       } else {
         draft.invalid = false
         draft.valid = true
+      }
+      if(isEqual(draft.values,draft.initialValues)){
+        draft.pristine = true
+      } else {
+        draft.pristine = false
       }
       if (draft.validating === true) {
         draft.loading = true

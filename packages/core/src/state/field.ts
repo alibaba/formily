@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { clone, toArr, isValid, FormPath } from '@uform/shared'
+import { clone, toArr, isValid, isEqual, FormPath } from '@uform/shared'
 import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态
@@ -12,7 +12,10 @@ export const FieldState = createStateModel(
       initialized: false,
       pristine: true,
       valid: true,
+      modified: false,
       touched: false,
+      active: false,
+      visited: false,
       invalid: false,
       visible: true,
       display: true,
@@ -113,7 +116,19 @@ export const FieldState = createStateModel(
       const { value, values } = this.parseValues(draft)
       draft.value = value
       draft.values = values
-      if(!isValid(draft.props)){
+      if (
+        draft.initialized &&
+        prevState.initialized &&
+        !isEqual(draft.value, prevState.value)
+      ) {
+        draft.modified = true
+      }
+      if (isEqual(draft.value, draft.initialValue)) {
+        draft.pristine = true
+      } else {
+        draft.pristine = false
+      }
+      if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
       if (!draft.editable) {

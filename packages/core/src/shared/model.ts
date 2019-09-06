@@ -27,7 +27,7 @@ export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
 ) => {
   return class Model<DefaultProps> {
-    public state: State
+    public state: State & { displayName?: string }
     public props: Props & DefaultProps & StateModelProps<State>
     public displayName?: string
     public dirtyNum: number
@@ -47,6 +47,7 @@ export const createStateModel = <State = {}, Props = {}>(
       this.batching = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
+      this.state.displayName = this.displayName
     }
 
     subscribe = (callback?: Subscriber<State>) => {
@@ -100,7 +101,7 @@ export const createStateModel = <State = {}, Props = {}>(
       }
     }
 
-    getSourceState = (callback?: (state: State) => State) => {
+    unsafe_getSourceState = (callback?: (state: State) => State) => {
       if (isFn(callback)) {
         return callback(this.state)
       } else {
@@ -108,9 +109,13 @@ export const createStateModel = <State = {}, Props = {}>(
       }
     }
 
-    setSourceState = (callback: (state: State) => void) => {
+    unsafe_setSourceState = (callback: (state: State) => void) => {
       if (isFn(callback)) {
-        callback(this.state)
+        if (!hasProxy || this.props.useDirty) {
+          callback(this.state)
+        } else {
+          this.state = produce(this.state, callback)
+        }
       }
     }
 

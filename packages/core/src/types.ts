@@ -64,6 +64,7 @@ export interface IStateModelFactory<S, P> {
 
 export interface IFieldState {
   path: FormPath
+  displayName: string
   name: string
   initialized: boolean
   pristine: boolean
@@ -74,6 +75,9 @@ export interface IFieldState {
   display: boolean
   editable: boolean
   loading: boolean
+  modified: boolean
+  active: boolean
+  visited: boolean
   validating: boolean
   errors: string[]
   values: any[]
@@ -143,6 +147,7 @@ export type FormCreatorOptions = IFormStateProps & {
 export interface IVFieldState {
   path: FormPath
   name: string
+  displayName: string
   initialized: boolean
   visible: boolean
   display: boolean
