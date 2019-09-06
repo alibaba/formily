@@ -1,6 +1,6 @@
 import { createStateModel } from '../shared/model'
 import { toArr, clone } from '@uform/shared'
-import { IFormState, IFormStateProps, FormStateDirtyMap } from '../types'
+import { IFormState, IFormStateProps } from '../types'
 /**
  * 核心数据结构，描述Form级别状态
  */
@@ -57,12 +57,6 @@ export const FormState = createStateModel(
       }
       if (draft.unmounted === true) {
         draft.mounted = false
-      }
-    }
-
-    dirtyCheck(dirtys: FormStateDirtyMap) {
-      if (dirtys.values) {
-        this.state.pristine = false
       }
     }
   }

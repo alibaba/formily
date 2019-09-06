@@ -1,6 +1,6 @@
 import { createStateModel } from '../shared/model'
 import { clone, toArr, isValid, FormPath } from '@uform/shared'
-import { IFieldState, IFieldStateProps, FieldStateDirtyMap } from '../types'
+import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态
  */
@@ -33,7 +33,11 @@ export const FieldState = createStateModel(
       props: {}
     }
 
-    static defaultProps = {}
+    static defaultProps = {
+      path: '',
+      editable: true,
+      props: {}
+    }
 
     private state: IFieldState
 
@@ -95,10 +99,11 @@ export const FieldState = createStateModel(
       }
     }
 
-    computeState(draft: IFieldState) {
+    computeState(draft: IFieldState, prevState: IFieldState) {
+      //如果是隐藏状态，则禁止修改值
       if (!draft.visible || draft.unmounted) {
-        draft.value = this.state.value
-        draft.initialValue = this.state.initialValue
+        draft.value = prevState.value
+        draft.initialValue = prevState.initialValue
       }
       draft.rules = toArr(draft.rules)
       draft.warnings = toArr(draft.warnings).filter(v => !!v)
@@ -108,18 +113,14 @@ export const FieldState = createStateModel(
       const { value, values } = this.parseValues(draft)
       draft.value = value
       draft.values = values
+      if(!isValid(draft.props)){
+        draft.props = prevState.props
+      }
       if (!draft.editable) {
         draft.errors = []
         draft.effectErrors = []
         draft.warnings = []
         draft.effectWarnings = []
-      }
-      if (draft.errors.length) {
-        draft.invalid = true
-        draft.valid = false
-      } else {
-        draft.invalid = false
-        draft.valid = true
       }
       if (draft.effectErrors.length) {
         draft.invalid = true
@@ -133,17 +134,32 @@ export const FieldState = createStateModel(
       } else if (draft.validating === false) {
         draft.loading = false
       }
+      if (draft.mounted === true) {
+        draft.unmounted = false
+      }
+      if (draft.visible === false) {
+        draft.errors = []
+        draft.effectErrors = []
+        draft.warnings = []
+        draft.effectWarnings = []
+      }
+      if (draft.unmounted === true) {
+        draft.mounted = false
+        draft.errors = []
+        draft.effectErrors = []
+        draft.warnings = []
+        draft.effectWarnings = []
+      }
+      if (draft.errors.length) {
+        draft.invalid = true
+        draft.valid = false
+      } else {
+        draft.invalid = false
+        draft.valid = true
+      }
       const { rules, required } = this.parseRules(draft)
       draft.rules = rules
       draft.required = required
-    }
-
-    dirtyCheck(dirtys: FieldStateDirtyMap) {
-      if (dirtys.value) {
-        if (!dirtys.initialized) {
-          this.state.pristine = false
-        }
-      }
     }
   }
 )

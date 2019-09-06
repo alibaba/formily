@@ -68,7 +68,7 @@ describe('createForm', () => {
       aa: 111,
       bb: 222
     })
-    expect(form.getFormState(state => state.pristine)).toEqual(true)
+    expect(form.getFormState(state => state.pristine)).toEqual(false)
     expect(form.getFormState(state => state.initialized)).toEqual(true)
     expect(aa.getState(state => state.value)).toEqual(111)
     expect(bb.getState(state => state.value)).toEqual(222)
@@ -188,7 +188,7 @@ describe('graph', () => {
         invalid: false,
         visible: true,
         display: true,
-        editable: undefined,
+        editable: true,
         loading: false,
         validating: false,
         errors: [],
@@ -202,7 +202,7 @@ describe('graph', () => {
         required: false,
         mounted: false,
         unmounted: false,
-        props: undefined
+        props: {}
       },
       bb: {
         name: 'bb',
@@ -213,7 +213,7 @@ describe('graph', () => {
         invalid: false,
         visible: true,
         display: true,
-        editable: undefined,
+        editable: true,
         loading: false,
         validating: false,
         errors: [],
@@ -227,7 +227,7 @@ describe('graph', () => {
         required: false,
         mounted: false,
         unmounted: false,
-        props: undefined
+        props: {}
       }
     })
   })
@@ -311,11 +311,14 @@ describe('major sences', () => {
     form.registerField({
       path: 'aa.1.bb'
     })
+    form.setFieldState('aa.1.aa', state => {
+      state.value = 'change aa'
+    })
     const mutators = form.createMutators('aa')
     mutators.remove(0)
     expect(form.getFormGraph()).toEqual({
       '': {
-        pristine: true,
+        pristine: false,
         valid: true,
         invalid: false,
         loading: false,
@@ -325,7 +328,7 @@ describe('major sences', () => {
         editable: true,
         errors: [],
         warnings: [],
-        values: { aa: [{ aa: 345, bb: 678 }] },
+        values: { aa: [{ aa: 'change aa', bb: 678 }] },
         initialValues: { aa: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }] },
         mounted: false,
         unmounted: false,
@@ -334,88 +337,88 @@ describe('major sences', () => {
       aa: {
         name: 'aa',
         initialized: true,
-        pristine: true,
+        pristine: false,
         valid: true,
         touched: false,
         invalid: false,
         visible: true,
         display: true,
-        editable: undefined,
+        editable: true,
         loading: false,
         validating: false,
         errors: [],
-        values: [[{ aa: 345, bb: 678 }]],
+        values: [[{ aa: 'change aa', bb: 678 }]],
         effectErrors: [],
         warnings: [],
         effectWarnings: [],
-        value: [{ aa: 345, bb: 678 }],
+        value: [{ aa: 'change aa', bb: 678 }],
         initialValue: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }],
         rules: [],
         required: false,
         mounted: false,
         unmounted: false,
-        props: undefined
+        props: {}
       },
       'aa.0': {
         name: 'aa.0',
         initialized: true,
-        pristine: true,
+        pristine: false,
         valid: true,
         touched: false,
         invalid: false,
         visible: true,
         display: true,
-        editable: undefined,
+        editable: true,
         loading: false,
         validating: false,
         errors: [],
-        values: [{ aa: 345, bb: 678 }],
+        values: [{ aa: 'change aa', bb: 678 }],
         effectErrors: [],
         warnings: [],
         effectWarnings: [],
-        value: { aa: 345, bb: 678 },
+        value: { aa: 'change aa', bb: 678 },
         initialValue: { aa: 123, bb: 321 },
         rules: [],
         required: false,
         mounted: false,
         unmounted: false,
-        props: undefined
+        props: {}
       },
       'aa.0.aa': {
         name: 'aa.0.aa',
         initialized: true,
-        pristine: true,
+        pristine: false,
         valid: true,
         touched: false,
         invalid: false,
         visible: true,
         display: true,
-        editable: undefined,
+        editable: true,
         loading: false,
         validating: false,
         errors: [],
-        values: [345],
+        values: ['change aa'],
         effectErrors: [],
         warnings: [],
         effectWarnings: [],
-        value: 345,
+        value: 'change aa',
         initialValue: 123,
         rules: [],
         required: false,
         mounted: false,
         unmounted: false,
-        props: undefined
+        props: {}
       },
       'aa.0.bb': {
         name: 'aa.0.bb',
         initialized: true,
-        pristine: true,
+        pristine: false,
         valid: true,
         touched: false,
         invalid: false,
         visible: true,
         display: true,
-        editable: undefined,
+        editable: true,
         loading: false,
         validating: false,
         errors: [],
@@ -429,10 +432,803 @@ describe('major sences', () => {
         required: false,
         mounted: false,
         unmounted: false,
-        props: undefined
+        props: {}
       }
     })
   })
 
-  test('nested dynamic remove', () => {})
+  test('nested dynamic remove', () => {
+    const form = createForm()
+    form.registerField({
+      path: 'aa',
+      value: []
+    })
+    form.registerField({
+      path: 'aa.0'
+    })
+    form.registerField({
+      path: 'aa.0.aa'
+    })
+    form.registerField({
+      path: 'aa.0.bb'
+    })
+    form.registerField({
+      path: 'aa.1'
+    })
+    form.registerField({
+      path: 'aa.1.aa'
+    })
+    form.registerField({
+      path: 'aa.1.bb'
+    })
+    form.setFieldState('aa.1.aa', state => {
+      state.value = 'change aa'
+    })
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: false,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: {
+          aa: [
+            undefined,
+            {
+              aa: 'change aa'
+            }
+          ]
+        },
+        initialValues: {},
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: false,
+        editable: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [
+          [
+            undefined,
+            {
+              aa: 'change aa'
+            }
+          ]
+        ],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: [
+          undefined,
+          {
+            aa: 'change aa'
+          }
+        ],
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.0': {
+        name: 'aa.0',
+        initialized: true,
+        pristine: true,
+        editable: true,
+        initialValue: undefined,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [],
+        value: undefined,
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.0.aa': {
+        name: 'aa.0.aa',
+        initialized: true,
+        pristine: true,
+        editable: true,
+        initialValue: undefined,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [],
+        value: undefined,
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.0.bb': {
+        name: 'aa.0.bb',
+        initialized: true,
+        pristine: true,
+        editable: true,
+        initialValue: undefined,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [],
+        value: undefined,
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.1': {
+        name: 'aa.1',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        loading: false,
+        editable: true,
+        validating: false,
+        errors: [],
+        values: [
+          {
+            aa: 'change aa'
+          }
+        ],
+        effectErrors: [],
+        initialValue: undefined,
+        warnings: [],
+        effectWarnings: [],
+        value: {
+          aa: 'change aa'
+        },
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.1.aa': {
+        name: 'aa.1.aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        editable: true,
+        display: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: ['change aa'],
+        initialValue: undefined,
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 'change aa',
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.1.bb': {
+        name: 'aa.1.bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [],
+        initialValue: undefined,
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      }
+    })
+    const mutators = form.createMutators('aa')
+    mutators.remove(0)
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: false,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: { aa: [{ aa: 'change aa', bb: undefined }] },
+        initialValues: {},
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [[{ aa: 'change aa', bb: undefined }]],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: [{ aa: 'change aa', bb: undefined }],
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.0': {
+        name: 'aa.0',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ aa: 'change aa' }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { aa: 'change aa' },
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.0.aa': {
+        name: 'aa.0.aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: ['change aa'],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 'change aa',
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.0.bb': {
+        name: 'aa.0.bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: undefined,
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      }
+    })
+  })
+
+  test('nested visible', () => {
+    const form = createForm()
+    form.registerField({
+      path: 'aa',
+      value: {}
+    })
+    form.registerField({
+      path: 'aa.bb',
+      initialValue: 123
+    })
+    form.registerField({
+      path: 'aa.cc',
+      initialValue: 222
+    })
+    form.setFieldState('aa', state => {
+      state.visible = false
+    })
+    expect(form.getFormState(state => state.values)).toEqual({})
+
+    form.setFieldState('aa', state => {
+      state.visible = false
+    })
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: false,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: {},
+        initialValues: { aa: { bb: 123, cc: 222 } },
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ bb: 123, cc: 222 }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { bb: 123, cc: 222 },
+        initialValue: { bb: 123, cc: 222 },
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.bb': {
+        name: 'aa.bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [123],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 123,
+        initialValue: 123,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.cc': {
+        name: 'aa.cc',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [222],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 222,
+        initialValue: 222,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      }
+    })
+
+    form.setFieldState('aa.bb', state => {
+      state.value = '123'
+    })
+
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: false,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: {},
+        initialValues: { aa: { bb: 123, cc: 222 } },
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ bb: 123, cc: 222 }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { bb: 123, cc: 222 },
+        initialValue: { bb: 123, cc: 222 },
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.bb': {
+        name: 'aa.bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [123],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 123,
+        initialValue: 123,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.cc': {
+        name: 'aa.cc',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [222],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 222,
+        initialValue: 222,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      }
+    })
+
+    form.setFieldState('aa', state => {
+      state.visible = true
+    })
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: false,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: { aa: { bb: 123, cc: 222 } },
+        initialValues: { aa: { bb: 123, cc: 222 } },
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ bb: 123, cc: 222 }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { bb: 123, cc: 222 },
+        initialValue: { bb: 123, cc: 222 },
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.bb': {
+        name: 'aa.bb',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [123],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 123,
+        initialValue: 123,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.cc': {
+        name: 'aa.cc',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: true,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [222],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 222,
+        initialValue: 222,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      }
+    })
+  })
+
+  test('deep nested visible', () => {
+    const form = createForm()
+    form.registerField({
+      path: 'aa',
+      value: {}
+    })
+    form.registerField({
+      path: 'aa.bb'
+    })
+    form.registerField({
+      path: 'aa.bb.cc',
+      value: 123
+    })
+    form.setFieldState('aa', state => {
+      state.visible = false
+    })
+    expect(form.getFormGraph()).toEqual({
+      '': {
+        pristine: false,
+        valid: true,
+        invalid: false,
+        loading: false,
+        validating: false,
+        initialized: true,
+        submitting: false,
+        editable: true,
+        errors: [],
+        warnings: [],
+        values: {},
+        initialValues: {},
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      aa: {
+        name: 'aa',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ bb: { cc: 123 } }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { bb: { cc: 123 } },
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.bb': {
+        name: 'aa.bb',
+        initialized: true,
+        pristine: false,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [{ cc: 123 }],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: { cc: 123 },
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      },
+      'aa.bb.cc': {
+        name: 'aa.bb.cc',
+        initialized: true,
+        pristine: true,
+        valid: true,
+        touched: false,
+        invalid: false,
+        visible: false,
+        display: true,
+        editable: true,
+        loading: false,
+        validating: false,
+        errors: [],
+        values: [123],
+        effectErrors: [],
+        warnings: [],
+        effectWarnings: [],
+        value: 123,
+        initialValue: undefined,
+        rules: [],
+        required: false,
+        mounted: false,
+        unmounted: false,
+        props: {}
+      }
+    })
+  })
 })

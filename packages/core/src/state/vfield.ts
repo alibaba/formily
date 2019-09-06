@@ -26,22 +26,21 @@ export const VFieldState = createStateModel(
 
     private state: IVFieldState
 
+    private path: FormPath
+
     constructor(state: IVFieldState, props: IVFieldStateProps) {
       this.state = state
-      this.state.path = FormPath.getPath(props.path)
-      this.state.name = this.state.path.entire
+      this.path = FormPath.getPath(props.path)
+      this.state.name = this.path.entire
       this.state.props = clone(props.props)
     }
 
-    publishState() {
-      return {
-        name: this.state.name,
-        path: FormPath.getPath(this.state.path),
-        initialized: this.state.initialized,
-        visible: this.state.visible,
-        display: this.state.display,
-        mounted: this.state.mounted,
-        unmounted: this.state.unmounted
+    computeState(draft: IVFieldState) {
+      if (draft.mounted === true) {
+        draft.unmounted = false
+      }
+      if (draft.unmounted === true) {
+        draft.mounted = false
       }
     }
   }

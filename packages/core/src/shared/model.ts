@@ -125,7 +125,7 @@ export const createStateModel = <State = {}, Props = {}>(
           this.dirtyMap = {}
           callback(draft)
           if (isFn(this.controller.computeState)) {
-            this.controller.computeState(draft)
+            this.controller.computeState(draft, this.state)
           }
           each(this.state, (value, key) => {
             if (isEmpty(value) && isEmpty(draft[key])) return
@@ -156,7 +156,7 @@ export const createStateModel = <State = {}, Props = {}>(
             draft => {
               callback(draft)
               if (isFn(this.controller.computeState)) {
-                this.controller.computeState(draft)
+                this.controller.computeState(draft, this.state)
               }
             },
             patches => {
@@ -192,13 +192,13 @@ export const createStateModel = <State = {}, Props = {}>(
     }
 
     hasChanged = (key?: string) =>
-      key ? !!this.dirtyMap[key] : this.dirtyNum > 0
+      key ? this.dirtyMap[key] === true : this.dirtyNum > 0
 
     getChanged = () => {
       if (!hasProxy || this.props.useDirty) {
         return clone(this.dirtyMap)
       } else {
-        return produce(this.dirtyMap, () => {})
+        return this.dirtyMap
       }
     }
   }

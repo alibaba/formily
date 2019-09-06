@@ -68,12 +68,13 @@ export const createForm = (options: FormCreatorOptions = {}) => {
           if (state.visible) {
             if (valuesChanged) {
               const path = FormPath.parse(state.name)
+              const index = path.segments[path.segments.length - 1]
               const parentValue = getFormValuesIn(path.parent())
               const value = getFormValuesIn(state.name)
               /**
                * https://github.com/alibaba/uform/issues/267 dynamic remove node
                */
-              if (!isValid(value) && isArr(parentValue)) {
+              if (isArr(parentValue) && parentValue.length <= Number(index)) {
                 graph.remove(state.name)
                 return
               }
@@ -112,17 +113,14 @@ export const createForm = (options: FormCreatorOptions = {}) => {
 
   function onFieldChange({ onChange, fieldState, path }) {
     return (published: IFieldState) => {
-      if (isFn(onChange)) onChange(fieldState)
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, fieldState)
       const valueChanged = fieldState.hasChanged('value')
       const initialValueChanged = fieldState.hasChanged('initialValue')
       const visibleChanged = fieldState.hasChanged('visible')
       const displayChanged = fieldState.hasChanged('display')
       const unmountedChanged = fieldState.hasChanged('unmounted')
       const mountedChanged = fieldState.hasChanged('mounted')
-      const initialized = fieldState.hasChanged('initialized')
-
-      if (initialized) {
+      const initializedChanged = fieldState.hasChanged('initialized')
+      if (initializedChanged) {
         heart.notify(LifeCycleTypes.ON_FIELD_INIT, fieldState)
         const isEmptyValue = isEmpty(published.value)
         const isEmptyInitialValue = isEmpty(published.initialValue)
@@ -131,7 +129,16 @@ export const createForm = (options: FormCreatorOptions = {}) => {
             if (isEmptyValue) state.value = getFormValuesIn(state.name)
             if (isEmptyInitialValue)
               state.initialValue = getFormInitialValuesIn(state.name)
-          })
+          }, true)
+        }
+      } else {
+        if (valueChanged) {
+          fieldState.setState((state: IFieldState) => {
+            state.pristine = false
+          }, true)
+          state.setState(state => {
+            state.pristine = false
+          }, true)
         }
       }
 
@@ -141,19 +148,26 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         } else {
           setFormValuesIn(path, published.value)
         }
-        graph.eachChildren(path, childState => {
-          childState.setState((state: IFieldState) => {
-            state.visible = published.visible
-            state.errors = state.visible ? state.errors : []
-          })
-        })
+        graph.eachChildren(
+          path,
+          childState => {
+            childState.setState((state: IFieldState) => {
+              state.visible = published.visible
+            })
+          },
+          false
+        )
       }
       if (displayChanged) {
-        graph.eachChildren(path, childState => {
-          childState.setState((state: IFieldState) => {
-            state.display = published.display
-          })
-        })
+        graph.eachChildren(
+          path,
+          childState => {
+            childState.setState((state: IFieldState) => {
+              state.display = published.display
+            })
+          },
+          false
+        )
       }
 
       if (unmountedChanged) {
@@ -162,12 +176,15 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         } else {
           setFormValuesIn(path, published.value)
         }
-        graph.eachChildren(path, childState => {
-          childState.setState((state: IFieldState) => {
-            state.unmounted = published.unmounted
-            state.errors = state.unmounted ? state.errors : []
-          })
-        })
+        graph.eachChildren(
+          path,
+          childState => {
+            childState.setState((state: IFieldState) => {
+              state.unmounted = published.unmounted
+            })
+          },
+          false
+        )
       }
       if (mountedChanged && published.mounted) {
         heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldState)
@@ -182,21 +199,20 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, fieldState)
       }
       changeGraph()
+      if (isFn(onChange)) onChange(fieldState)
+      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, fieldState)
     }
   }
 
   function onVFieldChange({ onChange, fieldState, path }) {
     return (published: IVFieldState) => {
-      if (isFn(onChange)) onChange(fieldState)
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, fieldState)
       const visibleChanged = fieldState.hasChanged('visible')
       const displayChanged = fieldState.hasChanged('display')
       const unmountedChanged = fieldState.hasChanged('unmounted')
       const mountedChanged = fieldState.hasChanged('mounted')
+      const initializedChnaged = fieldState.hasChanged('initialized')
 
-      const initialized = fieldState.hasChanged('initialized')
-
-      if (initialized) {
+      if (initializedChnaged) {
         heart.notify(LifeCycleTypes.ON_FIELD_INIT, fieldState)
       }
 
@@ -227,6 +243,8 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldState)
       }
       changeGraph()
+      if (isFn(onChange)) onChange(fieldState)
+      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, fieldState)
     }
   }
 
@@ -691,7 +709,10 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       getFieldInitialValue,
       'getInitialValue',
       'Please use the getFieldInitialValue.'
-    )
+    ),
+    notify: <T>(type: string, payload: T) => {
+      heart.notify(type, payload)
+    }
   }
   const heart = new FormHeart({ ...options, context: formApi })
   const env = {

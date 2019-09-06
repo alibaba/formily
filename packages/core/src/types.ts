@@ -46,7 +46,7 @@ export type StateDirtyMap<P> = {
 export interface StateModel<P> {
   publishState?: (state: P) => P
   dirtyCheck?: (dirtys: StateDirtyMap<P>) => StateDirtyMap<P> | void
-  computeState?: (state: Draft<P>) => Draft<P> | void
+  computeState?: (state: Draft<P>, preState?: P) => Draft<P> | void
 }
 
 export interface StateModelProps<S> {
