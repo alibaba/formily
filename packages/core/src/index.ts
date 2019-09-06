@@ -41,7 +41,8 @@ import { Model } from './shared/model'
  *    validateFirst:boolean,
  *    useDirty:boolean
  * }
- *
+ * todo: pristine 同步问题
+ * todo: graph新增节点同步问题
  */
 
 export const createForm = (options: FormCreatorOptions = {}) => {
@@ -63,35 +64,41 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
     }
     if (valuesChanged || initialValuesChanged) {
-      graph.eachChildren('', (fieldState: Model) => {
-        fieldState.setState((state: IFieldState) => {
-          if (state.visible) {
-            if (valuesChanged) {
-              const path = FormPath.parse(state.name)
-              const index = path.segments[path.segments.length - 1]
-              const parentValue = getFormValuesIn(path.parent())
-              const value = getFormValuesIn(state.name)
-              /**
-               * https://github.com/alibaba/uform/issues/267 dynamic remove node
-               */
-              if (isArr(parentValue) && parentValue.length <= Number(index)) {
-                graph.remove(state.name)
-                return
+      /**
+       * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
+       */
+      shadowUpdate(() => {
+        graph.eachChildren('', (fieldState: Model) => {
+          if (fieldState.displayName === 'VFieldState') return
+          fieldState.setState((state: IFieldState) => {
+            if (state.visible) {
+              if (valuesChanged) {
+                const path = FormPath.parse(state.name)
+                const index = path.segments[path.segments.length - 1]
+                const parentValue = getFormValuesIn(path.parent())
+                const value = getFormValuesIn(state.name)
+                /**
+                 * https://github.com/alibaba/uform/issues/267 dynamic remove node
+                 */
+                if (isArr(parentValue) && parentValue.length <= Number(index)) {
+                  graph.remove(state.name)
+                  return
+                }
+                if (!isEqual(value, state.value)) {
+                  state.value = value
+                }
               }
-              if (!isEqual(value, state.value)) {
-                state.value = value
-              }
-            }
-            if (initialValuesChanged) {
-              const initialValue = getFormInitialValuesIn(state.name)
-              if (!isEqual(initialValue, state.initialValue)) {
-                state.initialValue = initialValue
-                if (!isValid(state.value)) {
-                  state.value = initialValue
+              if (initialValuesChanged) {
+                const initialValue = getFormInitialValuesIn(state.name)
+                if (!isEqual(initialValue, state.initialValue)) {
+                  state.initialValue = initialValue
+                  if (!isValid(state.value)) {
+                    state.value = initialValue
+                  }
                 }
               }
             }
-          }
+          })
         })
       })
       if (valuesChanged) {
@@ -199,7 +206,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, fieldState)
       }
       changeGraph()
-      if (isFn(onChange)) onChange(fieldState)
+      if (isFn(onChange) && !env.shadowStage) onChange(fieldState)
       heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, fieldState)
     }
   }
@@ -674,6 +681,14 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     })
   }
 
+  function shadowUpdate(callback: () => void) {
+    env.shadowStage = true
+    if (isFn(callback)) {
+      callback()
+    }
+    env.shadowStage = false
+  }
+
   const state = new FormState(options)
   const validator = new FormValidator(options)
   const graph = new FormGraph()
@@ -717,7 +732,8 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   const heart = new FormHeart({ ...options, context: formApi })
   const env = {
     validateTimer: null,
-    graphChangeTimer: null
+    graphChangeTimer: null,
+    shadowStage: false
   }
   heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscribe(onFormChange)

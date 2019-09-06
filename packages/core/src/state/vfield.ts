@@ -12,7 +12,6 @@ export const VFieldState = createStateModel(
   class VFieldState {
     static displayName = 'VFieldState'
     static defaultState = {
-      path: FormPath.getPath(),
       name: '',
       initialized: false,
       visible: true,

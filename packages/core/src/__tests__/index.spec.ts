@@ -1231,4 +1231,23 @@ describe('major sences', () => {
       }
     })
   })
+
+  test('deep nested visible with VField', () => {
+    const form = createForm()
+    form.registerField({
+      path: 'aa',
+      value: {}
+    })
+    form.registerVField({
+      path: 'aa.bb'
+    })
+    form.registerField({
+      path: 'aa.bb.cc',
+      value: 123
+    })
+    form.setFieldState('aa', state => {
+      state.visible = false
+    })
+    //console.log(form.getFormGraph())
+  })
 })
