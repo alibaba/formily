@@ -344,7 +344,6 @@ registerFormWrapper(OriginForm => {
         autoAddColon,
         children,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        component,
         labelCol,
         layout,
         wrapperCol,

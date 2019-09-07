@@ -437,3 +437,26 @@ test('async validate side effect', async () => {
   expect(queryByText('aa is required')).toBeVisible()
   expect(queryByText('bb is required')).toBeNull()
 })
+
+test('async validate side effect', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => {
+    return (
+      <SchemaForm actions={actions}>
+        <Field name="aa" type="string" required />
+        <Field name="bb" type="string" required />
+        <button type="submit">Submit</button>
+      </SchemaForm>
+    )
+  }
+  const { queryByText } = render(<TestComponent />)
+  await sleep(33)
+
+  fireEvent.click(queryByText('Submit'))
+  await sleep(33)
+  actions.setFieldState(FormPath.match('*'), state => {
+    state.editable = false
+  })
+  await sleep(33)
+  expect(queryByText('aa is required')).toBeNull()
+})
