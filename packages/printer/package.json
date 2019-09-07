@@ -26,7 +26,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@uform/react-schema-form": "^0.4.0",
+    "@uform/react-schema-renderer": "^0.4.0",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },
