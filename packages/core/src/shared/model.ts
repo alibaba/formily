@@ -3,7 +3,6 @@ import {
   isEqual,
   isFn,
   each,
-  isEmpty,
   globalThisPolyfill
 } from '@uform/shared'
 import produce, { Draft } from 'immer'
@@ -133,7 +132,6 @@ export const createStateModel = <State = {}, Props = {}>(
             this.controller.computeState(draft, this.state)
           }
           each(this.state, (value, key) => {
-            if (isEmpty(value) && isEmpty(draft[key])) return
             if (!isEqual(value, draft[key])) {
               this.state[key] = draft[key]
               this.dirtyMap[key] = true

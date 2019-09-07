@@ -1,6 +1,5 @@
 import {
   isFn,
-  isEmpty,
   isEqual,
   toArr,
   isNum,
@@ -129,8 +128,8 @@ export const createForm = (options: FormCreatorOptions = {}) => {
       const initializedChanged = fieldState.hasChanged('initialized')
       if (initializedChanged) {
         heart.notify(LifeCycleTypes.ON_FIELD_INIT, fieldState)
-        const isEmptyValue = isEmpty(published.value)
-        const isEmptyInitialValue = isEmpty(published.initialValue)
+        const isEmptyValue = !isValid(published.value)
+        const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
           fieldState.setState((state: IFieldState) => {
             if (isEmptyValue) state.value = getFormValuesIn(state.name)

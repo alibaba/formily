@@ -285,7 +285,9 @@ describe('major sences', () => {
   })
 
   test('nested dynamic remove', () => {
-    const form = createForm()
+    const form = createForm({
+      useDirty:true
+    })
     form.registerField({
       path: 'aa',
       value: []
