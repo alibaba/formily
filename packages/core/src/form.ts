@@ -482,6 +482,7 @@ export class Form {
         field.pristine = true
       }
       if (field.dirty) {
+        field.notify()
         this.formNotify(field.publishState())
       }
     })
