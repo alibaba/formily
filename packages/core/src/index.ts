@@ -9,7 +9,8 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  deprecate
+  deprecate,
+  isObj
 } from '@uform/shared'
 import {
   FormValidator,
@@ -430,6 +431,23 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         setValue(path, ...values)
         return values[0]
       },
+      focus() {
+        const fieldState = graph.select(path)
+        if (fieldState) {
+          fieldState.setState((state: IFieldState) => {
+            state.active = true
+            state.visited = true
+          })
+        }
+      },
+      blur() {
+        const fieldState = graph.select(path)
+        if (fieldState) {
+          fieldState.setState((state: IFieldState) => {
+            state.active = false
+          })
+        }
+      },
       push(value: any) {
         const arr = toArr(getValue(path))
         arr.push(value)
@@ -487,20 +505,47 @@ export const createForm = (options: FormCreatorOptions = {}) => {
 
   function reset({ forceClear = false, validate = true } = {}) {
     leadingUpdate(() => {
-      state.setState(state => {
-        if (forceClear) {
-          state.values = {}
-        } else {
-          state.values = clone(state.initialValues)
-        }
+      graph.eachChildren('', fieldState => {
+        fieldState.setState((state: IFieldState) => {
+          state.modified = false
+          if (forceClear) {
+            if (isArr(state.value)) {
+              state.value = []
+            } else if (isObj(state.value)) {
+              state.value = {}
+            } else {
+              state.value = undefined
+            }
+          } else {
+            const value = clone(state.initialValue)
+            if (isArr(state.value)) {
+              if (isArr(value)) {
+                state.value = value
+              } else {
+                state.value = []
+              }
+            } else if (isObj(state.value)) {
+              if (isObj(value)) {
+                state.value = value
+              } else {
+                state.value = {}
+              }
+            } else {
+              state.value = value
+            }
+          }
+        })
       })
+
       if (validate) {
         formApi.validate()
       }
     })
   }
 
-  function submit(onSubmit: (values: IFormState['values']) => Promise<any>) {
+  async function submit(
+    onSubmit: (values: IFormState['values']) => Promise<any>
+  ) {
     if (state.getState(state => state.submitting)) return new Promise(() => {})
     state.setState(state => {
       state.submitting = true

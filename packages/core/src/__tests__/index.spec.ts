@@ -166,7 +166,6 @@ describe('graph', () => {
       value: 'hello bb'
     })
     expect(form.getFormGraph()).toMatchSnapshot()
-   
   })
 
   test('setFormGraph', () => {
@@ -187,7 +186,7 @@ describe('graph', () => {
       value: 'hello bb'
     })
     const snapshot = form.getFormGraph()
-    form.setFieldState('aa',state=>{
+    form.setFieldState('aa', state => {
       state.visible = false
     })
     expect(form.getFormGraph()).toMatchSnapshot()
@@ -201,7 +200,73 @@ describe('submit', () => {
 })
 
 describe('reset', () => {
-  //todo
+  test('array reset forceclear', () => {
+    const form = createForm({
+      initialValues: {
+        aa: {
+          bb: [{ aa: 123 }, { aa: 321 }]
+        }
+      }
+    })
+    form.registerField({
+      path: 'aa'
+    })
+    form.registerField({
+      path: 'aa.bb'
+    })
+    form.registerField({
+      path: 'aa.bb.0'
+    })
+    form.registerField({
+      path: 'aa.bb.1'
+    })
+    form.registerField({
+      path: 'aa.bb.0.aa'
+    })
+    form.registerField({
+      path: 'aa.bb.1.aa'
+    })
+    expect(form.getFormGraph()).toMatchSnapshot()
+    form.setFieldState('aa.bb.0.aa', state => {
+      state.value = 'aa changed'
+    })
+    form.reset({ forceClear: true })
+    expect(form.getFormGraph()).toMatchSnapshot()
+  })
+  test('array reset no forceclear', () => {
+    const form = createForm({
+      initialValues: {
+        aa: {
+          bb: [{ aa: 123 }, { aa: 321 }]
+        }
+      }
+    })
+    form.registerField({
+      path: 'aa'
+    })
+    form.registerField({
+      path: 'aa.bb'
+    })
+    form.registerField({
+      path: 'aa.bb.0'
+    })
+    form.registerField({
+      path: 'aa.bb.1'
+    })
+    form.registerField({
+      path: 'aa.bb.0.aa'
+    })
+    form.registerField({
+      path: 'aa.bb.1.aa'
+    })
+    expect(form.getFormGraph()).toMatchSnapshot()
+    form.setFieldState('aa.bb.0.aa', state => {
+      state.value = 'aa changed'
+    })
+    expect(form.getFormGraph()).toMatchSnapshot()
+    form.reset()
+    expect(form.getFormGraph()).toMatchSnapshot()
+  })
 })
 
 describe('validate', () => {
@@ -286,7 +351,7 @@ describe('major sences', () => {
 
   test('nested dynamic remove', () => {
     const form = createForm({
-      useDirty:true
+      useDirty: true
     })
     form.registerField({
       path: 'aa',
@@ -313,7 +378,7 @@ describe('major sences', () => {
     form.setFieldState('aa.1.aa', state => {
       state.value = 'change aa'
     })
-   
+
     const mutators = form.createMutators('aa')
     const snapshot = form.getFormGraph()
     expect(snapshot).toMatchSnapshot()
