@@ -375,3 +375,53 @@ test('editable conflicts that x-props editable props with setFieldState', async 
   await sleep(33)
   expect(queryByTestId('this is bbb')).toBeVisible()
 })
+
+test('fix:#300', async () => {
+  const beforeValue = {
+    name: 'completeOrderParam',
+    protocol: 'dubbo',
+    rpcGroup: 'HSF',
+    rpcMethod: 'completeCommodity',
+    rpcService: 'com.aliyun.lx.spi.babeldemo.TradeService:1.0.1',
+    status: 'pre'
+  }
+
+  const afterValue = {
+    name: 'completeCommodity',
+    protocol: 'pop',
+    rpcGroup: 'popGroup',
+    rpcMethod: 'popMethod',
+    rpcService: 'popService',
+    status: 'product'
+  }
+
+  const TestComponent = () => {
+    const [values, setValues] = useState({})
+    function getValue() {
+      setValues(afterValue)
+    }
+    return (
+      <SchemaForm initialValues={values} editable={false}>
+        <Field
+          required={true}
+          type="string"
+          title="aa"
+          name="AA"
+          x-rules={[
+            {
+              pattern: /^[a-z_.:-][a-z_.:-\d]+$/i,
+              message: 'error'
+            }
+          ]}
+        />
+        <button onClick={getValue}>GetValue</button>
+      </SchemaForm>
+    )
+  }
+
+  const { queryByText } = render(<TestComponent />)
+  await sleep(33)
+  fireEvent.click(queryByText('GetValue'))
+  await sleep(33)
+  expect(queryByText('empty')).toBeVisible()
+})

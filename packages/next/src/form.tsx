@@ -319,7 +319,6 @@ registerFormWrapper(OriginForm => {
           labelTextAlign,
           autoAddColon,
           children,
-          component,
           labelCol,
           wrapperCol,
           style,

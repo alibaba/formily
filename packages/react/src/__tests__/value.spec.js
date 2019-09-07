@@ -147,9 +147,9 @@ test('controlled with hooks by initalValues', async () => {
   await actions.reset()
   await sleep(33)
   expect(queryByTestId('test-input').value).toEqual('123')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
 })
 
 test('controlled with hooks by static value', async () => {
@@ -192,9 +192,9 @@ test('controlled with hooks by static value', async () => {
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
   actions.reset()
   await sleep(33)
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
   await actions.setFieldState('a3', state => {
     state.value = '456'
   })
@@ -202,13 +202,13 @@ test('controlled with hooks by static value', async () => {
   expect(queryByTestId('test-input').value).toEqual('123')
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-  expect(onChangeHandler).toHaveBeenCalledTimes(5)
+  expect(onChangeHandler).toHaveBeenCalledTimes(6)
   await actions.reset()
   await sleep(33)
   expect(queryByTestId('test-input').value).toEqual('')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-  expect(onChangeHandler).toHaveBeenCalledTimes(5)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(7)
 })
 
 test('controlled with hooks by dynamic value', async () => {
@@ -252,9 +252,9 @@ test('controlled with hooks by dynamic value', async () => {
   actions.reset()
   await sleep(33)
   expect(queryByTestId('test-input').value).toEqual('')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
-  expect(onChangeHandler).toHaveBeenCalledTimes(2)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(3)
   await actions.setFieldState('a3', state => {
     state.value = '456'
   })
@@ -262,13 +262,13 @@ test('controlled with hooks by dynamic value', async () => {
   expect(queryByTestId('test-input').value).toEqual('456')
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
   await actions.reset()
   await sleep(33)
   expect(queryByTestId('test-input').value).toEqual('')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(5)
 })
 
 test('invariant initialValues will not be changed when form rerender', async () => {
