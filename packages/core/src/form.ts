@@ -482,13 +482,7 @@ export class Form {
         field.pristine = true
       }
       if (field.dirty) {
-        raf(() => {
-          if (this.destructed) {
-            return
-          }
-          field.pristine = true
-          field.notify()
-        })
+        this.formNotify(field.publishState())
       }
     })
     if (!validate) {

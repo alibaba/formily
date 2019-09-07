@@ -34,22 +34,20 @@ const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
 }
 
 const mapMomentValue = props => {
-  const { value, showTime = false, disabled = false } = props
+  const { value, showTime = false } = props
   try {
-    if (!disabled) {
-      if (isStr(value) && value) {
-        props.value = moment(
-          value,
-          showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-        )
-      } else if (isArr(value) && value.length) {
-        props.value = value.map(
-          item =>
-            (item &&
-              moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
-            ''
-        )
-      }
+    if (isStr(value) && value) {
+      props.value = moment(
+        value,
+        showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+      )
+    } else if (isArr(value) && value.length) {
+      props.value = value.map(
+        item =>
+          (item &&
+            moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
+          ''
+      )
     }
   } catch (e) {
     throw new Error(e)
@@ -118,7 +116,11 @@ registerFormField(
       mapStyledProps,
       props => {
         if (isStr(props.value) && props.value) {
-          const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || ['', '', '']
+          const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || [
+            '',
+            '',
+            ''
+          ]
           props.value = moment(parsed[1], 'YYYY').add(parsed[2] - 1, 'weeks')
         }
         return props
