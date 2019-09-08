@@ -2,7 +2,8 @@ import { FormPath, FormPathPattern } from '@uform/shared'
 import { ValidateArrayRules } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
-import { Model } from './shared/model'
+import { FieldState } from './state/field'
+import { VFieldState } from './state/vfield'
 
 export type FormGraphNodeMap<T> = {
   [key in string]: T
@@ -96,6 +97,7 @@ export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IFieldStateProps {
   path: FormPathPattern
+  name?: string
   value?: any
   values?: any[]
   initialValue?: any
@@ -103,14 +105,7 @@ export interface IFieldStateProps {
   rules?: ValidateArrayRules[]
   required?: boolean
   editable?: boolean
-}
-
-export interface IFieldProps extends IFieldStateProps {
-  onChange?: (fieldState: Model) => void
-}
-
-export interface IVFieldProps extends IVFieldStateProps {
-  onChange?: (fieldState: Model) => void
+  onChange?: (fieldState: IField) => void
 }
 
 export interface IFormState {
@@ -121,7 +116,6 @@ export interface IFormState {
   validating: boolean
   submitting: boolean
   initialized: boolean
-  editable: boolean
   errors: string[]
   warnings: string[]
   values: {}
@@ -139,7 +133,7 @@ export interface IFormStateProps {
   lifecycles?: FormLifeCycle[]
 }
 
-export type FormCreatorOptions = IFormStateProps & {
+export interface IFormCreatorOptions extends IFormStateProps {
   useDirty?: boolean
   validateFirst?: boolean
 }
@@ -159,5 +153,74 @@ export type VFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IVFieldStateProps {
   path: FormPathPattern
+  name?: string
   props?: {}
+  onChange?: (fieldState: IVField) => void
+}
+
+export interface IFormValidateResult {
+  errors: string[]
+  warnings: string[]
+}
+
+export interface IFormSubmitResult {
+  validated: IFormValidateResult
+  payload: any
+}
+
+export interface IFormResetOptions {
+  forceClear?: boolean
+  validate?: boolean
+}
+
+export type IField = typeof FieldState.prototype
+
+export type IVField = typeof VFieldState.prototype
+
+export interface IFormGraph {
+  [path: string]: IFormState | IFieldState | IVFieldState
+}
+
+export interface IMutators {
+  change(...values: any[]): any
+  focus(): void
+  blur(): void
+  push(value: any): any[]
+  pop(): any[]
+  insert(index: number, value: any): any[]
+  remove(index: number | string): any
+  unshift(value: any): any[]
+  shift(): any[]
+  move($from: number, $to: number): any
+  validate(): void
+}
+
+export interface IForm {
+  submit(
+    onSubmit: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  reset(options: IFormResetOptions): void
+  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any): void
+  getFormState(callback?: (state: IFormState) => any): any
+  subscribe(callback?: (state: IFormState) => void): void
+  unsubscribe(callback?: (state: IFormState) => void): void
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void
+  ): void
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): any
+  registerField(props: IFieldStateProps): IField
+  registerVField(props: IVFieldStateProps): IVField
+  createMutators(path: FormPathPattern): IMutators
+  getFormGraph(): IFormGraph
+  setFormGraph(graph: IFormGraph): void
+  notify: <T>(type: string, payload: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  getFieldValue(path?: FormPathPattern): any
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  getFieldInitialValue(path?: FormPathPattern): any
 }

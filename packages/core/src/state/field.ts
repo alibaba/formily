@@ -128,6 +128,9 @@ export const FieldState = createStateModel(
       } else {
         draft.pristine = false
       }
+      if (!isValid(draft.editable)) {
+        draft.editable = prevState.editable
+      }
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }

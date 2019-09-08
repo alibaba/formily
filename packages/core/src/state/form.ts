@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { toArr, clone,isEqual } from '@uform/shared'
+import { toArr, clone, isEqual } from '@uform/shared'
 import { IFormState, IFormStateProps } from '../types'
 /**
  * 核心数据结构，描述Form级别状态
@@ -15,7 +15,6 @@ export const FormState = createStateModel(
       validating: false,
       initialized: false,
       submitting: false,
-      editable: true,
       errors: [],
       warnings: [],
       values: {},
@@ -37,7 +36,7 @@ export const FormState = createStateModel(
       this.state.values = clone(props.values || props.initialValues || {})
     }
 
-    computeState(draft: IFormState) {
+    computeState(draft: IFormState, prevState: IFormState) {
       draft.errors = toArr(draft.errors).filter(v => !!v)
       draft.warnings = toArr(draft.warnings).filter(v => !!v)
       if (draft.errors.length) {
@@ -47,7 +46,7 @@ export const FormState = createStateModel(
         draft.invalid = false
         draft.valid = true
       }
-      if(isEqual(draft.values,draft.initialValues)){
+      if (isEqual(draft.values, draft.initialValues)) {
         draft.pristine = true
       } else {
         draft.pristine = false

@@ -100,7 +100,7 @@ export const createStateModel = <State = {}, Props = {}>(
       }
     }
 
-    unsafe_getSourceState = (callback?: (state: State) => State) => {
+    unsafe_getSourceState = (callback?: (state: State) => any) => {
       if (isFn(callback)) {
         return callback(this.state)
       } else {

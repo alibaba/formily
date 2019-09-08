@@ -10,7 +10,8 @@ import {
   FormPathPattern,
   each,
   deprecate,
-  isObj
+  isObj,
+  isStr
 } from '@uform/shared'
 import {
   FormValidator,
@@ -26,12 +27,18 @@ import {
   IFormState,
   IFieldState,
   IVFieldState,
-  FormCreatorOptions,
-  IFieldProps,
-  IVFieldProps
+  IFormCreatorOptions,
+  IFieldStateProps,
+  IVFieldStateProps,
+  IForm,
+  IFormSubmitResult,
+  IFormValidateResult,
+  IFormResetOptions,
+  IField,
+  IVField
 } from './types'
-import { Model } from './shared/model'
-
+export * from './shared/lifecycle'
+export * from './types'
 /**
  *
  * {
@@ -43,7 +50,7 @@ import { Model } from './shared/model'
  * }
  */
 
-export const createForm = (options: FormCreatorOptions = {}) => {
+export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   function changeGraph() {
     clearTimeout(env.graphChangeTimer)
     env.graphChangeTimer = setTimeout(() => {
@@ -58,15 +65,13 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     const unmountedChanged = state.hasChanged('unmounted')
     const mountedChanged = state.hasChanged('mounted')
     const initialized = state.hasChanged('initialized')
-    if (initialized) {
-      heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
-    }
+
     if (valuesChanged || initialValuesChanged) {
       /**
        * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
        */
       shadowUpdate(() => {
-        graph.eachChildren('', (fieldState: Model) => {
+        graph.eachChildren('', (fieldState: IField | IVField) => {
           if (fieldState.displayName === 'VFieldState') {
             return
           }
@@ -74,15 +79,34 @@ export const createForm = (options: FormCreatorOptions = {}) => {
             if (state.visible) {
               if (valuesChanged) {
                 const path = FormPath.parse(state.name)
-                const index = path.segments[path.segments.length - 1]
-                const parentValue = getFormValuesIn(path.parent())
+                const parent = graph.getLatestParent(path)
+                const parentValue = getFormValuesIn(parent.path)
                 const value = getFormValuesIn(state.name)
                 /**
                  * https://github.com/alibaba/uform/issues/267 dynamic remove node
                  */
-                if (isArr(parentValue) && parentValue.length <= Number(index)) {
-                  graph.remove(state.name)
-                  return
+                if (isArr(parentValue)) {
+                  let removed = false
+                  each(
+                    path.segments,
+                    key => {
+                      if (isNum(key)) {
+                        if (key >= parentValue.length) {
+                          graph.remove(state.name)
+                          removed = true
+                        }
+                        return false
+                      } else if (isStr(key) && /\d+/.test(key)) {
+                        if (Number(key) >= parentValue.length) {
+                          graph.remove(state.name)
+                          removed = true
+                        }
+                        return false
+                      }
+                    },
+                    true
+                  )
+                  if (removed) return
                 }
                 if (!isEqual(value, state.value)) {
                   state.value = value
@@ -114,7 +138,9 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     if (mountedChanged && published.mounted) {
       heart.notify(LifeCycleTypes.ON_FORM_MOUNT, state)
     }
-
+    if (initialized) {
+      heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
+    }
     changeGraph()
   }
 
@@ -249,18 +275,16 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   }
 
   function registerVField({
+    name,
     path,
     props,
     onChange
-  }: IVFieldProps): typeof VFieldState.prototype {
-    let fieldState: typeof VFieldState.prototype
+  }: IVFieldStateProps): IVField {
+    path = path || name
+    let fieldState: IVField
     let newPath = FormPath.getPath(path)
     if (graph.exist(newPath)) {
-      fieldState.unsubscribe()
       fieldState = graph.select(newPath)
-      fieldState.subscribe(
-        onVFieldChange({ onChange, fieldState, path: newPath })
-      )
     } else {
       fieldState = new VFieldState({
         path: newPath,
@@ -283,18 +307,19 @@ export const createForm = (options: FormCreatorOptions = {}) => {
 
   function registerField({
     path,
+    name,
     value,
     initialValue,
     required,
     rules,
+    editable,
     onChange,
     props
-  }: IFieldProps): typeof FieldState.prototype {
-    let fieldState: typeof FieldState.prototype
+  }: IFieldStateProps): IField {
+    let fieldState: IField
+    path = path || name
     if (graph.exist(path)) {
-      fieldState.unsubscribe()
       fieldState = graph.select(path)
-      fieldState.subscribe(onFieldChange({ onChange, fieldState, path }))
     } else {
       fieldState = new FieldState({
         path,
@@ -313,6 +338,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
           state.props = props
           state.required = required
           state.rules = rules
+          state.editable = editable
         })
       })
       validator.register(path, validate => {
@@ -449,19 +475,19 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         }
       },
       push(value: any) {
-        const arr = toArr(getValue(path))
+        const arr = toArr(getValue(path)).slice()
         arr.push(value)
         setValue(path, arr)
         return arr
       },
       pop() {
-        const arr = toArr(getValue(path))
+        const arr = toArr(getValue(path)).slice()
         arr.pop()
         setValue(path, arr)
         return arr
       },
       insert(index: number, value: any) {
-        const arr = toArr(getValue(path))
+        const arr = toArr(getValue(path)).slice()
         arr.splice(index, 0, value)
         setValue(path, arr)
         return arr
@@ -478,19 +504,19 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         return val
       },
       unshift(value: any) {
-        const arr = toArr(getValue(path))
+        const arr = toArr(getValue(path)).slice()
         arr.unshift(value)
         setValue(path, arr)
         return arr
       },
       shift() {
-        const arr = toArr(getValue(path))
+        const arr = toArr(getValue(path)).slice()
         arr.shift()
         setValue(path, arr)
         return arr
       },
       move($from: number, $to: number) {
-        const arr = toArr(getValue(path))
+        const arr = toArr(getValue(path)).slice()
         const item = arr[$from]
         arr.splice($from, 1)
         arr.splice($to, 0, item)
@@ -503,7 +529,10 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     }
   }
 
-  function reset({ forceClear = false, validate = true } = {}) {
+  function reset({
+    forceClear = false,
+    validate = true
+  }: IFormResetOptions = {}) {
     leadingUpdate(() => {
       graph.eachChildren('', fieldState => {
         fieldState.setState((state: IFieldState) => {
@@ -548,8 +577,8 @@ export const createForm = (options: FormCreatorOptions = {}) => {
   }
 
   async function submit(
-    onSubmit: (values: IFormState['values']) => Promise<any>
-  ) {
+    onSubmit: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult> {
     if (state.getState(state => state.submitting)) return new Promise(() => {})
     state.setState(state => {
       state.submitting = true
@@ -564,7 +593,10 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         }
         return { validated, payload: undefined }
       })
-      .then(({ validated: { errors, warnings }, payload }) => {
+      .then<IFormSubmitResult>(response => {
+        const {
+          validated: { errors, warnings }
+        } = response
         state.setState(state => {
           state.submitting = false
         })
@@ -575,11 +607,14 @@ export const createForm = (options: FormCreatorOptions = {}) => {
         if (warnings.length) {
           console.warn(warnings)
         }
-        return payload
+        return response
       })
   }
 
-  async function validate(path?: FormPathPattern, options?: {}) {
+  async function validate(
+    path?: FormPathPattern,
+    options?: {}
+  ): Promise<IFormValidateResult> {
     clearTimeout(env.validateTimer)
     env.validateTimer = setTimeout(() => {
       state.setState(state => {
@@ -604,7 +639,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
     return state.getState(callback)
   }
 
-  function batchRunTaskQueue(fieldState: typeof FieldState.prototype) {
+  function batchRunTaskQueue(fieldState: IField | IVField) {
     env.taskQueue.forEach((task, index) => {
       const { path, callbacks } = task
       if (path.match(fieldState.unsafe_getSourceState(state => state.name))) {
@@ -674,7 +709,7 @@ export const createForm = (options: FormCreatorOptions = {}) => {
 
   function computeUserState(
     callback: (state: IFieldState) => void,
-    fieldState: typeof FieldState.prototype
+    fieldState: IField | IVField
   ) {
     return (draft: IFieldState) => {
       if (isFn(callback)) {
