@@ -4,7 +4,6 @@ exports[`createForm initialValue 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": 111,
@@ -33,7 +32,6 @@ exports[`createForm initialValues after init 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": 111,
@@ -124,7 +122,6 @@ exports[`createForm initialValues on init 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": 111,
@@ -215,7 +212,6 @@ exports[`createForm lifecycles 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": 111,
@@ -306,7 +302,6 @@ exports[`createForm values 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {},
     "initialized": true,
@@ -332,7 +327,6 @@ exports[`graph getFormGraph 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": "123",
@@ -423,7 +417,6 @@ exports[`graph setFormGraph 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": "123",
@@ -513,7 +506,6 @@ exports[`major sences deep nested visible 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {},
     "initialized": true,
@@ -641,7 +633,6 @@ exports[`major sences deep nested visible with VField 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {},
     "initialized": true,
@@ -771,7 +762,6 @@ exports[`major sences dynamic remove with intialValues 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Array [
@@ -1078,7 +1068,6 @@ exports[`major sences dynamic remove with intialValues 2`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Array [
@@ -1271,7 +1260,6 @@ exports[`major sences dynamic remove with intialValues 3`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Array [
@@ -1578,7 +1566,6 @@ exports[`major sences nested dynamic remove 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {},
     "initialized": true,
@@ -1831,7 +1818,6 @@ exports[`major sences nested dynamic remove 2`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {},
     "initialized": true,
@@ -1994,7 +1980,6 @@ exports[`major sences nested dynamic remove 3`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {},
     "initialized": true,
@@ -2247,7 +2232,6 @@ exports[`major sences nested visible 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -2377,7 +2361,6 @@ exports[`major sences nested visible 2`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -2507,7 +2490,6 @@ exports[`major sences nested visible 3`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -2642,7 +2624,6 @@ exports[`reset array reset forceclear 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -2933,7 +2914,6 @@ exports[`reset array reset forceclear 2`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -3053,7 +3033,6 @@ exports[`reset array reset no forceclear 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -3344,7 +3323,6 @@ exports[`reset array reset no forceclear 2`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {
@@ -3635,7 +3613,6 @@ exports[`reset array reset no forceclear 3`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": Object {

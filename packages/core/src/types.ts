@@ -202,7 +202,7 @@ export interface IForm {
   submit(
     onSubmit: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
-  reset(options: IFormResetOptions): void
+  reset(options?: IFormResetOptions): void
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void
   getFormState(callback?: (state: IFormState) => any): any
