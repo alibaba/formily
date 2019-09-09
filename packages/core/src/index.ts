@@ -18,11 +18,7 @@ import {
   setValidationLanguage,
   setValidationLocale
 } from '@uform/validator'
-import {
-  FormHeart,
-  LifeCycleTypes,
-  FormHeartSubscriber
-} from './shared/lifecycle'
+import { FormHeart, FormHeartSubscriber } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
 import { FormState } from './state/form'
 import { VirtualFieldState } from './state/virtual-field'
@@ -41,7 +37,8 @@ import {
   IField,
   IVirtualField,
   isField,
-  isFieldState
+  isFieldState,
+  LifeCycleTypes
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'

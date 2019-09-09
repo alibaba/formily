@@ -1,11 +1,44 @@
 import { FormPath, FormPathPattern, isFn } from '@uform/shared'
 import { ValidateArrayRules, ValidateNodeResult } from '@uform/validator'
-import {
-  FormLifeCycle,
-  FormHeartSubscriber,
-  LifeCycleTypes
-} from './shared/lifecycle'
+import { FormLifeCycle, FormHeartSubscriber } from './shared/lifecycle'
 import { Draft } from 'immer'
+
+export enum LifeCycleTypes {
+  /**
+   * Form LifeCycle
+   **/
+
+  ON_FORM_WILL_INIT = 'onFormWillInit',
+  ON_FORM_INIT = 'onFormInit',
+  ON_FORM_CHANGE = 'onFormChange', //ChangeType精准控制响应
+  ON_FORM_MOUNT = 'onFormMount',
+  ON_FORM_UNMOUNT = 'onFormUnmount',
+  ON_FORM_SUBMIT = 'onFormSubmit',
+  ON_FORM_RESET = 'onFormReset',
+  ON_FORM_SUBMIT_START = 'onFormSubmitStart',
+  ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
+  ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
+  ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValueChange',
+  ON_FORM_VALIDATE_START = 'onFormValidateStart',
+  ON_FORM_VALIDATE_END = 'onFormValidateEnd',
+
+  /**
+   * FormGraph LifeCycle
+   **/
+  ON_FORM_GRAPH_CHANGE = 'onFormGraphChange',
+
+  /**
+   * Field LifeCycle
+   **/
+
+  ON_FIELD_WILL_INIT = 'onFieldWillInit',
+  ON_FIELD_INIT = 'onFieldInit',
+  ON_FIELD_CHANGE = 'onFieldChange',
+  ON_FIELD_VALUE_CHANGE = 'onFieldValueChange',
+  ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
+  ON_FIELD_MOUNT = 'onFieldMount',
+  ON_FIELD_UNMOUNT = 'onFieldUnmount'
+}
 
 export type FormGraphNodeMap<T> = {
   [key in string]: T
@@ -261,4 +294,4 @@ export interface IForm {
   getFieldInitialValue(path?: FormPathPattern): any
 }
 
-export { FormHeartSubscriber, LifeCycleTypes }
+export { FormHeartSubscriber }
