@@ -1,6 +1,13 @@
 import React from 'react'
 import { isFn, FormPath } from '@uform/shared'
-import { LifeCycleTypes, FormLifeCycle } from '@uform/core'
+import {
+  LifeCycleTypes,
+  FormLifeCycle,
+  IForm,
+  IModel,
+  isStateModel,
+  IFormState
+} from '@uform/core'
 import { useForm } from '../hooks/useForm'
 import { useEva, createActions } from 'react-eva'
 import { Observable } from 'rxjs/internal/Observable'
@@ -35,19 +42,28 @@ const createFormEffects = (effects: IFormEffect | null, actions: any) => {
   }
 }
 
-export const createFormActions = () =>
+export const createFormActions = (): IForm =>
   createActions(
-    'getFormState',
-    'getFieldState',
-    'setFormState',
-    'setFieldState',
-    'setFormGraph',
-    'getFormGraph',
-    'reset',
     'submit',
+    'reset',
     'validate',
-    'dispatch'
-  )
+    'setFormState',
+    'getFormState',
+    'setFieldState',
+    'getFieldState',
+    'registerField',
+    'registerVirtualField',
+    'createMutators',
+    'getFormGraph',
+    'setFormGraph',
+    'subscribe',
+    'unsubscribe',
+    'notify',
+    'setFieldValue',
+    'getFieldValue',
+    'setFieldInitialValue',
+    'getFieldInitialValue'
+  ) as IForm
 
 export const Form = (props: IFormProps = {}) => {
   const actionsRef = React.useRef<any>(null)
@@ -63,17 +79,22 @@ export const Form = (props: IFormProps = {}) => {
     useDirty: props.useDirty,
     validateFirst: props.validateFirst,
     lifecycles: [
-      new FormLifeCycle(({ type, payload }) => {
-        dispatch(
-          type,
-          payload ? payload.getState && payload.getState() : payload
-        )
-        if (type === LifeCycleTypes.ON_FORM_VALUES_CHANGE) {
-          if (props.onChange) {
-            props.onChange(payload.getState(state => state.values))
+      new FormLifeCycle(
+        ({ type, payload }: { type: string; payload: IModel }) => {
+          dispatch.lazy(type, () => {
+            return isStateModel(payload) ? payload.getState() : payload
+          })
+          if (type === LifeCycleTypes.ON_FORM_VALUES_CHANGE) {
+            if (props.onChange) {
+              props.onChange(
+                isStateModel(payload)
+                  ? payload.getState((state: IFormState) => state.values)
+                  : {}
+              )
+            }
           }
         }
-      }),
+      ),
       new FormLifeCycle(LifeCycleTypes.ON_FORM_WILL_INIT, (payload, form) => {
         implementActions({
           ...form,
@@ -92,3 +113,5 @@ export const Form = (props: IFormProps = {}) => {
     </FormContext.Provider>
   )
 }
+
+Form.displayName = 'ReactInternalForm'

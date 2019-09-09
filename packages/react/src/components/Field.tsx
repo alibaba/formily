@@ -40,9 +40,11 @@ export const Field = (props: IFieldProps) => {
       mutators: createFieldMutators(mutators, props, state)
     })
   } else {
-    return props.children
+    return <React.Fragment>{props.children}</React.Fragment>
   }
 }
+
+Field.displayName = 'ReactInternalField'
 
 Field.defaultProps = {
   path: '',

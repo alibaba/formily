@@ -9,7 +9,8 @@ import {
   ValidateDescription,
   ValidateFieldOptions,
   ValidateCalculator,
-  ValidateNode
+  ValidateNode,
+  ValidateNodeResult
 } from './types'
 import {
   isFn,
@@ -149,10 +150,7 @@ class FormValidator {
   async validateNodes(
     pattern: FormPath,
     options: ValidateFieldOptions
-  ): Promise<{
-    errors: string[]
-    warnings: string[]
-  }> {
+  ): Promise<ValidateNodeResult> {
     const errors = []
     const warnings = []
     let promise = Promise.resolve({ errors, warnings })
@@ -161,22 +159,14 @@ class FormValidator {
         promise = promise.then(async ({ errors, warnings }) => {
           const result = await validator(options)
           return {
-            errors: errors.concat(
-              result.errors.map(message => {
-                return {
-                  path: path.toString(),
-                  message
-                }
-              })
-            ),
-            warnings: warnings.concat(
-              result.warnings.map(message => {
-                return {
-                  path: path.toString(),
-                  message
-                }
-              })
-            )
+            errors: errors.concat({
+              path: path.toString(),
+              messages: result.errors
+            }),
+            warnings: warnings.concat({
+              path: path.toString(),
+              messages: result.warnings
+            })
           }
         })
       }
@@ -193,18 +183,15 @@ class FormValidator {
   validate = (
     path?: FormPathPattern,
     options?: ValidateFieldOptions
-  ): Promise<{
-    errors: string[]
-    warnings: string[]
-  }> => {
+  ): Promise<ValidateNodeResult> => {
     const pattern = FormPath.getPath(path || '*')
     return this.validateNodes(pattern, options)
   }
 
   register = (path: FormPathPattern, calculator: ValidateCalculator) => {
     const newPath = FormPath.getPath(path)
-    if (isFn(calculator) && !this.nodes[newPath as any]) {
-      this.nodes[newPath as any] = (options: ValidateFieldOptions) => {
+    if (isFn(calculator) && !this.nodes[newPath.toString()]) {
+      this.nodes[newPath.toString()] = (options: ValidateFieldOptions) => {
         return new Promise((resolve, reject) => {
           const validate = async (value: any, rules: ValidatePatternRules) => {
             const data = {

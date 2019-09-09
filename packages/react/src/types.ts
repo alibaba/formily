@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   IFieldStateProps,
-  IVFieldStateProps,
+  IVirtualFieldStateProps,
   IForm,
   IMutators,
   IFieldState,
@@ -37,7 +37,7 @@ export interface IFieldApi {
   mutators: IMutators
 }
 
-export interface IVFieldApi {
+export interface IVirtualFieldApi {
   state: IFieldState
   props: {}
 }
@@ -48,6 +48,13 @@ export interface IFieldProps extends IFieldStateProps {
   children?: React.ReactChildren | ((api: IFieldApi) => React.ReactChildren)
 }
 
-export interface IVFieldProps extends IVFieldStateProps {
-  children?: React.ReactChildren | ((api: IVFieldApi) => React.ReactChildren)
+export interface IVirtualFieldProps extends IVirtualFieldStateProps {
+  children?:
+    | React.ReactChildren
+    | ((api: IVirtualFieldApi) => React.ReactChildren)
+}
+
+export interface IFormSpyProps {
+  selector?: string[] | string
+  children?: React.ReactChildren | ((api: IForm) => React.ReactChildren)
 }

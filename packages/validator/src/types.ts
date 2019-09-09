@@ -76,3 +76,14 @@ export type ValidateCalculator = (
     warnings: string[]
   }>
 ) => void
+
+export interface ValidateNodeResult {
+  errors: Array<{
+    path: string
+    messages: string[]
+  }>
+  warnings: Array<{
+    path: string
+    messages: string[]
+  }>
+}

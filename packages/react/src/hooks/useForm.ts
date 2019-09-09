@@ -22,6 +22,9 @@ export const useForm = (options: IFormCreatorOptions = {}) => {
   })
 
   useEffect(() => {
+    form.setFormState(state => {
+      state.mounted = true
+    })
     return () => {
       form.setFormState(state => {
         state.unmounted = true

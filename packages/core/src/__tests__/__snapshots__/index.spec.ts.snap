@@ -629,7 +629,7 @@ Object {
 }
 `;
 
-exports[`major sences deep nested visible with VField 1`] = `
+exports[`major sences deep nested visible with VirtualField 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
@@ -685,7 +685,7 @@ Object {
   },
   "aa.bb": Object {
     "display": true,
-    "displayName": "VFieldState",
+    "displayName": "VirtualFieldState",
     "initialized": true,
     "mounted": false,
     "name": "aa.bb",

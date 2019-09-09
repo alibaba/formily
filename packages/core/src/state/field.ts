@@ -4,7 +4,7 @@ import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态
  */
-export const FieldState = createStateModel(
+export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
   class FieldState {
     static displayName = 'FieldState'
     static defaultState = {

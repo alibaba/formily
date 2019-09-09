@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each } from '@uform/shared'
-import { IFieldStateProps, IFieldState, IForm } from '@uform/core'
+import { IFieldStateProps, IFieldState, IForm, IField } from '@uform/core'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import FormContext from '../context'
@@ -8,7 +8,7 @@ import FormContext from '../context'
 export const useField = (options: IFieldStateProps) => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
-  const ref = useRef<any>({
+  const ref = useRef<{ field: IField; unmounted: boolean }>({
     field: null,
     unmounted: false
   })
@@ -44,6 +44,9 @@ export const useField = (options: IFieldStateProps) => {
   })
 
   useEffect(() => {
+    ref.current.field.unsafe_setSourceState(state => {
+      state.mounted = true
+    })
     return () => {
       ref.current.unmounted = true
       ref.current.field.setState((state: IFieldState) => {

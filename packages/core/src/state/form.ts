@@ -4,7 +4,7 @@ import { IFormState, IFormStateProps } from '../types'
 /**
  * 核心数据结构，描述Form级别状态
  */
-export const FormState = createStateModel(
+export const FormState = createStateModel<IFormState, IFormStateProps>(
   class FormState {
     static displayName = 'FormState'
     static defaultState = {

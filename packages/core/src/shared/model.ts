@@ -1,33 +1,21 @@
-import {
-  clone,
-  isEqual,
-  isFn,
-  each,
-  globalThisPolyfill
-} from '@uform/shared'
+import { clone, isEqual, isFn, each, globalThisPolyfill } from '@uform/shared'
 import produce, { Draft } from 'immer'
 import {
   IStateModelFactory,
-  StateModelProps,
   StateDirtyMap,
-  StateModel
+  IModel,
+  StateModel,
+  Subscriber
 } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
-
-type Subscriber<S> = (payload: S) => void
-
-type Inner<T> = T extends (...args: any[]) => new (...args: any[]) => infer P
-  ? P
-  : never
-
-export type Model = Inner<typeof createStateModel>
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
 ) => {
-  return class Model<DefaultProps> {
+  return class Model<DefaultProps>
+    implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
-    public props: Props & DefaultProps & StateModelProps<State>
+    public props: Props & DefaultProps & { useDirty?: boolean }
     public displayName?: string
     public dirtyNum: number
     public dirtyMap: StateDirtyMap<State>

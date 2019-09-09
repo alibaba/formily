@@ -301,7 +301,7 @@ describe('registerField', () => {
   //todo
 })
 
-describe('registerVField', () => {
+describe('registerVirtualField', () => {
   //todo
 })
 
@@ -444,13 +444,13 @@ describe('major sences', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
-  test('deep nested visible with VField', () => {
+  test('deep nested visible with VirtualField', () => {
     const form = createForm()
     form.registerField({
       path: 'aa',
       value: {}
     })
-    form.registerVField({
+    form.registerVirtualField({
       path: 'aa.bb'
     })
     form.registerField({

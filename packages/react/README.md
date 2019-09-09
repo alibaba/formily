@@ -4,7 +4,7 @@
 
 ```jsx
 import React, { useState } from 'react'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from './src'
 
 const actions = createFormActions()
 
@@ -29,10 +29,16 @@ const Input = props => (
 const App = () => {
   return (
     <Form
-      actions={actions}
+      //actions={actions}
+      effects={($)=>{
+        $(LifeCycleTypes.ON_FORM_MOUNT).subscribe(()=>{
+          console.log('mounted')
+        })
+      }}
       onChange={() => {
         console.log(actions.getFormGraph())
       }}
+      onValidateFailed={console.log}
     >
       <Field name="array" initialValue={[]}>
         {({ state, mutators }) => {
@@ -72,6 +78,11 @@ const App = () => {
           )
         }}
       </Field>
+      <FormSpy selector={LifeCycleTypes.ON_FORM_MOUNT}>
+        {form => {
+          return <div>hello world</div>
+        }}
+      </FormSpy>
     </Form>
   )
 }

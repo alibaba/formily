@@ -1,11 +1,11 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each } from '@uform/shared'
-import { IVFieldStateProps, IVFieldState, IForm } from '@uform/core'
+import { IVirtualFieldStateProps, IVirtualFieldState, IForm } from '@uform/core'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import FormContext from '../context'
 
-export const useVField = (options: IVFieldStateProps) => {
+export const useVirtualField = (options: IVirtualFieldStateProps) => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props'])
   const ref = useRef<any>({
@@ -33,7 +33,7 @@ export const useVField = (options: IVFieldStateProps) => {
 
   useEffect(() => {
     if (dirty.num > 0) {
-      ref.current.field.setState((state: IVFieldState) => {
+      ref.current.field.setState((state: IVirtualFieldState) => {
         each(dirty.dirtys, (result, key) => {
           if (result) {
             state[key] = options[key]
@@ -46,7 +46,7 @@ export const useVField = (options: IVFieldStateProps) => {
   useEffect(() => {
     return () => {
       ref.current.unmounted = true
-      ref.current.field.setState((state: IVFieldState) => {
+      ref.current.field.setState((state: IVirtualFieldState) => {
         state.unmounted = true
       })
     }
@@ -59,4 +59,4 @@ export const useVField = (options: IVFieldStateProps) => {
   }
 }
 
-export default useVField
+export default useVirtualField
