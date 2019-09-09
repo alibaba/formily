@@ -30,7 +30,9 @@ const App = () => {
   return (
     <Form
       actions={actions}
-      onChange={console.log}
+      onChange={() => {
+        console.log(actions.getFormGraph())
+      }}
     >
       <Field name="array" initialValue={[]}>
         {({ state, mutators }) => {
@@ -39,8 +41,22 @@ const App = () => {
               {state.value.map((item, index) => {
                 return (
                   <React.Fragment key={index}>
-                    <Input name={`array.${index}.aaa`} />
-                    <Input name={`array.${index}.bbb`} />
+                    <Input
+                      name={`array.${index}.aaa`}
+                      required
+                      triggerType="onBlur"
+                    />
+                    <Input
+                      name={`array.${index}.bbb`}
+                      rules={value => {
+                        if (value == '123') {
+                          return {
+                            type: 'warning',
+                            message: '这个是一个提示'
+                          }
+                        }
+                      }}
+                    />
                     <button
                       onClick={() => {
                         mutators.remove(index)

@@ -2,7 +2,7 @@ import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each } from '@uform/shared'
 import { IFieldStateProps, IFieldState, IForm } from '@uform/core'
 import { useDirty } from './useDirty'
-import {useForceUpdate} from './useForceUpdaqte'
+import { useForceUpdate } from './useForceUpdate'
 import FormContext from '../context'
 
 export const useField = (options: IFieldStateProps) => {
@@ -22,10 +22,10 @@ export const useField = (options: IFieldStateProps) => {
       ...options,
       onChange() {
         if (ref.current.unmounted) return
-        /** 
+        /**
          * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
-        */
-        if(initialized) forceUpdate()
+         */
+        if (initialized) forceUpdate()
       }
     })
     initialized = true
@@ -35,7 +35,7 @@ export const useField = (options: IFieldStateProps) => {
     if (dirty.num > 0) {
       ref.current.field.setState((state: IFieldState) => {
         each(dirty.dirtys, (result, key) => {
-          if(result) {
+          if (result) {
             state[key] = options[key]
           }
         })

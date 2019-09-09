@@ -2,7 +2,7 @@ import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each } from '@uform/shared'
 import { IVFieldStateProps, IVFieldState, IForm } from '@uform/core'
 import { useDirty } from './useDirty'
-import { useForceUpdate } from './useForceUpdaqte'
+import { useForceUpdate } from './useForceUpdate'
 import FormContext from '../context'
 
 export const useVField = (options: IVFieldStateProps) => {
