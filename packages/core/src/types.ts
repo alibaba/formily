@@ -136,6 +136,9 @@ export interface IFormStateProps {
 export interface IFormCreatorOptions extends IFormStateProps {
   useDirty?: boolean
   validateFirst?: boolean
+  onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  onReset?: () => void
+  onValidateFailed?: (validated: IFormValidateResult) => void
 }
 
 export interface IVFieldState {

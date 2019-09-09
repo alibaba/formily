@@ -569,7 +569,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           }
         })
       })
-
+      if (isFn(options.onReset)) {
+        options.onReset()
+      }
       if (validate) {
         formApi.validate()
       }
@@ -577,8 +579,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   async function submit(
-    onSubmit: (values: IFormState['values']) => void | Promise<any>
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult> {
+    onSubmit = onSubmit || options.onSubmit
     if (state.getState(state => state.submitting)) return new Promise(() => {})
     state.setState(state => {
       state.submitting = true
@@ -613,7 +616,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
 
   async function validate(
     path?: FormPathPattern,
-    options?: {}
+    opts?: {}
   ): Promise<IFormValidateResult> {
     clearTimeout(env.validateTimer)
     env.validateTimer = setTimeout(() => {
@@ -621,10 +624,13 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         state.validating = true
       })
     }, 60)
-    return validator.validate(path, options).then((payload: any) => {
+    return validator.validate(path, opts).then(payload => {
       state.setState(state => {
         state.validating = false
       })
+      if (isFn(options.onValidateFailed)) {
+        options.onValidateFailed(payload)
+      }
       return payload
     })
   }
@@ -670,7 +676,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       matchCount++
     })
     if (matchCount === 0 || newPath.isWildMatchPattern) {
-      let taskIndex = env.taskIndexes[newPath]
+      let taskIndex = env.taskIndexes[newPath.toString()]
       if (isValid(taskIndex)) {
         if (
           !env.taskQueue[taskIndex].callbacks.some(fn => isEqual(fn, callback))
@@ -678,7 +684,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           env.taskQueue[taskIndex].callbacks.push(callback)
         }
       } else {
-        env.taskIndexes[newPath] = env.taskQueue.length
+        env.taskIndexes[newPath.toString()] = env.taskQueue.length
         env.taskQueue.push({
           path: newPath,
           callbacks: [callback]

@@ -4,7 +4,8 @@ import {
   IVFieldStateProps,
   IForm,
   IMutators,
-  IFieldState
+  IFieldState,
+  IFormValidateResult
 } from '@uform/core'
 import { Observable } from 'rxjs/internal/Observable'
 
@@ -22,6 +23,9 @@ export interface IFormProps {
   actions?: {}
   effects?: IFormEffect
   onChange?: (values: any) => void
+  onSubmit?: (values: any) => void | Promise<any>
+  onReset?: () => void
+  onValidateFailed?: (valideted: IFormValidateResult) => void
   children?: React.ReactChildren | ((form: IForm) => React.ReactChildren)
   useDirty?: boolean
   validateFirst?: boolean

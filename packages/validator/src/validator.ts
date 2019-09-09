@@ -146,7 +146,13 @@ class FormValidator {
     }
   }
 
-  validateNodes(pattern: FormPath, options: ValidateFieldOptions) {
+  async validateNodes(
+    pattern: FormPath,
+    options: ValidateFieldOptions
+  ): Promise<{
+    errors: string[]
+    warnings: string[]
+  }> {
     const errors = []
     const warnings = []
     let promise = Promise.resolve({ errors, warnings })
@@ -175,18 +181,30 @@ class FormValidator {
         })
       }
     })
-    return promise.catch(console.error) // eslint-disable-line
+    return promise.catch(error => {
+      console.error(error)
+      return {
+        errors: [],
+        warnings: []
+      }
+    })
   }
 
-  validate = (path?: FormPathPattern, options?: ValidateFieldOptions) => {
+  validate = (
+    path?: FormPathPattern,
+    options?: ValidateFieldOptions
+  ): Promise<{
+    errors: string[]
+    warnings: string[]
+  }> => {
     const pattern = FormPath.getPath(path || '*')
     return this.validateNodes(pattern, options)
   }
 
   register = (path: FormPathPattern, calculator: ValidateCalculator) => {
     const newPath = FormPath.getPath(path)
-    if (isFn(calculator) && !this.nodes[newPath]) {
-      this.nodes[newPath] = (options: ValidateFieldOptions) => {
+    if (isFn(calculator) && !this.nodes[newPath as any]) {
+      this.nodes[newPath as any] = (options: ValidateFieldOptions) => {
         return new Promise((resolve, reject) => {
           const validate = async (value: any, rules: ValidatePatternRules) => {
             const data = {

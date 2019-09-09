@@ -80,7 +80,10 @@ export const Form = (props: IFormProps = {}) => {
           dispatch
         })
       })
-    ]
+    ],
+    onReset: props.onReset,
+    onSubmit: props.onSubmit,
+    onValidateFailed: props.onValidateFailed
   })
 
   return (

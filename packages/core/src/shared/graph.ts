@@ -48,7 +48,7 @@ export class FormGraph<NodeType = any> {
         }
       })
     } else {
-      const matched = this.nodes[newPath]
+      const matched = this.nodes[newPath.toString()]
       if (isFn(matcher) && matched) {
         matcher(matched, newPath)
       }
@@ -65,7 +65,7 @@ export class FormGraph<NodeType = any> {
   }
 
   selectChildren = (path: FormPathPattern) => {
-    const ref = this.refrences[FormPath.getPath(path)]
+    const ref = this.refrences[FormPath.getPath(path).toString()]
     if (ref && ref.children) {
       return reduce(
         ref.children,
@@ -92,7 +92,7 @@ export class FormGraph<NodeType = any> {
     eacher: FormGraphEacher<NodeType>,
     recursion: boolean = true
   ) => {
-    const ref = this.refrences[FormPath.getPath(path)]
+    const ref = this.refrences[FormPath.getPath(path).toString()]
     if (ref && ref.children) {
       return each(ref.children, path => {
         if (isFn(eacher)) {
@@ -111,7 +111,7 @@ export class FormGraph<NodeType = any> {
    */
   eachParent = (path: FormPathPattern, eacher: FormGraphEacher<NodeType>) => {
     const selfPath = FormPath.getPath(path)
-    const ref = this.refrences[selfPath]
+    const ref = this.refrences[selfPath.toString()]
     if (isFn(eacher)) {
       eacher(this.getNode(selfPath), selfPath)
       if (ref.parent) {
@@ -124,8 +124,8 @@ export class FormGraph<NodeType = any> {
     const selfPath = FormPath.getPath(path)
     const parentPath = FormPath.getPath(path).parent()
     if (selfPath.toString() === parentPath.toString()) return undefined
-    if (this.refrences[parentPath])
-      return { ref: this.refrences[parentPath], path: parentPath }
+    if (this.refrences[parentPath.toString()])
+      return { ref: this.refrences[parentPath.toString()], path: parentPath }
     return this.getLatestParent(parentPath)
   }
 
@@ -143,14 +143,14 @@ export class FormGraph<NodeType = any> {
   appendNode = (path: FormPathPattern, node: NodeType) => {
     const selfPath = FormPath.getPath(path)
     const parentPath = selfPath.parent()
-    const parentRef = this.refrences[parentPath]
+    const parentRef = this.refrences[parentPath.toString()]
     const selfRef: FormGraphNodeRef = {
       path: selfPath,
       children: []
     }
     if (this.getNode(selfPath)) return
-    this.nodes[selfPath as string] = node
-    this.refrences[selfPath] = selfRef
+    this.nodes[selfPath.toString()] = node
+    this.refrences[selfPath.toString()] = selfRef
     if (parentRef) {
       parentRef.children.push(selfPath)
       selfRef.parent = parentRef
@@ -185,14 +185,14 @@ export class FormGraph<NodeType = any> {
 
   remove = (path: FormPathPattern) => {
     const selfPath = FormPath.getPath(path)
-    const selfRef = this.refrences[selfPath]
+    const selfRef = this.refrences[selfPath.toString()]
     if (selfRef.children) {
       selfRef.children.forEach(path => {
         this.remove(path)
       })
     }
-    delete this.nodes[selfPath as string]
-    delete this.refrences[selfPath]
+    delete this.nodes[selfPath.toString()]
+    delete this.refrences[selfPath.toString()]
     if (selfRef.parent) {
       selfRef.parent.children.forEach((path, index) => {
         if (path.match(selfPath)) {
