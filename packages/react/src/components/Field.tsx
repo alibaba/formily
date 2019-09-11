@@ -30,7 +30,7 @@ const createFieldMutators = (
   }
 }
 
-export const Field = (props: IFieldProps) => {
+export const Field: React.FunctionComponent<IFieldProps> = props => {
   const { state, props: innerProps, mutators } = useField(props)
   if (!state.visible || !state.display) return <React.Fragment />
   if (isFn(props.children)) {

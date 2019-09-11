@@ -11,7 +11,7 @@ import { isFn, isStr, FormPath, isArr } from '@uform/shared'
 import { IFormSpyProps } from '../types'
 import FormContext, { BroadcastContext } from '../context'
 
-export const FormSpy = (props: IFormSpyProps) => {
+export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   const broadcast = useContext(BroadcastContext)
   const form = useContext(FormContext)
   const initializedRef = useRef(false)
@@ -43,10 +43,8 @@ export const FormSpy = (props: IFormSpyProps) => {
     }
   }, [])
   if (isFn(props.children)) {
-    return props.children(
-      form ? form : broadcast && broadcast.getContext(),
-      type
-    )
+    const formApi = form ? form : broadcast && broadcast.getContext()
+    return props.children(formApi, type)
   } else {
     return props.children
   }

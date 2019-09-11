@@ -89,9 +89,8 @@ const App = () => {
           }}
         </Field>
       </Form>
-      <FormSpy selector={LifeCycleTypes.ON_FORM_MOUNT}>
+      <FormSpy>
         {(form,type) => {
-          console.log(type)
           return (
             <button
               onClick={() => {

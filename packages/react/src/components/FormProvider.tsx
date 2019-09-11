@@ -4,7 +4,7 @@ import { Broadcast } from '@uform/shared'
 
 const { Provider } = BroadcastContext
 
-export const FormProvider = (props: { children?: React.ReactChildren }) => {
+export const FormProvider: React.FunctionComponent = props => {
   const broadcast = useMemo<Broadcast>(() => {
     return new Broadcast()
   }, [])

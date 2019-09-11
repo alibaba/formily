@@ -3,7 +3,8 @@ import { useVirtualField } from '../hooks/useVirtualField'
 import { isFn } from '@uform/shared'
 import { IVirtualFieldProps } from '../types'
 
-export const VirtualField = (props: IVirtualFieldProps) => {
+
+export const VirtualField : React.FunctionComponent<IVirtualFieldProps> = (props) => {
   const { state, props: innerProps } = useVirtualField(props)
   if (!state.visible || !state.display) return <React.Fragment />
   if (isFn(props.children)) {

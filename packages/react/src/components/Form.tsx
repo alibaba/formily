@@ -65,7 +65,7 @@ export const createFormActions = (): IForm =>
     'getFieldInitialValue'
   ) as IForm
 
-export const Form = (props: IFormProps = {}) => {
+export const Form: React.FunctionComponent<IFormProps> = (props = {}) => {
   const broadcast = useContext(BroadcastContext)
   const actionsRef = React.useRef<any>(null)
   actionsRef.current =
