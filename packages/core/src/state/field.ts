@@ -61,7 +61,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
           values[0] = value
         } else {
           values = toArr(clone(values))
-          value = values[0]
+          values[0] = value
         }
       } else {
         if (isValid(value)) {
