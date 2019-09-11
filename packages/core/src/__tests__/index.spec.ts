@@ -1,5 +1,4 @@
-import { createForm } from '../index'
-import { FormLifeCycle, LifeCycleTypes } from '../shared/lifecycle'
+import { createForm, LifeCycleTypes, FormLifeCycle } from '../index'
 
 describe('createForm', () => {
   test('values', () => {

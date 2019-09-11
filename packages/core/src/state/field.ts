@@ -50,15 +50,6 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       this.state = state
       this.path = FormPath.getPath(props.path)
       this.state.name = this.path.entire
-      const { values, value } = this.parseValues(props)
-      this.state.value = value
-      this.state.values = values
-      this.state.initialValue = clone(props.initialValue)
-      this.state.editable = props.editable
-      this.state.props = clone(props.props)
-      const { rules, required } = this.parseRules(props)
-      this.state.rules = rules
-      this.state.required = required
     }
 
     parseValues({ value, values }: IFieldStateProps) {

@@ -31,7 +31,7 @@ test('register', async () => {
   expect(errors1).toEqual([])
   expect(errors2).toEqual(['This field is required'])
   expect(validateResponse).toEqual({
-    errors: [{ path: 'a.b.c', message: 'This field is required' }],
+    errors: [{ path: 'a.b.c', messages: ['This field is required'] }],
     warnings: []
   })
 })

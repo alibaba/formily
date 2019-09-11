@@ -67,65 +67,63 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     const initialValuesChanged = state.hasChanged('initialValues')
     const unmountedChanged = state.hasChanged('unmounted')
     const mountedChanged = state.hasChanged('mounted')
-    const initialized = state.hasChanged('initialized')
-
+    const initializedChanged = state.hasChanged('initialized')
     if (valuesChanged || initialValuesChanged) {
       /**
        * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
        */
       shadowUpdate(() => {
         graph.eachChildren('', (field: IField | IVirtualField) => {
-          if (field.displayName === 'VirtualFieldState') {
-            return
-          }
-          field.setState((state: IFieldState) => {
-            if (state.visible) {
-              if (valuesChanged) {
-                const path = FormPath.parse(state.name)
-                const parent = graph.getLatestParent(path)
-                const parentValue = getFormValuesIn(parent.path)
-                const value = getFormValuesIn(state.name)
-                /**
-                 * https://github.com/alibaba/uform/issues/267 dynamic remove node
-                 */
-                if (isArr(parentValue)) {
-                  let removed = false
-                  each(
-                    path.segments,
-                    key => {
-                      if (isNum(key)) {
-                        if (key >= parentValue.length) {
-                          graph.remove(state.name)
-                          removed = true
+          if (isField(field)) {
+            field.setState(state => {
+              if (state.visible) {
+                if (valuesChanged) {
+                  const path = FormPath.parse(state.name)
+                  const parent = graph.getLatestParent(path)
+                  const parentValue = getFormValuesIn(parent.path)
+                  const value = getFormValuesIn(state.name)
+                  /**
+                   * https://github.com/alibaba/uform/issues/267 dynamic remove node
+                   */
+                  if (isArr(parentValue)) {
+                    let removed = false
+                    each(
+                      path.segments,
+                      key => {
+                        if (isNum(key)) {
+                          if (key >= parentValue.length) {
+                            graph.remove(state.name)
+                            removed = true
+                          }
+                          return false
+                        } else if (isStr(key) && /\d+/.test(key)) {
+                          if (Number(key) >= parentValue.length) {
+                            graph.remove(state.name)
+                            removed = true
+                          }
+                          return false
                         }
-                        return false
-                      } else if (isStr(key) && /\d+/.test(key)) {
-                        if (Number(key) >= parentValue.length) {
-                          graph.remove(state.name)
-                          removed = true
-                        }
-                        return false
-                      }
-                    },
-                    true
-                  )
-                  if (removed) return
+                      },
+                      true
+                    )
+                    if (removed) return
+                  }
+                  if (!isEqual(value, state.value)) {
+                    state.value = value
+                  }
                 }
-                if (!isEqual(value, state.value)) {
-                  state.value = value
-                }
-              }
-              if (initialValuesChanged) {
-                const initialValue = getFormInitialValuesIn(state.name)
-                if (!isEqual(initialValue, state.initialValue)) {
-                  state.initialValue = initialValue
-                  if (!isValid(state.value)) {
-                    state.value = initialValue
+                if (initialValuesChanged) {
+                  const initialValue = getFormInitialValuesIn(state.name)
+                  if (!isEqual(initialValue, state.initialValue)) {
+                    state.initialValue = initialValue
+                    if (!isValid(state.value)) {
+                      state.value = initialValue
+                    }
                   }
                 }
               }
-            }
-          })
+            })
+          }
         })
       })
       if (valuesChanged) {
@@ -135,13 +133,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         heart.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
       }
     }
+
     if (unmountedChanged && published.unmounted) {
       heart.notify(LifeCycleTypes.ON_FORM_UNMOUNT, state)
     }
     if (mountedChanged && published.mounted) {
       heart.notify(LifeCycleTypes.ON_FORM_MOUNT, state)
     }
-    if (initialized) {
+    if (initializedChanged) {
       heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
     }
     changeGraph()

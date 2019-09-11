@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { clone, FormPath, isValid } from '@uform/shared'
+import { FormPath, isValid } from '@uform/shared'
 import { IVirtualFieldState, IVirtualFieldStateProps } from '../types'
 
 /**
@@ -37,7 +37,6 @@ export const VirtualFieldState = createStateModel<
       this.state = state
       this.path = FormPath.getPath(props.path)
       this.state.name = this.path.entire
-      this.state.props = clone(props.props)
     }
 
     computeState(draft: IVirtualFieldState, prevState: IVirtualFieldState) {

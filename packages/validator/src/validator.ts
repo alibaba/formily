@@ -159,14 +159,18 @@ class FormValidator {
         promise = promise.then(async ({ errors, warnings }) => {
           const result = await validator(options)
           return {
-            errors: errors.concat({
-              path: path.toString(),
-              messages: result.errors
-            }),
-            warnings: warnings.concat({
-              path: path.toString(),
-              messages: result.warnings
-            })
+            errors: result.errors.length
+              ? errors.concat({
+                  path: path.toString(),
+                  messages: result.errors
+                })
+              : errors,
+            warnings: result.warnings.length
+              ? warnings.concat({
+                  path: path.toString(),
+                  messages: result.warnings
+                })
+              : warnings
           }
         })
       }
