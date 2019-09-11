@@ -68,6 +68,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     const unmountedChanged = state.hasChanged('unmounted')
     const mountedChanged = state.hasChanged('mounted')
     const initializedChanged = state.hasChanged('initialized')
+    const editableChanged = state.hasChanged('editable')
     if (valuesChanged || initialValuesChanged) {
       /**
        * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
@@ -132,6 +133,16 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (initialValuesChanged) {
         heart.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
       }
+    }
+
+    if (editableChanged) {
+      graph.eachChildren('', (field: IField | IVirtualField) => {
+        if (isField(field)) {
+          field.setState(state => {
+            state.formEditable = published.editable
+          })
+        }
+      })
     }
 
     if (unmountedChanged && published.unmounted) {
@@ -339,6 +350,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.required = required
           state.rules = rules
           state.editable = editable
+          state.formEditable = options.editable
         })
       })
       validator.register(path, validate => {
@@ -743,6 +755,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         callback(draft)
         const errors = field.unsafe_getSourceState(state => state.errors)
         const warnings = field.unsafe_getSourceState(state => state.warnings)
+        draft.formEditable = field.unsafe_getSourceState(
+          state => state.formEditable
+        )
         draft.effectErrors = draft.errors
         draft.effectWarnings = draft.warnings
         draft.errors = errors
@@ -893,6 +908,6 @@ export const registerValidationRules = FormValidator.registerRules
 
 export const registerValidationMTEngine = FormValidator.registerMTEngine
 
-export { setValidationLanguage, setValidationLocale }
+export { setValidationLanguage, setValidationLocale, FormPath, FormPathPattern }
 
 export default createForm

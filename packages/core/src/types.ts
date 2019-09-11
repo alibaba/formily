@@ -103,6 +103,7 @@ export interface IFieldState {
   visible: boolean
   display: boolean
   editable: boolean
+  formEditable: boolean | ((name: string) => boolean)
   loading: boolean
   modified: boolean
   active: boolean
@@ -161,6 +162,7 @@ export interface IFormState {
   validating: boolean
   submitting: boolean
   initialized: boolean
+  editable: boolean | ((name: string) => boolean)
   errors: string[]
   warnings: string[]
   values: {}
@@ -176,11 +178,13 @@ export interface IFormStateProps {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
+  editable?: boolean | ((name: string) => boolean)
 }
 
 export interface IFormCreatorOptions extends IFormStateProps {
   useDirty?: boolean
   validateFirst?: boolean
+  editable?: boolean
   onSubmit?: (values: IFormState['values']) => void | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void

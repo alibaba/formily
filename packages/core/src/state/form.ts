@@ -15,6 +15,7 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
       validating: false,
       initialized: false,
       submitting: false,
+      editable: true,
       errors: [],
       warnings: [],
       values: {},
@@ -34,6 +35,7 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
       this.state = state
       this.state.initialValues = clone(props.initialValues || {})
       this.state.values = clone(props.values || props.initialValues || {})
+      this.state.editable = props.editable
     }
 
     computeState(draft: IFormState, prevState: IFormState) {

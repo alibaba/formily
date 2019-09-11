@@ -28,6 +28,7 @@ export interface IFormProps {
   onValidateFailed?: (valideted: IFormValidateResult) => void
   children?: React.ReactChildren | ((form: IForm) => React.ReactChildren)
   useDirty?: boolean
+  editable?: boolean
   validateFirst?: boolean
 }
 

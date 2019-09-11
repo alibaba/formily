@@ -77,6 +77,7 @@ export const Form = (props: IFormProps = {}) => {
     values: props.value,
     initialValues: props.initialValues,
     useDirty: props.useDirty,
+    editable: props.editable,
     validateFirst: props.validateFirst,
     lifecycles: [
       new FormLifeCycle(

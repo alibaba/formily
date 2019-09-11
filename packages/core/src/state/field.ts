@@ -19,7 +19,6 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       invalid: false,
       visible: true,
       display: true,
-      editable: true,
       loading: false,
       validating: false,
       errors: [],
@@ -27,6 +26,8 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       effectErrors: [],
       warnings: [],
       effectWarnings: [],
+      editable: undefined,
+      formEditable: undefined,
       value: undefined,
       initialValue: undefined,
       rules: [],
@@ -118,9 +119,6 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.pristine = true
       } else {
         draft.pristine = false
-      }
-      if (!isValid(draft.editable)) {
-        draft.editable = prevState.editable
       }
       if (!isValid(draft.props)) {
         draft.props = prevState.props

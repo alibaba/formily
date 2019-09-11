@@ -4,7 +4,7 @@
 
 ```jsx
 import React, { useState } from 'react'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from './src'
+import { Form, Field,FormPath, createFormActions, FormSpy, LifeCycleTypes } from './src'
 
 const actions = createFormActions()
 
@@ -27,17 +27,19 @@ const Input = props => (
 )
 
 const App = () => {
+  const [values, setValues] = useState({})
+  const [editable,setEditable] = useState(true)
   return (
     <Form
       //actions={actions}
-      effects={($)=>{
-        $(LifeCycleTypes.ON_FORM_MOUNT).subscribe(()=>{
+      editable={editable}
+      initialValues={values}
+      effects={$ => {
+        $(LifeCycleTypes.ON_FORM_MOUNT).subscribe(() => {
           console.log('mounted')
         })
       }}
-      onChange={() => {
-
-      }}
+      onChange={() => {}}
     >
       <Field name="array" initialValue={[]}>
         {({ state, mutators }) => {
@@ -79,7 +81,15 @@ const App = () => {
       </Field>
       <FormSpy selector={LifeCycleTypes.ON_FORM_MOUNT}>
         {form => {
-          return <div>hello world</div>
+          return (
+            <button
+              onClick={() => {
+                setEditable(!editable)
+              }}
+            >
+              Editable
+            </button>
+          )
         }}
       </FormSpy>
     </Form>
