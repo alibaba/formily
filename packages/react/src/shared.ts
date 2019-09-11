@@ -61,3 +61,29 @@ export const getValueFromEvent = (event: any) => {
   }
   return event
 }
+
+const compactScheduler = ([raf, caf, priority], fresh: boolean) => {
+  return [fresh ? callback => raf(priority, callback) : raf, caf]
+}
+
+const getScheduler = () => {
+  if (!self.requestAnimationFrame) {
+    return [self.setTimeout, self.clearTimeout]
+  }
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const scheduler = require('scheduler') as any
+    return compactScheduler(
+      [
+        scheduler.scheduleCallback || scheduler.unstable_scheduleCallback,
+        scheduler.cancelCallback || scheduler.unstable_cancelCallback,
+        scheduler.NormalPriority || scheduler.unstable_NormalPriority
+      ],
+      !!scheduler.unstable_requestPaint
+    )
+  } catch (err) {
+    return [self.requestAnimationFrame, self.cancelAnimationFrame]
+  }
+}
+
+export const [raf, caf] = getScheduler()

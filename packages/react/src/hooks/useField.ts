@@ -2,6 +2,7 @@ import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each } from '@uform/shared'
 import { isValid, isFn } from '@uform/shared'
 import { IFieldStateProps, IFieldState, IForm, IField } from '@uform/core'
+import { raf } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import FormContext from '../context'
@@ -41,7 +42,11 @@ export const useField = (options: IFieldStateProps) => {
         /**
          * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
          */
-        if (initialized) forceUpdate()
+        if (initialized) {
+          raf(() => {
+            forceUpdate()
+          })
+        }
       }
     })
     initialized = true
