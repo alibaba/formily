@@ -36,9 +36,8 @@ const App = () => {
         })
       }}
       onChange={() => {
-        console.log(actions.getFormGraph())
+
       }}
-      onValidateFailed={console.log}
     >
       <Field name="array" initialValue={[]}>
         {({ state, mutators }) => {

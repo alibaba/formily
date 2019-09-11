@@ -194,32 +194,30 @@ class FormValidator {
 
   register = (path: FormPathPattern, calculator: ValidateCalculator) => {
     const newPath = FormPath.getPath(path)
-    if (isFn(calculator) && !this.nodes[newPath.toString()]) {
-      this.nodes[newPath.toString()] = (options: ValidateFieldOptions) => {
-        return new Promise((resolve, reject) => {
-          const validate = async (value: any, rules: ValidatePatternRules) => {
-            const data = {
-              ...options,
-              key: newPath.toString()
-            }
-            return this.internalValidate(
-              value,
-              this.transformRules(rules),
-              data
-            ).then(
-              payload => {
-                resolve(payload)
-                return payload
-              },
-              payload => {
-                reject(payload)
-                return Promise.reject(payload)
-              }
-            )
+    this.nodes[newPath.toString()] = (options: ValidateFieldOptions) => {
+      return new Promise((resolve, reject) => {
+        const validate = async (value: any, rules: ValidatePatternRules) => {
+          const data = {
+            ...options,
+            key: newPath.toString()
           }
-          calculator(validate)
-        })
-      }
+          return this.internalValidate(
+            value,
+            this.transformRules(rules),
+            data
+          ).then(
+            payload => {
+              resolve(payload)
+              return payload
+            },
+            payload => {
+              reject(payload)
+              return Promise.reject(payload)
+            }
+          )
+        }
+        calculator(validate)
+      })
     }
   }
 
