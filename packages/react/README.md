@@ -11,6 +11,7 @@ import {
   createFormActions,
   FormSpy,
   FormProvider,
+  FormConsumer,
   LifeCycleTypes
 } from './src'
 
@@ -89,8 +90,9 @@ const App = () => {
           }}
         </Field>
       </Form>
-      <FormSpy>
-        {(form,type) => {
+      <FormConsumer>
+        {({state}) => {
+          console.log(state)
           return (
             <button
               onClick={() => {
@@ -101,7 +103,7 @@ const App = () => {
             </button>
           )
         }}
-      </FormSpy>
+      </FormConsumer>
     </FormProvider>
   )
 }
