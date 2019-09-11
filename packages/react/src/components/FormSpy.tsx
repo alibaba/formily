@@ -1,41 +1,52 @@
-import { useContext, useMemo, useRef, useEffect, useCallback } from 'react'
-import { IForm, FormHeartSubscriber } from '@uform/core'
+import {
+  useContext,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+  useState
+} from 'react'
+import { FormHeartSubscriber, LifeCycleTypes } from '@uform/core'
 import { isFn, isStr, FormPath, isArr } from '@uform/shared'
 import { IFormSpyProps } from '../types'
-import { useForceUpdate } from '../hooks/useForceUpdate'
-import FormContext from '../context'
+import FormContext, { BroadcastContext } from '../context'
 
 export const FormSpy = (props: IFormSpyProps) => {
-  const form = useContext<IForm>(FormContext)
+  const broadcast = useContext(BroadcastContext)
+  const form = useContext(FormContext)
   const initializedRef = useRef(false)
-  const forceUpdate = useForceUpdate()
+  const [type, setType] = useState<string>(LifeCycleTypes.ON_FORM_INIT)
   const subscriber = useCallback<FormHeartSubscriber>(({ type }) => {
     if (initializedRef.current) return
     if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
-      forceUpdate()
+      setType(type)
     } else if (isArr(props.selector) && props.selector.indexOf(type) > -1) {
-      forceUpdate()
+      setType(type)
     }
   }, [])
   useMemo(() => {
+    initializedRef.current = true
     if (form) {
-      initializedRef.current = true
       form.subscribe(subscriber)
-      initializedRef.current = false
+    } else if (broadcast) {
+      broadcast.subscribe(subscriber)
     }
+    initializedRef.current = false
   }, [])
   useEffect(() => {
-    if (form) {
-      form.subscribe(subscriber)
-    }
     return () => {
       if (form) {
         form.unsubscribe(subscriber)
+      } else if (broadcast) {
+        broadcast.unsubscribe(subscriber)
       }
     }
   }, [])
   if (isFn(props.children)) {
-    return props.children(form)
+    return props.children(
+      form ? form : broadcast && broadcast.getContext(),
+      type
+    )
   } else {
     return props.children
   }
@@ -44,5 +55,5 @@ export const FormSpy = (props: IFormSpyProps) => {
 FormSpy.displayName = 'ReactInternalFormSpy'
 
 FormSpy.defaultProps = {
-  selector: '*'
+  selector: `*`
 }

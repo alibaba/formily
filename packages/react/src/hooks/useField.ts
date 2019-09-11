@@ -5,6 +5,7 @@ import { IFieldStateProps, IFieldState, IForm, IField } from '@uform/core'
 import { raf } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
+import { IFieldHook } from '../types'
 import FormContext from '../context'
 
 const transformFieldState = (state: IFieldState) => {
@@ -22,7 +23,7 @@ const transformFieldState = (state: IFieldState) => {
   }
 }
 
-export const useField = (options: IFieldStateProps) => {
+export const useField = (options: IFieldStateProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
   const ref = useRef<{ field: IField; unmounted: boolean }>({

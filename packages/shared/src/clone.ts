@@ -1,5 +1,5 @@
 import { isFn } from './types'
-import { globalThisPolyfill } from './globalThis'
+import { globalThisPolyfill } from './global'
 
 type Filter = (value: any, key: string) => boolean
 

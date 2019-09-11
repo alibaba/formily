@@ -57,5 +57,13 @@ export interface IVirtualFieldProps extends IVirtualFieldStateProps {
 
 export interface IFormSpyProps {
   selector?: string[] | string
-  children?: React.ReactChildren | ((api: IForm) => React.ReactChildren)
+  children?:
+    | React.ReactChildren
+    | ((api: IForm, type: string) => React.ReactChildren)
+}
+
+export interface IFieldHook {
+  state: IFieldState
+  props: {}
+  mutators: IMutators
 }
