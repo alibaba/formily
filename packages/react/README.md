@@ -1,6 +1,6 @@
-# @uform/core
+# @uform/react
 
-> UForm 内核包
+> UForm React Pure Package
 
 ```jsx
 import React, { useState } from 'react'
