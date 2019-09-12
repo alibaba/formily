@@ -294,7 +294,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     props,
     onChange
   }: IVirtualFieldStateProps): IVirtualField {
-    path = path || name
+    path = FormPath.parse(path || name)
     let field: IVirtualField
     let newPath = FormPath.getPath(path)
     if (graph.exist(newPath)) {
@@ -329,7 +329,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     props
   }: IFieldStateProps): IField {
     let field: IField
-    path = path || name
+    path = FormPath.parse(path || name)
     if (graph.exist(path)) {
       field = graph.select(path)
     } else {

@@ -166,7 +166,7 @@ export class FormGraph<NodeType = any> {
         })
       }
     }
-    this.buffer.forEach(({ path, ref, latestParent }) => {
+    this.buffer.forEach(({ path, ref, latestParent }, index) => {
       if (
         path.parent().match(selfPath) ||
         (selfPath.includes(latestParent.path) &&
@@ -179,6 +179,7 @@ export class FormGraph<NodeType = any> {
           latestParent.ref.children.indexOf(path),
           1
         )
+        this.buffer.splice(index, 1)
       }
     })
   }
@@ -186,11 +187,15 @@ export class FormGraph<NodeType = any> {
   remove = (path: FormPathPattern) => {
     const selfPath = FormPath.getPath(path)
     const selfRef = this.refrences[selfPath.toString()]
+    if (!selfRef) return
     if (selfRef.children) {
       selfRef.children.forEach(path => {
         this.remove(path)
       })
     }
+    this.buffer = this.buffer.filter(({ ref }) => {
+      return selfRef !== ref
+    })
     delete this.nodes[selfPath.toString()]
     delete this.refrences[selfPath.toString()]
     if (selfRef.parent) {
