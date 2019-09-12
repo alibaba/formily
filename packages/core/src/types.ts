@@ -1,7 +1,17 @@
 import { FormPath, FormPathPattern, isFn } from '@uform/shared'
 import { ValidateArrayRules, ValidateNodeResult } from '@uform/validator'
-import { FormLifeCycle, FormHeartSubscriber } from './shared/lifecycle'
+import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
+
+export type FormLifeCycleHandler<T> = (payload: T, context: any) => void
+
+export type FormHeartSubscriber = ({
+  type,
+  payload
+}: {
+  type: string
+  payload: any
+}) => void
 
 export enum LifeCycleTypes {
   /**
@@ -21,7 +31,7 @@ export enum LifeCycleTypes {
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValueChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
   ON_FORM_VALIDATE_END = 'onFormValidateEnd',
-
+  ON_FORM_INPUT_CHANGE = 'onFormInputChange',
   /**
    * FormGraph LifeCycle
    **/
@@ -34,6 +44,7 @@ export enum LifeCycleTypes {
   ON_FIELD_WILL_INIT = 'onFieldWillInit',
   ON_FIELD_INIT = 'onFieldInit',
   ON_FIELD_CHANGE = 'onFieldChange',
+  ON_FIELD_INPUT_CHANGE = 'onFieldInputChange',
   ON_FIELD_VALUE_CHANGE = 'onFieldValueChange',
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
   ON_FIELD_MOUNT = 'onFieldMount',
@@ -54,8 +65,6 @@ export type FormGraph<T> = (
   node: T,
   options: FormGraphVisitorOptions<T>
 ) => void
-
-export type FormGrpahJSONParser<T> = (json: {}) => T
 
 export interface FormGraphNodeRef {
   parent?: FormGraphNodeRef
@@ -297,5 +306,3 @@ export interface IForm {
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
   getFieldInitialValue(path?: FormPathPattern): any
 }
-
-export { FormHeartSubscriber }

@@ -12,7 +12,7 @@ import {
   FormSpy,
   FormProvider,
   FormConsumer,
-  LifeCycleTypes
+  FormEffectHooks
 } from './src'
 
 const actions = createFormActions()
@@ -35,6 +35,8 @@ const Input = props => (
   </Field>
 )
 
+const { onFormInit$, onFormInputChange$ } = FormEffectHooks
+
 const App = () => {
   const [values, setValues] = useState({})
   const [editable, setEditable] = useState(true)
@@ -44,9 +46,12 @@ const App = () => {
         //actions={actions}
         editable={editable}
         initialValues={values}
-        effects={$ => {
-          $(LifeCycleTypes.ON_FORM_MOUNT).subscribe(() => {
-            console.log('mounted')
+        effects={() => {
+          onFormInit$().subscribe(() => {
+            console.log('初始化')
+          })
+          onFormInputChange$().subscribe(() => {
+            console.log('输入变化')
           })
         }}
         onChange={() => {}}
@@ -90,20 +95,6 @@ const App = () => {
           }}
         </Field>
       </Form>
-      <FormConsumer>
-        {({state}) => {
-          console.log(state)
-          return (
-            <button
-              onClick={() => {
-                setEditable(!editable)
-              }}
-            >
-              Editable
-            </button>
-          )
-        }}
-      </FormConsumer>
     </FormProvider>
   )
 }

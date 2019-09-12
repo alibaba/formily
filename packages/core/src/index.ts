@@ -18,7 +18,7 @@ import {
   setValidationLanguage,
   setValidationLocale
 } from '@uform/validator'
-import { FormHeart, FormHeartSubscriber } from './shared/lifecycle'
+import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
 import { FormState } from './state/form'
 import { VirtualFieldState } from './state/virtual-field'
@@ -38,6 +38,7 @@ import {
   IVirtualField,
   isField,
   isFieldState,
+  FormHeartSubscriber,
   LifeCycleTypes
 } from './types'
 export * from './shared/lifecycle'
@@ -445,6 +446,8 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         state.value = values[0]
         state.values = values
       })
+      heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
     }
   }
 
@@ -908,6 +911,12 @@ export const registerValidationRules = FormValidator.registerRules
 
 export const registerValidationMTEngine = FormValidator.registerMTEngine
 
-export { setValidationLanguage, setValidationLocale, FormPath, FormPathPattern }
+export {
+  setValidationLanguage,
+  setValidationLocale,
+  FormPath,
+  FormPathPattern,
+  FormGraph
+}
 
 export default createForm

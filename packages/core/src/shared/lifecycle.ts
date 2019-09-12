@@ -1,22 +1,9 @@
-import { isFn, isStr, isArr, isObj, each, FormPath } from '@uform/shared'
-import { FormLifeCyclePayload, LifeCycleTypes } from '../types'
-
-export type FormLifeCycleHooks<T = any> = {
-  [key in LifeCycleTypes]: ((
-    path: FormPath,
-    handler: FormLifeCycleHandler<T>
-  ) => FormLifeCycle<T>)
-}
-
-export type FormLifeCycleHandler<T> = (payload: T, context: any) => void
-
-export type FormHeartSubscriber = ({
-  type,
-  payload
-}: {
-  type: string
-  payload: any
-}) => void
+import { isFn, isStr, isArr, isObj, each } from '@uform/shared'
+import {
+  FormLifeCyclePayload,
+  FormLifeCycleHandler,
+  FormHeartSubscriber
+} from '../types'
 
 export class FormLifeCycle<Payload = any> {
   private listener: FormLifeCyclePayload<Payload>
@@ -124,15 +111,3 @@ export class FormHeart<Payload = any, Context = any> {
     }
   }
 }
-
-const createLifeCycleHooks = <Payload = any>(): FormLifeCycleHooks<Payload> => {
-  const result: Partial<FormLifeCycleHooks<Payload>> = {}
-  each(LifeCycleTypes, (type: string) => {
-    result[type] = function(handler: FormLifeCycleHandler<Payload>) {
-      return new FormLifeCycle(type, handler)
-    }
-  })
-  return result as FormLifeCycleHooks<Payload>
-}
-
-export const LifeCycleHooks = createLifeCycleHooks()
