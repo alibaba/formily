@@ -35,7 +35,7 @@ const Input = props => (
   </Field>
 )
 
-const { onFormInit$, onFormInputChange$ } = FormEffectHooks
+const { onFormInit$, onFormInputChange$,onFieldInputChange$ } = FormEffectHooks
 
 const App = () => {
   const [values, setValues] = useState({})
@@ -50,8 +50,8 @@ const App = () => {
           onFormInit$().subscribe(() => {
             console.log('初始化')
           })
-          onFormInputChange$().subscribe(() => {
-            console.log('输入变化')
+          onFieldInputChange$().subscribe((state) => {
+            console.log('输入变化',state)
           })
         }}
         onChange={() => {}}
@@ -64,12 +64,12 @@ const App = () => {
                   return (
                     <React.Fragment key={index}>
                       <Input
-                        name={`array.${index}.aaa`}
+                        name={`array[${index}].aaa`}
                         required
                         triggerType="onBlur"
                       />
                       <Input
-                        name={`array.${index}.bbb`}
+                        name={`array[${index}].bbb`}
                         rules={value => {
                           if (value == '123') {
                             return {
