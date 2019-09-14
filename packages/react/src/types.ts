@@ -6,8 +6,13 @@ import {
   IMutators,
   IFieldState,
   IFormValidateResult,
-  IFormState
+  IFormState,
+  IFormResetOptions,
+  IFormSubmitResult,
+  FormHeartSubscriber,
+  IFormGraph
 } from '@uform/core'
+import { FormPathPattern } from '@uform/shared'
 import { Observable } from 'rxjs/internal/Observable'
 export interface IFormEffect<T = any> {
   (selector: IFormEffectSelector<T>): void
@@ -80,4 +85,58 @@ export interface IFieldHook {
   state: IFieldState
   props: {}
   mutators: IMutators
+}
+
+export interface IFormActions {
+  submit(
+    onSubmit: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  reset(options?: IFormResetOptions): void
+  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any): void
+  getFormState(callback?: (state: IFormState) => any): any
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void
+  ): void
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): any
+  getFormGraph(): IFormGraph
+  setFormGraph(graph: IFormGraph): void
+  subscribe(callback?: FormHeartSubscriber): void
+  unsubscribe(callback?: FormHeartSubscriber): void
+  notify: <T>(type: string, payload: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  getFieldValue(path?: FormPathPattern): any
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+
+export interface IFormAsyncActions {
+  submit(
+    onSubmit: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  reset(options?: IFormResetOptions): Promise<void>
+  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any): Promise<void>
+  getFormState(callback?: (state: IFormState) => any): Promise<any>
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void
+  ): Promise<void>
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): Promise<any>
+  getFormGraph(): Promise<IFormGraph>
+  setFormGraph(graph: IFormGraph): Promise<void>
+  subscribe(callback?: FormHeartSubscriber): Promise<void>
+  unsubscribe(callback?: FormHeartSubscriber): Promise<void>
+  notify: <T>(type: string, payload: T) => Promise<void>
+  setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
+  getFieldValue(path?: FormPathPattern): Promise<any>
+  setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
+  getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }

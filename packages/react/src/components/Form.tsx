@@ -11,10 +11,10 @@ import {
 import { useForm } from '../hooks/useForm'
 import { useEva, createActions } from 'react-eva'
 import FormContext, { BroadcastContext } from '../context'
-import { IFormProps } from '../types'
+import { IFormProps, IFormActions, IFormAsyncActions } from '../types'
 import { createFormEffects, FormEffectHooks } from '../shared'
 
-export const createFormActions = (): IForm =>
+export const createFormActions = (): IFormActions =>
   createActions(
     'submit',
     'reset',
@@ -23,9 +23,6 @@ export const createFormActions = (): IForm =>
     'getFormState',
     'setFieldState',
     'getFieldState',
-    'registerField',
-    'registerVirtualField',
-    'createMutators',
     'getFormGraph',
     'setFormGraph',
     'subscribe',
@@ -35,7 +32,27 @@ export const createFormActions = (): IForm =>
     'getFieldValue',
     'setFieldInitialValue',
     'getFieldInitialValue'
-  ) as IForm
+  ) as IFormActions
+
+export const createAsyncFormActions = (): IFormAsyncActions =>
+  createActions(
+    'submit',
+    'reset',
+    'validate',
+    'setFormState',
+    'getFormState',
+    'setFieldState',
+    'getFieldState',
+    'getFormGraph',
+    'setFormGraph',
+    'subscribe',
+    'unsubscribe',
+    'notify',
+    'setFieldValue',
+    'getFieldValue',
+    'setFieldInitialValue',
+    'getFieldInitialValue'
+  ) as IFormAsyncActions
 
 export const Form: React.FunctionComponent<IFormProps> = (props = {}) => {
   const broadcast = useContext(BroadcastContext)
