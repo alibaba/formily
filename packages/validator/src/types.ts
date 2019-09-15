@@ -23,6 +23,10 @@ export interface ValidateDescription {
   required?: boolean
   pattern?: RegExp | string
   max?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  exclusiveMinimum?: number
+  minimum?: number
   min?: number
   len?: number
   whitespace?: boolean

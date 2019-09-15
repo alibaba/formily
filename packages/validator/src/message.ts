@@ -1,4 +1,5 @@
 import { FormPath, each, globalThisPolyfill } from '@uform/shared'
+import deepmerge from 'deepmerge'
 import locales from './locale'
 
 const getIn = FormPath.getIn
@@ -37,8 +38,9 @@ const getMatchLang = (lang: string) => {
 }
 
 export const setValidationLocale = (locale: ILocales) => {
-  Object.assign(LOCALE.messages, locale)
+  deepmerge(LOCALE.messages, locale)
 }
+
 export const setLocale = setValidationLocale
 
 export const setValidationLanguage = (lang: string) => {
@@ -48,10 +50,13 @@ export const setValidationLanguage = (lang: string) => {
 export const setLanguage = setValidationLanguage
 
 export const getMessage = (path: string) => {
-  return (
-    getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`) ||
-    'field is not valid,but not found error message.'
-  )
+  const message = getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`)
+  if (!message && console && console.error) {
+    console.error(
+      `field is not valid,but not found ${path} error message. Please set the language pack first through setValidationLocale`
+    )
+  }
+  return message || 'Field is invalid'
 }
 
 setValidationLocale(locales)

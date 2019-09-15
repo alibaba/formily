@@ -26,6 +26,26 @@ export default {
     const max = Number(rule.max)
     return length > max ? rule.message || getMessage('max') : ''
   },
+  maximum(value: any, rule: ValidateDescription) {
+    return Number(value) > Number(rule.maximum)
+      ? rule.message || getMessage('maximum')
+      : ''
+  },
+  exclusiveMaximum(value: any, rule: ValidateDescription) {
+    return Number(value) >= Number(rule.maximum)
+      ? rule.message || getMessage('exclusiveMaximum')
+      : ''
+  },
+  minimum(value: any, rule: ValidateDescription) {
+    return Number(value) < Number(rule.minimum)
+      ? rule.message || getMessage('minimum')
+      : ''
+  },
+  exclusiveMinimum(value: any, rule: ValidateDescription) {
+    return Number(value) <= Number(rule.minimum)
+      ? rule.message || getMessage('exclusiveMinimum')
+      : ''
+  },
   len(value: any, rule: ValidateDescription) {
     const length = getLength(value)
     const len = Number(rule.len)

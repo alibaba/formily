@@ -355,7 +355,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         })
       })
       validator.register(path, validate => {
-        const { value, rules } = field.getState()
+        const { value, rules, editable, visible, unmounted } = field.getState()
+        if (editable === false || visible === true || unmounted === true)
+          return validate(value, [])
         clearTimeout((field as any).validateTimer)
         ;(field as any).validateTimer = setTimeout(() => {
           field.setState(state => {

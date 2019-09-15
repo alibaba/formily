@@ -16,9 +16,13 @@ export default {
     zh: 'This field is not a chinese string',
     date: 'This field is not a valid date format',
     zip: 'This field is not a zip format',
-    len: 'The length of {{value}} must be {{len}}',
-    min: 'The length of {{value}} must be at least {{min}}',
-    max: 'The length of {{value}} must be at most {{max}}',
+    len: 'The length or number of entries must be {{len}}',
+    min: 'The length or number of entries must be at least {{min}}',
+    maximum: 'The value cannot be greater than {{maximum}}',
+    exclusiveMaximum: 'The value must be less than {{exclusiveMaximum}}',
+    minimum: 'The value cannot be less than {{minimum}}',
+    exclusiveMinimum: 'The value must be greater than {{exclusiveMinimum}}',
+    max: 'The length or number of entries must be at most {{max}}',
     whitespace: 'This field cannot be empty'
   },
   zh: {
@@ -38,9 +42,13 @@ export default {
     zh: '该字段不是合法的中文字符串',
     date: '该字段不是合法的日期格式',
     zip: '该字段不是合法的邮编格式',
-    len: '{{value}}长度不为{{len}}',
-    min: '{{value}}长度必须大于等于{{min}}',
-    max: '{{value}}长度必须小于等于{{max}}',
+    len: '长度或条目数必须为{{len}}',
+    min: '长度或条目数不能小于{{min}}',
+    max: '长度或条目数不能大于{{max}}',
+    maximum: '数值不能大于{{maximum}}',
+    exclusiveMaximum: '数值必须小于{{exclusiveMaximum}}',
+    minimum: '数值不能小于{{minimum}}',
+    exclusiveMinimum: '数值必须大于{{exclusiveMinimum}}',
     whitespace: 'This field cannot be empty'
   }
 }

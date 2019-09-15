@@ -25,8 +25,9 @@
     "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
+    "@uform/shared": "^0.4.0",
     "@uform/types": "^0.4.0",
-    "@uform/shared": "^0.4.0"
+    "deepmerge": "^4.0.0"
   },
   "publishConfig": {
     "access": "public"
