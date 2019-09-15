@@ -1,6 +1,7 @@
 import {
   ValidatePatternRules,
-  ValidateRules,
+  ValidateDescription,
+  CustomValidator,
   getMessage
 } from '@uform/validator'
 import {
@@ -160,8 +161,11 @@ export class Schema {
     dispatch: (type: string, payload: any) => void,
     option?: object
   ) => { [key: string]: any }
-
-  constructor(json: SchemaPattern) {
+  parent: Schema
+  constructor(json: SchemaPattern, parent?: Schema) {
+    if (parent) {
+      this.parent = parent
+    }
     return this.fromJSON(json) as any
   }
   /**
@@ -186,11 +190,17 @@ export class Schema {
     return suc === path.length ? res : undefined
   }
   getSelfProps() {
-    const { properties, items, ...props } = this
+    const {
+      properties,
+      additionalProperties,
+      additionalItems,
+      items,
+      ...props
+    } = this
     return props
   }
   getExtendsRules() {
-    const rules: ValidateRules = []
+    let rules: Array<string | ValidateDescription | CustomValidator> = []
     if (this.format) {
       rules.push({ format: this.format })
     }
@@ -228,6 +238,11 @@ export class Schema {
         }
       })
     }
+    /**剩余校验的都是关联型复杂校验，不抹平，让用户自己处理 */
+    if (isValid(this['x-rules'])) {
+      rules = rules.concat(this['x-rules'])
+    }
+
     return rules
   }
   getExtendsRequired() {
@@ -267,62 +282,62 @@ export class Schema {
     this['x-component'] = lowercase(json['x-component'])
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, item => {
-        return new Schema(item)
+        return new Schema(item, this)
       })
       if (isValid(json.additionalProperties)) {
-        this.additionalProperties = new Schema(json.additionalProperties)
+        this.additionalProperties = new Schema(json.additionalProperties, this)
       }
       if (isValid(json.patternProperties)) {
         this.patternProperties = map(json.patternProperties, item => {
-          return new Schema(item)
+          return new Schema(item, this)
         })
       }
       if (isValid(json.dependencies)) {
         this.dependencies = map(json.dependencies, item => {
-          return isArr(item) ? item : new Schema(item)
+          return isArr(item) ? item : new Schema(item, this)
         })
       }
       if (isValid(json.propertyNames)) {
-        this.propertyNames = new Schema(json.propertyNames)
+        this.propertyNames = new Schema(json.propertyNames, this)
       }
     } else if (!isEmpty(json.items)) {
       this.items = isArr(json.items)
-        ? map(json.items, item => new Schema(item))
+        ? map(json.items, item => new Schema(item, this))
         : new Schema(json.items)
       if (isValid(json.additionalItems)) {
-        this.additionalItems = new Schema(json.additionalItems)
+        this.additionalItems = new Schema(json.additionalItems, this)
       }
       if (isValid(json.contains)) {
-        this.additionalItems = new Schema(json.contains)
+        this.additionalItems = new Schema(json.contains, this)
       }
     }
 
     if (isValid(json.if)) {
-      this.if = new Schema(json.if)
+      this.if = new Schema(json.if, this)
     }
     if (isValid(json.then)) {
-      this.then = new Schema(json.then)
+      this.then = new Schema(json.then, this)
     }
     if (isValid(json.else)) {
-      this.else = new Schema(json.else)
+      this.else = new Schema(json.else, this)
     }
     if (isValid(json.allOf)) {
       this.allOf = map(json.allOf, item => {
-        return new Schema(item)
+        return new Schema(item, this)
       })
     }
     if (isValid(json.anyOf)) {
       this.anyOf = map(json.anyOf, item => {
-        return new Schema(item)
+        return new Schema(item, this)
       })
     }
     if (isValid(json.oneOf)) {
       this.oneOf = map(json.oneOf, item => {
-        return new Schema(item)
+        return new Schema(item, this)
       })
     }
     if (isValid(json.not)) {
-      this.not = new Schema(json.not)
+      this.not = new Schema(json.not, this)
     }
     return this
   }
