@@ -262,7 +262,7 @@ export interface IModel<S = {}, P = {}> {
   subscribe: (callback?: Subscriber<S>) => void
   unsubscribe: (callback?: Subscriber<S>) => void
   batch: (callback?: () => void) => void
-  notify: (payload: S) => void
+  notify: () => void
   getState: (callback?: (state: S) => any) => any
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
   unsafe_getSourceState: (callback?: (state: S) => any) => any

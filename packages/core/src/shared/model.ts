@@ -62,15 +62,17 @@ export const createStateModel = <State = {}, Props = {}>(
         callback()
       }
       if (this.dirtyNum > 0) {
-        this.notify(this.getState())
+        this.notify()
       }
       this.dirtyMap = {}
       this.dirtyNum = 0
       this.batching = false
     }
 
-    notify = (payload: State) => {
-      each(this.subscribers, callback => callback(payload))
+    notify = () => {
+      each(this.subscribers, callback => callback(this.getState()))
+      this.dirtyMap = {}
+      this.dirtyNum = 0
     }
 
     getState = (callback?: (state: State) => any) => {
@@ -134,9 +136,7 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
-            this.notify(this.getState())
-            this.dirtyMap = {}
-            this.dirtyNum = 0
+            this.notify()
           }
         } else {
           this.dirtyNum = 0
@@ -174,9 +174,7 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
-            this.notify(this.getState())
-            this.dirtyMap = {}
-            this.dirtyNum = 0
+            this.notify()
           }
         }
       }

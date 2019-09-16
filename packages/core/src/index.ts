@@ -10,8 +10,7 @@ import {
   FormPathPattern,
   each,
   deprecate,
-  isObj,
-  isStr
+  isObj
 } from '@uform/shared'
 import {
   FormValidator,
@@ -83,33 +82,34 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
                   const path = FormPath.parse(state.name)
                   const parent = graph.getLatestParent(path)
                   const parentValue = getFormValuesIn(parent.path)
+                  const parentPath = path.parent()
                   const value = getFormValuesIn(state.name)
                   /**
                    * https://github.com/alibaba/uform/issues/267 dynamic remove node
                    */
-                  if (isArr(parentValue)) {
-                    let removed = false
-                    each(
-                      path.segments,
-                      key => {
-                        if (isNum(key)) {
-                          if (key >= parentValue.length) {
-                            graph.remove(state.name)
-                            removed = true
-                          }
-                          return false
-                        } else if (isStr(key) && /\d+/.test(key)) {
-                          if (Number(key) >= parentValue.length) {
-                            graph.remove(state.name)
-                            removed = true
-                          }
-                          return false
-                        }
-                      },
-                      true
-                    )
-                    if (removed) return
+                  let removed = false
+                  if (
+                    isArr(parentValue) &&
+                    !path.existIn(parentValue, parent.path)
+                  ) {
+                    if (
+                      !parent.path
+                        .getNearestChildPathBy(path)
+                        .existIn(parentValue, parent.path)
+                    ) {
+                      graph.remove(state.name)
+                      removed = true
+                    }
+                  } else {
+                    each(env.removeNodes, (_, name) => {
+                      if (path.includes(name)) {
+                        graph.remove(path)
+                        delete env.removeNodes[name]
+                        removed = true
+                      }
+                    })
                   }
+                  if (removed) return
                   if (!isEqual(value, state.value)) {
                     state.value = value
                   }
@@ -453,6 +453,23 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
+  function removeValue(path: FormPathPattern) {
+    const fieldPath = FormPath.parse(path)
+    const field: IField = graph.select(fieldPath)
+    if (field) {
+      field.setState((state: IFieldState) => {
+        state.value = undefined
+        state.values = []
+      }, true)
+      deleteFormValuesIn(fieldPath)
+      env.removeNodes[fieldPath.toString()] = true
+      heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+      heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
+      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+    }
+  }
+
   function getValue(path: FormPathPattern) {
     const field = graph.select(path)
     if (field) {
@@ -501,16 +518,16 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         setValue(path, arr)
         return arr
       },
-      remove(index: number | string) {
+      remove(index?: number | string) {
+        const newPath = FormPath.parse(path)
         let val = getValue(path)
         if (isNum(index) && isArr(val)) {
           val = [].concat(val)
           val.splice(index, 1)
           setValue(path, val)
         } else {
-          setValue(path, undefined)
+          removeValue(index !== undefined ? newPath.concat(index) : newPath)
         }
-        return val
       },
       unshift(value: any) {
         const arr = toArr(getValue(path)).slice()
@@ -896,7 +913,8 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     shadowStage: false,
     leadingStage: false,
     taskQueue: [],
-    taskIndexes: {}
+    taskIndexes: {},
+    removeNodes: {}
   }
   heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscribe(onFormChange)
