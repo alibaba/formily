@@ -82,7 +82,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
                   const path = FormPath.parse(state.name)
                   const parent = graph.getLatestParent(path)
                   const parentValue = getFormValuesIn(parent.path)
-                  const parentPath = path.parent()
                   const value = getFormValuesIn(state.name)
                   /**
                    * https://github.com/alibaba/uform/issues/267 dynamic remove node
@@ -457,12 +456,12 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     const fieldPath = FormPath.parse(path)
     const field: IField = graph.select(fieldPath)
     if (field) {
+      env.removeNodes[fieldPath.toString()] = true
       field.setState((state: IFieldState) => {
         state.value = undefined
         state.values = []
       }, true)
       deleteFormValuesIn(fieldPath)
-      env.removeNodes[fieldPath.toString()] = true
       heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
@@ -528,6 +527,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         } else {
           removeValue(index !== undefined ? newPath.concat(index) : newPath)
         }
+      },
+      exist(index?: number | string) {
+        const newPath = FormPath.parse(path)
+        let val = getValue(path)
+        return (index !== undefined ? newPath.concat(index) : newPath).existIn(
+          val,
+          newPath
+        )
       },
       unshift(value: any) {
         const arr = toArr(getValue(path)).slice()
