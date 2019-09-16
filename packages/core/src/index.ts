@@ -348,7 +348,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.initialValue = initialValue
           state.props = props
           state.required = required
-          state.rules = rules
+          state.rules = rules as any
           state.editable = editable
           state.formEditable = options.editable
         })

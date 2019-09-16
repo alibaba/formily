@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, Fragment } from 'react'
 import { Field, VirtualField } from '@uform/react'
 import { FormPath, isFn, lowercase, reduce, each } from '@uform/shared'
 import pascalCase from 'pascal-case'
@@ -103,7 +103,7 @@ export function registerFieldWrappers(
     }
   )
   each<IFieldStore['virtualFields'], ISchemaVirtualFieldComponent>(
-    store.fields,
+    store.virtualFields,
     (component, key) => {
       if (
         !component.__WRAPPERS__.some(wrapper => wrappers.indexOf(wrapper) > -1)
@@ -139,10 +139,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return <SchemaField key={reactKey} path={path.concat(addtionKey)} />
   }
   if (fieldSchema.isObject() && !schemaComponent) {
-    return fieldSchema.mapProperties((schema: Schema, key: string) => {
-      const childPath = path.concat(key)
-      return <SchemaField key={childPath.toString()} path={childPath} />
-    })
+    return (
+      <Fragment>
+        {fieldSchema.mapProperties((schema: Schema, key: string) => {
+          const childPath = path.concat(key)
+          return <SchemaField key={childPath.toString()} path={childPath} />
+        })}
+      </Fragment>
+    )
   } else if (store.fields[finalComponentName]) {
     return (
       <Field
@@ -161,7 +165,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             mutators,
             renderField
           }
-          const renderComponent = () =>
+          const renderComponent = (): React.ReactElement =>
             React.createElement(store.fields[finalComponentName], props)
           if (isFn(schemaRenderer)) {
             return schemaRenderer({ ...props, renderComponent })

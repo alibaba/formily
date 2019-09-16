@@ -1,5 +1,9 @@
 import { FormPath, FormPathPattern, isFn } from '@uform/shared'
-import { ValidateArrayRules, ValidateNodeResult } from '@uform/validator'
+import {
+  ValidatePatternRules,
+  ValidateArrayRules,
+  ValidateNodeResult
+} from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
 
@@ -140,7 +144,7 @@ export interface IFieldStateProps {
   values?: any[]
   initialValue?: any
   props?: {}
-  rules?: ValidateArrayRules[]
+  rules?: ValidatePatternRules[]
   required?: boolean
   editable?: boolean
   onChange?: (fieldState: IField) => void

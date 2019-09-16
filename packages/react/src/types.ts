@@ -37,13 +37,13 @@ export interface IFormProps {
   validateFirst?: boolean
 }
 
-export interface IFieldApi {
+export interface IFieldAPI {
   state: IFieldState
   props: {}
   mutators: IMutators
 }
 
-export interface IVirtualFieldApi {
+export interface IVirtualFieldAPI {
   state: IFieldState
   props: {}
 }
@@ -51,13 +51,13 @@ export interface IVirtualFieldApi {
 export interface IFieldProps extends IFieldStateProps {
   triggerType?: 'onChange' | 'onBlur'
   getValueFromEvent?: (...args: any[]) => any
-  children?: React.ReactElement | ((api: IFieldApi) => React.ReactElement)
+  children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 
 export interface IVirtualFieldProps extends IVirtualFieldStateProps {
   children?:
     | React.ReactElement
-    | ((api: IVirtualFieldApi) => React.ReactElement)
+    | ((api: IVirtualFieldAPI) => React.ReactElement)
 }
 
 export interface IFormSpyProps {

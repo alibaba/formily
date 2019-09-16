@@ -7,7 +7,6 @@ import {
 import {
   JSONSchema7,
   JSONSchema7Version,
-  JSONSchema7TypeName,
   JSONSchema7Type,
   JSONSchema7Definition
 } from 'json-schema'
@@ -22,7 +21,10 @@ import {
   FormPathPattern,
   FormPath
 } from '@uform/shared'
-import { ISchemaFieldComponentProps } from '../types'
+import {
+  ISchemaFieldComponentProps,
+  ISchemaVirtualFieldComponentProps
+} from '../types'
 
 const numberRE = /^\d+$/
 
@@ -48,6 +50,8 @@ type SchemaPattern =
   | JSONSchema7Definition
   | Schema & IExtendsSchema
 
+//todo:想了一下，感觉不应该依赖JSONSchema7，因为在react这层，很多属性都会接受ReactElement形式的属性
+
 export class Schema {
   $id?: string
   $ref?: string
@@ -57,7 +61,7 @@ export class Schema {
   /**
    * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1
    */
-  type?: JSONSchema7TypeName | JSONSchema7TypeName[]
+  type?: string
   enum?: JSONSchema7Type[]
   const?: JSONSchema7Type
 
@@ -153,10 +157,10 @@ export class Schema {
   ['x-rules']?: ValidatePatternRules;
   ['x-component']?: string;
   ['x-render']?: (
-    props: ISchemaFieldComponentProps & {
+    props: (ISchemaFieldComponentProps | ISchemaVirtualFieldComponentProps) & {
       renderComponent: () => React.ReactElement
     }
-  ) => { [key: string]: any };
+  ) => React.ReactElement;
   ['x-effect']?: (
     dispatch: (type: string, payload: any) => void,
     option?: object
@@ -278,7 +282,7 @@ export class Schema {
     if (typeof json === 'boolean') return json
     if (json instanceof Schema) return json
     Object.assign(this, json)
-    this.type = lowercase(json.type) as JSONSchema7['type']
+    this.type = lowercase(String(json.type))
     this['x-component'] = lowercase(json['x-component'])
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, item => {

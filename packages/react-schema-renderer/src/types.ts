@@ -1,4 +1,4 @@
-import { FormPathPattern } from '@uform/shared'
+import { FormPathPattern, FormPath } from '@uform/shared'
 import { IFieldState, IVirtualFieldState, IMutators } from '@uform/react'
 import { Schema } from './shared/schema'
 export interface ISchemaFieldProps {
@@ -14,13 +14,20 @@ export type ComponentWithStyleComponent<ComponentProps> = React.ComponentType<
 export interface ISchemaFieldComponentProps extends IFieldState {
   schema: Schema
   mutators: IMutators
+  path: FormPath
   renderField: (
     addtionKey: string | number,
     reactKey?: string | number
   ) => React.ReactElement
 }
 export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
+  path: FormPath
   schema: Schema
+  children: React.ReactElement[]
+  renderField: (
+    addtionKey: string | number,
+    reactKey?: string | number
+  ) => React.ReactElement
 }
 
 export interface ISchemaFieldWrapper<Props = any> {
