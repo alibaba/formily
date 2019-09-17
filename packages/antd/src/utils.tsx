@@ -2,10 +2,8 @@ import React from 'react'
 import { Select as AntSelect, Icon } from 'antd'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
-import MoveTo from 'moveto'
 import { isFn } from '@uform/utils'
 import { IConnectProps, IFieldProps } from '@uform/react'
-
 export * from '@uform/utils'
 
 export interface ISelectProps {
@@ -16,7 +14,7 @@ export interface ISelectProps {
 export interface IElement extends Element {
   oldHTML?: string
 }
-
+const MoveTo = typeof window !== 'undefined' ? require('moveto') : null
 const WrapSelect = styled(
   class extends React.Component<ISelectProps> {
     public render() {
@@ -239,7 +237,7 @@ export const transformDataSourceKey = (component, dataSourceKey) => {
 }
 
 export const moveTo = element => {
-  if (!element) {
+  if (!element || !MoveTo) {
     return
   }
   if (element.scrollIntoView) {
