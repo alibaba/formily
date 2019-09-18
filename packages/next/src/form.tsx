@@ -1,9 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
 import styled from 'styled-components'
-import { ConfigProvider, Balloon, Icon } from '@alifd/next'
+import { ConfigProvider, Balloon, Icon, Grid } from '@alifd/next'
 import { registerFormWrapper, registerFieldMiddleware } from '@uform/react'
-import { Grid } from '@alifd/next'
 import { IFormItemProps, IFormProps } from '@uform/types'
 
 import LOCALE from './locale'
@@ -319,7 +318,6 @@ registerFormWrapper(OriginForm => {
           labelTextAlign,
           autoAddColon,
           children,
-          component,
           labelCol,
           wrapperCol,
           style,
