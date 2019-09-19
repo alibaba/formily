@@ -343,9 +343,17 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       field.batch(() => {
         batchRunTaskQueue(field)
         field.setState((state: IFieldState) => {
+          const formValue = getFormValuesIn(path)
+          const formInitialValue = getFormInitialValuesIn(path)
           state.initialized = true
-          state.value = isValid(value) ? value : initialValue
-          state.initialValue = initialValue
+          if (isValid(value)) { // value > formValue > initialValue
+            state.value = value
+          } else {
+            state.value = isValid(formValue) ? formValue : initialValue
+          }
+          // initialValue > formInitialValue
+          state.initialValue = isValid(initialValue) ? initialValue : formInitialValue
+
           state.props = props
           state.required = required
           state.rules = rules as any
@@ -574,12 +582,12 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.effectErrors = []
           state.warnings = []
           state.effectWarnings = []
-          if (forceClear) {
+          
+          // forceClear仅对设置initialValues的情况下有意义
+          if (forceClear || !isValid(state.initialValue)) {
             if (isArr(state.value)) {
               state.value = []
-            } else if (isObj(state.value)) {
-              state.value = {}
-            } else {
+            } else if (!isObj(state.value)) {
               state.value = undefined
             }
           } else {
@@ -888,6 +896,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     getFormGraph,
     setFormGraph,
     setFieldValue,
+    unsafe_do_not_use_transform_data_path: transformDataPath,
     setValue: deprecate(setValue, 'setValue', 'Please use the setFieldValue.'),
     getFieldValue,
     getValue: deprecate(getValue, 'getValue', 'Please use the getFieldValue.'),
