@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   ValidatePatternRules,
   ValidateDescription,
@@ -5,168 +6,79 @@ import {
   getMessage
 } from '@uform/validator'
 import {
-  JSONSchema7,
-  JSONSchema7Version,
-  JSONSchema7Type,
-  JSONSchema7Definition
-} from 'json-schema'
-import {
   lowercase,
   map,
   each,
   isEmpty,
+  isEqual,
   isArr,
+  toArr,
   isBool,
   isValid,
   FormPathPattern,
   FormPath
 } from '@uform/shared'
-import {
-  ISchemaFieldComponentProps,
-  ISchemaVirtualFieldComponentProps
-} from '../types'
+import { ISchemaFieldComponentProps, SchemaMessage, ISchema } from '../types'
 
 const numberRE = /^\d+$/
 
-interface IExtendsSchema {
-  editable?: boolean
-  ['x-props']?: { [name: string]: any }
-  ['x-index']?: number
-  ['x-rules']?: ValidatePatternRules
-  ['x-component']?: string
-  ['x-render']?: (
-    props: ISchemaFieldComponentProps & {
-      renderComponent: () => React.ReactElement
-    }
-  ) => { [key: string]: any }
-  ['x-effect']?: (
-    dispatch: (type: string, payload: any) => void,
-    option?: object
-  ) => { [key: string]: any }
+type SchemaProperties<T = Schema> = {
+  [key: string]: Schema
 }
 
-type SchemaPattern =
-  | JSONSchema7 & IExtendsSchema
-  | JSONSchema7Definition
-  | Schema & IExtendsSchema
-
-//todo:想了一下，感觉不应该依赖JSONSchema7，因为在react这层，很多属性都会接受ReactElement形式的属性
-
-export class Schema {
-  $id?: string
-  $ref?: string
-  $schema?: JSONSchema7Version
-  $comment?: string
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1
-   */
-  type?: string
-  enum?: JSONSchema7Type[]
-  const?: JSONSchema7Type
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.2
-   */
-  multipleOf?: number
-  maximum?: number
-  exclusiveMaximum?: number
-  minimum?: number
-  exclusiveMinimum?: number
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.3
-   */
-  maxLength?: number
-  minLength?: number
-  pattern?: string
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.4
-   */
-  items?: Schema | Schema[]
-  additionalItems?: Schema
-  maxItems?: number
-  minItems?: number
-  uniqueItems?: boolean
-  contains?: Schema
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.5
-   */
-  maxProperties?: number
-  minProperties?: number
-  required?: string[] | boolean
-  properties?: {
+export class Schema implements ISchema {
+  /** base json schema spec**/
+  public title?: SchemaMessage
+  public description?: SchemaMessage
+  public default?: any
+  public readOnly?: boolean
+  public writeOnly?: boolean
+  public type?: string
+  public enum?: Array<string | number | { label: SchemaMessage; value: any }>
+  public const?: any
+  public multipleOf?: number
+  public maximum?: number
+  public exclusiveMaximum?: number
+  public minimum?: number
+  public exclusiveMinimum?: number
+  public maxLength?: number
+  public minLength?: number
+  public pattern?: string | RegExp
+  public maxItems?: number
+  public minItems?: number
+  public uniqueItems?: boolean
+  public maxProperties?: number
+  public minProperties?: number
+  public required?: string[] | boolean
+  public format?: string
+  /** nested json schema spec **/
+  public properties?: SchemaProperties
+  public items?: Schema | Schema[]
+  public additionalItems?: Schema
+  public patternProperties?: {
     [key: string]: Schema
   }
-  patternProperties?: {
-    [key: string]: Schema
-  }
-  additionalProperties?: Schema
-  dependencies?: {
-    [key: string]: Schema | string[]
-  }
-  propertyNames?: Schema
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.6
-   */
-  if?: Schema
-  then?: Schema
-  else?: Schema
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.7
-   */
-  allOf?: Schema[]
-  anyOf?: Schema[]
-  oneOf?: Schema[]
-  not?: Schema
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-7
-   */
-  format?: string
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-8
-   */
-  contentMediaType?: string
-  contentEncoding?: string
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-9
-   */
-  definitions?: {
-    [key: string]: Schema
-  }
-
-  /**
-   * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10
-   */
-  title?: string
-  description?: string
-  default?: JSONSchema7Type
-  readOnly?: boolean
-  writeOnly?: boolean
-  examples?: JSONSchema7Type
-  editable?: boolean;
-  ['x-props']?: { [name: string]: any };
-  ['x-index']?: number;
-  ['x-rules']?: ValidatePatternRules;
-  ['x-component']?: string;
-  ['x-render']?: (
-    props: (ISchemaFieldComponentProps | ISchemaVirtualFieldComponentProps) & {
+  public additionalProperties?: Schema
+  /** extend json schema specs */
+  public editable?: boolean
+  public ['x-props']?: { [name: string]: any }
+  public ['x-index']?: number
+  public ['x-rules']?: ValidatePatternRules
+  public ['x-component']?: string | React.JSXElementConstructor<any>
+  public ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
       renderComponent: () => React.ReactElement
     }
-  ) => React.ReactElement;
-  ['x-effect']?: (
+  ) => React.ReactElement
+  public ['x-effect']?: (
     dispatch: (type: string, payload: any) => void,
     option?: object
   ) => { [key: string]: any }
-  parent: Schema
-  constructor(json: SchemaPattern, parent?: Schema) {
+  /** schema class self specs**/
+
+  public parent?: Schema
+
+  constructor(json: ISchema, parent?: Schema) {
     if (parent) {
       this.parent = parent
     }
@@ -226,6 +138,9 @@ export class Schema {
     if (isValid(this.exclusiveMinimum)) {
       rules.push({ exclusiveMinimum: this.exclusiveMinimum })
     }
+    if (isValid(this.pattern)) {
+      rules.push({ pattern: this.pattern })
+    }
     if (isValid(this.const)) {
       rules.push({
         validator: value => {
@@ -239,6 +154,40 @@ export class Schema {
           return value % this.multipleOf === 0
             ? ''
             : getMessage('schema.multipleOf')
+        }
+      })
+    }
+    if (isValid(this.maxProperties)) {
+      rules.push({
+        validator: value => {
+          return Object.keys(value || {}).length <= this.maxProperties
+            ? ''
+            : getMessage('schema.maxProperties')
+        }
+      })
+    }
+    if (isValid(this.minProperties)) {
+      rules.push({
+        validator: value => {
+          return Object.keys(value || {}).length >= this.minProperties
+            ? ''
+            : getMessage('schema.minProperties')
+        }
+      })
+    }
+    if (isValid(this.uniqueItems) && this.uniqueItems) {
+      rules.push({
+        validator: value => {
+          value = toArr(value)
+          return value.some((item: any, index: number) => {
+            for (let start = index; start < value.length; start++) {
+              if (isEqual(value[start], item)) {
+                return false
+              }
+            }
+          })
+            ? getMessage('schema.uniqueItems')
+            : ''
         }
       })
     }
@@ -275,10 +224,19 @@ export class Schema {
   /**
    * getters
    */
-  setProperties() {}
-  setArrayItems() {}
+  setPropertie(key: string, schema: ISchema) {
+    this.properties[key] = new Schema(schema, this)
+  }
+  setProperties(properties: SchemaProperties<ISchema>) {
+    each<SchemaProperties<ISchema>, ISchema>(properties, (schema, key) => {
+      this.setPropertie(key, schema)
+    })
+  }
+  setArrayItems(schema: ISchema) {
+    this.items = new Schema(schema, this)
+  }
   toJSON() {}
-  fromJSON(json: SchemaPattern = {}) {
+  fromJSON(json: ISchema = {}) {
     if (typeof json === 'boolean') return json
     if (json instanceof Schema) return json
     Object.assign(this, json)
@@ -296,14 +254,6 @@ export class Schema {
           return new Schema(item, this)
         })
       }
-      if (isValid(json.dependencies)) {
-        this.dependencies = map(json.dependencies, item => {
-          return isArr(item) ? item : new Schema(item, this)
-        })
-      }
-      if (isValid(json.propertyNames)) {
-        this.propertyNames = new Schema(json.propertyNames, this)
-      }
     } else if (!isEmpty(json.items)) {
       this.items = isArr(json.items)
         ? map(json.items, item => new Schema(item, this))
@@ -311,37 +261,6 @@ export class Schema {
       if (isValid(json.additionalItems)) {
         this.additionalItems = new Schema(json.additionalItems, this)
       }
-      if (isValid(json.contains)) {
-        this.additionalItems = new Schema(json.contains, this)
-      }
-    }
-
-    if (isValid(json.if)) {
-      this.if = new Schema(json.if, this)
-    }
-    if (isValid(json.then)) {
-      this.then = new Schema(json.then, this)
-    }
-    if (isValid(json.else)) {
-      this.else = new Schema(json.else, this)
-    }
-    if (isValid(json.allOf)) {
-      this.allOf = map(json.allOf, item => {
-        return new Schema(item, this)
-      })
-    }
-    if (isValid(json.anyOf)) {
-      this.anyOf = map(json.anyOf, item => {
-        return new Schema(item, this)
-      })
-    }
-    if (isValid(json.oneOf)) {
-      this.oneOf = map(json.oneOf, item => {
-        return new Schema(item, this)
-      })
-    }
-    if (isValid(json.not)) {
-      this.not = new Schema(json.not, this)
     }
     return this
   }
@@ -370,7 +289,7 @@ export class Schema {
   }
 
   static getOrderProperties = (
-    schema: SchemaPattern = {},
+    schema: ISchema = {},
     propertiesName: string = 'properties'
   ) => {
     const newSchema = new Schema(schema)

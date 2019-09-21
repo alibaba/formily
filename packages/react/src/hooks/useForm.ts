@@ -1,14 +1,34 @@
-import { useMemo, useEffect } from 'react'
-import { createForm, IFormCreatorOptions } from '@uform/core'
+import { useMemo, useEffect, useContext } from 'react'
+import {
+  createForm,
+  IFormCreatorOptions,
+  LifeCycleTypes,
+  FormLifeCycle,
+  IForm,
+  IModel,
+  isStateModel,
+  IFormState
+} from '@uform/core'
 import { useDirty } from './useDirty'
+import { useEva } from 'react-eva'
+import { IFormProps } from '../types'
+import { BroadcastContext } from '../context'
+import { createFormEffects } from '../shared'
 
-export const useForm = (options: IFormCreatorOptions = {}) => {
+const FormHookSymbol = Symbol('FORM_HOOK')
+
+const useInternalForm = (
+  options: IFormCreatorOptions & { form?: IForm } = {}
+) => {
   const dirty = useDirty(options, ['initialValues', 'values', 'editable'])
+  const alreadyHaveForm = !!options.form
+  const alreadyHaveHookForm = options.form && options.form[FormHookSymbol]
   const form = useMemo(() => {
-    return createForm(options)
+    return alreadyHaveForm ? options.form : createForm(options)
   }, [])
 
   useEffect(() => {
+    if (alreadyHaveHookForm) return
     if (dirty.num > 0) {
       form.setFormState(state => {
         if (dirty.dirtys.values) {
@@ -26,6 +46,7 @@ export const useForm = (options: IFormCreatorOptions = {}) => {
   })
 
   useEffect(() => {
+    if (alreadyHaveHookForm) return
     form.setFormState(state => {
       state.mounted = true
     })
@@ -36,6 +57,62 @@ export const useForm = (options: IFormCreatorOptions = {}) => {
     }
   }, [])
 
+  ;(form as any)[FormHookSymbol] = true
+
+  return form
+}
+
+export const useForm = (props: IFormProps) => {
+  const broadcast = useContext(BroadcastContext)
+  const { implementActions, dispatch } = useEva({
+    actions: props.actions,
+    effects: createFormEffects(props.effects, props.actions)
+  })
+  const form = useInternalForm({
+    form: props.form,
+    values: props.value,
+    initialValues: props.initialValues,
+    useDirty: props.useDirty,
+    editable: props.editable,
+    validateFirst: props.validateFirst,
+    lifecycles: [
+      new FormLifeCycle(
+        ({ type, payload }: { type: string; payload: IModel }) => {
+          dispatch.lazy(type, () => {
+            return isStateModel(payload) ? payload.getState() : payload
+          })
+          if (type === LifeCycleTypes.ON_FORM_INPUT_CHANGE) {
+            if (props.onChange) {
+              props.onChange(
+                isStateModel(payload)
+                  ? payload.getState((state: IFormState) => state.values)
+                  : {}
+              )
+            }
+          }
+          if (broadcast) {
+            broadcast.notify({ type, payload })
+          }
+        }
+      ),
+      new FormLifeCycle(
+        LifeCycleTypes.ON_FORM_WILL_INIT,
+        (payload: IModel, form: IForm) => {
+          const actions = {
+            ...form,
+            dispatch
+          }
+          if (broadcast) {
+            broadcast.setContext(actions)
+          }
+          implementActions(actions)
+        }
+      )
+    ],
+    onReset: props.onReset,
+    onSubmit: props.onSubmit,
+    onValidateFailed: props.onValidateFailed
+  })
   return form
 }
 

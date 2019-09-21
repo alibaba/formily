@@ -27,6 +27,7 @@ export interface IFormProps {
   initialValues?: {}
   actions?: {}
   effects?: IFormEffect
+  form?: IForm
   onChange?: (values: any) => void
   onSubmit?: (values: any) => void | Promise<any>
   onReset?: () => void
