@@ -346,13 +346,16 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           const formValue = getFormValuesIn(path)
           const formInitialValue = getFormInitialValuesIn(path)
           state.initialized = true
-          if (isValid(value)) { // value > formValue > initialValue
+          if (isValid(value)) {
+            // value > formValue > initialValue
             state.value = value
           } else {
             state.value = isValid(formValue) ? formValue : initialValue
           }
           // initialValue > formInitialValue
-          state.initialValue = isValid(initialValue) ? initialValue : formInitialValue
+          state.initialValue = isValid(initialValue)
+            ? initialValue
+            : formInitialValue
 
           state.props = props
           state.required = required
@@ -582,7 +585,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.effectErrors = []
           state.warnings = []
           state.effectWarnings = []
-          
+
           // forceClear仅对设置initialValues的情况下有意义
           if (forceClear || !isValid(state.initialValue)) {
             if (isArr(state.value)) {
@@ -896,7 +899,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     getFormGraph,
     setFormGraph,
     setFieldValue,
-    unsafe_do_not_use_transform_data_path: transformDataPath,
+    unsafe_do_not_use_transform_data_path: transformDataPath, //eslint-disable-line
     setValue: deprecate(setValue, 'setValue', 'Please use the setFieldValue.'),
     getFieldValue,
     getValue: deprecate(getValue, 'getValue', 'Please use the getFieldValue.'),

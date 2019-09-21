@@ -284,7 +284,7 @@ export type IFormInternal = IModel<IFormState, IFormStateProps>
 
 export interface IForm {
   submit(
-    onSubmit: (values: IFormState['values']) => void | Promise<any>
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): void
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
@@ -298,7 +298,7 @@ export interface IForm {
     path: FormPathPattern,
     callback?: (state: IFieldState) => any
   ): any
-  unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern
+  unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
   registerField(props: IFieldStateProps): IField
   registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
   createMutators(path: FormPathPattern): IMutators
@@ -306,7 +306,7 @@ export interface IForm {
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): void
   unsubscribe(callback?: FormHeartSubscriber): void
-  notify: <T>(type: string, payload: T) => void
+  notify: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
