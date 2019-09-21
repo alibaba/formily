@@ -40,12 +40,14 @@ export interface IFormProps {
 
 export interface IFieldAPI {
   state: IFieldState
+  form: IForm
   props: {}
   mutators: IMutators
 }
 
 export interface IVirtualFieldAPI {
   state: IFieldState
+  form: IForm
   props: {}
 }
 
@@ -83,9 +85,16 @@ export interface IFormConsumerProps {
 }
 
 export interface IFieldHook {
+  form: IForm
   state: IFieldState
   props: {}
   mutators: IMutators
+}
+
+export interface IVirtualFieldHook {
+  form: IForm
+  state: IFieldState
+  props: {}
 }
 
 export interface IFormActions {

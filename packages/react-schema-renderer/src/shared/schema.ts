@@ -221,19 +221,25 @@ export class Schema implements ISchema {
   getExtendsEffect() {
     return this['x-effect']
   }
+  getExtendsProps(){
+    return this['x-props'] || {}
+  }
   /**
    * getters
    */
-  setPropertie(key: string, schema: ISchema) {
+  setProperty(key: string, schema: ISchema) {
     this.properties[key] = new Schema(schema, this)
+    return this.properties[key]
   }
   setProperties(properties: SchemaProperties<ISchema>) {
     each<SchemaProperties<ISchema>, ISchema>(properties, (schema, key) => {
-      this.setPropertie(key, schema)
+      this.setProperty(key, schema)
     })
+    return this.properties
   }
   setArrayItems(schema: ISchema) {
     this.items = new Schema(schema, this)
+    return this.items
   }
   toJSON() {}
   fromJSON(json: ISchema = {}) {

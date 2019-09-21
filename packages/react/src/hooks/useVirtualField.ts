@@ -3,10 +3,13 @@ import { each } from '@uform/shared'
 import { IVirtualFieldStateProps, IVirtualFieldState, IForm } from '@uform/core'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
-import {raf} from '../shared'
+import { raf } from '../shared'
+import { IVirtualFieldHook } from '../types'
 import FormContext from '../context'
 
-export const useVirtualField = (options: IVirtualFieldStateProps) => {
+export const useVirtualField = (
+  options: IVirtualFieldStateProps
+): IVirtualFieldHook => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props'])
   const ref = useRef<any>({
@@ -19,7 +22,7 @@ export const useVirtualField = (options: IVirtualFieldStateProps) => {
   }
   useMemo(() => {
     let initialized = false
-    ref.current.field = form.registerField({
+    ref.current.field = form.registerVirtualField({
       ...options,
       onChange() {
         if (ref.current.unmounted) return
@@ -27,7 +30,7 @@ export const useVirtualField = (options: IVirtualFieldStateProps) => {
          * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
          */
         if (initialized) {
-          raf(()=>{
+          raf(() => {
             forceUpdate()
           })
         }
@@ -60,6 +63,7 @@ export const useVirtualField = (options: IVirtualFieldStateProps) => {
   const state = ref.current.field.getState()
   return {
     state,
+    form,
     props: state.props
   }
 }

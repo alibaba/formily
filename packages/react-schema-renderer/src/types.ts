@@ -4,7 +4,8 @@ import {
   IFieldState,
   IVirtualFieldState,
   IMutators,
-  IFormProps
+  IFormProps,
+  IForm
 } from '@uform/react'
 import { ValidatePatternRules } from '@uform/validator'
 import { Schema } from './shared/schema'
@@ -19,9 +20,10 @@ export type ComponentWithStyleComponent<ComponentProps> = React.ComponentType<
 }
 
 export interface ISchemaFieldComponentProps extends IFieldState {
+  path: FormPath
   schema: Schema
   mutators: IMutators
-  path: FormPath
+  form: IForm
   renderField: (
     addtionKey: string | number,
     reactKey?: string | number
@@ -30,6 +32,7 @@ export interface ISchemaFieldComponentProps extends IFieldState {
 export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
   path: FormPath
   schema: Schema
+  form: IForm
   children: React.ReactElement[]
   renderField: (
     addtionKey: string | number,
@@ -38,7 +41,7 @@ export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
 }
 
 export interface ISchemaFieldWrapper<Props = any> {
-  (Traget: ISchemaFieldComponent | ISchemaVirtualFieldComponent):
+  (Traget: ISchemaFieldComponent):
     | React.FC<Props>
     | React.ClassicComponent<Props>
 }
@@ -122,8 +125,32 @@ export interface ISchema {
 export interface ISchemaFormProps extends IFormProps {
   schema?: ISchema
   component?: string | React.JSXElementConstructor<any>
-  components: {
+  components?: {
     form?: React.JSXElementConstructor<any>
     formItem?: React.JSXElementConstructor<any>
   }
+}
+
+export interface IMarkupSchemaFieldProps extends ISchema {
+  name?: string
+}
+
+export interface IConnectOptions {
+  valueName?: string
+  eventName?: string
+  defaultProps?: {}
+  getValueFromEvent?: (event?: any, value?: any) => any
+  getProps?: (
+    componentProps: {},
+    fieldProps: ISchemaFieldComponentProps | ISchemaVirtualFieldComponentProps
+  ) => {} | void
+  getComponent?: (
+    Target: any,
+    componentProps: {},
+    fieldProps: ISchemaFieldComponentProps | ISchemaVirtualFieldComponentProps
+  ) => T
+}
+
+export interface IConnectProps {
+  [key: string]: any
 }

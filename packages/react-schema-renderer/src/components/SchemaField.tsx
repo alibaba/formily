@@ -17,8 +17,7 @@ import {
   IFieldStore,
   ISchemaFieldWrapper,
   ISchemaVirtualFieldComponentProps,
-  ISchemaFieldComponent,
-  ISchemaVirtualFieldComponent
+  ISchemaFieldComponent
 } from '../types'
 import { Schema } from '../shared/schema'
 import SchemaContext, { FormItemContext } from '../context'
@@ -38,6 +37,12 @@ function compose<T, P>(payload: T, args: P[], revert: boolean) {
     payload,
     revert
   )
+}
+
+export const cleanup = () => {
+  store.fields = {}
+  store.virtualFields = {}
+  store.wrappers = []
 }
 
 export function registerFormField(
@@ -84,53 +89,35 @@ export function registerVirtualBox(
   ) {
     name = lowercase(name)
     store.virtualFields[name] = component
-    store.virtualFields[name].__WRAPPERS__ = []
     store.virtualFields[name].displayName = pascalCase(name)
   }
 }
 
-export const registerFieldMiddleware = deprecate(
-  function registerFieldMiddleware(
-    wrappers: ISchemaFieldWrapper<
-      ISchemaFieldComponentProps | ISchemaVirtualFieldComponentProps
-    >[]
-  ) {
-    each<IFieldStore['fields'], ISchemaFieldComponent>(
-      store.fields,
-      (component, key) => {
-        if (
-          !component.__WRAPPERS__.some(
-            wrapper => wrappers.indexOf(wrapper) > -1
-          )
-        ) {
-          store.fields[key] = compose(
-            store.fields[key],
-            wrappers,
-            true
-          )
-          store.fields[key].__WRAPPERS__ = wrappers
-        }
+type FieldMiddleware = ISchemaFieldWrapper<ISchemaFieldComponentProps>
+
+export const registerFieldMiddleware = deprecate<
+  FieldMiddleware,
+  FieldMiddleware,
+  FieldMiddleware
+>(function registerFieldMiddleware(
+  ...wrappers: ISchemaFieldWrapper<ISchemaFieldComponentProps>[]
+) {
+  each<IFieldStore['fields'], ISchemaFieldComponent>(
+    store.fields,
+    (component, key) => {
+      if (
+        !component.__WRAPPERS__.some(wrapper => wrappers.indexOf(wrapper) > -1)
+      ) {
+        store.fields[key] = compose(
+          store.fields[key],
+          wrappers,
+          true
+        )
+        store.fields[key].__WRAPPERS__ = wrappers
       }
-    )
-    each<IFieldStore['virtualFields'], ISchemaVirtualFieldComponent>(
-      store.virtualFields,
-      (component, key) => {
-        if (
-          !component.__WRAPPERS__.some(
-            wrapper => wrappers.indexOf(wrapper) > -1
-          )
-        ) {
-          store.virtualFields[key] = compose(
-            store.virtualFields[key],
-            wrappers,
-            true
-          )
-          store.virtualFields[key].__WRAPPERS__ = wrappers
-        }
-      }
-    )
-  }
-)
+    }
+  )
+})
 
 export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
@@ -172,11 +159,12 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
           required={fieldSchema.getExtendsRequired()}
           rules={fieldSchema.getExtendsRules()}
         >
-          {({ state, mutators }) => {
+          {({ state, mutators, form }) => {
             const props: ISchemaFieldComponentProps = {
               ...state,
               schema: fieldSchema,
               path,
+              form,
               mutators,
               renderField
             }
@@ -199,11 +187,12 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             required={fieldSchema.getExtendsRequired()}
             rules={fieldSchema.getExtendsRules()}
           >
-            {({ state, mutators }) => {
+            {({ state, mutators, form }) => {
               const props: ISchemaFieldComponentProps = {
                 ...state,
                 schema: fieldSchema,
                 path,
+                form,
                 mutators,
                 renderField
               }
@@ -223,11 +212,12 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
       } else if (store.virtualFields[finalComponentName]) {
         return (
           <VirtualField path={path} props={fieldSchema.getSelfProps()}>
-            {({ state }) => {
+            {({ state, form }) => {
               const props: ISchemaVirtualFieldComponentProps = {
                 ...state,
                 schema: fieldSchema,
                 path,
+                form,
                 renderField,
                 children: fieldSchema.mapProperties(
                   (schema: Schema, key: string) => {

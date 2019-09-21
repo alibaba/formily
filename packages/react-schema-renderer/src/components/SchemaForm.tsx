@@ -1,12 +1,13 @@
-import React, { useMemo, Fragment } from 'react'
+import React, { useMemo } from 'react'
 import { ISchemaFormProps } from '../types'
 import { useForm, Form } from '@uform/react'
 import { Schema } from '../shared/schema'
+import { SchemaField } from './SchemaField'
 import SchemaContext, { FormItemContext } from '../context'
 
-export const SchemaForm: React.FC<ISchemaFormProps> = function(
-  props: ISchemaFormProps
-) {
+const EmptyItem = ({ children }) => children
+
+export const SchemaForm: React.FC<ISchemaFormProps> = props => {
   const {
     components,
     component,
@@ -29,23 +30,26 @@ export const SchemaForm: React.FC<ISchemaFormProps> = function(
     return new Schema(schema)
   }, [schema])
   const newForm = useForm(props)
+  const FormItemComponent =
+    components && components.formItem ? components.formItem : EmptyItem
+  const FormComponent =
+    components && components.form ? components.form : component
   return (
-    <FormItemContext.Provider
-      value={components && components.formItem ? components.formItem : Fragment}
-    >
+    <FormItemContext.Provider value={FormItemComponent}>
       <SchemaContext.Provider value={newSchema}>
         <Form {...props} form={newForm}>
           {React.createElement(
-            components && components.form ? components.form : component,
+            FormComponent,
             {
               ...innerProps,
               onSubmit: () => {
-                form.submit()
+                newForm.submit()
               },
               onReset: () => {
-                form.reset()
+                newForm.reset({ validate: false, forceClear: false })
               }
             },
+            <SchemaField path={''} />,
             children
           )}
         </Form>
