@@ -250,6 +250,7 @@ export interface IMutators {
   shift(): any[]
   move($from: number, $to: number): any
   validate(): void
+  exist(index?: number | string): boolean
 }
 
 export type Subscriber<S> = (payload: S) => void
@@ -297,6 +298,7 @@ export interface IForm {
     path: FormPathPattern,
     callback?: (state: IFieldState) => any
   ): any
+  unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern
   registerField(props: IFieldStateProps): IField
   registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
   createMutators(path: FormPathPattern): IMutators
