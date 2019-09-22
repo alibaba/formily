@@ -142,7 +142,7 @@ export const createFormEffects = (
   }
 }
 
-const createEffectHook = <T>(type: string) => (
+export const createEffectHook = <T>(type: string) => (
   ...args: any[]
 ): Observable<T> => {
   if (!env.effectStart || env.effectEnd) {
