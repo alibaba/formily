@@ -6,6 +6,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
+  createSchemaFormActions,
   cleanup
 } from '../index'
 import { render, fireEvent, wait } from '@testing-library/react'
@@ -65,9 +66,9 @@ describe('markup', () => {
       }
     )
 
-    const actions = createFormActions()
+    const actions = createSchemaFormActions()
 
-    const { queryByTestId,baseElement } = render(
+    const { queryByTestId } = render(
       <SchemaForm actions={actions}>
         <Card title={'this is card'}>
           <Field
@@ -79,7 +80,6 @@ describe('markup', () => {
         </Card>
       </SchemaForm>
     )
-    console.log(baseElement.innerHTML)
     expect(queryByTestId('input').getAttribute('value')).toEqual('123')
     fireEvent.change(queryByTestId('input'), {
       target: {
@@ -92,6 +92,7 @@ describe('markup', () => {
       expect(actions.getFormState(state => state.values)).toEqual({
         aa: 'aa change'
       })
+      expect(actions.getFormSchema()).toMatchSnapshot()
     })
   })
 })

@@ -5,7 +5,9 @@ import {
   IVirtualFieldState,
   IMutators,
   IFormProps,
-  IForm
+  IForm,
+  IFormActions,
+  IFormAsyncActions
 } from '@uform/react'
 import { ValidatePatternRules } from '@uform/validator'
 import { Schema } from './shared/schema'
@@ -153,4 +155,14 @@ export interface IConnectOptions {
 
 export interface IConnectProps {
   [key: string]: any
+}
+
+export interface ISchemaFormActions extends IFormActions {
+  getSchema(): Schema
+  getFormSchema(): Schema
+}
+
+export interface ISchemaFormAsyncActions extends IFormAsyncActions {
+  getSchema(): Promise<Schema>
+  getFormSchema(): Promise<Schema>
 }

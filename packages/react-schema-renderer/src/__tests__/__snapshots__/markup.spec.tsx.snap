@@ -44,7 +44,6 @@ Object {
     "props": Object {
       "default": "123",
       "type": "string",
-      "x-component": "",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -126,7 +125,6 @@ Object {
     "props": Object {
       "default": "123",
       "type": "string",
-      "x-component": "",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -165,7 +163,6 @@ Object {
     "props": Object {
       "default": "123",
       "type": "string",
-      "x-component": "",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -184,5 +181,29 @@ Object {
     "visited": false,
     "warnings": Array [],
   },
+}
+`;
+
+exports[`markup markup virtualbox 2`] = `
+Object {
+  "properties": Object {
+    "NO_NAME_FIELD_$0": Object {
+      "properties": Object {
+        "aa": Object {
+          "default": "123",
+          "type": "string",
+          "x-props": Object {
+            "data-testid": "input",
+          },
+        },
+      },
+      "type": "object",
+      "x-component": "card",
+      "x-props": Object {
+        "title": "this is card",
+      },
+    },
+  },
+  "type": "object",
 }
 `;
