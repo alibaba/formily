@@ -244,7 +244,7 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     const { title, help, text, name, extra, ...props } = schema['x-props']
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
-    const split = text.split('%s')
+    const split = String(text).split('%s')
     useEffect(() => {
       if (ref.current) {
         const eles = ref.current.querySelectorAll('.text-box-field')

@@ -228,7 +228,7 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     const { title, help, text, name, extra, ...props } = schema['x-props']
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
-    const split = text.split('%s')
+    const split = String(text).split('%s')
     let index = 0
     useEffect(() => {
       if (ref.current) {
@@ -249,12 +249,16 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
           <span key={index++} className="text-box-words">
             {item}
           </span>
-        ) : null,
+        ) : (
+          undefined
+        ),
         arrChildren[key] ? (
           <div key={index++} className="text-box-field">
             {arrChildren[key]}
           </div>
-        ) : null
+        ) : (
+          undefined
+        )
       )
     }, [])
 

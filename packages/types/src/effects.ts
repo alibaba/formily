@@ -5,5 +5,5 @@ export type IEffects = (selector: ISelector, actions: IFormActions) => void
 
 export type ISelector = (
   eventName: string,
-  formPathPattern: string | IFormPathMatcher
+  formPathPattern?: string | IFormPathMatcher
 ) => Observable<any>

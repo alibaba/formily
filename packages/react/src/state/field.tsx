@@ -107,7 +107,9 @@ const StateField = createHOC((options, Field) => {
           properties.push({ schema: item, key, path: newPath, name: newName })
         }
       })
-      return properties
+      return properties.reduce((buf, item) => {
+        return item ? buf.concat(item) : buf
+      }, [])
     }
 
     public render() {
