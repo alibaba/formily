@@ -46,8 +46,8 @@ export interface IFormLayoutProps {
   className?: string
   inline?: boolean
   labelAlign?: LabelAlign
-  wrapperCol?: number
-  labelCol?: number
+  wrapperCol?: IColProps | number
+  labelCol?: IColProps | number
   labelTextAlign?: TextAlign
   size?: Size
   style?: React.CSSProperties
