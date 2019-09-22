@@ -52,6 +52,9 @@ export const clone = (values: any, filter?: Filter) => {
     if ('$$typeof' in values && '_owner' in values) {
       return values
     }
+    if (values._isAMomentObject) {
+      return values
+    }
     if (Object.getOwnPropertySymbols(values || {}).length) {
       return values
     }

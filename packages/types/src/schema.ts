@@ -5,11 +5,11 @@ type MayBeArray<V> = V | (V[])
 
 export interface ISchema<V = any> {
   type?: string
-  title?: string
-  description?: string
+  title?: string | JSX.Element
+  description?: string | JSX.Element
   default?: MayBeArray<V>
   required?: boolean
-  enum?: Array<{ label: string; value: V } | string | number>
+  enum?: Array<{ label: string | JSX.Element; value: V } | string | number>
   enumNames?: string[]
   properties?: {
     [key: string]: ISchema

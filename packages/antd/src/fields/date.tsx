@@ -33,9 +33,10 @@ const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
   return value && value.format ? value.format(format) : value
 }
 
-const mapMomentValue = props => {
+const mapMomentValue = (props, fieldProps) => {
   const { value, showTime = false } = props
   try {
+    if (!fieldProps.editable) return props
     if (isStr(value) && value) {
       props.value = moment(
         value,

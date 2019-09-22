@@ -58,6 +58,7 @@ const Text = styled(props => {
   return (
     <div className={`${props.className} ${props.size || ''} text-field`}>
       {value || 'N/A'}
+      {props.innerAfter ? ' ' + props.innerAfter : ''}
       {props.addonAfter ? ' ' + props.addonAfter : ''}
     </div>
   )
