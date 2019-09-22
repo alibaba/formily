@@ -320,8 +320,14 @@ export class Field implements IField {
     }
     if (force || !isEqual(lastProps, props, filterSchema)) {
       this.props = clone(props, filterSchema)
-      this.editable = this.getEditableFromProps(this.props)
-      this.rules = this.getRulesFromProps(this.props)
+      const editable = this.getEditableFromProps(this.props)
+      if (!isEmpty(editable)) {
+        this.editable = this.getEditableFromProps(this.props)
+      }
+      const rules = this.getRulesFromProps(this.props)
+      if (!isEmpty(rules)) {
+        this.rules = rules
+      }
       this.dirty = true
       this.notify()
     }
@@ -528,6 +534,10 @@ export class Field implements IField {
       this.props = clone(published.props, filterSchema)
       this.dirtyType = 'props'
       this.dirty = true
+    }
+    if (this.editable === false) {
+      this.errors = []
+      this.effectErrors = []
     }
   }
 

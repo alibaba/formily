@@ -34,6 +34,7 @@ ReactDOM.render(
       actions={actions}
       labelCol={7}
       initialValues={{
+        date:'2019-08-01',
         upload3:[{
           downloadURL:
             "//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png",
@@ -81,7 +82,7 @@ ReactDOM.render(
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
-      <Field type="date" title="日期选择" name="date" />
+      <Field type="date" title="日期选择" name="date" x-props={{disabled:true}} />
       <Field
         type="daterange"
         title="日期范围"

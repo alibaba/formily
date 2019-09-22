@@ -2,11 +2,11 @@ import React from 'react'
 import { Select } from '@alifd/next'
 import styled from 'styled-components'
 import { isFn } from '@uform/utils'
-import MoveTo from 'moveto'
 import { IConnectProps, IFieldProps } from '@uform/react'
 
 export * from '@uform/utils'
 
+const MoveTo = typeof window !== 'undefined' ? require('moveto') : null
 const Text = styled(props => {
   let value
   if (props.dataSource && props.dataSource.length) {
@@ -99,7 +99,7 @@ export const compose = (...args) => {
 }
 
 export const moveTo = element => {
-  if (!element) return
+  if (!element || !MoveTo) return
   if (element.scrollIntoView) {
     element.scrollIntoView({
       behavior: 'smooth',
