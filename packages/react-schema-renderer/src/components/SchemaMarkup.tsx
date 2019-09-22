@@ -1,5 +1,6 @@
 import React, { Fragment, createContext, useContext, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import { registerVirtualBox } from './SchemaField'
 import { SchemaForm } from './SchemaForm'
 import { Schema } from '../shared/schema'
 import { ISchemaFormProps, IMarkupSchemaFieldProps } from '../types'
@@ -14,25 +15,26 @@ const getRadomName = () => {
   return `NO_NAME_FIELD_$${env.nonameId++}`
 }
 
-export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = props => {
+export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
+  name,
+  children,
+  ...props
+}) => {
   const parentSchema = useContext(MarkupContext)
+  if (!parentSchema) return <Fragment />
   if (parentSchema.isObject()) {
-    const name = props.name || getRadomName()
-    const schema = parentSchema.setProperty(name, props)
+    const propName = name || getRadomName()
+    const schema = parentSchema.setProperty(propName, props)
     return (
-      <MarkupContext.Provider value={schema}>
-        {props.children}
-      </MarkupContext.Provider>
+      <MarkupContext.Provider value={schema}>{children}</MarkupContext.Provider>
     )
-  } else if (parentSchema.isObject()) {
+  } else if (parentSchema.isArray()) {
     const schema = parentSchema.setArrayItems(props)
     return (
-      <MarkupContext.Provider value={schema}>
-        {props.children}
-      </MarkupContext.Provider>
+      <MarkupContext.Provider value={schema}>{children}</MarkupContext.Provider>
     )
   } else {
-    return (props.children as React.ReactElement) || <React.Fragment />
+    return (children as React.ReactElement) || <React.Fragment />
   }
 }
 
@@ -65,3 +67,18 @@ export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
 }
 
 SchemaMarkupForm.displayName = 'SchemaMarkupForm'
+
+export function createVirtualBox<T>(
+  key: string,
+  component?: React.JSXElementConstructor<any>
+) {
+  registerVirtualBox(key, component ? component : () => <Fragment />)
+  const VirtualBox: React.FC<T> = ({ children, ...props }) => {
+    return (
+      <SchemaMarkupField type="object" x-component={key} x-props={props}>
+        {children}
+      </SchemaMarkupField>
+    )
+  }
+  return VirtualBox
+}

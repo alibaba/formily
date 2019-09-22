@@ -33,7 +33,7 @@ export class Schema implements ISchema {
   public default?: any
   public readOnly?: boolean
   public writeOnly?: boolean
-  public type?: string
+  public type?: 'string' | 'object' | 'array' | 'number' | string
   public enum?: Array<string | number | { label: SchemaMessage; value: any }>
   public const?: any
   public multipleOf?: number
@@ -110,7 +110,9 @@ export class Schema implements ISchema {
       properties,
       additionalProperties,
       additionalItems,
+      patternProperties,
       items,
+      parent,
       ...props
     } = this
     return props
@@ -228,6 +230,7 @@ export class Schema implements ISchema {
    * getters
    */
   setProperty(key: string, schema: ISchema) {
+    this.properties = this.properties || {}
     this.properties[key] = new Schema(schema, this)
     return this.properties[key]
   }

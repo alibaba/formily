@@ -77,7 +77,7 @@ export interface ISchema {
   default?: any
   readOnly?: boolean
   writeOnly?: boolean
-  type?: string
+  type?: 'string' | 'object' | 'array' | 'number' | string
   enum?: Array<string | number | { label: SchemaMessage; value: any }>
   const?: any
   multipleOf?: number
