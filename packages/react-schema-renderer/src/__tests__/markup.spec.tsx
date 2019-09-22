@@ -11,7 +11,7 @@ import {
 } from '../index'
 import { render, fireEvent, wait } from '@testing-library/react'
 
-describe('markup', () => {
+describe('test all apis', () => {
   beforeEach(() => {
     registerFormField(
       'string',
@@ -95,4 +95,12 @@ describe('markup', () => {
       expect(actions.getFormSchema()).toMatchSnapshot()
     })
   })
+})
+
+describe('major scenes',()=>{
+  //todo，核心场景回归
+})
+
+describe('bugfix',()=>{
+  //todo，问题修复回归
 })

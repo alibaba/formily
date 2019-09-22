@@ -10,7 +10,7 @@ import {
 } from '../index'
 import { render, fireEvent, wait } from '@testing-library/react'
 
-describe('register', () => {
+describe('test all apis', () => {
   afterEach(() => {
     cleanup()
   })
@@ -154,4 +154,13 @@ describe('register', () => {
       expect(queryByText('this is VirtualBox.')).toBeTruthy()
     })
   })
+})
+
+describe('major scenes',()=>{
+  //todo
+})
+
+
+describe('bugfix',()=>{
+  //todo
 })
