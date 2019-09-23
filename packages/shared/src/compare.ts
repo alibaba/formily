@@ -6,9 +6,11 @@ const hasProp = Object.prototype.hasOwnProperty
 type Filter = (comparies: { a: any; b: any }, key: string) => boolean
 
 /* eslint-disable */
-function equal(a: any, b: any, filter: Filter) {
+function equal(a: any, b: any, filter?: Filter) {
   // fast-deep-equal index.js 2.0.1
-  if (a === b) { return true }
+  if (a === b) {
+    return true
+  }
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
     const arrA = isArray(a)
@@ -19,36 +21,73 @@ function equal(a: any, b: any, filter: Filter) {
 
     if (arrA && arrB) {
       length = a.length
-      if (length !== b.length) { return false }
-      for (i = length; i-- !== 0;) { if (!equal(a[i], b[i], filter)) { return false } }
+      if (length !== b.length) {
+        return false
+      }
+      for (i = length; i-- !== 0; ) {
+        if (!equal(a[i], b[i], filter)) {
+          return false
+        }
+      }
       return true
     }
 
-    if (arrA !== arrB) { return false }
+    if (arrA !== arrB) {
+      return false
+    }
 
+    const momentA = a && a._isAMomentObject
+    const momentB = b && b._isAMomentObject
+    if (momentA !== momentB) return false
+    if (momentA && momentB) return a.isSame(b)
+    const immutableA = a && a.toJS
+    const immutableB = b && b.toJS
+    if (immutableA !== immutableB) return false
+    if (immutableA) return a.is ? a.is(b) : a === b
+    const schemaA = a && a.toJSON
+    const schemaB = b && b.toJSON
+    if (schemaA !== schemaB) return false
+    if (schemaA && schemaB) return equal(a.toJSON(), b.toJSN(), filter)
     const dateA = a instanceof Date
     const dateB = b instanceof Date
-    if (dateA !== dateB) { return false }
-    if (dateA && dateB) { return a.getTime() === b.getTime() }
+    if (dateA !== dateB) {
+      return false
+    }
+    if (dateA && dateB) {
+      return a.getTime() === b.getTime()
+    }
 
     const regexpA = a instanceof RegExp
     const regexpB = b instanceof RegExp
-    if (regexpA !== regexpB) { return false }
-    if (regexpA && regexpB) { return a.toString() === b.toString() }
+    if (regexpA !== regexpB) {
+      return false
+    }
+    if (regexpA && regexpB) {
+      return a.toString() === b.toString()
+    }
     const urlA = a instanceof URL
     const urlB = b instanceof URL
-    if (urlA && urlB) { return a.href === b.href }
+    if (urlA && urlB) {
+      return a.href === b.href
+    }
     const keys = keyList(a)
     length = keys.length
 
-    if (length !== keyList(b).length) { return false }
+    if (length !== keyList(b).length) {
+      return false
+    }
 
-    for (i = length; i-- !== 0;) { if (!hasProp.call(b, keys[i])) { return false } }
+    for (i = length; i-- !== 0; ) {
+      if (!hasProp.call(b, keys[i])) {
+        return false
+      }
+    }
     // end fast-deep-equal
 
     // Custom handling for React
-    for (i = length; i-- !== 0;) {
+    for (i = length; i-- !== 0; ) {
       key = keys[i]
+
       if (key === '_owner' && a.$$typeof) {
         // React-specific: avoid traversing React elements' _owner.
         //  _owner contains circular references
@@ -58,11 +97,15 @@ function equal(a: any, b: any, filter: Filter) {
       } else {
         if (isFn(filter)) {
           if (filter({ a: a[key], b: b[key] }, key)) {
-            if (!equal(a[key], b[key], filter)) { return false }
+            if (!equal(a[key], b[key], filter)) {
+              return false
+            }
           }
         } else {
           // all other properties should be traversed as usual
-          if (!equal(a[key], b[key], filter)) { return false }
+          if (!equal(a[key], b[key], filter)) {
+            return false
+          }
         }
       }
     }
