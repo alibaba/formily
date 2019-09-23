@@ -4,7 +4,8 @@ import {
   useRef,
   useEffect,
   useCallback,
-  useState
+  useState,
+  useReducer
 } from 'react'
 import { FormHeartSubscriber, LifeCycleTypes } from '@uform/core'
 import { isFn, isStr, FormPath, isArr } from '@uform/shared'
@@ -16,12 +17,21 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   const form = useContext(FormContext)
   const initializedRef = useRef(false)
   const [type, setType] = useState<string>(LifeCycleTypes.ON_FORM_INIT)
-  const subscriber = useCallback<FormHeartSubscriber>(({ type }) => {
+  const [state, dispatch] = useReducer(props.reducer, {})
+  const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {
     if (initializedRef.current) return
     if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
       setType(type)
+      dispatch({
+        type,
+        payload
+      })
     } else if (isArr(props.selector) && props.selector.indexOf(type) > -1) {
       setType(type)
+      dispatch({
+        type,
+        payload
+      })
     }
   }, [])
   useMemo(() => {
@@ -44,7 +54,7 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   }, [])
   if (isFn(props.children)) {
     const formApi = form ? form : broadcast && broadcast.getContext()
-    return props.children(formApi, type)
+    return props.children({ form: formApi, type, state })
   } else {
     return props.children
   }
@@ -53,5 +63,8 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
 FormSpy.displayName = 'ReactInternalFormSpy'
 
 FormSpy.defaultProps = {
-  selector: `*`
+  selector: `*`,
+  reducer: (state, action) => {
+    return state
+  }
 }

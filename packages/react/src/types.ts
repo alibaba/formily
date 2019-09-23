@@ -63,11 +63,16 @@ export interface IVirtualFieldProps extends IVirtualFieldStateProps {
     | ((api: IVirtualFieldAPI) => React.ReactElement)
 }
 
+export interface IFormSpyAPI {
+  form: IForm
+  type: string
+  state: any
+}
+
 export interface IFormSpyProps {
   selector?: string[] | string
-  children?:
-    | React.ReactElement
-    | ((api: IForm, type: string) => React.ReactElement)
+  reducer?: (state: any, action: { type: string; payload: any }) => any
+  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
 }
 
 export interface IFormConsumerAPI {
