@@ -150,7 +150,7 @@ export interface IConnectOptions {
     Target: any,
     componentProps: {},
     fieldProps: ISchemaFieldComponentProps | ISchemaVirtualFieldComponentProps
-  ) => T
+  ) => React.JSXElementConstructor<any>
 }
 
 export interface IConnectProps {

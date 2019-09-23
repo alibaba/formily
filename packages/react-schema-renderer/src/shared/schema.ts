@@ -78,6 +78,8 @@ export class Schema implements ISchema {
 
   public parent?: Schema
 
+  public _isJSONSchemaObject = true
+
   constructor(json: ISchema, parent?: Schema) {
     if (parent) {
       this.parent = parent
@@ -107,6 +109,7 @@ export class Schema implements ISchema {
   }
   getSelfProps() {
     const {
+      _isJSONSchemaObject,
       properties,
       additionalProperties,
       additionalItems,

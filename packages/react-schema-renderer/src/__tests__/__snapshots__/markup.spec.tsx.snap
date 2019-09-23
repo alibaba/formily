@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`markup markup string 1`] = `
+exports[`test all apis markup string 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
@@ -65,7 +65,7 @@ Object {
 }
 `;
 
-exports[`markup markup virtualbox 1`] = `
+exports[`test all apis markup virtualbox 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
@@ -184,7 +184,7 @@ Object {
 }
 `;
 
-exports[`markup markup virtualbox 2`] = `
+exports[`test all apis markup virtualbox 2`] = `
 Object {
   "properties": Object {
     "NO_NAME_FIELD_$0": Object {
