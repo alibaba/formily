@@ -936,7 +936,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     taskQueue: [],
     taskIndexes: {},
     removeNodes: {},
-    submittingTask: undefined,
+    submittingTask: undefined
   }
   heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscribe(onFormChange)

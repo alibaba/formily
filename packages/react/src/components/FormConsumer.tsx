@@ -31,12 +31,14 @@ const transformFormAPI = (api: IForm, type: string): IFormConsumerAPI => {
   }
 }
 
-export const FormConsumer: React.FunctionComponent<IFormConsumerProps> = props => {
+export const FormConsumer: React.FunctionComponent<
+  IFormConsumerProps
+> = props => {
   return (
     <FormSpy {...props}>
-      {(formApi, type: string) => {
+      {({ form, type }) => {
         return isFn(props.children)
-          ? props.children(transformFormAPI(formApi, type))
+          ? props.children(transformFormAPI(form, type))
           : props.children
       }}
     </FormSpy>
