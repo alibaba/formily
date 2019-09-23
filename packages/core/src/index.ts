@@ -574,10 +574,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
-  function reset({
+  async function reset({
     forceClear = false,
     validate = true
-  }: IFormResetOptions = {}) {
+  }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
     leadingUpdate(() => {
       graph.eachChildren('', field => {
         field.setState((state: IFieldState) => {
@@ -617,7 +617,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         options.onReset()
       }
       if (validate) {
-        formApi.validate()
+        return formApi.validate()
       }
     })
   }

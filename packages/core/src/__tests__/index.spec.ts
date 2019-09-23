@@ -225,7 +225,7 @@ describe('submit', () => {
 })
 
 describe('reset', () => {
-  test('array reset forceclear', () => {
+  test('array reset forceclear', async () => {
     const form = createForm({
       initialValues: resetInitValues
     })
@@ -241,13 +241,13 @@ describe('reset', () => {
     form.setFieldState('aa.bb.0.aa', state => {
       state.value = 'aa changed'
     })
-    form.reset({ forceClear: true })
+    await form.reset({ forceClear: true })
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
     expect(form.getFormState(state => state.initialValues)).toEqual(resetInitValues)
   })
 
-  test('array reset no forceclear(initial values)', () => {
+  test('array reset no forceclear(initial values)', async () => {
     const form = createForm({
       initialValues: resetInitValues
     })
@@ -262,13 +262,13 @@ describe('reset', () => {
       state.value = 'aa changed'
     })
     expect(form.getFormGraph()).toMatchSnapshot()
-    form.reset()
+    await form.reset()
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual(resetInitValues)
     expect(form.getFormState(state => state.initialValues)).toEqual(resetInitValues)
   })
 
-  test('array reset no forceclear(values)', () => {
+  test('array reset no forceclear(values)', async () => {
     const form = createForm({
       values: resetInitValues
     })
@@ -283,7 +283,7 @@ describe('reset', () => {
       state.value = 'aa changed'
     })
     expect(form.getFormGraph()).toMatchSnapshot()
-    form.reset()
+    await form.reset()
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] }})
     expect(form.getFormState(state => state.initialValues)).toEqual({})
@@ -296,6 +296,22 @@ describe('validate', () => {
     const { warnings, errors } = await form.validate()
     expect(warnings).toEqual([])
     expect(errors).toEqual([])
+  })
+
+  test('onValidateFailed', async () => {
+    const onValidateFailedTrigger = jest.fn()
+    const onValidateFailed = ({ warnings, errors }) => {
+      expect(warnings).toEqual([{ path: 'b', messages: ['warning msg'] }])
+      expect(errors).toEqual([{ path: 'c', messages: ['error msg']}])      
+      onValidateFailedTrigger();
+    };
+    const form = createForm({
+      onValidateFailed
+    })
+    form.registerField({ path: 'b', rules: [() => ({ type: 'warning', message: 'warning msg' })] }) // CustomValidator warning
+    form.registerField({ path: 'c', rules: [() => ({ type: 'error', message: 'error msg' })] }) // CustomValidator error
+    await form.validate()
+    expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
   test('validate basic', async () => {
@@ -326,6 +342,28 @@ describe('validate', () => {
       expect(warnings.length).toEqual(1)
       expect(errors.length).toEqual(4)
     })
+  })
+
+  test('path', async () => {
+    const form = createForm()
+    form.registerField({ path: 'b', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] }) // CustomValidator warning
+    form.registerField({ path: 'c', rules: [(v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined] }) // CustomValidator error
+    const bResult = await form.validate('b')
+    expect(bResult.warnings).toEqual([{ path: 'b', messages: ['warning msg'] }])
+    expect(bResult.errors).toEqual([])      
+
+    const cResult = await form.validate('c')
+    expect(cResult.warnings).toEqual([])
+    expect(cResult.errors).toEqual([{ path: 'c', messages: ['error msg']}])
+
+    form.setFieldValue('b', 1)
+    form.setFieldValue('c', 1)
+    const bResult2 = await form.validate('b')
+    const cResult2 = await form.validate('c')
+    expect(bResult2.warnings).toEqual([])
+    expect(bResult2.errors).toEqual([])      
+    expect(cResult2.warnings).toEqual([])
+    expect(cResult2.errors).toEqual([])
   })
 })
 
