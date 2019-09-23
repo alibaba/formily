@@ -1,8 +1,8 @@
-import React, { Fragment, createContext, useContext, useRef } from 'react'
-import { createPortal } from 'react-dom'
+import React, { Fragment, createContext, useContext } from 'react'
 import { registerVirtualBox } from './SchemaField'
 import { SchemaForm } from './SchemaForm'
 import { Schema } from '../shared/schema'
+import { render } from '../shared/virtual-render'
 import { ISchemaFormProps, IMarkupSchemaFieldProps } from '../types'
 
 const env = {
@@ -41,7 +41,6 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
 SchemaMarkupField.displayName = 'SchemaMarkupField'
 
 export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
-  const ref = useRef<HTMLElement>(null)
   let alreadyHasSchema = false
   let finalSchema: Schema
   if (props.schema) {
@@ -50,16 +49,14 @@ export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
   } else {
     finalSchema = new Schema({ type: 'object' })
   }
-  ref.current = ref.current || document.createElement('div')
   env.nonameId = 0
   return (
     <Fragment>
       {!alreadyHasSchema &&
-        createPortal(
+        render(
           <MarkupContext.Provider value={finalSchema}>
             {props.children}
-          </MarkupContext.Provider>,
-          ref.current
+          </MarkupContext.Provider>
         )}
       <SchemaForm {...props} schema={finalSchema} />
     </Fragment>

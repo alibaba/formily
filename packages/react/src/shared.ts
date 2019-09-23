@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFn, FormPath } from '@uform/shared'
+import { isFn, FormPath, globalThisPolyfill } from '@uform/shared'
 import { IFormEffect } from './types'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter } from 'rxjs/internal/operators'
@@ -78,8 +78,8 @@ const compactScheduler = ([raf, caf, priority], fresh: boolean) => {
 }
 
 const getScheduler = () => {
-  if (!self.requestAnimationFrame) {
-    return [self.setTimeout, self.clearTimeout]
+  if (!globalThisPolyfill.requestAnimationFrame) {
+    return [globalThisPolyfill.setTimeout, globalThisPolyfill.clearTimeout]
   }
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires

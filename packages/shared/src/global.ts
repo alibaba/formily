@@ -1,13 +1,19 @@
 function globalThis() {
-  if (typeof self !== 'undefined') {
-    return self
-  }
-  if (typeof window !== 'undefined') {
-    return window
-  }
-  if (typeof global !== 'undefined') {
-    return global
-  }
+  try {
+    if (typeof self !== 'undefined') {
+      return self
+    }
+  } catch (e) {}
+  try {
+    if (typeof window !== 'undefined') {
+      return window
+    }
+  } catch (e) {}
+  try {
+    if (typeof global !== 'undefined') {
+      return global
+    }
+  } catch (e) {}
   return Function('return this')()
 }
 export const globalThisPolyfill = globalThis()
