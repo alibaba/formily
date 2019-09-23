@@ -198,7 +198,7 @@ export interface IFormCreatorOptions extends IFormStateProps {
   useDirty?: boolean
   validateFirst?: boolean
   editable?: boolean
-  onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
 }
@@ -284,7 +284,7 @@ export type IFormInternal = IModel<IFormState, IFormStateProps>
 
 export interface IForm {
   submit(
-    onSubmit?: (values: IFormState['values']) => void | Promise<any>
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): void
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
