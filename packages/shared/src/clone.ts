@@ -58,6 +58,12 @@ export const clone = (values: any, filter?: Filter) => {
     if (values._isJSONSchemaObject) {
       return values
     }
+    if (isFn(values.toJS)) {
+      return values
+    }
+    if (isFn(values.toJSON)) {
+      return values
+    }
     if (Object.getOwnPropertySymbols(values || {}).length) {
       return values
     }
