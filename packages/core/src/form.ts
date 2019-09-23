@@ -257,6 +257,7 @@ export class Form {
       field.pristine = false
       if (field.dirty) {
         field.notify()
+        this.dispatchEffect('onFieldInputChange', field.publishState())
         this.internalValidate(this.state.values).then(() => {
           this.formNotify(field.publishState())
         })

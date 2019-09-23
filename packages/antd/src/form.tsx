@@ -457,6 +457,7 @@ registerFieldMiddleware(Field => {
             wrapperCol,
             autoAddColon,
             size,
+            required: editable === false ? false : required,
             ...schema['x-item-props'],
             label: schema.title,
             noMinHeight: schema.type === 'object' && !schema['x-component'],
@@ -467,7 +468,6 @@ registerFieldMiddleware(Field => {
             type: schema['x-component'] || schema.type,
             id: name,
             validateState: toArr(errors).length ? 'error' : undefined,
-            required: editable === false ? false : required,
             extra: schema.description,
             help:
               toArr(errors).join(' , ') ||
