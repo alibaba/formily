@@ -21,7 +21,7 @@ export const createStateModel = <State = {}, Props = {}>(
     public dirtyMap: StateDirtyMap<State>
     public subscribers: Subscriber<State>[]
     public batching: boolean
-    public controller: StateModel<State>
+    public controller: StateModel<State>    
     constructor(defaultProps: DefaultProps) {
       this.state = { ...Factory.defaultState }
       this.props = {

@@ -30,7 +30,6 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
     }
 
     private state: IFormState
-
     constructor(state: IFormState, props: IFormStateProps) {
       this.state = state
       this.state.initialValues = clone(props.initialValues || {})

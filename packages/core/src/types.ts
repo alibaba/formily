@@ -286,6 +286,7 @@ export interface IForm {
   submit(
     onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<IFormSubmitResult>
+  clearErrors: (patter?: FormPathPattern) => void
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void

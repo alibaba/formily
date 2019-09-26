@@ -574,6 +574,28 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
+  function clearErrors(pattern?: FormPathPattern) {
+    // 1. 指定路径或全部子路径清理
+    const path = FormPath.getPath(pattern);
+    graph.eachChildren('', field => {
+      if (isField(field) && (!pattern || path.match(field.state.name))) {
+        field.setState(state => {
+          state.errors = []
+          state.warnings = []
+          state.effectErrors = []
+          state.effectWarnings = []
+        })
+      }      
+    })
+
+    // 2. 全局同步指定路径校验信息
+    const msgs = getMergeMessages();
+    state.setState(state => {
+      state.warnings = msgs.warnings
+      state.errors = msgs.errors
+    })
+  }
+
   async function reset({
     forceClear = false,
     validate = true
@@ -660,27 +682,23 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     return env.submittingTask
   }
 
-  function mergeMessages(
-    source: IFormState,
-    target: IFormValidateResult,
-    key: string
-  ) {
-    target[key].forEach(({ path, messages }) => {
-      let finded = false
-      each<{ path: string; message: string[] }>(source[key], (item, index) => {
-        if (item.path === path) {
-          source[key][index].messages = messages
-          finded = true
-          return false
-        }
-      })
-      if (!finded) {
-        source[key].push({
-          path,
-          messages
-        })
+  function getMergeMessages() {
+    const msgs = { warnings: [], errors: [] };
+    graph.eachChildren('', (field: IField | IVirtualField) => {
+      // 命中path或全局校验时整合校验信息，前提是非virtualField
+      if (isField(field)) {
+        field.getState(({ errors, warnings } )=> {
+          const { name } = field.state;
+          if (warnings.length > 0) {
+            msgs.warnings.push({ path: name, messages: warnings })  
+          }
+          if (errors.length > 0) {
+            msgs.errors.push({ path: name, messages: errors })  
+          }
+        });
       }
-    })
+    });
+    return msgs;
   }
 
   async function validate(
@@ -695,10 +713,12 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }, 60)
     heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
     return validator.validate(path, opts).then(payload => {
+      // 从所有子类收集校验信息, 避免校验成功后还无法清空错误信息以及父子不同步的问题
+      const msgs = getMergeMessages();
       state.setState(state => {
         state.validating = false
-        mergeMessages(state, payload, 'errors')
-        mergeMessages(state, payload, 'warnings')
+        state.warnings = msgs.warnings
+        state.errors = msgs.errors
       })
       if (isFn(options.onValidateFailed)) {
         options.onValidateFailed(
@@ -890,6 +910,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   const formApi = {
     submit,
     reset,
+    clearErrors,
     validate,
     setFormState,
     getFormState,
