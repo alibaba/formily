@@ -308,6 +308,35 @@ Object {
 }
 `;
 
+exports[`createForm merge values and initialValues 1`] = `
+Object {
+  "": Object {
+    "displayName": "FormState",
+    "editable": undefined,
+    "errors": Array [],
+    "initialValues": Object {
+      "a": "x",
+      "b": "y",
+    },
+    "initialized": true,
+    "invalid": false,
+    "loading": false,
+    "mounted": false,
+    "pristine": false,
+    "props": Object {},
+    "submitting": false,
+    "unmounted": false,
+    "valid": true,
+    "validating": false,
+    "values": Object {
+      "a": 1,
+      "b": 2,
+    },
+    "warnings": Array [],
+  },
+}
+`;
+
 exports[`createForm values 1`] = `
 Object {
   "": Object {

@@ -249,7 +249,7 @@ export interface IMutators {
   unshift(value: any): any[]
   shift(): any[]
   move($from: number, $to: number): any
-  validate(): void
+  validate(): Promise<IFormValidateResult>
   exist(index?: number | string): boolean
 }
 

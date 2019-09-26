@@ -43,7 +43,7 @@ describe('createForm', () => {
       initialValues: { a: 'x', b: 'y' }
     })
     expect(form.getFormState(state => state.values)).toEqual({ a: 1, b: 2 })
-    // expect(form.getFormGraph()).toMatchSnapshot()
+    expect(form.getFormGraph()).toMatchSnapshot()
   })
 
   test('initialValues after init', () => {
@@ -368,12 +368,12 @@ describe('validate', () => {
 
     expect(onValidateStart).toBeCalledTimes(0)
     expect(onValidateEnd).toBeCalledTimes(0)
-    // expect(form.getFormState(state => state.validating)).toEqual(false)
+    expect(form.getFormState(state => state.validating)).toEqual(false)
     const validatePromise = form.validate()
-    // expect(form.getFormState(state => state.validating)).toEqual(true)
+    expect(form.getFormState(state => state.validating)).toEqual(true)
     expect(onValidateStart).toBeCalledTimes(1)
     validatePromise.then((validated) => {
-      // expect(form.getFormState(state => state.validating)).toEqual(false)
+      expect(form.getFormState(state => state.validating)).toEqual(false)
       expect(onValidateEnd).toBeCalledTimes(1)
       const { warnings, errors } = validated;
       expect(warnings.length).toEqual(1)
@@ -416,11 +416,11 @@ describe('validate', () => {
   })
 })
 
-describe('setState', () => {
+describe('setFormState', () => {
   //todo
 })
 
-describe('getState', () => {
+describe('getFormState', () => {
   //todo
 })
 
@@ -596,6 +596,19 @@ describe('createMutators', () => {
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.move(0, 1)
     expect(form.getFieldValue('mm')).toEqual(arr.reverse())
+  })
+
+  test('validate', async () => {
+    const form = createForm()
+    form.registerField({ path: 'mm', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] })
+    const mutators = form.createMutators('mm')
+    const result = await mutators.validate()
+    expect(result.errors).toEqual([])
+    expect(result.warnings).toEqual([{ path: 'mm', messages: ['warning msg'] }])
+    mutators.change(1)
+    const result2 = await mutators.validate()
+    expect(result2.errors).toEqual([])
+    expect(result2.warnings).toEqual([])
   })
 })
 

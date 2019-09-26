@@ -600,6 +600,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     forceClear = false,
     validate = true
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
+    let result: Promise<void | IFormValidateResult>;
     leadingUpdate(() => {
       graph.eachChildren('', field => {
         field.setState((state: IFieldState) => {
@@ -639,9 +640,11 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         options.onReset()
       }
       if (validate) {
-        return formApi.validate()
+        result = formApi.validate()
       }
     })
+
+    return result;
   }
 
   async function submit(
@@ -705,15 +708,21 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     path?: FormPathPattern,
     opts?: {}
   ): Promise<IFormValidateResult> {
-    clearTimeout(env.validateTimer)
-    env.validateTimer = setTimeout(() => {
-      state.setState(state => {
+    if (!state.getState(state => state.validating)) {
+      state.unsafe_setSourceState(state => {
         state.validating = true
       })
-    }, 60)
+      // 渲染优化
+      clearTimeout(env.validateTimer)
+      env.validateTimer = setTimeout(() => {
+        state.notify()
+      }, 60)
+    }
+
     heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
     return validator.validate(path, opts).then(payload => {
       // 从所有子类收集校验信息, 避免校验成功后还无法清空错误信息以及父子不同步的问题
+      clearTimeout(env.validateTimer)
       const msgs = getMergeMessages();
       state.setState(state => {
         state.validating = false
