@@ -12,8 +12,8 @@ const Text = styled(props => {
   if (props.dataSource && props.dataSource.length) {
     let find = props.dataSource.filter(({ value }) =>
       Array.isArray(props.value)
-        ? props.value.indexOf(value) > -1
-        : props.value === value
+        ? props.value.some(val => val == value)
+        : props.value == value
     )
     value = find.map(item => item.label).join(' , ')
   } else {
