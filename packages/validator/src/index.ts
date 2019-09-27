@@ -69,7 +69,7 @@ export const runValidation = async (
     queue.push(
       Promise.all(
         toArr(field.rules).map(rule => {
-          return validate(value, rule, values, title || name)
+          return validate(value, rule, values, (title as string) || name)
         })
       ).then(errors => {
         clearTimeout(rafId)
