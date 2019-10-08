@@ -71,7 +71,11 @@ export interface IFormSpyAPI {
 
 export interface IFormSpyProps {
   selector?: string[] | string
-  reducer?: (state: any, action: { type: string; payload: any }) => any
+  reducer?: (
+    state: any,
+    action: { type: string; payload: any },
+    form: IForm
+  ) => any
   children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
 }
 

@@ -1,86 +1,36 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { ISchemaFormProps } from '../types'
-import {
-  useForm,
-  Form,
-  createFormActions,
-  createAsyncFormActions
-} from '@uform/react'
-import { Schema } from '../shared/schema'
+import { Form } from '@uform/react'
 import { SchemaField } from './SchemaField'
-import { deprecate } from '@uform/shared'
-import {
-  useEva,
-  mergeActions,
-  createActions,
-  createAsyncActions
-} from 'react-eva'
-import { ISchemaFormActions, ISchemaFormAsyncActions } from '../types'
-import SchemaContext, { FormItemContext } from '../context'
-
-const EmptyItem = ({ children }) => children
-
-export const createSchemaFormActions = (): ISchemaFormActions =>
-  mergeActions(
-    createFormActions(),
-    createActions('getSchema', 'getFormSchema')
-  ) as ISchemaFormActions
-
-export const createAsyncSchemaFormActions = (): ISchemaFormAsyncActions =>
-  mergeActions(
-    createAsyncFormActions(),
-    createAsyncActions('getSchema', 'getFormSchema')
-  ) as ISchemaFormAsyncActions
+import { useSchemaForm } from '../hooks/useSchemaForm'
+import SchemaContext, { FormComponentsContext } from '../shared/context'
 
 export const SchemaForm: React.FC<ISchemaFormProps> = props => {
   const {
-    components,
-    component,
+    fields,
+    virtualFields,
+    formComponent,
+    formItemComponent,
+    formComponentProps,
     schema,
-    value,
-    initialValues,
-    actions,
-    effects,
-    onChange,
-    onSubmit,
-    onReset,
-    onValidateFailed,
-    useDirty,
-    children,
-    editable,
-    validateFirst,
-    ...innerProps
-  } = props
-  const { implementActions } = useEva({
-    actions
-  })
-  const newSchema = useMemo(() => {
-    const result = new Schema(schema)
-    implementActions({
-      getSchema: deprecate(() => result, 'Please use the getFormSchema.'),
-      getFormSchema: () => result
-    })
-    return result
-  }, [schema])
-  const newForm = useForm(props)
-  const FormItemComponent =
-    components && components.formItem ? components.formItem : EmptyItem
-  const FormComponent =
-    components && components.form ? components.form : component
-
+    form,
+    children
+  } = useSchemaForm(props)
   return (
-    <FormItemContext.Provider value={FormItemComponent}>
-      <SchemaContext.Provider value={newSchema}>
-        <Form {...props} form={newForm}>
+    <FormComponentsContext.Provider
+      value={{ fields, virtualFields, formComponent, formItemComponent }}
+    >
+      <SchemaContext.Provider value={schema}>
+        <Form {...props} form={form}>
           {React.createElement(
-            FormComponent,
+            formComponent,
             {
-              ...innerProps,
+              ...formComponentProps,
               onSubmit: () => {
-                newForm.submit()
+                form.submit()
               },
               onReset: () => {
-                newForm.reset({ validate: false, forceClear: false })
+                form.reset({ validate: false, forceClear: false })
               }
             },
             <SchemaField path={''} />,
@@ -88,13 +38,12 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
           )}
         </Form>
       </SchemaContext.Provider>
-    </FormItemContext.Provider>
+    </FormComponentsContext.Provider>
   )
 }
 
 SchemaForm.defaultProps = {
-  schema: {},
-  component: 'form'
+  schema: {}
 }
 
 export default SchemaForm

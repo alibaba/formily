@@ -1,6 +1,6 @@
-import { connect, registerFormField } from '@uform/react-schema-form'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import { Transfer } from '@alifd/next'
-import { mapStyledProps } from '../utils'
+import { mapStyledProps } from '../shared'
 
 registerFormField(
   'transfer',

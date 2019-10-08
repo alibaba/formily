@@ -60,17 +60,19 @@ export type ISchemaVirtualFieldComponent = ComponentWithStyleComponent<
   __WRAPPERS__?: ISchemaFieldWrapper[]
 }
 
-export interface IFieldStore {
+export interface ISchemaFormRegistry {
   fields: {
     [key: string]: ISchemaFieldComponent
   }
   virtualFields: {
     [key: string]: ISchemaVirtualFieldComponent
   }
-  wrappers: ISchemaFieldWrapper[]
+  wrappers?: ISchemaFieldWrapper[]
+  formItemComponent: React.JSXElementConstructor<any>
+  formComponent: string | React.JSXElementConstructor<any>
 }
 
-export type SchemaMessage = string | React.ReactElement
+export type SchemaMessage = React.ReactNode
 
 export interface ISchema {
   /** base json schema spec**/
@@ -113,6 +115,7 @@ export interface ISchema {
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
   ['x-component']?: string | React.JSXElementConstructor<any>
+  ['x-component-props']?: { [name: string]: any }
   ['x-render']?: <T = ISchemaFieldComponentProps>(
     props: T & {
       renderComponent: () => React.ReactElement
@@ -127,10 +130,10 @@ export interface ISchema {
 export interface ISchemaFormProps extends IFormProps {
   schema?: ISchema
   component?: string | React.JSXElementConstructor<any>
-  components?: {
-    form?: React.JSXElementConstructor<any>
-    formItem?: React.JSXElementConstructor<any>
-  }
+  fields?: ISchemaFormRegistry['fields']
+  virtualFields?: ISchemaFormRegistry['virtualFields']
+  formComponent?: ISchemaFormRegistry['formComponent']
+  formItemComponent?: ISchemaFormRegistry['formItemComponent']
 }
 
 export interface IMarkupSchemaFieldProps extends ISchema {

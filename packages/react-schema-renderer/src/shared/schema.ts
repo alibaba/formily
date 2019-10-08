@@ -65,6 +65,7 @@ export class Schema implements ISchema {
   public ['x-index']?: number
   public ['x-rules']?: ValidatePatternRules
   public ['x-component']?: string | React.JSXElementConstructor<any>
+  public ['x-component-props']?: { [name: string]: any }
   public ['x-render']?: <T = ISchemaFieldComponentProps>(
     props: T & {
       renderComponent: () => React.ReactElement
@@ -107,6 +108,22 @@ export class Schema implements ISchema {
     })
     return suc === path.length ? res : undefined
   }
+
+  getEmptyValue() {
+    if (this.type === 'string') {
+      return ''
+    }
+    if (this.type === 'array') {
+      return []
+    }
+    if (this.type === 'object') {
+      return {}
+    }
+    if (this.type === 'number') {
+      return 0
+    }
+  }
+
   getSelfProps() {
     const {
       _isJSONSchemaObject,
@@ -217,6 +234,9 @@ export class Schema implements ISchema {
       return !this.readOnly
     }
   }
+  getExtendsItemProps() {
+    return this['x-item-props']
+  }
   getExtendsComponent() {
     return this['x-component']
   }
@@ -226,8 +246,11 @@ export class Schema implements ISchema {
   getExtendsEffect() {
     return this['x-effect']
   }
-  getExtendsProps(){
+  getExtendsProps() {
     return this['x-props'] || {}
+  }
+  getExtendsComponentProps() {
+    return { ...this['x-props'], ...this['x-component-props'] }
   }
   /**
    * getters
@@ -249,22 +272,24 @@ export class Schema implements ISchema {
   }
   toJSON() {
     const result: ISchema = this.getSelfProps()
-    if(isValid(this.properties)){
-      result.properties = map(this.properties,(schema)=>{
+    if (isValid(this.properties)) {
+      result.properties = map(this.properties, schema => {
         return schema.toJSON()
       })
     }
-    if(isValid(this.items)){
-      result.items = isArr(this.items) ? this.items.map(schema=>schema.toJSON()) : this.items.toJSON()
+    if (isValid(this.items)) {
+      result.items = isArr(this.items)
+        ? this.items.map(schema => schema.toJSON())
+        : this.items.toJSON()
     }
-    if(isValid(this.additionalItems)){
+    if (isValid(this.additionalItems)) {
       result.additionalItems = this.additionalItems.toJSON()
     }
-    if(isValid(this.additionalProperties)){
+    if (isValid(this.additionalProperties)) {
       result.additionalProperties = this.additionalProperties.toJSON()
     }
-    if(isValid(this.patternProperties)){
-      result.patternProperties = map(this.patternProperties,(schema)=>{
+    if (isValid(this.patternProperties)) {
+      result.patternProperties = map(this.patternProperties, schema => {
         return schema.toJSON()
       })
     }
@@ -275,10 +300,10 @@ export class Schema implements ISchema {
     if (typeof json === 'boolean') return json
     if (json instanceof Schema) return json
     Object.assign(this, json)
-    if(isValid(json.type)){
+    if (isValid(json.type)) {
       this.type = lowercase(String(json.type))
     }
-    if(isValid(json['x-component'])){
+    if (isValid(json['x-component'])) {
       this['x-component'] = lowercase(json['x-component'])
     }
     if (!isEmpty(json.properties)) {
@@ -314,17 +339,23 @@ export class Schema implements ISchema {
   }
 
   mapProperties(callback?: (schema: Schema, key: string) => any) {
-    return Schema.getOrderProperties(this).map(({ schema, key }) => {
+    return this.getOrderProperties().map(({ schema, key }) => {
       return callback(schema, key)
     })
   }
 
+  getOrderProperties() {
+    return Schema.getOrderProperties(this)
+  }
+
+  getOrderPatternProperties() {
+    return Schema.getOrderProperties(this, 'patternProperties')
+  }
+
   mapPatternProperties(callback?: (schema: Schema, key: string) => any) {
-    return Schema.getOrderProperties(this, 'patternProperties').map(
-      ({ schema, key }) => {
-        return callback(schema, key)
-      }
-    )
+    return this.getOrderPatternProperties().map(({ schema, key }) => {
+      return callback(schema, key)
+    })
   }
 
   static getOrderProperties = (

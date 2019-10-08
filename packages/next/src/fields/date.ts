@@ -1,6 +1,6 @@
-import { connect, registerFormField } from '@uform/react-schema-form'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import { DatePicker } from '@alifd/next'
-import { mapStyledProps, mapTextComponent } from '../utils'
+import { mapStyledProps, mapTextComponent } from '../shared'
 
 const { RangePicker, MonthPicker, YearPicker } = DatePicker
 

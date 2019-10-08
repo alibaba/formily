@@ -1,6 +1,6 @@
-import { connect, registerFormField } from '@uform/react-schema-form'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import { NumberPicker } from '@alifd/next'
-import { acceptEnum, mapStyledProps, mapTextComponent } from '../utils'
+import { acceptEnum, mapStyledProps, mapTextComponent } from '../shared'
 
 registerFormField(
   'number',

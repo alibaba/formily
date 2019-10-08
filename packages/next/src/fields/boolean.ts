@@ -1,5 +1,5 @@
-import { connect, registerFormField } from '@uform/react-schema-form'
-import { acceptEnum, mapStyledProps } from '../utils'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { acceptEnum, mapStyledProps } from '../shared'
 import { Switch } from '@alifd/next'
 
 registerFormField(

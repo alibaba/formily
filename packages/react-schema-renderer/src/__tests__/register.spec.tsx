@@ -6,13 +6,13 @@ import {
   connect,
   SchemaForm,
   createFormActions,
-  cleanup
+  cleanRegistry
 } from '../index'
 import { render, fireEvent, wait } from '@testing-library/react'
 
 describe('test all apis', () => {
   afterEach(() => {
-    cleanup()
+    cleanRegistry()
   })
   test('registerFormField', async () => {
     registerFormField(

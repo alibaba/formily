@@ -1,123 +1,13 @@
 import React, { useContext, Fragment } from 'react'
 import { Field, VirtualField } from '@uform/react'
-import {
-  FormPath,
-  isFn,
-  lowercase,
-  reduce,
-  each,
-  isStr,
-  deprecate
-} from '@uform/shared'
-import pascalCase from 'pascal-case'
+import { FormPath, isFn, isStr } from '@uform/shared'
 import {
   ISchemaFieldProps,
-  ComponentWithStyleComponent,
   ISchemaFieldComponentProps,
-  IFieldStore,
-  ISchemaFieldWrapper,
-  ISchemaVirtualFieldComponentProps,
-  ISchemaFieldComponent
+  ISchemaVirtualFieldComponentProps
 } from '../types'
 import { Schema } from '../shared/schema'
-import SchemaContext, { FormItemContext } from '../context'
-
-const store: IFieldStore = {
-  fields: {},
-  virtualFields: {},
-  wrappers: []
-}
-
-function compose<T, P>(payload: T, args: P[], revert: boolean) {
-  return reduce(
-    args,
-    (buf: T, fn: P) => {
-      return isFn(fn) ? fn(buf) : buf
-    },
-    payload,
-    revert
-  )
-}
-
-export const cleanup = () => {
-  store.fields = {}
-  store.virtualFields = {}
-  store.wrappers = []
-}
-
-export function registerFormField(
-  name: string,
-  component: ComponentWithStyleComponent<ISchemaFieldComponentProps>,
-  noWrapper: boolean = false
-) {
-  if (
-    name &&
-    (isFn(component) || typeof component.styledComponentId === 'string')
-  ) {
-    name = lowercase(name)
-    if (noWrapper) {
-      store.fields[name] = component
-      store.fields[name].__WRAPPERS__ = []
-    } else {
-      store.fields[name] = compose(
-        component,
-        store.wrappers,
-        true
-      )
-      store.fields[name].__WRAPPERS__ = store.wrappers
-    }
-    store.fields[name].displayName = pascalCase(name)
-  }
-}
-
-export function registerFormFields(object: IFieldStore['fields']) {
-  each<IFieldStore['fields'], ISchemaFieldComponent>(
-    object,
-    (component, key) => {
-      registerFormField(key, component)
-    }
-  )
-}
-
-export function registerVirtualBox(
-  name: string,
-  component: ComponentWithStyleComponent<ISchemaVirtualFieldComponentProps>
-) {
-  if (
-    name &&
-    (isFn(component) || typeof component.styledComponentId === 'string')
-  ) {
-    name = lowercase(name)
-    store.virtualFields[name] = component
-    store.virtualFields[name].displayName = pascalCase(name)
-  }
-}
-
-type FieldMiddleware = ISchemaFieldWrapper<ISchemaFieldComponentProps>
-
-export const registerFieldMiddleware = deprecate<
-  FieldMiddleware,
-  FieldMiddleware,
-  FieldMiddleware
->(function registerFieldMiddleware(
-  ...wrappers: ISchemaFieldWrapper<ISchemaFieldComponentProps>[]
-) {
-  each<IFieldStore['fields'], ISchemaFieldComponent>(
-    store.fields,
-    (component, key) => {
-      if (
-        !component.__WRAPPERS__.some(wrapper => wrappers.indexOf(wrapper) > -1)
-      ) {
-        store.fields[key] = compose(
-          store.fields[key],
-          wrappers,
-          true
-        )
-        store.fields[key].__WRAPPERS__ = wrappers
-      }
-    }
-  )
-})
+import SchemaContext, { FormComponentsContext } from '../shared/context'
 
 export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
@@ -125,9 +15,12 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   const path = FormPath.parse(props.path)
   const formSchema = useContext(SchemaContext)
   const fieldSchema = formSchema.get(path)
-  const formItemComponent = useContext(FormItemContext)
+  const formRegistry = useContext(FormComponentsContext)
   if (!fieldSchema) {
     throw new Error(`Can not found schema node by ${path.toString()}.`)
+  }
+  if (!formRegistry) {
+    throw new Error(`Can not found any form components.`)
   }
   const schemaType = fieldSchema.type
   const schemaComponent = fieldSchema.getExtendsComponent()
@@ -169,7 +62,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
               renderField
             }
             return React.createElement(
-              formItemComponent,
+              formRegistry.formItemComponent,
               props,
               React.createElement(finalComponentName, props)
             )
@@ -177,7 +70,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         </Field>
       )
     } else if (isStr(finalComponentName)) {
-      if (store.fields[finalComponentName]) {
+      if (formRegistry.fields[finalComponentName]) {
         return (
           <Field
             path={path}
@@ -198,9 +91,12 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
               }
               const renderComponent = (): React.ReactElement =>
                 React.createElement(
-                  formItemComponent,
+                  formRegistry.formItemComponent,
                   props,
-                  React.createElement(store.fields[finalComponentName], props)
+                  React.createElement(
+                    formRegistry.fields[finalComponentName],
+                    props
+                  )
                 )
               if (isFn(schemaRenderer)) {
                 return schemaRenderer({ ...props, renderComponent })
@@ -209,7 +105,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             }}
           </Field>
         )
-      } else if (store.virtualFields[finalComponentName]) {
+      } else if (formRegistry.virtualFields[finalComponentName]) {
         return (
           <VirtualField path={path} props={fieldSchema.getSelfProps()}>
             {({ state, form }) => {
@@ -233,7 +129,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
               }
               const renderComponent = () =>
                 React.createElement(
-                  store.virtualFields[finalComponentName],
+                  formRegistry.virtualFields[finalComponentName],
                   props
                 )
               if (isFn(schemaRenderer)) {

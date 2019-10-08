@@ -7,7 +7,7 @@ import {
   SchemaMarkupField as Field,
   createFormActions,
   createSchemaFormActions,
-  cleanup
+  cleanRegistry
 } from '../index'
 import { render, fireEvent, wait } from '@testing-library/react'
 
@@ -22,7 +22,7 @@ describe('test all apis', () => {
   })
 
   afterEach(() => {
-    cleanup()
+    cleanRegistry()
   })
 
   test('markup string', async () => {

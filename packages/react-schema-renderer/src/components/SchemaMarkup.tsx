@@ -1,5 +1,5 @@
 import React, { Fragment, createContext, useContext } from 'react'
-import { registerVirtualBox } from './SchemaField'
+import { registerVirtualBox } from '../shared/registry'
 import { SchemaForm } from './SchemaForm'
 import { Schema } from '../shared/schema'
 import { render } from '../shared/virtual-render'

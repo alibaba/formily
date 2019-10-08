@@ -17,7 +17,10 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   const form = useContext(FormContext)
   const initializedRef = useRef(false)
   const [type, setType] = useState<string>(LifeCycleTypes.ON_FORM_INIT)
-  const [state, dispatch] = useReducer(props.reducer, {})
+  const [state, dispatch] = useReducer(
+    (state, action) => props.reducer(state, action, form),
+    {}
+  )
   const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {
     if (initializedRef.current) return
     if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
