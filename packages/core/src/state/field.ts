@@ -123,7 +123,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
-      if (!draft.editable) {
+      if (draft.editable !== prevState.editable && !draft.editable) {
         draft.errors = []
         draft.effectErrors = []
         draft.warnings = []

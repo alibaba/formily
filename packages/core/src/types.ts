@@ -249,7 +249,7 @@ export interface IMutators {
   unshift(value: any): any[]
   shift(): any[]
   move($from: number, $to: number): any
-  validate(): void
+  validate(): Promise<IFormValidateResult>
   exist(index?: number | string): boolean
 }
 
@@ -286,7 +286,8 @@ export interface IForm {
   submit(
     onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<IFormSubmitResult>
-  reset(options?: IFormResetOptions): void
+  clearErrors: (patter?: FormPathPattern) => void
+  reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void
   getFormState(callback?: (state: IFormState) => any): any
