@@ -221,6 +221,11 @@ class FormValidator {
     }
   }
 
+  unregister = (path: FormPathPattern) => {
+    const newPath = FormPath.getPath(path)
+    delete this.nodes[newPath.toString()]
+  }
+
   static template: (
     message: ValidateResponse,
     data: ValidateDescription & { value: any; key: string }

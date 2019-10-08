@@ -234,8 +234,20 @@ export class Schema implements ISchema {
       return !this.readOnly
     }
   }
+  getExtendsTriggerType() {
+    const itemProps = this.getExtendsItemProps()
+    const props = this.getExtendsProps()
+    const componentProps = this.getExtendsComponentProps()
+    if (itemProps.triggerType) {
+      return itemProps.triggerType
+    } else if (props.triggerType) {
+      return props.triggerType
+    } else if (componentProps.triggerType) {
+      return componentProps.triggerType
+    }
+  }
   getExtendsItemProps() {
-    return this['x-item-props']
+    return this['x-item-props'] || {}
   }
   getExtendsComponent() {
     return this['x-component']

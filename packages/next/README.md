@@ -7,9 +7,19 @@ import { SchemaForm, Field, FormButtonGroup, Submit } from './src/index'
 import '@alifd/next/dist/next.css'
 export default () => (
   <SchemaForm onSubmit={console.log}>
-    <Field name="array" type="array" x-component-props={{ title: 'Card List' }}>
+    <Field
+      name="array"
+      type="array"
+      x-component-props={{ title: 'Card List', renderAddition: '添加' }}
+    >
       <Field type="object">
-        <Field type="string" required name="aa" title="AA" />
+        <Field
+          type="string"
+          required
+          name="aa"
+          title="AA"
+          x-item-props={{ triggerType: 'onBlur' }}
+        />
         <Field type="string" required name="bb" title="BB" />
       </Field>
     </Field>

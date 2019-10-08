@@ -17,7 +17,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "ts-node --project ../../tsconfig.build.json build.ts"
+    "build": ""
   },
   "devDependencies": {
     "antd": "^3.14.1"

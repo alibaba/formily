@@ -67,7 +67,9 @@ export const connect = (options?: IConnectOptions) => {
               : event,
             ...args
           )
-        }
+        },
+        onBlur: () => mutators.blur(),
+        onFocus: () => mutators.focus()
       }
       if (editable !== undefined) {
         if (isFn(editable)) {

@@ -6,6 +6,7 @@ import {
   FormPath,
   FormPathPattern
 } from '@uform/shared'
+import { Subscrible } from './subscrible'
 import { FormGraphNodeRef, FormGraphMatcher, FormGraphEacher } from '../types'
 /**
  * Form & Field 其实是属于一种图的关系，我们可以进一步抽象
@@ -13,7 +14,10 @@ import { FormGraphNodeRef, FormGraphMatcher, FormGraphEacher } from '../types'
  * 临时存放，后面会放在@uform/shared中
  */
 
-export class FormGraph<NodeType = any> {
+export class FormGraph<NodeType = any> extends Subscrible<{
+  type: string
+  payload: FormGraphNodeRef
+}> {
   private refrences: {
     [key in string]: FormGraphNodeRef
   }
@@ -32,6 +36,7 @@ export class FormGraph<NodeType = any> {
   }[]
 
   constructor() {
+    super()
     this.refrences = {}
     this.nodes = {}
     this.buffer = []
@@ -182,12 +187,20 @@ export class FormGraph<NodeType = any> {
         this.buffer.splice(index, 1)
       }
     })
+    this.notify({
+      type: 'GRAPH_NODE_DID_MOUNT',
+      payload: selfRef
+    })
   }
 
   remove = (path: FormPathPattern) => {
     const selfPath = FormPath.getPath(path)
     const selfRef = this.refrences[selfPath.toString()]
     if (!selfRef) return
+    this.notify({
+      type: 'GRAPH_NODE_WILL_UNMOUNT',
+      payload: selfRef
+    })
     if (selfRef.children) {
       selfRef.children.forEach(path => {
         this.remove(path)

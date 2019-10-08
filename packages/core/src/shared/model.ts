@@ -1,28 +1,28 @@
 import { clone, isEqual, isFn, each, globalThisPolyfill } from '@uform/shared'
 import produce, { Draft } from 'immer'
+import { Subscrible } from './subscrible'
 import {
   IStateModelFactory,
   StateDirtyMap,
   IModel,
-  StateModel,
-  Subscriber
+  StateModel
 } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
 ) => {
-  return class Model<DefaultProps>
+  return class Model<DefaultProps> extends Subscrible<State>
     implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
     public props: Props & DefaultProps & { useDirty?: boolean }
     public displayName?: string
     public dirtyNum: number
     public dirtyMap: StateDirtyMap<State>
-    public subscribers: Subscriber<State>[]
     public batching: boolean
-    public controller: StateModel<State>    
+    public controller: StateModel<State>
     constructor(defaultProps: DefaultProps) {
+      super()
       this.state = { ...Factory.defaultState }
       this.props = {
         ...Factory.defaultProps,
@@ -30,30 +30,10 @@ export const createStateModel = <State = {}, Props = {}>(
       }
       this.dirtyMap = {}
       this.dirtyNum = 0
-      this.subscribers = []
       this.batching = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
       this.state.displayName = this.displayName
-    }
-
-    subscribe = (callback?: Subscriber<State>) => {
-      if (
-        isFn(callback) &&
-        !this.subscribers.some(fn => fn.toString() === callback.toString())
-      ) {
-        this.subscribers.push(callback)
-      }
-    }
-
-    unsubscribe = (callback?: Subscriber<State>) => {
-      if (isFn(callback)) {
-        this.subscribers = this.subscribers.filter(fn => {
-          return fn.toString() !== callback.toString()
-        })
-      } else {
-        this.subscribers.length = 0
-      }
     }
 
     batch = (callback?: () => void) => {
@@ -62,17 +42,11 @@ export const createStateModel = <State = {}, Props = {}>(
         callback()
       }
       if (this.dirtyNum > 0) {
-        this.notify()
+        this.notify(this.getState())
       }
       this.dirtyMap = {}
       this.dirtyNum = 0
       this.batching = false
-    }
-
-    notify = () => {
-      each(this.subscribers, callback => callback(this.getState()))
-      this.dirtyMap = {}
-      this.dirtyNum = 0
     }
 
     getState = (callback?: (state: State) => any) => {
@@ -136,7 +110,9 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
-            this.notify()
+            this.notify(this.getState())
+            this.dirtyMap = {}
+            this.dirtyNum = 0
           }
         } else {
           this.dirtyNum = 0
@@ -174,7 +150,9 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
-            this.notify()
+            this.notify(this.getState())
+            this.dirtyMap = {}
+            this.dirtyNum = 0
           }
         }
       }

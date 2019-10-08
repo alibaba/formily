@@ -29,7 +29,14 @@ const ArrayComponents = {
 const FormCardsField = styled(
   (props: ISchemaFieldComponentProps & { className: string }) => {
     const { value, schema, className, editable, path, mutators } = props
-    const componentProps = schema.getExtendsComponentProps() || {}
+    const {
+      renderAddition,
+      renderRemove,
+      renderMoveDown,
+      renderMoveUp,
+      renderEmpty,
+      ...componentProps
+    } = schema.getExtendsComponentProps() || {}
     const onAdd = () => {
       const items = Array.isArray(schema.items)
         ? schema.items[schema.items.length - 1]
@@ -44,7 +51,13 @@ const FormCardsField = styled(
           maxItems={schema.maxItems}
           editable={editable}
           components={ArrayComponents}
-          renders={{ ...componentProps }}
+          renders={{
+            renderAddition,
+            renderRemove,
+            renderMoveDown,
+            renderMoveUp,
+            renderEmpty
+          }}
         >
           {toArr(value).map((item, index) => {
             return (
@@ -62,11 +75,11 @@ const FormCardsField = styled(
                   <Fragment>
                     <ArrayList.MoveDown
                       index={index}
-                      onClick={() => mutators.move(index, index + 1)}
+                      onClick={() => mutators.moveDown(index)}
                     />
                     <ArrayList.MoveUp
                       index={index}
-                      onClick={() => mutators.move(index, index - 1)}
+                      onClick={() => mutators.moveUp(index)}
                     />
                     <ArrayList.Remove
                       index={index}
@@ -157,8 +170,8 @@ const FormCardsField = styled(
       }
     }
   }
-  .card-list-empty.card-list-item{
-    cursor:pointer;
+  .card-list-empty.card-list-item {
+    cursor: pointer;
   }
   .next-card.card-list-item {
     margin-top: 20px;
@@ -166,8 +179,8 @@ const FormCardsField = styled(
 
   .next-card-extra {
     display: flex;
-    button{
-      margin-right:4px;
+    button {
+      margin-right: 8px;
     }
   }
   .array-cards-addition {

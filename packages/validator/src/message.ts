@@ -38,7 +38,7 @@ const getMatchLang = (lang: string) => {
 }
 
 export const setValidationLocale = (locale: ILocales) => {
-  deepmerge(LOCALE.messages, locale)
+  LOCALE.messages = deepmerge(LOCALE.messages, locale)
 }
 
 export const setLocale = setValidationLocale

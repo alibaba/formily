@@ -44,7 +44,7 @@ export interface IArrayListProps {
     MoveUpIcon?: ReactComponent
   }
   renders?: {
-    renderAddtion?: ReactRenderPropsChildren
+    renderAddition?: ReactRenderPropsChildren
     renderEmpty?: ReactRenderPropsChildren
     renderMoveDown?: ReactRenderPropsChildren<number>
     renderMoveUp?: ReactRenderPropsChildren<number>

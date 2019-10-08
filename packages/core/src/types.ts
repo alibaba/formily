@@ -6,6 +6,7 @@ import {
 } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
+import { Subscrible } from './shared/subscrible'
 
 export type FormLifeCycleHandler<T> = (payload: T, context: any) => void
 
@@ -249,13 +250,15 @@ export interface IMutators {
   unshift(value: any): any[]
   shift(): any[]
   move($from: number, $to: number): any
+  moveDown(index: number): any
+  moveUp(index: number): any
   validate(): Promise<IFormValidateResult>
   exist(index?: number | string): boolean
 }
 
 export type Subscriber<S> = (payload: S) => void
 
-export interface IModel<S = {}, P = {}> {
+export interface IModel<S = {}, P = {}> extends Subscrible {
   state: S
   props: P
   displayName?: string
@@ -264,10 +267,7 @@ export interface IModel<S = {}, P = {}> {
   subscribers: Subscriber<S>[]
   batching: boolean
   controller: StateModel<S>
-  subscribe: (callback?: Subscriber<S>) => void
-  unsubscribe: (callback?: Subscriber<S>) => void
   batch: (callback?: () => void) => void
-  notify: () => void
   getState: (callback?: (state: S) => any) => any
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
   unsafe_getSourceState: (callback?: (state: S) => any) => any
