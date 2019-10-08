@@ -325,7 +325,7 @@ describe('clearErrors', () => {
     expect(result2.warnings).toEqual([{ path: 'b', messages: warnMsg }])
     expect(result2.errors).toEqual([{ path: 'c', messages: errMsg}])      
 
-    form.clearErrors('')
+    form.clearErrors()
     expect(form.getFormState(state => state.warnings)).toEqual([])
     expect(form.getFormState(state => state.errors)).toEqual([])
   })

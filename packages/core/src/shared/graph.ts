@@ -42,7 +42,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     this.buffer = []
   }
 
-  select = (path: FormPathPattern, matcher?: FormGraphMatcher<NodeType>) => {
+  select(path: FormPathPattern, matcher?: FormGraphMatcher<NodeType>) {
     const newPath = FormPath.getPath(path)
     if (newPath.isMatchPattern) {
       this.eachChildren([], (child: NodeType, childPath: FormPath) => {
@@ -61,15 +61,15 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     }
   }
 
-  getNode = (path: FormPath | string) => {
+  getNode(path: FormPath | string) {
     return this.nodes[path as string]
   }
 
-  selectParent = (path: FormPathPattern) => {
+  selectParent(path: FormPathPattern) {
     return this.getNode(FormPath.getPath(path).parent())
   }
 
-  selectChildren = (path: FormPathPattern) => {
+  selectChildren(path: FormPathPattern) {
     const ref = this.refrences[FormPath.getPath(path).toString()]
     if (ref && ref.children) {
       return reduce(
@@ -85,26 +85,52 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     return []
   }
 
-  exist = (path: FormPathPattern) => {
+  exist(path: FormPathPattern) {
     return !!this.getNode(FormPath.getPath(path))
   }
 
   /**
    * 递归遍历所有children
    */
-  eachChildren = (
+  eachChildren(eacher: FormGraphEacher<NodeType>, recursion?: boolean): void
+  eachChildren(
     path: FormPathPattern,
     eacher: FormGraphEacher<NodeType>,
-    recursion: boolean = true
-  ) => {
+    recursion?: boolean
+  ): void
+  eachChildren(
+    path: FormPathPattern,
+    selector: FormPathPattern,
+    eacher: FormGraphEacher<NodeType>,
+    recursion?: boolean
+  ): void
+  eachChildren(
+    path: any,
+    selector: any = true,
+    eacher: any = true,
+    recursion: any = true
+  ) {
+    if (isFn(path)) {
+      recursion = selector
+      eacher = path
+      path = ''
+      selector = '*'
+    }
+    if (isFn(selector)) {
+      recursion = eacher
+      eacher = selector
+      selector = '*'
+    }
     const ref = this.refrences[FormPath.getPath(path).toString()]
     if (ref && ref.children) {
       return each(ref.children, path => {
         if (isFn(eacher)) {
           const node = this.getNode(path)
-          if (node) {
+          if (node && FormPath.parse(path).match(selector)) {
             eacher(node, path)
-            if (recursion) this.eachChildren(path, eacher, recursion)
+            if (recursion) {
+              this.eachChildren(path, selector, eacher, recursion)
+            }
           }
         }
       })
@@ -114,7 +140,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
   /**
    * 递归遍历所有parent
    */
-  eachParent = (path: FormPathPattern, eacher: FormGraphEacher<NodeType>) => {
+  eachParent(path: FormPathPattern, eacher: FormGraphEacher<NodeType>) {
     const selfPath = FormPath.getPath(path)
     const ref = this.refrences[selfPath.toString()]
     if (isFn(eacher)) {
@@ -125,7 +151,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     }
   }
 
-  getLatestParent = (path: FormPathPattern) => {
+  getLatestParent(path: FormPathPattern) {
     const selfPath = FormPath.getPath(path)
     const parentPath = FormPath.getPath(path).parent()
     if (selfPath.toString() === parentPath.toString()) return undefined
@@ -134,18 +160,18 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     return this.getLatestParent(parentPath)
   }
 
-  map = (mapper: (node: NodeType) => any) => {
+  map(mapper: (node: NodeType) => any) {
     return map(this.nodes, mapper)
   }
 
-  reduce = <T>(
+  reduce<T>(
     reducer: (buffer: T, node: NodeType, key: string) => T,
     initial: T
-  ) => {
+  ) {
     return reduce(this.nodes, reducer, initial)
   }
 
-  appendNode = (path: FormPathPattern, node: NodeType) => {
+  appendNode(path: FormPathPattern, node: NodeType) {
     const selfPath = FormPath.getPath(path)
     const parentPath = selfPath.parent()
     const parentRef = this.refrences[parentPath.toString()]
@@ -193,7 +219,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     })
   }
 
-  remove = (path: FormPathPattern) => {
+  remove(path: FormPathPattern) {
     const selfPath = FormPath.getPath(path)
     const selfRef = this.refrences[selfPath.toString()]
     if (!selfRef) return

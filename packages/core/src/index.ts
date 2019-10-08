@@ -74,7 +74,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
        * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
        */
       shadowUpdate(() => {
-        graph.eachChildren('', (field: IField | IVirtualField) => {
+        graph.eachChildren((field: IField | IVirtualField) => {
           if (isField(field)) {
             field.setState(state => {
               if (state.visible) {
@@ -136,7 +136,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
 
     if (editableChanged) {
-      graph.eachChildren('', (field: IField | IVirtualField) => {
+      graph.eachChildren((field: IField | IVirtualField) => {
         if (isField(field)) {
           field.setState(state => {
             state.formEditable = published.editable
@@ -165,6 +165,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       const unmountedChanged = field.hasChanged('unmounted')
       const mountedChanged = field.hasChanged('mounted')
       const initializedChanged = field.hasChanged('initialized')
+      const warningsChanged = field.hasChanged('warnings')
+      const errorsChanges = field.hasChanged('errors')
+      const effectWarningsChanged = field.hasChanged('effectWarnings')
+      const effectErrorsChanged = field.hasChanged('effectErrors')
       if (initializedChanged) {
         heart.notify(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
@@ -234,11 +238,45 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         setFormInitialValuesIn(path, published.initialValue)
         heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
+
+      if (errorsChanges || effectErrorsChanged) {
+        combineMessages('errors', published.name, [].concat(published.errors))
+      }
+
+      if (warningsChanged || effectWarningsChanged) {
+        combineMessages(
+          'warnings',
+          published.name,
+          [].concat(published.warnings, published.effectWarnings)
+        )
+      }
+
       if (isFn(onChange) && (!env.shadowStage || env.leadingStage)) {
         onChange(field)
       }
       heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
+  }
+
+  function combineMessages(type: string, path: string, messages: string[]) {
+    state.setState(state => {
+      let foundField = false
+      state[type] = state[type] || []
+      state[type] = state[type].reduce((buf: any, item: any) => {
+        if (item.path === path) {
+          foundField = true
+          return messages.length ? buf.concat({ path, messages }) : buf
+        } else {
+          return buf.concat(item)
+        }
+      }, [])
+      if (!foundField && messages.length) {
+        state[type].push({
+          path,
+          messages
+        })
+      }
+    }, true)
   }
 
   function onVirtualFieldChange({ onChange, field, path }) {
@@ -589,11 +627,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
-  function clearErrors(pattern?: FormPathPattern) {
+  function clearErrors(pattern: FormPathPattern = '*') {
     // 1. 指定路径或全部子路径清理
-    const path = FormPath.getPath(pattern)
-    graph.eachChildren('', field => {
-      if (isField(field) && (!pattern || path.match(field.state.name))) {
+    graph.eachChildren('', pattern, field => {
+      if (isField(field)) {
         field.setState(state => {
           state.errors = []
           state.warnings = []
@@ -601,13 +638,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.effectWarnings = []
         })
       }
-    })
-
-    // 2. 全局同步指定路径校验信息
-    const msgs = getMergeMessages()
-    state.setState(state => {
-      state.warnings = msgs.warnings
-      state.errors = msgs.errors
     })
   }
 
@@ -617,7 +647,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
     let result: Promise<void | IFormValidateResult>
     leadingUpdate(() => {
-      graph.eachChildren('', field => {
+      graph.eachChildren(field => {
         field.setState((state: IFieldState) => {
           state.modified = false
           state.errors = []
@@ -700,24 +730,24 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     return env.submittingTask
   }
 
-  function getMergeMessages() {
-    const msgs = { warnings: [], errors: [] }
-    graph.eachChildren('', (field: IField | IVirtualField) => {
-      // 命中path或全局校验时整合校验信息，前提是非virtualField
-      if (isField(field)) {
-        field.getState(({ errors, warnings }) => {
-          const { name } = field.state
-          if (warnings.length > 0) {
-            msgs.warnings.push({ path: name, messages: warnings })
-          }
-          if (errors.length > 0) {
-            msgs.errors.push({ path: name, messages: errors })
-          }
-        })
-      }
-    })
-    return msgs
-  }
+  // function getMergeMessages() {
+  //   const msgs = { warnings: [], errors: [] }
+  //   graph.eachChildren('', (field: IField | IVirtualField) => {
+  //     // 命中path或全局校验时整合校验信息，前提是非virtualField
+  //     if (isField(field)) {
+  //       field.getState(({ errors, warnings }) => {
+  //         const { name } = field.state
+  //         if (warnings.length > 0) {
+  //           msgs.warnings.push({ path: name, messages: warnings })
+  //         }
+  //         if (errors.length > 0) {
+  //           msgs.errors.push({ path: name, messages: errors })
+  //         }
+  //       })
+  //     }
+  //   })
+  //   return msgs
+  // }
 
   async function validate(
     path?: FormPathPattern,
@@ -736,13 +766,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
 
     heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
     return validator.validate(path, opts).then(payload => {
-      // 从所有子类收集校验信息, 避免校验成功后还无法清空错误信息以及父子不同步的问题
       clearTimeout(env.validateTimer)
-      const msgs = getMergeMessages()
       state.setState(state => {
         state.validating = false
-        state.warnings = msgs.warnings
-        state.errors = msgs.errors
       })
       if (isFn(options.onValidateFailed)) {
         options.onValidateFailed(
@@ -838,16 +864,19 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   >(callback: (state: State) => void, field: Field) {
     return (draft: State) => {
       if (isFn(callback) && isField(field) && isFieldState(draft)) {
+        const oldErrors = draft.errors
+        const oldWarnings = draft.warnings
+        const oldFormEditable = draft.formEditable
         callback(draft)
-        const errors = field.unsafe_getSourceState(state => state.errors)
-        const warnings = field.unsafe_getSourceState(state => state.warnings)
-        draft.formEditable = field.unsafe_getSourceState(
-          state => state.formEditable
-        )
-        draft.effectErrors = draft.errors
-        draft.effectWarnings = draft.warnings
-        draft.errors = errors
-        draft.warnings = warnings
+        if (!isEqual(oldErrors, draft.errors)) {
+          draft.effectErrors = draft.errors
+        }
+        if (!isEqual(oldWarnings, draft.warnings)) {
+          draft.effectWarnings = draft.warnings
+        }
+        draft.errors = oldErrors
+        draft.warnings = oldWarnings
+        draft.formEditable = oldFormEditable
       }
     }
   }
