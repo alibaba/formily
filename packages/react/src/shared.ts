@@ -1,8 +1,9 @@
 import React from 'react'
 import { isFn, FormPath, globalThisPolyfill } from '@uform/shared'
-import { IFormEffect } from './types'
+import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter } from 'rxjs/internal/operators'
+import { createActions, createAsyncActions } from 'react-eva'
 import {
   LifeCycleTypes,
   IFormState,
@@ -10,6 +11,46 @@ import {
   IFieldState,
   IVirtualFieldState
 } from '@uform/core'
+
+export const createFormActions = (): IFormActions =>
+  createActions(
+    'submit',
+    'reset',
+    'validate',
+    'setFormState',
+    'getFormState',
+    'setFieldState',
+    'getFieldState',
+    'getFormGraph',
+    'setFormGraph',
+    'subscribe',
+    'unsubscribe',
+    'notify',
+    'setFieldValue',
+    'getFieldValue',
+    'setFieldInitialValue',
+    'getFieldInitialValue'
+  ) as IFormActions
+
+export const createAsyncFormActions = (): IFormAsyncActions =>
+  createAsyncActions(
+    'submit',
+    'reset',
+    'validate',
+    'setFormState',
+    'getFormState',
+    'setFieldState',
+    'getFieldState',
+    'getFormGraph',
+    'setFormGraph',
+    'subscribe',
+    'unsubscribe',
+    'notify',
+    'setFieldValue',
+    'getFieldValue',
+    'setFieldInitialValue',
+    'getFieldInitialValue'
+  ) as IFormAsyncActions
 
 export interface IEventTargetOption {
   selected: boolean
@@ -105,9 +146,9 @@ export const env = {
 
 export const [raf, caf] = getScheduler()
 
-export const createFormEffects = (
-  effects: IFormEffect | null,
-  actions: any
+export const createFormEffects = <Payload = any, Actions = {}>(
+  effects: IFormEffect<Payload, Actions> | null,
+  actions: Actions
 ) => {
   if (isFn(effects)) {
     return (selector: (type: string) => Observable<any>) => {
@@ -120,7 +161,7 @@ export const createFormEffects = (
         const observable$: Observable<T> = selector(type)
         if (matcher) {
           return observable$.pipe(
-            filter(
+            filter<T>(
               isFn(matcher)
                 ? matcher
                 : (payload: T): boolean => {
@@ -133,6 +174,7 @@ export const createFormEffects = (
         }
         return observable$
       }
+      Object.assign(env.effectSelector, actions)
       effects(env.effectSelector, actions)
       env.effectStart = false
       env.effectEnd = true
@@ -157,75 +199,63 @@ export const createEffectHook = <T>(type: string) => (
 }
 
 export const FormEffectHooks = {
-  [`${LifeCycleTypes.ON_FORM_WILL_INIT}$`]: createEffectHook<IFormState>(
+  onFormWillInit$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_WILL_INIT
   ),
-  [`${LifeCycleTypes.ON_FORM_INIT}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_INIT
-  ),
-  [`${LifeCycleTypes.ON_FORM_CHANGE}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_CHANGE
-  ),
-  [`${LifeCycleTypes.ON_FORM_INPUT_CHANGE}$`]: createEffectHook<IFormState>(
+  onFormInit$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_INIT),
+  onFormChange$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_CHANGE),
+  onFormInputChange$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_INPUT_CHANGE
   ),
-  [`${LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE}$`]: createEffectHook<
-    IFormState
-  >(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE),
-  [`${LifeCycleTypes.ON_FORM_RESET}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_RESET
+  onFormInitialValueChange$: createEffectHook<IFormState>(
+    LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE
   ),
-  [`${LifeCycleTypes.ON_FORM_SUBMIT}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_SUBMIT
-  ),
-  [`${LifeCycleTypes.ON_FORM_SUBMIT_START}$`]: createEffectHook<IFormState>(
+  onFormReset$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_RESET),
+  onFormSubmit$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_SUBMIT),
+  onFormSubmitStart$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_SUBMIT_START
   ),
-  [`${LifeCycleTypes.ON_FORM_SUBMIT_END}$`]: createEffectHook<IFormState>(
+  onFormSubmitEnd$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_SUBMIT_END
   ),
-  [`${LifeCycleTypes.ON_FORM_MOUNT}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_MOUNT
+  onFormMount$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_MOUNT),
+  onFormUnmount$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_UNMOUNT),
+  onFormValidateStart$: createEffectHook<IFormState>(
+    LifeCycleTypes.ON_FORM_VALIDATE_START
   ),
-  [`${LifeCycleTypes.ON_FORM_UNMOUNT}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_UNMOUNT
-  ),
-  [`${LifeCycleTypes.ON_FORM_VALIDATE_START}$`]: createEffectHook<IFormState>(
+  onFormValidateEnd$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_VALIDATE_END
   ),
-  [`${LifeCycleTypes.ON_FORM_VALIDATE_END}$`]: createEffectHook<IFormState>(
-    LifeCycleTypes.ON_FORM_VALIDATE_END
-  ),
-  [`${LifeCycleTypes.ON_FORM_VALUES_CHANGE}$`]: createEffectHook<IFormState>(
+  onFormValuesChange$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_VALUES_CHANGE
   ),
 
-  [`${LifeCycleTypes.ON_FORM_GRAPH_CHANGE}$`]: createEffectHook<FormGraph>(
+  onFormGraphChange$: createEffectHook<FormGraph>(
     LifeCycleTypes.ON_FORM_GRAPH_CHANGE
   ),
 
-  [`${LifeCycleTypes.ON_FIELD_WILL_INIT}$`]: createEffectHook<
-    IFieldState | IVirtualFieldState
-  >(LifeCycleTypes.ON_FIELD_WILL_INIT),
-  [`${LifeCycleTypes.ON_FIELD_INIT}$`]: createEffectHook<
-    IFieldState | IVirtualFieldState
-  >(LifeCycleTypes.ON_FIELD_INIT),
-  [`${LifeCycleTypes.ON_FIELD_CHANGE}$`]: createEffectHook<
-    IFieldState | IVirtualFieldState
-  >(LifeCycleTypes.ON_FIELD_CHANGE),
-  [`${LifeCycleTypes.ON_FIELD_INPUT_CHANGE}$`]: createEffectHook<
-    IFieldState | IVirtualFieldState
-  >(LifeCycleTypes.ON_FIELD_INPUT_CHANGE),
-  [`${LifeCycleTypes.ON_FIELD_VALUE_CHANGE}$`]: createEffectHook<IFieldState>(
+  onFieldWillInit$: createEffectHook<IFieldState | IVirtualFieldState>(
+    LifeCycleTypes.ON_FIELD_WILL_INIT
+  ),
+  onFieldInit$: createEffectHook<IFieldState | IVirtualFieldState>(
+    LifeCycleTypes.ON_FIELD_INIT
+  ),
+  onFieldChange$: createEffectHook<IFieldState | IVirtualFieldState>(
+    LifeCycleTypes.ON_FIELD_CHANGE
+  ),
+  onFieldMount$: createEffectHook<IFieldState | IVirtualFieldState>(
+    LifeCycleTypes.ON_FIELD_MOUNT
+  ),
+  onFieldUnmount$: createEffectHook<IFieldState | IVirtualFieldState>(
+    LifeCycleTypes.ON_FIELD_UNMOUNT
+  ),
+  onFieldInputChange$: createEffectHook<IFieldState>(
+    LifeCycleTypes.ON_FIELD_INPUT_CHANGE
+  ),
+  onFieldValueChange$: createEffectHook<IFieldState>(
     LifeCycleTypes.ON_FIELD_VALUE_CHANGE
   ),
-  [`${LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE}$`]: createEffectHook<
-    IFieldState
-  >(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE),
-  [`${LifeCycleTypes.ON_FIELD_MOUNT}$`]: createEffectHook<
-    IFieldState | IVirtualFieldState
-  >(LifeCycleTypes.ON_FIELD_MOUNT),
-  [`${LifeCycleTypes.ON_FIELD_UNMOUNT}$`]: createEffectHook<
-    IFieldState | IVirtualFieldState
-  >(LifeCycleTypes.ON_FIELD_UNMOUNT)
+  onFieldInitialValueChange$: createEffectHook<IFieldState>(
+    LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE
+  )
 }

@@ -14,22 +14,38 @@ import {
 } from '@uform/core'
 import { FormPathPattern } from '@uform/shared'
 import { Observable } from 'rxjs/internal/Observable'
-export interface IFormEffect<T = any> {
-  (selector: IFormEffectSelector<T>): void
+export interface IFormEffect<Payload = any, Actions = {}> {
+  (
+    selector: IFormExtendsEffectSelector<Payload, Actions>,
+    actions: Actions
+  ): void
 }
 
-export interface IFormEffectSelector<T = any> {
-  (type: string, matcher?: string | ((payload: T) => boolean)): Observable<any>
+export interface IFormEffectSelector<Payload = any> {
+  (
+    type: string,
+    matcher?: string | ((payload: Payload) => boolean)
+  ): Observable<any>
 }
 
-export interface IFormProps {
-  value?: {}
-  initialValues?: {}
-  actions?: {}
-  effects?: IFormEffect
+export type IFormExtendsEffectSelector<
+  Payload = any,
+  Actions = {}
+> = IFormEffectSelector<Payload> & Actions
+
+export interface IFormProps<
+  Value = {},
+  DefaultValue = {},
+  EffectPayload = any,
+  EffectActions = {}
+> {
+  value?: Value
+  initialValues?: DefaultValue
+  actions?: EffectActions
+  effects?: IFormEffect<EffectPayload, EffectActions>
   form?: IForm
-  onChange?: (values: any) => void
-  onSubmit?: (values: any) => void | Promise<any>
+  onChange?: (values: Value) => void
+  onSubmit?: (values: Value) => void | Promise<Value>
   onReset?: () => void
   onValidateFailed?: (valideted: IFormValidateResult) => void
   children?: React.ReactElement | ((form: IForm) => React.ReactElement)
@@ -108,7 +124,7 @@ export interface IVirtualFieldHook {
 
 export interface IFormActions {
   submit(
-    onSubmit: (values: IFormState['values']) => void | Promise<any>
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): void
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
@@ -135,7 +151,7 @@ export interface IFormActions {
 
 export interface IFormAsyncActions {
   submit(
-    onSubmit: (values: IFormState['values']) => void | Promise<any>
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): Promise<void>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>

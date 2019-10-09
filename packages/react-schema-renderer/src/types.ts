@@ -127,7 +127,13 @@ export interface ISchema {
   ) => { [key: string]: any }
 }
 
-export interface ISchemaFormProps extends IFormProps {
+export interface ISchemaFormProps
+  extends IFormProps<
+    any,
+    any,
+    any,
+    ISchemaFormActions | ISchemaFormAsyncActions
+  > {
   schema?: ISchema
   component?: string | React.JSXElementConstructor<any>
   fields?: ISchemaFormRegistry['fields']

@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useContext } from 'react'
+import { useMemo, useEffect, useRef, useContext } from 'react'
 import {
   createForm,
   IFormCreatorOptions,
@@ -13,7 +13,7 @@ import { useDirty } from './useDirty'
 import { useEva } from 'react-eva'
 import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
-import { createFormEffects } from '../shared'
+import { createFormEffects, createFormActions } from '../shared'
 
 const FormHookSymbol = Symbol('FORM_HOOK')
 
@@ -56,17 +56,26 @@ const useInternalForm = (
       })
     }
   }, [])
-
   ;(form as any)[FormHookSymbol] = true
 
   return form
 }
 
-export const useForm = (props: IFormProps) => {
+export const useForm = <
+  Value = any,
+  DefaultValue = any,
+  EffectPayload = any,
+  EffectAction = any
+>(
+  props: IFormProps<Value, DefaultValue, EffectPayload, EffectAction>
+) => {
+  const actionsRef = useRef<any>(null)
+  actionsRef.current =
+    actionsRef.current || props.actions || createFormActions()
   const broadcast = useContext(BroadcastContext)
   const { implementActions, dispatch } = useEva({
-    actions: props.actions,
-    effects: createFormEffects(props.effects, props.actions)
+    actions: actionsRef.current,
+    effects: createFormEffects(props.effects, actionsRef.current)
   })
   const form = useInternalForm({
     form: props.form,

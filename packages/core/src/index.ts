@@ -730,25 +730,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     return env.submittingTask
   }
 
-  // function getMergeMessages() {
-  //   const msgs = { warnings: [], errors: [] }
-  //   graph.eachChildren('', (field: IField | IVirtualField) => {
-  //     // 命中path或全局校验时整合校验信息，前提是非virtualField
-  //     if (isField(field)) {
-  //       field.getState(({ errors, warnings }) => {
-  //         const { name } = field.state
-  //         if (warnings.length > 0) {
-  //           msgs.warnings.push({ path: name, messages: warnings })
-  //         }
-  //         if (errors.length > 0) {
-  //           msgs.errors.push({ path: name, messages: errors })
-  //         }
-  //       })
-  //     }
-  //   })
-  //   return msgs
-  // }
-
   async function validate(
     path?: FormPathPattern,
     opts?: {}

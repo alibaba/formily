@@ -1,9 +1,6 @@
 import { createFormActions, createAsyncFormActions } from '@uform/react'
 import { mergeActions, createActions, createAsyncActions } from 'react-eva'
-import {
-  ISchemaFormActions,
-  ISchemaFormAsyncActions
-} from '../types'
+import { ISchemaFormActions, ISchemaFormAsyncActions } from '../types'
 
 export const createSchemaFormActions = (): ISchemaFormActions =>
   mergeActions(

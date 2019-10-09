@@ -1,12 +1,13 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useForm } from '@uform/react'
 import { Schema } from '../shared/schema'
 import { deprecate } from '@uform/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
+import { createSchemaFormActions } from '../shared/actions'
 import { getRegistry } from '../shared/registry'
 
-export const useSchemaForm = (props: ISchemaFormProps) => {
+const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const {
     fields,
     virtualFields,
@@ -57,4 +58,14 @@ export const useSchemaForm = (props: ISchemaFormProps) => {
     }, [schema]),
     children
   }
+}
+
+export const useSchemaForm = (props: ISchemaFormProps) => {
+  const actionsRef = useRef<any>(null)
+  actionsRef.current =
+    actionsRef.current || props.actions || createSchemaFormActions()
+  return useInternalSchemaForm({
+    ...props,
+    actions: actionsRef.current
+  })
 }

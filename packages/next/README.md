@@ -3,10 +3,28 @@
 > UForm Fusion Next 组件插件包
 
 ```jsx
-import { SchemaForm, Field, FormButtonGroup, Submit } from './src/index'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  FormEffectHooks,
+  createFormActions,
+  FormPath
+} from './src/index'
 import '@alifd/next/dist/next.css'
+
+const { onFieldInputChange$ } = FormEffectHooks
+
 export default () => (
-  <SchemaForm onSubmit={console.log}>
+  <SchemaForm
+    onSubmit={console.log}
+    effects={({ getFormSchema }) => {
+      onFieldInputChange$('array.*.aa').subscribe(({ value, name }) => {
+        console.log(getFormSchema())
+      })
+    }}
+  >
     <Field
       name="array"
       type="array"
