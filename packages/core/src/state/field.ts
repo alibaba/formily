@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { clone, toArr, isValid, isEqual, FormPath } from '@uform/shared'
+import { clone, toArr, isValid, isEqual, FormPath, isFn } from '@uform/shared'
 import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态
@@ -23,10 +23,13 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       validating: false,
       errors: [],
       values: [],
+      ruleErrors:[],
+      ruleWarnings:[],
       effectErrors: [],
       warnings: [],
       effectWarnings: [],
-      editable: undefined,
+      editable: true,
+      selfEditable:undefined,
       formEditable: undefined,
       value: undefined,
       initialValue: undefined,
@@ -100,11 +103,43 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.value = prevState.value
         draft.initialValue = prevState.initialValue
       }
-      draft.rules = toArr(draft.rules)
-      draft.warnings = toArr(draft.warnings).filter(v => !!v)
+      //操作重定向
+      if (!isEqual(draft.errors, prevState.errors)) {
+        draft.effectErrors = draft.errors
+      }
+      if (!isEqual(draft.warnings, prevState.warnings)) {
+        draft.effectWarnings = draft.warnings
+      }
+      //容错逻辑
+      draft.rules = toArr(draft.rules).filter(v => !!v)
       draft.effectWarnings = toArr(draft.effectWarnings).filter(v => !!v)
-      draft.errors = toArr(draft.errors).filter(v => !!v)
       draft.effectErrors = toArr(draft.effectErrors).filter(v => !!v)
+      draft.ruleWarnings = toArr(draft.ruleWarnings).filter(v => !!v)
+      draft.ruleErrors = toArr(draft.ruleErrors).filter(v => !!v)
+      
+      draft.errors = draft.ruleErrors.concat(draft.effectErrors)
+      draft.warnings = draft.ruleWarnings.concat(draft.effectWarnings)
+
+      if (!isEqual(draft.editable, prevState.editable)) {
+        draft.selfEditable = draft.editable
+      }
+
+      draft.editable = isValid(draft.selfEditable)
+        ? draft.selfEditable
+        : isValid(draft.formEditable)
+        ? isFn(draft.formEditable)
+          ? draft.formEditable(draft.name)
+          : draft.formEditable
+        : true
+
+      if (
+        draft.selfEditable !== prevState.selfEditable &&
+        !draft.selfEditable
+      ) {
+        draft.errors = []
+        draft.warnings = []
+      }
+
       const { value, values } = this.parseValues(draft)
       draft.value = value
       draft.values = values
@@ -123,12 +158,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
-      if (draft.editable !== prevState.editable && !draft.editable) {
-        draft.errors = []
-        draft.effectErrors = []
-        draft.warnings = []
-        draft.effectWarnings = []
-      }
+
       if (draft.effectErrors.length) {
         draft.invalid = true
         draft.valid = false
@@ -153,9 +183,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (draft.unmounted === true) {
         draft.mounted = false
         draft.errors = []
-        draft.effectErrors = []
         draft.warnings = []
-        draft.effectWarnings = []
       }
       if (draft.errors.length) {
         draft.invalid = true

@@ -1,5 +1,12 @@
 import { getMessage } from './message'
-import { isEmpty, stringLength, isStr, isFn, toArr } from '@uform/shared'
+import {
+  isEmpty,
+  stringLength,
+  isStr,
+  isFn,
+  toArr,
+  isBool
+} from '@uform/shared'
 import { ValidateDescription } from './types'
 const isValidateEmpty = (value: any) => {
   if (typeof value === 'object') {
@@ -19,63 +26,62 @@ const getLength = (value: any) =>
 
 export default {
   required(value: any, rule: ValidateDescription) {
-    return isValidateEmpty(value) ? rule.message || getMessage('required') : ''
+    return isValidateEmpty(value) ? getMessage('required') : ''
   },
   max(value: any, rule: ValidateDescription) {
     const length = getLength(value)
     const max = Number(rule.max)
-    return length > max ? rule.message || getMessage('max') : ''
+    return length > max ? getMessage('max') : ''
   },
   maximum(value: any, rule: ValidateDescription) {
-    return Number(value) > Number(rule.maximum)
-      ? rule.message || getMessage('maximum')
-      : ''
+    return Number(value) > Number(rule.maximum) ? getMessage('maximum') : ''
   },
   exclusiveMaximum(value: any, rule: ValidateDescription) {
     return Number(value) >= Number(rule.maximum)
-      ? rule.message || getMessage('exclusiveMaximum')
+      ? getMessage('exclusiveMaximum')
       : ''
   },
   minimum(value: any, rule: ValidateDescription) {
-    return Number(value) < Number(rule.minimum)
-      ? rule.message || getMessage('minimum')
-      : ''
+    return Number(value) < Number(rule.minimum) ? getMessage('minimum') : ''
   },
   exclusiveMinimum(value: any, rule: ValidateDescription) {
     return Number(value) <= Number(rule.minimum)
-      ? rule.message || getMessage('exclusiveMinimum')
+      ? getMessage('exclusiveMinimum')
       : ''
   },
   len(value: any, rule: ValidateDescription) {
     const length = getLength(value)
     const len = Number(rule.len)
-    return length !== len ? rule.message || getMessage('len') : ''
+    return length !== len ? getMessage('len') : ''
   },
   min(value: any, rule: ValidateDescription) {
     const length = getLength(value)
     const min = Number(rule.len)
-    return length < min ? rule.message || getMessage('min') : ''
+    return length < min ? getMessage('min') : ''
   },
   pattern(value: any, rule: ValidateDescription) {
     return !new RegExp(rule.pattern).test(value)
       ? rule.message || getMessage('pattern')
       : ''
   },
-  validator(value: any, rule: ValidateDescription) {
+  async validator(value: any, rule: ValidateDescription) {
     if (isFn(rule.validator)) {
-      return rule.validator(value, rule)
+      const response = await Promise.resolve(rule.validator(value, rule))
+      if (isBool(response)) {
+        return response ? rule.message : ''
+      } else {
+        return response
+      }
     }
     throw new Error("The rule's validator property must be a function.")
   },
   whitespace(value: any, rule: ValidateDescription) {
     if (rule.whitespace) {
-      return /^\s+$/.test(value) || value === ''
-        ? rule.message || getMessage('whitespace')
-        : ''
+      return /^\s+$/.test(value) || value === '' ? getMessage('whitespace') : ''
     }
   },
   enum(value: any, rule: ValidateDescription) {
     const enums = toArr(rule.enum)
-    return enums.indexOf(value) === -1 ? rule.message || getMessage('enum') : ''
+    return enums.indexOf(value) === -1 ? getMessage('enum') : ''
   }
 }

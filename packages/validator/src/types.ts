@@ -54,6 +54,7 @@ export type CustomValidator = (
 export type ValidateResponse =
   | null
   | string
+  | boolean
   | {
       type?: 'error' | 'warning'
       message: string
@@ -63,7 +64,7 @@ export type ValidateRulesMap = {
   [key in string]: (
     value: any,
     description: ValidateDescription
-  ) => ValidateResponse
+  ) => ValidateResponse | Promise<ValidateResponse>
 }
 
 export interface ValidateFieldOptions {

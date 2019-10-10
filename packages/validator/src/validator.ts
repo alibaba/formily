@@ -83,6 +83,7 @@ class FormValidator {
           throw new Error('Can not found validator pattern')
         }
         rules.pattern = ValidatorFormators[rules.format]
+        rules.message = rules.message || getMessage(rules.format)
       }
       return [rules]
     }
@@ -104,7 +105,11 @@ class FormValidator {
     try {
       for (let i = 0; i < rules.length; i++) {
         const ruleObj = rules[i]
-        for (let key in ruleObj) {
+        const keys = Object.keys(ruleObj).sort(key =>
+          key === 'validator' ? 1 : -1
+        )
+        for (let l = 0; l < keys.length; l++) {
+          let key = keys[l]
           if (ruleObj.hasOwnProperty(key) && ruleObj[key] !== undefined) {
             const rule = ValidatorRules[key]
             if (rule) {
@@ -116,8 +121,10 @@ class FormValidator {
               })
               if (isStr(payload)) {
                 if (first) {
-                  if (message) errors.push(message)
-                  throw new Error(message)
+                  if (message) {
+                    errors.push(message)
+                    throw new Error(message)
+                  }
                 }
                 if (message) errors.push(message)
               } else if (isObj(payload)) {
@@ -125,8 +132,10 @@ class FormValidator {
                   if (message) warnings.push(message)
                 } else {
                   if (first) {
-                    if (message) errors.push(message)
-                    throw new Error(message)
+                    if (message) {
+                      errors.push(message)
+                      throw new Error(message)
+                    }
                   }
                   if (message) errors.push(message)
                 }

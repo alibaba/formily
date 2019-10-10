@@ -1,27 +1,11 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each } from '@uform/shared'
-import { isValid, isFn } from '@uform/shared'
 import { IFieldStateProps, IFieldState, IForm, IField } from '@uform/core'
 import { raf } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook } from '../types'
 import FormContext from '../context'
-
-const transformFieldState = (state: IFieldState) => {
-  return {
-    ...state,
-    editable: isValid(state.editable)
-      ? state.editable
-      : isValid(state.formEditable)
-      ? isFn(state.formEditable)
-        ? state.formEditable(state.name)
-        : state.formEditable
-      : true,
-    errors: state.errors.concat(state.effectErrors),
-    warnings: state.warnings.concat(state.effectWarnings)
-  }
-}
 
 export const useField = (options: IFieldStateProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
@@ -77,10 +61,13 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
     }
   }, [])
 
-  const state = transformFieldState(ref.current.field.getState())
+  const state = ref.current.field.getState()
   return {
     form,
-    state,
+    state: {
+      ...state,
+      errors: state.errors.join(', ')
+    },
     mutators: form.createMutators(state.name),
     props: state.props
   }

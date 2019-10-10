@@ -14,14 +14,23 @@ import {
 } from './src/index'
 import '@alifd/next/dist/next.css'
 
-const { onFieldInputChange$ } = FormEffectHooks
+const { onFieldInputChange$, onFormChange$ } = FormEffectHooks
 
 export default () => (
   <SchemaForm
-    onSubmit={console.log}
-    effects={({ getFormSchema }) => {
+    onSubmit={values => {
+      console.log('提交')
+      console.log(values)
+    }}
+    validateFirst
+    effects={({ setFieldState, getFormGraph }) => {
       onFieldInputChange$('array.*.aa').subscribe(({ value, name }) => {
-        console.log(getFormSchema())
+        setFieldState(
+          FormPath.transform(name, /\d/, $0 => `array.${$0}.bb`),
+          state => {
+            state.errors = value == '123' ? '联动错误' : ''
+          }
+        )
       })
     }}
   >
@@ -38,7 +47,32 @@ export default () => (
           title="AA"
           x-item-props={{ triggerType: 'onBlur' }}
         />
-        <Field type="string" required name="bb" title="BB" />
+        <Field
+          type="string"
+          name="bb"
+          title="BB"
+          x-rules={[
+            {
+              format: 'url',
+              required: true,
+              validator: async value => {
+                await new Promise(resolve => {
+                  setTimeout(() => {
+                    resolve()
+                  }, 1000)
+                })
+                return value == '123' ? '异步校验失败' : ''
+              }
+            },
+            {
+              validator(value) {
+                return value === '//baidu.com'
+                  ? { type: 'warning', message: '百度可能会窃取您的数据' }
+                  : ''
+              }
+            }
+          ]}
+        />
       </Field>
     </Field>
     <FormButtonGroup>

@@ -1,12 +1,7 @@
 import { clone, isEqual, isFn, each, globalThisPolyfill } from '@uform/shared'
 import produce, { Draft } from 'immer'
 import { Subscrible } from './subscrible'
-import {
-  IStateModelFactory,
-  StateDirtyMap,
-  IModel,
-  StateModel
-} from '../types'
+import { IStateModelFactory, StateDirtyMap, IModel, StateModel } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
 export const createStateModel = <State = {}, Props = {}>(
@@ -95,13 +90,18 @@ export const createStateModel = <State = {}, Props = {}>(
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
           }
-          each(this.state, (value, key) => {
-            if (!isEqual(value, draft[key])) {
-              this.state[key] = draft[key]
-              this.dirtyMap[key] = true
-              this.dirtyNum++
+          const draftKeys = Object.keys(draft || {})
+          const stateKeys = Object.keys(this.state || {})
+          each(
+            draftKeys.length > stateKeys.length ? draft : this.state,
+            (value, key) => {
+              if (!isEqual(value, draft[key])) {
+                this.state[key] = draft[key]
+                this.dirtyMap[key] = true
+                this.dirtyNum++
+              }
             }
-          })
+          )
           if (isFn(this.controller.dirtyCheck)) {
             const result = this.controller.dirtyCheck(this.dirtyMap)
             if (result !== undefined) {

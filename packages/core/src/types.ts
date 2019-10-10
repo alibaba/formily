@@ -117,17 +117,20 @@ export interface IFieldState {
   visible: boolean
   display: boolean
   editable: boolean
+  selfEditable: boolean
   formEditable: boolean | ((name: string) => boolean)
   loading: boolean
   modified: boolean
   active: boolean
   visited: boolean
   validating: boolean
-  errors: string[]
   values: any[]
+  errors: string[]
   effectErrors: string[]
+  ruleErrors: string[]
   warnings: string[]
   effectWarnings: string[]
+  ruleWarnings: string[]
   value: any
   initialValue: any
   rules: ValidateArrayRules[]
