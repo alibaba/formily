@@ -56,3 +56,10 @@ export interface IFormButtonGroupProps {
   span?: ColSpanType
   offset?: ColSpanType
 }
+
+export interface IFormItemGridProps {
+  cols?: Array<number | { span: number; offset: number }>
+  description?: React.ReactText
+  gutter?: number
+  title?: React.ReactText
+}

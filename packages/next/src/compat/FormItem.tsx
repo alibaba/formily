@@ -5,7 +5,7 @@ import { ISchemaFieldComponentProps } from '@uform/react-schema-renderer'
 import { ItemProps } from '@alifd/next/types/form'
 import { IFormItemTopProps } from '../types'
 
-type CompatItemProps = ItemProps & ISchemaFieldComponentProps
+type CompatItemProps = ItemProps & Partial<ISchemaFieldComponentProps>
 
 const computeStatus = (props: CompatItemProps) => {
   if (props.invalid) {
@@ -19,7 +19,6 @@ const computeStatus = (props: CompatItemProps) => {
 const computeHelp = (props: CompatItemProps) => {
   return [].concat(props.errors, props.warnings)
 }
-
 
 const computeLabel = (props: CompatItemProps) => {
   if (props.schema && props.schema.title) {

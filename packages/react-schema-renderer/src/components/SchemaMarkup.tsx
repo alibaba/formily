@@ -65,14 +65,38 @@ export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
 
 SchemaMarkupForm.displayName = 'SchemaMarkupForm'
 
-export function createVirtualBox<T>(
+export function createVirtualBox<T = {}>(
   key: string,
-  component?: React.JSXElementConstructor<any>
+  component?: React.JSXElementConstructor<any>,
+  isController?: boolean
 ) {
-  registerVirtualBox(key, component ? component : () => <Fragment />)
-  const VirtualBox: React.FC<T> = ({ children, ...props }) => {
+  registerVirtualBox(
+    key,
+    component
+      ? isController
+        ? component
+        : ({ props, children }) => {
+            return React.createElement(component, {
+              ...props['x-props'],
+              ...props['x-component-props'],
+              children
+            })
+          }
+      : () => <Fragment />
+  )
+  const VirtualBox: React.FC<T & { name?: string }> = ({
+    children,
+    name,
+    ...props
+  }) => {
     return (
-      <SchemaMarkupField type="object" x-component={key} x-props={props}>
+      <SchemaMarkupField
+        type="object"
+        name={name}
+        x-component={key}
+        x-props={props}
+        x-component-props={props}
+      >
         {children}
       </SchemaMarkupField>
     )

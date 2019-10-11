@@ -10,11 +10,13 @@ import {
   Submit,
   FormEffectHooks,
   createFormActions,
+  FormGridRow,
+  FormGridCol,
   FormPath
 } from './src/index'
 import '@alifd/next/dist/next.css'
 
-const { onFieldInputChange$, onFormChange$ } = FormEffectHooks
+const { onFieldInputChange$, onFormChange$,onFormInit$ } = FormEffectHooks
 
 export default () => (
   <SchemaForm
@@ -32,49 +34,21 @@ export default () => (
           }
         )
       })
+      onFormInit$().subscribe(()=>{
+        setFieldState('col1',state=>{
+          state.visible = false
+        })
+      })
     }}
   >
-    <Field
-      name="array"
-      type="array"
-      x-component-props={{ title: 'Card List', renderAddition: '添加' }}
-    >
-      <Field type="object">
-        <Field
-          type="string"
-          required
-          name="aa"
-          title="AA"
-          x-item-props={{ triggerType: 'onBlur' }}
-        />
-        <Field
-          type="string"
-          name="bb"
-          title="BB"
-          x-rules={[
-            {
-              format: 'url',
-              required: true,
-              validator: async value => {
-                await new Promise(resolve => {
-                  setTimeout(() => {
-                    resolve()
-                  }, 1000)
-                })
-                return value == '123' ? '异步校验失败' : ''
-              }
-            },
-            {
-              validator(value) {
-                return value === '//baidu.com'
-                  ? { type: 'warning', message: '百度可能会窃取您的数据' }
-                  : ''
-              }
-            }
-          ]}
-        />
-      </Field>
-    </Field>
+    <FormGridRow>
+      <FormGridCol name="col1" span={6}>
+        <Field name="hello" type="string" title="Hello" />
+      </FormGridCol>
+      <FormGridCol span={6}>
+        <Field name="hello2" type="string" title="Hello" />
+      </FormGridCol>
+    </FormGridRow>
     <FormButtonGroup>
       <Submit>提交</Submit>
     </FormButtonGroup>

@@ -37,7 +37,8 @@ import {
   IVirtualField,
   isField,
   FormHeartSubscriber,
-  LifeCycleTypes
+  LifeCycleTypes,
+  isVirtualField
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'
@@ -430,11 +431,16 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       const realPath = newPath.slice(0, index + 1)
       const dataPath = path.concat(key)
       const selected = graph.select(realPath)
-      if (selected && selected.displayName === 'VirtualFieldState') {
+      if (isVirtualField(selected)) {
         return path
       }
       return dataPath
     }, FormPath.getPath(''))
+  }
+
+  function transformVirtualPath(path: FormPathPattern) {
+    const newPath = FormPath.getPath(path)
+    return newPath.slice(newPath.length - 1)
   }
 
   function setFormIn(
@@ -781,7 +787,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   function batchRunTaskQueue(field: IField | IVirtualField) {
     env.taskQueue.forEach((task, index) => {
       const { path, callbacks } = task
-      if (path.match(field.unsafe_getSourceState(state => state.name))) {
+      if (monkeyMatch(path, field)) {
         callbacks.forEach(callback => {
           field.setState(callback)
         })
@@ -797,6 +803,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     })
   }
 
+  function monkeyMatch(path: FormPath, field: IField | IVirtualField) {
+    const name = field.unsafe_getSourceState(state => state.name)
+    const monkey = isField(field)
+      ? transformDataPath(name)
+      : transformVirtualPath(name)
+    return path.match(name) || path.match(monkey)
+  }
+
   function setFieldState(
     path: FormPathPattern,
     callback?: (state: IFieldState) => void
@@ -804,9 +818,11 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     if (!isFn(callback)) return
     let matchCount = 0
     let newPath = FormPath.getPath(path)
-    graph.select(newPath, field => {
-      field.setState(callback)
-      matchCount++
+    graph.each(field => {
+      if (monkeyMatch(newPath, field)) {
+        field.setState(callback)
+        matchCount++
+      }
     })
     if (matchCount === 0 || newPath.isWildMatchPattern) {
       let taskIndex = env.taskIndexes[newPath.toString()]

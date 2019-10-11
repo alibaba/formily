@@ -1,126 +1,162 @@
-// import React, { Component } from 'react'
-// import { registerFormField } from '@uform/react-schema-renderer'
-// import {ArrayList} from '@uform/react-shared-components'
-// import { isFn } from '@uform/shared'
-// import { ArrayField } from './array'
-// import styled from 'styled-components'
+import React from 'react'
+import { Icon } from '@alifd/next'
+import {
+  registerFormField,
+  ISchemaFieldComponentProps,
+  SchemaField,
+  Schema
+} from '@uform/react-schema-renderer'
+import { toArr, isFn, isArr } from '@uform/shared'
+import { ArrayList } from '@uform/react-shared-components'
+import { CircleButton, TextButton } from '../components/Button'
+import { Table, Form } from '@alifd/next'
+import styled from 'styled-components'
 
+const ArrayComponents = {
+  CircleButton,
+  TextButton,
+  AdditionIcon: () => <Icon type="add" className="next-icon-first" />,
+  RemoveIcon: () => (
+    <Icon size="xs" type="ashbin" className="next-icon-first" />
+  ),
+  MoveDownIcon: () => (
+    <Icon size="xs" type="arrow-down" className="next-icon-first" />
+  ),
+  MoveUpIcon: () => (
+    <Icon size="xs" type="arrow-up" className="next-icon-first" />
+  )
+}
 
-// registerFormField(
-//   'table',
-//   styled(
-//     class extends ArrayField {
-//       createFilter(key, payload) {
-//         const { schema } = this.props
-//         const columnFilter: (key: string, payload: any) => boolean =
-//           schema['x-props'] && schema['x-props'].columnFilter
+const FormTableField = styled(
+  (props: ISchemaFieldComponentProps & { className: string }) => {
+    const { value, schema, className, editable, path, mutators } = props
+    const {
+      renderAddition,
+      renderRemove,
+      renderMoveDown,
+      renderMoveUp,
+      renderEmpty,
+      renderExtraOperations,
+      operations,
+      ...componentProps
+    } = schema.getExtendsComponentProps() || {}
+    const onAdd = () => {
+      const items = Array.isArray(schema.items)
+        ? schema.items[schema.items.length - 1]
+        : schema.items
+      mutators.push(items.getEmptyValue())
+    }
+    const renderColumns = (items: Schema) => {
+      return items.mapProperties((props, key) => {
+        const itemProps = {
+          ...props.getExtendsItemProps(),
+          ...props.getExtendsProps()
+        }
+        return (
+          <Table.Column
+            {...itemProps}
+            dataIndex={key}
+            cell={(value: any, index: number) => {
+              return <SchemaField path={path.concat(index, key)} />
+            }}
+          />
+        )
+      })
+      return []
+    }
+    return (
+      <div className={className}>
+        <ArrayList
+          value={value}
+          minItems={schema.minItems}
+          maxItems={schema.maxItems}
+          editable={editable}
+          components={ArrayComponents}
+          renders={{
+            renderAddition,
+            renderRemove,
+            renderMoveDown,
+            renderMoveUp,
+            renderEmpty
+          }}
+        >
+          <Table {...componentProps} dataSource={toArr(value)}>
+            {isArr(schema.items)
+              ? schema.items.reduce((buf, items) => {
+                  return buf.concat(renderColumns(items))
+                }, [])
+              : renderColumns(schema.items)}
+            <Table.Column
+              {...operations}
+              key="operations"
+              dataIndex="operations"
+              cell={(value: any, index: number) => {
+                return (
+                  <Form.Item>
+                    <div className="array-item-operator">
+                      <ArrayList.Remove
+                        index={index}
+                        onClick={() => mutators.remove(index)}
+                      />
+                      <ArrayList.MoveDown
+                        index={index}
+                        onClick={() => mutators.moveDown(index)}
+                      />
+                      <ArrayList.MoveUp
+                        index={index}
+                        onClick={() => mutators.moveUp(index)}
+                      />
+                      {isFn(renderExtraOperations)
+                        ? renderExtraOperations(index)
+                        : renderExtraOperations}
+                    </div>
+                  </Form.Item>
+                )
+              }}
+            />
+          </Table>
+          <ArrayList.Addition>
+            {({ children }) => {
+              return (
+                <div className="array-table-addition" onClick={onAdd}>
+                  {children}
+                </div>
+              )
+            }}
+          </ArrayList.Addition>
+        </ArrayList>
+      </div>
+    )
+  }
+)`
+  display: inline-block;
+  min-width: 600px;
+  table {
+    margin-bottom: 0 !important;
+  }
+  .array-table-addition {
+    padding: 10px;
+    background: #fbfbfb;
+    border-left: 1px solid #dcdee3;
+    border-right: 1px solid #dcdee3;
+    border-bottom: 1px solid #dcdee3;
+    .next-btn-text {
+      color: #888;
+    }
+    .next-icon:before {
+      width: 16px !important;
+      font-size: 16px !important;
+      margin-right: 5px;
+    }
+    margin-bottom: 10px;
+  }
 
-//         return (render, otherwise) => {
-//           if (isFn(columnFilter)) {
-//             return columnFilter(key, payload)
-//               ? isFn(render)
-//                 ? render()
-//                 : render
-//               : isFn(otherwise)
-//               ? otherwise()
-//               : otherwise
-//           } else {
-//             return render()
-//           }
-//         }
-//       }
+  .array-item-operator {
+    display: flex;
+    button {
+      margin-right: 8px;
+    }
+  }
+`
 
-//       render() {
-//         const {
-//           value,
-//           schema,
-//           locale,
-//           className,
-//           renderField,
-//           getOrderProperties
-//         } = this.props
-//         const cls = this.getProps('className')
-//         const style = this.getProps('style')
-//         const operationsWidth = this.getProps('operationsWidth')
-//         return (
-//           <div
-//             className={`${className} ${cls}`}
-//             style={style}
-//             onClick={this.onClearErrorHandler()}
-//           >
-//             <div>
-//               <Table dataSource={value}>
-//                 {getOrderProperties(schema.items).reduce(
-//                   (buf, { key, schema }) => {
-//                     const filter = this.createFilter(key, schema)
-//                     const res = filter(
-//                       () => {
-//                         return buf.concat(
-//                           <Column
-//                             {...schema}
-//                             key={key}
-//                             title={schema.title}
-//                             dataIndex={key}
-//                             cell={(record, index) => {
-//                               return renderField([index, key])
-//                             }}
-//                           />
-//                         )
-//                       },
-//                       () => {
-//                         return buf
-//                       }
-//                     )
-//                     return res
-//                   },
-//                   []
-//                 )}
-//                 <Column
-//                   key="operations"
-//                   title={locale.operations}
-//                   dataIndex="operations"
-//                   width={operationsWidth}
-//                   cell={(item, index) => {
-//                     return (
-//                       <div className="array-item-operator">
-//                         {this.renderRemove(index, item)}
-//                         {this.renderMoveDown(index, item)}
-//                         {this.renderMoveUp(index)}
-//                         {this.renderExtraOperations(index)}
-//                       </div>
-//                     )
-//                   }}
-//                 />
-//               </Table>
-//               {this.renderAddition()}
-//             </div>
-//           </div>
-//         )
-//       }
-//     }
-//   )`
-//     display: inline-block;
-//     .array-item-addition {
-//       padding: 10px;
-//       background: #fbfbfb;
-//       border-left: 1px solid #dcdee3;
-//       border-right: 1px solid #dcdee3;
-//       border-bottom: 1px solid #dcdee3;
-//       .next-btn-text {
-//         color: #888;
-//       }
-//       .next-icon:before {
-//         width: 16px !important;
-//         font-size: 16px !important;
-//         margin-right: 5px;
-//       }
-//     }
-
-//     .next-table-cell-wrapper > .next-form-item {
-//       margin-bottom: 0;
-//     }
-//     .array-item-operator {
-//       display: flex;
-//     }
-//   `
-// )
+registerFormField('table', FormTableField)

@@ -53,12 +53,20 @@ export const connect = (options?: IConnectOptions) => {
     ...options
   }
   return (Component: React.JSXElementConstructor<any>) => {
-    return (props: ISchemaFieldComponentProps) => {
-      const { value, name, mutators, form, schema, editable } = props
+    return (fieldProps: ISchemaFieldComponentProps) => {
+      const {
+        value,
+        name,
+        mutators,
+        form,
+        schema,
+        editable,
+        props
+      } = fieldProps
       let componentProps: IConnectProps = {
         ...options.defaultProps,
-        ...schema.getExtendsProps(),
-        ...schema.getExtendsComponentProps(),
+        ...props['x-props'],
+        ...props['x-component-props'],
         [options.valueName]: value,
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(
@@ -90,7 +98,7 @@ export const connect = (options?: IConnectOptions) => {
       }
 
       if (isFn(options.getProps)) {
-        const newProps = options.getProps(componentProps, props)
+        const newProps = options.getProps(componentProps, fieldProps)
         if (newProps !== undefined) {
           componentProps = newProps as any
         }

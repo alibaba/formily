@@ -9,6 +9,7 @@ export * from './components/SchemaMarkup'
 export * from './hooks/useSchemaForm'
 export * from './shared/connect'
 export * from './shared/registry'
+export * from './shared/schema'
 export * from './types'
 
 export const createFormActions = createSchemaFormActions

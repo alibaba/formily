@@ -61,6 +61,16 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     }
   }
 
+  each(eacher?: (node: NodeType, key?: string) => boolean | void) {
+    if (!isFn(eacher)) return
+    for (let key in this.nodes) {
+      const res = eacher(this.nodes[key], key)
+      if (res === false) {
+        break
+      }
+    }
+  }
+
   getNode(path: FormPath | string) {
     return this.nodes[path as string]
   }

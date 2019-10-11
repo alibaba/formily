@@ -5,7 +5,7 @@ import {
   ISchemaFieldComponentProps,
   SchemaField
 } from '@uform/react-schema-renderer'
-import { toArr } from '@uform/shared'
+import { toArr, isFn } from '@uform/shared'
 import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Card } from '@alifd/next'
@@ -35,6 +35,7 @@ const FormCardsField = styled(
       renderMoveDown,
       renderMoveUp,
       renderEmpty,
+      renderExtraOperations,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
     const onAdd = () => {
@@ -73,6 +74,10 @@ const FormCardsField = styled(
                 }
                 extra={
                   <Fragment>
+                    <ArrayList.Remove
+                      index={index}
+                      onClick={() => mutators.remove(index)}
+                    />
                     <ArrayList.MoveDown
                       index={index}
                       onClick={() => mutators.moveDown(index)}
@@ -81,10 +86,9 @@ const FormCardsField = styled(
                       index={index}
                       onClick={() => mutators.moveUp(index)}
                     />
-                    <ArrayList.Remove
-                      index={index}
-                      onClick={() => mutators.remove(index)}
-                    />
+                    {isFn(renderExtraOperations)
+                      ? renderExtraOperations(index)
+                      : renderExtraOperations}
                   </Fragment>
                 }
               >
