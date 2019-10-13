@@ -1,5 +1,6 @@
 import { ButtonProps } from '@alifd/next/types/button'
 import { FormProps, ItemProps } from '@alifd/next/types/form'
+import { StepProps, ItemProps as StepItemProps } from '@alifd/next/types/step'
 import {
   ISchemaFormProps,
   IMarkupSchemaFieldProps,
@@ -87,4 +88,8 @@ export interface IFormItemGridProps extends IItemProps {
 export interface IFormTextBox extends IItemProps {
   text?: string
   gutter?: number
+}
+
+export interface IFormStep extends StepProps {
+  dataSource: StepItemProps[]
 }

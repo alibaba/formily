@@ -1,5 +1,9 @@
-import { FormPath, each, globalThisPolyfill } from '@uform/shared'
-import deepmerge from 'deepmerge'
+import {
+  FormPath,
+  each,
+  globalThisPolyfill,
+  merge as deepmerge
+} from '@uform/shared'
 import locales from './locale'
 
 const getIn = FormPath.getIn

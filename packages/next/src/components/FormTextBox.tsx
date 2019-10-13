@@ -21,7 +21,6 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
       {
         gutter: 5
       },
-      props['x-props'],
       props['x-component-props']
     )
     const ref: React.RefObject<HTMLDivElement> = useRef()

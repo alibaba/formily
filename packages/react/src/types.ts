@@ -144,6 +144,7 @@ export interface IFormActions {
   subscribe(callback?: FormHeartSubscriber): void
   unsubscribe(callback?: FormHeartSubscriber): void
   notify: <T>(type: string, payload: T) => void
+  dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
@@ -172,6 +173,7 @@ export interface IFormAsyncActions {
   subscribe(callback?: FormHeartSubscriber): Promise<void>
   unsubscribe(callback?: FormHeartSubscriber): Promise<void>
   notify: <T>(type: string, payload: T) => Promise<void>
+  dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldValue(path?: FormPathPattern): Promise<any>
   setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>

@@ -110,7 +110,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
                   }
                   if (removed) return
                   if (!isEqual(value, state.value)) {
-                    state.value = value
+                    state.value = isValid(value) ? value : state.initialValue
                   }
                 }
                 if (initialValuesChanged) {

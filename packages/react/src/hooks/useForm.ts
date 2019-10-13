@@ -14,7 +14,6 @@ import { useEva } from 'react-eva'
 import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
 import { createFormEffects, createFormActions } from '../shared'
-
 const FormHookSymbol = Symbol('FORM_HOOK')
 
 const useInternalForm = (
@@ -109,7 +108,7 @@ export const useForm = <
         (payload: IModel, form: IForm) => {
           const actions = {
             ...form,
-            dispatch
+            dispatch:form.notify
           }
           if (broadcast) {
             broadcast.setContext(actions)

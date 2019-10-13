@@ -31,6 +31,7 @@
   "dependencies": {
     "@uform/types": "^0.4.0",
     "camel-case": "^3.0.0",
-    "cool-path": "^0.1.1"
+    "cool-path": "^0.1.1",
+    "deepmerge": "^4.0.0"
   }
 }
