@@ -36,7 +36,7 @@ export function registerFormComponent(
   component: React.JSXElementConstructor<any>
 ) {
   if (isFn(component)) {
-    registry.formItemComponent = component
+    registry.formComponent = component
   }
 }
 

@@ -15,10 +15,11 @@ export interface ISchemaFieldProps {
   path?: FormPathPattern
 }
 
-export type ComponentWithStyleComponent<ComponentProps> = React.ComponentType<
+export type ComponentWithStyleComponent<
   ComponentProps
-> & {
+> = React.JSXElementConstructor<ComponentProps> & {
   styledComponentId?: string
+  displayName?: string
 }
 
 export interface ISchemaFieldComponentProps extends IFieldState {

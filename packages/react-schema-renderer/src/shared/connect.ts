@@ -114,7 +114,7 @@ export const connect = (options?: IConnectOptions) => {
 
       return React.createElement(
         isFn(options.getComponent)
-          ? options.getComponent(Component, props, this.props)
+          ? options.getComponent(Component, props, fieldProps)
           : Component,
         componentProps
       )

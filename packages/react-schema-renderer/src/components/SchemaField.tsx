@@ -32,81 +32,76 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   ) => {
     return <SchemaField key={reactKey} path={path.concat(addtionKey)} />
   }
-  if (fieldSchema.isObject() && !schemaComponent) {
+  const renderChildren = (
+    callback: (props: ISchemaFieldComponentProps) => React.ReactElement
+  ) => {
     return (
-      <Fragment>
-        {fieldSchema.mapProperties((schema: Schema, key: string) => {
-          const childPath = path.concat(key)
-          return <SchemaField key={childPath.toString()} path={childPath} />
-        })}
-      </Fragment>
+      <Field
+        path={path}
+        initialValue={fieldSchema.default}
+        props={fieldSchema.getSelfProps()}
+        triggerType={fieldSchema.getExtendsTriggerType()}
+        editable={fieldSchema.getExtendsEditable()}
+        required={fieldSchema.getExtendsRequired()}
+        rules={fieldSchema.getExtendsRules()}
+      >
+        {({ state, mutators, form }) => {
+          const props: ISchemaFieldComponentProps = {
+            ...state,
+            schema: fieldSchema,
+            path,
+            form,
+            mutators,
+            renderField
+          }
+          return callback(props)
+        }}
+      </Field>
     )
+  }
+  if (fieldSchema.isObject() && !schemaComponent) {
+    const properties = fieldSchema.mapProperties(
+      (schema: Schema, key: string) => {
+        const childPath = path.concat(key)
+        return <SchemaField key={childPath.toString()} path={childPath} />
+      }
+    )
+    if (path.length == 0) {
+      return <Fragment>{properties}</Fragment>
+    }
+    return renderChildren(props => {
+      return React.createElement(
+        formRegistry.formItemComponent,
+        props,
+        properties
+      )
+    })
   } else {
     if (isFn(finalComponentName)) {
-      return (
-        <Field
-          path={path}
-          initialValue={fieldSchema.default}
-          props={fieldSchema.getSelfProps()}
-          triggerType={fieldSchema.getExtendsTriggerType()}
-          editable={fieldSchema.getExtendsEditable()}
-          required={fieldSchema.getExtendsRequired()}
-          rules={fieldSchema.getExtendsRules()}
-        >
-          {({ state, mutators, form }) => {
-            const props: ISchemaFieldComponentProps = {
-              ...state,
-              schema: fieldSchema,
-              path,
-              form,
-              mutators,
-              renderField
-            }
-            return React.createElement(
-              formRegistry.formItemComponent,
-              props,
-              React.createElement(finalComponentName, props)
-            )
-          }}
-        </Field>
-      )
+      return renderChildren(props => {
+        return React.createElement(
+          formRegistry.formItemComponent,
+          props,
+          React.createElement(finalComponentName, props)
+        )
+      })
     } else if (isStr(finalComponentName)) {
       if (formRegistry.fields[finalComponentName]) {
-        return (
-          <Field
-            path={path}
-            initialValue={fieldSchema.default}
-            props={fieldSchema.getSelfProps()}
-            triggerType={fieldSchema.getExtendsTriggerType()}
-            editable={fieldSchema.getExtendsEditable()}
-            required={fieldSchema.getExtendsRequired()}
-            rules={fieldSchema.getExtendsRules()}
-          >
-            {({ state, mutators, form }) => {
-              const props: ISchemaFieldComponentProps = {
-                ...state,
-                schema: fieldSchema,
-                path,
-                form,
-                mutators,
-                renderField
-              }
-              const renderComponent = (): React.ReactElement =>
-                React.createElement(
-                  formRegistry.formItemComponent,
-                  props,
-                  React.createElement(
-                    formRegistry.fields[finalComponentName],
-                    props
-                  )
-                )
-              if (isFn(schemaRenderer)) {
-                return schemaRenderer({ ...props, renderComponent })
-              }
-              return renderComponent()
-            }}
-          </Field>
-        )
+        return renderChildren(props => {
+          const renderComponent = (): React.ReactElement =>
+            React.createElement(
+              formRegistry.formItemComponent,
+              props,
+              React.createElement(
+                formRegistry.fields[finalComponentName],
+                props
+              )
+            )
+          if (isFn(schemaRenderer)) {
+            return schemaRenderer({ ...props, renderComponent })
+          }
+          return renderComponent()
+        })
       } else if (formRegistry.virtualFields[finalComponentName]) {
         return (
           <VirtualField path={path} props={fieldSchema.getSelfProps()}>

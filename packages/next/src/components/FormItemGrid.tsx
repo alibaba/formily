@@ -4,22 +4,12 @@ import { createVirtualBox } from '@uform/react-schema-renderer'
 import { toArr } from '@uform/shared'
 import { Grid } from '@alifd/next'
 import { RowProps, ColProps } from '@alifd/next/types/grid'
-import { IFormItemGridProps } from '../types'
-
+import { ItemProps } from '@alifd/next/types/form'
+import { IFormItemGridProps, IItemProps } from '../types'
+import { normalizeCol } from '../shared'
 const { Row, Col } = Grid
 
-const normalizeCol = (
-  col: { span: number; offset?: number } | number,
-  defaultValue: { span: number } = { span: 0 }
-): { span: number; offset?: number } => {
-  if (!col) {
-    return defaultValue
-  } else {
-    return typeof col === 'object' ? col : { span: col }
-  }
-}
-
-export const FormItemGrid = createVirtualBox<IFormItemGridProps>(
+export const FormItemGrid = createVirtualBox<IFormItemGridProps & ItemProps>(
   'grid',
   props => {
     const {
@@ -33,7 +23,7 @@ export const FormItemGrid = createVirtualBox<IFormItemGridProps>(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       extra,
       ...selfProps
-    } = props['x-props'] || {}
+    } = props
     const children = toArr(props.children)
     const cols = toArr(rawCols).map(col => normalizeCol(col))
     const childNum = children.length
@@ -78,14 +68,22 @@ export const FormItemGrid = createVirtualBox<IFormItemGridProps>(
   }
 )
 
-export const FormGridRow = createVirtualBox<RowProps>('grid-row', props => {
-  return <Row {...props}>{props.children}</Row>
-})
+export const FormGridRow = createVirtualBox<RowProps & ItemProps & IItemProps>(
+  'grid-row',
+  props => {
+    const { title, description, extra } = props
+    const grids = <Row {...props}>{props.children}</Row>
+    if (title) {
+      return (
+        <CompatNextFormItem label={title} help={description} extra={extra}>
+          {grids}
+        </CompatNextFormItem>
+      )
+    }
+    return grids
+  }
+)
 
 export const FormGridCol = createVirtualBox<ColProps>('grid-col', props => {
-  return (
-    <Col {...props} {...normalizeCol(props)}>
-      {props.children}
-    </Col>
-  )
+  return <Col {...props}>{props.children}</Col>
 })

@@ -28,6 +28,8 @@ export const FormItemProvider: React.FC<IFormItemTopProps> = ({
   </FormItemContext.Provider>
 )
 
+FormItemProvider.displayName = 'FormItemProvider'
+
 export const useFormItem = () => {
   return useContext(FormItemContext)
 }

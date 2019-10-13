@@ -34,6 +34,17 @@ export const acceptEnum = (component: React.JSXElementConstructor<any>) => {
   }
 }
 
+export const normalizeCol = (
+  col: { span: number; offset?: number } | number,
+  defaultValue: { span: number } = { span: 0 }
+): { span: number; offset?: number } => {
+  if (!col) {
+    return defaultValue
+  } else {
+    return typeof col === 'object' ? col : { span: Number(col) }
+  }
+}
+
 export const mapStyledProps = (
   props: IConnectProps,
   fieldProps: ISchemaFieldComponentProps

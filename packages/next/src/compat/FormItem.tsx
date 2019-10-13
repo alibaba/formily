@@ -1,13 +1,10 @@
 import React from 'react'
 import { Form } from '@alifd/next'
 import { useFormItem } from './context'
-import { ISchemaFieldComponentProps } from '@uform/react-schema-renderer'
-import { ItemProps } from '@alifd/next/types/form'
-import { IFormItemTopProps } from '../types'
+import { IFormItemTopProps, ICompatItemProps } from '../types'
+import { normalizeCol } from '../shared'
 
-type CompatItemProps = ItemProps & Partial<ISchemaFieldComponentProps>
-
-const computeStatus = (props: CompatItemProps) => {
+const computeStatus = (props: ICompatItemProps) => {
   if (props.invalid) {
     return 'error'
   }
@@ -16,32 +13,35 @@ const computeStatus = (props: CompatItemProps) => {
   }
 }
 
-const computeHelp = (props: CompatItemProps) => {
-  return [].concat(props.errors, props.warnings)
+const computeHelp = (props: ICompatItemProps) => {
+  if (props.help) return props.help
+  const messages = [].concat(props.errors || [], props.warnings || [])
+  return messages.length ? messages : props.schema && props.schema.description
 }
 
-const computeLabel = (props: CompatItemProps) => {
+const computeLabel = (props: ICompatItemProps) => {
+  if (props.label) return props.label
   if (props.schema && props.schema.title) {
     return props.schema.title
   }
 }
 
-const computeExtra = (props: CompatItemProps) => {
-  if (props.schema && props.schema.description) {
-    return props.schema.description
-  }
+const computeExtra = (props: ICompatItemProps) => {
+  if (props.extra) return props.extra
 }
 
 function pickProps<T = {}>(obj: T, ...keys: (keyof T)[]): Pick<T, keyof T> {
   const result: Pick<T, keyof T> = {} as any
   for (let i = 0; i < keys.length; i++) {
-    result[keys[i]] = obj[keys[i]]
+    if (obj[keys[i]] !== undefined) {
+      result[keys[i]] = obj[keys[i]]
+    }
   }
   return result
 }
 
 const computeSchemaExtendProps = (
-  props: CompatItemProps
+  props: ICompatItemProps
 ): IFormItemTopProps => {
   if (props.schema) {
     return pickProps(
@@ -59,7 +59,7 @@ const computeSchemaExtendProps = (
   }
 }
 
-export const CompatNextFormItem: React.FC<CompatItemProps> = props => {
+export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
   const {
     prefix,
     labelAlign,
@@ -78,14 +78,14 @@ export const CompatNextFormItem: React.FC<CompatItemProps> = props => {
       prefix={prefix}
       label={label}
       labelTextAlign={labelTextAlign}
-      labelCol={labelCol}
+      labelCol={label ? normalizeCol(labelCol) : undefined}
       labelAlign={labelAlign}
       required={props.required}
-      wrapperCol={wrapperCol}
+      wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
       size={size}
       help={help}
       validateState={status}
-      extra={extra}
+      extra={<p>{extra}</p>}
       {...itemProps}
     >
       {props.children}

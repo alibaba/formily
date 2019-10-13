@@ -18,7 +18,7 @@ export const PreviewText: React.FC<IPreviewTextProps> = props => {
         )
   }
   return (
-    <p className={`${props.className}`}>
+    <p className={`preview-text ${props.className || ''}`}>
       {props.addonBefore ? ' ' + props.addonBefore : ''}
       {props.innerBefore ? ' ' + props.innerBefore : ''}
       {props.addonTextBefore ? ' ' + props.addonTextBefore : ''}
