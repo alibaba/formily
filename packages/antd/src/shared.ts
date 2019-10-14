@@ -1,10 +1,10 @@
 import React from 'react'
-import { Select } from '@alifd/next'
 import { PreviewText } from '@uform/react-shared-components'
 import {
-  MergedFieldComponentProps,
-  IConnectProps
+  IConnectProps,
+  MergedFieldComponentProps
 } from '@uform/react-schema-renderer'
+import { Select } from './components/Select'
 export * from '@uform/shared'
 
 export const mapTextComponent = (
@@ -31,6 +31,15 @@ export const acceptEnum = (component: React.JSXElementConstructor<any>) => {
     } else {
       return React.createElement(component, others)
     }
+  }
+}
+
+export const transformDataSourceKey = (component, dataSourceKey) => {
+  return ({ dataSource, ...others }) => {
+    return React.createElement(component, {
+      [dataSourceKey]: dataSource,
+      ...others
+    })
   }
 }
 

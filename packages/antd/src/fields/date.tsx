@@ -1,33 +1,22 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-form'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import moment from 'moment'
-import { DatePicker as AntDatePicker } from 'antd'
+import { DatePicker } from 'antd'
 import {
   mapStyledProps,
   mapTextComponent,
-  StateLoading,
   compose,
   isStr,
   isArr
-} from '../utils'
+} from '../shared'
 
-const {
-  RangePicker: AntRangePicker,
-  WeekPicker: AntWeekPicker,
-  MonthPicker: AntMonthPicker
-} = AntDatePicker
+const { RangePicker, WeekPicker, MonthPicker } = DatePicker
 
-class AntYearPicker extends React.Component {
+class YearPicker extends React.Component {
   public render() {
-    return <AntDatePicker {...this.props} mode={'year'} />
+    return <DatePicker {...this.props} mode={'year'} />
   }
 }
-
-const DatePicker = StateLoading(AntDatePicker)
-const RangePicker = StateLoading(AntRangePicker)
-const MonthPicker = StateLoading(AntMonthPicker)
-const WeekPicker = StateLoading(AntWeekPicker)
-const YearPicker = StateLoading(AntYearPicker)
 
 const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
   return value && value.format ? value.format(format) : value

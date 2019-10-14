@@ -207,6 +207,8 @@ export const createEffectHook = <TResult, Props extends Array<any> = any[]>(
   return env.effectSelector(type, ...args)
 }
 
+type FieldMergeState = Partial<IFieldState> & Partial<IVirtualFieldState>
+
 export const FormEffectHooks = {
   onFormWillInit$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_WILL_INIT
@@ -243,19 +245,17 @@ export const FormEffectHooks = {
     LifeCycleTypes.ON_FORM_GRAPH_CHANGE
   ),
 
-  onFieldWillInit$: createEffectHook<IFieldState | IVirtualFieldState>(
+  onFieldWillInit$: createEffectHook<FieldMergeState>(
     LifeCycleTypes.ON_FIELD_WILL_INIT
   ),
-  onFieldInit$: createEffectHook<IFieldState | IVirtualFieldState>(
-    LifeCycleTypes.ON_FIELD_INIT
-  ),
-  onFieldChange$: createEffectHook<IFieldState | IVirtualFieldState>(
+  onFieldInit$: createEffectHook<FieldMergeState>(LifeCycleTypes.ON_FIELD_INIT),
+  onFieldChange$: createEffectHook<FieldMergeState>(
     LifeCycleTypes.ON_FIELD_CHANGE
   ),
-  onFieldMount$: createEffectHook<IFieldState | IVirtualFieldState>(
+  onFieldMount$: createEffectHook<FieldMergeState>(
     LifeCycleTypes.ON_FIELD_MOUNT
   ),
-  onFieldUnmount$: createEffectHook<IFieldState | IVirtualFieldState>(
+  onFieldUnmount$: createEffectHook<FieldMergeState>(
     LifeCycleTypes.ON_FIELD_UNMOUNT
   ),
   onFieldInputChange$: createEffectHook<IFieldState>(

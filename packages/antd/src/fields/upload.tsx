@@ -1,8 +1,8 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-form'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import { Button, Upload, Icon } from 'antd'
 import styled from 'styled-components'
-import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
+import { toArr, isArr, isEqual, mapStyledProps } from '../shared'
 
 const { Dragger: UploadDragger } = Upload
 

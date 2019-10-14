@@ -1,6 +1,6 @@
 import React from 'react'
-import { Form } from '@alifd/next'
-import { FormProps } from '@alifd/next/types/form'
+import { Form } from 'antd'
+import { FormProps } from 'antd/lib/form'
 import { IFormItemTopProps } from '../types'
 import { FormItemProvider } from './context'
 import { normalizeCol } from '../shared'
@@ -14,7 +14,8 @@ export const CompatNextForm: React.FC<
         {...props}
         labelCol={normalizeCol(props.labelCol)}
         wrapperCol={normalizeCol(props.wrapperCol)}
-        field={false}
+        layout={props.inline ? 'inline' : props.layout}
+        form={undefined}
       />
     </FormItemProvider>
   )

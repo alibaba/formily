@@ -1,20 +1,20 @@
 import React from 'react'
-import { Form } from '@alifd/next'
+import { Form } from 'antd'
 import { useFormItem } from './context'
 import { IFormItemTopProps, ICompatItemProps } from '../types'
 import { normalizeCol } from '../shared'
 
 const computeStatus = (props: ICompatItemProps) => {
   if (props.loading) {
-    return 'loading'
+    return 'validating'
   }
   if (props.invalid) {
     return 'error'
   }
-  //todo:暂时不支持
-  // if (props.warnings.length) {
-  //   return 'warning'
-  // }
+  if (props.warnings.length) {
+    return 'warning'
+  }
+  return ''
 }
 
 const computeHelp = (props: ICompatItemProps) => {
@@ -64,14 +64,7 @@ const computeSchemaExtendProps = (
 }
 
 export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
-  const {
-    prefix,
-    labelAlign,
-    labelCol,
-    labelTextAlign,
-    wrapperCol,
-    size
-  } = useFormItem()
+  const { prefixCls, labelAlign, labelCol, wrapperCol } = useFormItem()
   const help = computeHelp(props)
   const label = computeLabel(props)
   const status = computeStatus(props)
@@ -79,17 +72,15 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
   const itemProps = computeSchemaExtendProps(props)
   return (
     <Form.Item
-      prefix={prefix}
+      prefixCls={prefixCls}
       label={label}
-      labelTextAlign={labelTextAlign}
       labelCol={label ? normalizeCol(labelCol) : undefined}
       labelAlign={labelAlign}
       required={props.required}
       wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
-      size={size}
       help={help}
-      validateState={status}
-      extra={<p>{extra}</p>}
+      validateStatus={status}
+      extra={extra ? <p>{extra}</p> : undefined}
       {...itemProps}
     >
       {props.children}
