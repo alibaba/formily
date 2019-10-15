@@ -58,17 +58,10 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
 
     parseValues({ value, values }: IFieldStateProps) {
       if (isValid(values)) {
-        if (isValid(value)) {
-          values = clone(toArr(values))
-          value = clone(value)
-          values[0] = value
-        } else {
-          values = toArr(clone(values))
-          values[0] = value
-        }
+        values = toArr(values)
+        values[0] = value
       } else {
         if (isValid(value)) {
-          value = clone(value)
           values = toArr(value)
         }
       }
@@ -132,14 +125,6 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
           : draft.formEditable
         : true
 
-      if (
-        draft.selfEditable !== prevState.selfEditable &&
-        !draft.selfEditable
-      ) {
-        draft.errors = []
-        draft.warnings = []
-      }
-
       const { value, values } = this.parseValues(draft)
       draft.value = value
       draft.values = values
@@ -159,31 +144,29 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.props = prevState.props
       }
 
-      if (draft.effectErrors.length) {
-        draft.invalid = true
-        draft.valid = false
-      } else {
-        draft.invalid = false
-        draft.valid = true
-      }
       if (draft.validating === true) {
         draft.loading = true
       } else if (draft.validating === false) {
         draft.loading = false
-      }
-      if (draft.mounted === true) {
-        draft.unmounted = false
-      }
-      if (draft.visible === false) {
+      }      
+      // 以下几种情况清理错误和警告信息
+      // 1. 字段设置为不可编辑
+      // 2. 字段隐藏
+      // 3. 字段被卸载
+      if ((draft.selfEditable !== prevState.selfEditable &&
+          !draft.selfEditable) ||
+          draft.visible === false ||
+          draft.unmounted === true) {
         draft.errors = []
         draft.effectErrors = []
         draft.warnings = []
         draft.effectWarnings = []
       }
+      if (draft.mounted === true) {
+        draft.unmounted = false
+      }
       if (draft.unmounted === true) {
-        draft.mounted = false
-        draft.errors = []
-        draft.warnings = []
+        draft.mounted = false        
       }
       if (draft.errors.length) {
         draft.invalid = true

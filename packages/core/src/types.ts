@@ -1,7 +1,6 @@
 import { FormPath, FormPathPattern, isFn } from '@uform/shared'
 import {
   ValidatePatternRules,
-  ValidateArrayRules,
   ValidateNodeResult
 } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
@@ -133,7 +132,7 @@ export interface IFieldState {
   ruleWarnings: string[]
   value: any
   initialValue: any
-  rules: ValidateArrayRules[]
+  rules: ValidatePatternRules[]
   required: boolean
   mounted: boolean
   unmounted: boolean
