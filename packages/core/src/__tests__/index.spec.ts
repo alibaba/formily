@@ -1,5 +1,6 @@
 import { isEqual } from '@uform/shared'
 import { createForm, LifeCycleTypes, FormLifeCycle, FormPath } from '../index'
+import { ValidateDescription, ValidatePatternRules } from '@uform/validator'
 
 // mock datasource
 const testValues = { aa: 111, bb: 222 }
@@ -520,21 +521,192 @@ describe('setFieldState', () => {
     expect(form.getFieldState('a')).toEqual(state)
   })
 
-  // effectErrors 依赖callback的errors
-  // effectWarnings 依赖callback的warnings
-  // errors, warnings 无法被设置，会从最新的state中获取
-  // 如果初始化情况下，value被改变,modified 为true
-  // pristine 依赖 draft.values === draft.initialValues
-  // 如果editable被有意清空, 或visible=false 或被unmounted=true，所有错误信息都会被清理
-  // 如果effectErrors或errors存在，invalid = true, valid = false
-  // loading 依赖 validating
-  // mounted 和 unmounted 互为取反，先读mounted
-  // rules 和 required无法被修改
-  test('set', async() => {
+  test('validating and loading', () => {
+    const form = createForm()
+    form.registerField({ path: 'a', rules: [
+      (v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined,
+      (v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined
+    ] })
+    expect(form.getFieldState('a', state => state.validating)).toEqual(false)
+    expect(form.getFieldState('a', state => state.loading)).toEqual(false)
+    form.setFieldState('a', state => state.validating = true)
+    expect(form.getFieldState('a', state => state.loading)).toEqual(true)
+    form.setFieldState('a', state => state.validating = false)
+    expect(form.getFieldState('a', state => state.loading)).toEqual(false)
+  });
+
+  test('value, values and parseValues', () => {
     const form = createForm()
     form.registerField({ path: 'a' })
-    // todo
-  })
+    expect(form.getFieldState('a', state => state.modified)).toEqual(false)
+    expect(form.getFieldState('a', state => state.value)).toEqual(undefined)
+    expect(form.getFieldState('a', state => state.values)).toEqual([undefined])
+    const arr = [1,2,3]
+    form.setFieldState('a', state => state.value = arr)
+    expect(form.getFieldState('a', state => state.modified)).toEqual(true)
+    expect(form.getFieldState('a', state => state.value)).toEqual(arr)
+    expect(form.getFieldState('a', state => state.values)).toEqual([arr])
+    form.setFieldState('a', state => state.values = ['e', 'context'])
+    // values 第一个参数会是value, 处理onChange的多参数一般会和values[0]同步，这里value测试极端情况
+    expect(form.getFieldState('a', state => state.value)).toEqual(arr)
+    expect(form.getFieldState('a', state => state.values)).toEqual([arr, 'context'])
+    // visible为false或者已卸载的组件无法修改value
+    form.setFieldState('a', state => state.visible = false)
+    form.setFieldState('a', state => state.value = [4,5,6])
+    expect(form.getFieldState('a', state => state.value)).toEqual(arr)
+    form.setFieldState('a', state => {
+      state.visible = true;
+      state.unmounted = true;
+    })
+    form.setFieldState('a', state => state.value = [4,5,6])
+    expect(form.getFieldState('a', state => state.value)).toEqual(arr)
+  });
+
+  test('mount and unmount', () => {
+    const form = createForm()
+    form.registerField({ path: 'a' })
+    expect(form.getFieldState('a', state => state.mounted)).toEqual(false)
+    expect(form.getFieldState('a', state => state.unmounted)).toEqual(false)
+    form.setFieldState('a', state => state.mounted = true)
+    expect(form.getFieldState('a', state => state.mounted)).toEqual(true)
+    expect(form.getFieldState('a', state => state.unmounted)).toEqual(false)
+  });
+
+  test('rules, required and parseRules', () => {
+    const form = createForm()
+    form.registerField({ path: 'a' })
+    expect(form.getFieldState('a', state => state.required)).toEqual(false)
+    expect(form.getFieldState('a', state => state.rules)).toEqual([])
+    form.setFieldState('a', state => state.required = true)
+    expect(form.getFieldState('a', state => state.required)).toEqual(true)
+    const customValidator: ValidatePatternRules[] = [(v, _: ValidateDescription) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : null];
+    form.setFieldState('a', state => state.rules = customValidator)
+    const rules = form.getFieldState('a', state => state.rules);
+    expect(rules).toEqual([...customValidator, { required: true }]) 
+  });
+
+  test('pristine', () => { // 无法被修改，依赖value和initialValue的差别
+    const form = createForm()
+    form.registerField({ path: 'a' })
+    expect(form.getFieldState('a', state => state.pristine)).toEqual(true)
+    form.setFieldState('a', state => state.pristine = false)
+    expect(form.getFieldState('a', state => state.pristine)).toEqual(true)
+    form.setFieldState('a', state => state.value = '1')
+    expect(form.getFieldState('a', state => state.pristine)).toEqual(false)
+    form.setFieldState('a', state => state.initialValue = '1')
+    expect(form.getFieldState('a', state => state.pristine)).toEqual(true)
+  });
+
+  test('invalid 和 valid', () => { // 无法被修改，依赖错误信息和告警信息
+    const form = createForm()
+    form.registerField({ path: 'a' })
+    expect(form.getFieldState('a', state => state.invalid)).toEqual(false)
+    expect(form.getFieldState('a', state => state.valid)).toEqual(true)
+    form.setFieldState('a', state => state.invalid = true)
+    form.setFieldState('a', state => state.valid = false)
+    expect(form.getFieldState('a', state => state.invalid)).toEqual(false)
+    expect(form.getFieldState('a', state => state.valid)).toEqual(true)
+  });
+
+  test('set errors and warnings', async() => {
+    const form = createForm()  
+    form.registerField({ path: 'a', rules: [
+      (v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined,
+      (v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined
+    ] })
+    const state = form.getFieldState('a')
+    expect(state.effectErrors).toEqual([])
+    expect(state.effectWarnings).toEqual([])
+    expect(state.ruleErrors).toEqual([])
+    expect(state.ruleWarnings).toEqual([])
+
+    const mutators = form.createMutators('a')
+    const result = await mutators.validate()
+    expect(result.errors).toEqual([{ path: 'a', messages: ['error msg'] }])
+    expect(result.warnings).toEqual([{ path: 'a', messages: ['warning msg'] }])
+    // 校验后影响的是ruleErrors, ruleWarnings
+    const state2 = form.getFieldState('a')
+    expect(state2.effectErrors).toEqual([])
+    expect(state2.effectWarnings).toEqual([])
+    expect(state2.ruleErrors).toEqual(['error msg'])
+    expect(state2.ruleWarnings).toEqual(['warning msg'])
+    expect(state2.errors).toEqual(['error msg'])
+    expect(state2.warnings).toEqual(['warning msg'])
+
+    // effectError 和 effectWarnings 需要通过设置 errors 和 warning 进行设置
+    // 看起来有问题，但是对于开发者并不透出effectErrors的概念，只让他感知这是errors
+    // errors = effectErrors + ruleErrors
+    // warnings = effectWarnings + ruleWarnings
+    form.setFieldState('a', state => state.errors = ['effect errors msg'])
+    form.setFieldState('a', state => state.warnings = ['effect warning msg'])
+    const state3 = form.getFieldState('a')
+    expect(state3.effectErrors).toEqual(['effect errors msg'])
+    expect(state3.effectWarnings).toEqual(['effect warning msg'])
+    expect(state3.errors).toEqual(['error msg', 'effect errors msg'])
+    expect(state3.warnings).toEqual(['warning msg', 'effect warning msg'])
+
+    // 不可编辑，清空所有错误和警告信息
+    form.setFieldState('a', state => state.editable = false)
+    const state4 = form.getFieldState('a')
+    expect(state4.effectErrors).toEqual([])
+    expect(state4.effectWarnings).toEqual([])
+    expect(state4.errors).toEqual([])
+    expect(state4.warnings).toEqual([])
+    form.setFieldState('a', state => state.editable = true)
+
+    // 隐藏，清空所有错误和警告信息
+    await mutators.validate()
+    form.setFieldState('a', state => state.errors = ['effect errors msg'])
+    form.setFieldState('a', state => state.warnings = ['effect warning msg'])
+    form.setFieldState('a', state => state.visible = false)
+    const state6 = form.getFieldState('a')
+    expect(state6.effectErrors).toEqual([])
+    expect(state6.effectWarnings).toEqual([])
+    expect(state6.errors).toEqual([])
+    expect(state6.warnings).toEqual([])
+
+    // 卸载组件，清空所有错误和警告信息
+    await mutators.validate()
+    form.setFieldState('a', state => state.errors = ['effect errors msg'])
+    form.setFieldState('a', state => state.warnings = ['effect warning msg'])
+    const state7 = form.getFieldState('a')
+    expect(state7.effectErrors).toEqual([])
+    expect(state7.effectWarnings).toEqual([])
+    expect(state7.errors).toEqual([])
+    expect(state7.warnings).toEqual([])
+  });
+
+  test('set editable', async() => {
+    const form = createForm()
+    form.registerField({ path: 'a' })
+    const state = form.getFieldState('a')
+
+    // 初始化
+    expect(state.editable).toEqual(true)
+    expect(state.selfEditable).toEqual(undefined)
+    expect(state.formEditable).toEqual(undefined)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(true)
+    // 简单设置 (editable会影响selfEditable)
+    form.setFieldState('a', state => state.editable = false)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(false)
+    expect(form.getFieldState('a', state => state.selfEditable)).toEqual(false)
+    // 设置影响计算的值selfEditable
+    form.setFieldState('a', state => state.selfEditable = true)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(true)
+    // 设置影响计算的值formEditable(selfEditable优先级高于formEditable)
+    form.setFieldState('a', state => state.selfEditable = undefined)
+    form.setFieldState('a', state => state.formEditable = false)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(false)
+    // 支持函数(UI层传入)
+    form.setFieldState('a', state => state.formEditable = () => true)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(true)
+    // editable会影响selfEditable, 设置顺序又因为 editable > selfEditable > formEditable
+    // 前两者都无效时，最终返回formEditable的值
+    form.setFieldState('a', state => state.editable = undefined)
+    form.setFieldState('a', state => state.formEditable = () => false)
+    expect(form.getFieldState('a', state => state.selfEditable)).toEqual(undefined)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(false)
+  });
 })
 
 describe('getFieldState', () => {
@@ -632,10 +804,16 @@ describe('registerField', () => {
     const form = createForm({ values: { a: 1 } })
     form.registerField({ path: 'a' })
     form.registerField({ path: 'b' })
-    expect(form.getFieldValue('a')).toEqual(1)
+    form.registerField({ path: 'c' })
+    form.registerField({ path: 'd', editable: false })
+    form.registerField({ path: 'e', editable: true })
+    expect(form.getFieldValue('a')).toEqual(1)    
     expect(form.getFieldValue('b')).toEqual(undefined)
     expect(form.getFieldState('a', state => state.values)).toEqual([1])
     expect(form.getFieldState('b', state => state.values)).toEqual([undefined])
+    expect(form.getFieldState('c', state => state.editable)).toEqual(true)
+    expect(form.getFieldState('d', state => state.editable)).toEqual(false)
+    expect(form.getFieldState('e', state => state.editable)).toEqual(true)
   })
 
   test('merge', async () => {
@@ -652,7 +830,25 @@ describe('registerField', () => {
 })
 
 describe('registerVirtualField', () => {
-  //todo
+  test('basic', async () => {
+    const onChange = jest.fn()
+    const vprops = { hello: 'world' };
+    const form = createForm({ values: { a: 1 } })
+    form.registerVirtualField({ path: 'a' })
+    form.registerVirtualField({ path: 'b', onChange })
+    expect(onChange).toBeCalledTimes(1) // initialized
+    form.registerVirtualField({ path: 'c', props: vprops })
+    expect(form.getFieldValue('a')).toEqual({ a: 1 }) // 根据dataPath法则，会拿到根路径的value
+    expect(form.getFieldState('a', state => state.values)).toEqual(undefined) // 不存在这个属性
+    expect(form.getFieldState('c', state => state.props)).toEqual(vprops)
+    expect(form.getFieldState('b', state => state.display)).toEqual(true)
+    expect(form.getFieldState('b', state => state.visible)).toEqual(true)
+    form.setFieldState('b', state => state.display = false)
+    expect(form.getFieldState('b', state => state.display)).toEqual(false)
+    form.setFieldState('b', state => state.visible = false)
+    expect(form.getFieldState('b', state => state.visible)).toEqual(false)
+    expect(onChange).toBeCalledTimes(3)
+  })
 })
 
 describe('createMutators', () => {
