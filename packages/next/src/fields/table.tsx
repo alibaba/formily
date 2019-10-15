@@ -11,7 +11,7 @@ import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form } from '@alifd/next'
 import styled from 'styled-components'
-
+import { FormItemProps } from '../compat/FormItem'
 const ArrayComponents = {
   CircleButton,
   TextButton,
@@ -54,10 +54,16 @@ const FormTableField = styled(
         }
         return (
           <Table.Column
+            width={200}
             {...itemProps}
+            title={props.title}
             dataIndex={key}
             cell={(value: any, index: number) => {
-              return <SchemaField path={path.concat(index, key)} />
+              return (
+                <FormItemProps label={undefined}>
+                  <SchemaField path={path.concat(index, key)} />
+                </FormItemProps>
+              )
             }}
           />
         )
@@ -80,15 +86,17 @@ const FormTableField = styled(
             renderEmpty
           }}
         >
-          <Table {...componentProps} dataSource={toArr(value)}>
+          <Table {...componentProps} size="small" dataSource={toArr(value)}>
             {isArr(schema.items)
               ? schema.items.reduce((buf, items) => {
                   return buf.concat(renderColumns(items))
                 }, [])
               : renderColumns(schema.items)}
             <Table.Column
+              width={200}
               {...operations}
               key="operations"
+              lock="right"
               dataIndex="operations"
               cell={(value: any, index: number) => {
                 return (
@@ -131,8 +139,14 @@ const FormTableField = styled(
 )`
   display: inline-block;
   min-width: 600px;
+  max-width: 100%;
+  overflow: scroll;
   table {
     margin-bottom: 0 !important;
+    th,
+    td {
+      padding: 0 !important;
+    }
   }
   .array-table-addition {
     padding: 10px;

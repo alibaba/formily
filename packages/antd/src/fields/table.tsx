@@ -9,12 +9,13 @@ import { toArr, isFn, isArr } from '@uform/shared'
 import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form, Icon } from 'antd'
+import { FormItemProps } from '../compat/FormItem'
 import styled from 'styled-components'
 
 const ArrayComponents = {
   CircleButton,
   TextButton,
-  AdditionIcon: () => <Icon type="plus" />,
+  AdditionIcon: () => <Icon type="plus" style={{ fontSize: 20 }} />,
   RemoveIcon: () => <Icon type="delete" />,
   MoveDownIcon: () => <Icon type="down" />,
   MoveUpIcon: () => <Icon type="up" />
@@ -45,17 +46,55 @@ const FormTableField = styled(
           ...props.getExtendsItemProps(),
           ...props.getExtendsProps()
         }
-        return (
-          <Table.Column
-            {...itemProps}
-            dataIndex={key}
-            cell={(value: any, index: number) => {
-              return <SchemaField path={path.concat(index, key)} />
-            }}
-          />
-        )
+        return {
+          title: props.title,
+          ...itemProps,
+          key,
+          dataIndex: key,
+          render: (value: any, record: any, index: number) => {
+            return (
+              <FormItemProps label={undefined}>
+                <SchemaField path={path.concat(index, key)} />
+              </FormItemProps>
+            )
+          }
+        }
       })
-      return []
+    }
+    let columns = isArr(schema.items)
+      ? schema.items.reduce((buf, items) => {
+          return buf.concat(renderColumns(items))
+        }, [])
+      : renderColumns(schema.items)
+    if (editable) {
+      columns.push({
+        ...operations,
+        key: 'operations',
+        dataIndex: 'operations',
+        render: (value: any, record: any, index: number) => {
+          return (
+            <Form.Item>
+              <div className="array-item-operator">
+                <ArrayList.Remove
+                  index={index}
+                  onClick={() => mutators.remove(index)}
+                />
+                <ArrayList.MoveDown
+                  index={index}
+                  onClick={() => mutators.moveDown(index)}
+                />
+                <ArrayList.MoveUp
+                  index={index}
+                  onClick={() => mutators.moveUp(index)}
+                />
+                {isFn(renderExtraOperations)
+                  ? renderExtraOperations(index)
+                  : renderExtraOperations}
+              </div>
+            </Form.Item>
+          )
+        }
+      })
     }
     return (
       <div className={className}>
@@ -73,41 +112,12 @@ const FormTableField = styled(
             renderEmpty
           }}
         >
-          <Table {...componentProps} dataSource={toArr(value)}>
-            {isArr(schema.items)
-              ? schema.items.reduce((buf, items) => {
-                  return buf.concat(renderColumns(items))
-                }, [])
-              : renderColumns(schema.items)}
-            <Table.Column
-              {...operations}
-              key="operations"
-              dataIndex="operations"
-              cell={(value: any, index: number) => {
-                return (
-                  <Form.Item>
-                    <div className="array-item-operator">
-                      <ArrayList.Remove
-                        index={index}
-                        onClick={() => mutators.remove(index)}
-                      />
-                      <ArrayList.MoveDown
-                        index={index}
-                        onClick={() => mutators.moveDown(index)}
-                      />
-                      <ArrayList.MoveUp
-                        index={index}
-                        onClick={() => mutators.moveUp(index)}
-                      />
-                      {isFn(renderExtraOperations)
-                        ? renderExtraOperations(index)
-                        : renderExtraOperations}
-                    </div>
-                  </Form.Item>
-                )
-              }}
-            />
-          </Table>
+          <Table
+            {...componentProps}
+            pagination={false}
+            columns={columns}
+            dataSource={toArr(value)}
+          ></Table>
           <ArrayList.Addition>
             {({ children }) => {
               return (
@@ -122,17 +132,16 @@ const FormTableField = styled(
     )
   }
 )`
-  display: inline-block;
   min-width: 600px;
+  margin-bottom: 10px;
   table {
     margin-bottom: 0 !important;
   }
   .array-table-addition {
-    padding: 10px;
     background: #fbfbfb;
-    border-left: 1px solid #dcdee3;
-    border-right: 1px solid #dcdee3;
-    border-bottom: 1px solid #dcdee3;
+    cursor: pointer;
+    margin-top: 3px;
+    border-radius: 3px;
     .next-btn-text {
       color: #888;
     }
@@ -141,9 +150,10 @@ const FormTableField = styled(
       font-size: 16px !important;
       margin-right: 5px;
     }
-    margin-bottom: 10px;
   }
-
+  .ant-btn {
+    color: #888;
+  }
   .array-item-operator {
     display: flex;
     button {

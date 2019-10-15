@@ -1,12 +1,10 @@
 import React, { useRef } from 'react'
-import { Grid } from '@alifd/next'
+import { Row, Col } from 'antd'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
 import { useFormItem } from '../compat/context'
 import { IFormButtonGroupProps } from '../types'
-
-const { Row, Col } = Grid
 
 export interface IOffset {
   top: number | string

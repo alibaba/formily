@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext, useContext } from 'react'
 import { Form } from 'antd'
 import { useFormItem } from './context'
 import { IFormItemTopProps, ICompatItemProps } from '../types'
@@ -11,7 +11,7 @@ const computeStatus = (props: ICompatItemProps) => {
   if (props.invalid) {
     return 'error'
   }
-  if (props.warnings.length) {
+  if (props.warnings && props.warnings.length) {
     return 'warning'
   }
   return ''
@@ -63,6 +63,14 @@ const computeSchemaExtendProps = (
   }
 }
 
+const FormItemPropsContext = createContext({})
+
+export const FormItemProps = ({ children, ...props }) => (
+  <FormItemPropsContext.Provider value={props}>
+    {children}
+  </FormItemPropsContext.Provider>
+)
+
 export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
   const { prefixCls, labelAlign, labelCol, wrapperCol } = useFormItem()
   const help = computeHelp(props)
@@ -70,6 +78,7 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
   const status = computeStatus(props)
   const extra = computeExtra(props)
   const itemProps = computeSchemaExtendProps(props)
+  const outerFormItemProps = useContext(FormItemPropsContext)
   return (
     <Form.Item
       prefixCls={prefixCls}
@@ -82,8 +91,9 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
       validateStatus={status}
       extra={extra ? <p>{extra}</p> : undefined}
       {...itemProps}
+      {...outerFormItemProps}
     >
-      {props.children}
+      <FormItemProps>{props.children}</FormItemProps>
     </Form.Item>
   )
 }

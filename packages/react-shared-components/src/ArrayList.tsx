@@ -1,5 +1,5 @@
 import React, { createContext, useContext, Fragment, useMemo } from 'react'
-import { isNum, isFn } from '@uform/shared'
+import { isNum, isFn, toArr } from '@uform/shared'
 import { IArrayList, IArrayListProps } from './types'
 
 const ArrayContext = createContext<IArrayListProps>({})
@@ -44,12 +44,16 @@ const useArrayList = (index: number = 0) => {
     return children || <Fragment />
   }
 
-  const isEmpty = !value || (value && value.length <= 0)
+  const newValue = toArr(value)
+
+  const isEmpty = !newValue || (newValue && newValue.length <= 0)
   const isDisable = disabled || editable === false
-  const allowMoveUp = value && value.length > 1 && !isDisable
-  const allowMoveDown = value && value.length > 1 && !isDisable
-  const allowRemove = isNum(minItems) ? value.length > minItems : !isDisable
-  const allowAddition = isNum(maxItems) ? value.length <= maxItems : !isDisable
+  const allowMoveUp = newValue && newValue.length > 1 && !isDisable
+  const allowMoveDown = newValue && newValue.length > 1 && !isDisable
+  const allowRemove = isNum(minItems) ? newValue.length > minItems : !isDisable
+  const allowAddition = isNum(maxItems)
+    ? newValue.length <= maxItems
+    : !isDisable
 
   const context = {
     ...props,
@@ -92,7 +96,7 @@ ArrayList.Remove = ({ children, component, index, ...props }) => {
     return renderWith(
       'renderRemove',
       text => (
-        <Button {...props}>
+        <Button {...props} style={{ border: text ? 'none' : '' }}>
           <RemoveIcon />
           {text}
         </Button>
@@ -117,7 +121,7 @@ ArrayList.Addition = ({ children, component, ...props }) => {
     return renderWith(
       'renderAddition',
       text => (
-        <Button {...props}>
+        <Button {...props} style={{ border: text ? 'none' : '' }}>
           <AdditionIcon />
           {text}
         </Button>
@@ -141,7 +145,7 @@ ArrayList.MoveUp = ({ children, component, index, ...props }) => {
     return renderWith(
       'renderMoveUp',
       text => (
-        <Button {...props}>
+        <Button {...props} style={{ border: text ? 'none' : '' }}>
           <MoveUpIcon />
           {text}
         </Button>
@@ -165,7 +169,7 @@ ArrayList.MoveDown = ({ children, component, index, ...props }) => {
     return renderWith(
       'renderMoveDown',
       text => (
-        <Button {...props}>
+        <Button {...props} style={{ border: text ? 'none' : '' }}>
           <MoveUpIcon />
           {text}
         </Button>
@@ -187,7 +191,7 @@ ArrayList.Empty = ({ children, component, ...props }) => {
   let addtion: any
   if (allowAddition) {
     addtion = renderWith('renderAddition', text => (
-      <Button {...props}>
+      <Button {...props} style={{ border: text ? 'none' : '' }}>
         <AdditionIcon />
         {text}
       </Button>

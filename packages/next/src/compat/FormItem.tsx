@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import { Form } from '@alifd/next'
 import { useFormItem } from './context'
 import { IFormItemTopProps, ICompatItemProps } from '../types'
 import { normalizeCol } from '../shared'
+import { useContext } from 'react'
 
 const computeStatus = (props: ICompatItemProps) => {
   if (props.loading) {
@@ -63,6 +64,14 @@ const computeSchemaExtendProps = (
   }
 }
 
+const FormItemPropsContext = createContext({})
+
+export const FormItemProps = ({ children, ...props }) => (
+  <FormItemPropsContext.Provider value={props}>
+    {children}
+  </FormItemPropsContext.Provider>
+)
+
 export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
   const {
     prefix,
@@ -72,6 +81,7 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
     wrapperCol,
     size
   } = useFormItem()
+  const formItemProps = useContext(FormItemPropsContext)
   const help = computeHelp(props)
   const label = computeLabel(props)
   const status = computeStatus(props)
@@ -91,8 +101,9 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
       validateState={status}
       extra={<p>{extra}</p>}
       {...itemProps}
+      {...formItemProps}
     >
-      {props.children}
+      <FormItemProps>{props.children}</FormItemProps>
     </Form.Item>
   )
 }

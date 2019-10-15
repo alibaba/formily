@@ -13,16 +13,10 @@ import styled from 'styled-components'
 const ArrayComponents = {
   CircleButton,
   TextButton,
-  AdditionIcon: () => <Icon type="plus"/>,
-  RemoveIcon: () => (
-    <Icon type="delete" />
-  ),
-  MoveDownIcon: () => (
-    <Icon type="down" />
-  ),
-  MoveUpIcon: () => (
-    <Icon type="up" />
-  )
+  AdditionIcon: () => <Icon type="plus" />,
+  RemoveIcon: () => <Icon type="delete" />,
+  MoveDownIcon: () => <Icon type="down" />,
+  MoveUpIcon: () => <Icon type="up" />
 }
 
 const FormCardsField = styled(
@@ -63,6 +57,7 @@ const FormCardsField = styled(
             return (
               <Card
                 {...componentProps}
+                size="small"
                 className={`card-list-item`}
                 key={index}
                 title={
@@ -99,6 +94,7 @@ const FormCardsField = styled(
               return (
                 <Card
                   {...componentProps}
+                  size="small"
                   className={`card-list-item card-list-empty`}
                   onClick={onAdd}
                 >
@@ -123,27 +119,11 @@ const FormCardsField = styled(
     )
   }
 )<ISchemaFieldComponentProps>`
-  .next-card-body {
-    padding-top: 30px;
-    padding-bottom: 0 !important;
-  }
-  .next-card-head-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .next-card {
-    display: block;
-    margin-bottom: 0px;
-    background: #fff;
+  .ant-card {
+    .ant-card {
+      box-shadow: none;
+    }
 
-    .next-card {
-      box-shadow: none;
-    }
-    .card-list-item {
-      box-shadow: none;
-      border: 1px solid #eee;
-    }
     .array-cards-addition {
       box-shadow: none;
       border: 1px solid #eee;
@@ -158,34 +138,19 @@ const FormCardsField = styled(
       align-items: center;
       margin-bottom: 20px;
       img {
-        margin-bottom: 16px;
         height: 85px;
       }
-      .next-btn-text {
+      .ant-btn {
         color: #888;
-      }
-      .next-icon:before {
-        width: 16px !important;
-        font-size: 16px !important;
-        margin-right: 5px;
       }
     }
   }
   .card-list-empty.card-list-item {
     cursor: pointer;
   }
-  .next-card.card-list-item {
-    margin-top: 20px;
-  }
 
-  .next-card-extra {
-    display: flex;
-    button {
-      margin-right: 8px;
-    }
-  }
   .array-cards-addition {
-    margin-top: 20px;
+    margin-top: 10px;
     margin-bottom: 3px;
     background: #fff;
     display: flex;
@@ -193,17 +158,19 @@ const FormCardsField = styled(
     padding: 10px 0;
     justify-content: center;
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.1);
-    .next-btn-text {
-      color: #888;
-    }
-    .next-icon:before {
-      width: 16px !important;
-      font-size: 16px !important;
-      margin-right: 5px;
-    }
+  }
+  .card-list-item {
+    margin-top: 10px;
+    border: 1px solid #eee;
   }
   .card-list-item:first-child {
     margin-top: 0 !important;
+  }
+  .ant-card-extra {
+    display: flex;
+    button {
+      margin-right: 8px;
+    }
   }
 `
 

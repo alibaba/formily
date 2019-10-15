@@ -14,24 +14,9 @@ export const FormBlock = createVirtualBox<CardProps>(
     )
   })`
     margin-bottom: 0px;
-    .ant-card-body {
-      padding-top: 20px;
-      padding-bottom: 0 !important;
-    }
     &.ant-card {
       border: none;
-      padding: 0 15px;
-      padding-bottom: 15px;
-      display: block;
       box-shadow: none;
-    }
-    .ant-card-head {
-      padding: 0 !important;
-      min-height: 24px;
-      font-weight: normal;
-    }
-    .ant-card-head-title {
-      padding: 0;
     }
   `
 )

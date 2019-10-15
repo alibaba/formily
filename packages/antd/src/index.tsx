@@ -14,3 +14,4 @@ export const SchemaForm: React.FC<
   INextSchemaFormProps
 > = SchemaMarkupForm as any
 export const Field: React.FC<INextSchemaFieldProps> = SchemaMarkupField
+export default SchemaForm

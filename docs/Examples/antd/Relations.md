@@ -65,6 +65,7 @@ const App = () => {
             })
           })
           $('onFieldChange', 'aa').subscribe(fieldState => {
+            console.log(fieldState.value)
             setFieldState('bb', state => {
               state.visible = !fieldState.value
             })
@@ -135,7 +136,7 @@ const App = () => {
             })
         }}
         labelCol={6}
-        wrapperCol={4}
+        wrapperCol={12}
         onSubmit={v => console.log(v)}
       >
         <FormBlock title="Block1">
