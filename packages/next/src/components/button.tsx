@@ -25,6 +25,13 @@ export const CircleButton = styled(props => {
   &.next-small {
     min-width: 20px;
   }
+  &.has-text {
+    .next-icon {
+      margin-right: 5px;
+    }
+    background: none !important;
+    border: none !important;
+  }
 `
 
 export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {

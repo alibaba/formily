@@ -8,12 +8,12 @@ export const FormBlock = createVirtualBox<CardProps>(
   'block',
   styled(({ children, className, ...props }) => {
     return (
-      <Card className={className} {...props}>
+      <Card className={className} size="small" {...props}>
         {children}
       </Card>
     )
   })`
-    margin-bottom: 0px;
+    margin-bottom: 10px !important;
     &.ant-card {
       border: none;
       box-shadow: none;

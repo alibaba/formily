@@ -123,7 +123,9 @@ const FormCardsField = styled(
     .ant-card {
       box-shadow: none;
     }
-
+    .ant-card-body{
+      padding:20px 10px 0 10px;
+    }
     .array-cards-addition {
       box-shadow: none;
       border: 1px solid #eee;
@@ -136,7 +138,7 @@ const FormCardsField = styled(
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom:10px;
       img {
         height: 85px;
       }
@@ -155,7 +157,7 @@ const FormCardsField = styled(
     background: #fff;
     display: flex;
     cursor: pointer;
-    padding: 10px 0;
+    padding: 5px 0;
     justify-content: center;
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.1);
   }

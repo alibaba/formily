@@ -20,7 +20,6 @@ export const FormBlock = createVirtualBox<CardProps>(
     }
     &.next-card {
       border: none;
-      padding: 0 15px;
       padding-bottom: 15px;
     }
   `

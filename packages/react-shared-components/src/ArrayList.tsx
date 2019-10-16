@@ -85,6 +85,12 @@ const useComponent = (name: string) => {
   }, [])
 }
 
+const createButtonCls = (props: any = {}, hasText: any) => {
+  return {
+    className: `${hasText ? 'has-text' : ''} ${props.className || ''}`
+  }
+}
+
 ArrayList.useArrayList = useArrayList
 ArrayList.useComponent = useComponent
 
@@ -96,7 +102,7 @@ ArrayList.Remove = ({ children, component, index, ...props }) => {
     return renderWith(
       'renderRemove',
       text => (
-        <Button {...props} style={{ border: text ? 'none' : '' }}>
+        <Button {...props} {...createButtonCls(props, text)}>
           <RemoveIcon />
           {text}
         </Button>
@@ -121,7 +127,7 @@ ArrayList.Addition = ({ children, component, ...props }) => {
     return renderWith(
       'renderAddition',
       text => (
-        <Button {...props} style={{ border: text ? 'none' : '' }}>
+        <Button {...props} {...createButtonCls(props, text)}>
           <AdditionIcon />
           {text}
         </Button>
@@ -145,7 +151,7 @@ ArrayList.MoveUp = ({ children, component, index, ...props }) => {
     return renderWith(
       'renderMoveUp',
       text => (
-        <Button {...props} style={{ border: text ? 'none' : '' }}>
+        <Button {...props} {...createButtonCls(props, text)}>
           <MoveUpIcon />
           {text}
         </Button>
@@ -169,7 +175,7 @@ ArrayList.MoveDown = ({ children, component, index, ...props }) => {
     return renderWith(
       'renderMoveDown',
       text => (
-        <Button {...props} style={{ border: text ? 'none' : '' }}>
+        <Button {...props} {...createButtonCls(props, text)}>
           <MoveUpIcon />
           {text}
         </Button>
@@ -191,7 +197,7 @@ ArrayList.Empty = ({ children, component, ...props }) => {
   let addtion: any
   if (allowAddition) {
     addtion = renderWith('renderAddition', text => (
-      <Button {...props} style={{ border: text ? 'none' : '' }}>
+      <Button {...props} {...createButtonCls(props, text)}>
         <AdditionIcon />
         {text}
       </Button>

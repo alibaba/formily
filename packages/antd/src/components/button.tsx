@@ -8,9 +8,16 @@ export const TextButton: React.FC<ButtonProps> = props => (
   <Button type="link" {...props} />
 )
 
-export const CircleButton: React.FC<ButtonProps> = props => (
-  <Button shape="circle" {...props} />
-)
+export const CircleButton: React.FC<ButtonProps> = props => {
+  const hasText = String(props.className || '').indexOf('has-text') > -1
+  return (
+    <Button
+      type={hasText ? 'link' : undefined}
+      shape={hasText ? undefined : 'circle'}
+      {...props}
+    />
+  )
+}
 
 export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
   return (

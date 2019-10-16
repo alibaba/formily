@@ -146,6 +146,10 @@ const FormTableField = styled(
     th,
     td {
       padding: 0 !important;
+      vertical-align: top;
+      .next-form-item{
+        margin-bottom:0 !important;
+      }
     }
   }
   .array-table-addition {
@@ -167,6 +171,7 @@ const FormTableField = styled(
 
   .array-item-operator {
     display: flex;
+    align-items: center;
     button {
       margin-right: 8px;
     }

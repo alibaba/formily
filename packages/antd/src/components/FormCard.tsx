@@ -6,11 +6,13 @@ import styled from 'styled-components'
 
 export const FormCard = createVirtualBox<CardProps>(
   'card',
-  ({ children, className, ...props }) => {
+  styled(({ children, className, ...props }) => {
     return (
-      <Card className={className} {...props}>
+      <Card className={className} size="small" {...props}>
         {children}
       </Card>
     )
-  }
+  })`
+    margin-bottom: 10px !important;
+  `
 )
