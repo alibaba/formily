@@ -15,7 +15,9 @@ const Text = styled(props => {
         ? props.value.some(val => val == value)
         : props.value == value
     )
-    value = find.map(item => item.label).join(' , ')
+    value = find.reduce((buf, item, index) => {
+      return buf.concat(item.label, index < find.length - 1 ? ', ' : '')
+    }, [])
   } else {
     value = Array.isArray(props.value)
       ? props.value.join(' ~ ')
