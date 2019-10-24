@@ -1,12 +1,10 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
+import React, { useRef } from 'react'
 import { Grid } from '@alifd/next'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
-
-import { FormLayoutConsumer } from '../form'
-import { IFormButtonGroupProps } from '../type'
+import { useFormItem } from '../compat/context'
+import { IFormButtonGroupProps } from '../types'
 
 const { Row, Col } = Grid
 
@@ -59,17 +57,22 @@ const isElementInViewport = (
   )
 }
 
-export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
-  class FormButtonGroup extends Component<IFormButtonGroupProps> {
-    static defaultProps = {
-      span: 24,
-      zIndex: 100
-    }
-
-    private formNode: HTMLElement
-
-    private renderChildren() {
-      const { children, itemStyle, offset, span } = this.props
+export const FormButtonGroup = styled(
+  (props: React.PropsWithChildren<IFormButtonGroupProps>) => {
+    const {
+      span,
+      zIndex,
+      sticky,
+      style,
+      offset,
+      className,
+      children,
+      triggerDistance,
+      itemStyle
+    } = props
+    const { inline } = useFormItem()
+    const selfRef = useRef<HTMLDivElement>()
+    const renderChildren = () => {
       return (
         <div className="button-group">
           <Row>
@@ -84,69 +87,53 @@ export const FormButtonGroup: React.FC<IFormButtonGroupProps> = styled(
         </div>
       )
     }
-
-    getStickyBoundaryHandler(ref) {
+    const getStickyBoundaryHandler = () => {
       return () => {
-        this.formNode = this.formNode || ReactDOM.findDOMNode(ref.current)
-        if (this.formNode) {
-          return isElementInViewport(this.formNode.getBoundingClientRect())
+        if (selfRef.current && selfRef.current.parentElement) {
+          const container = selfRef.current.parentElement
+          return isElementInViewport(container.getBoundingClientRect())
         }
         return true
       }
     }
 
-    render() {
-      const { sticky, style, className } = this.props
+    const content = (
+      <div
+        className={cls(className, {
+          'is-inline': !!inline
+        })}
+        style={style}
+      >
+        {renderChildren()}
+      </div>
+    )
 
-      const content = (
-        <FormLayoutConsumer>
-          {({ inline } = {}) => (
-            <div
-              className={cls(className, {
-                'is-inline': !!inline
-              })}
-              style={style}
-            >
-              {this.renderChildren()}
+    if (sticky) {
+      return (
+        <div ref={selfRef}>
+          <Sticky
+            edge="bottom"
+            triggerDistance={triggerDistance}
+            zIndex={zIndex}
+            getStickyBoundary={getStickyBoundaryHandler()}
+            style={{
+              borderTop: '1px solid #eee',
+              background: (style && style.background) || '#fff',
+              padding: (style && style.padding) || '8px 0'
+            }}
+          >
+            <div className={className} style={style}>
+              {content}
             </div>
-          )}
-        </FormLayoutConsumer>
+          </Sticky>
+        </div>
       )
-
-      if (sticky) {
-        return (
-          <div>
-            <FormLayoutConsumer>
-              {({ FormRef } = {}) => {
-                if (!FormRef) return
-                return (
-                  <Sticky
-                    edge="bottom"
-                    triggerDistance={this.props.triggerDistance}
-                    zIndex={this.props.zIndex}
-                    getStickyBoundary={this.getStickyBoundaryHandler(FormRef)}
-                    style={{
-                      borderTop: '1px solid #eee',
-                      background: (style && style.background) || '#fff',
-                      padding: (style && style.padding) || '8px 0'
-                    }}
-                  >
-                    <div className={className} style={style}>
-                      {content}
-                    </div>
-                  </Sticky>
-                )
-              }}
-            </FormLayoutConsumer>
-          </div>
-        )
-      }
-
-      return content
     }
+
+    return content
   }
-)`
-  ${props =>
+)<IFormButtonGroupProps>`
+  ${(props: IFormButtonGroupProps) =>
     props.align ? `display:flex;justify-content: ${getAlign(props.align)}` : ''}
   &.is-inline {
     display: inline-block;

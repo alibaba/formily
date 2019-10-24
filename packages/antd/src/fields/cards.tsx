@@ -1,132 +1,132 @@
-import React, { Fragment, ReactElement } from 'react'
+import React, { Fragment } from 'react'
+import {
+  registerFormField,
+  ISchemaFieldComponentProps,
+  SchemaField
+} from '@uform/react-schema-renderer'
+import { toArr, isFn } from '@uform/shared'
+import { ArrayList } from '@uform/react-shared-components'
+import { CircleButton, TextButton } from '../components/Button'
+import { Card, Icon } from 'antd'
 import styled from 'styled-components'
-import { registerFormField } from '@uform/react'
-import { Card } from 'antd'
-import { toArr } from '@uform/utils'
-import { ArrayField } from './array'
+
+const ArrayComponents = {
+  CircleButton,
+  TextButton,
+  AdditionIcon: () => <Icon type="plus" />,
+  RemoveIcon: () => <Icon type="delete" />,
+  MoveDownIcon: () => <Icon type="down" />,
+  MoveUpIcon: () => <Icon type="up" />
+}
 
 const FormCardsField = styled(
-  class extends ArrayField {
-    public renderOperations(item, index) {
-      return (
-        <Fragment>
-          {this.renderRemove(index, item)}
-          {this.renderMoveDown(index, item)}
-          {this.renderMoveUp(index)}
-          {this.renderExtraOperations(index)}
-        </Fragment>
-      )
+  (props: ISchemaFieldComponentProps & { className: string }) => {
+    const { value, schema, className, editable, path, mutators } = props
+    const {
+      renderAddition,
+      renderRemove,
+      renderMoveDown,
+      renderMoveUp,
+      renderEmpty,
+      renderExtraOperations,
+      ...componentProps
+    } = schema.getExtendsComponentProps() || {}
+    const onAdd = () => {
+      const items = Array.isArray(schema.items)
+        ? schema.items[schema.items.length - 1]
+        : schema.items
+      mutators.push(items.getEmptyValue())
     }
-
-    public renderCardEmpty = (title: string | ReactElement) => {
-      return (
-        <Card
-          style={this.getProps('style')}
-          title={title}
-          className="card-list"
-        >
-          {this.renderEmpty()}
-        </Card>
-      )
-    }
-
-    public render() {
-      const { value, className, schema, renderField } = this.props
-      const {
-        title,
-        style,
-        className: cls,
-        renderAddition,
-        renderRemove,
-        renderEmpty,
-        renderMoveDown,
-        renderMoveUp,
-        renderOperations,
-        ...others
-      } = this.getProps() || ({} as any)
-
-      return (
-        <div
-          className={`${className} ${cls}`}
-          style={style}
-          onClick={this.onClearErrorHandler()}
+    return (
+      <div className={className}>
+        <ArrayList
+          value={value}
+          minItems={schema.minItems}
+          maxItems={schema.maxItems}
+          editable={editable}
+          components={ArrayComponents}
+          renders={{
+            renderAddition,
+            renderRemove,
+            renderMoveDown,
+            renderMoveUp,
+            renderEmpty
+          }}
         >
           {toArr(value).map((item, index) => {
             return (
               <Card
-                {...others}
+                {...componentProps}
+                size="small"
+                className={`card-list-item`}
+                key={index}
                 title={
                   <span>
-                    {index + 1}. {title || schema.title}
+                    {index + 1}. {componentProps.title || schema.title}
                   </span>
                 }
-                className="card-list"
-                key={index}
-                extra={this.renderOperations(item, index)}
+                extra={
+                  <Fragment>
+                    <ArrayList.Remove
+                      index={index}
+                      onClick={() => mutators.remove(index)}
+                    />
+                    <ArrayList.MoveDown
+                      index={index}
+                      onClick={() => mutators.moveDown(index)}
+                    />
+                    <ArrayList.MoveUp
+                      index={index}
+                      onClick={() => mutators.moveUp(index)}
+                    />
+                    {isFn(renderExtraOperations)
+                      ? renderExtraOperations(index)
+                      : renderExtraOperations}
+                  </Fragment>
+                }
               >
-                {renderField(index)}
+                <SchemaField path={path.concat(index)} />
               </Card>
             )
           })}
-          {value.length === 0 && this.renderCardEmpty(title)}
-          <div className="addition-wrapper">
-            {value.length > 0 && this.renderAddition()}
-          </div>
-        </div>
-      )
-    }
+          <ArrayList.Empty>
+            {({ children }) => {
+              return (
+                <Card
+                  {...componentProps}
+                  size="small"
+                  className={`card-list-item card-list-empty`}
+                  onClick={onAdd}
+                >
+                  <div className="empty-wrapper">{children}</div>
+                </Card>
+              )
+            }}
+          </ArrayList.Empty>
+          <ArrayList.Addition>
+            {({ children, isEmpty }) => {
+              if (!isEmpty) {
+                return (
+                  <div className="array-cards-addition" onClick={onAdd}>
+                    {children}
+                  </div>
+                )
+              }
+            }}
+          </ArrayList.Addition>
+        </ArrayList>
+      </div>
+    )
   }
-)`
-  .ant-card-body {
-    padding-top: 30px;
-    padding-bottom: 0 !important;
-  }
-  .ant-card-head-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+)<ISchemaFieldComponentProps>`
   .ant-card {
-    display: block;
-    margin-bottom: 0px;
-    background: #fff;
-    .array-empty-wrapper {
-      display: flex;
-      justify-content: center;
-      cursor: pointer;
-      margin-bottom: 0px;
-      &.disabled {
-        cursor: default;
-      }
-      .array-empty {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 20px;
-        align-items: center;
-        img {
-          margin-bottom: 16px;
-          height: 85px;
-        }
-        .next-btn-text {
-          color: #888;
-        }
-        .next-icon:before {
-          width: 16px !important;
-          font-size: 16px !important;
-          margin-right: 5px;
-        }
-      }
-    }
-
-    .next-card {
+    .ant-card {
       box-shadow: none;
     }
-    .card-list {
-      box-shadow: none;
-      border: 1px solid #eee;
+    .ant-card-body{
+      padding:20px 10px 0 10px;
     }
-
-    .array-item-addition {
+    .array-cards-addition {
       box-shadow: none;
       border: 1px solid #eee;
       transition: all 0.35s ease-in-out;
@@ -134,40 +134,47 @@ const FormCardsField = styled(
         border: 1px solid #ccc;
       }
     }
+    .empty-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom:10px;
+      img {
+        height: 85px;
+      }
+      .ant-btn {
+        color: #888;
+      }
+    }
   }
-  .ant-card.card-list {
-    margin-top: 20px;
+  .card-list-empty.card-list-item {
+    cursor: pointer;
   }
 
-  .addition-wrapper .array-item-addition {
-    margin-top: 20px;
+  .array-cards-addition {
+    margin-top: 10px;
     margin-bottom: 3px;
-  }
-  .cricle-btn {
-    margin-bottom: 0;
-  }
-  .ant-card-extra {
-    display: flex;
-  }
-  .array-item-addition {
     background: #fff;
     display: flex;
     cursor: pointer;
-    padding: 10px 0;
+    padding: 5px 0;
     justify-content: center;
     box-shadow: 1px 1px 4px 0 rgba(0, 0, 0, 0.1);
-    .next-btn-text {
-      color: #888;
-    }
-    .next-icon:before {
-      width: 16px !important;
-      font-size: 16px !important;
-      margin-right: 5px;
-    }
   }
-  .card-list:first-child {
+  .card-list-item {
+    margin-top: 10px;
+    border: 1px solid #eee;
+  }
+  .card-list-item:first-child {
     margin-top: 0 !important;
+  }
+  .ant-card-extra {
+    display: flex;
+    button {
+      margin-right: 8px;
+    }
   }
 `
 
 registerFormField('cards', FormCardsField)
+registerFormField('array', FormCardsField)
