@@ -11,6 +11,7 @@ import {
   FormGraphNodeRef,
   FormGraphMatcher,
   FormGraphEacher,
+  FormGraphProps
 } from '../types'
 
 export class FormGraph<NodeType = any> extends Subscrible<{
@@ -34,11 +35,14 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     }
   }[]
 
-  constructor() {
+  private matchStrategy: FormGraphProps['matchStrategy']
+
+  constructor(props: FormGraphProps = {}) {
     super()
     this.refrences = {}
     this.nodes = {}
     this.buffer = []
+    this.matchStrategy = props.matchStrategy
   }
 
   /**
@@ -56,7 +60,11 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     }
     for (let name in this.nodes) {
       const node = this.nodes[name]
-      if (pattern.match(name)) {
+      if (
+        isFn(this.matchStrategy)
+          ? this.matchStrategy(pattern, node)
+          : pattern.match(name)
+      ) {
         if (isFn(matcher)) {
           const result = matcher(node, FormPath.parse(name))
           if (result === false) {
@@ -133,7 +141,12 @@ export class FormGraph<NodeType = any> extends Subscrible<{
       return each(ref.children, path => {
         if (isFn(eacher)) {
           const node = this.get(path)
-          if (node && FormPath.parse(path).match(selector)) {
+          if (
+            node &&
+            (isFn(this.matchStrategy)
+              ? this.matchStrategy(selector, node)
+              : FormPath.parse(selector).match(path))
+          ) {
             eacher(node, path)
             if (recursion) {
               this.eachChildren(path, selector, eacher, recursion)
