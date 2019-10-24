@@ -1,6 +1,6 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
-import { toArr, isArr, isEqual, mapStyledProps } from '../utils'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { toArr, isArr, isEqual, mapStyledProps } from '../shared'
 import { Button, Upload } from '@alifd/next'
 import { UploadProps, CardProps } from '@alifd/next/types/upload'
 const { Card: UploadCard, Dragger: UploadDragger } = Upload

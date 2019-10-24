@@ -12,8 +12,11 @@
     "build:docs": "node ./scripts/docs.js build -i docs -o docs",
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",
-    "test": "jest",
+    "test": "npm run lint && jest",
+    "test:core": "jest --watch packages/core/src/__tests__/index.spec.ts",
     "test:prod": "cross-env TEST_ENV=production npm run build && jest",
+    "doc:core": "doc-scripts start -i packages/core",
+    "doc:react": "doc-scripts start -i packages/react",
     "test:watch": "jest --watch",
     "coverage": "npm run test -- --coverage",
     "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
@@ -48,6 +51,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime-corejs3": "^7.2.0",
     "@testing-library/react": "^8.0.0",
+    "@types/jest": "^24.0.18",
     "@types/node": "^12.6.8",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
@@ -94,6 +98,7 @@
     "pretty-format": "^24.0.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
+    "react-eva": "^1.1.7",
     "remark-parse": "^6.0.3",
     "remark-stringify": "^6.0.4",
     "scheduler": "^0.15.0",
@@ -118,11 +123,11 @@
     }
   },
   "lint-staged": {
-    "packages/**": [
+    "packages/*/src/**.@(ts|tsx|js)": [
       "npm run lint",
       "git add"
     ],
-    "scripts/**": [
+    "scripts/**.@(ts|tsx|js)": [
       "npm run lint",
       "git add"
     ]

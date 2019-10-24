@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slider } from 'antd'
-import { connect, registerFormField } from '@uform/react'
-import { mapStyledProps } from '../utils'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { mapStyledProps } from '../shared'
 
 export interface ISliderMarks {
   [key: number]:
