@@ -610,7 +610,7 @@ describe('setFieldState', () => {
 
   test('set errors and warnings', async() => {
     const form = createForm()  
-    form.registerField({ path: 'a', rules: [
+    const a = form.registerField({ path: 'a', rules: [
       (v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined,
       (v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined
     ] })
@@ -620,7 +620,7 @@ describe('setFieldState', () => {
     expect(state.ruleErrors).toEqual([])
     expect(state.ruleWarnings).toEqual([])
 
-    const mutators = form.createMutators('a')
+    const mutators = form.createMutators(a)
     const result = await mutators.validate()
     expect(result.errors).toEqual([{ path: 'a', messages: ['error msg'] }])
     expect(result.warnings).toEqual([{ path: 'a', messages: ['warning msg'] }])
@@ -855,8 +855,8 @@ describe('createMutators', () => {
   const arr = ['a', 'b']
   test('change', async () => {
     const form = createForm()
-    form.registerField({ path: 'a' })
-    const mutators = form.createMutators('a')
+    const a = form.registerField({ path: 'a' })
+    const mutators = form.createMutators(a)
     expect(form.getFieldState('a', (state => ({ values: state.values, value: state.value })))).toEqual({
       value: undefined,
       values: [undefined],
@@ -870,8 +870,8 @@ describe('createMutators', () => {
 
   test('focus', async () => {
     const form = createForm()
-    form.registerField({ path: 'a' })
-    const mutators = form.createMutators('a')
+    const a = form.registerField({ path: 'a' })
+    const mutators = form.createMutators(a)
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFieldState('a', (state => ({ active: state.active, visited: state.visited })))).toEqual({
       active: false,
@@ -887,8 +887,8 @@ describe('createMutators', () => {
 
   test('blur', async () => {
     const form = createForm()
-    form.registerField({ path: 'a' })
-    const mutators = form.createMutators('a')
+    const a = form.registerField({ path: 'a' })
+    const mutators = form.createMutators(a)
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFieldState('a', (state => ({ active: state.active, visited: state.visited })))).toEqual({
       active: false,
@@ -905,8 +905,8 @@ describe('createMutators', () => {
 
   test('push', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: [] })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: [] })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual([])
     mutators.push({})
     expect(form.getFieldValue('mm')).toEqual([{}])
@@ -914,8 +914,8 @@ describe('createMutators', () => {
 
   test('pop', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: [{}] })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: [{}] })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual([{}])
     mutators.pop()
     expect(form.getFieldValue('mm')).toEqual([])
@@ -923,8 +923,8 @@ describe('createMutators', () => {
 
   test('insert', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: arr })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: arr })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.insert(1, 'x')
     expect(form.getFieldValue('mm')).toEqual(['a','x','b'])
@@ -932,8 +932,8 @@ describe('createMutators', () => {
 
   test('remove', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: arr })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: arr })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.remove(1)
     expect(form.getFieldValue('mm')).toEqual(arr.slice(0, 1))
@@ -941,15 +941,15 @@ describe('createMutators', () => {
 
   test('exist', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: arr })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: arr })
+    const mutators = form.createMutators(mm)
     expect(mutators.exist(1)).toEqual(true)
   })
 
   test('shift', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: arr })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: arr })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.shift()
     expect(form.getFieldValue('mm')).toEqual(arr.slice(1))
@@ -957,8 +957,8 @@ describe('createMutators', () => {
 
   test('unshift', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: arr })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: arr })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.unshift('x')
     expect(form.getFieldValue('mm')).toEqual(['x', ...arr])
@@ -966,8 +966,8 @@ describe('createMutators', () => {
 
   test('move', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', value: arr })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', value: arr })
+    const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.move(0, 1)
     expect(form.getFieldValue('mm')).toEqual(arr.reverse())
@@ -975,8 +975,8 @@ describe('createMutators', () => {
 
   test('validate', async () => {
     const form = createForm()
-    form.registerField({ path: 'mm', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] })
-    const mutators = form.createMutators('mm')
+    const mm = form.registerField({ path: 'mm', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] })
+    const mutators = form.createMutators(mm)
     const result = await mutators.validate()
     expect(result.errors).toEqual([])
     expect(result.warnings).toEqual([{ path: 'mm', messages: ['warning msg'] }])
@@ -1037,7 +1037,7 @@ describe('major sences', () => {
         aa: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }]
       }
     })
-    form.registerField({ path: 'aa' })
+    const aa = form.registerField({ path: 'aa' })
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
     form.registerField({ path: 'aa.0.bb' })
@@ -1047,7 +1047,7 @@ describe('major sences', () => {
     form.setFieldState('aa.1.aa', state => {
       state.value = 'change aa'
     })
-    const mutators = form.createMutators('aa')
+    const mutators = form.createMutators(aa)
     const snapshot = form.getFormGraph()
     expect(snapshot).toMatchSnapshot()
     mutators.remove(0)
@@ -1060,7 +1060,7 @@ describe('major sences', () => {
     const form = createForm({
       useDirty: true
     })
-    form.registerField({ path: 'aa', value: [] })
+    const aa = form.registerField({ path: 'aa', value: [] })
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
     form.registerField({ path: 'aa.0.bb' })
@@ -1071,7 +1071,7 @@ describe('major sences', () => {
       state.value = 'change aa'
     })
 
-    const mutators = form.createMutators('aa')
+    const mutators = form.createMutators(aa)
     const snapshot = form.getFormGraph()
     expect(snapshot).toMatchSnapshot()
     mutators.remove(0)

@@ -51,6 +51,7 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm
+        useDirty
         effects={($, { setFieldState, getFieldState }) => {
           $('onFormInit').subscribe(() => {
             setFieldState(FormPath.match('*(gg,hh)'), state => {
@@ -131,7 +132,7 @@ const App = () => {
         wrapperCol={4}
         onSubmit={v => console.log(v)}
       >
-        <FormBlock title="Block1">
+        <FormBlock name="block" title="Block1">
           <Field
             name="aa"
             type="boolean"
@@ -497,7 +498,7 @@ const App = () => {
               </FormLayout>
             </FormBlock>
             <FormBlock title="嵌套Array">
-              <Field type="array" name="dd" x-component="cards">
+              <Field type="array" name="dd">
                 <Field type="object">
                   <FormLayout inline style={{ marginLeft: 20 }}>
                     <Field

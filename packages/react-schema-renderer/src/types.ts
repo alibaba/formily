@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormPathPattern, FormPath } from '@uform/shared'
+import { FormPathPattern } from '@uform/shared'
 import {
   IFieldState,
   IVirtualFieldState,
@@ -23,7 +23,6 @@ export type ComponentWithStyleComponent<
 }
 
 export interface ISchemaFieldComponentProps extends IFieldState {
-  path: FormPath
   schema: Schema
   mutators: IMutators
   form: IForm
@@ -33,7 +32,6 @@ export interface ISchemaFieldComponentProps extends IFieldState {
   ) => React.ReactElement
 }
 export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
-  path: FormPath
   schema: Schema
   form: IForm
   children: React.ReactElement[]

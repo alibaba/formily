@@ -9,6 +9,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
     static displayName = 'FieldState'
     static defaultState = {
       name: '',
+      path: '',
       initialized: false,
       pristine: true,
       valid: true,
@@ -23,13 +24,13 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       validating: false,
       errors: [],
       values: [],
-      ruleErrors:[],
-      ruleWarnings:[],
+      ruleErrors: [],
+      ruleWarnings: [],
       effectErrors: [],
       warnings: [],
       effectWarnings: [],
       editable: true,
-      selfEditable:undefined,
+      selfEditable: undefined,
       formEditable: undefined,
       value: undefined,
       initialValue: undefined,
@@ -41,22 +42,24 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
     }
 
     static defaultProps = {
-      path: '',
-      editable: true,
-      props: {}
+      path: ''
     }
 
     private state: IFieldState
 
-    private path: FormPath
+    private nodePath: FormPath
+
+    private dataPath: FormPath
 
     constructor(state: IFieldState, props: IFieldStateProps) {
       this.state = state
-      this.path = FormPath.getPath(props.path)
-      this.state.name = this.path.entire
+      this.nodePath = FormPath.getPath(props.nodePath)
+      this.dataPath = FormPath.getPath(props.dataPath)
+      this.state.name = this.dataPath.entire
+      this.state.path = this.nodePath.entire
     }
 
-    parseValues({ value, values }: IFieldStateProps) {
+    readValues({ value, values }: IFieldStateProps) {
       if (isValid(values)) {
         values = toArr(values)
         values[0] = value
@@ -71,7 +74,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       }
     }
 
-    parseRules({ rules, required }: IFieldStateProps) {
+    readRules({ rules, required }: IFieldStateProps) {
       let newRules = isValid(rules) ? clone(toArr(rules)) : this.state.rules
       if (isValid(required)) {
         if (required) {
@@ -109,14 +112,13 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       draft.effectErrors = toArr(draft.effectErrors).filter(v => !!v)
       draft.ruleWarnings = toArr(draft.ruleWarnings).filter(v => !!v)
       draft.ruleErrors = toArr(draft.ruleErrors).filter(v => !!v)
-      
+
       draft.errors = draft.ruleErrors.concat(draft.effectErrors)
       draft.warnings = draft.ruleWarnings.concat(draft.effectWarnings)
 
       if (!isEqual(draft.editable, prevState.editable)) {
         draft.selfEditable = draft.editable
       }
-
       draft.editable = isValid(draft.selfEditable)
         ? draft.selfEditable
         : isValid(draft.formEditable)
@@ -125,7 +127,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
           : draft.formEditable
         : true
 
-      const { value, values } = this.parseValues(draft)
+      const { value, values } = this.readValues(draft)
       draft.value = value
       draft.values = values
       if (
@@ -148,15 +150,17 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.loading = true
       } else if (draft.validating === false) {
         draft.loading = false
-      }      
+      }
       // 以下几种情况清理错误和警告信息
       // 1. 字段设置为不可编辑
       // 2. 字段隐藏
       // 3. 字段被卸载
-      if ((draft.selfEditable !== prevState.selfEditable &&
+      if (
+        (draft.selfEditable !== prevState.selfEditable &&
           !draft.selfEditable) ||
-          draft.visible === false ||
-          draft.unmounted === true) {
+        draft.visible === false ||
+        draft.unmounted === true
+      ) {
         draft.errors = []
         draft.effectErrors = []
         draft.warnings = []
@@ -166,7 +170,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.unmounted = false
       }
       if (draft.unmounted === true) {
-        draft.mounted = false        
+        draft.mounted = false
       }
       if (draft.errors.length) {
         draft.invalid = true
@@ -175,7 +179,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.invalid = false
         draft.valid = true
       }
-      const { rules, required } = this.parseRules(draft)
+      const { rules, required } = this.readRules(draft)
       draft.rules = rules
       draft.required = required
     }

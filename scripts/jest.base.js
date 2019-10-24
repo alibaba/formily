@@ -22,6 +22,7 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest'
   },
   preset: 'ts-jest',
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
     require.resolve('@testing-library/react/cleanup-after-each'),

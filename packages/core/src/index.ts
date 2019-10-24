@@ -42,16 +42,6 @@ import {
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'
-/**
- *
- * {
- *    intialValues:any,
- *    values:any,
- *    lifecycles:LifeCycle[],
- *    validateFirst:boolean,
- *    useDirty:boolean
- * }
- */
 
 export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   function onGraphChange({ type, payload }) {
@@ -330,25 +320,33 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     props,
     onChange
   }: IVirtualFieldStateProps): IVirtualField {
-    path = FormPath.parse(path || name)
+    let nodePath = FormPath.parse(path || name)
     let field: IVirtualField
-    let newPath = FormPath.getPath(path)
-    if (graph.exist(newPath)) {
-      field = graph.select(newPath)
-    } else {
+    const createField = () => {
+      let field: IVirtualField
       field = new VirtualFieldState({
-        path: newPath,
+        nodePath,
         useDirty: options.useDirty
       })
-      graph.appendNode(newPath, field)
-      field.subscribe(onVirtualFieldChange({ onChange, field, path: newPath }))
+      field.subscribe(onVirtualFieldChange({ onChange, field, path: nodePath }))
       field.batch(() => {
-        batchRunTaskQueue(field)
+        batchRunTaskQueue(field, nodePath)
         field.setState((state: IVirtualFieldState) => {
           state.initialized = true
           state.props = props
         })
       })
+      return field
+    }
+    if (graph.exist(nodePath)) {
+      field = graph.get(nodePath)
+      if (isField(field)) {
+        field = createField()
+        graph.replace(nodePath, field)
+      }
+    } else {
+      field = createField()
+      graph.appendNode(nodePath, field)
     }
     return field
   }
@@ -363,25 +361,24 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     editable,
     onChange,
     props
-  }: IFieldStateProps): IField {
+  }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
-    path = FormPath.parse(path || name)
-    if (graph.exist(path)) {
-      field = graph.select(path)
-    } else {
+    let nodePath = FormPath.parse(path || name)
+    let dataPath = transformDataPath(path)
+    const createField = () => {
+      let field: IField
       field = new FieldState({
-        path,
+        nodePath,
+        dataPath,
         useDirty: options.useDirty
       })
       heart.notify(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
-      graph.appendNode(path, field)
-      graph.appendNode(transformDataPath(path), field)
-      field.subscribe(onFieldChange({ onChange, field, path }))
+      field.subscribe(onFieldChange({ onChange, field, path: nodePath }))
       field.batch(() => {
-        batchRunTaskQueue(field)
+        batchRunTaskQueue(field, nodePath)
         field.setState((state: IFieldState) => {
-          const formValue = getFormValuesIn(path)
-          const formInitialValue = getFormInitialValuesIn(path)
+          const formValue = getFormValuesIn(dataPath)
+          const formInitialValue = getFormInitialValuesIn(dataPath)
           state.initialized = true
           if (isValid(value)) {
             // value > formValue > initialValue
@@ -401,7 +398,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.formEditable = options.editable
         })
       })
-      validator.register(path, validate => {
+      validator.register(nodePath, validate => {
         const { value, rules, editable, visible, unmounted } = field.getState()
         // 不需要校验的情况有: 非编辑态(editable)，已销毁(unmounted), 逻辑上不可见(visible)
         if (editable === false || visible === false || unmounted === true)
@@ -421,6 +418,17 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           })
         })
       })
+      return field
+    }
+    if (graph.exist(nodePath)) {
+      field = graph.get(nodePath)
+      if (isVirtualField(nodePath)) {
+        field = createField()
+        graph.replace(nodePath, field)
+      }
+    } else {
+      field = createField()
+      graph.appendNode(nodePath, field)
     }
     return field
   }
@@ -430,17 +438,12 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     return newPath.reduce((path: FormPath, key: string, index: number) => {
       const realPath = newPath.slice(0, index + 1)
       const dataPath = path.concat(key)
-      const selected = graph.select(realPath)
+      const selected = graph.get(realPath)
       if (isVirtualField(selected)) {
         return path
       }
       return dataPath
     }, FormPath.getPath(''))
-  }
-
-  function transformVirtualPath(path: FormPathPattern) {
-    const newPath = FormPath.getPath(path)
-    return newPath.slice(newPath.length - 1)
   }
 
   function setFormIn(
@@ -450,18 +453,18 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     silent?: boolean
   ) {
     state.setState(state => {
-      FormPath.setIn(state[key], transformDataPath(path), value)
+      FormPath.setIn(state[key], path, value)
     }, silent)
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
     state.setState(state => {
-      FormPath.deleteIn(state[key], transformDataPath(path))
+      FormPath.deleteIn(state[key], path)
     }, silent)
   }
 
   function deleteFormValuesIn(path: FormPathPattern, silent?: boolean) {
-    deleteFormIn(path, 'values', silent)
+    deleteFormIn(transformDataPath(path), 'values', silent)
   }
 
   function setFormValuesIn(
@@ -469,7 +472,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     value?: any,
     silent?: boolean
   ) {
-    return setFormIn(path, 'values', value, silent)
+    return setFormIn(transformDataPath(path), 'values', value, silent)
   }
 
   function setFormInitialValuesIn(
@@ -477,26 +480,29 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     value?: any,
     silent?: boolean
   ) {
-    return setFormIn(path, 'initialValues', value, silent)
+    return setFormIn(transformDataPath(path), 'initialValues', value, silent)
   }
 
   function getFormIn(path: FormPathPattern, key?: string) {
-    return state.getState(state =>
-      FormPath.getIn(state[key], transformDataPath(path))
-    )
+    return state.getState(state => FormPath.getIn(state[key], path))
   }
 
   function getFormValuesIn(path: FormPathPattern) {
-    return getFormIn(path, 'values')
+    return getFormIn(transformDataPath(path), 'values')
   }
 
   function getFormInitialValuesIn(path: FormPathPattern) {
-    return getFormIn(path, 'initialValues')
+    return getFormIn(transformDataPath(path), 'initialValues')
   }
 
-  function setValue(path: FormPathPattern, ...values: any[]) {
-    const field = graph.select(path)
-    if (field) {
+  function createMutators(field: IField) {
+    if (!(field instanceof FieldState)) {
+      throw new Error(
+        'The `createMutators` can only accept FieldState instance.'
+      )
+    }
+
+    function setValue(...values: any[]) {
       field.setState((state: IFieldState) => {
         state.value = values[0]
         state.values = values
@@ -504,132 +510,118 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
     }
-  }
 
-  function removeValue(path: FormPathPattern) {
-    const fieldPath = FormPath.parse(path)
-    const field: IField = graph.select(fieldPath)
-    if (field) {
-      env.removeNodes[fieldPath.toString()] = true
+    function removeValue(key: string | number) {
+      const name = field.unsafe_getSourceState(state => state.name)
+      env.removeNodes[name] = true
       field.setState((state: IFieldState) => {
         state.value = undefined
         state.values = []
       }, true)
-      deleteFormValuesIn(fieldPath)
+      deleteFormValuesIn(key ? FormPath.parse(name).concat(key) : name)
       heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
       heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
-  }
 
-  function getValue(path: FormPathPattern) {
-    const field = graph.select(path)
-    if (field) {
-      return field.getState((state: IFieldState) => state.value)
+    function getValue() {
+      return field.unsafe_getSourceState(state => state.value)
     }
-  }
-
-  function createMutators(path: FormPathPattern) {
     return {
       change(...values: any[]) {
-        setValue(path, ...values)
+        setValue(...values)
         return values[0]
       },
       focus() {
-        const field = graph.select(path)
-        if (field) {
-          field.setState((state: IFieldState) => {
-            state.active = true
-            state.visited = true
-          })
-        }
+        field.setState((state: IFieldState) => {
+          state.active = true
+          state.visited = true
+        })
       },
       blur() {
-        const field = graph.select(path)
-        if (field) {
-          field.setState((state: IFieldState) => {
-            state.active = false
-          })
-        }
+        field.setState((state: IFieldState) => {
+          state.active = false
+        })
       },
       push(value: any) {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         arr.push(value)
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       pop() {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         arr.pop()
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       insert(index: number, value: any) {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         arr.splice(index, 0, value)
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       remove(index?: number | string) {
-        const newPath = FormPath.parse(path)
-        let val = getValue(path)
+        let val = getValue()
         if (isNum(index) && isArr(val)) {
           val = [].concat(val)
           val.splice(index, 1)
-          setValue(path, val)
+          setValue(val)
         } else {
-          removeValue(index !== undefined ? newPath.concat(index) : newPath)
+          removeValue(index)
         }
       },
       exist(index?: number | string) {
-        const newPath = FormPath.parse(path)
-        let val = getValue(path)
+        const newPath = field.unsafe_getSourceState(state =>
+          FormPath.parse(state.path)
+        )
+        let val = getValue()
         return (index !== undefined ? newPath.concat(index) : newPath).existIn(
           val,
           newPath
         )
       },
       unshift(value: any) {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         arr.unshift(value)
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       shift() {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         arr.shift()
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       move($from: number, $to: number) {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         const item = arr[$from]
         arr.splice($from, 1)
         arr.splice($to, 0, item)
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       moveUp(index: number) {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         const item = arr[index]
         const len = arr.length
         arr.splice(index, 1)
         arr.splice(index - 1 < 0 ? len - 1 : index - 1, 0, item)
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       moveDown(index: number) {
-        const arr = toArr(getValue(path)).slice()
+        const arr = toArr(getValue()).slice()
         const item = arr[index]
         const len = arr.length
         arr.splice(index, 1)
         arr.splice(index + 1 > len ? 0 : index + 1, 0, item)
-        setValue(path, arr)
+        setValue(arr)
         return arr
       },
       validate() {
-        return validate(path)
+        return validate(field.unsafe_getSourceState(state => state.path))
       }
     }
   }
@@ -784,31 +776,23 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     return state.getState(callback)
   }
 
-  function batchRunTaskQueue(field: IField | IVirtualField) {
+  function batchRunTaskQueue(field: IField | IVirtualField, path: FormPath) {
     env.taskQueue.forEach((task, index) => {
-      const { path, callbacks } = task
-      if (monkeyMatch(path, field)) {
+      const { pattern, callbacks } = task
+      if (pattern.match(path)) {
         callbacks.forEach(callback => {
           field.setState(callback)
         })
         if (!path.isWildMatchPattern && !path.isMatchPattern) {
           env.taskQueue.splice(index, 1)
-          env.taskQueue.forEach(({ path: newPath }, index) => {
-            if (newPath.toString() === path.toString()) {
-              env.taskIndexes[path] = index
+          env.taskQueue.forEach(({ pattern }, index) => {
+            if (pattern.toString() === path.toString()) {
+              env.taskIndexes[path.toString()] = index
             }
           })
         }
       }
     })
-  }
-
-  function monkeyMatch(path: FormPath, field: IField | IVirtualField) {
-    const name = field.unsafe_getSourceState(state => state.name)
-    const monkey = isField(field)
-      ? transformDataPath(name)
-      : transformVirtualPath(name)
-    return path.match(name) || path.match(monkey)
   }
 
   function setFieldState(
@@ -817,15 +801,13 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   ) {
     if (!isFn(callback)) return
     let matchCount = 0
-    let newPath = FormPath.getPath(path)
-    graph.each(field => {
-      if (monkeyMatch(newPath, field)) {
-        field.setState(callback)
-        matchCount++
-      }
+    let pattern = FormPath.getPath(path)
+    graph.select(pattern, field => {
+      field.setState(callback)
+      matchCount++
     })
-    if (matchCount === 0 || newPath.isWildMatchPattern) {
-      let taskIndex = env.taskIndexes[newPath.toString()]
+    if (matchCount === 0 || pattern.isWildMatchPattern) {
+      let taskIndex = env.taskIndexes[pattern.toString()]
       if (isValid(taskIndex)) {
         if (
           !env.taskQueue[taskIndex].callbacks.some(fn => isEqual(fn, callback))
@@ -833,9 +815,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           env.taskQueue[taskIndex].callbacks.push(callback)
         }
       } else {
-        env.taskIndexes[newPath.toString()] = env.taskQueue.length
+        env.taskIndexes[pattern.toString()] = env.taskQueue.length
         env.taskQueue.push({
-          path: newPath,
+          pattern,
           callbacks: [callback]
         })
       }
@@ -880,7 +862,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     each(nodes, (node: IFieldState | IVirtualFieldState, key) => {
       let nodeState: any
       if (graph.exist(key)) {
-        nodeState = graph.select(key)
+        nodeState = graph.get(key)
         nodeState.unsafe_setSourceState(state => {
           Object.assign(state, node)
         })
@@ -942,15 +924,18 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     setFormGraph,
     setFieldValue,
     unsafe_do_not_use_transform_data_path: transformDataPath, //eslint-disable-line
-    setValue: deprecate(setValue, 'setValue', 'Please use the setFieldValue.'),
-    getFieldValue,
-    getValue: deprecate(getValue, 'getValue', 'Please use the getFieldValue.'),
-    setFieldInitialValue,
-    setInitialValue: deprecate(
-      setValue,
-      'setInitialValue',
-      'Please use the setFieldInitialValue.'
+    setValue: deprecate(
+      setFieldValue,
+      'setValue',
+      'Please use the setFieldValue.'
     ),
+    getFieldValue,
+    getValue: deprecate(
+      getFieldValue,
+      'getValue',
+      'Please use the getFieldValue.'
+    ),
+    setFieldInitialValue,
     getFieldInitialValue,
     getInitialValue: deprecate(
       getFieldInitialValue,

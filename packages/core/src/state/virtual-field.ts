@@ -16,6 +16,7 @@ export const VirtualFieldState = createStateModel<
     static displayName = 'VirtualFieldState'
     static defaultState = {
       name: '',
+      path: '',
       initialized: false,
       visible: true,
       display: true,
@@ -35,8 +36,9 @@ export const VirtualFieldState = createStateModel<
 
     constructor(state: IVirtualFieldState, props: IVirtualFieldStateProps) {
       this.state = state
-      this.path = FormPath.getPath(props.path)
+      this.path = FormPath.getPath(props.nodePath)
       this.state.name = this.path.entire
+      this.state.path = this.path.entire
     }
 
     computeState(draft: IVirtualFieldState, prevState: IVirtualFieldState) {

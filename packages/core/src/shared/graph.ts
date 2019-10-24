@@ -7,12 +7,11 @@ import {
   FormPathPattern
 } from '@uform/shared'
 import { Subscrible } from './subscrible'
-import { FormGraphNodeRef, FormGraphMatcher, FormGraphEacher } from '../types'
-/**
- * Form & Field 其实是属于一种图的关系，我们可以进一步抽象
- * 要求FormGraph是Immutable的，所以它可以很容易的支持时间旅行的能力
- * 临时存放，后面会放在@uform/shared中
- */
+import {
+  FormGraphNodeRef,
+  FormGraphMatcher,
+  FormGraphEacher,
+} from '../types'
 
 export class FormGraph<NodeType = any> extends Subscrible<{
   type: string
@@ -42,41 +41,40 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     this.buffer = []
   }
 
+  /**
+   * 模糊匹配API
+   * @param path
+   * @param matcher
+   */
   select(path: FormPathPattern, matcher?: FormGraphMatcher<NodeType>) {
-    const newPath = FormPath.getPath(path)
-    if (newPath.isMatchPattern) {
-      this.eachChildren([], (child: NodeType, childPath: FormPath) => {
-        if (newPath.match(childPath)) {
-          if (isFn(matcher)) {
-            matcher(child, childPath)
+    const pattern = FormPath.parse(path)
+    if (!matcher) {
+      const node = this.get(pattern)
+      if (node) {
+        return node
+      }
+    }
+    for (let name in this.nodes) {
+      const node = this.nodes[name]
+      if (pattern.match(name)) {
+        if (isFn(matcher)) {
+          const result = matcher(node, FormPath.parse(name))
+          if (result === false) {
+            return node
           }
+        } else {
+          return node
         }
-      })
-    } else {
-      const matched = this.nodes[newPath.toString()]
-      if (isFn(matcher) && matched) {
-        matcher(matched, newPath)
-      }
-      return matched
-    }
-  }
-
-  each(eacher?: (node: NodeType, key?: string) => boolean | void) {
-    if (!isFn(eacher)) return
-    for (let key in this.nodes) {
-      const res = eacher(this.nodes[key], key)
-      if (res === false) {
-        break
       }
     }
   }
 
-  getNode(path: FormPath | string) {
-    return this.nodes[path as string]
+  get(path: FormPathPattern) {
+    return this.nodes[FormPath.getPath(path).toString()]
   }
 
   selectParent(path: FormPathPattern) {
-    return this.getNode(FormPath.getPath(path).parent())
+    return this.get(FormPath.getPath(path).parent())
   }
 
   selectChildren(path: FormPathPattern) {
@@ -85,9 +83,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
       return reduce(
         ref.children,
         (buf, path) => {
-          return buf
-            .concat(this.getNode(path))
-            .concat(this.selectChildren(path))
+          return buf.concat(this.get(path)).concat(this.selectChildren(path))
         },
         []
       )
@@ -96,11 +92,12 @@ export class FormGraph<NodeType = any> extends Subscrible<{
   }
 
   exist(path: FormPathPattern) {
-    return !!this.getNode(FormPath.getPath(path))
+    return !!this.get(FormPath.getPath(path))
   }
 
   /**
    * 递归遍历所有children
+   * 支持模糊匹配
    */
   eachChildren(eacher: FormGraphEacher<NodeType>, recursion?: boolean): void
   eachChildren(
@@ -135,7 +132,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     if (ref && ref.children) {
       return each(ref.children, path => {
         if (isFn(eacher)) {
-          const node = this.getNode(path)
+          const node = this.get(path)
           if (node && FormPath.parse(path).match(selector)) {
             eacher(node, path)
             if (recursion) {
@@ -154,7 +151,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
     const selfPath = FormPath.getPath(path)
     const ref = this.refrences[selfPath.toString()]
     if (isFn(eacher)) {
-      eacher(this.getNode(selfPath), selfPath)
+      eacher(this.get(selfPath), selfPath)
       if (ref.parent) {
         this.eachParent(ref.parent.path, eacher)
       }
@@ -189,7 +186,7 @@ export class FormGraph<NodeType = any> extends Subscrible<{
       path: selfPath,
       children: []
     }
-    if (this.getNode(selfPath)) return
+    if (this.get(selfPath)) return
     this.nodes[selfPath.toString()] = node
     this.refrences[selfPath.toString()] = selfRef
     if (parentRef) {
@@ -254,5 +251,20 @@ export class FormGraph<NodeType = any> extends Subscrible<{
         }
       })
     }
+  }
+
+  replace(path: FormPathPattern, node: NodeType) {
+    const selfPath = FormPath.getPath(path)
+    const selfRef = this.refrences[selfPath.toString()]
+    if (!selfRef) return
+    this.notify({
+      type: 'GRAPH_NODE_WILL_UNMOUNT',
+      payload: selfRef
+    })
+    this.nodes[selfPath.toString()] = node
+    this.notify({
+      type: 'GRAPH_NODE_DID_MOUNT',
+      payload: selfRef
+    })
   }
 }

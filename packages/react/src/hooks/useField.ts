@@ -68,7 +68,7 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
       ...state,
       errors: state.errors.join(', ')
     },
-    mutators: form.createMutators(state.name),
+    mutators: form.createMutators(ref.current.field),
     props: state.props
   }
 }

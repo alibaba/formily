@@ -1,8 +1,5 @@
 import { FormPath, FormPathPattern, isFn } from '@uform/shared'
-import {
-  ValidatePatternRules,
-  ValidateNodeResult
-} from '@uform/validator'
+import { ValidatePatternRules, ValidateNodeResult } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
 import { Subscrible } from './shared/subscrible'
@@ -76,7 +73,7 @@ export interface FormGraphNodeRef {
   children: FormPath[]
 }
 
-export type FormGraphMatcher<T> = (node: T, path: FormPath) => void
+export type FormGraphMatcher<T> = (node: T, path: FormPath) => void | boolean
 
 export type FormGraphEacher<T> = (node: T, path: FormPath) => void
 
@@ -108,6 +105,7 @@ export interface IStateModelFactory<S, P> {
 export interface IFieldState {
   displayName?: string
   name: string
+  path: string
   initialized: boolean
   pristine: boolean
   valid: boolean
@@ -142,6 +140,8 @@ export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IFieldStateProps {
   path?: FormPathPattern
+  nodePath?: FormPathPattern
+  dataPath?: FormPathPattern
   name?: string
   value?: any
   values?: any[]
@@ -208,6 +208,7 @@ export interface IFormCreatorOptions extends IFormStateProps {
 
 export interface IVirtualFieldState {
   name: string
+  path: string
   displayName?: string
   initialized: boolean
   visible: boolean
@@ -220,6 +221,7 @@ export type VirtualFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IVirtualFieldStateProps {
   path?: FormPathPattern
+  nodePath?: FormPathPattern
   name?: string
   props?: {}
   onChange?: (fieldState: IVirtualField) => void
@@ -304,7 +306,7 @@ export interface IForm {
   unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
   registerField(props: IFieldStateProps): IField
   registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
-  createMutators(path: FormPathPattern): IMutators
+  createMutators(field: IField): IMutators
   getFormGraph(): IFormGraph
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): void

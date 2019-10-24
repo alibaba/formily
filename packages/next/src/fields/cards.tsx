@@ -5,7 +5,7 @@ import {
   ISchemaFieldComponentProps,
   SchemaField
 } from '@uform/react-schema-renderer'
-import { toArr, isFn } from '@uform/shared'
+import { toArr, isFn, FormPath } from '@uform/shared'
 import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Card } from '@alifd/next'
@@ -92,7 +92,7 @@ const FormCardsField = styled(
                   </Fragment>
                 }
               >
-                <SchemaField path={path.concat(index)} />
+                <SchemaField path={FormPath.parse(path).concat(index)} />
               </Card>
             )
           })}

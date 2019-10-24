@@ -14,6 +14,7 @@ import { useEva } from 'react-eva'
 import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
 import { createFormEffects, createFormActions } from '../shared'
+import { isValid } from '@uform/shared'
 const FormHookSymbol = Symbol('FORM_HOOK')
 
 const useInternalForm = (
@@ -30,14 +31,14 @@ const useInternalForm = (
     if (alreadyHaveHookForm) return
     if (dirty.num > 0) {
       form.setFormState(state => {
-        if (dirty.dirtys.values) {
+        if (dirty.dirtys.values && isValid(options.values)) {
           state.values = options.values
         }
-        if (dirty.dirtys.initialValues) {
+        if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
           state.values = options.initialValues
           state.initialValues = options.initialValues
         }
-        if (dirty.dirtys.editable) {
+        if (dirty.dirtys.editable && isValid(options.editable)) {
           state.editable = options.editable
         }
       })
@@ -108,7 +109,7 @@ export const useForm = <
         (payload: IModel, form: IForm) => {
           const actions = {
             ...form,
-            dispatch:form.notify
+            dispatch: form.notify
           }
           if (broadcast) {
             broadcast.setContext(actions)

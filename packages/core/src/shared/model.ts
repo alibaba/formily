@@ -168,5 +168,13 @@ export const createStateModel = <State = {}, Props = {}>(
         return this.dirtyMap
       }
     }
+
+    watch = (key: string, callback?: (dirtys: StateDirtyMap<State>) => any) => {
+      if (this.hasChanged(key)) {
+        if (isFn(callback)) {
+          callback(this.getChanged())
+        }
+      }
+    }
   }
 }
