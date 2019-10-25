@@ -781,9 +781,9 @@ describe('getFieldValue', () => {
     form.registerField({ path: 'a.b.c.d.e' })
 
     expect(form.getFieldValue('a')).toEqual(deepValues.a)
-    expect(form.getFieldValue('a.b')).toEqual(deepValues.a)
+    expect(form.getFieldValue('a.b')).toEqual(undefined)
     expect(form.getFieldValue('a.b.c')).toEqual(deepValues.a.c)
-    expect(form.getFieldValue('a.b.c.d')).toEqual(deepValues.a.c)
+    expect(form.getFieldValue('a.b.c.d')).toEqual(undefined)
     expect(form.getFieldValue('a.b.c.d.e')).toEqual(deepValues.a.c.e)
   })
 
@@ -793,7 +793,7 @@ describe('getFieldValue', () => {
     form.registerField({ path: 'a.b' })
     form.registerField({ path: 'a.b.c' })
 
-    expect(form.getFieldValue('a')).toEqual(deepValues)
+    expect(form.getFieldValue('a')).toEqual(undefined)
     expect(form.getFieldValue('a.b')).toEqual(deepValues.b)
     expect(form.getFieldValue('a.b.c')).toEqual(deepValues.b.c)
   })
@@ -831,14 +831,12 @@ describe('registerField', () => {
 
 describe('registerVirtualField', () => {
   test('basic', async () => {
-    const onChange = jest.fn()
     const vprops = { hello: 'world' };
     const form = createForm({ values: { a: 1 } })
     form.registerVirtualField({ path: 'a' })
-    form.registerVirtualField({ path: 'b', onChange })
-    expect(onChange).toBeCalledTimes(1) // initialized
+    form.registerVirtualField({ path: 'b' })
     form.registerVirtualField({ path: 'c', props: vprops })
-    expect(form.getFieldValue('a')).toEqual({ a: 1 }) // 根据dataPath法则，会拿到根路径的value
+    expect(form.getFieldValue('a')).toEqual(undefined)
     expect(form.getFieldState('a', state => state.values)).toEqual(undefined) // 不存在这个属性
     expect(form.getFieldState('c', state => state.props)).toEqual(vprops)
     expect(form.getFieldState('b', state => state.display)).toEqual(true)
@@ -847,7 +845,6 @@ describe('registerVirtualField', () => {
     expect(form.getFieldState('b', state => state.display)).toEqual(false)
     form.setFieldState('b', state => state.visible = false)
     expect(form.getFieldState('b', state => state.visible)).toEqual(false)
-    expect(onChange).toBeCalledTimes(3)
   })
 })
 
@@ -1012,9 +1009,9 @@ describe('transformDataPath', () => {
     form.registerField({ path: 'a.b.c.d.e' })
 
     expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()).toEqual('a')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()).toEqual('a')
+    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()).toEqual('a.b')
     expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c')).toString()).toEqual('a.c')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d')).toString()).toEqual('a.c')
+    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d')).toString()).toEqual('a.c.d')
     expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e')).toString()).toEqual('a.c.e')
   })
 
@@ -1024,7 +1021,7 @@ describe('transformDataPath', () => {
     form.registerField({ path: 'a.b' })
     form.registerField({ path: 'a.b.c' })
 
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()).toEqual('')
+    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()).toEqual('a')
     expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()).toEqual('b')
     expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c')).toString()).toEqual('b.c')
   })

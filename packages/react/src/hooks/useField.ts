@@ -20,18 +20,16 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
   }
   useMemo(() => {
     let initialized = false
-    ref.current.field = form.registerField({
-      ...options,
-      onChange() {
-        if (ref.current.unmounted) return
-        /**
-         * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
-         */
-        if (initialized) {
-          raf(() => {
-            forceUpdate()
-          })
-        }
+    ref.current.field = form.registerField(options)
+    ref.current.field.subscribe(() => {
+      /**
+       * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
+       */
+      if (initialized) {
+        raf(() => {
+          if (ref.current.unmounted) return
+          forceUpdate()
+        })
       }
     })
     initialized = true
@@ -53,8 +51,10 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
     ref.current.field.unsafe_setSourceState(state => {
       state.mounted = true
     })
+    ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true
+      ref.current.field.unsubscribe()
       ref.current.field.setState((state: IFieldState) => {
         state.unmounted = true
       })

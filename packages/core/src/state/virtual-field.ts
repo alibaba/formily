@@ -34,11 +34,14 @@ export const VirtualFieldState = createStateModel<
 
     private path: FormPath
 
+    private dataPath: FormPath
+
     constructor(state: IVirtualFieldState, props: IVirtualFieldStateProps) {
       this.state = state
       this.path = FormPath.getPath(props.nodePath)
-      this.state.name = this.path.entire
+      this.dataPath = FormPath.getPath(props.dataPath)
       this.state.path = this.path.entire
+      this.state.name = this.dataPath.entire
     }
 
     computeState(draft: IVirtualFieldState, prevState: IVirtualFieldState) {
