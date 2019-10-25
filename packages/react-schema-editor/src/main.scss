@@ -1,0 +1,69 @@
+/* write style here */
+.schema-editor {
+  padding: 20px;
+
+  /* 操作区 */
+  .schema-menus {
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid #eee;
+
+    .schema-preview-btn {
+      float: right;
+    }
+  }
+
+  .splitter {
+    border-right: 1px dashed #aaa;
+  }
+
+  /* 编辑区 */
+  .schema-editor-main {
+    margin-top: 20px;
+
+    .schema-col {
+      padding: 20px;
+      min-height: 400px;
+    }
+
+    /* 树形编辑 */
+    .schema-tree {}
+
+    /* 代码编辑 */
+    .schema-code {}
+  }
+
+  .field-editor {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #eee;
+
+    .field-operate {
+      padding: 5px;
+
+      .op-btn {
+        margin-left: 5px;
+      }
+
+      .op-btn-expand {
+        float: right !important;
+      }
+    }
+
+    .field-group {
+      background-color: #F2F3F7;
+      padding: 5px;
+
+      .field-input {
+        margin-left: 5px;
+        width: 100px;
+      }
+    }
+
+    .field-children {
+      padding: 10px 0 0 20px;
+    }
+
+
+  }
+
+}
