@@ -166,10 +166,10 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.warnings = []
         draft.effectWarnings = []
       }
-      if (draft.mounted === true) {
+      if (draft.mounted === true && draft.mounted !== prevState.mounted) {
         draft.unmounted = false
       }
-      if (draft.unmounted === true) {
+      if (draft.unmounted === true && draft.unmounted !== prevState.unmounted) {
         draft.mounted = false
       }
       if (draft.errors.length) {

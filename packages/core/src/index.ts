@@ -146,7 +146,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
-  function onFieldChange({ onChange, field, path }) {
+  function onFieldChange({ field, path }) {
     return (published: IFieldState) => {
       const valueChanged = field.hasChanged('value')
       const initialValueChanged = field.hasChanged('initialValue')
@@ -169,7 +169,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           }, true)
         }
       }
-
       if (visibleChanged) {
         if (!published.visible) {
           deleteFormValuesIn(path, true)
@@ -197,7 +196,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           false
         )
       }
-
       if (unmountedChanged) {
         if (published.unmounted) {
           deleteFormValuesIn(path, true)
@@ -234,44 +232,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (warningsChanged) {
         syncFormMessages('warnings', published.name, published.warnings)
       }
-
-      if (isFn(onChange) && (!env.shadowStage || env.leadingStage)) {
-        onChange(field)
-      }
       heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      if (!(!env.shadowStage || env.leadingStage)) {
+        return false
+      }
     }
   }
 
-  //实时同步Form Messages
-  function syncFormMessages(type: string, path: string, messages: string[]) {
-    state.unsafe_setSourceState(state => {
-      let foundField = false
-      state[type] = state[type] || []
-      state[type] = state[type].reduce((buf: any, item: any) => {
-        if (item.path === path) {
-          foundField = true
-          return messages.length ? buf.concat({ path, messages }) : buf
-        } else {
-          return buf.concat(item)
-        }
-      }, [])
-      if (!foundField && messages.length) {
-        state[type].push({
-          path,
-          messages
-        })
-      }
-      if (state.errors.length) {
-        state.invalid = true
-        state.valid = false
-      } else {
-        state.invalid = false
-        state.valid = true
-      }
-    })
-  }
-
-  function onVirtualFieldChange({ onChange, field, path }) {
+  function onVirtualFieldChange({ field, path }) {
     return (published: IVirtualFieldState) => {
       const visibleChanged = field.hasChanged('visible')
       const displayChanged = field.hasChanged('display')
@@ -309,7 +277,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (mountedChanged && published.mounted) {
         heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-      if (isFn(onChange)) onChange(field)
       heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
   }
@@ -317,18 +284,21 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   function registerVirtualField({
     name,
     path,
-    props,
-    onChange
+    props
   }: IVirtualFieldStateProps): IVirtualField {
     let nodePath = FormPath.parse(path || name)
+    let dataPath = transformDataPath(nodePath)
     let field: IVirtualField
     const createField = () => {
       let field: IVirtualField
       field = new VirtualFieldState({
         nodePath,
+        dataPath,
         useDirty: options.useDirty
       })
-      field.subscribe(onVirtualFieldChange({ onChange, field, path: nodePath }))
+      field.subscription = {
+        notify: onVirtualFieldChange({ field, path: nodePath })
+      }
       field.batch(() => {
         batchRunTaskQueue(field, nodePath)
         field.setState((state: IVirtualFieldState) => {
@@ -359,12 +329,11 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     required,
     rules,
     editable,
-    onChange,
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
     let nodePath = FormPath.parse(path || name)
-    let dataPath = transformDataPath(path)
+    let dataPath = transformDataPath(nodePath)
     const createField = () => {
       let field: IField
       field = new FieldState({
@@ -372,8 +341,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         dataPath,
         useDirty: options.useDirty
       })
+      field.subscription = {
+        notify: onFieldChange({ field, path: nodePath })
+      }
       heart.notify(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
-      field.subscribe(onFieldChange({ onChange, field, path: nodePath }))
       field.batch(() => {
         batchRunTaskQueue(field, nodePath)
         field.setState((state: IFieldState) => {
@@ -433,9 +404,39 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     return field
   }
 
+  //实时同步Form Messages
+  function syncFormMessages(type: string, path: string, messages: string[]) {
+    state.unsafe_setSourceState(state => {
+      let foundField = false
+      state[type] = state[type] || []
+      state[type] = state[type].reduce((buf: any, item: any) => {
+        if (item.path === path) {
+          foundField = true
+          return messages.length ? buf.concat({ path, messages }) : buf
+        } else {
+          return buf.concat(item)
+        }
+      }, [])
+      if (!foundField && messages.length) {
+        state[type].push({
+          path,
+          messages
+        })
+      }
+      if (state.errors.length) {
+        state.invalid = true
+        state.valid = false
+      } else {
+        state.invalid = false
+        state.valid = true
+      }
+    })
+  }
+
   function transformDataPath(path: FormPathPattern) {
     const newPath = FormPath.getPath(path)
     return newPath.reduce((path: FormPath, key: string, index: number) => {
+      if (index >= newPath.length - 1) return path.concat(key)
       const realPath = newPath.slice(0, index + 1)
       const dataPath = path.concat(key)
       const selected = graph.get(realPath)
@@ -779,7 +780,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   function batchRunTaskQueue(field: IField | IVirtualField, path: FormPath) {
     env.taskQueue.forEach((task, index) => {
       const { pattern, callbacks } = task
-      if (pattern.match(path)) {
+      if (matchStrategy(pattern, field)) {
         callbacks.forEach(callback => {
           field.setState(callback)
         })
@@ -810,6 +811,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       let taskIndex = env.taskIndexes[pattern.toString()]
       if (isValid(taskIndex)) {
         if (
+          env.taskQueue[taskIndex] &&
           !env.taskQueue[taskIndex].callbacks.some(fn => isEqual(fn, callback))
         ) {
           env.taskQueue[taskIndex].callbacks.push(callback)
@@ -831,7 +833,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   function getFieldValue(path?: FormPathPattern) {
-    return getFormValuesIn(path)
+    return getFieldState(path, state => {
+      return state.value
+    })
   }
 
   function setFieldInitialValue(path?: FormPathPattern, value?: any) {
@@ -841,7 +845,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   function getFieldInitialValue(path?: FormPathPattern) {
-    return getFormInitialValuesIn(path)
+    return getFieldState(path, state => {
+      return state.initialValue
+    })
   }
 
   function getFieldState(
@@ -905,9 +911,21 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     env.leadingStage = false
   }
 
+  function matchStrategy(
+    pattern: FormPathPattern,
+    node: IField | IVirtualField
+  ) {
+    const matchPattern = FormPath.parse(pattern)
+    return node.unsafe_getSourceState(
+      state => matchPattern.match(state.name) || matchPattern.match(state.path)
+    )
+  }
+
   const state = new FormState(options)
   const validator = new FormValidator(options)
-  const graph = new FormGraph()
+  const graph = new FormGraph({
+    matchStrategy
+  })
   const formApi = {
     submit,
     reset,
@@ -964,7 +982,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     submittingTask: undefined
   }
   heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
-  state.subscribe(onFormChange)
+  state.subscription = {
+    notify: onFormChange
+  }
   graph.appendNode('', state)
   state.setState((state: IFormState) => {
     state.initialized = true

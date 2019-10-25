@@ -1,9 +1,11 @@
 import { isFn, each } from '@uform/shared'
-import { Subscriber } from '../types'
+import { Subscriber, Subscription } from '../types'
 
 export class Subscrible<Payload = any> {
   subscribers: Subscriber<Payload>[] = []
 
+  subscription: Subscription<Payload>
+  
   subscribe = (callback?: Subscriber<Payload>) => {
     if (
       isFn(callback) &&
@@ -24,6 +26,19 @@ export class Subscrible<Payload = any> {
   }
 
   notify = (payload?: Payload) => {
-    each(this.subscribers, callback => callback(payload))
+    if (this.subscription) {
+      if (this.subscription && isFn(this.subscription.notify)) {
+        if (this.subscription.notify.call(this, payload) === false) {
+          return
+        }
+      }
+    }
+    const filter = (payload: Payload) => {
+      if (this.subscription && isFn(this.subscription.filter)) {
+        return this.subscription.filter.call(this, payload)
+      }
+      return payload
+    }
+    each(this.subscribers, callback => callback(filter(payload)))
   }
 }
