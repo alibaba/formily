@@ -48,9 +48,9 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
   })
 
   useEffect(() => {
-    ref.current.field.unsafe_setSourceState(state => {
+    ref.current.field.setState(state => {
       state.mounted = true
-    })
+    }, true)
     ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true
