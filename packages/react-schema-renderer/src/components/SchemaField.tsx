@@ -115,7 +115,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
                     const childPath = path.concat(key)
                     return (
                       <SchemaField
-                        key={childPath.toString()}
+                        key={key}
                         path={childPath}
                       />
                     )

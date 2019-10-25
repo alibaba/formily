@@ -10,7 +10,10 @@ export const createStateModel = <State = {}, Props = {}>(
   return class Model<DefaultProps> extends Subscrible<State>
     implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
-    public props: Props & DefaultProps & { useDirty?: boolean }
+    public props: Props &
+      DefaultProps & {
+        useDirty?: boolean
+      }
     public displayName?: string
     public dirtyNum: number
     public dirtyMap: StateDirtyMap<State>

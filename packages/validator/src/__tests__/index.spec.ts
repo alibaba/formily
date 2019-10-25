@@ -51,7 +51,7 @@ test('required', async () => {
         required: true,
         message: '该字段不能为空'
       },
-      errors: ['该字段不能为空']
+      errors: ['This field is required']
     },
     {
       value: [],
@@ -59,7 +59,7 @@ test('required', async () => {
         required: true,
         message: '该字段不能为空'
       },
-      errors: ['该字段不能为空']
+      errors: ['This field is required']
     },
     {
       value: false,
@@ -122,7 +122,7 @@ test('max', async () => {
       rules: {
         max: 2
       },
-      errors: ['The length of 123 must be at most 2']
+      errors: ['The length or number of entries must be at most 2']
     },
     {
       value: '123',

@@ -52,6 +52,10 @@ export enum LifeCycleTypes {
   ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
 
+export interface FormGraphProps {
+  matchStrategy?: (pattern: FormPathPattern, field: any) => boolean
+}
+
 export type FormGraphNodeMap<T> = {
   [key in string]: T
 }
@@ -221,6 +225,7 @@ export type VirtualFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IVirtualFieldStateProps {
   path?: FormPathPattern
+  dataPath?: FormPathPattern
   nodePath?: FormPathPattern
   name?: string
   props?: {}
@@ -261,6 +266,11 @@ export interface IMutators {
 }
 
 export type Subscriber<S> = (payload: S) => void
+
+export interface Subscription<S> {
+  notify?: (payload: S) => void | boolean
+  filter?: (payload: S) => any
+}
 
 export interface IModel<S = {}, P = {}> extends Subscrible {
   state: S

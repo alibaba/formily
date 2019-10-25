@@ -71,7 +71,7 @@ SchemaMarkupForm.displayName = 'SchemaMarkupForm'
 
 export function createVirtualBox<T = {}>(
   key: string,
-  component?: React.JSXElementConstructor<T>
+  component?: React.JSXElementConstructor<React.PropsWithChildren<T>>
 ) {
   registerVirtualBox(
     key,
