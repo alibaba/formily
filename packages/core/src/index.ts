@@ -833,7 +833,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   function getFieldValue(path?: FormPathPattern) {
-    return getFormValuesIn(path)
+    return getFieldState(path, state => {
+      return state.value
+    })
   }
 
   function setFieldInitialValue(path?: FormPathPattern, value?: any) {
@@ -843,7 +845,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   function getFieldInitialValue(path?: FormPathPattern) {
-    return getFormInitialValuesIn(path)
+    return getFieldState(path, state => {
+      return state.initialValue
+    })
   }
 
   function getFieldState(
