@@ -1,8 +1,0 @@
-node_modules
-config
-public
-scripts
-*.log
-src/demo
-build
-__tests__
