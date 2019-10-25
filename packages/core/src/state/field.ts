@@ -95,7 +95,10 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
 
     computeState(draft: IFieldState, prevState: IFieldState) {
       //如果是隐藏状态，则禁止修改值
-      if (!draft.visible || draft.unmounted) {
+      if (
+        (!draft.visible && draft.visible !== prevState.visible) ||
+        (draft.unmounted && draft.unmounted !== prevState.unmounted)
+      ) {
         draft.value = prevState.value
         draft.initialValue = prevState.initialValue
       }

@@ -239,35 +239,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
-  //实时同步Form Messages
-  function syncFormMessages(type: string, path: string, messages: string[]) {
-    state.unsafe_setSourceState(state => {
-      let foundField = false
-      state[type] = state[type] || []
-      state[type] = state[type].reduce((buf: any, item: any) => {
-        if (item.path === path) {
-          foundField = true
-          return messages.length ? buf.concat({ path, messages }) : buf
-        } else {
-          return buf.concat(item)
-        }
-      }, [])
-      if (!foundField && messages.length) {
-        state[type].push({
-          path,
-          messages
-        })
-      }
-      if (state.errors.length) {
-        state.invalid = true
-        state.valid = false
-      } else {
-        state.invalid = false
-        state.valid = true
-      }
-    })
-  }
-
   function onVirtualFieldChange({ field, path }) {
     return (published: IVirtualFieldState) => {
       const visibleChanged = field.hasChanged('visible')
@@ -431,6 +402,35 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       graph.appendNode(nodePath, field)
     }
     return field
+  }
+
+  //实时同步Form Messages
+  function syncFormMessages(type: string, path: string, messages: string[]) {
+    state.unsafe_setSourceState(state => {
+      let foundField = false
+      state[type] = state[type] || []
+      state[type] = state[type].reduce((buf: any, item: any) => {
+        if (item.path === path) {
+          foundField = true
+          return messages.length ? buf.concat({ path, messages }) : buf
+        } else {
+          return buf.concat(item)
+        }
+      }, [])
+      if (!foundField && messages.length) {
+        state[type].push({
+          path,
+          messages
+        })
+      }
+      if (state.errors.length) {
+        state.invalid = true
+        state.valid = false
+      } else {
+        state.invalid = false
+        state.valid = true
+      }
+    })
   }
 
   function transformDataPath(path: FormPathPattern) {
