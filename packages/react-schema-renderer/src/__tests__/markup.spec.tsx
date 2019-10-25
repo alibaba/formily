@@ -98,8 +98,14 @@ describe('test all apis', () => {
 
 describe('major scenes',()=>{
   //todo，核心场景回归
+  test('basic',()=>{
+    //todo
+  })
 })
 
 describe('bugfix',()=>{
   //todo，问题修复回归
+  test('basic',()=>{
+    //todo
+  })
 })
