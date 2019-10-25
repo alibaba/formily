@@ -40,7 +40,10 @@ Object {
     "modified": true,
     "mounted": true,
     "name": "aa",
+<<<<<<< HEAD
     "path": "aa",
+=======
+>>>>>>> 667c9efe1b9281583f279a8b179d5a98b952f05c
     "pristine": false,
     "props": Object {
       "default": "123",
@@ -109,7 +112,10 @@ Object {
     "modified": true,
     "mounted": true,
     "name": "aa",
+<<<<<<< HEAD
     "path": "aa",
+=======
+>>>>>>> 667c9efe1b9281583f279a8b179d5a98b952f05c
     "pristine": false,
     "props": Object {
       "default": "123",
@@ -162,13 +168,62 @@ Object {
     },
     "warnings": Array [],
   },
+<<<<<<< HEAD
+=======
+  "aa": Object {
+    "active": false,
+    "display": true,
+    "displayName": "FieldState",
+    "editable": true,
+    "effectErrors": Array [],
+    "effectWarnings": Array [],
+    "errors": Array [],
+    "formEditable": undefined,
+    "initialValue": "123",
+    "initialized": true,
+    "invalid": false,
+    "loading": false,
+    "modified": true,
+    "mounted": true,
+    "name": "cc.aa",
+    "pristine": false,
+    "props": Object {
+      "default": "123",
+      "type": "string",
+      "x-props": Object {
+        "data-testid": "input",
+      },
+    },
+    "required": false,
+    "ruleErrors": Array [],
+    "ruleWarnings": Array [],
+    "rules": Array [],
+    "selfEditable": undefined,
+    "touched": false,
+    "unmounted": false,
+    "valid": true,
+    "validating": false,
+    "value": "aa change",
+    "values": Array [
+      "aa change",
+    ],
+    "visible": true,
+    "visited": false,
+    "warnings": Array [],
+  },
+>>>>>>> 667c9efe1b9281583f279a8b179d5a98b952f05c
   "cc": Object {
     "display": true,
     "displayName": "VirtualFieldState",
     "initialized": true,
+<<<<<<< HEAD
     "mounted": true,
     "name": "cc",
     "path": "cc",
+=======
+    "mounted": false,
+    "name": "cc",
+>>>>>>> 667c9efe1b9281583f279a8b179d5a98b952f05c
     "props": Object {
       "type": "object",
       "x-component": "box",
@@ -191,8 +246,12 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": true,
+<<<<<<< HEAD
     "name": "aa",
     "path": "cc.aa",
+=======
+    "name": "cc.aa",
+>>>>>>> 667c9efe1b9281583f279a8b179d5a98b952f05c
     "pristine": false,
     "props": Object {
       "default": "123",

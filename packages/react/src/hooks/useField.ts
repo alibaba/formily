@@ -15,7 +15,6 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
     unmounted: false
   })
   const form = useContext<IForm>(FormContext)
-
   if (!form) {
     throw new Error('Form object cannot be found from context.')
   }
