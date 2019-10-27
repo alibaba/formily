@@ -4,7 +4,7 @@ import {
   ISchemaFieldComponentProps,
   SchemaField
 } from '@uform/react-schema-renderer'
-import { toArr, isFn } from '@uform/shared'
+import { toArr, isFn, FormPath } from '@uform/shared'
 import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Card, Icon } from 'antd'
@@ -85,7 +85,7 @@ const FormCardsField = styled(
                   </Fragment>
                 }
               >
-                <SchemaField path={path.concat(index)} />
+                <SchemaField path={FormPath.parse(path).concat(index)} />
               </Card>
             )
           })}
@@ -123,8 +123,8 @@ const FormCardsField = styled(
     .ant-card {
       box-shadow: none;
     }
-    .ant-card-body{
-      padding:20px 10px 0 10px;
+    .ant-card-body {
+      padding: 20px 10px 0 10px;
     }
     .array-cards-addition {
       box-shadow: none;
@@ -138,7 +138,7 @@ const FormCardsField = styled(
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom:10px;
+      margin-bottom: 10px;
       img {
         height: 85px;
       }

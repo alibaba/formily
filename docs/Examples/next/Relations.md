@@ -51,7 +51,6 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm
-        useDirty
         effects={($, { setFieldState, getFieldState,getFormGraph }) => {
           $('onFormInit').subscribe(() => {
             setFieldState(FormPath.match('*(gg,hh)'), state => {

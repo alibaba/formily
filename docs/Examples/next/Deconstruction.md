@@ -226,9 +226,7 @@ const App = () => (
       effects={($, { setFieldState }) => {
         $('onFieldChange', 'wrapper.relation').subscribe(({ value }) => {
           setFieldState(
-            FormPath.match(
-              'wrapper.[[{aa:{bb:{cc:destructor1,dd:\\[destructor2,destructor3\\],ee}}}]]'
-            ),
+            'wrapper.{aa:{bb:{cc:destructor1,dd:[ destructor2, destructor3 ],ee}}}',
             state => {
               state.visible = value == 2
             }

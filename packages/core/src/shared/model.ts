@@ -87,8 +87,10 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         if (!hasProxy || this.props.useDirty) {
           const draft = this.getState()
-          this.dirtyNum = 0
+          if(!this.batching){
+            this.dirtyNum = 0
           this.dirtyMap = {}
+          }
           callback(draft)
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
@@ -118,8 +120,10 @@ export const createStateModel = <State = {}, Props = {}>(
             this.dirtyNum = 0
           }
         } else {
-          this.dirtyNum = 0
+          if(!this.batching){
+            this.dirtyNum = 0
           this.dirtyMap = {}
+          }
           //用proxy解决脏检查计算属性问题
           this.state = produce(
             this.state,
@@ -153,7 +157,9 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
-            this.notify(this.getState())
+            this.batch(()=>{
+              this.notify(this.getState())
+            })
             this.dirtyMap = {}
             this.dirtyNum = 0
           }
