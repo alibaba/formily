@@ -170,6 +170,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         }
       }
       if (visibleChanged) {
+        //visible不能遍历子节点控制其visible，visible只对当前节点生效
         if (!published.visible) {
           deleteFormValuesIn(path, true)
         } else {
