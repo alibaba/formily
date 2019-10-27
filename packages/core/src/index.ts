@@ -295,7 +295,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       field = graph.get(nodePath)
       if (isField(field)) {
         field = createField()
-        graph.replace(nodePath, field)
+        graph.remove(nodePath)
+        graph.appendNode(nodePath, field)
+        //todo:其实还需要重置子节点的state.name,考虑场景比较偏，先不支持
       }
     } else {
       field = createField()
@@ -378,7 +380,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       field = graph.get(nodePath)
       if (isVirtualField(nodePath)) {
         field = createField()
-        graph.replace(nodePath, field)
+        graph.remove(nodePath)
+        graph.appendNode(nodePath, field)
+        //todo:其实还需要重置子节点的state.name,考虑场景比较偏，先不支持
       }
     } else {
       field = createField()

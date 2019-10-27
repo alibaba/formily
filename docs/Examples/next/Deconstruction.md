@@ -172,7 +172,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### 使用 FormPath 路径匹配处理联动
 
-> 注意使用`[[]]`来包裹带关键字的 name 才能匹配
+> ~~注意使用`[[]]`来包裹带关键字的 name 才能匹配~~ v1.x不再需要包裹
 
 ```jsx
 import React from 'react'
@@ -224,7 +224,7 @@ const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldChange', 'wrapper.relation').subscribe(({ value }) => {
+        $('onFieldValueChange', 'wrapper.relation').subscribe(({ value }) => {
           setFieldState(
             'wrapper.{aa:{bb:{cc:destructor1,dd:[ destructor2, destructor3 ],ee}}}',
             state => {
