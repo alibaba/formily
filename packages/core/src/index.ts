@@ -198,7 +198,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (mountedChanged && published.mounted) {
         heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-
       if (valueChanged) {
         setFormValuesIn(path, published.value)
         heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
@@ -295,9 +294,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       field = graph.get(nodePath)
       if (isField(field)) {
         field = createField()
-        graph.remove(nodePath)
-        graph.appendNode(nodePath, field)
-        //todo:其实还需要重置子节点的state.name,考虑场景比较偏，先不支持
+        graph.replace(nodePath, field)
       }
     } else {
       field = createField()
@@ -380,9 +377,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       field = graph.get(nodePath)
       if (isVirtualField(nodePath)) {
         field = createField()
-        graph.remove(nodePath)
-        graph.appendNode(nodePath, field)
-        //todo:其实还需要重置子节点的state.name,考虑场景比较偏，先不支持
+        graph.replace(nodePath, field)
       }
     } else {
       field = createField()
