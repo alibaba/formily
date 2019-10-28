@@ -145,11 +145,12 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
-
-      if (draft.validating === true) {
-        draft.loading = true
-      } else if (draft.validating === false) {
-        draft.loading = false
+      if (draft.validating !== prevState.validating) {
+        if (draft.validating === true) {
+          draft.loading = true
+        } else if (draft.validating === false) {
+          draft.loading = false
+        }
       }
       // 以下几种情况清理错误和警告信息
       // 1. 字段设置为不可编辑

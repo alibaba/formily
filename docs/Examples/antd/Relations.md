@@ -64,14 +64,14 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', 'aa').subscribe(fieldState => {
+          $('onFieldValueChange', 'aa').subscribe(fieldState => {
             console.log(fieldState.value)
             setFieldState('bb', state => {
               state.visible = !fieldState.value
             })
           })
           
-          $('onFieldChange', 'cc').subscribe(fieldState => {
+          $('onFieldValueChange', 'cc').subscribe(fieldState => {
             setFieldState('dd', state => {
               state.visible = !fieldState.value
             })
@@ -89,12 +89,12 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', 'mm').subscribe(fieldState => {
+          $('onFieldValueChange', 'mm').subscribe(fieldState => {
             setFieldState('ff', state => {
               state.visible = !fieldState.value
             })
           })
-          $('onFieldChange', 'gg')
+          $('onFieldValueChange', 'gg')
             .pipe(
               withLatestFrom($('onChangeOption')),
               map(([fieldState, { payload: option }]) => {
@@ -267,7 +267,7 @@ const App = () => (
         $('onFormInit').subscribe(() => {
           hide('bb')
         })
-        $('onFieldChange', 'aa').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa').subscribe(fieldState => {
           if (!fieldState.value) return
           show('bb')
           loading('bb')
@@ -277,7 +277,7 @@ const App = () => (
             setValue('bb', '1111')
           }, 1000)
         })
-        $('onFieldChange', 'bb').subscribe(fieldState => {
+        $('onFieldValueChange', 'bb').subscribe(fieldState => {
           console.log(fieldState.loading)
           if (!fieldState.value) return hide('cc')
           show('cc')
@@ -340,7 +340,7 @@ const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldChange', 'bb').subscribe(state => {
+        $('onFieldValueChange', 'bb').subscribe(state => {
           if (state.value) {
             setFieldState('aa', state => {
               state.value = '123'
@@ -452,7 +452,7 @@ const App = () => {
         $('onFormInit').subscribe(() => {
           hide(FormPath.match('aa.*.*(cc,gg,dd.*.ee)'))
         })
-        $('onFieldChange', 'aa.*.bb').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa.*.bb').subscribe(fieldState => {
           const cc = FormPath.transform(
             fieldState.name,
             /\d+/,
@@ -470,7 +470,7 @@ const App = () => {
             setValue(cc, '1111')
           }, 1000)
         })
-        $('onFieldChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
           const gg = FormPath.transform(
             fieldState.name,
             /\d+/,
@@ -482,7 +482,7 @@ const App = () => {
             }
           })
         })
-        $('onFieldChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
           const ee = FormPath.transform(
             fieldState.name,
             /\d+/,

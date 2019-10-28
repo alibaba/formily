@@ -32,17 +32,20 @@ const bindEffects = (
   effect: ISchema['x-effect'],
   notify: (type: string, payload?: any) => void
 ): any => {
-  each(effect(notify, { ...props }), (event, key) => {
-    const prevEvent = key === 'onChange' ? props[key] : undefined
-    props[key] = (...args: any[]) => {
-      if (isFn(prevEvent)) {
-        prevEvent(...args)
-      }
-      if (isFn(event)) {
-        return event(...args)
+  each(
+    effect((type, payload) => notify(type, { payload }), { ...props }),
+    (event, key) => {
+      const prevEvent = key === 'onChange' ? props[key] : undefined
+      props[key] = (...args: any[]) => {
+        if (isFn(prevEvent)) {
+          prevEvent(...args)
+        }
+        if (isFn(event)) {
+          return event(...args)
+        }
       }
     }
-  })
+  )
   return props
 }
 
@@ -92,7 +95,6 @@ export const connect = (options?: IConnectOptions) => {
       }
 
       const extendsEffect = schema.getExtendsEffect()
-
       if (isFn(extendsEffect)) {
         componentProps = bindEffects(componentProps, extendsEffect, form.notify)
       }
@@ -104,8 +106,8 @@ export const connect = (options?: IConnectOptions) => {
         }
       }
 
-      if (isArr(schema.enum) && !componentProps.dataSource) {
-        componentProps.dataSource = createEnum(schema.enum)
+      if (isArr((props as ISchema).enum) && !componentProps.dataSource) {
+        componentProps.dataSource = createEnum((props as ISchema).enum)
       }
 
       if (componentProps.editable !== undefined) {

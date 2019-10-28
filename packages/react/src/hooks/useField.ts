@@ -7,7 +7,9 @@ import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook } from '../types'
 import FormContext from '../context'
 
-export const useField = (options: IFieldStateProps): IFieldHook => {
+export const useField = (
+  options: IFieldStateProps & { triggerType?: 'onChange' | 'onBlur' }
+): IFieldHook => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
   const ref = useRef<{ field: IField; unmounted: boolean }>({
@@ -18,7 +20,7 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
   if (!form) {
     throw new Error('Form object cannot be found from context.')
   }
-  useMemo(() => {
+  const mutators = useMemo(() => {
     let initialized = false
     ref.current.field = form.registerField(options)
     ref.current.field.subscribe(() => {
@@ -26,6 +28,11 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
        */
       if (initialized) {
+        if (options.triggerType === 'onChange') {
+          if (ref.current.field.hasChanged('value')) {
+            mutators.validate()
+          }
+        }
         raf(() => {
           if (ref.current.unmounted) return
           forceUpdate()
@@ -33,6 +40,7 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
       }
     })
     initialized = true
+    return form.createMutators(ref.current.field)
   }, [])
 
   useEffect(() => {
@@ -68,7 +76,7 @@ export const useField = (options: IFieldStateProps): IFieldHook => {
       ...state,
       errors: state.errors.join(', ')
     },
-    mutators: form.createMutators(ref.current.field),
+    mutators,
     props: state.props
   }
 }

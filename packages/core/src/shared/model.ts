@@ -19,6 +19,7 @@ export const createStateModel = <State = {}, Props = {}>(
     public dirtyMap: StateDirtyMap<State>
     public batching: boolean
     public controller: StateModel<State>
+
     constructor(defaultProps: DefaultProps) {
       super()
       this.state = { ...Factory.defaultState }
@@ -87,8 +88,10 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         if (!hasProxy || this.props.useDirty) {
           const draft = this.getState()
-          this.dirtyNum = 0
-          this.dirtyMap = {}
+          if (!this.batching) {
+            this.dirtyNum = 0
+            this.dirtyMap = {}
+          }
           callback(draft)
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
@@ -114,12 +117,15 @@ export const createStateModel = <State = {}, Props = {}>(
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
             this.notify(this.getState())
+
             this.dirtyMap = {}
             this.dirtyNum = 0
           }
         } else {
-          this.dirtyNum = 0
-          this.dirtyMap = {}
+          if (!this.batching) {
+            this.dirtyNum = 0
+            this.dirtyMap = {}
+          }
           //用proxy解决脏检查计算属性问题
           this.state = produce(
             this.state,
@@ -131,16 +137,14 @@ export const createStateModel = <State = {}, Props = {}>(
             },
             patches => {
               patches.forEach(({ path, op, value }) => {
-                if (!this.dirtyMap[path[0]]) {
-                  if (op === 'replace') {
-                    if (!isEqual(this.state[path[0]], value)) {
-                      this.dirtyMap[path[0]] = true
-                      this.dirtyNum++
-                    }
-                  } else {
+                if (op === 'replace') {
+                  if (!isEqual(this.state[path[0]], value)) {
                     this.dirtyMap[path[0]] = true
                     this.dirtyNum++
                   }
+                } else {
+                  this.dirtyMap[path[0]] = true
+                  this.dirtyNum++
                 }
               })
             }
