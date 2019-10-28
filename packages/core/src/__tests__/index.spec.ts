@@ -13,7 +13,7 @@ const resetInitValues = {
 }
 const deepValues = {
   a: {
-    b: { c: { d: { e: 1}}},
+    b: { c: { d: { e: 1 } } },
     c: {
       e: 2
     }
@@ -22,7 +22,6 @@ const deepValues = {
     c: 3
   }
 }
-
 
 describe('createForm', () => {
   test('values', () => {
@@ -109,8 +108,8 @@ describe('createForm', () => {
     expect(form.getFormState(state => state.values)).toEqual(testValues2)
 
     // change field's value
-    aa.setState(state => state.value = changeValues.aa)
-    bb.setState(state => state.value = changeValues.bb)
+    aa.setState(state => (state.value = changeValues.aa))
+    bb.setState(state => (state.value = changeValues.bb))
     expect(onFieldChange).toBeCalledTimes(4)
     expect(form.getFormState(state => state.values)).toEqual(changeValues)
     expect(aa.getState(state => state.value)).toEqual(changeValues.aa)
@@ -138,7 +137,7 @@ describe('graph', () => {
     form.registerField({ path: 'aa', value: changeValues.aa })
     form.registerField({ path: 'bb', value: changeValues.bb })
     const snapshot = form.getFormGraph()
-    form.setFieldState('aa', state => state.visible = false)
+    form.setFieldState('aa', state => (state.visible = false))
     expect(form.getFormGraph()).toMatchSnapshot()
 
     // change graph or you can also call it 'time travel'
@@ -148,10 +147,10 @@ describe('graph', () => {
 })
 
 describe('submit', () => {
-  test('onSubmit', async() => {
+  test('onSubmit', async () => {
     const onSubmitContructor = jest.fn()
     const onSubmitFn = jest.fn()
-    const changeSubmitPayload = (values) => ({ hello: 'world' })
+    const changeSubmitPayload = values => ({ hello: 'world' })
     const form1 = createForm({ onSubmit: onSubmitContructor })
     const form2 = createForm()
 
@@ -168,30 +167,47 @@ describe('submit', () => {
     expect(onSubmitContructor).toBeCalledTimes(1)
     expect(onSubmitFn).toBeCalledTimes(2)
     const result = await form2.submit(changeSubmitPayload)
-    expect(result).toEqual({ validated: {
-      errors: [],
-      warnings: [],
-    }, payload: { hello: 'world'} })
+    expect(result).toEqual({
+      validated: {
+        errors: [],
+        warnings: []
+      },
+      payload: { hello: 'world' }
+    })
   })
 
   test('submitResult', async () => {
     const sunmitFailed = jest.fn()
-    const form = createForm()    
-    form.registerField({ path: 'a', rules: [(value) => {
-      return value === undefined ? { type: 'error', message: 'a is required' } : null
-    }] })
-    form.registerField({ path: 'b', rules: [(value) => {
-      return value === undefined ? { type: 'warning', message: 'b is required' } : null
-    }] })
+    const form = createForm()
+    form.registerField({
+      path: 'a',
+      rules: [
+        value => {
+          return value === undefined
+            ? { type: 'error', message: 'a is required' }
+            : null
+        }
+      ]
+    })
+    form.registerField({
+      path: 'b',
+      rules: [
+        value => {
+          return value === undefined
+            ? { type: 'warning', message: 'b is required' }
+            : null
+        }
+      ]
+    })
 
     // error failed
     try {
       await form.submit()
     } catch (errors) {
       sunmitFailed()
-      expect(errors).toEqual([{ path: 'a', messages: ['a is required']}])
+      expect(errors).toEqual([{ path: 'a', messages: ['a is required'] }])
     }
-    
+
     // warning pass
     form.setFieldValue('a', 1)
     let validated
@@ -202,7 +218,9 @@ describe('submit', () => {
       sunmitFailed()
     }
 
-    expect(validated.warnings).toEqual([{ path: 'b', messages: ['b is required'] }])
+    expect(validated.warnings).toEqual([
+      { path: 'b', messages: ['b is required'] }
+    ])
     expect(validated.errors).toEqual([])
     expect(sunmitFailed).toHaveBeenCalledTimes(1)
   })
@@ -221,7 +239,7 @@ describe('submit', () => {
     const form = createForm({
       lifecycles: [
         new FormLifeCycle(LifeCycleTypes.ON_FORM_SUBMIT_START, onSubmitStart),
-        new FormLifeCycle(LifeCycleTypes.ON_FORM_SUBMIT_END, onSubmitEnd),
+        new FormLifeCycle(LifeCycleTypes.ON_FORM_SUBMIT_END, onSubmitEnd)
       ],
       onSubmit: () => {
         expect(form.getFormState(state => state.submitting)).toEqual(true)
@@ -257,7 +275,9 @@ describe('reset', () => {
     await form.reset({ forceClear: true })
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
-    expect(form.getFormState(state => state.initialValues)).toEqual(resetInitValues)
+    expect(form.getFormState(state => state.initialValues)).toEqual(
+      resetInitValues
+    )
   })
 
   test('array reset no forceclear(initial values)', async () => {
@@ -278,7 +298,9 @@ describe('reset', () => {
     await form.reset()
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual(resetInitValues)
-    expect(form.getFormState(state => state.initialValues)).toEqual(resetInitValues)
+    expect(form.getFormState(state => state.initialValues)).toEqual(
+      resetInitValues
+    )
   })
 
   test('array reset no forceclear(values)', async () => {
@@ -298,7 +320,7 @@ describe('reset', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
     await form.reset()
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] }})
+    expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
     expect(form.getFormState(state => state.initialValues)).toEqual({})
   })
 })
@@ -308,15 +330,31 @@ describe('clearErrors', () => {
     const form = createForm()
     const warnMsg = ['warning msg']
     const errMsg = ['error msg']
-    form.registerField({ path: 'b', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] }) // CustomValidator warning
-    form.registerField({ path: 'c', rules: [(v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined] }) // CustomValidator error
+    form.registerField({
+      path: 'b',
+      rules: [
+        v =>
+          v === undefined
+            ? { type: 'warning', message: 'warning msg' }
+            : undefined
+      ]
+    }) // CustomValidator warning
+    form.registerField({
+      path: 'c',
+      rules: [
+        v =>
+          v === undefined ? { type: 'error', message: 'error msg' } : undefined
+      ]
+    }) // CustomValidator error
     const result1 = await form.validate()
     expect(result1.warnings).toEqual([{ path: 'b', messages: warnMsg }])
-    expect(result1.errors).toEqual([{ path: 'c', messages: errMsg}])      
+    expect(result1.errors).toEqual([{ path: 'c', messages: errMsg }])
 
     form.clearErrors('b')
     expect(form.getFormState(state => state.warnings)).toEqual([])
-    expect(form.getFormState(state => state.errors)).toEqual([{ path: 'c', messages: errMsg}])
+    expect(form.getFormState(state => state.errors)).toEqual([
+      { path: 'c', messages: errMsg }
+    ])
 
     form.clearErrors('c')
     expect(form.getFormState(state => state.warnings)).toEqual([])
@@ -324,20 +362,16 @@ describe('clearErrors', () => {
 
     const result2 = await form.validate()
     expect(result2.warnings).toEqual([{ path: 'b', messages: warnMsg }])
-    expect(result2.errors).toEqual([{ path: 'c', messages: errMsg}])      
+    expect(result2.errors).toEqual([{ path: 'c', messages: errMsg }])
 
     form.clearErrors()
     expect(form.getFormState(state => state.warnings)).toEqual([])
     expect(form.getFormState(state => state.errors)).toEqual([])
   })
 
-  test('wildcard path', async () => {
+  test('wildcard path', async () => {})
 
-  })
-
-  test('effect', async () => {
-
-  })
+  test('effect', async () => {})
 })
 
 describe('validate', () => {
@@ -352,14 +386,20 @@ describe('validate', () => {
     const onValidateFailedTrigger = jest.fn()
     const onValidateFailed = ({ warnings, errors }) => {
       expect(warnings).toEqual([{ path: 'b', messages: ['warning msg'] }])
-      expect(errors).toEqual([{ path: 'c', messages: ['error msg']}])      
-      onValidateFailedTrigger();
-    };
+      expect(errors).toEqual([{ path: 'c', messages: ['error msg'] }])
+      onValidateFailedTrigger()
+    }
     const form = createForm({
       onValidateFailed
     })
-    form.registerField({ path: 'b', rules: [() => ({ type: 'warning', message: 'warning msg' })] }) // CustomValidator warning
-    form.registerField({ path: 'c', rules: [() => ({ type: 'error', message: 'error msg' })] }) // CustomValidator error
+    form.registerField({
+      path: 'b',
+      rules: [() => ({ type: 'warning', message: 'warning msg' })]
+    }) // CustomValidator warning
+    form.registerField({
+      path: 'c',
+      rules: [() => ({ type: 'error', message: 'error msg' })]
+    }) // CustomValidator error
     await form.validate()
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
@@ -369,15 +409,27 @@ describe('validate', () => {
     const onValidateEnd = jest.fn()
     const form = createForm({
       lifecycles: [
-        new FormLifeCycle(LifeCycleTypes.ON_FORM_VALIDATE_START, onValidateStart),
-        new FormLifeCycle(LifeCycleTypes.ON_FORM_VALIDATE_END, onValidateEnd),
-      ],
+        new FormLifeCycle(
+          LifeCycleTypes.ON_FORM_VALIDATE_START,
+          onValidateStart
+        ),
+        new FormLifeCycle(LifeCycleTypes.ON_FORM_VALIDATE_END, onValidateEnd)
+      ]
     })
     form.registerField({ path: 'a', rules: ['number'] }) // string
-    form.registerField({ path: 'b', rules: [() => ({ type: 'warning', message: 'warning msg' })] }) // CustomValidator warning
-    form.registerField({ path: 'c', rules: [() => ({ type: 'error', message: 'warning msg' })] }) // CustomValidator error
+    form.registerField({
+      path: 'b',
+      rules: [() => ({ type: 'warning', message: 'warning msg' })]
+    }) // CustomValidator warning
+    form.registerField({
+      path: 'c',
+      rules: [() => ({ type: 'error', message: 'warning msg' })]
+    }) // CustomValidator error
     form.registerField({ path: 'd', rules: [() => 'straight error msg'] }) // CustomValidator string
-    form.registerField({ path: 'e', rules: [{ required: true, message: 'desc msg' }] }) // ValidateDescription
+    form.registerField({
+      path: 'e',
+      rules: [{ required: true, message: 'desc msg' }]
+    }) // ValidateDescription
 
     expect(onValidateStart).toBeCalledTimes(0)
     expect(onValidateEnd).toBeCalledTimes(0)
@@ -385,10 +437,10 @@ describe('validate', () => {
     const validatePromise = form.validate()
     expect(form.getFormState(state => state.validating)).toEqual(true)
     expect(onValidateStart).toBeCalledTimes(1)
-    validatePromise.then((validated) => {
+    validatePromise.then(validated => {
       expect(form.getFormState(state => state.validating)).toEqual(false)
       expect(onValidateEnd).toBeCalledTimes(1)
-      const { warnings, errors } = validated;
+      const { warnings, errors } = validated
       expect(warnings.length).toEqual(1)
       expect(errors.length).toEqual(4)
     })
@@ -396,30 +448,56 @@ describe('validate', () => {
 
   test('path', async () => {
     const form = createForm()
-    form.registerField({ path: 'b', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] }) // CustomValidator warning
-    form.registerField({ path: 'c', rules: [(v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined] }) // CustomValidator error
+    form.registerField({
+      path: 'b',
+      rules: [
+        v =>
+          v === undefined
+            ? { type: 'warning', message: 'warning msg' }
+            : undefined
+      ]
+    }) // CustomValidator warning
+    form.registerField({
+      path: 'c',
+      rules: [
+        v =>
+          v === undefined ? { type: 'error', message: 'error msg' } : undefined
+      ]
+    }) // CustomValidator error
     const bResult = await form.validate('b')
     expect(bResult.warnings).toEqual([{ path: 'b', messages: ['warning msg'] }])
-    expect(bResult.errors).toEqual([])      
-    expect(form.getFieldState('b', state => state.warnings)).toEqual(['warning msg'])
+    expect(bResult.errors).toEqual([])
+    expect(form.getFieldState('b', state => state.warnings)).toEqual([
+      'warning msg'
+    ])
     expect(form.getFieldState('c', state => state.errors)).toEqual([])
-    expect(form.getFormState(state => state.warnings)).toEqual([{ path: 'b', messages: ['warning msg'] }])
+    expect(form.getFormState(state => state.warnings)).toEqual([
+      { path: 'b', messages: ['warning msg'] }
+    ])
     expect(form.getFormState(state => state.errors)).toEqual([])
 
     const cResult = await form.validate('c')
     expect(cResult.warnings).toEqual([])
-    expect(cResult.errors).toEqual([{ path: 'c', messages: ['error msg']}])
-    expect(form.getFieldState('b', state => state.warnings)).toEqual(['warning msg'])
-    expect(form.getFieldState('c', state => state.errors)).toEqual(['error msg'])
-    expect(form.getFormState(state => state.warnings)).toEqual([{ path: 'b', messages: ['warning msg'] }])
-    expect(form.getFormState(state => state.errors)).toEqual([{ path: 'c', messages: ['error msg']}])
+    expect(cResult.errors).toEqual([{ path: 'c', messages: ['error msg'] }])
+    expect(form.getFieldState('b', state => state.warnings)).toEqual([
+      'warning msg'
+    ])
+    expect(form.getFieldState('c', state => state.errors)).toEqual([
+      'error msg'
+    ])
+    expect(form.getFormState(state => state.warnings)).toEqual([
+      { path: 'b', messages: ['warning msg'] }
+    ])
+    expect(form.getFormState(state => state.errors)).toEqual([
+      { path: 'c', messages: ['error msg'] }
+    ])
 
     form.setFieldValue('b', 1)
     form.setFieldValue('c', 1)
     const bResult2 = await form.validate('b')
     const cResult2 = await form.validate('c')
     expect(bResult2.warnings).toEqual([])
-    expect(bResult2.errors).toEqual([])      
+    expect(bResult2.errors).toEqual([])
     expect(cResult2.warnings).toEqual([])
     expect(cResult2.errors).toEqual([])
     expect(form.getFieldState('b', state => state.warnings)).toEqual([])
@@ -437,7 +515,7 @@ describe('setFormState', () => {
     expect(form.getFormState()).toEqual(state)
   })
 
-  test('set', async() => {
+  test('set', async () => {
     const form = createForm()
     // pristine 依赖 draft.values === draft.initialValues
     // invalid 依赖 errors.length === 0
@@ -445,15 +523,29 @@ describe('setFormState', () => {
     // loading 取决于validating
     // mounted 和 unmounted 互为取反，先读mounted
     // errors, warnings 无法被设置，会从最新的state中获取
-    form.registerField({ path: 'b', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] }) // CustomValidator warning
-    form.registerField({ path: 'c', rules: [(v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined] }) // CustomValidator error
+    form.registerField({
+      path: 'b',
+      rules: [
+        v =>
+          v === undefined
+            ? { type: 'warning', message: 'warning msg' }
+            : undefined
+      ]
+    }) // CustomValidator warning
+    form.registerField({
+      path: 'c',
+      rules: [
+        v =>
+          v === undefined ? { type: 'error', message: 'error msg' } : undefined
+      ]
+    }) // CustomValidator error
     const { errors, warnings } = await form.validate()
     const invalid = errors.length > 0
 
     const values = { b: '2' }
     const initialValues = { a: '1' }
     const validating = true
-    form.setFormState((state) => {
+    form.setFormState(state => {
       state.pristine = false
       state.valid = false
       state.invalid = false
@@ -484,32 +576,40 @@ describe('setFormState', () => {
       initialValues,
       mounted: true,
       unmounted: false,
-      props: { hello: 'world' },
+      props: { hello: 'world' }
     })
-  })  
+  })
 })
 
 describe('getFormState', () => {
   test('basic', async () => {
     const form = createForm()
     const state = form.getFormState()
-    expect(state).toEqual(form.getFormState((state) => state))
+    expect(state).toEqual(form.getFormState(state => state))
     expect(form.getFormState(state => state.pristine)).toEqual(state.pristine)
     expect(form.getFormState(state => state.valid)).toEqual(state.valid)
     expect(form.getFormState(state => state.invalid)).toEqual(state.invalid)
     expect(form.getFormState(state => state.loading)).toEqual(state.loading)
-    expect(form.getFormState(state => state.validating)).toEqual(state.validating)
-    expect(form.getFormState(state => state.submitting)).toEqual(state.submitting)
-    expect(form.getFormState(state => state.initialized)).toEqual(state.initialized)
+    expect(form.getFormState(state => state.validating)).toEqual(
+      state.validating
+    )
+    expect(form.getFormState(state => state.submitting)).toEqual(
+      state.submitting
+    )
+    expect(form.getFormState(state => state.initialized)).toEqual(
+      state.initialized
+    )
     expect(form.getFormState(state => state.editable)).toEqual(state.editable)
     expect(form.getFormState(state => state.errors)).toEqual(state.errors)
     expect(form.getFormState(state => state.warnings)).toEqual(state.warnings)
     expect(form.getFormState(state => state.values)).toEqual(state.values)
-    expect(form.getFormState(state => state.initialValues)).toEqual(state.initialValues)
+    expect(form.getFormState(state => state.initialValues)).toEqual(
+      state.initialValues
+    )
     expect(form.getFormState(state => state.mounted)).toEqual(state.mounted)
     expect(form.getFormState(state => state.unmounted)).toEqual(state.unmounted)
     expect(form.getFormState(state => state.props)).toEqual(state.props)
-  })  
+  })
 })
 
 describe('setFieldState', () => {
@@ -523,17 +623,24 @@ describe('setFieldState', () => {
 
   test('validating and loading', () => {
     const form = createForm()
-    form.registerField({ path: 'a', rules: [
-      (v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined,
-      (v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined
-    ] })
+    form.registerField({
+      path: 'a',
+      rules: [
+        v =>
+          v === undefined
+            ? { type: 'warning', message: 'warning msg' }
+            : undefined,
+        v =>
+          v === undefined ? { type: 'error', message: 'error msg' } : undefined
+      ]
+    })
     expect(form.getFieldState('a', state => state.validating)).toEqual(false)
     expect(form.getFieldState('a', state => state.loading)).toEqual(false)
-    form.setFieldState('a', state => state.validating = true)
+    form.setFieldState('a', state => (state.validating = true))
     expect(form.getFieldState('a', state => state.loading)).toEqual(true)
-    form.setFieldState('a', state => state.validating = false)
+    form.setFieldState('a', state => (state.validating = false))
     expect(form.getFieldState('a', state => state.loading)).toEqual(false)
-  });
+  })
 
   test('value, values and parseValues', () => {
     const form = createForm()
@@ -541,79 +648,94 @@ describe('setFieldState', () => {
     expect(form.getFieldState('a', state => state.modified)).toEqual(false)
     expect(form.getFieldState('a', state => state.value)).toEqual(undefined)
     expect(form.getFieldState('a', state => state.values)).toEqual([undefined])
-    const arr = [1,2,3]
-    form.setFieldState('a', state => state.value = arr)
+    const arr = [1, 2, 3]
+    form.setFieldState('a', state => (state.value = arr))
     expect(form.getFieldState('a', state => state.modified)).toEqual(true)
     expect(form.getFieldState('a', state => state.value)).toEqual(arr)
     expect(form.getFieldState('a', state => state.values)).toEqual([arr])
-    form.setFieldState('a', state => state.values = ['e', 'context'])
+    form.setFieldState('a', state => (state.values = ['e', 'context']))
     // values 第一个参数会是value, 处理onChange的多参数一般会和values[0]同步，这里value测试极端情况
     expect(form.getFieldState('a', state => state.value)).toEqual(arr)
-    expect(form.getFieldState('a', state => state.values)).toEqual([arr, 'context'])
+    expect(form.getFieldState('a', state => state.values)).toEqual([
+      arr,
+      'context'
+    ])
     // visible为false或者已卸载的组件无法修改value
-    form.setFieldState('a', state => state.visible = false)
-    form.setFieldState('a', state => state.value = [4,5,6])
+    form.setFieldState('a', state => (state.visible = false))
+    form.setFieldState('a', state => (state.value = [4, 5, 6]))
     expect(form.getFieldState('a', state => state.value)).toEqual(arr)
     form.setFieldState('a', state => {
-      state.visible = true;
-      state.unmounted = true;
+      state.visible = true
+      state.unmounted = true
     })
-    form.setFieldState('a', state => state.value = [4,5,6])
+    form.setFieldState('a', state => (state.value = [4, 5, 6]))
     expect(form.getFieldState('a', state => state.value)).toEqual(arr)
-  });
+  })
 
   test('mount and unmount', () => {
     const form = createForm()
     form.registerField({ path: 'a' })
     expect(form.getFieldState('a', state => state.mounted)).toEqual(false)
     expect(form.getFieldState('a', state => state.unmounted)).toEqual(false)
-    form.setFieldState('a', state => state.mounted = true)
+    form.setFieldState('a', state => (state.mounted = true))
     expect(form.getFieldState('a', state => state.mounted)).toEqual(true)
     expect(form.getFieldState('a', state => state.unmounted)).toEqual(false)
-  });
+  })
 
   test('rules, required and parseRules', () => {
     const form = createForm()
     form.registerField({ path: 'a' })
     expect(form.getFieldState('a', state => state.required)).toEqual(false)
     expect(form.getFieldState('a', state => state.rules)).toEqual([])
-    form.setFieldState('a', state => state.required = true)
+    form.setFieldState('a', state => (state.required = true))
     expect(form.getFieldState('a', state => state.required)).toEqual(true)
-    const customValidator: ValidatePatternRules[] = [(v, _: ValidateDescription) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : null];
-    form.setFieldState('a', state => state.rules = customValidator)
-    const rules = form.getFieldState('a', state => state.rules);
-    expect(rules).toEqual([...customValidator, { required: true }]) 
-  });
+    const customValidator: ValidatePatternRules[] = [
+      (v, _: ValidateDescription) =>
+        v === undefined ? { type: 'warning', message: 'warning msg' } : null
+    ]
+    form.setFieldState('a', state => (state.rules = customValidator))
+    const rules = form.getFieldState('a', state => state.rules)
+    expect(rules).toEqual([...customValidator, { required: true }])
+  })
 
-  test('pristine', () => { // 无法被修改，依赖value和initialValue的差别
+  test('pristine', () => {
+    // 无法被修改，依赖value和initialValue的差别
     const form = createForm()
     form.registerField({ path: 'a' })
     expect(form.getFieldState('a', state => state.pristine)).toEqual(true)
-    form.setFieldState('a', state => state.pristine = false)
+    form.setFieldState('a', state => (state.pristine = false))
     expect(form.getFieldState('a', state => state.pristine)).toEqual(true)
-    form.setFieldState('a', state => state.value = '1')
+    form.setFieldState('a', state => (state.value = '1'))
     expect(form.getFieldState('a', state => state.pristine)).toEqual(false)
-    form.setFieldState('a', state => state.initialValue = '1')
+    form.setFieldState('a', state => (state.initialValue = '1'))
     expect(form.getFieldState('a', state => state.pristine)).toEqual(true)
-  });
+  })
 
-  test('invalid 和 valid', () => { // 无法被修改，依赖错误信息和告警信息
+  test('invalid 和 valid', () => {
+    // 无法被修改，依赖错误信息和告警信息
     const form = createForm()
     form.registerField({ path: 'a' })
     expect(form.getFieldState('a', state => state.invalid)).toEqual(false)
     expect(form.getFieldState('a', state => state.valid)).toEqual(true)
-    form.setFieldState('a', state => state.invalid = true)
-    form.setFieldState('a', state => state.valid = false)
+    form.setFieldState('a', state => (state.invalid = true))
+    form.setFieldState('a', state => (state.valid = false))
     expect(form.getFieldState('a', state => state.invalid)).toEqual(false)
     expect(form.getFieldState('a', state => state.valid)).toEqual(true)
-  });
+  })
 
-  test('set errors and warnings', async() => {
-    const form = createForm()  
-    const a = form.registerField({ path: 'a', rules: [
-      (v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined,
-      (v) => v === undefined ? ({ type: 'error', message: 'error msg' }) : undefined
-    ] })
+  test('set errors and warnings', async () => {
+    const form = createForm()
+    const a = form.registerField({
+      path: 'a',
+      rules: [
+        v =>
+          v === undefined
+            ? { type: 'warning', message: 'warning msg' }
+            : undefined,
+        v =>
+          v === undefined ? { type: 'error', message: 'error msg' } : undefined
+      ]
+    })
     const state = form.getFieldState('a')
     expect(state.effectErrors).toEqual([])
     expect(state.effectWarnings).toEqual([])
@@ -637,8 +759,8 @@ describe('setFieldState', () => {
     // 看起来有问题，但是对于开发者并不透出effectErrors的概念，只让他感知这是errors
     // errors = effectErrors + ruleErrors
     // warnings = effectWarnings + ruleWarnings
-    form.setFieldState('a', state => state.errors = ['effect errors msg'])
-    form.setFieldState('a', state => state.warnings = ['effect warning msg'])
+    form.setFieldState('a', state => (state.errors = ['effect errors msg']))
+    form.setFieldState('a', state => (state.warnings = ['effect warning msg']))
     const state3 = form.getFieldState('a')
     expect(state3.effectErrors).toEqual(['effect errors msg'])
     expect(state3.effectWarnings).toEqual(['effect warning msg'])
@@ -646,19 +768,19 @@ describe('setFieldState', () => {
     expect(state3.warnings).toEqual(['warning msg', 'effect warning msg'])
 
     // 不可编辑，清空所有错误和警告信息
-    form.setFieldState('a', state => state.editable = false)
+    form.setFieldState('a', state => (state.editable = false))
     const state4 = form.getFieldState('a')
     expect(state4.effectErrors).toEqual([])
     expect(state4.effectWarnings).toEqual([])
     expect(state4.errors).toEqual([])
     expect(state4.warnings).toEqual([])
-    form.setFieldState('a', state => state.editable = true)
+    form.setFieldState('a', state => (state.editable = true))
 
     // 隐藏，清空所有错误和警告信息
     await mutators.validate()
-    form.setFieldState('a', state => state.errors = ['effect errors msg'])
-    form.setFieldState('a', state => state.warnings = ['effect warning msg'])
-    form.setFieldState('a', state => state.visible = false)
+    form.setFieldState('a', state => (state.errors = ['effect errors msg']))
+    form.setFieldState('a', state => (state.warnings = ['effect warning msg']))
+    form.setFieldState('a', state => (state.visible = false))
     const state6 = form.getFieldState('a')
     expect(state6.effectErrors).toEqual([])
     expect(state6.effectWarnings).toEqual([])
@@ -667,16 +789,16 @@ describe('setFieldState', () => {
 
     // 卸载组件，清空所有错误和警告信息
     await mutators.validate()
-    form.setFieldState('a', state => state.errors = ['effect errors msg'])
-    form.setFieldState('a', state => state.warnings = ['effect warning msg'])
+    form.setFieldState('a', state => (state.errors = ['effect errors msg']))
+    form.setFieldState('a', state => (state.warnings = ['effect warning msg']))
     const state7 = form.getFieldState('a')
     expect(state7.effectErrors).toEqual([])
     expect(state7.effectWarnings).toEqual([])
     expect(state7.errors).toEqual([])
     expect(state7.warnings).toEqual([])
-  });
+  })
 
-  test('set editable', async() => {
+  test('set editable', async () => {
     const form = createForm()
     form.registerField({ path: 'a' })
     const state = form.getFieldState('a')
@@ -687,59 +809,85 @@ describe('setFieldState', () => {
     expect(state.formEditable).toEqual(undefined)
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // 简单设置 (editable会影响selfEditable)
-    form.setFieldState('a', state => state.editable = false)
+    form.setFieldState('a', state => (state.editable = false))
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
     expect(form.getFieldState('a', state => state.selfEditable)).toEqual(false)
     // 设置影响计算的值selfEditable
-    form.setFieldState('a', state => state.selfEditable = true)
+    form.setFieldState('a', state => (state.selfEditable = true))
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // 设置影响计算的值formEditable(selfEditable优先级高于formEditable)
-    form.setFieldState('a', state => state.selfEditable = undefined)
-    form.setFieldState('a', state => state.formEditable = false)
+    form.setFieldState('a', state => (state.selfEditable = undefined))
+    form.setFieldState('a', state => (state.formEditable = false))
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
     // 支持函数(UI层传入)
-    form.setFieldState('a', state => state.formEditable = () => true)
+    form.setFieldState('a', state => (state.formEditable = () => true))
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // editable会影响selfEditable, 设置顺序又因为 editable > selfEditable > formEditable
     // 前两者都无效时，最终返回formEditable的值
-    form.setFieldState('a', state => state.editable = undefined)
-    form.setFieldState('a', state => state.formEditable = () => false)
-    expect(form.getFieldState('a', state => state.selfEditable)).toEqual(undefined)
+    form.setFieldState('a', state => (state.editable = undefined))
+    form.setFieldState('a', state => (state.formEditable = () => false))
+    expect(form.getFieldState('a', state => state.selfEditable)).toEqual(
+      undefined
+    )
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
-  });
+  })
 })
 
 describe('getFieldState', () => {
   const form = createForm()
   form.registerField({ path: 'a' })
   const state = form.getFieldState('a')
-  expect(state).toEqual(form.getFieldState('a', (state) => state))
+  expect(state).toEqual(form.getFieldState('a', state => state))
   expect(form.getFieldState('a', state => state.name)).toEqual(state.name)
-  expect(form.getFieldState('a', state => state.initialized)).toEqual(state.initialized)
-  expect(form.getFieldState('a', state => state.pristine)).toEqual(state.pristine)
+  expect(form.getFieldState('a', state => state.initialized)).toEqual(
+    state.initialized
+  )
+  expect(form.getFieldState('a', state => state.pristine)).toEqual(
+    state.pristine
+  )
   expect(form.getFieldState('a', state => state.valid)).toEqual(state.valid)
   expect(form.getFieldState('a', state => state.touched)).toEqual(state.touched)
   expect(form.getFieldState('a', state => state.invalid)).toEqual(state.invalid)
   expect(form.getFieldState('a', state => state.visible)).toEqual(state.visible)
   expect(form.getFieldState('a', state => state.display)).toEqual(state.display)
-  expect(form.getFieldState('a', state => state.editable)).toEqual(state.editable)
-  expect(form.getFieldState('a', state => state.formEditable)).toEqual(state.formEditable)
+  expect(form.getFieldState('a', state => state.editable)).toEqual(
+    state.editable
+  )
+  expect(form.getFieldState('a', state => state.formEditable)).toEqual(
+    state.formEditable
+  )
   expect(form.getFieldState('a', state => state.loading)).toEqual(state.loading)
-  expect(form.getFieldState('a', state => state.modified)).toEqual(state.modified)
+  expect(form.getFieldState('a', state => state.modified)).toEqual(
+    state.modified
+  )
   expect(form.getFieldState('a', state => state.active)).toEqual(state.active)
   expect(form.getFieldState('a', state => state.visited)).toEqual(state.visited)
-  expect(form.getFieldState('a', state => state.validating)).toEqual(state.validating)
+  expect(form.getFieldState('a', state => state.validating)).toEqual(
+    state.validating
+  )
   expect(form.getFieldState('a', state => state.errors)).toEqual(state.errors)
   expect(form.getFieldState('a', state => state.values)).toEqual(state.values)
-  expect(form.getFieldState('a', state => state.effectErrors)).toEqual(state.effectErrors)
-  expect(form.getFieldState('a', state => state.warnings)).toEqual(state.warnings)
-  expect(form.getFieldState('a', state => state.effectWarnings)).toEqual(state.effectWarnings)
+  expect(form.getFieldState('a', state => state.effectErrors)).toEqual(
+    state.effectErrors
+  )
+  expect(form.getFieldState('a', state => state.warnings)).toEqual(
+    state.warnings
+  )
+  expect(form.getFieldState('a', state => state.effectWarnings)).toEqual(
+    state.effectWarnings
+  )
   expect(form.getFieldState('a', state => state.value)).toEqual(state.value)
-  expect(form.getFieldState('a', state => state.initialValue)).toEqual(state.initialValue)
+  expect(form.getFieldState('a', state => state.initialValue)).toEqual(
+    state.initialValue
+  )
   expect(form.getFieldState('a', state => state.rules)).toEqual(state.rules)
-  expect(form.getFieldState('a', state => state.required)).toEqual(state.required)
+  expect(form.getFieldState('a', state => state.required)).toEqual(
+    state.required
+  )
   expect(form.getFieldState('a', state => state.mounted)).toEqual(state.mounted)
-  expect(form.getFieldState('a', state => state.unmounted)).toEqual(state.unmounted)
+  expect(form.getFieldState('a', state => state.unmounted)).toEqual(
+    state.unmounted
+  )
   expect(form.getFieldState('a', state => state.props)).toEqual(state.props)
 })
 
@@ -807,7 +955,7 @@ describe('registerField', () => {
     form.registerField({ path: 'c' })
     form.registerField({ path: 'd', editable: false })
     form.registerField({ path: 'e', editable: true })
-    expect(form.getFieldValue('a')).toEqual(1)    
+    expect(form.getFieldValue('a')).toEqual(1)
     expect(form.getFieldValue('b')).toEqual(undefined)
     expect(form.getFieldState('a', state => state.values)).toEqual([1])
     expect(form.getFieldState('b', state => state.values)).toEqual([undefined])
@@ -817,7 +965,7 @@ describe('registerField', () => {
   })
 
   test('merge', async () => {
-    const form = createForm({ values: { a: 1, b: 2, c: 3, d: 4 }})
+    const form = createForm({ values: { a: 1, b: 2, c: 3, d: 4 } })
     form.registerField({ path: 'a' })
     form.registerField({ path: 'b', value: 'x' })
     form.registerField({ path: 'c', initialValue: 'y' })
@@ -831,7 +979,7 @@ describe('registerField', () => {
 
 describe('registerVirtualField', () => {
   test('basic', async () => {
-    const vprops = { hello: 'world' };
+    const vprops = { hello: 'world' }
     const form = createForm({ values: { a: 1 } })
     form.registerVirtualField({ path: 'a' })
     form.registerVirtualField({ path: 'b' })
@@ -841,9 +989,9 @@ describe('registerVirtualField', () => {
     expect(form.getFieldState('c', state => state.props)).toEqual(vprops)
     expect(form.getFieldState('b', state => state.display)).toEqual(true)
     expect(form.getFieldState('b', state => state.visible)).toEqual(true)
-    form.setFieldState('b', state => state.display = false)
+    form.setFieldState('b', state => (state.display = false))
     expect(form.getFieldState('b', state => state.display)).toEqual(false)
-    form.setFieldState('b', state => state.visible = false)
+    form.setFieldState('b', state => (state.visible = false))
     expect(form.getFieldState('b', state => state.visible)).toEqual(false)
   })
 })
@@ -854,14 +1002,24 @@ describe('createMutators', () => {
     const form = createForm()
     const a = form.registerField({ path: 'a' })
     const mutators = form.createMutators(a)
-    expect(form.getFieldState('a', (state => ({ values: state.values, value: state.value })))).toEqual({
+    expect(
+      form.getFieldState('a', state => ({
+        values: state.values,
+        value: state.value
+      }))
+    ).toEqual({
       value: undefined,
-      values: [undefined],
+      values: [undefined]
     })
-    mutators.change(1,2,3,4)
-    expect(form.getFieldState('a', (state => ({ values: state.values, value: state.value })))).toEqual({
+    mutators.change(1, 2, 3, 4)
+    expect(
+      form.getFieldState('a', state => ({
+        values: state.values,
+        value: state.value
+      }))
+    ).toEqual({
       value: 1,
-      values: [1,2,3,4],
+      values: [1, 2, 3, 4]
     })
   })
 
@@ -870,15 +1028,25 @@ describe('createMutators', () => {
     const a = form.registerField({ path: 'a' })
     const mutators = form.createMutators(a)
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFieldState('a', (state => ({ active: state.active, visited: state.visited })))).toEqual({
+    expect(
+      form.getFieldState('a', state => ({
+        active: state.active,
+        visited: state.visited
+      }))
+    ).toEqual({
       active: false,
-      visited: false,
+      visited: false
     })
     mutators.focus()
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFieldState('a', (state => ({ active: state.active, visited: state.visited })))).toEqual({
+    expect(
+      form.getFieldState('a', state => ({
+        active: state.active,
+        visited: state.visited
+      }))
+    ).toEqual({
       active: true,
-      visited: true,
+      visited: true
     })
   })
 
@@ -887,16 +1055,26 @@ describe('createMutators', () => {
     const a = form.registerField({ path: 'a' })
     const mutators = form.createMutators(a)
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFieldState('a', (state => ({ active: state.active, visited: state.visited })))).toEqual({
+    expect(
+      form.getFieldState('a', state => ({
+        active: state.active,
+        visited: state.visited
+      }))
+    ).toEqual({
       active: false,
-      visited: false,
+      visited: false
     })
     mutators.focus()
     mutators.blur()
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFieldState('a', (state => ({ active: state.active, visited: state.visited })))).toEqual({
+    expect(
+      form.getFieldState('a', state => ({
+        active: state.active,
+        visited: state.visited
+      }))
+    ).toEqual({
       active: false,
-      visited: true,
+      visited: true
     })
   })
 
@@ -924,7 +1102,7 @@ describe('createMutators', () => {
     const mutators = form.createMutators(mm)
     expect(form.getFieldValue('mm')).toEqual(arr)
     mutators.insert(1, 'x')
-    expect(form.getFieldValue('mm')).toEqual(['a','x','b'])
+    expect(form.getFieldValue('mm')).toEqual(['a', 'x', 'b'])
   })
 
   test('remove', async () => {
@@ -972,7 +1150,15 @@ describe('createMutators', () => {
 
   test('validate', async () => {
     const form = createForm()
-    const mm = form.registerField({ path: 'mm', rules: [(v) => v === undefined ? ({ type: 'warning', message: 'warning msg' }) : undefined] })
+    const mm = form.registerField({
+      path: 'mm',
+      rules: [
+        v =>
+          v === undefined
+            ? { type: 'warning', message: 'warning msg' }
+            : undefined
+      ]
+    })
     const mutators = form.createMutators(mm)
     const result = await mutators.validate()
     expect(result.errors).toEqual([])
@@ -993,11 +1179,27 @@ describe('transformDataPath', () => {
     form.registerField({ path: 'a.b.c.d' })
     form.registerField({ path: 'a.b.c.d.e' })
 
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()).toEqual('a')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()).toEqual('a.b')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c')).toString()).toEqual('a.b.c')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d')).toString()).toEqual('a.b.c.d')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e')).toString()).toEqual('a.b.c.d.e')
+    expect(
+      form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()
+    ).toEqual('a')
+    expect(
+      form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()
+    ).toEqual('a.b')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c'))
+        .toString()
+    ).toEqual('a.b.c')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d'))
+        .toString()
+    ).toEqual('a.b.c.d')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e'))
+        .toString()
+    ).toEqual('a.b.c.d.e')
   })
 
   test('virtual path', async () => {
@@ -1008,11 +1210,27 @@ describe('transformDataPath', () => {
     form.registerVirtualField({ path: 'a.b.c.d' })
     form.registerField({ path: 'a.b.c.d.e' })
 
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()).toEqual('a')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()).toEqual('a.b')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c')).toString()).toEqual('a.c')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d')).toString()).toEqual('a.c.d')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e')).toString()).toEqual('a.c.e')
+    expect(
+      form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()
+    ).toEqual('a')
+    expect(
+      form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()
+    ).toEqual('a.b')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c'))
+        .toString()
+    ).toEqual('a.c')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d'))
+        .toString()
+    ).toEqual('a.c.d')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e'))
+        .toString()
+    ).toEqual('a.c.e')
   })
 
   test('virtual path(head)', async () => {
@@ -1021,9 +1239,17 @@ describe('transformDataPath', () => {
     form.registerField({ path: 'a.b' })
     form.registerField({ path: 'a.b.c' })
 
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()).toEqual('a')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()).toEqual('b')
-    expect(form.unsafe_do_not_use_transform_data_path(new FormPath('a.b.c')).toString()).toEqual('b.c')
+    expect(
+      form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()
+    ).toEqual('a')
+    expect(
+      form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()
+    ).toEqual('b')
+    expect(
+      form
+        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c'))
+        .toString()
+    ).toEqual('b.c')
   })
 })
 
@@ -1083,14 +1309,18 @@ describe('major sences', () => {
     form.registerField({ path: 'aa', value: {} })
     form.registerField({ path: 'aa.bb', initialValue: 123 })
     form.registerField({ path: 'aa.cc', initialValue: 222 })
-    form.setFieldState('aa', state => state.visible = false)
+    form.setFieldState('aa', state => (state.visible = false))
     expect(form.getFormState(state => state.values)).toEqual({})
-    
+
     expect(form.getFormGraph()).toMatchSnapshot()
-    form.setFieldState('aa.bb', state => state.value = '123')
+    form.setFieldState('aa.bb', state => (state.value = '123'))
     expect(form.getFormGraph()).toMatchSnapshot()
 
-    form.setFieldState('aa', state => state.visible = true)
+    form.setFieldState('aa', state => (state.visible = true))
+    expect(form.getFieldValue('aa')).toEqual({ bb: 123, cc: 222 })
+    expect(form.getFormState(state => state.values)).toEqual({
+      aa: { bb: 123, cc: 222 }
+    })
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
@@ -1099,7 +1329,7 @@ describe('major sences', () => {
     form.registerField({ path: 'aa', value: {} })
     form.registerField({ path: 'aa.bb' })
     form.registerField({ path: 'aa.bb.cc', value: 123 })
-    form.setFieldState('aa', state => state.visible = false)
+    form.setFieldState('aa', state => (state.visible = false))
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual({})
   })
@@ -1109,7 +1339,7 @@ describe('major sences', () => {
     form.registerField({ path: 'aa', value: {} })
     form.registerField({ path: 'aa.bb' })
     form.registerField({ path: 'aa.bb.cc', value: 123 })
-    form.setFieldState('aa.bb', state => state.visible = false)
+    form.setFieldState('aa.bb', state => (state.visible = false))
     expect(form.getFormGraph()).toMatchSnapshot()
     expect(form.getFormState(state => state.values)).toEqual({ aa: {} })
   })

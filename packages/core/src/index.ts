@@ -170,20 +170,12 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         }
       }
       if (visibleChanged) {
+        //visible不能遍历子节点控制其visible，visible只对当前节点生效
         if (!published.visible) {
           deleteFormValuesIn(path, true)
         } else {
           setFormValuesIn(path, published.value)
         }
-        graph.eachChildren(
-          path,
-          childState => {
-            childState.setState((state: IFieldState) => {
-              state.visible = published.visible
-            })
-          },
-          false
-        )
       }
       if (displayChanged) {
         graph.eachChildren(
@@ -202,20 +194,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         } else {
           setFormValuesIn(path, published.value)
         }
-        graph.eachChildren(
-          path,
-          childState => {
-            childState.setState((state: IFieldState) => {
-              state.unmounted = published.unmounted
-            })
-          },
-          false
-        )
       }
       if (mountedChanged && published.mounted) {
         heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-
       if (valueChanged) {
         setFormValuesIn(path, published.value)
         heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
@@ -300,11 +282,11 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         notify: onVirtualFieldChange({ field, path: nodePath })
       }
       field.batch(() => {
-        batchRunTaskQueue(field, nodePath)
         field.setState((state: IVirtualFieldState) => {
           state.initialized = true
           state.props = props
         })
+        batchRunTaskQueue(field, nodePath)
       })
       return field
     }
@@ -346,7 +328,6 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       }
       heart.notify(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
       field.batch(() => {
-        batchRunTaskQueue(field, nodePath)
         field.setState((state: IFieldState) => {
           const formValue = getFormValuesIn(dataPath)
           const formInitialValue = getFormInitialValuesIn(dataPath)
@@ -368,6 +349,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.editable = editable
           state.formEditable = options.editable
         })
+        batchRunTaskQueue(field, nodePath)
       })
       validator.register(nodePath, validate => {
         const { value, rules, editable, visible, unmounted } = field.getState()
