@@ -12,9 +12,14 @@ export const useField = (
 ): IFieldHook => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
-  const ref = useRef<{ field: IField; unmounted: boolean }>({
+  const ref = useRef<{
+    field: IField
+    unmounted: boolean
+    subscriberId: number
+  }>({
     field: null,
-    unmounted: false
+    unmounted: false,
+    subscriberId: null
   })
   const form = useContext<IForm>(FormContext)
   if (!form) {
@@ -23,13 +28,13 @@ export const useField = (
   const mutators = useMemo(() => {
     let initialized = false
     ref.current.field = form.registerField(options)
-    ref.current.field.subscribe(() => {
+    ref.current.subscriberId = ref.current.field.subscribe(() => {
       /**
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
        */
       if (initialized) {
         if (options.triggerType === 'onChange') {
-          if (ref.current.field.hasChanged('value')) {
+          if (ref.current.field.hasChangedInSequence('value')) {
             mutators.validate()
           }
         }
@@ -62,7 +67,7 @@ export const useField = (
     ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true
-      ref.current.field.unsubscribe()
+      ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IFieldState) => {
         state.unmounted = true
       })

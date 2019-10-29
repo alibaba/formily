@@ -1,9 +1,5 @@
-import { isFn, isStr, isArr, isObj, each } from '@uform/shared'
-import {
-  FormLifeCyclePayload,
-  FormLifeCycleHandler,
-  FormHeartSubscriber
-} from '../types'
+import { isFn, isStr, isArr, isObj, each, Subscribable } from '@uform/shared'
+import { FormLifeCyclePayload, FormLifeCycleHandler } from '../types'
 
 export class FormLifeCycle<Payload = any> {
   private listener: FormLifeCyclePayload<Payload>
@@ -46,12 +42,10 @@ export class FormLifeCycle<Payload = any> {
   }
 }
 
-export class FormHeart<Payload = any, Context = any> {
+export class FormHeart<Payload = any, Context = any> extends Subscribable {
   private lifecycles: FormLifeCycle<Payload>[]
 
   private context: Context
-
-  private subscribers: FormHeartSubscriber[]
 
   constructor({
     lifecycles,
@@ -60,8 +54,8 @@ export class FormHeart<Payload = any, Context = any> {
     lifecycles?: FormLifeCycle[]
     context?: Context
   }) {
+    super()
     this.lifecycles = this.buildLifeCycles(lifecycles || [])
-    this.subscribers = []
     this.context = context
   }
 
@@ -81,32 +75,14 @@ export class FormHeart<Payload = any, Context = any> {
     }, [])
   }
 
-  unsubscribe = (callback?: FormHeartSubscriber) => {
-    if (isFn(callback)) {
-      this.subscribers = this.subscribers.filter(
-        fn => fn.toString() !== callback.toString()
-      )
-    } else {
-      this.subscribers = []
-    }
-  }
-
-  subscribe = (callback?: FormHeartSubscriber) => {
-    if (
-      isFn(callback) &&
-      !this.subscribers.some(fn => fn.toString() === callback.toString())
-    ) {
-      this.subscribers.push(callback)
-    }
-  }
-
-  notify = <P, C>(type: any, payload: P, context?: C) => {
+  publish = <P, C>(type: any, payload: P, context?: C) => {
     if (isStr(type)) {
       this.lifecycles.forEach(lifecycle => {
         lifecycle.notify(type, payload, context || this.context)
       })
-      this.subscribers.forEach(callback => {
-        callback({ type, payload })
+      this.notify({
+        type,
+        payload
       })
     }
   }

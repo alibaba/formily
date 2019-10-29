@@ -45,14 +45,14 @@ export * from './types'
 
 export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   function onGraphChange({ type, payload }) {
-    heart.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
+    heart.publish(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
     if (type === 'GRAPH_NODE_WILL_UNMOUNT') {
       validator.unregister(payload.path.toString())
     }
   }
 
   function onFormChange(published: IFormState) {
-    heart.notify(LifeCycleTypes.ON_FORM_CHANGE, state)
+    heart.publish(LifeCycleTypes.ON_FORM_CHANGE, state)
     const valuesChanged = state.hasChanged('values')
     const initialValuesChanged = state.hasChanged('initialValues')
     const unmountedChanged = state.hasChanged('unmounted')
@@ -118,10 +118,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         })
       })
       if (valuesChanged) {
-        heart.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
+        heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
       if (initialValuesChanged) {
-        heart.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
+        heart.publish(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
       }
     }
 
@@ -136,13 +136,13 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
 
     if (unmountedChanged && published.unmounted) {
-      heart.notify(LifeCycleTypes.ON_FORM_UNMOUNT, state)
+      heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, state)
     }
     if (mountedChanged && published.mounted) {
-      heart.notify(LifeCycleTypes.ON_FORM_MOUNT, state)
+      heart.publish(LifeCycleTypes.ON_FORM_MOUNT, state)
     }
     if (initializedChanged) {
-      heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
+      heart.publish(LifeCycleTypes.ON_FORM_INIT, state)
     }
   }
 
@@ -158,7 +158,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       const warningsChanged = field.hasChanged('warnings')
       const errorsChanges = field.hasChanged('errors')
       if (initializedChanged) {
-        heart.notify(LifeCycleTypes.ON_FIELD_INIT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
@@ -196,15 +196,15 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         }
       }
       if (mountedChanged && published.mounted) {
-        heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
       if (valueChanged) {
         setFormValuesIn(path, published.value)
-        heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (initialValueChanged) {
         setFormInitialValuesIn(path, published.initialValue)
-        heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
 
       if (errorsChanges) {
@@ -214,7 +214,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (warningsChanged) {
         syncFormMessages('warnings', published.name, published.warnings)
       }
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
       if (!(!env.shadowStage || env.leadingStage)) {
         return false
       }
@@ -230,7 +230,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       const initializedChnaged = field.hasChanged('initialized')
 
       if (initializedChnaged) {
-        heart.notify(LifeCycleTypes.ON_FIELD_INIT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
 
       if (visibleChanged) {
@@ -257,9 +257,9 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         })
       }
       if (mountedChanged && published.mounted) {
-        heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
   }
 
@@ -326,7 +326,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       field.subscription = {
         notify: onFieldChange({ field, path: nodePath })
       }
-      heart.notify(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
       field.batch(() => {
         field.setState((state: IFieldState) => {
           const formValue = getFormValuesIn(dataPath)
@@ -490,8 +490,8 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         state.value = values[0]
         state.values = values
       })
-      heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
-      heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
+      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
     }
 
     function removeValue(key: string | number) {
@@ -502,10 +502,10 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         state.values = []
       }, true)
       deleteFormValuesIn(key ? FormPath.parse(name).concat(key) : name)
-      heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-      heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
-      heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
+      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
 
     function getValue() {
@@ -683,7 +683,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     state.setState(state => {
       state.submitting = true
     })
-    heart.notify(LifeCycleTypes.ON_FORM_SUBMIT_START, state)
+    heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_START, state)
     env.submittingTask = validate()
       .then(validated => {
         const { errors } = validated
@@ -691,7 +691,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.setState(state => {
             state.submitting = false
           })
-          heart.notify(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
           return Promise.reject(errors)
         }
         if (isFn(onSubmit)) {
@@ -708,7 +708,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         state.setState(state => {
           state.submitting = false
         })
-        heart.notify(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
         if (errors.length) {
           return Promise.reject(errors)
         }
@@ -735,7 +735,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       }, 60)
     }
 
-    heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
+    heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
     return validator.validate(path, opts).then(payload => {
       clearTimeout(env.validateTimer)
       state.setState(state => {
@@ -744,7 +744,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (isFn(options.onValidateFailed)) {
         options.onValidateFailed(payload)
       }
-      heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
+      heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
       return payload
     })
   }
@@ -943,13 +943,13 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       'Please use the getFieldInitialValue.'
     ),
     subscribe: (callback?: FormHeartSubscriber) => {
-      heart.subscribe(callback)
+      return heart.subscribe(callback)
     },
-    unsubscribe: (callback?: FormHeartSubscriber) => {
-      heart.unsubscribe(callback)
+    unsubscribe: (id: number) => {
+      heart.unsubscribe(id)
     },
     notify: <T>(type: string, payload: T) => {
-      heart.notify(type, payload)
+      heart.publish(type, payload)
     }
   }
   const heart = new FormHeart({ ...options, context: formApi })
@@ -963,7 +963,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     removeNodes: {},
     submittingTask: undefined
   }
-  heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
+  heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscription = {
     notify: onFormChange
   }

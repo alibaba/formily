@@ -4,9 +4,9 @@ import {
   map,
   isFn,
   FormPath,
-  FormPathPattern
+  FormPathPattern,
+  Subscribable
 } from '@uform/shared'
-import { Subscrible } from './subscrible'
 import {
   FormGraphNodeRef,
   FormGraphMatcher,
@@ -14,7 +14,7 @@ import {
   FormGraphProps
 } from '../types'
 
-export class FormGraph<NodeType = any> extends Subscrible<{
+export class FormGraph<NodeType = any> extends Subscribable<{
   type: string
   payload: FormGraphNodeRef
 }> {
