@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { BroadcastContext } from '../context'
-import { Broadcast } from '@uform/shared'
+import { Broadcast } from '../shared'
 
 const { Provider } = BroadcastContext
 
