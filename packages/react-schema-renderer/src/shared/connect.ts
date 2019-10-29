@@ -6,7 +6,7 @@ import {
   ISchemaFieldComponentProps,
   IConnectProps
 } from '../types'
-import {Schema} from './schema'
+import { Schema } from './schema'
 
 const createEnum = (enums: any) => {
   if (isArr(enums)) {
@@ -58,14 +58,7 @@ export const connect = (options?: IConnectOptions) => {
   }
   return (Component: React.JSXElementConstructor<any>) => {
     return (fieldProps: ISchemaFieldComponentProps) => {
-      const {
-        value,
-        name,
-        mutators,
-        form,
-        editable,
-        props
-      } = fieldProps
+      const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
       let componentProps: IConnectProps = {
         ...options.defaultProps,
@@ -106,8 +99,8 @@ export const connect = (options?: IConnectOptions) => {
         }
       }
 
-      if (isArr(schema.enum) && !componentProps.dataSource) {
-        componentProps.dataSource = createEnum(schema.enum)
+      if (isArr((props as ISchema).enum) && !componentProps.dataSource) {
+        componentProps.dataSource = createEnum((props as ISchema).enum)
       }
 
       if (componentProps.editable !== undefined) {

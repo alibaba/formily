@@ -52,7 +52,7 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm
-        effects={($, { setFieldState, getFieldState, getFormGraph, watch }) => {
+        effects={($, { setFieldState, getFieldState, getFormGraph }) => {
           $('onFormInit').subscribe(() => {
             setFieldState(FormPath.match('*(gg,hh)'), state => {
               state.props['x-props'] = state.props['x-props'] || {}
