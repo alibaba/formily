@@ -127,7 +127,6 @@ export interface IFormActions {
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): void
-  watch: (key: string, callback?: () => void) => void
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void
   getFormState(callback?: (state: IFormState) => any): any
@@ -157,7 +156,6 @@ export interface IFormAsyncActions {
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): Promise<void>
-  watch: (key: string, callback?: () => void) => void
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): Promise<void>
