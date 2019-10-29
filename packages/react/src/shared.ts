@@ -1,7 +1,8 @@
-import { isFn, FormPath, globalThisPolyfill } from '@uform/shared'
+import { isFn, isEqual, FormPath, globalThisPolyfill } from '@uform/shared'
 import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
 import { Observable } from 'rxjs/internal/Observable'
-import { filter } from 'rxjs/internal/operators'
+import { filter } from 'rxjs/internal/operators/filter'
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged'
 import { createActions, createAsyncActions } from 'react-eva'
 import {
   LifeCycleTypes,
@@ -34,6 +35,12 @@ export const createFormActions = (): IFormActions => {
     'setFieldInitialValue',
     'getFieldInitialValue'
   ) as IFormActions
+}
+
+export const filterChanged = <T = any>(key?: string) => {
+  return distinctUntilChanged<T>((x, y) => {
+    return key ? isEqual(x[key], y[key]) : isEqual(x, y)
+  })
 }
 
 export const createAsyncFormActions = (): IFormAsyncActions =>

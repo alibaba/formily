@@ -277,9 +277,11 @@ export interface IModel<S = {}, P = {}> extends Subscrible {
   props: P
   displayName?: string
   dirtyNum: number
-  dirtyMap: StateDirtyMap<S>
+  dirtys: StateDirtyMap<S>
+  persistDirtys: StateDirtyMap<S>
   subscribers: Subscriber<S>[]
   batching: boolean
+  processing: boolean
   controller: StateModel<S>
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
@@ -287,7 +289,9 @@ export interface IModel<S = {}, P = {}> extends Subscrible {
   unsafe_getSourceState: (callback?: (state: S) => any) => any
   unsafe_setSourceState: (callback?: (state: S) => void) => void
   hasChanged: (key?: string) => boolean
+  hasChangedInSequence: (key?: string) => boolean
   getChanged: () => StateDirtyMap<S>
+  getChangedInSequence: (key?: string) => StateDirtyMap<S>
 }
 
 export type IField = IModel<IFieldState, IFieldStateProps>

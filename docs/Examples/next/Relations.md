@@ -39,7 +39,8 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  filterChanged
 } from '@uform/next'
 import { filter, combineLatest, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
@@ -51,7 +52,7 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm
-        effects={($, { setFieldState, getFieldState, getFormGraph }) => {
+        effects={($, { setFieldState, getFieldState, getFormGraph, watch }) => {
           $('onFormInit').subscribe(() => {
             setFieldState(FormPath.match('*(gg,hh)'), state => {
               state.props['x-props'] = state.props['x-props'] || {}
@@ -63,31 +64,36 @@ const App = () => {
               }
             })
           })
-          $('onFieldValueChange', 'aa').subscribe(fieldState => {
-            setFieldState('bb', state => {
-              state.visible = !fieldState.value
+          $('onFieldChange', 'aa')
+            .pipe(filterChanged('value'))
+            .subscribe(fieldState => {
+              setFieldState('bb', state => {
+                state.visible = !fieldState.value
+              })
             })
-          })
-          $('onFieldValueChange', 'cc').subscribe(fieldState => {
-            setFieldState('dd', state => {
-              state.visible = !fieldState.value
+          $('onFieldChange', 'cc')
+            .pipe(filterChanged('value'))
+            .subscribe(fieldState => {
+              setFieldState('dd', state => {
+                state.visible = !fieldState.value
+              })
+              setFieldState('gg', state => {
+                if (fieldState.value) {
+                  state.value = 'aaaa'
+                  state.props.enum = [
+                    { label: 'aaaa', value: 'aaaa', extra: ['x1', 'x2', 'x3'] },
+                    { label: 'bbbb', value: 'bbbb', extra: ['x4', 'x5', 'x6'] },
+                    { label: 'cccc', value: 'cccc', extra: ['x7', 'x8', 'x9'] }
+                  ]
+                } else {
+                  state.value = '123333'
+                  state.props.enum = ['123333', '333333']
+                }
+              })
             })
-            setFieldState('gg', state => {
-              if (fieldState.value) {
-                state.value = 'aaaa'
-                state.props.enum = [
-                  { label: 'aaaa', value: 'aaaa', extra: ['x1', 'x2', 'x3'] },
-                  { label: 'bbbb', value: 'bbbb', extra: ['x4', 'x5', 'x6'] },
-                  { label: 'cccc', value: 'cccc', extra: ['x7', 'x8', 'x9'] }
-                ]
-              } else {
-                state.value = '123333'
-                state.props.enum = ['123333', '333333']
-              }
-            })
-          })
-          $('onFieldValueChange', 'gg')
+          $('onFieldChange', 'gg')
             .pipe(
+              filterChanged('value'),
               combineLatest($('onChangeOption')),
               map(([fieldState, { payload: option }]) => {
                 return {

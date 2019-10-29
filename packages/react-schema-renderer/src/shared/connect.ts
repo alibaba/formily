@@ -6,6 +6,7 @@ import {
   ISchemaFieldComponentProps,
   IConnectProps
 } from '../types'
+import {Schema} from './schema'
 
 const createEnum = (enums: any) => {
   if (isArr(enums)) {
@@ -62,14 +63,13 @@ export const connect = (options?: IConnectOptions) => {
         name,
         mutators,
         form,
-        schema,
         editable,
         props
       } = fieldProps
+      const schema = new Schema(props)
       let componentProps: IConnectProps = {
         ...options.defaultProps,
-        ...props['x-props'],
-        ...props['x-component-props'],
+        ...schema.getExtendsComponentProps(),
         [options.valueName]: value,
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(
@@ -106,8 +106,8 @@ export const connect = (options?: IConnectOptions) => {
         }
       }
 
-      if (isArr((props as ISchema).enum) && !componentProps.dataSource) {
-        componentProps.dataSource = createEnum((props as ISchema).enum)
+      if (isArr(schema.enum) && !componentProps.dataSource) {
+        componentProps.dataSource = createEnum(schema.enum)
       }
 
       if (componentProps.editable !== undefined) {

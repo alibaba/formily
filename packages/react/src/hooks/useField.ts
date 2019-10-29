@@ -29,7 +29,7 @@ export const useField = (
        */
       if (initialized) {
         if (options.triggerType === 'onChange') {
-          if (ref.current.field.hasChanged('value')) {
+          if (ref.current.field.hasChangedInSequence('value')) {
             mutators.validate()
           }
         }
