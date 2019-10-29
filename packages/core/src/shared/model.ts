@@ -1,13 +1,19 @@
-import { clone, isEqual, isFn, each, globalThisPolyfill } from '@uform/shared'
+import {
+  clone,
+  isEqual,
+  isFn,
+  each,
+  globalThisPolyfill,
+  Subscribable
+} from '@uform/shared'
 import produce, { Draft } from 'immer'
-import { Subscrible } from './subscrible'
 import { IStateModelFactory, StateDirtyMap, IModel, StateModel } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
 ) => {
-  return class Model<DefaultProps> extends Subscrible<State>
+  return class Model<DefaultProps> extends Subscribable<State>
     implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
     public props: Props &

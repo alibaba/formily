@@ -1,8 +1,13 @@
-import { isFn, isEqual, FormPath, globalThisPolyfill } from '@uform/shared'
+import {
+  isFn,
+  isEqual,
+  FormPath,
+  globalThisPolyfill,
+  Subscribable
+} from '@uform/shared'
 import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter } from 'rxjs/internal/operators/filter'
-import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged'
 import { createActions, createAsyncActions } from 'react-eva'
 import {
   LifeCycleTypes,
@@ -37,9 +42,14 @@ export const createFormActions = (): IFormActions => {
   ) as IFormActions
 }
 
-export const filterChanged = <T = any>(key?: string) => {
-  return distinctUntilChanged<T>((x, y) => {
-    return key ? isEqual(x[key], y[key]) : isEqual(x, y)
+export const filterChanged = (key?: string) => {
+  const caches = {}
+  return filter<any>(x => {
+    if (!x) return true
+    const old = caches[x.name] || {}
+    const result = key ? isEqual(x[key], old[key]) : isEqual(x, old)
+    caches[x.name] = x
+    return !result
   })
 }
 
@@ -148,6 +158,17 @@ const getScheduler = () => {
     )
   } catch (err) {
     return [self.requestAnimationFrame, self.cancelAnimationFrame]
+  }
+}
+
+export class Broadcast extends Subscribable {
+  context: any
+
+  setContext(context: any) {
+    this.context = context
+  }
+  getContext() {
+    return this.context
   }
 }
 

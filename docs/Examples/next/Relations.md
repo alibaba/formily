@@ -64,6 +64,11 @@ const App = () => {
               }
             })
           })
+          $('onFieldChange', '*(aa,bb)')
+            .pipe(filterChanged('value'))
+            .subscribe(fieldState => {
+              console.log('aa或者bb发生变化了')
+            })
           $('onFieldChange', 'aa')
             .pipe(filterChanged('value'))
             .subscribe(fieldState => {
