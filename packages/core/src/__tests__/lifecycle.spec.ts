@@ -134,7 +134,7 @@ describe('FormHeart', () => {
     expect(cb2).toBeCalledWith(data, undefined)
   })
 
-  test('lifecycles with context',()=>{
+  test('lifecycles with constructor context',()=>{
     const cb = jest.fn()
     const context = { constructor: true }
     const heart = new FormHeart({
