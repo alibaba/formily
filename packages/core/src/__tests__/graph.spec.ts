@@ -124,6 +124,23 @@ test('remove',()=>{
   expect(graph.exist(vf1.state.path)).toEqual(false)
 })
 
+test('remove deep', () => {
+  const state = new FormState({})
+  const form = createForm()
+  const vf1 = form.registerVirtualField({ name: 'a' })
+  const vf1Children = form.registerVirtualField({ name: 'a.a' })
+  const vf1GrandChildren = form.registerVirtualField({ name: 'a.a.a' })
+  const graph = new FormGraph()
+  graph.appendNode("", state) 
+  graph.appendNode(vf1.state.path, vf1)
+  graph.appendNode(vf1Children.state.path, vf1Children)
+  graph.appendNode(vf1GrandChildren.state.path, vf1GrandChildren)
+  graph.remove(vf1.state.path)
+  expect(graph.exist(vf1.state.path)).toEqual(false)
+  expect(graph.exist(vf1Children.state.path)).toEqual(false)
+  expect(graph.exist(vf1GrandChildren.state.path)).toEqual(false)
+})
+
 test('map',()=>{
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
