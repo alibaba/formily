@@ -50,9 +50,9 @@ export class FormGraph<NodeType = any> extends Subscribable<{
    * @param path
    * @param matcher
    */
-  select(path: FormPathPattern, matcher?: FormGraphMatcher<NodeType>) {
+  select(path: FormPathPattern, eacher?: FormGraphMatcher<NodeType>) {
     const pattern = FormPath.parse(path)
-    if (!matcher) {
+    if (!eacher) {
       const node = this.get(pattern)
       if (node) {
         return node
@@ -65,8 +65,8 @@ export class FormGraph<NodeType = any> extends Subscribable<{
           ? this.matchStrategy(pattern, node)
           : pattern.match(name)
       ) {
-        if (isFn(matcher)) {
-          const result = matcher(node, FormPath.parse(name))
+        if (isFn(eacher)) {
+          const result = eacher(node, FormPath.parse(name))
           if (result === false) {
             return node
           }
@@ -82,7 +82,11 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   }
 
   selectParent(path: FormPathPattern) {
-    return this.get(FormPath.getPath(path).parent())
+    const selfPath = FormPath.getPath(path)
+    const parentPath = FormPath.getPath(path).parent()
+    if (selfPath.toString() === parentPath.toString()) return undefined
+
+    return this.get(parentPath)
   }
 
   selectChildren(path: FormPathPattern) {
@@ -136,6 +140,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
       eacher = selector
       selector = '*'
     }
+
     const ref = this.refrences[FormPath.getPath(path).toString()]
     if (ref && ref.children) {
       return each(ref.children, path => {
@@ -174,9 +179,10 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   getLatestParent(path: FormPathPattern) {
     const selfPath = FormPath.getPath(path)
     const parentPath = FormPath.getPath(path).parent()
+
     if (selfPath.toString() === parentPath.toString()) return undefined
     if (this.refrences[parentPath.toString()])
-      return { ref: this.refrences[parentPath.toString()], path: parentPath }
+      return { ref: this.refrences[parentPath.toString()], path: FormPath.getPath(parentPath.toString()) }
     return this.getLatestParent(parentPath)
   }
 
