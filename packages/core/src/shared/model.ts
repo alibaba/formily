@@ -116,9 +116,8 @@ export const createStateModel = <State = {}, Props = {}>(
           const draftKeys = Object.keys(draft || {})
           const stateKeys = Object.keys(this.state || {})
 
-          const [longObj, shorObj] = draftKeys.length > stateKeys.length ? [draft, this.state] : [this.state, draft]
-          each(longObj, (value, key) => {
-            if (!isEqual(longObj[key], shorObj[key])) {
+          each(draftKeys.length > stateKeys.length ? draft : this.state, (value, key) => {
+            if (!isEqual(this.state[key], draft[key])) {
               this.state[key] = draft[key]
               this.dirtys[key] = true
               this.persistDirtys[key] = true
