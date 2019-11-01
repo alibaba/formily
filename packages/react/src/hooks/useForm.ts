@@ -111,9 +111,6 @@ export const useForm = <
             ...form,
             dispatch: form.notify
           }
-          if (broadcast) {
-            broadcast.setContext(actions)
-          }
           implementActions(actions)
         }
       )

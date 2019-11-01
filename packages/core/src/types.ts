@@ -1,8 +1,7 @@
-import { FormPath, FormPathPattern, isFn } from '@uform/shared'
+import { FormPath, FormPathPattern, isFn, Subscribable } from '@uform/shared'
 import { ValidatePatternRules, ValidateNodeResult } from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
-import { Subscrible } from './shared/subscrible'
 
 export type FormLifeCycleHandler<T> = (payload: T, context: any) => void
 
@@ -265,21 +264,15 @@ export interface IMutators {
   exist(index?: number | string): boolean
 }
 
-export type Subscriber<S> = (payload: S) => void
-
-export interface Subscription<S> {
-  notify?: (payload: S) => void | boolean
-  filter?: (payload: S) => any
-}
-
-export interface IModel<S = {}, P = {}> extends Subscrible {
+export interface IModel<S = {}, P = {}> extends Subscribable {
   state: S
   props: P
   displayName?: string
   dirtyNum: number
-  dirtyMap: StateDirtyMap<S>
-  subscribers: Subscriber<S>[]
+  dirtys: StateDirtyMap<S>
+  persistDirtys: StateDirtyMap<S>
   batching: boolean
+  processing: boolean
   controller: StateModel<S>
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
@@ -287,7 +280,9 @@ export interface IModel<S = {}, P = {}> extends Subscrible {
   unsafe_getSourceState: (callback?: (state: S) => any) => any
   unsafe_setSourceState: (callback?: (state: S) => void) => void
   hasChanged: (key?: string) => boolean
+  hasChangedInSequence: (key?: string) => boolean
   getChanged: () => StateDirtyMap<S>
+  getChangedInSequence: (key?: string) => StateDirtyMap<S>
 }
 
 export type IField = IModel<IFieldState, IFieldStateProps>
@@ -319,8 +314,8 @@ export interface IForm {
   createMutators(field: IField): IMutators
   getFormGraph(): IFormGraph
   setFormGraph(graph: IFormGraph): void
-  subscribe(callback?: FormHeartSubscriber): void
-  unsubscribe(callback?: FormHeartSubscriber): void
+  subscribe(callback?: FormHeartSubscriber): number
+  unsubscribe(id: number): void
   notify: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any

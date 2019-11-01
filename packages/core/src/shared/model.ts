@@ -1,13 +1,19 @@
-import { clone, isEqual, isFn, each, globalThisPolyfill } from '@uform/shared'
+import {
+  clone,
+  isEqual,
+  isFn,
+  each,
+  globalThisPolyfill,
+  Subscribable
+} from '@uform/shared'
 import produce, { Draft } from 'immer'
-import { Subscrible } from './subscrible'
 import { IStateModelFactory, StateDirtyMap, IModel, StateModel } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
 ) => {
-  return class Model<DefaultProps> extends Subscrible<State>
+  return class Model<DefaultProps> extends Subscribable<State>
     implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
     public props: Props &
@@ -16,9 +22,12 @@ export const createStateModel = <State = {}, Props = {}>(
       }
     public displayName?: string
     public dirtyNum: number
-    public dirtyMap: StateDirtyMap<State>
+    public dirtys: StateDirtyMap<State>
+    public persistDirtys: StateDirtyMap<State>
     public batching: boolean
+    public processing: boolean
     public controller: StateModel<State>
+
     constructor(defaultProps: DefaultProps) {
       super()
       this.state = { ...Factory.defaultState }
@@ -26,7 +35,8 @@ export const createStateModel = <State = {}, Props = {}>(
         ...Factory.defaultProps,
         ...defaultProps
       }
-      this.dirtyMap = {}
+      this.dirtys = {}
+      this.persistDirtys = {}
       this.dirtyNum = 0
       this.batching = false
       this.controller = new Factory(this.state, this.props)
@@ -42,7 +52,7 @@ export const createStateModel = <State = {}, Props = {}>(
       if (this.dirtyNum > 0) {
         this.notify(this.getState())
       }
-      this.dirtyMap = {}
+      this.dirtys = {}
       this.dirtyNum = 0
       this.batching = false
     }
@@ -87,8 +97,14 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         if (!hasProxy || this.props.useDirty) {
           const draft = this.getState()
-          this.dirtyNum = 0
-          this.dirtyMap = {}
+          if (!this.batching) {
+            this.dirtys = {}
+            this.dirtyNum = 0
+          }
+          if (!this.processing) {
+            this.persistDirtys = {}
+            this.processing = true
+          }
           callback(draft)
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
@@ -100,26 +116,29 @@ export const createStateModel = <State = {}, Props = {}>(
             (value, key) => {
               if (!isEqual(value, draft[key])) {
                 this.state[key] = draft[key]
-                this.dirtyMap[key] = true
+                this.dirtys[key] = true
+                this.persistDirtys[key] = true
                 this.dirtyNum++
               }
             }
           )
           if (isFn(this.controller.dirtyCheck)) {
-            const result = this.controller.dirtyCheck(this.dirtyMap)
+            const result = this.controller.dirtyCheck(this.dirtys)
             if (result !== undefined) {
-              Object.assign(this.dirtyMap, result)
+              Object.assign(this.dirtys, result)
             }
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
             this.notify(this.getState())
-            this.dirtyMap = {}
+            this.dirtys = {}
             this.dirtyNum = 0
           }
         } else {
-          this.dirtyNum = 0
-          this.dirtyMap = {}
+          if (!this.batching) {
+            this.dirtys = {}
+            this.dirtyNum = 0
+          }
           //用proxy解决脏检查计算属性问题
           this.state = produce(
             this.state,
@@ -131,53 +150,53 @@ export const createStateModel = <State = {}, Props = {}>(
             },
             patches => {
               patches.forEach(({ path, op, value }) => {
-                if (!this.dirtyMap[path[0]]) {
-                  if (op === 'replace') {
-                    if (!isEqual(this.state[path[0]], value)) {
-                      this.dirtyMap[path[0]] = true
-                      this.dirtyNum++
-                    }
-                  } else {
-                    this.dirtyMap[path[0]] = true
+                if (op === 'replace') {
+                  if (!isEqual(this.state[path[0]], value)) {
+                    this.dirtys[path[0]] = true
+                    this.persistDirtys[path[0]] = true
                     this.dirtyNum++
                   }
+                } else {
+                  this.dirtys[path[0]] = true
+                  this.persistDirtys[path[0]] = true
+                  this.dirtyNum++
                 }
               })
             }
           )
           if (isFn(this.controller.dirtyCheck)) {
-            const result = this.controller.dirtyCheck(this.dirtyMap)
+            const result = this.controller.dirtyCheck(this.dirtys)
             if (result !== undefined) {
-              Object.assign(this.dirtyMap, result)
+              Object.assign(this.dirtys, result)
             }
           }
           if (this.dirtyNum > 0 && !silent) {
             if (this.batching) return
             this.notify(this.getState())
-            this.dirtyMap = {}
+            this.dirtys = {}
             this.dirtyNum = 0
+            //1. onFieldChange内的setFormValuesIn中不希望重置当前字段的dirtymap，如果不重置就会死循环
+            //2. 自己监听自己，自己修改自己的状态，希望触发onFieldChange
           }
         }
       }
     }
-
+    /**
+     * 当前操作的变化情况
+     */
     hasChanged = (key?: string) =>
-      key ? this.dirtyMap[key] === true : this.dirtyNum > 0
+      key ? this.dirtys[key] === true : this.dirtyNum > 0
+    /**
+     *
+     *在一组操作过程中的变化情况
+     */
+    hasChangedInSequence = (key?: string) =>
+      key
+        ? this.persistDirtys[key]
+        : Object.keys(this.persistDirtys || {}).length > 0
 
-    getChanged = () => {
-      if (!hasProxy || this.props.useDirty) {
-        return clone(this.dirtyMap)
-      } else {
-        return this.dirtyMap
-      }
-    }
+    getChanged = () => this.dirtys
 
-    watch = (key: string, callback?: (dirtys: StateDirtyMap<State>) => any) => {
-      if (this.hasChanged(key)) {
-        if (isFn(callback)) {
-          callback(this.getChanged())
-        }
-      }
-    }
+    getChangedInSequence = () => this.persistDirtys
   }
 }

@@ -16,6 +16,7 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   const broadcast = useContext(BroadcastContext)
   const form = useContext(FormContext)
   const initializedRef = useRef(false)
+  const subscriberId = useRef<number>()
   const [type, setType] = useState<string>(LifeCycleTypes.ON_FORM_INIT)
   const [state, dispatch] = useReducer(
     (state, action) => props.reducer(state, action, form),
@@ -40,18 +41,18 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   useMemo(() => {
     initializedRef.current = true
     if (form) {
-      form.subscribe(subscriber)
+      subscriberId.current = form.subscribe(subscriber)
     } else if (broadcast) {
-      broadcast.subscribe(subscriber)
+      subscriberId.current = broadcast.subscribe(subscriber)
     }
     initializedRef.current = false
   }, [])
   useEffect(() => {
     return () => {
       if (form) {
-        form.unsubscribe(subscriber)
+        form.unsubscribe(subscriberId.current)
       } else if (broadcast) {
-        broadcast.unsubscribe(subscriber)
+        broadcast.unsubscribe(subscriberId.current)
       }
     }
   }, [])
