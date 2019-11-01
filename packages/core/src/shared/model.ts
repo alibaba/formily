@@ -25,7 +25,7 @@ export const createStateModel = <State = {}, Props = {}>(
     public dirtys: StateDirtyMap<State>
     public persistDirtys: StateDirtyMap<State>
     public batching: boolean
-    public processing: boolean
+    public processFlag: number
     public controller: StateModel<State>
 
     constructor(defaultProps: DefaultProps) {
@@ -38,6 +38,7 @@ export const createStateModel = <State = {}, Props = {}>(
       this.dirtys = {}
       this.persistDirtys = {}
       this.dirtyNum = 0
+      this.processFlag = 0
       this.batching = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
@@ -101,9 +102,9 @@ export const createStateModel = <State = {}, Props = {}>(
             this.dirtys = {}
             this.dirtyNum = 0
           }
-          if (!this.processing) {
+          if (!this.processFlag) {
             this.persistDirtys = {}
-            this.processing = true
+            this.processFlag++
           }
           callback(draft)
           if (isFn(this.controller.computeState)) {
@@ -178,6 +179,10 @@ export const createStateModel = <State = {}, Props = {}>(
             //1. onFieldChange内的setFormValuesIn中不希望重置当前字段的dirtymap，如果不重置就会死循环
             //2. 自己监听自己，自己修改自己的状态，希望触发onFieldChange
           }
+        }
+        this.processFlag--
+        if (!this.processFlag) {
+          this.persistDirtys = {}
         }
       }
     }
