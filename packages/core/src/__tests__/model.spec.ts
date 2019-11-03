@@ -34,7 +34,6 @@ test('createStateModel', () => {
   expect(state1.persistDirtys).toEqual({})
   expect(state1.dirtyNum).toEqual(0)
   expect(state1.batching).toEqual(false)
-  expect(state1.processing).toEqual(false)
   expect(state1.displayName).toEqual(displayName)
   expect(state1.controller).toEqual({
     state: { displayName, ...defaultState },
