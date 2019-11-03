@@ -40,7 +40,6 @@ export const createStateModel = <State = {}, Props = {}>(
       this.dirtyNum = 0
       this.stackCount = 0
       this.batching = false
-      this.processing = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
       this.state.displayName = this.displayName
