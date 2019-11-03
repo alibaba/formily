@@ -61,43 +61,43 @@ beforeEach(() => {
   })
 })
 
-// test('update editable by setFieldState', async () => {
-//   const actions = createFormActions()
-//   const TestComponent = () => (
-//     <SchemaForm
-//       actions={actions}
-//       effects={($, { setFieldState }) => {
-//         $('onFormInit').subscribe(() => {
-//           setFieldState('aaa', state => {
-//             state.props.title = 'text'
-//             state.rules = [
-//               {
-//                 required: true,
-//                 message: 'field is required'
-//               }
-//             ]
-//             state.props.editable = false
-//           })
-//         })
-//       }}
-//     >
-//       <Fragment>
-//         <Field name="aaa" type="string" />
-//         <button type="submit" data-testid="btn">
-//           Submit
-//         </button>
-//       </Fragment>
-//     </SchemaForm>
-//   )
+test('update editable by setFieldState', async () => {
+  const actions = createFormActions()
+  const TestComponent = () => (
+    <SchemaForm
+      actions={actions}
+      effects={($, { setFieldState }) => {
+        $('onFormInit').subscribe(() => {
+          setFieldState('aaa', state => {
+            state.props.title = 'text'
+            state.rules = [
+              {
+                required: true,
+                message: 'field is required'
+              }
+            ]
+            state.props.editable = false
+          })
+        })
+      }}
+    >
+      <Fragment>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
+    </SchemaForm>
+  )
 
-//   const { queryByText } = render(<TestComponent />)
-//   await wait(() => {
-//     expect(queryByText('text')).toBeNull()
-//   })
-//   await actions.setFieldState('aaa', state => {
-//     state.editable = true
-//   })
-//   await wait(() => {
-//     expect(queryByText('text')).toBeVisible()
-//   })
-// })
+  const { queryByText } = render(<TestComponent />)
+  await wait(() => {
+    expect(queryByText('text')).toBeNull()
+  })
+  await actions.setFieldState('aaa', state => {
+    state.editable = true
+  })
+  await wait(() => {
+    expect(queryByText('text')).toBeVisible()
+  })
+})
