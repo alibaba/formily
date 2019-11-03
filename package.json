@@ -13,7 +13,7 @@
     "start": "node ./scripts/docs.js start -i docs",
     "sort-api": "node ./scripts/sort-api-table.js",
     "test": "npm run lint && jest",
-    "test:core": "jest --watch packages/core/src/__tests__/index.spec.ts",
+    "test:core": "jest --watch packages/core/src/__tests__/*.spec.ts",
     "test:prod": "cross-env TEST_ENV=production npm run build && jest",
     "doc:core": "doc-scripts start -i packages/core",
     "doc:react": "doc-scripts start -i packages/react",

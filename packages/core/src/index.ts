@@ -169,26 +169,33 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           }, true)
         }
       }
-      if (visibleChanged) {
-        //visible不能遍历子节点控制其visible，visible只对当前节点生效
-        if (!published.visible) {
-          deleteFormValuesIn(path, true)
-        } else {
-          setFormValuesIn(path, published.value)
+      if (displayChanged || visibleChanged) {
+        if (visibleChanged) {
+          if (!published.visible) {
+            deleteFormValuesIn(path, true)
+          } else {
+            setFormValuesIn(path, published.value)
+          }
         }
-      }
-      if (displayChanged) {
         graph.eachChildren(
           path,
           childState => {
             childState.setState((state: IFieldState) => {
-              state.display = published.display
+              if (visibleChanged) {
+                state.visible = published.visible
+              }
+              if (displayChanged) {
+                state.display = published.display
+              }
             })
           },
           false
         )
       }
-      if (unmountedChanged) {
+      if (
+        unmountedChanged &&
+        (published.display !== false || published.visible === false)
+      ) {
         if (published.unmounted) {
           deleteFormValuesIn(path, true)
         } else {
