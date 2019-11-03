@@ -25,7 +25,7 @@ export const createStateModel = <State = {}, Props = {}>(
     public dirtys: StateDirtyMap<State>
     public persistDirtys: StateDirtyMap<State>
     public batching: boolean
-    public processFlag: number
+    public stackCount: number
     public controller: StateModel<State>
 
     constructor(defaultProps: DefaultProps) {
@@ -38,7 +38,7 @@ export const createStateModel = <State = {}, Props = {}>(
       this.dirtys = {}
       this.persistDirtys = {}
       this.dirtyNum = 0
-      this.processFlag = 0
+      this.stackCount = 0
       this.batching = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
@@ -102,10 +102,10 @@ export const createStateModel = <State = {}, Props = {}>(
             this.dirtys = {}
             this.dirtyNum = 0
           }
-          if (!this.processFlag) {
+          if (!this.stackCount) {
             this.persistDirtys = {}
-            this.processFlag++
           }
+          this.stackCount++
           callback(draft)
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
@@ -180,8 +180,8 @@ export const createStateModel = <State = {}, Props = {}>(
             //2. 自己监听自己，自己修改自己的状态，希望触发onFieldChange
           }
         }
-        this.processFlag--
-        if (!this.processFlag) {
+        this.stackCount--
+        if (!this.stackCount) {
           this.persistDirtys = {}
         }
       }
