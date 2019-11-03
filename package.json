@@ -51,6 +51,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime-corejs3": "^7.2.0",
+    "@testing-library/jest-dom": "^4.2.2",
     "@testing-library/react": "^8.0.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.6.8",

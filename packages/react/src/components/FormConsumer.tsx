@@ -34,6 +34,7 @@ const transformFormAPI = (api: IForm, type: string): IFormConsumerAPI => {
 export const FormConsumer: React.FunctionComponent<
   IFormConsumerProps
 > = props => {
+
   return (
     <FormSpy {...props}>
       {({ form, type }) => {

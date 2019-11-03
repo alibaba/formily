@@ -8,6 +8,7 @@ export const Form: React.FunctionComponent<
   IFormProps<any, any, any, IFormActions | IFormAsyncActions>
 > = (props = {}) => {
   const form = useForm(props)
+
   return (
     <FormContext.Provider value={form}>
       {isFn(props.children) ? props.children(form) : props.children}

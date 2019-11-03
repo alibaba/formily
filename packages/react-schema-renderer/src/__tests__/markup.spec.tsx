@@ -94,6 +94,7 @@ describe('test all apis', () => {
       expect(actions.getFormSchema()).toMatchSnapshot()
     })
   })
+  
 })
 
 describe('major scenes',()=>{
