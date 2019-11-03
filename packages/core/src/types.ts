@@ -272,7 +272,7 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   dirtys: StateDirtyMap<S>
   persistDirtys: StateDirtyMap<S>
   batching: boolean
-  processing: boolean
+  stackCount: number
   controller: StateModel<S>
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
