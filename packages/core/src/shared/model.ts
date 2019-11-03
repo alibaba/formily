@@ -40,6 +40,7 @@ export const createStateModel = <State = {}, Props = {}>(
       this.dirtyNum = 0
       this.stackCount = 0
       this.batching = false
+      this.processing = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
       this.state.displayName = this.displayName
@@ -62,10 +63,11 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         return callback(this.getState())
       } else {
-        if (!hasProxy || this.props.useDirty) {
-          if (isFn(this.controller.publishState)) {
-            return this.controller.publishState(this.state)
-          }
+        if (isFn(this.controller.publishState)) {
+          return this.controller.publishState(this.state)
+        }
+
+        if (!hasProxy || this.props.useDirty) {          
           return clone(this.state)
         } else {
           return produce(this.state, () => {})
@@ -86,7 +88,9 @@ export const createStateModel = <State = {}, Props = {}>(
         if (!hasProxy || this.props.useDirty) {
           callback(this.state)
         } else {
-          this.state = produce(this.state, callback)
+          this.state = produce(this.state, (draft) => {
+            callback(draft)
+          })
         }
       }
     }
@@ -112,17 +116,15 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           const draftKeys = Object.keys(draft || {})
           const stateKeys = Object.keys(this.state || {})
-          each(
-            draftKeys.length > stateKeys.length ? draft : this.state,
-            (value, key) => {
-              if (!isEqual(value, draft[key])) {
-                this.state[key] = draft[key]
-                this.dirtys[key] = true
-                this.persistDirtys[key] = true
-                this.dirtyNum++
-              }
+
+          each(draftKeys.length > stateKeys.length ? draft : this.state, (value, key) => {
+            if (!isEqual(this.state[key], draft[key])) {
+              this.state[key] = draft[key]
+              this.dirtys[key] = true
+              this.persistDirtys[key] = true
+              this.dirtyNum++
             }
-          )
+          })
           if (isFn(this.controller.dirtyCheck)) {
             const result = this.controller.dirtyCheck(this.dirtys)
             if (result !== undefined) {
@@ -135,7 +137,7 @@ export const createStateModel = <State = {}, Props = {}>(
             this.dirtys = {}
             this.dirtyNum = 0
           }
-        } else {
+        } else {          
           if (!this.batching) {
             this.dirtys = {}
             this.dirtyNum = 0
@@ -198,7 +200,7 @@ export const createStateModel = <State = {}, Props = {}>(
     hasChangedInSequence = (key?: string) =>
       key
         ? this.persistDirtys[key]
-        : Object.keys(this.persistDirtys || {}).length > 0
+        : Object.keys(this.persistDirtys || {}).filter(k => this.persistDirtys[k] === true).length > 0
 
     getChanged = () => this.dirtys
 
