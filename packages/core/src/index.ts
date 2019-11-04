@@ -146,7 +146,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
-  function onFieldChange({ field, path }) {
+  function onFieldChange({ field, path }: { field: IField; path: FormPath }) {
     return (published: IFieldState) => {
       const valueChanged = field.hasChanged('value')
       const initialValueChanged = field.hasChanged('initialValue')
