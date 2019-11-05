@@ -198,10 +198,10 @@ export const createFormEffects = <Payload = any, Actions = {}>(
         if (matcher) {
           return observable$.pipe(
             filter<T>(
-              isFn(matcher)
+              isFn(matcher) && !matcher['path']
                 ? matcher
                 : (payload: T): boolean => {
-                    return FormPath.parse(matcher).match(
+                    return FormPath.parse(matcher as any).match(
                       payload && (payload as any).name
                     )
                   }

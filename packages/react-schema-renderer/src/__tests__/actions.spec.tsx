@@ -10,7 +10,10 @@ import {
 import { render, wait } from '@testing-library/react'
 
 beforeEach(() => {
-  registerFormField('string', connect()(props => <input {...props} value={props.value || ''} />))
+  registerFormField(
+    'string',
+    connect()(props => <input {...props} value={props.value || ''} />)
+  )
 })
 
 test('createFormActions', async () => {
@@ -46,15 +49,15 @@ test('createFormActions', async () => {
   )
 
   const { queryByTestId } = render(<TestComponent />)
-  expect(queryByTestId('inputA').getAttribute('value')).toEqual('change value of aaa field onFormInit')
-  await actions.setFormState(state => (state.values = { aaa: 123 }))
-  await wait(() => {
-    expect(queryByTestId('inputA').getAttribute('value')).toEqual('123')
-  })
-  await actions.setFieldState('aaa', state => (state.value = 'hello world'))
-  await wait(() => {
-    expect(queryByTestId('inputA').getAttribute('value')).toEqual('hello world')
-  })
+  expect(queryByTestId('inputA').getAttribute('value')).toEqual(
+    'change value of aaa field onFormInit'
+  )
+  actions.setFormState(state => (state.values = { aaa: 123 }))
+  await wait()
+  expect(queryByTestId('inputA').getAttribute('value')).toEqual('123')
+  actions.setFieldState('aaa', state => (state.value = 'hello world'))
+  await wait()
+  expect(queryByTestId('inputA').getAttribute('value')).toEqual('hello world')
   const VALUE_A = 'value of aaa field'
   const VALUE_B = 'value of bbb field'
   const schemaData = [
@@ -70,8 +73,7 @@ test('createFormActions', async () => {
     )
   })
   await Promise.all(updateQueue)
-  await wait(() => {
-    expect(queryByTestId('inputA').getAttribute('value')).toEqual(VALUE_A)
-    expect(queryByTestId('inputB').getAttribute('value')).toEqual(VALUE_B)
-  })
+  await wait()
+  expect(queryByTestId('inputA').getAttribute('value')).toEqual(VALUE_A)
+  expect(queryByTestId('inputB').getAttribute('value')).toEqual(VALUE_B)
 })

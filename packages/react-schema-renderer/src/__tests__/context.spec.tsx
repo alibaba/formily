@@ -6,13 +6,14 @@ import {
   SchemaMarkupField as Field,
   createFormActions,
   FormProvider,
-  FormConsumer,
+  FormConsumer
 } from '../index'
 import { render, fireEvent, act, wait } from '@testing-library/react'
 
-const sleep = async (timeout) => {
-  const noop = () => {}
-  await wait(noop, timeout)
+const sleep = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
 }
 
 beforeEach(() => {
@@ -29,7 +30,7 @@ test('submit by form consumer', async () => {
       <SchemaForm
         actions={actions}
         onSubmit={async () => {
-          await sleep(200)
+          await sleep(100)
         }}
       >
         <Field name="aaa" type="string" />
@@ -50,9 +51,9 @@ test('submit by form consumer', async () => {
   act(() => {
     fireEvent.click(queryByText('Submit'))
   })
-  // await sleep(30)
-  // expect(queryByText('Submitting')).toBeVisible()
-  // await sleep(300)
-  // expect(queryByText('Submitting')).toBeNull()
-  // expect(queryByText('Submit')).not.toBeUndefined()
+  await wait()
+  expect(queryByText('Submitting')).toBeVisible()
+  await sleep(1000)
+  expect(queryByText('Submitting')).toBeNull()
+  expect(queryByText('Submit')).not.toBeUndefined()
 })

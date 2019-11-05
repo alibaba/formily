@@ -109,6 +109,11 @@ export class Schema implements ISchema {
     return suc === path.length ? res : undefined
   }
 
+  merge(props: {}) {
+    Object.assign(this, props)
+    return this
+  }
+
   getEmptyValue() {
     if (this.type === 'string') {
       return ''
