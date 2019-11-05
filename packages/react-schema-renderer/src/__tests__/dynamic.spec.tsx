@@ -11,6 +11,10 @@ import {
 import { toArr } from '@uform/shared'
 import { render, fireEvent, wait, act } from '@testing-library/react'
 
+const sleep = (time) => {
+  return wait(() => {}, { timeout: time })
+}
+
 let FormCard
 beforeEach(() => {
   registerFormField(
@@ -515,20 +519,20 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   }
   const { queryByTestId, queryByText } = render(<TestComponent />)
 
-  await wait()
+  await sleep(33)
   fireEvent.click(queryByTestId('radio-a2'))
   await wait()
   expect(queryByText('valueB-456')).toBeVisible()
   actions.reset({validate:false})
   await wait()
   expect(queryByText('valueC-456')).toBeVisible()
-  // fireEvent.click(queryByText('Submit'))
-  // await wait()
-  // expect(queryByText('valueE-456')).toBeVisible()
-  // fireEvent.click(queryByTestId('radio-b2'))
-  // fireEvent.click(queryByText('Submit'))
-  // await wait()
-  // expect(queryByText('valueD-456')).toBeVisible()
+  fireEvent.click(queryByText('Submit'))
+  await wait()
+  expect(queryByText('valueE-456')).toBeVisible()
+  fireEvent.click(queryByTestId('radio-b2'))
+  fireEvent.click(queryByText('Submit'))
+  await wait()
+  expect(queryByText('valueD-456')).toBeVisible()
 })
 
 test('dynamic remove field and relationship needs to be retained', async () => {
