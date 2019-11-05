@@ -133,46 +133,15 @@ test('setSourceState', () => {
   state.unsafe_setSourceState(cb1)
   expect(state.unsafe_getSourceState()).toEqual({ ...prevState1, change: true })
 })
-test('hasChanged', () => {
+test('isDirty', () => {
   const state = new VirtualFieldState({ useDirty: true })
   expect(state.dirtyNum).toEqual(0)
-  expect(state.hasChanged()).toEqual(false)
+  expect(state.isDirty()).toEqual(false)
   state.dirtyNum = 1
-  expect(state.hasChanged()).toEqual(true)
+  expect(state.isDirty()).toEqual(true)
   state.dirtyNum = 0
-  expect(state.hasChanged()).toEqual(false)
+  expect(state.isDirty()).toEqual(false)
   state.dirtys.visible = true
-  expect(state.hasChanged()).toEqual(false)
-  expect(state.hasChanged('visible')).toEqual(true)
-})
-test('getChanged', () => {
-  const state = new VirtualFieldState({ useDirty: true })
-  expect(state.getChanged()).toEqual({})
-  state.dirtys.visible = true
-  expect(state.getChanged()).toEqual({ visible: true })
-  state.dirtys = { display: true }
-  expect(state.getChanged()).toEqual({ display: true })
-})
-test('hasChangedInSequence', () => {
-  const state = new VirtualFieldState({ useDirty: true })
-  expect(state.hasChangedInSequence()).toEqual(false)
-  state.persistDirtys.visible = true
-  expect(state.hasChangedInSequence()).toEqual(true)
-  expect(state.hasChangedInSequence('visible')).toEqual(true)
-  state.persistDirtys.visible = false
-  expect(state.hasChangedInSequence()).toEqual(false)
-  expect(state.hasChangedInSequence('visible')).toEqual(false)
-  state.persistDirtys = {}
-  expect(state.hasChangedInSequence()).toEqual(false)
-  state.persistDirtys = { visible: true }
-  expect(state.hasChangedInSequence()).toEqual(true)
-  expect(state.hasChangedInSequence('visible')).toEqual(true)
-})
-test('getChangedInSequence', () => {
-  const state = new VirtualFieldState({ useDirty: true })
-  expect(state.getChangedInSequence()).toEqual({})
-  state.persistDirtys.visible = true
-  expect(state.getChangedInSequence()).toEqual({ visible: true })
-  state.persistDirtys = { display: true }
-  expect(state.getChangedInSequence()).toEqual({ display: true })
+  expect(state.isDirty()).toEqual(false)
+  expect(state.isDirty('visible')).toEqual(true)
 })

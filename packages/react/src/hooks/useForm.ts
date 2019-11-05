@@ -77,7 +77,7 @@ export const useForm = <
     actions: actionsRef.current,
     effects: createFormEffects(props.effects, actionsRef.current)
   })
-  const form = useInternalForm({
+  const optionsRef = useRef<any>({
     form: props.form,
     values: props.value,
     initialValues: props.initialValues,
@@ -90,9 +90,9 @@ export const useForm = <
           dispatch.lazy(type, () => {
             return isStateModel(payload) ? payload.getState() : payload
           })
-          if (type === LifeCycleTypes.ON_FORM_INPUT_CHANGE) {
-            if (props.onChange) {
-              props.onChange(
+          if (type === LifeCycleTypes.ON_FORM_VALUES_CHANGE) {
+            if (optionsRef.current.onChange) {
+              optionsRef.current.onChange(
                 isStateModel(payload)
                   ? payload.getState((state: IFormState) => state.values)
                   : {}
@@ -112,16 +112,19 @@ export const useForm = <
             dispatch: form.notify
           }
           implementActions(actions)
-          if(broadcast){
+          if (broadcast) {
             broadcast.setContext(actions)
           }
         }
       )
-    ],
-    onReset: props.onReset,
-    onSubmit: props.onSubmit,
-    onValidateFailed: props.onValidateFailed
+    ]
   })
+  
+  const form = useInternalForm(optionsRef.current)
+  optionsRef.current.onChange = props.onChange
+  optionsRef.current.onReset = props.onReset
+  optionsRef.current.onSubmit = props.onSubmit
+  optionsRef.current.onValidateFailed = props.onValidateFailed
   return form
 }
 

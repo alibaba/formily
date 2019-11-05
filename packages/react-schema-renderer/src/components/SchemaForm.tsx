@@ -26,7 +26,8 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
             formComponent,
             {
               ...formComponentProps,
-              onSubmit: () => {
+              onSubmit: (e) => {
+                if(e && e.preventDefault) e.preventDefault();
                 form.submit()
               },
               onReset: () => {

@@ -10,7 +10,7 @@ import {
   registerFieldMiddleware
 } from '../index'
 import { toArr } from '@uform/shared'
-import { render, wait, /* fireEvent, act */ } from '@testing-library/react'
+import { render, wait /* fireEvent, act */ } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -32,7 +32,6 @@ registerFieldMiddleware(Field => {
 })
 
 beforeEach(() => {
-  jest.setTimeout(10000)
   registerFormField(
     'string',
     connect()(props => <input {...props} value={props.value || ''} />)
@@ -51,7 +50,7 @@ beforeEach(() => {
         <button
           type="button"
           onClick={() => {
-            mutators.push({aa: ""})
+            mutators.push({ aa: '' })
           }}
         >
           Add Field
@@ -76,7 +75,7 @@ test('update editable by setFieldState', async () => {
                 message: 'field is required'
               }
             ]
-            state.props.editable = false
+            state.editable = false
           })
         })
       }}
@@ -90,14 +89,13 @@ test('update editable by setFieldState', async () => {
     </SchemaForm>
   )
 
-  const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('text')).toBeNull()
-  })
-  await actions.setFieldState('aaa', state => {
+  const { queryByText,baseElement } = render(<TestComponent />)
+  await wait()
+  expect(queryByText('text')).toBeNull()
+  console.log(baseElement.innerHTML)
+  actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await wait(() => {
-    expect(queryByText('text')).toBeVisible()
-  })
+  await wait()
+  expect(queryByText('text')).toBeVisible()
 })
