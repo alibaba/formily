@@ -29,9 +29,8 @@ test('display is false will remove react node', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait();
+  expect(queryByText('123321')).toBeNull()
 })
 
 test('display is false will remove react children node', async () => {
