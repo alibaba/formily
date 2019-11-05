@@ -10,7 +10,7 @@ import {
   registerFieldMiddleware
 } from '../index'
 import { toArr } from '@uform/shared'
-import { render, wait, act, fireEvent } from '@testing-library/react'
+import { render, wait, fireEvent, act } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -32,7 +32,6 @@ registerFieldMiddleware(Field => {
 })
 
 beforeEach(() => {
-  jest.setTimeout(10000)
   registerFormField(
     'string',
     connect()(props => <input {...props} value={props.value || ''} />)
@@ -51,7 +50,7 @@ beforeEach(() => {
         <button
           type="button"
           onClick={() => {
-            mutators.push({aa: ""})
+            mutators.push({ aa: '' })
           }}
         >
           Add Field
@@ -76,7 +75,7 @@ test('update editable by setFieldState', async () => {
                 message: 'field is required'
               }
             ]
-            state.props.editable = false
+            state.editable = false
           })
         })
       }}
@@ -90,16 +89,15 @@ test('update editable by setFieldState', async () => {
     </SchemaForm>
   )
 
-  const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('text')).toBeNull()
-  })
-  await actions.setFieldState('aaa', state => {
+  const { queryByText,baseElement } = render(<TestComponent />)
+  await wait()
+  expect(queryByText('text')).toBeNull()
+  console.log(baseElement.innerHTML)
+  actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await wait(() => {
-    expect(queryByText('text')).toBeVisible()
-  })
+  await wait()
+  expect(queryByText('text')).toBeVisible()
 })
 
 test('update editable by setFieldState with initalState is not editable', async () => {
@@ -126,15 +124,13 @@ test('update editable by setFieldState with initalState is not editable', async 
   )
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('text')).toBeNull()
-  })
-  await actions.setFieldState('aaa', state => {
+  await wait();
+  expect(queryByText('text')).toBeNull()
+  actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await wait(() => {
-    expect(queryByText('text')).toBeVisible()
-  })
+  await wait();
+  expect(queryByText('text')).toBeVisible()
 })
 
 test('update editable in controlled', async () => {
@@ -150,17 +146,14 @@ test('update editable in controlled', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('text')).toBeVisible()
-  })
+  await wait();
+  expect(queryByText('text')).toBeVisible()
   act(() => updateEditable(false))
-  await wait(() => {
-    expect(queryByText('text')).toBeNull()
-  })
+  await wait();
+  expect(queryByText('text')).toBeNull()
   act(() => updateEditable(true))
-  await wait(() => {
-    expect(queryByText('text')).toBeVisible()
-  })
+  await wait();
+  expect(queryByText('text')).toBeVisible()
 })
 
 test('editable with x-props', async () => {
@@ -179,15 +172,13 @@ test('editable with x-props', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('text')).toBeNull()
-  })
-  await actions.setFieldState('aaa', state => {
+  await wait();
+  expect(queryByText('text')).toBeNull()
+  actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await wait(() => {
-    expect(queryByText('text')).toBeVisible()
-  })
+  await wait();
+  expect(queryByText('text')).toBeVisible()
 })
 
 test('editable with x-props in array field', async () => {
@@ -213,15 +204,13 @@ test('editable with x-props in array field', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('empty')).toBeVisible()
-  })
-  await actions.setFieldState('array.0.aa', state => {
+  await wait();
+  expect(queryByText('empty')).toBeVisible()
+  actions.setFieldState('array.0.aa', state => {
     state.editable = true
   })
-  await wait(() => {
-    expect(queryByText('empty')).toBeNull()
-  })
+  await wait();
+  expect(queryByText('empty')).toBeNull()
 })
 
 test('editable with x-props is affected by global editable', async () => {
@@ -248,15 +237,13 @@ test('editable with x-props is affected by global editable', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('empty')).toBeNull()
-  })
-  await actions.setFieldState('array.0.aa', state => {
+  await wait();
+  expect(queryByText('empty')).toBeNull()
+  actions.setFieldState('array.0.aa', state => {
     state.editable = false
   })
-  await wait(() => {
-    expect(queryByText('empty')).toBeVisible()
-  })
+  await wait();
+  expect(queryByText('empty')).toBeVisible()
 })
 
 test('editable conflicts that global editable props with setFieldState', async () => {
@@ -294,20 +281,17 @@ test('editable conflicts that global editable props with setFieldState', async (
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByTestId('this is aaa')).toBeVisible()
-    expect(queryByTestId('this is bbb')).toBeVisible()
-    expect(queryByTestId('this is ccc')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
-  await wait(() => {
-    expect(queryByTestId('this is bbb')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is bbb')).toBeVisible()
 
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
-  await wait(() => {
-    expect(queryByTestId('this is bbb')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is bbb')).toBeVisible()
 })
 
 test('editable conflicts that props editable props with setFieldState', async () => {
@@ -345,19 +329,16 @@ test('editable conflicts that props editable props with setFieldState', async ()
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByTestId('this is aaa')).toBeVisible()
-    expect(queryByTestId('this is bbb')).toBeVisible()
-    expect(queryByTestId('this is ccc')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
-  await wait(() => {
-    expect(queryByTestId('this is bbb')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is bbb')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
-  await wait(() => {
-    expect(queryByTestId('this is bbb')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is bbb')).toBeVisible()
 })
 
 
@@ -395,17 +376,14 @@ test('editable conflicts that x-props editable props with setFieldState', async 
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByTestId('this is aaa')).toBeVisible()
-    expect(queryByTestId('this is bbb')).toBeVisible()
-    expect(queryByTestId('this is ccc')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is aaa')).toBeVisible()
+  expect(queryByTestId('this is bbb')).toBeVisible()
+  expect(queryByTestId('this is ccc')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
-  await wait(() => {
-    expect(queryByTestId('this is bbb')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is bbb')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
-  await wait(() => {
-    expect(queryByTestId('this is bbb')).toBeVisible()
-  })
+  await wait();
+  expect(queryByTestId('this is bbb')).toBeVisible()
 })

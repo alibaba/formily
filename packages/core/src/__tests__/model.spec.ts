@@ -31,7 +31,6 @@ test('createStateModel', () => {
   expect(state1.state).toEqual({ displayName, ...defaultState })
   expect(state1.props).toEqual({ ...defaultProps, ...params })
   expect(state1.dirtys).toEqual({})
-  expect(state1.persistDirtys).toEqual({})
   expect(state1.dirtyNum).toEqual(0)
   expect(state1.batching).toEqual(false)
   expect(state1.displayName).toEqual(displayName)
@@ -151,49 +150,19 @@ describe('proxy model', () => {
     state.unsafe_setSourceState(cb1)
     expect(state.unsafe_getSourceState()).toEqual({ ...prevState1, change: true })
   })
-  test('hasChanged', () => {
+  test('isDirty', () => {
     const state = new StateModel({ useDirty: false })
     expect(state.dirtyNum).toEqual(0)
-    expect(state.hasChanged()).toEqual(false)
+    expect(state.isDirty()).toEqual(false)
     state.dirtyNum = 1
-    expect(state.hasChanged()).toEqual(true)
+    expect(state.isDirty()).toEqual(true)
     state.dirtyNum = 0
-    expect(state.hasChanged()).toEqual(false)
+    expect(state.isDirty()).toEqual(false)
     state.dirtys.change = true
-    expect(state.hasChanged()).toEqual(false)
-    expect(state.hasChanged('change')).toEqual(true)
+    expect(state.isDirty()).toEqual(false)
+    expect(state.isDirty('change')).toEqual(true)
   })
-  test('getChanged', () => {
-    const state = new StateModel({ useDirty: false })
-    expect(state.getChanged()).toEqual({})
-    state.dirtys.change = true
-    expect(state.getChanged()).toEqual({ change: true })
-    state.dirtys = { changeObj: true }
-    expect(state.getChanged()).toEqual({ changeObj: true })
-  })
-  test('hasChangedInSequence', () => {
-    const state = new StateModel({ useDirty: false })
-    expect(state.hasChangedInSequence()).toEqual(false)
-    state.persistDirtys.change = true
-    expect(state.hasChangedInSequence()).toEqual(true)
-    expect(state.hasChangedInSequence('change')).toEqual(true)
-    state.persistDirtys.change = false
-    expect(state.hasChangedInSequence()).toEqual(false)
-    expect(state.hasChangedInSequence('change')).toEqual(false)
-    state.persistDirtys = {}
-    expect(state.hasChangedInSequence()).toEqual(false)
-    state.persistDirtys = { change: true }
-    expect(state.hasChangedInSequence()).toEqual(true)
-    expect(state.hasChangedInSequence('change')).toEqual(true)
-  })
-  test('getChangedInSequence', () => {
-    const state = new StateModel({ useDirty: false })
-    expect(state.getChangedInSequence()).toEqual({})
-    state.persistDirtys.change = true
-    expect(state.getChangedInSequence()).toEqual({ change: true })
-    state.persistDirtys = { changeObj: true }
-    expect(state.getChangedInSequence()).toEqual({ changeObj: true })
-  })
+ 
 })
 
 describe('dirty model', () => {
@@ -303,44 +272,14 @@ describe('dirty model', () => {
   test('hasChanged', () => {
     const state = new StateModel({ useDirty: true })
     expect(state.dirtyNum).toEqual(0)
-    expect(state.hasChanged()).toEqual(false)
+    expect(state.isDirty()).toEqual(false)
     state.dirtyNum = 1
-    expect(state.hasChanged()).toEqual(true)
+    expect(state.isDirty()).toEqual(true)
     state.dirtyNum = 0
-    expect(state.hasChanged()).toEqual(false)
+    expect(state.isDirty()).toEqual(false)
     state.dirtys.change = true
-    expect(state.hasChanged()).toEqual(false)
-    expect(state.hasChanged('change')).toEqual(true)
+    expect(state.isDirty()).toEqual(false)
+    expect(state.isDirty('change')).toEqual(true)
   })
-  test('getChanged', () => {
-    const state = new StateModel({ useDirty: true })
-    expect(state.getChanged()).toEqual({})
-    state.dirtys.change = true
-    expect(state.getChanged()).toEqual({ change: true })
-    state.dirtys = { changeObj: true }
-    expect(state.getChanged()).toEqual({ changeObj: true })
-  })
-  test('hasChangedInSequence', () => {
-    const state = new StateModel({ useDirty: true })
-    expect(state.hasChangedInSequence()).toEqual(false)
-    state.persistDirtys.change = true
-    expect(state.hasChangedInSequence()).toEqual(true)
-    expect(state.hasChangedInSequence('change')).toEqual(true)
-    state.persistDirtys.change = false
-    expect(state.hasChangedInSequence()).toEqual(false)
-    expect(state.hasChangedInSequence('change')).toEqual(false)
-    state.persistDirtys = {}
-    expect(state.hasChangedInSequence()).toEqual(false)
-    state.persistDirtys = { change: true }
-    expect(state.hasChangedInSequence()).toEqual(true)
-    expect(state.hasChangedInSequence('change')).toEqual(true)
-  })
-  test('getChangedInSequence', () => {
-    const state = new StateModel({ useDirty: true })
-    expect(state.getChangedInSequence()).toEqual({})
-    state.persistDirtys.change = true
-    expect(state.getChangedInSequence()).toEqual({ change: true })
-    state.persistDirtys = { changeObj: true }
-    expect(state.getChangedInSequence()).toEqual({ changeObj: true })
-  })
+
 })

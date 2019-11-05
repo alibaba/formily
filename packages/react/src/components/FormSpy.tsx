@@ -24,19 +24,21 @@ export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
   )
   const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {
     if (initializedRef.current) return
-    if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
-      setType(type)
-      dispatch({
-        type,
-        payload
-      })
-    } else if (isArr(props.selector) && props.selector.indexOf(type) > -1) {
-      setType(type)
-      dispatch({
-        type,
-        payload
-      })
-    }
+    setTimeout(() => {
+      if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
+        setType(type)
+        dispatch({
+          type,
+          payload
+        })
+      } else if (isArr(props.selector) && props.selector.indexOf(type) > -1) {
+        setType(type)
+        dispatch({
+          type,
+          payload
+        })
+      }
+    })
   }, [])
   useMemo(() => {
     initializedRef.current = true

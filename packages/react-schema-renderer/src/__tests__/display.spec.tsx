@@ -29,9 +29,8 @@ test('display is false will remove react node', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait();
+  expect(queryByText('123321')).toBeNull()
 })
 
 test('display is false will remove react children node', async () => {
@@ -54,9 +53,8 @@ test('display is false will remove react children node', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait()
+  expect(queryByText('123321')).toBeNull()
 })
 
 test('display is false will not remove value(include default value)', async () => {
@@ -89,15 +87,13 @@ test('display is false will not remove value(include default value)', async () =
 
   const { queryByText } = render(<TestComponent />)
 
-  await wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait()
+  expect(queryByText('123321')).toBeNull()
   fireEvent.click(queryByText('Submit'))
-  await wait(() => {
-    expect(onSubmitHandler).toHaveBeenCalledWith({
-      obj: { aa: '123321' },
-      bb: '123'
-    })
+  await wait()
+  expect(onSubmitHandler).toHaveBeenCalledWith({
+    obj: { aa: '123321' },
+    bb: '123'
   })
 })
 
@@ -109,7 +105,7 @@ test('display is false will not validate(include children)', async () => {
       <SchemaForm
         initialValues={{ obj: { aa: '123321' } }}
         onSubmit={onSubmitHandler}
-        onValidateFailed={onValidateFailedHandler}
+        onValidateFailed={console.log}
         effects={($, { setFieldState }) => {
           $('onFieldChange', 'bb').subscribe(({ value }) => {
             if (value === '123') {
@@ -132,18 +128,14 @@ test('display is false will not validate(include children)', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait()
+  expect(queryByText('123321')).toBeNull()
   fireEvent.click(queryByText('Submit'))
-  await wait(() => {
-    expect(onSubmitHandler).toHaveBeenCalledWith({
-      obj: { aa: '123321' },
-      bb: '123'
-    })
-    expect(onValidateFailedHandler).toHaveBeenCalledTimes(0)
+  await wait()
+  expect(onSubmitHandler).toHaveBeenCalledWith({
+    obj: { aa: '123321' },
+    bb: '123'
   })
+  expect(onValidateFailedHandler).toHaveBeenCalledTimes(0)
 })
 
-// display 有问题

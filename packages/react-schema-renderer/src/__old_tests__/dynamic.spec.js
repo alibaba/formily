@@ -560,7 +560,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   await sleep(33)
   // onChange
   expect(queryAllByText('valueB-456').length).toBe(1)
-  actions.reset()
+  actions.reset({ validate: false })
   await sleep(33)
   // onReset
   expect(queryAllByText('valueC-456').length).toBe(1)
