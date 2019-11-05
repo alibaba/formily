@@ -40,9 +40,8 @@ test('destruct with initial values', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait()
+  expect(queryByText('123321')).toBeNull()
 })
 
 test('destruct with initial values in array', async () => {
@@ -59,8 +58,6 @@ test('destruct with initial values in array', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await wait(() => {
-    expect(queryByText('123321')).toBeNull()
-  })
+  await wait()
+  expect(queryByText('123321')).toBeNull()
 })

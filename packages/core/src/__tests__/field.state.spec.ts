@@ -381,6 +381,7 @@ test('getSourceState', () => {
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith(state.state)
 })
+
 test('setSourceState', () => {
   const state = new FieldState({ useDirty: false })
   const cb1 = (draft) => draft.change = true
@@ -390,47 +391,18 @@ test('setSourceState', () => {
   state.unsafe_setSourceState(cb1)
   expect(state.unsafe_getSourceState()).toEqual({ ...prevState1, change: true })
 })
-test('hasChanged', () => {
+
+test('isDirty', () => {
   const state = new FieldState({ useDirty: true })
   expect(state.dirtyNum).toEqual(0)
-  expect(state.hasChanged()).toEqual(false)
+  expect(state.isDirty()).toEqual(false)
   state.dirtyNum = 1
-  expect(state.hasChanged()).toEqual(true)
+  expect(state.isDirty()).toEqual(true)
   state.dirtyNum = 0
-  expect(state.hasChanged()).toEqual(false)
+  expect(state.isDirty()).toEqual(false)
   state.dirtys.validating = true
-  expect(state.hasChanged()).toEqual(false)
-  expect(state.hasChanged('validating')).toEqual(true)
+  expect(state.isDirty()).toEqual(false)
+  expect(state.isDirty('validating')).toEqual(true)
 })
-test('getChanged', () => {
-  const state = new FieldState({ useDirty: true })
-  expect(state.getChanged()).toEqual({})
-  state.dirtys.validating = true
-  expect(state.getChanged()).toEqual({ validating: true })
-  state.dirtys = { value: true }
-  expect(state.getChanged()).toEqual({ value: true })
-})
-test('hasChangedInSequence', () => {
-  const state = new FieldState({ useDirty: true })
-  expect(state.hasChangedInSequence()).toEqual(false)
-  state.persistDirtys.validating = true
-  expect(state.hasChangedInSequence()).toEqual(true)
-  expect(state.hasChangedInSequence('validating')).toEqual(true)
-  state.persistDirtys.validating = false
-  expect(state.hasChangedInSequence()).toEqual(false)
-  expect(state.hasChangedInSequence('validating')).toEqual(false)
-  state.persistDirtys = {}
-  expect(state.hasChangedInSequence()).toEqual(false)
-  state.persistDirtys = { validating: true }
-  expect(state.hasChangedInSequence()).toEqual(true)
-  expect(state.hasChangedInSequence('validating')).toEqual(true)
-})
-test('getChangedInSequence', () => {
-  const state = new FieldState({ useDirty: true })
-  expect(state.getChangedInSequence()).toEqual({})
-  state.persistDirtys.validating = true
-  expect(state.getChangedInSequence()).toEqual({ validating: true })
-  state.persistDirtys = { value: true }
-  expect(state.getChangedInSequence()).toEqual({ value: true })
-})
+
 

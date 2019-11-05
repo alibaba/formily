@@ -48,7 +48,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         {({ state, mutators, form }) => {
           const props: ISchemaFieldComponentProps = {
             ...state,
-            schema: fieldSchema,
+            schema: fieldSchema.merge(state.props),
             form,
             mutators,
             renderField
@@ -107,7 +107,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             {({ state, form }) => {
               const props: ISchemaVirtualFieldComponentProps = {
                 ...state,
-                schema: fieldSchema,
+                schema: fieldSchema.merge(state.props),
                 form,
                 renderField,
                 children: fieldSchema.mapProperties(
