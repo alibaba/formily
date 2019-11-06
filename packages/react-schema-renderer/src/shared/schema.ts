@@ -230,7 +230,7 @@ export class Schema implements ISchema {
       return this.required
     }
   }
-  getExtendsEditable() {
+  getExtendsEditable(): boolean {
     if (isValid(this.editable)) {
       return this.editable
     } else if (isValid(this['x-props'] && this['x-props'].editable)) {

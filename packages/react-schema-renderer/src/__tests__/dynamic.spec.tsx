@@ -11,8 +11,10 @@ import {
 import { toArr } from '@uform/shared'
 import { render, fireEvent, wait, act } from '@testing-library/react'
 
-const sleep = (time) => {
-  return wait(() => {}, { timeout: time })
+const sleep = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
 }
 
 let FormCard
@@ -442,9 +444,9 @@ test('invalid schema', async () => {
     )
   }
   const { queryByText, queryAllByTestId } = render(<TestComponent />)
-  await wait();
+  await sleep(33)
   fireEvent.click(queryByText('Add Field'))
-  await wait();
+  await wait()
   expect(queryAllByTestId('item').length).toBe(2)
   expect(queryAllByTestId('input').length).toBe(4)
 })
@@ -474,7 +476,6 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
           onReset={() => {
             if (constState.testA !== '123') {
               act(() => setState({ testC: '456' }))
-              console.log('执行重置')
             }
           }}
           onSubmit={() => {
@@ -482,8 +483,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
               act(() => setState({ testD: '456' }))
             }
           }}
-          onValidateFailed={(p) => {
-            console.log(p)
+          onValidateFailed={p => {
             if (constState.testA !== '123') {
               act(() => setState({ testE: '456' }))
             }
@@ -518,12 +518,11 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
     )
   }
   const { queryByTestId, queryByText } = render(<TestComponent />)
-
-  await sleep(33)
+  await sleep(100)
   fireEvent.click(queryByTestId('radio-a2'))
   await wait()
   expect(queryByText('valueB-456')).toBeVisible()
-  actions.reset({validate:false})
+  actions.reset({ validate: false })
   await wait()
   expect(queryByText('valueC-456')).toBeVisible()
   fireEvent.click(queryByText('Submit'))
@@ -573,22 +572,22 @@ test('dynamic remove field and relationship needs to be retained', async () => {
   const { queryAllByTestId, queryByText, queryAllByText } = render(
     <TestComponent />
   )
-  await wait();
+  await wait()
   expect(queryAllByTestId('input').length).toBe(2)
   let removes
-  await wait();
+  await wait()
   removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait();
+  await wait()
   removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait();
+  await wait()
   expect(queryAllByTestId('input').length).toBe(0)
-  await wait();
+  await wait()
   fireEvent.click(queryByText('Add Field'))
-  await wait();
+  await wait()
   fireEvent.click(queryByText('Add Field'))
-  await wait();
+  await wait()
   expect(queryAllByTestId('input').length).toBe(4)
   expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
   expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
@@ -628,20 +627,20 @@ test('after deleting a component should not be sync an default value', async () 
   const { queryAllByTestId, queryByText, queryAllByText } = render(
     <TestComponent />
   )
-  await wait();
+  await wait()
   expect(queryAllByTestId('input').length).toBe(4)
   let removes
-  await wait();
+  await wait()
   removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait();
+  await wait()
   removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait();
+  await wait()
   expect(queryAllByTestId('input').length).toBe(0)
   fireEvent.click(queryByText('Add Field'))
   fireEvent.click(queryByText('Add Field'))
-  await wait();
+  await wait()
   expect(queryAllByTestId('input').length).toBe(2)
   expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
   expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
