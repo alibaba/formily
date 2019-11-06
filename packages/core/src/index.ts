@@ -120,6 +120,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         })
       })
       if (valuesChanged) {
+        if (isFn(options.onChange)) {
+          options.onChange(published.values)
+        }
         heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
       if (initialValuesChanged) {

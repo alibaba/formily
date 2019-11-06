@@ -40,6 +40,7 @@ export interface IFormProps<
   EffectActions = {}
 > {
   value?: Value
+  defaultValue?: DefaultValue
   initialValues?: DefaultValue
   actions?: EffectActions
   effects?: IFormEffect<EffectPayload, EffectActions>
