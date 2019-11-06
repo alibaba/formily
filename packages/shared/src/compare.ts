@@ -67,8 +67,6 @@ function equal(a: any, b: any, filter?: Filter) {
     const urlA = a instanceof URL
     const urlB = b instanceof URL
     if (urlA && urlB) {
-      console.log(a)
-      console.log(b)
       return a.href === b.href
     }
     const keys = keyList(a)
