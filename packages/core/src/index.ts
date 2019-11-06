@@ -43,7 +43,7 @@ import {
 export * from './shared/lifecycle'
 export * from './types'
 
-export function createForm<FieldProps, VirtualFieldProps, FormProps>(
+export function createForm<FieldProps, VirtualFieldProps>(
   options: IFormCreatorOptions = {}
 ): IForm {
   function onGraphChange({ type, payload }) {
