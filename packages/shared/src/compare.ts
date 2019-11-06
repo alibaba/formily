@@ -44,10 +44,6 @@ function equal(a: any, b: any, filter?: Filter) {
     const immutableB = b && b.toJS
     if (immutableA !== immutableB) return false
     if (immutableA) return a.is ? a.is(b) : a === b
-    const schemaA = a && a.toJSON
-    const schemaB = b && b.toJSON
-    if (schemaA !== schemaB) return false
-    if (schemaA && schemaB) return equal(a.toJSON(), b.toJSN(), filter)
     const dateA = a instanceof Date
     const dateB = b instanceof Date
     if (dateA !== dateB) {
@@ -56,7 +52,10 @@ function equal(a: any, b: any, filter?: Filter) {
     if (dateA && dateB) {
       return a.getTime() === b.getTime()
     }
-
+    const schemaA = a && a.toJSON
+    const schemaB = b && b.toJSON
+    if (schemaA !== schemaB) return false
+    if (schemaA && schemaB) return equal(a.toJSON(), b.toJSON(), filter)
     const regexpA = a instanceof RegExp
     const regexpB = b instanceof RegExp
     if (regexpA !== regexpB) {
@@ -68,6 +67,8 @@ function equal(a: any, b: any, filter?: Filter) {
     const urlA = a instanceof URL
     const urlB = b instanceof URL
     if (urlA && urlB) {
+      console.log(a)
+      console.log(b)
       return a.href === b.href
     }
     const keys = keyList(a)
