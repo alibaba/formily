@@ -6,8 +6,7 @@ import {
   FormLifeCycle,
   IForm,
   IModel,
-  isStateModel,
-  IFormState
+  isStateModel
 } from '@uform/core'
 import { useDirty } from './useDirty'
 import { useEva } from 'react-eva'
@@ -82,15 +81,6 @@ export const useForm = <
         dispatch.lazy(type, () => {
           return isStateModel(payload) ? payload.getState() : payload
         })
-        if (type === LifeCycleTypes.ON_FORM_VALUES_CHANGE) {
-          if (optionsRef.current.onChange) {
-            optionsRef.current.onChange(
-              isStateModel(payload)
-                ? payload.getState((state: IFormState) => state.values)
-                : {}
-            )
-          }
-        }
         if (broadcast) {
           broadcast.notify({ type, payload })
         }
@@ -110,7 +100,10 @@ export const useForm = <
       }
     )
   ]
-  const optionsRef = useRef<any>({ ...props })
+  const optionsRef = useRef<any>({
+    ...props,
+    initialValues: props.initialValues || props.defaultValue
+  })
   Object.assign(optionsRef.current, props)
   optionsRef.current.values = props.value
   optionsRef.current.lifecycles = lifecycles

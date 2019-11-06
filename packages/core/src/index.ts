@@ -43,7 +43,7 @@ import {
 export * from './shared/lifecycle'
 export * from './types'
 
-export function createForm<FieldProps, VirtualFieldProps, FormProps>(
+export function createForm<FieldProps, VirtualFieldProps>(
   options: IFormCreatorOptions = {}
 ): IForm {
   function onGraphChange({ type, payload }) {
@@ -120,6 +120,9 @@ export function createForm<FieldProps, VirtualFieldProps, FormProps>(
         })
       })
       if (valuesChanged) {
+        if (isFn(options.onChange)) {
+          options.onChange(published.values)
+        }
         heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
       if (initialValuesChanged) {
