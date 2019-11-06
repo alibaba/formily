@@ -131,9 +131,7 @@ describe('test all apis', () => {
 
   test('x-component-props', () => {})
 
-  test('x-rules', () => {})
-
-  describe('x-index', () => {
+  test('x-rules', () => {
     test('Increase lastValidateValue value processing during initialization', async () => {
       const inpueFieldValidate = jest.fn()
       const requriedFieldValidate = jest.fn()
@@ -180,6 +178,8 @@ describe('test all apis', () => {
       expect(requriedFieldValidate).toHaveBeenCalledTimes(1)
     })
   })
+
+  describe('x-index', () => {})
 
   test('x-render', () => {})
 
