@@ -356,32 +356,25 @@ test('dynamic remove field', async () => {
   }
 
   const { queryAllByTestId, queryByText } = render(<TestComponent />)
-  await wait(() => {
-    fireEvent.click(queryByText('Add Field'))
-  })
-  await wait(() => {
-    fireEvent.click(queryByText('Remove Field'))
-  })
-  await wait(() => {
-    fireEvent.click(queryByText('Submit'))
-  })
-  await wait(() => {
-    expect(submitHandler).toHaveBeenCalledTimes(1)
-    expect(validateFaildHandler).toHaveBeenCalledTimes(0)
-  })
+  await wait()
   fireEvent.click(queryByText('Add Field'))
-  await wait(() => {
-    expect(queryAllByTestId('item').length).toBe(1)
-    expect(queryAllByTestId('input').length).toBe(2)
-  })
-  await wait(() => {
-    fireEvent.click(queryByText('Remove Field'))
-    fireEvent.click(queryByText('Submit'))
-  })
-  await wait(() => {
-    expect(submitHandler).toHaveBeenCalledTimes(2)
-    expect(validateFaildHandler).toHaveBeenCalledTimes(0)
-  })
+  await wait()
+  fireEvent.click(queryByText('Remove Field'))
+  await wait()
+  fireEvent.click(queryByText('Submit'))
+  await wait()
+  expect(submitHandler).toHaveBeenCalledTimes(1)
+  expect(validateFaildHandler).toHaveBeenCalledTimes(0)
+  fireEvent.click(queryByText('Add Field'))
+  await wait()
+  expect(queryAllByTestId('item').length).toBe(1)
+  expect(queryAllByTestId('input').length).toBe(2)
+  await wait()
+  fireEvent.click(queryByText('Remove Field'))
+  fireEvent.click(queryByText('Submit'))
+  await wait()
+  expect(submitHandler).toHaveBeenCalledTimes(2)
+  expect(validateFaildHandler).toHaveBeenCalledTimes(0)
 })
 
 test('dynamic default value', async () => {
@@ -451,13 +444,11 @@ test('invalid schema', async () => {
     )
   }
   const { queryByText, queryAllByTestId } = render(<TestComponent />)
-  await wait(() => {
-    fireEvent.click(queryByText('Add Field'))
-  })
-  await wait(() => {
-    expect(queryAllByTestId('item').length).toBe(2)
-    expect(queryAllByTestId('input').length).toBe(4)
-  })
+  await sleep(33)
+  fireEvent.click(queryByText('Add Field'))
+  await wait()
+  expect(queryAllByTestId('item').length).toBe(2)
+  expect(queryAllByTestId('input').length).toBe(4)
 })
 
 test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', async () => {
@@ -485,7 +476,6 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
           onReset={() => {
             if (constState.testA !== '123') {
               act(() => setState({ testC: '456' }))
-              console.log('执行重置')
             }
           }}
           onSubmit={() => {
@@ -493,8 +483,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
               act(() => setState({ testD: '456' }))
             }
           }}
-          onValidateFailed={(p) => {
-            console.log(p)
+          onValidateFailed={p => {
             if (constState.testA !== '123') {
               act(() => setState({ testE: '456' }))
             }
@@ -533,16 +522,16 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   fireEvent.click(queryByTestId('radio-a2'))
   await wait()
   expect(queryByText('valueB-456')).toBeVisible()
-  actions.reset({validate:false})
+  actions.reset({ validate: false })
   await wait()
   expect(queryByText('valueC-456')).toBeVisible()
-  // fireEvent.click(queryByText('Submit'))
-  // await wait()
-  // expect(queryByText('valueE-456')).toBeVisible()
-  // fireEvent.click(queryByTestId('radio-b2'))
-  // fireEvent.click(queryByText('Submit'))
-  // await wait()
-  // expect(queryByText('valueD-456')).toBeVisible()
+  fireEvent.click(queryByText('Submit'))
+  await wait()
+  expect(queryByText('valueE-456')).toBeVisible()
+  fireEvent.click(queryByTestId('radio-b2'))
+  fireEvent.click(queryByText('Submit'))
+  await wait()
+  expect(queryByText('valueD-456')).toBeVisible()
 })
 
 test('dynamic remove field and relationship needs to be retained', async () => {
@@ -583,32 +572,25 @@ test('dynamic remove field and relationship needs to be retained', async () => {
   const { queryAllByTestId, queryByText, queryAllByText } = render(
     <TestComponent />
   )
-  await wait(() => {
-    expect(queryAllByTestId('input').length).toBe(2)
-  })
+  await wait()
+  expect(queryAllByTestId('input').length).toBe(2)
   let removes
-  await wait(() => {
-    removes = queryAllByText('Remove Field')
-  })
+  await wait()
+  removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait(() => {
-    removes = queryAllByText('Remove Field')
-  })
+  await wait()
+  removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait(() => {
-    expect(queryAllByTestId('input').length).toBe(0)
-  })
-  await wait(() => {
-    fireEvent.click(queryByText('Add Field'))
-  })
-  await wait(() => {
-    fireEvent.click(queryByText('Add Field'))
-  })
-  await wait(() => {
-    expect(queryAllByTestId('input').length).toBe(4)
-    expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
-    expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
-  })
+  await wait()
+  expect(queryAllByTestId('input').length).toBe(0)
+  await wait()
+  fireEvent.click(queryByText('Add Field'))
+  await wait()
+  fireEvent.click(queryByText('Add Field'))
+  await wait()
+  expect(queryAllByTestId('input').length).toBe(4)
+  expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
+  expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
 })
 
 test('after deleting a component should not be sync an default value', async () => {
@@ -645,26 +627,21 @@ test('after deleting a component should not be sync an default value', async () 
   const { queryAllByTestId, queryByText, queryAllByText } = render(
     <TestComponent />
   )
-  await wait(() => {
-    expect(queryAllByTestId('input').length).toBe(4)
-  })
+  await wait()
+  expect(queryAllByTestId('input').length).toBe(4)
   let removes
-  await wait(() => {
-    removes = queryAllByText('Remove Field')
-  })
+  await wait()
+  removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait(() => {
-    removes = queryAllByText('Remove Field')
-  })
+  await wait()
+  removes = queryAllByText('Remove Field')
   fireEvent.click(removes[removes.length - 1])
-  await wait(() => {
-    expect(queryAllByTestId('input').length).toBe(0)
-  })
+  await wait()
+  expect(queryAllByTestId('input').length).toBe(0)
   fireEvent.click(queryByText('Add Field'))
   fireEvent.click(queryByText('Add Field'))
-  await wait(() => {
-    expect(queryAllByTestId('input').length).toBe(2)
-    expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
-    expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
-  })
+  await wait()
+  expect(queryAllByTestId('input').length).toBe(2)
+  expect(queryAllByTestId('input')[0].getAttribute('value')).toBe('')
+  expect(queryAllByTestId('input')[1].getAttribute('value')).toBe('')
 })

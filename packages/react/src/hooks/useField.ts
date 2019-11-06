@@ -1,11 +1,35 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
-import { each } from '@uform/shared'
-import { IFieldStateProps, IFieldState, IForm, IField } from '@uform/core'
-import { raf } from '../shared'
+import { each, isFn } from '@uform/shared'
+import {
+  IFieldStateProps,
+  IFieldState,
+  IForm,
+  IField,
+  IMutators
+} from '@uform/core'
+import { raf, getValueFromEvent } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
-import { IFieldHook } from '../types'
+import { IFieldHook, IFieldProps } from '../types'
 import FormContext from '../context'
+
+const extendMutators = (mutators: IMutators, props: IFieldProps): IMutators => {
+  return {
+    ...mutators,
+    change: (...args) => {
+      args[0] = isFn(props.getValueFromEvent)
+        ? props.getValueFromEvent(...args)
+        : args[0]
+      mutators.change(...args.map(event => getValueFromEvent(event)))
+    },
+    blur: () => {
+      mutators.blur()
+      if (props.triggerType === 'onBlur') {
+        mutators.validate()
+      }
+    }
+  }
+}
 
 export const useField = (
   options: IFieldStateProps & { triggerType?: 'onChange' | 'onBlur' }
@@ -45,7 +69,7 @@ export const useField = (
       }
     })
     initialized = true
-    return form.createMutators(ref.current.field)
+    return extendMutators(form.createMutators(ref.current.field), options)
   }, [])
 
   useEffect(() => {

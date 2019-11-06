@@ -361,7 +361,7 @@ export function createForm<FieldProps, VirtualFieldProps, FormProps>(
           state.props = props
           state.required = required
           state.rules = rules as any
-          state.editable = editable
+          state.selfEditable = editable
           state.formEditable = options.editable
         })
         batchRunTaskQueue(field, nodePath)
@@ -700,14 +700,17 @@ export function createForm<FieldProps, VirtualFieldProps, FormProps>(
       state.submitting = true
     })
     env.submittingTask = validate()
-      .then(validated => {
-        const { errors } = validated
-        if (errors.length) {
+      .then(() => {
+        const validated = state.getState(({ errors, warnings }) => ({
+          errors,
+          warnings
+        })) //因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
+        if (validated.errors.length) {
           state.setState(state => {
             state.submitting = false
           })
           heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-          return Promise.reject(errors)
+          return Promise.reject(validated.errors)
         }
         if (isFn(onSubmit)) {
           return Promise.resolve(
