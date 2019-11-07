@@ -47,7 +47,9 @@ export const filterChanged = (key?: string) => {
   return filter<any>(x => {
     if (!x) return true
     const old = caches[x.name] || {}
-    const result = key ? isEqual(x[key], old[key]) : isEqual(x, old)
+    const result = key
+      ? isEqual(FormPath.getIn(x, key), FormPath.getIn(old, key))
+      : isEqual(x, old)
     caches[x.name] = x
     return !result
   })
