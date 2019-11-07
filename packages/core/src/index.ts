@@ -150,17 +150,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
-function onFieldChange({ field, path }: { field: IField; path: FormPath }) {
-    return (published: IFieldState) => {
-      const valueChanged = field.hasChanged('value')
-      const initialValueChanged = field.hasChanged('initialValue')
-      const visibleChanged = field.hasChanged('visible')
-      const displayChanged = field.hasChanged('display')
-      const unmountedChanged = field.hasChanged('unmounted')
-      const mountedChanged = field.hasChanged('mounted')
-      const initializedChanged = field.hasChanged('initialized')
-      const warningsChanged = field.hasChanged('warnings')
-      const errorsChanges = field.hasChanged('errors')
+  function onFieldChange({ field, path }) {
+    return (published: IFieldState<FieldProps>) => {
+      const valueChanged = field.isDirty('value')
+      const initialValueChanged = field.isDirty('initialValue')
+      const visibleChanged = field.isDirty('visible')
+      const displayChanged = field.isDirty('display')
+      const unmountedChanged = field.isDirty('unmounted')
+      const mountedChanged = field.isDirty('mounted')
+      const initializedChanged = field.isDirty('initialized')
+      const warningsChanged = field.isDirty('warnings')
+      const errorsChanges = field.isDirty('errors')
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
