@@ -14,6 +14,7 @@ import {
   FormButtonGroup,
   Submit,
   Reset,
+  filterChanged,
   createFormActions
 } from '@uform/next'
 import { Button } from '@alifd/next'
@@ -35,6 +36,14 @@ ReactDOM.render(
             state.required = true
           })
         })
+
+        $('onFormChange')
+          .pipe(filterChanged('values.hello'))
+          .subscribe(state => {
+            setFieldState('radio', state => {
+              state.value = '4'
+            })
+          })
       }}
     >
       <Field
@@ -136,6 +145,15 @@ ReactDOM.render(
           }}
         >
           改变radio的值
+        </Button>
+        <Button
+          onClick={() => {
+            actions.setFormState(state => {
+              state.values = { ...state.values, hello: 'hello world' }
+            })
+          }}
+        >
+          改变form状态
         </Button>
       </FormButtonGroup>
     </SchemaForm>

@@ -9,7 +9,6 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  deprecate,
   isObj
 } from '@uform/shared'
 import {
@@ -770,9 +769,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
   }
 
-  function setFormState(callback?: (state: IFormState) => any) {
+  function setFormState(callback?: (state: IFormState) => any, silent?: boolean) {
     leadingUpdate(() => {
-      state.setState(callback)
+      state.setState(callback, silent)
     })
   }
 
@@ -801,13 +800,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState<FieldProps>) => void
+    callback?: (state: IFieldState<FieldProps>) => void,
+    silent?: boolean
   ) {
     if (!isFn(callback)) return
     let matchCount = 0
     let pattern = FormPath.getPath(path)
     graph.select(pattern, field => {
-      field.setState(callback)
+      field.setState(callback, silent)
       matchCount++
     })
     if (matchCount === 0 || pattern.isWildMatchPattern) {
@@ -829,10 +829,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
-  function setFieldValue(path: FormPathPattern, value?: any) {
+  function setFieldValue(path: FormPathPattern, value?: any, silent?: boolean) {
     setFieldState(path, state => {
       state.value = value
-    })
+    }, silent)
   }
 
   function getFieldValue(path?: FormPathPattern) {
@@ -841,10 +841,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
   }
 
-  function setFieldInitialValue(path?: FormPathPattern, value?: any) {
+  function setFieldInitialValue(path?: FormPathPattern, value?: any, silent?: boolean) {
     setFieldState(path, state => {
       state.initialValue = value
-    })
+    }, silent)
   }
 
   function getFieldInitialValue(path?: FormPathPattern) {
@@ -951,24 +951,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
     setFormGraph,
     setFieldValue,
     unsafe_do_not_use_transform_data_path: transformDataPath, //eslint-disable-line
-    setValue: deprecate(
-      setFieldValue,
-      'setValue',
-      'Please use the setFieldValue.'
-    ),
     getFieldValue,
-    getValue: deprecate(
-      getFieldValue,
-      'getValue',
-      'Please use the getFieldValue.'
-    ),
     setFieldInitialValue,
     getFieldInitialValue,
-    getInitialValue: deprecate(
-      getFieldInitialValue,
-      'getInitialValue',
-      'Please use the getFieldInitialValue.'
-    ),
     subscribe: (callback?: FormHeartSubscriber) => {
       return heart.subscribe(callback)
     },
