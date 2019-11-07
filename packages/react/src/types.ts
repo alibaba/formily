@@ -141,7 +141,7 @@ export interface IFormActions {
   ): any
   getFormGraph(): IFormGraph
   setFormGraph(graph: IFormGraph): void
-  subscribe(callback?: FormHeartSubscriber): void
+  subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
   notify: <T>(type: string, payload: T) => void
   dispatch: <T>(type: string, payload: T) => void
