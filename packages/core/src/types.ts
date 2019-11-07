@@ -298,11 +298,12 @@ export interface IForm {
   clearErrors: (pattern?: FormPathPattern) => void
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
-  setFormState(callback?: (state: IFormState) => any): void
+  setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
   getFormState(callback?: (state: IFormState) => any): any
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldState) => void,
+    silent?: boolean
   ): void
   getFieldState(
     path: FormPathPattern,
