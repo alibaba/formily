@@ -47,7 +47,9 @@ export const filterChanged = (key?: string) => {
   return filter<any>(x => {
     if (!x) return true
     const old = caches[x.name] || {}
-    const result = key ? isEqual(x[key], old[key]) : isEqual(x, old)
+    const result = key
+      ? isEqual(FormPath.getIn(x, key), FormPath.getIn(old, key))
+      : isEqual(x, old)
     caches[x.name] = x
     return !result
   })
@@ -198,10 +200,10 @@ export const createFormEffects = <Payload = any, Actions = {}>(
         if (matcher) {
           return observable$.pipe(
             filter<T>(
-              isFn(matcher)
+              isFn(matcher) && !matcher['path']
                 ? matcher
                 : (payload: T): boolean => {
-                    return FormPath.parse(matcher).match(
+                    return FormPath.parse(matcher as any).match(
                       payload && (payload as any).name
                     )
                   }

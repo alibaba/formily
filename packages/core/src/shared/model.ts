@@ -23,21 +23,22 @@ export const createStateModel = <State = {}, Props = {}>(
     public displayName?: string
     public dirtyNum: number
     public dirtys: StateDirtyMap<State>
-    public persistDirtys: StateDirtyMap<State>
+    public prevState: State
     public batching: boolean
-    public processing: boolean
+    public stackCount: number
     public controller: StateModel<State>
 
     constructor(defaultProps: DefaultProps) {
       super()
       this.state = { ...Factory.defaultState }
+      this.prevState = { ...Factory.defaultState }
       this.props = {
         ...Factory.defaultProps,
         ...defaultProps
       }
       this.dirtys = {}
-      this.persistDirtys = {}
       this.dirtyNum = 0
+      this.stackCount = 0
       this.batching = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
@@ -61,10 +62,11 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         return callback(this.getState())
       } else {
+        if (isFn(this.controller.publishState)) {
+          return this.controller.publishState(this.state)
+        }
+
         if (!hasProxy || this.props.useDirty) {
-          if (isFn(this.controller.publishState)) {
-            return this.controller.publishState(this.state)
-          }
           return clone(this.state)
         } else {
           return produce(this.state, () => {})
@@ -85,7 +87,9 @@ export const createStateModel = <State = {}, Props = {}>(
         if (!hasProxy || this.props.useDirty) {
           callback(this.state)
         } else {
-          this.state = produce(this.state, callback)
+          this.state = produce(this.state, draft => {
+            callback(draft)
+          })
         }
       }
     }
@@ -95,15 +99,12 @@ export const createStateModel = <State = {}, Props = {}>(
       silent = false
     ) => {
       if (isFn(callback)) {
+        this.stackCount++
         if (!hasProxy || this.props.useDirty) {
           const draft = this.getState()
           if (!this.batching) {
             this.dirtys = {}
             this.dirtyNum = 0
-          }
-          if (!this.processing) {
-            this.persistDirtys = {}
-            this.processing = true
           }
           callback(draft)
           if (isFn(this.controller.computeState)) {
@@ -111,13 +112,13 @@ export const createStateModel = <State = {}, Props = {}>(
           }
           const draftKeys = Object.keys(draft || {})
           const stateKeys = Object.keys(this.state || {})
+
           each(
             draftKeys.length > stateKeys.length ? draft : this.state,
             (value, key) => {
-              if (!isEqual(value, draft[key])) {
+              if (!isEqual(this.state[key], draft[key])) {
                 this.state[key] = draft[key]
                 this.dirtys[key] = true
-                this.persistDirtys[key] = true
                 this.dirtyNum++
               }
             }
@@ -129,7 +130,10 @@ export const createStateModel = <State = {}, Props = {}>(
             }
           }
           if (this.dirtyNum > 0 && !silent) {
-            if (this.batching) return
+            if (this.batching) {
+              this.stackCount--
+              return
+            }
             this.notify(this.getState())
             this.dirtys = {}
             this.dirtyNum = 0
@@ -153,12 +157,10 @@ export const createStateModel = <State = {}, Props = {}>(
                 if (op === 'replace') {
                   if (!isEqual(this.state[path[0]], value)) {
                     this.dirtys[path[0]] = true
-                    this.persistDirtys[path[0]] = true
                     this.dirtyNum++
                   }
                 } else {
                   this.dirtys[path[0]] = true
-                  this.persistDirtys[path[0]] = true
                   this.dirtyNum++
                 }
               })
@@ -171,7 +173,10 @@ export const createStateModel = <State = {}, Props = {}>(
             }
           }
           if (this.dirtyNum > 0 && !silent) {
-            if (this.batching) return
+            if (this.batching) {
+              this.stackCount--
+              return
+            }
             this.notify(this.getState())
             this.dirtys = {}
             this.dirtyNum = 0
@@ -179,24 +184,29 @@ export const createStateModel = <State = {}, Props = {}>(
             //2. 自己监听自己，自己修改自己的状态，希望触发onFieldChange
           }
         }
+
+        this.stackCount--
+        if (!this.stackCount) {
+          this.prevState = clone(this.state)
+        }
       }
     }
     /**
      * 当前操作的变化情况
      */
-    hasChanged = (key?: string) =>
+    isDirty = (key?: string) =>
       key ? this.dirtys[key] === true : this.dirtyNum > 0
+
+    getDirtyInfo = () => this.dirtys
+
     /**
      *
      *在一组操作过程中的变化情况
      */
-    hasChangedInSequence = (key?: string) =>
-      key
-        ? this.persistDirtys[key]
-        : Object.keys(this.persistDirtys || {}).length > 0
-
-    getChanged = () => this.dirtys
-
-    getChangedInSequence = () => this.persistDirtys
+    hasChanged = (key?: string) => {
+      return key
+        ? !isEqual(this.prevState[key], this.state[key])
+        : !isEqual(this.prevState, this.state)
+    }
   }
 }

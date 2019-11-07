@@ -105,7 +105,7 @@ export interface IStateModelFactory<S, P> {
   displayName?: string
 }
 
-export interface IFieldState {
+export interface IFieldState<FieldProps = any> {
   displayName?: string
   name: string
   path: string
@@ -137,11 +137,11 @@ export interface IFieldState {
   required: boolean
   mounted: boolean
   unmounted: boolean
-  props: {}
+  props: FieldProps
 }
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
-export interface IFieldStateProps {
+export interface IFieldStateProps<FieldProps = any> {
   path?: FormPathPattern
   nodePath?: FormPathPattern
   dataPath?: FormPathPattern
@@ -149,7 +149,7 @@ export interface IFieldStateProps {
   value?: any
   values?: any[]
   initialValue?: any
-  props?: {}
+  props?: FieldProps
   rules?: ValidatePatternRules[]
   required?: boolean
   editable?: boolean
@@ -173,7 +173,7 @@ export const isVirtualFieldState = (
 export const isStateModel = (target: any): target is IModel =>
   target && isFn(target.getState)
 
-export interface IFormState {
+export interface IFormState<FormProps = any> {
   pristine: boolean
   valid: boolean
   invalid: boolean
@@ -188,7 +188,7 @@ export interface IFormState {
   initialValues: {}
   mounted: boolean
   unmounted: boolean
-  props: {}
+  props: FormProps
 }
 
 export type FormStateDirtyMap = StateDirtyMap<IFormState>
@@ -204,12 +204,13 @@ export interface IFormCreatorOptions extends IFormStateProps {
   useDirty?: boolean
   validateFirst?: boolean
   editable?: boolean
+  onChange?: (values: IFormState['values']) => void
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
 }
 
-export interface IVirtualFieldState {
+export interface IVirtualFieldState<FieldProps = any> {
   name: string
   path: string
   displayName?: string
@@ -218,16 +219,16 @@ export interface IVirtualFieldState {
   display: boolean
   mounted: boolean
   unmounted: boolean
-  props: {}
+  props: FieldProps
 }
 export type VirtualFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
-export interface IVirtualFieldStateProps {
+export interface IVirtualFieldStateProps<FieldProps = any> {
   path?: FormPathPattern
   dataPath?: FormPathPattern
   nodePath?: FormPathPattern
   name?: string
-  props?: {}
+  props?: FieldProps
   onChange?: (fieldState: IVirtualField) => void
 }
 
@@ -251,7 +252,7 @@ export interface IMutators {
   change(...values: any[]): any
   focus(): void
   blur(): void
-  push(value: any): any[]
+  push(value?: any): any[]
   pop(): any[]
   insert(index: number, value: any): any[]
   remove(index: number | string): any
@@ -270,9 +271,9 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   displayName?: string
   dirtyNum: number
   dirtys: StateDirtyMap<S>
-  persistDirtys: StateDirtyMap<S>
+  prevState: S
   batching: boolean
-  processing: boolean
+  stackCount: number
   controller: StateModel<S>
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
@@ -280,9 +281,8 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   unsafe_getSourceState: (callback?: (state: S) => any) => any
   unsafe_setSourceState: (callback?: (state: S) => void) => void
   hasChanged: (key?: string) => boolean
-  hasChangedInSequence: (key?: string) => boolean
-  getChanged: () => StateDirtyMap<S>
-  getChangedInSequence: (key?: string) => StateDirtyMap<S>
+  isDirty: (key?: string) => boolean
+  getDirtyInfo: () => StateDirtyMap<S>
 }
 
 export type IField = IModel<IFieldState, IFieldStateProps>
@@ -298,11 +298,12 @@ export interface IForm {
   clearErrors: (pattern?: FormPathPattern) => void
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
-  setFormState(callback?: (state: IFormState) => any): void
+  setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
   getFormState(callback?: (state: IFormState) => any): any
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldState) => void,
+    silent?: boolean
   ): void
   getFieldState(
     path: FormPathPattern,

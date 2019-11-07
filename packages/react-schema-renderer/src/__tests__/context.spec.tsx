@@ -1,13 +1,20 @@
 import React from 'react'
-import SchemaForm, {
-  Field,
+import {
   registerFormField,
   connect,
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
   FormProvider,
-  FormConsumer,
-  createFormActions
+  FormConsumer
 } from '../index'
-import { render, fireEvent, act } from '@testing-library/react'
+import { render, fireEvent, act, wait } from '@testing-library/react'
+
+const sleep = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
+}
 
 beforeEach(() => {
   registerFormField(
@@ -23,17 +30,17 @@ test('submit by form consumer', async () => {
       <SchemaForm
         actions={actions}
         onSubmit={async () => {
-          await sleep(200)
+          await sleep(100)
         }}
       >
         <Field name="aaa" type="string" />
       </SchemaForm>
-      <FormConsumer selector={['submitting', 'submitted']}>
-        {({ status, submit }) => {
+      <FormConsumer>
+        {({ submit, status }) => {
           if (status === 'submitting') {
             return <div>Submitting</div>
           } else {
-            return <button onClick={submit}>Submit</button>
+            return <button onClick={() => submit()}>Submit</button>
           }
         }}
       </FormConsumer>
@@ -41,13 +48,12 @@ test('submit by form consumer', async () => {
   )
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
   act(() => {
     fireEvent.click(queryByText('Submit'))
   })
-  await sleep(33)
+  await wait()
   expect(queryByText('Submitting')).toBeVisible()
-  await sleep(300)
+  await sleep(1000)
   expect(queryByText('Submitting')).toBeNull()
-  expect(queryByText('Submit')).toBeVisible()
+  expect(queryByText('Submit')).not.toBeUndefined()
 })

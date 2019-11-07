@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import SchemaForm, {
-  Field,
+import React, { Fragment, useState, useEffect } from 'react'
+import {
   registerFormField,
   connect,
-  registerFieldMiddleware,
+  FormPath,
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
   createFormActions,
-  FormPath
+  registerFieldMiddleware
 } from '../index'
+import { render, wait, act, fireEvent } from '@testing-library/react'
 import { filter } from 'rxjs/operators'
-import { render, fireEvent, act } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -28,7 +29,11 @@ registerFieldMiddleware(Field => {
 registerFormField(
   'string',
   connect()(props =>
-    props.disabled ? 'Disabled' : <input {...props} value={props.value || ''} />
+    props.disabled ? (
+      <span>Disabled</span>
+    ) : (
+      <input {...props} value={props.value || ''} />
+    )
   )
 )
 
@@ -51,28 +56,30 @@ test('onFormInit setFieldState', async () => {
         })
       }}
     >
-      <Field name="aaa" type="string" />
-      <button type="submit" data-testid="btn">
-        Submit
-      </button>
+      <Fragment>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
     </SchemaForm>
   )
 
   const { getByText, getByTestId, queryByText } = render(<TestComponent />)
 
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeVisible()
-  await sleep(33)
+  await wait()
   fireEvent.click(getByTestId('btn'))
-  await sleep(33)
-  expect(getByText('field is required')).toBeVisible()
-  await sleep(33)
+  await wait()
+  expect(getByText('This field is required')).toBeVisible()
+  await wait()
   actions.setFieldState('aaa', state => {
     state.rules = []
   })
-  await sleep(33)
+  await wait()
   fireEvent.click(getByTestId('btn'))
-  await sleep(33)
+  await wait()
   expect(queryByText('field is required')).toBeNull()
 })
 
@@ -85,16 +92,18 @@ test('init triggers', async () => {
           $('onFieldChange', 'aaa').subscribe(callback)
         }}
       >
-        <Field name="aaa" type="string" />
-        <button type="submit" data-testid="btn">
-          Submit
-        </button>
+        <Fragment>
+          <Field name="aaa" type="string" />
+          <button type="submit" data-testid="btn">
+            Submit
+          </button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
@@ -118,16 +127,18 @@ test('onFieldChange will trigger with initialValues', async () => {
           $('onFieldChange', 'aaa').subscribe(callback)
         }}
       >
-        <Field name="aaa" type="string" />
-        <button type="submit" data-testid="btn">
-          Submit
-        </button>
+        <Fragment>
+          <Field name="aaa" type="string" />
+          <button type="submit" data-testid="btn">
+            Submit
+          </button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(callback).toHaveBeenCalledTimes(2)
   expect(callback.mock.calls[0][0].value).toBe(undefined)
   expect(callback.mock.calls[1][0].value).toBe(123)
@@ -145,16 +156,18 @@ test('setFieldState x-props with onFormInit', async () => {
           })
         }}
       >
-        <Field name="aaa" type="string" x-props={{ disabled: false }} />
-        <button type="submit" data-testid="btn">
-          Submit
-        </button>
+        <Fragment>
+          <Field name="aaa" type="string" x-props={{ disabled: false }} />
+          <button type="submit" data-testid="btn">
+            Submit
+          </button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByText('Disabled')).toBeVisible()
 })
 
@@ -183,9 +196,9 @@ test('getFieldState with onFieldChange', async () => {
     )
   }
   const { queryByTestId } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   fireEvent.change(queryByTestId('this is aa'), { target: { value: '333' } })
-  await sleep(33)
+  await wait()
   expect(aaValue).toBe('333')
 })
 
@@ -203,18 +216,20 @@ test('set errors in effects', async () => {
         }}
         onSubmit={callback}
       >
-        <Field name="aaa" type="string" />
-        <button type="submit" data-testid="btn">
-          Submit
-        </button>
+        <Fragment>
+          <Field name="aaa" type="string" />
+          <button type="submit" data-testid="btn">
+            Submit
+          </button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   fireEvent.click(queryByTestId('btn'))
-  await sleep(33)
+  await wait()
   expect(callback).toHaveBeenCalledTimes(0)
 })
 
@@ -225,33 +240,35 @@ test('setFieldState from buffer', async () => {
       <SchemaForm
         effects={($, { setFieldState }) => {
           $('onFormInit').subscribe(() => {
-            setFieldState(FormPath.match('*'), state => {
-              state.title = '1123'
+            setFieldState(FormPath.match('*') as any, state => {
+              ;(state as any).title = '1123'
             })
           })
           $('onFieldChange', 'kkk').subscribe(() => {
-            setFieldState(FormPath.match('dd.*'), state => {
+            setFieldState(FormPath.match('dd.*') as any, state => {
               state.visible = false
             })
           })
         }}
         onSubmit={callback}
       >
-        <Field type="object" name="dd" title="DD">
-          <Field type="string" name="bbb" title="ccc" />
-        </Field>
-        <Field
-          type="string"
-          name="kkk"
-          title="String"
-          x-props={{ 'data-testid': 'test' }}
-        />
+        <Fragment>
+          <Field type="object" name="dd" title="DD">
+            <Field type="string" name="bbb" title="ccc" />
+          </Field>
+          <Field
+            type="string"
+            name="kkk"
+            title="String"
+            x-props={{ 'data-testid': 'test' }}
+          />
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByTestId('test')).toBeVisible()
 })
 
@@ -274,7 +291,7 @@ test('filter first onFieldChange', async () => {
   }
 
   render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(sub1).toHaveBeenCalledTimes(0)
   expect(sub2).toHaveBeenCalledTimes(1)
 })

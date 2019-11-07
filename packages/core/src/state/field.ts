@@ -77,15 +77,14 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
     readRules({ rules, required }: IFieldStateProps) {
       let newRules = isValid(rules) ? clone(toArr(rules)) : this.state.rules
       if (isValid(required)) {
-        if (required) {
-          if (!newRules.some(rule => rule && rule.required)) {
-            newRules.push({ required: true })
-          }
-        } else {
-          newRules = newRules.filter(rule => rule && !rule.required)
+        if (
+          required &&
+          !newRules.some(rule => rule && rule.required !== undefined)
+        ) {
+          newRules.push({ required })
         }
       } else {
-        required = newRules.some(rule => rule && rule.required)
+        required = newRules.some(rule => rule && rule.required === true)
       }
       return {
         rules: newRules,
