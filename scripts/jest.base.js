@@ -26,7 +26,7 @@ module.exports = {
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
     require.resolve('@testing-library/react/cleanup-after-each'),
-    './scripts/global.js'
+    './scripts/global.ts'
   ],
   moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {

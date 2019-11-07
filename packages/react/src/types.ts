@@ -40,6 +40,7 @@ export interface IFormProps<
   EffectActions = {}
 > {
   value?: Value
+  defaultValue?: DefaultValue
   initialValues?: DefaultValue
   actions?: EffectActions
   effects?: IFormEffect<EffectPayload, EffectActions>
@@ -170,7 +171,7 @@ export interface IFormAsyncActions {
   ): Promise<any>
   getFormGraph(): Promise<IFormGraph>
   setFormGraph(graph: IFormGraph): Promise<void>
-  subscribe(callback?: FormHeartSubscriber): Promise<void>
+  subscribe(callback?: FormHeartSubscriber): Promise<number>
   unsubscribe(id: number): Promise<void>
   notify: <T>(type: string, payload: T) => Promise<void>
   dispatch: <T>(type: string, payload: T) => void

@@ -116,6 +116,7 @@ export const registerFieldMiddleware = deprecate<
 >(function registerFieldMiddleware(
   ...wrappers: ISchemaFieldWrapper<ISchemaFieldComponentProps>[]
 ) {
+  registry.wrappers = registry.wrappers.concat(wrappers)
   each<ISchemaFormRegistry['fields'], ISchemaFieldComponent>(
     registry.fields,
     (component, key) => {
