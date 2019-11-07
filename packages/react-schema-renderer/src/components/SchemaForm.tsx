@@ -26,9 +26,9 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
             formComponent,
             {
               ...formComponentProps,
-              onSubmit: (e) => {
-                if(e && e.preventDefault) e.preventDefault();
-                form.submit()
+              onSubmit: e => {
+                if (e && e.preventDefault) e.preventDefault()
+                form.submit().catch(e => console.warn(e))
               },
               onReset: () => {
                 form.reset({ validate: false, forceClear: false })

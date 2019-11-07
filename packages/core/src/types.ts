@@ -204,6 +204,7 @@ export interface IFormCreatorOptions extends IFormStateProps {
   useDirty?: boolean
   validateFirst?: boolean
   editable?: boolean
+  onChange?: (values: IFormState['values']) => void
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
