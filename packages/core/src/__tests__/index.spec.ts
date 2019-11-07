@@ -579,6 +579,31 @@ describe('setFormState', () => {
       props: { hello: 'world' }
     })
   })
+
+  test('set with slient', async () => {
+    const fieldChange = jest.fn()
+    const formChange = jest.fn()
+    const form = createForm({
+      lifecycles: [
+        new FormLifeCycle(LifeCycleTypes.ON_FIELD_CHANGE, fieldChange),
+        new FormLifeCycle(LifeCycleTypes.ON_FORM_CHANGE, formChange)
+      ]
+    })
+
+    form.registerField({ path: 'a' })
+
+    form.setFormState(state => {
+      state.values = { a: '1234' }
+    })
+    expect(form.getFormState((state) => state.values)).toEqual({ a: '1234' })
+    expect(fieldChange).toBeCalledTimes(2)
+    expect(formChange).toBeCalledTimes(2)
+
+    form.setFormState((state) => state.values = { a: '5678' }, true)
+    expect(form.getFormState((state) => state.values)).toEqual({ a: '5678' })
+    expect(formChange).toBeCalledTimes(2)
+    expect(fieldChange).toBeCalledTimes(2)    
+  })
 })
 
 describe('getFormState', () => {
@@ -619,6 +644,24 @@ describe('setFieldState', () => {
     const state = form.getFieldState('a')
     form.setFieldState('a')
     expect(form.getFieldState('a')).toEqual(state)
+  })
+
+  test('set with slient', async () => {
+    const fieldChange = jest.fn()
+    const form = createForm({
+      lifecycles: [
+        new FormLifeCycle(LifeCycleTypes.ON_FIELD_CHANGE, fieldChange),
+      ]
+    })
+    form.registerField({ path: 'a' })
+    form.getFieldState('a')  
+    form.setFieldState('a', state => (state.value = '1234'))
+    expect(form.getFieldState('a', state => state.value)).toEqual('1234')
+    expect(fieldChange).toBeCalledTimes(2)
+
+    form.setFieldState('a', state => (state.value = '5678'), true)
+    expect(form.getFieldState('a', state => state.value)).toEqual('5678')
+    expect(fieldChange).toBeCalledTimes(2)    
   })
 
   test('validating and loading', () => {
