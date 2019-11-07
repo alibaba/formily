@@ -9,7 +9,6 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  deprecate,
   isObj
 } from '@uform/shared'
 import {
@@ -951,24 +950,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
     setFormGraph,
     setFieldValue,
     unsafe_do_not_use_transform_data_path: transformDataPath, //eslint-disable-line
-    setValue: deprecate(
-      setFieldValue,
-      'setValue',
-      'Please use the setFieldValue.'
-    ),
     getFieldValue,
-    getValue: deprecate(
-      getFieldValue,
-      'getValue',
-      'Please use the getFieldValue.'
-    ),
     setFieldInitialValue,
     getFieldInitialValue,
-    getInitialValue: deprecate(
-      getFieldInitialValue,
-      'getInitialValue',
-      'Please use the getFieldInitialValue.'
-    ),
     subscribe: (callback?: FormHeartSubscriber) => {
       return heart.subscribe(callback)
     },
