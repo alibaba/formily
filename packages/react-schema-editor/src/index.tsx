@@ -4,6 +4,7 @@ import { jsonToSchema } from './utils'
 import { SchemaTree } from './components/SchemaTree'
 import { SchemaCode } from './components/SchemaCode'
 import json from './utils/schema'
+import '@alifd/next/dist/next.css'
 const { Row, Col } = Grid
 
 export const SchemaEditor: React.FC = () => {
