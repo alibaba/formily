@@ -47,16 +47,26 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
 
   private context: Context
 
+  private beforeNotify?: (...args: any[]) => void
+
+  private afterNotify?: (...args: any[]) => void
+
   constructor({
     lifecycles,
-    context
+    context,
+    beforeNotify,
+    afterNotify
   }: {
     lifecycles?: FormLifeCycle[]
     context?: Context
-  }) {
+    beforeNotify?: (...args: any[]) => void
+    afterNotify?: (...args: any[]) => void
+  } = {}) {
     super()
     this.lifecycles = this.buildLifeCycles(lifecycles || [])
     this.context = context
+    this.beforeNotify = beforeNotify
+    this.afterNotify = afterNotify
   }
 
   buildLifeCycles(lifecycles: FormLifeCycle[]) {
@@ -77,6 +87,9 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
 
   publish = <P, C>(type: any, payload: P, context?: C) => {
     if (isStr(type)) {
+      if (isFn(this.beforeNotify)) {
+        this.beforeNotify(type, payload, context)
+      }
       this.lifecycles.forEach(lifecycle => {
         lifecycle.notify(type, payload, context || this.context)
       })
@@ -84,6 +97,9 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
         type,
         payload
       })
+      if (isFn(this.afterNotify)) {
+        this.afterNotify(type, payload, context)
+      }
     }
   }
 }

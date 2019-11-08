@@ -2,8 +2,7 @@ import {
   FormEffectHooks,
   createEffectHook,
   createFormActions,
-  createAsyncFormActions,
-  filterChanged
+  createAsyncFormActions
 } from './shared'
 export * from '@uform/core'
 export * from './components/Form'
@@ -18,7 +17,6 @@ export * from './hooks/useVirtualField'
 export * from './types'
 
 export {
-  filterChanged,
   FormEffectHooks,
   createEffectHook,
   createFormActions,

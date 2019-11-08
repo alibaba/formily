@@ -4,7 +4,9 @@ import {
   isFn,
   each,
   globalThisPolyfill,
-  Subscribable
+  Subscribable,
+  FormPath,
+  FormPathPattern
 } from '@uform/shared'
 import produce, { Draft } from 'immer'
 import { IStateModelFactory, StateDirtyMap, IModel, StateModel } from '../types'
@@ -180,8 +182,6 @@ export const createStateModel = <State = {}, Props = {}>(
             this.notify(this.getState())
             this.dirtys = {}
             this.dirtyNum = 0
-            //1. onFieldChange内的setFormValuesIn中不希望重置当前字段的dirtymap，如果不重置就会死循环
-            //2. 自己监听自己，自己修改自己的状态，希望触发onFieldChange
           }
         }
 
@@ -203,9 +203,12 @@ export const createStateModel = <State = {}, Props = {}>(
      *
      *在一组操作过程中的变化情况
      */
-    hasChanged = (key?: string) => {
-      return key
-        ? !isEqual(this.prevState[key], this.state[key])
+    hasChanged = (path?: FormPathPattern) => {
+      return path
+        ? !isEqual(
+            FormPath.getIn(this.prevState, path),
+            FormPath.getIn(this.state, path)
+          )
         : !isEqual(this.prevState, this.state)
     }
   }

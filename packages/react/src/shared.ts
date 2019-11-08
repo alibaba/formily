@@ -1,10 +1,4 @@
-import {
-  isFn,
-  isEqual,
-  FormPath,
-  globalThisPolyfill,
-  Subscribable
-} from '@uform/shared'
+import { isFn, FormPath, globalThisPolyfill, Subscribable } from '@uform/shared'
 import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter } from 'rxjs/internal/operators/filter'
@@ -24,6 +18,7 @@ export const createFormActions = (): IFormActions => {
   return createActions(
     'submit',
     'reset',
+    'watch',
     'validate',
     'setFormState',
     'getFormState',
@@ -42,23 +37,11 @@ export const createFormActions = (): IFormActions => {
   ) as IFormActions
 }
 
-export const filterChanged = (key?: string) => {
-  const caches = {}
-  return filter<any>(x => {
-    if (!x) return true
-    const old = caches[x.name] || {}
-    const result = key
-      ? isEqual(FormPath.getIn(x, key), FormPath.getIn(old, key))
-      : isEqual(x, old)
-    caches[x.name] = x
-    return !result
-  })
-}
-
 export const createAsyncFormActions = (): IFormAsyncActions =>
   createAsyncActions(
     'submit',
     'reset',
+    'watch',
     'validate',
     'setFormState',
     'getFormState',

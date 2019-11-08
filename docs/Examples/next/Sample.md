@@ -23,6 +23,11 @@ import Printer from '@uform/printer'
 
 const actions = createFormActions()
 
+const sleep = duration =>
+  new Promise(resolve => {
+    setTimeout(resolve, duration)
+  })
+
 ReactDOM.render(
   <Printer>
     <SchemaForm
@@ -30,20 +35,21 @@ ReactDOM.render(
       actions={actions}
       labelCol={7}
       wrapperCol={12}
-      effects={($, { setFieldState }) => {
+      effects={($, { setFieldState, watch }) => {
         $('onFormMount').subscribe(() => {
           setFieldState('radio', state => {
             state.required = true
           })
         })
 
-        $('onFormChange')
-          .pipe(filterChanged('values.hello'))
-          .subscribe(state => {
+        $('onFormChange').subscribe(async state => {
+          watch(state, 'values.hello', async () => {
+            await sleep(1000)
             setFieldState('radio', state => {
               state.value = '4'
             })
           })
+        })
       }}
     >
       <Field
