@@ -769,7 +769,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
   }
 
-  function setFormState(callback?: (state: IFormState) => any, silent?: boolean) {
+  function setFormState(
+    callback?: (state: IFormState) => any,
+    silent?: boolean
+  ) {
     leadingUpdate(() => {
       state.setState(callback, silent)
     })
@@ -830,9 +833,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function setFieldValue(path: FormPathPattern, value?: any, silent?: boolean) {
-    setFieldState(path, state => {
-      state.value = value
-    }, silent)
+    setFieldState(
+      path,
+      state => {
+        state.value = value
+      },
+      silent
+    )
   }
 
   function getFieldValue(path?: FormPathPattern) {
@@ -841,10 +848,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
   }
 
-  function setFieldInitialValue(path?: FormPathPattern, value?: any, silent?: boolean) {
-    setFieldState(path, state => {
-      state.initialValue = value
-    }, silent)
+  function setFieldInitialValue(
+    path?: FormPathPattern,
+    value?: any,
+    silent?: boolean
+  ) {
+    setFieldState(
+      path,
+      state => {
+        state.initialValue = value
+      },
+      silent
+    )
   }
 
   function getFieldInitialValue(path?: FormPathPattern) {

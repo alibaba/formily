@@ -11,10 +11,11 @@ import {
 import { toArr } from '@uform/shared'
 import { render, fireEvent, wait, act } from '@testing-library/react'
 
-const sleep = (time) => {
-  return wait(() => {}, { timeout: time })
+const sleep = timeout => {	const sleep = (time) => {
+  return new Promise(resolve => {	  return wait(() => {}, { timeout: time })
+    setTimeout(resolve, timeout)	
+  })	
 }
-
 let FormCard
 beforeEach(() => {
   registerFormField(
@@ -517,7 +518,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   }
   const { queryByTestId, queryByText } = render(<TestComponent />)
 
-  await sleep(33)
+  await sleep(100)
   fireEvent.click(queryByTestId('radio-a2'))
   await wait()
   expect(queryByText('valueB-456')).toBeVisible()
