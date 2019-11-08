@@ -47,7 +47,6 @@ test('onFormInit setFieldState', async () => {
             state.rules = [
               {
                 required: true,
-                message: 'field is required'
               }
             ]
           })
@@ -70,7 +69,7 @@ test('onFormInit setFieldState', async () => {
   await wait();
   fireEvent.click(getByTestId('btn'))
   await wait();
-  expect(getByText('field is required')).toBeVisible()
+  expect(getByText('This field is required')).toBeVisible()
   await wait();
   actions.setFieldState('aaa', state => {
     state.rules = []
@@ -78,7 +77,7 @@ test('onFormInit setFieldState', async () => {
   await wait();
   fireEvent.click(getByTestId('btn'))
   await wait();
-  expect(queryByText('field is required')).toBeNull()
+  expect(queryByText('This field is required')).toBeNull()
 })
 
 test('init triggers', async () => {
