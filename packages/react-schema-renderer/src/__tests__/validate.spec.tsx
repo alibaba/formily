@@ -67,12 +67,12 @@ test('setFieldState will trigger validate', async () => {
   await wait();
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
-  expect(getByTestId('test-errors-2')).toHaveTextContent('text-2 is required')
+  expect(getByTestId('test-errors-2')).toHaveTextContent('This field is required')
   fireEvent.change(getByTestId('test-input-1'), { target: { value: '123' } })
   await wait();
   expect(getByTestId('test-input-2')).toHaveAttribute('value', '123')
   expect(getByTestId('test-errors-2')).not.toHaveTextContent(
-    'text-2 is required'
+    'This field is required'
   )
 })
 
