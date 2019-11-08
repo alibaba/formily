@@ -11,11 +11,12 @@ import {
 import { toArr } from '@uform/shared'
 import { render, fireEvent, wait, act } from '@testing-library/react'
 
-const sleep = timeout => {	const sleep = (time) => {
-  return new Promise(resolve => {	  return wait(() => {}, { timeout: time })
-    setTimeout(resolve, timeout)	
-  })	
+const sleep = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
 }
+
 let FormCard
 beforeEach(() => {
   registerFormField(
