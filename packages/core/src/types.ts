@@ -28,7 +28,7 @@ export enum LifeCycleTypes {
   ON_FORM_SUBMIT_START = 'onFormSubmitStart',
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
-  ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValueChange',
+  ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
   ON_FORM_VALIDATE_END = 'onFormValidateEnd',
   ON_FORM_INPUT_CHANGE = 'onFormInputChange',
@@ -157,13 +157,22 @@ export interface IFieldStateProps<FieldProps = any> {
 }
 
 export const isField = (target: any): target is IField =>
-  target && target.displayName === 'FieldState'
+  target &&
+  target.displayName === 'FieldState' &&
+  isFn(target.getState) &&
+  isFn(target.setState)
 
 export const isFieldState = (target: any): target is IFieldState =>
-  target && target.displayName === 'FieldState'
+  target && target.displayName === 'FieldState' && target.name && target.path
+
+export const isFormState = (target: any): target is IFormState =>
+  target && target.displayName === 'FormState' && target.name && target.path
 
 export const isVirtualField = (target: any): target is IVirtualField =>
-  target && target.displayName === 'VirtualFieldState'
+  target &&
+  target.displayName === 'VirtualFieldState' &&
+  isFn(target.getState) &&
+  isFn(target.setState)
 
 export const isVirtualFieldState = (
   target: any
@@ -296,6 +305,11 @@ export interface IForm {
     onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<IFormSubmitResult>
   clearErrors: (pattern?: FormPathPattern) => void
+  watch<T = any>(
+    target: any,
+    path: FormPathPattern | (() => T),
+    callback?: () => T
+  ): Promise<T>
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void
