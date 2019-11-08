@@ -37,7 +37,10 @@ import {
   isField,
   FormHeartSubscriber,
   LifeCycleTypes,
-  isVirtualField
+  isVirtualField,
+  isFormState,
+  isFieldState,
+  isVirtualFieldState
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'
@@ -769,7 +772,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
   }
 
-  function setFormState(callback?: (state: IFormState) => any, silent?: boolean) {
+  function setFormState(
+    callback?: (state: IFormState) => any,
+    silent?: boolean
+  ) {
     leadingUpdate(() => {
       state.setState(callback, silent)
     })
@@ -830,9 +836,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function setFieldValue(path: FormPathPattern, value?: any, silent?: boolean) {
-    setFieldState(path, state => {
-      state.value = value
-    }, silent)
+    setFieldState(
+      path,
+      state => {
+        state.value = value
+      },
+      silent
+    )
   }
 
   function getFieldValue(path?: FormPathPattern) {
@@ -841,10 +851,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
   }
 
-  function setFieldInitialValue(path?: FormPathPattern, value?: any, silent?: boolean) {
-    setFieldState(path, state => {
-      state.initialValue = value
-    }, silent)
+  function setFieldInitialValue(
+    path?: FormPathPattern,
+    value?: any,
+    silent?: boolean
+  ) {
+    setFieldState(
+      path,
+      state => {
+        state.initialValue = value
+      },
+      silent
+    )
   }
 
   function getFieldInitialValue(path?: FormPathPattern) {
@@ -930,6 +948,49 @@ export function createForm<FieldProps, VirtualFieldProps>(
     )
   }
 
+  //在subscribe中必须同步使用，否则会监听不到变化
+  function watch<T = any>(
+    target: any,
+    path: FormPathPattern | (() => T),
+    callback?: () => T
+  ): Promise<T> {
+    if (isFn(path)) {
+      callback = path as any
+      path = ''
+    }
+
+    if (!env.publishing) {
+      throw new Error(
+        'The watch function must be used synchronously in the subscribe callback.'
+      )
+    }
+
+    const resolve = () => {
+      return new Promise<T>(resolve => {
+        return setTimeout(() => {
+          if (isFn(callback)) {
+            resolve(Promise.resolve(callback()))
+          }
+        })
+      })
+    }
+
+    if (isFormState(target)) {
+      if (state.hasChanged(path)) {
+        return resolve()
+      }
+    } else if (isFieldState(target) || isVirtualFieldState(target)) {
+      const node = graph.get(target.path)
+      if (node && node.hasChanged(path)) {
+        return resolve()
+      }
+    } else {
+      throw new Error(
+        'Illegal parameter,You must pass the correct state object(FormState/FieldState/VirtualFieldState).'
+      )
+    }
+  }
+
   const state = new FormState(options)
   const validator = new FormValidator(options)
   const graph = new FormGraph({
@@ -938,6 +999,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const formApi = {
     submit,
     reset,
+    watch,
     clearErrors,
     validate,
     setFormState,
@@ -964,12 +1026,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
       heart.publish(type, payload)
     }
   }
-  const heart = new FormHeart({ ...options, context: formApi })
+  const heart = new FormHeart({
+    ...options,
+    context: formApi,
+    beforeNotify: () => {
+      env.publishing = true
+    },
+    afterNotify: () => {
+      env.publishing = false
+    }
+  })
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
     shadowStage: false,
     leadingStage: false,
+    publishing: false,
     taskQueue: [],
     taskIndexes: {},
     removeNodes: {},
