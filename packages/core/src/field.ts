@@ -473,7 +473,11 @@ export class Field implements IField {
       this.dirty = true
     } else {
       const propsRequired = this.getRequiredFromProps(published.props)
-      if (!isEmpty(propsRequired) && !isEqual(propsRequired, this.required)) {
+      const prevPropsRequired = this.getRequiredFromProps(this.props)
+      if (
+        !isEmpty(propsRequired) &&
+        !isEqual(propsRequired, prevPropsRequired)
+      ) {
         this.required = !!propsRequired
         this.errors = []
         if (this.required) {
