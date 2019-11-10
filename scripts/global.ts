@@ -1,5 +1,4 @@
 import prettyFormat from 'pretty-format'
-import '@testing-library/jest-dom/extend-expect'
 
 global['prettyFormat'] = prettyFormat
 

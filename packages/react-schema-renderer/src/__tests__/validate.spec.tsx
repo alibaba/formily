@@ -8,7 +8,21 @@ import {
   registerFieldMiddleware,
   FormPath
 } from '../index'
-import { render, fireEvent, wait, act, waitForElement, waitForDomChange } from '@testing-library/react'
+import '@testing-library/jest-dom/extend-expect'
+import {
+  render,
+  fireEvent,
+  wait,
+  act,
+  waitForElement,
+  waitForDomChange
+} from '@testing-library/react'
+
+const sleep = timeout => {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeout)
+  })
+}
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -26,7 +40,7 @@ registerFormField(
   connect()(props => (
     <input
       {...props}
-      data-testid={`test-input-${props.index}`}
+      data-testid={`test-input${props.index ? '-' + props.index : ''}`}
       value={props.value || ''}
     />
   ))
@@ -64,12 +78,14 @@ test('setFieldState will trigger validate', async () => {
   const { getByTestId } = render(<TestComponent />)
 
   fireEvent.click(getByTestId('btn'))
-  await wait();
+  await wait()
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
-  expect(getByTestId('test-errors-2')).toHaveTextContent('This field is required')
+  expect(getByTestId('test-errors-2')).toHaveTextContent(
+    'This field is required'
+  )
   fireEvent.change(getByTestId('test-input-1'), { target: { value: '123' } })
-  await wait();
+  await wait()
   expect(getByTestId('test-input-2')).toHaveAttribute('value', '123')
   expect(getByTestId('test-errors-2')).not.toHaveTextContent(
     'This field is required'
@@ -93,12 +109,12 @@ test('basic validate', async () => {
   const { getByTestId, getByText } = render(<TestComponent />)
 
   fireEvent.click(getByTestId('btn'))
-  await wait();
+  await wait()
   fireEvent.click(getByTestId('btn'))
   await wait()
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(2)
-  expect(getByText('text is required')).toBeVisible()
+  expect(getByText('This field is required')).toBeVisible()
 })
 
 test('validate in init', async () => {
@@ -139,7 +155,7 @@ test('validate in init', async () => {
   await wait()
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
-  expect(queryByText('text is required')).toBeVisible()
+  expect(queryByText('This field is required')).toBeVisible()
 })
 
 test('validate in editable false', async () => {
@@ -183,7 +199,7 @@ test('validate in editable false', async () => {
   await wait()
   expect(handleSubmit).toHaveBeenCalledTimes(0)
   expect(handleValidateFailed).toHaveBeenCalledTimes(1)
-  expect(queryByText('editable is required')).toBeVisible()
+  expect(queryByText('This field is required')).toBeVisible()
   actions.setFieldState('editable', state => {
     state.value = '123'
   })
@@ -227,7 +243,7 @@ test('modify required rules by setFieldState', async () => {
   await wait()
   fireEvent.click(queryByText('Submit'))
   await wait()
-  expect(queryByText('kk is required')).toBeVisible()
+  expect(queryByText('This field is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(1)
   expect(handleValidateFailed).toBeCalledTimes(1)
   actions.setFieldState('kk', state => {
@@ -236,7 +252,7 @@ test('modify required rules by setFieldState', async () => {
   await wait()
   fireEvent.click(queryByText('Submit'))
   await wait()
-  expect(queryByText('kk is required')).toBeNull()
+  expect(queryByText('This field is required')).toBeNull()
   expect(handleSubmit).toBeCalledTimes(2)
   expect(handleValidateFailed).toBeCalledTimes(1)
   actions.setFieldState('kk', state => {
@@ -245,7 +261,7 @@ test('modify required rules by setFieldState', async () => {
   await wait()
   fireEvent.click(queryByText('Submit'))
   await wait()
-  expect(queryByText('kk is required')).toBeVisible()
+  expect(queryByText('This field is required')).toBeVisible()
   expect(handleSubmit).toBeCalledTimes(2)
   expect(handleValidateFailed).toBeCalledTimes(2)
 })
@@ -384,7 +400,7 @@ test('dynamic switch visible', async () => {
         <Fragment>
           <Field name="aa" type="string" />
           <Field name="bb" type="string" required />
-          </Fragment>
+        </Fragment>
       </SchemaForm>
     )
   }
@@ -407,9 +423,10 @@ test('dynamic switch visible', async () => {
 
 test('async validate prevent submit', async () => {
   const onSubmitHandler = jest.fn()
+  const actions = createFormActions()
   const TestComponent = () => {
     return (
-      <SchemaForm initialValues={{ aa: '' }} onSubmit={onSubmitHandler}>
+      <SchemaForm actions={actions} initialValues={{ aa: '' }} onSubmit={onSubmitHandler}>
         <Fragment>
           <Field
             name="aa"
@@ -431,24 +448,24 @@ test('async validate prevent submit', async () => {
       </SchemaForm>
     )
   }
-  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  const { queryByTestId, queryByText } = render(<TestComponent />)
   await wait()
-  fireEvent.change(queryAllByTestId('test-input')[0], {
+  fireEvent.change(queryByTestId('test-input'), {
     target: { value: '444' }
   })
   await wait()
   fireEvent.click(queryByText('Submit'))
   fireEvent.click(queryByText('Submit'))
   fireEvent.click(queryByText('Submit'))
-  await wait()
+  await sleep(110)
   expect(queryByText('can not input 123')).toBeNull()
   expect(onSubmitHandler).toBeCalledTimes(1)
-  fireEvent.change(queryAllByTestId('test-input')[0], {
+  fireEvent.change(queryByTestId('test-input'), {
     target: { value: '123' }
   })
   await wait()
   fireEvent.click(queryByText('Submit'))
-  await wait()
+  await sleep(110)
   expect(queryByText('can not input 123')).toBeVisible()
   expect(onSubmitHandler).toBeCalledTimes(1)
 })
@@ -476,7 +493,7 @@ test('async validate side effect', async () => {
       </SchemaForm>
     )
   }
-  const { queryAllByTestId, queryByText } = render(<TestComponent />)
+  const { queryAllByTestId,queryAllByText, queryByText } = render(<TestComponent />)
   await wait()
   fireEvent.change(queryAllByTestId('test-input')[0], {
     target: { value: 'aaaaa' }
@@ -491,13 +508,11 @@ test('async validate side effect', async () => {
     target: { value: 'aaaaa' }
   })
   await wait()
-  expect(queryByText('aa is required')).toBeNull()
-  expect(queryByText('bb is required')).toBeNull()
+  expect(queryAllByText('This field is required').length).toEqual(0)
   await wait()
   fireEvent.change(queryAllByTestId('test-input')[0], {
     target: { value: '' }
   })
   await wait()
-  expect(queryByText('aa is required')).toBeVisible()
-  expect(queryByText('bb is required')).toBeNull()
+  expect(queryAllByText('This field is required').length).toEqual(1)
 })

@@ -39,8 +39,7 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout,
-  filterChanged
+  FormLayout
 } from '@uform/next'
 import { filter, combineLatest, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
@@ -64,20 +63,17 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', '*(aa,bb)')
-            .pipe(filterChanged('value'))
+          $('onFieldValueChange', '*(aa,bb)')
             .subscribe(fieldState => {
               console.log('aa或者bb发生变化了')
             })
-          $('onFieldChange', 'aa')
-            .pipe(filterChanged('value'))
+          $('onFieldValueChange', 'aa')
             .subscribe(fieldState => {
               setFieldState('bb', state => {
                 state.visible = !fieldState.value
               })
             })
-          $('onFieldChange', 'cc')
-            .pipe(filterChanged('value'))
+          $('onFieldValueChange', 'cc')
             .subscribe(fieldState => {
               setFieldState('dd', state => {
                 state.visible = !fieldState.value
@@ -96,9 +92,8 @@ const App = () => {
                 }
               })
             })
-          $('onFieldChange', 'gg')
+          $('onFieldValueChange', 'gg')
             .pipe(
-              filterChanged('value'),
               combineLatest($('onChangeOption')),
               map(([fieldState, { payload: option }]) => {
                 return {

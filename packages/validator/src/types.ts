@@ -48,10 +48,10 @@ export type ValidatePatternRules =
 
 export type CustomValidator = (
   value: any,
-  rescription: ValidateDescription
+  rescription?: ValidateDescription
 ) => ValidateResponse
 
-export type ValidateResponse =
+export type SyncValidateResponse =
   | null
   | string
   | boolean
@@ -59,6 +59,10 @@ export type ValidateResponse =
       type?: 'error' | 'warning'
       message: string
     }
+
+export type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
+
+export type AsyncValidateResponse = Promise<SyncValidateResponse>
 
 export type ValidateRulesMap = {
   [key in string]: (
