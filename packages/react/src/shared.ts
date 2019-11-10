@@ -18,7 +18,7 @@ export const createFormActions = (): IFormActions => {
   return createActions(
     'submit',
     'reset',
-    'watch',
+    'hasChanged',
     'validate',
     'setFormState',
     'getFormState',
@@ -41,7 +41,7 @@ export const createAsyncFormActions = (): IFormAsyncActions =>
   createAsyncActions(
     'submit',
     'reset',
-    'watch',
+    'hasChanged',
     'validate',
     'setFormState',
     'getFormState',

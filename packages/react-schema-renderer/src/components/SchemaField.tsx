@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from 'react'
-import { Field, VirtualField } from '@uform/react'
-import { FormPath, isFn, isStr } from '@uform/shared'
+import { Field, VirtualField,IFieldState } from '@uform/react'
+import { FormPath, isFn, isStr,isEqual } from '@uform/shared'
 import {
   ISchemaFieldProps,
   ISchemaFieldComponentProps,
@@ -8,6 +8,26 @@ import {
 } from '../types'
 import { Schema } from '../shared/schema'
 import SchemaContext, { FormComponentsContext } from '../shared/context'
+
+const computeSchemaState = (draft:IFieldState,prevState:IFieldState)=>{
+  const schema = new Schema(draft.props)
+  const prevSchema = new Schema(prevState.props)
+  const currentRequired = schema.getExtendsRequired()
+  const prevRequired = prevSchema.getExtendsRequired()
+  const currentRules = schema.getExtendsRules()
+  const prevRules = prevSchema.getExtendsRules()
+  const currentEditable = schema.getExtendsEditable()
+  const prevEditable = prevSchema.getExtendsEditable()
+  if(!isEqual(currentRequired,prevRequired)){
+    draft.required = currentRequired
+  }
+  if(!isEqual(currentRules,prevRules)){
+    draft.rules = currentRules
+  }
+  if(!isEqual(currentEditable,prevEditable)){
+    draft.selfEditable = currentEditable
+  }
+}
 
 export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
@@ -44,6 +64,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         editable={fieldSchema.getExtendsEditable()}
         required={fieldSchema.getExtendsRequired()}
         rules={fieldSchema.getExtendsRules()}
+        computeState={computeSchemaState}
       >
         {({ state, mutators, form }) => {
           const props: ISchemaFieldComponentProps = {
@@ -69,11 +90,17 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
       return <Fragment>{properties}</Fragment>
     }
     return renderChildren(props => {
-      return React.createElement(
-        formRegistry.formItemComponent,
-        props,
-        properties
-      )
+      const renderComponent = () => {
+        return React.createElement(
+          formRegistry.formItemComponent,
+          props,
+          properties
+        )
+      }
+      if (isFn(schemaRenderer)) {
+        return schemaRenderer({ ...props, renderComponent })
+      }
+      return renderComponent()
     })
   } else {
     if (isFn(finalComponentName)) {
@@ -113,12 +140,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
                 children: fieldSchema.mapProperties(
                   (schema: Schema, key: string) => {
                     const childPath = path.concat(key)
-                    return (
-                      <SchemaField
-                        key={key}
-                        path={childPath}
-                      />
-                    )
+                    return <SchemaField key={key} path={childPath} />
                   }
                 )
               }
