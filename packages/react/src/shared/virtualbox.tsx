@@ -49,12 +49,7 @@ export const createVirtualBox = <P extends unknown>(
     true
   )
 
-  const VirtualBox = ({
-    children,
-    name: fieldName,
-    render,
-    ...props
-  }: P & TVirtualBoxProps) => (
+  const VirtualBox = ({ children, name: fieldName, render, ...props }: any) => (
     <SchemaField
       type="object"
       name={fieldName}
