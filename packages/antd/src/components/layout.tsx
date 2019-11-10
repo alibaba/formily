@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useRef } from 'react'
+import React, { Component, useLayoutEffect, useRef } from 'react'
 import { createVirtualBox, createControllerBox } from '@uform/react'
 import { toArr } from '@uform/utils'
 import { IFormItemGridProps, IFormItemProps } from '@uform/types'
@@ -245,17 +245,34 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
     const split = String(text).split('%s')
-    useEffect(() => {
+    useLayoutEffect(() => {
       if (ref.current) {
-        const eles = ref.current.querySelectorAll('.text-box-field')
-        eles.forEach((el: HTMLElement) => {
-          const ctrl = el.querySelector(
-            '.ant-form-item-control>*:not(.ant-form-item-space)'
-          )
-          if (ctrl) {
-            el.style.width = getComputedStyle(ctrl).width
+        const elements = ref.current.querySelectorAll('.text-box-field')
+        const syncLayouts = Array.prototype.map.call(
+          elements,
+          (el: HTMLElement) => {
+            return [
+              el,
+              () => {
+                const ctrl = el.querySelector(
+                  '.ant-form-item-control:first-child'
+                )
+                if (ctrl) {
+                  el.style.width = ctrl.getBoundingClientRect().width + 'px'
+                }
+              }
+            ]
           }
+        )
+        syncLayouts.forEach(([el, handler]) => {
+          el.addEventListener('DOMSubtreeModified', handler)
         })
+
+        return () => {
+          syncLayouts.forEach(([el, handler]) => {
+            el.removeEventListener('DOMSubtreeModified', handler)
+          })
+        }
       }
     }, [])
 
