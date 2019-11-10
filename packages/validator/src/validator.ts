@@ -10,7 +10,8 @@ import {
   ValidateFieldOptions,
   ValidateCalculator,
   ValidateNode,
-  ValidateNodeResult
+  ValidateNodeResult,
+  SyncValidateResponse
 } from './types'
 import {
   isFn,
@@ -32,7 +33,7 @@ const ValidatorRules: ValidateRulesMap = {}
 const ValidatorFormators: ValidateFormatsMap = {}
 
 //模板引擎
-const template = (message: ValidateResponse, context: any): string => {
+const template = (message: SyncValidateResponse, context: any): string => {
   if (isStr(message)) {
     if (isFn(FormValidator.template)) {
       return FormValidator.template(message, context)

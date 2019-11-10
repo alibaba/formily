@@ -74,21 +74,56 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       }
     }
 
-    readRules({ rules, required }: IFieldStateProps) {
-      let newRules = isValid(rules) ? clone(toArr(rules)) : this.state.rules
-      if (isValid(required)) {
-        if (
-          required &&
-          !newRules.some(rule => rule && rule.required !== undefined)
-        ) {
-          newRules.push({ required })
+    readRequired(rules: any[]) {
+      for (let i = 0; i < rules.length; i++) {
+        if (rules[i].required !== undefined) {
+          return rules[i].required
         }
-      } else {
-        required = newRules.some(rule => rule && rule.required === true)
+      }
+    }
+
+    readRules({ rules, required }: IFieldStateProps, prevState: IFieldState) {
+      let newRules = isValid(rules) ? clone(toArr(rules)) : this.state.rules
+      let newRequired = required !== undefined ? required : false
+      const currentRulesRequired = this.readRequired(newRules)
+      const prevRulesRequired = this.readRequired(prevState.rules)
+      if (prevState.required !== newRequired) {
+        if (!newRules.some(rule => rule && rule.required !== undefined)) {
+          newRules.push({ required: newRequired })
+        } else {
+          newRules = newRules.reduce((buf: any[], item: any) => {
+            const keys = Object.keys(item || {})
+            if (item.required !== undefined) {
+              if (item.message !== undefined) {
+                if (keys.length > 2) {
+                  return {
+                    ...item,
+                    required: newRequired
+                  }
+                } else {
+                  return buf
+                }
+              } else {
+                if (keys.length > 1) {
+                  return {
+                    ...item,
+                    required: newRequired
+                  }
+                } else {
+                  return buf
+                }
+              }
+            }
+            return buf.concat(item)
+          }, [])
+        }
+      }
+      if (currentRulesRequired !== prevRulesRequired) {
+        newRequired = currentRulesRequired
       }
       return {
         rules: newRules,
-        required
+        required: newRequired
       }
     }
 
@@ -179,7 +214,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.invalid = false
         draft.valid = true
       }
-      const { rules, required } = this.readRules(draft)
+      const { rules, required } = this.readRules(draft, prevState)
       draft.rules = rules
       draft.required = required
     }

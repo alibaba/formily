@@ -5,7 +5,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  // FormSlot
+  FormSlot
 } from '../index'
 import { render, fireEvent, act, wait } from '@testing-library/react'
 
@@ -82,17 +82,18 @@ test('controlled initialValues', async () => {
   const { getByTestId } = render(<Component />)
   await wait()
   expect(getByTestId('type-value').textContent).toEqual('string')
-  await actions.setFieldState('foo', state => {
+  actions.setFieldState('foo', state => {
     state.value = '321'
   })
-  await actions.reset()
+  actions.reset()
   await wait()
   expect(getByTestId('value').textContent).toEqual('123')
-  await actions.setFieldState('foo', state => {
+  actions.setFieldState('foo', state => {
     state.value = '321'
   })
   await wait()
   act(() => {
+    actions.reset()
     outerSetState({ foo: '123' })
   })
   await wait()
@@ -100,184 +101,183 @@ test('controlled initialValues', async () => {
   await wait()
 })
 
+test('controlled with hooks by initalValues', async () => {
+  const onChangeHandler = jest.fn()
+  const actions = createFormActions()
+  const Component = () => {
+    const [total, setTotal] = useState(0)
+    return (
+      <div>
+        <SchemaForm
+          actions={actions}
+          initialValues={{ a3: 123 }}
+          effects={$ => {
+            $('onFieldChange', 'a3').subscribe(onChangeHandler)
+            $('onFieldChange', 'a3').subscribe(state => {
+              act(() => {
+                setTotal(state.value)
+              })
+            })
+          }}
+        >
+          <Fragment>
+            <Field type="string" name="a3" />
+            <FormSlot>
+              <div data-testid="inner-result">Total is:{total}</div>
+            </FormSlot>
+          </Fragment>
+        </SchemaForm>
+        <div data-testid="outer-result">Total is:{total}</div>
+      </div>
+    )
+  }
 
-// test('controlled with hooks by initalValues', async () => {
-//   const onChangeHandler = jest.fn()
-//   const actions = createFormActions()
-//   const Component = () => {
-//     const [total, setTotal] = useState(0)
-//     return (
-//       <div>
-//         <SchemaForm
-//           actions={actions}
-//           initialValues={{ a3: 123 }}
-//           effects={$ => {
-//             $('onFieldChange', 'a3').subscribe(onChangeHandler)
-//             $('onFieldChange', 'a3').subscribe(state => {
-//               act(() => {
-//                 setTotal(state.value)
-//               })
-//             })
-//           }}
-//         >
-//           <Fragment>
-//             <Field type="string" name="a3" />
-//             <FormSlot>
-//               <div data-testid="inner-result">Total is:{total}</div>
-//             </FormSlot>
-//           </Fragment>
-//         </SchemaForm>
-//         <div data-testid="outer-result">Total is:{total}</div>
-//       </div>
-//     )
-//   }
+  const { queryByTestId } = render(<Component />)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
+  await wait()
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
+  expect(onChangeHandler).toHaveBeenCalledTimes(2)
+  actions.setFieldState('a3', state => {
+    state.value = '456'
+  })
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
+  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  actions.reset()
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('123')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
+})
 
-//   const { queryByTestId } = render(<Component />)
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
-//   await wait()
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(2)
-//   await actions.setFieldState('a3', state => {
-//     state.value = '456'
-//   })
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-//   await actions.reset()
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('123')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-// })
+test('controlled with hooks by static value', async () => {
+  const onChangeHandler = jest.fn()
+  const actions = createFormActions()
+  const Component = () => {
+    const [total, setTotal] = useState(0)
 
-// test('controlled with hooks by static value', async () => {
-//   const onChangeHandler = jest.fn()
-//   const actions = createFormActions()
-//   const Component = () => {
-//     const [total, setTotal] = useState(0)
+    return (
+      <div>
+        <SchemaForm
+          value={{ a3: 123 }}
+          actions={actions}
+          effects={$ => {
+            $('onFieldChange', 'a3').subscribe(onChangeHandler)
+            $('onFieldChange', 'a3').subscribe(state => {
+              act(() => {
+                setTotal(state.value)
+              })
+            })
+          }}
+        >
+          <Fragment>
+            <Field type="string" name="a3" />
+            <FormSlot>
+              <div data-testid="inner-result">Total is:{total}</div>
+            </FormSlot>
+          </Fragment>
+        </SchemaForm>
+        <div data-testid="outer-result">Total is:{total}</div>
+      </div>
+    )
+  }
 
-//     return (
-//       <div>
-//         <SchemaForm
-//           value={{ a3: 123 }}
-//           actions={actions}
-//           effects={$ => {
-//             $('onFieldChange', 'a3').subscribe(onChangeHandler)
-//             $('onFieldChange', 'a3').subscribe(state => {
-//               act(() => {
-//                 setTotal(state.value)
-//               })
-//             })
-//           }}
-//         >
-//           <Fragment>
-//             <Field type="string" name="a3" />
-//             <FormSlot>
-//               <div data-testid="inner-result">Total is:{total}</div>
-//             </FormSlot>
-//           </Fragment>
-//         </SchemaForm>
-//         <div data-testid="outer-result">Total is:{total}</div>
-//       </div>
-//     )
-//   }
+  const { queryByTestId } = render(<Component />)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
+  await wait()
+  expect(onChangeHandler).toHaveBeenCalledTimes(2)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
+  actions.reset()
+  await wait()
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  actions.setFieldState('a3', state => {
+    state.value = '456'
+  })
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
+  actions.reset()
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(5)
+})
 
-//   const { queryByTestId } = render(<Component />)
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
-//   await wait()
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-//   actions.reset()
-//   await wait()
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-//   await actions.setFieldState('a3', state => {
-//     state.value = '456'
-//   })
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('123')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(5)
-//   await actions.reset()
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(5)
-// })
+test('controlled with hooks by dynamic value', async () => {
+  const onChangeHandler = jest.fn()
+  const actions = createFormActions()
+  const Component = () => {
+    const [total, setTotal] = useState('123')
 
-// test('controlled with hooks by dynamic value', async () => {
-//   const onChangeHandler = jest.fn()
-//   const actions = createFormActions()
-//   const Component = () => {
-//     const [total, setTotal] = useState('123')
+    return (
+      <div>
+        <SchemaForm
+          value={{ a3: total }}
+          actions={actions}
+          effects={$ => {
+            $('onFieldChange', 'a3').subscribe(onChangeHandler)
+            $('onFieldChange', 'a3').subscribe(state => {
+              act(() => {
+                setTotal(state.value)
+              })
+            })
+          }}
+        >
+          <Fragment>
+            <Field type="string" name="a3" />
+            <FormSlot>
+              <div data-testid="inner-result">Total is:{total}</div>
+            </FormSlot>
+          </Fragment>
+        </SchemaForm>
+        <div data-testid="outer-result">Total is:{total}</div>
+      </div>
+    )
+  }
 
-//     return (
-//       <div>
-//         <SchemaForm
-//           value={{ a3: total }}
-//           actions={actions}
-//           effects={$ => {
-//             $('onFieldChange', 'a3').subscribe(onChangeHandler)
-//             $('onFieldChange', 'a3').subscribe(state => {
-//               act(() => {
-//                 setTotal(state.value)
-//               })
-//             })
-//           }}
-//         >
-//           <Fragment>
-//             <Field type="string" name="a3" />
-//             <FormSlot>
-//               <div data-testid="inner-result">Total is:{total}</div>
-//             </FormSlot>
-//           </Fragment>
-//         </SchemaForm>
-//         <div data-testid="outer-result">Total is:{total}</div>
-//       </div>
-//     )
-//   }
-
-//   const { queryByTestId } = render(<Component />)
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-//   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
-//   await wait()
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(2)
-//   actions.reset()
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(2)
-//   await actions.setFieldState('a3', state => {
-//     state.value = '456'
-//   })
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-//   await actions.reset()
-//   await wait()
-//   expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
-//   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-//   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-//   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-// })
+  const { queryByTestId } = render(<Component />)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
+  await wait()
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
+  expect(onChangeHandler).toHaveBeenCalledTimes(2)
+  actions.reset()
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  await actions.setFieldState('a3', state => {
+    state.value = '456'
+  })
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
+  await actions.reset()
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(5)
+})
 
 test('invariant initialValues will not be changed when form rerender', async () => {
   const Component = () => {
@@ -301,7 +301,7 @@ test('invariant initialValues will not be changed when form rerender', async () 
             />
             <Field type="name-string" name="a3" x-props={{ name: 'a3' }} />
             <button type="submit">Click</button>
-            </Fragment>
+          </Fragment>
         </SchemaForm>
       </div>
     )

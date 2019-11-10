@@ -738,7 +738,7 @@ describe('setFieldState', () => {
     ]
     form.setFieldState('a', state => (state.rules = customValidator))
     const rules = form.getFieldState('a', state => state.rules)
-    expect(rules).toEqual([...customValidator, { required: true }])
+    expect(rules).toEqual([...customValidator])
   })
 
   test('pristine', () => {
