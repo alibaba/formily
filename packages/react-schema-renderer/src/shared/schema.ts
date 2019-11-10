@@ -95,18 +95,18 @@ export class Schema implements ISchema {
       return this
     }
     let res: Schema = this
-    let suc = 0
-    path = FormPath.parse(path)
-    path.forEach(key => {
+    let index = 0
+    let newPath = FormPath.parse(path)
+    newPath.forEach(key => {
       if (res && !isEmpty(res.properties)) {
-        res = res.properties[key]
-        suc++
+        const lastKey = newPath.segments.slice(index).join('.')
+        res = res.properties[key] || res.properties[lastKey]
       } else if (res && !isEmpty(res.items) && numberRE.test(key as string)) {
         res = isArr(res.items) ? res.items[key] : res.items
-        suc++
       }
+      index++
     })
-    return suc === path.length ? res : undefined
+    return res
   }
 
   merge(props: {}) {
