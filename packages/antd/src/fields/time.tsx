@@ -7,7 +7,7 @@ registerFormField(
   'time',
   connect({
     getValueFromEvent(_, value) {
-      return value
+      return value ? value : null
     },
     getProps: (props, fieldProps) => {
       const { value, disabled = false } = props

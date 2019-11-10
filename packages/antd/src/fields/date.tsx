@@ -37,17 +37,15 @@ const mapMomentValue = (props, fieldProps) => {
   const { value, showTime = false } = props
   try {
     if (!fieldProps.editable) return props
-    if (isStr(value) && value) {
-      props.value = moment(
-        value,
-        showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-      )
+    if (isStr(value)) {
+      props.value = value
+        ? moment(value, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
+        : null
     } else if (isArr(value) && value.length) {
-      props.value = value.map(
-        item =>
-          (item &&
-            moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
-          ''
+      props.value = value.map(item =>
+        item
+          ? moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
+          : null
       )
     }
   } catch (e) {

@@ -50,7 +50,7 @@ const App = () => {
             <Field
               type="radio"
               enum={[
-                { label: '选项1', value: '1' },
+                { label: <span style={{color:'red'}}>选项1</span>, value: '1' },
                 { label: '选项2', value: '2' },
                 { label: '选项3', value: '3' },
                 { label: '选项4', value: '4' }
