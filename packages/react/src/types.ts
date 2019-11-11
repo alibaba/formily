@@ -128,11 +128,7 @@ export interface IFormActions {
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): void
-  watch<T = any>(
-    target: any,
-    path: FormPathPattern | (() => T),
-    callback?: () => T
-  ): Promise<T>
+  hasChanged(target: any, path: FormPathPattern): boolean
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void
   getFormState(callback?: (state: IFormState) => any): any
@@ -162,11 +158,7 @@ export interface IFormAsyncActions {
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): Promise<void>
-  watch<T = any>(
-    target: any,
-    path: FormPathPattern | (() => T),
-    callback?: () => T
-  ): Promise<T>
+  hasChanged(target: any, path: FormPathPattern): Promise<boolean>
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): Promise<void>

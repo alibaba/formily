@@ -286,7 +286,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
   function registerVirtualField({
     name,
     path,
-    props
+    props,
+    computeState,
+    useDirty
   }: IVirtualFieldStateProps): IVirtualField {
     let nodePath = FormPath.parse(path || name)
     let dataPath = transformDataPath(nodePath)
@@ -296,7 +298,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       field = new VirtualFieldState({
         nodePath,
         dataPath,
-        useDirty: options.useDirty
+        computeState,
+        useDirty: isValid(useDirty) ? useDirty : options.useDirty
       })
       field.subscription = {
         notify: onVirtualFieldChange({ field, path: nodePath })
@@ -331,6 +334,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     required,
     rules,
     editable,
+    computeState,
+    useDirty,
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
@@ -341,7 +346,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       field = new FieldState({
         nodePath,
         dataPath,
-        useDirty: options.useDirty
+        computeState,
+        useDirty: isValid(useDirty) ? useDirty : options.useDirty
       })
       field.subscription = {
         notify: onFieldChange({ field, path: nodePath })
@@ -644,12 +650,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   async function reset({
+    selector = '*',
     forceClear = false,
     validate = true
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
     let result: Promise<void | IFormValidateResult>
     leadingUpdate(() => {
-      graph.eachChildren(field => {
+      graph.eachChildren('', selector, field => {
         field.setState((state: IFieldState<FieldProps>) => {
           state.modified = false
           state.ruleErrors = []
@@ -949,41 +956,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   //在subscribe中必须同步使用，否则会监听不到变化
-  function watch<T = any>(
-    target: any,
-    path: FormPathPattern | (() => T),
-    callback?: () => T
-  ): Promise<T> {
-    if (isFn(path)) {
-      callback = path as any
-      path = ''
-    }
-
+  function hasChanged(target: any, path: FormPathPattern): boolean {
     if (!env.publishing) {
       throw new Error(
         'The watch function must be used synchronously in the subscribe callback.'
       )
     }
-
-    const resolve = () => {
-      return new Promise<T>(resolve => {
-        return setTimeout(() => {
-          if (isFn(callback)) {
-            resolve(Promise.resolve(callback()))
-          }
-        })
-      })
-    }
-
     if (isFormState(target)) {
-      if (state.hasChanged(path)) {
-        return resolve()
-      }
+      return state.hasChanged(path)
     } else if (isFieldState(target) || isVirtualFieldState(target)) {
       const node = graph.get(target.path)
-      if (node && node.hasChanged(path)) {
-        return resolve()
-      }
+      return node && node.hasChanged(path)
     } else {
       throw new Error(
         'Illegal parameter,You must pass the correct state object(FormState/FieldState/VirtualFieldState).'
@@ -999,7 +982,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const formApi = {
     submit,
     reset,
-    watch,
+    hasChanged,
     clearErrors,
     validate,
     setFormState,

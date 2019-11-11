@@ -129,3 +129,18 @@ export function createControllerBox<T = {}>(
   }
   return VirtualBox
 }
+
+export const FormSlot: React.FC<{
+  name?: string
+  children?: React.ReactElement
+}> = ({ name, children }) => {
+  return (
+    <SchemaMarkupField
+      type="object"
+      name={name}
+      x-render={() => {
+        return <Fragment>{children}</Fragment>
+      }}
+    />
+  )
+}

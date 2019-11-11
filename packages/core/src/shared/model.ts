@@ -21,6 +21,7 @@ export const createStateModel = <State = {}, Props = {}>(
     public props: Props &
       DefaultProps & {
         useDirty?: boolean
+        computeState?: (draft: State, prevState: State) => void
       }
     public displayName?: string
     public dirtyNum: number
@@ -109,6 +110,9 @@ export const createStateModel = <State = {}, Props = {}>(
             this.dirtyNum = 0
           }
           callback(draft)
+          if (isFn(this.props.computeState)) {
+            this.props.computeState(draft, this.state)
+          }
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
           }
@@ -150,6 +154,9 @@ export const createStateModel = <State = {}, Props = {}>(
             this.state,
             draft => {
               callback(draft)
+              if (isFn(this.props.computeState)) {
+                this.props.computeState(draft, this.state)
+              }
               if (isFn(this.controller.computeState)) {
                 this.controller.computeState(draft, this.state)
               }
