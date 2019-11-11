@@ -153,6 +153,8 @@ export interface IFieldStateProps<FieldProps = any> {
   rules?: ValidatePatternRules[]
   required?: boolean
   editable?: boolean
+  useDirty?: boolean
+  computeState?: (draft: IFieldState, prevState: IFieldState) => void
   onChange?: (fieldState: IField) => void
 }
 
@@ -166,7 +168,7 @@ export const isFieldState = (target: any): target is IFieldState =>
   target && target.displayName === 'FieldState' && target.name && target.path
 
 export const isFormState = (target: any): target is IFormState =>
-  target && target.displayName === 'FormState' && target.name && target.path
+  target && target.displayName === 'FormState'
 
 export const isVirtualField = (target: any): target is IVirtualField =>
   target &&
@@ -236,6 +238,11 @@ export interface IVirtualFieldStateProps<FieldProps = any> {
   path?: FormPathPattern
   dataPath?: FormPathPattern
   nodePath?: FormPathPattern
+  useDirty?: boolean
+  computeState?: (
+    draft: IVirtualFieldState,
+    prevState: IVirtualFieldState
+  ) => void
   name?: string
   props?: FieldProps
   onChange?: (fieldState: IVirtualField) => void
@@ -251,6 +258,7 @@ export interface IFormSubmitResult {
 export interface IFormResetOptions {
   forceClear?: boolean
   validate?: boolean
+  selector?: FormPathPattern
 }
 
 export interface IFormGraph {
@@ -305,11 +313,7 @@ export interface IForm {
     onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<IFormSubmitResult>
   clearErrors: (pattern?: FormPathPattern) => void
-  watch<T = any>(
-    target: any,
-    path: FormPathPattern | (() => T),
-    callback?: () => T
-  ): Promise<T>
+  hasChanged(target: any, path: FormPathPattern): boolean
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any, silent?: boolean): void

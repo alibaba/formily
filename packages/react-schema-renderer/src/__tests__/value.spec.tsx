@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import { render, act, fireEvent } from '@testing-library/react'
-import SchemaForm, {
-  Field,
+import React, { Fragment, useState } from 'react'
+import {
   registerFormField,
   connect,
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
   createFormActions,
   FormSlot
 } from '../index'
+import { render, fireEvent, act, wait } from '@testing-library/react'
 
 registerFormField(
   'test-string',
@@ -44,7 +45,7 @@ test('default value', async () => {
   )
 
   const { getByTestId } = render(<Component />)
-  await sleep(33)
+  await wait()
   expect(getByTestId('type-value').textContent).toEqual('string')
 })
 
@@ -56,7 +57,7 @@ test('initialValues', async () => {
   )
 
   const { getByTestId } = render(<Component />)
-  await sleep(33)
+  await wait()
   expect(getByTestId('type-value').textContent).toEqual('string')
 })
 
@@ -79,24 +80,25 @@ test('controlled initialValues', async () => {
   }
 
   const { getByTestId } = render(<Component />)
-  await sleep(33)
+  await wait()
   expect(getByTestId('type-value').textContent).toEqual('string')
-  await actions.setFieldState('foo', state => {
+  actions.setFieldState('foo', state => {
     state.value = '321'
   })
-  await actions.reset()
-  await sleep(33)
+  actions.reset()
+  await wait()
   expect(getByTestId('value').textContent).toEqual('123')
-  await actions.setFieldState('foo', state => {
+  actions.setFieldState('foo', state => {
     state.value = '321'
   })
-  await sleep(33)
+  await wait()
   act(() => {
+    actions.reset()
     outerSetState({ foo: '123' })
   })
-  await sleep(33)
+  await wait()
   expect(getByTestId('value').textContent).toEqual('123')
-  await sleep(33)
+  await wait()
 })
 
 test('controlled with hooks by initalValues', async () => {
@@ -118,10 +120,12 @@ test('controlled with hooks by initalValues', async () => {
             })
           }}
         >
-          <Field type="string" name="a3" />
-          <FormSlot>
-            <div data-testid="inner-result">Total is:{total}</div>
-          </FormSlot>
+          <Fragment>
+            <Field type="string" name="a3" />
+            <FormSlot>
+              <div data-testid="inner-result">Total is:{total}</div>
+            </FormSlot>
+          </Fragment>
         </SchemaForm>
         <div data-testid="outer-result">Total is:{total}</div>
       </div>
@@ -132,24 +136,24 @@ test('controlled with hooks by initalValues', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
   expect(onChangeHandler).toHaveBeenCalledTimes(2)
-  await actions.setFieldState('a3', state => {
+  actions.setFieldState('a3', state => {
     state.value = '456'
   })
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('456')
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-  await actions.reset()
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('123')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  actions.reset()
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('123')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
 })
 
 test('controlled with hooks by static value', async () => {
@@ -172,10 +176,12 @@ test('controlled with hooks by static value', async () => {
             })
           }}
         >
-          <Field type="string" name="a3" />
-          <FormSlot>
-            <div data-testid="inner-result">Total is:{total}</div>
-          </FormSlot>
+          <Fragment>
+            <Field type="string" name="a3" />
+            <FormSlot>
+              <div data-testid="inner-result">Total is:{total}</div>
+            </FormSlot>
+          </Fragment>
         </SchemaForm>
         <div data-testid="outer-result">Total is:{total}</div>
       </div>
@@ -186,28 +192,28 @@ test('controlled with hooks by static value', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
-  await sleep(33)
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  await wait()
+  expect(onChangeHandler).toHaveBeenCalledTimes(2)
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
   actions.reset()
-  await sleep(33)
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  await wait()
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
   expect(onChangeHandler).toHaveBeenCalledTimes(3)
-  await actions.setFieldState('a3', state => {
+  actions.setFieldState('a3', state => {
     state.value = '456'
   })
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('123')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
-  expect(onChangeHandler).toHaveBeenCalledTimes(5)
-  await actions.reset()
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
+  actions.reset()
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
   expect(onChangeHandler).toHaveBeenCalledTimes(5)
 })
 
@@ -231,10 +237,12 @@ test('controlled with hooks by dynamic value', async () => {
             })
           }}
         >
-          <Field type="string" name="a3" />
-          <FormSlot>
-            <div data-testid="inner-result">Total is:{total}</div>
-          </FormSlot>
+          <Fragment>
+            <Field type="string" name="a3" />
+            <FormSlot>
+              <div data-testid="inner-result">Total is:{total}</div>
+            </FormSlot>
+          </Fragment>
         </SchemaForm>
         <div data-testid="outer-result">Total is:{total}</div>
       </div>
@@ -245,30 +253,30 @@ test('controlled with hooks by dynamic value', async () => {
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:123')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:123')
   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
   expect(onChangeHandler).toHaveBeenCalledTimes(2)
   actions.reset()
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:333')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:333')
-  expect(onChangeHandler).toHaveBeenCalledTimes(2)
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(3)
   await actions.setFieldState('a3', state => {
     state.value = '456'
   })
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('456')
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('456')
   expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
   expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  expect(onChangeHandler).toHaveBeenCalledTimes(4)
   await actions.reset()
-  await sleep(33)
-  expect(queryByTestId('test-input').value).toEqual('')
-  expect(queryByTestId('outer-result').textContent).toEqual('Total is:456')
-  expect(queryByTestId('inner-result').textContent).toEqual('Total is:456')
-  expect(onChangeHandler).toHaveBeenCalledTimes(3)
+  await wait()
+  expect(queryByTestId('test-input').getAttribute('value')).toEqual('')
+  expect(queryByTestId('outer-result').textContent).toEqual('Total is:')
+  expect(queryByTestId('inner-result').textContent).toEqual('Total is:')
+  expect(onChangeHandler).toHaveBeenCalledTimes(5)
 })
 
 test('invariant initialValues will not be changed when form rerender', async () => {
@@ -280,42 +288,44 @@ test('invariant initialValues will not be changed when form rerender', async () 
         <SchemaForm
           initialValues={{ a1: 'a1' }}
           onSubmit={() => {
-            act(setDisabled)
+            act(() => setDisabled(false))
           }}
         >
-          <Field type="name-string" x-props={{ name: 'a1' }} name="a1" />
-          <Field
-            type="name-string"
-            name="a2"
-            x-props={{ name: 'a2' }}
-            default={'a2'}
-          />
-          <Field type="name-string" name="a3" x-props={{ name: 'a3' }} />
-          <button type="submit">Click</button>
+          <Fragment>
+            <Field type="name-string" x-props={{ name: 'a1' }} name="a1" />
+            <Field
+              type="name-string"
+              name="a2"
+              x-props={{ name: 'a2' }}
+              default={'a2'}
+            />
+            <Field type="name-string" name="a3" x-props={{ name: 'a3' }} />
+            <button type="submit">Click</button>
+          </Fragment>
         </SchemaForm>
       </div>
     )
   }
 
   const { queryByTestId, queryByText } = render(<Component />)
-  expect(queryByTestId('test-input-a1').value).toEqual('a1')
-  expect(queryByTestId('test-input-a2').value).toEqual('a2')
-  expect(queryByTestId('test-input-a3').value).toEqual('')
+  expect(queryByTestId('test-input-a1').getAttribute('value')).toEqual('a1')
+  expect(queryByTestId('test-input-a2').getAttribute('value')).toEqual('a2')
+  expect(queryByTestId('test-input-a3').getAttribute('value')).toEqual('')
 
   fireEvent.click(queryByText('Click'))
-  await sleep(33)
+  await wait()
 
-  expect(queryByTestId('test-input-a1').value).toEqual('a1')
-  expect(queryByTestId('test-input-a2').value).toEqual('a2')
-  expect(queryByTestId('test-input-a3').value).toEqual('')
+  expect(queryByTestId('test-input-a1').getAttribute('value')).toEqual('a1')
+  expect(queryByTestId('test-input-a2').getAttribute('value')).toEqual('a2')
+  expect(queryByTestId('test-input-a3').getAttribute('value')).toEqual('')
 
   // 重新设置 SchemaForm Rerender
   fireEvent.click(queryByText('Click'))
-  await sleep(33)
+  await wait()
 
-  expect(queryByTestId('test-input-a1').value).toEqual('a1')
-  expect(queryByTestId('test-input-a2').value).toEqual('a2')
-  expect(queryByTestId('test-input-a3').value).toEqual('')
+  expect(queryByTestId('test-input-a1').getAttribute('value')).toEqual('a1')
+  expect(queryByTestId('test-input-a2').getAttribute('value')).toEqual('a2')
+  expect(queryByTestId('test-input-a3').getAttribute('value')).toEqual('')
 })
 
 test('submit with number name', async () => {
@@ -323,10 +333,12 @@ test('submit with number name', async () => {
   const Component = () => {
     return (
       <SchemaForm onSubmit={onSubmitHandler}>
-        <Field type="object" name="aaa">
-          <Field name="bbb" type="string" />
-        </Field>
-        <button type="submit">Click</button>
+        <Fragment>
+          <Field type="object" name="aaa">
+            <Field name="bbb" type="string" />
+          </Field>
+          <button type="submit">Click</button>
+        </Fragment>
       </SchemaForm>
     )
   }
@@ -335,7 +347,7 @@ test('submit with number name', async () => {
   fireEvent.change(queryByTestId('test-input'), { target: { value: '333' } })
   fireEvent.click(queryByText('Click'))
 
-  await sleep(33)
+  await wait()
   expect(onSubmitHandler).toHaveBeenCalledWith({
     aaa: {
       bbb: '333'
@@ -357,15 +369,17 @@ test('remove initial value by onFieldChange', async () => {
             })
           }}
         >
-          <Field type="string" name="a1" />
-          <Field type="string" name="a2" />
+          <Fragment>
+            <Field type="string" name="a1" />
+            <Field type="string" name="a2" />
+          </Fragment>
         </SchemaForm>
       </div>
     )
   }
   const { queryAllByTestId } = render(<Component />)
 
-  await sleep(33)
+  await wait()
 
-  expect(queryAllByTestId('test-input')[0].value).toEqual('')
+  expect(queryAllByTestId('test-input')[0].getAttribute('value')).toEqual('')
 })

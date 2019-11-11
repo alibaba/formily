@@ -35,7 +35,7 @@ ReactDOM.render(
       actions={actions}
       labelCol={7}
       wrapperCol={12}
-      effects={($, { setFieldState, watch }) => {
+      effects={($, { setFieldState, hasChanged }) => {
         $('onFormMount').subscribe(() => {
           setFieldState('radio', state => {
             state.required = true
@@ -43,12 +43,12 @@ ReactDOM.render(
         })
 
         $('onFormChange').subscribe(async state => {
-          watch(state, 'values.hello', async () => {
+          if (hasChanged(state, 'values.hello')) {
             await sleep(1000)
             setFieldState('radio', state => {
               state.value = '4'
             })
-          })
+          }
         })
       }}
     >

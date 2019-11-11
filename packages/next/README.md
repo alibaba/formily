@@ -43,7 +43,7 @@ export default () => (
           state.visible = false
         })
       })
-      FormStep.effects(['step-1', 'step-2', 'step-3'])
+      FormStep.useEffects(['step-1', 'step-2', 'step-3'])
     }}
   >
     <FormStep

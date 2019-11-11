@@ -518,6 +518,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
     )
   }
   const { queryByTestId, queryByText } = render(<TestComponent />)
+
   await sleep(100)
   fireEvent.click(queryByTestId('radio-a2'))
   await wait()

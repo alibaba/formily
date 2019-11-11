@@ -27,19 +27,21 @@ const EffectHooks = {
   }>(StateMap.ON_FORM_STEP_CURRENT_CHANGE)
 }
 
-const effects = (relations: FormPathPattern[]) => {
+const useEffects = (relations: FormPathPattern[]) => {
   const actions = createFormActions()
   return EffectHooks.onStepCurrentChange$().subscribe(({ value }) => {
     relations.forEach((pattern, index) => {
-      actions.setFieldState(pattern, (state: any) => {
-        state.display = index === value
+      setTimeout(()=>{
+        actions.setFieldState(pattern, (state: any) => {
+          state.display = index === value
+        })
       })
     })
   })
 }
 
 type StepComponentExtendsProps = StateMap & {
-  getEffects: (
+  useEffects: (
     relations: FormPathPattern[]
   ) => Observable<{
     value: number
@@ -67,9 +69,16 @@ export const FormStep: React.FC<IFormStep> &
       form.subscribe(({ type, payload }) => {
         switch (type) {
           case StateMap.ON_FORM_STEP_NEXT:
-            update(
-              ref.current + 1 > items.length - 1 ? ref.current : ref.current + 1
-            )
+            form.validate().then(({ errors }) => {
+              if (errors.length === 0) {
+                update(
+                  ref.current + 1 > items.length - 1
+                    ? ref.current
+                    : ref.current + 1
+                )
+              }
+            })
+
             break
           case StateMap.ON_FORM_STEP_PREVIOUS:
             update(ref.current - 1 < 0 ? ref.current : ref.current - 1)
@@ -94,5 +103,5 @@ export const FormStep: React.FC<IFormStep> &
 ) as any
 
 Object.assign(FormStep, StateMap, EffectHooks, {
-  effects
+  useEffects
 })
