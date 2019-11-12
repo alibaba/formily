@@ -64,6 +64,13 @@ describe('test all apis', () => {
         onChange={onChangeHandler}
         onValidateFailed={onValidateFailedHandler}
         actions={actions}
+        effects={($, { setFieldState }) => {
+          $('onChangeFieldValue').subscribe(({ name, value }) => {
+            setFieldState(name, state => {
+              state.value = value
+            })
+          })
+        }}
       >
         <Input name="aaa" required />
       </Form>
@@ -96,18 +103,23 @@ describe('test all apis', () => {
       expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
       expect(errorsEle).toBeTruthy()
     }
-    fireEvent.focus(inputEle)
     fireEvent.change(inputEle, { target: { value: '123' } })
     await actions.submit()
     expect(onSubmitHandler).toBeCalledWith({ aaa: '123' })
+    asyncActions.submit()
+    expect(onSubmitHandler).toBeCalledWith({ aaa: '123' })
   })
+
   test('reset', () => {
+    renderForm()
     actions.reset()
     expect(onResetHandler).toBeCalled()
     asyncActions.reset()
     expect(onResetHandler).toBeCalled()
   })
+
   test('validate', async () => {
+    renderForm()
     try {
       actions.validate()
     } catch (e) {
@@ -121,6 +133,7 @@ describe('test all apis', () => {
       expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
     }
   })
+
   test('setFormState', () => {
     renderForm()
     const fn = jest.fn().mockImplementation(formState => {
@@ -128,22 +141,57 @@ describe('test all apis', () => {
     })
     actions.setFormState(fn)
     expect(fn).toBeCalled()
+    asyncActions.setFormState(fn)
+    expect(fn).toBeCalled()
   })
-  test('getFormState', () => {})
-  test('setFieldState', () => {})
-  test('getFieldState', () => {})
-  test('getFormGraph', () => {})
-  test('setFormGraph', () => {})
+
+  test('getFormState', () => {
+    const { queryByTestId } = renderForm()
+    const inputEle = queryByTestId('input')
+    fireEvent.change(inputEle, { target: { value: '123' } })
+    const state = actions.getFormState()
+    expect(state.values.aaa).toEqual('123')
+  })
+
+  test('setFieldState', () => {
+    renderForm()
+    const fn = jest.fn().mockImplementation(fieldState => {
+      fieldState.value = '123'
+    })
+    actions.setFieldState('aaa', fn)
+    expect(fn).toBeCalled()
+    const state = actions.getFormState()
+    expect(state.values.aaa).toEqual('123')
+  })
+
+  test('getFieldState', () => {
+    const { queryByTestId } = renderForm()
+    const inputEle = queryByTestId('input')
+    fireEvent.change(inputEle, { target: { value: '123' } })
+    const state = actions.getFieldState('aaa')
+    expect(state.value).toEqual('123')
+  })
+
   test('subscribe', () => {})
+
   test('unsubscribe', () => {})
+
   test('notify', () => {})
-  test('dispatch', () => {})
+
+  test('dispatch', () => {
+    renderForm()
+    actions.dispatch('onChangeFieldValue', { name: 'aaa', value: '123' })
+    const state = actions.getFieldState('aaa')
+    expect(state.value).toEqual('123')
+  })
+
   test('setFieldValue', () => {})
+
   test('getFieldValue', () => {})
+
   test('setFieldInitialValue', () => {})
+
   test('getFieldInitialValue', () => {})
-  test('getSchema', () => {})
-  test('getFormSchema', () => {})
 })
 
 describe('major scenes', () => {
