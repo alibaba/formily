@@ -93,7 +93,7 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
       label={label}
       labelTextAlign={labelTextAlign}
       labelCol={label ? normalizeCol(labelCol) : undefined}
-      labelAlign={labelAlign}
+      labelAlign={labelAlign || 'left'}
       required={props.required}
       wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
       size={size}
