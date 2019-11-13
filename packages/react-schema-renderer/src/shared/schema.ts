@@ -64,7 +64,7 @@ export class Schema implements ISchema {
   public ['x-props']?: { [name: string]: any }
   public ['x-index']?: number
   public ['x-rules']?: ValidatePatternRules
-  public ['x-component']?: string | React.JSXElementConstructor<any>
+  public ['x-component']?: string
   public ['x-component-props']?: { [name: string]: any }
   public ['x-render']?: <T = ISchemaFieldComponentProps>(
     props: T & {
