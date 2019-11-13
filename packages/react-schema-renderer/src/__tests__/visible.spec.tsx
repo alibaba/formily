@@ -36,6 +36,7 @@ test('visible is false will remove react node', async () => {
   actions.setFieldState('aa', state => {
     state.visible = true
   })
+  await wait()
   expect(queryByText('123321')).toBeVisible()
 })
 
