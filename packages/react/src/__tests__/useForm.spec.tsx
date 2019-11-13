@@ -144,19 +144,18 @@ describe('useForm hook',()=>{
     expect(actionResultValues).toEqual(resultValues)
   })
 
-  // test('broadaast context', ()=>{
-  //   const broadcastInstance = new Broadcast()
-  //   const broadCastWrapper = ({ children }) => {
-  //     return <BroadcastContext.Provider value={broadcastInstance}>{children}</BroadcastContext.Provider>
-  //   }
+  test('broadaast context', ()=>{
+    const broadcastInstance = new Broadcast()
+    const broadCastWrapper = ({ children }) => {
+      return <BroadcastContext.Provider value={broadcastInstance}>{children}</BroadcastContext.Provider>
+    }
 
-  //   const form = createForm()
-  //   expect(broadcastInstance.context).toEqual(undefined)
-  //   renderHook(() => useForm({ form }), { wrapper: broadCastWrapper })
-
-  //   expect(broadcastInstance.context).toEqual({
-  //     ...form,
-  //     dispatch: form.notify
-  //   })
+    expect(broadcastInstance.context).toEqual(undefined)
+    const { result } = renderHook(() => useForm({}), { wrapper: broadCastWrapper })
+    const symbolList = Object.getOwnPropertySymbols(result.current)
+    expect({ ...broadcastInstance.context, [symbolList[0]]: true, }).toEqual({
+      ...result.current,
+      dispatch: result.current.notify,        
+    })
   })
 })
