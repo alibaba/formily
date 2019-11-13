@@ -38,7 +38,7 @@ const template = (message: SyncValidateResponse, context: any): string => {
     if (isFn(FormValidator.template)) {
       return FormValidator.template(message, context)
     }
-    return message.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, $0) => {
+    return message.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, $0) => {
       return FormPath.getIn(context, $0)
     })
   } else if (isObj(message)) {
@@ -75,7 +75,7 @@ class FormValidator {
         }
       ]
     } else if (isArr(rules)) {
-      return rules.reduce((buf, rule) => {
+      return rules.reduce((buf: any, rule) => {
         return buf.concat(this.transformRules(rule))
       }, [])
     } else if (isObj(rules)) {

@@ -32,6 +32,7 @@ export interface ValidateDescription {
   whitespace?: boolean
   enum?: any[]
   message?: string
+  [key: string]: any
 }
 
 export type ValidateRules = ValidateDescription[]
