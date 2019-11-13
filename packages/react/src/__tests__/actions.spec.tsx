@@ -8,6 +8,7 @@ import {
   IFieldProps
 } from '../index'
 import { IFormActions, IFormAsyncActions } from '../types'
+import { resolve } from 'url'
 
 const Input: React.FC<IFieldProps> = props => (
   <Field {...props}>
@@ -56,14 +57,14 @@ describe('test all apis', () => {
   let onValidateFailedHandler: any
   let onChangeHandler: any
 
-  const renderForm = (): RenderResult =>
+  const renderForm = (isAsync = false): RenderResult =>
     render(
       <Form
         onSubmit={onSubmitHandler}
         onReset={onResetHandler}
         onChange={onChangeHandler}
         onValidateFailed={onValidateFailedHandler}
-        actions={actions}
+        actions={isAsync ? asyncActions : actions}
         effects={($, { setFieldState }) => {
           $('onChangeFieldValue').subscribe(({ name, value }) => {
             setFieldState(name, state => {
@@ -106,7 +107,19 @@ describe('test all apis', () => {
     fireEvent.change(inputEle, { target: { value: '123' } })
     await actions.submit()
     expect(onSubmitHandler).toBeCalledWith({ aaa: '123' })
-    asyncActions.submit()
+  })
+
+  test('async submit', async () => {
+    const { queryByTestId } = renderForm(true)
+    const inputEle = queryByTestId('input')
+    const errorsEle = queryByTestId('field-errors')
+    try {
+      await asyncActions.submit()
+    } catch (e) {
+      expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
+      expect(errorsEle).toBeTruthy()
+    }
+    fireEvent.change(inputEle, { target: { value: '123' } })
     expect(onSubmitHandler).toBeCalledWith({ aaa: '123' })
   })
 
@@ -114,24 +127,34 @@ describe('test all apis', () => {
     renderForm()
     actions.reset()
     expect(onResetHandler).toBeCalled()
-    asyncActions.reset()
+  })
+
+  test('async reset', async () => {
+    renderForm(true)
+    await asyncActions.reset()
     expect(onResetHandler).toBeCalled()
   })
 
   test('validate', async () => {
-    renderForm()
-    try {
-      actions.validate()
-    } catch (e) {
-      expect(onValidateFailedHandler).toBeCalled()
-      expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
-    }
-    try {
-      asyncActions.validate()
-    } catch (e) {
-      expect(onValidateFailedHandler).toBeCalled()
-      expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
-    }
+    const { queryByTestId } = renderForm()
+    const errorsEle = queryByTestId('field-errors')
+    await actions.validate()
+    expect(onValidateFailedHandler).toBeCalledWith({
+      errors: [{ path: 'aaa', messages: ['This field is required'] }],
+      warnings: []
+    })
+    expect(errorsEle).toBeTruthy()
+  })
+
+  test('async valid', async () => {
+    const { queryByTestId } = renderForm(true)
+    const errorsEle = queryByTestId('field-errors')
+    await asyncActions.validate()
+    expect(onValidateFailedHandler).toBeCalledWith({
+      errors: [{ path: 'aaa', messages: ['This field is required'] }],
+      warnings: []
+    })
+    expect(errorsEle).toBeTruthy()
   })
 
   test('setFormState', () => {
@@ -141,6 +164,13 @@ describe('test all apis', () => {
     })
     actions.setFormState(fn)
     expect(fn).toBeCalled()
+  })
+
+  test('async setFormState', async () => {
+    renderForm(true)
+    const fn = jest.fn().mockImplementation(formState => {
+      formState.values.aaa = '123'
+    })
     asyncActions.setFormState(fn)
     expect(fn).toBeCalled()
   })
@@ -149,8 +179,16 @@ describe('test all apis', () => {
     const { queryByTestId } = renderForm()
     const inputEle = queryByTestId('input')
     fireEvent.change(inputEle, { target: { value: '123' } })
-    const state = actions.getFormState()
-    expect(state.values.aaa).toEqual('123')
+    const formState = actions.getFormState()
+    expect(formState.values.aaa).toEqual('123')
+  })
+
+  test('async getFormState', async () => {
+    const { queryByTestId } = renderForm(true)
+    const inputEle = queryByTestId('input')
+    fireEvent.change(inputEle, { target: { value: '123' } })
+    const formState = await asyncActions.getFormState()
+    expect(formState.values.aaa).toEqual('123')
   })
 
   test('setFieldState', () => {
@@ -160,38 +198,171 @@ describe('test all apis', () => {
     })
     actions.setFieldState('aaa', fn)
     expect(fn).toBeCalled()
-    const state = actions.getFormState()
-    expect(state.values.aaa).toEqual('123')
+    const formState = actions.getFormState()
+    expect(formState.values.aaa).toEqual('123')
   })
 
-  test('getFieldState', () => {
+  test('async setFieldState', async () => {
+    renderForm(true)
+    const fn = jest.fn().mockImplementation(fieldState => {
+      fieldState.value = '123'
+    })
+    await asyncActions.setFieldState('aaa', fn)
+    expect(fn).toBeCalled()
+    const formState = await asyncActions.getFormState()
+    expect(formState.values.aaa).toEqual('123')
+  })
+
+  test('getFieldState', async () => {
     const { queryByTestId } = renderForm()
     const inputEle = queryByTestId('input')
     fireEvent.change(inputEle, { target: { value: '123' } })
-    const state = actions.getFieldState('aaa')
-    expect(state.value).toEqual('123')
+    const fieldState = actions.getFieldState('aaa')
+    expect(fieldState.value).toEqual('123')
   })
 
-  test('subscribe', () => {})
+  test('async getFieldState', async () => {
+    const { queryByTestId } = renderForm(true)
+    const inputEle = queryByTestId('input')
+    fireEvent.change(inputEle, { target: { value: '123' } })
+    const fieldState = await asyncActions.getFieldState('aaa')
+    expect(fieldState.value).toEqual('123')
+  })
 
-  test('unsubscribe', () => {})
+  test('subscribe', () => {
+    renderForm()
+    const callAction = () =>
+      new Promise(resolve => {
+        const fn = jest.fn().mockImplementation(params => resolve(params))
+        actions.subscribe(fn)
+      })
+    expect(callAction()).resolves.toEqual(
+      expect.objectContaining({
+        type: expect.any(String),
+        payload: expect.any(Object)
+      })
+    )
+  })
 
-  test('notify', () => {})
+  test('async subscribe', () => {
+    renderForm(true)
+    const callAsyncAction = () =>
+      new Promise(async resolve => {
+        const fn = jest.fn().mockImplementation(params => resolve(params))
+        await asyncActions.subscribe(fn)
+      })
+    expect(callAsyncAction()).resolves.toEqual(
+      expect.objectContaining({
+        type: expect.any(String),
+        payload: expect.any(Object)
+      })
+    )
+  })
+
+  test('unsubscribe', () => {
+    renderForm()
+    expect.assertions(0)
+    const fn = jest.fn().mockImplementation(params => {
+      expect(params).toEqual(
+        expect.objectContaining({
+          type: expect.any(String),
+          payload: expect.any(Object)
+        })
+      )
+    })
+    const subscribeId = actions.subscribe(fn)
+    actions.unsubscribe(subscribeId)
+  })
+
+  test('async unsubscribe', async () => {
+    renderForm(true)
+    expect.assertions(0)
+    const fn = jest.fn().mockImplementation(params => {
+      expect(params).toEqual(
+        expect.objectContaining({
+          type: expect.any(String),
+          payload: expect.any(Object)
+        })
+      )
+    })
+    const subscribeId = await asyncActions.subscribe(fn)
+    await asyncActions.unsubscribe(subscribeId)
+  })
+
+  test('notify', () => {
+    renderForm()
+    actions.notify('123', {})
+  })
+
+  test('async notify', async () => {
+    renderForm(true)
+    await asyncActions.notify('123', {})
+  })
 
   test('dispatch', () => {
     renderForm()
     actions.dispatch('onChangeFieldValue', { name: 'aaa', value: '123' })
-    const state = actions.getFieldState('aaa')
-    expect(state.value).toEqual('123')
+    const fieldState = actions.getFieldState('aaa')
+    expect(fieldState.value).toEqual('123')
   })
 
-  test('setFieldValue', () => {})
+  test('async dispatch', async () => {
+    renderForm(true)
+    asyncActions.dispatch('onChangeFieldValue', {
+      name: 'aaa',
+      value: '123'
+    })
+    const fieldState = await asyncActions.getFieldState('aaa')
+    expect(fieldState.value).toEqual('123')
+  })
 
-  test('getFieldValue', () => {})
+  test('setFieldValue', () => {
+    renderForm()
+    actions.setFieldValue()
+  })
 
-  test('setFieldInitialValue', () => {})
+  test('async setFieldValue', async () => {
+    renderForm(true)
+    asyncActions.setFieldValue()
+  })
 
-  test('getFieldInitialValue', () => {})
+  test('getFieldValue', () => {
+    renderForm()
+    const fieldValue = actions.getFieldValue('aaa')
+  })
+
+  test('async getFieldValue', async () => {
+    renderForm(true)
+    const fieldValue = await asyncActions.getFieldValue('aaa')
+  })
+
+  test('setFieldInitialValue', () => {
+    renderForm()
+    actions.setFieldInitialValue('aaa', '456')
+    const fieldInitialValue = actions.getFieldState('aaa')
+    expect(fieldInitialValue.initialValue).toEqual('456')
+  })
+
+  test('async setFieldInitialValue', async () => {
+    renderForm(true)
+    await asyncActions.setFieldInitialValue('aaa', '456')
+    const fieldInitialValue = await asyncActions.getFieldState('aaa')
+    expect(fieldInitialValue.initialValue).toEqual('456')
+  })
+
+  test('getFieldInitialValue', () => {
+    renderForm()
+    actions.setFieldInitialValue('aaa', '456')
+    const fieldInitialValue = actions.getFieldInitialValue('aaa')
+    expect(fieldInitialValue).toEqual('456')
+  })
+
+  test('async getFieldInitialValue', async () => {
+    renderForm(true)
+    await asyncActions.setFieldInitialValue('aaa', '456')
+    const fieldInitialValue = await asyncActions.getFieldInitialValue('aaa')
+    expect(fieldInitialValue).toEqual('456')
+  })
 })
 
 describe('major scenes', () => {
