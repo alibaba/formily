@@ -1,9 +1,7 @@
 import React from 'react'
 import {
   SchemaMarkupForm,
-  SchemaMarkupField,
-  Field as InternalField,
-  Form as InternalForm
+  SchemaMarkupField
 } from '@uform/react-schema-renderer'
 import { IAntdSchemaFormProps, IAntdSchemaFieldProps } from './types'
 import './fields'
@@ -15,4 +13,3 @@ export { mapStyledProps, mapTextComponent } from './shared'
 export const SchemaForm: React.FC<IAntdSchemaFormProps> = SchemaMarkupForm as any
 export const Field: React.FC<IAntdSchemaFieldProps> = SchemaMarkupField
 export default SchemaForm
-export { InternalField, InternalForm }
