@@ -89,14 +89,14 @@ If there exists such a tree, then:
 
 
 
-- The name attribute of field c is a. c, and the path attribute is a. B. c.
-- The name attribute of field B is a. B, and the path attribute is a. B.
-- The name attribute of field d is a. d, and the path attribute is a. d.
-- The name attribute of field e is a. d. e, and the path attribute is a. d. e.
+- The name attribute of field c is a.c, and the path attribute is a.b.c.
+- The name attribute of field B is a.b, and the path attribute is a.b.
+- The name attribute of field d is a.d, and the path attribute is a.d.
+- The name attribute of field e is a.d.e, and the path attribute is a.d.e.
 
 
 
-After this explanation, we roughly understand that as long as VirtualField exists in a node path, its data path will skip VirtualField. However, for VirtualField itself, its name attribute contains its own node identification, which is why the name attribute of field B is a. b.
+After this explanation, we roughly understand that as long as VirtualField exists in a node path, its data path will skip VirtualField. However, for VirtualField itself, its name attribute contains its own node identification, which is why the name attribute of field B is a.b.
 
 
 
