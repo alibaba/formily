@@ -1,5 +1,13 @@
 import { isEqual } from '@uform/shared'
-import { createForm, LifeCycleTypes, FormLifeCycle, FormPath } from '../index'
+import {
+  createForm,
+  LifeCycleTypes,
+  FormLifeCycle,
+  FormPath,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine
+} from '../index'
 import { ValidateDescription, ValidatePatternRules } from '@uform/validator'
 
 // mock datasource
@@ -595,14 +603,14 @@ describe('setFormState', () => {
     form.setFormState(state => {
       state.values = { a: '1234' }
     })
-    expect(form.getFormState((state) => state.values)).toEqual({ a: '1234' })
+    expect(form.getFormState(state => state.values)).toEqual({ a: '1234' })
     expect(fieldChange).toBeCalledTimes(2)
     expect(formChange).toBeCalledTimes(2)
 
-    form.setFormState((state) => state.values = { a: '5678' }, true)
-    expect(form.getFormState((state) => state.values)).toEqual({ a: '5678' })
+    form.setFormState(state => (state.values = { a: '5678' }), true)
+    expect(form.getFormState(state => state.values)).toEqual({ a: '5678' })
     expect(formChange).toBeCalledTimes(2)
-    expect(fieldChange).toBeCalledTimes(2)    
+    expect(fieldChange).toBeCalledTimes(2)
   })
 })
 
@@ -650,18 +658,18 @@ describe('setFieldState', () => {
     const fieldChange = jest.fn()
     const form = createForm({
       lifecycles: [
-        new FormLifeCycle(LifeCycleTypes.ON_FIELD_CHANGE, fieldChange),
+        new FormLifeCycle(LifeCycleTypes.ON_FIELD_CHANGE, fieldChange)
       ]
     })
     form.registerField({ path: 'a' })
-    form.getFieldState('a')  
+    form.getFieldState('a')
     form.setFieldState('a', state => (state.value = '1234'))
     expect(form.getFieldState('a', state => state.value)).toEqual('1234')
     expect(fieldChange).toBeCalledTimes(2)
 
     form.setFieldState('a', state => (state.value = '5678'), true)
     expect(form.getFieldState('a', state => state.value)).toEqual('5678')
-    expect(fieldChange).toBeCalledTimes(2)    
+    expect(fieldChange).toBeCalledTimes(2)
   })
 
   test('validating and loading', () => {
@@ -1089,6 +1097,16 @@ describe('createMutators', () => {
       }))
     ).toEqual({
       active: true,
+      visited: false
+    })
+    mutators.blur()
+    expect(
+      form.getFieldState('a', state => ({
+        active: state.active,
+        visited: state.visited
+      }))
+    ).toEqual({
+      active: false,
       visited: true
     })
   })
@@ -1300,7 +1318,10 @@ describe('major sences', () => {
   test('dynamic remove with intialValues', async () => {
     const form = createForm({
       initialValues: {
-        aa: [{ aa: 123, bb: 321 }, { aa: 345, bb: 678 }]
+        aa: [
+          { aa: 123, bb: 321 },
+          { aa: 345, bb: 678 }
+        ]
       }
     })
     const aa = form.registerField({ path: 'aa' })
@@ -1396,5 +1417,130 @@ describe('major sences', () => {
       state.visible = false
     })
     expect(form.getFormGraph()).toMatchSnapshot()
+  })
+})
+
+describe('validator', () => {
+  test('registerValidationFormats', async () => {
+    registerValidationFormats({
+      number: /^[+-]?\d+(\.\d+)?$/
+    })
+
+    const form = createForm({
+      values: {},
+      initialValues: {},
+      onChange: values => {
+       // console.log(values)
+      }
+    })
+
+    const aa = form.registerField({
+      path: 'aa',
+      rules: [
+        {
+          format: 'number',
+          message: 'This field is not a number.'
+        }
+      ]
+    })
+
+    aa.setState(state => {
+      state.value = 'hello world'
+    })
+    await form.validate()
+
+    form.getFormState(state =>
+      expect(state.errors).toEqual([
+        {
+          path: 'aa',
+          messages: ['This field is not a number.']
+        }
+      ])
+    )
+  })
+
+  test('registerValidationRules', async () => {
+    registerValidationRules({
+      custom: value => {
+        return value === '123' ? 'This field can not be 123' : ''
+      }
+    })
+
+    const form = createForm({
+      values: {},
+      initialValues: {},
+      onChange: values => {
+      //  console.log(values)
+      }
+    })
+
+    const aa = form.registerField({
+      path: 'aa',
+      rules: [
+        {
+          custom: true
+        }
+      ]
+    })
+
+    aa.setState(state => {
+      state.value = '123'
+    })
+    await form.validate()
+
+    form.getFormState(state =>
+      expect(state.errors).toEqual([
+        {
+          path: 'aa',
+          messages: ['This field can not be 123']
+        }
+      ])
+    )
+  })
+
+  test('registerValidationMTEngine', async () => {
+    registerValidationMTEngine((message, context) => {
+      return message.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, $0) => {
+        return FormPath.getIn(context, $0)
+      })
+    })
+
+    const form = createForm({
+      values: {},
+      initialValues: {},
+      onChange: values => {
+       // console.log(values)
+      }
+    })
+
+    const aa = form.registerField({
+      path: 'aa',
+      rules: [
+        {
+          validator(value) {
+            return value === 123
+              ? 'This field can not be 123 {{scope.outerVariable}}'
+              : ''
+          },
+          scope: {
+            outerVariable: 'addonAfter'
+          }
+        }
+      ]
+    })
+
+    aa.setState(state => {
+      state.value = 123
+    })
+    await form.validate()
+
+    form.getFormState(state =>
+      expect(state.errors).toEqual([
+        {
+          path: 'aa',
+          messages: ['This field can not be 123 addonAfter']
+        }
+      ])
+    )
   })
 })
