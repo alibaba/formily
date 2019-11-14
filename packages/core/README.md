@@ -1,5 +1,7 @@
 # @ Uform/core
 
+English | [简体中文](./README.zh-cn.md)
+
 > The form state core management package does not rely on any third-party UI frameworks. In this package, it mainly includes:
 >
 > - Manage Form status
