@@ -1097,6 +1097,16 @@ describe('createMutators', () => {
       }))
     ).toEqual({
       active: true,
+      visited: false
+    })
+    mutators.blur()
+    expect(
+      form.getFieldState('a', state => ({
+        active: state.active,
+        visited: state.visited
+      }))
+    ).toEqual({
+      active: false,
       visited: true
     })
   })
@@ -1420,7 +1430,7 @@ describe('validator', () => {
       values: {},
       initialValues: {},
       onChange: values => {
-        console.log(values)
+       // console.log(values)
       }
     })
 
@@ -1460,7 +1470,7 @@ describe('validator', () => {
       values: {},
       initialValues: {},
       onChange: values => {
-        console.log(values)
+      //  console.log(values)
       }
     })
 
@@ -1499,7 +1509,7 @@ describe('validator', () => {
       values: {},
       initialValues: {},
       onChange: values => {
-        console.log(values)
+       // console.log(values)
       }
     })
 
