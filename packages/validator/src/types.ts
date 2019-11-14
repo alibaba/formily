@@ -74,7 +74,6 @@ export type ValidateRulesMap = {
 
 export interface ValidateFieldOptions {
   first?: boolean
-  key?: string
 }
 
 export type ValidateCalculator = (

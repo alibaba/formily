@@ -117,8 +117,7 @@ class FormValidator {
               const payload = await rule(value, ruleObj)
               const message = template(payload, {
                 ...ruleObj,
-                value,
-                key: options.key
+                value
               })
               if (isStr(payload)) {
                 if (first) {
