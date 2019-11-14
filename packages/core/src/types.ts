@@ -215,13 +215,12 @@ export interface IFormStateProps {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
+  useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
+  validateFirst?: boolean
 }
 
 export interface IFormCreatorOptions extends IFormStateProps {
-  useDirty?: boolean
-  validateFirst?: boolean
-  editable?: boolean
   onChange?: (values: IFormState['values']) => void
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
