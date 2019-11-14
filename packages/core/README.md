@@ -9,6 +9,13 @@ English | [简体中文](./README.zh-cn.md)
 > - Manage the Validator status
 > - Manage dependencies between Form, Field, and Vaidator
 
+### Install
+
+```bash
+npm install --save @uform/core
+```
+
+
 ### Table Of Contents
 
 <!-- toc -->

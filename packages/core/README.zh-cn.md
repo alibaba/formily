@@ -6,7 +6,11 @@
 > - 管理Validator状态
 > - 管理Form/Field/Vaidator之间的依赖关系
 
+### 安装
 
+```bash
+npm install --save @uform/core
+```
 
 ### 目录
 
