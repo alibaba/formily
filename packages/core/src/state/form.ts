@@ -55,10 +55,12 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
       } else {
         draft.pristine = false
       }
-      if (draft.validating === true) {
-        draft.loading = true
-      } else if (draft.validating === false) {
-        draft.loading = false
+      if (draft.validating !== prevState.validating) {
+        if (draft.validating === true) {
+          draft.loading = true
+        } else if (draft.validating === false) {
+          draft.loading = false
+        }
       }
       if (draft.mounted === true && draft.mounted !== prevState.mounted) {
         draft.unmounted = false

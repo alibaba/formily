@@ -14,7 +14,8 @@ import {
 import {
   FormValidator,
   setValidationLanguage,
-  setValidationLocale
+  setValidationLocale,
+  ValidateFieldOptions
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
@@ -545,12 +546,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
       focus() {
         field.setState((state: IFieldState<FieldProps>) => {
           state.active = true
-          state.visited = true
         })
       },
       blur() {
         field.setState((state: IFieldState<FieldProps>) => {
           state.active = false
+          state.visited = true
         })
       },
       push(value?: any) {
@@ -752,7 +753,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   async function validate(
     path?: FormPathPattern,
-    opts?: {}
+    opts?: ValidateFieldOptions
   ): Promise<IFormValidateResult> {
     if (!state.getState(state => state.validating)) {
       state.unsafe_setSourceState(state => {

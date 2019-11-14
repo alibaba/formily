@@ -1,5 +1,9 @@
 import { FormPath, FormPathPattern, isFn, Subscribable } from '@uform/shared'
-import { ValidatePatternRules, ValidateNodeResult } from '@uform/validator'
+import {
+  ValidatePatternRules,
+  ValidateNodeResult,
+  ValidateFieldOptions
+} from '@uform/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
 
@@ -105,6 +109,10 @@ export interface IStateModelFactory<S, P> {
   displayName?: string
 }
 
+export interface IStateModelProvider<S, P> {
+  new (props: P): IModel<S, P>
+}
+
 export interface IFieldState<FieldProps = any> {
   displayName?: string
   name: string
@@ -155,7 +163,6 @@ export interface IFieldStateProps<FieldProps = any> {
   editable?: boolean
   useDirty?: boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  onChange?: (fieldState: IField) => void
 }
 
 export const isField = (target: any): target is IField =>
@@ -208,13 +215,12 @@ export interface IFormStateProps {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
+  useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
+  validateFirst?: boolean
 }
 
 export interface IFormCreatorOptions extends IFormStateProps {
-  useDirty?: boolean
-  validateFirst?: boolean
-  editable?: boolean
   onChange?: (values: IFormState['values']) => void
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
@@ -245,7 +251,6 @@ export interface IVirtualFieldStateProps<FieldProps = any> {
   ) => void
   name?: string
   props?: FieldProps
-  onChange?: (fieldState: IVirtualField) => void
 }
 
 export type IFormValidateResult = ValidateNodeResult
@@ -275,9 +280,9 @@ export interface IMutators {
   remove(index: number | string): any
   unshift(value: any): any[]
   shift(): any[]
-  move($from: number, $to: number): any
-  moveDown(index: number): any
-  moveUp(index: number): any
+  move($from: number, $to: number): any[]
+  moveDown(index: number): any[]
+  moveUp(index: number): any[]
   validate(): Promise<IFormValidateResult>
   exist(index?: number | string): boolean
 }
@@ -297,7 +302,7 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
   unsafe_getSourceState: (callback?: (state: S) => any) => any
   unsafe_setSourceState: (callback?: (state: S) => void) => void
-  hasChanged: (key?: string) => boolean
+  hasChanged: (path?: FormPathPattern) => boolean
   isDirty: (key?: string) => boolean
   getDirtyInfo: () => StateDirtyMap<S>
 }
@@ -315,7 +320,10 @@ export interface IForm {
   clearErrors: (pattern?: FormPathPattern) => void
   hasChanged(target: any, path: FormPathPattern): boolean
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
-  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
+  validate(
+    path?: FormPathPattern,
+    options?: ValidateFieldOptions
+  ): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
   getFormState(callback?: (state: IFormState) => any): any
   setFieldState(
