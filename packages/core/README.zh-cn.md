@@ -6,6 +6,41 @@
 > - 管理Validator状态
 > - 管理Form/Field/Vaidator之间的依赖关系
 
+
+
+### 目录
+
+<!-- toc -->
+
+- [背景](#%E8%83%8C%E6%99%AF)
+- [设计理念](#%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5)
+- [核心亮点](#%E6%A0%B8%E5%BF%83%E4%BA%AE%E7%82%B9)
+- [架构图](#%E6%9E%B6%E6%9E%84%E5%9B%BE)
+- [术语解释](#%E6%9C%AF%E8%AF%AD%E8%A7%A3%E9%87%8A)
+- [API](#api)
+  * [`createForm`](#createform)
+  * [`registerValidationFormats`](#registervalidationformats)
+  * [`registerValidationRules`](#registervalidationrules)
+  * [`registerValidationMTEngine`](#registervalidationmtengine)
+  * [`setValidationLanguage`](#setvalidationlanguage)
+  * [`setValidationLocale`](#setvalidationlocale)
+- [Classes](#classes)
+  * [`new FormPath()`](#new-formpath)
+  * [`new FormLifeCyle()`](#new-formlifecyle)
+- [Enums](#enums)
+  * [LifeCycleTypes](#lifecycletypes)
+- [Interfaces](#interfaces)
+  * [IFormCreatorOptions](#iformcreatoroptions)
+  * [IForm](#iform)
+  * [Imutators](#imutators)
+  * [Validator](#validator)
+  * [IFormState](#iformstate)
+  * [IFieldState](#ifieldstate)
+  * [IVirtualFieldState](#ivirtualfieldstate)
+  * [IField/IVirtualField](#ifieldivirtualfield)
+
+<!-- tocstop -->
+
 ### 背景
 
 中后台领域，核心就是两种场景，**一个是数据录入，一个是数据查询+数据展现**，不管是数据录入还是数据查询，都是借助表单来实现，只有数据展现的形式是比较多样化的，但是却是最容易复用和抽象的，只有表单，会涉及大量的交互逻辑，所以，只要我们根本上解决了表单问题，对于中后台场景，基本上解决了大部分中后台场景问题，UForm，就是为此而诞生的。
