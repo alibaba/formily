@@ -104,6 +104,7 @@ export const useForm = <
     ...props,
     initialValues: props.initialValues || props.defaultValue
   })
+
   Object.assign(optionsRef.current, props)
   optionsRef.current.values = props.value
   optionsRef.current.lifecycles = lifecycles
