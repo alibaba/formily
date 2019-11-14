@@ -8,7 +8,6 @@ import {
   IFieldProps
 } from '../index'
 import { IFormActions, IFormAsyncActions } from '../types'
-import { resolve } from 'url'
 
 const Input: React.FC<IFieldProps> = props => (
   <Field {...props}>
@@ -291,12 +290,28 @@ describe('test all apis', () => {
 
   test('notify', () => {
     renderForm()
-    actions.notify('123', {})
+    expect.assertions(1)
+    const fn = jest.fn().mockImplementation(params => {
+      const { type, payload } = params
+      if (type === 'onTest') {
+        expect(payload).toEqual({ aaa: '123' })
+      }
+    })
+    actions.subscribe(fn)
+    actions.notify('onTest', { aaa: '123' })
   })
 
   test('async notify', async () => {
     renderForm(true)
-    await asyncActions.notify('123', {})
+    expect.assertions(1)
+    const fn = jest.fn().mockImplementation(params => {
+      const { type, payload } = params
+      if (type === 'onTest') {
+        expect(payload).toEqual({ aaa: '123' })
+      }
+    })
+    await asyncActions.subscribe(fn)
+    await asyncActions.notify('onTest', { aaa: '123' })
   })
 
   test('dispatch', () => {
@@ -318,22 +333,30 @@ describe('test all apis', () => {
 
   test('setFieldValue', () => {
     renderForm()
-    actions.setFieldValue()
+    actions.setFieldValue('aaa', '123')
+    const fieldState = actions.getFieldState('aaa')
+    expect(fieldState.value).toEqual('123')
   })
 
   test('async setFieldValue', async () => {
     renderForm(true)
-    asyncActions.setFieldValue()
+    await asyncActions.setFieldValue('aaa', '123')
+    const fieldState = await asyncActions.getFieldState('aaa')
+    expect(fieldState.value).toEqual('123')
   })
 
   test('getFieldValue', () => {
     renderForm()
+    actions.setFieldValue('aaa', '123')
     const fieldValue = actions.getFieldValue('aaa')
+    expect(fieldValue).toEqual('123')
   })
 
   test('async getFieldValue', async () => {
     renderForm(true)
+    await asyncActions.setFieldValue('aaa', '123')
     const fieldValue = await asyncActions.getFieldValue('aaa')
+    expect(fieldValue).toEqual('123')
   })
 
   test('setFieldInitialValue', () => {
