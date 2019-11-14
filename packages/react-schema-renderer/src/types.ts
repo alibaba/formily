@@ -113,7 +113,7 @@ export interface ISchema {
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
-  ['x-component']?: string | React.JSXElementConstructor<any>
+  ['x-component']?: string
   ['x-component-props']?: { [name: string]: any }
   ['x-render']?: <T = ISchemaFieldComponentProps>(
     props: T & {
