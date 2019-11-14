@@ -31,10 +31,10 @@ English | [简体中文](./README.zh-cn.md)
 - [Enums](#enums)
   * [Lifecycletypes](#lifecycletypes)
 - [Interfaces](#interfaces)
-  * [Iformcreatoroptions](#iformcreatoroptions)
-  * [Iform](#iform)
+  * [IFormCreatorOptions](#iformcreatoroptions)
+  * [IForm](#iform)
   * [Imutators](#imutators)
-  * [The Validator](#the-validator)
+  * [Validation](#the-validator)
   * [IFormState](#iformstate)
   * [IFieldState](#ifieldstate)
   * [IVirtualFieldState](#ivirtualfieldstate)
@@ -580,7 +580,7 @@ enum LifeCycleTypes {
 
 ###  Interfaces
 
-####  Iformcreatoroptions
+####  IFormCreatorOptions
 
 
 
@@ -625,7 +625,7 @@ interface IFormCreatorOptions {
 
 
 
-####  Iform
+####  IForm
 
 
 
@@ -869,7 +869,7 @@ interface IMutators {
 
 
 
-####  The Validator
+####  Validation
 
 
 
