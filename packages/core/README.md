@@ -49,7 +49,7 @@ In the middle and back-end field, the core is two scenarios, **One is data entry
 
 
 
-![img](https://intranetproxy.alipay.com/skylark/lark/0/2019/png/16211/1573713412067-de4fc20c-4002-43a1-bd15-d61918c66a6a.png)
+![img](https://img.alicdn.com/tfs/TB18LXHlVP7gK0jSZFjXXc5aXXa-1428-926.png)
 
 
 
@@ -81,7 +81,7 @@ For the data path and node path, we can look at the following figure:
 
 
 
-![img](https://intranetproxy.alipay.com/skylark/lark/0/2019/png/16211/1573713412078-b7135276-8181-48bc-acef-671210dd9717.png)
+![img](https://img.alicdn.com/tfs/TB1.rAamG61gK0jSZFlXXXDKFXa-1496-898.png)
 
 
 
