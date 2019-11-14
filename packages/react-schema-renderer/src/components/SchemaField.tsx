@@ -133,16 +133,13 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         return renderFieldDelegate(props => {
           const stateComponent =
             props.schema.getExtendsComponent() || props.schema.type
+          if (!isStr(stateComponent))
+            throw new Error('Can not found any form components.')
           const renderComponent = (): React.ReactElement =>
             React.createElement(
               formRegistry.formItemComponent,
               props,
-              isStr(stateComponent)
-                ? React.createElement(
-                    formRegistry.fields[stateComponent],
-                    props
-                  )
-                : React.createElement(stateComponent, props)
+              React.createElement(formRegistry.fields[stateComponent], props)
             )
           if (isFn(schemaRenderer)) {
             return schemaRenderer({ ...props, renderComponent })
@@ -153,13 +150,13 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         return renderVirtualFieldDelegate(props => {
           const stateComponent =
             props.schema.getExtendsComponent() || props.schema.type
+          if (!isStr(stateComponent))
+            throw new Error('Can not found any form components.')
           const renderComponent = () =>
-            isStr(stateComponent)
-              ? React.createElement(
-                  formRegistry.virtualFields[stateComponent],
-                  props
-                )
-              : React.createElement(stateComponent, props)
+            React.createElement(
+              formRegistry.virtualFields[stateComponent],
+              props
+            )
 
           if (isFn(schemaRenderer)) {
             return schemaRenderer({ ...props, renderComponent })
