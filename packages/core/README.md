@@ -44,7 +44,7 @@ English | [简体中文](./README.zh-cn.md)
 
 ###  Backdrop
 
-In the middle and back-end field, the core is two scenarios, **One is data entry, the other is Data Query + data presentation** , Whether it is data entry or data query, it is implemented by using forms. Only the forms of data presentation are diversified, but they are the easiest to reuse and abstract. Only forms, it involves a lot of Interactive Logic. Therefore, as long as we fundamentally solve the form problem, most of the middle and back-end scenarios are basically solved. UForm is born for this.
+In the middle and back-end field, the core is two scenarios, **one is data entry, one is data query + data presentation**, whether it is data entry or data query, it is realized by means of form, from the perspective of implementation complexity, The complexity of the two is similar, because the data rendering level will inevitably have extremely complex renderings (such as Tree Table, etc.), but the data rendering is the easiest to reuse and abstract, only the form, will involve a lot of interactive logic So, as long as we solve the form problem fundamentally, for the mid- and back-stage scenes, most of the mid- and back-stage scene problems are solved. UForm is born for this purpose.
 
 
 
