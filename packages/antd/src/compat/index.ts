@@ -2,9 +2,9 @@ import {
   registerFormComponent,
   registerFormItemComponent
 } from '@uform/react-schema-renderer'
-import { CompatNextForm } from './Form'
-import { CompatNextFormItem } from './FormItem'
+import { CompatAntdForm } from './Form'
+import { CompatAntdFormItem } from './FormItem'
 
-registerFormComponent(CompatNextForm)
+registerFormComponent(CompatAntdForm)
 
-registerFormItemComponent(CompatNextFormItem)
+registerFormItemComponent(CompatAntdFormItem)

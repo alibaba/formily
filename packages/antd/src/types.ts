@@ -13,11 +13,11 @@ import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
 
-export type INextSchemaFormProps = ISchemaFormProps &
+export type IAntdSchemaFormProps = ISchemaFormProps &
   FormProps &
   IFormItemTopProps
 
-export type INextSchemaFieldProps = IMarkupSchemaFieldProps
+export type IAntdSchemaFieldProps = IMarkupSchemaFieldProps
 
 export interface ISubmitProps extends ButtonProps {
   onSubmit?: ISchemaFormProps['onSubmit']
