@@ -32,6 +32,7 @@ export interface ValidateDescription {
   whitespace?: boolean
   enum?: any[]
   message?: string
+  [key: string]: any
 }
 
 export type ValidateRules = ValidateDescription[]
@@ -73,7 +74,6 @@ export type ValidateRulesMap = {
 
 export interface ValidateFieldOptions {
   first?: boolean
-  key?: string
 }
 
 export type ValidateCalculator = (

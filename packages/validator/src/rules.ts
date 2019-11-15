@@ -26,6 +26,9 @@ const getLength = (value: any) =>
 
 const getRuleMessage = (rule: any, type: string) => {
   if (isFn(rule.validator) || Object.keys(rule).length > 2) {
+    if (rule.format) {
+      return rule.message || getMessage(type)
+    }
     return getMessage(type)
   } else {
     return rule.message || getMessage(type)

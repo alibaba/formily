@@ -9,13 +9,19 @@ import {
   FormPathPattern
 } from '@uform/shared'
 import produce, { Draft } from 'immer'
-import { IStateModelFactory, StateDirtyMap, IModel, StateModel } from '../types'
+import {
+  IStateModelProvider,
+  IStateModelFactory,
+  StateDirtyMap,
+  IModel,
+  StateModel
+} from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
-) => {
-  return class Model<DefaultProps> extends Subscribable<State>
+): IStateModelProvider<State, Props> => {
+  return class Model<DefaultProps = any> extends Subscribable<State>
     implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
     public props: Props &
@@ -218,5 +224,5 @@ export const createStateModel = <State = {}, Props = {}>(
           )
         : !isEqual(this.prevState, this.state)
     }
-  }
+  } as any
 }
