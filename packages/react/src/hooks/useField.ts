@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each, isFn } from '@uform/shared'
 import {
-  IFieldStateProps,
   IFieldState,
   IForm,
   IField,
@@ -32,7 +31,7 @@ const extendMutators = (mutators: IMutators, props: IFieldProps): IMutators => {
 }
 
 export const useField = (
-  options: IFieldStateProps & { triggerType?: 'onChange' | 'onBlur' }
+  options: IFieldProps
 ): IFieldHook => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
