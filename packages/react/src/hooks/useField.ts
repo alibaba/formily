@@ -24,7 +24,6 @@ const extendMutators = (mutators: IMutators, props: IFieldProps): IMutators => {
     },
     blur: () => {
       mutators.blur()
-      console.log('=======>>> trigger blur validate', props);
       if (props.triggerType === 'onBlur') {        
         mutators.validate()
       }
