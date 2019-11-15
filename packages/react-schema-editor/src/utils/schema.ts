@@ -5,7 +5,9 @@ export default {
     default: '淘小宝',
     type: 'string',
     'x-props': {
-      help: '不得超过6个汉字'
+      help: '不得超过6个汉字',
+      validateStatus: 'success',
+      hasFeedback: true
     },
     'x-component': 'Input',
     'x-component-props': {

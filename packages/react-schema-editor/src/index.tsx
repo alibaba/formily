@@ -7,10 +7,37 @@ import json from './utils/schema'
 import '@alifd/next/dist/next.css'
 const { Row, Col } = Grid
 
+const components = [
+  {
+    name: 'Input',
+    'x-props': {
+      help: {},
+      validateStatus: {},
+      hasFeedback: {}
+    },
+    'x-component-props': {
+      value: {},
+      disabled: {},
+      onChange: {}
+    }
+  },
+  {
+    name: 'Switch',
+    'x-props': {
+      help: {},
+      validateStatus: {}
+    },
+    'x-component-props': {
+      checked: {},
+      disabled: {},
+      onChange: {}
+    }
+  }
+]
+
 export const SchemaEditor: React.FC = () => {
   const initialSchema = jsonToSchema(json)
   const [schema, setSchema] = React.useState(initialSchema)
-
   return (
     <div className="schema-editor">
       <div className="schema-menus">
@@ -21,7 +48,11 @@ export const SchemaEditor: React.FC = () => {
       </div>
       <Row className="schema-editor-main">
         <Col span={14} className="schema-col schema-tree splitter">
-          <SchemaTree schema={schema} onChange={setSchema}></SchemaTree>
+          <SchemaTree
+            schema={schema}
+            onChange={setSchema}
+            components={components}
+          ></SchemaTree>
         </Col>
         <Col span={10} className="schema-col schema-code">
           <SchemaCode schema={schema} onChange={setSchema}></SchemaCode>
