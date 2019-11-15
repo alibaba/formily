@@ -4,18 +4,23 @@ import { FieldEditor } from './FieldEditor'
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
+  components,
   onChange
 }) => {
+  const xRules = ['required', 'pattern', 'validator']
   return (
     <div>
-      <FieldEditor></FieldEditor>
-      <FieldEditor></FieldEditor>
-      <FieldEditor>
-        <FieldEditor>
-          <FieldEditor></FieldEditor>
-        </FieldEditor>
-        <FieldEditor></FieldEditor>
-      </FieldEditor>
+      <FieldEditor
+        schema={schema.name}
+        components={components}
+        xRules={xRules}
+        onChange={currentSchema => {
+          console.log('currentSchema====', currentSchema);
+          onChange({
+            name: currentSchema
+          })
+        }}
+      />
     </div>
   )
 }

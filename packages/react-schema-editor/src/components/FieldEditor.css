@@ -1,0 +1,10 @@
+.field-group{
+  display: flex;
+  margin-bottom: 5px;
+}
+.field-group .field-input:not(:first-of-type){
+  margin-left: 5px;
+}
+.field-group .op-btn-delete{
+  margin-left: 5px;
+}

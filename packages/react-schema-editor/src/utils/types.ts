@@ -5,6 +5,14 @@ export interface ISchemaCodeProps {
 
 export interface ISchemaTreeProps {
   schema: object
+  components: any
+  onChange?: Function
+}
+
+export interface IFieldEditorProps {
+  schema: object
+  components: any
+  xRules: string[]
   onChange?: Function
 }
 
