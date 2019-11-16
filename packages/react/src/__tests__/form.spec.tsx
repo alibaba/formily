@@ -4,11 +4,11 @@ import {
   Field,
   createFormActions,
   FormEffectHooks,
-  IFieldProps
+  IFieldStateProps
 } from '../index'
 import { render } from '@testing-library/react'
 
-const Input: React.FC<IFieldProps> = props => (
+const Input: React.FC<IFieldStateProps> = props => (
   <Field {...props}>
     {({ state, mutators }) => (
       <div>
