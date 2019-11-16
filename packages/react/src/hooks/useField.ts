@@ -9,10 +9,10 @@ import {
 import { raf, getValueFromEvent } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
-import { IFieldHook, IFieldProps } from '../types'
+import { IFieldHook, IFieldStateUIProps } from '../types'
 import FormContext from '../context'
 
-const extendMutators = (mutators: IMutators, props: IFieldProps): IMutators => {
+const extendMutators = (mutators: IMutators, props: IFieldStateUIProps): IMutators => {
   return {
     ...mutators,
     change: (...args) => {
@@ -31,7 +31,7 @@ const extendMutators = (mutators: IMutators, props: IFieldProps): IMutators => {
 }
 
 export const useField = (
-  options: IFieldProps
+  options: IFieldStateUIProps
 ): IFieldHook => {
   const forceUpdate = useForceUpdate()
   const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
