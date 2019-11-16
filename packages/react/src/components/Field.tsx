@@ -1,9 +1,9 @@
 import React from 'react'
 import { useField } from '../hooks/useField'
 import { isFn } from '@uform/shared'
-import { IFieldProps } from '../types'
+import { IFieldStateUIProps } from '../types'
 
-export const Field: React.FC<IFieldProps> = props => {
+export const Field: React.FC<IFieldStateUIProps> = props => {
   const { state, props: innerProps, mutators, form } = useField(props)
   if (!state.visible || !state.display) return <React.Fragment />
   if (isFn(props.children)) {

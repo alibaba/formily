@@ -68,7 +68,7 @@ export interface IVirtualFieldAPI {
   props: {}
 }
 
-export interface IFieldProps extends IFieldStateProps {
+export interface IFieldStateUIProps extends IFieldStateProps {
   triggerType?: 'onChange' | 'onBlur'
   getValueFromEvent?: (...args: any[]) => any
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
