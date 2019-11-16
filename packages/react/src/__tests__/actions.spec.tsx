@@ -5,11 +5,11 @@ import {
   Field,
   createFormActions,
   createAsyncFormActions,
-  IFieldProps
+  IFieldStateUIProps
 } from '../index'
 import { IFormActions, IFormAsyncActions } from '../types'
 
-const Input: React.FC<IFieldProps> = props => (
+const Input: React.FC<IFieldStateUIProps> = props => (
   <Field {...props}>
     {({ state, mutators }) => (
       <div>

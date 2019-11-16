@@ -59,4 +59,28 @@ describe('useDirty hook',()=>{
       data: dirtyProps,
     })
   })
+
+  // test('fields change（object）', ()=>{
+  //   let dirtyProps = { user: { username: 'abcd' } }
+  //   const { result, rerender } = renderHook(() => useDirty(dirtyProps, ['user']))
+  //   expect(result.current).toEqual({
+  //     num: 0,
+  //     dirtys: {
+  //       user: false,
+  //     },
+  //     data: dirtyProps,
+  //   })
+
+  //   dirtyProps.user.username = 'edgh'
+  //   rerender()
+
+  //   expect(result.current).toEqual({
+  //     num: 1,
+  //     dirtys: {
+  //       user: true
+  //     },
+  //     data: dirtyProps,
+  //   })
+  // })
+
 })
