@@ -45,20 +45,18 @@ export const useField = (
     subscriberId: null
   })
   const form = useContext<IForm>(FormContext)
-
   if (!form) {
     throw new Error('Form object cannot be found from context.')
   }
   const mutators = useMemo(() => {
     let initialized = false
     ref.current.field = form.registerField(options)
-
     ref.current.subscriberId = ref.current.field.subscribe(fieldState => {
       /**
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
        */
       if (initialized) {
-        if (options.triggerType === 'onChange' && !fieldState.pristine) {          
+        if (options.triggerType === 'onChange' && !fieldState.pristine) {
           if (ref.current.field.hasChanged('value')) {
             mutators.validate()
           }
