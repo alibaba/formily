@@ -43,17 +43,17 @@ npm install --save @uform/react
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
   - [`FormEffectHooks`](#FormEffectHooks)
-- [Interface](#Interface)
+- [Interfaces](#Interfaces)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`IFieldState`](#IFieldState)
-  - [`ValidatePatternRules`](#ValidatePatternRules)
-  - [`ValidateArrayRules`](#ValidateArrayRules)
+  - [`SyncValidateResponse`](#SyncValidateResponse)
+  - [`AsyncValidateResponse`](#AsyncValidateResponse)  
+  - [`ValidateResponse`](#ValidateResponse)
   - [`CustomValidator`](#CustomValidator)
   - [`ValidateDescription`](#ValidateDescription)
-  - [`ValidateResponse`](#ValidateResponse)
-  - [`SyncValidateResponse`](#SyncValidateResponse)
-  - [`AsyncValidateResponse`](#AsyncValidateResponse)
+  - [`ValidateArrayRules`](#ValidateArrayRules)
+  - [`ValidatePatternRules`](#ValidatePatternRules)    
 
 ### 使用方式
 
@@ -726,7 +726,7 @@ const App = () => {
 }
 ```
 
-### Interface
+### Interfaces
 
 ---
 
@@ -735,150 +735,150 @@ const App = () => {
 ```typescript
 interface IFormActions {
   /*
-   * Form submission, if the callback parameter returns Promise,
-   * Then the entire submission process will hold and load is true.
-   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   * 表单提交，如果回调参数返回Promise，
+   * 那么整个提交流程会hold住，同时loading为true，
+   * 等待Promise resolve才触发表单onFormSubmitEnd事件，同时loading为false
    */
-   submit(
-      onSubmit?: (values: IFormState['values']) => any | Promise<any>
-    ): Promise<{
-       Validated: IFormValidateResult
-       Payload: any //onSubmit callback function return value
-   }>
-   
-   /*
-    * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
-    * For example, clearErrors("*(aa,bb,cc)")
-    */
-   clearErrors: (pattern?: FormPathPattern) => void
-   
-   /*
-    * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
-    * For example, hasChanged(state,'value.aa')
-    */
-   hasChanged(target: IFormState | IFieldState | IVirtualFieldState, path: FormPathPattern): boolean
-   
-   /*
-    * Reset form
-    */
-   reset(options?: {
-     // Forced to empty
-     forceClear?: boolean
-     // Forced check
-     validate?: boolean
-     // Reset range for batch or precise control of the field to be reset
-     selector?: FormPathPattern
-   }): Promise<void | IFormValidateResult>
-   
-   /*
-    * Validation form
-    */
-   validate(path?: FormPathPattern, options?: {
-     // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
-     first?:boolean
-   }): Promise<IFormValidateResult>
-   
-   /*
-    * Set the form status
-    */
-   setFormState(
-     // Operation callback
-     callback?: (state: IFormState) => any,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get form status
-    */
-   getFormState(
-     //transformer
-     callback?: (state: IFormState) => any
-   ): any
-   
-   /*
-    * Set the field status
-    */
-   setFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Operation callback
-     callback?: (state: IFieldState) => void,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get the field status
-    */
-   getFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Transformer
-     callback?: (state: IFieldState) => any
-   ): any
-   
-   /*
-    * Registration field
-    */
-   registerField(props: {
-    // Node path
+  submit(
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
+  ): Promise<{
+      validated: IFormValidateResult
+      payload: any //onSubmit回调函数返回值
+  }>
+  
+  /*
+   * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
+   * 比如clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => void
+  
+  /*
+   * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
+   * 比如hasChanged(state,'value.aa')
+   */
+  hasChanged(target: IFormState | IFieldState | IVirtualFieldState, path: FormPathPattern): boolean
+  
+  /*
+   * 重置表单
+   */
+  reset(options?: {
+    //强制清空
+    forceClear?: boolean
+    //强制校验
+    validate?: boolean
+    //重置范围，用于批量或者精确控制要重置的字段
+    selector?: FormPathPattern      
+  }): Promise<void | IFormValidateResult>
+  
+  /*
+   * 校验表单
+   */
+  validate(path?: FormPathPattern, options?: {
+    //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
+    first?:boolean
+  }): Promise<IFormValidateResult>
+  
+  /*
+   * 设置表单状态
+   */
+  setFormState(
+    //操作回调
+    callback?: (state: IFormState) => any, 
+    //是否不触发事件
+    silent?: boolean
+  ): void
+  
+  /*
+   * 获取表单状态
+   */
+  getFormState(
+    //transformer
+    callback?: (state: IFormState) => any
+  ): any
+  
+  /*
+   * 设置字段状态
+   */
+  setFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //操作回调
+    callback?: (state: IFieldState) => void,
+    //是否不触发事件
+    silent?: boolean
+  ): void
+  
+  /* 
+   * 获取字段状态
+   */
+  getFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //transformer
+    callback?: (state: IFieldState) => any
+  ): any
+  
+  /*
+   * 注册字段
+   */
+  registerField(props: {
+    //节点路径            
     path?: FormPathPattern
-    // Data path
+    //数据路径           
     name?: string
-    // Field value
+    //字段值
     value?: any
-    // Field multi-value
+    //字段多参值
     values?: any[]
-    // Field initial value
+    //字段初始值
     initialValue?: any
-    // Field extension properties
+    //字段扩展属性
     props?: any
-    // Field check rule
+    //字段校验规则
     rules?: ValidatePatternRules[]
-    // Field is required
+    //字段是否必填
     required?: boolean
-    // Is the field editable?
+    //字段是否可编辑
     editable?: boolean
-    // Whether the field is dirty check
+    //字段是否走脏检查
     useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
+    //字段状态计算容器，主要用于扩展核心联动规则
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void         
   }): IField
   
   /*
-   * Register virtual fields
+   * 注册虚拟字段
    */
   registerVirtualField(props: {
-    // Node path
+    //节点路径            
     path?: FormPathPattern
-    // Data path
+    //数据路径           
     name?: string
-    // Field extension properties
+    //字段扩展属性
     props?: any
-    // Whether the field is dirty check
+    //字段是否走脏检查
     useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
+    //字段状态计算容器，主要用于扩展核心联动规则
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void                       
   }): IVirtualField
   
   /*
-   * Create a field data operator, which will explain the returned API in detail later.
+   * 创建字段数据操作器，后面会详细解释返回的API
    */
   createMutators(field: IField): IMutators
   
   /*
-   * Get the form observer tree
+   * 获取表单观察者树
    */
   getFormGraph(): IFormGraph
   
   /*
-   * Set the form observer tree
+   * 设置表单观察者树
    */
   setFormGraph(graph: IFormGraph): void
   
   /*
-   * Listen to the form life cycle
+   * 监听表单生命周期
    */
   subscribe(callback?: ({
     type,
@@ -889,34 +889,69 @@ interface IFormActions {
   }) => void): number
   
   /*
-   * Cancel the listening form life cycle
+   * 取消监听表单生命周期
    */
   unsubscribe(id: number): void
   
   /*
-   * Trigger form custom life cycle
+   * 触发表单自定义生命周期
    */
   notify: <T>(type: string, payload?: T) => void
   
   /*
-   * Set the field value
+   * 设置字段值
    */
   setFieldValue(path?: FormPathPattern, value?: any): void
   
   /*
-   * Get the field value
+   * 获取字段值
    */
   getFieldValue(path?: FormPathPattern): any
   
   /*
-   * Set the initial value of the field
+   * 设置字段初始值
    */
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
   
   /*
-   * Get the initial value of the field
+   * 获取字段初始值
    */
   getFieldInitialValue(path?: FormPathPattern): any
+}
+```
+
+
+
+#### IVirtualFieldState
+
+> 虚拟Field核心状态
+
+```typescript
+interface IVirtualFieldState<FieldProps = any> {
+  
+  /**只读状态**/
+  
+  //状态名称，VirtualFieldState
+  displayName: string
+  //字段数据路径
+  name: string
+  //字段节点路径
+  path: string
+  //是否已经初始化
+  initialized: boolean
+  
+  /**可写状态**/
+  
+  //是否可见，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
+  visible: boolean
+  //是否展示，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
+  display: boolean
+  //是否已挂载
+  mounted: boolean
+  //是否已卸载
+  unmounted: boolean
+  //字段扩展属性
+  props: FieldProps
 }
 
 ```
@@ -925,23 +960,71 @@ interface IFormActions {
 
 ```typescript
 interface IFormAsyncActions {
+  /*
+   * 表单提交，如果回调参数返回Promise，
+   * 那么整个提交流程会hold住，同时loading为true，
+   * 等待Promise resolve才触发表单onFormSubmitEnd事件，同时loading为false
+   */
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
+  /*
+   * 重置表单
+   */
   reset(options?: IFormResetOptions): Promise<void>
+  /*
+   * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
+   * 比如hasChanged(state,'value.aa')
+   */
   hasChanged(target: any, path: FormPathPattern): Promise<boolean>
+  /*
+   * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
+   * 比如clearErrors("*(aa,bb,cc)")
+   */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
-  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
-  setFormState(callback?: (state: IFormState) => any): Promise<void>
-  getFormState(callback?: (state: IFormState) => any): Promise<any>
-  setFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+  /*
+   * 校验表单
+   */
+  validate(path?: FormPathPattern, options?: {
+    //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
+    first?:boolean
+  }): Promise<IFormValidateResult>
+  /*
+   * 设置表单状态
+   */
+  setFormState(
+    //操作回调
+    callback?: (state: IFormState) => any, 
+    //是否不触发事件
+    silent?: boolean
   ): Promise<void>
-  getFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldState) => any
+  /*
+   * 获取表单状态
+   */
+  getFormState(
+    //transformer
+    callback?: (state: IFormState) => any
   ): Promise<any>
+  /*
+   * 设置字段状态
+   */
+  setFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //操作回调
+    callback?: (state: IFieldState) => void,
+    //是否不触发事件
+    silent?: boolean
+  ): Promise<void>
+  /* 
+   * 获取字段状态
+   */
+  getFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //transformer
+    callback?: (state: IFieldState) => any
+  ): Promise<void>
   getFormGraph(): Promise<IFormGraph>
   setFormGraph(graph: IFormGraph): Promise<void>
   subscribe(callback?: FormHeartSubscriber): Promise<number>
@@ -1021,55 +1104,7 @@ interface IFieldState<FieldProps = any> {
 }
 ```
 
-#### ValidatePatternRules
 
-```typescript
-declare type ValidatePatternRules = string | CustomValidator | ValidateDescription | ValidateArrayRules;
-```
-
-#### ValidateArrayRules
-
-```typescript
-declare type ValidateArrayRules = Array<string | CustomValidator | ValidateDescription>;
-```
-
-### string内置校验规则
-
-todo
-
-#### CustomValidator
-
-```typescript
-declare type CustomValidator = (value: any, rescription?: ValidateDescription) => ValidateResponse;
-```
-
-#### ValidateDescription
-
-```typescript
-interface ValidateDescription {
-    format?: string;
-    validator?: CustomValidator;
-    required?: boolean;
-    pattern?: RegExp | string;
-    max?: number;
-    maximum?: number;
-    exclusiveMaximum?: number;
-    exclusiveMinimum?: number;
-    minimum?: number;
-    min?: number;
-    len?: number;
-    whitespace?: boolean;
-    enum?: any[];
-    message?: string;
-    [key: string]: any;
-}
-```
-
-#### ValidateResponse
-
-```typescript
-export declare type ValidateResponse = SyncValidateResponse | AsyncValidateResponse;
-```
 
 #### SyncValidateResponse
 
@@ -1084,4 +1119,88 @@ declare type SyncValidateResponse = null | string | boolean | {
 
 ```typescript
 declare type AsyncValidateResponse = Promise<SyncValidateResponse>;
+
+```
+
+#### ValidateResponse
+
+```typescript
+export declare type ValidateResponse = SyncValidateResponse | AsyncValidateResponse;
+```
+
+### string内置校验规则
+
+```typescript
+{
+  pattern:'%s 不是一个合法的字段',
+  required: '%s 是必填字段',
+  number:'%s 不是合法的数字',
+  integer:'%s 不是合法的整型数字',
+  url:'%s 不是合法的url',
+  email:"%s 不是合法的邮箱格式",
+  ipv6:"%s 不是合法的ipv6格式",
+  ipv4:"%s 不是合法的ipv4格式",
+  idcard:"%s 不是合法的身份证格式",
+  taodomain:"%s 不符合淘系域名规则",
+  qq:"%s 不符合QQ号格式",
+  phone:"%s 不是有效的手机号",
+  money:"%s 不是有效货币格式",
+  zh:"%s 不是合法的中文字符串",
+  date:"%s 不是合法的日期格式",
+  zip:"%s 不是合法的邮编格式"
+}
+```
+
+#### CustomValidator
+
+```typescript
+declare type CustomValidator = (value: any, rescription?: ValidateDescription) => ValidateResponse;
+```
+
+#### ValidateDescription
+
+```typescript
+interface ValidateDescription {
+    // 内置校验规则，参考string内置校验规则
+    format?: string;
+    // 自定义校验规则
+    validator?: CustomValidator;
+    // 是否必填
+    required?: boolean;
+    // 匹配规则
+    pattern?: RegExp | string;
+    // 最大长度
+    max?: number;
+    // 最大值（大于）
+    maximum?: number;
+    // 最大值（大于等于）
+    exclusiveMaximum?: number;
+    // 最小值（小于等于）
+    exclusiveMinimum?: number;
+    // 最小值（小于）
+    minimum?: number;
+    // 最小长度
+    min?: number;
+    // 长度
+    len?: number;
+    // 空格
+    whitespace?: boolean;
+    // 是否包含在枚举列表中
+    enum?: any[];
+    // 错误信息
+    message?: string;
+    [key: string]: any;
+}
+```
+
+#### ValidateArrayRules
+
+```typescript
+declare type ValidateArrayRules = Array<string | CustomValidator | ValidateDescription>;
+```
+
+#### ValidatePatternRules
+
+```typescript
+declare type ValidatePatternRules = string | CustomValidator | ValidateDescription | ValidateArrayRules;
 ```
