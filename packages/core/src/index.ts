@@ -294,14 +294,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
     let nodePath = FormPath.parse(path || name)
     let dataPath = transformDataPath(nodePath)
     let field: IVirtualField
-    const createField = () => {
-      let field: IVirtualField
-      field = new VirtualFieldState({
-        nodePath,
-        dataPath,
-        computeState,
-        useDirty: isValid(useDirty) ? useDirty : options.useDirty
-      })
+    const createField = (field?: IVirtualField) => {
+      field =
+        field ||
+        new VirtualFieldState({
+          nodePath,
+          dataPath,
+          computeState,
+          useDirty: isValid(useDirty) ? useDirty : options.useDirty
+        })
       field.subscription = {
         notify: onVirtualFieldChange({ field, path: nodePath })
       }
@@ -316,8 +317,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
+      field = createField(field)
       if (isField(field)) {
-        field = createField()
         graph.replace(nodePath, field)
       }
     } else {
@@ -342,14 +343,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
     let field: IField
     let nodePath = FormPath.parse(path || name)
     let dataPath = transformDataPath(nodePath)
-    const createField = () => {
-      let field: IField
-      field = new FieldState({
-        nodePath,
-        dataPath,
-        computeState,
-        useDirty: isValid(useDirty) ? useDirty : options.useDirty
-      })
+    const createField = (field?: IField) => {
+      field =
+        field ||
+        new FieldState({
+          nodePath,
+          dataPath,
+          computeState,
+          useDirty: isValid(useDirty) ? useDirty : options.useDirty
+        })
       field.subscription = {
         notify: onFieldChange({ field, path: nodePath })
       }
@@ -402,8 +404,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
-      if (isVirtualField(nodePath)) {
-        field = createField()
+      field = createField(field)
+      if (isVirtualField(field)) {
         graph.replace(nodePath, field)
       }
     } else {
@@ -1035,6 +1037,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   state.subscription = {
     notify: onFormChange
   }
+
   graph.appendNode('', state)
   state.setState((state: IFormState) => {
     state.initialized = true
