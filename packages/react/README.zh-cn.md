@@ -1,6 +1,6 @@
 # @uform/react
 
-> UForm 在 react 层的实现，内置表单状态核心管理(@uform/core), 通过结合 React 和核心管理机制，提供给开发者 API 可以快速操作表单，以及提供相应 UI 层渲染的支持。
+> UForm 在 react 层的实现，内置表单状态核心管理(@uform/react), 通过结合 React 和核心管理机制，提供给开发者 API 可以快速操作表单，以及提供相应 UI 层渲染的支持。
 > @uform/react 中主要包含了以下部分：
 >
 > - Form 表单容器
@@ -138,7 +138,7 @@ const InputField = props => (
 #### 字段校验
 
 示例：必填校验 + error类型校验 + warning类型校验 + 自定义校验
-校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [string](#string内置校验规则) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
+校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 ```typescript
 <Form>
@@ -543,7 +543,7 @@ interface IFormSpyProps {
 例子1： 实现一个统计表单values改变的计数器
 
 ```typescript
-import { Form, FormSpy } from '@uform/core'
+import { Form, FormSpy, LifeCycleTypes } from '@uform/react'
 
 const App = () => {
   return (
@@ -566,7 +566,7 @@ const App = () => {
 例子2：实现常用combo组件
 
 ```typescript
-import { Form, FormSpy } from '@uform/core'
+import { Form, FormSpy } from '@uform/react'
 
 const App = () => {
   return (
@@ -591,7 +591,7 @@ const App = () => {
 **用法**
 
 ```typescript
-import { FormProvider, FormSpy } from '@uform/core'
+import { FormProvider, FormSpy } from '@uform/react'
 import OtherFileForm from '../otherFile'
 
 const App = () => {
@@ -643,7 +643,7 @@ createFormActions(): IFormActions
 **用法**
 
 ```typescript
-import { createFormActions } from '@uform/core'
+import { createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 console.log(actions.getFieldValue('username'))
@@ -663,7 +663,7 @@ createAsyncFormActions(): IFormAsyncActions
 **用法**
 
 ```typescript
-import { createAsyncFormActions } from '@uform/core'
+import { createAsyncFormActions } from '@uform/react'
 
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
@@ -676,7 +676,7 @@ actions.getFieldValue('username').then(val => console.log(val))
 **用法**
 
 ```typescript
-import { FormEffectHooks, Form } from '@uform/core'
+import { FormEffectHooks, Form } from '@uform/react'
 const {
   /**
    * Form LifeCycle
@@ -1158,7 +1158,7 @@ declare type CustomValidator = (value: any, rescription?: ValidateDescription) =
 ```typescript
 interface ValidateDescription {
     // 内置校验规则，参考string内置校验规则
-    format?: string;
+    format?: InternalFormats;
     // 自定义校验规则
     validator?: CustomValidator;
     // 是否必填

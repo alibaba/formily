@@ -138,7 +138,7 @@ const InputField = props => (
 #### Validation
 
 Example：required validation + error type validation + warning type validation + custom validation
-The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [string](#string rules) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
+The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 ```typescript
 <Form>
@@ -532,7 +532,7 @@ interface IFormSpyProps {
 Example1： Form state change counter
 
 ```typescript
-import { Form, FormSpy } from '@uform/core'
+import { Form, FormSpy, LifeCycleTypes } from '@uform/react'
 
 const App = () => {
   return (
@@ -555,7 +555,7 @@ const App = () => {
 Example2：Combo
 
 ```typescript
-import { Form, FormSpy } from '@uform/core'
+import { Form, FormSpy } from '@uform/react'
 
 const App = () => {
   return (
@@ -582,7 +582,7 @@ const App = () => {
 **Usage**
 
 ```typescript
-import { FormProvider, FormSpy } from '@uform/core'
+import { FormProvider, FormSpy } from '@uform/react'
 import OtherFileForm from '../otherFile'
 
 const App = () => {
@@ -634,7 +634,7 @@ createFormActions(): IFormActions
 **Usage**
 
 ```typescript
-import { createFormActions } from '@uform/core'
+import { createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 console.log(actions.getFieldValue('username'))
@@ -653,7 +653,7 @@ createAsyncFormActions(): IFormAsyncActions
 **Usage**
 
 ```typescript
-import { createAsyncFormActions } from '@uform/core'
+import { createAsyncFormActions } from '@uform/react'
 
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
@@ -666,7 +666,7 @@ actions.getFieldValue('username').then(val => console.log(val))
 **Usage**
 
 ```typescript
-import { FormEffectHooks, Form } from '@uform/core'
+import { FormEffectHooks, Form } from '@uform/react'
 const {
   /**
    * Form LifeCycle
@@ -1118,7 +1118,7 @@ declare type CustomValidator = (
 ```typescript
 interface ValidateDescription {
   // built-in rules，ref: string rules
-  format?: string
+  format?: InternalFormats;
   // custom validation
   validator?: CustomValidator
   // required
