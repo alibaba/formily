@@ -579,8 +579,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```typescript
 文件目录
 --app
-  --components
-  --customForm
+  |---components
+  |---customForm
 ```
 
 示例：跨文件消费表单数据, 更多用法，请参考[FormProvider](#FormProvider) 和 [FormSpy](#FormSpy)
@@ -1074,7 +1074,7 @@ const App = () => {
         })}
       >
         {({ state, type, form }) => {
-          return <div>{state.count || 0}</div>
+          return <div>count: {state.count || 0}</div>
         }}
       </FormSpy>
     </Form>

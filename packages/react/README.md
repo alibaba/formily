@@ -579,8 +579,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```typescript
 Dictionary
 --app
---components
---customForm
+  |---components
+  |---customForm
 ```
 
 Example：Cross-file consumption form state, Check [FormProvider](#FormProvider) and [FormSpy](#FormSpy) for more infomation.
@@ -1057,7 +1057,7 @@ const App = () => {
         })}
       >
         {({ state, type, form }) => {
-          return <div>{state.count || 0}</div>
+          return <div>count: {state.count || 0}</div>
         }}
       </FormSpy>
     </Form>
