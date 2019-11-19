@@ -166,7 +166,7 @@ export const env = {
 
 export const [raf, caf] = getScheduler()
 
-export const createFormEffects = <Payload = any, Actions = {}>(
+export const createFormEffects = <Payload = any, Actions = any>(
   effects: IFormEffect<Payload, Actions> | null,
   actions: Actions
 ) => {

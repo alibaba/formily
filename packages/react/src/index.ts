@@ -14,6 +14,7 @@ export * from './components/FormConsumer'
 export * from './hooks/useForm'
 export * from './hooks/useField'
 export * from './hooks/useVirtualField'
+export * from './hooks/useFormEffects'
 export * from './types'
 
 export {

@@ -77,7 +77,7 @@ export const useForm = <
   })
   const lifecycles = [
     new FormLifeCycle(
-      ({ type, payload }: { type: string; payload: IModel }) => {
+      ({ type, payload }) => {
         dispatch.lazy(type, () => {
           return isStateModel(payload) ? payload.getState() : payload
         })
