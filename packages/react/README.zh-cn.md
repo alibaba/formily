@@ -47,8 +47,9 @@ npm install --save @uform/react
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`IFieldState`](#IFieldState)
+  - [`IVirtualFieldState`](#IVirtualFieldState)
   - [`SyncValidateResponse`](#SyncValidateResponse)
-  - [`AsyncValidateResponse`](#AsyncValidateResponse)  
+  - [`AsyncValidateResponse`](#AsyncValidateResponse)
   - [`ValidateResponse`](#ValidateResponse)
   - [`CustomValidator`](#CustomValidator)
   - [`ValidateDescription`](#ValidateDescription)
@@ -656,7 +657,6 @@ console.log(actions.getFieldValue('username'))
 
 ```typescript
 createAsyncFormActions(): IFormAsyncActions
-actions.getFieldValue('username').then(val => console.log(val))
 ```
 
 **用法**
@@ -665,7 +665,7 @@ actions.getFieldValue('username').then(val => console.log(val))
 import { createAsyncFormActions } from '@uform/core'
 
 const actions = createAsyncFormActions()
-// 所有的API和formActions保持一致，但是会返回promise类型的结果
+actions.getFieldValue('username').then(val => console.log(val))
 ```
 
 #### `FormEffectHooks`
@@ -920,42 +920,6 @@ interface IFormActions {
 }
 ```
 
-
-
-#### IVirtualFieldState
-
-> 虚拟Field核心状态
-
-```typescript
-interface IVirtualFieldState<FieldProps = any> {
-  
-  /**只读状态**/
-  
-  //状态名称，VirtualFieldState
-  displayName: string
-  //字段数据路径
-  name: string
-  //字段节点路径
-  path: string
-  //是否已经初始化
-  initialized: boolean
-  
-  /**可写状态**/
-  
-  //是否可见，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
-  visible: boolean
-  //是否展示，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
-  display: boolean
-  //是否已挂载
-  mounted: boolean
-  //是否已卸载
-  unmounted: boolean
-  //字段扩展属性
-  props: FieldProps
-}
-
-```
-
 #### IFormAsyncActions
 
 ```typescript
@@ -1104,6 +1068,40 @@ interface IFieldState<FieldProps = any> {
 }
 ```
 
+
+#### IVirtualFieldState
+
+> 虚拟Field核心状态
+
+```typescript
+interface IVirtualFieldState<FieldProps = any> {
+  
+  /**只读状态**/
+  
+  //状态名称，VirtualFieldState
+  displayName: string
+  //字段数据路径
+  name: string
+  //字段节点路径
+  path: string
+  //是否已经初始化
+  initialized: boolean
+  
+  /**可写状态**/
+  
+  //是否可见，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
+  visible: boolean
+  //是否展示，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
+  display: boolean
+  //是否已挂载
+  mounted: boolean
+  //是否已卸载
+  unmounted: boolean
+  //字段扩展属性
+  props: FieldProps
+}
+
+```
 
 
 #### SyncValidateResponse
