@@ -907,9 +907,24 @@ interface IMutators {
     }>
 }
 
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+
 interface ValidateDescription {
      // Regular rule type
-     format?: string
+     format?: InternalFormats
      // Custom validator
      validator?: CustomValidator
      // Is it required?
