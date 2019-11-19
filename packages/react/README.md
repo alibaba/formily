@@ -23,22 +23,22 @@ npm install --save @uform/react
 
 <!-- toc -->
 
-- [Usage](#Usage)
-  - [`Quick Start`](#Quick Start)
-  - [`Basic Field`](#Basic Field)
+- [`Usage`](#Usage)
+  - [`Quick Start`](#Quick-Start)
+  - [`Basic Field`](#Basic-Field)
   - [`Validation`](#Validation)
-  - [`Object Field`](#Object Field)
+  - [`Object Field`](#Object-Field)
   - [`ArrayField`](#ArrayField)
-  - [`ArrayField<Object>`](#ArrayField<Object>)
-  - [`combo`](#combo)
-  - [`Provide and FormSpy`](#Provide and FormSpy)
+  - [`ArrayField<Object>`](#ArrayField&lt;Object&gt;)
+  - [`Combo`](#Combo)
+  - [`Provide and FormSpy`](#Provide-and-FormSpy)
 - [Components](#components)
   - [`Form`](#Form)
   - [`Field`](#Field)
   - [`VirtualField`](#VirtualField)
   - [`FormSpy`](#FormSpy)
   - [`FormProvider`](#FormProvider)
-  - [`FormConsumer(deprecated，pls using FormSpy)`](#FormConsumer(deprecated，pls using FormSpy))
+  - [`FormConsumer(deprecated，pls using FormSpy)`](#FormConsumer(deprecated，pls-using-FormSpy))
 - [API](#API)
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
@@ -239,7 +239,7 @@ Example：Id list
 <Form>
 ```
 
-#### ArrayField<Object>
+#### ArrayField&lt;Object&gt;
 
 Example：User id list
 
@@ -280,7 +280,7 @@ Example：User id list
 <Form>
 ```
 
-#### combo
+#### Combo
 
 Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more inforation.
 
