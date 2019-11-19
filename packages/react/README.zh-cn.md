@@ -51,6 +51,7 @@ npm install --save @uform/react
   - [`SyncValidateResponse`](#SyncValidateResponse)
   - [`AsyncValidateResponse`](#AsyncValidateResponse)
   - [`ValidateResponse`](#ValidateResponse)
+  - [`InternalFormats`](#InternalFormats)
   - [`CustomValidator`](#CustomValidator)
   - [`ValidateDescription`](#ValidateDescription)
   - [`ValidateArrayRules`](#ValidateArrayRules)
@@ -1126,28 +1127,25 @@ declare type AsyncValidateResponse = Promise<SyncValidateResponse>;
 export declare type ValidateResponse = SyncValidateResponse | AsyncValidateResponse;
 ```
 
-### string内置校验规则
+### InternalFormats
 
 ```typescript
-{
-  pattern:'%s 不是一个合法的字段',
-  required: '%s 是必填字段',
-  number:'%s 不是合法的数字',
-  integer:'%s 不是合法的整型数字',
-  url:'%s 不是合法的url',
-  email:"%s 不是合法的邮箱格式",
-  ipv6:"%s 不是合法的ipv6格式",
-  ipv4:"%s 不是合法的ipv4格式",
-  idcard:"%s 不是合法的身份证格式",
-  taodomain:"%s 不符合淘系域名规则",
-  qq:"%s 不符合QQ号格式",
-  phone:"%s 不是有效的手机号",
-  money:"%s 不是有效货币格式",
-  zh:"%s 不是合法的中文字符串",
-  date:"%s 不是合法的日期格式",
-  zip:"%s 不是合法的邮编格式"
-}
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
 ```
+
 
 #### CustomValidator
 

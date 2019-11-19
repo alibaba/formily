@@ -51,6 +51,7 @@ npm install --save @uform/react
   - [`SyncValidateResponse`](#SyncValidateResponse)
   - [`AsyncValidateResponse`](#AsyncValidateResponse)
   - [`ValidateResponse`](#ValidateResponse)
+  - [`InternalFormats`](#InternalFormats)
   - [`CustomValidator`](#CustomValidator)
   - [`ValidateDescription`](#ValidateDescription)
   - [`ValidateArrayRules`](#ValidateArrayRules)
@@ -1084,27 +1085,23 @@ export declare type ValidateResponse =
   | AsyncValidateResponse
 ```
 
-### string rules
+### InternalFormats
 
 ```typescript
-{
-  pattern:'%s value %s does not match pattern %s',
-  required: '%s is required',
-  number:'%s is not a number',
-  integer:'%s is not an integer number',
-  url:'%s is a invalid url',
-  email:"%s is not a email format",
-  ipv6:"%s is not a ipv6 format",
-  ipv4:"%s is not a ipv4 format",
-  idcard:"%s is not an idcard format",
-  taodomain:"%s is not a taobao domain format",
-  qq:"%s is not a qq number format",
-  phone:"%s is not a phone number format",
-  money:"%s is not a currency format",
-  zh:"%s is not a chinese string",
-  date:"%s is not a valid date format",
-  zip:"%s is not a zip format"
-}
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
 ```
 
 #### CustomValidator
