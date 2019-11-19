@@ -1,44 +1,44 @@
 # @uform/react
 
-> @uform/react is based on `react` and @uform/core is already built in. It provide API to manuplate form state and components for rendering support.
-> it mainly includes:
+> UForm 在 react 层的实现，内置表单状态核心管理(@uform/react), 通过结合 React 和核心管理机制，提供给开发者 API 可以快速操作表单，以及提供相应 UI 层渲染的支持。
+> @uform/react 中主要包含了以下部分：
 >
-> - Form
-> - Field
-> - VirtualField
-> - FormaSpy
-> - FormProvider
-> - FormConsumer(deprecated，pls using FormSpy)
-> - createFormActions (create sync API to manuplate form state)
-> - createAsyncFormActions (create async API to manuplate form state)
-> - FormEffectHooks (LifeCycles Hook)
+> - Form 表单容器
+> - Field 表单字段
+> - VirtualField 虚拟表单字段
+> - FormaSpy 表单替身
+> - FormProvider 表单核心提供者
+> - FormConsumer 表单核心消费者(即将废弃，请使用 FormSpy)
+> - createFormActions 创建表单核心操作 API 实例
+> - createAsyncFormActions 创建表单核心操作 API 实例（异步）
+> - FormEffectHooks 表单生命周期 hook
 
-### Install
+### 安装
 
 ```bash
 npm install --save @uform/react
 ```
 
-### Table Of Contents
+### 目录
 
 <!-- toc -->
 
-- [`Usage`](#Usage)
-  - [`Quick Start`](#Quick-Start)
-  - [`Basic Field`](#Basic-Field)
-  - [`Validation`](#Validation)
-  - [`Object Field`](#Object-Field)
-  - [`ArrayField`](#ArrayField)
-  - [`ArrayField<Object>`](#ArrayField<Object>)
-  - [`Combo`](#Combo)
-  - [`Provide and FormSpy`](#Provide-and-FormSpy)
+- [使用方式](#使用方式)
+  - [`快速开始`](#快速开始)
+  - [`基础类型字段`](#基础类型字段)
+  - [`字段校验`](#字段校验)
+  - [`对象类型字段`](#对象类型字段)
+  - [`简单数组类型字段`](#简单数组类型字段)
+  - [`对象数组类型字段`](#对象数组类型字段)
+  - [`combo字段`](#combo字段)
+  - [`跨文件消费表单数据`](#跨文件消费表单数据)
 - [Components](#components)
   - [`Form`](#Form)
   - [`Field`](#Field)
   - [`VirtualField`](#VirtualField)
   - [`FormSpy`](#FormSpy)
   - [`FormProvider`](#FormProvider)
-  - [`FormConsumer(deprecated，pls using FormSpy)`](<#FormConsumer(deprecated，pls-using-FormSpy)>)
+  - [`FormConsumer(即将废弃，请使用FormSpy)`](<#FormConsumer(即将废弃，请使用FormSpy)>)
 - [API](#API)
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
@@ -58,11 +58,11 @@ npm install --save @uform/react
   - [`ValidateArrayRules`](#ValidateArrayRules)
   - [`ValidatePatternRules`](#ValidatePatternRules)
 
-### Usage
+### 使用方式
 
 ---
 
-#### Quick Start
+#### 快速开始
 
 ```jsx
 import React from 'react'
@@ -86,10 +86,10 @@ const App = () => {
       actions={actions}
       effects={() => {
         onFormInit$().subscribe(() => {
-          console.log('initialized')
+          console.log('初始化')
         })
         onFieldInputChange$().subscribe(state => {
-          console.log('field change', state)
+          console.log('输入变化', state)
         })
       }}
       onChange={() => {}}
@@ -118,11 +118,11 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### Basic Field
+#### 基础类型字段
 
-Example：Show you how to bind the `<input>` field and subsequent examples are based on this field
+示例：以输入框为例，如何快速绑定表单字段，后续例子都基于此字段拓展。
 
-```tsx
+```typescript
 const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => (
@@ -142,10 +142,10 @@ const InputField = props => (
 )
 ```
 
-#### Validation
+#### 字段校验
 
-Example：required validation + error type validation + warning type validation + custom validation
-The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [InternalFormats](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
+示例：必填校验 + error 类型校验 + warning 类型校验 + 自定义校验
+校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [InternalFormats](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 ```jsx
 import React from 'react'
@@ -260,9 +260,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### Object Field
+#### 对象类型字段
 
-Example：User info `user(username, age)`
+示例：用户信息 `user(username, age)`
 
 ```jsx
 import React from 'react'
@@ -350,9 +350,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### ArrayField
+#### 简单数组类型字段
 
-Example：Id list
+示例：用户 id 列表，增删改查
 
 ```jsx
 import React from 'react'
@@ -407,9 +407,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### ArrayField&lt;Object&gt;
+#### 对象数组类型字段
 
-Example：User list
+示例：用户 id 列表，增删改查
 
 ```jsx
 import React from 'react'
@@ -521,9 +521,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### Combo
+#### combo 字段
 
-Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more inforation.
+示例：combo username 和 age 字段, 更多用法，请点击[FormSpy](#FormSpy)查看
 
 ```jsx
 import React from 'react'
@@ -574,16 +574,16 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### Provide and FormSpy
+#### 跨文件消费表单数据
 
 ```typescript
-Dictionary
+文件目录
 --app
   |---components
   |---customForm
 ```
 
-Example：Cross-file consumption form state, Check [FormProvider](#FormProvider) and [FormSpy](#FormSpy) for more infomation.
+示例：跨文件消费表单数据, 更多用法，请参考[FormProvider](#FormProvider) 和 [FormSpy](#FormSpy)
 
 ```jsx
 import React from 'react'
@@ -648,66 +648,78 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Form
 
-> `<Form>` Props
+> Form 组件属性定义
 
 ```typescript
 interface IFormProps {
-  // Form value
+  //值
   value?: any
-  defaultValue?: any // Form initial value
+  defaultValue?: any
+  //初始值
   initialValues?: any
   // formAPI
   actions?: IFormActions | IFormAsyncActions
-  // effect
+  // 副作用
   effects?: IFormEffect<any, IFormActions | IFormAsyncActions>
-  // IForm instance
-  form?: IForm // Form change event callback
-  onChange?: (values: Value) => void // Form submission event callback
-  onSubmit?: (values: Value) => void | Promise<Value> // Form reset event callback
-  onReset?: () => void // Form verification failure event callback
+  // IForm实例
+  form?: IForm
+  onChange?: (values: Value) => void
+  onSubmit?: (values: Value) => void | Promise<Value>
+  onReset?: () => void
   onValidateFailed?: (valideted: IFormValidateResult) => void
   children?: React.ReactElement | ((form: IForm) => React.ReactElement)
-  // Whether to use the dirty check, the default will go immer accurate update
+  //是否使用脏检查，默认会走immer精确更新
   useDirty?: boolean
-  // Is it editable, overall control in the Form dimension
+  // 是否可编辑，默认可编辑
   editable?: boolean
-  // Whether to go pessimistic check, stop the subsequent check when the first check fails
+  //是否走悲观校验，遇到第一个校验失败就停止后续校验
   validateFirst?: boolean
 }
 ```
 
 #### Field
 
-> `<Field>` Props
+> Field 组件属性定义
 
 ```typescript
 interface IFieldStateUIProps {
-  // Node path
-  path?: FormPathPattern // Node path
-  nodePath?: FormPathPattern // Data path
-  dataPath?: FormPathPattern // Data path
-  name?: string // Field value, is equal to values[0]
-  value?: any // Field multi-parameter value, such as when the field onChange trigger, the event callback passed multi-parameter data, then the value of all parameters will be stored here
-  values?: any[] // Initial value
-  initialValue?: any // field extension properties
-  props?: FieldProps // Check the rules, the specific type description refers to the following documents
-  rules?: ValidatePatternRules[] // Is it required?
-  required?: boolean // Is it editable?
-  editable?: boolean // Whether to use the dirty check, the default will go immer accurate update
+  //节点路径
+  path?: FormPathPattern
+  //节点路径
+  nodePath?: FormPathPattern
+  //数据路径
+  dataPath?: FormPathPattern
+  //数据路径
+  name?: string
+  //字段值，与values[0]是恒定相等
+  value?: any
+  //字段多参值，比如字段onChange触发时，给事件回调传了多参数据，那么这里会存储所有参数的值
+  values?: any[]
+  //初始值
+  initialValue?: any
+  //字段扩展属性
+  props?: FieldProps
+  //校验规则，具体类型描述参考后面文档
+  rules?: ValidatePatternRules[]
+  //是否必填
+  required?: boolean
+  //字段是否可编辑
+  editable?: boolean
+  //字段是否走脏检查
   useDirty?: boolean
-  // Field state calculation container, mainly used to extend the core linkage rules
+  //字段状态计算容器，主要用于扩展核心联动规则
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  // type of trigger validation
+  // 触发校验类型
   triggerType?: 'onChange' | 'onBlur'
-  // get value from browser event(eg. e.target.value)
+  // 值格式化函数，从浏览器event中获取value
   getValueFromEvent?: (...args: any[]) => any
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 ```
 
-**Usage**
+**用法**
 
-Example：All type of field
+例子：各种类型的字段
 
 ```jsx
 import React from 'react'
@@ -903,26 +915,31 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### VirtualField
 
-> `<VirtualField>` Props
+> VirtualField 组件属性定义
 
 ```typescript
 interface IVirtualFieldProps {
-  // Node path
-  path?: FormPathPattern // Node path
-  nodePath?: FormPathPattern // Data path
-  dataPath?: FormPathPattern // Data path
-  name?: string // Form extension properties
-  props?: FieldProps // Whether to use the dirty check, the default will go immer accurate update
+  //节点路径
+  path?: FormPathPattern
+  //节点路径
+  nodePath?: FormPathPattern
+  //数据路径
+  dataPath?: FormPathPattern
+  //数据路径
+  name?: string
+  //字段扩展属性
+  props?: FieldProps
+  //字段是否走脏检查
   useDirty?: boolean
-  // Field state calculation container, mainly used to extend the core linkage rules
+  //字段状态计算容器，主要用于扩展核心联动规则
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 ```
 
-**Usage**
+**用法**
 
-Example：Setting `<Layout>` size from 100x100 to 200x200
+例子：动态设置布局组件的属性
 
 ```jsx
 import React from 'react'
@@ -999,13 +1016,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### FormSpy
 
-> `<FormSpy>` Props
+> FormSpy 组件属性定义
 
 ```typescript
 interface IFormSpyProps {
-  // selector, eg: [ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
+  // 选择器, 如：[ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
   selector?: string[] | string
-  // reducer
+  // reducer函数，状态叠加处理，action为当前命中的生命周期的数据
   reducer?: (
     state: any,
     action: { type: string; payload: any },
@@ -1015,9 +1032,9 @@ interface IFormSpyProps {
 }
 ```
 
-**Usage**
+**用法**
 
-Example1： Form state change counter
+例子 1： 实现一个统计表单 values 改变的计数器
 
 ```jsx
 import React from 'react'
@@ -1068,7 +1085,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```
 
-Example2：Combo
+例子 2：实现常用 combo 组件
 
 ```jsx
 import React from 'react'
@@ -1121,10 +1138,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### FormProvider
 
-> Used with FormSpy, often used in Cross-file consumption form state
+> 与 FormSpy 搭配使用，常用与跨文件通信
 
-**Usage**
-
+**用法**
 
 ```jsx
 import React from 'react'
@@ -1183,13 +1199,13 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### FormConsumer(deprecated，pls using FormSpy)
+#### FormConsumer(即将废弃，请使用 FormSpy)
 
-> `<FormConsumer>` Props
+> FormConsumer 组件属性定义
 
 ```typescript
 interface IFormConsumerProps {
-  // eg.[ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
+  // 选择器, 如：[ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
   selector?: string[] | string
   children?:
     | React.ReactElement
@@ -1203,15 +1219,15 @@ interface IFormConsumerProps {
 
 #### `createFormActions`
 
-> Return [IFormActions](#IFormActions)
+> 创建一个 [IFormActions](#IFormActions) 实例
 
-**Signature**
+**签名**
 
 ```typescript
 createFormActions(): IFormActions
 ```
 
-**Usage**
+**用法**
 
 ```typescript
 import { createFormActions } from '@uform/react'
@@ -1222,15 +1238,16 @@ console.log(actions.getFieldValue('username'))
 
 #### `createAsyncFormActions`
 
-> Return [IFormAsyncActions](#IFormAsyncActions)
+> 创建一个 [IFormAsyncActions](#IFormAsyncActions) 实例，成员方法 同[IFormActions](#IFormActions),
+> 但是调用 API 返回的结果是异步的(promise)。
 
-**Signature**
+**签名**
 
 ```typescript
 createAsyncFormActions(): IFormAsyncActions
 ```
 
-**Usage**
+**用法**
 
 ```typescript
 import { createAsyncFormActions } from '@uform/react'
@@ -1241,68 +1258,45 @@ actions.getFieldValue('username').then(val => console.log(val))
 
 #### `FormEffectHooks`
 
-> Return all @uform/core lifeCycles hook which can be subscribe
+> 返回包含所有 UForm 生命周期的钩子函数，可以被监听消费
 
-**Usage**
+**用法**
 
-```tsx
+```typescript
 import { FormEffectHooks, Form } from '@uform/react'
 const {
   /**
    * Form LifeCycle
    **/
-  // Form pre-initialization trigger
-  onFormWillInit$,
-  // Form initialization trigger
-  onFormInit$,
-  // Triggered when the form changes
-  onFormChange$,
-  // Triggered when the form event is triggered, used to monitor only manual operations
-  onFormInputChange$,
-  // Trigger when the form initial value changes
-  onFormInitialValueChange$,
-  // Triggered when the form is reset
-  onFormReset$,
-  // Triggered when the form is submitted
-  onFormSubmit$,
-  // Triggered when the form submission starts
-  onFormSubmitStart$,
-  // Triggered when the form submission ends
-  onFormSubmitEnd$,
-  // Triggered when the form is mounted
-  onFormMount$,
-  // Triggered when the form is unloaded
-  onFormUnmount$,
-  // Triggered when form validation begins
-  onFormValidateStart$,
-  // Triggered when the form validation ends
-  onFormValidateEnd$,
-  // Trigger when the form initial value changes
-  onFormValuesChange$,
+  onFormWillInit$, // 表单预初始化触发
+  onFormInit$, // 表单初始化触发
+  onFormChange$, // 表单变化时触发
+  onFormInputChange$, // 表单事件触发时触发，用于只监控人工操作
+  onFormInitialValueChange$, // 表单初始值变化时触发
+  onFormReset$, // 表单重置时触发
+  onFormSubmit$, // 表单提交时触发
+  onFormSubmitStart$, // 表单提交开始时触发
+  onFormSubmitEnd$, // 表单提交结束时触发
+  onFormMount$, // 表单挂载时触发
+  onFormUnmount$, // 表单卸载时触发
+  onFormValidateStart$, // 表单校验开始时触发
+  onFormValidateEnd$, //表单校验结束时触发
+  onFormValuesChange$, // 表单值变化时触发
   /**
    * FormGraph LifeCycle
    **/
-  // Triggered when the form observer tree changes
-  onFormGraphChange$,
+  onFormGraphChange$, // 表单观察者树变化时触发
   /**
    * Field LifeCycle
    **/
-  // Triggered when pre-initialized
-  onFieldWillInit$,
-  // Triggered when the field is initialized
-  onFieldInit$,
-  // Triggered when the field changes
-  onFieldChange$,
-  // Triggered when the field is mounted
-  onFieldMount$,
-  // Trigger when the field is unloaded
-  onFieldUnmount$,
-  // Triggered when the field event is triggered, used to monitor only manual operations
-  onFieldInputChange$,
-  // Triggered when the field value changes
-  onFieldValueChange$,
-  // Trigger when the initial value of the field changes
-  onFieldInitialValueChange$
+  onFieldWillInit$, // 字段预初始化时触发
+  onFieldInit$, // 字段初始化时触发
+  onFieldChange$, // 字段变化时触发
+  onFieldMount$, // 字段挂载时触发
+  onFieldUnmount$, // 字段卸载时触发
+  onFieldInputChange$, // 字段事件触发时触发，用于只监控人工操作
+  onFieldValueChange$, // 字段值变化时触发
+  onFieldInitialValueChange$ // 字段初始值变化时触发
 } = FormEffectHooks
 
 const App = () => {
@@ -1310,7 +1304,7 @@ const App = () => {
     <Form
       effects={() => {
         onFormInit$().subscribe(() => {
-          console.log('initialized')
+          console.log('初始化')
         })
       }}
     >
@@ -1320,9 +1314,10 @@ const App = () => {
 }
 ```
 
+
 #### createEffectHook
 
-> Custom your own hook by this api
+> 自定义hook
 
 **Usage**
 
@@ -1360,7 +1355,6 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 ### Interfaces
 
 ---
@@ -1370,144 +1364,188 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```typescript
 interface IFormActions {
   /*
-   * Form submission, if the callback parameter returns Promise,
-   * Then the entire submission process will hold and load is true.
-   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   * 表单提交，如果回调参数返回Promise，
+   * 那么整个提交流程会hold住，同时loading为true，
+   * 等待Promise resolve才触发表单onFormSubmitEnd事件，同时loading为false
    */
   submit(
     onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<{
-    Validated: IFormValidateResult
-    Payload: any //onSubmit callback function return value
+    validated: IFormValidateResult
+    payload: any //onSubmit回调函数返回值
   }>
+
   /*
-   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
-   * For example, clearErrors("*(aa,bb,cc)")
+   * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
+   * 比如clearErrors("*(aa,bb,cc)")
    */
   clearErrors: (pattern?: FormPathPattern) => void
+
   /*
-   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
-   * For example, hasChanged(state,'value.aa')
+   * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
+   * 比如hasChanged(state,'value.aa')
    */
   hasChanged(
     target: IFormState | IFieldState | IVirtualFieldState,
     path: FormPathPattern
   ): boolean
+
   /*
-   * Reset form
+   * 重置表单
    */
   reset(options?: {
-    // Forced to empty
-    forceClear?: boolean // Forced check
-    validate?: boolean // Reset range for batch or precise control of the field to be reset
+    //强制清空
+    forceClear?: boolean
+    //强制校验
+    validate?: boolean
+    //重置范围，用于批量或者精确控制要重置的字段
     selector?: FormPathPattern
   }): Promise<void | IFormValidateResult>
+
   /*
-   * Validation form
+   * 校验表单
    */
   validate(
     path?: FormPathPattern,
     options?: {
-      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
       first?: boolean
     }
   ): Promise<IFormValidateResult>
+
   /*
-   * Set the form status
+   * 设置表单状态
    */
-  setFormState( // Operation callback
-    callback?: (state: IFormState) => any, // No trigger the event
+  setFormState(
+    //操作回调
+    callback?: (state: IFormState) => any,
+    //是否不触发事件
     silent?: boolean
   ): void
+
   /*
-   * Get form status
+   * 获取表单状态
    */
-  getFormState( //transformer
+  getFormState(
+    //transformer
     callback?: (state: IFormState) => any
   ): any
+
   /*
-   * Set the field status
+   * 设置字段状态
    */
-  setFieldState( // Field path
-    path: FormPathPattern, // Operation callback
-    callback?: (state: IFieldState) => void, // No trigger the event
+  setFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //操作回调
+    callback?: (state: IFieldState) => void,
+    //是否不触发事件
     silent?: boolean
   ): void
+
   /*
-   * Get the field status
+   * 获取字段状态
    */
-  getFieldState( // Field path
-    path: FormPathPattern, // Transformer
+  getFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //transformer
     callback?: (state: IFieldState) => any
   ): any
+
   /*
-   * Registration field
+   * 注册字段
    */
   registerField(props: {
-    // Node path
-    path?: FormPathPattern // Data path
-    name?: string // Field value
-    value?: any // Field multi-value
-    values?: any[] // Field initial value
-    initialValue?: any // Field extension properties
-    props?: any // Field check rule
-    rules?: ValidatePatternRules[] // Field is required
-    required?: boolean // Is the field editable?
-    editable?: boolean // Whether the field is dirty check
-    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
+    //节点路径
+    path?: FormPathPattern
+    //数据路径
+    name?: string
+    //字段值
+    value?: any
+    //字段多参值
+    values?: any[]
+    //字段初始值
+    initialValue?: any
+    //字段扩展属性
+    props?: any
+    //字段校验规则
+    rules?: ValidatePatternRules[]
+    //字段是否必填
+    required?: boolean
+    //字段是否可编辑
+    editable?: boolean
+    //字段是否走脏检查
+    useDirty?: boolean
+    //字段状态计算容器，主要用于扩展核心联动规则
     computeState?: (draft: IFieldState, prevState: IFieldState) => void
   }): IField
+
   /*
-   * Register virtual fields
+   * 注册虚拟字段
    */
   registerVirtualField(props: {
-    // Node path
-    path?: FormPathPattern // Data path
-    name?: string // Field extension properties
-    props?: any // Whether the field is dirty check
-    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
+    //节点路径
+    path?: FormPathPattern
+    //数据路径
+    name?: string
+    //字段扩展属性
+    props?: any
+    //字段是否走脏检查
+    useDirty?: boolean
+    //字段状态计算容器，主要用于扩展核心联动规则
     computeState?: (draft: IFieldState, prevState: IFieldState) => void
   }): IVirtualField
+
   /*
-   * Create a field data operator, which will explain the returned API in detail later.
+   * 创建字段数据操作器，后面会详细解释返回的API
    */
   createMutators(field: IField): IMutators
+
   /*
-   * Get the form observer tree
+   * 获取表单观察者树
    */
   getFormGraph(): IFormGraph
+
   /*
-   * Set the form observer tree
+   * 设置表单观察者树
    */
   setFormGraph(graph: IFormGraph): void
+
   /*
-   * Listen to the form life cycle
+   * 监听表单生命周期
    */
   subscribe(
     callback?: ({ type, payload }: { type: string; payload: any }) => void
   ): number
+
   /*
-   * Cancel the listening form life cycle
+   * 取消监听表单生命周期
    */
   unsubscribe(id: number): void
+
   /*
-   * Trigger form custom life cycle
+   * 触发表单自定义生命周期
    */
   notify: <T>(type: string, payload?: T) => void
+
   /*
-   * Set the field value
+   * 设置字段值
    */
   setFieldValue(path?: FormPathPattern, value?: any): void
+
   /*
-   * Get the field value
+   * 获取字段值
    */
   getFieldValue(path?: FormPathPattern): any
+
   /*
-   * Set the initial value of the field
+   * 设置字段初始值
    */
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
+
   /*
-   * Get the initial value of the field
+   * 获取字段初始值
    */
   getFieldInitialValue(path?: FormPathPattern): any
 }
@@ -1518,109 +1556,82 @@ interface IFormActions {
 ```typescript
 interface IFormAsyncActions {
   /*
-   * Form submission, if the callback parameter returns Promise,
-   * Then the entire submission process will hold and load is true.
-   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   * 表单提交，如果回调参数返回Promise，
+   * 那么整个提交流程会hold住，同时loading为true，
+   * 等待Promise resolve才触发表单onFormSubmitEnd事件，同时loading为false
    */
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   /*
-   * Reset form
+   * 重置表单
    */
   reset(options?: IFormResetOptions): Promise<void>
   /*
-   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
-   * For example, hasChanged(state,'value.aa')
+   * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
+   * 比如hasChanged(state,'value.aa')
    */
   hasChanged(target: any, path: FormPathPattern): Promise<boolean>
   /*
-   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
-   * For example, clearErrors("*(aa,bb,cc)")
+   * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
+   * 比如clearErrors("*(aa,bb,cc)")
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * Validation form
+   * 校验表单
    */
   validate(
     path?: FormPathPattern,
     options?: {
-      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
       first?: boolean
     }
   ): Promise<IFormValidateResult>
   /*
-   * Set the form state
+   * 设置表单状态
    */
   setFormState(
-    // Operation callback
+    //操作回调
     callback?: (state: IFormState) => any,
-    // No trigger the event
+    //是否不触发事件
     silent?: boolean
   ): Promise<void>
   /*
-   * Get form state
+   * 获取表单状态
    */
   getFormState(
     //transformer
     callback?: (state: IFormState) => any
   ): Promise<any>
   /*
-   * Set the field state
+   * 设置字段状态
    */
   setFieldState(
-    // Field path
+    //字段路径
     path: FormPathPattern,
-    // Operation callback
+    //操作回调
     callback?: (state: IFieldState) => void,
-    // No trigger the event
+    //是否不触发事件
     silent?: boolean
   ): Promise<void>
   /*
-   * Get the field state
+   * 获取字段状态
    */
   getFieldState(
-    // Field path
+    //字段路径
     path: FormPathPattern,
     //transformer
     callback?: (state: IFieldState) => any
   ): Promise<void>
-  /*
-   * Get the form observer tree
-   */
   getFormGraph(): Promise<IFormGraph>
-  /*
-   * Set the form observer tree
-   */
   setFormGraph(graph: IFormGraph): Promise<void>
-  /*
-   * Listen to the form life cycle
-   */
   subscribe(callback?: FormHeartSubscriber): Promise<number>
-  /*
-   * Cancel the listening form life cycle
-   */
   unsubscribe(id: number): Promise<void>
-  /*
-   * Trigger form custom life cycle
-   */
   notify: <T>(type: string, payload: T) => Promise<void>
   dispatch: <T>(type: string, payload: T) => void
-  /*
-   * Set the field value
-   */
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
-  /*
-   * Get the field value
-   */
   getFieldValue(path?: FormPathPattern): Promise<any>
-  /*
-   * Set the initial value of the field
-   */
   setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
-  /*
-   * Get the initial value of the field
-   */
   getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
 ```
@@ -1629,51 +1640,94 @@ interface IFormAsyncActions {
 
 ```typescript
 interface IFieldState<FieldProps = any> {
-  /**Read-only attribute**/
-  // State name, FieldState
-  displayName?: string // Data path
-  name: string // Node path
-  path: string // Has been initialized
-  initialized: boolean // Is it in the original state, the state is true only when value===intialValues
-  pristine: boolean // Is it in a legal state, as long as the error length is greater than 0, the valid is false
-  valid: boolean // Is it illegal, as long as the error length is greater than 0, the valid is true
-  invalid: boolean // Is it in check state?
-  validating: boolean // Is it modified, if the value changes, the property is true, and will be true throughout the life of the field
-  modified: boolean // Is it touched?
-  touched: boolean // Is it activated, when the field triggers the onFocus event, it will be triggered to true, when onBlur is triggered, it is false
-  active: boolean // Have you ever visited, when the field triggers the onBlur event, it will be triggered to true
-  visited: boolean /** writable property**/ // Is it visible, note: if the state is false, then the value of the field will not be submitted, and the UI will not display
-  visible: boolean // Whether to show, note: if the state is false, then the value of the field will be submitted, the UI will not display, similar to the form hidden field
-  display: boolean // Is it editable?
-  editable: boolean // Is it in the loading state, note: if the field is in asynchronous verification, loading is true
-  loading: boolean // Field multi-parameter value, such as when the field onChange trigger, the event callback passed multi-parameter data, then the value of all parameters will be stored here
-  values: any[] // Field error message
-  errors: string[] // Field alert message
-  warnings: string[] // Field value, is equal to values[0]
-  value: any // Initial value
-  initialValue: any // Check the rules, the specific type description refers to the following documents
-  rules: ValidatePatternRules[] // Is it required?
-  required: boolean // Whether to mount
-  mounted: boolean // Whether to uninstall
-  unmounted: boolean // field extension properties
+  /**只读属性**/
+
+  //状态名称，FieldState
+  displayName?: string
+  //数据路径
+  name: string
+  //节点路径
+  path: string
+  //是否已经初始化
+  initialized: boolean
+  //是否处于原始态，只有value===intialValues时的时候该状态为true
+  pristine: boolean
+  //是否处于合法态，只要errors长度大于0的时候valid为false
+  valid: boolean
+  //是否处于非法态，只要errors长度大于0的时候valid为true
+  invalid: boolean
+  //是否处于校验态
+  validating: boolean
+  //是否被修改，如果值发生变化，该属性为true，同时在整个字段的生命周期内都会为true
+  modified: boolean
+  //是否被触碰
+  touched: boolean
+  //是否被激活，字段触发onFocus事件的时候，它会被触发为true，触发onBlur时，为false
+  active: boolean
+  //是否访问过，字段触发onBlur事件的时候，它会被触发为true
+  visited: boolean
+
+  /**可写属性**/
+
+  //是否可见，注意：该状态如果为false，那么字段的值不会被提交，同时UI不会显示
+  visible: boolean
+  //是否展示，注意：该状态如果为false，那么字段的值会提交，UI不会展示，类似于表单隐藏域
+  display: boolean
+  //是否可编辑
+  editable: boolean
+  //是否处于loading状态，注意：如果字段处于异步校验时，loading为true
+  loading: boolean
+  //字段多参值，比如字段onChange触发时，给事件回调传了多参数据，那么这里会存储所有参数的值
+  values: any[]
+  //字段错误消息
+  errors: string[]
+  //字段告警消息
+  warnings: string[]
+  //字段值，与values[0]是恒定相等
+  value: any
+  //初始值
+  initialValue: any
+  //校验规则，具体类型描述参考后面文档
+  rules: ValidatePatternRules[]
+  //是否必填
+  required: boolean
+  //是否挂载
+  mounted: boolean
+  //是否卸载
+  unmounted: boolean
+  //字段扩展属性
   props: FieldProps
 }
 ```
 
 #### IVirtualFieldState
 
+> 虚拟 Field 核心状态
+
 ```typescript
 interface IVirtualFieldState<FieldProps = any> {
-  /**Read-only status**/
-  // State name, VirtualFieldState
-  displayName: string // Field data path
-  name: string // Field node path
-  path: string // Has been initialized
-  initialized: boolean /** writable status**/ // Is it visible, note: if the state is false, the UI will not be displayed, the data will not be submitted (because it is a VirtualField)
-  visible: boolean // Whether to show, note: if the state is false, the UI will not display, the data will not be submitted (because it is VirtualField)
-  display: boolean // Is it mounted?
-  mounted: boolean // Has been uninstalled
-  unmounted: boolean // field extension properties
+  /**只读状态**/
+
+  //状态名称，VirtualFieldState
+  displayName: string
+  //字段数据路径
+  name: string
+  //字段节点路径
+  path: string
+  //是否已经初始化
+  initialized: boolean
+
+  /**可写状态**/
+
+  //是否可见，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
+  visible: boolean
+  //是否展示，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
+  display: boolean
+  //是否已挂载
+  mounted: boolean
+  //是否已卸载
+  unmounted: boolean
+  //字段扩展属性
   props: FieldProps
 }
 ```
@@ -1737,33 +1791,33 @@ declare type CustomValidator = (
 
 ```typescript
 interface ValidateDescription {
-  // built-in rules，ref: string rules
+  // 内置校验规则，参考string内置校验规则
   format?: InternalFormats
-  // custom validation
+  // 自定义校验规则
   validator?: CustomValidator
-  // required
+  // 是否必填
   required?: boolean
-  // pattern
+  // 匹配规则
   pattern?: RegExp | string
-  // max length
+  // 最大长度
   max?: number
-  // maximum
+  // 最大值（大于）
   maximum?: number
-  // exclusiveMaximum
+  // 最大值（大于等于）
   exclusiveMaximum?: number
-  // exclusiveMinimum
+  // 最小值（小于等于）
   exclusiveMinimum?: number
-  // minimum
+  // 最小值（小于）
   minimum?: number
-  // min
+  // 最小长度
   min?: number
-  // length
+  // 长度
   len?: number
-  // whitespace
+  // 空格
   whitespace?: boolean
-  // enum
+  // 是否包含在枚举列表中
   enum?: any[]
-  // error message
+  // 错误信息
   message?: string
   [key: string]: any
 }
