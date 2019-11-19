@@ -8,10 +8,10 @@
 > - VirtualField 虚拟表单字段
 > - FormaSpy 表单替身
 > - FormProvider 表单核心提供者
-> - FormConsumer 表单核心消费者(即将废弃，请使用FormSpy)
-> - createFormActions 创建表单核心操作API实例
-> - createAsyncFormActions 创建表单核心操作API实例（异步）
-> - FormEffectHooks 表单生命周期hook
+> - FormConsumer 表单核心消费者(即将废弃，请使用 FormSpy)
+> - createFormActions 创建表单核心操作 API 实例
+> - createAsyncFormActions 创建表单核心操作 API 实例（异步）
+> - FormEffectHooks 表单生命周期 hook
 
 ### 安装
 
@@ -38,7 +38,7 @@ npm install --save @uform/react
   - [`VirtualField`](#VirtualField)
   - [`FormSpy`](#FormSpy)
   - [`FormProvider`](#FormProvider)
-  - [`FormConsumer(即将废弃，请使用FormSpy)`](#FormConsumer(即将废弃，请使用FormSpy))
+  - [`FormConsumer(即将废弃，请使用FormSpy)`](<#FormConsumer(即将废弃，请使用FormSpy)>)
 - [API](#API)
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
@@ -55,7 +55,7 @@ npm install --save @uform/react
   - [`CustomValidator`](#CustomValidator)
   - [`ValidateDescription`](#ValidateDescription)
   - [`ValidateArrayRules`](#ValidateArrayRules)
-  - [`ValidatePatternRules`](#ValidatePatternRules)    
+  - [`ValidatePatternRules`](#ValidatePatternRules)
 
 ### 使用方式
 
@@ -137,7 +137,7 @@ const InputField = props => (
 
 #### 字段校验
 
-示例：必填校验 + error类型校验 + warning类型校验 + 自定义校验
+示例：必填校验 + error 类型校验 + warning 类型校验 + 自定义校验
 校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 ```typescript
@@ -187,6 +187,7 @@ const InputField = props => (
 #### 对象类型字段
 
 示例：用户信息 `user(username, age)`
+
 ```typescript
 
 <Form actions={actions}>
@@ -216,6 +217,7 @@ const InputField = props => (
 #### 简单数组类型字段
 
 示例：用户 id 列表，增删改查
+
 ```typescript
 <Form actions={actions}>
 <Field name="idList" initialValue={[]}>
@@ -241,6 +243,7 @@ const InputField = props => (
 #### 对象数组类型字段
 
 示例：用户 id 列表，增删改查
+
 ```typescript
 <Form actions={actions}>
 <Field name="userList" initialValue={[]}>
@@ -278,9 +281,10 @@ const InputField = props => (
 <Form>
 ```
 
-#### combo字段
+#### combo 字段
 
-示例：combo username 和 age字段, 更多用法，请点击[FormSpy](#FormSpy)查看
+示例：combo username 和 age 字段, 更多用法，请点击[FormSpy](#FormSpy)查看
+
 ```typescript
 <Form actions={actions}>
   <FormSpy>
@@ -298,9 +302,9 @@ const InputField = props => (
 
 ```typescript
 文件目录
-  -- app
-  -- components
-    -- customForm
+--app
+--components
+--customForm
 ```
 
 示例：跨文件消费表单数据, 更多用法，请参考[FormProvider](#FormProvider) 和 [FormSpy](#FormSpy)
@@ -422,7 +426,7 @@ interface IFieldStateUIProps {
             }}
           </Field>
         })}
-      </React.Fragment>      
+      </React.Fragment>
     }}
   </Field>
 
@@ -437,7 +441,7 @@ interface IFieldStateUIProps {
             }}
           </Field>
         })}
-      </React.Fragment>      
+      </React.Fragment>
     }}
   </Field>
 
@@ -456,16 +460,15 @@ interface IFieldStateUIProps {
                     }}
                   </Field>
                 })}
-              </React.Fragment>      
+              </React.Fragment>
             }}
           </Field>
         })}
-      </React.Fragment>      
+      </React.Fragment>
     }}
   </Field>
 </Form>
 ```
-
 
 #### VirtualField
 
@@ -497,27 +500,30 @@ interface IVirtualFieldProps {
 
 ```typescript
 // render
-<Form actions={actions}>
+;<Form actions={actions}>
   <Field name="user" initialValue={{}}>
-      {({ state, mutator }) => {
-          return <VirtualField name="layout">
-              {({ state: layoutState }) => {
-                  return <Layout width={state.width} height={state.height}>
-                      <InputField name="username" />
-                      <InputField name="age" />
-                  </Layout>
-              }}
-          </VirtualField>
-      }}
+    {({ state, mutator }) => {
+      return (
+        <VirtualField name="layout">
+          {({ state: layoutState }) => {
+            return (
+              <Layout width={state.width} height={state.height}>
+                <InputField name="username" />
+                <InputField name="age" />
+              </Layout>
+            )
+          }}
+        </VirtualField>
+      )
+    }}
   </Field>
 </Form>
 
 // some where dynamic change layout's props
-actions.setFieldState('user.layout', (state) => {
-    state.width = '100px'
-    state.height = '100px'
+actions.setFieldState('user.layout', state => {
+  state.width = '100px'
+  state.height = '100px'
 })
-
 ```
 
 #### FormSpy
@@ -540,7 +546,7 @@ interface IFormSpyProps {
 
 **用法**
 
-例子1： 实现一个统计表单values改变的计数器
+例子 1： 实现一个统计表单 values 改变的计数器
 
 ```typescript
 import { Form, FormSpy, LifeCycleTypes } from '@uform/react'
@@ -563,7 +569,7 @@ const App = () => {
 }
 ```
 
-例子2：实现常用combo组件
+例子 2：实现常用 combo 组件
 
 ```typescript
 import { Form, FormSpy } from '@uform/react'
@@ -573,10 +579,12 @@ const App = () => {
     <Form>
       <FormSpy>
         {({ state, form }) => {
-          return <div>
-            name: {form.getFieldValue('username')}
-            age: {form.getFieldValue('age')}
-          </div>
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              age: {form.getFieldValue('age')}
+            </div>
+          )
         }}
       </FormSpy>
     </Form>
@@ -612,7 +620,7 @@ const App = () => {
 }
 ```
 
-#### FormConsumer(即将废弃，请使用FormSpy)
+#### FormConsumer(即将废弃，请使用 FormSpy)
 
 > FormConsumer 组件属性定义
 
@@ -652,7 +660,7 @@ console.log(actions.getFieldValue('username'))
 #### `createAsyncFormActions`
 
 > 创建一个 [IFormAsyncActions](#IFormAsyncActions) 实例，成员方法 同[IFormActions](#IFormActions),
-但是调用 API 返回的结果是异步的(promise)。
+> 但是调用 API 返回的结果是异步的(promise)。
 
 **签名**
 
@@ -743,22 +751,25 @@ interface IFormActions {
   submit(
     onSubmit?: (values: IFormState['values']) => any | Promise<any>
   ): Promise<{
-      validated: IFormValidateResult
-      payload: any //onSubmit回调函数返回值
+    validated: IFormValidateResult
+    payload: any //onSubmit回调函数返回值
   }>
-  
+
   /*
    * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
    * 比如clearErrors("*(aa,bb,cc)")
    */
   clearErrors: (pattern?: FormPathPattern) => void
-  
+
   /*
    * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
    * 比如hasChanged(state,'value.aa')
    */
-  hasChanged(target: IFormState | IFieldState | IVirtualFieldState, path: FormPathPattern): boolean
-  
+  hasChanged(
+    target: IFormState | IFieldState | IVirtualFieldState,
+    path: FormPathPattern
+  ): boolean
+
   /*
    * 重置表单
    */
@@ -768,27 +779,30 @@ interface IFormActions {
     //强制校验
     validate?: boolean
     //重置范围，用于批量或者精确控制要重置的字段
-    selector?: FormPathPattern      
+    selector?: FormPathPattern
   }): Promise<void | IFormValidateResult>
-  
+
   /*
    * 校验表单
    */
-  validate(path?: FormPathPattern, options?: {
-    //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
-    first?:boolean
-  }): Promise<IFormValidateResult>
-  
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+
   /*
    * 设置表单状态
    */
   setFormState(
     //操作回调
-    callback?: (state: IFormState) => any, 
+    callback?: (state: IFormState) => any,
     //是否不触发事件
     silent?: boolean
   ): void
-  
+
   /*
    * 获取表单状态
    */
@@ -796,7 +810,7 @@ interface IFormActions {
     //transformer
     callback?: (state: IFormState) => any
   ): any
-  
+
   /*
    * 设置字段状态
    */
@@ -808,8 +822,8 @@ interface IFormActions {
     //是否不触发事件
     silent?: boolean
   ): void
-  
-  /* 
+
+  /*
    * 获取字段状态
    */
   getFieldState(
@@ -818,14 +832,14 @@ interface IFormActions {
     //transformer
     callback?: (state: IFieldState) => any
   ): any
-  
+
   /*
    * 注册字段
    */
   registerField(props: {
-    //节点路径            
+    //节点路径
     path?: FormPathPattern
-    //数据路径           
+    //数据路径
     name?: string
     //字段值
     value?: any
@@ -844,76 +858,72 @@ interface IFormActions {
     //字段是否走脏检查
     useDirty?: boolean
     //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void         
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void
   }): IField
-  
+
   /*
    * 注册虚拟字段
    */
   registerVirtualField(props: {
-    //节点路径            
+    //节点路径
     path?: FormPathPattern
-    //数据路径           
+    //数据路径
     name?: string
     //字段扩展属性
     props?: any
     //字段是否走脏检查
     useDirty?: boolean
     //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void                       
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void
   }): IVirtualField
-  
+
   /*
    * 创建字段数据操作器，后面会详细解释返回的API
    */
   createMutators(field: IField): IMutators
-  
+
   /*
    * 获取表单观察者树
    */
   getFormGraph(): IFormGraph
-  
+
   /*
    * 设置表单观察者树
    */
   setFormGraph(graph: IFormGraph): void
-  
+
   /*
    * 监听表单生命周期
    */
-  subscribe(callback?: ({
-    type,
-    payload
-  }: {
-    type: string
-    payload: any
-  }) => void): number
-  
+  subscribe(
+    callback?: ({ type, payload }: { type: string; payload: any }) => void
+  ): number
+
   /*
    * 取消监听表单生命周期
    */
   unsubscribe(id: number): void
-  
+
   /*
    * 触发表单自定义生命周期
    */
   notify: <T>(type: string, payload?: T) => void
-  
+
   /*
    * 设置字段值
    */
   setFieldValue(path?: FormPathPattern, value?: any): void
-  
+
   /*
    * 获取字段值
    */
   getFieldValue(path?: FormPathPattern): any
-  
+
   /*
    * 设置字段初始值
    */
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
-  
+
   /*
    * 获取字段初始值
    */
@@ -950,16 +960,19 @@ interface IFormAsyncActions {
   /*
    * 校验表单
    */
-  validate(path?: FormPathPattern, options?: {
-    //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
-    first?:boolean
-  }): Promise<IFormValidateResult>
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
   /*
    * 设置表单状态
    */
   setFormState(
     //操作回调
-    callback?: (state: IFormState) => any, 
+    callback?: (state: IFormState) => any,
     //是否不触发事件
     silent?: boolean
   ): Promise<void>
@@ -981,7 +994,7 @@ interface IFormAsyncActions {
     //是否不触发事件
     silent?: boolean
   ): Promise<void>
-  /* 
+  /*
    * 获取字段状态
    */
   getFieldState(
@@ -1001,16 +1014,14 @@ interface IFormAsyncActions {
   setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
-
 ```
 
 #### IFieldState
 
 ```typescript
 interface IFieldState<FieldProps = any> {
-  
   /**只读属性**/
-  
+
   //状态名称，FieldState
   displayName?: string
   //数据路径
@@ -1035,9 +1046,9 @@ interface IFieldState<FieldProps = any> {
   active: boolean
   //是否访问过，字段触发onBlur事件的时候，它会被触发为true
   visited: boolean
-  
+
   /**可写属性**/
-  
+
   //是否可见，注意：该状态如果为false，那么字段的值不会被提交，同时UI不会显示
   visible: boolean
   //是否展示，注意：该状态如果为false，那么字段的值会提交，UI不会展示，类似于表单隐藏域
@@ -1069,16 +1080,14 @@ interface IFieldState<FieldProps = any> {
 }
 ```
 
-
 #### IVirtualFieldState
 
-> 虚拟Field核心状态
+> 虚拟 Field 核心状态
 
 ```typescript
 interface IVirtualFieldState<FieldProps = any> {
-  
   /**只读状态**/
-  
+
   //状态名称，VirtualFieldState
   displayName: string
   //字段数据路径
@@ -1087,9 +1096,9 @@ interface IVirtualFieldState<FieldProps = any> {
   path: string
   //是否已经初始化
   initialized: boolean
-  
+
   /**可写状态**/
-  
+
   //是否可见，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
   visible: boolean
   //是否展示，注意：该状态如果为false，UI不会显示，数据也不会提交(因为它是VirtualField)
@@ -1101,30 +1110,33 @@ interface IVirtualFieldState<FieldProps = any> {
   //字段扩展属性
   props: FieldProps
 }
-
 ```
-
 
 #### SyncValidateResponse
 
 ```typescript
-declare type SyncValidateResponse = null | string | boolean | {
-    type?: 'error' | 'warning';
-    message: string;
-};
+declare type SyncValidateResponse =
+  | null
+  | string
+  | boolean
+  | {
+      type?: 'error' | 'warning'
+      message: string
+    }
 ```
 
 #### AsyncValidateResponse
 
 ```typescript
-declare type AsyncValidateResponse = Promise<SyncValidateResponse>;
-
+declare type AsyncValidateResponse = Promise<SyncValidateResponse>
 ```
 
 #### ValidateResponse
 
 ```typescript
-export declare type ValidateResponse = SyncValidateResponse | AsyncValidateResponse;
+export declare type ValidateResponse =
+  | SyncValidateResponse
+  | AsyncValidateResponse
 ```
 
 #### InternalFormats
@@ -1146,57 +1158,65 @@ type InternalFormats =
   | string
 ```
 
-
 #### CustomValidator
 
 ```typescript
-declare type CustomValidator = (value: any, rescription?: ValidateDescription) => ValidateResponse;
+declare type CustomValidator = (
+  value: any,
+  rescription?: ValidateDescription
+) => ValidateResponse
 ```
 
 #### ValidateDescription
 
 ```typescript
 interface ValidateDescription {
-    // 内置校验规则，参考string内置校验规则
-    format?: InternalFormats;
-    // 自定义校验规则
-    validator?: CustomValidator;
-    // 是否必填
-    required?: boolean;
-    // 匹配规则
-    pattern?: RegExp | string;
-    // 最大长度
-    max?: number;
-    // 最大值（大于）
-    maximum?: number;
-    // 最大值（大于等于）
-    exclusiveMaximum?: number;
-    // 最小值（小于等于）
-    exclusiveMinimum?: number;
-    // 最小值（小于）
-    minimum?: number;
-    // 最小长度
-    min?: number;
-    // 长度
-    len?: number;
-    // 空格
-    whitespace?: boolean;
-    // 是否包含在枚举列表中
-    enum?: any[];
-    // 错误信息
-    message?: string;
-    [key: string]: any;
+  // 内置校验规则，参考string内置校验规则
+  format?: InternalFormats
+  // 自定义校验规则
+  validator?: CustomValidator
+  // 是否必填
+  required?: boolean
+  // 匹配规则
+  pattern?: RegExp | string
+  // 最大长度
+  max?: number
+  // 最大值（大于）
+  maximum?: number
+  // 最大值（大于等于）
+  exclusiveMaximum?: number
+  // 最小值（小于等于）
+  exclusiveMinimum?: number
+  // 最小值（小于）
+  minimum?: number
+  // 最小长度
+  min?: number
+  // 长度
+  len?: number
+  // 空格
+  whitespace?: boolean
+  // 是否包含在枚举列表中
+  enum?: any[]
+  // 错误信息
+  message?: string
+  [key: string]: any
 }
 ```
 
 #### ValidateArrayRules
 
 ```typescript
-declare type ValidateArrayRules = Array<string | CustomValidator | ValidateDescription>;
+declare type ValidateArrayRules = Array<
+  InternalFormats | CustomValidator | ValidateDescription
+>
 ```
 
 #### ValidatePatternRules
 
 ```typescript
-declare type ValidatePatternRules = string | CustomValidator | ValidateDescription | ValidateArrayRules;
+declare type ValidatePatternRules =
+  | InternalFormats
+  | CustomValidator
+  | ValidateDescription
+  | ValidateArrayRules
 ```

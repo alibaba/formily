@@ -63,7 +63,7 @@ npm install --save @uform/react
 
 #### Quick Start
 
-```typescript
+```tsx
 import {
     Form,
     Field,
@@ -115,7 +115,7 @@ const App = () => {
 
 Example：Show you how to bind the `<input>` field and subsequent examples are based on this field
 
-```typescript
+```tsx
 const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => (
@@ -140,7 +140,7 @@ const InputField = props => (
 Example：required validation + error type validation + warning type validation + custom validation
 The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
-```typescript
+```tsx
 <Form>
   // required validation
   <InputField name="username" required />
@@ -188,7 +188,7 @@ The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [str
 
 Example：User info `user(username, age)`
 
-```typescript
+```tsx
 
 <Form actions={actions}>
   <Field name="user" initialValue={{
@@ -218,7 +218,7 @@ Example：User info `user(username, age)`
 
 Example：Id list
 
-```typescript
+```tsx
 <Form actions={actions}>
 <Field name="idList" initialValue={[]}>
     {({ state, mutators }) => {
@@ -244,7 +244,7 @@ Example：Id list
 
 Example：User id list
 
-```typescript
+```tsx
 <Form actions={actions}>
 <Field name="userList" initialValue={[]}>
     {({ state, mutators }) => {
@@ -285,7 +285,7 @@ Example：User id list
 
 Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more inforation.
 
-```typescript
+```tsx
 <Form actions={actions}>
   <FormSpy>
     {({ state, form }) => {
@@ -309,7 +309,7 @@ Dictionary
 
 Example：Cross-file consumption form state, Check [FormProvider](#FormProvider) and [FormSpy](#FormSpy) for more infomation.
 
-```typescript
+```tsx
 import CustomForm from '../components/customForm'
 
 const App = () => {
@@ -394,7 +394,7 @@ interface IFieldStateUIProps {
 
 Example：All type of field
 
-```typescript
+```tsx
 <Form actions={actions}>
   // Basic Field
   <Field name="id">
@@ -481,7 +481,7 @@ interface IVirtualFieldProps {
 
 Example：Setting `<Layout>` props
 
-```typescript
+```tsx
 // render
 ;<Form actions={actions}>
   <Field name="user" initialValue={{}}>
@@ -554,7 +554,7 @@ const App = () => {
 
 Example2：Combo
 
-```typescript
+```tsx
 import { Form, FormSpy } from '@uform/react'
 
 const App = () => {
@@ -581,7 +581,7 @@ const App = () => {
 
 **Usage**
 
-```typescript
+```tsx
 import { FormProvider, FormSpy } from '@uform/react'
 import OtherFileForm from '../otherFile'
 
@@ -665,7 +665,7 @@ actions.getFieldValue('username').then(val => console.log(val))
 
 **Usage**
 
-```typescript
+```tsx
 import { FormEffectHooks, Form } from '@uform/react'
 const {
   /**
@@ -1153,7 +1153,7 @@ interface ValidateDescription {
 
 ```typescript
 declare type ValidateArrayRules = Array<
-  string | CustomValidator | ValidateDescription
+  InternalFormats | CustomValidator | ValidateDescription
 >
 ```
 
@@ -1161,7 +1161,7 @@ declare type ValidateArrayRules = Array<
 
 ```typescript
 declare type ValidatePatternRules =
-  | string
+  | InternalFormats
   | CustomValidator
   | ValidateDescription
   | ValidateArrayRules
