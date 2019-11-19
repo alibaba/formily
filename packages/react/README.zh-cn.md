@@ -1127,7 +1127,7 @@ declare type AsyncValidateResponse = Promise<SyncValidateResponse>;
 export declare type ValidateResponse = SyncValidateResponse | AsyncValidateResponse;
 ```
 
-### InternalFormats
+#### InternalFormats
 
 ```typescript
 type InternalFormats =

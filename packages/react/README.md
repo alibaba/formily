@@ -1085,7 +1085,7 @@ export declare type ValidateResponse =
   | AsyncValidateResponse
 ```
 
-### InternalFormats
+#### InternalFormats
 
 ```typescript
 type InternalFormats =
