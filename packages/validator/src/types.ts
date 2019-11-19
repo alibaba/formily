@@ -53,11 +53,11 @@ export interface ValidateDescription {
 export type ValidateRules = ValidateDescription[]
 
 export type ValidateArrayRules = Array<
-  string | CustomValidator | ValidateDescription
+  InternalFormats | CustomValidator | ValidateDescription
 >
 
 export type ValidatePatternRules =
-  | string
+  | InternalFormats
   | CustomValidator
   | ValidateDescription
   | ValidateArrayRules
