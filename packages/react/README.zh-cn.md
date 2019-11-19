@@ -145,7 +145,7 @@ const InputField = props => (
 #### 字段校验
 
 示例：必填校验 + error 类型校验 + warning 类型校验 + 自定义校验
-校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
+校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [InternalFormats](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 ```jsx
 import React from 'react'

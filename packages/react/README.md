@@ -145,7 +145,7 @@ const InputField = props => (
 #### Validation
 
 Example：required validation + error type validation + warning type validation + custom validation
-The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
+The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [InternalFormats](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 ```jsx
 import React from 'react'
