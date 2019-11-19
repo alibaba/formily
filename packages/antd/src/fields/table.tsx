@@ -5,7 +5,7 @@ import {
   SchemaField,
   Schema
 } from '@uform/react-schema-renderer'
-import { toArr, isFn, isArr } from '@uform/shared'
+import { toArr, isFn, isArr, FormPath } from '@uform/shared'
 import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form, Icon } from 'antd'
@@ -54,7 +54,7 @@ const FormTableField = styled(
           render: (value: any, record: any, index: number) => {
             return (
               <FormItemProps label={undefined}>
-                <SchemaField path={path.concat(index, key)} />
+                <SchemaField path={FormPath.parse(path).concat(index, key)} />
               </FormItemProps>
             )
           }

@@ -53,7 +53,7 @@ export interface ValidateDescription {
 export type ValidateRules = ValidateDescription[]
 
 export type ValidateArrayRules = Array<
-InternalFormats | CustomValidator | ValidateDescription
+  InternalFormats | CustomValidator | ValidateDescription
 >
 
 export type ValidatePatternRules =
