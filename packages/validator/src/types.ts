@@ -17,8 +17,23 @@ export type ValidateFormatsMap = {
   [key in string]: RegExp
 }
 
+export type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+
 export interface ValidateDescription {
-  format?: string
+  format?: InternalFormats
   validator?: CustomValidator
   required?: boolean
   pattern?: RegExp | string
