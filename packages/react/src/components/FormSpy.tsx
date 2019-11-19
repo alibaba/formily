@@ -1,66 +1,11 @@
-import {
-  useContext,
-  useMemo,
-  useRef,
-  useEffect,
-  useCallback,
-  useState,
-  useReducer
-} from 'react'
-import { FormHeartSubscriber, LifeCycleTypes } from '@uform/core'
-import { isFn, isStr, FormPath, isArr } from '@uform/shared'
+import React from 'react'
+import { isFn } from '@uform/shared'
 import { IFormSpyProps } from '../types'
-import FormContext, { BroadcastContext } from '../context'
+import { useFormSpy } from '../hooks/useFormSpy'
 
 export const FormSpy: React.FunctionComponent<IFormSpyProps> = props => {
-  const broadcast = useContext(BroadcastContext)
-  const form = useContext(FormContext)
-  const initializedRef = useRef(false)
-  const subscriberId = useRef<number>()
-  const [type, setType] = useState<string>(LifeCycleTypes.ON_FORM_INIT)
-  const [state, dispatch] = useReducer(
-    (state, action) => props.reducer(state, action, form),
-    {}
-  )
-  const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {
-    if (initializedRef.current) return
-    setTimeout(() => {
-      if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
-        setType(type)
-        dispatch({
-          type,
-          payload
-        })
-      } else if (isArr(props.selector) && props.selector.indexOf(type) > -1) {
-        setType(type)
-        dispatch({
-          type,
-          payload
-        })
-      }
-    })
-  }, [])
-  useMemo(() => {
-    initializedRef.current = true
-    if (form) {
-      subscriberId.current = form.subscribe(subscriber)
-    } else if (broadcast) {
-      subscriberId.current = broadcast.subscribe(subscriber)
-    }
-    initializedRef.current = false
-  }, [])
-  useEffect(() => {
-    return () => {
-      if (form) {
-        form.unsubscribe(subscriberId.current)
-      } else if (broadcast) {
-        broadcast.unsubscribe(subscriberId.current)
-      }
-    }
-  }, [])
   if (isFn(props.children)) {
-    const formApi = form ? form : broadcast && broadcast.getContext()
-    return props.children({ form: formApi, type, state })
+    return props.children(useFormSpy(props))
   } else {
     return props.children
   }

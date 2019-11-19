@@ -78,8 +78,7 @@ export function createVirtualBox<T = {}>(
     component
       ? ({ props, children }) => {
           return React.createElement(component, {
-            ...props['x-props'],
-            ...props['x-component-props'],
+            ...props.schema.getExtendsComponentProps(),
             children
           })
         }
