@@ -43,6 +43,7 @@ npm install --save @uform/react
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
   - [`FormEffectHooks`](#FormEffectHooks)
+  - [`createEffectHook`](#createEffectHook)
 - [Interfaces](#Interfaces)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
@@ -63,52 +64,58 @@ npm install --save @uform/react
 
 #### 快速开始
 
-```typescript
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {
-    Form,
-    Field,
-    FormPath,
-    createFormActions,
-    FormSpy,
-    FormProvider,
-    FormConsumer,
-    FormEffectHooks
-} from '@uform/react'
+  Form,
+  Field,
+  FormPath,
+  createFormActions,
+  FormSpy,
+  FormProvider,
+  FormConsumer,
+  FormEffectHooks
+} from './src'
 
 const { onFormInit$, onFormInputChange$, onFieldInputChange$ } = FormEffectHooks
 const actions = createFormActions()
 const App = () => {
-  return <Form
-    actions={actions}
-    effects={() => {
-      onFormInit$().subscribe(() => {
-        console.log('初始化')
-      })
-      onFieldInputChange$().subscribe(state => {
-        console.log('输入变化', state)
-      })
-    }}
-    onChange={() => {}}
-  >
-    <label>username: <label>
-    <Field>
-      {({ state, mutators }) => (
-        <div>
-          <input
-            disabled={!state.editable}
-            value={state.value || ''}
-            onChange={mutators.change}
-            onBlur={mutators.blur}
-            onFocus={mutators.focus}
-          />
-          {state.errors}
-          {state.warnings}
-        </div>
-    )}
-    </Field>
-  </Form>
+  return (
+    <Form
+      actions={actions}
+      effects={() => {
+        onFormInit$().subscribe(() => {
+          console.log('初始化')
+        })
+        onFieldInputChange$().subscribe(state => {
+          console.log('输入变化', state)
+        })
+      }}
+      onChange={() => {}}
+    >
+      <React.Fragment>
+        <label>username: </label>
+        <Field name="username">
+          {({ state, mutators }) => (
+            <React.Fragment>
+              <input
+                disabled={!state.editable}
+                value={state.value || ''}
+                onChange={mutators.change}
+                onBlur={mutators.blur}
+                onFocus={mutators.focus}
+              />
+              {state.errors}
+              {state.warnings}
+            </React.Fragment>
+          )}
+        </Field>
+      </React.Fragment>
+    </Form>
+  )
 }
-
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### 基础类型字段
@@ -140,162 +147,431 @@ const InputField = props => (
 示例：必填校验 + error 类型校验 + warning 类型校验 + 自定义校验
 校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [string](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
-```typescript
-<Form>
-  // 简单必填校验
-  <InputField name="username" required />
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions } from './src'
 
-  // 错误类型校验
-  <InputField name="age" rules={[
-    (val) => val === undefiend ? { type: 'error', message: 'age is required' } : undefined
-  ]} required>
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
 
-  // warning类型校验
-  <InputField name="gender" rules={[
-    (val) => val === undefiend ? { type: 'warning', message: 'gender is required' } : undefined
-  ]} required>
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <h5>required validation</h5>
+      <span>username</span>
+      <InputField name="username" required />
 
-  // 内置校验, 默认均为error类型
-  <InputField name="id" rules={[
-    {
-      format: 'number',
-      message: 'id is not a number.'
-    },
-    (val) => val === undefiend ? { type: 'warning', message: 'verifyCode is required' } : undefined
-  ]} required>
+      <h5>error type validation</h5>
+      <span>age</span>
+      <InputField
+        name="age"
+        rules={[
+          val =>
+            val === undefiend
+              ? { type: 'error', message: 'age is required' }
+              : undefined
+        ]}
+      />
 
-  // 自定义校验, 可以自定义返回类型
-  <InputField name="verifyCode" rules={[
-    {
-      validator(value) {
-        return value === 123 ? 'This field can not be 123 {{scope.outerVariable}}' : undefined
-      },
-      scope: {
-        outerVariable: 'addonAfter'
-      }
-    },
-    {
-      validator(value) {
-        return value === 456 ? { type: 'error', message: 'This field can not be 456' } : undefined
-      },
-    },
-  ]} required>
+      <h5>warning type validation</h5>
+      <span>gender</span>
+      <InputField
+        name="gender"
+        rules={[
+          val =>
+            val === undefiend
+              ? { type: 'warning', message: 'gender is required' }
+              : undefined
+        ]}
+      />
 
-</Form>
+      <h5>built-in validation default to error type validation</h5>
+      <span>id</span>
+      <InputField
+        name="id"
+        rules={[
+          {
+            format: 'number',
+            message: 'id is not a number.'
+          }
+        ]}
+      />
+
+      <h5>custom validation</h5>
+      <span>verifyCode</span>
+      <InputField
+        name="verifyCode"
+        rules={[
+          {
+            validator(value) {
+              return value === undefiend
+                ? 'This field can not be empty, please enter {{scope.outerVariable}}'
+                : undefined
+            },
+            scope: {
+              outerVariable: '456'
+            }
+          },
+
+          {
+            validator(value) {
+              return value === '456'
+                ? { type: 'error', message: 'This field can not be 456' }
+                : undefined
+            }
+          }
+        ]}
+      />
+
+      <div>
+        <button
+          onClick={() => {
+            const result = actions.validate()
+            console.log(actions.getFormState(state => state.values))
+            result.then(validateResp => {
+              console.log(validateResp)
+            })
+          }}
+        >
+          validate
+        </button>
+      </div>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### 对象类型字段
 
 示例：用户信息 `user(username, age)`
 
-```typescript
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions } from './src'
 
-<Form actions={actions}>
-  <Field name="user" initialValue={{
-    username: undefined,
-    age: undefined,
-  }}>
-    {({ state, mutators }) => {
-      return (
-        <React.Fragment>
-          {['username', 'age'].map(key => {
-            if (!mutators.exist(key)) return
-            return (
-              <React.Fragment key={key}>
-                <InputField name={`user.${key}`}>
-              </React.Fragment>
-            )
-          })}
-        </React.Fragment>
-      )
-    })}
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
   </Field>
-</Form>
+)
 
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <span>user</span>
+      <Field
+        name="user"
+        initialValue={{
+          username: undefined,
+          age: undefined
+        }}
+      >
+        {({ state, mutators }) => {
+          return (
+            <React.Fragment>
+              {Object.keys(state.value).map(key => {
+                if (!mutators.exist(key)) return
+
+                return (
+                  <div key={key}>
+                    <span>{key}</span>
+                    <InputField name={`user.${key}`} />
+                    <button
+                      onClick={() => {
+                        mutators.remove(key)
+                      }}
+                    >
+                      x
+                    </button>
+                  </div>
+                )
+              })}
+              <button
+                onClick={() => {
+                  mutators.change({
+                    ...state.value,
+                    [new Date().getTime()]: new Date().getTime()
+                  })
+                }}
+              >
+                +
+              </button>
+              <button
+                onClick={() => {
+                  console.log(
+                    'values',
+                    actions.getFormState(state => state.values)
+                  )
+                }}
+              >
+                print
+              </button>
+            </React.Fragment>
+          )
+        }}
+      </Field>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### 简单数组类型字段
 
 示例：用户 id 列表，增删改查
 
-```typescript
-<Form actions={actions}>
-<Field name="idList" initialValue={[]}>
-    {({ state, mutators }) => {
-      return (
-        <div>
-          {state.value.map((item, index) => {
-            return (
-              <React.Fragment key={index}>
-                <InputField name={`idList[${index}]`}>
-                <button onClick={() => mutators.remove(index)}>Remove</button>
-              </React.Fragment>
-            )
-          })}
-          <button onClick={() => mutators.push()}>Add Item</button>
-        </div>
-      )
-    }}
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
   </Field>
-<Form>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <Field name="idList" initialValue={['1', '2', '3']}>
+        {({ state, mutators }) => {
+          return (
+            <React.Fragment>
+              {state.value.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <InputField name={`idList[${index}]`} />
+                    <button onClick={() => mutators.remove(index)}>
+                      Remove
+                    </button>
+                  </div>
+                )
+              })}
+              <button onClick={() => mutators.push()}>Add Item</button>
+            </React.Fragment>
+          )
+        }}
+      </Field>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### 对象数组类型字段
 
 示例：用户 id 列表，增删改查
 
-```typescript
-<Form actions={actions}>
-<Field name="userList" initialValue={[]}>
-    {({ state, mutators }) => {
-      return (
-        <div>
-          {state.value.map((item, index) => {
-            return (
-              <React.Fragment key={index}>
-                <Field name={`userList[${index}]`}>
-                  {({ state, mutators }) => {
-                    return (
-                      <React.Fragment>
-                        {['username', 'age'].map(key => {
-                          if (!mutators.exist(key)) return
-                          return (
-                            <React.Fragment key={key}>
-                              <InputField name={`userList[${index}]${key}`}>
-                            </React.Fragment>
-                          )
-                        })}
-                      </React.Fragment>
-                    )
-                  }}
-                </Field>
-                <button onClick={() => mutators.remove(index)}>Remove</button>
-              </React.Fragment>
-            )
-          }}
-          <button onClick={() => mutators.push()}>Add Item</button>
-        </div>
-      )
-    })}
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
   </Field>
-<Form>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <Field
+        name="userList"
+        initialValue={[
+          { username: 'bobby', age: 21 },
+          { username: 'lily', age: 20 }
+        ]}
+      >
+        {({ state, mutators }) => {
+          return (
+            <React.Fragment>
+              {state.value.map((item, index) => {
+                return (
+                  <div key={index}>
+                    <Field name={`userList[${index}]`} initialValue={{}}>
+                      {({ state: innerState, mutators: innerMutator }) => {
+                        return (
+                          <React.Fragment>
+                            {Object.keys(innerState.value).map(key => {
+                              if (!innerMutator.exist(key)) return
+                              return (
+                                <React.Fragment key={key}>
+                                  <InputField
+                                    name={`userList[${index}].${key}`}
+                                  />
+                                  <button
+                                    onClick={() => {
+                                      innerMutator.remove(key)
+                                    }}
+                                  >
+                                    x
+                                  </button>
+                                </React.Fragment>
+                              )
+                            })}
+                            <button
+                              onClick={() => {
+                                innerMutator.change({
+                                  ...innerState.value,
+                                  [new Date().getTime()]: new Date().getTime()
+                                })
+                              }}
+                            >
+                              +
+                            </button>
+                          </React.Fragment>
+                        )
+                      }}
+                    </Field>
+
+                    <button onClick={() => mutators.remove(index)}>
+                      Remove
+                    </button>
+                  </div>
+                )
+              })}
+              <button
+                onClick={() =>
+                  mutators.push({
+                    username: undefined,
+                    age: undefined
+                  })
+                }
+              >
+                Add Item
+              </button>
+              <button
+                onClick={() =>
+                  console.log(actions.getFormState(state => state.values))
+                }
+              >
+                print
+              </button>
+            </React.Fragment>
+          )
+        }}
+      </Field>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### combo 字段
 
 示例：combo username 和 age 字段, 更多用法，请点击[FormSpy](#FormSpy)查看
 
-```typescript
-<Form actions={actions}>
-  <FormSpy>
-    {({ state, form }) => {
-      return <div>
-        name: {form.getFieldValue('username')}
-        age: {form.getFieldValue('age')}
-      </div>
-    }}
-  </FormSpy>
-<Form>
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy>
+        {({ state, form }) => {
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
+          )
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### 跨文件消费表单数据
@@ -303,28 +579,67 @@ const InputField = props => (
 ```typescript
 文件目录
 --app
---components
---customForm
+  --components
+  --customForm
 ```
 
 示例：跨文件消费表单数据, 更多用法，请参考[FormProvider](#FormProvider) 和 [FormSpy](#FormSpy)
 
-```typescript
-import CustomForm from '../components/customForm'
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const CustomForm = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+    </Form>
+  )
+}
 
 const App = () => {
-  return <FormProvider>
-    <CustomForm>
-    <FormSpy>
-      {({ state, form }) => {
-        return <div>
-          name: {form.getFieldValue('username')}
-          age: {form.getFieldValue('age')}
-        </div>
-      }}
-    </FormSpy>
-  </FormProvider>
+  return (
+    <FormProvider>
+      <CustomForm />
+      <FormSpy>
+        {({ state, form }) => {
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
+          )
+        }}
+      </FormSpy>
+    </FormProvider>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### Components
@@ -406,68 +721,196 @@ interface IFieldStateUIProps {
 
 例子：各种类型的字段
 
-```typescript
-<Form actions={actions}>
-  // 普通字段
-  <Field name="id">
-    {({ state, mutator }) => {
-      return <input value={state.value} onChange={mutator}>
-    }}
-  </Field>
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions } from './src'
 
-  // 对象字段
-  <Field name="user" initValue={{}}>
-    {({ state: outterState }) => {
-      return <React.Fragment>
-        {Object.keys(outterState.value).map(objKey => {
-          return <Field name={`user.${objKey}`}>
-            {({ state, mutator }) => {
-              return <input value={state.value} onChange={mutator}>
-            }}
-          </Field>
-        })}
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
       </React.Fragment>
-    }}
+    )}
   </Field>
+)
 
-  // 普通数组
-  <Field name="idList" initValue={[]}>
-    {({ state: outterState }) => {
-      return <React.Fragment>
-        {outterState.value.map((item, index) => {
-          return <Field name={`idList[${index}]`}>
-            {({ state, mutator }) => {
-              return <input value={state.value} onChange={mutator}>
-            }}
-          </Field>
-        })}
-      </React.Fragment>
-    }}
-  </Field>
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <div>
+        <h5>Basic Field</h5>
+        <Field name="id">
+          {({ state, mutator }) => {
+            return <input value={state.value} onChange={mutator} />
+          }}
+        </Field>
+      </div>
 
-  // 对象数组
-  <Field name="userList" initValue={[]}>
-    {({ state: outterState }) => {
-      return <React.Fragment>
-        {outterState.value.map((item, index) => {
-          return <Field name={`userList[${index}]`} initValue={{}}>
-            {({ state: outterState }) => {
-              return <React.Fragment>
-                {Object.keys(outterState.value).map(objKey => {
-                  return <Field name={`userList[${index}].${objKey}`}>
-                    {({ state, mutator }) => {
-                      return <input value={state.value} onChange={mutator}>
-                    }}
-                  </Field>
+      <div>
+        <h5>Object Field</h5>
+        <Field
+          name="user"
+          initialValue={{
+            username: undefined,
+            age: undefined
+          }}
+        >
+          {({ state, mutators }) => {
+            return (
+              <React.Fragment>
+                {Object.keys(state.value).map(key => {
+                  if (!mutators.exist(key)) return
+
+                  return (
+                    <div key={key}>
+                      <span>{key}</span>
+                      <InputField name={`user.${key}`} />
+                      <button
+                        onClick={() => {
+                          mutators.remove(key)
+                        }}
+                      >
+                        x
+                      </button>
+                    </div>
+                  )
                 })}
+                <button
+                  onClick={() => {
+                    mutators.change({
+                      ...state.value,
+                      [new Date().getTime()]: new Date().getTime()
+                    })
+                  }}
+                >
+                  +
+                </button>
               </React.Fragment>
-            }}
-          </Field>
-        })}
-      </React.Fragment>
-    }}
-  </Field>
-</Form>
+            )
+          }}
+        </Field>
+      </div>
+
+      <div>
+        <h5>ArrayField Field</h5>
+        <Field name="idList" initialValue={['1', '2', '3']}>
+          {({ state, mutators }) => {
+            return (
+              <React.Fragment>
+                {state.value.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <InputField name={`idList[${index}]`} />
+                      <button onClick={() => mutators.remove(index)}>
+                        Remove
+                      </button>
+                    </div>
+                  )
+                })}
+                <button onClick={() => mutators.push()}>Add Item</button>
+              </React.Fragment>
+            )
+          }}
+        </Field>
+      </div>
+
+      <div>
+        <h5>ArrayObject Field</h5>
+        <Field
+          name="userList"
+          initialValue={[
+            { username: 'bobby', age: 21 },
+            { username: 'lily', age: 20 }
+          ]}
+        >
+          {({ state, mutators }) => {
+            return (
+              <React.Fragment>
+                {state.value.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <Field name={`userList[${index}]`} initialValue={{}}>
+                        {({ state: innerState, mutators: innerMutator }) => {
+                          return (
+                            <React.Fragment>
+                              {Object.keys(innerState.value).map(key => {
+                                if (!innerMutator.exist(key)) return
+                                return (
+                                  <React.Fragment key={key}>
+                                    <InputField
+                                      name={`userList[${index}].${key}`}
+                                    />
+                                    <button
+                                      onClick={() => {
+                                        innerMutator.remove(key)
+                                      }}
+                                    >
+                                      x
+                                    </button>
+                                  </React.Fragment>
+                                )
+                              })}
+                              <button
+                                onClick={() => {
+                                  innerMutator.change({
+                                    ...innerState.value,
+                                    [new Date().getTime()]: new Date().getTime()
+                                  })
+                                }}
+                              >
+                                +
+                              </button>
+                            </React.Fragment>
+                          )
+                        }}
+                      </Field>
+
+                      <button onClick={() => mutators.remove(index)}>
+                        Remove
+                      </button>
+                    </div>
+                  )
+                })}
+                <button
+                  onClick={() =>
+                    mutators.push({
+                      username: undefined,
+                      age: undefined
+                    })
+                  }
+                >
+                  Add Item
+                </button>
+              </React.Fragment>
+            )
+          }}
+        </Field>
+
+        
+      </div>
+      <button
+        onClick={() =>
+          console.log(actions.getFormState(state => state.values))
+        }
+      >
+        print
+      </button>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### VirtualField
@@ -498,32 +941,77 @@ interface IVirtualFieldProps {
 
 例子：动态设置布局组件的属性
 
-```typescript
-// render
-;<Form actions={actions}>
-  <Field name="user" initialValue={{}}>
-    {({ state, mutator }) => {
-      return (
-        <VirtualField name="layout">
-          {({ state: layoutState }) => {
-            return (
-              <Layout width={state.width} height={state.height}>
-                <InputField name="username" />
-                <InputField name="age" />
-              </Layout>
-            )
-          }}
-        </VirtualField>
-      )
-    }}
-  </Field>
-</Form>
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, VirtualField } from './src'
 
-// some where dynamic change layout's props
-actions.setFieldState('user.layout', state => {
-  state.width = '100px'
-  state.height = '100px'
-})
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const Layout = ({ children, width = '100px', height = '100px' }) => {
+  return (
+    <div style={{ border: '1px solid #999', width, height }}>{children}</div>
+  )
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <Field name="user" initialValue={{}}>
+        {({ state, mutator }) => {
+          return (
+            <VirtualField name="layout">
+              {({ state: layoutState }) => {
+                return (
+                  <Layout
+                    width={layoutState.props.width}
+                    height={layoutState.props.height}
+                  >
+                    <label>username</label>
+                    <InputField name="username" />
+                    <label>age</label>
+                    <InputField name="age" />
+                  </Layout>
+                )
+              }}
+            </VirtualField>
+          )
+        }}
+      </Field>
+
+      <button
+        onClick={() => {
+          // some where dynamic change layout's props
+          actions.setFieldState('user.layout', state => {
+            state.props.width = '200px'
+            state.props.height = '200px'
+          })
+        }}
+      >
+        change layout
+      </button>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### FormSpy
@@ -548,12 +1036,37 @@ interface IFormSpyProps {
 
 例子 1： 实现一个统计表单 values 改变的计数器
 
-```typescript
-import { Form, FormSpy, LifeCycleTypes } from '@uform/react'
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
 
 const App = () => {
   return (
-    <Form>
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
       <FormSpy
         selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
         reducer={(state, action, form) => ({
@@ -567,21 +1080,50 @@ const App = () => {
     </Form>
   )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 例子 2：实现常用 combo 组件
 
-```typescript
-import { Form, FormSpy } from '@uform/react'
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
 
 const App = () => {
   return (
-    <Form>
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
       <FormSpy>
         {({ state, form }) => {
           return (
             <div>
               name: {form.getFieldValue('username')}
+              <br />
               age: {form.getFieldValue('age')}
             </div>
           )
@@ -590,6 +1132,8 @@ const App = () => {
     </Form>
   )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### FormProvider
@@ -598,26 +1142,61 @@ const App = () => {
 
 **用法**
 
-```typescript
-import { FormProvider, FormSpy } from '@uform/react'
-import OtherFileForm from '../otherFile'
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const CustomForm = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+    </Form>
+  )
+}
 
 const App = () => {
   return (
     <FormProvider>
-      <OtherFileForm />
+      <CustomForm />
       <FormSpy>
-        {({ status, state, submit, reset }) => {
+        {({ state, form }) => {
           return (
-            <Button disabled={status === 'submitting'} onClick={submit}>
-              提交
-            </Button>
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
           )
         }}
       </FormSpy>
     </FormProvider>
   )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### FormConsumer(即将废弃，请使用 FormSpy)
@@ -733,6 +1312,47 @@ const App = () => {
     </Form>
   )
 }
+```
+
+
+#### createEffectHook
+
+> 自定义hook
+
+**Usage**
+
+```jsx
+import { Form, createEffectHook, createFormActions } from './src'
+
+const actions = createFormActions()
+const diyHook1$ = createEffectHook('diy1')
+const diyHook2$ = createEffectHook('diy2')
+
+const App = () => {
+  return (
+    <Form
+      actions={actions}
+      effects={() => {
+        diyHook1$().subscribe((payload) => {
+          console.log('diy1 hook triggered', payload)
+        })
+
+        diyHook2$().subscribe((payload) => {
+          console.log('diy2 hook triggered', payload)
+        })
+      }}
+    >
+      <button onClick={() => {
+        actions.notify('diy1', { index: 1 })
+      }}>notify diy1</button>
+      <button onClick={() => {
+        actions.notify('diy2', { index: 2 })
+      }}>notify diy2</button>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### Interfaces
