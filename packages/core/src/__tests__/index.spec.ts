@@ -1430,7 +1430,7 @@ describe('validator', () => {
       values: {},
       initialValues: {},
       onChange: values => {
-       // console.log(values)
+        // console.log(values)
       }
     })
 
@@ -1470,7 +1470,7 @@ describe('validator', () => {
       values: {},
       initialValues: {},
       onChange: values => {
-      //  console.log(values)
+        //  console.log(values)
       }
     })
 
@@ -1509,7 +1509,7 @@ describe('validator', () => {
       values: {},
       initialValues: {},
       onChange: values => {
-       // console.log(values)
+        // console.log(values)
       }
     })
 
