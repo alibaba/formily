@@ -5,7 +5,7 @@ import { IFormItemTopProps } from '../types'
 import { FormItemProvider } from './context'
 import { normalizeCol } from '../shared'
 
-export const CompatNextForm: React.FC<
+export const CompatAntdForm: React.FC<
   FormProps & IFormItemTopProps
 > = props => {
   return (

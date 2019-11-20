@@ -2,6 +2,7 @@ import {
   createAsyncSchemaFormActions,
   createSchemaFormActions
 } from './shared/actions'
+import { Field as InternalField, Form as InternalForm } from '@uform/react'
 export * from '@uform/react'
 export * from './components/SchemaField'
 export * from './components/SchemaForm'
@@ -14,3 +15,4 @@ export * from './types'
 
 export const createFormActions = createSchemaFormActions
 export const createAsyncFormActions = createAsyncSchemaFormActions
+export { InternalField, InternalForm }

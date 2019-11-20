@@ -77,7 +77,7 @@ export const useForm = <
   })
   const lifecycles = [
     new FormLifeCycle(
-      ({ type, payload }: { type: string; payload: IModel }) => {
+      ({ type, payload }) => {
         dispatch.lazy(type, () => {
           return isStateModel(payload) ? payload.getState() : payload
         })
@@ -104,6 +104,7 @@ export const useForm = <
     ...props,
     initialValues: props.initialValues || props.defaultValue
   })
+
   Object.assign(optionsRef.current, props)
   optionsRef.current.values = props.value
   optionsRef.current.lifecycles = lifecycles

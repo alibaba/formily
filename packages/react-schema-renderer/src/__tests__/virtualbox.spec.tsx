@@ -55,7 +55,7 @@ test('createVirtualBox', async () => {
 
   const { queryByText } = render(<TestComponent />)
 
-  await wait();
+  await wait()
   expect(queryByText('card content')).toBeVisible()
 })
 
@@ -89,9 +89,9 @@ test('dynamic node', async () => {
 
   const { queryByText } = render(<TestComponent />)
 
-  await wait();
+  await wait()
   fireEvent.click(queryByText('Change Editable'))
-  await wait();
+  await wait()
   expect(queryByText('This is Text Component')).toBeVisible()
 })
 
@@ -149,13 +149,13 @@ test('dynamic schema', async () => {
     )
   }
 
-  const { queryByText, queryByTestId, baseElement } = render(<TestComponent />)
+  const { queryByText, queryByTestId } = render(<TestComponent />)
 
-  await wait();
+  await wait()
   act(() => {
     fireEvent.click(queryByText('Delete'))
   })
-  await wait();
+  await wait()
   expect(queryByTestId('aa').hasAttribute('disabled')).toBe(true)
   expect(queryByTestId('aa')).toBeVisible()
   expect(queryByTestId('bb')).toBeNull()

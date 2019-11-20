@@ -14,7 +14,7 @@ import {
 } from '@uform/core'
 import { FormPathPattern } from '@uform/shared'
 import { Observable } from 'rxjs/internal/Observable'
-export interface IFormEffect<Payload = any, Actions = {}> {
+export interface IFormEffect<Payload = any, Actions = any> {
   (
     selector: IFormExtendsEffectSelector<Payload, Actions>,
     actions: Actions
@@ -30,14 +30,14 @@ export interface IFormEffectSelector<Payload = any> {
 
 export type IFormExtendsEffectSelector<
   Payload = any,
-  Actions = {}
+  Actions = any
 > = IFormEffectSelector<Payload> & Actions
 
 export interface IFormProps<
   Value = {},
   DefaultValue = {},
   EffectPayload = any,
-  EffectActions = {}
+  EffectActions = any
 > {
   value?: Value
   defaultValue?: DefaultValue
@@ -68,7 +68,7 @@ export interface IVirtualFieldAPI {
   props: {}
 }
 
-export interface IFieldProps extends IFieldStateProps {
+export interface IFieldStateUIProps extends IFieldStateProps {
   triggerType?: 'onChange' | 'onBlur'
   getValueFromEvent?: (...args: any[]) => any
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)

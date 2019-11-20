@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { clone, toArr, isValid, isEqual, FormPath, isFn } from '@uform/shared'
+import { toArr, isValid, isEqual, FormPath, isFn } from '@uform/shared'
 import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态
@@ -82,44 +82,71 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       }
     }
 
-    readRules({ rules, required }: IFieldStateProps, prevState: IFieldState) {
-      let newRules = isValid(rules) ? clone(toArr(rules)) : this.state.rules
-      let newRequired = required !== undefined ? required : false
-      const currentRulesRequired = this.readRequired(newRules)
-      const prevRulesRequired = this.readRequired(prevState.rules)
-      if (prevState.required !== newRequired) {
-        if (!newRules.some(rule => rule && rule.required !== undefined)) {
-          newRules.push({ required: newRequired })
-        } else {
-          newRules = newRules.reduce((buf: any[], item: any) => {
-            const keys = Object.keys(item || {})
-            if (item.required !== undefined) {
-              if (item.message !== undefined) {
-                if (keys.length > 2) {
-                  return {
-                    ...item,
-                    required: newRequired
+    syncRulesByRequired(rules: any[], required: boolean) {
+      if (isValid(required)) {
+        if (rules.length) {
+          if (!rules.some(rule => rule && isValid(rule.required))) {
+            rules.push({ required })
+          } else {
+            rules = rules.reduce((buf: any[], item: any) => {
+              const keys = Object.keys(item || {})
+              if (item.required !== undefined) {
+                if (item.message !== undefined) {
+                  if (keys.length > 2) {
+                    return buf.concat({
+                      ...item,
+                      required
+                    })
                   }
                 } else {
-                  return buf
-                }
-              } else {
-                if (keys.length > 1) {
-                  return {
-                    ...item,
-                    required: newRequired
+                  if (keys.length > 1) {
+                    return buf.concat({
+                      ...item,
+                      required
+                    })
                   }
-                } else {
-                  return buf
                 }
               }
-            }
-            return buf.concat(item)
-          }, [])
+              if (isValid(item.required)) {
+                return buf.concat({
+                  ...item,
+                  required
+                })
+              }
+              return buf.concat(item)
+            }, [])
+          }
+        } else {
+          if (required === true) {
+            rules.push({
+              required
+            })
+          }
         }
       }
-      if (currentRulesRequired !== prevRulesRequired) {
-        newRequired = currentRulesRequired
+      return rules
+    }
+
+    readRules({ rules, required }: IFieldStateProps, prevState: IFieldState) {
+      let newRules = isValid(rules) ? toArr(rules) : this.state.rules
+      let newRequired = isValid(required) ? required : false
+      const currentRuleRequired = this.readRequired(newRules)
+      const prevRuleRequired = this.readRequired(prevState.rules)
+      const ruleRequiredChanged = currentRuleRequired !== prevRuleRequired
+      const requiredChanged = !isEqual(required, prevState.required)
+
+      if (ruleRequiredChanged && !requiredChanged) {
+        if (isValid(currentRuleRequired)) {
+          newRequired = currentRuleRequired
+        }
+      } else if (requiredChanged && !ruleRequiredChanged) {
+        newRules = this.syncRulesByRequired(newRules, newRequired)
+      } else if (ruleRequiredChanged && requiredChanged) {
+        if (isValid(currentRuleRequired)) {
+          newRequired = currentRuleRequired
+        }
+      } else {
+        newRules = this.syncRulesByRequired(newRules, newRequired)
       }
       return {
         rules: newRules,

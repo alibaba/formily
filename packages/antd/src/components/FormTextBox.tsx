@@ -2,7 +2,7 @@ import React, { useRef, useLayoutEffect } from 'react'
 import { createControllerBox } from '@uform/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@uform/shared'
-import { CompatNextFormItem } from '../compat/FormItem'
+import { CompatAntdFormItem } from '../compat/FormItem'
 import styled from 'styled-components'
 
 export const FormTextBox = createControllerBox<IFormTextBox>(
@@ -96,14 +96,14 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     if (!title) return textChildren
 
     return (
-      <CompatNextFormItem
+      <CompatAntdFormItem
         {...componentProps}
         label={title}
         help={help}
         extra={extra}
       >
         {textChildren}
-      </CompatNextFormItem>
+      </CompatAntdFormItem>
     )
   })`
     display: flex;

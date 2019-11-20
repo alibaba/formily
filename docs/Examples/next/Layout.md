@@ -300,15 +300,14 @@ export default () => (
           state.visible = false
         })
       })
-      FormStep.useEffects(['step-1', 'step-2', 'step-3'])
     }}
   >
     <FormStep
       style={{ marginBottom: 20 }}
       dataSource={[
-        { title: '基本信息' },
-        { title: '财务信息' },
-        { title: '条款信息' }
+        { title: '基本信息',name:'step-1' },
+        { title: '财务信息',name:'step-2' },
+        { title: '条款信息',name:'step-3' }
       ]}
     />
     <FormCard name="step-1" title="基本信息">
