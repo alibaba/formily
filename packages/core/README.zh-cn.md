@@ -48,7 +48,13 @@ npm install --save @uform/core
 
 ### 背景
 
-中后台领域，核心就是两种场景，**一个是数据录入，一个是数据查询+数据展现**，不管是数据录入还是数据查询，都是借助表单来实现的，从实现复杂度来看，两者复杂度相差不多，因为数据呈现层面难免会有极度复杂的呈现形式(比如 Tree Table 等等)，但是，数据呈现却是最容易复用和抽象的，只有表单，会涉及大量的交互逻辑，所以，只要我们根本上解决了表单问题，对于中后台场景，基本上解决了大部分中后台场景问题，UForm，就是为此而诞生的。
+
+中后台领域，核心就是两种场景，**一个是数据录入，一个是数据查询+数据展现**，不管
+是数据录入还是数据查询，都是借助表单来实现的，从实现复杂度来看，两者复杂度相差不
+多，因为数据呈现层面难免会有极度复杂的呈现形式(比如 Tree Table 等等)，但是，数据
+呈现却是最容易复用和抽象的，只有表单，会涉及大量的交互逻辑，所以，只要我们根本上
+解决了表单问题，对于中后台场景，基本上解决了大部分中后台场景问题，UForm，就是为
+此而诞生的。
 
 ### 设计理念
 
@@ -56,7 +62,9 @@ npm install --save @uform/core
 
 ### 核心亮点
 
-- 时间旅行，借助首创 Observable Graph，可以记录任意时刻的全量状态，也可以将状态回滚至任意时刻，这样的能力在，重事务型应用与本地调试上可以发挥出最大价值
+
+- 时间旅行，借助首创 Observable Graph，可以记录任意时刻的全量状态，也可以将状态
+  回滚至任意时刻，这样的能力在，重事务型应用与本地调试上可以发挥出最大价值
 - 高效更新，精确渲染，无需整树渲染
 - 内置 immer.js，智能降级，无需关心浏览器兼容性
 - 更加完备的生命周期钩子
@@ -76,15 +84,23 @@ npm install --save @uform/core
 
 ### 术语解释
 
-**FormPath/FormPathPattern** 是一个抽象数据路径形式，FormPath 是路径类，FormPathPattern 是可以被 FormPath 解析的路径形式，在这里主要使用了 [cool-path](https://github.com/janrywang/cool-path) 路径解析匹配，求值取值能力
 
-**VirtualField** 是一个特殊的 Field 数据结构，它与 Field 的差异就是，它不管理 value，也就是说，它与 Form 的 value 是没有关联性的，通常我们使用它，更多的是作为代理一个 UI 容器的状态，比如：UForm 中的布局组件 FormBlock，它会在整个 Form Grpah 中作为一个独立节点而存在，但是这个节点类型就是一个 VirtualField，但是最终数据提交的时候，FormBlock 并不会污染提交数据的数据结构。
+**FormPath/FormPathPattern** 是一个抽象数据路径形式，FormPath 是路径类
+，FormPathPattern 是可以被 FormPath 解析的路径形式，在这里主要使用了
+[cool-path](https://github.com/janrywang/cool-path) 路径解析匹配，求值取值能力
 
-**Observable Graph** 是 Form 独有的观察者树，借助观察者树，可以实现很多表单相关的内部联动逻辑
+**VirtualField** 是一个特殊的 Field 数据结构，它与 Field 的差异就是，它不管理
+value，也就是说，它与 Form 的 value 是没有关联性的，通常我们使用它，更多的是作为
+代理一个 UI 容器的状态，比如：UForm 中的布局组件 FormBlock，它会在整个 Form
+Graph 中作为一个独立节点而存在，但是这个节点类型就是一个 VirtualField，但是最终
+数据提交的时候，FormBlock 并不会污染提交数据的数据结构。
+
+**Observable Graph** 是 Form 独有的观察者树，借助观察者树，可以实现很多表单相关
+的内部联动逻辑
 
 **Data Path** 是 Field/VirtualField 的 name 属性，它是作为数据路径而存在
 
-**Node Path** 是 Field/VirtualFIeld 的 path 属性，它是作为节点路径而存在
+**Node Path** 是 Field/VirtualField 的 path 属性，它是作为节点路径而存在
 
 对于数据路径和节点路径，我们可以看下面这张图：
 
@@ -97,7 +113,11 @@ npm install --save @uform/core
 - d 字段的 name 属性是 a.d，path 属性是 a.d
 - e 字段的 name 属性是 a.d.e，path 属性是 a.d.e
 
-这一来解释之后，我们就大概明白了，只要在某个节点路径中，存在 VirtualField，那么它的数据路径就会略过 VirtualField，但是，对于 VirtualField 自身这个节点，它的 name 属性，是包含它自身的节点标识的，这就是为什么 b 字段的 name 属性是 a.b 的原因
+
+这一来解释之后，我们就大概明白了，只要在某个节点路径中，存在 VirtualField，那么
+它的数据路径就会略过 VirtualField，但是，对于 VirtualField 自身这个节点，它的
+name 属性，是包含它自身的节点标识的，这就是为什么 b 字段的 name 属性是 a.b 的原
+因
 
 ### API
 
@@ -127,7 +147,7 @@ const form = createForm({
 })
 
 const aa = form.registerField({
-  path: 'aa',
+  path: 'aa'
 })
 
 aa.setState(state => {
@@ -170,9 +190,9 @@ const aa = form.registerField({
   rules: [
     {
       format: 'number',
-      message: 'This field is not a number.',
-    },
-  ],
+      message: 'This field is not a number.'
+    }
+  ]
 })
 
 aa.setState(state => {
@@ -191,7 +211,8 @@ console.log(form.getFormState(state => state.errors))
 
 #### `registerValidationRules`
 
-> 注册校验规则集，与注册 formats 的差别是，它可以注册复杂校验规则，但是 formats 只是正则表达式
+> 注册校验规则集，与注册 formats 的差别是，它可以注册复杂校验规则，但是 formats
+> 只是正则表达式
 
 **签名**
 
@@ -343,8 +364,8 @@ import { setValidationLocale } from '@uform/core'
 
 setValidationLocale({
   'en-US': {
-    required: 'This field is required.',
-  },
+    required: 'This field is required.'
+  }
 })
 ```
 
@@ -436,7 +457,7 @@ enum LifeCycleTypes {
   ON_FIELD_VALUE_CHANGE = 'onFieldValueChange', //字段值变化时触发
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange', //字段初始值变化时触发
   ON_FIELD_MOUNT = 'onFieldMount', //字段挂载时触发
-  ON_FIELD_UNMOUNT = 'onFieldUnmount', //字段卸载时触发
+  ON_FIELD_UNMOUNT = 'onFieldUnmount' //字段卸载时触发
 }
 ```
 
@@ -738,9 +759,24 @@ interface IFormValidateResult {
   }>
 }
 
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+
 interface ValidateDescription {
   //正则规则类型
-  format?: string
+  format?: InternalFormats
   //自定义校验规则
   validator?: CustomValidator
   //是否必填

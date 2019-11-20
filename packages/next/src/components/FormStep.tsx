@@ -2,12 +2,11 @@ import React, { useState, useMemo, useRef } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
-  FormPathPattern,
   createEffectHook,
-  createFormActions
+  useFormEffects,
+  FormEffectHooks
 } from '@uform/react-schema-renderer'
 import { toArr } from '@uform/shared'
-import { Observable } from 'rxjs/internal/Observable'
 import { Step } from '@alifd/next'
 import { IFormStep } from '../types'
 
@@ -27,27 +26,7 @@ const EffectHooks = {
   }>(StateMap.ON_FORM_STEP_CURRENT_CHANGE)
 }
 
-const useEffects = (relations: FormPathPattern[]) => {
-  const actions = createFormActions()
-  return EffectHooks.onStepCurrentChange$().subscribe(({ value }) => {
-    relations.forEach((pattern, index) => {
-      setTimeout(()=>{
-        actions.setFieldState(pattern, (state: any) => {
-          state.display = index === value
-        })
-      })
-    })
-  })
-}
-
-type StepComponentExtendsProps = StateMap & {
-  useEffects: (
-    relations: FormPathPattern[]
-  ) => Observable<{
-    value: number
-    preValue: number
-  }>
-}
+type StepComponentExtendsProps = StateMap
 
 export const FormStep: React.FC<IFormStep> &
   StepComponentExtendsProps = createControllerBox<IFormStep>(
@@ -64,6 +43,26 @@ export const FormStep: React.FC<IFormStep> &
       })
       setCurrent(cur)
     }
+    useFormEffects(({ setFieldState }) => {
+      FormEffectHooks.onFormInit$().subscribe(() => {
+        items.forEach(({ name }, index) => {
+          setFieldState(name, (state: any) => {
+            state.display = index === current
+          })
+        })
+      })
+      EffectHooks.onStepCurrentChange$().subscribe(({ value }) => {
+        items.forEach(({ name }, index) => {
+          if (!name)
+            throw new Error('FormStep dataSource must include `name` property')
+          setTimeout(() => {
+            setFieldState(name, (state: any) => {
+              state.display = index === value
+            })
+          })
+        })
+      })
+    })
     useMemo(() => {
       update(ref.current)
       form.subscribe(({ type, payload }) => {
@@ -102,6 +101,4 @@ export const FormStep: React.FC<IFormStep> &
   }
 ) as any
 
-Object.assign(FormStep, StateMap, EffectHooks, {
-  useEffects
-})
+Object.assign(FormStep, StateMap, EffectHooks)

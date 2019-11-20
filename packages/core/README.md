@@ -728,22 +728,51 @@ interface IFormValidateResult {
   }>
 }
 
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+
 interface ValidateDescription {
   // Regular rule type
-  format?: string // Custom validator
-  validator?: CustomValidator // Is it required?
-  required?: boolean // Customize with regularity
-  pattern?: RegExp | string // Maximum length rule
-  max?: number // Maximum numerical rule
-  maximum?: number // Exclusive maximum numerical rule
-  exclusiveMaximum?: number // Exclusive minimum numerical rules
-  exclusiveMinimum?: number // Minimum value rule
-  minimum?: number // Minimum length rule
-  min?: number // Length rule
-  len?: number // Whether to check the white space
-  whitespace?: boolean // Enumeration check rules
-  enum?: any[] // Custom error copy
-  message?: string // Custom validation rules
+  format?: InternalFormats
+  // Custom validator
+  validator?: CustomValidator
+  // Is it required?
+  required?: boolean
+  // Customize with regularity
+  pattern?: RegExp | string
+  // Maximum length rule
+  max?: number;
+  // Maximum numerical rule
+  maximum?: number
+  // Exclusive maximum numerical rule
+  exclusiveMaximum?: number
+  // Exclusive minimum numerical rules
+  exclusiveMinimum?: number
+  // Minimum value rule
+  minimum?: number
+  // Minimum length rule
+  min?: number
+  // Length rule
+  len?: number
+  // Whether to check the white space
+  whitespace?: boolean
+  // Enumeration check rules
+  enum?: any[]
+  // Custom error copy
+  message?: string
+  // Custom validation rules
   [key: string]: any
 }
 ```
