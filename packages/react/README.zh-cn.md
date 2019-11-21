@@ -37,6 +37,8 @@ npm install --save @uform/react
   - [`复杂联动`](#复杂联动)
   - [`combo字段`](#combo字段)
   - [`跨文件消费表单数据`](#跨文件消费表单数据)
+  - [`简单解构`](#简单解构)
+  - [`复杂结构`](#复杂结构)
 - [Components](#components)
   - [`Form`](#Form)
   - [`Field`](#Field)
@@ -65,7 +67,7 @@ npm install --save @uform/react
   - [`IFormSpyProps`](#IFormSpyProps)
   - [`IFieldHook`](#IFieldHook)
   - [`IVirtualFieldHook`](#IVirtualFieldHook)
-  - [`ISpyHook](#ISpyHook)
+  - [`ISpyHook`](#ISpyHook)
   - [`SyncValidateResponse`](#SyncValidateResponse)
   - [`AsyncValidateResponse`](#AsyncValidateResponse)
   - [`ValidateResponse`](#ValidateResponse)
@@ -629,9 +631,11 @@ const App = () => {
 
       <FormSpy>
         {({ state, form }) => {
-          return (<div>
-            {JSON.stringify(form.getFormState(state => state.values))}    
-          </div>)
+          return (<code>
+            <pre>
+              {JSON.stringify(form.getFormState(state => state.values), null, 2)}    
+            </pre>
+          </code>)
         }}
       </FormSpy>
 
@@ -1142,6 +1146,139 @@ const App = () => {
         }}
       </FormSpy>
     </FormProvider>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### 简单解构
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
+
+const actions = createFormActions()
+
+const App = () => {
+  return (
+    <Form actions={actions} >
+      <label>range input</label>
+      <Field name="[start,end]">
+        {({ state, mutators }) => {
+          
+          const [start, end] = state.value
+          return <div>
+            <label>start</label>
+            <input value={state.value.start} onChange={(e) => {
+              mutators.change([e.target.value, end])
+            }} />
+            <label>end</label>
+            <input value={state.value.env} onChange={(e) => {
+              mutators.change([start, e.target.value])
+            }} />
+          </div>
+        }}
+      </Field>
+      <button onClick={() => {
+        actions.setFormState(state => {
+          state.values = { start: 'x', end: 'y' }
+        })
+        // actions.setFieldState(FormPath.match('\\[start,end\\]'), state => {
+        //   state.value = ['x', 'y']
+        // })
+      }}>set value</button>
+      <FormSpy>
+        {({ state, form }) => {
+          return (<div>
+            Form values:
+            <code>
+              <pre>
+                {JSON.stringify(form.getFormState(state => state.values), null, 2)}    
+              </pre>
+            </code>
+          </div>)
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### 复杂解构
+
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from './src'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+
+const App = () => {
+  return (
+    <Form actions={actions} >
+      <Field name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}">
+        {({ state, mutators }) => {
+          return <div>
+            <button
+              onClick={() => {
+                mutators.change({
+                  aa: {
+                    bb: {
+                      cc: 123,
+                      dd: [333, 444],
+                      ee: 'abcde'
+                    }
+                  }
+                })
+              }}
+            >
+              set value
+            </button>
+            <div>Field value:</div>
+            <code>              
+              <pre>{JSON.stringify(state.value, null, 2)}</pre>
+            </code>
+          </div>
+        }}
+      </Field>
+      <FormSpy>
+        {({ state, form }) => {
+          return (<div>
+            Form values:
+            <code>
+              <pre>
+                {JSON.stringify(form.getFormState(state => state.values), null, 2)}    
+              </pre>
+            </code>
+          </div>)
+        }}
+      </FormSpy>
+    </Form>
   )
 }
 
@@ -1822,7 +1959,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### UseForm
+#### useForm
 
 > 获取一个 [IForm](#IForm) 实例
 
@@ -1850,7 +1987,7 @@ const FormFragment = () => {
 }
 ```
 
-#### UseField
+#### useField
 
 > 获取一个 [IFieldHook](#IFieldHook) 实例
 
@@ -1877,7 +2014,7 @@ const FormFragment = (props) => {
 }
 ```
 
-#### UseVirtualField
+#### useVirtualField
 
 > 获取一个 [IVirtualFieldHook](#IVirtualFieldHook) 实例
 
