@@ -47,7 +47,7 @@ npm install --save @uform/react
   - [`VirtualField`](#VirtualField)
   - [`FormSpy`](#FormSpy)
   - [`FormProvider`](#FormProvider)
-  - [`FormConsumer(deprecated，pls using FormSpy)`](<#FormConsumer(deprecated，pls-using-FormSpy)>)
+  - [`FormConsumer(deprecated，pls using FormSpy)`](#formconsumerdeprecated，pls-using-formspy)
 - [Hook](#Hook)
   - [`useFormEffects`](#useFormEffects)
   - [`useForm`](#useForm)
@@ -1281,7 +1281,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ---
 
-#### Form
+#### `<Form/>`
 
 > `<Form>` Props
 
@@ -1311,7 +1311,7 @@ interface IFormProps {
 }
 ```
 
-#### Field
+#### `<Field/>`
 
 > `<Field>` Props
 
@@ -1536,7 +1536,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### VirtualField
+#### `<VirtualField/>`
 
 > `<VirtualField>` Props
 
@@ -1632,7 +1632,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### FormSpy
+#### `<FormSpy/>`
 
 > `<FormSpy>` Props
 
@@ -1754,7 +1754,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### FormProvider
+#### `<FormProvider/>`
 
 > Used with FormSpy, often used in Cross-file consumption form state
 
@@ -1818,7 +1818,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### FormConsumer(deprecated，pls using FormSpy)
+#### `<FormConsumer/>(deprecated，pls using <FormSpy/>)`
 
 > `<FormConsumer>` Props
 
