@@ -2041,6 +2041,8 @@ const FormFragment = (props) => {
 
 ### API
 
+> The api is fully inherited from @uform/core. The specific API of @uform/react is listed below.
+
 ---
 
 #### `createFormActions`

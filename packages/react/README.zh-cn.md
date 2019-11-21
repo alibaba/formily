@@ -2076,6 +2076,8 @@ const FormFragment = (props) => {
 
 ### API
 
+> 整体API完全继承@uform/core, 下面只列举@uform/react的特有API
+
 ---
 
 #### `createFormActions`
