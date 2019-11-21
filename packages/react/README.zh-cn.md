@@ -1240,7 +1240,6 @@ const App = () => {
     <Form actions={actions} >
       <Field name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}">
         {({ state, mutators }) => {
-          console.log(state.value)
           return <div>
             <button
               onClick={() => {

@@ -37,7 +37,7 @@ npm install --save @uform/core
 - [Interfaces](#interfaces)
   - [IFormCreatorOptions](#iformcreatoroptions)
   - [IForm](#iform)
-  - [Imutators](#imutators)
+  - [IMutators](#imutators)
   - [Validator](#validator)
   - [IFormState](#iformstate)
   - [IFieldState](#ifieldstate)
@@ -47,6 +47,7 @@ npm install --save @uform/core
 <!-- tocstop -->
 
 ### 背景
+
 
 中后台领域，核心就是两种场景，**一个是数据录入，一个是数据查询+数据展现**，不管
 是数据录入还是数据查询，都是借助表单来实现的，从实现复杂度来看，两者复杂度相差不
@@ -60,6 +61,7 @@ npm install --save @uform/core
 **Anything comes from Observable Graph.**
 
 ### 核心亮点
+
 
 - 时间旅行，借助首创 Observable Graph，可以记录任意时刻的全量状态，也可以将状态
   回滚至任意时刻，这样的能力在，重事务型应用与本地调试上可以发挥出最大价值
@@ -81,6 +83,7 @@ npm install --save @uform/core
 ![](https://img.alicdn.com/tfs/TB18LXHlVP7gK0jSZFjXXc5aXXa-1428-926.png)
 
 ### 术语解释
+
 
 **FormPath/FormPathPattern** 是一个抽象数据路径形式，FormPath 是路径类
 ，FormPathPattern 是可以被 FormPath 解析的路径形式，在这里主要使用了
@@ -109,6 +112,7 @@ Graph 中作为一个独立节点而存在，但是这个节点类型就是一�
 - b 字段的 name 属性是 a.b，path 属性是 a.b
 - d 字段的 name 属性是 a.d，path 属性是 a.d
 - e 字段的 name 属性是 a.d.e，path 属性是 a.d.e
+
 
 这一来解释之后，我们就大概明白了，只要在某个节点路径中，存在 VirtualField，那么
 它的数据路径就会略过 VirtualField，但是，对于 VirtualField 自身这个节点，它的
@@ -139,7 +143,7 @@ const form = createForm({
   initialValues: {},
   onChange: values => {
     console.log(values)
-  }
+  },
 })
 
 const aa = form.registerField({
@@ -170,7 +174,7 @@ registerValidationFormats(formats:{
 import { createForm, registerValidationFormats } from '@uform/core'
 
 registerValidationFormats({
-  number: /^[+-]?\d+(\.\d+)?$/
+  number: /^[+-]?\d+(\.\d+)?$/,
 })
 
 const form = createForm({
@@ -178,7 +182,7 @@ const form = createForm({
   initialValues: {},
   onChange: values => {
     console.log(values)
-  }
+  },
 })
 
 const aa = form.registerField({
@@ -198,9 +202,9 @@ form.validate()
 
 console.log(form.getFormState(state => state.errors))
 /**
-[{ 
+[{
     path: 'aa',
-    messages: [ 'This field is not a number.' ] 
+    messages: [ 'This field is not a number.' ]
 }]
 **/
 ```
@@ -228,7 +232,7 @@ import { createForm, registerValidationRules } from '@uform/core'
 registerValidationRules({
   custom: value => {
     return value === '123' ? 'This field can not be 123' : ''
-  }
+  },
 })
 
 const form = createForm({
@@ -236,16 +240,16 @@ const form = createForm({
   initialValues: {},
   onChange: values => {
     console.log(values)
-  }
+  },
 })
 
 const aa = form.registerField({
   path: 'aa',
   rules: [
     {
-      custom: true
-    }
-  ]
+      custom: true,
+    },
+  ],
 })
 
 aa.setState(state => {
@@ -382,9 +386,9 @@ setValidationLocale({
 ```typescript
 type FormLifeCycleHandler<T> = (payload: T, context: any) => void
 
-new FormLifeCyle(handler: FormLifeCycleHandler<Payload>)
-new FormLifeCyle(...type: LifeCycleTypes, handler: FormLifeCycleHandler<Payload>...)
-new FormLifeCyle(handlerMap: { [key: LifeCycleTypes]: FormLifeCycleHandler<Payload> })
+new FormLifeCycle(handler: FormLifeCycleHandler<Payload>)
+new FormLifeCycle(...type: LifeCycleTypes, handler: FormLifeCycleHandler<Payload>...)
+new FormLifeCycle(handlerMap: { [key: LifeCycleTypes]: FormLifeCycleHandler<Payload> })
 ```
 
 **用法**
@@ -684,7 +688,7 @@ interface IForm {
 }
 ```
 
-#### Imutators
+#### IMutators
 
 > 通过 createMutators 创建出来的实例 API，主要用于操作字段数据
 
