@@ -22,6 +22,7 @@ npm install --save @uform/react-schema-renderer
 如果您是直接基于@uform/react-schema-renderer做开发的，那么您必须在开发前将自定义组件注册到渲染器里去，否则，我们的JSON-Schema协议是不能渲染表单的。所以：
 
 ```jsx
+import React from 'react'
 import { SchemaForm, registerFormField,connect } from '@uform/react-schema-renderer'
 
 registerFormField('string',connect()(({value,onChange})=>{
@@ -52,6 +53,7 @@ export default ()=>{
 说到JSON Schema，上面一个例子其实已经涉及了，当然，它并不够复杂，我们看一个较为复杂的例子：
 
 ```tsx
+import React from 'react'
 import { SchemaForm } from '@uform/react-schema-renderer'
 
 registerFormField('string',connect()(({value,onChange})=>{
@@ -94,7 +96,11 @@ export default ()=>{
 JSchema就是在jsx中以一种更优雅的写法来描述JSON Schema，我们可以针对以上例子用JSchema实现一版：
 
 ```tsx
-import { SchemaForm,Field } from '@uform/react-schema-renderer'
+import React from 'react'
+import { 
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field 
+} from '@uform/react-schema-renderer'
 
 export default ()=>{
   return (
@@ -170,6 +176,7 @@ export default ()=>{
 接入方式目前提供了全局注册机制与单例注册机制，全局注册主要使用registerFormComponent和registerFormItemComponent两个API来注册，单例注册则是直接在SchemaForm属性上传formComponent和formItemComponent。如果是SPA场景，推荐使用单例注册的方式，下面看看例子：
 
 ```tsx
+import React from 'react'
 import {
   SchemaForm,
   registerFormComponent,
@@ -235,6 +242,7 @@ export default ()=>{
 咱们以InputNumber为例演示一下：
 
 ```tsx
+import React from 'react'
 import { connect, registerFormField } from '@uform/react-schema-renderer'
 import { InputNumber } from 'antd'
 
@@ -296,6 +304,7 @@ JSON Schema描述表单数据结构，其实是天然支持的，但是表单最
 现在uform的做法是，抽象了一个叫**虚拟节点**的概念，用户在代码层面上指定某个JSON Schema x-component为虚拟节点之后，后面不管是在渲染，还是在数据处理，还是最终数据提交，只要解析到这个节点是虚拟节点，都不会将它当做一个正常的数据节点。所以，有了这个虚拟节点的概念，我们就可以在JSON Schema中描述各种复杂布局，下面让我们试着写一个布局组件：
 
 ```tsx
+import React from 'react'
 import { SchemaForm,registerVirtualBox } from '@uform/react-schema-renderer'
 import { Card } from 'antd'
 
@@ -339,6 +348,7 @@ export default ()=>{
 从这段伪代码中我们可以看到card就是一个正常的Object Schema节点，只是需要指定一个x-component为card，这样就能和registerVirtualBox注册的card匹配上，就达到了虚拟节点的效果，所以，不管你把JSON Schema中的属性名改为什么，都不会影响最终的提交的数据结构。**这里需要注意的是x-component-props是直接透传到registerVirtualBox的回调函数参数上的。** 这是JSON Schema形式的使用，我们还有JSchema的使用方式：
 
 ```tsx
+import React from 'react'
 import { SchemaForm,createVirtualBox } from '@uform/react-schema-renderer'
 import { Card } from 'antd'
 
@@ -361,9 +371,11 @@ export default ()=>{
 }
 ```
 
-从这个例子中我们可以看到，借助createVirtualBox API可以快速创建一个布局组件，同时在JSchema中直接使用。**其实createVirtualBox的内部实现很简单，还是使用了registerVitualBox和Field**：
+从这个例子中我们可以看到，借助createVirtualBox API可以快速创建一个布局组件，同时在JSchema中直接使用。**其实createVirtualBox的内部实现很简单，还是使用了registerVitualBox和SchemaMarkupField**：
 
 ```tsx
+import React from 'react'
+import { SchemaMarkupField as Field } from '@uform/react-schema-renderer'
 export function createVirtualBox<T = {}>(
   key: string,
   component?: React.JSXElementConstructor<React.PropsWithChildren<T>>
@@ -403,9 +415,10 @@ export function createVirtualBox<T = {}>(
 前面介绍的注册布局组件的方式，其实都是单例注册，如果我们需要实例形式的注册，还是与前面说的方式类似
 
 ```tsx
-
+import React from 'react'
+import { Card as AntdCard } from 'antd'
 const Card = ({children,...props})=>{
-  return <Card {...props.schema.getExtendsComponentProps()}>{children}</Card>
+  return <AntdCard {...props.schema.getExtendsComponentProps()}>{children}</Card>
 }
 
 export default ()=>{
@@ -448,7 +461,7 @@ export default ()=>{
 
 #### 如何实现递归渲染组件？
 
-什么叫递归渲染组件？其实就是**实现了JSON Schema中properties和items的组件**，像`type:"string"` 这种节点就属于原子节点，不属于递归渲染组件。其实像前面说的布局组件，其实它也是属于递归渲染组件，只是它固定了渲染模式，所以可以很简单的注册。所以，我们大部分想要实现递归渲染的场景，可能实际业务场景中，更多的是在`type:"array"`这种场景才会去实现递归渲染，下面我们会详细介绍自增列表组件的实现方式。
+什么叫递归渲染组件？其实就是**实现了JSON Schema中properties和items的组件**，像`type:"string"` 这种节点就属于原子节点，不属于递归渲染组件。其实像前面说的布局组件，其实它也是属于递归渲染组件，只是它固定了渲染模式，所以可以很简单的注册。所以，我们大部分想要实现递归渲染的场景，可能更多的是在`type:"array"`这种场景才会去实现递归渲染，下面我们会详细介绍自增列表组件的实现方式。
 
 #### 如何实现自增列表组件？
 
@@ -478,7 +491,7 @@ registerFormField('array',({value,path,mutators})=>{
         
   const listUI = value.map((item,index)=>{
     return (
-      <div>
+      <div key={index}>
         <SchemaField path={FormPath.parse(path).concat(index)}/>
         <button onClick={()=>{
             mutators.remove(index)
@@ -513,38 +526,154 @@ registerFormField('array',({value,path,mutators})=>{
 就这3点，基本上满足超复杂自定义组件的特征了，对于这种场景，为什么我们通过正常的封装自定义组件的形式不能解决问题呢？其实主要是受限于校验，没法整体校验，所以，我们需要一个能聚合大量字段处理逻辑的能力，下面我们来看看具体方案：
 
 ```tsx
+import React, { Fragment } from 'react'
+import {
+  registerFormField,
+  SchemaField,
+  FormPath,
+  InternalField,
+  useFormEffects,
+  FormEffectHooks
+} from '@uform/react-schema-renderer'
+import { Input, Form } from 'antd'
 
+
+const FormItem = ({component,...props})=>{
+  return (
+    <InternalField {...props}>
+      {({state,mutators})=>{
+        const messages = [].concat(state.errors || [], state.warnings || [])
+        let status = ''
+        if (state.loading) {
+          status = 'validating'
+        }
+        if (state.invalid) {
+          status = 'error'
+        }
+        if (state.warnings && state.warnings.length) {
+          status = 'warning'
+        }
+        return (
+          <Form.Item 
+             {...props} 
+             help={messages.length ? messages : props.help && props.help}
+             validateStatus={status}
+            >
+            {React.createElement(component,{
+              ...state.props,
+              value:state.value,
+              onChange:mutators.change
+            })}
+          </Form.Item>
+        )
+      }}
+    </InternalField>
+  )
+}
+
+//不用connect包装
+registerFormField('complex',({path})=>{
+   useFormEffects(({setFieldState})=>{
+     FormEffectHooks.onFieldValueChange$('ccc').subscribe(({value})=>{
+        if(value === '123'){
+          setFieldState('ddd',state=>{
+            state.value = 'this is linkage relationship'
+          })
+        }
+     })
+   })
+  
+   return (
+      <>
+         <FormItem name={FormPath.parse(path).concat('aaa')} component={Input} />
+      	 <FormItem name={FormPath.parse(path).concat('bbb')} component={Input} />
+         <FormItem name="ccc" component={Input} />
+         <FormItem name="ddd" component={Input} />
+      </>
+   )
+})
 ```
 
+在这段伪代码中，我们主要使用了两个核心API，主要是useFormEffects和InternalField，useFormEffects给开发者提供了局部写effects逻辑的地方这样就能很方便的复用effects逻辑，InternalField则就是@uform/react的Field组件，这个可以具体看看@uform/react的文档，因为SchemaForm内部也是使用的@uform/react，所以可以共享同一个Context，所以我们就能很方便的在自定义组件内使用InternalField，同时需要注意一点，**直接使用InternalField的时候，我们注册的name是根级别的name，如果想要复用当前自定义组件的路径，可以借助FormPath解析路径，然后再concat即可。**
 
 
-### 协议
----
-
-#### 理念
-
-#### 架构
-
-#### 数据结构协议
-
-#### 布局协议
-
-#### 顺序协议
-
-#### 校验协议
-
-#### UI协议
-
-#### 逻辑协议
 
 ### API
+
 ---
 
+> 整体API完全继承@uform/core与@uform/react，下面只列举@uform/react-schema-renderer的特有API
+
+#### connect
+
+
+
+#### registerFormField
+
+
+
+#### registerFormFields
+
+
+
+#### registerFormComponent
+
+
+
+#### registerFormItemComponent
+
+
+
+#### registerVirtualBox
+
+
+
+#### getRegistry
+
+
+
+#### cleanRegistry
+
+
+
+
+
+### Classes
+
+> 整体Class完全继承@uform/core，比如FormPath与FormLifeCyle，下面只列举@uform/react-schema-renderer特有的Class
+
+
+
+#### new Schema()
+
+
+
 ### Components
+
 ---
+
+> 整体组件完全继承@uform/react，下面只列举@uform/react-schema-renderer特有的组件
+
+
+
+#### `<SchemaForm/>`
+
+
+
+#### `<SchemaField/>`
+
+
+
+#### `<SchemaMarkupForm/>`
+
+
+
+#### `<SchemaMarkupField/>`
+
 
 
 ### Interfaces
+
 ---
 
-
+> 整体继承@uform/react和@uform/core的Interfaces，下面只列举@uform/react-schema-renderer特有Interfaces
