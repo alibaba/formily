@@ -1287,6 +1287,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Components
 
+> 整体完全继承@uform/core, 下面只列举@uform/react的特有的Components
+
 ---
 
 #### Form
@@ -2076,7 +2078,7 @@ const FormFragment = (props) => {
 
 ### API
 
-> 整体API完全继承@uform/core, 下面只列举@uform/react的特有API
+> 整体完全继承@uform/core, 下面只列举@uform/react的特有API
 
 ---
 
@@ -2219,6 +2221,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### Interfaces
+
+> 整体完全继承@uform/core, 下面只列举@uform/react的特有的Interfaces
 
 ---
 

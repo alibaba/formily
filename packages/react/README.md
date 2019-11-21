@@ -1277,6 +1277,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Components
 
+> The Components is fully inherited from @uform/core. The specific Components of @uform/react is listed below.
+
 ---
 
 #### Form
@@ -2041,7 +2043,7 @@ const FormFragment = (props) => {
 
 ### API
 
-> The api is fully inherited from @uform/core. The specific API of @uform/react is listed below.
+> The API is fully inherited from @uform/core. The specific API of @uform/react is listed below.
 
 ---
 
@@ -2206,6 +2208,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 
 ### Interfaces
+
+> The Interfaces is fully inherited from @uform/core. The specific Interfaces of @uform/react is listed below.
 
 ---
 
