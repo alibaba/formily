@@ -42,12 +42,12 @@ npm install --save @uform/react
   - [`Deconstruction`](#Deconstruction)
   - [`Complex Deconstruction`](#Complex-Deconstruction)
 - [Components](#components)
-  - [`Form`](#Form)
-  - [`Field`](#Field)
-  - [`VirtualField`](#VirtualField)
-  - [`FormSpy`](#FormSpy)
-  - [`FormProvider`](#FormProvider)
-  - [`FormConsumer(deprecated，pls using FormSpy)`](#formconsumerdeprecated，pls-using-formspy)
+  - [`<Form/>`](#Form)
+  - [`<Field/>`](#Field)
+  - [`<VirtualField/>`](#VirtualField)
+  - [`<FormSpy/>`](#FormSpy)
+  - [`<FormProvider/>`](#FormProvider)
+  - [`<FormConsumer/>(deprecated，pls using <FormSpy/>)`](#formconsumerdeprecated，pls-using-formspy)
 - [Hook](#Hook)
   - [`useFormEffects`](#useFormEffects)
   - [`useForm`](#useForm)
@@ -1276,8 +1276,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### Components
-
-> The Components is fully inherited from @uform/core. The specific Components of @uform/react is listed below.
 
 ---
 

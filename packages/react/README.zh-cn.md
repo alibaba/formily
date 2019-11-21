@@ -40,12 +40,12 @@ npm install --save @uform/react
   - [`简单解构`](#简单解构)
   - [`复杂结构`](#复杂结构)
 - [Components](#components)
-  - [`Form`](#Form)
-  - [`Field`](#Field)
-  - [`VirtualField`](#VirtualField)
-  - [`FormSpy`](#FormSpy)
-  - [`FormProvider`](#FormProvider)
-  - [`FormConsumer(即将废弃，请使用FormSpy)`](<#FormConsumer(即将废弃，请使用FormSpy)>)
+  - [`<Form/>`](#Form)
+  - [`<Field/>`](#Field)
+  - [`<VirtualField/>`](#VirtualField)
+  - [`<FormSpy/>`](#FormSpy)
+  - [`<FormProvider/>`](#FormProvider)
+  - [`<FormConsumer/>(即将废弃，请使用<FormSpy/>)`](<#FormConsumer(即将废弃，请使用FormSpy)>)
 - [Hook](#Hook)
   - [`useFormEffects`](#useFormEffects)
   - [`useForm`](#useForm)
@@ -1286,8 +1286,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ### Components
-
-> 整体完全继承@uform/core, 下面只列举@uform/react的特有的Components
 
 ---
 
