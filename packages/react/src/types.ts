@@ -123,6 +123,12 @@ export interface IVirtualFieldHook {
   props: {}
 }
 
+export interface ISpyHook {
+  form: IForm
+  state: any
+  type: string
+}
+
 export interface IFormActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>

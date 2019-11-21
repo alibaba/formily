@@ -9,10 +9,10 @@ import {
 } from 'react'
 import { FormHeartSubscriber, LifeCycleTypes } from '@uform/core'
 import { isStr, FormPath, isArr } from '@uform/shared'
-import { IFormSpyProps } from '../types'
+import { IFormSpyProps, ISpyHook } from '../types'
 import FormContext, { BroadcastContext } from '../context'
 
-export const useFormSpy = (props: IFormSpyProps) => {
+export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
   const broadcast = useContext(BroadcastContext)
   const form = useContext(FormContext)
   const initializedRef = useRef(false)
