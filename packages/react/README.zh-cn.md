@@ -205,7 +205,7 @@ const App = () => {
         name="age"
         rules={[
           val =>
-            val === undefiend
+            val === undefined
               ? { type: 'error', message: 'age is required' }
               : undefined
         ]}
@@ -217,7 +217,7 @@ const App = () => {
         name="gender"
         rules={[
           val =>
-            val === undefiend
+            val === undefined
               ? { type: 'warning', message: 'gender is required' }
               : undefined
         ]}
@@ -242,7 +242,7 @@ const App = () => {
         rules={[
           {
             validator(value) {
-              return value === undefiend
+              return value === undefined
                 ? 'This field can not be empty, please enter {{scope.outerVariable}}'
                 : undefined
             },
@@ -1171,11 +1171,11 @@ const App = () => {
           const [start, end] = state.value
           return <div>
             <label>start</label>
-            <input value={state.value.start} onChange={(e) => {
+            <input value={start} onChange={(e) => {
               mutators.change([e.target.value, end])
             }} />
             <label>end</label>
-            <input value={state.value.env} onChange={(e) => {
+            <input value={end} onChange={(e) => {
               mutators.change([start, e.target.value])
             }} />
           </div>
@@ -1185,9 +1185,6 @@ const App = () => {
         actions.setFormState(state => {
           state.values = { start: 'x', end: 'y' }
         })
-        // actions.setFieldState(FormPath.match('\\[start,end\\]'), state => {
-        //   state.value = ['x', 'y']
-        // })
       }}>set value</button>
       <FormSpy>
         {({ state, form }) => {
@@ -1214,7 +1211,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from './src'
+import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1243,6 +1240,7 @@ const App = () => {
     <Form actions={actions} >
       <Field name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}">
         {({ state, mutators }) => {
+          console.log(state.value)
           return <div>
             <button
               onClick={() => {
@@ -1266,6 +1264,21 @@ const App = () => {
           </div>
         }}
       </Field>
+      <button onClick={() => {
+        actions.setFieldState(FormPath.match('[[{aa:{bb:{cc:destructor1,dd:\\[destructor2,destructor3\\],ee}}}]]'), state => {
+          state.value = {
+            aa: {
+              bb: {
+                cc: 'a',
+                dd: ['b', 'c'],
+                ee: 'd'
+              }
+            }
+          }
+        })
+      }}>
+        outside set
+      </button>
       <FormSpy>
         {({ state, form }) => {
           return (<div>
