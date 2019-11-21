@@ -1201,7 +1201,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from './src'
+import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
 
 const actions = createFormActions()
 const InputField = props => (
