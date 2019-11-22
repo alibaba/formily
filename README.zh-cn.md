@@ -41,9 +41,16 @@ npm install --save antd @uform/antd
 npm install --save @alifd/next @uform/next
 ```
 
-## 文档
+## 官网
 
 https://uformjs.org
+
+## 文档
+
+[@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
+[@uform/react](./packages/react/README.md)
+[@uform/core](./packages/core/README.md)
+
 
 ## 入门案例
 
