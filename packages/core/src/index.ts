@@ -230,9 +230,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
         syncFormMessages('warnings', published.name, published.warnings)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-      if (env.shadowStage || !env.leadingStage) {
-        return false
-      }
+      if (env.leadingStage) return
+      if (env.shadowStage) return false
     }
   }
 
@@ -470,9 +469,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
-    state.setState(state => {
-      FormPath.deleteIn(state[key], path)
-    }, silent)
+    leadingUpdate(() => {
+      state.setState(state => {
+        FormPath.deleteIn(state[key], path)
+      }, silent)
+    })
   }
 
   function deleteFormValuesIn(path: FormPathPattern, silent?: boolean) {
@@ -527,14 +528,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const name = field.unsafe_getSourceState(state => state.name)
       if (isValid(key)) {
         deleteFormValuesIn(FormPath.parse(name).concat(key))
-        field.notify(field.getState())
+        // field.notify(field.getState())
       } else {
         env.removeNodes[name] = true        
         deleteFormValuesIn(name)
         field.setState((fieldState: IFieldState<FieldProps>) => {
           fieldState.value = undefined
           fieldState.values = []
-        })
+        }, true)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
