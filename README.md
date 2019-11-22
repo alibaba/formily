@@ -65,7 +65,7 @@ https://uformjs.org
 
 - [@uform/antd](./packages/antd/README.md)
 - [@uform/next](./packages/next/README.md)
-- [@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
+- [@uform/react-schema-renderer](./packages/react-schema-renderer/README.md)
 - [@uform/react](./packages/react/README.md)
 - [@uform/core](./packages/core/README.md)
 
