@@ -528,7 +528,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const name = field.unsafe_getSourceState(state => state.name)
       if (isValid(key)) {
         deleteFormValuesIn(FormPath.parse(name).concat(key))
-        // field.notify(field.getState())
       } else {
         env.removeNodes[name] = true        
         deleteFormValuesIn(name)
