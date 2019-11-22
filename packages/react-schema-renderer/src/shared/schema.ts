@@ -1,8 +1,7 @@
 import React from 'react'
 import {
   ValidatePatternRules,
-  ValidateDescription,
-  CustomValidator,
+  ValidateArrayRules,
   getMessage
 } from '@uform/validator'
 import {
@@ -109,8 +108,12 @@ export class Schema implements ISchema {
     return res
   }
 
-  merge(props: {}) {
-    Object.assign(this, props)
+  merge(spec: any) {
+    if (spec instanceof Schema) {
+      Object.assign(this, spec.getSelfProps())
+    } else {
+      Object.assign(this, spec)
+    }
     return this
   }
 
@@ -143,7 +146,7 @@ export class Schema implements ISchema {
     return props
   }
   getExtendsRules() {
-    let rules: Array<string | ValidateDescription | CustomValidator> = []
+    let rules: ValidateArrayRules= []
     if (this.format) {
       rules.push({ format: this.format })
     }
@@ -233,9 +236,11 @@ export class Schema implements ISchema {
   getExtendsEditable(): boolean {
     if (isValid(this.editable)) {
       return this.editable
-    } else if (isValid(this['x-props'] && this['x-props'].editable)) {
+    } else if (isValid(this['x-props']) && isValid(this['x-props'].editable)) {
       return this['x-props'].editable
-    } else if (isValid(this.readOnly)) {
+    } else if(isValid(this['x-component-props']) && isValid(this['x-component-props'].editable)){
+      return this['x-component-props'].editable
+    }else if (isValid(this.readOnly)) {
       return !this.readOnly
     }
   }
@@ -365,12 +370,12 @@ export class Schema implements ISchema {
     return Schema.getOrderProperties(this)
   }
 
-  getOrderPatternProperties() {
+  unrelease_getOrderPatternProperties() {
     return Schema.getOrderProperties(this, 'patternProperties')
   }
 
-  mapPatternProperties(callback?: (schema: Schema, key: string) => any) {
-    return this.getOrderPatternProperties().map(({ schema, key }) => {
+  unrelease_mapPatternProperties(callback?: (schema: Schema, key: string) => any) {
+    return this.unrelease_getOrderPatternProperties().map(({ schema, key }) => {
       return callback(schema, key)
     })
   }
