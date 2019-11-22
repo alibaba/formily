@@ -525,12 +525,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
     function removeValue(key: string | number) {
       const name = field.unsafe_getSourceState(state => state.name)
-      env.removeNodes[name] = true
-      field.setState((state: IFieldState<FieldProps>) => {
-        state.value = undefined
-        state.values = []
-      }, true)
-      deleteFormValuesIn(key ? FormPath.parse(name).concat(key) : name)
+      if (isValid(key)) {
+        deleteFormValuesIn(FormPath.parse(name).concat(key))
+        field.notify(field.getState())
+      } else {
+        env.removeNodes[name] = true
+        field.setState((fieldState: IFieldState<FieldProps>) => {
+          fieldState.value = undefined
+          fieldState.values = []
+        }, true)
+        deleteFormValuesIn(name)
+      }      
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
