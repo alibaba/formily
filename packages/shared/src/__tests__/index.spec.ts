@@ -8,6 +8,7 @@ import { deprecate } from '../deprecate'
 import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
+import { isFn } from '../types'
 
 describe('array', () => {
   test('toArr', () => {
@@ -99,14 +100,14 @@ describe('compare', () => {
   expect(isEqual([{ k1: 'v1' }, { k2: 'v2' }], [{ k1: 'v1' }, { k2: 'v2' }])).toBeTruthy()
   expect(isEqual([{ k1: 'v1' }, { k2: 'v2' }], [{ k1: 'v1' }])).toBeFalsy()
   expect(isEqual([{ k1: 'v1' }, { k2: 'v2' }], [{ k1: 'v1' }], (_, key) => key !== 'k1')).toBeFalsy()
-  
+
   // moment
   const momentA = moment('2019-11-11', 'YYYY-MM-DD')
   const momentB = moment('2019-11-10', 'YYYY-MM-DD')
   expect(isEqual(momentA, {})).toBeFalsy()
   expect(isEqual(momentA, moment('2019-11-11', 'YYYY-MM-DD'))).toBeTruthy()
   expect(isEqual(momentA, momentB)).toBeFalsy()
-  
+
   // immutable
   const immutableA = ImmutableMap({ key: 'val' })
   const immutableB = ImmutableMap({ key1: 'val1' })
@@ -124,8 +125,8 @@ describe('compare', () => {
   const regexpA = new RegExp(/test/)
   const regexpB = new RegExp(/test2/)
   expect(isEqual(regexpA, {})).toBeFalsy()
-  expect(isEqual(regexpA,  new RegExp(/test/))).toBeTruthy()
-  expect(isEqual(regexpA,  regexpB)).toBeFalsy()
+  expect(isEqual(regexpA, new RegExp(/test/))).toBeTruthy()
+  expect(isEqual(regexpA, regexpB)).toBeFalsy()
   // URL
   const urlA = new URL('https://uformjs.org/')
   const urlB = new URL('https://www.taobao.com')
@@ -151,7 +152,7 @@ describe('clone and compare', () => {
     // ff.add({})
     // var gg = new Set()
     // gg.add(3)
-  
+
     var a = {
       aa: 123123,
       bb: [{ bb: 111 }, { bb: 222 }],
@@ -175,7 +176,7 @@ describe('clone and compare', () => {
     // expect(a.ff === cloned.ff).toBeTruthy()
     // expect(a.gg === cloned.gg).toBeTruthy()
   })
-  
+
   test('filter equal', () => {
     var a = {
       aa: {
@@ -187,11 +188,11 @@ describe('clone and compare', () => {
         bb: 123
       }
     }
-  
+
     expect(isEqual(a, b)).toBeTruthy()
     expect(isEqual(a, b, (_, key) => key !== 'aa')).toBeTruthy()
   })
-  
+
   test('filter clone', () => {
     var a = {
       aa: {
@@ -201,9 +202,9 @@ describe('clone and compare', () => {
         dd: [1, 3, 4, 5]
       }
     }
-  
+
     var b = clone(a, (_, key) => key !== 'aa')
-  
+
     expect(a.aa === b.aa).toBeTruthy()
     expect(a.cc === b.cc).toBeFalsy()
     expect(isEqual(a.cc, b.cc)).toBeTruthy()
@@ -258,8 +259,8 @@ describe('isEmpty', () => {
     expect(isEmpty('')).toBeTruthy()
 
     // val - function
-    const emptyFunc = function() {}
-    const nonEmptyFunc = function(payload) {
+    const emptyFunc = function () { }
+    const nonEmptyFunc = function (payload) {
       console.log(payload)
     }
     expect(isEmpty(emptyFunc)).toBeTruthy()
@@ -280,7 +281,7 @@ describe('isEmpty', () => {
     expect(isEmpty(new Map().set('key', 'val'))).toBeFalsy()
     expect(isEmpty(new Set())).toBeTruthy()
     expect(isEmpty(new Set([1, 2]))).toBeFalsy()
-    expect(isEmpty({key: 'val'})).toBeFalsy()
+    expect(isEmpty({ key: 'val' })).toBeFalsy()
     expect(isEmpty({})).toBeTruthy()
 
     expect(isEmpty(Symbol()))
@@ -301,12 +302,12 @@ describe('shared Subscribable', () => {
     const obj = new Subscribable()
     const handlerIdx = obj.subscribe(cb)
     expect(handlerIdx).toEqual(1)
-    obj.notify({ key: 'val'})
+    obj.notify({ key: 'val' })
     expect(cb).toHaveBeenCalledTimes(1)
     expect(cb).toBeCalledWith({ key: 'val' })
 
     obj.unsubscribe(handlerIdx)
-    obj.notify({ key: 'val'})
+    obj.notify({ key: 'val' })
     expect(cb).toHaveBeenCalledTimes(1)
 
     // subscribable with custom filter
@@ -321,7 +322,7 @@ describe('shared Subscribable', () => {
     objWithCustomFilter.subscribe(cb)
     const handlerIdx2 = objWithCustomFilter.subscribe(cb)
     expect(handlerIdx2).toEqual(2)
-    objWithCustomFilter.notify({ key4: 'val4'})
+    objWithCustomFilter.notify({ key4: 'val4' })
     expect(cb).toHaveBeenCalledTimes(3)
     expect(cb).toBeCalledWith({ key4: 'val4', key2: 'val2' })
 
@@ -335,7 +336,23 @@ describe('shared Subscribable', () => {
       notify: customNotify
     }
     objWithCustomNotify.subscribe(cb)
-    objWithCustomNotify.notify({ key3: 'val3'})
+    objWithCustomNotify.notify({ key3: 'val3' })
     expect(customNotify).toBeCalledTimes(1)
+  })
+})
+
+
+describe('types', () => {
+  test('isFn', () => {
+    const normalFunction = function normalFn() { }
+    const asyncFunction = async function asyncFn() { }
+    const generatorFunction = function* generatorFn() { }
+    expect(isFn(() => { })).toBeTruthy()
+    expect(isFn(normalFunction)).toBeTruthy()
+    expect(isFn(asyncFunction)).toBeTruthy()
+    expect(isFn(generatorFunction)).toBeTruthy()
+    expect(isFn("")).toBeFalsy()
+    expect(isFn(undefined)).toBeFalsy()
+    expect(isFn(["🦄"])).toBeFalsy()
   })
 })
