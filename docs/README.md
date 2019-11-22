@@ -1,19 +1,3 @@
-[English](./README.md) | 简体中文
-
-<p align="center">
-<img src="https://img.alicdn.com/tfs/TB1VsOcRbrpK1RjSZTEXXcWAVXa-1400-689.png">
-<a href="https://www.npmjs.com/package/@uform/core"><img src="https://img.shields.io/npm/v/@uform/core.svg"></a>
-<a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
-<a href="https://www.npmjs.com/package/@uform/next"><img src="https://img.shields.io/npm/v/@uform/next.svg"></a>
-<a href="https://www.npmjs.com/package/@uform/antd"><img src="https://img.shields.io/npm/v/@uform/antd.svg"></a>
-<a href="https://travis-ci.com/alibaba/uform"><img src="https://travis-ci.com/alibaba/uform.svg?branch=master"></a>
-<a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
-<a href="https://app.netlify.com/sites/uform/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
-</p>
-
-<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，UForm 谐音 Your Form，代表，这才是你想要的 Form 解决方案</p>
-
----
 
 ## 背景
 
@@ -58,23 +42,6 @@ npm install --save @uform/react
 ```bash
 npm install --save @uform/core
 ```
-
-## 官网
-
-https://uformjs.org
-
-## 文档
-
-- [@uform/antd](./packages/antd/README.md)
-- [@uform/next](./packages/next/README.md)
-- [@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
-- [@uform/react](./packages/react/README.md)
-- [@uform/core](./packages/core/README.md)
-
-
-## 入门案例
-
-[codesandbox](https://codesandbox.io/s/o5up7)
 
 ## 社区
 

@@ -38,15 +38,36 @@ Use Fusion Design：
 npm install --save @alifd/next @uform/next
 ```
 
+Use uform react render engine pacakge:
+
+```bash
+npm install --save @uform/react-schema-renderer
+```
+
+Use uform react package:
+
+```bash
+npm install --save @uform/react
+```
+
+Use UForm core package:
+
+```bash
+npm install --save @uform/core
+```
+
+
 ## WebSite
 
 https://uformjs.org
 
 ## Documents
 
-[@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
-[@uform/react](./packages/react/README.md)
-[@uform/core](./packages/core/README.md)
+- [@uform/antd](./packages/antd/README.md)
+- [@uform/next](./packages/next/README.md)
+- [@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
+- [@uform/react](./packages/react/README.md)
+- [@uform/core](./packages/core/README.md)
 
 
 ## Demo
@@ -76,17 +97,6 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 ## Sponsors
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/uform#sponsor)]
-
-<a href="https://opencollective.com/uform/sponsor/0/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/1/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/2/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/3/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/4/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/5/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/6/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/7/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/8/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/9/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/9/avatar.svg"></a>
 
 
 
