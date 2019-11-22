@@ -95,7 +95,7 @@ import {
   FormProvider,
   FormConsumer,
   FormEffectHooks
-} from './src'
+} from '@uform/react'
 
 const { onFormInit$, onFormInputChange$, onFieldInputChange$ } = FormEffectHooks
 const actions = createFormActions()
@@ -169,7 +169,7 @@ const InputField = props => (
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -288,7 +288,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -380,7 +380,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -439,7 +439,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -555,7 +555,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -661,7 +661,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -743,7 +743,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -847,7 +847,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -904,7 +904,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -1034,7 +1034,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from './src'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1096,7 +1096,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from './src'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1157,7 +1157,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
+import { Form, Field, createFormActions, FormSpy, FormPath } from '@uform/react'
 
 const actions = createFormActions()
 
@@ -1211,7 +1211,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
+import { Form, Field, createFormActions, FormSpy, FormPath } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1379,7 +1379,7 @@ interface IFieldStateUIProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1601,7 +1601,7 @@ interface IVirtualFieldProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, VirtualField } from './src'
+import { Form, Field, createFormActions, VirtualField } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1698,7 +1698,7 @@ interface IFormSpyProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1751,7 +1751,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from './src'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1808,7 +1808,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from './src'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1887,7 +1887,7 @@ interface IFormConsumerProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -2197,7 +2197,7 @@ const App = () => {
 **Usage**
 
 ```jsx
-import { Form, createEffectHook, createFormActions } from './src'
+import { Form, createEffectHook, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const diyHook1$ = createEffectHook('diy1')
