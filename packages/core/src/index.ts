@@ -230,7 +230,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         syncFormMessages('warnings', published.name, published.warnings)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-      if (!(!env.shadowStage || env.leadingStage)) {
+      if (env.shadowStage || !env.leadingStage) {
         return false
       }
     }
