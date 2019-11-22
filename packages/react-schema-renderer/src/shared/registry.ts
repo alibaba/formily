@@ -32,8 +32,8 @@ export const cleanRegistry = () => {
   registry.wrappers = []
 }
 
-export function registerFormComponent(
-  component: React.JSXElementConstructor<any>
+export function registerFormComponent<Props = any>(
+  component: React.JSXElementConstructor<Props>
 ) {
   if (isFn(component)) {
     registry.formComponent = component
@@ -65,11 +65,7 @@ export function registerFormField(
       registry.fields[name] = component
       registry.fields[name].__WRAPPERS__ = []
     } else {
-      registry.fields[name] = compose(
-        component,
-        registry.wrappers,
-        true
-      )
+      registry.fields[name] = compose(component, registry.wrappers, true)
       registry.fields[name].__WRAPPERS__ = registry.wrappers
     }
     registry.fields[name].displayName = pascalCase(name)
@@ -123,11 +119,7 @@ export const registerFieldMiddleware = deprecate<
       if (
         !component.__WRAPPERS__.some(wrapper => wrappers.indexOf(wrapper) > -1)
       ) {
-        registry.fields[key] = compose(
-          registry.fields[key],
-          wrappers,
-          true
-        )
+        registry.fields[key] = compose(registry.fields[key], wrappers, true)
         registry.fields[key].__WRAPPERS__ = wrappers
       }
     }

@@ -36,14 +36,14 @@ export type IFormExtendsEffectSelector<
 export interface IFormProps<
   Value = {},
   DefaultValue = {},
-  EffectPayload = any,
-  EffectActions = any
+  FormEffectPayload = any,
+  FormActions = any
 > {
   value?: Value
   defaultValue?: DefaultValue
   initialValues?: DefaultValue
-  actions?: EffectActions
-  effects?: IFormEffect<EffectPayload, EffectActions>
+  actions?: FormActions
+  effects?: IFormEffect<FormEffectPayload, FormActions>
   form?: IForm
   onChange?: (values: Value) => void
   onSubmit?: (values: Value) => void | Promise<Value>
@@ -51,7 +51,7 @@ export interface IFormProps<
   onValidateFailed?: (valideted: IFormValidateResult) => void
   children?: React.ReactElement | ((form: IForm) => React.ReactElement)
   useDirty?: boolean
-  editable?: boolean
+  editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
 }
 
