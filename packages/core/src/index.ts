@@ -529,13 +529,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
         deleteFormValuesIn(FormPath.parse(name).concat(key))
         field.notify(field.getState())
       } else {
-        env.removeNodes[name] = true
+        env.removeNodes[name] = true        
+        deleteFormValuesIn(name)
         field.setState((fieldState: IFieldState<FieldProps>) => {
           fieldState.value = undefined
           fieldState.values = []
-        }, true)
-        deleteFormValuesIn(name)
-      }      
+        })
+      }
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
