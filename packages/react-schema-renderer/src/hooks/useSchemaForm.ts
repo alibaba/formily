@@ -13,8 +13,8 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     virtualFields,
     formComponent,
     formItemComponent,
-    component,
     schema,
+    defaultValue,
     value,
     initialValues,
     actions,
@@ -25,6 +25,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     onValidateFailed,
     useDirty,
     children,
+    form,
     editable,
     validateFirst,
     ...formComponentProps
