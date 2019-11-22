@@ -38,15 +38,36 @@ Use Fusion Design：
 npm install --save @alifd/next @uform/next
 ```
 
+Use uform react render engine pacakge:
+
+```bash
+npm install --save @uform/react-schema-renderer
+```
+
+Use uform react package:
+
+```bash
+npm install --save @uform/react
+```
+
+Use UForm core package:
+
+```bash
+npm install --save @uform/core
+```
+
+
 ## WebSite
 
 https://uformjs.org
 
 ## Documents
 
-[@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
-[@uform/react](./packages/react/README.md)
-[@uform/core](./packages/core/README.md)
+- [@uform/antd](./packages/antd/README.md)
+- [@uform/next](./packages/next/README.md)
+- [@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
+- [@uform/react](./packages/react/README.md)
+- [@uform/core](./packages/core/README.md)
 
 
 ## Demo

@@ -18,73 +18,73 @@ npm install --save @uform/react-schema-renderer
 <!-- toc -->
 
 - [Usage](#usage)
-  * [Quick start](#quick-start)
-  * [JSON Schema driver form rendering](#json-schema-driver-form-rendering)
-  * [JSchema driver form rendering](#jschema-driver-form-rendering)
-  * [Non-single instance registration component](#non-single-instance-registration-component)
+  - [`Quick start`](#quick-start)
+  - [`JSON Schema driver form rendering`](#json-schema-driver-form-rendering)
+  - [`JSchema driver form rendering`](#jschema-driver-form-rendering)
+  - [`Non-single instance registration component`](#non-single-instance-registration-component)
 - [Advanced tutorial](#advanced-tutorial)
-  * [How to access third-party component libraries?](#how-to-access-third-party-component-libraries)
-  * [How to access the Form/FormItem component?](#how-to-access-the-formformitem-component)
-  * [How to access form components?](#how-to-access-form-components)
-  * [How to handle form layout?](#how-to-handle-form-layout)
-  * [How to implement recursive rendering components?](#how-to-implement-recursive-rendering-components)
-  * [How to implement the auto-increment list component?](#how-to-implement-the-auto-increment-list-component)
-  * [How to implement ultra-complex custom components?](#how-to-implement-ultra-complex-custom-components)
+  - [`How to access third-party component libraries?`](#how-to-access-third-party-component-libraries)
+  - [`How to access the Form/FormItem component?`](#how-to-access-the-formformitem-component)
+  - [`How to access form components?`](#how-to-access-form-components)
+  - [`How to handle form layout?`](#how-to-handle-form-layout)
+  - [`How to implement recursive rendering components?`](#how-to-implement-recursive-rendering-components)
+  - [`How to implement the auto-increment list component?`](#how-to-implement-the-auto-increment-list-component)
+  - [`How to implement ultra-complex custom components?`](#how-to-implement-ultra-complex-custom-components)
 - [API](#api)
-  * [connect](#connect)
-  * [registerFormField](#registerformfield)
-  * [registerFormFields](#registerformfields)
-  * [registerFormComponent](#registerformcomponent)
-  * [registerFormItemComponent](#registerformitemcomponent)
-  * [registerVirtualBox](#registervirtualbox)
-  * [createVirtualBox](#createvirtualbox)
-  * [createControllerBox](#createcontrollerbox)
-  * [getRegistry](#getregistry)
-  * [cleanRegistry](#cleanregistry)
+  - [`connect`](#connect)
+  - [`registerFormField`](#registerformfield)
+  - [`registerFormFields`](#registerformfields)
+  - [`registerFormComponent`](#registerformcomponent)
+  - [`registerFormItemComponent`](#registerformitemcomponent)
+  - [`registerVirtualBox`](#registervirtualbox)
+  - [`createVirtualBox`](#createvirtualbox)
+  - [`createControllerBox`](#createcontrollerbox)
+  - [`getRegistry`](#getregistry)
+  - [`cleanRegistry`](#cleanregistry)
 - [Classes](#classes)
-  * [new Schema(json : ISchema)](#new-schemajson--ischema)
-    + [`get`](#get)
-    + [`merge `](#merge-)
-    + [`getEmptyValue`](#getemptyvalue)
-    + [`getSelfProps`](#getselfprops)
-    + [`getExtendsRules`](#getextendsrules)
-    + [`getExtendsRequired`](#getextendsrequired)
-    + [`getExtendsEditable`](#getextendseditable)
-    + [`getExtendsTriggerType`](#getextendstriggertype)
-    + [`getExtendsProps`](#getextendsprops)
-    + [`getExtendsComponent`](#getextendscomponent)
-    + [`getExtendsComponentProps`](#getextendscomponentprops)
-    + [`getExtendsRenderer`](#getextendsrenderer)
-    + [`getExtendsEffect`](#getextendseffect)
-    + [`setProperty`](#setproperty)
-    + [`setProperties`](#setproperties)
-    + [`setArrayItems`](#setarrayitems)
-    + [`getOrderProperties`](#getorderproperties)
-    + [`mapProperties`](#mapproperties)
-    + [`toJSON`](#tojson)
-    + [`fromJSON`](#fromjson)
-    + [`isObject`](#isobject)
-    + [`isArray()`](#isarray)
+  - [new Schema(json : ISchema)](#new-schemajson--ischema)
+    - [`get`](#get)
+    - [`merge`](#merge-)
+    - [`getEmptyValue`](#getemptyvalue)
+    - [`getSelfProps`](#getselfprops)
+    - [`getExtendsRules`](#getextendsrules)
+    - [`getExtendsRequired`](#getextendsrequired)
+    - [`getExtendsEditable`](#getextendseditable)
+    - [`getExtendsTriggerType`](#getextendstriggertype)
+    - [`getExtendsProps`](#getextendsprops)
+    - [`getExtendsComponent`](#getextendscomponent)
+    - [`getExtendsComponentProps`](#getextendscomponentprops)
+    - [`getExtendsRenderer`](#getextendsrenderer)
+    - [`getExtendsEffect`](#getextendseffect)
+    - [`setProperty`](#setproperty)
+    - [`setProperties`](#setproperties)
+    - [`setArrayItems`](#setarrayitems)
+    - [`getOrderProperties`](#getorderproperties)
+    - [`mapProperties`](#mapproperties)
+    - [`toJSON`](#tojson)
+    - [`fromJSON`](#fromjson)
+    - [`isObject`](#isobject)
+    - [`isArray()`](#isarray)
 - [Components](#components)
-  * [`<SchemaForm/>`](#SchemaForm)
-  * [`<SchemaField/>`](#SchemaField)
-  * [`<SchemaMarkupForm/>`](#SchemaMarkupForm)
-  * [`<SchemaMarkupField/>`](#SchemaMarkupField)
-  * [`<InternalForm/>`](#InternalForm)
-  * [`<InternalField/>`](#InternalField)
+  - [`<SchemaForm/>`](#SchemaForm)
+  - [`<SchemaField/>`](#SchemaField)
+  - [`<SchemaMarkupForm/>`](#SchemaMarkupForm)
+  - [`<SchemaMarkupField/>`](#SchemaMarkupField)
+  - [`<InternalForm/>`](#InternalForm)
+  - [`<InternalField/>`](#InternalField)
 - [Interfaces](#interfaces)
-  * [ISchemaFieldComponentProps](#ischemafieldcomponentprops)
-  * [ISchemaVirtualFieldComponentProps](#ischemavirtualfieldcomponentprops)
-  * [ISchemaFormRegistry](#ischemaformregistry)
-  * [ISchema](#ischema)
-  * [ISchemaFormActions](#ischemaformactions)
-  * [ISchemaFormAsyncActions](#ischemaformasyncactions)
-  * [IFormValidateResult](#iformvalidateresult)
-  * [InternalFormats](#internalformats)
-  * [ValidateDescription](#validatedescription)
-  * [ValidateResponse](#validateresponse)
-  * [CustomValidator](#customvalidator)
-  * [ValidatePatternRules](#validatepatternrules)
+  - [ISchemaFieldComponentProps](#ischemafieldcomponentprops)
+  - [ISchemaVirtualFieldComponentProps](#ischemavirtualfieldcomponentprops)
+  - [ISchemaFormRegistry](#ischemaformregistry)
+  - [ISchema](#ischema)
+  - [ISchemaFormActions](#ischemaformactions)
+  - [ISchemaFormAsyncActions](#ischemaformasyncactions)
+  - [IFormValidateResult](#iformvalidateresult)
+  - [InternalFormats](#internalformats)
+  - [ValidateDescription](#validatedescription)
+  - [ValidateResponse](#validateresponse)
+  - [CustomValidator](#customvalidator)
+  - [ValidatePatternRules](#validatepatternrules)
 
 <!-- tocstop -->
 
@@ -96,7 +96,7 @@ npm install --save @uform/react-schema-renderer
 
 If you are developing directly based on @uform/react-schema-renderer, then you must register your custom component before development. Go to the renderer, otherwise our JSON-Schema protocol can't render the form. And so:
 
-```jsx
+```tsx
 import React from 'react'
 import {
   SchemaForm,
@@ -208,7 +208,7 @@ As you can see, using JSchema to describe JSON Schema in your code is more elega
 
 In the previous example, we used the registerFormField API to register a custom component, which is the way to register a singleton,Its main advantage is the convenience, but there are also some problems, that is, the single case is easily contaminated, especially in the SPA page.If the developers of different pages are different, because sharing the same memory environment, then A developers may register custom components with the same name as B developers, which can easily lead to online failures.Therefore, we recommend users to use non-single registration methods:
 
-```jsx
+```tsx
 import React, { useMemo } from 'react'
 import {
   SchemaForm,
@@ -614,7 +614,7 @@ registerFormField('array', ({ value, path, mutators }) => {
 })
 ```
 
- To implement a self-incrementing list component with recursive rendering is super simple. On the contrary, it would be a bit cumbersome to implement related styles. In short, the core is to use the SchemaField component and the mutators API, the specific API will be described in detail later.
+To implement a self-incrementing list component with recursive rendering is super simple. On the contrary, it would be a bit cumbersome to implement related styles. In short, the core is to use the SchemaField component and the mutators API, the specific API will be described in detail later.
 
 #### How to implement ultra-complex custom components?
 
@@ -697,7 +697,7 @@ registerFormField('complex', ({ path }) => {
 })
 ```
 
-In this pseudo-code, we mainly use two core APIs, mainly useFormEffects and InternalField,useFormEffects gives developers a place to write the effects logic locally, so that the effects logic can be easily reused. InternalField is the @uform/react Field component. You can take a look at the @uform/react documentation. SchemaForm also uses @uform/react internally, it can share the same Context, so we can easily use InternalField inside a custom component. Also note that **when using InternalField directly, the name we registered is the root level name, if you want to reuse the path of the current custom component, you can use FormPath to resolve the path, and then concat.** 
+In this pseudo-code, we mainly use two core APIs, mainly useFormEffects and InternalField,useFormEffects gives developers a place to write the effects logic locally, so that the effects logic can be easily reused. InternalField is the @uform/react Field component. You can take a look at the @uform/react documentation. SchemaForm also uses @uform/react internally, it can share the same Context, so we can easily use InternalField inside a custom component. Also note that **when using InternalField directly, the name we registered is the root level name, if you want to reuse the path of the current custom component, you can use FormPath to resolve the path, and then concat.**
 
 ### API
 
@@ -723,8 +723,6 @@ import { Select } from 'antd'
 registerFormField('select', connect()(Select))
 ```
 
-
-
 #### registerFormField
 
 > Register custom component functions
@@ -737,8 +735,6 @@ registerFormField(
   component: React.JSXElementConstructor<ISchemaFieldComponentProps>
 )
 ```
-
-
 
 #### registerFormFields
 
@@ -754,8 +750,6 @@ registerFormFields(
 )
 ```
 
-
-
 #### registerFormComponent
 
 > Register Form Style Component
@@ -767,8 +761,6 @@ registerFormComponent<Props>(
   component:React.JSXElementConstructor<Props>
 )
 ```
-
-
 
 #### registerFormItemComponent
 
@@ -782,8 +774,6 @@ registerFormItemComponent(
 )
 ```
 
-
-
 #### registerVirtualBox
 
 > Register the virtual box component, mainly used to describe the layout in JSON Schema
@@ -796,8 +786,6 @@ registerVirtualBox(
   component:React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
 )
 ```
-
-
 
 #### createVirtualBox
 
@@ -835,8 +823,6 @@ export default () => (
   </SchemaForm>
 )
 ```
-
-
 
 #### createControllerBox
 
@@ -877,8 +863,6 @@ export default () => (
 )
 ```
 
-
-
 #### getRegistry
 
 > Get the registry, all components registered through the registerFormXXX API are managed in the registry
@@ -888,8 +872,6 @@ export default () => (
 ```typescript
 getRegistry(): ISchemaFormRegistry
 ```
-
-
 
 #### cleanRegistry
 
@@ -901,8 +883,6 @@ getRegistry(): ISchemaFormRegistry
 cleanRegistry(): void
 ```
 
-
-
 ### Classes
 
 > The whole Class inherits @uform/core completely, such as FormPath and FormLifeCyle. Only the classes specific to @uform/react-schema-renderer are listed below.
@@ -913,45 +893,43 @@ cleanRegistry(): void
 
 **Attributes**
 
-| Attribute name       | Description                                                  | Type                                                         |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| title                | Field title                                                  | `React.ReactNode`                                            |
-| description          | Field description                                            | `React.ReactNode`                                            |
-| default              | Field default                                                | `any`                                                        |
-| readOnly             | Whether read-only and editable                               | `boolean`                                                    |
-| type                 | Field Type                                                   | `'string' | 'object' | 'array' | 'number' | string`          |
-| enum                 | Enumerate data                                               | `Array<string | number | { label: React.ReactNode, value: any }>` |
-| const                | Check if the field value is equal to the value of const      | `any`                                                        |
-| multipleOf           | Check if the field value can be divisible by the value of multipleOf | `number`                                                     |
-| maximum              | Check the maximum value (greater than)                       | `number`                                                     |
-| exclusiveMaximum     | Check the maximum value (greater than or equal to)           | `number`                                                     |
-| minimum              | Check minimum value (less than)                              | `number`                                                     |
-| exclusiveMinimum     | Minimum value (less than or equal to)                        | `number`                                                     |
-| maxLength            | Check maximum length                                         | `number`                                                     |
-| minLength            | Check minimum length                                         | `number`                                                     |
-| pattern              | Regular check rule                                           | `string | RegExp`                                            |
-| maxItems             | Maximum number of entries                                    | `number`                                                     |
-| minItems             | Minimum number of entries                                    | `number`                                                     |
-| uniqueItems          | Whether to check for duplicates                              | `boolean`                                                    |
-| maxProperties        | Maximum number of attributes                                 | `number`                                                     |
-| minProperties        | Minimum number of attributes                                 | `number`                                                     |
-| required             | Required                                                     | `boolean`                                                    |
-| format               | Regular rule type                                            | `InternalFormats`                                            |
-| properties           | Object property                                              | `{[key : string]:Schema}`                                    |
-| items                | Array description                                            | `Schema | Schema[]`                                          |
-| additionalItems      | Extra array element description                              | `Schema`                                                     |
-| patternProperties    | Dynamically match the schema of an attribute of an object    | `{[key : string]:Schema}`                                    |
-| additionalProperties | Schema matching the extra attributes of the object           | `Schema`                                                     |
-| editable             | Whether the field is editable                                | `boolean`                                                    |
-| x-props              | Field extension attribute                                    | `{ [name: string]: any }`                                    |
-| x-index              | Field order                                                  | `number`                                                     |
-| x-rules              | Field check rule                                             | `ValidatePatternRules`                                       |
-| x-component          | Field UI component                                           | `string`                                                     |
-| x-component-props    | Field UI component properties                                | `{}`                                                         |
-| x-render             | Field extension rendering function                           | `<T = ISchemaFieldComponentProps>(props: T & {  renderComponent: () => React.ReactElement}) => React.ReactElement` |
-| x-effect             | Field side effect trigger                                    | `(dispatch: (type: string, payload: any) => void,option?:object) => { [key: string]: any }` |
-
-
+| Attribute name       | Description                                                          | Type                                                                                                              |
+| -------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| title                | Field title                                                          | `React.ReactNode`                                                                                                 |
+| description          | Field description                                                    | `React.ReactNode`                                                                                                 |
+| default              | Field default                                                        | `any`                                                                                                             |
+| readOnly             | Whether read-only and editable                                       | `boolean`                                                                                                         |
+| type                 | Field Type                                                           | `'string' | 'object' | 'array' | 'number' | string`                                                               |
+| enum                 | Enumerate data                                                       | `Array<string | number | { label: React.ReactNode, value: any }>`                                                 |
+| const                | Check if the field value is equal to the value of const              | `any`                                                                                                             |
+| multipleOf           | Check if the field value can be divisible by the value of multipleOf | `number`                                                                                                          |
+| maximum              | Check the maximum value (greater than)                               | `number`                                                                                                          |
+| exclusiveMaximum     | Check the maximum value (greater than or equal to)                   | `number`                                                                                                          |
+| minimum              | Check minimum value (less than)                                      | `number`                                                                                                          |
+| exclusiveMinimum     | Minimum value (less than or equal to)                                | `number`                                                                                                          |
+| maxLength            | Check maximum length                                                 | `number`                                                                                                          |
+| minLength            | Check minimum length                                                 | `number`                                                                                                          |
+| pattern              | Regular check rule                                                   | `string | RegExp`                                                                                                 |
+| maxItems             | Maximum number of entries                                            | `number`                                                                                                          |
+| minItems             | Minimum number of entries                                            | `number`                                                                                                          |
+| uniqueItems          | Whether to check for duplicates                                      | `boolean`                                                                                                         |
+| maxProperties        | Maximum number of attributes                                         | `number`                                                                                                          |
+| minProperties        | Minimum number of attributes                                         | `number`                                                                                                          |
+| required             | Required                                                             | `boolean`                                                                                                         |
+| format               | Regular rule type                                                    | `InternalFormats`                                                                                                 |
+| properties           | Object property                                                      | `{[key : string]:Schema}`                                                                                         |
+| items                | Array description                                                    | `Schema | Schema[]`                                                                                               |
+| additionalItems      | Extra array element description                                      | `Schema`                                                                                                          |
+| patternProperties    | Dynamically match the schema of an attribute of an object            | `{[key : string]:Schema}`                                                                                         |
+| additionalProperties | Schema matching the extra attributes of the object                   | `Schema`                                                                                                          |
+| editable             | Whether the field is editable                                        | `boolean`                                                                                                         |
+| x-props              | Field extension attribute                                            | `{ [name: string]: any }`                                                                                         |
+| x-index              | Field order                                                          | `number`                                                                                                          |
+| x-rules              | Field check rule                                                     | `ValidatePatternRules`                                                                                            |
+| x-component          | Field UI component                                                   | `string`                                                                                                          |
+| x-component-props    | Field UI component properties                                        | `{}`                                                                                                              |
+| x-render             | Field extension rendering function                                   | `<T = ISchemaFieldComponentProps>(props: T & { renderComponent: () => React.ReactElement}) => React.ReactElement` |
+| x-effect             | Field side effect trigger                                            | `(dispatch: (type: string, payload: any) => void,option?:object) => { [key: string]: any }`                       |
 
 **Method**
 
@@ -969,15 +947,15 @@ Usage
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -988,9 +966,7 @@ const schema = new Schema({
 schema.get('array[0].input') //{type:"string"}
 ```
 
-
-
-##### `merge `
+##### `merge`
 
 > Merge Schema
 
@@ -1004,15 +980,15 @@ Usage
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -1021,7 +997,7 @@ const schema = new Schema({
 })
 
 schema.merge({
-  title:'root object'
+  title: 'root object'
 })
 /**
 {
@@ -1044,8 +1020,6 @@ schema.merge({
 **/
 ```
 
-
-
 ##### `getEmptyValue`
 
 > Get the null value of the current Schema based on the type of Schema
@@ -1060,15 +1034,15 @@ Usage
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -1080,10 +1054,7 @@ schema.get('array.0.input').getEmptyValue() // ''
 schema.get('array.0').getEmptyValue() // {}
 schema.get('array').getEmptyValue() // []
 schema.getEmptyValue() // {}
-
 ```
-
-
 
 ##### `getSelfProps`
 
@@ -1099,15 +1070,15 @@ Usage
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -1116,10 +1087,7 @@ const schema = new Schema({
 })
 
 schema.getSelfProps() // { type:"object" }
-
 ```
-
-
 
 ##### `getExtendsRules`
 
@@ -1146,8 +1114,6 @@ const schema = new Schema({
 schema.getExtendsRules() // [{required:true},{max:10},{pattern:/^\d+$/}]
 ```
 
-
-
 ##### `getExtendsRequired`
 
 > Obtaining whether it is required or not is actually reading the required attribute of the Schema. Why is it encapsulated into a method to ensure that the user is not aware of the protocol upgrade? We only need to ensure backward compatibility of the method.
@@ -1173,8 +1139,6 @@ const schema = new Schema({
 schema.getExtendsRequired() // true
 ```
 
-
-
 ##### `getExtendsEditable`
 
 > Get the editable state of the Schema, consistent with the getExtendsEditable ability, also to smooth out the protocol differences
@@ -1189,39 +1153,37 @@ Usage
 
 ```typescript
 const schema1 = new Schema({
-  type:"string",
-  editable:false
+  type: 'string',
+  editable: false
 })
 
 schema1.getExtendsEditable() // false
 
 const schema2 = new Schema({
-  type:"string",
-  readOnly:true
+  type: 'string',
+  readOnly: true
 })
 
 schema2.getExtendsEditable() // false
 
 const schema3 = new Schema({
-  type:"string",
-  "x-props":{
-    editable:false
+  type: 'string',
+  'x-props': {
+    editable: false
   }
 })
 
 schema3.getExtendsEditable() // false
 
 const schema4 = new Schema({
-  type:"string",
-  "x-component-props":{
-    editable:false
+  type: 'string',
+  'x-component-props': {
+    editable: false
   }
 })
 
 schema4.getExtendsEditable() // false
 ```
-
-
 
 ##### `getExtendsTriggerType`
 
@@ -1237,27 +1199,27 @@ Usage
 
 ```typescript
 const schema1 = new Schema({
-  type:"string",
-  "x-props":{
-    triggerType:"onBlur"
+  type: 'string',
+  'x-props': {
+    triggerType: 'onBlur'
   }
 })
 
 schema1.getExtendsTriggerType() // onBlur
 
 const schema2 = new Schema({
-  type:"string",
-  "x-component-props":{
-    triggerType:"onBlur"
+  type: 'string',
+  'x-component-props': {
+    triggerType: 'onBlur'
   }
 })
 
 schema2.getExtendsTriggerType() // onBlur
 
 const schema3 = new Schema({
-  type:"string",
-  "x-item-props":{
-    triggerType:"onBlur"
+  type: 'string',
+  'x-item-props': {
+    triggerType: 'onBlur'
   }
 })
 
@@ -1274,8 +1236,6 @@ Signature
 getExtendsProps() : {}
 ```
 
-
-
 ##### `getExtendsComponent`
 
 > Get the x-props attribute
@@ -1286,8 +1246,6 @@ Signature
 getExtendsComponent() : string
 ```
 
-
-
 ##### `getExtendsComponentProps`
 
 > Get the x-component-props property, which is the component property of the x-component
@@ -1297,8 +1255,6 @@ Signature
 ```typescript
 getExtendsComponentProps() : {}
 ```
-
-
 
 ##### `getExtendsRenderer`
 
@@ -1314,8 +1270,6 @@ getExtendsRenderer() : <T = ISchemaFieldComponentProps>(
   ) => React.ReactElement
 ```
 
-
-
 ##### `getExtendsEffect`
 
 > Get the x-effect attribute
@@ -1329,8 +1283,6 @@ getExtendsEffect() : (
 ) => { [key: string]: any }
 ```
 
-
-
 ##### `setProperty`
 
 > Set properties for the current schema
@@ -1340,8 +1292,6 @@ Signature
 ```typescript
 setProperty(key: string, schema: ISchema): Schema
 ```
-
-
 
 ##### `setProperties`
 
@@ -1353,8 +1303,6 @@ Signature
 setProperties(properties: {[key : string]:ISchema}) : {[key : string]:Schema}
 ```
 
-
-
 ##### `setArrayItems`
 
 > Set the items property to the current schema
@@ -1364,8 +1312,6 @@ Signature
 ```typescript
 setArrayItems(schema:Ischema) : Schema
 ```
-
-
 
 ##### `getOrderProperties`
 
@@ -1377,8 +1323,6 @@ Signature
 getOrderProperties() : {schema:Schema,key:string}[]
 ```
 
-
-
 ##### `mapProperties`
 
 > Traverse the properties of the schema in order (x-index)
@@ -1388,8 +1332,6 @@ Signature
 ```typescript
 mapProperties(callback?: (schema: Schema, key: string) => any):any[]
 ```
-
-
 
 ##### `toJSON`
 
@@ -1401,8 +1343,6 @@ Signature
 toJSON() : ISchema
 ```
 
-
-
 ##### `fromJSON`
 
 > Generate a Schema object based on a json parsing
@@ -1412,8 +1352,6 @@ Signature
 ```typescript
 fromJSON(json : ISchema) : Schema
 ```
-
-
 
 ##### `isObject`
 
@@ -1425,8 +1363,6 @@ Signature
 isObject() : boolean
 ```
 
-
-
 ##### `isArray()`
 
 > Determine if the current schema is an array type
@@ -1436,8 +1372,6 @@ Signature
 ```
 isArray() : boolean
 ```
-
-
 
 ### Components
 
@@ -1459,33 +1393,33 @@ interface ISchemaFormProps<
   FormActions = ISchemaFormActions | ISchemaFormAsyncActions
 > {
   //Form value
-  value?: Value;
+  value?: Value
   //Form default value
-  defaultValue?: DefaultValue;
+  defaultValue?: DefaultValue
   //Form default value, weakly controlled
-  initialValues?: DefaultValue;
+  initialValues?: DefaultValue
   //Form actions
-  actions?: FormActions;
+  actions?: FormActions
   //Form effects
-  effects?: IFormEffect<FormEffectPayload, FormActions>;
+  effects?: IFormEffect<FormEffectPayload, FormActions>
   //Form instance
-  form?: IForm;
+  form?: IForm
   //Form change callback
-  onChange?: (values: Value) => void;
+  onChange?: (values: Value) => void
   //Form submission callback
-  onSubmit?: (values: Value) => void | Promise<Value>;
+  onSubmit?: (values: Value) => void | Promise<Value>
   //Form reset callback
-  onReset?: () => void;
+  onReset?: () => void
   //Form validation failure callback
-  onValidateFailed?: (valideted: IFormValidateResult) => void;
+  onValidateFailed?: (valideted: IFormValidateResult) => void
   //Form child node
-  children?: React.ReactElement;
+  children?: React.ReactElement
   //Whether to open the dirty check
-  useDirty?: boolean;
+  useDirty?: boolean
   //Is it editable
-  editable?: boolean | ((name: string) => boolean);
+  editable?: boolean | ((name: string) => boolean)
   //Whether to enable pessimistic verification, if the first verification fails, stop the remaining verification
-  validateFirst?: boolean;
+  validateFirst?: boolean
   //Form Schema object
   schema?: ISchema
   //Instance level registration custom component
@@ -1499,8 +1433,6 @@ interface ISchemaFormProps<
 }
 ```
 
-
-
 #### `<SchemaField/>`
 
 > Based on a Data Path, it automatically finds and renders the internal components of the Schema node, mainly used to implement recursive rendering within the custom component.
@@ -1513,8 +1445,6 @@ interface ISchemaFieldProps {
   path?: FormPathPattern
 }
 ```
-
-
 
 #### `<SchemaMarkupForm/>`
 
@@ -1530,33 +1460,33 @@ interface ISchemaFormProps<
   FormActions = ISchemaFormActions | ISchemaFormAsyncActions
 > {
   //Form value
-  value?: Value;
+  value?: Value
   //Form default value
-  defaultValue?: DefaultValue;
+  defaultValue?: DefaultValue
   //Form default value, weakly controlled
-  initialValues?: DefaultValue;
+  initialValues?: DefaultValue
   //Form actions
-  actions?: FormActions;
+  actions?: FormActions
   //Form effects
-  effects?: IFormEffect<FormEffectPayload, FormActions>;
+  effects?: IFormEffect<FormEffectPayload, FormActions>
   //Form instance
-  form?: IForm;
+  form?: IForm
   //Form change callback
-  onChange?: (values: Value) => void;
+  onChange?: (values: Value) => void
   //Form submission callback
-  onSubmit?: (values: Value) => void | Promise<Value>;
+  onSubmit?: (values: Value) => void | Promise<Value>
   //Form reset callback
-  onReset?: () => void;
+  onReset?: () => void
   //Form validation failure callback
-  onValidateFailed?: (valideted: IFormValidateResult) => void;
+  onValidateFailed?: (valideted: IFormValidateResult) => void
   //Form child node
-  children?: React.ReactElement;
+  children?: React.ReactElement
   //Whether to open the dirty check
-  useDirty?: boolean;
+  useDirty?: boolean
   //Is it editable
-  editable?: boolean | ((name: string) => boolean);
+  editable?: boolean | ((name: string) => boolean)
   //Whether to enable pessimistic verification, if the first verification fails, stop the remaining verification
-  validateFirst?: boolean;
+  validateFirst?: boolean
   //Form Schema object
   schema?: ISchema
   //Instance level registration custom component
@@ -1578,10 +1508,10 @@ import {
   SchemaMarkupField as Field
 } from '@uform/react-schema-renderer'
 
-export default ()=>{
+export default () => {
   return (
     <SchemaForm>
-      <Field name="aa" type="string"/>
+      <Field name="aa" type="string" />
     </SchemaForm>
   )
 }
@@ -1594,16 +1524,12 @@ export default ()=>{
 **Attributes**
 
 ```typescript
-type IMarkupSchemaFieldProps  = ISchema
+type IMarkupSchemaFieldProps = ISchema
 ```
-
-
 
 #### `<InternalForm/>`
 
 > The core Form is the same as the Form component in @uform/react
-
-
 
 #### `<InternalField/>`
 
@@ -1687,8 +1613,6 @@ interface ISchemaFieldComponentProps {
 }
 ```
 
-
-
 #### ISchemaVirtualFieldComponentProps
 
 > The attributes received by the virtual field component, as long as it involves registering the virtual field, you need to understand the protocol.
@@ -1727,8 +1651,6 @@ interface ISchemaVirtualFieldComponentProps {
 }
 ```
 
-
-
 #### ISchemaFormRegistry
 
 > The component registry, whether it is a normal field, a virtual field, or a Form/FormItem will be registered here.
@@ -1737,16 +1659,16 @@ interface ISchemaVirtualFieldComponentProps {
 interface ISchemaFormRegistry {
   fields: {
     [key: string]: React.JSXElementConstructor<ISchemaFieldComponentProps>
-  },
+  }
   virtualFields: {
-    [key: string]: React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
-  },
+    [key: string]: React.JSXElementConstructor<
+      ISchemaVirtualFieldComponentProps
+    >
+  }
   formItemComponent: React.JSXElementConstructor<ISchemaFieldComponentProps>
   formComponent: string | React.JSXElementConstructor<any>
 }
 ```
-
-
 
 #### ISchema
 
@@ -1761,7 +1683,7 @@ interface ISchema {
   readOnly?: boolean
   writeOnly?: boolean
   type?: 'string' | 'object' | 'array' | 'number' | string
-  enum?: Array<string | number | { label: React.ReactNode, value: any }>
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
   const?: any
   multipleOf?: number
   maximum?: number
@@ -1807,8 +1729,6 @@ interface ISchema {
 }
 ```
 
-
-
 #### ISchemaFormActions
 
 > The core actions inherit @uform/react's IFormActions, mainly adding the getSchema API
@@ -1831,8 +1751,6 @@ interface ISchemaFormAsyncActions extends IFormAsyncActions {
 }
 ```
 
-
-
 #### IFormValidateResult
 
 > Calibration result
@@ -1849,8 +1767,6 @@ interface IFormValidateResult {
   }>
 }
 ```
-
-
 
 #### InternalFormats
 
@@ -1872,8 +1788,6 @@ type InternalFormats =
   | 'zip'
   | string
 ```
-
-
 
 #### ValidateDescription
 
@@ -1913,8 +1827,6 @@ interface ValidateDescription {
 }
 ```
 
-
-
 #### ValidateResponse
 
 ```typescript
@@ -1930,8 +1842,6 @@ type AsyncValidateResponse = Promise<SyncValidateResponse>
 type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
 ```
 
-
-
 #### CustomValidator
 
 > Custom check function
@@ -1943,20 +1853,14 @@ type CustomValidator = (
 ) => ValidateResponse
 ```
 
-
-
-
-
 #### ValidatePatternRules
 
 > Verification rule set
 
 ```typescript
- type ValidatePatternRules = InternalFormats
+type ValidatePatternRules =
+  | InternalFormats
   | CustomValidator
   | ValidateDescription
-  | Array<
-  InternalFormats | CustomValidator | ValidateDescription
->
+  | Array<InternalFormats | CustomValidator | ValidateDescription>
 ```
-
