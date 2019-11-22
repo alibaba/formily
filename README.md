@@ -51,7 +51,7 @@ Use uform react package:
 npm install --save @uform/react
 ```
 
-Use UForm core package:
+Use uform core package:
 
 ```bash
 npm install --save @uform/core
