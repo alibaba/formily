@@ -65,11 +65,17 @@ https://uformjs.org
 
 ## 文档
 
+<<<<<<< HEAD
 - [@uform/antd](./packages/antd/README.md)
 - [@uform/next](./packages/next/README.md)
 - [@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
 - [@uform/react](./packages/react/README.md)
 - [@uform/core](./packages/core/README.md)
+=======
+[@uform/react-schema-renderer](./packages/react-schema-renderder/README.md)
+[@uform/react](./packages/react/README.md)
+[@uform/core](./packages/core/README.md)
+>>>>>>> 8dbffb896a6b7a20d5d2b5bccfdc46db00939445
 
 
 ## 入门案例
