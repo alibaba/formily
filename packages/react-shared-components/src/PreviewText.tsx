@@ -20,11 +20,18 @@ export const PreviewText: React.FC<IPreviewTextProps> = props => {
         )
   }
   return (
-    <p className={`preview-text ${props.className || ''}`}>
+    <p
+      style={{ padding: 0, margin: 0 }}
+      className={`preview-text ${props.className || ''}`}
+    >
       {props.addonBefore ? ' ' + props.addonBefore : ''}
       {props.innerBefore ? ' ' + props.innerBefore : ''}
       {props.addonTextBefore ? ' ' + props.addonTextBefore : ''}
-      {!value ? 'N/A' : value}
+      {value === '' ||
+      value === undefined ||
+      (Array.isArray(value) && value.length === 0)
+        ? 'N/A'
+        : String(value)}
       {props.addonTextAfter ? ' ' + props.addonTextAfter : ''}
       {props.innerAfter ? ' ' + props.innerAfter : ''}
       {props.addonAfter ? ' ' + props.addonAfter : ''}
