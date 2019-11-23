@@ -334,7 +334,7 @@ const App = () => {
                     <InputField name={`user.${key}`} />
                     <button
                       onClick={() => {
-                        mutators.remove()
+                        mutators.remove(key)
                       }}
                     >
                       x
