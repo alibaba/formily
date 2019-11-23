@@ -55,6 +55,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     let initialized = false
     ref.current.field = form.registerField(options)
     ref.current.subscriberId = ref.current.field.subscribe(fieldState => {
+      if (ref.current.unmounted) return
       /**
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
        */
@@ -64,7 +65,6 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
             mutators.validate()
           }
         }
-        if (ref.current.unmounted) return
         forceUpdate()
       }
     })
