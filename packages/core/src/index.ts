@@ -469,11 +469,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
-    leadingUpdate(() => {
-      state.setState(state => {
-        FormPath.deleteIn(state[key], path)
-      }, silent)
-    })
+    state.setState(state => {
+      FormPath.deleteIn(state[key], path)
+    }, silent)
   }
 
   function deleteFormValuesIn(path: FormPathPattern, silent?: boolean) {
@@ -526,16 +524,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
     function removeValue(key: string | number) {
       const name = field.unsafe_getSourceState(state => state.name)
-      if (isValid(key)) {
-        deleteFormValuesIn(FormPath.parse(name).concat(key))
-      } else {
-        env.removeNodes[name] = true        
-        deleteFormValuesIn(name)
-        field.setState((fieldState: IFieldState<FieldProps>) => {
-          fieldState.value = undefined
-          fieldState.values = []
-        }, true)
-      }
+      leadingUpdate(() => {
+        if (isValid(key)) {
+          deleteFormValuesIn(FormPath.parse(name).concat(key))
+        } else {
+          env.removeNodes[name] = true
+          deleteFormValuesIn(name)
+          field.setState((fieldState: IFieldState<FieldProps>) => {
+            fieldState.value = undefined
+            fieldState.values = []
+          }, true)
+        }
+      })
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
