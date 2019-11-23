@@ -63,35 +63,32 @@ const App = () => {
               }
             })
           })
-          $('onFieldValueChange', '*(aa,bb)')
-            .subscribe(fieldState => {
-              console.log('aa或者bb发生变化了')
+          $('onFieldValueChange', '*(aa,bb)').subscribe(fieldState => {
+            console.log('aa或者bb发生变化了')
+          })
+          $('onFieldValueChange', 'aa').subscribe(fieldState => {
+            setFieldState('bb', state => {
+              state.visible = !fieldState.value
             })
-          $('onFieldValueChange', 'aa')
-            .subscribe(fieldState => {
-              setFieldState('bb', state => {
-                state.visible = !fieldState.value
-              })
+          })
+          $('onFieldValueChange', 'cc').subscribe(fieldState => {
+            setFieldState('dd', state => {
+              state.visible = !fieldState.value
             })
-          $('onFieldValueChange', 'cc')
-            .subscribe(fieldState => {
-              setFieldState('dd', state => {
-                state.visible = !fieldState.value
-              })
-              setFieldState('gg', state => {
-                if (fieldState.value) {
-                  state.value = 'aaaa'
-                  state.props.enum = [
-                    { label: 'aaaa', value: 'aaaa', extra: ['x1', 'x2', 'x3'] },
-                    { label: 'bbbb', value: 'bbbb', extra: ['x4', 'x5', 'x6'] },
-                    { label: 'cccc', value: 'cccc', extra: ['x7', 'x8', 'x9'] }
-                  ]
-                } else {
-                  state.value = '123333'
-                  state.props.enum = ['123333', '333333']
-                }
-              })
+            setFieldState('gg', state => {
+              if (fieldState.value) {
+                state.value = 'aaaa'
+                state.props.enum = [
+                  { label: 'aaaa', value: 'aaaa', extra: ['x1', 'x2', 'x3'] },
+                  { label: 'bbbb', value: 'bbbb', extra: ['x4', 'x5', 'x6'] },
+                  { label: 'cccc', value: 'cccc', extra: ['x7', 'x8', 'x9'] }
+                ]
+              } else {
+                state.value = '123333'
+                state.props.enum = ['123333', '333333']
+              }
             })
+          })
           $('onFieldValueChange', 'gg')
             .pipe(
               combineLatest($('onChangeOption')),
@@ -143,7 +140,10 @@ const App = () => {
             type="boolean"
             x-component="radio"
             default={true}
-            enum={[{ label: '是', value: true }, { label: '否', value: false }]}
+            enum={[
+              { label: '是', value: true },
+              { label: '否', value: false }
+            ]}
             title="是否隐藏AA"
           />
           <Field name="bb" type="string" title="AA" />
@@ -153,7 +153,10 @@ const App = () => {
             title="是否隐藏DD"
             default={true}
             x-component="radio"
-            enum={[{ label: '是', value: true }, { label: '否', value: false }]}
+            enum={[
+              { label: '是', value: true },
+              { label: '否', value: false }
+            ]}
           />
         </FormBlock>
         <FormBlock name="dd" title="Block2">
@@ -189,6 +192,95 @@ const App = () => {
     </Printer>
   )
 }
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+### 循环联动
+
+> 联动关系
+> 总价 = 单价 \* 数量
+> 数量 = 总价 / 单价
+> 单价 = 总价 / 数量
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
+  FormBlock,
+  FormLayout
+} from '@uform/next'
+import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
+import { Button } from '@alifd/next'
+import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      effects={($, { setFieldState, getFieldState }) => {
+        $('onFieldValueChange', 'total').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('count', state => {
+            const price = getFieldState('price', state => state.value)
+            if (!price) return
+            state.value = value / price
+          })
+          setFieldState('price', state => {
+            const count = getFieldState('count', state => state.value)
+            if (!count) return
+            state.value = value / count
+          })
+        })
+        $('onFieldValueChange', 'price').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('total', state => {
+            const count = getFieldState('count', state => state.value)
+            if (!count) return
+            state.value = value * count
+          })
+          setFieldState('count', state => {
+            const total = getFieldState('total', state => state.value)
+            if (!total) return
+            state.value = total / value
+          })
+        })
+        $('onFieldValueChange', 'count').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('total', state => {
+            const price = getFieldState('price', state => state.value)
+            if (!price) return
+            state.value = value * price
+          })
+          setFieldState('price', state => {
+            const total = getFieldState('total', state => state.value)
+            if (!total) return
+            state.value = total / value
+          })
+        })
+      }}
+      onChange={v => console.log(v)}
+      labelCol={6}
+      wrapperCol={4}
+      onSubmit={v => console.log(v)}
+    >
+      <Field name="total" type="number" required title="总价" />
+      <Field name="count" type="number" required title="数量" />
+      <Field name="price" type="number" required title="单价" />
+      <FormButtonGroup offset={6}>
+        <Submit />
+        <Reset />
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
