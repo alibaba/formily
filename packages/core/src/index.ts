@@ -287,6 +287,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     name,
     path,
     props,
+    display,
+    visible,
     computeState,
     useDirty
   }: IVirtualFieldStateProps): IVirtualField {
@@ -309,6 +311,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
         field.setState((state: IVirtualFieldState<VirtualFieldProps>) => {
           state.initialized = true
           state.props = props
+          if (isValid(visible)) {
+            state.visible = visible
+          }
+          if (isValid(display)) {
+            state.display = display
+          }
         })
         batchRunTaskQueue(field, nodePath)
       })
@@ -335,6 +343,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     required,
     rules,
     editable,
+    visible,
+    display,
     computeState,
     useDirty,
     props
@@ -370,7 +380,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
           state.initialValue = isValid(initialValue)
             ? initialValue
             : formInitialValue
-
+          if (isValid(visible)) {
+            state.visible = visible
+          }
+          if (isValid(display)) {
+            state.display = display
+          }
           state.props = props
           state.required = required
           state.rules = rules as any
@@ -380,9 +395,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
         batchRunTaskQueue(field, nodePath)
       })
       validator.register(nodePath, validate => {
-        const { value, rules, editable, visible, unmounted } = field.getState()
+        const {
+          value,
+          rules,
+          editable,
+          visible,
+          unmounted,
+          display
+        } = field.getState()
         // 不需要校验的情况有: 非编辑态(editable)，已销毁(unmounted), 逻辑上不可见(visible)
-        if (editable === false || visible === false || unmounted === true)
+        if (
+          editable === false ||
+          visible === false ||
+          unmounted === true ||
+          display === false
+        )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)
         ;(field as any).validateTimer = setTimeout(() => {

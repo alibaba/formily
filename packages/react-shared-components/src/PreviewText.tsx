@@ -1,7 +1,17 @@
-import React from 'react'
+import React, { useContext, createContext } from 'react'
+import { isFn } from '@uform/shared'
 import { IPreviewTextProps } from './types'
 
-export const PreviewText: React.FC<IPreviewTextProps> = props => {
+export interface PreviewTextConfigProps {
+  previewPlaceholder?: string | ((props: IPreviewTextProps) => string)
+}
+
+const PreviewTextContext = createContext<PreviewTextConfigProps>({})
+
+export const PreviewText: React.FC<IPreviewTextProps> & {
+  ConfigProvider: React.Context<PreviewTextConfigProps>['Provider']
+} = props => {
+  const context = useContext(PreviewTextContext) || {}
   let value: any
   if (props.dataSource && props.dataSource.length) {
     let find = props.dataSource.filter(({ value }) =>
@@ -19,6 +29,9 @@ export const PreviewText: React.FC<IPreviewTextProps> = props => {
           props.value === undefined || props.value === null ? '' : props.value
         )
   }
+  const placeholder = isFn(context.previewPlaceholder)
+    ? context.previewPlaceholder(props)
+    : context.previewPlaceholder
   return (
     <p
       style={{ padding: 0, margin: 0 }}
@@ -30,7 +43,7 @@ export const PreviewText: React.FC<IPreviewTextProps> = props => {
       {value === '' ||
       value === undefined ||
       (Array.isArray(value) && value.length === 0)
-        ? 'N/A'
+        ? placeholder || 'N/A'
         : String(value)}
       {props.addonTextAfter ? ' ' + props.addonTextAfter : ''}
       {props.innerAfter ? ' ' + props.innerAfter : ''}
@@ -38,3 +51,5 @@ export const PreviewText: React.FC<IPreviewTextProps> = props => {
     </p>
   )
 }
+
+PreviewText.ConfigProvider = PreviewTextContext.Provider

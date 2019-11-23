@@ -922,7 +922,9 @@ cleanRegistry(): void
 | additionalItems      | Extra array element description                                      | `Schema`                                                                                                          |
 | patternProperties    | Dynamically match the schema of an attribute of an object            | `{[key : string]:Schema}`                                                                                         |
 | additionalProperties | Schema matching the extra attributes of the object                   | `Schema`                                                                                                          |
-| editable             | Whether the field is editable                                        | `boolean`                                                                                                         |
+| editable             | Whether the field is editable                                        | `boolean`    
+| visible             | Whether the data and style is visible                                        | `boolean`     
+| display             | Whether the style is visible                                      | `boolean`                                                                                                          |
 | x-props              | Field extension attribute                                            | `{ [name: string]: any }`                                                                                         |
 | x-index              | Field order                                                          | `number`                                                                                                          |
 | x-rules              | Field check rule                                                     | `ValidatePatternRules`                                                                                            |
@@ -1711,6 +1713,8 @@ interface ISchema {
   }
   additionalProperties?: ISchema
   /** extend json schema specs */
+  visible?: boolean //Field initial visible status(Whether the data is visible)
+  display?: boolean //Field initial display status(Whether the style is visible)
   editable?: boolean
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number

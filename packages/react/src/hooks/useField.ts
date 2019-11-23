@@ -1,18 +1,16 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each, isFn } from '@uform/shared'
-import {
-  IFieldState,
-  IForm,
-  IField,
-  IMutators
-} from '@uform/core'
+import { IFieldState, IForm, IField, IMutators } from '@uform/core'
 import { raf, getValueFromEvent } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import FormContext from '../context'
 
-const extendMutators = (mutators: IMutators, props: IFieldStateUIProps): IMutators => {
+const extendMutators = (
+  mutators: IMutators,
+  props: IFieldStateUIProps
+): IMutators => {
   return {
     ...mutators,
     change: (...args) => {
@@ -23,18 +21,23 @@ const extendMutators = (mutators: IMutators, props: IFieldStateUIProps): IMutato
     },
     blur: () => {
       mutators.blur()
-      if (props.triggerType === 'onBlur') {        
+      if (props.triggerType === 'onBlur') {
         mutators.validate()
       }
     }
   }
 }
 
-export const useField = (
-  options: IFieldStateUIProps
-): IFieldHook => {
+export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
-  const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
+  const dirty = useDirty(options, [
+    'props',
+    'rules',
+    'required',
+    'editable',
+    'visible',
+    'display'
+  ])
   const ref = useRef<{
     field: IField
     unmounted: boolean
