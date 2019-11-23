@@ -523,17 +523,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     function removeValue(key: string | number) {
+      const nodePath = field.unsafe_getSourceState(state => state.path)
       const dataPath = field.unsafe_getSourceState(state => state.name)
-      leadingUpdate(() => {
-        if (isValid(key)) {
-          const childDataPath = FormPath.parse(dataPath).concat(key)
-          env.removeNodes[childDataPath.toString()] = true
-          deleteFormValuesIn(childDataPath)
-        } else {
-          env.removeNodes[dataPath.toString()] = true
-          deleteFormValuesIn(dataPath)
+      if (isValid(key)) {
+        const childDataPath = FormPath.parse(dataPath).concat(key)
+        env.removeNodes[childDataPath.toString()] = true
+        deleteFormValuesIn(childDataPath)
+        field.notify(field.getState())
+      } else {
+        const parent = graph.selectParent(nodePath)
+        env.removeNodes[dataPath.toString()] = true
+        deleteFormValuesIn(dataPath)
+        if (parent) {
+          parent.notify(parent.getState())
         }
-      })
+      }
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
