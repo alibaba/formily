@@ -1,6 +1,6 @@
 {
   "name": "@uform/next",
-  "version": "0.4.0",
+  "version": "1.0.0-alpha.0",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -21,23 +21,23 @@
   },
   "peerDependencies": {
     "@alifd/next": "^1.13.1",
+    "@babel/runtime": "^7.4.4",
     "@types/classnames": "^2.2.9",
     "@types/styled-components": "^4.1.19",
-    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react-schema-renderer": "^0.4.0",
-    "@uform/react-shared-components":"^0.4.0",
+    "@uform/react-schema-renderer": "^1.0.0-alpha.0",
+    "@uform/react-shared-components": "^1.0.0-alpha.0",
+    "@uform/shared": "^1.0.0-alpha.0",
     "@uform/types": "^0.4.0",
-    "@uform/shared": "^0.4.0",
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
+    "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
-    "styled-components": "^4.1.1",
-    "react-eva": "^1.0.0",
-    "rxjs": "^6.5.1"
+    "rxjs": "^6.5.1",
+    "styled-components": "^4.1.1"
   },
   "devDependencies": {
     "@alifd/next": "^1.13.1",
