@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each, isFn } from '@uform/shared'
 import { IFieldState, IForm, IField, IMutators } from '@uform/core'
-import { raf, getValueFromEvent } from '../shared'
+import { getValueFromEvent } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
@@ -64,10 +64,8 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
             mutators.validate()
           }
         }
-        raf(() => {
-          if (ref.current.unmounted) return
-          forceUpdate()
-        })
+        if (ref.current.unmounted) return
+        forceUpdate()
       }
     })
     initialized = true
