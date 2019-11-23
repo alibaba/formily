@@ -523,15 +523,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     function removeValue(key: string | number) {
-      const nodePath = field.unsafe_getSourceState(state => state.path)
+      const dataPath = field.unsafe_getSourceState(state => state.name)
       leadingUpdate(() => {
         if (isValid(key)) {
-          const childNodePath = FormPath.parse(nodePath).concat(key)
-          env.removeNodes[childNodePath.toString()] = true
-          deleteFormValuesIn(childNodePath)
+          const childDataPath = FormPath.parse(dataPath).concat(key)
+          env.removeNodes[childDataPath.toString()] = true
+          deleteFormValuesIn(childDataPath)
         } else {
-          env.removeNodes[nodePath.toString()] = true
-          deleteFormValuesIn(nodePath)
+          env.removeNodes[dataPath.toString()] = true
+          deleteFormValuesIn(dataPath)
         }
       })
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
