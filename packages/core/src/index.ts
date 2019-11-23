@@ -732,6 +732,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
             state.submitting = false
           })
           heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+          if (isFn(options.onValidateFailed)) {
+            options.onValidateFailed(validated)
+          }
           return Promise.reject(validated.errors)
         }
         if (isFn(onSubmit)) {
@@ -748,6 +751,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         state.setState(state => {
           state.submitting = false
         })
+
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
         if (errors.length) {
           return Promise.reject(errors)
@@ -781,9 +785,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       state.setState(state => {
         state.validating = false
       })
-      if (isFn(options.onValidateFailed) && payload.errors.length) {
-        options.onValidateFailed(payload)
-      }
       heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
       return payload
     })
