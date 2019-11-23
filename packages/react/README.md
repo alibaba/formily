@@ -205,7 +205,7 @@ const App = () => {
         name="age"
         rules={[
           val =>
-            val === undefiend
+            !val
               ? { type: 'error', message: 'age is required' }
               : undefined
         ]}
@@ -217,7 +217,7 @@ const App = () => {
         name="gender"
         rules={[
           val =>
-            val === undefiend
+            !val
               ? { type: 'warning', message: 'gender is required' }
               : undefined
         ]}
@@ -242,7 +242,7 @@ const App = () => {
         rules={[
           {
             validator(value) {
-              return value === undefiend
+              return !value
                 ? 'This field can not be empty, please enter {{scope.outerVariable}}'
                 : undefined
             },

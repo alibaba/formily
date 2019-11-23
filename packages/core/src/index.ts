@@ -230,9 +230,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
         syncFormMessages('warnings', published.name, published.warnings)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-      if (!(!env.shadowStage || env.leadingStage)) {
-        return false
-      }
+      if (env.leadingStage) return
+      if (env.shadowStage) return false
     }
   }
 
@@ -525,12 +524,25 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
     function removeValue(key: string | number) {
       const name = field.unsafe_getSourceState(state => state.name)
-      env.removeNodes[name] = true
-      field.setState((state: IFieldState<FieldProps>) => {
-        state.value = undefined
-        state.values = []
-      }, true)
-      deleteFormValuesIn(key ? FormPath.parse(name).concat(key) : name)
+      leadingUpdate(() => {
+        if (isValid(key)) {
+          const childPath = FormPath.parse(name).concat(key)
+          const child = graph.get(childPath)
+          env.removeNodes[childPath.toString()] = true
+          deleteFormValuesIn(childPath)
+          child.setState((fieldState: IFieldState<FieldProps>) => {
+              fieldState.value = undefined
+              fieldState.values = []
+          }, true)
+        } else {
+          env.removeNodes[name] = true
+          deleteFormValuesIn(name)
+          field.setState((fieldState: IFieldState<FieldProps>) => {
+            fieldState.value = undefined
+            fieldState.values = []
+          }, true)
+        }
+      })
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
