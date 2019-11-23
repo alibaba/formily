@@ -15,54 +15,54 @@ npm install --save @uform/react-schema-renderer
 
 <!-- toc -->
 
-- [使用方式](#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F)
-  * [快速开始](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
-  * [JSON Schema 驱动表单渲染](#json-schema-%E9%A9%B1%E5%8A%A8%E8%A1%A8%E5%8D%95%E6%B8%B2%E6%9F%93)
-  * [JSchema 驱动表单渲染](#jschema-%E9%A9%B1%E5%8A%A8%E8%A1%A8%E5%8D%95%E6%B8%B2%E6%9F%93)
-  * [非单例注册组件](#%E9%9D%9E%E5%8D%95%E4%BE%8B%E6%B3%A8%E5%86%8C%E7%BB%84%E4%BB%B6)
+- [使用方式](#/%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F)
+  - [`快速开始`](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
+  - [`JSON Schema 驱动表单渲染`](#json-schema-%E9%A9%B1%E5%8A%A8%E8%A1%A8%E5%8D%95%E6%B8%B2%E6%9F%93)
+  - [`JSchema 驱动表单渲染`](#jschema-%E9%A9%B1%E5%8A%A8%E8%A1%A8%E5%8D%95%E6%B8%B2%E6%9F%93)
+  - [`非单例注册组件`](#%E9%9D%9E%E5%8D%95%E4%BE%8B%E6%B3%A8%E5%86%8C%E7%BB%84%E4%BB%B6)
 - [高级教程](#%E9%AB%98%E7%BA%A7%E6%95%99%E7%A8%8B)
-  * [如何接入第三方组件库？](#%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E5%BA%93)
-  * [如何接入 Form/FormItem 组件？](#%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5-formformitem-%E7%BB%84%E4%BB%B6)
-  * [如何接入表单组件？](#%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6)
-  * [如何处理表单布局？](#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%A1%A8%E5%8D%95%E5%B8%83%E5%B1%80)
-  * [如何实现递归渲染组件？](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E9%80%92%E5%BD%92%E6%B8%B2%E6%9F%93%E7%BB%84%E4%BB%B6)
-  * [如何实现自增列表组件？](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%A2%9E%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6)
-  * [如何实现超复杂自定义组件？](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%B6%85%E5%A4%8D%E6%9D%82%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)
+  - [`如何接入第三方组件库？`](#%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E7%AC%AC%E4%B8%89%E6%96%B9%E7%BB%84%E4%BB%B6%E5%BA%93)
+  - [`如何接入 Form/FormItem 组件？`](#%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5-formformitem-%E7%BB%84%E4%BB%B6)
+  - [`如何接入表单组件？`](#%E5%A6%82%E4%BD%95%E6%8E%A5%E5%85%A5%E8%A1%A8%E5%8D%95%E7%BB%84%E4%BB%B6)
+  - [`如何处理表单布局？`](#%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86%E8%A1%A8%E5%8D%95%E5%B8%83%E5%B1%80)
+  - [`如何实现递归渲染组件？`](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E9%80%92%E5%BD%92%E6%B8%B2%E6%9F%93%E7%BB%84%E4%BB%B6)
+  - [`如何实现自增列表组件？`](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%A2%9E%E5%88%97%E8%A1%A8%E7%BB%84%E4%BB%B6)
+  - [`如何实现超复杂自定义组件？`](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E8%B6%85%E5%A4%8D%E6%9D%82%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6)
 - [API](#api)
-  * [connect](#connect)
-  * [registerFormField](#registerformfield)
-  * [registerFormFields](#registerformfields)
-  * [registerFormComponent](#registerformcomponent)
-  * [registerFormItemComponent](#registerformitemcomponent)
-  * [registerVirtualBox](#registervirtualbox)
-  * [createVirtualBox](#createvirtualbox)
-  * [createControllerBox](#createcontrollerbox)
-  * [getRegistry](#getregistry)
-  * [cleanRegistry](#cleanregistry)
+  - [`connect`](#connect)
+  - [`registerFormField`](#registerformfield)
+  - [`registerFormFields`](#registerformfields)
+  - [`registerFormComponent`](#registerformcomponent)
+  - [`registerFormItemComponent`](#registerformitemcomponent)
+  - [`registerVirtualBox`](#registervirtualbox)
+  - [`createVirtualBox`](#createvirtualbox)
+  - [`createControllerBox`](#createcontrollerbox)
+  - [`getRegistry`](#getregistry)
+  - [`cleanRegistry`](#cleanregistry)
 - [Classes](#classes)
-  * [new Schema(json : ISchema)](#new-schemajson--ischema)
-    + [`get`](#get)
-    + [`merge `](#merge-)
-    + [`getEmptyValue`](#getemptyvalue)
-    + [`getSelfProps`](#getselfprops)
-    + [`getExtendsRules`](#getextendsrules)
-    + [`getExtendsRequired`](#getextendsrequired)
-    + [`getExtendsEditable`](#getextendseditable)
-    + [`getExtendsTriggerType`](#getextendstriggertype)
-    + [`getExtendsProps`](#getextendsprops)
-    + [`getExtendsComponent`](#getextendscomponent)
-    + [`getExtendsComponentProps`](#getextendscomponentprops)
-    + [`getExtendsRenderer`](#getextendsrenderer)
-    + [`getExtendsEffect`](#getextendseffect)
-    + [`setProperty`](#setproperty)
-    + [`setProperties`](#setproperties)
-    + [`setArrayItems`](#setarrayitems)
-    + [`getOrderProperties`](#getorderproperties)
-    + [`mapProperties`](#mapproperties)
-    + [`toJSON`](#tojson)
-    + [`fromJSON`](#fromjson)
-    + [`isObject`](#isobject)
-    + [`isArray()`](#isarray)
+  - [new Schema(json : ISchema)](#new-schemajson--ischema)
+    - [`get`](#get)
+    - [`merge`](#merge-)
+    - [`getEmptyValue`](#getemptyvalue)
+    - [`getSelfProps`](#getselfprops)
+    - [`getExtendsRules`](#getextendsrules)
+    - [`getExtendsRequired`](#getextendsrequired)
+    - [`getExtendsEditable`](#getextendseditable)
+    - [`getExtendsTriggerType`](#getextendstriggertype)
+    - [`getExtendsProps`](#getextendsprops)
+    - [`getExtendsComponent`](#getextendscomponent)
+    - [`getExtendsComponentProps`](#getextendscomponentprops)
+    - [`getExtendsRenderer`](#getextendsrenderer)
+    - [`getExtendsEffect`](#getextendseffect)
+    - [`setProperty`](#setproperty)
+    - [`setProperties`](#setproperties)
+    - [`setArrayItems`](#setarrayitems)
+    - [`getOrderProperties`](#getorderproperties)
+    - [`mapProperties`](#mapproperties)
+    - [`toJSON`](#tojson)
+    - [`fromJSON`](#fromjson)
+    - [`isObject`](#isobject)
+    - [`isArray()`](#isarray)
 - [Components](#components)
   - [`<SchemaForm/>`](#SchemaForm)
   - [`<SchemaField/>`](#SchemaField)
@@ -71,18 +71,18 @@ npm install --save @uform/react-schema-renderer
   - [`<InternalForm/>`](#InternalForm)
   - [`<InternalField/>`](#InternalField)
 - [Interfaces](#interfaces)
-  * [ISchemaFieldComponentProps](#ischemafieldcomponentprops)
-  * [ISchemaVirtualFieldComponentProps](#ischemavirtualfieldcomponentprops)
-  * [ISchemaFormRegistry](#ischemaformregistry)
-  * [ISchema](#ischema)
-  * [ISchemaFormActions](#ischemaformactions)
-  * [ISchemaFormAsyncActions](#ischemaformasyncactions)
-  * [IFormValidateResult](#iformvalidateresult)
-  * [InternalFormats](#internalformats)
-  * [ValidateDescription](#validatedescription)
-  * [ValidateResponse](#validateresponse)
-  * [CustomValidator](#customvalidator)
-  * [ValidatePatternRules](#validatepatternrules)
+  - [`ISchemaFieldComponentProps`](#ischemafieldcomponentprops)
+  - [`ISchemaVirtualFieldComponentProps`](#ischemavirtualfieldcomponentprops)
+  - [`ISchemaFormRegistry`](#ischemaformregistry)
+  - [`ISchema`](#ischema)
+  - [`ISchemaFormActions`](#ischemaformactions)
+  - [`ISchemaFormAsyncActions`](#ischemaformasyncactions)
+  - [`IFormValidateResult`](#iformvalidateresult)
+  - [`InternalFormats`](#internalformats)
+  - [`ValidateDescription`](#validatedescription)
+  - [`ValidateResponse`](#validateresponse)
+  - [`CustomValidator`](#customvalidator)
+  - [`ValidatePatternRules`](#validatepatternrules)
 
 <!-- tocstop -->
 
@@ -94,7 +94,7 @@ npm install --save @uform/react-schema-renderer
 
 如果您是直接基于@uform/react-schema-renderer 做开发的，那么您必须在开发前将自定义组件注册到渲染器里去，否则，我们的 JSON-Schema 协议是不能渲染表单的。所以：
 
-```jsx
+```tsx
 import React from 'react'
 import {
   SchemaForm,
@@ -206,7 +206,7 @@ export default () => {
 
 在前面的例子中，我们使用了 registerFormField API 来注册了自定义组件，这种方式是单例注册的方式，它的主要优点就是方便，但是也会存在一些问题，就是单例容易受污染，特别是在 SPA 页面中，如果不同页面的开发者是不一样的，因为共享同一个内存环境，那么 A 开发者可能会注册 B 开发者同名的自定义组件，这样就很容易导致线上故障，所以，我们更加推荐用户使用非单例注册方式：
 
-```jsx
+```tsx
 import React, { useMemo } from 'react'
 import {
   SchemaForm,
@@ -721,8 +721,6 @@ import { Select } from 'antd'
 registerFormField('select', connect()(Select))
 ```
 
-
-
 #### registerFormField
 
 > 注册自定义组件函数
@@ -735,8 +733,6 @@ registerFormField(
   component: React.JSXElementConstructor<ISchemaFieldComponentProps>
 )
 ```
-
-
 
 #### registerFormFields
 
@@ -752,8 +748,6 @@ registerFormFields(
 )
 ```
 
-
-
 #### registerFormComponent
 
 > 注册 Form 样式组件
@@ -765,8 +759,6 @@ registerFormComponent<Props>(
   component:React.JSXElementConstructor<Props>
 )
 ```
-
-
 
 #### registerFormItemComponent
 
@@ -780,8 +772,6 @@ registerFormItemComponent(
 )
 ```
 
-
-
 #### registerVirtualBox
 
 > 注册虚拟盒子组件，主要用于在 JSON Schema 中描述布局
@@ -794,8 +784,6 @@ registerVirtualBox(
   component:React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
 )
 ```
-
-
 
 #### createVirtualBox
 
@@ -833,8 +821,6 @@ export default () => (
   </SchemaForm>
 )
 ```
-
-
 
 #### createControllerBox
 
@@ -875,11 +861,9 @@ export default () => (
 )
 ```
 
-
-
 #### getRegistry
 
-> 获取注册中心，所有通过registerFormXXX API 注册的组件都统一在registry中管理
+> 获取注册中心，所有通过 registerFormXXX API 注册的组件都统一在 registry 中管理
 
 **签名**
 
@@ -887,11 +871,9 @@ export default () => (
 getRegistry(): ISchemaFormRegistry
 ```
 
-
-
 #### cleanRegistry
 
-> 清空注册中心，清除所有通过registerFormXXX API注册的组件
+> 清空注册中心，清除所有通过 registerFormXXX API 注册的组件
 
 **签名**
 
@@ -899,63 +881,59 @@ getRegistry(): ISchemaFormRegistry
 cleanRegistry(): void
 ```
 
-
-
 ### Classes
 
 > 整体 Class 完全继承@uform/core，比如 FormPath 与 FormLifeCyle，下面只列举@uform/react-schema-renderer 特有的 Class
 
 #### new Schema(json : ISchema)
 
-> Schema解析引擎，给定一份满足JSON Schema的数据，我们会将其解析成对应的Schema实例，可以借助一些工具方法快速处理一些事情，同时该Schema Class提供了统一的协议差异抹平能力，保证协议升级的时候可以无缝平滑升级
+> Schema 解析引擎，给定一份满足 JSON Schema 的数据，我们会将其解析成对应的 Schema 实例，可以借助一些工具方法快速处理一些事情，同时该 Schema Class 提供了统一的协议差异抹平能力，保证协议升级的时候可以无缝平滑升级
 
 **属性**
 
-| 属性名               | 描述                                 | 类型                                                         |
-| -------------------- | ------------------------------------ | ------------------------------------------------------------ |
-| title                | 字段标题                             | `React.ReactNode`                                            |
-| description          | 字段描述                             | `React.ReactNode`                                            |
-| default              | 字段默认值                           | `any`                                                        |
-| readOnly             | 是否只读与editable一致               | `boolean`                                                    |
-| type                 | 字段类型                             | `'string' | 'object' | 'array' | 'number' | string`          |
-| enum                 | 枚举数据                             | `Array<string | number | { label: React.ReactNode, value: any }>` |
-| const                | 校验字段值是否与const的值相等        | `any`                                                        |
-| multipleOf           | 校验字段值是否可被multipleOf的值整除 | `number`                                                     |
-| maximum              | 校验最大值(大于)                     | `number`                                                     |
-| exclusiveMaximum     | 校验最大值（大于等于）               | `number`                                                     |
-| minimum              | 校验最小值(小于)                     | `number`                                                     |
-| exclusiveMinimum     | 最小值（小于等于）                   | `number`                                                     |
-| maxLength            | 校验最大长度                         | `number`                                                     |
-| minLength            | 校验最小长度                         | `number`                                                     |
-| pattern              | 正则校验规则                         | `string | RegExp`                                            |
-| maxItems             | 最大条目数                           | `number`                                                     |
-| minItems             | 最小条目数                           | `number`                                                     |
-| uniqueItems          | 是否校验重复                         | `boolean`                                                    |
-| maxProperties        | 最大属性数量                         | `number`                                                     |
-| minProperties        | 最小属性数量                         | `number`                                                     |
-| required             | 必填                                 | `boolean`                                                    |
-| format               | 正则规则类型                         | `InternalFormats`                                            |
-| properties           | 对象属性                             | `{[key : string]:Schema}`                                    |
-| items                | 数组描述                             | `Schema | Schema[]`                                          |
-| additionalItems      | 额外数组元素描述                     | `Schema`                                                     |
-| patternProperties    | 动态匹配对象的某个属性的Schema       | `{[key : string]:Schema}`                                    |
-| additionalProperties | 匹配对象额外属性的Schema             | `Schema`                                                     |
-| editable             | 字段是否可编辑                       | `boolean`                                                    |
-| x-props              | 字段扩展属性                         | `{ [name: string]: any }`                                    |
-| x-index              | 字段顺序                             | `number`                                                     |
-| x-rules              | 字段校验规则                         | `ValidatePatternRules`                                       |
-| x-component          | 字段UI组件                           | `string`                                                     |
-| x-component-props    | 字段UI组件属性                       | `{}`                                                         |
-| x-render             | 字段扩展渲染函数                     | `<T = ISchemaFieldComponentProps>(props: T & {  renderComponent: () => React.ReactElement}) => React.ReactElement` |
-| x-effect             | 字段副作用触发器                     | `(dispatch: (type: string, payload: any) => void,option?:object) => { [key: string]: any }` |
-
-
+| 属性名               | 描述                                   | 类型                                                                                                              |
+| -------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| title                | 字段标题                               | `React.ReactNode`                                                                                                 |
+| description          | 字段描述                               | `React.ReactNode`                                                                                                 |
+| default              | 字段默认值                             | `any`                                                                                                             |
+| readOnly             | 是否只读与 editable 一致               | `boolean`                                                                                                         |
+| type                 | 字段类型                               | `'string' | 'object' | 'array' | 'number' | string`                                                               |
+| enum                 | 枚举数据                               | `Array<string | number | { label: React.ReactNode, value: any }>`                                                 |
+| const                | 校验字段值是否与 const 的值相等        | `any`                                                                                                             |
+| multipleOf           | 校验字段值是否可被 multipleOf 的值整除 | `number`                                                                                                          |
+| maximum              | 校验最大值(大于)                       | `number`                                                                                                          |
+| exclusiveMaximum     | 校验最大值（大于等于）                 | `number`                                                                                                          |
+| minimum              | 校验最小值(小于)                       | `number`                                                                                                          |
+| exclusiveMinimum     | 最小值（小于等于）                     | `number`                                                                                                          |
+| maxLength            | 校验最大长度                           | `number`                                                                                                          |
+| minLength            | 校验最小长度                           | `number`                                                                                                          |
+| pattern              | 正则校验规则                           | `string | RegExp`                                                                                                 |
+| maxItems             | 最大条目数                             | `number`                                                                                                          |
+| minItems             | 最小条目数                             | `number`                                                                                                          |
+| uniqueItems          | 是否校验重复                           | `boolean`                                                                                                         |
+| maxProperties        | 最大属性数量                           | `number`                                                                                                          |
+| minProperties        | 最小属性数量                           | `number`                                                                                                          |
+| required             | 必填                                   | `boolean`                                                                                                         |
+| format               | 正则规则类型                           | `InternalFormats`                                                                                                 |
+| properties           | 对象属性                               | `{[key : string]:Schema}`                                                                                         |
+| items                | 数组描述                               | `Schema | Schema[]`                                                                                               |
+| additionalItems      | 额外数组元素描述                       | `Schema`                                                                                                          |
+| patternProperties    | 动态匹配对象的某个属性的 Schema        | `{[key : string]:Schema}`                                                                                         |
+| additionalProperties | 匹配对象额外属性的 Schema              | `Schema`                                                                                                          |
+| editable             | 字段是否可编辑                         | `boolean`                                                                                                         |
+| x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                                                                         |
+| x-index              | 字段顺序                               | `number`                                                                                                          |
+| x-rules              | 字段校验规则                           | `ValidatePatternRules`                                                                                            |
+| x-component          | 字段 UI 组件                           | `string`                                                                                                          |
+| x-component-props    | 字段 UI 组件属性                       | `{}`                                                                                                              |
+| x-render             | 字段扩展渲染函数                       | `<T = ISchemaFieldComponentProps>(props: T & { renderComponent: () => React.ReactElement}) => React.ReactElement` |
+| x-effect             | 字段副作用触发器                       | `(dispatch: (type: string, payload: any) => void,option?:object) => { [key: string]: any }`                       |
 
 **方法**
 
 ##### `get`
 
-> 根据数据路径获取Schema子节点
+> 根据数据路径获取 Schema 子节点
 
 签名
 
@@ -967,15 +945,15 @@ get(path?: FormPathPattern): Schema
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -986,11 +964,9 @@ const schema = new Schema({
 schema.get('array[0].input') //{type:"string"}
 ```
 
+##### `merge`
 
-
-##### `merge `
-
-> 合并Schema
+> 合并 Schema
 
 签名
 
@@ -1002,15 +978,15 @@ merge(spec:ISchema): Schema
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -1019,7 +995,7 @@ const schema = new Schema({
 })
 
 schema.merge({
-  title:'root object'
+  title: 'root object'
 })
 /**
 {
@@ -1042,11 +1018,9 @@ schema.merge({
 **/
 ```
 
-
-
 ##### `getEmptyValue`
 
-> 基于Schema的type获取当前Schema的空值
+> 基于 Schema 的 type 获取当前 Schema 的空值
 
 签名
 
@@ -1058,15 +1032,15 @@ getEmptyValue() : '' | [] | {} | 0
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -1078,14 +1052,11 @@ schema.get('array.0.input').getEmptyValue() // ''
 schema.get('array.0').getEmptyValue() // {}
 schema.get('array').getEmptyValue() // []
 schema.getEmptyValue() // {}
-
 ```
-
-
 
 ##### `getSelfProps`
 
-> 获取无嵌套Schema属性(不会包含properties/items这类嵌套属性)
+> 获取无嵌套 Schema 属性(不会包含 properties/items 这类嵌套属性)
 
 签名
 
@@ -1097,15 +1068,15 @@ getSelfProps() : ISchema
 
 ```typescript
 const schema = new Schema({
-  type:"object",
-  properties:{
-    array:{
-      type:'array',
-      items:{
-        type:'object',
-        properties:{
-          input:{
-            type:'string'
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string'
           }
         }
       }
@@ -1114,14 +1085,11 @@ const schema = new Schema({
 })
 
 schema.getSelfProps() // { type:"object" }
-
 ```
-
-
 
 ##### `getExtendsRules`
 
-> 获取扩展校验规则，该方法比较复杂，会解析当前Schema的所有校验类型的属性与x-rules属性，最终合并为一个统一的rules结构
+> 获取扩展校验规则，该方法比较复杂，会解析当前 Schema 的所有校验类型的属性与 x-rules 属性，最终合并为一个统一的 rules 结构
 
 签名
 
@@ -1144,11 +1112,9 @@ const schema = new Schema({
 schema.getExtendsRules() // [{required:true},{max:10},{pattern:/^\d+$/}]
 ```
 
-
-
 ##### `getExtendsRequired`
 
-> 获取是否必填，其实就是读取Schema的required属性，为什么封装成方法，是为了保证协议升级的时候对用户无感知，我们只需要保证方法的向后兼容即可
+> 获取是否必填，其实就是读取 Schema 的 required 属性，为什么封装成方法，是为了保证协议升级的时候对用户无感知，我们只需要保证方法的向后兼容即可
 
 签名
 
@@ -1171,11 +1137,9 @@ const schema = new Schema({
 schema.getExtendsRequired() // true
 ```
 
-
-
 ##### `getExtendsEditable`
 
-> 获取Schema的editable状态，与getExtendsEditable能力一致，也是为了抹平协议差异
+> 获取 Schema 的 editable 状态，与 getExtendsEditable 能力一致，也是为了抹平协议差异
 
 签名
 
@@ -1187,43 +1151,41 @@ getExtendsEditable() : void | boolean
 
 ```typescript
 const schema1 = new Schema({
-  type:"string",
-  editable:false
+  type: 'string',
+  editable: false
 })
 
 schema1.getExtendsEditable() // false
 
 const schema2 = new Schema({
-  type:"string",
-  readOnly:true
+  type: 'string',
+  readOnly: true
 })
 
 schema2.getExtendsEditable() // false
 
 const schema3 = new Schema({
-  type:"string",
-  "x-props":{
-    editable:false
+  type: 'string',
+  'x-props': {
+    editable: false
   }
 })
 
 schema3.getExtendsEditable() // false
 
 const schema4 = new Schema({
-  type:"string",
-  "x-component-props":{
-    editable:false
+  type: 'string',
+  'x-component-props': {
+    editable: false
   }
 })
 
 schema4.getExtendsEditable() // false
 ```
 
-
-
 ##### `getExtendsTriggerType`
 
-> 获取triggerType，与getExtendsTriggerType能力一致，都是提供协议差异抹平的能力
+> 获取 triggerType，与 getExtendsTriggerType 能力一致，都是提供协议差异抹平的能力
 
 签名
 
@@ -1235,27 +1197,27 @@ getExtendsTriggerType() : 'onBlur' | 'onChange' | string
 
 ```typescript
 const schema1 = new Schema({
-  type:"string",
-  "x-props":{
-    triggerType:"onBlur"
+  type: 'string',
+  'x-props': {
+    triggerType: 'onBlur'
   }
 })
 
 schema1.getExtendsTriggerType() // onBlur
 
 const schema2 = new Schema({
-  type:"string",
-  "x-component-props":{
-    triggerType:"onBlur"
+  type: 'string',
+  'x-component-props': {
+    triggerType: 'onBlur'
   }
 })
 
 schema2.getExtendsTriggerType() // onBlur
 
 const schema3 = new Schema({
-  type:"string",
-  "x-item-props":{
-    triggerType:"onBlur"
+  type: 'string',
+  'x-item-props': {
+    triggerType: 'onBlur'
   }
 })
 
@@ -1264,7 +1226,7 @@ schema3.getExtendsTriggerType() // onBlur
 
 ##### `getExtendsProps`
 
-> 获取x-props属性
+> 获取 x-props 属性
 
 签名
 
@@ -1272,11 +1234,9 @@ schema3.getExtendsTriggerType() // onBlur
 getExtendsProps() : {}
 ```
 
-
-
 ##### `getExtendsComponent`
 
-> 获取x-component属性
+> 获取 x-component 属性
 
 签名
 
@@ -1284,11 +1244,9 @@ getExtendsProps() : {}
 getExtendsComponent() : string
 ```
 
-
-
 ##### `getExtendsComponentProps`
 
-> 获取x-component-props属性，也就是x-component的组件属性
+> 获取 x-component-props 属性，也就是 x-component 的组件属性
 
 签名
 
@@ -1296,11 +1254,9 @@ getExtendsComponent() : string
 getExtendsComponentProps() : {}
 ```
 
-
-
 ##### `getExtendsRenderer`
 
-> 获取x-render属性
+> 获取 x-render 属性
 
 签名
 
@@ -1312,11 +1268,9 @@ getExtendsRenderer() : <T = ISchemaFieldComponentProps>(
   ) => React.ReactElement
 ```
 
-
-
 ##### `getExtendsEffect`
 
-> 获取x-effect属性
+> 获取 x-effect 属性
 
 签名
 
@@ -1327,11 +1281,9 @@ getExtendsEffect() : (
 ) => { [key: string]: any }
 ```
 
-
-
 ##### `setProperty`
 
-> 给当前Schema设置properties
+> 给当前 Schema 设置 properties
 
 签名
 
@@ -1339,11 +1291,9 @@ getExtendsEffect() : (
 setProperty(key: string, schema: ISchema): Schema
 ```
 
-
-
 ##### `setProperties`
 
-> 给当前Schema批量设置properties
+> 给当前 Schema 批量设置 properties
 
 签名
 
@@ -1351,11 +1301,9 @@ setProperty(key: string, schema: ISchema): Schema
 setProperties(properties: {[key : string]:ISchema}) : {[key : string]:Schema}
 ```
 
-
-
 ##### `setArrayItems`
 
-> 给当前Schema设置items属性
+> 给当前 Schema 设置 items 属性
 
 签名
 
@@ -1363,11 +1311,9 @@ setProperties(properties: {[key : string]:ISchema}) : {[key : string]:Schema}
 setArrayItems(schema:Ischema) : Schema
 ```
 
-
-
 ##### `getOrderProperties`
 
-> 按照x-index顺序给出所有properties
+> 按照 x-index 顺序给出所有 properties
 
 签名
 
@@ -1375,11 +1321,9 @@ setArrayItems(schema:Ischema) : Schema
 getOrderProperties() : {schema:Schema,key:string}[]
 ```
 
-
-
 ##### `mapProperties`
 
-> 按顺序(x-index)遍历Schema的properties属性
+> 按顺序(x-index)遍历 Schema 的 properties 属性
 
 签名
 
@@ -1387,11 +1331,9 @@ getOrderProperties() : {schema:Schema,key:string}[]
 mapProperties(callback?: (schema: Schema, key: string) => any):any[]
 ```
 
-
-
 ##### `toJSON`
 
-> 输出无循环依赖json数据结构
+> 输出无循环依赖 json 数据结构
 
 签名
 
@@ -1399,11 +1341,9 @@ mapProperties(callback?: (schema: Schema, key: string) => any):any[]
 toJSON() : ISchema
 ```
 
-
-
 ##### `fromJSON`
 
-> 基于一份json解析生成Schema对象
+> 基于一份 json 解析生成 Schema 对象
 
 签名
 
@@ -1411,11 +1351,9 @@ toJSON() : ISchema
 fromJSON(json : ISchema) : Schema
 ```
 
-
-
 ##### `isObject`
 
-> 判断当前Schema是否是object类型
+> 判断当前 Schema 是否是 object 类型
 
 签名
 
@@ -1423,19 +1361,15 @@ fromJSON(json : ISchema) : Schema
 isObject() : boolean
 ```
 
-
-
 ##### `isArray()`
 
-> 判断当前Schema是否是array类型
+> 判断当前 Schema 是否是 array 类型
 
 签名
 
 ```
 isArray() : boolean
 ```
-
-
 
 ### Components
 
@@ -1445,7 +1379,7 @@ isArray() : boolean
 
 #### `<SchemaForm/>`
 
-> 最核心的JSON Schema渲染组件
+> 最核心的 JSON Schema 渲染组件
 
 **属性**
 
@@ -1457,33 +1391,33 @@ interface ISchemaFormProps<
   FormActions = ISchemaFormActions | ISchemaFormAsyncActions
 > {
   //表单值
-  value?: Value;
+  value?: Value
   //表单默认值
-  defaultValue?: DefaultValue;
+  defaultValue?: DefaultValue
   //表单默认值，弱受控
-  initialValues?: DefaultValue;
+  initialValues?: DefaultValue
   //表单actions
-  actions?: FormActions;
+  actions?: FormActions
   //表单effects
-  effects?: IFormEffect<FormEffectPayload, FormActions>;
+  effects?: IFormEffect<FormEffectPayload, FormActions>
   //form实例
-  form?: IForm;
+  form?: IForm
   //表单变化回调
-  onChange?: (values: Value) => void;
+  onChange?: (values: Value) => void
   //表单提交回调
-  onSubmit?: (values: Value) => void | Promise<Value>;
+  onSubmit?: (values: Value) => void | Promise<Value>
   //表单重置回调
-  onReset?: () => void;
+  onReset?: () => void
   //表单校验失败回调
-  onValidateFailed?: (valideted: IFormValidateResult) => void;
+  onValidateFailed?: (valideted: IFormValidateResult) => void
   //表单子节点
-  children?: React.ReactElement;
+  children?: React.ReactElement
   //是否开启脏检查
-  useDirty?: boolean;
+  useDirty?: boolean
   //是否可编辑
-  editable?: boolean | ((name: string) => boolean);
+  editable?: boolean | ((name: string) => boolean)
   //是否开启悲观校验，遇到第一个校验失败，则停止剩余校验
-  validateFirst?: boolean;
+  validateFirst?: boolean
   //Form Schema对象
   schema?: ISchema
   //实例级注册自定义组件
@@ -1497,11 +1431,9 @@ interface ISchemaFormProps<
 }
 ```
 
-
-
 #### `<SchemaField/>`
 
-> 基于一个Data Path，自动寻找Schema节点并渲染的内部组件，主要用于在自定义组件内实现递归渲染
+> 基于一个 Data Path，自动寻找 Schema 节点并渲染的内部组件，主要用于在自定义组件内实现递归渲染
 
 **属性**
 
@@ -1512,11 +1444,9 @@ interface ISchemaFieldProps {
 }
 ```
 
-
-
 #### `<SchemaMarkupForm/>`
 
-> 让SchemaForm支持jsx标签式写法的Form组件，需要配合SchemaMarkupField一起使用
+> 让 SchemaForm 支持 jsx 标签式写法的 Form 组件，需要配合 SchemaMarkupField 一起使用
 
 **属性**
 
@@ -1528,33 +1458,33 @@ interface ISchemaFormProps<
   FormActions = ISchemaFormActions | ISchemaFormAsyncActions
 > {
   //表单值
-  value?: Value;
+  value?: Value
   //表单默认值
-  defaultValue?: DefaultValue;
+  defaultValue?: DefaultValue
   //表单默认值，弱受控
-  initialValues?: DefaultValue;
+  initialValues?: DefaultValue
   //表单actions
-  actions?: FormActions;
+  actions?: FormActions
   //表单effects
-  effects?: IFormEffect<FormEffectPayload, FormActions>;
+  effects?: IFormEffect<FormEffectPayload, FormActions>
   //form实例
-  form?: IForm;
+  form?: IForm
   //表单变化回调
-  onChange?: (values: Value) => void;
+  onChange?: (values: Value) => void
   //表单提交回调
-  onSubmit?: (values: Value) => void | Promise<Value>;
+  onSubmit?: (values: Value) => void | Promise<Value>
   //表单重置回调
-  onReset?: () => void;
+  onReset?: () => void
   //表单校验失败回调
-  onValidateFailed?: (valideted: IFormValidateResult) => void;
+  onValidateFailed?: (valideted: IFormValidateResult) => void
   //表单子节点
-  children?: React.ReactElement;
+  children?: React.ReactElement
   //是否开启脏检查
-  useDirty?: boolean;
+  useDirty?: boolean
   //是否可编辑
-  editable?: boolean | ((name: string) => boolean);
+  editable?: boolean | ((name: string) => boolean)
   //是否开启悲观校验，遇到第一个校验失败，则停止剩余校验
-  validateFirst?: boolean;
+  validateFirst?: boolean
   //Form Schema对象
   schema?: ISchema
   //实例级注册自定义组件
@@ -1576,10 +1506,10 @@ import {
   SchemaMarkupField as Field
 } from '@uform/react-schema-renderer'
 
-export default ()=>{
+export default () => {
   return (
     <SchemaForm>
-      <Field name="aa" type="string"/>
+      <Field name="aa" type="string" />
     </SchemaForm>
   )
 }
@@ -1587,25 +1517,21 @@ export default ()=>{
 
 #### `<SchemaMarkupField/>`
 
-> 让SchemaForm支持jsx标签式写法的Field组件，需要配合SchemaMarkupForm一起使用
+> 让 SchemaForm 支持 jsx 标签式写法的 Field 组件，需要配合 SchemaMarkupForm 一起使用
 
 **属性**
 
 ```typescript
-type IMarkupSchemaFieldProps  = ISchema
+type IMarkupSchemaFieldProps = ISchema
 ```
-
-
 
 #### `<InternalForm/>`
 
-> 核心Form，与@uform/react中的Form组件一样
-
-
+> 核心 Form，与@uform/react 中的 Form 组件一样
 
 #### `<InternalField/>`
 
-> 核心Field，与@uform/react中的Field组件一样，主要用于复杂自定义组件内使用
+> 核心 Field，与@uform/react 中的 Field 组件一样，主要用于复杂自定义组件内使用
 
 ### Interfaces
 
@@ -1685,8 +1611,6 @@ interface ISchemaFieldComponentProps {
 }
 ```
 
-
-
 #### ISchemaVirtualFieldComponentProps
 
 > 虚拟字段组件所接收的属性，只要涉及注册虚拟字段的，都需要了解该协议
@@ -1725,30 +1649,28 @@ interface ISchemaVirtualFieldComponentProps {
 }
 ```
 
-
-
 #### ISchemaFormRegistry
 
-> 组件注册中心，不管是普通字段，还是虚拟字段，还是Form/FormItem都会注册在这里
+> 组件注册中心，不管是普通字段，还是虚拟字段，还是 Form/FormItem 都会注册在这里
 
 ```typescript
 interface ISchemaFormRegistry {
   fields: {
     [key: string]: React.JSXElementConstructor<ISchemaFieldComponentProps>
-  },
+  }
   virtualFields: {
-    [key: string]: React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
-  },
+    [key: string]: React.JSXElementConstructor<
+      ISchemaVirtualFieldComponentProps
+    >
+  }
   formItemComponent: React.JSXElementConstructor<ISchemaFieldComponentProps>
   formComponent: string | React.JSXElementConstructor<any>
 }
 ```
 
-
-
 #### ISchema
 
-> Schema协议对象，主要用于约束一份json结构满足Schema协议
+> Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
 
 ```typescript
 interface ISchema {
@@ -1759,7 +1681,7 @@ interface ISchema {
   readOnly?: boolean
   writeOnly?: boolean
   type?: 'string' | 'object' | 'array' | 'number' | string
-  enum?: Array<string | number | { label: React.ReactNode, value: any }>
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
   const?: any
   multipleOf?: number
   maximum?: number
@@ -1805,11 +1727,9 @@ interface ISchema {
 }
 ```
 
-
-
 #### ISchemaFormActions
 
-> 核心actions继承@uform/react的IFormActions，主要增加了getSchema API
+> 核心 actions 继承@uform/react 的 IFormActions，主要增加了 getSchema API
 
 ```typescript
 interface ISchemaFormActions extends IFormActions {
@@ -1820,7 +1740,7 @@ interface ISchemaFormActions extends IFormActions {
 
 #### ISchemaFormAsyncActions
 
-> 核心actions继承@uform/react的IFormAsyncActions，主要增加了getSchema API
+> 核心 actions 继承@uform/react 的 IFormAsyncActions，主要增加了 getSchema API
 
 ```typescript
 interface ISchemaFormAsyncActions extends IFormAsyncActions {
@@ -1828,8 +1748,6 @@ interface ISchemaFormAsyncActions extends IFormAsyncActions {
   getFormSchema(): Promise<Schema>
 }
 ```
-
-
 
 #### IFormValidateResult
 
@@ -1847,8 +1765,6 @@ interface IFormValidateResult {
   }>
 }
 ```
-
-
 
 #### InternalFormats
 
@@ -1870,8 +1786,6 @@ type InternalFormats =
   | 'zip'
   | string
 ```
-
-
 
 #### ValidateDescription
 
@@ -1912,8 +1826,6 @@ interface ValidateDescription {
 }
 ```
 
-
-
 #### ValidateResponse
 
 ```typescript
@@ -1929,8 +1841,6 @@ type AsyncValidateResponse = Promise<SyncValidateResponse>
 type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
 ```
 
-
-
 #### CustomValidator
 
 > 自定义校验函数
@@ -1942,20 +1852,14 @@ type CustomValidator = (
 ) => ValidateResponse
 ```
 
-
-
-
-
 #### ValidatePatternRules
 
 > 校验规则集
 
 ```typescript
- type ValidatePatternRules = InternalFormats
+type ValidatePatternRules =
+  | InternalFormats
   | CustomValidator
   | ValidateDescription
-  | Array<
-  InternalFormats | CustomValidator | ValidateDescription
->
+  | Array<InternalFormats | CustomValidator | ValidateDescription>
 ```
-

@@ -97,7 +97,7 @@ import {
   FormProvider,
   FormConsumer,
   FormEffectHooks
-} from './src'
+} from '@uform/react'
 
 const { onFormInit$, onFormInputChange$, onFieldInputChange$ } = FormEffectHooks
 const actions = createFormActions()
@@ -171,7 +171,7 @@ The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [Int
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -205,7 +205,7 @@ const App = () => {
         name="age"
         rules={[
           val =>
-            val === undefiend
+            !val
               ? { type: 'error', message: 'age is required' }
               : undefined
         ]}
@@ -217,7 +217,7 @@ const App = () => {
         name="gender"
         rules={[
           val =>
-            val === undefiend
+            !val
               ? { type: 'warning', message: 'gender is required' }
               : undefined
         ]}
@@ -242,7 +242,7 @@ const App = () => {
         rules={[
           {
             validator(value) {
-              return value === undefiend
+              return !value
                 ? 'This field can not be empty, please enter {{scope.outerVariable}}'
                 : undefined
             },
@@ -288,7 +288,7 @@ Example：User info `user(username, age)`
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -378,7 +378,7 @@ Example：Id list
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -435,7 +435,7 @@ Example：User list
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -550,7 +550,7 @@ Example: see how `display` 与 `visible` affect values
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -655,7 +655,7 @@ Example：Show/hide field and modified props/value by using effects
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -737,7 +737,7 @@ Example：Change dataSource in select asynchronously by effects
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -841,7 +841,7 @@ Example：validation when form mounted and re-trigger validation when field chan
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -898,7 +898,7 @@ Example：See how ArrayField communicate with other field by using effects
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -1029,7 +1029,7 @@ Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more in
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from './src'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1089,7 +1089,7 @@ Example：Cross-file consumption form state, Check [FormProvider](#FormProvider)
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from './src'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1148,7 +1148,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
+import { Form, Field, createFormActions, FormSpy, FormPath } from '@uform/react'
 
 const actions = createFormActions()
 
@@ -1201,7 +1201,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from './src'
+import { Form, Field, createFormActions, FormSpy, FormPath } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1357,7 +1357,7 @@ Example：All type of field
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from './src'
+import { Form, Field, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1572,7 +1572,7 @@ Example：Setting `<Layout>` size from 100x100 to 200x200
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, VirtualField } from './src'
+import { Form, Field, createFormActions, VirtualField } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1667,7 +1667,7 @@ Example1： Form state change counter
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1718,7 +1718,7 @@ Example2：Combo
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from './src'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1774,7 +1774,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from './src'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1852,7 +1852,7 @@ interface IFormConsumerProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from './src'
+import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from '@uform/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -2183,7 +2183,7 @@ const App = () => {
 **Usage**
 
 ```jsx
-import { Form, createEffectHook, createFormActions } from './src'
+import { Form, createEffectHook, createFormActions } from '@uform/react'
 
 const actions = createFormActions()
 const diyHook1$ = createEffectHook('diy1')
