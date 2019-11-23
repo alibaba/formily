@@ -74,8 +74,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
             field.setState(state => {
               if (state.visible) {
                 if (valuesChanged) {
-                  const path = FormPath.parse(state.name)
-                  const parent = graph.getLatestParent(path)
+                  const dataPath = FormPath.parse(state.name)
+                  const parent = graph.getLatestParent(dataPath)
                   const parentValue = getFormValuesIn(parent.path)
                   const value = getFormValuesIn(state.name)
                   /**
@@ -84,20 +84,20 @@ export function createForm<FieldProps, VirtualFieldProps>(
                   let removed = false
                   if (
                     isArr(parentValue) &&
-                    !path.existIn(parentValue, parent.path)
+                    !dataPath.existIn(parentValue, parent.path)
                   ) {
                     if (
                       !parent.path
-                        .getNearestChildPathBy(path)
+                        .getNearestChildPathBy(dataPath)
                         .existIn(parentValue, parent.path)
                     ) {
-                      graph.remove(state.name)
+                      graph.remove(state.path)
                       removed = true
                     }
                   } else {
                     each(env.removeNodes, (_, name) => {
-                      if (path.includes(name)) {
-                        graph.remove(path)
+                      if (dataPath.includes(name)) {
+                        graph.remove(state.path)
                         delete env.removeNodes[name]
                         removed = true
                       }
@@ -523,24 +523,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     function removeValue(key: string | number) {
-      const name = field.unsafe_getSourceState(state => state.name)
+      const nodePath = field.unsafe_getSourceState(state => state.path)
       leadingUpdate(() => {
         if (isValid(key)) {
-          const childPath = FormPath.parse(name).concat(key)
-          const child = graph.get(childPath)
-          env.removeNodes[childPath.toString()] = true
-          deleteFormValuesIn(childPath)
-          child.setState((fieldState: IFieldState<FieldProps>) => {
-              fieldState.value = undefined
-              fieldState.values = []
-          }, true)
+          const childNodePath = FormPath.parse(nodePath).concat(key)
+          env.removeNodes[childNodePath.toString()] = true
+          deleteFormValuesIn(childNodePath)
         } else {
-          env.removeNodes[name] = true
-          deleteFormValuesIn(name)
-          field.setState((fieldState: IFieldState<FieldProps>) => {
-            fieldState.value = undefined
-            fieldState.values = []
-          }, true)
+          env.removeNodes[nodePath.toString()] = true
+          deleteFormValuesIn(nodePath)
         }
       })
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
