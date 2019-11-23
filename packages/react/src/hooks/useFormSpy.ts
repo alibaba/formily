@@ -58,9 +58,7 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
       }
     }
   }, [])
-  const formApi: IForm = form
-    ? form
-    : broadcast && (broadcast.getContext() as any)
+  const formApi: IForm = form ? form : broadcast && broadcast.getContext()
   return {
     form: formApi,
     type,
