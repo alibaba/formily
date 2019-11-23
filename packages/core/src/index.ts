@@ -526,7 +526,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const name = field.unsafe_getSourceState(state => state.name)
       leadingUpdate(() => {
         if (isValid(key)) {
-          deleteFormValuesIn(FormPath.parse(name).concat(key))
+          const childPath = FormPath.parse(name).concat(key)
+          const child = graph.get(childPath)
+          env.removeNodes[childPath.toString()] = true
+          deleteFormValuesIn(childPath)
+          child.setState((fieldState: IFieldState<FieldProps>) => {
+              fieldState.value = undefined
+              fieldState.values = []
+          }, true)
         } else {
           env.removeNodes[name] = true
           deleteFormValuesIn(name)
