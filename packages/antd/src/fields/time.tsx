@@ -1,7 +1,7 @@
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import moment from 'moment'
 import { TimePicker } from 'antd'
-import { mapStyledProps, mapTextComponent } from '../utils'
+import { mapStyledProps, mapTextComponent } from '../shared'
 
 registerFormField(
   'time',
@@ -9,7 +9,7 @@ registerFormField(
     getValueFromEvent(_, value) {
       return value
     },
-    getProps: (props, fieldProps) => {
+    getProps: (props: any, fieldProps) => {
       const { value, disabled = false } = props
       try {
         if (!disabled && value) {
