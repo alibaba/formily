@@ -50,6 +50,8 @@ npm install --save @uform/react-schema-renderer
     - [`getExtendsRules`](#getextendsrules)
     - [`getExtendsRequired`](#getextendsrequired)
     - [`getExtendsEditable`](#getextendseditable)
+    - [`getExtendsVisible`](#getextendsvisible)
+    - [`getExtendsDisplay`](#getextendsdisplay)
     - [`getExtendsTriggerType`](#getextendstriggertype)
     - [`getExtendsProps`](#getextendsprops)
     - [`getExtendsComponent`](#getextendscomponent)
@@ -922,8 +924,8 @@ cleanRegistry(): void
 | additionalItems      | Extra array element description                                      | `Schema`                                                                                                          |
 | patternProperties    | Dynamically match the schema of an attribute of an object            | `{[key : string]:Schema}`                                                                                         |
 | additionalProperties | Schema matching the extra attributes of the object                   | `Schema`                                                                                                          |
-| editable             | Whether the field is editable                                        | `boolean`    
-| visible             | Whether the data and style is visible                                        | `boolean`     
+| editable             | Whether the field is editable                                        | `boolean`    |
+| visible             | Whether the data and style is visible                                        | `boolean`     |
 | display             | Whether the style is visible                                      | `boolean`                                                                                                          |
 | x-props              | Field extension attribute                                            | `{ [name: string]: any }`                                                                                         |
 | x-index              | Field order                                                          | `number`                                                                                                          |
@@ -1185,6 +1187,26 @@ const schema4 = new Schema({
 })
 
 schema4.getExtendsEditable() // false
+```
+
+##### `getExtendsVisible`
+
+> Get data and style visible property
+
+签名
+
+```typescript
+getExtendsVisible(): boolean
+```
+
+##### `getExtendsDisplay`
+
+> Get style visible property
+
+签名
+
+```
+getExtendsDisplay() : boolean
 ```
 
 ##### `getExtendsTriggerType`
