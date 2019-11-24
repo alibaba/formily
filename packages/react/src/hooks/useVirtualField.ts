@@ -3,7 +3,6 @@ import { each } from '@uform/shared'
 import { IVirtualFieldStateProps, IVirtualFieldState, IForm } from '@uform/core'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
-import { raf } from '../shared'
 import { IVirtualFieldHook } from '../types'
 import FormContext from '../context'
 

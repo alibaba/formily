@@ -70,7 +70,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     })
     initialized = true
     return extendMutators(form.createMutators(ref.current.field), options)
-  }, [])
+  }, [true])
 
   useEffect(() => {
     if (dirty.num > 0) {
