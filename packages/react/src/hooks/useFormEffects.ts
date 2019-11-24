@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { isStateModel, LifeCycleTypes } from '@uform/core'
+import { isStateModel } from '@uform/core'
 import FormContext from '../context'
 import { useEva } from 'react-eva'
 import { IFormEffect } from '../types'
@@ -17,7 +17,6 @@ export function useFormEffects(effects: IFormEffect) {
         return isStateModel(payload) ? payload.getState() : payload
       })
     })
-    dispatch(LifeCycleTypes.ON_FORM_INIT, form.getFormState())
     return () => {
       form.unsubscribe(subscribeId)
     }

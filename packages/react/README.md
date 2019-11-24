@@ -1334,7 +1334,10 @@ interface IFieldStateUIProps {
   name?: string // Field value, is equal to values[0]
   value?: any // Field multi-parameter value, such as when the field onChange trigger, the event callback passed multi-parameter data, then the value of all parameters will be stored here
   values?: any[] // Initial value
+  
   initialValue?: any // field extension properties
+  visible?: boolean //Field initial visible status(Whether the data and style is visible)
+  display?: boolean //Field initial display status(Whether the style is visible)
   props?: FieldProps // Check the rules, the specific type description refers to the following documents
   rules?: ValidatePatternRules[] // Is it required?
   required?: boolean // Is it editable?
@@ -1556,6 +1559,8 @@ interface IVirtualFieldProps {
   path?: FormPathPattern // Node path
   nodePath?: FormPathPattern // Data path
   dataPath?: FormPathPattern // Data path
+  visible?: boolean //Field initial visible status(Whether the data and style is visible)
+  display?: boolean //Field initial display status(Whether the style is visible)
   name?: string // Form extension properties
   props?: FieldProps // Whether to use the dirty check, the default will go immer accurate update
   useDirty?: boolean

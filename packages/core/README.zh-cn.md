@@ -604,6 +604,10 @@ interface IForm {
     values?: any[]
     //字段初始值
     initialValue?: any
+    //数据与样式是否可见
+    visible?: boolean
+    //样式是否可见
+    display?: boolean
     //字段扩展属性
     props?: any
     //字段校验规则

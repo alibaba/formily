@@ -1352,6 +1352,10 @@ interface IFieldStateUIProps {
   values?: any[]
   //初始值
   initialValue?: any
+  //数据与样式是否可见
+  visible?: boolean
+  //样式是否可见
+  display?: boolean
   //字段扩展属性
   props?: FieldProps
   //校验规则，具体类型描述参考后面文档
@@ -1582,6 +1586,10 @@ interface IVirtualFieldProps {
   nodePath?: FormPathPattern
   //数据路径
   dataPath?: FormPathPattern
+  //数据与样式是否可见
+  visible?: boolean
+  //样式是否可见
+  display?: boolean
   //数据路径
   name?: string
   //字段扩展属性

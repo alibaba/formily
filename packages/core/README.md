@@ -594,6 +594,8 @@ interface IForm {
     value?: any // Field multi-value
     values?: any[] // Field initial value
     initialValue?: any // Field extension properties
+    visible?: boolean //Field initial visible status(Whether the data is visible)
+    display?: boolean //Field initial display status(Whether the style is visible)
     props?: any // Field check rule
     rules?: ValidatePatternRules[] // Field is required
     required?: boolean // Is the field editable?
@@ -608,6 +610,8 @@ interface IForm {
     // Node path
     path?: FormPathPattern // Data path
     name?: string // Field extension properties
+    visible?: boolean //Field initial visible status(Whether the data and style is visible)
+    display?: boolean //Field initial display status(Whether the style is visible)
     props?: any // Whether the field is dirty check
     useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
     computeState?: (draft: IFieldState, prevState: IFieldState) => void

@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useRef } from 'react'
+import React, { useState, useMemo, useRef, Fragment } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
   createEffectHook,
-  FormEffectHooks,
   useFormEffects
 } from '@uform/react-schema-renderer'
 import { toArr } from '@uform/shared'
@@ -31,7 +30,7 @@ type StepComponentExtendsProps = StateMap
 export const FormStep: React.FC<IFormStep> &
   StepComponentExtendsProps = createControllerBox<IFormStep>(
   'step',
-  ({ form, schema }: ISchemaVirtualFieldComponentProps) => {
+  ({ form, schema, children }: ISchemaVirtualFieldComponentProps) => {
     const [current, setCurrent] = useState(0)
     const ref = useRef(current)
     const { dataSource, ...stepProps } = schema.getExtendsComponentProps()
@@ -44,21 +43,17 @@ export const FormStep: React.FC<IFormStep> &
       setCurrent(cur)
     }
     useFormEffects(({ setFieldState }) => {
-      FormEffectHooks.onFormInit$().subscribe(() => {
-        items.forEach(({ name }, index) => {
-          setFieldState(name, (state: any) => {
-            state.display = index === current
-          })
+      items.forEach(({ name }, index) => {
+        setFieldState(name, (state: any) => {
+          state.display = index === current
         })
       })
       EffectHooks.onStepCurrentChange$().subscribe(({ value }) => {
         items.forEach(({ name }, index) => {
           if (!name)
             throw new Error('FormStep dataSource must include `name` property')
-          setTimeout(() => {
-            setFieldState(name, (state: any) => {
-              state.display = index === value
-            })
+          setFieldState(name, (state: any) => {
+            state.display = index === value
           })
         })
       })
@@ -92,11 +87,14 @@ export const FormStep: React.FC<IFormStep> &
     }, [])
     ref.current = current
     return (
-      <Steps {...stepProps} current={current}>
-        {items.map((props, key) => {
-          return <Steps.Step {...props} key={key} />
-        })}
-      </Steps>
+      <Fragment>
+        <Steps {...stepProps} current={current}>
+          {items.map((props, key) => {
+            return <Steps.Step {...props} key={key} />
+          })}
+        </Steps>{' '}
+        {children}
+      </Fragment>
     )
   }
 ) as any
