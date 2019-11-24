@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { clone, toArr, isValid, isEqual, FormPath, isFn } from '@uform/shared'
+import { toArr, isValid, isEqual, FormPath, isFn } from '@uform/shared'
 import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态
@@ -74,22 +74,83 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       }
     }
 
-    readRules({ rules, required }: IFieldStateProps) {
-      let newRules = isValid(rules) ? clone(toArr(rules)) : this.state.rules
+    readRequired(rules: any[]) {
+      for (let i = 0; i < rules.length; i++) {
+        if (rules[i].required !== undefined) {
+          return rules[i].required
+        }
+      }
+    }
+
+    syncRulesByRequired(rules: any[], required: boolean) {
       if (isValid(required)) {
-        if (required) {
-          if (!newRules.some(rule => rule && rule.required)) {
-            newRules.push({ required: true })
+        if (rules.length) {
+          if (!rules.some(rule => rule && isValid(rule.required))) {
+            rules.push({ required })
+          } else {
+            rules = rules.reduce((buf: any[], item: any) => {
+              const keys = Object.keys(item || {})
+              if (item.required !== undefined) {
+                if (item.message !== undefined) {
+                  if (keys.length > 2) {
+                    return buf.concat({
+                      ...item,
+                      required
+                    })
+                  }
+                } else {
+                  if (keys.length > 1) {
+                    return buf.concat({
+                      ...item,
+                      required
+                    })
+                  }
+                }
+              }
+              if (isValid(item.required)) {
+                return buf.concat({
+                  ...item,
+                  required
+                })
+              }
+              return buf.concat(item)
+            }, [])
           }
         } else {
-          newRules = newRules.filter(rule => rule && !rule.required)
+          if (required === true) {
+            rules.push({
+              required
+            })
+          }
+        }
+      }
+      return rules
+    }
+
+    readRules({ rules, required }: IFieldStateProps, prevState: IFieldState) {
+      let newRules = isValid(rules) ? toArr(rules) : this.state.rules
+      let newRequired = isValid(required) ? required : false
+      const currentRuleRequired = this.readRequired(newRules)
+      const prevRuleRequired = this.readRequired(prevState.rules)
+      const ruleRequiredChanged = currentRuleRequired !== prevRuleRequired
+      const requiredChanged = !isEqual(required, prevState.required)
+
+      if (ruleRequiredChanged && !requiredChanged) {
+        if (isValid(currentRuleRequired)) {
+          newRequired = currentRuleRequired
+        }
+      } else if (requiredChanged && !ruleRequiredChanged) {
+        newRules = this.syncRulesByRequired(newRules, newRequired)
+      } else if (ruleRequiredChanged && requiredChanged) {
+        if (isValid(currentRuleRequired)) {
+          newRequired = currentRuleRequired
         }
       } else {
-        required = newRules.some(rule => rule && rule.required)
+        newRules = this.syncRulesByRequired(newRules, newRequired)
       }
       return {
         rules: newRules,
-        required
+        required: newRequired
       }
     }
 
@@ -145,11 +206,12 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
-
-      if (draft.validating === true) {
-        draft.loading = true
-      } else if (draft.validating === false) {
-        draft.loading = false
+      if (draft.validating !== prevState.validating) {
+        if (draft.validating === true) {
+          draft.loading = true
+        } else if (draft.validating === false) {
+          draft.loading = false
+        }
       }
       // 以下几种情况清理错误和警告信息
       // 1. 字段设置为不可编辑
@@ -179,7 +241,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
         draft.invalid = false
         draft.valid = true
       }
-      const { rules, required } = this.readRules(draft)
+      const { rules, required } = this.readRules(draft, prevState)
       draft.rules = rules
       draft.required = required
     }

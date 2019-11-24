@@ -56,6 +56,7 @@ ReactDOM.render(
         enum={['1', '2', '3', '4']}
         title="Radio"
         name="radio"
+        default={'2'}
       />
 
       <Field

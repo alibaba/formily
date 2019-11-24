@@ -224,7 +224,7 @@ const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldChange', 'wrapper.relation').subscribe(({ value }) => {
+        $('onFieldValueChange', 'wrapper.relation').subscribe(({ value }) => {
           setFieldState(
             FormPath.match(
               'wrapper.[[{aa:{bb:{cc:destructor1,dd:\\[destructor2,destructor3\\],ee}}}]]'

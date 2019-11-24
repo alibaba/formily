@@ -158,7 +158,7 @@ const App = () => (
       labelCol={6}
       wrapperCol={6}
       effects={($, { setFieldState, getFieldState }) => {
-        $('onFieldChange', '*(password,confirm)').subscribe(fieldState => {
+        $('onFieldValueChange', '*(password,confirm)').subscribe(fieldState => {
           const selfName = fieldState.name
           const selfValue = fieldState.value
           const otherName = selfName == 'password' ? 'confirm' : 'password'

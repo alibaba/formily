@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { CompatNextFormItem } from '../compat/FormItem'
+import { CompatAntdFormItem } from '../compat/FormItem'
 import { createVirtualBox } from '@uform/react-schema-renderer'
 import { toArr } from '@uform/shared'
 import { Row, Col } from 'antd'
@@ -58,9 +58,9 @@ export const FormItemGrid = createVirtualBox<
 
   if (title) {
     return (
-      <CompatNextFormItem label={title} help={description} extra={extra}>
+      <CompatAntdFormItem label={title} help={description} extra={extra}>
         {grids}
-      </CompatNextFormItem>
+      </CompatAntdFormItem>
     )
   }
   return <Fragment>{grids}</Fragment>
@@ -73,9 +73,9 @@ export const FormGridRow = createVirtualBox<RowProps & ItemProps & IItemProps>(
     const grids = <Row {...props}>{props.children}</Row>
     if (title) {
       return (
-        <CompatNextFormItem label={title} help={description} extra={extra}>
+        <CompatAntdFormItem label={title} help={description} extra={extra}>
           {grids}
-        </CompatNextFormItem>
+        </CompatAntdFormItem>
       )
     }
     return grids

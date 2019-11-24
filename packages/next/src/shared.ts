@@ -36,7 +36,7 @@ export const acceptEnum = (component: React.JSXElementConstructor<any>) => {
 
 export const normalizeCol = (
   col: { span: number; offset?: number } | number,
-  defaultValue: { span: number }
+  defaultValue?: { span: number }
 ): { span: number; offset?: number } => {
   if (!col) {
     return defaultValue

@@ -1,11 +1,12 @@
 import React from 'react'
-import SchemaForm, {
-  Field,
+import {
   registerFormField,
   connect,
-  createFormActions
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
 } from '../index'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, wait } from '@testing-library/react'
 
 registerFormField(
   'mutator',
@@ -27,15 +28,15 @@ registerFormField(
 test('update value by ref', async () => {
   const actions = createFormActions()
   const TestComponent = () => (
-    <SchemaForm defaultValue={{ mutator: [{ aaa: '123' }] }} actions={actions}>
+    <SchemaForm initialValues={{ mutator: [{ aaa: '123' }] }} actions={actions}>
       <Field name="mutator" type="mutator" />
     </SchemaForm>
   )
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByText('123')).toBeVisible()
   fireEvent.click(queryByText('Change Value'))
-  await sleep(33)
+  await wait()
   expect(queryByText('321')).toBeVisible()
 })

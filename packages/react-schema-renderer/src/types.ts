@@ -110,10 +110,12 @@ export interface ISchema {
   additionalProperties?: ISchema
   /** extend json schema specs */
   editable?: boolean
+  visible?: boolean
+  display?: boolean
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
-  ['x-component']?: string | React.JSXElementConstructor<any>
+  ['x-component']?: string
   ['x-component-props']?: { [name: string]: any }
   ['x-render']?: <T = ISchemaFieldComponentProps>(
     props: T & {
@@ -126,15 +128,13 @@ export interface ISchema {
   ) => { [key: string]: any }
 }
 
-export interface ISchemaFormProps
-  extends IFormProps<
-    any,
-    any,
-    any,
-    ISchemaFormActions | ISchemaFormAsyncActions
-  > {
+export interface ISchemaFormProps<
+  Value = any,
+  DefaultValue = any,
+  FormEffectPayload = any,
+  FormActions = ISchemaFormActions | ISchemaFormAsyncActions
+> extends IFormProps<Value, DefaultValue, FormEffectPayload, FormActions> {
   schema?: ISchema
-  component?: string | React.JSXElementConstructor<any>
   fields?: ISchemaFormRegistry['fields']
   virtualFields?: ISchemaFormRegistry['virtualFields']
   formComponent?: ISchemaFormRegistry['formComponent']

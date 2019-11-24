@@ -71,7 +71,7 @@ export const FormItemProps = ({ children, ...props }) => (
   </FormItemPropsContext.Provider>
 )
 
-export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
+export const CompatAntdFormItem: React.FC<ICompatItemProps> = props => {
   const { prefixCls, labelAlign, labelCol, wrapperCol } = useFormItem()
   const help = computeHelp(props)
   const label = computeLabel(props)
