@@ -1,6 +1,6 @@
 {
   "name": "@uform/printer",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -26,7 +26,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@uform/react-schema-renderer": "^1.0.0-alpha.0",
+    "@uform/react-schema-renderer": "^1.0.0-alpha.1",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },
