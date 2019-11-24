@@ -7,7 +7,7 @@ import {
   useState,
   useReducer
 } from 'react'
-import { FormHeartSubscriber, LifeCycleTypes } from '@uform/core'
+import { FormHeartSubscriber, LifeCycleTypes, IForm } from '@uform/core'
 import { isStr, FormPath, isArr } from '@uform/shared'
 import { IFormSpyProps, ISpyHook } from '../types'
 import FormContext, { BroadcastContext } from '../context'
@@ -58,7 +58,7 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
       }
     }
   }, [])
-  const formApi = form ? form : broadcast && broadcast.getContext()
+  const formApi: IForm = form ? form : broadcast && broadcast.getContext()
   return {
     form: formApi,
     type,

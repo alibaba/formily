@@ -110,6 +110,8 @@ export interface ISchema {
   additionalProperties?: ISchema
   /** extend json schema specs */
   editable?: boolean
+  visible?: boolean
+  display?: boolean
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules

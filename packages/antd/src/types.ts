@@ -9,13 +9,15 @@ import {
   IMarkupSchemaFieldProps,
   ISchemaFieldComponentProps
 } from '@uform/react-schema-renderer'
+import { PreviewTextConfigProps } from '@uform/react-shared-components'
 import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
 
 export type IAntdSchemaFormProps = ISchemaFormProps &
   FormProps &
-  IFormItemTopProps
+  IFormItemTopProps &
+  PreviewTextConfigProps
 
 export type IAntdSchemaFieldProps = IMarkupSchemaFieldProps
 

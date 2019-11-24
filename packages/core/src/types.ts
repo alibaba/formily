@@ -161,6 +161,8 @@ export interface IFieldStateProps<FieldProps = any> {
   rules?: ValidatePatternRules[]
   required?: boolean
   editable?: boolean
+  visible?: boolean
+  display?: boolean
   useDirty?: boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
@@ -244,6 +246,8 @@ export interface IVirtualFieldStateProps<FieldProps = any> {
   path?: FormPathPattern
   dataPath?: FormPathPattern
   nodePath?: FormPathPattern
+  display?: boolean
+  visible?: boolean
   useDirty?: boolean
   computeState?: (
     draft: IVirtualFieldState,

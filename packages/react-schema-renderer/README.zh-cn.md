@@ -920,8 +920,10 @@ cleanRegistry(): void
 | additionalItems      | 额外数组元素描述                       | `Schema`                                                                                                          |
 | patternProperties    | 动态匹配对象的某个属性的 Schema        | `{[key : string]:Schema}`                                                                                         |
 | additionalProperties | 匹配对象额外属性的 Schema              | `Schema`                                                                                                          |
-| editable             | 字段是否可编辑                         | `boolean`                                                                                                         |
-| x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                                                                         |
+| editable             | 字段是否可编辑                         | `boolean`    |
+| visible             | 字段是否可见(数据+样式)                        | `boolean`       |
+| display             | 字段样式是否可见                         | `boolean`            |
+| x-props              | 字段扩展属性                           | `{ [name: string]: any }`     |
 | x-index              | 字段顺序                               | `number`                                                                                                          |
 | x-rules              | 字段校验规则                           | `ValidatePatternRules`                                                                                            |
 | x-component          | 字段 UI 组件                           | `string`                                                                                                          |
@@ -1183,9 +1185,33 @@ const schema4 = new Schema({
 schema4.getExtendsEditable() // false
 ```
 
+
+
+##### `getExtendsVisible`
+
+> 获取数据样式可见属性
+
+签名
+
+```typescript
+getExtendsVisible(): boolean
+```
+
+##### `getExtendsDisplay`
+
+> 获取样式可见属性
+
+签名
+
+```
+getExtendsDisplay() : boolean
+```
+
+
+
 ##### `getExtendsTriggerType`
 
-> 获取 triggerType，与 getExtendsTriggerType 能力一致，都是提供协议差异抹平的能力
+> 获取 triggerType，与 getExtendsEditable 能力一致，都是提供协议差异抹平的能力
 
 签名
 
@@ -1710,6 +1736,10 @@ interface ISchema {
   additionalProperties?: ISchema
   /** extend json schema specs */
   editable?: boolean
+  //数据与样式是否可见
+  visible?: boolean
+  //样式是否可见
+  display?: boolean
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules

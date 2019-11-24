@@ -1,18 +1,16 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each, isFn } from '@uform/shared'
-import {
-  IFieldState,
-  IForm,
-  IField,
-  IMutators
-} from '@uform/core'
-import { raf, getValueFromEvent } from '../shared'
+import { IFieldState, IForm, IField, IMutators } from '@uform/core'
+import { getValueFromEvent } from '../shared'
 import { useDirty } from './useDirty'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import FormContext from '../context'
 
-const extendMutators = (mutators: IMutators, props: IFieldStateUIProps): IMutators => {
+const extendMutators = (
+  mutators: IMutators,
+  props: IFieldStateUIProps
+): IMutators => {
   return {
     ...mutators,
     change: (...args) => {
@@ -23,18 +21,23 @@ const extendMutators = (mutators: IMutators, props: IFieldStateUIProps): IMutato
     },
     blur: () => {
       mutators.blur()
-      if (props.triggerType === 'onBlur') {        
+      if (props.triggerType === 'onBlur') {
         mutators.validate()
       }
     }
   }
 }
 
-export const useField = (
-  options: IFieldStateUIProps
-): IFieldHook => {
+export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
-  const dirty = useDirty(options, ['props', 'rules', 'required', 'editable'])
+  const dirty = useDirty(options, [
+    'props',
+    'rules',
+    'required',
+    'editable',
+    'visible',
+    'display'
+  ])
   const ref = useRef<{
     field: IField
     unmounted: boolean
@@ -52,6 +55,7 @@ export const useField = (
     let initialized = false
     ref.current.field = form.registerField(options)
     ref.current.subscriberId = ref.current.field.subscribe(fieldState => {
+      if (ref.current.unmounted) return
       /**
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
        */
@@ -61,15 +65,12 @@ export const useField = (
             mutators.validate()
           }
         }
-        raf(() => {
-          if (ref.current.unmounted) return
-          forceUpdate()
-        })
+        forceUpdate()
       }
     })
     initialized = true
     return extendMutators(form.createMutators(ref.current.field), options)
-  }, [])
+  }, [true])
 
   useEffect(() => {
     if (dirty.num > 0) {

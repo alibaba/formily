@@ -60,6 +60,8 @@ export class Schema implements ISchema {
   public additionalProperties?: Schema
   /** extend json schema specs */
   public editable?: boolean
+  public visible?: boolean
+  public display?: boolean
   public ['x-props']?: { [name: string]: any }
   public ['x-index']?: number
   public ['x-rules']?: ValidatePatternRules
@@ -146,7 +148,7 @@ export class Schema implements ISchema {
     return props
   }
   getExtendsRules() {
-    let rules: ValidateArrayRules= []
+    let rules: ValidateArrayRules = []
     if (this.format) {
       rules.push({ format: this.format })
     }
@@ -238,10 +240,37 @@ export class Schema implements ISchema {
       return this.editable
     } else if (isValid(this['x-props']) && isValid(this['x-props'].editable)) {
       return this['x-props'].editable
-    } else if(isValid(this['x-component-props']) && isValid(this['x-component-props'].editable)){
+    } else if (
+      isValid(this['x-component-props']) &&
+      isValid(this['x-component-props'].editable)
+    ) {
       return this['x-component-props'].editable
-    }else if (isValid(this.readOnly)) {
+    } else if (isValid(this.readOnly)) {
       return !this.readOnly
+    }
+  }
+  getExtendsVisible(): boolean {
+    if (isValid(this.visible)) {
+      return this.visible
+    } else if (isValid(this['x-props']) && isValid(this['x-props'].visible)) {
+      return this['x-props'].visible
+    } else if (
+      isValid(this['x-component-props']) &&
+      isValid(this['x-component-props'].visible)
+    ) {
+      return this['x-component-props'].visible
+    }
+  }
+  getExtendsDisplay(): boolean {
+    if (isValid(this.display)) {
+      return this.display
+    } else if (isValid(this['x-props']) && isValid(this['x-props'].display)) {
+      return this['x-props'].display
+    } else if (
+      isValid(this['x-component-props']) &&
+      isValid(this['x-component-props'].display)
+    ) {
+      return this['x-component-props'].display
     }
   }
   getExtendsTriggerType() {
@@ -374,7 +403,9 @@ export class Schema implements ISchema {
     return Schema.getOrderProperties(this, 'patternProperties')
   }
 
-  unrelease_mapPatternProperties(callback?: (schema: Schema, key: string) => any) {
+  unrelease_mapPatternProperties(
+    callback?: (schema: Schema, key: string) => any
+  ) {
     return this.unrelease_getOrderPatternProperties().map(({ schema, key }) => {
       return callback(schema, key)
     })
