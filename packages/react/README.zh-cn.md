@@ -35,6 +35,7 @@ npm install --save @uform/react
   - [`异步联动`](#异步联动)
   - [`联动校验`](#联动校验)
   - [`复杂联动`](#复杂联动)
+  - [`复用Effects`](#复用Effects)
   - [`combo字段`](#combo字段)
   - [`跨文件消费表单数据`](#跨文件消费表单数据)
   - [`简单解构`](#简单解构)
@@ -1027,6 +1028,96 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### 复用Effects
+
+自定义可复用的effects
+
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormEffectHooks } from '@uform/react'
+
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+const CheckedField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
+            mutators.change(!state.value)
+          }} checked={!!state.value} /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const { onFormMount$, onFieldValueChange$  } = FormEffectHooks
+const getEffects = ()=>{
+   const actions = createFormActions()
+   onFormMount$().subscribe(() => {
+      actions.setFieldState('a~', state => state.visible = false)
+    })
+
+    onFieldValueChange$('trigger').subscribe((triggerState) => {
+      actions.setFieldState('a~', state => {
+        state.visible = triggerState.value
+      })
+    })
+
+    onFieldValueChange$('a').subscribe((fieldState) => {
+      actions.setFieldState('a-copy', state => {
+        state.value = fieldState.value
+      })
+    })
+}
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <Form
+      actions={actions}
+      effects={() => {
+        getEffects()
+      }}
+    >
+      <CheckedField name="trigger" label="show/hide" /> 
+      <div>
+        <InputField label="a" name="a" />
+      </div>
+      <div>
+        <InputField label="a-copy" name="a-copy" />
+      </div>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
 #### combo 字段
 
 示例：combo username 和 age 字段, 更多用法，请点击[FormSpy](#FormSpy)查看
@@ -1644,7 +1735,7 @@ const App = () => {
       <Field name="user" initialValue={{}}>
         {({ state, mutator }) => {
           return (
-            <VirtualField name="layout">
+            <VirtualField name="user.layout">
               {({ state: layoutState }) => {
                 return (
                   <Layout
