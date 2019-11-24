@@ -49,16 +49,13 @@ describe('useField hook',()=>{
       return <FormContext.Provider value={form}>{children}</FormContext.Provider>
     }
 
-    const { result, waitForNextUpdate } = renderHook(() => useField({ name: 'username' }), { wrapper: formWrapper })
+    const { result } = renderHook(() => useField({ name: 'username' }), { wrapper: formWrapper })
     expect(result.current.state.value).toEqual(undefined)
     act(() => {
       globalForm.setFormState(state => state.values.username = 'abcd')
     })
     
-    // forceUpdate will trigger in raf, use waitForNextUpdate
-    expect(result.current.state.value).toEqual(undefined)
-    await waitForNextUpdate()
-      expect(result.current.state.value).toEqual('abcd')
+    expect(result.current.state.value).toEqual('abcd')
   })
 
   test('mounted change', async ()=>{    
@@ -95,7 +92,7 @@ describe('useField hook',()=>{
       editable: true,
       rules: [],
     }
-    const { result, waitForNextUpdate, rerender } = renderHook(() => useField(initialProps), { wrapper: formWrapper })
+    const { result, rerender } = renderHook(() => useField(initialProps), { wrapper: formWrapper })
     expect(result.current.props).toEqual({ disabled: true })
     expect(result.current.state.required).toEqual(false)
     expect(result.current.state.editable).toEqual(true)    
@@ -112,7 +109,6 @@ describe('useField hook',()=>{
     expect(result.current.state.rules).toEqual([])  
 
     rerender()
-    await waitForNextUpdate()
 
     expect(result.current.props).toEqual(initialProps.props)
     expect(result.current.state.required).toEqual(initialProps.required)
@@ -152,11 +148,15 @@ describe('useField hook',()=>{
     }
 
     const fieldProps = { name: 'username', required: true }    
-    const { result: result1, waitForNextUpdate: waitForNextUpdate1 } = renderHook(() => useField(fieldProps), { wrapper: formWrapper })
+    const { result: result1, rerender } = renderHook(() => useField(fieldProps), { wrapper: formWrapper })
     expect(result1.current.state.errors).toEqual('')
     expect(result1.current.state.value).toEqual(undefined)
-    result1.current.mutators.change('')
-    await waitForNextUpdate1()
+    rerender()
+    act(() => {
+      result1.current.mutators.change('')
+    })
+    
+    // await waitForNextUpdate1()
     expect(result1.current.state.value).toEqual('')
     expect(result1.current.state.errors).toEqual('')
 
@@ -164,7 +164,10 @@ describe('useField hook',()=>{
     expect(result2.current.state.errors).toEqual('')
     expect(result2.current.state.value).toEqual(undefined)
 
-    result2.current.mutators.change('')
+    act(() => {
+      result2.current.mutators.change('')
+    })
+    
     await waitForNextUpdate2()
     expect(result2.current.state.value).toEqual('')
     expect(result2.current.state.errors).toEqual('This field is required')
@@ -179,8 +182,11 @@ describe('useField hook',()=>{
     const fieldProps = { name: 'username', required: true }    
     const { result: result1, rerender } = renderHook(() => useField(fieldProps), { wrapper: formWrapper })
     expect(result1.current.state.errors).toEqual('')
-    result1.current.mutators.blur()    
     rerender()
+    act(() => {
+      result1.current.mutators.blur()
+    })
+    
     expect(result1.current.state.errors).toEqual('')
 
     const { result: result2, waitForNextUpdate: waitForNextUpdate2 } = renderHook(() => useField({ ...fieldProps, triggerType: 'onBlur' }), { wrapper: formWrapper })
@@ -188,7 +194,7 @@ describe('useField hook',()=>{
 
     act(() => {
       result2.current.mutators.blur()
-    })    
+    })
     await waitForNextUpdate2()
     expect(result2.current.state.errors).toEqual('This field is required')
   })
