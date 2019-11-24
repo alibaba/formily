@@ -1,8 +1,7 @@
 import React from 'react'
 import {
   ValidatePatternRules,
-  ValidateDescription,
-  CustomValidator,
+  ValidateArrayRules,
   getMessage
 } from '@uform/validator'
 import {
@@ -61,10 +60,12 @@ export class Schema implements ISchema {
   public additionalProperties?: Schema
   /** extend json schema specs */
   public editable?: boolean
+  public visible?: boolean
+  public display?: boolean
   public ['x-props']?: { [name: string]: any }
   public ['x-index']?: number
   public ['x-rules']?: ValidatePatternRules
-  public ['x-component']?: string | React.JSXElementConstructor<any>
+  public ['x-component']?: string
   public ['x-component-props']?: { [name: string]: any }
   public ['x-render']?: <T = ISchemaFieldComponentProps>(
     props: T & {
@@ -95,18 +96,27 @@ export class Schema implements ISchema {
       return this
     }
     let res: Schema = this
-    let suc = 0
-    path = FormPath.parse(path)
-    path.forEach(key => {
+    let index = 0
+    let newPath = FormPath.parse(path)
+    newPath.forEach(key => {
       if (res && !isEmpty(res.properties)) {
-        res = res.properties[key]
-        suc++
+        const lastKey = newPath.segments.slice(index).join('.')
+        res = res.properties[key] || res.properties[lastKey]
       } else if (res && !isEmpty(res.items) && numberRE.test(key as string)) {
         res = isArr(res.items) ? res.items[key] : res.items
-        suc++
       }
+      index++
     })
-    return suc === path.length ? res : undefined
+    return res
+  }
+
+  merge(spec: any) {
+    if (spec instanceof Schema) {
+      Object.assign(this, spec.getSelfProps())
+    } else {
+      Object.assign(this, spec)
+    }
+    return this
   }
 
   getEmptyValue() {
@@ -138,7 +148,7 @@ export class Schema implements ISchema {
     return props
   }
   getExtendsRules() {
-    let rules: Array<string | ValidateDescription | CustomValidator> = []
+    let rules: ValidateArrayRules = []
     if (this.format) {
       rules.push({ format: this.format })
     }
@@ -225,13 +235,42 @@ export class Schema implements ISchema {
       return this.required
     }
   }
-  getExtendsEditable() {
+  getExtendsEditable(): boolean {
     if (isValid(this.editable)) {
       return this.editable
-    } else if (isValid(this['x-props'] && this['x-props'].editable)) {
+    } else if (isValid(this['x-props']) && isValid(this['x-props'].editable)) {
       return this['x-props'].editable
+    } else if (
+      isValid(this['x-component-props']) &&
+      isValid(this['x-component-props'].editable)
+    ) {
+      return this['x-component-props'].editable
     } else if (isValid(this.readOnly)) {
       return !this.readOnly
+    }
+  }
+  getExtendsVisible(): boolean {
+    if (isValid(this.visible)) {
+      return this.visible
+    } else if (isValid(this['x-props']) && isValid(this['x-props'].visible)) {
+      return this['x-props'].visible
+    } else if (
+      isValid(this['x-component-props']) &&
+      isValid(this['x-component-props'].visible)
+    ) {
+      return this['x-component-props'].visible
+    }
+  }
+  getExtendsDisplay(): boolean {
+    if (isValid(this.display)) {
+      return this.display
+    } else if (isValid(this['x-props']) && isValid(this['x-props'].display)) {
+      return this['x-props'].display
+    } else if (
+      isValid(this['x-component-props']) &&
+      isValid(this['x-component-props'].display)
+    ) {
+      return this['x-component-props'].display
     }
   }
   getExtendsTriggerType() {
@@ -360,12 +399,14 @@ export class Schema implements ISchema {
     return Schema.getOrderProperties(this)
   }
 
-  getOrderPatternProperties() {
+  unrelease_getOrderPatternProperties() {
     return Schema.getOrderProperties(this, 'patternProperties')
   }
 
-  mapPatternProperties(callback?: (schema: Schema, key: string) => any) {
-    return this.getOrderPatternProperties().map(({ schema, key }) => {
+  unrelease_mapPatternProperties(
+    callback?: (schema: Schema, key: string) => any
+  ) {
+    return this.unrelease_getOrderPatternProperties().map(({ schema, key }) => {
       return callback(schema, key)
     })
   }

@@ -6,8 +6,7 @@ import {
   FormLifeCycle,
   IForm,
   IModel,
-  isStateModel,
-  IFormState
+  isStateModel
 } from '@uform/core'
 import { useDirty } from './useDirty'
 import { useEva } from 'react-eva'
@@ -35,7 +34,6 @@ const useInternalForm = (
           state.values = options.values
         }
         if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
-          state.values = options.initialValues
           state.initialValues = options.initialValues
         }
         if (dirty.dirtys.editable && isValid(options.editable)) {
@@ -77,51 +75,40 @@ export const useForm = <
     actions: actionsRef.current,
     effects: createFormEffects(props.effects, actionsRef.current)
   })
-  const form = useInternalForm({
-    form: props.form,
-    values: props.value,
-    initialValues: props.initialValues,
-    useDirty: props.useDirty,
-    editable: props.editable,
-    validateFirst: props.validateFirst,
-    lifecycles: [
-      new FormLifeCycle(
-        ({ type, payload }: { type: string; payload: IModel }) => {
-          dispatch.lazy(type, () => {
-            return isStateModel(payload) ? payload.getState() : payload
-          })
-          if (type === LifeCycleTypes.ON_FORM_INPUT_CHANGE) {
-            if (props.onChange) {
-              props.onChange(
-                isStateModel(payload)
-                  ? payload.getState((state: IFormState) => state.values)
-                  : {}
-              )
-            }
-          }
-          if (broadcast) {
-            broadcast.notify({ type, payload })
-          }
+  const lifecycles = [
+    new FormLifeCycle(
+      ({ type, payload }) => {
+        dispatch.lazy(type, () => {
+          return isStateModel(payload) ? payload.getState() : payload
+        })
+        if (broadcast) {
+          broadcast.notify({ type, payload })
         }
-      ),
-      new FormLifeCycle(
-        LifeCycleTypes.ON_FORM_WILL_INIT,
-        (payload: IModel, form: IForm) => {
-          const actions = {
-            ...form,
-            dispatch: form.notify
-          }
-          if (broadcast) {
-            broadcast.setContext(actions)
-          }
-          implementActions(actions)
+      }
+    ),
+    new FormLifeCycle(
+      LifeCycleTypes.ON_FORM_WILL_INIT,
+      (payload: IModel, form: IForm) => {
+        const actions = {
+          ...form,
+          dispatch: form.notify
         }
-      )
-    ],
-    onReset: props.onReset,
-    onSubmit: props.onSubmit,
-    onValidateFailed: props.onValidateFailed
+        implementActions(actions)
+        if (broadcast) {
+          broadcast.setContext(actions)
+        }
+      }
+    )
+  ]
+  const optionsRef = useRef<any>({
+    ...props,
+    initialValues: props.initialValues || props.defaultValue
   })
+
+  Object.assign(optionsRef.current, props)
+  optionsRef.current.values = props.value
+  optionsRef.current.lifecycles = lifecycles
+  const form = useInternalForm(optionsRef.current)
   return form
 }
 

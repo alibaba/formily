@@ -1,8 +1,15 @@
-import React from 'react'
-import SchemaForm, { Field, registerFormField, connect } from '../index'
-import { render, fireEvent } from '@testing-library/react'
+import React, { Fragment } from 'react'
+import {
+  registerFormField,
+  connect,
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field
+} from '../index'
+import { render, fireEvent, wait } from '@testing-library/react'
 
-registerFormField('string', connect()(props => <div>{props.value}</div>))
+beforeEach(() => {
+  registerFormField('string', connect()(props => <div>{props.value}</div>))
+})
 
 test('display is false will remove react node', async () => {
   const TestComponent = () => {
@@ -22,8 +29,7 @@ test('display is false will remove react node', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
+  await wait();
   expect(queryByText('123321')).toBeNull()
 })
 
@@ -47,8 +53,7 @@ test('display is false will remove react children node', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
+  await wait()
   expect(queryByText('123321')).toBeNull()
 })
 
@@ -69,21 +74,23 @@ test('display is false will not remove value(include default value)', async () =
           })
         }}
       >
-        <Field type="object" name="obj">
-          <Field type="string" name="aa" />
-        </Field>
-        <Field type="string" name="bb" default="123" />
-        <button type="submit">Submit</button>
+        <Fragment>
+          <Field type="object" name="obj">
+            <Field type="string" name="aa" />
+          </Field>
+          <Field type="string" name="bb" default="123" />
+          <button type="submit">Submit</button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByText } = render(<TestComponent />)
 
-  await sleep(33)
+  await wait()
   expect(queryByText('123321')).toBeNull()
   fireEvent.click(queryByText('Submit'))
-  await sleep(33)
+  await wait()
   expect(onSubmitHandler).toHaveBeenCalledWith({
     obj: { aa: '123321' },
     bb: '123'
@@ -98,7 +105,7 @@ test('display is false will not validate(include children)', async () => {
       <SchemaForm
         initialValues={{ obj: { aa: '123321' } }}
         onSubmit={onSubmitHandler}
-        onValidateFailed={onValidateFailedHandler}
+        onValidateFailed={console.log}
         effects={($, { setFieldState }) => {
           $('onFieldChange', 'bb').subscribe(({ value }) => {
             if (value === '123') {
@@ -109,24 +116,26 @@ test('display is false will not validate(include children)', async () => {
           })
         }}
       >
-        <Field type="object" name="obj">
-          <Field type="string" name="aa" required />
-        </Field>
-        <Field type="string" name="bb" default="123" />
-        <button type="submit">Submit</button>
+        <Fragment>
+          <Field type="object" name="obj">
+            <Field type="string" name="aa" required />
+          </Field>
+          <Field type="string" name="bb" default="123" />
+          <button type="submit">Submit</button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
+  await wait()
   expect(queryByText('123321')).toBeNull()
   fireEvent.click(queryByText('Submit'))
-  await sleep(33)
+  await wait()
   expect(onSubmitHandler).toHaveBeenCalledWith({
     obj: { aa: '123321' },
     bb: '123'
   })
   expect(onValidateFailedHandler).toHaveBeenCalledTimes(0)
 })
+

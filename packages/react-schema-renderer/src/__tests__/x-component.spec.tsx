@@ -1,12 +1,13 @@
-import React from 'react'
-import SchemaForm, {
-  Field,
+import React, { Fragment } from 'react'
+import {
   registerFormField,
   connect,
-  registerFieldMiddleware,
-  createFormActions
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+  registerFieldMiddleware
 } from '../index'
-import { render } from '@testing-library/react'
+import { render, wait } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -36,21 +37,23 @@ test('update x-component by setFieldState', async () => {
   const actions = createFormActions()
   const TestComponent = () => (
     <SchemaForm actions={actions}>
-      <Field name="aaa" type="string" />
-      <button type="submit" data-testid="btn">
-        Submit
-      </button>
+      <Fragment>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
     </SchemaForm>
   )
 
   const { queryByText } = render(<TestComponent />)
 
-  await sleep(33)
+  await wait();
   expect(queryByText('text component')).toBeNull()
-  await sleep(33)
+  await wait();
   actions.setFieldState('aaa', state => {
     state.props['x-component'] = 'text'
   })
-  await sleep(33)
+  await wait();
   expect(queryByText('text component')).toBeVisible()
 })

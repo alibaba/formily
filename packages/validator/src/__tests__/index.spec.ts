@@ -51,7 +51,7 @@ test('required', async () => {
         required: true,
         message: '该字段不能为空'
       },
-      errors: ['This field is required']
+      errors: ['该字段不能为空']
     },
     {
       value: [],
@@ -59,7 +59,7 @@ test('required', async () => {
         required: true,
         message: '该字段不能为空'
       },
-      errors: ['This field is required']
+      errors: ['该字段不能为空']
     },
     {
       value: false,

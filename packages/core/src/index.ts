@@ -9,13 +9,13 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  deprecate,
   isObj
 } from '@uform/shared'
 import {
   FormValidator,
   setValidationLanguage,
-  setValidationLocale
+  setValidationLocale,
+  ValidateFieldOptions
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
@@ -38,27 +38,32 @@ import {
   isField,
   FormHeartSubscriber,
   LifeCycleTypes,
-  isVirtualField
+  isVirtualField,
+  isFormState,
+  isFieldState,
+  isVirtualFieldState
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'
 
-export const createForm = (options: IFormCreatorOptions = {}): IForm => {
+export function createForm<FieldProps, VirtualFieldProps>(
+  options: IFormCreatorOptions = {}
+): IForm {
   function onGraphChange({ type, payload }) {
-    heart.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
+    heart.publish(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
     if (type === 'GRAPH_NODE_WILL_UNMOUNT') {
       validator.unregister(payload.path.toString())
     }
   }
 
   function onFormChange(published: IFormState) {
-    heart.notify(LifeCycleTypes.ON_FORM_CHANGE, state)
-    const valuesChanged = state.hasChanged('values')
-    const initialValuesChanged = state.hasChanged('initialValues')
-    const unmountedChanged = state.hasChanged('unmounted')
-    const mountedChanged = state.hasChanged('mounted')
-    const initializedChanged = state.hasChanged('initialized')
-    const editableChanged = state.hasChanged('editable')
+    heart.publish(LifeCycleTypes.ON_FORM_CHANGE, state)
+    const valuesChanged = state.isDirty('values')
+    const initialValuesChanged = state.isDirty('initialValues')
+    const unmountedChanged = state.isDirty('unmounted')
+    const mountedChanged = state.isDirty('mounted')
+    const initializedChanged = state.isDirty('initialized')
+    const editableChanged = state.isDirty('editable')
     if (valuesChanged || initialValuesChanged) {
       /**
        * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
@@ -69,8 +74,8 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
             field.setState(state => {
               if (state.visible) {
                 if (valuesChanged) {
-                  const path = FormPath.parse(state.name)
-                  const parent = graph.getLatestParent(path)
+                  const dataPath = FormPath.parse(state.name)
+                  const parent = graph.getLatestParent(dataPath)
                   const parentValue = getFormValuesIn(parent.path)
                   const value = getFormValuesIn(state.name)
                   /**
@@ -79,20 +84,20 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
                   let removed = false
                   if (
                     isArr(parentValue) &&
-                    !path.existIn(parentValue, parent.path)
+                    !dataPath.existIn(parentValue, parent.path)
                   ) {
                     if (
                       !parent.path
-                        .getNearestChildPathBy(path)
+                        .getNearestChildPathBy(dataPath)
                         .existIn(parentValue, parent.path)
                     ) {
-                      graph.remove(state.name)
+                      graph.remove(state.path)
                       removed = true
                     }
                   } else {
                     each(env.removeNodes, (_, name) => {
-                      if (path.includes(name)) {
-                        graph.remove(path)
+                      if (dataPath.includes(name)) {
+                        graph.remove(state.path)
                         delete env.removeNodes[name]
                         removed = true
                       }
@@ -118,10 +123,13 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         })
       })
       if (valuesChanged) {
-        heart.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
+        if (isFn(options.onChange)) {
+          options.onChange(published.values)
+        }
+        heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
       if (initialValuesChanged) {
-        heart.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
+        heart.publish(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
       }
     }
 
@@ -136,93 +144,82 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
 
     if (unmountedChanged && published.unmounted) {
-      heart.notify(LifeCycleTypes.ON_FORM_UNMOUNT, state)
+      heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, state)
     }
     if (mountedChanged && published.mounted) {
-      heart.notify(LifeCycleTypes.ON_FORM_MOUNT, state)
+      heart.publish(LifeCycleTypes.ON_FORM_MOUNT, state)
     }
     if (initializedChanged) {
-      heart.notify(LifeCycleTypes.ON_FORM_INIT, state)
+      heart.publish(LifeCycleTypes.ON_FORM_INIT, state)
     }
   }
 
   function onFieldChange({ field, path }) {
-    return (published: IFieldState) => {
-      const valueChanged = field.hasChanged('value')
-      const initialValueChanged = field.hasChanged('initialValue')
-      const visibleChanged = field.hasChanged('visible')
-      const displayChanged = field.hasChanged('display')
-      const unmountedChanged = field.hasChanged('unmounted')
-      const mountedChanged = field.hasChanged('mounted')
-      const initializedChanged = field.hasChanged('initialized')
-      const warningsChanged = field.hasChanged('warnings')
-      const errorsChanges = field.hasChanged('errors')
+    return (published: IFieldState<FieldProps>) => {
+      const valueChanged = field.isDirty('value')
+      const initialValueChanged = field.isDirty('initialValue')
+      const visibleChanged = field.isDirty('visible')
+      const displayChanged = field.isDirty('display')
+      const unmountedChanged = field.isDirty('unmounted')
+      const mountedChanged = field.isDirty('mounted')
+      const initializedChanged = field.isDirty('initialized')
+      const warningsChanged = field.isDirty('warnings')
+      const errorsChanges = field.isDirty('errors')
       if (initializedChanged) {
-        heart.notify(LifeCycleTypes.ON_FIELD_INIT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
-          field.setState((state: IFieldState) => {
+          field.setState((state: IFieldState<FieldProps>) => {
             if (isEmptyValue) state.value = getFormValuesIn(state.name)
             if (isEmptyInitialValue)
               state.initialValue = getFormInitialValuesIn(state.name)
           }, true)
         }
       }
-      if (visibleChanged) {
-        if (!published.visible) {
-          deleteFormValuesIn(path, true)
-        } else {
-          setFormValuesIn(path, published.value)
+      if (displayChanged || visibleChanged) {
+        if (visibleChanged) {
+          if (!published.visible) {
+            deleteFormValuesIn(path, true)
+          } else {
+            setFormValuesIn(path, published.value)
+          }
         }
         graph.eachChildren(
           path,
           childState => {
-            childState.setState((state: IFieldState) => {
-              state.visible = published.visible
+            childState.setState((state: IFieldState<FieldProps>) => {
+              if (visibleChanged) {
+                state.visible = published.visible
+              }
+              if (displayChanged) {
+                state.display = published.display
+              }
             })
           },
           false
         )
       }
-      if (displayChanged) {
-        graph.eachChildren(
-          path,
-          childState => {
-            childState.setState((state: IFieldState) => {
-              state.display = published.display
-            })
-          },
-          false
-        )
-      }
-      if (unmountedChanged) {
+      if (
+        unmountedChanged &&
+        (published.display !== false || published.visible === false)
+      ) {
         if (published.unmounted) {
           deleteFormValuesIn(path, true)
         } else {
           setFormValuesIn(path, published.value)
         }
-        graph.eachChildren(
-          path,
-          childState => {
-            childState.setState((state: IFieldState) => {
-              state.unmounted = published.unmounted
-            })
-          },
-          false
-        )
       }
       if (mountedChanged && published.mounted) {
-        heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-
       if (valueChanged) {
         setFormValuesIn(path, published.value)
-        heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (initialValueChanged) {
         setFormInitialValuesIn(path, published.initialValue)
-        heart.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
 
       if (errorsChanges) {
@@ -232,86 +229,103 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       if (warningsChanged) {
         syncFormMessages('warnings', published.name, published.warnings)
       }
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
-      if (!(!env.shadowStage || env.leadingStage)) {
-        return false
-      }
+      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      if (env.leadingStage) return
+      if (env.shadowStage) return false
     }
   }
 
   function onVirtualFieldChange({ field, path }) {
-    return (published: IVirtualFieldState) => {
-      const visibleChanged = field.hasChanged('visible')
-      const displayChanged = field.hasChanged('display')
-      const unmountedChanged = field.hasChanged('unmounted')
-      const mountedChanged = field.hasChanged('mounted')
-      const initializedChnaged = field.hasChanged('initialized')
+    return (published: IVirtualFieldState<VirtualFieldProps>) => {
+      const visibleChanged = field.isDirty('visible')
+      const displayChanged = field.isDirty('display')
+      const unmountedChanged = field.isDirty('unmounted')
+      const mountedChanged = field.isDirty('mounted')
+      const initializedChnaged = field.isDirty('initialized')
 
       if (initializedChnaged) {
-        heart.notify(LifeCycleTypes.ON_FIELD_INIT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
 
       if (visibleChanged) {
         graph.eachChildren(path, childState => {
-          childState.setState((state: IVirtualFieldState) => {
-            state.visible = published.visible
-          })
+          childState.setState(
+            (state: IVirtualFieldState<VirtualFieldProps>) => {
+              state.visible = published.visible
+            }
+          )
         })
       }
 
       if (displayChanged) {
         graph.eachChildren(path, childState => {
-          childState.setState((state: IVirtualFieldState) => {
-            state.display = published.display
-          })
+          childState.setState(
+            (state: IVirtualFieldState<VirtualFieldProps>) => {
+              state.display = published.display
+            }
+          )
         })
       }
 
       if (unmountedChanged) {
         graph.eachChildren(path, childState => {
-          childState.setState((state: IVirtualFieldState) => {
-            state.unmounted = published.unmounted
-          })
+          childState.setState(
+            (state: IVirtualFieldState<VirtualFieldProps>) => {
+              state.unmounted = published.unmounted
+            }
+          )
         })
       }
       if (mountedChanged && published.mounted) {
-        heart.notify(LifeCycleTypes.ON_FIELD_MOUNT, field)
+        heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
   }
 
   function registerVirtualField({
     name,
     path,
-    props
+    props,
+    display,
+    visible,
+    computeState,
+    useDirty
   }: IVirtualFieldStateProps): IVirtualField {
     let nodePath = FormPath.parse(path || name)
     let dataPath = transformDataPath(nodePath)
     let field: IVirtualField
-    const createField = () => {
-      let field: IVirtualField
-      field = new VirtualFieldState({
-        nodePath,
-        dataPath,
-        useDirty: options.useDirty
-      })
+    const createField = (field?: IVirtualField) => {
+      field =
+        field ||
+        new VirtualFieldState({
+          nodePath,
+          dataPath,
+          computeState,
+          useDirty: isValid(useDirty) ? useDirty : options.useDirty
+        })
       field.subscription = {
         notify: onVirtualFieldChange({ field, path: nodePath })
       }
       field.batch(() => {
-        batchRunTaskQueue(field, nodePath)
-        field.setState((state: IVirtualFieldState) => {
+        field.setState((state: IVirtualFieldState<VirtualFieldProps>) => {
           state.initialized = true
           state.props = props
+          if (isValid(visible)) {
+            state.visible = visible
+          }
+          if (isValid(display)) {
+            state.display = display
+          }
         })
+        batchRunTaskQueue(field, nodePath)
       })
       return field
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
+      field = createField(field)
       if (isField(field)) {
-        field = createField()
         graph.replace(nodePath, field)
       }
     } else {
@@ -329,25 +343,30 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     required,
     rules,
     editable,
+    visible,
+    display,
+    computeState,
+    useDirty,
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
     let nodePath = FormPath.parse(path || name)
     let dataPath = transformDataPath(nodePath)
-    const createField = () => {
-      let field: IField
-      field = new FieldState({
-        nodePath,
-        dataPath,
-        useDirty: options.useDirty
-      })
+    const createField = (field?: IField) => {
+      field =
+        field ||
+        new FieldState({
+          nodePath,
+          dataPath,
+          computeState,
+          useDirty: isValid(useDirty) ? useDirty : options.useDirty
+        })
       field.subscription = {
         notify: onFieldChange({ field, path: nodePath })
       }
-      heart.notify(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
       field.batch(() => {
-        batchRunTaskQueue(field, nodePath)
-        field.setState((state: IFieldState) => {
+        field.setState((state: IFieldState<FieldProps>) => {
           const formValue = getFormValuesIn(dataPath)
           const formInitialValue = getFormInitialValuesIn(dataPath)
           state.initialized = true
@@ -361,18 +380,36 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
           state.initialValue = isValid(initialValue)
             ? initialValue
             : formInitialValue
-
+          if (isValid(visible)) {
+            state.visible = visible
+          }
+          if (isValid(display)) {
+            state.display = display
+          }
           state.props = props
           state.required = required
           state.rules = rules as any
-          state.editable = editable
+          state.selfEditable = editable
           state.formEditable = options.editable
         })
+        batchRunTaskQueue(field, nodePath)
       })
       validator.register(nodePath, validate => {
-        const { value, rules, editable, visible, unmounted } = field.getState()
+        const {
+          value,
+          rules,
+          editable,
+          visible,
+          unmounted,
+          display
+        } = field.getState()
         // 不需要校验的情况有: 非编辑态(editable)，已销毁(unmounted), 逻辑上不可见(visible)
-        if (editable === false || visible === false || unmounted === true)
+        if (
+          editable === false ||
+          visible === false ||
+          unmounted === true ||
+          display === false
+        )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)
         ;(field as any).validateTimer = setTimeout(() => {
@@ -382,7 +419,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         }, 60)
         validate(value, rules).then(({ errors, warnings }) => {
           clearTimeout((field as any).validateTimer)
-          field.setState((state: IFieldState) => {
+          field.setState((state: IFieldState<FieldProps>) => {
             state.validating = false
             state.ruleErrors = errors
             state.ruleWarnings = warnings
@@ -393,8 +430,8 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
-      if (isVirtualField(nodePath)) {
-        field = createField()
+      field = createField(field)
+      if (isVirtualField(field)) {
         graph.replace(nodePath, field)
       }
     } else {
@@ -504,26 +541,34 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
 
     function setValue(...values: any[]) {
-      field.setState((state: IFieldState) => {
+      field.setState((state: IFieldState<FieldProps>) => {
         state.value = values[0]
         state.values = values
       })
-      heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
-      heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
+      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
     }
 
     function removeValue(key: string | number) {
-      const name = field.unsafe_getSourceState(state => state.name)
-      env.removeNodes[name] = true
-      field.setState((state: IFieldState) => {
-        state.value = undefined
-        state.values = []
-      }, true)
-      deleteFormValuesIn(key ? FormPath.parse(name).concat(key) : name)
-      heart.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-      heart.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
-      heart.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
-      heart.notify(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      const nodePath = field.unsafe_getSourceState(state => state.path)
+      const dataPath = field.unsafe_getSourceState(state => state.name)
+      if (isValid(key)) {
+        const childDataPath = FormPath.parse(dataPath).concat(key)
+        env.removeNodes[childDataPath.toString()] = true
+        deleteFormValuesIn(childDataPath)
+        field.notify(field.getState())
+      } else {
+        const parent = graph.selectParent(nodePath)
+        env.removeNodes[dataPath.toString()] = true
+        deleteFormValuesIn(dataPath)
+        if (parent) {
+          parent.notify(parent.getState())
+        }
+      }
+      heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
+      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
 
     function getValue() {
@@ -535,17 +580,17 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         return values[0]
       },
       focus() {
-        field.setState((state: IFieldState) => {
+        field.setState((state: IFieldState<FieldProps>) => {
           state.active = true
-          state.visited = true
         })
       },
       blur() {
-        field.setState((state: IFieldState) => {
+        field.setState((state: IFieldState<FieldProps>) => {
           state.active = false
+          state.visited = true
         })
       },
-      push(value: any) {
+      push(value?: any) {
         const arr = toArr(getValue()).slice()
         arr.push(value)
         setValue(arr)
@@ -642,13 +687,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   async function reset({
+    selector = '*',
     forceClear = false,
     validate = true
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
     let result: Promise<void | IFormValidateResult>
     leadingUpdate(() => {
-      graph.eachChildren(field => {
-        field.setState((state: IFieldState) => {
+      graph.eachChildren('', selector, field => {
+        field.setState((state: IFieldState<FieldProps>) => {
           state.modified = false
           state.ruleErrors = []
           state.ruleWarnings = []
@@ -697,20 +743,26 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   ): Promise<IFormSubmitResult> {
     // 重复提交，返回前一次的promise
     if (state.getState(state => state.submitting)) return env.submittingTask
+    heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_START, state)
     onSubmit = onSubmit || options.onSubmit
     state.setState(state => {
       state.submitting = true
     })
-    heart.notify(LifeCycleTypes.ON_FORM_SUBMIT_START, state)
     env.submittingTask = validate()
-      .then(validated => {
-        const { errors } = validated
-        if (errors.length) {
+      .then(() => {
+        const validated = state.getState(({ errors, warnings }) => ({
+          errors,
+          warnings
+        })) //因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
+        if (validated.errors.length) {
           state.setState(state => {
             state.submitting = false
           })
-          heart.notify(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-          return Promise.reject(errors)
+          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+          if (isFn(options.onValidateFailed)) {
+            options.onValidateFailed(validated)
+          }
+          return Promise.reject(validated.errors)
         }
         if (isFn(onSubmit)) {
           return Promise.resolve(
@@ -726,7 +778,8 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         state.setState(state => {
           state.submitting = false
         })
-        heart.notify(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
         if (errors.length) {
           return Promise.reject(errors)
         }
@@ -740,7 +793,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
 
   async function validate(
     path?: FormPathPattern,
-    opts?: {}
+    opts?: ValidateFieldOptions
   ): Promise<IFormValidateResult> {
     if (!state.getState(state => state.validating)) {
       state.unsafe_setSourceState(state => {
@@ -753,23 +806,23 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
       }, 60)
     }
 
-    heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
+    heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
     return validator.validate(path, opts).then(payload => {
       clearTimeout(env.validateTimer)
       state.setState(state => {
         state.validating = false
       })
-      if (isFn(options.onValidateFailed)) {
-        options.onValidateFailed(payload)
-      }
-      heart.notify(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
+      heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
       return payload
     })
   }
 
-  function setFormState(callback?: (state: IFormState) => any) {
+  function setFormState(
+    callback?: (state: IFormState) => any,
+    silent?: boolean
+  ) {
     leadingUpdate(() => {
-      state.setState(callback)
+      state.setState(callback, silent)
     })
   }
 
@@ -784,7 +837,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
         callbacks.forEach(callback => {
           field.setState(callback)
         })
-        if (!path.isWildMatchPattern && !path.isMatchPattern) {
+        if (!pattern.isWildMatchPattern && !pattern.isMatchPattern) {
           env.taskQueue.splice(index, 1)
           env.taskQueue.forEach(({ pattern }, index) => {
             if (pattern.toString() === path.toString()) {
@@ -798,13 +851,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
 
   function setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldState<FieldProps>) => void,
+    silent?: boolean
   ) {
     if (!isFn(callback)) return
     let matchCount = 0
     let pattern = FormPath.getPath(path)
     graph.select(pattern, field => {
-      field.setState(callback)
+      field.setState(callback, silent)
       matchCount++
     })
     if (matchCount === 0 || pattern.isWildMatchPattern) {
@@ -826,10 +880,14 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     }
   }
 
-  function setFieldValue(path: FormPathPattern, value?: any) {
-    setFieldState(path, state => {
-      state.value = value
-    })
+  function setFieldValue(path: FormPathPattern, value?: any, silent?: boolean) {
+    setFieldState(
+      path,
+      state => {
+        state.value = value
+      },
+      silent
+    )
   }
 
   function getFieldValue(path?: FormPathPattern) {
@@ -838,10 +896,18 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     })
   }
 
-  function setFieldInitialValue(path?: FormPathPattern, value?: any) {
-    setFieldState(path, state => {
-      state.initialValue = value
-    })
+  function setFieldInitialValue(
+    path?: FormPathPattern,
+    value?: any,
+    silent?: boolean
+  ) {
+    setFieldState(
+      path,
+      state => {
+        state.initialValue = value
+      },
+      silent
+    )
   }
 
   function getFieldInitialValue(path?: FormPathPattern) {
@@ -852,7 +918,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
 
   function getFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => any
+    callback?: (state: IFieldState<FieldProps>) => any
   ) {
     const field = graph.select(path)
     return field && field.getState(callback)
@@ -865,34 +931,40 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   }
 
   function setFormGraph(nodes: {}) {
-    each(nodes, (node: IFieldState | IVirtualFieldState, key) => {
-      let nodeState: any
-      if (graph.exist(key)) {
-        nodeState = graph.get(key)
-        nodeState.unsafe_setSourceState(state => {
-          Object.assign(state, node)
-        })
-      } else {
-        if (node.displayName === 'VirtualFieldState') {
-          nodeState = registerVirtualField({
-            path: key
-          })
+    each(
+      nodes,
+      (
+        node: IFieldState<FieldProps> | IVirtualFieldState<VirtualFieldProps>,
+        key
+      ) => {
+        let nodeState: any
+        if (graph.exist(key)) {
+          nodeState = graph.get(key)
           nodeState.unsafe_setSourceState(state => {
             Object.assign(state, node)
           })
-        } else if (node.displayName === 'FieldState') {
-          nodeState = registerField({
-            path: key
-          })
-          nodeState.unsafe_setSourceState(state => {
-            Object.assign(state, node)
-          })
+        } else {
+          if (node.displayName === 'VirtualFieldState') {
+            nodeState = registerVirtualField({
+              path: key
+            })
+            nodeState.unsafe_setSourceState(state => {
+              Object.assign(state, node)
+            })
+          } else if (node.displayName === 'FieldState') {
+            nodeState = registerField({
+              path: key
+            })
+            nodeState.unsafe_setSourceState(state => {
+              Object.assign(state, node)
+            })
+          }
+        }
+        if (nodeState) {
+          nodeState.notify(state.getState())
         }
       }
-      if (nodeState) {
-        nodeState.notify(state.getState())
-      }
-    })
+    )
   }
 
   function shadowUpdate(callback: () => void) {
@@ -921,6 +993,25 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     )
   }
 
+  //在subscribe中必须同步使用，否则会监听不到变化
+  function hasChanged(target: any, path: FormPathPattern): boolean {
+    if (!env.publishing) {
+      throw new Error(
+        'The watch function must be used synchronously in the subscribe callback.'
+      )
+    }
+    if (isFormState(target)) {
+      return state.hasChanged(path)
+    } else if (isFieldState(target) || isVirtualFieldState(target)) {
+      const node = graph.get(target.path)
+      return node && node.hasChanged(path)
+    } else {
+      throw new Error(
+        'Illegal parameter,You must pass the correct state object(FormState/FieldState/VirtualFieldState).'
+      )
+    }
+  }
+
   const state = new FormState(options)
   const validator = new FormValidator(options)
   const graph = new FormGraph({
@@ -929,6 +1020,7 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
   const formApi = {
     submit,
     reset,
+    hasChanged,
     clearErrors,
     validate,
     setFormState,
@@ -942,49 +1034,45 @@ export const createForm = (options: IFormCreatorOptions = {}): IForm => {
     setFormGraph,
     setFieldValue,
     unsafe_do_not_use_transform_data_path: transformDataPath, //eslint-disable-line
-    setValue: deprecate(
-      setFieldValue,
-      'setValue',
-      'Please use the setFieldValue.'
-    ),
     getFieldValue,
-    getValue: deprecate(
-      getFieldValue,
-      'getValue',
-      'Please use the getFieldValue.'
-    ),
     setFieldInitialValue,
     getFieldInitialValue,
-    getInitialValue: deprecate(
-      getFieldInitialValue,
-      'getInitialValue',
-      'Please use the getFieldInitialValue.'
-    ),
     subscribe: (callback?: FormHeartSubscriber) => {
-      heart.subscribe(callback)
+      return heart.subscribe(callback)
     },
-    unsubscribe: (callback?: FormHeartSubscriber) => {
-      heart.unsubscribe(callback)
+    unsubscribe: (id: number) => {
+      heart.unsubscribe(id)
     },
     notify: <T>(type: string, payload: T) => {
-      heart.notify(type, payload)
+      heart.publish(type, payload)
     }
   }
-  const heart = new FormHeart({ ...options, context: formApi })
+  const heart = new FormHeart({
+    ...options,
+    context: formApi,
+    beforeNotify: () => {
+      env.publishing = true
+    },
+    afterNotify: () => {
+      env.publishing = false
+    }
+  })
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
     shadowStage: false,
     leadingStage: false,
+    publishing: false,
     taskQueue: [],
     taskIndexes: {},
     removeNodes: {},
     submittingTask: undefined
   }
-  heart.notify(LifeCycleTypes.ON_FORM_WILL_INIT, state)
+  heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)
   state.subscription = {
     notify: onFormChange
   }
+
   graph.appendNode('', state)
   state.setState((state: IFormState) => {
     state.initialized = true

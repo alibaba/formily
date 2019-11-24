@@ -1,7 +1,7 @@
-import { isFn, FormPath, globalThisPolyfill } from '@uform/shared'
+import { isFn, FormPath, globalThisPolyfill, Subscribable } from '@uform/shared'
 import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
 import { Observable } from 'rxjs/internal/Observable'
-import { filter } from 'rxjs/internal/operators'
+import { filter } from 'rxjs/internal/operators/filter'
 import { createActions, createAsyncActions } from 'react-eva'
 import {
   LifeCycleTypes,
@@ -18,6 +18,7 @@ export const createFormActions = (): IFormActions => {
   return createActions(
     'submit',
     'reset',
+    'hasChanged',
     'validate',
     'setFormState',
     'getFormState',
@@ -40,6 +41,7 @@ export const createAsyncFormActions = (): IFormAsyncActions =>
   createAsyncActions(
     'submit',
     'reset',
+    'hasChanged',
     'validate',
     'setFormState',
     'getFormState',
@@ -144,6 +146,17 @@ const getScheduler = () => {
   }
 }
 
+export class Broadcast extends Subscribable {
+  context: any
+
+  setContext(context: any) {
+    this.context = context
+  }
+  getContext() {
+    return this.context
+  }
+}
+
 export const env = {
   effectStart: false,
   effectSelector: null,
@@ -153,7 +166,7 @@ export const env = {
 
 export const [raf, caf] = getScheduler()
 
-export const createFormEffects = <Payload = any, Actions = {}>(
+export const createFormEffects = <Payload = any, Actions = any>(
   effects: IFormEffect<Payload, Actions> | null,
   actions: Actions
 ) => {
@@ -170,10 +183,10 @@ export const createFormEffects = <Payload = any, Actions = {}>(
         if (matcher) {
           return observable$.pipe(
             filter<T>(
-              isFn(matcher)
+              isFn(matcher) && !matcher['path']
                 ? matcher
                 : (payload: T): boolean => {
-                    return FormPath.parse(matcher).match(
+                    return FormPath.parse(matcher as any).match(
                       payload && (payload as any).name
                     )
                   }

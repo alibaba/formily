@@ -28,14 +28,14 @@ const Password = styled(
       }
     }
 
-    onChangeHandler = (value, e) => {
+    onChangeHandler = (value) => {
       this.setState(
         {
           value
         },
         () => {
           if (this.props.onChange) {
-            this.props.onChange(value, e)
+            this.props.onChange(value,value)
           }
         }
       )
