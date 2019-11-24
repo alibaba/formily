@@ -124,7 +124,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       })
       if (valuesChanged) {
         if (isFn(options.onChange)) {
-          options.onChange(published.values)
+          options.onChange(clone(published.values))
         }
         heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
@@ -766,7 +766,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
         if (isFn(onSubmit)) {
           return Promise.resolve(
-            onSubmit(state.getState(state => state.values))
+            onSubmit(state.getState(state => clone(state.values)))
           ).then(payload => ({ validated, payload }))
         }
         return { validated, payload: undefined }
