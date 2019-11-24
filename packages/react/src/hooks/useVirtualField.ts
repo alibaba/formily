@@ -29,9 +29,7 @@ export const useVirtualField = (
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
        */
       if (initialized) {
-        raf(() => {
-          forceUpdate()
-        })
+        forceUpdate()
       }
     })
     initialized = true

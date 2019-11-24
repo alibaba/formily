@@ -37,6 +37,7 @@ npm install --save @uform/react
   - [`Async Linkage`](#Async-Linkage)
   - [`Linkage Validation`](#Linkage-Validation)
   - [`Complex Linkage`](#Complex-Linkage)
+  - [`Reuse Effects`](#Reuse-Effects)
   - [`Combo`](#Combo)
   - [`Provide and FormSpy`](#Provide-and-FormSpy)
   - [`Deconstruction`](#Deconstruction)
@@ -1022,6 +1023,94 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### Reuse Effects
+
+Make your own reusable effects.
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormEffectHooks } from '@uform/react'
+
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+const CheckedField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
+            mutators.change(!state.value)
+          }} checked={!!state.value} /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const { onFormMount$, onFieldValueChange$  } = FormEffectHooks
+const getEffects = ()=>{
+   const actions = createFormActions()
+   onFormMount$().subscribe(() => {
+      actions.setFieldState('a~', state => state.visible = false)
+    })
+
+    onFieldValueChange$('trigger').subscribe((triggerState) => {
+      actions.setFieldState('a~', state => {
+        state.visible = triggerState.value
+      })
+    })
+
+    onFieldValueChange$('a').subscribe((fieldState) => {
+      actions.setFieldState('a-copy', state => {
+        state.value = fieldState.value
+      })
+    })
+}
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <Form
+      actions={actions}
+      effects={() => {
+        getEffects()
+      }}
+    >
+      <CheckedField name="trigger" label="show/hide" /> 
+      <div>
+        <InputField label="a" name="a" />
+      </div>
+      <div>
+        <InputField label="a-copy" name="a-copy" />
+      </div>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 #### Combo
 
 Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more inforation.
@@ -1605,7 +1694,7 @@ const App = () => {
       <Field name="user" initialValue={{}}>
         {({ state, mutator }) => {
           return (
-            <VirtualField name="layout">
+            <VirtualField name="user.layout">
               {({ state: layoutState }) => {
                 return (
                   <Layout

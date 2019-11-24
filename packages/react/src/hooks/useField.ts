@@ -61,10 +61,9 @@ export const useField = (
             mutators.validate()
           }
         }
-        raf(() => {
-          if (ref.current.unmounted) return
-          forceUpdate()
-        })
+
+        if (ref.current.unmounted) return
+        forceUpdate()
       }
     })
     initialized = true

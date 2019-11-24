@@ -48,15 +48,12 @@ describe('useVirtualField hook',()=>{
       return <FormContext.Provider value={form}>{children}</FormContext.Provider>
     }
 
-    const { result, rerender } = renderHook(() => useVirtualField({ name: 'username' }), { wrapper: formWrapper })
+    const { result } = renderHook(() => useVirtualField({ name: 'username' }), { wrapper: formWrapper })
     expect(result.current.state.visible).toEqual(true)
     act(() => {
       globalForm.setFieldState('username', state => state.visible = false)
     })
     
-    // forceUpdate will trigger in raf, use waitForNextUpdate
-    expect(result.current.state.visible).toEqual(true)
-    rerender()
     expect(result.current.state.visible).toEqual(false)
   })
 
@@ -91,15 +88,12 @@ describe('useVirtualField hook',()=>{
       name: 'username',
       props: { disabled: true },
     }
-    const { result, waitForNextUpdate, rerender } = renderHook(() => useVirtualField(initialProps), { wrapper: formWrapper })
+    const { result, rerender } = renderHook(() => useVirtualField(initialProps), { wrapper: formWrapper })
     expect(result.current.props).toEqual({ disabled: true })    
     initialProps.props = { disabled: false }
     
     expect(result.current.props).toEqual({ disabled: true })
-
     rerender()
-    await waitForNextUpdate()
-
     expect(result.current.props).toEqual(initialProps.props)
   })
 })
