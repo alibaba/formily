@@ -1,6 +1,8 @@
 import React from 'react'
+import { Tree } from '@alifd/next'
 import { ISchemaTreeProps } from '../utils/types'
-import { FieldEditor } from './FieldEditor'
+
+const TreeNode = Tree.Node
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
@@ -8,14 +10,20 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
 }) => {
   return (
     <div>
-      <FieldEditor></FieldEditor>
-      <FieldEditor></FieldEditor>
-      <FieldEditor>
-        <FieldEditor>
-          <FieldEditor></FieldEditor>
-        </FieldEditor>
-        <FieldEditor></FieldEditor>
-      </FieldEditor>
+      <Tree defaultExpandAll showLine>
+        <TreeNode label="Trunk">
+          <TreeNode label="Branch">
+            <TreeNode label="Branch">
+              <TreeNode label="Leaf" />
+            </TreeNode>
+            <TreeNode label="Leaf" />
+          </TreeNode>
+          <TreeNode label="Branch">
+            <TreeNode label="Leaf" />
+            <TreeNode label="Leaf" />
+          </TreeNode>
+        </TreeNode>
+      </Tree>
     </div>
   )
 }
