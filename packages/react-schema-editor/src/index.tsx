@@ -6,6 +6,8 @@ import { SchemaCode } from './components/SchemaCode'
 import json from './utils/schema'
 const { Row, Col } = Grid
 
+import '@alifd/next/dist/next.css'
+
 export const SchemaEditor: React.FC = () => {
   const initialSchema = jsonToSchema(json)
   const [schema, setSchema] = React.useState(initialSchema)
