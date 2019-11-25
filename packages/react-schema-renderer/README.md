@@ -898,6 +898,7 @@ cleanRegistry(): void
 | Attribute name       | Description                                                          | Type                                                                                                              |
 | -------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | title                | Field title                                                          | `React.ReactNode`                                                                                                 |
+| name                | The parent property name of the field                                                         |  `string`                                                                                               |
 | description          | Field description                                                    | `React.ReactNode`                                                                                                 |
 | default              | Field default                                                        | `any`                                                                                                             |
 | readOnly             | Whether read-only and editable                                       | `boolean`                                                                                                         |
