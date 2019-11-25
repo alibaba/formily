@@ -1,45 +1,47 @@
-import './form'
-import './fields/string'
-import './fields/number'
-import './fields/boolean'
-import './fields/date'
-import './fields/time'
-import './fields/range'
-import './fields/upload'
-import './fields/checkbox'
-import './fields/radio'
-import './fields/rating'
-import './fields/transfer'
-import './fields/array'
-import './fields/cards'
-import './fields/table'
-import './fields/textarea'
-import './fields/password'
-
-export * from '@uform/react'
-export * from './components/formButtonGroup'
-export * from './components/button'
-export * from './components/layout'
-
-import React from 'react'
+import React, { useRef } from 'react'
 import {
-  SchemaForm as InternalSchemaForm,
-  Field as InternalField
-} from '@uform/react'
-import { SchemaFormProps, FieldProps } from './type'
+  SchemaMarkupForm,
+  SchemaMarkupField
+} from '@uform/react-schema-renderer'
+import { INextSchemaFormProps, INextSchemaFieldProps } from './types'
+import './fields'
+import './compat'
+export * from '@uform/react-schema-renderer'
+export * from './components'
+export * from './types'
+export { mapStyledProps, mapTextComponent } from './shared'
+export const SchemaForm: React.FC<INextSchemaFormProps> = props => {
+  const formRef = useRef<HTMLDivElement>()
 
-export { mapStyledProps, mapTextComponent } from './utils'
-
-export default class SchemaForm<V> extends React.Component<SchemaFormProps<V>> {
-  render() {
-    return <InternalSchemaForm {...this.props} />
-  }
+  return (
+    <div ref={formRef}>
+      <SchemaMarkupForm
+        {...props}
+        onValidateFailed={result => {
+          if (props.onValidateFailed) {
+            props.onValidateFailed(result)
+          }
+          if (formRef.current) {
+            setTimeout(() => {
+              const elements = formRef.current.querySelectorAll(
+                '.next-form-item.has-error'
+              )
+              if (elements && elements.length) {
+                if (!elements[0].scrollIntoView) return
+                elements[0].scrollIntoView({
+                  behavior: 'smooth',
+                  inline: 'center',
+                  block: 'center'
+                })
+              }
+            }, 30)
+          }
+        }}
+      >
+        {props.children}
+      </SchemaMarkupForm>
+    </div>
+  )
 }
-
-export class Field<V, T extends string> extends React.Component<
-  FieldProps<V, T>
-> {
-  render() {
-    return <InternalField {...this.props} />
-  }
-}
+export const Field: React.FC<INextSchemaFieldProps> = SchemaMarkupField
+export default SchemaForm

@@ -14,6 +14,7 @@ import {
   FormButtonGroup,
   Submit,
   Reset,
+  filterChanged,
   createFormActions
 } from '@uform/next'
 import { Button } from '@alifd/next'
@@ -22,6 +23,11 @@ import Printer from '@uform/printer'
 
 const actions = createFormActions()
 
+const sleep = duration =>
+  new Promise(resolve => {
+    setTimeout(resolve, duration)
+  })
+
 ReactDOM.render(
   <Printer>
     <SchemaForm
@@ -29,11 +35,20 @@ ReactDOM.render(
       actions={actions}
       labelCol={7}
       wrapperCol={12}
-      effects={($, { setFieldState }) => {
+      effects={($, { setFieldState, hasChanged }) => {
         $('onFormMount').subscribe(() => {
           setFieldState('radio', state => {
             state.required = true
           })
+        })
+
+        $('onFormChange').subscribe(async state => {
+          if (hasChanged(state, 'values.hello')) {
+            await sleep(1000)
+            setFieldState('radio', state => {
+              state.value = '4'
+            })
+          }
         })
       }}
     >
@@ -136,6 +151,15 @@ ReactDOM.render(
           }}
         >
           改变radio的值
+        </Button>
+        <Button
+          onClick={() => {
+            actions.setFormState(state => {
+              state.values = { ...state.values, hello: 'hello world' }
+            })
+          }}
+        >
+          改变form状态
         </Button>
       </FormButtonGroup>
     </SchemaForm>
