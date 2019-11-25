@@ -146,6 +146,7 @@ export interface IFieldState<FieldProps = any> {
   mounted: boolean
   unmounted: boolean
   props: FieldProps
+  [key: string]: any
 }
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
@@ -209,6 +210,7 @@ export interface IFormState<FormProps = any> {
   mounted: boolean
   unmounted: boolean
   props: FormProps
+  [key: string]: any
 }
 
 export type FormStateDirtyMap = StateDirtyMap<IFormState>
@@ -239,6 +241,7 @@ export interface IVirtualFieldState<FieldProps = any> {
   mounted: boolean
   unmounted: boolean
   props: FieldProps
+  [key: string]: any
 }
 export type VirtualFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
