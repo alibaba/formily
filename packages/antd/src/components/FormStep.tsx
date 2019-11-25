@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, Fragment } from 'react'
+import React, { useMemo, useRef, Fragment } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
@@ -30,8 +30,13 @@ type StepComponentExtendsProps = StateMap
 export const FormStep: React.FC<IFormStep> &
   StepComponentExtendsProps = createControllerBox<IFormStep>(
   'step',
-  ({ form, schema, children }: ISchemaVirtualFieldComponentProps) => {
-    const [current, setCurrent] = useState(0)
+  ({
+    form,
+    path,
+    schema,
+    current,
+    children
+  }: ISchemaVirtualFieldComponentProps) => {
     const ref = useRef(current)
     const { dataSource, ...stepProps } = schema.getExtendsComponentProps()
     const items = toArr(dataSource)
@@ -40,8 +45,11 @@ export const FormStep: React.FC<IFormStep> &
         value: cur,
         preValue: current
       })
-      setCurrent(cur)
+      form.setFieldState(path, state => {
+        state.current = cur
+      })
     }
+    current = current || 0
     useFormEffects(({ setFieldState }) => {
       items.forEach(({ name }, index) => {
         setFieldState(name, (state: any) => {
