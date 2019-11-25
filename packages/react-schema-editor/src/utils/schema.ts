@@ -11,7 +11,9 @@ export default {
     },
     'x-component': 'Input',
     'x-component-props': {
-      disabled: true
+      value: 'abc',
+      disabled: true,
+      onChange: '{{function(){}}}'
     },
     'x-rules': [
       {

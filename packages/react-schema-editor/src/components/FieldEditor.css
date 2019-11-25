@@ -1,10 +1,13 @@
 .field-group{
+
+}
+.field-group-title{
+  margin-top: 15px;
+  font-size: 16px;
+}
+.field-group-content{
   display: flex;
-  margin-bottom: 5px;
 }
-.field-group .field-input:not(:first-of-type){
-  margin-left: 5px;
-}
-.field-group .op-btn-delete{
-  margin-left: 5px;
+.field-group-form-item{
+  flex: 1;
 }

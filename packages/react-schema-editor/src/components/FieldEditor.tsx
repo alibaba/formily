@@ -1,248 +1,320 @@
-import { Input, Select, Button } from '@alifd/next'
 import React from 'react'
-import { IFieldEditorProps } from '../utils/types'
+import _ from 'lodash'
+import { Form, Button, Checkbox, Input, InputNumber, Select } from 'antd'
+import {
+  getFieldTypeData,
+  getInputTypeData,
+  getXComponentData,
+  getXComponentPropsData,
+  getInputType
+} from '../utils/fieldEditorHelpers'
+import { InputTypes } from '../utils/types'
 import './FieldEditor.css'
 
-const types = [
-  { label: '字符串', value: 'string' },
-  { label: '布尔值', value: 'boolean' },
-  { label: '数字', value: 'number' },
-  { label: '数组', value: 'array' },
-  { label: '对象', value: 'object' }
-]
+const FormItem = Form.Item
+const SelectOption = Select.Option
 
-const getComponentNames = components => {
-  return components.map(({ name }) => name)
+const formItemLayout = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 }
 }
 
-const getComponentByComponentName = (componentName: string, components) => {
-  return components.find(({ name }) => name === componentName)
-}
+const BLANK_PROPERTY_KEY = '-'
+const BLANK_PROPERTY_VALUE = ''
 
-const getXPropsByComponentName = (componentName: string, components) => {
-  const component = getComponentByComponentName(componentName, components)
-  if (!component) {
-    return {}
-  }
-  return component['x-props']
-}
-
-const getXComponentPropsByComponentName = (
-  componentName: string,
-  components
-) => {
-  const component = getComponentByComponentName(componentName, components)
-  if (!component) {
-    return []
-  }
-  return component['x-component-props']
-}
-
-export const FieldEditor: React.FC<IFieldEditorProps> = ({
-  schema,
-  components,
-  xRules,
-  onChange
-}) => {
+const FieldEditor = ({ form, schema, components, onChange }) => {
   const componentName = schema['x-component']
-  const componentNames = getComponentNames(components)
-  const xProps = getXPropsByComponentName(componentName, components)
-  const xComponentProps = getXComponentPropsByComponentName(
-    componentName,
-    components
-  )
+  const fieldTypeData = getFieldTypeData()
+  const inputTypeData = getInputTypeData()
+  const xComponentData = getXComponentData(components)
+  const xComponentPropsData = getXComponentPropsData(components, componentName)
 
-  const handleChange = (property, value) => {
-    onChange({
-      ...schema,
-      ...{
-        [property]: value
+  const handleInputTypeChange = (inputType, property, schema, propsKey) => {
+    const newSchema = { ...schema }
+    let defaultValue
+    switch (inputType) {
+      case InputTypes.INPUT: {
+        defaultValue = ''
+        break
       }
-    })
+      case InputTypes.NUMBER_PICKER: {
+        defaultValue = 0
+        break
+      }
+      case InputTypes.CHECKBOX: {
+        defaultValue = false
+        break
+      }
+      case InputTypes.TEXT_AREA: {
+        defaultValue = null
+        break
+      }
+    }
+    newSchema[propsKey][property] = defaultValue
+    onChange(newSchema)
+  }
+
+  const handleXComponentPropsValueChange = (
+    value,
+    property,
+    schema,
+    propsKey
+  ) => {
+    const newSchema = { ...schema }
+    newSchema[propsKey][property] = value
+    onChange(newSchema)
   }
 
   return (
-    <div className="field-editor">
-      <div>
-        <h3>字段</h3>
-        <div className="field-group">
-          <Input
-            className="field-input"
-            label="label"
-            size="small"
-            value={schema.title}
-            onChange={value => {
-              handleChange('title', value)
-            }}
-          />
-          <Select
-            className="field-input"
+    <Form className="field-editor" layout="inline">
+      <div className="field-group">
+        <div className="field-group-title">字段</div>
+        <div className="field-group-content">
+          <FormItem
             label="类型"
-            size="small"
-            dataSource={types}
-            value={schema.type}
-            onChange={value => {
-              handleChange('type', value)
-            }}
-          />
-          <Select
-            className="field-input"
+            {...formItemLayout}
+            className="field-group-form-item"
+          >
+            <Select
+              value={schema.type}
+              onChange={value => {
+                onChange({
+                  ...schema,
+                  type: value
+                })
+              }}
+            >
+              {fieldTypeData.options.map(({ label, value }) => (
+                <SelectOption value={value} key={value}>
+                  {label}
+                </SelectOption>
+              ))}
+            </Select>
+          </FormItem>
+          <FormItem
             label="组件"
-            size="small"
-            dataSource={componentNames}
-            style={{ width: 300 }}
-            value={componentName}
-            onChange={value => {
-              handleChange('x-component', value)
-            }}
-          />
-          <Input
-            className="field-input"
+            {...formItemLayout}
+            className="field-group-form-item"
+          >
+            <Select
+              value={schema['x-component']}
+              onChange={value => {
+                onChange({
+                  ...schema,
+                  'x-component': value,
+                  'x-component-props': {}
+                })
+              }}
+            >
+              {xComponentData.options.map(({ label, value }) => (
+                <SelectOption value={value} key={value}>
+                  {label}
+                </SelectOption>
+              ))}
+            </Select>
+          </FormItem>
+          <FormItem
             label="描述"
-            size="small"
-            value={schema.description}
-            onChange={value => {
-              handleChange('description', value)
-            }}
-          />
-        </div>
-      </div>
-
-      <div>
-        <h3>x-props</h3>
-        {Object.keys(schema['x-props']).map(property => (
-          <div className="field-group" key={property}>
-            <Select.AutoComplete
-              className="field-input"
-              label="属性"
-              size="small"
-              dataSource={Object.keys(xProps)}
-              style={{ width: 150 }}
-              value={property}
-            />
-            <Select
-              className="field-input"
-              label="类型"
-              name="x-props-type"
-              size="small"
-              dataSource={types}
-              value={schema['x-props'][property].constructor.name.toLowerCase()}
-            />
-            <Input
-              className="field-input"
-              label="值"
-              name="x-props-value"
-              size="small"
-              value={schema['x-props'][property]}
-            />
-            <Button className="op-btn op-btn-delete" size="small">
-              -
-            </Button>
-          </div>
-        ))}
-
-        <div>
-          <Button
-            className="op-btn op-btn-add"
-            size="small"
-            onClick={() => {
-              handleChange('x-props', {
-                ...schema['x-props'],
-                ...{
-                  '': ''
-                }
-              })
-            }}
+            {...formItemLayout}
+            className="field-group-form-item"
           >
-            +
-          </Button>
-        </div>
-      </div>
-
-      <div>
-        <h3>x-component-props</h3>
-        {Object.keys(schema['x-component-props']).map(property => (
-          <div className="field-group" key={property}>
-            <Select
-              className="field-input"
-              label="属性"
-              size="small"
-              dataSource={Object.keys(xComponentProps)}
-              style={{ width: 150 }}
-              value={property}
-            />
-            <Select
-              className="field-input"
-              label="类型"
-              size="small"
-              dataSource={types}
-              value={schema['x-component-props'][
-                property
-              ].constructor.name.toLowerCase()}
-            />
             <Input
-              className="field-input"
-              label="值"
-              size="small"
-              value={schema['x-component-props'][property]}
+              value={schema.description}
+              onChange={event => {
+                onChange({
+                  ...schema,
+                  description: event.target.value
+                })
+              }}
             />
-            <Button className="op-btn op-btn-delete" size="small">
-              -
-            </Button>
-          </div>
-        ))}
-
-        <div>
-          <Button
-            className="op-btn op-btn-add"
-            size="small"
-            onClick={() => {
-              handleChange('x-props', {
-                ...schema['x-props'],
-                ...{
-                  '': ''
-                }
-              })
-            }}
-          >
-            +
-          </Button>
+          </FormItem>
         </div>
       </div>
 
-      <div>
-        <h3>x-rules</h3>
-        <div className="field-group">
-          <Select
-            className="field-input"
-            label="属性"
-            name="xRules"
-            size="small"
-            dataSource={xRules}
-          />
-          <Select
-            className="field-input"
-            label="类型"
-            name="x-component-props-type"
-            size="small"
-            dataSource={types}
-          />
-          <Input
-            className="field-input"
-            label="值"
-            name="x-component-props-value"
-            size="small"
-          />
-        </div>
-        <div>
-          <Button className="op-btn op-btn-add" size="small">
-            +
-          </Button>
-          <Button className="op-btn op-btn-delete" size="small">
-            -
-          </Button>
-        </div>
+      <div className="field-group">
+        <div className="field-group-title">组件属性</div>
+        {Object.keys(schema['x-component-props'] || []).map(
+          (property, index) => {
+            const value = schema['x-component-props'][property]
+            const inputType = getInputType(value)
+            return (
+              <div className="field-group-content" key={index}>
+                <FormItem
+                  label={index === 0 ? '属性名' : null}
+                  {...formItemLayout}
+                  className="field-group-form-item"
+                >
+                  <Select
+                    placeholder="请选择属性"
+                    value={property}
+                    onChange={value => {
+                      const newXComponentProps = {}
+                      _.map(schema['x-component-props'], (v, k) => {
+                        if (k === property) {
+                          if (property === BLANK_PROPERTY_KEY) {
+                            delete newXComponentProps[value]
+                          }
+                          newXComponentProps[value] = v
+                        } else {
+                          newXComponentProps[k] = v
+                        }
+                      })
+
+                      onChange({
+                        ...schema,
+                        'x-component-props': newXComponentProps
+                      })
+                    }}
+                  >
+                    {xComponentPropsData.options.map(({ label, value }) => (
+                      <SelectOption value={value} key={value}>
+                        {label}
+                      </SelectOption>
+                    ))}
+                  </Select>
+                </FormItem>
+                <FormItem
+                  label={index === 0 ? '输入方式' : null}
+                  {...formItemLayout}
+                  className="field-group-form-item"
+                >
+                  <Select
+                    value={inputType}
+                    onChange={value => {
+                      handleInputTypeChange(
+                        value,
+                        property,
+                        schema,
+                        'x-component-props'
+                      )
+                    }}
+                  >
+                    {inputTypeData.options.map(({ label, value }) => (
+                      <SelectOption value={value} key={value}>
+                        {label}
+                      </SelectOption>
+                    ))}
+                  </Select>
+                </FormItem>
+                {inputType === InputTypes.INPUT && (
+                  <FormItem
+                    label={index === 0 ? '属性值' : null}
+                    {...formItemLayout}
+                    className="field-group-form-item"
+                  >
+                    <Input
+                      value={value}
+                      onChange={event => {
+                        handleXComponentPropsValueChange(
+                          event.target.value,
+                          property,
+                          schema,
+                          'x-component-props'
+                        )
+                      }}
+                    />
+                  </FormItem>
+                )}
+                {inputType === InputTypes.NUMBER_PICKER && (
+                  <FormItem
+                    label={index === 0 ? '属性值' : null}
+                    {...formItemLayout}
+                    className="field-group-form-item"
+                  >
+                    <InputNumber
+                      value={value}
+                      onChange={value => {
+                        handleXComponentPropsValueChange(
+                          value,
+                          property,
+                          schema,
+                          'x-component-props'
+                        )
+                      }}
+                    />
+                  </FormItem>
+                )}
+                {inputType === InputTypes.CHECKBOX && (
+                  <FormItem
+                    label={index === 0 ? '属性值' : null}
+                    {...formItemLayout}
+                    className="field-group-form-item"
+                  >
+                    <Checkbox
+                      checked={value}
+                      onChange={event => {
+                        handleXComponentPropsValueChange(
+                          event.target.checked,
+                          property,
+                          schema,
+                          'x-component-props'
+                        )
+                      }}
+                    />
+                  </FormItem>
+                )}
+                {inputType === InputTypes.TEXT_AREA && (
+                  <FormItem
+                    label={index === 0 ? '属性值' : null}
+                    {...formItemLayout}
+                    className="field-group-form-item"
+                  >
+                    <Input.TextArea
+                      placeholder="{{}}/{}/[]"
+                      // TODO, 这里暂时用 defaultValue
+                      defaultValue={value}
+                      onBlur={event => {
+                        let value = event.target.value
+                        try {
+                          value = JSON.parse(value)
+                        } catch (error) {}
+                        handleXComponentPropsValueChange(
+                          value,
+                          property,
+                          schema,
+                          'x-component-props'
+                        )
+                      }}
+                    />
+                  </FormItem>
+                )}
+                <FormItem
+                  label={index === 0 ? '操作' : null}
+                  {...formItemLayout}
+                  className="field-group-form-item"
+                >
+                  <Button
+                    type="primary"
+                    icon="minus"
+                    size="small"
+                    onClick={() => {
+                      onChange({
+                        ..._.omit(schema, `x-component-props.${property}`)
+                      })
+                    }}
+                  />
+                </FormItem>
+              </div>
+            )
+          }
+        )}
+        <Button
+          type="primary"
+          icon="plus"
+          size="small"
+          onClick={() => {
+            onChange({
+              ...schema,
+              'x-component-props': {
+                ...schema['x-component-props'],
+                [BLANK_PROPERTY_KEY]: BLANK_PROPERTY_VALUE
+              }
+            })
+          }}
+        />
       </div>
-    </div>
+    </Form>
   )
 }
+
+export default Form.create()(FieldEditor)

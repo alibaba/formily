@@ -1,20 +1,14 @@
 import React from 'react'
-import { Button, Icon, Grid } from '@alifd/next'
+import { Button, Icon, Row, Col } from 'antd'
 import { jsonToSchema } from './utils'
 import { SchemaTree } from './components/SchemaTree'
 import { SchemaCode } from './components/SchemaCode'
 import json from './utils/schema'
-import '@alifd/next/dist/next.css'
-const { Row, Col } = Grid
+import 'antd/dist/antd.css'
 
 const components = [
   {
     name: 'Input',
-    'x-props': {
-      help: {},
-      validateStatus: {},
-      hasFeedback: {}
-    },
     'x-component-props': {
       value: {},
       disabled: {},
@@ -23,10 +17,6 @@ const components = [
   },
   {
     name: 'Switch',
-    'x-props': {
-      help: {},
-      validateStatus: {}
-    },
     'x-component-props': {
       checked: {},
       disabled: {},
@@ -47,14 +37,14 @@ export const SchemaEditor: React.FC = () => {
         </Button>
       </div>
       <Row className="schema-editor-main">
-        <Col span={14} className="schema-col schema-tree splitter">
+        <Col span={18} className="schema-col schema-tree splitter">
           <SchemaTree
             schema={schema}
             onChange={setSchema}
             components={components}
           ></SchemaTree>
         </Col>
-        <Col span={10} className="schema-col schema-code">
+        <Col span={6} className="schema-col schema-code">
           <SchemaCode schema={schema} onChange={setSchema}></SchemaCode>
         </Col>
       </Row>
