@@ -82,9 +82,14 @@ export class Schema implements ISchema {
 
   public _isJSONSchemaObject = true
 
-  constructor(json: ISchema, parent?: Schema) {
+  public name?: string
+
+  constructor(json: ISchema, parent?: Schema, name?: string) {
     if (parent) {
       this.parent = parent
+    }
+    if (name) {
+      this.name = name
     }
     return this.fromJSON(json) as any
   }
@@ -308,7 +313,7 @@ export class Schema implements ISchema {
    */
   setProperty(key: string, schema: ISchema) {
     this.properties = this.properties || {}
-    this.properties[key] = new Schema(schema, this)
+    this.properties[key] = new Schema(schema, this, key)
     return this.properties[key]
   }
   setProperties(properties: SchemaProperties<ISchema>) {
@@ -358,15 +363,15 @@ export class Schema implements ISchema {
       this['x-component'] = lowercase(json['x-component'])
     }
     if (!isEmpty(json.properties)) {
-      this.properties = map(json.properties, item => {
-        return new Schema(item, this)
+      this.properties = map(json.properties, (item, key) => {
+        return new Schema(item, this, key)
       })
       if (isValid(json.additionalProperties)) {
         this.additionalProperties = new Schema(json.additionalProperties, this)
       }
       if (isValid(json.patternProperties)) {
-        this.patternProperties = map(json.patternProperties, item => {
-          return new Schema(item, this)
+        this.patternProperties = map(json.patternProperties, (item, key) => {
+          return new Schema(item, this, key)
         })
       }
     } else if (!isEmpty(json.items)) {
