@@ -7,11 +7,23 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   components,
   onChange
 }) => {
-  const xRules = { required: {}, pattern: {}, validator: {} }
+  const xRules = {
+    required: {},
+    pattern: {},
+    whitespace: {},
+    validator: {}
+  }
   const xProps = {
+    colon: {},
+    extra: {},
+    hasFeedback: {},
     help: {},
+    htmlFor: {},
+    labelCol: {},
+    labelAlign: {},
+    required: {},
     validateStatus: {},
-    hasFeedback: {}
+    wrapperCol: {}
   }
 
   return (

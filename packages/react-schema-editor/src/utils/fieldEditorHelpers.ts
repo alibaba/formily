@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { InputTypes } from './types'
+import { InputTypes, ComponentPropsTypes } from './types'
 
 export const getFieldTypeData = () => {
   const options = [
@@ -28,28 +28,101 @@ export const getInputTypeData = () => {
   }
 }
 
-export const getXComponentData = components => {
-  const options = (components || []).map(({ name }) => ({
-    label: name,
-    value: name
+const convertKeysToSelectData = keys => {
+  const options = keys.map(value => ({
+    label: value,
+    value
   }))
-
   return {
     options,
     defaultValue: _.get(options, '[0].value')
   }
 }
 
-export const getXComponentPropsData = (components, componentName) => {
+export const getXComponentData = components => {
+  return convertKeysToSelectData(_.keys(components))
+}
+
+export const getRemainingKeys = (allKeys, usedKeys) => {
+  return _.reduce(
+    allKeys,
+    (result, key) => {
+      if (!usedKeys.includes(key)) {
+        result.push(key)
+      }
+      return result
+    },
+    []
+  )
+}
+
+export const getComponentXRules = schema => {
+  return _.reduce(
+    schema[ComponentPropsTypes.X_RULES],
+    (result, current) => {
+      return _.concat(result, _.keys(_.omit(current, 'message')))
+    },
+    []
+  )
+}
+
+export const getComponentPropsData = ({
+  schema,
+  xProps,
+  xRules,
+  components,
+  componentName,
+  propsKey
+}) => {
   const component = _.find(components, { name: componentName })
-  const options = _.keys(_.get(component, 'x-component-props')).map(key => ({
-    label: key,
-    value: key
-  }))
-  return {
-    options,
-    defaultValue: _.get(options, '[0].value')
+
+  let allKeys
+  let usedKeys
+  switch (propsKey) {
+    case ComponentPropsTypes.X_COMPONENT_PROPS: {
+      allKeys = _.keys(_.get(component, propsKey))
+      usedKeys = _.keys(schema[propsKey])
+      break
+    }
+    case ComponentPropsTypes.X_PROPS: {
+      allKeys = _.keys(xProps)
+      usedKeys = _.keys(schema[propsKey])
+      break
+    }
+    case ComponentPropsTypes.X_RULES: {
+      allKeys = _.keys(xRules)
+      usedKeys = getComponentXRules(schema)
+      break
+    }
   }
+
+  const remainingKeys = getRemainingKeys(allKeys, usedKeys)
+
+  return convertKeysToSelectData(remainingKeys)
+}
+
+export const getComponentPropsValue = ({ schema, propsKey }) => {
+  if (propsKey === ComponentPropsTypes.X_RULES) {
+    return getComponentXRules(schema)
+  } else {
+    return _.keys(schema[propsKey])
+  }
+}
+
+export const getPropertyValue = ({ schema, propsKey, property }) => {
+  if (propsKey === ComponentPropsTypes.X_RULES) {
+    const rule = _.find(schema[propsKey], rule => _.has(rule, property))
+    return _.get(rule, property)
+  } else {
+    return _.get(schema, `${propsKey}.${property}`)
+  }
+}
+
+export const getRuleMessage = ({ schema, property }) => {
+  const rule = _.find(schema[ComponentPropsTypes.X_RULES], rule =>
+    _.has(rule, property)
+  )
+  return _.get(rule, 'message')
 }
 
 const isExpression = value => {
@@ -57,6 +130,7 @@ const isExpression = value => {
 }
 
 export const getInputType = value => {
+  debugger
   if (typeof value === 'object' || isExpression(value)) {
     return InputTypes.TEXT_AREA
   }
