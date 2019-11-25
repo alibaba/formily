@@ -7,20 +7,21 @@ export default {
     'x-props': {
       help: '不得超过6个汉字',
       validateStatus: 'success',
-      hasFeedback: true
     },
     'x-component': 'Input',
     'x-component-props': {
       value: 'abc',
-      disabled: true,
       onChange: '{{function(){}}}'
     },
     'x-rules': [
       {
-        required: true
+        required: true,
+        message: '此项必填'
       },
       {
-        pattern: '[\u4e00-\u9fa5]'
+        //TODO
+        pattern: '[\\u4e00-\\u9fa5]',
+        message: '正则'
       },
       {
         validator: 'nameValidator'
