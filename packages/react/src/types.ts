@@ -10,7 +10,9 @@ import {
   IFormResetOptions,
   IFormSubmitResult,
   FormHeartSubscriber,
-  IFormGraph
+  IFormGraph,
+  IField,
+  IVirtualField
 } from '@uform/core'
 import { FormPathPattern } from '@uform/shared'
 import { Observable } from 'rxjs/internal/Observable'
@@ -112,6 +114,7 @@ export interface IFormConsumerProps {
 
 export interface IFieldHook {
   form: IForm
+  field: IField
   state: IFieldState
   props: {}
   mutators: IMutators
@@ -119,6 +122,7 @@ export interface IFieldHook {
 
 export interface IVirtualFieldHook {
   form: IForm
+  field: IVirtualField
   state: IFieldState
   props: {}
 }
