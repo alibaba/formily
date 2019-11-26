@@ -33,19 +33,19 @@ npm install --save @uform/next
   - [`<TextButton/>`](#TextButton)
   - [`<CircleButton/>`](#CircleButton)
 - [字段类型](#Type-of-SchemaMarkupField)
-  - [string](#string)
-  - [textarea](#textarea)
-  - [password](#password)
-  - [number](#number)
-  - [boolean](#boolean)
-  - [date](#date)
-  - [time](#time)
-  - [range](#range)
-  - [upload](#upload)
-  - [checkbox](#checkbox)
-  - [radio](#radio)
-  - [rating](#rating)
-  - [transfer](#transfer)
+  - [`string`](#string)
+  - [`textarea`](#textarea)
+  - [`password`](#password)
+  - [`number`](#number)
+  - [`boolean`](#boolean)
+  - [`date`](#date)
+  - [`time`](#time)
+  - [`range`](#range)
+  - [`upload`](#upload)
+  - [`checkbox`](#checkbox)
+  - [`radio`](#radio)
+  - [`rating`](#rating)
+  - [`transfer`](#transfer)
 - [API](#API)
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
@@ -324,31 +324,31 @@ const App = () => {
       rating: {
         type: 'rating',
         title: '等级'
-      }
-      // layout_btb_g: {
-      //   type: 'object',
-      //   'x-component': 'button-group',
-      //   'x-component-props': {
-      //     offset:7,
-      //     sticky: true,
-      //   },
-      //   properties: {
-      //     submit_btn: {
-      //       type: 'object',
-      //       'x-component': 'submit',
-      //       'x-component-props': {
-      //         children: '提交',
-      //       },
-      //     },
-      //     reset_btn: {
-      //       type: 'object',
-      //       'x-component': 'reset',
-      //       'x-component-props': {
-      //         children: '重置',
-      //       },
-      //     },
-      //   }
-      // },
+      },
+      layout_btb_group: {
+        type: 'object',
+        'x-component': 'button-group',
+        'x-component-props': {
+          offset:7,
+          sticky: true,
+        },
+        properties: {
+          submit_btn: {
+            type: 'object',
+            'x-component': 'submit',
+            'x-component-props': {
+              children: '提交',
+            },
+          },
+          reset_btn: {
+            type: 'object',
+            'x-component': 'reset',
+            'x-component-props': {
+              children: '重置',
+            },
+          },
+        }
+      },
     }
   }
   return <SchemaForm actions={actions} schema={schema} />
@@ -934,6 +934,95 @@ interface IFormStep {
 
 **用法**
 
+```jsx
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  FormEffectHooks,
+  createFormActions,
+  FormGridRow,
+  FormItemGrid,
+  FormGridCol,
+  FormPath,
+  FormLayout,
+  FormBlock,
+  FormCard,
+  FormTextBox,
+  FormStep
+} from '@uform/next'
+import { Button } from '@alifd/next'
+import '@alifd/next/dist/next.css'
+
+const { onFormInit$ } = FormEffectHooks
+
+const actions = createFormActions()
+
+let cache = {}
+
+export default () => (
+  <SchemaForm
+    onSubmit={values => {
+      console.log('提交')
+      console.log(values)
+    }}
+    actions={actions}
+    labelCol={{ span: 8 }}
+    wrapperCol={{ span: 6 }}
+    validateFirst
+    effects={({ setFieldState, getFormGraph }) => {
+      onFormInit$().subscribe(() => {
+        setFieldState('col1', state => {
+          state.visible = false
+        })
+      })
+    }}
+  >
+    <FormStep
+      style={{ marginBottom: 20 }}
+      dataSource={[
+        { title: 'Step1', name: 'step-1' },
+        { title: 'Step2', name: 'step-2' },
+        { title: 'Step3', name: 'step-3' }
+      ]}
+    />
+    <FormCard name="step-1" title="Step1">
+      <Field name="a1" required title="A1" type="string" />
+    </FormCard>
+    <FormCard name="step-2" title="Step2">
+      <Field name="a2" required title="A2" type="string" />
+    </FormCard>
+    <FormCard name="step-3" title="Step3">
+      <Field name="a3" required title="A3" type="string" />
+    </FormCard>
+    <FormButtonGroup>
+      <Submit>提交</Submit>
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}>
+        上一步
+      </Button>
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
+        下一步
+      </Button>
+      <Button
+        onClick={() => {
+          cache = actions.getFormGraph()
+        }}
+      >
+        存储当前状态
+      </Button>
+      <Button
+        onClick={() => {
+          actions.setFormGraph(cache)
+        }}
+      >
+        回滚状态
+      </Button>
+    </FormButtonGroup>
+  </SchemaForm>
+)
+```
+
 #### `<FormLayout/>`
 
 > FormLayout 组件 Props
@@ -1336,7 +1425,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### string
 
-Fusion-Next `<Input/>`, `<Input.Textarea/>`, `<Select/>`
+* Schema Type : `string`
+* Schema UI Component: Fusion-Next `<Input/>`, `<Input.Textarea/>`, `<Select/>`
 
 **用法**
 
@@ -1410,7 +1500,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### textarea
 
-Fusion-Next `<Input.Textarea/>`
+* Schema Type : `string`
+* Schema UI Component: Fusion-Next `<Input.Textarea/>`
 
 **用法**
 
@@ -1450,7 +1541,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### password
 
-Fusion-Next `<Input htmlType="password"/>`
+* Schema Type : `password`
+* Schema UI Component: Fusion-Next `<Input htmlType="password"/>`
 
 ```typescript
 interface IPasswordProps {
@@ -1595,7 +1687,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### number
 
-Fusion-Next `<NumberPicker/>`
+* Schema Type : `number`
+* Schema UI Component: Fusion-Next `<NumberPicker/>`
 
 **用法**
 
@@ -1627,7 +1720,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### boolean
 
-Fusion-Next `<Switch />`
+* Schema Type : `boolean`
+* Schema UI Component: Fusion-Next `<Switch/>`
 
 **用法**
 
@@ -1668,7 +1762,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### date
 
-Fusion-Next `<DatePicker />`
+* Schema Type : `date`
+* Schema UI Component: Fusion-Next `<DatePicker/>`
 
 **用法**
 
@@ -1708,7 +1803,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### time
 
-Fusion-Next `<TimePicker />`
+* Schema Type : `time`
+* Schema UI Component: Fusion-Next `<TimePicker/>`
 
 **用法**
 
@@ -1748,7 +1844,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### range
 
-Fusion-Next `<Range />`
+* Schema Type : `range`
+* Schema UI Component: Fusion-Next `<Range/>`
 
 **用法**
 
@@ -1790,7 +1887,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### upload
 
-Fusion-Next `<Upload />`
+* Schema Type : `upload`
+* Schema UI Component: Fusion-Next `<Upload/>`
 
 **用法**
 
@@ -1848,7 +1946,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### checkbox
 
-Fusion-Next `<Checkbox />`
+* Schema Type : `checkbox`
+* Schema UI Component: Fusion-Next `<Checkbox/>`
 
 **用法**
 
@@ -1898,7 +1997,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### radio
 
-Fusion-Next `<Radio />`
+* Schema Type : `radio`
+* Schema UI Component: Fusion-Next `<Radio/>`
 
 **用法**
 
@@ -1948,7 +2048,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### rating
 
-Fusion-Next `<Rating/>`
+* Schema Type : `rating`
+* Schema UI Component: Fusion-Next `<Rating/>`
 
 **用法**
 
@@ -1987,7 +2088,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### transfer
 
-Fusion-Next `<Transfer/>`
+* Schema Type : `transfer`
+* Schema UI Component: Fusion-Next `<Transfer/>`
 
 **用法**
 
