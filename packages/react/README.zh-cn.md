@@ -49,6 +49,7 @@ npm install --save @uform/react
   - [`<FormConsumer/>(即将废弃，请使用<FormSpy/>)`](<#FormConsumer(即将废弃，请使用FormSpy)>)
 - [Hook](#Hook)
   - [`useFormEffects`](#useFormEffects)
+  - [`useFieldState`](#useFieldState)
   - [`useForm`](#useForm)
   - [`useField`](#useField)
   - [`useVirtualField`](#useVirtualField)    
@@ -2069,6 +2070,116 @@ const App = () => {
       actions={actions}
     >
       <FormFragment />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### `useFieldState`
+
+> 使用 useFieldState 为自定义组件提供状态管理能力
+
+**签名**
+
+```typescript
+(defaultState: T): [state: IFieldState, setFieldState: (state?: IFieldState) => void]
+```
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, VirtualField,
+  createFormActions, createEffectHook,
+  useForm,  
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes
+} from '@uform/react'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const changeTab$ = createEffectHook('changeTab')
+const actions = createFormActions()
+const TabFragment = (props) => {  
+  const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
+  const { current } = fieldState
+  const { children, dataSource, form } = props
+  const ref = useRef(current)
+
+  const update = (cur) => {    
+    form.notify('changeTab', cur)
+    setLocalFieldState({
+      current: cur
+    })
+  }
+
+  useFormEffects(($, { setFieldState }) => {
+    dataSource.forEach((item, itemIdx) => {
+      setFieldState(item.name, state => {
+        state.display = itemIdx === current
+      })
+    })
+
+    changeTab$().subscribe((idx) => {
+      dataSource.forEach((item, itemIdx) => {
+      setFieldState(item.name, state => {
+        state.display = itemIdx === idx
+      })
+    })
+    })
+  })
+
+  ref.current = current
+  const btns = dataSource.map((item, idx) => {
+    console.log('current', current, ref.current)
+    const focusStyle = idx === current ? { color: '#fff', background: 'blue' } : {}
+    return <button style={focusStyle} onClick={() => {
+      update(idx)
+    }}>{item.label}</button>
+  })
+
+  return btns
+}
+
+const FormTab = (props) => {
+  return <VirtualField name="layout_tab">
+    {({ form }) => {
+      return <TabFragment {...props} form={form} />
+    }}
+  </VirtualField>
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <FormTab dataSource={[
+        { label: 'tab-1', name: 'username' },
+        { label: 'tab-2', name: 'age' }
+      ]} />
+      <div>
+        <InputField name="username" label="username"/>
+        <InputField name="age" label="age"/>
+      </div>
     </Form>
   )
 }
