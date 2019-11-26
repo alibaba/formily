@@ -99,7 +99,6 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   }, [])
 
   const state = ref.current.field.getState()
-  console.log(state.errors)
   return {
     form,
     field: ref.current.field,

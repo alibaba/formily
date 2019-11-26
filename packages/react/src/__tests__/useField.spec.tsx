@@ -36,7 +36,7 @@ describe('useField hook',()=>{
     expect(result.current.state.props).toEqual({})
     expect(result.current.state).toEqual({
       ...globalGraph.get('username').getState(),
-      errors: '',
+      errors: [],
       mounted: false,
     })
   })
@@ -149,7 +149,7 @@ describe('useField hook',()=>{
 
     const fieldProps = { name: 'username', required: true }    
     const { result: result1, rerender } = renderHook(() => useField(fieldProps), { wrapper: formWrapper })
-    expect(result1.current.state.errors).toEqual('')
+    expect(result1.current.state.errors).toEqual([])
     expect(result1.current.state.value).toEqual(undefined)
     rerender()
     act(() => {
@@ -158,10 +158,10 @@ describe('useField hook',()=>{
     
     // await waitForNextUpdate1()
     expect(result1.current.state.value).toEqual('')
-    expect(result1.current.state.errors).toEqual('')
+    expect(result1.current.state.errors).toEqual([])
 
     const { result: result2, waitForNextUpdate: waitForNextUpdate2 } = renderHook(() => useField({ ...fieldProps, triggerType: 'onChange' }), { wrapper: formWrapper })
-    expect(result2.current.state.errors).toEqual('')
+    expect(result2.current.state.errors).toEqual([])
     expect(result2.current.state.value).toEqual(undefined)
 
     act(() => {
@@ -181,16 +181,16 @@ describe('useField hook',()=>{
 
     const fieldProps = { name: 'username', required: true }    
     const { result: result1, rerender } = renderHook(() => useField(fieldProps), { wrapper: formWrapper })
-    expect(result1.current.state.errors).toEqual('')
+    expect(result1.current.state.errors).toEqual([])
     rerender()
     act(() => {
       result1.current.mutators.blur()
     })
     
-    expect(result1.current.state.errors).toEqual('')
+    expect(result1.current.state.errors).toEqual([])
 
     const { result: result2, waitForNextUpdate: waitForNextUpdate2 } = renderHook(() => useField({ ...fieldProps, triggerType: 'onBlur' }), { wrapper: formWrapper })
-    expect(result2.current.state.errors).toEqual('')
+    expect(result2.current.state.errors).toEqual([])
 
     act(() => {
       result2.current.mutators.blur()
