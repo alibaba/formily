@@ -59,12 +59,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
 
   const componentPropsValue = getComponentPropsValue({ schema, propsKey })
 
-  const handleXComponentPropsValueChange = (
-    value,
-    property,
-    schema,
-    propsKey
-  ) => {
+  const handleXComponentPropsValueChange = (value, property) => {
     const newSchema = { ...schema }
     if (propsKey === ComponentPropsTypes.X_RULES) {
       const newRules = _.map(schema[propsKey], rule => {
@@ -83,10 +78,10 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
     onChange(newSchema)
   }
 
-  const handleInputTypeChange = (inputType, property, schema, propsKey) => {
+  const handleInputTypeChange = (value, property) => {
     const newSchema = { ...schema }
     let defaultValue
-    switch (inputType) {
+    switch (value) {
       case InputTypes.INPUT: {
         defaultValue = ''
         break
@@ -230,7 +225,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                   handlePropertyChange(value, property)
                 }}
               >
-                {componentPropsData.options.map(({ label, value }) => (
+                {_.map(componentPropsData.options, ({ label, value }) => (
                   <SelectOption value={value} key={value}>
                     {label}
                   </SelectOption>
@@ -245,10 +240,10 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
               <Select
                 value={inputType}
                 onChange={value => {
-                  handleInputTypeChange(value, property, schema, propsKey)
+                  handleInputTypeChange(value, property)
                 }}
               >
-                {inputTypeData.options.map(({ label, value }) => (
+                {_.map(inputTypeData.options, ({ label, value }) => (
                   <SelectOption value={value} key={value}>
                     {label}
                   </SelectOption>
@@ -266,9 +261,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                   onChange={event => {
                     handleXComponentPropsValueChange(
                       event.target.value,
-                      property,
-                      schema,
-                      propsKey
+                      property
                     )
                   }}
                 />
@@ -283,12 +276,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                 <InputNumber
                   value={value}
                   onChange={value => {
-                    handleXComponentPropsValueChange(
-                      value,
-                      property,
-                      schema,
-                      propsKey
-                    )
+                    handleXComponentPropsValueChange(value, property)
                   }}
                 />
               </FormItem>
@@ -304,9 +292,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                   onChange={event => {
                     handleXComponentPropsValueChange(
                       event.target.checked,
-                      property,
-                      schema,
-                      propsKey
+                      property
                     )
                   }}
                 />
@@ -327,12 +313,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                     try {
                       value = JSON.parse(value)
                     } catch (error) {}
-                    handleXComponentPropsValueChange(
-                      value,
-                      property,
-                      schema,
-                      propsKey
-                    )
+                    handleXComponentPropsValueChange(value, property)
                   }}
                 />
               </FormItem>
@@ -409,7 +390,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                 })
               }}
             >
-              {fieldTypeData.options.map(({ label, value }) => (
+              {_.map(fieldTypeData.options, ({ label, value }) => (
                 <SelectOption value={value} key={value}>
                   {label}
                 </SelectOption>
@@ -431,7 +412,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                 })
               }}
             >
-              {xComponentData.options.map(({ label, value }) => (
+              {_.map(xComponentData.options, ({ label, value }) => (
                 <SelectOption value={value} key={value}>
                   {label}
                 </SelectOption>
