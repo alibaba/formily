@@ -81,6 +81,8 @@ npm install --save @uform/react
   - [`ValidateDescription`](#ValidateDescription)
   - [`ValidateArrayRules`](#ValidateArrayRules)
   - [`ValidatePatternRules`](#ValidatePatternRules)
+  - [`IFieldAPI`](#IFieldAPI)
+  - [`IVirtualFieldAPI`](#IVirtualFieldAPI)
 
 ### Usage
 
@@ -3227,4 +3229,26 @@ declare type ValidatePatternRules =
   | CustomValidator
   | ValidateDescription
   | ValidateArrayRules
+```
+
+
+#### IFieldAPI
+
+```typescript
+interface IFieldAPI {
+  state: IFieldState
+  form: IForm
+  props: {}
+  mutators: IMutators
+}
+```
+
+#### IVirtualFieldAPI
+
+```typescript
+interface IVirtualFieldAPI {
+  state: IFieldState
+  form: IForm
+  props: {}
+}
 ```
