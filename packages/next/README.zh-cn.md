@@ -66,7 +66,7 @@ npm install --save @uform/next
   - [`ISchemaFormRegistry`](#ISchemaFormRegistry)
   - [`INextSchemaFieldProps`](#INextSchemaFieldProps)
   - [`IPreviewTextProps`](#IPreviewTextProps)
-  - [`Mutators`](#Mutators)
+  - [`IMutators`](#IMutators)
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
   
@@ -388,8 +388,8 @@ registerFormField(
 
 ReactDOM.render(
     <SchemaForm actions={actions} effects={($)=>{
-       $('onFieldChange','aa').subscribe((fieldState)=>{
-         actions.setFieldState('bb',state=>{
+       $('onFieldChange','a').subscribe((fieldState)=>{
+         actions.setFieldState('a-mirror',state=>{
            state.value = fieldState.value
          })
        })
@@ -2118,10 +2118,10 @@ const App = () => {
         title="Transfer"
         name="transfer"
         enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
+          { value: 'One', value: '1' },
+          { value: 'Two', value: '2' },
+          { value: 'Three', value: '3' },
+          { value: 'Four', value: '4' }
         ]}
         x-component-props={{
           showSearch: true
@@ -2837,10 +2837,10 @@ interface IPreviewTextProps {
 
 ```
 
-#### Mutators
+#### IMutators
 
 ```typescript
-interface Mutators<V = any> {
+interface IMutators<V = any> {
    change: (value: V)=> void,//改变当前字段值
    dispatch: (name: string, payload : any) => void,//触发effect事件
    errors: (errors: string | Array<string>, ...formatValues: Array<string | number>) => void,//设置当前字段的错误消息
