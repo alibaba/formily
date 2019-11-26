@@ -1983,6 +1983,12 @@ interface IFormConsumerProps {
 
 > 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
 
+**签名**
+
+```typescript
+(effects: IFormEffect): void
+```
+
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -2293,7 +2299,13 @@ const App = () => {
 
 > 自定义hook
 
-**Usage**
+**签名**
+
+```typescript
+(type: string): Observable<TResult>
+```
+
+**用法**
 
 ```jsx
 import { Form, createEffectHook, createFormActions } from '@uform/react'
