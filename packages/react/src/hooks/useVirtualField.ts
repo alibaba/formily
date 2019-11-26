@@ -47,22 +47,23 @@ export const useVirtualField = (
   })
 
   useEffect(() => {
-    ref.current.field.unsafe_setSourceState(state => {
+    ref.current.field.setState(state => {
       state.mounted = true
-    })
+    }, true)
     ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true
       ref.current.field.unsubscribe()
       ref.current.field.setState((state: IVirtualFieldState) => {
         state.unmounted = true
-      })
+      }, true)
     }
   }, [])
 
   const state = ref.current.field.getState()
   return {
     state,
+    field: ref.current.field,
     form,
     props: state.props
   }
