@@ -369,6 +369,61 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 Base on `<SchemaMarkupForm/>` of @uform/react-schema-renderer. Recommended for production environments.
 
+
+```typescript
+interface IAntdSchemaFormProps {
+    schema?: ISchema;
+    fields?: ISchemaFormRegistry['fields'];
+    virtualFields?: ISchemaFormRegistry['virtualFields'];
+    formComponent?: ISchemaFormRegistry['formComponent'];
+    formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    inline?: boolean
+    className?: string
+    style?: React.CSSProperties
+    labelCol?: number | { span: number; offset?: number }
+    wrapperCol?: number | { span: number; offset?: number }
+    previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
+    // prefix
+    prefix?: string;
+
+    // is it inline
+    inline?: boolean;
+
+    // The size of a single Item is customized, and takes precedence over the size of the Form, and when a component is used with an Item, the component itself does not set the size property.
+    size?: 'large' | 'medium' | 'small';
+
+    // position of label
+    labelAlign?: 'top' | 'left' | 'inset';
+
+    // aligment of label
+    labelTextAlign?: 'left' | 'right';
+
+    saveField?: () => void;
+
+    // labelCol of FormItem
+    labelCol?: {};
+
+    // wrapperCol of FormItem
+    wrapperCol?: {};
+
+    // triggered by `htmlType="submit"` or action.submit
+    onSubmit?: () => void;
+
+    children?: any;
+    className?: string;
+    style?: React.CSSProperties;
+
+    // form state value
+    value?: {};
+
+    // callback trigger when form state change
+    onChange?: (values: {}, item: {}) => void;
+
+    // type of component
+    component?: string | (() => void);
+}
+```
+
 **Usage**
 
 Example1: Sync value of a and a-mirror
