@@ -431,20 +431,20 @@ ReactDOM.render(
         <Submit>提交</Submit>​ <Reset>重置</Reset>​
       </FormButtonGroup>
     </SchemaForm>
-    <h5>inline</h5>
+    <h5>Inline Layout</h5>
     <SchemaForm inline>
-      <Field name="aaa" type="string" title="字段1" />
-      <Field name="bbb" type="number" title="字段2" />
-      <Field name="ccc" type="date" title="字段3" />​
+      <Field name="aaa" type="string" title="field1" />
+      <Field name="bbb" type="number" title="field2" />
+      <Field name="ccc" type="date" title="field3" />​
       <FormButtonGroup>
         <Submit>提交</Submit>​ <Reset>重置</Reset>​
       </FormButtonGroup>
     </SchemaForm>
     <h5>editable = false</h5>
     <SchemaForm inline editable={false}>
-      <Field name="aaa" type="string" title="字段1" />
-      <Field name="bbb" type="number" title="字段2" />
-      <Field name="ccc" type="date" title="字段3" />​
+      <Field name="aaa" type="string" title="field1" />
+      <Field name="bbb" type="number" title="field2" />
+      <Field name="ccc" type="date" title="field3" />​
       <FormButtonGroup>
         <Submit>提交</Submit>​ <Reset>重置</Reset>​
       </FormButtonGroup>
@@ -456,7 +456,7 @@ ReactDOM.render(
 
 #### `<SchemaMarkupField/>`
 
-> @uform/react 的核心组件，用于描述表单字段
+> @uform/next 的核心组件，用于描述表单字段
 
 ```typescript
 interface IMarkupSchemaFieldProps {
