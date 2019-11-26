@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useRef, useContext } from 'react'
+import { createElement, useMemo, useEffect, useRef, useContext } from 'react'
 import { each, isFn } from '@uform/shared'
 import { IFieldState, IForm, IField, IMutators } from '@uform/core'
 import { getValueFromEvent } from '../shared'
@@ -104,7 +104,14 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     field: ref.current.field,
     state: {
       ...state,
-      errors: state.errors.join(', ')
+      errors: state.errors.map((message, index) => {
+        return createElement(
+          'span',
+          { key: index },
+          message,
+          state.errors.length - 1 > index ? ' ,' : ''
+        )
+      })
     },
     mutators,
     props: state.props
