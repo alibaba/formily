@@ -1943,6 +1943,12 @@ interface IFormConsumerProps {
 
 > Implement local effects by using useFormEffects. Same effect as the example of [Linkage](#Linkage)
 
+**Signature**
+
+```typescript
+(effects: IFormEffect): void
+```
+
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -2273,6 +2279,12 @@ const App = () => {
 #### createEffectHook
 
 > Custom your own hook by this api
+
+**Signature**
+
+```typescript
+(type: string): Observable<TResult>
+```
 
 **Usage**
 

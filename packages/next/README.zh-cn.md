@@ -51,7 +51,8 @@ npm install --save @uform/next
   - [`createAsyncFormActions`](#createAsyncFormActions)
   - [`FormEffectHooks`](#FormEffectHooks)
   - [`createEffectHook`](#createEffectHook)
-  - [`registerFormField`](#registerFormField)
+  - [`connect`](#connect)
+  - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
   - [`ButtonProps`](#ButtonProps)
   - [`CardProps`](#CardProps)
@@ -67,6 +68,7 @@ npm install --save @uform/next
   - [`IPreviewTextProps`](#IPreviewTextProps)
   - [`Mutators`](#Mutators)
   - [`IFieldProps`](#IFieldProps)
+  - [`IConnectOptions`](#IConnectOptions)
   
 
 ### 使用方式
@@ -2179,6 +2181,25 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### connect
+
+> 包装字段组件，让字段组件只需要支持value/defaultValue/onChange属性即可快速接入表单
+
+```typescript
+type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOptions<T>) => 
+(Target: T) => React.PureComponent<IFieldProps>
+```
+**用法**
+
+```typescript
+import {registerFormField,connect} from '@uform/next'
+
+registerFormField(
+  'string',
+  connect()(props => <input {...props} value={props.value || ''} />)
+)
+```
+
 #### registerFormField
 
 ```typescript
@@ -2747,6 +2768,29 @@ interface IFieldProps<V = any> {
    getOrderProperties  : () => Array<{schema: ISchema, key: number, path: string, name: string }>,//根据properties里字段的x-index值求出排序后的properties
    mutators            : Mutators,//数据操作对象
    schema              : ISchema
+}
+
+```
+
+```typescript
+
+interface IConnectOptions<T> {
+  //控制表单组件
+  valueName?: string
+  //事件名称
+  eventName?: string
+  //默认props
+  defaultProps?: Partial<IConnectProps>
+  //取值函数，有些场景我们的事件函数取值并不是事件回调的第一个参数，需要做进一步的定制
+  getValueFromEvent?: (props:  IFieldProps['x-props'], event: Event, ...args: any[]) => any 
+  //字段组件props transformer
+  getProps?: (connectProps: IConnectProps, fieldProps: IFieldProps) => IConnectProps 
+  //字段组件component transformer
+  getComponent?: ( 
+    target: T, 
+    connectProps: IConnectProps,
+    fieldProps: IFieldProps
+  ) => T
 }
 
 ```
