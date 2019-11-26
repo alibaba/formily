@@ -365,6 +365,69 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 基于@uform/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
 
+```typescript
+interface INextSchemaFormProps {
+    schema?: ISchema;
+    fields?: ISchemaFormRegistry['fields'];
+    virtualFields?: ISchemaFormRegistry['virtualFields'];
+    formComponent?: ISchemaFormRegistry['formComponent'];
+    formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    inline?: boolean
+    className?: string
+    style?: React.CSSProperties
+    labelCol?: number | { span: number; offset?: number }
+    wrapperCol?: number | { span: number; offset?: number }
+    previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
+    // 样式前缀
+    prefix?: string;
+
+    // 内联表单
+    inline?: boolean;
+
+    // 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。
+    size?: 'large' | 'medium' | 'small';
+
+    // 标签的位置
+    labelAlign?: 'top' | 'left' | 'inset';
+
+    // 标签的左右对齐方式
+    labelTextAlign?: 'left' | 'right';
+
+    // 经 `new Field(this)` 初始化后，直接传给 Form 即可 用到表单校验则不可忽略此项
+    field?: any;
+
+    // 保存 Form 自动生成的 field 对象
+    saveField?: () => void;
+
+    // 控制第一级 Item 的 labelCol
+    labelCol?: {};
+
+    // 控制第一级 Item 的 wrapperCol
+    wrapperCol?: {};
+
+    // form内有 `htmlType="submit"` 或 actions.submit时 触发
+    onSubmit?: () => void;
+
+    // 子元素
+    children?: any;
+
+    // 扩展class
+    className?: string;
+
+    // 自定义内联样式
+    style?: React.CSSProperties;
+
+    // 表单数值
+    value?: {};
+
+    // 表单变化回调
+    onChange?: (values: {}, item: {}) => void;
+
+    // 设置标签类型
+    component?: string | (() => void);
+}
+```
+
 **用法**
 
 例子1: 将a-mirror的值设置为a的值。
