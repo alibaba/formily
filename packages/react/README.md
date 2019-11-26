@@ -51,6 +51,7 @@ npm install --save @uform/react
   - [`<FormConsumer/>(deprecated，pls using <FormSpy/>)`](#formconsumerdeprecated，pls-using-formspy)
 - [Hook](#Hook)
   - [`useFormEffects`](#useFormEffects)
+  - [`useFormState`](#useFormState)
   - [`useFieldState`](#useFieldState)
   - [`useForm`](#useForm)
   - [`useField`](#useField)
@@ -2037,6 +2038,73 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### `useFormState`
+
+> 使用 useFormState 为自定义组件提供FormState扩展和管理能力
+
+**签名**
+
+```typescript
+(defaultState: T): [state: IFormState, setFormState: (state?: IFormState) => void]
+```
+
+**用法**
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, VirtualField,
+  createFormActions, createEffectHook,
+  useForm,  
+  useFormState,
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes
+} from '@uform/react'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const actions = createFormActions()
+const FormFragment = (props) => {  
+  const [formState, setFormState ] = useFormState({ extendVar: 0 })
+  const { extendVar } = formState
+
+  return <div>
+    <button onClick={() => {
+      setFormState({ extendVar: extendVar + 1 })
+    }}>add</button>
+    <div>count: {extendVar}</div>
+  </div>
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <FormFragment />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 #### `useFieldState`
 

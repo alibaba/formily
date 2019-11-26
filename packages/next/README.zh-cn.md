@@ -23,8 +23,8 @@ npm install --save @uform/next
   - [`cards`](#cards)
   - [`table`](#table)
 - [布局组件](#Layout-Components)
-  - [`<FormBlock/>`](#FormBlock)
   - [`<FormCard/>`](#FormCard)
+  - [`<FormBlock/>`](#FormBlock)  
   - [`<FormStep/>`](#FormStep)
   - [`<FormLayout/>`](#FormLayout)
   - [`<FormItemGrid/>`](#FormItemGrid)
@@ -861,6 +861,30 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Layout Components
 
+
+#### `<FormCard/>`
+
+> FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)。
+> FormCard与[FormBlock](#FormBlock) 唯一区别是样式上是否有框
+
+**用法**
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@uform/next'
+import '@alifd/next/dist/next.css'
+
+const App = () => (
+  <SchemaForm>
+    <FormCard title="block">
+      <Field type="string" name="username" title="username" />
+    </FormCard>
+  </SchemaForm>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 #### `<FormBlock/>`
 
 > FormBlock 组件 Props, 完全继承自 [CardProps](#CardProps)
@@ -878,28 +902,6 @@ const App = () => (
     <FormBlock title="block">
       <Field type="string" name="username" title="username" />
     </FormBlock>
-  </SchemaForm>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<FormCard/>`
-
-> FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@uform/next'
-import '@alifd/next/dist/next.css'
-
-const App = () => (
-  <SchemaForm>
-    <FormCard title="block">
-      <Field type="string" name="username" title="username" />
-    </FormCard>
   </SchemaForm>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
