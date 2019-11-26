@@ -37,6 +37,8 @@
     "classnames": "^2.2.6",
     "moveto": "^1.7.4",
     "react-stikky": "^0.1.15",
+    "react-eva": "^1.0.0-alpha.0",
+    "rxjs": "^6.5.1",
     "styled-components": "^4.1.1"
   },
   "publishConfig": {
