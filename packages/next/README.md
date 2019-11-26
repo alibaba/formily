@@ -65,7 +65,7 @@ npm install --save @uform/next
   - [`ISchemaFormRegistry`](#ISchemaFormRegistry)
   - [`INextSchemaFieldProps`](#INextSchemaFieldProps)
   - [`IPreviewTextProps`](#IPreviewTextProps)
-  - [`Mutators`](#Mutators)
+  - [`IMutators`](#IMutators)
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
   
@@ -385,8 +385,8 @@ registerFormField(
 
 ReactDOM.render(
     <SchemaForm actions={actions} effects={($)=>{
-       $('onFieldChange','aa').subscribe((fieldState)=>{
-         actions.setFieldState('bb',state=>{
+       $('onFieldChange','a').subscribe((fieldState)=>{
+         actions.setFieldState('a-mirror',state=>{
            state.value = fieldState.value
          })
        })
@@ -2815,6 +2815,7 @@ interface IPreviewTextProps {
 }
 
 ```
+
 
 #### IMutators
 
