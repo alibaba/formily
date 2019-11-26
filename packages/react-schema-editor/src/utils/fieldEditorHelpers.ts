@@ -40,7 +40,7 @@ const convertKeysToSelectData = keys => {
 }
 
 export const getXComponentData = components => {
-  return convertKeysToSelectData(_.keys(components))
+  return convertKeysToSelectData(_.map(components, ({ name }) => name))
 }
 
 export const getRemainingKeys = (allKeys, usedKeys) => {
