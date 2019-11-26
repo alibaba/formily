@@ -1,169 +1,111 @@
-# 简单场景
-
-> 最简单的表单使用场景，只需要很简单使
-> 用`<SchemaForm/>/<Field/><FormButtonGroup/><Submit/><Reset/>`即可
-
-#### Demo 示例
-
 ```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
+import ReactDOM from "react-dom";
+import React, { useRef } from "react";
 import {
-  SchemaForm,
   Field,
-  FormButtonGroup,
-  Submit,
-  Reset,
-  filterChanged,
-  createFormActions
-} from '@uform/next'
-import { Button } from '@alifd/next'
-import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+  VirtualField,
+  Form,
+  createFormActions,
+  FormEffectHooks
+} from "@uform/react";
+import { combineLatest } from "rxjs";
+import { map } from "rxjs/operators";
 
-const actions = createFormActions()
+import { Input, Radio, Button } from "antd";
+import "antd/dist/antd.css";
 
-const sleep = duration =>
-  new Promise(resolve => {
-    setTimeout(resolve, duration)
-  })
+const { onFieldChange$, onFormMount$ } = FormEffectHooks;
 
-ReactDOM.render(
-  <Printer>
-    <SchemaForm
-      onSubmit={v => console.log(v)}
-      actions={actions}
-      labelCol={7}
-      wrapperCol={12}
-      effects={($, { setFieldState, hasChanged }) => {
-        $('onFormMount').subscribe(() => {
-          setFieldState('radio', state => {
-            state.required = true
-          })
-        })
+const FieldBlock = props => (
+  <VirtualField {...props}>
+    {({ state, mutators }) => (
+      <div style={{ marginTop: 10, padding: 10, border: "1px solid #1890ff" }}>
+        <h3>block-{props.name}</h3>
+        {props.children}
+      </div>
+    )}
+  </VirtualField>
+);
 
-        $('onFormChange').subscribe(async state => {
-          if (hasChanged(state, 'values.hello')) {
-            await sleep(1000)
-            setFieldState('radio', state => {
-              state.value = '4'
-            })
-          }
-        })
-      }}
-    >
-      <Field
-        type="radio"
-        enum={['1', '2', '3', '4']}
-        title="Radio"
-        name="radio"
+const CustomRadio = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <Radio.Group
+        onChange={e => mutators.change(e.target.value)}
+        value={state.value}
+      >
+        <Radio value={1}>是</Radio>
+        <Radio value={2}>否</Radio>
+      </Radio.Group>
+    )}
+  </Field>
+);
+
+const CustomInput = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <Input
+        style={{ width: 200 }}
+        data-testid="input"
+        disabled={!state.editable}
+        value={state.value || ""}
+        onChange={e => mutators.change(e.target.value)}
+        onBlur={mutators.blur}
+        onFocus={mutators.focus}
       />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        required
-        title="Select"
-        name="select"
-      />
-      <Field
-        type="checkbox"
-        enum={['1', '2', '3', '4']}
-        required
-        title="Checkbox"
-        name="checkbox"
-      />
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-      />
-      <Field type="number" title="数字选择" name="number" />
-      <Field type="boolean" title="开关选择" name="boolean" />
-      <Field type="date" title="日期选择" name="date" />
-      <Field
-        type="daterange"
-        title="日期范围"
-        default={['2018-12-19', '2018-12-19']}
-        name="daterange"
-      />
-      <Field type="year" title="年份" name="year" />
-      <Field type="time" title="时间" name="time" />
-      <Field
-        type="upload"
-        title="卡片上传文件"
-        name="upload"
-        x-props={{ listType: 'card' }}
-      />
-      <Field
-        type="upload"
-        title="拖拽上传文件"
-        name="upload2"
-        x-props={{ listType: 'dragger' }}
-      />
-      <Field
-        type="upload"
-        title="普通上传文件"
-        name="upload3"
-        x-props={{ listType: 'text' }}
-      />
-      <Field
-        type="range"
-        title="范围选择"
-        name="range"
-        x-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-      />
-      <Field
-        type="transfer"
-        enum={[{ value: 1, label: '选项1' }, { value: 2, label: '选项2' }]}
-        title="穿梭框"
-        name="transfer"
-      />
-      <Field type="rating" title="等级" name="rating" />
-      <FormButtonGroup offset={7} sticky>
-        <Submit />
-        <Reset />
-        <Button
-          onClick={() => {
-            actions.setFieldState('upload', state => {
-              state.value = [
-                {
-                  downloadURL:
-                    '//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png',
-                  imgURL:
-                    '//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png',
-                  name: 'doc.svg'
-                }
-              ]
-            })
-          }}
-        >
-          上传文件
-        </Button>
-        <Button
-          onClick={() => {
-            actions.setFormState(state => {
-              state.values = {
-                radio: '4',
-                checkbox: ['2', '3']
+    )}
+  </Field>
+);
+
+const MyForm = () => {
+  const actionsRef = useRef(createFormActions());
+
+  return (
+    <div style={{ padding: 20 }}>
+      <Form
+        onSubmit={v => {
+          console.log(v);
+        }}
+        onValidateFailed={v => {
+          console.log(v);
+        }}
+        actions={actionsRef.current}
+        effects={($, { setFieldState }) => {
+          combineLatest(onFormMount$(), onFieldChange$("a1"))
+            .pipe(map(([_, field]) => field))
+            .subscribe(x => {
+              if (x.value === 2) {
+                setFieldState("b", state => (state.visible = false));
+              } else if (x.value === 1) {
+                setFieldState("b", state => (state.visible = true));
               }
-            })
-          }}
-        >
-          改变radio的值
-        </Button>
-        <Button
-          onClick={() => {
-            actions.setFormState(state => {
-              state.values = { ...state.values, hello: 'hello world' }
-            })
-          }}
-        >
-          改变form状态
-        </Button>
-      </FormButtonGroup>
-    </SchemaForm>
-  </Printer>,
-  document.getElementById('root')
-)
+            });
+        }}
+      >
+        <CustomRadio name="a1" required />
+        <FieldBlock name="b">
+          <CustomInput name="b.b1" required />
+        </FieldBlock>
+      </Form>
+      <Button
+        type="primary"
+        style={{ marginTop: 10 }}
+        onClick={() => {
+          // actionsRef.current.validate().then(x => {
+          //   console.log(x);
+          // });
+          // actionsRef.current.getFormState(s => {
+          //   console.log(s.values);
+          // });
+          actionsRef.current.submit();
+        }}
+      >
+        Submit
+      </Button>
+    </div>
+  );
+};
+
+ReactDOM.render(<MyForm />, document.getElementById("root"));
+
 ```

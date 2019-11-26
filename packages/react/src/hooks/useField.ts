@@ -94,7 +94,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IFieldState) => {
         state.unmounted = true
-      }, true)
+      })
     }
   }, [])
 

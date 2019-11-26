@@ -56,7 +56,7 @@ export const useVirtualField = (
       ref.current.field.unsubscribe()
       ref.current.field.setState((state: IVirtualFieldState) => {
         state.unmounted = true
-      }, true)
+      })
     }
   }, [])
 
