@@ -63,6 +63,7 @@ export const useVirtualField = (
   const state = ref.current.field.getState()
   return {
     state,
+    field: ref.current.field,
     form,
     props: state.props
   }
