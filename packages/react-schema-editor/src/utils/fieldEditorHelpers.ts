@@ -130,7 +130,6 @@ const isExpression = value => {
 }
 
 export const getInputType = value => {
-  debugger
   if (typeof value === 'object' || isExpression(value)) {
     return InputTypes.TEXT_AREA
   }

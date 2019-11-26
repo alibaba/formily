@@ -66,7 +66,20 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
     propsKey
   ) => {
     const newSchema = { ...schema }
-    _.set(newSchema, `${propsKey}.${property}`, value)
+    if (propsKey === ComponentPropsTypes.X_RULES) {
+      const newRules = _.map(schema[propsKey], rule => {
+        if (_.has(rule, property)) {
+          return {
+            ...rule,
+            [property]: value
+          }
+        }
+        return rule
+      })
+      _.set(newSchema, `${propsKey}`, newRules)
+    } else {
+      _.set(newSchema, `${propsKey}.${property}`, value)
+    }
     onChange(newSchema)
   }
 
@@ -91,7 +104,20 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         break
       }
     }
-    _.set(newSchema, `${propsKey}.${property}`, defaultValue)
+    if (propsKey === ComponentPropsTypes.X_RULES) {
+      const newRules = _.map(schema[propsKey], rule => {
+        if (_.has(rule, property)) {
+          return {
+            ...rule,
+            [property]: defaultValue
+          }
+        }
+        return rule
+      })
+      _.set(newSchema, `${propsKey}`, newRules)
+    } else {
+      _.set(newSchema, `${propsKey}.${property}`, defaultValue)
+    }
     onChange(newSchema)
   }
 
@@ -124,20 +150,63 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
     })
   }
 
-  const handleMinusClick = property => {
+  const handleRuleMessageChange = (value, property) => {
+    const newRules = _.map(schema[propsKey], rule => {
+      if (_.has(rule, property)) {
+        return {
+          ...rule,
+          message: value
+        }
+      }
+      return rule
+    })
+
     onChange({
-      ..._.omit(schema, `${propsKey}.${property}`)
+      ...schema,
+      [ComponentPropsTypes.X_RULES]: newRules
     })
   }
 
+  const handleMinusClick = property => {
+    if (propsKey === ComponentPropsTypes.X_RULES) {
+      const newRules = _.reduce(
+        schema[propsKey],
+        (result, rule) => {
+          if (_.has(rule, property)) {
+            return result
+          }
+          return _.concat(result, rule)
+        },
+        []
+      )
+      onChange({
+        ...schema,
+        [ComponentPropsTypes.X_RULES]: newRules
+      })
+    } else {
+      onChange({
+        ..._.omit(schema, `${propsKey}.${property}`)
+      })
+    }
+  }
+
   const handlePlusClick = () => {
-    onChange({
-      ...schema,
-      [propsKey]: {
-        ...schema[propsKey],
-        [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
-      }
-    })
+    if (propsKey === ComponentPropsTypes.X_RULES) {
+      onChange({
+        ...schema,
+        [propsKey]: _.concat(schema[propsKey], {
+          [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
+        })
+      })
+    } else {
+      onChange({
+        ...schema,
+        [propsKey]: {
+          ...schema[propsKey],
+          [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
+        }
+      })
+    }
   }
 
   return (
@@ -274,7 +343,12 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                 {...formItemLayout}
                 className="field-group-form-item"
               >
-                <Input value={getRuleMessage({ schema, property })} />
+                <Input
+                  value={getRuleMessage({ schema, property })}
+                  onChange={event => {
+                    handleRuleMessageChange(event.target.value, property)
+                  }}
+                />
               </FormItem>
             )}
             <FormItem
