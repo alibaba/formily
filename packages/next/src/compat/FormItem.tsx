@@ -12,7 +12,7 @@ const computeStatus = (props: ICompatItemProps) => {
   if (props.invalid) {
     return 'error'
   }
-  if (props.warnings.length) {
+  if (props.warnings && props.warnings.length) {
     return 'warning'
   }
 }
