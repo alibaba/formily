@@ -77,6 +77,14 @@ ReactDOM.render(
         title="TextArea"
         name="textarea"
         x-component="textarea"
+        x-rules={value => {
+          return value > 20
+            ? {
+                type: 'warning',
+                message: '这是个警告信息'
+              }
+            : ''
+        }}
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
@@ -115,7 +123,10 @@ ReactDOM.render(
       />
       <Field
         type="transfer"
-        enum={[{ value: 1, label: '选项1' }, { value: 2, label: '选项2' }]}
+        enum={[
+          { value: 1, label: '选项1' },
+          { value: 2, label: '选项2' }
+        ]}
         title="穿梭框"
         name="transfer"
       />

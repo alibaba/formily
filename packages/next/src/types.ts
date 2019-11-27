@@ -50,7 +50,7 @@ export type IFormItemTopProps = React.PropsWithChildren<
 >
 
 export interface ICompatItemProps
-  extends Exclude<ItemProps, 'labelCol' | 'wrapperCol'>,
+  extends Omit<ItemProps, 'labelCol' | 'wrapperCol'>,
     Partial<ISchemaFieldComponentProps> {
   labelCol?: number | { span: number; offset?: number }
   wrapperCol?: number | { span: number; offset?: number }
