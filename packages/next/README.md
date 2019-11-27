@@ -364,55 +364,67 @@ Base on `<SchemaMarkupForm/>` of @uform/react-schema-renderer. Recommended for p
 
 ```typescript
 interface INextSchemaFormProps {
+    // render by schema
     schema?: ISchema;
     fields?: ISchemaFormRegistry['fields'];
     virtualFields?: ISchemaFormRegistry['virtualFields'];
+    // pre-registered Form Component
     formComponent?: ISchemaFormRegistry['formComponent'];
+    // pre-registered FormItem Component
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
-    inline?: boolean
-    className?: string
-    style?: React.CSSProperties
+    // label column settiing
     labelCol?: number | { span: number; offset?: number }
+    // FormItem column settiing
     wrapperCol?: number | { span: number; offset?: number }
+    // custom placeholder when preivew
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
     // prefix
     prefix?: string;
-
     // is it inline
     inline?: boolean;
-
     // The size of a single Item is customized, and takes precedence over the size of the Form, and when a component is used with an Item, the component itself does not set the size property.
     size?: 'large' | 'medium' | 'small';
-
     // position of label
     labelAlign?: 'top' | 'left' | 'inset';
-
     // aligment of label
     labelTextAlign?: 'left' | 'right';
-
     saveField?: () => void;
-
     // labelCol of FormItem
     labelCol?: {};
-
     // wrapperCol of FormItem
     wrapperCol?: {};
-
-    // triggered by `htmlType="submit"` or action.submit
-    onSubmit?: () => void;
-
     children?: any;
     className?: string;
     style?: React.CSSProperties;
-
-    // form state value
-    value?: {};
-
-    // callback trigger when form state change
-    onChange?: (values: {}, item: {}) => void;
-
     // type of component
     component?: string | (() => void);
+    // form state value
+    value?: Value;
+    // form state defaultValue
+    defaultValue?: DefaultValue;
+    // form state initialValues
+    initialValues?: DefaultValue;
+    // FormActions instance 
+    actions?: FormActions;
+    // IFormEffect instance
+    effects?: IFormEffect<FormEffectPayload, FormActions>;
+    // form instance
+    form?: IForm;
+    // Form change event callback
+    onChange?: (values: Value) => void;
+    // triggered by `htmlType="submit"` or actions.submit时
+    onSubmit?: (values: Value) => void | Promise<Value>;
+    // triggered by <Reset/> or actions.reset
+    onReset?: () => void;
+    Form verification failure event callback
+    onValidateFailed?: (valideted: IFormValidateResult) => void;
+    children?: React.ReactElement | ((form: IForm) => React.ReactElement);
+    // Whether to use the dirty check, the default will go immer accurate update
+    useDirty?: boolean;
+    // Is it editable, overall control in the Form dimension
+    editable?: boolean | ((name: string) => boolean);
+    // Whether to go pessimistic check, stop the subsequent check when the first check fails
+    validateFirst?: boolean;    
 }
 ```
 

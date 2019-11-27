@@ -373,28 +373,60 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```typescript
 interface IAntdSchemaFormProps {
+  // 通过schema渲染
     schema?: ISchema;
     fields?: ISchemaFormRegistry['fields'];
     virtualFields?: ISchemaFormRegistry['virtualFields'];
+    // 全局注册Form渲染组件
     formComponent?: ISchemaFormRegistry['formComponent'];
+    // 全局注册FormItem渲染组件
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    // 布局设置
     layout?: FormLayout;
-    form?: WrappedFormUtils;
-    onSubmit?: React.FormEventHandler<HTMLFormElement>;
-    style?: React.CSSProperties;
-    className?: string;
     prefixCls?: string;
+    // 隐藏required的星标
     hideRequiredMark?: boolean;
-    wrapperCol?: ColProps;
-    labelCol?: ColProps;
     colon?: boolean;
+    // 标签的位置
     labelAlign?: FormLabelAlign;
+    // 内联表单
     inline?: boolean
-    className?: string
+    // 扩展class
+    className?: string    
     style?: React.CSSProperties
+    // label 布局控制
     labelCol?: number | { span: number; offset?: number }
+    // FormItem 布局控制
     wrapperCol?: number | { span: number; offset?: number }
+    // 自定义 placeholder
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
+    // 全局value
+    value?: Value;
+    // 全局defaultValue
+    defaultValue?: DefaultValue;
+    // 全局initialValues
+    initialValues?: DefaultValue;
+    // FormActions实例
+    actions?: FormActions;
+    // IFormEffect实例
+    effects?: IFormEffect<FormEffectPayload, FormActions>;
+    // 表单实例
+    form?: IForm;
+    // 表单变化回调
+    onChange?: (values: Value) => void;
+    // form内有 `htmlType="submit"` 或 actions.submit时 触发
+    onSubmit?: (values: Value) => void | Promise<Value>;
+    // form内有 <Reset/> 或 actions.reset时 触发
+    onReset?: () => void;
+    // 校验失败时触发
+    onValidateFailed?: (valideted: IFormValidateResult) => void;
+    children?: React.ReactElement | ((form: IForm) => React.ReactElement);
+    //是否使用脏检查，默认会走immer精确更新
+    useDirty?: boolean;
+    // 是否可编辑
+    editable?: boolean | ((name: string) => boolean);
+    // 是否走悲观校验，遇到第一个校验失败就停止后续校验
+    validateFirst?: boolean;
 }
 ```
 
