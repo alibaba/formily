@@ -3,6 +3,7 @@ import { render, fireEvent, RenderResult } from '@testing-library/react'
 import {
   Form,
   Field,
+  VirtualField,
   createFormActions,
   createAsyncFormActions,
   FormEffectHooks
@@ -10,6 +11,17 @@ import {
 import { IFormActions, IFormAsyncActions } from '../types'
 
 const { onFieldValueChange$ } = FormEffectHooks
+
+const FieldBlock = props => (
+  <VirtualField {...props}>
+    {({ state }) => (
+      <fieldset>
+        <legend>block-{props.name}</legend>
+        {props.children}
+      </fieldset>
+    )}
+  </VirtualField>
+)
 
 const Radio = props => (
   <Field {...props}>
@@ -81,21 +93,24 @@ describe('test all apis', () => {
         onValidateFailed={onValidateFailedHandler}
         actions={isAsync ? asyncActions : actions}
         effects={($, { setFieldState }) => {
-          // run effect after form mount
           onFieldValueChange$('a1').subscribe(x => {
             if (x.value === '0') {
-              setFieldState('a2', state => (state.visible = false))
-              setFieldState('a3', state => (state.display = false))
+              setFieldState('b', state => (state.visible = false))
+              setFieldState('c', state => (state.display = false))
             } else if (x.value === '1') {
-              setFieldState('a2', state => (state.visible = true))
-              setFieldState('a3', state => (state.display = true))
+              setFieldState('b', state => (state.visible = true))
+              setFieldState('c', state => (state.display = true))
             }
           })
         }}
       >
         <Radio name="a1" required />
-        <Input name="a2" required />
-        <Input name="a3" required />
+        <FieldBlock name="b">
+          <Input name="b.b1" required />
+        </FieldBlock>
+        <FieldBlock name="c">
+          <Input name="c.c1" required />
+        </FieldBlock>
       </Form>
     )
 
@@ -108,22 +123,24 @@ describe('test all apis', () => {
     onChangeHandler = jest.fn()
   })
 
-  test('field visible and display', () => {
+  test('virtualField visible and display', () => {
     const { queryByTestId } = renderForm()
     const radio1Ele = queryByTestId('radio1')
     fireEvent.click(radio1Ele)
-    const inputA2 = queryByTestId('input-a2')
-    fireEvent.change(inputA2, { target: { value: '123' } })
-    const inputA3 = queryByTestId('input-a3')
-    fireEvent.change(inputA3, { target: { value: '456' } })
+    const inputB1 = queryByTestId('input-b.b1')
+    fireEvent.change(inputB1, { target: { value: '123' } })
+    const inputC1 = queryByTestId('input-c.c1')
+    fireEvent.change(inputC1, { target: { value: '456' } })
+
     let formState = actions.getFormState()
-    expect(formState.values.a2).toEqual('123')
-    expect(formState.values.a3).toEqual('456')
+    expect(formState.values.b1).toEqual('123')
+    expect(formState.values.c1).toEqual('456')
+    expect(formState.values).toEqual({ a1: '1', b1: '123', c1: '456' })
     const radio2Ele = queryByTestId('radio2')
     fireEvent.click(radio2Ele)
     formState = actions.getFormState()
-    expect(formState.values.a2).toBeUndefined()
-    expect(formState.values.a3).toEqual('456')
+    expect(formState.values.b1).toBeUndefined()
+    expect(formState.values).toEqual({ a1: '0', c1: '456' })
   })
 })
 
