@@ -20,7 +20,7 @@
     "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "peerDependencies": {
-    "@alifd/next": "^1.13.1",
+    "@alifd/next": "^1.19.1",
     "@babel/runtime": "^7.4.4",
     "@types/classnames": "^2.2.9",
     "@types/styled-components": "^4.1.19",
@@ -38,7 +38,7 @@
     "styled-components": "^4.1.1"
   },
   "devDependencies": {
-    "@alifd/next": "^1.13.1",
+    "@alifd/next": "^1.19.1",
     "@types/classnames": "^2.2.9",
     "@types/styled-components": "^4.1.19"
   },

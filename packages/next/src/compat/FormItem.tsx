@@ -12,10 +12,9 @@ const computeStatus = (props: ICompatItemProps) => {
   if (props.invalid) {
     return 'error'
   }
-  //todo:暂时不支持
-  // if (props.warnings.length) {
-  //   return 'warning'
-  // }
+  if (props.warnings.length) {
+    return 'warning'
+  }
 }
 
 const computeHelp = (props: ICompatItemProps) => {
