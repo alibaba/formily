@@ -372,27 +372,37 @@ Base on `<SchemaMarkupForm/>` of @uform/react-schema-renderer. Recommended for p
 
 ```typescript
 interface IAntdSchemaFormProps {
+    // render by schema
     schema?: ISchema;
     fields?: ISchemaFormRegistry['fields'];
     virtualFields?: ISchemaFormRegistry['virtualFields'];
+    // pre-registered Form Component
     formComponent?: ISchemaFormRegistry['formComponent'];
+    // pre-registered FormItem Component
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    // layout setting
     layout?: FormLayout;
     form?: WrappedFormUtils;
+    // triggered by `htmlType="submit"` or action.submit
     onSubmit?: React.FormEventHandler<HTMLFormElement>;
     style?: React.CSSProperties;
     className?: string;
+    // className of prefix
     prefixCls?: string;
     hideRequiredMark?: boolean;
+    // FormItem column settiing
     wrapperCol?: ColProps;
+    // label column settiing
     labelCol?: ColProps;
+    // it there a colon
     colon?: boolean;
+    // alignment of label
     labelAlign?: FormLabelAlign;
+    // is it inline
     inline?: boolean
     className?: string
     style?: React.CSSProperties
-    labelCol?: number | { span: number; offset?: number }
-    wrapperCol?: number | { span: number; offset?: number }
+    // custom placeholder when preivew
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
 }
 ```
@@ -2674,8 +2684,11 @@ interface IFieldState<FieldProps = any> {
 
 ```typescript
 interface ISchemaFieldComponentProps extends IFieldState {
+  // render by schema
   schema: Schema
+  // mutators of 
   mutators: IMutators
+  // form instance
   form: IForm
   renderField: (
     addtionKey: string | number,
@@ -2688,7 +2701,9 @@ interface ISchemaFieldComponentProps extends IFieldState {
 
 ```typescript
 interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
+  // render by schema
   schema: Schema
+  // form instance
   form: IForm
   children: React.ReactElement[]
   renderField: (
@@ -2785,8 +2800,11 @@ interface INextSchemaFieldProps {
         [key: string]: ISchema;
     };
     additionalProperties?: ISchema;
+    // Is it in the loading state, 
     editable?: boolean;
+    /** writable property**/ // Is it visible, note: if the state is false, then the value of the field will not be submitted, and the UI will not display
     visible?: boolean;
+    // Whether to show, note: if the state is false, then the value of the field will be submitted, the UI will not display, similar to the form hidden field
     display?: boolean;
     ['x-props']?: {
         [name: string]: any;

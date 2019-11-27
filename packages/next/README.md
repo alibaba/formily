@@ -364,16 +364,19 @@ Base on `<SchemaMarkupForm/>` of @uform/react-schema-renderer. Recommended for p
 
 ```typescript
 interface INextSchemaFormProps {
+    // render by schema
     schema?: ISchema;
     fields?: ISchemaFormRegistry['fields'];
     virtualFields?: ISchemaFormRegistry['virtualFields'];
+    // pre-registered Form Component
     formComponent?: ISchemaFormRegistry['formComponent'];
+    // pre-registered FormItem Component
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
-    inline?: boolean
-    className?: string
-    style?: React.CSSProperties
+    // label column settiing
     labelCol?: number | { span: number; offset?: number }
+    // FormItem column settiing
     wrapperCol?: number | { span: number; offset?: number }
+    // custom placeholder when preivew
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
     // prefix
     prefix?: string;

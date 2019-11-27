@@ -373,27 +373,37 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```typescript
 interface IAntdSchemaFormProps {
+  // 通过schema渲染
     schema?: ISchema;
     fields?: ISchemaFormRegistry['fields'];
     virtualFields?: ISchemaFormRegistry['virtualFields'];
+    // 全局注册Form渲染组件
     formComponent?: ISchemaFormRegistry['formComponent'];
+    // 全局注册FormItem渲染组件
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    // 布局设置
     layout?: FormLayout;
+    // 传入form实例
     form?: WrappedFormUtils;
+    // form内有 `htmlType="submit"` 或 actions.submit时 触发
     onSubmit?: React.FormEventHandler<HTMLFormElement>;
-    style?: React.CSSProperties;
-    className?: string;
     prefixCls?: string;
+    // 隐藏required的星标
     hideRequiredMark?: boolean;
-    wrapperCol?: ColProps;
-    labelCol?: ColProps;
     colon?: boolean;
+    // 标签的位置
     labelAlign?: FormLabelAlign;
+    // 内联表单
     inline?: boolean
+    // 扩展class
     className?: string
+    // 自定义内联样式
     style?: React.CSSProperties
+    // label布局控制
     labelCol?: number | { span: number; offset?: number }
+    // FormItem布局控制
     wrapperCol?: number | { span: number; offset?: number }
+    // 自定义预览placeholder
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
 }
 ```

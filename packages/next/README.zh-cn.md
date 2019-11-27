@@ -367,16 +367,19 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```typescript
 interface INextSchemaFormProps {
+    // 通过schema渲染
     schema?: ISchema;
     fields?: ISchemaFormRegistry['fields'];
     virtualFields?: ISchemaFormRegistry['virtualFields'];
+    // 全局注册Form渲染组件
     formComponent?: ISchemaFormRegistry['formComponent'];
+    // 全局注册FormItem渲染组件
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
-    inline?: boolean
-    className?: string
-    style?: React.CSSProperties
+    // label布局控制
     labelCol?: number | { span: number; offset?: number }
+    // FormItem布局控制
     wrapperCol?: number | { span: number; offset?: number }
+    // 自定义预览placeholder
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
     // 样式前缀
     prefix?: string;
