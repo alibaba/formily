@@ -2603,7 +2603,7 @@ interface IForm {
 #### ButtonProps
 
 ```typescript
-interface ISubmitProps {
+interface ButtonProps {
   /** reset pops **/
   onSubmit?: ISchemaFormProps['onSubmit']
   showLoading?: boolean

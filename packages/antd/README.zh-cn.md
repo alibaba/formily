@@ -378,59 +378,23 @@ interface IAntdSchemaFormProps {
     virtualFields?: ISchemaFormRegistry['virtualFields'];
     formComponent?: ISchemaFormRegistry['formComponent'];
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    layout?: FormLayout;
+    form?: WrappedFormUtils;
+    onSubmit?: React.FormEventHandler<HTMLFormElement>;
+    style?: React.CSSProperties;
+    className?: string;
+    prefixCls?: string;
+    hideRequiredMark?: boolean;
+    wrapperCol?: ColProps;
+    labelCol?: ColProps;
+    colon?: boolean;
+    labelAlign?: FormLabelAlign;
     inline?: boolean
     className?: string
     style?: React.CSSProperties
     labelCol?: number | { span: number; offset?: number }
     wrapperCol?: number | { span: number; offset?: number }
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
-    // 样式前缀
-    prefix?: string;
-
-    // 内联表单
-    inline?: boolean;
-
-    // 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。
-    size?: 'large' | 'medium' | 'small';
-
-    // 标签的位置
-    labelAlign?: 'top' | 'left' | 'inset';
-
-    // 标签的左右对齐方式
-    labelTextAlign?: 'left' | 'right';
-
-    // 经 `new Field(this)` 初始化后，直接传给 Form 即可 用到表单校验则不可忽略此项
-    field?: any;
-
-    // 保存 Form 自动生成的 field 对象
-    saveField?: () => void;
-
-    // 控制第一级 Item 的 labelCol
-    labelCol?: {};
-
-    // 控制第一级 Item 的 wrapperCol
-    wrapperCol?: {};
-
-    // form内有 `htmlType="submit"` 的元素的时候会触发
-    onSubmit?: () => void;
-
-    // 子元素
-    children?: any;
-
-    // 扩展class
-    className?: string;
-
-    // 自定义内联样式
-    style?: React.CSSProperties;
-
-    // 表单数值
-    value?: {};
-
-    // 表单变化回调
-    onChange?: (values: {}, item: {}) => void;
-
-    // 设置标签类型
-    component?: string | (() => void);
 }
 ```
 
@@ -2607,37 +2571,12 @@ interface IForm {
 #### ButtonProps
 
 ```typescript
-interface ISubmitProps {
-  /** reset pops **/
-  onSubmit?: ISchemaFormProps['onSubmit']
-  showLoading?: boolean
-  /** nextBtnProps **/
-  // 按钮的类型
-  type?: 'primary' | 'secondary' | 'normal'
-  // 按钮的尺寸
-  size?: 'small' | 'medium' | 'large'
-  // 按钮中 Icon 的尺寸，用于替代 Icon 的默认大小
-  iconSize?: 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
-  // 当 component = 'button' 时，设置 button 标签的 type 值
-  htmlType?: 'submit' | 'reset' | 'button'
-  // 设置标签类型
-  component?: 'button' | 'a'
-  // 设置按钮的载入状态
-  loading?: boolean
-  // 是否为幽灵按钮
-  ghost?: true | false | 'light' | 'dark'
-  // 是否为文本按钮
-  text?: boolean
-  // 是否为警告按钮
-  warning?: boolean
-  // 是否禁用
-  disabled?: boolean
-  // 点击按钮的回调
-  onClick?: (e: {}) => void
-  // 在Button组件使用component属性值为a时有效，代表链接页面的URL
-  href?: string
-  // 在Button组件使用component属性值为a时有效，代表何处打开链接文档
-  target?: string
+interface ButtonProps {
+  href: string;
+  target?: string;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  htmlType?: ButtonHTMLType;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 ```
 
@@ -2645,32 +2584,28 @@ interface ISubmitProps {
 
 ```typescript
 interface CardProps extends HTMLAttributesWeak, CommonProps {
-  // 卡片的上的图片 / 视频
-  media?: React.ReactNode
-
-  // 卡片的标题
-  title?: React.ReactNode
-
-  // 卡片的副标题
-  subTitle?: React.ReactNode
-
-  // 卡片操作组，位置在卡片底部
-  actions?: React.ReactNode
-
-  // 是否显示标题的项目符号
-  showTitleBullet?: boolean
-
-  // 是否展示头部的分隔线
-  showHeadDivider?: boolean
-
-  // 内容区域的固定高度
-  contentHeight?: string | number
-
-  // 标题区域的用户自定义内容
-  extra?: React.ReactNode
-
-  // 是否开启自由模式，开启后card 将使用子组件配合使用, 设置此项后 title, subtitle, 等等属性都将失效
-  free?: boolean
+  prefixCls?: string;
+  title?: React.ReactNode;
+  extra?: React.ReactNode;
+  bordered?: boolean;
+  headStyle?: React.CSSProperties;
+  bodyStyle?: React.CSSProperties;
+  style?: React.CSSProperties;
+  loading?: boolean;
+  noHovering?: boolean;
+  hoverable?: boolean;
+  children?: React.ReactNode;
+  id?: string;
+  className?: string;
+  size?: CardSize;
+  type?: CardType;
+  cover?: React.ReactNode;
+  actions?: React.ReactNode[];
+  tabList?: CardTabListType[];
+  tabBarExtraContent?: React.ReactNode | null;
+  onTabChange?: (key: string) => void;
+  activeTabKey?: string;
+  defaultActiveTabKey?: string;
 }
 ```
 

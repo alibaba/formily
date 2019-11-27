@@ -942,7 +942,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<FormBlock/>`
 
-> Props of `<FormBlock/> , fully inherited from [CardProps](#CardProps)
+> Props of `<FormBlock/>` , fully inherited from [CardProps](#CardProps)
 
 **Usage**
 
@@ -2604,7 +2604,7 @@ interface IForm {
 #### ButtonProps
 
 ```typescript
-interface ISubmitProps {
+interface ButtonProps {
   /** reset pops **/
   onSubmit?: ISchemaFormProps['onSubmit']
   showLoading?: boolean

@@ -377,50 +377,23 @@ interface IAntdSchemaFormProps {
     virtualFields?: ISchemaFormRegistry['virtualFields'];
     formComponent?: ISchemaFormRegistry['formComponent'];
     formItemComponent?: ISchemaFormRegistry['formItemComponent'];
+    layout?: FormLayout;
+    form?: WrappedFormUtils;
+    onSubmit?: React.FormEventHandler<HTMLFormElement>;
+    style?: React.CSSProperties;
+    className?: string;
+    prefixCls?: string;
+    hideRequiredMark?: boolean;
+    wrapperCol?: ColProps;
+    labelCol?: ColProps;
+    colon?: boolean;
+    labelAlign?: FormLabelAlign;
     inline?: boolean
     className?: string
     style?: React.CSSProperties
     labelCol?: number | { span: number; offset?: number }
     wrapperCol?: number | { span: number; offset?: number }
     previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
-    // prefix
-    prefix?: string;
-
-    // is it inline
-    inline?: boolean;
-
-    // The size of a single Item is customized, and takes precedence over the size of the Form, and when a component is used with an Item, the component itself does not set the size property.
-    size?: 'large' | 'medium' | 'small';
-
-    // position of label
-    labelAlign?: 'top' | 'left' | 'inset';
-
-    // aligment of label
-    labelTextAlign?: 'left' | 'right';
-
-    saveField?: () => void;
-
-    // labelCol of FormItem
-    labelCol?: {};
-
-    // wrapperCol of FormItem
-    wrapperCol?: {};
-
-    // triggered by `htmlType="submit"` or action.submit
-    onSubmit?: () => void;
-
-    children?: any;
-    className?: string;
-    style?: React.CSSProperties;
-
-    // form state value
-    value?: {};
-
-    // callback trigger when form state change
-    onChange?: (values: {}, item: {}) => void;
-
-    // type of component
-    component?: string | (() => void);
 }
 ```
 
@@ -946,7 +919,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<FormBlock/>`
 
-> Props of `<FormBlock/> , fully inherited from [CardProps](#CardProps)
+> Props of `<FormBlock/>` , fully inherited from [CardProps](#CardProps)
 
 **Usage**
 
@@ -2611,37 +2584,12 @@ interface IForm {
 #### ButtonProps
 
 ```typescript
-interface ISubmitProps {
-  /** reset pops **/
-  onSubmit?: ISchemaFormProps['onSubmit']
-  showLoading?: boolean
-  /** nextBtnProps **/
-  // type of btn
-  type?: 'primary' | 'secondary' | 'normal'
-  // size of btn
-  size?: 'small' | 'medium' | 'large'
-  // size of Icon 
-  iconSize?: 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
-  // type of button when component = 'button'
-  htmlType?: 'submit' | 'reset' | 'button'
-  // typeof btn
-  component?: 'button' | 'a'
-  // Set the loading state of the button
-  loading?: boolean
-  // Whether it is a ghost button
-  ghost?: true | false | 'light' | 'dark'
-  // Whether it is a text button
-  text?: boolean
-  // Whether it is a warning button
-  warning?: boolean
-  // Whether it is disabled
-  disabled?: boolean
-  // Callback for button click
-  onClick?: (e: {}) => void
-  // Valid when Button component is set to 'a', which represents the URL of the linked page
-  href?: string
-  // Valid when Button component is set to 'a', which represents the way of open the linked document
-  target?: string
+interface ButtonProps {
+  href: string;
+  target?: string;
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  htmlType?: ButtonHTMLType;
+  onClick?: React.MouseEventHandler<HTMLElement>;
 }
 ```
 
@@ -2649,30 +2597,28 @@ interface ISubmitProps {
 
 ```typescript
 interface CardProps extends HTMLAttributesWeak, CommonProps {
-  // media in card
-  media?: React.ReactNode
-
-  // title of the card
-  title?: React.ReactNode
-
-  // subTitle of the card
-  subTitle?: React.ReactNode
-
-  // action button of the card
-  actions?: React.ReactNode
-
-  // whether to show bullet of title
-  showTitleBullet?: boolean
-
-  // whether to show divider of head
-  showHeadDivider?: boolean
-  contentHeight?: string | number
-
-  // extra content of card
-  extra?: React.ReactNode
-
-  // whether to set free mode, title, subtitle will be invalid when this options turns on
-  free?: boolean
+  prefixCls?: string;
+  title?: React.ReactNode;
+  extra?: React.ReactNode;
+  bordered?: boolean;
+  headStyle?: React.CSSProperties;
+  bodyStyle?: React.CSSProperties;
+  style?: React.CSSProperties;
+  loading?: boolean;
+  noHovering?: boolean;
+  hoverable?: boolean;
+  children?: React.ReactNode;
+  id?: string;
+  className?: string;
+  size?: CardSize;
+  type?: CardType;
+  cover?: React.ReactNode;
+  actions?: React.ReactNode[];
+  tabList?: CardTabListType[];
+  tabBarExtraContent?: React.ReactNode | null;
+  onTabChange?: (key: string) => void;
+  activeTabKey?: string;
+  defaultActiveTabKey?: string;
 }
 ```
 
