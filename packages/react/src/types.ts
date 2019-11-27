@@ -51,7 +51,10 @@ export interface IFormProps<
   onSubmit?: (values: Value) => void | Promise<Value>
   onReset?: () => void
   onValidateFailed?: (valideted: IFormValidateResult) => void
-  children?: React.ReactElement | ((form: IForm) => React.ReactElement)
+  children?:
+    | React.ReactElement
+    | React.ReactElement[]
+    | ((form: IForm) => React.ReactElement)
   useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean

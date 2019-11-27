@@ -5,7 +5,7 @@ import FormContext from '../context'
 
 export const useFormState = <T extends {}>(defaultState: T) => {
   const forceUpdate = useForceUpdate()
-  const ref = useRef<{ state: IFormState; subscribeId: number }>()
+  const ref = useRef<{ state?: IFormState; subscribeId?: number }>({})
   const form = useContext(FormContext)
   ref.current.subscribeId = useMemo(() => {
     form.setFormState(state => {
