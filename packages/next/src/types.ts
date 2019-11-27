@@ -11,10 +11,10 @@ import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
 
-export type INextSchemaFormProps = ISchemaFormProps &
-  FormProps &
+export type INextSchemaFormProps = FormProps &
   IFormItemTopProps &
-  PreviewTextConfigProps
+  PreviewTextConfigProps &
+  ISchemaFormProps
 
 export type INextSchemaFieldProps = IMarkupSchemaFieldProps
 
