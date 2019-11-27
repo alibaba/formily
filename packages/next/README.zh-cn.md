@@ -391,10 +391,6 @@ interface INextSchemaFormProps {
     labelAlign?: 'top' | 'left' | 'inset';
     // 标签的左右对齐方式
     labelTextAlign?: 'left' | 'right';
-    // 经 `new Field(this)` 初始化后，直接传给 Form 即可 用到表单校验则不可忽略此项
-    field?: any;
-    // 保存 Form 自动生成的 field 对象
-    saveField?: () => void;
     // 控制第一级 Item 的 labelCol
     labelCol?: {};
     // 控制第一级 Item 的 wrapperCol

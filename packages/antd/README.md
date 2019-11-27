@@ -422,7 +422,7 @@ interface IAntdSchemaFormProps {
     onSubmit?: (values: Value) => void | Promise<Value>;
     // triggered by <Reset/> or actions.reset
     onReset?: () => void;
-    Form verification failure event callback
+    // Form verification failure event callback
     onValidateFailed?: (valideted: IFormValidateResult) => void;
     children?: React.ReactElement | ((form: IForm) => React.ReactElement);
     // Whether to use the dirty check, the default will go immer accurate update

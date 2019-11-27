@@ -388,7 +388,6 @@ interface INextSchemaFormProps {
     labelAlign?: 'top' | 'left' | 'inset';
     // aligment of label
     labelTextAlign?: 'left' | 'right';
-    saveField?: () => void;
     // labelCol of FormItem
     labelCol?: {};
     // wrapperCol of FormItem
@@ -416,7 +415,7 @@ interface INextSchemaFormProps {
     onSubmit?: (values: Value) => void | Promise<Value>;
     // triggered by <Reset/> or actions.reset
     onReset?: () => void;
-    Form verification failure event callback
+    // Form verification failure event callback
     onValidateFailed?: (valideted: IFormValidateResult) => void;
     children?: React.ReactElement | ((form: IForm) => React.ReactElement);
     // Whether to use the dirty check, the default will go immer accurate update
