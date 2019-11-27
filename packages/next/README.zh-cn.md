@@ -2181,10 +2181,10 @@ const App = () => {
         title="Transfer"
         name="transfer"
         enum={[
-          { value: 'One', value: '1' },
-          { value: 'Two', value: '2' },
-          { value: 'Three', value: '3' },
-          { value: 'Four', value: '4' }
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
         ]}
         x-component-props={{
           showSearch: true
