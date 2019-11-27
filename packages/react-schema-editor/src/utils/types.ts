@@ -4,8 +4,8 @@ export interface ISchemaCodeProps {
 }
 
 export interface ISchemaTreeProps {
-  schema: object
-  onChange?: Function
+  schema: any
+  onChange?: (newSchema: any) => void
 }
 
 export interface ISchemaPreviewProps {
