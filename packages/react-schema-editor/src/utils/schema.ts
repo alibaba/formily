@@ -7,6 +7,8 @@ export default {
     'x-props': {
       help: '不得超过6个汉字',
       validateStatus: 'success',
+      labelCol: [{ col: 2 }],
+      extra: null
     },
     'x-component': 'Input',
     'x-component-props': {
@@ -19,7 +21,6 @@ export default {
         message: '此项必填'
       },
       {
-        //TODO
         pattern: '[\\u4e00-\\u9fa5]',
         message: '正则'
       },
