@@ -102,17 +102,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   return {
     form,
     field: ref.current.field,
-    state: {
-      ...state,
-      errors: state.errors.map((message, index) => {
-        return createElement(
-          'span',
-          { key: index },
-          message,
-          state.errors.length - 1 > index ? ' ,' : ''
-        )
-      })
-    },
+    state,
     mutators,
     props: state.props
   }
