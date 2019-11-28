@@ -1,4 +1,4 @@
-import { createElement, useMemo, useEffect, useRef, useContext } from 'react'
+import { useMemo, useEffect, useRef, useContext } from 'react'
 import { each, isFn } from '@uform/shared'
 import { IFieldState, IForm, IField, IMutators } from '@uform/core'
 import { getValueFromEvent } from '../shared'
