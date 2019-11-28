@@ -30,11 +30,16 @@ const createEnum = (enums: any) => {
 
 const bindEffects = (
   props: {},
+  fieldProps: ISchemaFieldComponentProps,
   effect: ISchema['x-effect'],
   notify: (type: string, payload?: any) => void
 ): any => {
   each(
-    effect((type, payload) => notify(type, { payload }), { ...props }),
+    effect(
+      (type, payload) =>
+        notify(type, { payload, name: fieldProps.name, path: fieldProps.path }),
+      { ...props }
+    ),
     (event, key) => {
       const prevEvent = key === 'onChange' ? props[key] : undefined
       props[key] = (...args: any[]) => {
@@ -89,7 +94,12 @@ export const connect = (options?: IConnectOptions) => {
 
       const extendsEffect = schema.getExtendsEffect()
       if (isFn(extendsEffect)) {
-        componentProps = bindEffects(componentProps, extendsEffect, form.notify)
+        componentProps = bindEffects(
+          componentProps,
+          fieldProps,
+          extendsEffect,
+          form.notify
+        )
       }
 
       if (isFn(options.getProps)) {
