@@ -41,7 +41,7 @@ import {
   FormBlock,
   FormLayout
 } from '@uform/next'
-import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
+import { filter, combineLatest, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
@@ -51,8 +51,7 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm
-        useDirty
-        effects={($, { setFieldState, getFieldState,getFormGraph }) => {
+        effects={($, { setFieldState, getFieldState, getFormGraph }) => {
           $('onFormInit').subscribe(() => {
             setFieldState(FormPath.match('*(gg,hh)'), state => {
               state.props['x-props'] = state.props['x-props'] || {}
@@ -64,12 +63,15 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', 'aa').subscribe(fieldState => {
+          $('onFieldValueChange', '*(aa,bb)').subscribe(fieldState => {
+            console.log('aa或者bb发生变化了')
+          })
+          $('onFieldValueChange', 'aa').subscribe(fieldState => {
             setFieldState('bb', state => {
               state.visible = !fieldState.value
             })
           })
-          $('onFieldChange', 'cc').subscribe(fieldState => {
+          $('onFieldValueChange', 'cc').subscribe(fieldState => {
             setFieldState('dd', state => {
               state.visible = !fieldState.value
             })
@@ -87,9 +89,9 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', 'gg')
+          $('onFieldValueChange', 'gg')
             .pipe(
-              withLatestFrom($('onChangeOption')),
+              combineLatest($('onChangeOption')),
               map(([fieldState, { payload: option }]) => {
                 return {
                   state: fieldState,
@@ -138,7 +140,10 @@ const App = () => {
             type="boolean"
             x-component="radio"
             default={true}
-            enum={[{ label: '是', value: true }, { label: '否', value: false }]}
+            enum={[
+              { label: '是', value: true },
+              { label: '否', value: false }
+            ]}
             title="是否隐藏AA"
           />
           <Field name="bb" type="string" title="AA" />
@@ -148,7 +153,10 @@ const App = () => {
             title="是否隐藏DD"
             default={true}
             x-component="radio"
-            enum={[{ label: '是', value: true }, { label: '否', value: false }]}
+            enum={[
+              { label: '是', value: true },
+              { label: '否', value: false }
+            ]}
           />
         </FormBlock>
         <FormBlock name="dd" title="Block2">
@@ -160,7 +168,7 @@ const App = () => {
             name="gg"
             type="string"
             x-effect={dispatch => ({
-              onChange(value,type, option) {
+              onChange(value, type, option) {
                 dispatch('onChangeOption', option)
               },
               onSearch(value) {
@@ -184,6 +192,95 @@ const App = () => {
     </Printer>
   )
 }
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+### 循环联动
+
+> 联动关系
+> 总价 = 单价 \* 数量
+> 数量 = 总价 / 单价
+> 单价 = 总价 / 数量
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
+  FormBlock,
+  FormLayout
+} from '@uform/next'
+import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
+import { Button } from '@alifd/next'
+import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      effects={($, { setFieldState, getFieldState }) => {
+        $('onFieldValueChange', 'total').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('count', state => {
+            const price = getFieldState('price', state => state.value)
+            if (!price) return
+            state.value = value / price
+          })
+          setFieldState('price', state => {
+            const count = getFieldState('count', state => state.value)
+            if (!count) return
+            state.value = value / count
+          })
+        })
+        $('onFieldValueChange', 'price').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('total', state => {
+            const count = getFieldState('count', state => state.value)
+            if (!count) return
+            state.value = value * count
+          })
+          setFieldState('count', state => {
+            const total = getFieldState('total', state => state.value)
+            if (!total) return
+            state.value = total / value
+          })
+        })
+        $('onFieldValueChange', 'count').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('total', state => {
+            const price = getFieldState('price', state => state.value)
+            if (!price) return
+            state.value = value * price
+          })
+          setFieldState('price', state => {
+            const total = getFieldState('total', state => state.value)
+            if (!total) return
+            state.value = total / value
+          })
+        })
+      }}
+      onChange={v => console.log(v)}
+      labelCol={6}
+      wrapperCol={4}
+      onSubmit={v => console.log(v)}
+    >
+      <Field name="total" type="number" required title="总价" />
+      <Field name="count" type="number" required title="数量" />
+      <Field name="price" type="number" required title="单价" />
+      <FormButtonGroup offset={6}>
+        <Submit />
+        <Reset />
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
@@ -251,7 +348,7 @@ const App = () => (
         $('onFormInit').subscribe(() => {
           hide('bb')
         })
-        $('onFieldChange', 'aa').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa').subscribe(fieldState => {
           if (!fieldState.value) return
           show('bb')
           loading('bb')
@@ -261,7 +358,7 @@ const App = () => (
             setValue('bb', '1111')
           }, 1000)
         })
-        $('onFieldChange', 'bb').subscribe(fieldState => {
+        $('onFieldValueChange', 'bb').subscribe(fieldState => {
           console.log(fieldState.loading)
           if (!fieldState.value) return hide('cc')
           show('cc')
@@ -323,7 +420,7 @@ const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldChange', 'bb').subscribe(state => {
+        $('onFieldValueChange', 'bb').subscribe(state => {
           if (state.value) {
             setFieldState('aa', state => {
               state.value = '123'
@@ -359,7 +456,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 #### Demo 示例
 
 ```jsx
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
@@ -379,9 +476,9 @@ import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  const [values,setValues] = useState({})
-  useEffect(()=>{
-    setTimeout(()=>{
+  const [values, setValues] = useState({})
+  useEffect(() => {
+    setTimeout(() => {
       setValues({
         aa: [
           {
@@ -394,143 +491,142 @@ const App = () => {
           }
         ]
       })
-    },1000)
-  },[])
+    }, 1000)
+  }, [])
   return (
-  <Printer>
-    <SchemaForm
-      effects={($, { setFieldState, getFieldState }) => {
-        const loading = name => {
-          setFieldState(name, state => {
-            state.loading = true
-          })
-        }
-        const loaded = name => {
-          setFieldState(name, state => {
-            state.loading = false
-          })
-        }
-        const hide = name => {
-          setFieldState(name, state => {
-            state.visible = false
-          })
-        }
-        const show = name => {
-          setFieldState(name, state => {
-            state.visible = true
-          })
-        }
-        const setEnum = (name, value) => {
-          setFieldState(name, state => {
-            state.props.enum = value
-          })
-        }
-        const setValue = (name, value) => {
-          setFieldState(name, state => {
-            state.value = value
-          })
-        }
-        $('onFormInit').subscribe(() => {
-          hide(FormPath.match('aa.*.*(cc,gg,dd.*.ee)'))
-        })
-        $('onFieldChange', 'aa.*.bb').subscribe(fieldState => {
-          const cc = FormPath.transform(
-            fieldState.name,
-            /\d+/,
-            i => `aa.${i}.cc`
-          )
-          if (!fieldState.value) {
-            hide(cc)
-            return
+    <Printer>
+      <SchemaForm
+        effects={($, { setFieldState, getFieldState }) => {
+          const loading = name => {
+            setFieldState(name, state => {
+              state.loading = true
+            })
           }
-          show(cc)
-          loading(cc)
-          setTimeout(() => {
-            loaded(cc)
-            setEnum(cc, ['1111', '2222'])
-            setValue(cc, '1111')
-          }, 1000)
-        })
-        $('onFieldChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
-          const gg = FormPath.transform(
-            fieldState.name,
-            /\d+/,
-            (i, j) => `aa.${i}.gg`
-          )
-          setFieldState(gg, state => {
-            if (fieldState.value) {
-              state.visible = fieldState.value == '是'
+          const loaded = name => {
+            setFieldState(name, state => {
+              state.loading = false
+            })
+          }
+          const hide = name => {
+            setFieldState(name, state => {
+              state.visible = false
+            })
+          }
+          const show = name => {
+            setFieldState(name, state => {
+              state.visible = true
+            })
+          }
+          const setEnum = (name, value) => {
+            setFieldState(name, state => {
+              state.props.enum = value
+            })
+          }
+          const setValue = (name, value) => {
+            setFieldState(name, state => {
+              state.value = value
+            })
+          }
+          $('onFormInit').subscribe(() => {
+            hide(FormPath.match('aa.*.*(cc,gg,dd.*.ee)'))
+          })
+          $('onFieldValueChange', 'aa.*.bb').subscribe(fieldState => {
+            const cc = FormPath.transform(
+              fieldState.name,
+              /\d+/,
+              i => `aa.${i}.cc`
+            )
+            if (!fieldState.value) {
+              hide(cc)
+              return
             }
+            show(cc)
+            loading(cc)
+            setTimeout(() => {
+              loaded(cc)
+              setEnum(cc, ['1111', '2222'])
+              setValue(cc, '1111')
+            }, 1000)
           })
-        })
-        $('onFieldChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
-          const ee = FormPath.transform(
-            fieldState.name,
-            /\d+/,
-            (i, j) => `aa.${i}.dd.${j}.ee`
-          )
-          setFieldState(ee, state => {
-            state.visible = fieldState.value == '是'
+          $('onFieldValueChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
+            const gg = FormPath.transform(
+              fieldState.name,
+              /\d+/,
+              (i, j) => `aa.${i}.gg`
+            )
+            setFieldState(gg, state => {
+              if (fieldState.value) {
+                state.visible = fieldState.value == '是'
+              }
+            })
           })
-        })
-      }}
-      onSubmit={v => console.log(v)}
-      initialValues={values}
-    >
-      <FormBlock title="Block1">
-        <Field type="array" name="aa">
-          <Field type="object">
-            <FormBlock title="基本信息">
-              <FormLayout inline>
-                <Field
-                  type="string"
-                  name="bb"
-                  enum={['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee']}
-                  title="BB"
-                />
-                <Field type="string" name="cc" enum={[]} title="CC" />
-                <Field
-                  type="string"
-                  name="gg"
-                  title="GG"
-                  x-props={{ style: { width: 200 } }}
-                />
-              </FormLayout>
-            </FormBlock>
-            <FormBlock title="嵌套Array">
-              <Field type="array" name="dd">
-                <Field type="object">
-                  <FormLayout inline style={{ marginLeft: 20 }}>
-                    <Field
-                      type="string"
-                      name="ee"
-                      enum={['是', '否']}
-                      title="EE"
-                      description="是否显示GG"
-                    />
-                    <Field
-                      type="string"
-                      name="ff"
-                      default="是"
-                      enum={['是', '否']}
-                      title="FF"
-                      description="是否显示EE"
-                    />
-                  </FormLayout>
+          $('onFieldValueChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
+            const ee = FormPath.transform(
+              fieldState.name,
+              /\d+/,
+              (i, j) => `aa.${i}.dd.${j}.ee`
+            )
+            setFieldState(ee, state => {
+              state.visible = fieldState.value == '是'
+            })
+          })
+        }}
+        onSubmit={v => console.log(v)}
+        initialValues={values}
+      >
+        <FormBlock title="Block1">
+          <Field type="array" name="aa">
+            <Field type="object">
+              <FormBlock title="基本信息">
+                <FormLayout inline>
+                  <Field
+                    type="string"
+                    name="bb"
+                    enum={['aaaaa', 'bbbbb', 'ccccc', 'ddddd', 'eeeee']}
+                    title="BB"
+                  />
+                  <Field type="string" name="cc" enum={[]} title="CC" />
+                  <Field
+                    type="string"
+                    name="gg"
+                    title="GG"
+                    x-props={{ style: { width: 200 } }}
+                  />
+                </FormLayout>
+              </FormBlock>
+              <FormBlock title="嵌套Array">
+                <Field type="array" name="dd">
+                  <Field type="object">
+                    <FormLayout inline style={{ marginLeft: 20 }}>
+                      <Field
+                        type="string"
+                        name="ee"
+                        enum={['是', '否']}
+                        title="EE"
+                        description="是否显示GG"
+                      />
+                      <Field
+                        type="string"
+                        name="ff"
+                        default="是"
+                        enum={['是', '否']}
+                        title="FF"
+                        description="是否显示EE"
+                      />
+                    </FormLayout>
+                  </Field>
                 </Field>
-              </Field>
-            </FormBlock>
+              </FormBlock>
+            </Field>
           </Field>
-        </Field>
-      </FormBlock>
-      <FormButtonGroup style={{ marginLeft: 15 }}>
-        <Submit />
-        <Reset />
-      </FormButtonGroup>
-    </SchemaForm>
-  </Printer>
-)
+        </FormBlock>
+        <FormButtonGroup style={{ marginLeft: 15 }}>
+          <Submit />
+          <Reset />
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
 }
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-

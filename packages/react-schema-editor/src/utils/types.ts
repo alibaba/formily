@@ -4,7 +4,7 @@ export interface ISchemaCodeProps {
 }
 
 export interface ISchemaTreeProps {
-  schema: object
+  schema: any
   components: any
   onChange?: Function
 }
@@ -14,7 +14,7 @@ export interface IFieldEditorProps {
   components: any
   xProps: any
   xRules: any
-  onChange?: Function
+  onChange?: (newSchema: any) => void
 }
 
 export interface ISchemaPreviewProps {

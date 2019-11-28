@@ -5,22 +5,18 @@ const FormItemContext = createContext<IFormItemTopProps>({})
 
 export const FormItemProvider: React.FC<IFormItemTopProps> = ({
   children,
-  prefix,
-  size,
+  prefixCls,
   labelAlign,
   labelCol,
   inline,
-  labelTextAlign,
   wrapperCol
 }) => (
   <FormItemContext.Provider
     value={{
-      prefix,
+      prefixCls,
       labelAlign,
       labelCol,
-      labelTextAlign,
       wrapperCol,
-      size,
       inline
     }}
   >

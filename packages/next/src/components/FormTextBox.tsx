@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useLayoutEffect } from 'react'
 import { createControllerBox } from '@uform/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@uform/shared'
@@ -27,15 +27,34 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     const arrChildren = toArr(children)
     const split = text.split('%s')
     let index = 0
-    useEffect(() => {
+    useLayoutEffect(() => {
       if (ref.current) {
-        const eles = ref.current.querySelectorAll('.text-box-field')
-        eles.forEach((el: HTMLElement) => {
-          const ctrl = el.querySelector('.next-form-item-control:first-child')
-          if (ctrl) {
-            el.style.width = getComputedStyle(ctrl).width
+        const elements = ref.current.querySelectorAll('.text-box-field')
+        const syncLayouts = Array.prototype.map.call(
+          elements,
+          (el: HTMLElement) => {
+            return [
+              el,
+              () => {
+                const ctrl = el.querySelector(
+                  '.next-form-item-control:first-child'
+                )
+                if (ctrl) {
+                  el.style.width = ctrl.getBoundingClientRect().width + 'px'
+                }
+              }
+            ]
           }
+        )
+        syncLayouts.forEach(([el, handler]) => {
+          el.addEventListener('DOMSubtreeModified', handler)
         })
+
+        return () => {
+          syncLayouts.forEach(([el, handler]) => {
+            el.removeEventListener('DOMSubtreeModified', handler)
+          })
+        }
       }
     }, [])
     const newChildren = split.reduce((buf, item, key) => {
@@ -99,6 +118,7 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     }
     .preview-text {
       text-align: center !important;
+      white-space:nowrap;
     }
   `
 )

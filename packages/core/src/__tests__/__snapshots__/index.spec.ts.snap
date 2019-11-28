@@ -617,7 +617,7 @@ Object {
       undefined,
     ],
     "visible": true,
-    "visited": true,
+    "visited": false,
     "warnings": Array [],
   },
 }

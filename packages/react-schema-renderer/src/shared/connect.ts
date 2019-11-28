@@ -6,6 +6,7 @@ import {
   ISchemaFieldComponentProps,
   IConnectProps
 } from '../types'
+import { Schema } from './schema'
 
 const createEnum = (enums: any) => {
   if (isArr(enums)) {
@@ -32,17 +33,20 @@ const bindEffects = (
   effect: ISchema['x-effect'],
   notify: (type: string, payload?: any) => void
 ): any => {
-  each(effect(notify, { ...props }), (event, key) => {
-    const prevEvent = key === 'onChange' ? props[key] : undefined
-    props[key] = (...args: any[]) => {
-      if (isFn(prevEvent)) {
-        prevEvent(...args)
-      }
-      if (isFn(event)) {
-        return event(...args)
+  each(
+    effect((type, payload) => notify(type, { payload }), { ...props }),
+    (event, key) => {
+      const prevEvent = key === 'onChange' ? props[key] : undefined
+      props[key] = (...args: any[]) => {
+        if (isFn(prevEvent)) {
+          prevEvent(...args)
+        }
+        if (isFn(event)) {
+          return event(...args)
+        }
       }
     }
-  })
+  )
   return props
 }
 
@@ -54,19 +58,11 @@ export const connect = (options?: IConnectOptions) => {
   }
   return (Component: React.JSXElementConstructor<any>) => {
     return (fieldProps: ISchemaFieldComponentProps) => {
-      const {
-        value,
-        name,
-        mutators,
-        form,
-        schema,
-        editable,
-        props
-      } = fieldProps
+      const { value, name, mutators, form, editable, props } = fieldProps
+      const schema = new Schema(props)
       let componentProps: IConnectProps = {
         ...options.defaultProps,
-        ...props['x-props'],
-        ...props['x-component-props'],
+        ...schema.getExtendsComponentProps(),
         [options.valueName]: value,
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(
@@ -92,7 +88,6 @@ export const connect = (options?: IConnectOptions) => {
       }
 
       const extendsEffect = schema.getExtendsEffect()
-
       if (isFn(extendsEffect)) {
         componentProps = bindEffects(componentProps, extendsEffect, form.notify)
       }
@@ -104,8 +99,8 @@ export const connect = (options?: IConnectOptions) => {
         }
       }
 
-      if (isArr(schema.enum) && !componentProps.dataSource) {
-        componentProps.dataSource = createEnum(schema.enum)
+      if (isArr((props as ISchema).enum) && !componentProps.dataSource) {
+        componentProps.dataSource = createEnum((props as ISchema).enum)
       }
 
       if (componentProps.editable !== undefined) {

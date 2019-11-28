@@ -14,7 +14,7 @@ import {
 } from '@uform/core'
 import { FormPathPattern } from '@uform/shared'
 import { Observable } from 'rxjs/internal/Observable'
-export interface IFormEffect<Payload = any, Actions = {}> {
+export interface IFormEffect<Payload = any, Actions = any> {
   (
     selector: IFormExtendsEffectSelector<Payload, Actions>,
     actions: Actions
@@ -30,19 +30,20 @@ export interface IFormEffectSelector<Payload = any> {
 
 export type IFormExtendsEffectSelector<
   Payload = any,
-  Actions = {}
+  Actions = any
 > = IFormEffectSelector<Payload> & Actions
 
 export interface IFormProps<
   Value = {},
   DefaultValue = {},
-  EffectPayload = any,
-  EffectActions = {}
+  FormEffectPayload = any,
+  FormActions = any
 > {
   value?: Value
+  defaultValue?: DefaultValue
   initialValues?: DefaultValue
-  actions?: EffectActions
-  effects?: IFormEffect<EffectPayload, EffectActions>
+  actions?: FormActions
+  effects?: IFormEffect<FormEffectPayload, FormActions>
   form?: IForm
   onChange?: (values: Value) => void
   onSubmit?: (values: Value) => void | Promise<Value>
@@ -50,7 +51,7 @@ export interface IFormProps<
   onValidateFailed?: (valideted: IFormValidateResult) => void
   children?: React.ReactElement | ((form: IForm) => React.ReactElement)
   useDirty?: boolean
-  editable?: boolean
+  editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
 }
 
@@ -67,7 +68,7 @@ export interface IVirtualFieldAPI {
   props: {}
 }
 
-export interface IFieldProps extends IFieldStateProps {
+export interface IFieldStateUIProps extends IFieldStateProps {
   triggerType?: 'onChange' | 'onBlur'
   getValueFromEvent?: (...args: any[]) => any
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
@@ -122,11 +123,18 @@ export interface IVirtualFieldHook {
   props: {}
 }
 
+export interface ISpyHook {
+  form: IForm
+  state: any
+  type: string
+}
+
 export interface IFormActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): void
+  hasChanged(target: any, path: FormPathPattern): boolean
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): void
   getFormState(callback?: (state: IFormState) => any): any
@@ -141,8 +149,8 @@ export interface IFormActions {
   ): any
   getFormGraph(): IFormGraph
   setFormGraph(graph: IFormGraph): void
-  subscribe(callback?: FormHeartSubscriber): void
-  unsubscribe(callback?: FormHeartSubscriber): void
+  subscribe(callback?: FormHeartSubscriber): number
+  unsubscribe(id: number): void
   notify: <T>(type: string, payload: T) => void
   dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
@@ -156,6 +164,7 @@ export interface IFormAsyncActions {
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
   reset(options?: IFormResetOptions): Promise<void>
+  hasChanged(target: any, path: FormPathPattern): Promise<boolean>
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any): Promise<void>
@@ -170,8 +179,8 @@ export interface IFormAsyncActions {
   ): Promise<any>
   getFormGraph(): Promise<IFormGraph>
   setFormGraph(graph: IFormGraph): Promise<void>
-  subscribe(callback?: FormHeartSubscriber): Promise<void>
-  unsubscribe(callback?: FormHeartSubscriber): Promise<void>
+  subscribe(callback?: FormHeartSubscriber): Promise<number>
+  unsubscribe(id: number): Promise<void>
   notify: <T>(type: string, payload: T) => Promise<void>
   dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>

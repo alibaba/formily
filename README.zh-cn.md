@@ -41,9 +41,36 @@ npm install --save antd @uform/antd
 npm install --save @alifd/next @uform/next
 ```
 
-## 文档
+使用UForm React渲染引擎包:
+
+```bash
+npm install --save @uform/react-schema-renderer
+```
+
+使用 UForm React包:
+
+```bash
+npm install --save @uform/react
+```
+
+使用 UForm 核心包:
+
+```bash
+npm install --save @uform/core
+```
+
+## 官网
 
 https://uformjs.org
+
+## 文档
+
+- [@uform/antd](./packages/antd/README.zh-cn.md)
+- [@uform/next](./packages/next/README.zh-cn.md)
+- [@uform/react-schema-renderer](./packages/react-schema-renderer/README.zh-cn.md)
+- [@uform/react](./packages/react/README.zh-cn.md)
+- [@uform/core](./packages/core/README.zh-cn.md)
+
 
 ## 入门案例
 
@@ -72,19 +99,6 @@ Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com
 ## 捐献我们
 
 Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/uform#sponsor)]
-
-<a href="https://opencollective.com/uform/sponsor/0/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/1/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/2/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/3/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/4/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/5/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/6/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/7/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/8/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/uform/sponsor/9/website" target="_blank"><img src="https://opencollective.com/uform/sponsor/9/avatar.svg"></a>
-
-
 
 
 ## LICENSE

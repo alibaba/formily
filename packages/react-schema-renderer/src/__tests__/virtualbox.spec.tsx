@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
-import SchemaForm, {
-  Field,
+import React, { Fragment, useState } from 'react'
+import {
   registerFormField,
-  createVirtualBox,
   connect,
-  registerFieldMiddleware
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
+  registerFieldMiddleware,
+  createVirtualBox
 } from '../index'
-import { render, fireEvent, act } from '@testing-library/react'
+import { render, fireEvent, act, wait } from '@testing-library/react'
 
 let FormCard
 
@@ -41,18 +42,20 @@ FormCard = createVirtualBox('card', ({ children }) => {
 test('createVirtualBox', async () => {
   const TestComponent = () => (
     <SchemaForm>
-      <FormCard>
-        <Field name="aaa" type="string" />
-      </FormCard>
-      <button type="submit" data-testid="btn">
-        Submit
-      </button>
+      <Fragment>
+        <FormCard>
+          <Field name="aaa" type="string" />
+        </FormCard>
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
     </SchemaForm>
   )
 
   const { queryByText } = render(<TestComponent />)
 
-  await sleep(33)
+  await wait()
   expect(queryByText('card content')).toBeVisible()
 })
 
@@ -61,38 +64,40 @@ test('dynamic node', async () => {
     const [editable, setEditable] = useState(false)
     return (
       <SchemaForm editable={editable}>
-        {editable && (
+        <Fragment>
+          {editable && (
+            <FormCard>
+              <Field name="aaa" type="string" />
+            </FormCard>
+          )}
           <FormCard>
-            <Field name="aaa" type="string" />
+            <Field name="bbb" type="text" />
           </FormCard>
-        )}
-        <FormCard>
-          <Field name="bbb" type="text" />
-        </FormCard>
-        <button
-          onClick={() => {
-            act(() => {
-              setEditable(true)
-            })
-          }}
-        >
-          Change Editable
-        </button>
+          <button
+            onClick={() => {
+              act(() => {
+                setEditable(true)
+              })
+            }}
+          >
+            Change Editable
+          </button>
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByText } = render(<TestComponent />)
 
-  await sleep(33)
+  await wait()
   fireEvent.click(queryByText('Change Editable'))
-  await sleep(33)
+  await wait()
   expect(queryByText('This is Text Component')).toBeVisible()
 })
 
 test('dynamic schema', async () => {
   const TestComponent = () => {
-    const [schema, setSchema] = useState({
+    const [schema, setSchema] = useState<any>({
       type: 'object',
       properties: {
         card: {
@@ -144,13 +149,13 @@ test('dynamic schema', async () => {
     )
   }
 
-  const { queryByText, queryByTestId, baseElement } = render(<TestComponent />)
+  const { queryByText, queryByTestId } = render(<TestComponent />)
 
-  await sleep(33)
+  await wait()
   act(() => {
     fireEvent.click(queryByText('Delete'))
   })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('aa').hasAttribute('disabled')).toBe(true)
   expect(queryByTestId('aa')).toBeVisible()
   expect(queryByTestId('bb')).toBeNull()
