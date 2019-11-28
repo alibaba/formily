@@ -41,12 +41,14 @@ test('x-effect', async () => {
             'data-testid': 'aaa'
           }}
         />
-        <Field name="bbb" type="string" />
+        <Field name="bbb" type="string" x-props={{
+            'data-testid': 'bbb'
+          }} />
       </Fragment>
     </SchemaForm>
   )
 
-  const { queryByTestId, baseElement } = render(<TestComponent />)
+  const { queryByTestId } = render(<TestComponent />)
   await wait()
   fireEvent.change(queryByTestId('aaa'), {
     target: {
@@ -54,5 +56,5 @@ test('x-effect', async () => {
     }
   })
   await wait()
-  console.log(baseElement.innerHTML)
+  expect((queryByTestId('bbb') as any).value).toEqual('123')
 })
