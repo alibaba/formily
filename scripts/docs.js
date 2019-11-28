@@ -36,6 +36,7 @@ const createDocs = async () => {
     })
     .reduce((buf, _path) => {
       const name = path.basename(_path)
+
       return {
         ...buf,
         [`@uform/${name}`]: `${_path}/src`

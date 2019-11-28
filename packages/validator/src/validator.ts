@@ -10,7 +10,8 @@ import {
   ValidateFieldOptions,
   ValidateCalculator,
   ValidateNode,
-  ValidateNodeResult
+  ValidateNodeResult,
+  SyncValidateResponse
 } from './types'
 import {
   isFn,
@@ -32,12 +33,12 @@ const ValidatorRules: ValidateRulesMap = {}
 const ValidatorFormators: ValidateFormatsMap = {}
 
 //模板引擎
-const template = (message: ValidateResponse, context: any): string => {
+const template = (message: SyncValidateResponse, context: any): string => {
   if (isStr(message)) {
     if (isFn(FormValidator.template)) {
       return FormValidator.template(message, context)
     }
-    return message.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, $0) => {
+    return message.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, $0) => {
       return FormPath.getIn(context, $0)
     })
   } else if (isObj(message)) {
@@ -74,7 +75,7 @@ class FormValidator {
         }
       ]
     } else if (isArr(rules)) {
-      return rules.reduce((buf, rule) => {
+      return rules.reduce((buf: any, rule) => {
         return buf.concat(this.transformRules(rule))
       }, [])
     } else if (isObj(rules)) {
@@ -116,8 +117,7 @@ class FormValidator {
               const payload = await rule(value, ruleObj)
               const message = template(payload, {
                 ...ruleObj,
-                value,
-                key: options.key
+                value
               })
               if (isStr(payload)) {
                 if (first) {

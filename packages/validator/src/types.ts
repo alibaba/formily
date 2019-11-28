@@ -17,8 +17,23 @@ export type ValidateFormatsMap = {
   [key in string]: RegExp
 }
 
+export type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+
 export interface ValidateDescription {
-  format?: string
+  format?: InternalFormats
   validator?: CustomValidator
   required?: boolean
   pattern?: RegExp | string
@@ -32,26 +47,27 @@ export interface ValidateDescription {
   whitespace?: boolean
   enum?: any[]
   message?: string
+  [key: string]: any
 }
 
 export type ValidateRules = ValidateDescription[]
 
 export type ValidateArrayRules = Array<
-  string | CustomValidator | ValidateDescription
+  InternalFormats | CustomValidator | ValidateDescription
 >
 
 export type ValidatePatternRules =
-  | string
+  | InternalFormats
   | CustomValidator
   | ValidateDescription
   | ValidateArrayRules
 
 export type CustomValidator = (
   value: any,
-  rescription: ValidateDescription
+  rescription?: ValidateDescription
 ) => ValidateResponse
 
-export type ValidateResponse =
+export type SyncValidateResponse =
   | null
   | string
   | boolean
@@ -59,6 +75,10 @@ export type ValidateResponse =
       type?: 'error' | 'warning'
       message: string
     }
+
+export type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
+
+export type AsyncValidateResponse = Promise<SyncValidateResponse>
 
 export type ValidateRulesMap = {
   [key in string]: (
@@ -69,7 +89,6 @@ export type ValidateRulesMap = {
 
 export interface ValidateFieldOptions {
   first?: boolean
-  key?: string
 }
 
 export type ValidateCalculator = (

@@ -1,11 +1,19 @@
 import { useMemo, useRef } from 'react'
 import { useForm } from '@uform/react'
 import { Schema } from '../shared/schema'
-import { deprecate } from '@uform/shared'
+import { deprecate, each, lowercase } from '@uform/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
 import { createSchemaFormActions } from '../shared/actions'
 import { getRegistry } from '../shared/registry'
+
+const lowercaseKeys = (obj: any) => {
+  const result = {}
+  each(obj, (value, key) => {
+    result[lowercase(key)] = value
+  })
+  return result
+}
 
 const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const {
@@ -13,8 +21,8 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     virtualFields,
     formComponent,
     formItemComponent,
-    component,
     schema,
+    defaultValue,
     value,
     initialValues,
     actions,
@@ -25,6 +33,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     onValidateFailed,
     useDirty,
     children,
+    form,
     editable,
     validateFirst,
     ...formComponentProps
@@ -36,14 +45,14 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
   return {
     form: useForm(props),
     formComponentProps,
-    fields: {
+    fields: lowercaseKeys({
       ...registry.fields,
       ...fields
-    },
-    virtualFields: {
+    }),
+    virtualFields: lowercaseKeys({
       ...registry.virtualFields,
       ...virtualFields
-    },
+    }),
     formComponent: formComponent ? formComponent : registry.formComponent,
     formItemComponent: formItemComponent
       ? formItemComponent

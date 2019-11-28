@@ -208,7 +208,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
     if (propsKey === ComponentPropsTypes.X_RULES) {
       onChange({
         ...schema,
-        [propsKey]: _.concat(schema[propsKey], {
+        [propsKey]: _.concat(schema[propsKey] || [], {
           [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
         })
       })

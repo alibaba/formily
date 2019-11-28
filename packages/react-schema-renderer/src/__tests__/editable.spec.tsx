@@ -1,14 +1,15 @@
-import React, { useState, Fragment } from 'react'
-import SchemaForm, {
-  Field,
+import React, { Fragment, useState } from 'react'
+import {
   registerFormField,
   connect,
-  registerFieldMiddleware,
+  FormPath,
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field,
   createFormActions,
-  FormPath
+  registerFieldMiddleware
 } from '../index'
-import { render, act, fireEvent } from '@testing-library/react'
 import { toArr } from '@uform/shared'
+import { render, wait, fireEvent, act } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {
   return props => {
@@ -28,31 +29,34 @@ registerFieldMiddleware(Field => {
     )
   }
 })
-registerFormField(
-  'string',
-  connect()(props => <input {...props} value={props.value || ''} />)
-)
-registerFormField('array', props => {
-  const { value, mutators, renderField } = props
-  return (
-    <Fragment>
-      {toArr(value).map((item, index) => {
-        return (
-          <div data-testid="item" key={index}>
-            {renderField(index)}
-          </div>
-        )
-      })}
-      <button
-        type="button"
-        onClick={() => {
-          mutators.push()
-        }}
-      >
-        Add Field
-      </button>
-    </Fragment>
+
+beforeEach(() => {
+  registerFormField(
+    'string',
+    connect()(props => <input {...props} value={props.value || ''} />)
   )
+  registerFormField('array', props => {
+    const { value, mutators, renderField } = props
+    return (
+      <Fragment>
+        {toArr(value).map((item, index) => {
+          return (
+            <div data-testid="item" key={index}>
+              {renderField(index)}
+            </div>
+          )
+        })}
+        <button
+          type="button"
+          onClick={() => {
+            mutators.push({ aa: '' })
+          }}
+        >
+          Add Field
+        </button>
+      </Fragment>
+    )
+  })
 })
 
 test('update editable by setFieldState', async () => {
@@ -70,27 +74,27 @@ test('update editable by setFieldState', async () => {
                 message: 'field is required'
               }
             ]
-            state.props.editable = false
+            state.editable = false
           })
         })
       }}
     >
-      <Field name="aaa" type="string" />
-      <button type="submit" data-testid="btn">
-        Submit
-      </button>
+      <Fragment>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
     </SchemaForm>
   )
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeNull()
-  await sleep(33)
   actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeVisible()
 })
 
@@ -99,9 +103,7 @@ test('update editable by setFieldState with initalState is not editable', async 
   const TestComponent = () => (
     <SchemaForm
       actions={actions}
-      editable={name => {
-        return false
-      }}
+      editable={false}
       effects={($, { setFieldState }) => {
         $('onFormInit').subscribe(() => {
           setFieldState('aaa', state => {
@@ -110,22 +112,22 @@ test('update editable by setFieldState with initalState is not editable', async 
         })
       }}
     >
-      <Field name="aaa" type="string" />
-      <button type="submit" data-testid="btn">
-        Submit
-      </button>
+      <Fragment>
+        <Field name="aaa" type="string" />
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
     </SchemaForm>
   )
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeNull()
-  await sleep(33)
   actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeVisible()
 })
 
@@ -142,13 +144,13 @@ test('update editable in controlled', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeVisible()
   act(() => updateEditable(false))
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeNull()
   act(() => updateEditable(true))
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeVisible()
 })
 
@@ -168,12 +170,12 @@ test('editable with x-props', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeNull()
   actions.setFieldState('aaa', state => {
     state.editable = true
   })
-  await sleep(33)
+  await wait()
   expect(queryByText('text')).toBeVisible()
 })
 
@@ -182,7 +184,7 @@ test('editable with x-props in array field', async () => {
   const TestComponent = () => {
     return (
       <SchemaForm
-        defaultValue={{ array: [{ aa: '123123' }] }}
+        initialValues={{ array: [{ aa: '123123' }] }}
         actions={actions}
       >
         <Field type="array" name="array">
@@ -200,12 +202,12 @@ test('editable with x-props in array field', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByText('empty')).toBeVisible()
   actions.setFieldState('array.0.aa', state => {
     state.editable = true
   })
-  await sleep(33)
+  await wait()
   expect(queryByText('empty')).toBeNull()
 })
 
@@ -215,7 +217,7 @@ test('editable with x-props is affected by global editable', async () => {
     return (
       <SchemaForm
         editable={false}
-        defaultValue={{ array: [{ aa: '123123' }] }}
+        initialValues={{ array: [{ aa: '123123' }] }}
         actions={actions}
       >
         <Field type="array" name="array" x-props={{ editable: true }}>
@@ -233,12 +235,12 @@ test('editable with x-props is affected by global editable', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByText('empty')).toBeNull()
   actions.setFieldState('array.0.aa', state => {
     state.editable = false
   })
-  await sleep(33)
+  await wait()
   expect(queryByText('empty')).toBeVisible()
 })
 
@@ -246,7 +248,7 @@ test('editable conflicts that global editable props with setFieldState', async (
   const TestComponent = () => {
     return (
       <SchemaForm
-        editable={FormPath.match('*(!bbb)')}
+        editable={FormPath.match('*(!bbb)') as any}
         effects={($, { setFieldState }) => {
           $('onFieldChange', 'ccc').subscribe(() => {
             setFieldState('bbb', state => {
@@ -255,35 +257,38 @@ test('editable conflicts that global editable props with setFieldState', async (
           })
         }}
       >
-        <Field
-          type="string"
-          name="aaa"
-          x-props={{ 'data-testid': 'this is aaa' }}
-        />
-        <Field
-          type="string"
-          name="bbb"
-          x-props={{ 'data-testid': 'this is bbb' }}
-        />
-        <Field
-          type="string"
-          name="ccc"
-          x-props={{ 'data-testid': 'this is ccc' }}
-        />
+        <Fragment>
+          <Field
+            type="string"
+            name="aaa"
+            x-props={{ 'data-testid': 'this is aaa' }}
+          />
+          <Field
+            type="string"
+            name="bbb"
+            x-props={{ 'data-testid': 'this is bbb' }}
+          />
+          <Field
+            type="string"
+            name="ccc"
+            x-props={{ 'data-testid': 'this is ccc' }}
+          />
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is aaa')).toBeVisible()
   expect(queryByTestId('this is bbb')).toBeVisible()
   expect(queryByTestId('this is ccc')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is bbb')).toBeVisible()
+
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is bbb')).toBeVisible()
 })
 
@@ -299,36 +304,38 @@ test('editable conflicts that props editable props with setFieldState', async ()
           })
         }}
       >
-        <Field
-          type="string"
-          name="aaa"
-          x-props={{ 'data-testid': 'this is aaa' }}
-        />
-        <Field
-          type="string"
-          name="bbb"
-          editable={false}
-          x-props={{ 'data-testid': 'this is bbb' }}
-        />
-        <Field
-          type="string"
-          name="ccc"
-          x-props={{ 'data-testid': 'this is ccc' }}
-        />
+        <Fragment>
+          <Field
+            type="string"
+            name="aaa"
+            x-props={{ 'data-testid': 'this is aaa' }}
+          />
+          <Field
+            type="string"
+            name="bbb"
+            editable={false}
+            x-props={{ 'data-testid': 'this is bbb' }}
+          />
+          <Field
+            type="string"
+            name="ccc"
+            x-props={{ 'data-testid': 'this is ccc' }}
+          />
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is aaa')).toBeVisible()
   expect(queryByTestId('this is bbb')).toBeVisible()
   expect(queryByTestId('this is ccc')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is bbb')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is bbb')).toBeVisible()
 })
 
@@ -344,34 +351,36 @@ test('editable conflicts that x-props editable props with setFieldState', async 
           })
         }}
       >
-        <Field
-          type="string"
-          name="aaa"
-          x-props={{ 'data-testid': 'this is aaa' }}
-        />
-        <Field
-          type="string"
-          name="bbb"
-          x-props={{ 'data-testid': 'this is bbb', editable: false }}
-        />
-        <Field
-          type="string"
-          name="ccc"
-          x-props={{ 'data-testid': 'this is ccc' }}
-        />
+        <Fragment>
+          <Field
+            type="string"
+            name="aaa"
+            x-props={{ 'data-testid': 'this is aaa' }}
+          />
+          <Field
+            type="string"
+            name="bbb"
+            x-props={{ 'data-testid': 'this is bbb', editable: false }}
+          />
+          <Field
+            type="string"
+            name="ccc"
+            x-props={{ 'data-testid': 'this is ccc' }}
+          />
+        </Fragment>
       </SchemaForm>
     )
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is aaa')).toBeVisible()
   expect(queryByTestId('this is bbb')).toBeVisible()
   expect(queryByTestId('this is ccc')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '123' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is bbb')).toBeVisible()
   fireEvent.change(queryByTestId('this is ccc'), { target: { value: '321' } })
-  await sleep(33)
+  await wait()
   expect(queryByTestId('this is bbb')).toBeVisible()
 })

@@ -1,33 +1,53 @@
-import { clone, isEqual, isFn, each, globalThisPolyfill } from '@uform/shared'
+import {
+  clone,
+  isEqual,
+  isFn,
+  each,
+  globalThisPolyfill,
+  Subscribable,
+  FormPath,
+  FormPathPattern
+} from '@uform/shared'
 import produce, { Draft } from 'immer'
-import { Subscrible } from './subscrible'
-import { IStateModelFactory, StateDirtyMap, IModel, StateModel } from '../types'
+import {
+  IStateModelProvider,
+  IStateModelFactory,
+  StateDirtyMap,
+  IModel,
+  StateModel
+} from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
-) => {
-  return class Model<DefaultProps> extends Subscrible<State>
+): IStateModelProvider<State, Props> => {
+  return class Model<DefaultProps = any> extends Subscribable<State>
     implements IModel<State, Props & DefaultProps> {
     public state: State & { displayName?: string }
     public props: Props &
       DefaultProps & {
         useDirty?: boolean
+        computeState?: (draft: State, prevState: State) => void
       }
     public displayName?: string
     public dirtyNum: number
-    public dirtyMap: StateDirtyMap<State>
+    public dirtys: StateDirtyMap<State>
+    public prevState: State
     public batching: boolean
+    public stackCount: number
     public controller: StateModel<State>
+
     constructor(defaultProps: DefaultProps) {
       super()
       this.state = { ...Factory.defaultState }
+      this.prevState = { ...Factory.defaultState }
       this.props = {
         ...Factory.defaultProps,
         ...defaultProps
       }
-      this.dirtyMap = {}
+      this.dirtys = {}
       this.dirtyNum = 0
+      this.stackCount = 0
       this.batching = false
       this.controller = new Factory(this.state, this.props)
       this.displayName = Factory.displayName
@@ -42,7 +62,7 @@ export const createStateModel = <State = {}, Props = {}>(
       if (this.dirtyNum > 0) {
         this.notify(this.getState())
       }
-      this.dirtyMap = {}
+      this.dirtys = {}
       this.dirtyNum = 0
       this.batching = false
     }
@@ -51,10 +71,11 @@ export const createStateModel = <State = {}, Props = {}>(
       if (isFn(callback)) {
         return callback(this.getState())
       } else {
+        if (isFn(this.controller.publishState)) {
+          return this.controller.publishState(this.state)
+        }
+
         if (!hasProxy || this.props.useDirty) {
-          if (isFn(this.controller.publishState)) {
-            return this.controller.publishState(this.state)
-          }
           return clone(this.state)
         } else {
           return produce(this.state, () => {})
@@ -75,7 +96,9 @@ export const createStateModel = <State = {}, Props = {}>(
         if (!hasProxy || this.props.useDirty) {
           callback(this.state)
         } else {
-          this.state = produce(this.state, callback)
+          this.state = produce(this.state, draft => {
+            callback(draft)
+          })
         }
       }
     }
@@ -85,99 +108,121 @@ export const createStateModel = <State = {}, Props = {}>(
       silent = false
     ) => {
       if (isFn(callback)) {
+        this.stackCount++
         if (!hasProxy || this.props.useDirty) {
           const draft = this.getState()
-          this.dirtyNum = 0
-          this.dirtyMap = {}
+          if (!this.batching) {
+            this.dirtys = {}
+            this.dirtyNum = 0
+          }
           callback(draft)
+          if (isFn(this.props.computeState)) {
+            this.props.computeState(draft, this.state)
+          }
           if (isFn(this.controller.computeState)) {
             this.controller.computeState(draft, this.state)
           }
           const draftKeys = Object.keys(draft || {})
           const stateKeys = Object.keys(this.state || {})
+
           each(
             draftKeys.length > stateKeys.length ? draft : this.state,
             (value, key) => {
-              if (!isEqual(value, draft[key])) {
+              if (!isEqual(this.state[key], draft[key])) {
                 this.state[key] = draft[key]
-                this.dirtyMap[key] = true
+                this.dirtys[key] = true
                 this.dirtyNum++
               }
             }
           )
           if (isFn(this.controller.dirtyCheck)) {
-            const result = this.controller.dirtyCheck(this.dirtyMap)
+            const result = this.controller.dirtyCheck(this.dirtys)
             if (result !== undefined) {
-              Object.assign(this.dirtyMap, result)
+              Object.assign(this.dirtys, result)
             }
           }
           if (this.dirtyNum > 0 && !silent) {
-            if (this.batching) return
+            if (this.batching) {
+              this.stackCount--
+              return
+            }
             this.notify(this.getState())
-            this.dirtyMap = {}
+            this.dirtys = {}
             this.dirtyNum = 0
           }
         } else {
-          this.dirtyNum = 0
-          this.dirtyMap = {}
+          if (!this.batching) {
+            this.dirtys = {}
+            this.dirtyNum = 0
+          }
           //用proxy解决脏检查计算属性问题
           this.state = produce(
             this.state,
             draft => {
               callback(draft)
+              if (isFn(this.props.computeState)) {
+                this.props.computeState(draft, this.state)
+              }
               if (isFn(this.controller.computeState)) {
                 this.controller.computeState(draft, this.state)
               }
             },
             patches => {
               patches.forEach(({ path, op, value }) => {
-                if (!this.dirtyMap[path[0]]) {
-                  if (op === 'replace') {
-                    if (!isEqual(this.state[path[0]], value)) {
-                      this.dirtyMap[path[0]] = true
-                      this.dirtyNum++
-                    }
-                  } else {
-                    this.dirtyMap[path[0]] = true
+                if (op === 'replace') {
+                  if (!isEqual(this.state[path[0]], value)) {
+                    this.dirtys[path[0]] = true
                     this.dirtyNum++
                   }
+                } else {
+                  this.dirtys[path[0]] = true
+                  this.dirtyNum++
                 }
               })
             }
           )
           if (isFn(this.controller.dirtyCheck)) {
-            const result = this.controller.dirtyCheck(this.dirtyMap)
+            const result = this.controller.dirtyCheck(this.dirtys)
             if (result !== undefined) {
-              Object.assign(this.dirtyMap, result)
+              Object.assign(this.dirtys, result)
             }
           }
           if (this.dirtyNum > 0 && !silent) {
-            if (this.batching) return
+            if (this.batching) {
+              this.stackCount--
+              return
+            }
             this.notify(this.getState())
-            this.dirtyMap = {}
+            this.dirtys = {}
             this.dirtyNum = 0
           }
         }
-      }
-    }
 
-    hasChanged = (key?: string) =>
-      key ? this.dirtyMap[key] === true : this.dirtyNum > 0
-
-    getChanged = () => {
-      if (!hasProxy || this.props.useDirty) {
-        return clone(this.dirtyMap)
-      } else {
-        return this.dirtyMap
-      }
-    }
-
-    watch = (key: string, callback?: (dirtys: StateDirtyMap<State>) => any) => {
-      if (this.hasChanged(key)) {
-        if (isFn(callback)) {
-          callback(this.getChanged())
+        this.stackCount--
+        if (!this.stackCount) {
+          this.prevState = clone(this.state)
         }
       }
     }
-  }
+    /**
+     * 当前操作的变化情况
+     */
+    isDirty = (key?: string) =>
+      key ? this.dirtys[key] === true : this.dirtyNum > 0
+
+    getDirtyInfo = () => this.dirtys
+
+    /**
+     *
+     *在一组操作过程中的变化情况
+     */
+    hasChanged = (path?: FormPathPattern) => {
+      return path
+        ? !isEqual(
+            FormPath.getIn(this.prevState, path),
+            FormPath.getIn(this.state, path)
+          )
+        : !isEqual(this.prevState, this.state)
+    }
+  } as any
 }

@@ -1,31 +1,33 @@
 import React, { Fragment } from 'react'
-import SchemaForm, { Field, registerFormField, connect } from '../index'
+import {
+  connect,
+  registerFormField,
+  SchemaMarkupForm as SchemaForm,
+  SchemaMarkupField as Field
+} from '../index'
 import { toArr } from '@uform/shared'
-import { render } from '@testing-library/react'
+import { render, wait } from '@testing-library/react'
 
-registerFormField('string', connect()(props => <div>{props.value}</div>))
-
-registerFormField('array', props => {
-  const { value, mutators, renderField } = props
-  return (
-    <Fragment>
-      {toArr(value).map((item, index) => {
-        return (
-          <div data-testid="item" key={index}>
-            {renderField(index)}
-          </div>
-        )
-      })}
-      <button
-        type="button"
-        onClick={() => {
-          mutators.push()
-        }}
-      >
-        Add Field
-      </button>
-    </Fragment>
+beforeEach(() => {
+  registerFormField(
+    'string',
+    connect()(props => <input {...props} value={(props.value || []).join('')} />)
   )
+  
+  registerFormField('array', props => {
+    const { value, renderField } = props
+    return (
+      <Fragment>
+        {toArr(value).map((item, index) => {
+          return (
+            <div data-testid="item" key={index}>
+              {renderField(index)}
+            </div>
+          )
+        })}
+      </Fragment>
+    )
+  })
 })
 
 test('destruct with initial values', async () => {
@@ -38,9 +40,8 @@ test('destruct with initial values', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
-  expect(queryByText('123321')).toBeVisible()
+  await wait()
+  expect(queryByText('123321')).toBeNull()
 })
 
 test('destruct with initial values in array', async () => {
@@ -57,7 +58,6 @@ test('destruct with initial values in array', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-
-  await sleep(33)
-  expect(queryByText('123321')).toBeVisible()
+  await wait()
+  expect(queryByText('123321')).toBeNull()
 })

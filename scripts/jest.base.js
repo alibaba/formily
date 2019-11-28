@@ -26,13 +26,16 @@ module.exports = {
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
     require.resolve('@testing-library/react/cleanup-after-each'),
-    './scripts/global.js'
+    './scripts/global.ts'
   ],
   moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
       babelConfig: true,
-      tsConfig: 'tsconfig.jest.json'
+      tsConfig: 'tsconfig.jest.json',
+      diagnostics: {
+        pathRegex: '\\.(spec|test)\\.(ts|tsx|js|jsx)$'
+      }
     }
   },
   //watchPlugins: ['jest-watch-lerna-packages'],
