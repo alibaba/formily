@@ -9,6 +9,7 @@ import {
   getComponentPropsValue,
   getInputType,
   getPropertyValue,
+  getExpressionValue,
   getRuleMessage
 } from '../utils/fieldEditorHelpers'
 import { InputTypes, ComponentPropsTypes } from '../utils/types'
@@ -60,7 +61,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
   const componentPropsValue = getComponentPropsValue({ schema, propsKey })
 
   const handleXComponentPropsValueChange = (value, property) => {
-    const newSchema = { ...schema }
+    let newSchema
     if (propsKey === ComponentPropsTypes.X_RULES) {
       const newRules = _.map(schema[propsKey], rule => {
         if (_.has(rule, property)) {
@@ -71,15 +72,24 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         }
         return rule
       })
-      _.set(newSchema, `${propsKey}`, newRules)
+      newSchema = {
+        ...schema,
+        [propsKey]: newRules
+      }
     } else {
-      _.set(newSchema, `${propsKey}.${property}`, value)
+      newSchema = {
+        ...schema,
+        [propsKey]: {
+          ...schema[propsKey],
+          [property]: value
+        }
+      }
     }
     onChange(newSchema)
   }
 
   const handleInputTypeChange = (value, property) => {
-    const newSchema = { ...schema }
+    let newSchema
     let defaultValue
     switch (value) {
       case InputTypes.INPUT: {
@@ -109,9 +119,18 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         }
         return rule
       })
-      _.set(newSchema, `${propsKey}`, newRules)
+      newSchema = {
+        ...schema,
+        [propsKey]: newRules
+      }
     } else {
-      _.set(newSchema, `${propsKey}.${property}`, defaultValue)
+      newSchema = {
+        ...schema,
+        [propsKey]: {
+          ...schema[propsKey],
+          [property]: defaultValue
+        }
+      }
     }
     onChange(newSchema)
   }
@@ -305,9 +324,9 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                 className="field-group-form-item"
               >
                 <Input.TextArea
-                  placeholder="{{}}/{}/[]"
-                  // TODO, 这里暂时用 defaultValue
-                  defaultValue={value}
+                  key={getExpressionValue(value)}
+                  placeholder="格式：{{}}/{}/[]，失去焦点生效"
+                  defaultValue={getExpressionValue(value)}
                   onBlur={event => {
                     let value = event.target.value
                     try {

@@ -28,6 +28,7 @@ const components = [
 export const SchemaEditor: React.FC = () => {
   const initialSchema = jsonToSchema(json)
   const [schema, setSchema] = React.useState(initialSchema)
+
   return (
     <div className="schema-editor">
       <div className="schema-menus">

@@ -129,6 +129,12 @@ const isExpression = value => {
   return /^{{(.*)}}$/.test(value)
 }
 
+export const getExpressionValue = value => {
+  if (_.isObject(value)) {
+    return JSON.stringify(value)
+  }
+  return value
+}
 export const getInputType = value => {
   if (typeof value === 'object' || isExpression(value)) {
     return InputTypes.TEXT_AREA
