@@ -94,17 +94,15 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IFieldState) => {
         state.unmounted = true
-      })
+      })//must notify,need to trigger remove value
     }
   }, [])
 
   const state = ref.current.field.getState()
   return {
     form,
-    state: {
-      ...state,
-      errors: state.errors.join(', ')
-    },
+    field: ref.current.field,
+    state,
     mutators,
     props: state.props
   }

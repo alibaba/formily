@@ -1,4 +1,4 @@
-import { Input, Select, Checkbox, Button, Icon } from '@alifd/next'
+import { Input, Select, Checkbox, Button, Icon } from 'antd'
 import React from 'react'
 
 const typeOptions = [
@@ -24,42 +24,16 @@ export const FieldEditor: React.FC = ({ children }) => {
         </Button>
       </div>
       <div className="field-group">
-        <Input
-          className="field-input"
-          label="key"
-          name="key"
-          size="small"
-        ></Input>
-        <Input
-          className="field-input"
-          label="title"
-          name="title"
-          size="small"
-        ></Input>
+        <Input className="field-input" name="key" size="small"></Input>
+        <Input className="field-input" name="title" size="small"></Input>
         <Select
           className="field-input"
-          label="type"
-          name="type"
           size="small"
           dataSource={typeOptions}
         ></Select>
-        <Select
-          className="field-input"
-          label="component"
-          name="component"
-          size="small"
-        ></Select>
-        <Input
-          className="field-input"
-          label="desc"
-          name="description"
-          size="small"
-        ></Input>
-        <Checkbox
-          className="field-input"
-          label="必填"
-          name="required"
-        ></Checkbox>
+        <Select className="field-input" size="small"></Select>
+        <Input className="field-input" name="description" size="small"></Input>
+        <Checkbox className="field-input" name="required"></Checkbox>
       </div>
       <div className="props-group"></div>
       <div className="field-children">{children}</div>

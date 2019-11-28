@@ -14,10 +14,10 @@ import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
 
-export type IAntdSchemaFormProps = ISchemaFormProps &
-  FormProps &
+export type IAntdSchemaFormProps = FormProps &
   IFormItemTopProps &
-  PreviewTextConfigProps
+  PreviewTextConfigProps &
+  ISchemaFormProps
 
 export type IAntdSchemaFieldProps = IMarkupSchemaFieldProps
 
@@ -45,7 +45,7 @@ export type IFormItemTopProps = React.PropsWithChildren<
 >
 
 export interface ICompatItemProps
-  extends Exclude<ItemProps, 'labelCol' | 'wrapperCol'>,
+  extends Omit<ItemProps, 'labelCol' | 'wrapperCol'>,
     Partial<ISchemaFieldComponentProps> {
   labelCol?: number | { span: number; offset?: number }
   wrapperCol?: number | { span: number; offset?: number }

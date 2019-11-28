@@ -5,6 +5,7 @@ import cls from 'classnames'
 import styled from 'styled-components'
 import { useFormItem } from '../compat/context'
 import { IFormButtonGroupProps } from '../types'
+import { createVirtualBox } from '@uform/react-schema-renderer'
 
 const { Row, Col } = Grid
 
@@ -155,3 +156,8 @@ export const FormButtonGroup = styled(
     }
   }
 `
+
+createVirtualBox<React.PropsWithChildren<IFormButtonGroupProps>>(
+  'button-group',
+  FormButtonGroup,
+)
