@@ -39,6 +39,15 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
           return
         }
 
+        if (
+          (targetPath === 'root' && sourcePath.split('.').length === 2) ||
+          (targetPath !== 'root' &&
+            fp.dropRight(2, sourcePath.split('.')).join('.') === targetPath)
+        ) {
+          // 拖拽到直接父节点，等于不起作用
+          return
+        }
+
         let newSchema = schema
 
         // 增加新的 key
