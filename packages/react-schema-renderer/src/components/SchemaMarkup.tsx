@@ -78,7 +78,10 @@ export function createVirtualBox<T = {}>(
     component
       ? ({ schema, children }) => {
           const props = schema.getExtendsComponentProps()
-          return React.createElement(component, props, children)
+          return React.createElement(component, {
+            children,
+            ...props,
+          })
         }
       : () => <Fragment />
   )

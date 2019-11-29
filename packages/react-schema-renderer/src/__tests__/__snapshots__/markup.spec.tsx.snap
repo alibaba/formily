@@ -44,6 +44,7 @@ Object {
     "pristine": false,
     "props": Object {
       "default": "123",
+      "name": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",
@@ -101,6 +102,7 @@ Object {
     "name": "NO_NAME_FIELD_$0",
     "path": "NO_NAME_FIELD_$0",
     "props": Object {
+      "name": "NO_NAME_FIELD_$0",
       "type": "object",
       "x-component": "card",
       "x-component-props": Object {
@@ -133,6 +135,7 @@ Object {
     "pristine": false,
     "props": Object {
       "default": "123",
+      "name": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",
@@ -162,9 +165,11 @@ exports[`test all apis markup virtualbox 2`] = `
 Object {
   "properties": Object {
     "NO_NAME_FIELD_$0": Object {
+      "name": "NO_NAME_FIELD_$0",
       "properties": Object {
         "aa": Object {
           "default": "123",
+          "name": "aa",
           "type": "string",
           "x-props": Object {
             "data-testid": "input",
