@@ -64,7 +64,9 @@ npm install --save @uform/core
 
 ## WebSite
 
-https://uformjs.org
+https://uformjs.org (0.x)
+
+https://uform-next.netlify.com (1.x)
 
 ## Documents
 
