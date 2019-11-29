@@ -57,6 +57,10 @@ Use uform core package:
 npm install --save @uform/core
 ```
 
+## Architecture
+
+![](https://img.alicdn.com/tfs/TB1i9nmolv0gK0jSZKbXXbK2FXa-1882-1144.png)
+
 
 ## WebSite
 

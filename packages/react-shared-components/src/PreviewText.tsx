@@ -1,5 +1,5 @@
 import React, { useContext, createContext } from 'react'
-import { isFn } from '@uform/shared'
+import { isFn, isEqual } from '@uform/shared'
 import { IPreviewTextProps } from './types'
 
 export interface PreviewTextConfigProps {
@@ -14,20 +14,41 @@ export const PreviewText: React.FC<IPreviewTextProps> & {
   const context = useContext(PreviewTextContext) || {}
   let value: any
   if (props.dataSource && props.dataSource.length) {
-    let find = props.dataSource.filter(({ value }) =>
-      Array.isArray(props.value)
-        ? props.value.some(val => val == value)
-        : props.value == value
-    )
-    value = find.reduce((buf, item, index) => {
-      return buf.concat(item.label, index < find.length - 1 ? ', ' : '')
-    }, [])
+    if (Array.isArray(props.value)) {
+      value = props.value.map((val, index) => {
+        const finded = props.dataSource.find(item => isEqual(item.value, val))
+        if (finded) {
+          return (
+            <span key={index}>
+              {finded.label}
+              {index < props.value.length - 1 ? ' ,' : ''}
+            </span>
+          )
+        }
+      })
+    } else {
+      const fined = props.dataSource.find(item =>
+        isEqual(item.value, props.value)
+      )
+      if (fined) {
+        value = fined.label
+      }
+    }
   } else {
-    value = Array.isArray(props.value)
-      ? props.value.join(' ~ ')
-      : String(
-          props.value === undefined || props.value === null ? '' : props.value
+    if (Array.isArray(props.value)) {
+      value = props.value.map((val, index) => {
+        return (
+          <span key={index}>
+            {val}
+            {index < props.value.length - 1 ? '~' : ''}
+          </span>
         )
+      })
+    } else {
+      value = String(
+        props.value === undefined || props.value === null ? '' : props.value
+      )
+    }
   }
   const placeholder = isFn(context.previewPlaceholder)
     ? context.previewPlaceholder(props)
@@ -44,7 +65,7 @@ export const PreviewText: React.FC<IPreviewTextProps> & {
       value === undefined ||
       (Array.isArray(value) && value.length === 0)
         ? placeholder || 'N/A'
-        : String(value)}
+        : value}
       {props.addonTextAfter ? ' ' + props.addonTextAfter : ''}
       {props.innerAfter ? ' ' + props.innerAfter : ''}
       {props.addonAfter ? ' ' + props.addonAfter : ''}

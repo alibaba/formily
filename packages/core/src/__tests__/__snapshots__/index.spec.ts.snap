@@ -927,7 +927,7 @@ Object {
     "values": Array [
       123,
     ],
-    "visible": false,
+    "visible": true,
     "visited": false,
     "warnings": Array [],
   },
@@ -1215,7 +1215,7 @@ Object {
     "values": Array [
       123,
     ],
-    "visible": false,
+    "visible": true,
     "visited": false,
     "warnings": Array [],
   },

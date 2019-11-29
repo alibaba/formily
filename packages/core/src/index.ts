@@ -124,7 +124,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       })
       if (valuesChanged) {
         if (isFn(options.onChange)) {
-          options.onChange(published.values)
+          options.onChange(clone(published.values))
         }
         heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
@@ -195,7 +195,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
               if (displayChanged) {
                 state.display = published.display
               }
-            })
+            }, true)
           },
           false
         )
@@ -239,7 +239,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
     return (published: IVirtualFieldState<VirtualFieldProps>) => {
       const visibleChanged = field.isDirty('visible')
       const displayChanged = field.isDirty('display')
-      const unmountedChanged = field.isDirty('unmounted')
       const mountedChanged = field.isDirty('mounted')
       const initializedChnaged = field.isDirty('initialized')
 
@@ -247,35 +246,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
 
-      if (visibleChanged) {
+      if (visibleChanged || displayChanged) {
         graph.eachChildren(path, childState => {
           childState.setState(
             (state: IVirtualFieldState<VirtualFieldProps>) => {
-              state.visible = published.visible
-            }
+              if (visibleChanged) {
+                state.visible = published.visible
+              }
+              if (displayChanged) {
+                state.display = published.display
+              }
+            },
+            true
           )
         })
       }
 
-      if (displayChanged) {
-        graph.eachChildren(path, childState => {
-          childState.setState(
-            (state: IVirtualFieldState<VirtualFieldProps>) => {
-              state.display = published.display
-            }
-          )
-        })
-      }
-
-      if (unmountedChanged) {
-        graph.eachChildren(path, childState => {
-          childState.setState(
-            (state: IVirtualFieldState<VirtualFieldProps>) => {
-              state.unmounted = published.unmounted
-            }
-          )
-        })
-      }
       if (mountedChanged && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
@@ -766,7 +752,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
         if (isFn(onSubmit)) {
           return Promise.resolve(
-            onSubmit(state.getState(state => state.values))
+            onSubmit(state.getState(state => clone(state.values)))
           ).then(payload => ({ validated, payload }))
         }
         return { validated, payload: undefined }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormSpy, LifeCycleTypes } from '@uform/react-schema-renderer'
+import { FormSpy, LifeCycleTypes, createVirtualBox } from '@uform/react-schema-renderer'
 import { Button } from '@alifd/next'
 import { ButtonProps } from '@alifd/next/types/button'
 import { ISubmitProps, IResetProps } from '../types'
@@ -100,3 +100,8 @@ export const Reset: React.FC<IResetProps> = ({
     </FormSpy>
   )
 }
+
+createVirtualBox<IResetProps>('reset', Reset)
+createVirtualBox<ButtonProps>('text-button', TextButton)
+createVirtualBox<ISubmitProps>('submit', Submit)
+createVirtualBox<ButtonProps>('circle-button', CircleButton)

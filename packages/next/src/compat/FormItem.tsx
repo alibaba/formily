@@ -1,4 +1,4 @@
-import React, { createContext } from 'react'
+import React, { createContext, createElement } from 'react'
 import { Form } from '@alifd/next'
 import { useFormItem } from './context'
 import { IFormItemTopProps, ICompatItemProps } from '../types'
@@ -12,16 +12,24 @@ const computeStatus = (props: ICompatItemProps) => {
   if (props.invalid) {
     return 'error'
   }
-  //todo:暂时不支持
-  // if (props.warnings.length) {
-  //   return 'warning'
-  // }
+  if (props.warnings && props.warnings.length) {
+    return 'warning'
+  }
 }
 
 const computeHelp = (props: ICompatItemProps) => {
   if (props.help) return props.help
   const messages = [].concat(props.errors || [], props.warnings || [])
-  return messages.length ? messages : props.schema && props.schema.description
+  return messages.length
+    ? messages.map((message, index) =>
+        createElement(
+          'span',
+          { key: index },
+          message,
+          messages.length - 1 > index ? ' ,' : ''
+        )
+      )
+    : props.schema && props.schema.description
 }
 
 const computeLabel = (props: ICompatItemProps) => {
@@ -54,6 +62,7 @@ const computeSchemaExtendProps = (
         ...props.schema.getExtendsItemProps(),
         ...props.schema.getExtendsProps()
       },
+      'className',
       'prefix',
       'labelAlign',
       'labelTextAlign',
