@@ -64,7 +64,7 @@ const App = () => (
         title="手机号"
         required
       />
-      <Field type="string" name="qq" x-rules="qq" title="QQ号" required />
+      <Field type="string" name="qq" x-rules="qq" title="QQ号" minLength={3} required />
       <Field type="string" name="email" x-rules="email" title="邮箱" required />
       <Field
         type="string"
