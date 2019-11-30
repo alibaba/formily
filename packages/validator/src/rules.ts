@@ -70,7 +70,7 @@ export default {
   },
   min(value: any, rule: ValidateDescription) {
     const length = getLength(value)
-    const min = Number(rule.len)
+    const min = Number(rule.min)
     return length < min ? getRuleMessage(rule, 'min') : ''
   },
   pattern(value: any, rule: ValidateDescription) {
