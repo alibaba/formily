@@ -17,22 +17,22 @@ function SchemaEditorDemo() {
           title: '我是层级嵌套标题',
           description: '我是层级嵌套描述',
           properties: {
-            arrayA: {
-              type: 'array',
-              title: '动物',
-              description: '我是字段描述',
-              component: 'Select',
-              items: {
-                type: 'string',
-                enum: ['Dog', 'Cat', 'Horse']
-              }
-            },
-            numberB: {
-              type: 'number',
-              title: '年龄'
-            },
-            objectC: {
-              type: 'object'
+            input: {
+              type: 'string',
+              'x-component': 'Input',
+              'x-component-props': {
+                 value: 'abc',
+                 onChange: '{{function(){console.log("abcd");}}}'   
+               },
+              'x-props': {
+                 help: 'test'  
+              },
+              'x-rules': [
+                {
+                 required: true,
+                 message: '此项必填' 
+                }
+               ]  
             }
           }
         }
