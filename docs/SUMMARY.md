@@ -17,6 +17,7 @@
      - [内外通讯联动](./Examples/next/Actions.md)
      - [国际化](./Examples/next/International.md)
      - [解构字段数据](./Examples/next/Deconstruction.md)
+     - [压测](./Examples/next/Pressure.md)
   - Ant Design
      - [简单场景](./Examples/antd/Sample.md)
      - [表单详情](./Examples/antd/Detail.md)
