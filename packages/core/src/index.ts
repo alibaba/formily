@@ -75,7 +75,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
               if (state.visible) {
                 if (valuesChanged) {
                   const dataPath = FormPath.parse(state.name)
-                  const parent = graph.getLatestParent(dataPath)
+                  const parent = graph.getLatestParent(state.path)
                   const parentValue = getFormValuesIn(parent.path)
                   const value = getFormValuesIn(state.name)
                   /**
@@ -88,7 +88,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
                   ) {
                     if (
                       !parent.path
-                        .getNearestChildPathBy(dataPath)
+                        .getNearestChildPathBy(state.path)
                         .existIn(parentValue, parent.path)
                     ) {
                       graph.remove(state.path)
