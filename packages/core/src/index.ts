@@ -68,60 +68,74 @@ export function createForm<FieldProps, VirtualFieldProps>(
       /**
        * 影子更新：不会触发具体字段的onChange，如果不这样处理，会导致任何值变化都会导致整树rerender
        */
-      shadowUpdate(() => {
-        graph.eachChildren((field: IField | IVirtualField) => {
-          if (isField(field)) {
-            field.setState(state => {
-              if (state.visible) {
-                if (valuesChanged) {
-                  const dataPath = FormPath.parse(state.name)
-                  const parent = graph.getLatestParent(state.path)
-                  const parentValue = getFormValuesIn(parent.path)
-                  const value = getFormValuesIn(state.name)
-                  /**
-                   * https://github.com/alibaba/uform/issues/267 dynamic remove node
-                   */
-                  let removed = false
+      const updateFields = (field: IField | IVirtualField) => {
+        if (isField(field)) {
+          field.setState(state => {
+            if (state.visible) {
+              if (valuesChanged) {
+                const dataPath = FormPath.parse(state.name)
+                const parent = graph.getLatestParent(state.path)
+                const parentValue = getFormValuesIn(parent.path)
+                const value = getFormValuesIn(state.name)
+                /**
+                 * https://github.com/alibaba/uform/issues/267 dynamic remove node
+                 */
+                let removed = false
+                if (
+                  isArr(parentValue) &&
+                  !dataPath.existIn(parentValue, parent.path)
+                ) {
                   if (
-                    isArr(parentValue) &&
-                    !dataPath.existIn(parentValue, parent.path)
+                    !parent.path
+                      .getNearestChildPathBy(state.path)
+                      .existIn(parentValue, parent.path)
                   ) {
-                    if (
-                      !parent.path
-                        .getNearestChildPathBy(state.path)
-                        .existIn(parentValue, parent.path)
-                    ) {
+                    graph.remove(state.path)
+                    removed = true
+                  }
+                } else {
+                  each(env.removeNodes, (_, name) => {
+                    if (dataPath.includes(name)) {
                       graph.remove(state.path)
+                      delete env.removeNodes[name]
                       removed = true
                     }
-                  } else {
-                    each(env.removeNodes, (_, name) => {
-                      if (dataPath.includes(name)) {
-                        graph.remove(state.path)
-                        delete env.removeNodes[name]
-                        removed = true
-                      }
-                    })
-                  }
-                  if (removed) return
-                  if (!isEqual(value, state.value)) {
-                    state.value = isValid(value) ? value : state.initialValue
-                  }
+                  })
                 }
-                if (initialValuesChanged) {
-                  const initialValue = getFormInitialValuesIn(state.name)
-                  if (!isEqual(initialValue, state.initialValue)) {
-                    state.initialValue = initialValue
-                    if (!isValid(state.value)) {
-                      state.value = initialValue
-                    }
+                if (removed) return
+                if (!isEqual(value, state.value)) {
+                  state.value = isValid(value) ? value : state.initialValue
+                }
+              }
+              if (initialValuesChanged) {
+                const initialValue = getFormInitialValuesIn(state.name)
+                if (!isEqual(initialValue, state.initialValue)) {
+                  state.initialValue = initialValue
+                  if (!isValid(state.value)) {
+                    state.value = initialValue
                   }
                 }
               }
-            })
+            }
+          })
+        }
+      }
+      if (valuesChanged || initialValuesChanged) {
+        shadowUpdate(() => {
+          const fieldUpdate = env.patchQueue[env.patchQueue.length - 1]
+          //考虑初始化的时候还没生成节点树
+          if (fieldUpdate && graph.get(fieldUpdate.path)) {
+            if (fieldUpdate.type === 'update') {
+              graph.eachParentAndChildren(fieldUpdate.path, updateFields)
+            } else {
+              graph.eachParent(fieldUpdate.path, updateFields)
+            }
+          } else {
+            graph.eachChildren(updateFields)
           }
+          env.patchQueue.pop()
         })
-      })
+      }
       if (valuesChanged) {
         if (isFn(options.onChange)) {
           options.onChange(clone(published.values))
@@ -476,19 +490,29 @@ export function createForm<FieldProps, VirtualFieldProps>(
     value: any,
     silent?: boolean
   ) {
+    env.patchQueue.push({
+      path,
+      target: key,
+      type: 'update'
+    })
     state.setState(state => {
-      FormPath.setIn(state[key], path, value)
+      FormPath.setIn(state[key], transformDataPath(path), value)
     }, silent)
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
+    env.patchQueue.push({
+      path,
+      target: key,
+      type: 'remove'
+    })
     state.setState(state => {
-      FormPath.deleteIn(state[key], path)
+      FormPath.deleteIn(state[key], transformDataPath(path))
     }, silent)
   }
 
   function deleteFormValuesIn(path: FormPathPattern, silent?: boolean) {
-    deleteFormIn(transformDataPath(path), 'values', silent)
+    deleteFormIn(path, 'values', silent)
   }
 
   function setFormValuesIn(
@@ -496,7 +520,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     value?: any,
     silent?: boolean
   ) {
-    return setFormIn(transformDataPath(path), 'values', value, silent)
+    return setFormIn(path, 'values', value, silent)
   }
 
   function setFormInitialValuesIn(
@@ -504,19 +528,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
     value?: any,
     silent?: boolean
   ) {
-    return setFormIn(transformDataPath(path), 'initialValues', value, silent)
+    return setFormIn(path, 'initialValues', value, silent)
   }
 
   function getFormIn(path: FormPathPattern, key?: string) {
-    return state.getState(state => FormPath.getIn(state[key], path))
+    return state.getState(state =>
+      FormPath.getIn(state[key], transformDataPath(path))
+    )
   }
 
   function getFormValuesIn(path: FormPathPattern) {
-    return getFormIn(transformDataPath(path), 'values')
+    return getFormIn(path, 'values')
   }
 
   function getFormInitialValuesIn(path: FormPathPattern) {
-    return getFormIn(transformDataPath(path), 'initialValues')
+    return getFormIn(path, 'initialValues')
   }
 
   function createMutators(field: IField) {
@@ -1050,6 +1076,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     leadingStage: false,
     publishing: false,
     taskQueue: [],
+    patchQueue: [],
     taskIndexes: {},
     removeNodes: {},
     submittingTask: undefined

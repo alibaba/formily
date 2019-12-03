@@ -25,7 +25,7 @@ const App = () => {
   return (
     <SchemaForm actions={actions}>
       {range(1000).map(key => (
-        <Field type="string" key={key} title="String" name={"string" + key} />
+        <Field type="string" required key={key} title="String" name={"string" + key} />
       ))}
     </SchemaForm>
   );
