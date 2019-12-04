@@ -37,7 +37,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
 
   private matchStrategy: FormGraphProps['matchStrategy']
 
-  public size:number
+  public size: number
 
   constructor(props: FormGraphProps = {}) {
     super()
@@ -61,15 +61,15 @@ export class FormGraph<NodeType = any> extends Subscribable<{
         return node
       }
     }
-    for (let name in this.nodes) {
-      const node = this.nodes[name]
+    for (let nodePath in this.nodes) {
+      const node = this.nodes[nodePath]
       if (
         isFn(this.matchStrategy)
-          ? this.matchStrategy(pattern, node)
-          : pattern.match(name)
+          ? this.matchStrategy(pattern, nodePath)
+          : pattern.match(nodePath)
       ) {
         if (isFn(eacher)) {
-          const result = eacher(node, FormPath.parse(name))
+          const result = eacher(node, FormPath.parse(nodePath))
           if (result === false) {
             return node
           }
@@ -152,7 +152,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
           if (
             node &&
             (isFn(this.matchStrategy)
-              ? this.matchStrategy(selector, node)
+              ? this.matchStrategy(selector, path)
               : FormPath.parse(selector).match(path))
           ) {
             eacher(node, path)
@@ -189,7 +189,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   ) {
     const selfPath = FormPath.parse(path)
     const node = this.get(selfPath)
-    if(!node) return
+    if (!node) return
     this.eachParent(selfPath, eacher)
     if (isFn(eacher)) {
       eacher(node, selfPath)

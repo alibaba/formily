@@ -51,9 +51,11 @@ const template = (message: SyncValidateResponse, context: any): string => {
 class FormValidator {
   private validateFirst: boolean
   private nodes: ValidateNodeMap
+  private matchStrategy: ValidatorOptions['matchStrategy']
 
   constructor(options: ValidatorOptions = {}) {
     this.validateFirst = options.validateFirst
+    this.matchStrategy = options.matchStrategy
     this.nodes = {}
   }
 
@@ -164,7 +166,11 @@ class FormValidator {
     const warnings = []
     let promise = Promise.resolve({ errors, warnings })
     each<ValidateNodeMap, ValidateNode>(this.nodes, (validator, path) => {
-      if (pattern.match(path)) {
+      if (
+        isFn(this.matchStrategy)
+          ? this.matchStrategy(pattern, path)
+          : pattern.match(path)
+      ) {
         promise = promise.then(async ({ errors, warnings }) => {
           const result = await validator(options)
           return {
