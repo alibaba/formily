@@ -61,7 +61,9 @@ npm install --save @uform/core
 
 ## 官网
 
-https://uformjs.org
+https://uformjs.org (0.x)
+
+https://uform-next.netlify.com (1.x)
 
 ## 架构
 
