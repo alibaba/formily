@@ -169,8 +169,8 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     const selfPath = FormPath.getPath(path)
     const ref = this.refrences[selfPath.toString()]
     if (isFn(eacher)) {
-      eacher(this.get(selfPath), selfPath)
-      if (ref.parent) {
+      if (ref && ref.parent) {
+        eacher(this.get(ref.parent.path), ref.parent.path)
         this.eachParent(ref.parent.path, eacher)
       }
     }
