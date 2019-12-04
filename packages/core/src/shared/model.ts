@@ -8,7 +8,7 @@ import {
   FormPath,
   FormPathPattern
 } from '@uform/shared'
-import produce, { Draft } from 'immer'
+import produce, { Draft, setAutoFreeze } from 'immer'
 import {
   IStateModelProvider,
   IStateModelFactory,
@@ -17,6 +17,8 @@ import {
   StateModel
 } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
+
+setAutoFreeze(false)
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
@@ -93,13 +95,7 @@ export const createStateModel = <State = {}, Props = {}>(
 
     unsafe_setSourceState = (callback: (state: State) => void) => {
       if (isFn(callback)) {
-        if (!hasProxy || this.props.useDirty) {
-          callback(this.state)
-        } else {
-          this.state = produce(this.state, draft => {
-            callback(draft)
-          })
-        }
+        callback(this.state)
       }
     }
 
@@ -200,7 +196,7 @@ export const createStateModel = <State = {}, Props = {}>(
 
         this.stackCount--
         if (!this.stackCount) {
-          this.prevState = clone(this.state)
+          this.prevState = { ...this.state }
         }
       }
     }

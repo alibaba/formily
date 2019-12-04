@@ -1,4 +1,4 @@
-function globalThis() {
+function globalSelf() {
   try {
     if (typeof self !== 'undefined') {
       return self
@@ -16,4 +16,4 @@ function globalThis() {
   } catch (e) {}
   return Function('return this')()
 }
-export const globalThisPolyfill = globalThis()
+export const globalThisPolyfill = globalSelf()
