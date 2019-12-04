@@ -7,7 +7,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import SchemaForm, {
   SchemaMarkupField as Field,
-  createFormActions
+  createFormActions,
+  FormButtonGroup,
+  Submit
 } from "@uform/next";
 import "@alifd/next/dist/next.css";
 
@@ -27,6 +29,9 @@ const App = () => {
       {range(1000).map(key => (
         <Field type="string" required key={key} title="String" name={"string" + key} />
       ))}
+      <FormButtonGroup sticky align="center">
+        <Submit>提交</Submit>
+      </FormButtonGroup>
     </SchemaForm>
   );
 };

@@ -37,10 +37,13 @@ export class FormGraph<NodeType = any> extends Subscribable<{
 
   private matchStrategy: FormGraphProps['matchStrategy']
 
+  public size:number
+
   constructor(props: FormGraphProps = {}) {
     super()
     this.refrences = {}
     this.nodes = {}
+    this.size = 0
     this.buffer = []
     this.matchStrategy = props.matchStrategy
   }
@@ -228,6 +231,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     if (this.get(selfPath)) return
     this.nodes[selfPath.toString()] = node
     this.refrences[selfPath.toString()] = selfRef
+    this.size++
     if (parentRef) {
       parentRef.children.push(selfPath)
       selfRef.parent = parentRef
@@ -283,6 +287,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     })
     delete this.nodes[selfPath.toString()]
     delete this.refrences[selfPath.toString()]
+    this.size--
     if (selfRef.parent) {
       selfRef.parent.children.forEach((path, index) => {
         if (path.match(selfPath)) {

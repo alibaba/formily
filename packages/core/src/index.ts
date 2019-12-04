@@ -19,6 +19,7 @@ import {
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
+import { scheduler } from './shared/scheduler'
 import { FormState } from './state/form'
 import { VirtualFieldState } from './state/virtual-field'
 import { FieldState } from './state/field'
@@ -124,11 +125,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
         shadowUpdate(() => {
           const fieldUpdate = env.patchQueue[env.patchQueue.length - 1]
           //考虑初始化的时候还没生成节点树
-          if (fieldUpdate && graph.get(fieldUpdate.path)) {
-            if (fieldUpdate.type === 'update') {
-              graph.eachParentAndChildren(fieldUpdate.path, updateFields)
+          if (fieldUpdate) {
+            if (graph.get(fieldUpdate.path)) {
+              if (fieldUpdate.type === 'update') {
+                graph.eachParentAndChildren(fieldUpdate.path, updateFields)
+              } else {
+                graph.eachParent(fieldUpdate.path, updateFields)
+              }
             } else {
-              graph.eachParent(fieldUpdate.path, updateFields)
             }
           } else {
             graph.eachChildren(updateFields)
@@ -296,6 +300,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     let dataPath = transformDataPath(nodePath)
     let field: IVirtualField
     const createField = (field?: IVirtualField) => {
+      const alreadyHaveField = !!field
       field =
         field ||
         new VirtualFieldState({
@@ -306,6 +311,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         })
       field.subscription = {
         notify: onVirtualFieldChange({ field, path: nodePath })
+      }
+      heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
+      if (!alreadyHaveField) {
+        graph.appendNode(nodePath, field)
       }
       field.batch(() => {
         field.setState((state: IVirtualFieldState<VirtualFieldProps>) => {
@@ -330,7 +339,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
     } else {
       field = createField()
-      graph.appendNode(nodePath, field)
     }
     return field
   }
@@ -353,6 +361,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     let nodePath = FormPath.parse(path || name)
     let dataPath = transformDataPath(nodePath)
     const createField = (field?: IField) => {
+      const alreadyHaveField = !!field
       field =
         field ||
         new FieldState({
@@ -365,6 +374,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         notify: onFieldChange({ field, path: nodePath })
       }
       heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
+      if (!alreadyHaveField) {
+        graph.appendNode(nodePath, field)
+      }
       field.batch(() => {
         field.setState((state: IFieldState<FieldProps>) => {
           const formValue = getFormValuesIn(dataPath)
@@ -417,12 +429,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
             state.validating = true
           })
         }, 60)
-        validate(value, rules).then(({ errors, warnings }) => {
+        return validate(value, rules).then(({ errors, warnings }) => {
           clearTimeout((field as any).validateTimer)
-          field.setState((state: IFieldState<FieldProps>) => {
-            state.validating = false
-            state.ruleErrors = errors
-            state.ruleWarnings = warnings
+          return new Promise(resolve => {
+            const syncState = () => {
+              field.setState((state: IFieldState<FieldProps>) => {
+                state.validating = false
+                state.ruleErrors = errors
+                state.ruleWarnings = warnings
+              })
+              resolve({ errors, warnings })
+            }
+            if (graph.size < 100) {
+              syncState()
+            } else {
+              applyWithScheduler(syncState)
+            }
           })
         })
       })
@@ -436,7 +458,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
     } else {
       field = createField()
-      graph.appendNode(nodePath, field)
     }
     return field
   }
@@ -1029,6 +1050,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const graph = new FormGraph({
     matchStrategy
   })
+  const applyWithScheduler = scheduler(options.validateConcurrentTimeMS)
   const formApi = {
     submit,
     reset,
