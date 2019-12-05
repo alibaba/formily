@@ -1,4 +1,5 @@
 import { isFn, isArr } from './types'
+import { instOf } from './instanceof'
 const isArray = isArr
 const keyList = Object.keys
 const hasProp = Object.prototype.hasOwnProperty
@@ -44,8 +45,8 @@ function equal(a: any, b: any, filter?: Filter) {
     const immutableB = b && b.toJS
     if (immutableA !== immutableB) return false
     if (immutableA) return a.is ? a.is(b) : a === b
-    const dateA = a instanceof Date
-    const dateB = b instanceof Date
+    const dateA = instOf(a, 'Date')
+    const dateB = instOf(b, 'Date')
     if (dateA !== dateB) {
       return false
     }
@@ -56,16 +57,16 @@ function equal(a: any, b: any, filter?: Filter) {
     const schemaB = b && b.toJSON
     if (schemaA !== schemaB) return false
     if (schemaA && schemaB) return equal(a.toJSON(), b.toJSON(), filter)
-    const regexpA = a instanceof RegExp
-    const regexpB = b instanceof RegExp
+    const regexpA = instOf(a, 'RegExp')
+    const regexpB = instOf(b, 'RegExp')
     if (regexpA !== regexpB) {
       return false
     }
     if (regexpA && regexpB) {
       return a.toString() === b.toString()
     }
-    const urlA = a instanceof URL
-    const urlB = b instanceof URL
+    const urlA = instOf(a, 'URL')
+    const urlB = instOf(b, 'URL')
     if (urlA && urlB) {
       return a.href === b.href
     }
