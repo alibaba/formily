@@ -70,6 +70,7 @@ function equal(a: any, b: any, filter?: Filter) {
     if (urlA && urlB) {
       return a.href === b.href
     }
+    
     const keys = keyList(a)
     length = keys.length
 
