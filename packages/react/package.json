@@ -1,6 +1,6 @@
 {
   "name": "@uform/react",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -31,8 +31,8 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@uform/core": "^1.0.0-alpha.4",
-    "@uform/shared": "^1.0.0-alpha.4"
+    "@uform/core": "^1.0.0-alpha.5",
+    "@uform/shared": "^1.0.0-alpha.5"
   },
   "publishConfig": {
     "access": "public"
