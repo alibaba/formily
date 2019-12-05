@@ -880,9 +880,9 @@ interface IField/IVirtualField {
       silent?: boolean
    ) => void
    // Get the source status
-   unsafe_getSourceState: (callback?: (state: IFieldState) => any) => any
+   getSourceState: (callback?: (state: IFieldState) => any) => any
    // Set the source state
-   unsafe_setSourceState: (callback?: (state: IFieldState) => void) => void
+   setSourceState: (callback?: (state: IFieldState) => void) => void
    // Get status changes
    hasChanged: (key?: string) => boolean
    // Get the state dirty

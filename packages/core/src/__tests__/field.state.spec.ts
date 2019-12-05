@@ -370,14 +370,14 @@ test('setState', () => {
 test('getSourceState', () => {
   const state = new FieldState({ useDirty: false })
   const cb = jest.fn()
-  state.unsafe_getSourceState(cb)
+  state.getSourceState(cb)
   expect(cb).toBeCalledTimes(1)
   expect(cb).toBeCalledWith(state.state)
-  const syncState = state.unsafe_getSourceState()
+  const syncState = state.getSourceState()
   expect(syncState).toEqual(state.state)
 
   state.controller.publishState = () => null
-  state.unsafe_getSourceState(cb)
+  state.getSourceState(cb)
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith(state.state)
 })
@@ -385,11 +385,11 @@ test('getSourceState', () => {
 test('setSourceState', () => {
   const state = new FieldState({ useDirty: false })
   const cb1 = (draft) => draft.change = true
-  const prevState1 = state.unsafe_getSourceState()
+  const prevState1 = state.getSourceState()
   expect(prevState1.change).toEqual(undefined)
 
-  state.unsafe_setSourceState(cb1)
-  expect(state.unsafe_getSourceState()).toEqual({ ...prevState1, change: true })
+  state.setSourceState(cb1)
+  expect(state.getSourceState()).toEqual({ ...prevState1, change: true })
 })
 
 test('isDirty', () => {

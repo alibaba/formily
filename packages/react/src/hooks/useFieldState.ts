@@ -6,7 +6,7 @@ export const useFieldState = <T extends {}>(defaultState: T) => {
   const ref = useRef<IFieldState>()
   const field = useContext(FieldContext)
   useMemo(() => {
-    field.unsafe_setSourceState(state => {
+    field.setSourceState(state => {
       Object.assign(state, defaultState)
     })
   }, [])
