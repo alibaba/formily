@@ -33,7 +33,12 @@ export class Schema implements ISchema {
   public readOnly?: boolean
   public writeOnly?: boolean
   public type?: 'string' | 'object' | 'array' | 'number' | string
-  public enum?: Array<string | number | { label: SchemaMessage; value: any }>
+  public enum?: Array<
+  | string
+  | number
+  | { label: SchemaMessage; value: any; [key: string]: any }
+  | { key: any; title: SchemaMessage; [key: string]: any }
+>
   public const?: any
   public multipleOf?: number
   public maximum?: number
