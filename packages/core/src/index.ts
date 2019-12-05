@@ -9,7 +9,8 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  isObj
+  isObj,
+  scheduler
 } from '@uform/shared'
 import {
   FormValidator,
@@ -19,7 +20,6 @@ import {
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
-import { scheduler } from './shared/scheduler'
 import { FormState } from './state/form'
 import { VirtualFieldState } from './state/virtual-field'
 import { FieldState } from './state/field'
@@ -202,20 +202,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
             setFormValuesIn(path, published.value)
           }
         }
-        graph.eachChildren(
-          path,
-          childState => {
-            childState.setState((state: IFieldState<FieldProps>) => {
-              if (visibleChanged) {
-                state.visible = published.visible
-              }
-              if (displayChanged) {
-                state.display = published.display
-              }
-            }, true)
-          },
-          false
-        )
+        graph.eachChildren(path, childState => {
+          childState.setState((state: IFieldState<FieldProps>) => {
+            if (visibleChanged) {
+              state.visible = published.visible
+            }
+            if (displayChanged) {
+              state.display = published.display
+            }
+          }, true)
+        })
       }
       if (
         unmountedChanged &&
@@ -802,8 +798,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
           }
           return Promise.reject(validated.errors)
         }
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
         if (isFn(onSubmit)) {
-          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
           return Promise.resolve(
             onSubmit(state.getState(state => clone(state.values)))
           ).then(payload => ({ validated, payload }))
@@ -1024,8 +1020,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     const matchPattern = FormPath.parse(pattern)
     const node = graph.get(nodePath)
     if (!node) return false
-    return node.getSourceState(
-      state => matchPattern.match(state.name) || matchPattern.match(state.path)
+    return node.getSourceState(state =>
+      matchPattern.matchAliasGroup(state.name, state.path)
     )
   }
 

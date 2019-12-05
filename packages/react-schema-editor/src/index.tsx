@@ -17,11 +17,14 @@ export const SchemaEditor: React.FC<{
           <Icon type="success"></Icon>预览
         </Button>
       </div>
-      <Row className="schema-editor-main">
-        <Col span={14} className="schema-col schema-tree splitter">
+      <Row className="schema-editor-main" style={{ minHeight: '350px' }}>
+        <Col span={24} className="schema-col schema-tree splitter">
           <SchemaTree schema={schema} onChange={onChange} />
         </Col>
-        <Col span={10} className="schema-col schema-code">
+        <Col
+          className="schema-col schema-code"
+          style={{ position: 'absolute', right: '0px', height: '100%' }}
+        >
           <SchemaCode schema={schema} onChange={onChange}></SchemaCode>
         </Col>
       </Row>
