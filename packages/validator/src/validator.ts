@@ -51,9 +51,11 @@ const template = (message: SyncValidateResponse, context: any): string => {
 class FormValidator {
   private validateFirst: boolean
   private nodes: ValidateNodeMap
+  private matchStrategy: ValidatorOptions['matchStrategy']
 
   constructor(options: ValidatorOptions = {}) {
     this.validateFirst = options.validateFirst
+    this.matchStrategy = options.matchStrategy
     this.nodes = {}
   }
 
@@ -164,7 +166,11 @@ class FormValidator {
     const warnings = []
     let promise = Promise.resolve({ errors, warnings })
     each<ValidateNodeMap, ValidateNode>(this.nodes, (validator, path) => {
-      if (pattern.match(path)) {
+      if (
+        isFn(this.matchStrategy)
+          ? this.matchStrategy(pattern, path)
+          : pattern.match(path)
+      ) {
         promise = promise.then(async ({ errors, warnings }) => {
           const result = await validator(options)
           return {
@@ -205,6 +211,7 @@ class FormValidator {
     const newPath = FormPath.getPath(path)
     this.nodes[newPath.toString()] = (options: ValidateFieldOptions) => {
       return new Promise((resolve, reject) => {
+        let tmpResult: any
         const validate = async (value: any, rules: ValidatePatternRules) => {
           const data = {
             ...options,
@@ -216,16 +223,23 @@ class FormValidator {
             data
           ).then(
             payload => {
-              resolve(payload)
+              tmpResult = payload
               return payload
             },
             payload => {
-              reject(payload)
+              tmpResult = payload
               return Promise.reject(payload)
             }
           )
         }
-        calculator(validate)
+        Promise.resolve(calculator(validate)).then(
+          () => {
+            resolve(tmpResult)
+          },
+          () => {
+            reject(tmpResult)
+          }
+        )
       })
     }
   }
