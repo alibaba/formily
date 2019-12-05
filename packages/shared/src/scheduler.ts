@@ -1,4 +1,4 @@
-import { isFn } from '@uform/shared'
+import { isFn } from './types'
 
 export const scheduler = (concurrent = 360) => {
   let operating = false

@@ -9,7 +9,8 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  isObj
+  isObj,
+  scheduler
 } from '@uform/shared'
 import {
   FormValidator,
@@ -19,7 +20,6 @@ import {
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
-import { scheduler } from './shared/scheduler'
 import { FormState } from './state/form'
 import { VirtualFieldState } from './state/virtual-field'
 import { FieldState } from './state/field'
