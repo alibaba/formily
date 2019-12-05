@@ -1,19 +1,19 @@
 import { compile, getCompileConfig } from '../../scripts/build'
 import ts from 'typescript'
-//import tsImportPluginFactory from 'ts-import-plugin'
+import tsImportPluginFactory from 'ts-import-plugin'
 import glob from 'glob'
 
-// const transformer = tsImportPluginFactory({
-//   libraryName: 'antd',
-//   style: 'css',
-// })
+const transformer = tsImportPluginFactory({
+  libraryName: 'antd',
+  //style: 'css',
+})
 
 function buildESM() {
   const { fileNames, options } = getCompileConfig(require.resolve('./tsconfig.json'), {
     outDir: './esm',
     module: ts.ModuleKind.ESNext
   })
-  compile(fileNames, options)
+  compile(fileNames, options, { before: [transformer] })
   console.log('esm build successfully')
 }
 
