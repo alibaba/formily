@@ -64,11 +64,15 @@ function equal(a: any, b: any, filter?: Filter) {
     if (regexpA && regexpB) {
       return a.toString() === b.toString()
     }
-    const urlA = a instanceof URL
-    const urlB = b instanceof URL
-    if (urlA && urlB) {
-      return a.href === b.href
+    // fix: Not in the browser
+    if(typeof URL !== void(0)){
+      const urlA = a instanceof URL
+      const urlB = b instanceof URL
+      if (urlA && urlB) {
+        return a.href === b.href
+      }
     }
+    
     const keys = keyList(a)
     length = keys.length
 
