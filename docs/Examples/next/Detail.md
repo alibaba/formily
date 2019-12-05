@@ -137,7 +137,9 @@ const App = () => {
         <Field type="transfer" title="穿梭框" name="transfer" />
         <Field type="rating" title="等级" name="rating" />
         <FormButtonGroup offset={7} sticky>
-          <Submit />
+          <Button onClick={()=>{
+            actions.submit()
+          }}>提交</Button>
           <Button
             type="primary"
             onClick={() => setState({ editable: !state.editable })}
