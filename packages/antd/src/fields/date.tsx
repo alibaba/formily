@@ -1,52 +1,44 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import moment from 'moment'
-import { DatePicker as AntDatePicker } from 'antd'
+import { DatePicker } from 'antd'
 import {
   mapStyledProps,
   mapTextComponent,
-  StateLoading,
   compose,
   isStr,
   isArr
-} from '../utils'
+} from '../shared'
 
-const {
-  RangePicker: AntRangePicker,
-  WeekPicker: AntWeekPicker,
-  MonthPicker: AntMonthPicker
-} = AntDatePicker
+const { RangePicker, WeekPicker, MonthPicker } = DatePicker
 
-class AntYearPicker extends React.Component {
+class YearPicker extends React.Component {
   public render() {
-    return <AntDatePicker {...this.props} mode={'year'} />
+    return <DatePicker {...this.props} mode={'year'} />
   }
 }
-
-const DatePicker = StateLoading(AntDatePicker)
-const RangePicker = StateLoading(AntRangePicker)
-const MonthPicker = StateLoading(AntMonthPicker)
-const WeekPicker = StateLoading(AntWeekPicker)
-const YearPicker = StateLoading(AntYearPicker)
 
 const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
   return value && value.format ? value.format(format) : value
 }
 
-const mapMomentValue = (props, fieldProps) => {
-  const { value, showTime = false } = props
+const mapMomentValue = props => {
+  const { value, showTime = false, disabled = false } = props
   try {
-    if (!fieldProps.editable) return props
-    if (isStr(value)) {
-      props.value = value
-        ? moment(value, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
-        : null
-    } else if (isArr(value) && value.length) {
-      props.value = value.map(item =>
-        item
-          ? moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
-          : null
-      )
+    if (!disabled) {
+      if (isStr(value) && value) {
+        props.value = moment(
+          value,
+          showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+        )
+      } else if (isArr(value) && value.length) {
+        props.value = value.map(
+          item =>
+            (item &&
+              moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
+            ''
+        )
+      }
     }
   } catch (e) {
     throw new Error(e)

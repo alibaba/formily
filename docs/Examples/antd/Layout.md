@@ -164,7 +164,7 @@ import Printer from '@uform/printer'
 import 'antd/dist/antd.css'
 
 const App = () => {
-  const [state, setState] = useState({ editable: true })  
+  const [state, setState] = useState({ editable: true })
   return (
     <Printer>
       <SchemaForm
@@ -203,16 +203,16 @@ const App = () => {
             ​<Field name="ddd2" type="string" title="字段5" />​
             <Field name="eee2" type="string" title="字段6" />​
           </FormBlock>
-        </FormCard>
-        ​<FormButtonGroup offset={8} sticky>
+        </FormCard>​
+        <FormButtonGroup offset={8} sticky>
           ​ <Submit>提交</Submit>​
-           <Button
-             type="primary"
-             onClick={() => setState({ editable: !state.editable })}
-           >
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
             {state.editable ? '详情' : '编辑'}
-           </Button>
-           <Reset>重置</Reset>​
+          </Button>
+          <Reset>重置</Reset>​
         </FormButtonGroup>
       </SchemaForm>
     </Printer>
@@ -241,6 +241,7 @@ import {
   FormPath,
   FormBlock,
   FormLayout,
+  FormTextBox,
   createFormActions
 } from '@uform/antd'
 import { Button } from 'antd'
@@ -267,4 +268,95 @@ const App = () => (
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## 分步表单
+
+```jsx
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  FormEffectHooks,
+  createFormActions,
+  FormGridRow,
+  FormItemGrid,
+  FormGridCol,
+  FormPath,
+  FormLayout,
+  FormBlock,
+  FormCard,
+  FormTextBox,
+  FormStep
+} from '@uform/antd'
+import { Button } from 'antd'
+import 'antd/dist/antd.css'
+
+const { onFormInit$ } = FormEffectHooks
+
+const actions = createFormActions()
+
+let cache = {}
+
+export default () => (
+  <SchemaForm
+    onSubmit={values => {
+      console.log('提交')
+      console.log(values)
+    }}
+    actions={actions}
+    labelCol={{ span: 8 }}
+    wrapperCol={{ span: 6 }}
+    validateFirst
+    effects={({ setFieldState, getFormGraph }) => {
+      onFormInit$().subscribe(() => {
+        setFieldState('col1', state => {
+          state.visible = false
+        })
+      })
+    }}
+  >
+    <FormStep
+      style={{ marginBottom: 20 }}
+      dataSource={[
+        { title: '基本信息', name: 'step-1' },
+        { title: '财务信息', name: 'step-2' },
+        { title: '条款信息', name: 'step-3' }
+      ]}
+    />
+    <FormCard name="step-1" title="基本信息">
+      <Field name="a1" required title="A1" type="string" />
+    </FormCard>
+    <FormCard name="step-2" title="财务信息">
+      <Field name="a2" required title="A2" type="string" />
+    </FormCard>
+    <FormCard name="step-3" title="条款信息">
+      <Field name="a3" required title="A3" type="string" />
+    </FormCard>
+    <FormButtonGroup>
+      <Submit>提交</Submit>
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}>
+        上一步
+      </Button>
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
+        下一步
+      </Button>
+      <Button
+        onClick={() => {
+          cache = actions.getFormGraph()
+        }}
+      >
+        存储当前状态
+      </Button>
+      <Button
+        onClick={() => {
+          actions.setFormGraph(cache)
+        }}
+      >
+        回滚状态
+      </Button>
+    </FormButtonGroup>
+  </SchemaForm>
+)
 ```

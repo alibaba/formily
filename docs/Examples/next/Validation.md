@@ -64,7 +64,7 @@ const App = () => (
         title="手机号"
         required
       />
-      <Field type="string" name="qq" x-rules="qq" title="QQ号" required />
+      <Field type="string" name="qq" x-rules="qq" title="QQ号" minLength={3} required />
       <Field type="string" name="email" x-rules="email" title="邮箱" required />
       <Field
         type="string"
@@ -146,7 +146,7 @@ const App = () => (
       labelCol={6}
       wrapperCol={6}
       effects={($, { setFieldState, getFieldState }) => {
-        $('onFieldChange', '*(password,confirm)').subscribe(fieldState => {
+        $('onFieldValueChange', '*(password,confirm)').subscribe(fieldState => {
           const selfName = fieldState.name
           const selfValue = fieldState.value
           const otherName = selfName == 'password' ? 'confirm' : 'password'

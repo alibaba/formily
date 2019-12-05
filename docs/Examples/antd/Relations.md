@@ -64,13 +64,14 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', 'aa').subscribe(fieldState => {
+          $('onFieldValueChange', 'aa').subscribe(fieldState => {
+            console.log(fieldState.value)
             setFieldState('bb', state => {
               state.visible = !fieldState.value
             })
           })
           
-          $('onFieldChange', 'cc').subscribe(fieldState => {
+          $('onFieldValueChange', 'cc').subscribe(fieldState => {
             setFieldState('dd', state => {
               state.visible = !fieldState.value
             })
@@ -88,12 +89,12 @@ const App = () => {
               }
             })
           })
-          $('onFieldChange', 'mm').subscribe(fieldState => {
+          $('onFieldValueChange', 'mm').subscribe(fieldState => {
             setFieldState('ff', state => {
               state.visible = !fieldState.value
             })
           })
-          $('onFieldChange', 'gg')
+          $('onFieldValueChange', 'gg')
             .pipe(
               withLatestFrom($('onChangeOption')),
               map(([fieldState, { payload: option }]) => {
@@ -135,7 +136,7 @@ const App = () => {
             })
         }}
         labelCol={6}
-        wrapperCol={4}
+        wrapperCol={12}
         onSubmit={v => console.log(v)}
       >
         <FormBlock title="Block1">
@@ -198,6 +199,96 @@ const App = () => {
     </Printer>
   )
 }
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
+### 循环联动
+
+> 联动关系
+> 总价 = 单价 \* 数量
+> 数量 = 总价 / 单价
+> 单价 = 总价 / 数量
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
+  FormBlock,
+  FormLayout
+} from '@uform/next'
+import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
+import { Button } from '@alifd/next'
+import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      effects={($, { setFieldState, getFieldState }) => {
+        $('onFieldValueChange', 'total').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('count', state => {
+            const price = getFieldState('price', state => state.value)
+            if (!price) return
+            state.value = value / price
+          })
+          setFieldState('price', state => {
+            const count = getFieldState('count', state => state.value)
+            if (!count) return
+            state.value = value / count
+          })
+        })
+        $('onFieldValueChange', 'price').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('total', state => {
+            const count = getFieldState('count', state => state.value)
+            if (!count) return
+            state.value = value * count
+          })
+          setFieldState('count', state => {
+            const total = getFieldState('total', state => state.value)
+            if (!total) return
+            state.value = total / value
+          })
+        })
+        $('onFieldValueChange', 'count').subscribe(({ value }) => {
+          if (!value) return
+          setFieldState('total', state => {
+            const price = getFieldState('price', state => state.value)
+            if (!price) return
+            state.value = value * price
+          })
+          setFieldState('price', state => {
+            const total = getFieldState('total', state => state.value)
+            if (!total) return
+            state.value = total / value
+          })
+        })
+      }}
+      onChange={v => console.log(v)}
+      labelCol={6}
+      wrapperCol={4}
+      onSubmit={v => console.log(v)}
+    >
+      <Field name="total" type="number" required title="总价" />
+      <Field name="count" type="number" required title="数量" />
+      <Field name="price" type="number" required title="单价" />
+      <FormButtonGroup offset={6}>
+        <Submit />
+        <Reset validate={false} />
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
@@ -266,7 +357,7 @@ const App = () => (
         $('onFormInit').subscribe(() => {
           hide('bb')
         })
-        $('onFieldChange', 'aa').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa').subscribe(fieldState => {
           if (!fieldState.value) return
           show('bb')
           loading('bb')
@@ -276,7 +367,7 @@ const App = () => (
             setValue('bb', '1111')
           }, 1000)
         })
-        $('onFieldChange', 'bb').subscribe(fieldState => {
+        $('onFieldValueChange', 'bb').subscribe(fieldState => {
           console.log(fieldState.loading)
           if (!fieldState.value) return hide('cc')
           show('cc')
@@ -339,7 +430,7 @@ const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldChange', 'bb').subscribe(state => {
+        $('onFieldValueChange', 'bb').subscribe(state => {
           if (state.value) {
             setFieldState('aa', state => {
               state.value = '123'
@@ -451,7 +542,7 @@ const App = () => {
         $('onFormInit').subscribe(() => {
           hide(FormPath.match('aa.*.*(cc,gg,dd.*.ee)'))
         })
-        $('onFieldChange', 'aa.*.bb').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa.*.bb').subscribe(fieldState => {
           const cc = FormPath.transform(
             fieldState.name,
             /\d+/,
@@ -469,7 +560,7 @@ const App = () => {
             setValue(cc, '1111')
           }, 1000)
         })
-        $('onFieldChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
           const gg = FormPath.transform(
             fieldState.name,
             /\d+/,
@@ -481,7 +572,7 @@ const App = () => {
             }
           })
         })
-        $('onFieldChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
+        $('onFieldValueChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
           const ee = FormPath.transform(
             fieldState.name,
             /\d+/,

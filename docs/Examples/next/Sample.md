@@ -14,6 +14,7 @@ import {
   FormButtonGroup,
   Submit,
   Reset,
+  filterChanged,
   createFormActions
 } from '@uform/next'
 import { Button } from '@alifd/next'
@@ -22,6 +23,11 @@ import Printer from '@uform/printer'
 
 const actions = createFormActions()
 
+const sleep = duration =>
+  new Promise(resolve => {
+    setTimeout(resolve, duration)
+  })
+
 ReactDOM.render(
   <Printer>
     <SchemaForm
@@ -29,11 +35,20 @@ ReactDOM.render(
       actions={actions}
       labelCol={7}
       wrapperCol={12}
-      effects={($, { setFieldState }) => {
+      effects={($, { setFieldState, hasChanged }) => {
         $('onFormMount').subscribe(() => {
           setFieldState('radio', state => {
             state.required = true
           })
+        })
+
+        $('onFormChange').subscribe(async state => {
+          if (hasChanged(state, 'values.hello')) {
+            await sleep(1000)
+            setFieldState('radio', state => {
+              state.value = '4'
+            })
+          }
         })
       }}
     >
@@ -62,6 +77,14 @@ ReactDOM.render(
         title="TextArea"
         name="textarea"
         x-component="textarea"
+        x-rules={value => {
+          return value > 20
+            ? {
+                type: 'warning',
+                message: '这是个警告信息'
+              }
+            : ''
+        }}
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
@@ -100,7 +123,10 @@ ReactDOM.render(
       />
       <Field
         type="transfer"
-        enum={[{ value: 1, label: '选项1' }, { value: 2, label: '选项2' }]}
+        enum={[
+          { value: 1, label: '选项1' },
+          { value: 2, label: '选项2' }
+        ]}
         title="穿梭框"
         name="transfer"
       />
@@ -136,6 +162,15 @@ ReactDOM.render(
           }}
         >
           改变radio的值
+        </Button>
+        <Button
+          onClick={() => {
+            actions.setFormState(state => {
+              state.values = { ...state.values, hello: 'hello world' }
+            })
+          }}
+        >
+          改变form状态
         </Button>
       </FormButtonGroup>
     </SchemaForm>

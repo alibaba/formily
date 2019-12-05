@@ -171,33 +171,55 @@ const App = () => {
           <Field name="ccc" type="date" title="字段3" />​
         </FormCard>
         <FormCard title="详细信息">
-           <FormItemGrid title="字段3" gutter={10} cols={[11, 15]}>
-             ​<Field name="ddd" type="number" />
-             ​<Field name="eee" type="date" />​
-           </FormItemGrid>
-           <Field type="object" name="mmm" title="对象字段">
-             <FormItemGrid gutter={10} cols={[11, 15]}>
-               ​<Field name="ddd1" default={123} type="number" />
-               ​<Field name="[startDate,endDate]" type="daterange" />​
-             </FormItemGrid>
-           </Field>
+          <FormItemGrid title="字段3" gutter={10} cols={[11, 15]}>
+            ​<Field name="ddd" type="number" />
+            ​<Field name="eee" type="date" />​
+          </FormItemGrid>
+          <Field type="object" name="mmm" title="对象字段">
+            <FormItemGrid gutter={10} cols={[11, 15]}>
+              ​<Field name="ddd1" default={123} type="number" />
+              ​<Field name="[startDate,endDate]" type="daterange" />​
+            </FormItemGrid>
+          </Field>
           <FormLayout labelCol={8} wrapperCol={16}>
-            <FormTextBox title="文本串联" text="订%s元/票 退%s元/票 改%s元/票" gutter={8}>
-              <Field type="string" default={10} required name="aa1" x-props={{style:{width:80}}} description="简单描述" />
-              <Field type="number" default={20} required name="aa2" description="简单描述" />
-              <Field type="number" default={30} required name="aa3" description="简单描述" />
+            <FormTextBox
+              title="文本串联"
+              text="订%s元/票 退%s元/票 改%s元/票"
+              gutter={8}
+            >
+              <Field
+                type="string"
+                default={10}
+                required
+                name="aa1"
+                x-props={{ style: { width: 80 } }}
+                description="简单描述"
+              />
+              <Field
+                type="number"
+                default={20}
+                required
+                name="aa2"
+                description="简单描述"
+              />
+              <Field
+                type="number"
+                default={30}
+                required
+                name="aa3"
+                description="简单描述"
+              />
             </FormTextBox>
           </FormLayout>
           <Field name="aas" type="string" title="字段4" />​<FormBlock title="区块">
             <Field name="ddd2" type="string" title="字段5" />​
             <Field name="eee2" type="string" title="字段6" />​
           </FormBlock>
-        </FormCard>​
-        <FormButtonGroup offset={8} sticky>
+        </FormCard>​<FormButtonGroup offset={8} sticky>
           ​<Submit>提交</Submit>​
           <Button
-             type="primary"
-             onClick={() => setState({ editable: !state.editable })}
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
           >
             {state.editable ? '详情' : '编辑'}
           </Button>
@@ -254,4 +276,95 @@ const App = () => (
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## 分步表单
+
+```jsx
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  FormEffectHooks,
+  createFormActions,
+  FormGridRow,
+  FormItemGrid,
+  FormGridCol,
+  FormPath,
+  FormLayout,
+  FormBlock,
+  FormCard,
+  FormTextBox,
+  FormStep
+} from '@uform/next'
+import { Button } from '@alifd/next'
+import '@alifd/next/dist/next.css'
+
+const { onFormInit$ } = FormEffectHooks
+
+const actions = createFormActions()
+
+let cache = {}
+
+export default () => (
+  <SchemaForm
+    onSubmit={values => {
+      console.log('提交')
+      console.log(values)
+    }}
+    actions={actions}
+    labelCol={{ span: 8 }}
+    wrapperCol={{ span: 6 }}
+    validateFirst
+    effects={({ setFieldState, getFormGraph }) => {
+      onFormInit$().subscribe(() => {
+        setFieldState('col1', state => {
+          state.visible = false
+        })
+      })
+    }}
+  >
+    <FormStep
+      style={{ marginBottom: 20 }}
+      dataSource={[
+        { title: '基本信息', name: 'step-1' },
+        { title: '财务信息', name: 'step-2' },
+        { title: '条款信息', name: 'step-3' }
+      ]}
+    />
+    <FormCard name="step-1" title="基本信息">
+      <Field name="a1" required title="A1" type="string" />
+    </FormCard>
+    <FormCard name="step-2" title="财务信息">
+      <Field name="a2" required title="A2" type="string" />
+    </FormCard>
+    <FormCard name="step-3" title="条款信息">
+      <Field name="a3" required title="A3" type="string" />
+    </FormCard>
+    <FormButtonGroup>
+      <Submit>提交</Submit>
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}>
+        上一步
+      </Button>
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
+        下一步
+      </Button>
+      <Button
+        onClick={() => {
+          cache = actions.getFormGraph()
+        }}
+      >
+        存储当前状态
+      </Button>
+      <Button
+        onClick={() => {
+          actions.setFormGraph(cache)
+        }}
+      >
+        回滚状态
+      </Button>
+    </FormButtonGroup>
+  </SchemaForm>
+)
 ```

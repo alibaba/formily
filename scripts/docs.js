@@ -23,7 +23,7 @@ window.codeSandBoxPeerDependencies = {
 const FOOTER_HTML = `
 <script src="//unpkg.com/moment/min/moment-with-locales.js"></script>
 <script src="//unpkg.com/antd/dist/antd.min.js"></script>
-<script src="//unpkg.com/@alifd/next/dist/next.min.js"></script>
+<script src="//unpkg.com/@alifd/next@next/dist/next.min.js"></script>
 `
 
 const createDocs = async () => {
@@ -36,6 +36,7 @@ const createDocs = async () => {
     })
     .reduce((buf, _path) => {
       const name = path.basename(_path)
+
       return {
         ...buf,
         [`@uform/${name}`]: `${_path}/src`
