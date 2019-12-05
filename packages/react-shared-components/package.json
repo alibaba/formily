@@ -1,6 +1,6 @@
 {
   "name": "@uform/react-shared-components",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -29,7 +29,7 @@
     "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
-    "@uform/shared": "^1.0.0-alpha.4",
+    "@uform/shared": "^1.0.0-alpha.5",
     "@uform/types": "^0.4.0"
   }
 }
