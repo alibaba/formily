@@ -802,8 +802,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
           }
           return Promise.reject(validated.errors)
         }
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
         if (isFn(onSubmit)) {
-          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
           return Promise.resolve(
             onSubmit(state.getState(state => clone(state.values)))
           ).then(payload => ({ validated, payload }))
