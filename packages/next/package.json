@@ -1,6 +1,6 @@
 {
   "name": "@uform/next",
-  "version": "0.4.4",
+  "version": "1.0.0-alpha.5",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -20,22 +20,27 @@
     "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "peerDependencies": {
-    "@alifd/next": "^1.13.1",
+    "@alifd/next": "^1.19.1",
     "@babel/runtime": "^7.4.4",
+    "@types/classnames": "^2.2.9",
+    "@types/styled-components": "^4.1.19",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.4.4",
-    "@uform/types": "^0.4.4",
-    "@uform/utils": "^0.4.4",
+    "@uform/react-schema-renderer": "^1.0.0-alpha.5",
+    "@uform/react-shared-components": "^1.0.0-alpha.5",
+    "@uform/shared": "^1.0.0-alpha.5",
     "classnames": "^2.2.6",
-    "moveto": "^1.7.4",
+    "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
+    "rxjs": "^6.5.1",
     "styled-components": "^4.1.1"
   },
   "devDependencies": {
-    "@alifd/next": "^1.13.1"
+    "@alifd/next": "^1.19.1",
+    "@types/classnames": "^2.2.9",
+    "@types/styled-components": "^4.1.19"
   },
   "publishConfig": {
     "access": "public"

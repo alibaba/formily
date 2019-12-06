@@ -1,10 +1,10 @@
-import { connect, registerFormField } from '@uform/react'
+import { connect, registerFormField } from '@uform/react-schema-renderer'
 import { Radio } from 'antd'
 import {
   transformDataSourceKey,
   mapStyledProps,
   mapTextComponent
-} from '../utils'
+} from '../shared'
 
 const { Group: RadioGroup } = Radio
 

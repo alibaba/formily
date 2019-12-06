@@ -1,6 +1,6 @@
 {
   "name": "@uform/antd",
-  "version": "0.4.4",
+  "version": "1.0.0-alpha.5",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -24,17 +24,19 @@
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",
+    "@types/styled-components": "^4.1.19",
     "antd": "^3.14.1",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react": "^0.4.4",
-    "@uform/types": "^0.4.4",
-    "@uform/utils": "^0.4.4",
+    "@uform/react-schema-renderer": "^1.0.0-alpha.5",
+    "@uform/react-shared-components": "^1.0.0-alpha.5",
+    "@uform/shared": "^1.0.0-alpha.5",
     "classnames": "^2.2.6",
-    "moveto": "^1.7.4",
+    "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
+    "rxjs": "^6.5.1",
     "styled-components": "^4.1.1"
   },
   "publishConfig": {

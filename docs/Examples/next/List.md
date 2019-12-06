@@ -157,7 +157,12 @@ const App = () => (
             <Field name="ee" type="string" title="字段5" />
             <Field name="ff" type="string" title="字段6" />
             <Field name="gg" type="string" title="字段7" />
-            <Field name="hh" type="daterange" title="字段8" />
+            <Field
+              name="hh"
+              type="daterange"
+              x-props={{ width: 400 }}
+              title="字段8"
+            />
           </Field>
         </Field>
       </FormLayout>

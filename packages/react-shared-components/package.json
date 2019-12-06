@@ -1,0 +1,35 @@
+{
+  "name": "@uform/react-shared-components",
+  "version": "1.0.0-alpha.5",
+  "license": "MIT",
+  "main": "lib",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/uform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/uform/issues"
+  },
+  "homepage": "https://github.com/alibaba/uform#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
+  "scripts": {
+    "build": "tsc --declaration"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  },
+  "peerDependencies": {
+    "@babel/runtime": "^7.4.4"
+  },
+  "dependencies": {
+    "@uform/shared": "^1.0.0-alpha.5",
+    "@uform/types": "^0.4.0"
+  }
+}
