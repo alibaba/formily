@@ -31,7 +31,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -39,20 +39,29 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  FormEffectHooks,
+  createEffectHook,
+  createFormActions,
 } from '@uform/next'
 import { filter, combineLatest, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
 
+const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
+// customize effect hook
+const onChangeOption$ = createEffectHook('onChangeOption')
+const onSearch$ = createEffectHook('onSearch')
+const actions = createFormActions()
 const App = () => {
   const [state, setState] = useState({ visible: false })
   return (
     <Printer>
       <SchemaForm
+        actions={actions}
         effects={($, { setFieldState, getFieldState, getFormGraph }) => {
-          $('onFormInit').subscribe(() => {
+          onFormInit$().subscribe(() => {
             setFieldState(FormPath.match('*(gg,hh)'), state => {
               state.props['x-props'] = state.props['x-props'] || {}
               state.props['x-props'].style = {
@@ -63,15 +72,15 @@ const App = () => {
               }
             })
           })
-          $('onFieldValueChange', '*(aa,bb)').subscribe(fieldState => {
+          onFieldValueChange$('*(aa,bb)').subscribe(fieldState => {
             console.log('aa或者bb发生变化了')
           })
-          $('onFieldValueChange', 'aa').subscribe(fieldState => {
+          onFieldValueChange$('aa').subscribe(fieldState => {
             setFieldState('bb', state => {
               state.visible = !fieldState.value
             })
           })
-          $('onFieldValueChange', 'cc').subscribe(fieldState => {
+          onFieldValueChange$('cc').subscribe(fieldState => {
             setFieldState('dd', state => {
               state.visible = !fieldState.value
             })
@@ -89,9 +98,9 @@ const App = () => {
               }
             })
           })
-          $('onFieldValueChange', 'gg')
+          onFieldValueChange$('gg')
             .pipe(
-              combineLatest($('onChangeOption')),
+              combineLatest(onChangeOption$()),
               map(([fieldState, { payload: option }]) => {
                 return {
                   state: fieldState,
@@ -109,7 +118,7 @@ const App = () => {
                 }
               })
             })
-          $('onSearch', 'gg')
+          onSearch$('gg')
             .pipe(
               map(fieldState => {
                 setFieldState('gg', state => {
@@ -207,7 +216,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -215,18 +224,21 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  FormEffectHooks
 } from '@uform/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
 
+const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
+
 const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState, getFieldState }) => {
-        $('onFieldValueChange', 'total').subscribe(({ value }) => {
+        onFieldValueChange$('total').subscribe(({ value }) => {
           if (!value) return
           setFieldState('count', state => {
             const price = getFieldState('price', state => state.value)
@@ -239,7 +251,7 @@ const App = () => (
             state.value = value / count
           })
         })
-        $('onFieldValueChange', 'price').subscribe(({ value }) => {
+        onFieldValueChange$('price').subscribe(({ value }) => {
           if (!value) return
           setFieldState('total', state => {
             const count = getFieldState('count', state => state.value)
@@ -252,7 +264,7 @@ const App = () => (
             state.value = total / value
           })
         })
-        $('onFieldValueChange', 'count').subscribe(({ value }) => {
+        onFieldValueChange$('count').subscribe(({ value }) => {
           if (!value) return
           setFieldState('total', state => {
             const price = getFieldState('price', state => state.value)
@@ -296,7 +308,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -304,12 +316,15 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  FormEffectHooks
 } from '@uform/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
+
+const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
 
 const App = () => (
   <Printer>
@@ -345,10 +360,10 @@ const App = () => (
             state.value = value
           })
         }
-        $('onFormInit').subscribe(() => {
+        onFormInit$().subscribe(() => {
           hide('bb')
         })
-        $('onFieldValueChange', 'aa').subscribe(fieldState => {
+        onFieldValueChange$('aa').subscribe(fieldState => {
           if (!fieldState.value) return
           show('bb')
           loading('bb')
@@ -358,7 +373,7 @@ const App = () => (
             setValue('bb', '1111')
           }, 1000)
         })
-        $('onFieldValueChange', 'bb').subscribe(fieldState => {
+        onFieldValueChange$('bb').subscribe(fieldState => {
           console.log(fieldState.loading)
           if (!fieldState.value) return hide('cc')
           show('cc')
@@ -409,18 +424,21 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  FormEffectHooks
 } from '@uform/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
 
+const { onFieldValueChange$ } = FormEffectHooks
+
 const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldValueChange', 'bb').subscribe(state => {
+        onFieldValueChange$('bb').subscribe(state => {
           if (state.value) {
             setFieldState('aa', state => {
               state.value = '123'
@@ -468,12 +486,15 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  FormEffectHooks
 } from '@uform/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
+
+const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
 
 const App = () => {
   const [values, setValues] = useState({})
@@ -527,7 +548,7 @@ const App = () => {
               state.value = value
             })
           }
-          $('onFormInit').subscribe(() => {
+          onFormInit$().subscribe(() => {
             hide(FormPath.match('aa.*.*(cc,gg,dd.*.ee)'))
           })
           $('onFieldValueChange', 'aa.*.bb').subscribe(fieldState => {
@@ -548,7 +569,7 @@ const App = () => {
               setValue(cc, '1111')
             }, 1000)
           })
-          $('onFieldValueChange', 'aa.*.dd.*.ee').subscribe(fieldState => {
+          onFieldValueChange$('aa.*.dd.*.ee').subscribe(fieldState => {
             const gg = FormPath.transform(
               fieldState.name,
               /\d+/,
@@ -560,7 +581,7 @@ const App = () => {
               }
             })
           })
-          $('onFieldValueChange', 'aa.*.dd.*.ff').subscribe(fieldState => {
+          onFieldValueChange$('aa.*.dd.*.ff').subscribe(fieldState => {
             const ee = FormPath.transform(
               fieldState.name,
               /\d+/,
