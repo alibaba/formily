@@ -46,7 +46,9 @@ export default {
     return length > max ? getRuleMessage(rule, 'max') : ''
   },
   maximum(value: any, rule: ValidateDescription) {
-    return Number(value) > Number(rule.maximum) ? getMessage('maximum') : ''
+    return Number(value) > Number(rule.maximum)
+      ? getRuleMessage(rule, 'maximum')
+      : ''
   },
   exclusiveMaximum(value: any, rule: ValidateDescription) {
     return Number(value) >= Number(rule.maximum)
