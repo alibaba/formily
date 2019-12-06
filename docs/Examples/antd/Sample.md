@@ -10,7 +10,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -19,12 +19,14 @@ import {
   FormPath,
   FormBlock,
   FormLayout,
-  createFormActions
+  createFormActions,
+  FormEffectHooks,
 } from '@uform/antd'
 import { Button } from 'antd'
 import Printer from '@uform/printer'
 import 'antd/dist/antd.css'
 
+const { onFormMount$ } = FormEffectHooks
 const actions = createFormActions()
 
 ReactDOM.render(
@@ -44,7 +46,7 @@ ReactDOM.render(
       }}
       wrapperCol={12}
       effects={($, { setFieldState }) => {
-        $('onFormMount').subscribe(() => {
+        onFormMount$().subscribe(() => {
           setFieldState('radio', state => {
             state.required = true
           })
