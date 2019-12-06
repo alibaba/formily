@@ -455,11 +455,6 @@ import SchemaForm, {
 
 const actions = createFormActions()
 
-registerFormField(
-  'string',
-  connect()(props => <input {...props} value={props.value || ''} />)
-)
-
 ReactDOM.render(
     <SchemaForm actions={actions} effects={($)=>{
        $('onFieldChange','a').subscribe((fieldState)=>{
