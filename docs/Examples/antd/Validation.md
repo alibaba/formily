@@ -19,7 +19,7 @@ import ReactDOM from 'react-dom'
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -127,7 +127,7 @@ import ReactDOM from 'react-dom'
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -136,7 +136,8 @@ import {
   FormPath,
   FormBlock,
   FormLayout,
-  createFormActions
+  createFormActions,
+  FormEffectHooks
 } from '@uform/antd'
 import { Button, Icon } from 'antd'
 import Printer from '@uform/printer'
@@ -152,13 +153,15 @@ const PasswordPrefixIcon = (
   />
 )
 
+const { onFieldValueChange$ } = FormEffectHooks
+
 const App = () => (
   <Printer>
     <SchemaForm
       labelCol={6}
       wrapperCol={6}
       effects={($, { setFieldState, getFieldState }) => {
-        $('onFieldValueChange', '*(password,confirm)').subscribe(fieldState => {
+        onFieldValueChange$('*(password,confirm)').subscribe(fieldState => {
           const selfName = fieldState.name
           const selfValue = fieldState.value
           const otherName = selfName == 'password' ? 'confirm' : 'password'

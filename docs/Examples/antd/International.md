@@ -10,7 +10,7 @@
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@uform/antd'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@uform/antd'
 import { Button,LocaleProvider } from 'antd'
 import Printer from '@uform/printer'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
@@ -108,7 +108,7 @@ ReactDOM.render(
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@uform/antd'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@uform/antd'
 import { Button,LocaleProvider } from 'antd'
 import Printer from '@uform/printer'
 import enUS from 'antd/lib/locale-provider/en_US'

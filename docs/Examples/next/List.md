@@ -33,7 +33,7 @@
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import SchemaForm, {
-  Field,
+  SchemaMarkupField as Field,
   FormItemGrid,
   FormButtonGroup,
   Submit,

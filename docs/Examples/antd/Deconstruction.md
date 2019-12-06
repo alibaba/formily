@@ -10,7 +10,7 @@
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormButtonGroup, Submit, Reset } from '@uform/antd'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset } from '@uform/antd'
 import { Button } from '@alifd/antd'
 import Printer from '@uform/printer'
 import 'antd/dist/antd.css'
@@ -42,7 +42,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -107,7 +107,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -179,14 +179,15 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
   registerFormField,
   connect,
   FormLayout,
-  FormPath
+  FormPath,
+  FormEffectHooks,
 } from '@uform/antd'
 import { Button } from '@alifd/antd'
 import Printer from '@uform/printer'
@@ -219,12 +220,13 @@ registerFormField(
     )
   })
 )
+const { onFieldValueChange$ } = FormEffectHooks
 
 const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldValueChange', 'wrapper.relation').subscribe(({ value }) => {
+        onFieldValueChange$('wrapper.relation').subscribe(({ value }) => {
           setFieldState(
             FormPath.match(
               'wrapper.[[{aa:{bb:{cc:destructor1,dd:\\[destructor2,destructor3\\],ee}}}]]'
