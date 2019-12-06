@@ -202,20 +202,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
             setFormValuesIn(path, published.value)
           }
         }
-        graph.eachChildren(
-          path,
-          childState => {
-            childState.setState((state: IFieldState<FieldProps>) => {
-              if (visibleChanged) {
-                state.visible = published.visible
-              }
-              if (displayChanged) {
-                state.display = published.display
-              }
-            }, true)
-          },
-          false
-        )
+        graph.eachChildren(path, childState => {
+          childState.setState((state: IFieldState<FieldProps>) => {
+            if (visibleChanged) {
+              state.visible = published.visible
+            }
+            if (displayChanged) {
+              state.display = published.display
+            }
+          }, true)
+        })
       }
       if (
         unmountedChanged &&
