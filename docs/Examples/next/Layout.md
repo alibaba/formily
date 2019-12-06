@@ -328,19 +328,14 @@ export default () => (
     <FormStep
       style={{ marginBottom: 20 }}
       dataSource={[
-        { title: '基本信息', name: 'a1' },
+        { title: '基本信息', name: 'step-1' },
         { title: '财务信息', name: 'step-2' },
         { title: '条款信息', name: 'step-3' }
       ]}
     />
-
-    <Field name="a1" required type="object">
-      <FormCard name="step-1" title="基本信息">
-        <FormCard title="hello">
-          <Field name="a1" required title="A1" type="string" />
-        </FormCard>
-      </FormCard>
-    </Field>
+    <FormCard name="step-1" title="基本信息">
+      <Field name="a1" required title="A1" type="string" />
+    </FormCard>
     <FormCard name="step-2" title="财务信息">
       <Field name="a2" required title="A2" type="string" />
     </FormCard>
@@ -352,11 +347,7 @@ export default () => (
       <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}>
         上一步
       </Button>
-      <Button
-        onClick={() => {
-          actions.dispatch(FormStep.ON_FORM_STEP_NEXT)
-        }}
-      >
+      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
         下一步
       </Button>
       <Button
@@ -372,13 +363,6 @@ export default () => (
         }}
       >
         回滚状态
-      </Button>
-      <Button
-        onClick={() => {
-          console.log(actions.getFormState().values)
-        }}
-      >
-        获取表单值
       </Button>
     </FormButtonGroup>
   </SchemaForm>
