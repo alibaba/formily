@@ -61,6 +61,8 @@ npm install --save @uform/next
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
+  - [`IFormActions`](#IFormActions)
+  - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
   - [`CardProps`](#CardProps)
   - [`ICompatItemProps`](#ICompatItemProps)
@@ -2814,197 +2816,263 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > The Interfaces is fully inherited from @uform/react. The specific Interfaces of @uform/next is listed below.
 ---
 
-#### IForm
-
-> Form instance object API created by using createForm
-
-
+#### IFormActions
 
 ```typescript
-interface IForm {
-  /*
-   * Form submission, if the callback parameter returns Promise,
-   * Then the entire submission process will hold and load is true.
-   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
-   */
-   submit(
-      onSubmit?: (values: IFormState['values']) => any | Promise<any>
-    ): Promise<{
-       Validated: IFormValidateResult
-       Payload: any //onSubmit callback function return value
-   }>
-   
-   /*
-    * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
-    * For example, clearErrors("*(aa,bb,cc)")
-    */
-   clearErrors: (pattern?: FormPathPattern) => void
-   
-   /*
-    * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
-    * For example, hasChanged(state,'value.aa')
-    */
-   hasChanged(target: IFormState | IFieldState | IVirtualFieldState, path: FormPathPattern): boolean
-   
-   /*
-    * Reset form
-    */
-   reset(options?: {
-     // Forced to empty
-     forceClear?: boolean
-     // Forced check
-     validate?: boolean
-     // Reset range for batch or precise control of the field to be reset
-     selector?: FormPathPattern
-   }): Promise<void | IFormValidateResult>
-   
-   /*
-    * Validation form
-    */
-   validate(path?: FormPathPattern, options?: {
-     // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
-     first?:boolean
-   }): Promise<IFormValidateResult>
-   
-   /*
-    * Set the form status
-    */
-   setFormState(
-     // Operation callback
-     callback?: (state: IFormState) => any,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get form status
-    */
-   getFormState(
-     //transformer
-     callback?: (state: IFormState) => any
-   ): any
-   
-   /*
-    * Set the field status
-    */
-   setFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Operation callback
-     callback?: (state: IFieldState) => void,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get the field status
-    */
-   getFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Transformer
-     callback?: (state: IFieldState) => any
-   ): any
-   
-   /*
-    * Registration field
-    */
-   registerField(props: {
-    // Node path
-    path?: FormPathPattern
-    // Data path
-    name?: string
-    // Field value
-    value?: any
-    // Field multi-value
-    values?: any[]
-    // Field initial value
-    initialValue?: any
-    // Field extension properties
-    props?: any
-    // Field check rule
-    rules?: ValidatePatternRules[]
-    // Field is required
-    required?: boolean
-    // Is the field editable?
-    editable?: boolean
-    // Whether the field is dirty check
-    useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-  
-  /*
-   * Register virtual fields
-   */
-  registerVirtualField(props: {
-    // Node path
-    path?: FormPathPattern
-    // Data path
-    name?: string
-    // Field extension properties
-    props?: any
-    // Whether the field is dirty check
-    useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-  
-  /*
-   * Create a field data operator, which will explain the returned API in detail later.
-   */
-  createMutators(field: IField): IMutators
-  
-  /*
-   * Get the form observer tree
-   */
-  getFormGraph(): IFormGraph
-  
-  /*
-   * Set the form observer tree
-   */
-  setFormGraph(graph: IFormGraph): void
-  
-  /*
-   * Listen to the form life cycle
-   */
-  subscribe(callback?: ({
-    type,
-    payload
-  }: {
-    type: string
-    payload: any
-  }) => void): number
-  
-  /*
-   * Cancel the listening form life cycle
-   */
-  unsubscribe(id: number): void
-  
-  /*
-   * Trigger form custom life cycle
-   */
-  notify: <T>(type: string, payload?: T) => void
-  
-  /*
-   * Set the field value
-   */
-  setFieldValue(path?: FormPathPattern, value?: any): void
-  
-  /*
-   * Get the field value
-   */
-  getFieldValue(path?: FormPathPattern): any
-  
-  /*
-   * Set the initial value of the field
-   */
-  setFieldInitialValue(path?: FormPathPattern, value?: any): void
-  
-  /*
-   * Get the initial value of the field
-   */
-  getFieldInitialValue(path?: FormPathPattern): any
+interface IFormActions {
+  /*
+   * Form submission, if the callback parameter returns Promise,
+   * Then the entire submission process will hold and load is true.
+   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   */
+  submit(
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
+  ): Promise<{
+    Validated: IFormValidateResult
+    Payload: any //onSubmit callback function return value
+  }>
+  /*
+   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
+   * For example, clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => void
+  /*
+   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
+   * For example, hasChanged(state,'value.aa')
+   */
+  hasChanged(
+    target: IFormState | IFieldState | IVirtualFieldState,
+    path: FormPathPattern
+  ): boolean
+  /*
+   * Reset form
+   */
+  reset(options?: {
+    // Forced to empty
+    forceClear?: boolean // Forced check
+    validate?: boolean // Reset range for batch or precise control of the field to be reset
+    selector?: FormPathPattern
+  }): Promise<void | IFormValidateResult>
+  /*
+   * Validation form
+   */
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+  /*
+   * Set the form status
+   */
+  setFormState( // Operation callback
+    callback?: (state: IFormState) => any, // No trigger the event
+    silent?: boolean
+  ): void
+  /*
+   * Get form status
+   */
+  getFormState( //transformer
+    callback?: (state: IFormState) => any
+  ): any
+  /*
+   * Set the field status
+   */
+  setFieldState( // Field path
+    path: FormPathPattern, // Operation callback
+    callback?: (state: IFieldState) => void, // No trigger the event
+    silent?: boolean
+  ): void
+  /*
+   * Get the field status
+   */
+  getFieldState( // Field path
+    path: FormPathPattern, // Transformer
+    callback?: (state: IFieldState) => any
+  ): any
+  /*
+   * Registration field
+   */
+  registerField(props: {
+    // Node path
+    path?: FormPathPattern // Data path
+    name?: string // Field value
+    value?: any // Field multi-value
+    values?: any[] // Field initial value
+    initialValue?: any // Field extension properties
+    props?: any // Field check rule
+    rules?: ValidatePatternRules[] // Field is required
+    required?: boolean // Is the field editable?
+    editable?: boolean // Whether the field is dirty check
+    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void
+  }): IField
+  /*
+   * Register virtual fields
+   */
+  registerVirtualField(props: {
+    // Node path
+    path?: FormPathPattern // Data path
+    name?: string // Field extension properties
+    props?: any // Whether the field is dirty check
+    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void
+  }): IVirtualField
+  /*
+   * Create a field data operator, which will explain the returned API in detail later.
+   */
+  createMutators(field: IField): IMutators
+  /*
+   * Get the form observer tree
+   */
+  getFormGraph(): IFormGraph
+  /*
+   * Set the form observer tree
+   */
+  setFormGraph(graph: IFormGraph): void
+  /*
+   * Listen to the form life cycle
+   */
+  subscribe(
+    callback?: ({ type, payload }: { type: string; payload: any }) => void
+  ): number
+  /*
+   * Cancel the listening form life cycle
+   */
+  unsubscribe(id: number): void
+  /*
+   * Trigger form custom life cycle
+   */
+  notify: <T>(type: string, payload?: T) => void
+  /*
+   * Set the field value
+   */
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  /*
+   * Get the field value
+   */
+  getFieldValue(path?: FormPathPattern): any
+  /*
+   * Set the initial value of the field
+   */
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  /*
+   * Get the initial value of the field
+   */
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+```
+
+#### IFormAsyncActions
+
+```typescript
+interface IFormAsyncActions {
+  /*
+   * Form submission, if the callback parameter returns Promise,
+   * Then the entire submission process will hold and load is true.
+   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   */
+  submit(
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  /*
+   * Reset form
+   */
+  reset(options?: IFormResetOptions): Promise<void>
+  /*
+   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
+   * For example, hasChanged(state,'value.aa')
+   */
+  hasChanged(target: any, path: FormPathPattern): Promise<boolean>
+  /*
+   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
+   * For example, clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => Promise<void>
+  /*
+   * Validation form
+   */
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+  /*
+   * Set the form state
+   */
+  setFormState(
+    // Operation callback
+    callback?: (state: IFormState) => any,
+    // No trigger the event
+    silent?: boolean
+  ): Promise<void>
+  /*
+   * Get form state
+   */
+  getFormState(
+    //transformer
+    callback?: (state: IFormState) => any
+  ): Promise<any>
+  /*
+   * Set the field state
+   */
+  setFieldState(
+    // Field path
+    path: FormPathPattern,
+    // Operation callback
+    callback?: (state: IFieldState) => void,
+    // No trigger the event
+    silent?: boolean
+  ): Promise<void>
+  /*
+   * Get the field state
+   */
+  getFieldState(
+    // Field path
+    path: FormPathPattern,
+    //transformer
+    callback?: (state: IFieldState) => any
+  ): Promise<void>
+  /*
+   * Get the form observer tree
+   */
+  getFormGraph(): Promise<IFormGraph>
+  /*
+   * Set the form observer tree
+   */
+  setFormGraph(graph: IFormGraph): Promise<void>
+  /*
+   * Listen to the form life cycle
+   */
+  subscribe(callback?: FormHeartSubscriber): Promise<number>
+  /*
+   * Cancel the listening form life cycle
+   */
+  unsubscribe(id: number): Promise<void>
+  /*
+   * Trigger form custom life cycle
+   */
+  notify: <T>(type: string, payload: T) => Promise<void>
+  dispatch: <T>(type: string, payload: T) => void
+  /*
+   * Set the field value
+   */
+  setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
+  /*
+   * Get the field value
+   */
+  getFieldValue(path?: FormPathPattern): Promise<any>
+  /*
+   * Set the initial value of the field
+   */
+  setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
+  /*
+   * Get the initial value of the field
+   */
+  getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
 ```
 
