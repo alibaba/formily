@@ -18,12 +18,12 @@ test('register', async () => {
   let errors1: string[]
   let errors2: string[]
   validator.register('a.b.c.e', validate => {
-    validate('123', { required: true }).then(({ errors }) => {
+    return validate('123', { required: true }).then(({ errors }) => {
       errors1 = errors
     })
   })
   validator.register('a.b.c', validate => {
-    validate('', { required: true }).then(({ errors }) => {
+    return validate('', { required: true }).then(({ errors }) => {
       errors2 = errors
     })
   })

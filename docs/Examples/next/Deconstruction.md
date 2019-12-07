@@ -10,7 +10,7 @@
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormButtonGroup, Submit, Reset } from '@uform/next'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset } from '@uform/next'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
@@ -186,7 +186,8 @@ import {
   registerFormField,
   connect,
   FormLayout,
-  FormPath
+  FormPath,
+  FormEffectHooks
 } from '@uform/next'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
@@ -220,11 +221,13 @@ registerFormField(
   })
 )
 
+const { onFieldValueChange$ } = FormEffectHooks
+
 const App = () => (
   <Printer>
     <SchemaForm
       effects={($, { setFieldState }) => {
-        $('onFieldValueChange', 'wrapper.relation').subscribe(({ value }) => {
+        onFieldValueChange$('wrapper.relation').subscribe(({ value }) => {
           setFieldState(
             'wrapper.{aa:{bb:{cc:destructor1,dd:[ destructor2, destructor3 ],ee}}}',
             state => {

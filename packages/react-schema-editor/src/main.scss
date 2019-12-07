@@ -29,7 +29,10 @@
     .schema-tree {}
 
     /* 代码编辑 */
-    .schema-code {}
+    .schema-code {
+      position: absolute;
+      right: 0;
+    }
   }
 
   .field-editor {

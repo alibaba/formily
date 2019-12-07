@@ -10,7 +10,7 @@ test('constructor with strategy',()=>{
     node: IField | IVirtualField
   ) {
     const matchPattern = FormPath.parse(pattern)
-    return node.unsafe_getSourceState(
+    return node.getSourceState(
       state => matchPattern.match(state.name) || matchPattern.match(state.path)
     )
   }
