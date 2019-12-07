@@ -1,5 +1,8 @@
+import { FormPathPattern } from '@uform/shared'
+
 export interface ValidatorOptions {
   validateFirst?: boolean
+  matchStrategy?: (pattern: FormPathPattern, field: any) => boolean
 }
 
 export type ValidateNode = (

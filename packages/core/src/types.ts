@@ -229,6 +229,7 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
+  validateConcurrentTimeMS?: number
 }
 
 export interface IVirtualFieldState<FieldProps = any> {
@@ -307,8 +308,8 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
-  unsafe_getSourceState: (callback?: (state: S) => any) => any
-  unsafe_setSourceState: (callback?: (state: S) => void) => void
+  getSourceState: (callback?: (state: S) => any) => any
+  setSourceState: (callback?: (state: S) => void) => void
   hasChanged: (path?: FormPathPattern) => boolean
   isDirty: (key?: string) => boolean
   getDirtyInfo: () => StateDirtyMap<S>

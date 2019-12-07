@@ -967,9 +967,9 @@ interface IField/IVirtualField {
   //设置状态
   setState: (callback?: (state: IFieldState | Draft<IFieldState>) => void, silent?: boolean) => void
   //获取源状态
-  unsafe_getSourceState: (callback?: (state: IFieldState) => any) => any
+  getSourceState: (callback?: (state: IFieldState) => any) => any
   //设置源状态
-  unsafe_setSourceState: (callback?: (state: IFieldState) => void) => void
+  setSourceState: (callback?: (state: IFieldState) => void) => void
   //获取状态变化情况
   hasChanged: (key?: string) => boolean
   //获取状态脏

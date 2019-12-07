@@ -1,3 +1,4 @@
+import { instOf } from './instanceof'
 const has = Object.prototype.hasOwnProperty
 
 const toString = Object.prototype.toString
@@ -49,7 +50,7 @@ export function isEmpty(val: any): boolean {
   }
 
   // Errors...
-  if (val instanceof Error) {
+  if (instOf(val, 'Error')) {
     return val.message === ''
   }
 

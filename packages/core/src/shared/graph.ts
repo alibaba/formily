@@ -37,10 +37,13 @@ export class FormGraph<NodeType = any> extends Subscribable<{
 
   private matchStrategy: FormGraphProps['matchStrategy']
 
+  public size: number
+
   constructor(props: FormGraphProps = {}) {
     super()
     this.refrences = {}
     this.nodes = {}
+    this.size = 0
     this.buffer = []
     this.matchStrategy = props.matchStrategy
   }
@@ -58,15 +61,15 @@ export class FormGraph<NodeType = any> extends Subscribable<{
         return node
       }
     }
-    for (let name in this.nodes) {
-      const node = this.nodes[name]
+    for (let nodePath in this.nodes) {
+      const node = this.nodes[nodePath]
       if (
         isFn(this.matchStrategy)
-          ? this.matchStrategy(pattern, node)
-          : pattern.match(name)
+          ? this.matchStrategy(pattern, nodePath)
+          : pattern.match(nodePath)
       ) {
         if (isFn(eacher)) {
-          const result = eacher(node, FormPath.parse(name))
+          const result = eacher(node, FormPath.parse(nodePath))
           if (result === false) {
             return node
           }
@@ -78,19 +81,19 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   }
 
   get(path: FormPathPattern) {
-    return this.nodes[FormPath.getPath(path).toString()]
+    return this.nodes[FormPath.parse(path).toString()]
   }
 
   selectParent(path: FormPathPattern) {
-    const selfPath = FormPath.getPath(path)
-    const parentPath = FormPath.getPath(path).parent()
+    const selfPath = FormPath.parse(path)
+    const parentPath = FormPath.parse(path).parent()
     if (selfPath.toString() === parentPath.toString()) return undefined
 
     return this.get(parentPath)
   }
 
   selectChildren(path: FormPathPattern) {
-    const ref = this.refrences[FormPath.getPath(path).toString()]
+    const ref = this.refrences[FormPath.parse(path).toString()]
     if (ref && ref.children) {
       return reduce(
         ref.children,
@@ -104,7 +107,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   }
 
   exist(path: FormPathPattern) {
-    return !!this.get(FormPath.getPath(path))
+    return !!this.get(FormPath.parse(path))
   }
 
   /**
@@ -141,7 +144,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
       selector = '*'
     }
 
-    const ref = this.refrences[FormPath.getPath(path).toString()]
+    const ref = this.refrences[FormPath.parse(path).toString()]
     if (ref && ref.children) {
       return each(ref.children, path => {
         if (isFn(eacher)) {
@@ -149,7 +152,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
           if (
             node &&
             (isFn(this.matchStrategy)
-              ? this.matchStrategy(selector, node)
+              ? this.matchStrategy(selector, path)
               : FormPath.parse(selector).match(path))
           ) {
             eacher(node, path)
@@ -166,23 +169,43 @@ export class FormGraph<NodeType = any> extends Subscribable<{
    * 递归遍历所有parent
    */
   eachParent(path: FormPathPattern, eacher: FormGraphEacher<NodeType>) {
-    const selfPath = FormPath.getPath(path)
+    const selfPath = FormPath.parse(path)
     const ref = this.refrences[selfPath.toString()]
     if (isFn(eacher)) {
       if (ref && ref.parent) {
-        eacher(this.get(ref.parent.path), ref.parent.path)
+        const node = this.get(ref.parent.path)
         this.eachParent(ref.parent.path, eacher)
+        eacher(node, ref.parent.path)
       }
     }
   }
 
-  getLatestParent(path: FormPathPattern) {
-    const selfPath = FormPath.getPath(path)
-    const parentPath = FormPath.getPath(path).parent()
+  /**
+   * 遍历所有父节点与所有子节点
+   */
+  eachParentAndChildren(
+    path: FormPathPattern,
+    eacher: FormGraphEacher<NodeType>
+  ) {
+    const selfPath = FormPath.parse(path)
+    const node = this.get(selfPath)
+    if (!node) return
+    this.eachParent(selfPath, eacher)
+    if (isFn(eacher)) {
+      eacher(node, selfPath)
+      this.eachChildren(selfPath, eacher)
+    }
+  }
 
+  getLatestParent(path: FormPathPattern) {
+    const selfPath = FormPath.parse(path)
+    const parentPath = FormPath.parse(path).parent()
     if (selfPath.toString() === parentPath.toString()) return undefined
     if (this.refrences[parentPath.toString()])
-      return { ref: this.refrences[parentPath.toString()], path: FormPath.getPath(parentPath.toString()) }
+      return {
+        ref: this.refrences[parentPath.toString()],
+        path: FormPath.parse(parentPath.toString())
+      }
     return this.getLatestParent(parentPath)
   }
 
@@ -198,7 +221,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   }
 
   appendNode(path: FormPathPattern, node: NodeType) {
-    const selfPath = FormPath.getPath(path)
+    const selfPath = FormPath.parse(path)
     const parentPath = selfPath.parent()
     const parentRef = this.refrences[parentPath.toString()]
     const selfRef: FormGraphNodeRef = {
@@ -208,6 +231,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     if (this.get(selfPath)) return
     this.nodes[selfPath.toString()] = node
     this.refrences[selfPath.toString()] = selfRef
+    this.size++
     if (parentRef) {
       parentRef.children.push(selfPath)
       selfRef.parent = parentRef
@@ -246,7 +270,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   }
 
   remove(path: FormPathPattern) {
-    const selfPath = FormPath.getPath(path)
+    const selfPath = FormPath.parse(path)
     const selfRef = this.refrences[selfPath.toString()]
     if (!selfRef) return
     this.notify({
@@ -263,6 +287,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     })
     delete this.nodes[selfPath.toString()]
     delete this.refrences[selfPath.toString()]
+    this.size--
     if (selfRef.parent) {
       selfRef.parent.children.forEach((path, index) => {
         if (path.match(selfPath)) {
@@ -273,7 +298,7 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   }
 
   replace(path: FormPathPattern, node: NodeType) {
-    const selfPath = FormPath.getPath(path)
+    const selfPath = FormPath.parse(path)
     const selfRef = this.refrences[selfPath.toString()]
     if (!selfRef) return
     this.notify({
