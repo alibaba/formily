@@ -2210,6 +2210,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 #### `useFormEffects`
 
 > 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
+> 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
 
 **签名**
 

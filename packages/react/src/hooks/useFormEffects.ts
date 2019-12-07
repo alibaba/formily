@@ -22,3 +22,5 @@ export function useFormEffects(effects: IFormEffect) {
     }
   }, [])
 }
+
+export default useFormEffects
