@@ -158,8 +158,8 @@ export interface IFormActions {
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
-  notify: <T>(type: string, payload: T) => void
-  dispatch: <T>(type: string, payload: T) => void
+  notify: <T>(type: string, payload?: T) => void
+  dispatch: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
