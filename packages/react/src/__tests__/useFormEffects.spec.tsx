@@ -1,7 +1,6 @@
 import React from 'react'
 import { act, renderHook } from '@testing-library/react-hooks'
-import useFormEffects from '../hooks/useFormEffects'
-import { Form, LifeCycleTypes, Field, createFormActions } from '..'
+import { useFormEffects, Form, LifeCycleTypes, Field, createFormActions } from '..'
 
 const InputField = props => (
     <Field {...props}>
