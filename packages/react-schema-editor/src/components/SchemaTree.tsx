@@ -2,6 +2,8 @@ import React, { useCallback } from 'react'
 import { Tree, Row, Col, Icon } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
+import _ from 'lodash'
+import FieldEditor from './FieldEditor'
 
 const TreeNode = Tree.TreeNode
 
@@ -96,7 +98,6 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   const selectedSchema =
     selectedPath &&
     (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
-
   return (
     <Row>
       <Col span={12}>
@@ -111,7 +112,40 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
         </Tree>
       </Col>
       <Col span={12}>
-        <pre>{selectedSchema && JSON.stringify(selectedSchema, null, 2)}</pre>
+        {selectedSchema && (
+          <FieldEditor
+            xProps={{
+              help: {},
+              validateStatus: {},
+              hasFeedback: {}
+            }}
+            xRules={{ required: {}, pattern: {}, validator: {} }}
+            components={[
+              {
+                name: 'Input',
+                'x-component-props': {
+                  value: {},
+                  disabled: {},
+                  onChange: {}
+                }
+              },
+              {
+                name: 'Switch',
+                'x-component-props': {
+                  checked: {},
+                  disabled: {},
+                  onChange: {}
+                }
+              }
+            ]}
+            schema={selectedSchema}
+            onChange={value => {
+              const newSchema = _.clone(schema)
+              _.set(newSchema, selectedPath, value)
+              onChange(newSchema)
+            }}
+          />
+        )}
       </Col>
     </Row>
   )

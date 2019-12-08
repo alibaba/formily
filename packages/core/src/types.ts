@@ -146,6 +146,7 @@ export interface IFieldState<FieldProps = any> {
   mounted: boolean
   unmounted: boolean
   props: FieldProps
+  [key: string]: any
 }
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
@@ -209,6 +210,7 @@ export interface IFormState<FormProps = any> {
   mounted: boolean
   unmounted: boolean
   props: FormProps
+  [key: string]: any
 }
 
 export type FormStateDirtyMap = StateDirtyMap<IFormState>
@@ -227,6 +229,7 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
+  validateConcurrentTimeMS?: number
 }
 
 export interface IVirtualFieldState<FieldProps = any> {
@@ -239,6 +242,7 @@ export interface IVirtualFieldState<FieldProps = any> {
   mounted: boolean
   unmounted: boolean
   props: FieldProps
+  [key: string]: any
 }
 export type VirtualFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
@@ -304,8 +308,8 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
-  unsafe_getSourceState: (callback?: (state: S) => any) => any
-  unsafe_setSourceState: (callback?: (state: S) => void) => void
+  getSourceState: (callback?: (state: S) => any) => any
+  setSourceState: (callback?: (state: S) => void) => void
   hasChanged: (path?: FormPathPattern) => boolean
   isDirty: (key?: string) => boolean
   getDirtyInfo: () => StateDirtyMap<S>

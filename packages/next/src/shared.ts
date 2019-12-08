@@ -49,11 +49,13 @@ export const mapStyledProps = (
   props: IConnectProps,
   fieldProps: MergedFieldComponentProps
 ) => {
-  const { loading, errors } = fieldProps
+  const { loading, errors, warnings } = fieldProps
   if (loading) {
     props.state = props.state || 'loading'
   } else if (errors && errors.length) {
     props.state = 'error'
+  } else if (warnings && warnings.length) {
+    props.state = 'warning'
   }
 }
 

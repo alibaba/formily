@@ -16,7 +16,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -58,7 +58,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -99,7 +99,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -147,7 +147,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -232,7 +232,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -275,7 +275,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   FormEffectHooks,
@@ -296,6 +296,8 @@ import 'antd/dist/antd.css'
 const { onFormInit$ } = FormEffectHooks
 
 const actions = createFormActions()
+
+let cache = {}
 
 export default () => (
   <SchemaForm
@@ -339,6 +341,20 @@ export default () => (
       </Button>
       <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
         下一步
+      </Button>
+      <Button
+        onClick={() => {
+          cache = actions.getFormGraph()
+        }}
+      >
+        存储当前状态
+      </Button>
+      <Button
+        onClick={() => {
+          actions.setFormGraph(cache)
+        }}
+      >
+        回滚状态
       </Button>
     </FormButtonGroup>
   </SchemaForm>

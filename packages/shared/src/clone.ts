@@ -1,5 +1,5 @@
 import { isFn } from './types'
-import { globalThisPolyfill } from './global'
+import { instOf } from './instanceof'
 
 type Filter = (value: any, key: string) => boolean
 
@@ -24,17 +24,11 @@ const isNativeObject = (values: any): any => {
   for (let i = 0; i < NATIVE_KEYS.length; i++) {
     const item = NATIVE_KEYS[i]
     if (Array.isArray(item) && item[0]) {
-      if (
-        globalThisPolyfill[item[0] as string] &&
-        values instanceof globalThisPolyfill[item[0] as string]
-      ) {
+      if (instOf(values, item[0])) {
         return item[1] ? item[1] : item[0]
       }
     } else {
-      if (
-        globalThisPolyfill[item as string] &&
-        values instanceof globalThisPolyfill[item as string]
-      ) {
+      if (instOf(values, item)) {
         return item
       }
     }

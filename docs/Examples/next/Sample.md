@@ -1,7 +1,7 @@
 # 简单场景
 
 > 最简单的表单使用场景，只需要很简单使
-> 用`<SchemaForm/>/<Field/><FormButtonGroup/><Submit/><Reset/>`即可
+> 用`<SchemaForm/>/<SchemaMarkupField/><FormButtonGroup/><Submit/><Reset/>`即可
 
 #### Demo 示例
 
@@ -10,12 +10,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
   filterChanged,
-  createFormActions
+  createFormActions,
+  FormEffectHooks,
 } from '@uform/next'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
@@ -26,7 +27,9 @@ const actions = createFormActions()
 const sleep = duration =>
   new Promise(resolve => {
     setTimeout(resolve, duration)
-  })
+})
+
+const { onFormMount$, onFormChange$ } = FormEffectHooks
 
 ReactDOM.render(
   <Printer>
@@ -36,13 +39,13 @@ ReactDOM.render(
       labelCol={7}
       wrapperCol={12}
       effects={($, { setFieldState, hasChanged }) => {
-        $('onFormMount').subscribe(() => {
+        onFormMount$().subscribe(() => {
           setFieldState('radio', state => {
             state.required = true
           })
         })
 
-        $('onFormChange').subscribe(async state => {
+        onFormChange$().subscribe(async state => {
           if (hasChanged(state, 'values.hello')) {
             await sleep(1000)
             setFieldState('radio', state => {
@@ -77,6 +80,14 @@ ReactDOM.render(
         title="TextArea"
         name="textarea"
         x-component="textarea"
+        x-rules={value => {
+          return value > 20
+            ? {
+                type: 'warning',
+                message: '这是个警告信息'
+              }
+            : ''
+        }}
       />
       <Field type="number" title="数字选择" name="number" />
       <Field type="boolean" title="开关选择" name="boolean" />
@@ -115,7 +126,10 @@ ReactDOM.render(
       />
       <Field
         type="transfer"
-        enum={[{ value: 1, label: '选项1' }, { value: 2, label: '选项2' }]}
+        enum={[
+          { value: 1, label: '选项1' },
+          { value: 2, label: '选项2' }
+        ]}
         title="穿梭框"
         name="transfer"
       />

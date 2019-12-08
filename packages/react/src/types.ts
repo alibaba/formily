@@ -10,7 +10,9 @@ import {
   IFormResetOptions,
   IFormSubmitResult,
   FormHeartSubscriber,
-  IFormGraph
+  IFormGraph,
+  IField,
+  IVirtualField
 } from '@uform/core'
 import { FormPathPattern } from '@uform/shared'
 import { Observable } from 'rxjs/internal/Observable'
@@ -49,7 +51,10 @@ export interface IFormProps<
   onSubmit?: (values: Value) => void | Promise<Value>
   onReset?: () => void
   onValidateFailed?: (valideted: IFormValidateResult) => void
-  children?: React.ReactElement | ((form: IForm) => React.ReactElement)
+  children?:
+    | React.ReactElement
+    | React.ReactElement[]
+    | ((form: IForm) => React.ReactElement)
   useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
@@ -112,6 +117,7 @@ export interface IFormConsumerProps {
 
 export interface IFieldHook {
   form: IForm
+  field: IField
   state: IFieldState
   props: {}
   mutators: IMutators
@@ -119,6 +125,7 @@ export interface IFieldHook {
 
 export interface IVirtualFieldHook {
   form: IForm
+  field: IVirtualField
   state: IFieldState
   props: {}
 }
@@ -151,8 +158,8 @@ export interface IFormActions {
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
-  notify: <T>(type: string, payload: T) => void
-  dispatch: <T>(type: string, payload: T) => void
+  notify: <T>(type: string, payload?: T) => void
+  dispatch: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void

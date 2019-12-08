@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, createElement } from 'react'
 import { Form } from 'antd'
 import { useFormItem } from './context'
 import { IFormItemTopProps, ICompatItemProps } from '../types'
@@ -20,7 +20,16 @@ const computeStatus = (props: ICompatItemProps) => {
 const computeHelp = (props: ICompatItemProps) => {
   if (props.help) return props.help
   const messages = [].concat(props.errors || [], props.warnings || [])
-  return messages.length ? messages : props.schema && props.schema.description
+  return messages.length
+    ? messages.map((message, index) =>
+        createElement(
+          'span',
+          { key: index },
+          message,
+          messages.length - 1 > index ? ' ,' : ''
+        )
+      )
+    : props.schema && props.schema.description
 }
 
 const computeLabel = (props: ICompatItemProps) => {
@@ -53,6 +62,7 @@ const computeSchemaExtendProps = (
         ...props.schema.getExtendsItemProps(),
         ...props.schema.getExtendsProps()
       },
+      'className',
       'prefix',
       'labelAlign',
       'labelTextAlign',

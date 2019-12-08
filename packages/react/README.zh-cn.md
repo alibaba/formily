@@ -49,6 +49,8 @@ npm install --save @uform/react
   - [`<FormConsumer/>(即将废弃，请使用<FormSpy/>)`](<#FormConsumer(即将废弃，请使用FormSpy)>)
 - [Hook](#Hook)
   - [`useFormEffects`](#useFormEffects)
+  - [`useFormState`](#useFormState)
+  - [`useFieldState`](#useFieldState)
   - [`useForm`](#useForm)
   - [`useField`](#useField)
   - [`useVirtualField`](#useVirtualField)    
@@ -77,6 +79,8 @@ npm install --save @uform/react
   - [`ValidateDescription`](#ValidateDescription)
   - [`ValidateArrayRules`](#ValidateArrayRules)
   - [`ValidatePatternRules`](#ValidatePatternRules)
+  - [`IFieldAPI`](#IFieldAPI)
+  - [`IVirtualFieldAPI`](#IVirtualFieldAPI)
 
 ### 使用方式
 
@@ -1982,6 +1986,13 @@ interface IFormConsumerProps {
 #### `useFormEffects`
 
 > 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
+> 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
+
+**签名**
+
+```typescript
+(effects: IFormEffect): void
+```
 
 ```jsx
 import React from 'react'
@@ -2063,6 +2074,181 @@ const App = () => {
       actions={actions}
     >
       <FormFragment />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### `useFormState`
+
+> 使用 useFormState 为自定义组件提供FormState扩展和管理能力
+
+**签名**
+
+```typescript
+(defaultState: T): [state: IFormState, setFormState: (state?: IFormState) => void]
+```
+
+**用法**
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, VirtualField,
+  createFormActions, createEffectHook,
+  useForm,  
+  useFormState,
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes
+} from '@uform/react'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const actions = createFormActions()
+const FormFragment = (props) => {  
+  const [formState, setFormState ] = useFormState({ extendVar: 0 })
+  const { extendVar } = formState
+
+  return <div>
+    <button onClick={() => {
+      setFormState({ extendVar: extendVar + 1 })
+    }}>add</button>
+    <div>count: {extendVar}</div>
+  </div>
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <FormFragment />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### `useFieldState`
+
+> 使用 useFieldState 为自定义组件提供状态管理能力
+
+**签名**
+
+```typescript
+(defaultState: T): [state: IFieldState, setFieldState: (state?: IFieldState) => void]
+```
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, VirtualField,
+  createFormActions, createEffectHook,
+  useForm,  
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes
+} from '@uform/react'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const changeTab$ = createEffectHook('changeTab')
+const actions = createFormActions()
+const TabFragment = (props) => {  
+  const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
+  const { current } = fieldState
+  const { children, dataSource, form } = props
+
+  const update = (cur) => {    
+    form.notify('changeTab', cur)
+    setLocalFieldState({
+      current: cur
+    })
+  }
+
+  useFormEffects(($, { setFieldState }) => {
+    dataSource.forEach((item, itemIdx) => {
+      setFieldState(item.name, state => {
+        state.display = itemIdx === current
+      })
+    })
+
+    changeTab$().subscribe((idx) => {
+      dataSource.forEach((item, itemIdx) => {
+      setFieldState(item.name, state => {
+        state.display = itemIdx === idx
+      })
+    })
+    })
+  })
+
+  const btns = dataSource.map((item, idx) => {
+    const focusStyle = idx === current ? { color: '#fff', background: 'blue' } : {}
+    return <button style={focusStyle} onClick={() => {
+      update(idx)
+    }}>{item.label}</button>
+  })
+
+  return btns
+}
+
+const FormTab = (props) => {
+  return <VirtualField name="layout_tab">
+    {({ form }) => {
+      return <TabFragment {...props} form={form} />
+    }}
+  </VirtualField>
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <FormTab dataSource={[
+        { label: 'tab-1', name: 'username' },
+        { label: 'tab-2', name: 'age' }
+      ]} />
+      <div>
+        <InputField name="username" label="username"/>
+        <InputField name="age" label="age"/>
+      </div>
     </Form>
   )
 }
@@ -2293,7 +2479,13 @@ const App = () => {
 
 > 自定义hook
 
-**Usage**
+**签名**
+
+```typescript
+(type: string): Observable<TResult>
+```
+
+**用法**
 
 ```jsx
 import { Form, createEffectHook, createFormActions } from '@uform/react'
@@ -2663,55 +2855,6 @@ interface IFormActions {
     //transformer
     callback?: (state: IFieldState) => any
   ): any
-
-  /*
-   * 注册字段
-   */
-  registerField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段值
-    value?: any
-    //字段多参值
-    values?: any[]
-    //字段初始值
-    initialValue?: any
-    //字段扩展属性
-    props?: any
-    //字段校验规则
-    rules?: ValidatePatternRules[]
-    //字段是否必填
-    required?: boolean
-    //字段是否可编辑
-    editable?: boolean
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-
-  /*
-   * 注册虚拟字段
-   */
-  registerVirtualField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段扩展属性
-    props?: any
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-
-  /*
-   * 创建字段数据操作器，后面会详细解释返回的API
-   */
-  createMutators(field: IField): IMutators
 
   /*
    * 获取表单观察者树
@@ -3103,4 +3246,26 @@ declare type ValidatePatternRules =
   | CustomValidator
   | ValidateDescription
   | ValidateArrayRules
+```
+
+
+#### IFieldAPI
+
+```typescript
+interface IFieldAPI {
+  state: IFieldState
+  form: IForm
+  props: {}
+  mutators: IMutators
+}
+```
+
+#### IVirtualFieldAPI
+
+```typescript
+interface IVirtualFieldAPI {
+  state: IFieldState
+  form: IForm
+  props: {}
+}
 ```

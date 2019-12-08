@@ -10,7 +10,7 @@ test('constructor with strategy',()=>{
     node: IField | IVirtualField
   ) {
     const matchPattern = FormPath.parse(pattern)
-    return node.unsafe_getSourceState(
+    return node.getSourceState(
       state => matchPattern.match(state.name) || matchPattern.match(state.path)
     )
   }
@@ -296,20 +296,20 @@ test('eachParent',()=>{
   graph.appendNode(vf1GrandChildren.state.path, vf1GrandChildren)
   const rootEacher = jest.fn()
   graph.eachParent("", rootEacher)
-  expect(rootEacher).toBeCalledTimes(1)
-  expect(rootEacher).toBeCalledWith(state, FormPath.getPath(""))
+  expect(rootEacher).toBeCalledTimes(0)
+  //expect(rootEacher).toBeCalledWith(state, FormPath.getPath(""))
 
   const vf1Eacher = jest.fn()
   graph.eachParent(vf1.state.path, vf1Eacher)
-  expect(vf1Eacher).toBeCalledTimes(2)
+  expect(vf1Eacher).toBeCalledTimes(1)
 
   const vf1CEacher = jest.fn()
   graph.eachParent(vf1Children.state.path, vf1CEacher)
-  expect(vf1CEacher).toBeCalledTimes(3)
+  expect(vf1CEacher).toBeCalledTimes(2)
   
   const vf1GEacher = jest.fn()
   graph.eachParent(vf1GrandChildren.state.path, vf1GEacher)
-  expect(vf1GEacher).toBeCalledTimes(4)
+  expect(vf1GEacher).toBeCalledTimes(3)
 })
 
 test('getLatestParent',()=>{

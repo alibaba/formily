@@ -1,4 +1,4 @@
-import { isFn, FormPath, globalThisPolyfill, Subscribable } from '@uform/shared'
+import { isFn, FormPath, Subscribable } from '@uform/shared'
 import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter } from 'rxjs/internal/operators/filter'
@@ -20,6 +20,7 @@ export const createFormActions = (): IFormActions => {
     'reset',
     'hasChanged',
     'validate',
+    'clearErrors',
     'setFormState',
     'getFormState',
     'setFieldState',
@@ -42,6 +43,7 @@ export const createAsyncFormActions = (): IFormAsyncActions =>
     'submit',
     'reset',
     'hasChanged',
+    'clearErrors',
     'validate',
     'setFormState',
     'getFormState',
@@ -122,30 +124,6 @@ export const getValueFromEvent = (event: any) => {
   return event
 }
 
-const compactScheduler = ([raf, caf, priority], fresh: boolean) => {
-  return [fresh ? callback => raf(priority, callback) : raf, caf]
-}
-
-const getScheduler = () => {
-  if (!globalThisPolyfill.requestAnimationFrame) {
-    return [globalThisPolyfill.setTimeout, globalThisPolyfill.clearTimeout]
-  }
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const scheduler = require('scheduler') as any
-    return compactScheduler(
-      [
-        scheduler.scheduleCallback || scheduler.unstable_scheduleCallback,
-        scheduler.cancelCallback || scheduler.unstable_cancelCallback,
-        scheduler.NormalPriority || scheduler.unstable_NormalPriority
-      ],
-      !!scheduler.unstable_requestPaint
-    )
-  } catch (err) {
-    return [self.requestAnimationFrame, self.cancelAnimationFrame]
-  }
-}
-
 export class Broadcast extends Subscribable {
   context: any
 
@@ -163,8 +141,6 @@ export const env = {
   effectEnd: false,
   currentActions: null
 }
-
-export const [raf, caf] = getScheduler()
 
 export const createFormEffects = <Payload = any, Actions = any>(
   effects: IFormEffect<Payload, Actions> | null,
