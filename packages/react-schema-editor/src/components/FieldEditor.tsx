@@ -1,6 +1,14 @@
 import React from 'react'
 import _ from 'lodash'
-import { Form, Button, Checkbox, Input, InputNumber, Select } from 'antd'
+import {
+  Form,
+  Button,
+  Checkbox,
+  Input,
+  InputNumber,
+  Select,
+  AutoComplete
+} from 'antd'
 import {
   getFieldTypeData,
   getInputTypeData,
@@ -29,9 +37,9 @@ interface IFieldEditorProps {
   fieldKey: string
   onFieldKeyChange: (fieldKey: string) => void
   schema: any
-  components: any
-  xProps: any
-  xRules: any
+  components?: any
+  xProps?: any
+  xRules?: any
   onChange: (schema: any) => void
 }
 
@@ -211,7 +219,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
       onChange({
         ...schema,
         [propsKey]: _.concat(schema[propsKey] || [], {
-          [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
+          [BLANK_PROPERTY_VALUE]: BLANK_PROPERTY_VALUE
         })
       })
     } else {
@@ -219,7 +227,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         ...schema,
         [propsKey]: {
           ...schema[propsKey],
-          [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
+          [BLANK_PROPERTY_VALUE]: BLANK_PROPERTY_VALUE
         }
       })
     }
@@ -238,20 +246,22 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
               {...formItemLayout}
               className="field-group-form-item"
             >
-              <Select
+              <AutoComplete
                 placeholder="请选择属性"
-                notFoundContent="没有其他选项了"
+                dataSource={_.map(
+                  componentPropsData.options,
+                  ({ value }) => value
+                )}
                 value={property}
+                filterOption={(inputValue, option) =>
+                  (option.props.children as string)
+                    .toUpperCase()
+                    .includes(inputValue.toUpperCase())
+                }
                 onChange={value => {
                   handlePropertyChange(value, property)
                 }}
-              >
-                {_.map(componentPropsData.options, ({ label, value }) => (
-                  <SelectOption value={value} key={value}>
-                    {label}
-                  </SelectOption>
-                ))}
-              </Select>
+              />
             </FormItem>
             <FormItem
               label={index === 0 ? '输入方式' : null}
@@ -374,7 +384,6 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         type="primary"
         icon="plus"
         size="small"
-        disabled={componentPropsData.options.length < 1}
         onClick={handlePlusClick}
       />
     </div>
@@ -438,8 +447,14 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
             {...formItemLayout}
             className="field-group-form-item"
           >
-            <Select
+            <AutoComplete
+              dataSource={_.map(xComponentData.options, ({ value }) => value)}
               value={schema[ComponentPropsTypes.X_COMPONENT]}
+              filterOption={(inputValue, option) =>
+                (option.props.children as string)
+                  .toUpperCase()
+                  .includes(inputValue.toUpperCase())
+              }
               onChange={value => {
                 onChange({
                   ...schema,
@@ -447,13 +462,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                   [ComponentPropsTypes.X_COMPONENT_PROPS]: {}
                 })
               }}
-            >
-              {_.map(xComponentData.options, ({ label, value }) => (
-                <SelectOption value={value} key={value}>
-                  {label}
-                </SelectOption>
-              ))}
-            </Select>
+            />
           </FormItem>
           <FormItem
             label="描述"
@@ -506,4 +515,4 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
   )
 }
 
-export default Form.create()(FieldEditor)
+export default FieldEditor
