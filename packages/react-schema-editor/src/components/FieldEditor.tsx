@@ -7,7 +7,7 @@ import {
   Input,
   InputNumber,
   Select,
-  AutoComplete
+  AutoComplete,
 } from 'antd'
 import {
   getFieldTypeData,
@@ -245,7 +245,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
             <FormItem
               label={index === 0 ? '属性名' : null}
               {...formItemLayout}
-              className="field-group-form-item"
+              className="field-group-form-item auto-complete"
             >
               <AutoComplete
                 placeholder="请选择属性"
@@ -306,6 +306,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                 className="field-group-form-item"
               >
                 <InputNumber
+                  style={{width: '100%'}}
                   value={value}
                   onChange={value => {
                     handleXComponentPropsValueChange(value, property)
@@ -447,7 +448,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
           <FormItem
             label="组件"
             {...formItemLayout}
-            className="field-group-form-item"
+            className="field-group-form-item auto-complete"
           >
             <AutoComplete
               dataSource={_.map(xComponentData.options, ({ value }) => value)}
