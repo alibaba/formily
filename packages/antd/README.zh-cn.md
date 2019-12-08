@@ -62,6 +62,7 @@ npm install --save @uform/antd
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
+  - [ISchema](#ischema)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
@@ -2806,6 +2807,69 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ---
 
+#### ISchema
+
+> Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
+
+```typescript
+interface ISchema {
+  /** base json schema spec**/
+  title?: React.ReactNode
+  description?: React.ReactNode
+  default?: any
+  readOnly?: boolean
+  writeOnly?: boolean
+  type?: 'string' | 'object' | 'array' | 'number' | string
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
+  const?: any
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+  maxLength?: number
+  minLength?: number
+  pattern?: string | RegExp
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[] | boolean
+  format?: string
+  /** nested json schema spec **/
+  properties?: {
+    [key: string]: ISchema
+  }
+  items?: ISchema | ISchema[]
+  additionalItems?: ISchema
+  patternProperties?: {
+    [key: string]: ISchema
+  }
+  additionalProperties?: ISchema
+  /** extend json schema specs */
+  editable?: boolean
+  //数据与样式是否可见
+  visible?: boolean
+  //样式是否可见
+  display?: boolean
+  ['x-props']?: { [name: string]: any }
+  ['x-index']?: number
+  ['x-rules']?: ValidatePatternRules
+  ['x-component']?: string
+  ['x-component-props']?: { [name: string]: any }
+  ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
+      renderComponent: () => React.ReactElement
+    }
+  ) => React.ReactElement
+  ['x-effect']?: (
+    dispatch: (type: string, payload: any) => void,
+    option?: object
+  ) => { [key: string]: any }
+}
+```
+
 #### IFormActions
 
 ```typescript
@@ -2821,6 +2885,9 @@ interface IFormActions {
     validated: IFormValidateResult
     payload: any //onSubmit回调函数返回值
   }>
+
+  /** 获取当前表单Schema **/
+  getFormSchema(): Schema
 
   /*
    * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
@@ -3010,6 +3077,10 @@ interface IFormAsyncActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
+  
+  /** 获取当前表单Schema **/
+  getFormSchema(): Promise<Schema>
+
   /*
    * 重置表单
    */
