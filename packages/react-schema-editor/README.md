@@ -17,8 +17,8 @@ function SchemaEditorDemo() {
           title: '我是层级嵌套标题',
           description: '我是层级嵌套描述',
           properties: {
-            input: {
-              type: 'string',
+            fieldC: {
+              type: 'number',
               'x-component': 'Input',
               'x-component-props': {
                  value: 'abc',
