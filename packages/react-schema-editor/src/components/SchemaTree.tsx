@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Tree, Row, Col } from 'antd'
+import { Tree, Row, Col, Icon } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
 
@@ -34,38 +34,60 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
         // info.dropPosition -1 表示上方同级，1 表示下方同级
       } else {
         // 拖拽到这个元素内部
-        if (targetValue.type !== 'object') {
-          // 只有 object 才能被拖入
-          return
-        }
+        if (targetValue.type === 'object') {
+          // 拖入到 object
+          if (
+            (targetPath === 'root' && sourcePath.split('.').length === 2) ||
+            (targetPath !== 'root' &&
+              fp.dropRight(2, sourcePath.split('.')).join('.') === targetPath)
+          ) {
+            // 拖拽到直接父节点，等于不起作用
+            return
+          }
 
-        if (
-          (targetPath === 'root' && sourcePath.split('.').length === 2) ||
-          (targetPath !== 'root' &&
-            fp.dropRight(2, sourcePath.split('.')).join('.') === targetPath)
+          let newSchema = schema
+
+          // 增加新的 key
+          const newTargetValue = fp.set(
+            [
+              'properties',
+              getUniqueKeyFromObjectKeys(
+                sourceKey,
+                Object.keys(targetValue.properties || {})
+              )
+            ],
+            sourceValue,
+            targetValue
+          )
+
+          newSchema =
+            targetPath === 'root'
+              ? newTargetValue
+              : fp.set(targetPath, newTargetValue, newSchema)
+
+          // 删除旧的 key
+          newSchema = fp.unset(sourcePath, newSchema)
+
+          onChange(newSchema)
+        } else if (
+          targetValue.type === 'array' &&
+          (fp.get(['items'], targetValue) || []).length === 0
         ) {
-          // 拖拽到直接父节点，等于不起作用
-          return
+          // 拖入到 array
+
+          // array 只能拖入一个元素，因此 A 的子节点 B 无法再次拖入 A
+          let newSchema = schema
+
+          // 增加新的 key
+          const newTargetValue = fp.set(['items'], sourceValue, targetValue)
+
+          newSchema = fp.set(targetPath, newTargetValue, newSchema)
+
+          // 删除旧的 key
+          newSchema = fp.unset(sourcePath, newSchema)
+
+          onChange(newSchema)
         }
-
-        let newSchema = schema
-
-        // 增加新的 key
-        const newTargetValue = fp.set(
-          ['properties', sourceKey],
-          sourceValue,
-          targetValue
-        )
-
-        newSchema =
-          targetPath === 'root'
-            ? newTargetValue
-            : fp.set(targetPath, newTargetValue, newSchema)
-
-        // 删除旧的 key
-        newSchema = fp.unset(sourcePath, newSchema)
-
-        onChange(newSchema)
       }
     },
     [schema, onChange]
@@ -80,7 +102,7 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
       <Col span={12}>
         <Tree
           defaultExpandAll
-          showLine
+          showIcon
           draggable
           onSelect={handleSelect}
           onDrop={handleDrop}
@@ -111,7 +133,7 @@ const TreeNodeBySchema: React.FC<{
   switch (schema.type) {
     case 'object':
       return (
-        <TreeNode {...currentTreeLevelProps}>
+        <TreeNode icon={<Icon type="folder" />} {...currentTreeLevelProps}>
           {schema.properties &&
             Object.keys(schema.properties).map(key =>
               TreeNodeBySchema({
@@ -122,8 +144,36 @@ const TreeNodeBySchema: React.FC<{
         </TreeNode>
       )
     case 'array':
+      return (
+        <TreeNode
+          icon={<Icon type="deployment-unit" />}
+          {...currentTreeLevelProps}
+        >
+          {schema.items &&
+            TreeNodeBySchema({
+              schema: schema.items,
+              path: path.concat('items')
+            })}
+        </TreeNode>
+      )
     default:
   }
 
-  return <TreeNode {...currentTreeLevelProps} />
+  return <TreeNode icon={<Icon type="file" />} {...currentTreeLevelProps} />
+}
+
+function getUniqueKeyFromObjectKeys(key: string, keys: string[], count = -1) {
+  if (count === -1) {
+    if (keys.includes(key)) {
+      return getUniqueKeyFromObjectKeys(key, keys, 0)
+    }
+    return key
+  }
+
+  const newKey = key + count
+  if (keys.includes(newKey)) {
+    return getUniqueKeyFromObjectKeys(key, keys, count + 1)
+  } else {
+    return newKey
+  }
 }

@@ -27,6 +27,16 @@ function SchemaEditorDemo() {
                 enum: ['Dog', 'Cat', 'Horse']
               }
             },
+            arrayB: {
+              type: 'array',
+              title: '熊猫',
+              description: '我是字段描述',
+              component: 'Select',
+              items: {
+                type: 'number',
+                enum: ['Dog', 'Cat', 'Horse']
+              }
+            },
             numberB: {
               type: 'number',
               title: '年龄'
