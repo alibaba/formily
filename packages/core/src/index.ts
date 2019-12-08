@@ -1020,8 +1020,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     const matchPattern = FormPath.parse(pattern)
     const node = graph.get(nodePath)
     if (!node) return false
-    return node.getSourceState(
-      state => matchPattern.match(state.name) || matchPattern.match(state.path)
+    return node.getSourceState(state =>
+      matchPattern.matchAliasGroup(state.name, state.path)
     )
   }
 
