@@ -80,7 +80,7 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   console.log('selectedSchema====', selectedSchema)
   return (
     <Row>
-      <Col span={12}>
+      <Col span={8}>
         <Tree
           defaultExpandAll
           showLine
@@ -91,7 +91,7 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
           {TreeNodeBySchema({ schema, path: [] })}
         </Tree>
       </Col>
-      <Col span={12}>
+      <Col span={16}>
         {selectedSchema && (
           <FieldEditor
             xProps={{
@@ -118,6 +118,10 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
                 }
               }
             ]}
+            fieldKey={'fieldC'}
+            onFieldKeyChange={value => {
+              console.log('onFieldKeyChange====', value)
+            }}
             schema={selectedSchema}
             onChange={value => {
               const newSchema = _.clone(schema)

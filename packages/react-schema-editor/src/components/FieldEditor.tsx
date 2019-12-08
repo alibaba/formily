@@ -26,6 +26,8 @@ const formItemLayout = {
 const BLANK_PROPERTY_VALUE = ''
 
 interface IFieldEditorProps {
+  fieldKey: string
+  onFieldKeyChange: (fieldKey: string) => void
   schema: any
   components: any
   xProps: any
@@ -380,12 +382,15 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
 }
 
 const FieldEditor: React.FC<IFieldEditorProps> = ({
+  fieldKey,
   schema,
   components,
   xProps,
   xRules,
+  onFieldKeyChange,
   onChange
 }) => {
+  const isLeafField = !['object', 'array'].includes(schema.type)
   const fieldTypeData = getFieldTypeData()
 
   const xComponentData = getXComponentData(components)
@@ -395,6 +400,18 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
       <div className="field-group">
         <div className="field-group-title">字段</div>
         <div className="field-group-content">
+          <FormItem
+            label="fieldKey"
+            {...formItemLayout}
+            className="field-group-form-item"
+          >
+            <Input
+              value={fieldKey}
+              onChange={event => {
+                onFieldKeyChange(event.target.value)
+              }}
+            />
+          </FormItem>
           <FormItem
             label="类型"
             {...formItemLayout}
@@ -455,29 +472,36 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
           </FormItem>
         </div>
       </div>
-      <FormItemGroup
-        title="组件属性"
-        components={components}
-        propsKey={ComponentPropsTypes.X_COMPONENT_PROPS}
-        schema={schema}
-        onChange={onChange}
-      />
-      <FormItemGroup
-        title="表单字段属性"
-        components={components}
-        propsKey={ComponentPropsTypes.X_PROPS}
-        schema={schema}
-        xProps={xProps}
-        onChange={onChange}
-      />
-      <FormItemGroup
-        title="校验规则"
-        components={components}
-        propsKey={ComponentPropsTypes.X_RULES}
-        schema={schema}
-        xRules={xRules}
-        onChange={onChange}
-      />
+      {isLeafField && (
+        <FormItemGroup
+          title="组件属性"
+          components={components}
+          propsKey={ComponentPropsTypes.X_COMPONENT_PROPS}
+          schema={schema}
+          onChange={onChange}
+        />
+      )}
+      {isLeafField && (
+        <FormItemGroup
+          title="表单字段属性"
+          components={components}
+          propsKey={ComponentPropsTypes.X_PROPS}
+          schema={schema}
+          xProps={xProps}
+          onChange={onChange}
+        />
+      )}
+
+      {isLeafField && (
+        <FormItemGroup
+          title="校验规则"
+          components={components}
+          propsKey={ComponentPropsTypes.X_RULES}
+          schema={schema}
+          xRules={xRules}
+          onChange={onChange}
+        />
+      )}
     </Form>
   )
 }
