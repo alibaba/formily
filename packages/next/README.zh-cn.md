@@ -2904,55 +2904,6 @@ interface IFormActions {
   ): any
 
   /*
-   * 注册字段
-   */
-  registerField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段值
-    value?: any
-    //字段多参值
-    values?: any[]
-    //字段初始值
-    initialValue?: any
-    //字段扩展属性
-    props?: any
-    //字段校验规则
-    rules?: ValidatePatternRules[]
-    //字段是否必填
-    required?: boolean
-    //字段是否可编辑
-    editable?: boolean
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-
-  /*
-   * 注册虚拟字段
-   */
-  registerVirtualField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段扩展属性
-    props?: any
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-
-  /*
-   * 创建字段数据操作器，后面会详细解释返回的API
-   */
-  createMutators(field: IField): IMutators
-
-  /*
    * 获取表单观察者树
    */
   getFormGraph(): IFormGraph

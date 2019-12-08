@@ -2903,38 +2903,6 @@ interface IFormActions {
     callback?: (state: IFieldState) => any
   ): any
   /*
-   * Registration field
-   */
-  registerField(props: {
-    // Node path
-    path?: FormPathPattern // Data path
-    name?: string // Field value
-    value?: any // Field multi-value
-    values?: any[] // Field initial value
-    initialValue?: any // Field extension properties
-    props?: any // Field check rule
-    rules?: ValidatePatternRules[] // Field is required
-    required?: boolean // Is the field editable?
-    editable?: boolean // Whether the field is dirty check
-    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-  /*
-   * Register virtual fields
-   */
-  registerVirtualField(props: {
-    // Node path
-    path?: FormPathPattern // Data path
-    name?: string // Field extension properties
-    props?: any // Whether the field is dirty check
-    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-  /*
-   * Create a field data operator, which will explain the returned API in detail later.
-   */
-  createMutators(field: IField): IMutators
-  /*
    * Get the form observer tree
    */
   getFormGraph(): IFormGraph
