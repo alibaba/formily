@@ -18,7 +18,8 @@ import {
   getInputType,
   getPropertyValue,
   getExpressionValue,
-  getRuleMessage
+  getRuleMessage,
+  fieldTypeDisabled
 } from '../utils/fieldEditorHelpers'
 import { InputTypes, ComponentPropsTypes } from '../utils/types'
 import './FieldEditor.css'
@@ -434,6 +435,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                   type: value
                 })
               }}
+              disabled={fieldTypeDisabled(schema)}
             >
               {_.map(fieldTypeData.options, ({ label, value }) => (
                 <SelectOption value={value} key={value}>
