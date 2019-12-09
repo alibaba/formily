@@ -31,6 +31,7 @@ export enum LifeCycleTypes {
   ON_FORM_RESET = 'onFormReset',
   ON_FORM_SUBMIT_START = 'onFormSubmitStart',
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
+  ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',

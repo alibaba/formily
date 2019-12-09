@@ -782,51 +782,49 @@ export function createForm<FieldProps, VirtualFieldProps>(
     state.setState(state => {
       state.submitting = true
     })
-    env.submittingTask = validate()
-      .then(() => {
-        const validated = state.getState(({ errors, warnings }) => ({
-          errors,
-          warnings
-        })) //因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
-        if (validated.errors.length) {
-          state.setState(state => {
-            state.submitting = false
-          })
-          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-          if (isFn(options.onValidateFailed)) {
-            options.onValidateFailed(validated)
-          }
-          return Promise.reject(validated.errors)
-        }
+
+    env.submittingTask = new Promise(async (resolve, reject) => {
+      try {
+        await validate()
+        // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
+        const validated = state.getState(({ errors, warnings }) => ({ errors, warnings }))
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
+
+        let payload
         if (isFn(onSubmit)) {
-          return Promise.resolve(
+          payload = await Promise.resolve(
             onSubmit(state.getState(state => clone(state.values)))
-          ).then(payload => ({ validated, payload }))
+          )
         }
-        return { validated, payload: undefined }
-      })
-      .then<IFormSubmitResult>(response => {
-        const {
-          validated: { errors, warnings }
-        } = response
+
+        state.setState(state => {
+          state.submitting = false
+        })
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+        resolve({
+          validated,
+          payload,
+        })
+      } catch (failedResult) {
+        // 由于校验失败导致submit退出
         state.setState(state => {
           state.submitting = false
         })
 
+        // 增加onFormSubmitValidateFailed来明确结束submit的类型
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED, state)
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-        if (errors.length) {
-          return Promise.reject(errors)
+        if (isFn(options.onValidateFailed)) {
+          options.onValidateFailed(failedResult)
         }
-        if (warnings.length) {
-          console.warn(warnings)
-        }
-        return response
-      })
+        reject(failedResult.errors)
+      }
+    })
+
     return env.submittingTask
   }
 
-  async function validate(
+  function validate(
     path?: FormPathPattern,
     opts?: ValidateFieldOptions
   ): Promise<IFormValidateResult> {
@@ -842,13 +840,26 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    return validator.validate(path, opts).then(payload => {
-      clearTimeout(env.validateTimer)
-      state.setState(state => {
-        state.validating = false
+    return new Promise((resolve, reject) => {
+      validator.validate(path, opts).then(payload => {
+        clearTimeout(env.validateTimer)
+        state.setState(state => {
+          state.validating = false
+        })
+        heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
+        
+        // 错误立即退出
+        const { errors, warnings } = payload
+        // 打印warnings日志从submit挪到这里
+        if (warnings.length) {
+          console.warn(warnings)
+        }
+        if (errors.length > 0) {
+          reject(payload)
+        } else {
+          resolve(payload)
+        }
       })
-      heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-      return payload
     })
   }
 
