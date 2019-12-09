@@ -354,9 +354,12 @@ describe('clearErrors', () => {
           v === undefined ? { type: 'error', message: 'error msg' } : undefined
       ]
     }) // CustomValidator error
-    const result1 = await form.validate()
-    expect(result1.warnings).toEqual([{ path: 'b', messages: warnMsg }])
-    expect(result1.errors).toEqual([{ path: 'c', messages: errMsg }])
+    try {
+      await form.validate()
+    } catch (result1) {
+      expect(result1.warnings).toEqual([{ path: 'b', messages: warnMsg }])
+      expect(result1.errors).toEqual([{ path: 'c', messages: errMsg }])
+    }    
 
     form.clearErrors('b')
     expect(form.getFormState(state => state.warnings)).toEqual([])
@@ -368,9 +371,12 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.warnings)).toEqual([])
     expect(form.getFormState(state => state.errors)).toEqual([])
 
-    const result2 = await form.validate()
-    expect(result2.warnings).toEqual([{ path: 'b', messages: warnMsg }])
-    expect(result2.errors).toEqual([{ path: 'c', messages: errMsg }])
+    try {
+      await form.validate()
+    } catch (result2) {
+      expect(result2.warnings).toEqual([{ path: 'b', messages: warnMsg }])
+      expect(result2.errors).toEqual([{ path: 'c', messages: errMsg }])
+    }
 
     form.clearErrors()
     expect(form.getFormState(state => state.warnings)).toEqual([])
@@ -447,7 +453,7 @@ describe('validate', () => {
     const validatePromise = form.validate()
     expect(form.getFormState(state => state.validating)).toEqual(true)
     expect(onValidateStart).toBeCalledTimes(1)
-    validatePromise.then(validated => {
+    validatePromise.catch(validated => {
       expect(form.getFormState(state => state.validating)).toEqual(false)
       expect(onValidateEnd).toBeCalledTimes(1)
       const { warnings, errors } = validated
@@ -474,21 +480,29 @@ describe('validate', () => {
           v === undefined ? { type: 'error', message: 'error msg' } : undefined
       ]
     }) // CustomValidator error
-    const bResult = await form.validate('b')
-    expect(bResult.warnings).toEqual([{ path: 'b', messages: ['warning msg'] }])
-    expect(bResult.errors).toEqual([])
-    expect(form.getFieldState('b', state => state.warnings)).toEqual([
-      'warning msg'
-    ])
+    try {
+      await form.validate('b')
+    } catch (bResult) {
+      expect(bResult.warnings).toEqual([{ path: 'b', messages: ['warning msg'] }])
+      expect(bResult.errors).toEqual([])
+      expect(form.getFieldState('b', state => state.warnings)).toEqual([
+        'warning msg'
+      ])
+    }
+    
     expect(form.getFieldState('c', state => state.errors)).toEqual([])
     expect(form.getFormState(state => state.warnings)).toEqual([
       { path: 'b', messages: ['warning msg'] }
     ])
     expect(form.getFormState(state => state.errors)).toEqual([])
 
-    const cResult = await form.validate('c')
-    expect(cResult.warnings).toEqual([])
-    expect(cResult.errors).toEqual([{ path: 'c', messages: ['error msg'] }])
+    try {
+      await form.validate('c')
+    } catch (cResult) {
+      expect(cResult.warnings).toEqual([])
+      expect(cResult.errors).toEqual([{ path: 'c', messages: ['error msg'] }])
+    }
+    
     expect(form.getFieldState('b', state => state.warnings)).toEqual([
       'warning msg'
     ])
@@ -549,8 +563,12 @@ describe('setFormState', () => {
           v === undefined ? { type: 'error', message: 'error msg' } : undefined
       ]
     }) // CustomValidator error
-    const { errors, warnings } = await form.validate()
-    const invalid = errors.length > 0
+    let invalid = false
+    try {
+      await form.validate()
+    } catch (validateResult) {
+      invalid = validateResult.errors.length > 0
+    }
 
     const values = { b: '2' }
     const initialValues = { a: '1' }
@@ -570,6 +588,7 @@ describe('setFormState', () => {
       state.unmounted = true
       state.props = { hello: 'world' }
     })
+    const { warnings, errors } = form.getFormState(({ warnings, errors }) => ({ warnings, errors }))
     expect(form.getFormState()).toEqual({
       displayName: 'FormState',
       pristine: isEqual(values, initialValues),
@@ -796,9 +815,13 @@ describe('setFieldState', () => {
     expect(state.ruleWarnings).toEqual([])
 
     const mutators = form.createMutators(a)
-    const result = await mutators.validate()
-    expect(result.errors).toEqual([{ path: 'a', messages: ['error msg'] }])
-    expect(result.warnings).toEqual([{ path: 'a', messages: ['warning msg'] }])
+    try {
+      await mutators.validate()
+    } catch (result) {
+      expect(result.errors).toEqual([{ path: 'a', messages: ['error msg'] }])
+      expect(result.warnings).toEqual([{ path: 'a', messages: ['warning msg'] }])
+    }
+    
     // 校验后影响的是ruleErrors, ruleWarnings
     const state2 = form.getFieldState('a')
     expect(state2.effectErrors).toEqual([])
@@ -830,7 +853,12 @@ describe('setFieldState', () => {
     form.setFieldState('a', state => (state.editable = true))
 
     // 隐藏，清空所有错误和警告信息
-    await mutators.validate()
+    try {
+      await mutators.validate()
+    } catch (e) {
+      // do nothing...
+    }
+    
     form.setFieldState('a', state => (state.errors = ['effect errors msg']))
     form.setFieldState('a', state => (state.warnings = ['effect warning msg']))
     form.setFieldState('a', state => (state.visible = false))
@@ -841,7 +869,12 @@ describe('setFieldState', () => {
     expect(state6.warnings).toEqual([])
 
     // 卸载组件，清空所有错误和警告信息
-    await mutators.validate()
+    try {
+      await mutators.validate()  
+    } catch (e) {
+
+    }
+    
     form.setFieldState('a', state => (state.errors = ['effect errors msg']))
     form.setFieldState('a', state => (state.warnings = ['effect warning msg']))
     const state7 = form.getFieldState('a')
@@ -1460,7 +1493,12 @@ describe('validator', () => {
     aa.setState(state => {
       state.value = 'hello world'
     })
-    await form.validate()
+
+    try {
+      await form.validate()
+    } catch (failedResult) {
+      // do nothng...
+    }
 
     form.getFormState(state =>
       expect(state.errors).toEqual([
@@ -1499,7 +1537,13 @@ describe('validator', () => {
     aa.setState(state => {
       state.value = '123'
     })
-    await form.validate()
+
+    try {
+      await form.validate()
+    } catch(failedResult) {
+      // do nothing...
+    }
+    
 
     form.getFormState(state =>
       expect(state.errors).toEqual([
@@ -1545,7 +1589,14 @@ describe('validator', () => {
     aa.setState(state => {
       state.value = 123
     })
-    await form.validate()
+
+    
+    try {
+      await form.validate()
+    } catch (failedResult) {
+      // do nothng...
+    }
+    
 
     form.getFormState(state =>
       expect(state.errors).toEqual([
