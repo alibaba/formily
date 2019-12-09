@@ -5,6 +5,52 @@ import * as fp from 'lodash/fp'
 import _ from 'lodash'
 import FieldEditor from './FieldEditor'
 
+const xProps = {
+  colon: {},
+  extra: {},
+  hasFeedback: {},
+  help: {},
+  htmlFor: {},
+  label: {},
+  labelCol: {},
+  labelAlign: {},
+  required: {},
+  validateStatus: {},
+  wrapperCol: {}
+}
+
+const xRules = {
+  enum: {},
+  len: {},
+  max: {},
+  min: {},
+  pattern: {},
+  required: {},
+  transform: {},
+  type: {},
+  validator: {},
+  whitespace: {}
+}
+
+const components = [
+  {
+    name: 'Input',
+    'x-component-props': {
+      value: {},
+      disabled: {},
+      onChange: {}
+    }
+  },
+  {
+    name: 'Switch',
+    'x-component-props': {
+      checked: {},
+      disabled: {},
+      onChange: {}
+    }
+  }
+]
+
 const TreeNode = Tree.TreeNode
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
@@ -100,7 +146,7 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
     (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
   return (
     <Row>
-      <Col span={12}>
+      <Col span={8}>
         <Tree
           defaultExpandAll
           showIcon
@@ -111,33 +157,16 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
           {TreeNodeBySchema({ schema, path: [] })}
         </Tree>
       </Col>
-      <Col span={12}>
+      <Col span={16}>
         {selectedSchema && (
           <FieldEditor
-            xProps={{
-              help: {},
-              validateStatus: {},
-              hasFeedback: {}
+            xProps={xProps}
+            xRules={xRules}
+            components={components}
+            fieldKey="fieldC"
+            onFieldKeyChange={value => {
+              console.log('onFieldKeyChange====', value)
             }}
-            xRules={{ required: {}, pattern: {}, validator: {} }}
-            components={[
-              {
-                name: 'Input',
-                'x-component-props': {
-                  value: {},
-                  disabled: {},
-                  onChange: {}
-                }
-              },
-              {
-                name: 'Switch',
-                'x-component-props': {
-                  checked: {},
-                  disabled: {},
-                  onChange: {}
-                }
-              }
-            ]}
             schema={selectedSchema}
             onChange={value => {
               const newSchema = _.clone(schema)
