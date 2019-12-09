@@ -19,10 +19,10 @@ const extendMutators = (
         : args[0]
       mutators.change(...args.map(event => getValueFromEvent(event)))
     },
-    blur: async () => {
+    blur: () => {
       mutators.blur()
       if (props.triggerType === 'onBlur') {
-        await mutators.validate({ throwErrors: false })
+        mutators.validate({ throwErrors: false })
       }
     }
   }
@@ -54,7 +54,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const mutators = useMemo(() => {
     let initialized = false
     ref.current.field = form.registerField(options)
-    ref.current.subscriberId = ref.current.field.subscribe(async fieldState => {
+    ref.current.subscriberId = ref.current.field.subscribe(fieldState => {
       if (ref.current.unmounted) return
       /**
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
@@ -62,7 +62,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       if (initialized) {
         if (options.triggerType === 'onChange' && !fieldState.pristine) {
           if (ref.current.field.hasChanged('value')) {
-            await mutators.validate({ throwErrors: false })
+            mutators.validate({ throwErrors: false })
           }
         }
         forceUpdate()
