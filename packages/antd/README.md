@@ -16,6 +16,7 @@ npm install --save @uform/antd
   - [`<SchemaMarkupField/>`](#SchemaMarkupField)
   - [`<Submit/>`](#Submit)
   - [`<Reset/>`](#Reset)
+  - [`<FormSpy/>`](#FormSpy)
   - [`<Field/>(deprecated，please use <SchemaMarkupField/>)`](#<Field/>)
 - [Form List](#Array-Components)
   - [`array`](#array)
@@ -61,7 +62,7 @@ npm install --save @uform/antd
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
-  - [ISchema](#ischema)
+  - [`ISchema`](#ischema)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
@@ -79,6 +80,7 @@ npm install --save @uform/antd
   - [`IMutators`](#IMutators)
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
+  - [`ISpyHook`](#ISpyHook)
   
 
 ### Quick-Start
@@ -714,6 +716,128 @@ interface IResetProps {
   // Valid when Button component is set to 'a', which represents the way of open the linked document
   target?: string
 }
+```
+
+#### `<FormSpy/>`
+
+> `<FormSpy>` Props
+
+```typescript
+interface IFormSpyProps {
+  // selector, eg: [ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
+  selector?: string[] | string
+  // reducer
+  reducer?: (
+    state: any,
+    action: { type: string; payload: any },
+    form: IForm
+  ) => any
+  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
+}
+```
+
+**Usage**
+
+Example1： Form state change counter
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy
+        selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
+        reducer={(state, action, form) => ({
+          count: state.count ? state.count + 1 : 1
+        })}
+      >
+        {({ state, type, form }) => {
+          return <div>count: {state.count || 0}</div>
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+
+Example2：Combo
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy>
+        {({ state, form }) => {
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
+          )
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### `<Field/>`
@@ -2931,7 +3055,7 @@ interface IFormActions {
     selector?: FormPathPattern
   }): Promise<void | IFormValidateResult>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,
@@ -3040,7 +3164,7 @@ interface IFormAsyncActions {
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,
@@ -3460,4 +3584,15 @@ interface IConnectOptions<T> {
   ) => T
 }
 
+```
+
+
+#### ISpyHook
+
+```typescript
+interface ISpyHook {
+  form: IForm
+  state: any
+  type: string
+}
 ```
