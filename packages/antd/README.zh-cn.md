@@ -62,6 +62,9 @@ npm install --save @uform/antd
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)
 - [Interfaces](#Interfaces)
+  - [ISchema](#ischema)
+  - [`IFormActions`](#IFormActions)
+  - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
   - [`CardProps`](#CardProps)
   - [`ICompatItemProps`](#ICompatItemProps)
@@ -2265,6 +2268,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 #### `useFormEffects`
 
 > 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
+> 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
 
 **签名**
 
@@ -2858,12 +2862,73 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ---
 
-#### IForm
+#### ISchema
 
-> 通过 createForm 创建出来的 Form 实例对象 API
+> Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
 
 ```typescript
-interface IForm {
+interface ISchema {
+  /** base json schema spec**/
+  title?: React.ReactNode
+  description?: React.ReactNode
+  default?: any
+  readOnly?: boolean
+  writeOnly?: boolean
+  type?: 'string' | 'object' | 'array' | 'number' | string
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
+  const?: any
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+  maxLength?: number
+  minLength?: number
+  pattern?: string | RegExp
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[] | boolean
+  format?: string
+  /** nested json schema spec **/
+  properties?: {
+    [key: string]: ISchema
+  }
+  items?: ISchema | ISchema[]
+  additionalItems?: ISchema
+  patternProperties?: {
+    [key: string]: ISchema
+  }
+  additionalProperties?: ISchema
+  /** extend json schema specs */
+  editable?: boolean
+  //数据与样式是否可见
+  visible?: boolean
+  //样式是否可见
+  display?: boolean
+  ['x-props']?: { [name: string]: any }
+  ['x-index']?: number
+  ['x-rules']?: ValidatePatternRules
+  ['x-component']?: string
+  ['x-component-props']?: { [name: string]: any }
+  ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
+      renderComponent: () => React.ReactElement
+    }
+  ) => React.ReactElement
+  ['x-effect']?: (
+    dispatch: (type: string, payload: any) => void,
+    option?: object
+  ) => { [key: string]: any }
+}
+```
+
+#### IFormActions
+
+```typescript
+interface IFormActions {
   /*
    * 表单提交，如果回调参数返回Promise，
    * 那么整个提交流程会hold住，同时loading为true，
@@ -2875,6 +2940,9 @@ interface IForm {
     validated: IFormValidateResult
     payload: any //onSubmit回调函数返回值
   }>
+
+  /** 获取当前表单Schema **/
+  getFormSchema(): Schema
 
   /*
    * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
@@ -3049,6 +3117,95 @@ interface IForm {
    * 获取字段初始值
    */
   getFieldInitialValue(path?: FormPathPattern): any
+}
+```
+
+#### IFormAsyncActions
+
+```typescript
+interface IFormAsyncActions {
+  /*
+   * 表单提交，如果回调参数返回Promise，
+   * 那么整个提交流程会hold住，同时loading为true，
+   * 等待Promise resolve才触发表单onFormSubmitEnd事件，同时loading为false
+   */
+  submit(
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  
+  /** 获取当前表单Schema **/
+  getFormSchema(): Promise<Schema>
+
+  /*
+   * 重置表单
+   */
+  reset(options?: IFormResetOptions): Promise<void>
+  /*
+   * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
+   * 比如hasChanged(state,'value.aa')
+   */
+  hasChanged(target: any, path: FormPathPattern): Promise<boolean>
+  /*
+   * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
+   * 比如clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => Promise<void>
+  /*
+   * 校验表单
+   */
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      //是否悲观校验，如果当前字段遇到第一个校验错误则停止后续校验流程
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+  /*
+   * 设置表单状态
+   */
+  setFormState(
+    //操作回调
+    callback?: (state: IFormState) => any,
+    //是否不触发事件
+    silent?: boolean
+  ): Promise<void>
+  /*
+   * 获取表单状态
+   */
+  getFormState(
+    //transformer
+    callback?: (state: IFormState) => any
+  ): Promise<any>
+  /*
+   * 设置字段状态
+   */
+  setFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //操作回调
+    callback?: (state: IFieldState) => void,
+    //是否不触发事件
+    silent?: boolean
+  ): Promise<void>
+  /*
+   * 获取字段状态
+   */
+  getFieldState(
+    //字段路径
+    path: FormPathPattern,
+    //transformer
+    callback?: (state: IFieldState) => any
+  ): Promise<void>
+  getFormGraph(): Promise<IFormGraph>
+  setFormGraph(graph: IFormGraph): Promise<void>
+  subscribe(callback?: FormHeartSubscriber): Promise<number>
+  unsubscribe(id: number): Promise<void>
+  notify: <T>(type: string, payload: T) => Promise<void>
+  dispatch: <T>(type: string, payload: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
+  getFieldValue(path?: FormPathPattern): Promise<any>
+  setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
+  getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
 ```
 
