@@ -22,7 +22,11 @@ const extendMutators = (
     blur: () => {
       mutators.blur()
       if (props.triggerType === 'onBlur') {
-        mutators.validate()
+        try {
+          mutators.validate()
+        } catch (e) {
+          console.warn(e)
+        }
       }
     }
   }
@@ -62,7 +66,11 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       if (initialized) {
         if (options.triggerType === 'onChange' && !fieldState.pristine) {
           if (ref.current.field.hasChanged('value')) {
-            mutators.validate()
+            try {
+              mutators.validate()
+            } catch (e) {
+              console.warn(e)
+            }
           }
         }
         forceUpdate()
