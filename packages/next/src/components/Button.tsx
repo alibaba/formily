@@ -62,7 +62,13 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
         return (
           <Button
             type="primary"
-            onClick={() => form.submit(onSubmit)}
+            onClick={async() => {
+              try {
+                await form.submit(onSubmit)
+              } catch (e) {
+                // do nothing...
+              }
+            }}
             disabled={showLoading ? state.submitting : undefined}
             {...props}
             loading={showLoading ? state.submitting : undefined}
@@ -91,7 +97,13 @@ export const Reset: React.FC<IResetProps> = ({
         return (
           <Button
             {...props}
-            onClick={() => form.reset({ forceClear, validate })}
+            onClick={async() => {
+              try {
+                await form.reset({ forceClear, validate })
+              } catch (e) {
+                // do nothing...
+              }              
+            }}
           >
             {children || '重置'}
           </Button>

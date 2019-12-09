@@ -15,24 +15,6 @@ English | [简体中文](./README.zh-cn.md)
 npm install --save @uform/core
 ```
 
-```jsx
-import { createForm } from './src'
-const form = createForm({
-  
-})
-form.registerField({
-  path: 'b',
-  rules: [() => ({ type: 'warning', message: 'warning msg' })]
-}) // CustomValidator warning
-form.registerField({
-  path: 'c',
-  rules: [() => ({ type: 'error', message: 'error msg' })]
-}) // CustomValidator error
-
-form.reset()
-
-```
-
 ### Table Of Contents
 
 <!-- toc -->
