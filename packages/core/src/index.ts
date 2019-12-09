@@ -15,8 +15,7 @@ import {
 import {
   FormValidator,
   setValidationLanguage,
-  setValidationLocale,
-  ValidateFieldOptions
+  setValidationLocale
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
@@ -42,7 +41,8 @@ import {
   isVirtualField,
   isFormState,
   isFieldState,
-  isVirtualFieldState
+  isVirtualFieldState,
+  IFormExtendedValidateFieldOptions
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'
@@ -702,8 +702,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
         setValue(arr)
         return arr
       },
-      validate() {
-        return validate(field.getSourceState(state => state.path))
+      validate(opts?: IFormExtendedValidateFieldOptions) {
+        return validate(field.getSourceState(state => state.path), opts)
       }
     }
   }
@@ -767,11 +767,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
     let validateResult: void | IFormValidateResult
     if (validate) {
-      try {
-        validateResult = await formApi.validate()
-      } catch (failedResult) {
-        validateResult = failedResult
-      }
+      validateResult = await formApi.validate(selector, { throwErrors: false })
     }
 
     return validateResult
@@ -789,9 +785,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
 
     env.submittingTask = async () => {
-      try {
-        await validate()
-      } catch (failedResult) {
+      const validateResult = await validate('', { throwErrors: false })
+      const { errors } = validateResult
+      // 校验失败
+      if (errors.length) {
         // 由于校验失败导致submit退出
         state.setState(state => {
           state.submitting = false
@@ -801,10 +798,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED, state)
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
         if (isFn(options.onValidateFailed)) {
-          options.onValidateFailed(failedResult)
+          options.onValidateFailed(validateResult)
         }
 
-        throw failedResult.errors
+        throw errors
       }
 
       // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
@@ -834,10 +831,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
     return env.submittingTask()
   }
 
-  function validate(
+  async function validate(
     path?: FormPathPattern,
-    opts?: ValidateFieldOptions
+    opts?: IFormExtendedValidateFieldOptions
   ): Promise<IFormValidateResult> {
+    const { throwErrors = true } = opts || {}
     if (!state.getState(state => state.validating)) {
       state.setSourceState(state => {
         state.validating = true
@@ -850,27 +848,27 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    return new Promise((resolve, reject) => {
-      validator.validate(path, opts).then(payload => {
-        clearTimeout(env.validateTimer)
-        state.setState(state => {
-          state.validating = false
-        })
-        heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-
-        // 错误立即退出
-        const { errors, warnings } = payload
-        // 打印warnings日志从submit挪到这里
-        if (warnings.length) {
-          console.warn(warnings)
-        }
-        if (errors.length > 0) {
-          reject(payload)
-        } else {
-          resolve(payload)
-        }
-      })
+    const payload = await validator.validate(path, opts)
+    clearTimeout(env.validateTimer)
+    state.setState(state => {
+      state.validating = false
     })
+    heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
+
+    // 打印warnings日志从submit挪到这里
+    const { errors, warnings } = payload
+    if (warnings.length) {
+      console.warn(warnings)
+    }
+    if (errors.length > 0) {
+      if (throwErrors) {
+        throw payload
+      } else {
+        return payload
+      }
+    } else {
+      return payload
+    }
   }
 
   function setFormState(

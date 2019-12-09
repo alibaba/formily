@@ -279,6 +279,10 @@ export interface IFormGraph {
   [path: string]: IFormState | IFieldState | IVirtualFieldState
 }
 
+export type IFormExtendedValidateFieldOptions = ValidateFieldOptions & {
+  throwErrors?: boolean
+}
+
 export interface IMutators {
   change(...values: any[]): any
   focus(): void
@@ -292,7 +296,9 @@ export interface IMutators {
   move($from: number, $to: number): any[]
   moveDown(index: number): any[]
   moveUp(index: number): any[]
-  validate(): Promise<IFormValidateResult>
+  validate(
+    opts?: IFormExtendedValidateFieldOptions
+  ): Promise<IFormValidateResult>
   exist(index?: number | string): boolean
 }
 
@@ -331,7 +337,7 @@ export interface IForm {
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(
     path?: FormPathPattern,
-    options?: ValidateFieldOptions
+    options?: IFormExtendedValidateFieldOptions
   ): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
   getFormState(callback?: (state: IFormState) => any): any
