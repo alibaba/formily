@@ -459,7 +459,7 @@ test('async validate prevent submit', async () => {
   fireEvent.click(queryByText('Submit'))
   await sleep(110)
   expect(queryByText('can not input 123')).toBeNull()
-  expect(onSubmitHandler).toBeCalledTimes(1)
+  expect(onSubmitHandler).toBeCalledTimes(0)
   fireEvent.change(queryByTestId('test-input'), {
     target: { value: '123' }
   })

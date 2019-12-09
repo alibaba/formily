@@ -15,6 +15,24 @@ English | [简体中文](./README.zh-cn.md)
 npm install --save @uform/core
 ```
 
+```jsx
+import { createForm } from './src'
+const form = createForm({
+  
+})
+form.registerField({
+  path: 'b',
+  rules: [() => ({ type: 'warning', message: 'warning msg' })]
+}) // CustomValidator warning
+form.registerField({
+  path: 'c',
+  rules: [() => ({ type: 'error', message: 'error msg' })]
+}) // CustomValidator error
+
+form.reset()
+
+```
+
 ### Table Of Contents
 
 <!-- toc -->
@@ -432,6 +450,9 @@ enum LifeCycleTypes { // Form pre-initialization trigger
   // Triggered when the form submission ends
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
 
+  // Triggered when the form submission ends due to validate failed
+  ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
+
   // Triggered when the form value changes
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
 
@@ -547,7 +568,7 @@ interface IForm {
     selector?: FormPathPattern
   }): Promise<void | IFormValidateResult>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,

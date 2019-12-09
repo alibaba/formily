@@ -2931,7 +2931,7 @@ interface IFormActions {
     selector?: FormPathPattern
   }): Promise<void | IFormValidateResult>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,
@@ -3040,7 +3040,7 @@ interface IFormAsyncActions {
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,

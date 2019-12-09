@@ -727,7 +727,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
     forceClear = false,
     validate = true
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
-    let result: Promise<void | IFormValidateResult>
     graph.eachChildren('', selector, field => {
       field.setState((state: IFieldState<FieldProps>) => {
         state.modified = false
@@ -765,11 +764,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
     if (isFn(options.onReset)) {
       options.onReset()
     }
+
+    let validateResult: void | IFormValidateResult
     if (validate) {
-      result = formApi.validate()
+      try {
+        validateResult = await formApi.validate()
+      } catch (failedResult) {
+        validateResult = failedResult
+      }
     }
 
-    return result
+    return validateResult
   }
 
   async function submit(
@@ -784,28 +789,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
 
     env.submittingTask = async () => {
-      let submtiResult
       try {
         await validate()
-        // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
-        const validated = state.getState(({ errors, warnings }) => ({ errors, warnings }))
-        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
-
-        let payload
-        if (isFn(onSubmit)) {
-          payload = await Promise.resolve(
-            onSubmit(state.getState(state => clone(state.values)))
-          )
-        }
-
-        state.setState(state => {
-          state.submitting = false
-        })
-        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-        submtiResult = {
-          validated,
-          payload,
-        }
       } catch (failedResult) {
         // 由于校验失败导致submit退出
         state.setState(state => {
@@ -818,13 +803,35 @@ export function createForm<FieldProps, VirtualFieldProps>(
         if (isFn(options.onValidateFailed)) {
           options.onValidateFailed(failedResult)
         }
+
         throw failedResult.errors
       }
 
-      return submtiResult
+      // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
+      const validated = state.getState(({ errors, warnings }) => ({
+        errors,
+        warnings
+      }))
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
+
+      let payload
+      if (isFn(onSubmit)) {
+        payload = await Promise.resolve(
+          onSubmit(state.getState(state => clone(state.values)))
+        )
+      }
+
+      state.setState(state => {
+        state.submitting = false
+      })
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+      return {
+        validated,
+        payload
+      }
     }
 
-    return env.submittingTask
+    return env.submittingTask()
   }
 
   function validate(
@@ -850,7 +857,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           state.validating = false
         })
         heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-        
+
         // 错误立即退出
         const { errors, warnings } = payload
         // 打印warnings日志从submit挪到这里
