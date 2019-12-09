@@ -783,7 +783,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       state.submitting = true
     })
 
-    env.submittingTask = new Promise(async (resolve, reject) => {
+    env.submittingTask = async () => {
+      let submtiResult
       try {
         await validate()
         // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
@@ -801,10 +802,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
           state.submitting = false
         })
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-        resolve({
+        submtiResult = {
           validated,
           payload,
-        })
+        }
       } catch (failedResult) {
         // 由于校验失败导致submit退出
         state.setState(state => {
@@ -817,9 +818,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         if (isFn(options.onValidateFailed)) {
           options.onValidateFailed(failedResult)
         }
-        reject(failedResult.errors)
+        throw failedResult.errors
       }
-    })
+
+      return submtiResult
+    }
 
     return env.submittingTask
   }
