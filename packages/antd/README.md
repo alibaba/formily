@@ -61,6 +61,7 @@ npm install --save @uform/antd
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
+  - [ISchema](#ischema)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
@@ -2827,6 +2828,67 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > The Interfaces is fully inherited from @uform/react. The specific Interfaces of @uform/antd is listed below.
 ---
 
+#### ISchema
+
+> Schema protocol object, mainly used to constrain a json structure to satisfy the Schema protocol
+
+```typescript
+interface ISchema {
+  /** base json schema spec**/
+  title?: React.ReactNode
+  description?: React.ReactNode
+  default?: any
+  readOnly?: boolean
+  writeOnly?: boolean
+  type?: 'string' | 'object' | 'array' | 'number' | string
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
+  const?: any
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+  maxLength?: number
+  minLength?: number
+  pattern?: string | RegExp
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[] | boolean
+  format?: string
+  /** nested json schema spec **/
+  properties?: {
+    [key: string]: ISchema
+  }
+  items?: ISchema | ISchema[]
+  additionalItems?: ISchema
+  patternProperties?: {
+    [key: string]: ISchema
+  }
+  additionalProperties?: ISchema
+  /** extend json schema specs */
+  visible?: boolean //Field initial visible status(Whether the data is visible)
+  display?: boolean //Field initial display status(Whether the style is visible)
+  editable?: boolean
+  ['x-props']?: { [name: string]: any }
+  ['x-index']?: number
+  ['x-rules']?: ValidatePatternRules
+  ['x-component']?: string
+  ['x-component-props']?: { [name: string]: any }
+  ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
+      renderComponent: () => React.ReactElement
+    }
+  ) => React.ReactElement
+  ['x-effect']?: (
+    dispatch: (type: string, payload: any) => void,
+    option?: object
+  ) => { [key: string]: any }
+}
+```
+
 #### IFormActions
 
 ```typescript
@@ -2842,6 +2904,10 @@ interface IFormActions {
     Validated: IFormValidateResult
     Payload: any //onSubmit callback function return value
   }>
+
+  /** get Schema of form **/
+  getFormSchema(): Schema
+
   /*
    * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
    * For example, clearErrors("*(aa,bb,cc)")
@@ -2955,6 +3021,10 @@ interface IFormAsyncActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
+  
+  /** get Schema of form **/
+  getFormSchema(): Promise<Schema>
+
   /*
    * Reset form
    */
