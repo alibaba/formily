@@ -11,14 +11,15 @@ import {
 export const CompatAntdForm: React.FC<FormProps &
   IFormItemTopProps &
   PreviewTextConfigProps> = props => {
+  const { inline, ...rest } = props;
   return (
     <FormItemProvider {...props}>
       <PreviewText.ConfigProvider value={props}>
         <Form
-          {...props}
+          {...rest}
           labelCol={normalizeCol(props.labelCol)}
           wrapperCol={normalizeCol(props.wrapperCol)}
-          layout={props.inline ? 'inline' : props.layout}
+          layout={inline ? 'inline' : props.layout}
           form={undefined}
         />
       </PreviewText.ConfigProvider>
