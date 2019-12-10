@@ -179,7 +179,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const mountedChanged = field.isDirty('mounted')
       const initializedChanged = field.isDirty('initialized')
       const warningsChanged = field.isDirty('warnings')
-      const errorsChanges = field.isDirty('errors')
+      const errorsChanged = field.isDirty('errors')
       const userUpdateFieldPath =
         env.userUpdateFields[env.userUpdateFields.length - 1]
       if (initializedChanged) {
@@ -193,6 +193,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
               state.initialValue = getFormInitialValuesIn(state.name)
           }, true)
         }
+      }
+      if (valueChanged) {
+        userUpdating(field, () => {
+          setFormValuesIn(path, published.value)
+        })
+        heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+      }
+      if (initialValueChanged) {
+        setFormInitialValuesIn(path, published.initialValue)
+        heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
@@ -228,18 +238,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (mountedChanged && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-      if (valueChanged) {
-        userUpdating(field, () => {
-          setFormValuesIn(path, published.value)
-        })
-        heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-      }
-      if (initialValueChanged) {
-        setFormInitialValuesIn(path, published.initialValue)
-        heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
-      }
 
-      if (errorsChanges) {
+      if (errorsChanged) {
         syncFormMessages('errors', published.name, published.errors)
       }
 
@@ -703,7 +703,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(field.getSourceState(state => state.path), opts)
+        return validate(
+          field.getSourceState(state => state.path),
+          opts
+        )
       }
     }
   }
