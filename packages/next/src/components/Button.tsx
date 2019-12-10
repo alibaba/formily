@@ -62,6 +62,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
         return (
           <Button
             type="primary"
+            htmlType="submit"
             onClick={async() => {
               try {
                 await form.submit(onSubmit)
