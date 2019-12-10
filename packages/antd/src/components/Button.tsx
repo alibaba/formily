@@ -47,6 +47,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
         return (
           <Button
             type="primary"
+            htmlType="submit"
             onClick={() => form.submit(onSubmit)}
             disabled={showLoading ? state.submitting : undefined}
             {...props}
