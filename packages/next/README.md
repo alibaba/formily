@@ -16,6 +16,7 @@ npm install --save @uform/next
   - [`<SchemaMarkupField/>`](#SchemaMarkupField)
   - [`<Submit/>`](#Submit)
   - [`<Reset/>`](#Reset)
+  - [`<FormSpy/>`](#FormSpy)
   - [`<Field/>(deprecated，please use <SchemaMarkupField/>)`](#<Field/>)
 - [Form List](#Array-Components)
   - [`array`](#array)
@@ -61,6 +62,7 @@ npm install --save @uform/next
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
+  - [`ISchema`](#ischema)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
@@ -78,6 +80,7 @@ npm install --save @uform/next
   - [`IMutators`](#IMutators)
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
+  - [`ISpyHook`](#ISpyHook)
   
 
 ### Quick-Start
@@ -707,9 +710,131 @@ interface IResetProps {
 }
 ```
 
+#### `<FormSpy/>`
+
+> `<FormSpy>` Props
+
+```typescript
+interface IFormSpyProps {
+  // selector, eg: [ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
+  selector?: string[] | string
+  // reducer
+  reducer?: (
+    state: any,
+    action: { type: string; payload: any },
+    form: IForm
+  ) => any
+  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
+}
+```
+
 #### `<Field/>`
 
 > deprecated，please use [SchemaMarkupField](#SchemaMarkupField)
+
+**Usage**
+
+Example1： Form state change counter
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy
+        selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
+        reducer={(state, action, form) => ({
+          count: state.count ? state.count + 1 : 1
+        })}
+      >
+        {({ state, type, form }) => {
+          return <div>count: {state.count || 0}</div>
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+
+Example2：Combo
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy>
+        {({ state, form }) => {
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
+          )
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 ### Array Components
 
@@ -2816,6 +2941,67 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > The Interfaces is fully inherited from @uform/react. The specific Interfaces of @uform/next is listed below.
 ---
 
+#### ISchema
+
+> Schema protocol object, mainly used to constrain a json structure to satisfy the Schema protocol
+
+```typescript
+interface ISchema {
+  /** base json schema spec**/
+  title?: React.ReactNode
+  description?: React.ReactNode
+  default?: any
+  readOnly?: boolean
+  writeOnly?: boolean
+  type?: 'string' | 'object' | 'array' | 'number' | string
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
+  const?: any
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+  maxLength?: number
+  minLength?: number
+  pattern?: string | RegExp
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[] | boolean
+  format?: string
+  /** nested json schema spec **/
+  properties?: {
+    [key: string]: ISchema
+  }
+  items?: ISchema | ISchema[]
+  additionalItems?: ISchema
+  patternProperties?: {
+    [key: string]: ISchema
+  }
+  additionalProperties?: ISchema
+  /** extend json schema specs */
+  visible?: boolean //Field initial visible status(Whether the data is visible)
+  display?: boolean //Field initial display status(Whether the style is visible)
+  editable?: boolean
+  ['x-props']?: { [name: string]: any }
+  ['x-index']?: number
+  ['x-rules']?: ValidatePatternRules
+  ['x-component']?: string
+  ['x-component-props']?: { [name: string]: any }
+  ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
+      renderComponent: () => React.ReactElement
+    }
+  ) => React.ReactElement
+  ['x-effect']?: (
+    dispatch: (type: string, payload: any) => void,
+    option?: object
+  ) => { [key: string]: any }
+}
+```
+
 #### IFormActions
 
 ```typescript
@@ -2831,6 +3017,10 @@ interface IFormActions {
     Validated: IFormValidateResult
     Payload: any //onSubmit callback function return value
   }>
+  
+  /** get Schema of form **/
+  getFormSchema(): Schema
+
   /*
    * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
    * For example, clearErrors("*(aa,bb,cc)")
@@ -2854,7 +3044,7 @@ interface IFormActions {
     selector?: FormPathPattern
   }): Promise<void | IFormValidateResult>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,
@@ -2944,6 +3134,10 @@ interface IFormAsyncActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
+
+  /** get Schema of form **/
+  getFormSchema(): Promise<Schema>
+
   /*
    * Reset form
    */
@@ -2959,7 +3153,7 @@ interface IFormAsyncActions {
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * Validation form
+   * Validation form, throw IFormValidateResult when validation fails
    */
   validate(
     path?: FormPathPattern,
@@ -3399,4 +3593,15 @@ interface IConnectOptions<T> {
   ) => T
 }
 
+```
+
+
+#### ISpyHook
+
+```typescript
+interface ISpyHook {
+  form: IForm
+  state: any
+  type: string
+}
 ```

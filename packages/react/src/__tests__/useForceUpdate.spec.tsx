@@ -26,7 +26,9 @@ describe('useForceUpdate hook',()=>{
     const { result } = renderHook(() => useDemo())
     expect(result.current).toEqual(0)
 
-    instance.count = 1
+    act(() => {
+      instance.count = 1
+    })    
     expect(result.current).toEqual(0)
 
     act(() => {

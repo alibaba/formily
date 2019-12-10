@@ -17,7 +17,8 @@ npm install --save @uform/antd
   - [`<SchemaMarkupField/>`](#SchemaMarkupField)
   - [`<Submit/>`](#Submit)
   - [`<Reset/>`](#Reset)
-  - [`<Field/>(即将废弃，请使用<SchemaMarkupField/>)`](<#Field(即将废弃，请使用SchemaMarkupField)>)
+  - [`<FormSpy/>`](#FormSpy)
+  - [`<Field/>(即将废弃，请使用<SchemaMarkupField/>)`](#<Field/>)
 - [表单List](#Array-Components)
   - [`array`](#array)
   - [`cards`](#cards)
@@ -62,6 +63,7 @@ npm install --save @uform/antd
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
+  - [`ISchema`](#ischema)
   - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
@@ -79,6 +81,7 @@ npm install --save @uform/antd
   - [`IMutators`](#IMutators)
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
+  - [`ISpyHook`](#ISpyHook)
   
 
 ### 使用方式
@@ -709,6 +712,136 @@ interface IResetProps {
   target?: string
 }
 ```
+
+#### `<FormSpy/>`
+
+> FormSpy 组件属性定义
+
+```typescript
+interface IFormSpyProps {
+  // 选择器, 如：[ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
+  selector?: string[] | string
+  // reducer函数，状态叠加处理，action为当前命中的生命周期的数据
+  reducer?: (
+    state: any,
+    action: { type: string; payload: any },
+    form: IForm
+  ) => any
+  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
+}
+```
+
+**用法**
+
+例子 1： 实现一个统计表单 values 改变的计数器
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy
+        selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
+        reducer={(state, action, form) => ({
+          count: state.count ? state.count + 1 : 1
+        })}
+      >
+        {({ state, type, form }) => {
+          return <div>count: {state.count || 0}</div>
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+
+例子 2：实现常用 combo 组件
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy>
+        {({ state, form }) => {
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
+          )
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### `<Field/>`
+
+> 即将废弃，请使用 [SchemaMarkupField](#SchemaMarkupField)
 
 ### Array Components
 
@@ -2806,6 +2939,69 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ---
 
+#### ISchema
+
+> Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
+
+```typescript
+interface ISchema {
+  /** base json schema spec**/
+  title?: React.ReactNode
+  description?: React.ReactNode
+  default?: any
+  readOnly?: boolean
+  writeOnly?: boolean
+  type?: 'string' | 'object' | 'array' | 'number' | string
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
+  const?: any
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+  maxLength?: number
+  minLength?: number
+  pattern?: string | RegExp
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[] | boolean
+  format?: string
+  /** nested json schema spec **/
+  properties?: {
+    [key: string]: ISchema
+  }
+  items?: ISchema | ISchema[]
+  additionalItems?: ISchema
+  patternProperties?: {
+    [key: string]: ISchema
+  }
+  additionalProperties?: ISchema
+  /** extend json schema specs */
+  editable?: boolean
+  //数据与样式是否可见
+  visible?: boolean
+  //样式是否可见
+  display?: boolean
+  ['x-props']?: { [name: string]: any }
+  ['x-index']?: number
+  ['x-rules']?: ValidatePatternRules
+  ['x-component']?: string
+  ['x-component-props']?: { [name: string]: any }
+  ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
+      renderComponent: () => React.ReactElement
+    }
+  ) => React.ReactElement
+  ['x-effect']?: (
+    dispatch: (type: string, payload: any) => void,
+    option?: object
+  ) => { [key: string]: any }
+}
+```
+
 #### IFormActions
 
 ```typescript
@@ -2821,6 +3017,9 @@ interface IFormActions {
     validated: IFormValidateResult
     payload: any //onSubmit回调函数返回值
   }>
+
+  /** 获取当前表单Schema **/
+  getFormSchema(): Schema
 
   /*
    * 清空错误消息，可以通过传FormPathPattern来批量或精确控制要清空的字段，
@@ -2850,7 +3049,7 @@ interface IFormActions {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单
+   * 校验表单，当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -3010,6 +3209,10 @@ interface IFormAsyncActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
+  
+  /** 获取当前表单Schema **/
+  getFormSchema(): Promise<Schema>
+
   /*
    * 重置表单
    */
@@ -3025,7 +3228,7 @@ interface IFormAsyncActions {
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -3414,4 +3617,14 @@ interface IConnectOptions<T> {
   ) => T
 }
 
+```
+
+#### ISpyHook
+
+```typescript
+interface ISpyHook {
+  form: IForm
+  state: any
+  type: string
+}
 ```

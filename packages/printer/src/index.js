@@ -108,7 +108,7 @@ export default class extends React.Component {
 
   onClickHandler = async e => {
     e.preventDefault()
-    const schema = await this.actions.getSchema('')
+    const schema = await this.actions.getFormSchema('')
     createAlert(
       <div>
         <h1>JSON Schema</h1>
