@@ -14,7 +14,9 @@ type ColSpanType = number | string
 export type INextSchemaFormProps = FormProps &
   IFormItemTopProps &
   PreviewTextConfigProps &
-  ISchemaFormProps
+  ISchemaFormProps | {
+    onSubmit?: ISchemaFormProps['onSubmit']
+  }
 
 export type INextSchemaFieldProps = IMarkupSchemaFieldProps
 
