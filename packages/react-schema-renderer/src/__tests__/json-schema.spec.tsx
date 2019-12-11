@@ -87,11 +87,35 @@ describe('test all apis', () => {
     //todo
   })
 
+  test('minimum', () => {
+    //todo
+  })
+
   test('exclusiveMaximum', () => {
     //todo
   })
 
-  test('array minimum', async () => {
+  test('exclusiveMinimum', () => {
+    //todo
+  })
+
+  test('maxLength', () => {
+    //todo
+  })
+
+  test('minLength', () => {
+    //todo
+  })
+
+  test('pattern', () => {
+    //todo
+  })
+
+  test('maxItems', () => {
+    //todo
+  })
+
+  test('array minItems', async () => {
     const handleSubmit = jest.fn()
     const handleValidateFailed = jest.fn()
     const TestComponent = () => (
@@ -118,29 +142,6 @@ describe('test all apis', () => {
     expect(getByText('The length or number of entries must be at least 2')).toBeVisible()
   })
 
-  test('exclusiveMinimum', () => {
-    //todo
-  })
-
-  test('maxLength', () => {
-    //todo
-  })
-
-  test('minLength', () => {
-    //todo
-  })
-
-  test('pattern', () => {
-    //todo
-  })
-
-  test('maxItems', () => {
-    //todo
-  })
-
-  test('minItems', () => {
-    //todo
-  })
   test('uniqueItems', () => {
     //todo
   })
