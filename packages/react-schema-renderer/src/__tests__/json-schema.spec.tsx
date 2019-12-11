@@ -3,9 +3,24 @@ import {
   registerFormField,
   connect,
   SchemaMarkupForm as SchemaForm,
-  SchemaMarkupField as Field
+  SchemaMarkupField as Field,
+  registerFieldMiddleware
 } from '../index'
+import '@testing-library/jest-dom/extend-expect'
+import { toArr } from '@uform/shared'
 import { render, fireEvent, wait } from '@testing-library/react'
+
+registerFieldMiddleware(Field => {
+  return props => {
+    const index = props.schema['x-props'] && props.schema['x-props'].index
+    return (
+      <div>
+        <Field {...props} />
+        <div data-testid={`test-errors-${index}`}>{props.errors}</div>
+      </div>
+    )
+  }
+})
 
 registerFormField(
   'string',
@@ -13,6 +28,22 @@ registerFormField(
     <input {...props} data-testid={props.testid} value={props.value || ''} />
   ))
 )
+
+registerFormField('array', props => {
+  const { value, renderField } = props
+  return (
+    <Fragment>
+      {toArr(value).map((item, index) => {
+        return (
+          <div data-testid="item" key={index}>
+            {renderField(index)}
+          </div>
+        )
+      })}
+    </Fragment>
+  )
+})
+
 
 describe('test all apis', () => {
   //todo
@@ -60,8 +91,31 @@ describe('test all apis', () => {
     //todo
   })
 
-  test('minimum', () => {
-    //todo
+  test('array minimum', async () => {
+    const handleSubmit = jest.fn()
+    const handleValidateFailed = jest.fn()
+    const TestComponent = () => (
+      <SchemaForm onSubmit={handleSubmit} onValidateFailed={handleValidateFailed}>
+        <Fragment>
+          <Field name="text" type="array" minItems={2}>
+            <Field type="string"/>
+          </Field>
+          <button type="submit" data-testid="btn">
+            Submit
+          </button>
+        </Fragment>
+      </SchemaForm>
+    )
+  
+    const { getByTestId, getByText } = render(<TestComponent />)
+  
+    fireEvent.click(getByTestId('btn'))
+    await wait()
+    fireEvent.click(getByTestId('btn'))
+    await wait()
+    expect(handleSubmit).toHaveBeenCalledTimes(0)
+    expect(handleValidateFailed).toHaveBeenCalledTimes(2)
+    expect(getByText('The length or number of entries must be at least 2')).toBeVisible()
   })
 
   test('exclusiveMinimum', () => {
