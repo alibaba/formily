@@ -2806,7 +2806,7 @@ interface IFormActions {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -2933,7 +2933,7 @@ interface IFormAsyncActions {
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,

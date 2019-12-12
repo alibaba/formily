@@ -41,10 +41,21 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const { implementActions } = useEva({
     actions
   })
+  const formSchema = useMemo(() => {
+    const result = new Schema(schema)
+    implementActions({
+      getSchema: deprecate(() => result, 'Please use the getFormSchema.'),
+      getFormSchema: () => result
+    })
+    return result
+  }, [schema])
   const registry = getRegistry()
   return {
     form: useForm(props),
-    formComponentProps,
+    formComponentProps:{
+      ...formComponentProps,
+      ...formSchema.getExtendsComponentProps()
+    },
     fields: lowercaseKeys({
       ...registry.fields,
       ...fields
@@ -57,14 +68,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     formItemComponent: formItemComponent
       ? formItemComponent
       : registry.formItemComponent,
-    schema: useMemo(() => {
-      const result = new Schema(schema)
-      implementActions({
-        getSchema: deprecate(() => result, 'Please use the getFormSchema.'),
-        getFormSchema: () => result
-      })
-      return result
-    }, [schema]),
+    schema: formSchema,
     children
   }
 }
