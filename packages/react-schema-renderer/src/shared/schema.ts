@@ -444,6 +444,6 @@ export class Schema implements ISchema {
         properties.push({ schema: item, key })
       }
     })
-    return properties
+    return properties.filter(item=>!!item)
   }
 }
