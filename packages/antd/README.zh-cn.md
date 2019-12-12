@@ -25,7 +25,7 @@ npm install --save @uform/antd
   - [`table`](#table)
 - [布局组件](#Layout-Components)
   - [`<FormCard/>`](#FormCard)
-  - [`<FormBlock/>`](#FormBlock)  
+  - [`<FormBlock/>`](#FormBlock)
   - [`<FormStep/>`](#FormStep)
   - [`<FormLayout/>`](#FormLayout)
   - [`<FormItemGrid/>`](#FormItemGrid)
@@ -53,15 +53,15 @@ npm install --save @uform/antd
   - [`useFieldState`](#useFieldState)
   - [`useForm`](#useForm)
   - [`useField`](#useField)
-  - [`useVirtualField`](#useVirtualField)    
-  - [`useFormSpy`](#useFormSpy)  
+  - [`useVirtualField`](#useVirtualField)
+  - [`useFormSpy`](#useFormSpy)
 - [API](#API)
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
   - [`FormEffectHooks`](#FormEffectHooks)
   - [`createEffectHook`](#createEffectHook)
   - [`connect`](#connect)
-  - [`registerFormField`](#registerFormField)  
+  - [`registerFormField`](#registerFormField)
 - [Interfaces](#Interfaces)
   - [`ISchema`](#ischema)
   - [`IFormActions`](#IFormActions)
@@ -82,9 +82,63 @@ npm install --save @uform/antd
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
   - [`ISpyHook`](#ISpyHook)
-  
 
 ### 使用方式
+
+#### 安装
+
+```bash
+$ yarn add antd @uform/antd
+
+# or
+
+$ npm install --save antd @uform/antd
+```
+
+### 按需加载
+
+#### 在 umijs 中使用
+在开始之前，你可能需要安装 [umijs](https://umijs.org/zh/guide/getting-started.html), 并开启 [antd 配置](https://umijs.org/zh/plugin/umi-plugin-react.html#antd)。
+
+然后在 umijs 的 `.umirc.js` 或 `config/config.js` （二选一）中增加 `extraBabelIncludes` 配置项
+
+> 在使用 uform 组件的时候，请使用 ES Modules import 导入模块
+
+```js
+extraBabelIncludes: [
+  /node_modules[\\/][\\@]uform[\\/]antd[\\/]esm/
+],
+```
+
+---
+
+#### 在 create-react-app 中使用
+
+在开始之前，请先按照 antd 的[教程](https://ant-design.gitee.io/docs/react/use-with-create-react-app-cn)，完成对 `babel-plugin-import` 的配置, 然后只需要在 `config-overrides.js` 中加入 `babelInclude`
+
+> 在使用 uform 组件的时候，请使用 ES Modules import 导入模块
+
+```js
+// config-overrides.js
+
+const { override, fixBabelImports, babelInclude } = require('customize-cra');
+const path = require('path');
+
+module.exports = override(
+  fixBabelImports('import', {
+    libraryName: 'antd',
+    libraryDirectory: 'es',
+    style: 'css',
+  }),
+  babelInclude([
+    path.resolve('src'),
+    /node_modules[\\/][\\@]uform[\\/]antd[\\/]esm/,
+  ]),
+)
+```
+
+#### 更多脚手架
+`@uform/antd` 底层依赖 `antd`，在对 `@uform/antd` 进行按需加载实际也是对 `antd` 进行按需加载，从上面的例子可以看出，脚手架只需要配置好了 `babel-plugin-import`，然后再把 `@uform/antd/esm` 加入 `babel` 的 `include` 中即可完成功能配置
 
 ---
 
@@ -405,7 +459,7 @@ interface IAntdSchemaFormProps {
     // 内联表单
     inline?: boolean
     // 扩展class
-    className?: string    
+    className?: string
     style?: React.CSSProperties
     // label 布局控制
     labelCol?: number | { span: number; offset?: number }
@@ -451,7 +505,7 @@ interface IAntdSchemaFormProps {
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import SchemaForm, {
-  Field,  
+  Field,
   connect,
   createFormActions
 } from '@uform/antd'
@@ -481,7 +535,7 @@ ReactDOM.render(
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import SchemaForm, {
-  Field,  
+  Field,
   createFormActions,
   FormLayout,
   FormButtonGroup,
@@ -597,7 +651,7 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import SchemaForm, {
   FormSlot,
-  Field,  
+  Field,
   createFormActions,
   FormLayout,
   FormButtonGroup,
@@ -611,10 +665,10 @@ ReactDOM.render(
     <SchemaForm>
       <FormSlot><div>required</div></FormSlot>
       <Field name="a" required type="string" title="field1" />
-      
+
       <FormSlot><div>description</div></FormSlot>
       <Field name="b" description="description" type="string" title="field1" />
-      
+
       <FormSlot><div>default value</div></FormSlot>
       <Field name="c" default={10} type="string" title="field1" />
 
@@ -2416,7 +2470,7 @@ const FormFragment = () => {
 
   return (
     <React.Fragment>
-      <CheckedField name="trigger" label="show/hide" /> 
+      <CheckedField name="trigger" label="show/hide" />
       <div>
         <InputField label="a" name="a" />
       </div>
@@ -2457,7 +2511,7 @@ import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Form, Field, VirtualField,
   createFormActions, createEffectHook,
-  useForm,  
+  useForm,
   useFormState,
   useFormEffects,
   useFieldState,
@@ -2485,7 +2539,7 @@ const InputField = props => (
 )
 
 const actions = createFormActions()
-const FormFragment = (props) => {  
+const FormFragment = (props) => {
   const [formState, setFormState ] = useFormState({ extendVar: 0 })
   const { extendVar } = formState
 
@@ -2523,7 +2577,7 @@ import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Form, Field, VirtualField,
   createFormActions, createEffectHook,
-  useForm,  
+  useForm,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
@@ -2551,12 +2605,12 @@ const InputField = props => (
 
 const changeTab$ = createEffectHook('changeTab')
 const actions = createFormActions()
-const TabFragment = (props) => {  
+const TabFragment = (props) => {
   const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
   const { current } = fieldState
   const { children, dataSource, form } = props
 
-  const update = (cur) => {    
+  const update = (cur) => {
     form.notify('changeTab', cur)
     setLocalFieldState({
       current: cur
@@ -2665,7 +2719,7 @@ const FormFragment = (props) => {
     props: fieldProps,
     mutators
   } = useField({ name: 'username' })
-  
+
   return <input {...fieldProps} {...props} value={state.value} onChange={mutators.change} />
 }
 ```
@@ -2691,7 +2745,7 @@ const FormFragment = (props) => {
     state,
     props: fieldProps,
   } = UseVirtualField({ name: 'username' })
-  
+
   return <div style={{ width: fieldProps.width, height: fieldProps.height }}>
     {props.children}
   </div>
@@ -2723,7 +2777,7 @@ const FormFragment = (props) => {
       count: state.count ? state.count + 1 : 1
     })
   })
-  
+
   return <div>
     <div>count: {state.count || 0}</div>
   </div>
@@ -2886,7 +2940,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > 包装字段组件，让字段组件只需要支持value/defaultValue/onChange属性即可快速接入表单
 
 ```typescript
-type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOptions<T>) => 
+type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOptions<T>) =>
 (Target: T) => React.PureComponent<IFieldProps>
 ```
 **用法**
@@ -3606,12 +3660,12 @@ interface IConnectOptions<T> {
   //默认props
   defaultProps?: Partial<IConnectProps>
   //取值函数，有些场景我们的事件函数取值并不是事件回调的第一个参数，需要做进一步的定制
-  getValueFromEvent?: (props:  IFieldProps['x-props'], event: Event, ...args: any[]) => any 
+  getValueFromEvent?: (props:  IFieldProps['x-props'], event: Event, ...args: any[]) => any
   //字段组件props transformer
-  getProps?: (connectProps: IConnectProps, fieldProps: IFieldProps) => IConnectProps 
+  getProps?: (connectProps: IConnectProps, fieldProps: IFieldProps) => IConnectProps
   //字段组件component transformer
-  getComponent?: ( 
-    target: T, 
+  getComponent?: (
+    target: T,
     connectProps: IConnectProps,
     fieldProps: IFieldProps
   ) => T
