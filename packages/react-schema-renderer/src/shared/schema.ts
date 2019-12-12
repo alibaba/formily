@@ -166,7 +166,7 @@ export class Schema implements ISchema {
       rules.push({ max: this.maxItems })
     }
     if (isValid(this.minItems)) {
-      rules.push({ max: this.minItems })
+      rules.push({ min: this.minItems })
     }
     if (isValid(this.maxLength)) {
       rules.push({ max: this.maxLength })
