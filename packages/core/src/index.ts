@@ -891,22 +891,24 @@ export function createForm<FieldProps, VirtualFieldProps>(
     field: IField | IVirtualField,
     nodePath: FormPath
   ) {
-    env.taskQueue.forEach((task, index) => {
-      const { pattern, callbacks } = task
+    for (let index = 0; index < env.taskQueue.length; index++) {
+      const { pattern, callbacks } = env.taskQueue[index]
+      let removed = false
       if (matchStrategy(pattern, nodePath)) {
         callbacks.forEach(callback => {
           field.setState(callback)
         })
         if (!pattern.isWildMatchPattern && !pattern.isMatchPattern) {
-          env.taskQueue.splice(index, 1)
-          env.taskQueue.forEach(({ pattern }, index) => {
-            if (pattern.toString() === nodePath.toString()) {
-              env.taskIndexes[nodePath.toString()] = index
-            }
-          })
+          env.taskQueue.splice(index--, 1)
+          removed = true
         }
       }
-    })
+      if (!removed) {
+        env.taskIndexes[pattern.toString()] = index
+      } else {
+        delete env.taskIndexes[pattern.toString()]
+      }
+    }
   }
 
   function setFieldState(
