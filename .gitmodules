@@ -1,0 +1,3 @@
+[submodule "packages/miniapp-schema-renderer"]
+	path = packages/miniapp-schema-renderer
+	url = git@github.com:jincdream/sorm.git
