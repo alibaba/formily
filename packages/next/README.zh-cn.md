@@ -2355,48 +2355,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from '@uform/react'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  VirtualField,
+  createFormActions,
+  useFormEffects,
+  LifeCycleTypes,
+  createVirtualBox
+} from '@uform/next'
 
 const actions = createFormActions()
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
 
-const CheckedField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
-            mutators.change(!state.value)
-          }} checked={!!state.value} /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
-
-const FormFragment = () => {
+const FragmentContainer = createVirtualBox('ffb', (props) => {
   useFormEffects(($, { setFieldState }) => {
-    $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {
+    $(LifeCycleTypes.ON_FORM_MOUNT).subscribe(() => {
       setFieldState('a~', state => state.visible = false)
     })
 
@@ -2415,24 +2387,29 @@ const FormFragment = () => {
 
   return (
     <React.Fragment>
-      <CheckedField name="trigger" label="show/hide" /> 
-      <div>
-        <InputField label="a" name="a" />
-      </div>
-      <div>
-        <InputField label="a-copy" name="a-copy" />
-      </div>
+      {props.children}
     </React.Fragment>
   )
+});
+
+const FormFragment = () => {
+  return <FragmentContainer>
+    <Field
+      type="radio"
+      name="trigger"
+      title="trigger"
+      enum={[{ label: 'show', value: true }, { label: 'hide', value: false } ]}
+    />
+    <Field type="string" name="a" title="a" />
+    <Field type="string" name="a-copy" title="a-copy" />   
+  </FragmentContainer>   
 }
 
 const App = () => {
   return (
-    <Form
-      actions={actions}
-    >
+    <SchemaForm actions={actions}>
       <FormFragment />
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -2461,7 +2438,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@uform/next'
 
 const InputField = props => (
   <Field {...props}>
