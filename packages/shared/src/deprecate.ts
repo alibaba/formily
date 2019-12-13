@@ -10,7 +10,7 @@ export function deprecate<P1 = any, P2 = any, P3 = any, P4 = any, P5 = any>(
   if (isFn(method)) {
     return function(p1?: P1, p2?: P2, p3?: P3, p4?: P4, p5?: P5) {
       deprecate(message, help)
-      method.apply(this, arguments)
+      return method.apply(this, arguments)
     }
   }
   if (isStr(method) && !caches[method]) {

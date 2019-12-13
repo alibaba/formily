@@ -109,6 +109,8 @@ import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
 
+window.aa = actions
+
 const App = () => {
   return (
     <SchemaForm actions={actions}>
