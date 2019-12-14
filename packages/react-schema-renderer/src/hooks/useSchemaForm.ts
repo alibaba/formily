@@ -15,7 +15,7 @@ const lowercaseKeys = (obj: any) => {
   return result
 }
 
-const combineEffects = ({ effects, linkages, registry }): IFormEffect => {
+const combineEffects = ({ effects, linkages, registry,scope }): IFormEffect => {
   return ($, actions) => {
     if(isFn(effects)) effects($, actions)
     linkages.forEach((item: any) => {
@@ -48,6 +48,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     onValidateFailed,
     useDirty,
     children,
+    expressionScope,
     form,
     editable,
     validateFirst,
@@ -71,7 +72,8 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
       effects: combineEffects({
         effects,
         linkages: formSchema.linkages,
-        registry
+        registry,
+        scope:expressionScope
       })
     }),
     formComponentProps: {

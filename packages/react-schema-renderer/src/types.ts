@@ -159,6 +159,7 @@ export interface ISchemaFormProps<
   virtualFields?: ISchemaFormRegistry['virtualFields']
   formComponent?: ISchemaFormRegistry['formComponent']
   formItemComponent?: ISchemaFormRegistry['formItemComponent']
+  expressionScope?: { [key: string]: any }
 }
 
 export interface IMarkupSchemaFieldProps extends ISchema {
