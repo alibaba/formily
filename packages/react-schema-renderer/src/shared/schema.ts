@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   ValidatePatternRules,
   ValidateArrayRules,
@@ -17,7 +16,7 @@ import {
   FormPathPattern,
   FormPath
 } from '@uform/shared'
-import { ISchemaFieldComponentProps, SchemaMessage, ISchema } from '../types'
+import { SchemaMessage, ISchema } from '../types'
 
 const numberRE = /^\d+$/
 
@@ -32,13 +31,8 @@ export class Schema implements ISchema {
   public default?: any
   public readOnly?: boolean
   public writeOnly?: boolean
-  public type?: 'string' | 'object' | 'array' | 'number' | string
-  public enum?: Array<
-  | string
-  | number
-  | { label: SchemaMessage; value: any; [key: string]: any }
-  | { key: any; title: SchemaMessage; [key: string]: any }
->
+  public type?: ISchema['type']
+  public enum?: ISchema['enum']
   public const?: any
   public multipleOf?: number
   public maximum?: number
@@ -71,30 +65,41 @@ export class Schema implements ISchema {
   public ['x-index']?: number
   public ['x-rules']?: ValidatePatternRules
   public ['x-component']?: string
-  public ['x-component-props']?: { [name: string]: any }
-  public ['x-render']?: <T = ISchemaFieldComponentProps>(
-    props: T & {
-      renderComponent: () => React.ReactElement
-    }
-  ) => React.ReactElement
-  public ['x-effect']?: (
-    dispatch: (type: string, payload: any) => void,
-    option?: object
-  ) => { [key: string]: any }
+  public ['x-component-props']?: ISchema['x-component-props']
+  public ['x-render']?: ISchema['x-render']
+  public ['x-effect']?: ISchema['x-effect']
   /** schema class self specs**/
 
   public parent?: Schema
 
   public _isJSONSchemaObject = true
 
-  public name?: string
+  public key?: string
 
-  constructor(json: ISchema, parent?: Schema, name?: string) {
+  public path?: string
+
+  public linkages?: ISchema['x-linkages']
+
+  constructor(json: ISchema, parent?: Schema, key?: string) {
     if (parent) {
       this.parent = parent
     }
-    if (name) {
-      this.name = name
+    if (key) {
+      this.key = key
+    }
+    if (this.parent && this.parent.isArray()) {
+      this.path = this.parent.path + '.*.' + this.key
+    } else {
+      if (this.parent) {
+        this.path = this.parent.path
+          ? this.parent.path + '.' + this.key
+          : this.key
+      } else {
+        this.path = ''
+      }
+    }
+    if (!this.parent) {
+      this.linkages = []
     }
     return this.fromJSON(json) as any
   }
@@ -152,6 +157,7 @@ export class Schema implements ISchema {
       additionalItems,
       patternProperties,
       items,
+      path,
       parent,
       ...props
     } = this
@@ -337,6 +343,26 @@ export class Schema implements ISchema {
     this.items = new Schema(schema, this)
     return this.items
   }
+
+  private createLinkages(linkages: ISchema['x-linkages']) {
+    let root: Schema = this
+    while (true) {
+      if (root.parent) {
+        root = root.parent
+      } else {
+        break
+      }
+    }
+    root.linkages = root.linkages.concat(
+      linkages.map(item => {
+        return {
+          name: this.path,
+          ...item
+        }
+      })
+    )
+  }
+
   toJSON() {
     const result: ISchema = this.getSelfProps()
     if (isValid(this.properties)) {
@@ -372,6 +398,9 @@ export class Schema implements ISchema {
     }
     if (isValid(json['x-component'])) {
       this['x-component'] = lowercase(json['x-component'])
+    }
+    if (isValid(json['x-linkages'])) {
+      this.createLinkages(json['x-linkages'])
     }
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {
@@ -444,6 +473,6 @@ export class Schema implements ISchema {
         properties.push({ schema: item, key })
       }
     })
-    return properties.filter(item=>!!item)
+    return properties.filter(item => !!item)
   }
 }
