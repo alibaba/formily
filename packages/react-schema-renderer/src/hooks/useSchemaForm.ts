@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
-import { useForm } from '@uform/react'
+import { useForm, IFormEffect } from '@uform/react'
 import { Schema } from '../shared/schema'
-import { deprecate, each, lowercase } from '@uform/shared'
+import { deprecate, each, lowercase, isFn } from '@uform/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
 import { createSchemaFormActions } from '../shared/actions'
@@ -13,6 +13,21 @@ const lowercaseKeys = (obj: any) => {
     result[lowercase(key)] = value
   })
   return result
+}
+
+const combineEffects = ({ effects, linkages, registry }): IFormEffect => {
+  return ($, actions) => {
+    if(isFn(effects)) effects($, actions)
+    linkages.forEach((item: any) => {
+      if (item && item.type) {
+        if (registry.linkages[item.type]) {
+          if (isFn(registry.linkages[item.type](item))) {
+            registry.linkages[item.type](item)($, actions)
+          }
+        }
+      }
+    })
+  }
 }
 
 const useInternalSchemaForm = (props: ISchemaFormProps) => {
@@ -51,8 +66,15 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
   }, [schema])
   const registry = getRegistry()
   return {
-    form: useForm(props),
-    formComponentProps:{
+    form: useForm({
+      ...props,
+      effects: combineEffects({
+        effects,
+        linkages: formSchema.linkages,
+        registry
+      })
+    }),
+    formComponentProps: {
       ...formComponentProps,
       ...formSchema.getExtendsComponentProps()
     },
