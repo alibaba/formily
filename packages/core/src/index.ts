@@ -187,11 +187,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const isEmptyValue = !isValid(published.value)
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
-          field.setState((state: IFieldState<FieldProps>) => {
+          field.setSourceState((state: IFieldState<FieldProps>) => {
             if (isEmptyValue) state.value = getFormValuesIn(state.name)
             if (isEmptyInitialValue)
               state.initialValue = getFormInitialValuesIn(state.name)
-          }, true)
+          })
         }
       }
       if (valueChanged) {
@@ -386,7 +386,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
         field.setState((state: IFieldState<FieldProps>) => {
           const formValue = getFormValuesIn(dataPath)
           const formInitialValue = getFormInitialValuesIn(dataPath)
-          state.initialized = true
           if (isValid(value)) {
             // value > formValue > initialValue
             state.value = value
@@ -408,6 +407,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           state.rules = rules as any
           state.selfEditable = editable
           state.formEditable = options.editable
+          state.initialized = true
         })
         batchRunTaskQueue(field, nodePath)
       })
@@ -604,7 +604,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
-      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
 
     function getValue() {
