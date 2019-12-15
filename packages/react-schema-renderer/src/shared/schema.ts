@@ -88,7 +88,7 @@ export class Schema implements ISchema {
       this.key = key
     }
     if (this.parent && this.parent.isArray()) {
-      this.path = this.parent.path + '.*.' + this.key
+      this.path = this.parent.path + '.*'
     } else {
       if (this.parent) {
         this.path = this.parent.path
