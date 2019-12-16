@@ -135,6 +135,7 @@ export const getExpressionValue = value => {
   }
   return value
 }
+
 export const getInputType = value => {
   if (typeof value === 'object' || isExpression(value)) {
     return InputTypes.TEXT_AREA
@@ -147,4 +148,14 @@ export const getInputType = value => {
     case 'boolean':
       return InputTypes.CHECKBOX
   }
+}
+
+export const fieldTypeDisabled = schema => {
+  if (schema.type === 'object' && !_.isEmpty(schema.properties)) {
+    return true
+  }
+  if (schema.type === 'array' && !_.isEmpty(schema.items)) {
+    return true
+  }
+  return false
 }
