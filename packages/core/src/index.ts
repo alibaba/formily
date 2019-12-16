@@ -813,11 +813,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }))
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
 
-      let payload
+      let payload,
+        values = state.getState(state => clone(state.values))
       if (isFn(onSubmit)) {
-        payload = await Promise.resolve(
-          onSubmit(state.getState(state => clone(state.values)))
-        )
+        payload = await Promise.resolve(onSubmit(values))
       }
 
       state.setState(state => {
@@ -825,6 +824,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       })
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
       return {
+        values,
         validated,
         payload
       }

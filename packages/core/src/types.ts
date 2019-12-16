@@ -265,6 +265,7 @@ export interface IVirtualFieldStateProps<FieldProps = any> {
 export type IFormValidateResult = ValidateNodeResult
 
 export interface IFormSubmitResult {
+  values: any
   validated: IFormValidateResult
   payload: any
 }
