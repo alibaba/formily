@@ -402,11 +402,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
           if (isValid(display)) {
             state.display = display
           }
-          state.props = props
-          state.required = required
-          state.rules = rules as any
-          state.selfEditable = editable
-          state.formEditable = options.editable
+          if (isValid(props)) {
+            state.props = props
+          }
+          if (isValid(required)) {
+            state.required = required
+          }
+          if (isValid(rules)) {
+            state.rules = rules
+          }
+          if (isValid(editable)) {
+            state.selfEditable = editable
+          }
+          if (isValid(options.editable)) {
+            state.formEditable = options.editable
+          }
           state.initialized = true
         })
         batchRunTaskQueue(field, nodePath)
