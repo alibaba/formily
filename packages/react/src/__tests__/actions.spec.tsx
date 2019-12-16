@@ -137,7 +137,12 @@ describe('test all apis', () => {
   test('validate', async () => {
     const { queryByTestId } = renderForm()
     const errorsEle = queryByTestId('field-errors')
-    await actions.validate()
+    try {
+      await actions.validate()
+    } catch (e) {
+      // do nothing...
+    }
+    
     expect(onValidateFailedHandler).toBeCalledWith({
       errors: [{ path: 'aaa', messages: ['This field is required'] }],
       warnings: []
@@ -148,7 +153,12 @@ describe('test all apis', () => {
   test('async valid', async () => {
     const { queryByTestId } = renderForm(true)
     const errorsEle = queryByTestId('field-errors')
-    await asyncActions.validate()
+    try {
+      await asyncActions.validate()
+    } catch (e) {
+      // do nothing...
+    }
+    
     expect(onValidateFailedHandler).toBeCalledWith({
       errors: [{ path: 'aaa', messages: ['This field is required'] }],
       warnings: []

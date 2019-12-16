@@ -15,6 +15,7 @@
     "test": "npm run lint && jest",
     "test:core": "jest --watch packages/core/src/__tests__/*.spec.ts",
     "test:hook": "jest --watch packages/react/src/__tests__/*.spec.tsx",
+    "test:renderer": "jest --watch packages/react-schema-renderer/src/__tests__/*.spec.tsx",
     "test:editor": "jest --watch packages/react-schema-editor/src/__tests__/*.spec.ts",
     "test:prod": "cross-env TEST_ENV=production npm run build && jest",
     "doc:core": "doc-scripts start -i packages/core",

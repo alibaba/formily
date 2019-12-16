@@ -162,8 +162,9 @@ export const createFormEffects = <Payload = any, Actions = any>(
               isFn(matcher) && !matcher['path']
                 ? matcher
                 : (payload: T): boolean => {
-                    return FormPath.parse(matcher as any).match(
-                      payload && (payload as any).name
+                    return FormPath.parse(matcher as any).matchAliasGroup(
+                      payload && (payload as any).name,
+                      payload && (payload as any).path
                     )
                   }
             )

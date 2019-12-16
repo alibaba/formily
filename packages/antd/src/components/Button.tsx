@@ -1,5 +1,9 @@
 import React from 'react'
-import { FormSpy, LifeCycleTypes, createVirtualBox } from '@uform/react-schema-renderer'
+import {
+  FormSpy,
+  LifeCycleTypes,
+  createVirtualBox
+} from '@uform/react-schema-renderer'
 import { Button } from 'antd'
 import { ButtonProps } from 'antd/lib/button'
 import { ISubmitProps, IResetProps } from '../types'
@@ -46,8 +50,14 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
       {({ state, form }) => {
         return (
           <Button
-            type="primary"
-            onClick={() => form.submit(onSubmit)}
+            onClick={e => {
+              if (props.htmlType !== 'submit') {
+                form.submit(onSubmit)
+              }
+              if (props.onClick) {
+                props.onClick(e)
+              }
+            }}
             disabled={showLoading ? state.submitting : undefined}
             {...props}
             loading={showLoading ? state.submitting : undefined}
@@ -61,7 +71,9 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
 }
 
 Submit.defaultProps = {
-  showLoading: true
+  showLoading: true,
+  type: 'primary',
+  htmlType: 'submit'
 }
 
 export const Reset: React.FC<IResetProps> = ({

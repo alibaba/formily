@@ -2,7 +2,7 @@ English | [简体中文](./README.zh-cn.md)
 
 <p align="center">
 <img src="https://img.alicdn.com/tfs/TB19uf2XBGw3KVjSZFwXXbQ2FXa-1400-689.png">
-<a href="https://www.npmjs.com/package/@uform/core"><a href="#backers" alt="sponsors on Open Collective"><img src="https://opencollective.com/uform/backers/badge.svg" /></a> <a href="#sponsors" alt="Sponsors on Open Collective"><img src="https://opencollective.com/uform/sponsors/badge.svg" /></a> <img src="https://img.shields.io/npm/v/@uform/core.svg"></a>
+<a href="https://www.npmjs.com/package/@uform/core"><img src="https://img.shields.io/npm/v/@uform/core.svg"></a>
 <a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
 <a href="https://travis-ci.com/alibaba/uform"><img src="https://travis-ci.com/alibaba/uform.svg?branch=master"></a>
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
