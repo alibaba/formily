@@ -1,15 +1,14 @@
 import React from 'react'
-import { Button, Icon, Grid } from '@alifd/next'
-import { jsonToSchema } from './utils'
+import { Button, Icon, Row, Col } from 'antd'
 import { SchemaTree } from './components/SchemaTree'
 import { SchemaCode } from './components/SchemaCode'
-import json from './utils/schema'
-const { Row, Col } = Grid
 
-export const SchemaEditor: React.FC = () => {
-  const initialSchema = jsonToSchema(json)
-  const [schema, setSchema] = React.useState(initialSchema)
+import 'antd/dist/antd.css'
 
+export const SchemaEditor: React.FC<{
+  schema: any
+  onChange: (schema: any) => void
+}> = ({ schema, onChange }) => {
   return (
     <div className="schema-editor">
       <div className="schema-menus">
@@ -18,12 +17,15 @@ export const SchemaEditor: React.FC = () => {
           <Icon type="success"></Icon>预览
         </Button>
       </div>
-      <Row className="schema-editor-main">
-        <Col span={14} className="schema-col schema-tree splitter">
-          <SchemaTree schema={schema} onChange={setSchema}></SchemaTree>
+      <Row className="schema-editor-main" style={{ minHeight: '350px' }}>
+        <Col span={24} className="schema-col schema-tree splitter">
+          <SchemaTree schema={schema} onChange={onChange} />
         </Col>
-        <Col span={10} className="schema-col schema-code">
-          <SchemaCode schema={schema} onChange={setSchema}></SchemaCode>
+        <Col
+          className="schema-col schema-code"
+          style={{ position: 'absolute', right: '0px', height: '100%' }}
+        >
+          <SchemaCode schema={schema} onChange={onChange}></SchemaCode>
         </Col>
       </Row>
     </div>

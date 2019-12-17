@@ -433,9 +433,10 @@ enum LifeCycleTypes {
   ON_FORM_MOUNT = 'onFormMount', //表单挂载时触发
   ON_FORM_UNMOUNT = 'onFormUnmount', //表单卸载时触发
   ON_FORM_SUBMIT = 'onFormSubmit', //表单提交时触发
-  ON_FORM_RESET = 'onFormReset', //表单重置时触发
+  ON_FORM_RESET = 'onFormReset', //表单重置时触发  
   ON_FORM_SUBMIT_START = 'onFormSubmitStart', //表单提交开始时触发
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd', //表单提交结束时触发
+  ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed', // 表单提交时因为校验失败而出发
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange', //表单值变化时触发
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange', //表单初始值变化时触发
   ON_FORM_VALIDATE_START = 'onFormValidateStart', //表单校验开始时触发
@@ -540,7 +541,7 @@ interface IForm {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -967,9 +968,9 @@ interface IField/IVirtualField {
   //设置状态
   setState: (callback?: (state: IFieldState | Draft<IFieldState>) => void, silent?: boolean) => void
   //获取源状态
-  unsafe_getSourceState: (callback?: (state: IFieldState) => any) => any
+  getSourceState: (callback?: (state: IFieldState) => any) => any
   //设置源状态
-  unsafe_setSourceState: (callback?: (state: IFieldState) => void) => void
+  setSourceState: (callback?: (state: IFieldState) => void) => void
   //获取状态变化情况
   hasChanged: (key?: string) => boolean
   //获取状态脏

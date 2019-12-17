@@ -31,6 +31,7 @@ export enum LifeCycleTypes {
   ON_FORM_RESET = 'onFormReset',
   ON_FORM_SUBMIT_START = 'onFormSubmitStart',
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
+  ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
@@ -229,6 +230,7 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
+  validateConcurrentTimeMS?: number
 }
 
 export interface IVirtualFieldState<FieldProps = any> {
@@ -263,6 +265,7 @@ export interface IVirtualFieldStateProps<FieldProps = any> {
 export type IFormValidateResult = ValidateNodeResult
 
 export interface IFormSubmitResult {
+  values: any
   validated: IFormValidateResult
   payload: any
 }
@@ -275,6 +278,10 @@ export interface IFormResetOptions {
 
 export interface IFormGraph {
   [path: string]: IFormState | IFieldState | IVirtualFieldState
+}
+
+export type IFormExtendedValidateFieldOptions = ValidateFieldOptions & {
+  throwErrors?: boolean
 }
 
 export interface IMutators {
@@ -290,7 +297,9 @@ export interface IMutators {
   move($from: number, $to: number): any[]
   moveDown(index: number): any[]
   moveUp(index: number): any[]
-  validate(): Promise<IFormValidateResult>
+  validate(
+    opts?: IFormExtendedValidateFieldOptions
+  ): Promise<IFormValidateResult>
   exist(index?: number | string): boolean
 }
 
@@ -307,8 +316,8 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   batch: (callback?: () => void) => void
   getState: (callback?: (state: S) => any) => any
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
-  unsafe_getSourceState: (callback?: (state: S) => any) => any
-  unsafe_setSourceState: (callback?: (state: S) => void) => void
+  getSourceState: (callback?: (state: S) => any) => any
+  setSourceState: (callback?: (state: S) => void) => void
   hasChanged: (path?: FormPathPattern) => boolean
   isDirty: (key?: string) => boolean
   getDirtyInfo: () => StateDirtyMap<S>
@@ -329,7 +338,7 @@ export interface IForm {
   reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
   validate(
     path?: FormPathPattern,
-    options?: ValidateFieldOptions
+    options?: IFormExtendedValidateFieldOptions
   ): Promise<IFormValidateResult>
   setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
   getFormState(callback?: (state: IFormState) => any): any

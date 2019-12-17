@@ -44,7 +44,7 @@ Object {
     "pristine": false,
     "props": Object {
       "default": "123",
-      "name": "aa",
+      "key": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",
@@ -114,7 +114,7 @@ Object {
     "pristine": false,
     "props": Object {
       "default": "123",
-      "name": "aa",
+      "key": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",
@@ -172,7 +172,7 @@ Object {
     "name": "cc",
     "path": "cc",
     "props": Object {
-      "name": "cc",
+      "key": "cc",
       "type": "object",
       "x-component": "box",
     },
@@ -199,7 +199,7 @@ Object {
     "pristine": false,
     "props": Object {
       "default": "123",
-      "name": "aa",
+      "key": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",

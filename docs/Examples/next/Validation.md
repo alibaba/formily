@@ -18,7 +18,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
-  Field,
+  SchemaMarkupField as Field,
   FormButtonGroup,
   Submit,
   Reset,
@@ -64,7 +64,7 @@ const App = () => (
         title="手机号"
         required
       />
-      <Field type="string" name="qq" x-rules="qq" title="QQ号" required />
+      <Field type="string" name="qq" x-rules="qq" title="QQ号" minLength={3} required />
       <Field type="string" name="email" x-rules="email" title="邮箱" required />
       <Field
         type="string"
@@ -133,12 +133,15 @@ import {
   FormCard,
   FormPath,
   FormBlock,
-  FormLayout
+  FormLayout,
+  FormEffectHooks
 } from '@uform/next'
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
+
+const { onFieldValueChange$ } = FormEffectHooks
 
 const App = () => (
   <Printer>
@@ -146,7 +149,7 @@ const App = () => (
       labelCol={6}
       wrapperCol={6}
       effects={($, { setFieldState, getFieldState }) => {
-        $('onFieldValueChange', '*(password,confirm)').subscribe(fieldState => {
+        onFieldValueChange$('*(password,confirm)').subscribe(fieldState => {
           const selfName = fieldState.name
           const selfValue = fieldState.value
           const otherName = selfName == 'password' ? 'confirm' : 'password'

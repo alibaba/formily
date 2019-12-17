@@ -5,13 +5,15 @@ import {
   ISchemaFormRegistry,
   ISchemaFieldComponent,
   ISchemaFieldComponentProps,
-  ISchemaVirtualFieldComponentProps
+  ISchemaVirtualFieldComponentProps,
+  ISchemaLinkageHandler
 } from '../types'
 import pascalCase from 'pascal-case'
 
 const registry: ISchemaFormRegistry = {
   fields: {},
   virtualFields: {},
+  linkages: {},
   wrappers: [],
   formItemComponent: ({ children }) => children,
   formComponent: 'form'
@@ -21,6 +23,7 @@ export const getRegistry = () => {
   return {
     fields: registry.fields,
     virtualFields: registry.virtualFields,
+    linkages: registry.linkages,
     formItemComponent: registry.formItemComponent,
     formComponent: registry.formComponent
   }
@@ -69,6 +72,12 @@ export function registerFormField(
       registry.fields[name].__WRAPPERS__ = registry.wrappers
     }
     registry.fields[name].displayName = pascalCase(name)
+  }
+}
+
+export function registerLinkage(type: string, handler: ISchemaLinkageHandler) {
+  if (isFn(handler)) {
+    registry.linkages[type] = handler
   }
 }
 

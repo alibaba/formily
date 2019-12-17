@@ -46,7 +46,9 @@ export default {
     return length > max ? getRuleMessage(rule, 'max') : ''
   },
   maximum(value: any, rule: ValidateDescription) {
-    return Number(value) > Number(rule.maximum) ? getMessage('maximum') : ''
+    return Number(value) > Number(rule.maximum)
+      ? getRuleMessage(rule, 'maximum')
+      : ''
   },
   exclusiveMaximum(value: any, rule: ValidateDescription) {
     return Number(value) >= Number(rule.maximum)
@@ -70,7 +72,7 @@ export default {
   },
   min(value: any, rule: ValidateDescription) {
     const length = getLength(value)
-    const min = Number(rule.len)
+    const min = Number(rule.min)
     return length < min ? getRuleMessage(rule, 'min') : ''
   },
   pattern(value: any, rule: ValidateDescription) {

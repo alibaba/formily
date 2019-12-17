@@ -53,7 +53,7 @@ npm install --save @uform/react
   - [`useFieldState`](#useFieldState)
   - [`useForm`](#useForm)
   - [`useField`](#useField)
-  - [`useVirtualField`](#useVirtualField)    
+  - [`useVirtualField`](#useVirtualField)
   - [`useFormSpy`](#useFormSpy)
 - [API](#API)
   - [`createFormActions`](#createFormActions)
@@ -63,7 +63,7 @@ npm install --save @uform/react
 - [Interfaces](#Interfaces)
   - [`IForm`](#IForm)
   - [`Imutators`](#Imutators)
-  - [`IFormActions`](#IFormActions)  
+  - [`IFormActions`](#IFormActions)
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`IFieldState`](#IFieldState)
   - [`IVirtualFieldState`](#IVirtualFieldState)
@@ -604,7 +604,7 @@ const App = () => {
     <Form
       actions={actions}
       effects={($, { validate, setFieldState }) => {
-        $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {          
+        $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {
           setFieldState('displayTrigger', state => state.value = true)
           setFieldState('visibleTrigger', state => state.value = true)
           setFieldState('a', state => state.value = 1)
@@ -621,7 +621,7 @@ const App = () => {
           setFieldState('b', state => {
             state.display = fieldState.value
           })
-        })        
+        })
       }}
     >
       <div>
@@ -638,7 +638,7 @@ const App = () => {
         {({ state, form }) => {
           return (<code>
             <pre>
-              {JSON.stringify(form.getFormState(state => state.values), null, 2)}    
+              {JSON.stringify(form.getFormState(state => state.values), null, 2)}
             </pre>
           </code>)
         }}
@@ -727,7 +727,7 @@ const App = () => {
         })
       }}
     >
-      <CheckedField name="trigger" label="show/hide" /> 
+      <CheckedField name="trigger" label="show/hide" />
       <div>
         <InputField label="a" name="a" />
       </div>
@@ -827,11 +827,11 @@ const App = () => {
                 state.props.loading = false
                 state.props.dataSource = fieldState.value ? dataSource : []
               })
-            }, 300)     
+            }, 300)
         })
       }}
-    > 
-      <CheckedField name="trigger" label="show/reset dataSource" /> 
+    >
+      <CheckedField name="trigger" label="show/reset dataSource" />
       <div>
         <SelectField label="sync-source" name="sync-source" />
       </div>
@@ -1107,7 +1107,7 @@ const App = () => {
         getEffects()
       }}
     >
-      <CheckedField name="trigger" label="show/hide" /> 
+      <CheckedField name="trigger" label="show/hide" />
       <div>
         <InputField label="a" name="a" />
       </div>
@@ -1262,7 +1262,7 @@ const App = () => {
       <label>range input</label>
       <Field name="[start,end]">
         {({ state, mutators }) => {
-          
+
           const [start, end] = state.value
           return <div>
             <label>start</label>
@@ -1287,7 +1287,7 @@ const App = () => {
             Form values:
             <code>
               <pre>
-                {JSON.stringify(form.getFormState(state => state.values), null, 2)}    
+                {JSON.stringify(form.getFormState(state => state.values), null, 2)}
               </pre>
             </code>
           </div>)
@@ -1352,7 +1352,7 @@ const App = () => {
               set value
             </button>
             <div>Field value:</div>
-            <code>              
+            <code>
               <pre>{JSON.stringify(state.value, null, 2)}</pre>
             </code>
           </div>
@@ -1379,7 +1379,7 @@ const App = () => {
             Form values:
             <code>
               <pre>
-                {JSON.stringify(form.getFormState(state => state.values), null, 2)}    
+                {JSON.stringify(form.getFormState(state => state.values), null, 2)}
               </pre>
             </code>
           </div>)
@@ -1653,7 +1653,7 @@ const App = () => {
           }}
         </Field>
 
-        
+
       </div>
       <button
         onClick={() =>
@@ -1986,6 +1986,7 @@ interface IFormConsumerProps {
 #### `useFormEffects`
 
 > 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
+> 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
 
 **签名**
 
@@ -2056,7 +2057,7 @@ const FormFragment = () => {
 
   return (
     <React.Fragment>
-      <CheckedField name="trigger" label="show/hide" /> 
+      <CheckedField name="trigger" label="show/hide" />
       <div>
         <InputField label="a" name="a" />
       </div>
@@ -2097,7 +2098,7 @@ import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Form, Field, VirtualField,
   createFormActions, createEffectHook,
-  useForm,  
+  useForm,
   useFormState,
   useFormEffects,
   useFieldState,
@@ -2125,7 +2126,7 @@ const InputField = props => (
 )
 
 const actions = createFormActions()
-const FormFragment = (props) => {  
+const FormFragment = (props) => {
   const [formState, setFormState ] = useFormState({ extendVar: 0 })
   const { extendVar } = formState
 
@@ -2163,7 +2164,7 @@ import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Form, Field, VirtualField,
   createFormActions, createEffectHook,
-  useForm,  
+  useForm,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
@@ -2191,12 +2192,12 @@ const InputField = props => (
 
 const changeTab$ = createEffectHook('changeTab')
 const actions = createFormActions()
-const TabFragment = (props) => {  
+const TabFragment = (props) => {
   const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
   const { current } = fieldState
   const { children, dataSource, form } = props
 
-  const update = (cur) => {    
+  const update = (cur) => {
     form.notify('changeTab', cur)
     setLocalFieldState({
       current: cur
@@ -2305,7 +2306,7 @@ const FormFragment = (props) => {
     props: fieldProps,
     mutators
   } = useField({ name: 'username' })
-  
+
   return <input {...fieldProps} {...props} value={state.value} onChange={mutators.change} />
 }
 ```
@@ -2331,7 +2332,7 @@ const FormFragment = (props) => {
     state,
     props: fieldProps,
   } = UseVirtualField({ name: 'username' })
-  
+
   return <div style={{ width: fieldProps.width, height: fieldProps.height }}>
     {props.children}
   </div>
@@ -2363,7 +2364,7 @@ const FormFragment = (props) => {
       count: state.count ? state.count + 1 : 1
     })
   })
-  
+
   return <div>
     <div>count: {state.count || 0}</div>
   </div>
@@ -2805,7 +2806,7 @@ interface IFormActions {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -2856,55 +2857,6 @@ interface IFormActions {
   ): any
 
   /*
-   * 注册字段
-   */
-  registerField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段值
-    value?: any
-    //字段多参值
-    values?: any[]
-    //字段初始值
-    initialValue?: any
-    //字段扩展属性
-    props?: any
-    //字段校验规则
-    rules?: ValidatePatternRules[]
-    //字段是否必填
-    required?: boolean
-    //字段是否可编辑
-    editable?: boolean
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-
-  /*
-   * 注册虚拟字段
-   */
-  registerVirtualField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段扩展属性
-    props?: any
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-
-  /*
-   * 创建字段数据操作器，后面会详细解释返回的API
-   */
-  createMutators(field: IField): IMutators
-
-  /*
    * 获取表单观察者树
    */
   getFormGraph(): IFormGraph
@@ -2930,6 +2882,7 @@ interface IFormActions {
    * 触发表单自定义生命周期
    */
   notify: <T>(type: string, payload?: T) => void
+  dispatch: <T>(type: string, payload?: T) => void
 
   /*
    * 设置字段值
@@ -2980,7 +2933,7 @@ interface IFormAsyncActions {
    */
   clearErrors: (pattern?: FormPathPattern) => Promise<void>
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -3029,8 +2982,8 @@ interface IFormAsyncActions {
   setFormGraph(graph: IFormGraph): Promise<void>
   subscribe(callback?: FormHeartSubscriber): Promise<number>
   unsubscribe(id: number): Promise<void>
-  notify: <T>(type: string, payload: T) => Promise<void>
-  dispatch: <T>(type: string, payload: T) => void
+  notify: <T>(type: string, payload?: T) => Promise<void>
+  dispatch: <T>(type: string, payload?: T) => Promise<void>
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldValue(path?: FormPathPattern): Promise<any>
   setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
@@ -3134,7 +3087,7 @@ interface IVirtualFieldState<FieldProps = any> {
 }
 ```
 
-### IFormSpyProps 
+### IFormSpyProps
 
 ```typescript
 

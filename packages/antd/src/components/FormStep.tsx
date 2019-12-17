@@ -26,7 +26,7 @@ const EffectHooks = {
   }>(StateMap.ON_FORM_STEP_CURRENT_CHANGE)
 }
 
-type StepComponentExtendsProps = StateMap
+type StepComponentExtendsProps = typeof StateMap
 
 export const FormStep: React.FC<IFormStep> &
   StepComponentExtendsProps = createControllerBox<IFormStep>(

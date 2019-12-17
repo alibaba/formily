@@ -16,6 +16,7 @@ npm install --save @uform/next
   - [`<SchemaMarkupField/>`](#SchemaMarkupField)
   - [`<Submit/>`](#Submit)
   - [`<Reset/>`](#Reset)
+  - [`<FormSpy/>`](#FormSpy)
   - [`<Field/>(deprecated，please use <SchemaMarkupField/>)`](#<Field/>)
 - [Form List](#Array-Components)
   - [`array`](#array)
@@ -45,6 +46,14 @@ npm install --save @uform/next
   - [`radio`](#radio)
   - [`rating`](#rating)
   - [`transfer`](#transfer)
+- [Hook](#Hook)
+  - [`useFormEffects`](#useFormEffects)
+  - [`useFormState`](#useFormState)
+  - [`useFieldState`](#useFieldState)
+  - [`useForm`](#useForm)
+  - [`useField`](#useField)
+  - [`useVirtualField`](#useVirtualField)    
+  - [`useFormSpy`](#useFormSpy)  
 - [API](#API)
   - [`createFormActions`](#createFormActions)
   - [`createAsyncFormActions`](#createAsyncFormActions)
@@ -53,6 +62,9 @@ npm install --save @uform/next
   - [`connect`](#connect)
   - [`registerFormField`](#registerFormField)  
 - [Interfaces](#Interfaces)
+  - [`ISchema`](#ischema)
+  - [`IFormActions`](#IFormActions)
+  - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
   - [`CardProps`](#CardProps)
   - [`ICompatItemProps`](#ICompatItemProps)
@@ -68,6 +80,7 @@ npm install --save @uform/next
   - [`IMutators`](#IMutators)
   - [`IFieldProps`](#IFieldProps)
   - [`IConnectOptions`](#IConnectOptions)
+  - [`ISpyHook`](#ISpyHook)
   
 
 ### Quick-Start
@@ -443,11 +456,6 @@ import SchemaForm, {
 
 const actions = createFormActions()
 
-registerFormField(
-  'string',
-  connect()(props => <input {...props} value={props.value || ''} />)
-)
-
 ReactDOM.render(
     <SchemaForm actions={actions} effects={($)=>{
        $('onFieldChange','a').subscribe((fieldState)=>{
@@ -702,9 +710,131 @@ interface IResetProps {
 }
 ```
 
+#### `<FormSpy/>`
+
+> `<FormSpy>` Props
+
+```typescript
+interface IFormSpyProps {
+  // selector, eg: [ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
+  selector?: string[] | string
+  // reducer
+  reducer?: (
+    state: any,
+    action: { type: string; payload: any },
+    form: IForm
+  ) => any
+  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
+}
+```
+
 #### `<Field/>`
 
 > deprecated，please use [SchemaMarkupField](#SchemaMarkupField)
+
+**Usage**
+
+Example1： Form state change counter
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy
+        selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
+        reducer={(state, action, form) => ({
+          count: state.count ? state.count + 1 : 1
+        })}
+      >
+        {({ state, type, form }) => {
+          return <div>count: {state.count || 0}</div>
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+
+Example2：Combo
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+
+const actions = createFormActions()
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <React.Fragment>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    )}
+  </Field>
+)
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <label>username</label>
+      <InputField name="username" />
+      <label>age</label>
+      <InputField name="age" />
+      <FormSpy>
+        {({ state, form }) => {
+          return (
+            <div>
+              name: {form.getFieldValue('username')}
+              <br />
+              age: {form.getFieldValue('age')}
+            </div>
+          )
+        }}
+      </FormSpy>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 ### Array Components
 
@@ -2188,6 +2318,376 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+### Hook
+
+#### `useFormEffects`
+
+> Implement local effects by using useFormEffects. Same effect as the example of [Linkage](#Linkage)
+> Note: The life cycle of the listener starts from  `ON_FORM_MOUNT` 
+
+**Signature**
+
+```typescript
+(effects: IFormEffect): void
+```
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  VirtualField,
+  createFormActions,
+  useFormEffects,
+  LifeCycleTypes,
+  createVirtualBox
+} from '@uform/next'
+
+const actions = createFormActions()
+
+const FragmentContainer = createVirtualBox('ffb', (props) => {
+  useFormEffects(($, { setFieldState }) => {
+    $(LifeCycleTypes.ON_FORM_MOUNT).subscribe(() => {
+      setFieldState('a~', state => state.visible = false)
+    })
+
+    $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe((triggerState) => {
+      setFieldState('a~', state => {
+        state.visible = triggerState.value
+      })
+    })
+
+    $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe((fieldState) => {
+      setFieldState('a-copy', state => {
+        state.value = fieldState.value
+      })
+    })
+  })
+
+  return (
+    <React.Fragment>
+      {props.children}
+    </React.Fragment>
+  )
+});
+
+const FormFragment = () => {
+  return <FragmentContainer>
+    <Field
+      type="radio"
+      name="trigger"
+      title="trigger"
+      enum={[{ label: 'show', value: true }, { label: 'hide', value: false } ]}
+    />
+    <Field type="string" name="a" title="a" />
+    <Field type="string" name="a-copy" title="a-copy" />   
+  </FragmentContainer>   
+}
+
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <FormFragment />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### `useFormState`
+
+> 使用 useFormState 为自定义组件提供FormState扩展和管理能力
+
+**签名**
+
+```typescript
+(defaultState: T): [state: IFormState, setFormState: (state?: IFormState) => void]
+```
+
+**用法**
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, VirtualField,
+  createFormActions, createEffectHook,
+  useForm,  
+  useFormState,
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes
+} from '@uform/react'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const actions = createFormActions()
+const FormFragment = (props) => {  
+  const [formState, setFormState ] = useFormState({ extendVar: 0 })
+  const { extendVar } = formState
+
+  return <div>
+    <button onClick={() => {
+      setFormState({ extendVar: extendVar + 1 })
+    }}>add</button>
+    <div>count: {extendVar}</div>
+  </div>
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <FormFragment />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### `useFieldState`
+
+> Manage state of custom field by using `useFieldState`
+
+**Signature**
+
+```typescript
+(defaultState: T): [state: IFieldState, setFieldState: (state?: IFieldState) => void]
+```
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { Form, Field, VirtualField,
+  createFormActions, createEffectHook,
+  useForm,  
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes
+} from '@uform/react'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => {
+      const loading = state.props.loading
+      return <React.Fragment>
+        { props.label && <label>{props.label}</label> }
+        { loading ? ' loading... ' : <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        /> }
+        <span style={{ color: 'red' }}>{state.errors}</span>
+        <span style={{ color: 'orange' }}>{state.warnings}</span>
+      </React.Fragment>
+    }}
+  </Field>
+)
+
+const changeTab$ = createEffectHook('changeTab')
+const actions = createFormActions()
+const TabFragment = (props) => {  
+  const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
+  const { current } = fieldState
+  const { children, dataSource, form } = props
+  const ref = useRef(current)
+
+  const update = (cur) => {    
+    form.notify('changeTab', cur)
+    setLocalFieldState({
+      current: cur
+    })
+  }
+
+  useFormEffects(($, { setFieldState }) => {
+    dataSource.forEach((item, itemIdx) => {
+      setFieldState(item.name, state => {
+        state.display = itemIdx === current
+      })
+    })
+
+    changeTab$().subscribe((idx) => {
+      dataSource.forEach((item, itemIdx) => {
+      setFieldState(item.name, state => {
+        state.display = itemIdx === idx
+      })
+    })
+    })
+  })
+
+  ref.current = current
+  const btns = dataSource.map((item, idx) => {
+    console.log('current', current, ref.current)
+    const focusStyle = idx === current ? { color: '#fff', background: 'blue' } : {}
+    return <button style={focusStyle} onClick={() => {
+      update(idx)
+    }}>{item.label}</button>
+  })
+
+  return btns
+}
+
+const FormTab = (props) => {
+  return <VirtualField name="layout_tab">
+    {({ form }) => {
+      return <TabFragment {...props} form={form} />
+    }}
+  </VirtualField>
+}
+
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <FormTab dataSource={[
+        { label: 'tab-1', name: 'username' },
+        { label: 'tab-2', name: 'age' }
+      ]} />
+      <div>
+        <InputField name="username" label="username"/>
+        <InputField name="age" label="age"/>
+      </div>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### useForm
+
+> get [IForm](#IForm) instance
+
+**Signature**
+
+```typescript
+type useForm = <
+  Value = any,
+  DefaultValue = any,
+  EffectPayload = any,
+  EffectAction = any
+>(
+  props: IFormProps<Value, DefaultValue, EffectPayload, EffectAction>
+) => IForm
+```
+
+**Usage**
+
+```typescript
+import { useForm } from '@uform/react'
+
+const FormFragment = () => {
+  const form = useForm()
+  return <div>{form.getFieldValue('username')}</div>
+}
+```
+
+#### useField
+
+> get [IFieldHook](#IFieldHook) instance
+
+**Signature**
+
+```typescript
+type useField = (options: IFieldStateUIProps): IFieldHook
+```
+
+**Usage**
+
+```typescript
+import { useField } from '@uform/react'
+
+const FormFragment = (props) => {
+  const {
+    form,
+    state,
+    props: fieldProps,
+    mutators
+  } = useField({ name: 'username' })
+  
+  return <input {...fieldProps} {...props} value={state.value} onChange={mutators.change} />
+}
+```
+
+#### useVirtualField
+
+> get [IVirtualFieldHook](#IVirtualFieldHook) instance
+
+**Signature**
+
+```typescript
+type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
+```
+
+**Usage**
+
+```typescript
+import { UseVirtualField } from '@uform/react'
+
+const FormFragment = (props) => {
+  const {
+    form,
+    state,
+    props: fieldProps,
+  } = UseVirtualField({ name: 'username' })
+  
+  return <div style={{ width: fieldProps.width, height: fieldProps.height }}>
+    {props.children}
+  </div>
+}
+```
+
+#### useFormSpy
+
+> get [ISpyHook](#ISpyHook) instance. Same effect as the first example of [FormSpy](#FormSpy).
+
+**Signature**
+
+```typescript
+type useFormSpy = (props: IFormSpyProps): ISpyHook
+```
+
+**Usage**
+
+```typescript
+import { useFormSpy, LifeCycleTypes } from '@uform/react'
+const FormFragment = (props) => {
+  const {
+    form,
+    state,
+    type,
+  } = useFormSpy({
+    selector: LifeCycleTypes.ON_FORM_VALUES_CHANGE,
+    reducer: (state, action, form) => ({
+      count: state.count ? state.count + 1 : 1
+    })
+  })
+  
+  return <div>
+    <div>count: {state.count || 0}</div>
+  </div>
+}
+```
+
 ### API
 
 > Fully inherited from @uform/react, The specific API of @uform/next is listed below.
@@ -2418,197 +2918,300 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > The Interfaces is fully inherited from @uform/react. The specific Interfaces of @uform/next is listed below.
 ---
 
-#### IForm
+#### ISchema
 
-> Form instance object API created by using createForm
-
-
+> Schema protocol object, mainly used to constrain a json structure to satisfy the Schema protocol
 
 ```typescript
-interface IForm {
-  /*
-   * Form submission, if the callback parameter returns Promise,
-   * Then the entire submission process will hold and load is true.
-   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
-   */
-   submit(
-      onSubmit?: (values: IFormState['values']) => any | Promise<any>
-    ): Promise<{
-       Validated: IFormValidateResult
-       Payload: any //onSubmit callback function return value
-   }>
-   
-   /*
-    * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
-    * For example, clearErrors("*(aa,bb,cc)")
-    */
-   clearErrors: (pattern?: FormPathPattern) => void
-   
-   /*
-    * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
-    * For example, hasChanged(state,'value.aa')
-    */
-   hasChanged(target: IFormState | IFieldState | IVirtualFieldState, path: FormPathPattern): boolean
-   
-   /*
-    * Reset form
-    */
-   reset(options?: {
-     // Forced to empty
-     forceClear?: boolean
-     // Forced check
-     validate?: boolean
-     // Reset range for batch or precise control of the field to be reset
-     selector?: FormPathPattern
-   }): Promise<void | IFormValidateResult>
-   
-   /*
-    * Validation form
-    */
-   validate(path?: FormPathPattern, options?: {
-     // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
-     first?:boolean
-   }): Promise<IFormValidateResult>
-   
-   /*
-    * Set the form status
-    */
-   setFormState(
-     // Operation callback
-     callback?: (state: IFormState) => any,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get form status
-    */
-   getFormState(
-     //transformer
-     callback?: (state: IFormState) => any
-   ): any
-   
-   /*
-    * Set the field status
-    */
-   setFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Operation callback
-     callback?: (state: IFieldState) => void,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get the field status
-    */
-   getFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Transformer
-     callback?: (state: IFieldState) => any
-   ): any
-   
-   /*
-    * Registration field
-    */
-   registerField(props: {
-    // Node path
-    path?: FormPathPattern
-    // Data path
-    name?: string
-    // Field value
-    value?: any
-    // Field multi-value
-    values?: any[]
-    // Field initial value
-    initialValue?: any
-    // Field extension properties
-    props?: any
-    // Field check rule
-    rules?: ValidatePatternRules[]
-    // Field is required
-    required?: boolean
-    // Is the field editable?
-    editable?: boolean
-    // Whether the field is dirty check
-    useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-  
-  /*
-   * Register virtual fields
-   */
-  registerVirtualField(props: {
-    // Node path
-    path?: FormPathPattern
-    // Data path
-    name?: string
-    // Field extension properties
-    props?: any
-    // Whether the field is dirty check
-    useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-  
-  /*
-   * Create a field data operator, which will explain the returned API in detail later.
-   */
-  createMutators(field: IField): IMutators
-  
-  /*
-   * Get the form observer tree
-   */
-  getFormGraph(): IFormGraph
-  
-  /*
-   * Set the form observer tree
-   */
-  setFormGraph(graph: IFormGraph): void
-  
-  /*
-   * Listen to the form life cycle
-   */
-  subscribe(callback?: ({
-    type,
-    payload
-  }: {
-    type: string
-    payload: any
-  }) => void): number
-  
-  /*
-   * Cancel the listening form life cycle
-   */
-  unsubscribe(id: number): void
-  
-  /*
-   * Trigger form custom life cycle
-   */
-  notify: <T>(type: string, payload?: T) => void
-  
-  /*
-   * Set the field value
-   */
-  setFieldValue(path?: FormPathPattern, value?: any): void
-  
-  /*
-   * Get the field value
-   */
-  getFieldValue(path?: FormPathPattern): any
-  
-  /*
-   * Set the initial value of the field
-   */
-  setFieldInitialValue(path?: FormPathPattern, value?: any): void
-  
-  /*
-   * Get the initial value of the field
-   */
-  getFieldInitialValue(path?: FormPathPattern): any
+interface ISchema {
+  /** base json schema spec**/
+  title?: React.ReactNode
+  description?: React.ReactNode
+  default?: any
+  readOnly?: boolean
+  writeOnly?: boolean
+  type?: 'string' | 'object' | 'array' | 'number' | string
+  enum?: Array<string | number | { label: React.ReactNode; value: any }>
+  const?: any
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  minimum?: number
+  exclusiveMinimum?: number
+  maxLength?: number
+  minLength?: number
+  pattern?: string | RegExp
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[] | boolean
+  format?: string
+  /** nested json schema spec **/
+  properties?: {
+    [key: string]: ISchema
+  }
+  items?: ISchema | ISchema[]
+  additionalItems?: ISchema
+  patternProperties?: {
+    [key: string]: ISchema
+  }
+  additionalProperties?: ISchema
+  /** extend json schema specs */
+  visible?: boolean //Field initial visible status(Whether the data is visible)
+  display?: boolean //Field initial display status(Whether the style is visible)
+  editable?: boolean
+  ['x-props']?: { [name: string]: any }
+  ['x-index']?: number
+  ['x-rules']?: ValidatePatternRules
+  ['x-component']?: string
+  ['x-component-props']?: { [name: string]: any }
+  ['x-render']?: <T = ISchemaFieldComponentProps>(
+    props: T & {
+      renderComponent: () => React.ReactElement
+    }
+  ) => React.ReactElement
+  ['x-effect']?: (
+    dispatch: (type: string, payload: any) => void,
+    option?: object
+  ) => { [key: string]: any }
+}
+```
+
+#### IFormActions
+
+```typescript
+interface IFormActions {
+  /*
+   * Form submission, if the callback parameter returns Promise,
+   * Then the entire submission process will hold and load is true.
+   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   */
+  submit(
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
+  ): Promise<{
+    Validated: IFormValidateResult
+    Payload: any //onSubmit callback function return value
+  }>
+  
+  /** get Schema of form **/
+  getFormSchema(): Schema
+
+  /*
+   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
+   * For example, clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => void
+  /*
+   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
+   * For example, hasChanged(state,'value.aa')
+   */
+  hasChanged(
+    target: IFormState | IFieldState | IVirtualFieldState,
+    path: FormPathPattern
+  ): boolean
+  /*
+   * Reset form
+   */
+  reset(options?: {
+    // Forced to empty
+    forceClear?: boolean // Forced check
+    validate?: boolean // Reset range for batch or precise control of the field to be reset
+    selector?: FormPathPattern
+  }): Promise<void | IFormValidateResult>
+  /*
+   * Validation form, throw IFormValidateResult when validation fails
+   */
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+  /*
+   * Set the form status
+   */
+  setFormState( // Operation callback
+    callback?: (state: IFormState) => any, // No trigger the event
+    silent?: boolean
+  ): void
+  /*
+   * Get form status
+   */
+  getFormState( //transformer
+    callback?: (state: IFormState) => any
+  ): any
+  /*
+   * Set the field status
+   */
+  setFieldState( // Field path
+    path: FormPathPattern, // Operation callback
+    callback?: (state: IFieldState) => void, // No trigger the event
+    silent?: boolean
+  ): void
+  /*
+   * Get the field status
+   */
+  getFieldState( // Field path
+    path: FormPathPattern, // Transformer
+    callback?: (state: IFieldState) => any
+  ): any
+  /*
+   * Get the form observer tree
+   */
+  getFormGraph(): IFormGraph
+  /*
+   * Set the form observer tree
+   */
+  setFormGraph(graph: IFormGraph): void
+  /*
+   * Listen to the form life cycle
+   */
+  subscribe(
+    callback?: ({ type, payload }: { type: string; payload: any }) => void
+  ): number
+  /*
+   * Cancel the listening form life cycle
+   */
+  unsubscribe(id: number): void
+  /*
+   * Trigger form custom life cycle
+   */
+  notify: <T>(type: string, payload?: T) => void
+  /*
+   * Set the field value
+   */
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  /*
+   * Get the field value
+   */
+  getFieldValue(path?: FormPathPattern): any
+  /*
+   * Set the initial value of the field
+   */
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  /*
+   * Get the initial value of the field
+   */
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+```
+
+#### IFormAsyncActions
+
+```typescript
+interface IFormAsyncActions {
+  /*
+   * Form submission, if the callback parameter returns Promise,
+   * Then the entire submission process will hold and load is true.
+   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   */
+  submit(
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+
+  /** get Schema of form **/
+  getFormSchema(): Promise<Schema>
+
+  /*
+   * Reset form
+   */
+  reset(options?: IFormResetOptions): Promise<void>
+  /*
+   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
+   * For example, hasChanged(state,'value.aa')
+   */
+  hasChanged(target: any, path: FormPathPattern): Promise<boolean>
+  /*
+   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
+   * For example, clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => Promise<void>
+  /*
+   * Validation form, throw IFormValidateResult when validation fails
+   */
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+  /*
+   * Set the form state
+   */
+  setFormState(
+    // Operation callback
+    callback?: (state: IFormState) => any,
+    // No trigger the event
+    silent?: boolean
+  ): Promise<void>
+  /*
+   * Get form state
+   */
+  getFormState(
+    //transformer
+    callback?: (state: IFormState) => any
+  ): Promise<any>
+  /*
+   * Set the field state
+   */
+  setFieldState(
+    // Field path
+    path: FormPathPattern,
+    // Operation callback
+    callback?: (state: IFieldState) => void,
+    // No trigger the event
+    silent?: boolean
+  ): Promise<void>
+  /*
+   * Get the field state
+   */
+  getFieldState(
+    // Field path
+    path: FormPathPattern,
+    //transformer
+    callback?: (state: IFieldState) => any
+  ): Promise<void>
+  /*
+   * Get the form observer tree
+   */
+  getFormGraph(): Promise<IFormGraph>
+  /*
+   * Set the form observer tree
+   */
+  setFormGraph(graph: IFormGraph): Promise<void>
+  /*
+   * Listen to the form life cycle
+   */
+  subscribe(callback?: FormHeartSubscriber): Promise<number>
+  /*
+   * Cancel the listening form life cycle
+   */
+  unsubscribe(id: number): Promise<void>
+  /*
+   * Trigger form custom life cycle
+   */
+  notify: <T>(type: string, payload: T) => Promise<void>
+  dispatch: <T>(type: string, payload: T) => void
+  /*
+   * Set the field value
+   */
+  setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
+  /*
+   * Get the field value
+   */
+  getFieldValue(path?: FormPathPattern): Promise<any>
+  /*
+   * Set the initial value of the field
+   */
+  setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
+  /*
+   * Get the initial value of the field
+   */
+  getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
 ```
 
@@ -2967,4 +3570,15 @@ interface IConnectOptions<T> {
   ) => T
 }
 
+```
+
+
+#### ISpyHook
+
+```typescript
+interface ISpyHook {
+  form: IForm
+  state: any
+  type: string
+}
 ```

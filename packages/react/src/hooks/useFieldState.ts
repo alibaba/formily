@@ -2,11 +2,13 @@ import { useContext, useMemo, useRef } from 'react'
 import { IFieldState } from '@uform/core'
 import { FieldContext } from '../context'
 
-export const useFieldState = <T extends {}>(defaultState: T) => {
+export const useFieldState = <T extends {}>(
+  defaultState: T
+): [IFieldState, (nextState: T) => void] => {
   const ref = useRef<IFieldState>()
   const field = useContext(FieldContext)
   useMemo(() => {
-    field.unsafe_setSourceState(state => {
+    field.setSourceState(state => {
       Object.assign(state, defaultState)
     })
   }, [])

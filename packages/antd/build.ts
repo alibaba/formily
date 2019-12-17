@@ -1,12 +1,13 @@
 import { compile, getCompileConfig } from '../../scripts/build'
 import ts from 'typescript'
-//import tsImportPluginFactory from 'ts-import-plugin'
+import tsImportPluginFactory from 'ts-import-plugin'
 import glob from 'glob'
+import * as fs from 'fs-extra'
 
-// const transformer = tsImportPluginFactory({
-//   libraryName: 'antd',
-//   style: 'css',
-// })
+const transformer = tsImportPluginFactory({
+  libraryName: 'antd',
+  // style: 'css',
+})
 
 function buildESM() {
   const { fileNames, options } = getCompileConfig(require.resolve('./tsconfig.json'), {
@@ -17,8 +18,26 @@ function buildESM() {
   console.log('esm build successfully')
 }
 
+const TEMP_OUT_DIR = './temp_esm'
+
+function buildTempESM() {
+  const { fileNames, options } = getCompileConfig(require.resolve('./tsconfig.json'), {
+    outDir: TEMP_OUT_DIR,
+    module: ts.ModuleKind.ESNext
+  })
+  compile(fileNames, options, { before: [transformer] })
+
+  console.log('temporary esm build successfully')
+}
+
+function clearTempESM() {
+  fs.removeSync(TEMP_OUT_DIR)
+
+  console.log('clear temporary esm build successfully')
+}
+
 function buildES5() {
-  const rootNames = glob.sync('./esm/**/*.js')
+  const rootNames = glob.sync(`${TEMP_OUT_DIR}/**/*.js`)
   compile(rootNames, {
     allowJs: true,
     esModuleInterop: true,
@@ -34,4 +53,7 @@ function buildES5() {
 
 
 buildESM()
+
+buildTempESM()
 buildES5()
+clearTempESM()
