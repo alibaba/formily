@@ -45,6 +45,7 @@ Object {
     "props": Object {
       "default": "123",
       "key": "aa",
+      "name": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",
@@ -103,6 +104,7 @@ Object {
     "path": "NO_NAME_FIELD_$0",
     "props": Object {
       "key": "NO_NAME_FIELD_$0",
+      "name": "NO_NAME_FIELD_$0",
       "type": "object",
       "x-component": "card",
       "x-component-props": Object {
@@ -136,6 +138,7 @@ Object {
     "props": Object {
       "default": "123",
       "key": "aa",
+      "name": "aa",
       "type": "string",
       "x-props": Object {
         "data-testid": "input",
@@ -167,10 +170,12 @@ Object {
   "properties": Object {
     "NO_NAME_FIELD_$0": Object {
       "key": "NO_NAME_FIELD_$0",
+      "name": "NO_NAME_FIELD_$0",
       "properties": Object {
         "aa": Object {
           "default": "123",
           "key": "aa",
+          "name": "aa",
           "type": "string",
           "x-props": Object {
             "data-testid": "input",
