@@ -776,7 +776,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     if (isFn(options.onReset)) {
       options.onReset()
     }
-
+    heart.publish(LifeCycleTypes.ON_FORM_RESET, state)
     let validateResult: void | IFormValidateResult
     if (validate) {
       validateResult = await formApi.validate(selector, { throwErrors: false })
