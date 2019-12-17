@@ -12,8 +12,9 @@ import {
 export const CompatNextForm: React.FC<FormProps &
   IFormItemTopProps &
   PreviewTextConfigProps> = props => {
+  const { previewPlaceholder, ...rest } = props
   return (
-    <FormItemProvider {...props}>
+    <FormItemProvider {...rest}>
       <PreviewText.ConfigProvider value={props}>
         <Form
           {...props}
