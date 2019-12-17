@@ -391,8 +391,12 @@ export class Schema implements ISchema {
 
   fromJSON(json: ISchema = {}) {
     if (typeof json === 'boolean') return json
-    if (json instanceof Schema) return json
-    Object.assign(this, json)
+    if (json instanceof Schema) {
+      Object.assign(this, json)
+      return this
+    } else {
+      Object.assign(this, json)
+    }
     if (isValid(json.type)) {
       this.type = lowercase(String(json.type))
     }
