@@ -11,7 +11,7 @@ import {
 export const CompatAntdForm: React.FC<FormProps &
   IFormItemTopProps &
   PreviewTextConfigProps> = props => {
-  const { inline, ...rest } = props;
+  const { inline, previewPlaceholder, ...rest } = props
   return (
     <FormItemProvider {...props}>
       <PreviewText.ConfigProvider value={props}>
