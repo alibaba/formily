@@ -23,14 +23,19 @@
   /* 编辑区 */
   .schema-editor-main {
     margin-top: 20px;
-
-    .schema-col {
-      padding: 20px;
-      min-height: 400px;
-    }
+    display: flex;
+    flex-direction: row;
+    min-height: 600px;
 
     /* 树形编辑 */
-    .schema-tree {}
+    .schema-tree {
+      float: left;
+      width: 300px;
+    }
+
+    .schema-tabs {
+      flex: 1;
+    }
 
     /* 代码编辑 */
     .schema-code {
@@ -40,38 +45,59 @@
   }
 
   .field-editor {
-    margin-top: 10px;
-    padding: 5px;
-    border: 1px solid #eee;
-
-    .field-operate {
-      padding: 5px;
-
-      .op-btn {
-        margin-left: 5px;
-      }
-
-      .op-btn-expand {
-        float: right !important;
-      }
+    .field-group-title{
+      margin-top: 15px;
+      font-size: 16px;
     }
-
-    .field-group {
+    .field-group-content{
       display: flex;
-      background-color: #F2F3F7;
-      padding: 5px;
-
-      .field-input {
-        margin-left: 5px;
-        width: 100px;
+      align-items: flex-start;
+      .field-group-form-item{
+        width: 20%;
+        margin-right: 0;
+        padding-right: 10px;
+        &.auto-complete {
+          .ant-form-item-control{
+            margin-top: -1px;
+          }
+        } 
       }
     }
-
-    .field-children {
-      padding: 10px 0 0 20px;
-    }
-
-
   }
+
+  // .field-editor {
+  //   margin-top: 10px;
+  //   padding: 5px;
+  //   border: 1px solid #eee;
+
+  //   .field-operate {
+  //     padding: 5px;
+
+  //     .op-btn {
+  //       margin-left: 5px;
+  //     }
+
+  //     .op-btn-expand {
+  //       float: right !important;
+  //     }
+  //   }
+
+  //   .field-group {
+  //     display: flex;
+  //     background-color: #F2F3F7;
+  //     padding: 5px;
+
+  //     .field-input {
+  //       margin-left: 5px;
+  //       width: 100px;
+  //     }
+  //   }
+
+  //   .field-children {
+  //     padding: 10px 0 0 20px;
+  //   }
+
+
+  // }
 
 }

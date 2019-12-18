@@ -19,6 +19,7 @@
     "build": "tsc --declaration"
   },
   "devDependencies": {
+    "node-sass": "^4.13.0",
     "typescript": "^3.5.2"
   },
   "peerDependencies": {
@@ -29,8 +30,7 @@
     "react-dom": ">=16.8.0",
     "react-eva": "^1.1.7"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "publishConfig": {
     "access": "public"
   },
