@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Drawer, Icon, Tooltip, notification } from 'antd';
+import {Drawer, Icon, Tooltip, notification } from 'antd';
 import MonacoEditor from 'react-monaco-editor'
 import moment from 'moment';
 import { ISchemaCodeProps } from '../utils/types'
 
-const options = {
-  selectOnLineNumbers: true
-};
+// const options = {
+//   selectOnLineNumbers: true
+// };
 
 const styles = {
   icon: {
@@ -76,12 +76,10 @@ export const SchemaCode: React.FC<ISchemaCodeProps> = ({
         placement="right"
         visible={showDrawer}
         closable={false}
-        hasMask={false}
         bodyStyle={{ padding: 0, height: '100%' }}
         onClose={() => setShowDrawer(false)} >
         <div style={{ display: 'flex', flexDirection: 'row', height: '100%' }}>
           <MonacoEditor
-            style={{ flexGrow: '1' }}
             language="json"
             theme="vs-dark"
             onChange={(schema) => onChange(JSON.parse(schema))}
