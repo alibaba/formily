@@ -1,48 +1,18 @@
 import React from 'react'
-import { Tree, Row, Col, Icon } from 'antd'
+import { Tree, Icon } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
 import _ from 'lodash'
-import FieldEditor from './FieldEditor'
-
-const xProps = {
-  colon: {},
-  extra: {},
-  hasFeedback: {},
-  help: {},
-  htmlFor: {},
-  label: {},
-  labelCol: {},
-  labelAlign: {},
-  required: {},
-  validateStatus: {},
-  wrapperCol: {}
-}
-
-const xRules = {
-  enum: {},
-  len: {},
-  max: {},
-  min: {},
-  pattern: {},
-  required: {},
-  transform: {},
-  type: {},
-  validator: {},
-  whitespace: {}
-}
 
 const TreeNode = Tree.TreeNode
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
   onChange,
-  components
+  onSelect
 }) => {
-  const [selectedPath, setSelectedPath] = React.useState(null)
-
   const handleSelect = React.useCallback((path: string[]) => {
-    setSelectedPath(path[0])
+    onSelect(path[0])
   }, [])
 
   const handleDrop = React.useCallback(
@@ -123,43 +93,17 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
     [schema, onChange]
   )
 
-  const selectedSchema =
-    selectedPath &&
-    (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
   return (
-    <Row>
-      <Col span={8}>
-        <Tree
-          defaultExpandAll
-          showIcon
-          showLine
-          draggable
-          onSelect={handleSelect}
-          onDrop={handleDrop}
-        >
-          {TreeNodeBySchema({ schema, path: [] })}
-        </Tree>
-      </Col>
-      <Col span={16}>
-        {selectedSchema && (
-          <FieldEditor
-            xProps={xProps}
-            xRules={xRules}
-            components={components}
-            fieldKey="fieldC"
-            onFieldKeyChange={value => {
-              console.log('onFieldKeyChange====', value)
-            }}
-            schema={selectedSchema}
-            onChange={value => {
-              const newSchema = _.clone(schema)
-              _.set(newSchema, selectedPath, value)
-              onChange(newSchema)
-            }}
-          />
-        )}
-      </Col>
-    </Row>
+      <Tree
+        defaultExpandAll
+        showIcon
+        showLine
+        draggable
+        onSelect={handleSelect}
+        onDrop={handleDrop}
+      >
+        {TreeNodeBySchema({ schema, path: [] })}
+      </Tree>
   )
 }
 

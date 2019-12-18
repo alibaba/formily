@@ -5,7 +5,7 @@ export interface ISchemaCodeProps {
 
 export interface ISchemaTreeProps {
   schema: any
-  components: any
+  onSelect?: Function
   onChange?: Function
 }
 
