@@ -157,7 +157,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
       })
     }
-
     if (unmountedChanged && published.unmounted) {
       heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, state)
     }
@@ -234,6 +233,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             setFormValuesIn(path, published.value)
           }
         })
+        heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
       }
       if (mountedChanged && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
@@ -776,7 +776,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     if (isFn(options.onReset)) {
       options.onReset()
     }
-
+    heart.publish(LifeCycleTypes.ON_FORM_RESET, state)
     let validateResult: void | IFormValidateResult
     if (validate) {
       validateResult = await formApi.validate(selector, { throwErrors: false })
