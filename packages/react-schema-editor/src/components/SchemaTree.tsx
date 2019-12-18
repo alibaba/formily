@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Tree, Row, Col, Icon } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
@@ -32,30 +32,12 @@ const xRules = {
   whitespace: {}
 }
 
-const components = [
-  {
-    name: 'Input',
-    'x-component-props': {
-      value: {},
-      disabled: {},
-      onChange: {}
-    }
-  },
-  {
-    name: 'Switch',
-    'x-component-props': {
-      checked: {},
-      disabled: {},
-      onChange: {}
-    }
-  }
-]
-
 const TreeNode = Tree.TreeNode
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
-  onChange
+  onChange,
+  components
 }) => {
   const [selectedPath, setSelectedPath] = React.useState(null)
 
@@ -150,6 +132,7 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
         <Tree
           defaultExpandAll
           showIcon
+          showLine
           draggable
           onSelect={handleSelect}
           onDrop={handleDrop}
