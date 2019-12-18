@@ -76,6 +76,7 @@ export default {
     return length < min ? getRuleMessage(rule, 'min') : ''
   },
   pattern(value: any, rule: ValidateDescription) {
+    if (isValidateEmpty(value)) return ''
     return !new RegExp(rule.pattern).test(value)
       ? getRuleMessage(rule, 'pattern')
       : ''
