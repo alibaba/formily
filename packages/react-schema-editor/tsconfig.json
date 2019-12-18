@@ -1,5 +1,6 @@
 {
   "extends": "../../tsconfig.json",
+  "noUnusedLocals": false,
   "compilerOptions": {
     "outDir": "./lib"
   },
