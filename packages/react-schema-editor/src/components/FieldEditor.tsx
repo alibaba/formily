@@ -19,10 +19,11 @@ import {
   getPropertyValue,
   getExpressionValue,
   getRuleMessage,
-  fieldTypeDisabled
+  fieldTypeDisabled,
+  getDefaultXProps,
+  getDefaultXRules
 } from '../utils/fieldEditorHelpers'
 import { InputTypes, ComponentPropsTypes } from '../utils/types'
-import './FieldEditor.css'
 
 const FormItem = Form.Item
 const SelectOption = Select.Option
@@ -52,8 +53,6 @@ interface IFormItemGroupProps extends Partial<IFieldEditorProps> {
 const FormItemGroup: React.FC<IFormItemGroupProps> = ({
   title,
   schema,
-  xProps,
-  xRules,
   components,
   propsKey,
   onChange
@@ -62,8 +61,6 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
   const inputTypeData = getInputTypeData()
   const componentPropsData = getComponentPropsData({
     schema,
-    xProps,
-    xRules,
     components,
     componentName,
     propsKey
@@ -396,8 +393,6 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
   fieldKey,
   schema,
   components,
-  xProps,
-  xRules,
   onFieldKeyChange,
   onChange
 }) => {
@@ -499,7 +494,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
           components={components}
           propsKey={ComponentPropsTypes.X_PROPS}
           schema={schema}
-          xProps={xProps}
+          xProps={getDefaultXProps()}
           onChange={onChange}
         />
       )}
@@ -510,7 +505,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
           components={components}
           propsKey={ComponentPropsTypes.X_RULES}
           schema={schema}
-          xRules={xRules}
+          xRules={getDefaultXRules()}
           onChange={onChange}
         />
       )}
