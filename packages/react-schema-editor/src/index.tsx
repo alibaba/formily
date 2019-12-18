@@ -32,7 +32,6 @@ export const SchemaEditor: React.FC<{
   const selectedSchema =
   selectedPath &&
   (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
-  console.log('selectedSchema', selectedSchema)
   return (
     <div className="schema-editor">
       <div className="schema-menus">
