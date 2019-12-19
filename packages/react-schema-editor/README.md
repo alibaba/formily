@@ -1,5 +1,5 @@
 # react-schema-editor
-react-schema-editor is a UI tool for build your schema.
+react-schema-editor is a UI tool for build form schema.
 
 ## Usage
 ```
