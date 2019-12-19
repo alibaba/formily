@@ -65,39 +65,13 @@
     }
   }
 
-  // .field-editor {
-  //   margin-top: 10px;
-  //   padding: 5px;
-  //   border: 1px solid #eee;
-
-  //   .field-operate {
-  //     padding: 5px;
-
-  //     .op-btn {
-  //       margin-left: 5px;
-  //     }
-
-  //     .op-btn-expand {
-  //       float: right !important;
-  //     }
-  //   }
-
-  //   .field-group {
-  //     display: flex;
-  //     background-color: #F2F3F7;
-  //     padding: 5px;
-
-  //     .field-input {
-  //       margin-left: 5px;
-  //       width: 100px;
-  //     }
-  //   }
-
-  //   .field-children {
-  //     padding: 10px 0 0 20px;
-  //   }
-
-
-  // }
+  .field-editor-holder{
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
+    margin-top: 10px;
+    border: 1px dashed #eee;
+    text-align: center;
+  }
 
 }

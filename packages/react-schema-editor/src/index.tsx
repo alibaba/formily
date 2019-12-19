@@ -42,7 +42,7 @@ export const SchemaEditor: React.FC<{
         <span className="select-component-type">
           选择组件类型：
           <Radio.Group onChange={handleTypeChange}>
-            <Radio value="antd">Ant Design组件</Radio>
+            <Radio value="antd" checked>Ant Design组件</Radio>
             <Radio value="fusion">Fusion Design组件</Radio>
           </Radio.Group>
         </span>
@@ -54,7 +54,7 @@ export const SchemaEditor: React.FC<{
         <div className="schema-tabs">
           <Tabs type="card">
             <Tabs.TabPane tab="属性编辑" key="1">
-              {selectedSchema && <FieldEditor
+              {selectedSchema ? <FieldEditor
                   components={componentType === 'fusion' ? nextComponents : antdComponents}
                   fieldKey="fieldC"
                   onFieldKeyChange={value => {
@@ -66,7 +66,7 @@ export const SchemaEditor: React.FC<{
                     _.set(newSchema, selectedPath, value)
                     onChange(newSchema)
                   }}
-              />}
+              /> : <div className="field-editor-holder">👈请先选择左侧树的节点</div>}
             </Tabs.TabPane>
             <Tabs.TabPane tab="Schema源码" key="2">
               <SchemaCode schema={schema} onChange={handleCodeChange}></SchemaCode>
