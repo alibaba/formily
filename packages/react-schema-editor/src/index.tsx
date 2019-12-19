@@ -36,13 +36,10 @@ export const SchemaEditor: React.FC<{
     <div className="schema-editor">
       <div className="schema-menus">
         <Button type="primary">快速生成</Button>
-        {/* <Button className="schema-preview-btn">
-          <Icon type="success"></Icon>预览
-        </Button> */}
         <span className="select-component-type">
           选择组件类型：
-          <Radio.Group onChange={handleTypeChange}>
-            <Radio value="antd" checked>Ant Design组件</Radio>
+          <Radio.Group onChange={handleTypeChange} defaultValue="antd">
+            <Radio value="antd">Ant Design组件</Radio>
             <Radio value="fusion">Fusion Design组件</Radio>
           </Radio.Group>
         </span>
@@ -66,7 +63,7 @@ export const SchemaEditor: React.FC<{
                     _.set(newSchema, selectedPath, value)
                     onChange(newSchema)
                   }}
-              /> : <div className="field-editor-holder">👈请先选择左侧树的节点</div>}
+              /> : <div className="field-editor-holder">👈请先选择左侧树节点</div>}
             </Tabs.TabPane>
             <Tabs.TabPane tab="Schema源码" key="2">
               <SchemaCode schema={schema} onChange={handleCodeChange}></SchemaCode>
