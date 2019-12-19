@@ -1,4 +1,10 @@
-# schema-editor
+# react-schema-editor
+react-schema-editor is a UI tool for build form schema.
+
+## Usage
+```
+npm install @formily/react-schema-editor -S
+```
 
 ## Demo
 
@@ -71,3 +77,5 @@ function SchemaEditorDemo() {
 
 ReactDOM.render(<SchemaEditorDemo />, document.getElementById('root'))
 ```
+
+![](https://gw.alicdn.com/tfs/TB1Oo7hq4D1gK0jSZFKXXcJrVXa-1367-755.gif)
