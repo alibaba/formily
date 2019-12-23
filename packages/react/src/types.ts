@@ -12,6 +12,7 @@ import {
   FormHeartSubscriber,
   IFormGraph,
   IField,
+  IVirtualFieldState,
   IVirtualField
 } from '@uform/core'
 import { FormPathPattern } from '@uform/shared'
@@ -22,6 +23,9 @@ export interface IFormEffect<Payload = any, Actions = any> {
     actions: Actions
   ): void
 }
+
+export type IFieldMergeState = Partial<IFieldState> &
+  Partial<IVirtualFieldState>
 
 export interface IFormEffectSelector<Payload = any> {
   (

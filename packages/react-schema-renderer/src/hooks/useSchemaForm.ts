@@ -1,11 +1,14 @@
 import { useMemo, useRef } from 'react'
-import { useForm, IFormEffect } from '@uform/react'
+import { useForm } from '@uform/react'
 import { Schema } from '../shared/schema'
 import { deprecate, each, lowercase, isFn } from '@uform/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
 import { createSchemaFormActions } from '../shared/actions'
 import { getRegistry } from '../shared/registry'
+import { useValueVisibleLinkageEffect } from '../linkages/visible'
+import { useValueSchemaLinkageEffect } from '../linkages/schema'
+import { useValueStateLinkageEffect } from '../linkages/state'
 
 const lowercaseKeys = (obj: any) => {
   const result = {}
@@ -15,28 +18,13 @@ const lowercaseKeys = (obj: any) => {
   return result
 }
 
-const combineEffects = ({ effects, linkages, registry,scope }): IFormEffect => {
-  return ($, actions) => {
-    if(isFn(effects)) effects($, actions)
-    linkages.forEach((item: any) => {
-      if (item && item.type) {
-        if (registry.linkages[item.type]) {
-          if (isFn(registry.linkages[item.type](item))) {
-            registry.linkages[item.type](item)($, actions)
-          }
-        }
-      }
-    })
-  }
-}
-
 const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const {
     fields,
     virtualFields,
     formComponent,
     formItemComponent,
-    schema,
+    schema: propsSchema,
     defaultValue,
     value,
     initialValues,
@@ -57,28 +45,30 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const { implementActions } = useEva({
     actions
   })
-  const formSchema = useMemo(() => {
-    const result = new Schema(schema)
+  const schema = useMemo(() => {
+    const result = new Schema(propsSchema)
     implementActions({
       getSchema: deprecate(() => result, 'Please use the getFormSchema.'),
       getFormSchema: () => result
     })
     return result
-  }, [schema])
+  }, [propsSchema])
   const registry = getRegistry()
   return {
     form: useForm({
       ...props,
-      effects: combineEffects({
-        effects,
-        linkages: formSchema.linkages,
-        registry,
-        scope:expressionScope
-      })
+      effects: ($, actions) => {
+        useValueVisibleLinkageEffect(expressionScope)
+        useValueSchemaLinkageEffect(expressionScope)
+        useValueStateLinkageEffect(expressionScope)
+        if (isFn(effects)) {
+          effects($, actions)
+        }
+      }
     }),
     formComponentProps: {
       ...formComponentProps,
-      ...formSchema.getExtendsComponentProps()
+      ...schema.getExtendsComponentProps()
     },
     fields: lowercaseKeys({
       ...registry.fields,
@@ -92,7 +82,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     formItemComponent: formItemComponent
       ? formItemComponent
       : registry.formItemComponent,
-    schema: formSchema,
+    schema,
     children
   }
 }

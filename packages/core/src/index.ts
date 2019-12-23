@@ -826,7 +826,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
       let payload,
         values = state.getState(state => clone(state.values))
       if (isFn(onSubmit)) {
-        payload = await Promise.resolve(onSubmit(values))
+        try {
+          payload = await Promise.resolve(onSubmit(values))
+        } catch (e) {
+          if (e) {
+            console.error(e)
+          }
+        }
       }
 
       state.setState(state => {
@@ -1060,7 +1066,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   //在subscribe中必须同步使用，否则会监听不到变化
   function hasChanged(target: any, path: FormPathPattern): boolean {
-    if (!env.publishing) {
+    if (env.publishing[target ? target.path : ''] === false) {
       throw new Error(
         'The watch function must be used synchronously in the subscribe callback.'
       )
@@ -1119,18 +1125,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const heart = new FormHeart({
     ...options,
     context: formApi,
-    beforeNotify: () => {
-      env.publishing = true
+    beforeNotify: payload => {
+      env.publishing[payload.path || ''] = true
     },
-    afterNotify: () => {
-      env.publishing = false
+    afterNotify: payload => {
+      env.publishing[payload.path || ''] = false
     }
   })
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
-    publishing: false,
+    publishing: {},
     taskQueue: [],
     userUpdateFields: [],
     taskIndexes: {},
