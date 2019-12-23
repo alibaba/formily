@@ -486,7 +486,7 @@ describe('validate', () => {
       expect(onValidateEnd).toBeCalledTimes(1)
       const { warnings, errors } = validated
       expect(warnings.length).toEqual(1)
-      expect(errors.length).toEqual(4)
+      expect(errors.length).toEqual(3)
     })
   })
 

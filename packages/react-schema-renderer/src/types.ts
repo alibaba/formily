@@ -72,9 +72,6 @@ export interface ISchemaFormRegistry {
   virtualFields: {
     [key: string]: ISchemaVirtualFieldComponent
   }
-  linkages?: {
-    [key: string]: ISchemaLinkageHandler
-  }
   wrappers?: ISchemaFieldWrapper[]
   formItemComponent: React.JSXElementConstructor<any>
   formComponent: string | React.JSXElementConstructor<any>

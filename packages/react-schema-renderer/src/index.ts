@@ -14,7 +14,6 @@ export * from './shared/condition'
 export * from './shared/expression'
 export * from './shared/linkage'
 export * from './types'
-export * from './linkages'
 export const createFormActions = createSchemaFormActions
 export const createAsyncFormActions = createAsyncSchemaFormActions
 export { InternalField, InternalForm }

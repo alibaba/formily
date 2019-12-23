@@ -1,8 +1,15 @@
 import { JSONCondition } from '../shared/condition'
-import { FormPath, IFormEffect } from '@uform/react'
-import { isFn, isStr } from '@uform/shared'
+import {
+  FormPath,
+  FormEffectHooks,
+  createFormActions,
+  IFormActions,
+  IFieldMergeState
+} from '@uform/react'
+import { isFn, isStr, isArr } from '@uform/shared'
 import { ISchemaFormActions } from '../types'
 import { compileObject } from './expression'
+import { Schema } from './schema'
 
 const pathExpRE = /\[\s*(?:([+-])\s*(\d+)?)?\s*\]/g
 
@@ -36,41 +43,78 @@ const getPathIndexes = (path: any): number[] => {
   return path.transform(/\d+/, (...args) => args.map(i => Number(i))) as any
 }
 
-export const presetLinkage = (
-  resolve: (params: any, actions: ISchemaFormActions) => void,
+export const parseLinkages = (
+  fieldState: IFieldMergeState,
+  {
+    getFieldState,
+    getFormState,
+    scope
+  }: {
+    getFieldState?: IFormActions['getFieldState']
+    getFormState?: IFormActions['getFormState']
+    scope?: () => any
+  } = {}
+) => {
+  const schema = new Schema(fieldState.props)
+  const linkages = schema.getExtendsLinkages()
+  if (!isArr(linkages)) return []
+  const fieldName = FormPath.parse(fieldState.name)
+  const fieldIndexes = getPathIndexes(fieldName)
+  const formState = getFormState ? getFormState() : {}
+  return linkages.map(params => {
+    const newTarget = transformTargetPath(params.target, fieldIndexes)
+    const targetState = getFieldState ? getFieldState(newTarget) : {}
+    const fieldValue = fieldName.getIn(formState.values)
+    const options = compileObject(params, {
+      ...scope,
+      $value: fieldValue,
+      $self: fieldState || {},
+      $form: formState || {},
+      $target: targetState || {}
+    })
+    options.condition = JSONCondition.calculate(options.condition, fieldValue)
+    options.target = newTarget
+    return options
+  })
+}
+
+export const useValueLinkageEffect = ({
+  type,
+  resolve,
+  reject,
+  scope
+}: {
+  type?: string
+  resolve?: (params: any, actions: ISchemaFormActions) => void
   reject?: (params: any, actions: ISchemaFormActions) => void
-) => (params: any, context: any): IFormEffect<any, ISchemaFormActions> => {
-  return ($, actions) => {
-    const { name, target, triggerType = 'onFieldChange' } = params
-    const { hasChanged, getFormState, getFieldState } = actions
-    $(triggerType, name).subscribe(fieldState => {
-      const fieldName = FormPath.parse(fieldState.name)
-      const fieldIndexes = getPathIndexes(fieldName)
-      const formState = getFormState()
-      const newTarget = transformTargetPath(target, fieldIndexes)
-      const targetState = getFieldState(newTarget)
-      const fieldValue = fieldName.getIn(formState.values)
-      const options = compileObject(params, {
-        ...context,
-        $value: fieldValue,
-        $self: fieldState || {},
-        $form: formState || {},
-        $target: targetState || {}
-      })
-      options.condition = JSONCondition.calculate(options.condition, fieldValue)
-      options.target = newTarget
-      if (
-        hasChanged(fieldState, 'value') ||
-        hasChanged(fieldState, 'initialized') ||
-        hasChanged(fieldState, 'visible')
-      ) {
-        if (isFn(resolve)) {
-          if (options.condition) resolve(options, actions)
-        }
-        if (isFn(reject)) {
-          if (!options.condition) reject(options, actions)
-        }
+  scope?: any
+} = {}) => {
+  if (!type || !isFn(resolve)) return
+  const actions = createFormActions()
+  const { getFormState, getFieldState, hasChanged } = actions
+  const { onFieldChange$ } = FormEffectHooks
+  onFieldChange$('*').subscribe(fieldState => {
+    if (
+      !hasChanged(fieldState, 'value') &&
+      !hasChanged(fieldState, 'initialized') &&
+      !hasChanged(fieldState, 'visible')
+    ) {
+      return
+    }
+    const linkages = parseLinkages(fieldState, {
+      getFieldState,
+      getFormState,
+      scope
+    })
+    linkages.forEach(options => {
+      const { type: linkageType, condition } = options
+      if (linkageType !== type) return
+      if (isFn(resolve)) {
+        if (condition) resolve(options, actions)
+      }
+      if (isFn(reject)) {
+        if (!condition) reject(options, actions)
       }
     })
-  }
+  })
 }
