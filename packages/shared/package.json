@@ -29,7 +29,6 @@
     "@babel/runtime": "^7.4.4"
   },
   "dependencies": {
-    "@uform/types": "^0.4.0",
     "camel-case": "^3.0.0",
     "cool-path": "^0.1.18",
     "deepmerge": "^4.0.0"
