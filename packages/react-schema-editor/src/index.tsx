@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Button, Radio, Tabs } from 'antd'
 import * as fp from 'lodash/fp'
 import _ from 'lodash'
@@ -14,25 +14,22 @@ export const SchemaEditor: React.FC<{
   schema: any
   onChange: (schema: any) => void
 }> = ({ schema, onChange }) => {
-  const [componentType, setComponentType] = useState('antd');
-  const [selectedPath, setSelectedPath] = React.useState(null);
+  const [componentType, setComponentType] = useState('antd')
+  const [selectedPath, setSelectedPath] = React.useState(null)
 
-  const handleTypeChange = (e) => {
-    setComponentType(e.target.value);
+  const handleTypeChange = e => {
+    setComponentType(e.target.value)
   }
 
-  const handleTreeSelect = (path) => {
+  const handleTreeSelect = path => {
     setSelectedPath(path)
   }
 
-  const handleCodeChange = (code) => {
-    console.log(code);
-  }
+  const handleCodeChange = code => {}
 
   const selectedSchema =
-  selectedPath &&
-  (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
-  console.log('selectedSchema', selectedSchema)
+    selectedPath &&
+    (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
   return (
     <div className="schema-editor">
       <div className="schema-menus">
@@ -50,27 +47,36 @@ export const SchemaEditor: React.FC<{
       </div>
       <div className="schema-editor-main">
         <div className="schema-tree">
-          <SchemaTree schema={schema} onChange={onChange} onSelect ={handleTreeSelect} />
+          <SchemaTree
+            schema={schema}
+            onChange={onChange}
+            onSelect={handleTreeSelect}
+          />
         </div>
         <div className="schema-tabs">
           <Tabs type="card">
             <Tabs.TabPane tab="属性编辑" key="1">
-              {selectedSchema && <FieldEditor
-                  components={componentType === 'fusion' ? nextComponents : antdComponents}
+              {selectedSchema && (
+                <FieldEditor
+                  components={
+                    componentType === 'fusion' ? nextComponents : antdComponents
+                  }
                   fieldKey="fieldC"
-                  onFieldKeyChange={value => {
-                    console.log('onFieldKeyChange====', value)
-                  }}
+                  onFieldKeyChange={value => {}}
                   schema={selectedSchema}
                   onChange={value => {
                     const newSchema = _.clone(schema)
                     _.set(newSchema, selectedPath, value)
                     onChange(newSchema)
                   }}
-              />}
+                />
+              )}
             </Tabs.TabPane>
             <Tabs.TabPane tab="Schema源码" key="2">
-              <SchemaCode schema={schema} onChange={handleCodeChange}></SchemaCode>
+              <SchemaCode
+                schema={schema}
+                onChange={handleCodeChange}
+              ></SchemaCode>
             </Tabs.TabPane>
             <Tabs.TabPane tab="预览" key="3"></Tabs.TabPane>
           </Tabs>

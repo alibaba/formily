@@ -1,19 +1,18 @@
-import { registerLinkage } from '../shared/registry'
-import { presetLinkage } from '../shared/linkage'
+import { useValueLinkageEffect } from '../shared/linkage'
 
-registerLinkage(
-  'value:schema',
-  presetLinkage(
-    ({ target, schema }, { setFieldState }) => {
+export const useValueSchemaLinkageEffect = (scope?: any) =>
+  useValueLinkageEffect({
+    type: 'value:schema',
+    resolve: ({ target, schema }, { setFieldState }) => {
       setFieldState(target, innerState => {
         Object.assign(innerState.props, schema)
       })
     },
-    ({ target, otherwise }, { setFieldState }) => {
+    reject: ({ target, otherwise }, { setFieldState }) => {
       if (!otherwise) return
       setFieldState(target, innerState => {
         Object.assign(innerState.props, otherwise)
       })
-    }
-  )
-)
+    },
+    scope
+  })

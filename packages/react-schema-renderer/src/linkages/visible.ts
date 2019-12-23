@@ -1,18 +1,17 @@
-import { registerLinkage } from '../shared/registry'
-import { presetLinkage } from '../shared/linkage'
+import { useValueLinkageEffect } from '../shared/linkage'
 
-registerLinkage(
-  'value:visible',
-  presetLinkage(
-    ({ target }, { setFieldState }) => {
+export const useValueVisibleLinkageEffect = (scope?: any) =>
+  useValueLinkageEffect({
+    type: 'value:visible',
+    resolve: ({ target }, { setFieldState }) => {
       setFieldState(target, innerState => {
         innerState.visible = true
       })
     },
-    ({ target }, { setFieldState }) => {
+    reject: ({ target }, { setFieldState }) => {
       setFieldState(target, innerState => {
         innerState.visible = false
       })
-    }
-  )
-)
+    },
+    scope
+  })

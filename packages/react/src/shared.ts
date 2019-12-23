@@ -1,15 +1,14 @@
 import { isFn, FormPath, Subscribable } from '@uform/shared'
-import { IFormEffect, IFormActions, IFormAsyncActions } from './types'
+import {
+  IFormEffect,
+  IFormActions,
+  IFormAsyncActions,
+  IFieldMergeState
+} from './types'
 import { Observable } from 'rxjs/internal/Observable'
 import { filter } from 'rxjs/internal/operators/filter'
 import { createActions, createAsyncActions } from 'react-eva'
-import {
-  LifeCycleTypes,
-  IFormState,
-  FormGraph,
-  IFieldState,
-  IVirtualFieldState
-} from '@uform/core'
+import { LifeCycleTypes, IFormState, FormGraph, IFieldState } from '@uform/core'
 
 export const createFormActions = (): IFormActions => {
   if (env.currentActions) {
@@ -197,8 +196,6 @@ export const createEffectHook = <TResult, Props extends Array<any> = any[]>(
   return env.effectSelector(type, ...args)
 }
 
-type FieldMergeState = Partial<IFieldState> & Partial<IVirtualFieldState>
-
 export const FormEffectHooks = {
   onFormWillInit$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_WILL_INIT
@@ -235,17 +232,19 @@ export const FormEffectHooks = {
     LifeCycleTypes.ON_FORM_GRAPH_CHANGE
   ),
 
-  onFieldWillInit$: createEffectHook<FieldMergeState>(
+  onFieldWillInit$: createEffectHook<IFieldMergeState>(
     LifeCycleTypes.ON_FIELD_WILL_INIT
   ),
-  onFieldInit$: createEffectHook<FieldMergeState>(LifeCycleTypes.ON_FIELD_INIT),
-  onFieldChange$: createEffectHook<FieldMergeState>(
+  onFieldInit$: createEffectHook<IFieldMergeState>(
+    LifeCycleTypes.ON_FIELD_INIT
+  ),
+  onFieldChange$: createEffectHook<IFieldMergeState>(
     LifeCycleTypes.ON_FIELD_CHANGE
   ),
-  onFieldMount$: createEffectHook<FieldMergeState>(
+  onFieldMount$: createEffectHook<IFieldMergeState>(
     LifeCycleTypes.ON_FIELD_MOUNT
   ),
-  onFieldUnmount$: createEffectHook<FieldMergeState>(
+  onFieldUnmount$: createEffectHook<IFieldMergeState>(
     LifeCycleTypes.ON_FIELD_UNMOUNT
   ),
   onFieldInputChange$: createEffectHook<IFieldState>(
