@@ -166,7 +166,6 @@ Object {
 
 exports[`test all apis markup virtualbox 2`] = `
 Object {
-  "linkages": Array [],
   "properties": Object {
     "NO_NAME_FIELD_$0": Object {
       "key": "NO_NAME_FIELD_$0",
