@@ -4,7 +4,8 @@ import { StepProps, ItemProps as StepItemProps } from '@alifd/next/types/step'
 import {
   ISchemaFormProps,
   IMarkupSchemaFieldProps,
-  ISchemaFieldComponentProps
+  ISchemaFieldComponentProps,
+  FormPathPattern
 } from '@uform/react-schema-renderer'
 import { PreviewTextConfigProps } from '@uform/react-shared-components'
 import { StyledComponent } from 'styled-components'
@@ -93,5 +94,5 @@ export interface IFormTextBox extends IItemProps {
 }
 
 export interface IFormStep extends StepProps {
-  dataSource: StepItemProps[]
+  dataSource: Array<StepItemProps & { name: FormPathPattern }>
 }
