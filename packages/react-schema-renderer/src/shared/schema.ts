@@ -98,7 +98,6 @@ export class Schema implements ISchema {
         this.path = ''
       }
     }
-    this.linkages = []
     return this.fromJSON(json) as any
   }
   /**
@@ -386,7 +385,7 @@ export class Schema implements ISchema {
       this['x-component'] = lowercase(json['x-component'])
     }
     if (isValid(json['x-linkages'])) {
-      this.linkages = json['x-linkages']
+      this.linkages = isArr(json['x-linkages']) ? json['x-linkages'] : []
     }
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {
