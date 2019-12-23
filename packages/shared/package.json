@@ -1,6 +1,6 @@
 {
   "name": "@uform/shared",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
