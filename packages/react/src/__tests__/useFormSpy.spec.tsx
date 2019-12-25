@@ -22,8 +22,10 @@ describe('useFormSpy hook', () => {
             </Form>
         }
 
+        const typeList = []
         const Fragment = () => {
             const spyData = useFormSpy({ selector: '*', reducer: (state) => state })
+            typeList.push(spyData.type)
             return spyData
         }
 
@@ -42,10 +44,11 @@ describe('useFormSpy hook', () => {
             result.current.form.setFieldValue('a', 123)
 
             await waitForNextUpdate()
-            expect(result.current.type).toEqual(LifeCycleTypes.ON_FORM_VALIDATE_START)
-
-            await waitForNextUpdate()
-            expect(result.current.type).toEqual(LifeCycleTypes.ON_FORM_VALIDATE_END)
+            expect(typeList).toContain(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
+            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
+            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_INPUT_CHANGE)
+            expect(typeList).toContain(LifeCycleTypes.ON_FORM_INPUT_CHANGE)
         })
     })
 
@@ -60,11 +63,13 @@ describe('useFormSpy hook', () => {
             </Form>
         }
 
+        const typeList = []
         const Fragment = () => {
             const spyData = useFormSpy({ selector: [
                 LifeCycleTypes.ON_FORM_INIT,
                 LifeCycleTypes.ON_FIELD_CHANGE,
             ], reducer: (state) => state })
+            typeList.push(spyData.type)
             return spyData
         }
 
@@ -78,7 +83,7 @@ describe('useFormSpy hook', () => {
             result.current.form.setFieldValue('a', 123)
 
             await waitForNextUpdate()
-            expect(result.current.type).toEqual(LifeCycleTypes.ON_FIELD_CHANGE)
+            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
         })
     })
 
@@ -93,6 +98,7 @@ describe('useFormSpy hook', () => {
             </Form>
         }
 
+        const typeList = []
         const Fragment = () => {
             const spyData = useFormSpy({ selector: [
                 LifeCycleTypes.ON_FIELD_CHANGE,
@@ -101,8 +107,8 @@ describe('useFormSpy hook', () => {
                     count: (state.count || 0) + 1
                 }
             } })
-
             
+            typeList.push(spyData.type)
             return spyData
         }
 
@@ -113,25 +119,21 @@ describe('useFormSpy hook', () => {
             wrapper: FormWrapper
         })
 
-        act(async () => {
+        act(() => {
             result.current.form.setFieldValue('a', 1)
-            await waitForNextUpdate()            
         })
+        await waitForNextUpdate()            
 
-        act(async () => {
+        act(() => {
             result.current.form.setFieldValue('a', 2)
-            await waitForNextUpdate()            
         })
+        await waitForNextUpdate()     
 
-        act(async () => {
+        act(() => {
             result.current.form.setFieldValue('a', 3)
-            await waitForNextUpdate()
         })
-
-        // 除了fieldValue引起的渲染，还有三次reducer引起的渲染
         await waitForNextUpdate()
-        await waitForNextUpdate()
-        await waitForNextUpdate()
+        expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
         expect(result.current.state).toEqual({ count: 3 })
     })
 })
