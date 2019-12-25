@@ -30,10 +30,6 @@ describe('useFormSpy hook', () => {
             if (type === LifeCycleTypes.ON_FORM_MOUNT) {
                 mountFlag.resolve()
             }
-
-            if (type === 'custom2') {
-                endFlag.resolve()
-            }
         })
         
         const FormWrapper = (props) => {
@@ -48,10 +44,15 @@ describe('useFormSpy hook', () => {
         const Fragment = () => {
             const spyData = useFormSpy({ selector: '*', reducer: (state) => state })
             typeList.push(spyData.type)
+
+            if (spyData.type === 'custom2') {
+                endFlag.resolve()
+            }
             return spyData
         }
 
         const { result,
+            rerender,
             waitForNextUpdate
         } = renderHook(Fragment, {
             wrapper: FormWrapper
@@ -75,6 +76,7 @@ describe('useFormSpy hook', () => {
         await waitForNextUpdate()
 
         await endFlag.promise
+        rerender()
         expect(typeList).toContain('custom1')
         expect(typeList).toContain('custom2')
     })
@@ -113,6 +115,7 @@ describe('useFormSpy hook', () => {
         }
 
         const { result,
+            rerender,
             waitForNextUpdate
         } = renderHook(Fragment, {
             wrapper: FormWrapper
@@ -129,6 +132,7 @@ describe('useFormSpy hook', () => {
         })
 
         await endFlag.promise
+        rerender()
         expect(typeList).toContain('custom1')
         expect(typeList).not.toContain('custom2')
     })
@@ -142,10 +146,6 @@ describe('useFormSpy hook', () => {
         form.subscribe(({ type, payload }) => {
             if (type === LifeCycleTypes.ON_FORM_MOUNT) {
                 mountFlag.resolve()
-            }
-
-            if (type === 'custom3') {
-                endFlag.resolve()
             }
         })
         const FormWrapper = (props) => {
@@ -166,11 +166,16 @@ describe('useFormSpy hook', () => {
                 }
             } })
             
+            if (spyData.type === 'custom3') {
+                endFlag.resolve()
+            }
+
             typeList.push(spyData.type)
             return spyData
         }
 
         const { result,
+            rerender,
             waitForNextUpdate
         } = renderHook(Fragment, {
             wrapper: FormWrapper
@@ -192,6 +197,7 @@ describe('useFormSpy hook', () => {
         })
         await waitForNextUpdate()
         await endFlag.promise
+        rerender()
         expect(typeList).toContain('custom1')
         expect(typeList).toContain('custom2')
         expect(typeList).toContain('custom3')
