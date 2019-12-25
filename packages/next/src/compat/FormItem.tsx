@@ -62,6 +62,7 @@ const computeSchemaExtendProps = (
         ...props.schema.getExtendsItemProps(),
         ...props.schema.getExtendsProps()
       },
+      'required',
       'className',
       'prefix',
       'labelAlign',
