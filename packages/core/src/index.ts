@@ -712,10 +712,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(
-          field.getSourceState(state => state.path),
-          opts
-        )
+        return validate(field.getSourceState(state => state.path), opts)
       }
     }
   }
@@ -797,6 +794,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
 
     env.submittingTask = async () => {
+      // 增加onFormSubmitValidateStart来明确submit引起的校验开始了
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START, state)
       const validateResult = await validate('', { throwErrors: false })
       const { errors } = validateResult
       // 校验失败
@@ -815,6 +814,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
         throw errors
       }
+
+      // 增加onFormSubmitValidateSucces来明确submit引起的校验最终的结果
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS, state)
 
       // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
       const validated = state.getState(({ errors, warnings }) => ({
