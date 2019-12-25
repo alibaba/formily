@@ -47,8 +47,6 @@ describe('useFormSpy hook', () => {
             expect(typeList).toContain(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
             expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
             expect(typeList).toContain(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
-            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_INPUT_CHANGE)
-            expect(typeList).toContain(LifeCycleTypes.ON_FORM_INPUT_CHANGE)
         })
     })
 
