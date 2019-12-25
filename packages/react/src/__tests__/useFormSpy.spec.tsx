@@ -44,9 +44,7 @@ describe('useFormSpy hook', () => {
             result.current.form.setFieldValue('a', 123)
 
             await waitForNextUpdate()
-            expect(typeList).toContain(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
             expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
-            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
         })
     })
 
