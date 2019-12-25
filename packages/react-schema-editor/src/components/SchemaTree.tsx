@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react'
-import { Tree, Row, Col, Icon } from 'antd'
+import { Tree, Row, Col, Icon, Button } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
 import _ from 'lodash'
 import FieldEditor from './FieldEditor'
 
 const TreeNode = Tree.TreeNode
+
+let addIndex = 0
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
@@ -95,9 +97,22 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
     [schema, onChange]
   )
 
+  const handleAddNewFormItem = React.useCallback(() => {
+    let newSchema = schema
+
+    newSchema = fp.set(
+      ['properties', 'new' + addIndex++],
+      { type: 'object' },
+      newSchema
+    )
+
+    onChange(newSchema)
+  }, [schema, onChange])
+
   const selectedSchema =
     selectedPath &&
     (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
+
   return (
     <Row>
       <Col span={12}>
@@ -110,6 +125,7 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
         >
           {TreeNodeBySchema({ schema, path: [] })}
         </Tree>
+        <Button onClick={handleAddNewFormItem}>+ New FormItem</Button>
       </Col>
       <Col span={12}>
         {selectedSchema && (
