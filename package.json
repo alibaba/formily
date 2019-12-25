@@ -103,6 +103,7 @@
     "markdown-toc": "^1.2.0",
     "moment": "^2.24.0",
     "monaco-editor": "^0.18.1",
+    "node-sass": "^4.13.0",
     "onchange": "^5.2.0",
     "prettier": "^1.18.2",
     "pretty-format": "^24.0.0",
@@ -146,6 +147,7 @@
     ]
   },
   "dependencies": {
+    "@uform/react-schema-renderer": "^1.0.0-beta.5",
     "lodash": "^4.17.15",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2"
