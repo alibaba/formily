@@ -1,6 +1,6 @@
 import React from 'react'
 import { renderHook, act } from '@testing-library/react-hooks'
-import { LifeCycleTypes, Form, useFormSpy, createForm, Field } from '..'
+import { LifeCycleTypes, Form, useFormSpy, createForm, Field, createFormActions } from '..'
 
 const InputField = props => (
     <Field {...props}>
@@ -10,10 +10,32 @@ const InputField = props => (
     </Field>
 )
 
+function Deferred() {
+	this.resolve = null;
+    this.reject = null;
+    this.promise = new Promise(function(resolve, reject) {
+        this.resolve = resolve;
+        this.reject = reject;
+    }.bind(this));
+    Object.freeze(this);
+}
+
 describe('useFormSpy hook', () => {
     test('basic', async () => {
         const opts = {}        
+        const mountFlag = new Deferred()
+        const endFlag = new Deferred()
         const form = createForm(opts)
+        form.subscribe(({ type, payload }) => {
+            if (type === LifeCycleTypes.ON_FORM_MOUNT) {
+                mountFlag.resolve()
+            }
+
+            if (type === 'custom2') {
+                endFlag.resolve()
+            }
+        })
+        
         const FormWrapper = (props) => {
             const { children } = props
             return <Form form={form}>
@@ -39,18 +61,38 @@ describe('useFormSpy hook', () => {
         expect(result.current.form).toEqual(form)
         expect(result.current.type).toEqual(LifeCycleTypes.ON_FORM_INIT)
         expect(result.current.state).toEqual({})
+        expect(typeList.length).toEqual(1)
 
-        act(async () => {
-            result.current.form.setFieldValue('a', 123)
-
-            await waitForNextUpdate()
-            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
+        await mountFlag.promise
+        act(() => {
+            result.current.form.notify('custom1')
         })
+        await waitForNextUpdate()        
+
+        act(() => {
+            result.current.form.notify('custom2')
+        })
+        await waitForNextUpdate()
+
+        await endFlag.promise
+        expect(typeList).toContain('custom1')
+        expect(typeList).toContain('custom2')
     })
 
     test('selector', async () => {
         const opts = {}        
+        const mountFlag = new Deferred()
+        const endFlag = new Deferred()
         const form = createForm(opts)
+        form.subscribe(({ type, payload }) => {            
+            if (type === LifeCycleTypes.ON_FORM_MOUNT) {
+                mountFlag.resolve()
+            }
+
+            if (type === 'custom2') {
+                endFlag.resolve()
+            }
+        })
         const FormWrapper = (props) => {
             const { children } = props
             return <Form form={form}>
@@ -63,8 +105,9 @@ describe('useFormSpy hook', () => {
         const Fragment = () => {
             const spyData = useFormSpy({ selector: [
                 LifeCycleTypes.ON_FORM_INIT,
-                LifeCycleTypes.ON_FIELD_CHANGE,
+                'custom1',
             ], reducer: (state) => state })
+
             typeList.push(spyData.type)
             return spyData
         }
@@ -75,20 +118,39 @@ describe('useFormSpy hook', () => {
             wrapper: FormWrapper
         })
 
-        act(async () => {
-            result.current.form.setFieldValue('a', 123)
-
-            await waitForNextUpdate()
-            expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
+        await mountFlag.promise
+        act(() => {
+            result.current.form.notify('custom1')
         })
+        await waitForNextUpdate()        
+
+        act(() => {
+            result.current.form.notify('custom2')
+        })
+
+        await endFlag.promise
+        expect(typeList).toContain('custom1')
+        expect(typeList).not.toContain('custom2')
     })
 
     test('reducer', async () => {
         const opts = {}        
+        const mountFlag = new Deferred()
+        const endFlag = new Deferred()
         const form = createForm(opts)
+        const actions = createFormActions()
+        form.subscribe(({ type, payload }) => {
+            if (type === LifeCycleTypes.ON_FORM_MOUNT) {
+                mountFlag.resolve()
+            }
+
+            if (type === 'custom3') {
+                endFlag.resolve()
+            }
+        })
         const FormWrapper = (props) => {
             const { children } = props
-            return <Form form={form}>
+            return <Form actions={actions} form={form}>
                 <InputField name="a" />
                 {children}
             </Form>
@@ -97,7 +159,7 @@ describe('useFormSpy hook', () => {
         const typeList = []
         const Fragment = () => {
             const spyData = useFormSpy({ selector: [
-                LifeCycleTypes.ON_FIELD_CHANGE,
+                'custom1', 'custom2', 'custom3'
             ], reducer: (state) => {
                 return {
                     count: (state.count || 0) + 1
@@ -109,27 +171,30 @@ describe('useFormSpy hook', () => {
         }
 
         const { result,
-            // rerender,
             waitForNextUpdate
         } = renderHook(Fragment, {
             wrapper: FormWrapper
         })
 
+        await mountFlag.promise
         act(() => {
-            result.current.form.setFieldValue('a', 1)
-        })
-        await waitForNextUpdate()            
-
-        act(() => {
-            result.current.form.setFieldValue('a', 2)
-        })
-        await waitForNextUpdate()     
-
-        act(() => {
-            result.current.form.setFieldValue('a', 3)
+            form.notify('custom1')
         })
         await waitForNextUpdate()
-        expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
+
+        act(() => {
+            form.notify('custom2')
+        })
+        await waitForNextUpdate()        
+
+        act(() => {
+            form.notify('custom3')
+        })
+        await waitForNextUpdate()
+        await endFlag.promise
+        expect(typeList).toContain('custom1')
+        expect(typeList).toContain('custom2')
+        expect(typeList).toContain('custom3')
         expect(result.current.state).toEqual({ count: 3 })
     })
 })
