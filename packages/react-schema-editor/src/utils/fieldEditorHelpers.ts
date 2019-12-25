@@ -28,6 +28,37 @@ export const getInputTypeData = () => {
   }
 }
 
+export const getDefaultXProps = () => {
+  return  {
+    colon: {},
+    extra: {},
+    hasFeedback: {},
+    help: {},
+    htmlFor: {},
+    label: {},
+    labelCol: {},
+    labelAlign: {},
+    required: {},
+    validateStatus: {},
+    wrapperCol: {}
+  }
+}
+
+export const getDefaultXRules = () => {
+  return {
+    enum: {},
+    len: {},
+    max: {},
+    min: {},
+    pattern: {},
+    required: {},
+    transform: {},
+    type: {},
+    validator: {},
+    whitespace: {}
+  }
+}
+
 const convertKeysToSelectData = keys => {
   const options = keys.map(value => ({
     label: value,
@@ -68,8 +99,6 @@ export const getComponentXRules = schema => {
 
 export const getComponentPropsData = ({
   schema,
-  xProps,
-  xRules,
   components,
   componentName,
   propsKey
@@ -85,12 +114,12 @@ export const getComponentPropsData = ({
       break
     }
     case ComponentPropsTypes.X_PROPS: {
-      allKeys = _.keys(xProps)
+      allKeys = _.keys(getDefaultXProps())
       usedKeys = _.keys(schema[propsKey])
       break
     }
     case ComponentPropsTypes.X_RULES: {
-      allKeys = _.keys(xRules)
+      allKeys = _.keys(getDefaultXRules())
       usedKeys = getComponentXRules(schema)
       break
     }
@@ -135,6 +164,7 @@ export const getExpressionValue = value => {
   }
   return value
 }
+
 export const getInputType = value => {
   if (typeof value === 'object' || isExpression(value)) {
     return InputTypes.TEXT_AREA
@@ -147,4 +177,14 @@ export const getInputType = value => {
     case 'boolean':
       return InputTypes.CHECKBOX
   }
+}
+
+export const fieldTypeDisabled = schema => {
+  if (schema.type === 'object' && !_.isEmpty(schema.properties)) {
+    return true
+  }
+  if (schema.type === 'array' && !_.isEmpty(schema.items)) {
+    return true
+  }
+  return false
 }

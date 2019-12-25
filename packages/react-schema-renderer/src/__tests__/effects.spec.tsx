@@ -201,9 +201,11 @@ test('getFieldState with onFieldChange', async () => {
 
 test('set errors in effects', async () => {
   const callback = jest.fn()
+  const actions = createFormActions()
   const TestComponent = () => {
     return (
       <SchemaForm
+        actions={actions}
         effects={($, { setFieldState }) => {
           $('onFormInit').subscribe(() => {
             setFieldState('aaa', state => {
@@ -227,7 +229,7 @@ test('set errors in effects', async () => {
   await wait();
   fireEvent.click(queryByTestId('btn'))
   await wait();
-  expect(callback).toHaveBeenCalledTimes(0)
+  expect(callback).toHaveBeenCalledTimes(1)
 })
 
 test('setFieldState from buffer', async () => {

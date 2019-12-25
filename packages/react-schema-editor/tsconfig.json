@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "noUnusedLocals": false,
+  "compilerOptions": {
+    "outDir": "./lib"
+  },
+  "include": ["./src/**/*.ts", "./src/**/*.tsx"],
+  "exclude": ["./src/__tests__/*"]
+}

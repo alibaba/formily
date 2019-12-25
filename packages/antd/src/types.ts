@@ -7,14 +7,15 @@ import {
 import {
   ISchemaFormProps,
   IMarkupSchemaFieldProps,
-  ISchemaFieldComponentProps
+  ISchemaFieldComponentProps,
+  FormPathPattern
 } from '@uform/react-schema-renderer'
 import { PreviewTextConfigProps } from '@uform/react-shared-components'
 import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
 
-export type IAntdSchemaFormProps = FormProps &
+export type IAntdSchemaFormProps = Omit<FormProps, 'onSubmit'> &
   IFormItemTopProps &
   PreviewTextConfigProps &
   ISchemaFormProps
@@ -88,5 +89,5 @@ export interface IFormTextBox extends IItemProps {
 }
 
 export interface IFormStep extends StepProps {
-  dataSource: StepItemProps[]
+  dataSource: Array<StepItemProps & { name: FormPathPattern }>
 }

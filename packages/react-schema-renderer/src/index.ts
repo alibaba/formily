@@ -10,8 +10,10 @@ export * from './components/SchemaMarkup'
 export * from './shared/connect'
 export * from './shared/registry'
 export * from './shared/schema'
+export * from './shared/condition'
+export * from './shared/expression'
+export * from './shared/linkage'
 export * from './types'
-
 export const createFormActions = createSchemaFormActions
 export const createAsyncFormActions = createAsyncSchemaFormActions
 export { InternalField, InternalForm }

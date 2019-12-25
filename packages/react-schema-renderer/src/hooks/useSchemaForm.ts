@@ -1,11 +1,14 @@
 import { useMemo, useRef } from 'react'
 import { useForm } from '@uform/react'
 import { Schema } from '../shared/schema'
-import { deprecate, each, lowercase } from '@uform/shared'
+import { deprecate, each, lowercase, isFn } from '@uform/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
 import { createSchemaFormActions } from '../shared/actions'
 import { getRegistry } from '../shared/registry'
+import { useValueVisibleLinkageEffect } from '../linkages/visible'
+import { useValueSchemaLinkageEffect } from '../linkages/schema'
+import { useValueStateLinkageEffect } from '../linkages/state'
 
 const lowercaseKeys = (obj: any) => {
   const result = {}
@@ -21,7 +24,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     virtualFields,
     formComponent,
     formItemComponent,
-    schema,
+    schema: propsSchema,
     defaultValue,
     value,
     initialValues,
@@ -33,6 +36,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     onValidateFailed,
     useDirty,
     children,
+    expressionScope,
     form,
     editable,
     validateFirst,
@@ -41,10 +45,31 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const { implementActions } = useEva({
     actions
   })
+  const schema = useMemo(() => {
+    const result = new Schema(propsSchema)
+    implementActions({
+      getSchema: deprecate(() => result, 'Please use the getFormSchema.'),
+      getFormSchema: () => result
+    })
+    return result
+  }, [propsSchema])
   const registry = getRegistry()
   return {
-    form: useForm(props),
-    formComponentProps,
+    form: useForm({
+      ...props,
+      effects: ($, actions) => {
+        useValueVisibleLinkageEffect(expressionScope)
+        useValueSchemaLinkageEffect(expressionScope)
+        useValueStateLinkageEffect(expressionScope)
+        if (isFn(effects)) {
+          effects($, actions)
+        }
+      }
+    }),
+    formComponentProps: {
+      ...formComponentProps,
+      ...schema.getExtendsComponentProps()
+    },
     fields: lowercaseKeys({
       ...registry.fields,
       ...fields
@@ -57,14 +82,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     formItemComponent: formItemComponent
       ? formItemComponent
       : registry.formItemComponent,
-    schema: useMemo(() => {
-      const result = new Schema(schema)
-      implementActions({
-        getSchema: deprecate(() => result, 'Please use the getFormSchema.'),
-        getFormSchema: () => result
-      })
-      return result
-    }, [schema]),
+    schema,
     children
   }
 }

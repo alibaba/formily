@@ -3,7 +3,6 @@ import { Tree, Row, Col, Icon, Button } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
 import _ from 'lodash'
-import FieldEditor from './FieldEditor'
 
 const TreeNode = Tree.TreeNode
 
@@ -11,12 +10,11 @@ let addIndex = 0
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
-  onChange
+  onChange,
+  onSelect
 }) => {
-  const [selectedPath, setSelectedPath] = React.useState(null)
-
   const handleSelect = React.useCallback((path: string[]) => {
-    setSelectedPath(path[0])
+    onSelect(path[0])
   }, [])
 
   const handleDrop = React.useCallback(
@@ -210,6 +208,22 @@ const TreeNodeBySchema: React.FC<{
   }
 
   return <TreeNode icon={<Icon type="file" />} {...currentTreeLevelProps} />
+}
+
+function getUniqueKeyFromObjectKeys(key: string, keys: string[], count = -1) {
+  if (count === -1) {
+    if (keys.includes(key)) {
+      return getUniqueKeyFromObjectKeys(key, keys, 0)
+    }
+    return key
+  }
+
+  const newKey = key + count
+  if (keys.includes(newKey)) {
+    return getUniqueKeyFromObjectKeys(key, keys, count + 1)
+  } else {
+    return newKey
+  }
 }
 
 function getUniqueKeyFromObjectKeys(key: string, keys: string[], count = -1) {

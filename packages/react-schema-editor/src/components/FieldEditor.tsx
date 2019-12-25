@@ -1,6 +1,14 @@
 import React from 'react'
 import _ from 'lodash'
-import { Form, Button, Checkbox, Input, InputNumber, Select } from 'antd'
+import {
+  Form,
+  Button,
+  Checkbox,
+  Input,
+  InputNumber,
+  Select,
+  AutoComplete,
+} from 'antd'
 import {
   getFieldTypeData,
   getInputTypeData,
@@ -10,10 +18,12 @@ import {
   getInputType,
   getPropertyValue,
   getExpressionValue,
-  getRuleMessage
+  getRuleMessage,
+  fieldTypeDisabled,
+  getDefaultXProps,
+  getDefaultXRules
 } from '../utils/fieldEditorHelpers'
 import { InputTypes, ComponentPropsTypes } from '../utils/types'
-import './FieldEditor.css'
 
 const FormItem = Form.Item
 const SelectOption = Select.Option
@@ -26,10 +36,12 @@ const formItemLayout = {
 const BLANK_PROPERTY_VALUE = ''
 
 interface IFieldEditorProps {
+  fieldKey: string
+  onFieldKeyChange: (fieldKey: string) => void
   schema: any
-  components: any
-  xProps: any
-  xRules: any
+  components?: any
+  xProps?: any
+  xRules?: any
   onChange: (schema: any) => void
 }
 
@@ -41,8 +53,6 @@ interface IFormItemGroupProps extends Partial<IFieldEditorProps> {
 const FormItemGroup: React.FC<IFormItemGroupProps> = ({
   title,
   schema,
-  xProps,
-  xRules,
   components,
   propsKey,
   onChange
@@ -51,8 +61,6 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
   const inputTypeData = getInputTypeData()
   const componentPropsData = getComponentPropsData({
     schema,
-    xProps,
-    xRules,
     components,
     componentName,
     propsKey
@@ -209,7 +217,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
       onChange({
         ...schema,
         [propsKey]: _.concat(schema[propsKey] || [], {
-          [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
+          [BLANK_PROPERTY_VALUE]: BLANK_PROPERTY_VALUE
         })
       })
     } else {
@@ -217,7 +225,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         ...schema,
         [propsKey]: {
           ...schema[propsKey],
-          [componentPropsData.defaultValue]: BLANK_PROPERTY_VALUE
+          [BLANK_PROPERTY_VALUE]: BLANK_PROPERTY_VALUE
         }
       })
     }
@@ -234,22 +242,24 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
             <FormItem
               label={index === 0 ? '属性名' : null}
               {...formItemLayout}
-              className="field-group-form-item"
+              className="field-group-form-item auto-complete"
             >
-              <Select
+              <AutoComplete
                 placeholder="请选择属性"
-                notFoundContent="没有其他选项了"
+                dataSource={_.map(
+                  componentPropsData.options,
+                  ({ value }) => value
+                )}
                 value={property}
+                filterOption={(inputValue, option) =>
+                  (option.props.children as string)
+                    .toUpperCase()
+                    .includes(inputValue.toUpperCase())
+                }
                 onChange={value => {
                   handlePropertyChange(value, property)
                 }}
-              >
-                {_.map(componentPropsData.options, ({ label, value }) => (
-                  <SelectOption value={value} key={value}>
-                    {label}
-                  </SelectOption>
-                ))}
-              </Select>
+              />
             </FormItem>
             <FormItem
               label={index === 0 ? '输入方式' : null}
@@ -293,6 +303,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                 className="field-group-form-item"
               >
                 <InputNumber
+                  style={{width: '100%'}}
                   value={value}
                   onChange={value => {
                     handleXComponentPropsValueChange(value, property)
@@ -372,7 +383,6 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         type="primary"
         icon="plus"
         size="small"
-        disabled={componentPropsData.options.length < 1}
         onClick={handlePlusClick}
       />
     </div>
@@ -380,12 +390,13 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
 }
 
 const FieldEditor: React.FC<IFieldEditorProps> = ({
+  fieldKey,
   schema,
   components,
-  xProps,
-  xRules,
+  onFieldKeyChange,
   onChange
 }) => {
+  const isLeafField = !['object', 'array'].includes(schema.type)
   const fieldTypeData = getFieldTypeData()
 
   const xComponentData = getXComponentData(components)
@@ -395,6 +406,18 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
       <div className="field-group">
         <div className="field-group-title">字段</div>
         <div className="field-group-content">
+          <FormItem
+            label="fieldKey"
+            {...formItemLayout}
+            className="field-group-form-item"
+          >
+            <Input
+              value={fieldKey}
+              onChange={event => {
+                onFieldKeyChange(event.target.value)
+              }}
+            />
+          </FormItem>
           <FormItem
             label="类型"
             {...formItemLayout}
@@ -408,6 +431,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                   type: value
                 })
               }}
+              disabled={fieldTypeDisabled(schema)}
             >
               {_.map(fieldTypeData.options, ({ label, value }) => (
                 <SelectOption value={value} key={value}>
@@ -419,10 +443,16 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
           <FormItem
             label="组件"
             {...formItemLayout}
-            className="field-group-form-item"
+            className="field-group-form-item auto-complete"
           >
-            <Select
+            <AutoComplete
+              dataSource={_.map(xComponentData.options, ({ value }) => value)}
               value={schema[ComponentPropsTypes.X_COMPONENT]}
+              filterOption={(inputValue, option) =>
+                (option.props.children as string)
+                  .toUpperCase()
+                  .includes(inputValue.toUpperCase())
+              }
               onChange={value => {
                 onChange({
                   ...schema,
@@ -430,13 +460,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                   [ComponentPropsTypes.X_COMPONENT_PROPS]: {}
                 })
               }}
-            >
-              {_.map(xComponentData.options, ({ label, value }) => (
-                <SelectOption value={value} key={value}>
-                  {label}
-                </SelectOption>
-              ))}
-            </Select>
+            />
           </FormItem>
           <FormItem
             label="描述"
@@ -455,31 +479,38 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
           </FormItem>
         </div>
       </div>
-      <FormItemGroup
-        title="组件属性"
-        components={components}
-        propsKey={ComponentPropsTypes.X_COMPONENT_PROPS}
-        schema={schema}
-        onChange={onChange}
-      />
-      <FormItemGroup
-        title="表单字段属性"
-        components={components}
-        propsKey={ComponentPropsTypes.X_PROPS}
-        schema={schema}
-        xProps={xProps}
-        onChange={onChange}
-      />
-      <FormItemGroup
-        title="校验规则"
-        components={components}
-        propsKey={ComponentPropsTypes.X_RULES}
-        schema={schema}
-        xRules={xRules}
-        onChange={onChange}
-      />
+      {isLeafField && (
+        <FormItemGroup
+          title="组件属性"
+          components={components}
+          propsKey={ComponentPropsTypes.X_COMPONENT_PROPS}
+          schema={schema}
+          onChange={onChange}
+        />
+      )}
+      {isLeafField && (
+        <FormItemGroup
+          title="表单字段属性"
+          components={components}
+          propsKey={ComponentPropsTypes.X_PROPS}
+          schema={schema}
+          xProps={getDefaultXProps()}
+          onChange={onChange}
+        />
+      )}
+
+      {isLeafField && (
+        <FormItemGroup
+          title="校验规则"
+          components={components}
+          propsKey={ComponentPropsTypes.X_RULES}
+          schema={schema}
+          xRules={getDefaultXRules()}
+          onChange={onChange}
+        />
+      )}
     </Form>
   )
 }
 
-export default Form.create()(FieldEditor)
+export default FieldEditor

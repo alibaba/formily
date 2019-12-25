@@ -15,8 +15,7 @@ import {
 import {
   FormValidator,
   setValidationLanguage,
-  setValidationLocale,
-  ValidateFieldOptions
+  setValidationLocale
 } from '@uform/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
@@ -42,7 +41,8 @@ import {
   isVirtualField,
   isFormState,
   isFieldState,
-  isVirtualFieldState
+  isVirtualFieldState,
+  IFormExtendedValidateFieldOptions
 } from './types'
 export * from './shared/lifecycle'
 export * from './types'
@@ -157,7 +157,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
       })
     }
-
     if (unmountedChanged && published.unmounted) {
       heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, state)
     }
@@ -179,7 +178,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const mountedChanged = field.isDirty('mounted')
       const initializedChanged = field.isDirty('initialized')
       const warningsChanged = field.isDirty('warnings')
-      const errorsChanges = field.isDirty('errors')
+      const errorsChanged = field.isDirty('errors')
       const userUpdateFieldPath =
         env.userUpdateFields[env.userUpdateFields.length - 1]
       if (initializedChanged) {
@@ -187,12 +186,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const isEmptyValue = !isValid(published.value)
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
-          field.setState((state: IFieldState<FieldProps>) => {
+          field.setSourceState((state: IFieldState<FieldProps>) => {
             if (isEmptyValue) state.value = getFormValuesIn(state.name)
             if (isEmptyInitialValue)
               state.initialValue = getFormInitialValuesIn(state.name)
-          }, true)
+          })
         }
+      }
+      if (valueChanged) {
+        userUpdating(field, () => {
+          setFormValuesIn(path, published.value)
+        })
+        heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+      }
+      if (initialValueChanged) {
+        setFormInitialValuesIn(path, published.initialValue)
+        heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
@@ -224,22 +233,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
             setFormValuesIn(path, published.value)
           }
         })
+        heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
       }
       if (mountedChanged && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
-      if (valueChanged) {
-        userUpdating(field, () => {
-          setFormValuesIn(path, published.value)
-        })
-        heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-      }
-      if (initialValueChanged) {
-        setFormInitialValuesIn(path, published.initialValue)
-        heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
-      }
 
-      if (errorsChanges) {
+      if (errorsChanged) {
         syncFormMessages('errors', published.name, published.errors)
       }
 
@@ -386,7 +386,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
         field.setState((state: IFieldState<FieldProps>) => {
           const formValue = getFormValuesIn(dataPath)
           const formInitialValue = getFormInitialValuesIn(dataPath)
-          state.initialized = true
           if (isValid(value)) {
             // value > formValue > initialValue
             state.value = value
@@ -403,11 +402,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
           if (isValid(display)) {
             state.display = display
           }
-          state.props = props
-          state.required = required
-          state.rules = rules as any
-          state.selfEditable = editable
-          state.formEditable = options.editable
+          if (isValid(props)) {
+            state.props = props
+          }
+          if (isValid(required)) {
+            state.required = required
+          }
+          if (isValid(rules)) {
+            state.rules = rules
+          }
+          if (isValid(editable)) {
+            state.selfEditable = editable
+          }
+          if (isValid(options.editable)) {
+            state.formEditable = options.editable
+          }
+          state.initialized = true
         })
         batchRunTaskQueue(field, nodePath)
       })
@@ -604,7 +614,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
-      heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
     }
 
     function getValue() {
@@ -702,8 +711,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         setValue(arr)
         return arr
       },
-      validate() {
-        return validate(field.getSourceState(state => state.path))
+      validate(opts?: IFormExtendedValidateFieldOptions) {
+        return validate(
+          field.getSourceState(state => state.path),
+          opts
+        )
       }
     }
   }
@@ -727,7 +739,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
     forceClear = false,
     validate = true
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
-    let result: Promise<void | IFormValidateResult>
     graph.eachChildren('', selector, field => {
       field.setState((state: IFieldState<FieldProps>) => {
         state.modified = false
@@ -765,11 +776,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
     if (isFn(options.onReset)) {
       options.onReset()
     }
+    heart.publish(LifeCycleTypes.ON_FORM_RESET, state)
+    let validateResult: void | IFormValidateResult
     if (validate) {
-      result = formApi.validate()
+      validateResult = await formApi.validate(selector, { throwErrors: false })
     }
 
-    return result
+    return validateResult
   }
 
   async function submit(
@@ -782,54 +795,65 @@ export function createForm<FieldProps, VirtualFieldProps>(
     state.setState(state => {
       state.submitting = true
     })
-    env.submittingTask = validate()
-      .then(() => {
-        const validated = state.getState(({ errors, warnings }) => ({
-          errors,
-          warnings
-        })) //因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
-        if (validated.errors.length) {
-          state.setState(state => {
-            state.submitting = false
-          })
-          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-          if (isFn(options.onValidateFailed)) {
-            options.onValidateFailed(validated)
-          }
-          return Promise.reject(validated.errors)
-        }
-        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
-        if (isFn(onSubmit)) {
-          return Promise.resolve(
-            onSubmit(state.getState(state => clone(state.values)))
-          ).then(payload => ({ validated, payload }))
-        }
-        return { validated, payload: undefined }
-      })
-      .then<IFormSubmitResult>(response => {
-        const {
-          validated: { errors, warnings }
-        } = response
+
+    env.submittingTask = async () => {
+      const validateResult = await validate('', { throwErrors: false })
+      const { errors } = validateResult
+      // 校验失败
+      if (errors.length) {
+        // 由于校验失败导致submit退出
         state.setState(state => {
           state.submitting = false
         })
 
+        // 增加onFormSubmitValidateFailed来明确结束submit的类型
+        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED, state)
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-        if (errors.length) {
-          return Promise.reject(errors)
+        if (isFn(options.onValidateFailed)) {
+          options.onValidateFailed(validateResult)
         }
-        if (warnings.length) {
-          console.warn(warnings)
+
+        throw errors
+      }
+
+      // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
+      const validated = state.getState(({ errors, warnings }) => ({
+        errors,
+        warnings
+      }))
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
+
+      let payload,
+        values = state.getState(state => clone(state.values))
+      if (isFn(onSubmit)) {
+        try {
+          payload = await Promise.resolve(onSubmit(values))
+        } catch (e) {
+          if (e) {
+            console.error(e)
+          }
         }
-        return response
+      }
+
+      state.setState(state => {
+        state.submitting = false
       })
-    return env.submittingTask
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
+      return {
+        values,
+        validated,
+        payload
+      }
+    }
+
+    return env.submittingTask()
   }
 
   async function validate(
     path?: FormPathPattern,
-    opts?: ValidateFieldOptions
+    opts?: IFormExtendedValidateFieldOptions
   ): Promise<IFormValidateResult> {
+    const { throwErrors = true } = opts || {}
     if (!state.getState(state => state.validating)) {
       state.setSourceState(state => {
         state.validating = true
@@ -842,14 +866,27 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    return validator.validate(path, opts).then(payload => {
-      clearTimeout(env.validateTimer)
-      state.setState(state => {
-        state.validating = false
-      })
-      heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-      return payload
+    const payload = await validator.validate(path, opts)
+    clearTimeout(env.validateTimer)
+    state.setState(state => {
+      state.validating = false
     })
+    heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
+
+    // 打印warnings日志从submit挪到这里
+    const { errors, warnings } = payload
+    if (warnings.length) {
+      console.warn(warnings)
+    }
+    if (errors.length > 0) {
+      if (throwErrors) {
+        throw payload
+      } else {
+        return payload
+      }
+    } else {
+      return payload
+    }
   }
 
   function setFormState(
@@ -869,22 +906,24 @@ export function createForm<FieldProps, VirtualFieldProps>(
     field: IField | IVirtualField,
     nodePath: FormPath
   ) {
-    env.taskQueue.forEach((task, index) => {
-      const { pattern, callbacks } = task
+    for (let index = 0; index < env.taskQueue.length; index++) {
+      const { pattern, callbacks } = env.taskQueue[index]
+      let removed = false
       if (matchStrategy(pattern, nodePath)) {
         callbacks.forEach(callback => {
           field.setState(callback)
         })
         if (!pattern.isWildMatchPattern && !pattern.isMatchPattern) {
-          env.taskQueue.splice(index, 1)
-          env.taskQueue.forEach(({ pattern }, index) => {
-            if (pattern.toString() === nodePath.toString()) {
-              env.taskIndexes[nodePath.toString()] = index
-            }
-          })
+          env.taskQueue.splice(index--, 1)
+          removed = true
         }
       }
-    })
+      if (!removed) {
+        env.taskIndexes[pattern.toString()] = index
+      } else {
+        delete env.taskIndexes[pattern.toString()]
+      }
+    }
   }
 
   function setFieldState(
@@ -1027,7 +1066,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   //在subscribe中必须同步使用，否则会监听不到变化
   function hasChanged(target: any, path: FormPathPattern): boolean {
-    if (!env.publishing) {
+    if (env.publishing[target ? target.path : ''] === false) {
       throw new Error(
         'The watch function must be used synchronously in the subscribe callback.'
       )
@@ -1086,18 +1125,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const heart = new FormHeart({
     ...options,
     context: formApi,
-    beforeNotify: () => {
-      env.publishing = true
+    beforeNotify: payload => {
+      env.publishing[payload.path || ''] = true
     },
-    afterNotify: () => {
-      env.publishing = false
+    afterNotify: payload => {
+      env.publishing[payload.path || ''] = false
     }
   })
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
-    publishing: false,
+    publishing: {},
     taskQueue: [],
     userUpdateFields: [],
     taskIndexes: {},

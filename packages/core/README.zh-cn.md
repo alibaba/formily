@@ -433,9 +433,10 @@ enum LifeCycleTypes {
   ON_FORM_MOUNT = 'onFormMount', //表单挂载时触发
   ON_FORM_UNMOUNT = 'onFormUnmount', //表单卸载时触发
   ON_FORM_SUBMIT = 'onFormSubmit', //表单提交时触发
-  ON_FORM_RESET = 'onFormReset', //表单重置时触发
+  ON_FORM_RESET = 'onFormReset', //表单重置时触发  
   ON_FORM_SUBMIT_START = 'onFormSubmitStart', //表单提交开始时触发
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd', //表单提交结束时触发
+  ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed', // 表单提交时因为校验失败而出发
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange', //表单值变化时触发
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange', //表单初始值变化时触发
   ON_FORM_VALIDATE_START = 'onFormValidateStart', //表单校验开始时触发
@@ -540,7 +541,7 @@ interface IForm {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
