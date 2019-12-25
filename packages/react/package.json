@@ -16,7 +16,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "rm -rf lib && tsc --declaration"
+    "build": "rimraf -rf lib && tsc --declaration"
   },
   "devDependencies": {
     "typescript": "^3.5.2"
