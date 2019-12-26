@@ -1,21 +1,128 @@
-describe('test all apis',()=>{
-  //todo
-  test('basic',()=>{
-    //todo
-  })
-})
+import React from 'react'
+import { fireEvent, render, act, wait } from '@testing-library/react'
 
-describe('major scenes',()=>{
-  //todo
-  test('basic',()=>{
-    //todo
-  })
-})
+import { FormSpy, createFormActions, LifeCycleTypes, Form, createForm, Field } from '..'
 
+const InputField = props => (
+    <Field {...props}>
+      {({ state, mutators }) => (
+        <input data-testid="test-input" value={state.value || ''} onChange={mutators.change} />
+      )}
+    </Field>
+)
 
-describe('bugfix',()=>{
-  //todo
-  test('basic',()=>{
-    //todo
-  })
+describe('useFormSpy hook', () => {
+    test('basic', async () => {
+      const opts = {}        
+      const form = createForm(opts)
+      const actions = createFormActions()
+      const typeList = []
+      const { getByTestId, queryByTestId } = render(
+        <Form form={form} actions={actions}>
+          <InputField name="a" required />
+          <FormSpy>
+            {({ form: spyForm, type, state }) => {
+              typeList.push(type)
+              expect(spyForm).toEqual(form)
+              expect(state).toEqual({})
+
+              return <div data-testid="spy-type">
+                {type}
+              </div>
+            }}
+          </FormSpy>
+          <FormSpy>
+            {({ form: spyForm }) => {
+              const val = spyForm.getFieldValue('a')
+              return <div data-testid="spy-value">
+                {val}
+              </div>
+            }}
+          </FormSpy>
+        </Form>
+      )
+
+      expect(getByTestId('spy-type').textContent).toEqual(LifeCycleTypes.ON_FORM_INIT)
+      expect(getByTestId('spy-value').textContent).toEqual('')
+      act(() => {
+        fireEvent.change(queryByTestId('test-input'), { target: { value: 123 } })
+      })
+      await wait()      
+      expect(typeList).toContain(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+      expect(typeList).toContain(LifeCycleTypes.ON_FIELD_CHANGE)
+      expect(typeList).toContain(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
+      expect(typeList).toContain(LifeCycleTypes.ON_FIELD_INPUT_CHANGE)
+      expect(typeList).toContain(LifeCycleTypes.ON_FORM_INPUT_CHANGE)
+      expect(getByTestId('spy-type').textContent).toEqual(typeList[typeList.length - 1])
+      expect(getByTestId('spy-value').textContent).toEqual('123')
+    })
+
+    test('selector', async () => {
+      const opts = {}        
+      const form = createForm(opts)
+      const actions = createFormActions()
+      const typeList = []
+      const { getByTestId, queryByTestId } = render(
+        <Form form={form} actions={actions}>
+          <InputField name="a" required />
+          <FormSpy selector={[LifeCycleTypes.ON_FIELD_VALUE_CHANGE]}>
+            {({ type }) => {
+              typeList.push(type)
+              return <div data-testid="spy-type">
+                {type}
+              </div>
+            }}
+          </FormSpy>
+          <FormSpy>
+            {({ form: spyForm }) => {
+              const val = spyForm.getFieldValue('a')
+              return <div data-testid="spy-value">
+                {val}
+              </div>
+            }}
+          </FormSpy>
+        </Form>
+      )
+
+      expect(getByTestId('spy-type').textContent).toEqual(LifeCycleTypes.ON_FORM_INIT)
+      expect(getByTestId('spy-value').textContent).toEqual('')
+      act(() => {
+        fireEvent.change(queryByTestId('test-input'), { target: { value: 123 } })
+      })
+      await wait()
+      expect(getByTestId('spy-type').textContent).toEqual(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
+      expect(getByTestId('spy-type').textContent).toEqual(typeList[typeList.length - 1])
+      expect(getByTestId('spy-value').textContent).toEqual('123')
+    })
+
+    test('reducer', async () => {
+      const opts = {}        
+      const form = createForm(opts)
+      const actions = createFormActions()
+      const { getByTestId, queryByTestId } = render(
+        <Form form={form} actions={actions}>
+          <InputField name="a" required />
+          <FormSpy selector={[LifeCycleTypes.ON_FIELD_VALUE_CHANGE]} reducer={(state) => {
+                return {
+                    count: (state.count || 0) + 1
+                }
+            }}>
+            {({ state }) => {
+              return <div data-testid="spy-value">
+                {state.count}
+              </div>
+            }}
+          </FormSpy>
+        </Form>
+      )
+
+      expect(getByTestId('spy-value').textContent).toEqual("")
+      act(() => {
+        fireEvent.change(queryByTestId('test-input'), { target: { value: 123 } })
+        fireEvent.change(queryByTestId('test-input'), { target: { value: 456 } })
+        fireEvent.change(queryByTestId('test-input'), { target: { value: 789 } })
+      })
+      await wait()      
+      expect(getByTestId('spy-value').textContent).toEqual("3")
+    })
 })
