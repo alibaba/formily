@@ -52,9 +52,13 @@ const FormTableField = styled(
           key,
           dataIndex: key,
           render: (value: any, record: any, index: number) => {
+            const newPath = FormPath.parse(path).concat(index, key)
             return (
-              <CompatAntdFormItemProps label={undefined}>
-                <SchemaField path={FormPath.parse(path).concat(index, key)} />
+              <CompatAntdFormItemProps
+                key={newPath.toString()}
+                label={undefined}
+              >
+                <SchemaField path={newPath} />
               </CompatAntdFormItemProps>
             )
           }
