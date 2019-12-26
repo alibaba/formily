@@ -76,7 +76,7 @@ const computeSchemaExtendProps = (
 
 const FormItemPropsContext = createContext({})
 
-export const FormItemProps = ({ children, ...props }) => (
+export const CompatNextFormItemProps = ({ children, ...props }) => (
   <FormItemPropsContext.Provider value={props}>
     {children}
   </FormItemPropsContext.Provider>
@@ -113,7 +113,7 @@ export const CompatNextFormItem: React.FC<ICompatItemProps> = props => {
       {...itemProps}
       {...formItemProps}
     >
-      <FormItemProps>{props.children}</FormItemProps>
+      <CompatNextFormItemProps>{props.children}</CompatNextFormItemProps>
     </Form.Item>
   )
 }
