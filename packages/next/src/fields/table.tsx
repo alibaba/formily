@@ -11,7 +11,7 @@ import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form } from '@alifd/next'
 import styled from 'styled-components'
-import { FormItemProps } from '../compat/FormItem'
+import { CompatNextFormItemProps } from '../compat/FormItem'
 const ArrayComponents = {
   CircleButton,
   TextButton,
@@ -62,9 +62,9 @@ const FormTableField = styled(
             dataIndex={key}
             cell={(value: any, index: number) => {
               return (
-                <FormItemProps label={undefined}>
+                <CompatNextFormItemProps label={undefined}>
                   <SchemaField path={FormPath.parse(path).concat(index, key)} />
-                </FormItemProps>
+                </CompatNextFormItemProps>
               )
             }}
           />

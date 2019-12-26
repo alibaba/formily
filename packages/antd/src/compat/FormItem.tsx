@@ -76,7 +76,7 @@ const computeSchemaExtendProps = (
 
 const FormItemPropsContext = createContext({})
 
-export const FormItemProps = ({ children, ...props }) => (
+export const CompatAntdFormItemProps = ({ children, ...props }) => (
   <FormItemPropsContext.Provider value={props}>
     {children}
   </FormItemPropsContext.Provider>
