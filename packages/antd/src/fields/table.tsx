@@ -9,7 +9,7 @@ import { toArr, isFn, isArr, FormPath } from '@uform/shared'
 import { ArrayList } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form, Icon } from 'antd'
-import { FormItemProps } from '../compat/FormItem'
+import { CompatAntdFormItemProps } from '../compat/FormItem'
 import styled from 'styled-components'
 
 const ArrayComponents = {
@@ -53,9 +53,9 @@ const FormTableField = styled(
           dataIndex: key,
           render: (value: any, record: any, index: number) => {
             return (
-              <FormItemProps label={undefined}>
+              <CompatAntdFormItemProps label={undefined}>
                 <SchemaField path={FormPath.parse(path).concat(index, key)} />
-              </FormItemProps>
+              </CompatAntdFormItemProps>
             )
           }
         }
