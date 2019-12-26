@@ -1,12 +1,7 @@
-import React, { useContext, createContext } from 'react'
+import React, { useContext } from 'react'
 import { isFn, isEqual } from '@uform/shared'
-import { IPreviewTextProps } from './types'
-
-export interface PreviewTextConfigProps {
-  previewPlaceholder?: string | ((props: IPreviewTextProps) => string)
-}
-
-const PreviewTextContext = createContext<PreviewTextConfigProps>({})
+import { IPreviewTextProps, PreviewTextConfigProps } from './types'
+import { PreviewTextContext } from './context'
 
 export const PreviewText: React.FC<IPreviewTextProps> & {
   ConfigProvider: React.Context<PreviewTextConfigProps>['Provider']

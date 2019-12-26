@@ -86,3 +86,7 @@ export type IArrayListAdditionProps = OperatorButtonProps
 export type IArrayListMoveUpProps = OperatorButtonProps
 export type IArrayListMoveDownProps = OperatorButtonProps
 export type IArrayListEmptyProps = IArrayListAdditionProps
+
+export interface PreviewTextConfigProps {
+  previewPlaceholder?: string | ((props: IPreviewTextProps) => string)
+}
