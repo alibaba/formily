@@ -5,7 +5,7 @@ import {
 } from '@uform/react-schema-renderer'
 import { IAntdSchemaFormProps, IAntdSchemaFieldProps } from './types'
 import './fields'
-import './compat'
+export * from './compat'
 export * from '@uform/react-schema-renderer'
 export * from './components'
 export * from './types'
