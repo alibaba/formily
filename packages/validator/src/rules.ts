@@ -5,15 +5,14 @@ import {
   isStr,
   isFn,
   toArr,
+  isArr,
   isBool
 } from '@uform/shared'
 import { ValidateDescription } from './types'
 const isValidateEmpty = (value: any) => {
-  if (typeof value === 'object') {
-    for (let key in value) {
-      if (value.hasOwnProperty(key)) {
-        if (!isValidateEmpty(value[key])) return false
-      }
+  if (isArr(value)) {
+    for (let i = 0; i < value.length; i++) {
+      if (!isValidateEmpty(value[i])) return false
     }
     return true
   } else {
