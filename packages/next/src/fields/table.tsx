@@ -37,6 +37,7 @@ const FormTableField = styled(
       renderMoveUp,
       renderEmpty,
       renderExtraOperations,
+      operationsWidth,
       operations,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
@@ -57,6 +58,7 @@ const FormTableField = styled(
             width={200}
             {...itemProps}
             title={props.title}
+            key={key}
             dataIndex={key}
             cell={(value: any, index: number) => {
               return (
