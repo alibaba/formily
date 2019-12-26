@@ -71,6 +71,7 @@ npm install --save @uform/react-schema-renderer
   - [`<InternalForm/>`](#InternalForm)
   - [`<InternalField/>`](#InternalField)
 - [Interfaces](#interfaces)
+  - [`IConnectOptions`](#iconnectoptions)
   - [`ISchemaFieldComponentProps`](#ischemafieldcomponentprops)
   - [`ISchemaVirtualFieldComponentProps`](#ischemavirtualfieldcomponentprops)
   - [`ISchemaFormRegistry`](#ischemaformregistry)
