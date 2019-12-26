@@ -104,7 +104,7 @@ export const CompatAntdFormItem: React.FC<ICompatItemProps> = props => {
       {...itemProps}
       {...outerFormItemProps}
     >
-      <FormItemProps>{props.children}</FormItemProps>
+      <CompatAntdFormItemProps>{props.children}</CompatAntdFormItemProps>
     </Form.Item>
   )
 }
