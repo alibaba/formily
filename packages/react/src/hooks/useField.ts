@@ -70,7 +70,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     })
     initialized = true
     return extendMutators(form.createMutators(ref.current.field), options)
-  }, [true])
+  }, [])
 
   useEffect(() => {
     if (dirty.num > 0) {
@@ -87,14 +87,14 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   useEffect(() => {
     ref.current.field.setState(state => {
       state.mounted = true
-    }, true)
+    }, !ref.current.field.getSourceState(state => state.unmounted))
     ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true
       ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IFieldState) => {
         state.unmounted = true
-      })//must notify,need to trigger remove value
+      }) //must notify,need to trigger remove value
     }
   }, [])
 
