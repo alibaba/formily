@@ -3194,7 +3194,7 @@ type InternalFormats =
 ```typescript
 declare type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 ```
 
