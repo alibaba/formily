@@ -1,5 +1,5 @@
 import React, { useRef, useLayoutEffect } from 'react'
-import { createControllerBox } from '@uform/react-schema-renderer'
+import { createControllerBox, Schema } from '@uform/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@uform/shared'
 import { CompatAntdFormItem } from '../compat/FormItem'
@@ -8,6 +8,7 @@ import styled from 'styled-components'
 export const FormTextBox = createControllerBox<IFormTextBox>(
   'text-box',
   styled(({ props, className, children }) => {
+    const schema = new Schema(props)
     const {
       title,
       help,
@@ -21,7 +22,7 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
       {
         gutter: 5
       },
-      props['x-component-props']
+      schema.getExtendsComponentProps()
     )
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
