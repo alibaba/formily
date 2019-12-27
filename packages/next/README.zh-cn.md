@@ -76,6 +76,11 @@ npm install --save @uform/next
   - [`ISchemaFieldComponent`](#ISchemaFieldComponent)
   - [`ISchemaVirtualFieldComponent`](#ISchemaVirtualFieldComponent)
   - [`ISchemaFormRegistry`](#ISchemaFormRegistry)
+  - [`InternalFormats`](#InternalFormats)
+  - [`CustomValidator`](#CustomValidator)
+  - [`ValidateDescription`](#ValidateDescription)
+  - [`ValidateArrayRules`](#ValidateArrayRules)
+  - [`ValidatePatternRules`](#ValidatePatternRules)
   - [`INextSchemaFieldProps`](#INextSchemaFieldProps)
   - [`IPreviewTextProps`](#IPreviewTextProps)
   - [`IMutators`](#IMutators)
@@ -3433,6 +3438,89 @@ interface ISchemaFormRegistry {
   formItemComponent: React.JSXElementConstructor<any>
   formComponent: string | React.JSXElementConstructor<any>
 }
+```
+
+
+#### InternalFormats
+
+```typescript
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+```
+
+#### CustomValidator
+
+```typescript
+declare type CustomValidator = (
+  value: any,
+  rescription?: ValidateDescription
+) => ValidateResponse
+```
+
+#### ValidateDescription
+
+```typescript
+interface ValidateDescription {
+  // 内置校验规则，参考string内置校验规则
+  format?: InternalFormats
+  // 自定义校验规则
+  validator?: CustomValidator
+  // 是否必填
+  required?: boolean
+  // 匹配规则
+  pattern?: RegExp | string
+  // 最大长度
+  max?: number
+  // 最大值（大于）
+  maximum?: number
+  // 最大值（大于等于）
+  exclusiveMaximum?: number
+  // 最小值（小于等于）
+  exclusiveMinimum?: number
+  // 最小值（小于）
+  minimum?: number
+  // 最小长度
+  min?: number
+  // 长度
+  len?: number
+  // 空格
+  whitespace?: boolean
+  // 是否包含在枚举列表中
+  enum?: any[]
+  // 错误信息
+  message?: string
+  [key: string]: any
+}
+```
+
+#### ValidateArrayRules
+
+```typescript
+declare type ValidateArrayRules = Array<
+  InternalFormats | CustomValidator | ValidateDescription
+>
+```
+
+#### ValidatePatternRules
+
+```typescript
+declare type ValidatePatternRules =
+  | InternalFormats
+  | CustomValidator
+  | ValidateDescription
+  | ValidateArrayRules
 ```
 
 #### INextSchemaFieldProps

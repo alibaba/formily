@@ -14,7 +14,8 @@ import {
   isBool,
   isValid,
   FormPathPattern,
-  FormPath
+  FormPath,
+  deprecate
 } from '@uform/shared'
 import { SchemaMessage, ISchema } from '../types'
 
@@ -311,7 +312,7 @@ export class Schema implements ISchema {
     return this['x-component']
   }
   getExtendsRenderer() {
-    return this['x-render']
+    return deprecate(this['x-render'], 'x-render is deprecate in future, Please do not use it.')
   }
   getExtendsEffect() {
     return this['x-effect']
