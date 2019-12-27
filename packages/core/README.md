@@ -40,7 +40,7 @@ npm install --save @uform/core
   - [IFormCreatorOptions](#iformcreatoroptions)
   - [IForm](#iform)
   - [IMutators](#imutators)
-  - [Validation](#the-validator)
+  - [Validation](#validation)
   - [IFormState](#iformstate)
   - [IFieldState](#ifieldstate)
   - [IVirtualFieldState](#ivirtualfieldstate)
