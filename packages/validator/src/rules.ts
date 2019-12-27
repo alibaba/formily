@@ -3,16 +3,16 @@ import {
   isEmpty,
   stringLength,
   isStr,
+  isArr,
   isFn,
   toArr,
-  isArr,
   isBool
 } from '@uform/shared'
 import { ValidateDescription } from './types'
 const isValidateEmpty = (value: any) => {
   if (isArr(value)) {
     for (let i = 0; i < value.length; i++) {
-      if (!isValidateEmpty(value[i])) return false
+      if (value[i] !== undefined) return false
     }
     return true
   } else {

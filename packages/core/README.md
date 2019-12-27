@@ -717,7 +717,7 @@ interface IMutators {
 ```typescript
 type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 type SyncValidateResponse =
   | null

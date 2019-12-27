@@ -67,7 +67,7 @@ export type ValidatePatternRules =
 
 export type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 
 export type SyncValidateResponse =
