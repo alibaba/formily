@@ -1879,7 +1879,7 @@ type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
 ```typescript
 type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 ```
 
