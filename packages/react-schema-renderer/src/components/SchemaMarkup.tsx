@@ -84,15 +84,17 @@ export function createVirtualBox<T = {}>(
         }
       : () => <Fragment />
   )
-  const VirtualBox: React.FC<T & { name?: string }> = ({
-    children,
-    name,
-    ...props
-  }) => {
+  const VirtualBox: React.FC<T & {
+    name?: string
+    visible?: boolean
+    display?: boolean
+  }> = ({ children, name, visible, display, ...props }) => {
     return (
       <SchemaMarkupField
         type="object"
         name={name}
+        visible={visible}
+        display={display}
         x-component={key}
         x-props={props}
         x-component-props={props}
