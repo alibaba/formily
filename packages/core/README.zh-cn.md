@@ -38,7 +38,7 @@ npm install --save @uform/core
   - [IFormCreatorOptions](#iformcreatoroptions)
   - [IForm](#iform)
   - [IMutators](#imutators)
-  - [Validator](#validator)
+  - [Validation](#validation)
   - [IFormState](#iformstate)
   - [IFieldState](#ifieldstate)
   - [IVirtualFieldState](#ivirtualfieldstate)
@@ -735,7 +735,7 @@ interface IMutators {
 }
 ```
 
-#### Validator
+#### Validation
 
 > 这里主要列举校验相关的中间类型签名
 
