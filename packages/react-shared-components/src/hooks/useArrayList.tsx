@@ -44,7 +44,7 @@ export const useArrayList = (index: number = 0) => {
     ? newValue.length > minItems && !isDisable
     : !isDisable
   const allowAddition = isNum(maxItems)
-    ? newValue.length <= maxItems && !isDisable
+    ? newValue.length < maxItems && !isDisable
     : !isDisable
 
   const context = {
