@@ -87,7 +87,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   useEffect(() => {
     ref.current.field.setState(state => {
       state.mounted = true
-    }, !ref.current.field.getSourceState(state => state.unmounted))
+    }, true)
     ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true

@@ -71,6 +71,7 @@ npm install --save @uform/react-schema-renderer
   - [`<InternalForm/>`](#InternalForm)
   - [`<InternalField/>`](#InternalField)
 - [Interfaces](#interfaces)
+  - [`IConnectOptions`](#iconnectoptions)
   - [`ISchemaFieldComponentProps`](#ischemafieldcomponentprops)
   - [`ISchemaVirtualFieldComponentProps`](#ischemavirtualfieldcomponentprops)
   - [`ISchemaFormRegistry`](#ischemaformregistry)
@@ -710,7 +711,11 @@ registerFormField('complex', ({ path }) => {
 **签名**
 
 ```typescript
-connect(options?: IConnectOptions): (component : React.JSXElementConstructor<any>)=>(fieldProps:ISchemaFieldComponentProps)=>JSX.Element
+connect(options?: IConnectOptions): (
+   component : React.JSXElementConstructor<any>
+)=>(
+   fieldProps:ISchemaFieldComponentProps
+)=>JSX.Element
 ```
 
 **用法**
@@ -1565,6 +1570,29 @@ type IMarkupSchemaFieldProps = ISchema
 ---
 
 > 整体继承@uform/react 和@uform/core 的 Interfaces，下面只列举@uform/react-schema-renderer 特有 Interfaces
+
+#### IConnectOptions
+
+> 注册组件桥接器参数
+
+```typescript
+interface IConnectOptions {
+  valueName?: string //值名称，默认是value
+  eventName?: string //取值回调名称，默认是onChange
+  defaultProps?: {} //自定义组件默认属性
+  getValueFromEvent?: (event?: any, value?: any) => any //取值回调处理器，主要用于针对事件参数到最终触发onChange的值做转换合并
+  getProps?: ( //组件属性转换器，使用它可以轻松的处理从FieldProps到ComponentProps的转换映射等工作
+    componentProps: {},
+    fieldProps: MergedFieldComponentProps
+  ) => {} | void
+  getComponent?: ( //组件转换器，有些场景，根据FieldState，会将组件做动态切换，比如根据editable，会动态切换为文本预览组件之类的
+    Target: any,
+    componentProps: {},
+    fieldProps: MergedFieldComponentProps
+  ) => React.JSXElementConstructor<any>
+}
+
+```
 
 #### ISchemaFieldComponentProps
 
