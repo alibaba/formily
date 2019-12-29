@@ -98,9 +98,6 @@ export class Schema implements ISchema {
         this.path = ''
       }
     }
-    if (!this.parent) {
-      this.linkages = []
-    }
     return this.fromJSON(json) as any
   }
   /**
@@ -325,6 +322,9 @@ export class Schema implements ISchema {
   getExtendsComponentProps() {
     return { ...this['x-props'], ...this['x-component-props'] }
   }
+  getExtendsLinkages() {
+    return this['x-linkages']
+  }
   /**
    * getters
    */
@@ -342,25 +342,6 @@ export class Schema implements ISchema {
   setArrayItems(schema: ISchema) {
     this.items = new Schema(schema, this)
     return this.items
-  }
-
-  private createLinkages(linkages: ISchema['x-linkages']) {
-    let root: Schema = this
-    while (true) {
-      if (root.parent) {
-        root = root.parent
-      } else {
-        break
-      }
-    }
-    root.linkages = root.linkages.concat(
-      linkages.map(item => {
-        return {
-          name: this.path,
-          ...item
-        }
-      })
-    )
   }
 
   toJSON() {
@@ -404,7 +385,7 @@ export class Schema implements ISchema {
       this['x-component'] = lowercase(json['x-component'])
     }
     if (isValid(json['x-linkages'])) {
-      this.createLinkages(json['x-linkages'])
+      this.linkages = isArr(json['x-linkages']) ? json['x-linkages'] : []
     }
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {

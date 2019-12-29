@@ -712,10 +712,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(
-          field.getSourceState(state => state.path),
-          opts
-        )
+        return validate(field.getSourceState(state => state.path), opts)
       }
     }
   }
@@ -797,6 +794,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
 
     env.submittingTask = async () => {
+      // 增加onFormSubmitValidateStart来明确submit引起的校验开始了
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START, state)
       const validateResult = await validate('', { throwErrors: false })
       const { errors } = validateResult
       // 校验失败
@@ -816,6 +815,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         throw errors
       }
 
+      // 增加onFormSubmitValidateSucces来明确submit引起的校验最终的结果
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS, state)
+
       // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
       const validated = state.getState(({ errors, warnings }) => ({
         errors,
@@ -826,7 +828,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
       let payload,
         values = state.getState(state => clone(state.values))
       if (isFn(onSubmit)) {
-        payload = await Promise.resolve(onSubmit(values))
+        try {
+          payload = await Promise.resolve(onSubmit(values))
+        } catch (e) {
+          if (e) {
+            console.error(e)
+          }
+        }
       }
 
       state.setState(state => {
@@ -1060,7 +1068,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   //在subscribe中必须同步使用，否则会监听不到变化
   function hasChanged(target: any, path: FormPathPattern): boolean {
-    if (!env.publishing) {
+    if (env.publishing[target ? target.path : ''] === false) {
       throw new Error(
         'The watch function must be used synchronously in the subscribe callback.'
       )
@@ -1119,18 +1127,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const heart = new FormHeart({
     ...options,
     context: formApi,
-    beforeNotify: () => {
-      env.publishing = true
+    beforeNotify: payload => {
+      env.publishing[payload.path || ''] = true
     },
-    afterNotify: () => {
-      env.publishing = false
+    afterNotify: payload => {
+      env.publishing[payload.path || ''] = false
     }
   })
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
-    publishing: false,
+    publishing: {},
     taskQueue: [],
     userUpdateFields: [],
     taskIndexes: {},

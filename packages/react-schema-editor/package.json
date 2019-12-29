@@ -1,6 +1,6 @@
 {
   "name": "@uform/react-schema-editor",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.5",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -30,7 +30,6 @@
     "react-dom": ">=16.8.0",
     "react-eva": "^1.1.7"
   },
-  "dependencies": {},
   "publishConfig": {
     "access": "public"
   },

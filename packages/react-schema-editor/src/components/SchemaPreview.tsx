@@ -6,13 +6,9 @@ import {
   connect
 } from '@uform/react-schema-renderer'
 
-registerFormField(
-  'string',
-  connect()(({ value, onChange }) => {
-    return <input value={value} onChange={onChange} />
-  })
-)
+import {Input} from 'antd';
 
 export const SchemaPreview: React.FC<ISchemaPreviewProps> = ({ schema }) => {
-  return <SchemaForm schema={schema}></SchemaForm>
+  const displayName = 'SchemaPreview';
+  return <SchemaForm schema={schema} fields={[{'Input': Input}]}></SchemaForm>
 }

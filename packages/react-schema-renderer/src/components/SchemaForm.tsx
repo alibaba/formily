@@ -21,7 +21,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
       value={{ fields, virtualFields, formComponent, formItemComponent }}
     >
       <SchemaContext.Provider value={schema}>
-        <Form {...props} form={form}>
+        <Form form={form}>
           {React.createElement(
             formComponent,
             {
