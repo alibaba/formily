@@ -15,7 +15,10 @@ import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
 
-export type IAntdSchemaFormProps = Omit<FormProps, 'onSubmit'> &
+export type IAntdSchemaFormProps = Omit<
+  FormProps,
+  'onSubmit' | 'defaultValue'
+> &
   IFormItemTopProps &
   PreviewTextConfigProps &
   ISchemaFormProps

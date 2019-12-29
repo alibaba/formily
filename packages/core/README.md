@@ -40,7 +40,7 @@ npm install --save @uform/core
   - [IFormCreatorOptions](#iformcreatoroptions)
   - [IForm](#iform)
   - [IMutators](#imutators)
-  - [Validation](#the-validator)
+  - [Validation](#validation)
   - [IFormState](#iformstate)
   - [IFieldState](#ifieldstate)
   - [IVirtualFieldState](#ivirtualfieldstate)
@@ -717,7 +717,7 @@ interface IMutators {
 ```typescript
 type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 type SyncValidateResponse =
   | null

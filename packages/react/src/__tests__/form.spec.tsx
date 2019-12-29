@@ -52,7 +52,7 @@ describe('test all apis', () => {
     try {
       await actions.submit()
     } catch (e) {
-      expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
+      expect(e).toEqual([{ path: 'aaa', name: 'aaa', messages: ['This field is required'] }])
     }
     actions.setFieldState('aaa', state => {
       state.value = '123'

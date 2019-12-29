@@ -390,7 +390,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             // value > formValue > initialValue
             state.value = value
           } else {
-            state.value = isValid(formValue) ? formValue : initialValue
+            state.value = existFormValuesIn(dataPath) ? formValue : initialValue
           }
           // initialValue > formInitialValue
           state.initialValue = isValid(initialValue)
@@ -567,6 +567,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
     return getFormIn(path, 'values')
   }
 
+  function existFormValuesIn(path: FormPathPattern) {
+    return state.getState(state =>
+      FormPath.existIn(state.values, transformDataPath(path))
+    )
+  }
+
   function getFormInitialValuesIn(path: FormPathPattern) {
     return getFormIn(path, 'initialValues')
   }
@@ -712,7 +718,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(field.getSourceState(state => state.path), opts)
+        return validate(
+          field.getSourceState(state => state.path),
+          opts
+        )
       }
     }
   }
@@ -875,19 +884,32 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
 
+    // 增加name透出真实路径，和0.x保持一致
+    const result = {
+      errors: payload.errors.map(item => ({
+        ...item,
+        name: getFieldState(item.path).name
+      })),
+      warnings: payload.warnings.map(item => ({
+        ...item,
+        name: getFieldState(item.path).name
+      }))
+    }
+
+    const { errors, warnings } = result
+
     // 打印warnings日志从submit挪到这里
-    const { errors, warnings } = payload
     if (warnings.length) {
       console.warn(warnings)
     }
     if (errors.length > 0) {
       if (throwErrors) {
-        throw payload
+        throw result
       } else {
-        return payload
+        return result
       }
     } else {
-      return payload
+      return result
     }
   }
 

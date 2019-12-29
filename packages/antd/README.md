@@ -75,6 +75,11 @@ npm install --save @uform/antd
   - [`ISchemaFieldComponent`](#ISchemaFieldComponent)
   - [`ISchemaVirtualFieldComponent`](#ISchemaVirtualFieldComponent)
   - [`ISchemaFormRegistry`](#ISchemaFormRegistry)
+  - [`InternalFormats`](#InternalFormats)
+  - [`CustomValidator`](#CustomValidator)
+  - [`ValidateDescription`](#ValidateDescription)
+  - [`ValidateArrayRules`](#ValidateArrayRules)
+  - [`ValidatePatternRules`](#ValidatePatternRules)
   - [`INextSchemaFieldProps`](#INextSchemaFieldProps)
   - [`IPreviewTextProps`](#IPreviewTextProps)
   - [`IMutators`](#IMutators)
@@ -3392,6 +3397,88 @@ interface ISchemaFormRegistry {
   formItemComponent: React.JSXElementConstructor<any>
   formComponent: string | React.JSXElementConstructor<any>
 }
+```
+
+#### InternalFormats
+
+```typescript
+type InternalFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | string
+```
+
+#### CustomValidator
+
+```typescript
+declare type CustomValidator = (
+  value: any,
+  rescription?: ValidateDescription
+) => ValidateResponse
+```
+
+#### ValidateDescription
+
+```typescript
+interface ValidateDescription {
+  // built-in rules，ref: string rules
+  format?: InternalFormats
+  // custom validation
+  validator?: CustomValidator
+  // required
+  required?: boolean
+  // pattern
+  pattern?: RegExp | string
+  // max length
+  max?: number
+  // maximum
+  maximum?: number
+  // exclusiveMaximum
+  exclusiveMaximum?: number
+  // exclusiveMinimum
+  exclusiveMinimum?: number
+  // minimum
+  minimum?: number
+  // min
+  min?: number
+  // length
+  len?: number
+  // whitespace
+  whitespace?: boolean
+  // enum
+  enum?: any[]
+  // error message
+  message?: string
+  [key: string]: any
+}
+```
+
+#### ValidateArrayRules
+
+```typescript
+declare type ValidateArrayRules = Array<
+  InternalFormats | CustomValidator | ValidateDescription
+>
+```
+
+#### ValidatePatternRules
+
+```typescript
+declare type ValidatePatternRules =
+  | InternalFormats
+  | CustomValidator
+  | ValidateDescription
+  | ValidateArrayRules
 ```
 
 #### INextSchemaFieldProps
