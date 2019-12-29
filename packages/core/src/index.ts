@@ -712,7 +712,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(field.getSourceState(state => state.path), opts)
+        return validate(
+          field.getSourceState(state => state.path),
+          opts
+        )
       }
     }
   }
