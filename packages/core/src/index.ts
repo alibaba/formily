@@ -390,7 +390,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             // value > formValue > initialValue
             state.value = value
           } else {
-            state.value = isValid(formValue) ? formValue : initialValue
+            state.value = existFormValuesIn(dataPath) ? formValue : initialValue
           }
           // initialValue > formInitialValue
           state.initialValue = isValid(initialValue)
@@ -565,6 +565,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function getFormValuesIn(path: FormPathPattern) {
     return getFormIn(path, 'values')
+  }
+
+  function existFormValuesIn(path: FormPathPattern) {
+    return state.getState(state =>
+      FormPath.existIn(state.values, transformDataPath(path))
+    )
   }
 
   function getFormInitialValuesIn(path: FormPathPattern) {
