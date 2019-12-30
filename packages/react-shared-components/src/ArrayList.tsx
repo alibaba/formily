@@ -21,6 +21,16 @@ const createButtonCls = (props: any = {}, hasText: any) => {
 ArrayList.useArrayList = useArrayList
 ArrayList.useComponent = useComponent
 
+ArrayList.Wrapper = ({ children, ...props }) => {
+  const WrapperComponent = ArrayList.useComponent('Wrapper')
+  return <WrapperComponent {...props}>{children}</WrapperComponent>
+}
+
+ArrayList.Item = ({ children, ...props }) => {
+  const ItemComponent = ArrayList.useComponent('Item')
+  return <ItemComponent {...props}>{children}</ItemComponent>
+}
+
 ArrayList.Remove = ({ children, component, index, ...props }) => {
   const { allowRemove, renderWith } = ArrayList.useArrayList(index)
   const Button = ArrayList.useComponent(component)
