@@ -14,7 +14,8 @@ import {
   isBool,
   isValid,
   FormPathPattern,
-  FormPath
+  FormPath,
+  deprecate
 } from '@uform/shared'
 import { SchemaMessage, ISchema } from '../types'
 
@@ -97,9 +98,6 @@ export class Schema implements ISchema {
       } else {
         this.path = ''
       }
-    }
-    if (!this.parent) {
-      this.linkages = []
     }
     return this.fromJSON(json) as any
   }
@@ -314,7 +312,7 @@ export class Schema implements ISchema {
     return this['x-component']
   }
   getExtendsRenderer() {
-    return this['x-render']
+    return deprecate(this['x-render'], 'x-render is deprecate in future, Please do not use it.')
   }
   getExtendsEffect() {
     return this['x-effect']
@@ -324,6 +322,9 @@ export class Schema implements ISchema {
   }
   getExtendsComponentProps() {
     return { ...this['x-props'], ...this['x-component-props'] }
+  }
+  getExtendsLinkages() {
+    return this['x-linkages']
   }
   /**
    * getters
@@ -342,25 +343,6 @@ export class Schema implements ISchema {
   setArrayItems(schema: ISchema) {
     this.items = new Schema(schema, this)
     return this.items
-  }
-
-  private createLinkages(linkages: ISchema['x-linkages']) {
-    let root: Schema = this
-    while (true) {
-      if (root.parent) {
-        root = root.parent
-      } else {
-        break
-      }
-    }
-    root.linkages = root.linkages.concat(
-      linkages.map(item => {
-        return {
-          name: this.path,
-          ...item
-        }
-      })
-    )
   }
 
   toJSON() {
@@ -391,8 +373,12 @@ export class Schema implements ISchema {
 
   fromJSON(json: ISchema = {}) {
     if (typeof json === 'boolean') return json
-    if (json instanceof Schema) return json
-    Object.assign(this, json)
+    if (json instanceof Schema) {
+      Object.assign(this, json)
+      return this
+    } else {
+      Object.assign(this, json)
+    }
     if (isValid(json.type)) {
       this.type = lowercase(String(json.type))
     }
@@ -400,7 +386,7 @@ export class Schema implements ISchema {
       this['x-component'] = lowercase(json['x-component'])
     }
     if (isValid(json['x-linkages'])) {
-      this.createLinkages(json['x-linkages'])
+      this.linkages = isArr(json['x-linkages']) ? json['x-linkages'] : []
     }
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {

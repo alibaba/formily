@@ -1,4 +1,6 @@
 export type IArrayList = React.FC<IArrayListProps> & {
+  Wrapper: React.FC<IArrayListWrapperProps>
+  Item: React.FC<IArrayListItemProps>
   Remove: React.FC<IArrayListRemoveProps>
   Addition: React.FC<IArrayListAdditionProps>
   MoveUp: React.FC<IArrayListMoveUpProps>
@@ -36,6 +38,8 @@ export interface IArrayListProps {
   editable?: boolean
   disabled?: boolean
   components?: {
+    Wrapper?: ReactComponent
+    Item?: ReactComponent
     CircleButton?: ReactComponent
     TextButton?: ReactComponent
     AdditionIcon?: ReactComponent
@@ -51,6 +55,17 @@ export interface IArrayListProps {
     renderRemove?: ReactRenderPropsChildren<number>
   }
   context?: any
+}
+
+export interface IArrayListWrapperProps {
+  children?: ReactRenderPropsChildren
+  component?: string
+}
+
+export interface IArrayListItemProps {
+  index?: number
+  children?: ReactRenderPropsChildren
+  component?: string
 }
 
 export interface IArrayListOperatorProps<T> {
@@ -86,3 +101,7 @@ export type IArrayListAdditionProps = OperatorButtonProps
 export type IArrayListMoveUpProps = OperatorButtonProps
 export type IArrayListMoveDownProps = OperatorButtonProps
 export type IArrayListEmptyProps = IArrayListAdditionProps
+
+export interface PreviewTextConfigProps {
+  previewPlaceholder?: string | ((props: IPreviewTextProps) => string)
+}

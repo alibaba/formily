@@ -2433,6 +2433,9 @@ const {
   onFormChange$, // 表单变化时触发
   onFormInputChange$, // 表单事件触发时触发，用于只监控人工操作
   onFormInitialValueChange$, // 表单初始值变化时触发
+  onFormSubmitValidateStart$, // 表单提交时触发校验开始
+  onFormSubmitValidateSuccess$, // 表单提交时触发校验成功
+  onFormSubmitValidateFailed$, // 表单提交时触发校验失败
   onFormReset$, // 表单重置时触发
   onFormSubmit$, // 表单提交时触发
   onFormSubmitStart$, // 表单提交开始时触发
@@ -3191,7 +3194,7 @@ type InternalFormats =
 ```typescript
 declare type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 ```
 

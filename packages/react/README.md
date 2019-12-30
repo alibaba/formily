@@ -2400,6 +2400,12 @@ const {
   onFormInputChange$,
   // Trigger when the form initial value changes
   onFormInitialValueChange$,
+  // Triggered when the form submission within validate
+  onFormSubmitValidateStart$,
+  // Triggered when the form submission within validate and successs
+  onFormSubmitValidateSuccess$,
+  // Triggered when the form submission within validate and faield
+  onFormSubmitValidateFailed$,
   // Triggered when the form is reset
   onFormReset$,
   // Triggered when the form is submitted
@@ -3143,7 +3149,7 @@ type InternalFormats =
 ```typescript
 declare type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 ```
 

@@ -194,11 +194,11 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (
         draft.initialized &&
         prevState.initialized &&
-        !isEqual(draft.value, prevState.value)
+        !isEqual(prevState.value, draft.value)
       ) {
         draft.modified = true
       }
-      if (isEqual(draft.value, draft.initialValue)) {
+      if (isEqual(draft.initialValue, draft.value)) {
         draft.pristine = true
       } else {
         draft.pristine = false

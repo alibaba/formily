@@ -20,15 +20,14 @@ const getRadomName = () => {
 }
 
 export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
-  name,
   children,
   ...props
 }) => {
   const parentSchema = useContext(MarkupContext)
   if (!parentSchema) return <Fragment />
   if (parentSchema.isObject()) {
-    const propName = (name || getRadomName()).replace(/\s*/g, '')
-    const schema = parentSchema.setProperty(propName, props)
+    props.name = (props.name || getRadomName()).replace(/\s*/g, '')
+    const schema = parentSchema.setProperty(props.name, props)
     return (
       <MarkupContext.Provider value={schema}>{children}</MarkupContext.Provider>
     )
@@ -85,15 +84,17 @@ export function createVirtualBox<T = {}>(
         }
       : () => <Fragment />
   )
-  const VirtualBox: React.FC<T & { name?: string }> = ({
-    children,
-    name,
-    ...props
-  }) => {
+  const VirtualBox: React.FC<T & {
+    name?: string
+    visible?: boolean
+    display?: boolean
+  }> = ({ children, name, visible, display, ...props }) => {
     return (
       <SchemaMarkupField
         type="object"
         name={name}
+        visible={visible}
+        display={display}
         x-component={key}
         x-props={props}
         x-component-props={props}

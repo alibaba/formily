@@ -3,17 +3,16 @@ import {
   isEmpty,
   stringLength,
   isStr,
+  isArr,
   isFn,
   toArr,
   isBool
 } from '@uform/shared'
 import { ValidateDescription } from './types'
 const isValidateEmpty = (value: any) => {
-  if (typeof value === 'object') {
-    for (let key in value) {
-      if (value.hasOwnProperty(key)) {
-        if (!isValidateEmpty(value[key])) return false
-      }
+  if (isArr(value)) {
+    for (let i = 0; i < value.length; i++) {
+      if (value[i] !== undefined) return false
     }
     return true
   } else {
@@ -76,6 +75,7 @@ export default {
     return length < min ? getRuleMessage(rule, 'min') : ''
   },
   pattern(value: any, rule: ValidateDescription) {
+    if (isValidateEmpty(value)) return ''
     return !new RegExp(rule.pattern).test(value)
       ? getRuleMessage(rule, 'pattern')
       : ''

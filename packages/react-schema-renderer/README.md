@@ -75,6 +75,7 @@ npm install --save @uform/react-schema-renderer
   - [`<InternalForm/>`](#InternalForm)
   - [`<InternalField/>`](#InternalField)
 - [Interfaces](#interfaces)
+  - [IConnectOptions](#iconnectoptions)
   - [ISchemaFieldComponentProps](#ischemafieldcomponentprops)
   - [ISchemaVirtualFieldComponentProps](#ischemavirtualfieldcomponentprops)
   - [ISchemaFormRegistry](#ischemaformregistry)
@@ -1566,6 +1567,30 @@ type IMarkupSchemaFieldProps = ISchema
 
 > Inheriting @uform/react and @uform/core's Interfaces as a whole, only @uform/react-schema-renderer are listed below.
 
+#### IConnectOptions
+
+> Connect parameters for registered components
+
+```typescript
+interface IConnectOptions {
+  valueName?: string //value name
+  eventName?: string //get value callback name
+  defaultProps?: {} //component default props
+  getValueFromEvent?: (event?: any, value?: any) => any //get value from event callback.
+  getProps?: ( //props transformer
+    componentProps: {},
+    fieldProps: MergedFieldComponentProps
+  ) => {} | void
+  getComponent?: ( //component transformer
+    Target: any,
+    componentProps: {},
+    fieldProps: MergedFieldComponentProps
+  ) => React.JSXElementConstructor<any>
+}
+
+```
+
+
 #### ISchemaFieldComponentProps
 
 > It is very important to customize the properties received by the component. As long as it involves developing custom components, you need to understand the protocol.
@@ -1876,7 +1901,7 @@ type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
 ```typescript
 type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 ```
 

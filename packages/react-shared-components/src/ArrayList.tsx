@@ -1,8 +1,8 @@
-import React, { createContext, useContext, Fragment, useMemo } from 'react'
-import { isNum, isFn, toArr } from '@uform/shared'
-import { IArrayList, IArrayListProps } from './types'
-
-const ArrayContext = createContext<IArrayListProps>({})
+import React, { Fragment } from 'react'
+import { IArrayList } from './types'
+import { ArrayContext } from './context'
+import { useArrayList } from './hooks/useArrayList'
+import { useComponent } from './hooks/useComponent'
 
 export const ArrayList: IArrayList = props => {
   return (
@@ -10,79 +10,6 @@ export const ArrayList: IArrayList = props => {
       {props.children}
     </ArrayContext.Provider>
   )
-}
-
-const useArrayList = (index: number = 0) => {
-  const {
-    value,
-    disabled,
-    editable,
-    minItems,
-    maxItems,
-    renders,
-    ...props
-  } = useContext(ArrayContext)
-
-  const renderWith = (
-    name: string,
-    render: (node: any) => React.ReactElement,
-    wrapper: any
-  ) => {
-    let children: any
-    if (renders && renders[name]) {
-      if (isFn(renders[name]) || renders[name].styledComponentId) {
-        children = renders[name](context.currentIndex)
-      } else {
-        children = render(renders[name])
-      }
-    } else {
-      children = render(renders[name])
-    }
-    if (isFn(wrapper)) {
-      return wrapper({ ...context, children }) || <Fragment />
-    }
-    return children || <Fragment />
-  }
-
-  const newValue = toArr(value)
-
-  const isEmpty = !newValue || (newValue && newValue.length <= 0)
-  const isDisable = disabled || editable === false
-  const allowMoveUp = newValue && newValue.length > 1 && !isDisable
-  const allowMoveDown = newValue && newValue.length > 1 && !isDisable
-  const allowRemove = isNum(minItems) ? newValue.length > minItems : !isDisable
-  const allowAddition = isNum(maxItems)
-    ? newValue.length <= maxItems
-    : !isDisable
-
-  const context = {
-    ...props,
-    currentIndex: index,
-    isEmpty,
-    isDisable,
-    allowRemove,
-    allowAddition,
-    allowMoveDown,
-    allowMoveUp,
-    renderWith
-  }
-
-  return context
-}
-
-const useComponent = (name: string) => {
-  const { components } = useContext(ArrayContext)
-  return useMemo(() => {
-    if (isFn(components[name]) || components[name].styledComponentId)
-      return components[name]
-    return (props: {}) => {
-      return React.isValidElement(components[name]) ? (
-        React.cloneElement(components[name], props)
-      ) : (
-        <Fragment />
-      )
-    }
-  }, [])
 }
 
 const createButtonCls = (props: any = {}, hasText: any) => {
@@ -93,6 +20,16 @@ const createButtonCls = (props: any = {}, hasText: any) => {
 
 ArrayList.useArrayList = useArrayList
 ArrayList.useComponent = useComponent
+
+ArrayList.Wrapper = ({ children, ...props }) => {
+  const WrapperComponent = ArrayList.useComponent('Wrapper')
+  return <WrapperComponent {...props}>{children}</WrapperComponent>
+}
+
+ArrayList.Item = ({ children, ...props }) => {
+  const ItemComponent = ArrayList.useComponent('Item')
+  return <ItemComponent {...props}>{children}</ItemComponent>
+}
 
 ArrayList.Remove = ({ children, component, index, ...props }) => {
   const { allowRemove, renderWith } = ArrayList.useArrayList(index)

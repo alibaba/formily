@@ -157,7 +157,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
       })
     }
-
     if (unmountedChanged && published.unmounted) {
       heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, state)
     }
@@ -234,6 +233,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             setFormValuesIn(path, published.value)
           }
         })
+        heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
       }
       if (mountedChanged && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
@@ -390,7 +390,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             // value > formValue > initialValue
             state.value = value
           } else {
-            state.value = isValid(formValue) ? formValue : initialValue
+            state.value = existFormValuesIn(dataPath) ? formValue : initialValue
           }
           // initialValue > formInitialValue
           state.initialValue = isValid(initialValue)
@@ -565,6 +565,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function getFormValuesIn(path: FormPathPattern) {
     return getFormIn(path, 'values')
+  }
+
+  function existFormValuesIn(path: FormPathPattern) {
+    return state.getState(state =>
+      FormPath.existIn(state.values, transformDataPath(path))
+    )
   }
 
   function getFormInitialValuesIn(path: FormPathPattern) {
@@ -797,6 +803,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
 
     env.submittingTask = async () => {
+      // 增加onFormSubmitValidateStart来明确submit引起的校验开始了
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START, state)
       const validateResult = await validate('', { throwErrors: false })
       const { errors } = validateResult
       // 校验失败
@@ -816,6 +824,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         throw errors
       }
 
+      // 增加onFormSubmitValidateSucces来明确submit引起的校验最终的结果
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS, state)
+
       // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
       const validated = state.getState(({ errors, warnings }) => ({
         errors,
@@ -826,7 +837,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
       let payload,
         values = state.getState(state => clone(state.values))
       if (isFn(onSubmit)) {
-        payload = await Promise.resolve(onSubmit(values))
+        try {
+          payload = await Promise.resolve(onSubmit(values))
+        } catch (e) {
+          if (e) {
+            console.error(e)
+          }
+        }
       }
 
       state.setState(state => {
@@ -867,19 +884,32 @@ export function createForm<FieldProps, VirtualFieldProps>(
     })
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
 
+    // 增加name透出真实路径，和0.x保持一致
+    const result = {
+      errors: payload.errors.map(item => ({
+        ...item,
+        name: getFieldState(item.path).name
+      })),
+      warnings: payload.warnings.map(item => ({
+        ...item,
+        name: getFieldState(item.path).name
+      }))
+    }
+
+    const { errors, warnings } = result
+
     // 打印warnings日志从submit挪到这里
-    const { errors, warnings } = payload
     if (warnings.length) {
       console.warn(warnings)
     }
     if (errors.length > 0) {
       if (throwErrors) {
-        throw payload
+        throw result
       } else {
-        return payload
+        return result
       }
     } else {
-      return payload
+      return result
     }
   }
 
@@ -1060,7 +1090,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   //在subscribe中必须同步使用，否则会监听不到变化
   function hasChanged(target: any, path: FormPathPattern): boolean {
-    if (!env.publishing) {
+    if (env.publishing[target ? target.path : ''] === false) {
       throw new Error(
         'The watch function must be used synchronously in the subscribe callback.'
       )
@@ -1119,18 +1149,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const heart = new FormHeart({
     ...options,
     context: formApi,
-    beforeNotify: () => {
-      env.publishing = true
+    beforeNotify: payload => {
+      env.publishing[payload.path || ''] = true
     },
-    afterNotify: () => {
-      env.publishing = false
+    afterNotify: payload => {
+      env.publishing[payload.path || ''] = false
     }
   })
   const env = {
     validateTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
-    publishing: false,
+    publishing: {},
     taskQueue: [],
     userUpdateFields: [],
     taskIndexes: {},

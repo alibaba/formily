@@ -100,7 +100,7 @@ describe('test all apis', () => {
     try {
       await actions.submit()
     } catch (e) {
-      expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
+      expect(e).toEqual([{ path: 'aaa', name: 'aaa', messages: ['This field is required'] }])
       expect(errorsEle).toBeTruthy()
     }
     fireEvent.change(inputEle, { target: { value: '123' } })
@@ -115,7 +115,7 @@ describe('test all apis', () => {
     try {
       await asyncActions.submit()
     } catch (e) {
-      expect(e).toEqual([{ path: 'aaa', messages: ['This field is required'] }])
+      expect(e).toEqual([{ path: 'aaa', name: 'aaa', messages: ['This field is required'] }])
       expect(errorsEle).toBeTruthy()
     }
     fireEvent.change(inputEle, { target: { value: '123' } })
@@ -144,7 +144,7 @@ describe('test all apis', () => {
     }
     
     expect(onValidateFailedHandler).toBeCalledWith({
-      errors: [{ path: 'aaa', messages: ['This field is required'] }],
+      errors: [{ path: 'aaa', name: 'aaa', messages: ['This field is required'] }],
       warnings: []
     })
     expect(errorsEle).toBeTruthy()
@@ -160,7 +160,7 @@ describe('test all apis', () => {
     }
     
     expect(onValidateFailedHandler).toBeCalledWith({
-      errors: [{ path: 'aaa', messages: ['This field is required'] }],
+      errors: [{ path: 'aaa', name: 'aaa', messages: ['This field is required'] }],
       warnings: []
     })
     expect(errorsEle).toBeTruthy()

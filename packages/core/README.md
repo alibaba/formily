@@ -40,7 +40,7 @@ npm install --save @uform/core
   - [IFormCreatorOptions](#iformcreatoroptions)
   - [IForm](#iform)
   - [IMutators](#imutators)
-  - [Validation](#the-validator)
+  - [Validation](#validation)
   - [IFormState](#iformstate)
   - [IFieldState](#ifieldstate)
   - [IVirtualFieldState](#ivirtualfieldstate)
@@ -432,6 +432,12 @@ enum LifeCycleTypes { // Form pre-initialization trigger
   // Triggered when the form submission ends
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
 
+  // Triggered when the form submission within validate
+  ON_FORM_SUBMIT_VALIDATE_START = 'onFormSubmitValidateStart',
+
+  // Triggered when the form submission ends due to validate successs
+  ON_FORM_SUBMIT_VALIDATE_SUCCESS= 'onFormSubmitValidateSuccess',
+
   // Triggered when the form submission ends due to validate failed
   ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
 
@@ -711,7 +717,7 @@ interface IMutators {
 ```typescript
 type CustomValidator = (
   value: any,
-  rescription?: ValidateDescription
+  description?: ValidateDescription
 ) => ValidateResponse
 type SyncValidateResponse =
   | null

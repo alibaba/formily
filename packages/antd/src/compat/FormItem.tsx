@@ -62,6 +62,7 @@ const computeSchemaExtendProps = (
         ...props.schema.getExtendsItemProps(),
         ...props.schema.getExtendsProps()
       },
+      'required',
       'className',
       'prefix',
       'labelAlign',
@@ -75,7 +76,7 @@ const computeSchemaExtendProps = (
 
 const FormItemPropsContext = createContext({})
 
-export const FormItemProps = ({ children, ...props }) => (
+export const CompatAntdFormItemProps = ({ children, ...props }) => (
   <FormItemPropsContext.Provider value={props}>
     {children}
   </FormItemPropsContext.Provider>
@@ -103,7 +104,7 @@ export const CompatAntdFormItem: React.FC<ICompatItemProps> = props => {
       {...itemProps}
       {...outerFormItemProps}
     >
-      <FormItemProps>{props.children}</FormItemProps>
+      <CompatAntdFormItemProps>{props.children}</CompatAntdFormItemProps>
     </Form.Item>
   )
 }
