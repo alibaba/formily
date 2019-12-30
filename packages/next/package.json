@@ -32,6 +32,8 @@
     "@uform/react-shared-components": "^1.0.0-rc.0",
     "@uform/shared": "^1.0.0-rc.0",
     "classnames": "^2.2.6",
+    "react-dnd": "^10.0.2",
+    "react-dnd-html5-backend": "^10.0.2",
     "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
     "rxjs": "^6.5.1",
