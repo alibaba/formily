@@ -168,6 +168,32 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
+  function toggleVisibleOrDisplayOfChild(
+    parentState:
+      | IVirtualFieldState<VirtualFieldProps>
+      | IFieldState<FieldProps>,
+    childState: IVirtualFieldState<VirtualFieldProps> | IFieldState<FieldProps>,
+    name: 'visible' | 'display'
+  ) {
+    const hiddenNode = env.hiddenNodes[childState.path]
+    const prevStateValue = childState[name]
+    if (parentState[name] && hiddenNode && hiddenNode[name] === false) {
+      childState[name] = false
+      delete hiddenNode[name]
+      if (Object.keys(hiddenNode).length === 0) {
+        delete env.hiddenNodes[childState.path]
+      }
+    } else {
+      childState[name] = parentState[name]
+    }
+    if (!parentState[name] && !prevStateValue) {
+      if (!hiddenNode) {
+        env.hiddenNodes[childState.path] = {}
+      }
+      env.hiddenNodes[childState.path][name] = false
+    }
+  }
+
   function onFieldChange({ field, path }) {
     return (published: IFieldState<FieldProps>) => {
       const valueChanged = field.isDirty('value')
@@ -213,49 +239,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
-            const { visible, display } = state
-            const hiddenNode = env.hiddenNodes[state.path]
             if (visibleChanged) {
-              if (
-                published.visible &&
-                hiddenNode &&
-                hiddenNode.visible === false
-              ) {
-                state.visible = false
-                delete hiddenNode.visible
-                if (Object.keys(hiddenNode).length === 0) {
-                  delete env.hiddenNodes[state.path]
-                }
-              } else {
-                state.visible = published.visible
-              }
-              if (!published.visible && !visible) {
-                if (!hiddenNode) {
-                  env.hiddenNodes[state.path] = {}
-                }
-                env.hiddenNodes[state.path].visible = false
-              }
+              toggleVisibleOrDisplayOfChild(published, state, 'visible')
             }
             if (displayChanged) {
-              if (
-                published.display &&
-                hiddenNode &&
-                hiddenNode.display === false
-              ) {
-                state.display = false
-                delete hiddenNode.display
-                if (Object.keys(hiddenNode).length === 0) {
-                  delete env.hiddenNodes[state.path]
-                }
-              } else {
-                state.display = published.display
-              }
-              if (!published.display && !display) {
-                if (!hiddenNode) {
-                  env.hiddenNodes[state.path] = {}
-                }
-                env.hiddenNodes[state.path].display = false
-              }
+              toggleVisibleOrDisplayOfChild(published, state, 'display')
             }
           }, true)
         })
@@ -311,49 +299,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         graph.eachChildren(path, childState => {
           childState.setState(
             (state: IVirtualFieldState<VirtualFieldProps>) => {
-              const { visible, display } = state
-              const hiddenNode = env.hiddenNodes[state.path]
               if (visibleChanged) {
-                if (
-                  published.visible &&
-                  hiddenNode &&
-                  hiddenNode.visible === false
-                ) {
-                  state.visible = false
-                  delete hiddenNode.visible
-                  if (Object.keys(hiddenNode).length === 0) {
-                    delete env.hiddenNodes[state.path]
-                  }
-                } else {
-                  state.visible = published.visible
-                }
-                if (!published.visible && !visible) {
-                  if (!hiddenNode) {
-                    env.hiddenNodes[state.path] = {}
-                  }
-                  env.hiddenNodes[state.path].visible = false
-                }
+                toggleVisibleOrDisplayOfChild(published, state, 'visible')
               }
               if (displayChanged) {
-                if (
-                  published.display &&
-                  hiddenNode &&
-                  hiddenNode.display === false
-                ) {
-                  state.display = false
-                  delete hiddenNode.display
-                  if (Object.keys(hiddenNode).length === 0) {
-                    delete env.hiddenNodes[state.path]
-                  }
-                } else {
-                  state.display = published.display
-                }
-                if (!published.display && !display) {
-                  if (!hiddenNode) {
-                    env.hiddenNodes[state.path] = {}
-                  }
-                  env.hiddenNodes[state.path].display = false
-                }
+                toggleVisibleOrDisplayOfChild(published, state, 'display')
               }
             },
             true
