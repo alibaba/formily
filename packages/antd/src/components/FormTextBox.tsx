@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 export const FormTextBox = createControllerBox<IFormTextBox>(
   'text-box',
-  styled(({ props, className, children }) => {
+  styled(({ props, form, className, children }) => {
     const schema = new Schema(props)
     const {
       title,
@@ -38,16 +38,22 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
               el,
               () => {
                 const ctrl = el.querySelector(
-                  '.ant-form-item-control:first-child'
+                  '.ant-form-item-children'
                 )
-                if (ctrl) {
-                  el.style.width = ctrl.getBoundingClientRect().width + 'px'
-                }
+                setTimeout(() => {
+                  if (ctrl) {
+                    const editable = form.getFormState(state => state.editable)
+                    el.style.width = editable
+                      ? ctrl.getBoundingClientRect().width + 'px'
+                      : 'auto'
+                  }
+                })
               }
             ]
           }
         )
         syncLayouts.forEach(([el, handler]) => {
+          handler()
           el.addEventListener('DOMSubtreeModified', handler)
         })
 
@@ -111,8 +117,14 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
     .text-box-words:nth-child(1) {
       margin-left: 0;
     }
+    .text-box-words {
+      margin-bottom: 0 !important;
+    }
     .text-box-field {
       display: inline-block;
+      .ant-form-item {
+        margin-bottom: 0 !important;
+      }
     }
     .next-form-item {
       margin-bottom: 0 !important;
