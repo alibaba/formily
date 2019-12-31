@@ -216,46 +216,46 @@ export function createForm<FieldProps, VirtualFieldProps>(
             const { visible, display } = state
             const hiddenNode = env.hiddenNodes[state.path]
             if (visibleChanged) {
-              state.visible = published.visible
+              if (
+                published.visible &&
+                hiddenNode &&
+                hiddenNode.visible === false
+              ) {
+                state.visible = false
+                delete hiddenNode.visible
+                if (Object.keys(hiddenNode).length === 0) {
+                  delete env.hiddenNodes[state.path]
+                }
+              } else {
+                state.visible = published.visible
+              }
+              if (!published.visible && !visible) {
+                if (!hiddenNode) {
+                  env.hiddenNodes[state.path] = {}
+                }
+                env.hiddenNodes[state.path].visible = false
+              }
             }
             if (displayChanged) {
-              state.display = published.display
-            }
-            if (
-              visibleChanged &&
-              published.visible &&
-              hiddenNode &&
-              hiddenNode.visible === false
-            ) {
-              state.visible = false
-              delete hiddenNode.visible
-              if (Object.keys(hiddenNode).length === 0) {
-                delete env.hiddenNodes[state.path]
+              if (
+                published.display &&
+                hiddenNode &&
+                hiddenNode.display === false
+              ) {
+                state.display = false
+                delete hiddenNode.display
+                if (Object.keys(hiddenNode).length === 0) {
+                  delete env.hiddenNodes[state.path]
+                }
+              } else {
+                state.display = published.display
               }
-            }
-            if (visibleChanged && !published.visible && !visible) {
-              if (!hiddenNode) {
-                env.hiddenNodes[state.path] = {}
+              if (!published.display && !display) {
+                if (!hiddenNode) {
+                  env.hiddenNodes[state.path] = {}
+                }
+                env.hiddenNodes[state.path].display = false
               }
-              env.hiddenNodes[state.path].visible = false
-            }
-            if (
-              displayChanged &&
-              published.display &&
-              hiddenNode &&
-              hiddenNode.display === false
-            ) {
-              state.display = false
-              delete hiddenNode.display
-              if (Object.keys(hiddenNode).length === 0) {
-                delete env.hiddenNodes[state.path]
-              }
-            }
-            if (displayChanged && !published.display && !display) {
-              if (!hiddenNode) {
-                env.hiddenNodes[state.path] = {}
-              }
-              env.hiddenNodes[state.path].display = false
             }
           }, true)
         })
@@ -314,46 +314,46 @@ export function createForm<FieldProps, VirtualFieldProps>(
               const { visible, display } = state
               const hiddenNode = env.hiddenNodes[state.path]
               if (visibleChanged) {
-                state.visible = published.visible
+                if (
+                  published.visible &&
+                  hiddenNode &&
+                  hiddenNode.visible === false
+                ) {
+                  state.visible = false
+                  delete hiddenNode.visible
+                  if (Object.keys(hiddenNode).length === 0) {
+                    delete env.hiddenNodes[state.path]
+                  }
+                } else {
+                  state.visible = published.visible
+                }
+                if (!published.visible && !visible) {
+                  if (!hiddenNode) {
+                    env.hiddenNodes[state.path] = {}
+                  }
+                  env.hiddenNodes[state.path].visible = false
+                }
               }
               if (displayChanged) {
-                state.display = published.display
-              }
-              if (
-                visibleChanged &&
-                published.visible &&
-                hiddenNode &&
-                hiddenNode.visible === false
-              ) {
-                state.visible = false
-                delete hiddenNode.visible
-                if (Object.keys(hiddenNode).length === 0) {
-                  delete env.hiddenNodes[state.path]
+                if (
+                  published.display &&
+                  hiddenNode &&
+                  hiddenNode.display === false
+                ) {
+                  state.display = false
+                  delete hiddenNode.display
+                  if (Object.keys(hiddenNode).length === 0) {
+                    delete env.hiddenNodes[state.path]
+                  }
+                } else {
+                  state.display = published.display
                 }
-              }
-              if (visibleChanged && !published.visible && !visible) {
-                if (!hiddenNode) {
-                  env.hiddenNodes[state.path] = {}
+                if (!published.display && !display) {
+                  if (!hiddenNode) {
+                    env.hiddenNodes[state.path] = {}
+                  }
+                  env.hiddenNodes[state.path].display = false
                 }
-                env.hiddenNodes[state.path].visible = false
-              }
-              if (
-                displayChanged &&
-                published.display &&
-                hiddenNode &&
-                hiddenNode.display === false
-              ) {
-                state.display = false
-                delete hiddenNode.display
-                if (Object.keys(hiddenNode).length === 0) {
-                  delete env.hiddenNodes[state.path]
-                }
-              }
-              if (displayChanged && !published.display && !display) {
-                if (!hiddenNode) {
-                  env.hiddenNodes[state.path] = {}
-                }
-                env.hiddenNodes[state.path].display = false
               }
             },
             true
