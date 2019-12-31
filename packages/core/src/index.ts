@@ -213,11 +213,49 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
+            const { visible, display } = state
+            const hiddenNode = env.hiddenNodes[state.path]
             if (visibleChanged) {
               state.visible = published.visible
             }
             if (displayChanged) {
               state.display = published.display
+            }
+            if (
+              visibleChanged &&
+              published.visible &&
+              hiddenNode &&
+              hiddenNode.visible === false
+            ) {
+              state.visible = false
+              delete hiddenNode.visible
+              if (Object.keys(hiddenNode).length === 0) {
+                delete env.hiddenNodes[state.path]
+              }
+            }
+            if (visibleChanged && !published.visible && !visible) {
+              if (!hiddenNode) {
+                env.hiddenNodes[state.path] = {}
+              }
+              env.hiddenNodes[state.path].visible = false
+            }
+            if (
+              displayChanged &&
+              published.display &&
+              hiddenNode &&
+              hiddenNode.display === false
+            ) {
+              state.display = false
+              delete hiddenNode.display
+              if (Object.keys(hiddenNode).length === 0) {
+                delete env.hiddenNodes[state.path]
+              }
+            }
+            if (displayChanged && !published.display && !display) {
+              if (!hiddenNode) {
+                env.hiddenNodes[state.path] = {}
+              }
+              env.hiddenNodes[state.path].display = false
             }
           }, true)
         })
@@ -263,9 +301,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const visibleChanged = field.isDirty('visible')
       const displayChanged = field.isDirty('display')
       const mountedChanged = field.isDirty('mounted')
-      const initializedChnaged = field.isDirty('initialized')
+      const initializedChanged = field.isDirty('initialized')
 
-      if (initializedChnaged) {
+      if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
 
@@ -273,11 +311,49 @@ export function createForm<FieldProps, VirtualFieldProps>(
         graph.eachChildren(path, childState => {
           childState.setState(
             (state: IVirtualFieldState<VirtualFieldProps>) => {
+              const { visible, display } = state
+              const hiddenNode = env.hiddenNodes[state.path]
               if (visibleChanged) {
                 state.visible = published.visible
               }
               if (displayChanged) {
                 state.display = published.display
+              }
+              if (
+                visibleChanged &&
+                published.visible &&
+                hiddenNode &&
+                hiddenNode.visible === false
+              ) {
+                state.visible = false
+                delete hiddenNode.visible
+                if (Object.keys(hiddenNode).length === 0) {
+                  delete env.hiddenNodes[state.path]
+                }
+              }
+              if (visibleChanged && !published.visible && !visible) {
+                if (!hiddenNode) {
+                  env.hiddenNodes[state.path] = {}
+                }
+                env.hiddenNodes[state.path].visible = false
+              }
+              if (
+                displayChanged &&
+                published.display &&
+                hiddenNode &&
+                hiddenNode.display === false
+              ) {
+                state.display = false
+                delete hiddenNode.display
+                if (Object.keys(hiddenNode).length === 0) {
+                  delete env.hiddenNodes[state.path]
+                }
+              }
+              if (displayChanged && !published.display && !display) {
+                if (!hiddenNode) {
+                  env.hiddenNodes[state.path] = {}
+                }
+                env.hiddenNodes[state.path].display = false
               }
             },
             true
@@ -1165,6 +1241,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
+    hiddenNodes: {},
     submittingTask: undefined
   }
   heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)
