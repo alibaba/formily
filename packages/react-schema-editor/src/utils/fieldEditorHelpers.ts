@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { InputTypes, ComponentPropsTypes } from './types'
 
+// 组件取值类型
 export const getFieldTypeData = () => {
   const options = [
     { label: '字符串', value: 'string' },
@@ -15,6 +16,7 @@ export const getFieldTypeData = () => {
   }
 }
 
+// 属性配置输入方式
 export const getInputTypeData = () => {
   const options = [
     { label: '字符串输入框', value: InputTypes.INPUT },
@@ -28,8 +30,9 @@ export const getInputTypeData = () => {
   }
 }
 
+// 表单字段属性（对应 FormItem 的配置属性）
 export const getDefaultXProps = () => {
-  return  {
+  return {
     colon: {},
     extra: {},
     hasFeedback: {},
@@ -44,6 +47,7 @@ export const getDefaultXProps = () => {
   }
 }
 
+// 校验规则属性
 export const getDefaultXRules = () => {
   return {
     enum: {},
@@ -59,6 +63,7 @@ export const getDefaultXRules = () => {
   }
 }
 
+// 数组转换成 Select 组件识别的数据结构
 const convertKeysToSelectData = keys => {
   const options = keys.map(value => ({
     label: value,
@@ -70,6 +75,7 @@ const convertKeysToSelectData = keys => {
   }
 }
 
+// 提取所有组件的组件名
 export const getXComponentData = components => {
   return convertKeysToSelectData(_.map(components, ({ name }) => name))
 }
@@ -130,7 +136,7 @@ export const getComponentPropsData = ({
   return convertKeysToSelectData(remainingKeys)
 }
 
-export const getComponentPropsValue = ({ schema, propsKey }) => {
+export const getComponentProps = ({ schema, propsKey }) => {
   if (propsKey === ComponentPropsTypes.X_RULES) {
     return getComponentXRules(schema)
   } else {
@@ -165,6 +171,27 @@ export const getExpressionValue = value => {
   return value
 }
 
+// 根据用户选择的输入类型，为属性赋初始值
+export const getDefaultValue = inputType => {
+  switch (inputType) {
+    case InputTypes.INPUT: {
+      return ''
+    }
+    case InputTypes.NUMBER_PICKER: {
+      return 0
+    }
+    case InputTypes.CHECKBOX: {
+      return false
+    }
+    case InputTypes.TEXT_AREA: {
+      return null
+    }
+    default:
+      return null
+  }
+}
+
+// 根据属性的值反推输入类型
 export const getInputType = value => {
   if (typeof value === 'object' || isExpression(value)) {
     return InputTypes.TEXT_AREA
