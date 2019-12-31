@@ -380,6 +380,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         )
       })}
       <Button
+        disabled={_.includes(componentPropsValue, BLANK_PROPERTY_VALUE)}
         type="primary"
         icon="plus"
         size="small"
