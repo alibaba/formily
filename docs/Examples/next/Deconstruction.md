@@ -21,7 +21,7 @@ const App = () => (
       <Field type="daterange" name="daterange" title="未解构日期" required />
       <Field
         type="daterange"
-        name="[startDate,endDate]"
+        name="[  startDate,  endDate]"
         title="已解构日期"
         required
       />
