@@ -168,7 +168,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
-  function toggleVisibleOrDisplayOfChild(
+  function setChildFieldVisibleOrDisplay(
     parentState:
       | IVirtualFieldState<VirtualFieldProps>
       | IFieldState<FieldProps>,
@@ -240,10 +240,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
             if (visibleChanged) {
-              toggleVisibleOrDisplayOfChild(published, state, 'visible')
+              setChildFieldVisibleOrDisplay(published, state, 'visible')
             }
             if (displayChanged) {
-              toggleVisibleOrDisplayOfChild(published, state, 'display')
+              setChildFieldVisibleOrDisplay(published, state, 'display')
             }
           }, true)
         })
@@ -300,10 +300,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
           childState.setState(
             (state: IVirtualFieldState<VirtualFieldProps>) => {
               if (visibleChanged) {
-                toggleVisibleOrDisplayOfChild(published, state, 'visible')
+                setChildFieldVisibleOrDisplay(published, state, 'visible')
               }
               if (displayChanged) {
-                toggleVisibleOrDisplayOfChild(published, state, 'display')
+                setChildFieldVisibleOrDisplay(published, state, 'display')
               }
             },
             true
