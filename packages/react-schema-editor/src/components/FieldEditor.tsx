@@ -7,15 +7,16 @@ import {
   Input,
   InputNumber,
   Select,
-  AutoComplete,
+  AutoComplete
 } from 'antd'
 import {
   getFieldTypeData,
   getInputTypeData,
   getXComponentData,
   getComponentPropsData,
-  getComponentPropsValue,
+  getComponentProps,
   getInputType,
+  getDefaultValue,
   getPropertyValue,
   getExpressionValue,
   getRuleMessage,
@@ -66,7 +67,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
     propsKey
   })
 
-  const componentPropsValue = getComponentPropsValue({ schema, propsKey })
+  const componentProps = getComponentProps({ schema, propsKey })
 
   const handleXComponentPropsValueChange = (value, property) => {
     let newSchema
@@ -98,25 +99,8 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
 
   const handleInputTypeChange = (value, property) => {
     let newSchema
-    let defaultValue
-    switch (value) {
-      case InputTypes.INPUT: {
-        defaultValue = ''
-        break
-      }
-      case InputTypes.NUMBER_PICKER: {
-        defaultValue = 0
-        break
-      }
-      case InputTypes.CHECKBOX: {
-        defaultValue = false
-        break
-      }
-      case InputTypes.TEXT_AREA: {
-        defaultValue = null
-        break
-      }
-    }
+    let defaultValue = getDefaultValue(value)
+
     if (propsKey === ComponentPropsTypes.X_RULES) {
       const newRules = _.map(schema[propsKey], rule => {
         if (_.has(rule, property)) {
@@ -234,7 +218,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
   return (
     <div className="field-group">
       <div className="field-group-title">{title}</div>
-      {_.map(componentPropsValue, (property, index) => {
+      {_.map(componentProps, (property, index) => {
         const value = getPropertyValue({ schema, propsKey, property })
         const inputType = getInputType(value)
         return (
@@ -303,7 +287,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
                 className="field-group-form-item"
               >
                 <InputNumber
-                  style={{width: '100%'}}
+                  style={{ width: '100%' }}
                   value={value}
                   onChange={value => {
                     handleXComponentPropsValueChange(value, property)
@@ -380,7 +364,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
         )
       })}
       <Button
-        disabled={_.includes(componentPropsValue, BLANK_PROPERTY_VALUE)}
+        disabled={_.includes(componentProps, BLANK_PROPERTY_VALUE)}
         type="primary"
         icon="plus"
         size="small"
@@ -397,6 +381,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
   onFieldKeyChange,
   onChange
 }) => {
+  // 如果节点类型不是 object 或者 array，则该节点为叶子节点
   const isLeafField = !['object', 'array'].includes(schema.type)
   const fieldTypeData = getFieldTypeData()
 
@@ -432,6 +417,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                   type: value
                 })
               }}
+              // 如果当前节点不是叶子节点，而且拥有子元素，则该节点不能变更类型
               disabled={fieldTypeDisabled(schema)}
             >
               {_.map(fieldTypeData.options, ({ label, value }) => (
