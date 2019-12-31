@@ -168,29 +168,32 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
-  function setChildFieldVisibleOrDisplay(
+  function updateRecoverableShownState(
     parentState:
       | IVirtualFieldState<VirtualFieldProps>
       | IFieldState<FieldProps>,
     childState: IVirtualFieldState<VirtualFieldProps> | IFieldState<FieldProps>,
     name: 'visible' | 'display'
   ) {
-    const hiddenNode = env.hiddenNodes[childState.path]
-    const prevStateValue = childState[name]
-    if (parentState[name] && hiddenNode && hiddenNode[name] === false) {
+    const lastShownState = env.lastShownStates[childState.path]
+    const lastStateValue = childState[name]
+    if (parentState[name] && lastShownState && lastShownState[name] === false) {
       childState[name] = false
-      delete hiddenNode[name]
-      if (Object.keys(hiddenNode).length === 0) {
-        delete env.hiddenNodes[childState.path]
+      delete lastShownState[name]
+      if (
+        !lastShownState.hasOwnProperty('visible') &&
+        !lastShownState.hasOwnProperty('display')
+      ) {
+        delete env.lastShownStates[childState.path]
       }
     } else {
       childState[name] = parentState[name]
     }
-    if (!parentState[name] && !prevStateValue) {
-      if (!hiddenNode) {
-        env.hiddenNodes[childState.path] = {}
+    if (!parentState[name] && !lastStateValue) {
+      if (!lastShownState) {
+        env.lastShownStates[childState.path] = {}
       }
-      env.hiddenNodes[childState.path][name] = false
+      env.lastShownStates[childState.path][name] = false
     }
   }
 
@@ -240,10 +243,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
             if (visibleChanged) {
-              setChildFieldVisibleOrDisplay(published, state, 'visible')
+              updateRecoverableShownState(published, state, 'visible')
             }
             if (displayChanged) {
-              setChildFieldVisibleOrDisplay(published, state, 'display')
+              updateRecoverableShownState(published, state, 'display')
             }
           }, true)
         })
@@ -300,10 +303,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
           childState.setState(
             (state: IVirtualFieldState<VirtualFieldProps>) => {
               if (visibleChanged) {
-                setChildFieldVisibleOrDisplay(published, state, 'visible')
+                updateRecoverableShownState(published, state, 'visible')
               }
               if (displayChanged) {
-                setChildFieldVisibleOrDisplay(published, state, 'display')
+                updateRecoverableShownState(published, state, 'display')
               }
             },
             true
@@ -1191,7 +1194,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
-    hiddenNodes: {},
+    lastShownStates: {},
     submittingTask: undefined
   }
   heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)
