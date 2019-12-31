@@ -168,6 +168,35 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
+  function updateRecoverableShownState(
+    parentState:
+      | IVirtualFieldState<VirtualFieldProps>
+      | IFieldState<FieldProps>,
+    childState: IVirtualFieldState<VirtualFieldProps> | IFieldState<FieldProps>,
+    name: 'visible' | 'display'
+  ) {
+    const lastShownState = env.lastShownStates[childState.path]
+    const lastStateValue = childState[name]
+    if (parentState[name] && lastShownState && lastShownState[name] === false) {
+      childState[name] = false
+      delete lastShownState[name]
+      if (
+        !lastShownState.hasOwnProperty('visible') &&
+        !lastShownState.hasOwnProperty('display')
+      ) {
+        delete env.lastShownStates[childState.path]
+      }
+    } else {
+      childState[name] = parentState[name]
+    }
+    if (!parentState[name] && !lastStateValue) {
+      if (!lastShownState) {
+        env.lastShownStates[childState.path] = {}
+      }
+      env.lastShownStates[childState.path][name] = false
+    }
+  }
+
   function onFieldChange({ field, path }) {
     return (published: IFieldState<FieldProps>) => {
       const valueChanged = field.isDirty('value')
@@ -214,10 +243,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
             if (visibleChanged) {
-              state.visible = published.visible
+              updateRecoverableShownState(published, state, 'visible')
             }
             if (displayChanged) {
-              state.display = published.display
+              updateRecoverableShownState(published, state, 'display')
             }
           }, true)
         })
@@ -263,9 +292,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const visibleChanged = field.isDirty('visible')
       const displayChanged = field.isDirty('display')
       const mountedChanged = field.isDirty('mounted')
-      const initializedChnaged = field.isDirty('initialized')
+      const initializedChanged = field.isDirty('initialized')
 
-      if (initializedChnaged) {
+      if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
 
@@ -274,10 +303,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
           childState.setState(
             (state: IVirtualFieldState<VirtualFieldProps>) => {
               if (visibleChanged) {
-                state.visible = published.visible
+                updateRecoverableShownState(published, state, 'visible')
               }
               if (displayChanged) {
-                state.display = published.display
+                updateRecoverableShownState(published, state, 'display')
               }
             },
             true
@@ -1165,6 +1194,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
+    lastShownStates: {},
     submittingTask: undefined
   }
   heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)
