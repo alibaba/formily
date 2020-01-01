@@ -49,14 +49,14 @@ export const useVirtualField = (
   useEffect(() => {
     ref.current.field.setState(state => {
       state.mounted = true
-    }, true)
+    }, !ref.current.field.state.initialized) //must notify,need to trigger restore value
     ref.current.unmounted = false
     return () => {
       ref.current.unmounted = true
       ref.current.field.unsubscribe()
       ref.current.field.setState((state: IVirtualFieldState) => {
         state.unmounted = true
-      })//must notify,need to trigger remove value
+      }) //must notify,need to trigger remove value
     }
   }, [])
 
