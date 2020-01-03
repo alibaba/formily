@@ -26,7 +26,7 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
   const parentSchema = useContext(MarkupContext)
   if (!parentSchema) return <Fragment />
   if (parentSchema.isObject()) {
-    props.name = (props.name || getRadomName()).replace(/\s*/g, '')
+    props.name = props.name || getRadomName()
     const schema = parentSchema.setProperty(props.name, props)
     return (
       <MarkupContext.Provider value={schema}>{children}</MarkupContext.Provider>

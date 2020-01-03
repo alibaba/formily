@@ -151,6 +151,7 @@
   "dependencies": {
     "@uform/react-schema-renderer": "^1.0.0-beta.5",
     "lodash": "^4.17.15",
+    "node-sass": "^4.13.0",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2"
   },

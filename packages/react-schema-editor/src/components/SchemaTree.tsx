@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tree, Icon } from 'antd'
+import { Tree, Icon, Button } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
 import * as fp from 'lodash/fp'
 import _ from 'lodash'
@@ -11,6 +11,8 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   onChange,
   onSelect
 }) => {
+  const addIndex = React.useRef(0)
+
   const handleSelect = React.useCallback((path: string[]) => {
     onSelect(path[0])
   }, [])
@@ -93,7 +95,20 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
     [schema, onChange]
   )
 
+  const handleAddNewFormItem = React.useCallback(() => {
+    let newSchema = schema
+
+    newSchema = fp.set(
+      ['properties', 'new' + addIndex.current++],
+      { type: 'object' },
+      newSchema
+    )
+
+    onChange(newSchema)
+  }, [schema, onChange])
+
   return (
+    <>
       <Tree
         defaultExpandAll
         showIcon
@@ -104,6 +119,8 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
       >
         {TreeNodeBySchema({ schema, path: [] })}
       </Tree>
+      <Button onClick={handleAddNewFormItem}>+ FormItem</Button>
+    </>
   )
 }
 
