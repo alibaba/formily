@@ -411,9 +411,9 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.errors)).toEqual([])
   })
 
-  test('wildcard path', async () => {})
+  test('wildcard path', async () => { })
 
-  test('effect', async () => {})
+  test('effect', async () => { })
 })
 
 describe('validate', () => {
@@ -443,7 +443,7 @@ describe('validate', () => {
 
     try {
       await form.submit()
-    } catch (e) {}
+    } catch (e) { }
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -467,7 +467,7 @@ describe('validate', () => {
     }) // CustomValidator error
     try {
       await form.submit()
-    } catch (e) {}
+    } catch (e) { }
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -950,6 +950,40 @@ describe('setFieldState', () => {
       undefined
     )
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
+  })
+
+  test('set visible', async () => {
+    const form = createForm()
+    form.registerVirtualField({ path: 'a' })
+    form.registerField({ path: 'a.a1', visible: false })
+    form.registerField({ path: 'a.a2' })
+
+    form.setFieldState('a', state => (state.visible = false))
+    expect(form.getFieldState('a', state => state.visible)).toEqual(false)
+    expect(form.getFieldState('a.a1', state => state.visible)).toEqual(false)
+    expect(form.getFieldState('a.a2', state => state.visible)).toEqual(false)
+
+    form.setFieldState('a', state => (state.visible = true))
+    expect(form.getFieldState('a', state => state.visible)).toEqual(true)
+    expect(form.getFieldState('a.a1', state => state.visible)).toEqual(false)
+    expect(form.getFieldState('a.a2', state => state.visible)).toEqual(true)
+  })
+
+  test('set display', async () => {
+    const form = createForm()
+    form.registerField({ path: 'a' })
+    form.registerField({ path: 'a.a1', display: false })
+    form.registerField({ path: 'a.a2' })
+
+    form.setFieldState('a', state => (state.display = false))
+    expect(form.getFieldState('a', state => state.display)).toEqual(false)
+    expect(form.getFieldState('a.a1', state => state.display)).toEqual(false)
+    expect(form.getFieldState('a.a2', state => state.display)).toEqual(false)
+
+    form.setFieldState('a', state => (state.display = true))
+    expect(form.getFieldState('a', state => state.display)).toEqual(true)
+    expect(form.getFieldState('a.a1', state => state.display)).toEqual(false)
+    expect(form.getFieldState('a.a2', state => state.display)).toEqual(true)
   })
 })
 
