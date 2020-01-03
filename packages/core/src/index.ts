@@ -69,49 +69,47 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const updateFields = (field: IField | IVirtualField) => {
         if (isField(field)) {
           field.setState(state => {
-            if (state.visible) {
-              if (valuesChanged) {
-                const dataPath = FormPath.parse(state.name)
-                const parent = graph.getLatestParent(state.path)
-                const parentValue = getFormValuesIn(parent.path)
-                const value = getFormValuesIn(state.name)
-                /**
-                 * https://github.com/alibaba/uform/issues/267 dynamic remove node
-                 */
-                let removed = false
+            if (valuesChanged) {
+              const dataPath = FormPath.parse(state.name)
+              const parent = graph.getLatestParent(state.path)
+              const parentValue = getFormValuesIn(parent.path)
+              const value = getFormValuesIn(state.name)
+              /**
+               * https://github.com/alibaba/uform/issues/267 dynamic remove node
+               */
+              let removed = false
+              if (
+                isArr(parentValue) &&
+                !dataPath.existIn(parentValue, parent.path)
+              ) {
                 if (
-                  isArr(parentValue) &&
-                  !dataPath.existIn(parentValue, parent.path)
+                  !parent.path
+                    .getNearestChildPathBy(state.path)
+                    .existIn(parentValue, parent.path)
                 ) {
-                  if (
-                    !parent.path
-                      .getNearestChildPathBy(state.path)
-                      .existIn(parentValue, parent.path)
-                  ) {
+                  graph.remove(state.path)
+                  removed = true
+                }
+              } else {
+                each(env.removeNodes, (_, name) => {
+                  if (dataPath.includes(name)) {
                     graph.remove(state.path)
+                    delete env.removeNodes[name]
                     removed = true
                   }
-                } else {
-                  each(env.removeNodes, (_, name) => {
-                    if (dataPath.includes(name)) {
-                      graph.remove(state.path)
-                      delete env.removeNodes[name]
-                      removed = true
-                    }
-                  })
-                }
-                if (removed) return
-                if (!isEqual(value, state.value)) {
-                  state.value = value
-                }
+                })
               }
-              if (initialValuesChanged) {
-                const initialValue = getFormInitialValuesIn(state.name)
-                if (!isEqual(initialValue, state.initialValue)) {
-                  state.initialValue = initialValue
-                  if (!isValid(state.value)) {
-                    state.value = initialValue
-                  }
+              if (removed) return
+              if (!isEqual(value, state.value)) {
+                state.value = value
+              }
+            }
+            if (initialValuesChanged) {
+              const initialValue = getFormInitialValuesIn(state.name)
+              if (!isEqual(initialValue, state.initialValue)) {
+                state.initialValue = initialValue
+                if (!isValid(state.value)) {
+                  state.value = initialValue
                 }
               }
             }
@@ -747,7 +745,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(field.getSourceState(state => state.path), opts)
+        return validate(
+          field.getSourceState(state => state.path),
+          opts
+        )
       }
     }
   }

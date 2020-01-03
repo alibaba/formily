@@ -155,11 +155,6 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
     }
 
     computeState(draft: IFieldState, prevState: IFieldState) {
-      //如果是隐藏状态，则禁止修改值
-      if (!draft.visible || draft.unmounted) {
-        draft.value = prevState.value
-        draft.initialValue = prevState.initialValue
-      }
       //操作重定向
       if (!isEqual(draft.errors, prevState.errors)) {
         draft.effectErrors = draft.errors
