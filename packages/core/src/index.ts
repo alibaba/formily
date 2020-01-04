@@ -367,7 +367,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
-      field = createField(field)
+      //field = createField(field) 如果重置会导致#565的问题，目前还没想清楚不重置会有啥问题
       if (isField(field)) {
         graph.replace(nodePath, field)
       }
@@ -496,7 +496,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
-      field = createField(field)
+      //field = createField(field) 如果重置会导致#565的问题，目前还没想清楚不重置会有啥问题
       if (isVirtualField(field)) {
         graph.replace(nodePath, field)
       }
@@ -747,10 +747,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(
-          field.getSourceState(state => state.path),
-          opts
-        )
+        return validate(field.getSourceState(state => state.path), opts)
       }
     }
   }

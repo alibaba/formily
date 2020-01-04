@@ -36,7 +36,7 @@ registerFormField(
   })(
     class Component extends React.Component<ISliderProps> {
       public render() {
-        const { onChange, value, min, max, marks } = this.props
+        const { onChange, value, min, max, marks, ...rest } = this.props
         let newMarks = {}
         if (Array.isArray(marks)) {
           marks.forEach(mark => {
@@ -47,6 +47,7 @@ registerFormField(
         }
         return (
           <Slider
+            {...rest}
             onChange={onChange}
             value={value}
             min={min}
