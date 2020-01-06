@@ -22,10 +22,8 @@ import { SchemaMessage, ISchema } from '../types'
 const numberRE = /^\d+$/
 
 type SchemaProperties<T = Schema> = {
-  [key: string]: Schema
+  [key: string]: T
 }
-
-const cleanMs = (str: any) => String(str).replace(/\s*/g, '')
 
 export class Schema implements ISchema {
   /** base json schema spec**/
@@ -111,16 +109,15 @@ export class Schema implements ISchema {
       return this
     }
     let res: Schema = this
-    let index = 0
-    let newPath = FormPath.parse(path)
-    newPath.forEach(key => {
+    let depth = 0
+    let parsed = FormPath.parse(path)
+    parsed.forEach(key => {
       if (res && !isEmpty(res.properties)) {
-        const lastKey = newPath.segments.slice(index).join('.')
-        res = res.properties[key] || res.properties[lastKey]
+        res = res.properties[key] || res.properties[parsed.segments.slice(depth).join('.')]
       } else if (res && !isEmpty(res.items) && numberRE.test(key as string)) {
         res = isArr(res.items) ? res.items[key] : res.items
       }
-      index++
+      depth++
     })
     return res
   }
@@ -335,7 +332,6 @@ export class Schema implements ISchema {
    * getters
    */
   setProperty(key: string, schema: ISchema) {
-    key = cleanMs(key)
     this.properties = this.properties || {}
     this.properties[key] = new Schema(schema, this, key)
     return this.properties[key]
@@ -396,7 +392,6 @@ export class Schema implements ISchema {
     }
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {
-        key = cleanMs(key)
         return new Schema(item, this, key)
       })
       if (isValid(json.additionalProperties)) {
@@ -404,7 +399,6 @@ export class Schema implements ISchema {
       }
       if (isValid(json.patternProperties)) {
         this.patternProperties = map(json.patternProperties, (item, key) => {
-          key = cleanMs(key)
           return new Schema(item, this, key)
         })
       }
