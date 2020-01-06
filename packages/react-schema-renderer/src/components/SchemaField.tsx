@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from 'react'
 import { Field, VirtualField, IFieldState } from '@uform/react'
-import { FormPath, isFn, isStr, isEqual, isValid } from '@uform/shared'
+import { FormPath, isFn, isArr, isStr, isEqual, isValid } from '@uform/shared'
 import {
   ISchemaFieldProps,
   ISchemaFieldComponentProps,
@@ -50,7 +50,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     addtionKey: string | number,
     reactKey?: string | number
   ) => {
-    return <SchemaField schema={fieldSchema.get(addtionKey)} key={reactKey} />
+    return <SchemaField key={reactKey} path={path.concat(addtionKey)} />
   }
   const renderFieldDelegate = (
     callback: (props: ISchemaFieldComponentProps) => React.ReactElement
