@@ -25,7 +25,7 @@ type SchemaProperties<T = Schema> = {
   [key: string]: T
 }
 
-const findProperty = (object:any,propertyKey:string)=>{
+const findProperty = (object:any,propertyKey:string | number)=>{
   if(!object) return object
   if(object[propertyKey]){
     return object[propertyKey]
