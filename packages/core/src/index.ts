@@ -538,9 +538,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
   function transformDataPath(path: FormPathPattern) {
     const newPath = FormPath.getPath(path)
     return newPath.reduce((path: FormPath, key: string, index: number) => {
-      if (index >= newPath.length - 1) return path.concat(key)
+      if (index >= newPath.length - 1) return path.concat([key])
       const realPath = newPath.slice(0, index + 1)
-      const dataPath = path.concat(key)
+      const dataPath = path.concat([key])
       const selected = graph.get(realPath)
       if (isVirtualField(selected)) {
         return path
@@ -747,7 +747,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return arr
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
-        return validate(field.getSourceState(state => state.path), opts)
+        return validate(
+          field.getSourceState(state => state.path),
+          opts
+        )
       }
     }
   }
