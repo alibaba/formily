@@ -680,6 +680,31 @@ describe('setFormState', () => {
   })
 })
 
+describe('form editable change ', () => {
+  test('hide field errors', async () => {
+    const form = createForm()
+    form.registerField({ path: 'a', rules: [{ required: true, message: 'a msg' }] })
+    form.registerField({ path: 'b', rules: [{ required: true, message: 'b msg' }] })
+    expect(undefined).toEqual(form.getFormState(state => state.editable))
+    expect(true).toEqual(form.getFieldState('a', state => state.editable))
+    expect(true).toEqual(form.getFieldState('b', state => state.editable))
+    try {
+      await form.validate()
+    } catch (e) {}
+    
+    expect('a msg').toEqual(form.getFieldState('a', state => state.errors[0]))
+    expect('b msg').toEqual(form.getFieldState('b', state => state.errors[0]))
+    form.setFormState(state => {
+      state.editable = false
+    })
+    expect(false).toEqual(form.getFormState(state => state.editable))
+    expect(false).toEqual(form.getFieldState('a', state => state.editable))
+    expect(false).toEqual(form.getFieldState('b', state => state.editable))
+    expect(undefined).toEqual(form.getFieldState('a', state => state.errors[0]))
+    expect(undefined).toEqual(form.getFieldState('b', state => state.errors[0]))
+  })
+})
+
 describe('getFormState', () => {
   test('basic', async () => {
     const form = createForm()
