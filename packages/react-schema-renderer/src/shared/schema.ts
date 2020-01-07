@@ -25,6 +25,19 @@ type SchemaProperties<T = Schema> = {
   [key: string]: T
 }
 
+const findProperty = (object:any,propertyKey:string)=>{
+  if(!object) return object
+  if(object[propertyKey]){
+    return object[propertyKey]
+  }
+  //降级搜索，如果key通过映射的方式没有完全映射上，会提供降级搜索方式，保证完备性
+  for(let key in object){
+    if(FormPath.parse(key).match(`[[${propertyKey}]]`)){
+      return object[key]
+    }
+  }
+}
+
 export class Schema implements ISchema {
   /** base json schema spec**/
   public title?: SchemaMessage
@@ -113,9 +126,9 @@ export class Schema implements ISchema {
     let parsed = FormPath.parse(path)
     parsed.forEach(key => {
       if (res && !isEmpty(res.properties)) {
-        res = res.properties[key] || res.properties[parsed.segments.slice(depth).join('.')]
+        res = findProperty(res.properties,key) || findProperty(res.properties,parsed.segments.slice(depth).join('.'))
       } else if (res && !isEmpty(res.items) && numberRE.test(key as string)) {
-        res = isArr(res.items) ? res.items[key] : res.items
+        res = isArr(res.items) ? findProperty(res.items,key) : res.items
       }
       depth++
     })
