@@ -17,6 +17,10 @@ export const SchemaEditor: React.FC<{
   const [componentType, setComponentType] = useState('antd')
   const [selectedPath, setSelectedPath] = React.useState(null)
 
+  const selectedPaths = (selectedPath && selectedPath.split('.')) || []
+  const fieldKey =
+    selectedPaths.length > 0 && selectedPaths[selectedPaths.length - 1]
+
   const handleTypeChange = e => {
     setComponentType(e.target.value)
   }
@@ -30,6 +34,7 @@ export const SchemaEditor: React.FC<{
   const selectedSchema =
     selectedPath &&
     (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
+
   return (
     <div className="schema-editor">
       <div className="schema-menus">
@@ -58,11 +63,24 @@ export const SchemaEditor: React.FC<{
                   components={
                     componentType === 'fusion' ? nextComponents : antdComponents
                   }
-                  fieldKey="fieldC"
-                  onFieldKeyChange={value => {}}
+                  fieldKey={fieldKey}
+                  onFieldKeyChange={value => {
+                    const newSchema = _.cloneDeep(schema)
+                    // 新增 key
+                    const selectedPathPrev = selectedPaths
+                      .slice(0, selectedPaths.length - 1)
+                      .join('.')
+                    const newSelectPath = selectedPathPrev + '.' + value
+                    _.set(newSchema, newSelectPath, _.cloneDeep(selectedSchema))
+                    // 移除旧 key
+                    _.unset(newSchema, selectedPath)
+
+                    onChange(newSchema)
+                    setSelectedPath(newSelectPath)
+                  }}
                   schema={selectedSchema}
                   onChange={value => {
-                    const newSchema = _.clone(schema)
+                    const newSchema = _.cloneDeep(schema)
                     _.set(newSchema, selectedPath, value)
                     onChange(newSchema)
                   }}
