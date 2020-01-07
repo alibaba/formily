@@ -21,9 +21,6 @@
   "devDependencies": {
     "typescript": "^3.5.2"
   },
-  "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
-  },
   "dependencies": {
     "@uform/shared": "^1.0.0-rc.1"
   },
