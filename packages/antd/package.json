@@ -23,7 +23,6 @@
     "antd": "^3.14.1"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4",
     "@types/styled-components": "^4.1.19",
     "antd": "^3.14.1",
     "react": ">=16.8.0",

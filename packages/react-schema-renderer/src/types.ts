@@ -14,6 +14,7 @@ import { ValidatePatternRules } from '@uform/validator'
 import { Schema } from './shared/schema'
 export interface ISchemaFieldProps {
   path?: FormPathPattern
+  schema?: Schema
 }
 
 export type ComponentWithStyleComponent<
