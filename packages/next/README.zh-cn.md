@@ -6,39 +6,6 @@
 npm install --save @uform/next
 ```
 
-```jsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  registerFormField,
-  Field,  
-  connect,
-  createFormActions
-} from '@uform/next'
-
-const actions = createFormActions()
-window.ac = actions;
-
-const App = () => {
-  const [editable, setEditable] = useState(false);
-
-  return <div>
-    <SchemaForm editable={editable} actions={actions}>
-       <Field type="string" name="a" title="a" required/>
-       <Field type="string" name="a-mirror" title="a-mirror" required/>
-    </SchemaForm>
-    <button onClick={() => {
-      setEditable(!editable);
-    }}>toggle editable</button>
-    <button onClick={() => {
-      actions.validate();
-    }}>validate</button>
-  </div>
-}
-
-ReactDOM.render(<App/>, document.getElementById('root'))
-```
-
 ### 目录
 
 <!-- toc -->
