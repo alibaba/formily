@@ -25,9 +25,6 @@
   "devDependencies": {
     "typescript": "^3.5.2"
   },
-  "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
-  },
   "dependencies": {
     "camel-case": "^3.0.0",
     "cool-path": "^0.1.19",
