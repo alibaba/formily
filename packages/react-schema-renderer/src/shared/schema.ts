@@ -268,41 +268,29 @@ export class Schema implements ISchema {
     }
   }
   getExtendsEditable(): boolean {
+    const { editable } = this.getExtendsComponentProps()
     if (isValid(this.editable)) {
       return this.editable
-    } else if (isValid(this['x-props']) && isValid(this['x-props'].editable)) {
-      return this['x-props'].editable
-    } else if (
-      isValid(this['x-component-props']) &&
-      isValid(this['x-component-props'].editable)
-    ) {
-      return this['x-component-props'].editable
+    } else if (isValid(editable)) {
+      return editable
     } else if (isValid(this.readOnly)) {
       return !this.readOnly
     }
   }
   getExtendsVisible(): boolean {
+    const { visible } = this.getExtendsComponentProps()
     if (isValid(this.visible)) {
       return this.visible
-    } else if (isValid(this['x-props']) && isValid(this['x-props'].visible)) {
-      return this['x-props'].visible
-    } else if (
-      isValid(this['x-component-props']) &&
-      isValid(this['x-component-props'].visible)
-    ) {
-      return this['x-component-props'].visible
+    } else if (isValid(visible)) {
+      return visible
     }
   }
   getExtendsDisplay(): boolean {
+    const { display } = this.getExtendsComponentProps()
     if (isValid(this.display)) {
       return this.display
-    } else if (isValid(this['x-props']) && isValid(this['x-props'].display)) {
-      return this['x-props'].display
-    } else if (
-      isValid(this['x-component-props']) &&
-      isValid(this['x-component-props'].display)
-    ) {
-      return this['x-component-props'].display
+    } else if (isValid(display)) {
+      return display
     }
   }
   getExtendsTriggerType() {
