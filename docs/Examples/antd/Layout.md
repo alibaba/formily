@@ -360,3 +360,119 @@ export default () => (
   </SchemaForm>
 )
 ```
+
+## FormStep
+
+> 分步表单，主要用于大量表单填写，需要区分步骤的场景，使用FormStep和FormSpy
+
+#### Demo 示例
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormStep,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormSpy,
+  createFormActions
+} from '@uform/antd'
+import { Button } from 'antd'
+import Printer from '@uform/printer'
+import 'antd/dist/antd.css'
+
+const actions = createFormActions();
+let cache = {};
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      actions={actions}
+      onSubmit={v => console.log(v)}
+    >
+      <FormStep
+        dataSource={[
+          { title: "步骤1", name: 'basicInfo' },
+          { title: "步骤2", name: '*(companyInfo,itemInfo)' },
+          { title: "步骤3", name: 'businessInfo' }
+        ]}
+      />
+      <Field type="object" name="basicInfo">
+        <Field type="string" name="a1" title="字段1" required />
+        <Field type="string" name="a2" title="字段2" required />
+        <Field type="string" name="a3" title="字段3" required />
+        <Field type="string" name="a4" title="字段4" required />
+      </Field>
+
+       <Field type="object" name="companyInfo">
+        <Field type="string" name="a5" title="字段5" required />
+        <Field type="string" name="a6" title="字段6" required />
+        <Field type="string" name="a7" title="字段7" required />
+        <Field type="string" name="a8" title="字段8" required />
+      </Field>
+
+       <Field type="object" name="itemInfo">
+        <Field type="string" name="a9" title="字段9" required />
+        <Field type="string" name="a10" title="字段10" required />
+        <Field type="string" name="a11" title="字段11" required />
+        <Field type="string" name="a12" title="字段12" required />
+      </Field>
+
+      <Field type="object" name="businessInfo">
+        <Field type="string" name="a13" title="字段13" required />
+        <Field type="string" name="a14" title="字段14" required />
+        <Field type="string" name="a15" title="字段15" required />
+        <Field type="string" name="a16" title="字段16" required />
+      </Field>
+
+      <FormSpy
+        selector={`*(${FormStep.ON_FORM_STEP_CURRENT_CHANGE})`}
+        reducer={(state, action) => {
+          switch (action.type) {
+            case FormStep.ON_FORM_STEP_CURRENT_CHANGE:
+              return { ...state, step: action.payload }
+            default:
+              return { step: { value: 0 } }
+          }
+        }}
+      >
+        {({ state }) => {
+          const formStepState = state.step ? state : { step: { value: 0 } }
+          return (
+            <FormButtonGroup>
+              <Button
+                disabled={formStepState.step.value === 0}
+                onClick={() => {actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}}
+              >
+                上一步
+              </Button>
+              <Button onClick={() => {actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}}>
+                下一步
+              </Button>
+              <Submit>提交</Submit>
+              ​<Reset>重置</Reset>​
+              <Button
+                onClick={() => {
+                  cache = actions.getFormGraph()
+                }}
+              >
+                存储当前状态
+              </Button>
+              <Button
+                onClick={() => {
+                  actions.setFormGraph(cache)
+                }}
+              >
+                回滚状态
+              </Button>
+            </FormButtonGroup>)
+        }}
+      </FormSpy>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
