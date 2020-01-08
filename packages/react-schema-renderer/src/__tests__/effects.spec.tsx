@@ -229,7 +229,7 @@ test('set errors in effects', async () => {
   await wait();
   fireEvent.click(queryByTestId('btn'))
   await wait();
-  expect(callback).toHaveBeenCalledTimes(1)
+  expect(callback).toHaveBeenCalledTimes(0)
 })
 
 test('setFieldState from buffer', async () => {
