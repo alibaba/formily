@@ -232,6 +232,52 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+## Grid
+
+> 网格布局，主要用于列表查询场景的筛选项表单布局方式同样，使用 FormItemGrid
+
+#### Demo 示例
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItemGrid,
+  FormCard,
+  FormBlock,
+  FormLayout
+} from '@uform/next'
+import { Button } from '@alifd/next'
+import Printer from '@uform/printer'
+import '@alifd/next/dist/next.css'
+
+const App = () => (
+  <Printer>
+    <SchemaForm onSubmit={v => console.log(v)}>
+      <FormItemGrid gutter={20}>
+        <Field type="string" name="a1" title="查询字段1" />
+        <Field type="string" name="a2" title="查询字段2" />
+        <Field type="string" name="a3" title="查询字段3" />
+        <Field type="string" name="a4" title="查询字段4" />
+      </FormItemGrid>
+      <FormItemGrid gutter={20} cols={[6, 6]}>
+        <Field type="string" name="a5" title="查询字段5" />
+        <Field type="string" name="a6" title="查询字段6" />
+      </FormItemGrid>
+      <FormButtonGroup style={{ minWidth: 150 }}>
+        ​<Submit>提交</Submit>​<Reset>重置</Reset>​
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ## FormStep
 
 > 分步表单，主要用于大量表单填写，需要区分步骤的场景，使用FormStep和FormSpy
