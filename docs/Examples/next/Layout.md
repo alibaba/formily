@@ -232,9 +232,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-## Grid
+## FormStep
 
-> 网格布局，主要用于列表查询场景的筛选项表单布局方式同样，使用 FormItemGrid
+> 分步表单，主要用于大量表单填写，需要区分步骤的场景，使用FormStep和FormSpy
 
 #### Demo 示例
 
@@ -243,14 +243,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
+  FormStep,
   Field,
   FormButtonGroup,
   Submit,
   Reset,
-  FormItemGrid,
-  FormCard,
-  FormBlock,
-  FormLayout
+  FormSpy
 } from '@uform/next'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
@@ -259,112 +257,72 @@ import '@alifd/next/dist/next.css'
 const App = () => (
   <Printer>
     <SchemaForm onSubmit={v => console.log(v)}>
-      <FormItemGrid gutter={20}>
+      <FormStep
+        dataSource={[
+          { title: "步骤1", name: 'basicInfo' },
+          { title: "步骤2", name: '*(companyInfo,itemInfo)' },
+          { title: "步骤3", name: 'businessInfo' }
+        ]}
+      />
+      <Field type="object" name="basicInfo">
         <Field type="string" name="a1" title="查询字段1" />
         <Field type="string" name="a2" title="查询字段2" />
         <Field type="string" name="a3" title="查询字段3" />
         <Field type="string" name="a4" title="查询字段4" />
-      </FormItemGrid>
-      <FormItemGrid gutter={20} cols={[6, 6]}>
+      </Field>
+
+       <Field type="object" name="companyInfo">
         <Field type="string" name="a5" title="查询字段5" />
         <Field type="string" name="a6" title="查询字段6" />
-      </FormItemGrid>
-      <FormButtonGroup style={{ minWidth: 150 }}>
-        ​<Submit>提交</Submit>​<Reset>重置</Reset>​
-      </FormButtonGroup>
+        <Field type="string" name="a7" title="查询字段7" />
+        <Field type="string" name="a8" title="查询字段8" />
+      </Field>
+
+       <Field type="object" name="itemInfo">
+        <Field type="string" name="a9" title="查询字段9" />
+        <Field type="string" name="a10" title="查询字段10" />
+        <Field type="string" name="a11" title="查询字段11" />
+        <Field type="string" name="a12" title="查询字段12" />
+      </Field>
+
+      <Field type="object" name="businessInfo">
+        <Field type="string" name="a13" title="查询字段13" />
+        <Field type="string" name="a14" title="查询字段14" />
+        <Field type="string" name="a15" title="查询字段15" />
+        <Field type="string" name="a16" title="查询字段16" />
+      </Field>
+
+      <FormSpy
+        selector={`*(${FormStep.ON_FORM_STEP_CURRENT_CHANGE})`}
+        reducer={(state, action) => {
+          switch (action.type) {
+            case FormStep.ON_FORM_STEP_CURRENT_CHANGE:
+              return { ...state, step: action.payload }
+            default:
+              return { step: { value: 0 } }
+          }
+        }}
+      >
+        {({ state }) => {
+          const formStepState = state.step ? state : { step: { value: 0 } }
+          return (
+            <FormButtonGroup>
+              <Button
+                disabled={formStepState.step.value === 0}
+                onClick={() => {schemaActions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}}
+              >
+                上一步
+              </Button>
+              <Button onClick={() => {schemaActions.dispatch(FormStep.ON_FORM_STEP_NEXT)}}>
+                下一步
+              </Button>
+              <Submit>提交</Submit>
+              ​<Reset>重置</Reset>​
+            </FormButtonGroup>)
+        }}
+      </FormSpy>
     </SchemaForm>
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-## 分步表单
-
-```jsx
-import {
-  SchemaForm,
-  Field,
-  FormButtonGroup,
-  Submit,
-  FormEffectHooks,
-  createFormActions,
-  FormGridRow,
-  FormItemGrid,
-  FormGridCol,
-  FormPath,
-  FormLayout,
-  FormBlock,
-  FormCard,
-  FormTextBox,
-  FormStep
-} from '@uform/next'
-import { Button } from '@alifd/next'
-import '@alifd/next/dist/next.css'
-
-const { onFormInit$ } = FormEffectHooks
-
-const actions = createFormActions()
-
-let cache = {}
-
-export default () => (
-  <SchemaForm
-    onSubmit={values => {
-      console.log('提交')
-      console.log(values)
-    }}
-    actions={actions}
-    labelCol={{ span: 8 }}
-    wrapperCol={{ span: 6 }}
-    validateFirst
-    effects={({ setFieldState, getFormGraph }) => {
-      onFormInit$().subscribe(() => {
-        setFieldState('col1', state => {
-          state.visible = false
-        })
-      })
-    }}
-  >
-    <FormStep
-      style={{ marginBottom: 20 }}
-      dataSource={[
-        { title: '基本信息', name: 'step-1' },
-        { title: '财务信息', name: 'step-2' },
-        { title: '条款信息', name: 'step-3' }
-      ]}
-    />
-    <FormCard name="step-1" title="基本信息">
-      <Field name="a1" required title="A1" type="string" />
-    </FormCard>
-    <FormCard name="step-2" title="财务信息">
-      <Field name="a2" required title="A2" type="string" />
-    </FormCard>
-    <FormCard name="step-3" title="条款信息">
-      <Field name="a3" required title="A3" type="string" />
-    </FormCard>
-    <FormButtonGroup>
-      <Submit>提交</Submit>
-      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}>
-        上一步
-      </Button>
-      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
-        下一步
-      </Button>
-      <Button
-        onClick={() => {
-          cache = actions.getFormGraph()
-        }}
-      >
-        存储当前状态
-      </Button>
-      <Button
-        onClick={() => {
-          actions.setFormGraph(cache)
-        }}
-      >
-        回滚状态
-      </Button>
-    </FormButtonGroup>
-  </SchemaForm>
-)
 ```
