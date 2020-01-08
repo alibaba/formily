@@ -306,7 +306,10 @@ export class Schema implements ISchema {
     }
   }
   getExtendsItemProps() {
-    return this['x-item-props'] || {}
+    return deprecate(
+      (this['x-item-props'] || {}),
+      'x-item-props is deprecate in future, Please do not use it.'
+    )
   }
   getExtendsComponent() {
     return this['x-component']
