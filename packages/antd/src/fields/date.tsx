@@ -19,6 +19,7 @@ class YearPicker extends React.Component {
 }
 
 const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
+  if (value === "") return undefined
   return value && value.format ? value.format(format) : value
 }
 
