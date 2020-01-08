@@ -31,9 +31,10 @@ export const SchemaEditor: React.FC<{
 
   const handleCodeChange = code => {}
 
+  const isRoot = selectedPath === 'root'
+
   const selectedSchema =
-    selectedPath &&
-    (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
+    selectedPath && (isRoot ? schema : fp.get(selectedPath, schema))
 
   return (
     <div className="schema-editor">
@@ -63,6 +64,7 @@ export const SchemaEditor: React.FC<{
                   components={
                     componentType === 'fusion' ? nextComponents : antdComponents
                   }
+                  isRoot={isRoot}
                   fieldKey={fieldKey}
                   onFieldKeyChange={value => {
                     const newSchema = _.cloneDeep(schema)
