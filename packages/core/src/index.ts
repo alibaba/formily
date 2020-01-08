@@ -57,6 +57,49 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
+  function syncFieldValues(state: IFieldState) {
+    const dataPath = FormPath.parse(state.name)
+    const parent = graph.getLatestParent(state.path)
+    const parentValue = getFormValuesIn(parent.path)
+    const value = getFormValuesIn(state.name)
+    /**
+     * https://github.com/alibaba/uform/issues/267 dynamic remove node
+     */
+    let removed = false
+    if (isArr(parentValue) && !dataPath.existIn(parentValue, parent.path)) {
+      if (
+        !parent.path
+          .getNearestChildPathBy(state.path)
+          .existIn(parentValue, parent.path)
+      ) {
+        graph.remove(state.path)
+        removed = true
+      }
+    } else {
+      each(env.removeNodes, (_, name) => {
+        if (dataPath.includes(name)) {
+          graph.remove(state.path)
+          delete env.removeNodes[name]
+          removed = true
+        }
+      })
+    }
+    if (removed) return
+    if (!isEqual(value, state.value)) {
+      state.value = value
+    }
+  }
+
+  function syncFieldIntialValues(state: IFieldState) {
+    const initialValue = getFormInitialValuesIn(state.name)
+    if (!isEqual(initialValue, state.initialValue)) {
+      state.initialValue = initialValue
+      if (!isValid(state.value)) {
+        state.value = initialValue
+      }
+    }
+  }
+
   function onFormChange(published: IFormState) {
     heart.publish(LifeCycleTypes.ON_FORM_CHANGE, state)
     const valuesChanged = state.isDirty('values')
@@ -71,48 +114,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
           field.setState(state => {
             if (state.visible) {
               if (valuesChanged) {
-                const dataPath = FormPath.parse(state.name)
-                const parent = graph.getLatestParent(state.path)
-                const parentValue = getFormValuesIn(parent.path)
-                const value = getFormValuesIn(state.name)
-                /**
-                 * https://github.com/alibaba/uform/issues/267 dynamic remove node
-                 */
-                let removed = false
-                if (
-                  isArr(parentValue) &&
-                  !dataPath.existIn(parentValue, parent.path)
-                ) {
-                  if (
-                    !parent.path
-                      .getNearestChildPathBy(state.path)
-                      .existIn(parentValue, parent.path)
-                  ) {
-                    graph.remove(state.path)
-                    removed = true
-                  }
-                } else {
-                  each(env.removeNodes, (_, name) => {
-                    if (dataPath.includes(name)) {
-                      graph.remove(state.path)
-                      delete env.removeNodes[name]
-                      removed = true
-                    }
-                  })
-                }
-                if (removed) return
-                if (!isEqual(value, state.value)) {
-                  state.value = value
-                }
+                syncFieldValues(state)
               }
               if (initialValuesChanged) {
-                const initialValue = getFormInitialValuesIn(state.name)
-                if (!isEqual(initialValue, state.initialValue)) {
-                  state.initialValue = initialValue
-                  if (!isValid(state.value)) {
-                    state.value = initialValue
-                  }
-                }
+                syncFieldIntialValues(state)
+              }
+            } else {
+              //缓存变化，等字段重新显示的时候再执行
+              if (valuesChanged) {
+                env.visiblePendingFields[state.name] =
+                  env.visiblePendingFields[state.name] || {}
+                env.visiblePendingFields[state.name].values = true
+              }
+              if (initialValuesChanged) {
+                env.visiblePendingFields[state.name] =
+                  env.visiblePendingFields[state.name] || {}
+                env.visiblePendingFields[state.name].initialValues = true
               }
             }
           })
@@ -238,6 +255,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
             deleteFormValuesIn(path, true)
           } else {
             setFormValuesIn(path, published.value)
+            if (env.visiblePendingFields[published.name]) {
+              if (env.visiblePendingFields[published.name].values) {
+                syncFieldValues(published)
+              }
+              if (env.visiblePendingFields[published.name].initialValues) {
+                syncFieldIntialValues(published)
+              }
+              delete env.visiblePendingFields[published.name]
+            }
           }
         }
         graph.eachChildren(path, childState => {
@@ -1194,6 +1220,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
+    visiblePendingFields: {},
     lastShownStates: {},
     submittingTask: undefined
   }
