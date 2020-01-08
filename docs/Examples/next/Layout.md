@@ -294,15 +294,21 @@ import {
   FormButtonGroup,
   Submit,
   Reset,
-  FormSpy
+  FormSpy,
+  createFormActions
 } from '@uform/next'
 import { Button } from '@alifd/next'
 import Printer from '@uform/printer'
 import '@alifd/next/dist/next.css'
 
+const actions = createFormActions()
+
 const App = () => (
   <Printer>
-    <SchemaForm onSubmit={v => console.log(v)}>
+    <SchemaForm
+      actions={actions}
+      onSubmit={v => console.log(v)}
+    >
       <FormStep
         dataSource={[
           { title: "步骤1", name: 'basicInfo' },
@@ -311,31 +317,31 @@ const App = () => (
         ]}
       />
       <Field type="object" name="basicInfo">
-        <Field type="string" name="a1" title="查询字段1" />
-        <Field type="string" name="a2" title="查询字段2" />
-        <Field type="string" name="a3" title="查询字段3" />
-        <Field type="string" name="a4" title="查询字段4" />
+        <Field type="string" name="a1" title="查询字段1" required />
+        <Field type="string" name="a2" title="查询字段2" required />
+        <Field type="string" name="a3" title="查询字段3" required />
+        <Field type="string" name="a4" title="查询字段4" required />
       </Field>
 
        <Field type="object" name="companyInfo">
-        <Field type="string" name="a5" title="查询字段5" />
-        <Field type="string" name="a6" title="查询字段6" />
-        <Field type="string" name="a7" title="查询字段7" />
-        <Field type="string" name="a8" title="查询字段8" />
+        <Field type="string" name="a5" title="查询字段5" required />
+        <Field type="string" name="a6" title="查询字段6" required />
+        <Field type="string" name="a7" title="查询字段7" required />
+        <Field type="string" name="a8" title="查询字段8" required />
       </Field>
 
        <Field type="object" name="itemInfo">
-        <Field type="string" name="a9" title="查询字段9" />
-        <Field type="string" name="a10" title="查询字段10" />
-        <Field type="string" name="a11" title="查询字段11" />
-        <Field type="string" name="a12" title="查询字段12" />
+        <Field type="string" name="a9" title="查询字段9" required />
+        <Field type="string" name="a10" title="查询字段10" required />
+        <Field type="string" name="a11" title="查询字段11" required />
+        <Field type="string" name="a12" title="查询字段12" required />
       </Field>
 
       <Field type="object" name="businessInfo">
-        <Field type="string" name="a13" title="查询字段13" />
-        <Field type="string" name="a14" title="查询字段14" />
-        <Field type="string" name="a15" title="查询字段15" />
-        <Field type="string" name="a16" title="查询字段16" />
+        <Field type="string" name="a13" title="查询字段13" required />
+        <Field type="string" name="a14" title="查询字段14" required />
+        <Field type="string" name="a15" title="查询字段15" required />
+        <Field type="string" name="a16" title="查询字段16" required />
       </Field>
 
       <FormSpy
@@ -355,11 +361,11 @@ const App = () => (
             <FormButtonGroup>
               <Button
                 disabled={formStepState.step.value === 0}
-                onClick={() => {schemaActions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}}
+                onClick={() => {actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}}
               >
                 上一步
               </Button>
-              <Button onClick={() => {schemaActions.dispatch(FormStep.ON_FORM_STEP_NEXT)}}>
+              <Button onClick={() => {actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}}>
                 下一步
               </Button>
               <Submit>提交</Submit>
