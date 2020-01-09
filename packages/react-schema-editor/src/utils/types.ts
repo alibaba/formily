@@ -21,6 +21,12 @@ export interface ISchemaPreviewProps {
   schema: object
 }
 
+export enum ComponentTypes {
+  ANTD = 'antd',
+  FUSION = 'fusion',
+  CUSTOM = 'custom'
+}
+
 export enum InputTypes {
   INPUT = 'input',
   NUMBER_PICKER = 'numberPicker',
