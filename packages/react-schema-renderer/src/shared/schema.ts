@@ -305,9 +305,11 @@ export class Schema implements ISchema {
       return componentProps.triggerType
     }
   }
-  getExtendsItemProps() {
+  getExtendsItemProps () {
+    deprecate('x-item-props is deprecate in future, Please do not use it.')
     return this['x-item-props'] || {}
   }
+
   getExtendsComponent() {
     return this['x-component']
   }

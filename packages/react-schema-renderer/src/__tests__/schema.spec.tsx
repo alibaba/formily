@@ -1,4 +1,5 @@
 import { Schema } from '../'
+
 describe('major scene', () => {
   test('basic field schema', () => {
     const s1 = new Schema({
@@ -63,4 +64,20 @@ describe('major scene', () => {
     expect(s5.getExtendsDisplay()).toEqual(true)
     expect(s5.getExtendsEditable()).toEqual(true)
   })
+
+  test('deprecate x-item-props', () => {
+    const s1 = new Schema({
+        "type":"date",
+        "title":"test header",
+    }, undefined, 'test')
+
+    expect(s1.getExtendsItemProps()).toEqual({})
+
+    const s2 = new Schema({
+        "type":"date",
+        "title":"test header",
+        "x-item-props": { hello: 'world' },
+    }, undefined, 'test')
+    expect(s2.getExtendsItemProps()).toEqual({ hello: 'world' })
+  })  
 })

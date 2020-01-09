@@ -214,7 +214,9 @@ describe('submit', () => {
       await form.submit()
     } catch (errors) {
       sunmitFailed()
-      expect(errors).toEqual([{ path: 'a', name: 'a', messages: ['a is required'] }])
+      expect(errors).toEqual([
+        { path: 'a', name: 'a', messages: ['a is required'] }
+      ])
     }
 
     // warning pass
@@ -228,7 +230,7 @@ describe('submit', () => {
     }
 
     expect(validated.warnings).toEqual([
-      { path: 'b', messages: ['b is required'] }
+      { path: 'b', name: 'b', messages: ['b is required'] }
     ])
     expect(validated.errors).toEqual([])
     expect(sunmitFailed).toHaveBeenCalledTimes(1)
@@ -295,7 +297,9 @@ describe('reset', () => {
     await form.reset()
     await form.validate('', { throwErrors: false })
     const errors = form.getFormState(state => state.errors)
-    expect(errors).toEqual([{ path: 'a', messages: ['reset validate msg'] }])
+    expect(errors).toEqual([
+      { path: 'a', name: 'a', messages: ['reset validate msg'] }
+    ])
   })
 
   test('array reset forceclear', async () => {
@@ -389,13 +393,15 @@ describe('clearErrors', () => {
       ]
     }) // CustomValidator error
     const result1 = await form.validate('', { throwErrors: false })
-    expect(result1.warnings).toEqual([{ path: 'b', name: 'b', messages: warnMsg }])
+    expect(result1.warnings).toEqual([
+      { path: 'b', name: 'b', messages: warnMsg }
+    ])
     expect(result1.errors).toEqual([{ path: 'c', name: 'c', messages: errMsg }])
 
     form.clearErrors('b')
     expect(form.getFormState(state => state.warnings)).toEqual([])
     expect(form.getFormState(state => state.errors)).toEqual([
-      { path: 'c', messages: errMsg }
+      { path: 'c', name: 'c', messages: errMsg }
     ])
 
     form.clearErrors('c')
@@ -403,7 +409,9 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.errors)).toEqual([])
 
     const result2 = await form.validate('', { throwErrors: false })
-    expect(result2.warnings).toEqual([{ path: 'b', name: 'b', messages: warnMsg }])
+    expect(result2.warnings).toEqual([
+      { path: 'b', name: 'b', messages: warnMsg }
+    ])
     expect(result2.errors).toEqual([{ path: 'c', name: 'c', messages: errMsg }])
 
     form.clearErrors()
@@ -411,9 +419,9 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.errors)).toEqual([])
   })
 
-  test('wildcard path', async () => { })
+  test('wildcard path', async () => {})
 
-  test('effect', async () => { })
+  test('effect', async () => {})
 })
 
 describe('validate', () => {
@@ -428,8 +436,20 @@ describe('validate', () => {
   test('onValidateFailed(dataPath)', async () => {
     const onValidateFailedTrigger = jest.fn()
     const onValidateFailed = ({ warnings, errors }) => {
-      expect(warnings).toEqual([{ path: 'NO_NAME_FIELDS_$1.foo.boo', name: 'foo.boo', messages: ['warning msg'] }])
-      expect(errors).toEqual([{ path: 'NO_NAME_FIELDS_$1.foo.bar', name: 'foo.bar', messages: ['error msg'] }])
+      expect(warnings).toEqual([
+        {
+          path: 'NO_NAME_FIELDS_$1.foo.boo',
+          name: 'foo.boo',
+          messages: ['warning msg']
+        }
+      ])
+      expect(errors).toEqual([
+        {
+          path: 'NO_NAME_FIELDS_$1.foo.bar',
+          name: 'foo.bar',
+          messages: ['error msg']
+        }
+      ])
       onValidateFailedTrigger()
     }
     const form = createForm({
@@ -438,20 +458,30 @@ describe('validate', () => {
 
     form.registerVirtualField({ path: 'NO_NAME_FIELDS_$1' })
     form.registerField({ path: 'NO_NAME_FIELDS_$1.foo' })
-    form.registerField({ path: 'NO_NAME_FIELDS_$1.foo.bar', rules: [() => ({ type: 'error', message: 'error msg' })] })
-    form.registerField({ path: 'NO_NAME_FIELDS_$1.foo.boo', rules: [() => ({ type: 'warning', message: 'warning msg' })] })
+    form.registerField({
+      path: 'NO_NAME_FIELDS_$1.foo.bar',
+      rules: [() => ({ type: 'error', message: 'error msg' })]
+    })
+    form.registerField({
+      path: 'NO_NAME_FIELDS_$1.foo.boo',
+      rules: [() => ({ type: 'warning', message: 'warning msg' })]
+    })
 
     try {
       await form.submit()
-    } catch (e) { }
+    } catch (e) {}
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
   test('onValidateFailed', async () => {
     const onValidateFailedTrigger = jest.fn()
     const onValidateFailed = ({ warnings, errors }) => {
-      expect(warnings).toEqual([{ path: 'b', name: 'b', messages: ['warning msg'] }])
-      expect(errors).toEqual([{ path: 'c', name: 'c', messages: ['error msg'] }])
+      expect(warnings).toEqual([
+        { path: 'b', name: 'b', messages: ['warning msg'] }
+      ])
+      expect(errors).toEqual([
+        { path: 'c', name: 'c', messages: ['error msg'] }
+      ])
       onValidateFailedTrigger()
     }
     const form = createForm({
@@ -467,7 +497,7 @@ describe('validate', () => {
     }) // CustomValidator error
     try {
       await form.submit()
-    } catch (e) { }
+    } catch (e) {}
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -532,7 +562,9 @@ describe('validate', () => {
       ]
     }) // CustomValidator error
     const bResult = await form.validate('b', { throwErrors: false })
-    expect(bResult.warnings).toEqual([{ path: 'b', name: 'b', messages: ['warning msg'] }])
+    expect(bResult.warnings).toEqual([
+      { path: 'b', name: 'b', messages: ['warning msg'] }
+    ])
     expect(bResult.errors).toEqual([])
     expect(form.getFieldState('b', state => state.warnings)).toEqual([
       'warning msg'
@@ -540,13 +572,15 @@ describe('validate', () => {
 
     expect(form.getFieldState('c', state => state.errors)).toEqual([])
     expect(form.getFormState(state => state.warnings)).toEqual([
-      { path: 'b', messages: ['warning msg'] }
+      { path: 'b', name: 'b', messages: ['warning msg'] }
     ])
     expect(form.getFormState(state => state.errors)).toEqual([])
 
     const cResult = await form.validate('c', { throwErrors: false })
     expect(cResult.warnings).toEqual([])
-    expect(cResult.errors).toEqual([{ path: 'c', name: 'c', messages: ['error msg'] }])
+    expect(cResult.errors).toEqual([
+      { path: 'c', name: 'c', messages: ['error msg'] }
+    ])
 
     expect(form.getFieldState('b', state => state.warnings)).toEqual([
       'warning msg'
@@ -555,10 +589,10 @@ describe('validate', () => {
       'error msg'
     ])
     expect(form.getFormState(state => state.warnings)).toEqual([
-      { path: 'b', messages: ['warning msg'] }
+      { path: 'b', name: 'b', messages: ['warning msg'] }
     ])
     expect(form.getFormState(state => state.errors)).toEqual([
-      { path: 'c', messages: ['error msg'] }
+      { path: 'c', name: 'c', messages: ['error msg'] }
     ])
 
     form.setFieldValue('b', 1)
@@ -861,8 +895,12 @@ describe('setFieldState', () => {
 
     const mutators = form.createMutators(a)
     const result = await mutators.validate({ throwErrors: false })
-    expect(result.errors).toEqual([{ path: 'a', name: 'a', messages: ['error msg'] }])
-    expect(result.warnings).toEqual([{ path: 'a', name: 'a', messages: ['warning msg'] }])
+    expect(result.errors).toEqual([
+      { path: 'a', name: 'a', messages: ['error msg'] }
+    ])
+    expect(result.warnings).toEqual([
+      { path: 'a', name: 'a', messages: ['warning msg'] }
+    ])
 
     // 校验后影响的是ruleErrors, ruleWarnings
     const state2 = form.getFieldState('a')
@@ -1337,7 +1375,9 @@ describe('createMutators', () => {
     const mutators = form.createMutators(mm)
     const result = await mutators.validate()
     expect(result.errors).toEqual([])
-    expect(result.warnings).toEqual([{ path: 'mm', name: 'mm', messages: ['warning msg'] }])
+    expect(result.warnings).toEqual([
+      { path: 'mm', name: 'mm', messages: ['warning msg'] }
+    ])
     mutators.change(1)
     const result2 = await mutators.validate()
     expect(result2.errors).toEqual([])
@@ -1568,6 +1608,7 @@ describe('validator', () => {
       expect(state.errors).toEqual([
         {
           path: 'aa',
+          name: 'aa',
           messages: ['This field is not a number.']
         }
       ])
@@ -1608,6 +1649,7 @@ describe('validator', () => {
       expect(state.errors).toEqual([
         {
           path: 'aa',
+          name: 'aa',
           messages: ['This field can not be 123']
         }
       ])
@@ -1655,6 +1697,7 @@ describe('validator', () => {
       expect(state.errors).toEqual([
         {
           path: 'aa',
+          name: 'aa',
           messages: ['This field can not be 123 addonAfter']
         }
       ])
