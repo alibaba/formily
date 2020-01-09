@@ -82,6 +82,24 @@ describe('createForm', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
+  test('initialValues then change field visible after init', () => {
+    const form = createForm()
+    const aa = form.registerField({ path: 'aa' })
+    const bb = form.registerField({ path: 'bb' })
+    expect(form.getFormState(state => state.initialized)).toEqual(true)
+    aa.setState(state => (state.visible = false))
+    form.setFormState(state => {
+      state.initialValues = testValues
+    })
+    aa.setState(state => (state.visible = true))
+    expect(form.getFormState(state => state.initialValues)).toEqual(testValues)
+    expect(aa.getState(state => state.value)).toEqual(testValues.aa)
+    expect(bb.getState(state => state.value)).toEqual(testValues.bb)
+    expect(form.getFormState(state => state.values)).toEqual(testValues)
+
+    expect(form.getFormGraph()).toMatchSnapshot()
+  })
+
   test('initialValue', () => {
     const form = createForm({
       initialValues: testValues
@@ -419,9 +437,9 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.errors)).toEqual([])
   })
 
-  test('wildcard path', async () => {})
+  test('wildcard path', async () => { })
 
-  test('effect', async () => {})
+  test('effect', async () => { })
 })
 
 describe('validate', () => {
@@ -469,7 +487,7 @@ describe('validate', () => {
 
     try {
       await form.submit()
-    } catch (e) {}
+    } catch (e) { }
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -497,7 +515,7 @@ describe('validate', () => {
     }) // CustomValidator error
     try {
       await form.submit()
-    } catch (e) {}
+    } catch (e) { }
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
