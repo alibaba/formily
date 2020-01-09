@@ -133,6 +133,7 @@ export interface ISchema {
     type: string
     [key: string]: any
   }>
+  ['x-item-props']?: { [name: string]: any }
   ['x-component']?: string
   ['x-component-props']?: { [name: string]: any }
   ['x-render']?: <T = ISchemaFieldComponentProps>(
