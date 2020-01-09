@@ -437,9 +437,9 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.errors)).toEqual([])
   })
 
-  test('wildcard path', async () => {})
+  test('wildcard path', async () => { })
 
-  test('effect', async () => {})
+  test('effect', async () => { })
 })
 
 describe('validate', () => {
@@ -487,7 +487,7 @@ describe('validate', () => {
 
     try {
       await form.submit()
-    } catch (e) {}
+    } catch (e) { }
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -515,7 +515,7 @@ describe('validate', () => {
     }) // CustomValidator error
     try {
       await form.submit()
-    } catch (e) {}
+    } catch (e) { }
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
