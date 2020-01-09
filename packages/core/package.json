@@ -1,6 +1,6 @@
 {
   "name": "@uform/core",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -26,8 +26,8 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@uform/shared": "^1.0.0-rc.1",
-    "@uform/validator": "^1.0.0-rc.1",
+    "@uform/shared": "^1.0.0-rc.2",
+    "@uform/validator": "^1.0.0-rc.2",
     "immer": "^3.2.0"
   },
   "publishConfig": {
