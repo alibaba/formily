@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "camel-case": "^3.0.0",
-    "cool-path": "^0.1.19",
+    "cool-path": "^0.1.23",
     "deepmerge": "^4.0.0"
   }
 }
