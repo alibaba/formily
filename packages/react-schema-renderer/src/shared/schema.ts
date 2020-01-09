@@ -38,8 +38,11 @@ const findProperty = (object: any, propertyKey: string | number) => {
   }
 }
 
-const filterProperties = (object: {}, keys: string[]) => {
-  let result = {}
+const filterProperties = <T extends object>(
+  object: T,
+  keys: string[]
+): T => {
+  let result = {} as any
   for (let key in object) {
     if (!keys.includes(key) && Object.hasOwnProperty.call(object, key)) {
       result[key] = object[key]
