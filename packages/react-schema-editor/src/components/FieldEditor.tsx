@@ -37,6 +37,7 @@ const formItemLayout = {
 const BLANK_PROPERTY_VALUE = ''
 
 interface IFieldEditorProps {
+  isRoot: boolean;
   fieldKey: string
   onFieldKeyChange: (fieldKey: string) => void
   schema: any
@@ -375,6 +376,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
 }
 
 const FieldEditor: React.FC<IFieldEditorProps> = ({
+  isRoot,
   fieldKey,
   schema,
   components,
@@ -398,6 +400,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
             className="field-group-form-item"
           >
             <Input
+              disabled={isRoot}
               value={fieldKey}
               onChange={event => {
                 onFieldKeyChange(event.target.value)
