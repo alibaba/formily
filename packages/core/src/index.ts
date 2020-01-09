@@ -256,13 +256,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
           } else {
             setFormValuesIn(path, published.value)
             if (env.visiblePendingFields[published.name]) {
-              if (env.visiblePendingFields[published.name].values) {
-                syncFieldValues(published)
-              }
-              if (env.visiblePendingFields[published.name].initialValues) {
-                syncFieldIntialValues(published)
-              }
-              delete env.visiblePendingFields[published.name]
+              field.setState((state: IFieldState) => {
+                if (env.visiblePendingFields[state.name].values) {
+                  syncFieldValues(state)
+                }
+                if (env.visiblePendingFields[state.name].initialValues) {
+                  syncFieldIntialValues(state)
+                }
+                delete env.visiblePendingFields[state.name]
+              })
             }
           }
         }
