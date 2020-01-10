@@ -354,11 +354,10 @@ export class Schema implements ISchema {
   getExtendsProps() {
     return this['x-props'] || {}
   }
-  getExtendsComponentProps() {
-    return filterProperties(
-      { ...this['x-props'], ...this['x-component-props'] },
-      COMPAT_FORM_ITEM_PROPS
-    )
+  getExtendsComponentProps(needfilterFormItemKeys: boolean = true) {
+    const props = { ...this['x-props'], ...this['x-component-props'] }
+    if(!needfilterFormItemKeys) return props
+    return filterProperties(props, COMPAT_FORM_ITEM_PROPS)
   }
   getExtendsLinkages() {
     return this['x-linkages']
