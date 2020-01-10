@@ -75,12 +75,10 @@ export const FormButtonGroup = styled(
       return (
         <div className="button-group">
           <Row>
-            <Col span={span}>
-              <Col offset={offset} className="inline">
-                <div className="inline-view" style={itemStyle}>
-                  {children}
-                </div>
-              </Col>
+            <Col span={span} offset={offset} className="inline">
+              <div className="inline-view" style={itemStyle}>
+                {children}
+              </div>
             </Col>
           </Row>
         </div>
@@ -157,5 +155,5 @@ export const FormButtonGroup = styled(
 
 createVirtualBox<React.PropsWithChildren<IFormButtonGroupProps>>(
   'button-group',
-  FormButtonGroup,
+  FormButtonGroup
 )

@@ -25,18 +25,43 @@ type SchemaProperties<T = Schema> = {
   [key: string]: T
 }
 
-const findProperty = (object:any,propertyKey:string | number)=>{
-  if(!object) return object
-  if(object[propertyKey]){
+const findProperty = (object: any, propertyKey: string | number) => {
+  if (!object) return object
+  if (object[propertyKey]) {
     return object[propertyKey]
   }
   //降级搜索，如果key通过映射的方式没有完全映射上，会提供降级搜索方式，保证完备性
-  for(let key in object){
-    if(FormPath.parse(key).match(`[[${propertyKey}]]`)){
+  for (let key in object) {
+    if (FormPath.parse(key).match(`[[${propertyKey}]]`)) {
       return object[key]
     }
   }
 }
+
+const filterProperties = <T extends object>(
+  object: T,
+  keys: string[]
+): T => {
+  let result = {} as any
+  for (let key in object) {
+    if (!keys.includes(key) && Object.hasOwnProperty.call(object, key)) {
+      result[key] = object[key]
+    }
+  }
+  return result
+}
+
+//向后兼容逻辑，未来会干掉
+const COMPAT_FORM_ITEM_PROPS = [
+  'required',
+  'className',
+  'prefix',
+  'labelAlign',
+  'labelTextAlign',
+  'size',
+  'labelCol',
+  'wrapperCol'
+]
 
 export class Schema implements ISchema {
   /** base json schema spec**/
@@ -126,9 +151,11 @@ export class Schema implements ISchema {
     let parsed = FormPath.parse(path)
     parsed.forEach(key => {
       if (res && !isEmpty(res.properties)) {
-        res = findProperty(res.properties,key) || findProperty(res.properties,parsed.segments.slice(depth).join('.'))
+        res =
+          findProperty(res.properties, key) ||
+          findProperty(res.properties, parsed.segments.slice(depth).join('.'))
       } else if (res && !isEmpty(res.items) && numberRE.test(key as string)) {
-        res = isArr(res.items) ? findProperty(res.items,key) : res.items
+        res = isArr(res.items) ? findProperty(res.items, key) : res.items
       }
       depth++
     })
@@ -268,41 +295,29 @@ export class Schema implements ISchema {
     }
   }
   getExtendsEditable(): boolean {
+    const { editable } = this.getExtendsComponentProps()
     if (isValid(this.editable)) {
       return this.editable
-    } else if (isValid(this['x-props']) && isValid(this['x-props'].editable)) {
-      return this['x-props'].editable
-    } else if (
-      isValid(this['x-component-props']) &&
-      isValid(this['x-component-props'].editable)
-    ) {
-      return this['x-component-props'].editable
+    } else if (isValid(editable)) {
+      return editable
     } else if (isValid(this.readOnly)) {
       return !this.readOnly
     }
   }
   getExtendsVisible(): boolean {
+    const { visible } = this.getExtendsComponentProps()
     if (isValid(this.visible)) {
       return this.visible
-    } else if (isValid(this['x-props']) && isValid(this['x-props'].visible)) {
-      return this['x-props'].visible
-    } else if (
-      isValid(this['x-component-props']) &&
-      isValid(this['x-component-props'].visible)
-    ) {
-      return this['x-component-props'].visible
+    } else if (isValid(visible)) {
+      return visible
     }
   }
   getExtendsDisplay(): boolean {
+    const { display } = this.getExtendsComponentProps()
     if (isValid(this.display)) {
       return this.display
-    } else if (isValid(this['x-props']) && isValid(this['x-props'].display)) {
-      return this['x-props'].display
-    } else if (
-      isValid(this['x-component-props']) &&
-      isValid(this['x-component-props'].display)
-    ) {
-      return this['x-component-props'].display
+    } else if (isValid(display)) {
+      return display
     }
   }
   getExtendsTriggerType() {
@@ -318,16 +333,20 @@ export class Schema implements ISchema {
     }
   }
   getExtendsItemProps() {
+    if (isValid(this['x-item-props'])) {
+      deprecate('x-item-props is deprecate in future, Please do not use it.')
+    }
     return this['x-item-props'] || {}
   }
+
   getExtendsComponent() {
     return this['x-component']
   }
   getExtendsRenderer() {
-    return deprecate(
-      this['x-render'],
-      'x-render is deprecate in future, Please do not use it.'
-    )
+    if (isValid(this['x-render'])) {
+      deprecate('x-render is deprecate in future, Please do not use it.')
+    }
+    return this['x-render']
   }
   getExtendsEffect() {
     return this['x-effect']
@@ -335,8 +354,10 @@ export class Schema implements ISchema {
   getExtendsProps() {
     return this['x-props'] || {}
   }
-  getExtendsComponentProps() {
-    return { ...this['x-props'], ...this['x-component-props'] }
+  getExtendsComponentProps(needfilterFormItemKeys: boolean = true) {
+    const props = { ...this['x-props'], ...this['x-component-props'] }
+    if(!needfilterFormItemKeys) return props
+    return filterProperties(props, COMPAT_FORM_ITEM_PROPS)
   }
   getExtendsLinkages() {
     return this['x-linkages']

@@ -256,13 +256,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
           } else {
             setFormValuesIn(path, published.value)
             if (env.visiblePendingFields[published.name]) {
-              if (env.visiblePendingFields[published.name].values) {
-                syncFieldValues(published)
-              }
-              if (env.visiblePendingFields[published.name].initialValues) {
-                syncFieldIntialValues(published)
-              }
-              delete env.visiblePendingFields[published.name]
+              field.setState((state: IFieldState) => {
+                if (env.visiblePendingFields[state.name].values) {
+                  syncFieldValues(state)
+                }
+                if (env.visiblePendingFields[state.name].initialValues) {
+                  syncFieldIntialValues(state)
+                }
+                delete env.visiblePendingFields[state.name]
+              })
             }
           }
         }
@@ -295,11 +297,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
 
       if (errorsChanged) {
-        syncFormMessages('errors', published.name, published.errors)
+        syncFormMessages('errors', published)
       }
 
       if (warningsChanged) {
-        syncFormMessages('warnings', published.name, published.warnings)
+        syncFormMessages('warnings', published)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
       if (userUpdateFieldPath && !env.leadingStage) {
@@ -499,6 +501,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             state.validating = true
           })
         }, 60)
+        heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_START, field)
         return validate(value, rules).then(({ errors, warnings }) => {
           clearTimeout((field as any).validateTimer)
           return new Promise(resolve => {
@@ -508,6 +511,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 state.ruleErrors = errors
                 state.ruleWarnings = warnings
               })
+              heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_END, field)
               resolve({ errors, warnings })
             }
             if (graph.size < 100) {
@@ -533,7 +537,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   //实时同步Form Messages
-  function syncFormMessages(type: string, path: string, messages: string[]) {
+  function syncFormMessages(type: string, fieldState: IFieldState) {
+    const { name, path } = fieldState
+    const messages = fieldState[type]
     state.setSourceState(state => {
       let foundField = false
       state[type] = state[type] || []
@@ -547,6 +553,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }, [])
       if (!foundField && messages.length) {
         state[type].push({
+          name,
           path,
           messages
         })
@@ -860,8 +867,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
     env.submittingTask = async () => {
       // 增加onFormSubmitValidateStart来明确submit引起的校验开始了
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START, state)
-      const validateResult = await validate('', { throwErrors: false })
-      const { errors } = validateResult
+      await validate('', { throwErrors: false })
+      const validated: IFormValidateResult = state.getState(state => ({
+        errors: state.errors,
+        warnings: state.warnings
+      }))
+      const { errors } = validated
       // 校验失败
       if (errors.length) {
         // 由于校验失败导致submit退出
@@ -873,7 +884,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED, state)
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
         if (isFn(options.onValidateFailed)) {
-          options.onValidateFailed(validateResult)
+          options.onValidateFailed(validated)
         }
 
         throw errors
@@ -882,11 +893,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       // 增加onFormSubmitValidateSucces来明确submit引起的校验最终的结果
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS, state)
 
-      // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
-      const validated = state.getState(({ errors, warnings }) => ({
-        errors,
-        warnings
-      }))
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
 
       let payload,
