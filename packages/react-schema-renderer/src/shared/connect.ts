@@ -43,12 +43,13 @@ const bindEffects = (
     (event, key) => {
       const prevEvent = key === 'onChange' ? props[key] : undefined
       props[key] = (...args: any[]) => {
-        if (isFn(prevEvent)) {
-          prevEvent(...args)
-        }
         if (isFn(event)) {
-          return event(...args)
+          event(...args)
         }
+        if (isFn(prevEvent)) {
+          return prevEvent(...args)
+        }
+        
       }
     }
   )

@@ -901,9 +901,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         try {
           payload = await Promise.resolve(onSubmit(values))
         } catch (e) {
-          if (e) {
-            console.error(e)
-          }
+          new Promise(() => {
+            throw e
+          })
         }
       }
 
