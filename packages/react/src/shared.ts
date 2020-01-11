@@ -1,4 +1,4 @@
-import { isFn, FormPath, Subscribable } from '@uform/shared'
+import { isFn, FormPath, Subscribable, isValid } from '@uform/shared'
 import {
   IFormEffect,
   IFormActions,
@@ -93,11 +93,11 @@ export const getValueFromEvent = (event: any) => {
     if (
       !isReactNative &&
       event.nativeEvent &&
-      event.nativeEvent.text !== undefined
+      isValid(event.nativeEvent.text)
     ) {
       return event.nativeEvent.text
     }
-    if (isReactNative && event.nativeEvent !== undefined) {
+    if (isReactNative && isValid(event.nativeEvent)) {
       return event.nativeEvent.text
     }
 

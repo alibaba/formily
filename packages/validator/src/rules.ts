@@ -1,6 +1,7 @@
 import { getMessage } from './message'
 import {
   isEmpty,
+  isValid,
   stringLength,
   isStr,
   isArr,
@@ -12,7 +13,7 @@ import { ValidateDescription } from './types'
 const isValidateEmpty = (value: any) => {
   if (isArr(value)) {
     for (let i = 0; i < value.length; i++) {
-      if (value[i] !== undefined) return false
+      if (isValid(value[i])) return false
     }
     return true
   } else {
