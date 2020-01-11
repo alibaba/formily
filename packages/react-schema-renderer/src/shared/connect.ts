@@ -1,5 +1,5 @@
 import React from 'react'
-import { isArr, each, isFn } from '@uform/shared'
+import { isArr, each, isFn,isValid } from '@uform/shared'
 import {
   ISchema,
   IConnectOptions,
@@ -81,7 +81,7 @@ export const connect = (options?: IConnectOptions) => {
         onBlur: () => mutators.blur(),
         onFocus: () => mutators.focus()
       }
-      if (editable !== undefined) {
+      if (isValid(editable)) {
         if (isFn(editable)) {
           if (!editable(name)) {
             componentProps.disabled = true
@@ -105,7 +105,7 @@ export const connect = (options?: IConnectOptions) => {
 
       if (isFn(options.getProps)) {
         const newProps = options.getProps(componentProps, fieldProps)
-        if (newProps !== undefined) {
+        if (isValid(newProps)) {
           componentProps = newProps as any
         }
       }
@@ -114,7 +114,7 @@ export const connect = (options?: IConnectOptions) => {
         componentProps.dataSource = createEnum((props as ISchema).enum)
       }
 
-      if (componentProps.editable !== undefined) {
+      if (isValid(componentProps.editable)) {
         delete componentProps.editable
       }
 
