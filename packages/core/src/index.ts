@@ -900,17 +900,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (isFn(onSubmit)) {
         try {
           payload = await Promise.resolve(onSubmit(values))
-        } catch (err) {
-          state.setState(state => {
-            state.submitting = false
+        } catch (e) {
+          new Promise(() => {
+            throw e
           })
-          heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-          throw err
         }
-      } else {
-        heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
       }
 
+      state.setState(state => {
+        state.submitting = false
+      })
+      heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
       return {
         values,
         validated,
