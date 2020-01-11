@@ -76,7 +76,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
 
     readRequired(rules: any[]) {
       for (let i = 0; i < rules.length; i++) {
-        if (rules[i].required !== undefined) {
+        if (isValid(rules[i].required)) {
           return rules[i].required
         }
       }
@@ -90,8 +90,8 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
           } else {
             rules = rules.reduce((buf: any[], item: any) => {
               const keys = Object.keys(item || {})
-              if (item.required !== undefined) {
-                if (item.message !== undefined) {
+              if (isValid(item.required)) {
+                if (isValid(item.message)) {
                   if (keys.length > 2) {
                     return buf.concat({
                       ...item,

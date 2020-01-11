@@ -736,7 +736,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           FormPath.parse(state.path)
         )
         let val = getValue()
-        return (index !== undefined ? newPath.concat(index) : newPath).existIn(
+        return (isValid(index) ? newPath.concat(index) : newPath).existIn(
           val,
           newPath
         )
