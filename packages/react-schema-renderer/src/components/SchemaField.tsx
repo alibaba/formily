@@ -34,7 +34,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
 ) => {
   const path = FormPath.parse(props.path)
   const formSchema = useContext(SchemaContext)
-  const fieldSchema = formSchema.get(path)
+  const fieldSchema = props.schema || formSchema.get(path)
   const formRegistry = useContext(FormComponentsContext)
   if (!fieldSchema) {
     throw new Error(`Can not found schema node by ${path.toString()}.`)
@@ -95,7 +95,13 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             renderField,
             children: fieldSchema.mapProperties(
               (schema: Schema, key: string) => {
-                return <SchemaField key={key} path={path.concat(key)} />
+                return (
+                  <SchemaField
+                    schema={schema}
+                    key={key}
+                    path={path.concat(key)}
+                  />
+                )
               }
             )
           }
@@ -110,7 +116,13 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     const properties = fieldSchema.mapProperties(
       (schema: Schema, key: string) => {
         const childPath = path.concat(key)
-        return <SchemaField key={childPath.toString()} path={childPath} />
+        return (
+          <SchemaField
+            schema={schema}
+            key={childPath.toString()}
+            path={childPath}
+          />
+        )
       }
     )
     if (path.length == 0) {

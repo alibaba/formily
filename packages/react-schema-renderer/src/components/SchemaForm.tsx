@@ -34,7 +34,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
                 form.reset({ validate: false, forceClear: false })
               }
             },
-            <SchemaField path={''} />,
+            <SchemaField schema={schema} path={''} />,
             children
           )}
         </Form>

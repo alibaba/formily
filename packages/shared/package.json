@@ -1,6 +1,6 @@
 {
   "name": "@uform/shared",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0-rc.2",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -25,12 +25,9 @@
   "devDependencies": {
     "typescript": "^3.5.2"
   },
-  "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
-  },
   "dependencies": {
     "camel-case": "^3.0.0",
-    "cool-path": "^0.1.19",
+    "cool-path": "^0.1.23",
     "deepmerge": "^4.0.0"
   }
 }

@@ -57,6 +57,49 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
+  function syncFieldValues(state: IFieldState) {
+    const dataPath = FormPath.parse(state.name)
+    const parent = graph.getLatestParent(state.path)
+    const parentValue = getFormValuesIn(parent.path)
+    const value = getFormValuesIn(state.name)
+    /**
+     * https://github.com/alibaba/uform/issues/267 dynamic remove node
+     */
+    let removed = false
+    if (isArr(parentValue) && !dataPath.existIn(parentValue, parent.path)) {
+      if (
+        !parent.path
+          .getNearestChildPathBy(state.path)
+          .existIn(parentValue, parent.path)
+      ) {
+        graph.remove(state.path)
+        removed = true
+      }
+    } else {
+      each(env.removeNodes, (_, name) => {
+        if (dataPath.includes(name)) {
+          graph.remove(state.path)
+          delete env.removeNodes[name]
+          removed = true
+        }
+      })
+    }
+    if (removed) return
+    if (!isEqual(value, state.value)) {
+      state.value = value
+    }
+  }
+
+  function syncFieldIntialValues(state: IFieldState) {
+    const initialValue = getFormInitialValuesIn(state.name)
+    if (!isEqual(initialValue, state.initialValue)) {
+      state.initialValue = initialValue
+      if (!isValid(state.value)) {
+        state.value = initialValue
+      }
+    }
+  }
+
   function onFormChange(published: IFormState) {
     heart.publish(LifeCycleTypes.ON_FORM_CHANGE, state)
     const valuesChanged = state.isDirty('values')
@@ -71,48 +114,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
           field.setState(state => {
             if (state.visible) {
               if (valuesChanged) {
-                const dataPath = FormPath.parse(state.name)
-                const parent = graph.getLatestParent(state.path)
-                const parentValue = getFormValuesIn(parent.path)
-                const value = getFormValuesIn(state.name)
-                /**
-                 * https://github.com/alibaba/uform/issues/267 dynamic remove node
-                 */
-                let removed = false
-                if (
-                  isArr(parentValue) &&
-                  !dataPath.existIn(parentValue, parent.path)
-                ) {
-                  if (
-                    !parent.path
-                      .getNearestChildPathBy(state.path)
-                      .existIn(parentValue, parent.path)
-                  ) {
-                    graph.remove(state.path)
-                    removed = true
-                  }
-                } else {
-                  each(env.removeNodes, (_, name) => {
-                    if (dataPath.includes(name)) {
-                      graph.remove(state.path)
-                      delete env.removeNodes[name]
-                      removed = true
-                    }
-                  })
-                }
-                if (removed) return
-                if (!isEqual(value, state.value)) {
-                  state.value = value
-                }
+                syncFieldValues(state)
               }
               if (initialValuesChanged) {
-                const initialValue = getFormInitialValuesIn(state.name)
-                if (!isEqual(initialValue, state.initialValue)) {
-                  state.initialValue = initialValue
-                  if (!isValid(state.value)) {
-                    state.value = initialValue
-                  }
-                }
+                syncFieldIntialValues(state)
+              }
+            } else {
+              //缓存变化，等字段重新显示的时候再执行
+              if (valuesChanged) {
+                env.visiblePendingFields[state.name] =
+                  env.visiblePendingFields[state.name] || {}
+                env.visiblePendingFields[state.name].values = true
+              }
+              if (initialValuesChanged) {
+                env.visiblePendingFields[state.name] =
+                  env.visiblePendingFields[state.name] || {}
+                env.visiblePendingFields[state.name].initialValues = true
               }
             }
           })
@@ -238,6 +255,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
             deleteFormValuesIn(path, true)
           } else {
             setFormValuesIn(path, published.value)
+            if (env.visiblePendingFields[published.name]) {
+              field.setState((state: IFieldState) => {
+                if (env.visiblePendingFields[state.name].values) {
+                  syncFieldValues(state)
+                }
+                if (env.visiblePendingFields[state.name].initialValues) {
+                  syncFieldIntialValues(state)
+                }
+                delete env.visiblePendingFields[state.name]
+              })
+            }
           }
         }
         graph.eachChildren(path, childState => {
@@ -269,11 +297,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
 
       if (errorsChanged) {
-        syncFormMessages('errors', published.name, published.errors)
+        syncFormMessages('errors', published)
       }
 
       if (warningsChanged) {
-        syncFormMessages('warnings', published.name, published.warnings)
+        syncFormMessages('warnings', published)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
       if (userUpdateFieldPath && !env.leadingStage) {
@@ -473,6 +501,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             state.validating = true
           })
         }, 60)
+        heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_START, field)
         return validate(value, rules).then(({ errors, warnings }) => {
           clearTimeout((field as any).validateTimer)
           return new Promise(resolve => {
@@ -482,6 +511,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 state.ruleErrors = errors
                 state.ruleWarnings = warnings
               })
+              heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_END, field)
               resolve({ errors, warnings })
             }
             if (graph.size < 100) {
@@ -507,7 +537,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   //实时同步Form Messages
-  function syncFormMessages(type: string, path: string, messages: string[]) {
+  function syncFormMessages(type: string, fieldState: IFieldState) {
+    const { name, path } = fieldState
+    const messages = fieldState[type]
     state.setSourceState(state => {
       let foundField = false
       state[type] = state[type] || []
@@ -521,6 +553,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }, [])
       if (!foundField && messages.length) {
         state[type].push({
+          name,
           path,
           messages
         })
@@ -538,9 +571,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
   function transformDataPath(path: FormPathPattern) {
     const newPath = FormPath.getPath(path)
     return newPath.reduce((path: FormPath, key: string, index: number) => {
-      if (index >= newPath.length - 1) return path.concat(key)
+      if (index >= newPath.length - 1) return path.concat([key])
       const realPath = newPath.slice(0, index + 1)
-      const dataPath = path.concat(key)
+      const dataPath = path.concat([key])
       const selected = graph.get(realPath)
       if (isVirtualField(selected)) {
         return path
@@ -834,8 +867,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
     env.submittingTask = async () => {
       // 增加onFormSubmitValidateStart来明确submit引起的校验开始了
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START, state)
-      const validateResult = await validate('', { throwErrors: false })
-      const { errors } = validateResult
+      await validate('', { throwErrors: false })
+      const validated: IFormValidateResult = state.getState(state => ({
+        errors: state.errors,
+        warnings: state.warnings
+      }))
+      const { errors } = validated
       // 校验失败
       if (errors.length) {
         // 由于校验失败导致submit退出
@@ -847,7 +884,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED, state)
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
         if (isFn(options.onValidateFailed)) {
-          options.onValidateFailed(validateResult)
+          options.onValidateFailed(validated)
         }
 
         throw errors
@@ -856,11 +893,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       // 增加onFormSubmitValidateSucces来明确submit引起的校验最终的结果
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS, state)
 
-      // 因为要合并effectErrors/effectWarnings，所以不能直接读validate的结果
-      const validated = state.getState(({ errors, warnings }) => ({
-        errors,
-        warnings
-      }))
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, state)
 
       let payload,
@@ -1194,6 +1226,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
+    visiblePendingFields: {},
     lastShownStates: {},
     submittingTask: undefined
   }

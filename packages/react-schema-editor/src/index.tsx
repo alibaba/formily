@@ -5,18 +5,36 @@ import _ from 'lodash'
 import { SchemaTree } from './components/SchemaTree'
 import FieldEditor from './components/FieldEditor'
 import { SchemaCode } from './components/SchemaCode'
-import { SchemaPreview } from './components/SchemaPreview'
-import nextComponents from './utils/nextCompProps'
-import antdComponents from './utils/antdCompProps'
+// import { SchemaPreview } from './components/SchemaPreview'
+import { ComponentTypes } from './utils/types'
+import {
+  getDefaultComponentType,
+  getComponentsByComponentType
+} from './utils/schemaHelpers'
 import 'antd/dist/antd.css'
 import './main.scss'
 
 export const SchemaEditor: React.FC<{
   schema: any
+  showAntdComponents: boolean
+  showFusionComponents: boolean
+  customComponents: []
   onChange: (schema: any) => void
-}> = ({ schema, onChange }) => {
-  const [componentType, setComponentType] = useState('antd')
+}> = ({
+  schema,
+  showAntdComponents = true,
+  showFusionComponents = true,
+  customComponents = [],
+  onChange
+}) => {
+  const [componentType, setComponentType] = useState(
+    getDefaultComponentType({ showAntdComponents, showFusionComponents })
+  )
   const [selectedPath, setSelectedPath] = React.useState(null)
+
+  const selectedPaths = (selectedPath && selectedPath.split('.')) || []
+  const fieldKey =
+    selectedPaths.length > 0 && selectedPaths[selectedPaths.length - 1]
 
   const handleTypeChange = e => {
     setComponentType(e.target.value)
@@ -28,20 +46,31 @@ export const SchemaEditor: React.FC<{
 
   const handleCodeChange = code => {}
 
+  const isRoot = selectedPath === 'root'
+
   const selectedSchema =
-    selectedPath &&
-    (selectedPath === 'root' ? schema : fp.get(selectedPath, schema))
+    selectedPath && (isRoot ? schema : fp.get(selectedPath, schema))
+
   return (
     <div className="schema-editor">
       <div className="schema-menus">
         <Button type="primary">快速生成</Button>
-        <span className="select-component-type">
-          选择组件类型：
-          <Radio.Group onChange={handleTypeChange} defaultValue="antd">
-            <Radio value="antd">Ant Design组件</Radio>
-            <Radio value="fusion">Fusion Design组件</Radio>
-          </Radio.Group>
-        </span>
+        {(showAntdComponents || showFusionComponents) && (
+          <span className="select-component-type">
+            选择组件类型：
+            <Radio.Group
+              onChange={handleTypeChange}
+              defaultValue={componentType}
+            >
+              {showAntdComponents && (
+                <Radio value={ComponentTypes.ANTD}>Ant Design组件</Radio>
+              )}
+              {showFusionComponents && (
+                <Radio value={ComponentTypes.FUSION}>Fusion Design组件</Radio>
+              )}
+            </Radio.Group>
+          </span>
+        )}
       </div>
       <div className="schema-editor-main">
         <div className="schema-tree">
@@ -56,14 +85,29 @@ export const SchemaEditor: React.FC<{
             <Tabs.TabPane tab="属性编辑" key="1">
               {selectedSchema ? (
                 <FieldEditor
-                  components={
-                    componentType === 'fusion' ? nextComponents : antdComponents
-                  }
-                  fieldKey="fieldC"
-                  onFieldKeyChange={value => {}}
+                  components={getComponentsByComponentType({
+                    componentType,
+                    customComponents
+                  })}
+                  isRoot={isRoot}
+                  fieldKey={fieldKey}
+                  onFieldKeyChange={value => {
+                    const newSchema = _.cloneDeep(schema)
+                    // 新增 key
+                    const selectedPathPrev = selectedPaths
+                      .slice(0, selectedPaths.length - 1)
+                      .join('.')
+                    const newSelectPath = selectedPathPrev + '.' + value
+                    _.set(newSchema, newSelectPath, _.cloneDeep(selectedSchema))
+                    // 移除旧 key
+                    _.unset(newSchema, selectedPath)
+
+                    onChange(newSchema)
+                    setSelectedPath(newSelectPath)
+                  }}
                   schema={selectedSchema}
                   onChange={value => {
-                    const newSchema = _.clone(schema)
+                    const newSchema = _.cloneDeep(schema)
                     _.set(newSchema, selectedPath, value)
                     onChange(newSchema)
                   }}
@@ -79,7 +123,8 @@ export const SchemaEditor: React.FC<{
               ></SchemaCode>
             </Tabs.TabPane>
             <Tabs.TabPane tab="预览" key="3">
-              <SchemaPreview schema={schema}></SchemaPreview>
+              开发中，敬请期待...
+              {/* <SchemaPreview schema={schema}></SchemaPreview> */}
             </Tabs.TabPane>
           </Tabs>
         </div>

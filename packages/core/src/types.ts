@@ -54,6 +54,8 @@ export enum LifeCycleTypes {
   ON_FIELD_INPUT_CHANGE = 'onFieldInputChange',
   ON_FIELD_VALUE_CHANGE = 'onFieldValueChange',
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
+  ON_FIELD_VALIDATE_START = 'onFieldValidateStart',
+  ON_FIELD_VALIDATE_END = 'onFieldValidateEnd',
   ON_FIELD_MOUNT = 'onFieldMount',
   ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
