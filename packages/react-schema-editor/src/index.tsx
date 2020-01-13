@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { SchemaTree } from './components/SchemaTree'
 import FieldEditor from './components/FieldEditor'
 import { SchemaCode } from './components/SchemaCode'
+// import { SchemaPreview } from './components/SchemaPreview'
 import { ComponentTypes } from './utils/types'
 import {
   getDefaultComponentType,
@@ -121,7 +122,10 @@ export const SchemaEditor: React.FC<{
                 onChange={handleCodeChange}
               ></SchemaCode>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="预览" key="3"></Tabs.TabPane>
+            <Tabs.TabPane tab="预览" key="3">
+              开发中，敬请期待...
+              {/* <SchemaPreview schema={schema}></SchemaPreview> */}
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </div>
