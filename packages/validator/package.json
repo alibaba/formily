@@ -1,6 +1,6 @@
 {
   "name": "@uform/validator",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -22,7 +22,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@uform/shared": "^1.0.0-rc.2"
+    "@uform/shared": "^1.0.0-rc.3"
   },
   "publishConfig": {
     "access": "public"
