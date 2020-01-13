@@ -1,6 +1,6 @@
 {
   "name": "@uform/react-schema-editor",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -19,8 +19,8 @@
     "build": "tsc --declaration"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
-    "@uform/react-schema-renderer": "^1.0.0-beta.5"
+    "@uform/react-schema-renderer": "^1.0.0-rc.3",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "node-sass": "^4.13.0",
