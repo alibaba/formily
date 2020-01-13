@@ -37,7 +37,7 @@ const formItemLayout = {
 const BLANK_PROPERTY_VALUE = ''
 
 interface IFieldEditorProps {
-  isRoot: boolean;
+  isRoot: boolean
   fieldKey: string
   onFieldKeyChange: (fieldKey: string) => void
   schema: any
@@ -436,6 +436,7 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
             className="field-group-form-item auto-complete"
           >
             <AutoComplete
+              disabled={isRoot}
               dataSource={_.map(xComponentData.options, ({ value }) => value)}
               value={schema[ComponentPropsTypes.X_COMPONENT]}
               filterOption={(inputValue, option) =>
@@ -448,6 +449,21 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
                   ...schema,
                   [ComponentPropsTypes.X_COMPONENT]: value,
                   [ComponentPropsTypes.X_COMPONENT_PROPS]: {}
+                })
+              }}
+            />
+          </FormItem>
+          <FormItem
+            label="名称"
+            {...formItemLayout}
+            className="field-group-form-item"
+          >
+            <Input
+              value={schema.title}
+              onChange={event => {
+                onChange({
+                  ...schema,
+                  title: event.target.value
                 })
               }}
             />
