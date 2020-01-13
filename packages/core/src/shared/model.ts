@@ -6,7 +6,8 @@ import {
   globalThisPolyfill,
   Subscribable,
   FormPath,
-  FormPathPattern
+  FormPathPattern,
+  isValid
 } from '@uform/shared'
 import produce, { Draft, setAutoFreeze } from 'immer'
 import {
@@ -133,7 +134,7 @@ export const createStateModel = <State = {}, Props = {}>(
           )
           if (isFn(this.controller.dirtyCheck)) {
             const result = this.controller.dirtyCheck(this.dirtys)
-            if (result !== undefined) {
+            if (isValid(result)) {
               Object.assign(this.dirtys, result)
             }
           }
@@ -179,7 +180,7 @@ export const createStateModel = <State = {}, Props = {}>(
           )
           if (isFn(this.controller.dirtyCheck)) {
             const result = this.controller.dirtyCheck(this.dirtys)
-            if (result !== undefined) {
+            if (isValid(result)) {
               Object.assign(this.dirtys, result)
             }
           }
