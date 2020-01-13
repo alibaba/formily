@@ -453,6 +453,21 @@ const FieldEditor: React.FC<IFieldEditorProps> = ({
             />
           </FormItem>
           <FormItem
+            label="名称"
+            {...formItemLayout}
+            className="field-group-form-item"
+          >
+            <Input
+              value={schema.title}
+              onChange={event => {
+                onChange({
+                  ...schema,
+                  title: event.target.value
+                })
+              }}
+            />
+          </FormItem>
+          <FormItem
             label="描述"
             {...formItemLayout}
             className="field-group-form-item"
