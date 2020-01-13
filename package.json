@@ -127,7 +127,9 @@
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
-    "webpack": "^4.35.3"
+    "webpack": "^4.35.3",
+    "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.2"
   },
   "config": {
     "ghooks": {
@@ -147,13 +149,6 @@
       "npm run lint",
       "git add"
     ]
-  },
-  "dependencies": {
-    "@uform/react-schema-renderer": "^1.0.0-beta.5",
-    "lodash": "^4.17.15",
-    "node-sass": "^4.13.0",
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.2"
   },
   "collective": {
     "type": "opencollective",
