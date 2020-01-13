@@ -15,12 +15,14 @@ import 'antd/dist/antd.css'
 import './main.scss'
 
 export const SchemaEditor: React.FC<{
+  className?: string
   schema: any
   showAntdComponents: boolean
   showFusionComponents: boolean
   customComponents: []
   onChange: (schema: any) => void
 }> = ({
+  className,
   schema,
   showAntdComponents = true,
   showFusionComponents = true,
@@ -52,7 +54,7 @@ export const SchemaEditor: React.FC<{
     selectedPath && (isRoot ? schema : fp.get(selectedPath, schema))
 
   return (
-    <div className="schema-editor">
+    <div className={`schema-editor ${className}`}>
       <div className="schema-menus">
         <Button type="primary">快速生成</Button>
         {(showAntdComponents || showFusionComponents) && (
