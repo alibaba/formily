@@ -109,9 +109,13 @@ export const SchemaEditor: React.FC<{
                   }}
                   schema={selectedSchema}
                   onChange={value => {
-                    const newSchema = _.cloneDeep(schema)
-                    _.set(newSchema, selectedPath, value)
-                    onChange(newSchema)
+                    if (isRoot) {
+                      onChange(value)
+                    } else {
+                      const newSchema = _.cloneDeep(schema)
+                      _.set(newSchema, selectedPath, value)
+                      onChange(newSchema)
+                    }
                   }}
                 />
               ) : (
