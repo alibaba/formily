@@ -736,7 +736,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           FormPath.parse(state.path)
         )
         let val = getValue()
-        return (index !== undefined ? newPath.concat(index) : newPath).existIn(
+        return (isValid(index) ? newPath.concat(index) : newPath).existIn(
           val,
           newPath
         )
@@ -901,9 +901,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         try {
           payload = await Promise.resolve(onSubmit(values))
         } catch (e) {
-          if (e) {
-            console.error(e)
-          }
+          new Promise(() => {
+            throw e
+          })
         }
       }
 
