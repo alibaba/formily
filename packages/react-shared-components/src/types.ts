@@ -105,3 +105,10 @@ export type IArrayListEmptyProps = IArrayListAdditionProps
 export interface PreviewTextConfigProps {
   previewPlaceholder?: string | ((props: IPreviewTextProps) => string)
 }
+
+export interface IDragListViewProps {
+  onDragEnd: (fromIndex: number, toIndex: number) => void
+  handleSelector?: string
+  nodeSelector?: string
+  ignoreSelector?: string
+}
