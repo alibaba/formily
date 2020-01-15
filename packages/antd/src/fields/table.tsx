@@ -6,7 +6,7 @@ import {
   Schema
 } from '@uform/react-schema-renderer'
 import { toArr, isFn, isArr, FormPath } from '@uform/shared'
-import { ArrayList } from '@uform/react-shared-components'
+import { ArrayList, DragListView } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form, Icon } from 'antd'
 import { CompatAntdFormItemProps } from '../compat/FormItem'
@@ -21,6 +21,17 @@ const ArrayComponents = {
   MoveUpIcon: () => <Icon type="up" />
 }
 
+const DragHandler = styled.span`
+  width: 7px;
+  display: inline-block;
+  height: 14px;
+  border: 2px dotted #c5c5c5;
+  border-top: 0;
+  border-bottom: 0;
+  cursor: move;
+  margin-bottom: 24px;
+`
+
 const FormTableField = styled(
   (props: ISchemaFieldComponentProps & { className: string }) => {
     const { value, schema, className, editable, path, mutators } = props
@@ -32,6 +43,7 @@ const FormTableField = styled(
       renderEmpty,
       renderExtraOperations,
       operations,
+      dragable,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
     const onAdd = () => {
@@ -39,6 +51,9 @@ const FormTableField = styled(
         ? schema.items[schema.items.length - 1]
         : schema.items
       mutators.push(items.getEmptyValue())
+    }
+    const onMove = (dragIndex, dropIndex) => {
+      mutators.move(dragIndex, dropIndex)
     }
     const renderColumns = (items: Schema) => {
       return items.mapProperties((props, key) => {
@@ -100,6 +115,24 @@ const FormTableField = styled(
         }
       })
     }
+    if (dragable) {
+      columns.unshift({
+        width: 20,
+        render: () => {
+          return <DragHandler className="drag-handler" />
+        }
+      })
+    }
+    const renderTable = () => {
+      return (
+        <Table
+          {...componentProps}
+          pagination={false}
+          columns={columns}
+          dataSource={toArr(value)}
+        ></Table>
+      )
+    }
     return (
       <div className={className}>
         <ArrayList
@@ -116,12 +149,17 @@ const FormTableField = styled(
             renderEmpty
           }}
         >
-          <Table
-            {...componentProps}
-            pagination={false}
-            columns={columns}
-            dataSource={toArr(value)}
-          ></Table>
+          {dragable ? (
+            <DragListView
+              onDragEnd={onMove}
+              nodeSelector="tr.ant-table-row"
+              ignoreSelector="tr.ant-table-expanded-row"
+            >
+              {renderTable()}
+            </DragListView>
+          ) : (
+            renderTable()
+          )}
           <ArrayList.Addition>
             {({ children }) => {
               return (
