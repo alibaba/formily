@@ -65,6 +65,28 @@ describe('major scene', () => {
     expect(s5.getExtendsEditable()).toEqual(true)
   })
 
+  test('labelCol and wrapperCol(without filter)', () => {
+    const s = new Schema({
+        "type":"date",
+        "title":"test header",
+        "x-props": { "labelCol": 2, "wrapperCol": 22 },
+        "x-component-props": { "labelCol": 6, "wrapperCol": 18 },
+    }, undefined, 'test')
+
+    expect(s.getExtendsComponentProps()).toEqual({})    
+  })
+
+  test('labelCol and wrapperCol(with filter)', () => {
+    const s = new Schema({
+        "type":"date",
+        "title":"test header",
+        "x-props": { "labelCol": 2, "wrapperCol": 22 },
+        "x-component-props": { "labelCol": 6, "wrapperCol": 18 },
+    }, undefined, 'test')
+
+    expect(s.getExtendsComponentProps(false)).toEqual({ "labelCol": 6, "wrapperCol": 18 })    
+  })
+
   test('deprecate x-item-props', () => {
     const s1 = new Schema({
         "type":"date",
