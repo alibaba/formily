@@ -112,7 +112,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const updateFields = (field: IField | IVirtualField) => {
         if (isField(field)) {
           field.setState(state => {
-            if (state.visible) {
+            if (state.visible || state.unmounted) {
               if (valuesChanged) {
                 syncFieldValues(state)
               }
@@ -122,14 +122,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
             } else {
               //缓存变化，等字段重新显示的时候再执行
               if (valuesChanged) {
-                env.visiblePendingFields[state.name] =
-                  env.visiblePendingFields[state.name] || {}
-                env.visiblePendingFields[state.name].values = true
+                env.hiddenPendingFields[state.name] =
+                  env.hiddenPendingFields[state.name] || {}
+                env.hiddenPendingFields[state.name].values = true
               }
               if (initialValuesChanged) {
-                env.visiblePendingFields[state.name] =
-                  env.visiblePendingFields[state.name] || {}
-                env.visiblePendingFields[state.name].initialValues = true
+                env.hiddenPendingFields[state.name] =
+                  env.hiddenPendingFields[state.name] || {}
+                env.hiddenPendingFields[state.name].initialValues = true
               }
             }
           })
@@ -227,6 +227,28 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const errorsChanged = field.isDirty('errors')
       const userUpdateFieldPath =
         env.userUpdateFields[env.userUpdateFields.length - 1]
+
+      const syncField = () => {
+        if (env.hiddenPendingFields[published.name]) {
+          field.setState((state: IFieldState) => {
+            if (env.hiddenPendingFields[state.name].values) {
+              syncFieldValues(state)
+            }
+            if (env.hiddenPendingFields[state.name].initialValues) {
+              syncFieldIntialValues(state)
+            }
+            delete env.hiddenPendingFields[state.name]
+          })
+        }
+      }
+
+      const notifyFormValuesChange = () => {
+        if (isFn(options.onChange)) {
+          options.onChange(state.getSourceState(state => clone(state.values)))
+        }
+        heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
+      }
+
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
@@ -239,34 +261,34 @@ export function createForm<FieldProps, VirtualFieldProps>(
           })
         }
       }
+      const wasHidden =
+        published.visible == false || published.unmounted === true
       if (valueChanged) {
-        userUpdating(field, () => {
-          setFormValuesIn(path, published.value)
-        })
+        if (!wasHidden) {
+          userUpdating(field, () => {
+            setFormValuesIn(path, published.value)
+          })
+        }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (initialValueChanged) {
-        setFormInitialValuesIn(path, published.initialValue)
+        if (!wasHidden) {
+          setFormInitialValuesIn(path, published.initialValue)
+        }
         heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
-          if (!published.visible) {
-            deleteFormValuesIn(path, true)
-          } else {
-            setFormValuesIn(path, published.value)
-            if (env.visiblePendingFields[published.name]) {
-              field.setState((state: IFieldState) => {
-                if (env.visiblePendingFields[state.name].values) {
-                  syncFieldValues(state)
-                }
-                if (env.visiblePendingFields[state.name].initialValues) {
-                  syncFieldIntialValues(state)
-                }
-                delete env.visiblePendingFields[state.name]
-              })
+          userUpdating(field, () => {
+            if (!published.visible) {
+              deleteFormValuesIn(path, true)
+              //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
+              notifyFormValuesChange()
+            } else {
+              setFormValuesIn(path, published.value)
+              syncField()
             }
-          }
+          })
         }
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
@@ -286,8 +308,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         userUpdating(field, () => {
           if (published.unmounted) {
             deleteFormValuesIn(path, true)
+            //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
+            notifyFormValuesChange()
           } else {
             setFormValuesIn(path, published.value)
+            syncField()
           }
         })
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
@@ -1044,9 +1069,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function userUpdating(field: IField | IVirtualField, fn?: () => void) {
     if (!field) return
-    const nodePath = field.getSourceState(state => state.path)
-    if (nodePath)
-      env.userUpdateFields.push(field.getSourceState(state => state.path))
+    const nodePath = field.state.path
+    if (nodePath) env.userUpdateFields.push(nodePath)
     if (isFn(fn)) {
       fn()
     }
@@ -1226,7 +1250,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
-    visiblePendingFields: {},
+    hiddenPendingFields: {},
     lastShownStates: {},
     submittingTask: undefined
   }

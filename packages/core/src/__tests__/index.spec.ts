@@ -1560,6 +1560,23 @@ describe('major sences', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
+  test('visible onChange',()=>{
+    const onChangeHandler = jest.fn()
+    const form = createForm({
+      initialValues:{
+        aa:123
+      },
+      onChange:onChangeHandler
+    })
+    form.registerField({
+      name:'aa'
+    })
+    form.setFieldState('aa', state => {
+      state.visible = false
+    })
+    expect(onChangeHandler).toBeCalledTimes(1)
+  })
+
   test('deep nested visible(root)', () => {
     const form = createForm()
     form.registerField({ path: 'aa', value: {} })
