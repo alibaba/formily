@@ -104,6 +104,7 @@
     "markdown-toc": "^1.2.0",
     "moment": "^2.24.0",
     "monaco-editor": "^0.18.1",
+    "node-sass": "^4.13.0",
     "onchange": "^5.2.0",
     "prettier": "^1.18.2",
     "pretty-format": "^24.0.0",
@@ -126,7 +127,9 @@
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
-    "webpack": "^4.35.3"
+    "webpack": "^4.35.3",
+    "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.2"
   },
   "config": {
     "ghooks": {
@@ -146,12 +149,6 @@
       "npm run lint",
       "git add"
     ]
-  },
-  "dependencies": {
-    "lodash": "^4.17.15",
-    "node-sass": "^4.13.0",
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.2"
   },
   "collective": {
     "type": "opencollective",

@@ -1,10 +1,11 @@
 import React from 'react'
-import { Tree, Icon, Button } from 'antd'
+import { Tree, Icon, Menu, Dropdown } from 'antd'
 import { ISchemaTreeProps } from '../utils/types'
+import { getFieldTypeData } from '../utils/fieldEditorHelpers';
 import * as fp from 'lodash/fp'
-import _ from 'lodash'
 
 const TreeNode = Tree.TreeNode
+const { SubMenu } = Menu;
 
 export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   schema,
@@ -12,10 +13,36 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
   onSelect
 }) => {
   const addIndex = React.useRef(0)
+  const selectedKey = React.useRef('');
 
   const handleSelect = React.useCallback((path: string[]) => {
-    onSelect(path[0])
+    selectedKey.current = path[0];
+    onSelect && onSelect(path[0])
   }, [])
+
+  const handleRightClick = ({node}) => {
+    handleSelect([node.props.eventKey]);
+  }
+
+  const handleMenuClick = ({ item, key, keyPath, domEvent }) => {
+    if(selectedKey.current === 'root') return; // 根节点不能进行任何操作
+    if(keyPath.length > 1) {
+      if(keyPath[1] == 'node') {// 添加节点
+        addNode(keyPath[0]);
+      } else if (keyPath[1] == 'child') { // 添加叶子节点
+        addChildNode(keyPath[0])
+      } else {
+  
+      }
+    } else {
+      switch(keyPath[0]) {
+        case 'delete':
+          deleteNode()
+          break;
+      }
+    }
+    
+  }
 
   const handleDrop = React.useCallback(
     (info: any) => {
@@ -95,32 +122,79 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
     [schema, onChange]
   )
 
-  const handleAddNewFormItem = React.useCallback(() => {
+  const addNode = React.useCallback((type) => {
     let newSchema = schema
-
+    let pathArr = selectedKey.current.split('.');
+    pathArr.pop();
+    pathArr.push('new' + addIndex.current++);
     newSchema = fp.set(
-      ['properties', 'new' + addIndex.current++],
-      { type: 'object' },
+      pathArr.join('.'),
+      { type: type || 'object' },
       newSchema
     )
 
     onChange(newSchema)
   }, [schema, onChange])
 
+  const addChildNode = React.useCallback((type) => {
+    let newSchema = schema
+    newSchema = fp.set(
+      `${selectedKey.current}.properties.new${addIndex.current++}`,
+      { type: type || 'object' },
+      newSchema
+    )
+
+    onChange(newSchema)
+  }, [schema, onChange])
+
+  const deleteNode = React.useCallback(() => {
+    let newSchema = schema
+    newSchema = fp.unset(selectedKey.current, newSchema);
+    onChange(newSchema)
+  }, [schema, onChange])
+
+  const getSubMenus = () => {
+    const {options} = getFieldTypeData();
+    return options.map(option => {
+      return <Menu.Item key={option.value}>{option.label}</Menu.Item>
+    })
+  }
+
+  const getMenu = () => {
+    const fieldSchema = fp.get(selectedKey.current, schema);
+    const disableChildNode = !fieldSchema || fieldSchema.type === 'string'
+    return (
+      <Menu onClick={handleMenuClick}>
+        <SubMenu key='node' title={<><Icon type='plus'></Icon>添加节点 </>}>
+          {getSubMenus()}
+        </SubMenu>
+        <SubMenu key='child' title={<><Icon type='plus'></Icon>添加子节点 </>} disabled={disableChildNode}>
+          {getSubMenus()}
+        </SubMenu>
+        <Menu.Item key='delete'>
+          <Icon type='delete'></Icon>删除节点
+        </Menu.Item>
+      </Menu>
+    )
+  }
+
   return (
-    <>
-      <Tree
-        defaultExpandAll
-        showIcon
-        showLine
-        draggable
-        onSelect={handleSelect}
-        onDrop={handleDrop}
-      >
-        {TreeNodeBySchema({ schema, path: [] })}
-      </Tree>
-      <Button onClick={handleAddNewFormItem}>+ FormItem</Button>
-    </>
+    <Dropdown overlay={getMenu()} trigger={['contextMenu']}>
+      <div>
+        <Tree
+          defaultExpandAll
+          showLine
+          draggable
+          selectedKeys={[selectedKey.current]}
+          onSelect={handleSelect}
+          onDrop={handleDrop}
+          onRightClick={handleRightClick}
+        >
+          {TreeNodeBySchema({ schema, path: [] })}
+        </Tree>
+      </div>
+    </Dropdown>
+    
   )
 }
 

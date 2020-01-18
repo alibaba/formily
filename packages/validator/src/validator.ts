@@ -18,6 +18,7 @@ import {
   isStr,
   isArr,
   isObj,
+  isValid,
   each,
   FormPath,
   FormPathPattern
@@ -101,8 +102,9 @@ class FormValidator {
     errors: string[]
     warnings: string[]
   }> {
-    const first =
-      options.first !== undefined ? !!options.first : !!this.validateFirst
+    const first = isValid(options.first)
+      ? !!options.first
+      : !!this.validateFirst
     const errors: string[] = []
     const warnings = []
     try {
@@ -113,7 +115,7 @@ class FormValidator {
         )
         for (let l = 0; l < keys.length; l++) {
           let key = keys[l]
-          if (ruleObj.hasOwnProperty(key) && ruleObj[key] !== undefined) {
+          if (ruleObj.hasOwnProperty(key) && isValid(ruleObj[key])) {
             const rule = ValidatorRules[key]
             if (rule) {
               const payload = await rule(value, ruleObj)
