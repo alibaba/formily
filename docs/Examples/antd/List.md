@@ -187,6 +187,69 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+# Dragable Table Style
+
+> 数组场景，列表型数组，使用拖拽排序，对于需要做数据对比分析的场景，比较适合，但是它对数据结构
+> 的要求，必须是 ObjectList
+
+#### Demo 示例
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItemGrid,
+  FormCard,
+  FormPath,
+  FormBlock,
+  FormLayout,
+  createFormActions
+} from '@uform/antd'
+import { Button } from 'antd'
+import Printer from '@uform/printer'
+import 'antd/dist/antd.css'
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      initialValues={{
+        array: [
+          { aa: 'a1', bb: 'b1', cc: 'c1' },
+          { aa: 'a2', bb: 'b2', cc: 'c2' },
+          { aa: 'a3', bb: 'b3', cc: 'c3' }
+        ]
+      }}
+    >
+      <Field
+        title="数组"
+        name="array"
+        maxItems={5}
+        type="array"
+        x-component="table"
+        x-props={{
+          dragable: true,
+          renderMoveUp: () => {},
+          renderMoveDown: () => {},
+          operationsWidth: 100
+        }}
+      >
+        <Field type="object">
+          <Field name="aa" type="string" title="字段1" editable={true} />
+          <Field name="bb" type="string" title="字段2" />
+          <Field name="cc" type="string" title="字段3" />
+        </Field>
+      </Field>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # Card Style
 
 > 数组场景，卡片数组，信息层级结构更加清晰的要求，必须是 ObjectList

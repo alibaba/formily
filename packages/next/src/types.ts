@@ -106,35 +106,8 @@ export interface IFormStep extends StepProps {
   dataSource: Array<StepItemProps & { name: FormPathPattern }>
 }
 
-export interface IDragObject<T = any> extends DragObjectWithType {
-  id: T
-  index: number
-}
-
-export interface ICollectedProps {
-  isOver: boolean
-  dragingIndex: number
-}
-
-export type onMoveRowCallback = (dragIndex: number, dropIndex: number) => void
-
-export type IDragHandlerCellProps = React.PropsWithChildren<{
-  drag: ConnectDragSource
-}>
-
-export type IDragableRowWrapperProps = React.PropsWithChildren<{
-  rowIndex: number
-  moveRow: onMoveRowCallback
-  preview: ConnectDragPreview
-}>
+export type IDragHandlerCellProps = React.PropsWithChildren<{}>
 
 export interface IDragableRowProps {
-  rowIndex: number
-  moveRow: onMoveRowCallback
   columns: ColumnProps[]
-  record: { [key: string]: any }
-}
-
-export interface IDragableTableProps extends TableProps {
-  onMoveRow: onMoveRowCallback
 }

@@ -6,20 +6,15 @@ import {
   Schema
 } from '@uform/react-schema-renderer'
 import { toArr, isFn, isArr, FormPath } from '@uform/shared'
-import { ArrayList } from '@uform/react-shared-components'
+import { ArrayList, DragListView } from '@uform/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form, Icon } from '@alifd/next'
 import styled from 'styled-components'
 import { CompatNextFormItemProps } from '../compat/FormItem'
 import cls from 'classnames'
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
 import {
-  IDragableRowWrapperProps,
   IDragableRowProps,
   IDragableTableProps,
-  IDragObject,
-  ICollectedProps,
   IDragHandlerCellProps
 } from '../types'
 
@@ -41,13 +36,10 @@ const ArrayComponents = {
 }
 
 const DragHandlerCell = styled(
-  ({ children, drag, ...props }: IDragHandlerCellProps) => {
-    const ref = useRef(null)
-    drag(ref)
-
+  ({ children, ...props }: IDragHandlerCellProps) => {
     return (
       <div {...props}>
-        <span ref={ref} className="drag-handler" />
+        <span className="drag-handler" />
         <span className="drag-cell-content">{children}</span>
       </div>
     )
@@ -79,94 +71,14 @@ const DragHandlerCell = styled(
   }
 `
 
-const RowWrapper = styled(
-  ({
-    children,
-    rowIndex,
-    moveRow,
-    preview,
-    ...props
-  }: IDragableRowWrapperProps) => {
-    const ref = useRef(null)
-    const [{ isOver, dragingIndex }, drop] = useDrop<
-      IDragObject,
-      any,
-      ICollectedProps
-    >({
-      accept: 'row',
-      drop(item, monitor) {
-        const dragIndex = item.index
-        const dropIndex = rowIndex
-        if (dragIndex === dropIndex) {
-          return
-        }
-        moveRow(dragIndex, dropIndex)
-        item.index = dropIndex
-      },
-      collect(monitor) {
-        const dragingItem = monitor.getItem()
-
-        return {
-          isOver: monitor.isOver(),
-          dragingIndex: dragingItem ? dragingItem.index : -1
-        }
-      }
-    })
-
-    drop(ref)
-    preview(ref)
-
-    const child = React.Children.only(children)
-
-    return React.cloneElement(child, {
-      ...child.props,
-      ref,
-      className: cls(child.props.className, props.className, {
-        'drop-over-downward': isOver && rowIndex > dragingIndex,
-        'drop-over-upward': isOver && rowIndex < dragingIndex
-      })
-    })
-  }
-)`
-  &.drop-over-downward {
-    td {
-      border-bottom: 2px dashed #0070cc !important;
-    }
-  }
-  &.drop-over-upward {
-    td {
-      border-top: 2px dashed #0070cc !important;
-    }
-  }
-`
-
 const DragableRow = forwardRef(
-  ({ moveRow, columns, ...props }: IDragableRowProps, ref) => {
-    const [, drag, preview] = useDrag<IDragObject>({
-      item: {
-        type: 'row',
-        id: props.record[props.primaryKey],
-        index: props.rowIndex
-      }
-    })
-
+  ({ columns, ...props }: IDragableRowProps, ref) => {
     const [firstCol, ...otherCols] = columns
-
-    const createWrapper = row => {
-      return (
-        <RowWrapper
-          rowIndex={props.rowIndex}
-          moveRow={moveRow}
-          preview={preview}
-        >
-          {row}
-        </RowWrapper>
-      )
-    }
 
     return (
       <Table.SelectionRow
         {...props}
+        className={cls(props.className, "drag-item")}
         ref={ref}
         columns={[
           {
@@ -186,28 +98,25 @@ const DragableRow = forwardRef(
                   content = content(value, index, record, context)
                 }
               }
-              return <DragHandlerCell drag={drag}>{content}</DragHandlerCell>
+              return <DragHandlerCell>{content}</DragHandlerCell>
             }
           },
           ...otherCols
         ]}
-        wrapper={createWrapper}
       />
     )
   }
 )
 
-const DragableTable = styled(({ onMoveRow, ...props }: IDragableTableProps) => {
+const DragableTable = styled(props => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Table
-        {...props}
-        rowProps={() => ({ moveRow: onMoveRow })}
-        components={{
-          Row: DragableRow
-        }}
-      />
-    </DndProvider>
+    <Table
+      {...props}
+      components={{
+        ...props.components,
+        Row: DragableRow
+      }}
+    />
   )
 })`
   &.next-table .next-table-header th:nth-child(1) .next-table-cell-wrapper {
@@ -236,7 +145,7 @@ const FormTableField = styled(
         : schema.items
       mutators.push(items.getEmptyValue())
     }
-    const onMoveRow = (dragIndex, dropIndex) => {
+    const onMove = (dragIndex, dropIndex) => {
       mutators.move(dragIndex, dropIndex)
     }
     const renderColumns = (items: Schema) => {
@@ -267,6 +176,51 @@ const FormTableField = styled(
         )
       })
     }
+    const renderTable = () => {
+      return (
+        <ArrayList.Wrapper
+          size="small"
+          {...componentProps}
+          dataSource={toArr(value)}
+        >
+          {isArr(schema.items)
+            ? schema.items.reduce((buf, items) => {
+                return buf.concat(renderColumns(items))
+              }, [])
+            : renderColumns(schema.items)}
+          <ArrayList.Item
+            width={200}
+            lock="right"
+            {...operations}
+            key="operations"
+            dataIndex="operations"
+            cell={(value: any, index: number) => {
+              return (
+                <Form.Item>
+                  <div className="array-item-operator">
+                    <ArrayList.Remove
+                      index={index}
+                      onClick={() => mutators.remove(index)}
+                    />
+                    <ArrayList.MoveDown
+                      index={index}
+                      onClick={() => mutators.moveDown(index)}
+                    />
+                    <ArrayList.MoveUp
+                      index={index}
+                      onClick={() => mutators.moveUp(index)}
+                    />
+                    {isFn(renderExtraOperations)
+                      ? renderExtraOperations(index)
+                      : renderExtraOperations}
+                  </div>
+                </Form.Item>
+              )
+            }}
+          />
+        </ArrayList.Wrapper>
+      )
+    }
     return (
       <div className={className}>
         <ArrayList
@@ -286,48 +240,11 @@ const FormTableField = styled(
             renderEmpty
           }}
         >
-          <ArrayList.Wrapper
-            size="small"
-            {...componentProps}
-            {...(dragable ? { onMoveRow } : {})}
-            dataSource={toArr(value)}
-          >
-            {isArr(schema.items)
-              ? schema.items.reduce((buf, items) => {
-                  return buf.concat(renderColumns(items))
-                }, [])
-              : renderColumns(schema.items)}
-            <ArrayList.Item
-              width={200}
-              lock="right"
-              {...operations}
-              key="operations"
-              dataIndex="operations"
-              cell={(value: any, index: number) => {
-                return (
-                  <Form.Item>
-                    <div className="array-item-operator">
-                      <ArrayList.Remove
-                        index={index}
-                        onClick={() => mutators.remove(index)}
-                      />
-                      <ArrayList.MoveDown
-                        index={index}
-                        onClick={() => mutators.moveDown(index)}
-                      />
-                      <ArrayList.MoveUp
-                        index={index}
-                        onClick={() => mutators.moveUp(index)}
-                      />
-                      {isFn(renderExtraOperations)
-                        ? renderExtraOperations(index)
-                        : renderExtraOperations}
-                    </div>
-                  </Form.Item>
-                )
-              }}
-            />
-          </ArrayList.Wrapper>
+          {dragable ? (
+            <DragListView onDragEnd={onMove}>{renderTable()}</DragListView>
+          ) : (
+            renderTable()
+          )}
           <ArrayList.Addition>
             {({ children }) => {
               return (

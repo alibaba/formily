@@ -1,6 +1,6 @@
 {
   "name": "@uform/react-shared-components",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -26,6 +26,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@uform/shared": "^1.0.0-rc.2"
+    "@uform/shared": "^1.0.0-rc.3",
+    "react-drag-listview": "^0.1.6"
   }
 }
