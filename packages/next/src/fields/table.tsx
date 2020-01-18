@@ -189,7 +189,7 @@ const FormTableField = styled(
               }, [])
             : renderColumns(schema.items)}
           <ArrayList.Item
-            width={200}
+            width={operationsWidth || 200}
             lock="right"
             {...operations}
             key="operations"
