@@ -42,6 +42,7 @@ const FormTableField = styled(
       renderMoveUp,
       renderEmpty,
       renderExtraOperations,
+      operationsWidth,
       operations,
       dragable,
       ...componentProps
@@ -90,6 +91,7 @@ const FormTableField = styled(
         ...operations,
         key: 'operations',
         dataIndex: 'operations',
+        width: operationsWidth || 200,
         render: (value: any, record: any, index: number) => {
           return (
             <Form.Item>
