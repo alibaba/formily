@@ -96,6 +96,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
       state.initialValue = initialValue
       if (!isValid(state.value)) {
         state.value = initialValue
+      } else if (
+        state.dataType === 'array' &&
+        state.value &&
+        state.value.length === 0
+      ) {
+        state.value = initialValue
       }
     }
   }
@@ -441,6 +447,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     visible,
     display,
     computeState,
+    dataType,
     useDirty,
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
@@ -455,6 +462,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           nodePath,
           dataPath,
           computeState,
+          dataType,
           useDirty: isValid(useDirty) ? useDirty : options.useDirty
         })
       field.subscription = {
