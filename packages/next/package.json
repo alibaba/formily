@@ -1,6 +1,6 @@
 {
   "name": "@uform/next",
-  "version": "1.0.0-rc.3",
+  "version": "1.0.0-rc.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -27,9 +27,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react-schema-renderer": "^1.0.0-rc.3",
-    "@uform/react-shared-components": "^1.0.0-rc.3",
-    "@uform/shared": "^1.0.0-rc.3",
+    "@uform/react-schema-renderer": "^1.0.0-rc.4",
+    "@uform/react-shared-components": "^1.0.0-rc.4",
+    "@uform/shared": "^1.0.0-rc.4",
     "classnames": "^2.2.6",
     "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
