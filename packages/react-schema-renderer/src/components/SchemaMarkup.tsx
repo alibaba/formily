@@ -13,7 +13,7 @@ const env = {
   nonameId: 0
 }
 
-const MarkupContext = createContext<Schema>(null)
+export const MarkupContext = createContext<Schema>(null)
 
 const getRadomName = () => {
   return `NO_NAME_FIELD_$${env.nonameId++}`
