@@ -74,7 +74,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
 
       values = toArr(values)
 
-      if(this.state.dataType === 'array'){
+      if(/array/ig.test(this.state.dataType)){
         value = toArr(value)
         values[0] = toArr(values[0])
       }

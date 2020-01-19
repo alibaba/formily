@@ -97,7 +97,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (!isValid(state.value)) {
         state.value = initialValue
       } else if (
-        state.dataType === 'array' &&
+        /array/gi.test(state.dataType) &&
         state.value &&
         state.value.length === 0
       ) {
