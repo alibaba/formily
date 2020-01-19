@@ -60,6 +60,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         path={path}
         initialValue={fieldSchema.default}
         props={fieldSchema.getSelfProps()}
+        dataType={fieldSchema.type}
         triggerType={fieldSchema.getExtendsTriggerType()}
         editable={fieldSchema.getExtendsEditable()}
         visible={fieldSchema.getExtendsVisible()}

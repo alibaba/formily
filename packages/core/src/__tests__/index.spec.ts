@@ -111,6 +111,33 @@ describe('createForm', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
+  const sleep = (d=1000)=>new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve()
+    },d)
+  })
+
+  test('invalid initialValue will not trigger validate', async () => {
+    const form = createForm()
+    const field = form.registerField({
+      name: 'aa',
+      rules:[{
+        required:true
+      }]
+    })
+    const mutators = form.createMutators(field)
+    field.subscribe(() => {
+      mutators.validate({ throwErrors: false })
+    })
+    form.setFormState(state => {
+      state.initialValues = {
+        aa: null
+      }
+    })
+    await sleep(10)
+    expect(field.getState(state=>state.errors).length).toEqual(1)
+  })
+
   test('lifecycles', () => {
     const onFormInit = jest.fn()
     const onFieldInit = jest.fn()
@@ -437,9 +464,9 @@ describe('clearErrors', () => {
     expect(form.getFormState(state => state.errors)).toEqual([])
   })
 
-  test('wildcard path', async () => { })
+  test('wildcard path', async () => {})
 
-  test('effect', async () => { })
+  test('effect', async () => {})
 })
 
 describe('validate', () => {
@@ -487,7 +514,7 @@ describe('validate', () => {
 
     try {
       await form.submit()
-    } catch (e) { }
+    } catch (e) {}
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -515,7 +542,7 @@ describe('validate', () => {
     }) // CustomValidator error
     try {
       await form.submit()
-    } catch (e) { }
+    } catch (e) {}
     expect(onValidateFailedTrigger).toBeCalledTimes(1)
   })
 
@@ -1558,6 +1585,23 @@ describe('major sences', () => {
       aa: { bb: 123, cc: 222 }
     })
     expect(form.getFormGraph()).toMatchSnapshot()
+  })
+
+  test('visible onChange', () => {
+    const onChangeHandler = jest.fn()
+    const form = createForm({
+      initialValues: {
+        aa: 123
+      },
+      onChange: onChangeHandler
+    })
+    form.registerField({
+      name: 'aa'
+    })
+    form.setFieldState('aa', state => {
+      state.visible = false
+    })
+    expect(onChangeHandler).toBeCalledTimes(1)
   })
 
   test('deep nested visible(root)', () => {

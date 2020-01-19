@@ -26,6 +26,7 @@ Object {
   },
   "aa": Object {
     "active": false,
+    "dataType": "string",
     "display": true,
     "displayName": "FieldState",
     "editable": true,
@@ -96,6 +97,7 @@ Object {
   },
   "aa": Object {
     "active": false,
+    "dataType": "string",
     "display": true,
     "displayName": "FieldState",
     "editable": true,
@@ -181,6 +183,7 @@ Object {
   },
   "cc.aa": Object {
     "active": false,
+    "dataType": "string",
     "display": true,
     "displayName": "FieldState",
     "editable": true,

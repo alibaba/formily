@@ -45,13 +45,13 @@ export const VirtualFieldState = createStateModel<
     }
 
     computeState(draft: IVirtualFieldState, prevState: IVirtualFieldState) {
-      if (draft.mounted === true) {
+      if (draft.mounted === true && draft.mounted !== prevState.mounted) {
         draft.unmounted = false
       }
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
-      if (draft.unmounted === true) {
+      if (draft.unmounted === true && draft.unmounted !== prevState.unmounted) {
         draft.mounted = false
       }
     }
