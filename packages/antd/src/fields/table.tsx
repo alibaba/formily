@@ -74,7 +74,7 @@ const FormTableField = styled(
                 key={newPath.toString()}
                 label={undefined}
               >
-                <SchemaField path={newPath} />
+                <SchemaField path={newPath} schema={props} />
               </CompatAntdFormItemProps>
             )
           }
