@@ -6,29 +6,6 @@
 npm install --save @uform/next
 ```
 
-```jsx
-import React, { useState } from "react";
-import { SchemaForm, Submit } from '@uform/next';
-
-function App() {
-  const [visible, setVisible] = useState(true)
-  return (
-    <div className="App">
-      { visible ? <SchemaForm onSubmit={() => {
-        return new Promise(resolve => {
-          setVisible(false)
-          setTimeout(resolve, 1000)
-        })
-      }}>
-        <Submit />
-      </SchemaForm> : null }
-    </div>
-  );
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
 ### 目录
 
 <!-- toc -->
