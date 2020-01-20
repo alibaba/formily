@@ -3028,6 +3028,8 @@ interface IFormActions {
     validate?: boolean
     //重置范围，用于批量或者精确控制要重置的字段
     selector?: FormPathPattern
+    //是否清空默认值
+    clearInitialValue?:boolean
   }): Promise<void | IFormValidateResult>
 
   /*
@@ -3149,7 +3151,16 @@ interface IFormAsyncActions {
   /*
    * 重置表单
    */
-  reset(options?: IFormResetOptions): Promise<void>
+  reset(options?: {
+    //强制清空
+    forceClear?: boolean
+    //强制校验
+    validate?: boolean
+    //重置范围，用于批量或者精确控制要重置的字段
+    selector?: FormPathPattern
+    //是否清空默认值
+    clearInitialValue?:boolean
+  }): Promise<void>
   /*
    * 获取状态变化情况，主要用于在表单生命周期钩子内判断当前生命周期中有哪些状态发生了变化，
    * 比如hasChanged(state,'value.aa')
@@ -3218,6 +3229,7 @@ interface IFormAsyncActions {
   getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
 ```
+
 
 #### ButtonProps
 

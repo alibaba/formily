@@ -280,6 +280,7 @@ export interface IFormSubmitResult {
 export interface IFormResetOptions {
   forceClear?: boolean
   validate?: boolean
+  clearInitialValue?: boolean
   selector?: FormPathPattern
 }
 
