@@ -554,6 +554,7 @@ interface IForm {
     forceClear?: boolean // Forced check
     validate?: boolean // Reset range for batch or precise control of the field to be reset
     selector?: FormPathPattern
+    clearInitialValue?: boolean //Clear initialValue
   }): Promise<void | IFormValidateResult>
   /*
    * Validation form, throw IFormValidateResult when validation fails

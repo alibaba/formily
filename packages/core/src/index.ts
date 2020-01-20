@@ -838,7 +838,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
   async function reset({
     selector = '*',
     forceClear = false,
-    validate = true
+    validate = true,
+    clearInitialValue = false
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
     graph.eachChildren('', selector, field => {
       field.setState((state: IFieldState<FieldProps>) => {
@@ -847,6 +848,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         state.ruleWarnings = []
         state.effectErrors = []
         state.effectWarnings = []
+        if (clearInitialValue) {
+          state.initialValue = undefined
+        }
         // forceClear仅对设置initialValues的情况下有意义
         if (forceClear || !isValid(state.initialValue)) {
           if (isArr(state.value)) {
