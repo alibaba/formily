@@ -3031,10 +3031,14 @@ interface IFormActions {
    * Reset form
    */
   reset(options?: {
-    // Forced to empty
-    forceClear?: boolean // Forced check
-    validate?: boolean // Reset range for batch or precise control of the field to be reset
+    //force clear
+    forceClear?: boolean
+    //validate in reset
+    validate?: boolean
+    //select field in reset
     selector?: FormPathPattern
+    //clear initialValue
+    clearInitialValue?:boolean
   }): Promise<void | IFormValidateResult>
   /*
    * Validation form, throw IFormValidateResult when validation fails
@@ -3134,7 +3138,16 @@ interface IFormAsyncActions {
   /*
    * Reset form
    */
-  reset(options?: IFormResetOptions): Promise<void>
+  reset(options?: {
+    //force clear
+    forceClear?: boolean
+    //validate in reset
+    validate?: boolean
+    //select field to reset
+    selector?: FormPathPattern
+    //clear initialValue
+    clearInitialValue?:boolean
+  }): Promise<void>
   /*
    * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
    * For example, hasChanged(state,'value.aa')
