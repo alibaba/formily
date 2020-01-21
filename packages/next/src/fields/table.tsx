@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef } from 'react'
+import React, { forwardRef } from 'react'
 import {
   registerFormField,
   ISchemaFieldComponentProps,
@@ -12,11 +12,9 @@ import { Table, Form, Icon } from '@alifd/next'
 import styled from 'styled-components'
 import { CompatNextFormItemProps } from '../compat/FormItem'
 import cls from 'classnames'
-import {
-  IDragableRowProps,
-  IDragableTableProps,
-  IDragHandlerCellProps
-} from '../types'
+import { IDragableRowProps, IDragHandlerCellProps } from '../types'
+
+const SelectionRow = (Table as any).SelectionRow
 
 const ArrayComponents = {
   Wrapper: Table,
@@ -76,9 +74,9 @@ const DragableRow = forwardRef(
     const [firstCol, ...otherCols] = columns
 
     return (
-      <Table.SelectionRow
+      <SelectionRow
         {...props}
-        className={cls(props.className, "drag-item")}
+        className={cls(props.className, 'drag-item')}
         ref={ref}
         columns={[
           {
@@ -168,7 +166,7 @@ const FormTableField = styled(
                   key={newPath.toString()}
                   label={undefined}
                 >
-                  <SchemaField path={newPath} />
+                  <SchemaField path={newPath} schema={props} />
                 </CompatNextFormItemProps>
               )
             }}
@@ -189,7 +187,7 @@ const FormTableField = styled(
               }, [])
             : renderColumns(schema.items)}
           <ArrayList.Item
-            width={200}
+            width={operationsWidth || 200}
             lock="right"
             {...operations}
             key="operations"

@@ -26,6 +26,7 @@ Object {
   },
   "aa": Object {
     "active": false,
+    "dataType": "string",
     "display": true,
     "displayName": "FieldState",
     "editable": true,
@@ -121,6 +122,7 @@ Object {
   },
   "NO_NAME_FIELD_$0.aa": Object {
     "active": false,
+    "dataType": "string",
     "display": true,
     "displayName": "FieldState",
     "editable": true,

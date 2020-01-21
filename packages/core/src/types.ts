@@ -120,6 +120,7 @@ export interface IStateModelProvider<S, P> {
 
 export interface IFieldState<FieldProps = any> {
   displayName?: string
+  dataType: string
   name: string
   path: string
   initialized: boolean
@@ -159,6 +160,7 @@ export interface IFieldStateProps<FieldProps = any> {
   path?: FormPathPattern
   nodePath?: FormPathPattern
   dataPath?: FormPathPattern
+  dataType?: string
   name?: string
   value?: any
   values?: any[]
@@ -170,6 +172,7 @@ export interface IFieldStateProps<FieldProps = any> {
   visible?: boolean
   display?: boolean
   useDirty?: boolean
+  useListMode?: boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
 
@@ -277,6 +280,7 @@ export interface IFormSubmitResult {
 export interface IFormResetOptions {
   forceClear?: boolean
   validate?: boolean
+  clearInitialValue?: boolean
   selector?: FormPathPattern
 }
 
@@ -322,6 +326,16 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
   getSourceState: (callback?: (state: S) => any) => any
   setSourceState: (callback?: (state: S) => void) => void
+  watchProps: <T extends { [key: string]: any }>(
+    props: T,
+    keys: string[],
+    callback: (
+      changedProps: {
+        [key: string]: any
+      },
+      props: T
+    ) => void
+  ) => void
   hasChanged: (path?: FormPathPattern) => boolean
   isDirty: (key?: string) => boolean
   getDirtyInfo: () => StateDirtyMap<S>
