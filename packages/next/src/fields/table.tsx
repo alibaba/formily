@@ -86,7 +86,7 @@ const DragableRow = forwardRef(
               if (firstCol.cell) {
                 content = firstCol.cell
                 if (React.isValidElement(content)) {
-                  content = React.cloneElement(content, {
+                  content = React.cloneElement(content as any, {
                     value,
                     index,
                     record,
