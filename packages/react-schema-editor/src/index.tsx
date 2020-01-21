@@ -46,7 +46,7 @@ export const SchemaEditor: React.FC<{
     setSelectedPath(path)
   }
 
-  const handleCodeChange = code => {}
+  const handleCodeChange = () => {}
 
   const isRoot = selectedPath === 'root'
 
