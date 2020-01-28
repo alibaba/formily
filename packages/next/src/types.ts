@@ -105,4 +105,5 @@ export type IDragHandlerCellProps = React.PropsWithChildren<{}>
 
 export interface IDragableRowProps {
   columns: ColumnProps[]
+  className?: string
 }
