@@ -1,5 +1,0 @@
-{
-  "inputFiles": ["./packages/core/src/"],
-  "mode": "modules",
-  "out": "doc-site"
-}
