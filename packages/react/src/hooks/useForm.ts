@@ -13,8 +13,26 @@ import { useEva } from 'react-eva'
 import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
 import { createFormEffects, createFormActions } from '../shared'
-import { isValid } from '@uform/shared'
+import { isValid, globalThisPolyfill } from '@uform/shared'
 const FormHookSymbol = Symbol('FORM_HOOK')
+
+const DEV_TOOLS_HOOK = 'UFORM_DEV_TOOLS_HOOK'
+
+let formID = 0
+
+const useFormDevTools = (form: IForm) => {
+  return useEffect(() => {
+    formID++
+    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+      globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
+    }
+    return () => {
+      if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+        globalThisPolyfill[DEV_TOOLS_HOOK].unmount(formID)
+      }
+    }
+  })
+}
 
 const useInternalForm = (
   options: IFormCreatorOptions & { form?: IForm } = {}
@@ -76,16 +94,14 @@ export const useForm = <
     effects: createFormEffects(props.effects, actionsRef.current)
   })
   const lifecycles = [
-    new FormLifeCycle(
-      ({ type, payload }) => {
-        dispatch.lazy(type, () => {
-          return isStateModel(payload) ? payload.getState() : payload
-        })
-        if (broadcast) {
-          broadcast.notify({ type, payload })
-        }
+    new FormLifeCycle(({ type, payload }) => {
+      dispatch.lazy(type, () => {
+        return isStateModel(payload) ? payload.getState() : payload
+      })
+      if (broadcast) {
+        broadcast.notify({ type, payload })
       }
-    ),
+    }),
     new FormLifeCycle(
       LifeCycleTypes.ON_FORM_WILL_INIT,
       (payload: IModel, form: IForm) => {
@@ -109,6 +125,7 @@ export const useForm = <
   optionsRef.current.values = props.value
   optionsRef.current.lifecycles = lifecycles
   const form = useInternalForm(optionsRef.current)
+  useFormDevTools(form)
   return form
 }
 
