@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, Fragment } from 'react'
+import React, { useRef, Fragment } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,

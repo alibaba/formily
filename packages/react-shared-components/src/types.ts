@@ -60,6 +60,7 @@ export interface IArrayListProps {
 export interface IArrayListWrapperProps {
   children?: ReactRenderPropsChildren
   component?: string
+  [key: string]: any
 }
 
 export interface IArrayListItemProps {

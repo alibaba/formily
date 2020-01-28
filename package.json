@@ -39,7 +39,7 @@
     "postinstall": "opencollective-postinstall"
   },
   "resolutions": {
-    "@types/react": "16.8.23"
+    "@types/react": "^16.8.23"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",
@@ -106,6 +106,8 @@
     "monaco-editor": "^0.18.1",
     "node-sass": "^4.13.0",
     "onchange": "^5.2.0",
+    "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.2",
     "prettier": "^1.18.2",
     "pretty-format": "^24.0.0",
     "react": "^16.8.3",
@@ -127,9 +129,7 @@
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
-    "webpack": "^4.35.3",
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.2"
+    "webpack": "^4.35.3"
   },
   "config": {
     "ghooks": {
