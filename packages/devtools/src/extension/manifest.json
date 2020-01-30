@@ -34,10 +34,6 @@
     "48": "img/logo/48x48.png",
     "128": "img/logo/128x128.png"
   },
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
-  },
   "background": {
     "scripts": ["js/background.bundle.js"],
     "persistent": false
@@ -53,9 +49,8 @@
   ],
   "devtools_page": "devtools.html",
   "web_accessible_resources": [
-    "js/page.bundle.js",
     "js/inject.bundle.js",
-    "js/redux-devtools-extension.js"
+    "js/page.bundle.js"
   ],
   "externally_connectable": {
     "ids": ["*"]

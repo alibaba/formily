@@ -1,20 +1,32 @@
 import path from 'path'
+import fs from 'fs-extra'
 
-const getEntry = (src)=>{
-  return [path.resolve(__dirname,'../src/extension/',src)]
+const getEntry = src => {
+  return [path.resolve(__dirname, '../src/extension/', src)]
 }
+
+fs.copy(
+  path.resolve(__dirname, '../assets'),
+  path.resolve(__dirname, '../package')
+)
+
+fs.copy(
+  path.resolve(__dirname, '../src/extension/manifest.json'),
+  path.resolve(__dirname, '../package/manifest.json')
+)
 
 export default {
   mode: 'development',
   entry: {
-    popup:getEntry('./popup.tsx'),
-    devtools:getEntry('./devtools.tsx'),
-    devpanle:getEntry('./devpanel.tsx'),
-    content:getEntry('./content.ts'),
-    background:getEntry('./background.ts'),
+    popup: getEntry('./popup.tsx'),
+    devtools: getEntry('./devtools.tsx'),
+    devpanel: getEntry('./devpanel.tsx'),
+    content: getEntry('./content.ts'),
+    inject: getEntry('./inject.ts'),
+    background: getEntry('./background.ts')
   },
   output: {
-    path: path.resolve(__dirname,'../site'),
+    path: path.resolve(__dirname, '../package'),
     filename: 'js/[name].bundle.js'
   },
   resolve: {

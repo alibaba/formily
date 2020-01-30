@@ -3,6 +3,8 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import webpack from 'webpack'
 import path from 'path'
 
+const PORT = 3000
+
 const createPages = pages => {
   return pages.map(({ filename, template, chunk }) => {
     return new HtmlWebpackPlugin({
@@ -18,7 +20,7 @@ for (let key in baseConfig.entry) {
   if (Array.isArray(baseConfig.entry[key])) {
     baseConfig.entry[key].push(
       require.resolve('webpack/hot/dev-server'),
-      `${require.resolve('webpack-dev-server/client')}?http://localhost:8080`
+      `${require.resolve('webpack-dev-server/client')}?http://localhost:${PORT}`
     )
   }
 }
@@ -34,10 +36,25 @@ export default {
       },
       {
         filename: 'devtools.html',
-        template: path.resolve(__dirname, '../src/extension/views/devtools.ejs'),
+        template: path.resolve(
+          __dirname,
+          '../src/extension/views/devtools.ejs'
+        ),
         chunk: 'devtools'
+      },
+      {
+        filename: 'devpanel.html',
+        template: path.resolve(
+          __dirname,
+          '../src/extension/views/devpanel.ejs'
+        ),
+        chunk: 'devpanel'
       }
     ]),
     new webpack.HotModuleReplacementPlugin()
-  ]
+  ],
+  devServer: {
+    open: true,
+    port: PORT
+  }
 }
