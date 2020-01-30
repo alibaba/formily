@@ -42,14 +42,13 @@
     {
       "matches": ["<all_urls>"],
       "exclude_globs": [ "https://www.google*" ],
-      "js": ["js/content.bundle.js"],
+      "js": ["js/content.bundle.js","js/inject.bundle.js"],
       "run_at": "document_start",
       "all_frames": true
     }
   ],
   "devtools_page": "devtools.html",
   "web_accessible_resources": [
-    "js/inject.bundle.js",
     "js/page.bundle.js"
   ],
   "externally_connectable": {

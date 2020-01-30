@@ -17,11 +17,13 @@ fs.copy(
 
 export default {
   mode: 'development',
+  devtool: "inline-source-map", // 嵌入到源文件中
   entry: {
     popup: getEntry('./popup.tsx'),
     devtools: getEntry('./devtools.tsx'),
     devpanel: getEntry('./devpanel.tsx'),
     content: getEntry('./content.ts'),
+    page: getEntry('./page.tsx'),
     inject: getEntry('./inject.ts'),
     background: getEntry('./background.ts')
   },

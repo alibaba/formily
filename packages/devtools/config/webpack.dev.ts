@@ -30,6 +30,11 @@ export default {
   plugins: [
     ...createPages([
       {
+        filename: 'index.html',
+        template: path.resolve(__dirname, '../src/extension/views/devtools.ejs'),
+        chunk: 'devpanel'
+      },
+      {
         filename: 'popup.html',
         template: path.resolve(__dirname, '../src/extension/views/popup.ejs'),
         chunk: 'popup'
