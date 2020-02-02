@@ -1,3 +1,5 @@
+declare var chrome: any
+
 let created = false
 
 const createPanel = () => {
@@ -6,7 +8,7 @@ const createPanel = () => {
   }
 
   chrome.devtools.inspectedWindow.eval(
-    'window.__UFORM_DEV_TOOLS_HOOK__ && window.__UFORM_DEV_TOOLS_HOOK__.instances > 0',
+    'window.__UFORM_DEV_TOOLS_HOOK__ && window.__UFORM_DEV_TOOLS_HOOK__.hasUFormInstance',
     (hasUForm: boolean) => {
       if (!hasUForm) return
       created = true

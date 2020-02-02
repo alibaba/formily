@@ -23,7 +23,8 @@ export default {
     devtools: getEntry('./devtools.tsx'),
     devpanel: getEntry('./devpanel.tsx'),
     content: getEntry('./content.ts'),
-    page: getEntry('./page.tsx'),
+    backend: getEntry('./backend.ts'),
+    demo:getEntry('../app/demo.tsx'),
     inject: getEntry('./inject.ts'),
     background: getEntry('./background.ts')
   },

@@ -49,7 +49,7 @@
   ],
   "devtools_page": "devtools.html",
   "web_accessible_resources": [
-    "js/page.bundle.js"
+    "js/backend.bundle.js"
   ],
   "externally_connectable": {
     "ids": ["*"]

@@ -32,28 +32,7 @@ export default {
       {
         filename: 'index.html',
         template: path.resolve(__dirname, '../src/extension/views/devtools.ejs'),
-        chunk: 'devpanel'
-      },
-      {
-        filename: 'popup.html',
-        template: path.resolve(__dirname, '../src/extension/views/popup.ejs'),
-        chunk: 'popup'
-      },
-      {
-        filename: 'devtools.html',
-        template: path.resolve(
-          __dirname,
-          '../src/extension/views/devtools.ejs'
-        ),
-        chunk: 'devtools'
-      },
-      {
-        filename: 'devpanel.html',
-        template: path.resolve(
-          __dirname,
-          '../src/extension/views/devpanel.ejs'
-        ),
-        chunk: 'devpanel'
+        chunk: 'demo'
       }
     ]),
     new webpack.HotModuleReplacementPlugin()
