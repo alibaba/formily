@@ -1,7 +1,24 @@
 //inject content script
 import { IForm } from '@uform/core'
-
+import { isArr, map } from '@uform/shared'
 const globalThis: any = window
+
+const serializeObject = (obj: any) => {
+  if (isArr(obj)) {
+    return obj.map(serializeObject)
+  } else if (typeof obj === 'object') {
+    if ('$$typeof' in obj && '_owner' in obj) {
+      return '#ReactNode'
+    }  else if(obj.toJS){
+      return obj.toJS()
+    } else if(obj.toJSON){
+      return obj.toJSON()
+    }else {
+      return map(obj, serializeObject)
+    }
+  }
+  return obj
+}
 
 const send = ({
   type,
@@ -17,7 +34,7 @@ const send = ({
       source: '@uform-devtools-inject-script',
       type,
       id,
-      graph: form && JSON.stringify(form.getFormGraph())
+      graph: form && JSON.stringify(serializeObject(form.getFormGraph()))
     },
     '*'
   )
