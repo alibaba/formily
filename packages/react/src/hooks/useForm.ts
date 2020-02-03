@@ -16,23 +16,9 @@ import { createFormEffects, createFormActions } from '../shared'
 import { isValid, globalThisPolyfill } from '@uform/shared'
 const FormHookSymbol = Symbol('FORM_HOOK')
 
-const DEV_TOOLS_HOOK = 'UFORM_DEV_TOOLS_HOOK'
+const DEV_TOOLS_HOOK = '__UFORM_DEV_TOOLS_HOOK__'
 
 let formID = 0
-
-const useFormDevTools = (form: IForm) => {
-  return useEffect(() => {
-    formID++
-    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
-      globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
-    }
-    return () => {
-      if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
-        globalThisPolyfill[DEV_TOOLS_HOOK].unmount(formID)
-      }
-    }
-  })
-}
 
 const useInternalForm = (
   options: IFormCreatorOptions & { form?: IForm } = {}
@@ -66,10 +52,17 @@ const useInternalForm = (
     form.setFormState(state => {
       state.mounted = true
     })
+    formID++
+    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+      globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
+    }
     return () => {
       form.setFormState(state => {
         state.unmounted = true
       })
+      if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+        globalThisPolyfill[DEV_TOOLS_HOOK].unmount(formID)
+      }
     }
   }, [])
   ;(form as any)[FormHookSymbol] = true
@@ -125,7 +118,6 @@ export const useForm = <
   optionsRef.current.values = props.value
   optionsRef.current.lifecycles = lifecycles
   const form = useInternalForm(optionsRef.current)
-  useFormDevTools(form)
   return form
 }
 
