@@ -1,7 +1,7 @@
 English | [简体中文](./README.zh-cn.md)
 
 <p align="center">
-<img src="https://img.alicdn.com/tfs/TB1MdJYuYj1gK0jSZFuXXcrHpXa-2500-1200.png">
+<img src="https://img.alicdn.com/tfs/TB1fHhZu4D1gK0jSZFyXXciOVXa-2500-1200.png">
 <a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
 <a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
 <a href="https://travis-ci.com/alibaba/formily"><img src="https://travis-ci.com/alibaba/formily.svg?branch=master"></a>
@@ -87,20 +87,7 @@ https://formilyjs.org
 ## Contributors
 
 This project exists thanks to all the people who contribute. 
-<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg" /></a>
-
-
-## Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/formily#backer)]
-
-<a href="https://opencollective.com/formily#backers" target="_blank"><img src="https://opencollective.com/formily/backers.svg"></a>
-
-
-## Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/formily#sponsor)]
-
+<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890" /></a>
 
 
 ## LICENSE

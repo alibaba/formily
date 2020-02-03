@@ -56,18 +56,6 @@ This project exists thanks to all the people who contribute.
 <a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890&button=false" /></a>
 
 
-## 点个赞
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/formily#backer)]
-
-<a href="https://opencollective.com/formily#backers" target="_blank"><img src="https://opencollective.com/formily/backers.svg?width=890"></a>
-
-
-## 捐献我们
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/formily#sponsor)]
-
-
 ## LICENSE
 
 Formily is open source software licensed as
