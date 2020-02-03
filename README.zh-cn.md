@@ -59,9 +59,7 @@ npm install --save @formily/core
 
 ## 官网
 
-https://formilyjs.org (0.x)
-
-https://formily-next.netlify.com (1.x)
+https://formilyjs.org
 
 ## 架构
 
@@ -90,19 +88,7 @@ https://formily-next.netlify.com (1.x)
 ## 贡献者
 
 This project exists thanks to all the people who contribute. 
-<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg" /></a>
-
-
-## 点个赞
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/formily#backer)]
-
-<a href="https://opencollective.com/formily#backers" target="_blank"><img src="https://opencollective.com/formily/backers.svg"></a>
-
-
-## 捐献我们
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/formily#sponsor)]
+<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890" /></a>
 
 
 ## LICENSE
