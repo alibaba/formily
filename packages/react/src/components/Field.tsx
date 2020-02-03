@@ -1,6 +1,6 @@
 import React from 'react'
 import { useField } from '../hooks/useField'
-import { isFn } from '@uform/shared'
+import { isFn } from '@formily/shared'
 import { IFieldStateUIProps } from '../types'
 import { FieldContext } from '../context'
 

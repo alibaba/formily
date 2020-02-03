@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { toArr, clone, isEqual, isValid } from '@uform/shared'
+import { toArr, clone, isEqual, isValid } from '@formily/shared'
 import { IFormState, IFormStateProps } from '../types'
 /**
  * 核心数据结构，描述Form级别状态

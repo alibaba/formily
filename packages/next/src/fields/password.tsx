@@ -1,8 +1,8 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import { Input } from '@alifd/next'
 import { InputProps } from '@alifd/next/types/input'
-import { PasswordStrength } from '@uform/react-shared-components'
+import { PasswordStrength } from '@formily/react-shared-components'
 import styled from 'styled-components'
 import { mapStyledProps } from '../shared'
 

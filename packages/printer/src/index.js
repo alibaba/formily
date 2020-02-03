@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { createFormActions } from '@uform/react-schema-renderer'
+import { createFormActions } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 
@@ -115,7 +115,7 @@ export default class extends React.Component {
         <pre>
           <code>{printSchema(schema)}</code>
         </pre>
-        <h1>UForm Usage</h1>
+        <h1>Formily Usage</h1>
         <pre>
           <code>{`<SchemaForm schema={${printSchema(schema)}} />`}</code>
         </pre>

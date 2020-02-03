@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { isFn, isEqual } from '@uform/shared'
+import { isFn, isEqual } from '@formily/shared'
 import { IPreviewTextProps, PreviewTextConfigProps } from './types'
 import { PreviewTextContext } from './context'
 

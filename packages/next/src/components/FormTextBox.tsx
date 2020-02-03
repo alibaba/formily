@@ -1,7 +1,7 @@
 import React, { useRef, useLayoutEffect } from 'react'
-import { createControllerBox, Schema } from '@uform/react-schema-renderer'
+import { createControllerBox, Schema } from '@formily/react-schema-renderer'
 import { IFormTextBox } from '../types'
-import { toArr } from '@uform/shared'
+import { toArr } from '@formily/shared'
 import { CompatNextFormItem } from '../compat/FormItem'
 import styled from 'styled-components'
 

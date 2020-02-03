@@ -7,16 +7,16 @@ import {
   IForm,
   IModel,
   isStateModel
-} from '@uform/core'
+} from '@formily/core'
 import { useDirty } from './useDirty'
 import { useEva } from 'react-eva'
 import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
 import { createFormEffects, createFormActions } from '../shared'
-import { isValid, globalThisPolyfill } from '@uform/shared'
+import { isValid, globalThisPolyfill } from '@formily/shared'
 const FormHookSymbol = Symbol('FORM_HOOK')
 
-const DEV_TOOLS_HOOK = '__UFORM_DEV_TOOLS_HOOK__'
+const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
 let formID = 0
 

@@ -1,6 +1,6 @@
 # 国际化
 
-> 在 UForm 中配置国际化语言，其实只需要关心 validator 的国际化配置即可(setValidationLanguage)，对于具体
+> 在 Formily 中配置国际化语言，其实只需要关心 validator 的国际化配置即可(setValidationLanguage)，对于具体
 > 组件库的国际化配置，就走默认的组件国际化配置模式即可
 
 ### 示例 DEMO
@@ -10,9 +10,9 @@
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@uform/antd'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@formily/antd'
 import { Button,LocaleProvider } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import zhCN from 'antd/lib/locale-provider/zh_CN'
 import 'antd/dist/antd.css'
 
@@ -108,9 +108,9 @@ ReactDOM.render(
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@uform/antd'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset,setValidationLanguage } from '@formily/antd'
 import { Button,LocaleProvider } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import enUS from 'antd/lib/locale-provider/en_US'
 import 'antd/dist/antd.css'
 

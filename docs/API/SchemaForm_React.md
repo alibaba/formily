@@ -2,16 +2,16 @@
 
 ## 介绍
 
-@uform/react 的核心组件，用于构建表单
+@formily/react 的核心组件，用于构建表单
 
 ## 依赖
 
 ```javascript
-import {SchemaForm} from '@uform/react'
+import {SchemaForm} from '@formily/react'
 
 or 
 
-import SchemaForm from '@uform/react'
+import SchemaForm from '@formily/react'
 ```
 
 ## API
@@ -45,7 +45,7 @@ import SchemaForm, {
   Field,  
   connect,
   createFormActions
-} from '@uform/react'
+} from '@formily/react'
 
 const actions = createFormActions()
 
@@ -98,7 +98,7 @@ import SchemaForm, {
   registerFormField,
   Field,  
   connect
-} from '@uform/react'
+} from '@formily/react'
 
 registerFormField(
   'string',

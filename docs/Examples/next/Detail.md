@@ -19,9 +19,9 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 const actions = createFormActions()
 

@@ -1,17 +1,17 @@
 {
-  "name": "@uform/shared",
+  "name": "@formily/shared",
   "version": "1.0.0-rc.4",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },

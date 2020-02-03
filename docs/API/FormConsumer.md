@@ -7,7 +7,7 @@
 ## 依赖
 
 ```javascript
-import {FormConsumer} from '@uform/react'
+import {FormConsumer} from '@formily/react'
 ```
 
 ## API
@@ -34,7 +34,7 @@ import SchemaForm, {
   connect,
   FormProvider,
   FormConsumer
-} from '@uform/react'
+} from '@formily/react'
 
 registerFormField(
   'string',

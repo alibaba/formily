@@ -1,4 +1,4 @@
-# @uform/core
+# @formily/core
 
 > 表单状态核心管理包(不依赖任何第三方 UI 框架)，在该包中，它主要做了：
 >
@@ -10,7 +10,7 @@
 ### 安装
 
 ```bash
-npm install --save @uform/core
+npm install --save @formily/core
 ```
 
 ### 目录
@@ -53,7 +53,7 @@ npm install --save @uform/core
 是数据录入还是数据查询，都是借助表单来实现的，从实现复杂度来看，两者复杂度相差不
 多，因为数据呈现层面难免会有极度复杂的呈现形式(比如 Tree Table 等等)，但是，数据
 呈现却是最容易复用和抽象的，只有表单，会涉及大量的交互逻辑，所以，只要我们根本上
-解决了表单问题，对于中后台场景，基本上解决了大部分中后台场景问题，UForm，就是为
+解决了表单问题，对于中后台场景，基本上解决了大部分中后台场景问题，Formily，就是为
 此而诞生的。
 
 ### 设计理念
@@ -91,7 +91,7 @@ npm install --save @uform/core
 
 **VirtualField** 是一个特殊的 Field 数据结构，它与 Field 的差异就是，它不管理
 value，也就是说，它与 Form 的 value 是没有关联性的，通常我们使用它，更多的是作为
-代理一个 UI 容器的状态，比如：UForm 中的布局组件 FormBlock，它会在整个 Form
+代理一个 UI 容器的状态，比如：Formily 中的布局组件 FormBlock，它会在整个 Form
 Graph 中作为一个独立节点而存在，但是这个节点类型就是一个 VirtualField，但是最终
 数据提交的时候，FormBlock 并不会污染提交数据的数据结构。
 
@@ -136,7 +136,7 @@ createForm(options?: IFormCreatorOptions): IForm
 **用法**
 
 ```typescript
-import { createForm } from '@uform/core'
+import { createForm } from '@formily/core'
 
 const form = createForm({
   values: {},
@@ -171,7 +171,7 @@ registerValidationFormats(formats:{
 **用法**
 
 ```typescript
-import { createForm, registerValidationFormats } from '@uform/core'
+import { createForm, registerValidationFormats } from '@formily/core'
 
 registerValidationFormats({
   number: /^[+-]?\d+(\.\d+)?$/,
@@ -227,7 +227,7 @@ registerValidationRules(
 **用法**
 
 ```typescript
-import { createForm, registerValidationRules } from '@uform/core'
+import { createForm, registerValidationRules } from '@formily/core'
 
 registerValidationRules({
   custom: value => {
@@ -279,7 +279,7 @@ registerValidationMTEngine(callback:(message,context)=>any) : void
 **用法**
 
 ```javascript
-import { createForm,registerValidationMTEngine } from '@uform/core'
+import { createForm,registerValidationMTEngine } from '@formily/core'
 
 registerValidationMTEngine((message,context)=>{
   return message.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, $0) => {
@@ -336,7 +336,7 @@ setValidationLanguage(lang: string): void
 **用法**
 
 ```javascript
-import { setValidationLanguage } from '@uform/core'
+import { setValidationLanguage } from '@formily/core'
 
 setValidationLanguage('en-US')
 ```
@@ -360,7 +360,7 @@ setValidationLocale(locale: ILocales) => void
 **用法**
 
 ```javascript
-import { setValidationLocale } from '@uform/core'
+import { setValidationLocale } from '@formily/core'
 
 setValidationLocale({
   'en-US': {
@@ -394,7 +394,7 @@ new FormLifeCycle(handlerMap: { [key: LifeCycleTypes]: FormLifeCycleHandler<Payl
 **用法**
 
 ```typescript
-import { createForm,FormLifeCycle,LifeCycleTypes } from '@uform/core'
+import { createForm,FormLifeCycle,LifeCycleTypes } from '@formily/core'
 
 const form = createForm({
   lifecycles:[

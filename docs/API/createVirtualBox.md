@@ -20,13 +20,13 @@ React.FunctionComponent<{
 ## 依赖
 
 ```javascript
-import {createVirtualBox} from '@uform/react'
+import {createVirtualBox} from '@formily/react'
 ```
 
 ## 用例
 
 ```javascript
-import {createVirtualBox,SchemaForm} from '@uform/react'
+import {createVirtualBox,SchemaForm} from '@formily/react'
 
 const Card = createVirtualBox('card',(props)=>{
    return <div>这是一个卡片{props.children}</div>

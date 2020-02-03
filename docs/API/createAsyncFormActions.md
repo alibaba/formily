@@ -79,7 +79,7 @@ interface IFieldState<V = any>{
 ## 依赖
 
 ```javascript
-import { createAsyncFormActions } from '@uform/react'
+import { createAsyncFormActions } from '@formily/react'
 ```
 
 ## 用例
@@ -92,7 +92,7 @@ import SchemaForm, {
   registerFormField,
   connect,
   createAsyncFormActions
-} from '@uform/react'
+} from '@formily/react'
 
 registerFormField(
   'string',

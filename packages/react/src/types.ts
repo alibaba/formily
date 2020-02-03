@@ -14,8 +14,8 @@ import {
   IField,
   IVirtualFieldState,
   IVirtualField
-} from '@uform/core'
-import { FormPathPattern } from '@uform/shared'
+} from '@formily/core'
+import { FormPathPattern } from '@formily/shared'
 import { Observable } from 'rxjs/internal/Observable'
 export interface IFormEffect<Payload = any, Actions = any> {
   (

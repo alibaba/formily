@@ -5,7 +5,7 @@ import cls from 'classnames'
 import styled from 'styled-components'
 import { useFormItem } from '../compat/context'
 import { IFormButtonGroupProps } from '../types'
-import { createVirtualBox } from '@uform/react-schema-renderer'
+import { createVirtualBox } from '@formily/react-schema-renderer'
 
 export interface IOffset {
   top: number | string

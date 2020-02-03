@@ -16,31 +16,31 @@
 使用 Ant Design：
 
 ```bash
-npm install --save antd @uform/antd
+npm install --save antd @formily/antd
 ```
 
 使用 Fusion Design：
 
 ```bash
-npm install --save @alifd/next @uform/next
+npm install --save @alifd/next @formily/next
 ```
 
-使用UForm React渲染引擎包:
+使用Formily React渲染引擎包:
 
 ```bash
-npm install --save @uform/react-schema-renderer
+npm install --save @formily/react-schema-renderer
 ```
 
-使用 UForm React包:
+使用 Formily React包:
 
 ```bash
-npm install --save @uform/react
+npm install --save @formily/react
 ```
 
-使用 UForm 核心包:
+使用 Formily 核心包:
 
 ```bash
-npm install --save @uform/core
+npm install --save @formily/core
 ```
 
 ## 社区
@@ -48,27 +48,27 @@ npm install --save @uform/core
 
 | Online Chat Room                                             | 微信                                                         | 钉钉 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
-| [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
+| [gitter.im](https://gitter.im/alibaba-formily/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
 
 ## 贡献者
 
 This project exists thanks to all the people who contribute. 
-<a href="https://github.com/alibaba/uform/graphs/contributors"><img src="https://opencollective.com/uform/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890&button=false" /></a>
 
 
 ## 点个赞
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/uform#backer)]
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/formily#backer)]
 
-<a href="https://opencollective.com/uform#backers" target="_blank"><img src="https://opencollective.com/uform/backers.svg?width=890"></a>
+<a href="https://opencollective.com/formily#backers" target="_blank"><img src="https://opencollective.com/formily/backers.svg?width=890"></a>
 
 
 ## 捐献我们
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/uform#sponsor)]
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/formily#sponsor)]
 
 
 ## LICENSE
 
-UForm is open source software licensed as
-[MIT.](https://github.com/alibaba/uform/blob/master/LICENSE.md)
+Formily is open source software licensed as
+[MIT.](https://github.com/alibaba/formily/blob/master/LICENSE.md)

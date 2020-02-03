@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFn } from '@uform/shared'
+import { isFn } from '@formily/shared'
 import { useForm } from '../hooks/useForm'
 import FormContext from '../context'
 import { IFormProps, IFormActions, IFormAsyncActions } from '../types'

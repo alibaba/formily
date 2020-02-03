@@ -1,9 +1,9 @@
-import { FormPath, FormPathPattern, isFn, Subscribable } from '@uform/shared'
+import { FormPath, FormPathPattern, isFn, Subscribable } from '@formily/shared'
 import {
   ValidatePatternRules,
   ValidateNodeResult,
   ValidateFieldOptions
-} from '@uform/validator'
+} from '@formily/validator'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
 

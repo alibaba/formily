@@ -1,4 +1,4 @@
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import moment from 'moment'
 import { TimePicker } from 'antd'
 import { mapStyledProps, mapTextComponent } from '../shared'

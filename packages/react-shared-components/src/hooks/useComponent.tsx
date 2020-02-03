@@ -1,5 +1,5 @@
 import React, { useMemo, useContext, Fragment } from 'react'
-import { isFn } from '@uform/shared'
+import { isFn } from '@formily/shared'
 import { ArrayContext } from '../context'
 
 export const useComponent = (name: string) => {

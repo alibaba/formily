@@ -1,7 +1,7 @@
 import {
   registerFormComponent,
   registerFormItemComponent
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { CompatAntdForm as Form } from './Form'
 import {
   CompatAntdFormItem as FormItem,

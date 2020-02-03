@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import App from '../app'
 
 const backgroundPageConnection = chrome.runtime.connect({
-  name: '@uform-devtools-panel-script'
+  name: '@formily-devtools-panel-script'
 })
 
 backgroundPageConnection.postMessage({
@@ -34,7 +34,7 @@ const Devtools = () => {
       )
     })
     chrome.devtools.inspectedWindow.eval(
-      'window.__UFORM_DEV_TOOLS_HOOK__.update()'
+      'window.__FORMILY_DEV_TOOLS_HOOK__.update()'
     )
     backgroundPageConnection.onMessage.addListener(({ type, id, graph }) => {
       if (type == 'init') {

@@ -7,7 +7,7 @@ import {
   registerFieldMiddleware
 } from '../index'
 import '@testing-library/jest-dom/extend-expect'
-import { toArr } from '@uform/shared'
+import { toArr } from '@formily/shared'
 import { render, fireEvent, wait } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {

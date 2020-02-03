@@ -1,4 +1,4 @@
-import { isPlainObj, isArr, isStr, reduce } from '@uform/shared'
+import { isPlainObj, isArr, isStr, reduce } from '@formily/shared'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 

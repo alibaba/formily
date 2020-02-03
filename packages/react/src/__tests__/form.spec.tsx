@@ -8,7 +8,7 @@ import {
   FormSpy,
 } from '../index'
 import { render, fireEvent, waitForElement } from '@testing-library/react'
-import { LifeCycleTypes } from '@uform/core'
+import { LifeCycleTypes } from '@formily/core'
 
 const Input: React.FC<IFieldStateUIProps> = props => (
   <Field {...props}>

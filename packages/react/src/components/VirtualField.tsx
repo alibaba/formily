@@ -1,6 +1,6 @@
 import React from 'react'
 import { useVirtualField } from '../hooks/useVirtualField'
-import { isFn } from '@uform/shared'
+import { isFn } from '@formily/shared'
 import { IVirtualFieldProps } from '../types'
 import { FieldContext } from '../context'
 

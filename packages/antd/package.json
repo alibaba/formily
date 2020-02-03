@@ -1,18 +1,18 @@
 {
-  "name": "@uform/antd",
+  "name": "@formily/antd",
   "version": "1.0.0-rc.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "types": "esm/index.d.ts",
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
@@ -30,9 +30,9 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react-schema-renderer": "^1.0.0-rc.4",
-    "@uform/react-shared-components": "^1.0.0-rc.4",
-    "@uform/shared": "^1.0.0-rc.4",
+    "@formily/react-schema-renderer": "^1.0.0-rc.4",
+    "@formily/react-shared-components": "^1.0.0-rc.4",
+    "@formily/shared": "^1.0.0-rc.4",
     "classnames": "^2.2.6",
     "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",

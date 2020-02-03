@@ -9,7 +9,7 @@ import {
   FormPathPattern,
   isValid,
   toArr
-} from '@uform/shared'
+} from '@formily/shared'
 import produce, { Draft, setAutoFreeze } from 'immer'
 import {
   IStateModelProvider,

@@ -2,8 +2,8 @@ import {
   createAsyncSchemaFormActions,
   createSchemaFormActions
 } from './shared/actions'
-import { Field as InternalField, Form as InternalForm } from '@uform/react'
-export * from '@uform/react'
+import { Field as InternalField, Form as InternalForm } from '@formily/react'
+export * from '@formily/react'
 export * from './components/SchemaField'
 export * from './components/SchemaForm'
 export * from './components/SchemaMarkup'

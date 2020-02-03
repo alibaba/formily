@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import moment from 'moment'
 import { DatePicker } from 'antd'
 import {

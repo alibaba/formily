@@ -1,9 +1,9 @@
-# @uform/antd
+# @formily/antd
 
 ### 安装
 
 ```bash
-npm install --save @uform/antd
+npm install --save @formily/antd
 ```
 
 ### 目录
@@ -93,11 +93,11 @@ npm install --save @uform/antd
 #### 安装
 
 ```bash
-$ yarn add antd @uform/antd
+$ yarn add antd @formily/antd
 
 # or
 
-$ npm install --save antd @uform/antd
+$ npm install --save antd @formily/antd
 ```
 
 ### 按需加载
@@ -107,11 +107,11 @@ $ npm install --save antd @uform/antd
 
 然后在 umijs 的 `.umirc.js` 或 `config/config.js` （二选一）中增加 `extraBabelIncludes` 配置项
 
-> 在使用 uform 组件的时候，请使用 ES Modules import 导入模块
+> 在使用 formily 组件的时候，请使用 ES Modules import 导入模块
 
 ```js
 extraBabelIncludes: [
-  /node_modules[\\/][\\@]uform[\\/]antd[\\/]esm/
+  /node_modules[\\/][\\@]formily[\\/]antd[\\/]esm/
 ],
 ```
 
@@ -121,7 +121,7 @@ extraBabelIncludes: [
 
 在开始之前，请先按照 antd 的[教程](https://ant-design.gitee.io/docs/react/use-with-create-react-app-cn)，完成对 `babel-plugin-import` 的配置, 然后只需要在 `config-overrides.js` 中加入 `babelInclude`
 
-> 在使用 uform 组件的时候，请使用 ES Modules import 导入模块
+> 在使用 formily 组件的时候，请使用 ES Modules import 导入模块
 
 ```js
 // config-overrides.js
@@ -137,13 +137,13 @@ module.exports = override(
   }),
   babelInclude([
     path.resolve('src'),
-    /node_modules[\\/][\\@]uform[\\/]antd[\\/]esm/,
+    /node_modules[\\/][\\@]formily[\\/]antd[\\/]esm/,
   ]),
 )
 ```
 
 #### 更多脚手架
-`@uform/antd` 底层依赖 `antd`，在对 `@uform/antd` 进行按需加载实际也是对 `antd` 进行按需加载，从上面的例子可以看出，脚手架只需要配置好了 `babel-plugin-import`，然后再把 `@uform/antd/esm` 加入 `babel` 的 `include` 中即可完成功能配置
+`@formily/antd` 底层依赖 `antd`，在对 `@formily/antd` 进行按需加载实际也是对 `antd` 进行按需加载，从上面的例子可以看出，脚手架只需要配置好了 `babel-plugin-import`，然后再把 `@formily/antd/esm` 加入 `babel` 的 `include` 中即可完成功能配置
 
 ---
 
@@ -162,7 +162,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
 import 'antd/dist/antd.css'
 
@@ -295,7 +295,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
 import 'antd/dist/antd.css'
 
@@ -441,7 +441,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<SchemaForm/>`
 
-基于@uform/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
+基于@formily/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
 
 ```typescript
 interface IAntdSchemaFormProps {
@@ -513,7 +513,7 @@ import SchemaForm, {
   Field,
   connect,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -546,7 +546,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset,
-} from '@uform/antd'
+} from '@formily/antd'
 
 const actions = createFormActions()
 
@@ -588,7 +588,7 @@ ReactDOM.render(
 
 #### `<SchemaMarkupField/>`
 
-> @uform/antd 的核心组件，用于描述表单字段
+> @formily/antd 的核心组件，用于描述表单字段
 
 ```typescript
 interface IMarkupSchemaFieldProps {
@@ -662,7 +662,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset,
-} from '@uform/antd'
+} from '@formily/antd'
 
 const actions = createFormActions()
 
@@ -797,7 +797,7 @@ interface IFormSpyProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -850,7 +850,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -917,9 +917,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => {
   const [value, setValues] = useState({})
@@ -997,9 +997,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
@@ -1077,9 +1077,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
@@ -1134,7 +1134,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@uform/antd'
+import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -1156,7 +1156,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { FormBlock, SchemaMarkupField as Field } from '@uform/antd'
+import SchemaForm, { FormBlock, SchemaMarkupField as Field } from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -1215,7 +1215,7 @@ import {
   FormCard,
   FormTextBox,
   FormStep
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
 import 'antd/dist/antd.css'
 
@@ -1316,9 +1316,9 @@ import {
   FormCard,
   FormBlock,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 const App = () => (
   <Printer>
@@ -1477,9 +1477,9 @@ import {
   FormCard,
   FormBlock,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -1528,9 +1528,9 @@ import {
   FormTextBox,
   FormCard,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => {
@@ -1609,9 +1609,9 @@ import {
   FormCard,
   FormBlock,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => {
@@ -1650,7 +1650,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { TextButton } from '@uform/antd'
+import SchemaForm, { TextButton } from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -1670,7 +1670,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { CircleButton } from '@uform/antd'
+import SchemaForm, { CircleButton } from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -1705,7 +1705,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -1780,7 +1780,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -1926,7 +1926,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -1967,7 +1967,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2000,7 +2000,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2042,7 +2042,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2083,7 +2083,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2124,7 +2124,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2167,7 +2167,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2226,7 +2226,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2277,7 +2277,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2328,7 +2328,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2368,7 +2368,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/antd'
+} from '@formily/antd'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions()
@@ -2422,7 +2422,7 @@ import SchemaForm, {
   useFormEffects,
   LifeCycleTypes,
   createVirtualBox
-} from '@uform/antd'
+} from '@formily/antd'
 
 const actions = createFormActions()
 
@@ -2498,7 +2498,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -2563,7 +2563,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -2671,7 +2671,7 @@ type useForm = <
 **用法**
 
 ```typescript
-import { useForm } from '@uform/react'
+import { useForm } from '@formily/react'
 
 const FormFragment = () => {
   const form = useForm()
@@ -2692,7 +2692,7 @@ type useField = (options: IFieldStateUIProps): IFieldHook
 **用法**
 
 ```typescript
-import { useField } from '@uform/react'
+import { useField } from '@formily/react'
 
 const FormFragment = (props) => {
   const {
@@ -2719,7 +2719,7 @@ type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
 **用法**
 
 ```typescript
-import { UseVirtualField } from '@uform/react'
+import { UseVirtualField } from '@formily/react'
 
 const FormFragment = (props) => {
   const {
@@ -2747,7 +2747,7 @@ type useFormSpy = (props: IFormSpyProps): ISpyHook
 **用法**
 
 ```typescript
-import { useFormSpy, LifeCycleTypes } from '@uform/react'
+import { useFormSpy, LifeCycleTypes } from '@formily/react'
 const FormFragment = (props) => {
   const {
     form,
@@ -2768,7 +2768,7 @@ const FormFragment = (props) => {
 
 ### API
 
-> 整体完全继承@uform/react, 下面只列举@uform/antd 的特有 API
+> 整体完全继承@formily/react, 下面只列举@formily/antd 的特有 API
 
 ---
 
@@ -2785,7 +2785,7 @@ createFormActions(): IFormActions
 **用法**
 
 ```typescript
-import { createFormActions } from '@uform/antd'
+import { createFormActions } from '@formily/antd'
 
 const actions = createFormActions()
 console.log(actions.getFieldValue('username'))
@@ -2805,7 +2805,7 @@ createAsyncFormActions(): IFormAsyncActions
 **用法**
 
 ```typescript
-import { createAsyncFormActions } from '@uform/antd'
+import { createAsyncFormActions } from '@formily/antd'
 
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
@@ -2813,12 +2813,12 @@ actions.getFieldValue('username').then(val => console.log(val))
 
 #### `FormEffectHooks`
 
-> 返回包含所有 UForm 生命周期的钩子函数，可以被监听消费
+> 返回包含所有 Formily 生命周期的钩子函数，可以被监听消费
 
 **用法**
 
 ```typescript
-import SchemaForm, { FormEffectHooks } from '@uform/antd'
+import SchemaForm, { FormEffectHooks } from '@formily/antd'
 const {
   /**
    * Form LifeCycle
@@ -2876,7 +2876,7 @@ const App = () => {
 **Usage**
 
 ```jsx
-import SchemaForm, { createEffectHook, createFormActions } from '@uform/antd'
+import SchemaForm, { createEffectHook, createFormActions } from '@formily/antd'
 
 const actions = createFormActions()
 const diyHook1$ = createEffectHook('diy1')
@@ -2928,7 +2928,7 @@ type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOp
 **用法**
 
 ```typescript
-import {registerFormField,connect} from '@uform/antd'
+import {registerFormField,connect} from '@formily/antd'
 
 registerFormField(
   'string',
@@ -2950,7 +2950,7 @@ type registerFormField(
 
 ```jsx
 
-import SchemaForm, { SchemaMarkupField as Field, registerFormField, connect, createFormActions } from '@uform/antd'
+import SchemaForm, { SchemaMarkupField as Field, registerFormField, connect, createFormActions } from '@formily/antd'
 
 registerFormField(
   'custom-string',
@@ -2971,7 +2971,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Interfaces
 
-> 整体完全继承@uform/react, 下面只列举@uform/antd 的特有的 Interfaces
+> 整体完全继承@formily/react, 下面只列举@formily/antd 的特有的 Interfaces
 
 ---
 

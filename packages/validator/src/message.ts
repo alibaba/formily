@@ -3,7 +3,7 @@ import {
   each,
   globalThisPolyfill,
   merge as deepmerge
-} from '@uform/shared'
+} from '@formily/shared'
 import locales from './locale'
 
 const getIn = FormPath.getIn
