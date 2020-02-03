@@ -1,7 +1,7 @@
 [English](./README.md) | 简体中文
 
 <p align="center">
-<img src="https://img.alicdn.com/tfs/TB1VsOcRbrpK1RjSZTEXXcWAVXa-1400-689.png">
+<img src="https://img.alicdn.com/tfs/TB1DIpUu7L0gK0jSZFxXXXWHVXa-2500-1200.png">
 <a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
 <a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
 <a href="https://www.npmjs.com/package/@formily/next"><img src="https://img.shields.io/npm/v/@formily/next.svg"></a>
@@ -10,8 +10,6 @@
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
 <a href="https://app.netlify.com/sites/formily/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
-
-<p align="center" style="color:#666;margin-top:10px;">面向复杂场景的中后台表单解决方案，Formily 谐音 Your Form，代表，这才是你想要的 Form 解决方案</p>
 
 ---
 
@@ -67,7 +65,7 @@ https://formily-next.netlify.com (1.x)
 
 ## 架构
 
-![](https://img.alicdn.com/tfs/TB1i9nmolv0gK0jSZKbXXbK2FXa-1882-1144.png)
+![](https://img.alicdn.com/tfs/TB1BvlRu4D1gK0jSZFsXXbldVXa-1882-1144.png)
 
 ## 文档
 
