@@ -44,7 +44,7 @@ send({
   type: 'init'
 })
 
-globalThis.__FORMILY_DEV_TOOLS_HOOK__ = {
+const HOOK = {
   hasFormilyInstance: false,
   store: {},
   inject(id: number, form: IForm) {
@@ -81,3 +81,7 @@ globalThis.__FORMILY_DEV_TOOLS_HOOK__ = {
     })
   }
 }
+
+
+globalThis.__FORMILY_DEV_TOOLS_HOOK__ = HOOK
+globalThis.__UFORM_DEV_TOOLS_HOOK__ = HOOK
