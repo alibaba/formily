@@ -2,16 +2,16 @@
 
 ## 介绍
 
-基于@uform/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
+基于@formily/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
 
 ## 依赖
 
 ```javascript
-import {SchemaForm} from '@uform/next(antd)'
+import {SchemaForm} from '@formily/next(antd)'
 
 or 
 
-import SchemaForm from '@uform/next(antd)'
+import SchemaForm from '@formily/next(antd)'
 ```
 
 ## 原始API
@@ -46,7 +46,7 @@ import SchemaForm, {
   Field,  
   connect,
   createFormActions
-} from '@uform/react'
+} from '@formily/react'
 
 const actions = createFormActions()
 
@@ -97,7 +97,7 @@ ReactDOM.render(
 | autoAddColon | 是否自动添加冒号 | `boolean` |  |  |
 | className | className | `string` |  |  |
 | inline | 是否是单行布局 | `boolean` | false |  |
-| layout | 表单布局(horizontal/vertical/inline)，只有@uform/antd支持 | `'horizontal'|'vertical'|'inline'`  | horizontal|
+| layout | 表单布局(horizontal/vertical/inline)，只有@formily/antd支持 | `'horizontal'|'vertical'|'inline'`  | horizontal|
 | maxTipsNum | 针对Field description的最大提示字符数，如果超出该字符数，则会以PopTips的形式展示 | `number` | 30 |
 | labelAlign | 标签的位置<br /><br />可选值:<br />'top'(上)<br />'left'(左)<br />'inset'(内) | `'top'|'left'|'inset'` | 'left' |  |
 | labelCol | 控制所有子节点的labelCol | `number|{span: number, offset: number}` |  | |
@@ -116,7 +116,7 @@ import SchemaForm, {
   FormButtonGroup,
   Field,  
   Submit
-} from '@uform/next(antd)'
+} from '@formily/next(antd)'
 
 
 ReactDOM.render(

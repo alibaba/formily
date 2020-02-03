@@ -17,7 +17,7 @@ type setValidationLocale = (locale: Locale) => void
 ## 依赖
 
 ```javascript
-import {setValidationLocale} from '@uform/core'
+import {setValidationLocale} from '@formily/core'
 ```
 
 ## 默认配置

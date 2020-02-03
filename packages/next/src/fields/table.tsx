@@ -4,9 +4,9 @@ import {
   ISchemaFieldComponentProps,
   SchemaField,
   Schema
-} from '@uform/react-schema-renderer'
-import { toArr, isFn, isArr, FormPath } from '@uform/shared'
-import { ArrayList, DragListView } from '@uform/react-shared-components'
+} from '@formily/react-schema-renderer'
+import { toArr, isFn, isArr, FormPath } from '@formily/shared'
+import { ArrayList, DragListView } from '@formily/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Table, Form, Icon } from '@alifd/next'
 import styled from 'styled-components'

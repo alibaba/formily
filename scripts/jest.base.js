@@ -11,7 +11,7 @@ const alias = packages
     const name = path.basename(_path)
     return {
       ...buf,
-      [`@uform/${name}`]: `${_path}/src`
+      [`@formily/${name}`]: `${_path}/src`
     }
   }, {})
 module.exports = {

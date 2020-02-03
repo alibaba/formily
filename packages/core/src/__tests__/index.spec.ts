@@ -1,4 +1,4 @@
-import { isEqual } from '@uform/shared'
+import { isEqual } from '@formily/shared'
 import {
   createForm,
   LifeCycleTypes,
@@ -8,7 +8,7 @@ import {
   registerValidationRules,
   registerValidationMTEngine
 } from '../index'
-import { ValidateDescription, ValidatePatternRules } from '@uform/validator'
+import { ValidateDescription, ValidatePatternRules } from '@formily/validator'
 
 // mock datasource
 const testValues = { aa: 111, bb: 222 }

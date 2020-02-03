@@ -5,8 +5,8 @@ import {
   createEffectHook,
   useFormEffects,
   useFieldState
-} from '@uform/react-schema-renderer'
-import { toArr } from '@uform/shared'
+} from '@formily/react-schema-renderer'
+import { toArr } from '@formily/shared'
 import { Steps } from 'antd'
 import { IFormStep } from '../types'
 

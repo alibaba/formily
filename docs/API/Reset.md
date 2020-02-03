@@ -7,7 +7,7 @@
 ## 依赖
 
 ```javascript
-import { Reset } from '@uform/next(antd)'
+import { Reset } from '@formily/next(antd)'
 ```
 
 ## API
@@ -22,7 +22,7 @@ import { Reset } from '@uform/next(antd)'
 ```javascript
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, FormButtonGroup, Reset } from '@uform/next(antd)'
+import { SchemaForm, FormButtonGroup, Reset } from '@formily/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>

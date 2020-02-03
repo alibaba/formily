@@ -1,2 +1,2 @@
-# @uform/react-shared
-> UForm React通用库
+# @formily/react-shared
+> Formily React通用库

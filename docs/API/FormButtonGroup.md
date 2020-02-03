@@ -7,7 +7,7 @@
 ## 依赖
 
 ```javascript
-import { FormButtonGroup } from '@uform/next(antd)'
+import { FormButtonGroup } from '@formily/next(antd)'
 ```
 
 ## API
@@ -26,7 +26,7 @@ import { FormButtonGroup } from '@uform/next(antd)'
 ```javascript
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, FormButtonGroup } from '@uform/next(antd)'
+import { SchemaForm, FormButtonGroup } from '@formily/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>

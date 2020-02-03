@@ -1,5 +1,5 @@
 - 开发指南
-   - [UForm 是什么?](./README.md)
+   - [Formily 是什么?](./README.md)
    - API 文档
      - [Antd扩展库](../packages/antd/README.zh-cn.md)
      - [Fusion Next扩展库](../packages/next/README.zh-cn.md)
@@ -28,6 +28,6 @@
      - [内外通讯联动](./Examples/antd/Actions.md)
      - [国际化](./Examples/antd/International.md)
      - [解构字段数据](./Examples/next/Deconstruction.md)
-- [知乎专栏](https://zhuanlan.zhihu.com/uform)
-- [GitHub](https://github.com/alibaba/uform)
+- [知乎专栏](https://zhuanlan.zhihu.com/formily)
+- [GitHub](https://github.com/alibaba/formily)
 <!--- [PlayGround DEMO](../packages/builder/src/demo/index-1-x.js)-->

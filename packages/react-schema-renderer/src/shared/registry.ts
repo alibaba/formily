@@ -1,4 +1,4 @@
-import { isFn, lowercase, reduce, each, deprecate } from '@uform/shared'
+import { isFn, lowercase, reduce, each, deprecate } from '@formily/shared'
 import {
   ComponentWithStyleComponent,
   ISchemaFieldWrapper,

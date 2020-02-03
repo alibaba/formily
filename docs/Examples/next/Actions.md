@@ -25,10 +25,10 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -89,10 +89,10 @@ import {
   FormBlock,
   FormLayout,
   createAsyncFormActions
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const actions = createAsyncFormActions()

@@ -27,10 +27,10 @@ import {
   FormPath,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -135,10 +135,10 @@ import {
   FormBlock,
   FormLayout,
   FormEffectHooks
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const { onFieldValueChange$ } = FormEffectHooks

@@ -1,4 +1,4 @@
-import { createFormActions, createAsyncFormActions } from '@uform/react'
+import { createFormActions, createAsyncFormActions } from '@formily/react'
 import { mergeActions, createActions, createAsyncActions } from 'react-eva'
 import { ISchemaFormActions, ISchemaFormAsyncActions } from '../types'
 

@@ -6,10 +6,10 @@ const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
   '@alifd/next': 'latest',
-  '@uform/next': 'latest',
-  '@uform/antd': 'latest',
-  '@uform/react': 'latest',
-  '@uform/printer': 'latest',
+  '@formily/next': 'latest',
+  '@formily/antd': 'latest',
+  '@formily/react': 'latest',
+  '@formily/printer': 'latest',
   '@babel/runtime':'latest',
   antd: 'latest'
 }
@@ -39,12 +39,12 @@ const createDocs = async () => {
 
       return {
         ...buf,
-        [`@uform/${name}`]: `${_path}/src`
+        [`@formily/${name}`]: `${_path}/src`
       }
     }, {})
   command(
     {
-      title: 'UForm',
+      title: 'Formily',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
       header: HEAD_HTML,
       footer: FOOTER_HTML

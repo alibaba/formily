@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from 'react'
-import { isNum, isFn, toArr } from '@uform/shared'
+import { isNum, isFn, toArr } from '@formily/shared'
 import { ArrayContext } from '../context'
 
 export const useArrayList = (index: number = 0) => {

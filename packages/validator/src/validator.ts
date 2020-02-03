@@ -22,7 +22,7 @@ import {
   each,
   FormPath,
   FormPathPattern
-} from '@uform/shared'
+} from '@formily/shared'
 import { getMessage } from './message'
 import defaultFormats from './formats'
 import defaultRules from './rules'
@@ -265,7 +265,7 @@ class FormValidator {
     })
   }
   /**
-   * https://github.com/alibaba/uform/issues/215
+   * https://github.com/alibaba/formily/issues/215
    *
    * @static
    * @param {ValidateFormatsMap} formats

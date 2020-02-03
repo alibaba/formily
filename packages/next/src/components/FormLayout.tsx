@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormItemProvider, useFormItem } from '../compat/context'
-import { createVirtualBox } from '@uform/react-schema-renderer'
+import { createVirtualBox } from '@formily/react-schema-renderer'
 import cls from 'classnames'
 import { IFormItemTopProps } from '../types'
 

@@ -1,8 +1,8 @@
-# @uform/react-schema-renderer
+# @formily/react-schema-renderer
 
 English | [简体中文](./README.zh-cn.md)
 
-> Schema rendering engine, the package mainly relies on @uform/react, its responsibilities are very simple, the core does two things:
+> Schema rendering engine, the package mainly relies on @formily/react, its responsibilities are very simple, the core does two things:
 >
 > - Parse the Form Schema protocol, recursive rendering
 > - Manage custom components
@@ -10,7 +10,7 @@ English | [简体中文](./README.zh-cn.md)
 ### Installation
 
 ```bash
-npm install --save @uform/react-schema-renderer
+npm install --save @formily/react-schema-renderer
 ```
 
 ### Contents
@@ -97,7 +97,7 @@ npm install --save @uform/react-schema-renderer
 
 #### Quick start
 
-If you are developing directly based on @uform/react-schema-renderer, then you must register your custom component before development. Go to the renderer, otherwise our JSON-Schema protocol can't render the form. And so:
+If you are developing directly based on @formily/react-schema-renderer, then you must register your custom component before development. Go to the renderer, otherwise our JSON-Schema protocol can't render the form. And so:
 
 ```tsx
 import React from 'react'
@@ -105,7 +105,7 @@ import {
   SchemaForm,
   registerFormField,
   connect
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 registerFormField(
   'string',
@@ -139,7 +139,7 @@ Speaking of JSON Schema, the above example has been covered. Of course, it is no
 
 ```tsx
 import React from 'react'
-import { SchemaForm } from '@uform/react-schema-renderer'
+import { SchemaForm } from '@formily/react-schema-renderer'
 
 registerFormField(
   'string',
@@ -188,7 +188,7 @@ import React from 'react'
 import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 export default () => {
   return (
@@ -217,7 +217,7 @@ import {
   SchemaForm,
   registerFormField,
   connect
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 const StringField = connect()(({ value, onChange }) => {
   return <input value={value} onChange={onChange} />
@@ -254,7 +254,7 @@ In the above example, we mainly pass the custom component in the props dimension
 
 #### How to access third-party component libraries?
 
-Because @uform/react-schema-renderer is a base library, no component library is integrated by default. so in actual business development, If you want to customize it based on it, you have to face the problem of accessing third-party component libraries. How to access the third-party component library, let's divide it into the following steps:
+Because @formily/react-schema-renderer is a base library, no component library is integrated by default. so in actual business development, If you want to customize it based on it, you have to face the problem of accessing third-party component libraries. How to access the third-party component library, let's divide it into the following steps:
 
 - Access the Form/FormItem component
 - Access component library form component
@@ -273,7 +273,7 @@ import {
   SchemaForm,
   registerFormComponent,
   registerFormItemComponent
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Form } from 'antd'
 
 export const CompatFormComponent = ({children,...props})=>{
@@ -327,15 +327,15 @@ We can see that extending the overall or partial style of the form can be easily
 
 all components of the component library are atomic components, most of them are compatible with the value/onChange specification, so we can quickly access the components of the component library with the connect function. Usually, if we need access to the component library component, we probably do three things:
 
-- Handle state maps, map the loading/error state inside the uform to the component properties, of course, **the premise is that the component must support styles such as loading or error.**
-- Handle detail styles, map the editable state inside the uform to a PreviewText component for more friendly and cleaner presentation data.
+- Handle state maps, map the loading/error state inside the formily to the component properties, of course, **the premise is that the component must support styles such as loading or error.**
+- Handle detail styles, map the editable state inside the formily to a PreviewText component for more friendly and cleaner presentation data.
 - Handle component enumeration, let's think about it, **JSON Schema, each node should support the enum attribute**, If we have the enum attribute, we'd better show it in the form of Select, so we need to handle the component enumeration state.
 
 Let's take an example of InputNumber：
 
 ```tsx
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import { InputNumber } from 'antd'
 
 const mapTextComponent = (
@@ -392,11 +392,11 @@ In this example, we use the connect function in depth. Connect is a HOC. During 
 
 JSON Schema describes the form of data structure, which is supported by nature. But the form ends up at the UI level. Unfortunately, at the UI level, we have a lot of components that are not a specific data node of JSON Schema. It's just a UI node. So, how to do to describe complex layouts in JSON Schema?
 
-Now uform's approach is to abstract a concept called **virtual node**After the user specifies a JSON Schema x-component as a virtual node at the code level, whether it is rendering, data processing, or final data submission, as long as the node is virtual, it will not be treated as a normal data node. So, with the concept of this virtual node, we can describe various complex layouts in JSON Schema. Let's try to write a layout component:
+Now formily's approach is to abstract a concept called **virtual node**After the user specifies a JSON Schema x-component as a virtual node at the code level, whether it is rendering, data processing, or final data submission, as long as the node is virtual, it will not be treated as a normal data node. So, with the concept of this virtual node, we can describe various complex layouts in JSON Schema. Let's try to write a layout component:
 
 ```tsx
 import React from 'react'
-import { SchemaForm, registerVirtualBox } from '@uform/react-schema-renderer'
+import { SchemaForm, registerVirtualBox } from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 registerVirtualBox('card', ({ children, ...props }) => {
@@ -441,7 +441,7 @@ From this pseudo-code, we can see that the card is a normal Object Schema node, 
 
 ```tsx
 import React from 'react'
-import { SchemaForm, createVirtualBox } from '@uform/react-schema-renderer'
+import { SchemaForm, createVirtualBox } from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 const Card = createVirtualBox('card', ({ children, ...props }) => {
@@ -467,7 +467,7 @@ From this example we can see that with the createVirtualBox API you can quickly 
 
 ```tsx
 import React from 'react'
-import { SchemaMarkupField as Field } from '@uform/react-schema-renderer'
+import { SchemaMarkupField as Field } from '@formily/react-schema-renderer'
 export function createVirtualBox<T = {}>(
   key: string,
   component?: React.JSXElementConstructor<React.PropsWithChildren<T>>
@@ -570,7 +570,7 @@ import {
   registerFormField,
   SchemaField,
   FormPath
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 //No need to pack with connet
 registerFormField('array', ({ value, path, mutators }) => {
@@ -621,7 +621,7 @@ To implement a self-incrementing list component with recursive rendering is supe
 
 #### How to implement ultra-complex custom components?
 
-This problem is no solution in the old UForm.It happens that because our business complexity is high to a certain extent, we are limited by this problem, so we must find a way to solve this problem. We can define what is a super complex custom component:
+This problem is no solution in the old Formily.It happens that because our business complexity is high to a certain extent, we are limited by this problem, so we must find a way to solve this problem. We can define what is a super complex custom component:
 
 - There are a large number of form components inside the component, and there are also a large number of linkage relationships inside.
 - There is a private server dynamic rendering scheme inside the component.
@@ -639,7 +639,7 @@ import {
   InternalField,
   useFormEffects,
   FormEffectHooks
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Input, Form } from 'antd'
 
 const FormItem = ({ component, ...props }) => {
@@ -700,13 +700,13 @@ registerFormField('complex', ({ path }) => {
 })
 ```
 
-In this pseudo-code, we mainly use two core APIs, mainly useFormEffects and InternalField,useFormEffects gives developers a place to write the effects logic locally, so that the effects logic can be easily reused. InternalField is the @uform/react Field component. You can take a look at the @uform/react documentation. SchemaForm also uses @uform/react internally, it can share the same Context, so we can easily use InternalField inside a custom component. Also note that **when using InternalField directly, the name we registered is the root level name, if you want to reuse the path of the current custom component, you can use FormPath to resolve the path, and then concat.**
+In this pseudo-code, we mainly use two core APIs, mainly useFormEffects and InternalField,useFormEffects gives developers a place to write the effects logic locally, so that the effects logic can be easily reused. InternalField is the @formily/react Field component. You can take a look at the @formily/react documentation. SchemaForm also uses @formily/react internally, it can share the same Context, so we can easily use InternalField inside a custom component. Also note that **when using InternalField directly, the name we registered is the root level name, if you want to reuse the path of the current custom component, you can use FormPath to resolve the path, and then concat.**
 
 ### API
 
 ---
 
-> The overall API fully inherits @uform/core and @uform/react, and only the specific APIs of @uform/react-schema-renderer are listed below.
+> The overall API fully inherits @formily/core and @formily/react, and only the specific APIs of @formily/react-schema-renderer are listed below.
 
 #### connect
 
@@ -721,7 +721,7 @@ connect(options?: IConnectOptions): (component : React.JSXElementConstructor<any
 **Usage**
 
 ```typescript
-import { registerFormField, connect } from '@uform/react-schema-renderer'
+import { registerFormField, connect } from '@formily/react-schema-renderer'
 import { Select } from 'antd'
 registerFormField('select', connect()(Select))
 ```
@@ -811,7 +811,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
   createVirtualBox
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 const FormCard = createVirtualBox('card', props => {
@@ -850,7 +850,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
   createControllerBox
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 const FormCard = createControllerBox('card', ({ schema, children }) => {
@@ -888,7 +888,7 @@ cleanRegistry(): void
 
 ### Classes
 
-> The whole Class inherits @uform/core completely, such as FormPath and FormLifeCyle. Only the classes specific to @uform/react-schema-renderer are listed below.
+> The whole Class inherits @formily/core completely, such as FormPath and FormLifeCyle. Only the classes specific to @formily/react-schema-renderer are listed below.
 
 #### new Schema(json : ISchema)
 
@@ -1403,7 +1403,7 @@ isArray() : boolean
 
 ---
 
-> The whole component is completely inherited @uform/react, only the components specific to @uform/react-schema-renderer are listed below.
+> The whole component is completely inherited @formily/react, only the components specific to @formily/react-schema-renderer are listed below.
 
 #### `<SchemaForm/>`
 
@@ -1532,7 +1532,7 @@ interface ISchemaFormProps<
 import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 export default () => {
   return (
@@ -1555,17 +1555,17 @@ type IMarkupSchemaFieldProps = ISchema
 
 #### `<InternalForm/>`
 
-> The core Form is the same as the Form component in @uform/react
+> The core Form is the same as the Form component in @formily/react
 
 #### `<InternalField/>`
 
-> The core Field, like the Field component in @uform/react, is mainly used in complex custom components.
+> The core Field, like the Field component in @formily/react, is mainly used in complex custom components.
 
 ### Interfaces
 
 ---
 
-> Inheriting @uform/react and @uform/core's Interfaces as a whole, only @uform/react-schema-renderer are listed below.
+> Inheriting @formily/react and @formily/core's Interfaces as a whole, only @formily/react-schema-renderer are listed below.
 
 #### IConnectOptions
 
@@ -1783,7 +1783,7 @@ interface ISchema {
 
 #### ISchemaFormActions
 
-> The core actions inherit @uform/react's IFormActions, mainly adding the getSchema API
+> The core actions inherit @formily/react's IFormActions, mainly adding the getSchema API
 
 ```typescript
 interface ISchemaFormActions extends IFormActions {
@@ -1794,7 +1794,7 @@ interface ISchemaFormActions extends IFormActions {
 
 #### ISchemaFormAsyncActions
 
-> Core actions inherit @uform/react's IFormAsyncActions, mainly adding the getSchema API
+> Core actions inherit @formily/react's IFormAsyncActions, mainly adding the getSchema API
 
 ```typescript
 interface ISchemaFormAsyncActions extends IFormAsyncActions {

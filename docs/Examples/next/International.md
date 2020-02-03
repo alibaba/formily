@@ -1,6 +1,6 @@
 # 国际化
 
-> 在 UForm 中配置国际化语言，其实只需要关心 validator 的国际化配置即可
+> 在 Formily 中配置国际化语言，其实只需要关心 validator 的国际化配置即可
 > (setValidationLanguage)，对于具体组件库的国际化配置，就走默认的组件国际化配置
 > 模式即可
 
@@ -18,11 +18,11 @@ import {
   Submit,
   Reset,
   setValidationLanguage
-} from '@uform/next'
+} from '@formily/next'
 import { Button, ConfigProvider } from '@alifd/next'
 import zhCN from '@alifd/next/lib/locale/zh-cn'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 /**
  * 由于文档展示限制，后面的英文案例语言配置会覆盖该配置，如果要看实际效果，请点击案例右下角的codesandbox链接查看
@@ -115,9 +115,9 @@ import {
   Submit,
   Reset,
   setValidationLanguage
-} from '@uform/next'
+} from '@formily/next'
 import { Button, ConfigProvider } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import enUS from '@alifd/next/lib/locale/en-us'
 import '@alifd/next/dist/next.css'
 

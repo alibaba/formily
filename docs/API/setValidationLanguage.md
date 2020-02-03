@@ -13,13 +13,13 @@ type setValidationLanguage = (lang: string) => void
 ## 依赖
 
 ```javascript
-import {setValidationLanguage} from '@uform/core'
+import {setValidationLanguage} from '@formily/core'
 ```
 
 ## 用例
 
 ```javascript
-import {setValidationLanguage} from '@uform/core'
+import {setValidationLanguage} from '@formily/core'
 
 setValidationLanguage("en")
 ```

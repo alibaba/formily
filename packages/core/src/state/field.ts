@@ -1,5 +1,5 @@
 import { createStateModel } from '../shared/model'
-import { toArr, isValid, isEqual, FormPath, isFn } from '@uform/shared'
+import { toArr, isValid, isEqual, FormPath, isFn } from '@formily/shared'
 import { IFieldState, IFieldStateProps } from '../types'
 /**
  * 核心数据结构，描述表单字段的所有状态

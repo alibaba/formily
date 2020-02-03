@@ -2,7 +2,7 @@
 
 ## 介绍
 
-批量注册一个表单字段组件，主要用于扩展自定义控件，您的自定义控件只需要与正常的Input组件类似，接收value/onChange这样的受控控制即可完全接入uform.
+批量注册一个表单字段组件，主要用于扩展自定义控件，您的自定义控件只需要与正常的Input组件类似，接收value/onChange这样的受控控制即可完全接入formily.
 
 > 注意：被接入的自定义组件的props就是Field组件的x-props。所以我们在使用自定义组件的时候，除了指定x-component，其余配置都可以通过x-props来控制
 
@@ -18,7 +18,7 @@ type registerFormField(
 ## 依赖
 
 ```javascript
-import {registerFormFields} from '@uform/react'
+import {registerFormFields} from '@formily/react'
 ```
 
 ## API
@@ -60,7 +60,7 @@ interface Mutators<V = any> {
 ## 用例
 
 ```javascript
-import {registerFormFields,connect} from '@uform/react'
+import {registerFormFields,connect} from '@formily/react'
 
 registerFormFields({
   string:connect()(props => <input {...props} value={props.value || ''} />)

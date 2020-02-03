@@ -2,12 +2,12 @@
 
 ## 介绍
 
-@uform/react 的核心组件，用于描述表单字段
+@formily/react 的核心组件，用于描述表单字段
 
 ## 依赖
 
 ```javascript
-import {Field} from '@uform/react'
+import {Field} from '@formily/react'
 ```
 
 ## API
@@ -21,8 +21,8 @@ import {Field} from '@uform/react'
 | name | 字段名称 | `string` | '' |  |
 | required | 字段是否必填 | `boolean` | false |  |
 | description | 字段描述，如果字符串字数超过30字或内容是`JSX.Element`，会自动以pop形式展示 | `JSX.Element | string | null` | '' |  |
-| type | 字段类型，具体类型枚举参考 [fields](https://github.com/alibaba/uform/tree/master/packages/antd/src/fields) | `string` |  |  |
-| x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染，具体类型枚举参考 [fields](https://github.com/alibaba/uform/tree/master/packages/antd/src/fields) | `string` |  |  |
+| type | 字段类型，具体类型枚举参考 [fields](https://github.com/alibaba/formily/tree/master/packages/antd/src/fields) | `string` |  |  |
+| x-component | 字段UI组件，用于指定该字段应该用什么组件做渲染，具体类型枚举参考 [fields](https://github.com/alibaba/formily/tree/master/packages/antd/src/fields) | `string` |  |  |
 | x-effect | 副作用事件绑定对象 | `(dispatch: (eventName: string, ...params: any[]) => void) => void` |  |  |
 | x-index | 字段索引顺序 | `number` |  |  |
 | x-props | 字段UI组件属性，API请参考对应fusion next/ant design组件API | `{[key: string]: any}` | {} | |
@@ -32,7 +32,7 @@ import {Field} from '@uform/react'
 
 ## x-rules详解
 
-校验规则，在uform中有几种校验形态：
+校验规则，在formily中有几种校验形态：
 
 - 字符串正则校验，在x-rules中可以通过传字符串或者字符串数组来描述，下面是正则匹配模式
 
@@ -133,7 +133,7 @@ interface Mutators<V = any> {
 x-effect属于一个非常高级的API，它是为了解决在某些场景，我们的数据联动不是基于字段的onChange事件来做的联动或者依赖onChange事件的其他参数来做的联动，它的解决方案是将dispatch函数给x-effect函数，然后让x-effect函数返回对应的事件处理器，然后再传递给具体的组件，比如：
 
 ```javascript
-import {createFormActions} from '@uform/react'
+import {createFormActions} from '@formily/react'
 
 const actions = createFormActions()
 
@@ -176,7 +176,7 @@ import SchemaForm, {
   registerFormField,
   Field,  
   connect
-} from '@uform/react'
+} from '@formily/react'
 
 registerFormField(
   'string',

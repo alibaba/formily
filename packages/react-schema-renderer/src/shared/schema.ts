@@ -2,7 +2,7 @@ import {
   ValidatePatternRules,
   ValidateArrayRules,
   getMessage
-} from '@uform/validator'
+} from '@formily/validator'
 import {
   lowercase,
   map,
@@ -16,7 +16,7 @@ import {
   FormPathPattern,
   FormPath,
   deprecate
-} from '@uform/shared'
+} from '@formily/shared'
 import { SchemaMessage, ISchema } from '../types'
 
 const numberRE = /^\d+$/

@@ -128,9 +128,9 @@ describe('compare', () => {
   expect(isEqual(regexpA, new RegExp(/test/))).toBeTruthy()
   expect(isEqual(regexpA, regexpB)).toBeFalsy()
   // URL
-  const urlA = new URL('https://uformjs.org/')
+  const urlA = new URL('https://formilyjs.org/')
   const urlB = new URL('https://www.taobao.com')
-  const urlC = new URL('https://uformjs.org/')
+  const urlC = new URL('https://formilyjs.org/')
   expect(isEqual(urlA, urlC)).toBeTruthy()
   expect(isEqual(urlA, urlB)).toBeFalsy()
   // object

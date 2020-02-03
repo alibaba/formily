@@ -1,16 +1,16 @@
 {
-  "name": "@uform/devtools",
+  "name": "@formily/devtools",
   "version": "1.0.0-rc.4",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "types": "lib/index.d.ts",
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
@@ -31,8 +31,8 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "@uform/core": "^1.0.0-rc.4",
-    "@uform/shared": "^1.0.0-rc.4",
+    "@formily/core": "^1.0.0-rc.4",
+    "@formily/shared": "^1.0.0-rc.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-treebeard": "^3.2.4"

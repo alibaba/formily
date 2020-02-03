@@ -4,7 +4,7 @@ import {
   IVirtualFieldState,
   IForm,
   IVirtualField
-} from '@uform/core'
+} from '@formily/core'
 import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
 import FormContext from '../context'
@@ -33,7 +33,7 @@ export const useVirtualField = (
     ref.current.subscriberId = ref.current.field.subscribe(() => {
       if (ref.current.unmounted) return
       /**
-       * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在uform core内部
+       * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在formily core内部
        */
       if (initialized) {
         forceUpdate()

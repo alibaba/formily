@@ -1,6 +1,6 @@
-# @uform/react-schema-renderer
+# @formily/react-schema-renderer
 
-> Schema 渲染引擎，该包主要依赖了@uform/react，它的职责很简单，核心就做了两件事情：
+> Schema 渲染引擎，该包主要依赖了@formily/react，它的职责很简单，核心就做了两件事情：
 >
 > - 解析 Form Schema 协议，递归渲染
 > - 管理自定义组件
@@ -8,7 +8,7 @@
 ### 安装
 
 ```bash
-npm install --save @uform/react-schema-renderer
+npm install --save @formily/react-schema-renderer
 ```
 
 ### 目录
@@ -93,7 +93,7 @@ npm install --save @uform/react-schema-renderer
 
 #### 快速开始
 
-如果您是直接基于@uform/react-schema-renderer 做开发的，那么您必须在开发前将自定义组件注册到渲染器里去，否则，我们的 JSON-Schema 协议是不能渲染表单的。所以：
+如果您是直接基于@formily/react-schema-renderer 做开发的，那么您必须在开发前将自定义组件注册到渲染器里去，否则，我们的 JSON-Schema 协议是不能渲染表单的。所以：
 
 ```tsx
 import React from 'react'
@@ -101,7 +101,7 @@ import {
   SchemaForm,
   registerFormField,
   connect
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 registerFormField(
   'string',
@@ -135,7 +135,7 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { SchemaForm } from '@uform/react-schema-renderer'
+import { SchemaForm } from '@formily/react-schema-renderer'
 
 registerFormField(
   'string',
@@ -184,7 +184,7 @@ import React from 'react'
 import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 export default () => {
   return (
@@ -213,7 +213,7 @@ import {
   SchemaForm,
   registerFormField,
   connect
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 const StringField = connect()(({ value, onChange }) => {
   return <input value={value} onChange={onChange} />
@@ -250,7 +250,7 @@ export default () => {
 
 #### 如何接入第三方组件库？
 
-因为@uform/react-schema-renderer 是一个基础库，默认不会集成任何组件库的，所以我们在实际业务开发中，如果要基于它来定制，那么就必须得面对接入第三方组件库的问题。如何接入第三方组件库，我们分为以下几步：
+因为@formily/react-schema-renderer 是一个基础库，默认不会集成任何组件库的，所以我们在实际业务开发中，如果要基于它来定制，那么就必须得面对接入第三方组件库的问题。如何接入第三方组件库，我们分为以下几步：
 
 - 接入 Form/FormItem 组件
 - 接入组件库表单组件
@@ -269,7 +269,7 @@ import {
   SchemaForm,
   registerFormComponent,
   registerFormItemComponent
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Form } from 'antd'
 
 export const CompatFormComponent = ({children,...props})=>{
@@ -323,15 +323,15 @@ export default ()=>{
 
 因为组件库的所有组件都是原子型组件，同时大部分都兼容了 value/onChange 规范，所以我们可以借助 connect 函数快速接入组件库的组件，通常，我们接入组件库组件，大概要做 3 件事情：
 
-- 处理状态映射，将 uform 内部的 loading/error 状态映射到该组件属性上，当然，**前提是要求组件必须支持 loading 或 error 这类的样式**
-- 处理详情态样式，将 uform 内部的 editable 状态，映射到一个 PreviewText 组件上去，用于更友好更干净的展示数据
+- 处理状态映射，将 formily 内部的 loading/error 状态映射到该组件属性上，当然，**前提是要求组件必须支持 loading 或 error 这类的样式**
+- 处理详情态样式，将 formily 内部的 editable 状态，映射到一个 PreviewText 组件上去，用于更友好更干净的展示数据
 - 处理组件枚举态，我们想一下，**JSON Schema，每一个节点都应该支持 enum 属性的**，如果配了 enum 属性，我们最好都以 Select 形式来展现，所以我们需要处理一下组件枚举态
 
 咱们以 InputNumber 为例演示一下：
 
 ```tsx
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import { InputNumber } from 'antd'
 
 const mapTextComponent = (
@@ -388,11 +388,11 @@ registerFormField(
 
 JSON Schema 描述表单数据结构，其实是天然支持的，但是表单最终还是落在 UI 层面的，可惜在 UI 层面上我们有很多组件其实并不能作为 JSON Schema 的一个具体数据节点，它仅仅只是一个 UI 节点。所以，想要在 JSON Schema 中描述复杂布局，怎么做？
 
-现在 uform 的做法是，抽象了一个叫**虚拟节点**的概念，用户在代码层面上指定某个 JSON Schema x-component 为虚拟节点之后，后面不管是在渲染，还是在数据处理，还是最终数据提交，只要解析到这个节点是虚拟节点，都不会将它当做一个正常的数据节点。所以，有了这个虚拟节点的概念，我们就可以在 JSON Schema 中描述各种复杂布局，下面让我们试着写一个布局组件：
+现在 formily 的做法是，抽象了一个叫**虚拟节点**的概念，用户在代码层面上指定某个 JSON Schema x-component 为虚拟节点之后，后面不管是在渲染，还是在数据处理，还是最终数据提交，只要解析到这个节点是虚拟节点，都不会将它当做一个正常的数据节点。所以，有了这个虚拟节点的概念，我们就可以在 JSON Schema 中描述各种复杂布局，下面让我们试着写一个布局组件：
 
 ```tsx
 import React from 'react'
-import { SchemaForm, registerVirtualBox } from '@uform/react-schema-renderer'
+import { SchemaForm, registerVirtualBox } from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 registerVirtualBox('card', ({ children, ...props }) => {
@@ -437,7 +437,7 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { SchemaForm, createVirtualBox } from '@uform/react-schema-renderer'
+import { SchemaForm, createVirtualBox } from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 const Card = createVirtualBox('card', ({ children, ...props }) => {
@@ -463,7 +463,7 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { SchemaMarkupField as Field } from '@uform/react-schema-renderer'
+import { SchemaMarkupField as Field } from '@formily/react-schema-renderer'
 export function createVirtualBox<T = {}>(
   key: string,
   component?: React.JSXElementConstructor<React.PropsWithChildren<T>>
@@ -566,7 +566,7 @@ import {
   registerFormField,
   SchemaField,
   FormPath
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 //不用connect包装
 registerFormField('array', ({ value, path, mutators }) => {
@@ -617,7 +617,7 @@ registerFormField('array', ({ value, path, mutators }) => {
 
 #### 如何实现超复杂自定义组件？
 
-这个问题，在老版 UForm 中基本无解，恰好也是因为我们这边的业务复杂度高到一定程度之后，我们自己被这个问题给受限制了，所以必须得想办法解决这个问题，下面我们可以定义一下，什么才是超复杂自定义组件：
+这个问题，在老版 Formily 中基本无解，恰好也是因为我们这边的业务复杂度高到一定程度之后，我们自己被这个问题给受限制了，所以必须得想办法解决这个问题，下面我们可以定义一下，什么才是超复杂自定义组件：
 
 - 组件内部存在大量表单组件，同时内部也存在大量联动关系
 - 组件内部存在私有的服务端动态渲染方案
@@ -635,7 +635,7 @@ import {
   InternalField,
   useFormEffects,
   FormEffectHooks
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Input, Form } from 'antd'
 
 const FormItem = ({ component, ...props }) => {
@@ -696,13 +696,13 @@ registerFormField('complex', ({ path }) => {
 })
 ```
 
-在这段伪代码中，我们主要使用了两个核心 API，主要是 useFormEffects 和 InternalField，useFormEffects 给开发者提供了局部写 effects 逻辑的地方这样就能很方便的复用 effects 逻辑，InternalField 则就是@uform/react 的 Field 组件，这个可以具体看看@uform/react 的文档，因为 SchemaForm 内部也是使用的@uform/react，所以可以共享同一个 Context，所以我们就能很方便的在自定义组件内使用 InternalField，同时需要注意一点，**直接使用 InternalField 的时候，我们注册的 name 是根级别的 name，如果想要复用当前自定义组件的路径，可以借助 FormPath 解析路径，然后再 concat 即可。**
+在这段伪代码中，我们主要使用了两个核心 API，主要是 useFormEffects 和 InternalField，useFormEffects 给开发者提供了局部写 effects 逻辑的地方这样就能很方便的复用 effects 逻辑，InternalField 则就是@formily/react 的 Field 组件，这个可以具体看看@formily/react 的文档，因为 SchemaForm 内部也是使用的@formily/react，所以可以共享同一个 Context，所以我们就能很方便的在自定义组件内使用 InternalField，同时需要注意一点，**直接使用 InternalField 的时候，我们注册的 name 是根级别的 name，如果想要复用当前自定义组件的路径，可以借助 FormPath 解析路径，然后再 concat 即可。**
 
 ### API
 
 ---
 
-> 整体 API 完全继承@uform/core 与@uform/react，下面只列举@uform/react-schema-renderer 的特有 API
+> 整体 API 完全继承@formily/core 与@formily/react，下面只列举@formily/react-schema-renderer 的特有 API
 
 #### connect
 
@@ -721,7 +721,7 @@ connect(options?: IConnectOptions): (
 **用法**
 
 ```typescript
-import { registerFormField, connect } from '@uform/react-schema-renderer'
+import { registerFormField, connect } from '@formily/react-schema-renderer'
 import { Select } from 'antd'
 registerFormField('select', connect()(Select))
 ```
@@ -811,7 +811,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
   createVirtualBox
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 const FormCard = createVirtualBox('card', props => {
@@ -850,7 +850,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field,
   createControllerBox
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Card } from 'antd'
 
 const FormCard = createControllerBox('card', ({ schema, children }) => {
@@ -888,7 +888,7 @@ cleanRegistry(): void
 
 ### Classes
 
-> 整体 Class 完全继承@uform/core，比如 FormPath 与 FormLifeCyle，下面只列举@uform/react-schema-renderer 特有的 Class
+> 整体 Class 完全继承@formily/core，比如 FormPath 与 FormLifeCyle，下面只列举@formily/react-schema-renderer 特有的 Class
 
 #### new Schema(json : ISchema)
 
@@ -1407,7 +1407,7 @@ isArray() : boolean
 
 ---
 
-> 整体组件完全继承@uform/react，下面只列举@uform/react-schema-renderer 特有的组件
+> 整体组件完全继承@formily/react，下面只列举@formily/react-schema-renderer 特有的组件
 
 #### `<SchemaForm/>`
 
@@ -1536,7 +1536,7 @@ interface ISchemaFormProps<
 import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 
 export default () => {
   return (
@@ -1559,17 +1559,17 @@ type IMarkupSchemaFieldProps = ISchema
 
 #### `<InternalForm/>`
 
-> 核心 Form，与@uform/react 中的 Form 组件一样
+> 核心 Form，与@formily/react 中的 Form 组件一样
 
 #### `<InternalField/>`
 
-> 核心 Field，与@uform/react 中的 Field 组件一样，主要用于复杂自定义组件内使用
+> 核心 Field，与@formily/react 中的 Field 组件一样，主要用于复杂自定义组件内使用
 
 ### Interfaces
 
 ---
 
-> 整体继承@uform/react 和@uform/core 的 Interfaces，下面只列举@uform/react-schema-renderer 特有 Interfaces
+> 整体继承@formily/react 和@formily/core 的 Interfaces，下面只列举@formily/react-schema-renderer 特有 Interfaces
 
 #### IConnectOptions
 
@@ -1788,7 +1788,7 @@ interface ISchema {
 
 #### ISchemaFormActions
 
-> 核心 actions 继承@uform/react 的 IFormActions，主要增加了 getSchema API
+> 核心 actions 继承@formily/react 的 IFormActions，主要增加了 getSchema API
 
 ```typescript
 interface ISchemaFormActions extends IFormActions {
@@ -1799,7 +1799,7 @@ interface ISchemaFormActions extends IFormActions {
 
 #### ISchemaFormAsyncActions
 
-> 核心 actions 继承@uform/react 的 IFormAsyncActions，主要增加了 getSchema API
+> 核心 actions 继承@formily/react 的 IFormAsyncActions，主要增加了 getSchema API
 
 ```typescript
 interface ISchemaFormAsyncActions extends IFormAsyncActions {

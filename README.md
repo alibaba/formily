@@ -1,15 +1,13 @@
 English | [简体中文](./README.zh-cn.md)
 
 <p align="center">
-<img src="https://img.alicdn.com/tfs/TB19uf2XBGw3KVjSZFwXXbQ2FXa-1400-689.png">
-<a href="https://www.npmjs.com/package/@uform/core"><img src="https://img.shields.io/npm/v/@uform/core.svg"></a>
-<a href="https://www.npmjs.com/package/@uform/react"><img src="https://img.shields.io/npm/v/@uform/react.svg"></a>
-<a href="https://travis-ci.com/alibaba/uform"><img src="https://travis-ci.com/alibaba/uform.svg?branch=master"></a>
+<img src="https://img.alicdn.com/tfs/TB1MdJYuYj1gK0jSZFuXXcrHpXa-2500-1200.png">
+<a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
+<a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
+<a href="https://travis-ci.com/alibaba/formily"><img src="https://travis-ci.com/alibaba/formily.svg?branch=master"></a>
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
-<a href="https://app.netlify.com/sites/uform/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
+<a href="https://app.netlify.com/sites/formily/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
 </p>
-
-<p align="center" style="color:#666;margin-top:10px;">UForm - a high-performance React form solution for handling complicated enterprise requirements.</p>
 
 ---
 
@@ -30,51 +28,49 @@ In React, the whole tree rendering performance problem of the form is very obvio
 Use Ant Design：
 
 ```bash
-npm install --save antd @uform/antd
+npm install --save antd @formily/antd
 ```
 
 Use Fusion Design：
 
 ```bash
-npm install --save @alifd/next @uform/next
+npm install --save @alifd/next @formily/next
 ```
 
-Use uform react render engine pacakge:
+Use formily react render engine pacakge:
 
 ```bash
-npm install --save @uform/react-schema-renderer
+npm install --save @formily/react-schema-renderer
 ```
 
-Use uform react package:
+Use formily react package:
 
 ```bash
-npm install --save @uform/react
+npm install --save @formily/react
 ```
 
-Use uform core package:
+Use formily core package:
 
 ```bash
-npm install --save @uform/core
+npm install --save @formily/core
 ```
 
 ## Architecture
 
-![](https://img.alicdn.com/tfs/TB1i9nmolv0gK0jSZKbXXbK2FXa-1882-1144.png)
+![](https://img.alicdn.com/tfs/TB1BvlRu4D1gK0jSZFsXXbldVXa-1882-1144.png)
 
 
 ## WebSite
 
-https://uformjs.org (0.x)
-
-https://uform-next.netlify.com (1.x)
+https://formilyjs.org
 
 ## Documents
 
-- [@uform/antd](./packages/antd/README.md)
-- [@uform/next](./packages/next/README.md)
-- [@uform/react-schema-renderer](./packages/react-schema-renderer/README.md)
-- [@uform/react](./packages/react/README.md)
-- [@uform/core](./packages/core/README.md)
+- [@formily/antd](./packages/antd/README.md)
+- [@formily/next](./packages/next/README.md)
+- [@formily/react-schema-renderer](./packages/react-schema-renderer/README.md)
+- [@formily/react](./packages/react/README.md)
+- [@formily/core](./packages/core/README.md)
 
 
 ## Demo
@@ -85,29 +81,29 @@ https://uform-next.netlify.com (1.x)
 
 | Online Chat Room                                             | 微信                                                         | 钉钉 |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
-| [gitter.im](https://gitter.im/alibaba-uform/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
+| [gitter.im](https://gitter.im/alibaba-formily/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
 
 
 ## Contributors
 
 This project exists thanks to all the people who contribute. 
-<a href="https://github.com/alibaba/uform/graphs/contributors"><img src="https://opencollective.com/uform/contributors.svg" /></a>
+<a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg" /></a>
 
 
 ## Backers
 
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/uform#backer)]
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/formily#backer)]
 
-<a href="https://opencollective.com/uform#backers" target="_blank"><img src="https://opencollective.com/uform/backers.svg"></a>
+<a href="https://opencollective.com/formily#backers" target="_blank"><img src="https://opencollective.com/formily/backers.svg"></a>
 
 
 ## Sponsors
 
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/uform#sponsor)]
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/formily#sponsor)]
 
 
 
 ## LICENSE
 
-UForm is open source software licensed as
-[MIT](https://github.com/alibaba/uform/blob/master/LICENSE.md).
+Formily is open source software licensed as
+[MIT](https://github.com/alibaba/formily/blob/master/LICENSE.md).

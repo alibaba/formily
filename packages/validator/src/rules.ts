@@ -8,7 +8,7 @@ import {
   isFn,
   toArr,
   isBool
-} from '@uform/shared'
+} from '@formily/shared'
 import { ValidateDescription } from './types'
 const isValidateEmpty = (value: any) => {
   if (isArr(value)) {

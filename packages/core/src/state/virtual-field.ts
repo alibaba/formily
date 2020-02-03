@@ -1,12 +1,12 @@
 import { createStateModel } from '../shared/model'
-import { FormPath, isValid } from '@uform/shared'
+import { FormPath, isValid } from '@formily/shared'
 import { IVirtualFieldState, IVirtualFieldStateProps } from '../types'
 
 /**
- * UForm特有，描述一个虚拟字段，
+ * Formily特有，描述一个虚拟字段，
  * 它不占用数据空间，但是它拥有状态，
  * 可以联动控制Field或者VirtualField的状态
- * 类似于现在UForm的Card之类的容器布局组件
+ * 类似于现在Formily的Card之类的容器布局组件
  */
 export const VirtualFieldState = createStateModel<
   IVirtualFieldState,

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Select } from '@alifd/next'
-import { PreviewText } from '@uform/react-shared-components'
+import { PreviewText } from '@formily/react-shared-components'
 import {
   MergedFieldComponentProps,
   IConnectProps
-} from '@uform/react-schema-renderer'
-export * from '@uform/shared'
+} from '@formily/react-schema-renderer'
+export * from '@formily/shared'
 
 export const mapTextComponent = (
   Target: React.JSXElementConstructor<any>,

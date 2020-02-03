@@ -1,2 +1,2 @@
-# @uform/validator
-> UForm数据校验工具
+# @formily/validator
+> Formily数据校验工具

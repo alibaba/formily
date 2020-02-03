@@ -9,8 +9,8 @@ import {
   IMarkupSchemaFieldProps,
   ISchemaFieldComponentProps,
   FormPathPattern
-} from '@uform/react-schema-renderer'
-import { PreviewTextConfigProps } from '@uform/react-shared-components'
+} from '@formily/react-schema-renderer'
+import { PreviewTextConfigProps } from '@formily/react-shared-components'
 import { StyledComponent } from 'styled-components'
 
 type ColSpanType = number | string
