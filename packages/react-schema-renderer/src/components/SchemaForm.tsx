@@ -1,6 +1,6 @@
 import React from 'react'
 import { ISchemaFormProps } from '../types'
-import { Form } from '@uform/react'
+import { Form } from '@formily/react'
 import { SchemaField } from './SchemaField'
 import { useSchemaForm } from '../hooks/useSchemaForm'
 import SchemaContext, { FormComponentsContext } from '../shared/context'

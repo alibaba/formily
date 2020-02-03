@@ -10,7 +10,7 @@ import SchemaForm, {
   createFormActions,
   FormButtonGroup,
   Submit
-} from "@uform/next";
+} from "@formily/next";
 import "@alifd/next/dist/next.css";
 
 const actions = createFormActions();

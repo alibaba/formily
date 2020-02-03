@@ -7,7 +7,7 @@ import { normalizeCol } from '../shared'
 import {
   PreviewText,
   PreviewTextConfigProps
-} from '@uform/react-shared-components'
+} from '@formily/react-shared-components'
 export const CompatAntdForm: React.FC<FormProps &
   IFormItemTopProps &
   PreviewTextConfigProps> = props => {

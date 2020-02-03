@@ -26,9 +26,9 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 const App = () => (
   <Printer>
@@ -68,9 +68,9 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -109,9 +109,9 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -158,9 +158,9 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => {
@@ -243,9 +243,9 @@ import {
   FormLayout,
   FormTextBox,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -288,9 +288,9 @@ import {
   Reset,
   FormSpy,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const actions = createFormActions();

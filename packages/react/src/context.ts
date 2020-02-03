@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 import { Broadcast } from './shared'
-import { IForm } from '@uform/core'
-import { IField, IVirtualField } from '@uform/core'
+import { IForm } from '@formily/core'
+import { IField, IVirtualField } from '@formily/core'
 
 export const BroadcastContext = createContext<Broadcast>(null)
 

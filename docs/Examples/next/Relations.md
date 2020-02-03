@@ -43,10 +43,10 @@ import {
   FormEffectHooks,
   createEffectHook,
   createFormActions,
-} from '@uform/next'
+} from '@formily/next'
 import { filter, combineLatest, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
@@ -226,10 +226,10 @@ import {
   FormBlock,
   FormLayout,
   FormEffectHooks
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
@@ -318,10 +318,10 @@ import {
   FormBlock,
   FormLayout,
   FormEffectHooks
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const { onFormInit$, onFieldValueChange$ } = FormEffectHooks
@@ -426,10 +426,10 @@ import {
   FormBlock,
   FormLayout,
   FormEffectHooks
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const { onFieldValueChange$ } = FormEffectHooks
@@ -488,10 +488,10 @@ import {
   FormBlock,
   FormLayout,
   FormEffectHooks
-} from '@uform/next'
+} from '@formily/next'
 import { filter, withLatestFrom, map, debounceTime } from 'rxjs/operators'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const { onFormInit$, onFieldValueChange$ } = FormEffectHooks

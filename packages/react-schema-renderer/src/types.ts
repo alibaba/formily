@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormPathPattern } from '@uform/shared'
+import { FormPathPattern } from '@formily/shared'
 import {
   IFieldState,
   IVirtualFieldState,
@@ -9,8 +9,8 @@ import {
   IFormActions,
   IFormAsyncActions,
   IFormEffect
-} from '@uform/react'
-import { ValidatePatternRules } from '@uform/validator'
+} from '@formily/react'
+import { ValidatePatternRules } from '@formily/validator'
 import { Schema } from './shared/schema'
 export interface ISchemaFieldProps {
   path?: FormPathPattern

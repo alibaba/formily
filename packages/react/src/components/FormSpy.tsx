@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFn } from '@uform/shared'
+import { isFn } from '@formily/shared'
 import { IFormSpyProps } from '../types'
 import { useFormSpy } from '../hooks/useFormSpy'
 

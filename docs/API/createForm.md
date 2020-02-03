@@ -91,7 +91,7 @@ type Selector = <T = any>(eventName: string, formPathPattern: string | IFormPath
 ## 依赖
 
 ```javascript
-import { createForm } from '@uform/core'
+import { createForm } from '@formily/core'
 ```
 
 ## API

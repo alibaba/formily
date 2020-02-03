@@ -8,13 +8,13 @@ const createPanel = () => {
   }
 
   chrome.devtools.inspectedWindow.eval(
-    'window.__UFORM_DEV_TOOLS_HOOK__ && window.__UFORM_DEV_TOOLS_HOOK__.hasUFormInstance',
-    (hasUForm: boolean) => {
-      if (!hasUForm) return
+    'window.__FORMILY_DEV_TOOLS_HOOK__ && window.__FORMILY_DEV_TOOLS_HOOK__.hasFormilyInstance',
+    (hasFormily: boolean) => {
+      if (!hasFormily) return
       created = true
       clearInterval(loadCheckInterval)
       chrome.devtools.panels.create(
-        'UForm',
+        'Formily',
         'img/logo/scalable.png',
         './devpanel.html',
         function() {}

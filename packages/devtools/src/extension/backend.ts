@@ -1,6 +1,6 @@
 //inject content script
-import { IForm } from '@uform/core'
-import { isArr, map } from '@uform/shared'
+import { IForm } from '@formily/core'
+import { isArr, map } from '@formily/shared'
 const globalThis: any = window
 
 const serializeObject = (obj: any) => {
@@ -31,7 +31,7 @@ const send = ({
 }) => {
   window.postMessage(
     {
-      source: '@uform-devtools-inject-script',
+      source: '@formily-devtools-inject-script',
       type,
       id,
       graph: form && JSON.stringify(serializeObject(form.getFormGraph()))
@@ -44,11 +44,11 @@ send({
   type: 'init'
 })
 
-globalThis.__UFORM_DEV_TOOLS_HOOK__ = {
-  hasUFormInstance: false,
+globalThis.__FORMILY_DEV_TOOLS_HOOK__ = {
+  hasFormilyInstance: false,
   store: {},
   inject(id: number, form: IForm) {
-    this.hasUFormInstance = true
+    this.hasFormilyInstance = true
     this.store[id] = form
     send({
       type: 'install',

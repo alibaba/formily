@@ -4,7 +4,7 @@ import FormContext from '../context';
 import useForm from '../hooks/useForm'
 import useVirtualField from '../hooks/useVirtualField'
 import { createForm } from '..';
-import { FormLifeCycle, LifeCycleTypes } from '@uform/core';
+import { FormLifeCycle, LifeCycleTypes } from '@formily/core';
 
 describe('useVirtualField hook',()=>{
   test('form is required', ()=>{

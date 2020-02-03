@@ -1,4 +1,4 @@
-import { FormPathPattern } from '@uform/shared'
+import { FormPathPattern } from '@formily/shared'
 
 export interface ValidatorOptions {
   validateFirst?: boolean

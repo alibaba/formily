@@ -1,4 +1,4 @@
-import { isArr, isEqual, isBool } from '@uform/shared'
+import { isArr, isEqual, isBool } from '@formily/shared'
 
 export type ILinkageCondition = any[]
 

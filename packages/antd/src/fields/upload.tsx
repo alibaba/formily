@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import { Button, Upload, Icon } from 'antd'
 import styled from 'styled-components'
 import { toArr, isArr, isEqual, mapStyledProps } from '../shared'

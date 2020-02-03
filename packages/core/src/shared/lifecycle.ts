@@ -1,4 +1,4 @@
-import { isFn, isStr, isArr, isObj, each, Subscribable } from '@uform/shared'
+import { isFn, isStr, isArr, isObj, each, Subscribable } from '@formily/shared'
 import { FormLifeCyclePayload, FormLifeCycleHandler } from '../types'
 
 export class FormLifeCycle<Payload = any> {

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { IPasswordStrengthProps } from './types'
-import { isFn } from '@uform/shared'
+import { isFn } from '@formily/shared'
 
 var isNum = function(c) {
   return c >= 48 && c <= 57

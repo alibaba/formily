@@ -1,9 +1,9 @@
-# @uform/next
+# @formily/next
 
 ### Install
 
 ```bash
-npm install --save @uform/next
+npm install --save @formily/next
 ```
 
 ### Table Of Contents
@@ -105,7 +105,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
 
@@ -235,7 +235,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
 
@@ -378,7 +378,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<SchemaForm/>`
 
-Base on `<SchemaMarkupForm/>` of @uform/react-schema-renderer. Recommended for production environments.
+Base on `<SchemaMarkupForm/>` of @formily/react-schema-renderer. Recommended for production environments.
 
 ```typescript
 interface INextSchemaFormProps {
@@ -457,7 +457,7 @@ import SchemaForm, {
   Field,  
   connect,
   createFormActions
-} from '@uform/next'
+} from '@formily/next'
 
 const actions = createFormActions()
 
@@ -489,7 +489,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset,
-} from '@uform/next'
+} from '@formily/next'
 
 const actions = createFormActions()
 
@@ -531,7 +531,7 @@ ReactDOM.render(
 
 #### `<SchemaMarkupField/>`
 
-> Core components of @uform/next, used to describe form fields
+> Core components of @formily/next, used to describe form fields
 
 ```typescript
 interface IMarkupSchemaFieldProps {
@@ -605,7 +605,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset,
-} from '@uform/next'
+} from '@formily/next'
 
 const actions = createFormActions()
 
@@ -744,7 +744,7 @@ Example1： Form state change counter
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -795,7 +795,7 @@ Example2：Combo
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -856,9 +856,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => {
   const [value, setValues] = useState({})
@@ -936,9 +936,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
@@ -1016,9 +1016,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
@@ -1073,7 +1073,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@uform/next'
+import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -1095,7 +1095,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { FormBlock, SchemaMarkupField as Field } from '@uform/next'
+import SchemaForm, { FormBlock, SchemaMarkupField as Field } from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -1152,7 +1152,7 @@ import {
   FormCard,
   FormTextBox,
   FormStep
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
 
@@ -1253,9 +1253,9 @@ import {
   FormCard,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 const App = () => (
   <Printer>
@@ -1412,9 +1412,9 @@ import {
   FormCard,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -1463,9 +1463,9 @@ import {
   FormTextBox,
   FormCard,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
@@ -1544,9 +1544,9 @@ import {
   FormCard,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
@@ -1585,7 +1585,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { TextButton } from '@uform/next'
+import SchemaForm, { TextButton } from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -1605,7 +1605,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { CircleButton } from '@uform/next'
+import SchemaForm, { CircleButton } from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -1637,7 +1637,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -1712,7 +1712,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -1853,7 +1853,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -1894,7 +1894,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -1927,7 +1927,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -1969,7 +1969,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2010,7 +2010,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2051,7 +2051,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2094,7 +2094,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2153,7 +2153,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2204,7 +2204,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2255,7 +2255,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2295,7 +2295,7 @@ import SchemaForm, {
   FormButtonGroup,
   Submit,
   Reset
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
 
 const actions = createFormActions()
@@ -2346,7 +2346,7 @@ import SchemaForm, {
   useFormEffects,
   LifeCycleTypes,
   createVirtualBox
-} from '@uform/next'
+} from '@formily/next'
 
 const actions = createFormActions()
 
@@ -2422,7 +2422,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -2487,7 +2487,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -2598,7 +2598,7 @@ type useForm = <
 **Usage**
 
 ```typescript
-import { useForm } from '@uform/react'
+import { useForm } from '@formily/react'
 
 const FormFragment = () => {
   const form = useForm()
@@ -2619,7 +2619,7 @@ type useField = (options: IFieldStateUIProps): IFieldHook
 **Usage**
 
 ```typescript
-import { useField } from '@uform/react'
+import { useField } from '@formily/react'
 
 const FormFragment = (props) => {
   const {
@@ -2646,7 +2646,7 @@ type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
 **Usage**
 
 ```typescript
-import { UseVirtualField } from '@uform/react'
+import { UseVirtualField } from '@formily/react'
 
 const FormFragment = (props) => {
   const {
@@ -2674,7 +2674,7 @@ type useFormSpy = (props: IFormSpyProps): ISpyHook
 **Usage**
 
 ```typescript
-import { useFormSpy, LifeCycleTypes } from '@uform/react'
+import { useFormSpy, LifeCycleTypes } from '@formily/react'
 const FormFragment = (props) => {
   const {
     form,
@@ -2695,7 +2695,7 @@ const FormFragment = (props) => {
 
 ### API
 
-> Fully inherited from @uform/react, The specific API of @uform/next is listed below.
+> Fully inherited from @formily/react, The specific API of @formily/next is listed below.
 
 ---
 
@@ -2712,7 +2712,7 @@ createFormActions(): IFormActions
 **Usage**
 
 ```typescript
-import { createFormActions } from '@uform/next'
+import { createFormActions } from '@formily/next'
 
 const actions = createFormActions()
 console.log(actions.getFieldValue('username'))
@@ -2731,7 +2731,7 @@ createAsyncFormActions(): IFormAsyncActions
 **Usage**
 
 ```typescript
-import { createAsyncFormActions } from '@uform/next'
+import { createAsyncFormActions } from '@formily/next'
 
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
@@ -2739,12 +2739,12 @@ actions.getFieldValue('username').then(val => console.log(val))
 
 #### `FormEffectHooks`
 
-> Return all @uform/core lifeCycles hook which can be subscribe
+> Return all @formily/core lifeCycles hook which can be subscribe
 
 **Usage**
 
 ```tsx
-import { FormEffectHooks, Form } from '@uform/react'
+import { FormEffectHooks, Form } from '@formily/react'
 const {
   /**
    * Form LifeCycle
@@ -2825,7 +2825,7 @@ const App = () => {
 **Usage**
 
 ```jsx
-import SchemaForm, { createEffectHook, createFormActions } from '@uform/next'
+import SchemaForm, { createEffectHook, createFormActions } from '@formily/next'
 
 const actions = createFormActions()
 const diyHook1$ = createEffectHook('diy1')
@@ -2877,7 +2877,7 @@ type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOp
 **Usage**
 
 ```typescript
-import {registerFormField,connect} from '@uform/next'
+import {registerFormField,connect} from '@formily/next'
 
 registerFormField(
   'string',
@@ -2899,7 +2899,7 @@ type registerFormField(
 
 ```jsx
 
-import SchemaForm, { SchemaMarkupField as Field, registerFormField, connect, createFormActions } from '@uform/next'
+import SchemaForm, { SchemaMarkupField as Field, registerFormField, connect, createFormActions } from '@formily/next'
 
 registerFormField(
   'custom-string',
@@ -2920,7 +2920,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Interfaces
 
-> The Interfaces is fully inherited from @uform/react. The specific Interfaces of @uform/next is listed below.
+> The Interfaces is fully inherited from @formily/react. The specific Interfaces of @formily/next is listed below.
 ---
 
 #### ISchema

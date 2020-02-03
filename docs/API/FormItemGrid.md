@@ -7,7 +7,7 @@
 ## 依赖
 
 ```javascript
-import { FormItemGrid } from '@uform/next(antd)'
+import { FormItemGrid } from '@formily/next(antd)'
 ```
 
 ## API
@@ -24,7 +24,7 @@ import { FormItemGrid } from '@uform/next(antd)'
 ```javascript
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormCard, FormItemGrid } from '@uform/next(antd)'
+import { SchemaForm, Field, FormCard, FormItemGrid } from '@formily/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>

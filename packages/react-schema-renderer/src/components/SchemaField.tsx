@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from 'react'
-import { Field, VirtualField, IFieldState } from '@uform/react'
-import { FormPath, isFn, isStr, isEqual, isValid } from '@uform/shared'
+import { Field, VirtualField, IFieldState } from '@formily/react'
+import { FormPath, isFn, isStr, isEqual, isValid } from '@formily/shared'
 import {
   ISchemaFieldProps,
   ISchemaFieldComponentProps,

@@ -8,7 +8,7 @@ import {
   createFormActions,
   registerFieldMiddleware
 } from '../index'
-import { toArr } from '@uform/shared'
+import { toArr } from '@formily/shared'
 import { render, wait, fireEvent, act } from '@testing-library/react'
 
 registerFieldMiddleware(Field => {

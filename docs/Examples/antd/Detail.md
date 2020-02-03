@@ -19,9 +19,9 @@ import {
   FormBlock,
   FormLayout,
   createFormActions
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from 'antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 const actions = createFormActions()
 

@@ -8,7 +8,7 @@ import {
   createFormActions,
   createVirtualBox
 } from '../index'
-import { toArr } from '@uform/shared'
+import { toArr } from '@formily/shared'
 import { render, fireEvent, wait, act } from '@testing-library/react'
 
 const sleep = timeout => {

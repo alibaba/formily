@@ -1,5 +1,5 @@
 import React from 'react'
-import { isArr, each, isFn,isValid } from '@uform/shared'
+import { isArr, each, isFn,isValid } from '@formily/shared'
 import {
   ISchema,
   IConnectOptions,

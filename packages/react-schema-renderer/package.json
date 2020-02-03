@@ -1,16 +1,16 @@
 {
-  "name": "@uform/react-schema-renderer",
+  "name": "@formily/react-schema-renderer",
   "version": "1.0.0-rc.4",
   "license": "MIT",
   "main": "lib",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
@@ -29,9 +29,9 @@
     "rxjs": "^6.5.1"
   },
   "dependencies": {
-    "@uform/react": "^1.0.0-rc.4",
-    "@uform/shared": "^1.0.0-rc.4",
-    "@uform/validator": "^1.0.0-rc.4",
+    "@formily/react": "^1.0.0-rc.4",
+    "@formily/shared": "^1.0.0-rc.4",
+    "@formily/validator": "^1.0.0-rc.4",
     "pascal-case": "^2.0.1"
   },
   "publishConfig": {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect,useRef } from 'react'
 import styled from 'styled-components'
-import { FormPath } from '@uform/shared'
+import { FormPath } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
 
 const createTree = (dataSource: any, cursor?: any) => {

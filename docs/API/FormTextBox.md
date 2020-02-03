@@ -8,7 +8,7 @@
 ## 依赖
 
 ```javascript
-import { FormTextBox } from '@uform/next(antd)'
+import { FormTextBox } from '@formily/next(antd)'
 ```
 
 ## API
@@ -25,7 +25,7 @@ import { FormTextBox } from '@uform/next(antd)'
 ```javascript
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormCard, FormTextBox } from '@uform/next(antd)'
+import { SchemaForm, Field, FormCard, FormTextBox } from '@formily/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>

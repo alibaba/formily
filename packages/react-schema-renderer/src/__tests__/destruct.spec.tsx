@@ -5,7 +5,7 @@ import {
   SchemaMarkupForm as SchemaForm,
   SchemaMarkupField as Field
 } from '../index'
-import { toArr } from '@uform/shared'
+import { toArr } from '@formily/shared'
 import { render, wait } from '@testing-library/react'
 
 beforeEach(() => {

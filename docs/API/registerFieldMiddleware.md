@@ -14,13 +14,13 @@ type registerFieldMiddleware = (...wrappers : React.ComponentType<any>) => React
 ## 依赖
 
 ```javascript
-import {registerFieldMiddleware} from '@uform/react'
+import {registerFieldMiddleware} from '@formily/react'
 ```
 
 ## 用例
 
 ```javascript
-import {registerFieldMiddleware} from '@uform/react'
+import {registerFieldMiddleware} from '@formily/react'
 
 registerFieldMiddleware((Field)=>{
   return (props)=><div><Field {...props}/></div>

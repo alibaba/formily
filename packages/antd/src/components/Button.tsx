@@ -3,7 +3,7 @@ import {
   FormSpy,
   LifeCycleTypes,
   createVirtualBox
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { Button } from 'antd'
 import { ButtonProps } from 'antd/lib/button'
 import { ISubmitProps, IResetProps } from '../types'

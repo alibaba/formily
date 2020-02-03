@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import { toArr, isArr, isEqual, mapStyledProps } from '../shared'
 import { Button, Upload } from '@alifd/next'
 import { UploadProps, CardProps } from '@alifd/next/types/upload'

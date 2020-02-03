@@ -1,8 +1,8 @@
-# @uform/react
+# @formily/react
 
 English | [简体中文](./README.zh-cn.md)
 
-> @uform/react is based on `react` and @uform/core is already built in. It provide API to manuplate form state and components for rendering support.
+> @formily/react is based on `react` and @formily/core is already built in. It provide API to manuplate form state and components for rendering support.
 > it mainly includes:
 >
 > - Form
@@ -18,7 +18,7 @@ English | [简体中文](./README.zh-cn.md)
 ### Install
 
 ```bash
-npm install --save @uform/react
+npm install --save @formily/react
 ```
 
 ### Table Of Contents
@@ -102,7 +102,7 @@ import {
   FormProvider,
   FormConsumer,
   FormEffectHooks
-} from '@uform/react'
+} from '@formily/react'
 
 const { onFormInit$, onFormInputChange$, onFieldInputChange$ } = FormEffectHooks
 const actions = createFormActions()
@@ -176,7 +176,7 @@ The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [Int
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from '@uform/react'
+import { Form, Field, createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -293,7 +293,7 @@ Example：User info `user(username, age)`
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from '@uform/react'
+import { Form, Field, createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -383,7 +383,7 @@ Example：Id list
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from '@uform/react'
+import { Form, Field, createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -440,7 +440,7 @@ Example：User list
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from '@uform/react'
+import { Form, Field, createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -555,7 +555,7 @@ Example: see how `display` 与 `visible` affect values
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from '@uform/react'
+import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -660,7 +660,7 @@ Example：Show/hide field and modified props/value by using effects
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -742,7 +742,7 @@ Example：Change dataSource in select asynchronously by effects
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -846,7 +846,7 @@ Example：validation when form mounted and re-trigger validation when field chan
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -903,7 +903,7 @@ Example：See how ArrayField communicate with other field by using effects
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, LifeCycleTypes } from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -1034,7 +1034,7 @@ Make your own reusable effects.
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormEffectHooks } from '@uform/react'
+import { Form, Field, createFormActions, FormEffectHooks } from '@formily/react'
 
 
 const InputField = props => (
@@ -1122,7 +1122,7 @@ Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more in
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1182,7 +1182,7 @@ Example：Cross-file consumption form state, Check [FormProvider](#FormProvider)
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1241,7 +1241,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, FormPath } from '@formily/react'
 
 const actions = createFormActions()
 
@@ -1294,7 +1294,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, FormPath } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1453,7 +1453,7 @@ Example：All type of field
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions } from '@uform/react'
+import { Form, Field, createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1670,7 +1670,7 @@ Example：Setting `<Layout>` size from 100x100 to 200x200
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, VirtualField } from '@uform/react'
+import { Form, Field, createFormActions, VirtualField } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1765,7 +1765,7 @@ Example1： Form state change counter
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1816,7 +1816,7 @@ Example2：Combo
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1872,7 +1872,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from '@uform/react'
+import { Form, Field, createFormActions, FormSpy, FormProvider } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1957,7 +1957,7 @@ interface IFormConsumerProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from '@uform/react'
+import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -2063,7 +2063,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -2128,7 +2128,7 @@ import { Form, Field, VirtualField,
   useFormEffects,
   useFieldState,
   LifeCycleTypes
-} from '@uform/react'
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
@@ -2239,7 +2239,7 @@ type useForm = <
 **Usage**
 
 ```typescript
-import { useForm } from '@uform/react'
+import { useForm } from '@formily/react'
 
 const FormFragment = () => {
   const form = useForm()
@@ -2260,7 +2260,7 @@ type useField = (options: IFieldStateUIProps): IFieldHook
 **Usage**
 
 ```typescript
-import { useField } from '@uform/react'
+import { useField } from '@formily/react'
 
 const FormFragment = (props) => {
   const {
@@ -2287,7 +2287,7 @@ type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
 **Usage**
 
 ```typescript
-import { UseVirtualField } from '@uform/react'
+import { UseVirtualField } from '@formily/react'
 
 const FormFragment = (props) => {
   const {
@@ -2315,7 +2315,7 @@ type useFormSpy = (props: IFormSpyProps): ISpyHook
 **Usage**
 
 ```typescript
-import { useFormSpy, LifeCycleTypes } from '@uform/react'
+import { useFormSpy, LifeCycleTypes } from '@formily/react'
 const FormFragment = (props) => {
   const {
     form,
@@ -2336,7 +2336,7 @@ const FormFragment = (props) => {
 
 ### API
 
-> The API is fully inherited from @uform/core. The specific API of @uform/react is listed below.
+> The API is fully inherited from @formily/core. The specific API of @formily/react is listed below.
 
 ---
 
@@ -2353,7 +2353,7 @@ createFormActions(): IFormActions
 **Usage**
 
 ```typescript
-import { createFormActions } from '@uform/react'
+import { createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 console.log(actions.getFieldValue('username'))
@@ -2372,7 +2372,7 @@ createAsyncFormActions(): IFormAsyncActions
 **Usage**
 
 ```typescript
-import { createAsyncFormActions } from '@uform/react'
+import { createAsyncFormActions } from '@formily/react'
 
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
@@ -2380,12 +2380,12 @@ actions.getFieldValue('username').then(val => console.log(val))
 
 #### `FormEffectHooks`
 
-> Return all @uform/core lifeCycles hook which can be subscribe
+> Return all @formily/core lifeCycles hook which can be subscribe
 
 **Usage**
 
 ```tsx
-import { FormEffectHooks, Form } from '@uform/react'
+import { FormEffectHooks, Form } from '@formily/react'
 const {
   /**
    * Form LifeCycle
@@ -2478,7 +2478,7 @@ const App = () => {
 **Usage**
 
 ```jsx
-import { Form, createEffectHook, createFormActions } from '@uform/react'
+import { Form, createEffectHook, createFormActions } from '@formily/react'
 
 const actions = createFormActions()
 const diyHook1$ = createEffectHook('diy1')
@@ -2514,7 +2514,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Interfaces
 
-> The Interfaces is fully inherited from @uform/core. The specific Interfaces of @uform/react is listed below.
+> The Interfaces is fully inherited from @formily/core. The specific Interfaces of @formily/react is listed below.
 
 ---
 

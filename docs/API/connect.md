@@ -34,13 +34,13 @@ type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOp
 ## 依赖
 
 ```javascript
-import {connect} from '@uform/react'
+import {connect} from '@formily/react'
 ```
 
 ## 用例
 
 ```javascript
-import {registerFormField,connect} from '@uform/react'
+import {registerFormField,connect} from '@formily/react'
 
 registerFormField(
   'string',

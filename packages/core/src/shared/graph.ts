@@ -6,7 +6,7 @@ import {
   FormPath,
   FormPathPattern,
   Subscribable
-} from '@uform/shared'
+} from '@formily/shared'
 import {
   FormGraphNodeRef,
   FormGraphMatcher,

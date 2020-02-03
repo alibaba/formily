@@ -40,9 +40,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => {
   const [value, setValues] = useState({})
@@ -123,9 +123,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
@@ -182,9 +182,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { SchemaMarkupField as Field } from '@uform/next'
+import SchemaForm, { SchemaMarkupField as Field } from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
@@ -242,9 +242,9 @@ import SchemaForm, {
   Reset,
   FormBlock,
   FormLayout
-} from '@uform/next'
+} from '@formily/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>

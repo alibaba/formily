@@ -1,4 +1,4 @@
-import { connect, registerFormField } from '@uform/react-schema-renderer'
+import { connect, registerFormField } from '@formily/react-schema-renderer'
 import { Range } from '@alifd/next'
 import { mapStyledProps } from '../shared'
 

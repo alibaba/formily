@@ -3,9 +3,9 @@ import {
   registerFormField,
   ISchemaFieldComponentProps,
   SchemaField
-} from '@uform/react-schema-renderer'
-import { toArr, isFn, FormPath } from '@uform/shared'
-import { ArrayList } from '@uform/react-shared-components'
+} from '@formily/react-schema-renderer'
+import { toArr, isFn, FormPath } from '@formily/shared'
+import { ArrayList } from '@formily/react-shared-components'
 import { CircleButton, TextButton } from '../components/Button'
 import { Card, Icon } from 'antd'
 import styled from 'styled-components'

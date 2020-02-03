@@ -10,9 +10,9 @@
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset } from '@uform/antd'
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit, Reset } from '@formily/antd'
 import { Button } from '@alifd/antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const App = () => (
@@ -48,9 +48,9 @@ import {
   Reset,
   registerFormField,
   connect
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from '@alifd/antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 registerFormField(
@@ -114,9 +114,9 @@ import {
   registerFormField,
   connect,
   FormLayout
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from '@alifd/antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 registerFormField(
@@ -188,9 +188,9 @@ import {
   FormLayout,
   FormPath,
   FormEffectHooks,
-} from '@uform/antd'
+} from '@formily/antd'
 import { Button } from '@alifd/antd'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 registerFormField(

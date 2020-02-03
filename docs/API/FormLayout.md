@@ -7,7 +7,7 @@
 ## 依赖
 
 ```javascript
-import { FormLayout } from '@uform/next(antd)'
+import { FormLayout } from '@formily/next(antd)'
 ```
 
 ## API
@@ -27,7 +27,7 @@ import { FormLayout } from '@uform/next(antd)'
 
 ```javascript
 import React from 'react'
-import { SchemaForm, Field, FormLayout } from '@uform/next(antd)'
+import { SchemaForm, Field, FormLayout } from '@formily/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>

@@ -2,11 +2,11 @@ import React, { useRef } from 'react'
 import {
   SchemaMarkupForm,
   SchemaMarkupField
-} from '@uform/react-schema-renderer'
+} from '@formily/react-schema-renderer'
 import { IAntdSchemaFormProps, IAntdSchemaFieldProps } from './types'
 import './fields'
 export * from './compat'
-export * from '@uform/react-schema-renderer'
+export * from '@formily/react-schema-renderer'
 export * from './components'
 export * from './types'
 export { mapStyledProps, mapTextComponent } from './shared'

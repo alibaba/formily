@@ -117,7 +117,7 @@ stream
   .dest('.')
   .then(() => {
     /* eslint-disable no-console */
-    console.log(chalk.green('Sort UForm API Successfully!'))
+    console.log(chalk.green('Sort Formily API Successfully!'))
     /* eslint-enable no-console */
   })
 

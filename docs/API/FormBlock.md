@@ -7,7 +7,7 @@
 ## 依赖
 
 ```javascript
-import { FormBlock } from '@uform/next(antd)'
+import { FormBlock } from '@formily/next(antd)'
 ```
 
 ## API
@@ -19,7 +19,7 @@ import { FormBlock } from '@uform/next(antd)'
 ```javascript
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, Field, FormCard, FormBlock } from '@uform/next(antd)'
+import { SchemaForm, Field, FormCard, FormBlock } from '@formily/next(antd)'
 
 ReactDOM.render(
   <SchemaForm>

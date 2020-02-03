@@ -7,8 +7,8 @@ import {
   useState,
   useReducer
 } from 'react'
-import { FormHeartSubscriber, LifeCycleTypes, IForm } from '@uform/core'
-import { isStr, FormPath, isArr } from '@uform/shared'
+import { FormHeartSubscriber, LifeCycleTypes, IForm } from '@formily/core'
+import { isStr, FormPath, isArr } from '@formily/shared'
 import { IFormSpyProps, ISpyHook } from '../types'
 import FormContext, { BroadcastContext } from '../context'
 

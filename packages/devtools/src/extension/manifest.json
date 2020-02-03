@@ -1,13 +1,13 @@
 {
   "version": "0.1.0",
-  "name": "UForm DevTools",
-  "short_name": "UForm DevTools",
-  "description": "UForm DevTools for debugging application's state changes.",
-  "homepage_url": "https://github.com/alibaba/uform",
+  "name": "Formily DevTools",
+  "short_name": "Formily DevTools",
+  "description": "Formily DevTools for debugging application's state changes.",
+  "homepage_url": "https://github.com/alibaba/formily",
   "manifest_version": 2,
   "page_action": {
     "default_icon": "img/logo/gray.png",
-    "default_title": "UForm DevTools",
+    "default_title": "Formily DevTools",
     "default_popup": "popup.html"
   },
   "commands": {

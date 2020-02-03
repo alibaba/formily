@@ -1,2 +1,2 @@
-# @uform/shared
-> UForm工具函数集
+# @formily/shared
+> Formily工具函数集

@@ -26,7 +26,7 @@ interface FormPath {
 ## 依赖
 
 ```javascript
-import {FormPath} from '@uform/core'
+import {FormPath} from '@formily/core'
 ```
 
 ## Pattern路径匹配语法
@@ -70,7 +70,7 @@ import {FormPath} from '@uform/core'
 ## 用例
 
 ```javascript
-import {FormPath} from '@uform/core'
+import {FormPath} from '@formily/core'
 
 FormPath.match('aa')('aa') // true
 FormPath.match('*')('aa')  //true

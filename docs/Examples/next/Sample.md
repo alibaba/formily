@@ -17,10 +17,10 @@ import {
   filterChanged,
   createFormActions,
   FormEffectHooks,
-} from '@uform/next'
+} from '@formily/next'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
-import Printer from '@uform/printer'
+import Printer from '@formily/printer'
 
 const actions = createFormActions()
 

@@ -1,5 +1,5 @@
 import { FormGraph } from '../shared/graph'
-import { FormPathPattern, FormPath } from '@uform/shared'
+import { FormPathPattern, FormPath } from '@formily/shared'
 import { IField, IVirtualField } from '../types'
 import createForm from '../'
 import { FormState } from '../state/form'

@@ -15,13 +15,13 @@ type Wrapper = (component: FormComponent) => FormComponent
 ## 依赖
 
 ```javascript
-import {registerFormWrapper} from '@uform/react'
+import {registerFormWrapper} from '@formily/react'
 ```
 
 ## 用例
 
 ```javascript
-import {registerFormWrapper} from '@uform/react'
+import {registerFormWrapper} from '@formily/react'
 
 registerFormWrapper((Form)=>{
   return (props)=><div><Form {...props}/></div>

@@ -34,7 +34,7 @@ var error = function() {
   )
   console.log(
     'See our specific at:',
-    'https://github.com/alibaba/uform/blob/master/.github/GIT_COMMIT_SPECIFIC.md'
+    'https://github.com/alibaba/formily/blob/master/.github/GIT_COMMIT_SPECIFIC.md'
   )
 }
 
