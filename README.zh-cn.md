@@ -4,8 +4,6 @@
 <img src="https://img.alicdn.com/tfs/TB1DIpUu7L0gK0jSZFxXXXWHVXa-2500-1200.png">
 <a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
 <a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
-<a href="https://www.npmjs.com/package/@formily/next"><img src="https://img.shields.io/npm/v/@formily/next.svg"></a>
-<a href="https://www.npmjs.com/package/@formily/antd"><img src="https://img.shields.io/npm/v/@formily/antd.svg"></a>
 <a href="https://travis-ci.com/alibaba/formily"><img src="https://travis-ci.com/alibaba/formily.svg?branch=master"></a>
 <a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg"></a>
 <a href="https://app.netlify.com/sites/formily/deploys"><img src="https://api.netlify.com/api/v1/badges/7145918b-9cb5-47f8-8a42-111969e232ef/deploy-status"/></a>
