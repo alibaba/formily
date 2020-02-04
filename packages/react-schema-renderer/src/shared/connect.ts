@@ -62,7 +62,7 @@ export const connect = (options?: IConnectOptions) => {
     ...options
   }
   return (Component: React.JSXElementConstructor<any>) => {
-    return (fieldProps: ISchemaFieldComponentProps) => {
+    const ConnectedComponent = (fieldProps: ISchemaFieldComponentProps) => {
       const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
       const schemaComponentProps = schema.getExtendsComponentProps()
@@ -128,5 +128,9 @@ export const connect = (options?: IConnectOptions) => {
         componentProps
       )
     }
+
+    ConnectedComponent['__ALREADY_CONNECTED__'] = true
+
+    return ConnectedComponent
   }
 }

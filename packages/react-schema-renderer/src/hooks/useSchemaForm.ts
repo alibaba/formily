@@ -1,11 +1,12 @@
 import { useMemo, useRef } from 'react'
 import { useForm } from '@formily/react'
 import { Schema } from '../shared/schema'
-import { deprecate, each, lowercase, isFn } from '@formily/shared'
+import { deprecate, each, map, lowercase, isFn } from '@formily/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
 import { createSchemaFormActions } from '../shared/actions'
 import { getRegistry } from '../shared/registry'
+import { connect } from '../shared/connect'
 import { useValueVisibleLinkageEffect } from '../linkages/visible'
 import { useValueSchemaLinkageEffect } from '../linkages/schema'
 import { useValueStateLinkageEffect } from '../linkages/state'
@@ -18,10 +19,17 @@ const lowercaseKeys = (obj: any) => {
   return result
 }
 
+const transformComponents = (components: any) => {
+  return map(components, component => {
+    return component['__ALREADY_CONNECTED__'] ? component : connect()(component)
+  })
+}
+
 const useInternalSchemaForm = (props: ISchemaFormProps) => {
   const {
     fields,
     virtualFields,
+    components,
     formComponent,
     formItemComponent,
     schema: propsSchema,
@@ -72,7 +80,8 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     },
     fields: lowercaseKeys({
       ...registry.fields,
-      ...fields
+      ...fields,
+      ...transformComponents(components)
     }),
     virtualFields: lowercaseKeys({
       ...registry.virtualFields,
