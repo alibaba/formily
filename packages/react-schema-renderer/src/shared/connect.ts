@@ -1,5 +1,5 @@
 import React from 'react'
-import { isArr, each, isFn,isValid } from '@formily/shared'
+import { isArr, each, isFn, isValid } from '@formily/shared'
 import {
   ISchema,
   IConnectOptions,
@@ -49,7 +49,6 @@ const bindEffects = (
         if (isFn(prevEvent)) {
           return prevEvent(...args)
         }
-        
       }
     }
   )
@@ -66,9 +65,10 @@ export const connect = (options?: IConnectOptions) => {
     return (fieldProps: ISchemaFieldComponentProps) => {
       const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
+      const schemaComponentProps = schema.getExtendsComponentProps()
       let componentProps: IConnectProps = {
         ...options.defaultProps,
-        ...schema.getExtendsComponentProps(),
+        ...schemaComponentProps,
         [options.valueName]: value,
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(
@@ -77,6 +77,9 @@ export const connect = (options?: IConnectOptions) => {
               : event,
             ...args
           )
+          if (isFn(schemaComponentProps[options.eventName])) {
+            schemaComponentProps[options.eventName](event, ...args)
+          }
         },
         onBlur: () => mutators.blur(),
         onFocus: () => mutators.focus()
