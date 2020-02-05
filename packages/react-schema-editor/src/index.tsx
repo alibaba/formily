@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Radio, Tabs } from 'antd'
+import { Radio, Tabs } from 'antd'
 import * as fp from 'lodash/fp'
 import _ from 'lodash'
 import { SchemaTree } from './components/SchemaTree'
 import FieldEditor from './components/FieldEditor'
 import { SchemaCode } from './components/SchemaCode'
+import JsonDialog from './components/JsonDialog'
 // import { SchemaPreview } from './components/SchemaPreview'
 import { ComponentTypes } from './utils/types'
 import {
@@ -32,7 +33,7 @@ export const SchemaEditor: React.FC<{
   const [componentType, setComponentType] = useState(
     getDefaultComponentType({ showAntdComponents, showFusionComponents })
   )
-  const [selectedPath, setSelectedPath] = React.useState(null)
+  const [selectedPath, setSelectedPath] = useState(null)
 
   const selectedPaths = (selectedPath && selectedPath.split('.')) || []
   const fieldKey =
@@ -48,6 +49,10 @@ export const SchemaEditor: React.FC<{
 
   const handleCodeChange = () => {}
 
+  const handleSchemaChange = (schema: string) => {
+    onChange(schema)
+  }
+
   const isRoot = selectedPath === 'root'
 
   const selectedSchema =
@@ -56,7 +61,7 @@ export const SchemaEditor: React.FC<{
   return (
     <div className={`schema-editor ${className}`}>
       <div className="schema-menus">
-        <Button type="primary">快速生成</Button>
+        <JsonDialog onChange={handleSchemaChange} />
         {(showAntdComponents || showFusionComponents) && (
           <span className="select-component-type">
             选择组件类型：
