@@ -13,9 +13,10 @@ export function json2schema(json: any, parentsPath?: string) {
     schema = schema || {
       title: '',
       type,
-      properties: Object.keys(json).map(key =>
-        json2schema(json[key], newParentsPath + '.' + key)
-      ),
+      properties: Object.keys(json).reduce((result, key) => {
+        result[key] = json2schema(json[key], newParentsPath + '.' + key)
+        return result
+      }, {}),
       description: ''
     }
   } else if (type === 'array') {
