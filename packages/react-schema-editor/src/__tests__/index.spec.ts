@@ -23,8 +23,8 @@ describe('json object transform', () => {
     const validResult = {
       title: '',
       type: 'object',
-      properties: [
-        {
+      properties: {
+        string: {
           title: '',
           type: 'string',
           example: 'input test',
@@ -32,7 +32,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        boolean: {
           title: '',
           type: 'boolean',
           example: true,
@@ -40,7 +40,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        checkbox: {
           title: '',
           type: 'array',
           items: {
@@ -54,7 +54,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        date: {
           title: '',
           type: 'string',
           example: '2019-12-12',
@@ -62,7 +62,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        daterange: {
           title: '',
           type: 'array',
           items: {
@@ -76,7 +76,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        number: {
           title: '',
           type: 'number',
           example: 1,
@@ -84,7 +84,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        radio: {
           title: '',
           type: 'string',
           example: '2',
@@ -92,7 +92,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        rating: {
           title: '',
           type: 'number',
           example: 4,
@@ -100,7 +100,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        select: {
           title: '',
           type: 'string',
           example: '1',
@@ -108,7 +108,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        textarea: {
           title: '',
           type: 'string',
           example: 'test text',
@@ -116,7 +116,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        time: {
           title: '',
           type: 'string',
           example: '00:00:04',
@@ -124,7 +124,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        transfer: {
           title: '',
           type: 'array',
           items: {
@@ -138,7 +138,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         },
-        {
+        year: {
           title: '',
           type: 'string',
           example: '2013-01-01 00:00:00',
@@ -146,7 +146,7 @@ describe('json object transform', () => {
           description: '',
           'x-component': 'Input'
         }
-      ],
+      },
       description: ''
     }
 
