@@ -5,15 +5,15 @@ import { ButtonProps } from '@rax-ui/button';
 import { ISubmitProps, IResetProps } from '../types'
 
 const checkChildren = (children: any) => {
-  if(!children) return false;
-  if(Array.isArray(children) && !children.length) return false;
+  if (!children) return false;
+  if (Array.isArray(children) && !children.length) return false;
   return true;
 }
 
 
 export const TextButton: React.FC<ButtonProps> = createVirtualBox<any>(
   'textButton',
-  props => (<Button {...props} text/>),
+  props => (<Button {...props} text />),
 )
 
 export const Submit = createVirtualBox<any>(
@@ -53,7 +53,7 @@ export const Submit = createVirtualBox<any>(
               {...props}
               loading={showLoading ? state.submitting : undefined}
             >
-              {existChildren? children : '提交'}
+              {existChildren ? children : '提交'}
             </Button>
           )
         }}
@@ -85,7 +85,7 @@ export const Reset: React.FC<IResetProps> = createVirtualBox<any>(
               style={style}
               onClick={() => form.reset({ forceClear, validate })}
             >
-              {existChildren? children : '重置'}
+              {existChildren ? children : '重置'}
             </Button>
           )
         }}

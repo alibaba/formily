@@ -1,18 +1,18 @@
 {
-  "name": "@uform/mobile",
+  "name": "@formily/meet",
   "version": "0.4.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "types": "esm/index.d.ts",
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
@@ -29,6 +29,9 @@
     "@uform/react": "^0.4.4",
     "@uform/types": "^0.4.4",
     "@uform/utils": "^0.4.4",
+    "@uform/react-schema-renderer": "^1.0.0-rc.4",
+    "@uform/react-shared-components": "^1.0.0-rc.4",
+    "@uform/shared": "^1.0.0-rc.4",
     "classnames": "^2.2.6",
     "styled-components": "^4.1.1"
   },

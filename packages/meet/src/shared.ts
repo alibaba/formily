@@ -5,13 +5,13 @@ import {
   MergedFieldComponentProps
 } from '@uform/react-schema-renderer'
 import { Select } from '@alifd/meet'
-import RadioSelect from './extends/RadioSelect';
+import RadioSelect from './extends/RadioSelect'
 export * from '@uform/shared'
 
 export const mapSelectComponent = (
   Target: React.JSXElementConstructor<any>,
-  props: any = {},
-  fieldProps: any = {}
+  props: any = {}
+  // fieldProps: any = {}
 ): React.JSXElementConstructor<any> => {
   const { picker } = props
   if (picker === 'radio') {
@@ -40,9 +40,9 @@ export const mapTextComponent = (
 export const acceptEnum = (component: React.JSXElementConstructor<any>) => {
   return ({ dataSource, ...others }) => {
     if (dataSource) {
-    return React.createElement(Select, { dataSource, ...others })
+      return React.createElement(Select, { dataSource, ...others })
     } else {
-    return React.createElement(component, others)
+      return React.createElement(component, others)
     }
   }
 }
