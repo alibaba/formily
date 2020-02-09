@@ -3,7 +3,7 @@ import { Row, Col } from 'antd'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
-import { useFormItem } from '../compat/context'
+import { useDeepFormItem } from '../context'
 import { IFormButtonGroupProps } from '../types'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 
@@ -69,7 +69,7 @@ export const FormButtonGroup = styled(
       triggerDistance,
       itemStyle
     } = props
-    const { inline } = useFormItem()
+    const { inline } = useDeepFormItem()
     const selfRef = useRef<HTMLDivElement>()
     const renderChildren = () => {
       return (

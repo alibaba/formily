@@ -4,7 +4,15 @@ import {
   createFormActions,
   createAsyncFormActions
 } from './shared'
-export * from '@formily/core'
+import {
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  FormPathPattern,
+  FormPath
+} from '@formily/core'
 export * from './components/Form'
 export * from './components/Field'
 export * from './components/FieldList'
@@ -22,8 +30,15 @@ export * from './hooks/useFormEffects'
 export * from './types'
 
 export {
+  FormPath,
+  FormPathPattern,
   FormEffectHooks,
   createEffectHook,
   createFormActions,
-  createAsyncFormActions
+  createAsyncFormActions,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine
 }

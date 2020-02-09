@@ -67,7 +67,7 @@ npm install --save @formily/antd
   - [`IFormAsyncActions`](#IFormAsyncActions)
   - [`ButtonProps`](#ButtonProps)
   - [`CardProps`](#CardProps)
-  - [`ICompatItemProps`](#ICompatItemProps)
+  - [`ISchemaFieldAdaptorProps`](#ISchemaFieldAdaptorProps)
   - [`IFieldState`](#IFieldState)
   - [`ISchemaFieldComponentProps`](#ISchemaFieldComponentProps)
   - [`ISchemaVirtualFieldComponentProps`](#ISchemaVirtualFieldComponentProps)
@@ -3285,10 +3285,10 @@ interface CardProps extends HTMLAttributesWeak, CommonProps {
 }
 ```
 
-#### ICompatItemProps
+#### ISchemaFieldAdaptorProps
 
 ```typescript
-interface ICompatItemProps
+interface ISchemaFieldAdaptorProps
   extends Exclude<ItemProps, 'labelCol' | 'wrapperCol'>,
     Partial<ISchemaFieldComponentProps> {
   labelCol?: number | { span: number; offset?: number }

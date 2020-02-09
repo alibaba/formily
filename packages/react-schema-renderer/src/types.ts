@@ -12,6 +12,8 @@ import {
 } from '@formily/react'
 import { ValidatePatternRules } from '@formily/validator'
 import { Schema } from './shared/schema'
+export * from '@formily/react/lib/types'
+
 export interface ISchemaFieldProps {
   path?: FormPathPattern
   schema?: Schema

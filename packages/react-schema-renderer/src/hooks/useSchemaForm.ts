@@ -21,7 +21,9 @@ const lowercaseKeys = (obj: any) => {
 
 const transformComponents = (components: any) => {
   return map(components, component => {
-    return component['__ALREADY_CONNECTED__'] ? component : connect()(component)
+    return component['__ALREADY_CONNECTED__'] || component.isFieldComponent
+      ? component
+      : connect()(component)
   })
 }
 

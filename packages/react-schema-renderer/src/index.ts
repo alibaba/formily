@@ -2,8 +2,29 @@ import {
   createAsyncSchemaFormActions,
   createSchemaFormActions
 } from './shared/actions'
-import { Field as InternalField, Form as InternalForm } from '@formily/react'
-export * from '@formily/react'
+import {
+  Field as InternalField,
+  Form as InternalForm,
+  FieldList as InternalFieldList,
+  VirtualField as InternalVirtualField,
+  FormSpy,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationMTEngine,
+  registerValidationRules,
+  FormPath,
+  FormPathPattern,
+  FormEffectHooks,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormState,
+  useVirtualField
+} from '@formily/react'
 export * from './components/SchemaField'
 export * from './components/SchemaForm'
 export * from './components/SchemaMarkup'
@@ -16,4 +37,26 @@ export * from './shared/linkage'
 export * from './types'
 export const createFormActions = createSchemaFormActions
 export const createAsyncFormActions = createAsyncSchemaFormActions
-export { InternalField, InternalForm }
+export {
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  InternalForm,
+  FormSpy,
+  FormPath,
+  FormPathPattern,
+  FormEffectHooks,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormState,
+  useVirtualField
+}

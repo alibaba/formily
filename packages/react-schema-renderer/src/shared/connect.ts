@@ -62,7 +62,9 @@ export const connect = (options?: IConnectOptions) => {
     ...options
   }
   return (Component: React.JSXElementConstructor<any>) => {
-    const ConnectedComponent = (fieldProps: ISchemaFieldComponentProps) => {
+    const ConnectedComponent: React.FC<ISchemaFieldComponentProps> & {
+      [key: string]: any
+    } = (fieldProps: ISchemaFieldComponentProps) => {
       const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
       const schemaComponentProps = schema.getExtendsComponentProps()

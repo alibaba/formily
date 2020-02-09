@@ -14,20 +14,22 @@ import {
   FormButtonGroup,
   Submit,
   Reset,
-  filterChanged,
   createFormActions,
-  FormEffectHooks,
+  FormEffectHooks
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
+
+setup()
 
 const actions = createFormActions()
 
 const sleep = duration =>
   new Promise(resolve => {
     setTimeout(resolve, duration)
-})
+  })
 
 const { onFormMount$, onFormChange$ } = FormEffectHooks
 
