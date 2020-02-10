@@ -272,7 +272,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (valueChanged) {
         if (!wasHidden) {
           userUpdating(field, () => {
-            setFormValuesIn(path, published.value)
+            // 当表单已挂载，且 Field 是初始化时，静默更新表单值
+            const isSilent = state.getState().mounted && initializedChanged
+            setFormValuesIn(path, published.value, isSilent)
           })
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
