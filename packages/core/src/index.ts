@@ -314,10 +314,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         userUpdating(field, () => {
           if (published.unmounted) {
             deleteFormValuesIn(path, true)
-            //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
-            notifyFormValuesChange()
+            // 隐藏删值应该由 visibleChanged 来操作
+            // 切换 schema 组件卸载时不需要触发表单变化 Form.onChange 事件
           } else {
-            setFormValuesIn(path, published.value)
+            // 切换 schema 组件卸载时，静默更改表单值
+            setFormValuesIn(path, published.value, true)
             syncField()
           }
         })
