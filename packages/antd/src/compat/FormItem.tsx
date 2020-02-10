@@ -64,10 +64,9 @@ const computeSchemaExtendProps = (
       },
       'required',
       'className',
-      'prefix',
+      'prefixCls',
       'labelAlign',
-      'labelTextAlign',
-      'size',
+      'hasFeedback',
       'labelCol',
       'wrapperCol'
     )

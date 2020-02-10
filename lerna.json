@@ -9,6 +9,9 @@
         "--no-package-lock"
       ]
     },
+    "version": {
+      "allowBranch": ["master","uform_v1"]
+    },
     "publish": {
       "allowBranch": "master",
       "ignoreChanges": [
