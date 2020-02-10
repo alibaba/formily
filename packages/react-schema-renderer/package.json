@@ -1,6 +1,6 @@
 {
   "name": "@uform/react-schema-renderer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -29,9 +29,9 @@
     "rxjs": "^6.5.1"
   },
   "dependencies": {
-    "@uform/react": "^1.0.0",
-    "@uform/shared": "^1.0.0",
-    "@uform/validator": "^1.0.0",
+    "@uform/react": "^1.0.1",
+    "@uform/shared": "^1.0.1",
+    "@uform/validator": "^1.0.1",
     "pascal-case": "^2.0.1"
   },
   "publishConfig": {
