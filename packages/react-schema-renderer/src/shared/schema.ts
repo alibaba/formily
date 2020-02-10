@@ -38,31 +38,6 @@ const findProperty = (object: any, propertyKey: string | number) => {
   }
 }
 
-const filterProperties = <T extends object>(
-  object: T,
-  keys: string[]
-): T => {
-  let result = {} as any
-  for (let key in object) {
-    if (!keys.includes(key) && Object.hasOwnProperty.call(object, key)) {
-      result[key] = object[key]
-    }
-  }
-  return result
-}
-
-//向后兼容逻辑，未来会干掉
-const COMPAT_FORM_ITEM_PROPS = [
-  'required',
-  'className',
-  'prefix',
-  'labelAlign',
-  'labelTextAlign',
-  'size',
-  'labelCol',
-  'wrapperCol'
-]
-
 export class Schema implements ISchema {
   /** base json schema spec**/
   public title?: SchemaMessage
@@ -354,10 +329,8 @@ export class Schema implements ISchema {
   getExtendsProps() {
     return this['x-props'] || {}
   }
-  getExtendsComponentProps(needfilterFormItemKeys: boolean = true) {
-    const props = { ...this['x-props'], ...this['x-component-props'] }
-    if(!needfilterFormItemKeys) return props
-    return filterProperties(props, COMPAT_FORM_ITEM_PROPS)
+  getExtendsComponentProps() {
+    return { ...this['x-props'], ...this['x-component-props'] }
   }
   getExtendsLinkages() {
     return this['x-linkages']
