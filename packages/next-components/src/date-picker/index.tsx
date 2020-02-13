@@ -51,7 +51,7 @@ DatePicker.MonthPicker = connect({
 
 DatePicker.YearPicker = connect({
   getValueFromEvent(value) {
-    return transformMoment(value)
+    return transformMoment(value,'YYYY')
   },
   getProps: mapStyledProps,
   getComponent: mapTextComponent

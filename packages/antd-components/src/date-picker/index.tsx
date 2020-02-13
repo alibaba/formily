@@ -92,7 +92,7 @@ DatePicker.WeekPicker = connect({
 
 DatePicker.YearPicker = connect({
   getValueFromEvent(_, value) {
-    return transformMoment(value)
+    return transformMoment(value,'YYYY')
   },
   getProps: compose(mapStyledProps, mapMomentValue),
   getComponent: mapTextComponent

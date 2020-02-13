@@ -54,8 +54,6 @@ const filterProperties = <T extends object>(
 //向后兼容逻辑，未来会干掉
 const COMPAT_FORM_ITEM_PROPS = [
   'required',
-  'className',
-  'prefix',
   'labelAlign',
   'labelTextAlign',
   'size',

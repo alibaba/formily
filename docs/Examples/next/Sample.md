@@ -17,12 +17,12 @@ import {
   createFormActions,
   FormEffectHooks
 } from '@formily/next'
-import { setup } from '@formily/next-components'
+import { Input } from '@formily/next-components'
 import { Button } from '@alifd/next'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
 
-setup()
+//setup()
 
 const actions = createFormActions()
 
