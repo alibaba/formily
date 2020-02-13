@@ -8,7 +8,6 @@
         ]
       }
     ],
-    "rax-plugin-compat-react",
-    "@ali/rax-plugin-app-def"
+    "rax-plugin-compat-react"
   ]
 }

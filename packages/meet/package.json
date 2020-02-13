@@ -25,7 +25,7 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@alifd/meet": "^1.0.0-beta.19",
+    "@alifd/meet": "^1.0.0-beta.25",
     "@uform/react": "^0.4.4",
     "@uform/types": "^0.4.4",
     "@uform/utils": "^0.4.4",
@@ -33,7 +33,17 @@
     "@uform/react-shared-components": "^1.0.0-rc.4",
     "@uform/shared": "^1.0.0-rc.4",
     "classnames": "^2.2.6",
-    "styled-components": "^4.1.1"
+    "styled-components": "^4.1.1",
+    "@rax-ui/locale": "^1.0.0-beta.10",
+    "rax": "^1.1.1",
+    "rax-app": "^0.1.0",
+    "rax-dom": "^1.0.1",
+    "rax-image": "^1.0.3",
+    "rax-link": "^1.0.1",
+    "rax-recyclerview": "^1.1.1",
+    "rax-text": "^1.0.0",
+    "rax-view": "^1.0.0",
+    "universal-navigate": "^1.0.0"
   },
   "devDependencies": {},
   "publishConfig": {

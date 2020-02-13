@@ -130,19 +130,7 @@
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
     "webpack": "^4.35.3",
-    "@ali/rax-plugin-app-def": "^0.2.0",
-    "@alifd/meet": "^1.0.0-beta.16",
-    "@alife/meet": "^1.0.0-beta.1",
-    "@rax-ui/locale": "^1.0.0-beta.10",
-    "rax": "^1.0.8",
-    "rax-app": "^0.1.0",
-    "rax-dom": "^1.0.1",
-    "rax-image": "^1.0.3",
-    "rax-link": "^1.0.1",
-    "rax-recyclerview": "^1.1.1",
-    "rax-text": "^1.0.0",
-    "rax-view": "^1.0.0",
-    "universal-navigate": "^1.0.0"
+    "rax-plugin-app": "^0.2.19"
   },
   "config": {
     "ghooks": {
