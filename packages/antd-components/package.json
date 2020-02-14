@@ -1,0 +1,44 @@
+{
+  "name": "@formily/antd-components",
+  "version": "1.0.0-rc.4",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "build": "ts-node --project ../../tsconfig.build.json build.ts"
+  },
+  "devDependencies": {
+    "antd": "^3.14.1",
+    "@types/styled-components": "^4.1.19"
+  },
+  "peerDependencies": {
+    "@types/styled-components": "^4.1.19",
+    "antd": "^3.14.1",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "@formily/react-schema-renderer": "^1.0.0-rc.4",
+    "@formily/react-shared-components": "^1.0.0-rc.4",
+    "@formily/antd": "^1.0.0-rc.4",
+    "@formily/shared": "^1.0.0-rc.4",
+    "classnames": "^2.2.6",
+    "styled-components": "^4.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050"
+}

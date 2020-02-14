@@ -26,7 +26,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
             formComponent,
             {
               ...formComponentProps,
-              onSubmit: e => {
+              onSubmit: (e: any) => {
                 if (e && e.preventDefault) e.preventDefault()
                 form.submit().catch(e => console.warn(e))
               },

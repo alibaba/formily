@@ -17,6 +17,8 @@ import {
 } from '@formily/core'
 import { FormPathPattern } from '@formily/shared'
 import { Observable } from 'rxjs/internal/Observable'
+export * from '@formily/core/lib/types'
+
 export interface IFormEffect<Payload = any, Actions = any> {
   (
     selector: IFormExtendsEffectSelector<Payload, Actions>,

@@ -33,13 +33,12 @@ const transformFormAPI = (
   }
 }
 
-export const FormConsumer: React.FunctionComponent<
-  IFormConsumerProps
-> = props => {
+export const FormConsumer: React.FunctionComponent<IFormConsumerProps> = props => {
   const ref = useRef({})
   return (
     <FormSpy {...props}>
       {({ form, type }) => {
+        if (!form) return <React.Fragment />
         return isFn(props.children)
           ? props.children(transformFormAPI(form, type, ref))
           : props.children

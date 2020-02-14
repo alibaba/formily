@@ -39,7 +39,7 @@ const createDocs = async () => {
 
       return {
         ...buf,
-        [`@formily/${name}`]: `${_path}/src`
+        [`@formily/${name}$`]: `${_path}/src`
       }
     }, {})
   command(

@@ -1,47 +1,83 @@
-import React, { useRef } from 'react'
 import {
-  SchemaMarkupForm,
-  SchemaMarkupField
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  SchemaMarkupField,
+  InternalForm,
+  SchemaField,
+  Schema,
+  FormPath,
+  JSONCondition,
+  compileObject,
+  FormEffectHooks,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormState,
+  useVirtualField,
+  createFormActions,
+  createAsyncFormActions,
+  connect,
+  registerFieldMiddleware,
+  registerFormComponent,
+  registerFormField,
+  registerFormFields,
+  registerFormItemComponent,
+  registerVirtualBox,
+  parseLinkages,
+  useValueLinkageEffect
 } from '@formily/react-schema-renderer'
-import { INextSchemaFormProps, INextSchemaFieldProps } from './types'
-import './fields'
-export * from './compat'
-export * from '@formily/react-schema-renderer'
+import { mapStyledProps, mapTextComponent, normalizeCol } from './shared'
+export * from './adaptor'
 export * from './components'
+export * from './context'
 export * from './types'
-export { mapStyledProps, mapTextComponent } from './shared'
-export const SchemaForm: React.FC<INextSchemaFormProps> = props => {
-  const formRef = useRef<HTMLDivElement>()
 
-  return (
-    <div ref={formRef}>
-      <SchemaMarkupForm
-        {...props}
-        onValidateFailed={result => {
-          if (props.onValidateFailed) {
-            props.onValidateFailed(result)
-          }
-          if (formRef.current) {
-            setTimeout(() => {
-              const elements = formRef.current.querySelectorAll(
-                '.next-form-item.has-error'
-              )
-              if (elements && elements.length) {
-                if (!elements[0].scrollIntoView) return
-                elements[0].scrollIntoView({
-                  behavior: 'smooth',
-                  inline: 'center',
-                  block: 'center'
-                })
-              }
-            }, 30)
-          }
-        }}
-      >
-        {props.children}
-      </SchemaMarkupForm>
-    </div>
-  )
+export {
+  SchemaMarkupField,
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  InternalForm,
+  FormPath,
+  SchemaField,
+  Schema,
+  JSONCondition,
+  FormEffectHooks,
+  compileObject,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormState,
+  useVirtualField,
+  mapStyledProps,
+  mapTextComponent,
+  createFormActions,
+  createAsyncFormActions,
+  connect,
+  registerFieldMiddleware,
+  registerFormComponent,
+  registerFormField,
+  registerFormFields,
+  registerFormItemComponent,
+  registerVirtualBox,
+  parseLinkages,
+  useValueLinkageEffect,
+  normalizeCol
 }
-export const Field: React.FC<INextSchemaFieldProps> = SchemaMarkupField
-export default SchemaForm
