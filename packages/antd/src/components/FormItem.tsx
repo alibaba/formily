@@ -109,6 +109,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
             ...props
           },
           errors,
+          editable,
           warnings,
           required
         } = state
@@ -120,7 +121,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
             style={itemStyle}
             extra={extra}
             label={label}
-            required={required}
+            required={editable ? required : undefined}
             labelCol={label ? normalizeCol(labelCol) : undefined}
             labelAlign={labelAlign || 'left'}
             wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
