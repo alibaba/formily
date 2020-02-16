@@ -131,6 +131,9 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     }
     return renderFieldDelegate(props => {
       const renderComponent = () => {
+        if (!formRegistry.formItemComponent) {
+          throw new Error(`Can not found FormItem component`)
+        }
         return React.createElement(
           formRegistry.formItemComponent,
           props,
@@ -150,12 +153,16 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             props.schema.getExtendsComponent() || props.schema.type
           if (!isStr(stateComponent))
             throw new Error('Can not found any form components.')
-          const renderComponent = (): React.ReactElement =>
-            React.createElement(
+          const renderComponent = (): React.ReactElement => {
+            if (!formRegistry.fields[stateComponent]) {
+              throw new Error(`Can not found field component:${path}`)
+            }
+            return React.createElement(
               formRegistry.formItemComponent,
               props,
               React.createElement(formRegistry.fields[stateComponent], props)
             )
+          }
           if (isFn(schemaRenderer)) {
             return schemaRenderer({ ...props, renderComponent })
           }
@@ -167,11 +174,15 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             props.schema.getExtendsComponent() || props.schema.type
           if (!isStr(stateComponent))
             throw new Error('Can not found any form components.')
-          const renderComponent = () =>
-            React.createElement(
+          const renderComponent = () => {
+            if (!formRegistry.virtualFields[stateComponent]) {
+              throw new Error(`Can not found virtual field component:${path}`)
+            }
+            return React.createElement(
               formRegistry.virtualFields[stateComponent],
               props
             )
+          }
 
           if (isFn(schemaRenderer)) {
             return schemaRenderer({ ...props, renderComponent })

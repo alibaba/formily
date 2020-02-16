@@ -23,7 +23,7 @@ type SelectProps = AntSelectProps & {
   dataSource?: SelectOption[]
 }
 
-const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
+export const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
   const { dataSource = [], ...others } = props
   const children = dataSource.map(item => {
     const { label, value, ...others } = item

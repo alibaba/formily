@@ -1,4 +1,6 @@
-import { connect } from '@formily/react-schema-renderer'
+import {
+  connect
+} from '@formily/react-schema-renderer'
 import { Checkbox as AntdCheckbox } from 'antd'
 import {
   transformDataSourceKey,
@@ -6,14 +8,14 @@ import {
   mapTextComponent
 } from '../shared'
 
-export const Checkbox = connect({
+export const Checkbox = connect<'Group'>({
   getProps: mapStyledProps,
   getComponent: mapTextComponent
-})(transformDataSourceKey(AntdCheckbox, 'options'))
+})(AntdCheckbox)
 
 Checkbox.Group = connect({
   getProps: mapStyledProps,
   getComponent: mapTextComponent
-})(AntdCheckbox.Group)
+})(transformDataSourceKey(AntdCheckbox.Group, 'options'))
 
 export default Checkbox

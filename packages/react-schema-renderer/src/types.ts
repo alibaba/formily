@@ -203,3 +203,10 @@ export interface ISchemaFormAsyncActions extends IFormAsyncActions {
   getSchema(): Promise<Schema>
   getFormSchema(): Promise<Schema>
 }
+
+export type MixinConnectedComponent<T extends string> = React.FC<
+  ISchemaFieldComponentProps
+> &
+  {
+    [key in T]: React.FC<ISchemaFieldComponentProps>
+  }

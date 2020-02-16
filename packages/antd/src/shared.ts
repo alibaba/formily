@@ -10,7 +10,7 @@ export const autoScrollInValidateFailed = (formRef: any) => {
   if (formRef.current) {
     setTimeout(() => {
       const elements = formRef.current.querySelectorAll(
-        '.next-form-item.has-error'
+        '.ant-form-item-control.has-error'
       )
       if (elements && elements.length) {
         if (!elements[0].scrollIntoView) return

@@ -201,3 +201,45 @@ export interface IFormAsyncActions {
   setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldInitialValue(path?: FormPathPattern): Promise<any>
 }
+
+export interface IEffectProviderAPI<TActions = any, TContext = any> {
+  waitFor: <TPayload = any>(
+    type: string,
+    filter: (payload: TPayload) => boolean
+  ) => Promise<TPayload>
+  triggerTo: <TPayload = any>(
+    type: string,
+    payload: TPayload
+  ) => Promise<TPayload>
+  applyMiddlewares: <TPayload = any>(
+    type: string,
+    payload: TPayload
+  ) => Promise<TPayload>
+  actions: TActions
+  context?: TContext
+}
+
+export interface IEffectMiddlewareAPI<TActions = any, TContext = any> {
+  waitFor: <TPayload = any>(
+    type: string,
+    filter: (payload: TPayload) => boolean
+  ) => Promise<TPayload>
+  actions: TActions
+  context?: TContext
+}
+
+export interface IEffectProviderHandler<TActions = any, TContext = any> {
+  (options: IEffectProviderAPI<TActions, TContext>): (
+    $: (type: string) => Observable<any>,
+    actions: TActions
+  ) => void
+}
+
+export interface IEffectMiddleware<TActions = any, TContext = any> {
+  (options: IEffectMiddlewareAPI<TActions, TContext>): {
+    [key: string]: <TPayload = any>(
+      payload: TPayload,
+      next: (payload: any) => Promise<any>
+    ) => Promise<any>
+  }
+}

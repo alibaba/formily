@@ -1,6 +1,7 @@
 import { connect } from '@formily/react-schema-renderer'
 import { DatePicker as NextDatePicker } from '@alifd/next'
-import { mapStyledProps, mapTextComponent } from '../shared'
+import { mapStyledProps, mapTextComponent, compose, isStr } from '../shared'
+import moment from 'moment'
 
 const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
   return value && value.format ? value.format(format) : value
@@ -19,7 +20,9 @@ const getFormatFromProps = props => {
   }
 }
 
-export const DatePicker = connect({
+export const DatePicker = connect<
+  'RangePicker' | 'WeekPicker' | 'MonthPicker' | 'YearPicker'
+>({
   getValueFromEvent(value) {
     const props = this.getExtendsComponentProps()
     return transformMoment(value, getFormatFromProps(props))
@@ -41,6 +44,20 @@ DatePicker.RangePicker = connect({
   getComponent: mapTextComponent
 })(NextDatePicker.RangePicker)
 
+DatePicker.WeekPicker = connect({
+  getValueFromEvent(value) {
+    return transformMoment(value, 'gggg-wo')
+  },
+  getProps: compose(mapStyledProps, props => {
+    if (isStr(props.value) && props.value) {
+      const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || ['', '', '']
+      props.value = moment(parsed[1], 'YYYY').add(parsed[2] - 1, 'weeks')
+    }
+    return props
+  }),
+  getComponent: mapTextComponent
+})(NextDatePicker.WeekPicker)
+
 DatePicker.MonthPicker = connect({
   getValueFromEvent(value) {
     return transformMoment(value)
@@ -51,7 +68,7 @@ DatePicker.MonthPicker = connect({
 
 DatePicker.YearPicker = connect({
   getValueFromEvent(value) {
-    return transformMoment(value,'YYYY')
+    return transformMoment(value, 'YYYY')
   },
   getProps: mapStyledProps,
   getComponent: mapTextComponent

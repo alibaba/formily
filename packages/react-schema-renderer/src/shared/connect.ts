@@ -4,7 +4,8 @@ import {
   ISchema,
   IConnectOptions,
   ISchemaFieldComponentProps,
-  IConnectProps
+  IConnectProps,
+  MixinConnectedComponent
 } from '../types'
 import { Schema } from './schema'
 
@@ -55,16 +56,18 @@ const bindEffects = (
   return props
 }
 
-export const connect = (options?: IConnectOptions) => {
+export const connect = <ExtendsComponentKey extends string = ''>(
+  options?: IConnectOptions
+) => {
   options = {
     valueName: 'value',
     eventName: 'onChange',
     ...options
   }
   return (Component: React.JSXElementConstructor<any>) => {
-    const ConnectedComponent: React.FC<ISchemaFieldComponentProps> & {
-      [key: string]: any
-    } = (fieldProps: ISchemaFieldComponentProps) => {
+    const ConnectedComponent: MixinConnectedComponent<ExtendsComponentKey> = ((
+      fieldProps: ISchemaFieldComponentProps
+    ) => {
       const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
       const schemaComponentProps = schema.getExtendsComponentProps()
@@ -129,9 +132,11 @@ export const connect = (options?: IConnectOptions) => {
           : Component,
         componentProps
       )
-    }
+    }) as any
 
-    ConnectedComponent['__ALREADY_CONNECTED__'] = true
+    Object.assign(ConnectedComponent,{
+      __ALREADY_CONNECTED__:true
+    })
 
     return ConnectedComponent
   }
