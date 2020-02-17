@@ -89,7 +89,7 @@ export interface ISchema {
   default?: any
   readOnly?: boolean
   writeOnly?: boolean
-  type?: 'string' | 'object' | 'array' | 'number' | string
+  type?: 'string' | 'object' | 'array' | 'number' | 'boolean' | string
   enum?: Array<
     | string
     | number

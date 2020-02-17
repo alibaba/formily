@@ -67,7 +67,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         props={compileObject(
           fieldSchema.getSelfProps(),
           expressionScope,
-          (key: string) => key == 'x-linkage'
+          (key: string) => key == 'x-linkages'
         )}
         dataType={fieldSchema.type}
         triggerType={fieldSchema.getExtendsTriggerType()}
@@ -101,7 +101,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         props={compileObject(
           fieldSchema.getSelfProps(),
           expressionScope,
-          (key: string) => key == 'x-linkage'
+          (key: string) => key == 'x-linkages'
         )}
       >
         {({ state, form }) => {

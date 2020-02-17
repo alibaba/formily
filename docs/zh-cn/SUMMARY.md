@@ -8,6 +8,7 @@
     - [理解actions/effects](./schema-develop/actions-effects.md)
     - [理解表单路径系统](./schema-develop/form-path.md)
     - [理解传值属性](./schema-develop/value.md)
+    - [理解表单状态]()
     - [理解表单节点树](./schema-develop/form-graph.md)
     - [理解表单组件扩展机制](./schema-develop/extension.md)
   - 实践教程
@@ -39,6 +40,7 @@
     - 理解actions/effects
     - 理解表单路径系统
     - 理解传值属性
+    - 理解表单状态
     - 理解表单节点树
   - 实践教程
     - 使用布局组件
