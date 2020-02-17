@@ -7,7 +7,11 @@ import {
   ISchemaVirtualFieldComponentProps
 } from '../types'
 import { Schema } from '../shared/schema'
-import SchemaContext, { FormComponentsContext } from '../shared/context'
+import SchemaContext, {
+  FormComponentsContext,
+  FormExpressionScopeContext
+} from '../shared/context'
+import { compileObject } from '../shared/expression'
 
 const computeSchemaState = (draft: IFieldState, prevState: IFieldState) => {
   const schema = new Schema(draft.props)
@@ -36,6 +40,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   const formSchema = useContext(SchemaContext)
   const fieldSchema = props.schema || formSchema.get(path)
   const formRegistry = useContext(FormComponentsContext)
+  const expressionScope = useContext(FormExpressionScopeContext)
   if (!fieldSchema) {
     throw new Error(`Can not found schema node by ${path.toString()}.`)
   }
@@ -59,7 +64,11 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
       <Field
         path={path}
         initialValue={fieldSchema.default}
-        props={fieldSchema.getSelfProps()}
+        props={compileObject(
+          fieldSchema.getSelfProps(),
+          expressionScope,
+          (key: string) => key == 'x-linkage'
+        )}
         dataType={fieldSchema.type}
         triggerType={fieldSchema.getExtendsTriggerType()}
         editable={fieldSchema.getExtendsEditable()}
@@ -87,7 +96,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     callback: (props: ISchemaVirtualFieldComponentProps) => React.ReactElement
   ) => {
     return (
-      <VirtualField path={path} props={fieldSchema.getSelfProps()}>
+      <VirtualField
+        path={path}
+        props={compileObject(
+          fieldSchema.getSelfProps(),
+          expressionScope,
+          (key: string) => key == 'x-linkage'
+        )}
+      >
         {({ state, form }) => {
           const props: ISchemaVirtualFieldComponentProps = {
             ...state,

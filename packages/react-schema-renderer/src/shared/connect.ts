@@ -78,7 +78,13 @@ export const connect = <ExtendsComponentKey extends string = ''>(
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(
             options.getValueFromEvent
-              ? options.getValueFromEvent.call(schema, event, ...args)
+              ? options.getValueFromEvent.call(
+                  {
+                    props: componentProps
+                  },
+                  event,
+                  ...args
+                )
               : event,
             ...args
           )
@@ -134,8 +140,8 @@ export const connect = <ExtendsComponentKey extends string = ''>(
       )
     }) as any
 
-    Object.assign(ConnectedComponent,{
-      __ALREADY_CONNECTED__:true
+    Object.assign(ConnectedComponent, {
+      __ALREADY_CONNECTED__: true
     })
 
     return ConnectedComponent

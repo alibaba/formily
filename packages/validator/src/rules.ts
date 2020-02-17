@@ -24,8 +24,17 @@ const isValidateEmpty = (value: any) => {
 const getLength = (value: any) =>
   isStr(value) ? stringLength(value) : value ? value.length : 0
 
-const getRuleMessage = (rule: any, type: string) => {
-  if (isFn(rule.validator) || Object.keys(rule).length > 2) {
+const intersection = (arr1: string[], arr2: string[]) => {
+  return arr1.filter(key => arr2.includes(key))
+}
+
+const getRuleMessage = (rule: any, type: string, rules) => {
+  const allRuleKeys = Object.keys(rules || {})
+  const currentRuleKeys = Object.keys(rule || {})
+  if (
+    isFn(rule.validator) ||
+    intersection(currentRuleKeys, allRuleKeys).length > 2
+  ) {
     if (rule.format) {
       return rule.message || getMessage(type)
     }
@@ -94,9 +103,7 @@ export default {
   },
   whitespace(value: any, rule: ValidateDescription) {
     if (rule.whitespace) {
-      return /^\s+$/.test(value) || value === ''
-        ? getRuleMessage(rule, 'whitespace')
-        : ''
+      return /^\s+$/.test(value) ? getRuleMessage(rule, 'whitespace') : ''
     }
   },
   enum(value: any, rule: ValidateDescription) {
