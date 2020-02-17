@@ -918,9 +918,7 @@ import {
   FormPath,
   Submit,
   Reset,
-  setValidationLocale,
-  registerValidationRules,
-  registerValidationMTEngine
+  setValidationLocale
 } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
 import { merge } from 'rxjs'
@@ -1136,6 +1134,5 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 对象化传参，自定义校验器用 validator
 - 自定义校验器可以返回 Promise 做异步校验，异步校验需要考虑指定`x-props.triggerType="onBlur"`，防止请求次数过多
 - 阈值设置形态，通常采用 warning 式校验，需要在自定义校验器的返回值中指定`type:"warning"`
-- 使用 registerValidationMTEngine 处理校验规则消息的模板引擎
 - Schema 任何一个属性都支持`{{}}`表达式，该表达式要求任何一个字段值必须是字符串，同时字符串必须以`{{`开始，`}}`结束
 - 通过 SchemaForm 的 expressionScope 属性，从顶层传递上下文，在 Schema 属性表达式中可以读取

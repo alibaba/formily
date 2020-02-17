@@ -249,9 +249,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 使用了按需依赖的方式来载入 Schema 扩展组件，@formily/antd-components 中的扩展组件全部都是封装后的组件，只能给 Formily 的 SchemaForm 和 FormItem 组件消费
-- 使用了 JSX Schema 的形式来开发表单，点击 Print JSON Schema 可以查看对应的 JSON Schema 形式
-- 如果不想每次都手动注册扩展组件，可以参考以下写法
+- 使用了按需依赖的方式来载入扩展组件，@formily/antd-components 中的扩展组件全部都是封装后的组件，只能给 Formily 的 SchemaForm 和 FormItem 组件消费
+- FormItem的组件属性是合并了component组件的属性与实际FormItem组件的属性和Formily Field组件的属性，详细API可以查询API手册
 
 ```tsx
 import { setup } from '@formily/antd-components' //或者@formily/next-components
@@ -406,7 +405,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 借助 initialValues 属性处理异步默认值
-- initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 SchemaForm 传递 value 属性
+- initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 Form 传递 value 属性
 
 ### 开发查看详情页
 
@@ -677,7 +676,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 在 SchemaForm 组件属性上传入 effects 函数，所有联动操作统一在 effects 中实现
+- 在 Form 组件属性上传入 effects 函数，所有联动操作统一在 effects 中实现
 - FormEffectHooks 中包含表单所有生命周期钩子，调用生命周期钩子会返回 Rxjs 的 Observable 对象
 - 借助 merge 操作符对字段初始化和字段值变化的时机进行合流，这样联动发生的时机会在初始化和值变化的时候发生
 
@@ -714,9 +713,7 @@ import {
   FormPath,
   Submit,
   Reset,
-  setValidationLocale,
-  registerValidationRules,
-  registerValidationMTEngine
+  setValidationLocale
 } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
 import { merge } from 'rxjs'
@@ -896,7 +893,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- Schema 属性直接指定 required 可以配置必填校验
+- 直接指定 required 可以配置必填校验
 - setFieldState 中设置 rules 可以修改字段校验规则
 - x-rules 的传参形式，既支持直接传函数，也支持指定格式类型，同样也支持传对象或者对象数组形式
 - whitespace 规则校验字段是否全空白字符串
@@ -905,6 +902,3 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 对象化传参，自定义校验器用 validator
 - 自定义校验器可以返回 Promise 做异步校验，异步校验需要考虑指定`x-props.triggerType="onBlur"`，防止请求次数过多
 - 阈值设置形态，通常采用 warning 式校验，需要在自定义校验器的返回值中指定`type:"warning"`
-- 使用 registerValidationMTEngine 处理校验规则消息的模板引擎
-- Schema 任何一个属性都支持`{{}}`表达式，该表达式要求任何一个字段值必须是字符串，同时字符串必须以`{{`开始，`}}`结束
-- 通过 SchemaForm 的 expressionScope 属性，从顶层传递上下文，在 Schema 属性表达式中可以读取
