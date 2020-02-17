@@ -5,7 +5,7 @@ const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 export const compileObject = <Source = any, Context = any>(
   source: Source,
   context: Context,
-  exclude: (key: string, value: any) => boolean
+  exclude?: (key: string, value: any) => boolean
 ): any => {
   if (isStr(source)) {
     const matched = source.match(ExpRE)

@@ -67,7 +67,8 @@ export type ValidatePatternRules =
 
 export type CustomValidator = (
   value: any,
-  description?: ValidateDescription
+  description?: ValidateDescription,
+  rules?: ValidateRulesMap
 ) => ValidateResponse
 
 export type SyncValidateResponse =
