@@ -6,6 +6,19 @@ import { FormItemDeepProvider } from '../context'
 import { INextFormProps } from '../types'
 
 export const Form: React.FC<INextFormProps> = props => {
+  const {
+    inline,
+    effects,
+    actions,
+    initialValues,
+    value,
+    defaultValue,
+    form,
+    useDirty,
+    onValidateFailed,
+    validateFirst,
+    ...rest
+  } = props
   const formRef = useRef<HTMLDivElement>()
   return (
     <InternalForm
@@ -22,7 +35,7 @@ export const Form: React.FC<INextFormProps> = props => {
           <FormItemDeepProvider {...props}>
             <div ref={formRef}>
               <NextForm
-                {...props}
+                {...rest}
                 labelCol={normalizeCol(props.labelCol)}
                 wrapperCol={normalizeCol(props.wrapperCol)}
                 field={false}

@@ -18,7 +18,6 @@ const createEnum = (enums: any) => {
         }
       } else {
         return {
-          ...item,
           label: item,
           value: item
         }

@@ -57,6 +57,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
   const topFormItemProps = useDeepFormItem()
 
   const renderComponent = ({ props, state, mutators, form }) => {
+    if (!component) return <div>Can not fount component.</div>
     if (!component['__ALREADY_CONNECTED__']) {
       component[ConnectedComponent] = connect({
         eventName,
@@ -103,6 +104,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
             prefixCls,
             extra,
             help,
+            inline,
             hasFeedback,
             itemStyle,
             itemClassName,
@@ -123,7 +125,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
             label={label}
             required={editable ? required : undefined}
             labelCol={label ? normalizeCol(labelCol) : undefined}
-            labelAlign={labelAlign || 'left'}
+            labelAlign={labelAlign}
             wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
             validateStatus={computeStatus(state)}
             help={computeMessage(errors, warnings) || help}

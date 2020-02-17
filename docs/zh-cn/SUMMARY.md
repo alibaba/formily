@@ -32,8 +32,8 @@
     - [开发超复杂自定义组件](./schema-develop/create-complex-field-component.md)
   - [FAQ](./schema-develop/faq.md)
 - 源码开发指南
-  - 介绍
-  - 快速开始
+  - [介绍](./jsx-develop/introduction.md)
+  - [快速开始](./jsx-develop/quick-start.md)
   - 概念/术语理解
     - 理解表单生命周期
     - 理解actions/effects
@@ -88,3 +88,4 @@
     - validator
 - [UFORM](https://uformjs.org)
 - [UFORM V1](https://uform-next.netlify.com)
+- [GITHUB](https://github.com/alibaba/formily)

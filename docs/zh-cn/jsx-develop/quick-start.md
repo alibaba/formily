@@ -39,13 +39,13 @@ npm install --save next @formily/next @formily/next-components
 ```tsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm } from '@formily/antd' // 或者 @formily/next
+import { Form, FormItem } from '@formily/antd' // 或者 @formily/next
 import { Input } from '@formily/antd-components' // 或者@formily/next-components
 ```
 
 这里需要注意几点：
 
-- 引入 SchemaForm，用于 Schema 渲染表单
+- 引入 Form/FormItem 作为表单基础核心组件
 - 从@formily/antd-components 中引入 Input 组件(按需引入)，该 Input 组件属于扩展后的 Input 组件，它内部实现了一些额外状态的映射
 - 想要看完整的扩展组件列表，可以跳转至 API 列表中详细查看`@formily/antd-components`的具体 API
 
@@ -54,8 +54,8 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 ```jsx
 import React from 'react'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   useFormTableQuery,
   FormButtonGroup,
   Submit,
@@ -115,18 +115,13 @@ const App = () => {
   const { form, table } = useFormTableQuery(service)
   return (
     <>
-      <SchemaForm
-        {...form}
-        components={{ Input }}
-        style={{ marginBottom: 20 }}
-        inline
-      >
-        <Field type="string" name="name" title="Name" x-component="Input" />
+      <Form {...form} style={{ marginBottom: 20 }} inline>
+        <FormItem name="name" label="Name" component={Input} />
         <FormButtonGroup>
           <Submit>查询</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
-      </SchemaForm>
+      </Form>
       <Table
         {...table}
         columns={columns}
@@ -150,13 +145,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd' // 或者 @formily/next
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
 import {
   Input,
@@ -174,136 +163,84 @@ import {
 } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
 
-const components = {
-  Input,
-  Radio: Radio.Group,
-  Checkbox: Checkbox.Group,
-  TextArea: Input.TextArea,
-  NumberPicker,
-  Select,
-  Switch,
-  DatePicker,
-  DateRangePicker: DatePicker.RangePicker,
-  YearPicker: DatePicker.YearPicker,
-  MonthPicker: DatePicker.MonthPicker,
-  WeekPicker: DatePicker.WeekPicker,
-  TimePicker,
-  Upload,
-  Range,
-  Rating,
-  Transfer
-}
-
 const App = () => (
   <Printer>
-    <SchemaForm labelCol={5} wrapperCol={14} components={components}>
-      <Field type="string" title="String" name="string" x-component="Input" />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        title="Radio"
+    <Form labelCol={5} wrapperCol={14}>
+      <FormItem label="String" name="string" component={Input} />
+      <FormItem
+        dataSource={['1', '2', '3', '4']}
+        label="Radio"
         name="radio"
-        x-component="Radio"
+        component={Radio.Group}
       />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        title="Select"
+      <FormItem
+        dataSource={['1', '2', '3', '4']}
+        label="Select"
         name="select"
-        x-component="Select"
+        component={Select}
       />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        title="Checkbox"
+      <FormItem
+        dataSource={['1', '2', '3', '4']}
+        label="Checkbox"
         name="checkbox"
-        x-component="Checkbox"
+        component={Checkbox.Group}
       />
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="TextArea"
-      />
-      <Field
-        type="number"
-        title="数字选择"
-        name="number"
-        x-component="NumberPicker"
-      />
-      <Field
-        type="boolean"
-        title="开关选择"
-        name="boolean"
-        x-component="Switch"
-      />
-      <Field
-        type="string"
-        title="日期选择"
-        name="date"
-        x-component="DatePicker"
-      />
-      <Field
-        type="array<date>"
-        title="日期范围"
-        default={['2018-12-19', '2018-12-19']}
+      <FormItem label="TextArea" name="textarea" component={Input.TextArea} />
+      <FormItem label="数字选择" name="number" component={NumberPicker} />
+      <FormItem label="开关选择" name="boolean" component={Switch} />
+      <FormItem label="日期选择" name="date" component={DatePicker} />
+      <FormItem
+        label="日期范围"
+        initalValue={['2018-12-19', '2018-12-19']}
         name="daterange"
-        x-component="DateRangePicker"
+        component={DatePicker.RangePicker}
       />
-      <Field type="string" title="年份" name="year" x-component="YearPicker" />
-      <Field
-        type="string"
-        title="月份"
-        name="month"
-        x-component="MonthPicker"
-      />
-      <Field type="string" title="时间" name="time" x-component="TimePicker" />
-      <Field type="string" title="周" name="week" x-component="WeekPicker" />
-      <Field
-        type="array"
-        title="卡片上传文件"
+      <FormItem label="年份" name="year" component={DatePicker.YearPicker} />
+      <FormItem label="月份" name="month" component={DatePicker.MonthPicker} />
+      <FormItem label="时间" name="time" component={TimePicker} />
+      <FormItem label="周" name="week" component={DatePicker.WeekPicker} />
+      <FormItem
+        label="卡片上传文件"
         name="upload"
-        x-component-props={{ listType: 'card' }}
-        x-component="Upload"
+        listType="card"
+        component={Upload}
       />
-      <Field
-        type="array"
-        title="拖拽上传文件"
+      <FormItem
+        label="拖拽上传文件"
         name="upload2"
-        x-component-props={{ listType: 'dragger' }}
-        x-component="Upload"
+        listType="dragger"
+        component={Upload}
       />
-      <Field
-        type="array"
-        title="普通上传文件"
+      <FormItem
+        label="普通上传文件"
         name="upload3"
-        x-component-props={{ listType: 'text' }}
-        x-component="Upload"
+        listType="text"
+        component={Upload}
       />
-      <Field
-        type="number"
-        title="范围选择"
+      <FormItem
+        label="范围选择"
         name="range"
-        x-component-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-        x-component="Range"
+        min={0}
+        max={1024}
+        marks={[0, 1024]}
+        component={Range}
       />
-      <Field
-        type="number"
-        enum={[
+      <FormItem
+        dataSource={[
           { key: 1, title: '选项1' },
           { key: 2, title: '选项2' }
         ]}
-        x-component-props={{ render: item => item.title }}
-        title="穿梭框"
+        render={item => item.title}
+        label="穿梭框"
         name="transfer"
-        x-component="Transfer"
+        component={Transfer}
       />
-      <Field type="number" title="等级" name="rating" x-component="Rating" />
+      <FormItem label="等级" name="rating" component={Rating} />
       <FormButtonGroup offset={5}>
         <Submit>查询</Submit>
         <Reset>重置</Reset>
       </FormButtonGroup>
-    </SchemaForm>
+    </Form>
   </Printer>
 )
 
@@ -327,13 +264,7 @@ setup() //只需调用一次即可自动装载扩展组件，想要了解详细�
 ```jsx
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd' // 或者 @formily/next
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
 import {
   Input,
@@ -350,26 +281,6 @@ import {
   Rating
 } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
-
-const components = {
-  Input,
-  Radio: Radio.Group,
-  Checkbox: Checkbox.Group,
-  TextArea: Input.TextArea,
-  NumberPicker,
-  Select,
-  Switch,
-  DatePicker,
-  DateRangePicker: DatePicker.RangePicker,
-  YearPicker: DatePicker.YearPicker,
-  MonthPicker: DatePicker.MonthPicker,
-  WeekPicker: DatePicker.WeekPicker,
-  TimePicker,
-  Upload,
-  Range,
-  Rating,
-  Transfer
-}
 
 const getInitialValues = () => {
   return new Promise(reslove => {
@@ -405,129 +316,86 @@ const App = () => {
   }, [])
   return (
     <Printer>
-      <SchemaForm
-        initialValues={initialValues}
-        labelCol={5}
-        wrapperCol={14}
-        components={components}
-      >
-        <Field type="string" title="String" name="string" x-component="Input" />
-        <Field
-          type="string"
-          enum={['1', '2', '3', '4']}
-          title="Radio"
+      <Form initialValues={initialValues} labelCol={5} wrapperCol={14}>
+        <FormItem label="String" name="string" component={Input} />
+        <FormItem
+          dataSource={['1', '2', '3', '4']}
+          label="Radio"
           name="radio"
-          x-component="Radio"
+          component={Radio.Group}
         />
-        <Field
-          type="string"
-          enum={['1', '2', '3', '4']}
-          title="Select"
+        <FormItem
+          dataSource={['1', '2', '3', '4']}
+          label="Select"
           name="select"
-          x-component="Select"
+          component={Select}
         />
-        <Field
-          type="string"
-          enum={['1', '2', '3', '4']}
-          title="Checkbox"
+        <FormItem
+          dataSource={['1', '2', '3', '4']}
+          label="Checkbox"
           name="checkbox"
-          x-component="Checkbox"
+          component={Checkbox.Group}
         />
-        <Field
-          type="string"
-          title="TextArea"
-          name="textarea"
-          x-component="TextArea"
-        />
-        <Field
-          type="number"
-          title="数字选择"
-          name="number"
-          x-component="NumberPicker"
-        />
-        <Field
-          type="boolean"
-          title="开关选择"
-          name="boolean"
-          x-component="Switch"
-        />
-        <Field
-          type="string"
-          title="日期选择"
-          name="date"
-          x-component="DatePicker"
-        />
-        <Field
-          type="array<date>"
-          title="日期范围"
-          default={['2018-12-19', '2018-12-19']}
+        <FormItem label="TextArea" name="textarea" component={Input.TextArea} />
+        <FormItem label="数字选择" name="number" component={NumberPicker} />
+        <FormItem label="开关选择" name="boolean" component={Switch} />
+        <FormItem label="日期选择" name="date" component={DatePicker} />
+        <FormItem
+          label="日期范围"
+          initalValue={['2018-12-19', '2018-12-19']}
           name="daterange"
-          x-component="DateRangePicker"
+          component={DatePicker.RangePicker}
         />
-        <Field
-          type="string"
-          title="年份"
-          name="year"
-          x-component="YearPicker"
-        />
-        <Field
-          type="string"
-          title="月份"
+        <FormItem label="年份" name="year" component={DatePicker.YearPicker} />
+        <FormItem
+          label="月份"
           name="month"
-          x-component="MonthPicker"
+          component={DatePicker.MonthPicker}
         />
-        <Field
-          type="string"
-          title="时间"
-          name="time"
-          x-component="TimePicker"
-        />
-        <Field type="string" title="周" name="week" x-component="WeekPicker" />
-        <Field
-          type="array"
-          title="卡片上传文件"
+        <FormItem label="时间" name="time" component={TimePicker} />
+        <FormItem label="周" name="week" component={DatePicker.WeekPicker} />
+        <FormItem
+          label="卡片上传文件"
           name="upload"
-          x-component-props={{ listType: 'card' }}
-          x-component="Upload"
+          listType="card"
+          component={Upload}
         />
-        <Field
-          type="array"
-          title="拖拽上传文件"
+        <FormItem
+          label="拖拽上传文件"
           name="upload2"
-          x-component-props={{ listType: 'dragger' }}
-          x-component="Upload"
+          listType="dragger"
+          component={Upload}
         />
-        <Field
-          type="array"
-          title="普通上传文件"
+        <FormItem
+          label="普通上传文件"
           name="upload3"
-          x-component-props={{ listType: 'text' }}
-          x-component="Upload"
+          listType="text"
+          component={Upload}
         />
-        <Field
-          type="number"
-          title="范围选择"
+        <FormItem
+          label="范围选择"
           name="range"
-          x-component-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-          x-component="Range"
+          min={0}
+          max={1024}
+          marks={[0, 1024]}
+          component={Range}
         />
-        <Field
-          type="number"
-          enum={[
+        <FormItem
+          dataSource={[
             { key: 1, title: '选项1' },
             { key: 2, title: '选项2' }
           ]}
-          x-component-props={{ render: item => item.title }}
-          title="穿梭框"
+          render={item => item.title}
+          label="穿梭框"
           name="transfer"
-          x-component="Transfer"
+          component={Transfer}
         />
-        <Field type="number" title="等级" name="rating" x-component="Rating" />
+        <FormItem label="等级" name="rating" component={Rating} />
         <FormButtonGroup offset={5}>
           <Submit>查询</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
-      </SchemaForm>
+      </Form>
     </Printer>
   )
 }
@@ -545,13 +413,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd' // 或者 @formily/next
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
 import {
   Input,
@@ -568,26 +430,6 @@ import {
   Rating
 } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
-
-const components = {
-  Input,
-  Radio: Radio.Group,
-  Checkbox: Checkbox.Group,
-  TextArea: Input.TextArea,
-  NumberPicker,
-  Select,
-  Switch,
-  DatePicker,
-  DateRangePicker: DatePicker.RangePicker,
-  YearPicker: DatePicker.YearPicker,
-  MonthPicker: DatePicker.MonthPicker,
-  WeekPicker: DatePicker.WeekPicker,
-  TimePicker,
-  Upload,
-  Range,
-  Rating,
-  Transfer
-}
 
 const getInitialValues = () => {
   return new Promise(reslove => {
@@ -624,130 +466,91 @@ const App = () => {
   }, [])
   return (
     <Printer>
-      <SchemaForm
+      <Form
         initialValues={initialValues}
+        editable={false}
         labelCol={5}
         wrapperCol={14}
-        editable={false}
-        components={components}
       >
-        <Field type="string" title="String" name="string" x-component="Input" />
-        <Field
-          type="string"
-          enum={['1', '2', '3', '4']}
-          title="Radio"
+        <FormItem label="String" name="string" component={Input} />
+        <FormItem
+          dataSource={['1', '2', '3', '4']}
+          label="Radio"
           name="radio"
-          x-component="Radio"
+          component={Radio.Group}
         />
-        <Field
-          type="string"
-          enum={['1', '2', '3', '4']}
-          title="Select"
+        <FormItem
+          dataSource={['1', '2', '3', '4']}
+          label="Select"
           name="select"
-          x-component="Select"
+          component={Select}
         />
-        <Field
-          type="string"
-          enum={['1', '2', '3', '4']}
-          title="Checkbox"
+        <FormItem
+          dataSource={['1', '2', '3', '4']}
+          label="Checkbox"
           name="checkbox"
-          x-component="Checkbox"
+          component={Checkbox.Group}
         />
-        <Field
-          type="string"
-          title="TextArea"
-          name="textarea"
-          x-component="TextArea"
-        />
-        <Field
-          type="number"
-          title="数字选择"
-          name="number"
-          x-component="NumberPicker"
-        />
-        <Field
-          type="boolean"
-          title="开关选择"
-          name="boolean"
-          x-component="Switch"
-        />
-        <Field
-          type="string"
-          title="日期选择"
-          name="date"
-          x-component="DatePicker"
-        />
-        <Field
-          type="array<date>"
-          title="日期范围"
-          default={['2018-12-19', '2018-12-19']}
+        <FormItem label="TextArea" name="textarea" component={Input.TextArea} />
+        <FormItem label="数字选择" name="number" component={NumberPicker} />
+        <FormItem label="开关选择" name="boolean" component={Switch} />
+        <FormItem label="日期选择" name="date" component={DatePicker} />
+        <FormItem
+          label="日期范围"
+          initalValue={['2018-12-19', '2018-12-19']}
           name="daterange"
-          x-component="DateRangePicker"
+          component={DatePicker.RangePicker}
         />
-        <Field
-          type="string"
-          title="年份"
-          name="year"
-          x-component="YearPicker"
-        />
-        <Field
-          type="string"
-          title="月份"
+        <FormItem label="年份" name="year" component={DatePicker.YearPicker} />
+        <FormItem
+          label="月份"
           name="month"
-          x-component="MonthPicker"
+          component={DatePicker.MonthPicker}
         />
-        <Field
-          type="string"
-          title="时间"
-          name="time"
-          x-component="TimePicker"
-        />
-        <Field type="string" title="周" name="week" x-component="WeekPicker" />
-        <Field
-          type="array"
-          title="卡片上传文件"
+        <FormItem label="时间" name="time" component={TimePicker} />
+        <FormItem label="周" name="week" component={DatePicker.WeekPicker} />
+        <FormItem
+          label="卡片上传文件"
           name="upload"
-          x-component-props={{ listType: 'card' }}
-          x-component="Upload"
+          listType="card"
+          component={Upload}
         />
-        <Field
-          type="array"
-          title="拖拽上传文件"
+        <FormItem
+          label="拖拽上传文件"
           name="upload2"
-          x-component-props={{ listType: 'dragger' }}
-          x-component="Upload"
+          listType="dragger"
+          component={Upload}
         />
-        <Field
-          type="array"
-          title="普通上传文件"
+        <FormItem
+          label="普通上传文件"
           name="upload3"
-          x-component-props={{ listType: 'text' }}
-          x-component="Upload"
+          listType="text"
+          component={Upload}
         />
-        <Field
-          type="number"
-          title="范围选择"
+        <FormItem
+          label="范围选择"
           name="range"
-          x-component-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-          x-component="Range"
+          min={0}
+          max={1024}
+          marks={[0, 1024]}
+          component={Range}
         />
-        <Field
-          type="number"
-          enum={[
+        <FormItem
+          dataSource={[
             { key: 1, title: '选项1' },
             { key: 2, title: '选项2' }
           ]}
-          x-component-props={{ render: item => item.title }}
-          title="穿梭框"
+          render={item => item.title}
+          label="穿梭框"
           name="transfer"
-          x-component="Transfer"
+          component={Transfer}
         />
-        <Field type="number" title="等级" name="rating" x-component="Rating" />
+        <FormItem label="等级" name="rating" component={Rating} />
         <FormButtonGroup offset={5}>
           <Submit>查询</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
-      </SchemaForm>
+      </Form>
     </Printer>
   )
 }
@@ -820,8 +623,8 @@ onFieldValueChange$('aa').subscribe(fieldState => {
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormButtonGroup,
   FormEffectHooks,
   Submit,
@@ -832,20 +635,14 @@ import { merge } from 'rxjs'
 import { Input, Select } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
 
-const components = {
-  Input,
-  Select
-}
-
 const { onFieldValueChange$, onFieldInit$ } = FormEffectHooks
 
 const App = () => {
   return (
     <Printer>
-      <SchemaForm
+      <Form
         labelCol={5}
         wrapperCol={14}
-        components={components}
         effects={({ setFieldState }) => {
           merge(onFieldValueChange$('aa'), onFieldInit$('aa')).subscribe(
             fieldState => {
@@ -856,22 +653,21 @@ const App = () => {
           )
         }}
       >
-        <Field
-          type="string"
-          title="AA"
-          enum={[
+        <FormItem
+          label="AA"
+          dataSource={[
             { label: '123', value: 123 },
             { label: '321', value: 321 }
           ]}
           name="aa"
-          x-component="Select"
+          component={Select}
         />
-        <Field type="string" title="BB" name="bb" x-component="Input" />
+        <FormItem label="BB" name="bb" component={Input} />
         <FormButtonGroup offset={5}>
           <Submit>查询</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
-      </SchemaForm>
+      </Form>
     </Printer>
   )
 }
@@ -911,8 +707,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormButtonGroup,
   FormEffectHooks,
   FormPath,
@@ -926,12 +722,6 @@ import Printer from '@formily/printer'
 import { merge } from 'rxjs'
 import { Input, Select, NumberPicker } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
-
-const components = {
-  Input,
-  Select,
-  NumberPicker
-}
 
 const { onFieldValueChange$, onFieldInit$ } = FormEffectHooks
 
@@ -955,24 +745,20 @@ const placehodlers = {
   zh: '我爱中国'
 }
 
+const externalTitle = <span style={{ color: 'green' }}>React Node Message</span>
+const requiredReactNode = (
+  <div>
+    必填，<span style={{ color: 'blue' }}>富文本错误文案</span>
+  </div>
+)
+
 const App = () => {
   return (
     <Printer>
-      <SchemaForm
+      <Form
         labelCol={5}
         wrapperCol={14}
-        components={components}
         validateFirst
-        expressionScope={{
-          externalTitle: (
-            <span style={{ color: 'green' }}>React Node Message</span>
-          ),
-          requiredReactNode: (
-            <div>
-              必填，<span style={{ color: 'blue' }}>富文本错误文案</span>
-            </div>
-          )
-        }}
         effects={({ setFieldState }) => {
           merge(onFieldValueChange$('format_type')).subscribe(fieldState => {
             setFieldState('format_text', state => {
@@ -986,19 +772,12 @@ const App = () => {
           })
         }}
       >
-        <Field
-          type="string"
+        <FormItem required label="Required" name="required" component={Input} />
+        <FormItem
           required
-          title="Required"
-          name="required"
-          x-component="Input"
-        />
-        <Field
-          type="string"
-          required
-          title="Format Type"
+          label="Format Type"
           name="format_type"
-          enum={[
+          dataSource={[
             'url',
             'email',
             'ipv6',
@@ -1012,20 +791,18 @@ const App = () => {
             'date',
             'zip'
           ]}
-          x-component="Select"
+          component={Select}
         />
-        <Field
-          type="string"
+        <FormItem
           required
-          title="Format Text"
+          label="Format Text"
           name="format_text"
-          x-component="Input"
+          component={Input}
         />
-        <Field
-          type="string"
+        <FormItem
           required
-          title="Other Rules"
-          x-rules={[
+          label="Other Rules"
+          rules={[
             {
               whitespace: true,
               min: 5,
@@ -1036,13 +813,12 @@ const App = () => {
             }
           ]}
           name="custom_rules"
-          x-component="Input"
+          component={Input}
         />
-        <Field
-          type="string"
+        <FormItem
           required
-          title="Async Validate"
-          x-rules={value => {
+          label="Async Validate"
+          rules={value => {
             return new Promise(resolve => {
               setTimeout(() => {
                 resolve(value !== '57350' ? '验证码验证失败' : '')
@@ -1050,19 +826,14 @@ const App = () => {
             })
           }}
           name="remote_code"
-          x-props={{
-            triggerType: 'onBlur'
-          }}
-          x-component="Input"
-          x-component-props={{
-            placeholder: 'Please input remote code:57350'
-          }}
+          triggerType="onBlur"
+          placeholder="Please input remote code:57350"
+          component={Input}
         />
-        <Field
-          type="number"
+        <FormItem
           required
-          title="Threshold Validate"
-          x-rules={value => {
+          label="Threshold Validate"
+          rules={value => {
             if (value > 0 && value < 100) {
               return {
                 type: 'warning',
@@ -1088,36 +859,34 @@ const App = () => {
             }
           }}
           name="threshold"
-          x-component="NumberPicker"
+          component={NumberPicker}
         />
-        <Field
-          type="string"
-          title="Custom Message"
-          x-rules={{
+        <FormItem
+          label="Custom Message"
+          rules={{
             required: true,
             extra: '校验模板注入变量',
-            message: 'Required {{extra}}'
+            message: 'Required {{ extra }}'
           }}
           name="custom_message"
-          x-component="Input"
+          component={Input}
         />
-        <Field
-          type="string"
-          title="{{externalTitle}}"
-          x-rules={[
+        <FormItem
+          label={externalTitle}
+          rules={[
             {
               required: true,
-              message: '{{requiredReactNode}}'
+              message: requiredReactNode
             }
           ]}
           name="react_node_message"
-          x-component="Input"
+          component={Input}
         />
         <FormButtonGroup offset={5}>
           <Submit>查询</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
-      </SchemaForm>
+      </Form>
     </Printer>
   )
 }

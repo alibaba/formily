@@ -56,6 +56,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const topFormItemProps = useDeepFormItem()
 
   const renderComponent = ({ props, state, mutators, form }) => {
+    if (!component) return <div>Can not fount component.</div>
     if (!component['__ALREADY_CONNECTED__']) {
       component[ConnectedComponent] = connect({
         eventName,
@@ -101,6 +102,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
             labelAlign,
             wrapperCol,
             prefix,
+            inline,
             extra,
             help,
             hasFeedback,

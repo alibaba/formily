@@ -126,6 +126,7 @@ export interface ISchema {
   editable?: boolean
   visible?: boolean
   display?: boolean
+  triggerType?: 'onBlur' | 'onChange'
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
