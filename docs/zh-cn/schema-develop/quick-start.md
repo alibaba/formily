@@ -11,8 +11,9 @@
 3. 开发创建记录页
 4. 开发编辑记录页
 5. 开发查看详情页
-6. 实现一些联动逻辑
-7. 定制一些校验规则
+6. 实现一些表单布局
+7. 实现一些联动逻辑
+8. 定制一些校验规则
 
 ### 环境准备
 
@@ -313,7 +314,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 使用了按需依赖的方式来载入 Schema 扩展组件，@formily/antd-components 中的扩展组件全部都是封装后的组件，只能给 Formily 的 SchemaForm 和 FormItem 组件消费
-- 使用了 JSX Schema 的形式来开发表单，点击 Print JSON Schema 可以查看对应的 JSON Schema 形式
+- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
 - 如果不想每次都手动注册扩展组件，可以参考以下写法
 
 ```tsx
@@ -539,6 +540,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 借助 initialValues 属性处理异步默认值
 - initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 SchemaForm 传递 value 属性
+- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
 
 ### 开发查看详情页
 
@@ -759,6 +761,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 与编辑页相似，需要用 initialValues 来传递异步默认值
 - 借助 editable 属性可以全局控制所有表单项变为阅读态，目前只针对简单数据类型的组件支持阅读，其他组件会以 disabled 状态显示
+- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
+
+### 实现一些表单布局
 
 ### 实现一些联动逻辑
 
@@ -884,6 +889,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 在 SchemaForm 组件属性上传入 effects 函数，所有联动操作统一在 effects 中实现
 - FormEffectHooks 中包含表单所有生命周期钩子，调用生命周期钩子会返回 Rxjs 的 Observable 对象
 - 借助 merge 操作符对字段初始化和字段值变化的时机进行合流，这样联动发生的时机会在初始化和值变化的时候发生
+- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
 
 > 引导：想要了解更多联动的骚操作？可以看看后面的联动详细讲解文章。
 >
@@ -1136,3 +1142,4 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 阈值设置形态，通常采用 warning 式校验，需要在自定义校验器的返回值中指定`type:"warning"`
 - Schema 任何一个属性都支持`{{}}`表达式，该表达式要求任何一个字段值必须是字符串，同时字符串必须以`{{`开始，`}}`结束
 - 通过 SchemaForm 的 expressionScope 属性，从顶层传递上下文，在 Schema 属性表达式中可以读取
+- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
