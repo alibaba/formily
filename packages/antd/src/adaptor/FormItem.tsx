@@ -26,13 +26,13 @@ const computeHelp = (props: ISchemaFieldAdaptorProps) => {
   const messages = [].concat(props.errors || [], props.warnings || [])
   return messages.length
     ? messages.map((message, index) =>
-      createElement(
-        'span',
-        { key: index },
-        message,
-        messages.length - 1 > index ? ' ,' : ''
+        createElement(
+          'span',
+          { key: index },
+          message,
+          messages.length - 1 > index ? ' ,' : ''
+        )
       )
-    )
     : props.schema && props.schema.description
 }
 
