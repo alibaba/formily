@@ -7,13 +7,14 @@
 该项目总共分成以下几个部分，我会一步步的讲解：
 
 1. 环境准备
-2. 开发查询列表页
-3. 开发创建记录页
-4. 开发编辑记录页
-5. 开发查看详情页
-6. 实现一些表单布局
-7. 实现一些联动逻辑
-8. 定制一些校验规则
+2. 热身案例
+3. 开发查询列表页
+4. 开发创建记录页
+5. 开发编辑记录页
+6. 开发查看详情页
+7. 实现一些表单布局
+8. 实现一些联动逻辑
+9. 实现一些校验规则
 
 ### 环境准备
 
@@ -49,6 +50,10 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 - 引入 Form/FormItem 作为表单基础核心组件
 - 从@formily/antd-components 中引入 Input 组件(按需引入)，该 Input 组件属于扩展后的 Input 组件，它内部实现了一些额外状态的映射
 - 想要看完整的扩展组件列表，可以跳转至 API 列表中详细查看`@formily/antd-components`的具体 API
+
+### 极简案例
+
+
 
 ### 开发查询列表页
 
@@ -141,7 +146,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 调用 useFormTableQuery 会返回 Table 和 Form 属性，只需简单传递给对应组件即可
 - useFormTableQuery 的传入参数是一个返回 Promise 对象的函数，该函数约定了它的出入参形式，如果接口请求出入参不符合这个约定，需要手动转换。
 
-### 开发创建记录页面
+### 开发创建记录页
 
 ```jsx
 import React from 'react'
@@ -767,9 +772,7 @@ const App = () => {
             setFieldState('format_text', state => {
               state.value = placehodlers[fieldState.value]
               state.rules = fieldState.value
-              state.props['x-component-props'] =
-                state.props['x-component-props'] || {}
-              state.props['x-component-props'].placeholder =
+              state.props.placeholder =
                 placehodlers[fieldState.value]
             })
           })

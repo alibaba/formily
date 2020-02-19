@@ -79,7 +79,9 @@ export const connect = <ExtendsComponentKey extends string = ''>(
             options.getValueFromEvent
               ? options.getValueFromEvent.call(
                   {
-                    props: componentProps
+                    props: componentProps,
+                    schema,
+                    field: fieldProps
                   },
                   event,
                   ...args

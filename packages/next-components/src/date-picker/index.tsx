@@ -24,8 +24,7 @@ export const DatePicker = connect<
   'RangePicker' | 'WeekPicker' | 'MonthPicker' | 'YearPicker'
 >({
   getValueFromEvent(value) {
-    const props = this.getExtendsComponentProps()
-    return transformMoment(value, getFormatFromProps(props))
+    return transformMoment(value, getFormatFromProps(this.props))
   },
   getProps: mapStyledProps,
   getComponent: mapTextComponent
@@ -33,8 +32,7 @@ export const DatePicker = connect<
 
 DatePicker.RangePicker = connect({
   getValueFromEvent([startDate, endDate]) {
-    const props = this.getExtendsComponentProps()
-    const format = getFormatFromProps(props)
+    const format = getFormatFromProps(this.props)
     return [
       transformMoment(startDate, format),
       transformMoment(endDate, format)

@@ -7,13 +7,14 @@
 该项目总共分成以下几个部分，我会一步步的讲解：
 
 1. 环境准备
-2. 开发查询列表页
-3. 开发创建记录页
-4. 开发编辑记录页
-5. 开发查看详情页
-6. 实现一些表单布局
-7. 实现一些联动逻辑
-8. 定制一些校验规则
+2. 热身案例
+3. 开发查询列表页
+4. 开发创建记录页
+5. 开发编辑记录页
+6. 开发查看详情页
+7. 实现一些表单布局
+8. 实现一些联动逻辑
+9. 实现一些校验规则
 
 ### 环境准备
 
@@ -25,7 +26,7 @@
 npm install --save antd @formily/antd @formily/antd-components
 ```
 
-@formily/antd 主要是作为 Form 核心库，@formily/antd-components 主要作为 Form 的 antd 扩展组件库
+@formily/antd 主要是作为 Form 核心库，@formily/antd-components 主要作为 Form 的 antd 扩展组件库，我们可以不使用@formily/antd-components，它只是作为扩展包
 
 > 如果你使用的是 Fusion Next
 
@@ -33,22 +34,103 @@ npm install --save antd @formily/antd @formily/antd-components
 npm install --save next @formily/next @formily/next-components
 ```
 
-@formily/next 主要是作为 Form 核心库，@formily/next-components 主要作为 Form 的 fusion 扩展组件库
+@formily/next 主要是作为 Form 核心库，@formily/next-components 主要作为 Form 的 fusion 扩展组件库，我们可以不使用@formily/next-components，它只是作为扩展包
 
 **引入**
 
 ```tsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm } from '@formily/antd' // 或者 @formily/next
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
 import { Input } from '@formily/antd-components' // 或者@formily/next-components
 ```
 
 这里需要注意几点：
 
 - 引入 SchemaForm，用于 Schema 渲染表单
+- 引入 SchemaMarkupField，用于渲染 Schema 节点
+- 引入 FormButtonGroup，用于处理表单按钮组布局
+- 引入 Submit，用于处理按钮点击自动触发提交操作
+- 引入 Reset，用于处理按钮点击自动触发重置操作
 - 从@formily/antd-components 中引入 Input 组件(按需引入)，该 Input 组件属于扩展后的 Input 组件，它内部实现了一些额外状态的映射
 - 想要看完整的扩展组件列表，可以跳转至 API 列表中详细查看`@formily/antd-components`的具体 API
+
+### 热身案例
+
+```jsx
+import React from 'react'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { Input } from 'antd'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ Input }}
+      onSubmit={values => {
+        console.log(values)
+      }}
+    >
+      <Field type="string" name="name" title="Name" x-component="Input" />
+      <FormButtonGroup>
+        <Submit>查询</Submit>
+        <Reset>重置</Reset>
+      </FormButtonGroup>
+    </SchemaForm>
+  )
+}
+
+/*
+ JSON Schema写法
+const App = () => {
+  const { form, table } = useFormTableQuery(service)
+  return (
+    <SchemaForm
+      components={{ Input }}
+      schema={{
+        type:"object",
+        properties:{
+          name:{
+            type:"string",
+            title:"Name",
+            x-component":"Input"
+          }
+        }
+      }}
+      onSubmit={(values)=>{
+        console.log(values)
+      }}
+    >
+      <FormButtonGroup>
+        <Submit>查询</Submit>
+        <Reset>重置</Reset>
+      </FormButtonGroup>
+    </SchemaForm>
+  )
+}
+*/
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- Field 组件代表每个 json schema 的一个原子描述节点，它的属性与 json schema 完全等价。
+- Field 指定 x-component 的名称会和 SchemaForm 属性传入的 components 映射起来。
+
+> 注意：以上代码是以 JSX Schema 形式来写的，后面我们的案例也都会以 JSX Schema 形式来写，如果想要了解对应的 JSON Schema 写法，每个案例下方都会有一个 Print Schema 的按钮，点击可以查看与其完全等价的 JSON Schema 写法
 
 ### 开发查询列表页
 
@@ -146,7 +228,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 调用 useFormTableQuery 会返回 Table 和 Form 属性，只需简单传递给对应组件即可
 - useFormTableQuery 的传入参数是一个返回 Promise 对象的函数，该函数约定了它的出入参形式，如果接口请求出入参不符合这个约定，需要手动转换。
 
-### 开发创建记录页面
+### 开发创建记录页
 
 ```jsx
 import React from 'react'
@@ -314,7 +396,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 使用了按需依赖的方式来载入 Schema 扩展组件，@formily/antd-components 中的扩展组件全部都是封装后的组件，只能给 Formily 的 SchemaForm 和 FormItem 组件消费
-- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
+- 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 - 如果不想每次都手动注册扩展组件，可以参考以下写法
 
 ```tsx
@@ -540,7 +622,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 借助 initialValues 属性处理异步默认值
 - initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 SchemaForm 传递 value 属性
-- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
+- 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 
 ### 开发查看详情页
 
@@ -761,7 +843,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 与编辑页相似，需要用 initialValues 来传递异步默认值
 - 借助 editable 属性可以全局控制所有表单项变为阅读态，目前只针对简单数据类型的组件支持阅读，其他组件会以 disabled 状态显示
-- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
+- 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 
 ### 实现一些表单布局
 
@@ -889,7 +971,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 在 SchemaForm 组件属性上传入 effects 函数，所有联动操作统一在 effects 中实现
 - FormEffectHooks 中包含表单所有生命周期钩子，调用生命周期钩子会返回 Rxjs 的 Observable 对象
 - 借助 merge 操作符对字段初始化和字段值变化的时机进行合流，这样联动发生的时机会在初始化和值变化的时候发生
-- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
+- 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 
 > 引导：想要了解更多联动的骚操作？可以看看后面的联动详细讲解文章。
 >
@@ -1142,4 +1224,4 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 阈值设置形态，通常采用 warning 式校验，需要在自定义校验器的返回值中指定`type:"warning"`
 - Schema 任何一个属性都支持`{{}}`表达式，该表达式要求任何一个字段值必须是字符串，同时字符串必须以`{{`开始，`}}`结束
 - 通过 SchemaForm 的 expressionScope 属性，从顶层传递上下文，在 Schema 属性表达式中可以读取
-- 使用Printer组件，它内部会拦截actions.getFormSchema，点击 Print JSON Schema可以查看JSX Schema等价转换的JSON Schema形式
+- 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式

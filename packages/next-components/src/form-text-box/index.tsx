@@ -22,7 +22,7 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
       {
         gutter: 5
       },
-      schema.getExtendsComponentProps()
+      schema.getExtendsComponentProps(false)
     )
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
