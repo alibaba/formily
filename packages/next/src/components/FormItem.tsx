@@ -1,6 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Form as NextForm } from '@alifd/next'
-import { InternalField, connect } from '@formily/react-schema-renderer'
+import {
+  InternalField,
+  connect,
+  InternalVirtualField
+} from '@formily/react-schema-renderer'
 import {
   normalizeCol,
   pickNotFormItemProps,
@@ -60,7 +64,10 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const topFormItemProps = useDeepFormItem()
 
   const renderComponent = ({ props, state, mutators, form }) => {
-    if (!component) return <div>Can not fount component.</div>
+    if (!component) {
+      if (children) return <Fragment>{children}</Fragment>
+      return <div>Can not fount component.</div>
+    }
     if (!component['__ALREADY_CONNECTED__']) {
       component[ConnectedComponent] = connect({
         eventName,
@@ -84,6 +91,38 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
     )
   }
 
+  const renderField = ({ form, state, mutators }) => {
+    const { props, errors, warnings, editable, required } = state
+    const { label, labelCol, wrapperCol, help } = props
+    const formItemProps = pickFormItemProps(props)
+    const componentProps = pickNotFormItemProps(props)
+    return (
+      <NextFormItem
+        {...formItemProps}
+        required={editable === false ? undefined : required}
+        labelCol={label ? normalizeCol(labelCol) : undefined}
+        wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
+        validateState={computeStatus(state)}
+        help={computeMessage(errors, warnings) || help}
+      >
+        {renderComponent({ props: componentProps, state, mutators, form })}
+      </NextFormItem>
+    )
+  }
+
+  if (!component && children) {
+    return (
+      <InternalVirtualField
+        name={name}
+        visible={visible}
+        display={display}
+        props={{ ...topFormItemProps, ...itemProps, ...props }}
+      >
+        {renderField}
+      </InternalVirtualField>
+    )
+  }
+
   return (
     <InternalField
       name={name}
@@ -97,24 +136,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
       triggerType={triggerType}
       props={{ ...topFormItemProps, ...itemProps, ...props }}
     >
-      {({ form, state, mutators }) => {
-        const { props, errors, warnings, editable, required } = state
-        const { label, labelCol, wrapperCol, help } = props
-        const formItemProps = pickFormItemProps(props)
-        const componentProps = pickNotFormItemProps(props)
-        return (
-          <NextFormItem
-            {...formItemProps}
-            required={editable === false ? undefined : required}
-            labelCol={label ? normalizeCol(labelCol) : undefined}
-            wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
-            validateState={computeStatus(state)}
-            help={computeMessage(errors, warnings) || help}
-          >
-            {renderComponent({ props: componentProps, state, mutators, form })}
-          </NextFormItem>
-        )
-      }}
+      {renderField}
     </InternalField>
   )
 }

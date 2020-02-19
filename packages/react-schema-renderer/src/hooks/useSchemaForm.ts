@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, createElement } from 'react'
 import { useForm } from '@formily/react'
 import { Schema } from '../shared/schema'
 import { deprecate, each, map, lowercase, isFn } from '@formily/shared'
@@ -21,7 +21,13 @@ const lowercaseKeys = (obj: any) => {
 
 const transformComponents = (components: any) => {
   return map(components, component => {
-    return component['__ALREADY_CONNECTED__'] || component.isFieldComponent
+    if (!isFn(component))
+      return () => {
+        console.log('fuck')
+        return createElement('div', {}, 'Can not found any component.')
+      }
+    return component['__ALREADY_CONNECTED__'] ||
+      (component as any).isFieldComponent
       ? component
       : connect()(component)
   })

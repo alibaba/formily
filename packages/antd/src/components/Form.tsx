@@ -16,6 +16,7 @@ export const Form: React.FC<IAntdFormProps> = props => {
     form,
     useDirty,
     onValidateFailed,
+    editable,
     validateFirst,
     ...rest
   } = props
