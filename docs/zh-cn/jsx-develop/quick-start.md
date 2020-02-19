@@ -16,7 +16,7 @@
 8. 实现一些表单布局
 9. 实现一些校验规则
 
-### 环境准备
+## 环境准备
 
 **安装**
 
@@ -51,7 +51,7 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 - 从@formily/antd-components 中引入 Input 组件(按需引入)，该 Input 组件属于扩展后的 Input 组件，它内部实现了一些额外状态的映射
 - 想要看完整的扩展组件列表，可以跳转至 API 列表中详细查看`@formily/antd-components`的具体 API
 
-### 热身案例
+## 热身案例
 
 ```jsx
 import React from 'react'
@@ -83,7 +83,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - FormItem组件需要传入name来标识当前字段的路径，同时可以传入与对应组件库FormItem组件一样的label属性
 - FormItem组件需要传入一个component属性来注册需要渲染的组件，该组件只需要满足value/onChange属性API即可立即使用
 
-### 开发查询列表页
+## 开发查询列表页
 
 ```jsx
 import React from 'react'
@@ -174,7 +174,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 调用 useFormTableQuery 会返回 Table 和 Form 属性，只需简单传递给对应组件即可
 - useFormTableQuery 的传入参数是一个返回 Promise 对象的函数，该函数约定了它的出入参形式，如果接口请求出入参不符合这个约定，需要手动转换。
 
-### 开发创建记录页
+## 开发创建记录页
 
 ```jsx
 import React from 'react'
@@ -293,7 +293,7 @@ import { setup } from '@formily/antd-components' //或者@formily/next-component
 setup() //只需调用一次即可自动装载扩展组件，想要了解详细的x-component映射枚举表可以查看详细API列表
 ```
 
-### 开发编辑记录页
+## 开发编辑记录页
 
 ```jsx
 import React, { useEffect, useState } from 'react'
@@ -443,7 +443,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 Form 传递 value 属性
 - Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据
 
-### 开发查看详情页
+## 开发查看详情页
 
 ```jsx
 import React, { useEffect, useState } from 'react'
@@ -599,7 +599,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 借助 editable 属性可以全局控制所有表单项变为阅读态，目前只针对简单数据类型的组件支持阅读，其他组件会以 disabled 状态显示
 - Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据
 
-### 实现一些联动逻辑
+## 实现一些联动逻辑
 
 通常，我们的联动逻辑可以分为几类，我们可以是：
 
@@ -722,7 +722,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 >
 > 答疑：为什么用 Rxjs？因为 Rxjs 在处理异步问题上，是目前最优秀的解决方案，越是复杂的联动，使用 Rxjs 越能发挥它的最大价值。
 
-### 实现一些表单布局
+## 实现一些表单布局
 
 通常，我们的表单布局主要分为：
 
@@ -906,7 +906,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - FormItem 组件，不管是否传 component 或者 label 属性，它都会自带 FormItem 样式，如果期望联动控制非 FormItem 样式的布局组件，可以使用 VirtualField 组件，它是一个无 UI 组件
 - FormItemDeepProvider 可以在局部区域控制 FormItem 的 labelCol/wrapperCol
 
-### 实现一些校验规则
+## 实现一些校验规则
 
 通常，我们的校验场景可以分为几类，我们可以是：
 

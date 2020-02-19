@@ -104,6 +104,7 @@ export interface IFormSpyProps {
     action: { type: string; payload: any },
     form: IForm
   ) => any
+  initialState?: any
   children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
 }
 

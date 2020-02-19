@@ -21,9 +21,9 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
   const [type, setType] = useState<string>(LifeCycleTypes.ON_FORM_INIT)
   const [state, dispatch] = useReducer(
     (state, action) => props.reducer(state, action, form),
-    {}
+    props.initialState || {}
   )
-  const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {    
+  const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {
     if (initializedRef.current) return
     setTimeout(() => {
       if (unmountRef.current) return

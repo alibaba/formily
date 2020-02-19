@@ -16,7 +16,7 @@
 8. 实现一些表单布局
 9. 实现一些校验规则
 
-### 环境准备
+## 环境准备
 
 **安装**
 
@@ -61,7 +61,7 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 - 从@formily/antd-components 中引入 Input 组件(按需引入)，该 Input 组件属于扩展后的 Input 组件，它内部实现了一些额外状态的映射
 - 想要看完整的扩展组件列表，可以跳转至 API 列表中详细查看`@formily/antd-components`的具体 API
 
-### 热身案例
+## 热身案例
 
 ```jsx
 import React from 'react'
@@ -133,7 +133,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 > 注意：以上代码是以 JSX Schema 形式来写的，后面我们的案例也都会以 JSX Schema 形式来写，如果想要了解对应的 JSON Schema 写法，每个案例下方都会有一个 Print Schema 的按钮，点击可以查看与其完全等价的 JSON Schema 写法
 
-### 开发查询列表页
+## 开发查询列表页
 
 ```jsx
 import React from 'react'
@@ -229,7 +229,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 调用 useFormTableQuery 会返回 Table 和 Form 属性，只需简单传递给对应组件即可
 - useFormTableQuery 的传入参数是一个返回 Promise 对象的函数，该函数约定了它的出入参形式，如果接口请求出入参不符合这个约定，需要手动转换。
 
-### 开发创建记录页
+## 开发创建记录页
 
 ```jsx
 import React from 'react'
@@ -406,7 +406,7 @@ import { setup } from '@formily/antd-components' //或者@formily/next-component
 setup() //只需调用一次即可自动装载扩展组件，想要了解详细的x-component映射枚举表可以查看详细API列表
 ```
 
-### 开发编辑记录页
+## 开发编辑记录页
 
 ```jsx
 import React, { useEffect, useState } from 'react'
@@ -625,7 +625,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 SchemaForm 传递 value 属性
 - 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 
-### 开发查看详情页
+## 开发查看详情页
 
 ```jsx
 import React, { useEffect, useState } from 'react'
@@ -846,7 +846,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 借助 editable 属性可以全局控制所有表单项变为阅读态，目前只针对简单数据类型的组件支持阅读，其他组件会以 disabled 状态显示
 - 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 
-### 实现一些联动逻辑
+## 实现一些联动逻辑
 
 通常，我们的联动逻辑可以分为几类，我们可以是：
 
@@ -976,7 +976,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 >
 > 答疑：为什么用 Rxjs？因为 Rxjs 在处理异步问题上，是目前最优秀的解决方案，越是复杂的联动，使用 Rxjs 越能发挥它的最大价值。
 
-### 实现一些表单布局
+## 实现一些表单布局
 
 通常，我们的表单布局主要分为：
 
@@ -1181,7 +1181,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 > 注意：Formily 布局组件不是普通的 UI 组件，它只能在 SchemaForm 中使用，放到其他地方是不能独立使用的。
 
-### 实现一些校验规则
+## 实现一些校验规则
 
 通常，我们的校验场景可以分为几类，我们可以是：
 
