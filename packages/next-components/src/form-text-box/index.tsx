@@ -3,9 +3,10 @@ import { createControllerBox, Schema } from '@formily/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@formily/shared'
 import { NextSchemaFieldAdaptor, pickFormItemProps } from '@formily/next'
+import { ItemProps } from '@alifd/next/types/form'
 import styled from 'styled-components'
 
-export const FormTextBox = createControllerBox<IFormTextBox>(
+export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
   'text-box',
   styled(({ props, form, className, children }) => {
     const schema = new Schema(props)

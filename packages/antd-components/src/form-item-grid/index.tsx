@@ -8,11 +8,11 @@ import { createVirtualBox } from '@formily/react-schema-renderer'
 import { toArr } from '@formily/shared'
 import { Row, Col } from 'antd'
 import { FormItemProps as ItemProps } from 'antd/lib/form'
-import { IFormItemGridProps } from '../types'
+import { IFormItemGridProps, IItemProps } from '../types'
 import { normalizeCol } from '../shared'
 
 export const FormItemGrid = createVirtualBox<
-  React.PropsWithChildren<IFormItemGridProps & ItemProps>
+  React.PropsWithChildren<IFormItemGridProps & ItemProps & IItemProps>
 >('grid', props => {
   const {
     cols: rawCols,
