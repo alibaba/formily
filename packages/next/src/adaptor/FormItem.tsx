@@ -46,9 +46,7 @@ const computeExtra = (props: ISchemaFieldAdaptorProps) => {
   if (props.extra) return props.extra
 }
 
-const computeSchemaExtendProps = (
-  props: ISchemaFieldAdaptorProps
-): IFormItemTopProps => {
+const computeSchemaExtendProps = (props: ISchemaFieldAdaptorProps): any => {
   if (props.schema) {
     return pickFormItemProps({
       ...props.schema.getExtendsItemProps(),

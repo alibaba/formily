@@ -26,8 +26,8 @@ export const autoScrollInValidateFailed = (formRef: any) => {
 }
 
 export const pickProps = (object: any, targets: string[]) => {
-  let selected = {}
-  let otherwise = {}
+  let selected: any = {}
+  let otherwise: any = {}
   each(object, (value: any, key: string) => {
     if (targets.includes(key)) {
       selected[key] = value
@@ -64,11 +64,13 @@ const NextFormItemProps = [
 
 export const pickFormItemProps = (props: any) => {
   const { selected } = pickProps(props, NextFormItemProps)
-  return {
-    ...selected,
-    label: props.label || props.title,
-    help: props.help || props.description
+  if (!props.label && props.title) {
+    selected.label = props.title
   }
+  if (!props.help && props.description) {
+    selected.label = props.description
+  }
+  return selected
 }
 
 export const pickNotFormItemProps = (props: any) => {
