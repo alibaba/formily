@@ -1,5 +1,9 @@
 import React, { Fragment } from 'react'
-import { AntdSchemaFieldAdaptor } from '@formily/antd'
+import {
+  AntdSchemaFieldAdaptor,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from '@formily/antd'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import { toArr } from '@formily/shared'
 import { Row, Col } from 'antd'
@@ -14,14 +18,10 @@ export const FormItemGrid = createVirtualBox<
     cols: rawCols,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     title,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    description,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    help,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    extra,
-    ...selfProps
+    label
   } = props
+  const formItemProps = pickFormItemProps(props)
+  const gridProps = pickNotFormItemProps(props)
   const children = toArr(props.children)
   const cols = toArr(rawCols).map(col => normalizeCol(col))
   const childNum = children.length
@@ -42,7 +42,7 @@ export const FormItemGrid = createVirtualBox<
     }
   }
   const grids = (
-    <Row {...selfProps}>
+    <Row {...gridProps}>
       {children.reduce((buf, child, key) => {
         return child
           ? buf.concat(
@@ -55,9 +55,9 @@ export const FormItemGrid = createVirtualBox<
     </Row>
   )
 
-  if (title) {
+  if (title || label) {
     return (
-      <AntdSchemaFieldAdaptor label={title} help={description} extra={extra}>
+      <AntdSchemaFieldAdaptor {...formItemProps}>
         {grids}
       </AntdSchemaFieldAdaptor>
     )

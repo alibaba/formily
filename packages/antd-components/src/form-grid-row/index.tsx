@@ -1,5 +1,5 @@
 import React from 'react'
-import { AntdSchemaFieldAdaptor } from '@formily/antd'
+import { AntdSchemaFieldAdaptor, pickFormItemProps } from '@formily/antd'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import { Row } from 'antd'
 import { RowProps } from 'antd/lib/grid'
@@ -9,11 +9,11 @@ import { IItemProps } from '../types'
 export const FormGridRow = createVirtualBox<RowProps & ItemProps & IItemProps>(
   'grid-row',
   props => {
-    const { title, description, extra } = props
+    const { title, label } = props
     const grids = <Row {...props}>{props.children}</Row>
-    if (title) {
+    if (title || label) {
       return (
-        <AntdSchemaFieldAdaptor label={title} help={description} extra={extra}>
+        <AntdSchemaFieldAdaptor {...pickFormItemProps(props)}>
           {grids}
         </AntdSchemaFieldAdaptor>
       )

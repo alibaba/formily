@@ -42,7 +42,14 @@ import {
   cleanRegistry,
   getRegistry
 } from '@formily/react-schema-renderer'
-import { mapStyledProps, mapTextComponent, normalizeCol } from './shared'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  normalizeCol,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from './shared'
 export * from './adaptor'
 export * from './components'
 export * from './context'
@@ -94,5 +101,8 @@ export {
   createControllerBox,
   createVirtualBox,
   cleanRegistry,
-  getRegistry
+  getRegistry,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
 }

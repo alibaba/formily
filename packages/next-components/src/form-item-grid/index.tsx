@@ -1,5 +1,9 @@
 import React, { Fragment } from 'react'
-import { NextSchemaFieldAdaptor } from '@formily/next'
+import {
+  NextSchemaFieldAdaptor,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from '@formily/next'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import { toArr } from '@formily/shared'
 import { Grid } from '@alifd/next'
@@ -15,14 +19,10 @@ export const FormItemGrid = createVirtualBox<IFormItemGridProps & ItemProps>(
       cols: rawCols,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       title,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      description,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      help,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      extra,
-      ...selfProps
+      label
     } = props
+    const formItemProps = pickFormItemProps(props)
+    const gridProps = pickNotFormItemProps(props)
     const children = toArr(props.children)
     const cols = toArr(rawCols).map(col => normalizeCol(col))
     const childNum = children.length
@@ -43,7 +43,7 @@ export const FormItemGrid = createVirtualBox<IFormItemGridProps & ItemProps>(
       }
     }
     const grids = (
-      <Row {...selfProps}>
+      <Row {...gridProps}>
         {children.reduce((buf, child, key) => {
           return child
             ? buf.concat(
@@ -56,9 +56,9 @@ export const FormItemGrid = createVirtualBox<IFormItemGridProps & ItemProps>(
       </Row>
     )
 
-    if (title) {
+    if (title || label) {
       return (
-        <NextSchemaFieldAdaptor label={title} help={description} extra={extra}>
+        <NextSchemaFieldAdaptor {...formItemProps}>
           {grids}
         </NextSchemaFieldAdaptor>
       )

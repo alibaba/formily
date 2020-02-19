@@ -4,6 +4,7 @@ import {
   MergedFieldComponentProps,
   IConnectProps
 } from '@formily/react-schema-renderer'
+import { each } from '@formily/shared'
 export * from '@formily/shared'
 
 export const autoScrollInValidateFailed = (formRef: any) => {
@@ -22,6 +23,56 @@ export const autoScrollInValidateFailed = (formRef: any) => {
       }
     }, 30)
   }
+}
+
+export const pickProps = (object: any, targets: string[]) => {
+  let selected = {}
+  let otherwise = {}
+  each(object, (value: any, key: string) => {
+    if (targets.includes(key)) {
+      selected[key] = value
+    } else {
+      otherwise[key] = value
+    }
+  })
+  return {
+    selected,
+    otherwise
+  }
+}
+
+const NextFormItemProps = [
+  'required',
+  'prefix',
+  'labelAlign',
+  'hasFeedback',
+  'labelCol',
+  'wrapperCol',
+  'label',
+  'help',
+  'labelTextAlign',
+  'fullWidth',
+  'extra',
+  'size',
+  'asterisk',
+  'labelWidth',
+  'device',
+  'isPreview',
+  'renderPreview',
+  'validateState'
+]
+
+export const pickFormItemProps = (props: any) => {
+  const { selected } = pickProps(props, NextFormItemProps)
+  return {
+    ...selected,
+    label: props.label || props.title,
+    help: props.help || props.description
+  }
+}
+
+export const pickNotFormItemProps = (props: any) => {
+  return pickProps(props, NextFormItemProps).otherwise
 }
 
 export const mapTextComponent = (

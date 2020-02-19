@@ -43,7 +43,14 @@ import {
   cleanRegistry,
   getRegistry
 } from '@formily/react-schema-renderer'
-import { mapStyledProps, mapTextComponent, normalizeCol } from './shared'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  normalizeCol,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from './shared'
 import { useFormTableQuery } from './hooks/useFormTableQuery'
 export * from './adaptor'
 export * from './components'
@@ -97,5 +104,8 @@ export {
   createControllerBox,
   createVirtualBox,
   cleanRegistry,
-  getRegistry
+  getRegistry,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
 }

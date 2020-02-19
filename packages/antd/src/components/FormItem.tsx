@@ -1,7 +1,11 @@
 import React from 'react'
 import { Form as AntdForm } from 'antd'
 import { InternalField, connect } from '@formily/react-schema-renderer'
-import { normalizeCol } from '../shared'
+import {
+  normalizeCol,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from '../shared'
 import { useDeepFormItem } from '../context'
 import { IAntdFormItemProps } from '../types'
 const { Item: AntdFormItem } = AntdForm
@@ -95,42 +99,20 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
       props={{ ...topFormItemProps, ...itemProps, ...props }}
     >
       {({ form, state, mutators }) => {
-        const {
-          props: {
-            label,
-            labelCol,
-            labelAlign,
-            wrapperCol,
-            prefixCls,
-            extra,
-            help,
-            inline,
-            hasFeedback,
-            itemStyle,
-            itemClassName,
-            ...props
-          },
-          errors,
-          editable,
-          warnings,
-          required
-        } = state
+        const { props, errors, warnings, editable, required } = state
+        const { label, labelCol, wrapperCol, help } = props
+        const formItemProps = pickFormItemProps(props)
+        const componentProps = pickNotFormItemProps(props)
         return (
           <AntdFormItem
-            prefixCls={prefixCls}
-            hasFeedback={hasFeedback}
-            className={itemClassName}
-            style={itemStyle}
-            extra={extra}
-            label={label}
-            required={editable ? required : undefined}
+            {...formItemProps}
+            required={editable === false ? undefined : required}
             labelCol={label ? normalizeCol(labelCol) : undefined}
-            labelAlign={labelAlign}
             wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
             validateStatus={computeStatus(state)}
             help={computeMessage(errors, warnings) || help}
           >
-            {renderComponent({ props, state, mutators, form })}
+            {renderComponent({ props: componentProps, state, mutators, form })}
           </AntdFormItem>
         )
       }}

@@ -1,7 +1,11 @@
 import React from 'react'
 import { Form as NextForm } from '@alifd/next'
 import { InternalField, connect } from '@formily/react-schema-renderer'
-import { normalizeCol } from '../shared'
+import {
+  normalizeCol,
+  pickNotFormItemProps,
+  pickFormItemProps
+} from '../shared'
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
 const { Item: NextFormItem } = NextForm
@@ -94,47 +98,20 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
       props={{ ...topFormItemProps, ...itemProps, ...props }}
     >
       {({ form, state, mutators }) => {
-        const {
-          props: {
-            label,
-            labelTextAlign,
-            labelCol,
-            labelAlign,
-            wrapperCol,
-            prefix,
-            inline,
-            extra,
-            help,
-            hasFeedback,
-            size,
-            itemStyle,
-            itemClassName,
-            asterisk,
-            ...props
-          },
-          errors,
-          warnings,
-          required
-        } = state
+        const { props, errors, warnings, editable, required } = state
+        const { label, labelCol, wrapperCol, help } = props
+        const formItemProps = pickFormItemProps(props)
+        const componentProps = pickNotFormItemProps(props)
         return (
           <NextFormItem
-            prefix={prefix}
-            hasFeedback={hasFeedback}
-            className={itemClassName}
-            style={itemStyle}
-            asterisk={asterisk}
-            extra={extra}
-            label={label}
-            size={size}
-            labelTextAlign={labelTextAlign}
-            required={required}
+            {...formItemProps}
+            required={editable === false ? undefined : required}
             labelCol={label ? normalizeCol(labelCol) : undefined}
-            labelAlign={labelAlign || 'left'}
             wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
             validateState={computeStatus(state)}
             help={computeMessage(errors, warnings) || help}
           >
-            {renderComponent({ props, state, mutators, form })}
+            {renderComponent({ props: componentProps, state, mutators, form })}
           </NextFormItem>
         )
       }}
