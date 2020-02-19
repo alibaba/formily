@@ -89,7 +89,7 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 | x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                         |
 | x-index              | 字段顺序                               | `number`                                                          |
 | x-rules              | 字段校验规则，详细描述可以往后看       | `ValidatePatternRules`                                            |
-| x-component          | 字段 UI 组件                           | `string`                                                          |
+| x-component          | 字段 UI 组件名称，大小写不敏感                           | `string`                                                          |
 | x-component-props    | 字段 UI 组件属性                       | `{}`                                                              |
 
 ### From Schema 表达式

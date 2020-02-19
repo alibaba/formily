@@ -13,20 +13,16 @@
     - [理解表单组件扩展机制](./schema-develop/extension.md)
   - 实践教程
     - [使用布局组件](./schema-develop/use-form-layout.md)
-    - [使用Effect Hooks](./schema-develop/use-effect-hook.md)
-    - [自定义Effect Hook](./schema-develop/create-effect-hook.md)
-    - [借助Rxjs实现联动逻辑](./schema-develop/linkage-by-rxjs.md)
-    - [实现超复杂联动逻辑](./schema-develop/complex-linkage.md)
-    - [Schema中描述联动逻辑](./schema-develop/schema-linkage.md)
+    - [实现超复杂联动](./schema-develop/complex-linkage.md)
     - [实现弹窗表单]()
     - [实现分步表单]()
     - [实现联动校验](./schema-develop/linkage-validate.md)
-    - [跨组件通讯](./schema-develop/cross-component-comunicate.md)
     - [管理业务逻辑](./schema-develop/manage-business.md)
-    - [定制校验规则](./schema-develop/custom-validation.md)
   - 进阶教程
     - [实现递归渲染组件](./schema-develop/recursive-render.md)
     - [实现自增列表组件](./schema-develop/self-inc-component.md)
+    - [定制校验规则](./schema-develop/custom-validation.md)
+    - [自定义Effect Hook](./schema-develop/create-effect-hook.md)
     - [开发自定义组件](./schema-develop/create-field-component.md)
     - [开发自定义布局组件](./schema-develop/create-layout-component.md)
     - [接入组件库](./schema-develop/use-components.md)
@@ -36,26 +32,24 @@
   - [介绍](./jsx-develop/introduction.md)
   - [快速开始](./jsx-develop/quick-start.md)
   - 概念/术语理解
-    - 理解表单生命周期
-    - 理解actions/effects
-    - 理解表单路径系统
-    - 理解传值属性
-    - 理解表单状态
-    - 理解表单节点树
+    - [理解表单生命周期]()
+    - [理解actions/effects]()
+    - [理解表单路径系统]()
+    - [理解传值属性]()
+    - [理解表单状态]()
+    - [理解表单节点树]()
   - 实践教程
-    - 使用布局组件
-    - 使用Effect Hooks
-    - 自定义Effect Hook
-    - 借助Rxjs实现联动逻辑
-    - 实现超复杂联动逻辑
-    - 实现联动校验
-    - 跨组件操作表单
-    - 跨组件消费表单生命周期
-    - 管理业务逻辑
-    - 定制校验规则
+    - [使用布局组件]()
+    - [实现超复杂联动逻辑]()
+    - [实现弹窗表单]()
+    - [实现分步表单]()
+    - [实现联动校验]()
+    - [管理业务逻辑]()
   - 进阶教程
-    - 实现自增列表组件
-    - 接入组件库
+    - [实现自增列表组件]()
+    - [自定义Effect Hook]()
+    - [定制校验规则]()
+    - [接入组件库]()
   - FAQ
 - 其他指南
   - 底层扩展开发

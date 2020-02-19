@@ -65,6 +65,7 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 
 ```jsx
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,

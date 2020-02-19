@@ -55,6 +55,7 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 
 ```jsx
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd' // 或者 @formily/next
 import { Input } from 'antd'
 import 'antd/dist/antd.css'
@@ -87,6 +88,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```jsx
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   Form,
   FormItem,

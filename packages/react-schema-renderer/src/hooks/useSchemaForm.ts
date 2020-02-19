@@ -21,9 +21,8 @@ const lowercaseKeys = (obj: any) => {
 
 const transformComponents = (components: any) => {
   return map(components, component => {
-    if (!isFn(component))
+    if (!isFn(component) && !component['styledComponentId'])
       return () => {
-        console.log('fuck')
         return createElement('div', {}, 'Can not found any component.')
       }
     return component['__ALREADY_CONNECTED__'] ||
