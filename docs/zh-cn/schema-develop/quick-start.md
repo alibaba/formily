@@ -12,8 +12,8 @@
 4. 开发创建记录页
 5. 开发编辑记录页
 6. 开发查看详情页
-7. 实现一些表单布局
-8. 实现一些联动逻辑
+7. 实现一些联动逻辑
+8. 实现一些表单布局
 9. 实现一些校验规则
 
 ### 环境准备
@@ -127,6 +127,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
+- SchemaForm的components属性可以传入任意一个只要满足value/onChange属性的组件
 - Field 组件代表每个 json schema 的一个原子描述节点，它的属性与 json schema 完全等价。
 - Field 指定 x-component 的名称会和 SchemaForm 属性传入的 components 映射起来。
 
@@ -845,196 +846,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 借助 editable 属性可以全局控制所有表单项变为阅读态，目前只针对简单数据类型的组件支持阅读，其他组件会以 disabled 状态显示
 - 使用 Printer 组件，它内部会拦截 actions.getFormSchema，点击 Print JSON Schema 可以查看 JSX Schema 等价转换的 JSON Schema 形式
 
-### 实现一些表单布局
-
-通常，我们的表单布局主要分为：
-- 聚合型布局
-  - 字段集聚合
-    - 卡片布局
-    - 内联布局
-  - 网格布局
-  - 自增卡片类布局
-  - 自增列表类布局
-  - 特殊组件布局
-
-在Formily中，这些布局基本上都能覆盖到，即便是极端复杂的布局场景，也是可以在自定义组件中实现，下面，我们主要介绍如何使用已有的布局组件。
-
-```jsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import { Button } from 'antd'
-import Printer from '@formily/printer'
-import {
-  Input,
-  Radio,
-  Checkbox,
-  Select,
-  DatePicker,
-  NumberPicker,
-  TimePicker,
-  Upload,
-  Switch,
-  Range,
-  Transfer,
-  Rating,
-  FormItemGrid,
-  FormTextBox,
-  FormCard,
-  FormBlock,
-  FormLayout
-} from '@formily/antd-components' // 或者@formily/next-components
-import 'antd/dist/antd.css'
-
-const components = {
-  Input,
-  Radio: Radio.Group,
-  Checkbox: Checkbox.Group,
-  TextArea: Input.TextArea,
-  NumberPicker,
-  Select,
-  Switch,
-  DatePicker,
-  DateRangePicker: DatePicker.RangePicker,
-  YearPicker: DatePicker.YearPicker,
-  MonthPicker: DatePicker.MonthPicker,
-  WeekPicker: DatePicker.WeekPicker,
-  TimePicker,
-  Upload,
-  Range,
-  Rating,
-  Transfer
-}
-
-const App = () => {
-  const [state, setState] = useState({ editable: true })
-  return (
-    <Printer>
-      <SchemaForm
-        editable={state.editable}
-        labelCol={8}
-        wrapperCol={6}
-        components={components}
-      >
-        <FormCard title="基本信息">
-          <Field name="aaa" type="string" title="字段1" x-component="Input" />
-          <Field
-            name="bbb"
-            type="number"
-            title="字段2"
-            x-component="NumberPicker"
-          />
-          <Field
-            name="ccc"
-            type="date"
-            title="字段3"
-            x-component="DatePicker"
-          />
-          ​
-        </FormCard>
-        <FormCard title="详细信息">
-          <FormLayout labelCol={8} wrapperCol={12}>
-            <FormItemGrid title="字段3" gutter={10} cols={[6, 11]}>
-              ​<Field name="ddd" type="number" x-component="NumberPicker" />
-              ​<Field name="eee" type="date" x-component="DatePicker" />​
-            </FormItemGrid>
-            <Field type="object" name="mmm" title="对象字段">
-              <FormItemGrid gutter={10} cols={[6, 11]}>
-                <Field
-                  name="ddd1"
-                  default={123}
-                  type="number"
-                  x-component="NumberPicker"
-                />
-                <Field
-                  name="[startDate,endDate]"
-                  type="daterange"
-                  x-component="DateRangePicker"
-                />​
-              </FormItemGrid>
-            </Field>
-          </FormLayout>
-          <FormLayout labelCol={8} wrapperCol={16}>
-            <FormTextBox
-              title="文本串联"
-              text="订%s元/票 退%s元/票 改%s元/票"
-              gutter={8}
-            >
-              <Field
-                type="string"
-                default={10}
-                required
-                name="aa1"
-                x-props={{ style: { width: 80 } }}
-                description="简单描述"
-                x-component="Input"
-              />
-              <Field
-                type="number"
-                default={20}
-                required
-                name="aa2"
-                description="简单描述"
-                x-component="NumberPicker"
-              />
-              <Field
-                type="number"
-                default={30}
-                required
-                name="aa3"
-                description="简单描述"
-                x-component="NumberPicker"
-              />
-            </FormTextBox>
-          </FormLayout>
-          <Field name="aas" type="string" title="字段4" x-component="Input" />​
-          <FormBlock title="区块">
-            <Field
-              name="ddd2"
-              type="string"
-              title="字段5"
-              x-component="Input"
-            />
-            ​
-            <Field
-              name="eee2"
-              type="string"
-              title="字段6"
-              x-component="Input"
-            />
-            ​
-          </FormBlock>
-        </FormCard>​<FormButtonGroup offset={8} sticky>
-          ​<Submit>提交</Submit>​
-          <Button
-            type="primary"
-            onClick={() => setState({ editable: !state.editable })}
-          >
-            {state.editable ? '详情' : '编辑'}
-          </Button>
-          <Reset>重置</Reset>​
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
-  )
-}
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**案例解析**
-
-- FormCard/FormBlock/FormLayout/FormTextBox都是属于布局扩展组件，这类布局组件只能在Schema场景中使用，如果是纯源码开发，则需要自行实现
-- 每个布局组件都可以在JSON Schema中表示，具体可以点击Print JSON Schema按钮查看等价的布局组件使用方式。
-- 用户可以借助createVirtaulBox自己创建布局组件，想看详细API，可跳转至API手册中查看
-
-> 注意：Formily布局组件不是普通的UI组件，它只能在SchemaForm中使用，放到其他地方是不能独立使用的。
-
 ### 实现一些联动逻辑
 
 通常，我们的联动逻辑可以分为几类，我们可以是：
@@ -1164,6 +975,211 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > 引导：想要了解更多联动的骚操作？可以看看后面的联动详细讲解文章。
 >
 > 答疑：为什么用 Rxjs？因为 Rxjs 在处理异步问题上，是目前最优秀的解决方案，越是复杂的联动，使用 Rxjs 越能发挥它的最大价值。
+
+### 实现一些表单布局
+
+通常，我们的表单布局主要分为：
+
+- 聚合型布局
+  - 字段集聚合
+    - 卡片布局
+    - 内联布局
+  - 网格布局
+  - 自增卡片类布局
+  - 自增列表类布局
+  - 特殊组件布局
+
+在 Formily 中，这些布局基本上都能覆盖到，即便是极端复杂的布局场景，也是可以在自定义组件中实现，下面，我们主要介绍如何使用已有的布局组件。
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormEffectHooks
+} from '@formily/antd'
+import { Button } from 'antd'
+import Printer from '@formily/printer'
+import {
+  Input,
+  Radio,
+  Checkbox,
+  Select,
+  DatePicker,
+  NumberPicker,
+  TimePicker,
+  Upload,
+  Switch,
+  Range,
+  Transfer,
+  Rating,
+  FormItemGrid,
+  FormTextBox,
+  FormCard,
+  FormBlock,
+  FormLayout
+} from '@formily/antd-components' // 或者@formily/next-components
+import 'antd/dist/antd.css'
+
+const components = {
+  Input,
+  Radio: Radio.Group,
+  Checkbox: Checkbox.Group,
+  TextArea: Input.TextArea,
+  NumberPicker,
+  Select,
+  Switch,
+  DatePicker,
+  DateRangePicker: DatePicker.RangePicker,
+  YearPicker: DatePicker.YearPicker,
+  MonthPicker: DatePicker.MonthPicker,
+  WeekPicker: DatePicker.WeekPicker,
+  TimePicker,
+  Upload,
+  Range,
+  Rating,
+  Transfer
+}
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+    <Printer>
+      <SchemaForm
+        editable={state.editable}
+        labelCol={8}
+        wrapperCol={6}
+        components={components}
+        effects={({ setFieldState }) => {
+          FormEffectHooks.onFieldValueChange$('bbb').subscribe(({ value }) => {
+            setFieldState('detailCard', state => {
+              state.visible = value
+            })
+          })
+        }}
+      >
+        <FormCard title="基本信息">
+          <Field name="aaa" type="string" title="字段1" x-component="Input" />
+          <Field
+            name="bbb"
+            type="number"
+            title="控制详细信息显示隐藏"
+            enum={[
+              { value: true, label: '显示' },
+              { value: false, label: '隐藏' }
+            ]}
+            default={true}
+            x-component="Select"
+          />
+          <Field
+            name="ccc"
+            type="date"
+            title="字段3"
+            x-component="DatePicker"
+          />
+          ​
+        </FormCard>
+        <FormCard title="详细信息" name="detailCard">
+          <FormLayout labelCol={8} wrapperCol={12}>
+            <FormItemGrid title="字段3" gutter={10} cols={[6, 11]}>
+              ​<Field name="ddd" type="number" x-component="NumberPicker" />
+              ​<Field name="eee" type="date" x-component="DatePicker" />​
+            </FormItemGrid>
+            <Field type="object" name="mmm" title="对象字段">
+              <FormItemGrid gutter={10} cols={[6, 11]}>
+                <Field
+                  name="ddd1"
+                  default={123}
+                  type="number"
+                  x-component="NumberPicker"
+                />
+                <Field
+                  name="[startDate,endDate]"
+                  type="daterange"
+                  x-component="DateRangePicker"
+                />​
+              </FormItemGrid>
+            </Field>
+          </FormLayout>
+          <FormLayout labelCol={8} wrapperCol={16}>
+            <FormTextBox
+              title="文本串联"
+              text="订%s元/票 退%s元/票 改%s元/票"
+              gutter={8}
+            >
+              <Field
+                type="string"
+                default={10}
+                required
+                name="aa1"
+                x-props={{ style: { width: 80 } }}
+                description="简单描述"
+                x-component="Input"
+              />
+              <Field
+                type="number"
+                default={20}
+                required
+                name="aa2"
+                description="简单描述"
+                x-component="NumberPicker"
+              />
+              <Field
+                type="number"
+                default={30}
+                required
+                name="aa3"
+                description="简单描述"
+                x-component="NumberPicker"
+              />
+            </FormTextBox>
+          </FormLayout>
+          <Field name="aas" type="string" title="字段4" x-component="Input" />​
+          <FormBlock title="区块">
+            <Field
+              name="ddd2"
+              type="string"
+              title="字段5"
+              x-component="Input"
+            />
+            ​
+            <Field
+              name="eee2"
+              type="string"
+              title="字段6"
+              x-component="Input"
+            />
+            ​
+          </FormBlock>
+        </FormCard>​<FormButtonGroup offset={8} sticky>
+          ​<Submit>提交</Submit>​
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '详情' : '编辑'}
+          </Button>
+          <Reset>重置</Reset>​
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- FormCard/FormBlock/FormLayout/FormTextBox 都是属于布局扩展组件，这类布局组件只能在 Schema 场景中使用，如果是纯源码开发，则需要自行实现
+- 每个布局组件都可以在 JSON Schema 中表示，具体可以点击 Print JSON Schema 按钮查看等价的布局组件使用方式。
+- 用户可以借助 createVirtaulBox 自己创建布局组件，想看详细 API，可跳转至 API 手册中查看
+- 每个布局组件都有一个name属性，可以用于联动控制显示隐藏
+
+> 注意：Formily 布局组件不是普通的 UI 组件，它只能在 SchemaForm 中使用，放到其他地方是不能独立使用的。
 
 ### 实现一些校验规则
 

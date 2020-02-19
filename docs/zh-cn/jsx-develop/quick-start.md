@@ -12,8 +12,8 @@
 4. 开发创建记录页
 5. 开发编辑记录页
 6. 开发查看详情页
-7. 实现一些表单布局
-8. 实现一些联动逻辑
+7. 实现一些联动逻辑
+8. 实现一些表单布局
 9. 实现一些校验规则
 
 ### 环境准备
@@ -51,9 +51,37 @@ import { Input } from '@formily/antd-components' // 或者@formily/next-componen
 - 从@formily/antd-components 中引入 Input 组件(按需引入)，该 Input 组件属于扩展后的 Input 组件，它内部实现了一些额外状态的映射
 - 想要看完整的扩展组件列表，可以跳转至 API 列表中详细查看`@formily/antd-components`的具体 API
 
-### 极简案例
+### 热身案例
 
+```jsx
+import React from 'react'
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd' // 或者 @formily/next
+import { Input } from 'antd'
+import 'antd/dist/antd.css'
 
+const App = () => {
+  return (
+    <Form
+      onSubmit={values => {
+        console.log(values)
+      }}
+    >
+      <FormItem name="name" label="Name" component={Input} />
+      <FormButtonGroup>
+        <Submit>查询</Submit>
+        <Reset>重置</Reset>
+      </FormButtonGroup>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- FormItem组件需要传入name来标识当前字段的路径，同时可以传入与对应组件库FormItem组件一样的label属性
+- FormItem组件需要传入一个component属性来注册需要渲染的组件，该组件只需要满足value/onChange属性API即可立即使用
 
 ### 开发查询列表页
 
@@ -256,8 +284,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 使用了按需依赖的方式来载入扩展组件，@formily/antd-components 中的扩展组件全部都是封装后的组件，只能给 Formily 的 SchemaForm 和 FormItem 组件消费
-- FormItem的组件属性是合并了component组件的属性与实际FormItem组件的属性和Formily Field组件的属性，详细API可以查询API手册
-- Printer组件是用来打印数据的，目前它内部会拦截Form的onSubmit属性，然后弹窗展示提交数据
+- FormItem 的组件属性是合并了 component 组件的属性与实际 FormItem 组件的属性和 Formily Field 组件的属性，详细 API 可以查询 API 手册
+- Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据
 
 ```tsx
 import { setup } from '@formily/antd-components' //或者@formily/next-components
@@ -413,7 +441,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 借助 initialValues 属性处理异步默认值
 - initialValues 只能处理某个字段从无值到有值的填充，从第一次到第 N 次渲染，如果 N-1 次渲染，A 字段已经被填充值，那么第 N 次渲染，即便值变了，也不会发生改变，如果要实现全受控渲染模式，可以给 Form 传递 value 属性
-- Printer组件是用来打印数据的，目前它内部会拦截Form的onSubmit属性，然后弹窗展示提交数据
+- Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据
 
 ### 开发查看详情页
 
@@ -569,8 +597,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 与编辑页相似，需要用 initialValues 来传递异步默认值
 - 借助 editable 属性可以全局控制所有表单项变为阅读态，目前只针对简单数据类型的组件支持阅读，其他组件会以 disabled 状态显示
-- Printer组件是用来打印数据的，目前它内部会拦截Form的onSubmit属性，然后弹窗展示提交数据
-
+- Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据
 
 ### 实现一些联动逻辑
 
@@ -689,11 +716,195 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 在 Form 组件属性上传入 effects 函数，所有联动操作统一在 effects 中实现
 - FormEffectHooks 中包含表单所有生命周期钩子，调用生命周期钩子会返回 Rxjs 的 Observable 对象
 - 借助 merge 操作符对字段初始化和字段值变化的时机进行合流，这样联动发生的时机会在初始化和值变化的时候发生
-- Printer组件是用来打印数据的，目前它内部会拦截Form的onSubmit属性，然后弹窗展示提交数据
+- Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据
 
 > 引导：想要了解更多联动的骚操作？可以看看后面的联动详细讲解文章。
 >
 > 答疑：为什么用 Rxjs？因为 Rxjs 在处理异步问题上，是目前最优秀的解决方案，越是复杂的联动，使用 Rxjs 越能发挥它的最大价值。
+
+### 实现一些表单布局
+
+通常，我们的表单布局主要分为：
+
+- 聚合型布局
+  - 字段集聚合
+    - 卡片布局
+    - 内联布局
+  - 网格布局
+  - 自增卡片类布局
+  - 自增列表类布局
+  - 特殊组件布局
+
+在 Formily 中，这些布局基本上都能覆盖到，即便是极端复杂的布局场景，也是可以在自定义组件中实现，下面，我们主要介绍如何使用已有的布局组件。
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormEffectHooks,
+  FormItemDeepProvider as FormLayout,
+  InternalVirtualField as VirtualField
+} from '@formily/antd'
+import { Button, Card, Row, Col } from 'antd'
+import Printer from '@formily/printer'
+import {
+  Input,
+  Radio,
+  Checkbox,
+  Select,
+  DatePicker,
+  NumberPicker,
+  TimePicker,
+  Upload,
+  Switch,
+  Range,
+  Transfer,
+  Rating
+} from '@formily/antd-components' // 或者@formily/next-components
+import 'antd/dist/antd.css'
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+    <Printer noSchema>
+      <Form
+        editable={state.editable}
+        effects={({ setFieldState }) => {
+          FormEffectHooks.onFieldValueChange$('bbb').subscribe(({ value }) => {
+            setFieldState('detailCard', state => {
+              state.visible = value
+            })
+          })
+          FormEffectHooks.onFieldValueChange$('ccc').subscribe(({ value }) => {
+            setFieldState('layout_1', state => {
+              state.visible = value
+            })
+          })
+        }}
+        labelCol={8}
+        wrapperCol={6}
+      >
+        <Card title="基本信息" style={{ marginBottom: 15 }}>
+          <FormItem name="aaa" label="字段1" component={Input} />
+          <FormItem
+            name="bbb"
+            label="控制详细信息显示隐藏"
+            dataSource={[
+              { value: true, label: '显示' },
+              { value: false, label: '隐藏' }
+            ]}
+            initialValue={true}
+            component={Select}
+          />
+          <FormItem
+            name="ccc"
+            label="控制字段3显示隐藏"
+            dataSource={[
+              { value: true, label: '显示' },
+              { value: false, label: '隐藏' }
+            ]}
+            initialValue={true}
+            component={Select}
+          />
+        </Card>
+        <VirtualField name="detailCard">
+          <Card title="详细信息">
+            <FormLayout labelCol={8} wrapperCol={12}>
+              <FormItem name="layout_1" label="字段3">
+                <Row gutter={10}>
+                  <Col span={6}>
+                    <FormItem name="ddd" component={NumberPicker} />
+                  </Col>
+                  <Col span={18}>
+                    <FormItem name="eee" component={DatePicker} />
+                  </Col>
+                </Row>
+              </FormItem>
+              <FormItem name="layout_2" title="对象字段">
+                <Row gutter={10}>
+                  <Col span={6}>
+                    <FormItem
+                      name="mmm.ddd1"
+                      initialValue={123}
+                      component={NumberPicker}
+                    />
+                  </Col>
+                  <Col span={18}>
+                    <FormItem
+                      name="mmm.[startDate,endDate]"
+                      component={DatePicker.RangePicker}
+                    />
+                  </Col>
+                </Row>
+              </FormItem>
+            </FormLayout>
+            <FormLayout labelCol={8} wrapperCol={16}>
+              <FormItem name="layout_3" label="文本串联">
+                <div style={{ display: 'flex' }}>
+                  <span style={{ marginRight: 5 }}>定</span>
+                  <FormItem
+                    initialValue={10}
+                    required
+                    name="aa1"
+                    style={{
+                      width: 80
+                    }}
+                    help="简单描述"
+                    component={Input}
+                  />
+                  <span style={{ margin: '0 5px' }}>元/票 退</span>
+                  <FormItem
+                    initialValue={20}
+                    required
+                    name="aa2"
+                    help="简单描述"
+                    component={NumberPicker}
+                  />
+                  <span style={{ margin: '0 5px' }}>元/票 改</span>
+                  <FormItem
+                    initialValue={30}
+                    required
+                    name="aa3"
+                    help="简单描述"
+                    component={NumberPicker}
+                  />
+                  <span style={{ margin: '0 5px' }}>元/票</span>
+                </div>
+              </FormItem>
+            </FormLayout>
+            <FormItem name="aas" label="字段4" component={Input} />​
+            <Card title="区块">
+              <FormItem name="ddd2" label="字段5" component={Input} />
+              <FormItem name="eee2" label="字段6" component={Input} />
+            </Card>
+          </Card>
+        </VirtualField>​<FormButtonGroup offset={8} sticky>
+          ​<Submit>提交</Submit>​
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '详情' : '编辑'}
+          </Button>
+          <Reset>重置</Reset>​
+        </FormButtonGroup>
+      </Form>
+    </Printer>
+  )
+}
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- FormItem 组件，如果不传 component，可以作为一个普通布局组件，同时它也支持 name 属性，可以在联动场景下，直接操作布局组件的显示隐藏
+- FormItem 组件，不管是否传 component 或者 label 属性，它都会自带 FormItem 样式，如果期望联动控制非 FormItem 样式的布局组件，可以使用 VirtualField 组件，它是一个无 UI 组件
+- FormItemDeepProvider 可以在局部区域控制 FormItem 的 labelCol/wrapperCol
 
 ### 实现一些校验规则
 
@@ -772,8 +983,7 @@ const App = () => {
             setFieldState('format_text', state => {
               state.value = placehodlers[fieldState.value]
               state.rules = fieldState.value
-              state.props.placeholder =
-                placehodlers[fieldState.value]
+              state.props.placeholder = placehodlers[fieldState.value]
             })
           })
         }}
@@ -911,4 +1121,4 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 对象化传参，自定义校验器用 validator
 - 自定义校验器可以返回 Promise 做异步校验，异步校验需要考虑指定`x-props.triggerType="onBlur"`，防止请求次数过多
 - 阈值设置形态，通常采用 warning 式校验，需要在自定义校验器的返回值中指定`type:"warning"`
-- Printer组件是用来打印数据的，目前它内部会拦截Form的onSubmit属性，然后弹窗展示提交数据
+- Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据

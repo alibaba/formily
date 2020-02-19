@@ -96,7 +96,7 @@ export const pickFormItemProps = (props: any) => {
     selected.label = props.title
   }
   if (!props.help && props.description) {
-    selected.label = props.description
+    selected.help = props.description
   }
   return selected
 }

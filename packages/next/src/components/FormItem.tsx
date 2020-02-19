@@ -93,15 +93,15 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
 
   const renderField = ({ form, state, mutators }) => {
     const { props, errors, warnings, editable, required } = state
-    const { label, labelCol, wrapperCol, help } = props
+    const { labelCol, wrapperCol, help } = props
     const formItemProps = pickFormItemProps(props)
     const componentProps = pickNotFormItemProps(props)
     return (
       <NextFormItem
         {...formItemProps}
         required={editable === false ? undefined : required}
-        labelCol={label ? normalizeCol(labelCol) : undefined}
-        wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
+        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
+        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
         validateState={computeStatus(state)}
         help={computeMessage(errors, warnings) || help}
       >
@@ -121,6 +121,10 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
         {renderField}
       </InternalVirtualField>
     )
+  }
+
+  if (!name) {
+    return <div>Form Item must have name property</div>
   }
 
   return (

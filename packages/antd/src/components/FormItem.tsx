@@ -94,15 +94,15 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
 
   const renderField = ({ form, state, mutators }) => {
     const { props, errors, warnings, editable, required } = state
-    const { label, labelCol, wrapperCol, help } = props
+    const { labelCol, wrapperCol, help } = props
     const formItemProps = pickFormItemProps(props)
     const { inline, ...componentProps } = pickNotFormItemProps(props)
     return (
       <AntdFormItem
         {...formItemProps}
         required={editable === false ? undefined : required}
-        labelCol={label ? normalizeCol(labelCol) : undefined}
-        wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
+        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
+        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
         validateStatus={computeStatus(state)}
         help={computeMessage(errors, warnings) || help}
       >
