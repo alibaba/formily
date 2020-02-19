@@ -5,7 +5,6 @@ import {
   MergedFieldComponentProps
 } from '@formily/react-schema-renderer'
 import { Select } from '@alifd/meet'
-// import RadioSelect from './extends/RadioSelect'
 export * from '@formily/shared'
 
 export const mapSelectComponent = (
