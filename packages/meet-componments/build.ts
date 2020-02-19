@@ -4,7 +4,7 @@ import tsImportPluginFactory from 'ts-import-plugin'
 import glob from 'glob'
 
 const transformer = tsImportPluginFactory({
-  libraryName: '@alifd/meet',
+  libraryName: '@alifd/meet-componments',
   //style: importPath => `${importPath}/style`,
 })
 
