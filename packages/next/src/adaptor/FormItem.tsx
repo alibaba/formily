@@ -5,7 +5,7 @@ import {
   useShallowFormItem,
   FormItemShallowProvider
 } from '../context'
-import { IFormItemTopProps, ISchemaFieldAdaptorProps } from '../types'
+import { ISchemaFieldAdaptorProps } from '../types'
 import { normalizeCol, pickFormItemProps } from '../shared'
 
 const computeStatus = (props: ISchemaFieldAdaptorProps) => {
