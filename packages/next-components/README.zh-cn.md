@@ -6,10 +6,58 @@
 npm install --save @formily/next-components
 ```
 
+### 手动维护组件
 
-### Type of SchemaMarkupField
+通过在`<SchemaForm>`传入components，可以快速置入组件，表单字段通过`x-component`使用到内置的组件。
 
-通过 `setup` 设置的表单字段有以下类型
+```tsx
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/next'
+import { Input } from '@formily/next-components'
+import '@alifd/next/dist/next.css'
+
+export default () => {
+  return (
+    <SchemaForm
+      components={{ Input }}
+    >
+      <Field
+        title="Text"
+        name="text"
+        x-component="Input"
+      />
+    </SchemaForm>
+  )
+}
+
+```
+
+### 使用内置组件
+
+通过 `setup` 方法，可以快速置入内置的表单组件，免去维护全局`components`的工作。
+
+```tsx
+import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/next'
+import { setup } from '@formily/next-components'
+import '@alifd/next/dist/next.css'
+
+setup()
+export default () => {
+  return (
+    <SchemaForm>
+      <Field
+        type="string"
+        title="Text"
+        name="text"
+      />
+    </SchemaForm>
+  )
+}
+
+```
+
+### 内置组件类型
+
+通过 `setup`后，内置的表单字段有以下类型
 
 | type类型       | 对应组件                             | 描述                 |
 |:--------------|:----------------------------------|:----------------------|
@@ -30,22 +78,20 @@ npm install --save @formily/next-components
 
 #### string
 
-**用法**
+内置用法
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
+setup()
 const actions = createFormActions()
 const App = () => {
   return (
@@ -104,19 +150,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -142,19 +189,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -183,19 +231,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -216,19 +265,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -253,24 +303,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### date
 
-* Schema Type : `date`
-* Schema UI Component: Fusion-Next `<DatePicker/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -294,24 +342,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### time
 
-* Schema Type : `time`
-* Schema UI Component: Fusion-Next `<TimePicker/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -335,24 +381,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### range
 
-* Schema Type : `range`
-* Schema UI Component: Fusion-Next `<Range/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -378,24 +422,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### upload
 
-* Schema Type : `upload`
-* Schema UI Component: Fusion-Next `<Upload/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -437,24 +479,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### checkbox
 
-* Schema Type : `checkbox`
-* Schema UI Component: Fusion-Next `<Checkbox/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -488,24 +528,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### radio
 
-* Schema Type : `radio`
-* Schema UI Component: Fusion-Next `<Radio/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -539,24 +577,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### rating
 
-* Schema Type : `rating`
-* Schema UI Component: Fusion-Next `<Rating/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormBlock,
-  FormLayout,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -579,15 +615,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### transfer
 
-* Schema Type : `transfer`
-* Schema UI Component: Fusion-Next `<Transfer/>`
-
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import { SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
   FormBlock,
@@ -596,7 +629,10 @@ import SchemaForm, {
   Submit,
   Reset
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const actions = createFormActions()
 const App = () => {
@@ -623,25 +659,29 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 ### Array Components
 
 #### array
 
-```tsx
+```jsx
 import React, { useState, useEffect } from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  FormItemGrid,
+import { SchemaForm,
+  Field, 
   FormButtonGroup,
   Submit,
   Reset,
-  FormBlock,
-  FormLayout
 } from '@formily/next'
+import {
+  setup,
+  FormBlock,
+  FormItemGrid,
+  FormLayout } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
+
+setup()
+
 
 const App = () => {
   const [value, setValues] = useState({})
@@ -708,18 +748,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  FormItemGrid,
+import { SchemaForm,
+  Field, 
   FormButtonGroup,
   Submit,
   Reset,
-  FormBlock,
-  FormLayout
 } from '@formily/next'
+import {
+  setup,
+  FormBlock,
+  FormItemGrid,
+  FormLayout } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
 
@@ -788,18 +830,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### table
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  FormItemGrid,
+import { SchemaForm,
+  Field, 
   FormButtonGroup,
   Submit,
   Reset,
-  FormBlock,
-  FormLayout
 } from '@formily/next'
+import {
+  setup,
+  FormBlock,
+  FormItemGrid,
+  FormLayout } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
 
@@ -853,12 +897,14 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
+import { FormCard, setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
+setup()
 const App = () => (
   <SchemaForm>
     <FormCard title="block">
@@ -875,11 +921,14 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { FormBlock, SchemaMarkupField as Field } from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
+import { FormBlock, setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const App = () => (
   <SchemaForm>
@@ -895,39 +944,36 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 > FormStep 组件 Props
 
-```typescript
-interface IFormStep {
-  dataSource: StepItemProps[]
-  /** next step props**/
-  // 当前步骤
-  current?: number
-  // 展示方向
-  direction?: 'hoz' | 'ver'
-  // 横向布局时的内容排列
-  labelPlacement?: 'hoz' | 'ver'
-  // 类型
-  shape?: 'circle' | 'arrow' | 'dot'
-  // 是否只读模式
-  readOnly?: boolean
-  // 是否开启动效
-  animation?: boolean
-  // 自定义样式名
-  className?: string
-  // StepItem 的自定义渲染
-  itemRender?: (index: number, status: string) => React.ReactNode
-}
-```
+* IFormStep
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| dataSource    | 分步配置                 | StepItemProps[] |                |
+| current    | 当前步骤                 | number |                |
+| direction    | 展示方向                 | 'hoz' `|` 'ver' |                |
+| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `|` 'ver' |                |
+| shape    | 类型                 | 'circle' `|` 'arrow' `|` 'dot' |                |
+| readOnly    | 是否只读模式                 | boolean |                |
+| animation    | 是否开启动效                 | boolean |                |
+| itemRender    | StepItem 的自定义渲染                 | (index: number, status: string) => React.ReactNode |                |
+
 
 **用法**
 
-```tsx
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
-  FormButtonGroup,
   Submit,
+  FormButtonGroup,
   FormEffectHooks,
   createFormActions,
+  Reset
+} from '@formily/next'
+import { 
+  setup,
   FormGridRow,
   FormItemGrid,
   FormGridCol,
@@ -937,9 +983,12 @@ import {
   FormCard,
   FormTextBox,
   FormStep
-} from '@formily/next'
+} from '@formily/next-components'
 import { Button } from '@alifd/next'
+import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const { onFormInit$ } = FormEffectHooks
 
@@ -1011,37 +1060,41 @@ export default () => (
 
 #### `<FormLayout/>`
 
-> FormLayout 组件 Props
+* IFormItemTopProps
 
-```typescript
-interface IFormItemTopProps {
-  inline?: boolean
-  className?: string
-  style?: React.CSSProperties
-  labelCol?: number | { span: number; offset?: number }
-  wrapperCol?: number | { span: number; offset?: number }
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| inline    | 是否行内模式                 | boolean |                |
+| labelCol    |label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效                  | `{}` |                |
+| wrapperCol    |需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                  | `{}` | 
+
 
 **用法**
 
-```tsx
-import React from 'react'
+```jsx
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
-  FormButtonGroup,
   Submit,
-  Reset,
+  FormButtonGroup,
+  Reset
+} from '@formily/next'
+import { 
+  setup,
+  FormTextBox,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
-} from '@formily/next'
+} from '@formily/next-components'
 import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
+
+setup()
+
 const App = () => (
   <Printer>
     <SchemaForm>
@@ -1061,148 +1114,49 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<FormItemGrid/>`
 
-> FormItemGrid 组件 Props
+* IFormItemGridProps
 
-```typescript
-interface IFormItemGridProps {
-  cols?: Array<number | { span: number; offset: number }>
-  gutter?: number
-  /** next Form.Item props**/
-  // 样式前缀
-  prefix?: string
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| cols    | 列数                 | Array<number | { span: number; offset: number }> |                |
+| gutter    |列间距离                  | number |                |
+| labelCol    |label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效                  | `{}` |                |
+| wrapperCol    |需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                  | `{}` | 
+| help    |自定义提示信息，如不设置，则会根据校验规则自动生成.                | React.ReactNode | |
+| extra    |额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面 | React.ReactNode | |
+| validateState    |校验状态，如不设置，则会根据校验规则自动生成 | 'error' `|` 'success' `|` 'loading' | |
+| hasFeedback    |配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有Input支持 | boolean | |
+| size    | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `|` 'small' `|` 'medium' | |
+| labelAlign    | 标签的位置 | 'top' `|` 'left' `|` 'inset' | |
+| labelTextAlign    | 标签的左右对齐方式 | 'left' `|` 'right' | |
+| asterisk    | required 的星号是否显示 | boolean | |
 
-  // label 标签的文本
-  label?: React.ReactNode
-
-  // label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效
-  labelCol?: {}
-
-  // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol
-  wrapperCol?: {}
-
-  // 自定义提示信息，如不设置，则会根据校验规则自动生成.
-  help?: React.ReactNode
-
-  // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面
-  extra?: React.ReactNode
-
-  // 校验状态，如不设置，则会根据校验规则自动生成
-  validateState?: 'error' | 'success' | 'loading'
-
-  // 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有Input支持
-  hasFeedback?: boolean
-
-  // 自定义内联样式
-  style?: React.CSSProperties
-
-  // node 或者 function(values)
-  children?: React.ReactNode | (() => void)
-
-  // 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。
-  size?: 'large' | 'small' | 'medium'
-
-  // 标签的位置
-  labelAlign?: 'top' | 'left' | 'inset'
-
-  // 标签的左右对齐方式
-  labelTextAlign?: 'left' | 'right'
-
-  // 扩展class
-  className?: string
-
-  // [表单校验] 不能为空
-  required?: boolean
-
-  // required 的星号是否显示
-  asterisk?: boolean
-
-  // required 自定义错误信息
-  requiredMessage?: string
-
-  // required 自定义触发方式
-  requiredTrigger?: string | Array<any>
-
-  // [表单校验] 最小值
-  min?: number
-
-  // [表单校验] 最大值
-  max?: number
-
-  // min/max 自定义错误信息
-  minmaxMessage?: string
-
-  // min/max 自定义触发方式
-  minmaxTrigger?: string | Array<any>
-
-  // [表单校验] 字符串最小长度 / 数组最小个数
-  minLength?: number
-
-  // [表单校验] 字符串最大长度 / 数组最大个数
-  maxLength?: number
-
-  // minLength/maxLength 自定义错误信息
-  minmaxLengthMessage?: string
-
-  // minLength/maxLength 自定义触发方式
-  minmaxLengthTrigger?: string | Array<any>
-
-  // [表单校验] 字符串精确长度 / 数组精确个数
-  length?: number
-
-  // length 自定义错误信息
-  lengthMessage?: string
-
-  // length 自定义触发方式
-  lengthTrigger?: string | Array<any>
-
-  // 正则校验
-  pattern?: any
-
-  // pattern 自定义错误信息
-  patternMessage?: string
-
-  // pattern 自定义触发方式
-  patternTrigger?: string | Array<any>
-
-  // [表单校验] 四种常用的 pattern
-  format?: 'number' | 'email' | 'url' | 'tel'
-
-  // format 自定义错误信息
-  formatMessage?: string
-
-  // format 自定义触发方式
-  formatTrigger?: string | Array<any>
-
-  // [表单校验] 自定义校验函数
-  validator?: () => void
-
-  // validator 自定义触发方式
-  validatorTrigger?: string | Array<any>
-
-  // 是否修改数据时自动触发校验
-  autoValidate?: boolean
-}
-```
 
 **用法**
 
-```tsx
-import React from 'react'
+```jsx
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
-  FormButtonGroup,
   Submit,
-  Reset,
+  FormButtonGroup,
+  Reset
+} from '@formily/next'
+import { 
+  setup,
+  FormTextBox,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
-} from '@formily/next'
+} from '@formily/next-components'
 import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
+
+setup()
 
 const App = () => (
   <Printer>
@@ -1228,33 +1182,40 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<FormTextBox/>`
 
-> FormTextBox 组件 Props
+* IFormTextBox
 
-```typescript
-interface IFormTextBox {
-  text?: string
-  gutter?: number
-  title?: React.ReactText
-  description?: React.ReactText
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| text    | 文案                 | string |                |
+| gutter    |文案间距离                  | number |                |
+| title    |标题                  | React.ReactText |                |
+| description    | 描述                  | React.ReactText |                |
 
 **用法**
 
-```tsx
+```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
-  FormTextBox,
-  FormCard,
-  FormLayout
+  Submit,
+  FormButtonGroup,
+  Reset
 } from '@formily/next'
+import { 
+  setup,
+  FormTextBox,
+  FormItemGrid,
+  FormCard,
+  FormBlock,
+  FormLayout
+} from '@formily/next-components'
 import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
+setup()
 const App = () => {
   return (
     <Printer>
@@ -1300,42 +1261,42 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `<FormButtonGroup/>`
 
-> FormButtonGroup 组件 Props
+* IFormButtonGroupProps
 
-```typescript
-interface IFormButtonGroupProps {
-  sticky?: boolean
-  style?: React.CSSProperties
-  itemStyle?: React.CSSProperties
-  className?: string
-  align?: 'left' | 'right' | 'start' | 'end' | 'top' | 'bottom' | 'center'
-  triggerDistance?: number
-  zIndex?: number
-  span?: ColSpanType
-  offset?: ColSpanType
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| sticky    |是否吸附在页面底部                  | boolean |                |
+| itemStyle    |每个Btn的样式                  | React.CSSProperties |                |
+| align    |对齐方式                  | 'left' `|` 'right' `|` 'start' `|` 'end' `|` 'top' `|` 'bottom' `|` 'center' |                |
+| triggerDistance    | 按钮间距离                  | number |                |
+| zIndex    | z-index                  | number |                |
+| span    | 跨列配置                  | ColSpanType |                |
+| offset    | 偏移配置                  | ColSpanType |                |
 
 **用法**
 
-```tsx
+```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
-  FormButtonGroup,
   Submit,
-  Reset,
+  FormButtonGroup,
+  Reset
+} from '@formily/next'
+import { 
+  setup,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
-} from '@formily/next'
+} from '@formily/next-components'
 import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
+setup()
 const App = () => {
   const [state, setState] = useState({ editable: true })
   return (
@@ -1369,10 +1330,11 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { TextButton } from '@formily/next'
+import { SchemaForm } from '@formily/next'
+import { TextButton } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
@@ -1389,10 +1351,11 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, { CircleButton } from '@formily/next'
+import { SchemaForm } from '@formily/next'
+import { CircleButton } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => (
