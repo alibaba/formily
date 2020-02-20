@@ -64,35 +64,34 @@ npm install --save @formily/next
 | type    | 字段类型                  | 'string' `|` 'object' `|` 'array' `|` 'number' `|` string |                |
 | enum    | 相当于字段dataSource                  |  `Array<string | number | { label: SchemaMessage; value: any }>` |                |
 | required    | 是否必填，为true会同时设置校验规则                  | string[] `|` boolean |                |
-| format    |                   | string |                |
-| properties    |                   | { [key: string]: [ISchema](#ISchema) } |                |
-| items    |                   | [ISchema](#ISchema) `|` [ISchema](#ISchema)[] |                |
-| patternProperties    |                   | { [key: string]: [ISchema](#ISchema) } |                |
-| additionalProperties    |                   | [ISchema](#ISchema) |                |
+| format    | 正则规则类型，详细类型可以往后看	                  | string |                |
+| properties    | 对象属性	                  | { [key: string]: [ISchema](#ISchema) } |                |
+| items    | 数组描述	                  | [ISchema](#ISchema) `|` [ISchema](#ISchema)[] |                |
+| patternProperties    | 动态匹配对象的某个属性的 Schema	                  | { [key: string]: [ISchema](#ISchema) } |                |
+| additionalProperties    | 匹配对象额外属性的 Schema	                  | [ISchema](#ISchema) |                |
 | editable    | 字段是否可编辑                  | boolean |                |
 | visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
 | display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
 | x-component    | 用于渲染的组件                  | string |                | 
 | x-component-props    | 组件的属性                  | { [name: string]: any } |                | 
 | x-rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
-| x-props    |                   | { [name: string]: any } |                | 
-| x-index    |                   | number |                | 
-| x-effect    |                   | (dispatch: (type: string, payload: any) => void, option?: object) => { [key: string]: any } |                | 
-| default    |                   | any |                |
-| const    |                   | any |                |
-| multipleOf    |                   | number |                |
+| x-props    | 字段扩展属性	                  | { [name: string]: any } |                | 
+| x-index    | 字段顺序	                  | number |                | 
+| default    | 字段默认值	                  | any |                |
+| const    |  校验字段值是否与 const 的值相等	                 | any |                |
+| multipleOf    | 校验字段值是否可被 multipleOf 的值整除	                  | number |                |
 | maximum    | 最大值                  | number |                |
-| exclusiveMaximum    |                   | number |                |
+| exclusiveMaximum    | 校验最大值（大于等于）	                  | number |                |
 | minimum    | 最小值                  | number |                |
-| exclusiveMinimum    | 最小值                  | number |                |
+| exclusiveMinimum    | 最小值（小于等于）	                  | number |                |
 | maxLength    | 最大长度                  | number |                |
 | minLength    | 最小长度                  | number |                |
-| pattern    |                   | string `|` RegExp |                |
+| pattern    | 正则校验规则	                  | string `|` RegExp |                |
 | maxItems    | 最大项数                  | number |                |
 | minItems    | 最小项数                  | number |                |
-| uniqueItems    |                   | boolean |                |
-| maxProperties    |                   | number |                |
-| minProperties    |                   | number |                |
+| uniqueItems    | 是否校验重复	                  | boolean |                |
+| maxProperties    | 最大属性数量	                  | number |                |
+| minProperties    | 最小属性数量	                  | number |                |
 
 #### `<Submit/>`
 
@@ -159,8 +158,9 @@ npm install --save @formily/next
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm, SchemaMarkupField as Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/next'
+import { setup } from '@formily/next-components'
 
-console.log('==', FormSpy);
+setup() //内部会完全按照UForm注册规则将组件注册一遍
 
 const actions = createFormActions()
 
@@ -168,7 +168,6 @@ const App = () => {
   return (
     <SchemaForm actions={actions}>
       <Field type="string" title="username" name="username" />
-      <Field type="string" title="age" name="age" />
       <FormSpy
         selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
         reducer={(state, action, form) => ({
@@ -192,48 +191,31 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from '@formily/react'
+import { SchemaForm, SchemaMarkupField as Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/next'
+import { setup } from '@formily/next-components'
+
+setup() //内部会完全按照UForm注册规则将组件注册一遍
 
 const actions = createFormActions()
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
 
 const App = () => {
   return (
-    <Form actions={actions}>
-      <label>username</label>
-      <InputField name="username" />
-      <label>age</label>
-      <InputField name="age" />
+    <SchemaForm actions={actions}>
+      <Field type="string" title="username" name="username" />
+      <Field type="string" title="age" name="age" />
       <FormSpy>
         {({ state, form }) => {
+          // 由于formSpy会监听所有周期，包括form未init之前，所以form实例可能为null
           return (
             <div>
-              name: {form.getFieldValue('username')}
+              name: {form && form.getFieldValue('username')}
               <br />
-              age: {form.getFieldValue('age')}
+              age: {form && form.getFieldValue('age')}
             </div>
           )
         }}
       </FormSpy>
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -241,630 +223,18 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 
-#### `<Field/>(即将废弃，请使用SchemaMarkupField)`
+#### `<Field/>(废弃)`
 
 > 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
-
-### Type of SchemaMarkupField
-
-| type类型       | 对应组件                             | 描述                 |
-|:--------------|:----------------------------------|:----------------------|
-| string   | Input                     | 输入框组件         |
-| string(有enum属性时)   | Select                     | 选择框组件         |
-| textarea   | Input.Textarea                     | 多行输入框组件         |
-| password   | `<Input htmlType="password"/>`                     | 密码输入框         |
-| checkbox   | CheckboxGroup                     | Checkbox         |
-| radio   | RadioGroup                     | Radio         |
-| boolean   | Switch                     | 开关组件         |
-| date   | DatePicker                     | 日期选择器         |
-| time   | TimePicker                     | 时间选择器         |
-| daterange   | DatePicker x 2                     | 范围日期选择器         |
-| rating   | Rating                     | 评价组件         |
-| object   |                      | 嵌套表单         | 自动连接路径信息
-| array   |                      | 表单数组         | 表单数组
-
-
-#### string
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        required
-        title="Text"
-        name="text"
-        x-component-props={{
-          placeholder: 'input'
-        }}
-      />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        required
-        title="Simple Select"
-        name="simpleSelect"
-        x-component-props={{
-          placeholder: 'select'
-        }}
-      />
-      <Field
-        type="string"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-        required
-        title="Object Select"
-        name="objSelect"
-        x-component-props={{
-          placeholder: 'select'
-        }}
-      />
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-        x-component-props={{
-          placeholder: 'textarea'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### textarea
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-        x-component-props={{
-          placeholder: 'textarea'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### password
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        title="Password"
-        name="password"
-        x-component="password"
-        x-component-props={{
-          placeholder: 'password'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### number
-
-* Schema Type : `number`
-* Schema UI Component: Fusion-Next `<NumberPicker/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field type="number" required title="Number" name="number" />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### boolean
-
-* Schema Type : `boolean`
-* Schema UI Component: Fusion-Next `<Switch/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="boolean"
-        required
-        title="Boolean"
-        name="boolean"
-        x-component-props={{
-          checkedChildren: 'on',
-          unCheckedChildren: 'off'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### date
-
-* Schema Type : `date`
-* Schema UI Component: Fusion-Next `<DatePicker/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="date"
-        required
-        title="DatePicker"
-        name="datePicker"
-        x-component-props={{
-          format: 'YYYY-MM-DD HH:mm:ss'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### time
-
-* Schema Type : `time`
-* Schema UI Component: Fusion-Next `<TimePicker/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="time"
-        required
-        title="TimePicker"
-        name="timePicker"
-        x-component-props={{
-          format: 'YYYY-MM-DD HH:mm:ss'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### range
-
-* Schema Type : `range`
-* Schema UI Component: Fusion-Next `<Range/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="range"
-        required
-        title="Range"
-        name="range"
-        x-component-props={{
-          min: 0,
-          max: 1024,
-          marks: [0, 1024]
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### upload
-
-* Schema Type : `upload`
-* Schema UI Component: Fusion-Next `<Upload/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="upload"
-        required
-        title="Card Upload"
-        name="upload2"
-        x-component-props={{
-          listType: 'card'
-        }}
-      />
-      <Field
-        type="upload"
-        required
-        title="Dragger Upload"
-        name="upload1"
-        x-component-props={{
-          listType: 'dragger'
-        }}
-      />
-      <Field
-        type="upload"
-        required
-        title="Text Upload"
-        name="upload3"
-        x-component-props={{
-          listType: 'text'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### checkbox
-
-* Schema Type : `checkbox`
-* Schema UI Component: Fusion-Next `<Checkbox/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="checkbox"
-        required
-        title="Simple Checkbox"
-        name="checkbox"
-        enum={['1', '2', '3', '4']}
-      />
-      <Field
-        type="checkbox"
-        required
-        title="Object Checkbox"
-        name="checkbox2"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### radio
-
-* Schema Type : `radio`
-* Schema UI Component: Fusion-Next `<Radio/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="radio"
-        required
-        title="Simple Radio"
-        name="radio"
-        enum={['1', '2', '3', '4']}
-      />
-      <Field
-        type="radio"
-        required
-        title="Object Radio"
-        name="radio2"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### rating
-
-* Schema Type : `rating`
-* Schema UI Component: Fusion-Next `<Rating/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="rating"
-        title="Rating"
-        name="rating"
-        x-component-props={{
-          allowHalf: true
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### transfer
-
-* Schema Type : `transfer`
-* Schema UI Component: Fusion-Next `<Transfer/>`
-
-**用法**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/next'
-import '@alifd/next/dist/next.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="transfer"
-        title="Transfer"
-        name="transfer"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-        x-component-props={{
-          showSearch: true
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
 
 ### Hook
 
 #### `useFormEffects`
 
-> 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
-> 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
+通过使用 `useFormEffects` 可以轻松实现拥有局部逻辑表单。
+
+* 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
+* 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
 
 **签名**
 
@@ -872,10 +242,15 @@ ReactDOM.render(<App />, document.getElementById('root'))
 (effects: IFormEffect): void
 ```
 
-```tsx
+**用法**
+
+> 注意：使用`useFormState`的必须是自定义组件，即外层必须是 `VirtualField`。
+
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
   VirtualField,
   createFormActions,
@@ -883,7 +258,9 @@ import SchemaForm, {
   LifeCycleTypes,
   createVirtualBox
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 
+setup()
 const actions = createFormActions()
 
 const FragmentContainer = createVirtualBox('ffb', (props) => {
@@ -912,6 +289,8 @@ const FragmentContainer = createVirtualBox('ffb', (props) => {
   )
 });
 
+
+// 具有局部逻辑的表单
 const FormFragment = () => {
   return <FragmentContainer>
     <Field
@@ -938,7 +317,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `useFormState`
 
-> 使用 useFormState 为自定义组件提供FormState扩展和管理能力
+使用 useFormState 为自定义组件提供FormState扩展和管理能力
 
 **签名**
 
@@ -948,41 +327,24 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
-```tsx
+> 注意：使用`useFormState`的必须是自定义组件，即外层必须是 `VirtualField`。
+
+```jsx
 import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, VirtualField,
-  createFormActions, createEffectHook,
-  useForm,  
+import {
+  SchemaForm,
   useFormState,
-  useFormEffects,
-  useFieldState,
-  LifeCycleTypes
+  createFormActions,
+  LifeCycleTypes,
+  createVirtualBox
 } from '@formily/next'
+import { setup } from '@formily/next-components'
 
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
-
+setup()
 const actions = createFormActions()
-const FormFragment = (props) => {  
-  const [formState, setFormState ] = useFormState({ extendVar: 0 })
+const FormFragment = createVirtualBox('fusestatform', (props) => {  
+  const [formState, setFormState] = useFormState({ extendVar: 0 })
   const { extendVar } = formState
 
   return <div>
@@ -991,13 +353,13 @@ const FormFragment = (props) => {
     }}>add</button>
     <div>count: {extendVar}</div>
   </div>
-}
+})
 
 const App = () => {
   return (
-    <Form actions={actions}>
+    <SchemaForm actions={actions}>
       <FormFragment />
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -1006,7 +368,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `useFieldState`
 
-> 使用 useFieldState 为自定义组件提供状态管理能力
+使用 useFieldState 为自定义组件提供状态管理能力
 
 **签名**
 
@@ -1014,37 +376,25 @@ ReactDOM.render(<App />, document.getElementById('root'))
 (defaultState: T): [state: IFieldState, setFieldState: (state?: IFieldState) => void]
 ```
 
-```tsx
+**用法**
+
+> 注意：使用`useFormState`的必须是自定义组件，即外层必须要有 `VirtualField`。
+
+```jsx
 import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, VirtualField,
+import { SchemaForm,
+  SchemaMarkupField as Field,
   createFormActions, createEffectHook,
   useForm,  
   useFormEffects,
   useFieldState,
-  LifeCycleTypes
-} from '@formily/react'
+  LifeCycleTypes,
+  createControllerBox,
+} from '@formily/next'
+import { setup } from '@formily/next-components'
 
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
-
+setup()
 const changeTab$ = createEffectHook('changeTab')
 const actions = createFormActions()
 const TabFragment = (props) => {  
@@ -1085,26 +435,23 @@ const TabFragment = (props) => {
   return btns
 }
 
-const FormTab = (props) => {
-  return <VirtualField name="layout_tab">
-    {({ form }) => {
-      return <TabFragment {...props} form={form} />
-    }}
-  </VirtualField>
-}
+const FormTab = createControllerBox('formTab', (props) => {
+  const { form, props: comProps } = props;
+  return <TabFragment {...comProps['x-component-props']} form={form} />
+})
 
 const App = () => {
   return (
-    <Form actions={actions}>
+    <SchemaForm actions={actions}>
       <FormTab dataSource={[
         { label: 'tab-1', name: 'username' },
         { label: 'tab-2', name: 'age' }
       ]} />
       <div>
-        <InputField name="username" label="username"/>
-        <InputField name="age" label="age"/>
+        <Field type="string" title="username" name="username" />
+        <Field type="string" title="age" name="age" />
       </div>
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -1113,7 +460,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### useForm
 
-> 获取一个 [IForm](#IForm) 实例
+* 创建一个 [IForm](#IForm) 实例。需要注意的是，该操作会代理整个表单创建过程，包括actions的处理。
+* useForm是底层方法，它在包装具有业务属性的表单框架时非常有用。
 
 **签名**
 
@@ -1130,18 +478,43 @@ type useForm = <
 
 **用法**
 
-```typescript
-import { useForm } from '@formily/react'
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes,
+  createVirtualBox,
+} from '@formily/next'
+import { setup } from '@formily/next-components'
 
-const FormFragment = () => {
-  const form = useForm()
-  return <div>{form.getFieldValue('username')}</div>
+setup()
+const actions = createFormActions()
+const App = () => {
+  const form = useForm({
+    value: { username: 'moe' },
+    actions,
+  })
+
+  return (
+    <SchemaForm form={form}>
+      <Field type="string" title="username" name="username" />
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 #### useField
 
-> 获取一个 [IFieldHook](#IFieldHook) 实例
+`useField` 是一个非常底层的方法，一般情况不会用到它，但是它对于强业务诉求的定制非常有用。
 
 **签名**
 
@@ -1151,24 +524,53 @@ type useField = (options: IFieldStateUIProps): IFieldHook
 
 **用法**
 
-```typescript
-import { useField } from '@formily/react'
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  LifeCycleTypes,
+  createControllerBox,
+  useField,
+} from '@formily/next'
 
-const FormFragment = (props) => {
+const CustomField = createControllerBox('customField', (props) => {
+  const { name } = props;
+  const realName = props.props['x-component-props']['x-name'];
   const {
     form,
     state,
     props: fieldProps,
     mutators
-  } = useField({ name: 'username' })
+  } = useField({
+      name: `${name}.${realName}`,
+    })
   
-  return <input {...fieldProps} {...props} value={state.value} onChange={mutators.change} />
+  return <input {...fieldProps} value={state.value} onChange={mutators.change} />
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <CustomField x-name="username" />
+      <FormSpy>
+        {({ state, form }) => <div>name: {form && form.getFieldValue('username')}</div>}
+      </FormSpy>
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 #### useVirtualField
 
-> 获取一个 [IVirtualFieldHook](#IVirtualFieldHook) 实例
+`useVirtualField` 是一个非常底层的方法，一般情况不会用到它，但是它对于强业务诉求的定制非常有用。
 
 **签名**
 
@@ -1178,25 +580,46 @@ type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
 
 **用法**
 
-```typescript
-import { UseVirtualField } from '@formily/react'
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  LifeCycleTypes,
+  createControllerBox,
+  useVirtualField,
+} from '@formily/next'
+import { setup } from '@formily/next-components'
 
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    props: fieldProps,
-  } = UseVirtualField({ name: 'username' })
-  
-  return <div style={{ width: fieldProps.width, height: fieldProps.height }}>
-    {props.children}
-  </div>
+setup()
+
+const LayoutBox = createControllerBox('LayoutBox', (props) => {
+  useVirtualField({ name: 'random' })
+  return <div className="layout-box">{props.children}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <LayoutBox>
+        <Field type="string" name="username" title="username" />
+      </LayoutBox>
+      <Field type="string" name="age" title="age"/>
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 #### useFormSpy
 
-> 获取一个 [ISpyHook](#ISpyHook) 实例, 实现[FormSpy](#FormSpy) 第一个例子
+通过`useFormSpy`可以快速实现[FormSpy](#FormSpy) 的功能
 
 **签名**
 
@@ -1206,24 +629,39 @@ type useFormSpy = (props: IFormSpyProps): ISpyHook
 
 **用法**
 
-```typescript
-import { useFormSpy, LifeCycleTypes } from '@formily/react'
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    type,
-  } = useFormSpy({
-    selector: LifeCycleTypes.ON_FORM_VALUES_CHANGE,
-    reducer: (state, action, form) => ({
-      count: state.count ? state.count + 1 : 1
-    })
-  })
-  
-  return <div>
-    <div>count: {state.count || 0}</div>
-  </div>
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  LifeCycleTypes,
+  createControllerBox,
+  useFormSpy,
+} from '@formily/next'
+import { setup } from '@formily/next-components'
+
+setup()
+
+const CustomSpy = createControllerBox('CustomSpy', (props) => {
+  const { form } = useFormSpy({ selector: '*', reducer: v => v })
+  return <div>name: {form && form.getFieldValue('username')}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <Field type="string" name="username" title="username" />
+      <CustomSpy />
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 ### API
@@ -1431,13 +869,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Interfaces
 
-> 整体完全继承@formily/react, 下面只列举@formily/next 的特有的 Interfaces
+整体完全继承@formily/react, 下面只列举@formily/next 的特有的 Interfaces
 
 ---
 
 #### ISchema
 
-> Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
+Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
 
 ```typescript
 interface ISchema {

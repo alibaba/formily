@@ -25,7 +25,8 @@ import {
   useFormEffects,
   useFormSpy,
   useFormState,
-  useVirtualField
+  useVirtualField,
+  useFormQuery
 } from '@formily/react'
 export * from './components/SchemaField'
 export * from './components/SchemaForm'
@@ -62,5 +63,6 @@ export {
   useFormEffects,
   useFormSpy,
   useFormState,
-  useVirtualField
+  useVirtualField,
+  useFormQuery
 }

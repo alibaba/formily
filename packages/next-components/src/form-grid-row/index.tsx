@@ -1,5 +1,5 @@
 import React from 'react'
-import { NextSchemaFieldAdaptor } from '@formily/next'
+import { NextSchemaFieldAdaptor, pickFormItemProps } from '@formily/next'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import { Grid } from '@alifd/next'
 import { RowProps } from '@alifd/next/types/grid'
@@ -10,11 +10,11 @@ const { Row } = Grid
 export const FormGridRow = createVirtualBox<RowProps & ItemProps & IItemProps>(
   'grid-row',
   props => {
-    const { title, description, extra } = props
+    const { title, label } = props
     const grids = <Row {...props}>{props.children}</Row>
-    if (title) {
+    if (title || label) {
       return (
-        <NextSchemaFieldAdaptor label={title} help={description} extra={extra}>
+        <NextSchemaFieldAdaptor {...pickFormItemProps(props)}>
           {grids}
         </NextSchemaFieldAdaptor>
       )

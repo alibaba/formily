@@ -2,28 +2,22 @@ import React, { useRef, useLayoutEffect } from 'react'
 import { createControllerBox, Schema } from '@formily/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@formily/shared'
-import { NextSchemaFieldAdaptor } from '@formily/next'
+import { NextSchemaFieldAdaptor, pickFormItemProps } from '@formily/next'
+import { ItemProps } from '@alifd/next/types/form'
 import styled from 'styled-components'
 
-export const FormTextBox = createControllerBox<IFormTextBox>(
+export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
   'text-box',
   styled(({ props, form, className, children }) => {
     const schema = new Schema(props)
-    const {
-      title,
-      help,
-      text,
-      name,
-      extra,
-      gutter,
-      style,
-      ...componentProps
-    } = Object.assign(
+    const mergeProps = schema.getExtendsComponentProps(false)
+    const { title, label, text, gutter, style } = Object.assign(
       {
         gutter: 5
       },
-      schema.getExtendsComponentProps()
+      mergeProps
     )
+    const formItemProps = pickFormItemProps(mergeProps)
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
     const split = text.split('%s')
@@ -97,15 +91,10 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
       </div>
     )
 
-    if (!title) return textChildren
+    if (!title && !label) return textChildren
 
     return (
-      <NextSchemaFieldAdaptor
-        {...componentProps}
-        label={title}
-        help={help}
-        extra={extra}
-      >
+      <NextSchemaFieldAdaptor {...formItemProps}>
         {textChildren}
       </NextSchemaFieldAdaptor>
     )

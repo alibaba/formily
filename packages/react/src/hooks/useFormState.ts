@@ -10,7 +10,7 @@ export const useFormState = <T extends {}>(defaultState: T) => {
   ref.current.subscribeId = useMemo(() => {
     form.setFormState(state => {
       Object.assign(state, defaultState)
-    }, true)
+    })
     return form.subscribe(({ type }) => {
       if (type === LifeCycleTypes.ON_FORM_CHANGE) {
         forceUpdate()

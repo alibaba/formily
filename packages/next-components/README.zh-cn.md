@@ -7,6 +7,622 @@ npm install --save @formily/next-components
 ```
 
 
+### Type of SchemaMarkupField
+
+通过 `setup` 设置的表单字段有以下类型
+
+| type类型       | 对应组件                             | 描述                 |
+|:--------------|:----------------------------------|:----------------------|
+| string   | Input                     | 输入框组件         |
+| string(有enum属性时)   | Select                     | 选择框组件         |
+| textarea   | Input.Textarea                     | 多行输入框组件         |
+| password   | `<Input htmlType="password"/>`                     | 密码输入框         |
+| checkbox   | CheckboxGroup                     | Checkbox         |
+| radio   | RadioGroup                     | Radio         |
+| boolean   | Switch                     | 开关组件         |
+| date   | DatePicker                     | 日期选择器         |
+| time   | TimePicker                     | 时间选择器         |
+| daterange   | DatePicker x 2                     | 范围日期选择器         |
+| rating   | Rating                     | 评价组件         |
+| object   |                      | 嵌套表单         | 自动连接路径信息
+| array   |                      | 表单数组         | 表单数组
+
+
+#### string
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="string"
+        required
+        title="Text"
+        name="text"
+        x-component-props={{
+          placeholder: 'input'
+        }}
+      />
+      <Field
+        type="string"
+        enum={['1', '2', '3', '4']}
+        required
+        title="Simple Select"
+        name="simpleSelect"
+        x-component-props={{
+          placeholder: 'select'
+        }}
+      />
+      <Field
+        type="string"
+        enum={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+        required
+        title="Object Select"
+        name="objSelect"
+        x-component-props={{
+          placeholder: 'select'
+        }}
+      />
+      <Field
+        type="string"
+        title="TextArea"
+        name="textarea"
+        x-component="textarea"
+        x-component-props={{
+          placeholder: 'textarea'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### textarea
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="string"
+        title="TextArea"
+        name="textarea"
+        x-component="textarea"
+        x-component-props={{
+          placeholder: 'textarea'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### password
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="string"
+        title="Password"
+        name="password"
+        x-component="password"
+        x-component-props={{
+          placeholder: 'password'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### number
+
+* Schema Type : `number`
+* Schema UI Component: Fusion-Next `<NumberPicker/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field type="number" required title="Number" name="number" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### boolean
+
+* Schema Type : `boolean`
+* Schema UI Component: Fusion-Next `<Switch/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="boolean"
+        required
+        title="Boolean"
+        name="boolean"
+        x-component-props={{
+          checkedChildren: 'on',
+          unCheckedChildren: 'off'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### date
+
+* Schema Type : `date`
+* Schema UI Component: Fusion-Next `<DatePicker/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="date"
+        required
+        title="DatePicker"
+        name="datePicker"
+        x-component-props={{
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### time
+
+* Schema Type : `time`
+* Schema UI Component: Fusion-Next `<TimePicker/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="time"
+        required
+        title="TimePicker"
+        name="timePicker"
+        x-component-props={{
+          format: 'YYYY-MM-DD HH:mm:ss'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### range
+
+* Schema Type : `range`
+* Schema UI Component: Fusion-Next `<Range/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="range"
+        required
+        title="Range"
+        name="range"
+        x-component-props={{
+          min: 0,
+          max: 1024,
+          marks: [0, 1024]
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### upload
+
+* Schema Type : `upload`
+* Schema UI Component: Fusion-Next `<Upload/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="upload"
+        required
+        title="Card Upload"
+        name="upload2"
+        x-component-props={{
+          listType: 'card'
+        }}
+      />
+      <Field
+        type="upload"
+        required
+        title="Dragger Upload"
+        name="upload1"
+        x-component-props={{
+          listType: 'dragger'
+        }}
+      />
+      <Field
+        type="upload"
+        required
+        title="Text Upload"
+        name="upload3"
+        x-component-props={{
+          listType: 'text'
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### checkbox
+
+* Schema Type : `checkbox`
+* Schema UI Component: Fusion-Next `<Checkbox/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="checkbox"
+        required
+        title="Simple Checkbox"
+        name="checkbox"
+        enum={['1', '2', '3', '4']}
+      />
+      <Field
+        type="checkbox"
+        required
+        title="Object Checkbox"
+        name="checkbox2"
+        enum={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### radio
+
+* Schema Type : `radio`
+* Schema UI Component: Fusion-Next `<Radio/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="radio"
+        required
+        title="Simple Radio"
+        name="radio"
+        enum={['1', '2', '3', '4']}
+      />
+      <Field
+        type="radio"
+        required
+        title="Object Radio"
+        name="radio2"
+        enum={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### rating
+
+* Schema Type : `rating`
+* Schema UI Component: Fusion-Next `<Rating/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="rating"
+        title="Rating"
+        name="rating"
+        x-component-props={{
+          allowHalf: true
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### transfer
+
+* Schema Type : `transfer`
+* Schema UI Component: Fusion-Next `<Transfer/>`
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import SchemaForm, {
+  SchemaMarkupField as Field,
+  createFormActions,
+  FormBlock,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import '@alifd/next/dist/next.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions}>
+      <Field
+        type="transfer"
+        title="Transfer"
+        name="transfer"
+        enum={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+        x-component-props={{
+          showSearch: true
+        }}
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 
 ### Array Components
 

@@ -2,28 +2,22 @@ import React, { useRef, useLayoutEffect } from 'react'
 import { createControllerBox, Schema } from '@formily/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@formily/shared'
-import { AntdSchemaFieldAdaptor } from '@formily/antd'
+import { FormItemProps as ItemProps } from 'antd/lib/form'
+import { AntdSchemaFieldAdaptor, pickFormItemProps } from '@formily/antd'
 import styled from 'styled-components'
 
-export const FormTextBox = createControllerBox<IFormTextBox>(
+export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
   'text-box',
   styled(({ props, form, className, children }) => {
     const schema = new Schema(props)
-    const {
-      title,
-      help,
-      text,
-      name,
-      extra,
-      gutter,
-      style,
-      ...componentProps
-    } = Object.assign(
+    const mergeProps = schema.getExtendsComponentProps(false)
+    const { title, label, text, gutter, style } = Object.assign(
       {
         gutter: 5
       },
-      schema.getExtendsComponentProps()
+      mergeProps
     )
+    const formItemProps = pickFormItemProps(mergeProps)
     const ref: React.RefObject<HTMLDivElement> = useRef()
     const arrChildren = toArr(children)
     const split = text.split('%s')
@@ -37,9 +31,7 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
             return [
               el,
               () => {
-                const ctrl = el.querySelector(
-                  '.ant-form-item-children'
-                )
+                const ctrl = el.querySelector('.ant-form-item-children')
                 setTimeout(() => {
                   if (ctrl) {
                     const editable = form.getFormState(state => state.editable)
@@ -100,15 +92,10 @@ export const FormTextBox = createControllerBox<IFormTextBox>(
       </div>
     )
 
-    if (!title) return textChildren
+    if (!title && !label) return textChildren
 
     return (
-      <AntdSchemaFieldAdaptor
-        {...componentProps}
-        label={title}
-        help={help}
-        extra={extra}
-      >
+      <AntdSchemaFieldAdaptor {...formItemProps}>
         {textChildren}
       </AntdSchemaFieldAdaptor>
     )

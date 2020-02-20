@@ -23,7 +23,7 @@ export default {
     minimum: 'The value cannot be less than {{minimum}}',
     exclusiveMinimum: 'The value must be greater than {{exclusiveMinimum}}',
     max: 'The length or number of entries must be at most {{max}}',
-    whitespace: 'This field cannot be empty'
+    whitespace: 'This field cannot be blank string.'
   },
   zh: {
     pattern: '该字段不是一个合法的字段',
@@ -49,6 +49,6 @@ export default {
     exclusiveMaximum: '数值必须小于{{exclusiveMaximum}}',
     minimum: '数值不能小于{{minimum}}',
     exclusiveMinimum: '数值必须大于{{exclusiveMinimum}}',
-    whitespace: 'This field cannot be empty'
+    whitespace: '不能为纯空白字符串'
   }
 }

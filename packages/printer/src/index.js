@@ -124,7 +124,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { children, className } = this.props
+    const { children, className, noSchema } = this.props
     if (children && children.props && children.props.actions) {
       this.actions = children.props.actions
     }
@@ -145,19 +145,21 @@ export default class extends React.Component {
               )
             })
         })}
-        <a
-          href=""
-          style={{
-            fontSize: 12,
-            textDecoration: 'none',
-            margin: '20px 0',
-            display: 'block',
-            textAlign: 'center'
-          }}
-          onClick={this.onClickHandler}
-        >
-          Print JSON Schema
-        </a>
+        {!noSchema && (
+          <a
+            href=""
+            style={{
+              fontSize: 12,
+              textDecoration: 'none',
+              margin: '20px 0',
+              display: 'block',
+              textAlign: 'center'
+            }}
+            onClick={this.onClickHandler}
+          >
+            Print JSON Schema
+          </a>
+        )}
       </div>
     )
   }

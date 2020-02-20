@@ -28,13 +28,13 @@ In React, the whole tree rendering performance problem of the form is very obvio
 Use Ant Design：
 
 ```bash
-npm install --save antd @formily/antd
+npm install --save antd @formily/antd @formily/antd-components
 ```
 
 Use Fusion Design：
 
 ```bash
-npm install --save @alifd/next @formily/next
+npm install --save @alifd/next @formily/next @formily/next-components
 ```
 
 Use formily react render engine pacakge:
