@@ -8,7 +8,7 @@ export const useFieldState = <T extends {}>(
   const ref = useRef<IFieldState>()
   const field = useContext(FieldContext)
   useMemo(() => {
-    field.setSourceState(state => {
+    field.setState(state => {
       Object.assign(state, defaultState)
     })
   }, [])

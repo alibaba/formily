@@ -9,8 +9,7 @@ const transformMoment = (value, format) => {
 export const TimePicker = connect({
   getProps: mapStyledProps,
   getValueFromEvent(value) {
-    const props = this.getExtendsComponentProps()
-    const format = props.format || 'HH:mm:ss'
+    const format = this.props.format || 'HH:mm:ss'
     return transformMoment(value, format)
   },
   getComponent: mapTextComponent

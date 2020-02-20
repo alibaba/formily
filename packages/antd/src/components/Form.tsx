@@ -5,7 +5,23 @@ import { normalizeCol, autoScrollInValidateFailed } from '../shared'
 import { FormItemDeepProvider } from '../context'
 import { IAntdFormProps } from '../types'
 
-export const Form: React.FC<IAntdFormProps> = ({ inline, ...props }) => {
+export const Form: React.FC<IAntdFormProps> = props => {
+  const {
+    inline,
+    effects,
+    actions,
+    initialValues,
+    value,
+    defaultValue,
+    onChange,
+    onSubmit,
+    form,
+    useDirty,
+    onValidateFailed,
+    editable,
+    validateFirst,
+    ...rest
+  } = props
   const formRef = useRef<HTMLDivElement>()
   return (
     <InternalForm
@@ -22,7 +38,7 @@ export const Form: React.FC<IAntdFormProps> = ({ inline, ...props }) => {
           <FormItemDeepProvider {...props}>
             <div ref={formRef}>
               <AntdForm
-                {...props}
+                {...rest}
                 labelCol={normalizeCol(props.labelCol)}
                 wrapperCol={normalizeCol(props.wrapperCol)}
                 layout={inline ? 'inline' : props.layout}

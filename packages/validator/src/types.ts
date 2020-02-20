@@ -67,7 +67,8 @@ export type ValidatePatternRules =
 
 export type CustomValidator = (
   value: any,
-  description?: ValidateDescription
+  description?: ValidateDescription,
+  rules?: ValidateRulesMap
 ) => ValidateResponse
 
 export type SyncValidateResponse =
@@ -86,7 +87,8 @@ export type AsyncValidateResponse = Promise<SyncValidateResponse>
 export type ValidateRulesMap = {
   [key in string]: (
     value: any,
-    description: ValidateDescription
+    description: ValidateDescription,
+    rules: ValidateRulesMap
   ) => ValidateResponse | Promise<ValidateResponse>
 }
 

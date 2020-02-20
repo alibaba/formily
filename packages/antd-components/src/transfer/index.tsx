@@ -6,3 +6,5 @@ export const Transfer = connect({
   getProps: mapStyledProps,
   valueName: 'targetKeys'
 })(AntdTransfer)
+
+export default Transfer
