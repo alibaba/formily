@@ -1,15 +1,85 @@
 import React from 'react'
-import { Select } from '@alifd/next'
-import { PreviewText } from '@uform/react-shared-components'
+import { PreviewText } from '@formily/react-shared-components'
 import {
   MergedFieldComponentProps,
   IConnectProps
-} from '@uform/react-schema-renderer'
-export * from '@uform/shared'
+} from '@formily/react-schema-renderer'
+import { each } from '@formily/shared'
+export * from '@formily/shared'
+
+export const autoScrollInValidateFailed = (formRef: any) => {
+  if (formRef.current) {
+    setTimeout(() => {
+      const elements = formRef.current.querySelectorAll(
+        '.next-form-item.has-error'
+      )
+      if (elements && elements.length) {
+        if (!elements[0].scrollIntoView) return
+        elements[0].scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'center'
+        })
+      }
+    }, 30)
+  }
+}
+
+export const pickProps = (object: any, targets: string[]) => {
+  let selected: any = {}
+  let otherwise: any = {}
+  each(object, (value: any, key: string) => {
+    if (targets.includes(key)) {
+      selected[key] = value
+    } else {
+      otherwise[key] = value
+    }
+  })
+  return {
+    selected,
+    otherwise
+  }
+}
+
+const NextFormItemProps = [
+  'required',
+  'prefix',
+  'labelAlign',
+  'hasFeedback',
+  'labelCol',
+  'wrapperCol',
+  'label',
+  'help',
+  'labelTextAlign',
+  'fullWidth',
+  'extra',
+  'size',
+  'asterisk',
+  'labelWidth',
+  'device',
+  'isPreview',
+  'renderPreview',
+  'validateState'
+]
+
+export const pickFormItemProps = (props: any) => {
+  const { selected } = pickProps(props, NextFormItemProps)
+  if (!props.label && props.title) {
+    selected.label = props.title
+  }
+  if (!props.help && props.description) {
+    selected.help = props.description
+  }
+  return selected
+}
+
+export const pickNotFormItemProps = (props: any) => {
+  return pickProps(props, NextFormItemProps).otherwise
+}
 
 export const mapTextComponent = (
   Target: React.JSXElementConstructor<any>,
-  props: any = {},
+  props: any,
   fieldProps: any = {}
 ): React.JSXElementConstructor<any> => {
   const { editable } = fieldProps
@@ -18,20 +88,7 @@ export const mapTextComponent = (
       return PreviewText
     }
   }
-  if (Array.isArray(props.dataSource)) {
-    return Select
-  }
   return Target
-}
-
-export const acceptEnum = (component: React.JSXElementConstructor<any>) => {
-  return ({ dataSource, ...others }) => {
-    if (dataSource) {
-      return React.createElement(Select, { dataSource, ...others })
-    } else {
-      return React.createElement(component, others)
-    }
-  }
 }
 
 export const normalizeCol = (
@@ -56,13 +113,5 @@ export const mapStyledProps = (
     props.state = 'error'
   } else if (warnings && warnings.length) {
     props.state = 'warning'
-  }
-}
-
-export const compose = (...args: any[]) => {
-  return (payload: any, ...extra: any[]) => {
-    return args.reduce((buf, fn) => {
-      return buf !== undefined ? fn(buf, ...extra) : fn(payload, ...extra)
-    }, payload)
   }
 }

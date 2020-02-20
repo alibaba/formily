@@ -1,6 +1,6 @@
 # Contributing Guide
 
-Hi! I’m really excited that you are interested in contributing to UForm. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
+Hi! I’m really excited that you are interested in contributing to Formily. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
 - [Issue Reporting Guidelines](#issue-reporting-guidelines)
 - [Pull Request Guidelines](#pull-request-guidelines)
@@ -17,7 +17,7 @@ Hi! I’m really excited that you are interested in contributing to UForm. Befor
 
 - Try to search for your issue, it may have already been answered or even fixed in the development branch.
 
-- Check if the issue is reproducible with the latest stable version of UForm. If you are using a pre-release, please indicate the specific version you are using.
+- Check if the issue is reproducible with the latest stable version of Formily. If you are using a pre-release, please indicate the specific version you are using.
 
 - It is **required** that you clearly describe the steps necessary to reproduce the issue you are running into. Issues with no clear repro steps will not be triaged. If an issue labeled "need repro" receives no further input from the issue author for more than 5 days, it will be closed.
 

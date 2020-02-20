@@ -3,9 +3,9 @@ import { Grid } from '@alifd/next'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
-import { useFormItem } from '../compat/context'
+import { useDeepFormItem } from '../context'
 import { IFormButtonGroupProps } from '../types'
-import { createVirtualBox } from '@uform/react-schema-renderer'
+import { createVirtualBox } from '@formily/react-schema-renderer'
 
 const { Row, Col } = Grid
 
@@ -71,7 +71,7 @@ export const FormButtonGroup = styled(
       triggerDistance,
       itemStyle
     } = props
-    const { inline } = useFormItem()
+    const { inline } = useDeepFormItem()
     const selfRef = useRef<HTMLDivElement>()
     const renderChildren = () => {
       return (

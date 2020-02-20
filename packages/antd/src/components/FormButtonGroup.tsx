@@ -3,9 +3,9 @@ import { Row, Col } from 'antd'
 import Sticky from 'react-stikky'
 import cls from 'classnames'
 import styled from 'styled-components'
-import { useFormItem } from '../compat/context'
+import { useDeepFormItem } from '../context'
 import { IFormButtonGroupProps } from '../types'
-import { createVirtualBox } from '@uform/react-schema-renderer'
+import { createVirtualBox } from '@formily/react-schema-renderer'
 
 export interface IOffset {
   top: number | string
@@ -69,7 +69,7 @@ export const FormButtonGroup = styled(
       triggerDistance,
       itemStyle
     } = props
-    const { inline } = useFormItem()
+    const { inline } = useDeepFormItem()
     const selfRef = useRef<HTMLDivElement>()
     const renderChildren = () => {
       return (
@@ -135,6 +135,8 @@ export const FormButtonGroup = styled(
   &.is-inline {
     display: inline-block;
     flex-grow: 3;
+    height: 40px;
+    line-height: 40px;
   }
   .button-group {
     .inline {

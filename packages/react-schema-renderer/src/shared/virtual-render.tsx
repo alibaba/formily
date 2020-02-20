@@ -1,5 +1,5 @@
 import React from 'react'
-import { globalThisPolyfill } from '@uform/shared'
+import { globalThisPolyfill } from '@formily/shared'
 
 const env = {
   portalDOM: null

@@ -9,7 +9,7 @@ import {
   // createVirtualBox,
   registerFieldMiddleware
 } from '../index'
-// import { toArr } from '@uform/shared'
+// import { toArr } from '@formily/shared'
 import { render, wait, act, fireEvent } from '@testing-library/react'
 import { filter } from 'rxjs/operators'
 

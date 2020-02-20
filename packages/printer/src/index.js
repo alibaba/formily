@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { createFormActions } from '@uform/react-schema-renderer'
+import { createFormActions } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 
@@ -115,7 +115,7 @@ export default class extends React.Component {
         <pre>
           <code>{printSchema(schema)}</code>
         </pre>
-        <h1>UForm Usage</h1>
+        <h1>Formily Usage</h1>
         <pre>
           <code>{`<SchemaForm schema={${printSchema(schema)}} />`}</code>
         </pre>
@@ -124,7 +124,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { children, className } = this.props
+    const { children, className, noSchema } = this.props
     if (children && children.props && children.props.actions) {
       this.actions = children.props.actions
     }
@@ -145,19 +145,21 @@ export default class extends React.Component {
               )
             })
         })}
-        <a
-          href=""
-          style={{
-            fontSize: 12,
-            textDecoration: 'none',
-            margin: '20px 0',
-            display: 'block',
-            textAlign: 'center'
-          }}
-          onClick={this.onClickHandler}
-        >
-          Print JSON Schema
-        </a>
+        {!noSchema && (
+          <a
+            href=""
+            style={{
+              fontSize: 12,
+              textDecoration: 'none',
+              margin: '20px 0',
+              display: 'block',
+              textAlign: 'center'
+            }}
+            onClick={this.onClickHandler}
+          >
+            Print JSON Schema
+          </a>
+        )}
       </div>
     )
   }

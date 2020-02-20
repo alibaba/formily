@@ -6,8 +6,8 @@ export default ({ docs }) => {
     <SiteRenderer
       logo={
         <img
-          style={{ height: 46 }}
-          src="//img.alicdn.com/tfs/TB1_5.5MCzqK1RjSZFjXXblCFXa-186-97.png"
+          style={{ height: 70 }}
+          src="//img.alicdn.com/tfs/TB1La8Uu7Y2gK0jSZFgXXc5OFXa-372-194.png"
         />
       }
       docs={docs}

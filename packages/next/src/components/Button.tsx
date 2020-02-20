@@ -1,42 +1,7 @@
 import React from 'react'
-import {
-  FormSpy,
-  LifeCycleTypes,
-  createVirtualBox
-} from '@uform/react-schema-renderer'
+import { FormSpy, LifeCycleTypes } from '@formily/react-schema-renderer'
 import { Button } from '@alifd/next'
-import { ButtonProps } from '@alifd/next/types/button'
 import { ISubmitProps, IResetProps } from '../types'
-import styled from 'styled-components'
-
-export const TextButton: React.FC<ButtonProps> = props => (
-  <Button {...props} text />
-)
-
-export const CircleButton = styled(props => {
-  return (
-    <Button {...props} className={`circle-btn ${props.className}`}>
-      {props.children}
-    </Button>
-  )
-})<ButtonProps>`
-  border-radius: 50% !important;
-  padding: 0 !important;
-  min-width: 28px;
-  &.next-large {
-    min-width: 40px;
-  }
-  &.next-small {
-    min-width: 20px;
-  }
-  &.has-text {
-    .next-icon {
-      margin-right: 5px;
-    }
-    background: none !important;
-    border: none !important;
-  }
-`
 
 export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
   return (
@@ -118,8 +83,3 @@ export const Reset: React.FC<IResetProps> = ({
     </FormSpy>
   )
 }
-
-createVirtualBox<IResetProps>('reset', Reset)
-createVirtualBox<ButtonProps>('text-button', TextButton)
-createVirtualBox<ISubmitProps>('submit', Submit)
-createVirtualBox<ButtonProps>('circle-button', CircleButton)

@@ -1,4 +1,4 @@
-# @uform/core
+# @formily/core
 
 English | [简体中文](./README.zh-cn.md)
 
@@ -12,7 +12,7 @@ English | [简体中文](./README.zh-cn.md)
 ### Install
 
 ```bash
-npm install --save @uform/core
+npm install --save @formily/core
 ```
 
 ### Table Of Contents
@@ -52,7 +52,7 @@ npm install --save @uform/core
 
 There are two main scenarios in the middle and back-end field, **one is data entry, one is data query + data presentation**, whether it is data entry or data query, it is realized by means of form, from the perspective of implementation complexity, the complexity of them is similar, because the data rendering level will inevitably have extremely complex renderings (such as Tree Table, etc.), but the data rendering is easier to reuse and abstract, only the Form requirements will involve a lot of interactive logic. So, as long as we solve the Form problem fundamentally, for the mid- and back-stage scenes, most of the mid- and back-stage scene problems are solved.
 
-UForm is born for this purpose.
+Formily is born for this purpose.
 
 ### Design
 
@@ -86,7 +86,7 @@ UForm is born for this purpose.
 
 **FormPath/FormPathPattern** Is an abstract data path form, FormPath is a path class, and FormPathPattern is a path form that can be parsed by FormPath. [Cool-path](https://github.com/janrywang/cool-path) Path parsing matching, ability to evaluate values
 
-**The virtual field** Is a special Field data structure. The difference between the Field and the Field is that it does not manage values. That is to say, it has no relevance to the value of the Form. Usually we use it, more importantly, it acts as a proxy for the status of a UI container. For example, the layout component FormBlock in UForm exists as an independent node in the whole Form Graph, however, this node type is a VirtualField, but when the final data is submitted, the FormBlock does not pollute the data structure of the submitted data.
+**The virtual field** Is a special Field data structure. The difference between the Field and the Field is that it does not manage values. That is to say, it has no relevance to the value of the Form. Usually we use it, more importantly, it acts as a proxy for the status of a UI container. For example, the layout component FormBlock in Formily exists as an independent node in the whole Form Graph, however, this node type is a VirtualField, but when the final data is submitted, the FormBlock does not pollute the data structure of the submitted data.
 
 **Observable Graph** Form is a unique Observer Tree. With the help of the observer tree, many forms-related internal linkage logic can be implemented.
 
@@ -122,7 +122,7 @@ createForm(options?: IFormCreatorOptions): IForm
 **Usage**
 
 ```
- import { createForm } from '@uform/core'
+ import { createForm } from '@formily/core'
 
  const form = createForm({
    values:{},
@@ -157,7 +157,7 @@ registerValidationFormats(formats:{
 **Usage**
 
 ```
- import { createForm,registerValidationFormats } from '@uform/core'
+ import { createForm,registerValidationFormats } from '@formily/core'
 
  registerValidationFormats({
    number: /^[+-]?\d+(\.\d+)?$/
@@ -210,7 +210,7 @@ registerValidationRules(
 **Usage**
 
 ```
- import { createForm,registerValidationRules } from '@uform/core'
+ import { createForm,registerValidationRules } from '@formily/core'
 
  registerValidationRules({
    custom: value => {
@@ -262,7 +262,7 @@ registerValidationMTEngine(callback:(message,context)=>any) : void
 **Usage**
 
 ```
- import { createForm,registerValidationMTEngine } from '@uform/core'
+ import { createForm,registerValidationMTEngine } from '@formily/core'
 
  registerValidationMTEngine((message,context)=>{
    return message.replace(/\{\{\s*(\w+)\s*\}\}/g, (_, $0) => {
@@ -319,7 +319,7 @@ setValidationLanguage(lang: string): void
 **Usage**
 
 ```
-import { setValidationLanguage } from '@uform/core'
+import { setValidationLanguage } from '@formily/core'
 
 setValidationLanguage('en-US')
 ```
@@ -343,7 +343,7 @@ setValidationLocale(locale: ILocales) => void
 **Usage**
 
 ```
-import { setValidationLocale } from '@uform/core'
+import { setValidationLocale } from '@formily/core'
 
 setValidationLocale({
   'en-US':{
@@ -377,7 +377,7 @@ new FormLifeCycle(handlerMap: { [key: LifeCycleTypes]: FormLifeCycleHandler<Payl
 **Usage**
 
 ```typescript
- import { createForm,FormLifeCycle,LifeCycleTypes } from '@uform/core'
+ import { createForm,FormLifeCycle,LifeCycleTypes } from '@formily/core'
 
  const form = createForm({
    lifecycles:[

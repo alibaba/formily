@@ -1,5 +1,5 @@
 import React from 'react'
-import { isEqual } from '@uform/shared'
+import { isEqual } from '@formily/shared'
 
 export const useDirty = (input: any = {}, keys: string[] = []) => {
   const ref = React.useRef<any>({ data: { ...input }, dirtys: {}, num: 0 })

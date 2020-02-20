@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
-import { isFn, deprecate } from '@uform/shared'
+import { isFn, deprecate } from '@formily/shared'
 import { FormSpy } from './FormSpy'
-import { IForm, LifeCycleTypes } from '@uform/core'
+import { IForm, LifeCycleTypes } from '@formily/core'
 import { IFormConsumerProps, IFormConsumerAPI } from '../types'
 
 const transformStatus = (type: string, ref: any) => {
@@ -33,13 +33,12 @@ const transformFormAPI = (
   }
 }
 
-export const FormConsumer: React.FunctionComponent<
-  IFormConsumerProps
-> = props => {
+export const FormConsumer: React.FunctionComponent<IFormConsumerProps> = props => {
   const ref = useRef({})
   return (
     <FormSpy {...props}>
       {({ form, type }) => {
+        if (!form) return <React.Fragment />
         return isFn(props.children)
           ? props.children(transformFormAPI(form, type, ref))
           : props.children

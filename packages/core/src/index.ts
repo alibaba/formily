@@ -11,12 +11,12 @@ import {
   each,
   isObj,
   scheduler
-} from '@uform/shared'
+} from '@formily/shared'
 import {
   FormValidator,
   setValidationLanguage,
   setValidationLocale
-} from '@uform/validator'
+} from '@formily/validator'
 import { FormHeart } from './shared/lifecycle'
 import { FormGraph } from './shared/graph'
 import { FormState } from './state/form'
@@ -63,7 +63,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     const parentValue = getFormValuesIn(parent.path)
     const value = getFormValuesIn(state.name)
     /**
-     * https://github.com/alibaba/uform/issues/267 dynamic remove node
+     * https://github.com/alibaba/formily/issues/267 dynamic remove node
      */
     let removed = false
     if (isArr(parentValue) && !dataPath.existIn(parentValue, parent.path)) {

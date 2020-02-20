@@ -5,8 +5,8 @@ import {
   createFormActions,
   IFormActions,
   IFieldMergeState
-} from '@uform/react'
-import { isFn, isStr, isArr } from '@uform/shared'
+} from '@formily/react'
+import { isFn, isStr, isArr } from '@formily/shared'
 import { ISchemaFormActions } from '../types'
 import { compileObject } from './expression'
 import { Schema } from './schema'

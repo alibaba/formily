@@ -17,3 +17,4 @@ examples/test
 .vscode/
 TODO.md
 tsconfig.tsbuildinfo
+package/

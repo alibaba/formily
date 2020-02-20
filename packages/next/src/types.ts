@@ -6,10 +6,13 @@ import {
   ISchemaFormProps,
   IMarkupSchemaFieldProps,
   ISchemaFieldComponentProps,
-  FormPathPattern
-} from '@uform/react-schema-renderer'
-import { PreviewTextConfigProps } from '@uform/react-shared-components'
+  FormPathPattern,
+  IFormProps,
+  IFieldStateUIProps
+} from '@formily/react-schema-renderer'
+import { PreviewTextConfigProps } from '@formily/react-shared-components'
 import { StyledComponent } from 'styled-components'
+export * from '@formily/react-schema-renderer/lib/types'
 
 type ColSpanType = number | string
 
@@ -20,6 +23,17 @@ export type INextSchemaFormProps = Omit<
   IFormItemTopProps &
   PreviewTextConfigProps &
   ISchemaFormProps
+
+export type INextFormProps = Omit<FormProps, 'onSubmit' | 'defaultValue'> &
+  IFormItemTopProps &
+  IFormProps<any, any>
+
+export type INextFormItemProps = IFieldStateUIProps &
+  ItemProps & {
+    valueName?: string
+    eventName?: string
+    component?: React.JSXElementConstructor<any>
+  }
 
 export type INextSchemaFieldProps = IMarkupSchemaFieldProps
 
@@ -34,7 +48,7 @@ export interface IResetProps extends ButtonProps {
 }
 
 export type IFormItemTopProps = React.PropsWithChildren<
-  Exclude<
+  Omit<
     Pick<
       ItemProps,
       | 'prefix'
@@ -54,7 +68,7 @@ export type IFormItemTopProps = React.PropsWithChildren<
   }
 >
 
-export interface ICompatItemProps
+export interface ISchemaFieldAdaptorProps
   extends Omit<ItemProps, 'labelCol' | 'wrapperCol'>,
     Partial<ISchemaFieldComponentProps> {
   labelCol?: number | { span: number; offset?: number }
@@ -105,4 +119,5 @@ export type IDragHandlerCellProps = React.PropsWithChildren<{}>
 
 export interface IDragableRowProps {
   columns: ColumnProps[]
+  className?: string
 }

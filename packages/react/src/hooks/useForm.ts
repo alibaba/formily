@@ -7,14 +7,18 @@ import {
   IForm,
   IModel,
   isStateModel
-} from '@uform/core'
+} from '@formily/core'
 import { useDirty } from './useDirty'
 import { useEva } from 'react-eva'
 import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
 import { createFormEffects, createFormActions } from '../shared'
-import { isValid } from '@uform/shared'
+import { isValid, globalThisPolyfill } from '@formily/shared'
 const FormHookSymbol = Symbol('FORM_HOOK')
+
+const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
+
+let formID = 0
 
 const useInternalForm = (
   options: IFormCreatorOptions & { form?: IForm } = {}
@@ -48,10 +52,17 @@ const useInternalForm = (
     form.setFormState(state => {
       state.mounted = true
     })
+    formID++
+    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+      globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
+    }
     return () => {
       form.setFormState(state => {
         state.unmounted = true
       })
+      if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+        globalThisPolyfill[DEV_TOOLS_HOOK].unmount(formID)
+      }
     }
   }, [])
   ;(form as any)[FormHookSymbol] = true
@@ -76,16 +87,14 @@ export const useForm = <
     effects: createFormEffects(props.effects, actionsRef.current)
   })
   const lifecycles = [
-    new FormLifeCycle(
-      ({ type, payload }) => {
-        dispatch.lazy(type, () => {
-          return isStateModel(payload) ? payload.getState() : payload
-        })
-        if (broadcast) {
-          broadcast.notify({ type, payload })
-        }
+    new FormLifeCycle(({ type, payload }) => {
+      dispatch.lazy(type, () => {
+        return isStateModel(payload) ? payload.getState() : payload
+      })
+      if (broadcast) {
+        broadcast.notify({ type, payload })
       }
-    ),
+    }),
     new FormLifeCycle(
       LifeCycleTypes.ON_FORM_WILL_INIT,
       (payload: IModel, form: IForm) => {

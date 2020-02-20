@@ -1,10 +1,11 @@
 import React from 'react'
-import { isArr, each, isFn,isValid } from '@uform/shared'
+import { isArr, each, isFn, isValid, defaults } from '@formily/shared'
 import {
   ISchema,
   IConnectOptions,
   ISchemaFieldComponentProps,
-  IConnectProps
+  IConnectProps,
+  MixinConnectedComponent
 } from '../types'
 import { Schema } from './schema'
 
@@ -17,7 +18,6 @@ const createEnum = (enums: any) => {
         }
       } else {
         return {
-          ...item,
           label: item,
           value: item
         }
@@ -49,34 +49,51 @@ const bindEffects = (
         if (isFn(prevEvent)) {
           return prevEvent(...args)
         }
-        
       }
     }
   )
   return props
 }
 
-export const connect = (options?: IConnectOptions) => {
-  options = {
-    valueName: 'value',
-    eventName: 'onChange',
-    ...options
-  }
+export const connect = <ExtendsComponentKey extends string = ''>(
+  options?: IConnectOptions
+) => {
+  options = defaults(
+    {
+      valueName: 'value',
+      eventName: 'onChange'
+    },
+    options
+  )
   return (Component: React.JSXElementConstructor<any>) => {
-    return (fieldProps: ISchemaFieldComponentProps) => {
+    const ConnectedComponent: MixinConnectedComponent<ExtendsComponentKey> = ((
+      fieldProps: ISchemaFieldComponentProps
+    ) => {
       const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
+      const schemaComponentProps = schema.getExtendsComponentProps()
       let componentProps: IConnectProps = {
         ...options.defaultProps,
-        ...schema.getExtendsComponentProps(),
+        ...schemaComponentProps,
         [options.valueName]: value,
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(
             options.getValueFromEvent
-              ? options.getValueFromEvent.call(schema, event, ...args)
+              ? options.getValueFromEvent.call(
+                  {
+                    props: componentProps,
+                    schema,
+                    field: fieldProps
+                  },
+                  event,
+                  ...args
+                )
               : event,
             ...args
           )
+          if (isFn(schemaComponentProps[options.eventName])) {
+            schemaComponentProps[options.eventName](event, ...args)
+          }
         },
         onBlur: () => mutators.blur(),
         onFocus: () => mutators.focus()
@@ -112,6 +129,8 @@ export const connect = (options?: IConnectOptions) => {
 
       if (isArr((props as ISchema).enum) && !componentProps.dataSource) {
         componentProps.dataSource = createEnum((props as ISchema).enum)
+      } else if (componentProps.dataSource) {
+        componentProps.dataSource = createEnum(componentProps.dataSource)
       }
 
       if (isValid(componentProps.editable)) {
@@ -124,6 +143,12 @@ export const connect = (options?: IConnectOptions) => {
           : Component,
         componentProps
       )
-    }
+    }) as any
+
+    Object.assign(ConnectedComponent, {
+      __ALREADY_CONNECTED__: true
+    })
+
+    return ConnectedComponent
   }
 }

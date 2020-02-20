@@ -2,7 +2,7 @@ import React from 'react'
 import { renderHook } from '@testing-library/react-hooks'
 import { Broadcast } from '../shared';
 import { BroadcastContext } from '../context';
-import { createForm } from '@uform/core'
+import { createForm } from '@formily/core'
 import useForm from '../hooks/useForm'
 import { createFormActions, createAsyncFormActions } from '..';
 

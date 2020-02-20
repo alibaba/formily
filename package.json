@@ -9,8 +9,10 @@
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
     "build": "rimraf -rf packages/*/lib packages/*/esm && lerna run build",
-    "build:docs": "node ./scripts/docs.js build -i docs -o docs",
-    "start": "node ./scripts/docs.js start -i docs",
+    "build:docs": "node ./scripts/docs.js build -i docs/zh-cn -o docs/zh-cn",
+    "build:docs:en": "node ./scripts/docs.js build -i docs/en-us -o docs/en-us",
+    "start": "node ./scripts/docs.js start -i docs/zh-cn",
+    "start:en": "node ./scripts/docs.js start -i docs/en-us",
     "sort-api": "node ./scripts/sort-api-table.js",
     "test": "npm run lint && jest",
     "test:sc": "jest --watch packages/react-shared-components/src/__tests__/*.spec.tsx",
@@ -39,7 +41,7 @@
     "postinstall": "opencollective-postinstall"
   },
   "resolutions": {
-    "@types/react": "16.8.23"
+    "@types/react": "^16.8.23"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",
@@ -102,10 +104,13 @@
     "lint-staged": "^8.2.1",
     "majo": "^0.7.1",
     "markdown-toc": "^1.2.0",
+    "mfetch": "^0.2.27",
     "moment": "^2.24.0",
     "monaco-editor": "^0.18.1",
     "node-sass": "^4.13.0",
     "onchange": "^5.2.0",
+    "opencollective": "^1.0.3",
+    "opencollective-postinstall": "^2.0.2",
     "prettier": "^1.18.2",
     "pretty-format": "^24.0.0",
     "react": "^16.8.3",
@@ -127,9 +132,7 @@
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
-    "webpack": "^4.35.3",
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.2"
+    "webpack": "^4.35.3"
   },
   "config": {
     "ghooks": {
@@ -152,6 +155,6 @@
   },
   "collective": {
     "type": "opencollective",
-    "url": "https://opencollective.com/uform"
+    "url": "https://opencollective.com/formily"
   }
 }

@@ -22,7 +22,7 @@ import {
   each,
   FormPath,
   FormPathPattern
-} from '@uform/shared'
+} from '@formily/shared'
 import { getMessage } from './message'
 import defaultFormats from './formats'
 import defaultRules from './rules'
@@ -42,10 +42,10 @@ const template = (message: SyncValidateResponse, context: any): string => {
     return message.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, $0) => {
       return FormPath.getIn(context, $0)
     })
-  } else if (isObj(message)) {
+  } else if (isObj(message) && !message['$$typeof'] && !message['_owner']) {
     return template(message.message, context)
   } else {
-    return ''
+    return message as any
   }
 }
 
@@ -118,12 +118,16 @@ class FormValidator {
           if (ruleObj.hasOwnProperty(key) && isValid(ruleObj[key])) {
             const rule = ValidatorRules[key]
             if (rule) {
-              const payload = await rule(value, ruleObj)
+              const payload = await rule(value, ruleObj, ValidatorRules)
               const message = template(payload, {
                 ...ruleObj,
+                rule: ruleObj,
                 value
               })
-              if (isStr(payload)) {
+              if (
+                isStr(payload) ||
+                (payload['$$typeof'] && payload['_owner'])
+              ) {
                 if (first) {
                   if (message) {
                     errors.push(message)
@@ -265,7 +269,7 @@ class FormValidator {
     })
   }
   /**
-   * https://github.com/alibaba/uform/issues/215
+   * https://github.com/alibaba/formily/issues/215
    *
    * @static
    * @param {ValidateFormatsMap} formats

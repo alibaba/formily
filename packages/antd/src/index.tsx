@@ -1,47 +1,110 @@
-import React, { useRef } from 'react'
 import {
-  SchemaMarkupForm,
-  SchemaMarkupField
-} from '@uform/react-schema-renderer'
-import { IAntdSchemaFormProps, IAntdSchemaFieldProps } from './types'
-import './fields'
-export * from './compat'
-export * from '@uform/react-schema-renderer'
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  SchemaMarkupField,
+  InternalForm,
+  SchemaField,
+  Schema,
+  FormPath,
+  FormSlot,
+  FormSpy,
+  FormConsumer,
+  FormProvider,
+  JSONCondition,
+  compileObject,
+  FormEffectHooks,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormState,
+  useVirtualField,
+  createFormActions,
+  createAsyncFormActions,
+  connect,
+  registerFieldMiddleware,
+  registerFormComponent,
+  registerFormField,
+  registerFormFields,
+  registerFormItemComponent,
+  registerVirtualBox,
+  parseLinkages,
+  useValueLinkageEffect,
+  createControllerBox,
+  createVirtualBox,
+  cleanRegistry,
+  getRegistry
+} from '@formily/react-schema-renderer'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  normalizeCol,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from './shared'
+export * from './adaptor'
 export * from './components'
+export * from './context'
 export * from './types'
-export { mapStyledProps, mapTextComponent } from './shared'
-export const SchemaForm: React.FC<IAntdSchemaFormProps> = props => {
-  const formRef = useRef<HTMLDivElement>()
+export * from './hooks/useFormTableQuery'
 
-  return (
-    <div ref={formRef}>
-      <SchemaMarkupForm
-        {...props}
-        onValidateFailed={result => {
-          if (props.onValidateFailed) {
-            props.onValidateFailed(result)
-          }
-          if (formRef.current) {
-            setTimeout(() => {
-              const elements = formRef.current.querySelectorAll(
-                '.ant-form-item-control.has-error'
-              )
-              if (elements && elements.length) {
-                if (!elements[0].scrollIntoView) return
-                elements[0].scrollIntoView({
-                  behavior: 'smooth',
-                  inline: 'center',
-                  block: 'center'
-                })
-              }
-            }, 30)
-          }
-        }}
-      >
-        {props.children}
-      </SchemaMarkupForm>
-    </div>
-  )
+export {
+  SchemaMarkupField,
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  InternalForm,
+  FormPath,
+  FormSlot,
+  FormSpy,
+  FormConsumer,
+  FormProvider,
+  SchemaField,
+  Schema,
+  JSONCondition,
+  FormEffectHooks,
+  compileObject,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormState,
+  useVirtualField,
+  mapStyledProps,
+  mapTextComponent,
+  createFormActions,
+  createAsyncFormActions,
+  connect,
+  registerFieldMiddleware,
+  registerFormComponent,
+  registerFormField,
+  registerFormFields,
+  registerFormItemComponent,
+  registerVirtualBox,
+  parseLinkages,
+  useValueLinkageEffect,
+  normalizeCol,
+  createControllerBox,
+  createVirtualBox,
+  cleanRegistry,
+  getRegistry,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
 }
-export const Field: React.FC<IAntdSchemaFieldProps> = SchemaMarkupField
-export default SchemaForm

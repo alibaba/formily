@@ -1,27 +1,7 @@
 import React from 'react'
-import {
-  FormSpy,
-  LifeCycleTypes,
-  createVirtualBox
-} from '@uform/react-schema-renderer'
+import { FormSpy, LifeCycleTypes } from '@formily/react-schema-renderer'
 import { Button } from 'antd'
-import { ButtonProps } from 'antd/lib/button'
 import { ISubmitProps, IResetProps } from '../types'
-
-export const TextButton: React.FC<ButtonProps> = props => (
-  <Button type="link" {...props} />
-)
-
-export const CircleButton: React.FC<ButtonProps> = props => {
-  const hasText = String(props.className || '').indexOf('has-text') > -1
-  return (
-    <Button
-      type={hasText ? 'link' : undefined}
-      shape={hasText ? undefined : 'circle'}
-      {...props}
-    />
-  )
-}
 
 export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
   return (
@@ -97,8 +77,3 @@ export const Reset: React.FC<IResetProps> = ({
     </FormSpy>
   )
 }
-
-createVirtualBox<IResetProps>('reset', Reset)
-createVirtualBox<ButtonProps>('text-button', TextButton)
-createVirtualBox<ISubmitProps>('submit', Submit)
-createVirtualBox<ButtonProps>('circle-button', CircleButton)

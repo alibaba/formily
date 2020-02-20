@@ -4,8 +4,8 @@ import { render } from '@testing-library/react'
 import FormContext from '../context'
 import useForm from '../hooks/useForm'
 import useField from '../hooks/useField'
-import { createForm } from '..'
-import { FormLifeCycle, LifeCycleTypes } from '@uform/core'
+import { createForm } from '@formily/core'
+import { FormLifeCycle, LifeCycleTypes } from '@formily/core'
 
 describe('useField hook', () => {
   test('form is required', () => {

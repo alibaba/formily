@@ -2,7 +2,7 @@ import {
   ValidatePatternRules,
   ValidateArrayRules,
   getMessage
-} from '@uform/validator'
+} from '@formily/validator'
 import {
   lowercase,
   map,
@@ -16,7 +16,7 @@ import {
   FormPathPattern,
   FormPath,
   deprecate
-} from '@uform/shared'
+} from '@formily/shared'
 import { SchemaMessage, ISchema } from '../types'
 
 const numberRE = /^\d+$/
@@ -38,10 +38,7 @@ const findProperty = (object: any, propertyKey: string | number) => {
   }
 }
 
-const filterProperties = <T extends object>(
-  object: T,
-  keys: string[]
-): T => {
+const filterProperties = <T extends object>(object: T, keys: string[]): T => {
   let result = {} as any
   for (let key in object) {
     if (!keys.includes(key) && Object.hasOwnProperty.call(object, key)) {
@@ -54,13 +51,12 @@ const filterProperties = <T extends object>(
 //向后兼容逻辑，未来会干掉
 const COMPAT_FORM_ITEM_PROPS = [
   'required',
-  'className',
-  'prefix',
   'labelAlign',
   'labelTextAlign',
   'size',
   'labelCol',
-  'wrapperCol'
+  'wrapperCol',
+  'triggerType'
 ]
 
 export class Schema implements ISchema {
@@ -100,6 +96,7 @@ export class Schema implements ISchema {
   public editable?: boolean
   public visible?: boolean
   public display?: boolean
+  public triggerType?: 'onBlur' | 'onChange'
   public ['x-props']?: { [name: string]: any }
   public ['x-index']?: number
   public ['x-rules']?: ValidatePatternRules
@@ -116,8 +113,6 @@ export class Schema implements ISchema {
   public key?: string
 
   public path?: string
-
-  public linkages?: ISchema['x-linkages']
 
   constructor(json: ISchema, parent?: Schema, key?: string) {
     if (parent) {
@@ -324,6 +319,9 @@ export class Schema implements ISchema {
     const itemProps = this.getExtendsItemProps()
     const props = this.getExtendsProps()
     const componentProps = this.getExtendsComponentProps()
+    if (this.triggerType) {
+      return this.triggerType
+    }
     if (itemProps.triggerType) {
       return itemProps.triggerType
     } else if (props.triggerType) {
@@ -356,7 +354,7 @@ export class Schema implements ISchema {
   }
   getExtendsComponentProps(needfilterFormItemKeys: boolean = true) {
     const props = { ...this['x-props'], ...this['x-component-props'] }
-    if(!needfilterFormItemKeys) return props
+    if (!needfilterFormItemKeys) return props
     return filterProperties(props, COMPAT_FORM_ITEM_PROPS)
   }
   getExtendsLinkages() {
@@ -421,9 +419,7 @@ export class Schema implements ISchema {
     if (isValid(json['x-component'])) {
       this['x-component'] = lowercase(json['x-component'])
     }
-    if (isValid(json['x-linkages'])) {
-      this.linkages = isArr(json['x-linkages']) ? json['x-linkages'] : []
-    }
+    
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {
         return new Schema(item, this, key)

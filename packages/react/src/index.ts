@@ -2,9 +2,19 @@ import {
   FormEffectHooks,
   createEffectHook,
   createFormActions,
-  createAsyncFormActions
+  createAsyncFormActions,
+  createEffectsProvider,
+  createQueryEffects
 } from './shared'
-export * from '@uform/core'
+import {
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  FormPathPattern,
+  FormPath
+} from '@formily/core'
 export * from './components/Form'
 export * from './components/Field'
 export * from './components/FieldList'
@@ -19,11 +29,21 @@ export * from './hooks/useForm'
 export * from './hooks/useField'
 export * from './hooks/useVirtualField'
 export * from './hooks/useFormEffects'
+export * from './hooks/useFormQuery'
 export * from './types'
 
 export {
+  FormPath,
+  FormPathPattern,
   FormEffectHooks,
   createEffectHook,
   createFormActions,
-  createAsyncFormActions
+  createAsyncFormActions,
+  createEffectsProvider,
+  createQueryEffects,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine
 }
