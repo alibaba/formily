@@ -63,8 +63,8 @@
 - API手册
   - @formily/antd
   - @formily/antd-components
-  - @formily/next
-  - @formily/next-components
+  - [@formily/next](../packages/next/README.zh-cn.md)
+  - [@formily/next-components](../packages/next-components/README.zh-cn.md)
   - @formily/meet
   - @formily/meet-components
   - @formily/react-schema-renderer
