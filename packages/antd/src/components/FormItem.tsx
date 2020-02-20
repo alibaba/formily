@@ -70,7 +70,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
       return <div>Can not fount component.</div>
     }
     if (!component['__ALREADY_CONNECTED__']) {
-      component[ConnectedComponent] = connect({
+      component[ConnectedComponent] = component[ConnectedComponent] || connect({
         eventName,
         valueName,
         getValueFromEvent

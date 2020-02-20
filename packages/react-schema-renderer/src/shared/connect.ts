@@ -1,5 +1,5 @@
 import React from 'react'
-import { isArr, each, isFn, isValid } from '@formily/shared'
+import { isArr, each, isFn, isValid, defaults } from '@formily/shared'
 import {
   ISchema,
   IConnectOptions,
@@ -58,11 +58,10 @@ const bindEffects = (
 export const connect = <ExtendsComponentKey extends string = ''>(
   options?: IConnectOptions
 ) => {
-  options = {
+  options = defaults(options, {
     valueName: 'value',
-    eventName: 'onChange',
-    ...options
-  }
+    eventName: 'onChange'
+  })
   return (Component: React.JSXElementConstructor<any>) => {
     const ConnectedComponent: MixinConnectedComponent<ExtendsComponentKey> = ((
       fieldProps: ISchemaFieldComponentProps
@@ -127,7 +126,7 @@ export const connect = <ExtendsComponentKey extends string = ''>(
 
       if (isArr((props as ISchema).enum) && !componentProps.dataSource) {
         componentProps.dataSource = createEnum((props as ISchema).enum)
-      } else if(componentProps.dataSource){
+      } else if (componentProps.dataSource) {
         componentProps.dataSource = createEnum(componentProps.dataSource)
       }
 
