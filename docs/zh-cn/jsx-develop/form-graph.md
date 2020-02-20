@@ -54,15 +54,18 @@ name 属性，是包含它自身的节点标识的，这就是为什么 b 字段
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormButtonGroup,
   Submit,
   Reset,
   FormEffectHooks,
+  FormItemDeepProvider as FormLayout,
+  InternalVirtualField as VirtualField,
   createFormActions
 } from '@formily/antd'
-import { Button } from 'antd'
+import { isArr, map } from '@formily/shared'
+import { Button, Card, Row, Col } from 'antd'
 import Printer from '@formily/printer'
 import {
   Input,
@@ -76,35 +79,9 @@ import {
   Switch,
   Range,
   Transfer,
-  Rating,
-  FormItemGrid,
-  FormTextBox,
-  FormCard,
-  FormBlock,
-  FormLayout
+  Rating
 } from '@formily/antd-components' // 或者@formily/next-components
-import { isArr, map } from '@formily/shared'
 import 'antd/dist/antd.css'
-
-const components = {
-  Input,
-  Radio: Radio.Group,
-  Checkbox: Checkbox.Group,
-  TextArea: Input.TextArea,
-  NumberPicker,
-  Select,
-  Switch,
-  DatePicker,
-  DateRangePicker: DatePicker.RangePicker,
-  YearPicker: DatePicker.YearPicker,
-  MonthPicker: DatePicker.MonthPicker,
-  WeekPicker: DatePicker.WeekPicker,
-  TimePicker,
-  Upload,
-  Range,
-  Rating,
-  Transfer
-}
 
 const serializeObject = obj => {
   if (isArr(obj)) {
@@ -126,116 +103,123 @@ const serializeObject = obj => {
 const actions = createFormActions()
 
 const App = () => {
+  const [state, setState] = useState({ editable: true })
   const [graph, setFormGraph] = useState('')
   return (
-    <Printer>
-      <SchemaForm
+    <Printer noSchema>
+      <Form
         actions={actions}
-        labelCol={8}
-        wrapperCol={6}
-        components={components}
+        editable={state.editable}
         effects={({ setFieldState }) => {
           FormEffectHooks.onFieldValueChange$('bbb').subscribe(({ value }) => {
             setFieldState('detailCard', state => {
               state.visible = value
             })
           })
+          FormEffectHooks.onFieldValueChange$('ccc').subscribe(({ value }) => {
+            setFieldState('layout_1', state => {
+              state.visible = value
+            })
+          })
         }}
+        labelCol={8}
+        wrapperCol={6}
       >
-        <FormCard title="基本信息">
-          <Field name="aaa" type="string" title="字段1" x-component="Input" />
-          <Field
+        <Card title="基本信息" style={{ marginBottom: 15 }}>
+          <FormItem name="aaa" label="字段1" component={Input} />
+          <FormItem
             name="bbb"
-            type="number"
-            title="控制详细信息显示隐藏"
-            enum={[
+            label="控制详细信息显示隐藏"
+            dataSource={[
               { value: true, label: '显示' },
               { value: false, label: '隐藏' }
             ]}
-            default={true}
-            x-component="Select"
+            initialValue={true}
+            component={Select}
           />
-          <Field
+          <FormItem
             name="ccc"
-            type="date"
-            title="字段3"
-            x-component="DatePicker"
+            label="控制字段3显示隐藏"
+            dataSource={[
+              { value: true, label: '显示' },
+              { value: false, label: '隐藏' }
+            ]}
+            initialValue={true}
+            component={Select}
           />
-          ​
-        </FormCard>
-        <FormCard title="详细信息" name="detailCard">
-          <FormLayout labelCol={8} wrapperCol={12}>
-            <FormItemGrid title="字段3" gutter={10} cols={[6, 11]}>
-              ​<Field name="ddd" type="number" x-component="NumberPicker" />
-              ​<Field name="eee" type="date" x-component="DatePicker" />​
-            </FormItemGrid>
-            <Field type="object" name="mmm" title="对象字段">
-              <FormItemGrid gutter={10} cols={[6, 11]}>
-                <Field
-                  name="ddd1"
-                  default={123}
-                  type="number"
-                  x-component="NumberPicker"
-                />
-                <Field
-                  name="[startDate,endDate]"
-                  type="daterange"
-                  x-component="DateRangePicker"
-                />​
-              </FormItemGrid>
-            </Field>
-          </FormLayout>
-          <FormLayout labelCol={8} wrapperCol={16}>
-            <FormTextBox
-              title="文本串联"
-              text="订%s元/票 退%s元/票 改%s元/票"
-              gutter={8}
-            >
-              <Field
-                type="string"
-                default={10}
-                required
-                name="aa1"
-                x-props={{ style: { width: 80 } }}
-                description="简单描述"
-                x-component="Input"
-              />
-              <Field
-                type="number"
-                default={20}
-                required
-                name="aa2"
-                description="简单描述"
-                x-component="NumberPicker"
-              />
-              <Field
-                type="number"
-                default={30}
-                required
-                name="aa3"
-                description="简单描述"
-                x-component="NumberPicker"
-              />
-            </FormTextBox>
-          </FormLayout>
-          <Field name="aas" type="string" title="字段4" x-component="Input" />​
-          <FormBlock title="区块">
-            <Field
-              name="ddd2"
-              type="string"
-              title="字段5"
-              x-component="Input"
-            />
-            ​
-            <Field
-              name="eee2"
-              type="string"
-              title="字段6"
-              x-component="Input"
-            />
-            ​
-          </FormBlock>
-        </FormCard>​<FormButtonGroup offset={8} sticky>
+        </Card>
+        <VirtualField name="detailCard">
+          <Card title="详细信息">
+            <FormLayout labelCol={8} wrapperCol={12}>
+              <FormItem name="layout_1" label="字段3">
+                <Row gutter={10}>
+                  <Col span={6}>
+                    <FormItem name="ddd" component={NumberPicker} />
+                  </Col>
+                  <Col span={18}>
+                    <FormItem name="eee" component={DatePicker} />
+                  </Col>
+                </Row>
+              </FormItem>
+              <FormItem name="layout_2" title="对象字段">
+                <Row gutter={10}>
+                  <Col span={6}>
+                    <FormItem
+                      name="mmm.ddd1"
+                      initialValue={123}
+                      component={NumberPicker}
+                    />
+                  </Col>
+                  <Col span={18}>
+                    <FormItem
+                      name="mmm.[startDate,endDate]"
+                      component={DatePicker.RangePicker}
+                    />
+                  </Col>
+                </Row>
+              </FormItem>
+            </FormLayout>
+            <FormLayout labelCol={8} wrapperCol={16}>
+              <FormItem name="layout_3" label="文本串联">
+                <div style={{ display: 'flex' }}>
+                  <span style={{ marginRight: 5 }}>定</span>
+                  <FormItem
+                    initialValue={10}
+                    required
+                    name="aa1"
+                    style={{
+                      width: 80
+                    }}
+                    help="简单描述"
+                    component={Input}
+                  />
+                  <span style={{ margin: '0 5px' }}>元/票 退</span>
+                  <FormItem
+                    initialValue={20}
+                    required
+                    name="aa2"
+                    help="简单描述"
+                    component={NumberPicker}
+                  />
+                  <span style={{ margin: '0 5px' }}>元/票 改</span>
+                  <FormItem
+                    initialValue={30}
+                    required
+                    name="aa3"
+                    help="简单描述"
+                    component={NumberPicker}
+                  />
+                  <span style={{ margin: '0 5px' }}>元/票</span>
+                </div>
+              </FormItem>
+            </FormLayout>
+            <FormItem name="aas" label="字段4" component={Input} />​
+            <Card title="区块">
+              <FormItem name="ddd2" label="字段5" component={Input} />
+              <FormItem name="eee2" label="字段6" component={Input} />
+            </Card>
+          </Card>
+        </VirtualField>​<FormButtonGroup offset={8} sticky>
           ​<Submit>提交</Submit>​
           <Button
             type="primary"
@@ -246,6 +230,12 @@ const App = () => {
             }}
           >
             查看节点树
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '详情' : '编辑'}
           </Button>
           <Reset>重置</Reset>​
         </FormButtonGroup>
@@ -261,7 +251,7 @@ const App = () => {
             <pre>{graph}</pre>
           </code>
         </div>
-      </SchemaForm>
+      </Form>
     </Printer>
   )
 }
@@ -271,4 +261,4 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 调用 actions.getFormGraph()可以直接查看实时表单状态树
-- 节点状态树中是有可能存在ReactNode，所以JSON.stringify打印的时候需要先将ReactNode转换一下，否则会报循环引用错误
+- 节点状态树中是有可能存在 ReactNode，所以 JSON.stringify 打印的时候需要先将 ReactNode 转换一下，否则会报循环引用错误

@@ -13,6 +13,8 @@ export const Form: React.FC<IAntdFormProps> = props => {
     initialValues,
     value,
     defaultValue,
+    onChange,
+    onSubmit,
     form,
     useDirty,
     onValidateFailed,

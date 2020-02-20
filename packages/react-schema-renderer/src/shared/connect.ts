@@ -58,10 +58,13 @@ const bindEffects = (
 export const connect = <ExtendsComponentKey extends string = ''>(
   options?: IConnectOptions
 ) => {
-  options = defaults(options, {
-    valueName: 'value',
-    eventName: 'onChange'
-  })
+  options = defaults(
+    {
+      valueName: 'value',
+      eventName: 'onChange'
+    },
+    options
+  )
   return (Component: React.JSXElementConstructor<any>) => {
     const ConnectedComponent: MixinConnectedComponent<ExtendsComponentKey> = ((
       fieldProps: ISchemaFieldComponentProps

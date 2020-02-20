@@ -14,12 +14,7 @@
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Reset
-} from '@formily/antd'
+import { Form, FormItem, FormButtonGroup, Reset } from '@formily/antd'
 import { Input } from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
@@ -30,30 +25,23 @@ const App = () => {
     aa: 'first render value'
   })
   return (
-    <Printer>
-      <SchemaForm
-        value={value}
-        components={{
-          Input
-        }}
-      >
-        <Field type="string" name="aa" x-component="Input" />
-        <Field type="string" name="bb" x-component="Input" />
-        <FormButtonGroup>
-          <Button
-            onClick={() => {
-              setValue({
-                aa: Math.random() * 1000 + '',
-                bb: Math.random() * 1000 + ''
-              })
-            }}
-          >
-            刷新
-          </Button>
-          <Reset>重置会置空数据</Reset>
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
+    <Form value={value}>
+      <FormItem name="aa" component={Input} />
+      <FormItem name="bb" component={Input} />
+      <FormButtonGroup>
+        <Button
+          onClick={() => {
+            setValue({
+              aa: Math.random() * 1000 + '',
+              bb: Math.random() * 1000 + ''
+            })
+          }}
+        >
+          刷新
+        </Button>
+        <Reset>重置会置空数据</Reset>
+      </FormButtonGroup>
+    </Form>
   )
 }
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -64,12 +52,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Reset
-} from '@formily/antd'
+import { Form, FormItem, FormButtonGroup, Reset } from '@formily/antd'
 import { Input } from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
@@ -80,47 +63,34 @@ const App = () => {
     aa: 'first render value'
   })
   return (
-    <Printer>
-      <SchemaForm
-        defaultValue={value}
-        components={{
-          Input
-        }}
-      >
-        <Field type="string" name="aa" x-component="Input" />
-        <Field type="string" name="bb" x-component="Input" />
-        <FormButtonGroup>
-          <Button
-            onClick={() => {
-              setValue({
-                aa: Math.random() * 1000 + '',
-                bb: Math.random() * 1000 + ''
-              })
-            }}
-          >
-            刷新不会生效
-          </Button>
-          <Reset>重置不会置空数据</Reset>
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
+    <Form defaultValue={value}>
+      <FormItem name="aa" component={Input} />
+      <FormItem name="bb" component={Input} />
+      <FormButtonGroup>
+        <Button
+          onClick={() => {
+            setValue({
+              aa: Math.random() * 1000 + '',
+              bb: Math.random() * 1000 + ''
+            })
+          }}
+        >
+          刷新不会生效
+        </Button>
+        <Reset>重置不会置空数据</Reset>
+      </FormButtonGroup>
+    </Form>
   )
 }
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-
 
 # InitialValues 属性使用场景
 
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Reset
-} from '@formily/antd'
+import { Form, FormItem, FormButtonGroup, Reset } from '@formily/antd'
 import { Input } from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
@@ -131,31 +101,24 @@ const App = () => {
     aa: 'first render value'
   })
   return (
-    <Printer>
-      <SchemaForm
-        initialValues={value}
-        components={{
-          Input
-        }}
-      >
-        <Field type="string" name="aa" x-component="Input" />
-        <Field type="string" name="bb" x-component="Input" />
-        <FormButtonGroup>
-          <Button
-            onClick={() => {
-              setValue({
-                aa: Math.random() * 1000 + '',
-                bb: Math.random() * 1000 + ''
-              })
-            }}
-          >
-            刷新
-          </Button>
-          <Reset>重置</Reset>
-          <Reset forceClear>清空</Reset>
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
+    <Form initialValues={value}>
+      <FormItem name="aa" component={Input} />
+      <FormItem name="bb" component={Input} />
+      <FormButtonGroup>
+        <Button
+          onClick={() => {
+            setValue({
+              aa: Math.random() * 1000 + '',
+              bb: Math.random() * 1000 + ''
+            })
+          }}
+        >
+          刷新
+        </Button>
+        <Reset>重置</Reset>
+        <Reset forceClear>清空</Reset>
+      </FormButtonGroup>
+    </Form>
   )
 }
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -165,6 +128,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - 点击刷新只会针对未设置默认值字段生效，且只生效一次
 - 点击重置不会置空数据
-- 先点击刷新，后点击重置，点击刷新的时候，initialValues受表单重渲染而重新更新，aa字段的初始值更新了，但是因为aa当前是有值状态，所以不会被默认值更新所影响
-- 先点击刷新，后点击重置，点击重置按钮的时候，默认是会将值变为初始值，因为初始值变了，所以aa字段的值也变了，如果不希望出现这种行为，可以给重置按钮配置强制清空
-- 交替点击清空和刷新按钮，可以重复赋值，是因为初始值一直在变，清空使得字段又恢复到无默认值状态，所以是可以持续赋值的，看着就像前面value的效果一样
+- 先点击刷新，后点击重置，点击刷新的时候，initialValues 受表单重渲染而重新更新，aa 字段的初始值更新了，但是因为 aa 当前是有值状态，所以不会被默认值更新所影响
+- 先点击刷新，后点击重置，点击重置按钮的时候，默认是会将值变为初始值，因为初始值变了，所以 aa 字段的值也变了，如果不希望出现这种行为，可以给重置按钮配置强制清空
+- 交替点击清空和刷新按钮，可以重复赋值，是因为初始值一直在变，清空使得字段又恢复到无默认值状态，所以是可以持续赋值的，看着就像前面 value 的效果一样

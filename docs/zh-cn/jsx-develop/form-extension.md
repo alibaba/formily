@@ -1,505 +1,96 @@
 # 理解表单扩展机制
 
-Schema 模式开发表单与纯源码开发表单不一样的地方主要就是 Schema 模式它是一个黑盒，想要定制，必须要通过扩展 API 去定制，所以这既是它的优点，也是它的缺点：
+纯源码开发的扩展机制，主要有：
 
-- 优点：内置了很多便捷化方案，研发效率较高
-- 缺点，内部概念较多，学习成本较高
-
-所以，我们选择哪种开发模式，还是得基于自己当前的业务述求出发。
-
-下面主要讲讲 Formily SchemaForm 的扩展机制，目前我们提供的扩展口子主要有：
-
-- 扩展 Form UI 组件
-- 扩展 FormItem UI 组件
-- 扩展 Field 组件
-- 扩展 VirtualField 组件
+- 扩展 FormItem 渲染组件
 - 扩展校验模型(规则、文案、模板引擎)
-- 扩展联动协议
 - 扩展生命周期
 - 扩展 Effect Hook
 - 扩展状态(FormState/FieldState/VirtualFieldState)
 
-## 扩展 Form UI 组件
+## 扩展 FormItem 组件
 
-如果我们使用的是@formily/antd 或者 @firmily/next 这样的包，其实我们默认已经给您注册了 Form UI 组件，当然，您也可以自己覆盖。
-我们的扩展方式主要有两种：
+FormItem 组件扩展，其实就是 FormItem 组件上的 component 属性，我们只需要传一个符合 value/onChange 规范的组件给 FormItem 即可，当然，如果我们使用的是别人的组件，而且组件也不支持 value/onChange 这个规范，那么我们有两种方式适配
 
-- 全局注册方式
-- 实例注册方式
+- FormItem 组件上传 eventName/valueName/getValueFromEvent 做适配
+- 使用 connect API 包装组件
 
-实例注册优先级要比全局注册高
+目前@formily/antd-components 和@formily/next-components 里的组件都是默认包装好的，因为它还做了一些高级适配
 
-**全局注册方式**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  registerFormComponent
-} from '@formily/antd' // 或者 @formily/next
-import { Input } from 'antd'
-import 'antd/dist/antd.css'
-
-registerFormComponent(props => {
-  return <div>全局扩展Form组件{props.children}</div>
-})
-
-const App = () => {
-  return (
-    <SchemaForm
-      components={{ Input }}
-      onSubmit={values => {
-        console.log(values)
-      }}
-    >
-      <Field type="string" name="name" title="Name" x-component="Input" />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**实例注册方式**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd' // 或者 @formily/next
-import { Input } from 'antd'
-import 'antd/dist/antd.css'
-
-const formComponent = props => {
-  return <div>实例级扩展Form组件{props.children}</div>
-}
-
-const App = () => {
-  return (
-    <SchemaForm
-      formComponent={formComponent}
-      components={{ Input }}
-      onSubmit={values => {
-        console.log(values)
-      }}
-    >
-      <Field type="string" name="name" title="Name" x-component="Input" />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-## 扩展 FormItem UI 组件
-
-如果我们使用的是@formily/antd 或者 @firmily/next 这样的包，其实我们默认已经给您注册了 Form Item UI 组件，当然，您也可以自己覆盖。
-我们的扩展方式主要有两种：
-
-- 全局注册方式
-- 实例注册方式
-
-实例注册优先级要比全局注册高
-
-**全局注册方式**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  registerFormItemComponent
-} from '@formily/antd' // 或者 @formily/next
-import { Input } from 'antd'
-import 'antd/dist/antd.css'
-
-registerFormItemComponent(props => {
-  return <div>全局扩展FormItem组件{props.children}</div>
-})
-
-const App = () => {
-  return (
-    <SchemaForm
-      components={{ Input }}
-      onSubmit={values => {
-        console.log(values)
-      }}
-    >
-      <Field type="string" name="name" title="Name" x-component="Input" />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**实例注册方式**
-
-```tsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd' // 或者 @formily/next
-import { Input } from 'antd'
-import 'antd/dist/antd.css'
-
-const formItemComponent = props => {
-  return <div>实例级扩展FormItem组件{props.children}</div>
-}
-
-const App = () => {
-  return (
-    <SchemaForm
-      formItemComponent={formItemComponent}
-      components={{ Input }}
-      onSubmit={values => {
-        console.log(values)
-      }}
-    >
-      <Field type="string" name="name" title="Name" x-component="Input" />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-## 扩展 Field 组件
-
-扩展 Schema Field 组件可以说是我们平时用的最多的扩展方案，主要是用于扩展具体字段 UI 组件，目前我们提供的扩展方式主要有：
-
-- SchemaForm 中传入 components 扩展(要求组件满足 value/onChange API)
-- registerFormField 全局注册扩展组件，要求传入组件名和具体组件，同时，如果针对满足 value/onChange 的组件，需要用 connect 包装
-- registerFormFields 全局批量注册扩展组件
-
-**components 实例扩展**
-
-```tsx
+```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd' // 或者 @formily/next
+import { Form, FormItem, FormButtonGroup, Reset, connect } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import { Button } from 'antd'
+import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
-const CustomComponent = props => {
+const MyComponent1 = ({ value, onChange }) => {
   return (
-    <input
-      value={props.value || ''}
-      onChange={e => props.onChange(e.target.value)}
-    />
-  )
-}
-
-const App = () => {
-  const [value, setValue] = useState({})
-  return (
-    <SchemaForm
-      components={{ CustomComponent }}
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      <Field
-        type="string"
-        name="name"
-        title="Name"
-        x-component="CustomComponent"
-      />
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**registerFormField 全局扩展**
-
-```tsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  registerFormField,
-  connect
-} from '@formily/antd' // 或者 @formily/next
-import 'antd/dist/antd.css'
-
-const CustomComponent = props => {
-  return (
-    <input
-      value={props.value || ''}
-      onChange={e => props.onChange(e.target.value)}
-    />
-  )
-}
-
-registerFormField('CustomComponent2', connect()(CustomComponent))
-
-const App = () => {
-  const [value, setValue] = useState({})
-  return (
-    <SchemaForm
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      <Field
-        type="string"
-        name="name"
-        title="Name"
-        x-component="CustomComponent2"
-      />
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**registerFormFields 全局批量扩展**
-
-```tsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  registerFormFields,
-  connect
-} from '@formily/antd' // 或者 @formily/next
-import 'antd/dist/antd.css'
-
-const CustomComponent = props => {
-  return (
-    <input
-      value={props.value || ''}
-      onChange={e => props.onChange(e.target.value)}
-    />
-  )
-}
-
-registerFormFields({ CustomComponent3: connect()(CustomComponent) })
-
-const App = () => {
-  const [value, setValue] = useState({})
-  return (
-    <SchemaForm
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      <Field
-        type="string"
-        name="name"
-        title="Name"
-        x-component="CustomComponent3"
-      />
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-## 扩展 VirtualField 组件
-
-扩展 Schema VirtualField 组件，其实就是扩展布局组件，我们的扩展方式主要有：
-
-- registerVirtualBox 全局扩展
-
-- createVirtualBox 全局扩展
-
-- createControllerBox 全局扩展
-
-**registerVirtualBox 全局扩展**
-
-最原始的布局组件扩展方式，扩展完组件之后，布局组件使用方式与正常 Field 使用方式一样,扩展组件内部也能拿到完整的 FieldProps
-
-```tsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  registerFormFields,
-  connect,
-  registerVirtualBox
-} from '@formily/antd' // 或者 @formily/next
-import 'antd/dist/antd.css'
-
-const CustomComponent = props => {
-  return (
-    <input
-      value={props.value || ''}
-      onChange={e => props.onChange(e.target.value)}
-    />
-  )
-}
-
-registerFormFields({ CustomComponent3: connect()(CustomComponent) })
-
-registerVirtualBox('CustomLayout', ({ children, schema }) => {
-  return (
-    <div style={{ border: '1px solid red', padding: 10 }}>
-      {children}
-      {schema['x-component-props']['say']}
-    </div>
-  )
-})
-
-const App = () => {
-  const [value, setValue] = useState({})
-  return (
-    <SchemaForm
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      <Field
-        type="object"
-        name="layout"
-        x-component="CustomLayout"
-        x-component-props={{
-          say: 'hello'
+    <div>
+      {value}
+      <Button
+        onClick={() => {
+          onChange('this is inner value')
         }}
       >
-        <Field
-          type="string"
-          name="name"
-          title="Name"
-          x-component="CustomComponent3"
-        />
-      </Field>
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
+        Click
+      </Button>
+    </div>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**createVirtualBox 全局扩展**
-
-其实内部同样是使用 registerVirtualBox 来注册的，只是它会更具语义化，需要注意一点，如果是使用 createVirtualBox，在返回的组件中传入的属性，会自动映射到 Schema 的 x-component-props 上，扩展组件内部也只能拿到 x-component-props，拿不到 FieldProps
-
-```tsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  createVirtualBox,
-  registerFormFields,
-  connect
-} from '@formily/antd' // 或者 @formily/next
-import 'antd/dist/antd.css'
-
-const CustomComponent = props => {
+const MyComponent2 = ({ customValue, onInput }) => {
   return (
-    <input
-      value={props.value || ''}
-      onChange={e => props.onChange(e.target.value)}
-    />
+    <div>
+      {customValue}
+      <Button
+        onClick={() => {
+          onInput('this is inner value')
+        }}
+      >
+        Click
+      </Button>
+    </div>
   )
 }
 
-const CustomLayout2 = createVirtualBox('CustomLayout2', ({ children, say }) => {
+const MyComponent3 = connect({
+  eventName: 'onInput',
+  valueName: 'customValue'
+})(({ customValue, onInput }) => {
   return (
-    <div style={{ border: '1px solid red', padding: 10 }}>
-      {children}
-      {say}
+    <div>
+      {customValue}
+      <Button
+        onClick={() => {
+          onInput('this is inner value')
+        }}
+      >
+        Click
+      </Button>
     </div>
   )
 })
 
-registerFormFields({ CustomComponent3: connect()(CustomComponent) })
-
 const App = () => {
-  const [value, setValue] = useState({})
+  const [value, setValue] = useState({
+    aa: 'first render value'
+  })
   return (
-    <SchemaForm
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      <CustomLayout2 say="hello">
-        <Field
-          type="string"
-          name="name"
-          title="Name"
-          x-component="CustomComponent3"
-        />
-      </CustomLayout2>
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
+    <Form initialValues={value}>
+      <FormItem name="aa" component={MyComponent1} />
+      <FormItem
+        name="bb"
+        eventName="onInput"
+        valueName="customValue"
+        component={MyComponent2}
+      />
+      <FormItem name="cc" component={MyComponent3} />
+    </Form>
   )
 }
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**createControllerBox 全局扩展**
-
-与 createVirtualBox 一样，可以创建出语义化组件，但是扩展组件内部可以拿到 FieldProps，所以可以实现出一些更复杂的布局组件
-
-```tsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  createControllerBox
-} from '@formily/antd' // 或者 @formily/next
-import 'antd/dist/antd.css'
-
-const CustomComponent = props => {
-  return (
-    <input
-      value={props.value || ''}
-      onChange={e => props.onChange(e.target.value)}
-    />
-  )
-}
-
-const CustomLayout3 = createControllerBox(
-  'CustomLayout3',
-  ({ children, schema }) => {
-    return (
-      <div style={{ border: '1px solid red', padding: 10 }}>
-        {children}
-        {schema['x-component-props']['say']}
-      </div>
-    )
-  }
-)
-
-registerFormFields({ CustomComponent3: connect()(CustomComponent) })
-
-const App = () => {
-  const [value, setValue] = useState({})
-  return (
-    <SchemaForm
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      <CustomLayout3 say="hello">
-        <Field
-          type="string"
-          name="name"
-          title="Name"
-          x-component="CustomComponent3"
-        />
-      </CustomLayout3>
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
-  )
-}
-
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
@@ -507,12 +98,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 这里主要是扩展文案，规则，校验消息模板引擎
 
-```tsx
+```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormPath,
   setValidationLocale,
   registerValidationRules,
@@ -548,117 +139,29 @@ registerValidationFormats({
 const App = () => {
   const [value, setValue] = useState({})
   return (
-    <SchemaForm
-      components={{ Input }}
+    <Form
       onChange={values => {
         setValue(values)
       }}
     >
-      <Field
-        type="string"
+      <FormItem
         required
         name="name"
-        title="Name"
-        x-component="Input"
-        x-rules={{
+        label="Name"
+        component={Input}
+        rules={{
           customRule: true,
           format: 'custom_format',
           injectVar: '注入变量'
         }}
       />
       {JSON.stringify(value, null, 2)}
-    </SchemaForm>
+    </Form>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-
-## 扩展联动协议
-
-联动协议，我们之前在理解 Form Schema 中有提到，目前 Formily 内置了
-
-- value:visible
-- value:schema
-- value:state
-  3 种类型的联动协议，我们现在可以试着扩展一个 value:disabled，用于联动控制其他字段是否被禁用
-
-```tsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import { SchemaForm, useValueLinkageEffect } from '@formily/antd' // 或者 @formily/next
-import { Input, Select } from '@formily/antd-components'
-import 'antd/dist/antd.css'
-
-const useValueDisabledLinkageEffect = () => {
-  useValueLinkageEffect({
-    type: 'value:disabled',
-    resolve: ({ target }, { setFieldState }) => {
-      setFieldState(target, innerState => {
-        innerState.props['x-component-props'] = {
-          disabled: true
-        }
-      })
-    },
-    reject: ({ target }, { setFieldState }) => {
-      setFieldState(target, innerState => {
-        innerState.props['x-component-props'] = {
-          disabled: false
-        }
-      })
-    }
-  })
-}
-
-const App = () => {
-  const [value, setValue] = useState({})
-  return (
-    <SchemaForm
-      components={{ Input, Select }}
-      effects={() => {
-        useValueDisabledLinkageEffect()
-      }}
-      schema={{
-        type: 'object',
-        properties: {
-          aa: {
-            type: 'string',
-            enum: [
-              { label: 'Disabled', value: true },
-              { label: 'Undisabled', value: false }
-            ],
-            default: true,
-            'x-linkages': [
-              {
-                type: 'value:disabled',
-                condition: '{{ !!$self.value }}',
-                target: 'bb'
-              }
-            ],
-            'x-component': 'Select'
-          },
-          bb: {
-            type: 'string',
-            'x-component': 'Input'
-          }
-        }
-      }}
-      onChange={values => {
-        setValue(values)
-      }}
-    >
-      {JSON.stringify(value, null, 2)}
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-**案例解析**
-
-- 使用 useValueLinkageEffect 创建了一个 Effect Hook，在 effects 中注入即可注册联动协议
-- useValueLinkageEffect 需要传入一个协议类型，同时需要传入条件满足的 resolve 回调和条件不满足的 reject 回调
 
 ## 扩展生命周期
 
@@ -673,12 +176,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - createEffectHook 创建扩展生命周期 Hook
 - createFormActions，获取上下文中的 actions
 
-```tsx
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormEffectHooks,
   createEffectHook,
   createFormActions
@@ -709,24 +212,22 @@ const actions = createFormActions()
 
 const App = () => {
   return (
-    <SchemaForm
+    <Form
       actions={actions}
-      components={{ Input, Select }}
       effects={() => {
         useMyEffect()
       }}
     >
-      <Field
-        type="string"
+      <FormItem
         name="aa"
-        title="AA"
-        x-component="Select"
-        enum={[
+        label="AA"
+        component={Select}
+        dataSource={[
           { label: 'Visible', value: true },
           { label: 'Hidden', value: false }
         ]}
       />
-      <Field type="string" name="bb" title="BB" x-component="Input" />
+      <FormItem name="bb" label="BB" component={Input} />
       <Button
         onClick={() => {
           actions.dispatch('custom_event')
@@ -734,7 +235,7 @@ const App = () => {
       >
         Click
       </Button>
-    </SchemaForm>
+    </Form>
   )
 }
 
@@ -759,8 +260,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormEffectHooks,
   useFieldState,
   useFormState,
@@ -818,9 +319,8 @@ const MyComponent = () => {
 
 const App = () => {
   return (
-    <SchemaForm
+    <Form
       actions={actions}
-      components={{ Input, MyComponent }}
       effects={({ hasChanged, setFieldState }) => {
         onFormChange$().subscribe(formState => {
           if (hasChanged(formState, 'extendState')) {
@@ -838,8 +338,8 @@ const App = () => {
         })
       }}
     >
-      <Field type="string" name="aa" title="AA" x-component="Input" />
-      <Field type="string" name="bb" title="BB" x-component="MyComponent" />
+      <FormItem name="aa" label="AA" component={Input} />
+      <FormItem name="bb" label="BB" component={MyComponent} />
       <FormButtonGroup>
         <Button
           onClick={() => {
@@ -860,7 +360,7 @@ const App = () => {
           Change Form State
         </Button>
       </FormButtonGroup>
-    </SchemaForm>
+    </Form>
   )
 }
 

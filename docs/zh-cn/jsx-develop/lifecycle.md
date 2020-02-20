@@ -141,11 +141,6 @@ import { Button } from 'antd'
 import { Input, Select } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
 
-const components = {
-  Input,
-  Select
-}
-
 const actions = createFormActions()
 
 const App = () => {

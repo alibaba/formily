@@ -87,16 +87,18 @@ or
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormButtonGroup,
   FormEffectHooks,
+  InternalFieldList as FieldList,
   createFormActions,
   FormPath,
   Submit,
   Reset
 } from '@formily/antd' // 或者 @formily/next
-import { ArrayTable, Input } from '@formily/antd-components'
+import { Input, Select } from '@formily/antd-components'
+import { Button, Row, Col } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
@@ -104,43 +106,68 @@ const { onFieldValueChange$ } = FormEffectHooks
 
 const App = () => {
   return (
-    <Printer>
-      <SchemaForm
-        components={{ ArrayTable, Input }}
-        onSubmit={values => {
-          console.log(values)
-        }}
-        effects={({ setFieldState }) => {
-          onFieldValueChange$('array.*.aa').subscribe(({ name, value }) => {
-            setFieldState(
-              FormPath.transform(name, /\d/, $1 => {
-                return `array.${$1}.bb`
-              }),
-              state => {
-                state.visible = value
-              }
-            )
-          })
-        }}
-      >
-        <Field type="array" name="array" title="Name" x-component="ArrayTable">
-          <Field type="object">
-            <Field
-              type="string"
-              name="aa"
-              title="控制相邻字段显示隐藏"
-              enum={[
-                { label: '显示', value: true },
-                { label: '隐藏', value: false }
-              ]}
-              default={true}
-              x-component="Input"
-            />
-            <Field type="string" name="bb" title="BB" x-component="Input" />
-          </Field>
-        </Field>
-      </SchemaForm>
-    </Printer>
+    <Form
+      onSubmit={values => {
+        console.log(values)
+      }}
+      labelCol={5}
+      wrapperCol={8}
+      effects={({ setFieldState }) => {
+        onFieldValueChange$('array.*.aa').subscribe(({ name, value }) => {
+          setFieldState(
+            FormPath.transform(name, /\d/, $1 => {
+              return `array.${$1}.bb`
+            }),
+            state => {
+              state.visible = value
+            }
+          )
+        })
+      }}
+    >
+      <FieldList name="array">
+        {({ state, mutators }) => (
+          <div>
+            {state.value.map((item, index) => {
+              return (
+                <div key={index}>
+                  <FormItem
+                    name={`array.${index}.aa`}
+                    label="控制相邻字段显示隐藏"
+                    dataSource={[
+                      { label: '显示', value: true },
+                      { label: '隐藏', value: false }
+                    ]}
+                    component={Select}
+                  />
+                  <FormItem
+                    name={`array.${index}.bb`}
+                    label="BB"
+                    component={Input}
+                  />
+                  <Button
+                    style={{ marginBottom: 20 }}
+                    onClick={() => {
+                      mutators.remove(index)
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              )
+            })}
+            <Button
+              type="primary"
+              onClick={() => {
+                mutators.push()
+              }}
+            >
+              ADD
+            </Button>
+          </div>
+        )}
+      </FieldList>
+    </Form>
   )
 }
 
@@ -158,8 +185,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormButtonGroup,
   FormEffectHooks,
   createFormActions,
@@ -167,7 +194,7 @@ import {
   Submit,
   Reset
 } from '@formily/antd' // 或者 @formily/next
-import { Input } from '@formily/antd-components'
+import { Input, Select } from '@formily/antd-components'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
@@ -175,36 +202,32 @@ const { onFieldValueChange$ } = FormEffectHooks
 
 const App = () => {
   return (
-    <Printer>
-      <SchemaForm
-        components={{ Input }}
-        onSubmit={values => {
-          console.log(values)
-        }}
-        effects={({ setFieldState }) => {
-          onFieldValueChange$('aa').subscribe(({ name, value }) => {
-            setFieldState('*(bb,cc,dd)', state => {
-              state.visible = value
-            })
+    <Form
+      onSubmit={values => {
+        console.log(values)
+      }}
+      effects={({ setFieldState }) => {
+        onFieldValueChange$('aa').subscribe(({ name, value }) => {
+          setFieldState('*(bb,cc,dd)', state => {
+            state.visible = value
           })
-        }}
-      >
-        <Field
-          type="string"
-          name="aa"
-          title="批量控制显示隐藏"
-          enum={[
-            { label: '显示', value: true },
-            { label: '隐藏', value: false }
-          ]}
-          default={true}
-          x-component="Input"
-        />
-        <Field type="string" name="bb" title="BB" x-component="Input" />
-        <Field type="string" name="cc" title="CC" x-component="Input" />
-        <Field type="string" name="dd" title="DD" x-component="Input" />
-      </SchemaForm>
-    </Printer>
+        })
+      }}
+    >
+      <FormItem
+        name="aa"
+        label="批量控制显示隐藏"
+        dataSource={[
+          { label: '显示', value: true },
+          { label: '隐藏', value: false }
+        ]}
+        initialValue={true}
+        component={Select}
+      />
+      <FormItem name="bb" label="BB" component={Input} />
+      <FormItem name="cc" label="CC" component={Input} />
+      <FormItem name="dd" label="DD" component={Input} />
+    </Form>
   )
 }
 
@@ -227,44 +250,32 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd'
 import { DatePicker } from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
-const components = {
-  DateRangePicker: DatePicker.RangePicker
-}
-
 const App = () => (
-  <Printer>
-    <SchemaForm components={components} labelCol={6} wrapperCol={6}>
-      <Field
-        type="array"
+  <Printer noSchema>
+    <Form labelCol={6} wrapperCol={6}>
+      <FormItem
         name="daterange"
-        title="未解构日期"
+        label="未解构日期"
         required
-        x-component="DateRangePicker"
+        component={DatePicker.RangePicker}
       />
-      <Field
-        type="array"
+      <FormItem
         name="[startDate,endDate]"
-        title="已解构日期"
+        label="已解构日期"
         required
-        x-component="DateRangePicker"
+        component={DatePicker.RangePicker}
       />
       <FormButtonGroup offset={6}>
         <Submit>点击查看解构结果</Submit>
         <Reset />
       </FormButtonGroup>
-    </SchemaForm>
+    </Form>
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -275,13 +286,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
@@ -313,25 +318,18 @@ const MyComponent = ({ value, onChange }) => {
 
 const App = () => (
   <Printer>
-    <SchemaForm
-      components={{
-        MyComponent
-      }}
-      labelCol={6}
-      wrapperCol={6}
-    >
-      <Field
-        type="object"
+    <Form labelCol={6} wrapperCol={6}>
+      <FormItem
         name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}"
         title="复杂解构"
         required
-        x-component="MyComponent"
+        component={MyComponent}
       />
       <FormButtonGroup offset={6}>
         <Submit>点击查看解构结果</Submit>
         <Reset />
       </FormButtonGroup>
-    </SchemaForm>
+    </Form>
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -342,13 +340,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
+import { Form, FormItem, FormButtonGroup, Submit, Reset } from '@formily/antd'
 import { FormLayout } from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
@@ -380,24 +372,21 @@ const MyComponent = ({ value, onChange }) => {
 }
 
 const App = () => (
-  <Printer>
-    <SchemaForm components={{ MyComponent }}>
-      <Field type="object" name="wrapper">
-        <FormLayout labelCol={6} wrapperCol={6}>
-          <Field
-            type="object"
-            name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}"
-            title="复杂解构"
-            required
-            x-component="MyComponent"
-          />
-        </FormLayout>
-      </Field>
+  <Printer noSchema>
+    <Form>
+      <FormItem
+        labelCol={6}
+        wrapperCol={6}
+        name="wrapper.{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}"
+        label="复杂解构"
+        required
+        component={MyComponent}
+      />
       <FormButtonGroup offset={6}>
         <Submit>点击查看解构结果</Submit>
         <Reset />
       </FormButtonGroup>
-    </SchemaForm>
+    </Form>
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -409,14 +398,15 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {
-  SchemaForm,
-  SchemaMarkupField as Field,
+  Form,
+  FormItem,
   FormButtonGroup,
   Submit,
   Reset,
-  FormPath
+  FormPath,
+  FormItemDeepProvider as FormLayout
 } from '@formily/antd'
-import { Select, FormLayout } from '@formily/antd-components'
+import { Select } from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
@@ -448,11 +438,7 @@ const MyComponent = ({ value, onChange }) => {
 
 const App = () => (
   <Printer>
-    <SchemaForm
-      components={{
-        MyComponent,
-        Select
-      }}
+    <Form
       effects={($, { setFieldState }) => {
         $('onFieldChange', 'wrapper.relation').subscribe(({ value }) => {
           setFieldState(
@@ -464,33 +450,29 @@ const App = () => (
         })
       }}
     >
-      <Field type="object" name="wrapper">
-        <FormLayout labelCol={6} wrapperCol={6}>
-          <Field
-            name="relation"
-            type="number"
-            title="隐藏复杂解构"
-            default={1}
-            enum={[
-              { label: '是', value: 1 },
-              { label: '否', value: 2 }
-            ]}
-            x-component="Select"
-          />
-          <Field
-            type="object"
-            name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}"
-            title="复杂解构"
-            required
-            x-component="MyComponent"
-          />
-        </FormLayout>
-      </Field>
+      <FormLayout labelCol={6} wrapperCol={6}>
+        <FormItem
+          name="wrapper.relation"
+          label="隐藏复杂解构"
+          initialValue={1}
+          dataSource={[
+            { label: '是', value: 1 },
+            { label: '否', value: 2 }
+          ]}
+          component={Select}
+        />
+        <FormItem
+          name="wrapper.{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}"
+          label="复杂解构"
+          required
+          component={MyComponent}
+        />
+      </FormLayout>
       <FormButtonGroup offset={6}>
         <Submit>点击查看解构结果</Submit>
         <Reset />
       </FormButtonGroup>
-    </SchemaForm>
+    </Form>
   </Printer>
 )
 ReactDOM.render(<App />, document.getElementById('root'))

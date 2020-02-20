@@ -12,6 +12,8 @@ export const Form: React.FC<INextFormProps> = props => {
     actions,
     initialValues,
     value,
+    onChange,
+    onSubmit,
     defaultValue,
     form,
     useDirty,

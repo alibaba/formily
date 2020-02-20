@@ -49,35 +49,23 @@
   - FAQ
 - 其他指南
   - 升级迁移指南
-    - UForm迁移Formily
+    - [UForm迁移Formily](./uform-upgrade.md)
   - 开发调试指南
     - devtools
   - 贡献指南
   - 底层扩展开发
-    - 介绍
-    - 理解核心API
-    - 理解Observable Graph
     - 扩展实现@formily/vue
     - 扩展实现@formily/mini-app
     - FAQ
+  - [其他文档/资料](./other-links.md)
 - API手册
   - Ant Design
-    - antd
-    - antd-components
+    - [antd](../../packages/antd/README.zh-cn.md)
+    - [antd-components](../../packages/antd-components/README.zh-cn.md)
   - Fusion Next
-    - next
-    - next-components
+    - [next](../../packages/next/README.zh-cn.md)
+    - [next-components](../../packages/next-components/README.zh-cn.md)
   - Rax Meet
     - meet
     - meet-components
-  - React Bridge
-    - react-shared-components
-    - react-schema-renderer
-    - react
-  - Core
-    - core
-    - shared
-    - validator
-- [UFORM](https://uformjs.org)
-- [UFORM V1](https://uform-next.netlify.com)
 - [GITHUB](https://github.com/alibaba/formily)
