@@ -40,7 +40,7 @@ const computeMessage = (errors: any[], warnings: any[]) => {
     : undefined
 }
 
-const ConnectedComponent = Symbol('connected')
+const ConnectedComponent = Symbol.for('connected')
 
 export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const {

@@ -1,20 +1,23 @@
 //inject content script
 import { IForm } from '@formily/core'
-import { isArr, map } from '@formily/shared'
 const globalThis: any = window
 
 const serializeObject = (obj: any) => {
-  if (isArr(obj)) {
+  if (Array.isArray(obj)) {
     return obj.map(serializeObject)
   } else if (typeof obj === 'object') {
     if ('$$typeof' in obj && '_owner' in obj) {
       return '#ReactNode'
-    }  else if(obj.toJS){
+    } else if (obj.toJS) {
       return obj.toJS()
-    } else if(obj.toJSON){
+    } else if (obj.toJSON) {
       return obj.toJSON()
-    }else {
-      return map(obj, serializeObject)
+    } else {
+      const result = {}
+      for (let key in obj) {
+        result[key] = serializeObject(obj[key])
+      }
+      return result
     }
   }
   return obj
@@ -81,7 +84,6 @@ const HOOK = {
     })
   }
 }
-
 
 globalThis.__FORMILY_DEV_TOOLS_HOOK__ = HOOK
 globalThis.__UFORM_DEV_TOOLS_HOOK__ = HOOK

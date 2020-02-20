@@ -7,24 +7,20 @@
     - [理解表单生命周期](./schema-develop/lifecycle.md)
     - [理解actions/effects](./schema-develop/actions-effects.md)
     - [理解表单路径系统](./schema-develop/form-path.md)
-    - [理解传值属性](./schema-develop/value.md)
-    - [理解表单状态]()
+    - [理解传值属性](./schema-develop/form-value.md)
+    - [理解表单状态](./schema-develop/form-state.md)
     - [理解表单节点树](./schema-develop/form-graph.md)
-    - [理解表单组件扩展机制](./schema-develop/extension.md)
+    - [理解表单扩展机制](./schema-develop/form-extension.md)
   - 实践教程
     - [使用布局组件](./schema-develop/use-form-layout.md)
     - [实现超复杂联动](./schema-develop/complex-linkage.md)
-    - [实现弹窗表单]()
-    - [实现分步表单]()
+    - [实现弹窗表单](./schema-develop/form-dialog.md)
+    - [实现分步表单](./schema-develop/form-step.md)
     - [实现联动校验](./schema-develop/linkage-validate.md)
     - [管理业务逻辑](./schema-develop/manage-business.md)
   - 进阶教程
     - [实现递归渲染组件](./schema-develop/recursive-render.md)
     - [实现自增列表组件](./schema-develop/self-inc-component.md)
-    - [定制校验规则](./schema-develop/custom-validation.md)
-    - [自定义Effect Hook](./schema-develop/create-effect-hook.md)
-    - [开发自定义组件](./schema-develop/create-field-component.md)
-    - [开发自定义布局组件](./schema-develop/create-layout-component.md)
     - [接入组件库](./schema-develop/use-components.md)
     - [开发超复杂自定义组件](./schema-develop/create-complex-field-component.md)
   - [FAQ](./schema-develop/faq.md)
@@ -39,7 +35,6 @@
     - [理解表单状态]()
     - [理解表单节点树]()
   - 实践教程
-    - [使用布局组件]()
     - [实现超复杂联动逻辑]()
     - [实现弹窗表单]()
     - [实现分步表单]()
@@ -52,6 +47,11 @@
     - [接入组件库]()
   - FAQ
 - 其他指南
+  - 升级迁移指南
+    - UForm迁移Formily
+  - 开发调试指南
+    - devtools
+  - 贡献指南
   - 底层扩展开发
     - 介绍
     - 理解核心API
@@ -59,11 +59,6 @@
     - 扩展实现@formily/vue
     - 扩展实现@formily/mini-app
     - FAQ
-  - 升级迁移指南
-    - UForm迁移Formily
-  - 开发调试指南
-    - devtools
-  - 贡献指南
 - API手册
   - Ant Design
     - antd

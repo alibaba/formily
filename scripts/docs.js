@@ -17,6 +17,13 @@ window.codeSandBoxDependencies = {
 window.codeSandBoxPeerDependencies = {
   moment: 'latest'
 }
+if (window.parent !== window) {
+  try {
+    window.__FORMILY_DEV_TOOLS_HOOK__ = window.parent.__FORMILY_DEV_TOOLS_HOOK__;
+  } catch (error) {
+    // The above line can throw if we do not have access to the parent frame -- i.e. cross origin
+  }
+}
 </script>
 `
 

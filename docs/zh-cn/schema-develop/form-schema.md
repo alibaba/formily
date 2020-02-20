@@ -2,7 +2,7 @@
 
 Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之后，我们就能更高效，更快速的来开发表单了。
 
-### 结构
+## 结构
 
 首先，我们要理解，这份 Schema 是一份递归协议，它主要用于描述数据结构，但是 Formily 对其做了扩展，可以支持描述 UI：
 
@@ -50,7 +50,7 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 
 了解到 Schema 可以描述数据结构之后，在这里，我们暂且把拥有 type 属性的对象叫做一个字段节点，然后我们就可以看详细每个字段节点的可选属性了。
 
-### 属性
+## 属性
 
 | 属性名               | 描述                                   | 类型                                                              |
 | -------------------- | -------------------------------------- | ----------------------------------------------------------------- |
@@ -88,11 +88,11 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 | display              | 字段样式是否可见                       | `boolean`                                                         |
 | x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                         |
 | x-index              | 字段顺序                               | `number`                                                          |
-| x-rules              | 字段校验规则，详细描述可以往后看       | `ValidatePatternRules`                                            |
+| x-rules              | 字段校验规则，详细描述可以往后看       | [ValidatePatternRules](#validatepatternrules)                                            |
 | x-component          | 字段 UI 组件名称，大小写不敏感                           | `string`                                                          |
 | x-component-props    | 字段 UI 组件属性                       | `{}`                                                              |
 
-### From Schema 表达式
+## From Schema 表达式
 
 Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 JSON 字符串中注入一些逻辑能力
 
@@ -122,11 +122,11 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 - 表达式要求字段值必须为字符串，同时首位字符必须是以`{{`开始，以`}}`结束，否则会被认为普通字符串，不会被编译
 - 表达式编译执行只会在父组件渲染的时候执行
 
-### Form Schema 联动协议
+## Form Schema 联动协议
 
 考虑到协议层面希望做低纬度控制联动交互，所以我们抽象了一个叫做 x-linkages 的协议，帮助我们在协议层描述简单联动，注意，这个只是简单联动，它无法描述异步联动，也无法描述联动过程中的各种复杂数据处理。
 
-#### 抽象结构
+### 抽象结构
 
 首先，我们要理解 x-linkages 的核心抽象结构：
 
@@ -149,7 +149,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 - 每个数组项代表一个联动命令，需要指定联动类型 type 字段，也需要指定被联动的目标字段(target)
 - 需要指定每个联动发生的条件，由一个表达式来驱动
 
-#### 表达式说明
+### 表达式说明
 
 目前表达式的上下文注入了一些环境变量：
 
@@ -164,7 +164,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 ```
 
-#### 更多联动协议
+### 更多联动协议
 
 目前 Formily 内置了 3 种联动类型，主要有：
 
@@ -216,15 +216,20 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 ```
 
-#### 扩展联动协议
+### 扩展联动协议
 
 想要了解更多高级内容，可以详细查看API手册
 
-### 校验规则详细说明
 
-#### 格式校验类型
+## ValidatePatternRules
 
 ```typescript
+type ValidatePatternRules =
+  | InternalFormats
+  | CustomValidator
+  | ValidateDescription
+  | Array<InternalFormats | CustomValidator | ValidateDescription>
+
 type InternalFormats =
   | 'url'
   | 'email'
@@ -239,16 +244,6 @@ type InternalFormats =
   | 'date'
   | 'zip'
   | string //自定义正则规则
-```
-
-#### 校验规则类型
-
-```typescript
-type ValidatePatternRules =
-  | InternalFormats
-  | CustomValidator
-  | ValidateDescription
-  | Array<InternalFormats | CustomValidator | ValidateDescription>
 
 interface ValidateDescription {
   //正则规则类型
@@ -298,7 +293,3 @@ type CustomValidator = (
   description?: ValidateDescription
 ) => ValidateResponse
 ```
-
-#### 扩展校验规则
-
-查看API手册可以学习更多高级扩展操作

@@ -114,8 +114,6 @@ export class Schema implements ISchema {
 
   public path?: string
 
-  public linkages?: ISchema['x-linkages']
-
   constructor(json: ISchema, parent?: Schema, key?: string) {
     if (parent) {
       this.parent = parent
@@ -421,9 +419,7 @@ export class Schema implements ISchema {
     if (isValid(json['x-component'])) {
       this['x-component'] = lowercase(json['x-component'])
     }
-    if (isValid(json['x-linkages'])) {
-      this.linkages = isArr(json['x-linkages']) ? json['x-linkages'] : []
-    }
+    
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {
         return new Schema(item, this, key)

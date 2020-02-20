@@ -128,7 +128,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 在 effects 中使用\$订阅生命周期
+- 在 effects 中使用$订阅生命周期
 - 通过订阅 ON_FORM_INIT 在表单初始化时设置字段状态
 - 通过订阅 ON_FIELD_VALUE_CHANGE 在字段值变化时设置字段状态
 

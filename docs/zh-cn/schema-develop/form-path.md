@@ -405,8 +405,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### 使用 FormPath 路径匹配处理联动
 
-> 注意使用`[[]]`来包裹带关键字的 name 才能匹配
-
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
