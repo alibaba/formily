@@ -4,13 +4,14 @@ import {
   IConnectProps,
   MergedFieldComponentProps
 } from '@formily/react-schema-renderer'
+import { each } from '@formily/shared'
 export * from '@formily/shared'
 
 export const autoScrollInValidateFailed = (formRef: any) => {
   if (formRef.current) {
     setTimeout(() => {
       const elements = formRef.current.querySelectorAll(
-        '.next-form-item.has-error'
+        '.ant-form-item-control.has-error'
       )
       if (elements && elements.length) {
         if (!elements[0].scrollIntoView) return
@@ -56,6 +57,52 @@ export const normalizeCol = (
   } else {
     return typeof col === 'object' ? col : { span: Number(col) }
   }
+}
+
+export const pickProps = (object: any, targets: string[]) => {
+  let selected: any = {}
+  let otherwise: any = {}
+  each(object, (value: any, key: string) => {
+    if (targets.includes(key)) {
+      selected[key] = value
+    } else {
+      otherwise[key] = value
+    }
+  })
+  return {
+    selected,
+    otherwise
+  }
+}
+
+const NextFormItemProps = [
+  'colon',
+  'htmlFor',
+  'validateStatus',
+  'prefixCls',
+  'required',
+  'labelAlign',
+  'hasFeedback',
+  'labelCol',
+  'wrapperCol',
+  'label',
+  'help',
+  'extra'
+]
+
+export const pickFormItemProps = (props: any) => {
+  const { selected } = pickProps(props, NextFormItemProps)
+  if (!props.label && props.title) {
+    selected.label = props.title
+  }
+  if (!props.help && props.description) {
+    selected.help = props.description
+  }
+  return selected
+}
+
+export const pickNotFormItemProps = (props: any) => {
+  return pickProps(props, NextFormItemProps).otherwise
 }
 
 export const mapStyledProps = (

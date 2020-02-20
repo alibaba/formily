@@ -2,7 +2,9 @@ import {
   FormEffectHooks,
   createEffectHook,
   createFormActions,
-  createAsyncFormActions
+  createAsyncFormActions,
+  createEffectsProvider,
+  createQueryEffects
 } from './shared'
 import {
   setValidationLanguage,
@@ -27,6 +29,7 @@ export * from './hooks/useForm'
 export * from './hooks/useField'
 export * from './hooks/useVirtualField'
 export * from './hooks/useFormEffects'
+export * from './hooks/useFormQuery'
 export * from './types'
 
 export {
@@ -36,6 +39,8 @@ export {
   createEffectHook,
   createFormActions,
   createAsyncFormActions,
+  createEffectsProvider,
+  createQueryEffects,
   setValidationLanguage,
   setValidationLocale,
   registerValidationFormats,

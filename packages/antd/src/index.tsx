@@ -7,6 +7,10 @@ import {
   SchemaField,
   Schema,
   FormPath,
+  FormSlot,
+  FormSpy,
+  FormConsumer,
+  FormProvider,
   JSONCondition,
   compileObject,
   FormEffectHooks,
@@ -33,13 +37,25 @@ import {
   registerFormItemComponent,
   registerVirtualBox,
   parseLinkages,
-  useValueLinkageEffect
+  useValueLinkageEffect,
+  createControllerBox,
+  createVirtualBox,
+  cleanRegistry,
+  getRegistry
 } from '@formily/react-schema-renderer'
-import { mapStyledProps, mapTextComponent, normalizeCol } from './shared'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  normalizeCol,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from './shared'
 export * from './adaptor'
 export * from './components'
 export * from './context'
 export * from './types'
+export * from './hooks/useFormTableQuery'
 
 export {
   SchemaMarkupField,
@@ -48,6 +64,10 @@ export {
   InternalFieldList,
   InternalForm,
   FormPath,
+  FormSlot,
+  FormSpy,
+  FormConsumer,
+  FormProvider,
   SchemaField,
   Schema,
   JSONCondition,
@@ -79,5 +99,12 @@ export {
   registerVirtualBox,
   parseLinkages,
   useValueLinkageEffect,
-  normalizeCol
+  normalizeCol,
+  createControllerBox,
+  createVirtualBox,
+  cleanRegistry,
+  getRegistry,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
 }

@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Form as AntdForm } from 'antd'
-import { InternalField, connect } from '@formily/react-schema-renderer'
-import { normalizeCol } from '../shared'
+import {
+  InternalField,
+  connect,
+  InternalVirtualField
+} from '@formily/react-schema-renderer'
+import {
+  normalizeCol,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from '../shared'
 import { useDeepFormItem } from '../context'
 import { IAntdFormItemProps } from '../types'
 const { Item: AntdFormItem } = AntdForm
@@ -57,8 +65,12 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
   const topFormItemProps = useDeepFormItem()
 
   const renderComponent = ({ props, state, mutators, form }) => {
+    if (!component) {
+      if (children) return <Fragment>{children}</Fragment>
+      return <div>Can not fount component.</div>
+    }
     if (!component['__ALREADY_CONNECTED__']) {
-      component[ConnectedComponent] = connect({
+      component[ConnectedComponent] = component[ConnectedComponent] || connect({
         eventName,
         valueName,
         getValueFromEvent
@@ -80,6 +92,38 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     )
   }
 
+  const renderField = ({ form, state, mutators }) => {
+    const { props, errors, warnings, editable, required } = state
+    const { labelCol, wrapperCol, help } = props
+    const formItemProps = pickFormItemProps(props)
+    const { inline, ...componentProps } = pickNotFormItemProps(props)
+    return (
+      <AntdFormItem
+        {...formItemProps}
+        required={editable === false ? undefined : required}
+        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
+        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
+        validateStatus={computeStatus(state)}
+        help={computeMessage(errors, warnings) || help}
+      >
+        {renderComponent({ props: componentProps, state, mutators, form })}
+      </AntdFormItem>
+    )
+  }
+
+  if (!component && children) {
+    return (
+      <InternalVirtualField
+        name={name}
+        visible={visible}
+        display={display}
+        props={{ ...topFormItemProps, ...itemProps, ...props }}
+      >
+        {renderField}
+      </InternalVirtualField>
+    )
+  }
+
   return (
     <InternalField
       name={name}
@@ -93,45 +137,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
       triggerType={triggerType}
       props={{ ...topFormItemProps, ...itemProps, ...props }}
     >
-      {({ form, state, mutators }) => {
-        const {
-          props: {
-            label,
-            labelCol,
-            labelAlign,
-            wrapperCol,
-            prefixCls,
-            extra,
-            help,
-            hasFeedback,
-            itemStyle,
-            itemClassName,
-            ...props
-          },
-          errors,
-          editable,
-          warnings,
-          required
-        } = state
-        return (
-          <AntdFormItem
-            prefixCls={prefixCls}
-            hasFeedback={hasFeedback}
-            className={itemClassName}
-            style={itemStyle}
-            extra={extra}
-            label={label}
-            required={editable ? required : undefined}
-            labelCol={label ? normalizeCol(labelCol) : undefined}
-            labelAlign={labelAlign || 'left'}
-            wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
-            validateStatus={computeStatus(state)}
-            help={computeMessage(errors, warnings) || help}
-          >
-            {renderComponent({ props, state, mutators, form })}
-          </AntdFormItem>
-        )
-      }}
+      {renderField}
     </InternalField>
   )
 }

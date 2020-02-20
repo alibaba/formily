@@ -1,7 +1,15 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Form as NextForm } from '@alifd/next'
-import { InternalField, connect } from '@formily/react-schema-renderer'
-import { normalizeCol } from '../shared'
+import {
+  InternalField,
+  connect,
+  InternalVirtualField
+} from '@formily/react-schema-renderer'
+import {
+  normalizeCol,
+  pickNotFormItemProps,
+  pickFormItemProps
+} from '../shared'
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
 const { Item: NextFormItem } = NextForm
@@ -32,7 +40,7 @@ const computeMessage = (errors: any[], warnings: any[]) => {
     : undefined
 }
 
-const ConnectedComponent = Symbol('connected')
+const ConnectedComponent = Symbol.for('connected')
 
 export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const {
@@ -56,6 +64,10 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const topFormItemProps = useDeepFormItem()
 
   const renderComponent = ({ props, state, mutators, form }) => {
+    if (!component) {
+      if (children) return <Fragment>{children}</Fragment>
+      return <div>Can not fount component.</div>
+    }
     if (!component['__ALREADY_CONNECTED__']) {
       component[ConnectedComponent] = connect({
         eventName,
@@ -79,6 +91,42 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
     )
   }
 
+  const renderField = ({ form, state, mutators }) => {
+    const { props, errors, warnings, editable, required } = state
+    const { labelCol, wrapperCol, help } = props
+    const formItemProps = pickFormItemProps(props)
+    const componentProps = pickNotFormItemProps(props)
+    return (
+      <NextFormItem
+        {...formItemProps}
+        required={editable === false ? undefined : required}
+        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
+        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
+        validateState={computeStatus(state)}
+        help={computeMessage(errors, warnings) || help}
+      >
+        {renderComponent({ props: componentProps, state, mutators, form })}
+      </NextFormItem>
+    )
+  }
+
+  if (!component && children) {
+    return (
+      <InternalVirtualField
+        name={name}
+        visible={visible}
+        display={display}
+        props={{ ...topFormItemProps, ...itemProps, ...props }}
+      >
+        {renderField}
+      </InternalVirtualField>
+    )
+  }
+
+  if (!name) {
+    return <div>Form Item must have name property</div>
+  }
+
   return (
     <InternalField
       name={name}
@@ -92,50 +140,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
       triggerType={triggerType}
       props={{ ...topFormItemProps, ...itemProps, ...props }}
     >
-      {({ form, state, mutators }) => {
-        const {
-          props: {
-            label,
-            labelTextAlign,
-            labelCol,
-            labelAlign,
-            wrapperCol,
-            prefix,
-            extra,
-            help,
-            hasFeedback,
-            size,
-            itemStyle,
-            itemClassName,
-            asterisk,
-            ...props
-          },
-          errors,
-          warnings,
-          required
-        } = state
-        return (
-          <NextFormItem
-            prefix={prefix}
-            hasFeedback={hasFeedback}
-            className={itemClassName}
-            style={itemStyle}
-            asterisk={asterisk}
-            extra={extra}
-            label={label}
-            size={size}
-            labelTextAlign={labelTextAlign}
-            required={required}
-            labelCol={label ? normalizeCol(labelCol) : undefined}
-            labelAlign={labelAlign || 'left'}
-            wrapperCol={label ? normalizeCol(wrapperCol) : undefined}
-            validateState={computeStatus(state)}
-            help={computeMessage(errors, warnings) || help}
-          >
-            {renderComponent({ props, state, mutators, form })}
-          </NextFormItem>
-        )
-      }}
+      {renderField}
     </InternalField>
   )
 }
