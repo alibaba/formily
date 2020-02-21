@@ -7,7 +7,10 @@ const HEAD_HTML = `
 window.codeSandBoxDependencies = {
   '@alifd/next': 'latest',
   '@formily/next': 'latest',
+  '@formily/next-components': 'latest',
   '@formily/antd': 'latest',
+  '@formily/antd-components': 'latest',
+  '@formily/shared': 'latest',
   '@formily/react': 'latest',
   '@formily/printer': 'latest',
   '@babel/runtime':'latest',
