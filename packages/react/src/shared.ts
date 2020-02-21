@@ -336,7 +336,7 @@ export const createEffectsProvider = <TActions = any, TContext = any>(
     }
     const queue = toArr(middlewares).reduce((buf, fn) => {
       const spec = fn(runtime)
-      for (let key in spec) {
+      for (const key in spec) {
         buf[key] = buf[key] || []
         buf[key] = buf[key].concat(spec[key])
       }

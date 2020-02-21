@@ -33,9 +33,7 @@ module.exports = {
     'ts-jest': {
       babelConfig: true,
       tsConfig: 'tsconfig.jest.json',
-      diagnostics: {
-        pathRegex: '\\.(spec|test)\\.(ts|tsx|js|jsx)$'
-      }
+      diagnostics: false
     }
   },
   //watchPlugins: ['jest-watch-lerna-packages'],
