@@ -6,7 +6,7 @@
 npm install --save @formily/antd-components
 ```
 
-### 手动维护组件
+### 显式加载组件
 
 通过在`<SchemaForm>`传入components，可以快速置入组件，表单字段通过`x-component`使用到内置的组件。
 
@@ -61,19 +61,19 @@ export default () => {
 
 | type类型       | 对应组件                             | 描述                 |
 |:--------------|:----------------------------------|:----------------------|
-| string   | Input                     | 输入框组件         |
-| string(有enum属性时)   | Select                     | 选择框组件         |
-| textarea   | Input.Textarea                     | 多行输入框组件         |
-| password   | Password                     | 密码输入框         |
-| checkbox   | CheckboxGroup                     | Checkbox         |
-| radio   | RadioGroup                     | Radio         |
-| boolean   | Switch                     | 开关组件         |
-| date   | DatePicker                     | 日期选择器         |
-| time   | TimePicker                     | 时间选择器         |
-| daterange   | DatePicker.RangePicker                     | 范围日期选择器         |
-| rating   | Rating                     | 评价组件         |
+| string   | [Input](#Input)                     | 输入框组件         |
+| string(有enum属性时)   | [Select](#Select)                     | 选择框组件         |
+| textarea   | [Textarea](#Textarea)                     | 多行输入框组件         |
+| password   | [Password](#Password)                     | 密码输入框         |
+| checkbox   | [CheckboxGroup](#Checkbox)                     | Checkbox         |
+| radio   | [RadioGroup](#Radio)                     | Radio         |
+| boolean   | [Switch](#Swicth)                     | 开关组件         |
+| date   | [DatePicker](#DatePicker)                     | 日期选择器         |
+| time   | [TimePicker](#TimePicker)                     | 时间选择器         |
+| daterange   | [DatePicker.RangePicker](#RangePicker)                     | 范围日期选择器         |
+| rating   | [Rating](#Rating)                     | 评价组件         |
 | object   |                      | 嵌套表单         | 自动连接路径信息
-| array   |  ArrayCard（默认）                    | 表单数组         | 表单数组
+| array   | [ArrayCard](#ArrayCard)（默认）                       | 表单数组         |
 
 
 #### Input
@@ -760,6 +760,351 @@ import 'antd/dist/antd.css'
 const App = () => {
   return (<Form>
     <FormItem label="DatePicker" name="DatePicker" component={DatePicker} format={'YYYY-MM-DD HH:mm:ss'} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### RangePicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        RangePicker: DatePicker.RangePicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          '[start,end]': {
+            title: 'RangePicker',
+            'x-component': 'RangePicker',
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ RangePicker: DatePicker.RangePicker }}
+    >
+      <Field
+        x-component="RangePicker"
+        title="RangePicker"
+        name="[start,end]"
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, FormItem } from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="RangePicker" name="[start,end]" component={DatePicker.RangePicker} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### WeekPicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        WeekPicker: DatePicker.WeekPicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'WeekPicker',
+            'x-component': 'WeekPicker',
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ WeekPicker: DatePicker.WeekPicker }}
+    >
+      <Field
+        x-component="WeekPicker"
+        title="WeekPicker"
+        name="WeekPicker"
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, FormItem } from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="WeekPicker" name="WeekPicker" component={DatePicker.WeekPicker} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### MonthPicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        MonthPicker: DatePicker.MonthPicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'MonthPicker',
+            'x-component': 'MonthPicker',
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ MonthPicker: DatePicker.MonthPicker }}
+    >
+      <Field
+        x-component="MonthPicker"
+        title="MonthPicker"
+        name="MonthPicker"
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, FormItem } from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="MonthPicker" name="MonthPicker" component={DatePicker.MonthPicker}/>
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### YearPicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        YearPicker: DatePicker.YearPicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'YearPicker',
+            'x-component': 'YearPicker',
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ YearPicker: DatePicker.YearPicker }}
+    >
+      <Field
+        x-component="YearPicker"
+        title="YearPicker"
+        name="YearPicker"
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, FormItem } from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="YearPicker" name="YearPicker" component={DatePicker.YearPicker}/>
   </Form>)
 }
 
@@ -2095,47 +2440,5 @@ const App = () => {
     </Printer>
   )
 }
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<TextButton/>`
-
-> TextButton 组件 Props, 完全继承自 [ButtonProps](#ButtonProps)
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { SchemaForm } from '@formily/antd'
-import { TextButton } from '@formily/antd-components'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <SchemaForm>
-    <TextButton>content</TextButton>
-  </SchemaForm>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<CircleButton/>`
-
-> CircleButton 组件 Props, 完全继承自 [ButtonProps](#ButtonProps)
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { SchemaForm } from '@formily/antd'
-import { CircleButton } from '@formily/antd-components'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <SchemaForm>
-    <CircleButton>ok</CircleButton>
-  </SchemaForm>
-)
 ReactDOM.render(<App />, document.getElementById('root'))
 ```

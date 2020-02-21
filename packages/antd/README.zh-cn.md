@@ -34,17 +34,17 @@ npm install --save @formily/antd
 | className    |扩展class                  | string |                |
 | style    |自定义内联样式                  | React.CSSProperties |                |
 | component    |设置标签类型                  | string `|` (() => void) |                |
-| value    |全局value                  | [Value](#Value) |                |
-| defaultValue    |全局defaultValue                  | [DefaultValue](#DefaultValue) |                |
-| initialValues    |全局initialValues                  | [DefaultValue](#DefaultValue) |                |
+| value    |全局value                  | {} |                |
+| defaultValue    |全局defaultValue                  | {} |                |
+| initialValues    |全局initialValues                  | {} |                |
 | actions    |FormActions实例                  | [FormActions](#FormActions) |                |
-| effects    |IFormEffect实例                  | IFormEffect<FormEffectPayload, FormActions> |                |
+| effects    |IFormEffect实例                  | IFormEffect<FormEffectPayload, [FormActions](#FormActions)> |                |
 | form    |表单实例                  | [IForm](#IForm) |                |
-| onChange    |表单变化回调                  | (values: Value) => void |                |
-| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: Value) => void `|` Promise<Value> |                |
+| onChange    |表单变化回调                  | (values: {}) => void |                |
+| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: {}) => void `|` Promise<{}> |                |
 | onReset    |form内有 <Reset/> 或 actions.reset时 触发                  | () => void |                |
-| onValidateFailed    |校验失败时触发                  | (valideted: IFormValidateResult) => void |                |
-| children    |全局value                  | React.ReactElement `|` ((form: IForm) => React.ReactElement) |                |
+| onValidateFailed    |校验失败时触发                  | (valideted: [IFormValidateResult](#IFormValidateResult)) => void |                |
+| children    |全局value                  | React.ReactElement `|` ((form: [IForm](#IForm)) => React.ReactElement) |                |
 | useDirty    |是否使用脏检查，默认会走immer精确更新                  | boolean |                |
 | editable    |是否可编辑                  | boolean `|` ((name: string) => boolean) |                |
 | validateFirst    |是否走悲观校验，遇到第一个校验失败就停止后续校验                  | boolean |                |
@@ -57,12 +57,12 @@ npm install --save @formily/antd
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | name    |字段名                  | string |                |
-| title    |字段label                   | [SchemaMessage](#SchemaMessage) |                |
-| description    |字段描述信息                   | [SchemaMessage](#SchemaMessage) |                |
+| title    |字段label                   | React.ReactNode |                |
+| description    |字段描述信息                   | React.ReactNode |                |
 | readOnly    | 只读                  | boolean |                |
 | writeOnly    | 只写                  | boolean |                |
 | type    | 字段类型                  | 'string' `|` 'object' `|` 'array' `|` 'number' `|` string |                |
-| enum    | 相当于字段dataSource                  |  `Array<string | number | { label: SchemaMessage; value: any }>` |                |
+| enum    | 相当于字段dataSource                  |  `Array<string | number | { label: React.ReactNode; value: any }>` |                |
 | required    | 是否必填，为true会同时设置校验规则                  | string[] `|` boolean |                |
 | format    | 正则规则类型，详细类型可以往后看	                  | string |                |
 | properties    | 对象属性	                  | { [key: string]: [ISchema](#ISchema) } |                |
@@ -99,7 +99,7 @@ npm install --save @formily/antd
 
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
-| onSubmit    |触发提交的回调函数                  | [ISchemaFormProps.onSubmit](#) |                |
+| onSubmit    |触发提交的回调函数                  | [ISchemaFormProps.onSubmit](#ISchemaFormProps) |                |
 | showLoading    |是否展示loading                  | boolean |                |
 | type    |按钮的类型                  | 'primary' `|` 'secondary' `|` 'normal' |                |
 | size    |按钮的尺寸                  | 'small' `|` 'medium' `|` 'large' |                |
@@ -145,9 +145,9 @@ npm install --save @formily/antd
 
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
-| selector    |选择器, 如：[`LifeCycleTypes.ON_FORM_SUBMIT_START`, `LifeCycleTypes.ON_FORM_SUBMIT_END`]                  | string[] `|` string |                |
+| selector |选择器, 如：[`LifeCycleTypes.ON_FORM_SUBMIT_START`, `LifeCycleTypes.ON_FORM_SUBMIT_END`]                  | string[]`|`string |                |
 | reducer    |reducer函数，状态叠加处理，action为当前命中的生命周期的数据                  | (state: any, action: { type: string; payload: any }, form: IForm) => any |                |
-| children    |内容                  | React.ReactElement `|` ((api: IFormSpyAPI) => React.ReactElement) |                |
+| children    |内容                  | React.ReactElement `|` ((api: [IFormSpyAPI](#IFormSpyAPI)) => React.ReactElement) |                |
 
 
 **用法**
@@ -238,8 +238,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | align    |对齐方式                  | 'left' `|` 'right' `|` 'start' `|` 'end' `|` 'top' `|` 'bottom' `|` 'center' |                |
 | triggerDistance    | 按钮间距离                  | number |                |
 | zIndex    | z-index                  | number |                |
-| span    | 跨列配置                  | ColSpanType |                |
-| offset    | 偏移配置                  | ColSpanType |                |
+| span    | 跨列配置                  | number | string |                |
+| offset    | 偏移配置                  | number | string |                |
 
 **用法**
 
@@ -888,6 +888,19 @@ ReactDOM.render(<App />, document.getElementById('root'))
 type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOptions<T>) => 
 (Target: T) => React.PureComponent<IFieldProps>
 ```
+
+* IConnectOptions
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| valueName    | value字段的名称                 | string | `'value'`               |
+| eventName    | 改变value的事件名                 | string | `'onChange'`               |
+| defaultProps    | 默认属性                 | {} | {}               |
+| getValueFromEvent    | 根据事件获取value                 | (event?: any, value?: any) => any |                |
+| getProps    | 获取props的函数                 | (componentProps: {}, fieldProps: [MergedFieldComponentProps](#MergedFieldComponentProps)) => {} | void |                |
+| getComponent    | 获取Component的函数                 |  (Target: any, componentProps: {}, fieldProps: [MergedFieldComponentProps](#MergedFieldComponentProps)) => React.JSXElementConstructor<any> |                |
+
+
 **用法**
 
 ```typescript
@@ -1633,6 +1646,128 @@ interface IConnectOptions<T> {
 ```
 
 
+### IForm
+
+```typescript
+interface IForm {
+  submit(
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
+  ): Promise<IFormSubmitResult>
+  clearErrors: (pattern?: FormPathPattern) => void
+  hasChanged(target: any, path: FormPathPattern): boolean
+  reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
+  validate(
+    path?: FormPathPattern,
+    options?: IFormExtendedValidateFieldOptions
+  ): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
+  getFormState(callback?: (state: IFormState) => any): any
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void,
+    silent?: boolean
+  ): void
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): any
+  unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
+  registerField(props: IFieldStateProps): IField
+  registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
+  createMutators(field: IField): IMutators
+  getFormGraph(): IFormGraph
+  setFormGraph(graph: IFormGraph): void
+  subscribe(callback?: FormHeartSubscriber): number
+  unsubscribe(id: number): void
+  notify: <T>(type: string, payload?: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  getFieldValue(path?: FormPathPattern): any
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+```
+
+#### IFormActions
+
+```typescript
+interface IFormActions {
+  submit(
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  reset(options?: IFormResetOptions): void
+  hasChanged(target: any, path: FormPathPattern): boolean
+  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any): void
+  getFormState(callback?: (state: IFormState) => any): any
+  clearErrors: (pattern?: FormPathPattern) => void
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void
+  ): void
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): any
+  getFormGraph(): IFormGraph
+  setFormGraph(graph: IFormGraph): void
+  subscribe(callback?: FormHeartSubscriber): number
+  unsubscribe(id: number): void
+  notify: <T>(type: string, payload?: T) => void
+  dispatch: <T>(type: string, payload?: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  getFieldValue(path?: FormPathPattern): any
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+
+```
+
+#### IFormValidateResult
+
+```typescript
+interface IFormValidateResult {
+    errors: Array<{
+        path: string;
+        messages: string[];
+    }>;
+    warnings: Array<{
+        path: string;
+        messages: string[];
+    }>;
+}
+```
+
+#### ISchemaFormProps
+
+```typescript
+interface ISchemaFormProps<
+  Value = any,
+  DefaultValue = any,
+  FormEffectPayload = any,
+  FormActions = ISchemaFormActions | ISchemaFormAsyncActions
+> extends IFormProps<Value, DefaultValue, FormEffectPayload, FormActions> {
+  schema?: ISchema
+  fields?: ISchemaFormRegistry['fields']
+  components?: {
+    [key: string]: React.JSXElementConstructor<any>
+  }
+  virtualFields?: ISchemaFormRegistry['virtualFields']
+  formComponent?: ISchemaFormRegistry['formComponent']
+  formItemComponent?: ISchemaFormRegistry['formItemComponent']
+  expressionScope?: { [key: string]: any }
+}
+```
+
+#### IFormSpyAPI
+
+```typescript
+interface IFormSpyAPI {
+  form: IForm
+  type: string
+  state: any
+}
+```
+
 #### ISpyHook
 
 ```typescript
@@ -1641,4 +1776,19 @@ interface ISpyHook {
   state: any
   type: string
 }
+```
+
+#### MergedFieldComponentProps
+
+```typescript
+interface MergedFieldComponentProps extends IFieldState {
+  schema: Schema
+  mutators: IMutators
+  form: IForm
+  renderField: (
+    addtionKey: string | number,
+    reactKey?: string | number
+  ) => React.ReactElement
+}
+
 ```
