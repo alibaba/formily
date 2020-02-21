@@ -6,7 +6,7 @@
   "homepage_url": "https://github.com/alibaba/formily",
   "manifest_version": 2,
   "page_action": {
-    "default_icon": "img/logo/gray.png",
+    "default_icon": "img/logo/scalable.png",
     "default_title": "Formily DevTools",
     "default_popup": "popup.html"
   },
