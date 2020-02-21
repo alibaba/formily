@@ -2120,9 +2120,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | dataSource    | 分步配置                 | StepItemProps[] |                |
 | current    | 当前步骤                 | number |                |
-| direction    | 展示方向                 | 'hoz' `|` 'ver' |                |
-| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `|` 'ver' |                |
-| shape    | 类型                 | 'circle' `|` 'arrow' `|` 'dot' |                |
+| direction    | 展示方向                 | 'hoz' `or` 'ver' |                |
+| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `or` 'ver' |                |
+| shape    | 类型                 | 'circle' `or` 'arrow' `or` 'dot' |                |
 | readOnly    | 是否只读模式                 | boolean |                |
 | animation    | 是否开启动效                 | boolean |                |
 | itemRender    | StepItem 的自定义渲染                 | (index: number, status: string) => React.ReactNode |                |
@@ -2299,11 +2299,11 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | wrapperCol    |需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                  | `{}` | 
 | help    |自定义提示信息，如不设置，则会根据校验规则自动生成.                | React.ReactNode | |
 | extra    |额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面 | React.ReactNode | |
-| validateState    |校验状态，如不设置，则会根据校验规则自动生成 | 'error' `|` 'success' `|` 'loading' | |
+| validateState    |校验状态，如不设置，则会根据校验规则自动生成 | 'error' `or` 'success' `or` 'loading' | |
 | hasFeedback    |配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有Input支持 | boolean | |
-| size    | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `|` 'small' `|` 'medium' | |
-| labelAlign    | 标签的位置 | 'top' `|` 'left' `|` 'inset' | |
-| labelTextAlign    | 标签的左右对齐方式 | 'left' `|` 'right' | |
+| size    | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium' | |
+| labelAlign    | 标签的位置 | 'top' `or` 'left' `or` 'inset' | |
+| labelTextAlign    | 标签的左右对齐方式 | 'left' `or` 'right' | |
 | asterisk    | required 的星号是否显示 | boolean | |
 
 

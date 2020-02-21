@@ -19,21 +19,21 @@ npm install --save @formily/antd
 | schema    |通过schema渲染表单                  | [ISchema](#ISchema) |                |
 | fields    |传入自定义表单组件                   | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) } |                |
 | virtualFields    |传入自定义虚拟组件                   | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |                |
-| formComponent    |全局注册Form渲染组件                  | string `|` React.ReactElement |                |
+| formComponent    |全局注册Form渲染组件                  | string `or` React.ReactElement |                |
 | formItemComponent    |全局注册FormItem渲染组件                  | React.ReactElement |                |
-| labelCol    |label布局控制                  | number `|` { span: number; offset?: number } |                |
-| wrapperCol    |FormItem布局控制                  | number `|` { span: number; offset?: number } |                |
-| previewPlaceholder    |自定义预览placeholder                  | string `|` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
+| labelCol    |label布局控制                  | number `or` { span: number; offset?: number } |                |
+| wrapperCol    |FormItem布局控制                  | number `or` { span: number; offset?: number } |                |
+| previewPlaceholder    |自定义预览placeholder                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
 | prefix    |样式前缀                  | string |                |
 | inline    |是否为内联表单                  | boolean |                |
-| size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `|` 'medium' `|` 'small' |                |
-| labelAlign    |标签的位置                  | 'top' `|` 'left' `|` 'inset' |                |
-| labelTextAlign    |标签的左右对齐方式                  | 'left' `|` 'right' |                |
-| labelCol    |控制第一级 Item 的 labelCol                  | `{}` |                |
-| wrapperCol    |控制第一级 Item 的 wrapperCol                  | `{}` |                |
+| size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `or` 'medium' `or` 'small' |                |
+| labelAlign    |标签的位置                  | 'top' `or` 'left' `or` 'inset' |                |
+| labelTextAlign    |标签的左右对齐方式                  | 'left' `or` 'right' |                |
+| labelCol    |控制所有 Item 的 labelCol                  | `{}` |                |
+| wrapperCol    |控制所有 Item 的 wrapperCol                  | `{}` |                |
 | className    |扩展class                  | string |                |
 | style    |自定义内联样式                  | React.CSSProperties |                |
-| component    |设置标签类型                  | string `|` (() => void) |                |
+| component    |设置标签类型                  | string `or` (() => void) |                |
 | value    |全局value                  | {} |                |
 | defaultValue    |全局defaultValue                  | {} |                |
 | initialValues    |全局initialValues                  | {} |                |
@@ -41,12 +41,12 @@ npm install --save @formily/antd
 | effects    |IFormEffect实例                  | IFormEffect<FormEffectPayload, [FormActions](#FormActions)> |                |
 | form    |表单实例                  | [IForm](#IForm) |                |
 | onChange    |表单变化回调                  | (values: {}) => void |                |
-| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: {}) => void `|` Promise<{}> |                |
+| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: {}) => void `or` Promise<{}> |                |
 | onReset    |form内有 <Reset/> 或 actions.reset时 触发                  | () => void |                |
 | onValidateFailed    |校验失败时触发                  | (valideted: [IFormValidateResult](#IFormValidateResult)) => void |                |
-| children    |全局value                  | React.ReactElement `|` ((form: [IForm](#IForm)) => React.ReactElement) |                |
+| children    |全局value                  | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement) |                |
 | useDirty    |是否使用脏检查，默认会走immer精确更新                  | boolean |                |
-| editable    |是否可编辑                  | boolean `|` ((name: string) => boolean) |                |
+| editable    |是否可编辑                  | boolean `or` ((name: string) => boolean) |                |
 | validateFirst    |是否走悲观校验，遇到第一个校验失败就停止后续校验                  | boolean |                |
 
 
@@ -61,12 +61,12 @@ npm install --save @formily/antd
 | description    |字段描述信息                   | React.ReactNode |                |
 | readOnly    | 只读                  | boolean |                |
 | writeOnly    | 只写                  | boolean |                |
-| type    | 字段类型                  | 'string' `|` 'object' `|` 'array' `|` 'number' `|` string |                |
+| type    | 字段类型                  | 'string' `or` 'object' `or` 'array' `or` 'number' `or` string |                |
 | enum    | 相当于字段dataSource                  |  `Array<string | number | { label: React.ReactNode; value: any }>` |                |
-| required    | 是否必填，为true会同时设置校验规则                  | string[] `|` boolean |                |
+| required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
 | format    | 正则规则类型，详细类型可以往后看	                  | string |                |
 | properties    | 对象属性	                  | { [key: string]: [ISchema](#ISchema) } |                |
-| items    | 数组描述	                  | [ISchema](#ISchema) `|` [ISchema](#ISchema)[] |                |
+| items    | 数组描述	                  | [ISchema](#ISchema) `or` [ISchema](#ISchema)[] |                |
 | patternProperties    | 动态匹配对象的某个属性的 Schema	                  | { [key: string]: [ISchema](#ISchema) } |                |
 | additionalProperties    | 匹配对象额外属性的 Schema	                  | [ISchema](#ISchema) |                |
 | editable    | 字段是否可编辑                  | boolean |                |
@@ -86,7 +86,7 @@ npm install --save @formily/antd
 | exclusiveMinimum    | 最小值（小于等于）	                  | number |                |
 | maxLength    | 最大长度                  | number |                |
 | minLength    | 最小长度                  | number |                |
-| pattern    | 正则校验规则	                  | string `|` RegExp |                |
+| pattern    | 正则校验规则	                  | string `or` RegExp |                |
 | maxItems    | 最大项数                  | number |                |
 | minItems    | 最小项数                  | number |                |
 | uniqueItems    | 是否校验重复	                  | boolean |                |
@@ -101,13 +101,13 @@ npm install --save @formily/antd
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | onSubmit    |触发提交的回调函数                  | [ISchemaFormProps.onSubmit](#ISchemaFormProps) |                |
 | showLoading    |是否展示loading                  | boolean |                |
-| type    |按钮的类型                  | 'primary' `|` 'secondary' `|` 'normal' |                |
-| size    |按钮的尺寸                  | 'small' `|` 'medium' `|` 'large' |                |
-| iconSize    |按钮中 Icon 的尺寸，用于替代 Icon 的默认大小                  | 'xxs' `|` 'xs' `|` 'small' `|` 'medium' `|` 'large' `|` 'xl' `|` 'xxl' `|` 'xxxl' |                |
-| htmlType    |当 component = 'button' 时，设置 button 标签的 type 值                  | 'submit' `|` 'reset' `|` 'button' |                |
-| component    |设置标签类型                  | 'button' `|` 'a'  |                |
+| type    |按钮的类型                  | 'primary' `or` 'secondary' `or` 'normal' |                |
+| size    |按钮的尺寸                  | 'small' `or` 'medium' `or` 'large' |                |
+| iconSize    |按钮中 Icon 的尺寸，用于替代 Icon 的默认大小                  | 'xxs' `or` 'xs' `or` 'small' `or` 'medium' `or` 'large' `or` 'xl' `or` 'xxl' `or` 'xxxl' |                |
+| htmlType    |当 component = 'button' 时，设置 button 标签的 type 值                  | 'submit' `or` 'reset' `or` 'button' |                |
+| component    |设置标签类型                  | 'button' `or` 'a'  |                |
 | loading    |设置按钮的载入状态                  | boolean  |                |
-| ghost    |是否为幽灵按钮                  | true `|` false `|` 'light' `|` 'dark'  |                |
+| ghost    |是否为幽灵按钮                  | true `or` false `or` 'light' `or` 'dark'  |                |
 | text    |是否为文本按钮                  | boolean  |                |
 | warning    |是否为警告按钮                  | boolean  |                |
 | disabled    |是否禁用                  | boolean  |                |
@@ -124,13 +124,13 @@ npm install --save @formily/antd
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | forceClear    |是否清空                  | boolean |                |
 | validate    |是否触发校验                  | boolean |                |
-| type    |按钮的类型                  | 'primary' `|` 'secondary' `|` 'normal' |                |
-| size    |按钮的尺寸                  | 'small' `|` 'medium' `|` 'large' |                |
-| iconSize    |按钮中 Icon 的尺寸，用于替代 Icon 的默认大小                  | 'xxs' `|` 'xs' `|` 'small' `|` 'medium' `|` 'large' `|` 'xl' `|` 'xxl' `|` 'xxxl' |                |
-| htmlType    |当 component = 'button' 时，设置 button 标签的 type 值                  | 'submit' `|` 'reset' `|` 'button' |                |
-| component    |设置标签类型                  | 'button' `|` 'a'  |                |
+| type    |按钮的类型                  | 'primary' `or` 'secondary' `or` 'normal' |                |
+| size    |按钮的尺寸                  | 'small' `or` 'medium' `or` 'large' |                |
+| iconSize    |按钮中 Icon 的尺寸，用于替代 Icon 的默认大小                  | 'xxs' `or` 'xs' `or` 'small' `or` 'medium' `or` 'large' `or` 'xl' `or` 'xxl' `or` 'xxxl' |                |
+| htmlType    |当 component = 'button' 时，设置 button 标签的 type 值                  | 'submit' `or` 'reset' `or` 'button' |                |
+| component    |设置标签类型                  | 'button' `or` 'a'  |                |
 | loading    |设置按钮的载入状态                  | boolean  |                |
-| ghost    |是否为幽灵按钮                  | true `|` false `|` 'light' `|` 'dark'  |                |
+| ghost    |是否为幽灵按钮                  | true `or` false `or` 'light' `or` 'dark'  |                |
 | text    |是否为文本按钮                  | boolean  |                |
 | warning    |是否为警告按钮                  | boolean  |                |
 | disabled    |是否禁用                  | boolean  |                |
@@ -145,9 +145,9 @@ npm install --save @formily/antd
 
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
-| selector |选择器, 如：[`LifeCycleTypes.ON_FORM_SUBMIT_START`, `LifeCycleTypes.ON_FORM_SUBMIT_END`]                  | string[]`|`string |                |
+| selector |选择器, 如：[`LifeCycleTypes.ON_FORM_SUBMIT_START`, `LifeCycleTypes.ON_FORM_SUBMIT_END`]                  | string[]`or`string |                |
 | reducer    |reducer函数，状态叠加处理，action为当前命中的生命周期的数据                  | (state: any, action: { type: string; payload: any }, form: IForm) => any |                |
-| children    |内容                  | React.ReactElement `|` ((api: [IFormSpyAPI](#IFormSpyAPI)) => React.ReactElement) |                |
+| children    |内容                  | React.ReactElement `or` ((api: [IFormSpyAPI](#IFormSpyAPI)) => React.ReactElement) |                |
 
 
 **用法**
@@ -235,7 +235,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | sticky    |是否吸附在页面底部                  | boolean |                |
 | itemStyle    |每个Btn的样式                  | React.CSSProperties |                |
-| align    |对齐方式                  | 'left' `|` 'right' `|` 'start' `|` 'end' `|` 'top' `|` 'bottom' `|` 'center' |                |
+| align    |对齐方式                  | 'left' `or` 'right' `or` 'start' `or` 'end' `or` 'top' `or` 'bottom' `or` 'center' |                |
 | triggerDistance    | 按钮间距离                  | number |                |
 | zIndex    | z-index                  | number |                |
 | span    | 跨列配置                  | number | string |                |
