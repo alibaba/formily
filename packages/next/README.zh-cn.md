@@ -227,6 +227,72 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 > 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
 
+#### `<FormButtonGroup/>`
+
+* IFormButtonGroupProps
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| sticky    |是否吸附在页面底部                  | boolean |                |
+| itemStyle    |每个Btn的样式                  | React.CSSProperties |                |
+| align    |对齐方式                  | 'left' `|` 'right' `|` 'start' `|` 'end' `|` 'top' `|` 'bottom' `|` 'center' |                |
+| triggerDistance    | 按钮间距离                  | number |                |
+| zIndex    | z-index                  | number |                |
+| span    | 跨列配置                  | ColSpanType |                |
+| offset    | 偏移配置                  | ColSpanType |                |
+
+**用法**
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  Submit,
+  FormButtonGroup,
+  Reset
+} from '@formily/next'
+import { 
+  setup,
+  FormItemGrid,
+  FormCard,
+  FormBlock,
+  FormLayout
+} from '@formily/next-components'
+import { Button } from '@alifd/next'
+import Printer from '@formily/printer'
+import '@alifd/next/dist/next.css'
+
+setup()
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+    <Printer>
+      <SchemaForm onSubmit={v => console.log(v)}>
+        <div>normal</div>
+        <FormButtonGroup style={{ minWidth: 150 }}>
+          ​<Submit>提交</Submit>​<Reset>重置</Reset>​
+        </FormButtonGroup>
+        <div>sticky</div>
+        <FormButtonGroup offset={8} sticky>
+          ​<Submit>提交</Submit>​
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '详情' : '编辑'}
+          </Button>
+          <Reset>重置</Reset>​
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
 ### Hook
 
 #### `useFormEffects`
