@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { FormPath } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
@@ -43,6 +43,9 @@ const createTree = (dataSource: any, cursor?: any) => {
         cursor.current = node
       }
       const parent = findParent(key)
+      node.name = (node.path || '').slice(
+        parent && parent.path ? parent.path.length + 1 : 0
+      )
       parent.children = parent.children || []
       parent.children.push(node)
     }

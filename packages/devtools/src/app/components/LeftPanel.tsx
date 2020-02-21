@@ -12,6 +12,10 @@ export const LeftPanel = styled(({ className, dataSource, onSelect }) => {
         current={current}
         onChange={index => {
           setCurrent(index)
+          onSelect({
+            current: index,
+            key: ''
+          })
         }}
       />
       <FieldTree
