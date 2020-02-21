@@ -73,7 +73,7 @@ export default () => {
 | daterange   | [DatePicker.RangePicker](#RangePicker)                     | 范围日期选择器         |
 | rating   | [Rating](#Rating)                     | 评价组件         |
 | object   |                      | 嵌套表单         | 自动连接路径信息
-| array   | [ArrayCard](#ArrayCard)（默认）                       | 表单数组         | 表单数组
+| array   | [ArrayCards](#ArrayCards)（默认）                       | 表单数组         | 表单数组
 
 
 #### Input
@@ -1993,7 +1993,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### table
+#### ArrayTable
 
 ```jsx
 import React from 'react'
@@ -2063,7 +2063,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ### Layout Components
 
 
-#### `<FormCard/>`
+#### FormCard
 
 > FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)。
 > FormCard与[FormBlock](#FormBlock) 唯一区别是样式上是否有框
@@ -2087,7 +2087,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### `<FormBlock/>`
+#### FormBlock
 
 > FormBlock 组件 Props, 完全继承自 [CardProps](#CardProps)
 
@@ -2110,7 +2110,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### `<FormStep/>`
+#### FormStep
 
 > FormStep 组件 Props
 
@@ -2229,7 +2229,7 @@ export default () => (
 )
 ```
 
-#### `<FormLayout/>`
+#### FormLayout
 
 * IFormItemTopProps
 
@@ -2287,7 +2287,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### `<FormItemGrid/>`
+#### FormItemGrid
 
 * IFormItemGridProps
 
@@ -2357,7 +2357,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### `<FormTextBox/>`
+#### FormTextBox
 
 * IFormTextBox
 
