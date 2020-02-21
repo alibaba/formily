@@ -11,7 +11,12 @@
     "jest": true,
     "commonjs": true
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-hooks",
+    "prettier"
+  ],
   "parserOptions": {
     "project": "./tsconfig.json",
     "sourceType": "module",
@@ -49,8 +54,16 @@
     "no-console": [
       "error",
       {
-        "allow": ["warn", "error", "info"]
+        "allow": [
+          "warn",
+          "error",
+          "info"
+        ]
       }
-    ]
+    ],
+    "prefer-const": 1,
+    "no-var": 1,
+    "@typescript-eslint/no-empty-function":1,
+    "prefer-rest-params":1
   }
 }

@@ -2,19 +2,19 @@ import React, { Fragment } from 'react'
 import { IPasswordStrengthProps } from './types'
 import { isFn } from '@formily/shared'
 
-var isNum = function(c) {
+const isNum = function(c) {
   return c >= 48 && c <= 57
 }
-var isLower = function(c) {
+const isLower = function(c) {
   return c >= 97 && c <= 122
 }
-var isUpper = function(c) {
+const isUpper = function(c) {
   return c >= 65 && c <= 90
 }
-var isSymbol = function(c) {
+const isSymbol = function(c) {
   return !(isLower(c) || isUpper(c) || isNum(c))
 }
-var isLetter = function(c) {
+const isLetter = function(c) {
   return isLower(c) || isUpper(c)
 }
 
@@ -31,7 +31,7 @@ const getStrength = val => {
   let sequential = 0
   const len = () => num + lower + upper + symbol
   const callme = () => {
-    var re = num > 0 ? 1 : 0
+    let re = num > 0 ? 1 : 0
     re += lower > 0 ? 1 : 0
     re += upper > 0 ? 1 : 0
     re += symbol > 0 ? 1 : 0
@@ -41,8 +41,8 @@ const getStrength = val => {
       return 0
     }
   }
-  for (var i = 0; i < val.length; i++) {
-    var c = val.charCodeAt(i)
+  for (let i = 0; i < val.length; i++) {
+    const c = val.charCodeAt(i)
     if (isNum(c)) {
       num++
       if (i !== 0 && i !== val.length - 1) {
@@ -67,8 +67,8 @@ const getStrength = val => {
         MNS++
       }
     }
-    var exists = false
-    for (var j = 0; j < val.length; j++) {
+    let exists = false
+    for (let j = 0; j < val.length; j++) {
       if (val[i] === val[j] && i !== j) {
         exists = true
         repC += Math.abs(val.length / (j - i))
@@ -76,18 +76,18 @@ const getStrength = val => {
     }
     if (exists) {
       rep++
-      var unique = val.length - rep
+      const unique = val.length - rep
       repC = unique ? Math.ceil(repC / unique) : Math.ceil(repC)
     }
     if (i > 1) {
-      var last1 = val.charCodeAt(i - 1)
-      var last2 = val.charCodeAt(i - 2)
+      const last1 = val.charCodeAt(i - 1)
+      const last2 = val.charCodeAt(i - 2)
       if (isLetter(c)) {
         if (isLetter(last1) && isLetter(last2)) {
-          var v = val.toLowerCase()
-          var vi = v.charCodeAt(i)
-          var vi1 = v.charCodeAt(i - 1)
-          var vi2 = v.charCodeAt(i - 2)
+          const v = val.toLowerCase()
+          const vi = v.charCodeAt(i)
+          const vi1 = v.charCodeAt(i - 1)
+          const vi2 = v.charCodeAt(i - 2)
           if (vi - vi1 === vi1 - vi2 && Math.abs(vi - vi1) === 1) {
             sequential++
           }
@@ -108,7 +108,7 @@ const getStrength = val => {
     }
   }
   let sum = 0
-  let length = len()
+  const length = len()
   sum += 4 * length
   if (lower > 0) {
     sum += 2 * (length - lower)

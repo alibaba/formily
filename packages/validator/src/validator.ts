@@ -114,7 +114,7 @@ class FormValidator {
           key === 'validator' ? 1 : -1
         )
         for (let l = 0; l < keys.length; l++) {
-          let key = keys[l]
+          const key = keys[l]
           if (ruleObj.hasOwnProperty(key) && isValid(ruleObj[key])) {
             const rule = ValidatorRules[key]
             if (rule) {
