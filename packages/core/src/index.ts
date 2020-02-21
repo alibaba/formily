@@ -389,8 +389,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     computeState,
     useDirty
   }: IVirtualFieldStateProps): IVirtualField {
-    let nodePath = FormPath.parse(path || name)
-    let dataPath = transformDataPath(nodePath)
+    const nodePath = FormPath.parse(path || name)
+    const dataPath = transformDataPath(nodePath)
     let field: IVirtualField
     const createField = (field?: IVirtualField) => {
       const alreadyHaveField = !!field
@@ -452,8 +452,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
-    let nodePath = FormPath.parse(path || name)
-    let dataPath = transformDataPath(nodePath)
+    const nodePath = FormPath.parse(path || name)
+    const dataPath = transformDataPath(nodePath)
     const createField = (field?: IField) => {
       const alreadyHaveField = !!field
       field =
@@ -768,7 +768,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const newPath = field.getSourceState(state =>
           FormPath.parse(state.path)
         )
-        let val = getValue()
+        const val = getValue()
         return (isValid(index) ? newPath.concat(index) : newPath).existIn(
           val,
           newPath
@@ -1055,13 +1055,13 @@ export function createForm<FieldProps, VirtualFieldProps>(
   ) {
     if (!isFn(callback)) return
     let matchCount = 0
-    let pattern = FormPath.getPath(path)
+    const pattern = FormPath.getPath(path)
     graph.select(pattern, field => {
       field.setState(callback, silent)
       matchCount++
     })
     if (matchCount === 0 || pattern.isWildMatchPattern) {
-      let taskIndex = env.taskIndexes[pattern.toString()]
+      const taskIndex = env.taskIndexes[pattern.toString()]
       if (isValid(taskIndex)) {
         if (
           env.taskQueue[taskIndex] &&
