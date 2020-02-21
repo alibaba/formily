@@ -60,8 +60,8 @@ export const normalizeCol = (
 }
 
 export const pickProps = (object: any, targets: string[]) => {
-  let selected: any = {}
-  let otherwise: any = {}
+  const selected: any = {}
+  const otherwise: any = {}
   each(object, (value: any, key: string) => {
     if (targets.includes(key)) {
       selected[key] = value
