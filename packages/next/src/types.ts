@@ -12,7 +12,7 @@ import {
 } from '@formily/react-schema-renderer'
 import { PreviewTextConfigProps } from '@formily/react-shared-components'
 import { StyledComponent } from 'styled-components'
-export * from '@formily/react-schema-renderer/lib/types'
+export * from '@formily/react-schema-renderer/src/types'
 
 type ColSpanType = number | string
 
