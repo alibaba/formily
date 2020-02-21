@@ -13,7 +13,7 @@ npm install --save @formily/antd-components
 ```tsx
 import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/antd'
 import { Input } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import 'antd/dist/antd.css'
 
 export default () => {
   return (
@@ -38,7 +38,7 @@ export default () => {
 ```tsx
 import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/antd'
 import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import 'antd/dist/antd.css'
 
 setup()
 export default () => {
@@ -64,21 +64,60 @@ export default () => {
 | string   | Input                     | 输入框组件         |
 | string(有enum属性时)   | Select                     | 选择框组件         |
 | textarea   | Input.Textarea                     | 多行输入框组件         |
-| password   | `<Input htmlType="password"/>`                     | 密码输入框         |
+| password   | Password                     | 密码输入框         |
 | checkbox   | CheckboxGroup                     | Checkbox         |
 | radio   | RadioGroup                     | Radio         |
 | boolean   | Switch                     | 开关组件         |
 | date   | DatePicker                     | 日期选择器         |
 | time   | TimePicker                     | 时间选择器         |
-| daterange   | DatePicker x 2                     | 范围日期选择器         |
+| daterange   | DatePicker.RangePicker                     | 范围日期选择器         |
 | rating   | Rating                     | 评价组件         |
 | object   |                      | 嵌套表单         | 自动连接路径信息
-| array   |                      | 表单数组         | 表单数组
+| array   |  ArrayCard（默认）                    | 表单数组         | 表单数组
 
 
-#### string
+#### Input
 
-内置用法
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Input,
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          string: {
+            title: 'String',
+            'x-component': 'Input',
+            'x-component-props': {
+              placeholder: 'input'
+            },
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -88,25 +127,132 @@ import {
   SchemaMarkupField as Field,
   createFormActions,
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Input,
+      }}
+    >
       <Field
-        type="string"
         required
         title="Text"
         name="text"
+        x-component="Input"
         x-component-props={{
           placeholder: 'input'
         }}
       />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+} from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <Form>
+      <FormItem label="String" name="string" component={Input} />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Select
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { Select } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Select,
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          simpleSelect: {
+            title: 'Simple Select',
+            enum: ['1', '2', '3', '4'],
+            'x-component': 'Select',
+            'x-component-props': {
+              placeholder: 'select'
+            },
+          },
+          objSelect: {
+            title: 'Object Select',
+            'x-component': 'Select',
+            enum: [
+              { label: 'One', value: '1' },
+              { label: 'Two', value: '2' },
+              { label: 'Three', value: '3' },
+              { label: 'Four', value: '4' }
+            ],
+            'x-component-props': {
+              placeholder: 'select'
+            },
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Select } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Select,
+      }}
+    >
       <Field
-        type="string"
+        x-component="Select"
         enum={['1', '2', '3', '4']}
         required
         title="Simple Select"
@@ -116,7 +262,7 @@ const App = () => {
         }}
       />
       <Field
-        type="string"
+        x-component="Select"
         enum={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
@@ -130,11 +276,110 @@ const App = () => {
           placeholder: 'select'
         }}
       />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+} from '@formily/antd'
+import { Select } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <Form>
+      <FormItem label="Simple Select" name="simpleSelect" component={Select}
+        enum={['1', '2', '3', '4']}
+      />
+      <FormItem label="Object Select" name="objSelect" component={Select} 
+        enum={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+      />
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
+#### TextArea
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        TextArea: Input.TextArea
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'String',
+            'x-component': 'TextArea',
+            'x-component-props': {
+              placeholder: 'textarea'
+            },
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ TextArea: Input.TextArea }}
+    >
       <Field
-        type="string"
+        x-component="TextArea"
         title="TextArea"
         name="textarea"
-        x-component="textarea"
         x-component-props={{
           placeholder: 'textarea'
         }}
@@ -146,38 +391,58 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### textarea
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="TextArea" name="textarea" component={Input.TextArea} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Password
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Password } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-        x-component-props={{
-          placeholder: 'textarea'
-        }}
-      />
+    <SchemaForm
+      components={{
+        Password
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'Password',
+            'x-component': 'Password',
+            'x-component-props': {
+              placeholder: 'Password'
+            },
+          },
+        }
+      }}
+    >
+      
     </SchemaForm>
   )
 }
@@ -185,36 +450,30 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### password
-
-**用法**
+* JSX Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Password } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{ Password }}
+    >
       <Field
-        type="string"
+        x-component="Password"
         title="Password"
-        name="password"
-        x-component="password"
+        name="Password"
         x-component-props={{
-          placeholder: 'password'
+          placeholder: 'Password'
         }}
       />
     </SchemaForm>
@@ -224,33 +483,55 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### number
-
-* Schema Type : `number`
-* Schema UI Component: Fusion-Next `<NumberPicker/>`
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Password } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Password" name="Password" component={Password} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### NumberPicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { NumberPicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
-      <Field type="number" required title="Number" name="number" />
+    <SchemaForm
+      components={{
+        NumberPicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'NumberPicker',
+            'x-component': 'NumberPicker',
+          },
+        }
+      }}
+    >
+      
     </SchemaForm>
   )
 }
@@ -258,41 +539,28 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### boolean
-
-* Schema Type : `boolean`
-* Schema UI Component: Fusion-Next `<Switch/>`
-
-**用法**
+* JSX Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
   createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { NumberPicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{ NumberPicker }}
+    >
       <Field
-        type="boolean"
-        required
-        title="Boolean"
-        name="boolean"
-        x-component-props={{
-          checkedChildren: 'on',
-          unCheckedChildren: 'off'
-        }}
+        x-component="NumberPicker"
+        title="NumberPicker"
+        name="NumberPicker"
       />
     </SchemaForm>
   )
@@ -301,34 +569,174 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### date
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { NumberPicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="NumberPicker" name="NumberPicker" component={NumberPicker} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
+#### Switch
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Switch } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Switch
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'Switch',
+            'x-component': 'Switch',
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Switch } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ Switch }}
+    >
       <Field
-        type="date"
-        required
+        x-component="Switch"
+        title="Switch"
+        name="Switch"
+      />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* 纯 JSX(源码) 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Form, FormItem } from '@formily/antd'
+import { Switch } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Switch" name="Switch" component={Switch} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### DatePicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        DatePicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'DatePicker',
+            'x-component': 'DatePicker',
+            'x-component-props': {
+              format: 'YYYY-MM-DD HH:mm:ss'
+            },
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ DatePicker }}
+    >
+      <Field
+        x-component="DatePicker"
         title="DatePicker"
-        name="datePicker"
+        name="DatePicker"
         x-component-props={{
           format: 'YYYY-MM-DD HH:mm:ss'
         }}
@@ -340,34 +748,87 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### time
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { DatePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="DatePicker" name="DatePicker" component={DatePicker} format={'YYYY-MM-DD HH:mm:ss'} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### TimePicker
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { TimePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        TimePicker
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'TimePicker',
+            'x-component': 'TimePicker',
+            'x-component-props': {
+              format: 'YYYY-MM-DD HH:mm:ss'
+            },
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { TimePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ TimePicker }}
+    >
       <Field
-        type="time"
-        required
+        x-component="TimePicker"
         title="TimePicker"
-        name="timePicker"
+        name="TimePicker"
         x-component-props={{
           format: 'YYYY-MM-DD HH:mm:ss'
         }}
@@ -379,34 +840,89 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### range
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { TimePicker } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="TimePicker" name="TimePicker" component={TimePicker} format={'YYYY-MM-DD HH:mm:ss'} />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Range
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Range } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Range
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          textarea: {
+            title: 'Range',
+            'x-component': 'Range',
+            'x-component-props': {
+              min: 0,
+              max: 1024,
+              marks: [0, 1024]
+            }
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Range } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ Range }}
+    >
       <Field
-        type="range"
-        required
+        x-component="Range"
         title="Range"
-        name="range"
+        name="Range"
         x-component-props={{
           min: 0,
           max: 1024,
@@ -420,50 +936,120 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### upload
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Range } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Range" name="Range"
+      component={Range}
+      min={0}
+      max={1024}
+      marks={[0, 1024]}
+    />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Upload
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Upload } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Upload
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          upload1: {
+            title: 'Card Upload',
+            'x-component': 'Upload',
+            'x-component-props': {
+              listType: 'card'
+            }
+          },
+          upload2: {
+            title: 'Dragger Upload',
+            'x-component': 'Upload',
+            'x-component-props': {
+              listType: 'dragger'
+            }
+          },
+          upload3: {
+            title: 'Text Upload',
+            'x-component': 'Upload',
+            'x-component-props': {
+              listType: 'text'
+            }
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Upload } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{ Upload }}
+    >
       <Field
-        type="upload"
-        required
+        x-component="Upload"
         title="Card Upload"
-        name="upload2"
+        name="upload1"
         x-component-props={{
           listType: 'card'
         }}
       />
       <Field
-        type="upload"
-        required
+        x-component="Upload"
         title="Dragger Upload"
-        name="upload1"
+        name="upload2"
         x-component-props={{
           listType: 'dragger'
         }}
       />
       <Field
-        type="upload"
-        required
+        x-component="Upload"
         title="Text Upload"
         name="upload3"
         x-component-props={{
@@ -477,41 +1063,116 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### checkbox
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Upload } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Card Upload" name="upload1"
+      component={Upload}
+      listType="card"
+    />
+    <FormItem label="Dragger Upload" name="upload2"
+      component={Upload}
+      listType="dragger"
+    />
+    <FormItem label="Text Upload" name="upload3"
+      component={Upload}
+      listType="text"
+    />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Checkbox
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Checkbox } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Checkbox,
+        CheckboxGroup: Checkbox.Group,
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          checkbox: {
+            title: 'Simple Checkbox',
+            'x-component': 'CheckboxGroup',
+            enum: ['1', '2', '3', '4']
+          },
+          checkbox2: {
+            title: 'Object Checkbox',
+            'x-component': 'CheckboxGroup',
+            enum: [
+              { label: 'One', value: '1' },
+              { label: 'Two', value: '2' },
+              { label: 'Three', value: '3' },
+              { label: 'Four', value: '4' }
+            ]
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Checkbox } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Checkbox,
+        CheckboxGroup: Checkbox.Group,
+      }}
+    >
       <Field
-        type="checkbox"
-        required
+        x-component="CheckboxGroup"
         title="Simple Checkbox"
-        name="checkbox"
+        name="Checkbox"
         enum={['1', '2', '3', '4']}
       />
       <Field
-        type="checkbox"
-        required
+        x-component="CheckboxGroup"
         title="Object Checkbox"
-        name="checkbox2"
+        name="Checkbox2"
         enum={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
@@ -526,41 +1187,117 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### radio
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Checkbox } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Simple Checkbox" name="Checkbox"
+      component={Checkbox.Group}
+      dataSource={['1', '2', '3', '4']}
+    />
+    <FormItem label="Object Checkbox" name="Checkbox2"
+      component={Checkbox.Group}
+      dataSource={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+    />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Radio
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Radio } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Radio,
+        RadioGroup: Radio.Group,
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          radio: {
+            title: 'Simple Radio',
+            'x-component': 'RadioGroup',
+            enum: ['1', '2', '3', '4']
+          },
+          radio2: {
+            title: 'Object Radio',
+            'x-component': 'RadioGroup',
+            enum: [
+              { label: 'One', value: '1' },
+              { label: 'Two', value: '2' },
+              { label: 'Three', value: '3' },
+              { label: 'Four', value: '4' }
+            ]
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Radio } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Radio,
+        RadioGroup: Radio.Group,
+      }}
+    >
       <Field
-        type="radio"
-        required
+        x-component="RadioGroup"
         title="Simple Radio"
-        name="radio"
+        name="Radio"
         enum={['1', '2', '3', '4']}
       />
       <Field
-        type="radio"
-        required
         title="Object Radio"
-        name="radio2"
+        name="Radio2"
+        x-component="RadioGroup"
         enum={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
@@ -575,33 +1312,101 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### rating
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Radio } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Simple Radio" name="Radio"
+      component={Radio.Group}
+      dataSource={['1', '2', '3', '4']}
+    />
+    <FormItem label="Object Radio" name="Radio2"
+      component={Radio.Group}
+      dataSource={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+    />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Rating
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Rating } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Rating
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          rating: {
+            title: 'Rating',
+            'x-component': 'Rating',
+            'x-component-props': {
+              allowHalf: true
+            }
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Rating } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Rating
+      }}
+    >
       <Field
-        type="rating"
-        title="Rating"
-        name="rating"
+        x-component="Rating"
+        title="Simple Rating"
+        name="Rating"
         x-component-props={{
           allowHalf: true
         }}
@@ -613,38 +1418,103 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### transfer
-
-**用法**
+* 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
+import { Form, FormItem } from '@formily/antd'
+import { Rating } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (<Form>
+    <FormItem label="Rating" name="Rating"
+      component={Rating}
+      allowHalf
+    />
+  </Form>)
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### Transfer
+
+* JSON Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormButtonGroup,
-  Submit,
-  Reset
 } from '@formily/antd'
-import { setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { Transfer } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
-
-const actions = createFormActions()
 const App = () => {
   return (
-    <SchemaForm actions={actions}>
+    <SchemaForm
+      components={{
+        Transfer
+      }}
+      schema={{
+        type: 'object',
+        properties: {
+          transfer: {
+            title: 'Transfer',
+            'x-component': 'Transfer',
+            enum: [
+              { label: 'One', value: '1', key: '1' },
+              { label: 'Two', value: '2', key: '2' },
+              { label: 'Three', value: '3', key: '3' },
+              { label: 'Four', value: '4', key: '4' }
+            ],
+            'x-component-props': {
+              showSearch: true
+            }
+          },
+        }
+      }}
+    >
+      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+* JSX Schema 方式
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions,
+} from '@formily/antd'
+import { Transfer } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Transfer
+      }}
+    >
       <Field
-        type="transfer"
+        x-component="Transfer"
         title="Transfer"
-        name="transfer"
+        name="Transfer"
         enum={[
-          { label: 'One', value: '1', key: 1 },
-          { label: 'Two', value: '2', key: 2 },
-          { label: 'Three', value: '3', key: 3 },
-          { label: 'Four', value: '4', key: 4 }
+          { label: 'One', value: '1', key: '1' },
+          { label: 'Two', value: '2', key: '2' },
+          { label: 'Three', value: '3', key: '3' },
+          { label: 'Four', value: '4', key: '4' }
         ]}
         x-component-props={{
           showSearch: true
@@ -657,92 +1527,36 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-### Array Components
-
-#### array
+* 纯 JSX(源码) 方式
 
 ```jsx
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
-  Field,
-  FormButtonGroup,
-  Submit,
-  Reset,  
-} from '@formily/antd'
-import {
-    setup,
-    FormItemGrid,
-    FormBlock,
-    FormLayout
-} from '@formily/antd-components'
-import'antd/dist/antd.css'
-
-setup()
-import Printer from '@formily/printer'
+import { Form, FormItem } from '@formily/antd'
+import { Transfer } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
 const App = () => {
-  const [value, setValues] = useState({})
-  useEffect(() => {
-    setTimeout(() => {
-      setValues({
-        array: [{ array2: [{ aa: '123', bb: '321' }] }]
-      })
-    }, 1000)
-  }, [])
-  return (
-    <Printer>
-      <SchemaForm initialValues={value} onSubmit={v => console.log(v)}>
-        <Field
-          title="数组"
-          name="array"
-          maxItems={3}
-          type="array"
-          x-props={{
-            renderAddition: '这是定制的添加文案',
-            renderRemove: '这是定制的删除文案'
-          }}
-        >
-          <Field type="object">
-            <FormBlock title="基础信息">
-              <FormLayout labelCol={9} wrapperCol={6}>
-                <Field name="aa" type="string" title="字段1" />
-                <Field name="bb" type="string" title="字段2" />
-                <FormItemGrid title="字段3" gutter={10}>
-                  <Field name="cc" type="string" />
-                  <Field name="dd" type="string" />
-                </FormItemGrid>
-              </FormLayout>
-            </FormBlock>
-            <FormBlock title="嵌套数组">
-              <Field name="array2" maxItems={3} type="array">
-                <Field type="object">
-                  <FormLayout labelCol={9} wrapperCol={6}>
-                    <Field name="aa" type="string" title="字段1" />
-                    <Field name="bb" type="string" title="字段2" />
-                    <FormItemGrid title="字段3" gutter={10}>
-                      <Field name="cc" type="string" />
-                      <Field name="dd" type="string" />
-                    </FormItemGrid>
-                  </FormLayout>
-                </Field>
-              </Field>
-            </FormBlock>
-          </Field>
-        </Field>
-        <FormButtonGroup>
-          <Submit>提交</Submit>
-          <Reset>重置</Reset>
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
-  )
+  return (<Form>
+    <FormItem label="Transfer" name="Transfer"
+      component={Transfer}
+      dataSource={[
+        { label: 'One', value: '1', key: '1' },
+        { label: 'Two', value: '2', key: '2' },
+        { label: 'Three', value: '3', key: '3' },
+        { label: 'Four', value: '4', key: '4' }
+      ]}
+      showSearch
+    />
+  </Form>)
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### cards
+### Array Components
+
+#### ArrayCards
 
 **用法**
 
@@ -750,30 +1564,35 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm,
-  Field,
+  Field, 
   FormButtonGroup,
   Submit,
-  Reset,  
+  Reset,
 } from '@formily/antd'
 import {
-    setup,
-    FormItemGrid,
-    FormBlock,
-    FormLayout
-} from '@formily/antd-components'
-import'antd/dist/antd.css'
-
-setup()
+  Input,
+  ArrayCards,
+  DatePicker,
+  FormBlock,
+  FormItemGrid,
+  FormLayout } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
-    <SchemaForm>
+    <SchemaForm
+      components={{
+        Input,
+        ArrayCards,
+        RangePicker: DatePicker.RangePicker,
+      }}
+    >
       <Field
         name="array"
         maxItems={3}
         type="array"
-        x-component="cards"
+        x-component="ArrayCards"
         x-props={{
           title: '这是卡片标题',
           renderAddition: '这是定制的添加文案',
@@ -784,40 +1603,40 @@ const App = () => (
           <FormLayout labelCol={6} wrapperCol={8}>
             <Field
               name="aa"
-              type="string"
+              x-component="Input"
               description="hello world"
               title="字段1"
             />
-            <Field name="bb" type="string" title="字段2" />
-            <Field name="cc" type="string" title="字段3" />
-            <Field name="dd" type="string" title="字段4" />
-            <Field name="dd" type="string" title="字段5" />
-            <Field name="ee" type="string" title="字段6" />
-            <Field name="ff" type="string" title="字段7" />
-            <Field name="gg" type="daterange" title="字段8" />
+            <Field name="bb" x-component="Input" title="字段2" />
+            <Field name="cc" x-component="Input" title="字段3" />
+            <Field name="dd" x-component="Input" title="字段4" />
+            <Field name="dd" x-component="Input" title="字段5" />
+            <Field name="ee" x-component="Input" title="字段6" />
+            <Field name="ff" x-component="Input" title="字段7" />
+            <Field name="gg" x-component="RangePicker" title="字段8" />
           </FormLayout>
           <Field
             name="array"
             maxItems={3}
             type="array"
-            x-component="cards"
+            x-component="ArrayCards"
             x-props={{ title: '这是卡片标题' }}
           >
             <Field type="object">
               <FormLayout labelCol={6} wrapperCol={8}>
                 <Field
                   name="aa"
-                  type="string"
+                  x-component="Input"
                   description="hello world"
                   title="字段1"
                 />
-                <Field name="bb" type="string" title="字段2" />
-                <Field name="cc" type="string" title="字段3" />
-                <Field name="dd" type="string" title="字段4" />
-                <Field name="dd" type="string" title="字段5" />
-                <Field name="ee" type="string" title="字段6" />
-                <Field name="ff" type="string" title="字段7" />
-                <Field name="gg" type="daterange" title="字段8" />
+                <Field name="bb" x-component="Input" title="字段2" />
+                <Field name="cc" x-component="Input" title="字段3" />
+                <Field name="dd" x-component="Input" title="字段4" />
+                <Field name="dd" x-component="Input" title="字段5" />
+                <Field name="ee" x-component="Input" title="字段6" />
+                <Field name="ff" x-component="Input" title="字段7" />
+                <Field name="gg" x-component="RangePicker" title="字段8" />
               </FormLayout>
             </Field>
           </Field>
@@ -835,32 +1654,37 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm,
-  Field,  
+  Field, 
   FormButtonGroup,
   Submit,
-  Reset,  
+  Reset,
 } from '@formily/antd'
 import {
-    setup,
-    FormItemGrid,
-    FormBlock,
-    FormLayout
-} from '@formily/antd-components'
-import'antd/dist/antd.css'
-
-setup()
+  Input,
+  ArrayTable,
+  DatePicker,
+  FormBlock,
+  FormItemGrid,
+  FormLayout } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
-    <SchemaForm>
+    <SchemaForm
+      components={{
+        ArrayTable,
+        Input,
+        RangePicker: DatePicker.RangePicker,
+      }}
+    >
       <FormLayout>
         <Field
           title="数组"
           name="array"
           maxItems={3}
           type="array"
-          x-component="table"
+          x-component="ArrayTable"
           x-props={{
             renderExtraOperations() {
               return <div>Hello worldasdasdasdasd</div>
@@ -871,17 +1695,17 @@ const App = () => (
           <Field type="object">
             <Field
               name="aa"
-              type="string"
+              x-component="Input"
               description="hello world"
               title="字段1"
             />
-            <Field name="bb" type="string" title="字段2" />
-            <Field name="cc" type="string" title="字段3" />
-            <Field name="dd" type="string" title="字段4" x-index={1} />
-            <Field name="ee" type="string" title="字段5" />
-            <Field name="ff" type="string" title="字段6" />
-            <Field name="gg" type="string" title="字段7" />
-            <Field name="hh" type="daterange" title="字段8" />
+            <Field name="bb" x-component="Input" title="字段2" />
+            <Field name="cc" x-component="Input" title="字段3" />
+            <Field name="dd" x-component="Input" title="字段4" x-index={1} />
+            <Field name="ee" x-component="Input" title="字段5" />
+            <Field name="ff" x-component="Input" title="字段6" />
+            <Field name="gg" x-component="Input" title="字段7" />
+            <Field name="hh" x-component="RangePicker" title="字段8" />
           </Field>
         </Field>
       </FormLayout>
@@ -905,14 +1729,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd'
-import { FormCard, setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import { FormCard, Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup()
 const App = () => (
-  <SchemaForm>
+  <SchemaForm components={{ Input }}>
     <FormCard title="block">
-      <Field type="string" name="username" title="username" />
+      <Field x-component="Input" name="username" title="username" />
     </FormCard>
   </SchemaForm>
 )
@@ -929,15 +1752,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd'
-import { FormBlock, setup } from '@formily/antd-components'
-import'antd/dist/antd.css'
-
-setup()
+import { FormBlock, Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
 const App = () => (
-  <SchemaForm>
+  <SchemaForm components={{ Input }}>
     <FormBlock title="block">
-      <Field type="string" name="username" title="username" />
+      <Field x-component="Input" name="username" title="username" />
     </FormBlock>
   </SchemaForm>
 )
@@ -945,6 +1766,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 #### `<FormStep/>`
+
+> FormStep 组件 Props
 
 * IFormStep
 
@@ -975,7 +1798,7 @@ import {
   Reset
 } from '@formily/antd'
 import { 
-  setup,
+  Input,
   FormGridRow,
   FormItemGrid,
   FormGridCol,
@@ -986,11 +1809,9 @@ import {
   FormTextBox,
   FormStep
 } from '@formily/antd-components'
-import { Button } from 'antd'
+import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
-import'antd/dist/antd.css'
-
-setup()
+import 'antd/dist/antd.css'
 
 const { onFormInit$ } = FormEffectHooks
 
@@ -1000,6 +1821,9 @@ let cache = {}
 
 export default () => (
   <SchemaForm
+    components={{
+      Input
+    }}
     onSubmit={values => {
       console.log('提交')
       console.log(values)
@@ -1025,13 +1849,13 @@ export default () => (
       ]}
     />
     <FormCard name="step-1" title="Step1">
-      <Field name="a1" required title="A1" type="string" />
+      <Field name="a1" required title="A1" x-component="Input" />
     </FormCard>
     <FormCard name="step-2" title="Step2">
-      <Field name="a2" required title="A2" type="string" />
+      <Field name="a2" required title="A2" x-component="Input" />
     </FormCard>
     <FormCard name="step-3" title="Step3">
-      <Field name="a3" required title="A3" type="string" />
+      <Field name="a3" required title="A3" x-component="Input" />
     </FormCard>
     <FormButtonGroup>
       <Submit>提交</Submit>
@@ -1084,26 +1908,30 @@ import {
   Reset
 } from '@formily/antd'
 import { 
-  setup,
+  Input,
+  NumberPicker,
+  DatePicker,
   FormTextBox,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
 } from '@formily/antd-components'
-import { Button } from 'antd'
+import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
-import'antd/dist/antd.css'
-
-setup()
+import 'antd/dist/antd.css'
 
 const App = () => (
   <Printer>
-    <SchemaForm>
+    <SchemaForm components={{
+      Input,
+      NumberPicker,
+      DatePicker
+    }}>
       <FormLayout labelCol={8} wrapperCol={6}>
-        <Field name="aaa" type="string" title="字段1" />
-        <Field name="bbb" type="number" title="字段2" />
-        <Field name="ccc" type="date" title="字段3" />
+        <Field name="aaa" x-component="Input" title="字段1" />
+        <Field name="bbb" x-component="NumberPicker" title="字段2" />
+        <Field name="ccc" x-component="DatePicker" title="字段3" />
       </FormLayout>
       <FormButtonGroup offset={8}>
         <Submit>提交</Submit>​ <Reset>重置</Reset>​
@@ -1147,31 +1975,33 @@ import {
   Reset
 } from '@formily/antd'
 import { 
-  setup,
+  Input,
   FormTextBox,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
 } from '@formily/antd-components'
-import { Button } from 'antd'
+import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
-import'antd/dist/antd.css'
-
-setup()
+import 'antd/dist/antd.css'
 
 const App = () => (
   <Printer>
-    <SchemaForm onSubmit={v => console.log(v)}>
+    <SchemaForm
+      components={{
+        Input
+      }}
+      onSubmit={v => console.log(v)}>
       <FormItemGrid gutter={20}>
-        <Field type="string" name="a1" title="field1" />
-        <Field type="string" name="a2" title="field2" />
-        <Field type="string" name="a3" title="field3" />
-        <Field type="string" name="a4" title="field4" />
+        <Field x-component="Input" name="a1" title="field1" />
+        <Field x-component="Input" name="a2" title="field2" />
+        <Field x-component="Input" name="a3" title="field3" />
+        <Field x-component="Input" name="a4" title="field4" />
       </FormItemGrid>
       <FormItemGrid gutter={20} cols={[6, 6]}>
-        <Field type="string" name="a5" title="field5" />
-        <Field type="string" name="a6" title="field6" />
+        <Field x-component="Input" name="a5" title="field5" />
+        <Field x-component="Input" name="a6" title="field6" />
       </FormItemGrid>
       <FormButtonGroup style={{ minWidth: 150 }}>
         ​<Submit>提交</Submit>​<Reset>重置</Reset>​
@@ -1206,22 +2036,29 @@ import {
   Reset
 } from '@formily/antd'
 import { 
-  setup,
+  Input,
+  NumberPicker,
   FormTextBox,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
 } from '@formily/antd-components'
-import { Button } from 'antd'
+import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
-import'antd/dist/antd.css'
+import 'antd/dist/antd.css'
 
-setup()
 const App = () => {
   return (
     <Printer>
-      <SchemaForm labelCol={8} wrapperCol={6} onSubmit={v => console.log(v)}>
+      <SchemaForm
+        components={{
+          Input,
+          NumberPicker,
+        }}
+        labelCol={8}
+        wrapperCol={6}
+        onSubmit={v => console.log(v)}>
         <FormCard title="FormTextBox">
           <FormLayout labelCol={8} wrapperCol={16}>
             <FormTextBox
@@ -1230,7 +2067,7 @@ const App = () => {
               gutter={8}
             >
               <Field
-                type="string"
+                x-component="Input"
                 default={10}
                 required
                 name="aa1"
@@ -1238,14 +2075,14 @@ const App = () => {
                 description="desc1"
               />
               <Field
-                type="number"
+                x-component="NumberPicker"
                 default={20}
                 required
                 name="aa2"
                 description="desc2"
               />
               <Field
-                type="number"
+                x-component="NumberPicker"
                 default={30}
                 required
                 name="aa3"
@@ -1261,7 +2098,6 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 #### `<TextButton/>`
 
 > TextButton 组件 Props, 完全继承自 [ButtonProps](#ButtonProps)
@@ -1273,7 +2109,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm } from '@formily/antd'
 import { TextButton } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import 'antd/dist/antd.css'
 
 const App = () => (
   <SchemaForm>
@@ -1294,7 +2130,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { SchemaForm } from '@formily/antd'
 import { CircleButton } from '@formily/antd-components'
-import'antd/dist/antd.css'
+import 'antd/dist/antd.css'
 
 const App = () => (
   <SchemaForm>

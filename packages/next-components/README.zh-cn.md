@@ -70,10 +70,10 @@ export default () => {
 | boolean   | Switch                     | 开关组件         |
 | date   | DatePicker                     | 日期选择器         |
 | time   | TimePicker                     | 时间选择器         |
-| daterange   | DatePicker x 2                     | 范围日期选择器         |
+| daterange   | DatePicker.RangePicker                     | 范围日期选择器         |
 | rating   | Rating                     | 评价组件         |
 | object   |                      | 嵌套表单         | 自动连接路径信息
-| array   |                      | 表单数组         | 表单数组
+| array   | ArrayCard（默认）                       | 表单数组         | 表单数组
 
 
 #### Input
@@ -766,7 +766,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### time
+#### TimePicker
 
 * JSON Schema 方式
 
@@ -1556,90 +1556,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Array Components
 
-#### array
-
-```jsx
-import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom'
-import { SchemaForm,
-  Field, 
-  FormButtonGroup,
-  Submit,
-  Reset,
-} from '@formily/next'
-import {
-  setup,
-  FormBlock,
-  FormItemGrid,
-  FormLayout } from '@formily/next-components'
-import '@alifd/next/dist/next.css'
-import Printer from '@formily/printer'
-
-setup()
-
-
-const App = () => {
-  const [value, setValues] = useState({})
-  useEffect(() => {
-    setTimeout(() => {
-      setValues({
-        array: [{ array2: [{ aa: '123', bb: '321' }] }]
-      })
-    }, 1000)
-  }, [])
-  return (
-    <Printer>
-      <SchemaForm initialValues={value} onSubmit={v => console.log(v)}>
-        <Field
-          title="数组"
-          name="array"
-          maxItems={3}
-          type="array"
-          x-props={{
-            renderAddition: '这是定制的添加文案',
-            renderRemove: '这是定制的删除文案'
-          }}
-        >
-          <Field type="object">
-            <FormBlock title="基础信息">
-              <FormLayout labelCol={9} wrapperCol={6}>
-                <Field name="aa" type="string" title="字段1" />
-                <Field name="bb" type="string" title="字段2" />
-                <FormItemGrid title="字段3" gutter={10}>
-                  <Field name="cc" type="string" />
-                  <Field name="dd" type="string" />
-                </FormItemGrid>
-              </FormLayout>
-            </FormBlock>
-            <FormBlock title="嵌套数组">
-              <Field name="array2" maxItems={3} type="array">
-                <Field type="object">
-                  <FormLayout labelCol={9} wrapperCol={6}>
-                    <Field name="aa" type="string" title="字段1" />
-                    <Field name="bb" type="string" title="字段2" />
-                    <FormItemGrid title="字段3" gutter={10}>
-                      <Field name="cc" type="string" />
-                      <Field name="dd" type="string" />
-                    </FormItemGrid>
-                  </FormLayout>
-                </Field>
-              </Field>
-            </FormBlock>
-          </Field>
-        </Field>
-        <FormButtonGroup>
-          <Submit>提交</Submit>
-          <Reset>重置</Reset>
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### cards
+#### ArrayCards
 
 **用法**
 
@@ -1653,7 +1570,9 @@ import { SchemaForm,
   Reset,
 } from '@formily/next'
 import {
-  setup,
+  Input,
+  ArrayCards,
+  DatePicker,
   FormBlock,
   FormItemGrid,
   FormLayout } from '@formily/next-components'
@@ -1662,12 +1581,18 @@ import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
-    <SchemaForm>
+    <SchemaForm
+      components={{
+        Input,
+        ArrayCards,
+        RangePicker: DatePicker.RangePicker,
+      }}
+    >
       <Field
         name="array"
         maxItems={3}
         type="array"
-        x-component="cards"
+        x-component="ArrayCards"
         x-props={{
           title: '这是卡片标题',
           renderAddition: '这是定制的添加文案',
@@ -1678,40 +1603,40 @@ const App = () => (
           <FormLayout labelCol={6} wrapperCol={8}>
             <Field
               name="aa"
-              type="string"
+              x-component="Input"
               description="hello world"
               title="字段1"
             />
-            <Field name="bb" type="string" title="字段2" />
-            <Field name="cc" type="string" title="字段3" />
-            <Field name="dd" type="string" title="字段4" />
-            <Field name="dd" type="string" title="字段5" />
-            <Field name="ee" type="string" title="字段6" />
-            <Field name="ff" type="string" title="字段7" />
-            <Field name="gg" type="daterange" title="字段8" />
+            <Field name="bb" x-component="Input" title="字段2" />
+            <Field name="cc" x-component="Input" title="字段3" />
+            <Field name="dd" x-component="Input" title="字段4" />
+            <Field name="dd" x-component="Input" title="字段5" />
+            <Field name="ee" x-component="Input" title="字段6" />
+            <Field name="ff" x-component="Input" title="字段7" />
+            <Field name="gg" x-component="RangePicker" title="字段8" />
           </FormLayout>
           <Field
             name="array"
             maxItems={3}
             type="array"
-            x-component="cards"
+            x-component="ArrayCards"
             x-props={{ title: '这是卡片标题' }}
           >
             <Field type="object">
               <FormLayout labelCol={6} wrapperCol={8}>
                 <Field
                   name="aa"
-                  type="string"
+                  x-component="Input"
                   description="hello world"
                   title="字段1"
                 />
-                <Field name="bb" type="string" title="字段2" />
-                <Field name="cc" type="string" title="字段3" />
-                <Field name="dd" type="string" title="字段4" />
-                <Field name="dd" type="string" title="字段5" />
-                <Field name="ee" type="string" title="字段6" />
-                <Field name="ff" type="string" title="字段7" />
-                <Field name="gg" type="daterange" title="字段8" />
+                <Field name="bb" x-component="Input" title="字段2" />
+                <Field name="cc" x-component="Input" title="字段3" />
+                <Field name="dd" x-component="Input" title="字段4" />
+                <Field name="dd" x-component="Input" title="字段5" />
+                <Field name="ee" x-component="Input" title="字段6" />
+                <Field name="ff" x-component="Input" title="字段7" />
+                <Field name="gg" x-component="RangePicker" title="字段8" />
               </FormLayout>
             </Field>
           </Field>
@@ -1735,7 +1660,9 @@ import { SchemaForm,
   Reset,
 } from '@formily/next'
 import {
-  setup,
+  Input,
+  ArrayTable,
+  DatePicker,
   FormBlock,
   FormItemGrid,
   FormLayout } from '@formily/next-components'
@@ -1744,14 +1671,20 @@ import Printer from '@formily/printer'
 
 const App = () => (
   <Printer>
-    <SchemaForm>
+    <SchemaForm
+      components={{
+        ArrayTable,
+        Input,
+        RangePicker: DatePicker.RangePicker,
+      }}
+    >
       <FormLayout>
         <Field
           title="数组"
           name="array"
           maxItems={3}
           type="array"
-          x-component="table"
+          x-component="ArrayTable"
           x-props={{
             renderExtraOperations() {
               return <div>Hello worldasdasdasdasd</div>
@@ -1762,17 +1695,17 @@ const App = () => (
           <Field type="object">
             <Field
               name="aa"
-              type="string"
+              x-component="Input"
               description="hello world"
               title="字段1"
             />
-            <Field name="bb" type="string" title="字段2" />
-            <Field name="cc" type="string" title="字段3" />
-            <Field name="dd" type="string" title="字段4" x-index={1} />
-            <Field name="ee" type="string" title="字段5" />
-            <Field name="ff" type="string" title="字段6" />
-            <Field name="gg" type="string" title="字段7" />
-            <Field name="hh" type="daterange" title="字段8" />
+            <Field name="bb" x-component="Input" title="字段2" />
+            <Field name="cc" x-component="Input" title="字段3" />
+            <Field name="dd" x-component="Input" title="字段4" x-index={1} />
+            <Field name="ee" x-component="Input" title="字段5" />
+            <Field name="ff" x-component="Input" title="字段6" />
+            <Field name="gg" x-component="Input" title="字段7" />
+            <Field name="hh" x-component="RangePicker" title="字段8" />
           </Field>
         </Field>
       </FormLayout>
@@ -2042,7 +1975,7 @@ import {
   Reset
 } from '@formily/next'
 import { 
-  setup,
+  Input,
   FormTextBox,
   FormItemGrid,
   FormCard,
@@ -2053,20 +1986,22 @@ import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
-setup()
-
 const App = () => (
   <Printer>
-    <SchemaForm onSubmit={v => console.log(v)}>
+    <SchemaForm
+      components={{
+        Input
+      }}
+      onSubmit={v => console.log(v)}>
       <FormItemGrid gutter={20}>
-        <Field type="string" name="a1" title="field1" />
-        <Field type="string" name="a2" title="field2" />
-        <Field type="string" name="a3" title="field3" />
-        <Field type="string" name="a4" title="field4" />
+        <Field x-component="Input" name="a1" title="field1" />
+        <Field x-component="Input" name="a2" title="field2" />
+        <Field x-component="Input" name="a3" title="field3" />
+        <Field x-component="Input" name="a4" title="field4" />
       </FormItemGrid>
       <FormItemGrid gutter={20} cols={[6, 6]}>
-        <Field type="string" name="a5" title="field5" />
-        <Field type="string" name="a6" title="field6" />
+        <Field x-component="Input" name="a5" title="field5" />
+        <Field x-component="Input" name="a6" title="field6" />
       </FormItemGrid>
       <FormButtonGroup style={{ minWidth: 150 }}>
         ​<Submit>提交</Submit>​<Reset>重置</Reset>​
@@ -2101,7 +2036,8 @@ import {
   Reset
 } from '@formily/next'
 import { 
-  setup,
+  Input,
+  NumberPicker,
   FormTextBox,
   FormItemGrid,
   FormCard,
@@ -2112,11 +2048,17 @@ import { Button } from '@alifd/next'
 import Printer from '@formily/printer'
 import '@alifd/next/dist/next.css'
 
-setup()
 const App = () => {
   return (
     <Printer>
-      <SchemaForm labelCol={8} wrapperCol={6} onSubmit={v => console.log(v)}>
+      <SchemaForm
+        components={{
+          Input,
+          NumberPicker,
+        }}
+        labelCol={8}
+        wrapperCol={6}
+        onSubmit={v => console.log(v)}>
         <FormCard title="FormTextBox">
           <FormLayout labelCol={8} wrapperCol={16}>
             <FormTextBox
@@ -2125,7 +2067,7 @@ const App = () => {
               gutter={8}
             >
               <Field
-                type="string"
+                x-component="Input"
                 default={10}
                 required
                 name="aa1"
@@ -2133,14 +2075,14 @@ const App = () => {
                 description="desc1"
               />
               <Field
-                type="number"
+                x-component="NumberPicker"
                 default={20}
                 required
                 name="aa2"
                 description="desc2"
               />
               <Field
-                type="number"
+                x-component="NumberPicker"
                 default={30}
                 required
                 name="aa3"
