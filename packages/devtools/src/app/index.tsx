@@ -4,7 +4,10 @@ import { RightPanel } from './components/RightPanel'
 import styled from 'styled-components'
 
 export default styled(({ className, dataSource }) => {
-  const [selected, select] = useState(null)
+  const [selected, select] = useState({
+    current: 0,
+    key: ''
+  })
   return (
     <div className={className}>
       <LeftPanel
