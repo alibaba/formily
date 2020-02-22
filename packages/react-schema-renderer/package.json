@@ -31,6 +31,7 @@
   "dependencies": {
     "@formily/react": "^1.0.0",
     "@formily/shared": "^1.0.0",
+    "@formily/core":"^1.0.0",
     "@formily/validator": "^1.0.0",
     "pascal-case": "^2.0.1"
   },
