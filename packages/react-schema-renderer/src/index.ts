@@ -1,1 +1,1 @@
-module.exports = require('@formily/react-shared-renderer')
+module.exports = require('@formily/react-schema-renderer')
