@@ -162,7 +162,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
       if (valuesChanged) {
         if (isFn(options.onChange)) {
-          options.onChange(clone(published.values))
+          clearTimeout(env.onChangeTimer)
+          env.onChangeTimer = setTimeout(() => {
+            options.onChange(clone(published.values))
+          })
         }
         heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
@@ -250,7 +253,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
       const notifyFormValuesChange = () => {
         if (isFn(options.onChange)) {
-          options.onChange(state.getSourceState(state => clone(state.values)))
+          clearTimeout(env.onChangeTimer)
+          env.onChangeTimer = setTimeout(() => {
+            options.onChange(state.getSourceState(state => clone(state.values)))
+          })
         }
         heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
       }
@@ -1255,6 +1261,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   })
   const env = {
     validateTimer: null,
+    onChangeTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
     publishing: {},
