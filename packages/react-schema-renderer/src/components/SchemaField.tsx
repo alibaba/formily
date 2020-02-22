@@ -41,8 +41,9 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   const fieldSchema = props.schema || formSchema.get(path)
   const formRegistry = useContext(FormComponentsContext)
   const expressionScope = useContext(FormExpressionScopeContext)
+  const ErrorTipPathStr = path.toString()
   if (!fieldSchema) {
-    throw new Error(`Can not found schema node by ${path.toString()}.`)
+    throw new Error(`Can not found schema node by ${ErrorTipPathStr}.`)
   }
   if (!formRegistry) {
     throw new Error(`Can not found any form components.`)
@@ -148,7 +149,8 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return renderFieldDelegate(props => {
       const renderComponent = () => {
         if (!formRegistry.formItemComponent) {
-          return <div>Can not found FormItem component</div>
+          console.error(`[Formily Error]: Can not found any component.Its key is ${ErrorTipPathStr}.`)
+          return null
         }
         return React.createElement(
           formRegistry.formItemComponent,
@@ -167,15 +169,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         return renderFieldDelegate(props => {
           const stateComponent =
             props.schema.getExtendsComponent() || props.schema.type
-          if (!isStr(stateComponent))
-            return <div>Can not found any form component</div>
+          if (!isStr(stateComponent)){
+            console.error(`[Formily Error]: Can not found any form component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`)
+              return null
+          }
           const renderComponent = (): React.ReactElement => {
             if (!formRegistry.fields[stateComponent]) {
-              return (
-                <div>
-                  Can not found virtual field component:{path.toString()}
-                </div>
-              )
+              console.error(`[Formily Error]: Can not found the field component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`)
+              return null
             }
             return React.createElement(
               formRegistry.formItemComponent,
@@ -192,15 +193,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         return renderVirtualFieldDelegate(props => {
           const stateComponent =
             props.schema.getExtendsComponent() || props.schema.type
-          if (!isStr(stateComponent))
-            return <div>Can not found any form component</div>
+          if (!isStr(stateComponent)){
+            console.error(`[Formily Error]: Can not found any virtual form component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`)
+            return null
+          }
           const renderComponent = () => {
             if (!formRegistry.virtualFields[stateComponent]) {
-              return (
-                <div>
-                  Can not found virtual field component:{path.toString()}
-                </div>
-              )
+              console.error(`[Formily Error]: Can not found the virtual field component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`)
+              return null
             }
             return React.createElement(
               formRegistry.virtualFields[stateComponent],
@@ -214,12 +214,12 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
           return renderComponent()
         })
       } else {
-        return (
-          <div>Can not found virtual field component:{path.toString()}</div>
-        )
+        console.error(`[Formily Error]: Can not found the field component <${initialComponent}>.Its key is ${ErrorTipPathStr}.`)
+        return null
       }
     } else {
-      return <div>Can not found virtual field component:{path.toString()}</div>
+      console.error(`[Formily Error]: Can not found the field component <${initialComponent}>.Its key is ${ErrorTipPathStr}.`)
+      return null
     }
   }
 }

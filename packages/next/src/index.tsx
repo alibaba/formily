@@ -52,11 +52,12 @@ import {
   pickFormItemProps,
   pickNotFormItemProps
 } from './shared'
-import { useFormTableQuery } from './hooks/useFormTableQuery'
+import { SchemaForm } from './components'
 export * from './adaptor'
 export * from './components'
 export * from './context'
 export * from './types'
+export * from './hooks/useFormTableQuery'
 
 export {
   SchemaMarkupField,
@@ -86,7 +87,6 @@ export {
   useFormEffects,
   useFormSpy,
   useFormQuery,
-  useFormTableQuery,
   useFormState,
   useVirtualField,
   mapStyledProps,
@@ -111,3 +111,5 @@ export {
   pickFormItemProps,
   pickNotFormItemProps
 }
+
+export default SchemaForm
