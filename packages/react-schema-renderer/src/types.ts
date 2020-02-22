@@ -12,7 +12,7 @@ import {
 } from '@formily/react'
 import { ValidatePatternRules } from '@formily/validator'
 import { Schema } from './shared/schema'
-export * from '@formily/react/src/types'
+export * from '@formily/react'
 
 export interface ISchemaFieldProps {
   path?: FormPathPattern

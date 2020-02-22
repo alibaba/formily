@@ -56,8 +56,8 @@ import { SchemaForm } from './components'
 export * from './adaptor'
 export * from './components'
 export * from './context'
-export * from './types'
 export * from './hooks/useFormTableQuery'
+export * from './types'
 
 export {
   SchemaMarkupField,
