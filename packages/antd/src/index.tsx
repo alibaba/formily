@@ -51,6 +51,7 @@ import {
   pickFormItemProps,
   pickNotFormItemProps
 } from './shared'
+import { SchemaForm } from './components'
 export * from './adaptor'
 export * from './components'
 export * from './context'
@@ -108,3 +109,5 @@ export {
   pickFormItemProps,
   pickNotFormItemProps
 }
+
+export default SchemaForm
