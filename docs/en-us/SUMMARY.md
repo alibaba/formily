@@ -71,8 +71,8 @@
     - antd
     - antd-components
   - Fusion Next
-    - next
-    - next-components
+    - [next](../packages/next/README.zh-cn.md)
+    - [next-components](../packages/next-components/README.zh-cn.md)
   - Rax Meet
     - meet
     - meet-components
