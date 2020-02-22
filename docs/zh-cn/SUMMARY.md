@@ -51,7 +51,7 @@
   - 升级迁移指南
     - [UForm迁移Formily](./uform-upgrade.md)
   - 开发调试指南
-    - devtools
+    - [devtools](./devtools.md)
   - 贡献指南
   - 底层扩展开发
     - 扩展实现@formily/vue
