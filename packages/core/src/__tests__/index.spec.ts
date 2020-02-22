@@ -31,6 +31,13 @@ const deepValues = {
   }
 }
 
+const sleep = (d = 1000) =>
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve()
+    }, d)
+  })
+
 describe('createForm', () => {
   test('values', () => {
     const form = createForm({
@@ -111,19 +118,15 @@ describe('createForm', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
-  const sleep = (d=1000)=>new Promise((resolve)=>{
-    setTimeout(()=>{
-      resolve()
-    },d)
-  })
-
   test('invalid initialValue will not trigger validate', async () => {
     const form = createForm()
     const field = form.registerField({
       name: 'aa',
-      rules:[{
-        required:true
-      }]
+      rules: [
+        {
+          required: true
+        }
+      ]
     })
     const mutators = form.createMutators(field)
     field.subscribe(() => {
@@ -135,7 +138,7 @@ describe('createForm', () => {
       }
     })
     await sleep(10)
-    expect(field.getState(state=>state.errors).length).toEqual(1)
+    expect(field.getState(state => state.errors).length).toEqual(1)
   })
 
   test('lifecycles', () => {
@@ -1587,7 +1590,7 @@ describe('major sences', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
   })
 
-  test('visible onChange', () => {
+  test('visible onChange', async () => {
     const onChangeHandler = jest.fn()
     const form = createForm({
       initialValues: {
@@ -1601,6 +1604,7 @@ describe('major sences', () => {
     form.setFieldState('aa', state => {
       state.visible = false
     })
+    await sleep(10)
     expect(onChangeHandler).toBeCalledTimes(1)
   })
 
