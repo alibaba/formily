@@ -66,7 +66,8 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const renderComponent = ({ props, state, mutators, form }) => {
     if (!component) {
       if (children) return <Fragment>{children}</Fragment>
-      return <div>Can not fount component.</div>
+      console.error(`[Formily Error]: Can't fount the component. Its key is ${name}.`)
+      return null
     }
     if (!component['__ALREADY_CONNECTED__']) {
       component[ConnectedComponent] = connect({
