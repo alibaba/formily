@@ -26,7 +26,6 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@uform/shared": "^1.0.1",
-    "react-drag-listview": "^0.1.6"
+    "@formily/react-shared-components":"^1.0.0"
   }
 }

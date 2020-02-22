@@ -27,14 +27,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@uform/react-schema-renderer": "^1.0.1",
-    "@uform/react-shared-components": "^1.0.1",
-    "@uform/shared": "^1.0.1",
-    "classnames": "^2.2.6",
-    "react-eva": "^1.0.0-alpha.0",
-    "react-stikky": "^0.1.15",
-    "rxjs": "^6.5.1",
-    "styled-components": "^4.1.1"
+    "@formily/next": "^1.0.0",
+    "@formily/next-components": "^1.0.0"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",

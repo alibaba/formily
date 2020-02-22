@@ -36,10 +36,10 @@ const createDocs = async () => {
     })
     .reduce((buf, _path) => {
       const name = path.basename(_path)
-
       return {
         ...buf,
-        [`@uform/${name}`]: `${_path}/src`
+        [`@uform/${name}$`]: `${_path}/src`,
+        [`@formily/${name}$`]: require.resolve(`@formily/${name}`)
       }
     }, {})
   command(

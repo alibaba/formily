@@ -19,8 +19,7 @@
     "build": "tsc --declaration"
   },
   "dependencies": {
-    "@uform/react-schema-renderer": "^1.0.1",
-    "lodash": "^4.17.15"
+    "@formily/react-schema-renderer":"^1.0.0"
   },
   "devDependencies": {
     "node-sass": "^4.13.0",

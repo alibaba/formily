@@ -26,8 +26,6 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "camel-case": "^3.0.0",
-    "cool-path": "^0.1.23",
-    "deepmerge": "^4.0.0"
+    "@formily/shared":"^1.0.0"
   }
 }

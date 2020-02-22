@@ -1,3 +1,1 @@
-export * from './message'
-export * from './validator'
-export * from './types'
+module.exports = require('@formily/validator')
