@@ -470,22 +470,22 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
           initialValues={constState}
           onChange={() => {
             if (constState.testA !== '123') {
-              act(() => setState({ testB: '456' }))
+              act(() => setState({ ...constState, testB: '456' }))
             }
           }}
           onReset={() => {
             if (constState.testA !== '123') {
-              act(() => setState({ testC: '456' }))
+              act(() => setState({ ...constState, testC: '456' }))
             }
           }}
           onSubmit={() => {
             if (constState.testA !== '123') {
-              act(() => setState({ testD: '456' }))
+              act(() => setState({ ...constState, testD: '456' }))
             }
           }}
           onValidateFailed={p => {
             if (constState.testA !== '123') {
-              act(() => setState({ testE: '456' }))
+              act(() => setState({ ...constState, testE: '456' }))
             }
           }}
         >
@@ -519,7 +519,7 @@ test('dynamic change functions onChange/onReset/onSubmit/onValidateFailed', asyn
   }
   const { queryByTestId, queryByText } = render(<TestComponent />)
 
-  await sleep(100)
+  await sleep(30)
   fireEvent.click(queryByTestId('radio-a2'))
   await wait()
   expect(queryByText('valueB-456')).toBeVisible()
