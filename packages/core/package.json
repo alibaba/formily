@@ -1,6 +1,6 @@
 {
   "name": "@uform/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -26,7 +26,7 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@formily/core":"^1.0.0"
+    "@formily/core": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

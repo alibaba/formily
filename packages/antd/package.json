@@ -1,6 +1,6 @@
 {
   "name": "@uform/antd",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -30,8 +30,8 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@formily/antd":"^1.0.0",
-    "@formily/antd-components":"^1.0.0"
+    "@formily/antd": "^1.0.0",
+    "@formily/antd-components": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

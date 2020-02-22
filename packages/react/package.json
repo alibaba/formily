@@ -1,6 +1,6 @@
 {
   "name": "@uform/react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -29,7 +29,7 @@
     "rxjs": "^6.5.1"
   },
   "dependencies": {
-    "@formily/react":"^1.0.0"
+    "@formily/react": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

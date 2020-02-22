@@ -1,6 +1,6 @@
 {
   "name": "@uform/validator",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -22,7 +22,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@formily/validator":"^1.0.0"
+    "@formily/validator": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"

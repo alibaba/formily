@@ -1,6 +1,6 @@
 {
   "name": "@uform/react-shared-components",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -26,6 +26,6 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@formily/react-shared-components":"^1.0.0"
+    "@formily/react-shared-components": "^1.0.0"
   }
 }
