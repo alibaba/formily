@@ -1,10 +1,6 @@
-const Formily = require('@formily/antd')
-const { setup, ...components } = require('@formily/antd-components')
+export * from '@formily/antd'
+export * from '@formily/antd-components'
+
+const { setup } = require('@formily/antd-components')
 
 setup()
-
-Object.assign(Formily, components)
-
-Formily['default'] = Formily.SchemaForm
-
-module.exports = Formily

@@ -1,10 +1,6 @@
-const Formily = require('@formily/next')
-const { setup, ...components } = require('@formily/next-components')
+export * from '@formily/next'
+export * from '@formily/next-components'
+
+const { setup } = require('@formily/next-components')
 
 setup()
-
-Object.assign(Formily, components)
-
-Formily['default'] = Formily.SchemaForm
-
-module.exports = Formily
