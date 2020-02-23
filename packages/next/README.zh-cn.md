@@ -222,6 +222,44 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### `<FormProvider />`
+
+表单常常会有外部组件通信的场景，`<FormProvider/>` 则是为此而生。
+
+**用法**
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { FormProvider, SchemaForm, SchemaMarkupField as Field, FormSpy } from '@formily/next'
+import { Input } from '@formily/next-components'
+
+const FormFrag = () => {
+  return (
+    <SchemaForm components={{ Input }}>
+      <Field name="username" title="username" x-component="Input"/>
+    </SchemaForm>
+  )
+}
+
+const App = () => {
+  return (
+    <FormProvider>
+      <FormFrag />
+      <FormSpy>
+        {({ form: spyForm }) => {
+          return (
+            <div>username: {spyForm && spyForm.getFieldValue('username')}</div>
+          )
+        }}
+      </FormSpy>
+  </FormProvider>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 
 #### `<Field/>(废弃)`
 
@@ -294,6 +332,107 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 
 ### Hook
+
+#### `useFormTableQuery`
+
+* 调用 useFormTableQuery 会返回 Table 和 Form 属性，只需简单传递给对应组件即可
+* useFormTableQuery 的传入参数是一个返回 Promise 对象的函数，该函数约定了它的出入参形式，如果接口请求出入参不符合这个约定，需要手动转换。
+
+```typescript
+const useFormTableQuery = (
+  service: (payload: IQueryParams) => IQueryResponse | Promise<IQueryResponse>,
+  middlewares?: IEffectMiddleware<ISchemaFormActions>[]
+)
+```
+
+* useFormTableQuery入参
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| 参数1    |列表请求服务                  | (payload: [IQueryParams](#IQueryParams)) => [IQueryResponse](#IQueryParams) | Promise<[IQueryResponse](#IQueryParams)> |                |
+| 参数2    |请求处理middlewares                  | IEffectMiddleware<[ISchemaFormActions](#IFormActions)> |                |
+
+* useFormTableQuery返回结果
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| trigger    |触发列表请求                  | any |                |
+| form    | Form属性，主要为effects                  | { effects: [IFormEffect](#IFormEffect) } |                |
+| table    |Table属性                  | { loading:boolean, dataSource: any[], pagination: [Pagination](#Pagination), onChange } |                |
+
+**用法**
+
+```jsx
+import React from 'react'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  useFormTableQuery,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next'
+import { Input } from '@formily/next-components'
+import { fetch } from 'mfetch'
+import { Table } from '@alifd/next'
+
+const service = ({ values, pagination, sorter = {}, filters = {} }) => {
+  return fetch({
+    url: 'https://randomuser.me/api',
+    data: {
+      results: 10,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      page: pagination.current,
+      ...values,
+      ...filters
+    }
+  })
+    .then(res => res.json())
+    .then(({ results, info }) => {
+      return {
+        dataSource: results,
+        ...pagination,
+        total: 200
+      }
+    })
+}
+
+const App = () => {
+  const { form, table } = useFormTableQuery(service)
+  return (
+    <>
+      <SchemaForm
+        {...form}
+        components={{ Input }}
+        style={{ marginBottom: 20 }}
+        inline
+      >
+        <Field type="string" name="name" title="Name" x-component="Input" />
+        <FormButtonGroup>
+          <Submit>查询</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+      <Table
+        {...table}
+        rowKey={record => record.login.uuid}
+      >
+        <Table.Column sortable title="name" dataIndex="name" cell={(val, idx, record) => {
+          return `${val.first} ${val.last}`
+        }} />
+        <Table.Column filters={[
+          { label: 'male', value: 'male' },
+          { label: 'female', value: 'female' }
+        ]} title="gender" dataIndex="gender" />
+        <Table.Column title="email" dataIndex="email" />
+      </Table>
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 #### `useFormEffects`
 
@@ -913,6 +1052,116 @@ registerFormField(
 )
 ```
 
+#### registerFormFields
+
+全局批量注册拓展组件
+
+```typescript
+function registerFormFields(object: ISchemaFormRegistry['fields'])
+```
+**用法**
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  registerFormFields,
+  connect
+} from '@formily/next' // 或者 @formily/next
+
+const CustomComponent1 = props => {
+  return <input value={props.value || ''} onChange={e => props.onChange(e.target.value)} />
+}
+const CustomComponent2 = props => {
+  return <select value={props.value || ''} onChange={e => props.onChange(e.target.value)} />
+}
+
+registerFormFields({
+  CustomComponent1: connect()(CustomComponent1),
+  CustomComponent2: connect()(CustomComponent2)
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <Field name="component1" title="component1" x-component="CustomComponent1" />
+      <Field name="component2" title="component2" x-component="CustomComponent2" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### registerFormComponent
+
+全局扩展 `<Form/>` UI组件
+
+```typescript
+function registerFormComponent<Props = any>(
+  component: React.JSXElementConstructor<Props>
+)
+```
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm, SchemaMarkupField as Field, registerFormComponent } from '@formily/next'
+import { Input } from '@formily/next-components'
+
+registerFormComponent(props => {
+  return <div>全局扩展Form组件{props.children}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }}>
+      <Field type="string" name="name" title="Name" x-component="Input" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### registerFormItemComponent
+
+全局扩展 `<FormItem/>` UI 组件
+
+```typescript
+function registerFormItemComponent(
+  component: React.JSXElementConstructor<any>
+)
+```
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm, SchemaMarkupField as Field, registerFormItemComponent } from '@formily/next'
+import { Input } from '@formily/next-components'
+
+registerFormItemComponent(props => {
+  return <div>全局扩展FormItem组件{props.children}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }}>
+      <Field type="string" name="name" title="Name" x-component="Input" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
 #### registerFormField
 
 ```typescript
@@ -944,6 +1193,187 @@ const App = () => {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### createControllerBox
+
+创建虚拟表单字段，常用于创建表单布局组件。主要适用于`JSX-Schema`场景下。
+
+```typescript
+function createControllerBox<T = {}>(
+  key: string,
+  component?: React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
+)
+```
+
+**用法**
+
+```jsx
+
+import SchemaForm, { SchemaMarkupField as Field, createControllerBox, createFormActions } from '@formily/next'
+import { Input } from '@formily/next-components'
+
+const FormLayout = createControllerBox('controller-form-layout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} >
+      <FormLayout attr="hello">
+        <Field name="text" title="text" x-component="Input" />
+      </FormLayout>      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### createVirtualBox
+
+创建虚拟表单字段，常用于创建表单布局组件。主要适用于`JSX-Schema`场景下。
+
+```typescript
+function createVirtualBox<T = {}>(
+  key: string,
+  component?: React.JSXElementConstructor<any>
+)
+```
+
+**用法**
+
+```jsx
+
+import SchemaForm, { SchemaMarkupField as Field, createVirtualBox, createFormActions } from '@formily/next'
+import { Input } from '@formily/next-components'
+
+const FormLayout = createVirtualBox('c-form-layout', (props) => {
+  return <div>
+    {props.children}
+    {props.attr}
+  </div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} >
+      <FormLayout attr="hello">
+        <Field name="text" title="text" x-component="Input" />
+      </FormLayout>      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+
+#### registerVirtualBox
+
+注册虚拟表单字段，常用于生成表单布局组件。这种方式主要适用于 `json-schema` 模式下。
+
+```typescript
+function registerVirtualBox(
+  name: string,
+  component: ComponentWithStyleComponent<ISchemaVirtualFieldComponentProps>
+)
+```
+
+**用法**
+
+```jsx
+
+import SchemaForm, { SchemaMarkupField as Field, registerVirtualBox } from '@formily/next'
+import { Input } from '@formily/next-components'
+
+registerVirtualBox('CustomLayout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} >
+      <Field
+        type="object"
+        name="layout"
+        x-comppnent="CustomLayout"
+        x-component-props={{
+          attr: 'hello'
+        }}
+      >
+        <Field name="text" title="text" x-component="Input" />
+      </Field>      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### getRegistry
+
+获取预先注册的所有组件。
+
+```typescript
+interface ISchemaFormRegistry {
+  fields: {
+    [key: string]: ISchemaFieldComponent
+  }
+  virtualFields: {
+    [key: string]: ISchemaVirtualFieldComponent
+  }
+  wrappers?: ISchemaFieldWrapper[]
+  formItemComponent: React.JSXElementConstructor<any>
+  formComponent: string | React.JSXElementConstructor<any>
+}
+function getRegistry () => ISchemaFormRegistry
+```
+
+**用法**
+
+```tsx
+
+import SchemaForm, { SchemaMarkupField as Field, getRegistry } from '@formily/next'
+
+registerVirtualBox('CustomLayout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+getRegistry()
+```
+
+#### cleanRegistry
+
+清理预先注册的所有组件。
+
+```typescript
+function cleanRegistry ()
+```
+
+**用法**
+
+```tsx
+
+import SchemaForm, { SchemaMarkupField as Field, cleanRegistry } from '@formily/next'
+
+registerVirtualBox('CustomLayout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+cleanRegistry()
 ```
 
 ### Interfaces
@@ -1854,4 +2284,47 @@ interface MergedFieldComponentProps extends IFieldState {
   ) => React.ReactElement
 }
 
+```
+
+#### Pagination
+
+```typescript
+interface Pagination {
+  total: number
+  pageSize: number
+  current: number
+}
+```
+
+#### IQueryParams
+
+```typescript
+type IQueryParams = {
+  pagination: {
+    total: number
+    pageSize: number
+    current: number
+  }
+  sorter?: {
+    order: string
+    field: string
+    columnKey: string
+    column: any
+  }
+  filters?: {
+    [dataIndex: string]: any
+  }
+  values: any
+}
+```
+
+#### IQueryResponse
+
+```typescript
+type IQueryResponse = {
+  dataSource: any[]
+  total: number
+  pageSize: number
+  current: number
+}
 ```
