@@ -42,7 +42,12 @@ import './fields'
 import './compat'
 export const SchemaForm: React.FC<INextSchemaFormProps> = SchemaMarkupForm as any
 export const Field: React.FC<INextSchemaFieldProps> = SchemaMarkupField
-import { mapStyledProps, mapTextComponent, normalizeCol } from './shared'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  normalizeCol,
+  mapSelectComponent
+} from './shared'
 
 export * from './adaptor'
 export * from './components'
@@ -58,6 +63,7 @@ export {
   InternalForm,
   FormPath,
   SchemaField,
+  mapSelectComponent,
   Schema,
   JSONCondition,
   FormEffectHooks,
