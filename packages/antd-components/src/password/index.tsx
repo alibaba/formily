@@ -13,20 +13,11 @@ export interface IPasswordProps extends PasswordProps {
 export const Password = connect({
   getProps: mapStyledProps
 })(styled((props: IPasswordProps) => {
-  const { className, checkStrength, onChange, ...others } = props
-  const [value, setValue] = useState(props.value || props.defaultValue)
+  const { value, className, checkStrength, ...others } = props
+
   return (
-    <div className={className}>
-      <Input.Password
-        {...others}
-        value={value}
-        onChange={event => {
-          setValue(event.target.value)
-          if (onChange) {
-            onChange(event)
-          }
-        }}
-      />
+    <span className={className}>
+      <Input.Password {...others} value={value} />
       {checkStrength && (
         <PasswordStrength value={String(value)}>
           {score => {
@@ -47,9 +38,10 @@ export const Password = connect({
           }}
         </PasswordStrength>
       )}
-    </div>
+    </span>
   )
 })`
+  display: inline-block;
   .password-strength-wrapper {
     background: #e0e0e0;
     margin-bottom: 3px;
