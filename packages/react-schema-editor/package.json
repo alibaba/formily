@@ -1,0 +1,41 @@
+{
+  "name": "@formily/react-schema-editor",
+  "version": "1.0.2",
+  "license": "MIT",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc --declaration"
+  },
+  "dependencies": {
+    "@formily/react-schema-renderer": "^1.0.2",
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "node-sass": "^4.13.0",
+    "typescript": "^3.5.2"
+  },
+  "peerDependencies": {
+    "@babel/runtime": "^7.4.4",
+    "@types/json-schema": "^7.0.3",
+    "@types/react": "^16.8.23",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-eva": "^1.1.7"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050"
+}

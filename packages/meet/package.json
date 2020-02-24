@@ -1,0 +1,50 @@
+{
+  "name": "@formily/meet",
+  "version": "1.0.2",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "build": "ts-node --project ../../tsconfig.build.json build.ts"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "@alifd/meet": "^1.0.0-beta.25",
+    "@formily/react": "^1.0.2",
+    "@formily/react-schema-renderer": "^1.0.2",
+    "@formily/react-shared-components": "^1.0.2",
+    "@formily/shared": "^1.0.2",
+    "@rax-ui/locale": "^1.0.0-beta.10",
+    "classnames": "^2.2.6",
+    "rax": "^1.1.1",
+    "rax-app": "^0.1.0",
+    "rax-dom": "^1.0.1",
+    "rax-image": "^1.0.3",
+    "rax-link": "^1.0.1",
+    "rax-plugin-app": "^0.2.19",
+    "rax-recyclerview": "^1.1.1",
+    "rax-text": "^1.0.0",
+    "rax-view": "^1.0.0",
+    "styled-components": "^4.1.1",
+    "universal-navigate": "^1.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050"
+}

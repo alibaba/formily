@@ -1,17 +1,17 @@
 {
-  "name": "@uform/validator",
-  "version": "0.4.2",
+  "name": "@formily/validator",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "types": "lib/index.d.ts",
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
@@ -21,12 +21,8 @@
   "devDependencies": {
     "typescript": "^3.5.2"
   },
-  "peerDependencies": {
-    "@babel/runtime": "^7.4.4"
-  },
   "dependencies": {
-    "@uform/types": "^0.4.2",
-    "@uform/utils": "^0.4.2"
+    "@formily/shared": "^1.0.2"
   },
   "publishConfig": {
     "access": "public"

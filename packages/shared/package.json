@@ -1,0 +1,33 @@
+{
+  "name": "@formily/shared",
+  "version": "1.0.2",
+  "license": "MIT",
+  "main": "lib",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
+  "scripts": {
+    "build": "tsc --declaration"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  },
+  "dependencies": {
+    "camel-case": "^3.0.0",
+    "cool-path": "^0.1.23",
+    "deepmerge": "^4.0.0"
+  }
+}

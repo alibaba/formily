@@ -1,0 +1,42 @@
+{
+  "name": "@formily/react-schema-renderer",
+  "version": "1.0.2",
+  "license": "MIT",
+  "main": "lib",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc --declaration"
+  },
+  "devDependencies": {
+    "typescript": "^3.5.2"
+  },
+  "peerDependencies": {
+    "@types/react": "^16.8.23",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-eva": "^1.1.7",
+    "rxjs": "^6.5.1"
+  },
+  "dependencies": {
+    "@formily/core": "^1.0.2",
+    "@formily/react": "^1.0.2",
+    "@formily/shared": "^1.0.2",
+    "@formily/validator": "^1.0.2",
+    "pascal-case": "^2.0.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050"
+}

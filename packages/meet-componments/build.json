@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    [
+      "rax-plugin-app",
+      {
+        "targets": [
+          "web"
+        ]
+      }
+    ],
+    "rax-plugin-compat-react"
+  ]
+}

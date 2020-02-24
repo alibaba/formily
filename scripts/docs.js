@@ -6,16 +6,26 @@ const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
   '@alifd/next': 'latest',
-  '@uform/next': 'latest',
-  '@uform/antd': 'latest',
-  '@uform/react': 'latest',
-  '@uform/printer': 'latest',
+  '@formily/next': 'latest',
+  '@formily/next-components': 'latest',
+  '@formily/antd': 'latest',
+  '@formily/antd-components': 'latest',
+  '@formily/shared': 'latest',
+  '@formily/react': 'latest',
+  '@formily/printer': 'latest',
   '@babel/runtime':'latest',
   antd: 'latest'
 }
 
 window.codeSandBoxPeerDependencies = {
   moment: 'latest'
+}
+if (window.parent !== window) {
+  try {
+    window.__FORMILY_DEV_TOOLS_HOOK__ = window.parent.__FORMILY_DEV_TOOLS_HOOK__;
+  } catch (error) {
+    // The above line can throw if we do not have access to the parent frame -- i.e. cross origin
+  }
 }
 </script>
 `
@@ -36,14 +46,15 @@ const createDocs = async () => {
     })
     .reduce((buf, _path) => {
       const name = path.basename(_path)
+
       return {
         ...buf,
-        [`@uform/${name}`]: `${_path}/src`
+        [`@formily/${name}$`]: `${_path}/src`
       }
     }, {})
   command(
     {
-      title: 'UForm',
+      title: 'Formily',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
       header: HEAD_HTML,
       footer: FOOTER_HTML

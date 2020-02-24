@@ -1,45 +1,118 @@
-import './form'
-import './fields/string'
-import './fields/number'
-import './fields/boolean'
-import './fields/date'
-import './fields/time'
-import './fields/range'
-import './fields/upload'
-import './fields/checkbox'
-import './fields/radio'
-import './fields/rating'
-import './fields/transfer'
-import './fields/array'
-import './fields/cards'
-import './fields/table'
-import './fields/textarea'
-import './fields/password'
-
-export * from '@uform/react'
-export * from './components/formButtonGroup'
-export * from './components/button'
-export * from './components/layout'
-
-import React from 'react'
 import {
-  SchemaForm as InternalSchemaForm,
-  Field as InternalField
-} from '@uform/react'
-import { SchemaFormProps, FieldProps } from './type'
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  SchemaMarkupField,
+  InternalForm,
+  SchemaField,
+  Schema,
+  FormSpy,
+  FormPath,
+  FormSlot,
+  FormConsumer,
+  FormProvider,
+  JSONCondition,
+  compileObject,
+  FormEffectHooks,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormQuery,
+  useFormSpy,
+  useFormState,
+  useVirtualField,
+  createFormActions,
+  createAsyncFormActions,
+  connect,
+  registerFieldMiddleware,
+  registerFormComponent,
+  registerFormField,
+  registerFormFields,
+  registerFormItemComponent,
+  registerVirtualBox,
+  parseLinkages,
+  useValueLinkageEffect,
+  createControllerBox,
+  createVirtualBox,
+  cleanRegistry,
+  getRegistry
+} from '@formily/react-schema-renderer'
+import {
+  mapStyledProps,
+  mapTextComponent,
+  normalizeCol,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
+} from './shared'
+import { SchemaForm, Field, Form } from './components'
+export * from './adaptor'
+export * from './components'
+export * from './context'
+export * from './hooks/useFormTableQuery'
+export * from './types'
 
-export { mapStyledProps, mapTextComponent } from './utils'
-
-export default class SchemaForm<V> extends React.Component<SchemaFormProps<V>> {
-  render() {
-    return <InternalSchemaForm {...this.props} />
-  }
+export {
+  SchemaForm,
+  Form,
+  Field,
+  SchemaMarkupField,
+  InternalField,
+  InternalVirtualField,
+  InternalFieldList,
+  InternalForm,
+  FormSpy,
+  FormPath,
+  FormSlot,
+  FormProvider,
+  FormConsumer,
+  SchemaField,
+  Schema,
+  JSONCondition,
+  FormEffectHooks,
+  compileObject,
+  createEffectHook,
+  setValidationLanguage,
+  setValidationLocale,
+  registerValidationFormats,
+  registerValidationRules,
+  registerValidationMTEngine,
+  useField,
+  useFieldState,
+  useForm,
+  useFormEffects,
+  useFormSpy,
+  useFormQuery,
+  useFormState,
+  useVirtualField,
+  mapStyledProps,
+  mapTextComponent,
+  createFormActions,
+  createAsyncFormActions,
+  connect,
+  registerFieldMiddleware,
+  registerFormComponent,
+  registerFormField,
+  registerFormFields,
+  registerFormItemComponent,
+  registerVirtualBox,
+  parseLinkages,
+  useValueLinkageEffect,
+  normalizeCol,
+  createControllerBox,
+  createVirtualBox,
+  cleanRegistry,
+  getRegistry,
+  pickProps,
+  pickFormItemProps,
+  pickNotFormItemProps
 }
 
-export class Field<V, T extends string> extends React.Component<
-  FieldProps<V, T>
-> {
-  render() {
-    return <InternalField {...this.props} />
-  }
-}
+export default SchemaForm

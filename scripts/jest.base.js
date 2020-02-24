@@ -11,7 +11,7 @@ const alias = packages
     const name = path.basename(_path)
     return {
       ...buf,
-      [`@uform/${name}`]: `${_path}/src`
+      [`@formily/${name}`]: `${_path}/src`
     }
   }, {})
 module.exports = {
@@ -22,16 +22,18 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest'
   },
   preset: 'ts-jest',
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
     require.resolve('@testing-library/react/cleanup-after-each'),
-    './scripts/global.js'
+    './scripts/global.ts'
   ],
   moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
       babelConfig: true,
-      tsConfig: 'tsconfig.jest.json'
+      tsConfig: 'tsconfig.jest.json',
+      diagnostics: false
     }
   },
   //watchPlugins: ['jest-watch-lerna-packages'],

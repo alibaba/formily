@@ -1,22 +1,22 @@
 {
-  "name": "@uform/core",
-  "version": "0.4.2",
+  "name": "@formily/core",
+  "version": "1.0.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alibaba/uform.git"
+    "url": "git+https://github.com/alibaba/formily.git"
   },
   "types": "lib/index.d.ts",
   "bugs": {
-    "url": "https://github.com/alibaba/uform/issues"
+    "url": "https://github.com/alibaba/formily/issues"
   },
-  "homepage": "https://github.com/alibaba/uform#readme",
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "tsc --declaration"
+    "build": "rimraf -rf lib && tsc --declaration"
   },
   "devDependencies": {
     "typescript": "^3.5.2"
@@ -26,11 +26,9 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@uform/types": "^0.4.2",
-    "@uform/utils": "^0.4.2",
-    "@uform/validator": "^0.4.2",
-    "dot-match": "^0.1.18",
-    "rxjs": "^6.3.3"
+    "@formily/shared": "^1.0.2",
+    "@formily/validator": "^1.0.2",
+    "immer": "^3.2.0"
   },
   "publishConfig": {
     "access": "public"

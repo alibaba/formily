@@ -1,2 +1,7 @@
-# @uform/antd
-> UForm Ant Design组件插件包
+# @formily/antd
+
+### Install
+
+```bash
+npm install --save @formily/antd
+```

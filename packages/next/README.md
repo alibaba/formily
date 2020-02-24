@@ -1,2 +1,7 @@
-# @uform/next
-> UForm Fusion Next组件插件包
+# @formily/next
+
+### Install
+
+```bash
+npm install --save @formily/next
+```
