@@ -1,14 +1,19 @@
-// reference https://mathiasbynens.be/notes/globalthis
-// @ts-nocheck
-;(function(Object) {
-  if (typeof globalThis === 'object') return
-  Object.defineProperty(Object.prototype, '__magic__', {
-    get: function() {
-      return this
-    },
-    configurable: true
-  })
-  __magic__.globalThis = __magic__ 
-  delete Object.prototype.__magic__
-})(Object)
-export const globalThisPolyfill = globalThis
+function globalSelf() {
+  try {
+    if (typeof self !== 'undefined') {
+      return self
+    }
+  } catch (e) {}
+  try {
+    if (typeof window !== 'undefined') {
+      return window
+    }
+  } catch (e) {}
+  try {
+    if (typeof global !== 'undefined') {
+      return global
+    }
+  } catch (e) {}
+  return Function('return this')()
+}
+export const globalThisPolyfill = globalSelf()
