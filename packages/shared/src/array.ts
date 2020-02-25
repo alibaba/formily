@@ -31,8 +31,7 @@ type MemoObjectIterator<TValue, TResult> = (
   key: string
 ) => TResult
 
-export const toArr = (val: any): any[] => (isArr(val) ? val : val ? [val] : [])
-
+export const toArr = (val: any): any[] => [].concat(val || [])
 export function each(
   val: string,
   iterator: EachStringIterator,
