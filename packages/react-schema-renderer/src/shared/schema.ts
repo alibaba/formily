@@ -50,13 +50,30 @@ const filterProperties = <T extends object>(object: T, keys: string[]): T => {
 
 //向后兼容逻辑，未来会干掉
 const COMPAT_FORM_ITEM_PROPS = [
+  //next
   'required',
+  'prefix',
   'labelAlign',
-  'labelTextAlign',
-  'size',
+  'hasFeedback',
   'labelCol',
   'wrapperCol',
-  'triggerType'
+  'label',
+  'help',
+  'labelTextAlign',
+  'fullWidth',
+  'extra',
+  'size',
+  'asterisk',
+  'labelWidth',
+  'device',
+  'isPreview',
+  'renderPreview',
+  'validateState',
+  //antd
+  'colon',
+  'htmlFor',
+  'validateStatus',
+  'prefixCls'
 ]
 
 export class Schema implements ISchema {
@@ -352,10 +369,11 @@ export class Schema implements ISchema {
   getExtendsProps() {
     return this['x-props'] || {}
   }
-  getExtendsComponentProps(needfilterFormItemKeys: boolean = true) {
-    const props = { ...this['x-props'], ...this['x-component-props'] }
-    if (!needfilterFormItemKeys) return props
-    return filterProperties(props, COMPAT_FORM_ITEM_PROPS)
+  getExtendsComponentProps() {
+    return {
+      ...filterProperties(this['x-props'], COMPAT_FORM_ITEM_PROPS),
+      ...this['x-component-props']
+    }
   }
   getExtendsLinkages() {
     return this['x-linkages']
@@ -419,7 +437,7 @@ export class Schema implements ISchema {
     if (isValid(json['x-component'])) {
       this['x-component'] = lowercase(json['x-component'])
     }
-    
+
     if (!isEmpty(json.properties)) {
       this.properties = map(json.properties, (item, key) => {
         return new Schema(item, this, key)

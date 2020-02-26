@@ -1,4 +1,4 @@
-# Formily Devtools 
+# Formily Chrome Devtools 
 
 目前提供了chrome扩展开发者工具，可以帮助用户方便的查看状态树
 

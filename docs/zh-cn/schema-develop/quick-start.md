@@ -138,6 +138,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```jsx
 import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,

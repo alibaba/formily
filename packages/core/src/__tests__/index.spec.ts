@@ -716,8 +716,8 @@ describe('setFormState', () => {
     expect(form.getFormState()).toEqual({
       displayName: 'FormState',
       pristine: isEqual(values, initialValues),
-      valid: !invalid,
-      invalid: invalid,
+      valid: true,
+      invalid: false,
       loading: validating,
       validating: validating,
       submitting: true,
