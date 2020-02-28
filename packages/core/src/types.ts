@@ -167,7 +167,7 @@ export interface IFieldStateProps<FieldProps = any> {
   values?: any[]
   initialValue?: any
   props?: FieldProps
-  rules?: ValidatePatternRules[]
+  rules?: ValidatePatternRules[] | ValidatePatternRules
   required?: boolean
   editable?: boolean
   visible?: boolean
