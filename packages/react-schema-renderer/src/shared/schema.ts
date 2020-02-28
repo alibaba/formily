@@ -73,7 +73,9 @@ const COMPAT_FORM_ITEM_PROPS = [
   'colon',
   'htmlFor',
   'validateStatus',
-  'prefixCls'
+  'prefixCls',
+  //formily
+  'triggerType'
 ]
 
 export class Schema implements ISchema {
