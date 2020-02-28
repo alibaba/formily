@@ -12,7 +12,7 @@ import {
 export const AntdSchemaFormAdaptor: React.FC<FormProps &
   IFormItemTopProps &
   PreviewTextConfigProps & { onSubmit: () => void }> = props => {
-  const { inline, previewPlaceholder, ...rest } = props
+  const { inline, previewPlaceholder,onSubmit,onReset, ...rest } = props
   return (
     <FormItemDeepProvider {...props}>
       <PreviewText.ConfigProvider value={props}>
@@ -21,11 +21,14 @@ export const AntdSchemaFormAdaptor: React.FC<FormProps &
           labelCol={normalizeCol(props.labelCol)}
           wrapperCol={normalizeCol(props.wrapperCol)}
           layout={inline ? 'inline' : props.layout}
+          onSubmit={onSubmit}
+          onReset={onReset}
           component={useMemo(() => {
             return innerProps => {
               return React.createElement('form', {
                 ...innerProps,
-                ...rest
+                onSubmit,
+                onReset
               })
             }
           }, [])}

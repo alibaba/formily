@@ -231,6 +231,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const initializedChanged = field.isDirty('initialized')
       const warningsChanged = field.isDirty('warnings')
       const errorsChanged = field.isDirty('errors')
+      const editableChanged = field.isDirty('editable')
       const userUpdateFieldPath =
         env.userUpdateFields[env.userUpdateFields.length - 1]
 
@@ -291,7 +292,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
               //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
               notifyFormValuesChange()
             } else {
-              setFormValuesIn(path, published.value)
+              if (!existFormValuesIn(path)) {
+                setFormValuesIn(path, published.value)
+              }
               syncField()
             }
           })
@@ -317,7 +320,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
             //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
             notifyFormValuesChange()
           } else {
-            setFormValuesIn(path, published.value)
+            if (!existFormValuesIn(path)) {
+              setFormValuesIn(path, published.value)
+            }
             syncField()
           }
         })
@@ -334,6 +339,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (warningsChanged) {
         syncFormMessages('warnings', published)
       }
+
+      if (
+        unmountedChanged ||
+        visibleChanged ||
+        displayChanged ||
+        editableChanged
+      ) {
+        //fix #682
+        resetFormMessages(published)
+      }
+
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
       if (userUpdateFieldPath && !env.leadingStage) {
         if (FormPath.parse(path).match(userUpdateFieldPath)) {
@@ -567,6 +583,42 @@ export function createForm<FieldProps, VirtualFieldProps>(
       field = createField()
     }
     return field
+  }
+
+  function resetFormMessages(fieldState: IFieldState) {
+    const { path, visible, display, unmounted, editable } = fieldState
+    if (
+      editable === false ||
+      visible === false ||
+      unmounted === true ||
+      display === false
+    ) {
+      state.setSourceState(state => {
+        state.errors = state.errors || []
+        state.warnings = state.warnings || []
+        state.errors = state.errors.reduce((buf: any, item: any) => {
+          if (item.path === path) {
+            return buf
+          } else {
+            return buf.concat(item)
+          }
+        }, [])
+        state.warnings = state.warnings.reduce((buf: any, item: any) => {
+          if (item.path === path) {
+            return buf
+          } else {
+            return buf.concat(item)
+          }
+        }, [])
+        if (state.errors.length) {
+          state.invalid = true
+          state.valid = false
+        } else {
+          state.invalid = false
+          state.valid = true
+        }
+      })
+    }
   }
 
   //实时同步Form Messages

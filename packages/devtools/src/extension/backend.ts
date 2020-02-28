@@ -6,6 +6,7 @@ const serializeObject = (obj: any) => {
   if (Array.isArray(obj)) {
     return obj.map(serializeObject)
   } else if (typeof obj === 'object') {
+    if (!obj) return obj
     if ('$$typeof' in obj && '_owner' in obj) {
       return '#ReactNode'
     } else if (obj.toJS) {
