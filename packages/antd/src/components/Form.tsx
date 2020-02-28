@@ -47,7 +47,7 @@ export const Form: React.FC<IAntdFormProps &
           form.reset({ validate: false, forceClear: false })
         }
         return (
-          <PreviewText value={props}>
+          <PreviewText.ConfigProvider value={props}>
             <FormItemDeepProvider {...props}>
               <div ref={formRef}>
                 <AntdForm
@@ -55,7 +55,7 @@ export const Form: React.FC<IAntdFormProps &
                   component={useMemo(() => {
                     return props => {
                       return React.createElement('form', {
-                        ...rest,
+                        ...props,
                         onSubmit,
                         onReset
                       })
@@ -69,7 +69,7 @@ export const Form: React.FC<IAntdFormProps &
                 />
               </div>
             </FormItemDeepProvider>
-          </PreviewText>
+          </PreviewText.ConfigProvider>
         )
       }}
     </InternalForm>
