@@ -105,7 +105,6 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     const { inline, ...componentProps } = pickNotFormItemProps(props)
     return (
       <AntdFormItem
-        hasFeedback
         {...formItemProps}
         required={editable === false ? undefined : required}
         labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
