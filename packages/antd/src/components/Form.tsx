@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useMemo } from 'react'
 import { Form as AntdForm } from 'antd'
 import { InternalForm } from '@formily/react-schema-renderer'
 import { normalizeCol, autoScrollInValidateFailed } from '../shared'
@@ -34,22 +34,32 @@ export const Form: React.FC<IAntdFormProps> = props => {
       }}
     >
       {form => {
+        const onSubmit = e => {
+          if (e && e.preventDefault) e.preventDefault()
+          form.submit().catch(e => console.warn(e))
+        }
+        const onReset: =() => {
+          form.reset({ validate: false, forceClear: false })
+        }
         return (
           <FormItemDeepProvider {...props}>
             <div ref={formRef}>
               <AntdForm
                 {...rest}
+                component={useMemo(() => {
+                  return props =>{
+                    return React.createElement('form', {
+                      ...props,
+                      onSubmit,
+                      onReset
+                    })
+                  }
+                }, [])}
+                onSubmit={onSubmit}
+                onReset={onReset}
                 labelCol={normalizeCol(props.labelCol)}
                 wrapperCol={normalizeCol(props.wrapperCol)}
                 layout={inline ? 'inline' : props.layout}
-                form={undefined}
-                onSubmit={e => {
-                  if (e && e.preventDefault) e.preventDefault()
-                  form.submit().catch(e => console.warn(e))
-                }}
-                onReset={() => {
-                  form.reset({ validate: false, forceClear: false })
-                }}
               />
             </div>
           </FormItemDeepProvider>

@@ -7,19 +7,20 @@ import { toArr, isFn, FormPath } from '@formily/shared'
 import { ArrayList } from '@formily/react-shared-components'
 import { CircleButton } from '../circle-button'
 import { TextButton } from '../text-button'
-import { Card, Icon } from 'antd'
+import { Card } from 'antd'
+import { PlusOutlined, DeleteOutlined, DownOutlined, UpOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
 
 const ArrayComponents = {
   CircleButton,
   TextButton,
-  AdditionIcon: () => <Icon type="plus" />,
-  RemoveIcon: () => <Icon type="delete" />,
-  MoveDownIcon: () => <Icon type="down" />,
-  MoveUpIcon: () => <Icon type="up" />
+  AdditionIcon: () => <PlusOutlined />,
+  RemoveIcon: () => <DeleteOutlined />,
+  MoveDownIcon: () => <DownOutlined />,
+  MoveUpIcon: () => <UpOutlined />
 }
 
-export const ArrayCards : any = styled(
+export const ArrayCards: any = styled(
   (props: ISchemaFieldComponentProps & { className: string }) => {
     const { value, schema, className, editable, path, mutators } = props
     const {

@@ -135,8 +135,6 @@ export const FormButtonGroup = styled(
   &.is-inline {
     display: inline-block;
     flex-grow: 3;
-    height: 40px;
-    line-height: 40px;
   }
   .button-group {
     .inline {
