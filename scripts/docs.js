@@ -32,7 +32,7 @@ if (window.parent !== window) {
 
 const FOOTER_HTML = `
 <script src="//unpkg.com/moment/min/moment-with-locales.js"></script>
-<script src="//unpkg.com/antd/dist/antd.min.js"></script>
+<script src="//unpkg.com/antd@3.x/dist/antd.min.js"></script>
 <script src="//unpkg.com/@alifd/next/dist/next.min.js"></script>
 `
 
