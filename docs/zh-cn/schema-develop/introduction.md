@@ -5,7 +5,7 @@
 - JSON Schema 开发表单
   - 该方案主要用于后端动态渲染表单
 - JSX Schema 开发表单
-  - 该方案主要用于后端动态渲染表单的过渡形态，Schema在前端维护，方便未来迁移后端动态渲染模式
+  - 该方案主要用于后端动态渲染表单的过渡形态，Schema 在前端维护，方便未来迁移后端动态渲染模式
 - 纯 JSX(源码) 开发表单
   - 该方案主要用于纯前端开发方式，或者在前两个方案的自定义组件内部的开发以复合形态来开发。
 
@@ -17,11 +17,13 @@
 > 在该例子中，只需要了解我们需要用到一个叫 SchemaForm 的组件，同时需要给该组件传递一个叫做 schema 的属性，该属性接收一个 json 对象。
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { SchemaForm, FormButtonGroup, Submit } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
-export default () => {
+const App = () => {
   return (
     <SchemaForm
       components={{
@@ -47,16 +49,19 @@ export default () => {
     </SchemaForm>
   )
 }
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ## JSX Schema 开发表单
 
-> JSX Schema是一种对前端更友好的前端维护Schema的开发模式。
+> JSX Schema 是一种对前端更友好的前端维护 Schema 的开发模式。
 > 主要是使用了 SchemaForm 组件和 SchemaMarkupField 组件，SchemaMarkupField 是一个描述型标签，它不是实际的 UI 组件，只能再 SchemaForm 内部使用，这个标签属性与 JSON Schema 中的 Field 对象是等价的
-> 
->**注意：SchemaForm 的子节点不能随意插入任何 div 之类的实际 UI 节点，否则它会被推到 Form 底部去渲染。**
+>
+> **注意：SchemaForm 的子节点不能随意插入任何 div 之类的实际 UI 节点，否则它会被推到 Form 底部去渲染。**
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormButtonGroup,
@@ -66,7 +71,7 @@ import {
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
-export default () => (
+const App = () => (
   <SchemaForm
     components={{ Input }}
     labelCol={7}
@@ -82,18 +87,21 @@ export default () => (
     </FormButtonGroup>
   </SchemaForm>
 )
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 ## 纯 JSX(源码) 开发表单
 
-> 纯源码开发，没有任何 Schema 束缚，它更简单，更直接，对于一些简单页面，或者Schema开发中的自定义组件中，使用纯 JSX 开发模式会更高效
+> 纯源码开发，没有任何 Schema 束缚，它更简单，更直接，对于一些简单页面，或者 Schema 开发中的自定义组件中，使用纯 JSX 开发模式会更高效
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import { Form, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
-export default () => (
+const App = () => (
   <Form labelCol={7} wrapperCol={12} onSubmit={console.log}>
     <div style={{ padding: 20, margin: 20, border: '1px solid red' }}>
       Form组件内部可以随便插入UI元素了
@@ -104,4 +112,6 @@ export default () => (
     </FormButtonGroup>
   </Form>
 )
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```

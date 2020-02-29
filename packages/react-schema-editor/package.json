@@ -24,7 +24,8 @@
   },
   "devDependencies": {
     "node-sass": "^4.13.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.2",
+    "antd": "^3.x"
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.4",

@@ -37,6 +37,7 @@ export type IAntdFormItemProps = IFieldStateUIProps &
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    [key: string]: any
   }
 
 export interface ISubmitProps extends ButtonProps {

@@ -88,7 +88,6 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
       help={help}
       validateStatus={status}
       extra={extra ? <p>{extra}</p> : undefined}
-      hasFeedback
       {...mergedProps}
       labelCol={label ? normalizeCol(labelCol || contextLabelCol) : undefined}
       wrapperCol={
