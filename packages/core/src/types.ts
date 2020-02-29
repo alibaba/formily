@@ -58,8 +58,7 @@ export enum LifeCycleTypes {
   ON_FIELD_VALIDATE_START = 'onFieldValidateStart',
   ON_FIELD_VALIDATE_END = 'onFieldValidateEnd',
   ON_FIELD_MOUNT = 'onFieldMount',
-  ON_FIELD_UNMOUNT = 'onFieldUnmount',
-  ON_FIELD_WILL_REMOVE = 'onFieldWillRemove'
+  ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
 
 export interface FormGraphProps {

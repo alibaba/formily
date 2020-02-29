@@ -558,9 +558,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }, 60)
         heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_START, field)
         return validate(value, rules).then(({ errors, warnings }) => {
+          clearTimeout((field as any).validateTimer)
           return new Promise(resolve => {
-            applyWithScheduler(() => {
-              clearTimeout((field as any).validateTimer)
+            const syncState = () => {
               field.setState((state: IFieldState<FieldProps>) => {
                 state.validating = false
                 state.ruleErrors = errors
@@ -571,7 +571,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 errors,
                 warnings
               })
-            })
+            }
+            if (graph.size < 100) {
+              syncState()
+            } else {
+              applyWithScheduler(syncState)
+            }
           })
         })
       })
