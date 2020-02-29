@@ -44,7 +44,7 @@ const createEnum = (enums: any) => {
 }
 
 export const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
-  const { dataSource = [], ...others } = props
+  const { dataSource = [], onChange, ...others } = props
   const children = createEnum(dataSource).map(item => {
     const { label, value, ...others } = item
     return (
@@ -59,7 +59,16 @@ export const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
     )
   })
   return (
-    <AntSelect className={props.className} {...others}>
+    <AntSelect
+      className={props.className}
+      {...others}
+      onChange={(value: any, options: any) => {
+        onChange(value, {
+          ...options,
+          props: undefined //干掉循环引用
+        })
+      }}
+    >
       {children}
     </AntSelect>
   )

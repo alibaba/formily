@@ -57,7 +57,9 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
             mutators.validate({ throwErrors: false })
           }
         }
-        forceUpdate()
+        if(!form.isLeadingValidate()){
+          forceUpdate()
+        }
       }
     })
     initialized = true

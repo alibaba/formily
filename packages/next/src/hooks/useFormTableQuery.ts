@@ -74,9 +74,9 @@ export const useFormTableQuery = (
       }
     },
     pagination: {
-      current: response.current,
-      pageSize: response.pageSize,
-      total: response.total,
+      current: response.current || 1,
+      pageSize: response.pageSize || 20,
+      total: response.total || 0,
       onChange(current: number) {
         setPagination({
           ...pagination,

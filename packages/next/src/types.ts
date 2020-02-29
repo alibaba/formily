@@ -33,6 +33,7 @@ export type INextFormItemProps = IFieldStateUIProps &
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    [key: string]: any
   }
 
 export type INextSchemaFieldProps = IMarkupSchemaFieldProps
