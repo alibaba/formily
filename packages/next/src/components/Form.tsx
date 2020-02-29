@@ -39,7 +39,7 @@ export const Form: React.FC<INextFormProps &
     >
       {form => {
         return (
-          <PreviewText value={props}>
+          <PreviewText.ConfigProvider value={props}>
             <FormItemDeepProvider {...props}>
               <div ref={formRef}>
                 <NextForm
@@ -57,7 +57,7 @@ export const Form: React.FC<INextFormProps &
                 />
               </div>
             </FormItemDeepProvider>
-          </PreviewText>
+          </PreviewText.ConfigProvider>
         )
       }}
     </InternalForm>

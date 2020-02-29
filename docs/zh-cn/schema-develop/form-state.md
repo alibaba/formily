@@ -57,7 +57,7 @@
 | required       | 字段是否必填                                                                             | boolean                                       | false        |
 | mounted        | 字段是否已挂载                                                                           | boolean                                       | false        |
 | unmounted      | 字段是否已卸载                                                                           | boolean                                       | false        |
-| props          | 字段扩展 UI 属性                                                                         | {}                                            |              |
+| props          | 字段扩展 UI 属性(如果是Schema模式，props代表每个SchemaField属性，如果是JSX模式，则代表FormItem属性)                                                                              | {}                                            |              |
 | 扩展状态       | 通过 setFieldState 可以直接设置扩展状态                                                  | any                                           |              |
 
 ## VirtualFieldState
@@ -74,7 +74,7 @@ VirtualFieldState 代表 VirtualField 的状态，VirtualField 是 Formily 节�
 | display     | 字段是否 UI 显示(如果为 false，字段值可以被提交) | boolean | true                |
 | mounted     | 字段是否已挂载                                   | boolean | false               |
 | unmounted   | 字段是否已卸载                                   | boolean | false               |
-| props       | 字段扩展 UI 属性                                 | {}      |                     |
+| props       | 字段扩展 UI 属性(如果是Schema模式，props代表每个SchemaField属性，如果是JSX模式，则代表FormItem属性)                                      | {}      |                     |
 | 扩展状态    | 通过 setFieldState 可以直接设置扩展状态          | any     |                     |
 
 ## ValidatePatternRules
