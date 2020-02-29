@@ -1,4 +1,4 @@
-import { connect } from '@uform/react-schema-renderer'
+import { connect } from '@formily/react-schema-renderer'
 import { Select } from '@alifd/meet';
 import { mapStyledProps, mapTextComponent, mapSelectComponent } from '../shared'
 
