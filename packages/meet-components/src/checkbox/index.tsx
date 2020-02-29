@@ -1,9 +1,11 @@
 import { connect } from '@formily/react-schema-renderer'
-import { NumberPicker } from '@alifd/meet'
+import { Checkbox as MeetCheckbox } from '@alifd/meet'
 import { mapStyledProps, mapTextComponent } from '../shared'
 
-export const NumberPickers = connect({
+const { Group: MeetCheckboxGroup } = MeetCheckbox
+
+export const CheckboxGroup = connect({
   getProps: mapStyledProps,
   getComponent: mapTextComponent
-})(NumberPicker)
+})(MeetCheckboxGroup)
 
