@@ -572,10 +572,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 warnings
               })
             }
-            if (graph.size < 100) {
-              syncState()
-            } else {
+            if (graph.size > 200) {
               applyWithScheduler(syncState)
+            } else {
+              syncState()
             }
           })
         })
@@ -1039,7 +1039,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    if (hostRendering) env.leadingValidate = true
+    if (hostRendering && graph.size > 200) env.leadingValidate = true
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     state.setState(state => {
