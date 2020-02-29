@@ -274,7 +274,7 @@ import { Form } from 'antd'
 
 export const CompatFormComponent = ({children,...props})=>{
   return <Form {...props}>{children}</Form> //很简单的使用Form组件，props是SchemaForm组件的props，这里会直接透传
-})
+}
 
 export const CompatFormItemComponent = ({children,...props})=>{
   const messages = [].concat(props.errors || [], props.warnings || [])
@@ -313,6 +313,7 @@ export default ()=>{
        formComponent={CompatFormComponent}
        formItemComponent={CompatFormItemComponent}
     />
+  )
 }
 
 ```
