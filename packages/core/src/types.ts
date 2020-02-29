@@ -39,6 +39,7 @@ export enum LifeCycleTypes {
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
   ON_FORM_VALIDATE_END = 'onFormValidateEnd',
   ON_FORM_INPUT_CHANGE = 'onFormInputChange',
+  ON_FORM_HOST_RENDER = 'onFormHostRender',
   /**
    * FormGraph LifeCycle
    **/
@@ -291,6 +292,7 @@ export interface IFormGraph {
 
 export type IFormExtendedValidateFieldOptions = ValidateFieldOptions & {
   throwErrors?: boolean
+  hostRendering?: boolean
 }
 
 export interface IMutators {
@@ -379,6 +381,7 @@ export interface IForm {
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
   notify: <T>(type: string, payload?: T) => void
+  isLeadingValidate: () => boolean
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void

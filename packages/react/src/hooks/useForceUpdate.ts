@@ -6,7 +6,7 @@ import { useCallback, useState, useEffect, useRef } from 'react'
 
 export function useForceUpdate(): () => void {
   const updating = useRef(false)
-  const [value, dispatch] = useState<{}>(Object.create(null))
+  const [, dispatch] = useState<{}>(Object.create(null))
   updating.current = true
   // Turn dispatch(required_parameter) into dispatch().
   const memoizedDispatch = useCallback((): void => {
@@ -14,6 +14,6 @@ export function useForceUpdate(): () => void {
   }, [dispatch])
   useEffect(() => {
     updating.current = false
-  }, [value])
+  })
   return memoizedDispatch
 }
