@@ -38,8 +38,7 @@ import {
   useValueLinkageEffect
 } from '@formily/react-schema-renderer'
 import { INextSchemaFormProps, INextSchemaFieldProps } from './types'
-import './fields'
-import './compat'
+
 export const SchemaForm: React.FC<INextSchemaFormProps> = SchemaMarkupForm as any
 export const Field: React.FC<INextSchemaFieldProps> = SchemaMarkupField
 import {

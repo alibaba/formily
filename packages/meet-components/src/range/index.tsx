@@ -1,10 +1,8 @@
 import { connect } from '@formily/react-schema-renderer'
+import { Range as MeetRange } from '@alifd/meet'
 import { mapStyledProps } from '../shared'
-import { Switch } from '@alifd/meet';
 
-
-export const Switchs = connect({
-  valueName: 'checked',
+export const Range = connect({
   getProps: mapStyledProps
-})(Switch)
+})(MeetRange)
 

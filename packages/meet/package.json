@@ -44,7 +44,9 @@
     "rax-view": "^1.0.0",
     "universal-navigate": "^1.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ts-transform-import-path-rewrite": "^0.2.1"
+  },
   "publishConfig": {
     "access": "public"
   },
