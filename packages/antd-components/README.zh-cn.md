@@ -1824,7 +1824,8 @@ const App = () => {
               { label: 'Four', value: '4', key: '4' }
             ],
             'x-component-props': {
-              showSearch: true
+              showSearch: true,
+              render: record => record.label
             }
           },
         }
@@ -1869,7 +1870,8 @@ const App = () => {
           { label: 'Four', value: '4', key: '4' }
         ]}
         x-component-props={{
-          showSearch: true
+          showSearch: true,
+          render: record => record.label
         }}
       />
     </SchemaForm>
@@ -1898,6 +1900,7 @@ const App = () => {
         { label: 'Three', value: '3', key: '3' },
         { label: 'Four', value: '4', key: '4' }
       ]}
+      render={record => record.label}
       showSearch
     />
   </Form>)
