@@ -29,7 +29,10 @@ Formily 代表着，它已经是一个集团性的技术产品，Formily 的 API
 **过去**
 
 ```tsx
+import React from 'react'
 import { SchemaForm, Field } from '@uform/antd'
+import 'antd/dist/antd.css'
+
 
 const App = () => {
   return (
@@ -48,10 +51,12 @@ const App = () => {
 **现在**
 
 ```tsx
+import React from 'react'
 import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd'
 import { setup } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
-setup() //内部会完全按照UForm注册规则将组件注册一遍
+setup() //内部会完全按照UForm注册规则将组件注册一遍，注意，只需要注册一次即可，一般我们会在项目入口文件上注册
 
 const App = () => {
   return (
