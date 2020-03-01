@@ -14,7 +14,7 @@ import {
 } from '@formily/react-schema-renderer'
 import { PreviewTextConfigProps } from '@formily/react-shared-components'
 import { StyledComponent } from 'styled-components'
-export * from '@formily/react-schema-renderer/src/types'
+export * from '@formily/react-schema-renderer'
 
 type ColSpanType = number | string
 
@@ -37,6 +37,7 @@ export type IAntdFormItemProps = IFieldStateUIProps &
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    [key: string]: any
   }
 
 export interface ISubmitProps extends ButtonProps {

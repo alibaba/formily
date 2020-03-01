@@ -14,6 +14,7 @@ window.codeSandBoxDependencies = {
   '@formily/react': 'latest',
   '@formily/printer': 'latest',
   '@babel/runtime':'latest',
+  'mfetch':'latest',
   antd: 'latest'
 }
 
@@ -32,7 +33,7 @@ if (window.parent !== window) {
 
 const FOOTER_HTML = `
 <script src="//unpkg.com/moment/min/moment-with-locales.js"></script>
-<script src="//unpkg.com/antd/dist/antd.min.js"></script>
+<script src="//unpkg.com/antd@4.x/dist/antd.min.js"></script>
 <script src="//unpkg.com/@alifd/next/dist/next.min.js"></script>
 `
 

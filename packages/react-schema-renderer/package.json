@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-schema-renderer",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -29,10 +29,10 @@
     "rxjs": "^6.5.1"
   },
   "dependencies": {
-    "@formily/react": "^1.0.0",
-    "@formily/shared": "^1.0.0",
-    "@formily/core":"^1.0.0",
-    "@formily/validator": "^1.0.0",
+    "@formily/core": "^1.0.4",
+    "@formily/react": "^1.0.4",
+    "@formily/shared": "^1.0.4",
+    "@formily/validator": "^1.0.4",
     "pascal-case": "^2.0.1"
   },
   "publishConfig": {

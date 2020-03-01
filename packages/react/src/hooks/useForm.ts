@@ -14,6 +14,7 @@ import { IFormProps } from '../types'
 import { BroadcastContext } from '../context'
 import { createFormEffects, createFormActions } from '../shared'
 import { isValid, globalThisPolyfill } from '@formily/shared'
+import { useForceUpdate } from './useForceUpdate'
 const FormHookSymbol = Symbol('FORM_HOOK')
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
@@ -23,11 +24,23 @@ let formID = 0
 const useInternalForm = (
   options: IFormCreatorOptions & { form?: IForm } = {}
 ) => {
+  const forceUpdate = useForceUpdate()
+  const ref = useRef({
+    subscribeId: null
+  })
   const dirty = useDirty(options, ['initialValues', 'values', 'editable'])
   const alreadyHaveForm = !!options.form
   const alreadyHaveHookForm = options.form && options.form[FormHookSymbol]
   const form = useMemo(() => {
-    return alreadyHaveForm ? options.form : createForm(options)
+    const form = alreadyHaveForm ? options.form : createForm(options)
+    if (!alreadyHaveForm) {
+      ref.current.subscribeId = form.subscribe(({ type }) => {
+        if (type === LifeCycleTypes.ON_FORM_HOST_RENDER) {
+          forceUpdate()
+        }
+      })
+    }
+    return form
   }, [])
 
   useEffect(() => {
@@ -57,6 +70,7 @@ const useInternalForm = (
       globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
     }
     return () => {
+      form.unsubscribe(ref.current.subscribeId)
       form.setFormState(state => {
         state.unmounted = true
       })
@@ -66,7 +80,6 @@ const useInternalForm = (
     }
   }, [])
   ;(form as any)[FormHookSymbol] = true
-
   return form
 }
 

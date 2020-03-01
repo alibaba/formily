@@ -66,15 +66,19 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const renderComponent = ({ props, state, mutators, form }) => {
     if (!component) {
       if (children) return <Fragment>{children}</Fragment>
-      console.error(`[Formily Error]: Can't fount the component. Its key is ${name}.`)
+      console.error(
+        `[Formily Error]: Can't fount the component. Its key is ${name}.`
+      )
       return null
     }
     if (!component['__ALREADY_CONNECTED__']) {
-      component[ConnectedComponent] = connect({
-        eventName,
-        valueName,
-        getValueFromEvent
-      })(component)
+      component[ConnectedComponent] =
+        component[ConnectedComponent] ||
+        connect({
+          eventName,
+          valueName,
+          getValueFromEvent
+        })(component)
     }
     return React.createElement(
       component['__ALREADY_CONNECTED__']
@@ -92,7 +96,8 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
     )
   }
 
-  const renderField = ({ form, state, mutators }) => {
+  const renderField = (fieldProps: any) => {
+    const { form, state, mutators } = fieldProps
     const { props, errors, warnings, editable, required } = state
     const { labelCol, wrapperCol, help } = props
     const formItemProps = pickFormItemProps(props)

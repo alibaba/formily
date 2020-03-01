@@ -8,17 +8,18 @@ import { toArr, isFn, isArr, FormPath } from '@formily/shared'
 import { ArrayList, DragListView } from '@formily/react-shared-components'
 import { CircleButton } from '../circle-button'
 import { TextButton } from '../text-button'
-import { Table, Form, Icon } from 'antd'
+import { Table, Form } from 'antd'
 import { FormItemShallowProvider } from '@formily/antd'
+import { PlusOutlined, DeleteOutlined, DownOutlined, UpOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
 
 const ArrayComponents = {
   CircleButton,
   TextButton,
-  AdditionIcon: () => <Icon type="plus" style={{ fontSize: 20 }} />,
-  RemoveIcon: () => <Icon type="delete" />,
-  MoveDownIcon: () => <Icon type="down" />,
-  MoveUpIcon: () => <Icon type="up" />
+  AdditionIcon: () => <PlusOutlined style={{ fontSize: 20 }} />,
+  RemoveIcon: () => <DeleteOutlined />,
+  MoveDownIcon: () => <DownOutlined />,
+  MoveUpIcon: () => <UpOutlined />
 }
 
 const DragHandler = styled.span`

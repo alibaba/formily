@@ -1,9 +1,14 @@
 import React from 'react'
 import { connect } from '@formily/react-schema-renderer'
-import { Button, Upload as AntdUpload, Icon } from 'antd'
+import { Button, Upload as AntdUpload } from 'antd'
 import styled from 'styled-components'
 import { toArr, isArr, isEqual, mapStyledProps } from '../shared'
-
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  UploadOutlined,
+  InboxOutlined
+} from '@ant-design/icons'
 const { Dragger: UploadDragger } = AntdUpload
 
 const exts = [
@@ -71,7 +76,7 @@ const exts = [
 
 const UploadPlaceholder = styled(props => (
   <div>
-    <Icon type={props.loading ? 'loading' : 'plus'} />
+    {props.loading ? <LoadingOutlined /> : <PlusOutlined />}
     <div className={'ant-upload-text'}>上传</div>
   </div>
 ))``
@@ -260,7 +265,7 @@ export const Upload = connect({
             listType={listType.indexOf('image') > -1 ? 'picture' : 'text'}
           >
             <p className={'ant-upload-drag-icon'}>
-              <Icon type={'inbox'} />
+              <InboxOutlined />
             </p>
             <p className={'ant-upload-text'}>拖拽上传</p>
           </UploadDragger>
@@ -275,7 +280,7 @@ export const Upload = connect({
           listType={listType}
         >
           <Button style={{ margin: '0 0 10px' }}>
-            <Icon type={'upload'} />
+            <UploadOutlined />
             {(locale && locale.uploadText) || '上传文件'}
           </Button>
         </AntdUpload>

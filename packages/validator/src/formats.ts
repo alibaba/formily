@@ -1,7 +1,7 @@
 export default {
   url: new RegExp(
     // protocol identifier
-    '^(?:(?:(?:https?|ftp):)?//)' +
+    '^(?:(?:(?:https?|ftp|rtmp):)?//)' +
       // user:pass authentication
       '(?:\\S+(?::\\S*)?@)?' +
       '(?:' +
