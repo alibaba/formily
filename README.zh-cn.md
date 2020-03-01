@@ -28,13 +28,13 @@
 使用 Ant Design：
 
 ```bash
-npm install --save antd @formily/antd
+npm install --save antd @formily/antd @formily/antd-components
 ```
 
 使用 Fusion Design：
 
 ```bash
-npm install --save @alifd/next @formily/next
+npm install --save @alifd/next @formily/next @formily/next-components
 ```
 
 使用Formily React渲染引擎包:

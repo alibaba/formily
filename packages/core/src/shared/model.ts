@@ -8,7 +8,8 @@ import {
   FormPath,
   FormPathPattern,
   isValid,
-  toArr
+  toArr,
+  defaults
 } from '@formily/shared'
 import produce, { Draft, setAutoFreeze } from 'immer'
 import {
@@ -21,18 +22,6 @@ import {
 const hasProxy = !!globalThisPolyfill.Proxy
 
 setAutoFreeze(false)
-
-const defaults = (...args:any[]):any=>{
-  const result = {}
-  each(args,(target)=>{
-    each(target,(value,key)=>{
-      if(isValid(value)){
-        result[key] = value
-      }
-    })
-  })
-  return result
-}
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
@@ -58,7 +47,7 @@ export const createStateModel = <State = {}, Props = {}>(
       super()
       this.state = { ...Factory.defaultState }
       this.prevState = { ...Factory.defaultState }
-      this.props = defaults(Factory.defaultProps,defaultProps)
+      this.props = defaults(Factory.defaultProps, defaultProps)
       this.dirtys = {}
       this.dirtyNum = 0
       this.stackCount = 0

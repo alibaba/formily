@@ -1,6 +1,6 @@
 {
   "packages": [
-    "packages/!(devtools)"
+    "packages/*"
   ],
   "version": "independent",
   "command": {

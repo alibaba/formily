@@ -17,7 +17,7 @@ import {
 } from '@formily/core'
 import { FormPathPattern } from '@formily/shared'
 import { Observable } from 'rxjs/internal/Observable'
-export * from '@formily/core/lib/types'
+export * from '@formily/core'
 
 export interface IFormEffect<Payload = any, Actions = any> {
   (
@@ -104,6 +104,7 @@ export interface IFormSpyProps {
     action: { type: string; payload: any },
     form: IForm
   ) => any
+  initialState?: any
   children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
 }
 
@@ -200,4 +201,46 @@ export interface IFormAsyncActions {
   getFieldValue(path?: FormPathPattern): Promise<any>
   setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldInitialValue(path?: FormPathPattern): Promise<any>
+}
+
+export interface IEffectProviderAPI<TActions = any, TContext = any> {
+  waitFor: <TPayload = any>(
+    type: string,
+    filter: (payload: TPayload) => boolean
+  ) => Promise<TPayload>
+  triggerTo: <TPayload = any>(
+    type: string,
+    payload: TPayload
+  ) => Promise<TPayload>
+  applyMiddlewares: <TPayload = any>(
+    type: string,
+    payload: TPayload
+  ) => Promise<TPayload>
+  actions: TActions
+  context?: TContext
+}
+
+export interface IEffectMiddlewareAPI<TActions = any, TContext = any> {
+  waitFor: <TPayload = any>(
+    type: string,
+    filter: (payload: TPayload) => boolean
+  ) => Promise<TPayload>
+  actions: TActions
+  context?: TContext
+}
+
+export interface IEffectProviderHandler<TActions = any, TContext = any> {
+  (options: IEffectProviderAPI<TActions, TContext>): (
+    $: (type: string) => Observable<any>,
+    actions: TActions
+  ) => void
+}
+
+export interface IEffectMiddleware<TActions = any, TContext = any> {
+  (options: IEffectMiddlewareAPI<TActions, TContext>): {
+    [key: string]: <TPayload = any>(
+      payload: TPayload,
+      next: (payload: any) => Promise<any>
+    ) => Promise<any>
+  }
 }

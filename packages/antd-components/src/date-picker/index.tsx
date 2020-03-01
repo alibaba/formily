@@ -21,8 +21,9 @@ const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
   return value && value.format ? value.format(format) : value
 }
 
-const mapMomentValue = props => {
+const mapMomentValue = (props: any, fieldProps: any) => {
   const { value, showTime = false } = props
+  if (!fieldProps.editable) return props
   try {
     if (isStr(value) && value) {
       props.value = moment(
@@ -43,7 +44,9 @@ const mapMomentValue = props => {
   return props
 }
 
-export const DatePicker = connect({
+export const DatePicker = connect<
+  'RangePicker' | 'MonthPicker' | 'YearPicker' | 'WeekPicker'
+>({
   getValueFromEvent(_, value) {
     const props = this.props || {}
     return transformMoment(
@@ -92,7 +95,7 @@ DatePicker.WeekPicker = connect({
 
 DatePicker.YearPicker = connect({
   getValueFromEvent(_, value) {
-    return transformMoment(value,'YYYY')
+    return transformMoment(value, 'YYYY')
   },
   getProps: compose(mapStyledProps, mapMomentValue),
   getComponent: mapTextComponent

@@ -6,435 +6,6 @@
 npm install --save @formily/antd
 ```
 
-### 目录
-
-<!-- toc -->
-
-- [使用方式](#使用方式)
-  - [`快速开始`](#快速开始)
-- [Components](#components)
-  - [`<SchemaForm/>`](#SchemaForm)
-  - [`<SchemaMarkupField/>`](#SchemaMarkupField)
-  - [`<Submit/>`](#Submit)
-  - [`<Reset/>`](#Reset)
-  - [`<FormSpy/>`](#FormSpy)
-  - [`<Field/>(即将废弃，请使用<SchemaMarkupField/>)`](#<Field/>)
-- [表单List](#Array-Components)
-  - [`array`](#array)
-  - [`cards`](#cards)
-  - [`table`](#table)
-- [布局组件](#Layout-Components)
-  - [`<FormCard/>`](#FormCard)
-  - [`<FormBlock/>`](#FormBlock)
-  - [`<FormStep/>`](#FormStep)
-  - [`<FormLayout/>`](#FormLayout)
-  - [`<FormItemGrid/>`](#FormItemGrid)
-  - [`<FormTextBox/>`](#FormTextBox)
-  - [`<FormButtonGroup/>`](#FormButtonGroup)
-  - [`<TextButton/>`](#TextButton)
-  - [`<CircleButton/>`](#CircleButton)
-- [字段类型](#Type-of-SchemaMarkupField)
-  - [`string`](#string)
-  - [`textarea`](#textarea)
-  - [`password`](#password)
-  - [`number`](#number)
-  - [`boolean`](#boolean)
-  - [`date`](#date)
-  - [`time`](#time)
-  - [`range`](#range)
-  - [`upload`](#upload)
-  - [`checkbox`](#checkbox)
-  - [`radio`](#radio)
-  - [`rating`](#rating)
-  - [`transfer`](#transfer)
-- [Hook](#Hook)
-  - [`useFormEffects`](#useFormEffects)
-  - [`useFormState`](#useFormState)
-  - [`useFieldState`](#useFieldState)
-  - [`useForm`](#useForm)
-  - [`useField`](#useField)
-  - [`useVirtualField`](#useVirtualField)
-  - [`useFormSpy`](#useFormSpy)
-- [API](#API)
-  - [`createFormActions`](#createFormActions)
-  - [`createAsyncFormActions`](#createAsyncFormActions)
-  - [`FormEffectHooks`](#FormEffectHooks)
-  - [`createEffectHook`](#createEffectHook)
-  - [`connect`](#connect)
-  - [`registerFormField`](#registerFormField)
-- [Interfaces](#Interfaces)
-  - [`ISchema`](#ischema)
-  - [`IFormActions`](#IFormActions)
-  - [`IFormAsyncActions`](#IFormAsyncActions)
-  - [`ButtonProps`](#ButtonProps)
-  - [`CardProps`](#CardProps)
-  - [`ISchemaFieldAdaptorProps`](#ISchemaFieldAdaptorProps)
-  - [`IFieldState`](#IFieldState)
-  - [`ISchemaFieldComponentProps`](#ISchemaFieldComponentProps)
-  - [`ISchemaVirtualFieldComponentProps`](#ISchemaVirtualFieldComponentProps)
-  - [`ISchemaFieldWrapper`](#ISchemaFieldWrapper)
-  - [`ISchemaFieldComponent`](#ISchemaFieldComponent)
-  - [`ISchemaVirtualFieldComponent`](#ISchemaVirtualFieldComponent)
-  - [`ISchemaFormRegistry`](#ISchemaFormRegistry)
-  - [`InternalFormats`](#InternalFormats)
-  - [`CustomValidator`](#CustomValidator)
-  - [`ValidateDescription`](#ValidateDescription)
-  - [`ValidateArrayRules`](#ValidateArrayRules)
-  - [`ValidatePatternRules`](#ValidatePatternRules)
-  - [`INextSchemaFieldProps`](#INextSchemaFieldProps)
-  - [`IPreviewTextProps`](#IPreviewTextProps)
-  - [`IMutators`](#IMutators)
-  - [`IFieldProps`](#IFieldProps)
-  - [`IConnectOptions`](#IConnectOptions)
-  - [`ISpyHook`](#ISpyHook)
-
-### 使用方式
-
-#### 安装
-
-```bash
-$ yarn add antd @formily/antd
-
-# or
-
-$ npm install --save antd @formily/antd
-```
-
-### 按需加载
-
-#### 在 umijs 中使用
-在开始之前，你可能需要安装 [umijs](https://umijs.org/zh/guide/getting-started.html), 并开启 [antd 配置](https://umijs.org/zh/plugin/umi-plugin-react.html#antd)。
-
-然后在 umijs 的 `.umirc.js` 或 `config/config.js` （二选一）中增加 `extraBabelIncludes` 配置项
-
-> 在使用 formily 组件的时候，请使用 ES Modules import 导入模块
-
-```js
-extraBabelIncludes: [
-  /node_modules[\\/][\\@]formily[\\/]antd[\\/]esm/
-],
-```
-
----
-
-#### 在 create-react-app 中使用
-
-在开始之前，请先按照 antd 的[教程](https://ant-design.gitee.io/docs/react/use-with-create-react-app-cn)，完成对 `babel-plugin-import` 的配置, 然后只需要在 `config-overrides.js` 中加入 `babelInclude`
-
-> 在使用 formily 组件的时候，请使用 ES Modules import 导入模块
-
-```js
-// config-overrides.js
-
-const { override, fixBabelImports, babelInclude } = require('customize-cra');
-const path = require('path');
-
-module.exports = override(
-  fixBabelImports('import', {
-    libraryName: 'antd',
-    libraryDirectory: 'es',
-    style: 'css',
-  }),
-  babelInclude([
-    path.resolve('src'),
-    /node_modules[\\/][\\@]formily[\\/]antd[\\/]esm/,
-  ]),
-)
-```
-
-#### 更多脚手架
-`@formily/antd` 底层依赖 `antd`，在对 `@formily/antd` 进行按需加载实际也是对 `antd` 进行按需加载，从上面的例子可以看出，脚手架只需要配置好了 `babel-plugin-import`，然后再把 `@formily/antd/esm` 加入 `babel` 的 `include` 中即可完成功能配置
-
----
-
-#### 快速开始
-
-例子：使用 JSX 开发
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import { Button } from 'antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="radio"
-        enum={['1', '2', '3', '4']}
-        title="Radio"
-        name="radio"
-      />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        required
-        title="Select"
-        name="select"
-      />
-      <Field
-        type="checkbox"
-        enum={['1', '2', '3', '4']}
-        required
-        title="Checkbox"
-        name="checkbox"
-      />
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-      />
-      <Field type="number" title="数字选择" name="number" />
-      <Field type="boolean" title="开关选择" name="boolean" />
-      <Field type="date" title="日期选择" name="date" />
-      <Field
-        type="daterange"
-        title="日期范围"
-        default={['2018-12-19', '2018-12-19']}
-        name="daterange"
-      />
-      <Field type="year" title="年份" name="year" />
-      <Field type="time" title="时间" name="time" />
-      <Field
-        type="upload"
-        title="卡片上传文件"
-        name="upload"
-        x-props={{ listType: 'card' }}
-      />
-      <Field
-        type="upload"
-        title="拖拽上传文件"
-        name="upload2"
-        x-props={{ listType: 'dragger' }}
-      />
-      <Field
-        type="upload"
-        title="普通上传文件"
-        name="upload3"
-        x-props={{ listType: 'text' }}
-      />
-      <Field
-        type="range"
-        title="范围选择"
-        name="range"
-        x-props={{ min: 0, max: 1024, marks: [0, 1024] }}
-      />
-      <Field
-        type="transfer"
-        enum={[{ key: 1, title: '选项1' }, { key: 2, title: '选项2' }]}
-        x-props={{
-          render: (item) => item.title
-        }}
-        title="穿梭框"
-        name="transfer"
-      />
-      <Field type="rating" title="等级" name="rating" />
-      <FormButtonGroup offset={7} sticky>
-        <Submit />
-        <Reset />
-        <Button
-          onClick={() => {
-            actions.setFieldState('upload', state => {
-              state.value = [
-                {
-                  downloadURL:
-                    '//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png',
-                  imgURL:
-                    '//img.alicdn.com/tfs/TB1n8jfr1uSBuNjy1XcXXcYjFXa-200-200.png',
-                  name: 'doc.svg'
-                }
-              ]
-            })
-          }}
-        >
-          上传文件
-        </Button>
-        <Button
-          onClick={() => {
-            actions.setFormState(state => {
-              state.values = {
-                radio: '4',
-                checkbox: ['2', '3']
-              }
-            })
-          }}
-        >
-          改变radio的值
-        </Button>
-      </FormButtonGroup>
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-例子：使用 schema 来开发
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import { Button } from 'antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-
-const App = () => {
-  const schema = {
-    type: 'object',
-    properties: {
-      radio: {
-        type: 'radio',
-        enum: ['1', '2', '3', '4'],
-        title: 'Radio'
-      },
-      select: {
-        type: 'string',
-        enum: ['1', '2', '3', '4'],
-        title: 'Select',
-        required: true
-      },
-      checkbox: {
-        type: 'checkbox',
-        enum: ['1', '2', '3', '4'],
-        title: 'Checkbox',
-        required: true
-      },
-      textarea: {
-        type: 'string',
-        'x-component': 'textarea',
-        title: 'TextArea'
-      },
-      number: {
-        type: 'number',
-        title: '数字选择'
-      },
-      boolean: {
-        type: 'boolean',
-        title: '开关选择'
-      },
-      date: {
-        type: 'date',
-        title: '日期选择'
-      },
-      daterange: {
-        type: 'daterange',
-        default: ['2018-12-19', '2018-12-19'],
-        title: '日期范围'
-      },
-      year: {
-        type: 'year',
-        title: '年份'
-      },
-      time: {
-        type: 'time',
-        title: '时间'
-      },
-      upload: {
-        type: 'upload',
-        'x-props': {
-          listType: 'card'
-        },
-        title: '卡片上传文件'
-      },
-      upload2: {
-        type: 'upload',
-        'x-props': {
-          listType: 'dragger'
-        },
-        title: '拖拽上传文件'
-      },
-      upload3: {
-        type: 'upload',
-        'x-props': {
-          listType: 'text'
-        },
-        title: '普通上传文件'
-      },
-      range: {
-        type: 'range',
-        'x-props': {
-          min: 0,
-          max: 1024,
-          marks: [0, 1024]
-        },
-        title: '范围选择'
-      },
-      transfer: {
-        type: 'transfer',
-        enum: [
-          {
-            key: 1,
-            title: '选项1'
-          },
-          {
-            key: 2,
-            title: '选项2'
-          }
-        ],
-        'x-props': {
-          render: (item) => item.title
-        },
-        title: '穿梭框'
-      },
-      rating: {
-        type: 'rating',
-        title: '等级'
-      },
-      layout_btb_group: {
-        type: 'object',
-        'x-component': 'button-group',
-        'x-component-props': {
-          offset:7,
-          sticky: true,
-        },
-        properties: {
-          submit_btn: {
-            type: 'object',
-            'x-component': 'submit',
-            'x-component-props': {
-              children: '提交',
-            },
-          },
-          reset_btn: {
-            type: 'object',
-            'x-component': 'reset',
-            'x-component-props': {
-              children: '重置',
-            },
-          },
-        }
-      },
-    }
-  }
-  return <SchemaForm actions={actions} schema={schema} />
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
 ### Components
 
 ---
@@ -443,352 +14,141 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 基于@formily/react 的核心组件SchemaForm进一步扩展出来的SchemaForm组件，推荐生产环境下使用
 
-```typescript
-interface IAntdSchemaFormProps {
-  // 通过schema渲染
-    schema?: ISchema;
-    fields?: ISchemaFormRegistry['fields'];
-    virtualFields?: ISchemaFormRegistry['virtualFields'];
-    // 全局注册Form渲染组件
-    formComponent?: ISchemaFormRegistry['formComponent'];
-    // 全局注册FormItem渲染组件
-    formItemComponent?: ISchemaFormRegistry['formItemComponent'];
-    // 布局设置
-    layout?: FormLayout;
-    prefixCls?: string;
-    // 隐藏required的星标
-    hideRequiredMark?: boolean;
-    colon?: boolean;
-    // 标签的位置
-    labelAlign?: FormLabelAlign;
-    // 内联表单
-    inline?: boolean
-    // 扩展class
-    className?: string
-    style?: React.CSSProperties
-    // label 布局控制
-    labelCol?: number | { span: number; offset?: number }
-    // FormItem 布局控制
-    wrapperCol?: number | { span: number; offset?: number }
-    // 自定义 placeholder
-    previewPlaceholder?: string | ((props: IPreviewTextProps) => string);
-    // 全局value
-    value?: Value;
-    // 全局defaultValue
-    defaultValue?: DefaultValue;
-    // 全局initialValues
-    initialValues?: DefaultValue;
-    // FormActions实例
-    actions?: FormActions;
-    // IFormEffect实例
-    effects?: IFormEffect<FormEffectPayload, FormActions>;
-    // 表单实例
-    form?: IForm;
-    // 表单变化回调
-    onChange?: (values: Value) => void;
-    // form内有 `htmlType="submit"` 或 actions.submit时 触发
-    onSubmit?: (values: Value) => void | Promise<Value>;
-    // form内有 <Reset/> 或 actions.reset时 触发
-    onReset?: () => void;
-    // 校验失败时触发
-    onValidateFailed?: (valideted: IFormValidateResult) => void;
-    children?: React.ReactElement | ((form: IForm) => React.ReactElement);
-    //是否使用脏检查，默认会走immer精确更新
-    useDirty?: boolean;
-    // 是否可编辑
-    editable?: boolean | ((name: string) => boolean);
-    // 是否走悲观校验，遇到第一个校验失败就停止后续校验
-    validateFirst?: boolean;
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| schema    |通过schema渲染表单                  | [ISchema](#ISchema) |                |
+| fields    |传入自定义表单组件                   | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) } |                |
+| virtualFields    |传入自定义虚拟组件                   | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |                |
+| formComponent    |全局注册Form渲染组件                  | string `or` React.ReactElement |                |
+| formItemComponent    |全局注册FormItem渲染组件                  | React.ReactElement |                |
+| labelCol    |label布局控制                  | number `or` { span: number; offset?: number } |                |
+| wrapperCol    |FormItem布局控制                  | number `or` { span: number; offset?: number } |                |
+| previewPlaceholder    |自定义预览placeholder                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
+| prefix    |样式前缀                  | string |                |
+| inline    |是否为内联表单                  | boolean |                |
+| size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `or` 'medium' `or` 'small' |                |
+| labelAlign    |标签的位置                  | 'top' `or` 'left' `or` 'inset' |                |
+| labelTextAlign    |标签的左右对齐方式                  | 'left' `or` 'right' |                |
+| labelCol    |控制所有 Item 的 labelCol                  | `{}` |                |
+| wrapperCol    |控制所有 Item 的 wrapperCol                  | `{}` |                |
+| className    |扩展class                  | string |                |
+| style    |自定义内联样式                  | React.CSSProperties |                |
+| component    |设置标签类型                  | string `or` (() => void) |                |
+| value    |全局value                  | {} |                |
+| defaultValue    |全局defaultValue                  | {} |                |
+| initialValues    |全局initialValues                  | {} |                |
+| actions    |FormActions实例                  | [FormActions](#FormActions) |                |
+| effects    |IFormEffect实例                  | IFormEffect<FormEffectPayload, [FormActions](#FormActions)> |                |
+| form    |表单实例                  | [IForm](#IForm) |                |
+| onChange    |表单变化回调                  | (values: {}) => void |                |
+| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: {}) => void `or` Promise<{}> |                |
+| onReset    |form内有 <Reset/> 或 actions.reset时 触发                  | () => void |                |
+| onValidateFailed    |校验失败时触发                  | (valideted: [IFormValidateResult](#IFormValidateResult)) => void |                |
+| children    |全局value                  | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement) |                |
+| useDirty    |是否使用脏检查，默认会走immer精确更新                  | boolean |                |
+| editable    |是否可编辑                  | boolean `or` ((name: string) => boolean) |                |
+| validateFirst    |是否走悲观校验，遇到第一个校验失败就停止后续校验                  | boolean |                |
 
-**用法**
-
-例子1: 将a-mirror的值设置为a的值。
-
-```jsx
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  connect,
-  createFormActions
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-
-ReactDOM.render(
-    <SchemaForm actions={actions} effects={($)=>{
-       $('onFieldChange','a').subscribe((fieldState)=>{
-         actions.setFieldState('a-mirror',state=>{
-           state.value = fieldState.value
-         })
-       })
-    }}>
-       <Field type="string" name="a" title="a"/>
-       <Field type="string" name="a-mirror" title="a-mirror"/>
-    </SchemaForm>,
-    document.getElementById('root')
-)
-```
-
-
-例子2： 布局
-
-```jsx
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  createFormActions,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset,
-} from '@formily/antd'
-
-const actions = createFormActions()
-
-ReactDOM.render(
-    <div>
-    <h5>常规布局</h5>
-    <SchemaForm>
-      <FormLayout labelCol={8} wrapperCol={6}>
-        <Field name="aaa" type="string" title="field1" />
-        <Field name="bbb" type="number" title="field2" />
-        <Field name="ccc" type="date" title="field3" />
-      </FormLayout>
-      <FormButtonGroup offset={8}>
-        <Submit>提交</Submit>​ <Reset>重置</Reset>​
-      </FormButtonGroup>
-    </SchemaForm>
-    <h5>Inline Layout</h5>
-    <SchemaForm inline>
-      <Field name="aaa" type="string" title="field1" />
-      <Field name="bbb" type="number" title="field2" />
-      <Field name="ccc" type="date" title="field3" />​
-      <FormButtonGroup>
-        <Submit>提交</Submit>​ <Reset>重置</Reset>​
-      </FormButtonGroup>
-    </SchemaForm>
-    <h5>editable = false</h5>
-    <SchemaForm inline editable={false}>
-      <Field name="aaa" type="string" title="field1" />
-      <Field name="bbb" type="number" title="field2" />
-      <Field name="ccc" type="date" title="field3" />​
-      <FormButtonGroup>
-        <Submit>提交</Submit>​ <Reset>重置</Reset>​
-      </FormButtonGroup>
-    </SchemaForm>
-    </div>,
-    document.getElementById('root')
-)
-```
 
 #### `<SchemaMarkupField/>`
 
 > @formily/antd 的核心组件，用于描述表单字段
 
-```typescript
-interface IMarkupSchemaFieldProps {
-  name?: string
-  /** base json schema spec**/
-  title?: SchemaMessage
-  description?: SchemaMessage
-  default?: any
-  readOnly?: boolean
-  writeOnly?: boolean
-  type?: 'string' | 'object' | 'array' | 'number' | string
-  enum?: Array<string | number | { label: SchemaMessage; value: any }>
-  const?: any
-  multipleOf?: number
-  maximum?: number
-  exclusiveMaximum?: number
-  minimum?: number
-  exclusiveMinimum?: number
-  maxLength?: number
-  minLength?: number
-  pattern?: string | RegExp
-  maxItems?: number
-  minItems?: number
-  uniqueItems?: boolean
-  maxProperties?: number
-  minProperties?: number
-  required?: string[] | boolean
-  format?: string
-  /** nested json schema spec **/
-  properties?: {
-    [key: string]: ISchema
-  }
-  items?: ISchema | ISchema[]
-  additionalItems?: ISchema
-  patternProperties?: {
-    [key: string]: ISchema
-  }
-  additionalProperties?: ISchema
-  /** extend json schema specs */
-  editable?: boolean
-  visible?: boolean
-  display?: boolean
-  ['x-props']?: { [name: string]: any }
-  ['x-index']?: number
-  ['x-rules']?: ValidatePatternRules
-  ['x-component']?: string
-  ['x-component-props']?: { [name: string]: any }
-  ['x-render']?: <T = ISchemaFieldComponentProps>(
-    props: T & {
-      renderComponent: () => React.ReactElement
-    }
-  ) => React.ReactElement
-  ['x-effect']?: (
-    dispatch: (type: string, payload: any) => void,
-    option?: object
-  ) => { [key: string]: any }
-}
-```
-
-##### 用法
-
-
-```jsx
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  FormSlot,
-  Field,
-  createFormActions,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset,
-} from '@formily/antd'
-
-const actions = createFormActions()
-
-ReactDOM.render(
-    <SchemaForm>
-      <FormSlot><div>required</div></FormSlot>
-      <Field name="a" required type="string" title="field1" />
-
-      <FormSlot><div>description</div></FormSlot>
-      <Field name="b" description="description" type="string" title="field1" />
-
-      <FormSlot><div>default value</div></FormSlot>
-      <Field name="c" default={10} type="string" title="field1" />
-
-      <FormSlot><div>readOnly</div></FormSlot>
-      <Field name="d" readOnly default={10} type="string" title="field1" />
-
-      <FormSlot><div>visible = false</div></FormSlot>
-      <Field name="e" visible={false} default={10} type="string" title="field1" />
-
-      <FormSlot><div>display = false</div></FormSlot>
-      <Field name="f" visible={false} default={10} type="string" title="field1" />
-
-      <FormSlot><div>editable = false</div></FormSlot>
-      <Field name="g" editable={false} default={10} type="string" title="field1" />
-    </SchemaForm>,
-    document.getElementById('root')
-)
-```
-
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| name    |字段名                  | string |                |
+| title    |字段label                   | React.ReactNode |                |
+| description    |字段描述信息                   | React.ReactNode |                |
+| readOnly    | 只读                  | boolean |                |
+| writeOnly    | 只写                  | boolean |                |
+| type    | 字段类型                  | 'string' `or` 'object' `or` 'array' `or` 'number' `or` string |                |
+| enum    | 相当于字段dataSource                  |  `Array<string | number | { label: React.ReactNode; value: any }>` |                |
+| required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
+| format    | 正则规则类型，详细类型可以往后看	                  | string |                |
+| properties    | 对象属性	                  | { [key: string]: [ISchema](#ISchema) } |                |
+| items    | 数组描述	                  | [ISchema](#ISchema) `or` [ISchema](#ISchema)[] |                |
+| patternProperties    | 动态匹配对象的某个属性的 Schema	                  | { [key: string]: [ISchema](#ISchema) } |                |
+| additionalProperties    | 匹配对象额外属性的 Schema	                  | [ISchema](#ISchema) |                |
+| editable    | 字段是否可编辑                  | boolean |                |
+| visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
+| display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
+| x-component    | 用于渲染的组件                  | string |                | 
+| x-component-props    | 组件的属性                  | { [name: string]: any } |                | 
+| x-rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
+| x-props    | 字段扩展属性	                  | { [name: string]: any } |                | 
+| x-index    | 字段顺序	                  | number |                | 
+| default    | 字段默认值	                  | any |                |
+| const    |  校验字段值是否与 const 的值相等	                 | any |                |
+| multipleOf    | 校验字段值是否可被 multipleOf 的值整除	                  | number |                |
+| maximum    | 最大值                  | number |                |
+| exclusiveMaximum    | 校验最大值（大于等于）	                  | number |                |
+| minimum    | 最小值                  | number |                |
+| exclusiveMinimum    | 最小值（小于等于）	                  | number |                |
+| maxLength    | 最大长度                  | number |                |
+| minLength    | 最小长度                  | number |                |
+| pattern    | 正则校验规则	                  | string `or` RegExp |                |
+| maxItems    | 最大项数                  | number |                |
+| minItems    | 最小项数                  | number |                |
+| uniqueItems    | 是否校验重复	                  | boolean |                |
+| maxProperties    | 最大属性数量	                  | number |                |
+| minProperties    | 最小属性数量	                  | number |                |
 
 #### `<Submit/>`
 
 > Submit 组件 Props
 
-```typescript
-interface ISubmitProps {
-  /** reset pops **/
-  onSubmit?: ISchemaFormProps['onSubmit']
-  showLoading?: boolean
-  /** nextBtnProps **/
-  // 按钮的类型
-  type?: 'primary' | 'secondary' | 'normal'
-  // 按钮的尺寸
-  size?: 'small' | 'medium' | 'large'
-  // 按钮中 Icon 的尺寸，用于替代 Icon 的默认大小
-  iconSize?: 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
-  // 当 component = 'button' 时，设置 button 标签的 type 值
-  htmlType?: 'submit' | 'reset' | 'button'
-  // 设置标签类型
-  component?: 'button' | 'a'
-  // 设置按钮的载入状态
-  loading?: boolean
-  // 是否为幽灵按钮
-  ghost?: true | false | 'light' | 'dark'
-  // 是否为文本按钮
-  text?: boolean
-  // 是否为警告按钮
-  warning?: boolean
-  // 是否禁用
-  disabled?: boolean
-  // 点击按钮的回调
-  onClick?: (e: {}) => void
-  // 在Button组件使用component属性值为a时有效，代表链接页面的URL
-  href?: string
-  // 在Button组件使用component属性值为a时有效，代表何处打开链接文档
-  target?: string
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| onSubmit    |触发提交的回调函数                  | [ISchemaFormProps.onSubmit](#ISchemaFormProps) |                |
+| showLoading    |是否展示loading                  | boolean |                |
+| type    |按钮的类型                  | 'primary' `or` 'secondary' `or` 'normal' |                |
+| size    |按钮的尺寸                  | 'small' `or` 'medium' `or` 'large' |                |
+| iconSize    |按钮中 Icon 的尺寸，用于替代 Icon 的默认大小                  | 'xxs' `or` 'xs' `or` 'small' `or` 'medium' `or` 'large' `or` 'xl' `or` 'xxl' `or` 'xxxl' |                |
+| htmlType    |当 component = 'button' 时，设置 button 标签的 type 值                  | 'submit' `or` 'reset' `or` 'button' |                |
+| component    |设置标签类型                  | 'button' `or` 'a'  |                |
+| loading    |设置按钮的载入状态                  | boolean  |                |
+| ghost    |是否为幽灵按钮                  | true `or` false `or` 'light' `or` 'dark'  |                |
+| text    |是否为文本按钮                  | boolean  |                |
+| warning    |是否为警告按钮                  | boolean  |                |
+| disabled    |是否禁用                  | boolean  |                |
+| onClick    |点击按钮的回调                  | (e: {}) => void  |                |
+| href    |在Button组件使用component属性值为a时有效，代表链接页面的URL                  | string  |                |
+| target    |在Button组件使用component属性值为a时有效，代表何处打开链接文档                  | string  |                |
+
 
 #### `<Reset/>`
 
 > Reset 组件 Props
 
-```typescript
-interface IResetProps {
-  /** reset pops **/
-  forceClear?: boolean
-  validate?: boolean
-  /** nextBtnProps **/
-  // 按钮的类型
-  type?: 'primary' | 'secondary' | 'normal'
-  // 按钮的尺寸
-  size?: 'small' | 'medium' | 'large'
-  // 按钮中 Icon 的尺寸，用于替代 Icon 的默认大小
-  iconSize?: 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
-  // 当 component = 'button' 时，设置 button 标签的 type 值
-  htmlType?: 'submit' | 'reset' | 'button'
-  // 设置标签类型
-  component?: 'button' | 'a'
-  // 设置按钮的载入状态
-  loading?: boolean
-  // 是否为幽灵按钮
-  ghost?: true | false | 'light' | 'dark'
-  // 是否为文本按钮
-  text?: boolean
-  // 是否为警告按钮
-  warning?: boolean
-  // 是否禁用
-  disabled?: boolean
-  // 点击按钮的回调
-  onClick?: (e: {}) => void
-  // 在Button组件使用component属性值为a时有效，代表链接页面的URL
-  href?: string
-  // 在Button组件使用component属性值为a时有效，代表何处打开链接文档
-  target?: string
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| forceClear    |是否清空                  | boolean |                |
+| validate    |是否触发校验                  | boolean |                |
+| type    |按钮的类型                  | 'primary' `or` 'secondary' `or` 'normal' |                |
+| size    |按钮的尺寸                  | 'small' `or` 'medium' `or` 'large' |                |
+| iconSize    |按钮中 Icon 的尺寸，用于替代 Icon 的默认大小                  | 'xxs' `or` 'xs' `or` 'small' `or` 'medium' `or` 'large' `or` 'xl' `or` 'xxl' `or` 'xxxl' |                |
+| htmlType    |当 component = 'button' 时，设置 button 标签的 type 值                  | 'submit' `or` 'reset' `or` 'button' |                |
+| component    |设置标签类型                  | 'button' `or` 'a'  |                |
+| loading    |设置按钮的载入状态                  | boolean  |                |
+| ghost    |是否为幽灵按钮                  | true `or` false `or` 'light' `or` 'dark'  |                |
+| text    |是否为文本按钮                  | boolean  |                |
+| warning    |是否为警告按钮                  | boolean  |                |
+| disabled    |是否禁用                  | boolean  |                |
+| onClick    |点击按钮的回调                  | (e: {}) => void  |                |
+| href    |在Button组件使用component属性值为a时有效，代表链接页面的URL                  | string  |                |
+| target    |在Button组件使用component属性值为a时有效，代表何处打开链接文档                  | string  |                |
+
 
 #### `<FormSpy/>`
 
 > FormSpy 组件属性定义
 
-```typescript
-interface IFormSpyProps {
-  // 选择器, 如：[ LifeCycleTypes.ON_FORM_SUBMIT_START, LifeCycleTypes.ON_FORM_SUBMIT_END ]
-  selector?: string[] | string
-  // reducer函数，状态叠加处理，action为当前命中的生命周期的数据
-  reducer?: (
-    state: any,
-    action: { type: string; payload: any },
-    form: IForm
-  ) => any
-  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| selector |选择器, 如：[`LifeCycleTypes.ON_FORM_SUBMIT_START`, `LifeCycleTypes.ON_FORM_SUBMIT_END`]                  | string[]`or`string |                |
+| reducer    |reducer函数，状态叠加处理，action为当前命中的生命周期的数据                  | (state: any, action: { type: string; payload: any }, form: IForm) => any |                |
+| children    |内容                  | React.ReactElement `or` ((api: [IFormSpyAPI](#IFormSpyAPI)) => React.ReactElement) |                |
+
 
 **用法**
 
@@ -797,36 +157,17 @@ interface IFormSpyProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/react'
+import { SchemaForm, SchemaMarkupField as Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/antd'
+import { setup } from '@formily/antd-components'
+
+setup() //内部会完全按照UForm注册规则将组件注册一遍
 
 const actions = createFormActions()
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
 
 const App = () => {
   return (
-    <Form actions={actions}>
-      <label>username</label>
-      <InputField name="username" />
-      <label>age</label>
-      <InputField name="age" />
+    <SchemaForm actions={actions}>
+      <Field type="string" title="username" name="username" />
       <FormSpy
         selector={LifeCycleTypes.ON_FORM_VALUES_CHANGE}
         reducer={(state, action, form) => ({
@@ -837,7 +178,7 @@ const App = () => {
           return <div>count: {state.count || 0}</div>
         }}
       </FormSpy>
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -850,749 +191,93 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy } from '@formily/react'
+import { SchemaForm, SchemaMarkupField as Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/antd'
+import { setup } from '@formily/antd-components'
+
+setup() //内部会完全按照UForm注册规则将组件注册一遍
 
 const actions = createFormActions()
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
 
 const App = () => {
   return (
-    <Form actions={actions}>
-      <label>username</label>
-      <InputField name="username" />
-      <label>age</label>
-      <InputField name="age" />
+    <SchemaForm actions={actions}>
+      <Field type="string" title="username" name="username" />
+      <Field type="string" title="age" name="age" />
       <FormSpy>
         {({ state, form }) => {
+          // 由于formSpy会监听所有周期，包括form未init之前，所以form实例可能为null
           return (
             <div>
-              name: {form.getFieldValue('username')}
+              name: {form && form.getFieldValue('username')}
               <br />
-              age: {form.getFieldValue('age')}
+              age: {form && form.getFieldValue('age')}
             </div>
           )
         }}
       </FormSpy>
-    </Form>
+    </SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### `<Field/>`
+#### `<FormProvider />`
 
-> 即将废弃，请使用 [SchemaMarkupField](#SchemaMarkupField)
+表单常常会有外部组件通信的场景，`<FormProvider/>` 则是为此而生。
 
-### Array Components
-
-#### array
+**用法**
 
 ```jsx
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  FormItemGrid,
-  FormButtonGroup,
-  Submit,
-  Reset,
-  FormBlock,
-  FormLayout
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-import Printer from '@formily/printer'
+import { FormProvider, SchemaForm, SchemaMarkupField as Field, FormSpy } from '@formily/antd'
+import { Input } from '@formily/antd-components'
 
-const App = () => {
-  const [value, setValues] = useState({})
-  useEffect(() => {
-    setTimeout(() => {
-      setValues({
-        array: [{ array2: [{ aa: '123', bb: '321' }] }]
-      })
-    }, 1000)
-  }, [])
+const FormFrag = () => {
   return (
-    <Printer>
-      <SchemaForm initialValues={value} onSubmit={v => console.log(v)}>
-        <Field
-          title="数组"
-          name="array"
-          maxItems={3}
-          type="array"
-          x-props={{
-            renderAddition: '这是定制的添加文案',
-            renderRemove: '这是定制的删除文案'
-          }}
-        >
-          <Field type="object">
-            <FormBlock title="基础信息">
-              <FormLayout labelCol={9} wrapperCol={6}>
-                <Field name="aa" type="string" title="字段1" />
-                <Field name="bb" type="string" title="字段2" />
-                <FormItemGrid title="字段3" gutter={10}>
-                  <Field name="cc" type="string" />
-                  <Field name="dd" type="string" />
-                </FormItemGrid>
-              </FormLayout>
-            </FormBlock>
-            <FormBlock title="嵌套数组">
-              <Field name="array2" maxItems={3} type="array">
-                <Field type="object">
-                  <FormLayout labelCol={9} wrapperCol={6}>
-                    <Field name="aa" type="string" title="字段1" />
-                    <Field name="bb" type="string" title="字段2" />
-                    <FormItemGrid title="字段3" gutter={10}>
-                      <Field name="cc" type="string" />
-                      <Field name="dd" type="string" />
-                    </FormItemGrid>
-                  </FormLayout>
-                </Field>
-              </Field>
-            </FormBlock>
-          </Field>
-        </Field>
-        <FormButtonGroup>
-          <Submit>提交</Submit>
-          <Reset>重置</Reset>
-        </FormButtonGroup>
-      </SchemaForm>
-    </Printer>
+    <SchemaForm components={{ Input }}>
+      <Field name="username" title="username" x-component="Input"/>
+    </SchemaForm>
   )
 }
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### cards
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  FormItemGrid,
-  FormButtonGroup,
-  Submit,
-  Reset,
-  FormBlock,
-  FormLayout
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-import Printer from '@formily/printer'
-
-const App = () => (
-  <Printer>
-    <SchemaForm>
-      <Field
-        name="array"
-        maxItems={3}
-        type="array"
-        x-component="cards"
-        x-props={{
-          title: '这是卡片标题',
-          renderAddition: '这是定制的添加文案',
-          renderRemove: '这是定制的删除文案'
-        }}
-      >
-        <Field type="object">
-          <FormLayout labelCol={6} wrapperCol={8}>
-            <Field
-              name="aa"
-              type="string"
-              description="hello world"
-              title="字段1"
-            />
-            <Field name="bb" type="string" title="字段2" />
-            <Field name="cc" type="string" title="字段3" />
-            <Field name="dd" type="string" title="字段4" />
-            <Field name="dd" type="string" title="字段5" />
-            <Field name="ee" type="string" title="字段6" />
-            <Field name="ff" type="string" title="字段7" />
-            <Field name="gg" type="daterange" title="字段8" />
-          </FormLayout>
-          <Field
-            name="array"
-            maxItems={3}
-            type="array"
-            x-component="cards"
-            x-props={{ title: '这是卡片标题' }}
-          >
-            <Field type="object">
-              <FormLayout labelCol={6} wrapperCol={8}>
-                <Field
-                  name="aa"
-                  type="string"
-                  description="hello world"
-                  title="字段1"
-                />
-                <Field name="bb" type="string" title="字段2" />
-                <Field name="cc" type="string" title="字段3" />
-                <Field name="dd" type="string" title="字段4" />
-                <Field name="dd" type="string" title="字段5" />
-                <Field name="ee" type="string" title="字段6" />
-                <Field name="ff" type="string" title="字段7" />
-                <Field name="gg" type="daterange" title="字段8" />
-              </FormLayout>
-            </Field>
-          </Field>
-        </Field>
-      </Field>
-    </SchemaForm>
-  </Printer>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### table
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  Field,
-  FormItemGrid,
-  FormButtonGroup,
-  Submit,
-  Reset,
-  FormBlock,
-  FormLayout
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-import Printer from '@formily/printer'
-
-const App = () => (
-  <Printer>
-    <SchemaForm>
-      <FormLayout>
-        <Field
-          title="数组"
-          name="array"
-          maxItems={3}
-          type="array"
-          x-component="table"
-          x-props={{
-            renderExtraOperations() {
-              return <div>Hello worldasdasdasdasd</div>
-            },
-            operationsWidth: 300
-          }}
-        >
-          <Field type="object">
-            <Field
-              name="aa"
-              type="string"
-              description="hello world"
-              title="字段1"
-            />
-            <Field name="bb" type="string" title="字段2" />
-            <Field name="cc" type="string" title="字段3" />
-            <Field name="dd" type="string" title="字段4" x-index={1} />
-            <Field name="ee" type="string" title="字段5" />
-            <Field name="ff" type="string" title="字段6" />
-            <Field name="gg" type="string" title="字段7" />
-            <Field name="hh" type="daterange" title="字段8" />
-          </Field>
-        </Field>
-      </FormLayout>
-    </SchemaForm>
-  </Printer>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-### Layout Components
-
-
-#### `<FormCard/>`
-
-> FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)。
-> FormCard与[FormBlock](#FormBlock) 唯一区别是样式上是否有框
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, { FormCard, SchemaMarkupField as Field } from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <SchemaForm>
-    <FormCard title="block">
-      <Field type="string" name="username" title="username" />
-    </FormCard>
-  </SchemaForm>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<FormBlock/>`
-
-> FormBlock 组件 Props, 完全继承自 [CardProps](#CardProps)
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, { FormBlock, SchemaMarkupField as Field } from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <SchemaForm>
-    <FormBlock title="block">
-      <Field type="string" name="username" title="username" />
-    </FormBlock>
-  </SchemaForm>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<FormStep/>`
-
-> FormStep 组件 Props
-
-```typescript
-interface IFormStep {
-  dataSource: StepItemProps[]
-  /** next step props**/
-  // 当前步骤
-  current?: number
-  // 展示方向
-  direction?: 'hoz' | 'ver'
-  // 横向布局时的内容排列
-  labelPlacement?: 'hoz' | 'ver'
-  // 类型
-  shape?: 'circle' | 'arrow' | 'dot'
-  // 是否只读模式
-  readOnly?: boolean
-  // 是否开启动效
-  animation?: boolean
-  // 自定义样式名
-  className?: string
-  // StepItem 的自定义渲染
-  itemRender?: (index: number, status: string) => React.ReactNode
-}
-```
-
-**用法**
-
-```jsx
-import {
-  SchemaForm,
-  Field,
-  FormButtonGroup,
-  Submit,
-  FormEffectHooks,
-  createFormActions,
-  FormGridRow,
-  FormItemGrid,
-  FormGridCol,
-  FormPath,
-  FormLayout,
-  FormBlock,
-  FormCard,
-  FormTextBox,
-  FormStep
-} from '@formily/antd'
-import { Button } from 'antd'
-import 'antd/dist/antd.css'
-
-const { onFormInit$ } = FormEffectHooks
-
-const actions = createFormActions()
-
-let cache = {}
-
-export default () => (
-  <SchemaForm
-    onSubmit={values => {
-      console.log('提交')
-      console.log(values)
-    }}
-    actions={actions}
-    labelCol={{ span: 8 }}
-    wrapperCol={{ span: 6 }}
-    validateFirst
-    effects={({ setFieldState, getFormGraph }) => {
-      onFormInit$().subscribe(() => {
-        setFieldState('col1', state => {
-          state.visible = false
-        })
-      })
-    }}
-  >
-    <FormStep
-      style={{ marginBottom: 20 }}
-      dataSource={[
-        { title: 'Step1', name: 'step-1' },
-        { title: 'Step2', name: 'step-2' },
-        { title: 'Step3', name: 'step-3' }
-      ]}
-    />
-    <FormCard name="step-1" title="Step1">
-      <Field name="a1" required title="A1" type="string" />
-    </FormCard>
-    <FormCard name="step-2" title="Step2">
-      <Field name="a2" required title="A2" type="string" />
-    </FormCard>
-    <FormCard name="step-3" title="Step3">
-      <Field name="a3" required title="A3" type="string" />
-    </FormCard>
-    <FormButtonGroup>
-      <Submit>提交</Submit>
-      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_PREVIOUS)}>
-        上一步
-      </Button>
-      <Button onClick={() => actions.dispatch(FormStep.ON_FORM_STEP_NEXT)}>
-        下一步
-      </Button>
-      <Button
-        onClick={() => {
-          cache = actions.getFormGraph()
-        }}
-      >
-        存储当前状态
-      </Button>
-      <Button
-        onClick={() => {
-          actions.setFormGraph(cache)
-        }}
-      >
-        回滚状态
-      </Button>
-    </FormButtonGroup>
-  </SchemaForm>
-)
-```
-
-#### `<FormLayout/>`
-
-> FormLayout 组件 Props
-
-```typescript
-interface IFormItemTopProps {
-  inline?: boolean
-  className?: string
-  style?: React.CSSProperties
-  labelCol?: number | { span: number; offset?: number }
-  wrapperCol?: number | { span: number; offset?: number }
-}
-```
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  Field,
-  FormButtonGroup,
-  Submit,
-  Reset,
-  FormItemGrid,
-  FormCard,
-  FormBlock,
-  FormLayout
-} from '@formily/antd'
-import { Button } from 'antd'
-import Printer from '@formily/printer'
-import 'antd/dist/antd.css'
-const App = () => (
-  <Printer>
-    <SchemaForm>
-      <FormLayout labelCol={8} wrapperCol={6}>
-        <Field name="aaa" type="string" title="字段1" />
-        <Field name="bbb" type="number" title="字段2" />
-        <Field name="ccc" type="date" title="字段3" />
-      </FormLayout>
-      <FormButtonGroup offset={8}>
-        <Submit>提交</Submit>​ <Reset>重置</Reset>​
-      </FormButtonGroup>
-    </SchemaForm>
-  </Printer>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<FormItemGrid/>`
-
-> FormItemGrid 组件 Props
-
-```typescript
-interface IFormItemGridProps {
-  cols?: Array<number | { span: number; offset: number }>
-  gutter?: number
-  /** next Form.Item props**/
-  // 样式前缀
-  prefix?: string
-
-  // label 标签的文本
-  label?: React.ReactNode
-
-  // label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效
-  labelCol?: {}
-
-  // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol
-  wrapperCol?: {}
-
-  // 自定义提示信息，如不设置，则会根据校验规则自动生成.
-  help?: React.ReactNode
-
-  // 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面
-  extra?: React.ReactNode
-
-  // 校验状态，如不设置，则会根据校验规则自动生成
-  validateState?: 'error' | 'success' | 'loading'
-
-  // 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有Input支持
-  hasFeedback?: boolean
-
-  // 自定义内联样式
-  style?: React.CSSProperties
-
-  // node 或者 function(values)
-  children?: React.ReactNode | (() => void)
-
-  // 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。
-  size?: 'large' | 'small' | 'medium'
-
-  // 标签的位置
-  labelAlign?: 'top' | 'left' | 'inset'
-
-  // 标签的左右对齐方式
-  labelTextAlign?: 'left' | 'right'
-
-  // 扩展class
-  className?: string
-
-  // [表单校验] 不能为空
-  required?: boolean
-
-  // required 的星号是否显示
-  asterisk?: boolean
-
-  // required 自定义错误信息
-  requiredMessage?: string
-
-  // required 自定义触发方式
-  requiredTrigger?: string | Array<any>
-
-  // [表单校验] 最小值
-  min?: number
-
-  // [表单校验] 最大值
-  max?: number
-
-  // min/max 自定义错误信息
-  minmaxMessage?: string
-
-  // min/max 自定义触发方式
-  minmaxTrigger?: string | Array<any>
-
-  // [表单校验] 字符串最小长度 / 数组最小个数
-  minLength?: number
-
-  // [表单校验] 字符串最大长度 / 数组最大个数
-  maxLength?: number
-
-  // minLength/maxLength 自定义错误信息
-  minmaxLengthMessage?: string
-
-  // minLength/maxLength 自定义触发方式
-  minmaxLengthTrigger?: string | Array<any>
-
-  // [表单校验] 字符串精确长度 / 数组精确个数
-  length?: number
-
-  // length 自定义错误信息
-  lengthMessage?: string
-
-  // length 自定义触发方式
-  lengthTrigger?: string | Array<any>
-
-  // 正则校验
-  pattern?: any
-
-  // pattern 自定义错误信息
-  patternMessage?: string
-
-  // pattern 自定义触发方式
-  patternTrigger?: string | Array<any>
-
-  // [表单校验] 四种常用的 pattern
-  format?: 'number' | 'email' | 'url' | 'tel'
-
-  // format 自定义错误信息
-  formatMessage?: string
-
-  // format 自定义触发方式
-  formatTrigger?: string | Array<any>
-
-  // [表单校验] 自定义校验函数
-  validator?: () => void
-
-  // validator 自定义触发方式
-  validatorTrigger?: string | Array<any>
-
-  // 是否修改数据时自动触发校验
-  autoValidate?: boolean
-}
-```
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  Field,
-  FormButtonGroup,
-  Submit,
-  Reset,
-  FormItemGrid,
-  FormCard,
-  FormBlock,
-  FormLayout
-} from '@formily/antd'
-import { Button } from 'antd'
-import Printer from '@formily/printer'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <Printer>
-    <SchemaForm onSubmit={v => console.log(v)}>
-      <FormItemGrid gutter={20}>
-        <Field type="string" name="a1" title="field1" />
-        <Field type="string" name="a2" title="field2" />
-        <Field type="string" name="a3" title="field3" />
-        <Field type="string" name="a4" title="field4" />
-      </FormItemGrid>
-      <FormItemGrid gutter={20} cols={[6, 6]}>
-        <Field type="string" name="a5" title="field5" />
-        <Field type="string" name="a6" title="field6" />
-      </FormItemGrid>
-      <FormButtonGroup style={{ minWidth: 150 }}>
-        ​<Submit>提交</Submit>​<Reset>重置</Reset>​
-      </FormButtonGroup>
-    </SchemaForm>
-  </Printer>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<FormTextBox/>`
-
-> FormTextBox 组件 Props
-
-```typescript
-interface IFormTextBox {
-  text?: string
-  gutter?: number
-  title?: React.ReactText
-  description?: React.ReactText
-}
-```
-
-**用法**
-
-```jsx
-import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  Field,
-  FormTextBox,
-  FormCard,
-  FormLayout
-} from '@formily/antd'
-import { Button } from 'antd'
-import Printer from '@formily/printer'
-import 'antd/dist/antd.css'
 
 const App = () => {
   return (
-    <Printer>
-      <SchemaForm labelCol={8} wrapperCol={6} onSubmit={v => console.log(v)}>
-        <FormCard title="FormTextBox">
-          <FormLayout labelCol={8} wrapperCol={16}>
-            <FormTextBox
-              title="text label"
-              text="prefix%suffix prefix2%suffix2 prefix3%suffix3"
-              gutter={8}
-            >
-              <Field
-                type="string"
-                default={10}
-                required
-                name="aa1"
-                x-props={{ style: { width: 80 } }}
-                description="desc1"
-              />
-              <Field
-                type="number"
-                default={20}
-                required
-                name="aa2"
-                description="desc2"
-              />
-              <Field
-                type="number"
-                default={30}
-                required
-                name="aa3"
-                description="desc3"
-              />
-            </FormTextBox>
-          </FormLayout>
-        </FormCard>
-      </SchemaForm>
-    </Printer>
+    <FormProvider>
+      <FormFrag />
+      <FormSpy>
+        {({ form: spyForm }) => {
+          return (
+            <div>username: {spyForm && spyForm.getFieldValue('username')}</div>
+          )
+        }}
+      </FormSpy>
+  </FormProvider>
   )
 }
+
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+
+#### `<Field/>(废弃)`
+
+> 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
 
 #### `<FormButtonGroup/>`
 
-> FormButtonGroup 组件 Props
+* IFormButtonGroupProps
 
-```typescript
-interface IFormButtonGroupProps {
-  sticky?: boolean
-  style?: React.CSSProperties
-  itemStyle?: React.CSSProperties
-  className?: string
-  align?: 'left' | 'right' | 'start' | 'end' | 'top' | 'bottom' | 'center'
-  triggerDistance?: number
-  zIndex?: number
-  span?: ColSpanType
-  offset?: ColSpanType
-}
-```
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| sticky    |是否吸附在页面底部                  | boolean |                |
+| itemStyle    |每个Btn的样式                  | React.CSSProperties |                |
+| align    |对齐方式                  | 'left' `or` 'right' `or` 'start' `or` 'end' `or` 'top' `or` 'bottom' `or` 'center' |                |
+| triggerDistance    | 按钮间距离                  | number |                |
+| zIndex    | z-index                  | number |                |
+| span    | 跨列配置                  | number | string |                |
+| offset    | 偏移配置                  | number | string |                |
 
 **用法**
 
@@ -1602,18 +287,22 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   Field,
-  FormButtonGroup,
   Submit,
-  Reset,
+  FormButtonGroup,
+  Reset
+} from '@formily/antd'
+import { 
+  setup,
   FormItemGrid,
   FormCard,
   FormBlock,
   FormLayout
-} from '@formily/antd'
+} from '@formily/antd-components'
 import { Button } from 'antd'
 import Printer from '@formily/printer'
-import 'antd/dist/antd.css'
+import'antd/dist/antd.css'
 
+setup()
 const App = () => {
   const [state, setState] = useState({ editable: true })
   return (
@@ -1641,770 +330,131 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-#### `<TextButton/>`
+### Hook
 
-> TextButton 组件 Props, 完全继承自 [ButtonProps](#ButtonProps)
+#### `useFormTableQuery`
 
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, { TextButton } from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <SchemaForm>
-    <TextButton>content</TextButton>
-  </SchemaForm>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<CircleButton/>`
-
-> CircleButton 组件 Props, 完全继承自 [ButtonProps](#ButtonProps)
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, { CircleButton } from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const App = () => (
-  <SchemaForm>
-    <CircleButton>ok</CircleButton>
-  </SchemaForm>
-)
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### `<Field/>(即将废弃，请使用SchemaMarkupField)`
-
-> 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
-
-### Type of SchemaMarkupField
-
-#### string
-
-* Schema Type : `string`
-* Schema UI Component: Fusion-Next `<Input/>`, `<Input.Textarea/>`, `<Select/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        required
-        title="Text"
-        name="text"
-        x-component-props={{
-          placeholder: 'input'
-        }}
-      />
-      <Field
-        type="string"
-        enum={['1', '2', '3', '4']}
-        required
-        title="Simple Select"
-        name="simpleSelect"
-        x-component-props={{
-          placeholder: 'select'
-        }}
-      />
-      <Field
-        type="string"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-        required
-        title="Object Select"
-        name="objSelect"
-        x-component-props={{
-          placeholder: 'select'
-        }}
-      />
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-        x-component-props={{
-          placeholder: 'textarea'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### textarea
-
-* Schema Type : `string`
-* Schema UI Component: Fusion-Next `<Input.Textarea/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        title="TextArea"
-        name="textarea"
-        x-component="textarea"
-        x-component-props={{
-          placeholder: 'textarea'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### password
-
-* Schema Type : `password`
-* Schema UI Component: Fusion-Next `<Input htmlType="password"/>`
+* 调用 useFormTableQuery 会返回 Table 和 Form 属性，只需简单传递给对应组件即可
+* useFormTableQuery 的传入参数是一个返回 Promise 对象的函数，该函数约定了它的出入参形式，如果接口请求出入参不符合这个约定，需要手动转换。
 
 ```typescript
-interface IPasswordProps {
-  checkStrength: boolean
-  /** next input props **/
-  // 当前值
-  value?: string | number
-
-  // 初始化值
-  defaultValue?: string | number
-
-  // 发生改变的时候触发的回调
-  onChange?: (value: string, e: React.ChangeEvent<HTMLInputElement>) => void
-
-  // 键盘按下的时候触发的回调
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>, opts: {}) => void
-
-  // 禁用状态
-  disabled?: boolean
-
-  // 最大长度
-  maxLength?: number
-
-  // 是否展现最大长度样式
-  hasLimitHint?: boolean
-
-  // 当设置了maxLength时，是否截断超出字符串
-  cutString?: boolean
-
-  // 只读
-  readOnly?: boolean
-
-  // onChange返回会自动去除头尾空字符
-  trim?: boolean
-
-  // 输入提示
-  placeholder?: string
-
-  // 获取焦点时候触发的回调
-  onFocus?: () => void
-
-  // 失去焦点时候触发的回调
-  onBlur?: () => void
-
-  // 自定义字符串计算长度方式
-  getValueLength?: (value: string) => number
-
-  // 自定义class
-  className?: string
-
-  // 自定义内联样式
-  style?: React.CSSProperties
-
-  // 原生type
-  htmlType?: string
-
-  // name
-  name?: string
-
-  // 状态
-  state?: 'error' | 'loading' | 'success'
-
-  // label
-  label?: React.ReactNode
-
-  // 是否出现clear按钮
-  hasClear?: boolean
-
-  // 是否有边框
-  hasBorder?: boolean
-
-  // 尺寸
-  size?: 'small' | 'medium' | 'large'
-
-  // 按下回车的回调
-  onPressEnter?: () => void
-
-  // 水印 (Icon的type类型，和hasClear占用一个地方)
-  hint?: string
-
-  // 文字前附加内容
-  innerBefore?: React.ReactNode
-
-  // 文字后附加内容
-  innerAfter?: React.ReactNode
-
-  // 输入框前附加内容
-  addonBefore?: React.ReactNode
-
-  // 输入框后附加内容
-  addonAfter?: React.ReactNode
-
-  // 输入框前附加文字
-  addonTextBefore?: React.ReactNode
-
-  // 输入框后附加文字
-  addonTextAfter?: React.ReactNode
-
-  // (原生input支持)
-  autoComplete?: string
-
-  // 自动聚焦(原生input支持)
-  autoFocus?: boolean
-}
+const useFormTableQuery = (
+  service: (payload: IQueryParams) => IQueryResponse | Promise<IQueryResponse>,
+  middlewares?: IEffectMiddleware<ISchemaFormActions>[]
+)
 ```
+
+* useFormTableQuery入参
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| 参数1    |列表请求服务                  | (payload: [IQueryParams](#IQueryParams)) => [IQueryResponse](#IQueryParams) | Promise<[IQueryResponse](#IQueryParams)> |                |
+| 参数2    |请求处理middlewares                  | IEffectMiddleware<[ISchemaFormActions](#IFormActions)> |                |
+
+* useFormTableQuery返回结果
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| trigger    |触发列表请求                  | any |                |
+| form    | Form属性，主要为effects                  | { effects: [IFormEffect](#IFormEffect) } |                |
+| table    |Table属性                  | { loading:boolean, dataSource: any[], pagination: [Pagination](#Pagination), onChange } |                |
 
 **用法**
 
 ```jsx
 import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
+  useFormTableQuery,
   FormButtonGroup,
   Submit,
   Reset
 } from '@formily/antd'
-import 'antd/dist/antd.css'
+import { Input } from '@formily/antd-components'
+import { fetch } from 'mfetch'
+import { Table } from 'antd'
 
-const actions = createFormActions()
+const service = ({ values, pagination, sorter = {}, filters = {} }) => {
+  return fetch({
+    url: 'https://randomuser.me/api',
+    data: {
+      results: 10,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      page: pagination.current,
+      ...values,
+      ...filters
+    }
+  })
+    .then(res => res.json())
+    .then(({ results, info }) => {
+      return {
+        dataSource: results,
+        ...pagination,
+        total: 200
+      }
+    })
+}
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    sorter: true,
+    render: name => `${name.first} ${name.last}`,
+    width: '20%'
+  },
+  {
+    title: 'Gender',
+    dataIndex: 'gender',
+    filters: [
+      { text: 'Male', value: 'male' },
+      { text: 'Female', value: 'female' }
+    ],
+    width: '20%'
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email'
+  }
+]
+
+
 const App = () => {
+  const { form, table } = useFormTableQuery(service)
   return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="string"
-        title="Password"
-        name="password"
-        x-component="password"
-        x-component-props={{
-          placeholder: 'password'
-        }}
+    <>
+      <SchemaForm
+        {...form}
+        components={{ Input }}
+        style={{ marginBottom: 20 }}
+        inline
+      >
+        <Field type="string" name="name" title="Name" x-component="Input" />
+        <FormButtonGroup>
+          <Submit>查询</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+      <Table
+        {...table}
+        columns={columns}
+        rowKey={record => record.login.uuid}
       />
-    </SchemaForm>
+    </>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-
-#### number
-
-* Schema Type : `number`
-* Schema UI Component: Fusion-Next `<NumberPicker/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field type="number" required title="Number" name="number" />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### boolean
-
-* Schema Type : `boolean`
-* Schema UI Component: Fusion-Next `<Switch/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="boolean"
-        required
-        title="Boolean"
-        name="boolean"
-        x-component-props={{
-          checkedChildren: 'on',
-          unCheckedChildren: 'off'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### date
-
-* Schema Type : `date`
-* Schema UI Component: Fusion-Next `<DatePicker/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="date"
-        required
-        title="DatePicker"
-        name="datePicker"
-        x-component-props={{
-          format: 'YYYY-MM-DD HH:mm:ss'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### time
-
-* Schema Type : `time`
-* Schema UI Component: Fusion-Next `<TimePicker/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="time"
-        required
-        title="TimePicker"
-        name="timePicker"
-        x-component-props={{
-          format: 'YYYY-MM-DD HH:mm:ss'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### range
-
-* Schema Type : `range`
-* Schema UI Component: Fusion-Next `<Range/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="range"
-        required
-        title="Range"
-        name="range"
-        x-component-props={{
-          min: 0,
-          max: 1024,
-          marks: [0, 1024]
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### upload
-
-* Schema Type : `upload`
-* Schema UI Component: Fusion-Next `<Upload/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="upload"
-        required
-        title="Card Upload"
-        name="upload2"
-        x-component-props={{
-          listType: 'card'
-        }}
-      />
-      <Field
-        type="upload"
-        required
-        title="Dragger Upload"
-        name="upload1"
-        x-component-props={{
-          listType: 'dragger'
-        }}
-      />
-      <Field
-        type="upload"
-        required
-        title="Text Upload"
-        name="upload3"
-        x-component-props={{
-          listType: 'text'
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### checkbox
-
-* Schema Type : `checkbox`
-* Schema UI Component: Fusion-Next `<Checkbox/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="checkbox"
-        required
-        title="Simple Checkbox"
-        name="checkbox"
-        enum={['1', '2', '3', '4']}
-      />
-      <Field
-        type="checkbox"
-        required
-        title="Object Checkbox"
-        name="checkbox2"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### radio
-
-* Schema Type : `radio`
-* Schema UI Component: Fusion-Next `<Radio/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="radio"
-        required
-        title="Simple Radio"
-        name="radio"
-        enum={['1', '2', '3', '4']}
-      />
-      <Field
-        type="radio"
-        required
-        title="Object Radio"
-        name="radio2"
-        enum={[
-          { label: 'One', value: '1' },
-          { label: 'Two', value: '2' },
-          { label: 'Three', value: '3' },
-          { label: 'Four', value: '4' }
-        ]}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### rating
-
-* Schema Type : `rating`
-* Schema UI Component: Fusion-Next `<Rating/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="rating"
-        title="Rating"
-        name="rating"
-        x-component-props={{
-          allowHalf: true
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-#### transfer
-
-* Schema Type : `transfer`
-* Schema UI Component: Fusion-Next `<Transfer/>`
-
-**用法**
-
-```jsx
-import React from 'react'
-import ReactDOM from 'react-dom'
-import SchemaForm, {
-  SchemaMarkupField as Field,
-  createFormActions,
-  FormBlock,
-  FormLayout,
-  FormButtonGroup,
-  Submit,
-  Reset
-} from '@formily/antd'
-import 'antd/dist/antd.css'
-
-const actions = createFormActions()
-const App = () => {
-  return (
-    <SchemaForm actions={actions}>
-      <Field
-        type="transfer"
-        title="Transfer"
-        name="transfer"
-        enum={[
-          { title: 'One', key: '1' },
-          { title: 'Two', key: '2' },
-          { title: 'Three', key: '3' },
-          { title: 'Four', key: '4' }
-        ]}
-        x-props={{
-          render: (item) => item.title
-        }}
-        x-component-props={{
-          showSearch: true
-        }}
-      />
-    </SchemaForm>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-### Hook
 
 #### `useFormEffects`
 
-> 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
-> 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
+通过使用 `useFormEffects` 可以轻松实现拥有局部逻辑表单。
+
+* 使用 useFormEffects 可以实现局部effect的表单组件，效果同：[简单联动](#简单联动)
+* 注意：监听的生命周期是从 `ON_FORM_MOUNT` 开始
 
 **签名**
 
@@ -2412,10 +462,15 @@ ReactDOM.render(<App />, document.getElementById('root'))
 (effects: IFormEffect): void
 ```
 
+**用法**
+
+> 注意：使用`useFormState`的必须是自定义组件，即外层必须是 `VirtualField`。
+
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import SchemaForm, {
+import {
+  SchemaForm,
   SchemaMarkupField as Field,
   VirtualField,
   createFormActions,
@@ -2423,7 +478,9 @@ import SchemaForm, {
   LifeCycleTypes,
   createVirtualBox
 } from '@formily/antd'
+import { setup } from '@formily/antd-components'
 
+setup()
 const actions = createFormActions()
 
 const FragmentContainer = createVirtualBox('ffb', (props) => {
@@ -2452,6 +509,8 @@ const FragmentContainer = createVirtualBox('ffb', (props) => {
   )
 });
 
+
+// 具有局部逻辑的表单
 const FormFragment = () => {
   return <FragmentContainer>
     <Field
@@ -2478,7 +537,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `useFormState`
 
-> 使用 useFormState 为自定义组件提供FormState扩展和管理能力
+使用 useFormState 为自定义组件提供FormState扩展和管理能力
 
 **签名**
 
@@ -2488,41 +547,24 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **用法**
 
+> 注意：使用`useFormState`的必须是自定义组件，即外层必须是 `VirtualField`。
+
 ```jsx
 import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, VirtualField,
-  createFormActions, createEffectHook,
-  useForm,
+import {
+  SchemaForm,
   useFormState,
-  useFormEffects,
-  useFieldState,
-  LifeCycleTypes
-} from '@formily/react'
+  createFormActions,
+  LifeCycleTypes,
+  createVirtualBox
+} from '@formily/antd'
+import { setup } from '@formily/antd-components'
 
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
-
+setup()
 const actions = createFormActions()
-const FormFragment = (props) => {
-  const [formState, setFormState ] = useFormState({ extendVar: 0 })
+const FormFragment = createVirtualBox('fusestatform', (props) => {  
+  const [formState, setFormState] = useFormState({ extendVar: 0 })
   const { extendVar } = formState
 
   return <div>
@@ -2531,13 +573,13 @@ const FormFragment = (props) => {
     }}>add</button>
     <div>count: {extendVar}</div>
   </div>
-}
+})
 
 const App = () => {
   return (
-    <Form actions={actions}>
+    <SchemaForm actions={actions}>
       <FormFragment />
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -2546,7 +588,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `useFieldState`
 
-> 使用 useFieldState 为自定义组件提供状态管理能力
+使用 useFieldState 为自定义组件提供状态管理能力
 
 **签名**
 
@@ -2554,45 +596,33 @@ ReactDOM.render(<App />, document.getElementById('root'))
 (defaultState: T): [state: IFieldState, setFieldState: (state?: IFieldState) => void]
 ```
 
+**用法**
+
+> 注意：使用`useFormState`的必须是自定义组件，即外层必须要有 `VirtualField`。
+
 ```jsx
 import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, VirtualField,
+import { SchemaForm,
+  SchemaMarkupField as Field,
   createFormActions, createEffectHook,
-  useForm,
+  useForm,  
   useFormEffects,
   useFieldState,
-  LifeCycleTypes
-} from '@formily/react'
+  LifeCycleTypes,
+  createControllerBox,
+} from '@formily/antd'
+import { setup } from '@formily/antd-components'
 
-const InputField = props => (
-  <Field {...props}>
-    {({ state, mutators }) => {
-      const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
-    }}
-  </Field>
-)
-
+setup()
 const changeTab$ = createEffectHook('changeTab')
 const actions = createFormActions()
-const TabFragment = (props) => {
+const TabFragment = (props) => {  
   const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
   const { current } = fieldState
   const { children, dataSource, form } = props
 
-  const update = (cur) => {
+  const update = (cur) => {    
     form.notify('changeTab', cur)
     setLocalFieldState({
       current: cur
@@ -2625,26 +655,23 @@ const TabFragment = (props) => {
   return btns
 }
 
-const FormTab = (props) => {
-  return <VirtualField name="layout_tab">
-    {({ form }) => {
-      return <TabFragment {...props} form={form} />
-    }}
-  </VirtualField>
-}
+const FormTab = createControllerBox('formTab', (props) => {
+  const { form, props: comProps } = props;
+  return <TabFragment {...comProps['x-component-props']} form={form} />
+})
 
 const App = () => {
   return (
-    <Form actions={actions}>
+    <SchemaForm actions={actions}>
       <FormTab dataSource={[
         { label: 'tab-1', name: 'username' },
         { label: 'tab-2', name: 'age' }
       ]} />
       <div>
-        <InputField name="username" label="username"/>
-        <InputField name="age" label="age"/>
+        <Field type="string" title="username" name="username" />
+        <Field type="string" title="age" name="age" />
       </div>
-    </Form>
+    </SchemaForm>
   )
 }
 
@@ -2653,7 +680,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### useForm
 
-> 获取一个 [IForm](#IForm) 实例
+* 创建一个 [IForm](#IForm) 实例。需要注意的是，该操作会代理整个表单创建过程，包括actions的处理。
+* useForm是底层方法，它在包装具有业务属性的表单框架时非常有用。
 
 **签名**
 
@@ -2670,18 +698,43 @@ type useForm = <
 
 **用法**
 
-```typescript
-import { useForm } from '@formily/react'
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  useFieldState,
+  LifeCycleTypes,
+  createVirtualBox,
+} from '@formily/antd'
+import { setup } from '@formily/antd-components'
 
-const FormFragment = () => {
-  const form = useForm()
-  return <div>{form.getFieldValue('username')}</div>
+setup()
+const actions = createFormActions()
+const App = () => {
+  const form = useForm({
+    value: { username: 'moe' },
+    actions,
+  })
+
+  return (
+    <SchemaForm form={form}>
+      <Field type="string" title="username" name="username" />
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 #### useField
 
-> 获取一个 [IFieldHook](#IFieldHook) 实例
+`useField` 是一个非常底层的方法，一般情况不会用到它，但是它对于强业务诉求的定制非常有用。
 
 **签名**
 
@@ -2691,24 +744,53 @@ type useField = (options: IFieldStateUIProps): IFieldHook
 
 **用法**
 
-```typescript
-import { useField } from '@formily/react'
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  LifeCycleTypes,
+  createControllerBox,
+  useField,
+} from '@formily/antd'
 
-const FormFragment = (props) => {
+const CustomField = createControllerBox('customField', (props) => {
+  const { name } = props;
+  const realName = props.props['x-component-props']['x-name'];
   const {
     form,
     state,
     props: fieldProps,
     mutators
-  } = useField({ name: 'username' })
+  } = useField({
+      name: `${name}.${realName}`,
+    })
+  
+  return <input {...fieldProps} value={state.value} onChange={mutators.change} />
+})
 
-  return <input {...fieldProps} {...props} value={state.value} onChange={mutators.change} />
+const App = () => {
+  return (
+    <SchemaForm>
+      <CustomField x-name="username" />
+      <FormSpy>
+        {({ state, form }) => <div>name: {form && form.getFieldValue('username')}</div>}
+      </FormSpy>
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 #### useVirtualField
 
-> 获取一个 [IVirtualFieldHook](#IVirtualFieldHook) 实例
+`useVirtualField` 是一个非常底层的方法，一般情况不会用到它，但是它对于强业务诉求的定制非常有用。
 
 **签名**
 
@@ -2718,25 +800,46 @@ type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
 
 **用法**
 
-```typescript
-import { UseVirtualField } from '@formily/react'
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  LifeCycleTypes,
+  createControllerBox,
+  useVirtualField,
+} from '@formily/antd'
+import { setup } from '@formily/antd-components'
 
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    props: fieldProps,
-  } = UseVirtualField({ name: 'username' })
+setup()
 
-  return <div style={{ width: fieldProps.width, height: fieldProps.height }}>
-    {props.children}
-  </div>
+const LayoutBox = createControllerBox('LayoutBox', (props) => {
+  useVirtualField({ name: 'random' })
+  return <div className="layout-box">{props.children}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <LayoutBox>
+        <Field type="string" name="username" title="username" />
+      </LayoutBox>
+      <Field type="string" name="age" title="age"/>
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 #### useFormSpy
 
-> 获取一个 [ISpyHook](#ISpyHook) 实例, 实现[FormSpy](#FormSpy) 第一个例子
+通过`useFormSpy`可以快速实现[FormSpy](#FormSpy) 的功能
 
 **签名**
 
@@ -2746,24 +849,39 @@ type useFormSpy = (props: IFormSpyProps): ISpyHook
 
 **用法**
 
-```typescript
-import { useFormSpy, LifeCycleTypes } from '@formily/react'
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    type,
-  } = useFormSpy({
-    selector: LifeCycleTypes.ON_FORM_VALUES_CHANGE,
-    reducer: (state, action, form) => ({
-      count: state.count ? state.count + 1 : 1
-    })
-  })
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm,
+  SchemaMarkupField as Field,
+  createFormActions, createEffectHook,
+  useForm,  
+  FormSpy,
+  useFormEffects,
+  LifeCycleTypes,
+  createControllerBox,
+  useFormSpy,
+} from '@formily/antd'
+import { setup } from '@formily/antd-components'
 
-  return <div>
-    <div>count: {state.count || 0}</div>
-  </div>
+setup()
+
+const CustomSpy = createControllerBox('CustomSpy', (props) => {
+  const { form } = useFormSpy({ selector: '*', reducer: v => v })
+  return <div>name: {form && form.getFieldValue('username')}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <Field type="string" name="username" title="username" />
+      <CustomSpy />
+    </SchemaForm>
+  )
 }
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
 
 ### API
@@ -2875,7 +993,7 @@ const App = () => {
 
 **Usage**
 
-```jsx
+```tsx
 import SchemaForm, { createEffectHook, createFormActions } from '@formily/antd'
 
 const actions = createFormActions()
@@ -2922,9 +1040,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > 包装字段组件，让字段组件只需要支持value/defaultValue/onChange属性即可快速接入表单
 
 ```typescript
-type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOptions<T>) =>
+type Connect = <T extends React.ComponentType<IFieldProps>>(options?: IConnectOptions<T>) => 
 (Target: T) => React.PureComponent<IFieldProps>
 ```
+
+* IConnectOptions
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| valueName    | value字段的名称                 | string | `'value'`               |
+| eventName    | 改变value的事件名                 | string | `'onChange'`               |
+| defaultProps    | 默认属性                 | {} | {}               |
+| getValueFromEvent    | 根据事件获取value                 | (event?: any, value?: any) => any |                |
+| getProps    | 获取props的函数                 | (componentProps: {}, fieldProps: [MergedFieldComponentProps](#MergedFieldComponentProps)) => {} | void |                |
+| getComponent    | 获取Component的函数                 |  (Target: any, componentProps: {}, fieldProps: [MergedFieldComponentProps](#MergedFieldComponentProps)) => React.JSXElementConstructor<any> |                |
+
+
 **用法**
 
 ```typescript
@@ -2935,6 +1066,116 @@ registerFormField(
   connect()(props => <input {...props} value={props.value || ''} />)
 )
 ```
+
+#### registerFormFields
+
+全局批量注册拓展组件
+
+```typescript
+function registerFormFields(object: ISchemaFormRegistry['fields'])
+```
+**用法**
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  registerFormFields,
+  connect
+} from '@formily/antd' // 或者 @formily/next
+
+const CustomComponent1 = props => {
+  return <input value={props.value || ''} onChange={e => props.onChange(e.target.value)} />
+}
+const CustomComponent2 = props => {
+  return <select value={props.value || ''} onChange={e => props.onChange(e.target.value)} />
+}
+
+registerFormFields({
+  CustomComponent1: connect()(CustomComponent1),
+  CustomComponent2: connect()(CustomComponent2)
+})
+
+const App = () => {
+  return (
+    <SchemaForm>
+      <Field name="component1" title="component1" x-component="CustomComponent1" />
+      <Field name="component2" title="component2" x-component="CustomComponent2" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### registerFormComponent
+
+全局扩展 `<Form/>` UI组件
+
+```typescript
+function registerFormComponent<Props = any>(
+  component: React.JSXElementConstructor<Props>
+)
+```
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm, SchemaMarkupField as Field, registerFormComponent } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+
+registerFormComponent(props => {
+  return <div>全局扩展Form组件{props.children}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }}>
+      <Field type="string" name="name" title="Name" x-component="Input" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### registerFormItemComponent
+
+全局扩展 `<FormItem/>` UI 组件
+
+```typescript
+function registerFormItemComponent(
+  component: React.JSXElementConstructor<any>
+)
+```
+
+**用法**
+
+```tsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm, SchemaMarkupField as Field, registerFormItemComponent } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+
+registerFormItemComponent(props => {
+  return <div>全局扩展FormItem组件{props.children}</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }}>
+      <Field type="string" name="name" title="Name" x-component="Input" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 
 #### registerFormField
 
@@ -2948,7 +1189,7 @@ type registerFormField(
 
 **用法**
 
-```jsx
+```tsx
 
 import SchemaForm, { SchemaMarkupField as Field, registerFormField, connect, createFormActions } from '@formily/antd'
 
@@ -2969,15 +1210,196 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### createControllerBox
+
+创建虚拟表单字段，常用于创建表单布局组件。主要适用于`JSX-Schema`场景下。
+
+```typescript
+function createControllerBox<T = {}>(
+  key: string,
+  component?: React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
+)
+```
+
+**用法**
+
+```jsx
+
+import SchemaForm, { SchemaMarkupField as Field, createControllerBox, createFormActions } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+
+const FormLayout = createControllerBox('controller-form-layout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} >
+      <FormLayout attr="hello">
+        <Field name="text" title="text" x-component="Input" />
+      </FormLayout>      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### createVirtualBox
+
+创建虚拟表单字段，常用于创建表单布局组件。主要适用于`JSX-Schema`场景下。
+
+```typescript
+function createVirtualBox<T = {}>(
+  key: string,
+  component?: React.JSXElementConstructor<any>
+)
+```
+
+**用法**
+
+```jsx
+
+import SchemaForm, { SchemaMarkupField as Field, createVirtualBox, createFormActions } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+
+const FormLayout = createVirtualBox('form-layout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} >
+      <FormLayout x-component-props={{
+        attr: 'hello'
+      }}>
+        <Field name="text" title="text" x-component="Input" />
+      </FormLayout>      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### registerVirtualBox
+
+注册虚拟表单字段，常用于生成表单布局组件。这种方式主要适用于 `json-schema` 模式下。
+
+```typescript
+function registerVirtualBox(
+  name: string,
+  component: ComponentWithStyleComponent<ISchemaVirtualFieldComponentProps>
+)
+```
+
+**用法**
+
+```jsx
+
+import SchemaForm, { SchemaMarkupField as Field, registerVirtualBox, createFormActions } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+
+registerVirtualBox('form-layout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} >
+      <Field
+        type="object"
+        x-comppnent="form-layout"
+        x-component-props={{
+          attr: 'hello'
+        }}
+      >
+        <Field name="text" title="text" x-component="Input" />
+      </Field>      
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+#### getRegistry
+
+获取预先注册的所有组件。
+
+```typescript
+interface ISchemaFormRegistry {
+  fields: {
+    [key: string]: ISchemaFieldComponent
+  }
+  virtualFields: {
+    [key: string]: ISchemaVirtualFieldComponent
+  }
+  wrappers?: ISchemaFieldWrapper[]
+  formItemComponent: React.JSXElementConstructor<any>
+  formComponent: string | React.JSXElementConstructor<any>
+}
+function getRegistry () => ISchemaFormRegistry
+```
+
+**用法**
+
+```tsx
+
+import SchemaForm, { SchemaMarkupField as Field, getRegistry } from '@formily/antd'
+
+registerVirtualBox('CustomLayout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+getRegistry()
+```
+
+#### cleanRegistry
+
+清理预先注册的所有组件。
+
+```typescript
+function cleanRegistry ()
+```
+
+**用法**
+
+```tsx
+
+import SchemaForm, { SchemaMarkupField as Field, cleanRegistry } from '@formily/antd'
+
+registerVirtualBox('CustomLayout', (props) => {
+  return <div>
+    {props.children}
+    {props.schema['x-component-props']['attr']}
+  </div>
+})
+
+cleanRegistry()
+```
+
 ### Interfaces
 
-> 整体完全继承@formily/react, 下面只列举@formily/antd 的特有的 Interfaces
+整体完全继承@formily/react, 下面只列举@formily/antd 的特有的 Interfaces
 
 ---
 
 #### ISchema
 
-> Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
+Schema 协议对象，主要用于约束一份 json 结构满足 Schema 协议
 
 ```typescript
 interface ISchema {
@@ -3038,6 +1460,7 @@ interface ISchema {
 }
 ```
 
+
 #### IFormActions
 
 ```typescript
@@ -3087,7 +1510,7 @@ interface IFormActions {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单，当校验失败时抛出异常
+   * 校验表单, 当校验失败时抛出异常
    */
   validate(
     path?: FormPathPattern,
@@ -3136,55 +1559,6 @@ interface IFormActions {
     //transformer
     callback?: (state: IFieldState) => any
   ): any
-
-  /*
-   * 注册字段
-   */
-  registerField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段值
-    value?: any
-    //字段多参值
-    values?: any[]
-    //字段初始值
-    initialValue?: any
-    //字段扩展属性
-    props?: any
-    //字段校验规则
-    rules?: ValidatePatternRules[]
-    //字段是否必填
-    required?: boolean
-    //字段是否可编辑
-    editable?: boolean
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-
-  /*
-   * 注册虚拟字段
-   */
-  registerVirtualField(props: {
-    //节点路径
-    path?: FormPathPattern
-    //数据路径
-    name?: string
-    //字段扩展属性
-    props?: any
-    //字段是否走脏检查
-    useDirty?: boolean
-    //字段状态计算容器，主要用于扩展核心联动规则
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-
-  /*
-   * 创建字段数据操作器，后面会详细解释返回的API
-   */
-  createMutators(field: IField): IMutators
 
   /*
    * 获取表单观察者树
@@ -3247,7 +1621,7 @@ interface IFormAsyncActions {
   submit(
     onSubmit?: (values: IFormState['values']) => void | Promise<any>
   ): Promise<IFormSubmitResult>
-  
+
   /** 获取当前表单Schema **/
   getFormSchema(): Promise<Schema>
 
@@ -3333,15 +1707,41 @@ interface IFormAsyncActions {
 }
 ```
 
+
 #### ButtonProps
 
 ```typescript
 interface ButtonProps {
-  href: string;
-  target?: string;
-  onClick?: React.MouseEventHandler<HTMLElement>;
-  htmlType?: ButtonHTMLType;
-  onClick?: React.MouseEventHandler<HTMLElement>;
+  /** reset pops **/
+  onSubmit?: ISchemaFormProps['onSubmit']
+  showLoading?: boolean
+  /** nextBtnProps **/
+  // 按钮的类型
+  type?: 'primary' | 'secondary' | 'normal'
+  // 按钮的尺寸
+  size?: 'small' | 'medium' | 'large'
+  // 按钮中 Icon 的尺寸，用于替代 Icon 的默认大小
+  iconSize?: 'xxs' | 'xs' | 'small' | 'medium' | 'large' | 'xl' | 'xxl' | 'xxxl'
+  // 当 component = 'button' 时，设置 button 标签的 type 值
+  htmlType?: 'submit' | 'reset' | 'button'
+  // 设置标签类型
+  component?: 'button' | 'a'
+  // 设置按钮的载入状态
+  loading?: boolean
+  // 是否为幽灵按钮
+  ghost?: true | false | 'light' | 'dark'
+  // 是否为文本按钮
+  text?: boolean
+  // 是否为警告按钮
+  warning?: boolean
+  // 是否禁用
+  disabled?: boolean
+  // 点击按钮的回调
+  onClick?: (e: {}) => void
+  // 在Button组件使用component属性值为a时有效，代表链接页面的URL
+  href?: string
+  // 在Button组件使用component属性值为a时有效，代表何处打开链接文档
+  target?: string
 }
 ```
 
@@ -3349,28 +1749,32 @@ interface ButtonProps {
 
 ```typescript
 interface CardProps extends HTMLAttributesWeak, CommonProps {
-  prefixCls?: string;
-  title?: React.ReactNode;
-  extra?: React.ReactNode;
-  bordered?: boolean;
-  headStyle?: React.CSSProperties;
-  bodyStyle?: React.CSSProperties;
-  style?: React.CSSProperties;
-  loading?: boolean;
-  noHovering?: boolean;
-  hoverable?: boolean;
-  children?: React.ReactNode;
-  id?: string;
-  className?: string;
-  size?: CardSize;
-  type?: CardType;
-  cover?: React.ReactNode;
-  actions?: React.ReactNode[];
-  tabList?: CardTabListType[];
-  tabBarExtraContent?: React.ReactNode | null;
-  onTabChange?: (key: string) => void;
-  activeTabKey?: string;
-  defaultActiveTabKey?: string;
+  // 卡片的上的图片 / 视频
+  media?: React.ReactNode
+
+  // 卡片的标题
+  title?: React.ReactNode
+
+  // 卡片的副标题
+  subTitle?: React.ReactNode
+
+  // 卡片操作组，位置在卡片底部
+  actions?: React.ReactNode
+
+  // 是否显示标题的项目符号
+  showTitleBullet?: boolean
+
+  // 是否展示头部的分隔线
+  showHeadDivider?: boolean
+
+  // 内容区域的固定高度
+  contentHeight?: string | number
+
+  // 标题区域的用户自定义内容
+  extra?: React.ReactNode
+
+  // 是否开启自由模式，开启后card 将使用子组件配合使用, 设置此项后 title, subtitle, 等等属性都将失效
+  free?: boolean
 }
 ```
 
@@ -3608,68 +2012,6 @@ declare type ValidatePatternRules =
   | ValidateArrayRules
 ```
 
-#### INextSchemaFieldProps
-
-```typescript
-interface INextSchemaFieldProps {
-    name?: string;
-    /** ISchema **/
-    title?: SchemaMessage;
-    description?: SchemaMessage;
-    default?: any;
-    readOnly?: boolean;
-    writeOnly?: boolean;
-    type?: 'string' | 'object' | 'array' | 'number' | string;
-    enum?: Array<string | number | {
-        label: SchemaMessage;
-        value: any;
-    }>;
-    const?: any;
-    multipleOf?: number;
-    maximum?: number;
-    exclusiveMaximum?: number;
-    minimum?: number;
-    exclusiveMinimum?: number;
-    maxLength?: number;
-    minLength?: number;
-    pattern?: string | RegExp;
-    maxItems?: number;
-    minItems?: number;
-    uniqueItems?: boolean;
-    maxProperties?: number;
-    minProperties?: number;
-    required?: string[] | boolean;
-    format?: string;
-    properties?: {
-        [key: string]: ISchema;
-    };
-    items?: ISchema | ISchema[];
-    additionalItems?: ISchema;
-    patternProperties?: {
-        [key: string]: ISchema;
-    };
-    additionalProperties?: ISchema;
-    editable?: boolean;
-    visible?: boolean;
-    display?: boolean;
-    ['x-props']?: {
-        [name: string]: any;
-    };
-    ['x-index']?: number;
-    ['x-rules']?: ValidatePatternRules;
-    ['x-component']?: string;
-    ['x-component-props']?: {
-        [name: string]: any;
-    };
-    ['x-render']?: <T = ISchemaFieldComponentProps>(props: T & {
-        renderComponent: () => React.ReactElement;
-    }) => React.ReactElement;
-    ['x-effect']?: (dispatch: (type: string, payload: any) => void, option?: object) => {
-        [key: string]: any;
-    };
-
-```
-
 #### IPreviewTextProps
 
 ```typescript
@@ -3736,17 +2078,140 @@ interface IConnectOptions<T> {
   //默认props
   defaultProps?: Partial<IConnectProps>
   //取值函数，有些场景我们的事件函数取值并不是事件回调的第一个参数，需要做进一步的定制
-  getValueFromEvent?: (props:  IFieldProps['x-props'], event: Event, ...args: any[]) => any
+  getValueFromEvent?: (props:  IFieldProps['x-props'], event: Event, ...args: any[]) => any 
   //字段组件props transformer
-  getProps?: (connectProps: IConnectProps, fieldProps: IFieldProps) => IConnectProps
+  getProps?: (connectProps: IConnectProps, fieldProps: IFieldProps) => IConnectProps 
   //字段组件component transformer
-  getComponent?: (
-    target: T,
+  getComponent?: ( 
+    target: T, 
     connectProps: IConnectProps,
     fieldProps: IFieldProps
   ) => T
 }
 
+```
+
+
+### IForm
+
+```typescript
+interface IForm {
+  submit(
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
+  ): Promise<IFormSubmitResult>
+  clearErrors: (pattern?: FormPathPattern) => void
+  hasChanged(target: any, path: FormPathPattern): boolean
+  reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
+  validate(
+    path?: FormPathPattern,
+    options?: IFormExtendedValidateFieldOptions
+  ): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
+  getFormState(callback?: (state: IFormState) => any): any
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void,
+    silent?: boolean
+  ): void
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): any
+  unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
+  registerField(props: IFieldStateProps): IField
+  registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
+  createMutators(field: IField): IMutators
+  getFormGraph(): IFormGraph
+  setFormGraph(graph: IFormGraph): void
+  subscribe(callback?: FormHeartSubscriber): number
+  unsubscribe(id: number): void
+  notify: <T>(type: string, payload?: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  getFieldValue(path?: FormPathPattern): any
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+```
+
+#### IFormActions
+
+```typescript
+interface IFormActions {
+  submit(
+    onSubmit?: (values: IFormState['values']) => void | Promise<any>
+  ): Promise<IFormSubmitResult>
+  reset(options?: IFormResetOptions): void
+  hasChanged(target: any, path: FormPathPattern): boolean
+  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
+  setFormState(callback?: (state: IFormState) => any): void
+  getFormState(callback?: (state: IFormState) => any): any
+  clearErrors: (pattern?: FormPathPattern) => void
+  setFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => void
+  ): void
+  getFieldState(
+    path: FormPathPattern,
+    callback?: (state: IFieldState) => any
+  ): any
+  getFormGraph(): IFormGraph
+  setFormGraph(graph: IFormGraph): void
+  subscribe(callback?: FormHeartSubscriber): number
+  unsubscribe(id: number): void
+  notify: <T>(type: string, payload?: T) => void
+  dispatch: <T>(type: string, payload?: T) => void
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  getFieldValue(path?: FormPathPattern): any
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  getFieldInitialValue(path?: FormPathPattern): any
+}
+
+```
+
+#### IFormValidateResult
+
+```typescript
+interface IFormValidateResult {
+    errors: Array<{
+        path: string;
+        messages: string[];
+    }>;
+    warnings: Array<{
+        path: string;
+        messages: string[];
+    }>;
+}
+```
+
+#### ISchemaFormProps
+
+```typescript
+interface ISchemaFormProps<
+  Value = any,
+  DefaultValue = any,
+  FormEffectPayload = any,
+  FormActions = ISchemaFormActions | ISchemaFormAsyncActions
+> extends IFormProps<Value, DefaultValue, FormEffectPayload, FormActions> {
+  schema?: ISchema
+  fields?: ISchemaFormRegistry['fields']
+  components?: {
+    [key: string]: React.JSXElementConstructor<any>
+  }
+  virtualFields?: ISchemaFormRegistry['virtualFields']
+  formComponent?: ISchemaFormRegistry['formComponent']
+  formItemComponent?: ISchemaFormRegistry['formItemComponent']
+  expressionScope?: { [key: string]: any }
+}
+```
+
+#### IFormSpyAPI
+
+```typescript
+interface IFormSpyAPI {
+  form: IForm
+  type: string
+  state: any
+}
 ```
 
 #### ISpyHook
@@ -3756,5 +2221,63 @@ interface ISpyHook {
   form: IForm
   state: any
   type: string
+}
+```
+
+#### MergedFieldComponentProps
+
+```typescript
+interface MergedFieldComponentProps extends IFieldState {
+  schema: Schema
+  mutators: IMutators
+  form: IForm
+  renderField: (
+    addtionKey: string | number,
+    reactKey?: string | number
+  ) => React.ReactElement
+}
+
+```
+
+#### Pagination
+
+```typescript
+interface Pagination {
+  total: number
+  pageSize: number
+  current: number
+}
+```
+
+#### IQueryParams
+
+```typescript
+type IQueryParams = {
+  pagination: {
+    total: number
+    pageSize: number
+    current: number
+  }
+  sorter?: {
+    order: string
+    field: string
+    columnKey: string
+    column: any
+  }
+  filters?: {
+    [dataIndex: string]: any
+  }
+  values: any
+}
+```
+
+#### IQueryResponse
+
+```typescript
+type IQueryResponse = {
+  dataSource: any[]
+  total: number
+  pageSize: number
+  current: number
 }
 ```

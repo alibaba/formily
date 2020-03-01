@@ -3,6 +3,7 @@ import { mapTextComponent, mapStyledProps, normalizeCol } from '@formily/antd'
 import { Select as AntSelect } from 'antd'
 import { SelectProps as AntSelectProps } from 'antd/lib/select'
 import styled from 'styled-components'
+import { isArr } from '@formily/shared'
 export * from '@formily/shared'
 
 export const compose = (...args: any[]) => {
@@ -23,9 +24,28 @@ type SelectProps = AntSelectProps & {
   dataSource?: SelectOption[]
 }
 
-const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
-  const { dataSource = [], ...others } = props
-  const children = dataSource.map(item => {
+const createEnum = (enums: any) => {
+  if (isArr(enums)) {
+    return enums.map(item => {
+      if (typeof item === 'object') {
+        return {
+          ...item
+        }
+      } else {
+        return {
+          label: item,
+          value: item
+        }
+      }
+    })
+  }
+
+  return []
+}
+
+export const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
+  const { dataSource = [], onChange, ...others } = props
+  const children = createEnum(dataSource).map(item => {
     const { label, value, ...others } = item
     return (
       <AntSelect.Option
@@ -39,7 +59,16 @@ const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
     )
   })
   return (
-    <AntSelect className={props.className} {...others}>
+    <AntSelect
+      className={props.className}
+      {...others}
+      onChange={(value: any, options: any) => {
+        onChange(value, {
+          ...options,
+          props: undefined //干掉循环引用
+        })
+      }}
+    >
       {children}
     </AntSelect>
   )

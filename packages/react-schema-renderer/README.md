@@ -278,7 +278,7 @@ import { Form } from 'antd'
 
 export const CompatFormComponent = ({children,...props})=>{
   return <Form {...props}>{children}</Form> //Very simple to use the Form component, props is the props of the SchemaForm component, here will be directly transparent
-})
+}
 
 export const CompatFormItemComponent = ({children,...props})=>{
   const messages = [].concat(props.errors || [], props.warnings || [])
@@ -317,6 +317,7 @@ export default ()=>{
        formComponent={CompatFormComponent}
        formItemComponent={CompatFormItemComponent}
     />
+  )
 }
 
 ```

@@ -12,7 +12,7 @@ import {
 } from '@formily/react'
 import { ValidatePatternRules } from '@formily/validator'
 import { Schema } from './shared/schema'
-export * from '@formily/react/lib/types'
+export * from '@formily/react'
 
 export interface ISchemaFieldProps {
   path?: FormPathPattern
@@ -89,7 +89,7 @@ export interface ISchema {
   default?: any
   readOnly?: boolean
   writeOnly?: boolean
-  type?: 'string' | 'object' | 'array' | 'number' | string
+  type?: 'string' | 'object' | 'array' | 'number' | 'boolean' | string
   enum?: Array<
     | string
     | number
@@ -126,6 +126,7 @@ export interface ISchema {
   editable?: boolean
   visible?: boolean
   display?: boolean
+  triggerType?: 'onBlur' | 'onChange'
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
@@ -203,3 +204,10 @@ export interface ISchemaFormAsyncActions extends IFormAsyncActions {
   getSchema(): Promise<Schema>
   getFormSchema(): Promise<Schema>
 }
+
+export type MixinConnectedComponent<T extends string> = React.FC<
+  ISchemaFieldComponentProps
+> &
+  {
+    [key in T]: React.FC<ISchemaFieldComponentProps>
+  }
