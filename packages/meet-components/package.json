@@ -20,6 +20,7 @@
     "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "peerDependencies": {
+    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
@@ -29,19 +30,22 @@
     "@formily/react-schema-renderer": "^1.0.4",
     "@formily/react-shared-components": "^1.0.4",
     "@formily/shared": "^1.0.4",
-    "@rax-ui/locale": "^1.0.0-beta.10",
     "classnames": "^2.2.6",
+    "styled-components": "^4.1.1",
+    "@rax-ui/locale": "^1.0.0-beta.10",
+    "rax-plugin-app": "^0.2.19",
     "rax": "^1.1.1",
     "rax-app": "^0.1.0",
     "rax-dom": "^1.0.1",
     "rax-image": "^1.0.3",
     "rax-link": "^1.0.1",
-    "rax-plugin-app": "^0.2.19",
     "rax-recyclerview": "^1.1.1",
     "rax-text": "^1.0.0",
     "rax-view": "^1.0.0",
-    "styled-components": "^4.1.1",
     "universal-navigate": "^1.0.0"
+  },
+  "devDependencies": {
+    "ts-transform-import-path-rewrite": "^0.2.1"
   },
   "publishConfig": {
     "access": "public"

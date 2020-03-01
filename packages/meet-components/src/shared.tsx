@@ -1,5 +1,10 @@
 import React from 'react'
-import { mapTextComponent, mapStyledProps, normalizeCol } from '@formily/meet'
+import {
+  mapTextComponent,
+  mapStyledProps,
+  normalizeCol,
+  mapSelectComponent
+} from '@formily/meet'
 import { Select as MeetSelect } from '@alifd/meet'
 import { SelectComponent as MeetSelectProps } from '@alifd/meet/types/select'
 import styled from 'styled-components'
@@ -61,4 +66,4 @@ export const transformDataSourceKey = (component, dataSourceKey) => {
   }
 }
 
-export { mapTextComponent, mapStyledProps, normalizeCol }
+export { mapTextComponent, mapStyledProps, normalizeCol, mapSelectComponent }
