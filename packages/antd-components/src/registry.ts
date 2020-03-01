@@ -27,6 +27,7 @@ export const setup = () => {
     daterange: DatePicker.RangePicker,
     year: DatePicker.YearPicker,
     month: DatePicker.MonthPicker,
+    week: DatePicker.WeekPicker,
     string: Input,
     textarea: Input.TextArea,
     number: NumberPicker,

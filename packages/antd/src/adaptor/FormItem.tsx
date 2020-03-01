@@ -6,7 +6,7 @@ import {
   useShallowFormItem
 } from '../context'
 import { IFormItemTopProps, ISchemaFieldAdaptorProps } from '../types'
-import { normalizeCol } from '../shared'
+import { normalizeCol, pickFormItemProps } from '../shared'
 
 const computeStatus = (props: ISchemaFieldAdaptorProps) => {
   if (props.loading) {
@@ -47,33 +47,14 @@ const computeExtra = (props: ISchemaFieldAdaptorProps) => {
   if (props.extra) return props.extra
 }
 
-function pickProps<T = {}>(obj: T, ...keys: (keyof T)[]): Pick<T, keyof T> {
-  const result: Pick<T, keyof T> = {} as any
-  for (let i = 0; i < keys.length; i++) {
-    if (obj[keys[i]] !== undefined) {
-      result[keys[i]] = obj[keys[i]]
-    }
-  }
-  return result
-}
-
 const computeSchemaExtendProps = (
   props: ISchemaFieldAdaptorProps
 ): IFormItemTopProps => {
   if (props.schema) {
-    return pickProps(
-      {
-        ...props.schema.getExtendsItemProps(),
-        ...props.schema.getExtendsProps()
-      },
-      'required',
-      'className',
-      'prefixCls',
-      'labelAlign',
-      'hasFeedback',
-      'labelCol',
-      'wrapperCol'
-    )
+    return pickFormItemProps({
+      ...props.schema.getExtendsItemProps(),
+      ...props.schema.getExtendsProps()
+    })
   }
 }
 
@@ -103,7 +84,7 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
       prefixCls={prefixCls}
       label={label}
       labelAlign={labelAlign}
-      required={props.editable ? props.required : undefined}
+      required={props.editable === false ? undefined : props.required}
       help={help}
       validateStatus={status}
       extra={extra ? <p>{extra}</p> : undefined}

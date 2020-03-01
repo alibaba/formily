@@ -382,6 +382,7 @@ test('test idcard rules', async () => {
   fireEvent.change(element, { target: { value: value4 } })
   fireEvent.change(element, { target: { value: value5 } })
   fireEvent.change(element, { target: { value: value6 } })
+  await sleep(33)
 })
 
 test('dynamic switch visible', async () => {

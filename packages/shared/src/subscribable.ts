@@ -13,7 +13,7 @@ export class Subscribable<Payload = any> {
 
   subscribe = (callback?: Subscriber<Payload>): number => {
     if (isFn(callback)) {
-      let index: number = this.subscribers.index + 1
+      const index: number = this.subscribers.index + 1
       this.subscribers[index] = callback
       this.subscribers.index++
       return index

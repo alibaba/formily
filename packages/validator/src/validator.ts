@@ -20,6 +20,7 @@ import {
   isObj,
   isValid,
   each,
+  reduce,
   FormPath,
   FormPathPattern
 } from '@formily/shared'
@@ -42,10 +43,10 @@ const template = (message: SyncValidateResponse, context: any): string => {
     return message.replace(/\{\{\s*([\w.]+)\s*\}\}/g, (_, $0) => {
       return FormPath.getIn(context, $0)
     })
-  } else if (isObj(message)) {
+  } else if (isObj(message) && !message['$$typeof'] && !message['_owner']) {
     return template(message.message, context)
   } else {
-    return ''
+    return message as any
   }
 }
 
@@ -114,16 +115,20 @@ class FormValidator {
           key === 'validator' ? 1 : -1
         )
         for (let l = 0; l < keys.length; l++) {
-          let key = keys[l]
+          const key = keys[l]
           if (ruleObj.hasOwnProperty(key) && isValid(ruleObj[key])) {
             const rule = ValidatorRules[key]
             if (rule) {
-              const payload = await rule(value, ruleObj)
+              const payload = await rule(value, ruleObj, ValidatorRules)
               const message = template(payload, {
                 ...ruleObj,
+                rule: ruleObj,
                 value
               })
-              if (isStr(payload)) {
+              if (
+                isStr(payload) ||
+                (payload['$$typeof'] && payload['_owner'])
+              ) {
                 if (first) {
                   if (message) {
                     errors.push(message)
@@ -164,41 +169,51 @@ class FormValidator {
     pattern: FormPath,
     options: ValidateFieldOptions
   ): Promise<ValidateNodeResult> {
-    const errors = []
-    const warnings = []
-    let promise = Promise.resolve({ errors, warnings })
-    each<ValidateNodeMap, ValidateNode>(this.nodes, (validator, path) => {
-      if (
-        isFn(this.matchStrategy)
-          ? this.matchStrategy(pattern, path)
-          : pattern.match(path)
-      ) {
-        promise = promise.then(async ({ errors, warnings }) => {
-          const result = await validator(options)
-          return {
-            errors: result.errors.length
-              ? errors.concat({
-                  path: path.toString(),
-                  messages: result.errors
+    let errors = []
+    let warnings = []
+    try {
+      await Promise.all(
+        reduce<ValidateNodeMap, ValidateNode>(
+          this.nodes,
+          (buf, validator, path) => {
+            if (
+              isFn(this.matchStrategy)
+                ? this.matchStrategy(pattern, path)
+                : pattern.match(path)
+            ) {
+              return buf.concat(
+                validator(options).then(result => {
+                  if (result.errors.length) {
+                    errors = errors.concat({
+                      path: path.toString(),
+                      messages: result.errors
+                    })
+                  }
+                  if (result.warnings.length) {
+                    warnings = warnings.concat({
+                      path: path.toString(),
+                      messages: result.warnings
+                    })
+                  }
                 })
-              : errors,
-            warnings: result.warnings.length
-              ? warnings.concat({
-                  path: path.toString(),
-                  messages: result.warnings
-                })
-              : warnings
-          }
-        })
+              )
+            }
+            return buf
+          },
+          []
+        )
+      )
+      return {
+        errors,
+        warnings
       }
-    })
-    return promise.catch(error => {
+    } catch (error) {
       console.error(error)
       return {
-        errors: [],
-        warnings: []
+        errors,
+        warnings
       }
-    })
+    }
   }
 
   validate = (

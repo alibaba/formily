@@ -2,7 +2,7 @@ import { isFn } from './types'
 
 export const scheduler = (concurrent = 360) => {
   let operating = false
-  let buffer = []
+  const buffer = []
   const applyQueue = () => {
     operating = true
     requestAnimationFrame(() => {

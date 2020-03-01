@@ -12,7 +12,7 @@ import {
 } from '@formily/react-schema-renderer'
 import { PreviewTextConfigProps } from '@formily/react-shared-components'
 import { StyledComponent } from 'styled-components'
-export * from '@formily/react-schema-renderer/lib/types'
+export * from '@formily/react-schema-renderer'
 
 type ColSpanType = number | string
 
@@ -33,6 +33,7 @@ export type INextFormItemProps = IFieldStateUIProps &
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    [key: string]: any
   }
 
 export type INextSchemaFieldProps = IMarkupSchemaFieldProps
