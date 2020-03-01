@@ -4,6 +4,7 @@
     "outDir": "./lib"
   },
   "include": [
+    "./src/**/*.js",
     "./src/**/*.ts",
     "./src/**/*.tsx"
   ],
