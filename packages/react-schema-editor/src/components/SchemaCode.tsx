@@ -41,7 +41,7 @@ export const SchemaCode: React.FC<ISchemaCodeProps> = ({
         height={500}
         language="json"
         theme="vs-dark"
-        onChange={(schema) => onChange(JSON.parse(schema))}
+        onChange={(schema) => onChange(schema)}
         value={schema}
       />
     </div>

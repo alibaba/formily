@@ -1,5 +1,14 @@
 import React from 'react'
-import { Tree, Icon, Menu, Dropdown } from 'antd'
+
+import {
+  DeleteOutlined,
+  DeploymentUnitOutlined,
+  FileOutlined,
+  FolderOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
+
+import { Tree, Menu, Dropdown } from 'antd';
 import { ISchemaTreeProps } from '../utils/types'
 import { getFieldTypeData } from '../utils/fieldEditorHelpers';
 import * as fp from 'lodash/fp'
@@ -165,17 +174,17 @@ export const SchemaTree: React.FC<ISchemaTreeProps> = ({
     const disableChildNode = !fieldSchema || fieldSchema.type === 'string'
     return (
       <Menu onClick={handleMenuClick}>
-        <SubMenu key='node' title={<><Icon type='plus'></Icon>添加节点 </>}>
+        <SubMenu key='node' title={<><PlusOutlined></PlusOutlined>添加节点 </>}>
           {getSubMenus()}
         </SubMenu>
-        <SubMenu key='child' title={<><Icon type='plus'></Icon>添加子节点 </>} disabled={disableChildNode}>
+        <SubMenu key='child' title={<><PlusOutlined></PlusOutlined>添加子节点 </>} disabled={disableChildNode}>
           {getSubMenus()}
         </SubMenu>
         <Menu.Item key='delete'>
-          <Icon type='delete'></Icon>删除节点
+          <DeleteOutlined></DeleteOutlined>删除节点
         </Menu.Item>
       </Menu>
-    )
+    );
   }
 
   return (
@@ -214,7 +223,7 @@ const TreeNodeBySchema: React.FC<{
   switch (schema.type) {
     case 'object':
       return (
-        <TreeNode icon={<Icon type="folder" />} {...currentTreeLevelProps}>
+        <TreeNode active icon={<FolderOutlined />} {...currentTreeLevelProps}>
           {schema.properties &&
             Object.keys(schema.properties).map(key =>
               TreeNodeBySchema({
@@ -223,11 +232,12 @@ const TreeNodeBySchema: React.FC<{
               })
             )}
         </TreeNode>
-      )
+      );
     case 'array':
       return (
         <TreeNode
-          icon={<Icon type="deployment-unit" />}
+          active
+          icon={<DeploymentUnitOutlined />}
           {...currentTreeLevelProps}
         >
           {schema.items &&
@@ -236,11 +246,11 @@ const TreeNodeBySchema: React.FC<{
               path: path.concat('items')
             })}
         </TreeNode>
-      )
+      );
     default:
   }
 
-  return <TreeNode icon={<Icon type="file" />} {...currentTreeLevelProps} />
+  return <TreeNode active icon={<FileOutlined />} {...currentTreeLevelProps} />;
 }
 
 function getUniqueKeyFromObjectKeys(key: string, keys: string[], count = -1) {
