@@ -59,21 +59,28 @@ export default () => {
 
 通过 `setup`后，内置的表单字段有以下类型
 
-| type类型       | 对应组件                             | 描述                 |
-|:--------------|:----------------------------------|:----------------------|
-| string   | [Input](#Input)                     | 输入框组件         |
-| string(有enum属性时)   | [Select](#Select)                     | 选择框组件         |
-| textarea   | [Textarea](#Textarea)                     | 多行输入框组件         |
-| password   | [Password](#Password)                     | 密码输入框         |
-| checkbox   | [CheckboxGroup](#Checkbox)                     | Checkbox         |
-| radio   | [RadioGroup](#Radio)                     | Radio         |
-| boolean   | [Switch](#Swicth)                     | 开关组件         |
-| date   | [DatePicker](#DatePicker)                     | 日期选择器         |
-| time   | [TimePicker](#TimePicker)                     | 时间选择器         |
-| daterange   | [DatePicker.RangePicker](#RangePicker)                     | 范围日期选择器         |
-| rating   | [Rating](#Rating)                     | 评价组件         |
-| object   |                      | 嵌套表单         | 自动连接路径信息
-| array   | [ArrayCards](#ArrayCards)（默认）                       | 表单数组         |
+| type 类型              | 对应组件                               | 描述           |
+| :--------------------- | :------------------------------------- | :------------- |
+| string                 | [Input](#Input)                        | 输入框组件     |
+| string(有 enum 属性时) | [Select](#Select)                      | 选择框组件     |
+| textarea               | [Textarea](#Textarea)                  | 多行输入框组件 |
+| password               | [Password](#Password)                  | 密码输入框     |
+| number                 | [NumberPicker](#NumberPickers)         | 数字输入框     |
+| checkbox               | [CheckboxGroup](#Checkbox)             | Checkbox       |
+| radio                  | [RadioGroup](#Radio)                   | Radio          |
+| boolean                | [Switch](#Swicth)                      | 开关组件       |
+| date                   | [DatePicker](#DatePicker)              | 日期选择器     |
+| time                   | [TimePicker](#TimePicker)              | 时间选择器     |
+| daterange              | [DatePicker.RangePicker](#RangePicker) | 范围日期选择器 |
+| week                   | [DatePicker.WeekPicker](#WeekPicker)   | 周选择器       |
+| month                  | [DatePicker.MonthPicker](#MonthPicker) | 月份选择器     |
+| year                   | [DatePicker.YearPicker](#YearPicker)   | 年份选择器     |
+| rating                 | [Rating](#Rating)                      | 评价组件       |
+| upload                 | [Upload](#Upload)                      | 文件上传组件   |
+| range                  | [Range](#Range)                        | 范围选择器     |
+| transfer               | [Transfer](#Transfer)                  | 穿梭框         |
+| object                 |                                        | 嵌套表单       | 自动连接路径信息 |
+| array                  | [ArrayCards](#ArrayCards)（默认）      | 表单数组       |
 
 
 #### Input
