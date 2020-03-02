@@ -54,6 +54,6 @@
     - [next](../../packages/next/README.zh-cn.md)
     - [next-components](../../packages/next-components/README.zh-cn.md)
   - Rax Meet
-    - [meet](../../packages/meet/README.zh-cn.md)
-    - [meet-components](../../packages/meet-components/README.zh-cn.md)
+    - meet
+    - meet-components
 - [GITHUB](https://github.com/alibaba/formily)
