@@ -54,11 +54,15 @@ export const FormStep: React.FC<IFormStep> &
         })
       })
       $(StateMap.ON_FORM_STEP_CURRENT_CHANGE).subscribe(({ value }) => {
-        items.forEach(({ name }, index) => {
-          if (!name)
-            throw new Error('FormStep dataSource must include `name` property')
-          setFieldState(name, (state: any) => {
-            state.display = index === value
+        form.hostRender(() => {
+          items.forEach(({ name }, index) => {
+            if (!name)
+              throw new Error(
+                'FormStep dataSource must include `name` property'
+              )
+            setFieldState(name, (state: any) => {
+              state.display = index === value
+            })
           })
         })
       })

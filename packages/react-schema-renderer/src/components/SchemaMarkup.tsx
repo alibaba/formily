@@ -43,6 +43,7 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
 
 SchemaMarkupField.displayName = 'SchemaMarkupField'
 
+
 export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
   let alreadyHasSchema = false
   let finalSchema: Schema

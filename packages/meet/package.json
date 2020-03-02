@@ -44,7 +44,10 @@
     "universal-navigate": "^1.0.0"
   },
   "devDependencies": {
-    "ts-transform-import-path-rewrite": "^0.2.1"
+    "ts-transform-import-path-rewrite": "^0.2.1",
+    "ts-import-plugin": "1.6.1",
+    "ts-node": "^8.3.0",
+    "typescript": "~3.6.2"
   },
   "publishConfig": {
     "access": "public"

@@ -380,7 +380,8 @@ export interface IForm {
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
   notify: <T>(type: string, payload?: T) => void
-  isLeadingValidate: () => boolean
+  isHostRendering: () => boolean
+  hostRender: (callback?: () => void) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
