@@ -5,7 +5,7 @@ import {
   FormItemShallowProvider,
   useShallowFormItem
 } from '../context'
-import { IFormItemTopProps, ISchemaFieldAdaptorProps } from '../types'
+import { ISchemaFieldAdaptorProps } from '../types'
 import { normalizeCol, pickFormItemProps } from '../shared'
 
 const computeStatus = (props: ISchemaFieldAdaptorProps) => {
@@ -47,9 +47,7 @@ const computeExtra = (props: ISchemaFieldAdaptorProps) => {
   if (props.extra) return props.extra
 }
 
-const computeSchemaExtendProps = (
-  props: ISchemaFieldAdaptorProps
-): IFormItemTopProps => {
+const computeSchemaExtendProps = (props: ISchemaFieldAdaptorProps) => {
   if (props.schema) {
     return pickFormItemProps({
       ...props.schema.getExtendsItemProps(),
@@ -79,6 +77,19 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
 
   const { labelCol, wrapperCol } = mergedProps
 
+  const addonAfter = mergedProps.addonAfter
+
+  delete mergedProps.addonAfter
+
+  const children = addonAfter ? (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
+      {addonAfter}
+    </div>
+  ) : (
+    <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
+  )
+
   return (
     <Form.Item
       prefixCls={prefixCls}
@@ -94,7 +105,7 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
         label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
       }
     >
-      <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
+      {children}
     </Form.Item>
   )
 }

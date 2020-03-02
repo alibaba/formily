@@ -92,7 +92,7 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 | x-component          | 字段 UI 组件名称，大小写不敏感                           | `string`                                                          |
 | x-component-props    | 字段 UI 组件属性                       | `{}`                                                              |
 
-## From Schema 表达式
+## Form Schema 表达式
 
 Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 JSON 字符串中注入一些逻辑能力
 
@@ -147,6 +147,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 - x-linkages 是一个数组结构，代表借助它可以实现 1 对多联动
 - 每个数组项代表一个联动命令，需要指定联动类型 type 字段，也需要指定被联动的目标字段(target)
+- target是一个FormPathPattern匹配表达式，在这里我们可以使用FormPath的各种匹配语法
 - 需要指定每个联动发生的条件，由一个表达式来驱动
 
 ### 表达式说明

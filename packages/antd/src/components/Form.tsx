@@ -1,7 +1,7 @@
 import React, { useRef, useMemo } from 'react'
 import { Form as AntdForm } from 'antd'
 import { InternalForm } from '@formily/react-schema-renderer'
-import { normalizeCol, autoScrollInValidateFailed } from '../shared'
+import { normalizeCol, autoScrollInValidateFailed, isAntdV4 } from '../shared'
 import { FormItemDeepProvider } from '../context'
 import { IAntdFormProps } from '../types'
 import {
@@ -53,12 +53,14 @@ export const Form: React.FC<IAntdFormProps &
                 <AntdForm
                   {...rest}
                   component={useMemo(() => {
-                    return props => {
-                      return React.createElement('form', {
-                        ...props,
-                        onSubmit,
-                        onReset
-                      })
+                    if (isAntdV4) {
+                      return props => {
+                        return React.createElement('form', {
+                          ...props,
+                          onSubmit,
+                          onReset
+                        })
+                      }
                     }
                   }, [])}
                   onSubmit={onSubmit}
