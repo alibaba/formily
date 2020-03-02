@@ -265,6 +265,90 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 > 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
 
+#### InternalField
+
+底层的 `<Field>` 组件，具备完整的功能性，没有UI的限制，开发者根据特定场景需求，基于此组件进行开发。
+
+**用法**
+
+示例：以输入框为例，如何快速绑定表单字段。
+
+```tsx
+import { InternalField as Field } from '@formily/antd'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <div>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        {state.errors}
+        {state.warnings}
+      </div>
+    )}
+  </Field>
+)
+```
+
+#### InternalVirtualField
+
+底层的 `<VirtualField>` 组件，具备完整的功能性，常用作布局组件，开发者根据特定场景需求，基于此组件进行开发。
+
+**用法**
+
+示例：布局组件为例，如何根据API设置布局样式。
+
+```tsx
+import { createFormActions, Form, Field, VirtualField } from '@formily/antd'
+
+const Layout = ({ children, width = '100px', height = '100px' }) => {
+  return (
+    <div style={{ border: '1px solid #999', width, height }}>{children}</div>
+  )
+}
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <Field name="user" initialValue={{}}>
+        {({ state, mutator }) => {
+          return (
+            <VirtualField name="user.layout">
+              {({ state: layoutState }) => {
+                return (
+                  <Layout
+                    width={layoutState.props.width}
+                    height={layoutState.props.height}
+                  />
+                )
+              }}
+            </VirtualField>
+          )
+        }}
+      </Field>
+
+      <button
+        onClick={() => {
+          // some where dynamic change layout's props
+          actions.setFieldState('user.layout', state => {
+            state.props.width = '200px'
+            state.props.height = '200px'
+          })
+        }}
+      >
+        change layout
+      </button>
+    </Form>
+  )
+}
+```
+
 #### `<FormButtonGroup/>`
 
 * IFormButtonGroupProps
@@ -329,6 +413,7 @@ const App = () => {
 }
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
 
 ### Hook
 
@@ -884,6 +969,60 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```
 
+#### useDeepFormItem
+
+获取顶部设置与 `FormItem` 相关属性，常用于布局组件需要和表单组件对齐等需求。搭配 `<FormItemDeepProvider>` 一起使用
+
+**用法**
+
+```tsx
+import { useDeepFormItem, FormItemDeepProvider } from '@formily/antd'
+import { Form } from '@alifd/antd'
+const CustomComponent = (props) => {
+  const {
+    prefixCls,
+    labelAlign,
+    labelCol: contextLabelCol,
+    wrapperCol: contextWrapperCol
+  } = useDeepFormItem()
+
+  return <Form.Item
+    prefixCls={prefixCls}
+    labelAlign={labelAlign}
+    labelCol={{ span: contextLabelCol }}
+    wrapperCol={{ span: contextWrapperCol }}
+   >
+    {props.children}
+  </Form.Item>
+}
+
+const App = () => {
+  return <FormItemDeepProvider labelAlign="top" labelCol={6} wrapperCol={18}>
+    <CustomComponent />
+  </FormItemDeepProvider>
+}
+
+```
+
+#### useShallowFormItem
+
+当想保留大部分表单组件的属性，并且阻隔某些指定属性时，搭配 `<FormItemShallowProvider>` 一起使用
+
+**用法**
+
+下列 `<NoLabelInput>`  除了`label`以外，会继承其他所有顶部的 `FormItem` 属性。
+
+```tsx
+import { SchemaField, FormItemShallowProvider, useShallowFormItem } from '@formily/antd'
+import { Form } from '@alifd/antd'
+const NoLabelInput = (props) => {
+  return <FormItemShallowProvider label={undefined}>
+    <SchemaField path={props.path} type="string">
+  </FormItemShallowProvider>
+}
+
+```
+
 ### API
 
 > 整体完全继承@formily/react, 下面只列举@formily/antd 的特有 API
@@ -928,6 +1067,117 @@ import { createAsyncFormActions } from '@formily/antd'
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
 ```
+
+#### setValidationLanguage
+
+设置校验规则语种，搭配[setValidationLocale](#setValidationLocale) 使用
+
+**签名**
+
+```typescript
+const setValidationLanguage = (lang: string) => void;
+```
+
+**用法**
+
+```tsx
+import { setValidationLanguage } from '@formily/antd'
+setValidationLanguage('zh')
+```
+
+#### setValidationLocale
+
+设置校验规则命中时，message的定义, 搭配[setValidationLanguage](#setValidationLanguage) 使用
+
+**签名**
+
+```typescript
+interface ILocaleMessages {
+    [key: string]: string | ILocaleMessages;
+}
+interface ILocales {
+    [lang: string]: ILocaleMessages;
+}
+const setValidationLocale: (locale: ILocales) => void;
+```
+
+**用法**
+
+```tsx
+import { setValidationLanguage, setValidationLocale, } from '@formily/antd'
+
+setValidationLanguage('zh')
+setValidationLocale({
+  zh: {
+    required: '这是修改默认的必填文案',
+  },
+})
+```
+
+#### registerValidationFormats
+
+拓展校验正则format, 当不满足此规则时即报错。
+
+**签名**
+
+```typescript
+type ValidateFormatsMap = {
+    [key in string]: RegExp;
+};
+static registerFormats(formats: ValidateFormatsMap): void
+```
+
+**用法**
+
+```tsx
+import { registerValidationFormats } from '@formily/antd'
+
+registerValidationFormats({
+  custom_format: /^\d+$/
+})
+
+<Field
+  type="string"
+  required
+  name="username"
+  title="UserName"
+  x-component="Input"
+  x-rules={{
+    format: 'custom_format',
+  }}
+/>
+```
+
+#### registerValidationMTEngine
+
+注册校验消息模板引擎
+
+**签名**
+
+```tsx
+static (template: any) => void;
+```
+
+**用法**
+
+```tsx
+import { setValidationLocale, registerValidationMTEngine } from '@formily/antd'
+setValidationLocale({
+  en: {
+    required: '这是定制必填文案 <% injectVar %>',
+  },
+})
+
+registerValidationMTEngine((message, context) => {
+  return message.replace(/\<\%\s*([\w.]+)\s*\%\>/g, (_, $0) => {
+    return '替代inject的文案'
+  })
+})
+```
+
+#### FormPath
+
+完全等价于 [cool-path](https://github.com/janryWang/cool-path)，提供了针对数据路径一系列的解析，匹配，取值，求值的能力。可以帮助我们在表单的很多地方高效实现业务逻辑。更详尽的内容，可以参考[理解表单路径系统](https://formilyjs.org/#/L3TOTn/JjSLSJFXiw)
 
 #### `FormEffectHooks`
 
@@ -1066,6 +1316,35 @@ registerFormField(
   connect()(props => <input {...props} value={props.value || ''} />)
 )
 ```
+
+#### mapStyledProps
+
+表单常使用 `mapStyledProps` 与 `connect` 搭配，它能够将当前表单字段的状态传递到 `<FormItem>` 上，实现
+`loading`，`error`, `warning` 三种状态。
+
+**用法**
+
+```tsx
+const Input = connect({
+  getProps: mapStyledProps,
+  getComponent: mapTextComponent
+})(Input))
+```
+
+#### mapTextComponent
+
+表单常使用 `mapTextComponent` 与 `connect` 搭配，它能够将当前表单字段在非编辑态时，显示预览值`<PreviewText>`，
+并且会自动处理有 `dataSource` 等情况。
+
+**用法**
+
+```tsx
+const Input = connect({
+  getProps: mapStyledProps,
+  getComponent: mapTextComponent
+})(Input))
+```
+
 
 #### registerFormFields
 
