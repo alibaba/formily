@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-schema-editor",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -19,10 +19,11 @@
     "build": "tsc --declaration"
   },
   "dependencies": {
-    "@formily/react-schema-renderer": "^1.0.2",
+    "@formily/react-schema-renderer": "^1.0.4",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
+    "antd": "^3.x",
     "node-sass": "^4.13.0",
     "typescript": "^3.5.2"
   },

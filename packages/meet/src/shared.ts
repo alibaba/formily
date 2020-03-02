@@ -9,9 +9,10 @@ export * from '@formily/shared'
 
 export const mapSelectComponent = (
   Target: React.JSXElementConstructor<any>
-  // props: any = {}
+  // props: any = {},
   // fieldProps: any = {}
 ): React.JSXElementConstructor<any> => {
+  // console.log(props, fieldProps)
   // const { picker } = props
   // if (picker === 'radio') {
   //   return RadioSelect

@@ -7,7 +7,7 @@ import {
 
 export const Select = connect({
   getProps: mapStyledProps,
-  getComponent: mapTextComponent
+  getComponent: mapTextComponent,
 })(AntdSelect)
 
 export default Select

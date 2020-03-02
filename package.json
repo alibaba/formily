@@ -65,7 +65,7 @@
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
     "all-contributors-cli": "^6.1.2",
-    "antd": "^3.17.0",
+    "antd": "^4.0.0",
     "awesome-typescript-loader": "^5.2.1",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",

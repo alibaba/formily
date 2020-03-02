@@ -73,7 +73,9 @@ describe('major scene', () => {
         "x-component-props": { "labelCol": 6, "wrapperCol": 18 },
     }, undefined, 'test')
 
-    expect(s.getExtendsComponentProps()).toEqual({})    
+    expect(s.getExtendsComponentProps()).toEqual({
+      "labelCol": 6, "wrapperCol": 18
+    })    
   })
 
   test('labelCol and wrapperCol(with filter)', () => {
@@ -84,7 +86,7 @@ describe('major scene', () => {
         "x-component-props": { "labelCol": 6, "wrapperCol": 18 },
     }, undefined, 'test')
 
-    expect(s.getExtendsComponentProps(false)).toEqual({ "labelCol": 6, "wrapperCol": 18 })    
+    expect(s.getExtendsComponentProps()).toEqual({ "labelCol": 6, "wrapperCol": 18 })    
   })
 
   test('deprecate x-item-props', () => {

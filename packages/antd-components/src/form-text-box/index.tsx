@@ -93,7 +93,6 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
     )
 
     if (!title && !label) return textChildren
-
     return (
       <AntdSchemaFieldAdaptor {...formItemProps}>
         {textChildren}

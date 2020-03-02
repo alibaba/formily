@@ -63,9 +63,9 @@ export const useFormTableQuery = (
       dataSource: response.dataSource || [],
       pagination: {
         ...pagination,
-        current: response.current,
-        pageSize: response.pageSize,
-        total: response.total
+        current: response.current || 1,
+        pageSize: response.pageSize || 20,
+        total: response.total || 0
       },
       onChange: (pagination: any, filters: any, sorter: any) => {
         if (pagination) setPagination(pagination)
