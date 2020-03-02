@@ -1,5 +1,4 @@
 import React, { Fragment, createContext, useContext } from 'react'
-import ReactDOM from 'react-dom'
 import { registerVirtualBox } from '../shared/registry'
 import { SchemaForm } from './SchemaForm'
 import { Schema } from '../shared/schema'
@@ -44,33 +43,6 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
 
 SchemaMarkupField.displayName = 'SchemaMarkupField'
 
-export const parseMarkupSchema = (target: any) => {
-  if (
-    target &&
-    target.type &&
-    target.type === 'object' &&
-    Object.keys(target.properties || {}).length
-  ) {
-    return { schema: new Schema(target) }
-  }
-  if (React.isValidElement(target)) {
-    const schema: Schema = new Schema({ type: 'object' })
-    const reactNode = render(
-      <MarkupContext.Provider value={schema}>{target}</MarkupContext.Provider>
-    )
-    ReactDOM.render(reactNode, document.createElement('div'))
-    if (Object.keys(schema.properties || {}).length) {
-      return {
-        schema,
-        reactNode
-      }
-    }
-  }
-  return {
-    schema: undefined,
-    reactNode: undefined
-  }
-}
 
 export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
   let alreadyHasSchema = false
