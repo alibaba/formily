@@ -43,6 +43,9 @@
     "styled-components": "^4.1.1",
     "universal-navigate": "^1.0.0"
   },
+  "devDependencies": {
+    "ts-transform-import-path-rewrite": "^0.2.1"
+  },
   "publishConfig": {
     "access": "public"
   },
