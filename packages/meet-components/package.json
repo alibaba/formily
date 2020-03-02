@@ -20,7 +20,6 @@
     "build": "ts-node --project ../../tsconfig.build.json build.ts"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
@@ -45,7 +44,10 @@
     "universal-navigate": "^1.0.0"
   },
   "devDependencies": {
-    "ts-transform-import-path-rewrite": "^0.2.1"
+    "ts-transform-import-path-rewrite": "^0.2.1",
+    "ts-import-plugin": "1.6.1",
+    "ts-node": "^8.3.0",
+    "typescript": "~3.6.2"
   },
   "publishConfig": {
     "access": "public"

@@ -18,7 +18,6 @@
     "build": "tsc"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
