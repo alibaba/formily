@@ -1,6 +1,6 @@
 # 实现复杂布局
 
-## Inline 布局
+## 内联布局
 
 ```jsx
 import React from 'react'
@@ -35,6 +35,10 @@ const App = () => (
 )
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+**案例解析**
+
+- 给SchemaForm组件传入inline属性即可把表单变成内联模式
 
 ## 复杂组合布局
 
@@ -315,6 +319,12 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+**案例解析**
+
+- 抽象了几个可复用的富文本工具方法，主要用在表达式中使用，可以快速实现很多简单的富文本文案场景
+- 每个Field都可以配一个x-props.addonAfter，可以给组件尾部追加文案
+- FormCard是卡片式布局，FormBlock是属于内联式卡片布局
+
 ## 网格布局
 
 ```jsx
@@ -352,6 +362,10 @@ const App = () => (
 )
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+**案例解析**
+
+- 使用FormItemGrid可以实现网格布局，如果加了title属性，就能处理FormItem维度的网格布局
 
 ## 分步表单
 
@@ -495,4 +509,8 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-## 自定义布局
+**案例解析**
+
+- 使用FormStep组件需要传入dataSource，同时指定对应要控制的字段name，这个name属性是一个FormPathPattern，可以使用匹配语法匹配任何字段
+- 消费FormStep状态，主要使用FormSpy来消费，借助reducer可以自定义状态
+- 借助actions.dispatch可以手工触发FormStep的生命周期钩子
