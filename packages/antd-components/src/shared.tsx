@@ -63,10 +63,18 @@ export const Select: React.FC<SelectProps> = styled((props: SelectProps) => {
       className={props.className}
       {...others}
       onChange={(value: any, options: any) => {
-        onChange(value, {
-          ...options,
-          props: undefined //干掉循环引用
-        })
+        onChange(
+          value,
+          isArr(options)
+            ? options.map(item => ({
+                ...item,
+                props: undefined
+              }))
+            : {
+                ...options,
+                props: undefined //干掉循环引用
+              }
+        )
       }}
     >
       {children}

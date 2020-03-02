@@ -165,6 +165,8 @@ export interface IFormActions {
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
+  isHostRendering: () => boolean
+  hostRender: (callback?: () => void) => void
   notify: <T>(type: string, payload?: T) => void
   dispatch: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
@@ -196,6 +198,8 @@ export interface IFormAsyncActions {
   subscribe(callback?: FormHeartSubscriber): Promise<number>
   unsubscribe(id: number): Promise<void>
   notify: <T>(type: string, payload: T) => Promise<void>
+  isHostRendering: () => boolean
+  hostRender: (callback?: () => void) => void
   dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldValue(path?: FormPathPattern): Promise<any>

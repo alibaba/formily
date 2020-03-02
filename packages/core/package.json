@@ -22,7 +22,6 @@
     "typescript": "^3.5.2"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4",
     "scheduler": ">=0.11.2"
   },
   "dependencies": {

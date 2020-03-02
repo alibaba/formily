@@ -78,6 +78,15 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
 
   const { labelCol, wrapperCol } = mergedProps
 
+  const children = mergedProps.addonAfter ? (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
+      {mergedProps.addonAfter}
+    </div>
+  ) : (
+    <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
+  )
+
   return (
     <Form.Item
       prefix={prefix}
@@ -95,7 +104,7 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
         label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
       }
     >
-      <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
+      {children}
     </Form.Item>
   )
 }
