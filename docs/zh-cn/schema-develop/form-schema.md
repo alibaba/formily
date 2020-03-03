@@ -92,6 +92,14 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 | x-component          | 字段 UI 组件名称，大小写不敏感                           | `string`                                                          |
 | x-component-props    | 字段 UI 组件属性                       | `{}`                                                              |
 
+## x-props扩展属性
+
+| 属性名               | 描述            | 类型                        |
+| -------------------- | ------------------ | ------------------- |
+| `x-props.addonAfter`| FormItem的尾随内容 | ReactNode |
+| `x-props.itemStyle`| FormItem的style属性  | Object |
+| `x-props.itemClassName` | FormItem的className属性 | String |
+
 ## Form Schema 表达式
 
 Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 JSON 字符串中注入一些逻辑能力
