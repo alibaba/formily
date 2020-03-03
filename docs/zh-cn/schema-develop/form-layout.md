@@ -81,7 +81,7 @@ const components = {
   Input,
   Radio: Radio.Group,
   Checkbox: Checkbox.Group,
-  CheckboxSigle: Checkbox,
+  CheckboxSingle: Checkbox,
   TextArea: Input.TextArea,
   NumberPicker,
   Select,
@@ -307,7 +307,7 @@ const App = () => {
             children:
               "{{text('确认签署',link('《xxxx协议》','https://taobao.com','_blank'))}}"
           }}
-          x-component="CheckboxSigle"
+          x-component="CheckboxSingle"
         />
         <FormButtonGroup offset={8} sticky>
           ​<Submit>提交</Submit>​<Reset>重置</Reset>​
