@@ -299,10 +299,10 @@ const App = () => {
   return (
     <Form>
       <FormItem label="Simple Select" name="simpleSelect" component={Select}
-        enum={['1', '2', '3', '4']}
+        dataSource={['1', '2', '3', '4']}
       />
       <FormItem label="Object Select" name="objSelect" component={Select} 
-        enum={[
+        dataSource={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
           { label: 'Three', value: '3' },
