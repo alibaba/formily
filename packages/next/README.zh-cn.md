@@ -260,6 +260,80 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### `<Form/>`
+
+适用于纯JSX开发，开发者可以基于此进行二次封装。
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| fields    |传入自定义表单组件                   | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) } |                |
+| virtualFields    |传入自定义虚拟组件                   | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |                |
+| labelCol    |label布局控制                  | number `or` { span: number; offset?: number } |                |
+| wrapperCol    |FormItem布局控制                  | number `or` { span: number; offset?: number } |                |
+| previewPlaceholder    |自定义预览placeholder                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
+| prefix    |样式前缀                  | string |                |
+| inline    |是否为内联表单                  | boolean |                |
+| size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `or` 'medium' `or` 'small' |                |
+| labelAlign    |标签的位置                  | 'top' `or` 'left' `or` 'inset' |                |
+| labelTextAlign    |标签的左右对齐方式                  | 'left' `or` 'right' |                |
+| labelCol    |控制所有 Item 的 labelCol                  | `{}` |                |
+| wrapperCol    |控制所有 Item 的 wrapperCol                  | `{}` |                |
+| className    |扩展class                  | string |                |
+| style    |自定义内联样式                  | React.CSSProperties |                |
+| component    |设置标签类型                  | string `or` (() => void) |                |
+| value    |全局value                  | {} |                |
+| defaultValue    |全局defaultValue                  | {} |                |
+| initialValues    |全局initialValues                  | {} |                |
+| actions    |FormActions实例                  | [FormActions](#FormActions) |                |
+| effects    |IFormEffect实例                  | IFormEffect<FormEffectPayload, [FormActions](#FormActions)> |                |
+| form    |表单实例                  | [IForm](#IForm) |                |
+| onChange    |表单变化回调                  | (values: {}) => void |                |
+| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: {}) => void `or` Promise<{}> |                |
+| onReset    |form内有 <Reset/> 或 actions.reset时 触发                  | () => void |                |
+| onValidateFailed    |校验失败时触发                  | (valideted: [IFormValidateResult](#IFormValidateResult)) => void |                |
+| children    |全局value                  | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement) |                |
+| useDirty    |是否使用脏检查，默认会走immer精确更新                  | boolean |                |
+| editable    |是否可编辑                  | boolean `or` ((name: string) => boolean) |                |
+| validateFirst    |是否走悲观校验，遇到第一个校验失败就停止后续校验                  | boolean |                |
+
+#### `<FormItem>`
+
+适用于纯JSX开发，开发者可以基于此进行二次封装。
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| name    |字段名                  | string |                |
+| label    |字段label                   | React.ReactNode |                |
+| component    |表单组件                   | React.ReactNode |                |
+| description    |字段描述信息                   | React.ReactNode |                |
+| readOnly    | 只读                  | boolean |                |
+| writeOnly    | 只写                  | boolean |                |
+| required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
+| format    | 正则规则类型，详细类型可以往后看	                  | string |                |
+| properties    | 对象属性	                  | { [key: string]: [ISchema](#ISchema) } |                |
+| items    | 数组描述	                  | [ISchema](#ISchema) `or` [ISchema](#ISchema)[] |                |
+| patternProperties    | 动态匹配对象的某个属性的 Schema	                  | { [key: string]: [ISchema](#ISchema) } |                |
+| additionalProperties    | 匹配对象额外属性的 Schema	                  | [ISchema](#ISchema) |                |
+| editable    | 字段是否可编辑                  | boolean |                |
+| visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
+| display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
+| rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
+| default    | 字段默认值	                  | any |                |
+| const    |  校验字段值是否与 const 的值相等	                 | any |                |
+| multipleOf    | 校验字段值是否可被 multipleOf 的值整除	                  | number |                |
+| maximum    | 最大值                  | number |                |
+| exclusiveMaximum    | 校验最大值（大于等于）	                  | number |                |
+| minimum    | 最小值                  | number |                |
+| exclusiveMinimum    | 最小值（小于等于）	                  | number |                |
+| maxLength    | 最大长度                  | number |                |
+| minLength    | 最小长度                  | number |                |
+| pattern    | 正则校验规则	                  | string `or` RegExp |                |
+| maxItems    | 最大项数                  | number |                |
+| minItems    | 最小项数                  | number |                |
+| uniqueItems    | 是否校验重复	                  | boolean |                |
+| maxProperties    | 最大属性数量	                  | number |                |
+| minProperties    | 最小属性数量	                  | number |                |
+
 #### `<Field/>(废弃)`
 
 > 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
