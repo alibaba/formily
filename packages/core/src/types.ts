@@ -173,7 +173,6 @@ export interface IFieldStateProps<FieldProps = any> {
   visible?: boolean
   display?: boolean
   useDirty?: boolean
-  useListMode?: boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
 

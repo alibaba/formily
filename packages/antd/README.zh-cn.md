@@ -300,13 +300,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 适用于纯JSX开发，开发者可以基于此进行二次封装。
 
+> 当 `<FormItem>` 接收 `component` 字段时，`<FormItem>` 会继承对应组件的所有属性。
+
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | label    |字段label                   | React.ReactNode |                |
 | component    |表单组件                   | React.ReactNode |                |
 | path    |字段路径                  | [FormPathPattern](#FormPathPattern) |                |
-| nodePath    |字段完整路径                  | [FormPathPattern](#FormPathPattern) |                |
-| dataPath    |读取数据路径                  | [FormPathPattern](#FormPathPattern) |                |
 | name    |字段名                  | [FormPathPattern](#FormPathPattern) |                |
 | dataType    |数据类型(array/object)                  | string |                |
 | value    |字段值                  | any |                |
@@ -314,6 +314,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | values    |字段集合, 从onChange获取的所有参数                  | any |                |
 | triggerType    |  字段触发校验类型                  | 'onChange' `|` 'onBlur' |                | 
 | getValueFromEvent    |  字段变更时，从event中获取value的计算函数                  | (...args: any[]) => any |                | 
+| itemClassName    | formItem类名                  | string |                | 
+| itemStyle    | formItem样式控制                  | { [key: string]: string `|` number } |                | 
 | props    | 字段属性                  | `{}` |                | 
 | rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
 | required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
@@ -321,7 +323,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
 | display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
 | useDirty    | 是否使用脏检查                  | boolean | false               |
-| useListMode    | 是否使用列表模式                  | boolean | false               |
 | computeState    | 计算字段状态                  | (draft: [IFieldState](#IFieldState), prevState: [IFieldState](#IFieldState)) => void |                |
 | valueName    | value字段名                  | string | value               |
 | eventName    | value变更方式                  | string | onChange               |
