@@ -2130,12 +2130,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | dataSource    | 分步配置                 | StepItemProps[] |                |
 | current    | 当前步骤                 | number |                |
-| direction    | 展示方向                 | 'hoz' `or` 'ver' |                |
-| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `or` 'ver' |                |
-| shape    | 类型                 | 'circle' `or` 'arrow' `or` 'dot' |                |
-| readOnly    | 是否只读模式                 | boolean |                |
-| animation    | 是否开启动效                 | boolean |                |
-| itemRender    | StepItem 的自定义渲染                 | (index: number, status: string) => React.ReactNode |                |
+| direction    | 展示方向                 | 'horizontal' `or` 'vertical' |                |
+| labelPlacement    | 横向布局时的内容排列                 | 'horizontal' `or` 'vertical' |                |
+| status    | 状态                 | 'wait' `or` 'process' `or` 'finish' `or` 'error' |                |
+| size    | 指定大小，目前支持普通（default）和迷你（small）                 | 'default' `or` 'small' |                |
+| onChange    | 	点击切换步骤时触发                 | (current: number) => void |                |
+| progressDot    | 点状步骤条，可以设置为一个 function，labelPlacement 将强制为 vertical                 | boolean | Function |                |
+| initial    | 起始序号，从 0 开始记数                 | number |  0              |
 
 
 **用法**
