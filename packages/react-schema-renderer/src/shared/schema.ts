@@ -76,7 +76,6 @@ const COMPAT_FORM_ITEM_PROPS = [
   'prefixCls',
   //formily
   'triggerType',
-  //extend
   'itemStyle',
   'itemClassName',
   'addonAfter'

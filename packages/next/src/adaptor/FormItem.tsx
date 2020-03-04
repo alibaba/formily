@@ -78,6 +78,8 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
 
   const { labelCol, wrapperCol } = mergedProps
 
+  delete mergedProps.addonAfter
+
   const children = mergedProps.addonAfter ? (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
