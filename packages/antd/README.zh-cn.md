@@ -302,37 +302,32 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
-| name    |字段名                  | string |                |
 | label    |字段label                   | React.ReactNode |                |
 | component    |表单组件                   | React.ReactNode |                |
-| description    |字段描述信息                   | React.ReactNode |                |
-| readOnly    | 只读                  | boolean |                |
-| writeOnly    | 只写                  | boolean |                |
+| path    |字段路径                  | [FormPathPattern](#FormPathPattern) |                |
+| nodePath    |字段完整路径                  | [FormPathPattern](#FormPathPattern) |                |
+| dataPath    |读取数据路径                  | [FormPathPattern](#FormPathPattern) |                |
+| name    |字段名                  | [FormPathPattern](#FormPathPattern) |                |
+| dataType    |数据类型(array/object)                  | string |                |
+| value    |字段值                  | any |                |
+| initialValue    |初始哈字段值                  | any |                |
+| values    |字段集合, 从onChange获取的所有参数                  | any |                |
+| triggerType    |  字段触发校验类型                  | 'onChange' `|` 'onBlur' |                | 
+| getValueFromEvent    |  字段变更时，从event中获取value的计算函数                  | (...args: any[]) => any |                | 
+| props    | 字段属性                  | [FieldProps](#FieldProps) |                | 
+| rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
 | required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
-| format    | 正则规则类型，详细类型可以往后看	                  | string |                |
-| properties    | 对象属性	                  | { [key: string]: [ISchema](#ISchema) } |                |
-| items    | 数组描述	                  | [ISchema](#ISchema) `or` [ISchema](#ISchema)[] |                |
-| patternProperties    | 动态匹配对象的某个属性的 Schema	                  | { [key: string]: [ISchema](#ISchema) } |                |
-| additionalProperties    | 匹配对象额外属性的 Schema	                  | [ISchema](#ISchema) |                |
 | editable    | 字段是否可编辑                  | boolean |                |
 | visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
 | display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
-| rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
-| default    | 字段默认值	                  | any |                |
-| const    |  校验字段值是否与 const 的值相等	                 | any |                |
-| multipleOf    | 校验字段值是否可被 multipleOf 的值整除	                  | number |                |
-| maximum    | 最大值                  | number |                |
-| exclusiveMaximum    | 校验最大值（大于等于）	                  | number |                |
-| minimum    | 最小值                  | number |                |
-| exclusiveMinimum    | 最小值（小于等于）	                  | number |                |
-| maxLength    | 最大长度                  | number |                |
-| minLength    | 最小长度                  | number |                |
-| pattern    | 正则校验规则	                  | string `or` RegExp |                |
-| maxItems    | 最大项数                  | number |                |
-| minItems    | 最小项数                  | number |                |
-| uniqueItems    | 是否校验重复	                  | boolean |                |
-| maxProperties    | 最大属性数量	                  | number |                |
-| minProperties    | 最小属性数量	                  | number |                |
+| useDirty    | 是否使用脏检查                  | boolean | false               |
+| useListMode    | 是否使用列表模式                  | boolean | false               |
+| computeState    | 计算字段状态                  | (draft: [IFieldState](#IFieldState), prevState: [IFieldState](#IFieldState)) => void |                |
+| valueName    | value字段名                  | string | value               |
+| eventName    | value变更方式                  | string | onChange               |
+| noStyle    | 	`(antd)`为 true 时不带样式，作为纯字段控件使用                  | boolean | false               |
+| hasFeedback    | `(antd)`配合 validateStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用                  | boolean | false               |
+| validateStatus    | `(antd)`校验状态，如不设置，则会根据校验规则自动生成，可选：'success' 'warning' 'error' 'validating'                  | string |                |
 
 #### `<Field/>(废弃)`
 
