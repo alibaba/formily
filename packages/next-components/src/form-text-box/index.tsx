@@ -10,7 +10,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
   'text-box',
   styled(({ props, form, className, children }) => {
     const schema = new Schema(props)
-    const mergeProps = schema.getExtendsComponentProps(false)
+    const mergeProps = schema.getExtendsComponentProps()
     const { title, label, text, gutter, style } = Object.assign(
       {
         gutter: 5
@@ -92,7 +92,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
     )
 
     if (!title && !label) return textChildren
-
+    
     return (
       <NextSchemaFieldAdaptor {...formItemProps}>
         {textChildren}

@@ -1306,7 +1306,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     setFieldInitialValue,
     getFieldInitialValue,
     isHostRendering,
-    hostRender(callback?: () => void) {
+    batchUpdate(callback?: () => void) {
       if (isFn(callback)) {
         env.hostRendering = true
         callback()
