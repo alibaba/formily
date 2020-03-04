@@ -37,6 +37,10 @@ export type IAntdFormItemProps = IFieldStateUIProps &
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    itemStyle?: {
+      [key: string]: string | number
+    }
+    itemClassName?: string
     [key: string]: any
   }
 
