@@ -314,7 +314,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | values    |字段集合, 从onChange获取的所有参数                  | any |                |
 | triggerType    |  字段触发校验类型                  | 'onChange' `|` 'onBlur' |                | 
 | getValueFromEvent    |  字段变更时，从event中获取value的计算函数                  | (...args: any[]) => any |                | 
-| props    | 字段属性                  | [FieldProps](#FieldProps) |                | 
+| props    | 字段属性                  | `{}` |                | 
 | rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
 | required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
 | editable    | 字段是否可编辑                  | boolean |                |
