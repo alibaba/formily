@@ -83,7 +83,7 @@ $ npm run build #各自构建子项目lib
 举例说明，现在开发core，想要比较有体感的使用某个core的API
 ```shell
 $ cd formily
-$ tnpm run doc:core # 查看core的demo展示，目录位于 packages/core/README.md
+$ npm run doc:core # 查看core的demo展示，目录位于 packages/core/README.md
 ```
 此时编辑 packages/core/README.md 会在 `watch` 模式下看到 `demo` 的改变，方便直观感受和修改代码
 
@@ -93,6 +93,6 @@ $ tnpm run doc:core # 查看core的demo展示，目录位于 packages/core/READM
 举例说明，现在对core进行单测覆盖
 ```shell
 $ cd formily
-$ tnpm run test:core # 会执行 packages/core/src/__test__ 下的单元测试
+$ npm run test:core # 会执行 packages/core/src/__test__ 下的单元测试
 ```
 > 更多单测形式请参考源码，我们已在源码中提供超过200个单元测试！
