@@ -35,7 +35,7 @@
     - [管理业务逻辑](./jsx-develop/manage-business.md)
     - [实现自增列表组件](./jsx-develop/self-inc-component.md)
   - [FAQ](./jsx-develop/faq.md)
-- Other
+- Help
   - 升级迁移指南
     - [UForm迁移Formily](./uform-upgrade.md)
   - 开发调试指南
