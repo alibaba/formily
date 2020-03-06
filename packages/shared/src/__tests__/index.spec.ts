@@ -9,7 +9,7 @@ import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
 import { isFn } from '../types'
-import FormilyLog from '../log'
+import { log } from '../log'
 
 describe('array', () => {
   test('toArr', () => {
@@ -363,7 +363,7 @@ describe('log', ()=>{
   const SomeObject = {v: SomeString}
   const Keyword = "Formily"
   const Tips = "you should do something"
-
+  const FormilyLog = log
   test("log api", ()=>{
     expect(FormilyLog.log(SomeString)).toEqual({content: SomeString, keyword: Keyword})
     expect(FormilyLog.log(SomeObject)).toEqual({ content: SomeObject, keyword: Keyword})
