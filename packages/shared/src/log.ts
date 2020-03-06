@@ -35,7 +35,7 @@ type ILogData<C,T> = {
   keyword: string
 }
 
-export class Log{
+class Log{
   private keyword: string = "APP"
   private defaultMethods = [CONSOLE_METHODS.LOG, CONSOLE_METHODS.ERROR, CONSOLE_METHODS.WARN]
   private disabled: boolean = true
@@ -97,4 +97,4 @@ export class Log{
   }
 }
 
-export default new Log("Formily", [])
+export const log = new Log("Formily", [])
