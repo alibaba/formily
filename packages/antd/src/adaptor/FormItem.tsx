@@ -71,8 +71,8 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   const formItemShallowProps = useShallowFormItem()
 
   const mergedProps = {
-    ...itemProps,
-    ...formItemShallowProps
+    ...formItemShallowProps,
+    ...itemProps
   }
 
   const { labelCol, wrapperCol } = mergedProps
