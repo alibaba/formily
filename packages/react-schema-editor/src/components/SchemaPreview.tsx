@@ -7,21 +7,21 @@ import {
   Checkbox,
   Select,
   DatePicker,
-  NumberPicker,
+  InputNumber,
   TimePicker,
   Upload,
   Switch,
-  Range,
+  Slider,
   Transfer,
-  Rating
-} from '@formily/antd-components';
+  Rate
+} from 'antd';
 
 const components = {
   Input,
   Radio: Radio.Group,
   Checkbox: Checkbox.Group,
   TextArea: Input.TextArea,
-  NumberPicker,
+  InputNumber,
   Select,
   Switch,
   DatePicker,
@@ -31,8 +31,9 @@ const components = {
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
   Upload,
-  Range,
-  Rating,
+  Dragger: Upload.Dragger,
+  Slider,
+  Rate,
   Transfer
 }
 

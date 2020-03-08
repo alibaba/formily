@@ -13,7 +13,7 @@ import {
   getComponentsByComponentType
 } from './utils/schemaHelpers'
 import 'antd/dist/antd.css'
-import './main.scss'
+import './index.css'
 
 export const SchemaEditor: React.FC<{
   className?: string

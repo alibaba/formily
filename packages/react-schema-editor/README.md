@@ -55,12 +55,9 @@ function SchemaEditorDemo() {
     "checkbox": {
       "type": "string",
       "x-component": "Checkbox",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "x-component-props" : {
+        options :['Apple', 'Pear', 'Orange']
+      },
       "title": "Checkbox"
     },
     "textarea": {
@@ -70,12 +67,12 @@ function SchemaEditorDemo() {
     },
     "number": {
       "type": "number",
-      "x-component": "NumberPicker",
+      "x-component": "InputNumber",
       "title": "数字选择"
     },
     "boolean": {
       "type": "boolean",
-      "x-component": "switch",
+      "x-component": "Switch",
       "title": "开关选择"
     },
     "date": {
@@ -84,12 +81,8 @@ function SchemaEditorDemo() {
       "title": "日期选择"
     },
     "daterange": {
-      "type": "array<date>",
+      "type": "object",
       "x-component": "DateRangePicker",
-      "default": [
-        "2018-12-19",
-        "2018-12-19"
-      ],
       "title": "日期范围"
     },
     "year": {
@@ -115,17 +108,42 @@ function SchemaEditorDemo() {
     "upload": {
       "type": "array",
       "x-component": "Upload",
+      "x-component-props": {
+        fileList:[
+          {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          },
+          {
+            uid: '-2',
+            name: 'image.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          },
+          {
+            uid: '-3',
+            name: 'image.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          },
+          {
+            uid: '-4',
+            name: 'image.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+          },
+          {
+            uid: '-5',
+            name: 'image.png',
+            status: 'error',
+          },
+        ],
+        action:"https://www.mocky.io/v2/5cc8019d300000980a055e76",
+        listType:"picture-card"
+      },
       "title": "卡片上传文件"
-    },
-    "upload2": {
-      "type": "array",
-      "x-component": "Upload",
-      "title": "拖拽上传文件"
-    },
-    "upload3": {
-      "type": "array",
-      "x-component": "Upload",
-      "title": "普通上传文件"
     },
     "range": {
       "type": "number",
@@ -135,21 +153,20 @@ function SchemaEditorDemo() {
     "transfer": {
       "type": "number",
       "x-component": "Transfer",
-      "enum": [
-        {
-          "key": 1,
+      "x-component-props": {
+        "dataSource":[{
+          "key": "1",
           "title": "选项1"
-        },
-        {
-          "key": 2,
+        },{
+          "key": "2",
           "title": "选项2"
-        }
-      ],
+        }]
+      },
       "title": "穿梭框"
     },
     "rating": {
       "type": "number",
-      "x-component": "Rating",
+      "x-component": "Rate",
       "title": "等级"
     }
   }
