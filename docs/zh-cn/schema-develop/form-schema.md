@@ -228,7 +228,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 ### 扩展联动协议
 
-想要了解更多高级内容，可以详细查看[理解表单扩展机制(https://formilyjs.org/#/L3TOTn/g7SDSEi8HO)
+想要了解更多高级内容，可以详细查看 [理解表单扩展机制](#/L3TOTn/g7SDSEi8HO)
 
 ## ValidatePatternRules
 
