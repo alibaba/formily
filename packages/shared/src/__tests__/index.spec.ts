@@ -9,6 +9,7 @@ import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
 import { isFn } from '../types'
+import { log } from '../log'
 
 describe('array', () => {
   test('toArr', () => {
@@ -354,5 +355,49 @@ describe('types', () => {
     expect(isFn("")).toBeFalsy()
     expect(isFn(undefined)).toBeFalsy()
     expect(isFn(["🦄"])).toBeFalsy()
+  })
+})
+
+describe('log', ()=>{
+  const SomeString = Date.now().toString(32)
+  const SomeObject = {v: SomeString}
+  const Keyword = "Formily"
+  const Tips = "you should do something"
+  const FormilyLog = log
+  test("log api", ()=>{
+    expect(FormilyLog.log(SomeString)).toEqual({content: SomeString, keyword: Keyword})
+    expect(FormilyLog.log(SomeObject)).toEqual({ content: SomeObject, keyword: Keyword})
+  })
+  test("info api", ()=>{
+    expect(FormilyLog.info(SomeString)).toEqual({content: SomeString, keyword: Keyword})
+    expect(FormilyLog.info(SomeObject)).toEqual({ content: SomeObject, keyword: Keyword})
+  })
+  test("warn api", ()=>{
+    expect(FormilyLog.warn(SomeString)).toEqual({content: SomeString, keyword: Keyword})
+    expect(FormilyLog.warn(SomeObject)).toEqual({ content: SomeObject, keyword: Keyword})
+
+    expect(FormilyLog.warn(SomeString,Tips)).toEqual({content: SomeString, keyword: Keyword, tips: Tips})
+    expect(FormilyLog.warn(SomeObject,Tips)).toEqual({content: SomeObject, keyword: Keyword, tips: Tips})
+  })
+  test("error api", ()=>{
+    expect(FormilyLog.error(SomeString)).toEqual({content: SomeString, keyword: Keyword})
+    expect(FormilyLog.error(SomeObject)).toEqual({ content: SomeObject, keyword: Keyword})
+
+    expect(FormilyLog.error(SomeString,Tips)).toEqual({content: SomeString, keyword: Keyword, tips: Tips})
+    expect(FormilyLog.error(SomeObject,Tips)).toEqual({content: SomeObject, keyword: Keyword, tips: Tips})
+  })
+  test("close open", ()=>{
+
+    expect(FormilyLog.log(SomeString)).toEqual({content: SomeString, keyword: Keyword})
+    FormilyLog.close()
+    expect(FormilyLog.log(SomeString)).toEqual({content: undefined, keyword: Keyword})
+    FormilyLog.open()
+    expect(FormilyLog.log(SomeString)).toEqual({content: SomeString, keyword: Keyword})
+
+    expect(FormilyLog.warn(SomeString,Tips)).toEqual({content: SomeString, keyword: Keyword, tips: Tips})
+    FormilyLog.close()
+    expect(FormilyLog.log(SomeString)).toEqual({content: undefined, keyword: Keyword, tips: undefined})
+    FormilyLog.open()
+    expect(FormilyLog.warn(SomeString,Tips)).toEqual({content: SomeString, keyword: Keyword, tips: Tips})
   })
 })
