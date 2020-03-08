@@ -77,12 +77,6 @@ https://formilyjs.org
 
 [codesandbox](https://codesandbox.io/s/o5up7)
 
-## Community
-
-| Online Chat Room                                             | 微信                                                         | 钉钉 |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ---- |
-| [gitter.im](https://gitter.im/alibaba-formily/community?source=orgpage) | <img width="200" src="https://img.alicdn.com/tfs/TB1jhm5VNYaK1RjSZFnXXa80pXa-620-824.png"/> |   <img width="200" src="https://img.alicdn.com/tfs/TB1pHMzUrPpK1RjSZFFXXa5PpXa-620-818.png"/>   |
-
 
 ## Contributors
 

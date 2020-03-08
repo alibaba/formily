@@ -13,6 +13,7 @@
   - 实践教程
     - [实现复杂联动](./schema-develop/complex-linkage.md)
     - [实现复杂布局](./schema-develop/form-layout.md)
+    - [性能优化实践](./schema-develop/performance.md)
     - [管理业务逻辑](./schema-develop/manage-business.md)
     - [实现递归渲染组件](./schema-develop/recursive-render.md)
     - [实现自增列表组件](./schema-develop/self-inc-component.md)
@@ -32,6 +33,7 @@
   - 实践教程
     - [实现复杂联动逻辑](./jsx-develop/complex-linkage.md)
     - [实现复杂布局](./jsx-develop/form-layout.md)
+    - [性能优化实践](./jsx-develop/performance.md)
     - [管理业务逻辑](./jsx-develop/manage-business.md)
     - [实现自增列表组件](./jsx-develop/self-inc-component.md)
   - [FAQ](./jsx-develop/faq.md)
