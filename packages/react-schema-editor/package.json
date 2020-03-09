@@ -21,10 +21,9 @@
   },
   "dependencies": {
     "antd": "^4.0",
-    "@ant-design/compatible": "^0.0.1-rc.1",
-    "@formily/antd-components": "^1.0.4",
-    "@formily/react-schema-renderer": "^1.0.4",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "@formily/antd": "^1.0.4",
+    "@ant-design/compatible": "^0.0.1-rc.1"
   },
   "devDependencies": {
     "node-sass": "^4.13.0",
