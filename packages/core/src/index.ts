@@ -8,6 +8,7 @@ import {
   isValid,
   FormPath,
   FormPathPattern,
+  BigData,
   each,
   isObj,
   scheduler
@@ -1371,6 +1372,7 @@ export const registerValidationMTEngine = FormValidator.registerMTEngine
 export {
   setValidationLanguage,
   setValidationLocale,
+  BigData,
   FormPath,
   FormPathPattern,
   FormGraph
