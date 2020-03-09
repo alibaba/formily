@@ -25,7 +25,7 @@ function SchemaEditorDemo() {
       "type": "string",
       "x-component": "Radio",
       "x-component-props": {
-        "dataSource":[
+        "options":[
           "1",
           "2",
           "3",
