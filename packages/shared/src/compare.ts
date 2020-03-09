@@ -1,5 +1,6 @@
 import { isFn, isArr } from './types'
 import { instOf } from './instanceof'
+import { BigData } from './big-data'
 const isArray = isArr
 const keyList = Object.keys
 const hasProp = Object.prototype.hasOwnProperty
@@ -14,6 +15,16 @@ function equal(a: any, b: any, filter?: Filter) {
   }
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
+    const bigDataA = BigData.isBigData(a)
+    const bigDataB = BigData.isBigData(b)
+
+    if (bigDataA !== bigDataB) {
+      return false
+    }
+    if (bigDataA && bigDataB) {
+      return BigData.compare(a, b)
+    }
+
     const arrA = isArray(a)
     const arrB = isArray(b)
     let i: number
@@ -70,7 +81,7 @@ function equal(a: any, b: any, filter?: Filter) {
     if (urlA && urlB) {
       return a.href === b.href
     }
-    
+
     const keys = keyList(a)
     length = keys.length
 
