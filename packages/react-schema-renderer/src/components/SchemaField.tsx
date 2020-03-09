@@ -143,7 +143,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         )
       }
     )
-    if (path.length == 0) {
+    if (path.length == 0 || props.onlyRenderProperties) {
       return <Fragment>{properties}</Fragment>
     }
     return renderFieldDelegate(props => {

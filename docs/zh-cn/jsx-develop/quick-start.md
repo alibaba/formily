@@ -941,7 +941,6 @@ import {
   setValidationLocale
 } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
-import { merge } from 'rxjs'
 import { Input, Select, NumberPicker } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
 
@@ -982,7 +981,7 @@ const App = () => {
         wrapperCol={14}
         validateFirst
         effects={({ setFieldState }) => {
-          merge(onFieldValueChange$('format_type')).subscribe(fieldState => {
+          onFieldValueChange$('format_type').subscribe(fieldState => {
             setFieldState('format_text', state => {
               state.value = placehodlers[fieldState.value]
               state.rules = fieldState.value
@@ -1046,6 +1045,7 @@ const App = () => {
           }}
           name="remote_code"
           triggerType="onBlur"
+          hasFeedback
           placeholder="Please input remote code:57350"
           component={Input}
         />

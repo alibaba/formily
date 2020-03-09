@@ -13,9 +13,7 @@ const createEnum = (enums: any) => {
   if (isArr(enums)) {
     return enums.map(item => {
       if (typeof item === 'object') {
-        return {
-          ...item
-        }
+        return item
       } else {
         return {
           label: item,

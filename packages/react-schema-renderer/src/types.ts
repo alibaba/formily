@@ -17,6 +17,7 @@ export * from '@formily/react'
 export interface ISchemaFieldProps {
   path?: FormPathPattern
   schema?: Schema
+  onlyRenderProperties?: boolean
 }
 
 export type ComponentWithStyleComponent<

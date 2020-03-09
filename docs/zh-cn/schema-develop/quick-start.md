@@ -128,7 +128,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- SchemaForm的components属性可以传入任意一个只要满足value/onChange属性的组件
+- SchemaForm 的 components 属性可以传入任意一个只要满足 value/onChange 属性的组件
 - Field 组件代表每个 json schema 的一个原子描述节点，它的属性与 json schema 完全等价。
 - Field 指定 x-component 的名称会和 SchemaForm 属性传入的 components 映射起来。
 
@@ -1179,7 +1179,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - FormCard/FormBlock/FormLayout/FormTextBox 都是属于布局扩展组件，这类布局组件只能在 Schema 场景中使用，如果是纯源码开发，则需要自行实现
 - 每个布局组件都可以在 JSON Schema 中表示，具体可以点击 Print JSON Schema 按钮查看等价的布局组件使用方式。
 - 用户可以借助 createVirtaulBox 自己创建布局组件，想看详细 API，可跳转至 API 手册中查看
-- 每个布局组件都有一个name属性，可以用于联动控制显示隐藏
+- 每个布局组件都有一个 name 属性，可以用于联动控制显示隐藏
 
 > 注意：Formily 布局组件不是普通的 UI 组件，它只能在 SchemaForm 中使用，放到其他地方是不能独立使用的。
 
@@ -1215,7 +1215,6 @@ import {
   setValidationLocale
 } from '@formily/antd' // 或者 @formily/next
 import Printer from '@formily/printer'
-import { merge } from 'rxjs'
 import { Input, Select, NumberPicker } from '@formily/antd-components' // 或者@formily/next-components
 import 'antd/dist/antd.css'
 
@@ -1266,7 +1265,7 @@ const App = () => {
           )
         }}
         effects={({ setFieldState }) => {
-          merge(onFieldValueChange$('format_type')).subscribe(fieldState => {
+          onFieldValueChange$('format_type').subscribe(fieldState => {
             setFieldState('format_text', state => {
               state.value = placehodlers[fieldState.value]
               state.rules = fieldState.value
@@ -1343,6 +1342,7 @@ const App = () => {
           }}
           name="remote_code"
           x-props={{
+            hasFeedback: true,
             triggerType: 'onBlur'
           }}
           x-component="Input"
