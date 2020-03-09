@@ -24,12 +24,14 @@ function SchemaEditorDemo() {
     "radio": {
       "type": "string",
       "x-component": "Radio",
-      "enum": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
+      "x-component-props": {
+        "dataSource":[
+          "1",
+          "2",
+          "3",
+          "4"
+        ] 
+      },
       "title": "Radio"
     },
     "select": {
