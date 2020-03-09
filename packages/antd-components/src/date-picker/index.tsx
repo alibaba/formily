@@ -12,7 +12,7 @@ import {
 
 class YearPicker extends React.Component {
   public render() {
-    return <AntdDatePicker {...this.props} mode={'year'} />
+    return <AntdDatePicker {...this.props} picker={'year'} />
   }
 }
 

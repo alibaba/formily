@@ -8,6 +8,7 @@ import {
   isValid,
   FormPath,
   FormPathPattern,
+  BigData,
   each,
   isObj,
   scheduler
@@ -1039,7 +1040,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    if (hostRendering && graph.size > 200) env.leadingValidate = true
+    if (hostRendering && graph.size > 200) env.hostRendering = true
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     state.setState(state => {
@@ -1049,7 +1050,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     if (hostRendering) {
       heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, state)
     }
-    env.leadingValidate = false
+    env.hostRendering = false
     // 增加name透出真实路径，和0.x保持一致
     const result = {
       errors: payload.errors.map(item => ({
@@ -1272,8 +1273,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
-  function isLeadingValidate() {
-    return env.leadingValidate
+  function isHostRendering() {
+    return env.hostRendering
   }
 
   const state = new FormState(options)
@@ -1305,7 +1306,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
     getFieldValue,
     setFieldInitialValue,
     getFieldInitialValue,
-    isLeadingValidate,
+    isHostRendering,
+    batchUpdate(callback?: () => void) {
+      if (isFn(callback)) {
+        env.hostRendering = true
+        callback()
+        heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, state)
+        env.hostRendering = false
+      }
+    },
     subscribe: (callback?: FormHeartSubscriber) => {
       return heart.subscribe(callback)
     },
@@ -1331,7 +1340,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     onChangeTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
-    leadingValidate: false,
+    hostRendering: false,
     publishing: {},
     taskQueue: [],
     userUpdateFields: [],
@@ -1363,6 +1372,7 @@ export const registerValidationMTEngine = FormValidator.registerMTEngine
 export {
   setValidationLanguage,
   setValidationLocale,
+  BigData,
   FormPath,
   FormPathPattern,
   FormGraph

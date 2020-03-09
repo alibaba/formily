@@ -3,8 +3,11 @@ import { createControllerBox, Schema } from '@formily/react-schema-renderer'
 import { IFormTextBox } from '../types'
 import { toArr } from '@formily/shared'
 import { FormItemProps as ItemProps } from 'antd/lib/form'
+import { version } from 'antd'
 import { AntdSchemaFieldAdaptor, pickFormItemProps } from '@formily/antd'
 import styled from 'styled-components'
+
+const isV4 = /^4\./.test(version)
 
 export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
   'text-box',
@@ -105,6 +108,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
     }
     .text-box-words {
       margin-bottom: 0 !important;
+      ${isV4 ? 'line-height:32px' : ''}
     }
     .text-box-field {
       display: inline-block;

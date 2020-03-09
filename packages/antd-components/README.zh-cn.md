@@ -59,21 +59,28 @@ export default () => {
 
 通过 `setup`后，内置的表单字段有以下类型
 
-| type类型       | 对应组件                             | 描述                 |
-|:--------------|:----------------------------------|:----------------------|
-| string   | [Input](#Input)                     | 输入框组件         |
-| string(有enum属性时)   | [Select](#Select)                     | 选择框组件         |
-| textarea   | [Textarea](#Textarea)                     | 多行输入框组件         |
-| password   | [Password](#Password)                     | 密码输入框         |
-| checkbox   | [CheckboxGroup](#Checkbox)                     | Checkbox         |
-| radio   | [RadioGroup](#Radio)                     | Radio         |
-| boolean   | [Switch](#Swicth)                     | 开关组件         |
-| date   | [DatePicker](#DatePicker)                     | 日期选择器         |
-| time   | [TimePicker](#TimePicker)                     | 时间选择器         |
-| daterange   | [DatePicker.RangePicker](#RangePicker)                     | 范围日期选择器         |
-| rating   | [Rating](#Rating)                     | 评价组件         |
-| object   |                      | 嵌套表单         | 自动连接路径信息
-| array   | [ArrayCards](#ArrayCards)（默认）                       | 表单数组         |
+| type 类型              | 对应组件                               | 描述           |
+| :--------------------- | :------------------------------------- | :------------- |
+| string                 | [Input](#Input)                        | 输入框组件     |
+| string(有 enum 属性时) | [Select](#Select)                      | 选择框组件     |
+| textarea               | [Textarea](#Textarea)                  | 多行输入框组件 |
+| password               | [Password](#Password)                  | 密码输入框     |
+| number                 | [NumberPicker](#NumberPickers)         | 数字输入框     |
+| checkbox               | [CheckboxGroup](#Checkbox)             | Checkbox       |
+| radio                  | [RadioGroup](#Radio)                   | Radio          |
+| boolean                | [Switch](#Swicth)                      | 开关组件       |
+| date                   | [DatePicker](#DatePicker)              | 日期选择器     |
+| time                   | [TimePicker](#TimePicker)              | 时间选择器     |
+| daterange              | [DatePicker.RangePicker](#RangePicker) | 范围日期选择器 |
+| week                   | [DatePicker.WeekPicker](#WeekPicker)   | 周选择器       |
+| month                  | [DatePicker.MonthPicker](#MonthPicker) | 月份选择器     |
+| year                   | [DatePicker.YearPicker](#YearPicker)   | 年份选择器     |
+| rating                 | [Rating](#Rating)                      | 评价组件       |
+| upload                 | [Upload](#Upload)                      | 文件上传组件   |
+| range                  | [Range](#Range)                        | 范围选择器     |
+| transfer               | [Transfer](#Transfer)                  | 穿梭框         |
+| object                 |                                        | 嵌套表单       | 自动连接路径信息 |
+| array                  | [ArrayCards](#ArrayCards)（默认）      | 表单数组       |
 
 
 #### Input
@@ -299,10 +306,10 @@ const App = () => {
   return (
     <Form>
       <FormItem label="Simple Select" name="simpleSelect" component={Select}
-        enum={['1', '2', '3', '4']}
+        dataSource={['1', '2', '3', '4']}
       />
       <FormItem label="Object Select" name="objSelect" component={Select} 
-        enum={[
+        dataSource={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
           { label: 'Three', value: '3' },
@@ -1817,7 +1824,8 @@ const App = () => {
               { label: 'Four', value: '4', key: '4' }
             ],
             'x-component-props': {
-              showSearch: true
+              showSearch: true,
+              render: record => record.label
             }
           },
         }
@@ -1862,7 +1870,8 @@ const App = () => {
           { label: 'Four', value: '4', key: '4' }
         ]}
         x-component-props={{
-          showSearch: true
+          showSearch: true,
+          render: record => record.label
         }}
       />
     </SchemaForm>
@@ -1891,6 +1900,7 @@ const App = () => {
         { label: 'Three', value: '3', key: '3' },
         { label: 'Four', value: '4', key: '4' }
       ]}
+      render={record => record.label}
       showSearch
     />
   </Form>)
@@ -2120,12 +2130,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | dataSource    | 分步配置                 | StepItemProps[] |                |
 | current    | 当前步骤                 | number |                |
-| direction    | 展示方向                 | 'hoz' `or` 'ver' |                |
-| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `or` 'ver' |                |
-| shape    | 类型                 | 'circle' `or` 'arrow' `or` 'dot' |                |
-| readOnly    | 是否只读模式                 | boolean |                |
-| animation    | 是否开启动效                 | boolean |                |
-| itemRender    | StepItem 的自定义渲染                 | (index: number, status: string) => React.ReactNode |                |
+| direction    | 展示方向                 | 'horizontal' `or` 'vertical' |                |
+| labelPlacement    | 横向布局时的内容排列                 | 'horizontal' `or` 'vertical' |                |
+| status    | 状态                 | 'wait' `or` 'process' `or` 'finish' `or` 'error' |                |
+| size    | 指定大小，目前支持普通（default）和迷你（small）                 | 'default' `or` 'small' |                |
+| onChange    | 	点击切换步骤时触发                 | (current: number) => void |                |
+| progressDot    | 点状步骤条，可以设置为一个 function，labelPlacement 将强制为 vertical                 | boolean | Function |                |
+| initial    | 起始序号，从 0 开始记数                 | number |  0              |
 
 
 **用法**

@@ -1,0 +1,1 @@
+import '@alifd/next/lib/table/style'

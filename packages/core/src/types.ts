@@ -173,7 +173,6 @@ export interface IFieldStateProps<FieldProps = any> {
   visible?: boolean
   display?: boolean
   useDirty?: boolean
-  useListMode?: boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
 
@@ -380,7 +379,8 @@ export interface IForm {
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
   notify: <T>(type: string, payload?: T) => void
-  isLeadingValidate: () => boolean
+  isHostRendering: () => boolean
+  batchUpdate: (callback?: () => void) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void

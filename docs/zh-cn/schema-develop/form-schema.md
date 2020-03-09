@@ -88,11 +88,20 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 | display              | 字段样式是否可见                       | `boolean`                                                         |
 | x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                         |
 | x-index              | 字段顺序                               | `number`                                                          |
-| x-rules              | 字段校验规则，详细描述可以往后看       | [ValidatePatternRules](#validatepatternrules)                                            |
-| x-component          | 字段 UI 组件名称，大小写不敏感                           | `string`                                                          |
+| x-rules              | 字段校验规则，详细描述可以往后看       | [ValidatePatternRules](#validatepatternrules)                     |
+| x-component          | 字段 UI 组件名称，大小写不敏感         | `string`                                                          |
 | x-component-props    | 字段 UI 组件属性                       | `{}`                                                              |
 
-## From Schema 表达式
+## x-props 扩展属性
+
+| 属性名                  | 描述                                              | 类型      |
+| ----------------------- | ------------------------------------------------- | --------- |
+| `x-props.addonAfter`    | FormItem 的尾随内容                               | ReactNode |
+| `x-props.itemStyle`     | FormItem 的 style 属性                            | Object    |
+| `x-props.itemClassName` | FormItem 的 className 属性                        | String    |
+| `x-props.triggerType`   | 配置校验触发类型 `"onChange" | "onBlur" | "none"` | String    |
+
+## Form Schema 表达式
 
 Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 JSON 字符串中注入一些逻辑能力
 
@@ -147,6 +156,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 - x-linkages 是一个数组结构，代表借助它可以实现 1 对多联动
 - 每个数组项代表一个联动命令，需要指定联动类型 type 字段，也需要指定被联动的目标字段(target)
+- target 是一个 FormPathPattern 匹配表达式，在这里我们可以使用 FormPath 的各种匹配语法
 - 需要指定每个联动发生的条件，由一个表达式来驱动
 
 ### 表达式说明
@@ -218,8 +228,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 ### 扩展联动协议
 
-想要了解更多高级内容，可以详细查看API手册
-
+想要了解更多高级内容，可以详细查看 [理解表单扩展机制](#/L3TOTn/g7SDSEi8HO)
 
 ## ValidatePatternRules
 
