@@ -113,9 +113,6 @@ Object {
       "x-component-props": Object {
         "title": "this is card",
       },
-      "x-props": Object {
-        "title": "this is card",
-      },
     },
     "unmounted": false,
     "visible": true,
@@ -190,9 +187,6 @@ Object {
       "visible": undefined,
       "x-component": "card",
       "x-component-props": Object {
-        "title": "this is card",
-      },
-      "x-props": Object {
         "title": "this is card",
       },
     },
