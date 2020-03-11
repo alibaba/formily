@@ -1,3 +1,4 @@
 import camelCase from 'camel-case'
-export { camelCase }
-export const lowercase = (str: any) => String(str || '').toLowerCase()
+import lowercase from 'lower-case'
+import uppercase from 'upper-case'
+export { camelCase, lowercase, uppercase }

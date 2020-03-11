@@ -157,7 +157,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 - x-linkages 是一个数组结构，代表借助它可以实现 1 对多联动
 - 每个数组项代表一个联动命令，需要指定联动类型 type 字段，也需要指定被联动的目标字段(target)
 - target 是一个 FormPathPattern 匹配表达式，在这里我们可以使用 FormPath 的各种匹配语法
-- 需要指定每个联动发生的条件，由一个表达式来驱动
+- 需要指定每个联动发生的条件(condition)，由一个表达式来驱动
 
 ### 表达式说明
 
@@ -193,7 +193,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
           type: "value:schema",
           target: "bbb",
           condition: '{{ $self.value == "123"}}',//当值为123时发生联动
-          schema: {//控制bbb字段的标题
+          schema: {//控制bbb字段的标题，如果不指定condition，默认会走到该处
             title: "这是标题"
           },
           otherwise: {//条件不满足时控制bbb字段标题
@@ -209,7 +209,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
           type: "value:state",
           target: "ccc",
           condition: '{{ $self.value == "123"}}',//当值为123时发生联动
-          state:{//控制bbb字段的可编辑状态
+          state:{//控制bbb字段的可编辑状态，如果不指定condition，默认会走到该处
              editable:true
           },
           otherwise:{//条件不满足时控制bbb字段的编辑状态
@@ -225,6 +225,8 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 }
 
 ```
+
+> 注意：如果不指定condition，那么默认会执行state(value:state)/schema(value:schema)流程
 
 ### 扩展联动协议
 

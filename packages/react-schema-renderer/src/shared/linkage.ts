@@ -1,14 +1,13 @@
 import { JSONCondition } from '../shared/condition'
 import {
-  FormPath,
   FormEffectHooks,
   createFormActions,
   IFormActions,
   IFieldMergeState
 } from '@formily/react'
-import { isFn, isStr, isArr } from '@formily/shared'
+import { isFn, isStr, isArr, FormPathPattern, FormPath } from '@formily/shared'
 import { ISchemaFormActions } from '../types'
-import { compileObject } from './expression'
+import { complieExpression } from './expression'
 import { Schema } from './schema'
 
 const pathExpRE = /\[\s*(?:([+-])\s*(\d+)?)?\s*\]/g
@@ -61,21 +60,40 @@ export const parseLinkages = (
   const fieldName = FormPath.parse(fieldState.name)
   const fieldIndexes = getPathIndexes(fieldName)
   const formState = getFormState ? getFormState() : {}
-  return linkages.map(params => {
-    const newTarget = transformTargetPath(params.target, fieldIndexes)
+  return linkages.map(({ target, condition, scope, ...params }) => {
+    const newTarget = transformTargetPath(target, fieldIndexes)
     const targetState = getFieldState ? getFieldState(newTarget) : {}
     const fieldValue = fieldName.getIn(formState.values)
-    const options = compileObject(params, {
+    const _scope = {
       ...scope,
       $value: fieldValue,
       $self: fieldState || {},
       $form: formState || {},
       $target: targetState || {}
-    })
-    options.condition = JSONCondition.calculate(options.condition, fieldValue)
+    }
+    const options = params
+    options.complie = (path: FormPathPattern = '', scope?: any) => {
+      return complieExpression(FormPath.getIn(params, path), {
+        ..._scope,
+        ...scope
+      })
+    }
+    if (condition !== undefined) {
+      options.condition = JSONCondition.calculate(
+        complieExpression(condition, _scope),
+        fieldValue
+      )
+    }
     options.target = newTarget
     return options
   })
+}
+
+type LinkageParams = {
+  type: string
+  condition: any
+  complie: (path: FormPathPattern, scope?: any) => any
+  [key: string]: any
 }
 
 export const useValueLinkageEffect = ({
@@ -85,8 +103,8 @@ export const useValueLinkageEffect = ({
   scope
 }: {
   type?: string
-  resolve?: (params: any, actions: ISchemaFormActions) => void
-  reject?: (params: any, actions: ISchemaFormActions) => void
+  resolve?: (params: LinkageParams, actions: ISchemaFormActions) => void
+  reject?: (params: LinkageParams, actions: ISchemaFormActions) => void
   scope?: any
 } = {}) => {
   if (!type || !isFn(resolve)) return
@@ -110,10 +128,11 @@ export const useValueLinkageEffect = ({
       const { type: linkageType, condition } = options
       if (linkageType !== type) return
       if (isFn(resolve)) {
-        if (condition) resolve(options, actions)
+        if (condition === true || condition === undefined)
+          resolve(options, actions)
       }
       if (isFn(reject)) {
-        if (!condition) reject(options, actions)
+        if (condition === false) reject(options, actions)
       }
     })
   })

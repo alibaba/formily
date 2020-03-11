@@ -2,9 +2,9 @@ import { isPlainObj, isArr, isFn, isStr, reduce } from '@formily/shared'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 
-export const compileObject = <Source = any, Context = any>(
+export const complieExpression = <Source = any, Context = any>(
   source: Source,
-  context: Context,
+  context?: Context,
   exclude?: (key: string, value: any) => boolean
 ): any => {
   const seenObjects = []
