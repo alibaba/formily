@@ -16,6 +16,7 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
       initialized: false,
       submitting: false,
       editable: true,
+      modified: false,
       errors: [],
       warnings: [],
       values: {},
@@ -50,11 +51,18 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
       if (!isValid(draft.props)) {
         draft.props = prevState.props
       }
+      if (draft.initialized && prevState.initialized && !draft.modified) {
+        if (!isEqual(prevState.values, draft.values)) {
+          draft.modified = true
+        }
+      }
+      
       if (isEqual(draft.initialValues, draft.values)) {
         draft.pristine = true
       } else {
         draft.pristine = false
       }
+
       if (draft.validating !== prevState.validating) {
         if (draft.validating === true) {
           draft.loading = true
