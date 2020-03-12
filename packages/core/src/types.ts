@@ -155,6 +155,20 @@ export interface IFieldState<FieldProps = any> {
   props: FieldProps
   [key: string]: any
 }
+
+export type IFieldUserState<FieldProps = any> = Omit<
+  IFieldState<FieldProps>,
+  | 'errors'
+  | 'effectErrors'
+  | 'ruleErrors'
+  | 'warnings'
+  | 'effectWarnings'
+  | 'ruleWarnings'
+> & {
+  errors: React.ReactNode | React.ReactNode[]
+  warnings: React.ReactNode | React.ReactNode[]
+}
+
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IFieldStateProps<FieldProps = any> {
@@ -364,7 +378,7 @@ export interface IForm {
   getFormState(callback?: (state: IFormState) => any): any
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void,
+    callback?: (state: IFieldUserState) => void,
     silent?: boolean
   ): void
   getFieldState(
