@@ -74,7 +74,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
 
       values = toArr(values)
 
-      if(/array/ig.test(this.state.dataType)){
+      if (/array/gi.test(this.state.dataType)) {
         value = toArr(value)
         values[0] = toArr(values[0])
       }
@@ -205,11 +205,12 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       if (
         draft.initialized &&
         prevState.initialized &&
+        !draft.modified &&
         !isEqual(prevState.value, draft.value)
       ) {
         draft.modified = true
       }
-      if (isEqual(draft.initialValue, draft.value)) {
+      if (!draft.pristine && isEqual(draft.initialValue, draft.value)) {
         draft.pristine = true
       } else {
         draft.pristine = false
