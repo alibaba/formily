@@ -1,4 +1,11 @@
-import { isPlainObj, isArr, isFn, isStr, reduce } from '@formily/shared'
+import {
+  isPlainObj,
+  isArr,
+  isFn,
+  isStr,
+  reduce,
+  BigData
+} from '@formily/shared'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 
@@ -18,6 +25,21 @@ export const complieExpression = <Source = any, Context = any>(
     } else if (isArr(source)) {
       return source.map(value => complie(value))
     } else if (isPlainObj(source)) {
+      if (source['_isAMomentObject']) {
+        return source
+      }
+      if (source['_isJSONSchemaObject']) {
+        return source
+      }
+      if (BigData.isBigData(source)) {
+        return source
+      }
+      if (isFn(source['toJS'])) {
+        return source
+      }
+      if (isFn(source['toJSON'])) {
+        return source
+      }
       if (seenObjects.includes(source)) {
         return source
       }
