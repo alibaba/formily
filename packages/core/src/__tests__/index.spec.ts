@@ -725,6 +725,7 @@ describe('setFormState', () => {
       validating: validating,
       submitting: true,
       initialized: false,
+      modified: false,
       editable: false,
       errors,
       warnings,
