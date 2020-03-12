@@ -10,6 +10,7 @@ test('computeState', () => {
     invalid: false,
     loading: false,
     validating: false,
+    modified: false,
     initialized: false,
     submitting: false,
     errors: [],
@@ -60,11 +61,11 @@ test('computeState', () => {
 
   // cannot set invalid props
   expect(state.getState().props).toEqual({})
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.props = { hello: 'world' }
   })
   expect(state.getState().props).toEqual({ hello: 'world' })
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.props = undefined
   })
   expect(state.getState().props).toEqual({ hello: 'world' })
@@ -138,26 +139,45 @@ test('setState', () => {
   const state = new FormState({ useDirty: false })
   const susCb = jest.fn()
   state.subscribe(susCb)
-  const cb1 = (draft) => { draft.values = { change: true } }
-  const cb2 = (draft) => { draft.values = { withNotify: true } }
-  const cb3 = (draft) => { draft.values = { withBatching: true } }
-  const cb4 = (draft) => { draft.values = { ...draft.values, withBatching2: true } }
+  const cb1 = draft => {
+    draft.values = { change: true }
+  }
+  const cb2 = draft => {
+    draft.values = { withNotify: true }
+  }
+  const cb3 = draft => {
+    draft.values = { withBatching: true }
+  }
+  const cb4 = draft => {
+    draft.values = { ...draft.values, withBatching2: true }
+  }
   const prevState1 = state.getState()
   expect(prevState1.values.change).toEqual(undefined)
 
   // 默认 slient = false, 触发notify 通知UI更新
   state.setState(cb1)
   expect(state.getState().values.change).toEqual(true)
-  expect(state.getState()).toEqual({ ...prevState1, pristine: false, values: { change: true } })
+  expect(state.getState()).toEqual({
+    ...prevState1,
+    pristine: false,
+    values: { change: true }
+  })
   expect(susCb).toBeCalledTimes(1)
-  expect(susCb).toBeCalledWith({ ...prevState1, pristine: false, values: { change: true } })
-  
+  expect(susCb).toBeCalledWith({
+    ...prevState1,
+    pristine: false,
+    values: { change: true }
+  })
+
   // slient = true 不触发notify
   const prevState2 = state.getState()
   expect(prevState2.values.withNotify).toEqual(undefined)
   state.setState(cb2, true)
   expect(state.getState().values.withNotify).toEqual(true)
-  expect(state.getState()).toEqual({ ...prevState2, values: { withNotify: true }})
+  expect(state.getState()).toEqual({
+    ...prevState2,
+    values: { withNotify: true }
+  })
   expect(susCb).toBeCalledTimes(1)
 
   // batching 相当于slient = true
@@ -171,10 +191,16 @@ test('setState', () => {
 
   expect(state.getState().values.withBatching).toEqual(true)
   expect(state.getState().values.withBatching2).toEqual(true)
-  expect(state.getState()).toEqual({ ...prevState3, values: { withBatching: true, withBatching2: true } })
+  expect(state.getState()).toEqual({
+    ...prevState3,
+    values: { withBatching: true, withBatching2: true }
+  })
   // 这次notify是由batch批处理结束调用的
   expect(susCb).toBeCalledTimes(2)
-  expect(susCb).toBeCalledWith({ ...prevState3, values: { withBatching: true, withBatching2: true } })
+  expect(susCb).toBeCalledWith({
+    ...prevState3,
+    values: { withBatching: true, withBatching2: true }
+  })
 })
 test('getSourceState', () => {
   const state = new FormState({ useDirty: false })
@@ -192,7 +218,7 @@ test('getSourceState', () => {
 })
 test('setSourceState', () => {
   const state = new FormState({ useDirty: false })
-  const cb1 = (draft) => draft.change = true
+  const cb1 = draft => (draft.change = true)
   const prevState1 = state.getSourceState()
   expect(prevState1.change).toEqual(undefined)
 

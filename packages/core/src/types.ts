@@ -208,6 +208,7 @@ export interface IFormState<FormProps = any> {
   invalid: boolean
   loading: boolean
   validating: boolean
+  modified: boolean
   submitting: boolean
   initialized: boolean
   editable: boolean | ((name: string) => boolean)
