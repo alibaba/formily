@@ -11,7 +11,7 @@ import SchemaContext, {
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'
-import { compileObject } from '../shared/expression'
+import { complieExpression } from '../shared/expression'
 
 const computeSchemaState = (draft: IFieldState, prevState: IFieldState) => {
   const schema = new Schema(draft.props)
@@ -65,7 +65,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
       <Field
         path={path}
         initialValue={fieldSchema.default}
-        props={compileObject(
+        props={complieExpression(
           fieldSchema.getSelfProps(),
           expressionScope,
           (key: string) => key == 'x-linkages'
@@ -99,7 +99,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return (
       <VirtualField
         path={path}
-        props={compileObject(
+        props={complieExpression(
           fieldSchema.getSelfProps(),
           expressionScope,
           (key: string) => key == 'x-linkages'

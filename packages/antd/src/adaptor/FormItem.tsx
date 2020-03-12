@@ -67,12 +67,14 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   const label = computeLabel(props)
   const status = computeStatus(props)
   const extra = computeExtra(props)
-  const itemProps = computeSchemaExtendProps(props)
+  const itemProps = pickFormItemProps(props)
+  const schemaItemProps = computeSchemaExtendProps(props)
   const formItemShallowProps = useShallowFormItem()
 
   const mergedProps = {
     ...formItemShallowProps,
-    ...itemProps
+    ...itemProps,
+    ...schemaItemProps
   }
 
   const { labelCol, wrapperCol } = mergedProps

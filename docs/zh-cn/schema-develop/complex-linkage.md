@@ -843,15 +843,18 @@ const mockSchema = {
             type: 'string',
             title: 'Sibling visible',
             'x-component': 'Select',
+            default: false,
             enum: [
               { label: 'visible', value: true },
               { label: 'hidden', value: false }
             ],
             'x-linkages': [
               {
-                type: 'value:visible',
+                type: 'value:state',
                 target: 'array.[].ff',
-                condition: '{{!!$value}}'
+                state: {
+                  visible: '{{!!$value}}'
+                }
               }
             ]
           },
@@ -958,8 +961,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 自增列表中的动态联动，借助x-linkages可以实现相邻联动，或者是跨行联动
-- target支持一种特殊语法
+- 自增列表中的动态联动，借助 x-linkages 可以实现相邻联动，或者是跨行联动
+- target 支持一种特殊语法
   - `prevPath.[].fieldName`代表当前行字段
   - `prevPath.[+].fieldName`代表下一行字段
   - `prevPath.[-].fieldName`代表上一行字段

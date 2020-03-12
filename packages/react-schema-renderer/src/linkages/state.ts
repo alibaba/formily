@@ -3,15 +3,31 @@ import { merge } from '@formily/shared'
 export const useValueStateLinkageEffect = (scope?: any) =>
   useValueLinkageEffect({
     type: 'value:state',
-    resolve: ({ target, state }, { setFieldState }) => {
+    resolve: ({ target, complie }, { setFieldState }) => {
       setFieldState(target, innerState => {
-        merge(innerState, state)
+        merge(
+          innerState,
+          complie('state', {
+            $target: innerState
+          }),
+          {
+            assign: true
+          }
+        )
       })
     },
-    reject: ({ target, otherwise }, { setFieldState }) => {
+    reject: ({ target, otherwise, complie }, { setFieldState }) => {
       if (!otherwise) return
       setFieldState(target, innerState => {
-        merge(innerState, otherwise)
+        merge(
+          innerState,
+          complie('otherwise', {
+            $target: innerState
+          }),
+          {
+            assign: true
+          }
+        )
       })
     },
     scope
