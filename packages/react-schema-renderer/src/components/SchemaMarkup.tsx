@@ -97,7 +97,6 @@ export function createVirtualBox<T = {}>(
         visible={visible}
         display={display}
         x-component={key}
-        x-props={props}
         x-component-props={props}
       >
         {children}
@@ -122,7 +121,6 @@ export function createControllerBox<T = {}>(
         type="object"
         name={name}
         x-component={key}
-        x-props={props}
         x-component-props={props}
       >
         {children}

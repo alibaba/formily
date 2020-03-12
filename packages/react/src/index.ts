@@ -13,7 +13,8 @@ import {
   registerValidationRules,
   registerValidationMTEngine,
   FormPathPattern,
-  FormPath
+  FormPath,
+  BigData
 } from '@formily/core'
 export * from './components/Form'
 export * from './components/Field'
@@ -33,6 +34,7 @@ export * from './hooks/useFormQuery'
 export * from './types'
 
 export {
+  BigData,
   FormPath,
   FormPathPattern,
   FormEffectHooks,

@@ -1122,6 +1122,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - min 规则校验字段最小长度
 - max 规则校验字段最大长度
 - 对象化传参，自定义校验器用 validator
-- 自定义校验器可以返回 Promise 做异步校验，异步校验需要考虑指定`x-props.triggerType="onBlur"`，防止请求次数过多
+- 自定义校验器可以返回 Promise 做异步校验，异步校验需要考虑指定`triggerType="onBlur"`，防止请求次数过多
 - 阈值设置形态，通常采用 warning 式校验，需要在自定义校验器的返回值中指定`type:"warning"`
 - Printer 组件是用来打印数据的，目前它内部会拦截 Form 的 onSubmit 属性，然后弹窗展示提交数据

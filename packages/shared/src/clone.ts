@@ -1,6 +1,6 @@
 import { isFn } from './types'
 import { instOf } from './instanceof'
-
+import { BigData } from './big-data'
 type Filter = (value: any, key: string) => boolean
 
 const NATIVE_KEYS = [
@@ -51,6 +51,9 @@ export const clone = (values: any, filter?: Filter) => {
     }
     if (values._isJSONSchemaObject) {
       return values
+    }
+    if (BigData.isBigData(values)) {
+      return BigData.clone(values)
     }
     if (isFn(values.toJS)) {
       return values
