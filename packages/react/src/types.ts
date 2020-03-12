@@ -5,6 +5,7 @@ import {
   IForm,
   IMutators,
   IFieldState,
+  IFieldUserState,
   IFormValidateResult,
   IFormState,
   IFormResetOptions,
@@ -155,7 +156,7 @@ export interface IFormActions {
   clearErrors: (pattern?: FormPathPattern) => void
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldUserState) => void
   ): void
   getFieldState(
     path: FormPathPattern,
@@ -187,7 +188,7 @@ export interface IFormAsyncActions {
   getFormState(callback?: (state: IFormState) => any): Promise<any>
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldUserState) => void
   ): Promise<void>
   getFieldState(
     path: FormPathPattern,
