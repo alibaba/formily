@@ -8,6 +8,7 @@
 | ------------- | ------------------------------------------- | --------------- | ----------- |
 | displayName   | Form 状态标识                               | string          | "FormState" |
 | pristine      | 表单 value 是否等于 initialValues           | boolean         | false       |
+| modified      | 表单 value 是否发生变化                     | boolean         | false       |
 | valid         | 表单是否处于合法态                          | boolean         | true        |
 | invalid       | 表单是否处于非法态，如果校验失败则会为 true | boolean         | False       |
 | loading       | 表单是否处于加载态                          | boolean         | false       |
@@ -17,13 +18,13 @@
 | editable      | 表单是否可编辑                              | boolean         | false       |
 | errors        | 表单错误信息集合                            | `Array<string>` | []          |
 | warnings      | 表单警告信息集合                            | `Array<string>` | []          |
-| values        | 表单值                                     | object          | {}          |
+| values        | 表单值                                      | object          | {}          |
 | initialValues | 表单初始值                                  | object          | {}          |
 | mounted       | 表单是否已挂载                              | boolean         | false       |
 | unmounted     | 表单是否已卸载                              | boolean         | false       |
 | 扩展状态      | 通过 setFormState 可以直接设置扩展状态      | any             |             |
 
-> 注意，这里的values是状态名，如果是表单组件属性名，对应的是value，而不是values，因为状态管理是独立于React的，选用value作为SchemaForm/Form属性，主要是与React规范对齐 
+> 注意，这里的 values 是状态名，如果是表单组件属性名，对应的是 value，而不是 values，因为状态管理是独立于 React 的，选用 value 作为 SchemaForm/Form 属性，主要是与 React 规范对齐
 
 ## FieldState
 
