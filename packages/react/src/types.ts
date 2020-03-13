@@ -167,7 +167,7 @@ export interface IFormActions {
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
   isHostRendering: () => boolean
-  batchUpdate: (callback?: () => void) => void
+  hostUpdate: (callback?: () => any) => any
   notify: <T>(type: string, payload?: T) => void
   dispatch: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
@@ -200,7 +200,7 @@ export interface IFormAsyncActions {
   unsubscribe(id: number): Promise<void>
   notify: <T>(type: string, payload: T) => Promise<void>
   isHostRendering: () => boolean
-  batchUpdate: (callback?: () => void) => void
+  hostUpdate: (callback?: () => any) => Promise<any>
   dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldValue(path?: FormPathPattern): Promise<any>
