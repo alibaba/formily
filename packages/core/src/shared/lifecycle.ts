@@ -1,4 +1,4 @@
-import { isFn, isStr, isArr, isObj, each, Subscribable } from '@formily/shared'
+import { isFn, isStr, isObj, each, Subscribable } from '@formily/shared'
 import { FormLifeCyclePayload, FormLifeCycleHandler } from '../types'
 
 export class FormLifeCycle<Payload = any> {
@@ -73,14 +73,6 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
     return lifecycles.reduce((buf, item) => {
       if (item instanceof FormLifeCycle) {
         return buf.concat(item)
-      } else {
-        if (typeof item === 'object') {
-          this.context = item
-          return buf
-        } else if (isArr(item)) {
-          return this.buildLifeCycles(item)
-        }
-        return buf
       }
     }, [])
   }
