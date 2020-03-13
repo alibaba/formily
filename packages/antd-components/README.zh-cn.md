@@ -1948,7 +1948,7 @@ const App = () => (
         maxItems={3}
         type="array"
         x-component="ArrayCards"
-        x-props={{
+        x-component-props={{
           title: '这是卡片标题',
           renderAddition: '这是定制的添加文案',
           renderRemove: '这是定制的删除文案'
@@ -1975,7 +1975,7 @@ const App = () => (
             maxItems={3}
             type="array"
             x-component="ArrayCards"
-            x-props={{ title: '这是卡片标题' }}
+            x-component-props={{ title: '这是卡片标题' }}
           >
             <Field type="object">
               <FormLayout labelCol={6} wrapperCol={8}>
@@ -2040,7 +2040,7 @@ const App = () => (
           maxItems={3}
           type="array"
           x-component="ArrayTable"
-          x-props={{
+          x-component-props={{
             renderExtraOperations() {
               return <div>Hello worldasdasdasdasd</div>
             },
@@ -2427,7 +2427,7 @@ const App = () => {
                 default={10}
                 required
                 name="aa1"
-                x-props={{ style: { width: 80 } }}
+                x-component-props={{ style: { width: 80 } }}
                 description="desc1"
               />
               <Field

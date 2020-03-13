@@ -16,8 +16,8 @@
   },
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "npm run build-css && tsc --declaration && cp src/index.css lib/",
-    "build-css": "node-sass src/ -o src/"
+    "build": "npm run build-css && tsc --declaration",
+    "build-css": "node-sass src/ -o lib/"
   },
   "dependencies": {
     "@ant-design/compatible": "^0.0.1-rc.1",
