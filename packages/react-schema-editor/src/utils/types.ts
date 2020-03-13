@@ -1,6 +1,6 @@
 export interface ISchemaCodeProps {
   schema: any
-  onChange?: any
+  onChange?: Function
 }
 
 export interface ISchemaTreeProps {

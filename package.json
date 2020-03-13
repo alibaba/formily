@@ -156,5 +156,8 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/formily"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.0.2"
   }
 }

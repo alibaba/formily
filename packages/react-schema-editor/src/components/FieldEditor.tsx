@@ -1,14 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
-import {
-  Form,
-  Button,
-  Checkbox,
-  Input,
-  InputNumber,
-  Select,
-  AutoComplete
-} from 'antd'
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Checkbox, Input, InputNumber, Select, AutoComplete } from 'antd';
 import {
   getFieldTypeData,
   getInputTypeData,
@@ -247,7 +242,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
               />
             </FormItem>
             <FormItem
-              label={index === 0 ? '输入方式' : null}
+              label={index === 0 ? '输入方式' : ' '}
               {...formItemLayout}
               className="field-group-form-item"
             >
@@ -354,7 +349,7 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
             >
               <Button
                 type="primary"
-                icon="minus"
+                icon={<MinusOutlined />}
                 size="small"
                 onClick={() => {
                   handleMinusClick(property)
@@ -362,17 +357,17 @@ const FormItemGroup: React.FC<IFormItemGroupProps> = ({
               />
             </FormItem>
           </div>
-        )
+        );
       })}
       <Button
         disabled={_.includes(componentProps, BLANK_PROPERTY_VALUE)}
         type="primary"
-        icon="plus"
+        icon={<PlusOutlined />}
         size="small"
         onClick={handlePlusClick}
       />
     </div>
-  )
+  );
 }
 
 const FieldEditor: React.FC<IFieldEditorProps> = ({
