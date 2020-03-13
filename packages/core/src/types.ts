@@ -395,7 +395,7 @@ export interface IForm {
   unsubscribe(id: number): void
   notify: <T>(type: string, payload?: T) => void
   isHostRendering: () => boolean
-  batchUpdate: (callback?: () => void) => void
+  hostUpdate: (callback?: () => any) => any
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void
