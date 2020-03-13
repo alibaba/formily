@@ -266,11 +266,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
-| fields    |传入自定义表单组件                   | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) } |                |
-| virtualFields    |传入自定义虚拟组件                   | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |                |
 | labelCol    |label布局控制                  | number `or` { span: number; offset?: number } |                |
 | wrapperCol    |FormItem布局控制                  | number `or` { span: number; offset?: number } |                |
-| previewPlaceholder    |自定义预览placeholder                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
+| previewPlaceholder    |详情页的文本态占位符                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |   N/A             |
 | prefix    |样式前缀                  | string |                |
 | inline    |是否为内联表单                  | boolean |                |
 | size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `or` 'medium' `or` 'small' |                |
