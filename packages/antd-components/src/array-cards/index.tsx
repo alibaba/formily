@@ -32,6 +32,7 @@ export const ArrayCards: any = styled(
       renderExtraOperations,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
+
     const onAdd = () => {
       const items = Array.isArray(schema.items)
         ? schema.items[schema.items.length - 1]
