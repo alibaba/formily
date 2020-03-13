@@ -56,11 +56,11 @@
         width: 20%;
         margin-right: 0;
         padding-right: 10px;
-        &.auto-complete {
-          .ant-form-item-control{
-            margin-top: -1px;
-          }
-        } 
+        // &.auto-complete {
+        //   .ant-legacy-form-item-control{
+        //     margin-top: -4px;
+        //   }
+        // } 
       }
     }
   }
@@ -72,6 +72,11 @@
     margin-top: 10px;
     border: 1px dashed #eee;
     text-align: center;
+  }
+
+  .ant-legacy-form-item-control-wrapper, .ant-legacy-form-item-label{
+    display: block!important;
+    padding: 0;
   }
 
 }

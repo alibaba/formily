@@ -1,5 +1,6 @@
 import React from 'react'
-import {Tooltip, Icon} from 'antd';
+import {Tooltip} from 'antd';
+import {DownloadOutlined, CopyOutlined} from '@ant-design/icons';
 import MonacoEditor from 'react-monaco-editor'
 import { ISchemaCodeProps } from '../utils/types'
 import {copySchema, downloadSchema} from '../utils/schemaTools'
@@ -25,10 +26,10 @@ export const SchemaCode: React.FC<ISchemaCodeProps> = ({
     return (
       <div style={{ height: '30px', lineHeight: '30px', padding: '3px 30px', textAlign: 'right', background: '#1890ff' }}>
         <Tooltip placement="left" title="复制协议">
-          <Icon type="copy" onClick={() => {copySchema(schema)}} style={styles.icon} />
+          <CopyOutlined onClick={() => {copySchema(schema)}} style={styles.icon} />
         </Tooltip>
         <Tooltip placement="left" title="下载协议">
-          <Icon type="download" onClick={()=> {downloadSchema(schema)}} style={styles.icon} />
+          <DownloadOutlined onClick={()=> {downloadSchema(schema)}} style={styles.icon} />
         </Tooltip>
       </div>
   )};
@@ -40,7 +41,7 @@ export const SchemaCode: React.FC<ISchemaCodeProps> = ({
         height={500}
         language="json"
         theme="vs-dark"
-        onChange={(schema) => onChange(JSON.parse(schema))}
+        onChange={(schema) => onChange(schema)}
         value={schema}
       />
     </div>
