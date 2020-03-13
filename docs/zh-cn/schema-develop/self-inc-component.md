@@ -1,23 +1,19 @@
 # 实现自增列表组件
 
-Formily 已经内置了 `array-table` 和 `array-cards` 两种类型的自增列表组件。开发者可以非常方便的使用它们。
-不过你可能想要开发有自己业务场景特色的自增列表组件，这篇文档将帮助你快速实现这一步。
+`Formily` 已经内置了 `array-table` 和 `array-cards` 两种类型的自增列表组件。开发者可以非常方便的使用它们。
+如果内置类型已经无法满足特有业务需求，那这篇文档将帮助你快速实现定制化的自增列表组件。
 
 > 内置类型源码阅读：
->
-> Fusion-Next: [array-cards](https://github.com/alibaba/formily/tree/master/packages/next-components/src/array-cards)，[array-table](https://github.com/alibaba/formily/tree/master/packages/next-components/src/array-table)
-> 
-> Ant-Design [array-cards](https://github.com/alibaba/formily/tree/master/packages/antd-components/src/array-cards)，[array-table](https://github.com/alibaba/formily/tree/master/packages/antd-components/src/array-table)
+* Fusion-Next: [array-cards](https://github.com/alibaba/formily/tree/master/packages/next-components/src/array-cards)，[array-table](https://github.com/alibaba/formily/tree/master/packages/next-components/src/array-table)
+* Ant-Design [array-cards](https://github.com/alibaba/formily/tree/master/packages/antd-components/src/array-cards)，[array-table](https://github.com/alibaba/formily/tree/master/packages/antd-components/src/array-table)
 
 ## 简单版本
 
-这个版本旨在快速讲清楚如何实现自增组件，仅需要 **25** 行代码就能实现一个 `Formily` 自增组件。可以点击[IMutators](#IMutators)了解更多API。
+这个版本旨在快速讲清楚如何实现自增组件，仅需要 **25** 行代码就能实现一个 `Formily` 自增组件。可以点击 [IMutators](#IMutators) 了解更多API。
 
 ```tsx
-import React from 'react'
-import { Button, Input } from 'antd'
-import { SchemaForm, SchemaField } from '@formily/antd'
-import { toArr, FormPath } from '@formily/shared'
+import { Button } from 'antd'
+import { SchemaForm, SchemaField, toArr, FormPath } from '@formily/antd'
 
 const ArrayCustom = (props) => {
     const { value, schema, className, editable, path, mutators } = props;    
@@ -44,7 +40,7 @@ ArrayCustom.isFieldComponent = true
 
 ## 生产级别版本
 
-为了编写更**健壮**的自增列表组件，我们会用到 `@formily/react-shared-components`的 [ArrayList](https://github.com/alibaba/formily/blob/master/packages/react-shared-components/src/ArrayList.tsx)
+为了编写更**健壮**的自增列表组件，我们会用到 `@formily/react-shared-components` 的 [ArrayList](https://github.com/alibaba/formily/blob/master/packages/react-shared-components/src/ArrayList.tsx)
 
 ## 认识ArrayList
 
@@ -65,24 +61,27 @@ ArrayCustom.isFieldComponent = true
         MoveUpIcon: () => <div>↑</div>, // 自定义上移icon
     }}
     renders={{ // 拓展给使用者的渲染方法
-        renderAddition, 
-        renderRemove,
-        renderMoveDown,
-        renderMoveUp,
-        renderEmpty
+        renderAddition, // 对应的组件为 ArrayList.Addition
+        renderRemove, // 对应的组件为 ArrayList.Remove
+        renderMoveDown, // 对应的组件为 ArrayList.MoveDown
+        renderMoveUp, // 对应的组件为 ArrayList.MoveUp
+        renderEmpty // 对应的组件为 ArrayList.Empty
     }}
 />
 ```
 
 ## 生产级别版本实践
 
+以下例子展示了如何使用 **ArrayList** 进行快速编写自增组件，以及对每一行自增组件样式的控制。
+
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Button } from 'antd'
-import { SchemaForm, SchemaField, SchemaMarkupField as Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/antd'
-import { toArr, isFn, FormPath } from '@formily/shared'
+import styled from 'styled-components'
+import { SchemaForm, SchemaField, SchemaMarkupField as Field } from '@formily/antd'
 import { ArrayList } from '@formily/react-shared-components'
+import { toArr, isFn, FormPath } from '@formily/shared'
 import { Input } from '@formily/antd-components'
 import'antd/dist/antd.css'
 
@@ -94,6 +93,21 @@ const ArrayComponents = {
   MoveDownIcon: () => <div>Down</div>,
   MoveUpIcon: () => <div>Up</div>,
 }
+
+const RowStyleLayout = styled((props) => <div {...props} />)`
+  .ant-btn {
+    margin-right: 16px;
+  }
+  .ant-form-item {
+    display: inline-flex;
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
+  > .ant-form-item {
+    margin-bottom: 0;
+    margin-right: 0;
+  }
+`
 
 const ArrayCustom = (props) => {
     const { value, schema, className, editable, path, mutators } = props;
@@ -125,18 +139,18 @@ const ArrayCustom = (props) => {
             renderRemove,
             renderMoveDown,
             renderMoveUp,
-            renderEmpty
+            renderEmpty, // 允许开发者覆盖默认
           }}
         >
         {toArr(value).map((item, index) => {
             return (
-              <div {...componentProps} key={index}>
-                <div>序号：{index + 1}</div>
+              <RowStyleLayout {...componentProps} key={index}>
+                <span>#{index + 1}. </span>
                 <SchemaField path={FormPath.parse(path).concat(index)} />
                 <ArrayList.Remove index={index} onClick={() => mutators.remove(index)} />
                 <ArrayList.MoveDown index={index} onClick={() => mutators.moveDown(index)} />
                 <ArrayList.MoveUp index={index} onClick={() => mutators.moveUp(index)} />
-              </div>
+              </RowStyleLayout>
             )
         })}
         <ArrayList.Empty>
@@ -148,7 +162,7 @@ const ArrayCustom = (props) => {
                   className={`card-list-item card-list-empty`}
                   onClick={onAdd}
                 >
-                  <div className="empty-wrapper">{children}</div>
+                  <div>{children}</div>
                 </div>
               )
             }}
@@ -169,8 +183,6 @@ const ArrayCustom = (props) => {
 
 ArrayCustom.isFieldComponent = true
 
-
-const actions = createFormActions()
 const App = () => {
   return (
     <SchemaForm
@@ -183,6 +195,10 @@ const App = () => {
           title="用户列表"
           name="userList"
           type="array"
+          default={[
+            { username: 'molly', age: 20 },
+            { username: 'joe', age: 21 }
+          ]}
           x-component="ArrayCustom"
         >
           <Field type="object">
