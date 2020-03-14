@@ -502,18 +502,26 @@ export class Schema implements ISchema {
     propertiesName: string = 'properties'
   ) => {
     const newSchema = new Schema(schema)
-    const properties = []
+    const orderProperties = []
+    const unorderProperties = []
     each(newSchema[propertiesName], (item, key) => {
       const index = item['x-index']
       if (typeof index === 'number') {
-        properties[index] = {
-          schema: item,
-          key
-        }
+        orderProperties[index] = { schema: item, key }
       } else {
-        properties.push({ schema: item, key })
+        unorderProperties.push({ schema: item, key })
       }
     })
-    return properties.filter(item => !!item)
+
+    let orderIndex = 0
+    while (unorderProperties.length) {
+      const peroperty = unorderProperties.shift()
+      while (orderProperties[orderIndex]) {
+        orderIndex += 1
+      }
+      orderProperties[orderIndex] = peroperty
+    }
+
+    return orderProperties.filter(item => !!item)
   }
 }
