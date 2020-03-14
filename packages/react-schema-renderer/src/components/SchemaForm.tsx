@@ -7,6 +7,7 @@ import SchemaContext, {
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'
+import { log } from '@formily/shared'
 
 export const SchemaForm: React.FC<ISchemaFormProps> = props => {
   const {
@@ -32,7 +33,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
                 ...formComponentProps,
                 onSubmit: (e: any) => {
                   if (e && e.preventDefault) e.preventDefault()
-                  form.submit().catch(e => console.warn(e))
+                  form.submit().catch(e => log.warn(e))
                 },
                 onReset: () => {
                   form.reset({ validate: false, forceClear: false })

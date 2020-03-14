@@ -2,7 +2,8 @@ import {
   FormPath,
   each,
   globalThisPolyfill,
-  merge as deepmerge
+  merge as deepmerge,
+  log
 } from '@formily/shared'
 import locales from './locale'
 
@@ -55,8 +56,8 @@ export const setLanguage = setValidationLanguage
 
 export const getMessage = (path: string) => {
   const message = getIn(LOCALE.messages, `${getMatchLang(LOCALE.lang)}.${path}`)
-  if (!message && console && console.error) {
-    console.error(
+  if (!message) {
+    log.error(
       `field is not valid,but not found ${path} error message. Please set the language pack first through setValidationLocale`
     )
   }
