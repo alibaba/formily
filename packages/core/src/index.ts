@@ -8,6 +8,7 @@ import {
   isValid,
   FormPath,
   FormPathPattern,
+  BigData,
   each,
   isObj,
   scheduler
@@ -278,9 +279,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         published.visible == false || published.unmounted === true
       if (valueChanged) {
         if (!wasHidden) {
-          userUpdating(field, () => {
-            setFormValuesIn(path, published.value)
-          })
+          setFormValuesIn(path, published.value)
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
@@ -292,18 +291,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
-          userUpdating(field, () => {
-            if (!published.visible) {
-              deleteFormValuesIn(path, true)
-              //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
-              notifyFormValuesChange()
-            } else {
-              if (!existFormValuesIn(path)) {
-                setFormValuesIn(path, published.value)
-              }
-              syncField()
+          if (!published.visible) {
+            deleteFormValuesIn(path, true)
+            //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
+            notifyFormValuesChange()
+          } else {
+            if (!existFormValuesIn(path)) {
+              setFormValuesIn(path, published.value)
             }
-          })
+            syncField()
+          }
         }
         graph.eachChildren(path, childState => {
           childState.setState((state: IFieldState<FieldProps>) => {
@@ -320,18 +317,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
         unmountedChanged &&
         (published.display !== false || published.visible === false)
       ) {
-        userUpdating(field, () => {
-          if (published.unmounted) {
-            deleteFormValuesIn(path, true)
-            //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
-            notifyFormValuesChange()
-          } else {
-            if (!existFormValuesIn(path)) {
-              setFormValuesIn(path, published.value)
-            }
-            syncField()
+        if (published.unmounted) {
+          deleteFormValuesIn(path, true)
+          //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
+          notifyFormValuesChange()
+        } else {
+          if (!existFormValuesIn(path)) {
+            setFormValuesIn(path, published.value)
           }
-        })
+          syncField()
+        }
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
       }
       if (mountedChanged && published.mounted) {
@@ -740,9 +735,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
       )
     }
     function setValue(...values: any[]) {
-      field.setState((state: IFieldState<FieldProps>) => {
-        state.value = values[0]
-        state.values = values
+      userUpdating(field, () => {
+        field.setState((state: IFieldState<FieldProps>) => {
+          state.value = values[0]
+          state.values = values
+        })
       })
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
@@ -887,15 +884,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function clearErrors(pattern: FormPathPattern = '*') {
     // 1. 指定路径或全部子路径清理
-    graph.eachChildren('', pattern, field => {
-      if (isField(field)) {
-        field.setState(state => {
-          state.ruleErrors = []
-          state.ruleWarnings = []
-          state.effectErrors = []
-          state.effectWarnings = []
-        })
-      }
+    hostUpdate(() => {
+      graph.eachChildren('', pattern, field => {
+        if (isField(field)) {
+          field.setState(state => {
+            state.ruleErrors = []
+            state.ruleWarnings = []
+            state.effectErrors = []
+            state.effectWarnings = []
+          })
+        }
+      })
     })
   }
 
@@ -905,41 +904,43 @@ export function createForm<FieldProps, VirtualFieldProps>(
     validate = true,
     clearInitialValue = false
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
-    graph.eachChildren('', selector, field => {
-      field.setState((state: IFieldState<FieldProps>) => {
-        state.modified = false
-        state.ruleErrors = []
-        state.ruleWarnings = []
-        state.effectErrors = []
-        state.effectWarnings = []
-        if (clearInitialValue) {
-          state.initialValue = undefined
-        }
-        // forceClear仅对设置initialValues的情况下有意义
-        if (forceClear || !isValid(state.initialValue)) {
-          if (isArr(state.value)) {
-            state.value = []
-          } else if (!isObj(state.value)) {
-            state.value = undefined
+    hostUpdate(() => {
+      graph.eachChildren('', selector, (field: IField) => {
+        field.setState((state: IFieldState<FieldProps>) => {
+          state.modified = false
+          state.ruleErrors = []
+          state.ruleWarnings = []
+          state.effectErrors = []
+          state.effectWarnings = []
+          if (clearInitialValue) {
+            state.initialValue = undefined
           }
-        } else {
-          const value = clone(state.initialValue)
-          if (isArr(state.value)) {
-            if (isArr(value)) {
-              state.value = value
-            } else {
+          // forceClear仅对设置initialValues的情况下有意义
+          if (forceClear || !isValid(state.initialValue)) {
+            if (isArr(state.value)) {
               state.value = []
-            }
-          } else if (isObj(state.value)) {
-            if (isObj(value)) {
-              state.value = value
-            } else {
-              state.value = {}
+            } else if (!isObj(state.value)) {
+              state.value = undefined
             }
           } else {
-            state.value = value
+            const value = clone(state.initialValue)
+            if (isArr(state.value)) {
+              if (isArr(value)) {
+                state.value = value
+              } else {
+                state.value = []
+              }
+            } else if (isObj(state.value)) {
+              if (isObj(value)) {
+                state.value = value
+              } else {
+                state.value = {}
+              }
+            } else {
+              state.value = value
+            }
           }
-        }
+        })
       })
     })
     if (isFn(options.onReset)) {
@@ -1026,7 +1027,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     path?: FormPathPattern,
     opts?: IFormExtendedValidateFieldOptions
   ): Promise<IFormValidateResult> {
-    const { throwErrors = true, hostRendering = true } = opts || {}
+    const { throwErrors = true } = opts || {}
     if (!state.getState(state => state.validating)) {
       state.setSourceState(state => {
         state.validating = true
@@ -1039,17 +1040,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    if (hostRendering && graph.size > 200) env.leadingValidate = true
+    if (graph.size > 100) env.hostRendering = true
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     state.setState(state => {
       state.validating = false
     })
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-    if (hostRendering) {
+    if (graph.size > 100) {
       heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, state)
+      env.hostRendering = false
     }
-    env.leadingValidate = false
     // 增加name透出真实路径，和0.x保持一致
     const result = {
       errors: payload.errors.map(item => ({
@@ -1101,7 +1102,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       let removed = false
       if (matchStrategy(pattern, nodePath)) {
         callbacks.forEach(callback => {
-          field.setState(callback)
+          userUpdating(field, () => {
+            field.setState(callback)
+          })
         })
         if (!pattern.isWildMatchPattern && !pattern.isMatchPattern) {
           env.taskQueue.splice(index--, 1)
@@ -1125,7 +1128,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
     let matchCount = 0
     const pattern = FormPath.getPath(path)
     graph.select(pattern, field => {
-      field.setState(callback, silent)
+      userUpdating(field, () => {
+        field.setState(callback, silent)
+      })
       matchCount++
     })
     if (matchCount === 0 || pattern.isWildMatchPattern) {
@@ -1272,8 +1277,20 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
-  function isLeadingValidate() {
-    return env.leadingValidate
+  function isHostRendering() {
+    return env.hostRendering
+  }
+
+  function hostUpdate(callback?: () => any): any {
+    if (isFn(callback)) {
+      if (graph.size > 100) env.hostRendering = true
+      const result = callback()
+      if (graph.size > 100) {
+        heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, state)
+        env.hostRendering = false
+      }
+      return result
+    }
   }
 
   const state = new FormState(options)
@@ -1305,7 +1322,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     getFieldValue,
     setFieldInitialValue,
     getFieldInitialValue,
-    isLeadingValidate,
+    isHostRendering,
+    hostUpdate,
     subscribe: (callback?: FormHeartSubscriber) => {
       return heart.subscribe(callback)
     },
@@ -1331,7 +1349,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     onChangeTimer: null,
     graphChangeTimer: null,
     leadingStage: false,
-    leadingValidate: false,
+    hostRendering: false,
     publishing: {},
     taskQueue: [],
     userUpdateFields: [],
@@ -1363,6 +1381,7 @@ export const registerValidationMTEngine = FormValidator.registerMTEngine
 export {
   setValidationLanguage,
   setValidationLocale,
+  BigData,
   FormPath,
   FormPathPattern,
   FormGraph

@@ -5,6 +5,7 @@ import {
   IForm,
   IMutators,
   IFieldState,
+  IFieldUserState,
   IFormValidateResult,
   IFormState,
   IFormResetOptions,
@@ -80,7 +81,7 @@ export interface IVirtualFieldAPI {
 }
 
 export interface IFieldStateUIProps extends IFieldStateProps {
-  triggerType?: 'onChange' | 'onBlur'
+  triggerType?: 'onChange' | 'onBlur' | 'none'
   getValueFromEvent?: (...args: any[]) => any
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
@@ -155,7 +156,7 @@ export interface IFormActions {
   clearErrors: (pattern?: FormPathPattern) => void
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldUserState) => void
   ): void
   getFieldState(
     path: FormPathPattern,
@@ -165,6 +166,8 @@ export interface IFormActions {
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
+  isHostRendering: () => boolean
+  hostUpdate: (callback?: () => any) => any
   notify: <T>(type: string, payload?: T) => void
   dispatch: <T>(type: string, payload?: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): void
@@ -185,7 +188,7 @@ export interface IFormAsyncActions {
   getFormState(callback?: (state: IFormState) => any): Promise<any>
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void
+    callback?: (state: IFieldUserState) => void
   ): Promise<void>
   getFieldState(
     path: FormPathPattern,
@@ -196,6 +199,8 @@ export interface IFormAsyncActions {
   subscribe(callback?: FormHeartSubscriber): Promise<number>
   unsubscribe(id: number): Promise<void>
   notify: <T>(type: string, payload: T) => Promise<void>
+  isHostRendering: () => boolean
+  hostUpdate: (callback?: () => any) => Promise<any>
   dispatch: <T>(type: string, payload: T) => void
   setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
   getFieldValue(path?: FormPathPattern): Promise<any>

@@ -124,11 +124,11 @@
     "scheduler": "^0.15.0",
     "semver-regex": "^2.0.0",
     "staged-git-files": "^1.1.2",
-    "ts-import-plugin": "^1.6.1",
+    "ts-import-plugin": "1.6.1",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "^3.6.2",
+    "typescript": "~3.6.2",
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
@@ -156,5 +156,8 @@
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/formily"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.0.2"
   }
 }

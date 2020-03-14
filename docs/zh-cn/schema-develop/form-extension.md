@@ -170,8 +170,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 扩展 Schema Field 组件可以说是我们平时用的最多的扩展方案，主要是用于扩展具体字段 UI 组件，目前我们提供的扩展方式主要有：
 
 - SchemaForm 中传入 components 扩展(要求组件满足 value/onChange API)
-- registerFormField 全局注册扩展组件，要求传入组件名和具体组件，同时，如果针对满足 value/onChange 的组件，需要用 connect 包装
-- registerFormFields 全局批量注册扩展组件
+- SchemaForm 中传入 components 组件拥有isFieldComponent静态属性，可以拿到FieldProps
+- registerFormField 全局注册扩展组件，要求传入组件名和具体组件，同时，如果针对满足 value/onChange 的组件，需要用 connect 包装，不包装，需要手动同步状态(借助mutators)
+- registerFormFields 全局批量注册扩展组件，同时，如果针对满足 value/onChange 的组件，需要用 connect 包装，不包装，需要手动同步状态(借助mutators)
 
 **components 实例扩展**
 
@@ -190,11 +191,22 @@ const CustomComponent = props => {
   )
 }
 
+const CustomFieldComponent = props=>{
+  return (
+    <input
+      value={props.value || ''}
+      onChange={e => props.mutators.change(e.target.value)}
+    />
+  )
+}
+
+CustomFieldComponent.isFieldComponent = true
+
 const App = () => {
   const [value, setValue] = useState({})
   return (
     <SchemaForm
-      components={{ CustomComponent }}
+      components={{ CustomComponent,CustomFieldComponent }}
       onChange={values => {
         setValue(values)
       }}
@@ -204,6 +216,12 @@ const App = () => {
         name="name"
         title="Name"
         x-component="CustomComponent"
+      />
+      <Field
+        type="string"
+        name="lastName"
+        title="Last Name"
+        x-component="CustomFieldComponent"
       />
       {JSON.stringify(value, null, 2)}
     </SchemaForm>

@@ -59,7 +59,10 @@ const NextFormItemProps = [
   'device',
   'isPreview',
   'renderPreview',
-  'validateState'
+  'validateState',
+  'itemStyle',
+  'itemClassName',
+  'addonAfter'
 ]
 
 export const pickFormItemProps = (props: any) => {
@@ -69,6 +72,14 @@ export const pickFormItemProps = (props: any) => {
   }
   if (!props.help && props.description) {
     selected.help = props.description
+  }
+  if (selected.itemStyle) {
+    selected.style = selected.itemStyle
+    delete selected.itemStyle
+  }
+  if (selected.itemClassName) {
+    selected.className = selected.itemClassName
+    delete selected.itemClassName
   }
   return selected
 }

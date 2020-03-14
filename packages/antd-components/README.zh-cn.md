@@ -306,10 +306,10 @@ const App = () => {
   return (
     <Form>
       <FormItem label="Simple Select" name="simpleSelect" component={Select}
-        enum={['1', '2', '3', '4']}
+        dataSource={['1', '2', '3', '4']}
       />
       <FormItem label="Object Select" name="objSelect" component={Select} 
-        enum={[
+        dataSource={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
           { label: 'Three', value: '3' },
@@ -1948,7 +1948,7 @@ const App = () => (
         maxItems={3}
         type="array"
         x-component="ArrayCards"
-        x-props={{
+        x-component-props={{
           title: '这是卡片标题',
           renderAddition: '这是定制的添加文案',
           renderRemove: '这是定制的删除文案'
@@ -1975,7 +1975,7 @@ const App = () => (
             maxItems={3}
             type="array"
             x-component="ArrayCards"
-            x-props={{ title: '这是卡片标题' }}
+            x-component-props={{ title: '这是卡片标题' }}
           >
             <Field type="object">
               <FormLayout labelCol={6} wrapperCol={8}>
@@ -2040,7 +2040,7 @@ const App = () => (
           maxItems={3}
           type="array"
           x-component="ArrayTable"
-          x-props={{
+          x-component-props={{
             renderExtraOperations() {
               return <div>Hello worldasdasdasdasd</div>
             },
@@ -2130,12 +2130,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | dataSource    | 分步配置                 | StepItemProps[] |                |
 | current    | 当前步骤                 | number |                |
-| direction    | 展示方向                 | 'hoz' `or` 'ver' |                |
-| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `or` 'ver' |                |
-| shape    | 类型                 | 'circle' `or` 'arrow' `or` 'dot' |                |
-| readOnly    | 是否只读模式                 | boolean |                |
-| animation    | 是否开启动效                 | boolean |                |
-| itemRender    | StepItem 的自定义渲染                 | (index: number, status: string) => React.ReactNode |                |
+| direction    | 展示方向                 | 'horizontal' `or` 'vertical' |                |
+| labelPlacement    | 横向布局时的内容排列                 | 'horizontal' `or` 'vertical' |                |
+| status    | 状态                 | 'wait' `or` 'process' `or` 'finish' `or` 'error' |                |
+| size    | 指定大小，目前支持普通（default）和迷你（small）                 | 'default' `or` 'small' |                |
+| onChange    | 	点击切换步骤时触发                 | (current: number) => void |                |
+| progressDot    | 点状步骤条，可以设置为一个 function，labelPlacement 将强制为 vertical                 | boolean | Function |                |
+| initial    | 起始序号，从 0 开始记数                 | number |  0              |
 
 
 **用法**
@@ -2426,7 +2427,7 @@ const App = () => {
                 default={10}
                 required
                 name="aa1"
-                x-props={{ style: { width: 80 } }}
+                x-component-props={{ style: { width: 80 } }}
                 description="desc1"
               />
               <Field

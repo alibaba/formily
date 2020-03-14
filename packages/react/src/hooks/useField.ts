@@ -57,7 +57,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
             mutators.validate({ throwErrors: false })
           }
         }
-        if(!form.isLeadingValidate()){
+        if(!form.isHostRendering()){
           forceUpdate()
         }
       }

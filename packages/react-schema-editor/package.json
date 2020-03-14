@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-schema-editor",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -16,19 +16,20 @@
   },
   "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc --declaration"
+    "build": "npm run build-css && tsc --declaration",
+    "build-css": "node-sass src/ -o lib/"
   },
   "dependencies": {
-    "@formily/react-schema-renderer": "^1.0.4",
+    "@ant-design/compatible": "^0.0.1-rc.1",
+    "@formily/antd": "^1.0.5",
+    "antd": "^4.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "antd": "^3.x",
     "node-sass": "^4.13.0",
-    "typescript": "^3.5.2"
+    "typescript": "^3.6.2"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.4",
     "@types/json-schema": "^7.0.3",
     "@types/react": "^16.8.23",
     "react": ">=16.8.0",

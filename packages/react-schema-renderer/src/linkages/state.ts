@@ -1,17 +1,33 @@
 import { useValueLinkageEffect } from '../shared/linkage'
-
+import { merge } from '@formily/shared'
 export const useValueStateLinkageEffect = (scope?: any) =>
   useValueLinkageEffect({
     type: 'value:state',
-    resolve: ({ target, state }, { setFieldState }) => {
+    resolve: ({ target, complie }, { setFieldState }) => {
       setFieldState(target, innerState => {
-        Object.assign(innerState, state)
+        merge(
+          innerState,
+          complie('state', {
+            $target: innerState
+          }),
+          {
+            assign: true
+          }
+        )
       })
     },
-    reject: ({ target, otherwise }, { setFieldState }) => {
+    reject: ({ target, otherwise, complie }, { setFieldState }) => {
       if (!otherwise) return
       setFieldState(target, innerState => {
-        Object.assign(innerState, otherwise)
+        merge(
+          innerState,
+          complie('otherwise', {
+            $target: innerState
+          }),
+          {
+            assign: true
+          }
+        )
       })
     },
     scope

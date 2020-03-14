@@ -6,14 +6,14 @@ import { SchemaTree } from './components/SchemaTree'
 import FieldEditor from './components/FieldEditor'
 import { SchemaCode } from './components/SchemaCode'
 import JsonDialog from './components/JsonDialog'
-// import { SchemaPreview } from './components/SchemaPreview'
+import { SchemaPreview } from './components/SchemaPreview'
 import { ComponentTypes } from './utils/types'
 import {
   getDefaultComponentType,
   getComponentsByComponentType
 } from './utils/schemaHelpers'
 import 'antd/dist/antd.css'
-import './main.scss'
+import './index.css'
 
 export const SchemaEditor: React.FC<{
   className?: string
@@ -47,10 +47,8 @@ export const SchemaEditor: React.FC<{
     setSelectedPath(path)
   }
 
-  const handleCodeChange = () => {}
-
   const handleSchemaChange = (schema: string) => {
-    onChange(schema)
+    onChange(JSON.parse(schema))
   }
 
   const isRoot = selectedPath === 'root'
@@ -130,12 +128,11 @@ export const SchemaEditor: React.FC<{
             <Tabs.TabPane tab="Schema源码" key="2">
               <SchemaCode
                 schema={schema}
-                onChange={handleCodeChange}
+                onChange={handleSchemaChange}
               ></SchemaCode>
             </Tabs.TabPane>
             <Tabs.TabPane tab="预览" key="3">
-              开发中，敬请期待...
-              {/* <SchemaPreview schema={schema}></SchemaPreview> */}
+              <SchemaPreview schema={schema}></SchemaPreview>
             </Tabs.TabPane>
           </Tabs>
         </div>

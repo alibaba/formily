@@ -17,13 +17,11 @@ npm install --save @formily/antd
 | 参数       | 说明                             | 类型                 | 默认值               |
 |:----------|:---------------------------------|:--------------------|:--------------------|
 | schema    |通过schema渲染表单                  | [ISchema](#ISchema) |                |
-| fields    |传入自定义表单组件                   | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) } |                |
-| virtualFields    |传入自定义虚拟组件                   | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |                |
 | formComponent    |全局注册Form渲染组件                  | string `or` React.ReactElement |                |
 | formItemComponent    |全局注册FormItem渲染组件                  | React.ReactElement |                |
 | labelCol    |label布局控制                  | number `or` { span: number; offset?: number } |                |
 | wrapperCol    |FormItem布局控制                  | number `or` { span: number; offset?: number } |                |
-| previewPlaceholder    |自定义预览placeholder                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
+| previewPlaceholder    |详情页的文本态占位符                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |       N/A         |
 | prefix    |样式前缀                  | string |                |
 | inline    |是否为内联表单                  | boolean |                |
 | size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `or` 'medium' `or` 'small' |                |
@@ -260,10 +258,163 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### `<Form/>`
+
+适用于纯JSX开发，开发者可以基于此进行二次封装。
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| fields    |传入自定义表单组件                   | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) } |                |
+| virtualFields    |传入自定义虚拟组件                   | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |                |
+| labelCol    |label布局控制                  | number `or` { span: number; offset?: number } |                |
+| wrapperCol    |FormItem布局控制                  | number `or` { span: number; offset?: number } |                |
+| previewPlaceholder    |自定义预览placeholder                  | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) |                |
+| prefix    |样式前缀                  | string |                |
+| inline    |是否为内联表单                  | boolean |                |
+| size    |单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。                  | 'large' `or` 'medium' `or` 'small' |                |
+| labelAlign    |标签的位置                  | 'top' `or` 'left' `or` 'inset' |                |
+| labelTextAlign    |标签的左右对齐方式                  | 'left' `or` 'right' |                |
+| labelCol    |控制所有 Item 的 labelCol                  | `{}` |                |
+| wrapperCol    |控制所有 Item 的 wrapperCol                  | `{}` |                |
+| className    |扩展class                  | string |                |
+| style    |自定义内联样式                  | React.CSSProperties |                |
+| component    |设置标签类型                  | string `or` (() => void) |                |
+| value    |全局value                  | {} |                |
+| defaultValue    |全局defaultValue                  | {} |                |
+| initialValues    |全局initialValues                  | {} |                |
+| actions    |FormActions实例                  | [FormActions](#FormActions) |                |
+| effects    |IFormEffect实例                  | IFormEffect<FormEffectPayload, [FormActions](#FormActions)> |                |
+| form    |表单实例                  | [IForm](#IForm) |                |
+| onChange    |表单变化回调                  | (values: {}) => void |                |
+| onSubmit    |form内有 `htmlType="submit"` 或 actions.submit时 触发                  | (values: {}) => void `or` Promise<{}> |                |
+| onReset    |form内有 <Reset/> 或 actions.reset时 触发                  | () => void |                |
+| onValidateFailed    |校验失败时触发                  | (valideted: [IFormValidateResult](#IFormValidateResult)) => void |                |
+| children    |全局value                  | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement) |                |
+| useDirty    |是否使用脏检查，默认会走immer精确更新                  | boolean |                |
+| editable    |是否可编辑                  | boolean `or` ((name: string) => boolean) |                |
+| validateFirst    |是否走悲观校验，遇到第一个校验失败就停止后续校验                  | boolean |                |
+
+#### `<FormItem>`
+
+适用于纯JSX开发，开发者可以基于此进行二次封装。
+
+> 当 `<FormItem>` 接收 `component` 字段时，`<FormItem>` 会继承对应组件的所有属性。
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| label    |字段label                   | React.ReactNode |                |
+| component    |表单组件                   | React.ReactNode |                |
+| path    |字段路径                  | [FormPathPattern](#FormPathPattern) |                |
+| name    |字段名                  | [FormPathPattern](#FormPathPattern) |                |
+| dataType    |数据类型(array/object)                  | string |                |
+| value    |字段值                  | any |                |
+| initialValue    |初始哈字段值                  | any |                |
+| values    |字段集合, 从onChange获取的所有参数                  | any |                |
+| triggerType    |  字段触发校验类型                  | 'onChange' `|` 'onBlur' |                | 
+| getValueFromEvent    |  字段变更时，从event中获取value的计算函数                  | (...args: any[]) => any |                | 
+| itemClassName    | formItem类名                  | string |                | 
+| itemStyle    | formItem样式控制                  | { [key: string]: string `|` number } |                | 
+| props    | 字段属性                  | `{}` |                | 
+| rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
+| required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
+| editable    | 字段是否可编辑                  | boolean |                |
+| visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
+| display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
+| useDirty    | 是否使用脏检查                  | boolean | false               |
+| computeState    | 计算字段状态                  | (draft: [IFieldState](#IFieldState), prevState: [IFieldState](#IFieldState)) => void |                |
+| valueName    | value字段名                  | string | value               |
+| eventName    | value变更方式                  | string | onChange               |
+| noStyle    | 	`(antd)`为 true 时不带样式，作为纯字段控件使用                  | boolean | false               |
+| hasFeedback    | `(antd)`配合 validateStatus 属性使用，展示校验状态图标，建议只配合 Input 组件使用                  | boolean | false               |
+| validateStatus    | `(antd)`校验状态，如不设置，则会根据校验规则自动生成，可选：'success' 'warning' 'error' 'validating'                  | string |                |
 
 #### `<Field/>(废弃)`
 
 > 即将废弃，请使用[SchemaMarkupField](#SchemaMarkupField)
+
+#### InternalField
+
+底层的 `<Field>` 组件，具备完整的功能性，没有UI的限制，开发者根据特定场景需求，基于此组件进行开发。
+
+**用法**
+
+示例：以输入框为例，如何快速绑定表单字段。
+
+```tsx
+import { InternalField as Field } from '@formily/antd'
+
+const InputField = props => (
+  <Field {...props}>
+    {({ state, mutators }) => (
+      <div>
+        <input
+          disabled={!state.editable}
+          value={state.value || ''}
+          onChange={mutators.change}
+          onBlur={mutators.blur}
+          onFocus={mutators.focus}
+        />
+        {state.errors}
+        {state.warnings}
+      </div>
+    )}
+  </Field>
+)
+```
+
+#### InternalVirtualField
+
+底层的 `<VirtualField>` 组件，具备完整的功能性，常用作布局组件，开发者根据特定场景需求，基于此组件进行开发。
+
+**用法**
+
+示例：布局组件为例，如何根据API设置布局样式。
+
+```tsx
+import { createFormActions, Form, Field, VirtualField } from '@formily/antd'
+
+const Layout = ({ children, width = '100px', height = '100px' }) => {
+  return (
+    <div style={{ border: '1px solid #999', width, height }}>{children}</div>
+  )
+}
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <Form actions={actions}>
+      <Field name="user" initialValue={{}}>
+        {({ state, mutator }) => {
+          return (
+            <VirtualField name="user.layout">
+              {({ state: layoutState }) => {
+                return (
+                  <Layout
+                    width={layoutState.props.width}
+                    height={layoutState.props.height}
+                  />
+                )
+              }}
+            </VirtualField>
+          )
+        }}
+      </Field>
+
+      <button
+        onClick={() => {
+          // some where dynamic change layout's props
+          actions.setFieldState('user.layout', state => {
+            state.props.width = '200px'
+            state.props.height = '200px'
+          })
+        }}
+      >
+        change layout
+      </button>
+    </Form>
+  )
+}
+```
 
 #### `<FormButtonGroup/>`
 
@@ -329,6 +480,7 @@ const App = () => {
 }
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
 
 ### Hook
 
@@ -884,6 +1036,60 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ```
 
+#### useDeepFormItem
+
+获取顶部设置与 `FormItem` 相关属性，常用于布局组件需要和表单组件对齐等需求。搭配 `<FormItemDeepProvider>` 一起使用
+
+**用法**
+
+```tsx
+import { useDeepFormItem, FormItemDeepProvider } from '@formily/antd'
+import { Form } from '@alifd/antd'
+const CustomComponent = (props) => {
+  const {
+    prefixCls,
+    labelAlign,
+    labelCol: contextLabelCol,
+    wrapperCol: contextWrapperCol
+  } = useDeepFormItem()
+
+  return <Form.Item
+    prefixCls={prefixCls}
+    labelAlign={labelAlign}
+    labelCol={{ span: contextLabelCol }}
+    wrapperCol={{ span: contextWrapperCol }}
+   >
+    {props.children}
+  </Form.Item>
+}
+
+const App = () => {
+  return <FormItemDeepProvider labelAlign="top" labelCol={6} wrapperCol={18}>
+    <CustomComponent />
+  </FormItemDeepProvider>
+}
+
+```
+
+#### useShallowFormItem
+
+当想保留大部分表单组件的属性，并且阻隔某些指定属性时，搭配 `<FormItemShallowProvider>` 一起使用
+
+**用法**
+
+下列 `<NoLabelInput>`  除了`label`以外，会继承其他所有顶部的 `FormItem` 属性。
+
+```tsx
+import { SchemaField, FormItemShallowProvider, useShallowFormItem } from '@formily/antd'
+import { Form } from '@alifd/antd'
+const NoLabelInput = (props) => {
+  return <FormItemShallowProvider label={undefined}>
+    <SchemaField path={props.path} type="string">
+  </FormItemShallowProvider>
+}
+
+```
+
 ### API
 
 > 整体完全继承@formily/react, 下面只列举@formily/antd 的特有 API
@@ -928,6 +1134,117 @@ import { createAsyncFormActions } from '@formily/antd'
 const actions = createAsyncFormActions()
 actions.getFieldValue('username').then(val => console.log(val))
 ```
+
+#### setValidationLanguage
+
+设置校验规则语种，搭配[setValidationLocale](#setValidationLocale) 使用
+
+**签名**
+
+```typescript
+const setValidationLanguage = (lang: string) => void;
+```
+
+**用法**
+
+```tsx
+import { setValidationLanguage } from '@formily/antd'
+setValidationLanguage('zh')
+```
+
+#### setValidationLocale
+
+设置校验规则命中时，message的定义, 搭配[setValidationLanguage](#setValidationLanguage) 使用
+
+**签名**
+
+```typescript
+interface ILocaleMessages {
+    [key: string]: string | ILocaleMessages;
+}
+interface ILocales {
+    [lang: string]: ILocaleMessages;
+}
+const setValidationLocale: (locale: ILocales) => void;
+```
+
+**用法**
+
+```tsx
+import { setValidationLanguage, setValidationLocale, } from '@formily/antd'
+
+setValidationLanguage('zh')
+setValidationLocale({
+  zh: {
+    required: '这是修改默认的必填文案',
+  },
+})
+```
+
+#### registerValidationFormats
+
+拓展校验正则format, 当不满足此规则时即报错。
+
+**签名**
+
+```typescript
+type ValidateFormatsMap = {
+    [key in string]: RegExp;
+};
+static registerFormats(formats: ValidateFormatsMap): void
+```
+
+**用法**
+
+```tsx
+import { registerValidationFormats } from '@formily/antd'
+
+registerValidationFormats({
+  custom_format: /^\d+$/
+})
+
+<Field
+  type="string"
+  required
+  name="username"
+  title="UserName"
+  x-component="Input"
+  x-rules={{
+    format: 'custom_format',
+  }}
+/>
+```
+
+#### registerValidationMTEngine
+
+注册校验消息模板引擎
+
+**签名**
+
+```tsx
+static (template: any) => void;
+```
+
+**用法**
+
+```tsx
+import { setValidationLocale, registerValidationMTEngine } from '@formily/antd'
+setValidationLocale({
+  en: {
+    required: '这是定制必填文案 <% injectVar %>',
+  },
+})
+
+registerValidationMTEngine((message, context) => {
+  return message.replace(/\<\%\s*([\w.]+)\s*\%\>/g, (_, $0) => {
+    return '替代inject的文案'
+  })
+})
+```
+
+#### FormPath
+
+完全等价于 [cool-path](https://github.com/janryWang/cool-path)，提供了针对数据路径一系列的解析，匹配，取值，求值的能力。可以帮助我们在表单的很多地方高效实现业务逻辑。更详尽的内容，可以参考[理解表单路径系统](https://formilyjs.org/#/L3TOTn/JjSLSJFXiw)
 
 #### `FormEffectHooks`
 
@@ -1066,6 +1383,35 @@ registerFormField(
   connect()(props => <input {...props} value={props.value || ''} />)
 )
 ```
+
+#### mapStyledProps
+
+表单常使用 `mapStyledProps` 与 `connect` 搭配，它能够将当前表单字段的状态传递到 `<FormItem>` 上，实现
+`loading`，`error`, `warning` 三种状态。
+
+**用法**
+
+```tsx
+const Input = connect({
+  getProps: mapStyledProps,
+  getComponent: mapTextComponent
+})(Input))
+```
+
+#### mapTextComponent
+
+表单常使用 `mapTextComponent` 与 `connect` 搭配，它能够将当前表单字段在非编辑态时，显示预览值`<PreviewText>`，
+并且会自动处理有 `dataSource` 等情况。
+
+**用法**
+
+```tsx
+const Input = connect({
+  getProps: mapStyledProps,
+  getComponent: mapTextComponent
+})(Input))
+```
+
 
 #### registerFormFields
 

@@ -33,6 +33,10 @@ export type INextFormItemProps = IFieldStateUIProps &
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    itemStyle?: {
+      [key: string]: string | number
+    }
+    itemClassName?: string
     [key: string]: any
   }
 
@@ -69,12 +73,14 @@ export type IFormItemTopProps = React.PropsWithChildren<
   }
 >
 
-export interface ISchemaFieldAdaptorProps
-  extends Omit<ItemProps, 'labelCol' | 'wrapperCol'>,
-    Partial<ISchemaFieldComponentProps> {
-  labelCol?: number | { span: number; offset?: number }
-  wrapperCol?: number | { span: number; offset?: number }
-}
+export type ISchemaFieldAdaptorProps = Omit<
+  ItemProps,
+  'labelCol' | 'wrapperCol'
+> &
+  Partial<ISchemaFieldComponentProps> & {
+    labelCol?: number | { span: number; offset?: number }
+    wrapperCol?: number | { span: number; offset?: number }
+  }
 
 export type StyledCP<P extends {}> = StyledComponent<
   (props: React.PropsWithChildren<P>) => React.ReactElement,

@@ -4,8 +4,11 @@ import {
   IConnectProps,
   MergedFieldComponentProps
 } from '@formily/react-schema-renderer'
+import { version } from 'antd'
 import { each } from '@formily/shared'
 export * from '@formily/shared'
+
+export const isAntdV4 = /^4\./.test(version)
 
 export const autoScrollInValidateFailed = (formRef: any) => {
   if (formRef.current) {
@@ -87,7 +90,10 @@ const NextFormItemProps = [
   'wrapperCol',
   'label',
   'help',
-  'extra'
+  'extra',
+  'itemStyle',
+  'itemClassName',
+  'addonAfter'
 ]
 
 export const pickFormItemProps = (props: any) => {
@@ -97,6 +103,14 @@ export const pickFormItemProps = (props: any) => {
   }
   if (!props.help && props.description) {
     selected.help = props.description
+  }
+  if (selected.itemStyle) {
+    selected.style = selected.itemStyle
+    delete selected.itemStyle
+  }
+  if (selected.itemClassName) {
+    selected.className = selected.itemClassName
+    delete selected.itemClassName
   }
   return selected
 }

@@ -155,6 +155,20 @@ export interface IFieldState<FieldProps = any> {
   props: FieldProps
   [key: string]: any
 }
+
+export type IFieldUserState<FieldProps = any> = Omit<
+  IFieldState<FieldProps>,
+  | 'errors'
+  | 'effectErrors'
+  | 'ruleErrors'
+  | 'warnings'
+  | 'effectWarnings'
+  | 'ruleWarnings'
+> & {
+  errors: React.ReactNode | React.ReactNode[]
+  warnings: React.ReactNode | React.ReactNode[]
+}
+
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IFieldStateProps<FieldProps = any> {
@@ -173,7 +187,6 @@ export interface IFieldStateProps<FieldProps = any> {
   visible?: boolean
   display?: boolean
   useDirty?: boolean
-  useListMode?: boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
 
@@ -209,6 +222,7 @@ export interface IFormState<FormProps = any> {
   invalid: boolean
   loading: boolean
   validating: boolean
+  modified: boolean
   submitting: boolean
   initialized: boolean
   editable: boolean | ((name: string) => boolean)
@@ -364,7 +378,7 @@ export interface IForm {
   getFormState(callback?: (state: IFormState) => any): any
   setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState) => void,
+    callback?: (state: IFieldUserState) => void,
     silent?: boolean
   ): void
   getFieldState(
@@ -380,7 +394,8 @@ export interface IForm {
   subscribe(callback?: FormHeartSubscriber): number
   unsubscribe(id: number): void
   notify: <T>(type: string, payload?: T) => void
-  isLeadingValidate: () => boolean
+  isHostRendering: () => boolean
+  hostUpdate: (callback?: () => any) => any
   setFieldValue(path?: FormPathPattern, value?: any): void
   getFieldValue(path?: FormPathPattern): any
   setFieldInitialValue(path?: FormPathPattern, value?: any): void

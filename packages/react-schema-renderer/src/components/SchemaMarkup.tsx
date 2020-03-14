@@ -43,6 +43,7 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
 
 SchemaMarkupField.displayName = 'SchemaMarkupField'
 
+
 export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
   let alreadyHasSchema = false
   let finalSchema: Schema
@@ -96,7 +97,6 @@ export function createVirtualBox<T = {}>(
         visible={visible}
         display={display}
         x-component={key}
-        x-props={props}
         x-component-props={props}
       >
         {children}
@@ -121,7 +121,6 @@ export function createControllerBox<T = {}>(
         type="object"
         name={name}
         x-component={key}
-        x-props={props}
         x-component-props={props}
       >
         {children}
