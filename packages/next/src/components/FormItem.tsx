@@ -8,7 +8,8 @@ import {
 import {
   normalizeCol,
   pickNotFormItemProps,
-  pickFormItemProps
+  pickFormItemProps,
+  log
 } from '../shared'
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
@@ -66,8 +67,8 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const renderComponent = ({ props, state, mutators, form }) => {
     if (!component) {
       if (children) return <Fragment>{children}</Fragment>
-      console.error(
-        `[Formily Error]: Can't fount the component. Its key is ${name}.`
+      log.error(
+        `Can't fount the component. Its key is ${name}.`
       )
       return null
     }
