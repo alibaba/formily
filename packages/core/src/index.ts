@@ -5,6 +5,7 @@ import {
   isNum,
   isArr,
   clone,
+  log,
   isValid,
   FormPath,
   FormPathPattern,
@@ -1067,7 +1068,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
     // 打印warnings日志从submit挪到这里
     if (warnings.length) {
-      console.warn(warnings)
+      log.warn(warnings)
     }
     if (errors.length > 0) {
       if (throwErrors) {
