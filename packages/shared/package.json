@@ -1,6 +1,6 @@
 {
   "name": "@formily/shared",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -27,8 +27,8 @@
   },
   "dependencies": {
     "camel-case": "^3.0.0",
-    "upper-case":"^1.1.3",
-    "lower-case":"^1.1.4",
-    "cool-path": "^0.1.23"
+    "cool-path": "^0.1.23",
+    "lower-case": "^1.1.4",
+    "upper-case": "^1.1.3"
   }
 }
