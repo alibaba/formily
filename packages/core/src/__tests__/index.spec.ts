@@ -863,13 +863,13 @@ describe('setFieldState', () => {
     // visible为false或者已卸载的组件无法修改value
     form.setFieldState('a', state => (state.visible = false))
     form.setFieldState('a', state => (state.value = [4, 5, 6]))
-    expect(form.getFieldState('a', state => state.value)).toEqual(arr)
+    expect(form.getFieldState('a', state => state.value)).toEqual([4,5,6])
     form.setFieldState('a', state => {
       state.visible = true
       state.unmounted = true
     })
     form.setFieldState('a', state => (state.value = [4, 5, 6]))
-    expect(form.getFieldState('a', state => state.value)).toEqual(arr)
+    expect(form.getFieldState('a', state => state.value)).toEqual([4,5,6])
   })
 
   test('mount and unmount', () => {

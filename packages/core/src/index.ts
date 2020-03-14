@@ -60,6 +60,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldValues(state: IFieldState) {
+    if (
+      env.visibleHiddenSource &&
+      FormPath.parse(env.visibleHiddenSource).match(state.path)
+    ) {
+      if (state.visible === false || state.unmounted) return
+    }
     const dataPath = FormPath.parse(state.name)
     const parent = graph.getLatestParent(state.path)
     const parentValue = getFormValuesIn(parent.path)
@@ -86,6 +92,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
       })
     }
+
     if (removed) return
     if (!isEqual(value, state.value)) {
       state.value = value
@@ -93,6 +100,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldIntialValues(state: IFieldState) {
+    if (
+      env.visibleHiddenSource &&
+      FormPath.parse(env.visibleHiddenSource).match(state.path)
+    ) {
+      if (state.visible === false || state.unmounted) return
+    }
     const initialValue = getFormInitialValuesIn(state.name)
     if (!isEqual(initialValue, state.initialValue)) {
       state.initialValue = initialValue
@@ -120,25 +133,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const updateFields = (field: IField | IVirtualField) => {
         if (isField(field)) {
           field.setState(state => {
-            if (state.visible || state.unmounted) {
-              if (valuesChanged) {
-                syncFieldValues(state)
-              }
-              if (initialValuesChanged) {
-                syncFieldIntialValues(state)
-              }
-            } else {
-              //缓存变化，等字段重新显示的时候再执行
-              if (valuesChanged) {
-                env.hiddenPendingFields[state.name] =
-                  env.hiddenPendingFields[state.name] || {}
-                env.hiddenPendingFields[state.name].values = true
-              }
-              if (initialValuesChanged) {
-                env.hiddenPendingFields[state.name] =
-                  env.hiddenPendingFields[state.name] || {}
-                env.hiddenPendingFields[state.name].initialValues = true
-              }
+            if (valuesChanged) {
+              syncFieldValues(state)
+            }
+            if (initialValuesChanged) {
+              syncFieldIntialValues(state)
             }
           })
         }
@@ -149,11 +148,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
             env.userUpdateFields[env.userUpdateFields.length - 1]
           /*
            * 考虑初始化的时候还没生成节点树
-           * 两种数据同步策略，
+           * 3种数据同步策略，
            * 1. 精确更新的时候(mutators/setFieldState)，只遍历父节点与子节点，同时父节点静默处理，子节点通知渲染
            * 2. setFormState批量更新的时候，是会遍历所有节点，同时所有节点只要有变化就会被通知
+           * 3. visible变化只同步父节点
            */
-          if (userUpdateFieldPath && graph.get(userUpdateFieldPath)) {
+          if (env.visibleHiddenSource) {
+            graph.eachParent(env.visibleHiddenSource, updateFields)
+          } else if (userUpdateFieldPath && graph.get(userUpdateFieldPath)) {
             graph.eachParentAndChildren(userUpdateFieldPath, updateFields)
           } else {
             graph.eachChildren(updateFields)
@@ -240,30 +242,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const userUpdateFieldPath =
         env.userUpdateFields[env.userUpdateFields.length - 1]
 
-      const syncField = () => {
-        if (env.hiddenPendingFields[published.name]) {
-          field.setState((state: IFieldState) => {
-            if (env.hiddenPendingFields[state.name].values) {
-              syncFieldValues(state)
-            }
-            if (env.hiddenPendingFields[state.name].initialValues) {
-              syncFieldIntialValues(state)
-            }
-            delete env.hiddenPendingFields[state.name]
-          })
-        }
-      }
-
-      const notifyFormValuesChange = () => {
-        if (isFn(options.onChange)) {
-          clearTimeout(env.onChangeTimer)
-          env.onChangeTimer = setTimeout(() => {
-            options.onChange(state.getSourceState(state => clone(state.values)))
-          })
-        }
-        heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
-      }
-
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
@@ -293,14 +271,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
           if (!published.visible) {
-            deleteFormValuesIn(path, true)
-            //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
-            notifyFormValuesChange()
+            env.visibleHiddenSource = path
+            deleteFormValuesIn(path)
+            env.visibleHiddenSource = null
           } else {
             if (!existFormValuesIn(path)) {
-              setFormValuesIn(path, published.value)
+              setFormValuesIn(
+                path,
+                isValid(published.value)
+                  ? published.value
+                  : published.initialValue
+              )
             }
-            syncField()
           }
         }
         graph.eachChildren(path, childState => {
@@ -319,14 +301,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
         (published.display !== false || published.visible === false)
       ) {
         if (published.unmounted) {
-          deleteFormValuesIn(path, true)
-          //考虑到隐藏删值，不应该同步子树，但是需要触发表单变化事件
-          notifyFormValuesChange()
+          env.visibleHiddenSource = path
+          deleteFormValuesIn(path)
+          env.visibleHiddenSource = null
         } else {
           if (!existFormValuesIn(path)) {
-            setFormValuesIn(path, published.value)
+            setFormValuesIn(
+              path,
+              isValid(published.value)
+                ? published.value
+                : published.initialValue
+            )
           }
-          syncField()
         }
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
       }
@@ -1356,8 +1342,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
     userUpdateFields: [],
     taskIndexes: {},
     removeNodes: {},
-    hiddenPendingFields: {},
     lastShownStates: {},
+    visibleHiddenSource: null,
     submittingTask: undefined
   }
   heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)
