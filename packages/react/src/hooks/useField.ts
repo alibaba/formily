@@ -88,6 +88,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       ref.current.unmounted = true
       ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IFieldState) => {
+        console.log('删除字段',state.name)
         state.unmounted = true
       }) //must notify,need to trigger remove value
     }

@@ -60,12 +60,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldValues(state: IFieldState) {
-    if (
-      env.visibleHiddenSource &&
-      FormPath.parse(env.visibleHiddenSource).match(state.path)
-    ) {
-      if (state.visible === false || state.unmounted) return
-    }
     const dataPath = FormPath.parse(state.name)
     const parent = graph.getLatestParent(state.path)
     const parentValue = getFormValuesIn(parent.path)
@@ -100,12 +94,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldIntialValues(state: IFieldState) {
-    if (
-      env.visibleHiddenSource &&
-      FormPath.parse(env.visibleHiddenSource).match(state.path)
-    ) {
-      if (state.visible === false || state.unmounted) return
-    }
     const initialValue = getFormInitialValuesIn(state.name)
     if (!isEqual(initialValue, state.initialValue)) {
       state.initialValue = initialValue
@@ -143,25 +131,25 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
       }
       if (valuesChanged || initialValuesChanged) {
-        if (!env.leadingStage) {
-          const userUpdateFieldPath =
-            env.userUpdateFields[env.userUpdateFields.length - 1]
-          /*
-           * 考虑初始化的时候还没生成节点树
-           * 3种数据同步策略，
-           * 1. 精确更新的时候(mutators/setFieldState)，只遍历父节点与子节点，同时父节点静默处理，子节点通知渲染
-           * 2. setFormState批量更新的时候，是会遍历所有节点，同时所有节点只要有变化就会被通知
-           * 3. visible变化只同步父节点
-           */
-          if (env.visibleHiddenSource) {
-            graph.eachParent(env.visibleHiddenSource, updateFields)
-          } else if (userUpdateFieldPath && graph.get(userUpdateFieldPath)) {
-            graph.eachParentAndChildren(userUpdateFieldPath, updateFields)
+        const userUpdateSource =
+          env.userUpdateSources[env.userUpdateSources.length - 1]
+        /*
+         * 考虑初始化的时候还没生成节点树
+         * 2种数据同步策略，
+         * 1. 精确更新的时候(mutators/setFieldState)，只遍历父节点与子节点，同时父节点静默处理，子节点通知渲染
+         * 2. 批量同步，但是会采用异步节流方式合并同步任务
+         */
+        if (userUpdateSource && graph.get(userUpdateSource)) {
+          graph.eachParentAndChildren(userUpdateSource, updateFields)
+        } else {
+          if (graph.size > 20) {
+            clearTimeout(env.syncFormStateTimer)
+            env.syncFormStateTimer = setTimeout(() => {
+              graph.eachChildren(updateFields)
+            })
           } else {
             graph.eachChildren(updateFields)
           }
-        } else {
-          graph.eachChildren(updateFields)
         }
       }
       if (valuesChanged) {
@@ -239,8 +227,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const warningsChanged = field.isDirty('warnings')
       const errorsChanged = field.isDirty('errors')
       const editableChanged = field.isDirty('editable')
-      const userUpdateFieldPath =
-        env.userUpdateFields[env.userUpdateFields.length - 1]
+      const userUpdateSource =
+        env.userUpdateSources[env.userUpdateSources.length - 1]
 
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
@@ -271,15 +259,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
           if (!published.visible) {
-            env.visibleHiddenSource = path
+            field.setSourceState((state: IFieldState<FieldProps>) => {
+              state.visibleCacheValue = published.value
+            })
             deleteFormValuesIn(path)
-            env.visibleHiddenSource = null
           } else {
             if (!existFormValuesIn(path)) {
               setFormValuesIn(
                 path,
-                isValid(published.value)
-                  ? published.value
+                isValid(published.visibleCacheValue)
+                  ? published.visibleCacheValue
                   : published.initialValue
               )
             }
@@ -301,15 +290,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
         (published.display !== false || published.visible === false)
       ) {
         if (published.unmounted) {
-          env.visibleHiddenSource = path
+          field.setSourceState((state: IFieldState<FieldProps>) => {
+            state.visibleCacheValue = published.value
+          })
           deleteFormValuesIn(path)
-          env.visibleHiddenSource = null
         } else {
           if (!existFormValuesIn(path)) {
             setFormValuesIn(
               path,
-              isValid(published.value)
-                ? published.value
+              isValid(published.visibleCacheValue)
+                ? published.visibleCacheValue
                 : published.initialValue
             )
           }
@@ -339,11 +329,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
 
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-      if (userUpdateFieldPath && !env.leadingStage) {
-        if (FormPath.parse(path).match(userUpdateFieldPath)) {
+      if (userUpdateSource) {
+        if (FormPath.parse(path).match(userUpdateSource)) {
           return
         }
-        if (FormPath.parse(userUpdateFieldPath).includes(path)) {
+        if (FormPath.parse(userUpdateSource).includes(path)) {
           return false
         }
       }
@@ -736,26 +726,26 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const nodePath = field.getSourceState(state => state.path)
       if (isValid(key)) {
         const childNodePath = FormPath.parse(nodePath).concat(key)
-        env.userUpdateFields.push(nodePath)
+        env.userUpdateSources.push(nodePath)
         env.removeNodes[childNodePath.toString()] = true
         deleteFormValuesIn(childNodePath)
         field.notify(field.getState())
-        env.userUpdateFields.pop()
+        env.userUpdateSources.pop()
       } else {
         const parent = graph.selectParent(nodePath)
         env.removeNodes[nodePath.toString()] = true
         const parentNodePath =
           parent && parent.getSourceState(state => state.path)
         if (parentNodePath) {
-          env.userUpdateFields.push(parentNodePath)
+          env.userUpdateSources.push(parentNodePath)
         } else {
-          env.userUpdateFields.push(nodePath)
+          env.userUpdateSources.push(nodePath)
         }
         deleteFormValuesIn(nodePath)
         if (parent) {
           parent.notify(parent.getState())
         }
-        env.userUpdateFields.pop()
+        env.userUpdateSources.pop()
       }
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
@@ -1071,9 +1061,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     callback?: (state: IFormState) => any,
     silent?: boolean
   ) {
-    env.leadingStage = true
     state.setState(callback, silent)
-    env.leadingStage = false
   }
 
   function getFormState(callback?: (state: IFormState) => any) {
@@ -1142,11 +1130,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
   function userUpdating(field: IField | IVirtualField, fn?: () => void) {
     if (!field) return
     const nodePath = field.state.path
-    if (nodePath) env.userUpdateFields.push(nodePath)
+    if (nodePath) env.userUpdateSources.push(nodePath)
     if (isFn(fn)) {
       fn()
     }
-    env.userUpdateFields.pop()
+    env.userUpdateSources.pop()
   }
 
   function setFieldValue(path: FormPathPattern, value?: any, silent?: boolean) {
@@ -1285,7 +1273,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     ...options,
     matchStrategy
   })
-  const graph = new FormGraph({
+  const graph: FormGraph = new FormGraph({
     matchStrategy
   })
   const applyWithScheduler = scheduler(options.validateConcurrentTimeMS)
@@ -1333,17 +1321,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
   })
   const env = {
     validateTimer: null,
+    syncFormStateTimer: null,
     onChangeTimer: null,
     graphChangeTimer: null,
-    leadingStage: false,
     hostRendering: false,
     publishing: {},
     taskQueue: [],
-    userUpdateFields: [],
+    userUpdateSources: [],
     taskIndexes: {},
     removeNodes: {},
     lastShownStates: {},
-    visibleHiddenSource: null,
     submittingTask: undefined
   }
   heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, state)

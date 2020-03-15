@@ -34,6 +34,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       selfEditable: undefined,
       formEditable: undefined,
       value: undefined,
+      visibleCacheValue: undefined,
       initialValue: undefined,
       rules: [],
       required: false,
@@ -166,11 +167,6 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
     }
 
     computeState(draft: IFieldState, prevState: IFieldState) {
-      //放开隐藏赋值，断开循环赋值在onFieldChange里拦截
-      // if (!draft.visible || draft.unmounted) {
-      //   draft.value = prevState.value
-      //   draft.initialValue = prevState.initialValue
-      // }
       //操作重定向
       if (!isEqual(draft.errors, prevState.errors)) {
         draft.effectErrors = draft.errors

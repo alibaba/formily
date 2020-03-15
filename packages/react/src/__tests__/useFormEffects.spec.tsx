@@ -91,6 +91,7 @@ describe('useFormEffects hook', () => {
         const Fragment = () => {
             useFormEffects(($, actions) => {
                 $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE).subscribe((state) => {
+                    console.log(state,'1111')
                     effectFieldChangeFn(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
                     effectFieldChangeState = state
                 })
@@ -102,6 +103,7 @@ describe('useFormEffects hook', () => {
             return <Form actions={actions} effects={($) => {
                 $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE).subscribe((state) => {
                     formFieldChangeFn(LifeCycleTypes.ON_FIELD_VALUE_CHANGE)
+                    console.log(state,'2222')
                     formFieldChangeState = state
                 })
             }}>
@@ -136,10 +138,10 @@ describe('useFormEffects hook', () => {
         })
         
         rerender()
-        expect(effectFieldChangeFn).toBeCalledTimes(1)
-        expect(formFieldChangeFn).toBeCalledTimes(2)
+        expect(effectFieldChangeFn).toBeCalledTimes(2)
+        expect(formFieldChangeFn).toBeCalledTimes(3)
 
         expect(formFieldChangeState.value).toEqual(2)
-        expect(effectFieldChangeState.value).toEqual(1)
+        expect(effectFieldChangeState.value).toEqual(undefined) //因为Fragment已经unmount了，是接收不到消息了
     })
 })

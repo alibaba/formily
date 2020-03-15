@@ -147,6 +147,7 @@ export interface IFieldState<FieldProps = any> {
   effectWarnings: string[]
   ruleWarnings: string[]
   value: any
+  visibleCacheValue: any
   initialValue: any
   rules: ValidatePatternRules[]
   required: boolean

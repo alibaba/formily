@@ -171,6 +171,9 @@ test('setFieldState x-props with onFormInit', async () => {
 test('getFieldState with onFieldChange', async () => {
   let aaValue
   const TestComponent = () => {
+    useEffect(()=>()=>{
+      console.log('卸载卸载卸载卸载')
+    },[])
     return (
       <SchemaForm
         // eslint-disable-next-line no-console
@@ -178,7 +181,9 @@ test('getFieldState with onFieldChange', async () => {
         initialValues={{ obj: { aa: 123 } }}
         effects={($, { getFieldState }) => {
           $('onFieldChange', 'obj.aa').subscribe(() => {
-            aaValue = getFieldState('obj', state => state.value.aa)
+            aaValue = getFieldState('obj', state => {
+              return state.value && state.value.aa
+            })
           })
         }}
       >
