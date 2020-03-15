@@ -513,15 +513,6 @@ export class Schema implements ISchema {
       }
     })
 
-    let orderIndex = 0
-    while (unorderProperties.length) {
-      const peroperty = unorderProperties.shift()
-      while (orderProperties[orderIndex]) {
-        orderIndex += 1
-      }
-      orderProperties[orderIndex] = peroperty
-    }
-
-    return orderProperties.filter(item => !!item)
+    return orderProperties.concat(unorderProperties).filter(item => !!item)
   }
 }

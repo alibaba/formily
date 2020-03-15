@@ -121,7 +121,7 @@ describe('major scene', () => {
     })
   })
 
-  test.only('x-index', () => {
+  test('x-index', () => {
     // 全排序
     const s1 = new Schema({
       type: 'object',
@@ -137,6 +137,9 @@ describe('major scene', () => {
         },
         p4: {
           'x-index': 4
+        },
+        p5: {
+          'x-index': 5
         }
       }
     })
@@ -145,7 +148,8 @@ describe('major scene', () => {
       'p1',
       'p3',
       'p2',
-      'p4'
+      'p4',
+      'p5'
     ])
 
     // 多排序
@@ -161,29 +165,29 @@ describe('major scene', () => {
         p3: {
           'x-index': 7
         },
-        p4: {
+        p4: {},
+        p5: {
           'x-index': 2
-        },
-        p5: {}
+        }
       }
     })
 
     expect(s2.getOrderProperties().map(k => k.key)).toEqual([
-      'p5',
       'p1',
-      'p4',
+      'p5',
       'p2',
-      'p3'
+      'p3',
+      'p4'
     ])
 
     // 多无序
     const s3 = new Schema({
       type: 'object',
       properties: {
-        p1: {
+        p1: {},
+        p2: {
           'x-index': 3
         },
-        p2: {},
         p3: {},
         p4: {},
         p5: {}
@@ -192,9 +196,9 @@ describe('major scene', () => {
 
     expect(s3.getOrderProperties().map(k => k.key)).toEqual([
       'p2',
+      'p1',
       'p3',
       'p4',
-      'p1',
       'p5'
     ])
 
