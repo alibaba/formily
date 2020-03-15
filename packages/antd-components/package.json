@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd-components",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -31,10 +31,10 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0-rc.0",
-    "@formily/antd": "^1.0.7",
-    "@formily/react-schema-renderer": "^1.0.7",
-    "@formily/react-shared-components": "^1.0.7",
-    "@formily/shared": "^1.0.7",
+    "@formily/antd": "^1.0.8",
+    "@formily/react-schema-renderer": "^1.0.8",
+    "@formily/react-shared-components": "^1.0.8",
+    "@formily/shared": "^1.0.8",
     "classnames": "^2.2.6",
     "styled-components": "^4.1.1"
   },

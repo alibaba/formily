@@ -219,7 +219,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function onFieldChange({ field, path }) {
     function notifyTreeFromValues() {
-      field.setState(syncFieldValues, true)
+      field.setState(syncFieldValues)
       graph.eachParent(path, (field: IField) => {
         if (isField(field)) {
           field.setState(syncFieldValues, true)
@@ -233,7 +233,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       notifyFormValuesChange()
     }
     function notifyTreeFromInitialValues() {
-      field.setState(syncFieldIntialValues, true)
+      field.setState(syncFieldIntialValues)
       graph.eachParent(path, (field: IField) => {
         field.setState(syncFieldIntialValues, true)
       })
