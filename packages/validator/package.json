@@ -1,6 +1,6 @@
 {
   "name": "@formily/validator",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -22,7 +22,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@formily/shared": "^1.0.7"
+    "@formily/shared": "^1.0.8"
   },
   "publishConfig": {
     "access": "public"
