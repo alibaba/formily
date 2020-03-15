@@ -136,10 +136,10 @@ describe('useFormEffects hook', () => {
         })
         
         rerender()
-        expect(effectFieldChangeFn).toBeCalledTimes(1)
-        expect(formFieldChangeFn).toBeCalledTimes(2)
+        expect(effectFieldChangeFn).toBeCalledTimes(2)
+        expect(formFieldChangeFn).toBeCalledTimes(3)
 
         expect(formFieldChangeState.value).toEqual(2)
-        expect(effectFieldChangeState.value).toEqual(1)
+        expect(effectFieldChangeState.value).toEqual(undefined)
     })
 })
