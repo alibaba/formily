@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-shared-components",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -26,7 +26,7 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
-    "@formily/shared": "^1.0.6",
+    "@formily/shared": "^1.0.7",
     "react-drag-listview": "^0.1.6"
   }
 }
