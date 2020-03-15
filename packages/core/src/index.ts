@@ -12,7 +12,6 @@ import {
   BigData,
   each,
   isObj
-  //scheduler
 } from '@formily/shared'
 import {
   FormValidator,
