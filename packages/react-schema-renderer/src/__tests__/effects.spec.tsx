@@ -30,10 +30,19 @@ registerFieldMiddleware(Field => {
 })
 registerFormField(
   'string',
-  connect()(props => props.disabled 
-    ? <span>Disabled</span>
-    : <input {...props} value={props.value || ''} />)
+  connect()(props =>
+    props.disabled ? (
+      <span>Disabled</span>
+    ) : (
+      <input {...props} value={props.value || ''} />
+    )
+  )
 )
+
+const sleep = (duration = 100) =>
+  new Promise(resolve => {
+    setTimeout(resolve, duration)
+  })
 
 test('onFormInit setFieldState', async () => {
   const actions = createFormActions()
@@ -46,7 +55,7 @@ test('onFormInit setFieldState', async () => {
             state.props.title = 'text'
             state.rules = [
               {
-                required: true,
+                required: true
               }
             ]
           })
@@ -64,19 +73,19 @@ test('onFormInit setFieldState', async () => {
 
   const { getByText, getByTestId, queryByText } = render(<TestComponent />)
 
-  await wait();
+  await wait()
   expect(queryByText('text')).toBeVisible()
-  await wait();
+  await wait()
   fireEvent.click(getByTestId('btn'))
-  await wait();
+  await wait()
   expect(getByText('This field is required')).toBeVisible()
-  await wait();
+  await wait()
   actions.setFieldState('aaa', state => {
     state.rules = []
   })
-  await wait();
+  await wait()
   fireEvent.click(getByTestId('btn'))
-  await wait();
+  await wait()
   expect(queryByText('This field is required')).toBeNull()
 })
 
@@ -100,7 +109,7 @@ test('init triggers', async () => {
   }
 
   render(<TestComponent />)
-  await wait();
+  await wait()
   expect(callback).toHaveBeenCalledTimes(1)
 })
 
@@ -135,7 +144,7 @@ test('onFieldChange will trigger with initialValues', async () => {
   }
 
   render(<TestComponent />)
-  await wait();
+  await wait()
   expect(callback).toHaveBeenCalledTimes(2)
   expect(callback.mock.calls[0][0].value).toBe(undefined)
   expect(callback.mock.calls[1][0].value).toBe(123)
@@ -164,7 +173,7 @@ test('setFieldState x-props with onFormInit', async () => {
   }
 
   const { queryByText } = render(<TestComponent />)
-  await wait();
+  await wait()
   expect(queryByText('Disabled')).toBeVisible()
 })
 
@@ -195,9 +204,9 @@ test('getFieldState with onFieldChange', async () => {
     )
   }
   const { queryByTestId } = render(<TestComponent />)
-  await wait();
+  await wait()
   fireEvent.change(queryByTestId('this is aa'), { target: { value: '333' } })
-  await wait();
+  await wait()
   expect(aaValue).toBe('333')
 })
 
@@ -228,9 +237,9 @@ test('set errors in effects', async () => {
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await wait();
+  await wait()
   fireEvent.click(queryByTestId('btn'))
-  await wait();
+  await wait()
   expect(callback).toHaveBeenCalledTimes(0)
 })
 
@@ -242,7 +251,7 @@ test('setFieldState from buffer', async () => {
         effects={($, { setFieldState }) => {
           $('onFormInit').subscribe(() => {
             setFieldState(FormPath.match('*') as any, state => {
-              (state as any).title = '1123'
+              ;(state as any).title = '1123'
             })
           })
           $('onFieldChange', 'kkk').subscribe(() => {
@@ -269,7 +278,7 @@ test('setFieldState from buffer', async () => {
   }
 
   const { queryByTestId } = render(<TestComponent />)
-  await wait();
+  await wait()
   expect(queryByTestId('test')).toBeVisible()
 })
 
@@ -292,7 +301,7 @@ test('filter first onFieldChange', async () => {
   }
 
   render(<TestComponent />)
-  await wait();
+  await wait()
   expect(sub1).toHaveBeenCalledTimes(0)
   expect(sub2).toHaveBeenCalledTimes(1)
 })

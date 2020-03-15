@@ -11,8 +11,8 @@ import {
   FormPathPattern,
   BigData,
   each,
-  isObj,
-  scheduler
+  isObj
+  //scheduler
 } from '@formily/shared'
 import {
   FormValidator,
@@ -109,6 +109,20 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
+  function notifyFormValuesChange() {
+    if (isFn(options.onChange)) {
+      clearTimeout(env.onChangeTimer)
+      env.onChangeTimer = setTimeout(() => {
+        options.onChange(clone(getFormValuesIn('')))
+      })
+    }
+    heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
+  }
+
+  function notifyFormInitialValuesChange() {
+    heart.publish(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
+  }
+
   function onFormChange(published: IFormState) {
     heart.publish(LifeCycleTypes.ON_FORM_CHANGE, state)
     const valuesChanged = state.isDirty('values')
@@ -131,38 +145,27 @@ export function createForm<FieldProps, VirtualFieldProps>(
         }
       }
       if (valuesChanged || initialValuesChanged) {
-        const userUpdateSource =
-          env.userUpdateSources[env.userUpdateSources.length - 1]
         /*
          * 考虑初始化的时候还没生成节点树
          * 2种数据同步策略，
-         * 1. 精确更新的时候(mutators/setFieldState)，只遍历父节点与子节点，同时父节点静默处理，子节点通知渲染
+         * 1. 精确同步，基于操作节点，静默更新父子节点，同时不会回流onFormChange
          * 2. 批量同步，但是会采用异步节流方式合并同步任务
          */
-        if (userUpdateSource && graph.get(userUpdateSource)) {
-          graph.eachParentAndChildren(userUpdateSource, updateFields)
-        } else {
-          if (graph.size > 20) {
-            clearTimeout(env.syncFormStateTimer)
-            env.syncFormStateTimer = setTimeout(() => {
-              graph.eachChildren(updateFields)
-            })
-          } else {
+        if (graph.size > 20) {
+          clearTimeout(env.syncFormStateTimer)
+          env.syncFormStateTimer = setTimeout(() => {
             graph.eachChildren(updateFields)
-          }
+          })
+        } else {
+          graph.eachChildren(updateFields)
         }
+        // }
       }
       if (valuesChanged) {
-        if (isFn(options.onChange)) {
-          clearTimeout(env.onChangeTimer)
-          env.onChangeTimer = setTimeout(() => {
-            options.onChange(clone(published.values))
-          })
-        }
-        heart.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE, state)
+        notifyFormValuesChange()
       }
       if (initialValuesChanged) {
-        heart.publish(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, state)
+        notifyFormInitialValuesChange()
       }
     }
 
@@ -216,6 +219,30 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function onFieldChange({ field, path }) {
+    function notifyTreeFromValues() {
+      field.setState(syncFieldValues, true)
+      graph.eachParent(path, (field: IField) => {
+        if (isField(field)) {
+          field.setState(syncFieldValues, true)
+        }
+      })
+      graph.eachChildren(path, (field: IField) => {
+        if (isField(field)) {
+          field.setState(syncFieldValues)
+        }
+      })
+      notifyFormValuesChange()
+    }
+    function notifyTreeFromInitialValues() {
+      field.setState(syncFieldIntialValues, true)
+      graph.eachParent(path, (field: IField) => {
+        field.setState(syncFieldIntialValues, true)
+      })
+      graph.eachChildren(path, (field: IField) => {
+        field.setState(syncFieldIntialValues)
+      })
+      notifyFormInitialValuesChange()
+    }
     return (published: IFieldState<FieldProps>) => {
       const valueChanged = field.isDirty('value')
       const initialValueChanged = field.isDirty('initialValue')
@@ -227,8 +254,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const warningsChanged = field.isDirty('warnings')
       const errorsChanged = field.isDirty('errors')
       const editableChanged = field.isDirty('editable')
-      const userUpdateSource =
-        env.userUpdateSources[env.userUpdateSources.length - 1]
 
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
@@ -246,31 +271,38 @@ export function createForm<FieldProps, VirtualFieldProps>(
         published.visible == false || published.unmounted === true
       if (valueChanged) {
         if (!wasHidden) {
-          setFormValuesIn(path, published.value)
+          setFormValuesIn(path, published.value, true)
+          notifyTreeFromValues()
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (initialValueChanged) {
         if (!wasHidden) {
-          setFormInitialValuesIn(path, published.initialValue)
+          setFormInitialValuesIn(path, published.initialValue, true)
+          notifyTreeFromInitialValues()
         }
         heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
       if (displayChanged || visibleChanged) {
         if (visibleChanged) {
           if (!published.visible) {
-            field.setSourceState((state: IFieldState<FieldProps>) => {
-              state.visibleCacheValue = published.value
-            })
-            deleteFormValuesIn(path)
+            if (isValid(published.value)) {
+              field.setSourceState((state: IFieldState<FieldProps>) => {
+                state.visibleCacheValue = published.value
+              })
+            }
+            deleteFormValuesIn(path, true)
+            notifyTreeFromValues()
           } else {
             if (!existFormValuesIn(path)) {
               setFormValuesIn(
                 path,
                 isValid(published.visibleCacheValue)
                   ? published.visibleCacheValue
-                  : published.initialValue
+                  : published.initialValue,
+                true
               )
+              notifyTreeFromValues()
             }
           }
         }
@@ -290,18 +322,23 @@ export function createForm<FieldProps, VirtualFieldProps>(
         (published.display !== false || published.visible === false)
       ) {
         if (published.unmounted) {
-          field.setSourceState((state: IFieldState<FieldProps>) => {
-            state.visibleCacheValue = published.value
-          })
-          deleteFormValuesIn(path)
+          if (isValid(published.value)) {
+            field.setSourceState((state: IFieldState<FieldProps>) => {
+              state.visibleCacheValue = published.value
+            })
+          }
+          deleteFormValuesIn(path, true)
+          notifyTreeFromValues()
         } else {
           if (!existFormValuesIn(path)) {
             setFormValuesIn(
               path,
               isValid(published.visibleCacheValue)
                 ? published.visibleCacheValue
-                : published.initialValue
+                : published.initialValue,
+              true
             )
+            notifyTreeFromValues()
           }
         }
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
@@ -329,14 +366,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
 
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-      if (userUpdateSource) {
-        if (FormPath.parse(path).match(userUpdateSource)) {
-          return
-        }
-        if (FormPath.parse(userUpdateSource).includes(path)) {
-          return false
-        }
-      }
     }
   }
 
@@ -532,23 +561,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return validate(value, rules).then(({ errors, warnings }) => {
           clearTimeout((field as any).validateTimer)
           return new Promise(resolve => {
-            const syncState = () => {
-              field.setState((state: IFieldState<FieldProps>) => {
-                state.validating = false
-                state.ruleErrors = errors
-                state.ruleWarnings = warnings
-              })
-              heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_END, field)
-              resolve({
-                errors,
-                warnings
-              })
-            }
-            if (graph.size > 200) {
-              applyWithScheduler(syncState)
-            } else {
-              syncState()
-            }
+            field.setState((state: IFieldState<FieldProps>) => {
+              state.validating = false
+              state.ruleErrors = errors
+              state.ruleWarnings = warnings
+            })
+            heart.publish(LifeCycleTypes.ON_FIELD_VALIDATE_END, field)
+            resolve({
+              errors,
+              warnings
+            })
           })
         })
       })
@@ -712,11 +734,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       )
     }
     function setValue(...values: any[]) {
-      userUpdating(field, () => {
-        field.setState((state: IFieldState<FieldProps>) => {
-          state.value = values[0]
-          state.values = values
-        })
+      field.setState((state: IFieldState<FieldProps>) => {
+        state.value = values[0]
+        state.values = values
       })
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, state)
@@ -726,26 +746,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const nodePath = field.getSourceState(state => state.path)
       if (isValid(key)) {
         const childNodePath = FormPath.parse(nodePath).concat(key)
-        env.userUpdateSources.push(nodePath)
         env.removeNodes[childNodePath.toString()] = true
         deleteFormValuesIn(childNodePath)
         field.notify(field.getState())
-        env.userUpdateSources.pop()
       } else {
         const parent = graph.selectParent(nodePath)
         env.removeNodes[nodePath.toString()] = true
-        const parentNodePath =
-          parent && parent.getSourceState(state => state.path)
-        if (parentNodePath) {
-          env.userUpdateSources.push(parentNodePath)
-        } else {
-          env.userUpdateSources.push(nodePath)
-        }
         deleteFormValuesIn(nodePath)
         if (parent) {
           parent.notify(parent.getState())
         }
-        env.userUpdateSources.pop()
       }
       heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
@@ -755,7 +765,55 @@ export function createForm<FieldProps, VirtualFieldProps>(
     function getValue() {
       return field.getSourceState(state => state.value)
     }
-    return {
+
+    function onGraphChange(callback: () => void) {
+      let timer = null
+      const id = graph.subscribe(() => {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          graph.unsubscribe(id)
+          callback()
+        })
+      })
+    }
+
+    function swapState($from: number, $to: number) {
+      const keys: string[] = ['initialValue', 'visibleCacheValue', 'values']
+      const arrayName = field.getSourceState(state => state.name)
+      const fromFieldsName = `${arrayName}.${$from}.*`
+      const toFieldsName = `${arrayName}.${$to}.*`
+      const cache = {}
+      const calculatePath = (name: string, $from: number, $to: number) => {
+        return name.replace(`${arrayName}.${$from}`, `${arrayName}.${$to}`)
+      }
+      graph.select(fromFieldsName, field => {
+        field.setSourceState((state: IFieldState) => {
+          const targetState =
+            getFieldState(calculatePath(state.name, $from, $to)) || {}
+          keys.forEach(key => {
+            cache[state.name] = cache[state.name] || {}
+            cache[state.name][key] = state[key]
+            state[key] = targetState && targetState[key]
+          })
+        })
+      })
+      graph.select(toFieldsName, field => {
+        field.setSourceState((state: IFieldState) => {
+          const cacheState = cache[calculatePath(state.name, $to, $from)] || {}
+          keys.forEach(key => {
+            state[key] = cacheState[key]
+          })
+        })
+      })
+    }
+
+    function swapAfterState(start: number, arrayLength: number) {
+      for (let i = arrayLength - 1; i >= start + 1; i--) {
+        swapState(i, i - 1)
+      }
+    }
+
+    const mutators = {
       change(...values: any[]) {
         setValue(...values)
         return values[0]
@@ -787,13 +845,20 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const arr = toArr(getValue()).slice()
         arr.splice(index, 0, value)
         setValue(arr)
+        onGraphChange(() => {
+          swapAfterState(index, arr.length)
+        })
         return arr
       },
       remove(index?: number | string) {
         let val = getValue()
         if (isNum(index) && isArr(val)) {
           val = [].concat(val)
+          const lastIndex = val.length - 1
           val.splice(index, 1)
+          if (index < lastIndex) {
+            swapState(Number(index), Number(index) + 1)
+          }
           setValue(val)
         } else {
           removeValue(index)
@@ -813,11 +878,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const arr = toArr(getValue()).slice()
         arr.unshift(value)
         setValue(arr)
+        onGraphChange(() => {
+          swapAfterState(0, arr.length)
+        })
         return arr
       },
       shift() {
         const arr = toArr(getValue()).slice()
         arr.shift()
+        swapState(0, 1)
         setValue(arr)
         return arr
       },
@@ -826,26 +895,17 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const item = arr[$from]
         arr.splice($from, 1)
         arr.splice($to, 0, item)
+        swapState($from, $to)
         setValue(arr)
         return arr
       },
       moveUp(index: number) {
-        const arr = toArr(getValue()).slice()
-        const item = arr[index]
-        const len = arr.length
-        arr.splice(index, 1)
-        arr.splice(index - 1 < 0 ? len - 1 : index - 1, 0, item)
-        setValue(arr)
-        return arr
+        const len = toArr(getValue()).length
+        return mutators.move(index, index - 1 < 0 ? len - 1 : index - 1)
       },
       moveDown(index: number) {
-        const arr = toArr(getValue()).slice()
-        const item = arr[index]
-        const len = arr.length
-        arr.splice(index, 1)
-        arr.splice(index + 1 > len ? 0 : index + 1, 0, item)
-        setValue(arr)
-        return arr
+        const len = toArr(getValue()).length
+        return mutators.move(index, index + 1 > len ? 0 : index + 1)
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
         return validate(
@@ -857,6 +917,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         )
       }
     }
+    return mutators
   }
 
   function clearErrors(pattern: FormPathPattern = '*') {
@@ -1077,9 +1138,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       let removed = false
       if (matchStrategy(pattern, nodePath)) {
         callbacks.forEach(callback => {
-          userUpdating(field, () => {
-            field.setState(callback)
-          })
+          field.setState(callback)
         })
         if (!pattern.isWildMatchPattern && !pattern.isMatchPattern) {
           env.taskQueue.splice(index--, 1)
@@ -1103,9 +1162,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     let matchCount = 0
     const pattern = FormPath.getPath(path)
     graph.select(pattern, field => {
-      userUpdating(field, () => {
-        field.setState(callback, silent)
-      })
+      field.setState(callback, silent)
       matchCount++
     })
     if (matchCount === 0 || pattern.isWildMatchPattern) {
@@ -1125,16 +1182,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
         })
       }
     }
-  }
-
-  function userUpdating(field: IField | IVirtualField, fn?: () => void) {
-    if (!field) return
-    const nodePath = field.state.path
-    if (nodePath) env.userUpdateSources.push(nodePath)
-    if (isFn(fn)) {
-      fn()
-    }
-    env.userUpdateSources.pop()
   }
 
   function setFieldValue(path: FormPathPattern, value?: any, silent?: boolean) {
@@ -1276,7 +1323,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
   const graph: FormGraph = new FormGraph({
     matchStrategy
   })
-  const applyWithScheduler = scheduler(options.validateConcurrentTimeMS)
   const formApi = {
     submit,
     reset,
@@ -1327,7 +1373,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
     hostRendering: false,
     publishing: {},
     taskQueue: [],
-    userUpdateSources: [],
     taskIndexes: {},
     removeNodes: {},
     lastShownStates: {},

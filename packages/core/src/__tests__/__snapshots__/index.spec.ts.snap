@@ -36,6 +36,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -51,6 +55,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -142,6 +150,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -157,6 +169,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -248,6 +264,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -263,6 +283,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -354,6 +378,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -369,6 +397,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": "change aa",
       "bb": "change bb",
@@ -765,6 +797,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -780,6 +816,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": "change aa",
       "bb": "change bb",
@@ -871,6 +911,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -886,6 +930,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "bb": "change bb",
     },
@@ -1373,6 +1421,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1396,6 +1456,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "values": Object {
       "aa": Array [
         Object {
@@ -1730,6 +1802,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1753,6 +1837,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "values": Object {
       "aa": Array [
         Object {
@@ -1877,7 +1973,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 123,
+    "initialValue": 345,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -1915,7 +2011,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 321,
+    "initialValue": 678,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -1923,7 +2019,7 @@ Object {
     "mounted": false,
     "name": "aa.0.bb",
     "path": "aa.0.bb",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1952,6 +2048,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1975,6 +2083,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "values": Object {
       "aa": Array [
         Object {
@@ -2111,7 +2231,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 123,
+    "initialValue": 345,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2132,7 +2252,7 @@ Object {
     "validating": false,
     "value": 123,
     "values": Array [
-      123,
+      "change aa",
     ],
     "visible": true,
     "visibleCacheValue": undefined,
@@ -2149,7 +2269,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 321,
+    "initialValue": 678,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2170,7 +2290,7 @@ Object {
     "validating": false,
     "value": 321,
     "values": Array [
-      321,
+      678,
     ],
     "visible": true,
     "visibleCacheValue": undefined,
@@ -2234,7 +2354,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 345,
+    "initialValue": 123,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2255,7 +2375,7 @@ Object {
     "validating": false,
     "value": "change aa",
     "values": Array [
-      "change aa",
+      123,
     ],
     "visible": true,
     "visibleCacheValue": undefined,
@@ -2272,7 +2392,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 678,
+    "initialValue": 321,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2293,7 +2413,7 @@ Object {
     "validating": false,
     "value": 678,
     "values": Array [
-      678,
+      321,
     ],
     "visible": true,
     "visibleCacheValue": undefined,
@@ -3125,6 +3245,12 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": 123,
+        "cc": 222,
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3142,6 +3268,11 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": 123,
+      },
+    },
     "values": Object {},
     "warnings": Array [],
   },
@@ -3274,6 +3405,12 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": 123,
+        "cc": 222,
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3291,6 +3428,11 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": 123,
+      },
+    },
     "values": Object {},
     "warnings": Array [],
   },
@@ -3423,6 +3565,12 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": 123,
+        "cc": 222,
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3440,6 +3588,11 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": 123,
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": 123,
@@ -3583,6 +3736,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -3606,6 +3771,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -3917,6 +4094,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -3940,6 +4129,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [],
@@ -4052,6 +4253,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4075,6 +4288,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4386,6 +4611,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4409,6 +4646,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4720,6 +4969,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4743,6 +5004,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [

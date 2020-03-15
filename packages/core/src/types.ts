@@ -253,7 +253,6 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
-  validateConcurrentTimeMS?: number
 }
 
 export interface IVirtualFieldState<FieldProps = any> {
