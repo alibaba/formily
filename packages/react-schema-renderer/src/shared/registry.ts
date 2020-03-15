@@ -1,4 +1,4 @@
-import { isFn, lowercase, reduce, each, deprecate } from '@formily/shared'
+import { isFn, lowercase, reduce, each, deprecate, log } from '@formily/shared'
 import {
   ComponentWithStyleComponent,
   ISchemaFieldWrapper,
@@ -61,6 +61,11 @@ export function registerFormField(
     (isFn(component) || typeof component.styledComponentId === 'string')
   ) {
     name = lowercase(name)
+    if (registry.fields[name]) {
+      log.warn(
+        'Component registration naming conflict. Please change the name. Globally registered components will no longer support overlay registration in the future.'
+      )
+    }
     if (noWrapper) {
       registry.fields[name] = component
       registry.fields[name].__WRAPPERS__ = []

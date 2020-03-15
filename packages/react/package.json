@@ -1,6 +1,6 @@
 {
   "name": "@formily/react",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -29,8 +29,8 @@
     "rxjs": "^6.5.1"
   },
   "dependencies": {
-    "@formily/core": "^1.0.5",
-    "@formily/shared": "^1.0.5"
+    "@formily/core": "^1.0.7",
+    "@formily/shared": "^1.0.7"
   },
   "publishConfig": {
     "access": "public"

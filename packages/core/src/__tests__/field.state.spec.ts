@@ -12,8 +12,8 @@ test('computeState setValues', () => {
   })
   expect(state.getState().unmounted).toEqual(false)
   expect(state.getState().visible).toEqual(false)
-  expect(state.getState().value).toEqual(undefined)
-  expect(state.getState().initialValue).toEqual(undefined)
+  expect(state.getState().value).toEqual(123)
+  expect(state.getState().initialValue).toEqual(456)
   state.setState((draft) => {
     draft.visible = true
     draft.unmounted = true
@@ -22,8 +22,8 @@ test('computeState setValues', () => {
   })
   expect(state.getState().visible).toEqual(true)
   expect(state.getState().unmounted).toEqual(true)
-  expect(state.getState().value).toEqual(undefined)
-  expect(state.getState().initialValue).toEqual(undefined)
+  expect(state.getState().value).toEqual(123)
+  expect(state.getState().initialValue).toEqual(456)
   state.setState((draft) => {
     draft.visible = true
     draft.unmounted = false

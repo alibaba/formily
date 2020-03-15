@@ -20,6 +20,7 @@ import {
   isObj,
   isValid,
   each,
+  log,
   reduce,
   FormPath,
   FormPathPattern
@@ -208,7 +209,7 @@ class FormValidator {
         warnings
       }
     } catch (error) {
-      console.error(error)
+      log.error(error)
       return {
         errors,
         warnings
