@@ -171,9 +171,6 @@ test('setFieldState x-props with onFormInit', async () => {
 test('getFieldState with onFieldChange', async () => {
   let aaValue
   const TestComponent = () => {
-    useEffect(()=>()=>{
-      console.log('卸载卸载卸载卸载')
-    },[])
     return (
       <SchemaForm
         // eslint-disable-next-line no-console
