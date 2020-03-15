@@ -36,6 +36,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -51,6 +55,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -91,6 +99,7 @@ Object {
       111,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -128,6 +137,7 @@ Object {
       222,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -140,6 +150,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -155,6 +169,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -195,6 +213,7 @@ Object {
       111,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -232,6 +251,7 @@ Object {
       222,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -244,6 +264,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -259,6 +283,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -299,6 +327,7 @@ Object {
       111,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -336,6 +365,7 @@ Object {
       222,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -348,6 +378,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -363,6 +397,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": "change aa",
       "bb": "change bb",
@@ -403,6 +441,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -440,6 +479,7 @@ Object {
       "change bb",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -558,6 +598,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -619,6 +660,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": true,
     "warnings": Array [],
   },
@@ -680,6 +722,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -741,6 +784,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -753,6 +797,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -768,6 +816,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "aa": "change aa",
       "bb": "change bb",
@@ -808,6 +860,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -845,6 +898,7 @@ Object {
       "change bb",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -857,6 +911,10 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -872,6 +930,10 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": 111,
+      "bb": 222,
+    },
     "values": Object {
       "bb": "change bb",
     },
@@ -891,7 +953,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa",
     "path": "aa",
@@ -906,11 +968,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": "change aa",
+    "value": undefined,
     "values": Array [
-      "change aa",
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": "change aa",
     "visited": false,
     "warnings": Array [],
   },
@@ -948,6 +1011,7 @@ Object {
       "change bb",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -993,7 +1057,7 @@ Object {
     "mounted": false,
     "name": "aa",
     "path": "aa",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1004,15 +1068,14 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "cc": 123,
-    },
+    "value": undefined,
     "values": Array [
-      Object {
-        "cc": 123,
-      },
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": Object {
+      "cc": 123,
+    },
     "visited": false,
     "warnings": Array [],
   },
@@ -1041,11 +1104,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.cc",
     "path": "aa.bb.cc",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1056,11 +1119,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 123,
+    "value": undefined,
     "values": Array [
-      123,
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1119,19 +1183,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "bb": Object {
-        "cc": 123,
-      },
-    },
+    "value": Object {},
     "values": Array [
-      Object {
-        "bb": Object {
-          "cc": 123,
-        },
-      },
+      Object {},
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1153,7 +1210,7 @@ Object {
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1164,15 +1221,14 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "cc": 123,
-    },
+    "value": undefined,
     "values": Array [
-      Object {
-        "cc": 123,
-      },
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": Object {
+      "cc": 123,
+    },
     "visited": false,
     "warnings": Array [],
   },
@@ -1190,11 +1246,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.bb.cc",
     "path": "aa.bb.cc",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1205,11 +1261,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 123,
+    "value": undefined,
     "values": Array [
-      123,
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1255,7 +1312,7 @@ Object {
     "mounted": false,
     "name": "aa",
     "path": "aa",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1266,19 +1323,16 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
+    "value": undefined,
+    "values": Array [
+      undefined,
+    ],
+    "visible": false,
+    "visibleCacheValue": Object {
       "bb": Object {
         "cc": 123,
       },
     },
-    "values": Array [
-      Object {
-        "bb": Object {
-          "cc": 123,
-        },
-      },
-    ],
-    "visible": false,
     "visited": false,
     "warnings": Array [],
   },
@@ -1300,7 +1354,7 @@ Object {
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1311,15 +1365,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "cc": 123,
-    },
+    "value": undefined,
     "values": Array [
-      Object {
-        "cc": 123,
-      },
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1337,11 +1388,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.bb.cc",
     "path": "aa.bb.cc",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1352,11 +1403,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 123,
+    "value": undefined,
     "values": Array [
-      123,
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1369,6 +1421,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1392,6 +1456,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "values": Object {
       "aa": Array [
         Object {
@@ -1467,6 +1543,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1513,6 +1590,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1550,6 +1628,7 @@ Object {
       123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1587,6 +1666,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1633,6 +1713,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1670,6 +1751,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1707,6 +1789,7 @@ Object {
       678,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1719,6 +1802,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1742,6 +1837,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "values": Object {
       "aa": Array [
         Object {
@@ -1805,6 +1912,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1851,6 +1959,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1864,7 +1973,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 123,
+    "initialValue": 345,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -1888,6 +1997,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1901,7 +2011,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 321,
+    "initialValue": 678,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -1909,7 +2019,7 @@ Object {
     "mounted": false,
     "name": "aa.0.bb",
     "path": "aa.0.bb",
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -1925,6 +2035,7 @@ Object {
       678,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -1937,6 +2048,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1960,6 +2083,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Array [
+        Object {
+          "aa": 123,
+          "bb": 321,
+        },
+        Object {
+          "aa": 345,
+          "bb": 678,
+        },
+      ],
+    },
     "values": Object {
       "aa": Array [
         Object {
@@ -2035,6 +2170,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2081,6 +2217,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2094,7 +2231,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 123,
+    "initialValue": 345,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2115,9 +2252,10 @@ Object {
     "validating": false,
     "value": 123,
     "values": Array [
-      123,
+      "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2131,7 +2269,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 321,
+    "initialValue": 678,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2152,9 +2290,10 @@ Object {
     "validating": false,
     "value": 321,
     "values": Array [
-      321,
+      678,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2201,6 +2340,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2214,7 +2354,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 345,
+    "initialValue": 123,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2235,9 +2375,10 @@ Object {
     "validating": false,
     "value": "change aa",
     "values": Array [
-      "change aa",
+      123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2251,7 +2392,7 @@ Object {
     "effectWarnings": Array [],
     "errors": Array [],
     "formEditable": undefined,
-    "initialValue": 678,
+    "initialValue": 321,
     "initialized": true,
     "invalid": false,
     "loading": false,
@@ -2272,9 +2413,10 @@ Object {
     "validating": false,
     "value": 678,
     "values": Array [
-      678,
+      321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2353,6 +2495,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2390,6 +2533,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2427,6 +2571,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2464,6 +2609,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2505,6 +2651,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2542,6 +2689,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2579,6 +2727,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2654,6 +2803,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2695,6 +2845,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2732,6 +2883,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2769,6 +2921,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2847,6 +3000,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2884,6 +3038,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2921,6 +3076,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2958,6 +3114,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -2999,6 +3156,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3036,6 +3194,7 @@ Object {
       "change aa",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3073,6 +3232,7 @@ Object {
       undefined,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3085,6 +3245,12 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": 123,
+        "cc": 222,
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3102,6 +3268,11 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": 123,
+      },
+    },
     "values": Object {},
     "warnings": Array [],
   },
@@ -3126,7 +3297,7 @@ Object {
     "mounted": false,
     "name": "aa",
     "path": "aa",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -3137,17 +3308,15 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
+    "value": undefined,
+    "values": Array [
+      undefined,
+    ],
+    "visible": false,
+    "visibleCacheValue": Object {
       "bb": 123,
       "cc": 222,
     },
-    "values": Array [
-      Object {
-        "bb": 123,
-        "cc": 222,
-      },
-    ],
-    "visible": false,
     "visited": false,
     "warnings": Array [],
   },
@@ -3165,11 +3334,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -3180,11 +3349,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 123,
+    "value": undefined,
     "values": Array [
-      123,
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3202,11 +3372,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.cc",
     "path": "aa.cc",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -3217,11 +3387,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 222,
+    "value": undefined,
     "values": Array [
-      222,
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3234,6 +3405,12 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": 123,
+        "cc": 222,
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3251,6 +3428,11 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": 123,
+      },
+    },
     "values": Object {},
     "warnings": Array [],
   },
@@ -3275,7 +3457,7 @@ Object {
     "mounted": false,
     "name": "aa",
     "path": "aa",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -3286,17 +3468,15 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
+    "value": undefined,
+    "values": Array [
+      undefined,
+    ],
+    "visible": false,
+    "visibleCacheValue": Object {
       "bb": 123,
       "cc": 222,
     },
-    "values": Array [
-      Object {
-        "bb": 123,
-        "cc": 222,
-      },
-    ],
-    "visible": false,
     "visited": false,
     "warnings": Array [],
   },
@@ -3314,11 +3494,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -3329,11 +3509,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 123,
+    "value": "123",
     "values": Array [
-      123,
+      "123",
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3351,11 +3532,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.cc",
     "path": "aa.cc",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -3366,11 +3547,12 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": 222,
+    "value": undefined,
     "values": Array [
-      222,
+      undefined,
     ],
     "visible": false,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3383,6 +3565,12 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": 123,
+        "cc": 222,
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3400,6 +3588,11 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": 123,
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": 123,
@@ -3451,6 +3644,10 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": Object {
+      "bb": 123,
+      "cc": 222,
+    },
     "visited": false,
     "warnings": Array [],
   },
@@ -3468,7 +3665,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
@@ -3488,6 +3685,7 @@ Object {
       123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3505,7 +3703,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.cc",
     "path": "aa.cc",
@@ -3525,6 +3723,7 @@ Object {
       222,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3537,6 +3736,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -3560,6 +3771,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -3635,6 +3858,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3693,6 +3917,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3736,6 +3961,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3773,6 +3999,7 @@ Object {
       123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3816,6 +4043,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3853,6 +4081,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3865,6 +4094,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -3888,6 +4129,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [],
@@ -3942,6 +4195,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3986,6 +4240,7 @@ Object {
       Array [],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -3998,6 +4253,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4021,6 +4288,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4096,6 +4375,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4154,6 +4434,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4197,6 +4478,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4234,6 +4516,7 @@ Object {
       123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4277,6 +4560,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4314,6 +4598,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4326,6 +4611,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4349,6 +4646,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4424,6 +4733,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4482,6 +4792,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4525,6 +4836,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4562,6 +4874,7 @@ Object {
       "aa changed",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4605,6 +4918,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4642,6 +4956,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4654,6 +4969,18 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
+    "initialValue": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4677,6 +5004,18 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
+    "value": Object {
+      "aa": Object {
+        "bb": Array [
+          Object {
+            "aa": 123,
+          },
+          Object {
+            "aa": 321,
+          },
+        ],
+      },
+    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4752,6 +5091,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4810,6 +5150,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4853,6 +5194,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4890,6 +5232,7 @@ Object {
       123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4933,6 +5276,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -4970,6 +5314,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5060,6 +5405,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5111,6 +5457,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5152,6 +5499,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5189,6 +5537,7 @@ Object {
       123,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5230,6 +5579,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5267,6 +5617,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5357,6 +5708,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5408,6 +5760,7 @@ Object {
       ],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5449,6 +5802,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5486,6 +5840,7 @@ Object {
       "aa changed",
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5527,6 +5882,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5564,6 +5920,7 @@ Object {
       321,
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5633,6 +5990,7 @@ Object {
       },
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },
@@ -5670,6 +6028,7 @@ Object {
       Array [],
     ],
     "visible": true,
+    "visibleCacheValue": undefined,
     "visited": false,
     "warnings": Array [],
   },

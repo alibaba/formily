@@ -147,6 +147,7 @@ export interface IFieldState<FieldProps = any> {
   effectWarnings: string[]
   ruleWarnings: string[]
   value: any
+  visibleCacheValue: any
   initialValue: any
   rules: ValidatePatternRules[]
   required: boolean
@@ -252,7 +253,6 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void
   onValidateFailed?: (validated: IFormValidateResult) => void
-  validateConcurrentTimeMS?: number
 }
 
 export interface IVirtualFieldState<FieldProps = any> {

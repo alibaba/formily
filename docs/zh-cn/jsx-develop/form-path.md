@@ -138,6 +138,7 @@ const App = () => {
                       { label: '显示', value: true },
                       { label: '隐藏', value: false }
                     ]}
+                    initialValue={true}
                     component={Select}
                   />
                   <FormItem
@@ -163,6 +164,17 @@ const App = () => {
               }}
             >
               ADD
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                mutators.insert(1,{
+                  aa:true,
+                  bb:'hello world'
+                })
+              }}
+            >
+              Insert
             </Button>
           </div>
         )}
