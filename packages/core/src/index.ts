@@ -776,6 +776,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       })
     }
 
+    //1. 无法自动交换通过移动来新增删除子列表元素的状态
+    //2. 暂时不支持通过setFieldState修改值场景的状态交换
     function swapState($from: number, $to: number) {
       const keys: string[] = ['initialValue', 'visibleCacheValue', 'values']
       const arrayName = field.getSourceState(state => state.name)
