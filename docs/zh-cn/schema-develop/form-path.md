@@ -97,15 +97,19 @@ import {
   Reset
 } from '@formily/antd' // 或者 @formily/next
 import { ArrayTable, Input } from '@formily/antd-components'
+import {Button} from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
 const { onFieldValueChange$ } = FormEffectHooks
 
+const actions = createFormActions()
+
 const App = () => {
   return (
     <Printer>
       <SchemaForm
+        actions={actions}
         components={{ ArrayTable, Input }}
         onSubmit={values => {
           console.log(values)
@@ -139,6 +143,12 @@ const App = () => {
             <Field type="string" name="bb" title="BB" x-component="Input" />
           </Field>
         </Field>
+        <FormButtonGroup>
+          <Button onClick={()=>{
+            const mutators = actions.createMutators('array')
+            mutators.push({})
+          }}>Add</Button>
+        </FormButtonGroup>
       </SchemaForm>
     </Printer>
   )

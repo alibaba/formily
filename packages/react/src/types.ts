@@ -5,18 +5,12 @@ import {
   IForm,
   IMutators,
   IFieldState,
-  IFieldUserState,
   IFormValidateResult,
   IFormState,
-  IFormResetOptions,
-  IFormSubmitResult,
-  FormHeartSubscriber,
-  IFormGraph,
   IField,
   IVirtualFieldState,
   IVirtualField
 } from '@formily/core'
-import { FormPathPattern } from '@formily/shared'
 import { Observable } from 'rxjs/internal/Observable'
 export * from '@formily/core'
 
@@ -144,69 +138,24 @@ export interface ISpyHook {
   type: string
 }
 
-export interface IFormActions {
-  submit(
-    onSubmit?: (values: IFormState['values']) => void | Promise<any>
-  ): Promise<IFormSubmitResult>
-  reset(options?: IFormResetOptions): void
-  hasChanged(target: any, path: FormPathPattern): boolean
-  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
-  setFormState(callback?: (state: IFormState) => any): void
-  getFormState(callback?: (state: IFormState) => any): any
-  clearErrors: (pattern?: FormPathPattern) => void
-  setFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldUserState) => void
-  ): void
-  getFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldState) => any
-  ): any
-  getFormGraph(): IFormGraph
-  setFormGraph(graph: IFormGraph): void
-  subscribe(callback?: FormHeartSubscriber): number
-  unsubscribe(id: number): void
-  isHostRendering: () => boolean
-  hostUpdate: (callback?: () => any) => any
-  notify: <T>(type: string, payload?: T) => void
-  dispatch: <T>(type: string, payload?: T) => void
-  setFieldValue(path?: FormPathPattern, value?: any): void
-  getFieldValue(path?: FormPathPattern): any
-  setFieldInitialValue(path?: FormPathPattern, value?: any): void
-  getFieldInitialValue(path?: FormPathPattern): any
+type OMitActions =
+  | 'registerField'
+  | 'registerVirtualField'
+  | 'unsafe_do_not_use_transform_data_path'
+
+export type IFormActions = Omit<IForm, OMitActions> & {
+  dispatch: (type: string, payload: any) => void
 }
 
-export interface IFormAsyncActions {
-  submit(
-    onSubmit?: (values: IFormState['values']) => void | Promise<any>
-  ): Promise<IFormSubmitResult>
-  reset(options?: IFormResetOptions): Promise<void>
-  hasChanged(target: any, path: FormPathPattern): Promise<boolean>
-  clearErrors: (pattern?: FormPathPattern) => Promise<void>
-  validate(path?: FormPathPattern, options?: {}): Promise<IFormValidateResult>
-  setFormState(callback?: (state: IFormState) => any): Promise<void>
-  getFormState(callback?: (state: IFormState) => any): Promise<any>
-  setFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldUserState) => void
-  ): Promise<void>
-  getFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldState) => any
-  ): Promise<any>
-  getFormGraph(): Promise<IFormGraph>
-  setFormGraph(graph: IFormGraph): Promise<void>
-  subscribe(callback?: FormHeartSubscriber): Promise<number>
-  unsubscribe(id: number): Promise<void>
-  notify: <T>(type: string, payload: T) => Promise<void>
-  isHostRendering: () => boolean
-  hostUpdate: (callback?: () => any) => Promise<any>
-  dispatch: <T>(type: string, payload: T) => void
-  setFieldValue(path?: FormPathPattern, value?: any): Promise<void>
-  getFieldValue(path?: FormPathPattern): Promise<any>
-  setFieldInitialValue(path?: FormPathPattern, value?: any): Promise<void>
-  getFieldInitialValue(path?: FormPathPattern): Promise<any>
+type WrapPromise<
+  T extends {
+    [key: string]: (...args: any) => any
+  }
+> = {
+  [key in keyof T]: (...args: Parameters<T[key]>) => Promise<ReturnType<T[key]>>
 }
+
+export type IFormAsyncActions = WrapPromise<IFormActions>
 
 export interface IEffectProviderAPI<TActions = any, TContext = any> {
   waitFor: <TPayload = any>(

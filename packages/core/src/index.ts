@@ -30,7 +30,6 @@ import {
   IFormCreatorOptions,
   IFieldStateProps,
   IVirtualFieldStateProps,
-  IForm,
   IFormSubmitResult,
   IFormValidateResult,
   IFormResetOptions,
@@ -50,7 +49,7 @@ export * from './types'
 
 export function createForm<FieldProps, VirtualFieldProps>(
   options: IFormCreatorOptions = {}
-): IForm {
+) {
   function onGraphChange({ type, payload }) {
     heart.publish(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
     if (type === 'GRAPH_NODE_WILL_UNMOUNT') {
@@ -725,12 +724,23 @@ export function createForm<FieldProps, VirtualFieldProps>(
   function getFormInitialValuesIn(path: FormPathPattern) {
     return getFormIn(path, 'initialValues')
   }
-
-  function createMutators(field: IField) {
-    if (!isField(field)) {
-      throw new Error(
-        'The `createMutators` can only accept FieldState instance.'
-      )
+  /**
+   *
+   * @param input IField | FormPathPattern
+   */
+  function createMutators(input: any) {
+    let field: IField
+    if (!isField(input)) {
+      const selected = graph.select(input)
+      if (selected) {
+        field = selected
+      } else {
+        throw new Error(
+          'The `createMutators` can only accept FieldState instance or FormPathPattern.'
+        )
+      }
+    } else {
+      field = input
     }
     function setValue(...values: any[]) {
       field.setState((state: IFieldState<FieldProps>) => {
@@ -808,8 +818,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       })
     }
 
-    function swapAfterState(start: number, arrayLength: number) {
-      for (let i = arrayLength - 1; i >= start + 1; i--) {
+    function swapAfterState(start: number, arrayLength: number, step = 1) {
+      for (let i = arrayLength - 1; i >= start + 1; i -= step) {
         swapState(i, i - 1)
       }
     }
@@ -876,13 +886,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         )
       },
       unshift(value: any) {
-        const arr = toArr(getValue()).slice()
-        arr.unshift(value)
-        setValue(arr)
-        onGraphChange(() => {
-          swapAfterState(0, arr.length)
-        })
-        return arr
+        return mutators.insert(0, value)
       },
       shift() {
         const arr = toArr(getValue()).slice()
