@@ -2466,7 +2466,7 @@ interface IForm {
   unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
   registerField(props: IFieldStateProps): IField
   registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
-  createMutators(field: IField): IMutators
+  createMutators(field: IField | FormPathPattern): IMutators
   getFormGraph(): IFormGraph
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): number
@@ -2526,6 +2526,27 @@ interface IFormValidateResult {
         path: string;
         messages: string[];
     }>;
+}
+```
+
+#### IFormProps
+
+```typescript
+interface IFormProps<Value = {}, DefaultValue = {}, FormEffectPayload = any, FormActions = any> {
+    value?: Value;
+    defaultValue?: DefaultValue;
+    initialValues?: DefaultValue;
+    actions?: FormActions;
+    effects?: IFormEffect<FormEffectPayload, FormActions>;
+    form?: IForm;
+    onChange?: (values: Value) => void;
+    onSubmit?: (values: Value) => void | Promise<Value>;
+    onReset?: () => void;
+    onValidateFailed?: (valideted: IFormValidateResult) => void;
+    children?: React.ReactElement | React.ReactElement[] | ((form: IForm) => React.ReactElement);
+    useDirty?: boolean;
+    editable?: boolean | ((name: string) => boolean);
+    validateFirst?: boolean;
 }
 ```
 
