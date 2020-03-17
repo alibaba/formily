@@ -213,6 +213,12 @@ export const FormEffectHooks = {
   ),
   onFormInit$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_INIT),
   onFormChange$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_CHANGE),
+  onFormOnSubmitSuccess$: createEffectHook<IFormState>(
+    LifeCycleTypes.ON_FORM_ON_SUBMIT_SUCCESS
+  ),
+  onFormOnSubmitFailed$: createEffectHook<IFormState>(
+    LifeCycleTypes.ON_FORM_ON_SUBMIT_FAILED
+  ),
   onFormInputChange$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_INPUT_CHANGE
   ),
