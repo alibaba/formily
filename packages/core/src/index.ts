@@ -724,7 +724,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
   function getFormInitialValuesIn(path: FormPathPattern) {
     return getFormIn(path, 'initialValues')
   }
-  function createMutators(input: IField | FormPathPattern) {
+  /**
+   *
+   * @param input IField | FormPathPattern
+   */
+  function createMutators(input: any) {
     let field: IField
     if (!isField(input)) {
       const selected = graph.select(input)
