@@ -30,6 +30,8 @@
 | ON_FORM_SUBMIT_VALIDATE_START   | "onFormSubmitValidateStart"   | 表单提交校验开始时触发                           | ` onFormSubmitValidateStart$ `   | FormState  |
 | ON_FORM_SUBMIT_VALIDATE_SUCCESS | "onFormSubmitValidateSuccess" | 表单提交校验成功时触发                           | ` onFormSubmitValidateSuccess$ ` | FormState  |
 | ON_FORM_SUBMIT_VALIDATE_FAILED  | "onFormSubmitValidateFailed"  | 表单提交校验失败时触发                           | ` onFormSubmitValidateFailed$ `  | FormState  |
+| ON_FORM_ON_SUBMIT_SUCCESS   | "onFormOnSubmitSuccess"   | 表单自定义onSubmit成功，入参为onSubmit返回值                           | ` onFormOnSubmitSuccess$ `   | any  |
+| ON_FORM_ON_SUBMIT_FAILED | "onFormOnSubmitFailed" | 表单自定义onSubmit失败，入参为onSubmit抛出异常                           | ` onFormOnSubmitFailed$ ` | Error  |
 | ON_FORM_VALUES_CHANGE           | "onFormValuesChange"          | 表单值变化时触发                                 | ` onFormValuesChange$ `          | FormState  |
 | ON_FORM_INITIAL_VALUES_CHANGE   | "onFormInitialValuesChange"   | 表单初始值变化时触发                             | ` onFormInitialValuesChange$ `   | FormState  |
 | ON_FORM_VALIDATE_START          | "onFormValidateStart"         | 表单校验开始时触发                               | ` onFormValidateStart$ `         | FormState  |
