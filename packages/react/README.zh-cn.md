@@ -2675,7 +2675,7 @@ interface IForm {
   /*
    * 创建字段数据操作器，后面会详细解释返回的API
    */
-  createMutators(field: IField): IMutators
+  createMutators(field: IField | FormPathPattern): IMutators
 
   /*
    * 获取表单观察者树
