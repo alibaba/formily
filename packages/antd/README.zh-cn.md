@@ -2466,7 +2466,7 @@ interface IForm {
   unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
   registerField(props: IFieldStateProps): IField
   registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
-  createMutators(field: IField): IMutators
+  createMutators(field: IField | FormPathPattern): IMutators
   getFormGraph(): IFormGraph
   setFormGraph(graph: IFormGraph): void
   subscribe(callback?: FormHeartSubscriber): number

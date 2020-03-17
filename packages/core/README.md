@@ -635,7 +635,7 @@ interface IForm {
   /*
    * Create a field data operator, which will explain the returned API in detail later.
    */
-  createMutators(field: IField): IMutators
+  createMutators(field: IField | FormPathPattern): IMutators
   /*
    * Get the form observer tree
    */

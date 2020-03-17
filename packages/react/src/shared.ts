@@ -27,6 +27,7 @@ export const createFormActions = (): IFormActions => {
     'hasChanged',
     'validate',
     'clearErrors',
+    'createMutators',
     'setFormState',
     'getFormState',
     'setFieldState',
