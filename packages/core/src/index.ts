@@ -1041,7 +1041,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (isFn(onSubmit)) {
         try {
           payload = await Promise.resolve(onSubmit(values))
+          heart.publish(LifeCycleTypes.ON_FORM_ON_SUBMIT_SUCCESS, payload)
         } catch (e) {
+          heart.publish(LifeCycleTypes.ON_FORM_ON_SUBMIT_FAILED, e)
           new Promise(() => {
             throw e
           })

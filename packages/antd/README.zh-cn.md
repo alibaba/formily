@@ -2529,6 +2529,27 @@ interface IFormValidateResult {
 }
 ```
 
+#### IFormProps
+
+```typescript
+interface IFormProps<Value = {}, DefaultValue = {}, FormEffectPayload = any, FormActions = any> {
+    value?: Value;
+    defaultValue?: DefaultValue;
+    initialValues?: DefaultValue;
+    actions?: FormActions;
+    effects?: IFormEffect<FormEffectPayload, FormActions>;
+    form?: IForm;
+    onChange?: (values: Value) => void;
+    onSubmit?: (values: Value) => void | Promise<Value>;
+    onReset?: () => void;
+    onValidateFailed?: (valideted: IFormValidateResult) => void;
+    children?: React.ReactElement | React.ReactElement[] | ((form: IForm) => React.ReactElement);
+    useDirty?: boolean;
+    editable?: boolean | ((name: string) => boolean);
+    validateFirst?: boolean;
+}
+```
+
 #### ISchemaFormProps
 
 ```typescript

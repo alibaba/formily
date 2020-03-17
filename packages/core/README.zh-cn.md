@@ -439,6 +439,8 @@ enum LifeCycleTypes {
   ON_FORM_SUBMIT_VALIDATE_START = 'onFormSubmitValidateStart', // 表单提交触发的校验
   ON_FORM_SUBMIT_VALIDATE_SUCCESS= 'onFormSubmitValidateSuccess', // 表单提交时因为校验成功而触发
   ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed', // 表单提交时因为校验失败而触发
+  ON_FORM_ON_SUBMIT_SUCCESS = 'onFormOnSubmitSuccess', // 表单自定义onSubmit成功
+  ON_FORM_ON_SUBMIT_FAILED = 'onFormOnSubmitFailed', // 表单自定义onSubmit失败
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange', //表单值变化时触发
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange', //表单初始值变化时触发
   ON_FORM_VALIDATE_START = 'onFormValidateStart', //表单校验开始时触发

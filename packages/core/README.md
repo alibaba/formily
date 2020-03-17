@@ -441,6 +441,12 @@ enum LifeCycleTypes { // Form pre-initialization trigger
   // Triggered when the form submission ends due to validate failed
   ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
 
+  // Triggered when the onSubmit success
+  ON_FORM_ON_SUBMIT_SUCCESS = 'onFormOnSubmitSuccess',
+
+  // Triggered when the onSubmit failed
+  ON_FORM_ON_SUBMIT_FAILED = 'onFormOnSubmitFailed',
+
   // Triggered when the form value changes
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
 
