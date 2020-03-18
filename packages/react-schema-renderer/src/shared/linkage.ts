@@ -47,7 +47,7 @@ export const parseLinkages = (
   {
     getFieldState,
     getFormState,
-    scope
+    scope: outerScope
   }: {
     getFieldState?: IFormActions['getFieldState']
     getFormState?: IFormActions['getFormState']
@@ -65,6 +65,7 @@ export const parseLinkages = (
     const targetState = getFieldState ? getFieldState(newTarget) : {}
     const fieldValue = fieldName.getIn(formState.values)
     const _scope = {
+      ...outerScope,
       ...scope,
       $value: fieldValue,
       $self: fieldState || {},

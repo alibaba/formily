@@ -29,11 +29,13 @@ const App = () => {
       components={{
         Input
       }}
-      labelCol={7}
-      wrapperCol={12}
       onSubmit={console.log}
       schema={{
         type: 'object',
+        "x-component-props":{
+          labelCol:7,
+          wrapperCol:12
+        },
         properties: {
           string: {
             type: 'string',

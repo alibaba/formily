@@ -27,6 +27,7 @@ export const createFormActions = (): IFormActions => {
     'hasChanged',
     'validate',
     'clearErrors',
+    'createMutators',
     'setFormState',
     'getFormState',
     'setFieldState',
@@ -35,6 +36,7 @@ export const createFormActions = (): IFormActions => {
     'setFormGraph',
     'subscribe',
     'unsubscribe',
+    'createMutators',
     'isHostRendering',
     'hostUpdate',
     'notify',
@@ -62,6 +64,7 @@ export const createAsyncFormActions = (): IFormAsyncActions =>
     'subscribe',
     'unsubscribe',
     'isHostRendering',
+    'createMutators',
     'hostUpdate',
     'notify',
     'dispatch',
@@ -213,6 +216,12 @@ export const FormEffectHooks = {
   ),
   onFormInit$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_INIT),
   onFormChange$: createEffectHook<IFormState>(LifeCycleTypes.ON_FORM_CHANGE),
+  onFormOnSubmitSuccess$: createEffectHook<IFormState>(
+    LifeCycleTypes.ON_FORM_ON_SUBMIT_SUCCESS
+  ),
+  onFormOnSubmitFailed$: createEffectHook<IFormState>(
+    LifeCycleTypes.ON_FORM_ON_SUBMIT_FAILED
+  ),
   onFormInputChange$: createEffectHook<IFormState>(
     LifeCycleTypes.ON_FORM_INPUT_CHANGE
   ),

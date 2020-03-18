@@ -4,6 +4,7 @@ import {
   ValidateNodeResult,
   ValidateFieldOptions
 } from '@formily/validator'
+import { createForm } from './index'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
 
@@ -34,6 +35,8 @@ export enum LifeCycleTypes {
   ON_FORM_SUBMIT_VALIDATE_START = 'onFormSubmitValidateStart',
   ON_FORM_SUBMIT_VALIDATE_SUCCESS = 'onFormSubmitValidateSuccess',
   ON_FORM_SUBMIT_VALIDATE_FAILED = 'onFormSubmitValidateFailed',
+  ON_FORM_ON_SUBMIT_SUCCESS = 'onFormOnSubmitSuccess',
+  ON_FORM_ON_SUBMIT_FAILED = 'onFormOnSubmitFailed',
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
@@ -308,24 +311,7 @@ export type IFormExtendedValidateFieldOptions = ValidateFieldOptions & {
   hostRendering?: boolean
 }
 
-export interface IMutators {
-  change(...values: any[]): any
-  focus(): void
-  blur(): void
-  push(value?: any): any[]
-  pop(): any[]
-  insert(index: number, value: any): any[]
-  remove(index: number | string): any
-  unshift(value: any): any[]
-  shift(): any[]
-  move($from: number, $to: number): any[]
-  moveDown(index: number): any[]
-  moveUp(index: number): any[]
-  validate(
-    opts?: IFormExtendedValidateFieldOptions
-  ): Promise<IFormValidateResult>
-  exist(index?: number | string): boolean
-}
+export type IMutators = ReturnType<IForm['createMutators']>
 
 export interface IModel<S = {}, P = {}> extends Subscribable {
   state: S
@@ -363,41 +349,4 @@ export type IVirtualField = IModel<IVirtualFieldState, IVirtualFieldStateProps>
 
 export type IFormInternal = IModel<IFormState, IFormStateProps>
 
-export interface IForm {
-  submit(
-    onSubmit?: (values: IFormState['values']) => any | Promise<any>
-  ): Promise<IFormSubmitResult>
-  clearErrors: (pattern?: FormPathPattern) => void
-  hasChanged(target: any, path: FormPathPattern): boolean
-  reset(options?: IFormResetOptions): Promise<void | IFormValidateResult>
-  validate(
-    path?: FormPathPattern,
-    options?: IFormExtendedValidateFieldOptions
-  ): Promise<IFormValidateResult>
-  setFormState(callback?: (state: IFormState) => any, silent?: boolean): void
-  getFormState(callback?: (state: IFormState) => any): any
-  setFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldUserState) => void,
-    silent?: boolean
-  ): void
-  getFieldState(
-    path: FormPathPattern,
-    callback?: (state: IFieldState) => any
-  ): any
-  unsafe_do_not_use_transform_data_path(path: FormPathPattern): FormPathPattern //eslint-disable-line
-  registerField(props: IFieldStateProps): IField
-  registerVirtualField(props: IVirtualFieldStateProps): IVirtualField
-  createMutators(field: IField): IMutators
-  getFormGraph(): IFormGraph
-  setFormGraph(graph: IFormGraph): void
-  subscribe(callback?: FormHeartSubscriber): number
-  unsubscribe(id: number): void
-  notify: <T>(type: string, payload?: T) => void
-  isHostRendering: () => boolean
-  hostUpdate: (callback?: () => any) => any
-  setFieldValue(path?: FormPathPattern, value?: any): void
-  getFieldValue(path?: FormPathPattern): any
-  setFieldInitialValue(path?: FormPathPattern, value?: any): void
-  getFieldInitialValue(path?: FormPathPattern): any
-}
+export type IForm = ReturnType<typeof createForm>
