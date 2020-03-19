@@ -17,6 +17,7 @@
     - [管理业务逻辑](./schema-develop/manage-business.md)
     - [实现递归渲染组件](./schema-develop/recursive-render.md)
     - [实现自增列表组件](./schema-develop/self-inc-component.md)
+    - [玩转自增列表组件](./schema-develop/complext-self-inc-component.md)
     - [实现超复杂自定义组件](./schema-develop/create-complex-field-component.md)
   - [FAQ](./schema-develop/faq.md)
 - Form
@@ -35,7 +36,7 @@
     - [实现复杂布局](./jsx-develop/form-layout.md)
     - [性能优化实践](./jsx-develop/performance.md)
     - [管理业务逻辑](./jsx-develop/manage-business.md)
-    - [实现自增列表组件](./jsx-develop/self-inc-component.md)
+    - [玩转自增列表组件](./jsx-develop/self-inc-component.md)
   - [FAQ](./jsx-develop/faq.md)
 - Help
   - 升级迁移指南
