@@ -97,51 +97,91 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### 异步加载自增列表组件内容
 
-本例会说明自增列表组件如何异步读取服务端返回的数据，并转化成标准的 `Schema` 进行动态渲染内容的能力。
+本例会说明自增列表组件如何异步地把数据并转化成标准的 `Schema` 进行动态渲染内容的能力。
 
 
 ```jsx
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field, Schema } from '@formily/antd'
-import { Input, ArrayTable } from '@formily/antd-components'
-import 'antd/dist/antd.css'
-import Printer from '@formily/printer'
+import { Button } from 'antd'
+import styled from 'styled-components'
+import { Schema, SchemaForm, SchemaField, SchemaMarkupField as Field } from '@formily/antd'
+import { ArrayList } from '@formily/react-shared-components'
+import { toArr, isFn, FormPath } from '@formily/shared'
+import { Input } from '@formily/antd-components'
+import'antd/dist/antd.css'
+
+const RowStyleLayout = styled((props) => <div {...props} />)`
+  .ant-btn {
+    margin-right: 16px;
+  }
+  .ant-form-item {
+    display: inline-flex;
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
+  > .ant-form-item {
+    margin-bottom: 0;
+    margin-right: 0;
+  }
+`
+
+const ArrayCustom = (props) => {
+    const { value, className, editable, path, mutators } = props
+    const [dynamicSchema, setDynamicSchema] = useState(null)
+    const loadDynamicSchema = () => {
+        setDynamicSchema(new Schema({
+            type: 'object',
+            properties: {
+                dy1: {
+                    title: '动态字段1',
+                    'x-component': 'Input',
+                    'x-component-props': { placeholder: 'input' },
+                },
+                dy2: {
+                    title: '动态字段2',
+                    'x-component': 'Input',
+                    'x-component-props': { placeholder: 'input' },
+                },
+            }
+        }))
+    }
+    
+    return <ArrayList value={value}>
+        {toArr(value).map((item, index) => (
+            <RowStyleLayout key={index}>
+            <span>#{index + 1}. </span>
+            <SchemaField path={FormPath.parse(path).concat(index)} schema={dynamicSchema} />                
+            </RowStyleLayout>
+        ))}
+        <Button onClick={loadDynamicSchema}>加载异步Schema</Button>
+    </ArrayList>
+}
+
+ArrayCustom.isFieldComponent = true
 
 const App = () => {
-    const [schema, setSchema] = useState(undefined)
-    useEffect(() => {
-        setTimeout(() => { // 模拟异步接口返回
-            setSchema(new Schema({
-                type: 'object',
-                properties: {
-                    username: {
-                        title: '用户名',
-                        'x-component': 'Input',
-                        'x-component-props': { placeholder: 'input' },
-                    },
-                    age: {
-                        title: '年龄',
-                        'x-component': 'Input',
-                        'x-component-props': { placeholder: 'input' },
-                    },
-                }
-            }))
-        }, 500);
-    }, [])
-  return (<Printer>
-    <SchemaForm components={{ ArrayTable, Input }}>
+  return (
+    <SchemaForm components={{ ArrayCustom, Input }}>
         <Field
-            title="用户列表"
-            name="userList"
-            maxItems={3}
-            type="array"
-            x-component="ArrayTable"
-            items={schema}
-            default={[{}]}
-        />
+          title="用户列表"
+          name="userList"
+          type="array"
+          default={[
+            { username: 'morally', age: 20 },
+            { username: 'joe', age: 21 }
+          ]}
+          x-component="ArrayCustom"
+        >
+          <Field type="object">
+            <Field name="username" x-component="Input" title="用户名" />
+            <Field name="age" x-component="Input" title="年龄" />
+          </Field>
+        </Field>
     </SchemaForm>
-  </Printer>)
+  )
 }
+
 ReactDOM.render(<App />, document.getElementById('root'))
+
 ```
