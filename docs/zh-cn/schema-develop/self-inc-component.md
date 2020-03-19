@@ -70,6 +70,59 @@ ArrayCustom.isFieldComponent = true
 />
 ```
 
+### 自定义操作按钮
+
+如上所示的 `renderAddition`, `renderRemove`, `renderMoveDown`, `renderMoveUp`, `renderEmpty` 均可以被用户属性复写并自定义，以下会演示几个常见场景。
+
+1. 自定义添加图标
+2. 隐藏上移，下移图标
+3. 根据当行的值决定是否显示删除图标
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Button } from 'antd'
+import styled from 'styled-components'
+import { createFormActions, SchemaForm, SchemaField, SchemaMarkupField as Field } from '@formily/antd'
+import { Input, ArrayCards } from '@formily/antd-components'
+import'antd/dist/antd.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions} components={{ ArrayCards, Input }}>
+        <Field
+          title="用户列表"
+          name="userList"
+          type="array"
+          default={[
+            { username: 'morally', age: 20 },
+            { username: 'joe', age: 21 }
+          ]}
+          x-component="ArrayCards"
+          x-component-props={{
+            renderMoveDown: () => null,
+            renderMoveUp: () => null,
+            renderAddition: () => '+add',
+            renderRemove: (idx) => {
+              const val = actions.getFieldValue(`userList.${idx}.username`)
+              return val === 'morally' ? null : 'remove';
+            }
+          }}
+        >
+          <Field type="object">
+            <Field name="username" x-component="Input" title="用户名" />
+            <Field name="age" x-component="Input" title="年龄" />
+          </Field>
+        </Field>
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+
 ## 生产级别版本实践
 
 以下例子展示了如何使用 **ArrayList** 进行快速编写自增组件，以及对每一行自增组件样式的控制。
@@ -185,18 +238,13 @@ ArrayCustom.isFieldComponent = true
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{
-        ArrayCustom,
-        Input,
-      }}
-    >
+    <SchemaForm components={{ ArrayCustom, Input }}>
         <Field
           title="用户列表"
           name="userList"
           type="array"
           default={[
-            { username: 'molly', age: 20 },
+            { username: 'morally', age: 20 },
             { username: 'joe', age: 21 }
           ]}
           x-component="ArrayCustom"
