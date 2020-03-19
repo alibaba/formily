@@ -416,6 +416,83 @@ const App = () => {
 }
 ```
 
+#### `<FieldList>`
+
+数组类型的 `Field`，用于开发自增组件
+
+| 参数       | 说明                             | 类型                 | 默认值               |
+|:----------|:---------------------------------|:--------------------|:--------------------|
+| path    |字段路径                  | [FormPathPattern](#FormPathPattern) |                |
+| name    |字段名                  | [FormPathPattern](#FormPathPattern) |                |
+| value    |字段值                  | any |                |
+| initialValue    |初始哈字段值                  | any |     []           |
+| values    |字段集合, 从onChange获取的所有参数                  | any |                |
+| triggerType    |  字段触发校验类型                  | 'onChange' `|` 'onBlur' |                | 
+| getValueFromEvent    |  字段变更时，从event中获取value的计算函数                  | (...args: any[]) => any |                | 
+| props    | 字段属性                  | `{}` |                | 
+| rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
+| required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
+| editable    | 字段是否可编辑                  | boolean |                |
+| visible    | 字段是否显示（伴随value的显示和隐藏）                  | boolean |                |
+| display    | 字段是否显示（纯视觉，不影响value）                  | boolean |                |
+| useDirty    | 是否使用脏检查                  | boolean | false               |
+| computeState    | 计算字段状态                  | (draft: [IFieldState](#IFieldState), prevState: [IFieldState](#IFieldState)) => void |                |
+
+**用法**
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Button } from 'antd'
+import styled from 'styled-components'
+import { Form, FormItem, InternalFieldList as FieldList, } from '@formily/antd'
+import { Input } from '@formily/antd-components'
+import'antd/dist/antd.css'
+
+const RowStyleLayout = styled((props) => <div {...props} />)`
+  .ant-btn {
+    margin-right: 16px;
+  }
+  .ant-form-item {
+    display: inline-flex;
+    margin-right: 16px;
+    margin-bottom: 16px;
+  }
+`
+
+const App = () => {
+  return (
+    <Form>
+        <FieldList name="userList" initialValue={[
+            { username: 'morally', age: 21 },
+            { username: 'bill', age: 22 }
+        ]}>
+            {({ state, mutators }) => {
+                const onAdd = () => mutators.push()
+                return (<div>
+                    {state.value.map((item, index) => {
+                        const onRemove = (index) => mutators.remove(index)
+                        const onMoveUp = (index) => mutators.moveUp(index)
+                        const onMoveDown = (index) => mutators.moveDown(index)
+                        return (<RowStyleLayout key={index}>
+                            <FormItem name={`userList.${index}.username`} component={Input} title="用户名" />
+                            <FormItem name={`userList.${index}.age`} component={Input} title="年龄" />
+                            <Button onClick={onRemove.bind(null, index)}>remove</Button>
+                            <Button onClick={onMoveUp.bind(null, index)}>up</Button>
+                            <Button onClick={onMoveDown.bind(null, index)}>down</Button>
+                        </RowStyleLayout>)
+                    })}
+                    <Button onClick={onAdd}>add</Button>
+                </div>)
+            }}
+        </FieldList>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 #### `<FormButtonGroup/>`
 
 * IFormButtonGroupProps
