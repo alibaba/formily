@@ -1177,7 +1177,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (isValid(taskIndex)) {
         if (
           env.taskQueue[taskIndex] &&
-          !env.taskQueue[taskIndex].callbacks.some(fn => isEqual(fn, callback))
+          !env.taskQueue[taskIndex].callbacks.some(fn =>
+            isEqual(fn, callback) ? fn === callback : false
+          )
         ) {
           env.taskQueue[taskIndex].callbacks.push(callback)
         }
