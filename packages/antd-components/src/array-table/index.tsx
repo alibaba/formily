@@ -82,11 +82,15 @@ export const ArrayTable: any = styled(
         }
       })
     }
-    let columns = isArr(schema.items)
+    // 兼容异步items schema传入
+    let columns = []
+    if (schema.items) {
+      columns = isArr(schema.items)
       ? schema.items.reduce((buf, items) => {
           return buf.concat(renderColumns(items))
         }, [])
       : renderColumns(schema.items)
+    }
     if (editable) {
       columns.push({
         ...operations,
