@@ -48,7 +48,7 @@ import React from 'react'
 import { SchemaForm } from '@formily/antd'
 import { BusinessCard } from './fields/BusinessCard'
 
-export const BusinessCard = () => {
+export const App = () => {
   return (
     <SchemaForm>
       <BusinessCard />
@@ -133,7 +133,7 @@ import { SchemaForm } from '@formily/antd'
 import { createEffects } from './effects'
 import { BusinessCard } from './fields/BusinessCard'
 
-export const BusinessCard = () => {
+export const App = () => {
   return (
     <SchemaForm effects={createEffects()}>
       <BusinessCard />
@@ -181,7 +181,7 @@ import { createEffects } from './effects'
 import { BusinessCard } from './fields/BusinessCard'
 import { useInitialValues } from './hooks/useInitialValues'
 
-export const BusinessCard = () => {
+export const App = () => {
   const initialValues = useInitialValues()
   return (
     <SchemaForm initialValues={initialValues} effects={createEffects()}>
@@ -192,6 +192,8 @@ export const BusinessCard = () => {
 ```
 
 #### 异步下拉选项
+
+①：定义EffectHook
 
 ```tsx
 // src/effects/useAsyncDataSource.ts
@@ -220,6 +222,8 @@ const useAsyncDataSource = (name, service) => {
 }
 ```
 
+②：引入EffectHook
+
 ```tsx
 // src/effects/index.ts
 import { useBusinessEffects } from './useBusinessEffects'
@@ -242,6 +246,8 @@ export const createEffects = context => () => {
 ```
 
 #### 可搜索的异步下拉选项
+
+①：定义EffectHook
 
 ```tsx
 // src/effects/useAsyncSearchDataSource.ts
@@ -274,6 +280,8 @@ const useSearchDataSource = (name, service) => {
   })
 }
 ```
+
+②：引入EffectHook
 
 ```tsx
 // src/effects/index.ts
@@ -347,7 +355,7 @@ import { BusinessCard } from './fields/BusinessCard'
 import { useInitialValues } from './hooks/useInitialValues'
 import { MyComponent } from './extentions/MyComponent'
 
-export const BusinessCard = () => {
+export const App = () => {
   const initialValues = useInitialValues()
   return (
     <SchemaForm 
@@ -455,7 +463,7 @@ import { useInitialValues } from './hooks/useInitialValues'
 import { MyComponent } from './extentions/MyComponent'
 import zhCN from './local/zh-cn'
 
-export const BusinessCard = () => {
+export const App = () => {
   const initialValues = useInitialValues()
   return (
     <SchemaForm 

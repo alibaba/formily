@@ -969,3 +969,96 @@ ReactDOM.render(<App />, document.getElementById('root'))
   - `prevPath.[+2].fieldName`代表下下一行字段
   - `prevPath.[-2].fieldName`代表上上一行字段
   - 一次可以继续往下递增或者递减
+
+## 外部联动
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  FormEffectHooks,
+  FormSpy,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { Input, Select } from '@formily/antd-components'
+import { Button } from 'antd'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const { onFieldValueChange$ } = FormEffectHooks
+
+const useOneToManyEffects = () => {
+  const { setFieldState } = createFormActions()
+  onFieldValueChange$('aa').subscribe(({ value }) => {
+    setFieldState('*(bb,cc,dd)', state => {
+      state.visible = value
+    })
+  })
+}
+
+const actions = createFormActions()
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm
+        components={{ Input, Select }}
+        actions={actions}
+        effects={() => {
+          useOneToManyEffects()
+        }}
+      >
+        <Field
+          type="string"
+          enum={[
+            { label: 'visible', value: true },
+            { label: 'hidden', value: false }
+          ]}
+          default={false}
+          name="aa"
+          title="AA"
+          x-component="Select"
+        />
+        <Field type="string" name="bb" title="BB" x-component="Input" />
+        <Field type="string" name="cc" title="CC" x-component="Input" />
+        <Field type="string" name="dd" title="DD" x-component="Input" />
+        <FormButtonGroup>
+          <FormSpy selector={[['onFieldValueChange', 'aa']]}>
+            {({ state }) => {
+              return (
+                state.value && (
+                  <>
+                    <Submit />
+                    <Button
+                      onClick={() => {
+                        actions.setFieldState('bb', state => {
+                          state.value = '' + Math.random()
+                        })
+                      }}
+                    >
+                      修改BB的值
+                    </Button>
+                  </>
+                )
+              )
+            }}
+          </FormSpy>
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- 主联动逻辑是一对多联动
+- 借助FormSpy可以针对具体字段做监听，所以可以很方便的做UI联动状态同步
+- 借助FormActions可以方便的在外部操作Form内部状态

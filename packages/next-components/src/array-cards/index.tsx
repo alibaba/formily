@@ -38,11 +38,13 @@ export const ArrayCards = styled(
       renderExtraOperations,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
+
+    const schemaItems = Array.isArray(schema.items)
+    ? schema.items[schema.items.length - 1]
+    : schema.items
+
     const onAdd = () => {
-      const items = Array.isArray(schema.items)
-        ? schema.items[schema.items.length - 1]
-        : schema.items
-      mutators.push(items.getEmptyValue())
+      mutators.push(schemaItems.getEmptyValue())
     }
     return (
       <div className={className}>
@@ -92,7 +94,7 @@ export const ArrayCards = styled(
                   </Fragment>
                 }
               >
-                <SchemaField path={FormPath.parse(path).concat(index)} />
+                <SchemaField path={FormPath.parse(path).concat(index)} schema={schemaItems} />
               </Card>
             )
           })}

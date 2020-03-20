@@ -5,9 +5,13 @@ import {
   IForm,
   IVirtualField
 } from '@formily/core'
+import { uid } from '@formily/shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
+import { inspectChanged } from '../shared'
 import FormContext from '../context'
+
+const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 
 export const useVirtualField = (
   options: IVirtualFieldStateProps
@@ -18,10 +22,12 @@ export const useVirtualField = (
     field: IVirtualField
     unmounted: boolean
     subscriberId: number
+    uid: string
   }>({
     field: null,
     unmounted: false,
-    subscriberId: null
+    subscriberId: null,
+    uid: ''
   })
   const form = useContext<IForm>(FormContext)
   if (!form) {
@@ -39,20 +45,24 @@ export const useVirtualField = (
         forceUpdate()
       }
     })
+    ref.current.uid = uid()
     initialized = true
   }, [])
 
   useEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
-    ref.current.field.watchProps(
-      options,
-      ['props', 'visible', 'display'],
-      (props: any) => {
+    const cacheProps = ref.current.field.getCache(ref.current.uid)
+    if (cacheProps) {
+      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
+      if (props) {
         ref.current.field.setState((state: IVirtualFieldState) => {
           Object.assign(state, props)
         })
+        ref.current.field.setCache(ref.current.uid, options)
       }
-    )
+    } else {
+      ref.current.field.setCache(ref.current.uid, options)
+    }
   })
 
   useEffect(() => {
@@ -61,6 +71,7 @@ export const useVirtualField = (
     }, !ref.current.field.state.unmounted) //must notify,need to trigger restore value
     ref.current.unmounted = false
     return () => {
+      ref.current.field.removeCache(ref.current.uid)
       ref.current.unmounted = true
       ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IVirtualFieldState) => {
