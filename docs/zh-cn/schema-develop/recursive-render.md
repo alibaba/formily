@@ -467,3 +467,9 @@ const App = () => (
 )
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+**案例解析**
+
+- 以分步表单为例，我们定义了一个控制器组件(VirtualField)，可以拿到字段路径，同时不占用数据节点，借助SchemaField可以很方便的传入动态schema进行动态渲染
+- 定义了useBatchRequired的EffectHook，可以批量给字段加必填
+- 借助FormSpy可以监听分步组件内部事件，同时做状态映射
