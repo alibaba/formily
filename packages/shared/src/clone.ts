@@ -35,6 +35,20 @@ const isNativeObject = (values: any): any => {
   }
 }
 
+export const shallowClone = (values: any) => {
+  let nativeClone: (values: any) => any
+  if (Array.isArray(values)) {
+    return values.slice(0)
+  } else if (isNativeObject(values)) {
+    nativeClone = isNativeObject(values)
+    return isFn(nativeClone) ? nativeClone(values) : values
+  } else if (typeof values === 'object' && !!values) {
+    return {
+      ...values
+    }
+  }
+}
+
 export const clone = (values: any, filter?: Filter) => {
   let nativeClone: (values: any) => any
   if (Array.isArray(values)) {

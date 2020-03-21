@@ -93,7 +93,7 @@ export interface IFormSpyAPI {
 }
 
 export interface IFormSpyProps {
-  selector?: string[] | string
+  selector?: string | string[] | string[][]
   reducer?: (
     state: any,
     action: { type: string; payload: any },
@@ -111,7 +111,7 @@ export interface IFormConsumerAPI {
 }
 
 export interface IFormConsumerProps {
-  selector?: string[] | string
+  selector?: string | string[] | string[][]
   children?:
     | React.ReactElement
     | ((api: IFormConsumerAPI) => React.ReactElement)
