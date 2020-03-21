@@ -28,7 +28,6 @@ describe('useFormSpy hook', () => {
           {({ form: spyForm, type, state }) => {
             typeList.push(type)
             expect(spyForm).toEqual(form)
-            expect(state).toEqual({})
 
             return <div data-testid="spy-type">{type}</div>
           }}

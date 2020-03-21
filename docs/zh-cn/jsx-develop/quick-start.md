@@ -67,7 +67,7 @@ const App = () => {
         console.log(values)
       }}
     >
-      <FormItem name="name" label="Name" component={Input} />
+      <FormItem name="name" label="Name" placeholder="Input Name" component={Input} />
       <FormButtonGroup>
         <Submit>查询</Submit>
         <Reset>重置</Reset>

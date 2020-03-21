@@ -328,19 +328,12 @@ export interface IModel<S = {}, P = {}> extends Subscribable {
   setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
   getSourceState: (callback?: (state: S) => any) => any
   setSourceState: (callback?: (state: S) => void) => void
-  watchProps: <T extends { [key: string]: any }>(
-    props: T,
-    keys: string[],
-    callback: (
-      changedProps: {
-        [key: string]: any
-      },
-      props: T
-    ) => void
-  ) => void
   hasChanged: (path?: FormPathPattern) => boolean
   isDirty: (key?: string) => boolean
   getDirtyInfo: () => StateDirtyMap<S>
+  setCache: (key: string, value: any) => void
+  getCache: (key: string) => any
+  removeCache: (key: string) => void
 }
 
 export type IField = IModel<IFieldState, IFieldStateProps>

@@ -8,7 +8,12 @@ import { ArrayList } from '@formily/react-shared-components'
 import { CircleButton } from '../circle-button'
 import { TextButton } from '../text-button'
 import { Card } from 'antd'
-import { PlusOutlined, DeleteOutlined, DownOutlined, UpOutlined } from '@ant-design/icons'
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  DownOutlined,
+  UpOutlined
+} from '@ant-design/icons'
 import styled from 'styled-components'
 
 const ArrayComponents = {
@@ -33,11 +38,12 @@ export const ArrayCards: any = styled(
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
 
+    const schemaItems = Array.isArray(schema.items)
+      ? schema.items[schema.items.length - 1]
+      : schema.items
+
     const onAdd = () => {
-      const items = Array.isArray(schema.items)
-        ? schema.items[schema.items.length - 1]
-        : schema.items
-      mutators.push(items.getEmptyValue())
+      mutators.push(schemaItems.getEmptyValue())
     }
     return (
       <div className={className}>
@@ -87,7 +93,10 @@ export const ArrayCards: any = styled(
                   </Fragment>
                 }
               >
-                <SchemaField path={FormPath.parse(path).concat(index)} />
+                <SchemaField
+                  path={FormPath.parse(path).concat(index)}
+                  schema={schemaItems}
+                />
               </Card>
             )
           })}

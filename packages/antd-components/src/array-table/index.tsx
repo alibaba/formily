@@ -48,11 +48,11 @@ export const ArrayTable: any = styled(
       dragable,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
+    const schemaItems = Array.isArray(schema.items)
+    ? schema.items[schema.items.length - 1]
+    : schema.items
     const onAdd = () => {
-      const items = Array.isArray(schema.items)
-        ? schema.items[schema.items.length - 1]
-        : schema.items
-      mutators.push(items.getEmptyValue())
+      mutators.push(schemaItems.getEmptyValue())
     }
     const onMove = (dragIndex, dropIndex) => {
       mutators.move(dragIndex, dropIndex)
@@ -82,11 +82,15 @@ export const ArrayTable: any = styled(
         }
       })
     }
-    let columns = isArr(schema.items)
+    // 兼容异步items schema传入
+    let columns = []
+    if (schema.items) {
+      columns = isArr(schema.items)
       ? schema.items.reduce((buf, items) => {
           return buf.concat(renderColumns(items))
         }, [])
       : renderColumns(schema.items)
+    }
     if (editable) {
       columns.push({
         ...operations,
