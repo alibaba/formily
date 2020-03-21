@@ -1,7 +1,7 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
-import { isFn } from '@formily/shared'
+import { isFn, uid } from '@formily/shared'
 import { IFieldState, IForm, IField, IMutators } from '@formily/core'
-import { getValueFromEvent } from '../shared'
+import { getValueFromEvent, inspectChanged } from '../shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import FormContext from '../context'
@@ -27,16 +27,27 @@ const extendMutators = (
   }
 }
 
+const INSPECT_PROPS_KEYS = [
+  'props',
+  'rules',
+  'required',
+  'editable',
+  'visible',
+  'display'
+]
+
 export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
   const ref = useRef<{
     field: IField
     unmounted: boolean
     subscriberId: number
+    uid: string
   }>({
     field: null,
     unmounted: false,
-    subscriberId: null
+    subscriberId: null,
+    uid: ''
   })
   const form = useContext<IForm>(FormContext)
   if (!form) {
@@ -57,26 +68,30 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
             mutators.validate({ throwErrors: false })
           }
         }
-        if(!form.isHostRendering()){
+        if (!form.isHostRendering()) {
           forceUpdate()
         }
       }
     })
+    ref.current.uid = uid()
     initialized = true
     return extendMutators(form.createMutators(ref.current.field), options)
   }, [])
 
   useEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
-    ref.current.field.watchProps(
-      options,
-      ['props', 'rules', 'required', 'editable', 'visible', 'display'],
-      (props: any) => {
+    const cacheProps = ref.current.field.getCache(ref.current.uid)
+    if (cacheProps) {
+      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
+      if (props) {
         ref.current.field.setState((state: IFieldState) => {
           Object.assign(state, props)
         })
       }
-    )
+      ref.current.field.setCache(ref.current.uid, options)
+    } else {
+      ref.current.field.setCache(ref.current.uid, options)
+    }
   })
 
   useEffect(() => {
@@ -85,6 +100,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     }, !ref.current.field.state.unmounted) //must notify,need to trigger restore value
     ref.current.unmounted = false
     return () => {
+      ref.current.field.removeCache(ref.current.uid)
       ref.current.unmounted = true
       ref.current.field.unsubscribe(ref.current.subscriberId)
       ref.current.field.setState((state: IFieldState) => {

@@ -1,4 +1,11 @@
-import { isFn, FormPath, Subscribable, isValid, toArr } from '@formily/shared'
+import {
+  isFn,
+  FormPath,
+  Subscribable,
+  isValid,
+  toArr,
+  isEqual
+} from '@formily/shared'
 import {
   IFormEffect,
   IFormActions,
@@ -447,4 +454,23 @@ export const createQueryEffects = <
     middlewares,
     context
   )
+}
+
+export const inspectChanged = (
+  source: any,
+  target: any,
+  keys: string[]
+): any => {
+  let changeNum = 0
+  const changedProps = {}
+  toArr(keys).forEach((key: string) => {
+    if (!isEqual(source[key], target[key])) {
+      changeNum++
+      changedProps[key] = target[key]
+    }
+  })
+
+  if (changeNum > 0) {
+    return changedProps
+  }
 }
