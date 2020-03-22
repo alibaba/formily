@@ -153,7 +153,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 > 考虑到有些业务场景，交互述求是希望 UI 维度是可以做到下钻，但是后端数据层又希望数据层是扁平结构，所以我们可以考虑支持一个递归渲染组件
 
 - 递归渲染，主要是使用 SchemaField 组件，需要注意的是，必须要传入 schema 对象和路径，如果只传路径，它会自动从顶层 json schema 去读
-- 目前除了 schema.items/schema.properties 是可以用 SchemaMarkupField 来等价描述，但是对于用户自己扩展的递归属性(比如上面的 enum)，是没法通过 SchemaMarkupField 描述的，所以只能写纯 JSON
+- 目前除了 schema.items/schema.properties 是可以用 SchemaMarkupField 来等价描述，但是对于用户用于递归渲染的递归属性(比如上面的 enum)，是没法通过 SchemaMarkupField 描述的，所以只能写纯 JSON
+- 注意，用于递归渲染的 SchemaField 组件必须要传 schema 对象，否则会存在子字段读取 schema 失效的风险问题。
 
 ## 自增列表递归渲染
 
@@ -235,6 +236,10 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+**案例解析**
+
+- 注意，用于递归渲染的 SchemaField 组件必须要传 schema 对象，否则会存在子字段读取 schema 失效的风险问题。
 
 ## 动态递归渲染(混合开发)
 
@@ -345,7 +350,7 @@ const useBatchRequired = name => {
 const App = () => (
   <Printer>
     <SchemaForm
-      components={{ Input, DynamicFields }}
+      components={{ Input }}
       actions={actions}
       effects={() => {
         useBatchRequired('*')
@@ -470,6 +475,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 以分步表单为例，我们定义了一个控制器组件(VirtualField)，可以拿到字段路径，同时不占用数据节点，借助SchemaField可以很方便的传入动态schema进行动态渲染
-- 定义了useBatchRequired的EffectHook，可以批量给字段加必填
-- 借助FormSpy可以监听分步组件内部事件，同时做状态映射
+- 以分步表单为例，我们定义了一个控制器组件(VirtualField)，可以拿到字段路径，同时不占用数据节点，借助 SchemaField 可以很方便的传入动态 schema 进行动态渲染
+- 定义了 useBatchRequired 的 EffectHook，可以批量给字段加必填
+- 借助 FormSpy 可以监听分步组件内部事件，同时做状态映射
+- 注意，用于递归渲染的 SchemaField 组件必须要传 schema 对象，否则会存在子字段读取 schema 失效的风险问题。
