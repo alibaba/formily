@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@ant-design/compatible": "^0.0.1-rc.1",
+    "@ant-design/icons": "^4.0.3",
     "@formily/antd": "^1.0.9",
     "antd": "^4.0",
     "lodash": "^4.17.15"
