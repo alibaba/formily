@@ -48,7 +48,11 @@ export const SchemaEditor: React.FC<{
   }
 
   const handleSchemaChange = (schema: string) => {
-    onChange(JSON.parse(schema))
+    try {
+      onChange(JSON.parse(schema))
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   const isRoot = selectedPath === 'root'
