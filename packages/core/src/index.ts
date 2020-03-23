@@ -108,9 +108,10 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function notifyFormValuesChange() {
-    if (isFn(options.onChange)) {
+    if (isFn(options.onChange) && !state.state.unmounted) {
       clearTimeout(env.onChangeTimer)
       env.onChangeTimer = setTimeout(() => {
+        if (state.state.unmounted) return
         options.onChange(clone(getFormValuesIn('')))
       })
     }
@@ -986,7 +987,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         })
       })
     })
-    if (isFn(options.onReset)) {
+    if (isFn(options.onReset) && !state.state.unmounted) {
       options.onReset()
     }
     heart.publish(LifeCycleTypes.ON_FORM_RESET, state)
@@ -1028,7 +1029,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         // 增加onFormSubmitValidateFailed来明确结束submit的类型
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED, state)
         heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_END, state)
-        if (isFn(options.onValidateFailed)) {
+        if (isFn(options.onValidateFailed) && !state.state.unmounted) {
           options.onValidateFailed(validated)
         }
 
@@ -1042,7 +1043,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
       let payload,
         values = state.getState(state => clone(state.values))
-      if (isFn(onSubmit)) {
+      if (isFn(onSubmit) && !state.state.unmounted) {
         try {
           payload = await Promise.resolve(onSubmit(values))
           heart.publish(LifeCycleTypes.ON_FORM_ON_SUBMIT_SUCCESS, payload)
