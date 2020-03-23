@@ -31,7 +31,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
         return (
           <Button
             onClick={e => {
-              if (props.htmlType !== 'submit') {
+              if (props.htmlType === 'submit') {
                 form.submit(onSubmit)
               }
               if (props.onClick) {
