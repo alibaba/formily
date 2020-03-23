@@ -91,7 +91,7 @@ export const ArrayTable: any = styled(
         }, [])
       : renderColumns(schema.items)
     }
-    if (editable) {
+    if (editable && operations !== false) {
       columns.push({
         ...operations,
         key: 'operations',

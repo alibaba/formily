@@ -186,7 +186,7 @@ export const ArrayTable = styled(
                 return buf.concat(renderColumns(items))
               }, [])
             : renderColumns(schema.items)}
-          {editable && <ArrayList.Item
+          {editable && operations !== false && <ArrayList.Item
             width={operationsWidth || 200}
             lock="right"
             {...operations}
