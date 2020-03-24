@@ -124,6 +124,7 @@
     "scheduler": "^0.15.0",
     "semver-regex": "^2.0.0",
     "staged-git-files": "^1.1.2",
+    "sw-precache-webpack-plugin": "^1.0.0",
     "ts-import-plugin": "1.6.1",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
