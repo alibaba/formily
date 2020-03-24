@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const { command } = require('doc-scripts')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
@@ -100,6 +101,20 @@ const createDocs = async () => {
           configFile: path.resolve(__dirname, '../tsconfig.json')
         })
       ]
+      if(env === 'production'){
+        webpackConfig.plugins.push(
+          new SWPrecacheWebpackPlugin(
+            {
+              cacheId: 'formily-doc-site',
+              dontCacheBustUrlsMatching: /\.\w{8}\./,
+              filename: 'service-worker.js',
+              minify: true,
+              navigateFallback: 'https://formilyjs.org/index.html',
+              staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+            }
+          ) 
+        )
+      }
       return webpackConfig
     }
   )

@@ -1,6 +1,10 @@
 import React from 'react'
 import SiteRenderer from 'react-site-renderer'
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js')
+}
+
 export default ({ docs }) => {
   return (
     <SiteRenderer
