@@ -2,7 +2,6 @@ const path = require('path')
 const fs = require('fs-extra')
 const { command } = require('doc-scripts')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
-const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
@@ -32,12 +31,6 @@ if (window.parent !== window) {
 </script>
 `
 
-const FOOTER_HTML = `
-<script src="//unpkg.com/moment/min/moment-with-locales.js"></script>
-<script src="//unpkg.com/antd@4.x/dist/antd.min.js"></script>
-<script src="//unpkg.com/@alifd/next/dist/next.min.js"></script>
-`
-
 const createDocs = async () => {
   const packagesDir = path.resolve(process.cwd(), './packages')
   const packages = await fs.readdir(packagesDir)
@@ -58,18 +51,10 @@ const createDocs = async () => {
     {
       title: 'Formily',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
-      header: HEAD_HTML,
-      footer: FOOTER_HTML
+      header: HEAD_HTML
     },
     (webpackConfig, env) => {
       webpackConfig.devtool = 'none'
-      webpackConfig.externals = {
-        ...webpackConfig.externals,
-        '@alifd/next': 'Next',
-        antd: 'antd',
-        moment: 'moment'
-      }
-
       webpackConfig.module.rules = webpackConfig.module.rules.map(rule => {
         if (rule.test.test('.tsx')) {
           return {
@@ -101,20 +86,6 @@ const createDocs = async () => {
           configFile: path.resolve(__dirname, '../tsconfig.json')
         })
       ]
-      if(env === 'production'){
-        webpackConfig.plugins.push(
-          new SWPrecacheWebpackPlugin(
-            {
-              cacheId: 'formily-doc-site',
-              dontCacheBustUrlsMatching: /\.\w{8}\./,
-              filename: 'service-worker.js',
-              minify: true,
-              navigateFallback: 'https://formilyjs.org/index.html',
-              staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
-            }
-          ) 
-        )
-      }
       return webpackConfig
     }
   )

@@ -51,7 +51,7 @@ export const SchemaEditor: React.FC<{
     try {
       onChange(JSON.parse(schema))
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   }
 

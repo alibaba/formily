@@ -133,7 +133,8 @@
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
-    "webpack": "^4.35.3"
+    "webpack": "^4.35.3",
+    "workbox-webpack-plugin": "^5.1.1"
   },
   "config": {
     "ghooks": {
