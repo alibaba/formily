@@ -134,7 +134,7 @@ export const ArrayTable = styled(
       renderExtraOperations,
       operationsWidth,
       operations,
-      dragable,
+      draggable,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
     const onAdd = () => {
@@ -228,7 +228,7 @@ export const ArrayTable = styled(
           editable={editable}
           components={{
             ...ArrayComponents,
-            Wrapper: dragable ? DragableTable : ArrayComponents.Wrapper
+            Wrapper: draggable ? DragableTable : ArrayComponents.Wrapper
           }}
           renders={{
             renderAddition,
@@ -238,7 +238,7 @@ export const ArrayTable = styled(
             renderEmpty
           }}
         >
-          {dragable ? (
+          {draggable ? (
             <DragListView onDragEnd={onMove}>{renderTable()}</DragListView>
           ) : (
             renderTable()

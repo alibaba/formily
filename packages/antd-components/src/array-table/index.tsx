@@ -45,7 +45,7 @@ export const ArrayTable: any = styled(
       renderExtraOperations,
       operationsWidth,
       operations,
-      dragable,
+      draggable,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
     const schemaItems = Array.isArray(schema.items)
@@ -122,7 +122,7 @@ export const ArrayTable: any = styled(
         }
       })
     }
-    if (dragable) {
+    if (draggable) {
       columns.unshift({
         width: 20,
         render: () => {
@@ -156,7 +156,7 @@ export const ArrayTable: any = styled(
             renderEmpty
           }}
         >
-          {dragable ? (
+          {draggable ? (
             <DragListView
               onDragEnd={onMove}
               nodeSelector="tr.ant-table-row"

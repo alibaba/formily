@@ -51,7 +51,7 @@ const createDocs = async () => {
     {
       title: 'Formily',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
-      header: HEAD_HTML
+      header: HEAD_HTML,
     },
     (webpackConfig, env) => {
       webpackConfig.devtool = 'none'

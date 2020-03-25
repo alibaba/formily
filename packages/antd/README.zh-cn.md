@@ -311,7 +311,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | getValueFromEvent    |  字段变更时，从event中获取value的计算函数                  | (...args: any[]) => any |                | 
 | itemClassName    | formItem类名                  | string |                | 
 | itemStyle    | formItem样式控制                  | { [key: string]: string `|` number } |                | 
-| props    | 字段属性                  | `{}` |                | 
 | rules    | 校验规则                  | [ValidatePatternRules](#ValidatePatternRules) |                | 
 | required    | 是否必填，为true会同时设置校验规则                  | string[] `or` boolean |                |
 | editable    | 字段是否可编辑                  | boolean |                |
