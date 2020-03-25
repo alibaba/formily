@@ -32,6 +32,11 @@ if (window.parent !== window) {
 </script>
 `
 
+const FOOTER_HTML = `
+<script src="https://g.alicdn.com/code/lib/react/16.13.1/umd/react.production.min.js"></script>
+<script src="https://g.alicdn.com/code/lib/react-dom/16.13.1/umd/react-dom.production.min.js"></script>
+`
+
 const createDocs = async () => {
   const packagesDir = path.resolve(process.cwd(), './packages')
   const packages = await fs.readdir(packagesDir)
@@ -52,7 +57,8 @@ const createDocs = async () => {
     {
       title: 'Formily',
       renderer: path.resolve(__dirname, './doc-renderer.js'),
-      header: HEAD_HTML
+      header: HEAD_HTML,
+      footer: FOOTER_HTML,
     },
     (webpackConfig, env) => {
       webpackConfig.devtool = 'none'
