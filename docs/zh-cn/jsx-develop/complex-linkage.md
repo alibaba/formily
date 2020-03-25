@@ -488,7 +488,7 @@ const App = () => (
       <FormItem
         name="password"
         title="密码"
-        props={{ checkStrength: true }}
+        checkStrength
         help={
           <ul>
             <li>1. 长度不小于8个</li>
@@ -501,7 +501,7 @@ const App = () => (
       <FormItem
         name="confirm"
         title="确认密码"
-        props={{ checkStrength: true }}
+        checkStrength
         required
         component={Password}
       />
@@ -600,10 +600,8 @@ const App = () => (
         title="BB"
         dataSource={[]}
         visible={false}
+        hasFeedback
         component={Select}
-        props={{
-          hasFeedback: true
-        }}
       />
       <FormItem name="cc" title="CC" component={Input} />
       <FormButtonGroup offset={6}>
