@@ -94,17 +94,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | renderExtraOperations    | 自定义渲染额外操作按钮内容            | (index: Number) => React.ReactElement |
 
 
-#### ArrayTable专属定制属性
-
-除了上述属性外，**ArrayTable** 还支持以下属性
-
-| 属性名       | 说明                             | 类型                 |
-|:----------|:---------------------------------|:--------------------|
-| operations    | 操作列props传入            | { [key: string]: any } |
-| operationsWidth    | 操作列宽度            | number |
-| dragable    | 是否启用拖拽模式            | boolean |
-
-
 通过以上属性可以复写并自定义操作按钮，以下会演示几个常见场景。
 
 1. 自定义添加图标
@@ -138,13 +127,66 @@ const App = () => {
             renderMoveUp: () => null,
             renderAddition: () => '+add',
             renderRemove: (idx) => {
-              return <FormSpy>
-                {({ form }) => {
-                  const val = form ? form.getFieldState(`userList.${idx}.username`, state => state.value) : {}
-                  return val === 'morally' ? null : 'remove';
-                }}
+              return <FormSpy selector={[['onFieldValueChange',`userList.${idx}.username`]]}>
+                {({ state }) => state.value === 'morally' ? null : 'remove'}
               </FormSpy>
             }
+          }}
+        >
+          <Field type="object">
+            <Field name="username" x-component="Input" title="用户名" />
+            <Field name="age" x-component="Input" title="年龄" />
+          </Field>
+        </Field>
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+
+
+### ArrayTable专属定制属性
+
+除了上述属性外，**ArrayTable** 还支持以下属性
+
+| 属性名       | 说明                             | 类型                 |
+|:----------|:---------------------------------|:--------------------|
+| operations    | 作为Table.Column的props传入            | { [key: string]: any } |
+| operationsWidth    | 操作列宽度            | number |
+| dragable    | 是否启用拖拽模式            | boolean |
+
+下面例子来展示下如何使用上述属性
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Button } from 'antd'
+import styled from 'styled-components'
+import { FormSpy, createFormActions, SchemaForm, SchemaField, SchemaMarkupField as Field } from '@formily/antd'
+import { Input, ArrayTable } from '@formily/antd-components'
+import'antd/dist/antd.css'
+
+const actions = createFormActions()
+const App = () => {
+  return (
+    <SchemaForm actions={actions} components={{ ArrayTable, Input }}>
+        <Field
+          title="用户列表"
+          name="userList"
+          type="array"
+          default={[
+            { username: 'morally', age: 20 },
+            { username: 'joe', age: 21 }
+          ]}
+          x-component="ArrayTable"
+          x-component-props={{
+            operationsWidth: 500,
+            operations: {
+              title: '操作'
+            },
+            dragable: true,
           }}
         >
           <Field type="object">
