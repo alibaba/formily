@@ -93,8 +93,18 @@ export const connect = <ExtendsComponentKey extends string = ''>(
             schemaComponentProps[options.eventName](event, ...args)
           }
         },
-        onBlur: () => mutators.blur(),
-        onFocus: () => mutators.focus()
+        onBlur: (...args: any) => {
+          mutators.blur()
+          if (isFn(schemaComponentProps['onBlur'])) {
+            schemaComponentProps[options.eventName](...args)
+          }
+        },
+        onFocus: (...args: any) => {
+          mutators.focus()
+          if (isFn(schemaComponentProps['onBlur'])) {
+            schemaComponentProps[options.eventName](...args)
+          }
+        }
       }
       if (isValid(editable)) {
         if (isFn(editable)) {
