@@ -91,6 +91,19 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | renderMoveDown    | 自定义向下移动按钮内容       | (index: Number) => React.ReactElement |
 | renderMoveUp    | 自定义向上移动按钮内容         | (index: Number) => React.ReactElement |
 | renderEmpty    | 自定义渲染空数据内容            | (index: Number) => React.ReactElement |
+| renderExtraOperations    | 自定义渲染额外操作按钮内容            | (index: Number) => React.ReactElement |
+
+
+#### ArrayTable专属定制属性
+
+除了上述属性外，**ArrayTable** 还支持以下属性
+
+| 属性名       | 说明                             | 类型                 |
+|:----------|:---------------------------------|:--------------------|
+| operations    | 操作列props传入            | { [key: string]: any } |
+| operationsWidth    | 操作列宽度            | number |
+| dragable    | 是否启用拖拽模式            | boolean |
+
 
 通过以上属性可以复写并自定义操作按钮，以下会演示几个常见场景。
 
@@ -103,7 +116,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Button } from 'antd'
 import styled from 'styled-components'
-import { createFormActions, SchemaForm, SchemaField, SchemaMarkupField as Field } from '@formily/antd'
+import { FormSpy, createFormActions, SchemaForm, SchemaField, SchemaMarkupField as Field } from '@formily/antd'
 import { Input, ArrayCards } from '@formily/antd-components'
 import'antd/dist/antd.css'
 
@@ -125,8 +138,12 @@ const App = () => {
             renderMoveUp: () => null,
             renderAddition: () => '+add',
             renderRemove: (idx) => {
-              const val = actions.getFieldValue(`userList.${idx}.username`)
-              return val === 'morally' ? null : 'remove';
+              return <FormSpy>
+                {({ form }) => {
+                  const val = form ? form.getFieldState(`userList.${idx}.username`, state => state.value) : {}
+                  return val === 'morally' ? null : 'remove';
+                }}
+              </FormSpy>
             }
           }}
         >
