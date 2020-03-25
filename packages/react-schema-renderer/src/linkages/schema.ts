@@ -11,7 +11,8 @@ export const useValueSchemaLinkageEffect = (scope?: any) =>
             $target: innerState
           }),
           {
-            assign: true
+            assign: true,
+            arrayMerge:(target,source)=>source
           }
         )
       })
@@ -25,7 +26,8 @@ export const useValueSchemaLinkageEffect = (scope?: any) =>
             $target: innerState
           }),
           {
-            assign: true
+            assign: true,
+            arrayMerge:(target,source)=>source
           }
         )
       })
