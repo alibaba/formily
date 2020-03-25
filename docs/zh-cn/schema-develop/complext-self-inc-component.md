@@ -155,7 +155,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 |:----------|:---------------------------------|:--------------------|
 | operations    | 作为Table.Column的props传入            | { [key: string]: any } |
 | operationsWidth    | 操作列宽度            | number |
-| dragable    | 是否启用拖拽模式            | boolean |
+| draggable    | 是否启用拖拽模式            | boolean |
 
 下面例子来展示下如何使用上述属性
 
@@ -186,7 +186,7 @@ const App = () => {
             operations: {
               title: '操作'
             },
-            dragable: true,
+            draggable: true,
           }}
         >
           <Field type="object">
