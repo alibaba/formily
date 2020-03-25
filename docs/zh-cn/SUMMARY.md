@@ -5,6 +5,7 @@
   - [Formily解决了什么问题](./introduction/solutions.md)
   - [Formily核心特性](./introduction/features.md)
   - [Formily未来规划](./introduction/planning.md)
+  - [团队介绍](./introduction/team.md)
 - Schema Form
   - [介绍](./schema-develop/introduction.md)
   - [快速开始](./schema-develop/quick-start.md)
