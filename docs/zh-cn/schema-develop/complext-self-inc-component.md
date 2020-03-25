@@ -153,7 +153,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 属性名       | 说明                             | 类型                 |
 |:----------|:---------------------------------|:--------------------|
-| operations    | 作为Table.Column的props传入            | { [key: string]: any } |
+| operations    | 为false时不展示操作列，作为Table.Column的props传入            | { [key: string]: any } `or` false |
 | operationsWidth    | 操作列宽度            | number |
 | draggable    | 是否启用拖拽模式            | boolean |
 
