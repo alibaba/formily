@@ -2312,7 +2312,7 @@ interface IFieldState<FieldProps = any> {
   mounted: boolean
   //是否卸载
   unmounted: boolean
-  //是否在卸载时自动删除表单值
+  //是否在卸载时自动删除字段值
   unmountRemoveValue: boolean
   //字段扩展属性
   props: FieldProps
