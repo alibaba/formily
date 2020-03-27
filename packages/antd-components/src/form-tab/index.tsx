@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
@@ -7,10 +7,12 @@ import {
   useFieldState,
   FormEffectHooks,
   SchemaField,
-  FormPath
+  FormPath,
+  IVirtualBoxProps
 } from '@formily/react-schema-renderer'
 import { Tabs, Badge } from 'antd'
-import { TabsProps, TabPaneProps } from 'antd/lib/tabs'
+import { TabPaneProps } from 'antd/lib/tabs'
+import { IFormTab } from '../types'
 import { createMatchUpdate } from '../shared'
 
 enum StateMap {
@@ -27,8 +29,13 @@ const EffectHooks = {
   }>(StateMap.ON_FORM_TAB_ACTIVE_KEY_CHANGE)
 }
 
-const parseTabItems = (items: any) => {
+const parseTabItems = (items: any, hiddenKeys?: string[]) => {
   return items.reduce((buf: any, { schema, key }) => {
+    if (Array.isArray(hiddenKeys)) {
+      if (hiddenKeys.includes(key)) {
+        return buf
+      }
+    }
     if (schema.getExtendsComponent() === 'tabpane') {
       return buf.concat({
         props: schema.getExtendsComponentProps(),
@@ -69,80 +76,93 @@ const addErrorBadge = (
   return tab
 }
 
-type ExtendsProps = StateMap & {
-  TabPane: React.FC<TabPaneProps>
-}
+type ExtendsProps = StateMap &
+  typeof EffectHooks & {
+    TabPane: React.FC<TabPaneProps>
+  }
 
 type ExtendsState = {
   activeKey?: string
   childrenErrors?: any
 }
 
-export const FormTab: React.FC<TabsProps> & ExtendsProps = createControllerBox<
-  TabsProps
->('tab', ({ form, schema, name, path }: ISchemaVirtualFieldComponentProps) => {
-  const orderProperties = schema.getOrderProperties()
-  const componentProps = schema.getExtendsComponentProps()
-  const [{ activeKey, childrenErrors }, setFieldState] = useFieldState<
-    ExtendsState
-  >({
-    activeKey: parseDefaultActiveKey(schema, orderProperties),
-    childrenErrors: []
-  })
-  const items = parseTabItems(orderProperties)
-  const update = (cur: string) => {
-    form.notify(StateMap.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
-      name,
-      path,
-      value: cur
+export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
+  ExtendsProps = createControllerBox<IFormTab>(
+  'tab',
+  ({ form, schema, name, path }: ISchemaVirtualFieldComponentProps) => {
+    const orderProperties = schema.getOrderProperties()
+    let { hiddenKeys, ...componentProps } = schema.getExtendsComponentProps()
+    hiddenKeys = hiddenKeys || []
+    const [{ activeKey, childrenErrors }, setFieldState] = useFieldState<
+      ExtendsState
+    >({
+      activeKey: parseDefaultActiveKey(schema, orderProperties),
+      childrenErrors: []
     })
-  }
-  const matchUpdate = createMatchUpdate(name, path)
-  useFormEffects(({ hasChanged }) => {
-    onFormChange$().subscribe(formState => {
-      const errorsChanged = hasChanged(formState, 'errors')
-      if (errorsChanged) {
+    const items = parseTabItems(orderProperties, hiddenKeys)
+    const update = (cur: string) => {
+      form.notify(StateMap.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
+        name,
+        path,
+        value: cur
+      })
+    }
+    const matchUpdate = createMatchUpdate(name, path)
+    useEffect(() => {
+      if (Array.isArray(hiddenKeys)) {
         setFieldState({
-          childrenErrors: parseChildrenErrors(formState.errors, path)
+          activeKey: hiddenKeys.includes(activeKey)
+            ? items[0] && items[0].key
+            : activeKey
         })
       }
-    })
-    EffectHooks.onTabActiveKeyChange$().subscribe(
-      ({ value, name, path }: any = {}) => {
-        matchUpdate(name, path, () => {
+    }, [hiddenKeys.length])
+    useFormEffects(({ hasChanged }) => {
+      onFormChange$().subscribe(formState => {
+        const errorsChanged = hasChanged(formState, 'errors')
+        if (errorsChanged) {
           setFieldState({
-            activeKey: value
+            childrenErrors: parseChildrenErrors(formState.errors, path)
           })
-        })
-      }
+        }
+      })
+      EffectHooks.onTabActiveKeyChange$().subscribe(
+        ({ value, name, path }: any = {}) => {
+          matchUpdate(name, path, () => {
+            setFieldState({
+              activeKey: value
+            })
+          })
+        }
+      )
+    })
+    return (
+      <Tabs {...componentProps} activeKey={activeKey} onChange={update}>
+        {items.map(({ props, schema, key }) => {
+          const currentPath = FormPath.parse(path).concat(key)
+          return (
+            <Tabs.TabPane
+              {...props}
+              tab={
+                activeKey === key
+                  ? props.tab
+                  : addErrorBadge(props.tab, currentPath, childrenErrors)
+              }
+              key={key}
+              forceRender
+            >
+              <SchemaField
+                path={currentPath}
+                schema={schema}
+                onlyRenderProperties
+              />
+            </Tabs.TabPane>
+          )
+        })}
+      </Tabs>
     )
-  })
-  return (
-    <Tabs {...componentProps} activeKey={activeKey} onChange={update}>
-      {items.map(({ props, schema, key }) => {
-        const currentPath = FormPath.parse(path).concat(key)
-        return (
-          <Tabs.TabPane
-            {...props}
-            tab={
-              activeKey === key
-                ? props.tab
-                : addErrorBadge(props.tab, currentPath, childrenErrors)
-            }
-            key={key}
-            forceRender
-          >
-            <SchemaField
-              path={currentPath}
-              schema={schema}
-              onlyRenderProperties
-            />
-          </Tabs.TabPane>
-        )
-      })}
-    </Tabs>
-  )
-}) as any
+  }
+) as any
 
 FormTab.TabPane = createControllerBox<TabPaneProps>(
   'tabpane',

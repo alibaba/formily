@@ -1,12 +1,6 @@
 
 - 首页
   - [Formily是什么](./introduction/formily.md)
-  - [我们面临着什么问题](./introduction/problems.md)
-  - [Formily解决了什么问题](./introduction/solutions.md)
-  - [Formily核心特性](./introduction/features.md)
-  - [Formily未来规划](./introduction/planning.md)
-  - [Formily团队介绍](./introduction/team.md)
-  - [Formily数据公示](./introduction/data.md)
   - [竞品对比](./introduction/comparison.md)
 - Schema Form
   - [介绍](./schema-develop/introduction.md)

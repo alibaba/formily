@@ -548,7 +548,7 @@ const App = () => (
       actions={actions}
       onSubmit={v => console.log(v)}
     >
-      <FormTab>
+      <FormTab name="tabs">
         <FormTab.TabPane name="tab-1" tab="选项1">
           <Field
             type="string"
@@ -591,11 +591,28 @@ const App = () => (
       </FormTab>
       <FormButtonGroup>
         <Submit />
-        <Button onClick={()=>{
-          actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE,{
-            value:'tab-2'
-          })
-        }}>切换到第二个选项</Button>
+        <Button
+          onClick={() => {
+            actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
+              value: 'tab-2'
+            })
+          }}
+        >
+          切换到第二个选项
+        </Button>
+        <Button
+          onClick={() => {
+            actions.setFieldState('tabs', state => {
+              state.props['x-component-props'] =
+                state.props['x-component-props'] || {}
+              const { hiddenKeys } = state.props['x-component-props']
+              state.props['x-component-props'].hiddenKeys =
+                hiddenKeys && hiddenKeys.length ? [] : ['tab-2']
+            })
+          }}
+        >
+          隐藏/显示第二个选项卡
+        </Button>
       </FormButtonGroup>
     </SchemaForm>
   </Printer>
@@ -605,6 +622,6 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 从@formily/antd-components中导出FormTab
-- FormTab中的渲染是会强制全部渲染的，主要是为了收集校验
-- 如果被隐藏的Tab校验错误，在Tab Title上会展现Badge小红标，同时浏览器自动滚动
+- 从@formily/antd-components 中导出 FormTab
+- FormTab 中的渲染是会强制全部渲染的，主要是为了收集校验
+- 如果被隐藏的 Tab 校验错误，在 Tab Title 上会展现 Badge 小红标，同时浏览器自动滚动

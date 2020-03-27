@@ -4,7 +4,8 @@ import {
   ISchemaVirtualFieldComponentProps,
   createEffectHook,
   useFormEffects,
-  useFieldState
+  useFieldState,
+  IVirtualBoxProps
 } from '@formily/react-schema-renderer'
 import { toArr } from '@formily/shared'
 import { Step } from '@alifd/next'
@@ -27,10 +28,10 @@ const EffectHooks = {
   }>(StateMap.ON_FORM_STEP_CURRENT_CHANGE)
 }
 
-type StepComponentExtendsProps = typeof StateMap
+type ExtendsProps = StateMap & typeof EffectHooks
 
-export const FormStep: React.FC<IFormStep> &
-  StepComponentExtendsProps = createControllerBox<IFormStep>(
+export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
+  ExtendsProps = createControllerBox<IFormStep>(
   'step',
   ({
     name,

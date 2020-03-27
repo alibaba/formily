@@ -2269,7 +2269,7 @@ const App = () => (
       actions={actions}
       onSubmit={v => console.log(v)}
     >
-      <FormTab>
+      <FormTab name="tabs">
         <FormTab.TabPane name="tab-1" tab="选项1">
           <Field
             type="string"
@@ -2317,6 +2317,19 @@ const App = () => (
             value:'tab-2'
           })
         }}>切换到第二个选项</Button>
+        <Button
+          onClick={() => {
+            actions.setFieldState('tabs', state => {
+              state.props['x-component-props'] =
+                state.props['x-component-props'] || {}
+              const { hiddenKeys } = state.props['x-component-props']
+              state.props['x-component-props'].hiddenKeys =
+                hiddenKeys && hiddenKeys.length ? [] : ['tab-2']
+            })
+          }}
+        >
+          隐藏/显示第二个选项卡
+        </Button>
       </FormButtonGroup>
     </SchemaForm>
   </Printer>
