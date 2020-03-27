@@ -4,6 +4,7 @@ import {
   StepsProps as StepProps,
   StepProps as StepItemProps
 } from 'antd/lib/steps'
+import { TabsProps } from 'antd/lib/tabs'
 import {
   ISchemaFormProps,
   IMarkupSchemaFieldProps,
@@ -48,12 +49,14 @@ export type IFormItemTopProps = React.PropsWithChildren<
   }
 >
 
-export interface ISchemaFieldAdaptorProps
-  extends Omit<ItemProps, 'labelCol' | 'wrapperCol'>,
-    Partial<ISchemaFieldComponentProps> {
-  labelCol?: number | { span: number; offset?: number }
-  wrapperCol?: number | { span: number; offset?: number }
-}
+export type ISchemaFieldAdaptorProps = Omit<
+  ItemProps,
+  'labelCol' | 'wrapperCol'
+> &
+  Partial<ISchemaFieldComponentProps> & {
+    labelCol?: number | { span: number; offset?: number }
+    wrapperCol?: number | { span: number; offset?: number }
+  }
 
 export type StyledCP<P extends {}> = StyledComponent<
   (props: React.PropsWithChildren<P>) => React.ReactElement,
@@ -93,4 +96,8 @@ export interface IFormTextBox extends IItemProps {
 
 export interface IFormStep extends StepProps {
   dataSource: Array<StepItemProps & { name: FormPathPattern }>
+}
+
+export interface IFormTab extends TabsProps {
+  hiddenKeys?: string[]
 }

@@ -26,57 +26,58 @@
 
 ## FieldState
 
-| 状态名         | 描述                                                                                     | 类型                                          | 默认值       |
-| -------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------- | ------------ |
-| displayName    | Field 状态标识                                                                           | string                                        | "FieldState" |
-| dataType       | 字段值类型                                                                               | `"any" | "array"`                             | "any"        |
-| name           | 字段数据路径                                                                             | string                                        |              |
-| path           | 字段节点路径                                                                             | string                                        |              |
-| initialized    | 字段是否已经初始化                                                                       | boolean                                       | false        |
-| pristine       | 字段 value 是否等于 initialValue                                                         | boolean                                       | false        |
-| valid          | 字段是否合法                                                                             | boolean                                       | false        |
-| invalid        | 字段是否非法                                                                             | boolean                                       | false        |
-| touched        | 字段是否被 touch                                                                         | boolean                                       | false        |
-| visible        | 字段是否显示(如果为 false，字段值不会被提交)                                             | boolean                                       | true         |
-| display        | 字段是否 UI 显示(如果为 false，字段值可以被提交)                                         | boolean                                       | true         |
-| editable       | 字段是否可编辑                                                                           | boolean                                       | true         |
-| loading        | 字段是否处于加载态                                                                       | boolean                                       | false        |
-| modified       | 字段的 value 是否变化                                                                    | boolean                                       | false        |
-| active         | 字段是否被激活(onFocus 触发)                                                             | boolean                                       | false        |
-| visited        | 字段是否被 visited(onBlur 触发)                                                          | boolean                                       | false        |
-| validating     | 字段是否正在校验                                                                         | boolean                                       | false        |
-| values         | 字段值集合，value 属性相当于是 values[0]，该集合主要来源于组件的 onChange 事件的回调参数 | any[]                                         | []           |
-| errors         | 字段错误消息集合                                                                         | string[]                                      | []           |
-| effectErrors   | 人工操作的错误消息集合(在 setFieldState 中设置 errors 会被重定向到设置 effectErrors)     | string[]                                      | []           |
-| ruleErrors     | 校验规则的错误消息集合                                                                   | string[]                                      | []           |
-| warnings       | 字段警告信息集合                                                                         | string[]                                      | []           |
-| effectWarnings | 人工操作的警告信息集合(在 setFieldState 中设置 warnings 会被重定向到设置 effectWarnings) | string[]                                      | []           |
-| ruleWarnings   | 校验规则的警告信息集合                                                                   | string[]                                      | []           |
-| value          | 字段值                                                                                   | any                                           |              |
-| initialValue   | 字段初始值                                                                               | any                                           |              |
-| rules          | 字段校验规则                                                                             | [ValidatePatternRules](#validatepatternrules) | []           |
-| required       | 字段是否必填                                                                             | boolean                                       | false        |
-| mounted        | 字段是否已挂载                                                                           | boolean                                       | false        |
-| unmounted      | 字段是否已卸载                                                                           | boolean                                       | false        |
-| props          | 字段扩展 UI 属性(如果是Schema模式，props代表每个SchemaField属性，如果是JSX模式，则代表FormItem属性)                                                                         | {}                                            |              |
-| 扩展状态       | 通过 setFieldState 可以直接设置扩展状态                                                  | any                                           |              |
+| 状态名             | 描述                                                                                                         | 类型                                          | 默认值       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------- | ------------ |
+| displayName        | Field 状态标识                                                                                               | string                                        | "FieldState" |
+| dataType           | 字段值类型                                                                                                   | `"any" | "array"`                             | "any"        |
+| name               | 字段数据路径                                                                                                 | string                                        |              |
+| path               | 字段节点路径                                                                                                 | string                                        |              |
+| initialized        | 字段是否已经初始化                                                                                           | boolean                                       | false        |
+| pristine           | 字段 value 是否等于 initialValue                                                                             | boolean                                       | false        |
+| valid              | 字段是否合法                                                                                                 | boolean                                       | false        |
+| invalid            | 字段是否非法                                                                                                 | boolean                                       | false        |
+| touched            | 字段是否被 touch                                                                                             | boolean                                       | false        |
+| visible            | 字段是否显示(如果为 false，字段值不会被提交)                                                                 | boolean                                       | true         |
+| display            | 字段是否 UI 显示(如果为 false，字段值可以被提交)                                                             | boolean                                       | true         |
+| editable           | 字段是否可编辑                                                                                               | boolean                                       | true         |
+| loading            | 字段是否处于加载态                                                                                           | boolean                                       | false        |
+| modified           | 字段的 value 是否变化                                                                                        | boolean                                       | false        |
+| active             | 字段是否被激活(onFocus 触发)                                                                                 | boolean                                       | false        |
+| visited            | 字段是否被 visited(onBlur 触发)                                                                              | boolean                                       | false        |
+| validating         | 字段是否正在校验                                                                                             | boolean                                       | false        |
+| values             | 字段值集合，value 属性相当于是 values[0]，该集合主要来源于组件的 onChange 事件的回调参数                     | any[]                                         | []           |
+| errors             | 字段错误消息集合                                                                                             | string[]                                      | []           |
+| effectErrors       | 人工操作的错误消息集合(在 setFieldState 中设置 errors 会被重定向到设置 effectErrors)                         | string[]                                      | []           |
+| ruleErrors         | 校验规则的错误消息集合                                                                                       | string[]                                      | []           |
+| warnings           | 字段警告信息集合                                                                                             | string[]                                      | []           |
+| effectWarnings     | 人工操作的警告信息集合(在 setFieldState 中设置 warnings 会被重定向到设置 effectWarnings)                     | string[]                                      | []           |
+| ruleWarnings       | 校验规则的警告信息集合                                                                                       | string[]                                      | []           |
+| value              | 字段值                                                                                                       | any                                           |              |
+| initialValue       | 字段初始值                                                                                                   | any                                           |              |
+| rules              | 字段校验规则                                                                                                 | [ValidatePatternRules](#validatepatternrules) | []           |
+| required           | 字段是否必填                                                                                                 | boolean                                       | false        |
+| mounted            | 字段是否已挂载                                                                                               | boolean                                       | false        |
+| unmounted          | 字段是否已卸载                                                                                               | boolean                                       | false        |
+| unmountRemoveValue | 是否在卸载时自动删除字段值                                                                                   | true                                          |
+| props              | 字段扩展 UI 属性(如果是 Schema 模式，props 代表每个 SchemaField 属性，如果是 JSX 模式，则代表 FormItem 属性) | {}                                            |              |
+| 扩展状态           | 通过 setFieldState 可以直接设置扩展状态                                                                      | any                                           |              |
 
 ## VirtualFieldState
 
 VirtualFieldState 代表 VirtualField 的状态，VirtualField 是 Formily 节点树中的虚拟节点，它是无值节点，所以提交的时候，不会带值，但是我们又能控制它的具体 UI 属性，所以在 Formily 中，它更多的职责是作为布局组件而存在
 
-| 状态名      | 描述                                             | 类型    | 默认值              |
-| ----------- | ------------------------------------------------ | ------- | ------------------- |
-| displayName | VirtualField 状态标识                            | string  | "VirtualFieldState" |
-| name        | 字段数据路径                                     | string  |                     |
-| path        | 字段节点路径                                     | string  |                     |
-| initialized | 字段是否已经初始化                               | boolean | false               |
-| visible     | 字段是否显示(如果为 false，字段值不会被提交)     | boolean | true                |
-| display     | 字段是否 UI 显示(如果为 false，字段值可以被提交) | boolean | true                |
-| mounted     | 字段是否已挂载                                   | boolean | false               |
-| unmounted   | 字段是否已卸载                                   | boolean | false               |
-| props       | 字段扩展 UI 属性(如果是Schema模式，props代表每个SchemaField属性，如果是JSX模式，则代表FormItem属性)                                     | {}      |                     |
-| 扩展状态    | 通过 setFieldState 可以直接设置扩展状态          | any     |                     |
+| 状态名      | 描述                                                                                                         | 类型    | 默认值              |
+| ----------- | ------------------------------------------------------------------------------------------------------------ | ------- | ------------------- |
+| displayName | VirtualField 状态标识                                                                                        | string  | "VirtualFieldState" |
+| name        | 字段数据路径                                                                                                 | string  |                     |
+| path        | 字段节点路径                                                                                                 | string  |                     |
+| initialized | 字段是否已经初始化                                                                                           | boolean | false               |
+| visible     | 字段是否显示(如果为 false，字段值不会被提交)                                                                 | boolean | true                |
+| display     | 字段是否 UI 显示(如果为 false，字段值可以被提交)                                                             | boolean | true                |
+| mounted     | 字段是否已挂载                                                                                               | boolean | false               |
+| unmounted   | 字段是否已卸载                                                                                               | boolean | false               |
+| props       | 字段扩展 UI 属性(如果是 Schema 模式，props 代表每个 SchemaField 属性，如果是 JSX 模式，则代表 FormItem 属性) | {}      |                     |
+| 扩展状态    | 通过 setFieldState 可以直接设置扩展状态                                                                      | any     |                     |
 
 ## ValidatePatternRules
 
