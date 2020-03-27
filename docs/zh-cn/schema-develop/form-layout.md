@@ -38,7 +38,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 给SchemaForm组件传入inline属性即可把表单变成内联模式
+- 给 SchemaForm 组件传入 inline 属性即可把表单变成内联模式
 
 ## 复杂组合布局
 
@@ -322,8 +322,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 抽象了几个可复用的富文本工具方法，主要用在表达式中使用，可以快速实现很多简单的富文本文案场景
-- 每个Field都可以配一个x-props.addonAfter，可以给组件尾部追加文案
-- FormCard是卡片式布局，FormBlock是属于内联式卡片布局
+- 每个 Field 都可以配一个 x-props.addonAfter，可以给组件尾部追加文案
+- FormCard 是卡片式布局，FormBlock 是属于内联式卡片布局
 
 ## 网格布局
 
@@ -365,7 +365,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 使用FormItemGrid可以实现网格布局，如果加了title属性，就能处理FormItem维度的网格布局
+- 使用 FormItemGrid 可以实现网格布局，如果加了 title 属性，就能处理 FormItem 维度的网格布局
 
 ## 分步表单
 
@@ -388,8 +388,8 @@ import 'antd/dist/antd.css'
 
 const actions = createFormActions()
 let cache = {
-  graph:{},
-  current:0
+  graph: {},
+  current: 0
 }
 
 const App = () => (
@@ -494,7 +494,10 @@ const App = () => (
               <Button
                 onClick={() => {
                   actions.setFormGraph(cache.graph)
-                  actions.dispatch(FormStep.ON_FORM_STEP_CURRENT_CHANGE,cache.current)
+                  actions.dispatch(
+                    FormStep.ON_FORM_STEP_CURRENT_CHANGE,
+                    cache.current
+                  )
                 }}
               >
                 回滚状态
@@ -511,6 +514,97 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 使用FormStep组件需要传入dataSource，同时指定对应要控制的字段name，这个name属性是一个FormPathPattern，可以使用匹配语法匹配任何字段
-- 消费FormStep状态，主要使用FormSpy来消费，借助reducer可以自定义状态
-- 借助actions.dispatch可以手工触发FormStep的生命周期钩子
+- 使用 FormStep 组件需要传入 dataSource，同时指定对应要控制的字段 name，这个 name 属性是一个 FormPathPattern，可以使用匹配语法匹配任何字段
+- 消费 FormStep 状态，主要使用 FormSpy 来消费，借助 reducer 可以自定义状态
+- 借助 actions.dispatch 可以手工触发 FormStep 的生命周期钩子
+
+**FormStep API**
+
+## 选项卡表单
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormSpy,
+  createFormActions
+} from '@formily/antd'
+import { Input, FormTab } from '@formily/antd-components'
+import { Button } from 'antd'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const actions = createFormActions()
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      components={{ Input }}
+      actions={actions}
+      onSubmit={v => console.log(v)}
+    >
+      <FormTab>
+        <FormTab.TabPane name="tab-1" tab="选项1">
+          <Field
+            type="string"
+            name="a1"
+            title="字段1"
+            required
+            x-component="Input"
+          />
+        </FormTab.TabPane>
+        <FormTab.TabPane name="tab-2" tab="选项2">
+          <Field
+            type="string"
+            name="a2"
+            title="字段2"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a3"
+            title="字段3"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a4"
+            title="字段4"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a5"
+            title="字段5"
+            required
+            x-component="Input"
+          />
+        </FormTab.TabPane>
+      </FormTab>
+      <FormButtonGroup>
+        <Submit />
+        <Button onClick={()=>{
+          actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE,{
+            value:'tab-2'
+          })
+        }}>切换到第二个选项</Button>
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- 从@formily/antd-components中导出FormTab
+- FormTab中的渲染是会强制全部渲染的，主要是为了收集校验
+- 如果被隐藏的Tab校验错误，在Tab Title上会展现Badge小红标，同时浏览器自动滚动

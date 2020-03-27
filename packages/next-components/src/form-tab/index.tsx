@@ -9,9 +9,9 @@ import {
   SchemaField,
   FormPath
 } from '@formily/react-schema-renderer'
-import { Tabs, Badge } from 'antd'
-import { TabsProps, TabPaneProps } from 'antd/lib/tabs'
+import { Tab, Badge } from '@alifd/next'
 import { createMatchUpdate } from '../shared'
+import { TabProps, ItemProps } from '@alifd/next/types/tab'
 
 enum StateMap {
   ON_FORM_TAB_ACTIVE_KEY_CHANGE = 'onFormTabActiveKeyChange'
@@ -60,17 +60,13 @@ const addErrorBadge = (
     return FormPath.parse(path).includes(currentPath)
   })
   if (currentErrors.length > 0) {
-    return (
-      <Badge offset={[12, 0]} count={currentErrors.length}>
-        {tab}
-      </Badge>
-    )
+    return <Badge count={currentErrors.length}>{tab}</Badge>
   }
   return tab
 }
 
 type ExtendsProps = StateMap & {
-  TabPane: React.FC<TabPaneProps>
+  TabPane: React.FC<ItemProps>
 }
 
 type ExtendsState = {
@@ -78,8 +74,8 @@ type ExtendsState = {
   childrenErrors?: any
 }
 
-export const FormTab: React.FC<TabsProps> & ExtendsProps = createControllerBox<
-  TabsProps
+export const FormTab: React.FC<TabProps> & ExtendsProps = createControllerBox<
+  TabProps
 >('tab', ({ form, schema, name, path }: ISchemaVirtualFieldComponentProps) => {
   const orderProperties = schema.getOrderProperties()
   const componentProps = schema.getExtendsComponentProps()
@@ -90,6 +86,7 @@ export const FormTab: React.FC<TabsProps> & ExtendsProps = createControllerBox<
     childrenErrors: []
   })
   const items = parseTabItems(orderProperties)
+  const matchUpdate = createMatchUpdate(name, path)
   const update = (cur: string) => {
     form.notify(StateMap.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
       name,
@@ -97,7 +94,6 @@ export const FormTab: React.FC<TabsProps> & ExtendsProps = createControllerBox<
       value: cur
     })
   }
-  const matchUpdate = createMatchUpdate(name, path)
   useFormEffects(({ hasChanged }) => {
     onFormChange$().subscribe(formState => {
       const errorsChanged = hasChanged(formState, 'errors')
@@ -107,49 +103,52 @@ export const FormTab: React.FC<TabsProps> & ExtendsProps = createControllerBox<
         })
       }
     })
-    EffectHooks.onTabActiveKeyChange$().subscribe(
-      ({ value, name, path }: any = {}) => {
-        matchUpdate(name, path, () => {
-          setFieldState({
-            activeKey: value
-          })
+    EffectHooks.onTabActiveKeyChange$().subscribe(({ value, name, path }) => {
+      matchUpdate(name, path, () => {
+        setFieldState({
+          activeKey: value
         })
-      }
-    )
+      })
+    })
   })
   return (
-    <Tabs {...componentProps} activeKey={activeKey} onChange={update}>
+    <Tab
+      {...componentProps}
+      lazyLoad={false}
+      activeKey={activeKey}
+      onChange={update}
+    >
       {items.map(({ props, schema, key }) => {
         const currentPath = FormPath.parse(path).concat(key)
         return (
-          <Tabs.TabPane
+          <Tab.Item
             {...props}
-            tab={
+            title={
               activeKey === key
-                ? props.tab
-                : addErrorBadge(props.tab, currentPath, childrenErrors)
+                ? props.title || props.tab
+                : addErrorBadge(
+                    props.title || props.tab,
+                    currentPath,
+                    childrenErrors
+                  )
             }
             key={key}
-            forceRender
           >
             <SchemaField
               path={currentPath}
               schema={schema}
               onlyRenderProperties
             />
-          </Tabs.TabPane>
+          </Tab.Item>
         )
       })}
-    </Tabs>
+    </Tab>
   )
 }) as any
 
-FormTab.TabPane = createControllerBox<TabPaneProps>(
-  'tabpane',
-  ({ children }) => {
-    return <Fragment>{children}</Fragment>
-  }
-)
+FormTab.TabPane = createControllerBox<ItemProps>('tabpane', ({ children }) => {
+  return <Fragment>{children}</Fragment>
+})
 
 Object.assign(FormTab, StateMap, EffectHooks)
 

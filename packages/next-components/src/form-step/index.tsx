@@ -9,6 +9,7 @@ import {
 import { toArr } from '@formily/shared'
 import { Step } from '@alifd/next'
 import { IFormStep } from '../types'
+import { createMatchUpdate } from '../shared'
 
 enum StateMap {
   ON_FORM_STEP_NEXT = 'onFormStepNext',
@@ -31,13 +32,20 @@ type StepComponentExtendsProps = typeof StateMap
 export const FormStep: React.FC<IFormStep> &
   StepComponentExtendsProps = createControllerBox<IFormStep>(
   'step',
-  ({ form, schema, children }: ISchemaVirtualFieldComponentProps) => {
+  ({
+    name,
+    path,
+    form,
+    schema,
+    children
+  }: ISchemaVirtualFieldComponentProps) => {
     const [{ current }, setFieldState] = useFieldState({
       current: 0
     })
     const ref = useRef(current)
     const { dataSource, ...stepProps } = schema.getExtendsComponentProps()
     const items = toArr(dataSource)
+    const batchUpdate = createMatchUpdate(name, path)
     const update = (cur: number) => {
       form.notify(StateMap.ON_FORM_STEP_CURRENT_CHANGE, {
         value: cur,
@@ -53,39 +61,55 @@ export const FormStep: React.FC<IFormStep> &
           state.display = index === current
         })
       })
-      $(StateMap.ON_FORM_STEP_CURRENT_CHANGE).subscribe(({ value }) => {
-        form.hostUpdate(() => {
-          items.forEach(({ name }, index) => {
-            if (!name)
-              throw new Error(
-                'FormStep dataSource must include `name` property'
-              )
-            setFieldState(name, (state: any) => {
-              state.display = index === value
+      $(StateMap.ON_FORM_STEP_CURRENT_CHANGE).subscribe(
+        ({ value, name, path }: any = {}) => {
+          batchUpdate(name, path, () => {
+            form.hostUpdate(() => {
+              items.forEach(({ name }, index) => {
+                if (!name)
+                  throw new Error(
+                    'FormStep dataSource must include `name` property'
+                  )
+                setFieldState(name, (state: any) => {
+                  state.display = index === value
+                })
+              })
             })
+          })
+        }
+      )
+
+      $(StateMap.ON_FORM_STEP_NEXT).subscribe(({ name, path }: any = {}) => {
+        batchUpdate(name, path, () => {
+          form.validate().then(({ errors }) => {
+            if (errors.length === 0) {
+              update(
+                ref.current + 1 > items.length - 1
+                  ? ref.current
+                  : ref.current + 1
+              )
+            }
           })
         })
       })
 
-      $(StateMap.ON_FORM_STEP_NEXT).subscribe(() => {
-        form.validate().then(({ errors }) => {
-          if (errors.length === 0) {
-            update(
-              ref.current + 1 > items.length - 1 ? ref.current : ref.current + 1
-            )
-          }
-        })
-      })
-
-      $(StateMap.ON_FORM_STEP_PREVIOUS).subscribe(() => {
-        update(ref.current - 1 < 0 ? ref.current : ref.current - 1)
-      })
-
-      $(StateMap.ON_FORM_STEP_GO_TO).subscribe(payload => {
-        if (!(payload < 0 || payload > items.length)) {
-          update(payload)
+      $(StateMap.ON_FORM_STEP_PREVIOUS).subscribe(
+        ({ name, path }: any = {}) => {
+          batchUpdate(name, path, () => {
+            update(ref.current - 1 < 0 ? ref.current : ref.current - 1)
+          })
         }
-      })
+      )
+
+      $(StateMap.ON_FORM_STEP_GO_TO).subscribe(
+        ({ name, path, value }: any = {}) => {
+          batchUpdate(name, path, () => {
+            if (!(value < 0 || value > items.length)) {
+              update(value)
+            }
+          })
+        }
+      )
     })
     ref.current = current
     return (
