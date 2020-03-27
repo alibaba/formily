@@ -318,7 +318,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
       }
       if (
         unmountedChanged &&
-        (published.display !== false || published.visible === false)
+        (published.display !== false || published.visible === false) &&
+        published.unmountRemoveValue
       ) {
         if (published.unmounted) {
           if (isValid(published.value)) {

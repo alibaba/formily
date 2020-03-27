@@ -2240,6 +2240,103 @@ export default () => (
 )
 ```
 
+
+#### FormTab
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  Field,
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormSpy,
+  createFormActions
+} from '@formily/antd'
+import { Input, FormTab } from '@formily/antd-components'
+import { Button } from 'antd'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const actions = createFormActions()
+
+const App = () => (
+  <Printer>
+    <SchemaForm
+      components={{ Input }}
+      actions={actions}
+      onSubmit={v => console.log(v)}
+    >
+      <FormTab name="tabs">
+        <FormTab.TabPane name="tab-1" tab="选项1">
+          <Field
+            type="string"
+            name="a1"
+            title="字段1"
+            required
+            x-component="Input"
+          />
+        </FormTab.TabPane>
+        <FormTab.TabPane name="tab-2" tab="选项2">
+          <Field
+            type="string"
+            name="a2"
+            title="字段2"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a3"
+            title="字段3"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a4"
+            title="字段4"
+            required
+            x-component="Input"
+          />
+          <Field
+            type="string"
+            name="a5"
+            title="字段5"
+            required
+            x-component="Input"
+          />
+        </FormTab.TabPane>
+      </FormTab>
+      <FormButtonGroup>
+        <Submit />
+        <Button onClick={()=>{
+          actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE,{
+            value:'tab-2'
+          })
+        }}>切换到第二个选项</Button>
+        <Button
+          onClick={() => {
+            actions.setFieldState('tabs', state => {
+              state.props['x-component-props'] =
+                state.props['x-component-props'] || {}
+              const { hiddenKeys } = state.props['x-component-props']
+              state.props['x-component-props'].hiddenKeys =
+                hiddenKeys && hiddenKeys.length ? [] : ['tab-2']
+            })
+          }}
+        >
+          隐藏/显示第二个选项卡
+        </Button>
+      </FormButtonGroup>
+    </SchemaForm>
+  </Printer>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 #### FormLayout
 
 * IFormItemTopProps
