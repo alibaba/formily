@@ -472,6 +472,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     computeState,
     dataType,
     useDirty,
+    unmountRemoveValue,
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
@@ -486,6 +487,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           dataPath,
           computeState,
           dataType,
+          unmountRemoveValue,
           useDirty: isValid(useDirty) ? useDirty : options.useDirty
         })
       field.subscription = {
@@ -508,7 +510,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
           // initialValue > formInitialValue
           state.initialValue = isValid(initialValue)
             ? initialValue
-            : formInitialValue
+            : isValid(formInitialValue)
+            ? formInitialValue
+            : undefined
           if (isValid(visible)) {
             state.visible = visible
           }

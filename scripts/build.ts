@@ -15,7 +15,7 @@ function diagnositcReporter(diagnostic: ts.Diagnostic) {
   console.error(msg);
 }
 
-export function getCompileConfig(configPath: string, extendOptions?: ts.CompilerOptions) {
+export function getCompileConfig(configPath: string, extendOptions?: any) {
   const host: ts.ParseConfigFileHost = ts.sys as any
   host.onUnRecoverableConfigFileDiagnostic = diagnositcReporter
   const parsedCmd = ts.getParsedCommandLineOfConfigFile(configPath, extendOptions, host);
@@ -28,7 +28,7 @@ export function getCompileConfig(configPath: string, extendOptions?: ts.Compiler
 }
 
 
-export function compile(rootNames: string[], options: ts.CompilerOptions, customTransformers?: ts.CustomTransformers) {
+export function compile(rootNames: string[], options: any, customTransformers?: ts.CustomTransformers) {
   const program = ts.createProgram({ rootNames, options })
   const emitResult = program.emit(
     undefined,
