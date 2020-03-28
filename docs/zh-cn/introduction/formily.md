@@ -124,6 +124,10 @@ NPM Downloads(Formily)：![](https://img.shields.io/npm/dy/@formily/core)
 - 大文娱
 - 盒马
 - 阿里妈妈
+- 数据平台
+- 飞猪
+- ICBU
+- 口碑
 - 钉钉
 - 天猫超市、天猫国际、阿里健康、农村淘宝、淘宝心选
 
