@@ -260,9 +260,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
           field.setSourceState((state: IFieldState<FieldProps>) => {
-            if (isEmptyValue) state.value = getFormValuesIn(state.name)
-            if (isEmptyInitialValue)
-              state.initialValue = getFormInitialValuesIn(state.name)
+            if (isEmptyValue) {
+              const formValue = getFormValuesIn(state.name)
+              state.value = isValid(formValue) ? formValue : state.value
+            }
+            if (isEmptyInitialValue) {
+              const formInitialValue = getFormInitialValuesIn(state.name)
+              state.initialValue = isValid(formInitialValue)
+                ? formInitialValue
+                : state.initialValue
+            }
           })
         }
       }
@@ -472,6 +479,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     computeState,
     dataType,
     useDirty,
+    unmountRemoveValue,
     props
   }: Exclude<IFieldStateProps, 'dataPath' | 'nodePath'>): IField {
     let field: IField
@@ -486,6 +494,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           dataPath,
           computeState,
           dataType,
+          unmountRemoveValue,
           useDirty: isValid(useDirty) ? useDirty : options.useDirty
         })
       field.subscription = {
@@ -508,7 +517,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
           // initialValue > formInitialValue
           state.initialValue = isValid(initialValue)
             ? initialValue
-            : formInitialValue
+            : isValid(formInitialValue)
+            ? formInitialValue
+            : initialValue
           if (isValid(visible)) {
             state.visible = visible
           }
@@ -1014,7 +1025,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     env.submittingTask = async () => {
       // 增加onFormSubmitValidateStart来明确submit引起的校验开始了
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START, state)
-      await validate('', { throwErrors: false })
+      await validate('', { throwErrors: false, hostRendering: true })
       const validated: IFormValidateResult = state.getState(state => ({
         errors: state.errors,
         warnings: state.warnings
@@ -1074,7 +1085,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     path?: FormPathPattern,
     opts?: IFormExtendedValidateFieldOptions
   ): Promise<IFormValidateResult> {
-    const { throwErrors = true } = opts || {}
+    const { throwErrors = true, hostRendering } = opts || {}
     if (!state.getState(state => state.validating)) {
       state.setSourceState(state => {
         state.validating = true
@@ -1087,14 +1098,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    if (graph.size > 100) env.hostRendering = true
+    if (graph.size > 100 && hostRendering) env.hostRendering = true
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     state.setState(state => {
       state.validating = false
     })
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-    if (graph.size > 100) {
+    if (graph.size > 100 && hostRendering) {
       heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, state)
       env.hostRendering = false
     }
