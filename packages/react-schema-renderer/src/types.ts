@@ -46,6 +46,12 @@ export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
   ) => React.ReactElement
 }
 
+export type IVirtualBoxProps<Props> = Props & {
+  name?: string
+  visible?: boolean
+  display?: boolean
+}
+
 export interface ISchemaFieldWrapper<Props = any> {
   (Traget: ISchemaFieldComponent):
     | React.FC<Props>

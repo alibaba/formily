@@ -6,7 +6,8 @@ import { render } from '../shared/virtual-render'
 import {
   ISchemaFormProps,
   IMarkupSchemaFieldProps,
-  ISchemaVirtualFieldComponentProps
+  ISchemaVirtualFieldComponentProps,
+  IVirtualBoxProps
 } from '../types'
 
 const env = {
@@ -42,7 +43,6 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
 }
 
 SchemaMarkupField.displayName = 'SchemaMarkupField'
-
 
 export const SchemaMarkupForm: React.FC<ISchemaFormProps> = props => {
   let alreadyHasSchema = false
@@ -85,11 +85,13 @@ export function createVirtualBox<T = {}>(
         }
       : () => <Fragment />
   )
-  const VirtualBox: React.FC<T & {
-    name?: string
-    visible?: boolean
-    display?: boolean
-  }> = ({ children, name, visible, display, ...props }) => {
+  const VirtualBox: React.FC<IVirtualBoxProps<T>> = ({
+    children,
+    name,
+    visible,
+    display,
+    ...props
+  }) => {
     return (
       <SchemaMarkupField
         type="object"
@@ -111,7 +113,7 @@ export function createControllerBox<T = {}>(
   component?: React.JSXElementConstructor<ISchemaVirtualFieldComponentProps>
 ) {
   registerVirtualBox(key, component ? component : () => <Fragment />)
-  const VirtualBox: React.FC<T & { name?: string }> = ({
+  const VirtualBox: React.FC<IVirtualBoxProps<T>> = ({
     children,
     name,
     ...props
