@@ -40,6 +40,7 @@ export const FieldState = createStateModel<IFieldState, IFieldStateProps>(
       required: false,
       mounted: false,
       unmounted: false,
+      unmountRemoveValue: true,
       props: {}
     }
 

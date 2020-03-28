@@ -156,6 +156,7 @@ export interface IFieldState<FieldProps = any> {
   required: boolean
   mounted: boolean
   unmounted: boolean
+  unmountRemoveValue: boolean
   props: FieldProps
   [key: string]: any
 }
@@ -188,6 +189,7 @@ export interface IFieldStateProps<FieldProps = any> {
   rules?: ValidatePatternRules[] | ValidatePatternRules
   required?: boolean
   editable?: boolean
+  unmountRemoveValue?: boolean
   visible?: boolean
   display?: boolean
   useDirty?: boolean
