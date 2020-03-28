@@ -1,6 +1,6 @@
 {
   "name": "@formily/next-components",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -27,10 +27,10 @@
     "react-dom": ">=16.8.0"
   },
   "dependencies": {
-    "@formily/next": "^1.0.9",
-    "@formily/react-schema-renderer": "^1.0.9",
-    "@formily/react-shared-components": "^1.0.9",
-    "@formily/shared": "^1.0.9",
+    "@formily/next": "^1.0.10",
+    "@formily/react-schema-renderer": "^1.0.10",
+    "@formily/react-shared-components": "^1.0.10",
+    "@formily/shared": "^1.0.10",
     "classnames": "^2.2.6",
     "styled-components": "^4.1.1"
   },
