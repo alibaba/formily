@@ -260,9 +260,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
           field.setSourceState((state: IFieldState<FieldProps>) => {
-            if (isEmptyValue) state.value = getFormValuesIn(state.name)
-            if (isEmptyInitialValue)
-              state.initialValue = getFormInitialValuesIn(state.name)
+            if (isEmptyValue) {
+              const formValue = getFormValuesIn(state.name)
+              state.value = isValid(formValue) ? formValue : state.value
+            }
+            if (isEmptyInitialValue) {
+              const formInitialValue = getFormInitialValuesIn(state.name)
+              state.initialValue = isValid(formInitialValue)
+                ? formInitialValue
+                : state.initialValue
+            }
           })
         }
       }
@@ -512,7 +519,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             ? initialValue
             : isValid(formInitialValue)
             ? formInitialValue
-            : undefined
+            : initialValue
           if (isValid(visible)) {
             state.visible = visible
           }
