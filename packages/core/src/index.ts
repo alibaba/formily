@@ -1087,14 +1087,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
 
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, state)
-    if (graph.size > 100) env.hostRendering = true
+    // validator.validate是异步执行，异步期间，graph的数量会发生变化，所以不能动态取值
+    const graphSize = graph.size
+    if (graphSize > 100) env.hostRendering = true
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     state.setState(state => {
       state.validating = false
     })
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_END, state)
-    if (graph.size > 100) {
+    if (graphSize > 100) {
       heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, state)
       env.hostRendering = false
     }
