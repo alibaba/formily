@@ -178,3 +178,47 @@ test('visible is false will not validate(include children)', async () => {
     bb: '123'
   })
 })
+
+test('visible is expression true will show react node', async () => {
+  const TestComponent = () => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'aa': {
+          'x-component': 'string',
+          'title': 'aa',
+          'default':'123321',
+          'visible':'{{true}}'
+        },
+      }
+    }
+    return (
+      <SchemaForm schema={schema}/>
+    )
+  }
+  const { queryByText } = render(<TestComponent />)
+  await wait()
+  expect(queryByText('123321')).toBeVisible()
+})
+
+test('visible is expression false will remove react node', async () => {
+  const TestComponent = () => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'aa': {
+          'x-component': 'string',
+          'title': 'aa',
+          'default':'123321',
+          'visible':'{{false}}'
+        },
+      }
+    }
+    return (
+      <SchemaForm schema={schema}/>
+    )
+  }
+  const { queryByText } = render(<TestComponent />)
+  await wait()
+  expect(queryByText('123321')).toBeNull()
+})
