@@ -84,8 +84,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
           fieldSchema.getExtendsDisplay(),
           expressionScope
         )}
-        required={fieldSchema.getExtendsRequired()}
-        rules={fieldSchema.getExtendsRules()}
+        required={complieExpression(
+          fieldSchema.getExtendsRequired(),
+          expressionScope
+        )}
+        rules={complieExpression(
+          fieldSchema.getExtendsRules(),
+          expressionScope
+        )}
         computeState={computeSchemaState}
       >
         {({ state, mutators, form }) => {
