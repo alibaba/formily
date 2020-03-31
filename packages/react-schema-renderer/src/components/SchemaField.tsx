@@ -76,8 +76,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         dataType={fieldSchema.type}
         triggerType={fieldSchema.getExtendsTriggerType()}
         editable={fieldSchema.getExtendsEditable()}
-        visible={fieldSchema.getExtendsVisible()}
-        display={fieldSchema.getExtendsDisplay()}
+        visible={complieExpression(
+          fieldSchema.getExtendsVisible(),
+          expressionScope
+        )}
+        display={complieExpression(
+          fieldSchema.getExtendsDisplay(),
+          expressionScope
+        )}
         required={fieldSchema.getExtendsRequired()}
         rules={fieldSchema.getExtendsRules()}
         computeState={computeSchemaState}
