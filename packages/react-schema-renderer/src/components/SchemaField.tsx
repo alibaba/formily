@@ -64,7 +64,10 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return (
       <Field
         path={path}
-        initialValue={fieldSchema.default}
+        initialValue={complieExpression(
+          fieldSchema.default,
+          expressionScope
+        )}
         props={complieExpression(
           fieldSchema.getSelfProps(),
           expressionScope,
