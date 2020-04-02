@@ -121,7 +121,7 @@ test('validate in init', async () => {
   const handleSubmit = jest.fn()
   const handleValidateFailed = jest.fn()
   const TestComponent = () => {
-    const [state, setState] = useState()
+    const [state, setState] = useState<any>()
     useEffect(() => {
       act(() => {
         setState({
@@ -163,7 +163,7 @@ test('validate in editable false', async () => {
   const handleValidateFailed = jest.fn()
   const actions = createFormActions()
   const TestComponent = () => {
-    const [state, setState] = useState()
+    const [state, setState] = useState<any>()
     useEffect(() => {
       act(() => {
         setState({
@@ -237,7 +237,7 @@ test('modify required rules by setFieldState', async () => {
   await wait()
   expect(handleSubmit).toBeCalledTimes(1)
   expect(handleValidateFailed).toBeCalledTimes(0)
-  actions.setFieldState('kk', state => {
+  actions.setFieldState('kk', (state:any) => {
     state.props.required = true
   })
   await wait()
@@ -509,6 +509,7 @@ test('async validate side effect', async () => {
     target: { value: 'aaaaa' }
   })
   await wait()
+  await sleep(1000)
   expect(queryAllByText('This field is required').length).toEqual(0)
   await wait()
   fireEvent.change(queryAllByTestId('test-input')[0], {
