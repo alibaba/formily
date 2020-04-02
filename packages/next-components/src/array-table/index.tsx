@@ -137,11 +137,13 @@ export const ArrayTable = styled(
       draggable,
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
+    const schemaItems = Array.isArray(schema.items)
+      ? schema.items[schema.items.length - 1]
+      : schema.items
     const onAdd = () => {
-      const items = Array.isArray(schema.items)
-        ? schema.items[schema.items.length - 1]
-        : schema.items
-      mutators.push(items.getEmptyValue())
+      if (schemaItems) {
+        mutators.push(schemaItems.getEmptyValue())
+      }
     }
     const onMove = (dragIndex, dropIndex) => {
       mutators.move(dragIndex, dropIndex)
@@ -174,6 +176,14 @@ export const ArrayTable = styled(
         )
       })
     }
+    let columns = []
+    if (schema.items) {
+      columns = isArr(schema.items)
+        ? schema.items.reduce((buf, items) => {
+            return buf.concat(renderColumns(items))
+          }, [])
+        : renderColumns(schema.items)
+    }
     const renderTable = () => {
       return (
         <ArrayList.Wrapper
@@ -181,41 +191,39 @@ export const ArrayTable = styled(
           {...componentProps}
           dataSource={toArr(value)}
         >
-          {isArr(schema.items)
-            ? schema.items.reduce((buf, items) => {
-                return buf.concat(renderColumns(items))
-              }, [])
-            : renderColumns(schema.items)}
-          {editable && operations !== false && <ArrayList.Item
-            width={operationsWidth || 200}
-            lock="right"
-            {...operations}
-            key="operations"
-            dataIndex="operations"
-            cell={(value: any, index: number) => {
-              return (
-                <Form.Item>
-                  <div className="array-item-operator">
-                    <ArrayList.Remove
-                      index={index}
-                      onClick={() => mutators.remove(index)}
-                    />
-                    <ArrayList.MoveDown
-                      index={index}
-                      onClick={() => mutators.moveDown(index)}
-                    />
-                    <ArrayList.MoveUp
-                      index={index}
-                      onClick={() => mutators.moveUp(index)}
-                    />
-                    {isFn(renderExtraOperations)
-                      ? renderExtraOperations(index)
-                      : renderExtraOperations}
-                  </div>
-                </Form.Item>
-              )
-            }}
-          />}
+          {columns}
+          {editable && operations !== false && (
+            <ArrayList.Item
+              width={operationsWidth || 200}
+              lock="right"
+              {...operations}
+              key="operations"
+              dataIndex="operations"
+              cell={(value: any, index: number) => {
+                return (
+                  <Form.Item>
+                    <div className="array-item-operator">
+                      <ArrayList.Remove
+                        index={index}
+                        onClick={() => mutators.remove(index)}
+                      />
+                      <ArrayList.MoveDown
+                        index={index}
+                        onClick={() => mutators.moveDown(index)}
+                      />
+                      <ArrayList.MoveUp
+                        index={index}
+                        onClick={() => mutators.moveUp(index)}
+                      />
+                      {isFn(renderExtraOperations)
+                        ? renderExtraOperations(index)
+                        : renderExtraOperations}
+                    </div>
+                  </Form.Item>
+                )
+              }}
+            />
+          )}
         </ArrayList.Wrapper>
       )
     }
