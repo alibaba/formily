@@ -567,7 +567,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
           editable === false ||
           visible === false ||
           unmounted === true ||
-          display === false
+          display === false ||
+          (field as any).disabledValidate
         )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)
@@ -970,6 +971,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }: IFormResetOptions = {}): Promise<void | IFormValidateResult> {
     hostUpdate(() => {
       graph.eachChildren('', selector, (field: IField) => {
+        ;(field as any).disabledValidate = true
         field.setState((state: IFieldState<FieldProps>) => {
           state.modified = false
           state.ruleErrors = []
@@ -1005,6 +1007,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
             }
           }
         })
+        ;(field as any).disabledValidate = false
       })
     })
     if (isFn(options.onReset) && !state.state.unmounted) {

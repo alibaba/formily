@@ -57,22 +57,24 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const mutators = useMemo(() => {
     let initialized = false
     ref.current.field = form.registerField(options)
-    ref.current.subscriberId = ref.current.field.subscribe(fieldState => {
-      if (ref.current.unmounted) return
-      /**
-       * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在formily core内部
-       */
-      if (initialized) {
-        if (options.triggerType === 'onChange' && !fieldState.pristine) {
-          if (ref.current.field.hasChanged('value')) {
-            mutators.validate({ throwErrors: false })
+    ref.current.subscriberId = ref.current.field.subscribe(
+      (fieldState: IFieldState) => {
+        if (ref.current.unmounted) return
+        /**
+         * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在formily core内部
+         */
+        if (initialized) {
+          if (options.triggerType === 'onChange') {
+            if (ref.current.field.hasChanged('value')) {
+              mutators.validate({ throwErrors: false })
+            }
+          }
+          if (!form.isHostRendering()) {
+            forceUpdate()
           }
         }
-        if (!form.isHostRendering()) {
-          forceUpdate()
-        }
       }
-    })
+    )
     ref.current.uid = uid()
     initialized = true
     return extendMutators(form.createMutators(ref.current.field), options)
