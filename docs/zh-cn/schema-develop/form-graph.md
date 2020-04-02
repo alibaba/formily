@@ -271,4 +271,4 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 调用 actions.getFormGraph()可以直接查看实时表单状态树
-- 节点状态树中是有可能存在ReactNode，所以JSON.stringify打印的时候需要先将ReactNode转换一下，否则会报循环引用错误
+- 节点状态树中是有可能存在 ReactNode，所以 JSON.stringify 打印的时候需要先将 ReactNode 转换一下，否则会报循环引用错误

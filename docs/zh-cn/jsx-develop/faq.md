@@ -1,62 +1,62 @@
 # FAQ
 
 ```jsx
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
-import { SchemaForm } from "@formily/antd"; // 或者 @formily/next
-import { Input, Select, Radio } from "@formily/antd-components";
-import Printer from "@formily/printer";
-import "antd/dist/antd.css";
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import { SchemaForm } from '@formily/antd' // 或者 @formily/next
+import { Input, Select, Radio } from '@formily/antd-components'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
 
 const mockSchema = {
-  type: "object",
+  type: 'object',
   properties: {
     aa: {
-      type: "boolean",
+      type: 'boolean',
       enum: [
-        { label: "设置bb的枚举列表", value: true },
-        { label: "还原bb的枚举列表", value: false }
+        { label: '设置bb的枚举列表', value: true },
+        { label: '还原bb的枚举列表', value: false }
       ],
       default: false,
-      title: "AA",
-      "x-component": "RadioGroup",
-      "x-linkages": [
+      title: 'AA',
+      'x-component': 'RadioGroup',
+      'x-linkages': [
         {
-          type: "value:schema",
-          target: "bb",
-          condition: "{{!!$value}}",
+          type: 'value:schema',
+          target: 'bb',
+          condition: '{{!!$value}}',
           schema: {
-            enum: ["xx1", "xx2", "xx3"]
+            enum: ['xx1', 'xx2', 'xx3']
           },
           otherwise: {
-            enum: ["zz"]
+            enum: ['zz']
           }
         }
       ]
     },
     bb: {
-      type: "string",
-      title: "BB",
-      "x-component": "Input",
-      enum: ["yy"]
+      type: 'string',
+      title: 'BB',
+      'x-component': 'Input',
+      enum: ['yy']
     },
     cc: {
-      type: "string",
-      title: "{{customCCTitle}}",
-      "x-component": "Input"
+      type: 'string',
+      title: '{{customCCTitle}}',
+      'x-component': 'Input'
     }
   }
-};
+}
 
 const App = () => {
   const [schema, setSchema] = useState({
-    type: "object"
-  });
+    type: 'object'
+  })
   useEffect(() => {
     setTimeout(() => {
-      setSchema(mockSchema);
-    }, 1000);
-  }, []);
+      setSchema(mockSchema)
+    }, 1000)
+  }, [])
 
   return (
     <Printer>
@@ -64,17 +64,16 @@ const App = () => {
         schema={schema}
         components={{ Input, Select, RadioGroup: Radio.Group }}
         onSubmit={values => {
-          console.log(values);
+          console.log(values)
         }}
         expressionScope={{
-          customTitle: "this is custom title",
-          customCCTitle: "CC"
+          customTitle: 'this is custom title',
+          customCCTitle: 'CC'
         }}
       />
     </Printer>
-  );
-};
+  )
+}
 
-ReactDOM.render(<App />, document.getElementById("root"));
-
+ReactDOM.render(<App />, document.getElementById('root'))
 ```

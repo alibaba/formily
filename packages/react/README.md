@@ -210,9 +210,7 @@ const App = () => {
         name="age"
         rules={[
           val =>
-            !val
-              ? { type: 'error', message: 'age is required' }
-              : undefined
+            !val ? { type: 'error', message: 'age is required' } : undefined
         ]}
       />
 
@@ -547,7 +545,6 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 #### display visible
 
 Example: see how `display` 与 `visible` affect values
@@ -555,24 +552,36 @@ Example: see how `display` 与 `visible` affect values
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, LifeCycleTypes, FormSpy } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  LifeCycleTypes,
+  FormSpy
+} from '@formily/react'
 
 const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -581,14 +590,24 @@ const CheckedField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
-            mutators.change(!state.value)
-          }} checked={!!state.value} /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                mutators.change(!state.value)
+              }}
+              checked={!!state.value}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -600,48 +619,51 @@ const App = () => {
       actions={actions}
       effects={($, { validate, setFieldState }) => {
         $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {
-          setFieldState('displayTrigger', state => state.value = true)
-          setFieldState('visibleTrigger', state => state.value = true)
-          setFieldState('a', state => state.value = 1)
-          setFieldState('b', state => state.value = 2)
+          setFieldState('displayTrigger', state => (state.value = true))
+          setFieldState('visibleTrigger', state => (state.value = true))
+          setFieldState('a', state => (state.value = 1))
+          setFieldState('b', state => (state.value = 2))
         })
 
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'visibleTrigger').subscribe((fieldState) => {
-          setFieldState('a', state => {
-            state.visible = fieldState.value
-          })
-        })
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'visibleTrigger').subscribe(
+          fieldState => {
+            setFieldState('a', state => {
+              state.visible = fieldState.value
+            })
+          }
+        )
 
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'displayTrigger').subscribe((fieldState) => {
-          setFieldState('b', state => {
-            state.display = fieldState.value
-          })
-        })
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'displayTrigger').subscribe(
+          fieldState => {
+            setFieldState('b', state => {
+              state.display = fieldState.value
+            })
+          }
+        )
       }}
     >
       <div>
-      <CheckedField label="visible" name="visibleTrigger"/>
+        <CheckedField label="visible" name="visibleTrigger" />
 
-      <InputField name="a" label="a" />
+        <InputField name="a" label="a" />
       </div>
       <div>
-        <CheckedField label="display" name="displayTrigger"/>
-      <InputField name="b" label="b" />
+        <CheckedField label="display" name="displayTrigger" />
+        <InputField name="b" label="b" />
       </div>
 
       <FormSpy>
         {({ state, form }) => {
-          return (<div>
-            {JSON.stringify(form.getFormState(state => state.values))}
-          </div>)
+          return (
+            <div>
+              {JSON.stringify(form.getFormState(state => state.values))}
+            </div>
+          )
         }}
       </FormSpy>
 
-
       <button
-        onClick={() =>
-          console.log(actions.getFormState(state => state.values))
-        }
+        onClick={() => console.log(actions.getFormState(state => state.values))}
       >
         print
       </button>
@@ -651,7 +673,6 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-
 
 #### Linkage
 
@@ -666,18 +687,24 @@ const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -686,14 +713,24 @@ const CheckedField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
-            mutators.change(!state.value)
-          }} checked={!!state.value} /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                mutators.change(!state.value)
+              }}
+              checked={!!state.value}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -705,16 +742,18 @@ const App = () => {
       actions={actions}
       effects={($, { setFieldState }) => {
         $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {
-          setFieldState('a~', state => state.visible = false)
+          setFieldState('a~', state => (state.visible = false))
         })
 
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe((triggerState) => {
-          setFieldState('a~', state => {
-            state.visible = triggerState.value
-          })
-        })
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe(
+          triggerState => {
+            setFieldState('a~', state => {
+              state.visible = triggerState.value
+            })
+          }
+        )
 
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe((fieldState) => {
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe(fieldState => {
           setFieldState('a-copy', state => {
             state.value = fieldState.value
           })
@@ -748,18 +787,24 @@ const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -767,14 +812,24 @@ const CheckedField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
-            mutators.change(!state.value)
-          }} checked={!!state.value} /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                mutators.change(!state.value)
+              }}
+              checked={!!state.value}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -783,20 +838,28 @@ const SelectField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const { loading, dataSource = [] } = state.props
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <select
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        >
-          {dataSource.map(item => (<option value ={item.value}>{item.label}</option>))}
-        </select>}
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <select
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            >
+              {dataSource.map(item => (
+                <option value={item.value}>{item.label}</option>
+              ))}
+            </select>
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -807,8 +870,12 @@ const App = () => {
     <Form
       actions={actions}
       effects={($, { setFieldState }) => {
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe((fieldState) => {
-            const dataSource = [{ label: 'aa', value: 'aa' }, { label: 'bb', value: 'bb' } ]
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe(
+          fieldState => {
+            const dataSource = [
+              { label: 'aa', value: 'aa' },
+              { label: 'bb', value: 'bb' }
+            ]
             setFieldState('sync-source', state => {
               state.props.dataSource = fieldState.value ? dataSource : []
             })
@@ -822,7 +889,8 @@ const App = () => {
                 state.props.dataSource = fieldState.value ? dataSource : []
               })
             }, 300)
-        })
+          }
+        )
       }}
     >
       <CheckedField name="trigger" label="show/reset dataSource" />
@@ -852,18 +920,24 @@ const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -878,7 +952,7 @@ const App = () => {
           validate()
         })
 
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe((fieldState) => {
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe(fieldState => {
           setFieldState('a-copy', state => {
             state.value = fieldState.value
           })
@@ -887,7 +961,7 @@ const App = () => {
     >
       <InputField label="a" name="a" />
       <div>
-        <InputField label="a-copy" name="a-copy" required/>
+        <InputField label="a-copy" name="a-copy" required />
       </div>
     </Form>
   )
@@ -909,18 +983,24 @@ const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -937,87 +1017,98 @@ const App = () => {
           })
         })
 
-        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe((fieldState) => {
-          setFieldState('userList.*.username', state => {
-            state.visible = fieldState.value
-          })
-        })
+        $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe(
+          fieldState => {
+            setFieldState('userList.*.username', state => {
+              state.visible = fieldState.value
+            })
+          }
+        )
       }}
     >
       <div>
-      <Field name="trigger" label="show/hide username">
-        {({ state, mutators }) => {
-          return <input type="checkbox" onChange={mutators.change} checked={state.value ? 'checked' : undefined } />
-        }}
-      </Field>
+        <Field name="trigger" label="show/hide username">
+          {({ state, mutators }) => {
+            return (
+              <input
+                type="checkbox"
+                onChange={mutators.change}
+                checked={state.value ? 'checked' : undefined}
+              />
+            )
+          }}
+        </Field>
       </div>
       <div>
-        <Field initialValue={[
-          { username: 'bobby', age: 22 },
-          { username: 'lily', age: 21 }
-        ]} name="userList">
+        <Field
+          initialValue={[
+            { username: 'bobby', age: 22 },
+            { username: 'lily', age: 21 }
+          ]}
+          name="userList"
+        >
           {({ state, mutators }) => {
-          return (
-            <React.Fragment>
-              {state.value.map((item, index) => {
-                return (
-                  <div key={index}>
-                    <Field name={`userList[${index}]`} initialValue={{}}>
-                      {({ state: innerState, mutators: innerMutator }) => {
-                        return (
-                          <React.Fragment>
-                            {Object.keys(innerState.value).map(key => {
-                              if (!innerMutator.exist(key)) return
-                              return (
-                                <React.Fragment key={key}>
-                                  <InputField
-                                    label={key}
-                                    name={`userList[${index}].${key}`}
-                                  />
-                                </React.Fragment>
-                              )
-                            })}
-                            <button
-                              onClick={() => {
-                                innerMutator.change({
-                                  ...innerState.value,
-                                  [new Date().getTime()]: new Date().getTime()
-                                })
-                              }}
-                            >
-                              +
-                            </button>
-                          </React.Fragment>
-                        )
-                      }}
-                    </Field>
+            return (
+              <React.Fragment>
+                {state.value.map((item, index) => {
+                  return (
+                    <div key={index}>
+                      <Field name={`userList[${index}]`} initialValue={{}}>
+                        {({ state: innerState, mutators: innerMutator }) => {
+                          return (
+                            <React.Fragment>
+                              {Object.keys(innerState.value).map(key => {
+                                if (!innerMutator.exist(key)) return
+                                return (
+                                  <React.Fragment key={key}>
+                                    <InputField
+                                      label={key}
+                                      name={`userList[${index}].${key}`}
+                                    />
+                                  </React.Fragment>
+                                )
+                              })}
+                              <button
+                                onClick={() => {
+                                  innerMutator.change({
+                                    ...innerState.value,
+                                    [new Date().getTime()]: new Date().getTime()
+                                  })
+                                }}
+                              >
+                                +
+                              </button>
+                            </React.Fragment>
+                          )
+                        }}
+                      </Field>
 
-                    <button onClick={() => mutators.remove(index)}>
-                      Remove
-                    </button>
-                  </div>
-                )
-              })}
-              <button
-                onClick={() =>
-                  mutators.push({
-                    username: undefined,
-                    age: undefined
-                  })
-                }
-              >
-                Add Item
-              </button>
-              <button
-                onClick={() =>
-                  console.log(actions.getFormState(state => state.values))
-                }
-              >
-                print
-              </button>
-            </React.Fragment>
-          )
-        }}
+                      <button onClick={() => mutators.remove(index)}>
+                        Remove
+                      </button>
+                    </div>
+                  )
+                })}
+                <button
+                  onClick={() =>
+                    mutators.push({
+                      username: undefined,
+                      age: undefined
+                    })
+                  }
+                >
+                  Add Item
+                </button>
+                <button
+                  onClick={() =>
+                    console.log(actions.getFormState(state => state.values))
+                  }
+                >
+                  print
+                </button>
+              </React.Fragment>
+            )
+          }}
         </Field>
       </div>
     </Form>
@@ -1036,23 +1127,28 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Form, Field, createFormActions, FormEffectHooks } from '@formily/react'
 
-
 const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -1060,36 +1156,46 @@ const CheckedField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
-            mutators.change(!state.value)
-          }} checked={!!state.value} /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                mutators.change(!state.value)
+              }}
+              checked={!!state.value}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
 
-const { onFormMount$, onFieldValueChange$  } = FormEffectHooks
-const getEffects = ()=>{
-   const actions = createFormActions()
-   onFormMount$().subscribe(() => {
-      actions.setFieldState('a~', state => state.visible = false)
-    })
+const { onFormMount$, onFieldValueChange$ } = FormEffectHooks
+const getEffects = () => {
+  const actions = createFormActions()
+  onFormMount$().subscribe(() => {
+    actions.setFieldState('a~', state => (state.visible = false))
+  })
 
-    onFieldValueChange$('trigger').subscribe((triggerState) => {
-      actions.setFieldState('a~', state => {
-        state.visible = triggerState.value
-      })
+  onFieldValueChange$('trigger').subscribe(triggerState => {
+    actions.setFieldState('a~', state => {
+      state.visible = triggerState.value
     })
+  })
 
-    onFieldValueChange$('a').subscribe((fieldState) => {
-      actions.setFieldState('a-copy', state => {
-        state.value = fieldState.value
-      })
+  onFieldValueChange$('a').subscribe(fieldState => {
+    actions.setFieldState('a-copy', state => {
+      state.value = fieldState.value
     })
+  })
 }
 
 const actions = createFormActions()
@@ -1182,7 +1288,13 @@ Example：Cross-file consumption form state, Check [FormProvider](#FormProvider)
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  FormSpy,
+  FormProvider
+} from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1241,45 +1353,68 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  FormSpy,
+  FormPath
+} from '@formily/react'
 
 const actions = createFormActions()
 
 const App = () => {
   return (
-    <Form actions={actions} >
+    <Form actions={actions}>
       <label>range input</label>
       <Field name="[start,end]">
         {({ state, mutators }) => {
-
           const [start, end] = state.value
-          return <div>
-            <label>start</label>
-            <input value={start} onChange={(e) => {
-              mutators.change([e.target.value, end])
-            }} />
-            <label>end</label>
-            <input value={end} onChange={(e) => {
-              mutators.change([start, e.target.value])
-            }} />
-          </div>
+          return (
+            <div>
+              <label>start</label>
+              <input
+                value={start}
+                onChange={e => {
+                  mutators.change([e.target.value, end])
+                }}
+              />
+              <label>end</label>
+              <input
+                value={end}
+                onChange={e => {
+                  mutators.change([start, e.target.value])
+                }}
+              />
+            </div>
+          )
         }}
       </Field>
-      <button onClick={() => {
-        actions.setFormState(state => {
-          state.values = { start: 'x', end: 'y' }
-        })
-      }}>set value</button>
+      <button
+        onClick={() => {
+          actions.setFormState(state => {
+            state.values = { start: 'x', end: 'y' }
+          })
+        }}
+      >
+        set value
+      </button>
       <FormSpy>
         {({ state, form }) => {
-          return (<div>
-            Form values:
-            <code>
-              <pre>
-                {JSON.stringify(form.getFormState(state => state.values), null, 2)}
-              </pre>
-            </code>
-          </div>)
+          return (
+            <div>
+              Form values:
+              <code>
+                <pre>
+                  {JSON.stringify(
+                    form.getFormState(state => state.values),
+                    null,
+                    2
+                  )}
+                </pre>
+              </code>
+            </div>
+          )
         }}
       </FormSpy>
     </Form>
@@ -1294,83 +1429,109 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormPath } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  FormSpy,
+  FormPath
+} from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
 
-
 const App = () => {
   return (
-    <Form actions={actions} >
+    <Form actions={actions}>
       <Field name="{aa:{bb:{cc:destructor1,dd:[destructor2,destructor3],ee}}}">
         {({ state, mutators }) => {
-          return <div>
-            <button
-              onClick={() => {
-                mutators.change({
-                  aa: {
-                    bb: {
-                      cc: 123,
-                      dd: [333, 444],
-                      ee: 'abcde'
+          return (
+            <div>
+              <button
+                onClick={() => {
+                  mutators.change({
+                    aa: {
+                      bb: {
+                        cc: 123,
+                        dd: [333, 444],
+                        ee: 'abcde'
+                      }
                     }
-                  }
-                })
-              }}
-            >
-              set value
-            </button>
-            <div>Field value:</div>
-            <code>
-              <pre>{JSON.stringify(state.value, null, 2)}</pre>
-            </code>
-          </div>
+                  })
+                }}
+              >
+                set value
+              </button>
+              <div>Field value:</div>
+              <code>
+                <pre>{JSON.stringify(state.value, null, 2)}</pre>
+              </code>
+            </div>
+          )
         }}
       </Field>
-      <button onClick={() => {
-        actions.setFieldState(FormPath.match('[[{aa:{bb:{cc:destructor1,dd:\\[destructor2,destructor3\\],ee}}}]]'), state => {
-          state.value = {
-            aa: {
-              bb: {
-                cc: 'a',
-                dd: ['b', 'c'],
-                ee: 'd'
+      <button
+        onClick={() => {
+          actions.setFieldState(
+            FormPath.match(
+              '[[{aa:{bb:{cc:destructor1,dd:\\[destructor2,destructor3\\],ee}}}]]'
+            ),
+            state => {
+              state.value = {
+                aa: {
+                  bb: {
+                    cc: 'a',
+                    dd: ['b', 'c'],
+                    ee: 'd'
+                  }
+                }
               }
             }
-          }
-        })
-      }}>
+          )
+        }}
+      >
         outside set
       </button>
       <FormSpy>
         {({ state, form }) => {
-          return (<div>
-            Form values:
-            <code>
-              <pre>
-                {JSON.stringify(form.getFormState(state => state.values), null, 2)}
-              </pre>
-            </code>
-          </div>)
+          return (
+            <div>
+              Form values:
+              <code>
+                <pre>
+                  {JSON.stringify(
+                    form.getFormState(state => state.values),
+                    null,
+                    2
+                  )}
+                </pre>
+              </code>
+            </div>
+          )
         }}
       </FormSpy>
     </Form>
@@ -1625,13 +1786,9 @@ const App = () => {
             )
           }}
         </Field>
-
-
       </div>
       <button
-        onClick={() =>
-          console.log(actions.getFormState(state => state.values))
-        }
+        onClick={() => console.log(actions.getFormState(state => state.values))}
       >
         print
       </button>
@@ -1765,7 +1922,13 @@ Example1： Form state change counter
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, LifeCycleTypes } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  FormSpy,
+  LifeCycleTypes
+} from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1808,7 +1971,6 @@ const App = () => {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
-
 ```
 
 Example2：Combo
@@ -1868,11 +2030,16 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **Usage**
 
-
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, FormSpy, FormProvider } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  FormSpy,
+  FormProvider
+} from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
@@ -1940,13 +2107,12 @@ interface IFormConsumerProps {
 }
 ```
 
-
 ### Hook
 
 #### `useFormEffects`
 
 > Implement local effects by using useFormEffects. Same effect as the example of [Linkage](#Linkage)
-> Note: The life cycle of the listener starts from  `ON_FORM_MOUNT` 
+> Note: The life cycle of the listener starts from `ON_FORM_MOUNT`
 
 **Signature**
 
@@ -1957,25 +2123,37 @@ interface IFormConsumerProps {
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, createFormActions, useFormEffects, LifeCycleTypes } from '@formily/react'
+import {
+  Form,
+  Field,
+  createFormActions,
+  useFormEffects,
+  LifeCycleTypes
+} from '@formily/react'
 
 const actions = createFormActions()
 const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -1984,14 +2162,24 @@ const CheckedField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input type="checkbox" onChange={() => {
-            mutators.change(!state.value)
-          }} checked={!!state.value} /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              type="checkbox"
+              onChange={() => {
+                mutators.change(!state.value)
+              }}
+              checked={!!state.value}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
@@ -1999,16 +2187,18 @@ const CheckedField = props => (
 const FormFragment = () => {
   useFormEffects(($, { setFieldState }) => {
     $(LifeCycleTypes.ON_FORM_INIT).subscribe(() => {
-      setFieldState('a~', state => state.visible = false)
+      setFieldState('a~', state => (state.visible = false))
     })
 
-    $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe((triggerState) => {
-      setFieldState('a~', state => {
-        state.visible = triggerState.value
-      })
-    })
+    $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'trigger').subscribe(
+      triggerState => {
+        setFieldState('a~', state => {
+          state.visible = triggerState.value
+        })
+      }
+    )
 
-    $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe((fieldState) => {
+    $(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, 'a').subscribe(fieldState => {
       setFieldState('a-copy', state => {
         state.value = fieldState.value
       })
@@ -2030,9 +2220,7 @@ const FormFragment = () => {
 
 const App = () => {
   return (
-    <Form
-      actions={actions}
-    >
+    <Form actions={actions}>
       <FormFragment />
     </Form>
   )
@@ -2043,7 +2231,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### `useFormState`
 
-> 使用 useFormState 为自定义组件提供FormState扩展和管理能力
+> 使用 useFormState 为自定义组件提供 FormState 扩展和管理能力
 
 **签名**
 
@@ -2056,8 +2244,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, VirtualField,
-  createFormActions, createEffectHook,
+import {
+  Form,
+  Field,
+  VirtualField,
+  createFormActions,
+  createEffectHook,
   useForm,
   useFormState,
   useFormEffects,
@@ -2069,33 +2261,45 @@ const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
 
 const actions = createFormActions()
-const FormFragment = (props) => {
-  const [formState, setFormState ] = useFormState({ extendVar: 0 })
+const FormFragment = props => {
+  const [formState, setFormState] = useFormState({ extendVar: 0 })
   const { extendVar } = formState
 
-  return <div>
-    <button onClick={() => {
-      setFormState({ extendVar: extendVar + 1 })
-    }}>add</button>
-    <div>count: {extendVar}</div>
-  </div>
+  return (
+    <div>
+      <button
+        onClick={() => {
+          setFormState({ extendVar: extendVar + 1 })
+        }}
+      >
+        add
+      </button>
+      <div>count: {extendVar}</div>
+    </div>
+  )
 }
 
 const App = () => {
@@ -2122,8 +2326,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import { Form, Field, VirtualField,
-  createFormActions, createEffectHook,
+import {
+  Form,
+  Field,
+  VirtualField,
+  createFormActions,
+  createEffectHook,
   useForm,
   useFormEffects,
   useFieldState,
@@ -2134,31 +2342,37 @@ const InputField = props => (
   <Field {...props}>
     {({ state, mutators }) => {
       const loading = state.props.loading
-      return <React.Fragment>
-        { props.label && <label>{props.label}</label> }
-        { loading ? ' loading... ' : <input
-          disabled={!state.editable}
-          value={state.value || ''}
-          onChange={mutators.change}
-          onBlur={mutators.blur}
-          onFocus={mutators.focus}
-        /> }
-        <span style={{ color: 'red' }}>{state.errors}</span>
-        <span style={{ color: 'orange' }}>{state.warnings}</span>
-      </React.Fragment>
+      return (
+        <React.Fragment>
+          {props.label && <label>{props.label}</label>}
+          {loading ? (
+            ' loading... '
+          ) : (
+            <input
+              disabled={!state.editable}
+              value={state.value || ''}
+              onChange={mutators.change}
+              onBlur={mutators.blur}
+              onFocus={mutators.focus}
+            />
+          )}
+          <span style={{ color: 'red' }}>{state.errors}</span>
+          <span style={{ color: 'orange' }}>{state.warnings}</span>
+        </React.Fragment>
+      )
     }}
   </Field>
 )
 
 const changeTab$ = createEffectHook('changeTab')
 const actions = createFormActions()
-const TabFragment = (props) => {
-  const [fieldState, setLocalFieldState ] = useFieldState({ current: 0 })
+const TabFragment = props => {
+  const [fieldState, setLocalFieldState] = useFieldState({ current: 0 })
   const { current } = fieldState
   const { children, dataSource, form } = props
   const ref = useRef(current)
 
-  const update = (cur) => {
+  const update = cur => {
     form.notify('changeTab', cur)
     setLocalFieldState({
       current: cur
@@ -2172,45 +2386,57 @@ const TabFragment = (props) => {
       })
     })
 
-    changeTab$().subscribe((idx) => {
+    changeTab$().subscribe(idx => {
       dataSource.forEach((item, itemIdx) => {
-      setFieldState(item.name, state => {
-        state.display = itemIdx === idx
+        setFieldState(item.name, state => {
+          state.display = itemIdx === idx
+        })
       })
-    })
     })
   })
 
   ref.current = current
   const btns = dataSource.map((item, idx) => {
     console.log('current', current, ref.current)
-    const focusStyle = idx === current ? { color: '#fff', background: 'blue' } : {}
-    return <button style={focusStyle} onClick={() => {
-      update(idx)
-    }}>{item.label}</button>
+    const focusStyle =
+      idx === current ? { color: '#fff', background: 'blue' } : {}
+    return (
+      <button
+        style={focusStyle}
+        onClick={() => {
+          update(idx)
+        }}
+      >
+        {item.label}
+      </button>
+    )
   })
 
   return btns
 }
 
-const FormTab = (props) => {
-  return <VirtualField name="layout_tab">
-    {({ form }) => {
-      return <TabFragment {...props} form={form} />
-    }}
-  </VirtualField>
+const FormTab = props => {
+  return (
+    <VirtualField name="layout_tab">
+      {({ form }) => {
+        return <TabFragment {...props} form={form} />
+      }}
+    </VirtualField>
+  )
 }
 
 const App = () => {
   return (
     <Form actions={actions}>
-      <FormTab dataSource={[
-        { label: 'tab-1', name: 'username' },
-        { label: 'tab-2', name: 'age' }
-      ]} />
+      <FormTab
+        dataSource={[
+          { label: 'tab-1', name: 'username' },
+          { label: 'tab-2', name: 'age' }
+        ]}
+      />
       <div>
-        <InputField name="username" label="username"/>
-        <InputField name="age" label="age"/>
+        <InputField name="username" label="username" />
+        <InputField name="age" label="age" />
       </div>
     </Form>
   )
@@ -2262,15 +2488,19 @@ type useField = (options: IFieldStateUIProps): IFieldHook
 ```typescript
 import { useField } from '@formily/react'
 
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    props: fieldProps,
-    mutators
-  } = useField({ name: 'username' })
+const FormFragment = props => {
+  const { form, state, props: fieldProps, mutators } = useField({
+    name: 'username'
+  })
 
-  return <input {...fieldProps} {...props} value={state.value} onChange={mutators.change} />
+  return (
+    <input
+      {...fieldProps}
+      {...props}
+      value={state.value}
+      onChange={mutators.change}
+    />
+  )
 }
 ```
 
@@ -2289,16 +2519,16 @@ type UseVirtualField = (options: IVirtualFieldStateProps): IVirtualFieldHook
 ```typescript
 import { UseVirtualField } from '@formily/react'
 
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    props: fieldProps,
-  } = UseVirtualField({ name: 'username' })
+const FormFragment = props => {
+  const { form, state, props: fieldProps } = UseVirtualField({
+    name: 'username'
+  })
 
-  return <div style={{ width: fieldProps.width, height: fieldProps.height }}>
-    {props.children}
-  </div>
+  return (
+    <div style={{ width: fieldProps.width, height: fieldProps.height }}>
+      {props.children}
+    </div>
+  )
 }
 ```
 
@@ -2316,21 +2546,19 @@ type useFormSpy = (props: IFormSpyProps): ISpyHook
 
 ```typescript
 import { useFormSpy, LifeCycleTypes } from '@formily/react'
-const FormFragment = (props) => {
-  const {
-    form,
-    state,
-    type,
-  } = useFormSpy({
+const FormFragment = props => {
+  const { form, state, type } = useFormSpy({
     selector: LifeCycleTypes.ON_FORM_VALUES_CHANGE,
     reducer: (state, action, form) => ({
       count: state.count ? state.count + 1 : 1
     })
   })
 
-  return <div>
-    <div>count: {state.count || 0}</div>
-  </div>
+  return (
+    <div>
+      <div>count: {state.count || 0}</div>
+    </div>
+  )
 }
 ```
 
@@ -2489,21 +2717,29 @@ const App = () => {
     <Form
       actions={actions}
       effects={() => {
-        diyHook1$().subscribe((payload) => {
+        diyHook1$().subscribe(payload => {
           console.log('diy1 hook triggered', payload)
         })
 
-        diyHook2$().subscribe((payload) => {
+        diyHook2$().subscribe(payload => {
           console.log('diy2 hook triggered', payload)
         })
       }}
     >
-      <button onClick={() => {
-        actions.notify('diy1', { index: 1 })
-      }}>notify diy1</button>
-      <button onClick={() => {
-        actions.notify('diy2', { index: 2 })
-      }}>notify diy2</button>
+      <button
+        onClick={() => {
+          actions.notify('diy1', { index: 1 })
+        }}
+      >
+        notify diy1
+      </button>
+      <button
+        onClick={() => {
+          actions.notify('diy2', { index: 2 })
+        }}
+      >
+        notify diy2
+      </button>
     </Form>
   )
 }
@@ -2511,219 +2747,167 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 ### Interfaces
 
 > The Interfaces is fully inherited from @formily/core. The specific Interfaces of @formily/react is listed below.
 
 ---
 
-####  IForm
-
-
+#### IForm
 
 > Form instance object API created by using createForm
 
-
-
 ```typescript
 interface IForm {
-  /*
-   * Form submission, if the callback parameter returns Promise,
-   * Then the entire submission process will hold and load is true.
-   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
-   */
-   submit(
-      onSubmit?: (values: IFormState['values']) => any | Promise<any>
-    ): Promise<{
-       Validated: IFormValidateResult
-       Payload: any //onSubmit callback function return value
-   }>
-   
-   /*
-    * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
-    * For example, clearErrors("*(aa,bb,cc)")
-    */
-   clearErrors: (pattern?: FormPathPattern) => void
-   
-   /*
-    * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
-    * For example, hasChanged(state,'value.aa')
-    */
-   hasChanged(target: IFormState | IFieldState | IVirtualFieldState, path: FormPathPattern): boolean
-   
-   /*
-    * Reset form
-    */
-   reset(options?: {
-     // Forced to empty
-     forceClear?: boolean
-     // Forced check
-     validate?: boolean
-     // Reset range for batch or precise control of the field to be reset
-     selector?: FormPathPattern
-     //clear initialValue
-     clearInitialValue?:boolean
-   }): Promise<void | IFormValidateResult>
-   
-   /*
-    * Validation form
-    */
-   validate(path?: FormPathPattern, options?: {
-     // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
-     first?:boolean
-   }): Promise<IFormValidateResult>
-   
-   /*
-    * Set the form status
-    */
-   setFormState(
-     // Operation callback
-     callback?: (state: IFormState) => any,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get form status
-    */
-   getFormState(
-     //transformer
-     callback?: (state: IFormState) => any
-   ): any
-   
-   /*
-    * Set the field status
-    */
-   setFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Operation callback
-     callback?: (state: IFieldState) => void,
-     // No trigger the event
-     silent?: boolean
-   ): void
-   
-   /*
-    * Get the field status
-    */
-   getFieldState(
-     // Field path
-     path: FormPathPattern,
-     // Transformer
-     callback?: (state: IFieldState) => any
-   ): any
-   
-   /*
-    * Registration field
-    */
-   registerField(props: {
-    // Node path
-    path?: FormPathPattern
-    // Data path
-    name?: string
-    // Field value
-    value?: any
-    // Field multi-value
-    values?: any[]
-    // Field initial value
-    initialValue?: any
-    // Field extension properties
-    props?: any
-    // Field check rule
-    rules?: ValidatePatternRules[]
-    // Field is required
-    required?: boolean
-    // Is the field editable?
-    editable?: boolean
-    // Whether the field is dirty check
-    useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IField
-  
-  /*
-   * Register virtual fields
-   */
-  registerVirtualField(props: {
-    // Node path
-    path?: FormPathPattern
-    // Data path
-    name?: string
-    // Field extension properties
-    props?: any
-    // Whether the field is dirty check
-    useDirty?: boolean
-    // Field state calculation container, mainly used to extend the core linkage rules
-    computeState?: (draft: IFieldState, prevState: IFieldState) => void
-  }): IVirtualField
-  
-  /*
-   * Create a field data operator, which will explain the returned API in detail later.
-   */
-  createMutators(field: IField | FormPathPattern): IMutators
-  
-  /*
-   * Get the form observer tree
-   */
-  getFormGraph(): IFormGraph
-  
-  /*
-   * Set the form observer tree
-   */
-  setFormGraph(graph: IFormGraph): void
-  
-  /*
-   * Listen to the form life cycle
-   */
-  subscribe(callback?: ({
-    type,
-    payload
-  }: {
-    type: string
-    payload: any
-  }) => void): number
-  
-  /*
-   * Cancel the listening form life cycle
-   */
-  unsubscribe(id: number): void
-  
-  /*
-   * Trigger form custom life cycle
-   */
-  notify: <T>(type: string, payload?: T) => void
-  
-  /*
-   * Set the field value
-   */
-  setFieldValue(path?: FormPathPattern, value?: any): void
-  
-  /*
-   * Get the field value
-   */
-  getFieldValue(path?: FormPathPattern): any
-  
-  /*
-   * Set the initial value of the field
-   */
-  setFieldInitialValue(path?: FormPathPattern, value?: any): void
-  
-  /*
-   * Get the initial value of the field
-   */
-  getFieldInitialValue(path?: FormPathPattern): any
+  /*
+   * Form submission, if the callback parameter returns Promise,
+   * Then the entire submission process will hold and load is true.
+   * Wait for Promise resolve to trigger the form onFormSubmitEnd event while loading is false
+   */
+  submit(
+    onSubmit?: (values: IFormState['values']) => any | Promise<any>
+  ): Promise<{
+    Validated: IFormValidateResult
+    Payload: any //onSubmit callback function return value
+  }>
+  /*
+   * Clear the error message, you can pass the FormPathPattern to batch or precise control of the field to be cleared.
+   * For example, clearErrors("*(aa,bb,cc)")
+   */
+  clearErrors: (pattern?: FormPathPattern) => void
+  /*
+   * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
+   * For example, hasChanged(state,'value.aa')
+   */
+  hasChanged(
+    target: IFormState | IFieldState | IVirtualFieldState,
+    path: FormPathPattern
+  ): boolean
+  /*
+   * Reset form
+   */
+  reset(options?: {
+    // Forced to empty
+    forceClear?: boolean // Forced check
+    validate?: boolean // Reset range for batch or precise control of the field to be reset
+    selector?: FormPathPattern
+    //clear initialValue
+    clearInitialValue?: boolean
+  }): Promise<void | IFormValidateResult>
+  /*
+   * Validation form
+   */
+  validate(
+    path?: FormPathPattern,
+    options?: {
+      // Is it pessimistic check, if the current field encounters the first verification error, stop the subsequent verification process
+      first?: boolean
+    }
+  ): Promise<IFormValidateResult>
+  /*
+   * Set the form status
+   */
+  setFormState( // Operation callback
+    callback?: (state: IFormState) => any, // No trigger the event
+    silent?: boolean
+  ): void
+  /*
+   * Get form status
+   */
+  getFormState( //transformer
+    callback?: (state: IFormState) => any
+  ): any
+  /*
+   * Set the field status
+   */
+  setFieldState( // Field path
+    path: FormPathPattern, // Operation callback
+    callback?: (state: IFieldState) => void, // No trigger the event
+    silent?: boolean
+  ): void
+  /*
+   * Get the field status
+   */
+  getFieldState( // Field path
+    path: FormPathPattern, // Transformer
+    callback?: (state: IFieldState) => any
+  ): any
+  /*
+   * Registration field
+   */
+  registerField(props: {
+    // Node path
+    path?: FormPathPattern // Data path
+    name?: string // Field value
+    value?: any // Field multi-value
+    values?: any[] // Field initial value
+    initialValue?: any // Field extension properties
+    props?: any // Field check rule
+    rules?: ValidatePatternRules[] // Field is required
+    required?: boolean // Is the field editable?
+    editable?: boolean // Whether the field is dirty check
+    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void
+  }): IField
+  /*
+   * Register virtual fields
+   */
+  registerVirtualField(props: {
+    // Node path
+    path?: FormPathPattern // Data path
+    name?: string // Field extension properties
+    props?: any // Whether the field is dirty check
+    useDirty?: boolean // Field state calculation container, mainly used to extend the core linkage rules
+    computeState?: (draft: IFieldState, prevState: IFieldState) => void
+  }): IVirtualField
+  /*
+   * Create a field data operator, which will explain the returned API in detail later.
+   */
+  createMutators(field: IField | FormPathPattern): IMutators
+  /*
+   * Get the form observer tree
+   */
+  getFormGraph(): IFormGraph
+  /*
+   * Set the form observer tree
+   */
+  setFormGraph(graph: IFormGraph): void
+  /*
+   * Listen to the form life cycle
+   */
+  subscribe(
+    callback?: ({ type, payload }: { type: string; payload: any }) => void
+  ): number
+  /*
+   * Cancel the listening form life cycle
+   */
+  unsubscribe(id: number): void
+  /*
+   * Trigger form custom life cycle
+   */
+  notify: <T>(type: string, payload?: T) => void
+  /*
+   * Set the field value
+   */
+  setFieldValue(path?: FormPathPattern, value?: any): void
+  /*
+   * Get the field value
+   */
+  getFieldValue(path?: FormPathPattern): any
+  /*
+   * Set the initial value of the field
+   */
+  setFieldInitialValue(path?: FormPathPattern, value?: any): void
+  /*
+   * Get the initial value of the field
+   */
+  getFieldInitialValue(path?: FormPathPattern): any
 }
 ```
 
-
-####  Imutators
-
-
+#### Imutators
 
 > The instance API created by crewikiutators is mainly used to operate field data.
-
-
 
 ```typescript
 interface IMutators {
@@ -2732,18 +2916,18 @@ interface IMutators {
   // Get focus, trigger active state change
   focus(): void
   // Lose focus, trigger active / visited status change
-  blur (): void
+  blur(): void
   // Trigger current field verifier
   validate(): Promise<IFormValidateResult>
   // Whether the value of the current field exists in the values property of form
-  exist (index?: number | string): Boolean
+  exist(index?: number | string): Boolean
 
   /**Array operation method**/
 
   // Append data
   push(value?: any): any[]
   // Pop up tail data
-  pop (): any[]
+  pop(): any[]
   // Insert data
   insert(index: number, value: any): any[]
   // Delete data
@@ -2760,7 +2944,6 @@ interface IMutators {
   moveUp(index: number): any[]
 }
 ```
-
 
 #### IFormActions
 
@@ -2904,7 +3087,7 @@ interface IFormAsyncActions {
     //select field to reset
     selector?: FormPathPattern
     //clear initialValue
-    clearInitialValue?:boolean
+    clearInitialValue?: boolean
   }): Promise<void>
   /*
    * Get status changes, mainly used to determine which states in the current life cycle have changed in the form lifecycle hook.
@@ -3058,7 +3241,6 @@ interface IVirtualFieldState<FieldProps = any> {
 ### IFormSpyProps
 
 ```typescript
-
 interface IFormSpyProps {
   selector?: string[] | string
   reducer?: (
@@ -3068,47 +3250,38 @@ interface IFormSpyProps {
   ) => any
   children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
 }
-
 ```
-
 
 ### IFieldHook
 
 ```typescript
-
 interface IFieldHook {
   form: IForm
   state: IFieldState
   props: {}
   mutators: IMutators
 }
-
 ```
-
 
 ### IVirtualFieldHook
 
 ```typescript
-
 interface IVirtualFieldHook {
   form: IForm
   state: IFieldState
   props: {}
 }
-
 ```
 
 ### ISpyHook
 
 ```typescript
-
 interface ISpyHook {
   form: IForm
   state: IFieldState
   props: {}
   mutators: IMutators
 }
-
 ```
 
 #### SyncValidateResponse
@@ -3219,7 +3392,6 @@ declare type ValidatePatternRules =
   | ValidateDescription
   | ValidateArrayRules
 ```
-
 
 #### IFieldAPI
 

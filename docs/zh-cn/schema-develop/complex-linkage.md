@@ -1060,5 +1060,5 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 主联动逻辑是一对多联动
-- 借助FormSpy可以针对具体字段做监听，所以可以很方便的做UI联动状态同步
-- 借助FormActions可以方便的在外部操作Form内部状态
+- 借助 FormSpy 可以针对具体字段做监听，所以可以很方便的做 UI 联动状态同步
+- 借助 FormActions 可以方便的在外部操作 Form 内部状态
