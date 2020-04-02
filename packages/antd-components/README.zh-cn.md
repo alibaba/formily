@@ -2165,7 +2165,7 @@ import {
   FormTextBox,
   FormStep
 } from '@formily/antd-components'
-import { Button } from '@alifd/next'
+import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
@@ -2370,7 +2370,7 @@ import {
   FormBlock,
   FormLayout
 } from '@formily/antd-components'
-import { Button } from '@alifd/next'
+import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
@@ -2435,7 +2435,7 @@ import {
   FormBlock,
   FormLayout
 } from '@formily/antd-components'
-import { Button } from '@alifd/next'
+import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
@@ -2497,7 +2497,7 @@ import {
   FormBlock,
   FormLayout
 } from '@formily/antd-components'
-import { Button } from '@alifd/next'
+import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
