@@ -112,7 +112,7 @@ export const useBusinessEffects = context => {
 }
 ```
 
-③：引入createEffects
+③：引入 createEffects
 
 ```tsx
 // src/effects/index.ts
@@ -124,7 +124,7 @@ export const createEffects = context => () => {
 }
 ```
 
-④：传入createEffects
+④：传入 createEffects
 
 ```tsx
 // src/index.tsx
@@ -152,7 +152,7 @@ export const App = () => {
 
 #### 表单初始化默认值
 
-①：定义React Hook
+①：定义 React Hook
 
 ```tsx
 // src/hooks/useInitialValues.ts
@@ -171,7 +171,7 @@ export const useInitialValues = () => {
 }
 ```
 
-②：引入React Hook
+②：引入 React Hook
 
 ```tsx
 // src/index.tsx
@@ -193,7 +193,7 @@ export const App = () => {
 
 #### 异步下拉选项
 
-①：定义EffectHook
+①：定义 EffectHook
 
 ```tsx
 // src/effects/useAsyncDataSource.ts
@@ -222,7 +222,7 @@ const useAsyncDataSource = (name, service) => {
 }
 ```
 
-②：引入EffectHook
+②：引入 EffectHook
 
 ```tsx
 // src/effects/index.ts
@@ -247,7 +247,7 @@ export const createEffects = context => () => {
 
 #### 可搜索的异步下拉选项
 
-①：定义EffectHook
+①：定义 EffectHook
 
 ```tsx
 // src/effects/useAsyncSearchDataSource.ts
@@ -281,7 +281,7 @@ const useSearchDataSource = (name, service) => {
 }
 ```
 
-②：引入EffectHook
+②：引入 EffectHook
 
 ```tsx
 // src/effects/index.ts
@@ -312,11 +312,11 @@ export const createEffects = context => ($) => {
       }
     })
   })
-  
+
   $('requestAsyncDataSource','aaa.bbb').subscribe(()=>{
     //监听aaa.ccc的下拉选项查询结果
   })
-  
+
   $('requestSearchDataSource','aaa.ccc').subscribe(()=>{
     //监听aaa.ccc的搜索结果，考虑一种场景，我们需要在搜索的过程实时联动
   })
@@ -337,11 +337,9 @@ export const createEffects = context => ($) => {
 // src/extensions/MyComponent.tsx
 import { connect } from '@formily/antd'
 
-export const MyComponent = connect()(
-  ({value,onChange})=>{
-     //内部接收value,调用onChange
-  }
-)
+export const MyComponent = connect()(({ value, onChange }) => {
+  //内部接收value,调用onChange
+})
 ```
 
 ②：引入扩展组件
@@ -358,38 +356,37 @@ import { MyComponent } from './extentions/MyComponent'
 export const App = () => {
   const initialValues = useInitialValues()
   return (
-    <SchemaForm 
+    <SchemaForm
       components={{
         MyComponent
-      }} 
-      initialValues={initialValues} 
-      effects={createEffects()}>
+      }}
+      initialValues={initialValues}
+      effects={createEffects()}
+    >
       <BusinessCard />
     </SchemaForm>
   )
 }
 ```
 
-
-
 ## 批处理字段
 
-**方法**：借助FormPath能力，对所有字段进行批处理
+**方法**：借助 FormPath 能力，对所有字段进行批处理
 
 **优点**：大大提高开发效率
 
-① ：定义EffectHook
+① ：定义 EffectHook
 
 ```tsx
 // src/effects/useAsyncSearchDataSource.ts
 import { createFormActions, FormEffectHooks } from '@formily/antd'
 const { onFormInit$ } = FormEffectHooks
 
-const useBatchLocales = (locales) => {
+const useBatchLocales = locales => {
   const { dispatch, setFieldState } = createFormActions()
   onFormInit$().subscribe(() => {
     setFieldState('*', state => {
-      if(state.name && locales[state.name]){
+      if (state.name && locales[state.name]) {
         state.props.title = locales[state.name]
       }
     })
@@ -397,7 +394,7 @@ const useBatchLocales = (locales) => {
 }
 ```
 
-②：引入EffectHook
+②：引入 EffectHook
 
 ```tsx
 // src/effects/index.ts
@@ -430,11 +427,11 @@ export const createEffects = context => ($) => {
       }
     })
   })
-  
+
   $('requestAsyncDataSource','aaa.bbb').subscribe(()=>{
     //监听aaa.ccc的下拉选项查询结果
   })
-  
+
   $('requestSearchDataSource','aaa.ccc').subscribe(()=>{
     //监听aaa.ccc的搜索结果，考虑一种场景，我们需要在搜索的过程实时联动
   })
@@ -451,7 +448,7 @@ export {
 }
 ```
 
-④：引入国际化文案，并传入createEffects
+④：引入国际化文案，并传入 createEffects
 
 ```tsx
 // src/index.tsx
@@ -466,21 +463,20 @@ import zhCN from './local/zh-cn'
 export const App = () => {
   const initialValues = useInitialValues()
   return (
-    <SchemaForm 
+    <SchemaForm
       components={{
         MyComponent
-      }} 
-      initialValues={initialValues} 
+      }}
+      initialValues={initialValues}
       effects={createEffects({
-        locale:zhCN
-      })}>
+        locale: zhCN
+      })}
+    >
       <BusinessCard />
     </SchemaForm>
   )
 }
 ```
-
-
 
 ## 整体目录结构
 
@@ -501,8 +497,6 @@ export const App = () => {
     - zh-cn
       - Index.ts
   - Index.tsx
-
-
 
 ## 总结
 

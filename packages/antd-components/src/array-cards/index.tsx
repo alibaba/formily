@@ -43,7 +43,9 @@ export const ArrayCards: any = styled(
       : schema.items
 
     const onAdd = () => {
-      mutators.push(schemaItems.getEmptyValue())
+      if (schemaItems) {
+        mutators.push(schemaItems.getEmptyValue())
+      }
     }
     return (
       <div className={className}>
@@ -93,10 +95,12 @@ export const ArrayCards: any = styled(
                   </Fragment>
                 }
               >
-                <SchemaField
-                  path={FormPath.parse(path).concat(index)}
-                  schema={schemaItems}
-                />
+                {schemaItems && (
+                  <SchemaField
+                    path={FormPath.parse(path).concat(index)}
+                    schema={schemaItems}
+                  />
+                )}
               </Card>
             )
           })}

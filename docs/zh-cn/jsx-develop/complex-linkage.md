@@ -569,13 +569,11 @@ const useAsyncLinkageEffect = () => {
       linkage.value('bb', '1111')
     }, 1000)
   })
-  merge(onFieldValueChange$('bb'), onFieldInit$('bb')).subscribe(
-    fieldState => {
-      if (!fieldState.value) return linkage.hide('cc')
-      linkage.show('cc')
-      linkage.value('cc', fieldState.value)
-    }
-  )
+  merge(onFieldValueChange$('bb'), onFieldInit$('bb')).subscribe(fieldState => {
+    if (!fieldState.value) return linkage.hide('cc')
+    linkage.show('cc')
+    linkage.value('cc', fieldState.value)
+  })
 }
 
 const App = () => (
@@ -679,7 +677,11 @@ const App = () => {
                         initialValue={true}
                         component={Select}
                       />
-                      <FormItem name={`array.${index}.bb`} title="BB" component={Input} />
+                      <FormItem
+                        name={`array.${index}.bb`}
+                        title="BB"
+                        component={Input}
+                      />
                     </div>
                   )
                 })}
