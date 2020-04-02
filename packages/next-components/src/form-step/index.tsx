@@ -40,11 +40,11 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
     schema,
     children
   }: ISchemaVirtualFieldComponentProps) => {
+    const { dataSource, ...stepProps } = schema.getExtendsComponentProps()
     const [{ current }, setFieldState] = useFieldState({
-      current: 0
+      current: stepProps.current || 0
     })
     const ref = useRef(current)
-    const { dataSource, ...stepProps } = schema.getExtendsComponentProps()
     const items = toArr(dataSource)
     const batchUpdate = createMatchUpdate(name, path)
     const update = (cur: number) => {
