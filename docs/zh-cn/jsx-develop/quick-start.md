@@ -67,7 +67,12 @@ const App = () => {
         console.log(values)
       }}
     >
-      <FormItem name="name" label="Name" placeholder="Input Name" component={Input} />
+      <FormItem
+        name="name"
+        label="Name"
+        placeholder="Input Name"
+        component={Input}
+      />
       <FormButtonGroup>
         <Submit>查询</Submit>
         <Reset>重置</Reset>
@@ -81,8 +86,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- FormItem组件需要传入name来标识当前字段的路径，同时可以传入与对应组件库FormItem组件一样的label属性
-- FormItem组件需要传入一个component属性来注册需要渲染的组件，该组件只需要满足value/onChange属性API即可立即使用
+- FormItem 组件需要传入 name 来标识当前字段的路径，同时可以传入与对应组件库 FormItem 组件一样的 label 属性
+- FormItem 组件需要传入一个 component 属性来注册需要渲染的组件，该组件只需要满足 value/onChange 属性 API 即可立即使用
 
 ## 开发查询列表页
 
@@ -907,7 +912,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - FormItem 组件，如果不传 component，可以作为一个普通布局组件，同时它也支持 name 属性，可以在联动场景下，直接操作布局组件的显示隐藏
 - FormItem 组件，不管是否传 component 或者 label 属性，它都会自带 FormItem 样式，如果期望联动控制非 FormItem 样式的布局组件，可以使用 VirtualField 组件，它是一个无 UI 组件
 - FormItemDeepProvider 可以在局部区域控制 FormItem 的 labelCol/wrapperCol
-- 数据嵌套场景，每个FormItem的name要传完整路径，这个与Schema开发的SchemaMarkupField的name规则不一样
+- 数据嵌套场景，每个 FormItem 的 name 要传完整路径，这个与 Schema 开发的 SchemaMarkupField 的 name 规则不一样
 
 ## 实现一些校验规则
 

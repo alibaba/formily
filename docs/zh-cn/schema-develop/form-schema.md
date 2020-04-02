@@ -226,7 +226,7 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 
 ```
 
-> 注意：如果不指定condition，那么默认会执行state(value:state)/schema(value:schema)流程
+> 注意：如果不指定 condition，那么默认会执行 state(value:state)/schema(value:schema)流程
 
 ### 扩展联动协议
 

@@ -24,7 +24,6 @@ import React from 'react'
 import { SchemaForm, Field } from '@uform/antd'
 import 'antd/dist/antd.css'
 
-
 const App = () => {
   return (
     <SchemaForm>
