@@ -8,27 +8,25 @@ npm install --save @formily/next-components
 
 ### 显式加载组件
 
-通过在`<SchemaForm>`传入components，可以快速置入组件，表单字段通过`x-component`使用到内置的组件。
+通过在`<SchemaForm>`传入 components，可以快速置入组件，表单字段通过`x-component`使用到内置的组件。
 
 ```tsx
-import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/next'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit
+} from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 export default () => {
   return (
-    <SchemaForm
-      components={{ Input }}
-    >
-      <Field
-        title="Text"
-        name="text"
-        x-component="Input"
-      />
+    <SchemaForm components={{ Input }}>
+      <Field title="Text" name="text" x-component="Input" />
     </SchemaForm>
   )
 }
-
 ```
 
 ### 使用内置组件
@@ -36,7 +34,12 @@ export default () => {
 通过 `setup` 方法，可以快速置入内置的表单组件，免去维护全局`components`的工作。
 
 ```tsx
-import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/next'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit
+} from '@formily/next'
 import { setup } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -44,49 +47,40 @@ setup()
 export default () => {
   return (
     <SchemaForm>
-      <Field
-        type="string"
-        title="Text"
-        name="text"
-      />
+      <Field type="string" title="Text" name="text" />
     </SchemaForm>
   )
 }
-
 ```
 
 ### 内置组件类型
 
 通过 `setup`后，内置的表单字段有以下类型
 
-| type类型       | 对应组件                             | 描述                 |
-|:--------------|:----------------------------------|:----------------------|
-| string   | [Input](#Input)                     | 输入框组件         |
-| string(有enum属性时)   | [Select](#Select)                     | 选择框组件         |
-| textarea   | [Textarea](#Textarea)                     | 多行输入框组件         |
-| password   | [Password](#Password)                     | 密码输入框         |
-| checkbox   | [CheckboxGroup](#Checkbox)                     | Checkbox         |
-| radio   | [RadioGroup](#Radio)                     | Radio         |
-| boolean   | [Switch](#Swicth)                     | 开关组件         |
-| date   | [DatePicker](#DatePicker)                     | 日期选择器         |
-| time   | [TimePicker](#TimePicker)                     | 时间选择器         |
-| daterange   | [DatePicker.RangePicker](#RangePicker)                     | 范围日期选择器         |
-| rating   | [Rating](#Rating)                     | 评价组件         |
-| object   |                      | 嵌套表单         | 自动连接路径信息
-| array   | [ArrayCards](#ArrayCards)（默认）                       | 表单数组         | 表单数组
-
+| type 类型              | 对应组件                               | 描述           |
+| :--------------------- | :------------------------------------- | :------------- |
+| string                 | [Input](#Input)                        | 输入框组件     |
+| string(有 enum 属性时) | [Select](#Select)                      | 选择框组件     |
+| textarea               | [Textarea](#Textarea)                  | 多行输入框组件 |
+| password               | [Password](#Password)                  | 密码输入框     |
+| checkbox               | [CheckboxGroup](#Checkbox)             | Checkbox       |
+| radio                  | [RadioGroup](#Radio)                   | Radio          |
+| boolean                | [Switch](#Swicth)                      | 开关组件       |
+| date                   | [DatePicker](#DatePicker)              | 日期选择器     |
+| time                   | [TimePicker](#TimePicker)              | 时间选择器     |
+| daterange              | [DatePicker.RangePicker](#RangePicker) | 范围日期选择器 |
+| rating                 | [Rating](#Rating)                      | 评价组件       |
+| object                 |                                        | 嵌套表单       | 自动连接路径信息 |
+| array                  | [ArrayCards](#ArrayCards)（默认）      | 表单数组       | 表单数组 |
 
 #### Input
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -94,7 +88,7 @@ const App = () => {
   return (
     <SchemaForm
       components={{
-        Input,
+        Input
       }}
       schema={{
         type: 'object',
@@ -104,20 +98,18 @@ const App = () => {
             'x-component': 'Input',
             'x-component-props': {
               placeholder: 'input'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -125,7 +117,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -134,7 +126,7 @@ const App = () => {
   return (
     <SchemaForm
       components={{
-        Input,
+        Input
       }}
     >
       <Field
@@ -153,15 +145,12 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  Form,
-  FormItem,
-} from '@formily/next'
+import { Form, FormItem } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -178,15 +167,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Select
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Select } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -194,7 +180,7 @@ const App = () => {
   return (
     <SchemaForm
       components={{
-        Select,
+        Select
       }}
       schema={{
         type: 'object',
@@ -205,7 +191,7 @@ const App = () => {
             'x-component': 'Select',
             'x-component-props': {
               placeholder: 'select'
-            },
+            }
           },
           objSelect: {
             title: 'Object Select',
@@ -218,20 +204,18 @@ const App = () => {
             ],
             'x-component-props': {
               placeholder: 'select'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -239,7 +223,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Select } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -248,7 +232,7 @@ const App = () => {
   return (
     <SchemaForm
       components={{
-        Select,
+        Select
       }}
     >
       <Field
@@ -283,25 +267,28 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  Form,
-  FormItem,
-} from '@formily/next'
+import { Form, FormItem } from '@formily/next'
 import { Select } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
     <Form>
-      <FormItem label="Simple Select" name="simpleSelect" component={Select}
+      <FormItem
+        label="Simple Select"
+        name="simpleSelect"
+        component={Select}
         dataSource={['1', '2', '3', '4']}
       />
-      <FormItem label="Object Select" name="objSelect" component={Select} 
+      <FormItem
+        label="Object Select"
+        name="objSelect"
+        component={Select}
         dataSource={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
@@ -316,18 +303,14 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 #### TextArea
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -345,20 +328,18 @@ const App = () => {
             'x-component': 'TextArea',
             'x-component-props': {
               placeholder: 'textarea'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -366,16 +347,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ TextArea: Input.TextArea }}
-    >
+    <SchemaForm components={{ TextArea: Input.TextArea }}>
       <Field
         x-component="TextArea"
         title="TextArea"
@@ -391,7 +370,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -401,9 +380,11 @@ import { Input } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="TextArea" name="textarea" component={Input.TextArea} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem label="TextArea" name="textarea" component={Input.TextArea} />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -411,15 +392,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Password
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Password } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -437,20 +415,18 @@ const App = () => {
             'x-component': 'Password',
             'x-component-props': {
               placeholder: 'Password'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -458,16 +434,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Password } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Password }}
-    >
+    <SchemaForm components={{ Password }}>
       <Field
         x-component="Password"
         title="Password"
@@ -483,7 +457,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -493,9 +467,11 @@ import { Password } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Password" name="Password" component={Password} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem label="Password" name="Password" component={Password} />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -503,15 +479,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### NumberPicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { NumberPicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -526,20 +499,18 @@ const App = () => {
         properties: {
           textarea: {
             title: 'NumberPicker',
-            'x-component': 'NumberPicker',
-          },
+            'x-component': 'NumberPicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -547,16 +518,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { NumberPicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ NumberPicker }}
-    >
+    <SchemaForm components={{ NumberPicker }}>
       <Field
         x-component="NumberPicker"
         title="NumberPicker"
@@ -569,7 +538,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -579,26 +548,28 @@ import { NumberPicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="NumberPicker" name="NumberPicker" component={NumberPicker} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="NumberPicker"
+        name="NumberPicker"
+        component={NumberPicker}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-
 #### Switch
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Switch } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -613,20 +584,18 @@ const App = () => {
         properties: {
           textarea: {
             title: 'Switch',
-            'x-component': 'Switch',
-          },
+            'x-component': 'Switch'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -634,21 +603,15 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Switch } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Switch }}
-    >
-      <Field
-        x-component="Switch"
-        title="Switch"
-        name="Switch"
-      />
+    <SchemaForm components={{ Switch }}>
+      <Field x-component="Switch" title="Switch" name="Switch" />
     </SchemaForm>
   )
 }
@@ -656,7 +619,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -666,9 +629,11 @@ import { Switch } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Switch" name="Switch" component={Switch} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem label="Switch" name="Switch" component={Switch} />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -676,15 +641,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### DatePicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -702,20 +664,18 @@ const App = () => {
             'x-component': 'DatePicker',
             'x-component-props': {
               format: 'YYYY-MM-DD HH:mm:ss'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -723,16 +683,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ DatePicker }}
-    >
+    <SchemaForm components={{ DatePicker }}>
       <Field
         x-component="DatePicker"
         title="DatePicker"
@@ -748,7 +706,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -758,9 +716,16 @@ import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="DatePicker" name="DatePicker" component={DatePicker} format={'YYYY-MM-DD HH:mm:ss'} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="DatePicker"
+        name="DatePicker"
+        component={DatePicker}
+        format={'YYYY-MM-DD HH:mm:ss'}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -768,7 +733,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### RangePicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
@@ -776,7 +741,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -792,20 +757,18 @@ const App = () => {
         properties: {
           '[start,end]': {
             title: 'RangePicker',
-            'x-component': 'RangePicker',
-          },
+            'x-component': 'RangePicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -813,21 +776,15 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ RangePicker: DatePicker.RangePicker }}
-    >
-      <Field
-        x-component="RangePicker"
-        title="RangePicker"
-        name="[start,end]"
-      />
+    <SchemaForm components={{ RangePicker: DatePicker.RangePicker }}>
+      <Field x-component="RangePicker" title="RangePicker" name="[start,end]" />
     </SchemaForm>
   )
 }
@@ -835,7 +792,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -845,9 +802,15 @@ import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="RangePicker" name="[start,end]" component={DatePicker.RangePicker} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="RangePicker"
+        name="[start,end]"
+        component={DatePicker.RangePicker}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -855,15 +818,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### WeekPicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -878,20 +838,18 @@ const App = () => {
         properties: {
           textarea: {
             title: 'WeekPicker',
-            'x-component': 'WeekPicker',
-          },
+            'x-component': 'WeekPicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -899,21 +857,15 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ WeekPicker: DatePicker.WeekPicker }}
-    >
-      <Field
-        x-component="WeekPicker"
-        title="WeekPicker"
-        name="WeekPicker"
-      />
+    <SchemaForm components={{ WeekPicker: DatePicker.WeekPicker }}>
+      <Field x-component="WeekPicker" title="WeekPicker" name="WeekPicker" />
     </SchemaForm>
   )
 }
@@ -921,7 +873,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -931,9 +883,15 @@ import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="WeekPicker" name="WeekPicker" component={DatePicker.WeekPicker} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="WeekPicker"
+        name="WeekPicker"
+        component={DatePicker.WeekPicker}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -941,15 +899,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### MonthPicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -964,20 +919,18 @@ const App = () => {
         properties: {
           textarea: {
             title: 'MonthPicker',
-            'x-component': 'MonthPicker',
-          },
+            'x-component': 'MonthPicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -985,21 +938,15 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ MonthPicker: DatePicker.MonthPicker }}
-    >
-      <Field
-        x-component="MonthPicker"
-        title="MonthPicker"
-        name="MonthPicker"
-      />
+    <SchemaForm components={{ MonthPicker: DatePicker.MonthPicker }}>
+      <Field x-component="MonthPicker" title="MonthPicker" name="MonthPicker" />
     </SchemaForm>
   )
 }
@@ -1007,7 +954,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1017,9 +964,15 @@ import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="MonthPicker" name="MonthPicker" component={DatePicker.MonthPicker}/>
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="MonthPicker"
+        name="MonthPicker"
+        component={DatePicker.MonthPicker}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1027,15 +980,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### YearPicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1050,20 +1000,18 @@ const App = () => {
         properties: {
           textarea: {
             title: 'YearPicker',
-            'x-component': 'YearPicker',
-          },
+            'x-component': 'YearPicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1071,21 +1019,15 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ YearPicker: DatePicker.YearPicker }}
-    >
-      <Field
-        x-component="YearPicker"
-        title="YearPicker"
-        name="YearPicker"
-      />
+    <SchemaForm components={{ YearPicker: DatePicker.YearPicker }}>
+      <Field x-component="YearPicker" title="YearPicker" name="YearPicker" />
     </SchemaForm>
   )
 }
@@ -1093,7 +1035,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1103,9 +1045,15 @@ import { DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="YearPicker" name="YearPicker" component={DatePicker.YearPicker}/>
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="YearPicker"
+        name="YearPicker"
+        component={DatePicker.YearPicker}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1113,15 +1061,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### TimePicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { TimePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1139,20 +1084,18 @@ const App = () => {
             'x-component': 'TimePicker',
             'x-component-props': {
               format: 'YYYY-MM-DD HH:mm:ss'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1160,16 +1103,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { TimePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ TimePicker }}
-    >
+    <SchemaForm components={{ TimePicker }}>
       <Field
         x-component="TimePicker"
         title="TimePicker"
@@ -1185,7 +1126,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1195,9 +1136,11 @@ import { TimePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="TimePicker" name="TimePicker" component={TimePicker} />
-  </Form>)
+  return (
+    <Form>
+      <FormItem label="TimePicker" name="TimePicker" component={TimePicker} />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1205,15 +1148,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Range
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Range } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1234,19 +1174,17 @@ const App = () => {
               max: 1024,
               marks: [0, 1024]
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1254,16 +1192,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Range } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Range }}
-    >
+    <SchemaForm components={{ Range }}>
       <Field
         x-component="Range"
         title="Range"
@@ -1281,7 +1217,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1291,14 +1227,18 @@ import { Range } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Range" name="Range"
-      component={Range}
-      min={0}
-      max={1024}
-      marks={[0, 1024]}
-    />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="Range"
+        name="Range"
+        component={Range}
+        min={0}
+        max={1024}
+        marks={[0, 1024]}
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1306,15 +1246,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Upload
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Upload } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1347,19 +1284,17 @@ const App = () => {
             'x-component-props': {
               listType: 'text'
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1367,16 +1302,14 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Upload } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Upload }}
-    >
+    <SchemaForm components={{ Upload }}>
       <Field
         x-component="Upload"
         title="Card Upload"
@@ -1408,7 +1341,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1418,20 +1351,28 @@ import { Upload } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Card Upload" name="upload1"
-      component={Upload}
-      listType="card"
-    />
-    <FormItem label="Dragger Upload" name="upload2"
-      component={Upload}
-      listType="dragger"
-    />
-    <FormItem label="Text Upload" name="upload3"
-      component={Upload}
-      listType="text"
-    />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="Card Upload"
+        name="upload1"
+        component={Upload}
+        listType="card"
+      />
+      <FormItem
+        label="Dragger Upload"
+        name="upload2"
+        component={Upload}
+        listType="dragger"
+      />
+      <FormItem
+        label="Text Upload"
+        name="upload3"
+        component={Upload}
+        listType="text"
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1439,15 +1380,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Checkbox
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Checkbox } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1456,7 +1394,7 @@ const App = () => {
     <SchemaForm
       components={{
         Checkbox,
-        CheckboxGroup: Checkbox.Group,
+        CheckboxGroup: Checkbox.Group
       }}
       schema={{
         type: 'object',
@@ -1475,19 +1413,17 @@ const App = () => {
               { label: 'Three', value: '3' },
               { label: 'Four', value: '4' }
             ]
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1495,7 +1431,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Checkbox } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -1505,7 +1441,7 @@ const App = () => {
     <SchemaForm
       components={{
         Checkbox,
-        CheckboxGroup: Checkbox.Group,
+        CheckboxGroup: Checkbox.Group
       }}
     >
       <Field
@@ -1532,7 +1468,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1542,21 +1478,27 @@ import { Checkbox } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Simple Checkbox" name="Checkbox"
-      component={Checkbox.Group}
-      dataSource={['1', '2', '3', '4']}
-    />
-    <FormItem label="Object Checkbox" name="Checkbox2"
-      component={Checkbox.Group}
-      dataSource={[
+  return (
+    <Form>
+      <FormItem
+        label="Simple Checkbox"
+        name="Checkbox"
+        component={Checkbox.Group}
+        dataSource={['1', '2', '3', '4']}
+      />
+      <FormItem
+        label="Object Checkbox"
+        name="Checkbox2"
+        component={Checkbox.Group}
+        dataSource={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
           { label: 'Three', value: '3' },
           { label: 'Four', value: '4' }
         ]}
-    />
-  </Form>)
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1564,15 +1506,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Radio
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Radio } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1581,7 +1520,7 @@ const App = () => {
     <SchemaForm
       components={{
         Radio,
-        RadioGroup: Radio.Group,
+        RadioGroup: Radio.Group
       }}
       schema={{
         type: 'object',
@@ -1600,19 +1539,17 @@ const App = () => {
               { label: 'Three', value: '3' },
               { label: 'Four', value: '4' }
             ]
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1620,7 +1557,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Radio } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -1630,7 +1567,7 @@ const App = () => {
     <SchemaForm
       components={{
         Radio,
-        RadioGroup: Radio.Group,
+        RadioGroup: Radio.Group
       }}
     >
       <Field
@@ -1657,7 +1594,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1667,21 +1604,27 @@ import { Radio } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Simple Radio" name="Radio"
-      component={Radio.Group}
-      dataSource={['1', '2', '3', '4']}
-    />
-    <FormItem label="Object Radio" name="Radio2"
-      component={Radio.Group}
-      dataSource={[
+  return (
+    <Form>
+      <FormItem
+        label="Simple Radio"
+        name="Radio"
+        component={Radio.Group}
+        dataSource={['1', '2', '3', '4']}
+      />
+      <FormItem
+        label="Object Radio"
+        name="Radio2"
+        component={Radio.Group}
+        dataSource={[
           { label: 'One', value: '1' },
           { label: 'Two', value: '2' },
           { label: 'Three', value: '3' },
           { label: 'Four', value: '4' }
         ]}
-    />
-  </Form>)
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1689,15 +1632,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Rating
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Rating } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1716,19 +1656,17 @@ const App = () => {
             'x-component-props': {
               allowHalf: true
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1736,7 +1674,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Rating } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -1763,7 +1701,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1773,12 +1711,11 @@ import { Rating } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Rating" name="Rating"
-      component={Rating}
-      allowHalf
-    />
-  </Form>)
+  return (
+    <Form>
+      <FormItem label="Rating" name="Rating" component={Rating} allowHalf />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1786,15 +1723,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### Transfer
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/next'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/next'
 import { Transfer } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
@@ -1819,19 +1753,17 @@ const App = () => {
             'x-component-props': {
               showSearch: true
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
 import React from 'react'
@@ -1839,7 +1771,7 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/next'
 import { Transfer } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
@@ -1872,7 +1804,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-* 纯 JSX(源码) 方式
+- 纯 JSX(源码) 方式
 
 ```jsx
 import React from 'react'
@@ -1882,18 +1814,22 @@ import { Transfer } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
-  return (<Form>
-    <FormItem label="Transfer" name="Transfer"
-      component={Transfer}
-      dataSource={[
-        { label: 'One', value: '1' },
-        { label: 'Two', value: '2' },
-        { label: 'Three', value: '3' },
-        { label: 'Four', value: '4' }
-      ]}
-      showSearch
-    />
-  </Form>)
+  return (
+    <Form>
+      <FormItem
+        label="Transfer"
+        name="Transfer"
+        component={Transfer}
+        dataSource={[
+          { label: 'One', value: '1' },
+          { label: 'Two', value: '2' },
+          { label: 'Three', value: '3' },
+          { label: 'Four', value: '4' }
+        ]}
+        showSearch
+      />
+    </Form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
@@ -1908,11 +1844,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
-  Field, 
+import {
+  SchemaForm,
+  Field,
   FormButtonGroup,
   Submit,
-  Reset,
+  Reset
 } from '@formily/next'
 import {
   Input,
@@ -1920,7 +1857,8 @@ import {
   DatePicker,
   FormBlock,
   FormItemGrid,
-  FormLayout } from '@formily/next-components'
+  FormLayout
+} from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
 
@@ -1930,7 +1868,7 @@ const App = () => (
       components={{
         Input,
         ArrayCards,
-        RangePicker: DatePicker.RangePicker,
+        RangePicker: DatePicker.RangePicker
       }}
     >
       <Field
@@ -1998,11 +1936,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm,
-  Field, 
+import {
+  SchemaForm,
+  Field,
   FormButtonGroup,
   Submit,
-  Reset,
+  Reset
 } from '@formily/next'
 import {
   Input,
@@ -2010,7 +1949,8 @@ import {
   DatePicker,
   FormBlock,
   FormItemGrid,
-  FormLayout } from '@formily/next-components'
+  FormLayout
+} from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 import Printer from '@formily/printer'
 
@@ -2020,7 +1960,7 @@ const App = () => (
       components={{
         ArrayTable,
         Input,
-        RangePicker: DatePicker.RangePicker,
+        RangePicker: DatePicker.RangePicker
       }}
     >
       <FormLayout>
@@ -2062,11 +2002,10 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Layout Components
 
-
 #### FormCard
 
 > FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)。
-> FormCard与[FormBlock](#FormBlock) 唯一区别是样式上是否有框
+> FormCard 与[FormBlock](#FormBlock) 唯一区别是样式上是否有框
 
 **用法**
 
@@ -2114,19 +2053,18 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 > FormStep 组件 Props
 
-* IFormStep
+- IFormStep
 
-| 参数       | 说明                             | 类型                 | 默认值               |
-|:----------|:---------------------------------|:--------------------|:--------------------|
-| dataSource    | 分步配置                 | StepItemProps[] |                |
-| current    | 当前步骤                 | number |                |
-| direction    | 展示方向                 | 'hoz' `or` 'ver' |                |
-| labelPlacement    | 横向布局时的内容排列                 | 'hoz' `or` 'ver' |                |
-| shape    | 类型                 | 'circle' `or` 'arrow' `or` 'dot' |                |
-| readOnly    | 是否只读模式                 | boolean |                |
-| animation    | 是否开启动效                 | boolean |                |
-| itemRender    | StepItem 的自定义渲染                 | (index: number, status: string) => React.ReactNode |                |
-
+| 参数           | 说明                  | 类型                                               | 默认值 |
+| :------------- | :-------------------- | :------------------------------------------------- | :----- |
+| dataSource     | 分步配置              | StepItemProps[]                                    |        |
+| current        | 当前步骤              | number                                             |        |
+| direction      | 展示方向              | 'hoz' `or` 'ver'                                   |        |
+| labelPlacement | 横向布局时的内容排列  | 'hoz' `or` 'ver'                                   |        |
+| shape          | 类型                  | 'circle' `or` 'arrow' `or` 'dot'                   |        |
+| readOnly       | 是否只读模式          | boolean                                            |        |
+| animation      | 是否开启动效          | boolean                                            |        |
+| itemRender     | StepItem 的自定义渲染 | (index: number, status: string) => React.ReactNode |        |
 
 **用法**
 
@@ -2142,7 +2080,7 @@ import {
   createFormActions,
   Reset
 } from '@formily/next'
-import { 
+import {
   Input,
   FormGridRow,
   FormItemGrid,
@@ -2229,7 +2167,6 @@ export default () => (
 )
 ```
 
-
 #### FormTab
 
 ```jsx
@@ -2301,11 +2238,15 @@ const App = () => (
       </FormTab>
       <FormButtonGroup>
         <Submit />
-        <Button onClick={()=>{
-          actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE,{
-            value:'tab-2'
-          })
-        }}>切换到第二个选项</Button>
+        <Button
+          onClick={() => {
+            actions.dispatch(FormTab.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
+              value: 'tab-2'
+            })
+          }}
+        >
+          切换到第二个选项
+        </Button>
         <Button
           onClick={() => {
             actions.setFieldState('tabs', state => {
@@ -2328,14 +2269,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### FormLayout
 
-* IFormItemTopProps
+- IFormItemTopProps
 
-| 参数       | 说明                             | 类型                 | 默认值               |
-|:----------|:---------------------------------|:--------------------|:--------------------|
-| inline    | 是否行内模式                 | boolean |                |
-| labelCol    |label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效                  | `{}` |                |
-| wrapperCol    |需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                  | `{}` | 
-
+| 参数       | 说明                                                                                                 | 类型    | 默认值 |
+| :--------- | :--------------------------------------------------------------------------------------------------- | :------ | :----- |
+| inline     | 是否行内模式                                                                                         | boolean |        |
+| labelCol   | label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效 | `{}`    |        |
+| wrapperCol | 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                                            | `{}`    |
 
 **用法**
 
@@ -2349,7 +2289,7 @@ import {
   FormButtonGroup,
   Reset
 } from '@formily/next'
-import { 
+import {
   Input,
   NumberPicker,
   DatePicker,
@@ -2365,11 +2305,13 @@ import '@alifd/next/dist/next.css'
 
 const App = () => (
   <Printer>
-    <SchemaForm components={{
-      Input,
-      NumberPicker,
-      DatePicker
-    }}>
+    <SchemaForm
+      components={{
+        Input,
+        NumberPicker,
+        DatePicker
+      }}
+    >
       <FormLayout labelCol={8} wrapperCol={6}>
         <Field name="aaa" x-component="Input" title="字段1" />
         <Field name="bbb" x-component="NumberPicker" title="字段2" />
@@ -2386,23 +2328,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### FormItemGrid
 
-* IFormItemGridProps
+- IFormItemGridProps
 
-| 参数       | 说明                             | 类型                 | 默认值               |
-|:----------|:---------------------------------|:--------------------|:--------------------|
-| cols    | 列数                 | Array<number | { span: number; offset: number }> |                |
-| gutter    |列间距离                  | number |                |
-| labelCol    |label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效                  | `{}` |                |
-| wrapperCol    |需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                  | `{}` | 
-| help    |自定义提示信息，如不设置，则会根据校验规则自动生成.                | React.ReactNode | |
-| extra    |额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面 | React.ReactNode | |
-| validateState    |校验状态，如不设置，则会根据校验规则自动生成 | 'error' `or` 'success' `or` 'loading' | |
-| hasFeedback    |配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有Input支持 | boolean | |
-| size    | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium' | |
-| labelAlign    | 标签的位置 | 'top' `or` 'left' `or` 'inset' | |
-| labelTextAlign    | 标签的左右对齐方式 | 'left' `or` 'right' | |
-| asterisk    | required 的星号是否显示 | boolean | |
-
+| 参数           | 说明                                                                                                        | 类型                                  | 默认值                            |
+| :------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------ | :-------------------------------- |
+| cols           | 列数                                                                                                        | Array<number                          | { span: number; offset: number }> |  |
+| gutter         | 列间距离                                                                                                    | number                                |                                   |
+| labelCol       | label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效        | `{}`                                  |                                   |
+| wrapperCol     | 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                                                   | `{}`                                  |
+| help           | 自定义提示信息，如不设置，则会根据校验规则自动生成.                                                         | React.ReactNode                       |                                   |
+| extra          | 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面           | React.ReactNode                       |                                   |
+| validateState  | 校验状态，如不设置，则会根据校验规则自动生成                                                                | 'error' `or` 'success' `or` 'loading' |                                   |
+| hasFeedback    | 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有 Input 支持                   | boolean                               |                                   |
+| size           | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium'    |                                   |
+| labelAlign     | 标签的位置                                                                                                  | 'top' `or` 'left' `or` 'inset'        |                                   |
+| labelTextAlign | 标签的左右对齐方式                                                                                          | 'left' `or` 'right'                   |                                   |
+| asterisk       | required 的星号是否显示                                                                                     | boolean                               |                                   |
 
 **用法**
 
@@ -2416,7 +2357,7 @@ import {
   FormButtonGroup,
   Reset
 } from '@formily/next'
-import { 
+import {
   Input,
   FormTextBox,
   FormItemGrid,
@@ -2434,7 +2375,8 @@ const App = () => (
       components={{
         Input
       }}
-      onSubmit={v => console.log(v)}>
+      onSubmit={v => console.log(v)}
+    >
       <FormItemGrid gutter={20}>
         <Field x-component="Input" name="a1" title="field1" />
         <Field x-component="Input" name="a2" title="field2" />
@@ -2456,14 +2398,14 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 #### FormTextBox
 
-* IFormTextBox
+- IFormTextBox
 
-| 参数       | 说明                             | 类型                 | 默认值               |
-|:----------|:---------------------------------|:--------------------|:--------------------|
-| text    | 文案                 | string |                |
-| gutter    |文案间距离                  | number |                |
-| title    |标题                  | React.ReactText |                |
-| description    | 描述                  | React.ReactText |                |
+| 参数        | 说明       | 类型            | 默认值 |
+| :---------- | :--------- | :-------------- | :----- |
+| text        | 文案       | string          |        |
+| gutter      | 文案间距离 | number          |        |
+| title       | 标题       | React.ReactText |        |
+| description | 描述       | React.ReactText |        |
 
 **用法**
 
@@ -2477,7 +2419,7 @@ import {
   FormButtonGroup,
   Reset
 } from '@formily/next'
-import { 
+import {
   Input,
   NumberPicker,
   FormTextBox,
@@ -2496,11 +2438,12 @@ const App = () => {
       <SchemaForm
         components={{
           Input,
-          NumberPicker,
+          NumberPicker
         }}
         labelCol={8}
         wrapperCol={6}
-        onSubmit={v => console.log(v)}>
+        onSubmit={v => console.log(v)}
+      >
         <FormCard title="FormTextBox">
           <FormLayout labelCol={8} wrapperCol={16}>
             <FormTextBox
@@ -2539,4 +2482,3 @@ const App = () => {
 }
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-

@@ -97,7 +97,7 @@ import {
   Reset
 } from '@formily/antd' // 或者 @formily/next
 import { ArrayTable, Input } from '@formily/antd-components'
-import {Button} from 'antd'
+import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
@@ -144,10 +144,14 @@ const App = () => {
           </Field>
         </Field>
         <FormButtonGroup>
-          <Button onClick={()=>{
-            const mutators = actions.createMutators('array')
-            mutators.push({})
-          }}>Add</Button>
+          <Button
+            onClick={() => {
+              const mutators = actions.createMutators('array')
+              mutators.push({})
+            }}
+          >
+            Add
+          </Button>
         </FormButtonGroup>
       </SchemaForm>
     </Printer>
@@ -159,7 +163,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 在 ` onFieldValueChange$ `入参中使用\*批量匹配数组第 n 项的 aa 字段
+- 在 `onFieldValueChange$`入参中使用\*批量匹配数组第 n 项的 aa 字段
 - 使用 FormPath.transform 将一个路径转换成另外一个路径，目前该例子主要用于转换成相邻路径
 
 ## 使用路径匹配能力批量操作字段状态
