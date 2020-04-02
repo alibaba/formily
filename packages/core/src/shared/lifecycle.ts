@@ -99,6 +99,7 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
       this.buffer.forEach(({ type, payload, context }) => {
         this.publish(type, payload, context)
       })
+      this.buffer = []
     }
   }
 

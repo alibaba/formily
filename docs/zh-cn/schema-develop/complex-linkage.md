@@ -86,6 +86,60 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 使用 FormEffectHooks 可以很方便的将联动逻辑拆分出去，方便我们进行物理分离
 - 借助路径系统的批量匹配能力实现一对多联动
 
+## 自己联动自己(副作用校验)
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  FormEffectHooks,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { Input, Select } from '@formily/antd-components'
+import Printer from '@formily/printer'
+import { merge } from 'rxjs'
+import 'antd/dist/antd.css'
+
+const { onFieldValueChange$, onFormSubmitStart$ } = FormEffectHooks
+
+const useValidator = (name, validator) => {
+  const { setFieldState } = createFormActions()
+  merge(onFieldValueChange$(name), onFormSubmitStart$()).subscribe(() => {
+    setFieldState(name, state => {
+      state.errors = validator(state.value, state)
+    })
+  })
+}
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm
+        components={{ Input, Select }}
+        onSubmit={values => {
+          console.log(values)
+        }}
+        effects={() => {
+          useValidator('aa', value => (!value ? '必填字段' : ''))
+        }}
+      >
+        <Field type="string" name="aa" title="AA" x-component="Input" />
+        <FormButtonGroup>
+          <Submit />
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ## 多对一联动
 
 ```jsx
