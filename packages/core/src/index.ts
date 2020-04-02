@@ -439,18 +439,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (!alreadyHaveField) {
         graph.appendNode(nodePath, field)
       }
-      field.batch(() => {
-        field.setState((state: IVirtualFieldState<VirtualFieldProps>) => {
-          state.initialized = true
-          state.props = props
-          if (isValid(visible)) {
-            state.visible = visible
-          }
-          if (isValid(display)) {
-            state.display = display
-          }
+      heart.batch(() => {
+        //fix #766
+        field.batch(() => {
+          field.setState((state: IVirtualFieldState<VirtualFieldProps>) => {
+            state.initialized = true
+            state.props = props
+            if (isValid(visible)) {
+              state.visible = visible
+            }
+            if (isValid(display)) {
+              state.display = display
+            }
+          })
+          batchRunTaskQueue(field, nodePath)
         })
-        batchRunTaskQueue(field, nodePath)
       })
       return field
     }
@@ -504,46 +507,51 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (!alreadyHaveField) {
         graph.appendNode(nodePath, field)
       }
-      field.batch(() => {
-        field.setState((state: IFieldState<FieldProps>) => {
-          const formValue = getFormValuesIn(dataPath)
-          const formInitialValue = getFormInitialValuesIn(dataPath)
-          if (isValid(value)) {
-            // value > formValue > initialValue
-            state.value = value
-          } else {
-            state.value = existFormValuesIn(dataPath) ? formValue : initialValue
-          }
-          // initialValue > formInitialValue
-          state.initialValue = isValid(initialValue)
-            ? initialValue
-            : isValid(formInitialValue)
-            ? formInitialValue
-            : initialValue
-          if (isValid(visible)) {
-            state.visible = visible
-          }
-          if (isValid(display)) {
-            state.display = display
-          }
-          if (isValid(props)) {
-            state.props = props
-          }
-          if (isValid(required)) {
-            state.required = required
-          }
-          if (isValid(rules)) {
-            state.rules = rules as any
-          }
-          if (isValid(editable)) {
-            state.selfEditable = editable
-          }
-          if (isValid(options.editable)) {
-            state.formEditable = options.editable
-          }
-          state.initialized = true
+
+      heart.batch(() => {
+        field.batch(() => {
+          field.setState((state: IFieldState<FieldProps>) => {
+            const formValue = getFormValuesIn(dataPath)
+            const formInitialValue = getFormInitialValuesIn(dataPath)
+            if (isValid(value)) {
+              // value > formValue > initialValue
+              state.value = value
+            } else {
+              state.value = existFormValuesIn(dataPath)
+                ? formValue
+                : initialValue
+            }
+            // initialValue > formInitialValue
+            state.initialValue = isValid(initialValue)
+              ? initialValue
+              : isValid(formInitialValue)
+              ? formInitialValue
+              : initialValue
+            if (isValid(visible)) {
+              state.visible = visible
+            }
+            if (isValid(display)) {
+              state.display = display
+            }
+            if (isValid(props)) {
+              state.props = props
+            }
+            if (isValid(required)) {
+              state.required = required
+            }
+            if (isValid(rules)) {
+              state.rules = rules as any
+            }
+            if (isValid(editable)) {
+              state.selfEditable = editable
+            }
+            if (isValid(options.editable)) {
+              state.formEditable = options.editable
+            }
+            state.initialized = true
+          })
+          batchRunTaskQueue(field, nodePath)
         })
-        batchRunTaskQueue(field, nodePath)
       })
       validator.register(nodePath, validate => {
         const {
@@ -1173,6 +1181,27 @@ export function createForm<FieldProps, VirtualFieldProps>(
     }
   }
 
+  function pushTaskQueue(pattern: FormPath, callback: () => void) {
+    const id = pattern.toString()
+    const taskIndex = env.taskIndexes[id]
+    if (isValid(taskIndex)) {
+      if (
+        env.taskQueue[taskIndex] &&
+        !env.taskQueue[taskIndex].callbacks.some(fn =>
+          isEqual(fn, callback) ? fn === callback : false
+        )
+      ) {
+        env.taskQueue[taskIndex].callbacks.push(callback)
+      }
+    } else {
+      env.taskIndexes[id] = env.taskQueue.length
+      env.taskQueue.push({
+        pattern,
+        callbacks: [callback]
+      })
+    }
+  }
+
   function setFieldState(
     path: FormPathPattern,
     callback?: (state: IFieldState<FieldProps>) => void,
@@ -1186,23 +1215,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       matchCount++
     })
     if (matchCount === 0 || pattern.isWildMatchPattern) {
-      const taskIndex = env.taskIndexes[pattern.toString()]
-      if (isValid(taskIndex)) {
-        if (
-          env.taskQueue[taskIndex] &&
-          !env.taskQueue[taskIndex].callbacks.some(fn =>
-            isEqual(fn, callback) ? fn === callback : false
-          )
-        ) {
-          env.taskQueue[taskIndex].callbacks.push(callback)
-        }
-      } else {
-        env.taskIndexes[pattern.toString()] = env.taskQueue.length
-        env.taskQueue.push({
-          pattern,
-          callbacks: [callback]
-        })
-      }
+      pushTaskQueue(pattern, callback)
     }
   }
 
