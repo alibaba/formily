@@ -1,30 +1,32 @@
 var connections = {}
 
 chrome.runtime.onConnect.addListener(function(port) {
-  var extensionListener = function(message, sender, sendResponse) {
-    // 原始的连接事件不包含开发者工具网页的标签页标识符，
-    // 所以我们需要显式发送它。
-    if (message.name == 'init') {
-      connections[message.tabId] = port
-      return
-    }
-    // 其他消息的处理
-  }
-
-  // 监听开发者工具网页发来的消息
-  port.onMessage.addListener(extensionListener)
-
-  port.onDisconnect.addListener(function(port) {
-    port.onMessage.removeListener(extensionListener)
-
-    var tabs = Object.keys(connections)
-    for (var i = 0, len = tabs.length; i < len; i++) {
-      if (connections[tabs[i]] == port) {
-        delete connections[tabs[i]]
-        break
+  if (port.name === '@formily-devtools-panel-script') {
+    var extensionListener = function(message, sender, sendResponse) {
+      // 原始的连接事件不包含开发者工具网页的标签页标识符，
+      // 所以我们需要显式发送它。
+      if (message.name == 'init') {
+        connections[message.tabId] = port
+        return
       }
+      // 其他消息的处理
     }
-  })
+
+    // 监听开发者工具网页发来的消息
+    port.onMessage.addListener(extensionListener)
+
+    port.onDisconnect.addListener(function(port) {
+      port.onMessage.removeListener(extensionListener)
+
+      var tabs = Object.keys(connections)
+      for (var i = 0, len = tabs.length; i < len; i++) {
+        if (connections[tabs[i]] == port) {
+          delete connections[tabs[i]]
+          break
+        }
+      }
+    })
+  }
 })
 
 // 从内容脚本接收消息，并转发至当前
