@@ -511,15 +511,16 @@ export function createForm<FieldProps, VirtualFieldProps>(
       heart.batch(() => {
         field.batch(() => {
           field.setState((state: IFieldState<FieldProps>) => {
-            const formValue = getFormValuesIn(dataPath)
-            const formInitialValue = getFormInitialValuesIn(dataPath)
+            const formValue = getFormValuesIn(state.name)
+            const formInitialValue = getFormInitialValuesIn(state.name)
             if (isValid(value)) {
               // value > formValue > initialValue
               state.value = value
             } else {
-              state.value = existFormValuesIn(dataPath)
-                ? formValue
-                : initialValue
+              state.value =
+                existFormValuesIn(state.name) || formValue !== undefined
+                  ? formValue
+                  : initialValue
             }
             // initialValue > formInitialValue
             state.initialValue = isValid(initialValue)

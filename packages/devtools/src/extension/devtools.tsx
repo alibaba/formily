@@ -17,7 +17,18 @@ const createPanel = () => {
         'Formily',
         'img/logo/scalable.png',
         './devpanel.html',
-        function() {}
+        function(panel) {
+          panel.onShown.addListener(()=>{
+            chrome.devtools.inspectedWindow.eval(
+              'window.__FORMILY_DEV_TOOLS_HOOK__.openDevtools()'
+            )
+          })
+          panel.onHidden.addListener(()=>{
+            chrome.devtools.inspectedWindow.eval(
+              'window.__FORMILY_DEV_TOOLS_HOOK__.closeDevtools()'
+            )
+          })
+        }
       )
     }
   )
