@@ -164,18 +164,16 @@ const Header = props => {
 
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   const [data, setData] = useState(createTree(dataSource))
-  const cursor = useRef(null)
+  const cursor = useRef(data)
 
   const onToggle = (node: any, toggled: boolean) => {
-    if (cursor.current) {
-      cursor.current.active = false
-    }
+    cursor.current.active = false
     node.active = true
     if (node.children && node.children.length) {
       node.toggled = toggled
     }
     cursor.current = node
-    setData({ ...data })
+    setData(data)
     if (onSelect) {
       onSelect(node)
     }
