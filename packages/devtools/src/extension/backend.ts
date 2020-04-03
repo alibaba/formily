@@ -62,7 +62,6 @@ const HOOK = {
     })
     let timer = null
     form.subscribe(() => {
-      if (!HOOK.hasOpenDevtools) return
       clearTimeout(timer)
       timer = setTimeout(() => {
         globalThis.requestIdleCallback(() => {
@@ -76,12 +75,6 @@ const HOOK = {
         })
       }, 300)
     })
-  },
-  openDevtools() {
-    HOOK.hasOpenDevtools = true
-  },
-  closeDevtools() {
-    HOOK.hasOpenDevtools = false
   },
   update() {
     const keys = Object.keys(this.store || {})
