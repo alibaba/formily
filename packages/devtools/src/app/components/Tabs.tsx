@@ -38,6 +38,7 @@ export const Tabs = styled(({ className, dataSource, current, onChange }) => {
     transition: 0.15s all ease-in-out;
     border-right: 1px solid #3d424a;
     padding: 0 10px;
+    font-size: 12px;
     &:hover {
       background: #1d1f25;
     }
