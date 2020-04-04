@@ -905,7 +905,7 @@ const mockSchema = {
             'x-linkages': [
               {
                 type: 'value:state',
-                target: 'array.[].ff',
+                target: '..[].ff',
                 state: {
                   visible: '{{!!$value}}'
                 }
@@ -1023,6 +1023,10 @@ ReactDOM.render(<App />, document.getElementById('root'))
   - `prevPath.[+2].fieldName`代表下下一行字段
   - `prevPath.[-2].fieldName`代表上上一行字段
   - 一次可以继续往下递增或者递减
+  - `.path.a.b`代表基于当前字段路径往后计算
+  - `..path.a.b`代表往前计算相对路径
+  - `...path.a.b`代表继续往前计算相对路径
+  - 以此类推
 
 ## 外部联动
 
