@@ -99,12 +99,12 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
       label={label}
       labelTextAlign={labelTextAlign}
       labelAlign={labelAlign || 'left'}
-      required={props.editable === false ? undefined : props.required}
       size={size}
       help={help}
       validateState={status}
       extra={<p>{extra}</p>}
       {...mergedProps}
+      required={props.editable === false ? undefined : props.required}
       labelCol={label ? normalizeCol(labelCol || contextLabelCol) : undefined}
       wrapperCol={
         label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
