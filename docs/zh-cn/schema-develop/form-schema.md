@@ -159,6 +159,22 @@ Formily 针对 Form Schema 支持了表达式的能力，可以帮助我们在 J
 - target 是一个 FormPathPattern 匹配表达式，在这里我们可以使用 FormPath 的各种匹配语法
 - 需要指定每个联动发生的条件(condition)，由一个表达式来驱动
 
+### target 相邻路径查找
+
+- `prevPath.[].fieldName`代表当前行字段
+- `prevPath.[+].fieldName`代表下一行字段
+- `prevPath.[-].fieldName`代表上一行字段
+- `prevPath.[+2].fieldName`代表下下一行字段
+- `prevPath.[-2].fieldName`代表上上一行字段
+- 依次类推往下递增或者递减
+
+### target 向前路径查找
+
+- `.path.a.b`代表基于当前字段路径往后计算
+- `..path.a.b`代表往前计算相对路径
+- `...path.a.b`代表继续往前计算相对路径
+- 以此类推向前查找
+
 ### 表达式说明
 
 目前表达式的上下文注入了一些环境变量：
