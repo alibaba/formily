@@ -1016,13 +1016,14 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 自增列表中的动态联动，借助 x-linkages 可以实现相邻联动，或者是跨行联动
-- target 支持一种特殊语法
+- target 相邻查找
   - `prevPath.[].fieldName`代表当前行字段
   - `prevPath.[+].fieldName`代表下一行字段
   - `prevPath.[-].fieldName`代表上一行字段
   - `prevPath.[+2].fieldName`代表下下一行字段
   - `prevPath.[-2].fieldName`代表上上一行字段
   - 一次可以继续往下递增或者递减
+- target 向前路径查找
   - `.path.a.b`代表基于当前字段路径往后计算
   - `..path.a.b`代表往前计算相对路径
   - `...path.a.b`代表继续往前计算相对路径
