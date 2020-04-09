@@ -687,13 +687,13 @@ import {
 } from '@formily/next'
 import { Input } from '@formily/next-components'
 import { fetch } from 'mfetch'
-import { Table } from '@alifd/next'
+import { Table, Pagination } from '@alifd/next'
 
 const service = ({ values, pagination, sorter = {}, filters = {} }) => {
   return fetch({
     url: 'https://randomuser.me/api',
     data: {
-      results: 10,
+      results: pagination.pageSize,
       sortField: sorter.field,
       sortOrder: sorter.order,
       page: pagination.current,
@@ -712,7 +712,7 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
 }
 
 const App = () => {
-  const { form, table } = useFormTableQuery(service)
+  const { form, table, pagination } = useFormTableQuery(service)
   return (
     <>
       <SchemaForm
@@ -746,6 +746,11 @@ const App = () => {
         />
         <Table.Column title="email" dataIndex="email" />
       </Table>
+      <Pagination
+        {...pagination}
+        style={{ marginTop: 10 }}
+        pageSizeSelector="filter"
+      />
     </>
   )
 }

@@ -50,6 +50,7 @@ send({
 
 const HOOK = {
   hasFormilyInstance: false,
+  hasOpenDevtools: false,
   store: {},
   inject(id: number, form: IForm) {
     this.hasFormilyInstance = true
@@ -59,12 +60,20 @@ const HOOK = {
       id,
       form
     })
+    let timer = null
     form.subscribe(() => {
-      send({
-        type: 'update',
-        id,
-        form
-      })
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        globalThis.requestIdleCallback(() => {
+          globalThis.requestAnimationFrame(() => {
+            send({
+              type: 'update',
+              id,
+              form
+            })
+          })
+        })
+      }, 300)
     })
   },
   update() {

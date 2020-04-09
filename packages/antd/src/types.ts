@@ -33,10 +33,11 @@ export type IAntdFormProps = Omit<FormProps, 'onSubmit' | 'defaultValue'> &
   IFormProps<any, any>
 
 export type IAntdFormItemProps = IFieldStateUIProps &
-  ItemProps & {
+  Omit<ItemProps, 'children'> & {
     valueName?: string
     eventName?: string
     component?: React.JSXElementConstructor<any>
+    children?: React.ReactNode
     itemStyle?: {
       [key: string]: string | number
     }

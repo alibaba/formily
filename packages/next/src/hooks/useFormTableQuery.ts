@@ -77,6 +77,13 @@ export const useFormTableQuery = (
       current: response.current || 1,
       pageSize: response.pageSize || 20,
       total: response.total || 0,
+      onPageSizeChange(pageSize: number) {
+        setPagination({
+          ...pagination,
+          pageSize
+        })
+        trigger()
+      },
       onChange(current: number) {
         setPagination({
           ...pagination,

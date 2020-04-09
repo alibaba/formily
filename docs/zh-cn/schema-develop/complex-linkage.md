@@ -86,6 +86,60 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 使用 FormEffectHooks 可以很方便的将联动逻辑拆分出去，方便我们进行物理分离
 - 借助路径系统的批量匹配能力实现一对多联动
 
+## 自己联动自己(副作用校验)
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  FormEffectHooks,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { Input, Select } from '@formily/antd-components'
+import Printer from '@formily/printer'
+import { merge } from 'rxjs'
+import 'antd/dist/antd.css'
+
+const { onFieldValueChange$, onFormSubmitStart$ } = FormEffectHooks
+
+const useValidator = (name, validator) => {
+  const { setFieldState } = createFormActions()
+  merge(onFieldValueChange$(name), onFormSubmitStart$()).subscribe(() => {
+    setFieldState(name, state => {
+      state.errors = validator(state.value, state)
+    })
+  })
+}
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm
+        components={{ Input, Select }}
+        onSubmit={values => {
+          console.log(values)
+        }}
+        effects={() => {
+          useValidator('aa', value => (!value ? '必填字段' : ''))
+        }}
+      >
+        <Field type="string" name="aa" title="AA" x-component="Input" />
+        <FormButtonGroup>
+          <Submit />
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ## 多对一联动
 
 ```jsx
@@ -851,7 +905,7 @@ const mockSchema = {
             'x-linkages': [
               {
                 type: 'value:state',
-                target: 'array.[].ff',
+                target: '..[].ff',
                 state: {
                   visible: '{{!!$value}}'
                 }
@@ -962,13 +1016,18 @@ ReactDOM.render(<App />, document.getElementById('root'))
 **案例解析**
 
 - 自增列表中的动态联动，借助 x-linkages 可以实现相邻联动，或者是跨行联动
-- target 支持一种特殊语法
+- target 相邻查找
   - `prevPath.[].fieldName`代表当前行字段
   - `prevPath.[+].fieldName`代表下一行字段
   - `prevPath.[-].fieldName`代表上一行字段
   - `prevPath.[+2].fieldName`代表下下一行字段
   - `prevPath.[-2].fieldName`代表上上一行字段
   - 一次可以继续往下递增或者递减
+- target 向前路径查找
+  - `.path.a.b`代表基于当前字段路径往后计算
+  - `..path.a.b`代表往前计算相对路径
+  - `...path.a.b`代表继续往前计算相对路径
+  - 以此类推
 
 ## 外部联动
 

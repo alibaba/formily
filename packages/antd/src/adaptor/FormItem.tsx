@@ -97,11 +97,11 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
       prefixCls={prefixCls}
       label={label}
       labelAlign={labelAlign}
-      required={props.editable === false ? undefined : props.required}
       help={help}
       validateStatus={status}
       extra={extra ? <p>{extra}</p> : undefined}
       {...mergedProps}
+      required={props.editable === false ? undefined : props.required}
       labelCol={label ? normalizeCol(labelCol || contextLabelCol) : undefined}
       wrapperCol={
         label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
