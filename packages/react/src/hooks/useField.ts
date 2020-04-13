@@ -1,6 +1,12 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import { isFn, uid } from '@formily/shared'
-import { IFieldState, IForm, IField, IMutators } from '@formily/core'
+import {
+  IFieldState,
+  IForm,
+  IField,
+  IMutators,
+  LifeCycleTypes
+} from '@formily/core'
 import { getValueFromEvent, inspectChanged } from '../shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
@@ -100,6 +106,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     ref.current.field.setState(state => {
       state.mounted = true
     }, !ref.current.field.state.unmounted) //must notify,need to trigger restore value
+    form.notify(LifeCycleTypes.ON_FIELD_MOUNT, ref.current.field)
     ref.current.unmounted = false
     return () => {
       ref.current.field.removeCache(ref.current.uid)
