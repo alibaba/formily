@@ -254,6 +254,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const errorsChanged = field.isDirty('errors')
       const editableChanged = field.isDirty('editable')
 
+      const initializeLazy = (callback: () => void) => {
+        if (options.initializeLazySyncState) {
+          if (initialValueChanged) {
+            setTimeout(callback)
+          } else {
+            callback()
+          }
+        } else {
+          callback()
+        }
+      }
+
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
@@ -277,15 +289,19 @@ export function createForm<FieldProps, VirtualFieldProps>(
         published.visible == false || published.unmounted === true
       if (valueChanged) {
         if (!wasHidden) {
-          setFormValuesIn(path, published.value, true)
-          notifyTreeFromValues()
+          initializeLazy(() => {
+            setFormValuesIn(path, published.value, true)
+            notifyTreeFromValues()
+          })
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (initialValueChanged) {
         if (!wasHidden) {
-          setFormInitialValuesIn(path, published.initialValue, true)
-          notifyTreeFromInitialValues()
+          initializeLazy(() => {
+            setFormInitialValuesIn(path, published.initialValue, true)
+            notifyTreeFromInitialValues()
+          })
         }
         heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
@@ -297,18 +313,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 state.visibleCacheValue = published.value
               })
             }
-            deleteFormValuesIn(path, true)
-            notifyTreeFromValues()
+            initializeLazy(() => {
+              deleteFormValuesIn(path, true)
+              notifyTreeFromValues()
+            })
           } else {
             if (!existFormValuesIn(path)) {
-              setFormValuesIn(
-                path,
-                isValid(published.visibleCacheValue)
-                  ? published.visibleCacheValue
-                  : published.initialValue,
-                true
-              )
-              notifyTreeFromValues()
+              initializeLazy(() => {
+                setFormValuesIn(
+                  path,
+                  isValid(published.visibleCacheValue)
+                    ? published.visibleCacheValue
+                    : published.initialValue,
+                  true
+                )
+                notifyTreeFromValues()
+              })
             }
           }
         }
@@ -334,18 +354,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
               state.visibleCacheValue = published.value
             })
           }
-          deleteFormValuesIn(path, true)
-          notifyTreeFromValues()
+          initializeLazy(() => {
+            deleteFormValuesIn(path, true)
+            notifyTreeFromValues()
+          })
         } else {
           if (!existFormValuesIn(path)) {
-            setFormValuesIn(
-              path,
-              isValid(published.visibleCacheValue)
-                ? published.visibleCacheValue
-                : published.initialValue,
-              true
-            )
-            notifyTreeFromValues()
+            initializeLazy(() => {
+              setFormValuesIn(
+                path,
+                isValid(published.visibleCacheValue)
+                  ? published.visibleCacheValue
+                  : published.initialValue,
+                true
+              )
+              notifyTreeFromValues()
+            })
           }
         }
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
@@ -516,18 +540,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
             if (isValid(value)) {
               // value > formValue > initialValue
               state.value = value
-            } else {
-              state.value =
-                existFormValuesIn(state.name) || formValue !== undefined
-                  ? formValue
-                  : initialValue
+            } else if (
+              existFormValuesIn(state.name) ||
+              formValue !== undefined
+            ) {
+              state.value = formValue
+            } else if (isValid(initialValue)) {
+              state.value = initialValue
             }
-            // initialValue > formInitialValue
-            state.initialValue = isValid(initialValue)
-              ? initialValue
-              : isValid(formInitialValue)
-              ? formInitialValue
-              : initialValue
+
+            if (isValid(initialValue)) {
+              state.initialValue = initialValue
+            } else if (isValid(formInitialValue)) {
+              state.initialValue = formInitialValue
+            }
+
             if (isValid(visible)) {
               state.visible = visible
             }
