@@ -1,6 +1,6 @@
 {
   "name": "@formily/core",
-  "version": "1.1.1-beta.0",
+  "version": "1.1.1-beta.1",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -25,8 +25,8 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@formily/shared": "^1.1.1-beta.0",
-    "@formily/validator": "^1.1.1-beta.0",
+    "@formily/shared": "^1.1.1-beta.1",
+    "@formily/validator": "^1.1.1-beta.1",
     "immer": "^3.2.0"
   },
   "publishConfig": {

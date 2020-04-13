@@ -11,7 +11,8 @@ import {
   FormPathPattern,
   BigData,
   each,
-  isObj
+  isObj,
+  scheduler
 } from '@formily/shared'
 import {
   FormValidator,
@@ -257,7 +258,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const initializeLazy = (callback: () => void) => {
         if (options.initializeLazySyncState) {
           if (initialValueChanged) {
-            setTimeout(callback)
+            scheduler.applyWithIdlePriority(() => {
+              callback()
+            })
           } else {
             callback()
           }

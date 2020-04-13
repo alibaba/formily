@@ -60,6 +60,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     onSubmit,
     onReset,
     onValidateFailed,
+    initializeLazySyncState,
     useDirty,
     children,
     expressionScope,

@@ -58,6 +58,7 @@ export interface IFormProps<
     | ((form: IForm) => React.ReactElement)
   useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
+  initializeLazySyncState?: boolean
   validateFirst?: boolean
 }
 
