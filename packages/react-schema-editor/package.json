@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-schema-editor",
-  "version": "1.1.1-beta.1",
+  "version": "1.1.1-beta.2",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -22,7 +22,7 @@
   "dependencies": {
     "@ant-design/compatible": "^0.0.1-rc.1",
     "@ant-design/icons": "^4.0.3",
-    "@formily/antd": "^1.1.1-beta.1",
+    "@formily/antd": "^1.1.1-beta.2",
     "antd": "^4.0",
     "lodash": "^4.17.15"
   },
