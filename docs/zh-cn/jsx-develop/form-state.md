@@ -7,7 +7,6 @@
 | 状态名        | 描述                                        | 类型            | 默认值      |
 | ------------- | ------------------------------------------- | --------------- | ----------- |
 | displayName   | Form 状态标识                               | string          | "FormState" |
-| pristine      | 表单 value 是否等于 initialValues           | boolean         | false       |
 | modified      | 表单 value 是否发生变化                     | boolean         | false       |
 | valid         | 表单是否处于合法态                          | boolean         | true        |
 | invalid       | 表单是否处于非法态，如果校验失败则会为 true | boolean         | False       |

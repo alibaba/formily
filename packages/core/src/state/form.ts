@@ -56,12 +56,6 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
           draft.modified = true
         }
       }
-      
-      if (isEqual(draft.initialValues, draft.values)) {
-        draft.pristine = true
-      } else {
-        draft.pristine = false
-      }
 
       if (draft.validating !== prevState.validating) {
         if (draft.validating === true) {
