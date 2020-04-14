@@ -5,7 +5,6 @@ test('computeState', () => {
   expect(state.getState()).toEqual({
     displayName: 'FormState',
     editable: undefined,
-    pristine: true,
     valid: true,
     invalid: false,
     loading: false,
@@ -48,7 +47,6 @@ test('computeState', () => {
   expect(state.getState().valid).toEqual(false)
 
   // pristine depends on whether values to be equal initialvalues
-  expect(state.getState().pristine).toEqual(true)
   state.setState(draft => {
     draft.pristine = false
   })
