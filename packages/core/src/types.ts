@@ -253,7 +253,6 @@ export interface IFormStateProps {
   values?: {}
   lifecycles?: FormLifeCycle[]
   useDirty?: boolean
-  initializeLazySyncState?: boolean
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
 }

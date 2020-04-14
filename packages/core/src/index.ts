@@ -11,8 +11,7 @@ import {
   FormPathPattern,
   BigData,
   each,
-  isObj,
-  scheduler
+  isObj
 } from '@formily/shared'
 import {
   FormValidator,
@@ -264,20 +263,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
       const errorsChanged = field.isDirty('errors')
       const editableChanged = field.isDirty('editable')
 
-      const initializeLazy = (callback: () => void) => {
-        if (options.initializeLazySyncState) {
-          if (initialValueChanged) {
-            scheduler.applyWithIdlePriority(() => {
-              callback()
-            })
-          } else {
-            callback()
-          }
-        } else {
-          callback()
-        }
-      }
-
       if (initializedChanged) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
         const isEmptyValue = !isValid(published.value)
@@ -301,19 +286,15 @@ export function createForm<FieldProps, VirtualFieldProps>(
         published.visible == false || published.unmounted === true
       if (valueChanged) {
         if (!wasHidden) {
-          initializeLazy(() => {
-            setFormValuesIn(path, published.value, true)
-            notifyTreeFromValues()
-          })
+          setFormValuesIn(path, published.value, true)
+          notifyTreeFromValues()
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (initialValueChanged) {
         if (!wasHidden) {
-          initializeLazy(() => {
-            setFormInitialValuesIn(path, published.initialValue, true)
-            notifyTreeFromInitialValues()
-          })
+          setFormInitialValuesIn(path, published.initialValue, true)
+          notifyTreeFromInitialValues()
         }
         heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
       }
@@ -325,22 +306,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 state.visibleCacheValue = published.value
               })
             }
-            initializeLazy(() => {
-              deleteFormValuesIn(path)
-              notifyTreeFromValues()
-            })
+            deleteFormValuesIn(path)
+            notifyTreeFromValues()
           } else {
             if (!existFormValuesIn(path)) {
-              initializeLazy(() => {
-                setFormValuesIn(
-                  path,
-                  isValid(published.visibleCacheValue)
-                    ? published.visibleCacheValue
-                    : published.initialValue,
-                  true
-                )
-                notifyTreeFromValues()
-              })
+              setFormValuesIn(
+                path,
+                isValid(published.visibleCacheValue)
+                  ? published.visibleCacheValue
+                  : published.initialValue,
+                true
+              )
+              notifyTreeFromValues()
             }
           }
         }
@@ -366,22 +343,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
               state.visibleCacheValue = published.value
             })
           }
-          initializeLazy(() => {
-            deleteFormValuesIn(path, true)
-            notifyTreeFromValues()
-          })
+          deleteFormValuesIn(path, true)
+          notifyTreeFromValues()
         } else {
           if (!existFormValuesIn(path)) {
-            initializeLazy(() => {
-              setFormValuesIn(
-                path,
-                isValid(published.visibleCacheValue)
-                  ? published.visibleCacheValue
-                  : published.initialValue,
-                true
-              )
-              notifyTreeFromValues()
-            })
+            setFormValuesIn(
+              path,
+              isValid(published.visibleCacheValue)
+                ? published.visibleCacheValue
+                : published.initialValue,
+              true
+            )
+            notifyTreeFromValues()
           }
         }
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
