@@ -3,7 +3,8 @@ import {
   IVirtualFieldStateProps,
   IVirtualFieldState,
   IForm,
-  IVirtualField
+  IVirtualField,
+  LifeCycleTypes
 } from '@formily/core'
 import { uid } from '@formily/shared'
 import { useForceUpdate } from './useForceUpdate'
@@ -69,6 +70,7 @@ export const useVirtualField = (
     ref.current.field.setState(state => {
       state.mounted = true
     }, !ref.current.field.state.unmounted) //must notify,need to trigger restore value
+    form.notify(LifeCycleTypes.ON_FIELD_MOUNT, ref.current.field)
     ref.current.unmounted = false
     return () => {
       ref.current.field.removeCache(ref.current.uid)

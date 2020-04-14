@@ -11,62 +11,57 @@ npm install --save @formily/meet-components
 通过 `setup` 方法，可以快速置入内置的表单组件，免去维护全局`components`的工作。
 
 ```tsx
-import { SchemaForm, SchemaMarkupField as Field, FormButtonGroup, Submit } from '@formily/meet'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  Submit
+} from '@formily/meet'
 import { setup } from '@formily/meet-components'
 
 setup()
 export default () => {
   return (
     <SchemaForm>
-      <Field
-        type="string"
-        title="Text"
-        name="text"
-      />
+      <Field type="string" title="Text" name="text" />
     </SchemaForm>
   )
 }
-
 ```
 
 ### 内置组件类型
 
 通过 `setup`后，内置的表单字段有以下类型
 
-| type类型       | 对应组件                             | 描述                 |
-|:--------------|:----------------------------------|:----------------------|
-| string   | [Input](#Input)                     | 输入框组件         |
-| string(有enum属性时)   | [Select](#Select)                     | 选择框组件         |
-| password   | [Password](#Password)                     | 密码输入框         |
-| checkbox   | [CheckboxGroup](#Checkbox)                     | Checkbox         |
-| radio   | [RadioGroup](#Radio)                     | Radio         |
-| boolean   | [Switch](#Swicth)                     | 开关组件         |
-| date   | [DatePicker](#DatePicker)                     | 日期选择器         |
-| time   | [TimePicker](#TimePicker)                     | 时间选择器         |
-| daterange   | [DatePicker.RangePicker](#RangePicker)                     | 范围日期选择器         |
-
+| type 类型              | 对应组件                               | 描述           |
+| :--------------------- | :------------------------------------- | :------------- |
+| string                 | [Input](#Input)                        | 输入框组件     |
+| string(有 enum 属性时) | [Select](#Select)                      | 选择框组件     |
+| password               | [Password](#Password)                  | 密码输入框     |
+| checkbox               | [CheckboxGroup](#Checkbox)             | Checkbox       |
+| radio                  | [RadioGroup](#Radio)                   | Radio          |
+| boolean                | [Switch](#Swicth)                      | 开关组件       |
+| date                   | [DatePicker](#DatePicker)              | 日期选择器     |
+| time                   | [TimePicker](#TimePicker)              | 时间选择器     |
+| daterange              | [DatePicker.RangePicker](#RangePicker) | 范围日期选择器 |
 
 #### Input
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-import { createElement, useState } from 'rax';
-import { useLocale } from '@rax-ui/locale';
-import { ConfigProvider } from '@alifd/meet';
-import {
-  SchemaForm,
-} from '@formily/meet';
+import { createElement, useState } from 'rax'
+import { useLocale } from '@rax-ui/locale'
+import { ConfigProvider } from '@alifd/meet'
+import { SchemaForm } from '@formily/meet'
 
-import {
-  setup,
-} from '@formily/meet-components';
+import { setup } from '@formily/meet-components'
 
 const App = () => {
   return (
     <SchemaForm
       components={{
-        Input,
+        Input
       }}
       schema={{
         type: 'object',
@@ -76,26 +71,25 @@ const App = () => {
             'x-component': 'Input',
             'x-component-props': {
               placeholder: 'input'
-            },
-          },
+            }
+          }
         }
       }}
-    > 
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Input } from '@formily/meet-components'
 
@@ -103,7 +97,7 @@ const App = () => {
   return (
     <SchemaForm
       components={{
-        Input,
+        Input
       }}
     >
       <Field
@@ -119,36 +113,28 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
 
 #### Select
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-
-import { createElement, useState } from 'rax';
-import View from 'rax-view';
-import { useLocale } from '@rax-ui/locale';
-import { ConfigProvider } from '@alifd/meet';
-import {
-  SchemaForm,
-} from '@formily/meet';
+import { createElement, useState } from 'rax'
+import View from 'rax-view'
+import { useLocale } from '@rax-ui/locale'
+import { ConfigProvider } from '@alifd/meet'
+import { SchemaForm } from '@formily/meet'
 import { Select } from '@formily/meet-components'
 
-import {
-  setup,
-} from '@formily/meet-components';
-
+import { setup } from '@formily/meet-components'
 
 const App = () => {
   return (
     <SchemaForm
       components={{
-        Select,
+        Select
       }}
       schema={{
         type: 'object',
@@ -159,7 +145,7 @@ const App = () => {
             'x-component': 'Select',
             'x-component-props': {
               placeholder: 'select'
-            },
+            }
           },
           objSelect: {
             title: 'Object Select',
@@ -172,27 +158,25 @@ const App = () => {
             ],
             'x-component-props': {
               placeholder: 'select'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Select } from '@formily/meet-components'
 
@@ -200,7 +184,7 @@ const App = () => {
   return (
     <SchemaForm
       components={{
-        Select,
+        Select
       }}
     >
       <Field
@@ -232,23 +216,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
 
 #### TextArea
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Input } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -264,37 +242,31 @@ const App = () => {
             'x-component': 'TextArea',
             'x-component-props': {
               placeholder: 'textarea'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Input } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ TextArea: Input.TextArea }}
-    >
+    <SchemaForm components={{ TextArea: Input.TextArea }}>
       <Field
         x-component="TextArea"
         title="TextArea"
@@ -307,24 +279,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### Password
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Password } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -340,37 +305,31 @@ const App = () => {
             'x-component': 'Password',
             'x-component-props': {
               placeholder: 'Password'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Password } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Password }}
-    >
+    <SchemaForm components={{ Password }}>
       <Field
         x-component="Password"
         title="Password"
@@ -383,24 +342,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### NumberPicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { NumberPicker } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -413,37 +365,31 @@ const App = () => {
         properties: {
           textarea: {
             title: 'NumberPicker',
-            'x-component': 'NumberPicker',
-          },
+            'x-component': 'NumberPicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { NumberPicker } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ NumberPicker }}
-    >
+    <SchemaForm components={{ NumberPicker }}>
       <Field
         x-component="NumberPicker"
         title="NumberPicker"
@@ -453,24 +399,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### Switch
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Switch } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -483,64 +422,47 @@ const App = () => {
         properties: {
           textarea: {
             title: 'Switch',
-            'x-component': 'Switch',
-          },
+            'x-component': 'Switch'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Switch } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Switch }}
-    >
-      <Field
-        x-component="Switch"
-        title="Switch"
-        name="Switch"
-      />
+    <SchemaForm components={{ Switch }}>
+      <Field x-component="Switch" title="Switch" name="Switch" />
     </SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### DatePicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { DatePicker } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -556,37 +478,31 @@ const App = () => {
             'x-component': 'DatePicker',
             'x-component-props': {
               format: 'YYYY-MM-DD HH:mm:ss'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { DatePicker } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ DatePicker }}
-    >
+    <SchemaForm components={{ DatePicker }}>
       <Field
         x-component="DatePicker"
         title="DatePicker"
@@ -599,25 +515,21 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### RangePicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { DatePicker } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -630,66 +542,47 @@ const App = () => {
         properties: {
           '[start,end]': {
             title: 'RangePicker',
-            'x-component': 'RangePicker',
-          },
+            'x-component': 'RangePicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { DatePicker } from '@formily/meet-components'
-
 
 const App = () => {
   return (
-    <SchemaForm
-      components={{ RangePicker: DatePicker.RangePicker }}
-    >
-      <Field
-        x-component="RangePicker"
-        title="RangePicker"
-        name="[start,end]"
-      />
+    <SchemaForm components={{ RangePicker: DatePicker.RangePicker }}>
+      <Field x-component="RangePicker" title="RangePicker" name="[start,end]" />
     </SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
-
-
 
 #### MonthPicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { DatePicker } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -702,63 +595,47 @@ const App = () => {
         properties: {
           textarea: {
             title: 'MonthPicker',
-            'x-component': 'MonthPicker',
-          },
+            'x-component': 'MonthPicker'
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { DatePicker } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ MonthPicker: DatePicker.MonthPicker }}
-    >
-      <Field
-        x-component="MonthPicker"
-        title="MonthPicker"
-        name="MonthPicker"
-      />
+    <SchemaForm components={{ MonthPicker: DatePicker.MonthPicker }}>
+      <Field x-component="MonthPicker" title="MonthPicker" name="MonthPicker" />
     </SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
 
 #### TimePicker
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { TimePicker } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -774,37 +651,31 @@ const App = () => {
             'x-component': 'TimePicker',
             'x-component-props': {
               format: 'YYYY-MM-DD HH:mm:ss'
-            },
-          },
+            }
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { TimePicker } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ TimePicker }}
-    >
+    <SchemaForm components={{ TimePicker }}>
       <Field
         x-component="TimePicker"
         title="TimePicker"
@@ -817,23 +688,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
 
 #### Range
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Range } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -852,36 +717,30 @@ const App = () => {
               max: 1024,
               marks: [0, 1024]
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Range } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Range }}
-    >
+    <SchemaForm components={{ Range }}>
       <Field
         x-component="Range"
         title="Range"
@@ -896,24 +755,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### Upload
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Upload } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -944,36 +796,30 @@ const App = () => {
             'x-component-props': {
               listType: 'text'
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Upload } from '@formily/meet-components'
 
-
 const App = () => {
   return (
-    <SchemaForm
-      components={{ Upload }}
-    >
+    <SchemaForm components={{ Upload }}>
       <Field
         x-component="Upload"
         title="Card Upload"
@@ -1002,29 +848,24 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
 #### Checkbox
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Checkbox } from '@formily/meet-components'
-
 
 const App = () => {
   return (
     <SchemaForm
       components={{
         Checkbox,
-        CheckboxGroup: Checkbox.Group,
+        CheckboxGroup: Checkbox.Group
       }}
       schema={{
         type: 'object',
@@ -1043,37 +884,33 @@ const App = () => {
               { label: 'Three', value: '3' },
               { label: 'Four', value: '4' }
             ]
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Checkbox } from '@formily/meet-components'
-
 
 const App = () => {
   return (
     <SchemaForm
       components={{
         Checkbox,
-        CheckboxGroup: Checkbox.Group,
+        CheckboxGroup: Checkbox.Group
       }}
     >
       <Field
@@ -1097,31 +934,24 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### Radio
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Radio } from '@formily/meet-components'
-
 
 const App = () => {
   return (
     <SchemaForm
       components={{
         Radio,
-        RadioGroup: Radio.Group,
+        RadioGroup: Radio.Group
       }}
       schema={{
         type: 'object',
@@ -1140,37 +970,33 @@ const App = () => {
               { label: 'Three', value: '3' },
               { label: 'Four', value: '4' }
             ]
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Radio } from '@formily/meet-components'
-
 
 const App = () => {
   return (
     <SchemaForm
       components={{
         Radio,
-        RadioGroup: Radio.Group,
+        RadioGroup: Radio.Group
       }}
     >
       <Field
@@ -1194,24 +1020,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### Rating
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Rating } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -1228,30 +1047,26 @@ const App = () => {
             'x-component-props': {
               allowHalf: true
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Rating } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -1272,24 +1087,17 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
-
-
 
 #### Transfer
 
-* JSON Schema 方式
+- JSON Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
-import {
-  SchemaForm,
-  SchemaMarkupField as Field,
-} from '@formily/meet'
+import { createElement, useState } from 'rax'
+import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Transfer } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -1312,30 +1120,26 @@ const App = () => {
             'x-component-props': {
               showSearch: true
             }
-          },
+          }
         }
       }}
-    >
-      
-    </SchemaForm>
+    ></SchemaForm>
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```
 
-* JSX Schema 方式
+- JSX Schema 方式
 
 ```jsx
-
-import { createElement, useState } from 'rax';
+import { createElement, useState } from 'rax'
 import {
   SchemaForm,
   SchemaMarkupField as Field,
-  createFormActions,
+  createFormActions
 } from '@formily/meet'
 import { Transfer } from '@formily/meet-components'
-
 
 const App = () => {
   return (
@@ -1362,5 +1166,5 @@ const App = () => {
   )
 }
 
-render(<App />, null, { driver: DriverUniversal });
+render(<App />, null, { driver: DriverUniversal })
 ```

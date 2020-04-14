@@ -156,7 +156,7 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
   return fetch({
     url: 'https://randomuser.me/api',
     data: {
-      results: 10,
+      results: pagination.pageSize,
       sortField: sorter.field,
       sortOrder: sorter.order,
       page: pagination.current,

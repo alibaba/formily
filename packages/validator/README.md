@@ -1,2 +1,3 @@
 # @formily/validator
-> Formily数据校验工具
+
+> Formily 数据校验工具

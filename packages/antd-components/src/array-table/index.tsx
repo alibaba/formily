@@ -10,7 +10,12 @@ import { CircleButton } from '../circle-button'
 import { TextButton } from '../text-button'
 import { Table, Form } from 'antd'
 import { FormItemShallowProvider } from '@formily/antd'
-import { PlusOutlined, DeleteOutlined, DownOutlined, UpOutlined } from '@ant-design/icons'
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  DownOutlined,
+  UpOutlined
+} from '@ant-design/icons'
 import styled from 'styled-components'
 
 const ArrayComponents = {
@@ -49,10 +54,12 @@ export const ArrayTable: any = styled(
       ...componentProps
     } = schema.getExtendsComponentProps() || {}
     const schemaItems = Array.isArray(schema.items)
-    ? schema.items[schema.items.length - 1]
-    : schema.items
+      ? schema.items[schema.items.length - 1]
+      : schema.items
     const onAdd = () => {
-      mutators.push(schemaItems.getEmptyValue())
+      if (schemaItems) {
+        mutators.push(schemaItems.getEmptyValue())
+      }
     }
     const onMove = (dragIndex, dropIndex) => {
       mutators.move(dragIndex, dropIndex)
@@ -86,10 +93,10 @@ export const ArrayTable: any = styled(
     let columns = []
     if (schema.items) {
       columns = isArr(schema.items)
-      ? schema.items.reduce((buf, items) => {
-          return buf.concat(renderColumns(items))
-        }, [])
-      : renderColumns(schema.items)
+        ? schema.items.reduce((buf, items) => {
+            return buf.concat(renderColumns(items))
+          }, [])
+        : renderColumns(schema.items)
     }
     if (editable && operations !== false) {
       columns.push({
@@ -169,7 +176,7 @@ export const ArrayTable: any = styled(
           )}
           <ArrayList.Addition>
             {({ children }) => {
-              return (
+              return children && (
                 <div className="array-table-addition" onClick={onAdd}>
                   {children}
                 </div>

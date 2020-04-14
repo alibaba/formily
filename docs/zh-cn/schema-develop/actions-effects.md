@@ -55,8 +55,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 **案例解析**
 
-- 借助actions，我们可以在外部自由调用FormAPI
-- 注意：调用actions中的API，必须要Form初始化完成才能调用，其实我们真实业务逻辑通常也是会在某个异步事件完成后调用，所以对这个初始化时机问题感知不多，如果需要保证调用安全性，我们可以调用createAsyncFormActions来创建actions，但是所创建出来的actions的内部所有API，调用时都会返回Promise对象
+- 借助 actions，我们可以在外部自由调用 FormAPI
+- 注意：调用 actions 中的 API，必须要 Form 初始化完成才能调用，其实我们真实业务逻辑通常也是会在某个异步事件完成后调用，所以对这个初始化时机问题感知不多，如果需要保证调用安全性，我们可以调用 createAsyncFormActions 来创建 actions，但是所创建出来的 actions 的内部所有 API，调用时都会返回 Promise 对象
 
 ## 如何监听 Form 内部事件
 

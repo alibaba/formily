@@ -7,6 +7,7 @@ import {
 import { createForm } from './index'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
+export * from '@formily/validator'
 
 export type FormLifeCycleHandler<T> = (payload: T, context: any) => void
 
@@ -249,6 +250,7 @@ export interface IFormStateProps {
   values?: {}
   lifecycles?: FormLifeCycle[]
   useDirty?: boolean
+  initializeLazySyncState?: boolean
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
 }

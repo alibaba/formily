@@ -64,7 +64,10 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return (
       <Field
         path={path}
-        initialValue={fieldSchema.default}
+        initialValue={complieExpression(
+          fieldSchema.default,
+          expressionScope
+        )}
         props={complieExpression(
           fieldSchema.getSelfProps(),
           expressionScope,
@@ -73,10 +76,22 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         dataType={fieldSchema.type}
         triggerType={fieldSchema.getExtendsTriggerType()}
         editable={fieldSchema.getExtendsEditable()}
-        visible={fieldSchema.getExtendsVisible()}
-        display={fieldSchema.getExtendsDisplay()}
-        required={fieldSchema.getExtendsRequired()}
-        rules={fieldSchema.getExtendsRules()}
+        visible={complieExpression(
+          fieldSchema.getExtendsVisible(),
+          expressionScope
+        )}
+        display={complieExpression(
+          fieldSchema.getExtendsDisplay(),
+          expressionScope
+        )}
+        required={complieExpression(
+          fieldSchema.getExtendsRequired(),
+          expressionScope
+        )}
+        rules={complieExpression(
+          fieldSchema.getExtendsRules(),
+          expressionScope
+        )}
         computeState={computeSchemaState}
       >
         {({ state, mutators, form }) => {

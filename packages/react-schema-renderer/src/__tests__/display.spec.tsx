@@ -139,3 +139,46 @@ test('display is false will not validate(include children)', async () => {
   expect(onValidateFailedHandler).toHaveBeenCalledTimes(0)
 })
 
+test('display is expression true will display react node', async () => {
+  const TestComponent = () => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'aa': {
+          'x-component': 'string',
+          'title': 'aa',
+          'default':'123321',
+          'display':'{{true}}'
+        },
+      }
+    }
+    return (
+      <SchemaForm schema={schema}/>
+    )
+  }
+  const { queryByText } = render(<TestComponent />)
+  await wait()
+  expect(queryByText('123321')).toBeVisible()
+})
+
+test('display is expression false will hide react node', async () => {
+  const TestComponent = () => {
+    const schema = {
+      'type': 'object',
+      'properties': {
+        'aa': {
+          'x-component': 'string',
+          'title': 'aa',
+          'default':'123321',
+          'display':'{{false}}'
+        },
+      }
+    }
+    return (
+      <SchemaForm schema={schema}/>
+    )
+  }
+  const { queryByText } = render(<TestComponent />)
+  await wait()
+  expect(queryByText('123321')).toBeNull()
+})

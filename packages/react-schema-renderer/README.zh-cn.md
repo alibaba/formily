@@ -272,11 +272,11 @@ import {
 } from '@formily/react-schema-renderer'
 import { Form } from 'antd'
 
-export const CompatFormComponent = ({children,...props})=>{
+export const CompatFormComponent = ({ children, ...props }) => {
   return <Form {...props}>{children}</Form> //很简单的使用Form组件，props是SchemaForm组件的props，这里会直接透传
 }
 
-export const CompatFormItemComponent = ({children,...props})=>{
+export const CompatFormItemComponent = ({ children, ...props }) => {
   const messages = [].concat(props.errors || [], props.warnings || [])
   let status = ''
   if (props.loading) {
@@ -292,9 +292,11 @@ export const CompatFormItemComponent = ({children,...props})=>{
     <Form.Item
       {...props}
       label={props.schema.title}
-      help={messages.length ? messages : props.schema && props.schema.description}
+      help={
+        messages.length ? messages : props.schema && props.schema.description
+      }
       validateStatus={status}
-      >
+    >
       {children}
     </Form.Item>
   )
@@ -307,15 +309,14 @@ registerFormItemComponent(CompatFormItemComponent)
 ***/
 
 //单例注册方式
-export default ()=>{
+export default () => {
   return (
     <SchemaForm
-       formComponent={CompatFormComponent}
-       formItemComponent={CompatFormItemComponent}
+      formComponent={CompatFormComponent}
+      formItemComponent={CompatFormItemComponent}
     />
   )
 }
-
 ```
 
 我们可以看到，扩展表单整体或局部的样式，仅仅只需要通过扩展 Form/FormItem 组件就可以轻松解决了，这里需要注意的是，FormItem 组件接收到的 props 有点复杂，不用担心，后面会列出详细 props API，现在我们只需要知道大概是如何注册的就行了。
@@ -900,7 +901,7 @@ cleanRegistry(): void
 | 属性名               | 描述                                   | 类型                                                                                                              |
 | -------------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | title                | 字段标题                               | `React.ReactNode`                                                                                                 |
-| name                | 字段所属的父节点属性名                               | `string`                                                                                                 |
+| name                 | 字段所属的父节点属性名                 | `string`                                                                                                          |
 | description          | 字段描述                               | `React.ReactNode`                                                                                                 |
 | default              | 字段默认值                             | `any`                                                                                                             |
 | readOnly             | 是否只读与 editable 一致               | `boolean`                                                                                                         |
@@ -927,10 +928,10 @@ cleanRegistry(): void
 | additionalItems      | 额外数组元素描述                       | `Schema`                                                                                                          |
 | patternProperties    | 动态匹配对象的某个属性的 Schema        | `{[key : string]:Schema}`                                                                                         |
 | additionalProperties | 匹配对象额外属性的 Schema              | `Schema`                                                                                                          |
-| editable             | 字段是否可编辑                         | `boolean`    |
-| visible             | 字段是否可见(数据+样式)                        | `boolean`       |
-| display             | 字段样式是否可见                         | `boolean`            |
-| x-props              | 字段扩展属性                           | `{ [name: string]: any }`     |
+| editable             | 字段是否可编辑                         | `boolean`                                                                                                         |
+| visible              | 字段是否可见(数据+样式)                | `boolean`                                                                                                         |
+| display              | 字段样式是否可见                       | `boolean`                                                                                                         |
+| x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                                                                         |
 | x-index              | 字段顺序                               | `number`                                                                                                          |
 | x-rules              | 字段校验规则                           | `ValidatePatternRules`                                                                                            |
 | x-component          | 字段 UI 组件                           | `string`                                                                                                          |
@@ -1192,8 +1193,6 @@ const schema4 = new Schema({
 schema4.getExtendsEditable() // false
 ```
 
-
-
 ##### `getExtendsVisible`
 
 > 获取数据样式可见属性
@@ -1213,8 +1212,6 @@ getExtendsVisible(): boolean
 ```
 getExtendsDisplay() : boolean
 ```
-
-
 
 ##### `getExtendsTriggerType`
 
@@ -1582,17 +1579,18 @@ interface IConnectOptions {
   eventName?: string //取值回调名称，默认是onChange
   defaultProps?: {} //自定义组件默认属性
   getValueFromEvent?: (event?: any, value?: any) => any //取值回调处理器，主要用于针对事件参数到最终触发onChange的值做转换合并
-  getProps?: ( //组件属性转换器，使用它可以轻松的处理从FieldProps到ComponentProps的转换映射等工作
+  getProps?: (
+    //组件属性转换器，使用它可以轻松的处理从FieldProps到ComponentProps的转换映射等工作
     componentProps: {},
     fieldProps: MergedFieldComponentProps
   ) => {} | void
-  getComponent?: ( //组件转换器，有些场景，根据FieldState，会将组件做动态切换，比如根据editable，会动态切换为文本预览组件之类的
+  getComponent?: (
+    //组件转换器，有些场景，根据FieldState，会将组件做动态切换，比如根据editable，会动态切换为文本预览组件之类的
     Target: any,
     componentProps: {},
     fieldProps: MergedFieldComponentProps
   ) => React.JSXElementConstructor<any>
 }
-
 ```
 
 #### ISchemaFieldComponentProps

@@ -153,6 +153,10 @@
     "scripts/**.@(ts|tsx|js)": [
       "npm run lint",
       "git add"
+    ],
+    "**/*.md": [
+      "prettier --write",
+      "git add"
     ]
   },
   "collective": {

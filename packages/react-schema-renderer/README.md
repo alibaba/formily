@@ -276,11 +276,11 @@ import {
 } from '@formily/react-schema-renderer'
 import { Form } from 'antd'
 
-export const CompatFormComponent = ({children,...props})=>{
+export const CompatFormComponent = ({ children, ...props }) => {
   return <Form {...props}>{children}</Form> //Very simple to use the Form component, props is the props of the SchemaForm component, here will be directly transparent
 }
 
-export const CompatFormItemComponent = ({children,...props})=>{
+export const CompatFormItemComponent = ({ children, ...props }) => {
   const messages = [].concat(props.errors || [], props.warnings || [])
   let status = ''
   if (props.loading) {
@@ -296,9 +296,11 @@ export const CompatFormItemComponent = ({children,...props})=>{
     <Form.Item
       {...props}
       label={props.schema.title}
-      help={messages.length ? messages : props.schema && props.schema.description}
+      help={
+        messages.length ? messages : props.schema && props.schema.description
+      }
       validateStatus={status}
-      >
+    >
       {children}
     </Form.Item>
   )
@@ -311,15 +313,14 @@ registerFormItemComponent(CompatFormItemComponent)
 ***/
 
 //Single case registration method
-export default ()=>{
+export default () => {
   return (
     <SchemaForm
-       formComponent={CompatFormComponent}
-       formItemComponent={CompatFormItemComponent}
+      formComponent={CompatFormComponent}
+      formItemComponent={CompatFormItemComponent}
     />
   )
 }
-
 ```
 
 We can see that extending the overall or partial style of the form can be easily solved by simply extending the Form/FormItem component. It should be noted here that the props received by the FormItem component are a bit complicated. Don't worry, the detailed props API will be listed later. Now we just need to know how it is probably registered.
@@ -900,7 +901,7 @@ cleanRegistry(): void
 | Attribute name       | Description                                                          | Type                                                                                                              |
 | -------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | title                | Field title                                                          | `React.ReactNode`                                                                                                 |
-| name                | The parent property name of the field                                                         |  `string`                                                                                               |
+| name                 | The parent property name of the field                                | `string`                                                                                                          |
 | description          | Field description                                                    | `React.ReactNode`                                                                                                 |
 | default              | Field default                                                        | `any`                                                                                                             |
 | readOnly             | Whether read-only and editable                                       | `boolean`                                                                                                         |
@@ -927,9 +928,9 @@ cleanRegistry(): void
 | additionalItems      | Extra array element description                                      | `Schema`                                                                                                          |
 | patternProperties    | Dynamically match the schema of an attribute of an object            | `{[key : string]:Schema}`                                                                                         |
 | additionalProperties | Schema matching the extra attributes of the object                   | `Schema`                                                                                                          |
-| editable             | Whether the field is editable                                        | `boolean`    |
-| visible             | Whether the data and style is visible                                        | `boolean`     |
-| display             | Whether the style is visible                                      | `boolean`                                                                                                          |
+| editable             | Whether the field is editable                                        | `boolean`                                                                                                         |
+| visible              | Whether the data and style is visible                                | `boolean`                                                                                                         |
+| display              | Whether the style is visible                                         | `boolean`                                                                                                         |
 | x-props              | Field extension attribute                                            | `{ [name: string]: any }`                                                                                         |
 | x-index              | Field order                                                          | `number`                                                                                                          |
 | x-rules              | Field check rule                                                     | `ValidatePatternRules`                                                                                            |
@@ -1578,19 +1579,19 @@ interface IConnectOptions {
   eventName?: string //get value callback name
   defaultProps?: {} //component default props
   getValueFromEvent?: (event?: any, value?: any) => any //get value from event callback.
-  getProps?: ( //props transformer
+  getProps?: (
+    //props transformer
     componentProps: {},
     fieldProps: MergedFieldComponentProps
   ) => {} | void
-  getComponent?: ( //component transformer
+  getComponent?: (
+    //component transformer
     Target: any,
     componentProps: {},
     fieldProps: MergedFieldComponentProps
   ) => React.JSXElementConstructor<any>
 }
-
 ```
-
 
 #### ISchemaFieldComponentProps
 

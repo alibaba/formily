@@ -138,35 +138,42 @@ const theme = {
   }
 }
 
-const Header = ({ onSelect, node, style, customStyles }) => (
-  <div className="node-header" style={style.base} onClick={onSelect}>
+const Header = props => {
+  const { node, style, customStyles } = props
+  return (
     <div
-      style={
-        node.selected
-          ? { ...style.title, ...customStyles.header.title }
-          : style.title
-      }
+      className="node-header"
+      style={style.base}
+      onClick={() => {
+        node.toggled = false
+      }}
     >
-      <span style={{ zIndex: 1, position: 'relative' }}>{node.name}</span>
-      <div className={`highlight ${node.active ? 'active' : ''}`}></div>
+      <div
+        style={
+          node.selected
+            ? { ...style.title, ...customStyles.header.title }
+            : style.title
+        }
+      >
+        <span style={{ zIndex: 1, position: 'relative' }}>{node.name}</span>
+        <div className={`highlight ${node.active ? 'active' : ''}`}></div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   const [data, setData] = useState(createTree(dataSource))
-  const cursor = useRef(null)
+  const cursor = useRef(data)
 
   const onToggle = (node: any, toggled: boolean) => {
-    if (cursor.current) {
-      cursor.current.active = false
-    }
+    cursor.current.active = false
     node.active = true
     if (node.children && node.children.length) {
       node.toggled = toggled
     }
     cursor.current = node
-    setData({ ...data })
+    setData(data)
     if (onSelect) {
       onSelect(node)
     }

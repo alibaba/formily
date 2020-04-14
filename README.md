@@ -59,7 +59,6 @@ npm install --save @formily/core
 
 ![](https://img.alicdn.com/tfs/TB1BvlRu4D1gK0jSZFsXXbldVXa-1882-1144.png)
 
-
 ## WebSite
 
 https://formilyjs.org
@@ -72,21 +71,18 @@ https://formilyjs.org
 - [@formily/react](./packages/react/README.md)
 - [@formily/core](./packages/core/README.md)
 
-
 ## Demo
 
 [codesandbox](https://codesandbox.io/s/o5up7)
 
-## Conmmunity
+## Community
 
 - [icejs](https://github.com/alibaba/ice)
 
-
 ## Contributors
 
-This project exists thanks to all the people who contribute. 
+This project exists thanks to all the people who contribute.
 <a href="https://github.com/alibaba/formily/graphs/contributors"><img src="https://opencollective.com/formily/contributors.svg?width=890" /></a>
-
 
 ## LICENSE
 

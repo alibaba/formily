@@ -117,7 +117,7 @@ export interface ISchema {
   uniqueItems?: boolean
   maxProperties?: number
   minProperties?: number
-  required?: string[] | boolean
+  required?: string[] | boolean | string
   format?: string
   /** nested json schema spec **/
   properties?: {
@@ -131,8 +131,8 @@ export interface ISchema {
   additionalProperties?: ISchema
   /** extend json schema specs */
   editable?: boolean
-  visible?: boolean
-  display?: boolean
+  visible?: boolean | string
+  display?: boolean | string
   triggerType?: 'onBlur' | 'onChange'
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number

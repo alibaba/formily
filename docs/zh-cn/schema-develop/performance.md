@@ -86,3 +86,28 @@ onFieldValueChange$('aa').subscribe(() => {
 
 - aa 值变化时触发 bb 所有子节点隐藏
 - 使用 hostUpdate 包装，可以在当前操作中阻止精确更新策略，在所有字段状态更新完毕之后直接走根组件重渲染策略，从而起到合并渲染的目的
+
+## 表单初始化渲染卡顿问题
+
+因为 Formily 内部维护了一棵状态树，初始化阶段，会频繁同步状态树，用来保证实时幂等，但这样带来的问题就是整体计算压力比较大，如果在一些比较老旧的浏览器，比如 IE11 上，就很难带动起来，节点数量越多，首次渲染会越卡顿，这个没法避免，所以，我们考虑给 Formily 支持一个参数 `initializeLazySyncState`，用于解决首次渲染的惰性同步状态，但是开启之后，肯定会存在一些副作用问题，比如：
+
+```js
+onFieldValueChange$().subscribe(() => {
+  const values = actions.getFormState(state => state.values)
+  //初始化阶段基于当前表单的某个值去做一些处理
+})
+```
+
+开启`initializeLazySyncState`
+
+```js
+<SchemaForm initializeLazySyncState>
+  ...
+</SchemaForm>
+
+or
+
+<Form initializeLazySyncState>
+  ...
+</Form>
+```
