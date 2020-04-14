@@ -59,7 +59,6 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldValues(state: IFieldState) {
-    if (!isField(state)) return
     const dataPath = FormPath.parse(state.name)
     const parent = graph.getLatestParent(state.path)
     const parentValue = getFormValuesIn(parent.path)
@@ -327,7 +326,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
               })
             }
             initializeLazy(() => {
-              deleteFormValuesIn(path, true)
+              deleteFormValuesIn(path)
               notifyTreeFromValues()
             })
           } else {
@@ -747,8 +746,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
-    state.setState(state => {
+    const method = silent ? 'setSourceState' : 'setState'
+    state[method](state => {
       FormPath.deleteIn(state[key], transformDataPath(path))
+      if (key === 'values') {
+        state.modified = true
+      }
     }, silent)
   }
 

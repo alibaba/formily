@@ -8,7 +8,6 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
   class FormState {
     static displayName = 'FormState'
     static defaultState = {
-      pristine: true,
       valid: true,
       invalid: false,
       loading: false,
