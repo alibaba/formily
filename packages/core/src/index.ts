@@ -59,6 +59,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldValues(state: IFieldState) {
+    if (!isField(state)) return
     const dataPath = FormPath.parse(state.name)
     const parent = graph.getLatestParent(state.path)
     const parentValue = getFormValuesIn(parent.path)
@@ -93,6 +94,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldIntialValues(state: IFieldState) {
+    if (state.name === '') return
     const initialValue = getFormInitialValuesIn(state.name)
     if (!isEqual(initialValue, state.initialValue)) {
       state.initialValue = initialValue
@@ -109,7 +111,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function notifyFormValuesChange() {
-    if (isFn(options.onChange) && !state.state.unmounted) {
+    if (
+      isFn(options.onChange) &&
+      state.state.mounted &&
+      !state.state.unmounted
+    ) {
       clearTimeout(env.onChangeTimer)
       env.onChangeTimer = setTimeout(() => {
         if (state.state.unmounted) return
@@ -236,10 +242,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
     function notifyTreeFromInitialValues() {
       field.setState(syncFieldIntialValues)
       graph.eachParent(path, (field: IField) => {
-        field.setState(syncFieldIntialValues, true)
+        if (isField(field)) {
+          field.setState(syncFieldIntialValues, true)
+        }
       })
       graph.eachChildren(path, (field: IField) => {
-        field.setState(syncFieldIntialValues)
+        if (isField(field)) {
+          field.setState(syncFieldIntialValues)
+        }
       })
       notifyFormInitialValuesChange()
     }
@@ -727,8 +737,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
     value: any,
     silent?: boolean
   ) {
-    state.setState(state => {
+    const method = silent ? 'setSourceState' : 'setState'
+    state[method](state => {
       FormPath.setIn(state[key], transformDataPath(path), value)
+      if (key === 'values') {
+        state.modified = true
+      }
     }, silent)
   }
 

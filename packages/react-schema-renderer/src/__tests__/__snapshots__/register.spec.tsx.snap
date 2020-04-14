@@ -6,9 +6,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": "123",
-    },
     "initialValues": Object {
       "aa": "123",
     },
@@ -17,15 +14,12 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": true,
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": "123",
-    },
     "values": Object {
       "aa": "aa change",
     },
@@ -86,9 +80,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": "123",
-    },
     "initialValues": Object {
       "aa": "123",
     },
@@ -97,15 +88,12 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": true,
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": "123",
-    },
     "values": Object {
       "aa": "aa change",
     },
@@ -166,9 +154,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": "123",
-    },
     "initialValues": Object {
       "aa": "123",
     },
@@ -177,15 +162,12 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": true,
-    "pristine": false,
+    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": "123",
-    },
     "values": Object {
       "aa": "aa change",
     },
