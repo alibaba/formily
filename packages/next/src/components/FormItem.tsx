@@ -11,8 +11,10 @@ import {
   pickFormItemProps,
   log
 } from '../shared'
+import MegaLayout, { StyledLayoutItem } from '../components/FormMegaLayout';
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
+
 const { Item: NextFormItem } = NextForm
 
 const computeStatus = (props: any) => {
@@ -103,18 +105,54 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
     const { labelCol, wrapperCol, help } = props
     const formItemProps = pickFormItemProps(props)
     const componentProps = pickNotFormItemProps(props)
-    return (
-      <NextFormItem
-        {...formItemProps}
-        required={editable === false ? undefined : required}
-        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
-        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
-        validateState={computeStatus(state)}
-        help={computeMessage(errors, warnings) || help}
-      >
-        {renderComponent({ props: componentProps, state, mutators, form })}
-      </NextFormItem>
-    )
+
+    return <MegaLayout.Item {...props}>
+      {layoutProps => {
+        const itemProps = {
+          ...formItemProps,
+          required: editable === false ? undefined : required,
+          labelCol: formItemProps.label ? normalizeCol(labelCol) : undefined,
+          wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : undefined,
+          validateState: computeStatus(state),
+          help: computeMessage(errors, warnings) || help,
+        }
+
+        // 启用了MegaLayout
+        if (layoutProps) {
+          const { cols, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
+          itemProps.labelAlign = labelAlign
+          itemProps.inline = inline
+          itemProps.grid = grid
+          itemProps.gutter = gutter
+          itemProps.span = span
+          itemProps.cols = cols
+
+          if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
+          if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
+          if (labelWidth !== -1) itemProps.labelWidth = labelWidth
+          if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
+
+          // 撑满即为组件宽度为100%
+          if (full) {
+            componentProps.style = {
+              ...(componentProps.style || {}),
+              width: '100%',
+            }
+          }
+
+          return <StyledLayoutItem {...itemProps}>
+            {renderComponent({ props: componentProps, state, mutators, form })}
+          </StyledLayoutItem>
+        }
+
+        // 没有启用MegaLayout, 保持和线上完全一致的功能。
+        return (
+          <NextFormItem {...itemProps}>
+            {renderComponent({ props: componentProps, state, mutators, form })}
+          </NextFormItem>
+        )
+      }}
+    </MegaLayout.Item>
   }
 
   if (!component && children) {
