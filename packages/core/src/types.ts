@@ -228,7 +228,6 @@ export const isStateModel = (target: any): target is IModel =>
   target && isFn(target.getState)
 
 export interface IFormState<FormProps = any> {
-  pristine: boolean
   valid: boolean
   invalid: boolean
   loading: boolean
