@@ -47,7 +47,7 @@ const App = () => {
         <FormItem name="t5" title="t5" component={Select}/>
       </MegaLayout>
 
-      <h1>addon</h1>
+      <h1>layout addon</h1>
 
       <h5>addonBefore/addonAfter/description</h5>
       <MegaLayout addonBefore="before" addonAfter="after" description="description">
@@ -59,10 +59,14 @@ const App = () => {
         <FormItem name="l1" title="l1" component={Select}/>
       </MegaLayout>
 
-      <h5>****</h5>
       <h5>label + addon + full</h5>
       <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description" full>
         <FormItem name="l1" title="l1" component={Select}/>
+      </MegaLayout>
+
+      <h1>item addon</h1>
+      <MegaLayout full>
+        <FormItem name="fff1" title="fff1" component={Select} addonBefore="before" addonAfter="after" help="description"/>
       </MegaLayout>
       
       <MegaLayout labelCol={4} label="label" addonBefore="before" addonAfter="after" description="description" full>

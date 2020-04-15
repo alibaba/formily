@@ -27,19 +27,6 @@ export const useLayout = (props: ILayoutProps) => {
     const span = computeAttr(props.span, 1, 1)
     let grid = computeAttr(props.grid, context.grid, false)
     let inline = computeAttr(props.inline, context.inline, false)
-    const { responsive, layoutBox } = props
-    const { width } = layoutBox || {}
-    const { minColWidth } = responsive || {}
-    
-    if (isLayout && width) {        
-        if (minColWidth) {
-            const responsiveCols = Math.floor(parseInt(width) / parseInt(minColWidth))
-            console.log('width', cols, responsiveCols, props, layoutBox, width, responsive,  minColWidth)
-            if (responsiveCols < cols) {
-                cols = responsiveCols
-            }
-        }
-    }
 
     // inline 和 grid 是互斥关系，如果同时存在，需要根据props的优先级来判断, inline > grid
     if (grid && inline) {
