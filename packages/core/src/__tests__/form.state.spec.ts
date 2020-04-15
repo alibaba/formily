@@ -5,7 +5,6 @@ test('computeState', () => {
   expect(state.getState()).toEqual({
     displayName: 'FormState',
     editable: undefined,
-    pristine: true,
     valid: true,
     invalid: false,
     loading: false,
@@ -48,16 +47,13 @@ test('computeState', () => {
   expect(state.getState().valid).toEqual(false)
 
   // pristine depends on whether values to be equal initialvalues
-  expect(state.getState().pristine).toEqual(true)
   state.setState(draft => {
     draft.pristine = false
   })
-  expect(state.getState().pristine).toEqual(true)
   state.setState(draft => {
     draft.values = { change: true }
   })
   expect(state.getState().values).toEqual({ change: true })
-  expect(state.getState().pristine).toEqual(false)
 
   // cannot set invalid props
   expect(state.getState().props).toEqual({})
@@ -159,13 +155,11 @@ test('setState', () => {
   expect(state.getState().values.change).toEqual(true)
   expect(state.getState()).toEqual({
     ...prevState1,
-    pristine: false,
     values: { change: true }
   })
   expect(susCb).toBeCalledTimes(1)
   expect(susCb).toBeCalledWith({
     ...prevState1,
-    pristine: false,
     values: { change: true }
   })
 

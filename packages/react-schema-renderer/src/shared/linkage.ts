@@ -12,12 +12,23 @@ import { Schema } from './schema'
 
 const pathExpRE = /\[\s*(?:([+-])\s*(\d+)?)?\s*\]/g
 
-const transformTargetPath = (target: string, indexes: number[]) => {
+const transformTargetPath = (
+  target: string,
+  indexes: number[],
+  basePath: FormPath
+) => {
   if (!isStr(target)) return target
   let index = 0
-  const newTarget = target.replace(
-    pathExpRE,
-    (_: string, operator: string, delta: string) => {
+  const newTarget = target
+    .replace(/^\s*(\.+)/, (_: string, $1: string) => {
+      const depth = $1.length
+      let path = basePath
+      for (let i = 0; i < depth; i++) {
+        path = path.parent()
+      }
+      return path.toString() + '.'
+    })
+    .replace(pathExpRE, (_: string, operator: string, delta: string) => {
       if (delta) {
         if (operator === '+') {
           return String(indexes[index++] + Number(delta))
@@ -32,8 +43,7 @@ const transformTargetPath = (target: string, indexes: number[]) => {
         }
       }
       return String(indexes[index++])
-    }
-  )
+    })
   pathExpRE.lastIndex = 0
   return newTarget
 }
@@ -61,7 +71,7 @@ export const parseLinkages = (
   const fieldIndexes = getPathIndexes(fieldName)
   const formState = getFormState ? getFormState() : {}
   return linkages.map(({ target, condition, scope, ...params }) => {
-    const newTarget = transformTargetPath(target, fieldIndexes)
+    const newTarget = transformTargetPath(target, fieldIndexes, fieldName)
     const targetState = getFieldState ? getFieldState(newTarget) : {}
     const fieldValue = fieldName.getIn(formState.values)
     const _scope = {

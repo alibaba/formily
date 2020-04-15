@@ -15,7 +15,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -36,10 +35,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -49,16 +44,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -152,10 +142,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -163,18 +149,13 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -268,10 +249,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -281,16 +258,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "values": Object {
       "aa": 111,
       "bb": 222,
@@ -384,10 +356,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -397,16 +365,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "values": Object {
       "aa": "change aa",
       "bb": "change bb",
@@ -509,7 +472,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -536,7 +498,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -563,7 +524,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -626,7 +586,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -689,7 +648,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -752,7 +710,6 @@ Object {
     "loading": false,
     "modified": false,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -809,10 +766,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -822,16 +775,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "values": Object {
       "aa": "change aa",
       "bb": "change bb",
@@ -925,10 +873,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "initialValues": Object {
       "aa": 111,
       "bb": 222,
@@ -938,16 +882,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": 111,
-      "bb": 222,
-    },
     "values": Object {
       "bb": "change bb",
     },
@@ -1046,7 +985,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -1161,7 +1099,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -1306,7 +1243,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -1445,18 +1381,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
-        Object {
-          "aa": 345,
-          "bb": 678,
-        },
-      ],
-    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1474,24 +1398,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
-        Object {
-          "aa": 345,
-          "bb": 678,
-        },
-      ],
-    },
     "values": Object {
       "aa": Array [
         Object {
@@ -1529,7 +1440,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa",
     "path": "aa",
@@ -1715,7 +1626,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa.1",
     "path": "aa.1",
@@ -1833,18 +1744,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
-        Object {
-          "aa": 345,
-          "bb": 678,
-        },
-      ],
-    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -1862,24 +1761,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
-        Object {
-          "aa": 345,
-          "bb": 678,
-        },
-      ],
-    },
     "values": Object {
       "aa": Array [
         Object {
@@ -2083,18 +1969,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
-        Object {
-          "aa": 345,
-          "bb": 678,
-        },
-      ],
-    },
     "initialValues": Object {
       "aa": Array [
         Object {
@@ -2112,30 +1986,13 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
-        Object {
-          "aa": 345,
-          "bb": 678,
-        },
-      ],
-    },
     "values": Object {
       "aa": Array [
-        Object {
-          "aa": 123,
-          "bb": 321,
-        },
         Object {
           "aa": "change aa",
           "bb": 678,
@@ -2167,7 +2024,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa",
     "path": "aa",
@@ -2353,7 +2210,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa.1",
     "path": "aa.1",
@@ -2477,7 +2334,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -2795,7 +2651,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -2993,7 +2848,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -3305,12 +3159,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": 123,
-        "cc": 222,
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3322,17 +3170,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": 123,
-      },
-    },
     "values": Object {},
     "warnings": Array [],
   },
@@ -3468,12 +3310,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": 123,
-        "cc": 222,
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3485,17 +3321,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": 123,
-      },
-    },
     "values": Object {},
     "warnings": Array [],
   },
@@ -3631,12 +3461,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": 123,
-        "cc": 222,
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": 123,
@@ -3648,17 +3472,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": 123,
-      },
-    },
     "values": Object {
       "aa": Object {
         "bb": 123,
@@ -3805,18 +3623,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -3832,26 +3638,13 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4169,18 +3962,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4198,24 +3979,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "values": Object {
       "aa": Object {
         "bb": Array [],
@@ -4246,7 +4014,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa",
     "path": "aa",
@@ -4330,18 +4098,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4357,26 +4113,13 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4694,18 +4437,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -4723,24 +4454,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -4778,7 +4496,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa",
     "path": "aa",
@@ -4842,7 +4560,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
@@ -4897,7 +4615,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa.bb.0",
     "path": "aa.bb.0",
@@ -5058,18 +4776,6 @@ Object {
     "displayName": "FormState",
     "editable": undefined,
     "errors": Array [],
-    "initialValue": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "initialValues": Object {
       "aa": Object {
         "bb": Array [
@@ -5087,24 +4793,11 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": true,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": Object {
-      "aa": Object {
-        "bb": Array [
-          Object {
-            "aa": 123,
-          },
-          Object {
-            "aa": 321,
-          },
-        ],
-      },
-    },
     "values": Object {
       "aa": Object {
         "bb": Array [
@@ -5426,9 +5119,8 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -5737,7 +5429,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -5771,7 +5462,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa",
     "path": "aa",
@@ -5828,7 +5519,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa.bb",
     "path": "aa.bb",
@@ -5881,7 +5572,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa.bb.0",
     "path": "aa.bb.0",
@@ -6046,7 +5737,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": false,
-    "pristine": false,
     "props": Object {},
     "submitting": false,
     "unmounted": false,
@@ -6073,7 +5763,7 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": true,
+    "modified": false,
     "mounted": false,
     "name": "aa",
     "path": "aa",

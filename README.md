@@ -75,7 +75,7 @@ https://formilyjs.org
 
 [codesandbox](https://codesandbox.io/s/o5up7)
 
-## Conmmunity
+## Community
 
 - [icejs](https://github.com/alibaba/ice)
 

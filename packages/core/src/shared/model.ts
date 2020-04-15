@@ -11,7 +11,7 @@ import {
   defaults,
   shallowClone
 } from '@formily/shared'
-import produce, { Draft, setAutoFreeze } from 'immer'
+import { Draft, Immer, enablePatches } from 'immer'
 import {
   IStateModelProvider,
   IStateModelFactory,
@@ -21,7 +21,11 @@ import {
 } from '../types'
 const hasProxy = !!globalThisPolyfill.Proxy
 
-setAutoFreeze(false)
+enablePatches()
+
+const { produce } = new Immer({
+  autoFreeze: false
+})
 
 export const createStateModel = <State = {}, Props = {}>(
   Factory: IStateModelFactory<State, Props>
@@ -46,7 +50,7 @@ export const createStateModel = <State = {}, Props = {}>(
     constructor(defaultProps: DefaultProps) {
       super()
       this.state = { ...Factory.defaultState }
-      this.prevState = { ...Factory.defaultState }
+      this.prevState = this.state
       this.props = defaults(Factory.defaultProps, defaultProps)
       this.dirtys = {}
       this.cache = {}
@@ -180,7 +184,7 @@ export const createStateModel = <State = {}, Props = {}>(
             patches => {
               patches.forEach(({ path, op, value }) => {
                 if (op === 'replace') {
-                  if (!isEqual(this.state[path[0]], value)) {
+                  if (path.length > 1 ||!isEqual(this.state[path[0]], value)) {
                     this.dirtys[path[0]] = true
                     this.dirtyNum++
                   }
@@ -210,7 +214,7 @@ export const createStateModel = <State = {}, Props = {}>(
 
         this.stackCount--
         if (!this.stackCount) {
-          this.prevState = { ...this.state }
+          this.prevState = this.state
         }
       }
     }
