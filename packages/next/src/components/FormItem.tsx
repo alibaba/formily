@@ -121,13 +121,13 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
 
         // 启用了MegaLayout
         if (layoutProps) {
-          const { cols, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
+          const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
           itemProps.labelAlign = labelAlign
           itemProps.inline = inline
           itemProps.grid = grid
           itemProps.gutter = gutter
           itemProps.span = span
-          itemProps.cols = cols
+          itemProps.columns = columns
 
           if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
           if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)

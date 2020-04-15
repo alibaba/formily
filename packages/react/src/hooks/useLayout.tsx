@@ -15,7 +15,7 @@ export const useLayout = (props: ILayoutProps) => {
     const context = useContext(LayoutContext)
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
-    let cols = computeAttr(props.cols, context.cols, 3)
+    let columns = computeAttr(props.columns, context.columns, 3)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
@@ -53,7 +53,7 @@ export const useLayout = (props: ILayoutProps) => {
         autoRow,
         flex,
         inset,
-        cols,
+        columns,
         full,
         labelWidth,
         wrapperWidth,

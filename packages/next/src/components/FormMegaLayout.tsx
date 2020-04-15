@@ -10,9 +10,8 @@ const { Row, Col } = Grid
 
 const StyledLayoutItem = styled((props) => {
     const { children, addonBefore, addonAfter,
-      grid, span, cols, gutter, className, autoRow, ...others } = props
-    const finalSpan = (24 / cols) * (span > cols ? cols : span)
-    console.log('********', props.label, 'span:', span, 'cols:', cols)
+      grid, span, columns, gutter, className, autoRow, ...others } = props
+    const finalSpan = (24 / columns) * (span > columns ? columns : span)
     const cls = classnames({
       [className]: true,
       'mega-layout-item': true,
@@ -231,7 +230,7 @@ const MegaLayout = styled(props => {
         {...others}
         responsive={responsive}
         children={(layout) => {
-            const { inline, required, span, cols, addonBefore, addonAfter, description, label, labelAlign,
+            const { inline, required, span, columns, addonBefore, addonAfter, description, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
                 labelWidth, wrapperWidth,
                 context,
@@ -285,7 +284,7 @@ const MegaLayout = styled(props => {
                 paddingRight: halfGutterString,
               };
 
-              const finalSpan = (24 / (context.cols || cols)) * (props.span || span)
+              const finalSpan = (24 / (context.columns || columns)) * (props.span || span)
         
               return <Col span={finalSpan} style={style}>
                 {ele}
