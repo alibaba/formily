@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import { normalizeCol } from '../shared'
 import { createVirtualBox } from '@formily/react-schema-renderer'
@@ -10,7 +10,8 @@ const { Row, Col } = Grid
 
 const StyledLayoutItem = styled((props) => {
     const { grid, span, cols, gutter, className, autoRow, ...others } = props
-    const finalSpan = (24 / cols) * span
+    const finalSpan = (24 / cols) * (span > cols ? cols : span)
+    console.log('********', props.label, 'span:', span, 'cols:', cols)
     const cls = classnames({
       [className]: true,
       'mega-layout-item': true,
@@ -97,19 +98,31 @@ const StyledLayoutItem = styled((props) => {
     `}
   `
 
-// & > .next-form-item-control > .formily-mega-layout-content {
-//   display: flex;
-//   > .mega-layout-item {
-//     margin-bottom: 0;
-//     flex: 1;
-//   }
-// }
+
 const StyledLayoutWrapper = styled((props) => {
     const { gutter, ...others } = props
     return <Form.Item {...others} />
 })`
     & > .next-form-item-label {
         text-align: ${props => props.labelAlign !== 'top' ? props.labelAlign : 'left'};
+    }
+
+    & > .next-form-item-control > .formily-mega-layout-content-wrapper {
+      display: flex;
+      > .formily-mega-layout-content {
+        margin-bottom: 0;
+        flex: 1;
+      }
+
+      > .formily-mega-layout-before {
+        flex: initial;
+        margin-right: ${props => props.halfGutterString}
+      }
+
+      > .formily-mega-layout-after {
+        flex: initial;
+        margin-left: ${props => props.halfGutterString}
+      }
     }
 
     ${props => (props.labelAlign !== 'top' && !props.labelWidth && !props.labelCol) && css`
@@ -124,9 +137,51 @@ const StyledLayoutWrapper = styled((props) => {
       }
     `}
 
+    ${props => (props.labelWidth || props.wrapperWidth) && css`
+      display: flex;
+      box-sizing: border-box;
+      flex-direction: ${props.labelAlign !== 'top' ? 'row' : 'column'};
+      
+      & > .next-form-item-label,
+      & > .next-form-item-control {
+        flex: 1;
+      }
+    `}
+
+    ${props => props.labelWidth && css`
+      & > .next-form-item-label {
+        width: ${props.labelWidth}px;
+        max-width: ${props.labelWidth}px;
+        flex: ${props.labelAlign !== 'top' ? `0 0 ${props.labelWidth}px` : 'initial'};
+      }
+    `}
+  
+    ${props => props.wrapperWidth && css`
+      & > .next-form-item-control {
+        width: ${props.wrapperWidth}px;
+        max-width: ${props.wrapperWidth}px;
+        flex: ${props.labelAlign !== 'top' ? `0 0 ${props.wrapperWidth}px` : 'initial'};
+      }
+    `}
+
+    ${props => props.inline && css`
+      display: inline-block;
+      vertical-align: top;    
+      &:not(:last-child) {
+        margin-right: ${props.gutter}px;
+      }
+  
+      & > .next-form-item-label {
+        display: inline-block;
+      }
+      & > .next-form-item-control {
+        display: ${props.labelAlign !== 'top' ? 'inline-block' : 'block'};
+      }
+    `}
+
     ${props => (props.inline || (props.grid && !props.autoRow)) && css`
-      > .next-form-item-control > .formily-mega-layout-content > .mega-layout-item-col > .mega-layout-item,
-      > .next-form-item-control > .formily-mega-layout-content > .mega-layout-item {
+      > .next-form-item-control > .formily-mega-layout-content-wrapper > .formily-mega-layout-content > .mega-layout-item-col > .mega-layout-item,
+      > .next-form-item-control > .formily-mega-layout-content-wrapper > .formily-mega-layout-content > .mega-layout-item {
         margin-bottom: 0;
       }
     `}
@@ -136,27 +191,58 @@ const StyledLayoutWrapper = styled((props) => {
         margin-bottom: 0;
       }
     `}
+
+    ${props => (!props.grid && !props.inline) && css`
+      > .next-form-item-control > .formily-mega-layout-content-wrapper > .formily-mega-layout-content > .mega-layout-item:last-child {
+        margin-bottom: 0;
+      }
+    `}
 `
+
+const useLayoutBox = () => {
+  const ref = useRef()
+  const [bbox, setBbox] = useState({})
+
+  const set = () => {
+    setBbox(ref && ref.current ? ref.current.getBoundingClientRect() : {})
+  }
+
+  useEffect(() => {
+    set();
+    window.addEventListener('resize', set)
+    return () => window.removeEventListener('resize', set)
+  }, [])
+
+  return [bbox, ref]
+};
 
 const Div = props => <div {...props} />
 const MegaLayout = styled(props => {
-    const { children, ...others } = props
-    return <Layout
+    const { responsive, children, ...others } = props
+    const [layoutBox, ref] = useLayoutBox()
+
+    return <Layout        
         defaultSettings={{
             gutter: 20,
         }}
         {...others}
+        responsive={responsive}
+        layoutBox={layoutBox}
         children={(layout) => {
             const { inline, required, span, cols, addonBefore, addonAfter, description, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
+                labelWidth, wrapperWidth,
                 context,
             } = layout
 
-            let Wrapper
+            let Wrapper            
+            const gutterNumber = parseInt(gutter)
+            const halfGutterString = `${gutterNumber / 2}px`
             const itemProps: any = {
               inline,
               grid,
               autoRow,
+              halfGutterString,
             }
             const wrapperProps: any = {}
             if (grid) {
@@ -165,11 +251,13 @@ const MegaLayout = styled(props => {
               wrapperProps.wrap = autoRow
             } else {
               Wrapper = Div
-            }
+            }            
 
             if (label) {
                 if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
                 if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
+                if (labelWidth !== -1) itemProps.labelWidth = labelWidth
+                if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
             }
 
             let ele = <StyledLayoutWrapper
@@ -180,28 +268,24 @@ const MegaLayout = styled(props => {
                 labelAlign={label ? labelAlign : undefined}
                 {...itemProps}
             >
-                <Wrapper {...wrapperProps} className="formily-mega-layout-content">
-                    {addonBefore}
-                    {children}
-                    {addonAfter}
-                </Wrapper>
+                <div ref={ref} className="formily-mega-layout-content-wrapper">
+                    <p className="formily-mega-layout-before">{addonBefore}</p>
+                    <Wrapper {...wrapperProps} className="formily-mega-layout-content">
+                      {children}
+                    </Wrapper>
+                    <p className="formily-mega-layout-after">{addonAfter}</p>
+                </div>
             </StyledLayoutWrapper>
 
-            if (!props.grid && grid) {
-              const gutterNumber = parseInt(gutter)
-              const halfGutterString = `${gutterNumber / 2}px`
+            if (!props.grid && grid) {              
               const style = {
                 paddingLeft: halfGutterString,
                 paddingRight: halfGutterString,
               };
 
               const finalSpan = (24 / (context.cols || cols)) * (props.span || span)
-              const cls = classnames({
-                // 'mega-layout-item': true,
-                // 'mega-layout-item-grid': grid
-              });
         
-              return <Col className={cls} span={finalSpan} style={style}>
+              return <Col span={finalSpan} style={style}>
                 {ele}
               </Col>
             }

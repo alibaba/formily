@@ -18,6 +18,35 @@ import '@alifd/next/dist/next.css'
 const App = () => {
   return (
     <Form>
+      <h1>top layout</h1>
+      <MegaLayout labelAlign="top" autoRow grid cols={3} full>
+        <FormItem name="t1" title="t1" component={Select}/>
+        <FormItem name="t2" span={2} title="t2" component={Select}/>
+        <FormItem name="t3" span={2} title="t3" component={Select}/>
+        <FormItem name="t4" title="t4" component={Select}/>
+        <FormItem name="t5" title="t5" component={Select}/>
+
+        <MegaLayout cols={3} span={2}>
+          <FormItem name="tc1" title="tc1" component={Select}/>
+          <FormItem name="tc2" title="tc2" component={Select}/>
+          <FormItem name="tc3" title="tc3" component={Select}/>
+        </MegaLayout>
+
+      </MegaLayout>
+
+      <h1>响应式</h1>
+      <MegaLayout labelAlign="top" autoRow grid full
+        responsive={{
+          minColWidth: 330
+        }}
+      >
+        <FormItem name="t1" title="t1" component={Select}/>
+        <FormItem name="t2" span={2} title="t2" component={Select}/>
+        <FormItem name="t3" span={2} title="t3" component={Select}/>
+        <FormItem name="t4" title="t4" component={Select}/>
+        <FormItem name="t5" title="t5" component={Select}/>
+      </MegaLayout>
+
       <h1>addon</h1>
 
       <h5>addonBefore/addonAfter/description</h5>
@@ -29,6 +58,37 @@ const App = () => {
       <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description">
         <FormItem name="l1" title="l1" component={Select}/>
       </MegaLayout>
+
+      <h5>****</h5>
+      <h5>label + addon + full</h5>
+      <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description" full>
+        <FormItem name="l1" title="l1" component={Select}/>
+      </MegaLayout>
+      
+      <MegaLayout labelCol={4} label="label" addonBefore="before" addonAfter="after" description="description" full>
+        <FormItem name="aa1" title="aa1" component={Select}/>
+        <FormItem name="aa2" title="aa2" component={Select}/>
+        <FormItem name="aa3" title="aa3" component={Select}/>
+      </MegaLayout>
+
+      <MegaLayout labelWidth={200} label="label" addonBefore="before" addonAfter="after" description="description" full>
+        <FormItem name="aa1" title="aa1" component={Select}/>
+        <FormItem name="aa2" title="aa2" component={Select}/>
+        <FormItem name="aa3" title="aa3" component={Select}/>
+      </MegaLayout>
+
+      <MegaLayout grid label="label" addonBefore="before" addonAfter="after" description="description" full>
+        <FormItem name="aa1" title="aa1" component={Select}/>
+        <FormItem name="aa2" title="aa2" component={Select}/>
+        <FormItem name="aa3" title="aa3" component={Select}/>
+      </MegaLayout>
+
+      <MegaLayout inline label="label" addonBefore="before" addonAfter="after" description="description" full>
+        <FormItem name="aa1" title="aa1" component={Select}/>
+        <FormItem name="aa2" title="aa2" component={Select}/>
+        <FormItem name="aa3" title="aa3" component={Select}/>
+      </MegaLayout>
+      <h5>****</h5>
 
       <h5>grid + inline</h5>
       <MegaLayout grid cols={2} full>
@@ -96,7 +156,7 @@ const App = () => {
           <FormItem name="lwn17" span={2} component={Select}/>
         </MegaLayout>
 
-        <MegaLayout label="user">
+        <MegaLayout label="user" labelCol={6}>
           <FormItem name="userattr1" label="userattr1" component={Select}/>
           
           <MegaLayout grid label="useratt2">
@@ -113,7 +173,7 @@ const App = () => {
         </MegaLayout>
       </MegaLayout>
 
-      {/* <h1>labelAlign</h1>
+      <h1>labelAlign</h1>
       <h5>默认labelAlign:right</h5>
       <MegaLayout labelCol={4}>
         <FormItem name="lt1" title="l1" component={Select}/>
@@ -303,7 +363,7 @@ const App = () => {
         <FormItem span={2} name="g4" title="g4" component={Select}/>
         <FormItem name="g5" title="g5" component={Select}/>
         <FormItem name="g6" title="g6" component={Select}/>
-      </MegaLayout> */}
+      </MegaLayout>
     </Form>
   )
 }
