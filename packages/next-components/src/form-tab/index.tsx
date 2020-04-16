@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
@@ -48,7 +48,9 @@ const parseTabItems = (items: any, hiddenKeys?: string[]) => {
 }
 
 
-const parseDefaultActiveKey = (hiddenKeys: Array<string> = [], items: any) => {
+const parseDefaultActiveKey = (hiddenKeys: Array<string> = [], items: any, defaultActiveKey) => {
+  if(!hiddenKeys.includes(defaultActiveKey))return defaultActiveKey
+
   const index = items.findIndex(item => !hiddenKeys.includes(item.key))
   return index >= 0 ? items[index].key : ''
 }
@@ -93,10 +95,13 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
     const [{ activeKey, childrenErrors }, setFieldState] = useFieldState<
       ExtendsState
     >({
-      activeKey: defaultActiveKey || parseDefaultActiveKey(hiddenKeys, orderProperties),,
+      activeKey: parseDefaultActiveKey(hiddenKeys, orderProperties, defaultActiveKey),
       childrenErrors: []
     })
-    const items = parseTabItems(orderProperties, hiddenKeys)
+
+    const itemsRef = useRef([])
+    itemsRef.current = parseTabItems(orderProperties, hiddenKeys)
+
     const matchUpdate = createMatchUpdate(name, path)
     const update = (cur: string) => {
       form.notify(StateMap.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
@@ -108,7 +113,7 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
     useEffect(() => {
       if (Array.isArray(hiddenKeys)) {
         setFieldState({
-          activeKey: parseDefaultActiveKey(hiddenKeys, orderProperties)
+          activeKey: parseDefaultActiveKey(hiddenKeys, orderProperties, defaultActiveKey)
         })
       }
     }, [hiddenKeys.length])
@@ -121,7 +126,8 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
           })
         }
       })
-      EffectHooks.onTabActiveKeyChange$().subscribe(({ value, name, path }) => {
+      EffectHooks.onTabActiveKeyChange$().subscribe(({ value, name, path }) => {   
+        if(!itemsRef.current.map(item => item.key).includes(value))return
         matchUpdate(name, path, () => {
           setFieldState({
             activeKey: value
@@ -136,7 +142,7 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
         activeKey={activeKey}
         onChange={update}
       >
-        {items.map(({ props, schema, key }) => {
+        {itemsRef.current.map(({ props, schema, key }) => {
           const currentPath = FormPath.parse(path).concat(key)
           return (
             <Tab.Item
