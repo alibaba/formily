@@ -93,7 +93,7 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
     const [{ activeKey, childrenErrors }, setFieldState] = useFieldState<
       ExtendsState
     >({
-      activeKey: defaultActiveKey || parseDefaultActiveKey(hiddenKeys, orderProperties),,
+      activeKey: defaultActiveKey || parseDefaultActiveKey(hiddenKeys, orderProperties),
       childrenErrors: []
     })
     const items = parseTabItems(orderProperties, hiddenKeys)

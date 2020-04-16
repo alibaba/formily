@@ -19,14 +19,14 @@ const App = () => {
   return (
     <Form>
       <h1>top layout</h1>
-      <MegaLayout labelAlign="top" autoRow grid cols={3} full>
+      <MegaLayout labelAlign="top" autoRow grid full>
         <FormItem name="t1" title="t1" component={Select}/>
         <FormItem name="t2" span={2} title="t2" component={Select}/>
         <FormItem name="t3" span={2} title="t3" component={Select}/>
         <FormItem name="t4" title="t4" component={Select}/>
         <FormItem name="t5" title="t5" component={Select}/>
 
-        <MegaLayout cols={3} span={2}>
+        <MegaLayout columns={3} span={2}>
           <FormItem name="tc1" title="tc1" component={Select}/>
           <FormItem name="tc2" title="tc2" component={Select}/>
           <FormItem name="tc3" title="tc3" component={Select}/>
@@ -47,7 +47,7 @@ const App = () => {
         <FormItem name="t5" title="t5" component={Select}/>
       </MegaLayout>
 
-      <h1>addon</h1>
+      <h1>layout addon</h1>
 
       <h5>addonBefore/addonAfter/description</h5>
       <MegaLayout addonBefore="before" addonAfter="after" description="description">
@@ -59,10 +59,14 @@ const App = () => {
         <FormItem name="l1" title="l1" component={Select}/>
       </MegaLayout>
 
-      <h5>****</h5>
       <h5>label + addon + full</h5>
       <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description" full>
         <FormItem name="l1" title="l1" component={Select}/>
+      </MegaLayout>
+
+      <h1>item addon</h1>
+      <MegaLayout full>
+        <FormItem name="fff1" title="fff1" component={Select} addonBefore="before" addonAfter="after" help="description"/>
       </MegaLayout>
       
       <MegaLayout labelCol={4} label="label" addonBefore="before" addonAfter="after" description="description" full>
@@ -88,10 +92,9 @@ const App = () => {
         <FormItem name="aa2" title="aa2" component={Select}/>
         <FormItem name="aa3" title="aa3" component={Select}/>
       </MegaLayout>
-      <h5>****</h5>
 
       <h5>grid + inline</h5>
-      <MegaLayout grid cols={2} full>
+      <MegaLayout grid columns={2} full>
         <FormItem name="l1" title="l1" component={Select}/>        
         <MegaLayout label="hello" inline>
           <FormItem name="l2" component={Select}/>
@@ -100,17 +103,17 @@ const App = () => {
       </MegaLayout>
 
       <h5>netsted grid</h5>
-      <MegaLayout grid cols={3} full autoRow>
+      <MegaLayout grid columns={3} full autoRow>
         <FormItem name="ng1" title="ng1" component={Select}/>        
         <MegaLayout label="ng2" span={2}>
           <FormItem name="ng2" span={2} component={Select}/>
           <FormItem name="ng3" component={Select}/>
         </MegaLayout>
-        <MegaLayout label="ng3" cols={3}>
+        <MegaLayout label="ng3" columns={3}>
           <FormItem name="ng3" component={Select}/>
           <FormItem name="ng4" span={2} component={Select}/>
         </MegaLayout>
-        <MegaLayout label="ng5" cols={3}>
+        <MegaLayout label="ng5" columns={3}>
           <FormItem name="ng5" span={2} component={Select}/>
           <FormItem name="ng6" component={Select}/>
         </MegaLayout>
@@ -132,7 +135,7 @@ const App = () => {
           <FormItem name="lwnx4" component={Select}/>
         </MegaLayout>
 
-        <MegaLayout label="lwn5" grid cols={2}>
+        <MegaLayout label="lwn5" grid columns={2}>
           <FormItem name="lwn5" component={Select}/>
           <FormItem name="lwn6" component={Select}/>
         </MegaLayout>

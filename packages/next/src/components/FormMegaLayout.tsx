@@ -9,14 +9,22 @@ import { Form, Grid } from '@alifd/next'
 const { Row, Col } = Grid
 
 const StyledLayoutItem = styled((props) => {
-    const { grid, span, cols, gutter, className, autoRow, ...others } = props
-    const finalSpan = (24 / cols) * (span > cols ? cols : span)
-    console.log('********', props.label, 'span:', span, 'cols:', cols)
+    const { children, addonBefore, addonAfter,
+      grid, span, columns, gutter, className, autoRow, ...others } = props
+    const finalSpan = (24 / columns) * (span > columns ? columns : span)
     const cls = classnames({
       [className]: true,
       'mega-layout-item': true,
       'mega-layout-item-grid': grid
     });
+
+    const finalFormItem = <Form.Item className={cls} {...others}>
+      <div className="mega-layout-item-content">
+        { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
+        {children}
+        { addonAfter ? <p className="formily-mega-item-after">{addonAfter}</p> : null }
+      </div>
+    </Form.Item>
 
     if (grid) {
       const gutterNumber = parseInt(gutter)
@@ -27,14 +35,26 @@ const StyledLayoutItem = styled((props) => {
       };
 
       return <Col className="mega-layout-item-col" span={finalSpan} style={style}>
-        <Form.Item className={cls} {...others} />
+        {finalFormItem}
       </Col>
     }
   
-    return <Form.Item className={cls} {...others} />
+    return finalFormItem
   })`    
     & > .next-form-item-label {
       text-align: ${props => props.labelAlign !== 'top' ? props.labelAlign : 'left'};
+    }
+
+    & > .next-form-item-control > .mega-layout-item-content{
+      display: flex;
+      .formily-mega-item-before {
+        flex: initial;
+        margin-right: ${props => `${parseInt(props.gutter) / 2}px`}
+      }
+      .formily-mega-item-after {
+        flex: initial;
+        margin-left: ${props => `${parseInt(props.gutter) / 2}px`}
+      }
     }
   
     ${props => (props.labelAlign !== 'top' && !props.labelWidth && !props.labelCol) && css`
@@ -199,27 +219,9 @@ const StyledLayoutWrapper = styled((props) => {
     `}
 `
 
-const useLayoutBox = () => {
-  const ref = useRef()
-  const [bbox, setBbox] = useState({})
-
-  const set = () => {
-    setBbox(ref && ref.current ? ref.current.getBoundingClientRect() : {})
-  }
-
-  useEffect(() => {
-    set();
-    window.addEventListener('resize', set)
-    return () => window.removeEventListener('resize', set)
-  }, [])
-
-  return [bbox, ref]
-};
-
 const Div = props => <div {...props} />
 const MegaLayout = styled(props => {
     const { responsive, children, ...others } = props
-    const [layoutBox, ref] = useLayoutBox()
 
     return <Layout        
         defaultSettings={{
@@ -227,9 +229,8 @@ const MegaLayout = styled(props => {
         }}
         {...others}
         responsive={responsive}
-        layoutBox={layoutBox}
         children={(layout) => {
-            const { inline, required, span, cols, addonBefore, addonAfter, description, label, labelAlign,
+            const { inline, required, span, columns, addonBefore, addonAfter, description, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
                 labelWidth, wrapperWidth,
                 context,
@@ -268,12 +269,12 @@ const MegaLayout = styled(props => {
                 labelAlign={label ? labelAlign : undefined}
                 {...itemProps}
             >
-                <div ref={ref} className="formily-mega-layout-content-wrapper">
-                    <p className="formily-mega-layout-before">{addonBefore}</p>
+                <div className="formily-mega-layout-content-wrapper">
+                    { addonBefore ? <p className="formily-mega-layout-before">{addonBefore}</p> : null }
                     <Wrapper {...wrapperProps} className="formily-mega-layout-content">
                       {children}
                     </Wrapper>
-                    <p className="formily-mega-layout-after">{addonAfter}</p>
+                    { addonAfter ? <p className="formily-mega-layout-after">{addonAfter}</p> : null }
                 </div>
             </StyledLayoutWrapper>
 
@@ -283,7 +284,7 @@ const MegaLayout = styled(props => {
                 paddingRight: halfGutterString,
               };
 
-              const finalSpan = (24 / (context.cols || cols)) * (props.span || span)
+              const finalSpan = (24 / (context.columns || columns)) * (props.span || span)
         
               return <Col span={finalSpan} style={style}>
                 {ele}

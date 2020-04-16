@@ -26,7 +26,7 @@ export interface ILayoutProps {
   inline?: boolean;
   inset?: boolean;
   autoRow?: boolean;
-  cols?: number;
+  columns?: number;
   flex?: boolean;
   labelWidth?: number | string;
   wrapperWidth?: number | string;

@@ -102,7 +102,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const renderField = (fieldProps: any) => {
     const { form, state, mutators } = fieldProps
     const { props, errors, warnings, editable, required } = state
-    const { labelCol, wrapperCol, help } = props
+    const { labelCol, wrapperCol, help, addonBefore, addonAfter } = props
     const formItemProps = pickFormItemProps(props)
     const componentProps = pickNotFormItemProps(props)
 
@@ -115,17 +115,19 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
           wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : undefined,
           validateState: computeStatus(state),
           help: computeMessage(errors, warnings) || help,
+          addonBefore,
+          addonAfter,
         }
 
         // 启用了MegaLayout
         if (layoutProps) {
-          const { cols, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
+          const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
           itemProps.labelAlign = labelAlign
           itemProps.inline = inline
           itemProps.grid = grid
           itemProps.gutter = gutter
           itemProps.span = span
-          itemProps.cols = cols
+          itemProps.columns = columns
 
           if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
           if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
@@ -139,6 +141,9 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
               width: '100%',
             }
           }
+
+          componentProps.addonBefore = undefined
+          componentProps.addonAfter = undefined
 
           return <StyledLayoutItem {...itemProps}>
             {renderComponent({ props: componentProps, state, mutators, form })}

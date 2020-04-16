@@ -15,7 +15,7 @@ export const useLayout = (props: ILayoutProps) => {
     const context = useContext(LayoutContext)
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
-    let cols = computeAttr(props.cols, context.cols, 3)
+    let columns = computeAttr(props.columns, context.columns, 3)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
@@ -27,19 +27,6 @@ export const useLayout = (props: ILayoutProps) => {
     const span = computeAttr(props.span, 1, 1)
     let grid = computeAttr(props.grid, context.grid, false)
     let inline = computeAttr(props.inline, context.inline, false)
-    const { responsive, layoutBox } = props
-    const { width } = layoutBox || {}
-    const { minColWidth } = responsive || {}
-    
-    if (isLayout && width) {        
-        if (minColWidth) {
-            const responsiveCols = Math.floor(parseInt(width) / parseInt(minColWidth))
-            console.log('width', cols, responsiveCols, props, layoutBox, width, responsive,  minColWidth)
-            if (responsiveCols < cols) {
-                cols = responsiveCols
-            }
-        }
-    }
 
     // inline 和 grid 是互斥关系，如果同时存在，需要根据props的优先级来判断, inline > grid
     if (grid && inline) {
@@ -66,7 +53,7 @@ export const useLayout = (props: ILayoutProps) => {
         autoRow,
         flex,
         inset,
-        cols,
+        columns,
         full,
         labelWidth,
         wrapperWidth,
@@ -83,7 +70,7 @@ export const useLayoutItem = (props: ILayoutItemProps) => {
     const layout = useLayout(props)
 
     // 计算item宽度
-    const { enableLayout} = layout
+    const { enableLayout } = layout
     if (!enableLayout) {
         return null
     }
