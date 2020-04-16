@@ -70,7 +70,7 @@ export const useLayoutItem = (props: ILayoutItemProps) => {
     const layout = useLayout(props)
 
     // 计算item宽度
-    const { enableLayout} = layout
+    const { enableLayout } = layout
     if (!enableLayout) {
         return null
     }

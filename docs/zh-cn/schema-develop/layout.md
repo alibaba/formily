@@ -19,7 +19,7 @@ const App = () => {
   return (
     <Form>
       <h1>top layout</h1>
-      <MegaLayout labelAlign="top" autoRow grid columns={3} full>
+      <MegaLayout labelAlign="top" autoRow grid full>
         <FormItem name="t1" title="t1" component={Select}/>
         <FormItem name="t2" span={2} title="t2" component={Select}/>
         <FormItem name="t3" span={2} title="t3" component={Select}/>
