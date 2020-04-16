@@ -14,6 +14,43 @@ import {
 import { Observable } from 'rxjs/internal/Observable'
 export * from '@formily/core'
 
+type ILayoutLabelAlign = 'top' | 'left' | 'right'
+export interface ILayoutProps {
+  isLayout?: boolean
+  defaultSettings?: any
+  children?: (props: ILayoutProps) => React.ReactElement
+  full?: boolean;
+  label?: any;
+  required?: boolean;
+  labelAlign?: ILayoutLabelAlign;
+  inline?: boolean;
+  inset?: boolean;
+  autoRow?: boolean;
+  cols?: number;
+  flex?: boolean;
+  labelWidth?: number | string;
+  wrapperWidth?: number | string;
+  labelCol?: number;
+  wrapperCol?: number;
+  addonBefore?: any;
+  addonAfter?: any;
+  description?: any;
+  gutter?: number | string;
+  span?: number;
+  grid?: boolean;
+}
+
+export type ILayoutItemProps = {
+  span?: number;
+  full?: boolean;
+  labelAlign?: ILayoutLabelAlign;
+  inset?: boolean;
+  labelWidth?: number;
+  wrapperWidth?: number;
+  labelCol?: number;
+  wrapperCol?: number;
+}
+
 export interface IFormEffect<Payload = any, Actions = any> {
   (
     selector: IFormExtendsEffectSelector<Payload, Actions>,
