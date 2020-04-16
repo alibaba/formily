@@ -7,7 +7,7 @@ import { NumberPicker } from './number-picker'
 import { RadioGroup } from './radio'
 import { Range } from './range'
 import { Select } from './select'
-import { RadioDrawer } from './radio-drawer'
+// import { RadioDrawer } from './radio-drawer'
 
 export const setup = () => {
   registerFormFields({
@@ -18,7 +18,7 @@ export const setup = () => {
     number: NumberPicker,
     radio: RadioGroup,
     range: Range,
-    select: Select,
-    radioDrawer: RadioDrawer
+    select: Select
+    // radioDrawer: RadioDrawer
   })
 }
