@@ -47,9 +47,10 @@ const parseTabItems = (items: any, hiddenKeys?: string[]) => {
   }, [])
 }
 
-const parseDefaultActiveKey = (props: any, items: any) => {
-  const { defaultActiveKey } = props
-  return defaultActiveKey ? defaultActiveKey : items[0] && items[0].key
+
+const parseDefaultActiveKey = (hiddenKeys: Array<string> = [], items: any) => {
+  const index = items.findIndex(item => !hiddenKeys.includes(item.key))
+  return index >= 0 ? items[index].key : ''
 }
 
 const parseChildrenErrors = (errors: any, target: string) => {
@@ -87,12 +88,12 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
   'tab',
   ({ form, schema, name, path }: ISchemaVirtualFieldComponentProps) => {
     const orderProperties = schema.getOrderProperties()
-    let { hiddenKeys, ...componentProps } = schema.getExtendsComponentProps()
+    let { hiddenKeys, defaultActiveKey, ...componentProps } = schema.getExtendsComponentProps()
     hiddenKeys = hiddenKeys || []
     const [{ activeKey, childrenErrors }, setFieldState] = useFieldState<
       ExtendsState
     >({
-      activeKey: parseDefaultActiveKey(schema, orderProperties),
+      activeKey: defaultActiveKey || parseDefaultActiveKey(hiddenKeys, orderProperties),,
       childrenErrors: []
     })
     const items = parseTabItems(orderProperties, hiddenKeys)
@@ -107,9 +108,7 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
     useEffect(() => {
       if (Array.isArray(hiddenKeys)) {
         setFieldState({
-          activeKey: hiddenKeys.includes(activeKey)
-            ? items[0] && items[0].key
-            : activeKey
+          activeKey: parseDefaultActiveKey(hiddenKeys, orderProperties)
         })
       }
     }, [hiddenKeys.length])
