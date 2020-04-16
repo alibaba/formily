@@ -44,7 +44,6 @@ describe('createForm', () => {
       values: testValues
     })
     expect(form.getFormState(state => state.values)).toEqual(testValues)
-    expect(form.getFormState(state => state.pristine)).toEqual(false)
     expect(form.getFormState(state => state.initialized)).toEqual(true)
     expect(form.getFormGraph()).toMatchSnapshot()
   })
@@ -57,7 +56,6 @@ describe('createForm', () => {
     const bb = form.registerField({ path: 'bb' })
     expect(form.getFormState(state => state.values)).toEqual(testValues)
     expect(form.getFormState(state => state.initialValues)).toEqual(testValues)
-    expect(form.getFormState(state => state.pristine)).toEqual(true)
     expect(form.getFormState(state => state.initialized)).toEqual(true)
     expect(aa.getState(state => state.value)).toEqual(testValues.aa)
     expect(bb.getState(state => state.value)).toEqual(testValues.bb)
@@ -82,7 +80,6 @@ describe('createForm', () => {
     })
     expect(form.getFormState(state => state.values)).toEqual(testValues)
     expect(form.getFormState(state => state.initialValues)).toEqual(testValues)
-    expect(form.getFormState(state => state.pristine)).toEqual(true)
     expect(form.getFormState(state => state.initialized)).toEqual(true)
     expect(aa.getState(state => state.value)).toEqual(testValues.aa)
     expect(bb.getState(state => state.value)).toEqual(testValues.bb)
@@ -113,7 +110,6 @@ describe('createForm', () => {
     })
     expect(form.getFormState(state => state.values)).toEqual(testValues)
     expect(form.getFormState(state => state.initialValues)).toEqual(testValues)
-    expect(form.getFormState(state => state.pristine)).toEqual(true)
     expect(form.getFormState(state => state.initialized)).toEqual(true)
     expect(form.getFormGraph()).toMatchSnapshot()
   })
@@ -725,7 +721,7 @@ describe('setFormState', () => {
       validating: validating,
       submitting: true,
       initialized: false,
-      modified: false,
+      modified: true,
       editable: false,
       errors,
       warnings,
@@ -1601,6 +1597,9 @@ describe('major sences', () => {
     })
     form.registerField({
       name: 'aa'
+    })
+    form.setFormState(state=>{
+      state.mounted = true
     })
     form.setFieldState('aa', state => {
       state.visible = false

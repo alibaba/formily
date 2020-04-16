@@ -18,9 +18,9 @@ import './index.css'
 export const SchemaEditor: React.FC<{
   className?: string
   schema: any
-  showAntdComponents: boolean
-  showFusionComponents: boolean
-  customComponents: []
+  showAntdComponents?: boolean
+  showFusionComponents?: boolean
+  customComponents?: []
   onChange: (schema: any) => void
 }> = ({
   className,

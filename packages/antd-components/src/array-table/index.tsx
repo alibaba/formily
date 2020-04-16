@@ -176,7 +176,7 @@ export const ArrayTable: any = styled(
           )}
           <ArrayList.Addition>
             {({ children }) => {
-              return (
+              return children && (
                 <div className="array-table-addition" onClick={onAdd}>
                   {children}
                 </div>

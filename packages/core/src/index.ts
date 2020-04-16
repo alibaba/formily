@@ -92,6 +92,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function syncFieldIntialValues(state: IFieldState) {
+    if (state.name === '') return
     const initialValue = getFormInitialValuesIn(state.name)
     if (!isEqual(initialValue, state.initialValue)) {
       state.initialValue = initialValue
@@ -108,7 +109,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function notifyFormValuesChange() {
-    if (isFn(options.onChange) && !state.state.unmounted) {
+    if (
+      isFn(options.onChange) &&
+      state.state.mounted &&
+      !state.state.unmounted
+    ) {
       clearTimeout(env.onChangeTimer)
       env.onChangeTimer = setTimeout(() => {
         if (state.state.unmounted) return
@@ -235,10 +240,14 @@ export function createForm<FieldProps, VirtualFieldProps>(
     function notifyTreeFromInitialValues() {
       field.setState(syncFieldIntialValues)
       graph.eachParent(path, (field: IField) => {
-        field.setState(syncFieldIntialValues, true)
+        if (isField(field)) {
+          field.setState(syncFieldIntialValues, true)
+        }
       })
       graph.eachChildren(path, (field: IField) => {
-        field.setState(syncFieldIntialValues)
+        if (isField(field)) {
+          field.setState(syncFieldIntialValues)
+        }
       })
       notifyFormInitialValuesChange()
     }
@@ -297,7 +306,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 state.visibleCacheValue = published.value
               })
             }
-            deleteFormValuesIn(path, true)
+            deleteFormValuesIn(path)
             notifyTreeFromValues()
           } else {
             if (!existFormValuesIn(path)) {
@@ -516,18 +525,21 @@ export function createForm<FieldProps, VirtualFieldProps>(
             if (isValid(value)) {
               // value > formValue > initialValue
               state.value = value
-            } else {
-              state.value =
-                existFormValuesIn(state.name) || formValue !== undefined
-                  ? formValue
-                  : initialValue
+            } else if (
+              existFormValuesIn(state.name) ||
+              formValue !== undefined
+            ) {
+              state.value = formValue
+            } else if (isValid(initialValue)) {
+              state.value = initialValue
             }
-            // initialValue > formInitialValue
-            state.initialValue = isValid(initialValue)
-              ? initialValue
-              : isValid(formInitialValue)
-              ? formInitialValue
-              : initialValue
+
+            if (isValid(initialValue)) {
+              state.initialValue = initialValue
+            } else if (isValid(formInitialValue)) {
+              state.initialValue = formInitialValue
+            }
+
             if (isValid(visible)) {
               state.visible = visible
             }
@@ -697,14 +709,22 @@ export function createForm<FieldProps, VirtualFieldProps>(
     value: any,
     silent?: boolean
   ) {
-    state.setState(state => {
+    const method = silent ? 'setSourceState' : 'setState'
+    state[method](state => {
       FormPath.setIn(state[key], transformDataPath(path), value)
+      if (key === 'values') {
+        state.modified = true
+      }
     }, silent)
   }
 
   function deleteFormIn(path: FormPathPattern, key: string, silent?: boolean) {
-    state.setState(state => {
+    const method = silent ? 'setSourceState' : 'setState'
+    state[method](state => {
       FormPath.deleteIn(state[key], transformDataPath(path))
+      if (key === 'values') {
+        state.modified = true
+      }
     }, silent)
   }
 
