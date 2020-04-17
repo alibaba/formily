@@ -8,7 +8,6 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
   class FormState {
     static displayName = 'FormState'
     static defaultState = {
-      pristine: true,
       valid: true,
       invalid: false,
       loading: false,
@@ -55,12 +54,6 @@ export const FormState = createStateModel<IFormState, IFormStateProps>(
         if (!isEqual(prevState.values, draft.values)) {
           draft.modified = true
         }
-      }
-      
-      if (isEqual(draft.initialValues, draft.values)) {
-        draft.pristine = true
-      } else {
-        draft.pristine = false
       }
 
       if (draft.validating !== prevState.validating) {

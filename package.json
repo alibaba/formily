@@ -37,7 +37,7 @@
     "version:major": "npm run prevesion && lerna version major --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",
     "release:force": "lerna publish from-package --yes",
     "release": "lerna publish",
-    "lint": "eslint --ext .ts,.tsx,.js \"packages/*/src/**.@(ts|tsx|js)\" \"scripts/**/*.js\" --fix",
+    "lint": "eslint --ext .ts,.tsx,.js \"packages/*/src/**.@(ts|tsx|js)\" \"scripts/**/*.js\"",
     "postinstall": "opencollective-postinstall"
   },
   "resolutions": {
