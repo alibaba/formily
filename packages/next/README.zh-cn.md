@@ -320,7 +320,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | name              | 字段名                                                                                                                | [FormPathPattern](#FormPathPattern)                                                  |          |
 | dataType          | 数据类型(array/object)                                                                                                | string                                                                               |          |
 | value             | 字段值                                                                                                                | any                                                                                  |          |
-| initialValue      | 初始哈字段值                                                                                                          | any                                                                                  |          |
+| initialValue      | 初始化字段值                                                                                                          | any                                                                                  |          |
 | values            | 字段集合, 从 onChange 获取的所有参数                                                                                  | any                                                                                  |          |
 | triggerType       | 字段触发校验类型                                                                                                      | 'onChange' `|` 'onBlur'                                                              |          |
 | getValueFromEvent | 字段变更时，从 event 中获取 value 的计算函数                                                                          | (...args: any[]) => any                                                              |          |
@@ -496,7 +496,7 @@ const App = () => {
 | path              | 字段路径                                     | [FormPathPattern](#FormPathPattern)                                                  |        |
 | name              | 字段名                                       | [FormPathPattern](#FormPathPattern)                                                  |        |
 | value             | 字段值                                       | any                                                                                  |        |
-| initialValue      | 初始哈字段值                                 | any                                                                                  | []     |
+| initialValue      | 初始化字段值                                 | any                                                                                  | []     |
 | values            | 字段集合, 从 onChange 获取的所有参数         | any                                                                                  |        |
 | triggerType       | 字段触发校验类型                             | 'onChange' `|` 'onBlur'                                                              |        |
 | getValueFromEvent | 字段变更时，从 event 中获取 value 的计算函数 | (...args: any[]) => any                                                              |        |
