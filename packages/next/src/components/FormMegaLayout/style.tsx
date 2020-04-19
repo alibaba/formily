@@ -2,7 +2,8 @@ import { css } from 'styled-components'
 
 export const baseComputeStyle = (props) => {
     const result: any = {}
-    const { labelAlign, gutter,
+    const {
+        labelAlign, gutter,
         isLayout,
         inline, autoRow,
         labelWidth, wrapperWidth,
@@ -18,22 +19,22 @@ export const baseComputeStyle = (props) => {
 
     // 增量属性 addonBefore/addonAfter
     result.addonStyle = `
-        & > .next-form-item-control > .formily-mega-layout-content-wrapper,
+        & > .next-form-item-control > .mega-layout-container-wrapper,
         & > .next-form-item-control > .mega-layout-item-content {
             display: flex;
-            > .formily-mega-layout-content {
+            > .mega-layout-container-content {
                 margin-bottom: 0;
                 flex: 1;
             }
 
-            > .formily-mega-layout-before,
-            .formily-mega-item-before {
+            > .mega-layout-container-before,
+            > .formily-mega-item-before {
                 flex: initial;
                 margin-right: ${`${parseInt(gutter) / 2}px`}
             }
 
-            > .formily-mega-layout-after,
-            .formily-mega-item-after {
+            > .mega-layout-container-after,
+            > .formily-mega-item-after {
                 flex: initial;
                 margin-left: ${`${parseInt(gutter) / 2}px`}
             }
@@ -117,8 +118,8 @@ export const baseComputeStyle = (props) => {
         // 内容都在同一行
         if (inline || (grid && !autoRow)) {
             result.layoutMargin = `
-                > .next-form-item-control > .formily-mega-layout-content-wrapper > .formily-mega-layout-content > .mega-layout-item-col > .mega-layout-item,
-                > .next-form-item-control > .formily-mega-layout-content-wrapper > .formily-mega-layout-content > .mega-layout-item {
+                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
                     margin-bottom: 0;
                 }
             `
@@ -127,7 +128,7 @@ export const baseComputeStyle = (props) => {
         // 栅格布局，自动换行
         if (grid && autoRow) {
             result.layoutMargin = `
-                &.formily-mega-layout {
+                &.mega-layout-container {
                     margin-bottom: 0;
                 }
             `
@@ -136,7 +137,7 @@ export const baseComputeStyle = (props) => {
         // 常规布局
         if (!grid && !inline) {
             result.layoutMargin = `
-                > .next-form-item-control > .formily-mega-layout-content-wrapper > .formily-mega-layout-content > .mega-layout-item:last-child {
+                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
                     margin-bottom: 0;
                 }
             `
@@ -150,6 +151,7 @@ export const computeStyle = (props) => {
     const styleResult = baseComputeStyle(props)
     // labelAlign, addon 是任何布局模式都可以用到
     // inline 和 grid 是互斥关系, 优先级: inline > grid
+    // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
 
     return css`
         ${styleResult.labelAlignStyle}

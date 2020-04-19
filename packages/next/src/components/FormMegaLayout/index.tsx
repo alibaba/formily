@@ -73,7 +73,7 @@ const MegaLayout = styled(props => {
               inline,
               grid,
               autoRow,
-              halfGutterString,
+              gutter,            
             }
             const wrapperProps: any = {}
             if (grid) {
@@ -92,19 +92,19 @@ const MegaLayout = styled(props => {
             }
 
             let ele = <StyledLayoutWrapper
-                className={classnames(props.className, 'formily-mega-layout')}
+                className={classnames(props.className, 'mega-layout-container')}
                 label={label}
                 required={required}
                 help={description}
                 labelAlign={label ? labelAlign : undefined}
                 {...itemProps}
             >
-                <div className="formily-mega-layout-content-wrapper">
-                    { addonBefore ? <p className="formily-mega-layout-before">{addonBefore}</p> : null }
-                    <Wrapper {...wrapperProps} className="formily-mega-layout-content">
+                <div className="mega-layout-container-wrapper">
+                    { addonBefore ? <p className="mega-layout-container-before">{addonBefore}</p> : null }
+                    <Wrapper {...wrapperProps} className="mega-layout-container-content">
                       {children}
                     </Wrapper>
-                    { addonAfter ? <p className="formily-mega-layout-after">{addonAfter}</p> : null }
+                    { addonAfter ? <p className="mega-layout-container-after">{addonAfter}</p> : null }
                 </div>
             </StyledLayoutWrapper>
 
@@ -129,6 +129,12 @@ const MegaLayout = styled(props => {
 `;
 
 MegaLayout.Item = Layout.Item;
+
+// TODO1: 把formItem里面的内容给收拢到这里
+// TODO2: 把schema模式下的formItem里面的内容给收拢到这里
+const MegaLayoutItem = (props) => {
+  
+}
 
 export {
     MegaLayout,
