@@ -16,8 +16,10 @@ export * from '@formily/react'
 
 declare global {
   namespace FormilyCore {
-    export type FieldProps = ISchema
-    export type VirtualFieldProps = ISchema
+    // eslint-disable-next-line
+    export interface FieldProps extends ISchema {}
+    // eslint-disable-next-line
+    export interface VirtualFieldProps extends ISchema {}
   }
 }
 
