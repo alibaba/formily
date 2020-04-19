@@ -7,6 +7,7 @@ import {
   clone,
   log,
   isValid,
+  isEmpty,
   FormPath,
   FormPathPattern,
   BigData,
@@ -47,9 +48,18 @@ import {
 export * from './shared/lifecycle'
 export * from './types'
 
-export function createForm<FieldProps, VirtualFieldProps>(
-  options: IFormCreatorOptions = {}
-) {
+declare global {
+  namespace FormilyCore {
+    export interface FieldProps {
+      [key: string]: any
+    }
+    export interface VirtualFieldProps {
+      [key: string]: any
+    }
+  }
+}
+
+export function createForm(options: IFormCreatorOptions = {}) {
   function onGraphChange({ type, payload }) {
     heart.publish(LifeCycleTypes.ON_FORM_GRAPH_CHANGE, graph)
     if (type === 'GRAPH_NODE_WILL_UNMOUNT') {
@@ -195,9 +205,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function updateRecoverableShownState(
     parentState:
-      | IVirtualFieldState<VirtualFieldProps>
-      | IFieldState<FieldProps>,
-    childState: IVirtualFieldState<VirtualFieldProps> | IFieldState<FieldProps>,
+      | IVirtualFieldState<FormilyCore.VirtualFieldProps>
+      | IFieldState<FormilyCore.FieldProps>,
+    childState:
+      | IVirtualFieldState<FormilyCore.VirtualFieldProps>
+      | IFieldState<FormilyCore.FieldProps>,
     name: 'visible' | 'display'
   ) {
     const lastShownState = env.lastShownStates[childState.path]
@@ -251,7 +263,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       })
       notifyFormInitialValuesChange()
     }
-    return (published: IFieldState<FieldProps>) => {
+    return (published: IFieldState<FormilyCore.FieldProps>) => {
       const valueChanged = field.isDirty('value')
       const initialValueChanged = field.isDirty('initialValue')
       const visibleChanged = field.isDirty('visible')
@@ -268,7 +280,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         const isEmptyValue = !isValid(published.value)
         const isEmptyInitialValue = !isValid(published.initialValue)
         if (isEmptyValue || isEmptyInitialValue) {
-          field.setSourceState((state: IFieldState<FieldProps>) => {
+          field.setSourceState((state: IFieldState<FormilyCore.FieldProps>) => {
             if (isEmptyValue) {
               const formValue = getFormValuesIn(state.name)
               state.value = isValid(formValue) ? formValue : state.value
@@ -302,9 +314,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
         if (visibleChanged) {
           if (!published.visible) {
             if (isValid(published.value)) {
-              field.setSourceState((state: IFieldState<FieldProps>) => {
-                state.visibleCacheValue = published.value
-              })
+              field.setSourceState(
+                (state: IFieldState<FormilyCore.FieldProps>) => {
+                  state.visibleCacheValue = published.value
+                }
+              )
             }
             deleteFormValuesIn(path)
             notifyTreeFromValues()
@@ -322,7 +336,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
           }
         }
         graph.eachChildren(path, childState => {
-          childState.setState((state: IFieldState<FieldProps>) => {
+          childState.setState((state: IFieldState<FormilyCore.FieldProps>) => {
             if (visibleChanged) {
               updateRecoverableShownState(published, state, 'visible')
             }
@@ -339,9 +353,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
       ) {
         if (published.unmounted) {
           if (isValid(published.value)) {
-            field.setSourceState((state: IFieldState<FieldProps>) => {
-              state.visibleCacheValue = published.value
-            })
+            field.setSourceState(
+              (state: IFieldState<FormilyCore.FieldProps>) => {
+                state.visibleCacheValue = published.value
+              }
+            )
           }
           deleteFormValuesIn(path, true)
           notifyTreeFromValues()
@@ -386,7 +402,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
   }
 
   function onVirtualFieldChange({ field, path }) {
-    return (published: IVirtualFieldState<VirtualFieldProps>) => {
+    return (published: IVirtualFieldState<FormilyCore.VirtualFieldProps>) => {
       const visibleChanged = field.isDirty('visible')
       const displayChanged = field.isDirty('display')
       const mountedChanged = field.isDirty('mounted')
@@ -399,7 +415,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       if (visibleChanged || displayChanged) {
         graph.eachChildren(path, childState => {
           childState.setState(
-            (state: IVirtualFieldState<VirtualFieldProps>) => {
+            (state: IVirtualFieldState<FormilyCore.VirtualFieldProps>) => {
               if (visibleChanged) {
                 updateRecoverableShownState(published, state, 'visible')
               }
@@ -451,16 +467,18 @@ export function createForm<FieldProps, VirtualFieldProps>(
       heart.batch(() => {
         //fix #766
         field.batch(() => {
-          field.setState((state: IVirtualFieldState<VirtualFieldProps>) => {
-            state.initialized = true
-            state.props = props
-            if (isValid(visible)) {
-              state.visible = visible
+          field.setState(
+            (state: IVirtualFieldState<FormilyCore.VirtualFieldProps>) => {
+              state.initialized = true
+              state.props = props
+              if (isValid(visible)) {
+                state.visible = visible
+              }
+              if (isValid(display)) {
+                state.display = display
+              }
             }
-            if (isValid(display)) {
-              state.display = display
-            }
-          })
+          )
           batchRunTaskQueue(field, nodePath)
         })
       })
@@ -519,25 +537,24 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
       heart.batch(() => {
         field.batch(() => {
-          field.setState((state: IFieldState<FieldProps>) => {
+          field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
             const formValue = getFormValuesIn(state.name)
             const formInitialValue = getFormInitialValuesIn(state.name)
-            if (isValid(value)) {
-              // value > formValue > initialValue
-              state.value = value
-            } else if (
-              existFormValuesIn(state.name) ||
-              formValue !== undefined
-            ) {
-              state.value = formValue
-            } else if (isValid(initialValue)) {
-              state.value = initialValue
-            }
 
             if (isValid(initialValue)) {
               state.initialValue = initialValue
             } else if (isValid(formInitialValue)) {
               state.initialValue = formInitialValue
+            }
+
+            if (isValid(value)) {
+              // value > formValue > initialValue
+              state.value = value
+            } else if (existFormValuesIn(state.name) || !isEmpty(formValue)) {
+              //to resolve empty array checker
+              state.value = formValue
+            } else if (isValid(state.initialValue)) {
+              state.value = state.initialValue
             }
 
             if (isValid(visible)) {
@@ -594,7 +611,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return validate(value, rules).then(({ errors, warnings }) => {
           clearTimeout((field as any).validateTimer)
           return new Promise(resolve => {
-            field.setState((state: IFieldState<FieldProps>) => {
+            field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
               state.validating = false
               state.ruleErrors = errors
               state.ruleWarnings = warnings
@@ -786,7 +803,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
       field = input
     }
     function setValue(...values: any[]) {
-      field.setState((state: IFieldState<FieldProps>) => {
+      field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
         state.value = values[0]
         state.values = values
       })
@@ -873,12 +890,12 @@ export function createForm<FieldProps, VirtualFieldProps>(
         return values[0]
       },
       focus() {
-        field.setState((state: IFieldState<FieldProps>) => {
+        field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
           state.active = true
         })
       },
       blur() {
-        field.setState((state: IFieldState<FieldProps>) => {
+        field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
           state.active = false
           state.visited = true
         })
@@ -993,7 +1010,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
     hostUpdate(() => {
       graph.eachChildren('', selector, (field: IField) => {
         ;(field as any).disabledValidate = true
-        field.setState((state: IFieldState<FieldProps>) => {
+        field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
           state.modified = false
           state.ruleErrors = []
           state.ruleWarnings = []
@@ -1228,7 +1245,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function setFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState<FieldProps>) => void,
+    callback?: (state: IFieldState<FormilyCore.FieldProps>) => void,
     silent?: boolean
   ) {
     if (!isFn(callback)) return
@@ -1281,7 +1298,7 @@ export function createForm<FieldProps, VirtualFieldProps>(
 
   function getFieldState(
     path: FormPathPattern,
-    callback?: (state: IFieldState<FieldProps>) => any
+    callback?: (state: IFieldState<FormilyCore.FieldProps>) => any
   ) {
     const field = graph.select(path)
     return field && field.getState(callback)
@@ -1297,7 +1314,9 @@ export function createForm<FieldProps, VirtualFieldProps>(
     each(
       nodes,
       (
-        node: IFieldState<FieldProps> | IVirtualFieldState<VirtualFieldProps>,
+        node:
+          | IFieldState<FormilyCore.FieldProps>
+          | IVirtualFieldState<FormilyCore.VirtualFieldProps>,
         key
       ) => {
         let nodeState: any

@@ -14,6 +14,13 @@ import { ValidatePatternRules } from '@formily/validator'
 import { Schema } from './shared/schema'
 export * from '@formily/react'
 
+declare global {
+  namespace FormilyCore {
+    export type FieldProps = ISchema
+    export type VirtualFieldProps = ISchema
+  }
+}
+
 export interface ISchemaFieldProps {
   path?: FormPathPattern
   schema?: Schema
