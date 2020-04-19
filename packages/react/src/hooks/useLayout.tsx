@@ -48,6 +48,7 @@ export const useLayout = (props: ILayoutProps) => {
 
     return {
         enableLayout: Object.keys(context).length > 0,
+        isLayout,
         grid,
         inline,
         autoRow,

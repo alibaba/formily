@@ -299,6 +299,7 @@ const MegaLayout = styled(props => {
 `;
 
 MegaLayout.Item = Layout.Item;
+
 export {
     MegaLayout,
     StyledLayoutItem,
