@@ -112,7 +112,20 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   return <MegaLayout.Item itemProps={itemProps} {...props}>
     {(megaComponentProps) => {
       if (megaComponentProps) {
-        return children
+        const hijectStyleChild = React.cloneElement(props.children, {
+          ...props.children.props,
+          props: {
+            ...props.children.props.props,
+            ['x-component-props']: {
+              ...(props.children.props.props['x-component-props'] || {}),
+              style: {
+                ...(((props.children.props.props['x-component-props'] || {}).style) || {}),
+                ...(megaComponentProps.style),
+            },
+          }
+        }})
+
+        return <FormItemShallowProvider>{hijectStyleChild}</FormItemShallowProvider>
       }
 
       return <Form.Item {...itemProps}>

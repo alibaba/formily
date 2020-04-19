@@ -28,7 +28,7 @@ const App = () => {
     <SchemaForm components={{ Select, Input }}>
       <FormSlot><h1>top layout</h1></FormSlot>
       <MegaLayout labelAlign="top" autoRow grid full>
-        <Field name="t1" title="t1" x-component="Select" full />
+        <Field name="t1" title="t1" x-component="Select" />
         <Field name="t2" span={2} title="t2" x-component="Select" />
         <Field name="t3" span={2} title="t3" x-component="Select" />
         <Field name="t4" title="t4" x-component="Select" />
