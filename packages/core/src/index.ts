@@ -553,8 +553,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
             } else if (existFormValuesIn(state.name) || !isEmpty(formValue)) {
               //to resolve empty array checker
               state.value = formValue
-            } else if (isValid(state.initialValue)) {
-              state.value = state.initialValue
+            } else if (isValid(initialValue)) {
+              state.value = initialValue
             }
 
             if (isValid(visible)) {
