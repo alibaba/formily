@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import classnames from 'classnames'
-import { normalizeCol } from '../../shared'
+import { normalizeCol, pickNotFormItemProps, pickFormItemProps } from '../../shared'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import { Layout } from '@formily/react'
 import styled from 'styled-components'
@@ -50,7 +50,7 @@ const StyledLayoutWrapper = styled((props) => {
 })`${props => computeStyle(props)}`
 
 const Div = props => <div {...props} />
-const MegaLayout = styled(props => {
+export const MegaLayout = styled(props => {
     const { responsive, children, ...others } = props
 
     return <Layout        
@@ -128,16 +128,53 @@ const MegaLayout = styled(props => {
 
 `;
 
-MegaLayout.Item = Layout.Item;
-
 // TODO1: 把formItem里面的内容给收拢到这里
 // TODO2: 把schema模式下的formItem里面的内容给收拢到这里
 const MegaLayoutItem = (props) => {
-  
+  const { children, schmeaMode, itemProps, ...others } = props;
+  return <Layout.Item {...others}>
+    {layoutProps => {
+      const componentProps = pickNotFormItemProps(others)
+
+      // 启用了MegaLayout
+      if (layoutProps) {
+        const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
+        itemProps.labelAlign = labelAlign
+        itemProps.inline = inline
+        itemProps.grid = grid
+        itemProps.gutter = gutter
+        itemProps.span = span
+        itemProps.columns = columns
+
+        if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
+        if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
+        if (labelWidth !== -1) itemProps.labelWidth = labelWidth
+        if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
+
+        // 撑满即为组件宽度为100%
+        if (full) {
+          componentProps.style = {
+            ...(componentProps.style || {}),
+            width: '100%',
+          }
+        }
+
+        componentProps.addonBefore = undefined
+        componentProps.addonAfter = undefined
+
+        return <StyledLayoutItem {...itemProps}>
+          {children(componentProps)}
+        </StyledLayoutItem>
+      }
+
+      // 没有启用MegaLayout, 保持和线上完全一致的功能。
+      return children()
+    }}
+  </Layout.Item>
 }
 
-export {
-    MegaLayout,
-    StyledLayoutItem,
-    MegaLayout as default,
-}
+MegaLayout.Item = MegaLayoutItem;
+
+export const FormMegaLayout = createVirtualBox('mega-layout', MegaLayout)
+
+export default MegaLayout
