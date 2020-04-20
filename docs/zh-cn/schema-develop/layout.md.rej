@@ -1,0 +1,6 @@
+diff a/docs/zh-cn/schema-develop/layout.md b/docs/zh-cn/schema-develop/layout.md	(rejected hunks)
+@@ -349,2 +409,2 @@ const App = () => {
+-          <FormItem span={2} name="ngm3" title="ngm3" component={Select}/>
+-          <FormItem span={2} name="ngm4" title="ngm4" component={Select}/>
++          <FormItem span={2} name="ngm3" title="ngm3" component={Select} />
++          <FormItem span={2} name="ngm4" title="ngm4" component={Select} />

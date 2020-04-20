@@ -407,7 +407,7 @@ const App = () => {
         <FormItem span={2} name="ngm2" title="ngm2" component={Select} />
         <MegaLayout grid full span={3}>
           <FormItem span={2} name="ngm3" title="ngm3" component={Select} />
-          <FormItem span={2} name="ngm4" title="ngm4" component={Select} />
+          <FormItem span={1} name="ngm4" title="ngm4" component={Select} />
         </MegaLayout>
       </MegaLayout>
 
