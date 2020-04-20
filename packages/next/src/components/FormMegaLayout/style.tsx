@@ -117,7 +117,7 @@ export const baseComputeStyle = (props) => {
         result.layoutMarginStyle = ''
         // 内容都在同一行
         if (inline || (grid && !autoRow)) {
-            result.layoutMargin = `
+            result.layoutMarginStyle = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
                     margin-bottom: 0;
@@ -127,7 +127,7 @@ export const baseComputeStyle = (props) => {
 
         // 栅格布局，自动换行
         if (grid && autoRow) {
-            result.layoutMargin = `
+            result.layoutMarginStyle = `
                 &.mega-layout-container {
                     margin-bottom: 0;
                 }
@@ -136,7 +136,7 @@ export const baseComputeStyle = (props) => {
 
         // 常规布局
         if (!grid && !inline) {
-            result.layoutMargin = `
+            result.layoutMarginStyle = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
                     margin-bottom: 0;
                 }

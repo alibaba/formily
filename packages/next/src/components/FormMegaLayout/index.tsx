@@ -12,6 +12,7 @@ const { Row, Col } = Grid
 const StyledLayoutItem = styled((props) => {
     const { children, addonBefore, addonAfter,
       grid, span, columns, gutter, className, autoRow, ...others } = props
+
     const finalSpan = (24 / columns) * (span > columns ? columns : span)
     const cls = classnames({
       [className]: true,
@@ -73,7 +74,8 @@ export const MegaLayout = styled(props => {
               inline,
               grid,
               autoRow,
-              gutter,            
+              gutter,     
+              isLayout: true,       
             }
             const wrapperProps: any = {}
             if (grid) {
@@ -128,13 +130,12 @@ export const MegaLayout = styled(props => {
 
 `;
 
-// TODO1: 把formItem里面的内容给收拢到这里
-// TODO2: 把schema模式下的formItem里面的内容给收拢到这里
 const MegaLayoutItem = (props) => {
-  const { children, schmeaMode, itemProps, ...others } = props;
+  const { children, schemaChildren, itemProps, ...others } = props;
   return <Layout.Item {...others}>
     {layoutProps => {
       const componentProps = pickNotFormItemProps(others)
+      let schemaComponent = schemaChildren
 
       // 启用了MegaLayout
       if (layoutProps) {
@@ -157,13 +158,30 @@ const MegaLayoutItem = (props) => {
             ...(componentProps.style || {}),
             width: '100%',
           }
+          
+          // 处理schema的组件，因为FormItem层面没法触及到真实的组件（schema-renderer控制真正的组件注入）
+          // 因此这里改动的其实是Field
+          if (schemaChildren) {
+            schemaComponent = React.cloneElement(schemaChildren, {
+              ...schemaChildren.props,
+              props: {
+                ...schemaChildren.props.props,
+                ['x-component-props']: {
+                  ...(schemaChildren.props.props['x-component-props'] || {}),
+                  style: {
+                    width: '100%',
+                    ...(((schemaChildren.props.props['x-component-props'] || {}).style) || {}),                
+                },
+              }
+            }})
+          }          
         }
-
+        
         componentProps.addonBefore = undefined
         componentProps.addonAfter = undefined
-
+        
         return <StyledLayoutItem {...itemProps}>
-          {children(componentProps)}
+          {schemaChildren ? children(schemaComponent) : children(componentProps)}
         </StyledLayoutItem>
       }
 

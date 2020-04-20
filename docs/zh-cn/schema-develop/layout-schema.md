@@ -59,22 +59,22 @@ const App = () => {
 
       <FormSlot><h5>addonBefore/addonAfter/description</h5></FormSlot>
       <MegaLayout addonBefore="before" addonAfter="after" description="description">
-        <Field name="l1" title="l1" x-component="Select"/>
+        <Field name="addon1" title="addon1" x-component="Select"/>
       </MegaLayout>
 
       <FormSlot><h5>label + addon</h5></FormSlot>
       <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description">
-        <Field name="l1" title="l1" x-component="Select"/>
+        <Field name="addon2" title="addon2" x-component="Select"/>
       </MegaLayout>
 
       <FormSlot><h5>label + addon + full</h5></FormSlot>
       <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description" full>
-        <Field name="l1" title="l1" x-component="Select"/>
+        <Field name="addon3" title="addon3" x-component="Select"/>
       </MegaLayout>
 
       <FormSlot><h1>item addon</h1></FormSlot>
       <MegaLayout full>
-        <Field name="fff1" title="fff1" x-component="Select" addonBefore="before" addonAfter="after" help="description"/>
+        <Field name="iitemAddon1" title="fff1" x-component="Select" addonBefore="before" addonAfter="after" help="description"/>
       </MegaLayout>
       
       <MegaLayout labelCol={4} label="label" addonBefore="before" addonAfter="after" description="description" full>

@@ -100,36 +100,26 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
     wrapperCol: label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
   }
 
-  const children = addonAfter ? (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
-      {addonAfter}
-    </div>
-  ) : (
-    <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
-  )
+  const renderComponent = (children, opts?) => {
+    const { addonAfter } = opts || {}
+    return addonAfter ? (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FormItemShallowProvider>{children}</FormItemShallowProvider>
+        {addonAfter}
+      </div>
+    ) : (
+      <FormItemShallowProvider>{children}</FormItemShallowProvider>
+    )
+  }
 
-  return <MegaLayout.Item itemProps={itemProps} {...props}>
-    {(megaComponentProps) => {
-      if (megaComponentProps) {
-        const hijectStyleChild = React.cloneElement(props.children, {
-          ...props.children.props,
-          props: {
-            ...props.children.props.props,
-            ['x-component-props']: {
-              ...(props.children.props.props['x-component-props'] || {}),
-              style: {
-                ...(((props.children.props.props['x-component-props'] || {}).style) || {}),
-                ...(megaComponentProps.style),
-            },
-          }
-        }})
-
-        return <FormItemShallowProvider>{hijectStyleChild}</FormItemShallowProvider>
+  return <MegaLayout.Item itemProps={itemProps} {...props.props} schemaChildren={props.children}>
+    {(megaComponent) => {
+      if (megaComponent) {
+        return renderComponent(megaComponent, { addonAfter })
       }
 
       return <Form.Item {...itemProps}>
-        {children}
+        {renderComponent(props.children, { addonAfter })}
       </Form.Item>
     }}      
   </MegaLayout.Item>

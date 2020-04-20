@@ -70,6 +70,6 @@ export const useLayout = (props: ILayoutProps) => {
 export const useLayoutItem = (props: ILayoutItemProps) => {    
     // 如果外层有MegaLayou容器，则返回计算后的结构，反之则返回null代表不在MegaLayout模式下
     const layout = useLayout(props)
-    const { enableLayout } = layout    
+    const { enableLayout } = layout
     return enableLayout ? layout : null
 }
