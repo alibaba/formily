@@ -63,7 +63,7 @@ export const MegaLayout = styled(props => {
         children={(layout) => {
             const { inline, required, span, columns, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
-                labelWidth, wrapperWidth,
+                labelWidth, wrapperWidth, isRoot,
                 context,
             } = layout
 
@@ -75,6 +75,7 @@ export const MegaLayout = styled(props => {
               grid,
               autoRow,
               gutter,     
+              isRoot,
               isLayout: true,       
             }
             const wrapperProps: any = {}

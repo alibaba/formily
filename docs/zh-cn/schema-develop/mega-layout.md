@@ -1,7 +1,7 @@
 # 理解表单布局
 
 `FormMegaLayout` 是下一代的 **Formily** 表单布局，基于表单组件维度，到整体维度都有相应的设计标准指导。
-查看这些设计了解更多：[单字段布局能力](#)，[静态布局场景](#)，[响应式布局场景](#)
+查看这些设计了解更多：[单字段布局能力](https://img.alicdn.com/tfs/TB1N2xIC8r0gK0jSZFnXXbRRXXa-1090-876.png)，[静态布局场景](https://img.alicdn.com/tfs/TB1vwlFCYj1gK0jSZFuXXcrHpXa-1090-1231.png)，[响应式布局场景](https://img.alicdn.com/tfs/TB1qjRyC.H1gK0jSZSyXXXtlpXa-1090-1231.png)
 
 下面会通过一些实际例子来理解有哪些能力：
 
@@ -456,3 +456,129 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 # 响应式布局
 
+
+# 复杂嵌套布局
+
+`FormMegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  FormMegaLayout,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Input, Select } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{ Select, Input }}>
+        <FormMegaLayout labelCol={6}>
+          <Field name="ff1" title="普通字段" x-component="Select"/>
+
+          <FormMegaLayout label="以下字段会撑满" full>
+            <Field name="flf1" x-component="Select"/>
+            <Field name="flf2" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="行内布局" inline>
+            <Field name="fi1" x-component="Select"/>
+            <Field name="fi2" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="栅格布局" grid>
+            <Field name="fg1" x-component="Select"/>
+            <Field name="fg2" x-component="Select"/>
+            <Field name="fg3" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="栅格布局 + 撑满" grid full>
+            <Field name="ffg1" x-component="Select"/>
+            <Field name="ffg2" x-component="Select"/>
+            <Field name="ffg3" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="栅格布局 + 撑满 + 指定总列数" grid columns={2} full>
+            <Field name="ffcg1" x-component="Select"/>
+            <Field name="ffcg2" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="栅格布局 + 自动换行 + 自定义比例" autoRow grid full>
+            <Field name="fag1" x-component="Select"/>
+            <Field name="fag2" span={2} x-component="Select"/>
+            <Field name="fag3" x-component="Select"/>
+          </FormMegaLayout>
+
+          <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fad1" x-component="Select"/>
+
+          <Field full title="辅助文案 + full" itemBefore="before" itemAfter="after" description="description" name="fad2" x-component="Select"/>
+
+          <FormMegaLayout label="行内布局 + 辅助文案" inline>
+            <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fiad1" x-component="Select"/>
+            <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fiad2" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="栅格布局 + 辅助文案" grid full>
+              <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fgiad1" x-component="Select"/>
+              <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fgiad2" x-component="Select"/>
+              <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fgiad3" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="栅格布局 + 辅助文案 + 指定列数" grid full columns={2}>
+              <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fcgiad1" x-component="Select"/>
+              <Field title="辅助文案" itemBefore="before" itemAfter="after" description="description" name="fcgiad2" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="嵌套栅格布局" autoRow grid full>
+            <Field name="fnestg1" title="普通字段" x-component="Select" />
+            <Field name="fnestg2" span={2} title="普通字段" x-component="Select" />
+            <Field name="fnestg3" span={2} title="普通字段" x-component="Select" />
+            <Field name="fnestg4" title="普通字段" x-component="Select" />
+            <Field name="fnestg5" title="普通字段" x-component="Select" />
+
+            <FormMegaLayout columns={3} span={2}>
+              <Field name="fnestg6" title="普通字段" x-component="Select"/>
+              <Field name="fnestg7" title="普通字段" x-component="Select"/>
+              <Field name="fnestg8" title="普通字段" x-component="Select"/>
+            </FormMegaLayout>     
+          </FormMegaLayout>
+
+          <FormMegaLayout label="连续嵌套布局">
+            <Field name="fns1" title="普通字段" x-component="Select"/>
+            <FormMegaLayout inline label="嵌套行内">
+              <Field name="fns2" title="普通字段" x-component="Select"/>
+              <Field name="fns3" title="普通字段" x-component="Select"/>
+              <Field name="fns4" title="普通字段" x-component="Select"/>
+            </FormMegaLayout>
+
+            <FormMegaLayout grid label="嵌套栅格">
+              <Field name="fns2" title="普通字段" x-component="Select"/>
+              <Field name="fns3" title="普通字段" x-component="Select"/>
+              <Field name="fns4" title="普通字段" x-component="Select"/>
+            </FormMegaLayout>
+          </FormMegaLayout>
+
+        </FormMegaLayout>
+
+        <FormButtonGroup offset={6}>
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```

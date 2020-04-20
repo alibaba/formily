@@ -46,8 +46,11 @@ export const useLayout = (props: ILayoutProps) => {
         wrapperCol = -1
     }
 
+    const enableLayout = Object.keys(context).length > 0
+
     return {
-        enableLayout: Object.keys(context).length > 0,
+        enableLayout,
+        isRoot: isLayout && !enableLayout,
         isLayout,
         grid,
         inline,

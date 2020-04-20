@@ -7,7 +7,7 @@ export const baseComputeStyle = (props) => {
         isLayout,
         inline, autoRow,
         labelWidth, wrapperWidth,
-        labelCol, grid
+        labelCol, grid, isRoot
     } = props
 
     // label对齐相关 labelAlign
@@ -138,6 +138,14 @@ export const baseComputeStyle = (props) => {
         if (!grid && !inline) {
             result.layoutMarginStyle = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
+                    margin-bottom: 0;
+                }
+            `
+        }
+
+        if (isRoot) {
+            result.layoutMarginStyle += `
+                &.mega-layout-container {
                     margin-bottom: 0;
                 }
             `
