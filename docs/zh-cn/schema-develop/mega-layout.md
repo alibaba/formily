@@ -456,6 +456,46 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 # 响应式布局
 
+# 嵌套布局
+
+`FormMegaLayout` 有作用范围的控制能力。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  FormMegaLayout,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Input, Select } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{ Select, Input }}>
+        <FormMegaLayout labelCol={6}>
+          <Field name="ndomain1" title="普通字段" x-component="Select"/>
+          <FormMegaLayout label="改变作用域范围内字段" labelCol={4}>
+              <Field name="ndomain2" title="普通字段" x-component="Select"/>
+          </FormMegaLayout>
+        </FormMegaLayout>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 # 复杂嵌套布局
 
