@@ -5,9 +5,9 @@ export const baseComputeStyle = (props) => {
     const {
         labelAlign, gutter,
         isLayout,
-        inline, autoRow,
+        inline,
         labelWidth, wrapperWidth,
-        labelCol, grid
+        labelCol, grid, full, context = {}, columns
     } = props
 
     // label对齐相关 labelAlign
@@ -104,31 +104,54 @@ export const baseComputeStyle = (props) => {
     }
 
     // grid栅格模式
-    if (grid) {
+    if (!context.grid && grid) {
         result.gridStyle = `
             & > .next-form-item {
                 width: 100%;
             }
+            & > .next-form-item-control > .mega-layout-container-wrapper,
+            & > .next-form-item-control > .mega-layout-item-content {
+                display: flex;
+                > .mega-layout-container-content {
+                    &.grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(100px, ${full ? '1fr' : '200px'} ));
+                        grid-column-gap: ${parseInt(gutter)}px;
+                        grid-row-gap: ${parseInt(gutter)}px;
+                    }
+                }
+            }
         `
     }
 
+    // 嵌套grid布局
+    if (context.grid && grid) {
+        result.gridStyle = `
+            & > .next-form-item {
+                width: 100%;
+            }
+            & > .next-form-item-control > .mega-layout-container-wrapper,
+            & > .next-form-item-control > .mega-layout-item-content {
+                display: flex;
+                > .mega-layout-container-content {
+                    &.grid {
+                        display: grid;
+                        grid-template-columns: repeat(${columns}, 1fr);
+                        grid-column-gap: ${parseInt(gutter)}px;
+                        grid-row-gap: ${parseInt(gutter)}px;
+                    }
+                }
+            }
+        `
+    }
     // 处理嵌套边距
     if (isLayout) {
         result.layoutMarginStyle = ''
         // 内容都在同一行
-        if (inline || (grid && !autoRow)) {
+        if (inline) {
             result.layoutMargin = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
-                    margin-bottom: 0;
-                }
-            `
-        }
-
-        // 栅格布局，自动换行
-        if (grid && autoRow) {
-            result.layoutMargin = `
-                &.mega-layout-container {
                     margin-bottom: 0;
                 }
             `
