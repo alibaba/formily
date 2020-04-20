@@ -10,9 +10,10 @@ import { computeStyle } from './style'
 const { Row, Col } = Grid
 
 const StyledLayoutItem = styled((props) => {
+
     const { children, addonBefore, addonAfter,
       grid, span, columns, gutter, className, autoRow, ...others } = props
-    const finalSpan = (24 / columns) * (span > columns ? columns : span)
+    // const finalSpan = (24 / columns) * (span > columns ? columns : span)
     const cls = classnames({
       [className]: true,
       'mega-layout-item': true,
@@ -31,15 +32,14 @@ const StyledLayoutItem = styled((props) => {
       const gutterNumber = parseInt(gutter)
       const halfGutterString = `${gutterNumber / 2}px`
       const style = {
-        paddingLeft: halfGutterString,
-        paddingRight: halfGutterString,
+        gridColumnStart: `span ${span}`
       };
 
-      return <Col className="mega-layout-item-col" span={finalSpan} style={style}>
+      return <div className="mega-layout-item-col" style={style}>
         {finalFormItem}
-      </Col>
+      </div>
     }
-  
+
     return finalFormItem
 })`${props => computeStyle(props)}`
 
@@ -62,10 +62,9 @@ const MegaLayout = styled(props => {
         children={(layout) => {
             const { inline, required, span, columns, addonBefore, addonAfter, description, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
-                labelWidth, wrapperWidth,
+                labelWidth, wrapperWidth, full,
                 context,
             } = layout
-
             let Wrapper            
             const gutterNumber = parseInt(gutter)
             const halfGutterString = `${gutterNumber / 2}px`
@@ -73,13 +72,15 @@ const MegaLayout = styled(props => {
               inline,
               grid,
               autoRow,
-              gutter,            
+              gutter,
+              full,
+              context,
+              columns
             }
             const wrapperProps: any = {}
             if (grid) {
-              Wrapper = Row
-              wrapperProps.gutter = gutter
-              wrapperProps.wrap = autoRow
+              Wrapper = Div // 一行
+              wrapperProps.gutter = gutter // gutter
             } else {
               Wrapper = Div
             }            
@@ -89,6 +90,12 @@ const MegaLayout = styled(props => {
                 if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
                 if (labelWidth !== -1) itemProps.labelWidth = labelWidth
                 if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
+            }
+            
+            if (context.grid && grid) {
+              itemProps.style = {
+                gridColumnStart: `span ${span}`,
+              }
             }
 
             let ele = <StyledLayoutWrapper
@@ -101,7 +108,7 @@ const MegaLayout = styled(props => {
             >
                 <div className="mega-layout-container-wrapper">
                     { addonBefore ? <p className="mega-layout-container-before">{addonBefore}</p> : null }
-                    <Wrapper {...wrapperProps} className="mega-layout-container-content">
+                    <Wrapper {...wrapperProps} className={classnames('mega-layout-container-content', { grid })}>
                       {children}
                     </Wrapper>
                     { addonAfter ? <p className="mega-layout-container-after">{addonAfter}</p> : null }
@@ -113,12 +120,10 @@ const MegaLayout = styled(props => {
                 paddingLeft: halfGutterString,
                 paddingRight: halfGutterString,
               };
-
-              const finalSpan = (24 / (context.columns || columns)) * (props.span || span)
         
-              return <Col span={finalSpan} style={style}>
+              return <div style={style}>
                 {ele}
-              </Col>
+              </div>
             }
      
             return ele

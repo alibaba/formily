@@ -128,6 +128,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
           itemProps.gutter = gutter
           itemProps.span = span
           itemProps.columns = columns
+          itemProps.full = full
 
           if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
           if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
@@ -144,7 +145,6 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
 
           componentProps.addonBefore = undefined
           componentProps.addonAfter = undefined
-
           return <StyledLayoutItem {...itemProps}>
             {renderComponent({ props: componentProps, state, mutators, form })}
           </StyledLayoutItem>
