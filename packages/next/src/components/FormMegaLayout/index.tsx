@@ -9,6 +9,14 @@ import { computeStyle } from './style'
 
 const { Row, Col } = Grid
 
+// 优先级：当前属性 > context 传递的属性 > 默认值
+const computeAttr = (propAttr, layoutAttr, defaultValue) => {
+  if (typeof propAttr !== 'undefined') return propAttr
+  if (typeof layoutAttr !== 'undefined') return layoutAttr
+  return defaultValue
+};
+
+
 const StyledLayoutItem = styled((props) => {
     const { children, itemBefore, itemAfter,
       grid, span, columns, gutter, className, autoRow, ...others } = props
@@ -53,7 +61,10 @@ const StyledLayoutWrapper = styled((props) => {
 const Div = props => <div {...props} />
 export const MegaLayout = styled(props => {
     const { responsive, children, itemBefore, itemAfter, description, ...others } = props
-
+    const layoutProps = props.layoutProps || {}
+    
+    // 注意, labelCol/wrapperCol, labelWidth/wrapperWidth Layout只能透传下去
+    // 自身的 labelCol/wrapperCol, labelWidth/wrapperWidth 必须通过其layoutProps来控制
     return <Layout        
         defaultSettings={{
             gutter: 20,
@@ -62,9 +73,8 @@ export const MegaLayout = styled(props => {
         responsive={responsive}
         children={(layout) => {
             const { inline, required, span, columns, label, labelAlign,
-                labelCol, wrapperCol, grid, gutter, autoRow,
-                labelWidth, wrapperWidth, isRoot,
-                context,
+                grid, gutter, autoRow,
+                isRoot, context
             } = layout
 
             let Wrapper            
@@ -85,9 +95,15 @@ export const MegaLayout = styled(props => {
               wrapperProps.wrap = autoRow
             } else {
               Wrapper = Div
-            }            
+            }
 
             if (label) {
+                // 只能通过layoutProps来改动当前MegaLayout的label/wrapper相关配置
+                const labelWidth = computeAttr(layoutProps.labelWidth, context.labelWidth, -1)
+                const wrapperWidth = computeAttr(layoutProps.wrapperWidth, context.wrapperWidth, -1)
+                const labelCol = computeAttr(layoutProps.labelCol, context.labelCol, -1)
+                const wrapperCol = computeAttr(layoutProps.wrapperCol, context.wrapperCol, -1)
+
                 if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
                 if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
                 if (labelWidth !== -1) itemProps.labelWidth = labelWidth

@@ -8,6 +8,7 @@ import {
   FormSlot,
   createVirtualBox,
   FormMegaLayout as MegaLayout,
+  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,

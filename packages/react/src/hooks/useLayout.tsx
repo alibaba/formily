@@ -13,6 +13,8 @@ export const useLayout = (props: ILayoutProps) => {
     const isLayout = props.isLayout || false
     const defaultSettings = props.defaultSettings || {}
     const context = useContext(LayoutContext)
+    const enableLayout = Object.keys(context).length > 0
+    const isRoot = isLayout && !enableLayout
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
     let columns = computeAttr(props.columns, context.columns, 3)
@@ -46,11 +48,11 @@ export const useLayout = (props: ILayoutProps) => {
         wrapperCol = -1
     }
 
-    const enableLayout = Object.keys(context).length > 0
+    
 
     return {
         enableLayout,
-        isRoot: isLayout && !enableLayout,
+        isRoot,
         isLayout,
         grid,
         inline,
