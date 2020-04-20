@@ -10,7 +10,7 @@ import { computeStyle } from './style'
 const { Row, Col } = Grid
 
 const StyledLayoutItem = styled((props) => {
-    const { children, addonBefore, addonAfter,
+    const { children, itemBefore, itemAfter,
       grid, span, columns, gutter, className, autoRow, ...others } = props
 
     const finalSpan = (24 / columns) * (span > columns ? columns : span)
@@ -22,11 +22,11 @@ const StyledLayoutItem = styled((props) => {
 
     const finalFormItem = <Form.Item className={cls} {...others}>
       <div className="mega-layout-item-content">
-        { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
+        { itemBefore ? <p className="formily-mega-item-before">{itemBefore}</p> : null }
         {children}
-        { addonAfter ? <p className="formily-mega-item-after">{addonAfter}</p> : null }
+        { itemAfter ? <p className="formily-mega-item-after">{itemAfter}</p> : null }
       </div>
-    </Form.Item>
+    </Form.Item>    
 
     if (grid) {
       const gutterNumber = parseInt(gutter)
@@ -61,7 +61,7 @@ export const MegaLayout = styled(props => {
         {...others}
         responsive={responsive}
         children={(layout) => {
-            const { inline, required, span, columns, addonBefore, addonAfter, description, label, labelAlign,
+            const { inline, required, span, columns, itemBefore, itemAfter, description, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
                 labelWidth, wrapperWidth,
                 context,
@@ -102,11 +102,11 @@ export const MegaLayout = styled(props => {
                 {...itemProps}
             >
                 <div className="mega-layout-container-wrapper">
-                    { addonBefore ? <p className="mega-layout-container-before">{addonBefore}</p> : null }
+                    { itemBefore ? <p className="mega-layout-container-before">{itemBefore}</p> : null }
                     <Wrapper {...wrapperProps} className="mega-layout-container-content">
                       {children}
                     </Wrapper>
-                    { addonAfter ? <p className="mega-layout-container-after">{addonAfter}</p> : null }
+                    { itemAfter ? <p className="mega-layout-container-after">{itemAfter}</p> : null }
                 </div>
             </StyledLayoutWrapper>
 
@@ -139,6 +139,7 @@ const MegaLayoutItem = (props) => {
 
       // 启用了MegaLayout
       if (layoutProps) {
+        const { itemBefore, itemAfter } = others
         const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
         itemProps.labelAlign = labelAlign
         itemProps.inline = inline
@@ -151,6 +152,8 @@ const MegaLayoutItem = (props) => {
         if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
         if (labelWidth !== -1) itemProps.labelWidth = labelWidth
         if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
+        if (itemBefore) itemProps.itemBefore = itemBefore
+        if (itemAfter) itemProps.itemAfter = itemAfter
 
         // 撑满即为组件宽度为100%
         if (full) {
@@ -176,9 +179,6 @@ const MegaLayoutItem = (props) => {
             }})
           }          
         }
-        
-        componentProps.addonBefore = undefined
-        componentProps.addonAfter = undefined
         
         return <StyledLayoutItem {...itemProps}>
           {schemaChildren ? children(schemaComponent) : children(componentProps)}

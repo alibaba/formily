@@ -49,45 +49,45 @@ const App = () => {
 
       <h1>layout addon</h1>
 
-      <h5>addonBefore/addonAfter/description</h5>
-      <MegaLayout addonBefore="before" addonAfter="after" description="description">
+      <h5>itemBefore/itemAfter/description</h5>
+      <MegaLayout itemBefore="before" itemAfter="after" description="description">
         <FormItem name="l1" title="l1" component={Select}/>
       </MegaLayout>
 
       <h5>label + addon</h5>
-      <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description">
+      <MegaLayout label="label" itemBefore="before" itemAfter="after" description="description">
         <FormItem name="l1" title="l1" component={Select}/>
       </MegaLayout>
 
       <h5>label + addon + full</h5>
-      <MegaLayout label="label" addonBefore="before" addonAfter="after" description="description" full>
+      <MegaLayout label="label" itemBefore="before" itemAfter="after" description="description" full>
         <FormItem name="l1" title="l1" component={Select}/>
       </MegaLayout>
 
       <h1>item addon</h1>
       <MegaLayout full>
-        <FormItem name="fff1" title="fff1" component={Select} addonBefore="before" addonAfter="after" help="description"/>
+        <FormItem name="fff1" title="fff1" component={Select} itemBefore="before" itemAfter="after" help="description"/>
       </MegaLayout>
       
-      <MegaLayout labelCol={4} label="label" addonBefore="before" addonAfter="after" description="description" full>
+      <MegaLayout labelCol={4} label="label" itemBefore="before" itemAfter="after" description="description" full>
         <FormItem name="aa1" title="aa1" component={Select}/>
         <FormItem name="aa2" title="aa2" component={Select}/>
         <FormItem name="aa3" title="aa3" component={Select}/>
       </MegaLayout>
 
-      <MegaLayout labelWidth={200} label="label" addonBefore="before" addonAfter="after" description="description" full>
+      <MegaLayout labelWidth={200} label="label" itemBefore="before" itemAfter="after" description="description" full>
         <FormItem name="aa1" title="aa1" component={Select}/>
         <FormItem name="aa2" title="aa2" component={Select}/>
         <FormItem name="aa3" title="aa3" component={Select}/>
       </MegaLayout>
 
-      <MegaLayout grid label="label" addonBefore="before" addonAfter="after" description="description" full>
+      <MegaLayout grid label="label" itemBefore="before" itemAfter="after" description="description" full>
         <FormItem name="aa1" title="aa1" component={Select}/>
         <FormItem name="aa2" title="aa2" component={Select}/>
         <FormItem name="aa3" title="aa3" component={Select}/>
       </MegaLayout>
 
-      <MegaLayout inline label="label" addonBefore="before" addonAfter="after" description="description" full>
+      <MegaLayout inline label="label" itemBefore="before" itemAfter="after" description="description" full>
         <FormItem name="aa1" title="aa1" component={Select}/>
         <FormItem name="aa2" title="aa2" component={Select}/>
         <FormItem name="aa3" title="aa3" component={Select}/>

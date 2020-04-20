@@ -17,7 +17,7 @@ export const baseComputeStyle = (props) => {
         }
     `
 
-    // 增量属性 addonBefore/addonAfter
+    // 增量属性 itemBefore/itemAfter
     result.addonStyle = `
         & > .next-form-item-control > .mega-layout-container-wrapper,
         & > .next-form-item-control > .mega-layout-item-content {
