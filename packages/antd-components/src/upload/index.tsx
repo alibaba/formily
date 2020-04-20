@@ -288,3 +288,5 @@ export const Upload = connect({
     }
   }
 )
+
+export default Upload
