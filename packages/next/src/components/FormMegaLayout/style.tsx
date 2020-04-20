@@ -7,7 +7,7 @@ export const baseComputeStyle = (props) => {
         isLayout,
         inline,
         labelWidth, wrapperWidth,
-        labelCol, grid, full, context = {}, columns
+        labelCol, grid, full, context = {}, columns, isRoot
     } = props
 
     // label对齐相关 labelAlign
@@ -17,7 +17,7 @@ export const baseComputeStyle = (props) => {
         }
     `
 
-    // 增量属性 addonBefore/addonAfter
+    // 增量属性 itemBefore/itemAfter
     result.addonStyle = `
         & > .next-form-item-control > .mega-layout-container-wrapper,
         & > .next-form-item-control > .mega-layout-item-content {
@@ -69,7 +69,7 @@ export const baseComputeStyle = (props) => {
                     max-width: ${labelWidth}px;
                     flex: ${labelAlign !== 'top' ? `0 0 ${labelWidth}px` : 'initial'};
                     ` : 
-                    `flex: 1;`
+                    ''
                 }
             }
 
@@ -149,7 +149,7 @@ export const baseComputeStyle = (props) => {
         result.layoutMarginStyle = ''
         // 内容都在同一行
         if (inline) {
-            result.layoutMargin = `
+            result.layoutMarginStyle = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
                     margin-bottom: 0;
@@ -159,8 +159,16 @@ export const baseComputeStyle = (props) => {
 
         // 常规布局
         if (!grid && !inline) {
-            result.layoutMargin = `
+            result.layoutMarginStyle = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
+                    margin-bottom: 0;
+                }
+            `
+        }
+
+        if (isRoot) {
+            result.layoutMarginStyle += `
+                &.mega-layout-container {
                     margin-bottom: 0;
                 }
             `
