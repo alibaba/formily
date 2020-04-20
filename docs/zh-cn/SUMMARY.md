@@ -11,6 +11,7 @@
     - [理解表单路径系统](./schema-develop/form-path.md)
     - [理解传值属性](./schema-develop/form-value.md)
     - [理解表单状态](./schema-develop/form-state.md)
+    - [理解表单布局](./schema-develop/mega-layout.md)
     - [布局JSX](./schema-develop/layout.md)
     - [布局Schema](./schema-develop/layout-schema.md)
     - [理解表单节点树](./schema-develop/form-graph.md)

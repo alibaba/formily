@@ -52,7 +52,7 @@ const StyledLayoutWrapper = styled((props) => {
 
 const Div = props => <div {...props} />
 export const MegaLayout = styled(props => {
-    const { responsive, children, ...others } = props
+    const { responsive, children, itemBefore, itemAfter, description, ...others } = props
 
     return <Layout        
         defaultSettings={{
@@ -61,7 +61,7 @@ export const MegaLayout = styled(props => {
         {...others}
         responsive={responsive}
         children={(layout) => {
-            const { inline, required, span, columns, itemBefore, itemAfter, description, label, labelAlign,
+            const { inline, required, span, columns, label, labelAlign,
                 labelCol, wrapperCol, grid, gutter, autoRow,
                 labelWidth, wrapperWidth,
                 context,
@@ -155,11 +155,12 @@ const MegaLayoutItem = (props) => {
         if (itemBefore) itemProps.itemBefore = itemBefore
         if (itemAfter) itemProps.itemAfter = itemAfter
 
-        // 撑满即为组件宽度为100%
+        // 撑满即为组件宽度为100%, flex: 1
         if (full) {
           componentProps.style = {
             ...(componentProps.style || {}),
             width: '100%',
+            flex: 1,
           }
           
           // 处理schema的组件，因为FormItem层面没法触及到真实的组件（schema-renderer控制真正的组件注入）
@@ -172,7 +173,7 @@ const MegaLayoutItem = (props) => {
                 ['x-component-props']: {
                   ...(schemaChildren.props.props['x-component-props'] || {}),
                   style: {
-                    width: '100%',
+                    ...componentProps.style,
                     ...(((schemaChildren.props.props['x-component-props'] || {}).style) || {}),                
                 },
               }

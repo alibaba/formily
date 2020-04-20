@@ -69,7 +69,7 @@ export const baseComputeStyle = (props) => {
                     max-width: ${labelWidth}px;
                     flex: ${labelAlign !== 'top' ? `0 0 ${labelWidth}px` : 'initial'};
                     ` : 
-                    `flex: 1;`
+                    ''
                 }
             }
 
