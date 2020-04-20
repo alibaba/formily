@@ -458,7 +458,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 # 嵌套布局
 
-`FormMegaLayout` 有作用范围的控制能力。
+`FormMegaLayout` 的属性会传递到下面的 **表单组件** 或 嵌套的 **FormMegaLayout**。
+
+由于部分属性如 **labelCol** 等属性是父子组件共用的，约定只能影响子组件。因此需要更改 `FormMegaLayout` 自身时需要通过 **layoutProps** 来实现。
+
+| 字段名        | 描述                                        | 类型            | 默认值      |
+|: ------------- |: ------------------------------------------- |: --------------- |: ----------- |
+| layoutProps   | 改变 **FormMegaLayout** 自身布局属性   | { `labelCol` : `number`, `wrapperCol` : `number`, `labelWidth` : `number`, `wrapperWidth` : `number` }   |  |
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -483,10 +489,14 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm components={{ Select, Input }}>
-        <FormMegaLayout labelCol={6}>
-          <Field name="ndomain1" title="普通字段" x-component="Select"/>
-          <FormMegaLayout label="改变作用域范围内字段" labelCol={4}>
-              <Field name="ndomain2" title="普通字段" x-component="Select"/>
+        <FormMegaLayout labelCol={4}>
+          <Field name="ndomain1" title="col4" x-component="Select"/>
+          <FormMegaLayout label="独立作用域" labelCol={6}>
+              <Field name="ndomain2" title="col6" x-component="Select"/>
+          </FormMegaLayout>
+
+          <FormMegaLayout label="修改MegaLayout本身" layoutProps={{ labelCol: 6 }}>
+              <Field name="ndomain3" title="col4" x-component="Select"/>
           </FormMegaLayout>
         </FormMegaLayout>
       </SchemaForm>
