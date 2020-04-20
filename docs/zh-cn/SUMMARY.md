@@ -11,10 +11,12 @@
     - [理解表单路径系统](./schema-develop/form-path.md)
     - [理解传值属性](./schema-develop/form-value.md)
     - [理解表单状态](./schema-develop/form-state.md)
-    - [布局1](./schema-develop/layout.md)
+    - [理解表单布局](./schema-develop/mega-layout.md)
+    - [布局 JSX](./schema-develop/layout.md)
+    - [布局 Schema](./schema-develop/layout-schema.md)
     - [理解表单节点树](./schema-develop/form-graph.md)
     - [理解表单扩展机制](./schema-develop/form-extension.md)
-  - 实践教程  
+  - 实践教程
     - [实现复杂联动](./schema-develop/complex-linkage.md)
     - [实现复杂布局](./schema-develop/form-layout.md)
     - [性能优化实践](./schema-develop/performance.md)

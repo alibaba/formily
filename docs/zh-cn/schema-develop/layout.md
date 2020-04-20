@@ -52,10 +52,10 @@ const App = () => {
 
       <h1>layout addon</h1>
 
-      <h5>addonBefore/addonAfter/description</h5>
+      <h5>itemBefore/itemAfter/description</h5>
       <MegaLayout
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
       >
         <FormItem name="l1" title="l1" component={Select} />
@@ -64,8 +64,8 @@ const App = () => {
       <h5>label + addon</h5>
       <MegaLayout
         label="label"
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
       >
         <FormItem name="l1" title="l1" component={Select} />
@@ -74,8 +74,8 @@ const App = () => {
       <h5>label + addon + full</h5>
       <MegaLayout
         label="label"
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
         full
       >
@@ -88,8 +88,8 @@ const App = () => {
           name="fff1"
           title="fff1"
           component={Select}
-          addonBefore="before"
-          addonAfter="after"
+          itemBefore="before"
+          itemAfter="after"
           help="description"
         />
       </MegaLayout>
@@ -97,8 +97,8 @@ const App = () => {
       <MegaLayout
         labelCol={4}
         label="label"
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
         full
       >
@@ -110,8 +110,8 @@ const App = () => {
       <MegaLayout
         labelWidth={200}
         label="label"
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
         full
       >
@@ -123,8 +123,8 @@ const App = () => {
       <MegaLayout
         grid
         label="label"
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
         full
       >
@@ -136,8 +136,8 @@ const App = () => {
       <MegaLayout
         inline
         label="label"
-        addonBefore="before"
-        addonAfter="after"
+        itemBefore="before"
+        itemAfter="after"
         description="description"
         full
       >

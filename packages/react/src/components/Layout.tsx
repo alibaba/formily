@@ -7,7 +7,7 @@ import { useLayout, useLayoutItem } from '../hooks/useLayout'
 // case2: layout -> layout
 // case3: layout -> nested formitem
 // case4: layout -> array nested formitem
-const Layout: React.FC<ILayoutProps> = ({
+export const Layout: React.FC<ILayoutProps> = ({
   children,
   required, label, addonBefore, addonAfter, description,
   ...props
@@ -39,6 +39,4 @@ Object.assign(Layout, {
   Item,
 })
 
-export {
-  Layout,
-}
+export default Layout

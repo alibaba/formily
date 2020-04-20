@@ -13,6 +13,8 @@ export const useLayout = (props: ILayoutProps) => {
     const isLayout = props.isLayout || false
     const defaultSettings = props.defaultSettings || {}
     const context = useContext(LayoutContext)
+    const enableLayout = Object.keys(context).length > 0
+    const isRoot = isLayout && !enableLayout
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
     let columns = computeAttr(props.columns, context.columns, 3)
@@ -46,8 +48,11 @@ export const useLayout = (props: ILayoutProps) => {
         wrapperCol = -1
     }
 
+    
+
     return {
-        enableLayout: Object.keys(context).length > 0,
+        enableLayout,
+        isRoot,
         isLayout,
         grid,
         inline,
@@ -67,14 +72,9 @@ export const useLayout = (props: ILayoutProps) => {
     }
 }
 
-export const useLayoutItem = (props: ILayoutItemProps) => {
+export const useLayoutItem = (props: ILayoutItemProps) => {    
+    // 如果外层有MegaLayou容器，则返回计算后的结构，反之则返回null代表不在MegaLayout模式下
     const layout = useLayout(props)
-
-    // 计算item宽度
     const { enableLayout } = layout
-    if (!enableLayout) {
-        return null
-    }
-
-    return layout
+    return enableLayout ? layout : null
 }
