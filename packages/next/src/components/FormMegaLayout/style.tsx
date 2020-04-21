@@ -91,10 +91,7 @@ export const baseComputeStyle = (props) => {
     if (inline) {
         result.inlineStyle = `
             display: inline-block;
-            vertical-align: top;    
-            &:not(:last-child) {
-                margin-right: ${gutter}px;
-            }
+            vertical-align: top;            
         
             & > .next-form-item-label {
                 display: inline-block;
@@ -103,6 +100,14 @@ export const baseComputeStyle = (props) => {
                 display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
             }
         `
+
+        if (!isLayout) {
+            result.inlineStyle += `
+                &:not(:last-child) {
+                    margin-right: ${gutter}px;
+                }
+            `
+        }
     }
 
     // grid栅格模式
