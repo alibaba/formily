@@ -641,7 +641,7 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm components={{ Select, Input }}>
-        <FormMegaLayout labelCol={6}>
+        <FormMegaLayout labelCol={3}>
           <Field name="ff1" title="普通字段" x-component="Select" />
 
           <FormMegaLayout label="以下字段会撑满" full>
