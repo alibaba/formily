@@ -143,15 +143,20 @@ export const baseComputeStyle = (props) => {
 
     if (seed) {
         result.nextLayoutItemStyle = `
-            .mega-layout-nest-container.${seed} {
+            &.mega-layout-nest-container.${seed} {
+                .mega-layout-container {
+                    width: 100%;
+                }
                 @media (max-width: 720px) {
-                    grid-column-start: span ${s > span ? span : s}
+                    grid-column-start: span ${s > span ? span : s};
                 }
                 @media (min-width: 720px ) and (max-width: 1200px ) {
-                    grid-column-start: span ${m > span ? span : m}
+                    grid-column-start: span ${m > span ? span : m};
                 }
                 @media (min-width: 1200px ) {
-                    grid-column-start: span ${lg > span ? span : lg}
+                    grid-column-start: span ${lg > span ? span : lg};
+                    grid-column-span: span ${span};
+                    grid-column-lg: span ${lg};
                 }
             }
         `
@@ -160,17 +165,15 @@ export const baseComputeStyle = (props) => {
     // grid item
     if (!context.grid && grid && span) {
         result.gridItemStyle = `
-        > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col, 
-
-        {
+        &.mega-layout-item-col {
             @media (max-width: 720px) {
-                grid-column-start: span ${s > span ? span : s}
+                grid-column-start: span ${s > span ? span : s};
             }
             @media (min-width: 720px ) and (max-width: 1200px ) {
-                grid-column-start: span ${m > span ? span : m}
+                grid-column-start: span ${m > span ? span : m};
             }
             @media (min-width: 1200px ) {
-                grid-column-start: span ${lg > span ? span : lg}
+                grid-column-start: span ${lg > span ? span : lg};
             }
         }
         `

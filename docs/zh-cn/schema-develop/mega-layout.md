@@ -289,13 +289,20 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### itemBefore/itemAfter/description 辅助文案
 
-以下属性同时适用于 **FormMegaLayout** 及 **FormMegaLayout 下的 SchemaMarkupField**
+以下属性适用于 **FormMegaLayout**
 
 | 字段名      | 描述             | 类型 | 默认值 |
 | :---------- | :--------------- | :--- | :----- |
-| itemBefore  | 组件前辅助文案   | any  |        |
-| itemAfter   | 组件后辅助文案   | any  |        |
-| description | 组件底部辅助文案 | any  |        |
+| itemBefore  | FormMegaLayout 前辅助文案   | any  |        |
+| itemAfter   | FormMegaLayout 后辅助文案   | any  |        |
+| description | FormMegaLayout 底部辅助文案 | any  |        |
+
+以下属性适用于 **FormMegaLayout 下的 SchemaMarkupField**
+
+| 字段名      | 描述             | 类型 | 默认值 |
+| :---------- | :--------------- | :--- | :----- |
+| ['x-mega-props'].itemBefore  | 表单组件前辅助文案   | any  |        |
+| ['x-mega-props'].itemAfter   | 表单组件后辅助文案   | any  |        |
 
 `FormMegaLayout` 通过`itemBefore/itemAfter/description`，实现在各种位置需要插入辅助文案。
 
@@ -357,10 +364,11 @@ const App = () => {
             name="itemAddon"
             title="组件标题"
             x-component="Select"
-            itemBefore="组件before"
-            itemAfter="组件after"
+            x-mega-props={{
+              itemBefore: "组件before",
+              itemAfter: "组件after"
+            }}
             description="组件description"
-            full
           />
         </FormMegaLayout>
 
@@ -378,10 +386,11 @@ const App = () => {
             name="itemAddon"
             title="组件标题"
             x-component="Select"
-            itemBefore="组件before"
-            itemAfter="组件after"
+            x-mega-props={{
+              itemBefore: "组件before",
+              itemAfter: "组件after"
+            }}
             description="组件description"
-            full
           />
         </FormMegaLayout>
       </SchemaForm>
@@ -482,12 +491,13 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | :------ | :--------------- | :------ | :----- |
 | grid    | 是否启用栅格布局 | boolean | false  |
 | columns | 栅格布局总共列数 | number  | 3      |
+| autoRow | 是否自动换行 | boolean  | false      |
 
 ### FormMegaLayout 下 SchemaMarkupField 的属性
 
 | 字段名 | 描述     | 类型   | 默认值 |
 | :----- | :------- | :----- | :----- |
-| span   | 所占列数 | number | 1      |
+| ['x-mega-props'].span   | 所占列数 | number | 1      |
 
 通过 `CSS Grid Layout` 实现栅格布局，功能更加强大。
 
@@ -520,35 +530,35 @@ const App = () => {
           <h5>最简单的grid栅格布局</h5>
         </FormSlot>
         <FormMegaLayout grid full>
-          <Field name="g1" title="标题" x-component="Select" />
-          <Field span={2} name="g2" title="标题" x-component="Select" />
+          <Field name="g1" title="标题1" x-component="Select" />
+          <Field x-mega-props={{ span: 2 }} name="g2" title="标题2" x-component="Select" />
         </FormMegaLayout>
 
         <FormSlot>
           <h5>grid + autoRow 自动换行</h5>
         </FormSlot>
         <FormMegaLayout grid full autoRow>
-          <Field span={2} name="ga1" title="标题" x-component="Select" />
-          <Field name="ga2" title="标题" x-component="Select" />
-          <Field name="ga3" title="标题" x-component="Select" />
+          <Field x-mega-props={{ span: 2 }} name="ga1" title="标题1" x-component="Select" />
+          <Field name="ga2" title="标题2" x-component="Select" />
+          <Field name="ga3" title="标题3" x-component="Select" />
         </FormMegaLayout>
 
         <FormSlot>
           <h5>grid + autoRow 自动换行 + labelWidth: 100</h5>
         </FormSlot>
         <FormMegaLayout grid full autoRow labelWidth={100}>
-          <Field span={2} name="gal1" title="标题" x-component="Select" />
-          <Field name="gal2" title="标题" x-component="Select" />
-          <Field name="gal3" title="标题" x-component="Select" />
+          <Field x-mega-props={{ span: 2 }} name="gal1" title="标题1" x-component="Select" />
+          <Field name="gal2" title="标题2" x-component="Select" />
+          <Field name="gal3" title="标题3" x-component="Select" />
         </FormMegaLayout>
 
         <FormSlot>
           <h5>grid + autoRow 自动换行 + label在顶部</h5>
         </FormSlot>
         <FormMegaLayout grid full autoRow labelAlign="top">
-          <Field span={2} name="galt1" title="标题" x-component="Select" />
-          <Field name="galt2" title="标题" x-component="Select" />
-          <Field name="galt3" title="标题" x-component="Select" />
+          <Field x-mega-props={{ span: 2 }} name="galt1" title="标题1" x-component="Select" />
+          <Field name="galt2" title="标题2" x-component="Select" />
+          <Field name="galt3" title="标题3" x-component="Select" />
         </FormMegaLayout>
       </SchemaForm>
     </Printer>
@@ -564,9 +574,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 字段名 | 描述                                                   | 类型   | 默认值    |
 | :----- | :----------------------------------------------------- | :----- | :-------- |
-| s      | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
-| m      | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
-| lg     | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+| ['x-mega-props'].responsive.s      | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| ['x-mega-props'].responsive.m      | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| ['x-mega-props'].responsive.lg     | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -595,15 +605,22 @@ const App = () => {
           <h5>嵌套栅格布局</h5>
         </FormSlot>
         <FormMegaLayout labelAlign="top" grid full autoRow lg={3} m={2} s={1}>
-          <Field name="flngt1" title="普通字段" x-component="Select" />
-          <Field name="flngt2" span={2} title="普通字段" x-component="Select" />
-          <Field name="flngt3" span={2} title="普通字段" x-component="Select" />
-          <Field name="flngt4" title="普通字段" x-component="Select" />
-          <Field name="flngt5" title="普通字段" x-component="Select" />
+          <Field name="flngt1" title="字段1" x-component="Select" />
+          <Field name="flngt2" x-mega-props={{ span: 2 }} title="字段2" x-component="Select" />
+          <Field name="flngt3" x-mega-props={{ span: 2 }} title="字段3" x-component="Select" />
+          <Field name="flngt4" title="字段4" x-component="Select" />
+          <Field name="flngt5" title="字段5" x-component="Select" />
 
-          <FormMegaLayout columns={2} span={2}>
-            <Field name="flngtc1" title="字段" x-component="Select" />
-            <Field name="flngtc2" title="字段" x-component="Select" />
+          <FormMegaLayout columns={3} span={2}>
+            <Field name="flngtc1" title="字段1" x-component="Select" />
+            <Field name="flngtc2" title="字段2" x-component="Select" />
+            <Field name="flngtc3" title="字段3" x-component="Select" />
+          </FormMegaLayout>
+
+          <FormMegaLayout columns={2} span={3} id="xx">
+            <Field name="flngtc4" title="字段4" x-component="Select" />
+            <Field name="flngtc5" title="字段5" x-component="Select" />
+            <Field name="flngtc6" title="字段6" x-component="Select" />
           </FormMegaLayout>
         </FormMegaLayout>
 
@@ -742,7 +759,7 @@ const App = () => {
             full
           >
             <Field name="fag1" x-component="Select" />
-            <Field name="fag2" span={2} x-component="Select" />
+            <Field name="fag2" x-mega-props={{ span: 2 }} x-component="Select" />
             <Field name="fag3" x-component="Select" />
           </FormMegaLayout>
 
@@ -846,13 +863,13 @@ const App = () => {
             <Field name="fnestg1" title="字段1" x-component="Select" />
             <Field
               name="fnestg2"
-              span={2}
+              x-mega-props={{ span: 2 }} 
               title="字段2"
               x-component="Select"
             />
             <Field
               name="fnestg3"
-              span={2}
+              x-mega-props={{ span: 2 }} 
               title="字段3"
               x-component="Select"
             />
@@ -879,13 +896,13 @@ const App = () => {
               <Field name="confngt1" title="字段1" x-component="Select" />
               <Field
                 name="confngt2"
-                span={2}
+                x-mega-props={{ span: 2 }} 
                 title="字段2"
                 x-component="Select"
               />
               <Field
                 name="confngt3"
-                span={2}
+                x-mega-props={{ span: 2 }} 
                 title="字段3"
                 x-component="Select"
               />
