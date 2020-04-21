@@ -562,6 +562,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 `FormMegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。
 
+| 字段名 | 描述                                                   | 类型   | 默认值    |
+| :----- | :----------------------------------------------------- | :----- | :-------- |
+| s      | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| m      | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| lg     | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+
 ```jsx
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
@@ -588,7 +594,7 @@ const App = () => {
         <FormSlot>
           <h5>嵌套栅格布局</h5>
         </FormSlot>
-        <FormMegaLayout grid full autoRow lg={3} m={2} s={1}>
+        <FormMegaLayout labelAlign="top" grid full autoRow lg={3} m={2} s={1}>
           <Field name="flngt1" title="普通字段" x-component="Select" />
           <Field name="flngt2" span={2} title="普通字段" x-component="Select" />
           <Field name="flngt3" span={2} title="普通字段" x-component="Select" />
@@ -601,7 +607,7 @@ const App = () => {
           </FormMegaLayout>
         </FormMegaLayout>
 
-        <FormButtonGroup offset={6}>
+        <FormButtonGroup align="right">
           <Submit>提交</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
@@ -694,7 +700,7 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm components={{ Select, Input }}>
-        <FormMegaLayout labelCol={3}>
+        <FormMegaLayout labelCol={4}>
           <Field name="ff1" title="普通字段" x-component="Select" />
 
           <FormMegaLayout label="以下字段会撑满" full>
@@ -713,14 +719,14 @@ const App = () => {
             <Field name="fg3" x-component="Select" />
           </FormMegaLayout>
 
-          <FormMegaLayout label="栅格布局 + 撑满" grid full>
+          <FormMegaLayout label="栅格布局 + 撑满(3列默认)" grid full>
             <Field name="ffg1" x-component="Select" />
             <Field name="ffg2" x-component="Select" />
             <Field name="ffg3" x-component="Select" />
           </FormMegaLayout>
 
           <FormMegaLayout
-            label="栅格布局 + 撑满 + 指定总列数"
+            label="栅格布局 + 撑满(2列)"
             grid
             columns={2}
             full
@@ -730,7 +736,7 @@ const App = () => {
           </FormMegaLayout>
 
           <FormMegaLayout
-            label="栅格布局 + 自动换行 + 自定义比例"
+            label="栅格 + 自动换行 + 自定义比例"
             autoRow
             grid
             full
@@ -778,7 +784,7 @@ const App = () => {
             />
           </FormMegaLayout>
 
-          <FormMegaLayout label="栅格布局 + 辅助文案" grid full labelCol={null}>
+          <FormMegaLayout label="栅格 + 辅助文案(3列默认)" grid full labelCol={null}>
             <Field
               title="辅助文案"
               itemBefore="before"
@@ -806,7 +812,7 @@ const App = () => {
           </FormMegaLayout>
 
           <FormMegaLayout
-            label="栅格布局 + 辅助文案 + 指定列数"
+            label="栅格 + 辅助文案(2列)"
             grid
             full
             columns={2}
@@ -837,59 +843,59 @@ const App = () => {
             full
             labelCol={null}
           >
-            <Field name="fnestg1" title="普通字段" x-component="Select" />
+            <Field name="fnestg1" title="字段1" x-component="Select" />
             <Field
               name="fnestg2"
               span={2}
-              title="普通字段"
+              title="字段2"
               x-component="Select"
             />
             <Field
               name="fnestg3"
               span={2}
-              title="普通字段"
+              title="字段3"
               x-component="Select"
             />
-            <Field name="fnestg4" title="普通字段" x-component="Select" />
-            <Field name="fnestg5" title="普通字段" x-component="Select" />
+            <Field name="fnestg4" title="字段4" x-component="Select" />
+            <Field name="fnestg5" title="字段5" x-component="Select" />
 
             <FormMegaLayout columns={3} span={2}>
-              <Field name="fnestg6" title="普通字段" x-component="Select" />
-              <Field name="fnestg7" title="普通字段" x-component="Select" />
-              <Field name="fnestg8" title="普通字段" x-component="Select" />
+              <Field name="fnestg6" title="字段1" x-component="Select" />
+              <Field name="fnestg7" title="字段2" x-component="Select" />
+              <Field name="fnestg8" title="字段3" x-component="Select" />
             </FormMegaLayout>
           </FormMegaLayout>
 
           <FormMegaLayout label="连续嵌套布局" labelCol={null}>
-            <Field name="fns1" title="普通字段" x-component="Select" />
+            <Field name="confns1" title="字段1" x-component="Select" />
 
             <FormMegaLayout inline label="嵌套行内">
-              <Field name="fns2" title="普通字段" x-component="Select" />
-              <Field name="fns3" title="普通字段" x-component="Select" />
-              <Field name="fns4" title="普通字段" x-component="Select" />
+              <Field name="confns2" title="字段2" x-component="Select" />
+              <Field name="confns3" title="字段3" x-component="Select" />
+              <Field name="confns4" title="字段4" x-component="Select" />
             </FormMegaLayout>
 
             <FormMegaLayout grid label="嵌套栅格" full autoRow>
-              <Field name="fngt1" title="普通字段" x-component="Select" />
+              <Field name="confngt1" title="字段1" x-component="Select" />
               <Field
-                name="fngt2"
+                name="confngt2"
                 span={2}
-                title="普通字段"
+                title="字段2"
                 x-component="Select"
               />
               <Field
-                name="fngt3"
+                name="confngt3"
                 span={2}
-                title="普通字段"
+                title="字段3"
                 x-component="Select"
               />
-              <Field name="fngt4" title="普通字段" x-component="Select" />
-              <Field name="fngt5" title="普通字段" x-component="Select" />
+              <Field name="confngt4" title="字段4" x-component="Select" />
+              <Field name="confngt5" title="字段5" x-component="Select" />
 
               <FormMegaLayout columns={3} span={2}>
-                <Field name="fngtc1" title="普通字段" x-component="Select" />
-                <Field name="fngtc2" title="普通字段" x-component="Select" />
-                <Field name="fngtc3" title="普通字段" x-component="Select" />
+                <Field name="confngtc1" title="字段1" x-component="Select" />
+                <Field name="confngtc2" title="字段2" x-component="Select" />
+                <Field name="confngtc3" title="字段3" x-component="Select" />
               </FormMegaLayout>
             </FormMegaLayout>
           </FormMegaLayout>

@@ -200,7 +200,7 @@ export const baseComputeStyle = (props) => {
     if (isLayout) {
         result.layoutMarginStyle = ''
         // 内容都在同一行
-        if (inline) {
+        if (inline || grid) {
             result.layoutMarginStyle = `
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
