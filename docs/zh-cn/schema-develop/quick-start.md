@@ -274,6 +274,7 @@ const components = {
   MonthPicker: DatePicker.MonthPicker,
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
+  TimeRangePicker: TimePicker.RangePicker,
   Upload,
   Range,
   Rating,
@@ -344,6 +345,12 @@ const App = () => (
         x-component="MonthPicker"
       />
       <Field type="string" title="时间" name="time" x-component="TimePicker" />
+      <Field
+        type="string"
+        title="时间范围"
+        name="timerange"
+        x-component="TimeRangePicker"
+      />
       <Field type="string" title="周" name="week" x-component="WeekPicker" />
       <Field
         type="array"
@@ -451,6 +458,7 @@ const components = {
   MonthPicker: DatePicker.MonthPicker,
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
+  TimeRangePicker: TimePicker.RangePicker,
   Upload,
   Range,
   Rating,
@@ -473,6 +481,7 @@ const getInitialValues = () => {
         date: '2020-02-20',
         month: '2020-08',
         time: '22:29:53',
+        timerange: ['9:00:00', '18:00:00'],
         week: '2020-9th',
         number: 123,
         boolean: true,
@@ -567,6 +576,12 @@ const App = () => {
           title="时间"
           name="time"
           x-component="TimePicker"
+        />
+        <Field
+          type="string"
+          title="时间范围"
+          name="timerange"
+          x-component="TimeRangePicker"
         />
         <Field type="string" title="周" name="week" x-component="WeekPicker" />
         <Field
@@ -670,6 +685,7 @@ const components = {
   MonthPicker: DatePicker.MonthPicker,
   WeekPicker: DatePicker.WeekPicker,
   TimePicker,
+  TimeRangePicker: TimePicker.RangePicker,
   Upload,
   Range,
   Rating,
@@ -693,6 +709,7 @@ const getInitialValues = () => {
         month: '2020-08',
         year: '2023',
         time: '22:29:53',
+        timerange: ['9:00:00', '18:00:00'],
         week: '2020-9th',
         number: 123,
         boolean: true,
@@ -788,6 +805,12 @@ const App = () => {
           title="时间"
           name="time"
           x-component="TimePicker"
+        />
+        <Field
+          type="string"
+          title="时间范围"
+          name="timerange"
+          x-component="TimeRangePicker"
         />
         <Field type="string" title="周" name="week" x-component="WeekPicker" />
         <Field
