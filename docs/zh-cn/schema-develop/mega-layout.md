@@ -588,7 +588,7 @@ const App = () => {
         <FormSlot>
           <h5>嵌套栅格布局</h5>
         </FormSlot>
-        <FormMegaLayout grid labelCol={3} full autoRow lg={3} m={2} s={1}>
+        <FormMegaLayout grid full autoRow lg={3} m={2} s={1}>
           <Field name="flngt1" title="普通字段" x-component="Select" />
           <Field name="flngt2" span={2} title="普通字段" x-component="Select" />
           <Field name="flngt3" span={2} title="普通字段" x-component="Select" />
