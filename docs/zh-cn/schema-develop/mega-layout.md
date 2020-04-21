@@ -595,14 +595,12 @@ const App = () => {
       <SchemaForm components={{ Select, Input }}>
         <FormMegaLayout labelCol={4}>
           <Field name="ndomain1" title="col4" x-component="Select" />
+
           <FormMegaLayout label="独立作用域" labelCol={6}>
             <Field name="ndomain2" title="col6" x-component="Select" />
           </FormMegaLayout>
 
-          <FormMegaLayout
-            label="修改MegaLayout本身"
-            layoutProps={{ labelCol: 6 }}
-          >
+          <FormMegaLayout label="修改MegaLayout本身" layoutProps={{ labelCol: 6 }}>
             <Field name="ndomain3" title="col4" x-component="Select" />
           </FormMegaLayout>
         </FormMegaLayout>
