@@ -7,15 +7,12 @@ import styled from 'styled-components'
 import { Form, Grid } from '@alifd/next'
 import { computeStyle } from './style'
 
-const { Row, Col } = Grid
-
 // 优先级：当前属性 > context 传递的属性 > 默认值
 const computeAttr = (propAttr, layoutAttr, defaultValue) => {
   if (typeof propAttr !== 'undefined') return propAttr
   if (typeof layoutAttr !== 'undefined') return layoutAttr
   return defaultValue
 };
-
 
 const StyledLayoutItem = styled((props) => {
     const { children, itemBefore, itemAfter,
@@ -38,7 +35,7 @@ const StyledLayoutItem = styled((props) => {
       const gutterNumber = parseInt(gutter)
       const halfGutterString = `${gutterNumber / 2}px`
       const style = {
-        gridColumnStart: `span ${span}`
+        // gridColumnStart: `span ${span}`
       };
 
       return <div className="mega-layout-item-col" style={style}>
@@ -55,6 +52,11 @@ const StyledLayoutWrapper = styled((props) => {
     return <Form.Item {...others} />
 })`${props => computeStyle(props)}`
 
+const StyledLayoutNestWrapper = styled(props => {
+  const { children, seed, style } = props;
+return <div style={style} className={classnames('mega-layout-nest-container', { [`nest-${seed}`]: true })}>{children}</div>
+})`${props => computeStyle(props)}`
+
 const Div = props => <div {...props} />
 export const MegaLayout = styled(props => {
     const { responsive, children, itemBefore, itemAfter, description, ...others } = props
@@ -69,13 +71,11 @@ export const MegaLayout = styled(props => {
         {...others}
         responsive={responsive}
         children={(layout) => {
-            const { inline, required, span, columns, addonBefore, description, label, labelAlign,
+            const { inline, required, span, columns, description, label, labelAlign,
                 grid, gutter, autoRow,
-                full, context, isRoot
+                full, context, isRoot, lg, m, s
             } = layout
             let Wrapper            
-            const gutterNumber = parseInt(gutter)
-            const halfGutterString = `${gutterNumber / 2}px`
             const itemProps: any = {
               inline,
               grid,
@@ -85,7 +85,8 @@ export const MegaLayout = styled(props => {
               context,
               columns,   
               isRoot,
-              isLayout: true,       
+              isLayout: true,    
+              lg, m, s   
             }
             const wrapperProps: any = {}
             if (grid) {
@@ -108,11 +109,11 @@ export const MegaLayout = styled(props => {
                 if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
             }
             
-            if (context.grid && grid) {
-              itemProps.style = {
-                gridColumnStart: `span ${span}`,
-              }
-            }
+            // if (context.grid && grid) {
+            //   itemProps.style = {
+            //     gridColumnStart: `span ${span}`,
+            //   }
+            // }
 
             let ele = <StyledLayoutWrapper
                 className={classnames(props.className, 'mega-layout-container')}
@@ -131,16 +132,11 @@ export const MegaLayout = styled(props => {
                 </div>
             </StyledLayoutWrapper>
 
-            if (!props.grid && grid) {              
-              const style = {
-                // paddingLeft: halfGutterString,
-                // paddingRight: halfGutterString,
-                gridColumnStart: `span ${span}`,
-              };
-        
-              return <div style={style}>
+            if (!props.grid && grid) {   
+              const seed = Date.now();
+              return <StyledLayoutNestWrapper seed={seed} {...{lg, s, m}}>
                 {ele}
-              </div>
+              </StyledLayoutNestWrapper>
             }
      
             return ele
@@ -160,7 +156,9 @@ const MegaLayoutItem = (props) => {
       // 启用了MegaLayout
       if (layoutProps) {
         const { itemBefore, itemAfter } = others
-        const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full } = layoutProps;
+        const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
+          lg, m, s
+        } = layoutProps;
         itemProps.labelAlign = labelAlign
         itemProps.inline = inline
         itemProps.grid = grid
@@ -168,6 +166,9 @@ const MegaLayoutItem = (props) => {
         itemProps.span = span
         itemProps.columns = columns
         itemProps.full = full
+        itemProps.lg = lg
+        itemProps.m = m
+        itemProps.s = s
 
         if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
         if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
