@@ -562,6 +562,12 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 `FormMegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。
 
+| 字段名 | 描述                                                   | 类型   | 默认值    |
+| :----- | :----------------------------------------------------- | :----- | :-------- |
+| s      | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| m      | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| lg     | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+
 ```jsx
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
@@ -588,7 +594,7 @@ const App = () => {
         <FormSlot>
           <h5>嵌套栅格布局</h5>
         </FormSlot>
-        <FormMegaLayout grid labelCol={3} full autoRow lg={3} m={2} s={1}>
+        <FormMegaLayout grid labelCol={5} full autoRow lg={3} m={2} s={1}>
           <Field name="flngt1" title="普通字段" x-component="Select" />
           <Field name="flngt2" span={2} title="普通字段" x-component="Select" />
           <Field name="flngt3" span={2} title="普通字段" x-component="Select" />
