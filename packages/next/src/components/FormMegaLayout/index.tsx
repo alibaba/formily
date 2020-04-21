@@ -133,8 +133,9 @@ export const MegaLayout = styled(props => {
 
             if (!props.grid && grid) {              
               const style = {
-                paddingLeft: halfGutterString,
-                paddingRight: halfGutterString,
+                // paddingLeft: halfGutterString,
+                // paddingRight: halfGutterString,
+                gridColumnStart: `span ${span}`,
               };
         
               return <div style={style}>
