@@ -7,7 +7,9 @@ export const baseComputeStyle = (props) => {
         isLayout,
         inline,
         labelWidth, wrapperWidth,
-        labelCol, grid, full, context = {}, columns, isRoot, autoRow
+        labelCol, grid, full, context = {}, columns, isRoot, autoRow,
+        span, seed,
+        lg, m, s
     } = props
 
     // label对齐相关 labelAlign
@@ -115,12 +117,57 @@ export const baseComputeStyle = (props) => {
                 > .mega-layout-container-content {
                     &.grid {
                         display: grid;
-                        grid-template-columns: repeat(${autoRow ? columns : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
+
+                        @media (max-width: 720px) {
+                            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                        }
+                        
+                        @media (min-width: 720px ) and (max-width: 1200px ) {
+                            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                        }
+                        @media (min-width: 1200px ) {
+                            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                        }
                     }
                 }
             }
+        `
+    }
+
+    if (seed) {
+        result.nextLayoutItemStyle = `
+            .mega-layout-nest-container.${seed} {
+                @media (max-width: 720px) {
+                    grid-column-start: span ${s > span ? span : s}
+                }
+                @media (min-width: 720px ) and (max-width: 1200px ) {
+                    grid-column-start: span ${m > span ? span : m}
+                }
+                @media (min-width: 1200px ) {
+                    grid-column-start: span ${lg > span ? span : lg}
+                }
+            }
+        `
+    }
+
+    // grid item
+    if (!context.grid && grid && span) {
+        result.gridItemStyle = `
+        > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col, 
+
+        {
+            @media (max-width: 720px) {
+                grid-column-start: span ${s > span ? span : s}
+            }
+            @media (min-width: 720px ) and (max-width: 1200px ) {
+                grid-column-start: span ${m > span ? span : m}
+            }
+            @media (min-width: 1200px ) {
+                grid-column-start: span ${lg > span ? span : lg}
+            }
+        }
         `
     }
 
@@ -191,6 +238,8 @@ export const computeStyle = (props) => {
         ${styleResult.widthStyle}
         ${styleResult.inlineStyle}
         ${styleResult.gridStyle}
+        ${styleResult.gridItemStyle}
+        ${styleResult.nextLayoutItemStyle}
         ${styleResult.layoutMarginStyle}
     `
 }

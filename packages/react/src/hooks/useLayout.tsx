@@ -18,6 +18,9 @@ export const useLayout = (props: ILayoutProps) => {
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
     let columns = computeAttr(props.columns, context.columns, 3)
+    const lg = computeAttr(props.lg, columns, columns)
+    const m = computeAttr(props.m, columns, columns)
+    const s = computeAttr(props.s, columns, columns)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
@@ -29,7 +32,6 @@ export const useLayout = (props: ILayoutProps) => {
     const span = computeAttr(props.span, 1, 1)
     let grid = computeAttr(props.grid, context.grid, false)
     let inline = computeAttr(props.inline, context.inline, false)
-
     // inline 和 grid 是互斥关系，如果同时存在，需要根据props的优先级来判断, inline > grid
     if (grid && inline) {
         if (props.grid) {
@@ -69,6 +71,9 @@ export const useLayout = (props: ILayoutProps) => {
         gutter,
         span,
         context,
+        lg,
+        m,
+        s,
     }
 }
 

@@ -560,6 +560,59 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 # 响应式布局
 
+`FormMegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  FormMegaLayout,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Input, Select } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{ Select, Input }}>
+        <FormSlot>
+          <h5>嵌套栅格布局</h5>
+        </FormSlot>
+        <FormMegaLayout grid labelCol={3} full autoRow lg={3} m={2} s={1}>
+          <Field name="flngt1" title="普通字段" x-component="Select" />
+          <Field name="flngt2" span={2} title="普通字段" x-component="Select" />
+          <Field name="flngt3" span={2} title="普通字段" x-component="Select" />
+          <Field name="flngt4" title="普通字段" x-component="Select" />
+          <Field name="flngt5" title="普通字段" x-component="Select" />
+
+          <FormMegaLayout columns={2} span={2}>
+            <Field name="flngtc1" title="字段" x-component="Select" />
+            <Field name="flngtc2" title="字段" x-component="Select" />
+          </FormMegaLayout>
+        </FormMegaLayout>
+
+        <FormButtonGroup offset={6}>
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 嵌套布局
 
 `FormMegaLayout` 的属性会传递到下面的 **表单组件** 或 嵌套的 **FormMegaLayout**。
@@ -595,12 +648,14 @@ const App = () => {
       <SchemaForm components={{ Select, Input }}>
         <FormMegaLayout labelCol={4}>
           <Field name="ndomain1" title="col4" x-component="Select" />
-
           <FormMegaLayout label="独立作用域" labelCol={6}>
             <Field name="ndomain2" title="col6" x-component="Select" />
           </FormMegaLayout>
 
-          <FormMegaLayout label="修改MegaLayout本身" layoutProps={{ labelCol: 6 }}>
+          <FormMegaLayout
+            label="修改MegaLayout本身"
+            layoutProps={{ labelCol: 6 }}
+          >
             <Field name="ndomain3" title="col4" x-component="Select" />
           </FormMegaLayout>
         </FormMegaLayout>
