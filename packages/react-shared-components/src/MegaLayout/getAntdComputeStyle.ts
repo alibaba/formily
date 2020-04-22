@@ -14,15 +14,15 @@ const computeNextStyleBase = (props) => {
 
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
-        & > .next-form-item-label {
+        & > .ant-form-item-label {
             text-align: ${labelAlign !== 'top' ? labelAlign : 'left'};
         }
     `
 
     // 增量属性 addonBefore/addonAfter
     result.addonStyle = `
-        & > .next-form-item-control > .mega-layout-container-wrapper,
-        & > .next-form-item-control > .mega-layout-item-content {
+        & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
+        & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
             display: flex;
             > .mega-layout-container-content {
                 margin-bottom: 0;
@@ -49,10 +49,10 @@ const computeNextStyleBase = (props) => {
             display: flex;
             box-sizing: border-box;
         
-            & > .next-form-item-label {
+            & > .ant-form-item-label {
                 flex: initial;
             }
-            & > .next-form-item-control {
+            & > .ant-form-item-control {
                 flex: 1;
             }
         `
@@ -65,7 +65,7 @@ const computeNextStyleBase = (props) => {
             box-sizing: border-box;
             flex-direction: ${props.labelAlign !== 'top' ? 'row' : 'column'};
             
-            & > .next-form-item-label{
+            & > .ant-form-item-label{
                 ${labelWidth ? `
                     width: ${labelWidth}px;
                     max-width: ${labelWidth}px;
@@ -75,7 +75,7 @@ const computeNextStyleBase = (props) => {
                 }
             }
 
-            & > .next-form-item-control {
+            & > .ant-form-item-control {
                 ${wrapperWidth ? `
                     width: ${wrapperWidth}px;
                     max-width: ${wrapperWidth}px;
@@ -90,15 +90,17 @@ const computeNextStyleBase = (props) => {
     // 行内模式
     if (inline) {
         result.inlineStyle = `
-            display: inline-block;
-            vertical-align: top;            
-        
-            & > .next-form-item-label {
+            &.ant-form-item {
                 display: inline-block;
-            }
-            & > .next-form-item-control {
-                display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
-            }
+                vertical-align: top;
+
+                > .ant-form-item-label {
+                    display: inline-block;
+                }
+                > .ant-form-item-control {
+                    display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
+                }
+            }                  
         `
 
         if (!isLayout) {
@@ -113,11 +115,11 @@ const computeNextStyleBase = (props) => {
     // grid栅格模式
     if (!context.grid && grid) {
         result.gridStyle = `
-            & > .next-form-item {
+            & > .ant-form-item {
                 width: 100%;
             }
-            & > .next-form-item-control > .mega-layout-container-wrapper,
-            & > .next-form-item-control > .mega-layout-item-content {
+            & > .ant-form-item-control > .mega-layout-container-wrapper,
+            & > .ant-form-item-control > .mega-layout-item-content {
                 display: flex;
                 > .mega-layout-container-content {
                     &.grid {
@@ -182,11 +184,11 @@ const computeNextStyleBase = (props) => {
     // 嵌套grid布局
     if (context.grid && grid) {
         result.gridStyle = `
-            & > .next-form-item {
+            & > .ant-form-item {
                 width: 100%;
             }
-            & > .next-form-item-control > .mega-layout-container-wrapper,
-            & > .next-form-item-control > .mega-layout-item-content {
+            & > .ant-form-item-control > .mega-layout-container-wrapper,
+            & > .ant-form-item-control > .mega-layout-item-content {
                 display: flex;
                 > .mega-layout-container-content {
                     &.grid {
@@ -215,8 +217,8 @@ const computeNextStyleBase = (props) => {
         // 内容都在同一行
         if (inline || grid) {
             result.layoutMarginStyle = `
-                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
-                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
+                > .ant-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+                > .ant-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
                     margin-bottom: 0;
                 }
             `
@@ -225,7 +227,7 @@ const computeNextStyleBase = (props) => {
         // 常规布局
         if (!grid && !inline) {
             result.layoutMarginStyle = `
-                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
+                > .ant-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
                     margin-bottom: 0;
                 }
             `

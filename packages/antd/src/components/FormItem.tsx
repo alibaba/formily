@@ -5,6 +5,8 @@ import {
   connect,
   InternalVirtualField
 } from '@formily/react-schema-renderer'
+import styled, { css } from 'styled-components'
+import { getAntdComputeStyle, getMegaLayout } from '@formily/react-shared-components'
 import {
   normalizeCol,
   pickFormItemProps,
@@ -14,6 +16,17 @@ import {
 import { useDeepFormItem } from '../context'
 import { IAntdFormItemProps } from '../types'
 const { Item: AntdFormItem } = AntdForm
+
+const { MegaLayoutItem } = getMegaLayout({
+  FormItem: AntdFormItem,
+  computeStyle: getAntdComputeStyle({ css }),
+  styled,
+  util: {
+    normalizeCol,
+    pickFormItemProps,
+    pickNotFormItemProps
+  }
+})
 
 const computeStatus = (props: any) => {
   if (props.loading) {
@@ -104,18 +117,29 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     const { labelCol, wrapperCol, help } = props
     const formItemProps = pickFormItemProps(props)
     const { inline, ...componentProps } = pickNotFormItemProps(props)
-    return (
-      <AntdFormItem
-        {...formItemProps}
-        required={editable === false ? undefined : required}
-        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
-        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
-        validateStatus={computeStatus(state)}
-        help={computeMessage(errors, warnings) || help}
-      >
-        {renderComponent({ props: componentProps, state, mutators, form })}
-      </AntdFormItem>
-    )
+
+    const itemProps = {
+      ...formItemProps,
+      required: editable === false ? undefined : required,
+      labelCol: formItemProps.label ? normalizeCol(labelCol) : undefined,
+      wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : undefined,
+      validateStatus: computeStatus(state),
+      help: computeMessage(errors, warnings) || help,
+    }
+
+    return <MegaLayoutItem itemProps={itemProps} {...props}>
+      {(megaComponentProps) => {
+        if (megaComponentProps) {
+          return renderComponent({ props: megaComponentProps, state, mutators, form })
+        }
+
+        return (
+          <AntdFormItem {...itemProps}>
+            {renderComponent({ props: componentProps, state, mutators, form })}
+          </AntdFormItem>
+        )
+      }}      
+    </MegaLayoutItem>
   }
 
   if (!component && children) {
