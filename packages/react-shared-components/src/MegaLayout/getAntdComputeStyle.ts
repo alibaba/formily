@@ -1,6 +1,4 @@
-import { css } from 'styled-components'
-
-export const baseComputeStyle = (props) => {
+const computeNextStyleBase = (props) => {
     const result: any = {}
     const {
         labelAlign, gutter,
@@ -21,7 +19,7 @@ export const baseComputeStyle = (props) => {
         }
     `
 
-    // 增量属性 itemBefore/itemAfter
+    // 增量属性 addonBefore/addonAfter
     result.addonStyle = `
         & > .next-form-item-control > .mega-layout-container-wrapper,
         & > .next-form-item-control > .mega-layout-item-content {
@@ -245,24 +243,29 @@ export const baseComputeStyle = (props) => {
     return result
 }
 
-export const computeStyle = (props) => {
-    const styleResult = baseComputeStyle(props)
+export const getAntdComputeStyle = (opts) => {
+    const { css } = opts || {}
+    const computeStyle = (props) => {
+        const styleResult = computeNextStyleBase(props)
+    
+        // labelAlign, addon 是任何布局模式都可以用到
+        // inline 和 grid 是互斥关系, 优先级: inline > grid
+        // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
+    
+        return css`
+            ${styleResult.labelAlignStyle}
+            ${styleResult.addonStyle}
+            ${styleResult.defaultStyle}
+            ${styleResult.widthStyle}
+            ${styleResult.inlineStyle}
+            ${styleResult.gridStyle}
+            ${styleResult.gridItemStyle}
+            ${styleResult.nestLayoutItemStyle}
+            ${styleResult.layoutMarginStyle}
+        `
+    }
 
-    // labelAlign, addon 是任何布局模式都可以用到
-    // inline 和 grid 是互斥关系, 优先级: inline > grid
-    // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
-
-    return css`
-        ${styleResult.labelAlignStyle}
-        ${styleResult.addonStyle}
-        ${styleResult.defaultStyle}
-        ${styleResult.widthStyle}
-        ${styleResult.inlineStyle}
-        ${styleResult.gridStyle}
-        ${styleResult.gridItemStyle}
-        ${styleResult.nestLayoutItemStyle}
-        ${styleResult.layoutMarginStyle}
-    `
+    return computeStyle
 }
 
-export default computeStyle
+export default getAntdComputeStyle

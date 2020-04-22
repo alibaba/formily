@@ -5,9 +5,10 @@ import {
   useShallowFormItem,
   FormItemShallowProvider
 } from '../context'
-import MegaLayout from '../components/FormMegaLayout';
 import { ISchemaFieldAdaptorProps } from '../types'
-import { normalizeCol, pickFormItemProps } from '../shared'
+import { normalizeCol, pickFormItemProps, pickNotFormItemProps } from '../shared'
+import { getMegaLayout, getNextComputeStyle } from '@formily/react-shared-components'
+import styled, { css } from 'styled-components'
 
 const computeStatus = (props: ISchemaFieldAdaptorProps) => {
   if (props.loading) {
@@ -55,6 +56,17 @@ const computeSchemaExtendProps = (props: ISchemaFieldAdaptorProps): any => {
     })
   }
 }
+
+const { MegaLayoutItem } = getMegaLayout({
+  FormItem: Form.Item,
+  computeStyle: getNextComputeStyle({ css }),
+  styled,
+  util: {
+    normalizeCol,
+    pickFormItemProps,
+    pickNotFormItemProps
+  }
+})
 
 export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props => {
   const {
@@ -112,7 +124,7 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
     )
   }
 
-  return <MegaLayout.Item itemProps={itemProps} {...props.props} schemaChildren={props.children}>
+  return <MegaLayoutItem itemProps={itemProps} {...props.props} schemaChildren={props.children}>
     {(megaComponent) => {
       if (megaComponent) {
         return renderComponent(megaComponent, { addonAfter })
@@ -122,5 +134,5 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
         {renderComponent(props.children, { addonAfter })}
       </Form.Item>
     }}      
-  </MegaLayout.Item>
+  </MegaLayoutItem>
 }

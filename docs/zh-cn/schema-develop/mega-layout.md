@@ -19,7 +19,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -27,7 +26,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -76,7 +75,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -84,7 +82,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -138,7 +136,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -146,7 +143,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -221,7 +218,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -229,7 +225,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -287,24 +283,24 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-### itemBefore/itemAfter/description 辅助文案
+### addonBefore/addonAfter/description 辅助文案
 
 以下属性适用于 **FormMegaLayout**
 
 | 字段名      | 描述                        | 类型 | 默认值 |
 | :---------- | :-------------------------- | :--- | :----- |
-| itemBefore  | FormMegaLayout 前辅助文案   | any  |        |
-| itemAfter   | FormMegaLayout 后辅助文案   | any  |        |
+| addonBefore  | FormMegaLayout 前辅助文案   | any  |        |
+| addonAfter   | FormMegaLayout 后辅助文案   | any  |        |
 | description | FormMegaLayout 底部辅助文案 | any  |        |
 
 以下属性适用于 **FormMegaLayout 下的 SchemaMarkupField**
 
 | 字段名                      | 描述               | 类型 | 默认值 |
 | :-------------------------- | :----------------- | :--- | :----- |
-| ['x-mega-props'].itemBefore | 表单组件前辅助文案 | any  |        |
-| ['x-mega-props'].itemAfter  | 表单组件后辅助文案 | any  |        |
+| ['x-mega-props'].addonBefore | 表单组件前辅助文案 | any  |        |
+| ['x-mega-props'].addonAfter  | 表单组件后辅助文案 | any  |        |
 
-`FormMegaLayout` 通过`itemBefore/itemAfter/description`，实现在各种位置需要插入辅助文案。
+`FormMegaLayout` 通过`addonBefore/addonAfter/description`，实现在各种位置需要插入辅助文案。
 
 > 为了更好的说明例子，下面所有例子都声明 `full=true`
 
@@ -314,7 +310,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -322,7 +317,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -335,8 +330,8 @@ const App = () => {
           <h5>无label + 辅助文案</h5>
         </FormSlot>
         <FormMegaLayout
-          itemBefore="容器before"
-          itemAfter="容器after"
+          addonBefore="容器before"
+          addonAfter="容器after"
           description="容器description"
           full
         >
@@ -348,8 +343,8 @@ const App = () => {
         </FormSlot>
         <FormMegaLayout
           label="容器标题"
-          itemBefore="容器before"
-          itemAfter="容器after"
+          addonBefore="容器before"
+          addonAfter="容器after"
           description="容器description"
           full
         >
@@ -365,8 +360,8 @@ const App = () => {
             title="组件标题"
             x-component="Select"
             x-mega-props={{
-              itemBefore: '组件before',
-              itemAfter: '组件after'
+              addonBefore: '组件before',
+              addonAfter: '组件after'
             }}
             description="组件description"
           />
@@ -377,8 +372,8 @@ const App = () => {
         </FormSlot>
         <FormMegaLayout
           label="容器标题"
-          itemBefore="容器before"
-          itemAfter="容器after"
+          addonBefore="容器before"
+          addonAfter="容器after"
           description="容器description"
           full
         >
@@ -387,8 +382,8 @@ const App = () => {
             title="组件标题"
             x-component="Select"
             x-mega-props={{
-              itemBefore: '组件before',
-              itemAfter: '组件after'
+              addonBefore: '组件before',
+              addonAfter: '组件after'
             }}
             description="组件description"
           />
@@ -415,7 +410,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -423,7 +417,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -509,7 +503,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -517,7 +510,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -604,7 +597,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -612,7 +604,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -698,7 +690,11 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 字段名      | 描述                                 | 类型                                                                                                   | 默认值 |
 | :---------- | :----------------------------------- | :----------------------------------------------------------------------------------------------------- | :----- |
-| layoutProps | 改变 **FormMegaLayout** 自身布局属性 | { `labelCol` : `number`, `wrapperCol` : `number`, `labelWidth` : `number`, `wrapperWidth` : `number` } |        |
+| layoutProps.labelCol | 改变自身布局属性, wrapper 比例 | number(0-24) |        |
+| layoutProps.wrapperCol | 改变自身布局属性, label 比例 | number(0-24) |        |
+| layoutProps.labelWidth | 改变自身布局属性, label 宽度 | number |        |
+| layoutProps.wrapperWidth | 改变自身布局属性, wrapper 宽度 | number |        |
+
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -706,7 +702,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -714,7 +709,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -754,7 +749,6 @@ import ReactDOM from 'react-dom'
 import {
   SchemaForm,
   FormSlot,
-  FormMegaLayout,
   SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
@@ -762,7 +756,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { Input, Select } from '@formily/next-components'
+import { FormMegaLayout, Input, Select } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -818,8 +812,10 @@ const App = () => {
 
           <Field
             title="辅助文案"
-            itemBefore="before"
-            itemAfter="after"
+            x-mega-props={{
+              addonBefore: 'before',
+              addonAfter: 'after'
+            }}
             description="description"
             name="fad1"
             x-component="Select"
@@ -828,8 +824,10 @@ const App = () => {
           <Field
             full
             title="辅助文案 + full"
-            itemBefore="before"
-            itemAfter="after"
+            x-mega-props={{
+              addonBefore: 'before',
+              addonAfter: 'after'
+            }}
             description="description"
             name="fad2"
             x-component="Select"
@@ -838,16 +836,20 @@ const App = () => {
           <FormMegaLayout label="行内布局 + 辅助文案" inline>
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fiad1"
               x-component="Select"
             />
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fiad2"
               x-component="Select"
@@ -862,24 +864,30 @@ const App = () => {
           >
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fgiad1"
               x-component="Select"
             />
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fgiad2"
               x-component="Select"
             />
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fgiad3"
               x-component="Select"
@@ -895,16 +903,20 @@ const App = () => {
           >
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fcgiad1"
               x-component="Select"
             />
             <Field
               title="辅助文案"
-              itemBefore="before"
-              itemAfter="after"
+              x-mega-props={{
+                addonBefore: 'before',
+                addonAfter: 'after'
+              }}
               description="description"
               name="fcgiad2"
               x-component="Select"
