@@ -18,9 +18,11 @@ export const useLayout = (props: ILayoutProps) => {
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
     let columns = computeAttr(props.columns, context.columns, 3)
-    const lg = computeAttr(props.lg, columns, columns)
-    const m = computeAttr(props.m, columns, columns)
-    const s = computeAttr(props.s, columns, columns)
+    const responsive = {
+        lg: computeAttr((props.responsive || {}).lg, (context.responsive || {}).lg, columns),
+        m: computeAttr((props.responsive || {}).m, (context.responsive || {}).m, columns),
+        s: computeAttr((props.responsive || {}).s, (context.responsive || {}).s, columns)
+    }
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
@@ -71,13 +73,11 @@ export const useLayout = (props: ILayoutProps) => {
         gutter,
         span,
         context,
-        lg,
-        m,
-        s,
+        responsive
     }
 }
 
-export const useLayoutItem = (props: ILayoutItemProps) => {    
+export const useLayoutItem = (props: ILayoutItemProps) => {  
     // 如果外层有MegaLayou容器，则返回计算后的结构，反之则返回null代表不在MegaLayout模式下
     const layout = useLayout(props)
     const { enableLayout } = layout

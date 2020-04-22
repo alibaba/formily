@@ -9,8 +9,10 @@ export const baseComputeStyle = (props) => {
         labelWidth, wrapperWidth,
         labelCol, grid, full, context = {}, columns, isRoot, autoRow,
         span, seed,
-        lg, m, s
+        // lg, m, s,
+        responsive
     } = props
+    const { lg, m, s } = responsive
 
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
@@ -142,21 +144,19 @@ export const baseComputeStyle = (props) => {
     }
 
     if (seed) {
-        result.nextLayoutItemStyle = `
+        result.nestLayoutItemStyle = `
             &.mega-layout-nest-container.${seed} {
                 .mega-layout-container {
                     width: 100%;
                 }
                 @media (max-width: 720px) {
-                    grid-column-start: span ${s > span ? span : s};
+                    grid-column-start: span ${responsive.s > span ? span : responsive.s};
                 }
                 @media (min-width: 720px ) and (max-width: 1200px ) {
-                    grid-column-start: span ${m > span ? span : m};
+                    grid-column-start: span ${responsive.m > span ? span : responsive.m};
                 }
                 @media (min-width: 1200px ) {
-                    grid-column-start: span ${lg > span ? span : lg};
-                    grid-column-span: span ${span};
-                    grid-column-lg: span ${lg};
+                    grid-column-start: span ${responsive.lg > span ? span : responsive.lg};
                 }
             }
         `
@@ -191,9 +191,19 @@ export const baseComputeStyle = (props) => {
                 > .mega-layout-container-content {
                     &.grid {
                         display: grid;
-                        grid-template-columns: repeat(${columns}, 1fr);
+                        // grid-template-columns: repeat(${columns}, 1fr);
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
+                        @media (max-width: 720px) {
+                            grid-template-columns: repeat(${s}, 1fr);
+                        }
+                        
+                        @media (min-width: 720px ) and (max-width: 1200px ) {
+                            grid-template-columns: repeat(${m}, 1fr);
+                        }
+                        @media (min-width: 1200px ) {
+                            grid-template-columns: repeat(${lg}, 1fr);
+                        }
                     }
                 }
             }
@@ -235,6 +245,7 @@ export const baseComputeStyle = (props) => {
 
 export const computeStyle = (props) => {
     const styleResult = baseComputeStyle(props)
+
     // labelAlign, addon 是任何布局模式都可以用到
     // inline 和 grid 是互斥关系, 优先级: inline > grid
     // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
@@ -247,7 +258,7 @@ export const computeStyle = (props) => {
         ${styleResult.inlineStyle}
         ${styleResult.gridStyle}
         ${styleResult.gridItemStyle}
-        ${styleResult.nextLayoutItemStyle}
+        ${styleResult.nestLayoutItemStyle}
         ${styleResult.layoutMarginStyle}
     `
 }
