@@ -148,7 +148,9 @@ export const baseComputeStyle = (props) => {
             &.mega-layout-nest-container.${seed} {
                 .mega-layout-container {
                     width: 100%;
+                    margin-bottom: 0;
                 }
+
                 @media (max-width: 720px) {
                     grid-column-start: span ${responsive.s > span ? span : responsive.s};
                 }
