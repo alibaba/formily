@@ -30,13 +30,7 @@ export const Layout: React.FC<ILayoutProps> = ({
 // 3. full
 // 4. labelWidth/wrapperWidth
 // 5. labelCol/wrapperCol
-const Item = ({ children, ...props }) => {
+export const LayoutItem = ({ children, ...props }) => {
   const layoutItem = useLayoutItem(props)
   return children(layoutItem)
 }
-
-Object.assign(Layout, {
-  Item,
-})
-
-export default Layout

@@ -1,11 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { normalizeCol, pickNotFormItemProps } from '../../shared'
-import { createVirtualBox } from '@formily/react-schema-renderer'
-import { Layout } from '@formily/react'
-import styled from 'styled-components'
-import { Form } from '@alifd/next'
-import { computeStyle } from './style'
+import { Layout, LayoutItem } from './Layout'
 
 // 优先级：当前属性 > context 传递的属性 > 默认值
 const computeAttr = (propAttr, layoutAttr, defaultValue) => {
@@ -14,22 +9,26 @@ const computeAttr = (propAttr, layoutAttr, defaultValue) => {
   return defaultValue
 };
 
-const StyledLayoutItem = styled((props) => {
-    const { children, itemBefore, itemAfter,
-      grid, span, columns, gutter, className, autoRow, ...others } = props
+export const getMegaLayout = (opts) => {
+  const { FormItem, computeStyle, styled, util } = opts || {};
+  const { normalizeCol, pickFormItemProps, pickNotFormItemProps } = util
+
+  const StyledLayoutItem = styled((props) => {
+    const { className, grid, children, addonBefore, addonAfter, labelAlign, ...others } = props
+    const formItemProps = pickFormItemProps(others)
     const cls = classnames({
       [className]: true,
       'mega-layout-item': true,
       'mega-layout-item-col': grid,
     });
 
-    const finalFormItem = <Form.Item className={cls} {...others}>
+    const finalFormItem = <FormItem className={cls} {...formItemProps}>
       <div className="mega-layout-item-content">
-        { itemBefore ? <p className="formily-mega-item-before">{itemBefore}</p> : null }
+        { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
         {children}
-        { itemAfter ? <p className="formily-mega-item-after">{itemAfter}</p> : null }
+        { addonAfter ? <p className="formily-mega-item-after">{addonAfter}</p> : null }
       </div>
-    </Form.Item>    
+    </FormItem>
 
     if (grid) {
       return <div className={cls}>
@@ -42,8 +41,12 @@ const StyledLayoutItem = styled((props) => {
 
 
 const StyledLayoutWrapper = styled((props) => {
-    const { gutter, ...others } = props
-    return <Form.Item {...others} />
+    const formItemProps = pickFormItemProps(props);
+    const { labelAlign, addonAfter, addonBefore, ...others } = formItemProps
+    others.children = props.children
+    others.className = props.className
+
+    return <FormItem {...others} />
 })`${props => computeStyle(props)}`
 
 const StyledLayoutNestWrapper = styled(props => {
@@ -51,9 +54,8 @@ const StyledLayoutNestWrapper = styled(props => {
 return <div style={style} className={classnames('mega-layout-nest-container', className, seed)}>{children}</div>
 })`${props => computeStyle(props)}`
 
-const Div = props => <div {...props} />
-export const MegaLayout = styled(props => {
-    const { children, itemBefore, itemAfter, description, ...others } = props
+const MegaLayout = (props => {
+    const { children, addonBefore, addonAfter, description, ...others } = props
     const layoutProps = props.layoutProps || {}
 
     // 注意, labelCol/wrapperCol, labelWidth/wrapperWidth Layout只能透传下去
@@ -68,7 +70,6 @@ export const MegaLayout = styled(props => {
                 grid, gutter, autoRow, span,
                 full, context, isRoot, responsive
             } = layout
-            let Wrapper            
             const itemProps: any = {
               inline,
               grid,
@@ -80,13 +81,6 @@ export const MegaLayout = styled(props => {
               isRoot,
               isLayout: true,    
               responsive
-            }
-            const wrapperProps: any = {}
-            if (grid) {
-              Wrapper = Div // 一行
-              wrapperProps.gutter = gutter // gutter
-            } else {
-              Wrapper = Div
             }
 
             if (label) {
@@ -103,7 +97,7 @@ export const MegaLayout = styled(props => {
             }
 
             let ele = <StyledLayoutWrapper
-                className={classnames(props.className, 'mega-layout-container')}
+                className="mega-layout-container"
                 label={label}
                 required={required}
                 help={description}
@@ -111,11 +105,11 @@ export const MegaLayout = styled(props => {
                 {...itemProps}
             >
                 <div className="mega-layout-container-wrapper">
-                    { itemBefore ? <p className="mega-layout-container-before">{itemBefore}</p> : null }
-                    <Wrapper {...wrapperProps} className={classnames('mega-layout-container-content', { grid })}>
+                    { addonBefore ? <p className="mega-layout-container-before">{addonBefore}</p> : null }
+                    <div className={classnames('mega-layout-container-content', { grid })}>
                       {children}
-                    </Wrapper>
-                    { itemAfter ? <p className="mega-layout-container-after">{itemAfter}</p> : null }
+                    </div>
+                    { addonAfter ? <p className="mega-layout-container-after">{addonAfter}</p> : null }
                 </div>
             </StyledLayoutWrapper>
 
@@ -129,20 +123,18 @@ export const MegaLayout = styled(props => {
             return ele
         }}
     />
-})`
-
-`;
+});
 
 const MegaLayoutItem = (props) => {
   const { children, schemaChildren, itemProps, ...others } = props;
   const megaProps = (schemaChildren ? others['x-mega-props'] : others['mega-props']) || {}
-  return <Layout.Item {...megaProps}>
+  return <LayoutItem {...megaProps}>
     {layoutProps => {
       const componentProps = pickNotFormItemProps(others)
       let schemaComponent = schemaChildren
       // 启用了MegaLayout
       if (layoutProps) {
-        const { itemBefore, itemAfter } = megaProps
+        const { addonBefore, addonAfter } = megaProps
         const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
          responsive
         } = layoutProps;
@@ -159,8 +151,8 @@ const MegaLayoutItem = (props) => {
         if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
         if (labelWidth !== -1) itemProps.labelWidth = labelWidth
         if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
-        if (itemBefore) itemProps.itemBefore = itemBefore
-        if (itemAfter) itemProps.itemAfter = itemAfter
+        if (addonBefore) itemProps.addonBefore = addonBefore
+        if (addonAfter) itemProps.addonAfter = addonAfter
 
         // 撑满即为组件宽度为100%, flex: 1
         if (full) {
@@ -196,11 +188,15 @@ const MegaLayoutItem = (props) => {
       // 没有启用MegaLayout, 保持和线上完全一致的功能。
       return children()
     }}
-  </Layout.Item>
+  </LayoutItem>
 }
 
-MegaLayout.Item = MegaLayoutItem;
+  return {
+    MegaLayout,
+    MegaLayoutItem
+  }
+}
 
-export const FormMegaLayout = createVirtualBox('mega-layout', MegaLayout)
 
-export default MegaLayout
+
+export default getMegaLayout
