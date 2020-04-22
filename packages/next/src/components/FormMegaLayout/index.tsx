@@ -53,11 +53,9 @@ return <div style={style} className={classnames('mega-layout-nest-container', cl
 
 const Div = props => <div {...props} />
 export const MegaLayout = styled(props => {
-    const { responsive, children, itemBefore, itemAfter, description, ...others } = props
+    const { children, itemBefore, itemAfter, description, ...others } = props
     const layoutProps = props.layoutProps || {}
 
-    
-    
     // 注意, labelCol/wrapperCol, labelWidth/wrapperWidth Layout只能透传下去
     // 自身的 labelCol/wrapperCol, labelWidth/wrapperWidth 必须通过其layoutProps来控制
     return <Layout        
@@ -65,13 +63,11 @@ export const MegaLayout = styled(props => {
             gutter: 20,
         }}
         {...others}
-        responsive={responsive}
         children={(layout) => {
             const { inline, required, columns, label, labelAlign,
                 grid, gutter, autoRow, span,
-                full, context, isRoot, lg, m, s
+                full, context, isRoot, responsive
             } = layout
-
             let Wrapper            
             const itemProps: any = {
               inline,
@@ -83,7 +79,7 @@ export const MegaLayout = styled(props => {
               columns,   
               isRoot,
               isLayout: true,    
-              lg, m, s   
+              responsive
             }
             const wrapperProps: any = {}
             if (grid) {
@@ -125,7 +121,7 @@ export const MegaLayout = styled(props => {
 
             if (!props.grid && grid) {   
               const seed = `nest-${Date.now()}`;
-              return <StyledLayoutNestWrapper seed={seed} {...{span, lg, s, m}}>
+              return <StyledLayoutNestWrapper seed={seed} {...{span, columns, context, responsive}}>
                 {ele}
               </StyledLayoutNestWrapper>
             }
@@ -144,12 +140,11 @@ const MegaLayoutItem = (props) => {
     {layoutProps => {
       const componentProps = pickNotFormItemProps(others)
       let schemaComponent = schemaChildren
-
       // 启用了MegaLayout
       if (layoutProps) {
         const { itemBefore, itemAfter } = megaProps
         const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
-          lg, m, s
+         responsive
         } = layoutProps;
         itemProps.labelAlign = labelAlign
         itemProps.inline = inline
@@ -158,9 +153,7 @@ const MegaLayoutItem = (props) => {
         itemProps.span = span
         itemProps.columns = columns
         itemProps.full = full
-        itemProps.lg = lg
-        itemProps.m = m
-        itemProps.s = s
+        itemProps.responsive = responsive
 
         if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
         if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
