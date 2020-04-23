@@ -396,6 +396,107 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+### 各种尺寸匹配
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <div>
+      <SchemaForm size="small" components={{ DatePicker, Input }}>
+        <FormSlot>
+          <h5 style={{ marginTop: '16px' }}>小</h5>
+        </FormSlot>
+        <FormMegaLayout
+          label="容器标题"
+          addonBefore="容器before"
+          addonAfter="容器after"
+          description="容器description"
+          full
+        >
+          <Field
+            name="itemAddon"
+            title="组件标题"
+            x-component="DatePicker"
+            x-mega-props={{
+              addonBefore: '组件before',
+              addonAfter: '组件after'
+            }}
+            description="组件description"
+          />
+        </FormMegaLayout>
+      </SchemaForm>
+
+      <SchemaForm components={{ DatePicker, Input }}>
+        <FormSlot>
+          <h5 style={{ marginTop: '16px' }}>中</h5>
+        </FormSlot>
+        <FormMegaLayout
+          label="容器标题"
+          addonBefore="容器before"
+          addonAfter="容器after"
+          description="容器description"
+          full
+        >
+          <Field
+            name="itemAddon"
+            title="组件标题"
+            x-component="DatePicker"
+            x-mega-props={{
+              addonBefore: '组件before',
+              addonAfter: '组件after'
+            }}
+            description="组件description"
+          />
+        </FormMegaLayout>
+      </SchemaForm>
+
+      <SchemaForm size="large" components={{ DatePicker, Input }}>
+        <FormSlot>
+          <h5 style={{ marginTop: '16px' }}>大</h5>
+        </FormSlot>
+        <FormMegaLayout
+          label="容器标题"
+          addonBefore="容器before"
+          addonAfter="容器after"
+          description="容器description"
+          full
+        >
+          <Field
+            name="itemAddon"
+            title="组件标题"
+            x-component="DatePicker"
+            x-mega-props={{
+              addonBefore: '组件before',
+              addonAfter: '组件after'
+            }}
+            description="组件description"
+          />
+        </FormMegaLayout>
+      </SchemaForm>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # inline 行内布局
 
 | 字段名 | 描述             | 类型    | 默认值 |
@@ -739,9 +840,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-# 复杂嵌套布局
+# 列表布局
 
-`FormMegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。
+常见的列表布局，用 `MegaLayout` 可以非常轻易做到。
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -765,6 +866,141 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
+        <FormMegaLayout
+          labelAlign="top"
+          grid
+          full
+          autoRow
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <Field name="listc1" title="组件1" x-component="DatePicker" />
+          <Field
+            name="listc2"
+            x-mega-props={{ span: 2 }}
+            title="组件2"
+            x-component="DatePicker"
+          />
+          <Field
+            name="listc3"
+            x-mega-props={{ span: 3 }}
+            title="组件3"
+            x-component="DatePicker"
+          />
+          <Field
+            name="组件4"
+            x-mega-props={{ span: 2 }}
+            title="字段4"
+            x-component="DatePicker"
+          />
+          <Field name="组件5" title="字段5" x-component="DatePicker" />          
+        </FormMegaLayout>
+
+        <FormButtonGroup align="right">
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+如果需要把非VirtualField放入布局组件内，可以通过 `FormSlot`
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  createVirtualBox,
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{ DatePicker, Input }}>
+        <FormMegaLayout
+          labelAlign="top"
+          grid
+          full
+          autoRow
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <Field name="listc1" title="组件1" x-component="DatePicker" />
+          <Field
+            name="listc2"
+            x-mega-props={{ span: 2 }}
+            title="组件2"
+            x-component="DatePicker"
+          />
+          <Field
+            name="listc3"
+            x-mega-props={{ span: 3 }}
+            title="组件3"
+            x-component="DatePicker"
+          />
+          <Field
+            name="组件4"
+            title="字段4"
+            x-component="DatePicker"
+          />
+          <Field name="组件5" title="字段5" x-component="DatePicker" />          
+          <FormSlot>
+            <FormButtonGroup style={{ marginTop: '32px' }} align="right">
+              <Submit>提交</Submit>
+              <Reset>重置</Reset>
+            </FormButtonGroup>
+          </FormSlot>
+        </FormMegaLayout>        
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+# 复杂嵌套布局
+
+`FormMegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。
+
+```jsx
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Button } from 'antd'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+    <Printer>
+      <SchemaForm editable={state.editable} components={{ DatePicker, Input }}>
         <FormMegaLayout labelCol={4}>
           <Field name="ff1" title="普通字段" x-component="DatePicker" />
 
@@ -989,6 +1225,12 @@ const App = () => {
         </FormMegaLayout>
 
         <FormButtonGroup offset={4}>
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '切换详情态' : '切换编辑'}
+          </Button>
           <Submit>提交</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>

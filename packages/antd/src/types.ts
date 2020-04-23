@@ -60,6 +60,7 @@ export type IFormItemTopProps = React.PropsWithChildren<
     Pick<ItemProps, 'prefixCls' | 'labelCol' | 'wrapperCol' | 'labelAlign'>,
     'labelCol' | 'wrapperCol'
   > & {
+    size: string
     inline?: boolean
     className?: string
     style?: React.CSSProperties

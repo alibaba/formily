@@ -106,6 +106,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     const formItemProps = pickFormItemProps(props)
     const { inline, ...componentProps } = pickNotFormItemProps(props)
 
+    const { size } = topFormItemProps
     const itemProps = {
       ...formItemProps,
       required: editable === false ? undefined : required,
@@ -115,7 +116,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
       help: computeMessage(errors, warnings) || help,
     }
 
-    return <MegaLayoutItem itemProps={itemProps} {...props}>
+    return <MegaLayoutItem itemProps={{ ...itemProps, size }} {...props}>
       {(megaComponentProps) => {
         if (megaComponentProps) {
           return renderComponent({ props: megaComponentProps, state, mutators, form })

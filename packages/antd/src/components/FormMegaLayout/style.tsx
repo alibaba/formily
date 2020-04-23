@@ -26,6 +26,7 @@ const computeAntdStyleBase = (props) => {
         & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
         & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
             display: flex;
+            line-height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
             > .mega-layout-container-content {
                 margin-bottom: 0;
                 flex: 1;
@@ -38,7 +39,7 @@ const computeAntdStyleBase = (props) => {
                 margin-bottom: 0;
                 display: inline-flex;
                 align-items: center;
-                height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '32px' : '40px') };
+                height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
             }
 
             > .mega-layout-container-after,
@@ -48,7 +49,7 @@ const computeAntdStyleBase = (props) => {
                 margin-bottom: 0;
                 display: inline-flex;
                 align-items: center;
-                height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '32px' : '40px') };
+                height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
             }
         }
     `
@@ -114,6 +115,7 @@ const computeAntdStyleBase = (props) => {
 
                 > .ant-form-item-label {
                     display: inline-block;
+                    vertical-align: top;
                 }
                 > .ant-form-item-control {
                     display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
@@ -255,12 +257,8 @@ const computeAntdStyleBase = (props) => {
             `
         }
 
-        if (isRoot) {
+        if (isLayout) {
             result.layoutMarginStyle += `
-                &.mega-layout-container {
-                    margin-bottom: 0;
-                }
-
                 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child{
                     margin-bottom: 0;
                 }

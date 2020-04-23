@@ -11,7 +11,8 @@ export const FormItemDeepProvider: React.FC<IFormItemTopProps> = ({
   labelAlign,
   labelCol,
   inline,
-  wrapperCol
+  wrapperCol,
+  size,
 }) => (
   <NextFormItemDeepContext.Provider
     value={{
@@ -19,7 +20,8 @@ export const FormItemDeepProvider: React.FC<IFormItemTopProps> = ({
       labelAlign,
       labelCol,
       wrapperCol,
-      inline
+      inline,
+      size
     }}
   >
     {children}
