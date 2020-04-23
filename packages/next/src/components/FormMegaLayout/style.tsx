@@ -1,3 +1,5 @@
+import { css } from 'styled-components'
+
 const computeNextStyleBase = (props) => {
     const result: any = {}
     const {
@@ -235,6 +237,10 @@ const computeNextStyleBase = (props) => {
             result.layoutMarginStyle += `
                 &.mega-layout-container {
                     margin-bottom: 0;
+
+                    > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child{
+                        margin-bottom: 0;
+                    }
                 }
             `
         }
@@ -243,29 +249,22 @@ const computeNextStyleBase = (props) => {
     return result
 }
 
-export const getNextComputeStyle = (opts) => {
-    const { css } = opts || {}
-    const computeStyle = (props) => {
-        const styleResult = computeNextStyleBase(props)
+export const computeStyle = (props) => {
+    const styleResult = computeNextStyleBase(props)
     
-        // labelAlign, addon 是任何布局模式都可以用到
-        // inline 和 grid 是互斥关系, 优先级: inline > grid
-        // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
-    
-        return css`
-            ${styleResult.labelAlignStyle}
-            ${styleResult.addonStyle}
-            ${styleResult.defaultStyle}
-            ${styleResult.widthStyle}
-            ${styleResult.inlineStyle}
-            ${styleResult.gridStyle}
-            ${styleResult.gridItemStyle}
-            ${styleResult.nestLayoutItemStyle}
-            ${styleResult.layoutMarginStyle}
-        `
-    }
+    // labelAlign, addon 是任何布局模式都可以用到
+    // inline 和 grid 是互斥关系, 优先级: inline > grid
+    // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
 
-    return computeStyle
+    return css`
+        ${styleResult.labelAlignStyle}
+        ${styleResult.addonStyle}
+        ${styleResult.defaultStyle}
+        ${styleResult.widthStyle}
+        ${styleResult.inlineStyle}
+        ${styleResult.gridStyle}
+        ${styleResult.gridItemStyle}
+        ${styleResult.nestLayoutItemStyle}
+        ${styleResult.layoutMarginStyle}
+    `
 }
-
-export default getNextComputeStyle

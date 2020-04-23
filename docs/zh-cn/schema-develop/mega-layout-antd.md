@@ -36,21 +36,21 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>label右对齐（默认）</h5>
+          <h5 style={{ marginTop: '16px' }}>label右对齐（默认）</h5>
         </FormSlot>
         <FormMegaLayout labelCol={4}>
           <Field name="alignLeft" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>label左对齐</h5>
+          <h5 style={{ marginTop: '16px' }}>label左对齐</h5>
         </FormSlot>
         <FormMegaLayout labelCol={4} labelAlign="left">
           <Field name="alignRight" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>label在顶部</h5>
+          <h5 style={{ marginTop: '16px' }}>label在顶部</h5>
         </FormSlot>
         <FormMegaLayout labelAlign="top">
           <Field name="alignTop" title="标题" x-component="DatePicker" />
@@ -92,21 +92,21 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>不撑满（默认）</h5>
+          <h5 style={{ marginTop: '16px' }}>不撑满（默认）</h5>
         </FormSlot>
         <FormMegaLayout labelCol={4}>
           <Field name="defaultFull" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>撑满</h5>
+          <h5 style={{ marginTop: '16px' }}>撑满</h5>
         </FormSlot>
         <FormMegaLayout labelCol={4} full>
           <Field name="full" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>label在顶部，撑满</h5>
+          <h5 style={{ marginTop: '16px' }}>label在顶部，撑满</h5>
         </FormSlot>
         <FormMegaLayout labelAlign="top" full>
           <Field name="fullTop" title="标题" x-component="DatePicker" />
@@ -153,42 +153,42 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>labelCol: undefined / wrapperCol: undefined </h5>
+          <h5 style={{ marginTop: '16px' }}>labelCol: undefined / wrapperCol: undefined </h5>
         </FormSlot>
         <FormMegaLayout full>
           <Field name="lc1" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelCol: 4 / wrapperCol: undefined </h5>
+          <h5 style={{ marginTop: '16px' }}>labelCol: 4 / wrapperCol: undefined </h5>
         </FormSlot>
         <FormMegaLayout labelCol={4} full>
           <Field name="lc2" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelCol: undefined / wrapperCol: 20 </h5>
+          <h5 style={{ marginTop: '16px' }}>labelCol: undefined / wrapperCol: 20 </h5>
         </FormSlot>
         <FormMegaLayout wrapperCol={20} full>
           <Field name="lc3" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelCol: 4 / wrapperCol: 20</h5>
+          <h5 style={{ marginTop: '16px' }}>labelCol: 4 / wrapperCol: 20</h5>
         </FormSlot>
         <FormMegaLayout labelCol={4} wrapperCol={20} full>
           <Field name="lc4" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelCol: 12 / wrapperCol: 12</h5>
+          <h5 style={{ marginTop: '16px' }}>labelCol: 12 / wrapperCol: 12</h5>
         </FormSlot>
         <FormMegaLayout labelCol={12} wrapperCol={12} full>
           <Field name="lc5" title="标题" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelCol: 20 / wrapperCol: 4</h5>
+          <h5 style={{ marginTop: '16px' }}>labelCol: 20 / wrapperCol: 4</h5>
         </FormSlot>
         <FormMegaLayout labelCol={20} wrapperCol={4} full>
           <Field name="lc6" title="标题" x-component="DatePicker" />
@@ -235,42 +235,42 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>labelWidth: undefined / wrapperWidth: undefined </h5>
+          <h5 style={{ marginTop: '16px' }}>labelWidth: undefined / wrapperWidth: undefined </h5>
         </FormSlot>
         <FormMegaLayout full>
           <Field name="lw1" title="lw1" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelWidth: 200px / wrapperWidth: undefined </h5>
+          <h5 style={{ marginTop: '16px' }}>labelWidth: 200px / wrapperWidth: undefined </h5>
         </FormSlot>
         <FormMegaLayout labelWidth={200} full>
           <Field name="lw2" title="lw2" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelWidth: undefined / wrapperWidth: 200px </h5>
+          <h5 style={{ marginTop: '16px' }}>labelWidth: undefined / wrapperWidth: 200px </h5>
         </FormSlot>
         <FormMegaLayout wrapperWidth={200} full>
           <Field name="lw3" title="lw3" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelWidth: 200px / wrapperWidth: 400px</h5>
+          <h5 style={{ marginTop: '16px' }}>labelWidth: 200px / wrapperWidth: 400px</h5>
         </FormSlot>
         <FormMegaLayout labelWidth={200} wrapperWidth={400} full>
           <Field name="lw4" title="lw4" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelWidth: 300px / wrapperWidth: 300px</h5>
+          <h5 style={{ marginTop: '16px' }}>labelWidth: 300px / wrapperWidth: 300px</h5>
         </FormSlot>
         <FormMegaLayout labelWidth={300} wrapperWidth={300} full>
           <Field name="lw5" title="lw5" x-component="DatePicker" />
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>labelWidth: 400px / wrapperWidth: 200px</h5>
+          <h5 style={{ marginTop: '16px' }}>labelWidth: 400px / wrapperWidth: 200px</h5>
         </FormSlot>
         <FormMegaLayout labelWidth={400} wrapperWidth={200} full>
           <Field name="lw6" title="lw6" x-component="DatePicker" />
@@ -327,7 +327,7 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>无label + 辅助文案</h5>
+          <h5 style={{ marginTop: '16px' }}>无label + 辅助文案</h5>
         </FormSlot>
         <FormMegaLayout
           addonBefore="容器before"
@@ -339,7 +339,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>label + 辅助文案</h5>
+          <h5 style={{ marginTop: '16px' }}>label + 辅助文案</h5>
         </FormSlot>
         <FormMegaLayout
           label="容器标题"
@@ -352,7 +352,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>单纯表单字段（label + 辅助文案）</h5>
+          <h5 style={{ marginTop: '16px' }}>单纯表单字段（label + 辅助文案）</h5>
         </FormSlot>
         <FormMegaLayout full>
           <Field
@@ -368,7 +368,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>label + 辅助文案 + 表单字段（label + 辅助文案）</h5>
+          <h5 style={{ marginTop: '16px' }}>label + 辅助文案 + 表单字段（label + 辅助文案）</h5>
         </FormSlot>
         <FormMegaLayout
           label="容器标题"
@@ -427,7 +427,7 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>最简单的inline布局</h5>
+          <h5 style={{ marginTop: '16px' }}>最简单的inline布局</h5>
         </FormSlot>
         <FormMegaLayout inline>
           <Field name="is1" title="标题" x-component="DatePicker" />
@@ -436,7 +436,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>inline + labelWidth: 120 + wrapperWidth: 200</h5>
+          <h5 style={{ marginTop: '16px' }}>inline + labelWidth: 120 + wrapperWidth: 200</h5>
         </FormSlot>
         <FormMegaLayout inline labelWidth={120} wrapperWidth={200} full>
           <Field name="il2w2f1" title="标题" x-component="DatePicker" />
@@ -445,7 +445,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>inline + labelAlign: top</h5>
+          <h5 style={{ marginTop: '16px' }}>inline + labelAlign: top</h5>
         </FormSlot>
         <FormMegaLayout inline labelAlign="top">
           <Field name="ilt1" title="标题" x-component="DatePicker" />
@@ -454,7 +454,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>
+          <h5 style={{ marginTop: '16px' }}>
             inline + labelAlign: top + labelWidth: 120 + wrapperWidth: 200
           </h5>
         </FormSlot>
@@ -520,7 +520,7 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>最简单的grid栅格布局</h5>
+          <h5 style={{ marginTop: '16px' }}>最简单的grid栅格布局</h5>
         </FormSlot>
         <FormMegaLayout grid full>
           <Field name="g1" title="标题1" x-component="DatePicker" />
@@ -533,7 +533,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>grid + autoRow 自动换行</h5>
+          <h5 style={{ marginTop: '16px' }}>grid + autoRow 自动换行</h5>
         </FormSlot>
         <FormMegaLayout grid full autoRow>
           <Field
@@ -547,7 +547,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>grid + autoRow 自动换行 + labelWidth: 100</h5>
+          <h5 style={{ marginTop: '16px' }}>grid + autoRow 自动换行 + labelWidth: 100</h5>
         </FormSlot>
         <FormMegaLayout grid full autoRow labelWidth={100}>
           <Field
@@ -561,7 +561,7 @@ const App = () => {
         </FormMegaLayout>
 
         <FormSlot>
-          <h5>grid + autoRow 自动换行 + label在顶部</h5>
+          <h5 style={{ marginTop: '16px' }}>grid + autoRow 自动换行 + label在顶部</h5>
         </FormSlot>
         <FormMegaLayout grid full autoRow labelAlign="top">
           <Field
@@ -614,7 +614,7 @@ const App = () => {
     <Printer>
       <SchemaForm components={{ DatePicker, Input }}>
         <FormSlot>
-          <h5>嵌套栅格布局</h5>
+          <h5 style={{ marginTop: '16px' }}>嵌套栅格布局</h5>
         </FormSlot>
         <FormMegaLayout
           labelAlign="top"
@@ -988,7 +988,7 @@ const App = () => {
           </FormMegaLayout>
         </FormMegaLayout>
 
-        <FormButtonGroup offset={6}>
+        <FormButtonGroup offset={4}>
           <Submit>提交</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>
