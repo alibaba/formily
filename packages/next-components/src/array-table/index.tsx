@@ -10,7 +10,7 @@ import { TextButton } from '../text-button'
 import { CircleButton } from '../circle-button'
 import { Table, Form, Icon } from '@alifd/next'
 import styled from 'styled-components'
-import { FormItemDeepProvider } from '@formily/next'
+import { FormItemShallowProvider } from '@formily/next'
 import cls from 'classnames'
 import { IDragableRowProps, IDragHandlerCellProps } from '../types'
 
@@ -164,14 +164,14 @@ export const ArrayTable = styled(
             cell={(value: any, index: number) => {
               const newPath = FormPath.parse(path).concat(index, key)
               return (
-                <FormItemDeepProvider
+                <FormItemShallowProvider
                   key={newPath.toString()}
                   label={undefined}
                   labelCol={undefined}
                   wrapperCol={undefined}
                 >
                   <SchemaField path={newPath} schema={props} />
-                </FormItemDeepProvider>
+                </FormItemShallowProvider>
               )
             }}
           />

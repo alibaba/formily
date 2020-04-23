@@ -9,7 +9,7 @@ import { ArrayList, DragListView } from '@formily/react-shared-components'
 import { CircleButton } from '../circle-button'
 import { TextButton } from '../text-button'
 import { Table, Form } from 'antd'
-import { FormItemDeepProvider } from '@formily/antd'
+import { FormItemShallowProvider } from '@formily/antd'
 import {
   PlusOutlined,
   DeleteOutlined,
@@ -78,14 +78,14 @@ export const ArrayTable: any = styled(
           render: (value: any, record: any, index: number) => {
             const newPath = FormPath.parse(path).concat(index, key)
             return (
-              <FormItemDeepProvider
+              <FormItemShallowProvider
                 key={newPath.toString()}
                 label={undefined}
                 labelCol={undefined}
                 wrapperCol={undefined}
               >
                 <SchemaField path={newPath} schema={props} />
-              </FormItemDeepProvider>
+              </FormItemShallowProvider>
             )
           }
         }
