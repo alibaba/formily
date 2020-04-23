@@ -8,7 +8,7 @@ const computeNextStyleBase = (props) => {
         inline,
         labelWidth, wrapperWidth,
         labelCol, grid, full, context = {}, columns, isRoot, autoRow,
-        span, seed,
+        span, seed, size,
         // lg, m, s,
         responsive
     } = props
@@ -35,12 +35,16 @@ const computeNextStyleBase = (props) => {
             > .formily-mega-item-before {
                 flex: initial;
                 margin-right: ${`${parseInt(gutter) / 2}px`}
+                line-height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '28px' : '40px') };
+                font-size: ${size === 'small' ? '12px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
 
             > .mega-layout-container-after,
             > .formily-mega-item-after {
                 flex: initial;
                 margin-left: ${`${parseInt(gutter) / 2}px`}
+                line-height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '28px' : '40px') };
+                font-size: ${size === 'small' ? '12px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
         }
     `
@@ -97,6 +101,7 @@ const computeNextStyleBase = (props) => {
         
             & > .next-form-item-label {
                 display: inline-block;
+                vertical-align: top;
             }
             & > .next-form-item-control {
                 display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
@@ -233,14 +238,10 @@ const computeNextStyleBase = (props) => {
             `
         }
 
-        if (isRoot) {
+        if (isLayout) {
             result.layoutMarginStyle += `
-                &.mega-layout-container {
+                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child{
                     margin-bottom: 0;
-
-                    > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child{
-                        margin-bottom: 0;
-                    }
                 }
             `
         }

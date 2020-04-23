@@ -25,26 +25,26 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
     <Form>
-      <h5>label右对齐（默认）</h5>
+      <h5 style={{ marginTop: '16px' }}>label右对齐（默认）</h5>
       <MegaLayout labelCol={4}>
-        <FormItem name="alignLeft" title="标题" component={Select} />
+        <FormItem name="alignLeft" title="标题" component={DatePicker} />
       </MegaLayout>
 
-      <h5>label左对齐</h5>
+      <h5 style={{ marginTop: '16px' }}>label左对齐</h5>
       <MegaLayout labelCol={4} labelAlign="left">
-        <FormItem name="alignRight" title="标题" component={Select} />
+        <FormItem name="alignRight" title="标题" component={DatePicker} />
       </MegaLayout>
 
-      <h5>label在顶部</h5>
+      <h5 style={{ marginTop: '16px' }}>label在顶部</h5>
       <MegaLayout labelAlign="top">
-        <FormItem name="alignTop" title="标题" component={Select} />
+        <FormItem name="alignTop" title="标题" component={DatePicker} />
       </MegaLayout>
     </Form>
   )
@@ -71,29 +71,29 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
       <Form >
-        <h5>不撑满（默认）</h5>
+        <h5 style={{ marginTop: '16px' }}>不撑满（默认）</h5>
 
         <MegaLayout labelCol={4}>
-          <FormItem name="defaultFull" title="标题" component={Select} />
+          <FormItem name="defaultFull" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>撑满</h5>
+        <h5 style={{ marginTop: '16px' }}>撑满</h5>
 
         <MegaLayout labelCol={4} full>
-          <FormItem name="full" title="标题" component={Select} />
+          <FormItem name="full" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>label在顶部，撑满</h5>
+        <h5 style={{ marginTop: '16px' }}>label在顶部，撑满</h5>
 
         <MegaLayout labelAlign="top" full>
-          <FormItem name="fullTop" title="标题" component={Select} />
+          <FormItem name="fullTop" title="标题" component={DatePicker} />
         </MegaLayout>
       </Form>
   )
@@ -125,46 +125,46 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
       <Form >
-        <h5>labelCol: undefined / wrapperCol: undefined </h5>
+        <h5 style={{ marginTop: '16px' }}>labelCol: undefined / wrapperCol: undefined </h5>
 
         <MegaLayout full>
-          <FormItem name="lc1" title="标题" component={Select} />
+          <FormItem name="lc1" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelCol: 4 / wrapperCol: undefined </h5>
+        <h5 style={{ marginTop: '16px' }}>labelCol: 4 / wrapperCol: undefined </h5>
 
         <MegaLayout labelCol={4} full>
-          <FormItem name="lc2" title="标题" component={Select} />
+          <FormItem name="lc2" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelCol: undefined / wrapperCol: 20 </h5>
+        <h5 style={{ marginTop: '16px' }}>labelCol: undefined / wrapperCol: 20 </h5>
 
         <MegaLayout wrapperCol={20} full>
-          <FormItem name="lc3" title="标题" component={Select} />
+          <FormItem name="lc3" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelCol: 4 / wrapperCol: 20</h5>
+        <h5 style={{ marginTop: '16px' }}>labelCol: 4 / wrapperCol: 20</h5>
 
         <MegaLayout labelCol={4} wrapperCol={20} full>
-          <FormItem name="lc4" title="标题" component={Select} />
+          <FormItem name="lc4" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelCol: 12 / wrapperCol: 12</h5>
+        <h5 style={{ marginTop: '16px' }}>labelCol: 12 / wrapperCol: 12</h5>
 
         <MegaLayout labelCol={12} wrapperCol={12} full>
-          <FormItem name="lc5" title="标题" component={Select} />
+          <FormItem name="lc5" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelCol: 20 / wrapperCol: 4</h5>
+        <h5 style={{ marginTop: '16px' }}>labelCol: 20 / wrapperCol: 4</h5>
 
         <MegaLayout labelCol={20} wrapperCol={4} full>
-          <FormItem name="lc6" title="标题" component={Select} />
+          <FormItem name="lc6" title="标题" component={DatePicker} />
         </MegaLayout>
       </Form>
   )
@@ -196,7 +196,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 import Printer from '@formily/printer'
 
 import '@alifd/next/dist/next.css'
@@ -204,40 +204,40 @@ import '@alifd/next/dist/next.css'
 const App = () => {
   return (
       <Form >
-        <h5>labelWidth: undefined / wrapperWidth: undefined </h5>
+        <h5 style={{ marginTop: '16px' }}>labelWidth: undefined / wrapperWidth: undefined </h5>
 
         <MegaLayout full>
-          <FormItem name="lw1" title="lw1" component={Select} />
+          <FormItem name="lw1" title="lw1" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelWidth: 200px / wrapperWidth: undefined </h5>
+        <h5 style={{ marginTop: '16px' }}>labelWidth: 200px / wrapperWidth: undefined </h5>
 
         <MegaLayout labelWidth={200} full>
-          <FormItem name="lw2" title="lw2" component={Select} />
+          <FormItem name="lw2" title="lw2" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelWidth: undefined / wrapperWidth: 200px </h5>
+        <h5 style={{ marginTop: '16px' }}>labelWidth: undefined / wrapperWidth: 200px </h5>
 
         <MegaLayout wrapperWidth={200} full>
-          <FormItem name="lw3" title="lw3" component={Select} />
+          <FormItem name="lw3" title="lw3" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelWidth: 200px / wrapperWidth: 400px</h5>
+        <h5 style={{ marginTop: '16px' }}>labelWidth: 200px / wrapperWidth: 400px</h5>
 
         <MegaLayout labelWidth={200} wrapperWidth={400} full>
-          <FormItem name="lw4" title="lw4" component={Select} />
+          <FormItem name="lw4" title="lw4" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelWidth: 300px / wrapperWidth: 300px</h5>
+        <h5 style={{ marginTop: '16px' }}>labelWidth: 300px / wrapperWidth: 300px</h5>
 
         <MegaLayout labelWidth={300} wrapperWidth={300} full>
-          <FormItem name="lw5" title="lw5" component={Select} />
+          <FormItem name="lw5" title="lw5" component={DatePicker} />
         </MegaLayout>
 
-        <h5>labelWidth: 400px / wrapperWidth: 200px</h5>
+        <h5 style={{ marginTop: '16px' }}>labelWidth: 400px / wrapperWidth: 200px</h5>
 
         <MegaLayout labelWidth={400} wrapperWidth={200} full>
-          <FormItem name="lw6" title="lw6" component={Select} />
+          <FormItem name="lw6" title="lw6" component={DatePicker} />
         </MegaLayout>
       </Form>
   )
@@ -273,21 +273,20 @@ import ReactDOM from 'react-dom'
 import {
   Form,
   FormItem,
-  SchemaMarkupField as Field,
   FormButtonGroup,
   createFormActions,
   Submit,
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
       <Form >
-        <h5>无label + 辅助文案</h5>
+        <h5 style={{ marginTop: '16px' }}>无label + 辅助文案</h5>
 
         <MegaLayout
           addonBefore="容器before"
@@ -295,10 +294,10 @@ const App = () => {
           description="容器description"
           full
         >
-          <FormItem name="addon1" title="组件标题" component={Select} />
+          <FormItem name="addon1" title="组件标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>label + 辅助文案</h5>
+        <h5 style={{ marginTop: '16px' }}>label + 辅助文案</h5>
 
         <MegaLayout
           label="容器标题"
@@ -307,16 +306,16 @@ const App = () => {
           description="容器description"
           full
         >
-          <FormItem name="addon2" title="组件标题" component={Select} />
+          <FormItem name="addon2" title="组件标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>单纯表单字段（label + 辅助文案）</h5>
+        <h5 style={{ marginTop: '16px' }}>单纯表单字段（label + 辅助文案）</h5>
 
         <MegaLayout full>
           <FormItem
             name="itemAddon"
             title="组件标题"
-            component={Select}
+            component={DatePicker}
             mega-props={{
               addonBefore: '组件before',
               addonAfter: '组件after'
@@ -325,7 +324,7 @@ const App = () => {
           />
         </MegaLayout>
 
-        <h5>label + 辅助文案 + 表单字段（label + 辅助文案）</h5>
+        <h5 style={{ marginTop: '16px' }}>label + 辅助文案 + 表单字段（label + 辅助文案）</h5>
 
         <MegaLayout
           label="容器标题"
@@ -337,7 +336,7 @@ const App = () => {
           <FormItem
             name="itemAddon"
             title="组件标题"
-            component={Select}
+            component={DatePicker}
             mega-props={{
               addonBefore: '组件before',
               addonAfter: '组件after'
@@ -351,6 +350,101 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+### 各种尺寸匹配
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <div>
+      <Form size="small">
+        <h5 style={{ marginTop: '16px' }}>小</h5>
+        <MegaLayout
+          label="容器标题"
+          addonBefore="容器before"
+          addonAfter="容器after"
+          description="容器description"
+          full
+        >
+          <FormItem
+            name="itemAddon"
+            title="组件标题"
+            component={DatePicker}
+            mega-props={{
+              addonBefore: '组件before',
+              addonAfter: '组件after'
+            }}
+            description="组件description"
+          />
+        </MegaLayout>
+      </Form>
+
+      <Form>
+        <h5 style={{ marginTop: '16px' }}>中</h5>
+        <MegaLayout
+          label="容器标题"
+          addonBefore="容器before"
+          addonAfter="容器after"
+          description="容器description"
+          full
+        >
+          <FormItem
+            name="itemAddon"
+            title="组件标题"
+            component={DatePicker}
+            mega-props={{
+              addonBefore: '组件before',
+              addonAfter: '组件after'
+            }}
+            description="组件description"
+          />
+        </MegaLayout>
+      </Form>
+
+      <Form size="large">
+        <h5 style={{ marginTop: '16px' }}>大</h5>
+        <MegaLayout
+          label="容器标题"
+          addonBefore="容器before"
+          addonAfter="容器after"
+          description="容器description"
+          full
+        >
+          <FormItem
+            name="itemAddon"
+            title="组件标题"
+            component={DatePicker}
+            mega-props={{
+              addonBefore: '组件before',
+              addonAfter: '组件after'
+            }}
+            description="组件description"
+          />
+        </MegaLayout>
+      </Form>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 
 # inline 行内布局
 
@@ -372,38 +466,38 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
       <Form >
-        <h5>最简单的inline布局</h5>
+        <h5 style={{ marginTop: '16px' }}>最简单的inline布局</h5>
 
         <MegaLayout inline>
-          <FormItem name="is1" title="标题" component={Select} />
-          <FormItem name="is2" title="标题" component={Select} />
-          <FormItem name="is3" title="标题" component={Select} />
+          <FormItem name="is1" title="标题" component={DatePicker} />
+          <FormItem name="is2" title="标题" component={DatePicker} />
+          <FormItem name="is3" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>inline + labelWidth: 120 + wrapperWidth: 200</h5>
+        <h5 style={{ marginTop: '16px' }}>inline + labelWidth: 120 + wrapperWidth: 200</h5>
 
         <MegaLayout inline labelWidth={120} wrapperWidth={200} full>
-          <FormItem name="il2w2f1" title="标题" component={Select} />
-          <FormItem name="il2w2f2" title="标题" component={Select} />
-          <FormItem name="il2w2f3" title="标题" component={Select} />
+          <FormItem name="il2w2f1" title="标题" component={DatePicker} />
+          <FormItem name="il2w2f2" title="标题" component={DatePicker} />
+          <FormItem name="il2w2f3" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>inline + labelAlign: top</h5>
+        <h5 style={{ marginTop: '16px' }}>inline + labelAlign: top</h5>
 
         <MegaLayout inline labelAlign="top">
-          <FormItem name="ilt1" title="标题" component={Select} />
-          <FormItem name="ilt2" title="标题" component={Select} />
-          <FormItem name="ilt3" title="标题" component={Select} />
+          <FormItem name="ilt1" title="标题" component={DatePicker} />
+          <FormItem name="ilt2" title="标题" component={DatePicker} />
+          <FormItem name="ilt3" title="标题" component={DatePicker} />
         </MegaLayout>
 
-        <h5>inline + labelAlign: top + labelWidth: 120 + wrapperWidth: 200</h5>
+        <h5 style={{ marginTop: '16px' }}>inline + labelAlign: top + labelWidth: 120 + wrapperWidth: 200</h5>
 
         <MegaLayout
           inline
@@ -412,9 +506,9 @@ const App = () => {
           wrapperWidth={200}
           full
         >
-          <FormItem name="iltl2w21" title="标题" component={Select} />
-          <FormItem name="iltl2w22" title="标题" component={Select} />
-          <FormItem name="iltl2w23" title="标题" component={Select} />
+          <FormItem name="iltl2w21" title="标题" component={DatePicker} />
+          <FormItem name="iltl2w22" title="标题" component={DatePicker} />
+          <FormItem name="iltl2w23" title="标题" component={DatePicker} />
         </MegaLayout>
       </Form>
   )
@@ -455,62 +549,62 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
       <Form >
-        <h5>最简单的grid栅格布局</h5>
+        <h5 style={{ marginTop: '16px' }}>最简单的grid栅格布局</h5>
 
         <MegaLayout grid full>
-          <FormItem name="g1" title="标题1" component={Select} />
+          <FormItem name="g1" title="标题1" component={DatePicker} />
           <FormItem
             mega-props={{ span: 2 }}
             name="g2"
             title="标题2"
-            component={Select}
+            component={DatePicker}
           />
         </MegaLayout>
 
-        <h5>grid + autoRow 自动换行</h5>
+        <h5 style={{ marginTop: '16px' }}>grid + autoRow 自动换行</h5>
 
         <MegaLayout grid full autoRow>
           <FormItem
             mega-props={{ span: 2 }}
             name="ga1"
             title="标题1"
-            component={Select}
+            component={DatePicker}
           />
-          <FormItem name="ga2" title="标题2" component={Select} />
-          <FormItem name="ga3" title="标题3" component={Select} />
+          <FormItem name="ga2" title="标题2" component={DatePicker} />
+          <FormItem name="ga3" title="标题3" component={DatePicker} />
         </MegaLayout>
 
-        <h5>grid + autoRow 自动换行 + labelWidth: 100</h5>
+        <h5 style={{ marginTop: '16px' }}>grid + autoRow 自动换行 + labelWidth: 100</h5>
 
         <MegaLayout grid full autoRow labelWidth={100}>
           <FormItem
             mega-props={{ span: 2 }}
             name="gal1"
             title="标题1"
-            component={Select}
+            component={DatePicker}
           />
-          <FormItem name="gal2" title="标题2" component={Select} />
-          <FormItem name="gal3" title="标题3" component={Select} />
+          <FormItem name="gal2" title="标题2" component={DatePicker} />
+          <FormItem name="gal3" title="标题3" component={DatePicker} />
         </MegaLayout>
 
-        <h5>grid + autoRow 自动换行 + label在顶部</h5>
+        <h5 style={{ marginTop: '16px' }}>grid + autoRow 自动换行 + label在顶部</h5>
 
         <MegaLayout grid full autoRow labelAlign="top">
           <FormItem
             mega-props={{ span: 2 }}
             name="galt1"
             title="标题1"
-            component={Select}
+            component={DatePicker}
           />
-          <FormItem name="galt2" title="标题2" component={Select} />
-          <FormItem name="galt3" title="标题3" component={Select} />
+          <FormItem name="galt2" title="标题2" component={DatePicker} />
+          <FormItem name="galt3" title="标题3" component={DatePicker} />
         </MegaLayout>
       </Form>
   )
@@ -541,14 +635,14 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
       <Form >
-        <h5>嵌套栅格布局</h5>
+        <h5 style={{ marginTop: '16px' }}>嵌套栅格布局</h5>
 
         <MegaLayout
           labelAlign="top"
@@ -557,48 +651,48 @@ const App = () => {
           autoRow
           responsive={{ lg: 3, m: 2, s: 1 }}
         >
-          <FormItem name="flngt1" title="字段1" component={Select} />
+          <FormItem name="flngt1" title="字段1" component={DatePicker} />
           <FormItem
             name="flngt2"
             mega-props={{ span: 2 }}
             title="字段2"
-            component={Select}
+            component={DatePicker}
           />
           <FormItem
             name="flngt3"
             mega-props={{ span: 2 }}
             title="字段3"
-            component={Select}
+            component={DatePicker}
           />
-          <FormItem name="flngt4" title="字段4" component={Select} />
-          <FormItem name="flngt5" title="字段5" component={Select} />
+          <FormItem name="flngt4" title="字段4" component={DatePicker} />
+          <FormItem name="flngt5" title="字段5" component={DatePicker} />
 
           <MegaLayout columns={3} span={2}>
-            <FormItem name="flngtc6" title="字段6" component={Select} />
-            <FormItem name="flngtc7" title="字段7" component={Select} />
-            <FormItem name="flngtc8" title="字段8" component={Select} />
+            <FormItem name="flngtc6" title="字段6" component={DatePicker} />
+            <FormItem name="flngtc7" title="字段7" component={DatePicker} />
+            <FormItem name="flngtc8" title="字段8" component={DatePicker} />
           </MegaLayout>
 
           <MegaLayout columns={2} span={3} id="xx">
-            <FormItem name="flngtc9" title="字段9" component={Select} />
-            <FormItem name="flngtc10" title="字段10" component={Select} />
+            <FormItem name="flngtc9" title="字段9" component={DatePicker} />
+            <FormItem name="flngtc10" title="字段10" component={DatePicker} />
             <MegaLayout columns={2} span={2}>
               <FormItem
                 name="flngtc11"
                 title="字段11"
-                component={Select}
+                component={DatePicker}
                 mega-props={{ span: 2 }}
               />
               <MegaLayout columns={3} span={2}>
-                <FormItem name="flngtc12" title="字段12" component={Select} />
+                <FormItem name="flngtc12" title="字段12" component={DatePicker} />
                 <FormItem
                   name="flngtc13"
                   title="字段13"
-                  component={Select}
+                  component={DatePicker}
                   mega-props={{ span: 2 }}
                 />
-                <FormItem name="flngtc14" title="字段14" component={Select} />
-                <FormItem name="flngtc15" title="字段15" component={Select} />
+                <FormItem name="flngtc14" title="字段14" component={DatePicker} />
+                <FormItem name="flngtc15" title="字段15" component={DatePicker} />
               </MegaLayout>
             </MegaLayout>
           </MegaLayout>
@@ -642,7 +736,7 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
@@ -650,16 +744,16 @@ const App = () => {
   return (
     <Form>
       <MegaLayout labelCol={4}>
-        <FormItem name="ndomain1" title="col4" component={Select} />
+        <FormItem name="ndomain1" title="col4" component={DatePicker} />
         <MegaLayout label="独立作用域" labelCol={6}>
-          <FormItem name="ndomain2" title="col6" component={Select} />
+          <FormItem name="ndomain2" title="col6" component={DatePicker} />
         </MegaLayout>
 
         <MegaLayout
           label="修改MegaLayout本身"
           layoutProps={{ labelCol: 6 }}
         >
-          <FormItem name="ndomain3" title="col4" component={Select} />
+          <FormItem name="ndomain3" title="col4" component={DatePicker} />
         </MegaLayout>
       </MegaLayout>
     </Form>
@@ -669,9 +763,9 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-# 复杂嵌套布局
+# 列表布局
 
-`MegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。
+常见的列表布局，用 `MegaLayout` 可以非常轻易做到。
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -685,41 +779,165 @@ import {
   Reset
 } from '@formily/next' // 或者 @formily/next
 import styled, { css } from 'styled-components'
-import { MegaLayout, Input, Select } from '@formily/next-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
 
 import '@alifd/next/dist/next.css'
 
 const App = () => {
   return (
-      <Form>
+      <Form components={{ DatePicker, Input }}>
+        <MegaLayout
+          labelAlign="top"
+          grid
+          full
+          autoRow
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <FormItem name="listc1" title="组件1" component={DatePicker} />
+          <FormItem
+            name="listc2"
+            mega-props={{ span: 2 }}
+            title="组件2"
+            component={DatePicker}
+          />
+          <FormItem
+            name="listc3"
+            mega-props={{ span: 3 }}
+            title="组件3"
+            component={DatePicker}
+          />
+          <FormItem
+            name="组件4"
+            mega-props={{ span: 2 }}
+            title="字段4"
+            component={DatePicker}
+          />
+          <FormItem name="组件5" title="字段5" component={DatePicker} />          
+        </MegaLayout>
+
+        <FormButtonGroup align="right">
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+操作按钮在同一行的情况
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <Form>
+      <MegaLayout
+        labelAlign="top"
+        grid
+        full
+        autoRow
+        responsive={{ lg: 3, m: 2, s: 1 }}
+      >
+        <FormItem name="listc1" title="组件1" component={DatePicker} />
+        <FormItem
+          name="listc2"
+          mega-props={{ span: 2 }}
+          title="组件2"
+          component={DatePicker}
+        />
+        <FormItem
+          name="listc3"
+          mega-props={{ span: 3 }}
+          title="组件3"
+          component={DatePicker}
+        />
+        <FormItem
+          name="组件4"
+          title="字段4"
+          component={DatePicker}
+        />
+        <FormItem name="组件5" title="字段5" component={DatePicker} />          
+        <FormButtonGroup style={{ marginTop: '32px' }} align="right">
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </MegaLayout>        
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+# 复杂嵌套布局
+
+`MegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。
+
+```jsx
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import { Button } from '@alifd/next'
+import styled, { css } from 'styled-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+      <Form editable={state.editable} >
         <MegaLayout labelCol={4}>
-          <FormItem name="ff1" title="普通字段" component={Select} />
+          <FormItem name="ff1" title="普通字段" component={DatePicker} />
 
           <MegaLayout label="以下字段会撑满" full>
-            <FormItem name="flf1" component={Select} />
-            <FormItem name="flf2" component={Select} />
+            <FormItem name="flf1" component={DatePicker} />
+            <FormItem name="flf2" component={DatePicker} />
           </MegaLayout>
 
           <MegaLayout label="行内布局" inline>
-            <FormItem name="fi1" component={Select} />
-            <FormItem name="fi2" component={Select} />
+            <FormItem name="fi1" component={DatePicker} />
+            <FormItem name="fi2" component={DatePicker} />
           </MegaLayout>
 
           <MegaLayout label="栅格布局" grid>
-            <FormItem name="fg1" component={Select} />
-            <FormItem name="fg2" component={Select} />
-            <FormItem name="fg3" component={Select} />
+            <FormItem name="fg1" component={DatePicker} />
+            <FormItem name="fg2" component={DatePicker} />
+            <FormItem name="fg3" component={DatePicker} />
           </MegaLayout>
 
           <MegaLayout label="栅格布局 + 撑满(3列默认)" grid full>
-            <FormItem name="ffg1" component={Select} />
-            <FormItem name="ffg2" component={Select} />
-            <FormItem name="ffg3" component={Select} />
+            <FormItem name="ffg1" component={DatePicker} />
+            <FormItem name="ffg2" component={DatePicker} />
+            <FormItem name="ffg3" component={DatePicker} />
           </MegaLayout>
 
           <MegaLayout label="栅格布局 + 撑满(2列)" grid columns={2} full>
-            <FormItem name="ffcg1" component={Select} />
-            <FormItem name="ffcg2" component={Select} />
+            <FormItem name="ffcg1" component={DatePicker} />
+            <FormItem name="ffcg2" component={DatePicker} />
           </MegaLayout>
 
           <MegaLayout
@@ -728,13 +946,13 @@ const App = () => {
             grid
             full
           >
-            <FormItem name="fag1" component={Select} />
+            <FormItem name="fag1" component={DatePicker} />
             <FormItem
               name="fag2"
               mega-props={{ span: 2 }}
-              component={Select}
+              component={DatePicker}
             />
-            <FormItem name="fag3" component={Select} />
+            <FormItem name="fag3" component={DatePicker} />
           </MegaLayout>
 
           <FormItem
@@ -745,7 +963,7 @@ const App = () => {
             }}
             description="description"
             name="fad1"
-            component={Select}
+            component={DatePicker}
           />
 
           <FormItem
@@ -757,7 +975,7 @@ const App = () => {
             }}
             description="description"
             name="fad2"
-            component={Select}
+            component={DatePicker}
           />
 
           <MegaLayout label="行内布局 + 辅助文案" inline>
@@ -769,7 +987,7 @@ const App = () => {
               }}
               description="description"
               name="fiad1"
-              component={Select}
+              component={DatePicker}
             />
             <FormItem
               title="辅助文案"
@@ -779,7 +997,7 @@ const App = () => {
               }}
               description="description"
               name="fiad2"
-              component={Select}
+              component={DatePicker}
             />
           </MegaLayout>
 
@@ -797,7 +1015,7 @@ const App = () => {
               }}
               description="description"
               name="fgiad1"
-              component={Select}
+              component={DatePicker}
             />
             <FormItem
               title="辅助文案"
@@ -807,7 +1025,7 @@ const App = () => {
               }}
               description="description"
               name="fgiad2"
-              component={Select}
+              component={DatePicker}
             />
             <FormItem
               title="辅助文案"
@@ -817,7 +1035,7 @@ const App = () => {
               }}
               description="description"
               name="fgiad3"
-              component={Select}
+              component={DatePicker}
             />
           </MegaLayout>
 
@@ -836,7 +1054,7 @@ const App = () => {
               }}
               description="description"
               name="fcgiad1"
-              component={Select}
+              component={DatePicker}
             />
             <FormItem
               title="辅助文案"
@@ -846,7 +1064,7 @@ const App = () => {
               }}
               description="description"
               name="fcgiad2"
-              component={Select}
+              component={DatePicker}
             />
           </MegaLayout>
 
@@ -857,65 +1075,71 @@ const App = () => {
             full
             labelCol={null}
           >
-            <FormItem name="fnestg1" title="字段1" component={Select} />
+            <FormItem name="fnestg1" title="字段1" component={DatePicker} />
             <FormItem
               name="fnestg2"
               mega-props={{ span: 2 }}
               title="字段2"
-              component={Select}
+              component={DatePicker}
             />
             <FormItem
               name="fnestg3"
               mega-props={{ span: 2 }}
               title="字段3"
-              component={Select}
+              component={DatePicker}
             />
-            <FormItem name="fnestg4" title="字段4" component={Select} />
-            <FormItem name="fnestg5" title="字段5" component={Select} />
+            <FormItem name="fnestg4" title="字段4" component={DatePicker} />
+            <FormItem name="fnestg5" title="字段5" component={DatePicker} />
 
             <MegaLayout columns={3} span={2}>
-              <FormItem name="fnestg6" title="字段1" component={Select} />
-              <FormItem name="fnestg7" title="字段2" component={Select} />
-              <FormItem name="fnestg8" title="字段3" component={Select} />
+              <FormItem name="fnestg6" title="字段1" component={DatePicker} />
+              <FormItem name="fnestg7" title="字段2" component={DatePicker} />
+              <FormItem name="fnestg8" title="字段3" component={DatePicker} />
             </MegaLayout>
           </MegaLayout>
 
           <MegaLayout label="连续嵌套布局" labelCol={null}>
-            <FormItem name="confns1" title="字段1" component={Select} />
+            <FormItem name="confns1" title="字段1" component={DatePicker} />
 
             <MegaLayout inline label="嵌套行内">
-              <FormItem name="confns2" title="字段2" component={Select} />
-              <FormItem name="confns3" title="字段3" component={Select} />
-              <FormItem name="confns4" title="字段4" component={Select} />
+              <FormItem name="confns2" title="字段2" component={DatePicker} />
+              <FormItem name="confns3" title="字段3" component={DatePicker} />
+              <FormItem name="confns4" title="字段4" component={DatePicker} />
             </MegaLayout>
 
             <MegaLayout grid label="嵌套栅格" full autoRow>
-              <FormItem name="confngt1" title="字段1" component={Select} />
+              <FormItem name="confngt1" title="字段1" component={DatePicker} />
               <FormItem
                 name="confngt2"
                 mega-props={{ span: 2 }}
                 title="字段2"
-                component={Select}
+                component={DatePicker}
               />
               <FormItem
                 name="confngt3"
                 mega-props={{ span: 2 }}
                 title="字段3"
-                component={Select}
+                component={DatePicker}
               />
-              <FormItem name="confngt4" title="字段4" component={Select} />
-              <FormItem name="confngt5" title="字段5" component={Select} />
+              <FormItem name="confngt4" title="字段4" component={DatePicker} />
+              <FormItem name="confngt5" title="字段5" component={DatePicker} />
 
               <MegaLayout columns={3} span={2}>
-                <FormItem name="confngtc1" title="字段1" component={Select} />
-                <FormItem name="confngtc2" title="字段2" component={Select} />
-                <FormItem name="confngtc3" title="字段3" component={Select} />
+                <FormItem name="confngtc1" title="字段1" component={DatePicker} />
+                <FormItem name="confngtc2" title="字段2" component={DatePicker} />
+                <FormItem name="confngtc3" title="字段3" component={DatePicker} />
               </MegaLayout>
             </MegaLayout>
           </MegaLayout>
         </MegaLayout>
 
-        <FormButtonGroup offset={6}>
+        <FormButtonGroup offset={4}>
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '切换详情态' : '切换编辑'}
+          </Button>
           <Submit>提交</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup>

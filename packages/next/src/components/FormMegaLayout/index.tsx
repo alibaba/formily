@@ -4,6 +4,7 @@ import { Form } from '@alifd/next'
 import { Layout, LayoutItem } from '@formily/react-shared-components'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
+import { useDeepFormItem } from '../../context'
 import { normalizeCol, pickFormItemProps, pickNotFormItemProps } from '../../shared'
 import { computeStyle } from './style'
 
@@ -58,6 +59,7 @@ return <div style={style} className={classnames('mega-layout-nest-container', cl
 const MegaLayout = (props => {
     const { children, addonBefore, addonAfter, description, ...others } = props
     const layoutProps = props.layoutProps || {}
+    const { size } = useDeepFormItem()
 
     // 注意, labelCol/wrapperCol, labelWidth/wrapperWidth Layout只能透传下去
     // 自身的 labelCol/wrapperCol, labelWidth/wrapperWidth 必须通过其layoutProps来控制
@@ -82,7 +84,8 @@ const MegaLayout = (props => {
               columns,   
               isRoot,
               isLayout: true,    
-              responsive
+              responsive,
+              size
             }
 
             if (label) {

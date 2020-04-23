@@ -62,7 +62,8 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
     prefixCls,
     labelAlign,
     labelCol: contextLabelCol,
-    wrapperCol: contextWrapperCol
+    wrapperCol: contextWrapperCol,
+    size,
   } = useDeepFormItem()
   const help = computeHelp(props)
   const label = computeLabel(props)
@@ -109,7 +110,7 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
     )
   }
 
-  return <MegaLayoutItem itemProps={itemProps} {...props.props} schemaChildren={props.children}>
+  return <MegaLayoutItem itemProps={{...itemProps, size, }} {...props.props} schemaChildren={props.children}>
     {(megaComponent) => {
       if (megaComponent) {
         return renderComponent(megaComponent, { addonAfter })
