@@ -1019,7 +1019,11 @@ export function createForm<FieldProps, VirtualFieldProps>(
                 state.value = []
               }
             } else if (isPlainObj(state.value)) {
-              state.value = {}
+              if (isPlainObj(value)) {
+                state.value = value
+              } else {
+                state.value = {}
+              }
             } else {
               state.value = value
             }
