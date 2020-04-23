@@ -32,7 +32,7 @@
     - [理解表单路径系统](./jsx-develop/form-path.md)
     - [理解传值属性](./jsx-develop/form-value.md)
     - [理解表单状态](./jsx-develop/form-state.md)
-    - [理解表单布局](./jsx-develop/mega-layout.md)
+    - [理解表单布局](./jsx-develop/mega-layout-antd.md)
     - [理解表单节点树](./jsx-develop/form-graph.md)
     - [理解表单扩展机制](./jsx-develop/form-extension.md)
   - 实践教程

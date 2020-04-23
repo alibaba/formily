@@ -1,6 +1,11 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Layout, LayoutItem } from './Layout'
+import { Form } from 'antd'
+import { Layout, LayoutItem } from '@formily/react-shared-components'
+import { createVirtualBox } from '@formily/react-schema-renderer'
+import styled from 'styled-components'
+import { normalizeCol, pickFormItemProps, pickNotFormItemProps } from '../../shared'
+import { computeStyle } from './style'
 
 // 优先级：当前属性 > context 传递的属性 > 默认值
 const computeAttr = (propAttr, layoutAttr, defaultValue) => {
@@ -9,11 +14,7 @@ const computeAttr = (propAttr, layoutAttr, defaultValue) => {
   return defaultValue
 };
 
-export const getMegaLayout = (opts) => {
-  const { FormItem, computeStyle, styled, util } = opts || {};
-  const { normalizeCol, pickFormItemProps, pickNotFormItemProps } = util
-
-  const StyledLayoutItem = styled((props) => {
+const StyledLayoutItem = styled((props) => {
     const { className, grid, children, addonBefore, addonAfter, labelAlign, ...others } = props
     const formItemProps = pickFormItemProps(others)
     const cls = classnames({
@@ -22,13 +23,13 @@ export const getMegaLayout = (opts) => {
       'mega-layout-item-col': grid,
     });
 
-    const finalFormItem = <FormItem className={cls} {...formItemProps}>
+    const finalFormItem = <Form.Item className={cls} {...formItemProps}>
       <div className="mega-layout-item-content">
         { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
         {children}
         { addonAfter ? <p className="formily-mega-item-after">{addonAfter}</p> : null }
       </div>
-    </FormItem>
+    </Form.Item>
 
     if (grid) {
       return <div className={cls}>
@@ -46,7 +47,7 @@ const StyledLayoutWrapper = styled((props) => {
     others.children = props.children
     others.className = props.className
 
-    return <FormItem {...others} />
+    return <Form.Item {...others} />
 })`${props => computeStyle(props)}`
 
 const StyledLayoutNestWrapper = styled(props => {
@@ -60,6 +61,7 @@ const MegaLayout = (props => {
 
     // 注意, labelCol/wrapperCol, labelWidth/wrapperWidth Layout只能透传下去
     // 自身的 labelCol/wrapperCol, labelWidth/wrapperWidth 必须通过其layoutProps来控制
+    
     return <Layout        
         defaultSettings={{
             gutter: 20,
@@ -191,12 +193,10 @@ const MegaLayoutItem = (props) => {
   </LayoutItem>
 }
 
-  return {
+const FormMegaLayout = createVirtualBox('mega-layout', MegaLayout)
+
+export {
     MegaLayout,
-    MegaLayoutItem
-  }
+    MegaLayoutItem,
+    FormMegaLayout,
 }
-
-
-
-export default getMegaLayout

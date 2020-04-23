@@ -5,8 +5,7 @@ import {
   connect,
   InternalVirtualField
 } from '@formily/react-schema-renderer'
-import styled, { css } from 'styled-components'
-import { getAntdComputeStyle, getMegaLayout } from '@formily/react-shared-components'
+import { MegaLayoutItem } from './FormMegaLayout/index'
 import {
   normalizeCol,
   pickFormItemProps,
@@ -16,17 +15,6 @@ import {
 import { useDeepFormItem } from '../context'
 import { IAntdFormItemProps } from '../types'
 const { Item: AntdFormItem } = AntdForm
-
-const { MegaLayoutItem } = getMegaLayout({
-  FormItem: AntdFormItem,
-  computeStyle: getAntdComputeStyle({ css }),
-  styled,
-  util: {
-    normalizeCol,
-    pickFormItemProps,
-    pickNotFormItemProps
-  }
-})
 
 const computeStatus = (props: any) => {
   if (props.loading) {

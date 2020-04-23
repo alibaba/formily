@@ -1,4 +1,6 @@
-const computeNextStyleBase = (props) => {
+import { css } from 'styled-components'
+
+const computeAntdStyleBase = (props) => {
     const result: any = {}
     const {
         labelAlign, gutter,
@@ -6,7 +8,7 @@ const computeNextStyleBase = (props) => {
         inline,
         labelWidth, wrapperWidth,
         labelCol, grid, full, context = {}, columns, isRoot, autoRow,
-        span, seed,
+        span, seed, size,
         // lg, m, s,
         responsive
     } = props
@@ -32,13 +34,21 @@ const computeNextStyleBase = (props) => {
             > .mega-layout-container-before,
             > .formily-mega-item-before {
                 flex: initial;
-                margin-right: ${`${parseInt(gutter) / 2}px`}
+                margin-right: ${`${parseInt(gutter) / 2}px`};
+                margin-bottom: 0;
+                display: inline-flex;
+                align-items: center;
+                height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '32px' : '40px') };
             }
 
             > .mega-layout-container-after,
             > .formily-mega-item-after {
                 flex: initial;
-                margin-left: ${`${parseInt(gutter) / 2}px`}
+                margin-left: ${`${parseInt(gutter) / 2}px`};
+                margin-bottom: 0;
+                display: inline-flex;
+                align-items: center;
+                height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '32px' : '40px') };
             }
         }
     `
@@ -54,6 +64,14 @@ const computeNextStyleBase = (props) => {
             }
             & > .ant-form-item-control {
                 flex: 1;
+            }
+        `
+    }
+
+    if (labelAlign === 'top') {
+        result.defaultStyle = `
+            &.ant-form-item {
+                display: block;
             }
         `
     }
@@ -90,7 +108,7 @@ const computeNextStyleBase = (props) => {
     // 行内模式
     if (inline) {
         result.inlineStyle = `
-            &.ant-form-item {
+            & {
                 display: inline-block;
                 vertical-align: top;
 
@@ -105,6 +123,10 @@ const computeNextStyleBase = (props) => {
 
         if (!isLayout) {
             result.inlineStyle += `
+                &.ant-form-item {
+                    display: inline-block;
+                    vertical-align: top;
+                }
                 &:not(:last-child) {
                     margin-right: ${gutter}px;
                 }
@@ -118,8 +140,8 @@ const computeNextStyleBase = (props) => {
             & > .ant-form-item {
                 width: 100%;
             }
-            & > .ant-form-item-control > .mega-layout-container-wrapper,
-            & > .ant-form-item-control > .mega-layout-item-content {
+            & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
+            & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
                 display: flex;
                 > .mega-layout-container-content {
                     &.grid {
@@ -187,8 +209,8 @@ const computeNextStyleBase = (props) => {
             & > .ant-form-item {
                 width: 100%;
             }
-            & > .ant-form-item-control > .mega-layout-container-wrapper,
-            & > .ant-form-item-control > .mega-layout-item-content {
+            & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
+            & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
                 display: flex;
                 > .mega-layout-container-content {
                     &.grid {
@@ -217,8 +239,8 @@ const computeNextStyleBase = (props) => {
         // 内容都在同一行
         if (inline || grid) {
             result.layoutMarginStyle = `
-                > .ant-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
-                > .ant-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
+                > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+                > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
                     margin-bottom: 0;
                 }
             `
@@ -227,7 +249,7 @@ const computeNextStyleBase = (props) => {
         // 常规布局
         if (!grid && !inline) {
             result.layoutMarginStyle = `
-                > .ant-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
+                > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
                     margin-bottom: 0;
                 }
             `
@@ -238,6 +260,10 @@ const computeNextStyleBase = (props) => {
                 &.mega-layout-container {
                     margin-bottom: 0;
                 }
+
+                > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child{
+                    margin-bottom: 0;
+                }
             `
         }
     }
@@ -245,29 +271,22 @@ const computeNextStyleBase = (props) => {
     return result
 }
 
-export const getAntdComputeStyle = (opts) => {
-    const { css } = opts || {}
-    const computeStyle = (props) => {
-        const styleResult = computeNextStyleBase(props)
+export const computeStyle = (props) => {
+    const styleResult = computeAntdStyleBase(props)
     
-        // labelAlign, addon 是任何布局模式都可以用到
-        // inline 和 grid 是互斥关系, 优先级: inline > grid
-        // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
-    
-        return css`
-            ${styleResult.labelAlignStyle}
-            ${styleResult.addonStyle}
-            ${styleResult.defaultStyle}
-            ${styleResult.widthStyle}
-            ${styleResult.inlineStyle}
-            ${styleResult.gridStyle}
-            ${styleResult.gridItemStyle}
-            ${styleResult.nestLayoutItemStyle}
-            ${styleResult.layoutMarginStyle}
-        `
-    }
+    // labelAlign, addon 是任何布局模式都可以用到
+    // inline 和 grid 是互斥关系, 优先级: inline > grid
+    // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
 
-    return computeStyle
+    return css`
+        ${styleResult.labelAlignStyle}
+        ${styleResult.addonStyle}
+        ${styleResult.defaultStyle}
+        ${styleResult.widthStyle}
+        ${styleResult.inlineStyle}
+        ${styleResult.gridStyle}
+        ${styleResult.gridItemStyle}
+        ${styleResult.nestLayoutItemStyle}
+        ${styleResult.layoutMarginStyle}
+    `
 }
-
-export default getAntdComputeStyle

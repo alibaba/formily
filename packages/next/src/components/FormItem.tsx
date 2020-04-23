@@ -5,29 +5,17 @@ import {
   connect,
   InternalVirtualField
 } from '@formily/react-schema-renderer'
-import styled, { css } from 'styled-components'
-import { getNextComputeStyle, getMegaLayout } from '@formily/react-shared-components'
 import {
   normalizeCol,
   pickNotFormItemProps,
   pickFormItemProps,
   log
 } from '../shared'
+import { MegaLayoutItem } from './FormMegaLayout';
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
 
 const { Item: NextFormItem } = NextForm
-
-const { MegaLayoutItem } = getMegaLayout({
-  FormItem: NextFormItem,
-  computeStyle: getNextComputeStyle({ css }),
-  styled,
-  util: {
-    normalizeCol,
-    pickFormItemProps,
-    pickNotFormItemProps
-  }
-})
 
 const computeStatus = (props: any) => {
   if (props.loading) {

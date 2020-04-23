@@ -6,20 +6,8 @@ import {
   useShallowFormItem
 } from '../context'
 import { ISchemaFieldAdaptorProps } from '../types'
-import { normalizeCol, pickFormItemProps, pickNotFormItemProps } from '../shared'
-import { getMegaLayout, getAntdComputeStyle } from '@formily/react-shared-components'
-import styled, { css } from 'styled-components'
-
-const { MegaLayoutItem } = getMegaLayout({
-  FormItem: Form.Item,
-  computeStyle: getAntdComputeStyle({ css }),
-  styled,
-  util: {
-    normalizeCol,
-    pickFormItemProps,
-    pickNotFormItemProps
-  }
-})
+import { normalizeCol, pickFormItemProps } from '../shared'
+import { MegaLayoutItem } from '../components/FormMegaLayout/index'
 
 const computeStatus = (props: ISchemaFieldAdaptorProps) => {
   if (props.loading) {
