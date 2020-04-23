@@ -413,6 +413,30 @@ describe('reset', () => {
     expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
     expect(form.getFormState(state => state.initialValues)).toEqual({})
   })
+
+  test('date reset', () => {
+    const form = createForm({
+      values: {},
+      initialValues: {},
+      onChange: values => {
+        console.log(values)
+      }
+    })
+
+    const aa = form.registerField({
+      path: 'aa',
+      initialValue: ''
+    })
+
+    aa.setState(state => {
+      state.value = new Date()
+    })
+
+    form.reset()
+    expect(
+      form.getFormState(state => state.values.aa)
+    ).toBe('')
+  })
 })
 
 describe('clearErrors', () => {
@@ -859,13 +883,13 @@ describe('setFieldState', () => {
     // visible为false或者已卸载的组件无法修改value
     form.setFieldState('a', state => (state.visible = false))
     form.setFieldState('a', state => (state.value = [4, 5, 6]))
-    expect(form.getFieldState('a', state => state.value)).toEqual([4,5,6])
+    expect(form.getFieldState('a', state => state.value)).toEqual([4, 5, 6])
     form.setFieldState('a', state => {
       state.visible = true
       state.unmounted = true
     })
     form.setFieldState('a', state => (state.value = [4, 5, 6]))
-    expect(form.getFieldState('a', state => state.value)).toEqual([4,5,6])
+    expect(form.getFieldState('a', state => state.value)).toEqual([4, 5, 6])
   })
 
   test('mount and unmount', () => {
@@ -1598,7 +1622,7 @@ describe('major sences', () => {
     form.registerField({
       name: 'aa'
     })
-    form.setFormState(state=>{
+    form.setFormState(state => {
       state.mounted = true
     })
     form.setFieldState('aa', state => {
