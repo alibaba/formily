@@ -73,6 +73,7 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   const schemaItemProps = computeSchemaExtendProps(props)
 
   const mergedProps = {
+    label,
     ...formItemShallowProps,
     ...itemProps,
     ...schemaItemProps
@@ -96,7 +97,6 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   return (
     <Form.Item
       prefix={prefix}
-      label={label}
       labelTextAlign={labelTextAlign}
       labelAlign={labelAlign || 'left'}
       size={size}
@@ -105,9 +105,9 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
       extra={<p>{extra}</p>}
       {...mergedProps}
       required={props.editable === false ? undefined : props.required}
-      labelCol={label ? normalizeCol(labelCol || contextLabelCol) : undefined}
+      labelCol={mergedProps.label ? normalizeCol(labelCol || contextLabelCol) : undefined}
       wrapperCol={
-        label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
+        mergedProps.label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
       }
     >
       {children}
