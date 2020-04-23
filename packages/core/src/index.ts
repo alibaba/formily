@@ -11,7 +11,8 @@ import {
   FormPathPattern,
   BigData,
   each,
-  isObj
+  isObj,
+  isPlainObj
 } from '@formily/shared'
 import {
   FormValidator,
@@ -1017,12 +1018,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
               } else {
                 state.value = []
               }
-            } else if (isObj(state.value)) {
-              if (isObj(value)) {
-                state.value = value
-              } else {
-                state.value = {}
-              }
+            } else if (isPlainObj(state.value)) {
+              state.value = {}
             } else {
               state.value = value
             }
