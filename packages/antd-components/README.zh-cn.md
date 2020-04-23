@@ -2346,20 +2346,19 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - IFormItemGridProps
 
-| 参数           | 说明                                                                                                        | 类型                                  | 默认值                            |
-| :------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------ | :-------------------------------- |
-| cols           | 列数                                                                                                        | Array<number                          | { span: number; offset: number }> |  |
-| gutter         | 列间距离                                                                                                    | number                                |                                   |
-| labelCol       | label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效        | `{}`                                  |                                   |
-| wrapperCol     | 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                                                   | `{}`                                  |
-| help           | 自定义提示信息，如不设置，则会根据校验规则自动生成.                                                         | React.ReactNode                       |                                   |
-| extra          | 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面           | React.ReactNode                       |                                   |
-| validateState  | 校验状态，如不设置，则会根据校验规则自动生成                                                                | 'error' `or` 'success' `or` 'loading' |                                   |
-| hasFeedback    | 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有 Input 支持                   | boolean                               |                                   |
-| size           | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium'    |                                   |
-| labelAlign     | 标签的位置                                                                                                  | 'top' `or` 'left' `or` 'inset'        |                                   |
-| labelTextAlign | 标签的左右对齐方式                                                                                          | 'left' `or` 'right'                   |                                   |
-| asterisk       | required 的星号是否显示                                                                                     | boolean                               |                                   |
+| 参数          | 说明                                                                                                        | 类型                                  | 默认值                            |
+| :------------ | :---------------------------------------------------------------------------------------------------------- | :------------------------------------ | :-------------------------------- |
+| cols          | 列数                                                                                                        | Array<number                          | { span: number; offset: number }> |  |
+| gutter        | 列间距离                                                                                                    | number                                |                                   |
+| labelCol      | label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效        | `{}`                                  |                                   |
+| wrapperCol    | 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                                                   | `{}`                                  |
+| help          | 自定义提示信息，如不设置，则会根据校验规则自动生成.                                                         | React.ReactNode                       |                                   |
+| extra         | 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面           | React.ReactNode                       |                                   |
+| validateState | 校验状态，如不设置，则会根据校验规则自动生成                                                                | 'error' `or` 'success' `or` 'loading' |                                   |
+| hasFeedback   | 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有 Input 支持                   | boolean                               |                                   |
+| size          | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium'    |                                   |
+| labelAlign    | 标签的位置                                                                                                  | 'left' `or` 'right'                   |                                   |
+| asterisk      | required 的星号是否显示                                                                                     | boolean                               |                                   |
 
 **用法**
 
