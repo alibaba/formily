@@ -25,7 +25,7 @@ npm install --save @formily/antd
 | prefix             | 样式前缀                                                                                                      | string                                                                   |        |
 | inline             | 是否为内联表单                                                                                                | boolean                                                                  |        |
 | size               | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。 | 'large' `or` 'medium' `or` 'small'                                       |        |
-| labelAlign         | 标签的位置                                                                                                    | 'top' `or` 'left' `or` 'inset'                                           |        |
+| labelAlign         | 标签的位置                                                                                                    | 'left' `or` 'right'                                                      |        |
 | className          | 扩展 class                                                                                                    | string                                                                   |        |
 | style              | 自定义内联样式                                                                                                | React.CSSProperties                                                      |        |
 | component          | 设置标签类型                                                                                                  | string `or` (() => void)                                                 |        |
@@ -281,8 +281,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | prefix             | 样式前缀                                                                                                      | string                                                                           |        |
 | inline             | 是否为内联表单                                                                                                | boolean                                                                          |        |
 | size               | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。 | 'large' `or` 'medium' `or` 'small'                                               |        |
-| labelAlign         | 标签的位置                                                                                                    | 'top' `or` 'left' `or` 'inset'                                                   |        |
-| labelTextAlign     | 标签的左右对齐方式                                                                                            | 'left' `or` 'right'                                                              |        |
+| labelAlign         | 标签的位置                                                                                                    | 'left' `or` 'right'                                                              |        |
 | labelCol           | 控制所有 Item 的 labelCol                                                                                     | `{}`                                                                             |        |
 | wrapperCol         | 控制所有 Item 的 wrapperCol                                                                                   | `{}`                                                                             |        |
 | className          | 扩展 class                                                                                                    | string                                                                           |        |
@@ -1188,7 +1187,7 @@ const CustomComponent = props => {
 
 const App = () => {
   return (
-    <FormItemDeepProvider labelAlign="top" labelCol={6} wrapperCol={18}>
+    <FormItemDeepProvider labelAlign="left" labelCol={6} wrapperCol={18}>
       <CustomComponent />
     </FormItemDeepProvider>
   )
