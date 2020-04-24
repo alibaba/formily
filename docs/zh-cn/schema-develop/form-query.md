@@ -367,7 +367,7 @@ const App = () => {
         await sleep(5000)
         actions.setFieldState('gender', state => {
           state.value = 'male'
-          state.enum = ['male', 'female']
+          state.props.enum = ['male', 'female']
         })
       })
     ],
@@ -403,6 +403,136 @@ const App = () => {
         columns={columns}
         rowKey={record => record.login.uuid}
       />
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+## Fusion 例子
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  useFormTableQuery,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/antd
+import { Input } from '@formily/next-components' // 或者@formily/antd-components
+import { fetch } from 'mfetch'
+import { Table, Pagination } from '@alifd/next'
+import '@alifd/next/dist/next.css'
+
+const service = ({ values, pagination, sorter = {}, filters = {} }) => {
+  return fetch({
+    url: 'https://randomuser.me/api',
+    data: {
+      results: pagination.pageSize,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      page: pagination.current,
+      ...values,
+      ...filters
+    }
+  })
+    .then(res => res.json())
+    .then(({ results, info }) => {
+      return {
+        dataSource: results,
+        pageSize: 10,
+        ...pagination,
+        total: 200
+      }
+    })
+}
+
+const SubmitResetPlugin = () => ({ context }) => ({
+  onFormSubmitQuery(payload, next) {
+    context.setPagination({
+      ...context.pagination,
+      current: 1
+    })
+    return next(payload)
+  }
+})
+
+const asyncDefaultPlugin = service => ({ actions }) => ({
+  async onFormFirstQuery(payload, next) {
+    await service(actions)
+    return next(payload)
+  }
+})
+
+const sleep = (duration = 100) =>
+  new Promise(resolve => {
+    setTimeout(resolve, duration)
+  })
+
+const App = () => {
+  const { form, table, pagination } = useFormTableQuery(
+    service,
+    [
+      SubmitResetPlugin(),
+      asyncDefaultPlugin(async actions => {
+        await sleep(5000)
+        actions.setFieldState('gender', state => {
+          state.value = 'male'
+          state.props.enum = ['male', 'female']
+        })
+      })
+    ],
+    {
+      pagination: {
+        pageSize: 5
+      }
+    }
+  )
+  return (
+    <>
+      <SchemaForm
+        {...form}
+        components={{ Input }}
+        style={{ marginBottom: 20 }}
+        inline
+      >
+        <Field
+          type="string"
+          name="gender"
+          title="Gender"
+          enum={[]}
+          x-component="Input"
+        />
+        <Field type="string" name="name" title="Name" x-component="Input" />
+        <FormButtonGroup>
+          <Submit>查询</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+      <Table {...table}>
+        <Table.Column
+          title="Name"
+          dataIndex="name"
+          sortable
+          cell={name => `${name.first} ${name.last}`}
+          width="20%"
+        />
+        <Table.Column
+          title="Gender"
+          dataIndex="gender"
+          filters={[
+            { label: 'Male', value: 'male' },
+            { label: 'Female', value: 'female' }
+          ]}
+          width="20%"
+        />
+        <Table.Column title="Email" dataIndex="email" />
+      </Table>
+      <Pagination {...pagination} style={{ marginTop: 20 }} />
     </>
   )
 }
