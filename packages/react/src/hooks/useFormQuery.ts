@@ -6,10 +6,12 @@ import { IEffectMiddleware, IFormActions } from '../types'
 export const useFormQuery = <
   TQueryPayload = any,
   TQueryResult = any,
+  TContext = any,
   TActions extends IFormActions = any
 >(
   resource: (payload: TQueryPayload) => TQueryResult | Promise<TQueryResult>,
-  middlewares: IEffectMiddleware[]
+  middlewares: IEffectMiddleware[],
+  context?: TContext
 ) => {
   const ref = useRef<any>()
   const [state, setState] = useState({
@@ -23,13 +25,13 @@ export const useFormQuery = <
     response: ref.current.response,
     error: ref.current.error,
     ...useMemo(() => {
-      let dispatch: any
+      let trigger: any
       const effects = createQueryEffects<TQueryPayload, TQueryResult, TActions>(
         resource,
         [
           ({ actions }) => {
-            dispatch = () => {
-              actions.dispatch('onFormSubmit', actions.getFormState())
+            trigger = (type: string = 'onFormSubmitQuery') => {
+              actions.dispatch('onFormQuery', type)
             }
             return {
               async onFormWillQuery(payload, next) {
@@ -61,13 +63,14 @@ export const useFormQuery = <
               return response
             }
           })
-        ]
+        ],
+        context
       )
       return {
         effects,
-        trigger() {
-          if (dispatch) {
-            dispatch()
+        trigger(type?: string) {
+          if (trigger) {
+            trigger(type)
           }
         }
       }

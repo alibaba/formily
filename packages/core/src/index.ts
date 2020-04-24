@@ -581,7 +581,8 @@ export function createForm<FieldProps, VirtualFieldProps>(
           visible === false ||
           unmounted === true ||
           display === false ||
-          (field as any).disabledValidate
+          (field as any).disabledValidate ||
+          rules.length === 0
         )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)
