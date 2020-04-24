@@ -413,6 +413,31 @@ describe('reset', () => {
     expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
     expect(form.getFormState(state => state.initialValues)).toEqual({})
   })
+
+  test('date reset', () => {
+    const form = createForm({
+      values: {},
+      initialValues: {},
+      onChange: values => {
+        console.log(values)
+      }
+    })
+
+    const aa = form.registerField({
+      path: 'aa',
+      initialValue: ''
+    })
+
+    aa.setState(state => {
+      state.value = new Date()
+    })
+
+    form.reset()
+    expect(
+      form.getFormState(state => state.values.aa)
+    ).toBe('')
+  })
+  
 })
 
 describe('clearErrors', () => {
