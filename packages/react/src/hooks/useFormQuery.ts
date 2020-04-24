@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef } from 'react'
-import { createQueryEffects } from '../shared'
+import { createQueryEffects, ON_FORM_QUERY } from '../shared'
 import { toArr } from '@formily/shared'
 import { IEffectMiddleware, IFormActions } from '../types'
 
@@ -31,7 +31,7 @@ export const useFormQuery = <
         [
           ({ actions }) => {
             trigger = (type: string = 'onFormSubmitQuery') => {
-              actions.dispatch('onFormQuery', type)
+              actions.dispatch(ON_FORM_QUERY, type)
             }
             return {
               async onFormWillQuery(payload, next) {

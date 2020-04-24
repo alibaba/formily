@@ -197,18 +197,8 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
-    context.setPagination({
-      ...context.pagination,
-      current: 1
-    })
-    return next(payload)
-  }
-})
-
 const App = () => {
-  const { form, table } = useFormTableQuery(service, [SubmitResetPlugin()])
+  const { form, table } = useFormTableQuery(service)
   return (
     <>
       <SchemaForm

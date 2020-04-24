@@ -162,10 +162,7 @@ export interface IEffectProviderAPI<TActions = any, TContext = any> {
     type: string,
     filter: (payload: TPayload) => boolean
   ) => Promise<TPayload>
-  triggerTo: <TPayload = any>(
-    type: string,
-    payload: TPayload
-  ) => Promise<TPayload>
+  triggerTo: <TPayload = any>(type: string, payload: TPayload) => void
   applyMiddlewares: <TPayload = any>(
     type: string,
     payload: TPayload

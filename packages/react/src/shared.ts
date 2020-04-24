@@ -331,28 +331,20 @@ export const createEffectsProvider = <
     return promises[type].then(payload => {
       delete promises[type]
       delete resolves[type]
-      return resolvePayload(payload)
+      return payload
     })
   }
 
-  const triggerTo = async <TPayload = any>(
-    type: string,
-    payload: TPayload
-  ): Promise<TPayload> => {
+  const triggerTo = <TPayload = any>(type: string, payload: TPayload): void => {
     if (resolves[type]) {
+      payload = resolvePayload(payload)
       if (resolves[type].filter) {
         if (resolves[type].filter(payload)) {
-          return resolves[type].resolve(payload)
-        } else {
-          return
+          resolves[type].resolve(payload)
         }
+      } else {
+        resolves[type].resolve(payload)
       }
-      return resolves[type].resolve(payload)
-    } else {
-      promises[type] = new Promise(resolve => {
-        resolves[type] = { resolve }
-      })
-      return resolves[type].resolve(payload)
     }
   }
 
@@ -393,13 +385,15 @@ export const createEffectsProvider = <
     $('onFormInit').subscribe(() => {
       actions.subscribe(async ({ type, payload }) => {
         await applyMiddlewares(type, payload)
-        await triggerTo(type, payload)
+        triggerTo(type, payload)
       })
     })
 
     callback({ ...runtime, applyMiddlewares, triggerTo, waitFor })($, actions)
   }
 }
+
+export const ON_FORM_QUERY = '@@__ON_FORM_QUERY__@@'
 
 export const createQueryEffects = <
   TQueryPayload = any,
@@ -413,7 +407,7 @@ export const createQueryEffects = <
 ) => {
   return createEffectsProvider<TActions>(
     ({ applyMiddlewares, actions }) => $ => {
-      $('onFormQuery').subscribe(async (type: string) => {
+      $(ON_FORM_QUERY).subscribe(async (type: string) => {
         if (!isStr(type)) return
         let values = await applyMiddlewares(
           'onFormWillQuery',
@@ -428,15 +422,15 @@ export const createQueryEffects = <
         }
       })
       $('onFormMount').subscribe(async () => {
-        actions.dispatch('onFormQuery', 'onFormFirstQuery')
+        actions.dispatch(ON_FORM_QUERY, 'onFormFirstQuery')
       })
 
       $('onFormSubmit').subscribe(async () => {
-        actions.dispatch('onFormQuery', 'onFormSubmitQuery')
+        actions.dispatch(ON_FORM_QUERY, 'onFormSubmitQuery')
       })
 
       $('onFormReset').subscribe(async () => {
-        actions.dispatch('onFormQuery', 'onFormResetQuery')
+        actions.dispatch(ON_FORM_QUERY, 'onFormResetQuery')
       })
     },
     middlewares,

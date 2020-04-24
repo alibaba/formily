@@ -4,8 +4,9 @@ import {
   IEffectMiddleware,
   ISchemaFormActions
 } from '@formily/react-schema-renderer'
+import { defaults } from '@formily/shared'
 
-type IQueryParams = {
+interface IQueryParams {
   pagination: {
     total: number
     pageSize: number
@@ -23,34 +24,50 @@ type IQueryParams = {
   values: any
 }
 
-type IQueryResponse = {
+interface IQueryResponse {
   dataSource: any[]
   total: number
   pageSize: number
   current: number
 }
 
-type IQueryContext = Partial<{
-  pagination: IQueryParams['pagination']
-  sorter: IQueryParams['sorter']
-  filters: IQueryParams['filters']
-  setPagination: (pagination: IQueryParams['pagination']) => void
-  setFilters: (filters: IQueryParams['filters']) => void
-  setSorter: (sorter: IQueryParams['sorter']) => void
-}>
+interface IQueryContext {
+  pagination?: IQueryParams['pagination']
+  sorter?: IQueryParams['sorter']
+  filters?: IQueryParams['filters']
+  setPagination?: (pagination: IQueryParams['pagination']) => void
+  setFilters?: (filters: IQueryParams['filters']) => void
+  setSorter?: (sorter: IQueryParams['sorter']) => void
+}
+
+interface IQueryProps {
+  pagination?: IQueryParams['pagination']
+  sorter?: IQueryParams['sorter']
+  filters?: IQueryParams['filters']
+}
 
 export const useFormTableQuery = (
   service: (payload: IQueryParams) => IQueryResponse | Promise<IQueryResponse>,
-  middlewares?: IEffectMiddleware<ISchemaFormActions>[]
+  middlewares?: IEffectMiddleware<ISchemaFormActions>[],
+  defaultProps: IQueryProps = {}
 ) => {
   const ref = useRef<IQueryContext>({})
-  const [pagination, setPagination] = useState<IQueryParams['pagination']>({
-    current: 1,
-    total: 0,
-    pageSize: 20
-  })
-  const [sorter, setSorter] = useState<IQueryParams['sorter']>()
-  const [filters, setFilters] = useState<IQueryParams['filters']>()
+  const [pagination, setPagination] = useState<IQueryParams['pagination']>(
+    defaults(
+      {
+        current: 1,
+        total: 0,
+        pageSize: 20
+      },
+      defaultProps.pagination
+    )
+  )
+  const [sorter, setSorter] = useState<IQueryParams['sorter']>(
+    defaultProps.sorter
+  )
+  const [filters, setFilters] = useState<IQueryParams['filters']>(
+    defaultProps.filters
+  )
   const { effects, trigger, loading, response } = useFormQuery<
     IQueryParams,
     IQueryResponse,
