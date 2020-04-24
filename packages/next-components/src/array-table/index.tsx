@@ -268,7 +268,6 @@ export const ArrayTable = styled(
   }
 )`
   display: inline-block;
-  min-width: 600px;
   max-width: 100%;
   overflow: scroll;
   table {

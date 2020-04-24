@@ -190,7 +190,6 @@ export const ArrayTable: any = styled(
     )
   }
 )`
-  min-width: 600px;
   margin-bottom: 10px;
   table {
     margin-bottom: 0 !important;
