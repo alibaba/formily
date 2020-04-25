@@ -588,6 +588,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
         const {
           value,
           rules,
+          errors,
+          warnings,
           editable,
           visible,
           unmounted,
@@ -599,7 +601,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
           visible === false ||
           unmounted === true ||
           display === false ||
-          (field as any).disabledValidate
+          (field as any).disabledValidate ||
+          (rules.length === 0 && errors.length === 0 && warnings.length === 0)
         )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)
