@@ -94,12 +94,13 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 
 ## x-props 扩展属性
 
-| 属性名                  | 描述                                              | 类型      |
-| ----------------------- | ------------------------------------------------- | --------- |
-| `x-props.addonAfter`    | FormItem 的尾随内容                               | ReactNode |
-| `x-props.itemStyle`     | FormItem 的 style 属性                            | Object    |
-| `x-props.itemClassName` | FormItem 的 className 属性                        | String    |
-| `x-props.triggerType`   | 配置校验触发类型 `"onChange" | "onBlur" | "none"` | String    |
+| 属性名                     | 描述                                              | 类型      |
+| -------------------------- | ------------------------------------------------- | --------- |
+| `x-props.addonAfter`       | FormItem 的尾随内容                               | ReactNode |
+| `x-props.itemStyle`        | FormItem 的 style 属性                            | Object    |
+| `x-props.itemClassName`    | FormItem 的 className 属性                        | String    |
+| `x-props.triggerType`      | 配置校验触发类型 `"onChange" | "onBlur" | "none"` | String    |
+| 针对组件库的 FormItem 属性 | 比如 labelCol/wrapperCol 等                       |           |
 
 ## Form Schema 表达式
 

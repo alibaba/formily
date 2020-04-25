@@ -144,7 +144,7 @@ type OMitActions =
   | 'unsafe_do_not_use_transform_data_path'
 
 export type IFormActions = Omit<IForm, OMitActions> & {
-  dispatch: (type: string, payload: any) => void
+  dispatch: (type: string, payload?: any) => void
 }
 
 type WrapPromise<
@@ -162,10 +162,7 @@ export interface IEffectProviderAPI<TActions = any, TContext = any> {
     type: string,
     filter: (payload: TPayload) => boolean
   ) => Promise<TPayload>
-  triggerTo: <TPayload = any>(
-    type: string,
-    payload: TPayload
-  ) => Promise<TPayload>
+  triggerTo: <TPayload = any>(type: string, payload: TPayload) => void
   applyMiddlewares: <TPayload = any>(
     type: string,
     payload: TPayload
