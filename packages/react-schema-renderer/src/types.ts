@@ -147,7 +147,6 @@ export interface ISchema {
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
   ['x-linkages']?: Array<{
-    name: FormPathPattern
     target: FormPathPattern
     type: string
     [key: string]: any
