@@ -104,19 +104,25 @@ describe('useFormSpy hook', () => {
     const opts = {}
     const form = createForm(opts)
     const actions = createFormActions()
-    const { getByTestId, queryByTestId } = render(
+    const { getByTestId, queryByTestId, baseElement } = render(
       <Form form={form} actions={actions}>
         <InputField name="a" required />
         <FormSpy
           selector={[LifeCycleTypes.ON_FIELD_VALUE_CHANGE]}
-          reducer={state => {
+          reducer={(state, { payload }) => {
             return {
-              count: (state.count || 0) + 1
+              count: (state.count || 0) + 1,
+              value: payload.value
             }
           }}
         >
           {({ state }) => {
-            return <div data-testid="spy-value">{state.count}</div>
+            return (
+              <div>
+                <div data-testid="spy-value">{state.value}</div>
+                <div data-testid="spy-count">{state.count}</div>
+              </div>
+            )
           }}
         </FormSpy>
       </Form>
@@ -129,6 +135,7 @@ describe('useFormSpy hook', () => {
       fireEvent.change(queryByTestId('test-input'), { target: { value: 789 } })
     })
     await wait()
-    expect(getByTestId('spy-value').textContent).toEqual('3')
+    expect(getByTestId('spy-value').textContent).toEqual('789')
+    expect(getByTestId('spy-count').textContent).toEqual('1')
   })
 })
