@@ -882,7 +882,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | layoutProps.wrapperCol | 改变自身布局属性, label 比例 | number(0-24) |        |
 | layoutProps.labelWidth | 改变自身布局属性, label 宽度 | number |        |
 | layoutProps.wrapperWidth | 改变自身布局属性, wrapper 宽度 | number |        |
-
+| layoutProps.labelAlign | 改变自身label对齐方式 | 'right', 'left', 'top' |        |
 
 
 ```jsx
