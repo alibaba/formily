@@ -12,7 +12,8 @@ import {
   FormPathPattern,
   BigData,
   each,
-  isObj
+  isObj,
+  isPlainObj
 } from '@formily/shared'
 import {
   FormValidator,
@@ -587,6 +588,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
         const {
           value,
           rules,
+          errors,
+          warnings,
           editable,
           visible,
           unmounted,
@@ -598,7 +601,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
           visible === false ||
           unmounted === true ||
           display === false ||
-          (field as any).disabledValidate
+          (field as any).disabledValidate ||
+          (rules.length === 0 && errors.length === 0 && warnings.length === 0)
         )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)
@@ -1034,8 +1038,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
               } else {
                 state.value = []
               }
-            } else if (isObj(state.value)) {
-              if (isObj(value)) {
+            } else if (isPlainObj(state.value)) {
+              if (isPlainObj(value)) {
                 state.value = value
               } else {
                 state.value = {}

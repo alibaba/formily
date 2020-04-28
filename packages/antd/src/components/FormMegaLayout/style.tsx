@@ -70,6 +70,14 @@ const computeAntdStyleBase = (props) => {
     }
 
     if (labelAlign === 'top') {
+        result.labelAlignStyle += `
+            &.mega-layout-item {
+                display: ${inline ? 'inline-block' : 'block'};
+            }
+        `
+    }
+
+    if (labelAlign === 'top') {
         result.defaultStyle = `
             &.ant-form-item {
                 display: block;

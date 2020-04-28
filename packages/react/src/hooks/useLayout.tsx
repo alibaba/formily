@@ -23,6 +23,7 @@ export const useLayout = (props: ILayoutProps) => {
         m: computeAttr((props.responsive || {}).m, (context.responsive || {}).m, columns),
         s: computeAttr((props.responsive || {}).s, (context.responsive || {}).s, columns)
     }
+    const size = computeAttr(props.size, context.size, undefined)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
@@ -52,7 +53,6 @@ export const useLayout = (props: ILayoutProps) => {
         wrapperCol = -1
     }
 
-    
 
     return {
         enableLayout,
@@ -73,7 +73,8 @@ export const useLayout = (props: ILayoutProps) => {
         gutter,
         span,
         context,
-        responsive
+        responsive,
+        size,
     }
 }
 

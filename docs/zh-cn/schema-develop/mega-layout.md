@@ -682,6 +682,60 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+### 联动控制 display / visible
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset,
+  FormEffectHooks
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const { onFieldChange$ } = FormEffectHooks
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm 
+        effects={($, actions) => {
+          onFieldChange$('vvv1').subscribe(({ value }) => {
+            actions.setFieldState('vvv2', state => state.visible = (value === '1'))
+            actions.setFieldState('vvv3', state => state.display = (value === '2'))
+          })
+        }}
+        components={{ DatePicker, Input }}
+      >
+        <FormSlot>
+          <h5 style={{ marginTop: '16px' }}>最简单的grid栅格布局</h5>
+        </FormSlot>
+        <FormMegaLayout autoRow grid full>
+          <Field name="vvv1" title="标题1" x-component="Input" />
+          <Field name="vvv2" title="标题2" x-component="DatePicker" />
+          <Field name="vvv3" title="标题3" x-component="DatePicker" />
+          <Field name="vvv4" title="标题4" x-component="DatePicker" />
+          <Field name="vvv5" title="标题5" x-component="DatePicker" />
+          <Field name="vvv6" title="标题6" x-component="DatePicker" />
+        </FormMegaLayout>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 常见复杂布局
 
 ```jsx
@@ -708,11 +762,17 @@ const App = () => {
   return (
     <Printer>
       <SchemaForm
+        initialValues={{
+          productList: [{}],
+          productList2: [{}],
+          layoutCleanList: [{}],
+          layoutCleanList2: [{}],
+        }}
         onSubmit={(values) => console.log(values)}
         editable={state.editable}
         components={{ DatePicker, Input, ArrayTable, ArrayCards }}
-      >
-        <FormMegaLayout labelCol={4}>
+      >        
+        <FormMegaLayout labelCol={4} full>
           <Field name="normal1" title="普通字段" x-component="DatePicker" />
 
           <Field name="user" type="object" title="用户信息">
@@ -722,9 +782,29 @@ const App = () => {
             </FormMegaLayout>
           </Field>
 
-          <Field name="productList" type="array" x-component="ArrayTable" title="商品列表table">
-            <Field name="name" title="商品名称" x-component="Input" />
-            <Field name="quantity" title="商品数量" x-component="Input" />
+          <Field name="user2" type="object" title="用户信息2">
+            <Field name="username2" title="用户名" x-component="Input" />
+            <Field name="age2" title="年龄" x-component="Input" />
+          </Field>
+
+          <Field x-mega-props={{ labelCol: null }} name="user3" type="object" title="用户信息3">
+            <Field name="username2" title="用户名" x-component="Input" />
+            <Field name="age2" title="年龄" x-component="Input" />
+          </Field>
+
+          <Field
+            name="user4" type="object" title="用户信息4"
+            x-mega-props={{ labelAlign: 'top', grid: true, columns: 2, full: true }}
+          >
+            <Field name="username2" title="用户名" x-component="Input" />
+            <Field name="age2" title="年龄" x-component="Input" />
+          </Field>
+
+          <Field name="productList" type="array" x-component="ArrayTable"  title="商品列表table">
+            <Field type="object">
+                <Field name="name" title="商品名称" x-component="Input" />
+                <Field name="quantity" title="商品数量" x-component="Input" />              
+            </Field>
           </Field>
 
           <Field
@@ -732,37 +812,14 @@ const App = () => {
             type="array"
             x-component="ArrayCards"
             title="商品列表card"
-            x-mega-props={{ full: true }}
-            x-component-props={{
-              style: {
-                width: '100%'
-              }
-            }}
           >
-            <Field name="name" title="商品名称" x-component="Input" />
-            <Field name="quantity" title="商品数量" x-component="Input" />
+            <Field type="object" x-mega-props={{ labelCol: null }}>
+              <Field name="name" title="商品名称" x-component="Input" />
+              <Field name="quantity" title="商品数量" x-component="Input" />
+            </Field>
           </Field>
 
         </FormMegaLayout>
-
-        <FormLayout labelCol={4}>
-          <Field name="layoutCleanList" type="array" x-component="ArrayTable" title="商品列表c1">
-            <Field name="name" title="商品名称" x-component="Input" />
-            <Field name="quantity" title="商品数量" x-component="Input" />
-          </Field>
-
-          <Field
-            name="layoutCleanList2"
-            type="array"
-            x-component="ArrayCards"
-            title="商品列表c2"
-            x-mega-props={{ full: true }}
-          >
-            <Field name="name" title="商品名称" x-component="Input" />
-            <Field name="quantity" title="商品数量" x-component="Input" />
-          </Field>
-
-        </FormLayout>
 
         <FormButtonGroup offset={4}>
           <Button

@@ -69,6 +69,7 @@ const MegaLayout = (props => {
             gutter: 20,
         }}
         {...others}
+        size={size}
         children={(layout) => {
             const { inline, required, columns, label, labelAlign,
                 grid, gutter, autoRow, span,
@@ -94,7 +95,9 @@ const MegaLayout = (props => {
                 const wrapperWidth = computeAttr(layoutProps.wrapperWidth, context.wrapperWidth, -1)
                 const labelCol = computeAttr(layoutProps.labelCol, context.labelCol, -1)
                 const wrapperCol = computeAttr(layoutProps.wrapperCol, context.wrapperCol, -1)
+                const labelAlign = computeAttr(layoutProps.labelAlign, context.labelAlign, -1)
 
+                if (labelAlign) itemProps.labelAlign = normalizeCol(labelAlign)
                 if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
                 if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
                 if (labelWidth !== -1) itemProps.labelWidth = labelWidth
@@ -131,52 +134,62 @@ const MegaLayout = (props => {
 });
 
 const MegaLayoutItem = (props) => {
-  const { children, schemaChildren, itemProps, ...others } = props;
+  const { children, schemaChildren, itemProps, ...others } = props
   const megaProps = (schemaChildren ? others['x-mega-props'] : others['mega-props']) || {}
-  return <LayoutItem {...megaProps}>
-    {layoutProps => {
-      const componentProps = pickNotFormItemProps(others)
-      let schemaComponent = schemaChildren
-      // 启用了MegaLayout
-      if (layoutProps) {
-        const { addonBefore, addonAfter } = megaProps
-        const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
-         responsive
-        } = layoutProps;
-        itemProps.labelAlign = labelAlign
-        itemProps.inline = inline
-        itemProps.grid = grid
-        itemProps.gutter = gutter
-        itemProps.span = span
-        itemProps.columns = columns
-        itemProps.full = full
-        itemProps.responsive = responsive
+  const isObjectField = others.type === 'object'
 
-        if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
-        if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
-        if (labelWidth !== -1) itemProps.labelWidth = labelWidth
-        if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
-        if (addonBefore) itemProps.addonBefore = addonBefore
-        if (addonAfter) itemProps.addonAfter = addonAfter
+  return React.createElement(LayoutItem, megaProps, layoutProps => {
+    const componentProps = pickNotFormItemProps(others)
+    let schemaComponent = schemaChildren
+    // 启用了MegaLayout
+    if (layoutProps) {
+      const { addonBefore, addonAfter } = megaProps
+      const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
+        responsive, size
+      } = layoutProps;
+      itemProps.labelAlign = labelAlign
+      itemProps.inline = inline
+      itemProps.grid = grid
+      itemProps.gutter = gutter
+      itemProps.span = span
+      itemProps.columns = columns
+      itemProps.full = full
+      itemProps.responsive = responsive
 
-        // 撑满即为组件宽度为100%, flex: 1
-        if (full) {
-          componentProps.style = {
-            ...(componentProps.style || {}),
-            width: '100%',
-            flex: 1,
-          }       
-        }
-        
-        return <StyledLayoutItem {...itemProps}>
-          {schemaChildren ? children(schemaComponent) : children(componentProps)}
-        </StyledLayoutItem>
+      if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
+      if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
+      if (labelWidth !== -1) itemProps.labelWidth = labelWidth
+      if (wrapperWidth !== -1) itemProps.wrapperWidth = wrapperWidth
+      if (addonBefore) itemProps.addonBefore = addonBefore
+      if (addonAfter) itemProps.addonAfter = addonAfter
+
+      // 撑满即为组件宽度为100%, flex: 1
+      if (full) {
+        componentProps.style = {
+          ...(componentProps.style || {}),
+          width: '100%',
+          flex: 1,
+        }       
       }
 
-      // 没有启用MegaLayout, 保持和线上完全一致的功能。
-      return children()
-    }}
-  </LayoutItem>
+      if (size) {
+        componentProps.size = size 
+      }
+
+      if (isObjectField) {
+        const objectFieldProps = {...megaProps}
+        objectFieldProps.label = itemProps.label
+        return React.createElement(MegaLayout, objectFieldProps, 
+          (schemaChildren ? children(schemaComponent) : children(componentProps)))
+      }
+
+      return React.createElement(StyledLayoutItem, itemProps, 
+        (schemaChildren ? children(schemaComponent) : children(componentProps)))
+    }
+
+    // 没有启用MegaLayout, 保持和线上完全一致的功能。
+    return children()
+  })
 }
 
 const FormMegaLayout = createVirtualBox('mega-layout', MegaLayout)

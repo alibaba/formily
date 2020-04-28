@@ -11,7 +11,7 @@ import {
   defaults,
   shallowClone
 } from '@formily/shared'
-import { Draft, Immer, enablePatches } from 'immer'
+import { Draft, Immer, enablePatches, setAutoFreeze } from 'immer'
 import {
   IStateModelProvider,
   IStateModelFactory,
@@ -22,6 +22,8 @@ import {
 const hasProxy = !!globalThisPolyfill.Proxy
 
 enablePatches()
+
+setAutoFreeze(false)
 
 const { produce } = new Immer({
   autoFreeze: false
@@ -184,7 +186,7 @@ export const createStateModel = <State = {}, Props = {}>(
             patches => {
               patches.forEach(({ path, op, value }) => {
                 if (op === 'replace') {
-                  if (path.length > 1 ||!isEqual(this.state[path[0]], value)) {
+                  if (path.length > 1 || !isEqual(this.state[path[0]], value)) {
                     this.dirtys[path[0]] = true
                     this.dirtyNum++
                   }

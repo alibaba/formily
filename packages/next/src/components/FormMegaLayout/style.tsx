@@ -18,8 +18,16 @@ const computeNextStyleBase = (props) => {
     result.labelAlignStyle = `
         & > .next-form-item-label {
             text-align: ${labelAlign !== 'top' ? labelAlign : 'left'};
-        }
+        }        
     `
+
+    if (labelAlign === 'top') {
+        result.labelAlignStyle += `
+            &.mega-layout-item {
+                display: ${inline ? 'inline-block' : 'block'};
+            }
+        `
+    }
 
     // 增量属性 addonBefore/addonAfter
     result.addonStyle = `
@@ -133,14 +141,14 @@ const computeNextStyleBase = (props) => {
                         grid-row-gap: ${parseInt(gutter)}px;
 
                         @media (max-width: 720px) {
-                            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, 1fr));
                         }
                         
                         @media (min-width: 720px ) and (max-width: 1200px ) {
-                            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, 1fr));
                         }
                         @media (min-width: 1200px ) {
-                            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, 1fr));
                         }
                     }
                 }

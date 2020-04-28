@@ -134,6 +134,7 @@ export const ArrayCards: any = styled(
     )
   }
 )<ISchemaFieldComponentProps>`
+  width: 100%;
   .ant-card {
     .ant-card {
       box-shadow: none;
