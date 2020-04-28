@@ -146,12 +146,18 @@ export const connect = <ExtendsComponentKey extends string = ''>(
         delete componentProps.editable
       }
 
-      const { full } = useLayout(props['x-mega-props'] || {})
+      const megaProps = schema.getMegaLayoutProps()
+      const { full, size } = useLayout(megaProps)
       if (full) {
         componentProps.style = {
           ...(componentProps.style || {}),
           width: '100%',
+          flex: 1,
         }
+      }
+
+      if (size) {
+        componentProps.size = size
       }
 
       return React.createElement(

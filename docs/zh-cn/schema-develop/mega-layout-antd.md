@@ -682,6 +682,163 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+### 联动控制 display / visible
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset,
+  FormEffectHooks
+} from '@formily/antd' // 或者 @formily/antd
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const { onFieldChange$ } = FormEffectHooks
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm 
+        effects={($, actions) => {
+          onFieldChange$('vvv1').subscribe(({ value }) => {
+            actions.setFieldState('vvv2', state => state.visible = (value === '1'))
+            actions.setFieldState('vvv3', state => state.display = (value === '2'))
+          })
+        }}
+        components={{ DatePicker, Input }}
+      >
+        <FormSlot>
+          <h5 style={{ marginTop: '16px' }}>最简单的grid栅格布局</h5>
+        </FormSlot>
+        <FormMegaLayout autoRow grid full>
+          <Field name="vvv1" title="标题1" x-component="Input" />
+          <Field name="vvv2" title="标题2" x-component="DatePicker" />
+          <Field name="vvv3" title="标题3" x-component="DatePicker" />
+          <Field name="vvv4" title="标题4" x-component="DatePicker" />
+          <Field name="vvv5" title="标题5" x-component="DatePicker" />
+          <Field name="vvv6" title="标题6" x-component="DatePicker" />
+        </FormMegaLayout>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+### 常见复杂布局
+
+```jsx
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Button } from 'antd'
+import { FormMegaLayout, FormLayout, ArrayCards, ArrayTable, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+    <Printer>
+      <SchemaForm
+        initialValues={{
+          productList: [{}],
+          productList2: [{}],
+          layoutCleanList: [{}],
+          layoutCleanList2: [{}],
+        }}
+        onSubmit={(values) => console.log(values)}
+        editable={state.editable}
+        components={{ DatePicker, Input, ArrayTable, ArrayCards }}
+      >        
+        <FormMegaLayout labelCol={4} full>
+          <Field name="normal1" title="普通字段" x-component="DatePicker" />
+
+          <Field name="user" type="object" title="用户信息">
+            <FormMegaLayout inline>
+              <Field name="username" title="用户名" x-component="Input" />
+              <Field name="age" title="年龄" x-component="Input" />
+            </FormMegaLayout>
+          </Field>
+
+          <Field name="user2" type="object" title="用户信息2">
+            <Field name="username2" title="用户名" x-component="Input" />
+            <Field name="age2" title="年龄" x-component="Input" />
+          </Field>
+
+          <Field x-mega-props={{ labelCol: null }} name="user3" type="object" title="用户信息3">
+            <Field name="username2" title="用户名" x-component="Input" />
+            <Field name="age2" title="年龄" x-component="Input" />
+          </Field>
+
+          <Field
+            name="user4" type="object" title="用户信息4"
+            x-mega-props={{ labelAlign: 'top', grid: true, columns: 2, full: true }}
+          >
+            <Field name="username2" title="用户名" x-component="Input" />
+            <Field name="age2" title="年龄" x-component="Input" />
+          </Field>
+
+          <Field name="productList" type="array" x-component="ArrayTable"  title="商品列表table">
+            <Field type="object">
+                <Field name="name" title="商品名称" x-component="Input" />
+                <Field name="quantity" title="商品数量" x-component="Input" />              
+            </Field>
+          </Field>
+
+          <Field
+            name="productList2"
+            type="array"
+            x-component="ArrayCards"
+            title="商品列表card"
+          >
+            <Field type="object" x-mega-props={{ labelCol: null }}>
+              <Field name="name" title="商品名称" x-component="Input" />
+              <Field name="quantity" title="商品数量" x-component="Input" />
+            </Field>
+          </Field>
+
+        </FormMegaLayout>
+
+        <FormButtonGroup offset={4}>
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '切换详情态' : '切换编辑'}
+          </Button>
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 响应式布局
 
 `FormMegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。
@@ -795,6 +952,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | layoutProps.wrapperCol | 改变自身布局属性, label 比例 | number(0-24) |        |
 | layoutProps.labelWidth | 改变自身布局属性, label 宽度 | number |        |
 | layoutProps.wrapperWidth | 改变自身布局属性, wrapper 宽度 | number |        |
+| layoutProps.labelAlign | 改变自身label对齐方式 | 'right', 'left', 'top' |        |
 
 
 ```jsx

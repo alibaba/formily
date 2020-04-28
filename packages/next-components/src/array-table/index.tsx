@@ -167,6 +167,8 @@ export const ArrayTable = styled(
                 <FormItemShallowProvider
                   key={newPath.toString()}
                   label={undefined}
+                  labelCol={undefined}
+                  wrapperCol={undefined}
                 >
                   <SchemaField path={newPath} schema={props} />
                 </FormItemShallowProvider>
@@ -227,6 +229,7 @@ export const ArrayTable = styled(
         </ArrayList.Wrapper>
       )
     }
+
     return (
       <div className={className}>
         <ArrayList
@@ -266,7 +269,7 @@ export const ArrayTable = styled(
   }
 )`
   display: inline-block;
-  min-width: 600px;
+  width: 100%;
   max-width: 100%;
   overflow: scroll;
   table {

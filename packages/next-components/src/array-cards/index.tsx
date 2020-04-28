@@ -48,6 +48,7 @@ export const ArrayCards = styled(
         mutators.push(schemaItems.getEmptyValue())
       }
     }
+
     return (
       <div className={className}>
         <ArrayList
@@ -135,6 +136,7 @@ export const ArrayCards = styled(
     )
   }
 )<ISchemaFieldComponentProps>`
+  width: 100%;
   .next-card-body {
     padding-top: 30px;
     padding-bottom: 0 !important;

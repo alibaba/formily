@@ -74,6 +74,7 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   const formItemShallowProps = useShallowFormItem()
 
   const mergedProps = {
+    label,
     ...formItemShallowProps,
     ...formItemProps,
     ...schemaItemProps
@@ -87,7 +88,6 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
 
   const itemProps = {
     prefixCls,
-    label,
     labelAlign,
     help,
     validateStatus: status,

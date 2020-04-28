@@ -613,6 +613,167 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+### 联动控制 display / visible
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset,
+  FormEffectHooks
+} from '@formily/antd' // 或者 @formily/antd
+import { MegaLayout, Input, DatePicker } from '@formily/antd-components'
+
+import 'antd/dist/antd.css'
+
+const { onFieldChange$ } = FormEffectHooks
+
+const App = () => {
+  return (
+    <Form 
+      effects={($, actions) => {
+        onFieldChange$('vvv1').subscribe(({ value }) => {
+          actions.setFieldState('vvv2', state => state.visible = (value === '1'))
+          actions.setFieldState('vvv3', state => state.display = (value === '2'))
+        })
+      }}
+    >
+      <h5 style={{ marginTop: '16px' }}>最简单的grid栅格布局</h5>
+      <MegaLayout autoRow grid full>
+        <FormItem name="vvv1" title="标题1" component={Input} />
+        <FormItem name="vvv2" title="标题2" component={DatePicker} />
+        <FormItem name="vvv3" title="标题3" component={DatePicker} />
+        <FormItem name="vvv4" title="标题4" component={DatePicker} />
+        <FormItem name="vvv5" title="标题5" component={DatePicker} />
+        <FormItem name="vvv6" title="标题6" component={DatePicker} />
+      </MegaLayout>
+    </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+### 常见复杂布局
+
+```jsx
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  Form,
+  FormItem,
+  FieldList,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Button } from 'antd'
+import { MegaLayout, FormLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+      <Form
+        initialValues={{
+          userList: [{}],
+        }}
+        onSubmit={(values) => console.log(values)}
+        editable={state.editable}
+      >        
+        <MegaLayout labelCol={4} full>
+          <FormItem name="normal1" title="普通字段" component={DatePicker} />
+
+          <FormItem name="user" type="object" title="用户信息">
+            <MegaLayout inline>
+              <FormItem name="username" title="用户名" component={Input} />
+              <FormItem name="age" title="年龄" component={Input} />
+            </MegaLayout>
+          </FormItem>
+
+          <FormItem name="user2" type="object" title="用户信息2">
+            <FormItem name="username2" title="用户名" component={Input} />
+            <FormItem name="age2" title="年龄" component={Input} />
+          </FormItem>
+
+          <FormItem mega-props={{ labelCol: null }} name="user3" type="object" title="用户信息3">
+            <FormItem name="username2" title="用户名" component={Input} />
+            <FormItem name="age2" title="年龄" component={Input} />
+          </FormItem>
+
+          <FormItem
+            name="user4" type="object" title="用户信息4"
+            mega-props={{ labelAlign: 'top', grid: true, columns: 2, full: true }}
+          >
+            <FormItem name="username2" title="用户名" component={Input} />
+            <FormItem name="age2" title="年龄" component={Input} />
+          </FormItem>
+
+          <MegaLayout label="用户列表" labelCol={null}>
+            <FieldList name="userList">
+              {({ state, mutators }) => {
+                const onAdd = () => mutators.push()
+                return (
+                  <div>
+                    {state.value.map((item, index) => {
+                      const onRemove = index => mutators.remove(index)
+                      const onMoveUp = index => mutators.moveUp(index)
+                      const onMoveDown = index => mutators.moveDown(index)
+                      return (
+                        <div key={index}>
+                          <FormItem
+                            name={`userList.${index}.username`}
+                            component={Input}
+                            title="用户名"
+                          />
+                          <FormItem
+                            name={`userList.${index}.age`}
+                            component={Input}
+                            title="年龄"
+                          />
+                          <FormButtonGroup style={{ marginBottom: '16px' }}>
+                            <Button onClick={onRemove.bind(null, index)}>remove</Button>
+                            <Button onClick={onMoveUp.bind(null, index)}>up</Button>
+                            <Button onClick={onMoveDown.bind(null, index)}>down</Button>
+                          </FormButtonGroup>
+                        </div>
+                      )
+                    })}
+                    <Button onClick={onAdd}>add</Button>
+                  </div>
+                )
+              }}
+            </FieldList>   
+          </MegaLayout>
+
+        </MegaLayout>
+
+        <FormButtonGroup offset={4}>
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '切换详情态' : '切换编辑'}
+          </Button>
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 响应式布局
 
 `MegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。

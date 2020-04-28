@@ -613,6 +613,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+
 # 响应式布局
 
 `MegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。
@@ -721,6 +722,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | layoutProps.wrapperCol | 改变自身布局属性, label 比例 | number(0-24) |        |
 | layoutProps.labelWidth | 改变自身布局属性, label 宽度 | number |        |
 | layoutProps.wrapperWidth | 改变自身布局属性, wrapper 宽度 | number |        |
+| layoutProps.labelAlign | 改变自身label对齐方式 | 'right', 'left', 'top' |        |
 
 
 
