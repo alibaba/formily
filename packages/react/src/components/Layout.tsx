@@ -1,7 +1,7 @@
 import React from 'react'
-import { ILayoutProps } from './types'
-import { LayoutContext } from './context'
-import { useLayout, useLayoutItem } from './hooks/useLayout'
+import { ILayoutProps } from '../types'
+import { LayoutContext } from '../context'
+import { useLayout, useLayoutItem } from '../hooks/useLayout'
 
 // case1: form -> layout(inline/lablCol/wrappreCol)
 // case2: layout -> layout

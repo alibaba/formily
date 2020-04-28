@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { Form } from 'antd'
-import { Layout, LayoutItem } from '@formily/react-shared-components'
+import { Layout, LayoutItem } from '@formily/react'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
 import { useDeepFormItem } from '../../context'
@@ -165,24 +165,7 @@ const MegaLayoutItem = (props) => {
             ...(componentProps.style || {}),
             width: '100%',
             flex: 1,
-          }
-          
-          // 处理schema的组件，因为FormItem层面没法触及到真实的组件（schema-renderer控制真正的组件注入）
-          // 因此这里改动的其实是Field
-          if (schemaChildren) {
-            schemaComponent = React.cloneElement(schemaChildren, {
-              ...schemaChildren.props,
-              props: {
-                ...schemaChildren.props.props,
-                ['x-component-props']: {
-                  ...(schemaChildren.props.props['x-component-props'] || {}),
-                  style: {
-                    ...componentProps.style,
-                    ...(((schemaChildren.props.props['x-component-props'] || {}).style) || {}),                
-                },
-              }
-            }})
-          }          
+          }       
         }
         
         return <StyledLayoutItem {...itemProps}>
