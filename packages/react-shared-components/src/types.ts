@@ -25,46 +25,6 @@ interface ArrayListInfo {
   ) => any
 }
 
-type ILayoutLabelAlign = 'top' | 'left' | 'right'
-export interface ILayoutProps {
-  context?: any
-  isRoot?: boolean
-  isLayout?: boolean
-  defaultSettings?: any
-  children?: (props: ILayoutProps) => React.ReactElement
-  full?: boolean
-  label?: any
-  required?: boolean
-  labelAlign?: ILayoutLabelAlign
-  inline?: boolean
-  inset?: boolean
-  autoRow?: boolean
-  columns?: number
-  flex?: boolean
-  labelWidth?: number | string
-  wrapperWidth?: number | string
-  labelCol?: number
-  wrapperCol?: number
-  addonBefore?: any
-  addonAfter?: any
-  description?: any
-  gutter?: number | string
-  span?: number
-  grid?: boolean
-  responsive?: { lg?: number; m?: number; s?: number }
-}
-
-export type ILayoutItemProps = {
-  span?: number
-  full?: boolean
-  labelAlign?: ILayoutLabelAlign
-  inset?: boolean
-  labelWidth?: number
-  wrapperWidth?: number
-  labelCol?: number
-  wrapperCol?: number
-}
-
 type ReactComponent = React.JSXElementConstructor<any>
 
 type ReactRenderPropsChildren<T = any> =

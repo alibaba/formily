@@ -682,6 +682,106 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+# 常见复杂布局
+
+```jsx
+import React, { useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { Button } from '@alifd/next'
+import { FormMegaLayout, FormLayout, ArrayCards, ArrayTable, Input, DatePicker } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  const [state, setState] = useState({ editable: true })
+  return (
+    <Printer>
+      <SchemaForm
+        onSubmit={(values) => console.log(values)}
+        editable={state.editable}
+        components={{ DatePicker, Input, ArrayTable, ArrayCards }}
+      >
+        <FormMegaLayout labelCol={4}>
+          <Field name="normal1" title="普通字段" x-component="DatePicker" />
+
+          <Field name="user" type="object" title="用户信息">
+            <FormMegaLayout inline>
+              <Field name="username" title="用户名" x-component="Input" />
+              <Field name="age" title="年龄" x-component="Input" />
+            </FormMegaLayout>
+          </Field>
+
+          <Field name="productList" type="array" x-component="ArrayTable" title="商品列表table">
+            <Field name="name" title="商品名称" x-component="Input" />
+            <Field name="quantity" title="商品数量" x-component="Input" />
+          </Field>
+
+          <Field
+            name="productList2"
+            type="array"
+            x-component="ArrayCards"
+            title="商品列表card"
+            x-mega-props={{ full: true }}
+            x-component-props={{
+              style: {
+                width: '100%'
+              }
+            }}
+          >
+            <Field name="name" title="商品名称" x-component="Input" />
+            <Field name="quantity" title="商品数量" x-component="Input" />
+          </Field>
+
+        </FormMegaLayout>
+
+        <FormLayout labelCol={4}>
+          <Field name="layoutCleanList" type="array" x-component="ArrayTable" title="商品列表c1">
+            <Field name="name" title="商品名称" x-component="Input" />
+            <Field name="quantity" title="商品数量" x-component="Input" />
+          </Field>
+
+          <Field
+            name="layoutCleanList2"
+            type="array"
+            x-component="ArrayCards"
+            title="商品列表c2"
+            x-mega-props={{ full: true }}
+          >
+            <Field name="name" title="商品名称" x-component="Input" />
+            <Field name="quantity" title="商品数量" x-component="Input" />
+          </Field>
+
+        </FormLayout>
+
+        <FormButtonGroup offset={4}>
+          <Button
+            type="primary"
+            onClick={() => setState({ editable: !state.editable })}
+          >
+            {state.editable ? '切换详情态' : '切换编辑'}
+          </Button>
+          <Submit>提交</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 响应式布局
 
 `FormMegaLayout` 提供响应式栅格布局。默认使用 3 栏栅格布局，你只需要将子元素按顺序排布，指定子元素所占的比例（默认为 1，即 1/3），并且配合屏幕大小改变子元素占比，页面内容就可以根据自适应。
