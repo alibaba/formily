@@ -92,6 +92,32 @@ exports[`test addon style normal 1`] = `
 />
 `;
 
+exports[`test grid layout style default style 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.c0 > .next-form-item-label {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 > .next-form-item-control {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+<div
+  className="c0"
+/>
+`;
+
 exports[`test grid layout style gridStyle autoRow 1`] = `
 .c0 > .next-form-item {
   width: 100%;
