@@ -1,5 +1,187 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`default style default style 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.c0 > .next-form-item-label {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 > .next-form-item-control {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style gutter item 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: inline-block;
+}
+
+.c0:not(:last-child) {
+  margin-right: 20px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style item 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: inline-block;
+}
+
+.c0:not(:last-child) {
+  margin-right: undefinedpx;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style labelAlign:top item 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: block;
+}
+
+.c0:not(:last-child) {
+  margin-right: undefinedpx;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style labelAlign:top layout 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inline style layout 1`] = `
+.c0 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-label {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.c0 > .next-form-item-control {
+  display: inline-block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle default layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
+  margin-bottom: 0;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
+  margin-bottom: 0;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle grid layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
+  margin-bottom: 0;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
+  margin-bottom: 0;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle inline layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
+  margin-bottom: 0;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
+  margin-bottom: 0;
+}
+
+<div
+  className="c0"
+/>
+`;
+
 exports[`test addon style gutter 1`] = `
 .c0 > .next-form-item-control > .mega-layout-container-wrapper,
 .c0 > .next-form-item-control > .mega-layout-item-content {
@@ -85,32 +267,6 @@ exports[`test addon style normal 1`] = `
   margin-left: NaNpx;
   line-height: 28px;
   font-size: 14px;
-}
-
-<div
-  className="c0"
-/>
-`;
-
-exports[`test grid layout style default style 1`] = `
-.c0 {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  box-sizing: border-box;
-}
-
-.c0 > .next-form-item-label {
-  -webkit-flex: initial;
-  -ms-flex: initial;
-  flex: initial;
-}
-
-.c0 > .next-form-item-control {
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
 }
 
 <div
@@ -297,6 +453,128 @@ exports[`test label-align style top and inline 1`] = `
 
 .c0.mega-layout-item {
   display: inline-block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style labelAlign:top labelWidth and wrapperWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 > .next-form-item-label {
+  width: 100px;
+  max-width: 100px;
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 > .next-form-item-control {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style labelWidth and wrapperWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > .next-form-item-label {
+  width: 100px;
+  max-width: 100px;
+  -webkit-flex: 0 0 100px;
+  -ms-flex: 0 0 100px;
+  flex: 0 0 100px;
+}
+
+.c0 > .next-form-item-control {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: 0 0 200px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style only labelWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > .next-form-item-label {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: 0 0 200px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
+}
+
+.c0 > .next-form-item-control {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`width style only wrapperWidth 1`] = `
+.c0 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.c0 > .next-form-item-control {
+  width: 200px;
+  max-width: 200px;
+  -webkit-flex: 0 0 200px;
+  -ms-flex: 0 0 200px;
+  flex: 0 0 200px;
 }
 
 <div

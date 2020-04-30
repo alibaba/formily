@@ -1,18 +1,21 @@
 import { css } from 'styled-components'
 
+const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 const computeAntdStyleBase = (props) => {
     const result: any = {}
     const {
-        labelAlign, gutter,
+        labelAlign,
         isLayout,
         inline,
-        labelWidth, wrapperWidth,
         labelCol, grid, full, context = {}, columns, isRoot, autoRow,
         span, seed, size,
         // lg, m, s,
         responsive
     } = props
     const { lg, m, s } = responsive
+    const labelWidth = formatPx(props.labelWidth)
+    const wrapperWidth = formatPx(props.wrapperWidth)
+    const gutter = formatPx(props.gutter)
 
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
