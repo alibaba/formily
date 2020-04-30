@@ -196,7 +196,9 @@ describe('test grid layout style',() => {
       media: '(min-width:1200px )'
     })
   })
+})
 
+describe('default style',() => {
   test('default style', () => {
     const styleResult = computeNextStyleBase({})
     const Mega = styled.div`${styleResult.defaultStyle}`
@@ -206,5 +208,166 @@ describe('test grid layout style',() => {
     expect(tree).toHaveStyleRule('box-sizing', 'border-box')
     expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('flex', '1', { modifier: '& > .next-form-item-control' })
+  })
+})
+
+describe('inline style',() => {
+  test('item', () => {
+    const styleResult = computeNextStyleBase({ inline: true })
+    const Mega = styled.div`${styleResult.inlineStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'inline-block')
+    expect(tree).toHaveStyleRule('vertical-align', 'top')
+    expect(tree).toHaveStyleRule('display', 'inline-block', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('vertical-align', 'top', { modifier: '& > .next-form-item-label' })
+
+    expect(tree).toHaveStyleRule('display', 'inline-block', { modifier: '& > .next-form-item-control' })
+
+    expect(tree).toHaveStyleRule('margin-right', 'undefinedpx', { modifier: '&:not(:last-child)' })
+  })
+
+  test('layout', () => {
+    const styleResult = computeNextStyleBase({ inline: true, isLayout: true })
+    const Mega = styled.div`${styleResult.inlineStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'inline-block')
+    expect(tree).toHaveStyleRule('vertical-align', 'top')
+    expect(tree).toHaveStyleRule('display', 'inline-block', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('vertical-align', 'top', { modifier: '& > .next-form-item-label' })
+
+    expect(tree).toHaveStyleRule('display', 'inline-block', { modifier: '& > .next-form-item-control' })
+
+    expect(tree).not.toHaveStyleRule('margin-right', 'undefinedpx', { modifier: '&:not(:last-child)' })
+  })
+
+  test('labelAlign:top item', () => {
+    const styleResult = computeNextStyleBase({ inline: true, labelAlign: 'top' })
+    const Mega = styled.div`${styleResult.inlineStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'block', { modifier: '& > .next-form-item-control' })
+  })
+
+  test('labelAlign:top layout', () => {
+    const styleResult = computeNextStyleBase({ inline: true, isLayout: true, labelAlign: 'top' })
+    const Mega = styled.div`${styleResult.inlineStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'block', { modifier: '& > .next-form-item-control' })
+  })
+
+
+  test('gutter item', () => {
+    const styleResult = computeNextStyleBase({ inline: true, gutter: '20px' })
+    const Mega = styled.div`${styleResult.inlineStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('margin-right', '20px', { modifier: '&:not(:last-child)' })
+  })
+})
+
+describe('width style',() => {
+  test('only labelWidth', () => {
+    const styleResult = computeNextStyleBase({ labelWidth: '200px' })
+    const Mega = styled.div`${styleResult.widthStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'flex')
+    expect(tree).toHaveStyleRule('box-sizing', 'border-box')
+    expect(tree).toHaveStyleRule('flex-direction', 'row')
+    
+    expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-label' })
+
+    expect(tree).toHaveStyleRule('flex', '1', { modifier: '& > .next-form-item-control' })
+  })
+
+  test('only wrapperWidth', () => {
+    const styleResult = computeNextStyleBase({ wrapperWidth: '200px' })
+    const Mega = styled.div`${styleResult.widthStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'flex')
+    expect(tree).toHaveStyleRule('box-sizing', 'border-box')
+    expect(tree).toHaveStyleRule('flex-direction', 'row')
+    
+    expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-control' })
+    expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-control' })
+    expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-control' })
+
+    // label比较特殊，不需要撑满适配，遵循next和antd的col实现
+    expect(tree).not.toHaveStyleRule('flex', '1', { modifier: '& > .next-form-item-label' })
+  })
+
+  test('labelWidth and wrapperWidth', () => {
+    const styleResult = computeNextStyleBase({ labelWidth: '100px', wrapperWidth: '200px' })
+    const Mega = styled.div`${styleResult.widthStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'flex')
+    expect(tree).toHaveStyleRule('box-sizing', 'border-box')
+    expect(tree).toHaveStyleRule('flex-direction', 'row')
+
+    expect(tree).toHaveStyleRule('width', '100px', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('max-width', '100px', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('flex', '0 0 100px', { modifier: '& > .next-form-item-label' })
+    
+    expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-control' })
+    expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-control' })
+    expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-control' })    
+  })
+
+  test('labelAlign:top labelWidth and wrapperWidth', () => {
+    const styleResult = computeNextStyleBase({ labelAlign: 'top', labelWidth: '100px', wrapperWidth: '200px' })
+    const Mega = styled.div`${styleResult.widthStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'flex')
+    expect(tree).toHaveStyleRule('box-sizing', 'border-box')
+    expect(tree).toHaveStyleRule('flex-direction', 'column')
+
+    expect(tree).toHaveStyleRule('width', '100px', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('max-width', '100px', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-label' })
+    
+    expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-control' })
+    expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-control' })
+    expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-control' })    
+  })
+})
+
+describe('layoutMarginStyle',() => {
+  test('default layout', () => {
+    const styleResult = computeNextStyleBase({ isLayout: true, })
+    const Mega = styled.div`${styleResult.layoutMarginStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child' })
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child' })
+  })
+
+  test('inline layout', () => {
+    const styleResult = computeNextStyleBase({ isLayout: true, inline: true })
+    const Mega = styled.div`${styleResult.layoutMarginStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item' })
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item' })
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child' })
+  })
+
+  test('grid layout', () => {
+    const styleResult = computeNextStyleBase({ isLayout: true, inline: true })
+    const Mega = styled.div`${styleResult.layoutMarginStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item' })
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item' })
+    expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child' })
   })
 })

@@ -1,17 +1,20 @@
 import { css } from 'styled-components'
 
+const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 export const computeNextStyleBase = (props) => {
     const result: any = {}
     const {
-        labelAlign, gutter,
+        labelAlign,
         isLayout,
         inline,
-        labelWidth, wrapperWidth,
         labelCol, grid, full, context = {}, columns, isRoot, autoRow,
         span, seed, size,
         // lg, m, s,
         responsive
     } = props
+    const labelWidth = formatPx(props.labelWidth)
+    const wrapperWidth = formatPx(props.wrapperWidth)
+    const gutter = formatPx(props.gutter)
     const { lg, m, s } = responsive || {}
 
     // label对齐相关 labelAlign
