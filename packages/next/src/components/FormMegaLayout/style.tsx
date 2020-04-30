@@ -1,6 +1,6 @@
 import { css } from 'styled-components'
 
-const computeNextStyleBase = (props) => {
+export const computeNextStyleBase = (props) => {
     const result: any = {}
     const {
         labelAlign, gutter,
@@ -12,7 +12,7 @@ const computeNextStyleBase = (props) => {
         // lg, m, s,
         responsive
     } = props
-    const { lg, m, s } = responsive
+    const { lg, m, s } = responsive || {}
 
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
@@ -42,7 +42,7 @@ const computeNextStyleBase = (props) => {
             > .mega-layout-container-before,
             > .formily-mega-item-before {
                 flex: initial;
-                margin-right: ${`${parseInt(gutter) / 2}px`}
+                margin-right: ${`${parseInt(gutter) / 2}px`};
                 line-height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '28px' : '40px') };
                 font-size: ${size === 'small' ? '12px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
@@ -50,7 +50,7 @@ const computeNextStyleBase = (props) => {
             > .mega-layout-container-after,
             > .formily-mega-item-after {
                 flex: initial;
-                margin-left: ${`${parseInt(gutter) / 2}px`}
+                margin-left: ${`${parseInt(gutter) / 2}px`};
                 line-height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '28px' : '40px') };
                 font-size: ${size === 'small' ? '12px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
