@@ -196,4 +196,15 @@ describe('test grid layout style',() => {
       media: '(min-width:1200px )'
     })
   })
+
+  test('default style', () => {
+    const styleResult = computeNextStyleBase({})
+    const Mega = styled.div`${styleResult.defaultStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('display', 'flex')
+    expect(tree).toHaveStyleRule('box-sizing', 'border-box')
+    expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-label' })
+    expect(tree).toHaveStyleRule('flex', '1', { modifier: '& > .next-form-item-control' })
+  })
 })
