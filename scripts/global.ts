@@ -1,4 +1,5 @@
 import prettyFormat from 'pretty-format'
+// import 'jest-styled-components'
 
 global['prettyFormat'] = prettyFormat
 

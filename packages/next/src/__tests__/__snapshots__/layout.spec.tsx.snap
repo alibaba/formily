@@ -1,0 +1,279 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test addon style gutter 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: 10px;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: 10px;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test addon style normal 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(1,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:720px ) and (max-width:1200px ) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(2,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:1200px ) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(3,minmax(100px,1fr));
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow 2`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:720px ) and (max-width:1200px ) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:1200px ) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style normal 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:720px ) and (max-width:1200px ) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+@media (min-width:1200px ) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style left 1`] = `
+.c0 > .next-form-item-label {
+  text-align: left;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style right 1`] = `
+.c0 > .next-form-item-label {
+  text-align: right;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style top 1`] = `
+.c0 > .next-form-item-label {
+  text-align: left;
+}
+
+.c0.mega-layout-item {
+  display: block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test label-align style top and inline 1`] = `
+.c0 > .next-form-item-label {
+  text-align: left;
+}
+
+.c0.mega-layout-item {
+  display: inline-block;
+}
+
+<div
+  className="c0"
+/>
+`;
