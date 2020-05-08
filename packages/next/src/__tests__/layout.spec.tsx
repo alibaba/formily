@@ -145,7 +145,7 @@ describe('test grid layout style',() => {
     expect(tree).toHaveStyleRule('grid-row-gap', '20px', { modifier: '& > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid' })
   })
 
-  test('gridStyle autoRow', () => {
+  test('gridStyle autoRow true', () => {
     let layoutProps = {
       gutter: 20,
       autoRow: true,
@@ -163,15 +163,15 @@ describe('test grid layout style',() => {
     })
     expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.m},minmax(100px,1fr))`, 
     { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:720px ) and (max-width:1200px )'
+      media: '(min-width:720px) and (max-width:1200px)'
     })
     expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.lg},minmax(100px,1fr))`, 
     { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:1200px )'
+      media: '(min-width:1200px)'
     })
   })
 
-  test('gridStyle autoRow', () => {
+  test('gridStyle autoRow false', () => {
     let layoutProps = {
       gutter: 20,
       autoRow: false,
@@ -189,11 +189,181 @@ describe('test grid layout style',() => {
     })
     expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, 
     { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:720px ) and (max-width:1200px )'
+      media: '(min-width:720px) and (max-width:1200px)'
     })
     expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, 
     { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:1200px )'
+      media: '(min-width:1200px)'
+    })
+  })
+})
+
+describe('nest layout item style', () => {
+  test('span style span 3', () => {
+    const seed = `nest-${Date.now()}`;
+    let layoutProps = {
+      responsive: { s: 1, m: 2, lg: 3 },
+      span: 3,
+      seed,
+    }
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.nestLayoutItemStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    const containerCls = `&.mega-layout-nest-container.${seed}`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${containerCls}`,
+      media: '(max-width: 720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: `${containerCls}`,
+      media: '(min-width: 720px) and (max-width: 1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 3`, {
+      modifier: `${containerCls}`,
+      media: '(min-width: 1200px)'
+    })
+  })
+
+  test('span style span 2', () => {
+    const seed = `nest-${Date.now()}`;
+    let layoutProps = {
+      responsive: { s: 1, m: 2, lg: 3 },
+      span: 2,
+      seed,
+    }
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.nestLayoutItemStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    const containerCls = `&.mega-layout-nest-container.${seed}`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${containerCls}`,
+      media: '(max-width: 720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: `${containerCls}`,
+      media: '(min-width: 720px) and (max-width: 1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: `${containerCls}`,
+      media: '(min-width: 1200px)'
+    })
+  })
+
+  test('span style span 1', () => {
+    const seed = `nest-${Date.now()}`;
+    let layoutProps = {
+      responsive: { s: 1, m: 2, lg: 3 },
+      span: 1,
+      seed,
+    }
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.nestLayoutItemStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    const containerCls = `&.mega-layout-nest-container.${seed}`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${containerCls}`,
+      media: '(max-width: 720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${containerCls}`,
+      media: '(min-width: 720px) and (max-width: 1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${containerCls}`,
+      media: '(min-width: 1200px)'
+    })
+  })
+
+  test('grid item style in small span', () => {
+    let layoutProps = {
+      responsive: { s: 1, m: 2, lg: 3 },
+      span: 2,
+      grid: true,
+    }
+
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.gridItemStyle}`
+    console.log(styleResult.gridItemStyle)
+    const tree = renderer.create(<Mega />).toJSON();
+    const cls = `&.mega-layout-item-col`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${cls}`,
+      media: '(max-width: 720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: `${cls}`,
+      media: '(min-width: 720px) and (max-width: 1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: `${cls}`,
+      media: '(min-width: 1200px)'
+    })
+  })
+
+  test('grid item style in large span', () => {
+    let layoutProps = {
+      responsive: { s: 1, m: 2, lg: 3 },
+      span: 4,
+      grid: true,
+    }
+
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.gridItemStyle}`
+    const tree = renderer.create(<Mega />).toJSON();
+    const cls = `&.mega-layout-item-col`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
+      modifier: `${cls}`,
+      media: '(max-width: 720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: `${cls}`,
+      media: '(min-width: 720px) and (max-width: 1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-column-start', `span 3`, {
+      modifier: `${cls}`,
+      media: '(min-width: 1200px)'
+    })
+  })
+})
+
+describe('nest grid layout container', () => {
+  test('nest mega layout container', () => {
+    let layoutProps = {
+      responsive: { s: 1, m: 2, lg: 3 },
+      columns: 3,
+      gutter: 20,
+      context: {
+        grid: true,
+      },
+      grid: true
+    }
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.gridStyle}`
+    const tree = renderer.create(<Mega />).toJSON();
+    const cls = `& > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-column-gap', `20px`, {
+      modifier: `${cls}`,
+    })
+    expect(tree).toHaveStyleRule('grid-row-gap', `20px`, {
+      modifier: `${cls}`,
+    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(1,1fr)`, {
+      modifier: `${cls}`,
+      media: '(max-width: 720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(2,1fr)`, {
+      modifier: `${cls}`,
+      media: '(min-width: 720px) and (max-width: 1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`, {
+      modifier: `${cls}`,
+      media: '(min-width: 1200px)'
     })
   })
 })

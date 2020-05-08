@@ -127,7 +127,6 @@ export const computeNextStyleBase = (props) => {
             `
         }
     }
-
     // grid栅格模式
     if (!context.grid && grid) {
         result.gridStyle = `
@@ -147,10 +146,10 @@ export const computeNextStyleBase = (props) => {
                             grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, 1fr));
                         }
                         
-                        @media (min-width: 720px ) and (max-width: 1200px ) {
+                        @media (min-width: 720px) and (max-width: 1200px) {
                             grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, 1fr));
                         }
-                        @media (min-width: 1200px ) {
+                        @media (min-width: 1200px) {
                             grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, 1fr));
                         }
                     }
@@ -170,10 +169,10 @@ export const computeNextStyleBase = (props) => {
                 @media (max-width: 720px) {
                     grid-column-start: span ${responsive.s > span ? span : responsive.s};
                 }
-                @media (min-width: 720px ) and (max-width: 1200px ) {
+                @media (min-width: 720px) and (max-width: 1200px) {
                     grid-column-start: span ${responsive.m > span ? span : responsive.m};
                 }
-                @media (min-width: 1200px ) {
+                @media (min-width: 1200px) {
                     grid-column-start: span ${responsive.lg > span ? span : responsive.lg};
                 }
             }
@@ -187,10 +186,10 @@ export const computeNextStyleBase = (props) => {
             @media (max-width: 720px) {
                 grid-column-start: span ${s > span ? span : s};
             }
-            @media (min-width: 720px ) and (max-width: 1200px ) {
+            @media (min-width: 720px) and (max-width: 1200px) {
                 grid-column-start: span ${m > span ? span : m};
             }
-            @media (min-width: 1200px ) {
+            @media (min-width: 1200px) {
                 grid-column-start: span ${lg > span ? span : lg};
             }
         }
@@ -216,10 +215,10 @@ export const computeNextStyleBase = (props) => {
                             grid-template-columns: repeat(${s}, 1fr);
                         }
                         
-                        @media (min-width: 720px ) and (max-width: 1200px ) {
+                        @media (min-width: 720px) and (max-width: 1200px) {
                             grid-template-columns: repeat(${m}, 1fr);
                         }
-                        @media (min-width: 1200px ) {
+                        @media (min-width: 1200px) {
                             grid-template-columns: repeat(${lg}, 1fr);
                         }
                     }
