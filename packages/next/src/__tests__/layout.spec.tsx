@@ -200,7 +200,7 @@ describe('test grid layout style',() => {
 
 describe('nest layout item style', () => {
   test('span style span 3', () => {
-    const seed = `nest-${Date.now()}`;
+    const seed = `nest-test123`;
     let layoutProps = {
       responsive: { s: 1, m: 2, lg: 3 },
       span: 3,
@@ -226,7 +226,7 @@ describe('nest layout item style', () => {
   })
 
   test('span style span 2', () => {
-    const seed = `nest-${Date.now()}`;
+    const seed = `nest-test123`;
     let layoutProps = {
       responsive: { s: 1, m: 2, lg: 3 },
       span: 2,
@@ -252,7 +252,7 @@ describe('nest layout item style', () => {
   })
 
   test('span style span 1', () => {
-    const seed = `nest-${Date.now()}`;
+    const seed = `nest-test123`;
     let layoutProps = {
       responsive: { s: 1, m: 2, lg: 3 },
       span: 1,
@@ -286,7 +286,6 @@ describe('nest layout item style', () => {
 
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridItemStyle}`
-    console.log(styleResult.gridItemStyle)
     const tree = renderer.create(<Mega />).toJSON();
     const cls = `&.mega-layout-item-col`
     expect(tree).toMatchSnapshot()
