@@ -208,7 +208,6 @@ export const computeNextStyleBase = (props) => {
                 > .mega-layout-container-content {
                     &.grid {
                         display: grid;
-                        // grid-template-columns: repeat(${columns}, 1fr);
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
                         @media (max-width: 720px) {

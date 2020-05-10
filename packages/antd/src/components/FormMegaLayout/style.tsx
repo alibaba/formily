@@ -1,7 +1,7 @@
 import { css } from 'styled-components'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
-const computeAntdStyleBase = (props) => {
+export const computeAntdStyleBase = (props) => {
     const result: any = {}
     const {
         labelAlign,
@@ -12,7 +12,7 @@ const computeAntdStyleBase = (props) => {
         // lg, m, s,
         responsive
     } = props
-    const { lg, m, s } = responsive
+    const { lg, m, s } = responsive || {}
     const labelWidth = formatPx(props.labelWidth)
     const wrapperWidth = formatPx(props.wrapperWidth)
     const gutter = formatPx(props.gutter)
@@ -43,6 +43,7 @@ const computeAntdStyleBase = (props) => {
                 display: inline-flex;
                 align-items: center;
                 height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
+                font-size: ${size === 'small' ? '14px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
 
             > .mega-layout-container-after,
@@ -53,6 +54,7 @@ const computeAntdStyleBase = (props) => {
                 display: inline-flex;
                 align-items: center;
                 height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
+                font-size: ${size === 'small' ? '14px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
         }
     `
@@ -163,14 +165,14 @@ const computeAntdStyleBase = (props) => {
                         grid-row-gap: ${parseInt(gutter)}px;
 
                         @media (max-width: 720px) {
-                            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, 1fr));
                         }
                         
-                        @media (min-width: 720px ) and (max-width: 1200px ) {
-                            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                        @media (min-width: 720px) and (max-width: 1200px) {
+                            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, 1fr));
                         }
-                        @media (min-width: 1200px ) {
-                            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, ${full ? '1fr' : '200px'} ));
+                        @media (min-width: 1200px) {
+                            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, 1fr));
                         }
                     }
                 }
@@ -189,10 +191,10 @@ const computeAntdStyleBase = (props) => {
                 @media (max-width: 720px) {
                     grid-column-start: span ${responsive.s > span ? span : responsive.s};
                 }
-                @media (min-width: 720px ) and (max-width: 1200px ) {
+                @media (min-width: 720px) and (max-width: 1200px) {
                     grid-column-start: span ${responsive.m > span ? span : responsive.m};
                 }
-                @media (min-width: 1200px ) {
+                @media (min-width: 1200px) {
                     grid-column-start: span ${responsive.lg > span ? span : responsive.lg};
                 }
             }
@@ -206,10 +208,10 @@ const computeAntdStyleBase = (props) => {
             @media (max-width: 720px) {
                 grid-column-start: span ${s > span ? span : s};
             }
-            @media (min-width: 720px ) and (max-width: 1200px ) {
+            @media (min-width: 720px) and (max-width: 1200px) {
                 grid-column-start: span ${m > span ? span : m};
             }
-            @media (min-width: 1200px ) {
+            @media (min-width: 1200px) {
                 grid-column-start: span ${lg > span ? span : lg};
             }
         }
@@ -228,17 +230,16 @@ const computeAntdStyleBase = (props) => {
                 > .mega-layout-container-content {
                     &.grid {
                         display: grid;
-                        // grid-template-columns: repeat(${columns}, 1fr);
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
                         @media (max-width: 720px) {
                             grid-template-columns: repeat(${s}, 1fr);
                         }
                         
-                        @media (min-width: 720px ) and (max-width: 1200px ) {
+                        @media (min-width: 720px) and (max-width: 1200px) {
                             grid-template-columns: repeat(${m}, 1fr);
                         }
-                        @media (min-width: 1200px ) {
+                        @media (min-width: 1200px) {
                             grid-template-columns: repeat(${lg}, 1fr);
                         }
                     }
