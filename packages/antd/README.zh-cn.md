@@ -1808,12 +1808,14 @@ function registerVirtualBox(
 **用法**
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import SchemaForm, {
   SchemaMarkupField as Field,
-  registerVirtualBox,
-  createFormActions
+  registerVirtualBox
 } from '@formily/antd'
 import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
 registerVirtualBox('form-layout', props => {
   return (
@@ -1829,7 +1831,7 @@ const App = () => {
     <SchemaForm components={{ Input }}>
       <Field
         type="object"
-        x-comppnent="form-layout"
+        x-component="form-layout"
         x-component-props={{
           attr: 'hello'
         }}
