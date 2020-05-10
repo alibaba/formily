@@ -21,7 +21,8 @@
   },
   "devDependencies": {
     "@types/styled-components": "^4.1.19",
-    "antd": "^4.0.0"
+    "antd": "^4.0.0",
+    "jest-styled-components": "^6.3.3"
   },
   "peerDependencies": {
     "@types/styled-components": "^4.1.19",
