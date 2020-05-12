@@ -969,11 +969,11 @@ const App = () => {
           />
 
           <FormItem
-            full
             title="辅助文案 + full"
             mega-props={{
               addonBefore: 'before',
-              addonAfter: 'after'
+              addonAfter: 'after',
+              full: true,
             }}
             description="description"
             name="fad2"

@@ -2002,6 +2002,63 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Layout Components
 
+#### MegaLayout
+
+**Scehma引入方式**
+
+```tsx
+import { FormMegaLayout } from '@formily/next-components'
+```
+
+**JSX引入方式**
+
+```tsx
+import { MegaLayout } from '@formily/next-components'
+```
+
+- MegaLayout属性一览
+
+| 字段名     | 描述           | 类型                   | 默认值  |
+| :--------- | :------------- | :--------------------- | :------ |
+| labelAlign | label 对齐方式 | `left`, `right`, `top` | `right` |
+| full   | 表单组件是否撑满 | boolean | false  |
+| labelCol   | label 所占列数   | number(0-24) |        |
+| wrapperCol | wrapper 所占列数 | number(0-24) |        |
+| labelWidth   | label 宽度   | number |        |
+| wrapperWidth | wrapper 宽度 | number |        |
+| addonBefore  | FormMegaLayout 前辅助文案   | any  |        |
+| addonAfter   | FormMegaLayout 后辅助文案   | any  |        |
+| description | FormMegaLayout 底部辅助文案 | any  |        |
+| inline | 是否启用行内布局 | boolean | false  |
+| grid    | 是否启用栅格布局 | boolean | false  |
+| columns | 栅格布局总共列数 | number  | 3      |
+| autoRow | 是否自动换行     | boolean | false  |
+| responsive.s  | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| responsive.m  | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| responsive.lg | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+| layoutProps.labelCol | 改变自身布局属性, wrapper 比例 | number(0-24) |        |
+| layoutProps.wrapperCol | 改变自身布局属性, label 比例 | number(0-24) |        |
+| layoutProps.labelWidth | 改变自身布局属性, label 宽度 | number |        |
+| layoutProps.wrapperWidth | 改变自身布局属性, wrapper 宽度 | number |        |
+| layoutProps.labelAlign | 改变自身label对齐方式 | 'right', 'left', 'top' |        |
+
+- Schema字段对应属性一览
+
+> JSX模式下，属性名前缀为 `mega-props` , Schema模式下则为 `x-mega-props`
+
+| 字段名     | 描述           | 类型                   | 默认值  |
+| :--------- | :------------- | :--------------------- | :------ |
+| ['x-mega-props'].labelAlign | label 对齐方式 | `left`, `right`, `top` | `right` |
+| ['x-mega-props'].full   | 表单组件是否撑满 | boolean | false  |
+| ['x-mega-props'].labelCol   | label 所占列数   | number(0-24) |        |
+| ['x-mega-props'].wrapperCol | wrapper 所占列数 | number(0-24) |        |
+| ['x-mega-props'].labelWidth   | label 宽度   | number |        |
+| ['x-mega-props'].wrapperWidth | wrapper 宽度 | number |        |
+| ['x-mega-props'].addonBefore  | FormMegaLayout 前辅助文案   | any  |        |
+| ['x-mega-props'].addonAfter   | FormMegaLayout 后辅助文案   | any  |        |
+| ['x-mega-props'].description | FormMegaLayout 底部辅助文案 | any  |        |
+| ['x-mega-props'].span | 所占列数 | number | 1      |
+
 #### FormCard
 
 > FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)。

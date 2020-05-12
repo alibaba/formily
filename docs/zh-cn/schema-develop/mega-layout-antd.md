@@ -845,9 +845,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 字段名                         | 描述                                                   | 类型   | 默认值    |
 | :----------------------------- | :----------------------------------------------------- | :----- | :-------- |
-| ['x-mega-props'].responsive.s  | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
-| ['x-mega-props'].responsive.m  | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
-| ['x-mega-props'].responsive.lg | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+| responsive.s  | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| responsive.m  | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| responsive.lg | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -1216,11 +1216,11 @@ const App = () => {
           />
 
           <Field
-            full
             title="辅助文案 + full"
             x-mega-props={{
               addonBefore: 'before',
-              addonAfter: 'after'
+              addonAfter: 'after',
+              full: true,
             }}
             description="description"
             name="fad2"
