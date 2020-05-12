@@ -1215,11 +1215,11 @@ const App = () => {
           />
 
           <Field
-            full
             title="辅助文案 + full"
             x-mega-props={{
               addonBefore: 'before',
-              addonAfter: 'after'
+              addonAfter: 'after',
+              full: true,
             }}
             description="description"
             name="fad2"

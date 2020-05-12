@@ -291,7 +291,7 @@ const App = () => {
         <MegaLayout
           addonBefore="容器before"
           addonAfter="容器after"
-          description="容器description"
+          help="容器description"
           full
         >
           <FormItem name="addon1" title="组件标题" component={DatePicker} />
@@ -303,7 +303,7 @@ const App = () => {
           label="容器标题"
           addonBefore="容器before"
           addonAfter="容器after"
-          description="容器description"
+          help="容器description"
           full
         >
           <FormItem name="addon2" title="组件标题" component={DatePicker} />
@@ -320,7 +320,7 @@ const App = () => {
               addonBefore: '组件before',
               addonAfter: '组件after'
             }}
-            description="组件description"
+            help="组件description"
           />
         </MegaLayout>
 
@@ -330,7 +330,7 @@ const App = () => {
           label="容器标题"
           addonBefore="容器before"
           addonAfter="容器after"
-          description="容器description"
+          help="容器description"
           full
         >
           <FormItem
@@ -341,7 +341,7 @@ const App = () => {
               addonBefore: '组件before',
               addonAfter: '组件after'
             }}
-            description="组件description"
+            help="组件description"
           />
         </MegaLayout>
       </Form>
@@ -379,7 +379,7 @@ const App = () => {
           label="容器标题"
           addonBefore="容器before"
           addonAfter="容器after"
-          description="容器description"
+          help="容器description"
           full
         >
           <FormItem
@@ -390,7 +390,7 @@ const App = () => {
               addonBefore: '组件before',
               addonAfter: '组件after'
             }}
-            description="组件description"
+            help="组件description"
           />
         </MegaLayout>
       </Form>
@@ -401,7 +401,7 @@ const App = () => {
           label="容器标题"
           addonBefore="容器before"
           addonAfter="容器after"
-          description="容器description"
+          help="容器description"
           full
         >
           <FormItem
@@ -412,7 +412,7 @@ const App = () => {
               addonBefore: '组件before',
               addonAfter: '组件after'
             }}
-            description="组件description"
+            help="组件description"
           />
         </MegaLayout>
       </Form>
@@ -423,7 +423,7 @@ const App = () => {
           label="容器标题"
           addonBefore="容器before"
           addonAfter="容器after"
-          description="容器description"
+          help="容器description"
           full
         >
           <FormItem
@@ -434,7 +434,7 @@ const App = () => {
               addonBefore: '组件before',
               addonAfter: '组件after'
             }}
-            description="组件description"
+            help="组件description"
           />
         </MegaLayout>
       </Form>
@@ -780,9 +780,9 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 | 字段名                         | 描述                                                   | 类型   | 默认值    |
 | :----------------------------- | :----------------------------------------------------- | :----- | :-------- |
-| ['mega-props'].responsive.s  | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
-| ['mega-props'].responsive.m  | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
-| ['mega-props'].responsive.lg | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+| responsive.s  | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| responsive.m  | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| responsive.lg | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -1122,19 +1122,19 @@ const App = () => {
               addonBefore: 'before',
               addonAfter: 'after'
             }}
-            description="description"
+            help="description"
             name="fad1"
             component={DatePicker}
           />
 
           <FormItem
-            full
             title="辅助文案 + full"
             mega-props={{
               addonBefore: 'before',
-              addonAfter: 'after'
+              addonAfter: 'after',
+              full: true,
             }}
-            description="description"
+            help="description"
             name="fad2"
             component={DatePicker}
           />
@@ -1146,7 +1146,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fiad1"
               component={DatePicker}
             />
@@ -1156,7 +1156,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fiad2"
               component={DatePicker}
             />
@@ -1174,7 +1174,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fgiad1"
               component={DatePicker}
             />
@@ -1184,7 +1184,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fgiad2"
               component={DatePicker}
             />
@@ -1194,7 +1194,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fgiad3"
               component={DatePicker}
             />
@@ -1213,7 +1213,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fcgiad1"
               component={DatePicker}
             />
@@ -1223,7 +1223,7 @@ const App = () => {
                 addonBefore: 'before',
                 addonAfter: 'after'
               }}
-              description="description"
+              help="description"
               name="fcgiad2"
               component={DatePicker}
             />
