@@ -14,6 +14,15 @@ import { ValidatePatternRules } from '@formily/validator'
 import { Schema } from './shared/schema'
 export * from '@formily/react'
 
+declare global {
+  namespace FormilyCore {
+    // eslint-disable-next-line
+    export interface FieldProps extends ISchema {}
+    // eslint-disable-next-line
+    export interface VirtualFieldProps extends ISchema {}
+  }
+}
+
 export interface ISchemaFieldProps {
   path?: FormPathPattern
   schema?: Schema
@@ -138,7 +147,6 @@ export interface ISchema {
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
   ['x-linkages']?: Array<{
-    name: FormPathPattern
     target: FormPathPattern
     type: string
     [key: string]: any

@@ -54,9 +54,9 @@ export const transformDataSourceKey = (component, dataSourceKey) => {
 }
 
 export const normalizeCol = (
-  col: { span: number; offset?: number } | number,
+  col?: { span: number; offset?: number } | number,
   defaultValue?: { span: number }
-): { span: number; offset?: number } => {
+): { span: number; offset?: number } | undefined => {
   if (!col) {
     return defaultValue
   } else {

@@ -126,6 +126,7 @@ export class Schema implements ISchema {
   public ['x-component-props']?: ISchema['x-component-props']
   public ['x-render']?: ISchema['x-render']
   public ['x-effect']?: ISchema['x-effect']
+  public ['x-linkages']?: ISchema['x-linkages']
   /** schema class self specs**/
 
   public parent?: Schema

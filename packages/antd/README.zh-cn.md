@@ -14,35 +14,35 @@ npm install --save @formily/antd
 
 基于@formily/react 的核心组件 SchemaForm 进一步扩展出来的 SchemaForm 组件，推荐生产环境下使用
 
-| 参数               | 说明                                                                                                          | 类型                                                                     | 默认值 |
-| :----------------- | :------------------------------------------------------------------------------------------------------------ | :----------------------------------------------------------------------- | :----- |
-| schema             | 通过 schema 渲染表单                                                                                          | [ISchema](#ISchema)                                                      |        |
-| formComponent      | 全局注册 Form 渲染组件                                                                                        | string `or` React.ReactElement                                           |        |
-| formItemComponent  | 全局注册 FormItem 渲染组件                                                                                    | React.ReactElement                                                       |        |
-| labelCol           | label 布局控制                                                                                                | number `or` { span: number; offset?: number }                            |        |
-| wrapperCol         | FormItem 布局控制                                                                                             | number `or` { span: number; offset?: number }                            |        |
-| previewPlaceholder | 详情页的文本态占位符                                                                                          | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string) | N/A    |
-| prefix             | 样式前缀                                                                                                      | string                                                                   |        |
-| inline             | 是否为内联表单                                                                                                | boolean                                                                  |        |
-| size               | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。 | 'large' `or` 'medium' `or` 'small'                                       |        |
-| labelAlign         | 标签的位置                                                                                                    | 'top' `or` 'left' `or` 'inset'                                           |        |
-| className          | 扩展 class                                                                                                    | string                                                                   |        |
-| style              | 自定义内联样式                                                                                                | React.CSSProperties                                                      |        |
-| component          | 设置标签类型                                                                                                  | string `or` (() => void)                                                 |        |
-| value              | 全局 value                                                                                                    | {}                                                                       |        |
-| defaultValue       | 全局 defaultValue                                                                                             | {}                                                                       |        |
-| initialValues      | 全局 initialValues                                                                                            | {}                                                                       |        |
-| actions            | FormActions 实例                                                                                              | [FormActions](#FormActions)                                              |        |
-| effects            | IFormEffect 实例                                                                                              | IFormEffect<FormEffectPayload, [FormActions](#FormActions)>              |        |
-| form               | 表单实例                                                                                                      | [IForm](#IForm)                                                          |        |
-| onChange           | 表单变化回调                                                                                                  | (values: {}) => void                                                     |        |
-| onSubmit           | form 内有 `htmlType="submit"` 或 actions.submit 时 触发                                                       | (values: {}) => void `or` Promise<{}>                                    |        |
-| onReset            | form 内有 <Reset/> 或 actions.reset 时 触发                                                                   | () => void                                                               |        |
-| onValidateFailed   | 校验失败时触发                                                                                                | (valideted: [IFormValidateResult](#IFormValidateResult)) => void         |        |
-| children           | 全局 value                                                                                                    | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement)  |        |
-| useDirty           | 是否使用脏检查，默认会走 immer 精确更新                                                                       | boolean                                                                  |        |
-| editable           | 是否可编辑                                                                                                    | boolean `or` ((name: string) => boolean)                                 |        |
-| validateFirst      | 是否走悲观校验，遇到第一个校验失败就停止后续校验                                                              | boolean                                                                  |        |
+| 参数               | 说明                                                                                                          | 类型                                                                                                 | 默认值 |
+| :----------------- | :------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------- | :----- |
+| schema             | 通过 schema 渲染表单                                                                                          | [ISchema](#ISchema)                                                                                  |        |
+| formComponent      | 全局注册 Form 渲染组件                                                                                        | string `or` React.ReactElement                                                                       |        |
+| formItemComponent  | 全局注册 FormItem 渲染组件                                                                                    | React.ReactElement                                                                                   |        |
+| labelCol           | label 布局控制                                                                                                | number `or` { span: number; offset?: number } `or` [object](https://ant.design/components/grid/#Col) |        |
+| wrapperCol         | FormItem 布局控制                                                                                             | number `or` { span: number; offset?: number } `or` [object](https://ant.design/components/grid/#Col) |        |
+| previewPlaceholder | 详情页的文本态占位符                                                                                          | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string)                             | N/A    |
+| prefix             | 样式前缀                                                                                                      | string                                                                                               |        |
+| inline             | 是否为内联表单                                                                                                | boolean                                                                                              |        |
+| size               | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。 | 'large' `or` 'medium' `or` 'small'                                                                   |        |
+| labelAlign         | 标签的位置                                                                                                    | 'left' `or` 'right'                                                                                  |        |
+| className          | 扩展 class                                                                                                    | string                                                                                               |        |
+| style              | 自定义内联样式                                                                                                | React.CSSProperties                                                                                  |        |
+| component          | 设置标签类型                                                                                                  | string `or` (() => void)                                                                             |        |
+| value              | 全局 value                                                                                                    | {}                                                                                                   |        |
+| defaultValue       | 全局 defaultValue                                                                                             | {}                                                                                                   |        |
+| initialValues      | 全局 initialValues                                                                                            | {}                                                                                                   |        |
+| actions            | FormActions 实例                                                                                              | [FormActions](#FormActions)                                                                          |        |
+| effects            | IFormEffect 实例                                                                                              | IFormEffect<FormEffectPayload, [FormActions](#FormActions)>                                          |        |
+| form               | 表单实例                                                                                                      | [IForm](#IForm)                                                                                      |        |
+| onChange           | 表单变化回调                                                                                                  | (values: {}) => void                                                                                 |        |
+| onSubmit           | form 内有 `htmlType="submit"` 或 actions.submit 时 触发                                                       | (values: {}) => void `or` Promise<{}>                                                                |        |
+| onReset            | form 内有 <Reset/> 或 actions.reset 时 触发                                                                   | () => void                                                                                           |        |
+| onValidateFailed   | 校验失败时触发                                                                                                | (valideted: [IFormValidateResult](#IFormValidateResult)) => void                                     |        |
+| children           | 全局 value                                                                                                    | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement)                              |        |
+| useDirty           | 是否使用脏检查，默认会走 immer 精确更新                                                                       | boolean                                                                                              |        |
+| editable           | 是否可编辑                                                                                                    | boolean `or` ((name: string) => boolean)                                                             |        |
+| validateFirst      | 是否走悲观校验，遇到第一个校验失败就停止后续校验                                                              | boolean                                                                                              |        |
 
 #### `<SchemaMarkupField/>`
 
@@ -271,37 +271,34 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 适用于纯 JSX 开发，开发者可以基于此进行二次封装。
 
-| 参数               | 说明                                                                                                          | 类型                                                                             | 默认值 |
-| :----------------- | :------------------------------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------- | :----- |
-| fields             | 传入自定义表单组件                                                                                            | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) }               |        |
-| virtualFields      | 传入自定义虚拟组件                                                                                            | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) } |        |
-| labelCol           | label 布局控制                                                                                                | number `or` { span: number; offset?: number }                                    |        |
-| wrapperCol         | FormItem 布局控制                                                                                             | number `or` { span: number; offset?: number }                                    |        |
-| previewPlaceholder | 自定义预览 placeholder                                                                                        | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string)         |        |
-| prefix             | 样式前缀                                                                                                      | string                                                                           |        |
-| inline             | 是否为内联表单                                                                                                | boolean                                                                          |        |
-| size               | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。 | 'large' `or` 'medium' `or` 'small'                                               |        |
-| labelAlign         | 标签的位置                                                                                                    | 'top' `or` 'left' `or` 'inset'                                                   |        |
-| labelTextAlign     | 标签的左右对齐方式                                                                                            | 'left' `or` 'right'                                                              |        |
-| labelCol           | 控制所有 Item 的 labelCol                                                                                     | `{}`                                                                             |        |
-| wrapperCol         | 控制所有 Item 的 wrapperCol                                                                                   | `{}`                                                                             |        |
-| className          | 扩展 class                                                                                                    | string                                                                           |        |
-| style              | 自定义内联样式                                                                                                | React.CSSProperties                                                              |        |
-| component          | 设置标签类型                                                                                                  | string `or` (() => void)                                                         |        |
-| value              | 全局 value                                                                                                    | {}                                                                               |        |
-| defaultValue       | 全局 defaultValue                                                                                             | {}                                                                               |        |
-| initialValues      | 全局 initialValues                                                                                            | {}                                                                               |        |
-| actions            | FormActions 实例                                                                                              | [FormActions](#FormActions)                                                      |        |
-| effects            | IFormEffect 实例                                                                                              | IFormEffect<FormEffectPayload, [FormActions](#FormActions)>                      |        |
-| form               | 表单实例                                                                                                      | [IForm](#IForm)                                                                  |        |
-| onChange           | 表单变化回调                                                                                                  | (values: {}) => void                                                             |        |
-| onSubmit           | form 内有 `htmlType="submit"` 或 actions.submit 时 触发                                                       | (values: {}) => void `or` Promise<{}>                                            |        |
-| onReset            | form 内有 <Reset/> 或 actions.reset 时 触发                                                                   | () => void                                                                       |        |
-| onValidateFailed   | 校验失败时触发                                                                                                | (valideted: [IFormValidateResult](#IFormValidateResult)) => void                 |        |
-| children           | 全局 value                                                                                                    | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement)          |        |
-| useDirty           | 是否使用脏检查，默认会走 immer 精确更新                                                                       | boolean                                                                          |        |
-| editable           | 是否可编辑                                                                                                    | boolean `or` ((name: string) => boolean)                                         |        |
-| validateFirst      | 是否走悲观校验，遇到第一个校验失败就停止后续校验                                                              | boolean                                                                          |        |
+| 参数               | 说明                                                                                                          | 类型                                                                                                 | 默认值 |
+| :----------------- | :------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------- | :----- |
+| fields             | 传入自定义表单组件                                                                                            | { [key: string]: [ISchemaFieldComponent](#ISchemaFieldComponent) }                                   |        |
+| virtualFields      | 传入自定义虚拟组件                                                                                            | { [key: string]: [ISchemaVirtualFieldComponent](#ISchemaVirtualFieldComponent) }                     |        |
+| labelCol           | label 布局控制                                                                                                | number `or` { span: number; offset?: number } `or` [object](https://ant.design/components/grid/#Col) |        |
+| wrapperCol         | 输入控件布局控制                                                                                              | number `or` { span: number; offset?: number } `or` [object](https://ant.design/components/grid/#Col) |        |
+| previewPlaceholder | 自定义预览 placeholder                                                                                        | string `or` ((props: [IPreviewTextProps](#IPreviewTextProps)) => string)                             |        |
+| prefix             | 样式前缀                                                                                                      | string                                                                                               |        |
+| inline             | 是否为内联表单                                                                                                | boolean                                                                                              |        |
+| size               | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效。 | 'large' `or` 'medium' `or` 'small'                                                                   |        |
+| labelAlign         | 标签的位置                                                                                                    | 'left' `or` 'right'                                                                                  |        |
+| className          | 扩展 class                                                                                                    | string                                                                                               |        |
+| style              | 自定义内联样式                                                                                                | React.CSSProperties                                                                                  |        |
+| component          | 设置标签类型                                                                                                  | string `or` (() => void)                                                                             |        |
+| value              | 全局 value                                                                                                    | {}                                                                                                   |        |
+| defaultValue       | 全局 defaultValue                                                                                             | {}                                                                                                   |        |
+| initialValues      | 全局 initialValues                                                                                            | {}                                                                                                   |        |
+| actions            | FormActions 实例                                                                                              | [FormActions](#FormActions)                                                                          |        |
+| effects            | IFormEffect 实例                                                                                              | IFormEffect<FormEffectPayload, [FormActions](#FormActions)>                                          |        |
+| form               | 表单实例                                                                                                      | [IForm](#IForm)                                                                                      |        |
+| onChange           | 表单变化回调                                                                                                  | (values: {}) => void                                                                                 |        |
+| onSubmit           | form 内有 `htmlType="submit"` 或 actions.submit 时 触发                                                       | (values: {}) => void `or` Promise<{}>                                                                |        |
+| onReset            | form 内有 <Reset/> 或 actions.reset 时 触发                                                                   | () => void                                                                                           |        |
+| onValidateFailed   | 校验失败时触发                                                                                                | (valideted: [IFormValidateResult](#IFormValidateResult)) => void                                     |        |
+| children           | 全局 value                                                                                                    | React.ReactElement `or` ((form: [IForm](#IForm)) => React.ReactElement)                              |        |
+| useDirty           | 是否使用脏检查，默认会走 immer 精确更新                                                                       | boolean                                                                                              |        |
+| editable           | 是否可编辑                                                                                                    | boolean `or` ((name: string) => boolean)                                                             |        |
+| validateFirst      | 是否走悲观校验，遇到第一个校验失败就停止后续校验                                                              | boolean                                                                                              |        |
 
 #### `<FormItem>`
 
@@ -317,7 +314,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | name              | 字段名                                                                                               | [FormPathPattern](#FormPathPattern)                                                  |          |
 | dataType          | 数据类型(array/object)                                                                               | string                                                                               |          |
 | value             | 字段值                                                                                               | any                                                                                  |          |
-| initialValue      | 初始哈字段值                                                                                         | any                                                                                  |          |
+| initialValue      | 初始化字段值                                                                                         | any                                                                                  |          |
 | values            | 字段集合, 从 onChange 获取的所有参数                                                                 | any                                                                                  |          |
 | triggerType       | 字段触发校验类型                                                                                     | 'onChange' `|` 'onBlur'                                                              |          |
 | getValueFromEvent | 字段变更时，从 event 中获取 value 的计算函数                                                         | (...args: any[]) => any                                                              |          |
@@ -433,7 +430,7 @@ const App = () => {
 | path              | 字段路径                                     | [FormPathPattern](#FormPathPattern)                                                  |        |
 | name              | 字段名                                       | [FormPathPattern](#FormPathPattern)                                                  |        |
 | value             | 字段值                                       | any                                                                                  |        |
-| initialValue      | 初始哈字段值                                 | any                                                                                  | []     |
+| initialValue      | 初始化字段值                                 | any                                                                                  | []     |
 | values            | 字段集合, 从 onChange 获取的所有参数         | any                                                                                  |        |
 | triggerType       | 字段触发校验类型                             | 'onChange' `|` 'onBlur'                                                              |        |
 | getValueFromEvent | 字段变更时，从 event 中获取 value 的计算函数 | (...args: any[]) => any                                                              |        |
@@ -1188,7 +1185,7 @@ const CustomComponent = props => {
 
 const App = () => {
   return (
-    <FormItemDeepProvider labelAlign="top" labelCol={6} wrapperCol={18}>
+    <FormItemDeepProvider labelAlign="left" labelCol={6} wrapperCol={18}>
       <CustomComponent />
     </FormItemDeepProvider>
   )
@@ -1811,12 +1808,14 @@ function registerVirtualBox(
 **用法**
 
 ```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
 import SchemaForm, {
   SchemaMarkupField as Field,
-  registerVirtualBox,
-  createFormActions
+  registerVirtualBox
 } from '@formily/antd'
 import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
 
 registerVirtualBox('form-layout', props => {
   return (
@@ -1832,7 +1831,7 @@ const App = () => {
     <SchemaForm components={{ Input }}>
       <Field
         type="object"
-        x-comppnent="form-layout"
+        x-component="form-layout"
         x-component-props={{
           attr: 'hello'
         }}

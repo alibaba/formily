@@ -548,7 +548,7 @@ const App = () => (
       actions={actions}
       onSubmit={v => console.log(v)}
     >
-      <FormTab name="tabs">
+      <FormTab name="tabs" defaultActiveKey={'tab-2'}>
         <FormTab.TabPane name="tab-1" tab="选项1">
           <Field
             type="string"
