@@ -48,7 +48,6 @@ export const ArrayCards = styled(
         mutators.push(schemaItems.getEmptyValue())
       }
     }
-
     return (
       <div className={className}>
         <ArrayList

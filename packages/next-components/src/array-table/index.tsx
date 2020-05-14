@@ -229,7 +229,6 @@ export const ArrayTable = styled(
         </ArrayList.Wrapper>
       )
     }
-
     return (
       <div className={className}>
         <ArrayList
