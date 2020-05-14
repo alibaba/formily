@@ -595,7 +595,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | ['x-mega-props'].span | 所占列数 | number | 1      |
 
 通过 `CSS Grid Layout` 实现栅格布局，功能更加强大。
-
+ 
 > 为了更好的说明例子，下面所有例子都声明 `full=true`
 
 ```jsx
