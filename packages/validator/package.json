@@ -19,7 +19,7 @@
     "build": "tsc --declaration"
   },
   "devDependencies": {
-    "typescript": "^3.5.2"
+    "typescript":"~3.8.0"
   },
   "dependencies": {
     "@formily/shared": "^1.1.3"
