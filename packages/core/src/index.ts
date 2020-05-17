@@ -107,7 +107,7 @@ export function createForm(options: IFormCreatorOptions = {}) {
     const initialValue = getFormInitialValuesIn(state.name)
     if (!isEqual(initialValue, state.initialValue)) {
       state.initialValue = initialValue
-      if (!isValid(state.value)) {
+      if (!isValid(state.value) || isEmpty(state.value)) {
         state.value = initialValue
       } else if (
         /array/gi.test(state.dataType) &&

@@ -132,7 +132,7 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "~3.6.2",
+    "typescript": "~3.8.0",
     "unified": "^7.1.0",
     "user-event": "^1.4.4",
     "wait-for-expect": "^3.0.1",
