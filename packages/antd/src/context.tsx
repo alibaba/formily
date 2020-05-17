@@ -12,7 +12,7 @@ export const FormItemDeepProvider: React.FC<IFormItemTopProps> = ({
   labelCol,
   inline,
   wrapperCol,
-  size,
+  size
 }) => (
   <NextFormItemDeepContext.Provider
     value={{
