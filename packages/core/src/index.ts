@@ -350,7 +350,7 @@ export function createForm(options: IFormCreatorOptions = {}) {
       if (
         unmountedChanged &&
         (published.display !== false || published.visible === false) &&
-        published.unmountRemoveValue
+        published.unmountRemoveValue === true
       ) {
         if (published.unmounted) {
           if (isValid(published.value)) {
@@ -525,7 +525,6 @@ export function createForm(options: IFormCreatorOptions = {}) {
           dataPath,
           computeState,
           dataType,
-          unmountRemoveValue,
           useDirty: isValid(useDirty) ? useDirty : options.useDirty
         })
       field.subscription = {
@@ -546,6 +545,10 @@ export function createForm(options: IFormCreatorOptions = {}) {
               state.initialValue = initialValue
             } else if (isValid(formInitialValue)) {
               state.initialValue = formInitialValue
+            }
+
+            if (isValid(unmountRemoveValue)) {
+              state.unmountRemoveValue = unmountRemoveValue
             }
 
             if (isValid(value)) {
