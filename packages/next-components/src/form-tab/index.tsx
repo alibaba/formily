@@ -47,9 +47,12 @@ const parseTabItems = (items: any, hiddenKeys?: string[]) => {
   }, [])
 }
 
-
-const parseDefaultActiveKey = (hiddenKeys: Array<string> = [], items: any, defaultActiveKey) => {
-  if(!hiddenKeys.includes(defaultActiveKey))return defaultActiveKey
+const parseDefaultActiveKey = (
+  hiddenKeys: Array<string> = [],
+  items: any,
+  defaultActiveKey
+) => {
+  if (!hiddenKeys.includes(defaultActiveKey)) return defaultActiveKey
 
   const index = items.findIndex(item => !hiddenKeys.includes(item.key))
   return index >= 0 ? items[index].key : ''
@@ -77,7 +80,7 @@ const addErrorBadge = (
 
 type ExtendsProps = StateMap &
   typeof EffectHooks & {
-    TabPane: React.FC<ItemProps>
+    TabPane: React.FC<IVirtualBoxProps<ItemProps>>
   }
 
 type ExtendsState = {
@@ -90,12 +93,20 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
   'tab',
   ({ form, schema, name, path }: ISchemaVirtualFieldComponentProps) => {
     const orderProperties = schema.getOrderProperties()
-    let { hiddenKeys, defaultActiveKey, ...componentProps } = schema.getExtendsComponentProps()
+    let {
+      hiddenKeys,
+      defaultActiveKey,
+      ...componentProps
+    } = schema.getExtendsComponentProps()
     hiddenKeys = hiddenKeys || []
     const [{ activeKey, childrenErrors }, setFieldState] = useFieldState<
       ExtendsState
     >({
-      activeKey: parseDefaultActiveKey(hiddenKeys, orderProperties, defaultActiveKey),
+      activeKey: parseDefaultActiveKey(
+        hiddenKeys,
+        orderProperties,
+        defaultActiveKey
+      ),
       childrenErrors: []
     })
 
@@ -113,7 +124,11 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
     useEffect(() => {
       if (Array.isArray(hiddenKeys)) {
         setFieldState({
-          activeKey: parseDefaultActiveKey(hiddenKeys, orderProperties, defaultActiveKey)
+          activeKey: parseDefaultActiveKey(
+            hiddenKeys,
+            orderProperties,
+            defaultActiveKey
+          )
         })
       }
     }, [hiddenKeys.length])
@@ -126,8 +141,8 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
           })
         }
       })
-      EffectHooks.onTabActiveKeyChange$().subscribe(({ value, name, path }) => {   
-        if(!itemsRef.current.map(item => item.key).includes(value))return
+      EffectHooks.onTabActiveKeyChange$().subscribe(({ value, name, path }) => {
+        if (!itemsRef.current.map(item => item.key).includes(value)) return
         matchUpdate(name, path, () => {
           setFieldState({
             activeKey: value
