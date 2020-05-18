@@ -1,6 +1,6 @@
 {
   "name": "@formily/meet",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "@alifd/meet": "^1.0.0-beta.25",
-    "@formily/react": "^1.1.2",
-    "@formily/react-schema-renderer": "^1.1.2",
-    "@formily/react-shared-components": "^1.1.2",
-    "@formily/shared": "^1.1.2",
+    "@formily/react": "^1.1.3",
+    "@formily/react-schema-renderer": "^1.1.3",
+    "@formily/react-shared-components": "^1.1.3",
+    "@formily/shared": "^1.1.3",
     "@rax-ui/locale": "^1.0.0-beta.10",
     "classnames": "^2.2.6",
     "rax": "^1.1.1",
@@ -47,7 +47,7 @@
     "ts-import-plugin": "1.6.1",
     "ts-node": "^8.3.0",
     "ts-transform-import-path-rewrite": "^0.2.1",
-    "typescript": "~3.6.2"
+    "typescript":"~3.8.0"
   },
   "publishConfig": {
     "access": "public"

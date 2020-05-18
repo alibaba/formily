@@ -80,7 +80,7 @@ const addErrorBadge = (
 
 type ExtendsProps = StateMap &
   typeof EffectHooks & {
-    TabPane: React.FC<TabPaneProps>
+    TabPane: React.FC<IVirtualBoxProps<TabPaneProps>>
   }
 
 type ExtendsState = {

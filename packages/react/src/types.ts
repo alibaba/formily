@@ -14,6 +14,47 @@ import {
 import { Observable } from 'rxjs/internal/Observable'
 export * from '@formily/core'
 
+type ILayoutLabelAlign = 'top' | 'left' | 'right'
+export interface ILayoutProps {
+  context?: any
+  isRoot?: boolean
+  isLayout?: boolean
+  defaultSettings?: any
+  children?: (props: ILayoutProps) => React.ReactElement
+  full?: boolean
+  label?: any
+  required?: boolean
+  labelAlign?: ILayoutLabelAlign
+  inline?: boolean
+  inset?: boolean
+  autoRow?: boolean
+  columns?: number
+  flex?: boolean
+  labelWidth?: number | string
+  wrapperWidth?: number | string
+  labelCol?: number
+  wrapperCol?: number
+  addonBefore?: any
+  addonAfter?: any
+  description?: any
+  gutter?: number | string
+  span?: number
+  grid?: boolean
+  responsive?: { lg?: number; m?: number; s?: number }
+  size?: string
+}
+
+export type ILayoutItemProps = {
+  span?: number
+  full?: boolean
+  labelAlign?: ILayoutLabelAlign
+  inset?: boolean
+  labelWidth?: number
+  wrapperWidth?: number
+  labelCol?: number
+  wrapperCol?: number
+}
+
 export interface IFormEffect<Payload = any, Actions = any> {
   (
     selector: IFormExtendsEffectSelector<Payload, Actions>,
@@ -162,10 +203,7 @@ export interface IEffectProviderAPI<TActions = any, TContext = any> {
     type: string,
     filter: (payload: TPayload) => boolean
   ) => Promise<TPayload>
-  triggerTo: <TPayload = any>(
-    type: string,
-    payload: TPayload
-  ) => Promise<TPayload>
+  triggerTo: <TPayload = any>(type: string, payload: TPayload) => void
   applyMiddlewares: <TPayload = any>(
     type: string,
     payload: TPayload

@@ -126,6 +126,8 @@ export class Schema implements ISchema {
   public ['x-component-props']?: ISchema['x-component-props']
   public ['x-render']?: ISchema['x-render']
   public ['x-effect']?: ISchema['x-effect']
+  public ['x-linkages']?: ISchema['x-linkages']
+  public ['x-mega-props']?: ISchema['x-mega-props']
   /** schema class self specs**/
 
   public parent?: Schema
@@ -337,6 +339,11 @@ export class Schema implements ISchema {
       return display
     }
   }
+
+  getMegaLayoutProps() {
+    return this['x-mega-props'] || {}
+  }
+
   getExtendsTriggerType() {
     const itemProps = this.getExtendsItemProps()
     const props = this.getExtendsProps()

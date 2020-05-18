@@ -17,7 +17,7 @@ export const NextSchemaFormAdaptor: React.FC<FormProps &
     <FormItemDeepProvider {...rest}>
       <PreviewText.ConfigProvider value={props}>
         <Form
-          {...props}
+          {...rest}
           labelCol={normalizeCol(props.labelCol)}
           wrapperCol={normalizeCol(props.wrapperCol)}
           field={false}

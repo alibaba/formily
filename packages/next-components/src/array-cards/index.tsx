@@ -135,6 +135,7 @@ export const ArrayCards = styled(
     )
   }
 )<ISchemaFieldComponentProps>`
+  width: 100%;
   .next-card-body {
     padding-top: 30px;
     padding-bottom: 0 !important;

@@ -5,6 +5,7 @@ import {
   connect,
   InternalVirtualField
 } from '@formily/react-schema-renderer'
+import { MegaLayoutItem } from './FormMegaLayout/index'
 import {
   normalizeCol,
   pickFormItemProps,
@@ -104,18 +105,30 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     const { labelCol, wrapperCol, help } = props
     const formItemProps = pickFormItemProps(props)
     const { inline, ...componentProps } = pickNotFormItemProps(props)
-    return (
-      <AntdFormItem
-        {...formItemProps}
-        required={editable === false ? undefined : required}
-        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
-        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
-        validateStatus={computeStatus(state)}
-        help={computeMessage(errors, warnings) || help}
-      >
-        {renderComponent({ props: componentProps, state, mutators, form })}
-      </AntdFormItem>
-    )
+
+    const { size } = topFormItemProps
+    const itemProps = {
+      ...formItemProps,
+      required: editable === false ? undefined : required,
+      labelCol: formItemProps.label ? normalizeCol(labelCol) : {},
+      wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : {},
+      validateStatus: computeStatus(state),
+      help: computeMessage(errors, warnings) || help,
+    }
+
+    return <MegaLayoutItem itemProps={{ ...itemProps, size }} {...props}>
+      {(megaComponentProps) => {
+        if (megaComponentProps) {
+          return renderComponent({ props: megaComponentProps, state, mutators, form })
+        }
+
+        return (
+          <AntdFormItem {...itemProps}>
+            {renderComponent({ props: componentProps, state, mutators, form })}
+          </AntdFormItem>
+        )
+      }}      
+    </MegaLayoutItem>
   }
 
   if (!component && children) {

@@ -107,7 +107,7 @@ export function createForm(options: IFormCreatorOptions = {}) {
     const initialValue = getFormInitialValuesIn(state.name)
     if (!isEqual(initialValue, state.initialValue)) {
       state.initialValue = initialValue
-      if (!isValid(state.value)) {
+      if (!isValid(state.value) || isEmpty(state.value)) {
         state.value = initialValue
       } else if (
         /array/gi.test(state.dataType) &&
@@ -350,7 +350,7 @@ export function createForm(options: IFormCreatorOptions = {}) {
       if (
         unmountedChanged &&
         (published.display !== false || published.visible === false) &&
-        published.unmountRemoveValue
+        published.unmountRemoveValue === true
       ) {
         if (published.unmounted) {
           if (isValid(published.value)) {
@@ -525,7 +525,6 @@ export function createForm(options: IFormCreatorOptions = {}) {
           dataPath,
           computeState,
           dataType,
-          unmountRemoveValue,
           useDirty: isValid(useDirty) ? useDirty : options.useDirty
         })
       field.subscription = {
@@ -546,6 +545,10 @@ export function createForm(options: IFormCreatorOptions = {}) {
               state.initialValue = initialValue
             } else if (isValid(formInitialValue)) {
               state.initialValue = formInitialValue
+            }
+
+            if (isValid(unmountRemoveValue)) {
+              state.unmountRemoveValue = unmountRemoveValue
             }
 
             if (isValid(value)) {
@@ -588,6 +591,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
         const {
           value,
           rules,
+          errors,
+          warnings,
           editable,
           visible,
           unmounted,
@@ -599,7 +604,8 @@ export function createForm(options: IFormCreatorOptions = {}) {
           visible === false ||
           unmounted === true ||
           display === false ||
-          (field as any).disabledValidate
+          (field as any).disabledValidate ||
+          (rules.length === 0 && errors.length === 0 && warnings.length === 0)
         )
           return validate(value, [])
         clearTimeout((field as any).validateTimer)

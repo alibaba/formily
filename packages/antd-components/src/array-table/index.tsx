@@ -190,6 +190,7 @@ export const ArrayTable: any = styled(
     )
   }
 )`
+  width: 100%;
   margin-bottom: 10px;
   table {
     margin-bottom: 0 !important;
