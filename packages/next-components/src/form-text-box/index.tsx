@@ -80,7 +80,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
 
     const textChildren = (
       <div
-        className={className}
+        className={`${className} ${mergeProps.className}`}
         style={{
           marginRight: -gutter / 2,
           marginLeft: -gutter / 2
@@ -92,7 +92,7 @@ export const FormTextBox = createControllerBox<IFormTextBox & ItemProps>(
     )
 
     if (!title && !label) return textChildren
-    
+
     return (
       <NextSchemaFieldAdaptor {...formItemProps}>
         {textChildren}
