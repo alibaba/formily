@@ -165,7 +165,10 @@ export const env = {
   currentActions: null
 }
 
-export const createFormEffects = <Payload = any, Actions = any>(
+export const createFormEffects = <
+  Payload = any,
+  Actions extends IFormActions = any
+>(
   effects: IFormEffect<Payload, Actions> | null,
   actions: Actions
 ) => {
