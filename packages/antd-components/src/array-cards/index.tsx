@@ -105,13 +105,13 @@ export const ArrayCards: any = styled(
             )
           })}
           <ArrayList.Empty>
-            {({ children }) => {
+            {({ children, allowAddition }) => {
               return (
                 <Card
                   {...componentProps}
                   size="small"
-                  className={`card-list-item card-list-empty`}
-                  onClick={onAdd}
+                  className={`card-list-item card-list-empty ${allowAddition ? 'add-pointer' : ''}`}
+                  onClick={allowAddition ? onAdd : undefined}
                 >
                   <div className="empty-wrapper">{children}</div>
                 </Card>
@@ -163,7 +163,7 @@ export const ArrayCards: any = styled(
       }
     }
   }
-  .card-list-empty.card-list-item {
+  .card-list-empty.card-list-item.add-pointer {
     cursor: pointer;
   }
 
