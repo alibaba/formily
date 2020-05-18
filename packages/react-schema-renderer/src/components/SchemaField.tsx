@@ -1,6 +1,14 @@
 import React, { useContext, Fragment } from 'react'
 import { Field, VirtualField, IFieldState } from '@formily/react'
-import { FormPath, isFn, isStr, isEqual, isValid, log } from '@formily/shared'
+import {
+  FormPath,
+  isFn,
+  isStr,
+  isEqual,
+  isValid,
+  log,
+  lowercase
+} from '@formily/shared'
 import {
   ISchemaFieldProps,
   ISchemaFieldComponentProps,
@@ -64,10 +72,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return (
       <Field
         path={path}
-        initialValue={complieExpression(
-          fieldSchema.default,
-          expressionScope
-        )}
+        initialValue={complieExpression(fieldSchema.default, expressionScope)}
         props={complieExpression(
           fieldSchema.getSelfProps(),
           expressionScope,
@@ -184,8 +189,9 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     if (isStr(initialComponent)) {
       if (formRegistry.fields[initialComponent]) {
         return renderFieldDelegate(props => {
-          const stateComponent =
+          const stateComponent = lowercase(
             props.schema.getExtendsComponent() || props.schema.type
+          )
           if (!isStr(stateComponent)) {
             log.error(
               `Can not found any form component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`
@@ -212,8 +218,9 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         })
       } else if (formRegistry.virtualFields[initialComponent]) {
         return renderVirtualFieldDelegate(props => {
-          const stateComponent =
+          const stateComponent = lowercase(
             props.schema.getExtendsComponent() || props.schema.type
+          )
           if (!isStr(stateComponent)) {
             log.error(
               `Can not found any virtual form component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`
