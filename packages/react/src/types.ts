@@ -144,7 +144,7 @@ type OMitActions =
   | 'unsafe_do_not_use_transform_data_path'
 
 export type IFormActions = Omit<IForm, OMitActions> & {
-  dispatch: (type: string, payload: any) => void
+  dispatch?: (type: string, payload: any) => void
 }
 
 type WrapPromise<
