@@ -39,7 +39,8 @@
   "devDependencies": {
     "@alifd/next": "^1.19.1",
     "@types/classnames": "^2.2.9",
-    "@types/styled-components": "^4.1.19"
+    "@types/styled-components": "^4.1.19",
+    "jest-styled-components": "^6.3.3"
   },
   "publishConfig": {
     "access": "public"

@@ -1,5 +1,6 @@
 import React from 'react'
 import { isArr, each, isFn, isValid, defaults } from '@formily/shared'
+import { useLayout } from '@formily/react'
 import {
   ISchema,
   IConnectOptions,
@@ -143,6 +144,20 @@ export const connect = <ExtendsComponentKey extends string = ''>(
 
       if (isValid(componentProps.editable)) {
         delete componentProps.editable
+      }
+
+      const megaProps = schema.getMegaLayoutProps()
+      const { full, size } = useLayout(megaProps)
+      if (full) {
+        componentProps.style = {
+          ...(componentProps.style || {}),
+          width: '100%',
+          flex: 1,
+        }
+      }
+
+      if (size) {
+        componentProps.size = size
       }
 
       return React.createElement(

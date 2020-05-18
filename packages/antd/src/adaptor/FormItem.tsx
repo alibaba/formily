@@ -7,6 +7,7 @@ import {
 } from '../context'
 import { ISchemaFieldAdaptorProps } from '../types'
 import { normalizeCol, pickFormItemProps } from '../shared'
+import { MegaLayoutItem } from '../components/FormMegaLayout/index'
 
 const computeStatus = (props: ISchemaFieldAdaptorProps) => {
   if (props.loading) {
@@ -61,20 +62,21 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
     prefixCls,
     labelAlign,
     labelCol: contextLabelCol,
-    wrapperCol: contextWrapperCol
+    wrapperCol: contextWrapperCol,
+    size,
   } = useDeepFormItem()
   const help = computeHelp(props)
   const label = computeLabel(props)
   const status = computeStatus(props)
   const extra = computeExtra(props)
-  const itemProps = pickFormItemProps(props)
+  const formItemProps = pickFormItemProps(props)
   const schemaItemProps = computeSchemaExtendProps(props)
   const formItemShallowProps = useShallowFormItem()
 
   const mergedProps = {
     label,
     ...formItemShallowProps,
-    ...itemProps,
+    ...formItemProps,
     ...schemaItemProps
   }
 
@@ -84,31 +86,39 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
 
   delete mergedProps.addonAfter
 
-  const children = addonAfter ? (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
-      {addonAfter}
-    </div>
-  ) : (
-    <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
-  )
-  return (
-    <Form.Item
-      prefixCls={prefixCls}
-      labelAlign={labelAlign}
-      help={help}
-      validateStatus={status}
-      extra={extra ? <p>{extra}</p> : undefined}
-      {...mergedProps}
-      required={props.editable === false ? undefined : props.required}
-      labelCol={
-        mergedProps.label ? normalizeCol(labelCol || contextLabelCol) : {}
+  const itemProps = {
+    prefixCls,
+    labelAlign,
+    help,
+    validateStatus: status,
+    extra: extra ? <p>{extra}</p> : undefined,
+    ...mergedProps,
+    required: props.editable === false ? undefined : props.required,
+    labelCol: label ? normalizeCol(labelCol || contextLabelCol) : {},
+    wrapperCol: label ? normalizeCol(wrapperCol || contextWrapperCol) : {}
+  }
+
+  const renderComponent = (children, opts?) => {
+    const { addonAfter } = opts || {}
+    return addonAfter ? (
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FormItemShallowProvider>{children}</FormItemShallowProvider>
+        {addonAfter}
+      </div>
+    ) : (
+      <FormItemShallowProvider>{children}</FormItemShallowProvider>
+    )
+  }
+
+  return <MegaLayoutItem itemProps={{...itemProps, size, }} {...props.props} schemaChildren={props.children}>
+    {(megaComponent) => {
+      if (megaComponent) {
+        return renderComponent(megaComponent, { addonAfter })
       }
-      wrapperCol={
-        mergedProps.label ? normalizeCol(wrapperCol || contextWrapperCol) : {}
-      }
-    >
-      {children}
-    </Form.Item>
-  )
+
+      return <Form.Item {...itemProps}>
+        {renderComponent(props.children, { addonAfter })}
+      </Form.Item>
+    }}      
+  </MegaLayoutItem>
 }
