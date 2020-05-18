@@ -94,8 +94,8 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
     extra: extra ? <p>{extra}</p> : undefined,
     ...mergedProps,
     required: props.editable === false ? undefined : props.required,
-    labelCol: label ? normalizeCol(labelCol || contextLabelCol) : undefined,
-    wrapperCol: label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
+    labelCol: label ? normalizeCol(labelCol || contextLabelCol) : {},
+    wrapperCol: label ? normalizeCol(wrapperCol || contextWrapperCol) : {}
   }
 
   const renderComponent = (children, opts?) => {

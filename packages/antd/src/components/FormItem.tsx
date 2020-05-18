@@ -110,8 +110,8 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     const itemProps = {
       ...formItemProps,
       required: editable === false ? undefined : required,
-      labelCol: formItemProps.label ? normalizeCol(labelCol) : undefined,
-      wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : undefined,
+      labelCol: formItemProps.label ? normalizeCol(labelCol) : {},
+      wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : {},
       validateStatus: computeStatus(state),
       help: computeMessage(errors, warnings) || help,
     }
