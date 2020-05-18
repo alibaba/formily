@@ -92,7 +92,6 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   ) : (
     <FormItemShallowProvider>{props.children}</FormItemShallowProvider>
   )
-
   return (
     <Form.Item
       prefixCls={prefixCls}
@@ -102,9 +101,11 @@ export const AntdSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
       extra={extra ? <p>{extra}</p> : undefined}
       {...mergedProps}
       required={props.editable === false ? undefined : props.required}
-      labelCol={mergedProps.label ? normalizeCol(labelCol || contextLabelCol) : undefined}
+      labelCol={
+        mergedProps.label ? normalizeCol(labelCol || contextLabelCol) : {}
+      }
       wrapperCol={
-        mergedProps.label ? normalizeCol(wrapperCol || contextWrapperCol) : undefined
+        mergedProps.label ? normalizeCol(wrapperCol || contextWrapperCol) : {}
       }
     >
       {children}
