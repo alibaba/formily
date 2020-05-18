@@ -14,7 +14,7 @@ import {
 import { Observable } from 'rxjs/internal/Observable'
 export * from '@formily/core'
 
-export interface IFormEffect<Payload = any, Actions = any> {
+export interface IFormEffect<Payload = any, Actions = IFormActions> {
   (
     selector: IFormExtendsEffectSelector<Payload, Actions>,
     actions: Actions
