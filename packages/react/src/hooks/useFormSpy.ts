@@ -8,7 +8,7 @@ import {
   useReducer
 } from 'react'
 import { FormHeartSubscriber, LifeCycleTypes, IForm } from '@formily/core'
-import { isStr, FormPath, isArr,isFn } from '@formily/shared'
+import { isStr, FormPath, isArr, isFn } from '@formily/shared'
 import { IFormSpyProps, ISpyHook } from '../types'
 import FormContext, { BroadcastContext } from '../context'
 
@@ -67,10 +67,10 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
   }, [])
   useMemo(() => {
     initializedRef.current = true
-    if (form) {
-      subscriberId.current = form.subscribe(subscriber)
-    } else if (broadcast) {
+    if (broadcast) {
       subscriberId.current = broadcast.subscribe(subscriber)
+    } else if (form) {
+      subscriberId.current = form.subscribe(subscriber)
     }
     initializedRef.current = false
   }, [])
@@ -84,7 +84,7 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
       unmountRef.current = true
     }
   }, [])
-  const formApi: IForm = form ? form : broadcast && broadcast.getContext()
+  const formApi: IForm = broadcast ? broadcast && broadcast.getContext() : form
   return {
     form: formApi,
     type,
