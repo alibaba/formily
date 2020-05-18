@@ -148,7 +148,9 @@ export class Broadcast extends Subscribable {
   context: any
 
   setContext(context: any) {
-    this.context = context
+    if (!this.context) {
+      this.context = context
+    }
   }
   getContext() {
     return this.context
