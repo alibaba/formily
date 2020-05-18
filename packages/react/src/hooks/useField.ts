@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
-import { isFn, uid } from '@formily/shared'
+import { isFn, uid, merge } from '@formily/shared'
 import {
   IFieldState,
   IForm,
@@ -93,7 +93,10 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
       if (props) {
         ref.current.field.setState((state: IFieldState) => {
-          Object.assign(state, props)
+          merge(state, props, {
+            assign: true,
+            arrayMerge: (target, source) => source
+          })
         })
       }
       ref.current.field.setCache(ref.current.uid, options)

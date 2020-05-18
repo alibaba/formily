@@ -6,7 +6,7 @@ import {
   IVirtualField,
   LifeCycleTypes
 } from '@formily/core'
-import { uid } from '@formily/shared'
+import { uid, merge } from '@formily/shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
 import { inspectChanged } from '../shared'
@@ -57,7 +57,10 @@ export const useVirtualField = (
       const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
       if (props) {
         ref.current.field.setState((state: IVirtualFieldState) => {
-          Object.assign(state, props)
+          merge(state, props, {
+            assign: true,
+            arrayMerge: (target, source) => source
+          })
         })
         ref.current.field.setCache(ref.current.uid, options)
       }
