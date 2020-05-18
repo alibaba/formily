@@ -119,7 +119,7 @@
     "react-dom": "^16.8.3",
     "react-eva": "^1.1.7",
     "react-monaco-editor": "^0.32.1",
-    "react-test-renderer": "16.8.6",
+    "react-test-renderer": "^16.11.0",
     "remark-parse": "^6.0.3",
     "remark-stringify": "^6.0.4",
     "rimraf": "^3.0.0",
