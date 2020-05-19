@@ -123,7 +123,8 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
           return renderComponent({ props: megaComponentProps, state, mutators, form })
         }
 
-        return <NextFormItem {...itemProps}>
+        const { addonBefore, addonAfter, ...otherItemProps } = itemProps
+        return <NextFormItem {...otherItemProps}>
           {renderComponent({ props: componentProps, state, mutators, form })}
         </NextFormItem>
       }}      
