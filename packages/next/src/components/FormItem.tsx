@@ -11,8 +11,10 @@ import {
   pickFormItemProps,
   log
 } from '../shared'
+import { MegaLayoutItem } from './FormMegaLayout';
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
+
 const { Item: NextFormItem } = NextForm
 
 const computeStatus = (props: any) => {
@@ -100,21 +102,33 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const renderField = (fieldProps: any) => {
     const { form, state, mutators } = fieldProps
     const { props, errors, warnings, editable, required } = state
-    const { labelCol, wrapperCol, help } = props
+    const { labelCol, wrapperCol, help, addonBefore, addonAfter } = props
     const formItemProps = pickFormItemProps(props)
     const componentProps = pickNotFormItemProps(props)
-    return (
-      <NextFormItem
-        {...formItemProps}
-        required={editable === false ? undefined : required}
-        labelCol={formItemProps.label ? normalizeCol(labelCol) : undefined}
-        wrapperCol={formItemProps.label ? normalizeCol(wrapperCol) : undefined}
-        validateState={computeStatus(state)}
-        help={computeMessage(errors, warnings) || help}
-      >
-        {renderComponent({ props: componentProps, state, mutators, form })}
-      </NextFormItem>
-    )
+
+    const itemProps = {
+      ...formItemProps,
+      required: editable === false ? undefined : required,
+      labelCol: formItemProps.label ? normalizeCol(labelCol) : undefined,
+      wrapperCol: formItemProps.label ? normalizeCol(wrapperCol) : undefined,
+      validateState: computeStatus(state),
+      help: computeMessage(errors, warnings) || help,
+      addonBefore,
+      addonAfter,
+    }
+
+    return <MegaLayoutItem itemProps={itemProps} {...props}>
+      {(megaComponentProps) => {
+        if (megaComponentProps) {
+          return renderComponent({ props: megaComponentProps, state, mutators, form })
+        }
+
+        const { addonBefore, addonAfter, ...otherItemProps } = itemProps
+        return <NextFormItem {...otherItemProps}>
+          {renderComponent({ props: componentProps, state, mutators, form })}
+        </NextFormItem>
+      }}      
+    </MegaLayoutItem>
   }
 
   if (!component && children) {

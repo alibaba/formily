@@ -91,7 +91,7 @@ npm install --save @formily/meet
 
 **用法**
 
-例子 1： xxx
+例子 1： 
 
 ```js
 import { render } from 'rax'

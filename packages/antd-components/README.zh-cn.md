@@ -2017,6 +2017,63 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### Layout Components
 
+#### MegaLayout
+
+**Scehma引入方式**
+
+```tsx
+import { FormMegaLayout } from '@formily/antd-components'
+```
+
+**JSX引入方式**
+
+```tsx
+import { MegaLayout } from '@formily/antd-components'
+```
+
+- MegaLayout属性一览
+
+| 字段名     | 描述           | 类型                   | 默认值  |
+| :--------- | :------------- | :--------------------- | :------ |
+| labelAlign | label 对齐方式 | `left`, `right`, `top` | `right` |
+| full   | 表单组件是否撑满 | boolean | false  |
+| labelCol   | label 所占列数   | number(0-24) |        |
+| wrapperCol | wrapper 所占列数 | number(0-24) |        |
+| labelWidth   | label 宽度   | number |        |
+| wrapperWidth | wrapper 宽度 | number |        |
+| addonBefore  | FormMegaLayout 前辅助文案   | any  |        |
+| addonAfter   | FormMegaLayout 后辅助文案   | any  |        |
+| description | FormMegaLayout 底部辅助文案 | any  |        |
+| inline | 是否启用行内布局 | boolean | false  |
+| grid    | 是否启用栅格布局 | boolean | false  |
+| columns | 栅格布局总共列数 | number  | 3      |
+| autoRow | 是否自动换行     | boolean | false  |
+| responsive.s  | 媒体查询断点，视口宽度 <=720px，响应式栅格             | Number | Column 值 |
+| responsive.m  | 媒体查询断点，720px <= 视口宽度 <= 1200px ，响应式栅格 | Number | Column 值 |
+| responsive.lg | 媒体查询断点，视口宽度 >=1200px，响应式栅格            | Number | Column 值 |
+| layoutProps.labelCol | 改变自身布局属性, wrapper 比例 | number(0-24) |        |
+| layoutProps.wrapperCol | 改变自身布局属性, label 比例 | number(0-24) |        |
+| layoutProps.labelWidth | 改变自身布局属性, label 宽度 | number |        |
+| layoutProps.wrapperWidth | 改变自身布局属性, wrapper 宽度 | number |        |
+| layoutProps.labelAlign | 改变自身label对齐方式 | 'right', 'left', 'top' |        |
+
+- Schema字段对应属性一览
+
+> JSX模式下，属性名前缀为 `mega-props` , Schema模式下则为 `x-mega-props`
+
+| 字段名     | 描述           | 类型                   | 默认值  |
+| :--------- | :------------- | :--------------------- | :------ |
+| ['x-mega-props'].labelAlign | label 对齐方式 | `left`, `right`, `top` | `right` |
+| ['x-mega-props'].full   | 表单组件是否撑满 | boolean | false  |
+| ['x-mega-props'].labelCol   | label 所占列数   | number(0-24) |        |
+| ['x-mega-props'].wrapperCol | wrapper 所占列数 | number(0-24) |        |
+| ['x-mega-props'].labelWidth   | label 宽度   | number |        |
+| ['x-mega-props'].wrapperWidth | wrapper 宽度 | number |        |
+| ['x-mega-props'].addonBefore  | FormMegaLayout 前辅助文案   | any  |        |
+| ['x-mega-props'].addonAfter   | FormMegaLayout 后辅助文案   | any  |        |
+| ['x-mega-props'].description | FormMegaLayout 底部辅助文案 | any  |        |
+| ['x-mega-props'].span | 所占列数 | number | 1      |
+
 #### FormCard
 
 > FormCard 组件 Props, 完全继承自 [CardProps](#CardProps)。
@@ -2346,20 +2403,19 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 - IFormItemGridProps
 
-| 参数           | 说明                                                                                                        | 类型                                  | 默认值                            |
-| :------------- | :---------------------------------------------------------------------------------------------------------- | :------------------------------------ | :-------------------------------- |
-| cols           | 列数                                                                                                        | Array<number                          | { span: number; offset: number }> |  |
-| gutter         | 列间距离                                                                                                    | number                                |                                   |
-| labelCol       | label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效        | `{}`                                  |                                   |
-| wrapperCol     | 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                                                   | `{}`                                  |
-| help           | 自定义提示信息，如不设置，则会根据校验规则自动生成.                                                         | React.ReactNode                       |                                   |
-| extra          | 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面           | React.ReactNode                       |                                   |
-| validateState  | 校验状态，如不设置，则会根据校验规则自动生成                                                                | 'error' `or` 'success' `or` 'loading' |                                   |
-| hasFeedback    | 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有 Input 支持                   | boolean                               |                                   |
-| size           | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium'    |                                   |
-| labelAlign     | 标签的位置                                                                                                  | 'top' `or` 'left' `or` 'inset'        |                                   |
-| labelTextAlign | 标签的左右对齐方式                                                                                          | 'left' `or` 'right'                   |                                   |
-| asterisk       | required 的星号是否显示                                                                                     | boolean                               |                                   |
+| 参数          | 说明                                                                                                        | 类型                                  | 默认值                            |
+| :------------ | :---------------------------------------------------------------------------------------------------------- | :------------------------------------ | :-------------------------------- |
+| cols          | 列数                                                                                                        | Array<number                          | { span: number; offset: number }> |  |
+| gutter        | 列间距离                                                                                                    | number                                |                                   |
+| labelCol      | label 标签布局，通 `<Col>` 组件，设置 span offset 值，如 {span: 8, offset: 16}，该项仅在垂直表单有效        | `{}`                                  |                                   |
+| wrapperCol    | 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol                                                   | `{}`                                  |
+| help          | 自定义提示信息，如不设置，则会根据校验规则自动生成.                                                         | React.ReactNode                       |                                   |
+| extra         | 额外的提示信息，和 help 类似，当需要错误信息和提示文案同时出现时，可以使用这个。 位于错误信息后面           | React.ReactNode                       |                                   |
+| validateState | 校验状态，如不设置，则会根据校验规则自动生成                                                                | 'error' `or` 'success' `or` 'loading' |                                   |
+| hasFeedback   | 配合 validateState 属性使用，是否展示 success/loading 的校验状态图标, 目前只有 Input 支持                   | boolean                               |                                   |
+| size          | 单个 Item 的 size 自定义，优先级高于 Form 的 size, 并且当组件与 Item 一起使用时，组件自身设置 size 属性无效 | 'large' `or` 'small' `or` 'medium'    |                                   |
+| labelAlign    | 标签的位置                                                                                                  | 'left' `or` 'right'                   |                                   |
+| asterisk      | required 的星号是否显示                                                                                     | boolean                               |                                   |
 
 **用法**
 

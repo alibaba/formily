@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-schema-editor",
-  "version": "1.1.1",
+  "version": "1.1.5",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -22,13 +22,14 @@
   "dependencies": {
     "@ant-design/compatible": "^0.0.1-rc.1",
     "@ant-design/icons": "^4.0.3",
-    "@formily/antd": "^1.1.1",
+    "@formily/antd": "^1.1.5",
     "antd": "^4.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "react-monaco-editor": "^0.36.0"
   },
   "devDependencies": {
     "node-sass": "^4.13.0",
-    "typescript": "^3.6.2"
+    "typescript": "~3.8.0"
   },
   "peerDependencies": {
     "@types/json-schema": "^7.0.3",

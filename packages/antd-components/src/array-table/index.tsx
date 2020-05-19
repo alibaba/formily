@@ -81,6 +81,8 @@ export const ArrayTable: any = styled(
               <FormItemShallowProvider
                 key={newPath.toString()}
                 label={undefined}
+                labelCol={undefined}
+                wrapperCol={undefined}
               >
                 <SchemaField path={newPath} schema={props} />
               </FormItemShallowProvider>
@@ -188,7 +190,7 @@ export const ArrayTable: any = styled(
     )
   }
 )`
-  min-width: 600px;
+  width: 100%;
   margin-bottom: 10px;
   table {
     margin-bottom: 0 !important;

@@ -106,13 +106,13 @@ export const ArrayCards = styled(
             )
           })}
           <ArrayList.Empty>
-            {({ children }) => {
+            {({ children, allowAddition }) => {
               return (
                 <Card
                   {...componentProps}
-                  className={`card-list-item card-list-empty`}
+                  className={`card-list-item card-list-empty ${allowAddition ? 'add-pointer' : ''}`}
                   contentHeight="auto"
-                  onClick={onAdd}
+                  onClick={allowAddition ? onAdd : undefined}
                 >
                   <div className="empty-wrapper">{children}</div>
                 </Card>
@@ -135,6 +135,7 @@ export const ArrayCards = styled(
     )
   }
 )<ISchemaFieldComponentProps>`
+  width: 100%;
   .next-card-body {
     padding-top: 30px;
     padding-bottom: 0 !important;
@@ -183,7 +184,7 @@ export const ArrayCards = styled(
       }
     }
   }
-  .card-list-empty.card-list-item {
+  .card-list-empty.card-list-item.add-pointer {
     cursor: pointer;
   }
   .next-card.card-list-item {
