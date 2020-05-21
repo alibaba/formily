@@ -6,4 +6,4 @@ export const FormComponentsContext = createContext<ISchemaFormRegistry>(null)
 
 export const FormExpressionScopeContext = createContext<any>({})
 
-export default createContext<Schema>(null)
+export const SchemaContext = createContext<Schema>(null)

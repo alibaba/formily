@@ -15,7 +15,8 @@ import {
   ISchemaVirtualFieldComponentProps
 } from '../types'
 import { Schema } from '../shared/schema'
-import SchemaContext, {
+import {
+  SchemaContext,
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'

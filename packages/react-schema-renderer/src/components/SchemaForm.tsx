@@ -3,7 +3,8 @@ import { ISchemaFormProps } from '../types'
 import { Form } from '@formily/react'
 import { SchemaField } from './SchemaField'
 import { useSchemaForm } from '../hooks/useSchemaForm'
-import SchemaContext, {
+import {
+  SchemaContext,
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'
