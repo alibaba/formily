@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   ISchemaFieldComponentProps,
   SchemaField,
-  Schema
+  Schema,
+  complieExpression,
+  FormExpressionScopeContext
 } from '@formily/react-schema-renderer'
 import { toArr, isFn, isArr, FormPath } from '@formily/shared'
 import { ArrayList, DragListView } from '@formily/react-shared-components'
@@ -40,6 +42,7 @@ const DragHandler = styled.span`
 
 export const ArrayTable: any = styled(
   (props: ISchemaFieldComponentProps & { className: string }) => {
+    const expressionScope = useContext(FormExpressionScopeContext)
     const { value, schema, className, editable, path, mutators } = props
     const {
       renderAddition,
@@ -71,7 +74,7 @@ export const ArrayTable: any = styled(
           ...props.getExtendsProps()
         }
         return {
-          title: props.title,
+          title: complieExpression(props.title, expressionScope),
           ...itemProps,
           key,
           dataIndex: key,
@@ -178,10 +181,12 @@ export const ArrayTable: any = styled(
           )}
           <ArrayList.Addition>
             {({ children }) => {
-              return children && (
-                <div className="array-table-addition" onClick={onAdd}>
-                  {children}
-                </div>
+              return (
+                children && (
+                  <div className="array-table-addition" onClick={onAdd}>
+                    {children}
+                  </div>
+                )
               )
             }}
           </ArrayList.Addition>
