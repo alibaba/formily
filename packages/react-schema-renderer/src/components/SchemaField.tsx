@@ -119,6 +119,14 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return (
       <VirtualField
         path={path}
+        visible={complieExpression(
+          fieldSchema.getExtendsVisible(),
+          expressionScope
+        )}
+        display={complieExpression(
+          fieldSchema.getExtendsDisplay(),
+          expressionScope
+        )}
         props={complieExpression(
           fieldSchema.getSelfProps(),
           expressionScope,
