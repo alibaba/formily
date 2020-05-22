@@ -436,7 +436,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ## 使用 useFormEffects 实现局部联动
 
 > 这个例子中，设置数组的默认值，同时 `useFormEffects` 也声明了每一行初始化值的设置，`effects` 的优先级会高于 `default` 设定的默认值，
-> 因此，如果不希望覆盖默认值可以通过判断值是否为 **undefine** 来是显示，如下所示。
+> 因此，如果不希望覆盖默认值可以通过判断值是否为 **undefined** 来是显示，如下所示。
 
 ```jsx
 import React, { useEffect, useState } from 'react'
