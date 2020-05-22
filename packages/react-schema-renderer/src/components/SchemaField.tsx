@@ -15,7 +15,8 @@ import {
   ISchemaVirtualFieldComponentProps
 } from '../types'
 import { Schema } from '../shared/schema'
-import SchemaContext, {
+import {
+  FormSchemaContext,
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'
@@ -45,7 +46,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
 ) => {
   const path = FormPath.parse(props.path)
-  const formSchema = useContext(SchemaContext)
+  const formSchema = useContext(FormSchemaContext)
   const fieldSchema = new Schema(props.schema || formSchema.get(path))
   const formRegistry = useContext(FormComponentsContext)
   const expressionScope = useContext(FormExpressionScopeContext)

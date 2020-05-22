@@ -1,8 +1,10 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useContext } from 'react'
 import {
   ISchemaFieldComponentProps,
   SchemaField,
-  Schema
+  Schema,
+  FormExpressionScopeContext,
+  complieExpression
 } from '@formily/react-schema-renderer'
 import { toArr, isFn, isArr, FormPath } from '@formily/shared'
 import { ArrayList, DragListView } from '@formily/react-shared-components'
@@ -124,6 +126,7 @@ const DragableTable = styled(props => {
 
 export const ArrayTable = styled(
   (props: ISchemaFieldComponentProps & { className: string }) => {
+    const expressionScope = useContext(FormExpressionScopeContext)
     const { value, schema, className, editable, path, mutators } = props
     const {
       renderAddition,
@@ -158,7 +161,7 @@ export const ArrayTable = styled(
           <ArrayList.Item
             width={200}
             {...itemProps}
-            title={props.title}
+            title={complieExpression(props.title, expressionScope)}
             key={key}
             dataIndex={key}
             cell={(value: any, index: number) => {
@@ -255,10 +258,12 @@ export const ArrayTable = styled(
           )}
           <ArrayList.Addition>
             {({ children }) => {
-              return children && (
-                <div className="array-table-addition" onClick={onAdd}>
-                  {children}
-                </div>
+              return (
+                children && (
+                  <div className="array-table-addition" onClick={onAdd}>
+                    {children}
+                  </div>
+                )
               )
             }}
           </ArrayList.Addition>
@@ -270,7 +275,7 @@ export const ArrayTable = styled(
   display: inline-block;
   width: 100%;
   max-width: 100%;
-  overflow: scroll;
+  overflow: auto;
   table {
     margin-bottom: 0 !important;
     th,
