@@ -4,7 +4,7 @@ import { Form } from '@formily/react'
 import { SchemaField } from './SchemaField'
 import { useSchemaForm } from '../hooks/useSchemaForm'
 import {
-  SchemaContext,
+  FormSchemaContext,
   FormComponentsContext,
   FormExpressionScopeContext
 } from '../shared/context'
@@ -26,7 +26,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
       value={{ fields, virtualFields, formComponent, formItemComponent }}
     >
       <FormExpressionScopeContext.Provider value={props.expressionScope}>
-        <SchemaContext.Provider value={schema}>
+        <FormSchemaContext.Provider value={schema}>
           <Form form={form}>
             {React.createElement(
               formComponent,
@@ -44,7 +44,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
               children
             )}
           </Form>
-        </SchemaContext.Provider>
+        </FormSchemaContext.Provider>
       </FormExpressionScopeContext.Provider>
     </FormComponentsContext.Provider>
   )
