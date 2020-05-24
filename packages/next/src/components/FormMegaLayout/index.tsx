@@ -52,8 +52,8 @@ const StyledLayoutWrapper = styled((props) => {
 })`${props => computeStyle(props)}`
 
 const StyledLayoutNestWrapper = styled(props => {
-  const { children, seed, style, className } = props;
-return <div style={style} className={classnames('mega-layout-nest-container', className, seed)}>{children}</div>
+  const { children, style, className } = props;
+return <div style={style} className={classnames('mega-layout-nest-container', className)}>{children}</div>
 })`${props => computeStyle(props)}`
 
 const MegaLayout = (props => {
@@ -72,7 +72,7 @@ const MegaLayout = (props => {
         size={size}
         children={(layout) => {
             const { inline, required, columns, label, labelAlign,
-                grid, gutter, autoRow, span,
+                grid, gutter, autoRow, span, contextColumns,
                 full, context, isRoot, responsive
             } = layout
             const itemProps: any = {
@@ -83,6 +83,7 @@ const MegaLayout = (props => {
               full,
               context,
               columns,   
+              contextColumns,
               isRoot,
               isLayout: true,    
               responsive,
@@ -121,9 +122,9 @@ const MegaLayout = (props => {
                 </div>
             </StyledLayoutWrapper>
 
+            // 嵌套布局
             if (!props.grid && grid) {   
-              const seed = `nest-${Date.now()}`;
-              return <StyledLayoutNestWrapper seed={seed} {...{span, columns, context, responsive}}>
+              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, context, responsive}}>
                 {ele}
               </StyledLayoutNestWrapper>
             }

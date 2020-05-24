@@ -205,21 +205,21 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 @media (max-width:720px) {
   .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(1,1fr);
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
   .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
   }
 }
 
 @media (min-width:1200px) {
   .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(3,1fr);
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
   }
 }
 
@@ -277,25 +277,25 @@ exports[`nest layout item style grid item style in small span 1`] = `
 `;
 
 exports[`nest layout item style span style span 1 1`] = `
-.c0.mega-layout-nest-container.nest-test123 .mega-layout-container {
+.c0.mega-layout-nest-container > .mega-layout-container {
   width: 100%;
   margin-bottom: 0;
 }
 
 @media (max-width:720px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 1;
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 1;
   }
 }
 
 @media (min-width:1200px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 1;
   }
 }
@@ -306,25 +306,25 @@ exports[`nest layout item style span style span 1 1`] = `
 `;
 
 exports[`nest layout item style span style span 2 1`] = `
-.c0.mega-layout-nest-container.nest-test123 .mega-layout-container {
+.c0.mega-layout-nest-container > .mega-layout-container {
   width: 100%;
   margin-bottom: 0;
 }
 
 @media (max-width:720px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 1;
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 2;
   }
 }
 
 @media (min-width:1200px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 2;
   }
 }
@@ -335,25 +335,25 @@ exports[`nest layout item style span style span 2 1`] = `
 `;
 
 exports[`nest layout item style span style span 3 1`] = `
-.c0.mega-layout-nest-container.nest-test123 .mega-layout-container {
+.c0.mega-layout-nest-container > .mega-layout-container {
   width: 100%;
   margin-bottom: 0;
 }
 
 @media (max-width:720px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 1;
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 2;
   }
 }
 
 @media (min-width:1200px) {
-  .c0.mega-layout-nest-container.nest-test123 {
+  .c0.mega-layout-nest-container {
     grid-column-start: span 3;
   }
 }
@@ -519,6 +519,32 @@ exports[`test grid layout style gridStyle autoRow true 1`] = `
   display: grid;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
+  grid-template-columns: repeat(3,minmax(100px,1fr));
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
 }
 
 @media (max-width:720px) {
@@ -565,27 +591,7 @@ exports[`test grid layout style normal 1`] = `
   display: grid;
   grid-column-gap: 20px;
   grid-row-gap: 20px;
-}
-
-@media (max-width:720px) {
-  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
-  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
-  }
-}
-
-@media (min-width:720px) and (max-width:1200px) {
-  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
-  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
-  }
-}
-
-@media (min-width:1200px) {
-  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
-  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
-  }
+  grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
 }
 
 <div
