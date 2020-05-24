@@ -149,6 +149,23 @@ describe('test grid layout style',() => {
     let layoutProps = {
       gutter: 20,
       autoRow: true,
+      context: {},
+      grid: true,
+      columns: 3,
+    }
+    const styleResult = computeAntdStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.gridStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,minmax(100px,1fr))`, 
+    { modifier: `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+    })
+  })
+
+  test('gridStyle autoRow true(responsive)', () => {
+    let layoutProps = {
+      gutter: 20,
+      autoRow: true,
       responsive: { s: 1, m: 2, lg: 3 },
       context: {},
       grid: true
@@ -200,16 +217,15 @@ describe('test grid layout style',() => {
 
 describe('nest layout item style', () => {
   test('span style span 3', () => {
-    const seed = `nest-test123`;
     let layoutProps = {
       responsive: { s: 1, m: 2, lg: 3 },
       span: 3,
-      seed,
+      nested: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.nestLayoutItemStyle}`
     const tree = renderer.create(<Mega />).toJSON()
-    const containerCls = `&.mega-layout-nest-container.${seed}`
+    const containerCls = `&.mega-layout-nest-container`
     expect(tree).toMatchSnapshot()
     expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
       modifier: `${containerCls}`,
@@ -226,16 +242,15 @@ describe('nest layout item style', () => {
   })
 
   test('span style span 2', () => {
-    const seed = `nest-test123`;
     let layoutProps = {
       responsive: { s: 1, m: 2, lg: 3 },
       span: 2,
-      seed,
+      nested: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.nestLayoutItemStyle}`
     const tree = renderer.create(<Mega />).toJSON()
-    const containerCls = `&.mega-layout-nest-container.${seed}`
+    const containerCls = `&.mega-layout-nest-container`
     expect(tree).toMatchSnapshot()
     expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
       modifier: `${containerCls}`,
@@ -252,16 +267,15 @@ describe('nest layout item style', () => {
   })
 
   test('span style span 1', () => {
-    const seed = `nest-test123`;
     let layoutProps = {
       responsive: { s: 1, m: 2, lg: 3 },
       span: 1,
-      seed,
+      nested: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.nestLayoutItemStyle}`
     const tree = renderer.create(<Mega />).toJSON()
-    const containerCls = `&.mega-layout-nest-container.${seed}`
+    const containerCls = `&.mega-layout-nest-container`
     expect(tree).toMatchSnapshot()
     expect(tree).toHaveStyleRule('grid-column-start', `span 1`, {
       modifier: `${containerCls}`,
@@ -352,17 +366,44 @@ describe('nest grid layout container', () => {
     expect(tree).toHaveStyleRule('grid-row-gap', `20px`, {
       modifier: `${cls}`,
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(1,1fr)`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
       modifier: `${cls}`,
       media: '(max-width: 720px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(2,1fr)`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
       modifier: `${cls}`,
       media: '(min-width: 720px) and (max-width: 1200px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
       modifier: `${cls}`,
       media: '(min-width: 1200px)'
+    })
+  })
+
+  test('nest columns', () => {
+    let layoutProps = {
+      columns: 3,
+      span: 3,
+      nested: true,
+      autoRow: true,
+      contextColumns: 2,
+      context: { grid: true },
+      grid: true
+    }
+    const styleResult = computeAntdStyleBase(layoutProps)
+    const Mega = styled.div`
+      ${styleResult.gridStyle}
+      ${styleResult.nestLayoutItemStyle}
+    `
+    const tree = renderer.create(<Mega className="mega-layout-nest-container" />).toJSON();
+    const cls = `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,minmax(100px,1fr))`, {
+      modifier: `${cls}`,
+    })
+
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: '&.mega-layout-nest-container',
     })
   })
 })
