@@ -18,11 +18,12 @@ export const useLayout = (props: ILayoutProps) => {
     const autoRow = computeAttr(props.autoRow, context.autoRow, false)
     const flex = computeAttr(props.flex, context.flex, false)
     let columns = computeAttr(props.columns, context.columns, 3)
-    const responsive = {
-        lg: computeAttr((props.responsive || {}).lg, (context.responsive || {}).lg, columns),
-        m: computeAttr((props.responsive || {}).m, (context.responsive || {}).m, columns),
-        s: computeAttr((props.responsive || {}).s, (context.responsive || {}).s, columns)
+    const responsive = (props.responsive || context.contextResponsive) && {
+        lg: computeAttr((props.responsive || {}).lg, (context.contextResponsive || {}).lg, columns),
+        m: computeAttr((props.responsive || {}).m, (context.contextResponsive || {}).m, columns),
+        s: computeAttr((props.responsive || {}).s, (context.contextResponsive || {}).s, columns)
     }
+    const contextResponsive = responsive ? responsive : context.contextResponsive
     const size = computeAttr(props.size, context.size, undefined)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
     const inset = computeAttr(props.inset, context.inset, false)
@@ -64,6 +65,7 @@ export const useLayout = (props: ILayoutProps) => {
         flex,
         inset,
         columns,
+        contextColumns: context.columns,
         full,
         labelWidth,
         wrapperWidth,
@@ -74,6 +76,7 @@ export const useLayout = (props: ILayoutProps) => {
         span,
         context,
         responsive,
+        contextResponsive,
         size,
     }
 }

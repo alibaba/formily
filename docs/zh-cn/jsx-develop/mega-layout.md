@@ -613,6 +613,56 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+# 复杂grid嵌套
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  createVirtualBox,
+  Form,
+  FormItem,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { MegaLayout, Input, DatePicker } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+      <Form>
+        <MegaLayout
+          labelAlign="top"
+          grid
+          full
+          autoRow
+          columns={3}
+        >
+          <FormItem name="listx1" mega-props={{ span: 2 }} title="组件1" component={DatePicker} />
+          <FormItem name="listx2" title="组件2" component={DatePicker} />
+          <FormItem name="listx3" title="组件3" component={DatePicker} />
+          <MegaLayout columns={2} span={2} autoRow>
+            <FormItem name="listy1" title="组件1" component={DatePicker} />
+            <FormItem name="listy2" title="组件2" component={DatePicker} />
+            <FormItem name="listy3" title="组件3" component={DatePicker} />
+            <MegaLayout columns={3} span={3} autoRow>
+              <FormItem name="listz1" title="组件1" component={DatePicker} />
+              <FormItem name="listz2" title="组件2" component={DatePicker} />
+              <FormItem name="listz3" title="组件3" component={DatePicker} />
+            </MegaLayout>
+          </MegaLayout>
+        </MegaLayout>        
+      </Form>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 # 响应式布局
 

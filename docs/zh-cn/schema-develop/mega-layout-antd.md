@@ -682,6 +682,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+
 ### 联动控制 display / visible
 
 ```jsx
@@ -728,6 +729,60 @@ const App = () => {
           <Field name="vvv5" title="标题5" x-component="DatePicker" />
           <Field name="vvv6" title="标题6" x-component="DatePicker" />
         </FormMegaLayout>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+# 复杂grid嵌套
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  createVirtualBox,
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{ DatePicker, Input }}>
+        <FormMegaLayout
+          labelAlign="top"
+          grid
+          full
+          autoRow
+          columns={3}
+        >
+          <Field name="listx1" x-mega-props={{ span: 2 }} title="组件1" x-component="DatePicker" />
+          <Field name="listx2" title="组件2" x-component="DatePicker" />
+          <Field name="listx3" title="组件3" x-component="DatePicker" />
+          <FormMegaLayout columns={2} span={2} autoRow>
+            <Field name="listy1" title="组件1" x-component="DatePicker" />
+            <Field name="listy2" title="组件2" x-component="DatePicker" />
+            <Field name="listy3" title="组件3" x-component="DatePicker" />
+            <FormMegaLayout columns={3} span={3} autoRow>
+              <Field name="listz1" title="组件1" x-component="DatePicker" />
+              <Field name="listz2" title="组件2" x-component="DatePicker" />
+              <Field name="listz3" title="组件3" x-component="DatePicker" />
+            </FormMegaLayout>
+          </FormMegaLayout>
+        </FormMegaLayout>        
       </SchemaForm>
     </Printer>
   )
