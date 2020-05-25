@@ -9,6 +9,7 @@ import {
 } from '../shared'
 
 export const Checkbox = connect<'Group'>({
+  valueName: 'checked',
   getProps: mapStyledProps,
   getComponent: mapTextComponent
 })(AntdCheckbox)
