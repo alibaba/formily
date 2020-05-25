@@ -1,16 +1,18 @@
 import { css } from 'styled-components'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
-export const computeAntdStyleBase = (props) => {
+export const computeAntdStyleBase = (props, debug?: boolean) => {
     const result: any = {}
     const {
         labelAlign,
         isLayout,
         inline,
-        labelCol, grid, full, context = {}, columns, isRoot, autoRow,
-        span, seed, size,
+        nested,
+        labelCol, grid, full, context = {}, contextColumns, columns, isRoot, autoRow,
+        span,
+        size,
         // lg, m, s,
-        responsive
+        responsive,
     } = props
     const { lg, m, s } = responsive || {}
     const labelWidth = formatPx(props.labelWidth)
@@ -149,6 +151,36 @@ export const computeAntdStyleBase = (props) => {
         }
     }
 
+    const gridContainerStyle = responsive ? `
+        @media (max-width: 720px) {
+            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, 1fr));
+        }
+        
+        @media (min-width: 720px) and (max-width: 1200px) {
+            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, 1fr));
+        }
+        @media (min-width: 1200px) {
+            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, 1fr));
+        }
+    ` : `
+        grid-template-columns: repeat(${autoRow ? columns : 'auto-fit'}, minmax(100px, 1fr));
+    `
+
+    const minColumns = nested ? Math.min(columns, contextColumns) : columns
+    const gridItemSpanStyle = responsive ? `
+        @media (max-width: 720px) {
+            grid-column-start: span ${s > span ? span : s};
+        }
+        @media (min-width: 720px) and (max-width: 1200px) {
+            grid-column-start: span ${m > span ? span : m};
+        }
+        @media (min-width: 1200px) {
+            grid-column-start: span ${lg > span ? span : lg};
+        }
+    `: `
+        grid-column-start: span ${minColumns > span ? span : minColumns};
+    `
+
     // grid栅格模式
     if (!context.grid && grid) {
         result.gridStyle = `
@@ -164,39 +196,21 @@ export const computeAntdStyleBase = (props) => {
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
 
-                        @media (max-width: 720px) {
-                            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, 1fr));
-                        }
-                        
-                        @media (min-width: 720px) and (max-width: 1200px) {
-                            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, 1fr));
-                        }
-                        @media (min-width: 1200px) {
-                            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, 1fr));
-                        }
+                        ${gridContainerStyle}
                     }
                 }
             }
         `
     }
 
-    if (seed) {
+    if (nested) {
         result.nestLayoutItemStyle = `
-            &.mega-layout-nest-container.${seed} {
-                .mega-layout-container {
+            &.mega-layout-nest-container {
+                > .mega-layout-container {
                     width: 100%;
                     margin-bottom: 0;
                 }
-
-                @media (max-width: 720px) {
-                    grid-column-start: span ${responsive.s > span ? span : responsive.s};
-                }
-                @media (min-width: 720px) and (max-width: 1200px) {
-                    grid-column-start: span ${responsive.m > span ? span : responsive.m};
-                }
-                @media (min-width: 1200px) {
-                    grid-column-start: span ${responsive.lg > span ? span : responsive.lg};
-                }
+                ${gridItemSpanStyle}
             }
         `
     }
@@ -204,17 +218,7 @@ export const computeAntdStyleBase = (props) => {
     // grid item
     if (!context.grid && grid && span) {
         result.gridItemStyle = `
-        &.mega-layout-item-col {
-            @media (max-width: 720px) {
-                grid-column-start: span ${s > span ? span : s};
-            }
-            @media (min-width: 720px) and (max-width: 1200px) {
-                grid-column-start: span ${m > span ? span : m};
-            }
-            @media (min-width: 1200px) {
-                grid-column-start: span ${lg > span ? span : lg};
-            }
-        }
+        &.mega-layout-item-col { ${gridItemSpanStyle} }
         `
     }
 
@@ -231,17 +235,9 @@ export const computeAntdStyleBase = (props) => {
                     &.grid {
                         display: grid;
                         grid-column-gap: ${parseInt(gutter)}px;
-                        grid-row-gap: ${parseInt(gutter)}px;
-                        @media (max-width: 720px) {
-                            grid-template-columns: repeat(${s}, 1fr);
-                        }
-                        
-                        @media (min-width: 720px) and (max-width: 1200px) {
-                            grid-template-columns: repeat(${m}, 1fr);
-                        }
-                        @media (min-width: 1200px) {
-                            grid-template-columns: repeat(${lg}, 1fr);
-                        }
+                        grid-row-gap: ${parseInt(gutter)}px;                        
+
+                        ${gridContainerStyle}
                     }
                 }
             }
@@ -281,8 +277,8 @@ export const computeAntdStyleBase = (props) => {
     return result
 }
 
-export const computeStyle = (props) => {
-    const styleResult = computeAntdStyleBase(props)
+export const computeStyle = (props, debug?: boolean) => {
+    const styleResult = computeAntdStyleBase(props, debug)
     
     // labelAlign, addon 是任何布局模式都可以用到
     // inline 和 grid 是互斥关系, 优先级: inline > grid

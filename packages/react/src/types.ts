@@ -40,6 +40,8 @@ export interface ILayoutProps {
   gutter?: number | string
   span?: number
   grid?: boolean
+  contextColumns?: number
+  contextResponsive?: { lg?: number; m?: number; s?: number }
   responsive?: { lg?: number; m?: number; s?: number }
   size?: string
 }
