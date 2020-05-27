@@ -1967,6 +1967,12 @@ interface ISchema {
   ['x-props']?: { [name: string]: any }
   ['x-index']?: number
   ['x-rules']?: ValidatePatternRules
+  ['x-linkages']?: Array<{
+    target: FormPathPattern
+    type: string
+    [key: string]: any
+  }>
+  ['x-mega-props']?: { [name: string]: any }
   ['x-component']?: string
   ['x-component-props']?: { [name: string]: any }
   ['x-render']?: <T = ISchemaFieldComponentProps>(
