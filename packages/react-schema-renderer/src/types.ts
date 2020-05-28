@@ -59,6 +59,7 @@ export type IVirtualBoxProps<Props> = Props & {
   name?: string
   visible?: boolean
   display?: boolean
+  title?: string
 }
 
 export interface ISchemaFieldWrapper<Props = any> {

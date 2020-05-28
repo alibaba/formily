@@ -88,6 +88,7 @@ export function createVirtualBox<T = {}>(
   const VirtualBox: React.FC<IVirtualBoxProps<T>> = ({
     children,
     name,
+    title,
     visible,
     display,
     ...props
@@ -96,6 +97,7 @@ export function createVirtualBox<T = {}>(
       <SchemaMarkupField
         type="object"
         name={name}
+        title={title}
         visible={visible}
         display={display}
         x-component={key}
@@ -116,12 +118,14 @@ export function createControllerBox<T = {}>(
   const VirtualBox: React.FC<IVirtualBoxProps<T>> = ({
     children,
     name,
+    title,
     ...props
   }) => {
     return (
       <SchemaMarkupField
         type="object"
         name={name}
+        title={title}
         x-component={key}
         x-component-props={props}
       >
