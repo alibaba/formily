@@ -938,6 +938,8 @@ cleanRegistry(): void
 | x-component-props    | 字段 UI 组件属性                       | `{}`                                                                                                              |
 | x-render             | 字段扩展渲染函数                       | `<T = ISchemaFieldComponentProps>(props: T & { renderComponent: () => React.ReactElement}) => React.ReactElement` |
 | x-effect             | 字段副作用触发器                       | `(dispatch: (type: string, payload: any) => void,option?:object) => { [key: string]: any }`                       |
+| x-linkages           | 字段间联动协议，详细描述可以往后看        | `Array<{ target: FormPathPattern, type: string, [key: string]: any }>` |
+| x-mega-props         | 字段布局属性                           | `{ [name: string]: any }`                                             |
 
 **方法**
 
