@@ -51,7 +51,7 @@ export const DatePicker = connect<
     const props = this.props || {}
     return transformMoment(
       value,
-      props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+      props.format || (props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
     )
   },
   getProps: compose(mapStyledProps, mapMomentValue),
@@ -61,7 +61,8 @@ export const DatePicker = connect<
 DatePicker.RangePicker = connect({
   getValueFromEvent(_, [startDate, endDate]) {
     const props = this.props || {}
-    const format = props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+    const format =
+      props.format || (props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
     return [
       transformMoment(startDate, format),
       transformMoment(endDate, format)

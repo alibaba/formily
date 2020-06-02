@@ -7,8 +7,7 @@ import {
 } from '../shared'
 
 export const Radio = connect<'Group'>({
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
+  getProps: mapStyledProps
 })(AntdRadio)
 
 Radio.Group = connect({

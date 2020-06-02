@@ -3,8 +3,7 @@ import { Checkbox as NextCheckbox } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../shared'
 
 export const Checkbox = connect<'Group'>({
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
+  getProps: mapStyledProps
 })(NextCheckbox)
 
 Checkbox.Group = connect({
