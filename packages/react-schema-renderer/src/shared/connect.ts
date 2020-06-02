@@ -97,13 +97,13 @@ export const connect = <ExtendsComponentKey extends string = ''>(
         onBlur: (...args: any) => {
           mutators.blur()
           if (isFn(schemaComponentProps['onBlur'])) {
-            schemaComponentProps[options.eventName](...args)
+            schemaComponentProps['onBlur'](...args)
           }
         },
         onFocus: (...args: any) => {
           mutators.focus()
           if (isFn(schemaComponentProps['onFocus'])) {
-            schemaComponentProps[options.eventName](...args)
+            schemaComponentProps['onFocus'](...args)
           }
         }
       }

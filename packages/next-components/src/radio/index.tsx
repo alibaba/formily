@@ -3,6 +3,7 @@ import { Radio as NextRadio } from '@alifd/next'
 import { mapStyledProps, mapTextComponent } from '../shared'
 
 export const Radio = connect<'Group'>({
+  valueName: 'checked',
   getProps: mapStyledProps
 })(NextRadio)
 
