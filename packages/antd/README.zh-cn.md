@@ -56,7 +56,7 @@ npm install --save @formily/antd
 | readOnly             | 只读                                    | boolean                                                           |        |
 | writeOnly            | 只写                                    | boolean                                                           |        |
 | type                 | 字段类型                                | 'string' `or` 'object' `or` 'array' `or` 'number' `or` string     |        |
-| enum                 | 相当于字段 dataSource                   | `Array<string | number | { label: React.ReactNode; value: any }>` |        |
+| enum                 | 相当于字段 dataSource                   | `Array<string\|number\|{label:React.ReactNode;value:any}>` |        |
 | required             | 是否必填，为 true 会同时设置校验规则    | string[] `or` boolean                                             |        |
 | format               | 正则规则类型，详细类型可以往后看        | string                                                            |        |
 | properties           | 对象属性                                | { [key: string]: [ISchema](#ISchema) }                            |        |
