@@ -122,6 +122,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   }, [])
 
   const state = ref.current.field.getState()
+
   return {
     form,
     field: ref.current.field,

@@ -11,6 +11,7 @@
     "preserveConstEnums": true,
     "sourceMap": false,
     "declaration": true,
+    "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
       "rxjs/*": [
