@@ -8,6 +8,8 @@ import {
   registerValidationRules,
   registerValidationMTEngine
 } from '../index'
+import { createFormInternals } from '../internals'
+import { createFormExternals } from '../externals'
 import { ValidateDescription, ValidatePatternRules } from '@formily/validator'
 
 // mock datasource
@@ -433,11 +435,8 @@ describe('reset', () => {
     })
 
     form.reset()
-    expect(
-      form.getFormState(state => state.values.aa)
-    ).toBe('')
+    expect(form.getFormState(state => state.values.aa)).toBe('')
   })
-  
 })
 
 describe('clearErrors', () => {
@@ -884,13 +883,13 @@ describe('setFieldState', () => {
     // visible为false或者已卸载的组件无法修改value
     form.setFieldState('a', state => (state.visible = false))
     form.setFieldState('a', state => (state.value = [4, 5, 6]))
-    expect(form.getFieldState('a', state => state.value)).toEqual([4,5,6])
+    expect(form.getFieldState('a', state => state.value)).toEqual([4, 5, 6])
     form.setFieldState('a', state => {
       state.visible = true
       state.unmounted = true
     })
     form.setFieldState('a', state => (state.value = [4, 5, 6]))
-    expect(form.getFieldState('a', state => state.value)).toEqual([4,5,6])
+    expect(form.getFieldState('a', state => state.value)).toEqual([4, 5, 6])
   })
 
   test('mount and unmount', () => {
@@ -1387,7 +1386,7 @@ describe('createMutators', () => {
   })
 
   test('remove object key', async () => {
-    const form = createForm({ useDirty: true })
+    const form = createForm()
     const initialValue = { username: '1234' }
     const user = form.registerField({ path: 'user', initialValue })
     form.registerField({ path: 'user.username' })
@@ -1457,7 +1456,8 @@ describe('createMutators', () => {
 
 describe('transformDataPath', () => {
   test('normal path', async () => {
-    const form = createForm()
+    const internals = createFormInternals()
+    const form = createFormExternals(internals)
     form.registerField({ path: 'a' })
     form.registerField({ path: 'a.b' })
     form.registerField({ path: 'a.b.c' })
@@ -1465,30 +1465,31 @@ describe('transformDataPath', () => {
     form.registerField({ path: 'a.b.c.d.e' })
 
     expect(
-      form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()
+      internals.getDataPath(new FormPath('a')).toString()
     ).toEqual('a')
     expect(
-      form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()
+      internals.getDataPath(new FormPath('a.b')).toString()
     ).toEqual('a.b')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c'))
+      internals
+        .getDataPath(new FormPath('a.b.c'))
         .toString()
     ).toEqual('a.b.c')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d'))
+      internals
+        .getDataPath(new FormPath('a.b.c.d'))
         .toString()
     ).toEqual('a.b.c.d')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e'))
+      internals
+        .getDataPath(new FormPath('a.b.c.d.e'))
         .toString()
     ).toEqual('a.b.c.d.e')
   })
 
   test('virtual path', async () => {
-    const form = createForm()
+    const internals = createFormInternals()
+    const form = createFormExternals(internals)
     form.registerField({ path: 'a' })
     form.registerVirtualField({ path: 'a.b' })
     form.registerField({ path: 'a.b.c' })
@@ -1496,43 +1497,48 @@ describe('transformDataPath', () => {
     form.registerField({ path: 'a.b.c.d.e' })
 
     expect(
-      form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()
+      internals
+        .getDataPath(new FormPath('a')).toString()
     ).toEqual('a')
     expect(
-      form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()
+      internals
+        .getDataPath(new FormPath('a.b')).toString()
     ).toEqual('a.b')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c'))
+      internals
+        .getDataPath(new FormPath('a.b.c'))
         .toString()
     ).toEqual('a.c')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d'))
+      internals
+        .getDataPath(new FormPath('a.b.c.d'))
         .toString()
     ).toEqual('a.c.d')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c.d.e'))
+      internals
+        .getDataPath(new FormPath('a.b.c.d.e'))
         .toString()
     ).toEqual('a.c.e')
   })
 
   test('virtual path(head)', async () => {
-    const form = createForm()
+    const internals = createFormInternals()
+    const form = createFormExternals(internals)
     form.registerVirtualField({ path: 'a' })
     form.registerField({ path: 'a.b' })
     form.registerField({ path: 'a.b.c' })
 
     expect(
-      form.unsafe_do_not_use_transform_data_path(new FormPath('a')).toString()
+      internals
+        .getDataPath(new FormPath('a')).toString()
     ).toEqual('a')
     expect(
-      form.unsafe_do_not_use_transform_data_path(new FormPath('a.b')).toString()
+      internals
+        .getDataPath(new FormPath('a.b')).toString()
     ).toEqual('b')
     expect(
-      form
-        .unsafe_do_not_use_transform_data_path(new FormPath('a.b.c'))
+      internals
+        .getDataPath(new FormPath('a.b.c'))
         .toString()
     ).toEqual('b.c')
   })
@@ -1568,9 +1574,7 @@ describe('major sences', () => {
   })
 
   test('nested dynamic remove', () => {
-    const form = createForm({
-      useDirty: true
-    })
+    const form = createForm()
     const aa = form.registerField({ path: 'aa', value: [] })
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
@@ -1623,7 +1627,7 @@ describe('major sences', () => {
     form.registerField({
       name: 'aa'
     })
-    form.setFormState(state=>{
+    form.setFormState(state => {
       state.mounted = true
     })
     form.setFieldState('aa', state => {

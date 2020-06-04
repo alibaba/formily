@@ -12,8 +12,7 @@ import {
   enableAllPlugins,
   setAutoFreeze,
   Patch,
-  Draft,
-  original
+  Draft
 } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
 
@@ -57,7 +56,7 @@ export const createModel = <
     batching: boolean
     cache: Map<any, any>
     displayName: string
-    constructor(props: Props) {
+    constructor(props: Props = {} as any) {
       super()
       this.props = defaults(Factory.defaultProps, props)
       this.displayName = Factory.displayName
@@ -201,6 +200,14 @@ export const createModel = <
 
     removeCache(key: string) {
       this.cache.delete(key)
+    }
+
+    isDirty(key?: string) {
+      if (key) {
+        return this.dirtys[key]
+      } else {
+        return this.dirtyCount > 0
+      }
     }
 
     hasChanged = (path?: FormPathPattern) => {

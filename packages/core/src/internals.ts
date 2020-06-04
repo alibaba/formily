@@ -22,7 +22,8 @@ import {
   IVirtualField,
   isField
 } from './types'
-export const createFormContext = (options: IFormCreatorOptions = {}) => {
+
+export const createFormInternals = (options: IFormCreatorOptions = {}) => {
   function onFormChange(published: IFormState) {
     const { dirtys } = form
     if (dirtys.values) {
@@ -365,6 +366,7 @@ export const createFormContext = (options: IFormCreatorOptions = {}) => {
   }
   graph.subscribe(onGraphChange)
   return {
+    options,
     init,
     form,
     graph,
