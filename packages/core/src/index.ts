@@ -7,8 +7,20 @@ import {
 import { FormPath, FormPathPattern, BigData } from '@formily/shared'
 import { createFormInternals } from './internals'
 import { createFormExternals } from './externals'
+import { FormGraph } from './shared/graph'
 export * from './shared/lifecycle'
 export * from './types'
+
+declare global {
+  namespace FormilyCore {
+    export interface FieldProps {
+      [key: string]: any
+    }
+    export interface VirtualFieldProps {
+      [key: string]: any
+    }
+  }
+}
 
 export const createForm = (options: IFormCreatorOptions = {}) => {
   return createFormExternals(createFormInternals(options))
@@ -24,6 +36,7 @@ export {
   setValidationLanguage,
   setValidationLocale,
   BigData,
+  FormGraph,
   FormPath,
   FormPathPattern
 }

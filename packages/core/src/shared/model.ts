@@ -7,7 +7,7 @@ import {
   defaults,
   shallowClone
 } from '@formily/shared'
-import { produce, enableAllPlugins, setAutoFreeze, Patch, Draft } from 'immer'
+import { produce, enableAllPlugins, setAutoFreeze, Draft } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
 
 enableAllPlugins()
@@ -22,6 +22,13 @@ type ExtendsProps<State> = NormalRecord & {
   dirtyCheck?: (path: FormPathPattern, value: any, nextValue: any) => boolean
 }
 
+type Patch = {
+  op: "replace" | "remove" | "add";
+  path: (string | number)[];
+  value?: any;
+}
+
+
 const applyPatches = (target: any, patches: Patch[]) => {
   patches.forEach(({ op, path, value }) => {
     if (op === 'replace' || op === 'add') {
@@ -33,12 +40,12 @@ const applyPatches = (target: any, patches: Patch[]) => {
 }
 
 export const createModel = <
-  SourceState extends ExtendsState,
-  Props extends ExtendsProps<SourceState>
+  State extends ExtendsState,
+  Props extends ExtendsProps<State>
 >(
-  Factory: IDirtyModelFactory<SourceState, Props>
+  Factory: IDirtyModelFactory<State, Props>
 ) => {
-  type State = Partial<SourceState>
+  //type State = Partial<SourceState>
   return class Model extends Subscribable {
     factory: InstanceType<IDirtyModelFactory<State, Props>>
     state: State
@@ -56,7 +63,7 @@ export const createModel = <
       this.displayName = Factory.displayName
       this.factory = new Factory(this.props)
       this.cache = new Map()
-      this.state = this.factory.state
+      this.state = this.factory.state as any
       this.state.displayName = this.displayName
       this.prevState = this.state
     }

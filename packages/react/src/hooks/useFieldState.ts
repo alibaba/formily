@@ -1,5 +1,5 @@
 import { useContext, useMemo, useRef } from 'react'
-import { IFieldState } from '@formily/core'
+import { IFieldState, isField } from '@formily/core'
 import { FieldContext } from '../context'
 
 export const useFieldState = <T extends {}>(
@@ -12,8 +12,7 @@ export const useFieldState = <T extends {}>(
       Object.assign(state, defaultState)
     })
   }, [])
-
-  ref.current = field.getState()
+  ref.current = isField(field) ? field.getState() : field.getState()
   return [
     ref.current,
     (nextState?: {}) => {

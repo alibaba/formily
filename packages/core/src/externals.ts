@@ -38,17 +38,6 @@ import { createFormInternals } from './internals'
 import { Field } from './models/field'
 import { VirtualField } from './models/virtual-field'
 
-declare global {
-  namespace FormilyCore {
-    export interface FieldProps {
-      [key: string]: any
-    }
-    export interface VirtualFieldProps {
-      [key: string]: any
-    }
-  }
-}
-
 export const createFormExternals = (
   internals: ReturnType<typeof createFormInternals>
 ) => {
@@ -562,8 +551,8 @@ export const createFormExternals = (
 
       heart.publish(LifeCycleTypes.ON_FORM_SUBMIT, form)
 
-      let payload,
-        values = form.getState(state => clone(state.values))
+      let payload: any
+      const values = form.getState(state => clone(state.values))
       if (isFn(onSubmit) && !form.state.unmounted) {
         try {
           payload = await Promise.resolve(onSubmit(values))
@@ -787,26 +776,33 @@ export const createFormExternals = (
     //1. 无法自动交换通过移动来新增删除子列表元素的状态
     //2. 暂时不支持通过setFieldState修改值场景的状态交换
     function swapState($from: number, $to: number) {
-      const keys: string[] = ['initialValue', 'visibleCacheValue', 'values']
+      const keys: string[] = [
+        'initialValue',
+        'visibleCacheValue',
+        'value',
+        'values'
+      ]
       const arrayName = field.getSourceState(state => state.name)
       const fromFieldsName = `${arrayName}.${$from}.*`
       const toFieldsName = `${arrayName}.${$to}.*`
-      const cache = {}
+      const cache: any = {}
       const calculatePath = (name: string, $from: number, $to: number) => {
         return name.replace(`${arrayName}.${$from}`, `${arrayName}.${$to}`)
       }
-      graph.select(fromFieldsName, field => {
+      graph.select(fromFieldsName, (field: IField) => {
         field.setState((state: IFieldState) => {
           const targetState =
             getFieldState(calculatePath(state.name, $from, $to)) || {}
           keys.forEach(key => {
-            cache[state.name] = cache[state.name] || {}
+            cache[state.name] = isValid(cache[state.name])
+              ? cache[state.name]
+              : {}
             cache[state.name][key] = clone(state[key])
             state[key] = targetState && targetState[key]
           })
         }, true)
       })
-      graph.select(toFieldsName, field => {
+      graph.select(toFieldsName, (field: IField) => {
         field.setState((state: IFieldState) => {
           const cacheState = cache[calculatePath(state.name, $to, $from)] || {}
           keys.forEach(key => {

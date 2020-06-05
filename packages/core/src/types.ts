@@ -197,7 +197,7 @@ export interface IFieldStateProps {
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
 
-export interface IFieldRegistryProps<FieldProps> {
+export interface IFieldRegistryProps<FieldProps = FormilyCore.FieldProps> {
   path?: FormPathPattern
   name?: FormPathPattern
   value?: any
@@ -273,7 +273,9 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onValidateFailed?: (validated: IFormValidateResult) => void
 }
 
-export interface IVirtualFieldState<FieldProps = any> {
+export interface IVirtualFieldState<
+  FieldProps = FormilyCore.VirtualFieldProps
+> {
   name: string
   path: string
   displayName?: string
