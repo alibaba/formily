@@ -7,13 +7,7 @@ import {
   defaults,
   shallowClone
 } from '@formily/shared'
-import {
-  produce,
-  enableAllPlugins,
-  setAutoFreeze,
-  Patch,
-  Draft
-} from 'immer'
+import { produce, enableAllPlugins, setAutoFreeze, Patch, Draft } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
 
 enableAllPlugins()
@@ -147,8 +141,8 @@ export const createModel = <
       )
       this.factory.state = this.state
       this.dirtys = this.getDirtys(this.patches)
-      if (this.dirtyCount > 0 && !silent) {
-        this.notify(this.getState())
+      if (this.dirtyCount > 0) {
+        this.notify(this.getState(), silent)
       }
       this.dirtyCount = 0
       this.dirtys = {}

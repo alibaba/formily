@@ -31,7 +31,8 @@ import {
   log,
   defaults,
   toArr,
-  isNum
+  isNum,
+  isEmpty
 } from '@formily/shared'
 import { createFormInternals } from './internals'
 import { Field } from './models/field'
@@ -79,6 +80,17 @@ export const createFormExternals = (
     return (published: IFieldState) => {
       const { dirtys } = field
       if (dirtys.initialized) {
+        if (published.initialized) {
+          const isEmptyValue =
+            !isValid(published.value) || isEmpty(published.value)
+          if (isEmptyValue) {
+            field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
+              if (isEmptyValue) {
+                state.value = state.initialValue
+              }
+            })
+          }
+        }
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
       if (dirtys.value) {
@@ -225,10 +237,10 @@ export const createFormExternals = (
             if (isValid(unmountRemoveValue)) {
               state.unmountRemoveValue = unmountRemoveValue
             }
-            if (isValid(value)) {
-              state.value = value
-            } else if (isValid(initialValue)) {
+            if (!isValid(value) || isEmpty(value)) {
               state.value = initialValue
+            } else {
+              state.value = value
             }
 
             if (isValid(visible)) {
@@ -781,23 +793,23 @@ export const createFormExternals = (
         return name.replace(`${arrayName}.${$from}`, `${arrayName}.${$to}`)
       }
       graph.select(fromFieldsName, field => {
-        field.setSourceState((state: IFieldState) => {
+        field.setState((state: IFieldState) => {
           const targetState =
             getFieldState(calculatePath(state.name, $from, $to)) || {}
           keys.forEach(key => {
             cache[state.name] = cache[state.name] || {}
-            cache[state.name][key] = state[key]
+            cache[state.name][key] = clone(state[key])
             state[key] = targetState && targetState[key]
           })
-        })
+        }, true)
       })
       graph.select(toFieldsName, field => {
-        field.setSourceState((state: IFieldState) => {
+        field.setState((state: IFieldState) => {
           const cacheState = cache[calculatePath(state.name, $to, $from)] || {}
           keys.forEach(key => {
             state[key] = cacheState[key]
           })
-        })
+        }, true)
       })
     }
 

@@ -110,7 +110,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       const initialValue = this.getInitialValueFromProps()
       return {
         ...this.state,
-        initialValue,
+        initialValue: isValid(this.state.initialValue)
+          ? this.state.initialValue
+          : initialValue,
         value,
         values: [value].concat(this.state.values.slice(1))
       }
@@ -177,7 +179,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         draft.warnings = []
         draft.effectWarnings = []
       }
-      if(!isValid(draft.props)){
+      if (!isValid(draft.props)) {
         draft.props = {}
       }
       if (draft.mounted === true && dirtys.mounted) {
@@ -199,7 +201,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
             draft.unmounted === true ||
             draft.mounted === false
           ) {
-            draft.visibleCacheValue = draft.value
+            draft.visibleCacheValue = isValid(draft.value)
+              ? draft.value
+              : draft.initialValue
             draft.value = undefined
             draft.values = toArr(draft.values)
             draft.values[0] = undefined
@@ -252,7 +256,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       if (valueChanged) {
         this.props.setValue?.(this.state.name, getOriginalValue(draft.value))
       }
-      if (draft.initialValue) {
+      if (
+        draft.initialValue &&
+        !isValid(this.props?.getInitialValue(this.state.name))
+      ) {
         this.props.setInitialValue?.(
           this.state.name,
           getOriginalValue(draft.initialValue)

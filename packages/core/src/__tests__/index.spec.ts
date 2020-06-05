@@ -710,10 +710,6 @@ describe('setFormState', () => {
           v === undefined ? { type: 'error', message: 'error msg' } : undefined
       ]
     }) // CustomValidator error
-    let invalid = false
-    const validateResult = await form.validate('', { throwErrors: false })
-    invalid = validateResult.errors.length > 0
-
     const values = { b: '2' }
     const initialValues = { a: '1' }
     const validating = true
@@ -1558,9 +1554,9 @@ describe('major sences', () => {
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
     form.registerField({ path: 'aa.0.bb' })
-    form.registerField({ path: 'aa.1' })
-    form.registerField({ path: 'aa.1.aa' })
-    form.registerField({ path: 'aa.1.bb' })
+    const last1 =form.registerField({ path: 'aa.1' })
+    const last2 =form.registerField({ path: 'aa.1.aa' })
+    const last3 = form.registerField({ path: 'aa.1.bb' })
     form.setFieldState('aa.1.aa', state => {
       state.value = 'change aa'
     })
@@ -1568,6 +1564,15 @@ describe('major sences', () => {
     const snapshot = form.getFormGraph()
     expect(snapshot).toMatchSnapshot()
     mutators.remove(0)
+    last1.setState(state=>{
+      state.unmounted = true
+    })
+    last2.setState(state=>{
+      state.unmounted = true
+    })
+    last3.setState(state=>{
+      state.unmounted = true
+    })
     expect(form.getFormGraph()).toMatchSnapshot()
     form.setFormGraph(snapshot)
     expect(form.getFormGraph()).toMatchSnapshot()
@@ -1579,9 +1584,9 @@ describe('major sences', () => {
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
     form.registerField({ path: 'aa.0.bb' })
-    form.registerField({ path: 'aa.1' })
-    form.registerField({ path: 'aa.1.aa' })
-    form.registerField({ path: 'aa.1.bb' })
+    const last1 = form.registerField({ path: 'aa.1' })
+    const last2 = form.registerField({ path: 'aa.1.aa' })
+    const last3 = form.registerField({ path: 'aa.1.bb' })
     form.setFieldState('aa.1.aa', state => {
       state.value = 'change aa'
     })
@@ -1590,6 +1595,15 @@ describe('major sences', () => {
     const snapshot = form.getFormGraph()
     expect(snapshot).toMatchSnapshot()
     mutators.remove(0)
+    last1.setState(state=>{
+      state.unmounted = true
+    })
+    last2.setState(state=>{
+      state.unmounted = true
+    })
+    last3.setState(state=>{
+      state.unmounted = true
+    })
     expect(form.getFormGraph()).toMatchSnapshot()
     form.setFormGraph(snapshot)
     expect(form.getFormGraph()).toMatchSnapshot()
