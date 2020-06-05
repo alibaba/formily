@@ -237,6 +237,9 @@ export const createFormExternals = (
             if (isValid(unmountRemoveValue)) {
               state.unmountRemoveValue = unmountRemoveValue
             }
+            if (isValid(initialValue)) {
+              state.initialValue = initialValue
+            }
             if (!isValid(value) || isEmpty(value)) {
               state.value = initialValue
             } else {

@@ -257,7 +257,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         this.props.setValue?.(this.state.name, getOriginalValue(draft.value))
       }
       if (
-        draft.initialValue &&
+        dirtys.initialValue &&
         !isValid(this.props?.getInitialValue(this.state.name))
       ) {
         this.props.setInitialValue?.(

@@ -114,12 +114,6 @@ const App = () => {
         onSubmit={values => {
           console.log(values)
         }}
-        initialValues={{
-          array: [
-            { aa: true, bb: '123' },
-            { aa: false, bb: '321' }
-          ]
-        }}
         effects={({ setFieldState }) => {
           onFieldValueChange$('array.*.aa').subscribe(({ name, value }) => {
             setFieldState(
@@ -144,8 +138,15 @@ const App = () => {
                 { label: '隐藏', value: false }
               ]}
               x-component="Input"
+              default={false}
             />
-            <Field type="string" name="bb" title="BB" x-component="Input" />
+            <Field
+              type="string"
+              name="bb"
+              title="BB"
+              default={123}
+              x-component="Input"
+            />
           </Field>
         </Field>
         <FormButtonGroup>
