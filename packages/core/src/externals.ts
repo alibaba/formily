@@ -98,6 +98,23 @@ export const createFormExternals = (
     return segments.join('.')
   }
 
+  function getExchangeState(state: IFieldState) {
+    const results = {
+      ...state
+    }
+    delete results.name
+    delete results.path
+    if (
+      results.visible === false ||
+      results.unmounted === true ||
+      results.mounted === false
+    ) {
+      delete results.value
+      delete results.values
+    }
+    return results
+  }
+
   function exchangeState(
     prevPattern: FormPathPattern,
     currentPattern: FormPathPattern
@@ -114,17 +131,10 @@ export const createFormExternals = (
       }
     )
     graph.select(prevPattern + '.*', (field: IField) => {
-      //eslint-disable-next-line
-      const { name, path, value, values, ...state } = field.getState()
-      const currentPath = calculateMovePath(path, currentIndex)
-      const currentState = getFieldState(
-        currentPath,
-        //eslint-disable-next-line
-        ({ name, path, value, values, ...state }) => {
-          return state
-        }
-      )
-      prevStateMap[name] = state
+      const prevState = field.getState(getExchangeState)
+      const currentPath = calculateMovePath(field.state.path, currentIndex)
+      const currentState = getFieldState(currentPath, getExchangeState)
+      prevStateMap[field.state.name] = prevState
       field.setState(state => {
         Object.assign(state, currentState)
       })
@@ -161,7 +171,9 @@ export const createFormExternals = (
       if (dirtys.value) {
         const isArrayList = /array/gi.test(published.dataType)
         if (isArrayList) {
-          eachArrayExchanges(field.prevState, published, exchangeState)
+          hostUpdate(() => {
+            eachArrayExchanges(field.prevState, published, exchangeState)
+          })
           //重置TAG，保证下次状态交换是没问题的
           setFormValuesIn(
             published.name,
