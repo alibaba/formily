@@ -23,11 +23,10 @@ type ExtendsProps<State> = NormalRecord & {
 }
 
 type Patch = {
-  op: "replace" | "remove" | "add";
-  path: (string | number)[];
-  value?: any;
+  op: 'replace' | 'remove' | 'add'
+  path: (string | number)[]
+  value?: any
 }
-
 
 const applyPatches = (target: any, patches: Patch[]) => {
   patches.forEach(({ op, path, value }) => {
@@ -103,13 +102,14 @@ export const createModel = <
       }
     }
 
-    setState(recipe?: Recipe<State>, silent?: boolean) {
+    setState(recipe?: Recipe<State>, silent: boolean = false) {
       if (!isFn(recipe)) return
       const base = this.getBaseState()
       this.dirtyCount = 0
       this.patches = []
       this.prevState = base
       this.factory.prevState = base
+      this.factory.state = base
       produce(
         base,
         draft => {
@@ -119,7 +119,7 @@ export const createModel = <
           this.patches = this.patches.concat(patches)
         }
       )
-      this.state = produce(
+      const produced = produce(
         base,
         draft => {
           applyPatches(draft, this.patches)
@@ -146,10 +146,11 @@ export const createModel = <
           }
         }
       )
-      this.factory.state = this.state
+      this.factory.state = produced
       this.dirtys = this.getDirtys(this.patches)
       if (this.dirtyCount > 0) {
         this.notify(this.getState(), silent)
+        this.state = produced
       }
       this.dirtyCount = 0
       this.dirtys = {}

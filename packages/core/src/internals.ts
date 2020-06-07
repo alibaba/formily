@@ -30,10 +30,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       notifyFormValuesChange()
     }
     if (dirtys.initialValues) {
-      hostUpdate(() => {
-        form.setState(state => {
-          state.values = defaults(published.initialValues, published.values)
-        })
+      form.setState(state => {
+        state.values = defaults(published.initialValues, published.values)
       })
       notifyFormInitialValuesChange()
     }

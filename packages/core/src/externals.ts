@@ -35,7 +35,7 @@ import {
   isEmpty
 } from '@formily/shared'
 import { createFormInternals } from './internals'
-import { Field } from './models/field'
+import { Field, ARRAY_UNIQUE_TAG, tagArrayList } from './models/field'
 import { VirtualField } from './models/virtual-field'
 
 export const createFormExternals = (
@@ -65,6 +65,82 @@ export const createFormExternals = (
     pushTaskQueue
   } = internals
 
+  function eachArrayExchanges(
+    prevState: IFieldState,
+    currentState: IFieldState,
+    eacher: (prevPath: string, currentPath: string) => void
+  ) {
+    const exchanged = {}
+    currentState.value?.forEach?.((item: any, index: number) => {
+      const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
+      const current = item?.[ARRAY_UNIQUE_TAG]
+      if (prev === current) return
+      if (prev === undefined || current === undefined) return
+      if (exchanged[prev] || exchanged[current]) return
+      exchanged[prev] = true
+      exchanged[current] = true
+      eacher(prev, current)
+    })
+  }
+
+  function calculateMovePath(name: string, replace: number) {
+    const segments = []
+    const indexes = []
+    FormPath.parse(name).forEach((key: string) => {
+      if (/^\d+$/.test(key)) {
+        indexes.push(segments.length)
+      }
+      segments.push(key)
+    })
+    if (indexes.length) {
+      segments[indexes[indexes.length - 1]] = replace
+    }
+    return segments.join('.')
+  }
+
+  function exchangeState(
+    prevPattern: FormPathPattern,
+    currentPattern: FormPathPattern
+  ) {
+    const prevStateMap = {}
+    const prevIndex = FormPath.transform(prevPattern, /\d+/, (...args) => {
+      return Number(args[args.length - 1])
+    })
+    const currentIndex = FormPath.transform(
+      currentPattern,
+      /\d+/,
+      (...args) => {
+        return Number(args[args.length - 1])
+      }
+    )
+    graph.select(prevPattern + '.*', (field: IField) => {
+      //eslint-disable-next-line
+      const { name, path, value, values, ...state } = field.getState()
+      const currentPath = calculateMovePath(path, currentIndex)
+      const currentState = getFieldState(
+        currentPath,
+        //eslint-disable-next-line
+        ({ name, path, value, values, ...state }) => {
+          return state
+        }
+      )
+      prevStateMap[name] = state
+      field.setState(state => {
+        Object.assign(state, currentState)
+      })
+    })
+    graph.select(currentPattern + '.*', (field: IField) => {
+      const { path } = field.getState()
+      const prevPath = calculateMovePath(path, prevIndex)
+      const prevState = prevStateMap[prevPath]
+      if (prevState) {
+        field.setState(state => {
+          Object.assign(state, prevState)
+        })
+      }
+    })
+  }
+
   function onFieldChange({ field, path }: { field: IField; path: FormPath }) {
     return (published: IFieldState) => {
       const { dirtys } = field
@@ -83,6 +159,15 @@ export const createFormExternals = (
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
       if (dirtys.value) {
+        const isArrayList = /array/gi.test(published.dataType)
+        if (isArrayList) {
+          eachArrayExchanges(field.prevState, published, exchangeState)
+          //重置TAG，保证下次状态交换是没问题的
+          setFormValuesIn(
+            published.name,
+            tagArrayList(published.value, published.name, true)
+          )
+        }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
       if (dirtys.initialValue) {
@@ -762,62 +847,6 @@ export const createFormExternals = (
       return field.getState(state => state.value)
     }
 
-    function onGraphChange(callback: () => void) {
-      let timer = null
-      const id = graph.subscribe(() => {
-        clearTimeout(timer)
-        timer = setTimeout(() => {
-          graph.unsubscribe(id)
-          callback()
-        })
-      })
-    }
-
-    //1. 无法自动交换通过移动来新增删除子列表元素的状态
-    //2. 暂时不支持通过setFieldState修改值场景的状态交换
-    function swapState($from: number, $to: number) {
-      const keys: string[] = [
-        'initialValue',
-        'visibleCacheValue',
-        'value',
-        'values'
-      ]
-      const arrayName = field.getSourceState(state => state.name)
-      const fromFieldsName = `${arrayName}.${$from}.*`
-      const toFieldsName = `${arrayName}.${$to}.*`
-      const cache: any = {}
-      const calculatePath = (name: string, $from: number, $to: number) => {
-        return name.replace(`${arrayName}.${$from}`, `${arrayName}.${$to}`)
-      }
-      graph.select(fromFieldsName, (field: IField) => {
-        field.setState((state: IFieldState) => {
-          const targetState =
-            getFieldState(calculatePath(state.name, $from, $to)) || {}
-          keys.forEach(key => {
-            cache[state.name] = isValid(cache[state.name])
-              ? cache[state.name]
-              : {}
-            cache[state.name][key] = clone(state[key])
-            state[key] = targetState && targetState[key]
-          })
-        }, true)
-      })
-      graph.select(toFieldsName, (field: IField) => {
-        field.setState((state: IFieldState) => {
-          const cacheState = cache[calculatePath(state.name, $to, $from)] || {}
-          keys.forEach(key => {
-            state[key] = cacheState[key]
-          })
-        }, true)
-      })
-    }
-
-    function swapAfterState(start: number, arrayLength: number, step = 1) {
-      for (let i = arrayLength - 1; i >= start + 1; i -= step) {
-        swapState(i, i - 1)
-      }
-    }
-
     const mutators = {
       change(...values: any[]) {
         setValue(...values)
@@ -835,36 +864,27 @@ export const createFormExternals = (
         })
       },
       push(value?: any) {
-        const arr = toArr(getValue()).slice()
-        arr.push(value)
+        const arr = toArr(getValue()).concat(value)
         setValue(arr)
         return arr
       },
       pop() {
-        const arr = toArr(getValue()).slice()
-        arr.pop()
+        const origin = toArr(getValue())
+        const arr = origin.slice(0, origin.length - 1)
         setValue(arr)
         return arr
       },
       insert(index: number, value: any) {
-        const arr = toArr(getValue()).slice()
-        arr.splice(index, 0, value)
+        const arr = toArr(getValue()).reduce((buf, item, idx) => {
+          return idx === index ? buf.concat([value, item]) : buf.concat(item)
+        }, [])
         setValue(arr)
-        onGraphChange(() => {
-          swapAfterState(index, arr.length)
-        })
         return arr
       },
       remove(index?: number | string) {
-        let val = getValue()
+        const val = getValue()
         if (isNum(index) && isArr(val)) {
-          val = [].concat(val)
-          const lastIndex = val.length - 1
-          val.splice(index, 1)
-          if (index < lastIndex) {
-            swapState(Number(index), Number(index) + 1)
-          }
-          setValue(val)
+          setValue(val.filter((item, idx) => idx !== index))
         } else {
           removeValue(index)
         }
@@ -883,18 +903,13 @@ export const createFormExternals = (
         return mutators.insert(0, value)
       },
       shift() {
-        const arr = toArr(getValue()).slice()
-        arr.shift()
-        swapState(0, 1)
-        setValue(arr)
-        return arr
+        return mutators.remove(0)
       },
       move($from: number, $to: number) {
         const arr = toArr(getValue()).slice()
         const item = arr[$from]
         arr.splice($from, 1)
         arr.splice($to, 0, item)
-        swapState($from, $to)
         setValue(arr)
         return arr
       },

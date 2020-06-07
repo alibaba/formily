@@ -26,6 +26,19 @@ const getOriginalValue = (value: any) => {
   return isValid(origin) ? origin : value
 }
 
+export const ARRAY_UNIQUE_TAG = Symbol('@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@')
+
+export const tagArrayList = (current: any[], name: string, force?: boolean) => {
+  return current?.map?.((item, index) => {
+    if (typeof item === 'object') {
+      item[ARRAY_UNIQUE_TAG] = force
+        ? `${name}.${index}`
+        : item[ARRAY_UNIQUE_TAG] || `${name}.${index}`
+    }
+    return item
+  })
+}
+
 export const Field = createModel<IFieldState, IFieldStateProps>(
   class FieldStateFactory implements IModelSpec<IFieldState, IFieldStateProps> {
     nodePath: FormPath
@@ -91,7 +104,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
 
     getInitialValueFromProps() {
       if (isFn(this.props?.getInitialValue)) {
-        return this.props.getInitialValue(this.state.name)
+        const initialValue = this.props.getInitialValue(this.state.name)
+        return isValid(this.state.initialValue)
+          ? this.state.initialValue
+          : initialValue
       }
       return this.state.initialValue
     }
@@ -106,13 +122,16 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     }
 
     getState() {
-      const value = this.getValueFromProps()
-      const initialValue = this.getInitialValueFromProps()
+      if (!this.state.initialized) return this.state
+      let value = this.getValueFromProps()
+      let initialValue = this.getInitialValueFromProps()
+      if (this.isArrayList()) {
+        value = this.tagArrayList(toArr(value))
+        initialValue = this.tagArrayList(toArr(initialValue))
+      }
       return {
         ...this.state,
-        initialValue: isValid(this.state.initialValue)
-          ? this.state.initialValue
-          : initialValue,
+        initialValue,
         value,
         values: [value].concat(this.state.values.slice(1))
       }
@@ -203,6 +222,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
           ) {
             draft.visibleCacheValue = isValid(draft.value)
               ? draft.value
+              : isValid(draft.visibleCacheValue)
+              ? draft.visibleCacheValue
               : draft.initialValue
             draft.value = undefined
             draft.values = toArr(draft.values)
@@ -233,22 +254,29 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       }
     }
 
+    tagArrayList(value: any[]) {
+      return tagArrayList(value, this.state.name)
+    }
+
+    isArrayList() {
+      return /array/gi.test(this.state.dataType)
+    }
+
     produceValue(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
       const valueOrInitialValueChanged =
         dirtys.values || dirtys.value || dirtys.initialValue
       const valueChanged = dirtys.values || dirtys.value
-      const isArrayType = /array/gi.test(draft.dataType)
       if (dirtys.values) {
         draft.values = toArr(draft.values)
-        if (isArrayType) {
-          draft.values[0] = toArr(draft.values[0])
+        if (this.isArrayList()) {
+          draft.values[0] = this.tagArrayList(toArr(draft.values[0]))
         }
         draft.value = draft.values[0]
         draft.modified = true
       }
       if (dirtys.value) {
-        if (isArrayType) {
-          draft.value = toArr(draft.value)
+        if (this.isArrayList()) {
+          draft.value = this.tagArrayList(toArr(draft.value))
         }
         draft.values[0] = draft.value
         draft.modified = true
