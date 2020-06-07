@@ -16,7 +16,7 @@ const env = {
 
 export const MarkupContext = createContext<Schema>(null)
 
-const getRadomName = () => {
+const getRandomName = () => {
   return `NO_NAME_FIELD_$${env.nonameId++}`
 }
 
@@ -27,7 +27,7 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
   const parentSchema = useContext(MarkupContext)
   if (!parentSchema) return <Fragment />
   if (parentSchema.isObject()) {
-    props.name = props.name || getRadomName()
+    props.name = props.name || getRandomName()
     const schema = parentSchema.setProperty(props.name, props)
     return (
       <MarkupContext.Provider value={schema}>{children}</MarkupContext.Provider>
