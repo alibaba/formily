@@ -6,13 +6,13 @@ const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 const getPxFromSize = function (size: EComponentSize = EComponentSize.MEDIUM, type: EPxType): PxValue {
     let lineSize = {
         [EComponentSize.SMALL]: ELineHeightPx.small,
-        [EComponentSize.MEDIUM]: ELineHeightPx.middle,
+        [EComponentSize.MEDIUM]: ELineHeightPx.medium,
         [EComponentSize.MIDDLE]: ELineHeightPx.middle,
         [EComponentSize.LARGE]: ELineHeightPx.large,
     }
     let fontSize = {
         [EComponentSize.SMALL]: EFontSizePx.small,
-        [EComponentSize.MEDIUM]: EFontSizePx.middle,
+        [EComponentSize.MEDIUM]: EFontSizePx.medium,
         [EComponentSize.MIDDLE]: EFontSizePx.middle,
         [EComponentSize.LARGE]: EFontSizePx.large,
     }
