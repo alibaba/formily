@@ -6,19 +6,17 @@ const defaultProps = { type: 'factory defaultProps' }
 
 class State {
   static displayName = displayName
-  static defaultState = defaultState
   static defaultProps = defaultProps
 
   name: string
-  state: any
   props: any
+
+  state = { ...defaultState }
 
   constructor(props) {
     this.name = 'inner'
-    this.state = {}
     this.props = props
   }
-
 }
 const StateModel = createModel(State)
 
@@ -126,7 +124,7 @@ describe('proxy model', () => {
       withBatching2: true
     })
     // 这次notify是由batch批处理结束调用的
-    expect(susCb).toBeCalledTimes(2)
+    expect(susCb).toBeCalledTimes(3)
     expect(susCb).toBeCalledWith({
       ...prevState3,
       withBatching: true,
@@ -257,7 +255,7 @@ describe('dirty model', () => {
       withBatching2: true
     })
     // 这次notify是由batch批处理结束调用的
-    expect(susCb).toBeCalledTimes(2)
+    expect(susCb).toBeCalledTimes(3)
     expect(susCb).toBeCalledWith({
       ...prevState3,
       withBatching: true,

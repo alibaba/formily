@@ -38,6 +38,8 @@ const applyPatches = (target: any, patches: Patch[]) => {
   })
 }
 
+type CacheKey = string | Symbol | number
+
 export const createModel = <
   State extends ExtendsState,
   Props extends ExtendsProps<State>
@@ -65,11 +67,14 @@ export const createModel = <
       this.state = this.factory.state as any
       this.state.displayName = this.displayName
       this.prevState = this.state
+      this.dirtyCount = 0
+      this.dirtys = {}
+      this.batching = false
     }
 
     getBaseState() {
       if (isFn(this.factory.getState)) {
-        return this.factory.getState(this.state)
+        return this.factory.getState.call(this.factory, this.state)
       } else {
         return this.state
       }
@@ -147,10 +152,10 @@ export const createModel = <
         }
       )
       this.factory.state = produced
+      this.state = produced
       this.dirtys = this.getDirtys(this.patches)
       if (this.dirtyCount > 0) {
         this.notify(this.getState(), silent)
-        this.state = produced
       }
       this.dirtyCount = 0
       this.dirtys = {}
@@ -192,15 +197,15 @@ export const createModel = <
       this.patches = []
     }
 
-    setCache(key: string, value: any) {
+    setCache(key: CacheKey, value: any) {
       this.cache.set(key, shallowClone(value))
     }
 
-    getCache(key: string) {
+    getCache(key: CacheKey) {
       return this.cache.get(key)
     }
 
-    removeCache(key: string) {
+    removeCache(key: CacheKey) {
       this.cache.delete(key)
     }
 

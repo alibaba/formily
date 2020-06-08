@@ -158,11 +158,9 @@ export const createFormExternals = (
         if (published.initialized) {
           const isEmptyValue =
             !isValid(published.value) || isEmpty(published.value)
-          if (isEmptyValue) {
+          if (isEmptyValue && isValid(published.initialValue)) {
             field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
-              if (isEmptyValue) {
-                state.value = state.initialValue
-              }
+              state.value = state.initialValue
             })
           }
         }
@@ -303,10 +301,20 @@ export const createFormExternals = (
             setFormInitialValuesIn(name, value)
           },
           removeValue(name) {
-            deleteFormValuesIn(name, true)
+            deleteFormValuesIn(name)
           },
           getInitialValue(name) {
             return getFormInitialValuesIn(name)
+          },
+          unControlledValueChanged() {
+            heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+            heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
+            setTimeout(() => {
+              validate(field.state.path, {
+                hostRendering: false,
+                throwErrors: false
+              })
+            })
           }
         })
       field.subscription = {
@@ -326,7 +334,7 @@ export const createFormExternals = (
             if (isValid(initialValue)) {
               state.initialValue = initialValue
             }
-            if (!isValid(value) || isEmpty(value)) {
+            if (!isValid(value)) {
               state.value = initialValue
             } else {
               state.value = value
@@ -546,7 +554,9 @@ export const createFormExternals = (
     callback?: (state: IFormState) => any,
     silent?: boolean
   ) {
-    form.setState(callback, silent)
+    hostUpdate(() => {
+      form.setState(callback, silent)
+    })
   }
 
   function getFormGraph() {

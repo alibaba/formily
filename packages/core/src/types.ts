@@ -195,6 +195,7 @@ export interface IFieldStateProps {
   removeValue?: (name: FormPathPattern) => void
   setInitialValue?: (name: FormPathPattern, initialValue: any) => void
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
+  unControlledValueChanged?: () => void
 }
 
 export interface IFieldRegistryProps<FieldProps = FormilyCore.FieldProps> {

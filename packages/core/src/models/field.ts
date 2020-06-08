@@ -26,7 +26,9 @@ const getOriginalValue = (value: any) => {
   return isValid(origin) ? origin : value
 }
 
-export const ARRAY_UNIQUE_TAG = Symbol('@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@')
+export const ARRAY_UNIQUE_TAG = Symbol(
+  '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
+)
 
 export const tagArrayList = (current: any[], name: string, force?: boolean) => {
   return current?.map?.((item, index) => {
@@ -48,6 +50,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     props: IFieldStateProps
 
     prevState: IFieldState
+
+    lastCompareResults?: boolean
 
     state = {
       name: '',
@@ -121,7 +125,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       }
     }
 
-    getState() {
+    getState = () => {
       if (!this.state.initialized) return this.state
       let value = this.getValueFromProps()
       let initialValue = this.getInitialValueFromProps()
@@ -129,12 +133,19 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         value = this.tagArrayList(toArr(value))
         initialValue = this.tagArrayList(toArr(initialValue))
       }
-      return {
+
+      const state = {
         ...this.state,
         initialValue,
         value,
         values: [value].concat(this.state.values.slice(1))
       }
+      const compareResults = isEqual(this.state.value, value)
+      if (!compareResults && compareResults !== this.lastCompareResults) {
+        this.lastCompareResults = compareResults
+        this.props?.unControlledValueChanged()
+      }
+      return state
     }
 
     produceErrorsAndWarnings(
@@ -159,12 +170,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       if (dirtys.ruleWarnings) {
         draft.ruleWarnings = normalizeMessages(draft.ruleWarnings)
       }
-      if (dirtys.effectErrors || dirtys.ruleErrors) {
-        draft.errors = draft.effectErrors.concat(draft.ruleErrors)
-      }
-      if (dirtys.effectWarnings || dirtys.ruleWarnings) {
-        draft.warnings = draft.effectWarnings.concat(draft.ruleWarnings)
-      }
+      draft.errors = draft.ruleErrors.concat(draft.effectErrors)
+      draft.warnings = draft.ruleWarnings.concat(draft.effectWarnings)
     }
 
     produceEditable(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
@@ -189,7 +196,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         }
       }
       if (
-        (dirtys.selfEditable && !draft.selfEditable) ||
+        dirtys.editable ||
+        dirtys.selfEditable ||
         draft.visible === false ||
         draft.unmounted === true
       ) {
@@ -215,31 +223,29 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       }
       if (dirtys.visible || dirtys.mounted || dirtys.unmounted) {
         if (draft.unmountRemoveValue) {
-          if (
-            draft.visible === false ||
-            draft.unmounted === true ||
-            draft.mounted === false
-          ) {
-            draft.visibleCacheValue = isValid(draft.value)
-              ? draft.value
-              : isValid(draft.visibleCacheValue)
-              ? draft.visibleCacheValue
-              : draft.initialValue
-            draft.value = undefined
-            draft.values = toArr(draft.values)
-            draft.values[0] = undefined
-            this.props.removeValue?.(this.state.name)
-          } else if (
-            draft.visible === true &&
-            draft.mounted === true &&
-            draft.unmounted === false
-          ) {
-            if (!isValid(draft.value)) {
-              draft.value = draft.visibleCacheValue
-              this.props.setValue?.(
-                this.state.name,
-                getOriginalValue(draft.value)
-              )
+          if (draft.display) {
+            if (draft.visible === false || draft.unmounted === true) {
+              draft.visibleCacheValue = isValid(draft.value)
+                ? draft.value
+                : isValid(draft.visibleCacheValue)
+                ? draft.visibleCacheValue
+                : draft.initialValue
+              draft.value = undefined
+              draft.values = toArr(draft.values)
+              draft.values[0] = undefined
+              this.props.setValue?.(this.state.name, undefined)
+            } else if (
+              draft.visible === true ||
+              draft.mounted === true ||
+              draft.unmounted === false
+            ) {
+              if (!isValid(draft.value)) {
+                draft.value = draft.visibleCacheValue
+                this.props.setValue?.(
+                  this.state.name,
+                  getOriginalValue(draft.value)
+                )
+              }
             }
           }
         }

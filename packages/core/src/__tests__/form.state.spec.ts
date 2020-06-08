@@ -3,8 +3,8 @@ import { Form } from '../models/form'
 test('computeState', () => {
   const state = new Form()
   expect(state.getState()).toEqual({
-    displayName: 'Form',
-    editable: undefined,
+    displayName: 'FormState',
+    editable: true,
     valid: true,
     invalid: false,
     loading: false,
@@ -17,8 +17,7 @@ test('computeState', () => {
     values: {},
     initialValues: {},
     mounted: false,
-    unmounted: false,
-    props: {}
+    unmounted: false
   })
 
   // can not set invalid errors, warnings
@@ -55,16 +54,6 @@ test('computeState', () => {
   })
   expect(state.getState().values).toEqual({ change: true })
 
-  // cannot set invalid props
-  expect(state.getState().props).toEqual({})
-  state.setState(draft => {
-    draft.props = { hello: 'world' }
-  })
-  expect(state.getState().props).toEqual({ hello: 'world' })
-  state.setState(draft => {
-    draft.props = undefined
-  })
-  expect(state.getState().props).toEqual({ hello: 'world' })
 
   // loading depends on validating
   expect(state.getState().loading).toEqual(false)
@@ -190,7 +179,7 @@ test('setState', () => {
     values: { withBatching: true, withBatching2: true }
   })
   // 这次notify是由batch批处理结束调用的
-  expect(susCb).toBeCalledTimes(2)
+  expect(susCb).toBeCalledTimes(3)
   expect(susCb).toBeCalledWith({
     ...prevState3,
     values: { withBatching: true, withBatching2: true }

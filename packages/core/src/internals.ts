@@ -9,8 +9,7 @@ import {
   isValid,
   isEqual,
   clone,
-  isFn,
-  defaults
+  isFn
 } from '@formily/shared'
 import {
   LifeCycleTypes,
@@ -26,13 +25,11 @@ import {
 export const createFormInternals = (options: IFormCreatorOptions = {}) => {
   function onFormChange(published: IFormState) {
     const { dirtys } = form
+
     if (dirtys.values) {
       notifyFormValuesChange()
     }
     if (dirtys.initialValues) {
-      form.setState(state => {
-        state.values = defaults(published.initialValues, published.values)
-      })
       notifyFormInitialValuesChange()
     }
     if (dirtys.editable) {
@@ -54,6 +51,10 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       heart.publish(LifeCycleTypes.ON_FORM_INIT, form)
     }
     heart.publish(LifeCycleTypes.ON_FORM_CHANGE, form)
+    if (env.hostRendering) {
+      env.hostRendering = dirtys.values || dirtys.initialValues
+    }
+    return env.hostRendering
   }
 
   function notifyFormValuesChange() {
@@ -312,6 +313,18 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     graph.appendNode('', form)
     form.setState((state: IFormState) => {
       state.initialized = true
+      if (isValid(options.initialValues)) {
+        state.initialValues = options.initialValues
+      }
+      if (isValid(options.values)) {
+        state.values = options.values
+      }
+      if (!isValid(state.values)) {
+        state.values = state.initialValues
+      }
+      if (isValid(options.editable)) {
+        state.editable = options.editable
+      }
     })
   }
 
@@ -319,7 +332,9 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     if (isFn(callback)) {
       env.hostRendering = true
       const result = callback()
-      heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, form)
+      if (env.hostRendering) {
+        heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, form)
+      }
       env.hostRendering = false
       return result
     }

@@ -8,6 +8,7 @@ import { FormPath, FormPathPattern, BigData } from '@formily/shared'
 import { createFormInternals } from './internals'
 import { createFormExternals } from './externals'
 import { FormGraph } from './shared/graph'
+import { createModel } from './shared/model'
 export * from './shared/lifecycle'
 export * from './types'
 
@@ -35,6 +36,7 @@ export const registerValidationMTEngine = FormValidator.registerMTEngine
 export {
   setValidationLanguage,
   setValidationLocale,
+  createModel,
   BigData,
   FormGraph,
   FormPath,

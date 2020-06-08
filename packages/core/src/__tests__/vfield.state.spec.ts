@@ -12,7 +12,6 @@ test('computeState', () => {
   })
   expect(state.getState().mounted).toEqual(true)
   expect(state.getState().unmounted).toEqual(false)
-  // cannot set invalid props
   expect(state.getState().props).toEqual({})
   state.setState((draft) => {
     draft.props = { hello: 'world' }
@@ -21,7 +20,7 @@ test('computeState', () => {
   state.setState((draft) => {
     draft.props = undefined
   })
-  expect(state.getState().props).toEqual({ hello: 'world' })
+  expect(state.getState().props).toEqual({})
 })
 
 
@@ -107,7 +106,7 @@ test('setState', () => {
   expect(state.getState().mounted).toEqual(true)
   expect(state.getState()).toEqual({ ...prevState3, initialized: true, mounted: true })
   // 这次notify是由batch批处理结束调用的
-  expect(susCb).toBeCalledTimes(2)
+  expect(susCb).toBeCalledTimes(3)
   expect(susCb).toBeCalledWith({ ...prevState3, initialized: true, mounted: true })
 })
 test('getSourceState', () => {
