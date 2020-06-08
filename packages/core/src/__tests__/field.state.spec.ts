@@ -384,7 +384,7 @@ test('setState', () => {
     values: [{ withBatching: true, withBatching2: true }]
   })
   // 这次notify是由batch批处理结束调用的
-  expect(susCb).toBeCalledTimes(3)
+  expect(susCb).toBeCalledTimes(2)
   expect(susCb).toBeCalledWith({
     ...prevState3,
     value: { withBatching: true, withBatching2: true },

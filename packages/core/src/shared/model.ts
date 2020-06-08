@@ -154,7 +154,10 @@ export const createModel = <
       this.factory.state = produced
       this.state = produced
       this.dirtys = this.getDirtys(this.patches)
-      if (this.dirtyCount > 0) {
+      if (this.dirtyCount > 0 && !silent) {
+        if (this.batching) {
+          return
+        }
         this.notify(this.getState(), silent)
       }
       this.dirtyCount = 0

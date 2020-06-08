@@ -780,7 +780,7 @@ describe('setFormState', () => {
     form.setFormState(state => (state.values = { a: '5678' }), true)
     a.getState() //手动同步
     expect(form.getFormState(state => state.values)).toEqual({ a: '5678' })
-    expect(formChange).toBeCalledTimes(3)
+    expect(formChange).toBeCalledTimes(2)
     expect(fieldChange).toBeCalledTimes(2)
   })
 })
@@ -840,7 +840,7 @@ describe('setFieldState', () => {
 
     form.setFieldState('a', state => (state.value = '5678'), true)
     expect(form.getFieldState('a', state => state.value)).toEqual('5678')
-    expect(fieldChange).toBeCalledTimes(3)
+    expect(fieldChange).toBeCalledTimes(2)
   })
 
   test('validating and loading', () => {

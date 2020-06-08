@@ -18,7 +18,7 @@
     "test:sc": "jest --watch packages/react-shared-components/src/__tests__/*.spec.tsx",
     "test:core": "jest packages/core/src/__tests__/*.spec.ts",
     "test:hook": "jest packages/react/src/__tests__/*.spec.tsx",
-    "test:renderer": "jest --watch packages/react-schema-renderer/src/__tests__/*.spec.tsx",
+    "test:renderer": "jest packages/react-schema-renderer/src/__tests__/*.spec.tsx",
     "test:editor": "jest --watch packages/react-schema-editor/src/__tests__/*.spec.ts",
     "test:layout": "jest --watch packages/**/src/__tests__/layout.spec.tsx",
     "test:prod": "cross-env TEST_ENV=production npm run build && jest",

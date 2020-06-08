@@ -5,7 +5,14 @@ import {
   IFieldStateProps,
   FieldStateDirtyMap
 } from '../types'
-import { FormPath, isFn, toArr, isValid, isEqual } from '@formily/shared'
+import {
+  FormPath,
+  isFn,
+  toArr,
+  isValid,
+  isEqual,
+  isEmpty
+} from '@formily/shared'
 import { Draft, original } from 'immer'
 
 const normalizeMessages = (messages: any) => toArr(messages).filter(v => !!v)
@@ -269,9 +276,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     }
 
     produceValue(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      const valueOrInitialValueChanged =
+      let valueOrInitialValueChanged =
         dirtys.values || dirtys.value || dirtys.initialValue
-      const valueChanged = dirtys.values || dirtys.value
+      let valueChanged = dirtys.values || dirtys.value
       if (dirtys.values) {
         draft.values = toArr(draft.values)
         if (this.isArrayList()) {
@@ -286,6 +293,16 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         }
         draft.values[0] = draft.value
         draft.modified = true
+      }
+      if (dirtys.initialized) {
+        const isEmptyValue = !isValid(draft.value) || isEmpty(draft.value)
+        if (isEmptyValue && isValid(draft.initialValue)) {
+          draft.value = draft.initialValue
+          draft.values = toArr(draft.values)
+          draft.values[0] = draft.value
+          valueChanged = true
+          valueOrInitialValueChanged = true
+        }
       }
       if (valueChanged) {
         this.props.setValue?.(this.state.name, getOriginalValue(draft.value))

@@ -106,7 +106,7 @@ test('setState', () => {
   expect(state.getState().mounted).toEqual(true)
   expect(state.getState()).toEqual({ ...prevState3, initialized: true, mounted: true })
   // 这次notify是由batch批处理结束调用的
-  expect(susCb).toBeCalledTimes(3)
+  expect(susCb).toBeCalledTimes(2)
   expect(susCb).toBeCalledWith({ ...prevState3, initialized: true, mounted: true })
 })
 test('getSourceState', () => {

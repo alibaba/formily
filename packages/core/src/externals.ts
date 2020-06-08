@@ -31,8 +31,7 @@ import {
   log,
   defaults,
   toArr,
-  isNum,
-  isEmpty
+  isNum
 } from '@formily/shared'
 import { createFormInternals } from './internals'
 import { Field, ARRAY_UNIQUE_TAG, tagArrayList } from './models/field'
@@ -155,15 +154,6 @@ export const createFormExternals = (
     return (published: IFieldState) => {
       const { dirtys } = field
       if (dirtys.initialized) {
-        if (published.initialized) {
-          const isEmptyValue =
-            !isValid(published.value) || isEmpty(published.value)
-          if (isEmptyValue && isValid(published.initialValue)) {
-            field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
-              state.value = state.initialValue
-            })
-          }
-        }
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
       if (dirtys.value) {

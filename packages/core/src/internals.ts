@@ -33,12 +33,14 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       notifyFormInitialValuesChange()
     }
     if (dirtys.editable) {
-      graph.eachChildren((field: IField | IVirtualField) => {
-        if (isField(field)) {
-          field.setState(state => {
-            state.formEditable = published.editable
-          })
-        }
+      hostUpdate(() => {
+        graph.eachChildren((field: IField | IVirtualField) => {
+          if (isField(field)) {
+            field.setState(state => {
+              state.formEditable = published.editable
+            })
+          }
+        })
       })
     }
     if (dirtys.unmounted && published.unmounted) {
