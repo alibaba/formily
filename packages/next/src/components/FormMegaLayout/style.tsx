@@ -16,7 +16,7 @@ const getPxFromSize = function (size: EComponentSize = EComponentSize.MEDIUM, ty
         [EComponentSize.MIDDLE]: EFontSizePx.middle,
         [EComponentSize.LARGE]: EFontSizePx.large,
     }
-    let defaultSize: EComponentSize.MEDIUM
+    let defaultSize: EComponentSize = EComponentSize.MEDIUM
     let thisSize: {
         [key in EComponentSize]: PxValue
     } = type === EPxType.Font ? fontSize : lineSize
