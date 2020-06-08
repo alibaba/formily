@@ -1,6 +1,29 @@
 import { css } from 'styled-components'
+import { EComponentSize, EPxType, PxValue, ELineHeightPx, EFontSizePx } from './types'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
+
+const getPxFromSize = function (size: EComponentSize = EComponentSize.MEDIUM, type: EPxType): PxValue {
+    let lineSize = {
+        [EComponentSize.SMALL]: ELineHeightPx.small,
+        [EComponentSize.MEDIUM]: ELineHeightPx.middle,
+        [EComponentSize.MIDDLE]: ELineHeightPx.middle,
+        [EComponentSize.LARGE]: ELineHeightPx.large,
+    }
+    let fontSize = {
+        [EComponentSize.SMALL]: EFontSizePx.small,
+        [EComponentSize.MEDIUM]: EFontSizePx.middle,
+        [EComponentSize.MIDDLE]: EFontSizePx.middle,
+        [EComponentSize.LARGE]: EFontSizePx.large,
+    }
+    let defaultSize: EComponentSize.MEDIUM
+    let thisSize: {
+        [key in EComponentSize]: PxValue
+    } = type === EPxType.Font ? fontSize : lineSize
+
+    return thisSize[size] || thisSize[defaultSize]
+}
+
 export const computeNextStyleBase = (props) => {
     const result: any = {}
     const {
@@ -8,10 +31,11 @@ export const computeNextStyleBase = (props) => {
         isLayout,
         inline,
         labelCol, grid, full, context = {}, contextColumns, columns, isRoot, autoRow,
-        span, nested, size,
+        span, nested,
         // lg, m, s,
         responsive
     } = props
+    const size: EComponentSize = props.size
     const labelWidth = formatPx(props.labelWidth)
     const wrapperWidth = formatPx(props.wrapperWidth)
     const gutter = formatPx(props.gutter)
@@ -45,17 +69,17 @@ export const computeNextStyleBase = (props) => {
             > .mega-layout-container-before,
             > .formily-mega-item-before {
                 flex: initial;
-                margin-right: ${`${parseInt(gutter) / 2}px`};
-                line-height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '28px' : '40px') };
-                font-size: ${size === 'small' ? '12px' : ((size === 'middle' || !size) ? '14px' : '16px') };
+                margin-right: ${parseInt(gutter) / 2}px;
+                line-height: ${getPxFromSize(size, EPxType.Line)}px;
+                font-size: ${getPxFromSize(size, EPxType.Font)}px;
             }
 
             > .mega-layout-container-after,
             > .formily-mega-item-after {
                 flex: initial;
-                margin-left: ${`${parseInt(gutter) / 2}px`};
-                line-height: ${size === 'small' ? '20px' : ((size === 'middle' || !size) ? '28px' : '40px') };
-                font-size: ${size === 'small' ? '12px' : ((size === 'middle' || !size) ? '14px' : '16px') };
+                margin-left: ${parseInt(gutter) / 2}px;
+                line-height: ${getPxFromSize(size, EPxType.Line)}px;
+                font-size: ${getPxFromSize(size, EPxType.Font)}px;
             }
         }
     `
@@ -87,9 +111,9 @@ export const computeNextStyleBase = (props) => {
                     width: ${labelWidth}px;
                     max-width: ${labelWidth}px;
                     flex: ${labelAlign !== 'top' ? `0 0 ${labelWidth}px` : 'initial'};
-                    ` : 
-                    ''
-                }
+                    ` :
+                ''
+            }
             }
 
             & > .next-form-item-control {
@@ -97,9 +121,9 @@ export const computeNextStyleBase = (props) => {
                     width: ${wrapperWidth}px;
                     max-width: ${wrapperWidth}px;
                     flex: ${labelAlign !== 'top' ? `0 0 ${wrapperWidth}px` : 'initial'};
-                    ` : 
-                    `flex: 1;`
-                }
+                    ` :
+                `flex: 1;`
+            }
             }
         `
     }
@@ -256,7 +280,7 @@ export const computeNextStyleBase = (props) => {
 
 export const computeStyle = (props) => {
     const styleResult = computeNextStyleBase(props)
-    
+
     // labelAlign, addon 是任何布局模式都可以用到
     // inline 和 grid 是互斥关系, 优先级: inline > grid
     // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
