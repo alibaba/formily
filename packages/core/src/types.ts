@@ -1,4 +1,4 @@
-import { FormPath, FormPathPattern, isFn, Subscribable } from '@formily/shared'
+import { FormPath, FormPathPattern, isFn } from '@formily/shared'
 import {
   ValidatePatternRules,
   ValidateNodeResult,
@@ -7,6 +7,8 @@ import {
 import { createForm } from './index'
 import { FormLifeCycle } from './shared/lifecycle'
 import { Draft } from 'immer'
+import { Field } from './models/field'
+import { VirtualField } from './models/virtual-field'
 export * from '@formily/validator'
 
 export type FormLifeCycleHandler<T> = (payload: T, context: any) => void
@@ -106,29 +108,31 @@ export type StateDirtyMap<P> = {
   [key in keyof P]?: boolean
 }
 
-export interface StateModel<P> {
-  publishState?: (state: P) => P
-  dirtyCheck?: (dirtys: StateDirtyMap<P>) => StateDirtyMap<P> | void
-  computeState?: (
-    state: Draft<P>,
-    preState?: P,
-    dirtys?: StateDirtyMap<P>
-  ) => Draft<P> | void
+export type NormalRecord = { [key: string]: any }
+
+export interface IModelSpec<
+  State extends NormalRecord,
+  Props extends NormalRecord
+> {
+  state?: Partial<State>
+  props?: Props
+  prevState?: Partial<State>
+  getState?: (state?: State) => any
+  dirtyCheck?: (path: FormPathPattern, value: any, nextValue: any) => boolean
+  produce?: (draft: Draft<State>, dirtys: StateDirtyMap<State>) => void
 }
 
-export interface IStateModelFactory<S, P> {
-  new (state: S, props: P): StateModel<S>
-  defaultState?: S
-  defaultProps?: P
+export interface IDirtyModelFactory<
+  State extends NormalRecord,
+  Props extends NormalRecord
+> {
+  new (props?: Props): IModelSpec<Partial<State>, Props>
+  defaultProps?: Props
   displayName?: string
-}
-
-export interface IStateModelProvider<S, P> {
-  new (props: P): IModel<S, P>
 }
 
 export interface IFieldState<FieldProps = any> {
-  displayName?: string
+  displayName: string
   dataType: string
   name: string
   path: string
@@ -181,12 +185,22 @@ export type IFieldUserState<FieldProps = any> = Omit<
 
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
-export interface IFieldStateProps<FieldProps = any> {
-  path?: FormPathPattern
+export interface IFieldStateProps {
   nodePath?: FormPathPattern
   dataPath?: FormPathPattern
   dataType?: string
-  name?: string
+  getValue?: (name: FormPathPattern) => any
+  getInitialValue?: (name: FormPathPattern) => any
+  setValue?: (name: FormPathPattern, value: any) => void
+  removeValue?: (name: FormPathPattern) => void
+  setInitialValue?: (name: FormPathPattern, initialValue: any) => void
+  computeState?: (draft: IFieldState, prevState: IFieldState) => void
+  unControlledValueChanged?: () => void
+}
+
+export interface IFieldRegistryProps<FieldProps = FormilyCore.FieldProps> {
+  path?: FormPathPattern
+  name?: FormPathPattern
   value?: any
   values?: any[]
   initialValue?: any
@@ -197,7 +211,7 @@ export interface IFieldStateProps<FieldProps = any> {
   unmountRemoveValue?: boolean
   visible?: boolean
   display?: boolean
-  useDirty?: boolean
+  dataType?: string
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
 }
 
@@ -224,9 +238,6 @@ export const isVirtualFieldState = (
 ): target is IVirtualFieldState =>
   target && target.displayName === 'VirtualFieldState'
 
-export const isStateModel = (target: any): target is IModel =>
-  target && isFn(target.getState)
-
 export interface IFormState<FormProps = any> {
   valid: boolean
   invalid: boolean
@@ -252,7 +263,6 @@ export interface IFormStateProps {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
-  useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
 }
@@ -264,7 +274,9 @@ export interface IFormCreatorOptions extends IFormStateProps {
   onValidateFailed?: (validated: IFormValidateResult) => void
 }
 
-export interface IVirtualFieldState<FieldProps = any> {
+export interface IVirtualFieldState<
+  FieldProps = FormilyCore.VirtualFieldProps
+> {
   name: string
   path: string
   displayName?: string
@@ -278,18 +290,24 @@ export interface IVirtualFieldState<FieldProps = any> {
 }
 export type VirtualFieldStateDirtyMap = StateDirtyMap<IFieldState>
 
-export interface IVirtualFieldStateProps<FieldProps = any> {
-  path?: FormPathPattern
+export interface IVirtualFieldStateProps {
   dataPath?: FormPathPattern
   nodePath?: FormPathPattern
-  display?: boolean
-  visible?: boolean
-  useDirty?: boolean
   computeState?: (
     draft: IVirtualFieldState,
     prevState: IVirtualFieldState
   ) => void
-  name?: string
+}
+
+export interface IVirtualFieldRegistryProps<FieldProps = any> {
+  name?: FormPathPattern
+  path?: FormPathPattern
+  display?: boolean
+  visible?: boolean
+  computeState?: (
+    draft: IVirtualFieldState,
+    prevState: IVirtualFieldState
+  ) => void
   props?: FieldProps
 }
 
@@ -319,33 +337,37 @@ export type IFormExtendedValidateFieldOptions = ValidateFieldOptions & {
 
 export type IMutators = ReturnType<IForm['createMutators']>
 
-export interface IModel<S = {}, P = {}> extends Subscribable {
-  state: S
-  props: P
-  displayName?: string
-  dirtyNum: number
-  dirtys: StateDirtyMap<S>
-  prevState: S
-  batching: boolean
-  stackCount: number
-  controller: StateModel<S>
-  batch: (callback?: () => void) => void
-  getState: (callback?: (state: S) => any) => any
-  setState: (callback?: (state: S | Draft<S>) => void, silent?: boolean) => void
-  getSourceState: (callback?: (state: S) => any) => any
-  setSourceState: (callback?: (state: S) => void) => void
-  hasChanged: (path?: FormPathPattern) => boolean
-  isDirty: (key?: string) => boolean
-  getDirtyInfo: () => StateDirtyMap<S>
-  setCache: (key: string, value: any) => void
-  getCache: (key: string) => any
-  removeCache: (key: string) => void
-}
+export type IField = InstanceType<typeof Field>
 
-export type IField = IModel<IFieldState, IFieldStateProps>
-
-export type IVirtualField = IModel<IVirtualFieldState, IVirtualFieldStateProps>
-
-export type IFormInternal = IModel<IFormState, IFormStateProps>
+export type IVirtualField = InstanceType<typeof VirtualField>
 
 export type IForm = ReturnType<typeof createForm>
+
+export type IFormPlugin<
+  Context extends { [key: string]: any } = any,
+  Exports extends {
+    [key: string]: (...args: any[]) => any
+  } = any
+> = (
+  context: Context
+) => {
+  context?: {
+    [key: string]: any
+  }
+  exports?: Exports
+} | void
+
+export type IFormPluginExports<P> = P extends (
+  context: any
+) => {
+  context?: {
+    [key: string]: any
+  }
+  exports?: infer P
+} | void
+  ? P
+  : {}
+
+export const isStateModel = (payload: any) => {
+  return isFn(payload?.getState)
+}

@@ -4,7 +4,7 @@ exports[`test all apis markup string 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": undefined,
+    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": "123",
@@ -14,7 +14,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": true,
-    "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,
@@ -78,7 +77,7 @@ exports[`test all apis markup virtualbox 1`] = `
 Object {
   "": Object {
     "displayName": "FormState",
-    "editable": undefined,
+    "editable": true,
     "errors": Array [],
     "initialValues": Object {
       "aa": "123",
@@ -88,7 +87,6 @@ Object {
     "loading": false,
     "modified": true,
     "mounted": true,
-    "props": Object {},
     "submitting": false,
     "unmounted": false,
     "valid": true,

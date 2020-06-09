@@ -6,7 +6,7 @@ import {
   IVirtualField,
   LifeCycleTypes
 } from '@formily/core'
-import { uid, merge } from '@formily/shared'
+import { merge } from '@formily/shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
 import { inspectChanged } from '../shared'
@@ -23,12 +23,12 @@ export const useVirtualField = (
     field: IVirtualField
     unmounted: boolean
     subscriberId: number
-    uid: string
+    uid: Symbol
   }>({
     field: null,
     unmounted: false,
     subscriberId: null,
-    uid: ''
+    uid: null
   })
   const form = useContext<IForm>(FormContext)
   if (!form) {
@@ -46,7 +46,7 @@ export const useVirtualField = (
         forceUpdate()
       }
     })
-    ref.current.uid = uid()
+    ref.current.uid = Symbol()
     initialized = true
   }, [])
 

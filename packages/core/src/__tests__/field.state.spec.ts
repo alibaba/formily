@@ -1,30 +1,30 @@
-import { FieldState } from '../state/field'
+import { Field } from '../models/field'
 
 test('computeState setValues', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   expect(state.getState().visible).toEqual(true)
   expect(state.getState().value).toEqual(undefined)
   //如果是隐藏状态，则禁止修改值
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.visible = false
     draft.value = 123
     draft.initialValue = 456
   })
   expect(state.getState().unmounted).toEqual(false)
   expect(state.getState().visible).toEqual(false)
-  expect(state.getState().value).toEqual(123)
+  expect(state.getState().value).toEqual(undefined)
   expect(state.getState().initialValue).toEqual(456)
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.visible = true
-    draft.unmounted = true
+    draft.unmounted = false
     draft.value = 123
     draft.initialValue = 456
   })
   expect(state.getState().visible).toEqual(true)
-  expect(state.getState().unmounted).toEqual(true)
+  expect(state.getState().unmounted).toEqual(false)
   expect(state.getState().value).toEqual(123)
   expect(state.getState().initialValue).toEqual(456)
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.visible = true
     draft.unmounted = false
     draft.value = 123
@@ -37,7 +37,7 @@ test('computeState setValues', () => {
 })
 
 test('computeState value and readValues', () => {
-  const state = new FieldState({ useDirty: false })  
+  const state = new Field()
   expect(state.getState().value).toEqual(undefined)
   expect(state.getState().values).toEqual([])
   expect(state.getState().initialized).toEqual(false)
@@ -45,35 +45,35 @@ test('computeState value and readValues', () => {
 
   // modified depends on initialized and value change
   // invalid values and
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.values = undefined
     draft.value = 123
     draft.initialized = true
   })
 
-  expect(state.getState().value).toEqual(123)
-  expect(state.getState().values).toEqual([123])
+  expect(state.getState().value).toEqual(undefined)
+  expect(state.getState().values).toEqual([undefined])
   expect(state.getState().initialized).toEqual(true)
-  expect(state.getState().modified).toEqual(false)
+  expect(state.getState().modified).toEqual(true)
 
   // valid values
-  state.setState((draft) => {
-    draft.values = [1,2,3]
+  state.setState(draft => {
+    draft.values = [1, 2, 3]
     draft.value = 456
   })
   expect(state.getState().modified).toEqual(true)
-  expect(state.getState().value).toEqual(456)
-  expect(state.getState().values).toEqual([456,2,3])
+  expect(state.getState().value).toEqual(1)
+  expect(state.getState().values).toEqual([1, 2, 3])
 })
 
 test('computeState editable', () => {
-  const state = new FieldState({ useDirty: false })  
+  const state = new Field()
   expect(state.getState().editable).toEqual(true)
   expect(state.getState().selfEditable).toEqual(undefined)
   expect(state.getState().formEditable).toEqual(undefined)
 
   // selfEditable
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.editable = false
   })
   expect(state.getState().editable).toEqual(false)
@@ -82,7 +82,7 @@ test('computeState editable', () => {
 
   // priority: selfEditable > formEditable > true
   const formEditable = () => true
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.editable = undefined
     draft.formEditable = formEditable
   })
@@ -91,7 +91,7 @@ test('computeState editable', () => {
   expect(state.getState().formEditable).toEqual(formEditable)
 
   // priority: selfEditable > formEditable > true
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.editable = undefined
     draft.formEditable = undefined
   })
@@ -101,7 +101,7 @@ test('computeState editable', () => {
 })
 
 test('computeState erors/warning', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   expect(state.getState().invalid).toEqual(false)
   expect(state.getState().valid).toEqual(true)
   expect(state.getState().errors).toEqual([])
@@ -112,7 +112,7 @@ test('computeState erors/warning', () => {
   expect(state.getState().ruleWarnings).toEqual([])
 
   // invalid setting
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.errors = ['', undefined, null]
     draft.warnings = ['', undefined, null]
     draft.ruleErrors = ['', undefined, null]
@@ -133,7 +133,7 @@ test('computeState erors/warning', () => {
   const warnings = ['warning1', 'warning2']
   const ruleErrors = ['ruleError1', 'ruleError2']
   const ruleWarnings = ['ruleWarning1', 'ruleWarning2']
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.errors = errors
     draft.warnings = warnings
     draft.ruleErrors = ruleErrors
@@ -152,7 +152,7 @@ test('computeState erors/warning', () => {
   // 1. 字段设置为不可编辑
   // 2. 字段隐藏
   // 3. 字段被卸载
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.visible = false
   })
   expect(state.getState().invalid).toEqual(false)
@@ -164,7 +164,7 @@ test('computeState erors/warning', () => {
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
 
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.visible = true
   })
 
@@ -177,7 +177,7 @@ test('computeState erors/warning', () => {
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
 
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.unmounted = true
   })
   expect(state.getState().invalid).toEqual(false)
@@ -189,7 +189,7 @@ test('computeState erors/warning', () => {
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
 
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.unmounted = false
   })
   expect(state.getState().invalid).toEqual(true)
@@ -201,7 +201,7 @@ test('computeState erors/warning', () => {
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
 
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.editable = false
   })
   expect(state.getState().invalid).toEqual(false)
@@ -213,7 +213,7 @@ test('computeState erors/warning', () => {
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
 
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.editable = false
   })
   expect(state.getState().invalid).toEqual(true)
@@ -224,18 +224,16 @@ test('computeState erors/warning', () => {
   expect(state.getState().effectWarnings).toEqual([])
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
-
 })
-
 
 test('computeState comon', () => {
   // pristine depends on whether values to be equal initialvalues
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   expect(state.getState().pristine).toEqual(true)
   state.setState(draft => {
     draft.pristine = false
   })
-  expect(state.getState().pristine).toEqual(true)
+  expect(state.getState().pristine).toEqual(false)
   state.setState(draft => {
     draft.value = { change: true }
   })
@@ -252,14 +250,14 @@ test('computeState comon', () => {
 
   // cannot set invalid props
   expect(state.getState().props).toEqual({})
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.props = { hello: 'world' }
   })
   expect(state.getState().props).toEqual({ hello: 'world' })
-  state.setState((draft) => {
+  state.setState(draft => {
     draft.props = undefined
   })
-  expect(state.getState().props).toEqual({ hello: 'world' })
+  expect(state.getState().props).toEqual({})
 
   // mounted and unmounted
   expect(state.getState().mounted).toEqual(false)
@@ -277,7 +275,7 @@ test('computeState comon', () => {
 })
 
 test('subscribe/unsubscribe', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   const cb = jest.fn()
   const idx = state.subscribe(cb)
   const paylaod = state.getState()
@@ -290,7 +288,7 @@ test('subscribe/unsubscribe', () => {
   expect(cb).toBeCalledWith(paylaod)
 })
 test('batch', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   const cb = jest.fn()
   state.batch(cb)
   expect(cb).toBeCalledTimes(1)
@@ -298,7 +296,7 @@ test('batch', () => {
   // force run getState
   const susCb = jest.fn()
   state.subscribe(susCb)
-  state.dirtyNum = 1
+  state.dirtyCount = 1
   state.batch(cb)
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith()
@@ -306,7 +304,7 @@ test('batch', () => {
   expect(susCb).toBeCalledWith(state.state)
 })
 test('getState', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   const cb = jest.fn()
   state.getState(cb)
   expect(cb).toBeCalledTimes(1)
@@ -314,35 +312,59 @@ test('getState', () => {
   const syncState = state.getState()
   expect(syncState).toEqual(state.state)
 
-  state.controller.publishState = () => null
+  state.factory.getState = () => null
   state.getState(cb)
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith(null)
 })
 test('setState', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   const susCb = jest.fn()
   state.subscribe(susCb)
-  const cb1 = (draft) => { draft.value = { change: true } }
-  const cb2 = (draft) => { draft.value = { withNotify: true } }
-  const cb3 = (draft) => { draft.value = { withBatching: true } }
-  const cb4 = (draft) => { draft.value = { ...draft.value, withBatching2: true } }
+  const cb1 = draft => {
+    draft.value = { change: true }
+  }
+  const cb2 = draft => {
+    draft.value = { withNotify: true }
+  }
+  const cb3 = draft => {
+    draft.value = { withBatching: true }
+  }
+  const cb4 = draft => {
+    draft.value = { ...draft.value, withBatching2: true }
+  }
   const prevState1 = state.getState()
   expect(prevState1.value).toEqual(undefined)
 
   // 默认 slient = false, 触发notify 通知UI更新
   state.setState(cb1)
   expect(state.getState().value).toEqual({ change: true })
-  expect(state.getState()).toEqual({ ...prevState1, pristine: false, value: { change: true }, values: [{ change: true }] })
+  expect(state.getState()).toEqual({
+    ...prevState1,
+    pristine: false,
+    modified: true,
+    value: { change: true },
+    values: [{ change: true }]
+  })
   expect(susCb).toBeCalledTimes(1)
-  expect(susCb).toBeCalledWith({ ...prevState1, pristine: false, value: { change: true }, values: [{ change: true }] })
-  
+  expect(susCb).toBeCalledWith({
+    ...prevState1,
+    pristine: false,
+    modified: true,
+    value: { change: true },
+    values: [{ change: true }]
+  })
+
   // slient = true 不触发notify
   const prevState2 = state.getState()
   expect(prevState2.value.withNotify).toEqual(undefined)
   state.setState(cb2, true)
   expect(state.getState().value.withNotify).toEqual(true)
-  expect(state.getState()).toEqual({ ...prevState2, value: { withNotify: true }, values: [{ withNotify: true }]})
+  expect(state.getState()).toEqual({
+    ...prevState2,
+    value: { withNotify: true },
+    values: [{ withNotify: true }]
+  })
   expect(susCb).toBeCalledTimes(1)
 
   // batching 相当于slient = true
@@ -356,19 +378,21 @@ test('setState', () => {
 
   expect(state.getState().value.withBatching).toEqual(true)
   expect(state.getState().value.withBatching2).toEqual(true)
-  expect(state.getState()).toEqual({ ...prevState3,
+  expect(state.getState()).toEqual({
+    ...prevState3,
     value: { withBatching: true, withBatching2: true },
     values: [{ withBatching: true, withBatching2: true }]
   })
   // 这次notify是由batch批处理结束调用的
   expect(susCb).toBeCalledTimes(2)
-  expect(susCb).toBeCalledWith({ ...prevState3,
+  expect(susCb).toBeCalledWith({
+    ...prevState3,
     value: { withBatching: true, withBatching2: true },
     values: [{ withBatching: true, withBatching2: true }]
   })
 })
 test('getSourceState', () => {
-  const state = new FieldState({ useDirty: false })
+  const state = new Field()
   const cb = jest.fn()
   state.getSourceState(cb)
   expect(cb).toBeCalledTimes(1)
@@ -376,15 +400,15 @@ test('getSourceState', () => {
   const syncState = state.getSourceState()
   expect(syncState).toEqual(state.state)
 
-  state.controller.publishState = () => null
+  state.factory.getState = () => null
   state.getSourceState(cb)
   expect(cb).toBeCalledTimes(2)
   expect(cb).toBeCalledWith(state.state)
 })
 
 test('setSourceState', () => {
-  const state = new FieldState({ useDirty: false })
-  const cb1 = (draft) => draft.change = true
+  const state = new Field()
+  const cb1 = draft => (draft.change = true)
   const prevState1 = state.getSourceState()
   expect(prevState1.change).toEqual(undefined)
 
@@ -393,16 +417,14 @@ test('setSourceState', () => {
 })
 
 test('isDirty', () => {
-  const state = new FieldState({ useDirty: true })
-  expect(state.dirtyNum).toEqual(0)
+  const state = new Field()
+  expect(state.dirtyCount).toEqual(0)
   expect(state.isDirty()).toEqual(false)
-  state.dirtyNum = 1
+  state.dirtyCount = 1
   expect(state.isDirty()).toEqual(true)
-  state.dirtyNum = 0
+  state.dirtyCount = 0
   expect(state.isDirty()).toEqual(false)
   state.dirtys.validating = true
   expect(state.isDirty()).toEqual(false)
   expect(state.isDirty('validating')).toEqual(true)
 })
-
-

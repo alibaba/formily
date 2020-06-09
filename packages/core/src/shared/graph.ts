@@ -14,19 +14,19 @@ import {
   FormGraphProps
 } from '../types'
 
-export class FormGraph<NodeType = any> extends Subscribable<{
+export class FormGraph<NodeType=any> extends Subscribable<{
   type: string
   payload: FormGraphNodeRef
 }> {
-  private refrences: {
-    [key in string]: FormGraphNodeRef
+  refrences: {
+    [key: string]: FormGraphNodeRef
   }
 
-  private nodes: {
-    [key in string]: NodeType
+  nodes: {
+    [key: string]: NodeType
   }
 
-  private buffer: {
+  buffer: {
     path: FormPath
     ref: FormGraphNodeRef
     latestParent?: {
@@ -35,9 +35,9 @@ export class FormGraph<NodeType = any> extends Subscribable<{
     }
   }[]
 
-  private matchStrategy: FormGraphProps['matchStrategy']
+  matchStrategy: FormGraphProps['matchStrategy']
 
-  public size: number
+  size: number
 
   constructor(props: FormGraphProps = {}) {
     super()
