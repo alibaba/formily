@@ -4,7 +4,10 @@ import renderer from 'react-test-renderer'
 import 'jest-styled-components'
 import { computeNextStyleBase } from '../../src/components/FormMegaLayout/style'
 
-describe('test label-align style',() => {
+const itemCls = '& > .next-form-item-control > .mega-layout-item-content'
+const containerCls = '& > .next-form-item-control > .mega-layout-container-wrapper'
+
+describe('test label-align style', () => {
   test('top', () => {
     const styleResult = computeNextStyleBase({ labelAlign: 'top' });
     const Mega = styled.div`
@@ -62,14 +65,11 @@ describe('test label-align style',() => {
   })
 })
 
-describe('test addon style',() => {
+describe('test addon style', () => {
   test('normal', () => {
     const styleResult = computeNextStyleBase({});
     const Mega = styled.div`${styleResult.addonStyle}`
     const tree = renderer.create(<Mega />).toJSON()
-
-    const containerCls = '& > .next-form-item-control > .mega-layout-container-wrapper'
-    const itemCls = '& > .next-form-item-control > .mega-layout-item-content'
 
     expect(tree).toMatchSnapshot()
     // container
@@ -121,7 +121,7 @@ describe('test addon style',() => {
 })
 
 
-describe('test grid layout style',() => {
+describe('test grid layout style', () => {
   test('normal', () => {
     let layoutProps = {
       gutter: 20,
@@ -157,9 +157,10 @@ describe('test grid layout style',() => {
     const Mega = styled.div`${styleResult.gridStyle}`
     const tree = renderer.create(<Mega />).toJSON()
     expect(tree).toMatchSnapshot()
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+      })
   })
 
   test('gridStyle autoRow true(responsive)', () => {
@@ -174,18 +175,21 @@ describe('test grid layout style',() => {
     const Mega = styled.div`${styleResult.gridStyle}`
     const tree = renderer.create(<Mega />).toJSON()
     expect(tree).toMatchSnapshot()
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.s},minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(max-width:720px)'
-    })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.m},minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:720px) and (max-width:1200px)'
-    })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.lg},minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:1200px)'
-    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.s},minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(max-width:720px)'
+      })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.m},minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(min-width:720px) and (max-width:1200px)'
+      })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(${layoutProps.responsive.lg},minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(min-width:1200px)'
+      })
   })
 
   test('gridStyle autoRow false', () => {
@@ -200,18 +204,21 @@ describe('test grid layout style',() => {
     const Mega = styled.div`${styleResult.gridStyle}`
     const tree = renderer.create(<Mega />).toJSON()
     expect(tree).toMatchSnapshot()
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(max-width:720px)'
-    })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:720px) and (max-width:1200px)'
-    })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, 
-    { modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
-      media: '(min-width:1200px)'
-    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(max-width:720px)'
+      })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(min-width:720px) and (max-width:1200px)'
+      })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(min-width:1200px)'
+      })
   })
 })
 
@@ -381,7 +388,7 @@ describe('nest grid layout container', () => {
   })
 })
 
-describe('default style',() => {
+describe('default style', () => {
   test('default style', () => {
     const styleResult = computeNextStyleBase({})
     const Mega = styled.div`${styleResult.defaultStyle}`
@@ -394,7 +401,7 @@ describe('default style',() => {
   })
 })
 
-describe('inline style',() => {
+describe('inline style', () => {
   test('item', () => {
     const styleResult = computeNextStyleBase({ inline: true })
     const Mega = styled.div`${styleResult.inlineStyle}`
@@ -451,7 +458,7 @@ describe('inline style',() => {
   })
 })
 
-describe('width style',() => {
+describe('width style', () => {
   test('only labelWidth', () => {
     const styleResult = computeNextStyleBase({ labelWidth: '200px' })
     const Mega = styled.div`${styleResult.widthStyle}`
@@ -460,7 +467,7 @@ describe('width style',() => {
     expect(tree).toHaveStyleRule('display', 'flex')
     expect(tree).toHaveStyleRule('box-sizing', 'border-box')
     expect(tree).toHaveStyleRule('flex-direction', 'row')
-    
+
     expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-label' })
@@ -476,7 +483,7 @@ describe('width style',() => {
     expect(tree).toHaveStyleRule('display', 'flex')
     expect(tree).toHaveStyleRule('box-sizing', 'border-box')
     expect(tree).toHaveStyleRule('flex-direction', 'row')
-    
+
     expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-control' })
     expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-control' })
     expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-control' })
@@ -497,10 +504,10 @@ describe('width style',() => {
     expect(tree).toHaveStyleRule('width', '100px', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('max-width', '100px', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('flex', '0 0 100px', { modifier: '& > .next-form-item-label' })
-    
+
     expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-control' })
     expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-control' })
-    expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-control' })    
+    expect(tree).toHaveStyleRule('flex', '0 0 200px', { modifier: '& > .next-form-item-control' })
   })
 
   test('labelAlign:top labelWidth and wrapperWidth', () => {
@@ -515,14 +522,14 @@ describe('width style',() => {
     expect(tree).toHaveStyleRule('width', '100px', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('max-width', '100px', { modifier: '& > .next-form-item-label' })
     expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-label' })
-    
+
     expect(tree).toHaveStyleRule('width', '200px', { modifier: '& > .next-form-item-control' })
     expect(tree).toHaveStyleRule('max-width', '200px', { modifier: '& > .next-form-item-control' })
-    expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-control' })    
+    expect(tree).toHaveStyleRule('flex', 'initial', { modifier: '& > .next-form-item-control' })
   })
 })
 
-describe('layoutMarginStyle',() => {
+describe('layoutMarginStyle', () => {
   test('default layout', () => {
     const styleResult = computeNextStyleBase({ isLayout: true, })
     const Mega = styled.div`${styleResult.layoutMarginStyle}`
@@ -537,7 +544,7 @@ describe('layoutMarginStyle',() => {
     const Mega = styled.div`${styleResult.layoutMarginStyle}`
     const tree = renderer.create(<Mega />).toJSON()
     expect(tree).toMatchSnapshot()
-    
+
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item' })
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item' })
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child' })
@@ -548,9 +555,69 @@ describe('layoutMarginStyle',() => {
     const Mega = styled.div`${styleResult.layoutMarginStyle}`
     const tree = renderer.create(<Mega />).toJSON()
     expect(tree).toMatchSnapshot()
-    
+
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item' })
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item' })
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child' })
   })
+
+  test('medium size', () => {
+    const styleResult = computeNextStyleBase({
+      size: "medium"
+    });
+    const Mega = styled.div`${styleResult.addonStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('line-height', '28px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('font-size', '14px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('line-height', '28px', { modifier: `${containerCls} > .mega-layout-container-after` })
+    expect(tree).toHaveStyleRule('font-size', '14px', { modifier: `${containerCls} > .mega-layout-container-after` })
+
+  })
+
+  test('middle size', () => {
+    const styleResult = computeNextStyleBase({
+      size: "middle"
+    });
+    const Mega = styled.div`${styleResult.addonStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('line-height', '28px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('font-size', '14px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('line-height', '28px', { modifier: `${containerCls} > .mega-layout-container-after` })
+    expect(tree).toHaveStyleRule('font-size', '14px', { modifier: `${containerCls} > .mega-layout-container-after` })
+
+  })
+
+  test('small size', () => {
+    const styleResult = computeNextStyleBase({
+      size: "small"
+    });
+    const Mega = styled.div`${styleResult.addonStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('line-height', '20px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('font-size', '12px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('line-height', '20px', { modifier: `${containerCls} > .mega-layout-container-after` })
+    expect(tree).toHaveStyleRule('font-size', '12px', { modifier: `${containerCls} > .mega-layout-container-after` })
+
+  })
+
+  test('large size', () => {
+    const styleResult = computeNextStyleBase({
+      size: "large"
+    });
+    const Mega = styled.div`${styleResult.addonStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('line-height', '40px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('font-size', '16px', { modifier: `${itemCls} > .formily-mega-item-before` })
+    expect(tree).toHaveStyleRule('line-height', '40px', { modifier: `${containerCls} > .mega-layout-container-after` })
+    expect(tree).toHaveStyleRule('font-size', '16px', { modifier: `${containerCls} > .mega-layout-container-after` })
+  })
+
 })
