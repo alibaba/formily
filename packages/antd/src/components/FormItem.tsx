@@ -55,6 +55,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     required,
     editable,
     triggerType,
+    unmountRemoveValue,
     valueName,
     eventName,
     getValueFromEvent,
@@ -148,6 +149,7 @@ export const FormItem: React.FC<IAntdFormItemProps> = topProps => {
     <InternalField
       name={name}
       initialValue={initialValue}
+      unmountRemoveValue={unmountRemoveValue}
       value={value}
       visible={visible}
       display={display}

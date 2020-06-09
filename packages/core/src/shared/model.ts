@@ -201,7 +201,10 @@ export const createModel = <
     }
 
     setCache(key: CacheKey, value: any) {
-      this.cache.set(key, shallowClone(value))
+      this.cache.set(
+        key,
+        typeof value === 'object' ? shallowClone(value) : value
+      )
     }
 
     getCache(key: CacheKey) {

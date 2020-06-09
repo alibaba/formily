@@ -11,7 +11,8 @@ import {
   toArr,
   isValid,
   isEqual,
-  isEmpty
+  isEmpty,
+  isArr
 } from '@formily/shared'
 import { Draft, original } from 'immer'
 
@@ -38,6 +39,7 @@ export const ARRAY_UNIQUE_TAG = Symbol.for(
 )
 
 export const parseArrayTags = (value: any[]) => {
+  if(!isArr(value)) return []
   return value?.reduce?.((buf, item: any) => {
     return item?.[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
   }, [])
@@ -256,6 +258,30 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
               draft.mounted === true ||
               draft.unmounted === false
             ) {
+              if (!isValid(draft.value)) {
+                draft.value = draft.visibleCacheValue
+                this.props.setValue?.(
+                  this.state.name,
+                  getOriginalValue(draft.value)
+                )
+              }
+            }
+          }
+        } else {
+          if (draft.display) {
+            if (draft.visible === false) {
+              if (!dirtys.visibleCacheValue) {
+                draft.visibleCacheValue = isValid(draft.value)
+                  ? draft.value
+                  : isValid(draft.visibleCacheValue)
+                  ? draft.visibleCacheValue
+                  : draft.initialValue
+              }
+              draft.value = undefined
+              draft.values = toArr(draft.values)
+              draft.values[0] = undefined
+              this.props.setValue?.(this.state.name, undefined)
+            } else if (draft.visible === true) {
               if (!isValid(draft.value)) {
                 draft.value = draft.visibleCacheValue
                 this.props.setValue?.(

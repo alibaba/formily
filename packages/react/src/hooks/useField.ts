@@ -75,7 +75,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
               mutators.validate({ throwErrors: false })
             }
           }
-         if (!form.isHostRendering()) {
+          if (!form.isHostRendering()) {
             forceUpdate()
           }
         }
@@ -84,7 +84,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     ref.current.uid = Symbol()
     initialized = true
     return extendMutators(form.createMutators(ref.current.field), options)
-  }, [])
+  }, [options.name, options.path])
 
   useEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
