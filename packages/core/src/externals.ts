@@ -31,11 +31,22 @@ import {
   log,
   defaults,
   toArr,
-  isNum
+  isNum,
+  isEqual
 } from '@formily/shared'
 import { createFormInternals } from './internals'
-import { Field, ARRAY_UNIQUE_TAG, tagArrayList } from './models/field'
+import {
+  Field,
+  ARRAY_UNIQUE_TAG,
+  tagArrayList,
+  parseArrayTags
+} from './models/field'
 import { VirtualField } from './models/virtual-field'
+
+const nextTick = () =>
+  new Promise(resolve => {
+    setTimeout(resolve)
+  })
 
 export const createFormExternals = (
   internals: ReturnType<typeof createFormInternals>
@@ -74,10 +85,14 @@ export const createFormExternals = (
       const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
       const current = item?.[ARRAY_UNIQUE_TAG]
       if (prev === current) return
-      if (prev === undefined || current === undefined) return
-      if (exchanged[prev] || exchanged[current]) return
-      exchanged[prev] = true
-      exchanged[current] = true
+      if (prev === undefined || current === undefined) {
+        return
+      }
+      if (currentState.value?.length === prevState.value?.length) {
+        if (exchanged[prev] || exchanged[current]) return
+        exchanged[prev] = true
+        exchanged[current] = true
+      }
       eacher(prev, current)
     })
   }
@@ -134,7 +149,7 @@ export const createFormExternals = (
       const currentPath = calculateMovePath(field.state.path, currentIndex)
       const currentState = getFieldState(currentPath, getExchangeState)
       prevStateMap[field.state.name] = prevState
-      field.setState(state => {
+      field.setSourceState(state => {
         Object.assign(state, currentState)
       })
     })
@@ -143,7 +158,7 @@ export const createFormExternals = (
       const prevPath = calculateMovePath(path, prevIndex)
       const prevState = prevStateMap[prevPath]
       if (prevState) {
-        field.setState(state => {
+        field.setSourceState(state => {
           Object.assign(state, prevState)
         })
       }
@@ -159,14 +174,18 @@ export const createFormExternals = (
       if (dirtys.value) {
         const isArrayList = /array/gi.test(published.dataType)
         if (isArrayList) {
-          hostUpdate(() => {
-            eachArrayExchanges(field.prevState, published, exchangeState)
-          })
-          //重置TAG，保证下次状态交换是没问题的
-          setFormValuesIn(
-            published.name,
-            tagArrayList(published.value, published.name, true)
-          )
+          const prevTags = parseArrayTags(field.prevState.value)
+          const currentTags = parseArrayTags(published.value)
+          if (!isEqual(prevTags, currentTags)) {
+            hostUpdate(() => {
+              eachArrayExchanges(field.prevState, published, exchangeState)
+            })
+            //重置TAG，保证下次状态交换是没问题的
+            setFormValuesIn(
+              field.state.name,
+              tagArrayList(field.state.value, field.state.name, true)
+            )
+          }
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
@@ -367,6 +386,7 @@ export const createFormExternals = (
           editable,
           visible,
           unmounted,
+          modified,
           display
         } = field.getState()
         // 不需要校验的情况有: 非编辑态(editable)，已销毁(unmounted), 逻辑上不可见(visible)
@@ -375,6 +395,7 @@ export const createFormExternals = (
           visible === false ||
           unmounted === true ||
           display === false ||
+          modified === false ||
           (field as any).disabledValidate ||
           (rules.length === 0 && errors.length === 0 && warnings.length === 0)
         )
@@ -760,6 +781,7 @@ export const createFormExternals = (
     }
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, form)
     if (graph.size > 100 && hostRendering) env.hostRendering = true
+    await nextTick() //很重要，如果校验过程在hostUpdate中的话，要求必须在Next Tick中执行
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     form.setState(state => {

@@ -37,6 +37,12 @@ export const ARRAY_UNIQUE_TAG = Symbol.for(
   '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
 )
 
+export const parseArrayTags = (value: any[]) => {
+  return value?.reduce?.((buf, item: any) => {
+    return item[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
+  }, [])
+}
+
 export const tagArrayList = (current: any[], name: string, force?: boolean) => {
   return current?.map?.((item, index) => {
     if (typeof item === 'object') {
