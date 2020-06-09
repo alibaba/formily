@@ -11,13 +11,10 @@ const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
 const getFormatFromProps = props => {
   if (props.showTime) {
     if (typeof props.showTime === 'boolean') {
-      return 'YYYY-MM-DD HH:mm:ss'
-    } else if ('format' in props.showTime) {
-      return `YYYY-MM-DD ${props.showTime.format}`
+      return props.format || 'YYYY-MM-DD HH:mm:ss'
     }
-  } else {
-    return 'YYYY-MM-DD'
   }
+  return props.format || 'YYYY-MM-DD'
 }
 
 export const DatePicker = connect<

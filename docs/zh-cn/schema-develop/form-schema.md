@@ -52,45 +52,47 @@ Schema 开发，最核心的就是 Schema，只有我们理解了这套协议之
 
 ## 属性
 
-| 属性名               | 描述                                   | 类型                                                              |
-| -------------------- | -------------------------------------- | ----------------------------------------------------------------- |
-| title                | 字段标题                               | `React.ReactNode`                                                 |
-| name                 | 字段所属的父节点属性名                 | `string`                                                          |
-| description          | 字段描述                               | `React.ReactNode`                                                 |
-| default              | 字段默认值                             | `any`                                                             |
-| readOnly             | 是否只读与 editable 一致               | `boolean`                                                         |
-| type                 | 字段类型                               | `'string' | 'object' | 'array' | 'number' | string`               |
-| enum                 | 枚举数据                               | `Array<string | number | { label: React.ReactNode, value: any }>` |
-| const                | 校验字段值是否与 const 的值相等        | `any`                                                             |
-| multipleOf           | 校验字段值是否可被 multipleOf 的值整除 | `number`                                                          |
-| maximum              | 校验最大值(大于)                       | `number`                                                          |
-| exclusiveMaximum     | 校验最大值（大于等于）                 | `number`                                                          |
-| minimum              | 校验最小值(小于)                       | `number`                                                          |
-| exclusiveMinimum     | 最小值（小于等于）                     | `number`                                                          |
-| maxLength            | 校验最大长度                           | `number`                                                          |
-| minLength            | 校验最小长度                           | `number`                                                          |
-| pattern              | 正则校验规则                           | `string | RegExp`                                                 |
-| maxItems             | 最大条目数                             | `number`                                                          |
-| minItems             | 最小条目数                             | `number`                                                          |
-| uniqueItems          | 是否校验重复                           | `boolean`                                                         |
-| maxProperties        | 最大属性数量                           | `number`                                                          |
-| minProperties        | 最小属性数量                           | `number`                                                          |
-| required             | 必填                                   | `boolean`                                                         |
-| format               | 正则规则类型，详细类型可以往后看       | `InternalFormats`                                                 |
-| properties           | 对象属性                               | `{[key : string]:Schema}`                                         |
-| items                | 数组描述                               | `Schema | Schema[]`                                               |
-| additionalItems      | 额外数组元素描述                       | `Schema`                                                          |
-| patternProperties    | 动态匹配对象的某个属性的 Schema        | `{[key : string]:Schema}`                                         |
-| additionalProperties | 匹配对象额外属性的 Schema              | `Schema`                                                          |
-| triggerType          | 字段校验时机                           | `"onChange" | "onBlur"`                                           |
-| editable             | 字段是否可编辑                         | `boolean`                                                         |
-| visible              | 字段是否可见(数据+样式)                | `boolean`                                                         |
-| display              | 字段样式是否可见                       | `boolean`                                                         |
-| x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                         |
-| x-index              | 字段顺序                               | `number`                                                          |
-| x-rules              | 字段校验规则，详细描述可以往后看       | [ValidatePatternRules](#validatepatternrules)                     |
-| x-component          | 字段 UI 组件名称，大小写不敏感         | `string`                                                          |
-| x-component-props    | 字段 UI 组件属性                       | `{}`                                                              |
+| 属性名               | 描述                                   | 类型                                                                   |
+| -------------------- | -------------------------------------- | ---------------------------------------------------------------------- |
+| title                | 字段标题                               | `React.ReactNode`                                                      |
+| name                 | 字段所属的父节点属性名                 | `string`                                                               |
+| description          | 字段描述                               | `React.ReactNode`                                                      |
+| default              | 字段默认值                             | `any`                                                                  |
+| readOnly             | 是否只读与 editable 一致               | `boolean`                                                              |
+| type                 | 字段类型                               | `'string' | 'object' | 'array' | 'number' | string`                    |
+| enum                 | 枚举数据                               | `Array<string | number | { label: React.ReactNode, value: any }>`      |
+| const                | 校验字段值是否与 const 的值相等        | `any`                                                                  |
+| multipleOf           | 校验字段值是否可被 multipleOf 的值整除 | `number`                                                               |
+| maximum              | 校验最大值(大于)                       | `number`                                                               |
+| exclusiveMaximum     | 校验最大值（大于等于）                 | `number`                                                               |
+| minimum              | 校验最小值(小于)                       | `number`                                                               |
+| exclusiveMinimum     | 最小值（小于等于）                     | `number`                                                               |
+| maxLength            | 校验最大长度                           | `number`                                                               |
+| minLength            | 校验最小长度                           | `number`                                                               |
+| pattern              | 正则校验规则                           | `string | RegExp`                                                      |
+| maxItems             | 最大条目数                             | `number`                                                               |
+| minItems             | 最小条目数                             | `number`                                                               |
+| uniqueItems          | 是否校验重复                           | `boolean`                                                              |
+| maxProperties        | 最大属性数量                           | `number`                                                               |
+| minProperties        | 最小属性数量                           | `number`                                                               |
+| required             | 必填                                   | `boolean`                                                              |
+| format               | 正则规则类型，详细类型可以往后看       | `InternalFormats`                                                      |
+| properties           | 对象属性                               | `{[key : string]:Schema}`                                              |
+| items                | 数组描述                               | `Schema | Schema[]`                                                    |
+| additionalItems      | 额外数组元素描述                       | `Schema`                                                               |
+| patternProperties    | 动态匹配对象的某个属性的 Schema        | `{[key : string]:Schema}`                                              |
+| additionalProperties | 匹配对象额外属性的 Schema              | `Schema`                                                               |
+| triggerType          | 字段校验时机                           | `"onChange" | "onBlur"`                                                |
+| editable             | 字段是否可编辑                         | `boolean`                                                              |
+| visible              | 字段是否可见(数据+样式)                | `boolean`                                                              |
+| display              | 字段样式是否可见                       | `boolean`                                                              |
+| x-props              | 字段扩展属性                           | `{ [name: string]: any }`                                              |
+| x-index              | 字段顺序                               | `number`                                                               |
+| x-rules              | 字段校验规则，详细描述可以往后看       | [ValidatePatternRules](#validatepatternrules)                          |
+| x-component          | 字段 UI 组件名称，大小写不敏感         | `string`                                                               |
+| x-component-props    | 字段 UI 组件属性                       | `{}`                                                                   |
+| x-linkages           | 字段间联动协议，详细描述可以往后看     | `Array<{ target: FormPathPattern, type: string, [key: string]: any }>` |
+| x-mega-props         | 字段布局属性                           | `{ [name: string]: any }`                                              |
 
 ## x-props 扩展属性
 

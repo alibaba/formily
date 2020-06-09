@@ -305,7 +305,6 @@ export class Schema implements ISchema {
     if (isValid(this['x-rules'])) {
       rules = rules.concat(this['x-rules'])
     }
-
     return rules
   }
   getExtendsRequired() {
