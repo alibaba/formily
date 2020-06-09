@@ -25,8 +25,8 @@
     "scheduler": ">=0.11.2"
   },
   "dependencies": {
-    "@formily/shared": "^1.1.6",
-    "@formily/validator": "^1.1.6",
+    "@formily/shared": "~1.1.6",
+    "@formily/validator": "~1.1.6",
     "immer": "^6.0.3"
   },
   "publishConfig": {

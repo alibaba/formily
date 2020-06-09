@@ -22,7 +22,7 @@
     "typescript": "~3.8.0"
   },
   "dependencies": {
-    "@formily/shared": "^1.1.6"
+    "@formily/shared": "~1.1.6"
   },
   "publishConfig": {
     "access": "public"
