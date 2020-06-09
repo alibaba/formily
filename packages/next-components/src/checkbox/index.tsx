@@ -4,8 +4,7 @@ import { mapStyledProps, mapTextComponent } from '../shared'
 
 export const Checkbox = connect<'Group'>({
   valueName: 'checked',
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
+  getProps: mapStyledProps
 })(NextCheckbox)
 
 Checkbox.Group = connect({

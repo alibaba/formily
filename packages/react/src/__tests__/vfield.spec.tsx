@@ -140,7 +140,7 @@ describe('test all apis', () => {
     fireEvent.click(radio2Ele)
     formState = actions.getFormState()
     expect(formState.values.b1).toBeUndefined()
-    expect(formState.values).toEqual({ a1: '0', c1: '456' })
+    expect(formState.values).toEqual({ a1: '0', c1: '456', b1: undefined })
   })
 })
 

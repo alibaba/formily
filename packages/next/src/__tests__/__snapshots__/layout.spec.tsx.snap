@@ -182,6 +182,190 @@ exports[`layoutMarginStyle inline layout 1`] = `
 />
 `;
 
+exports[`layoutMarginStyle large size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 40px;
+  font-size: 16px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 40px;
+  font-size: 16px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle medium size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle middle size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 28px;
+  font-size: 14px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`layoutMarginStyle small size 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content {
+  margin-bottom: 0;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-before {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-right: NaNpx;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .next-form-item-control > .mega-layout-item-content > .formily-mega-item-after {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+  margin-left: NaNpx;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
 exports[`nest grid layout container nest mega layout container 1`] = `
 .c0 > .next-form-item {
   width: 100%;

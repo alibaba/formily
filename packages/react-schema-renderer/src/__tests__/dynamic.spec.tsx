@@ -327,7 +327,14 @@ test('dynaimc add field with initialValue in virtualbox', async () => {
   fireEvent.click(queryByText('Submit'))
   await wait()
   expect(submitHandler).toHaveBeenCalledWith({
-    container: [{ aa: '321' }, undefined]
+    container: [
+      {
+        aa: '321',
+        bb: undefined,
+        [Symbol.for('@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@')]: 'container.0'
+      },
+      undefined
+    ]
   })
 })
 

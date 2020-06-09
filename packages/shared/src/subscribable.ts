@@ -26,7 +26,7 @@ export class Subscribable<Payload = any> {
     }
   }
 
-  notify = (payload?: Payload) => {
+  notify = (payload?: Payload, silent?: boolean) => {
     if (this.subscription) {
       if (this.subscription && isFn(this.subscription.notify)) {
         if (this.subscription.notify.call(this, payload) === false) {
@@ -34,6 +34,7 @@ export class Subscribable<Payload = any> {
         }
       }
     }
+    if (silent) return
     const filter = (payload: Payload) => {
       if (this.subscription && isFn(this.subscription.filter)) {
         return this.subscription.filter.call(this, payload)

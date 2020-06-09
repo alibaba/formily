@@ -101,7 +101,7 @@ import { Button } from 'antd'
 import Printer from '@formily/printer'
 import 'antd/dist/antd.css'
 
-const { onFieldValueChange$ } = FormEffectHooks
+const { onFieldChange$ } = FormEffectHooks
 
 const actions = createFormActions()
 
@@ -114,14 +114,21 @@ const App = () => {
         onSubmit={values => {
           console.log(values)
         }}
+        initialValues={{
+          array: [
+            { aa: true, bb: '123' },
+            { aa: false, bb: '321' }
+          ]
+        }}
         effects={({ setFieldState }) => {
-          onFieldValueChange$('array.*.aa').subscribe(({ name, value }) => {
+          onFieldChange$('array.*.aa').subscribe(({ name, value }) => {
             setFieldState(
               FormPath.transform(name, /\d/, $1 => {
                 return `array.${$1}.bb`
               }),
               state => {
-                state.visible = value
+                console.log(name, value, state.name)
+                state.visible = !!value
               }
             )
           })
@@ -137,7 +144,6 @@ const App = () => {
                 { label: '显示', value: true },
                 { label: '隐藏', value: false }
               ]}
-              default={true}
               x-component="Input"
             />
             <Field type="string" name="bb" title="BB" x-component="Input" />

@@ -1,28 +1,24 @@
-import { createStateModel } from '../shared/model'
+import { createModel } from '../shared/model'
 
 const displayName = 'TEST'
-const defaultState = { type: 'controller defaultState' }
-const defaultProps = { type: 'controller defaultProps' }
+const defaultState = { type: 'factory defaultState' }
+const defaultProps = { type: 'factory defaultProps' }
 
 class State {
-    static displayName = displayName
-    static defaultState = defaultState
-    static defaultProps = defaultProps
+  static displayName = displayName
+  static defaultProps = defaultProps
 
-    name: string
-    state: any
-    props: any
+  name: string
+  props: any
 
-    constructor(state, props) {
-        this.name = 'inner'
-        this.state = state
-        this.props = props
-    }
+  state = { ...defaultState }
 
-    dirtyCheck(dirtys) {}
-    computeState(state, prevState) {}
+  constructor(props) {
+    this.name = 'inner'
+    this.props = props
+  }
 }
-const StateModel = createStateModel(State)
+const StateModel = createModel(State)
 
 test('createStateModel', () => {
   const params = { modelType: 'model defaultProps' }
@@ -31,13 +27,13 @@ test('createStateModel', () => {
   expect(state1.state).toEqual({ displayName, ...defaultState })
   expect(state1.props).toEqual({ ...defaultProps, ...params })
   expect(state1.dirtys).toEqual({})
-  expect(state1.dirtyNum).toEqual(0)
+  expect(state1.dirtyCount).toEqual(0)
   expect(state1.batching).toEqual(false)
   expect(state1.displayName).toEqual(displayName)
-  expect(state1.controller).toEqual({
+  expect(state1.factory).toEqual({
     state: { displayName, ...defaultState },
     props: { ...defaultProps, ...params },
-    name: 'inner',
+    name: 'inner'
   })
 })
 
@@ -64,7 +60,7 @@ describe('proxy model', () => {
     // force run getState
     const susCb = jest.fn()
     state.subscribe(susCb)
-    state.dirtyNum = 1
+    state.dirtyCount = 1
     state.batch(cb)
     expect(cb).toBeCalledTimes(2)
     expect(cb).toBeCalledWith()
@@ -80,7 +76,7 @@ describe('proxy model', () => {
     const syncState = state.getState()
     expect(syncState).toEqual(state.state)
 
-    state.controller.publishState = () => null
+    state.factory.getState = () => null
     state.getState(cb)
     expect(cb).toBeCalledTimes(2)
     expect(cb).toBeCalledWith(null)
@@ -89,10 +85,10 @@ describe('proxy model', () => {
     const state = new StateModel({ useDirty: false })
     const susCb = jest.fn()
     state.subscribe(susCb)
-    const cb1 = (draft) => draft.change = true
-    const cb2 = (draft) => draft.withNotify = true
-    const cb3 = (draft) => draft.withBatching = true
-    const cb4 = (draft) => draft.withBatching2 = true
+    const cb1 = draft => (draft.change = true)
+    const cb2 = draft => (draft.withNotify = true)
+    const cb3 = draft => (draft.withBatching = true)
+    const cb4 = draft => (draft.withBatching2 = true)
     const prevState1 = state.getState()
     expect(prevState1.change).toEqual(undefined)
 
@@ -102,7 +98,7 @@ describe('proxy model', () => {
     expect(state.getState()).toEqual({ ...prevState1, change: true })
     expect(susCb).toBeCalledTimes(1)
     expect(susCb).toBeCalledWith({ ...prevState1, change: true })
-    
+
     // slient = true 不触发notify
     const prevState2 = state.getState()
     expect(prevState2.withNotify).toEqual(undefined)
@@ -122,10 +118,18 @@ describe('proxy model', () => {
 
     expect(state.getState().withBatching).toEqual(true)
     expect(state.getState().withBatching2).toEqual(true)
-    expect(state.getState()).toEqual({ ...prevState3, withBatching: true, withBatching2: true })
+    expect(state.getState()).toEqual({
+      ...prevState3,
+      withBatching: true,
+      withBatching2: true
+    })
     // 这次notify是由batch批处理结束调用的
     expect(susCb).toBeCalledTimes(2)
-    expect(susCb).toBeCalledWith({ ...prevState3, withBatching: true, withBatching2: true })
+    expect(susCb).toBeCalledWith({
+      ...prevState3,
+      withBatching: true,
+      withBatching2: true
+    })
   })
   test('getSourceState', () => {
     const state = new StateModel({ useDirty: false })
@@ -136,14 +140,14 @@ describe('proxy model', () => {
     const syncState = state.getSourceState()
     expect(syncState).toEqual(state.state)
 
-    state.controller.publishState = () => null
+    state.factory.getState = () => null
     state.getSourceState(cb)
     expect(cb).toBeCalledTimes(2)
     expect(cb).toBeCalledWith(state.state)
   })
   test('setSourceState', () => {
     const state = new StateModel({ useDirty: false })
-    const cb1 = (draft) => draft.change = true
+    const cb1 = draft => (draft.change = true)
     const prevState1 = state.getSourceState()
     expect(prevState1.change).toEqual(undefined)
 
@@ -152,17 +156,16 @@ describe('proxy model', () => {
   })
   test('isDirty', () => {
     const state = new StateModel({ useDirty: false })
-    expect(state.dirtyNum).toEqual(0)
+    expect(state.dirtyCount).toEqual(0)
     expect(state.isDirty()).toEqual(false)
-    state.dirtyNum = 1
+    state.dirtyCount = 1
     expect(state.isDirty()).toEqual(true)
-    state.dirtyNum = 0
+    state.dirtyCount = 0
     expect(state.isDirty()).toEqual(false)
     state.dirtys.change = true
     expect(state.isDirty()).toEqual(false)
     expect(state.isDirty('change')).toEqual(true)
   })
- 
 })
 
 describe('dirty model', () => {
@@ -188,7 +191,7 @@ describe('dirty model', () => {
     // force run getState
     const susCb = jest.fn()
     state.subscribe(susCb)
-    state.dirtyNum = 1
+    state.dirtyCount = 1
     state.batch(cb)
     expect(cb).toBeCalledTimes(2)
     expect(cb).toBeCalledWith()
@@ -204,7 +207,7 @@ describe('dirty model', () => {
     const syncState = state.getState()
     expect(syncState).toEqual(state.state)
 
-    state.controller.publishState = () => null
+    state.factory.getState = () => null
     state.getState(cb)
     expect(cb).toBeCalledTimes(2)
     expect(cb).toBeCalledWith(null)
@@ -213,10 +216,10 @@ describe('dirty model', () => {
     const state = new StateModel({ useDirty: true })
     const susCb = jest.fn()
     state.subscribe(susCb)
-    const cb1 = (draft) => draft.change = true
-    const cb2 = (draft) => draft.withNotify = true
-    const cb3 = (draft) => draft.withBatching = true
-    const cb4 = (draft) => draft.withBatching2 = true
+    const cb1 = draft => (draft.change = true)
+    const cb2 = draft => (draft.withNotify = true)
+    const cb3 = draft => (draft.withBatching = true)
+    const cb4 = draft => (draft.withBatching2 = true)
     const prevState1 = state.getState()
     expect(prevState1.change).toEqual(undefined)
 
@@ -226,7 +229,7 @@ describe('dirty model', () => {
     expect(state.getState()).toEqual({ ...prevState1, change: true })
     expect(susCb).toBeCalledTimes(1)
     expect(susCb).toBeCalledWith({ ...prevState1, change: true })
-    
+
     // slient = true 不触发notify
     const prevState2 = state.getState()
     expect(prevState2.withNotify).toEqual(undefined)
@@ -246,10 +249,18 @@ describe('dirty model', () => {
 
     expect(state.getState().withBatching).toEqual(true)
     expect(state.getState().withBatching2).toEqual(true)
-    expect(state.getState()).toEqual({ ...prevState3, withBatching: true, withBatching2: true })
+    expect(state.getState()).toEqual({
+      ...prevState3,
+      withBatching: true,
+      withBatching2: true
+    })
     // 这次notify是由batch批处理结束调用的
     expect(susCb).toBeCalledTimes(2)
-    expect(susCb).toBeCalledWith({ ...prevState3, withBatching: true, withBatching2: true })
+    expect(susCb).toBeCalledWith({
+      ...prevState3,
+      withBatching: true,
+      withBatching2: true
+    })
   })
   test('getSourceState', () => {
     const state = new StateModel({ useDirty: true })
@@ -262,7 +273,7 @@ describe('dirty model', () => {
   })
   test('setSourceState', () => {
     const state = new StateModel({ useDirty: true })
-    const cb1 = (draft) => draft.change = true
+    const cb1 = draft => (draft.change = true)
     const prevState1 = state.getSourceState()
     expect(prevState1.change).toEqual(undefined)
 
@@ -271,15 +282,14 @@ describe('dirty model', () => {
   })
   test('hasChanged', () => {
     const state = new StateModel({ useDirty: true })
-    expect(state.dirtyNum).toEqual(0)
+    expect(state.dirtyCount).toEqual(0)
     expect(state.isDirty()).toEqual(false)
-    state.dirtyNum = 1
+    state.dirtyCount = 1
     expect(state.isDirty()).toEqual(true)
-    state.dirtyNum = 0
+    state.dirtyCount = 0
     expect(state.isDirty()).toEqual(false)
     state.dirtys.change = true
     expect(state.isDirty()).toEqual(false)
     expect(state.isDirty('change')).toEqual(true)
   })
-
 })
