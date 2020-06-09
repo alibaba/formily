@@ -119,6 +119,9 @@ export const createModel = <
         base,
         draft => {
           recipe(draft)
+          if (isFn(this.props.computeState)) {
+            this.props.computeState(draft, this.prevState)
+          }
         },
         patches => {
           this.patches = this.patches.concat(patches)
@@ -129,9 +132,6 @@ export const createModel = <
         draft => {
           applyPatches(draft, this.patches)
           const dirtys = this.getDirtys(this.patches)
-          if (isFn(this.props.computeState)) {
-            this.props.computeState(draft, this.prevState)
-          }
           if (isFn(this.factory.produce)) {
             this.factory.produce(draft, dirtys)
           }

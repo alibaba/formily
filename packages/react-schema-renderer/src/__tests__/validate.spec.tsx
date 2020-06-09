@@ -505,11 +505,11 @@ test('async validate side effect', async () => {
   await wait()
   fireEvent.click(queryByText('Cancel'))
   await wait()
+  expect(queryAllByText('This field is required').length).toEqual(0)
   fireEvent.change(queryAllByTestId('test-input')[0], {
     target: { value: 'aaaaa' }
   })
   await wait()
-  await sleep(1000)
   expect(queryAllByText('This field is required').length).toEqual(0)
   await wait()
   fireEvent.change(queryAllByTestId('test-input')[0], {

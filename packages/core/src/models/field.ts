@@ -33,7 +33,7 @@ const getOriginalValue = (value: any) => {
   return isValid(origin) ? origin : value
 }
 
-export const ARRAY_UNIQUE_TAG = Symbol(
+export const ARRAY_UNIQUE_TAG = Symbol.for(
   '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
 )
 
@@ -329,9 +329,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       if (isValid(required)) {
         if (rules.length) {
           if (!rules.some(rule => rule && isValid(rule!['required']))) {
-            rules.push({ required })
+            return rules.concat([{ required }])
           } else {
-            rules = rules.reduce((buf: any[], item: any) => {
+            return rules.reduce((buf: any[], item: any) => {
               const keys = Object.keys(item || {})
               if (isValid(item.required)) {
                 if (isValid(item.message)) {
@@ -361,60 +361,39 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
           }
         } else {
           if (required === true) {
-            rules.push({
-              required
-            })
+            return rules.concat([
+              {
+                required
+              }
+            ])
           }
         }
       }
       return rules
     }
 
-    readRequired(rules: any[]) {
+    getRequiredFromRulesAndRequired(rules: any[], required: boolean) {
       for (let i = 0; i < rules.length; i++) {
         if (isValid(rules[i].required)) {
           return rules[i].required
         }
       }
-    }
-
-    readRules(
-      required: boolean,
-      rules: IFieldState['rules'],
-      prevState: IFieldState
-    ) {
-      let newRules = isValid(rules) ? toArr(rules) : this.state.rules
-      let newRequired = isValid(required) ? required : false
-      const currentRuleRequired = this.readRequired(newRules)
-      const prevRuleRequired = this.readRequired(prevState.rules)
-      const ruleRequiredChanged = currentRuleRequired !== prevRuleRequired
-      const requiredChanged = !isEqual(required, prevState.required)
-
-      if (ruleRequiredChanged && !requiredChanged) {
-        if (isValid(currentRuleRequired)) {
-          newRequired = currentRuleRequired
-        }
-      } else if (requiredChanged && !ruleRequiredChanged) {
-        newRules = this.getRulesFromRulesAndRequired(newRules, newRequired)
-      } else if (ruleRequiredChanged && requiredChanged) {
-        if (isValid(currentRuleRequired)) {
-          newRequired = currentRuleRequired
-        }
-      } else {
-        newRules = this.getRulesFromRulesAndRequired(newRules, newRequired)
-      }
-      return { required: newRequired, rules: newRules }
+      return required
     }
 
     produceRules(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      if (dirtys.required || dirtys.rules) {
-        const { required, rules } = this.readRules(
-          draft.required,
+      if ((dirtys.required && dirtys.rules) || dirtys.required) {
+        const rules = this.getRulesFromRulesAndRequired(
           draft.rules,
-          this.prevState
+          draft.required
         )
-        draft.required = required
+        draft.required = draft.required
         draft.rules = rules
+      } else if (dirtys.rules) {
+        draft.required = this.getRequiredFromRulesAndRequired(
+          draft.rules,
+          draft.required
+        )
       }
     }
 

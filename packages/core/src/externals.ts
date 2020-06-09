@@ -299,12 +299,14 @@ export const createFormExternals = (
           unControlledValueChanged() {
             heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
             heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-            setTimeout(() => {
-              validate(field.state.path, {
-                hostRendering: false,
-                throwErrors: false
+            if (field.state.modified) {
+              setTimeout(() => {
+                validate(field.state.path, {
+                  hostRendering: false,
+                  throwErrors: false
+                })
               })
-            })
+            }
           }
         })
       field.subscription = {
@@ -734,7 +736,7 @@ export const createFormExternals = (
     }
     heart.publish(LifeCycleTypes.ON_FORM_RESET, form)
     let validateResult: void | IFormValidateResult
-    if (validate) {
+    if (props.validate) {
       validateResult = await validate(props.selector, { throwErrors: false })
     }
 
