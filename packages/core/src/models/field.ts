@@ -232,11 +232,13 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         if (draft.unmountRemoveValue) {
           if (draft.display) {
             if (draft.visible === false || draft.unmounted === true) {
-              draft.visibleCacheValue = isValid(draft.value)
-                ? draft.value
-                : isValid(draft.visibleCacheValue)
-                ? draft.visibleCacheValue
-                : draft.initialValue
+              if (!dirtys.visibleCacheValue) {
+                draft.visibleCacheValue = isValid(draft.value)
+                  ? draft.value
+                  : isValid(draft.visibleCacheValue)
+                  ? draft.visibleCacheValue
+                  : draft.initialValue
+              }
               draft.value = undefined
               draft.values = toArr(draft.values)
               draft.values[0] = undefined

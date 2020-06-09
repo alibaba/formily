@@ -48,44 +48,44 @@ npm install --save @formily/antd
 
 > @formily/antd 的核心组件，用于描述表单字段
 
-| 参数                 | 说明                                    | 类型                                                              | 默认值 |
-| :------------------- | :-------------------------------------- | :---------------------------------------------------------------- | :----- |
-| name                 | 字段名                                  | string                                                            |        |
-| title                | 字段 label                              | React.ReactNode                                                   |        |
-| description          | 字段描述信息                            | React.ReactNode                                                   |        |
-| readOnly             | 只读                                    | boolean                                                           |        |
-| writeOnly            | 只写                                    | boolean                                                           |        |
-| type                 | 字段类型                                | 'string' `or` 'object' `or` 'array' `or` 'number' `or` string     |        |
-| enum                 | 相当于字段 dataSource                   | `Array<string\|number\|{label:React.ReactNode;value:any}>` |        |
-| required             | 是否必填，为 true 会同时设置校验规则    | string[] `or` boolean                                             |        |
-| format               | 正则规则类型，详细类型可以往后看        | string                                                            |        |
-| properties           | 对象属性                                | { [key: string]: [ISchema](#ISchema) }                            |        |
-| items                | 数组描述                                | [ISchema](#ISchema) `or` [ISchema](#ISchema)[]                    |        |
-| patternProperties    | 动态匹配对象的某个属性的 Schema         | { [key: string]: [ISchema](#ISchema) }                            |        |
-| additionalProperties | 匹配对象额外属性的 Schema               | [ISchema](#ISchema)                                               |        |
-| editable             | 字段是否可编辑                          | boolean                                                           |        |
-| visible              | 字段是否显示（伴随 value 的显示和隐藏） | boolean                                                           |        |
-| display              | 字段是否显示（纯视觉，不影响 value）    | boolean                                                           |        |
-| x-component          | 用于渲染的组件                          | string                                                            |        |
-| x-component-props    | 组件的属性                              | { [name: string]: any }                                           |        |
-| x-rules              | 校验规则                                | [ValidatePatternRules](#ValidatePatternRules)                     |        |
-| x-props              | 字段扩展属性                            | { [name: string]: any }                                           |        |
-| x-index              | 字段顺序                                | number                                                            |        |
-| default              | 字段默认值                              | any                                                               |        |
-| const                | 校验字段值是否与 const 的值相等         | any                                                               |        |
-| multipleOf           | 校验字段值是否可被 multipleOf 的值整除  | number                                                            |        |
-| maximum              | 最大值                                  | number                                                            |        |
-| exclusiveMaximum     | 校验最大值（大于等于）                  | number                                                            |        |
-| minimum              | 最小值                                  | number                                                            |        |
-| exclusiveMinimum     | 最小值（小于等于）                      | number                                                            |        |
-| maxLength            | 最大长度                                | number                                                            |        |
-| minLength            | 最小长度                                | number                                                            |        |
-| pattern              | 正则校验规则                            | string `or` RegExp                                                |        |
-| maxItems             | 最大项数                                | number                                                            |        |
-| minItems             | 最小项数                                | number                                                            |        |
-| uniqueItems          | 是否校验重复                            | boolean                                                           |        |
-| maxProperties        | 最大属性数量                            | number                                                            |        |
-| minProperties        | 最小属性数量                            | number                                                            |        |
+| 参数                 | 说明                                    | 类型                                                          | 默认值 |
+| :------------------- | :-------------------------------------- | :------------------------------------------------------------ | :----- |
+| name                 | 字段名                                  | string                                                        |        |
+| title                | 字段 label                              | React.ReactNode                                               |        |
+| description          | 字段描述信息                            | React.ReactNode                                               |        |
+| readOnly             | 只读                                    | boolean                                                       |        |
+| writeOnly            | 只写                                    | boolean                                                       |        |
+| type                 | 字段类型                                | 'string' `or` 'object' `or` 'array' `or` 'number' `or` string |        |
+| enum                 | 相当于字段 dataSource                   | `Array<string\|number\|{label:React.ReactNode;value:any}>`    |        |
+| required             | 是否必填，为 true 会同时设置校验规则    | string[] `or` boolean                                         |        |
+| format               | 正则规则类型，详细类型可以往后看        | string                                                        |        |
+| properties           | 对象属性                                | { [key: string]: [ISchema](#ISchema) }                        |        |
+| items                | 数组描述                                | [ISchema](#ISchema) `or` [ISchema](#ISchema)[]                |        |
+| patternProperties    | 动态匹配对象的某个属性的 Schema         | { [key: string]: [ISchema](#ISchema) }                        |        |
+| additionalProperties | 匹配对象额外属性的 Schema               | [ISchema](#ISchema)                                           |        |
+| editable             | 字段是否可编辑                          | boolean                                                       |        |
+| visible              | 字段是否显示（伴随 value 的显示和隐藏） | boolean                                                       |        |
+| display              | 字段是否显示（纯视觉，不影响 value）    | boolean                                                       |        |
+| x-component          | 用于渲染的组件                          | string                                                        |        |
+| x-component-props    | 组件的属性                              | { [name: string]: any }                                       |        |
+| x-rules              | 校验规则                                | [ValidatePatternRules](#ValidatePatternRules)                 |        |
+| x-props              | 字段扩展属性                            | { [name: string]: any }                                       |        |
+| x-index              | 字段顺序                                | number                                                        |        |
+| default              | 字段默认值                              | any                                                           |        |
+| const                | 校验字段值是否与 const 的值相等         | any                                                           |        |
+| multipleOf           | 校验字段值是否可被 multipleOf 的值整除  | number                                                        |        |
+| maximum              | 最大值                                  | number                                                        |        |
+| exclusiveMaximum     | 校验最大值（大于等于）                  | number                                                        |        |
+| minimum              | 最小值                                  | number                                                        |        |
+| exclusiveMinimum     | 最小值（小于等于）                      | number                                                        |        |
+| maxLength            | 最大长度                                | number                                                        |        |
+| minLength            | 最小长度                                | number                                                        |        |
+| pattern              | 正则校验规则                            | string `or` RegExp                                            |        |
+| maxItems             | 最大项数                                | number                                                        |        |
+| minItems             | 最小项数                                | number                                                        |        |
+| uniqueItems          | 是否校验重复                            | boolean                                                       |        |
+| maxProperties        | 最大属性数量                            | number                                                        |        |
+| minProperties        | 最小属性数量                            | number                                                        |        |
 
 #### `<Submit/>`
 
