@@ -172,13 +172,12 @@ export const createFormExternals = (
           const prevTags = parseArrayTags(field.prevState.value)
           const currentTags = parseArrayTags(published.value)
           if (!isEqual(prevTags, currentTags)) {
-            hostUpdate(() => {
-              eachArrayExchanges(field.prevState, published, exchangeState)
-            })
+            eachArrayExchanges(field.prevState, published, exchangeState)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
               field.state.name,
-              tagArrayList(field.state.value, field.state.name, true)
+              tagArrayList(field.state.value, field.state.name, true),
+              true
             )
           }
         }
@@ -311,15 +310,19 @@ export const createFormExternals = (
             return getFormInitialValuesIn(name)
           },
           unControlledValueChanged() {
-            heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-            heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
             if (field.state.modified) {
               setTimeout(() => {
+                //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
+                heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+                heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
                 validate(field.state.path, {
                   hostRendering: false,
                   throwErrors: false
                 })
               })
+            } else {
+              heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+              heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
             }
           }
         })

@@ -153,7 +153,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         value,
         values: [value].concat(this.state.values.slice(1))
       }
-      const compareResults = isEqual(this.state.value, value)
+      const compareResults =
+        isEqual(this.state.value, value) ||
+        isEmpty(this.state.value) === isEmpty(value)
       if (!compareResults && compareResults !== this.lastCompareResults) {
         this.lastCompareResults = compareResults
         this.props?.unControlledValueChanged()
