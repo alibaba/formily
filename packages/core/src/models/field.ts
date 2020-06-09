@@ -39,7 +39,7 @@ export const ARRAY_UNIQUE_TAG = Symbol.for(
 
 export const parseArrayTags = (value: any[]) => {
   return value?.reduce?.((buf, item: any) => {
-    return item[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
+    return item?.[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
   }, [])
 }
 

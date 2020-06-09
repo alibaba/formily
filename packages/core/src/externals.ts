@@ -43,11 +43,6 @@ import {
 } from './models/field'
 import { VirtualField } from './models/virtual-field'
 
-const nextTick = () =>
-  new Promise(resolve => {
-    setTimeout(resolve)
-  })
-
 export const createFormExternals = (
   internals: ReturnType<typeof createFormInternals>
 ) => {
@@ -386,7 +381,6 @@ export const createFormExternals = (
           editable,
           visible,
           unmounted,
-          modified,
           display
         } = field.getState()
         // 不需要校验的情况有: 非编辑态(editable)，已销毁(unmounted), 逻辑上不可见(visible)
@@ -395,7 +389,6 @@ export const createFormExternals = (
           visible === false ||
           unmounted === true ||
           display === false ||
-          modified === false ||
           (field as any).disabledValidate ||
           (rules.length === 0 && errors.length === 0 && warnings.length === 0)
         )
@@ -781,7 +774,6 @@ export const createFormExternals = (
     }
     heart.publish(LifeCycleTypes.ON_FORM_VALIDATE_START, form)
     if (graph.size > 100 && hostRendering) env.hostRendering = true
-    await nextTick() //很重要，如果校验过程在hostUpdate中的话，要求必须在Next Tick中执行
     const payload = await validator.validate(path, opts)
     clearTimeout(env.validateTimer)
     form.setState(state => {
