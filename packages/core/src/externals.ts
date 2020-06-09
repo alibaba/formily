@@ -31,10 +31,16 @@ import {
   log,
   defaults,
   toArr,
-  isNum
+  isNum,
+  isEqual
 } from '@formily/shared'
 import { createFormInternals } from './internals'
-import { Field, ARRAY_UNIQUE_TAG, tagArrayList } from './models/field'
+import {
+  Field,
+  ARRAY_UNIQUE_TAG,
+  tagArrayList,
+  parseArrayTags
+} from './models/field'
 import { VirtualField } from './models/virtual-field'
 
 export const createFormExternals = (
@@ -74,10 +80,14 @@ export const createFormExternals = (
       const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
       const current = item?.[ARRAY_UNIQUE_TAG]
       if (prev === current) return
-      if (prev === undefined || current === undefined) return
-      if (exchanged[prev] || exchanged[current]) return
-      exchanged[prev] = true
-      exchanged[current] = true
+      if (prev === undefined || current === undefined) {
+        return
+      }
+      if (currentState.value?.length === prevState.value?.length) {
+        if (exchanged[prev] || exchanged[current]) return
+        exchanged[prev] = true
+        exchanged[current] = true
+      }
       eacher(prev, current)
     })
   }
@@ -134,7 +144,7 @@ export const createFormExternals = (
       const currentPath = calculateMovePath(field.state.path, currentIndex)
       const currentState = getFieldState(currentPath, getExchangeState)
       prevStateMap[field.state.name] = prevState
-      field.setState(state => {
+      field.setSourceState(state => {
         Object.assign(state, currentState)
       })
     })
@@ -143,7 +153,7 @@ export const createFormExternals = (
       const prevPath = calculateMovePath(path, prevIndex)
       const prevState = prevStateMap[prevPath]
       if (prevState) {
-        field.setState(state => {
+        field.setSourceState(state => {
           Object.assign(state, prevState)
         })
       }
@@ -159,14 +169,17 @@ export const createFormExternals = (
       if (dirtys.value) {
         const isArrayList = /array/gi.test(published.dataType)
         if (isArrayList) {
-          hostUpdate(() => {
+          const prevTags = parseArrayTags(field.prevState.value)
+          const currentTags = parseArrayTags(published.value)
+          if (!isEqual(prevTags, currentTags)) {
             eachArrayExchanges(field.prevState, published, exchangeState)
-          })
-          //重置TAG，保证下次状态交换是没问题的
-          setFormValuesIn(
-            published.name,
-            tagArrayList(published.value, published.name, true)
-          )
+            //重置TAG，保证下次状态交换是没问题的
+            setFormValuesIn(
+              field.state.name,
+              tagArrayList(field.state.value, field.state.name, true),
+              true
+            )
+          }
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
@@ -297,15 +310,19 @@ export const createFormExternals = (
             return getFormInitialValuesIn(name)
           },
           unControlledValueChanged() {
-            heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-            heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
             if (field.state.modified) {
               setTimeout(() => {
+                //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
+                heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+                heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
                 validate(field.state.path, {
                   hostRendering: false,
                   throwErrors: false
                 })
               })
+            } else {
+              heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+              heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
             }
           }
         })

@@ -1757,13 +1757,13 @@ Object {
     "initialValues": Object {
       "aa": Array [
         Object {
-          "aa": 345,
-          "bb": 678,
+          "aa": 123,
+          "bb": 321,
           Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
         },
         Object {
-          "aa": 123,
-          "bb": 321,
+          "aa": 345,
+          "bb": 678,
           Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
         },
       ],
@@ -1861,8 +1861,8 @@ Object {
     "errors": Array [],
     "formEditable": undefined,
     "initialValue": Object {
-      "aa": 345,
-      "bb": 678,
+      "aa": 123,
+      "bb": 321,
       Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
     },
     "initialized": true,
@@ -2701,7 +2701,7 @@ Object {
       "aa": Array [
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
         },
       ],
     },
@@ -2740,14 +2740,14 @@ Object {
     "value": Array [
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
       },
     ],
     "values": Array [
       Array [
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
         },
       ],
     ],
@@ -2788,12 +2788,12 @@ Object {
     "validating": false,
     "value": Object {
       "aa": "change aa",
-      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
     },
     "values": Array [
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
       },
     ],
     "visible": true,
@@ -2903,7 +2903,7 @@ Object {
         undefined,
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
         },
       ],
     },
@@ -2943,7 +2943,7 @@ Object {
       undefined,
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
       },
     ],
     "values": Array [
@@ -2951,7 +2951,7 @@ Object {
         undefined,
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
         },
       ],
     ],
@@ -3109,12 +3109,12 @@ Object {
     "validating": false,
     "value": Object {
       "aa": "change aa",
-      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
     },
     "values": Array [
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
       },
     ],
     "visible": true,

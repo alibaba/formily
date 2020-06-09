@@ -37,6 +37,12 @@ export const ARRAY_UNIQUE_TAG = Symbol.for(
   '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
 )
 
+export const parseArrayTags = (value: any[]) => {
+  return value?.reduce?.((buf, item: any) => {
+    return item?.[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
+  }, [])
+}
+
 export const tagArrayList = (current: any[], name: string, force?: boolean) => {
   return current?.map?.((item, index) => {
     if (typeof item === 'object') {
@@ -147,7 +153,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         value,
         values: [value].concat(this.state.values.slice(1))
       }
-      const compareResults = isEqual(this.state.value, value)
+      const compareResults =
+        isEqual(this.state.value, value) ||
+        isEmpty(this.state.value) === isEmpty(value)
       if (!compareResults && compareResults !== this.lastCompareResults) {
         this.lastCompareResults = compareResults
         this.props?.unControlledValueChanged()
