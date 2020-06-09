@@ -137,7 +137,7 @@ describe('createForm', () => {
     })
     field.getState() //手动同步状态，如果在React场景下，会在重新渲染的时候同步
     await sleep(10)
-    expect(field.getState(state => state.errors).length).toEqual(1)
+    expect(field.getState(state => state.errors).length).toEqual(0)
   })
 
   test('lifecycles', () => {
