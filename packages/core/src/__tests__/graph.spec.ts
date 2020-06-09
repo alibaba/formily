@@ -2,7 +2,7 @@ import { FormGraph } from '../shared/graph'
 import { FormPathPattern, FormPath } from '@formily/shared'
 import { IField, IVirtualField } from '../types'
 import createForm from '../'
-import { FormState } from '../state/form'
+import { Form } from '../models/form'
 
 test('constructor with strategy',()=>{
   function matchStrategy(
@@ -31,7 +31,7 @@ test('constructor without strategy',()=>{
 })
 
 test('appendNode',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -55,7 +55,7 @@ test('appendNode',()=>{
 })
 
 test('appendNode disOreder',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -125,7 +125,7 @@ test('remove',()=>{
 })
 
 test('remove deep', () => {
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -165,7 +165,7 @@ test('reduce',()=>{
 })
 
 test('selectChildren',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf2 = form.registerVirtualField({ name: 'b' })
@@ -180,7 +180,7 @@ test('selectChildren',()=>{
 
 
 test('selectParent',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -200,7 +200,7 @@ test('selectParent',()=>{
 })
 
 test('eachChildren eacher',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -232,7 +232,7 @@ test('eachChildren eacher',()=>{
 })
 
 test('eachChildren path eacher',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -255,7 +255,7 @@ test('eachChildren path eacher',()=>{
 })
 
 test('eachChildren path selector eacher',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -284,7 +284,7 @@ test('eachChildren path selector eacher',()=>{
 })
 
 test('eachParent',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
@@ -313,7 +313,7 @@ test('eachParent',()=>{
 })
 
 test('getLatestParent',()=>{
-  const state = new FormState({})
+  const state = new Form({})
   const form = createForm()
   const vf1 = form.registerVirtualField({ name: 'a' })
   const vf1Children = form.registerVirtualField({ name: 'a.a' })
