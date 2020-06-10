@@ -2,7 +2,6 @@ import {
   IFieldRegistryProps,
   IField,
   IFieldState,
-  isVirtualField,
   IVirtualField,
   LifeCycleTypes,
   IVirtualFieldRegistryProps,
@@ -55,6 +54,8 @@ export const createFormExternals = (
     graph,
     validator,
     hostUpdate,
+    afterUnmount,
+    nextTick,
     isHostRendering,
     getDataPath,
     getFormValuesIn,
@@ -62,7 +63,6 @@ export const createFormExternals = (
     deleteFormValuesIn,
     setFormValuesIn,
     setFormInitialValuesIn,
-    existFormValuesIn,
     updateRecoverableShownState,
     resetFormMessages,
     syncFormMessages,
@@ -124,6 +124,26 @@ export const createFormExternals = (
     return results
   }
 
+  function calculateRemovedTags(prevTags: string[], currentTags: string[]) {
+    if (prevTags.length <= currentTags.length) return []
+    env.realRemoveTags = prevTags.reduce((buf, tag) => {
+      return currentTags.includes(tag) ? buf : buf.concat(tag)
+    }, [])
+    return prevTags.slice(currentTags.length - prevTags.length)
+  }
+
+  function removeArrayNodes(tags: string[]) {
+    tags.forEach(tag => {
+      graph.select(calculateMathTag(tag), (node: IField) => {
+        graph.remove(node.state.path)
+      })
+    })
+  }
+
+  function calculateMathTag(tag: FormPathPattern) {
+    return `*(${tag},${tag}.*)`
+  }
+
   function exchangeState(
     prevPattern: FormPathPattern,
     currentPattern: FormPathPattern
@@ -139,7 +159,7 @@ export const createFormExternals = (
         return Number(args[args.length - 1])
       }
     )
-    graph.select(prevPattern + '.*', (field: IField) => {
+    graph.select(calculateMathTag(prevPattern), (field: IField) => {
       const prevState = field.getState(getExchangeState)
       const currentPath = calculateMovePath(field.state.path, currentIndex)
       const currentState = getFieldState(currentPath, getExchangeState)
@@ -148,7 +168,7 @@ export const createFormExternals = (
         Object.assign(state, currentState)
       })
     })
-    graph.select(currentPattern + '.*', (field: IField) => {
+    graph.select(calculateMathTag(currentPattern), (field: IField) => {
       const { path } = field.getState()
       const prevPath = calculateMovePath(path, prevIndex)
       const prevState = prevStateMap[prevPath]
@@ -172,7 +192,9 @@ export const createFormExternals = (
           const prevTags = parseArrayTags(field.prevState.value)
           const currentTags = parseArrayTags(published.value)
           if (!isEqual(prevTags, currentTags)) {
+            const removedTags = calculateRemovedTags(prevTags, currentTags)
             eachArrayExchanges(field.prevState, published, exchangeState)
+            removeArrayNodes(removedTags)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
               field.state.name,
@@ -199,10 +221,10 @@ export const createFormExternals = (
         })
       }
       if (dirtys.unmounted && published.unmounted) {
+        afterUnmount(() => {
+          env.realRemoveTags = []
+        })
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
-        if (!existFormValuesIn(published.name)) {
-          graph.remove(published.path)
-        }
       }
 
       if (dirtys.mounted && published.mounted) {
@@ -259,7 +281,12 @@ export const createFormExternals = (
           )
         })
       }
-
+      if (dirtys.unmounted && published.unmounted) {
+        afterUnmount(() => {
+          env.realRemoveTags = []
+        })
+        heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
+      }
       if (dirtys.mounted && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
@@ -285,54 +312,57 @@ export const createFormExternals = (
     let field: IField
     const nodePath = FormPath.parse(path || name)
     const dataPath = getDataPath(nodePath)
-    const createField = (field?: IField) => {
-      const alreadyHaveField = !!field
-      field =
-        field ||
-        new Field({
-          nodePath,
-          dataPath,
-          computeState,
-          dataType,
-          getValue(name) {
-            return getFormValuesIn(name)
-          },
-          setValue(name, value) {
-            setFormValuesIn(name, value)
-          },
-          setInitialValue(name, value) {
-            setFormInitialValuesIn(name, value)
-          },
-          removeValue(name) {
-            deleteFormValuesIn(name)
-          },
-          getInitialValue(name) {
-            return getFormInitialValuesIn(name)
-          },
-          unControlledValueChanged() {
-            if (field.state.modified) {
-              setTimeout(() => {
-                //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
-                heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-                heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-                validate(field.state.path, {
-                  hostRendering: false,
-                  throwErrors: false
-                })
-              })
-            } else {
+    const createField = () => {
+      const field = new Field({
+        nodePath,
+        dataPath,
+        computeState,
+        dataType,
+        getValue(name) {
+          return getFormValuesIn(name)
+        },
+        needRemoveValue(path) {
+          if (!env.realRemoveTags?.length) return true
+          return env.realRemoveTags.every(tag => {
+            return !FormPath.parse(calculateMathTag(tag)).match(path)
+          })
+        },
+        setValue(name, value) {
+          setFormValuesIn(name, value)
+        },
+        setInitialValue(name, value) {
+          setFormInitialValuesIn(name, value)
+        },
+        removeValue(name) {
+          if (!graph.get(nodePath)) return
+          deleteFormValuesIn(name)
+        },
+        getInitialValue(name) {
+          return getFormInitialValuesIn(name)
+        },
+        unControlledValueChanged() {
+          if (field.state.modified) {
+            nextTick(() => {
+              //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
               heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
               heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-            }
+              validate(field.state.path, {
+                hostRendering: false,
+                throwErrors: false
+              })
+            })
+          } else {
+            heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+            heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
           }
-        })
+        }
+      })
       field.subscription = {
         notify: onFieldChange({ field, path: nodePath })
       }
       heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
-      if (!alreadyHaveField) {
-        graph.appendNode(nodePath, field)
-      }
+
+      graph.appendNode(nodePath, field)
 
       heart.batch(() => {
         field.batch(() => {
@@ -423,10 +453,6 @@ export const createFormExternals = (
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
-      //field = createField(field) 如果重置会导致#565的问题，目前还没想清楚不重置会有啥问题
-      if (isVirtualField(field)) {
-        graph.replace(nodePath, field)
-      }
     } else {
       field = createField()
     }
@@ -444,22 +470,19 @@ export const createFormExternals = (
     const nodePath = FormPath.parse(path || name)
     const dataPath = getDataPath(nodePath)
     let field: IVirtualField
-    const createField = (field?: IVirtualField) => {
-      const alreadyHaveField = !!field
-      field =
-        field ||
-        new VirtualField({
-          nodePath,
-          dataPath,
-          computeState
-        })
+    const createField = () => {
+      const field = new VirtualField({
+        nodePath,
+        dataPath,
+        computeState
+      })
       field.subscription = {
         notify: onVirtualFieldChange({ field, path: nodePath })
       }
       heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
-      if (!alreadyHaveField) {
-        graph.appendNode(nodePath, field)
-      }
+
+      graph.appendNode(nodePath, field)
+
       heart.batch(() => {
         //fix #766
         field.batch(() => {
@@ -482,10 +505,6 @@ export const createFormExternals = (
     }
     if (graph.exist(nodePath)) {
       field = graph.get(nodePath)
-      //field = createField(field) 如果重置会导致#565的问题，目前还没想清楚不重置会有啥问题
-      if (isField(field)) {
-        graph.replace(nodePath, field)
-      }
     } else {
       field = createField()
     }

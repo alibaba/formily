@@ -123,7 +123,7 @@ export interface IFieldStateUIProps extends IFieldRegistryProps {
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 
-export interface IVirtualFieldProps extends IVirtualFieldRegistryProps {
+export interface IVirtualFieldStateUIProps extends IVirtualFieldRegistryProps {
   children?:
     | React.ReactElement
     | ((api: IVirtualFieldAPI) => React.ReactElement)
