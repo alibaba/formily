@@ -194,6 +194,7 @@ export interface IFieldStateProps {
   setValue?: (name: FormPathPattern, value: any) => void
   removeValue?: (name: FormPathPattern) => void
   setInitialValue?: (name: FormPathPattern, initialValue: any) => void
+  needRemoveValue?: (path: FormPathPattern) => boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
   unControlledValueChanged?: () => void
 }

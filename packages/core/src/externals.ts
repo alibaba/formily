@@ -54,6 +54,8 @@ export const createFormExternals = (
     graph,
     validator,
     hostUpdate,
+    afterUnmount,
+    nextTick,
     isHostRendering,
     getDataPath,
     getFormValuesIn,
@@ -124,15 +126,22 @@ export const createFormExternals = (
 
   function calculateRemovedTags(prevTags: string[], currentTags: string[]) {
     if (prevTags.length <= currentTags.length) return []
+    env.realRemoveTags = prevTags.reduce((buf, tag) => {
+      return currentTags.includes(tag) ? buf : buf.concat(tag)
+    }, [])
     return prevTags.slice(currentTags.length - prevTags.length)
   }
 
   function removeArrayNodes(tags: string[]) {
     tags.forEach(tag => {
-      graph.select(`${tag}.*`, (node: IField) => {
+      graph.select(calculateMathTag(tag), (node: IField) => {
         graph.remove(node.state.path)
       })
     })
+  }
+
+  function calculateMathTag(tag: FormPathPattern) {
+    return `*(${tag},${tag}.*)`
   }
 
   function exchangeState(
@@ -150,7 +159,7 @@ export const createFormExternals = (
         return Number(args[args.length - 1])
       }
     )
-    graph.select(prevPattern + '.*', (field: IField) => {
+    graph.select(calculateMathTag(prevPattern), (field: IField) => {
       const prevState = field.getState(getExchangeState)
       const currentPath = calculateMovePath(field.state.path, currentIndex)
       const currentState = getFieldState(currentPath, getExchangeState)
@@ -159,7 +168,7 @@ export const createFormExternals = (
         Object.assign(state, currentState)
       })
     })
-    graph.select(currentPattern + '.*', (field: IField) => {
+    graph.select(calculateMathTag(currentPattern), (field: IField) => {
       const { path } = field.getState()
       const prevPath = calculateMovePath(path, prevIndex)
       const prevState = prevStateMap[prevPath]
@@ -182,9 +191,10 @@ export const createFormExternals = (
         if (isArrayList) {
           const prevTags = parseArrayTags(field.prevState.value)
           const currentTags = parseArrayTags(published.value)
-          const removedTags = calculateRemovedTags(prevTags, currentTags)
           if (!isEqual(prevTags, currentTags)) {
+            const removedTags = calculateRemovedTags(prevTags, currentTags)
             eachArrayExchanges(field.prevState, published, exchangeState)
+            removeArrayNodes(removedTags)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
               field.state.name,
@@ -192,7 +202,6 @@ export const createFormExternals = (
               true
             )
           }
-          removeArrayNodes(removedTags)
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
       }
@@ -212,6 +221,9 @@ export const createFormExternals = (
         })
       }
       if (dirtys.unmounted && published.unmounted) {
+        afterUnmount(() => {
+          env.realRemoveTags = []
+        })
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
       }
 
@@ -269,7 +281,12 @@ export const createFormExternals = (
           )
         })
       }
-
+      if (dirtys.unmounted && published.unmounted) {
+        afterUnmount(() => {
+          env.realRemoveTags = []
+        })
+        heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
+      }
       if (dirtys.mounted && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
@@ -304,6 +321,12 @@ export const createFormExternals = (
         getValue(name) {
           return getFormValuesIn(name)
         },
+        needRemoveValue(path) {
+          if (!env.realRemoveTags?.length) return true
+          return env.realRemoveTags.every(tag => {
+            return !FormPath.parse(calculateMathTag(tag)).match(path)
+          })
+        },
         setValue(name, value) {
           setFormValuesIn(name, value)
         },
@@ -311,6 +334,7 @@ export const createFormExternals = (
           setFormInitialValuesIn(name, value)
         },
         removeValue(name) {
+          if (!graph.get(nodePath)) return
           deleteFormValuesIn(name)
         },
         getInitialValue(name) {
@@ -318,7 +342,7 @@ export const createFormExternals = (
         },
         unControlledValueChanged() {
           if (field.state.modified) {
-            setTimeout(() => {
+            nextTick(() => {
               //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
               heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
               heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)

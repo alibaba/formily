@@ -39,7 +39,7 @@ export const ARRAY_UNIQUE_TAG = Symbol.for(
 )
 
 export const parseArrayTags = (value: any[]) => {
-  if(!isArr(value)) return []
+  if (!isArr(value)) return []
   return value?.reduce?.((buf, item: any) => {
     return item?.[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
   }, [])
@@ -239,7 +239,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         draft.mounted = true
       }
       if (dirtys.visible || dirtys.mounted || dirtys.unmounted) {
-        if (draft.unmountRemoveValue) {
+        if (
+          draft.unmountRemoveValue &&
+          this.props?.needRemoveValue?.(this.state.path)
+        ) {
           if (draft.display) {
             if (draft.visible === false || draft.unmounted === true) {
               if (!dirtys.visibleCacheValue) {

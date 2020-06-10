@@ -342,6 +342,15 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }
   }
 
+  function nextTick(callback?: () => void) {
+    setTimeout(callback)
+  }
+
+  function afterUnmount(callback?: () => void) {
+    clearTimeout(env.unmountTimer)
+    env.unmountTimer = setTimeout(callback, 1000)
+  }
+
   function isHostRendering() {
     return env.hostRendering
   }
@@ -365,6 +374,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
   })
   const env = {
     validateTimer: null,
+    unmountTimer: null,
     syncFormStateTimer: null,
     onChangeTimer: null,
     graphChangeTimer: null,
@@ -372,7 +382,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     publishing: {},
     taskQueue: [],
     taskIndexes: {},
-    removeNodes: {},
+    realRemoveTags: [],
     lastShownStates: {},
     submittingTask: undefined
   }
@@ -388,6 +398,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     validator,
     heart,
     env,
+    nextTick,
+    afterUnmount,
     getDataPath,
     getFormValuesIn,
     getFormInitialValuesIn,

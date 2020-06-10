@@ -1861,9 +1861,9 @@ Object {
     "errors": Array [],
     "formEditable": undefined,
     "initialValue": Object {
-      "aa": 123,
-      "bb": 321,
-      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      "aa": 345,
+      "bb": 678,
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
     },
     "initialized": true,
     "invalid": false,
@@ -2378,7 +2378,9 @@ Object {
     "validating": false,
     "values": Object {
       "aa": Array [
-        undefined,
+        Object {
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        },
         Object {
           "aa": "change aa",
           Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
@@ -2418,7 +2420,9 @@ Object {
     "valid": true,
     "validating": false,
     "value": Array [
-      undefined,
+      Object {
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      },
       Object {
         "aa": "change aa",
         Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
@@ -2426,7 +2430,9 @@ Object {
     ],
     "values": Array [
       Array [
-        undefined,
+        Object {
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        },
         Object {
           "aa": "change aa",
           Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
@@ -2468,9 +2474,13 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": undefined,
+    "value": Object {
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+    },
     "values": Array [
-      undefined,
+      Object {
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      },
     ],
     "visible": true,
     "visibleCacheValue": undefined,
@@ -2701,7 +2711,7 @@ Object {
       "aa": Array [
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
         },
       ],
     },
@@ -2740,14 +2750,14 @@ Object {
     "value": Array [
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
       },
     ],
     "values": Array [
       Array [
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
         },
       ],
     ],
@@ -2788,12 +2798,12 @@ Object {
     "validating": false,
     "value": Object {
       "aa": "change aa",
-      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
     },
     "values": Array [
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
       },
     ],
     "visible": true,
@@ -2815,11 +2825,11 @@ Object {
     "initialized": true,
     "invalid": false,
     "loading": false,
-    "modified": false,
+    "modified": true,
     "mounted": false,
     "name": "aa.0.aa",
     "path": "aa.0.aa",
-    "pristine": true,
+    "pristine": false,
     "props": Object {},
     "required": false,
     "ruleErrors": Array [],
@@ -2900,10 +2910,12 @@ Object {
     "validating": false,
     "values": Object {
       "aa": Array [
-        undefined,
+        Object {
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        },
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
         },
       ],
     },
@@ -2940,18 +2952,22 @@ Object {
     "valid": true,
     "validating": false,
     "value": Array [
-      undefined,
+      Object {
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      },
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
       },
     ],
     "values": Array [
       Array [
-        undefined,
+        Object {
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+        },
         Object {
           "aa": "change aa",
-          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+          Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
         },
       ],
     ],
@@ -2990,9 +3006,13 @@ Object {
     "unmounted": false,
     "valid": true,
     "validating": false,
-    "value": undefined,
+    "value": Object {
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+    },
     "values": Array [
-      undefined,
+      Object {
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
+      },
     ],
     "visible": true,
     "visibleCacheValue": undefined,
@@ -3109,12 +3129,12 @@ Object {
     "validating": false,
     "value": Object {
       "aa": "change aa",
-      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+      Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
     },
     "values": Array [
       Object {
         "aa": "change aa",
-        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.1",
+        Symbol(@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@): "aa.0",
       },
     ],
     "visible": true,

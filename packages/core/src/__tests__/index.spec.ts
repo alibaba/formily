@@ -1556,7 +1556,11 @@ describe('major sences', () => {
 
   test('nested dynamic remove', () => {
     const form = createForm()
-    const aa = form.registerField({ path: 'aa', value: [], dataType: 'array' })
+    const aa = form.registerField({
+      path: 'aa',
+      value: [{}, {}],
+      dataType: 'array'
+    })
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
     form.registerField({ path: 'aa.0.bb' })
