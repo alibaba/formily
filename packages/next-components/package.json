@@ -1,6 +1,6 @@
 {
   "name": "@formily/next-components",
-  "version": "2.0.0-beta.2",
+  "version": "1.2.0-beta.0",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
