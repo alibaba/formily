@@ -80,11 +80,14 @@ export const createModel = <
       }
     }
 
-    getDirtys(patches: Patch[]): StateDirtyMap<State> {
-      return patches.reduce((buf, { path }) => {
-        buf[path[0]] = true
-        return buf
-      }, {})
+    getDirtys(patches: Patch[], refresh?: boolean): StateDirtyMap<State> {
+      return patches.reduce(
+        (buf, { path }) => {
+          buf[path[0]] = true
+          return buf
+        },
+        refresh ? {} : this.batching ? this.dirtys : {}
+      )
     }
 
     dirtyCheck(path: FormPathPattern, nextValue: any) {
@@ -110,7 +113,7 @@ export const createModel = <
     setState(recipe?: Recipe<State>, silent: boolean = false) {
       if (!isFn(recipe)) return
       const base = this.getBaseState()
-      this.dirtyCount = 0
+      this.dirtyCount = this.batching ? this.dirtyCount : 0
       this.patches = []
       this.prevState = base
       this.factory.prevState = base
@@ -131,7 +134,7 @@ export const createModel = <
         base,
         draft => {
           applyPatches(draft, this.patches)
-          const dirtys = this.getDirtys(this.patches)
+          const dirtys = this.getDirtys(this.patches, true)
           if (isFn(this.factory.produce)) {
             this.factory.produce(draft, dirtys)
           }
@@ -154,6 +157,7 @@ export const createModel = <
       this.factory.state = produced
       this.state = produced
       this.dirtys = this.getDirtys(this.patches)
+      this.patches = []
       if (this.dirtyCount > 0 && !silent) {
         if (this.batching) {
           return
@@ -162,7 +166,6 @@ export const createModel = <
       }
       this.dirtyCount = 0
       this.dirtys = {}
-      this.patches = []
     }
 
     setSourceState(recipe?: Recipe<State>) {
@@ -197,7 +200,6 @@ export const createModel = <
       this.batching = false
       this.dirtys = {}
       this.dirtyCount = 0
-      this.patches = []
     }
 
     setCache(key: CacheKey, value: any) {
