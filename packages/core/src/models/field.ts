@@ -421,6 +421,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     }
 
     produceRules(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
+      if (isValid(draft.rules)) {
+        draft.rules = toArr(draft.rules)
+      }
       if ((dirtys.required && dirtys.rules) || dirtys.required) {
         const rules = this.getRulesFromRulesAndRequired(
           draft.rules,
