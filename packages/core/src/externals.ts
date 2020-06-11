@@ -180,6 +180,14 @@ export const createFormExternals = (
     })
   }
 
+  function eachParentFields(field: IField, callback: (field: IField) => void) {
+    graph.eachParent(field.state.path, (node: any) => {
+      if (isField(node)) {
+        callback(node)
+      }
+    })
+  }
+
   function onFieldChange({ field, path }: { field: IField; path: FormPath }) {
     return (published: IFieldState) => {
       const { dirtys } = field
@@ -204,9 +212,15 @@ export const createFormExternals = (
           }
         }
         heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
+        eachParentFields(field, node => {
+          heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, node)
+        })
       }
       if (dirtys.initialValue) {
         heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, field)
+        eachParentFields(field, node => {
+          heart.publish(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, node)
+        })
       }
       if (dirtys.visible || dirtys.display) {
         graph.eachChildren(path, childState => {
