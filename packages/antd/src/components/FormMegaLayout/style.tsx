@@ -1,4 +1,5 @@
 import { css } from 'styled-components'
+import insetStyle from './inset'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 export const computeAntdStyleBase = (props, debug?: boolean) => {
@@ -8,9 +9,11 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
         isLayout,
         inline,
         nested,
-        labelCol, grid, full, context = {}, contextColumns, columns, isRoot, autoRow,
+        inset,
+        labelCol, grid, context = {}, contextColumns, columns, autoRow,
         span,
         size,
+        hasBorder,
         // lg, m, s,
         responsive,
     } = props
@@ -18,6 +21,10 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
     const labelWidth = formatPx(props.labelWidth)
     const wrapperWidth = formatPx(props.wrapperWidth)
     const gutter = formatPx(props.gutter)
+
+    if (inset && isLayout) {
+        result.insetStyle = insetStyle({ hasBorder })
+    }
 
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
@@ -284,7 +291,7 @@ export const computeStyle = (props, debug?: boolean) => {
     // inline 和 grid 是互斥关系, 优先级: inline > grid
     // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
 
-    return css`
+    return css`        
         ${styleResult.labelAlignStyle}
         ${styleResult.addonStyle}
         ${styleResult.defaultStyle}
@@ -294,5 +301,6 @@ export const computeStyle = (props, debug?: boolean) => {
         ${styleResult.gridItemStyle}
         ${styleResult.nestLayoutItemStyle}
         ${styleResult.layoutMarginStyle}
+        ${styleResult.insetStyle}
     `
 }

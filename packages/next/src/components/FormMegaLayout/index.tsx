@@ -20,6 +20,7 @@ const StyledLayoutItem = styled((props) => {
     const formItemProps = pickFormItemProps(others)
     const cls = classnames({
       [className]: true,
+      'mega-layout-item-inset': props.inset,
       'mega-layout-item': true,
       'mega-layout-item-col': grid,
     });

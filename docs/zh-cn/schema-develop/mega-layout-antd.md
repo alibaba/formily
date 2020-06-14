@@ -1186,6 +1186,153 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+列表布局常使用 **inset** 模式，使用 `FormMegaLayout` 可以快速实现此种布局。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  createVirtualBox,
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import {
+  FormMegaLayout,
+  Input,
+  Radio,
+  Checkbox,
+  Select,
+  DatePicker,
+  NumberPicker,
+  TimePicker,
+  Switch,
+  Range,
+  Rating
+} from '@formily/antd-components'
+import Printer from '@formily/printer'
+
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{
+        Input,
+        Radio: Radio.Group,
+        Checkbox: Checkbox.Group,
+        NumberPicker,
+        Select,
+        Switch,
+        DatePicker,
+        DateRangePicker: DatePicker.RangePicker,
+        YearPicker: DatePicker.YearPicker,
+        MonthPicker: DatePicker.MonthPicker,
+        WeekPicker: DatePicker.WeekPicker,
+        TimePicker,
+        TimeRangePicker: TimePicker.RangePicker,
+        Rating,
+      }}>
+        <FormMegaLayout
+          inset
+          grid
+          full
+          autoRow
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <Field title="String" name="string"
+            x-component="Input"
+            required
+            x-rules={value => {
+              if (value > 0 && value < 100) {
+                return {
+                  type: 'warning',
+                  message: '第一阶梯'
+                }
+              } else {
+                return ''
+              }
+            }}
+          />
+          <Field
+            enum={['1', '2', '3', '4']}
+            title="Radio"
+            name="radio"
+            x-component="Radio"
+          />
+          <Field
+            enum={['1', '2', '3', '4']}
+            title="Select"
+            name="select"
+            x-component="Select"
+          />
+          <Field
+            enum={['1', '2', '3', '4']}
+            title="Checkbox"
+            name="checkbox"
+            x-component="Checkbox"
+          />
+          <Field
+            title="TextArea"
+            name="textarea"
+            x-component="TextArea"
+          />
+          <Field
+            title="数字选择"
+            name="number"
+            x-component="NumberPicker"
+          />
+          <Field
+            title="开关选择"
+            name="boolean"
+            x-component="Switch"
+            x-mega-props={{ full: false }}
+          />
+          <Field
+            title="日期选择"
+            name="date"
+            x-component="DatePicker"
+          />
+          <Field
+            title="日期范围"
+            default={['2018-12-19', '2018-12-19']}
+            name="daterange"
+            x-component="DateRangePicker"
+          />
+          <Field type="string" title="年份" name="year" x-component="YearPicker" />
+          <Field
+            title="月份"
+            name="month"
+            x-component="MonthPicker"
+          />
+          <Field type="string" title="时间" name="time" x-component="TimePicker" />
+          <Field
+            title="时间范围"
+            name="timerange"
+            x-component="TimeRangePicker"
+          />
+          <Field type="string" title="周" name="week" x-component="WeekPicker" />
+          <Field title="等级" name="rating" x-component="Rating" />
+          <FormSlot>
+            <FormButtonGroup align="right">
+              <Submit>提交</Submit>
+              <Reset>重置</Reset>
+            </FormButtonGroup>
+          </FormSlot>
+        </FormMegaLayout>        
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 复杂嵌套布局
 
 `FormMegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。
