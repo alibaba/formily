@@ -50,6 +50,11 @@ exports[`inline style gutter item 1`] = `
   margin-right: 20px;
 }
 
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 <div
   className="c0"
 />
@@ -79,6 +84,11 @@ exports[`inline style item 1`] = `
   margin-right: undefinedpx;
 }
 
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 <div
   className="c0"
 />
@@ -106,6 +116,11 @@ exports[`inline style labelAlign:top item 1`] = `
 
 .c0:not(:last-child) {
   margin-right: undefinedpx;
+}
+
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
 }
 
 <div
@@ -215,7 +230,7 @@ exports[`nest grid layout container nest columns 1`] = `
   display: grid;
   grid-column-gap: NaNpx;
   grid-row-gap: NaNpx;
-  grid-template-columns: repeat(3,minmax(100px,1fr));
+  grid-template-columns: repeat(3,1fr);
 }
 
 .c0.mega-layout-nest-container {
@@ -255,21 +270,21 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 @media (max-width:720px) {
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
 @media (min-width:1200px) {
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
@@ -279,6 +294,11 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 `;
 
 exports[`nest layout item style grid item style in large span 1`] = `
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 @media (max-width:720px) {
   .c0.mega-layout-item-col {
     grid-column-start: span 1;
@@ -303,6 +323,11 @@ exports[`nest layout item style grid item style in large span 1`] = `
 `;
 
 exports[`nest layout item style grid item style in small span 1`] = `
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 @media (max-width:720px) {
   .c0.mega-layout-item-col {
     grid-column-start: span 1;
