@@ -41,6 +41,9 @@ export const computeNextStyleBase = (props) => {
     const gutter = formatPx(props.gutter)
     const { lg, m, s } = responsive || {}
 
+    // 嵌套不需要执行响应
+    const disabledResponsive = context.grid && grid && context.responsive
+
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
         & > .next-form-item-label {
@@ -152,23 +155,26 @@ export const computeNextStyleBase = (props) => {
         }
     }
 
-    const gridContainerStyle = responsive ? `
-        @media (max-width: 720px) {
-            grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, minmax(100px, 1fr));
-        }
-        
-        @media (min-width: 720px) and (max-width: 1200px) {
-            grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, minmax(100px, 1fr));
-        }
-        @media (min-width: 1200px) {
-            grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, minmax(100px, 1fr));
-        }
-    ` : `
-        grid-template-columns: repeat(${autoRow ? columns : 'auto-fit'}, minmax(100px, 1fr));
-    `
+    const gridContainerStyle = (nested?: boolean) => {
+        const frStyle = nested ? '1fr' : 'minmax(100px, 1fr)';
+        return !disabledResponsive && responsive ? `
+            @media (max-width: 720px) {
+                grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, ${frStyle});
+            }
+            
+            @media (min-width: 720px) and (max-width: 1200px) {
+                grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, ${frStyle});
+            }
+            @media (min-width: 1200px) {
+                grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, ${frStyle});
+            }
+        ` : `
+            grid-template-columns: repeat(${autoRow ? columns : 'auto-fit'}, ${frStyle});
+        `
+    }
 
     const minColumns = nested ? Math.min(columns, contextColumns) : columns
-    const gridItemSpanStyle = responsive ? `
+    const gridItemSpanStyle = !disabledResponsive && responsive ? `
         @media (max-width: 720px) {
             grid-column-start: span ${s > span ? span : s};
         }
@@ -197,7 +203,7 @@ export const computeNextStyleBase = (props) => {
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
 
-                        ${gridContainerStyle}
+                        ${gridContainerStyle()}
                     }
                 }
             }
@@ -238,7 +244,7 @@ export const computeNextStyleBase = (props) => {
                         grid-column-gap: ${parseInt(gutter)}px;
                         grid-row-gap: ${parseInt(gutter)}px;
                         
-                        ${gridContainerStyle}
+                        ${gridContainerStyle(true)}
                     }
                 }
             }
