@@ -74,7 +74,6 @@ export const NextSchemaFieldAdaptor: React.FC<ISchemaFieldAdaptorProps> = props 
   const schemaItemProps = computeSchemaExtendProps(props)
 
   const mergedProps = {
-    label,
     ...formItemShallowProps,
     ...formItemProps,
     ...schemaItemProps

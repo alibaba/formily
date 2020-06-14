@@ -13,7 +13,7 @@ import { Schema } from './schema'
 const pathExpRE = /\[\s*(?:([+-])\s*(\d+)?)?\s*\]/g
 
 const transformTargetPath = (
-  target: FormPathPattern,
+  target: string,
   indexes: number[],
   basePath: FormPath
 ) => {

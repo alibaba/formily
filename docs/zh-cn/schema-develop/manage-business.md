@@ -501,7 +501,3 @@ export const App = () => {
 ## 总结
 
 整体来看，我们这样一层层的将项目分解了之后，后续的整体维护性就会大大提高，当然你们还可以根据自己业务的特殊性来做一些定制。
-
-## CodeSandBox地址
-
-https://codesandbox.io/s/naughty-glitter-9mpcl

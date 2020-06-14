@@ -15,7 +15,7 @@ const astralRegex = (opts?: { exact: boolean }) =>
   opts && opts.exact ? new RegExp(`^${regex}$`) : new RegExp(regex, 'g')
 
 // stripAnsi
-const stripAnsi = (input: any) =>
+const stripAnsi = <T extends any>(input: T): T =>
   typeof input === 'string' ? input.replace(ansiRegex(), '') : input
 
 export const stringLength = (input: string) =>

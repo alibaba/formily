@@ -4,9 +4,8 @@ import {
   IEffectMiddleware,
   ISchemaFormActions
 } from '@formily/react-schema-renderer'
-import { defaults } from '@formily/shared'
 
-interface IQueryParams {
+type IQueryParams = {
   pagination: {
     total: number
     pageSize: number
@@ -24,76 +23,37 @@ interface IQueryParams {
   values: any
 }
 
-interface IQueryResponse {
+type IQueryResponse = {
   dataSource: any[]
   total: number
   pageSize: number
   current: number
 }
 
-interface IQueryContext {
-  pagination?: IQueryParams['pagination']
-  sorter?: IQueryParams['sorter']
-  filters?: IQueryParams['filters']
-  setPagination?: (pagination: IQueryParams['pagination']) => void
-  setFilters?: (filters: IQueryParams['filters']) => void
-  setSorter?: (sorter: IQueryParams['sorter']) => void
-}
-
-interface IQueryProps {
-  pagination?: IQueryParams['pagination']
-  sorter?: IQueryParams['sorter']
-  filters?: IQueryParams['filters']
-}
-
 export const useFormTableQuery = (
   service: (payload: IQueryParams) => IQueryResponse | Promise<IQueryResponse>,
-  middlewares?: IEffectMiddleware<ISchemaFormActions>[],
-  defaultProps: IQueryProps = {}
+  middlewares?: IEffectMiddleware<ISchemaFormActions>[]
 ) => {
-  const ref = useRef<IQueryContext>({})
-  const [pagination, setPagination] = useState<IQueryParams['pagination']>(
-    defaults(
-      {
-        current: 1,
-        total: 0,
-        pageSize: 20
-      },
-      defaultProps.pagination
-    )
-  )
-  const [sorter, setSorter] = useState<IQueryParams['sorter']>(
-    defaultProps.sorter
-  )
-  const [filters, setFilters] = useState<IQueryParams['filters']>(
-    defaultProps.filters
-  )
-  const { effects, trigger, loading, response } = useFormQuery<
-    IQueryParams,
-    IQueryResponse,
-    IQueryContext
-  >(
-    async values => {
-      return service({
-        values,
-        pagination: ref.current.pagination,
-        sorter: ref.current.sorter,
-        filters: ref.current.filters
-      })
-    },
-    middlewares,
-    ref.current
-  )
+  const ref = useRef<any>({})
+  const [pagination, setPagination] = useState<any>({
+    current: 1,
+    total: 0,
+    pageSize: 20
+  })
+  const [sorter, setSorter] = useState<any>()
+  const [filters, setFilters] = useState<any>()
+  const { effects, trigger, loading, response } = useFormQuery(async values => {
+    return service({
+      values,
+      pagination: ref.current.pagination,
+      sorter: ref.current.sorter,
+      filters: ref.current.filters
+    })
+  }, middlewares)
   ref.current.pagination = pagination
   ref.current.sorter = sorter
   ref.current.filters = filters
-  ref.current.setPagination = setPagination
-  ref.current.setSorter = setSorter
-  ref.current.setFilters = setFilters
   return {
-    setPagination,
-    setSorter,
-    setFilters,
     trigger,
     form: {
       effects
@@ -108,20 +68,10 @@ export const useFormTableQuery = (
         total: response.total || 0
       },
       onChange: (pagination: any, filters: any, sorter: any) => {
-        let type = ''
-        if (pagination) {
-          setPagination(pagination)
-          type = 'onPageQuery'
-        }
-        if (filters) {
-          setFilters(filters)
-          type = 'onFilterQuery'
-        }
-        if (sorter) {
-          setSorter(sorter)
-          type = 'onSorterQuery'
-        }
-        trigger(type)
+        if (pagination) setPagination(pagination)
+        if (filters) setFilters(filters)
+        if (sorter) setSorter(sorter)
+        trigger()
       }
     }
   }

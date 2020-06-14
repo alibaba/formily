@@ -762,7 +762,7 @@ render(<App />, null, { driver: DriverUniversal })
 
 - JSON Schema 方式
 
-```js
+```jsx
 import { createElement, useState } from 'rax'
 import { SchemaForm, SchemaMarkupField as Field } from '@formily/meet'
 import { Upload } from '@formily/meet-components'

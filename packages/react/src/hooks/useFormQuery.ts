@@ -1,17 +1,15 @@
 import { useMemo, useState, useRef } from 'react'
-import { createQueryEffects, ON_FORM_QUERY } from '../shared'
+import { createQueryEffects } from '../shared'
 import { toArr } from '@formily/shared'
 import { IEffectMiddleware, IFormActions } from '../types'
 
 export const useFormQuery = <
   TQueryPayload = any,
   TQueryResult = any,
-  TContext = any,
   TActions extends IFormActions = any
 >(
   resource: (payload: TQueryPayload) => TQueryResult | Promise<TQueryResult>,
-  middlewares: IEffectMiddleware[],
-  context?: TContext
+  middlewares: IEffectMiddleware[]
 ) => {
   const ref = useRef<any>()
   const [state, setState] = useState({
@@ -25,13 +23,13 @@ export const useFormQuery = <
     response: ref.current.response,
     error: ref.current.error,
     ...useMemo(() => {
-      let trigger: any
+      let dispatch: any
       const effects = createQueryEffects<TQueryPayload, TQueryResult, TActions>(
         resource,
         [
           ({ actions }) => {
-            trigger = (type: string = 'onFormSubmitQuery') => {
-              actions.dispatch(ON_FORM_QUERY, type)
+            dispatch = () => {
+              actions.dispatch('onFormSubmit', actions.getFormState())
             }
             return {
               async onFormWillQuery(payload, next) {
@@ -63,14 +61,13 @@ export const useFormQuery = <
               return response
             }
           })
-        ],
-        context
+        ]
       )
       return {
         effects,
-        trigger(type?: string) {
-          if (trigger) {
-            trigger(type)
+        trigger() {
+          if (dispatch) {
+            dispatch()
           }
         }
       }

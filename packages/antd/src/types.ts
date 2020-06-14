@@ -1,6 +1,5 @@
 import { ButtonProps } from 'antd/lib/button'
 import { FormProps, FormItemProps as ItemProps } from 'antd/lib/form'
-import { ColProps } from 'antd/lib/grid'
 import {
   StepsProps as StepProps,
   StepProps as StepItemProps
@@ -21,7 +20,7 @@ type ColSpanType = number | string
 
 export type IAntdSchemaFormProps = Omit<
   FormProps,
-  'onSubmit' | 'defaultValue' | 'labelCol' | 'wrapperCol'
+  'onSubmit' | 'defaultValue'
 > &
   IFormItemTopProps &
   PreviewTextConfigProps &
@@ -29,10 +28,7 @@ export type IAntdSchemaFormProps = Omit<
 
 export type IAntdSchemaFieldProps = IMarkupSchemaFieldProps
 
-export type IAntdFormProps = Omit<
-  FormProps,
-  'onSubmit' | 'defaultValue' | 'labelCol' | 'wrapperCol'
-> &
+export type IAntdFormProps = Omit<FormProps, 'onSubmit' | 'defaultValue'> &
   IFormItemTopProps &
   IFormProps<any, any>
 
@@ -60,12 +56,15 @@ export interface IResetProps extends ButtonProps {
 }
 
 export type IFormItemTopProps = React.PropsWithChildren<
-  Pick<ItemProps, 'prefixCls' | 'labelAlign'> & {
+  Exclude<
+    Pick<ItemProps, 'prefixCls' | 'labelCol' | 'wrapperCol' | 'labelAlign'>,
+    'labelCol' | 'wrapperCol'
+  > & {
     inline?: boolean
     className?: string
     style?: React.CSSProperties
-    labelCol?: number | { span: number; offset?: number } | ColProps
-    wrapperCol?: number | { span: number; offset?: number } | ColProps
+    labelCol?: number | { span: number; offset?: number }
+    wrapperCol?: number | { span: number; offset?: number }
   }
 >
 

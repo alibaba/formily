@@ -15,5 +15,3 @@ Radio.Group = connect({
   getProps: mapStyledProps,
   getComponent: mapTextComponent
 })(transformDataSourceKey(AntdRadio.Group, 'options'))
-
-export default Radio

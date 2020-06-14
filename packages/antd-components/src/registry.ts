@@ -17,7 +17,6 @@ import { Upload } from './upload'
 export const setup = () => {
   registerFormFields({
     time: TimePicker,
-    timerange: TimePicker.RangePicker,
     transfer: Transfer,
     boolean: Switch,
     array: ArrayCards,

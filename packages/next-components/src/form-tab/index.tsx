@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
@@ -109,10 +109,7 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
       ),
       childrenErrors: []
     })
-
-    const itemsRef = useRef([])
-    itemsRef.current = parseTabItems(orderProperties, hiddenKeys)
-
+    const items = parseTabItems(orderProperties, hiddenKeys)
     const matchUpdate = createMatchUpdate(name, path)
     const update = (cur: string) => {
       form.notify(StateMap.ON_FORM_TAB_ACTIVE_KEY_CHANGE, {
@@ -157,7 +154,7 @@ export const FormTab: React.FC<IVirtualBoxProps<IFormTab>> &
         activeKey={activeKey}
         onChange={update}
       >
-        {itemsRef.current.map(({ props, schema, key }) => {
+        {items.map(({ props, schema, key }) => {
           const currentPath = FormPath.parse(path).concat(key)
           return (
             <Tab.Item

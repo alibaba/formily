@@ -170,8 +170,6 @@ export const ArrayTable = styled(
                 <FormItemShallowProvider
                   key={newPath.toString()}
                   label={undefined}
-                  labelCol={undefined}
-                  wrapperCol={undefined}
                 >
                   <SchemaField path={newPath} schema={props} />
                 </FormItemShallowProvider>

@@ -20,7 +20,6 @@
     - [性能优化实践](./schema-develop/performance.md)
     - [管理业务逻辑](./schema-develop/manage-business.md)
     - [实现递归渲染组件](./schema-develop/recursive-render.md)
-    - [玩转查询列表](./schema-develop/form-query.md)
     - [玩转自增列表组件](./schema-develop/complext-self-inc-component.md)
     - [实现超复杂自定义组件](./schema-develop/create-complex-field-component.md)
   - [FAQ](./schema-develop/faq.md)
@@ -58,6 +57,6 @@
     - [next](../../packages/next/README.zh-cn.md)
     - [next-components](../../packages/next-components/README.zh-cn.md)
   - Rax Meet
-    - [meet](../../packages/meet/README.zh-cn.md)
-    - [meet-components](../../packages/meet-components/README.zh-cn.md)
+    - meet
+    - meet-components
 - [GITHUB](https://github.com/alibaba/formily)
