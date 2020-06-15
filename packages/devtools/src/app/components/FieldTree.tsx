@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { FormPath } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
+import * as filters from './filter'
+import SerachBox from './SearchBox'
 
 const createTree = (dataSource: any, cursor?: any) => {
   const tree: any = {}
@@ -63,7 +65,8 @@ const theme = {
       color: '#9DA5AB',
       fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
       fontSize: '8px',
-      background: 'none'
+      background: 'none',
+      marginBottom: '50px'
     },
     node: {
       base: {
@@ -162,9 +165,23 @@ const Header = props => {
   )
 }
 
+const ToolBar = styled.div`
+  border-bottom: 1px solid #3d424a;
+  height: 30px;
+  padding: 10px 10;
+  padding: 5px;
+  overflow: scroll;
+  position: sticky;
+  top: 0;
+  background: #282c34;
+  z-index: 100;
+`
+
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
-  const [data, setData] = useState(createTree(dataSource))
-  const cursor = useRef(data)
+  const allDataRef = useRef(createTree(dataSource))
+  const cursor = useRef(allDataRef.current)
+
+  const [data, setData] = useState(allDataRef.current)
 
   const onToggle = (node: any, toggled: boolean) => {
     cursor.current.active = false
@@ -179,12 +196,27 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
     }
   }
 
+  const onFilterMouseUp = ({ target: { value } }) => {
+    const filter = value.trim();
+    if (!filter) {
+        return setData(allDataRef.current)
+    }
+    let filtered = filters.filterTree(data, filter);
+    filtered = filters.expandFilteredNodes(filtered, filter);
+    setData(filtered);
+  }
+
   useEffect(() => {
-    setData(createTree(dataSource, cursor))
+    allDataRef.current = createTree(dataSource, cursor)
+    setData(allDataRef.current)
   }, [dataSource])
 
   return (
     <div className={className}>
+      <ToolBar >
+        <SerachBox onKeyUp={onFilterMouseUp} />
+      </ToolBar>
+      
       <Treebeard
         data={data}
         onToggle={onToggle}
@@ -197,6 +229,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
     </div>
   )
 })`
+  position: relative;
   overflow: scroll;
   height: calc(100% - 40px);
   user-select: none;
