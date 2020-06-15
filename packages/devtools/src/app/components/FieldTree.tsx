@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { FormPath } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
 import * as filters from './filter'
-import searchIcon from '../../../assets/img/search.svg'
+import SerachBox from './SearchBox'
 
 const createTree = (dataSource: any, cursor?: any) => {
   const tree: any = {}
@@ -164,22 +164,6 @@ const Header = props => {
   )
 }
 
-const SerachBox = styled.div`
-  display: flex;
-  align-items: center;
-  height: 100%;
-  .input-addon{
-    padding: 0 5px;
-  }
-  .form-control{
-    width: 50%;
-    border: none;
-    background: transparent;
-    color: white;
-    outline: none;
-  }
-`
-
 const ToolBar = styled.div`
   border-bottom: 1px solid #3d424a;
   height: 30px;
@@ -225,17 +209,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   return (
     <div className={className}>
       <ToolBar >
-        <SerachBox>
-          <div className ="input-addon">
-            <img src={searchIcon} />
-          </div>
-          <input
-            className="form-control"
-            onKeyUp={onFilterMouseUp}
-            placeholder="Search the field..."
-            type="text"
-          />
-        </SerachBox>
+        <SerachBox onKeyUp={onFilterMouseUp} />
       </ToolBar>
       
       <Treebeard
