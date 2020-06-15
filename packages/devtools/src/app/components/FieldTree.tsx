@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import { FormPath } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
+import * as filters from './filter'
 
 const createTree = (dataSource: any, cursor?: any) => {
   const tree: any = {}
@@ -162,9 +163,18 @@ const Header = props => {
   )
 }
 
+const SerachBox = styled.div`
+  padding: 2px 0;
+  .form-control{
+    width: 50%
+  }
+`
+
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
-  const [data, setData] = useState(createTree(dataSource))
-  const cursor = useRef(data)
+  const allDataRef = useRef(createTree(dataSource))
+  const cursor = useRef(allDataRef.current)
+
+  const [data, setData] = useState(allDataRef.current)
 
   const onToggle = (node: any, toggled: boolean) => {
     cursor.current.active = false
@@ -179,12 +189,31 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
     }
   }
 
+  const onFilterMouseUp = ({ target: { value } }) => {
+    const filter = value.trim();
+    if (!filter) {
+        return setData(allDataRef.current)
+    }
+    let filtered = filters.filterTree(data, filter);
+    filtered = filters.expandFilteredNodes(filtered, filter);
+    setData(filtered);
+  }
+
   useEffect(() => {
-    setData(createTree(dataSource, cursor))
+    allDataRef.current = createTree(dataSource, cursor)
+    setData(allDataRef.current)
   }, [dataSource])
 
   return (
     <div className={className}>
+      <SerachBox>
+        <input
+            className="form-control"
+            onKeyUp={onFilterMouseUp}
+            placeholder="Search the field..."
+            type="text"
+        />
+      </SerachBox>
       <Treebeard
         data={data}
         onToggle={onToggle}
