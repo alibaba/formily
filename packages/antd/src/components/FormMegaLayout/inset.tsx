@@ -67,7 +67,6 @@ const insetStyle = (props) => {
                 }
 
                 .ant-checkbox-group {
-                    padding-left: 11px;
                     padding-left: 0;
                 }
 
