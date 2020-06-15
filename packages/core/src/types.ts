@@ -249,11 +249,11 @@ export interface IFormState<FormProps = any> {
   initialized: boolean
   editable: boolean | ((name: string) => boolean)
   errors: Array<{
-    path: string,
+    path: string
     messages: string[]
   }>
   warnings: Array<{
-    path: string,
+    path: string
     messages: string[]
   }>
   values: any
