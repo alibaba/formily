@@ -248,8 +248,14 @@ export interface IFormState<FormProps = any> {
   submitting: boolean
   initialized: boolean
   editable: boolean | ((name: string) => boolean)
-  errors: string[]
-  warnings: string[]
+  errors: Array<{
+    path: string,
+    messages: string[]
+  }>
+  warnings: Array<{
+    path: string,
+    messages: string[]
+  }>
   values: any
   initialValues: any
   mounted: boolean
