@@ -15,8 +15,8 @@
 | initialized   | 表单是否已经初始化                          | boolean         | false       |
 | submitting    | 表单是否正在提交                            | boolean         | false       |
 | editable      | 表单是否可编辑                              | boolean         | false       |
-| errors        | 表单错误信息集合                            | `Array<string>` | []          |
-| warnings      | 表单警告信息集合                            | `Array<string>` | []          |
+| errors        | 表单错误信息集合                            | `Array<{ path: string, messages: string[] }>` | []          |
+| warnings      | 表单警告信息集合                            | `Array<{ path: string, messages: string[] }>` | []          |
 | values        | 表单值                                      | object          | {}          |
 | initialValues | 表单初始值                                  | object          | {}          |
 | mounted       | 表单是否已挂载                              | boolean         | false       |
