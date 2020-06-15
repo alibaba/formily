@@ -45,6 +45,7 @@ export const computeNextStyleBase = (props) => {
     if (inset) {
         result.insetStyle = insetStyle({ hasBorder, isLayout })
     }
+  
     // 嵌套不需要执行响应
     const disabledResponsive = context.grid && grid && context.responsive
 
