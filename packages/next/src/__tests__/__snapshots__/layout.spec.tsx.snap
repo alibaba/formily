@@ -366,6 +366,41 @@ exports[`layoutMarginStyle small size 1`] = `
 />
 `;
 
+exports[`nest grid layout container nest columns 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: NaNpx;
+  grid-row-gap: NaNpx;
+  grid-template-columns: repeat(3,1fr);
+}
+
+.c0.mega-layout-nest-container {
+  grid-column-start: span 2;
+}
+
+.c0.mega-layout-nest-container > .mega-layout-container {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+<div
+  className="c0 mega-layout-nest-container"
+/>
+`;
+
 exports[`nest grid layout container nest mega layout container 1`] = `
 .c0 > .next-form-item {
   width: 100%;
@@ -389,21 +424,21 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 @media (max-width:720px) {
   .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
   .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
 @media (min-width:1200px) {
   .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 

@@ -373,17 +373,44 @@ describe('nest grid layout container', () => {
     expect(tree).toHaveStyleRule('grid-row-gap', `20px`, {
       modifier: `${cls}`,
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(max-width: 720px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(min-width: 720px) and (max-width: 1200px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(min-width: 1200px)'
+    })
+  })
+
+  test('nest columns', () => {
+    let layoutProps = {
+      columns: 3,
+      span: 3,
+      nested: true,
+      autoRow: true,
+      contextColumns: 2,
+      context: { grid: true },
+      grid: true
+    }
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`
+      ${styleResult.gridStyle}
+      ${styleResult.nestLayoutItemStyle}
+    `
+    const tree = renderer.create(<Mega className="mega-layout-nest-container" />).toJSON();
+    const cls = `& > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid`
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`, {
+      modifier: `${cls}`,
+    })
+
+    expect(tree).toHaveStyleRule('grid-column-start', `span 2`, {
+      modifier: '&.mega-layout-nest-container',
     })
   })
 })
