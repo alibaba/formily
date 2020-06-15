@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FormPath } from '@formily/shared'
 import { Treebeard, decorators } from 'react-treebeard'
 import * as filters from './filter'
+import searchIcon from '../../../assets/img/search.svg'
 
 const createTree = (dataSource: any, cursor?: any) => {
   const tree: any = {}
@@ -226,7 +227,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
       <ToolBar >
         <SerachBox>
           <div className ="input-addon">
-            <img src="../../../assets/img/search.svg" />
+            <img src={searchIcon} />
           </div>
           <input
             className="form-control"
