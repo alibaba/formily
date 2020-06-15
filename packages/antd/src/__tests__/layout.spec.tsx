@@ -366,15 +366,15 @@ describe('nest grid layout container', () => {
     expect(tree).toHaveStyleRule('grid-row-gap', `20px`, {
       modifier: `${cls}`,
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(max-width: 720px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(min-width: 720px) and (max-width: 1200px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(min-width: 1200px)'
     })
@@ -398,7 +398,7 @@ describe('nest grid layout container', () => {
     const tree = renderer.create(<Mega className="mega-layout-nest-container" />).toJSON();
     const cls = `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`
     expect(tree).toMatchSnapshot()
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`, {
       modifier: `${cls}`,
     })
 
