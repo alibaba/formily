@@ -67,6 +67,10 @@ export default {
         options: {
           name: '[name].[ext]'
         }
+      },
+      {
+        test: /\.svg/,
+        use: ['file-loader']
       }
     ]
   }

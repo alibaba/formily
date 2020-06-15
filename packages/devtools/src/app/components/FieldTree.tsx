@@ -164,10 +164,27 @@ const Header = props => {
 }
 
 const SerachBox = styled.div`
-  padding: 2px 0;
-  .form-control{
-    width: 50%
+  display: flex;
+  align-items: center;
+  height: 100%;
+  .input-addon{
+    padding: 0 5px;
   }
+  .form-control{
+    width: 50%;
+    border: none;
+    background: transparent;
+    color: white;
+    outline: none;
+  }
+`
+
+const ToolBar = styled.div`
+  border-bottom: 1px solid #3d424a;
+  height: 30px;
+  padding: 10px 10;
+  padding: 5px;
+  overflow: scroll;
 `
 
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
@@ -206,14 +223,20 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
 
   return (
     <div className={className}>
-      <SerachBox>
-        <input
+      <ToolBar >
+        <SerachBox>
+          <div className ="input-addon">
+            <img src="../../../assets/img/search.svg" />
+          </div>
+          <input
             className="form-control"
             onKeyUp={onFilterMouseUp}
             placeholder="Search the field..."
             type="text"
-        />
-      </SerachBox>
+          />
+        </SerachBox>
+      </ToolBar>
+      
       <Treebeard
         data={data}
         onToggle={onToggle}
