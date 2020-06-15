@@ -1186,7 +1186,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-列表布局常使用 **inset** 模式，使用 `FormMegaLayout` 可以快速实现此种布局。
+列表布局常使用 **inset** 模式，使用 `FormMegaLayout` 可以快速实现此种布局。配合 **hasBorder** 可以指定某些元素是否需要边框。
 
 ```jsx
 import React, { useEffect } from 'react'
@@ -1278,11 +1278,6 @@ const App = () => {
             x-component="Checkbox"
           />
           <Field
-            title="TextArea"
-            name="textarea"
-            x-component="TextArea"
-          />
-          <Field
             title="数字选择"
             name="number"
             x-component="NumberPicker"
@@ -1291,7 +1286,7 @@ const App = () => {
             title="开关选择"
             name="boolean"
             x-component="Switch"
-            x-mega-props={{ full: false }}
+            x-mega-props={{ full: false, hasBorder: false }}
           />
           <Field
             title="日期选择"
@@ -1302,7 +1297,15 @@ const App = () => {
             title="日期范围"
             default={['2018-12-19', '2018-12-19']}
             name="daterange"
+            x-mega-props={{ span: 2 }}
             x-component="DateRangePicker"
+          />
+          <Field
+            title="时间范围"
+            name="timerange"
+            x-component="TimeRangePicker"
+            x-mega-props={{ span: 2 }}
+
           />
           <Field type="string" title="年份" name="year" x-component="YearPicker" />
           <Field
@@ -1310,14 +1313,10 @@ const App = () => {
             name="month"
             x-component="MonthPicker"
           />
-          <Field type="string" title="时间" name="time" x-component="TimePicker" />
-          <Field
-            title="时间范围"
-            name="timerange"
-            x-component="TimeRangePicker"
-          />
           <Field type="string" title="周" name="week" x-component="WeekPicker" />
+          <Field type="string" title="时间" name="time" x-component="TimePicker"  />          
           <Field title="等级" name="rating" x-component="Rating" />
+          <FormSlot><div /></FormSlot>
           <FormSlot>
             <FormButtonGroup align="right">
               <Submit>提交</Submit>

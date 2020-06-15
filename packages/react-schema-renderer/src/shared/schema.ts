@@ -340,7 +340,7 @@ export class Schema implements ISchema {
   }
 
   getMegaLayoutProps() {
-    return this['x-mega-props'] || {}
+    return this['x-mega-props'] || this.getExtendsComponentProps()['mega-props'] || {}
   }
 
   getExtendsTriggerType() {

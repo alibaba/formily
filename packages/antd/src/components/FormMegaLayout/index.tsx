@@ -187,7 +187,7 @@ const MegaLayoutItem = (props) => {
           ...(componentProps.style || {}),
           width: '100%',
           flex: 1,
-        }       
+        }
       }
 
       if (size) {

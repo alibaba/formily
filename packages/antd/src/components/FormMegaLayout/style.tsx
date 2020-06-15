@@ -22,8 +22,8 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
     const wrapperWidth = formatPx(props.wrapperWidth)
     const gutter = formatPx(props.gutter)
 
-    if (inset && isLayout) {
-        result.insetStyle = insetStyle({ hasBorder })
+    if (inset) {
+        result.insetStyle = insetStyle({ hasBorder, isLayout })
     }
 
     // label对齐相关 labelAlign

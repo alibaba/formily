@@ -127,7 +127,6 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
               form
             })
           }
-
           const { addonBefore, addonAfter, ...otherItemProps } = itemProps
           return (
             <NextFormItem {...otherItemProps}>
