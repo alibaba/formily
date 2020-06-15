@@ -24,14 +24,14 @@ const SearchIcon = () => {
 export default ({ onKeyUp }) => {
   return (
   <SerachBox>
-  <div className ="input-addon">
-    <SearchIcon />
-  </div>
-  <input
-    className="form-control"
-    onKeyUp={onKeyUp}
-    placeholder="Search the field..."
-    type="text"
-  />
+    <div className ="input-addon">
+      <SearchIcon />
+    </div>
+    <input
+      className="form-control"
+      onKeyUp={onKeyUp}
+      placeholder="Search the field..."
+      type="text"
+    />
 </SerachBox>)
 }

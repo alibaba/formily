@@ -65,7 +65,8 @@ const theme = {
       color: '#9DA5AB',
       fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
       fontSize: '8px',
-      background: 'none'
+      background: 'none',
+      marginBottom: '50px'
     },
     node: {
       base: {
@@ -170,6 +171,10 @@ const ToolBar = styled.div`
   padding: 10px 10;
   padding: 5px;
   overflow: scroll;
+  position: sticky;
+  top: 0;
+  background: #282c34;
+  z-index: 100;
 `
 
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
@@ -224,6 +229,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
     </div>
   )
 })`
+  position: relative;
   overflow: scroll;
   height: calc(100% - 40px);
   user-select: none;
