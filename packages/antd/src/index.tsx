@@ -53,17 +53,15 @@ import {
   pickFormItemProps,
   pickNotFormItemProps
 } from './shared'
-import { SchemaForm, Form, Field } from './components'
+
 export * from './adaptor'
 export * from './components'
+export { SchemaForm as default } from './components'
 export * from './context'
 export * from './hooks/useFormTableQuery'
 export * from './types'
 
 export {
-  SchemaForm,
-  Form,
-  Field,
   SchemaMarkupField,
   InternalField,
   InternalVirtualField,
@@ -116,5 +114,3 @@ export {
   pickFormItemProps,
   pickNotFormItemProps
 }
-
-export default SchemaForm
