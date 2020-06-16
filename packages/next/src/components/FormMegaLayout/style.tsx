@@ -1,5 +1,6 @@
 import { css } from 'styled-components'
 import { EComponentSize, EPxType, PxValue, ELineHeightPx, EFontSizePx } from './types'
+import insetStyle from './inset'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 
@@ -30,7 +31,7 @@ export const computeNextStyleBase = (props) => {
         labelAlign,
         isLayout,
         inline,
-        labelCol, grid, full, context = {}, contextColumns, columns, isRoot, autoRow,
+        labelCol, grid, inset, context = {}, contextColumns, columns, hasBorder, autoRow,
         span, nested,
         // lg, m, s,
         responsive
@@ -41,6 +42,10 @@ export const computeNextStyleBase = (props) => {
     const gutter = formatPx(props.gutter)
     const { lg, m, s } = responsive || {}
 
+    if (inset) {
+        result.insetStyle = insetStyle({ hasBorder, isLayout })
+    }
+  
     // 嵌套不需要执行响应
     const disabledResponsive = context.grid && grid && context.responsive
 
@@ -301,5 +306,6 @@ export const computeStyle = (props) => {
         ${styleResult.gridItemStyle}
         ${styleResult.nestLayoutItemStyle}
         ${styleResult.layoutMarginStyle}
+        ${styleResult.insetStyle}
     `
 }

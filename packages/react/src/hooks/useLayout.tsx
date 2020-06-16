@@ -26,6 +26,7 @@ export const useLayout = (props: ILayoutProps) => {
     const contextResponsive = responsive ? responsive : context.contextResponsive
     const size = computeAttr(props.size, context.size, undefined)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
+    const hasBorder = computeAttr(props.hasBorder, context.hasBorder, true)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
     const labelAlign = computeAttr(props.labelAlign, context.labelAlign, 'right')
@@ -64,6 +65,7 @@ export const useLayout = (props: ILayoutProps) => {
         autoRow,
         flex,
         inset,
+        hasBorder,
         columns,
         contextColumns: context.columns,
         full,

@@ -24,6 +24,13 @@ const StyledLayoutItem = styled((props) => {
       'mega-layout-item-col': grid,
     });
 
+    let finalHelpInfo = null
+    if (props.inset && formItemProps.validateStatus) {      
+      finalHelpInfo = <div className="mega-layout-item-inset-help">
+        {formItemProps.help[0]}
+      </div>
+    }
+
     const finalFormItem = <Form.Item className={cls} {...formItemProps}>
       <div className="mega-layout-item-content">
         { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
@@ -33,8 +40,14 @@ const StyledLayoutItem = styled((props) => {
     </Form.Item>
 
     if (grid) {
-      return <div className={cls}>
+      return <div className={classnames({
+        [cls]: true,
+        'mega-layout-item-inset': props.inset,
+        'mega-layout-item-inset-has-error': formItemProps.validateStatus === 'error',
+        'mega-layout-item-inset-has-warning': formItemProps.validateStatus === 'warning',
+      })}>
         {finalFormItem}
+        {finalHelpInfo}
       </div>
     }
 
@@ -73,7 +86,7 @@ const MegaLayout = (props => {
         children={(layout) => {
             const { inline, required, columns, label, labelAlign,
                 grid, gutter, autoRow, span, contextColumns,
-                full, context, isRoot, responsive
+                full, context, isRoot, responsive, inset, hasBorder
             } = layout
             const itemProps: any = {
               inline,
@@ -87,7 +100,9 @@ const MegaLayout = (props => {
               isRoot,
               isLayout: true,    
               responsive,
-              size
+              size,
+              inset,
+              hasBorder,
             }
 
             if (label) {
@@ -146,8 +161,10 @@ const MegaLayoutItem = (props) => {
     if (layoutProps) {
       const { addonBefore, addonAfter } = megaProps
       const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
-        responsive, size
+        responsive, size, inset, hasBorder
       } = layoutProps;
+      itemProps.hasBorder = hasBorder
+      itemProps.inset = inset
       itemProps.labelAlign = labelAlign
       itemProps.inline = inline
       itemProps.grid = grid
@@ -170,7 +187,7 @@ const MegaLayoutItem = (props) => {
           ...(componentProps.style || {}),
           width: '100%',
           flex: 1,
-        }       
+        }
       }
 
       if (size) {

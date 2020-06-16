@@ -16,6 +16,7 @@ export * from '@formily/core'
 
 type ILayoutLabelAlign = 'top' | 'left' | 'right'
 export interface ILayoutProps {
+  hasBorder?: boolean
   context?: any
   isRoot?: boolean
   isLayout?: boolean

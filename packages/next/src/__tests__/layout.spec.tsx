@@ -648,3 +648,76 @@ describe('layoutMarginStyle', () => {
   })
 
 })
+
+describe('inset mode', () => {
+  test('inset style', () => {
+    const styleResult = computeNextStyleBase({
+      inset: true,
+      isLayout: true
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).toHaveStyleRule('border-color', 'red', { modifier: `.mega-layout-item-inset-has-error .next-form-item` })
+    expect(tree).toHaveStyleRule('border-color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .next-form-item` })
+    expect(tree).toHaveStyleRule('color', 'red', { modifier: `.mega-layout-item-inset-has-error .mega-layout-item-inset-help` })
+    expect(tree).toHaveStyleRule('color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .mega-layout-item-inset-help` })
+    expect(tree).toHaveStyleRule('display', 'none', { modifier: `.next-form-item-help` })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.next-form-item.mega-layout-item` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.next-form-item.mega-layout-item` })
+  })
+
+  test('inset style(hasBorder)', () => {
+    const styleResult = computeNextStyleBase({
+      inset: true,
+      isLayout: true,
+      hasBorder: true,
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('padding-left', '12px', { modifier: `.next-form-item` })
+    expect(tree).toHaveStyleRule('border', '1px solid #D8D8D8', { modifier: `.next-form-item` })
+    expect(tree).toHaveStyleRule('border-radius', '4px', { modifier: `.next-form-item` })
+  })
+
+  test('inset style of component', () => {
+    const styleResult = computeNextStyleBase({
+      inset: true,
+      isLayout: true,
+      hasBorder: true,
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.next-range-picker-trigger` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.next-input` })
+  })
+
+  test('item inset style(hasBorder)', () => {
+    const styleResult = computeNextStyleBase({
+      inset: true,
+      isLayout: false,
+      hasBorder: false,
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()    
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.next-form-item.mega-layout-item` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.next-form-item.mega-layout-item` })
+    expect(tree).not.toHaveStyleRule('display', 'none', { modifier: `.next-form-item-help` })
+    expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).not.toHaveStyleRule('border-color', 'red', { modifier: `.mega-layout-item-inset-has-error .next-form-item` })
+    expect(tree).not.toHaveStyleRule('border-color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .next-form-item` })
+    expect(tree).not.toHaveStyleRule('color', 'red', { modifier: `.mega-layout-item-inset-has-error .mega-layout-item-inset-help` })
+    expect(tree).not.toHaveStyleRule('color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .mega-layout-item-inset-help` })
+    expect(tree).not.toHaveStyleRule('display', 'none', { modifier: `.next-form-item-help` })
+  })
+})
