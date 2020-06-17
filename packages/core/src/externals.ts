@@ -23,7 +23,6 @@ import {
   isValid,
   isFn,
   isArr,
-  isObj,
   isPlainObj,
   each,
   clone,
@@ -756,7 +755,9 @@ export const createFormExternals = (
           if (props.forceClear || !isValid(state.initialValue)) {
             if (isArr(state.value)) {
               state.value = []
-            } else if (!isObj(state.value)) {
+            } else if (isPlainObj(state.value)) {
+              state.value = {}
+            } else {
               state.value = undefined
             }
           } else {
