@@ -359,10 +359,6 @@ export const createFormExternals = (
               //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
               heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
               heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-              validate(field.state.path, {
-                hostRendering: false,
-                throwErrors: false
-              })
             })
           } else {
             heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
