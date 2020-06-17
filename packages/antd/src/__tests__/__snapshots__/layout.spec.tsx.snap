@@ -50,6 +50,11 @@ exports[`inline style gutter item 1`] = `
   margin-right: 20px;
 }
 
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 <div
   className="c0"
 />
@@ -79,6 +84,11 @@ exports[`inline style item 1`] = `
   margin-right: undefinedpx;
 }
 
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 <div
   className="c0"
 />
@@ -106,6 +116,11 @@ exports[`inline style labelAlign:top item 1`] = `
 
 .c0:not(:last-child) {
   margin-right: undefinedpx;
+}
+
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
 }
 
 <div
@@ -146,6 +161,295 @@ exports[`inline style layout 1`] = `
 
 .c0 > .ant-form-item-control {
   display: inline-block;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode inset style 1`] = `
+.c0 .mega-layout-item-inset {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 .mega-layout-item-inset-has-error .mega-layout-item-inset-help {
+  color: red;
+}
+
+.c0 .mega-layout-item-inset-has-error .ant-form-item {
+  border-color: red;
+}
+
+.c0 .mega-layout-item-inset-has-warning .mega-layout-item-inset-help {
+  color: #FF6A00;
+}
+
+.c0 .mega-layout-item-inset-has-warning .ant-form-item {
+  border-color: #FF6A00;
+}
+
+.c0 .ant-form-item-explain {
+  display: none;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-selector,
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input input,
+.c0 .ant-form-item .mega-layout-item-content .ant-input-number,
+.c0 .ant-form-item .mega-layout-item-content .ant-time-picker-input,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-selection,
+.c0 .ant-form-item .mega-layout-item-content .ant-input {
+  border: none;
+  box-shadow: none;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker {
+  width: 100%;
+  padding-right: 0;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-checkbox-group {
+  padding-left: 0;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-range {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-right: 11px;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-range .ant-picker-input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 11px;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input > input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 .ant-form-item.mega-layout-item {
+  padding-left: 0;
+  border: none;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode inset style of component 1`] = `
+.c0 .mega-layout-item-inset {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 .mega-layout-item-inset-has-error .mega-layout-item-inset-help {
+  color: red;
+}
+
+.c0 .mega-layout-item-inset-has-error .ant-form-item {
+  border-color: red;
+}
+
+.c0 .mega-layout-item-inset-has-warning .mega-layout-item-inset-help {
+  color: #FF6A00;
+}
+
+.c0 .mega-layout-item-inset-has-warning .ant-form-item {
+  border-color: #FF6A00;
+}
+
+.c0 .ant-form-item-explain {
+  display: none;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-selector,
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input input,
+.c0 .ant-form-item .mega-layout-item-content .ant-input-number,
+.c0 .ant-form-item .mega-layout-item-content .ant-time-picker-input,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-selection,
+.c0 .ant-form-item .mega-layout-item-content .ant-input {
+  border: none;
+  box-shadow: none;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker {
+  width: 100%;
+  padding-right: 0;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-checkbox-group {
+  padding-left: 0;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-range {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-right: 11px;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-range .ant-picker-input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 11px;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input > input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 .ant-form-item {
+  padding-left: 12px;
+  border: 1px solid #D8D8D8;
+  border-radius: 4px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode inset style(hasBorder) 1`] = `
+.c0 .mega-layout-item-inset {
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+.c0 .mega-layout-item-inset-has-error .mega-layout-item-inset-help {
+  color: red;
+}
+
+.c0 .mega-layout-item-inset-has-error .ant-form-item {
+  border-color: red;
+}
+
+.c0 .mega-layout-item-inset-has-warning .mega-layout-item-inset-help {
+  color: #FF6A00;
+}
+
+.c0 .mega-layout-item-inset-has-warning .ant-form-item {
+  border-color: #FF6A00;
+}
+
+.c0 .ant-form-item-explain {
+  display: none;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-selector,
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input input,
+.c0 .ant-form-item .mega-layout-item-content .ant-input-number,
+.c0 .ant-form-item .mega-layout-item-content .ant-time-picker-input,
+.c0 .ant-form-item .mega-layout-item-content .ant-select-selection,
+.c0 .ant-form-item .mega-layout-item-content .ant-input {
+  border: none;
+  box-shadow: none;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker {
+  width: 100%;
+  padding-right: 0;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-checkbox-group {
+  padding-left: 0;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-range {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding-right: 11px;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-range .ant-picker-input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0 11px;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input > input {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.c0 .ant-form-item .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
+  -webkit-flex: initial;
+  -ms-flex: initial;
+  flex: initial;
+}
+
+.c0 .ant-form-item {
+  padding-left: 12px;
+  border: 1px solid #D8D8D8;
+  border-radius: 4px;
+}
+
+<div
+  className="c0"
+/>
+`;
+
+exports[`inset mode item inset style(hasBorder) 1`] = `
+.c0 .ant-form-item.mega-layout-item {
+  padding-left: 0;
+  border: none;
 }
 
 <div
@@ -215,7 +519,7 @@ exports[`nest grid layout container nest columns 1`] = `
   display: grid;
   grid-column-gap: NaNpx;
   grid-row-gap: NaNpx;
-  grid-template-columns: repeat(3,minmax(100px,1fr));
+  grid-template-columns: repeat(3,1fr);
 }
 
 .c0.mega-layout-nest-container {
@@ -255,21 +559,21 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 @media (max-width:720px) {
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
 @media (min-width:720px) and (max-width:1200px) {
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
 @media (min-width:1200px) {
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
-    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+    grid-template-columns: repeat(auto-fit,1fr);
   }
 }
 
@@ -279,6 +583,11 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 `;
 
 exports[`nest layout item style grid item style in large span 1`] = `
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 @media (max-width:720px) {
   .c0.mega-layout-item-col {
     grid-column-start: span 1;
@@ -303,6 +612,11 @@ exports[`nest layout item style grid item style in large span 1`] = `
 `;
 
 exports[`nest layout item style grid item style in small span 1`] = `
+.c0 .ant-form-item-explain.show-help-leave {
+  -webkit-animation-duration: 0s;
+  animation-duration: 0s;
+}
+
 @media (max-width:720px) {
   .c0.mega-layout-item-col {
     grid-column-start: span 1;

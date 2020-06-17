@@ -1097,6 +1097,133 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+列表布局常使用 **inset** 模式，使用 `FormMegaLayout` 可以快速实现此种布局。配合 **hasBorder** 可以指定某些元素是否需要边框。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  createVirtualBox,
+  Form,
+  FormItem,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import {
+  MegaLayout,
+  Input,
+  Radio,
+  Checkbox,
+  Select,
+  DatePicker,
+  NumberPicker,
+  TimePicker,
+  Switch,
+  Range,
+  Rating
+} from '@formily/antd-components'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <Form>
+        <MegaLayout
+          inset
+          grid
+          full
+          autoRow
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <FormItem title="String" name="string"
+            component={Input}
+            required
+            rules={value => {
+              if (value > 0 && value < 100) {
+                return {
+                  type: 'warning',
+                  message: '第一阶梯'
+                }
+              } else {
+                return ''
+              }
+            }}
+          />
+          <FormItem
+            enum={['1', '2', '3', '4']}
+            title="Radio"
+            name="radio"
+            component={Radio.Group}
+          />
+          <FormItem
+            enum={['1', '2', '3', '4']}
+            title="Select"
+            name="select"
+            component={Select}
+          />
+          <FormItem
+            enum={['1', '2', '3', '4']}
+            title="Checkbox"
+            name="checkbox"
+            component={Checkbox.Group}
+          />
+          <FormItem
+            title="数字选择"
+            name="number"
+            component={NumberPicker}
+          />
+          <FormItem
+            title="开关选择"
+            name="boolean"
+            component={Switch}
+            mega-props={{ full: false, hasBorder: false }}
+          />
+          <FormItem
+            title="日期选择"
+            name="date"
+            component={DatePicker}
+          />
+          <FormItem
+            title="日期范围"
+            default={['2018-12-19', '2018-12-19']}
+            name="daterange"
+            mega-props={{ span: 2 }}
+            component={DatePicker.RangePicker}
+          />
+          <FormItem
+            title="时间范围"
+            name="timerange"
+            component={TimePicker.RangePicker}
+            mega-props={{ span: 2 }}
+
+          />
+          <FormItem title="年份" name="year" component={DatePicker.YearPicker} />
+          <FormItem
+            title="月份"
+            name="month"
+            component={DatePicker.MonthPicker}
+          />
+          <FormItem title="周" name="week" component={DatePicker.WeekPicker} />
+          <FormItem title="时间" name="time" component={TimePicker}  />          
+          <FormItem title="等级" name="rating" component={Rating} />
+          <div />
+          <FormButtonGroup align="right">
+            <Submit>提交</Submit>
+            <Reset>重置</Reset>
+          </FormButtonGroup>
+        </MegaLayout>        
+      </Form>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 # 复杂嵌套布局
 
 `MegaLayout` 强大之处在于能够处理复杂的嵌套，使得上述原子化的能力能够通过各种组合实现极其复杂的布局。

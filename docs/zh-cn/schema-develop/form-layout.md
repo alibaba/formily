@@ -625,3 +625,193 @@ ReactDOM.render(<App />, document.getElementById('root'))
 - 从@formily/antd-components 中导出 FormTab
 - FormTab 中的渲染是会强制全部渲染的，主要是为了收集校验
 - 如果被隐藏的 Tab 校验错误，在 Tab Title 上会展现 Badge 小红标，同时浏览器自动滚动
+
+## 自适应复合栅格布局
+
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { Button } from "antd";
+import {
+  PlusCircleOutlined
+} from '@ant-design/icons';
+import styled from "styled-components";
+import {
+  SchemaForm,
+  SchemaField,
+  SchemaMarkupField as Field,  
+  MegaLayout,
+  FormMegaLayout
+} from "@formily/antd";
+import { ArrayList } from "@formily/react-shared-components";
+import { toArr, isFn, FormPath } from "@formily/shared";
+import { FormCard, Input, Checkbox } from "@formily/antd-components";
+import "antd/dist/antd.css";
+
+const ArrayComponents = {
+  CircleButton: props => <Button {...props} />,
+  TextButton: props => <Button text {...props} />,
+  AdditionIcon: () => <div>+Add</div>,
+  RemoveIcon: () => <div>Remove</div>,
+  MoveDownIcon: () => <div>Down</div>,
+  MoveUpIcon: () => <div>Up</div>
+};
+
+const ArrayCustom = props => {
+  const { value, schema, className, editable, path, mutators } = props;
+  const {
+    renderAddition,
+    renderRemove,
+    renderMoveDown,
+    renderMoveUp,
+    renderEmpty,
+    renderExtraOperations,
+    ...componentProps
+  } = schema.getExtendsComponentProps() || {};
+
+  const onAdd = () => {
+    const items = Array.isArray(schema.items)
+      ? schema.items[schema.items.length - 1]
+      : schema.items;
+    mutators.push(items.getEmptyValue());
+  };
+
+  return (
+    <ArrayList
+      value={value}
+      minItems={schema.minItems}
+      maxItems={schema.maxItems}
+      editable={editable}
+      components={ArrayComponents}
+      renders={{
+        renderAddition,
+        renderRemove,
+        renderMoveDown,
+        renderMoveUp,
+        renderEmpty // 允许开发者覆盖默认
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+        {toArr(value).map((item, index) => {
+          return (
+            <div style={{ marginBottom: "16px" }} key={index}>
+              <SchemaField path={FormPath.parse(path).concat(index)} />
+            </div>
+          );
+        })}
+      </div>
+      <ArrayList.Empty>
+        {({ children }) => {
+          return (
+            <div
+              {...componentProps}
+              size="small"
+              className={`card-list-item card-list-empty`}
+              onClick={onAdd}
+            >
+              <div>{children}</div>
+            </div>
+          );
+        }}
+      </ArrayList.Empty>
+      <ArrayList.Addition>
+        {({ children, isEmpty }) => {
+          if (!isEmpty) {
+            return (
+              <div
+                style={{ marginLeft: "12px", cursor: 'pointer' }}
+                className="array-cards-addition"
+                onClick={onAdd}
+              >
+                <PlusCircleOutlined style={{ color: '#1890ff' }}/>
+              </div>
+            );
+          }
+        }}
+      </ArrayList.Addition>
+    </ArrayList>
+  );
+};
+
+ArrayCustom.isFieldComponent = true;
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input, Checkbox, ArrayCustom }}>
+      <FormCard title="基本信息">
+        <FormMegaLayout
+          labelWidth="100"
+          grid
+          full
+          autoRow
+          labelAlign="left"
+          columns="3"
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <Field name="username" title="姓名" x-component="Input" required/>
+          <Field name="gender" title="性别" x-component="Input" required/>
+          <Field name="company" title="公司" x-component="Input" required/>
+          <Field title="固定电话" name="phoneList" type="array" required
+            default={[
+              { phone: '010-1234 5678' },
+              { phone: '010-1234 5678' }
+            ]}
+            x-component="ArrayCustom"
+          >
+            <Field type="object" x-mega-props={{ columns: 1 }}>
+              <Field name="phone" x-component="Input" />
+            </Field>
+          </Field>
+
+          <Field
+            title="部门职务"
+            name="departmentList"
+            type="array"
+            required
+            default={[
+              { group: "项目1部", position: '项目经理' },
+              { group: "项目1部", position: '研发经理', isManeger: true }
+            ]}
+            x-component="ArrayCustom"
+          >
+              <Field type="object" x-mega-props={{ columns: 2 }}>
+                <Field name="group" x-mega-props={{ span: 2 }} x-component="Input" />
+                <Field name="position" x-component="Input" />
+                <Field name="isManeger" x-component="Checkbox" x-component-props={{
+                  children: '是否主管'
+                }} />
+              </Field>
+          </Field>
+          
+          <Field
+            title="手机号"
+            name="mobileList"
+            type="array"
+            required
+            default={[
+              { mobile: "136 0123 4567", enableSMS: true },
+              { mobile: "136 0123 4567", enableSMS: false }
+            ]}
+            x-component="ArrayCustom"
+          >
+            <Field type="object" x-mega-props={{ columns: 2 }}>
+              <Field name="mobile" x-component="Input" />
+              <Field name="enableSMS" x-component="Checkbox" x-component-props={{
+                children: '接受短信'
+              }} />
+            </Field>
+          </Field>
+        </FormMegaLayout>
+      </FormCard>      
+    </SchemaForm>
+  );
+};
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+**案例解析**
+
+- 结合自定义 ArrayList 以及 MegaLayout 的在栅格场景下的应用
+- 配合响应式布局，能够根据屏幕宽度进行自适应
+- 在 ArrayList场景下，如何通过Field（object）来改变columns
