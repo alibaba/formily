@@ -1,6 +1,6 @@
 {
   "name": "@formily/shared",
-  "version": "1.2.0-beta.3",
+  "version": "1.2.0-beta.4",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",

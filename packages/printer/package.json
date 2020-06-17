@@ -1,6 +1,6 @@
 {
   "name": "@formily/printer",
-  "version": "1.2.0-beta.3",
+  "version": "1.2.0-beta.4",
   "license": "MIT",
   "main": "lib",
   "repository": {
@@ -25,7 +25,7 @@
     "typescript": "~3.8.0"
   },
   "dependencies": {
-    "@formily/react-schema-renderer": "^1.2.0-beta.3",
+    "@formily/react-schema-renderer": "^1.2.0-beta.4",
     "react-modal": "^3.8.1",
     "styled-components": "^4.1.1"
   },
