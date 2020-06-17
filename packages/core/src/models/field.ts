@@ -66,6 +66,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
 
     prevState: IFieldState
 
+    cacheGetterValue?: any
+
     lastCompareResults?: boolean
 
     state = {
@@ -105,7 +107,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       props: {}
     }
 
-    constructor(props: IFieldStateProps) {
+    constructor(props: IFieldStateProps = {}) {
       this.nodePath = FormPath.getPath(props.nodePath)
       this.dataPath = FormPath.getPath(props.dataPath)
       this.state.name = this.dataPath.entire
@@ -155,12 +157,11 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         value,
         values: [value].concat(this.state.values.slice(1))
       }
-      const compareResults =
-        isEqual(this.state.value, value) ||
-        isEmpty(this.state.value) === isEmpty(value)
+      const compareResults = isEqual(this.cacheGetterValue, value)
       if (!compareResults && compareResults !== this.lastCompareResults) {
+        this.cacheGetterValue = value
         this.lastCompareResults = compareResults
-        this.props?.unControlledValueChanged()
+        this.props?.unControlledValueChanged?.()
       }
       return state
     }

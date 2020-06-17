@@ -367,7 +367,7 @@ describe('reset', () => {
     })
     await form.reset({ forceClear: true })
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
+    expect(form.getFormState(state => state.values)).toEqual({ aa: {} })
     expect(form.getFormState(state => state.initialValues)).toEqual(
       resetInitValues
     )
@@ -413,7 +413,7 @@ describe('reset', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
     await form.reset()
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
+    expect(form.getFormState(state => state.values)).toEqual({ aa: {} })
     expect(form.getFormState(state => state.initialValues)).toEqual({})
   })
 

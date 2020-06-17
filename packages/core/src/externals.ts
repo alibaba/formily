@@ -23,7 +23,6 @@ import {
   isValid,
   isFn,
   isArr,
-  isObj,
   isPlainObj,
   each,
   clone,
@@ -360,10 +359,6 @@ export const createFormExternals = (
               //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
               heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
               heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-              validate(field.state.path, {
-                hostRendering: false,
-                throwErrors: false
-              })
             })
           } else {
             heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
@@ -756,7 +751,9 @@ export const createFormExternals = (
           if (props.forceClear || !isValid(state.initialValue)) {
             if (isArr(state.value)) {
               state.value = []
-            } else if (!isObj(state.value)) {
+            } else if (isPlainObj(state.value)) {
+              state.value = {}
+            } else {
               state.value = undefined
             }
           } else {
