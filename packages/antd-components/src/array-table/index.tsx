@@ -143,9 +143,11 @@ export const ArrayTable: any = styled(
       })
     }
     const renderTable = () => {
+      let index = 0
       return (
         <Table
           {...componentProps}
+          rowKey={() => index++}
           pagination={false}
           columns={columns}
           dataSource={toArr(value)}

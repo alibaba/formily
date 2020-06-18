@@ -774,14 +774,14 @@ describe('setFormState', () => {
     })
     a.getState() //手动同步
     expect(form.getFormState(state => state.values)).toEqual({ a: '1234' })
-    expect(fieldChange).toBeCalledTimes(2)
+    expect(fieldChange).toBeCalledTimes(1)
     expect(formChange).toBeCalledTimes(2)
 
     form.setFormState(state => (state.values = { a: '5678' }), true)
     a.getState() //手动同步
     expect(form.getFormState(state => state.values)).toEqual({ a: '5678' })
     expect(formChange).toBeCalledTimes(2)
-    expect(fieldChange).toBeCalledTimes(2)
+    expect(fieldChange).toBeCalledTimes(1)
   })
 })
 
