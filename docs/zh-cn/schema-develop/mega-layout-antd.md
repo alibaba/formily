@@ -1243,6 +1243,7 @@ const App = () => {
           grid
           full
           autoRow
+          labelAlign="top"
           responsive={{ lg: 3, m: 2, s: 1 }}
         >
           <Field title="String" name="string"

@@ -170,6 +170,13 @@ exports[`inset mode inset style 1`] = `
   border: none;
 }
 
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .c0 .next-form-item.mega-layout-item {
   padding-left: 0;
   border: none;
@@ -210,6 +217,13 @@ exports[`inset mode inset style of component 1`] = `
 .c0 .next-range-picker-trigger,
 .c0 .next-input {
   border: none;
+}
+
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .c0 .next-form-item {
@@ -256,6 +270,13 @@ exports[`inset mode inset style(hasBorder) 1`] = `
 }
 
 .c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 .next-form-item {
   padding-left: 12px;
   border: 1px solid #D8D8D8;
   border-radius: 4px;
@@ -267,6 +288,13 @@ exports[`inset mode inset style(hasBorder) 1`] = `
 `;
 
 exports[`inset mode item inset style(hasBorder) 1`] = `
+.c0 .next-form-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .c0 .next-form-item.mega-layout-item {
   padding-left: 0;
   border: none;

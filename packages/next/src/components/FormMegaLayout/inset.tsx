@@ -3,6 +3,9 @@ const insetStyle = (props) => {
 
 
     result.borderStyle = `
+        .next-form-item {
+            display: flex;
+        }
         ${props.hasBorder ? `
             .next-form-item {
                 padding-left: 12px;
