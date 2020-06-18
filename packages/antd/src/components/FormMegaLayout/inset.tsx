@@ -2,6 +2,9 @@ const insetStyle = (props) => {
     const result: any = {};
     
     result.borderStyle = `
+        .ant-form-item {
+            display: flex;
+        }
         ${props.hasBorder ? `
             .ant-form-item {
                 padding-left: 12px;
