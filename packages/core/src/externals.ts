@@ -354,16 +354,10 @@ export const createFormExternals = (
           return getFormInitialValuesIn(name)
         },
         unControlledValueChanged() {
-          if (field.state.modified) {
-            nextTick(() => {
-              //如果在ArrayList场景状态交换走hostUpdate方式，需要在nextTick中执行
-              heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
-              heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-            })
-          } else {
+          nextTick(() => {
             heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
             heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
-          }
+          })
         }
       })
       field.subscription = {

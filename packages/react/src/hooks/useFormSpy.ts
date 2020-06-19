@@ -26,8 +26,9 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
   )
   const subscriber = useCallback<FormHeartSubscriber>(({ type, payload }) => {
     if (initializedRef.current) return
-    clearTimeout(timerRef.current[type])
-    timerRef.current[type] = setTimeout(() => {
+    const key =  `${type}_${payload?.state?.name}`
+    clearTimeout(timerRef.current[key])
+    timerRef.current[key] = setTimeout(() => {
       if (unmountRef.current) return
       payload = payload && isFn(payload.getState) ? payload.getState() : payload
       if (isStr(props.selector) && FormPath.parse(props.selector).match(type)) {
