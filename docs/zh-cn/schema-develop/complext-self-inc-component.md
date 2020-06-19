@@ -132,11 +132,16 @@ const App = () => {
           renderMoveUp: () => null,
           renderAddition: () => '+add',
           renderRemove: idx => {
+            const mutators = actions.createMutators('userList')
             return (
               <FormSpy
                 selector={[['onFieldValueChange', `userList.${idx}.username`]]}
               >
-                {({ state }) => (state.value === 'morally' ? null : 'remove')}
+                {({ state }) => {
+                  return (state.value === 'morally' ? null : <Button onClick={() => {
+                    mutators.remove(idx)
+                  }}>remove</Button> )
+                }}
               </FormSpy>
             )
           }
