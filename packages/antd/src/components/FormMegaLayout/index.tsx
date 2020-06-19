@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { Form } from 'antd'
-import { Layout, LayoutItem } from '@formily/react'
+import { Layout, LayoutItem, ILayoutProps } from '@formily/react'
 import { createVirtualBox } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
 import { useDeepFormItem } from '../../context'
@@ -69,7 +69,7 @@ const StyledLayoutNestWrapper = styled(props => {
   return <div style={style} className={classnames('mega-layout-nest-container', className)}>{children}</div>
 })`${props => computeStyle(props, true)}`
 
-const MegaLayout = (props => {
+const MegaLayout = (props: ILayoutProps) => {
     const { children, addonBefore, addonAfter, description, ...others } = props
     const layoutProps = props.layoutProps || {}
     const { size } = useDeepFormItem()
@@ -147,7 +147,7 @@ const MegaLayout = (props => {
             return ele
         }}
     />
-});
+};
 
 const MegaLayoutItem = (props) => {
   const { children, schemaChildren, itemProps, ...others } = props
@@ -210,7 +210,7 @@ const MegaLayoutItem = (props) => {
   })
 }
 
-const FormMegaLayout = createVirtualBox('mega-layout', MegaLayout)
+const FormMegaLayout = createVirtualBox<ILayoutProps>('mega-layout', MegaLayout)
 
 export {
     MegaLayout,
