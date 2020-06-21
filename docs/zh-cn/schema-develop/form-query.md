@@ -78,7 +78,7 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
+const submitResetMiddleware = () => ({ context }) => ({
   onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
@@ -89,11 +89,15 @@ const SubmitResetPlugin = () => ({ context }) => ({
 })
 
 const App = () => {
-  const { form, table } = useFormTableQuery(service, [SubmitResetPlugin()], {
-    pagination: {
-      pageSize: 5
+  const { form, table } = useFormTableQuery(
+    service,
+    [submitResetMiddleware()],
+    {
+      pagination: {
+        pageSize: 5
+      }
     }
-  })
+  )
   return (
     <>
       <SchemaForm
@@ -207,7 +211,7 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
+const submitResetMiddleware = () => ({ context }) => ({
   onFormSubmitQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
@@ -217,7 +221,7 @@ const SubmitResetPlugin = () => ({ context }) => ({
   }
 })
 
-const matchFieldValuePlugin = (pattern, value) => ({ waitFor }) => ({
+const matchFieldValueMiddleware = (pattern, value) => ({ waitFor }) => ({
   async onFormFirstQuery(payload, next) {
     await waitFor('onFieldValueChange', state => {
       return (
@@ -232,7 +236,7 @@ const matchFieldValuePlugin = (pattern, value) => ({ waitFor }) => ({
 const App = () => {
   const { form, table } = useFormTableQuery(
     service,
-    [SubmitResetPlugin(), matchFieldValuePlugin('gender', 'male')],
+    [submitResetMiddleware(), matchFieldValueMiddleware('gender', 'male')],
     {
       pagination: {
         pageSize: 5
@@ -336,7 +340,7 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
+const submitResetMiddleware = () => ({ context }) => ({
   onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
@@ -346,7 +350,7 @@ const SubmitResetPlugin = () => ({ context }) => ({
   }
 })
 
-const asyncDefaultPlugin = service => ({ actions }) => ({
+const asyncDefaultMiddleware = service => ({ actions }) => ({
   async onFormFirstQuery(payload, next) {
     await service(actions)
     return next(payload)
@@ -362,8 +366,8 @@ const App = () => {
   const { form, table } = useFormTableQuery(
     service,
     [
-      SubmitResetPlugin(),
-      asyncDefaultPlugin(async actions => {
+      submitResetMiddleware(),
+      asyncDefaultMiddleware(async actions => {
         await sleep(5000)
         actions.setFieldState('gender', state => {
           state.value = 'male'
@@ -412,13 +416,10 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ## 自定义触发请求
 
-之前有用户提到 useFormTableQuery 希望借助 trigger 函数手动发起请求，但是目前的 trigger 只接收一个 type，弄不懂这个 type 是干嘛的，其实这个就是扩展生命周期的类型，为什么不能接收额外参数呢？其实是个 bug，应该要接收额外参数的，目前已经支持传额外参数，API 形式：
-
-- `trigger("自定义生命周期",{/**自定义参数**/})`
-- `trigger({/**自定义参数**/})`，内部默认以 onFormSubmitQuery 作为生命周期触发事件
+之前有用户提到 useFormTableQuery 希望借助 trigger 函数手动发起请求，但是目前的 trigger 只接收一个 type，弄不懂这个 type 是干嘛的，其实这个就是扩展生命周期的类型，为什么不能接收额外参数呢？其实原因是因为额外参数的定位到底应该是啥？它应该作为 FormValues？还是独立于 FormValues 像 pagination 一样的参数，如果在 FormValues，是否要受重置影响？等等，所以这里的边界问题还是挺多的，所以，针对额外参数，我们推荐的做法比较简单，手动维护状态，然后在请求的时候做数据 merge
 
 ```jsx
-import React from 'react'
+import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
 import {
   SchemaForm,
@@ -479,8 +480,33 @@ const columns = [
   }
 ]
 
+const useFormQueryParams = (defaultParams = {}) => {
+  const params = useRef()
+  const trigger = useRef()
+  return [
+    data => {
+      params.current = data
+      if (trigger.current) {
+        trigger.current()
+      }
+    },
+    ({ context }) => {
+      trigger.current = context.trigger
+      return {
+        onFormWillQuery(payload, next) {
+          return next({
+            ...payload,
+            ...params.current
+          })
+        }
+      }
+    }
+  ]
+}
+
 const App = () => {
-  const { form, table, trigger } = useFormTableQuery(service, [], {
+  const [dispatchWithParams, queryParamsMiddleware] = useFormQueryParams()
+  const { form, table } = useFormTableQuery(service, [queryParamsMiddleware], {
     pagination: {
       pageSize: 10
     }
@@ -497,6 +523,15 @@ const App = () => {
         <FormButtonGroup>
           <Submit>查询</Submit>
           <Reset>重置</Reset>
+          <Button
+            onClick={() => {
+              dispatchWithParams({
+                custormParams: 'this is custom params'
+              })
+            }}
+          >
+            手动请求
+          </Button>
         </FormButtonGroup>
       </SchemaForm>
       <Table
@@ -504,15 +539,6 @@ const App = () => {
         columns={columns}
         rowKey={record => record.login.uuid}
       />
-      <Button
-        onClick={() => {
-          trigger({
-            extraParams: 'this is extra params'
-          })
-        }}
-      >
-        手动请求
-      </Button>
     </>
   )
 }
@@ -562,7 +588,7 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
     })
 }
 
-const SubmitResetPlugin = () => ({ context }) => ({
+const submitResetMiddleware = () => ({ context }) => ({
   onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
@@ -572,7 +598,7 @@ const SubmitResetPlugin = () => ({ context }) => ({
   }
 })
 
-const asyncDefaultPlugin = service => ({ actions }) => ({
+const asyncDefaultMiddleware = service => ({ actions }) => ({
   async onFormFirstQuery(payload, next) {
     await service(actions)
     return next(payload)
@@ -588,8 +614,8 @@ const App = () => {
   const { form, table, pagination } = useFormTableQuery(
     service,
     [
-      SubmitResetPlugin(),
-      asyncDefaultPlugin(async actions => {
+      submitResetMiddleware(),
+      asyncDefaultMiddleware(async actions => {
         actions.setFieldState('gender', state => {
           state.value = 'male'
           state.props.enum = ['male', 'female']
@@ -784,6 +810,7 @@ interface IQueryContext {
   pagination?: IQueryParams['pagination']
   sorter?: IQueryParams['sorter']
   filters?: IQueryParams['filters']
+  trigger?: (type: string) => void
   setPagination?: (pagination: IQueryParams['pagination']) => void
   setFilters?: (filters: IQueryParams['filters']) => void
   setSorter?: (sorter: IQueryParams['sorter']) => void
@@ -803,7 +830,7 @@ type useFormTableQuery = (
   setPagination: (pagination: IQueryParams['pagination']) => void //设置页码
   setFilters: (filters: IQueryParams['filters']) => void //设置过滤信息
   setSorter: (sorter: IQueryParams['sorter']) => void //设置排序信息
-  trigger:(type:string='onFormSubmitQuery',payload:any)=>void //发起新查询流程，或者走默认onFormSubmitQuery流程
+  trigger:(type:string='onFormSubmitQuery')=>void //发起新查询流程，或者走默认onFormSubmitQuery流程
   form:{
     effects:IEffects //这就是Formily标准effects函数
   },

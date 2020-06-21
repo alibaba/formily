@@ -35,6 +35,7 @@ interface IQueryContext {
   pagination?: IQueryParams['pagination']
   sorter?: IQueryParams['sorter']
   filters?: IQueryParams['filters']
+  trigger?: (type: string) => void
   setPagination?: (pagination: IQueryParams['pagination']) => void
   setFilters?: (filters: IQueryParams['filters']) => void
   setSorter?: (sorter: IQueryParams['sorter']) => void
@@ -84,6 +85,7 @@ export const useFormTableQuery = (
     middlewares,
     ref.current
   )
+  ref.current.trigger = trigger
   ref.current.pagination = pagination
   ref.current.sorter = sorter
   ref.current.filters = filters
