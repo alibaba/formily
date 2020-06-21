@@ -5,7 +5,8 @@ import {
   FormPath,
   FormPathPattern,
   defaults,
-  shallowClone
+  shallowClone,
+  isStr
 } from '@formily/shared'
 import { produce, enableAllPlugins, setAutoFreeze, Draft } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
@@ -225,13 +226,20 @@ export const createModel = <
       }
     }
 
-    hasChanged = (path?: FormPathPattern) => {
-      return path
-        ? !isEqual(
+    hasChanged = (pattern?: FormPathPattern) => {
+      if (!pattern) {
+        return this.dirtyCount > 0
+      } else {
+        const path = FormPath.parse(pattern)
+        if (path.length > 1 || !isStr(pattern)) {
+          return !isEqual(
             FormPath.getIn(this.prevState, path),
             FormPath.getIn(this.state, path)
           )
-        : !isEqual(this.prevState, this.state)
+        } else {
+          return this.dirtys[pattern]
+        }
+      }
     }
   }
 }

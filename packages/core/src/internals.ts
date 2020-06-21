@@ -206,7 +206,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       unmounted === true ||
       display === false
     ) {
-      form.setSourceState(state => {
+      form.setState(state => {
         state.errors = state.errors || []
         state.warnings = state.warnings || []
         state.errors = state.errors.reduce((buf: any, item: any) => {
@@ -237,7 +237,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
   function syncFormMessages(type: string, fieldState: IFieldState) {
     const { name, path } = fieldState
     const messages = fieldState[type]
-    form.setSourceState(state => {
+    form.setState(state => {
       let foundField = false
       state[type] = state[type] || []
       state[type] = state[type].reduce((buf: any, item: any) => {
