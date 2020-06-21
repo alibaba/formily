@@ -26,6 +26,14 @@ export const useFormQuery = <
     error: ref.current.error,
     ...useMemo(() => {
       let trigger: any
+      let promise: Promise<any>
+      let resolve: () => void
+      const onSubmit = () => {
+        promise = new Promise(_resolve => {
+          resolve = _resolve
+        })
+        return promise
+      }
       const effects = createQueryEffects<TQueryPayload, TQueryResult, TActions>(
         resource,
         [
@@ -60,6 +68,9 @@ export const useFormQuery = <
                 loading: false,
                 response
               })
+              if (resolve) {
+                resolve()
+              }
               return response
             }
           })
@@ -68,6 +79,7 @@ export const useFormQuery = <
       )
       return {
         effects,
+        onSubmit,
         trigger(type?: string) {
           if (trigger) {
             trigger(type)

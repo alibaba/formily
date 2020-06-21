@@ -78,8 +78,8 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
+const submitResetMiddleware = () => ({ context }) => ({
+  onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
       current: 1
@@ -89,11 +89,15 @@ const SubmitResetPlugin = () => ({ context }) => ({
 })
 
 const App = () => {
-  const { form, table } = useFormTableQuery(service, [SubmitResetPlugin()], {
-    pagination: {
-      pageSize: 5
+  const { form, table } = useFormTableQuery(
+    service,
+    [submitResetMiddleware()],
+    {
+      pagination: {
+        pageSize: 5
+      }
     }
-  })
+  )
   return (
     <>
       <SchemaForm
@@ -207,7 +211,7 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
+const submitResetMiddleware = () => ({ context }) => ({
   onFormSubmitQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
@@ -217,7 +221,7 @@ const SubmitResetPlugin = () => ({ context }) => ({
   }
 })
 
-const matchFieldValuePlugin = (pattern, value) => ({ waitFor }) => ({
+const matchFieldValueMiddleware = (pattern, value) => ({ waitFor }) => ({
   async onFormFirstQuery(payload, next) {
     await waitFor('onFieldValueChange', state => {
       return (
@@ -232,7 +236,7 @@ const matchFieldValuePlugin = (pattern, value) => ({ waitFor }) => ({
 const App = () => {
   const { form, table } = useFormTableQuery(
     service,
-    [SubmitResetPlugin(), matchFieldValuePlugin('gender', 'male')],
+    [submitResetMiddleware(), matchFieldValueMiddleware('gender', 'male')],
     {
       pagination: {
         pageSize: 5
@@ -336,8 +340,8 @@ const columns = [
   }
 ]
 
-const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
+const submitResetMiddleware = () => ({ context }) => ({
+  onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
       current: 1
@@ -346,7 +350,7 @@ const SubmitResetPlugin = () => ({ context }) => ({
   }
 })
 
-const asyncDefaultPlugin = service => ({ actions }) => ({
+const asyncDefaultMiddleware = service => ({ actions }) => ({
   async onFormFirstQuery(payload, next) {
     await service(actions)
     return next(payload)
@@ -362,8 +366,8 @@ const App = () => {
   const { form, table } = useFormTableQuery(
     service,
     [
-      SubmitResetPlugin(),
-      asyncDefaultPlugin(async actions => {
+      submitResetMiddleware(),
+      asyncDefaultMiddleware(async actions => {
         await sleep(5000)
         actions.setFieldState('gender', state => {
           state.value = 'male'
@@ -410,6 +414,138 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+## 自定义触发请求
+
+之前有用户提到 useFormTableQuery 希望借助 trigger 函数手动发起请求，但是目前的 trigger 只接收一个 type，弄不懂这个 type 是干嘛的，其实这个就是扩展生命周期的类型，为什么不能接收额外参数呢？其实原因是因为额外参数的定位到底应该是啥？它应该作为 FormValues？还是独立于 FormValues 像 pagination 一样的参数，如果在 FormValues，是否要受重置影响？等等，所以这里的边界问题还是挺多的，所以，针对额外参数，我们推荐的做法比较简单，手动维护状态，然后在请求的时候做数据 merge
+
+```jsx
+import React, { useRef } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  useFormTableQuery,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { Input } from '@formily/antd-components' // 或者@formily/next-components
+import { fetch } from 'mfetch'
+import { Table, Button } from 'antd'
+import 'antd/dist/antd.css'
+
+const service = ({ values, pagination, sorter = {}, filters = {} }) => {
+  return fetch({
+    url: 'https://randomuser.me/api',
+    data: {
+      results: pagination.pageSize,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      page: pagination.current,
+      ...values,
+      ...filters
+    }
+  })
+    .then(res => res.json())
+    .then(({ results, info }) => {
+      return {
+        dataSource: results,
+        pageSize: 10,
+        ...pagination,
+        total: 200
+      }
+    })
+}
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    sorter: true,
+    render: name => `${name.first} ${name.last}`,
+    width: '20%'
+  },
+  {
+    title: 'Gender',
+    dataIndex: 'gender',
+    filters: [
+      { text: 'Male', value: 'male' },
+      { text: 'Female', value: 'female' }
+    ],
+    width: '20%'
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email'
+  }
+]
+
+const useFormQueryParams = (defaultParams = {}) => {
+  const params = useRef()
+  const trigger = useRef()
+  return [
+    data => {
+      params.current = data
+      if (trigger.current) {
+        trigger.current()
+      }
+    },
+    ({ context }) => {
+      trigger.current = context.trigger
+      return {
+        onFormWillQuery(payload, next) {
+          return next({
+            ...payload,
+            ...params.current
+          })
+        }
+      }
+    }
+  ]
+}
+
+const App = () => {
+  const [dispatchWithParams, queryParamsMiddleware] = useFormQueryParams()
+  const { form, table } = useFormTableQuery(service, [queryParamsMiddleware], {
+    pagination: {
+      pageSize: 10
+    }
+  })
+  return (
+    <>
+      <SchemaForm
+        {...form}
+        components={{ Input }}
+        style={{ marginBottom: 20 }}
+        inline
+      >
+        <Field type="string" name="name" title="Name" x-component="Input" />
+        <FormButtonGroup>
+          <Submit>查询</Submit>
+          <Reset>重置</Reset>
+          <Button
+            onClick={() => {
+              dispatchWithParams({
+                custormParams: 'this is custom params'
+              })
+            }}
+          >
+            手动请求
+          </Button>
+        </FormButtonGroup>
+      </SchemaForm>
+      <Table
+        {...table}
+        columns={columns}
+        rowKey={record => record.login.uuid}
+      />
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ## Fusion 例子
 
 ```jsx
@@ -441,7 +577,8 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
     }
   })
     .then(res => res.json())
-    .then(({ results, info }) => {
+    .then(async ({ results, info }) => {
+      await sleep(1000)
       return {
         dataSource: results,
         pageSize: 10,
@@ -451,8 +588,8 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
     })
 }
 
-const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
+const submitResetMiddleware = () => ({ context }) => ({
+  onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
       current: 1
@@ -461,7 +598,7 @@ const SubmitResetPlugin = () => ({ context }) => ({
   }
 })
 
-const asyncDefaultPlugin = service => ({ actions }) => ({
+const asyncDefaultMiddleware = service => ({ actions }) => ({
   async onFormFirstQuery(payload, next) {
     await service(actions)
     return next(payload)
@@ -477,9 +614,8 @@ const App = () => {
   const { form, table, pagination } = useFormTableQuery(
     service,
     [
-      SubmitResetPlugin(),
-      asyncDefaultPlugin(async actions => {
-        await sleep(5000)
+      submitResetMiddleware(),
+      asyncDefaultMiddleware(async actions => {
         actions.setFieldState('gender', state => {
           state.value = 'male'
           state.props.enum = ['male', 'female']
@@ -674,6 +810,7 @@ interface IQueryContext {
   pagination?: IQueryParams['pagination']
   sorter?: IQueryParams['sorter']
   filters?: IQueryParams['filters']
+  trigger?: (type: string) => void
   setPagination?: (pagination: IQueryParams['pagination']) => void
   setFilters?: (filters: IQueryParams['filters']) => void
   setSorter?: (sorter: IQueryParams['sorter']) => void

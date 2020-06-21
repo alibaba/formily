@@ -412,13 +412,13 @@ export const createQueryEffects = <
 ) => {
   return createEffectsProvider<TActions>(
     ({ applyMiddlewares, actions }) => $ => {
-      $(ON_FORM_QUERY).subscribe(async (type: string) => {
+      $(ON_FORM_QUERY).subscribe(async type => {
         if (!isStr(type)) return
-        let values = await applyMiddlewares(
+        const preValues = await applyMiddlewares(
           'onFormWillQuery',
           actions.getFormState(state => state.values)
         )
-        values = await applyMiddlewares(type, values)
+        const values = await applyMiddlewares(type, preValues)
         try {
           await applyMiddlewares('onFormDidQuery', await resource(values))
         } catch (e) {
