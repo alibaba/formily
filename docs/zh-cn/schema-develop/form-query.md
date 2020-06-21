@@ -79,7 +79,7 @@ const columns = [
 ]
 
 const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
+  onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
       current: 1
@@ -337,7 +337,7 @@ const columns = [
 ]
 
 const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
+  onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
       current: 1
@@ -410,6 +410,116 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+## 自定义触发请求
+
+之前有用户提到 useFormTableQuery 希望借助 trigger 函数手动发起请求，但是目前的 trigger 只接收一个 type，弄不懂这个 type 是干嘛的，其实这个就是扩展生命周期的类型，为什么不能接收额外参数呢？其实是个 bug，应该要接收额外参数的，目前已经支持传额外参数，API 形式：
+
+- `trigger("自定义生命周期",{/**自定义参数**/})`
+- `trigger({/**自定义参数**/})`，内部默认以 onFormSubmitQuery 作为生命周期触发事件
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  useFormTableQuery,
+  FormButtonGroup,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { Input } from '@formily/antd-components' // 或者@formily/next-components
+import { fetch } from 'mfetch'
+import { Table, Button } from 'antd'
+import 'antd/dist/antd.css'
+
+const service = ({ values, pagination, sorter = {}, filters = {} }) => {
+  return fetch({
+    url: 'https://randomuser.me/api',
+    data: {
+      results: pagination.pageSize,
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      page: pagination.current,
+      ...values,
+      ...filters
+    }
+  })
+    .then(res => res.json())
+    .then(({ results, info }) => {
+      return {
+        dataSource: results,
+        pageSize: 10,
+        ...pagination,
+        total: 200
+      }
+    })
+}
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    sorter: true,
+    render: name => `${name.first} ${name.last}`,
+    width: '20%'
+  },
+  {
+    title: 'Gender',
+    dataIndex: 'gender',
+    filters: [
+      { text: 'Male', value: 'male' },
+      { text: 'Female', value: 'female' }
+    ],
+    width: '20%'
+  },
+  {
+    title: 'Email',
+    dataIndex: 'email'
+  }
+]
+
+const App = () => {
+  const { form, table, trigger } = useFormTableQuery(service, [], {
+    pagination: {
+      pageSize: 10
+    }
+  })
+  return (
+    <>
+      <SchemaForm
+        {...form}
+        components={{ Input }}
+        style={{ marginBottom: 20 }}
+        inline
+      >
+        <Field type="string" name="name" title="Name" x-component="Input" />
+        <FormButtonGroup>
+          <Submit>查询</Submit>
+          <Reset>重置</Reset>
+        </FormButtonGroup>
+      </SchemaForm>
+      <Table
+        {...table}
+        columns={columns}
+        rowKey={record => record.login.uuid}
+      />
+      <Button
+        onClick={() => {
+          trigger({
+            extraParams: 'this is extra params'
+          })
+        }}
+      >
+        手动请求
+      </Button>
+    </>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ## Fusion 例子
 
 ```jsx
@@ -441,7 +551,8 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
     }
   })
     .then(res => res.json())
-    .then(({ results, info }) => {
+    .then(async ({ results, info }) => {
+      await sleep(1000)
       return {
         dataSource: results,
         pageSize: 10,
@@ -452,7 +563,7 @@ const service = ({ values, pagination, sorter = {}, filters = {} }) => {
 }
 
 const SubmitResetPlugin = () => ({ context }) => ({
-  onFormSubmitQuery(payload, next) {
+  onFormResetQuery(payload, next) {
     context.setPagination({
       ...context.pagination,
       current: 1
@@ -479,7 +590,6 @@ const App = () => {
     [
       SubmitResetPlugin(),
       asyncDefaultPlugin(async actions => {
-        await sleep(5000)
         actions.setFieldState('gender', state => {
           state.value = 'male'
           state.props.enum = ['male', 'female']
@@ -693,7 +803,7 @@ type useFormTableQuery = (
   setPagination: (pagination: IQueryParams['pagination']) => void //设置页码
   setFilters: (filters: IQueryParams['filters']) => void //设置过滤信息
   setSorter: (sorter: IQueryParams['sorter']) => void //设置排序信息
-  trigger:(type:string='onFormSubmitQuery')=>void //发起新查询流程，或者走默认onFormSubmitQuery流程
+  trigger:(type:string='onFormSubmitQuery',payload:any)=>void //发起新查询流程，或者走默认onFormSubmitQuery流程
   form:{
     effects:IEffects //这就是Formily标准effects函数
   },

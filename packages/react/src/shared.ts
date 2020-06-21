@@ -412,13 +412,16 @@ export const createQueryEffects = <
 ) => {
   return createEffectsProvider<TActions>(
     ({ applyMiddlewares, actions }) => $ => {
-      $(ON_FORM_QUERY).subscribe(async (type: string) => {
+      $(ON_FORM_QUERY).subscribe(async ({ type, payload }) => {
         if (!isStr(type)) return
-        let values = await applyMiddlewares(
+        actions.setFormState(state => {
+          Object.assign(state.values, payload || {})
+        })
+        const preValues = await applyMiddlewares(
           'onFormWillQuery',
           actions.getFormState(state => state.values)
         )
-        values = await applyMiddlewares(type, values)
+        const values = await applyMiddlewares(type, preValues)
         try {
           await applyMiddlewares('onFormDidQuery', await resource(values))
         } catch (e) {
@@ -427,15 +430,15 @@ export const createQueryEffects = <
         }
       })
       $('onFormMount').subscribe(async () => {
-        actions.dispatch(ON_FORM_QUERY, 'onFormFirstQuery')
+        actions.dispatch(ON_FORM_QUERY, { type: 'onFormFirstQuery' })
       })
 
       $('onFormSubmit').subscribe(async () => {
-        actions.dispatch(ON_FORM_QUERY, 'onFormSubmitQuery')
+        actions.dispatch(ON_FORM_QUERY, { type: 'onFormSubmitQuery' })
       })
 
       $('onFormReset').subscribe(async () => {
-        actions.dispatch(ON_FORM_QUERY, 'onFormResetQuery')
+        actions.dispatch(ON_FORM_QUERY, { type: 'onFormResetQuery' })
       })
     },
     middlewares,

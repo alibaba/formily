@@ -38,7 +38,6 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
                 props.onClick(e)
               }
             }}
-            disabled={showLoading ? state.submitting : undefined}
             {...props}
             loading={showLoading ? state.submitting : undefined}
           >

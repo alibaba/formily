@@ -1,6 +1,6 @@
 import { useMemo, useState, useRef } from 'react'
 import { createQueryEffects, ON_FORM_QUERY } from '../shared'
-import { toArr } from '@formily/shared'
+import { toArr, isStr } from '@formily/shared'
 import { IEffectMiddleware, IFormActions } from '../types'
 
 export const useFormQuery = <
@@ -26,12 +26,24 @@ export const useFormQuery = <
     error: ref.current.error,
     ...useMemo(() => {
       let trigger: any
+      let promise: Promise<any>
+      let resolve: () => void
+      const onSubmit = () => {
+        promise = new Promise(_resolve => {
+          resolve = _resolve
+        })
+        return promise
+      }
       const effects = createQueryEffects<TQueryPayload, TQueryResult, TActions>(
         resource,
         [
           ({ actions }) => {
-            trigger = (type: string = 'onFormSubmitQuery') => {
-              actions.dispatch(ON_FORM_QUERY, type)
+            trigger = (type?: any, payload?: any) => {
+              if (!isStr(type)) {
+                payload = type
+                type = 'onFormSubmitQuery'
+              }
+              actions.dispatch(ON_FORM_QUERY, { type, payload })
             }
             return {
               async onFormWillQuery(payload, next) {
@@ -60,6 +72,9 @@ export const useFormQuery = <
                 loading: false,
                 response
               })
+              if (resolve) {
+                resolve()
+              }
               return response
             }
           })
@@ -68,9 +83,10 @@ export const useFormQuery = <
       )
       return {
         effects,
-        trigger(type?: string) {
+        onSubmit,
+        trigger(type?: any, payload?: any) {
           if (trigger) {
-            trigger(type)
+            trigger(type, payload)
           }
         }
       }

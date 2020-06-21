@@ -68,7 +68,7 @@ export const useFormTableQuery = (
   const [filters, setFilters] = useState<IQueryParams['filters']>(
     defaultProps.filters
   )
-  const { effects, trigger, loading, response } = useFormQuery<
+  const { effects, trigger,onSubmit, loading, response } = useFormQuery<
     IQueryParams,
     IQueryResponse,
     IQueryContext
@@ -96,7 +96,8 @@ export const useFormTableQuery = (
     setFilters,
     trigger,
     form: {
-      effects
+      effects,
+      onSubmit
     },
     table: {
       loading,
