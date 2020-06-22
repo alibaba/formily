@@ -367,47 +367,46 @@ export const createFormExternals = (
 
       graph.appendNode(nodePath, field)
 
-      heart.batch(() => {
-        field.batch(() => {
-          field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
-            if (isValid(unmountRemoveValue)) {
-              state.unmountRemoveValue = unmountRemoveValue
-            }
-            if (isValid(initialValue)) {
-              state.initialValue = initialValue
-            }
-            if (!isValid(value)) {
-              state.value = initialValue
-            } else {
-              state.value = value
-            }
+      field.batch(() => {
+        field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
+          if (isValid(unmountRemoveValue)) {
+            state.unmountRemoveValue = unmountRemoveValue
+          }
+          if (isValid(initialValue)) {
+            state.initialValue = initialValue
+          }
+          if (!isValid(value)) {
+            state.value = initialValue
+          } else {
+            state.value = value
+          }
 
-            if (isValid(visible)) {
-              state.visible = visible
-            }
-            if (isValid(display)) {
-              state.display = display
-            }
-            if (isValid(props)) {
-              state.props = props
-            }
-            if (isValid(required)) {
-              state.required = required
-            }
-            if (isValid(rules)) {
-              state.rules = rules as any
-            }
-            if (isValid(editable)) {
-              state.selfEditable = editable
-            }
-            if (isValid(options.editable)) {
-              state.formEditable = options.editable
-            }
-            state.initialized = true
-          })
-          batchRunTaskQueue(field, nodePath)
+          if (isValid(visible)) {
+            state.visible = visible
+          }
+          if (isValid(display)) {
+            state.display = display
+          }
+          if (isValid(props)) {
+            state.props = props
+          }
+          if (isValid(required)) {
+            state.required = required
+          }
+          if (isValid(rules)) {
+            state.rules = rules as any
+          }
+          if (isValid(editable)) {
+            state.selfEditable = editable
+          }
+          if (isValid(options.editable)) {
+            state.formEditable = options.editable
+          }
+          state.initialized = true
         })
+        batchRunTaskQueue(field, nodePath)
       })
+
       validator.register(nodePath, validate => {
         const {
           value,
@@ -486,24 +485,22 @@ export const createFormExternals = (
 
       graph.appendNode(nodePath, field)
 
-      heart.batch(() => {
-        //fix #766
-        field.batch(() => {
-          field.setState(
-            (state: IVirtualFieldState<FormilyCore.VirtualFieldProps>) => {
-              state.initialized = true
-              state.props = props
-              if (isValid(visible)) {
-                state.visible = visible
-              }
-              if (isValid(display)) {
-                state.display = display
-              }
+      field.batch(() => {
+        field.setState(
+          (state: IVirtualFieldState<FormilyCore.VirtualFieldProps>) => {
+            state.initialized = true
+            state.props = props
+            if (isValid(visible)) {
+              state.visible = visible
             }
-          )
-          batchRunTaskQueue(field, nodePath)
-        })
+            if (isValid(display)) {
+              state.display = display
+            }
+          }
+        )
+        batchRunTaskQueue(field, nodePath)
       })
+
       return field
     }
     if (graph.exist(nodePath)) {
