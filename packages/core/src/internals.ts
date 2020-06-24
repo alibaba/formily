@@ -312,7 +312,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
 
   function init<T>(actions: T) {
     heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, form, actions)
-    graph.appendNode('', form)
+    graph.appendNode(form)
     form.setState((state: IFormState) => {
       state.initialized = true
       if (isValid(options.initialValues)) {

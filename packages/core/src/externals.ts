@@ -365,7 +365,7 @@ export const createFormExternals = (
       }
       heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
 
-      graph.appendNode(nodePath, field)
+      graph.appendNode(field, nodePath, dataPath)
 
       field.batch(() => {
         field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
@@ -483,7 +483,7 @@ export const createFormExternals = (
       }
       heart.publish(LifeCycleTypes.ON_FIELD_WILL_INIT, field)
 
-      graph.appendNode(nodePath, field)
+      graph.appendNode(field, nodePath, dataPath)
 
       field.batch(() => {
         field.setState(
