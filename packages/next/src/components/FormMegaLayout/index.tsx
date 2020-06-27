@@ -1,8 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { Form } from '@alifd/next'
-import { Layout, LayoutItem, ILayoutProps } from '@formily/react'
-import { createVirtualBox } from '@formily/react-schema-renderer'
+import { createVirtualBox, Layout, LayoutItem, ILayoutProps } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
 import { useDeepFormItem } from '../../context'
 import { normalizeCol, pickFormItemProps, pickNotFormItemProps } from '../../shared'
@@ -31,13 +30,13 @@ const StyledLayoutItem = styled((props) => {
       </div>
     }
 
-    const finalFormItem = <Form.Item className={cls} {...formItemProps}>
+    const finalFormItem = (cls) => (<Form.Item className={cls} {...formItemProps}>
       <div className="mega-layout-item-content">
         { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
         {children}
         { addonAfter ? <p className="formily-mega-item-after">{addonAfter}</p> : null }
       </div>
-    </Form.Item>
+    </Form.Item>)
 
     if (grid) {
       return <div className={classnames({
@@ -46,12 +45,12 @@ const StyledLayoutItem = styled((props) => {
         'mega-layout-item-inset-has-error': formItemProps.validateState === 'error',
         'mega-layout-item-inset-has-warning': formItemProps.validateState === 'warning',
       })}>
-        {finalFormItem}
+        {finalFormItem(className)}
         {finalHelpInfo}
       </div>
     }
 
-    return finalFormItem
+    return finalFormItem(cls)
 })`${props => computeStyle(props)}`
 
 
@@ -139,7 +138,7 @@ const MegaLayout = (props: ILayoutProps) => {
 
             // 嵌套布局
             if (!props.grid && grid) {   
-              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, context, responsive}}>
+              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, gutter, context, responsive}}>
                 {ele}
               </StyledLayoutNestWrapper>
             }

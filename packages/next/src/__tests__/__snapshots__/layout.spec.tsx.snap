@@ -320,6 +320,7 @@ exports[`layoutMarginStyle default layout 1`] = `
 `;
 
 exports[`layoutMarginStyle grid layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .next-form-item,
 .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
 .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
   margin-bottom: 0;
@@ -335,6 +336,7 @@ exports[`layoutMarginStyle grid layout 1`] = `
 `;
 
 exports[`layoutMarginStyle inline layout 1`] = `
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .next-form-item,
 .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
 .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
   margin-bottom: 0;
