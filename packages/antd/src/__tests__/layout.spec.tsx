@@ -599,8 +599,8 @@ describe('inset mode', () => {
     expect(tree).toHaveStyleRule('color', 'red', { modifier: `.mega-layout-item-inset-has-error .mega-layout-item-inset-help` })
     expect(tree).toHaveStyleRule('color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .mega-layout-item-inset-help` })
     expect(tree).toHaveStyleRule('display', 'none', { modifier: `.ant-form-item-explain` })
-    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.ant-form-item.mega-layout-item` })
-    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.ant-form-item.mega-layout-item` })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.ant-form-item.mega-layout-item.ant-row` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.ant-form-item.mega-layout-item.ant-row` })
   })
 
   test('inset style(hasBorder)', () => {
@@ -613,9 +613,9 @@ describe('inset mode', () => {
     const tree = renderer.create(<Mega />).toJSON()
 
     expect(tree).toMatchSnapshot()
-    expect(tree).toHaveStyleRule('padding-left', '12px', { modifier: `.ant-form-item` })
-    expect(tree).toHaveStyleRule('border', '1px solid #D8D8D8', { modifier: `.ant-form-item` })
-    expect(tree).toHaveStyleRule('border-radius', '4px', { modifier: `.ant-form-item` })
+    expect(tree).toHaveStyleRule('padding-left', '12px', { modifier: `.ant-form-item.ant-row` })
+    expect(tree).toHaveStyleRule('border', '1px solid #D8D8D8', { modifier: `.ant-form-item.ant-row` })
+    expect(tree).toHaveStyleRule('border-radius', '4px', { modifier: `.ant-form-item.ant-row` })
   })
 
   test('inset style of component', () => {
@@ -628,7 +628,7 @@ describe('inset mode', () => {
     const tree = renderer.create(<Mega />).toJSON()
 
     expect(tree).toMatchSnapshot()
-    const prefix = `.ant-form-item .mega-layout-item-content `
+    const prefix = `.ant-form-item.ant-row .mega-layout-item-content `
     expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-picker' })
     expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-select-single:not(.ant-select-customize-input) .ant-select-selector' })
     expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-select-selector' })
@@ -669,8 +669,8 @@ describe('inset mode', () => {
     const tree = renderer.create(<Mega />).toJSON()
 
     expect(tree).toMatchSnapshot()    
-    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.ant-form-item.mega-layout-item` })
-    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.ant-form-item.mega-layout-item` })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.ant-form-item.mega-layout-item.ant-row` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.ant-form-item.mega-layout-item.ant-row` })
     expect(tree).not.toHaveStyleRule('display', 'none', { modifier: `.ant-form-item-explain` })
     expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
     expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })

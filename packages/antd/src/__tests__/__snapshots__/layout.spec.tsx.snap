@@ -37,11 +37,12 @@ exports[`inline style gutter item 1`] = `
   vertical-align: top;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   display: inline-block;
 }
 
-.c0.ant-form-item {
+.c0.ant-form-item.ant-row {
   display: inline-block;
   vertical-align: top;
 }
@@ -71,11 +72,12 @@ exports[`inline style item 1`] = `
   vertical-align: top;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   display: inline-block;
 }
 
-.c0.ant-form-item {
+.c0.ant-form-item.ant-row {
   display: inline-block;
   vertical-align: top;
 }
@@ -105,11 +107,12 @@ exports[`inline style labelAlign:top item 1`] = `
   vertical-align: top;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   display: block;
 }
 
-.c0.ant-form-item {
+.c0.ant-form-item.ant-row {
   display: inline-block;
   vertical-align: top;
 }
@@ -139,6 +142,7 @@ exports[`inline style labelAlign:top layout 1`] = `
   vertical-align: top;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   display: block;
 }
@@ -159,6 +163,7 @@ exports[`inline style layout 1`] = `
   vertical-align: top;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   display: inline-block;
 }
@@ -195,28 +200,28 @@ exports[`inset mode inset style 1`] = `
   display: none;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-selector,
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input input,
-.c0 .ant-form-item .mega-layout-item-content .ant-input-number,
-.c0 .ant-form-item .mega-layout-item-content .ant-time-picker-input,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-selection,
-.c0 .ant-form-item .mega-layout-item-content .ant-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-selector,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input input,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-input-number,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-time-picker-input,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-selection,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-input {
   border: none;
   box-shadow: none;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker {
   width: 100%;
   padding-right: 0;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-checkbox-group {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-checkbox-group {
   padding-left: 0;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-range {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-range {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -224,13 +229,13 @@ exports[`inset mode inset style 1`] = `
   padding-right: 11px;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-range .ant-picker-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-range .ant-picker-input {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -238,26 +243,46 @@ exports[`inset mode inset style 1`] = `
   padding: 0 11px;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input > input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input > input {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
   -webkit-flex: initial;
   -ms-flex: initial;
   flex: initial;
 }
 
-.c0 .ant-form-item {
+.c0 .ant-form-item.ant-row {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c0 .ant-form-item.mega-layout-item {
+.c0 .ant-form-item.ant-row .ant-form-item-children {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: 32px;
+}
+
+.c0 .ant-form-item.ant-row .ant-form-item-children .mega-layout-item-content {
+  -webkit-flex: auto;
+  -ms-flex: auto;
+  flex: auto;
+  max-width: 100%;
+}
+
+.c0 .ant-form-item.mega-layout-item.ant-row {
   padding-left: 0;
   border: none;
 }
@@ -294,28 +319,28 @@ exports[`inset mode inset style of component 1`] = `
   display: none;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-selector,
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input input,
-.c0 .ant-form-item .mega-layout-item-content .ant-input-number,
-.c0 .ant-form-item .mega-layout-item-content .ant-time-picker-input,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-selection,
-.c0 .ant-form-item .mega-layout-item-content .ant-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-selector,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input input,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-input-number,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-time-picker-input,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-selection,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-input {
   border: none;
   box-shadow: none;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker {
   width: 100%;
   padding-right: 0;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-checkbox-group {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-checkbox-group {
   padding-left: 0;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-range {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-range {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -323,13 +348,13 @@ exports[`inset mode inset style of component 1`] = `
   padding-right: 11px;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-range .ant-picker-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-range .ant-picker-input {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -337,26 +362,46 @@ exports[`inset mode inset style of component 1`] = `
   padding: 0 11px;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input > input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input > input {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
   -webkit-flex: initial;
   -ms-flex: initial;
   flex: initial;
 }
 
-.c0 .ant-form-item {
+.c0 .ant-form-item.ant-row {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c0 .ant-form-item {
+.c0 .ant-form-item.ant-row .ant-form-item-children {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: 32px;
+}
+
+.c0 .ant-form-item.ant-row .ant-form-item-children .mega-layout-item-content {
+  -webkit-flex: auto;
+  -ms-flex: auto;
+  flex: auto;
+  max-width: 100%;
+}
+
+.c0 .ant-form-item.ant-row {
   padding-left: 12px;
   border: 1px solid #D8D8D8;
   border-radius: 4px;
@@ -394,28 +439,28 @@ exports[`inset mode inset style(hasBorder) 1`] = `
   display: none;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-selector,
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input input,
-.c0 .ant-form-item .mega-layout-item-content .ant-input-number,
-.c0 .ant-form-item .mega-layout-item-content .ant-time-picker-input,
-.c0 .ant-form-item .mega-layout-item-content .ant-select-selection,
-.c0 .ant-form-item .mega-layout-item-content .ant-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-selector,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input input,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-input-number,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-time-picker-input,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-select-selection,
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-input {
   border: none;
   box-shadow: none;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker {
   width: 100%;
   padding-right: 0;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-checkbox-group {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-checkbox-group {
   padding-left: 0;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-range {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-range {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -423,13 +468,13 @@ exports[`inset mode inset style(hasBorder) 1`] = `
   padding-right: 11px;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-range .ant-picker-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-range .ant-picker-input {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -437,26 +482,46 @@ exports[`inset mode inset style(hasBorder) 1`] = `
   padding: 0 11px;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input > input {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input > input {
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
 }
 
-.c0 .ant-form-item .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker-input .ant-picker-suffix {
   -webkit-flex: initial;
   -ms-flex: initial;
   flex: initial;
 }
 
-.c0 .ant-form-item {
+.c0 .ant-form-item.ant-row {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c0 .ant-form-item {
+.c0 .ant-form-item.ant-row .ant-form-item-children {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: 32px;
+}
+
+.c0 .ant-form-item.ant-row .ant-form-item-children .mega-layout-item-content {
+  -webkit-flex: auto;
+  -ms-flex: auto;
+  flex: auto;
+  max-width: 100%;
+}
+
+.c0 .ant-form-item.ant-row {
   padding-left: 12px;
   border: 1px solid #D8D8D8;
   border-radius: 4px;
@@ -468,14 +533,34 @@ exports[`inset mode inset style(hasBorder) 1`] = `
 `;
 
 exports[`inset mode item inset style(hasBorder) 1`] = `
-.c0 .ant-form-item {
+.c0 .ant-form-item.ant-row {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
 }
 
-.c0 .ant-form-item.mega-layout-item {
+.c0 .ant-form-item.ant-row .ant-form-item-children {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: 32px;
+}
+
+.c0 .ant-form-item.ant-row .ant-form-item-children .mega-layout-item-content {
+  -webkit-flex: auto;
+  -ms-flex: auto;
+  flex: auto;
+  max-width: 100%;
+}
+
+.c0 .ant-form-item.mega-layout-item.ant-row {
   padding-left: 0;
   border: none;
 }
@@ -486,10 +571,12 @@ exports[`inset mode item inset style(hasBorder) 1`] = `
 `;
 
 exports[`layoutMarginStyle default layout 1`] = `
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
   margin-bottom: 0;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
   margin-bottom: 0;
 }
@@ -500,12 +587,16 @@ exports[`layoutMarginStyle default layout 1`] = `
 `;
 
 exports[`layoutMarginStyle grid layout 1`] = `
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .ant-form-item,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .ant-form-item,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
   margin-bottom: 0;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
   margin-bottom: 0;
 }
@@ -516,12 +607,16 @@ exports[`layoutMarginStyle grid layout 1`] = `
 `;
 
 exports[`layoutMarginStyle inline layout 1`] = `
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .ant-form-item,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .ant-form-item,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
   margin-bottom: 0;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
   margin-bottom: 0;
 }
@@ -536,6 +631,8 @@ exports[`nest grid layout container nest columns 1`] = `
   width: 100%;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -544,6 +641,8 @@ exports[`nest grid layout container nest columns 1`] = `
   display: flex;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
   display: grid;
@@ -571,6 +670,8 @@ exports[`nest grid layout container nest mega layout container 1`] = `
   width: 100%;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -579,6 +680,8 @@ exports[`nest grid layout container nest mega layout container 1`] = `
   display: flex;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
   display: grid;
@@ -587,6 +690,8 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 }
 
 @media (max-width:720px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(auto-fit,1fr);
@@ -594,6 +699,8 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 }
 
 @media (min-width:720px) and (max-width:1200px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(auto-fit,1fr);
@@ -601,6 +708,8 @@ exports[`nest grid layout container nest mega layout container 1`] = `
 }
 
 @media (min-width:1200px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(auto-fit,1fr);
@@ -758,6 +867,8 @@ exports[`nest layout item style span style span 3 1`] = `
 `;
 
 exports[`test addon style gutter 1`] = `
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -767,6 +878,8 @@ exports[`test addon style gutter 1`] = `
   line-height: 32px;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content {
   margin-bottom: 0;
@@ -775,8 +888,12 @@ exports[`test addon style gutter 1`] = `
   flex: 1;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .formily-mega-item-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .formily-mega-item-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .formily-mega-item-before {
   -webkit-flex: initial;
@@ -796,8 +913,12 @@ exports[`test addon style gutter 1`] = `
   font-size: 14px;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .formily-mega-item-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .formily-mega-item-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .formily-mega-item-after {
   -webkit-flex: initial;
@@ -817,12 +938,33 @@ exports[`test addon style gutter 1`] = `
   font-size: 14px;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper .ant-form-item-label,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content .ant-form-item-label {
+  line-height: 1.5715;
+}
+
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper .ant-form-item-label label,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content .ant-form-item-label label {
+  height: 32px;
+  font-size: 14px;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 <div
   className="c0"
 />
 `;
 
 exports[`test addon style normal 1`] = `
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -832,6 +974,8 @@ exports[`test addon style normal 1`] = `
   line-height: 32px;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content {
   margin-bottom: 0;
@@ -840,8 +984,12 @@ exports[`test addon style normal 1`] = `
   flex: 1;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-before,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-before,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .formily-mega-item-before,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .formily-mega-item-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .formily-mega-item-before,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .formily-mega-item-before {
   -webkit-flex: initial;
@@ -861,8 +1009,12 @@ exports[`test addon style normal 1`] = `
   font-size: 14px;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-after,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-after,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .formily-mega-item-after,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .formily-mega-item-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .formily-mega-item-after,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .formily-mega-item-after {
   -webkit-flex: initial;
@@ -882,6 +1034,25 @@ exports[`test addon style normal 1`] = `
   font-size: 14px;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper .ant-form-item-label,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content .ant-form-item-label {
+  line-height: 1.5715;
+}
+
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper .ant-form-item-label label,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content .ant-form-item-label label {
+  height: 32px;
+  font-size: 14px;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
 <div
   className="c0"
 />
@@ -892,6 +1063,8 @@ exports[`test grid layout style gridStyle autoRow false 1`] = `
   width: 100%;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -900,6 +1073,8 @@ exports[`test grid layout style gridStyle autoRow false 1`] = `
   display: flex;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
   display: grid;
@@ -908,6 +1083,8 @@ exports[`test grid layout style gridStyle autoRow false 1`] = `
 }
 
 @media (max-width:720px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
@@ -915,6 +1092,8 @@ exports[`test grid layout style gridStyle autoRow false 1`] = `
 }
 
 @media (min-width:720px) and (max-width:1200px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
@@ -922,6 +1101,8 @@ exports[`test grid layout style gridStyle autoRow false 1`] = `
 }
 
 @media (min-width:1200px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
@@ -938,6 +1119,8 @@ exports[`test grid layout style gridStyle autoRow true 1`] = `
   width: 100%;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -946,6 +1129,8 @@ exports[`test grid layout style gridStyle autoRow true 1`] = `
   display: flex;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
   display: grid;
@@ -964,6 +1149,8 @@ exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
   width: 100%;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -972,6 +1159,8 @@ exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
   display: flex;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
   display: grid;
@@ -980,6 +1169,8 @@ exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
 }
 
 @media (max-width:720px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(1,minmax(100px,1fr));
@@ -987,6 +1178,8 @@ exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
 }
 
 @media (min-width:720px) and (max-width:1200px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(2,minmax(100px,1fr));
@@ -994,6 +1187,8 @@ exports[`test grid layout style gridStyle autoRow true(responsive) 1`] = `
 }
 
 @media (min-width:1200px) {
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
   .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
     grid-template-columns: repeat(3,minmax(100px,1fr));
@@ -1010,6 +1205,8 @@ exports[`test grid layout style normal 1`] = `
   width: 100%;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
   display: -webkit-box;
@@ -1018,6 +1215,8 @@ exports[`test grid layout style normal 1`] = `
   display: flex;
 }
 
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
 .c0 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content > .mega-layout-container-content.grid {
   display: grid;
@@ -1099,6 +1298,7 @@ exports[`width style labelAlign:top labelWidth and wrapperWidth 1`] = `
   flex: initial;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   width: 200px;
   max-width: 200px;
@@ -1132,6 +1332,7 @@ exports[`width style labelWidth and wrapperWidth 1`] = `
   flex: 0 0 100px;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   width: 200px;
   max-width: 200px;
@@ -1165,6 +1366,7 @@ exports[`width style only labelWidth 1`] = `
   flex: 0 0 200px;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   -webkit-flex: 1;
   -ms-flex: 1;
@@ -1188,6 +1390,7 @@ exports[`width style only wrapperWidth 1`] = `
   flex-direction: row;
 }
 
+.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
   width: 200px;
   max-width: 200px;
