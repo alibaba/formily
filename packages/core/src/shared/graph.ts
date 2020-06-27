@@ -42,7 +42,6 @@ export class FormGraph<NodeType = any> extends Subscribable<{
   constructor(props: FormGraphProps = {}) {
     super()
     this.refrences = {}
-    this.data_refrences = {}
     this.nodes = {}
     this.size = 0
     this.buffer = []
