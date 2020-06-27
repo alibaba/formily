@@ -27,18 +27,43 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
         result.insetStyle = insetStyle({ hasBorder, isLayout })
     }
 
+    result.antdV3Style = `
+        &.ant-row {
+            display: flex;
+            flex-flow: row wrap;
+
+            .ant-form-item-label {
+                line-height: 1.5715;
+                float: none;
+                > label {
+                    display: inline-flex;
+                    align-items: center;
+                    height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
+                    font-size: ${size === 'small' ? '14px' : ((size === 'middle' || !size) ? '14px' : '16px') };
+                }
+            }
+
+            > .ant-form-item-control-wrapper {
+                float: none;
+                flex: 1 1 0;
+            }
+        }
+    `
+
     // 嵌套不需要执行响应
     const disabledResponsive = context.grid && grid && context.responsive
 
     // label对齐相关 labelAlign
     result.labelAlignStyle = `
         & > .ant-form-item-label {
-            text-align: ${labelAlign !== 'top' ? labelAlign : 'left'};
+            text-align: ${labelAlign !== 'top' ? (labelAlign || 'right') : 'left'};
         }
     `
 
     // 增量属性 addonBefore/addonAfter
     result.addonStyle = `
+        & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+        & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
         & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
         & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
             display: flex;
@@ -70,6 +95,19 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                 font-size: ${size === 'small' ? '14px' : ((size === 'middle' || !size) ? '14px' : '16px') };
             }
         }
+
+        & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+        & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content {
+            .ant-form-item-label {
+                line-height: 1.5715;
+            }            
+            .ant-form-item-label label {
+                height: ${size === 'small' ? '24px' : ((size === 'middle' || !size) ? '32px' : '40px') };
+                font-size: ${size === 'small' ? '14px' : ((size === 'middle' || !size) ? '14px' : '16px') };
+                display: inline-flex;
+                align-items: center;
+            }
+        }
     `
 
     // 默认为flex布局
@@ -97,7 +135,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
 
     if (labelAlign === 'top') {
         result.defaultStyle = `
-            &.ant-form-item {
+            &.ant-form-item.ant-row {
                 display: block;
             }
         `
@@ -120,6 +158,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                 }
             }
 
+            & > .ant-form-item-control-wrapper,
             & > .ant-form-item-control {
                 ${wrapperWidth ? `
                     width: ${wrapperWidth}px;
@@ -143,6 +182,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                     display: inline-block;
                     vertical-align: top;
                 }
+                > .ant-form-item-control-wrapper,
                 > .ant-form-item-control {
                     display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
                 }                
@@ -151,7 +191,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
 
         if (!isLayout) {
             result.inlineStyle += `
-                &.ant-form-item {
+                &.ant-form-item.ant-row {
                     display: inline-block;
                     vertical-align: top;
                 }
@@ -187,7 +227,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
             grid-column-gap: ${parseInt(gutter)}px;
             grid-row-gap: ${parseInt(gutter)}px;
             ${containerStyle}
-            ${getIEGridContainerStyle({ gutter, autoRow })}
+            ${getIEGridContainerStyle({ gutter, autoRow })}            
         `
     }
 
@@ -211,7 +251,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
             ${itemStyle}
             ${getIEGridItemStyle({
                 gutter,
-                disabledResponsive,
+                enableResponsive: !disabledResponsive && responsive,
                 responsive,
                 span: minColumns > span ? span : minColumns,
                 lgSpan: lg > span ? span : lg,
@@ -229,6 +269,8 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
             & > .ant-form-item {
                 width: 100%;
             }
+            & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+            & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
             & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
             & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
                 display: flex;
@@ -271,6 +313,9 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
             & > .ant-form-item {
                 width: 100%;
             }
+
+            & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper,
+            & > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-item-content,
             & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper,
             & > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-item-content {
                 display: flex;
@@ -282,12 +327,16 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
             }
         `
     }
+    
     // 处理嵌套边距
     if (isLayout) {
         result.layoutMarginStyle = ''
         // 内容都在同一行
         if (inline || grid) {
             result.layoutMarginStyle = `
+                > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .ant-form-item,
+                > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
+                > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item,
                 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .ant-form-item,
                 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
                 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
@@ -299,6 +348,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
         // 常规布局
         if (!grid && !inline) {
             result.layoutMarginStyle = `
+                > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child,
                 > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item:last-child {
                     margin-bottom: 0;
                 }
@@ -307,7 +357,8 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
 
         if (isLayout) {
             result.layoutMarginStyle += `
-                > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child{
+                > .ant-form-item-control-wrapper > .ant-form-item-control > .ant-form-item-children > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child,
+                > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child {
                     margin-bottom: 0;
                 }
             `
@@ -325,6 +376,7 @@ export const computeStyle = (props, debug?: boolean) => {
     // 最终调用一次css计算方法，会自动筛去同位置不生效的代码
 
     return css`        
+        ${styleResult.antdV3Style}
         ${styleResult.labelAlignStyle}
         ${styleResult.addonStyle}
         ${styleResult.defaultStyle}

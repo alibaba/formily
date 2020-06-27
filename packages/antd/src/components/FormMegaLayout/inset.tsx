@@ -2,17 +2,29 @@ const insetStyle = (props) => {
     const result: any = {};
     
     result.borderStyle = `
-        .ant-form-item {
+        .ant-form-item.ant-row {
             display: flex;
+
+            .ant-form-item-children {
+                position: relative;
+                display: flex;
+                align-items: center;
+                min-height: 32px;
+
+                .mega-layout-item-content {
+                    flex: auto;
+                    max-width: 100%;
+                }
+            }
         }
         ${props.hasBorder ? `
-            .ant-form-item {
+            .ant-form-item.ant-row {
                 padding-left: 12px;
                 border: 1px solid #D8D8D8;
                 border-radius: 4px;
             }
         ` : `
-            .ant-form-item.mega-layout-item {
+            .ant-form-item.mega-layout-item.ant-row {
                 padding-left: 0;
                 border: none;
             }
@@ -51,7 +63,7 @@ const insetStyle = (props) => {
         `
 
         result.componentStyle = `
-            .ant-form-item .mega-layout-item-content {
+            .ant-form-item.ant-row .mega-layout-item-content {
                 .ant-picker,
                 .ant-select-single:not(.ant-select-customize-input) .ant-select-selector,
                 .ant-select-selector,

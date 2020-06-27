@@ -15,14 +15,40 @@ const getIEGridContainerStyle = (opts) => {
 
 const getIEGridItemStyle = (opts) => {
     if (isIECompat) {
-        const { gutter, span, columns } = opts
+        const { gutter, span, columns,
+            lgSpan, mSpan, sSpan,
+            responsive,
+            enableResponsive } = opts
         const halfGutter = Math.floor(gutter / 2)
         const flexBase = `${Number((Number(span) / Number(columns)).toFixed(6)) * 100}%`
 
-        return `
+        const itemStyle = `
             padding: ${halfGutter}px;
             max-width: ${flexBase};
             flex: 0 0 ${flexBase};
+        `
+
+        let responsiveStyle = ''
+        if (enableResponsive) {
+            const { s, m, lg } = responsive
+            const sFlexBase = `${Number((Number(sSpan) / Number(s)).toFixed(6)) * 100}%`
+            const mFlexBase = `${Number((Number(mSpan) / Number(m)).toFixed(6)) * 100}%`
+            const lgFlexBase = `${Number((Number(lgSpan) / Number(lg)).toFixed(6)) * 100}%`
+            responsiveStyle = `
+                @media (max-width: 720px) {
+                    flex: 0 0 ${sFlexBase};
+                }
+                @media (min-width: 720px) and (max-width: 1200px) {
+                    flex: 0 0 ${mFlexBase};
+                }
+                @media (min-width: 1200px) {
+                    flex: 0 0 ${lgFlexBase};
+                }
+            `
+        }
+
+        return `
+            ${itemStyle}
         `
     }
 
