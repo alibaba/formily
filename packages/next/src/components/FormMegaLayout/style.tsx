@@ -1,6 +1,7 @@
 import { css } from 'styled-components'
 import { EComponentSize, EPxType, PxValue, ELineHeightPx, EFontSizePx } from './types'
 import insetStyle from './inset'
+import { getIEGridContainerStyle, getIEGridItemStyle } from './ie'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 
@@ -162,7 +163,7 @@ export const computeNextStyleBase = (props) => {
 
     const gridContainerStyle = (nested?: boolean) => {
         const frStyle = nested ? '1fr' : 'minmax(100px, 1fr)';
-        return !disabledResponsive && responsive ? `
+        const containerStyle = !disabledResponsive && responsive ? `
             @media (max-width: 720px) {
                 grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, ${frStyle});
             }
@@ -176,22 +177,47 @@ export const computeNextStyleBase = (props) => {
         ` : `
             grid-template-columns: repeat(${autoRow ? columns : 'auto-fit'}, ${frStyle});
         `
+
+        return `
+            display: grid;
+            grid-column-gap: ${parseInt(gutter)}px;
+            grid-row-gap: ${parseInt(gutter)}px;
+            ${containerStyle}
+            ${getIEGridContainerStyle({ gutter, autoRow })}
+        `
     }
 
     const minColumns = nested ? Math.min(columns, contextColumns) : columns
-    const gridItemSpanStyle = !disabledResponsive && responsive ? `
-        @media (max-width: 720px) {
-            grid-column-start: span ${s > span ? span : s};
-        }
-        @media (min-width: 720px) and (max-width: 1200px) {
-            grid-column-start: span ${m > span ? span : m};
-        }
-        @media (min-width: 1200px) {
-            grid-column-start: span ${lg > span ? span : lg};
-        }
-    `: `
-        grid-column-start: span ${minColumns > span ? span : minColumns};
-    `
+    const gridItemSpanStyle = () => {
+        const itemStyle = !disabledResponsive && responsive ? `
+            @media (max-width: 720px) {
+                grid-column-start: span ${s > span ? span : s};
+            }
+            @media (min-width: 720px) and (max-width: 1200px) {
+                grid-column-start: span ${m > span ? span : m};
+            }
+            @media (min-width: 1200px) {
+                grid-column-start: span ${lg > span ? span : lg};
+            }
+        `: `
+            grid-column-start: span ${minColumns > span ? span : minColumns};
+        `
+
+        return `
+            ${itemStyle}
+            ${getIEGridItemStyle({
+                gutter,
+                disabledResponsive,
+                responsive,
+                span: minColumns > span ? span : minColumns,
+                lgSpan: lg > span ? span : lg,
+                mSpan: m > span ? span : m,
+                sSpan: s > span ? span : s,
+                autoRow,
+                columns: contextColumns || columns,
+            })}
+        `
+    }
 
     // grid栅格模式
     if (!context.grid && grid) {
@@ -204,10 +230,6 @@ export const computeNextStyleBase = (props) => {
                 display: flex;
                 > .mega-layout-container-content {
                     &.grid {
-                        display: grid;
-                        grid-column-gap: ${parseInt(gutter)}px;
-                        grid-row-gap: ${parseInt(gutter)}px;
-
                         ${gridContainerStyle()}
                     }
                 }
@@ -222,7 +244,7 @@ export const computeNextStyleBase = (props) => {
                     width: 100%;
                     margin-bottom: 0;
                 }
-                ${gridItemSpanStyle}
+                ${gridItemSpanStyle()}
             }
         `
     }
@@ -230,7 +252,7 @@ export const computeNextStyleBase = (props) => {
     // grid item
     if (!context.grid && grid && span) {
         result.gridItemStyle = `
-        &.mega-layout-item-col { ${gridItemSpanStyle} }
+        &.mega-layout-item-col { ${gridItemSpanStyle()} }
         `
     }
 
@@ -245,10 +267,6 @@ export const computeNextStyleBase = (props) => {
                 display: flex;
                 > .mega-layout-container-content {
                     &.grid {
-                        display: grid;
-                        grid-column-gap: ${parseInt(gutter)}px;
-                        grid-row-gap: ${parseInt(gutter)}px;
-                        
                         ${gridContainerStyle(true)}
                     }
                 }
@@ -261,6 +279,7 @@ export const computeNextStyleBase = (props) => {
         // 内容都在同一行
         if (inline || grid) {
             result.layoutMarginStyle = `
+                > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .next-form-item,
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item,
                 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item {
                     margin-bottom: 0;
