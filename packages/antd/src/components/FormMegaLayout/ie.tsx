@@ -1,4 +1,4 @@
-const isIECompat = typeof document !== 'undefined' && !('grid-column-gap' in document.documentElement.style)
+const isIECompat = !('grid-column-gap' in document?.documentElement?.style)
 const getIEGridContainerStyle = (opts) => {
     if (isIECompat) {
         const { gutter, autoRow } = opts
