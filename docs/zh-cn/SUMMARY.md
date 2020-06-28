@@ -12,7 +12,6 @@
     - [理解传值属性](./schema-develop/form-value.md)
     - [理解表单状态](./schema-develop/form-state.md)
     - [理解表单布局](./schema-develop/mega-layout-antd.md)
-    - [理解表单布局Next](./schema-develop/mega-layout.md)
     - [理解表单节点树](./schema-develop/form-graph.md)
     - [理解表单扩展机制](./schema-develop/form-extension.md)
   - 实践教程
