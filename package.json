@@ -42,7 +42,7 @@
     "postinstall": "opencollective-postinstall"
   },
   "resolutions": {
-    "@types/react": "^16.8.23"
+    "@types/react": "^16.9.41"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",
