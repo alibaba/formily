@@ -1,4 +1,4 @@
-const isIECompat = window.ActiveXObject || "ActiveXObject" in window
+const isIECompat = !('grid-column-gap' in document.documentElement.style)
 const getIEGridContainerStyle = (opts) => {
     if (isIECompat) {
         const { gutter, autoRow } = opts
