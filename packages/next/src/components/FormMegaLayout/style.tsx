@@ -31,6 +31,7 @@ export const computeNextStyleBase = (props) => {
     const {
         labelAlign,
         isLayout,
+        isSecondary,
         inline,
         labelCol, grid, inset, context = {}, contextColumns, columns, hasBorder, autoRow,
         span, nested,
@@ -206,13 +207,12 @@ export const computeNextStyleBase = (props) => {
         return `
             ${itemStyle}
             ${getIEGridItemStyle({
+                nested,
+                isSecondary,
                 gutter,
-                disabledResponsive,
+                enableResponsive: !disabledResponsive && responsive,
                 responsive,
-                span: minColumns > span ? span : minColumns,
-                lgSpan: lg > span ? span : lg,
-                mSpan: m > span ? span : m,
-                sSpan: s > span ? span : s,
+                span,
                 autoRow,
                 columns: contextColumns || columns,
             })}

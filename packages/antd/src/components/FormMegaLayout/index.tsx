@@ -87,7 +87,9 @@ const MegaLayout = (props: ILayoutProps) => {
                 grid, gutter, autoRow, span, contextColumns,
                 full, context, isRoot, responsive, inset, hasBorder
             } = layout
+            const isSecondary = context.isRoot
             const itemProps: any = {
+              isSecondary,
               inline,
               grid,
               autoRow,
@@ -103,7 +105,6 @@ const MegaLayout = (props: ILayoutProps) => {
               inset,
               hasBorder,
             }
-
             if (label) {
                 // 只能通过layoutProps来改动当前MegaLayout的label/wrapper相关配置
                 const labelWidth = computeAttr(layoutProps.labelWidth, context.labelWidth, -1)
@@ -138,7 +139,7 @@ const MegaLayout = (props: ILayoutProps) => {
 
             // 嵌套布局
             if (!props.grid && grid) {   
-              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, gutter, context, responsive}}>
+              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, gutter, isSecondary, context, responsive}}>
                 {ele}
               </StyledLayoutNestWrapper>
             }
@@ -160,8 +161,11 @@ const MegaLayoutItem = (props) => {
     if (layoutProps) {
       const { addonBefore, addonAfter } = megaProps
       const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
-        responsive, size, inset, hasBorder
+        responsive, size, inset, hasBorder, context
       } = layoutProps;
+
+      const isSecondary = context.isRoot
+      itemProps.isSecondary = isSecondary
       itemProps.hasBorder = hasBorder
       itemProps.inset = inset
       itemProps.labelAlign = labelAlign

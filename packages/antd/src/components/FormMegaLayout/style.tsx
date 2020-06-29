@@ -8,6 +8,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
     const {
         labelAlign,
         isLayout,
+        isSecondary,
         inline,
         nested,
         inset,
@@ -250,13 +251,12 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
         return `
             ${itemStyle}
             ${getIEGridItemStyle({
+                nested,
+                isSecondary,
                 gutter,
                 enableResponsive: !disabledResponsive && responsive,
                 responsive,
-                span: minColumns > span ? span : minColumns,
-                lgSpan: lg > span ? span : lg,
-                mSpan: m > span ? span : m,
-                sSpan: s > span ? span : s,
+                span,
                 autoRow,
                 columns: contextColumns || columns,
             })}
