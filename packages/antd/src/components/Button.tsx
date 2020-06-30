@@ -31,7 +31,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
         return (
           <Button
             onClick={e => {
-              if (props.htmlType !== 'submit') {
+              if (onSubmit) {
                 form.submit(onSubmit)
               }
               if (props.onClick) {
@@ -39,6 +39,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
               }
             }}
             {...props}
+            htmlType={onSubmit ? 'button' : 'submit'}
             loading={showLoading ? state.submitting : undefined}
           >
             {props.children || '提交'}
