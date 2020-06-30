@@ -30,7 +30,8 @@ import {
   defaults,
   toArr,
   isNum,
-  isEqual
+  isEqual,
+  isEmpty
 } from '@formily/shared'
 import { createFormInternals } from './internals'
 import {
@@ -307,6 +308,13 @@ export const createFormExternals = (
     }
   }
 
+  function pickNotEmpty(v1: any, v2: any) {
+    if (!isEmpty(v1)) return v1
+    if (!isEmpty(v2)) return v2
+    if (isValid(v1)) return v1
+    if (isValid(v2)) return v2
+  }
+
   function registerField({
     path,
     name,
@@ -369,16 +377,24 @@ export const createFormExternals = (
 
       field.batch(() => {
         field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
+          const formValue = getFormValuesIn(state.name)
+          const formInitialValue = getFormInitialValuesIn(state.name)
+          const syncValue = pickNotEmpty(value, formValue)
+          const syncInitialValue = pickNotEmpty(initialValue, formInitialValue)
           if (isValid(unmountRemoveValue)) {
             state.unmountRemoveValue = unmountRemoveValue
           }
-          if (isValid(initialValue)) {
-            state.initialValue = initialValue
+
+          if (isValid(syncInitialValue)) {
+            state.initialValue = syncInitialValue
           }
-          if (!isValid(value)) {
-            state.value = initialValue
+
+          if (isValid(syncValue)) {
+            state.value = syncValue
           } else {
-            state.value = value
+            if (isValid(state.initialValue)) {
+              state.value = state.initialValue
+            }
           }
 
           if (isValid(visible)) {

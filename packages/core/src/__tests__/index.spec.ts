@@ -1235,7 +1235,7 @@ describe('registerField', () => {
     form.registerField({ path: 'd', initialValue: 'z', value: 's' })
     expect(form.getFieldValue('a')).toEqual(1)
     expect(form.getFieldValue('b')).toEqual('x')
-    expect(form.getFieldValue('c')).toEqual('y') // false, 得到y
+    expect(form.getFieldValue('c')).toEqual(3) // false, 得到y
     expect(form.getFieldValue('d')).toEqual('s')
   })
 })
