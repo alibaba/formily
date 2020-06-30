@@ -24,7 +24,8 @@
     "@types/classnames": "^2.2.9",
     "@types/styled-components": "^4.1.19",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "styled-components": "^4.1.1"
   },
   "dependencies": {
     "@formily/react-schema-renderer": "^1.2.2",
@@ -33,8 +34,7 @@
     "classnames": "^2.2.6",
     "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
-    "rxjs": "^6.5.1",
-    "styled-components": "^4.1.1"
+    "rxjs": "^6.5.1"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",

@@ -28,7 +28,8 @@
     "@types/styled-components": "^4.1.19",
     "antd": "^3.14.1 || ^4.0.0",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "styled-components": "^4.1.1"
   },
   "dependencies": {
     "@formily/react-schema-renderer": "^1.2.2",
@@ -37,8 +38,7 @@
     "classnames": "^2.2.6",
     "react-eva": "^1.0.0-alpha.0",
     "react-stikky": "^0.1.15",
-    "rxjs": "^6.5.1",
-    "styled-components": "^4.1.1"
+    "rxjs": "^6.5.1"
   },
   "publishConfig": {
     "access": "public"
