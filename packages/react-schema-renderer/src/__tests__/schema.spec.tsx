@@ -140,6 +140,24 @@ describe('major scene', () => {
         },
         p5: {
           'x-index': 5
+        },
+        p6: {
+          'x-index': 6
+        },
+        p7: {
+          'x-index': 7
+        },
+        p8: {
+          'x-index': 8
+        },
+        p9: {
+          'x-index': 9
+        },
+        p10: {
+          'x-index': 10
+        },
+        p11: {
+          'x-index': 11
         }
       }
     })
@@ -149,7 +167,13 @@ describe('major scene', () => {
       'p3',
       'p2',
       'p4',
-      'p5'
+      'p5',
+      'p6',
+      'p7',
+      'p8',
+      'p9',
+      'p10',
+      'p11',
     ])
 
     // 多排序
