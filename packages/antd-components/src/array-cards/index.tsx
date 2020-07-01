@@ -72,7 +72,7 @@ export const ArrayCards: any = styled(
                 key={index}
                 title={
                   <span>
-                    {index + 1}. {componentProps.title || schema.title}
+                    {index + 1}<span>.</span> {componentProps.title || schema.title}
                   </span>
                 }
                 extra={
