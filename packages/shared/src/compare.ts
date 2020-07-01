@@ -126,10 +126,6 @@ function equal(a: any, b: any, filter?: Filter) {
     return true
   }
 
-  if (a && b && typeof a === 'function' && typeof b === 'function') {
-    return a.toString() === b.toString()
-  }
-
   return a !== a && b !== b
 }
 // end fast-deep-equal

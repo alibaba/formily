@@ -7,7 +7,6 @@ import {
   FormPath,
   FormPathPattern,
   isValid,
-  isEqual,
   clone,
   isFn
 } from '@formily/shared'
@@ -284,8 +283,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     if (isValid(taskIndex)) {
       if (
         env.taskQueue[taskIndex] &&
-        !env.taskQueue[taskIndex].callbacks.some(fn =>
-          isEqual(fn, callback) ? fn === callback : false
+        !env.taskQueue[taskIndex].callbacks.some((fn: any) =>
+          fn.toString() === callback.toString() ? fn === callback : false
         )
       ) {
         env.taskQueue[taskIndex].callbacks.push(callback)
