@@ -1,4 +1,4 @@
-import React, { useRef, Fragment } from 'react'
+import React, { useRef, Fragment, useEffect } from 'react'
 import {
   createControllerBox,
   ISchemaVirtualFieldComponentProps,
@@ -16,7 +16,8 @@ enum StateMap {
   ON_FORM_STEP_NEXT = 'onFormStepNext',
   ON_FORM_STEP_PREVIOUS = 'onFormStepPrevious',
   ON_FORM_STEP_GO_TO = 'onFormStepGoto',
-  ON_FORM_STEP_CURRENT_CHANGE = 'onFormStepCurrentChange'
+  ON_FORM_STEP_CURRENT_CHANGE = 'onFormStepCurrentChange',
+  ON_FORM_STEP_DATA_SOURCE_CHANGED = 'onFormStepDataSourceChanged'
 }
 const EffectHooks = {
   onStepNext$: createEffectHook<void>(StateMap.ON_FORM_STEP_NEXT),
@@ -45,8 +46,9 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
       current: stepProps.current || 0
     })
     const ref = useRef(current)
-    const items = toArr(dataSource)
-    const batchUpdate = createMatchUpdate(name, path)
+    const itemsRef = useRef([])
+    itemsRef.current = toArr(dataSource)
+    const matchUpdate = createMatchUpdate(name, path)
     const update = (cur: number) => {
       form.notify(StateMap.ON_FORM_STEP_CURRENT_CHANGE, {
         value: cur,
@@ -56,17 +58,36 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
         current: cur
       })
     }
-    useFormEffects(($, { setFieldState }) => {
-      items.forEach(({ name }, index) => {
-        setFieldState(name, (state: any) => {
-          state.display = index === current
-        })
+
+    useEffect(() => {
+      form.notify(StateMap.ON_FORM_STEP_DATA_SOURCE_CHANGED, {
+        path,
+        name,
+        value: itemsRef.current
       })
+    }, [itemsRef.current.length])
+
+    useFormEffects(($, { setFieldState }) => {
+      const updateFields = () => {
+        itemsRef.current.forEach(({ name }, index) => {
+          setFieldState(name, (state: any) => {
+            state.display = index === current
+          })
+        })
+      }
+      updateFields()
+      $(StateMap.ON_FORM_STEP_DATA_SOURCE_CHANGED).subscribe(
+        ({ name, path }) => {
+          matchUpdate(name, path, () => {
+            updateFields()
+          })
+        }
+      )
       $(StateMap.ON_FORM_STEP_CURRENT_CHANGE).subscribe(
         ({ value, name, path }: any = {}) => {
-          batchUpdate(name, path, () => {
+          matchUpdate(name, path, () => {
             form.hostUpdate(() => {
-              items.forEach(({ name }, index) => {
+              itemsRef.current.forEach(({ name }, index) => {
                 if (!name)
                   throw new Error(
                     'FormStep dataSource must include `name` property'
@@ -81,11 +102,11 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
       )
 
       $(StateMap.ON_FORM_STEP_NEXT).subscribe(({ name, path }: any = {}) => {
-        batchUpdate(name, path, () => {
+        matchUpdate(name, path, () => {
           form.validate().then(({ errors }) => {
             if (errors.length === 0) {
               update(
-                ref.current + 1 > items.length - 1
+                ref.current + 1 > itemsRef.current.length - 1
                   ? ref.current
                   : ref.current + 1
               )
@@ -96,7 +117,7 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
 
       $(StateMap.ON_FORM_STEP_PREVIOUS).subscribe(
         ({ name, path }: any = {}) => {
-          batchUpdate(name, path, () => {
+          matchUpdate(name, path, () => {
             update(ref.current - 1 < 0 ? ref.current : ref.current - 1)
           })
         }
@@ -104,8 +125,8 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
 
       $(StateMap.ON_FORM_STEP_GO_TO).subscribe(
         ({ name, path, value }: any = {}) => {
-          batchUpdate(name, path, () => {
-            if (!(value < 0 || value > items.length)) {
+          matchUpdate(name, path, () => {
+            if (!(value < 0 || value > itemsRef.current.length)) {
               update(value)
             }
           })
@@ -116,7 +137,7 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
     return (
       <Fragment>
         <Step {...stepProps} current={current}>
-          {items.map((props, key) => {
+          {itemsRef.current.map((props, key) => {
             return <Step.Item {...props} key={key} />
           })}
         </Step>
