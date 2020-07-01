@@ -1035,7 +1035,7 @@ describe('setFieldState', () => {
     // 初始化
     expect(state.editable).toEqual(true)
     expect(state.selfEditable).toEqual(undefined)
-    expect(state.formEditable).toEqual(undefined)
+    expect(state.formEditable).toEqual(true)
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // 简单设置 (editable会影响selfEditable)
     form.setFieldState('a', state => (state.editable = false))
@@ -1045,18 +1045,18 @@ describe('setFieldState', () => {
     form.setFieldState('a', state => (state.selfEditable = true))
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // 设置影响计算的值formEditable(selfEditable优先级高于formEditable)
-    form.setFieldState('a', state => (state.selfEditable = undefined))
-    form.setFieldState('a', state => (state.formEditable = false))
+    form.setFieldState('a', state => (state.selfEditable = false))
+    form.setFieldState('a', state => (state.formEditable = true))
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
     // 支持函数(UI层传入)
     form.setFieldState('a', state => (state.formEditable = () => true))
-    expect(form.getFieldState('a', state => state.editable)).toEqual(true)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(false)
     // editable会影响selfEditable, 设置顺序又因为 editable > selfEditable > formEditable
     // 前两者都无效时，最终返回formEditable的值
-    form.setFieldState('a', state => (state.editable = undefined))
+    form.setFieldState('a', state => (state.editable = false))
     form.setFieldState('a', state => (state.formEditable = () => false))
     expect(form.getFieldState('a', state => state.selfEditable)).toEqual(
-      undefined
+      false
     )
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
   })

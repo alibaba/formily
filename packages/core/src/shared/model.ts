@@ -8,11 +8,14 @@ import {
   shallowClone,
   isStr
 } from '@formily/shared'
-import { produce, enableAllPlugins, setAutoFreeze, Draft } from 'immer'
+import { Immer, enableAllPlugins, Draft } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
 
 enableAllPlugins()
-setAutoFreeze(false)
+
+const { produce } = new Immer({
+  autoFreeze: false
+})
 
 type Recipe<State> = (state?: State) => any
 
