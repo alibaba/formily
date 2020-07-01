@@ -24,15 +24,15 @@
     "@types/classnames": "^2.2.9",
     "@types/styled-components": "^4.1.19",
     "react": ">=16.8.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "styled-components": "^4.1.1"
   },
   "dependencies": {
     "@formily/next": "^1.2.2",
     "@formily/react-schema-renderer": "^1.2.2",
     "@formily/react-shared-components": "^1.2.2",
     "@formily/shared": "^1.2.2",
-    "classnames": "^2.2.6",
-    "styled-components": "^4.1.1"
+    "classnames": "^2.2.6"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",

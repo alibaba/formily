@@ -190,6 +190,7 @@ export interface IFieldStateProps {
   nodePath?: FormPathPattern
   dataPath?: FormPathPattern
   dataType?: string
+  getEditable?: () => boolean | ((name: string) => boolean)
   getValue?: (name: FormPathPattern) => any
   getInitialValue?: (name: FormPathPattern) => any
   setValue?: (name: FormPathPattern, value: any) => void
