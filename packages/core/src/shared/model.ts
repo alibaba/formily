@@ -6,7 +6,8 @@ import {
   FormPathPattern,
   defaults,
   shallowClone,
-  isStr
+  isStr,
+  isValid
 } from '@formily/shared'
 import { Immer, enableAllPlugins, Draft } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
@@ -214,7 +215,16 @@ export const createModel = <
     }
 
     getCache(key: CacheKey) {
-      return this.cache.get(key)
+      const value = this.cache.get(key)
+      if (isValid(value)) return value
+      if (this.cache.size === 1) {
+        let findKey = null
+        this.cache.forEach((value, key) => {
+          findKey = key
+        })
+        return this.cache.get(findKey)
+      }
+      return value
     }
 
     removeCache(key: CacheKey) {
