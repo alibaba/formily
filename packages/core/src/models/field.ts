@@ -441,6 +441,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     }
 
     afterProduce() {
+      //Because the draft data cannot be consumed externally, I can only cache the changes and handle it uniformly
       this.updates.forEach(type => {
         if (type === 'value') {
           this.props?.setValue?.(this.state.name, this.state.value)
