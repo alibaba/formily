@@ -310,6 +310,8 @@ export class Schema implements ISchema {
   getExtendsRequired() {
     if (isBool(this.required)) {
       return this.required
+    } else if (isArr(this.parent?.required) && this.parent?.required.includes(this.key)) {
+      return true
     }
   }
   getExtendsEditable(): boolean {
@@ -512,7 +514,7 @@ export class Schema implements ISchema {
     const unorderProperties = []
     each(newSchema[propertiesName], (item, key) => {
       const index = item['x-index']
-      if (typeof index === 'number') {
+      if (!isNaN(index)) {
         orderProperties[index] = { schema: item, key }
       } else {
         unorderProperties.push({ schema: item, key })

@@ -7,7 +7,6 @@ import {
   FormPath,
   FormPathPattern,
   isValid,
-  isEqual,
   clone,
   isFn
 } from '@formily/shared'
@@ -18,8 +17,7 @@ import {
   IVirtualFieldState,
   IFieldState,
   IField,
-  IVirtualField,
-  isField
+  IVirtualField
 } from './types'
 
 export const createFormInternals = (options: IFormCreatorOptions = {}) => {
@@ -32,17 +30,6 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     if (dirtys.initialValues) {
       notifyFormInitialValuesChange()
     }
-    if (dirtys.editable) {
-      hostUpdate(() => {
-        graph.eachChildren((field: IField | IVirtualField) => {
-          if (isField(field)) {
-            field.setState(state => {
-              state.formEditable = published.editable
-            })
-          }
-        })
-      })
-    }
     if (dirtys.unmounted && published.unmounted) {
       heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, form)
     }
@@ -54,7 +41,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }
     heart.publish(LifeCycleTypes.ON_FORM_CHANGE, form)
     if (env.hostRendering) {
-      env.hostRendering = dirtys.values || dirtys.initialValues
+      env.hostRendering =
+        dirtys.values || dirtys.initialValues || dirtys.editable
     }
     return env.hostRendering
   }
@@ -295,8 +283,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     if (isValid(taskIndex)) {
       if (
         env.taskQueue[taskIndex] &&
-        !env.taskQueue[taskIndex].callbacks.some(fn =>
-          isEqual(fn, callback) ? fn === callback : false
+        !env.taskQueue[taskIndex].callbacks.some((fn: any) =>
+          fn.toString() === callback.toString() ? fn === callback : false
         )
       ) {
         env.taskQueue[taskIndex].callbacks.push(callback)

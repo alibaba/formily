@@ -265,6 +265,7 @@ export const createFormExternals = (
       }
 
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      return !env.hostRendering
     }
   }
 
@@ -306,6 +307,7 @@ export const createFormExternals = (
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
       }
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
+      return !env.hostRendering
     }
   }
 
@@ -348,6 +350,9 @@ export const createFormExternals = (
           return env.realRemoveTags.every(tag => {
             return !FormPath.parse(calculateMathTag(tag)).match(path)
           })
+        },
+        getEditable() {
+          return form.getState(state => state.editable)
         },
         setValue(name, value) {
           setFormValuesIn(name, value)

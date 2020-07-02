@@ -30,6 +30,21 @@ const DEEP_INSPECT_PROPERTY_KEYS = [
   'ruleWarnings'
 ]
 
+
+const calculateEditable = (
+  selfEditable: boolean,
+  formEditable: boolean | ((name: string) => boolean),
+  name: string
+) => {
+  return isValid(selfEditable)
+    ? selfEditable
+    : isValid(formEditable)
+    ? isFn(formEditable)
+      ? formEditable(name)
+      : formEditable
+    : true
+}
+
 export const ARRAY_UNIQUE_TAG = Symbol.for(
   '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
 )
@@ -120,6 +135,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       return this.state.value
     }
 
+    getEditableFromProps() {
+      return this.props?.getEditable?.()
+    }
+
     getInitialValueFromProps() {
       if (isFn(this.props?.getInitialValue)) {
         const initialValue = this.props.getInitialValue(this.state.name)
@@ -143,6 +162,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       if (!this.state.initialized) return this.state
       let value = this.getValueFromProps()
       let initialValue = this.getInitialValueFromProps()
+      let formEditable = this.getEditableFromProps()
       if (this.isArrayList()) {
         value = this.tagArrayList(toArr(value))
         initialValue = this.tagArrayList(toArr(initialValue))
@@ -151,6 +171,12 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       const state = {
         ...this.state,
         initialValue,
+        formEditable,
+        editable: calculateEditable(
+          this.state.selfEditable,
+          formEditable,
+          this.state.name
+        ),
         value,
         values: [value].concat(this.state.values.slice(1))
       }
@@ -193,13 +219,11 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       if (dirtys.editable) {
         draft.selfEditable = draft.editable
       }
-      draft.editable = isValid(draft.selfEditable)
-        ? draft.selfEditable
-        : isValid(draft.formEditable)
-        ? isFn(draft.formEditable)
-          ? draft.formEditable(draft.name)
-          : draft.formEditable
-        : true
+      draft.editable = calculateEditable(
+        draft.selfEditable,
+        draft.formEditable,
+        draft.name
+      )
     }
 
     produceSideEffects(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
