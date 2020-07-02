@@ -76,20 +76,21 @@ export const createFormExternals = (
     eacher: (prevPath: string, currentPath: string) => void
   ) {
     const exchanged = {}
-    currentState.value?.forEach?.((item: any, index: number) => {
+    for (let index = currentState?.value?.length - 1; index >= 0; index--) {
+      const item = currentState?.value?.[index]
       const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
       const current = item?.[ARRAY_UNIQUE_TAG]
-      if (prev === current) return
+      if (prev === current) continue
       if (prev === undefined || current === undefined) {
-        return
+        continue
       }
       if (currentState.value?.length === prevState.value?.length) {
-        if (exchanged[prev] || exchanged[current]) return
+        if (exchanged[prev] || exchanged[current]) continue
         exchanged[prev] = true
         exchanged[current] = true
       }
       eacher(prev, current)
-    })
+    }
   }
 
   function calculateMovePath(name: string, replace: number) {
@@ -943,7 +944,13 @@ export const createFormExternals = (
         return arr
       },
       insert(index: number, value: any) {
-        const arr = toArr(getValue()).reduce((buf, item, idx) => {
+        const origin = toArr(getValue())
+        if (origin.length === 0) {
+          const arr = [value]
+          setValue(arr)
+          return arr
+        }
+        const arr = origin.reduce((buf, item, idx) => {
           return idx === index ? buf.concat([value, item]) : buf.concat(item)
         }, [])
         setValue(arr)

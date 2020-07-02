@@ -119,6 +119,8 @@ export interface IModelSpec<
   props?: Props
   prevState?: Partial<State>
   getState?: (state?: State) => any
+  beforeProduce?: () => void
+  afterProduce?: () => void
   dirtyCheck?: (path: FormPathPattern, value: any, nextValue: any) => boolean
   produce?: (draft: Draft<State>, dirtys: StateDirtyMap<State>) => void
 }

@@ -12,9 +12,10 @@ import {
   isValid,
   isEqual,
   isEmpty,
-  isArr
+  isArr,
+  isPlainObj
 } from '@formily/shared'
-import { Draft, original } from 'immer'
+import { Draft } from 'immer'
 
 const normalizeMessages = (messages: any) => toArr(messages).filter(v => !!v)
 
@@ -29,11 +30,6 @@ const DEEP_INSPECT_PROPERTY_KEYS = [
   'ruleWarnings'
 ]
 
-const getOriginalValue = (value: any) => {
-  const origin = original(value)
-  return isValid(origin) ? origin : value
-}
-
 export const ARRAY_UNIQUE_TAG = Symbol.for(
   '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
 )
@@ -47,7 +43,7 @@ export const parseArrayTags = (value: any[]) => {
 
 export const tagArrayList = (current: any[], name: string, force?: boolean) => {
   return current?.map?.((item, index) => {
-    if (typeof item === 'object') {
+    if (isPlainObj(item)) {
       item[ARRAY_UNIQUE_TAG] = force
         ? `${name}.${index}`
         : item[ARRAY_UNIQUE_TAG] || `${name}.${index}`
@@ -65,6 +61,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     props: IFieldStateProps
 
     prevState: IFieldState
+
+    updates: Array<'value' | 'initialValue'>
 
     lastCompareResults?: boolean
 
@@ -112,6 +110,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       this.state.path = this.nodePath.entire
       this.state.dataType = props.dataType
       this.props = props
+      this.updates = []
     }
 
     getValueFromProps() {
@@ -254,7 +253,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
               draft.value = undefined
               draft.values = toArr(draft.values)
               draft.values[0] = undefined
-              this.props.setValue?.(this.state.name, undefined)
+              this.updates.push('value')
             } else if (
               draft.visible === true ||
               draft.mounted === true ||
@@ -262,10 +261,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
             ) {
               if (!isValid(draft.value)) {
                 draft.value = draft.visibleCacheValue
-                this.props.setValue?.(
-                  this.state.name,
-                  getOriginalValue(draft.value)
-                )
+                this.updates.push('value')
               }
             }
           }
@@ -282,14 +278,11 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
               draft.value = undefined
               draft.values = toArr(draft.values)
               draft.values[0] = undefined
-              this.props.setValue?.(this.state.name, undefined)
+              this.updates.push('value')
             } else if (draft.visible === true) {
               if (!isValid(draft.value)) {
                 draft.value = draft.visibleCacheValue
-                this.props.setValue?.(
-                  this.state.name,
-                  getOriginalValue(draft.value)
-                )
+                this.updates.push('value')
               }
             }
           }
@@ -343,13 +336,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         }
       }
       if (valueChanged) {
-        this.props.setValue?.(this.state.name, getOriginalValue(draft.value))
+        this.updates.push('value')
       }
       if (dirtys.initialValue) {
-        this.props.setInitialValue?.(
-          this.state.name,
-          getOriginalValue(draft.initialValue)
-        )
+        this.updates.push('initialValue')
       }
       if (valueOrInitialValueChanged) {
         if (isEqual(draft.initialValue, draft.value)) {
@@ -438,12 +428,29 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       }
     }
 
+    beforeProduce() {
+      this.updates = []
+    }
+
     produce(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
       this.produceErrorsAndWarnings(draft, dirtys)
       this.produceEditable(draft, dirtys)
       this.produceValue(draft, dirtys)
       this.produceSideEffects(draft, dirtys)
       this.produceRules(draft, dirtys)
+    }
+
+    afterProduce() {
+      this.updates.forEach(type => {
+        if (type === 'value') {
+          this.props?.setValue?.(this.state.name, this.state.value)
+        } else {
+          this.props?.setInitialValue?.(
+            this.state.name,
+            this.state.initialValue
+          )
+        }
+      })
     }
 
     static defaultProps = {
