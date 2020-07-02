@@ -7,6 +7,7 @@ import {
   FormPath,
   FormPathPattern,
   isValid,
+  isEqual,
   clone,
   isFn
 } from '@formily/shared'
@@ -195,28 +196,27 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       display === false
     ) {
       form.setState(state => {
-        state.errors = state.errors || []
-        state.warnings = state.warnings || []
-        state.errors = state.errors.reduce((buf: any, item: any) => {
+        const newErrors = state.errors?.reduce?.((buf: any, item: any) => {
           if (item.path === path) {
             return buf
           } else {
             return buf.concat(item)
           }
         }, [])
-        state.warnings = state.warnings.reduce((buf: any, item: any) => {
+        const newWarnings = state.warnings?.reduce?.((buf: any, item: any) => {
           if (item.path === path) {
             return buf
           } else {
             return buf.concat(item)
           }
         }, [])
-        if (state.errors.length) {
-          state.invalid = true
-          state.valid = false
-        } else {
-          state.invalid = false
-          state.valid = true
+        const errorsChanged = !isEqual(state.errors, newErrors)
+        const warningsChanged = !isEqual(state.warnings, newWarnings)
+        if (warningsChanged) {
+          state.warnings = newWarnings
+        }
+        if (errorsChanged) {
+          state.errors = newErrors
         }
       })
     }
@@ -227,28 +227,24 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     const messages = fieldState[type]
     form.setState(state => {
       let foundField = false
-      state[type] = state[type] || []
-      state[type] = state[type].reduce((buf: any, item: any) => {
+      const newMessages = state[type]?.reduce?.((buf: any, item: any) => {
         if (item.path === path) {
           foundField = true
-          return messages.length ? buf.concat({ path, messages }) : buf
+          return messages.length ? buf.concat({ name, path, messages }) : buf
         } else {
           return buf.concat(item)
         }
       }, [])
+      const messageChanged = !isEqual(state[type], newMessages)
+      if (messageChanged) {
+        state[type] = newMessages
+      }
       if (!foundField && messages.length) {
         state[type].push({
           name,
           path,
           messages
         })
-      }
-      if (state.errors.length) {
-        state.invalid = true
-        state.valid = false
-      } else {
-        state.invalid = false
-        state.valid = true
       }
     })
   }
