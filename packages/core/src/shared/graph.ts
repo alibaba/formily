@@ -156,9 +156,9 @@ export class FormGraph<NodeType = any> extends Subscribable<{
               : FormPath.parse(selector).match(path))
           ) {
             eacher(node, path)
-            if (recursion) {
-              this.eachChildren(path, selector, eacher, recursion)
-            }
+          }
+          if (recursion) {
+            this.eachChildren(path, selector, eacher, recursion)
           }
         }
       })
