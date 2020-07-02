@@ -285,7 +285,7 @@ test('eachChildren path selector eacher', () => {
     (node, path) => {
       shallowChilds.push({ node, path })
     },
-    true
+    false
   )
   expect(shallowChilds).toEqual([])
 
