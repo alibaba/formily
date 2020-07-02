@@ -230,7 +230,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       const newMessages = state[type]?.reduce?.((buf: any, item: any) => {
         if (item.path === path) {
           foundField = true
-          return messages.length ? buf.concat({ path, messages }) : buf
+          return messages.length ? buf.concat({ name, path, messages }) : buf
         } else {
           return buf.concat(item)
         }
