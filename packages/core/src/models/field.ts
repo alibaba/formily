@@ -19,18 +19,6 @@ import { Draft } from 'immer'
 
 const normalizeMessages = (messages: any) => toArr(messages).filter(v => !!v)
 
-const DEEP_INSPECT_PROPERTY_KEYS = [
-  'props',
-  'rules',
-  'errors',
-  'warnings',
-  'effectErrors',
-  'effectWarnings',
-  'ruleErrors',
-  'ruleWarnings'
-]
-
-
 const calculateEditable = (
   selfEditable: boolean,
   formEditable: boolean | ((name: string) => boolean),
@@ -147,15 +135,6 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
           : initialValue
       }
       return this.state.initialValue
-    }
-
-    dirtyCheck(path: string[], value: any, nextValue: any) {
-      const propName = path[0]
-      if (DEEP_INSPECT_PROPERTY_KEYS.includes(propName)) {
-        return !isEqual(value, nextValue)
-      } else {
-        return value !== nextValue
-      }
     }
 
     getState = () => {
