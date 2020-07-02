@@ -123,6 +123,7 @@ export const createModel = <
       this.prevState = base
       this.factory.prevState = base
       this.factory.state = base
+      this.factory?.beforeProduce?.()
       produce(
         base,
         draft => {
@@ -163,6 +164,7 @@ export const createModel = <
       this.state = produced
       this.dirtys = this.getDirtys(this.patches)
       this.patches = []
+      this.factory?.afterProduce?.()
       if (this.dirtyCount > 0 && !silent) {
         if (this.batching) {
           return
