@@ -69,7 +69,7 @@ return <div style={style} className={classnames('mega-layout-nest-container', cl
 })`${props => computeStyle(props)}`
 
 const MegaLayout = (props: ILayoutProps) => {
-    const { children, addonBefore, addonAfter, description, ...others } = props
+    const { children, addonBefore, addonAfter, description, className: megaLayoutClassName, ...others } = props
     const layoutProps = props.layoutProps || {}
     const { size } = useDeepFormItem()
 
@@ -122,7 +122,7 @@ const MegaLayout = (props: ILayoutProps) => {
             }
 
             let ele = <StyledLayoutWrapper
-                className="mega-layout-container"
+                className={classnames("mega-layout-container", megaLayoutClassName || '')}
                 label={label}
                 required={required}
                 help={description}
