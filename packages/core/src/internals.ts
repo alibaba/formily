@@ -341,12 +341,12 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
 
   function disableUnmountClearStates(pattern: FormPathPattern = '*') {
     const path = FormPath.parse(pattern)
-    env.clearStatesPatterns[path.toString()] = true
+    env.clearStatesPatterns[path.toString()] = false
   }
 
   function enableUnmountClearStates(pattern: FormPathPattern = '*') {
     const path = FormPath.parse(pattern)
-    env.clearStatesPatterns[path.toString()] = false
+    env.clearStatesPatterns[path.toString()] = true
   }
 
   function supportUnmountClearStates(path: FormPathPattern) {
