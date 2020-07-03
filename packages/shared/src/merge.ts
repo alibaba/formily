@@ -64,7 +64,9 @@ function getEnumerableOwnPropertySymbols(target: any): any {
 }
 
 function getKeys(target: any) {
-  return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
+  return Object.keys(target || {}).concat(
+    getEnumerableOwnPropertySymbols(target)
+  )
 }
 
 function propertyIsOnObject(object: any, property: any) {
