@@ -1,4 +1,5 @@
 import { BigData } from './big-data'
+import { isValid } from './isEmpty'
 
 function defaultIsMergeableObject(value: any) {
   return isNonNullObject(value) && !isSpecial(value)
@@ -64,6 +65,7 @@ function getEnumerableOwnPropertySymbols(target: any): any {
 }
 
 function getKeys(target: any) {
+  if (!isValid(target)) return []
   return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
 }
 

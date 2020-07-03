@@ -110,7 +110,7 @@ export const createModel = <
         if (isFn(this.props.dirtyCheck)) {
           return this.props.dirtyCheck(path, currentValue, nextValue)
         } else {
-          return currentValue !== nextValue
+          return !isEqual(currentValue,nextValue)
         }
       }
     }
@@ -146,18 +146,13 @@ export const createModel = <
           }
         },
         patches => {
-          if (isFn(this.factory.dirtyCheck)) {
-            patches.forEach(patch => {
-              const { path, value } = patch
-              if (this.dirtyCheck(path, value)) {
-                this.patches.push(patch)
-                this.dirtyCount++
-              }
-            })
-          } else {
-            this.patches = this.patches.concat(patches)
-            this.dirtyCount += patches.length
-          }
+          patches.forEach(patch => {
+            const { path, value } = patch
+            if (this.dirtyCheck(path, value)) {
+              this.patches.push(patch)
+              this.dirtyCount++
+            }
+          })
         }
       )
       this.factory.state = produced
