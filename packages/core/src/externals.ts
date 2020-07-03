@@ -64,6 +64,9 @@ export const createFormExternals = (
     setFormValuesIn,
     setFormInitialValuesIn,
     updateRecoverableShownState,
+    supportUnmountClearStates,
+    disableUnmountClearStates,
+    enableUnmountClearStates,
     resetFormMessages,
     syncFormMessages,
     batchRunTaskQueue,
@@ -254,14 +257,15 @@ export const createFormExternals = (
         syncFormMessages('warnings', published)
       }
 
-      if (
-        dirtys.unmounted ||
-        dirtys.visible ||
-        dirtys.display ||
-        dirtys.editable
-      ) {
+      if (dirtys.visible || dirtys.display || dirtys.editable) {
         //fix #682
-        resetFormMessages(published)
+        if (dirtys.unmounted) {
+          if (supportUnmountClearStates(published.path)) {
+            resetFormMessages(published)
+          }
+        } else {
+          resetFormMessages(published)
+        }
       }
 
       heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
@@ -330,7 +334,6 @@ export const createFormExternals = (
     display,
     computeState,
     dataType,
-    unmountRemoveValue,
     props
   }: IFieldRegistryProps<FormilyCore.FieldProps>) {
     let field: IField
@@ -345,7 +348,8 @@ export const createFormExternals = (
         getValue(name) {
           return getFormValuesIn(name)
         },
-        needRemoveValue(path) {
+        supportUnmountClearStates(path) {
+          if (!supportUnmountClearStates(path)) return false
           if (!env.realRemoveTags?.length) return true
           return env.realRemoveTags.every(tag => {
             return !FormPath.parse(calculateMathTag(tag)).match(path)
@@ -387,9 +391,6 @@ export const createFormExternals = (
           const formInitialValue = getFormInitialValuesIn(state.name)
           const syncValue = pickNotEmpty(value, formValue)
           const syncInitialValue = pickNotEmpty(initialValue, formInitialValue)
-          if (isValid(unmountRemoveValue)) {
-            state.unmountRemoveValue = unmountRemoveValue
-          }
 
           if (isValid(syncInitialValue)) {
             state.initialValue = syncInitialValue
@@ -1051,6 +1052,8 @@ export const createFormExternals = (
     getFieldValue,
     setFieldInitialValue,
     getFieldInitialValue,
+    disableUnmountClearStates,
+    enableUnmountClearStates,
     isHostRendering,
     hostUpdate,
     subscribe,

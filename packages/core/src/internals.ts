@@ -339,6 +339,26 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     return env.hostRendering
   }
 
+  function disableUnmountClearStates(pattern: FormPathPattern = '*') {
+    const path = FormPath.parse(pattern)
+    env.clearStatesPatterns[path.toString()] = true
+  }
+
+  function enableUnmountClearStates(pattern: FormPathPattern = '*') {
+    const path = FormPath.parse(pattern)
+    env.clearStatesPatterns[path.toString()] = false
+  }
+
+  function supportUnmountClearStates(path: FormPathPattern) {
+    for (const pattern in env.clearStatesPatterns) {
+      const enable = env.clearStatesPatterns[pattern]
+      if (matchStrategy(pattern, path)) {
+        return enable
+      }
+    }
+    return true
+  }
+
   const graph = new FormGraph({
     matchStrategy
   })
@@ -368,6 +388,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     taskIndexes: {},
     realRemoveTags: [],
     lastShownStates: {},
+    clearStatesPatterns: {},
     submittingTask: undefined
   }
   form.subscription = {
@@ -392,6 +413,9 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     existFormValuesIn,
     deleteFormValuesIn,
     updateRecoverableShownState,
+    disableUnmountClearStates,
+    enableUnmountClearStates,
+    supportUnmountClearStates,
     resetFormMessages,
     syncFormMessages,
     batchRunTaskQueue,

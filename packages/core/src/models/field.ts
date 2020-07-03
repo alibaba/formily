@@ -102,7 +102,6 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       required: false,
       mounted: false,
       unmounted: false,
-      unmountRemoveValue: true,
       props: {}
     }
 
@@ -205,7 +204,15 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       )
     }
 
+    supportUnmountClearStates() {
+      if (isFn(this.props?.supportUnmountClearStates)) {
+        return this.props?.supportUnmountClearStates(this.state.path)
+      }
+      return true
+    }
+
     produceSideEffects(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
+      const supportClearStates = this.supportUnmountClearStates()
       if (dirtys.validating) {
         if (draft.validating === true) {
           draft.loading = true
@@ -217,7 +224,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         dirtys.editable ||
         dirtys.selfEditable ||
         draft.visible === false ||
-        draft.unmounted === true
+        (dirtys.unmounted && draft.unmounted === true && supportClearStates)
       ) {
         draft.errors = []
         draft.effectErrors = []
@@ -240,10 +247,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         draft.mounted = true
       }
       if (dirtys.visible || dirtys.mounted || dirtys.unmounted) {
-        if (
-          draft.unmountRemoveValue &&
-          this.props?.needRemoveValue?.(this.state.path)
-        ) {
+        if (supportClearStates) {
           if (draft.display) {
             if (draft.visible === false || draft.unmounted === true) {
               if (!dirtys.visibleCacheValue) {
