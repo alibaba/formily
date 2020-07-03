@@ -1,4 +1,6 @@
-const isIECompat = !('grid-column-gap' in document?.documentElement?.style)
+import { globalThisPolyfill } from '@formily/shared'
+
+const isIECompat = !('grid-column-gap' in globalThisPolyfill?.document?.documentElement?.style)
 const getIEGridContainerStyle = (opts) => {
     if (isIECompat) {
         const { gutter, autoRow } = opts
