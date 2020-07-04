@@ -296,11 +296,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
               draft.value = undefined
               draft.values = toArr(draft.values)
               draft.values[0] = undefined
-              this.updates.push('value')
             } else if (draft.visible === true) {
               if (!isValid(draft.value)) {
                 draft.value = draft.visibleCacheValue
-                this.updates.push('value')
               }
             }
           }
