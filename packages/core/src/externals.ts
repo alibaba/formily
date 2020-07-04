@@ -79,21 +79,25 @@ export const createFormExternals = (
     eacher: (prevPath: string, currentPath: string) => void
   ) {
     const exchanged = {}
-    for (let index = currentState?.value?.length - 1; index >= 0; index--) {
-      const item = currentState?.value?.[index]
-      const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
-      const current = item?.[ARRAY_UNIQUE_TAG]
-      if (prev === current) continue
-      if (prev === undefined || current === undefined) {
-        continue
-      }
-      if (currentState.value?.length === prevState.value?.length) {
-        if (exchanged[prev] || exchanged[current]) continue
-        exchanged[prev] = true
-        exchanged[current] = true
-      }
-      eacher(prev, current)
-    }
+    //删除元素正向循环，添加或移动使用逆向循环
+    each(
+      currentState?.value,
+      (item, index) => {
+        const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
+        const current = item?.[ARRAY_UNIQUE_TAG]
+        if (prev === current) return
+        if (prev === undefined || current === undefined) {
+          return
+        }
+        if (currentState.value?.length === prevState.value?.length) {
+          if (exchanged[prev] || exchanged[current]) return
+          exchanged[prev] = true
+          exchanged[current] = true
+        }
+        eacher(prev, current)
+      },
+      currentState?.value?.length >= prevState?.value?.length
+    )
   }
 
   function calculateMovePath(name: string, replace: number) {
@@ -152,10 +156,6 @@ export const createFormExternals = (
     prevPattern: FormPathPattern,
     currentPattern: FormPathPattern
   ) {
-    const prevStateMap = {}
-    const prevIndex = FormPath.transform(prevPattern, /\d+/, (...args) => {
-      return Number(args[args.length - 1])
-    })
     const currentIndex = FormPath.transform(
       currentPattern,
       /\d+/,
@@ -163,21 +163,17 @@ export const createFormExternals = (
         return Number(args[args.length - 1])
       }
     )
-    graph.select(calculateMathTag(prevPattern), (field: IField) => {
-      const prevState = field.getState(getExchangeState)
-      const currentPath = calculateMovePath(field.state.path, currentIndex)
+    graph.select(calculateMathTag(prevPattern), (prevField: IField) => {
+      const prevPath = prevField.state.path
+      const prevState = prevField.getState(getExchangeState)
+      const currentPath = calculateMovePath(prevPath, currentIndex)
       const currentState = getFieldState(currentPath, getExchangeState)
-      prevStateMap[field.state.name] = prevState
-      field.setSourceState(state => {
-        Object.assign(state, currentState)
-      })
-    })
-    graph.select(calculateMathTag(currentPattern), (field: IField) => {
-      const { path } = field.getState()
-      const prevPath = calculateMovePath(path, prevIndex)
-      const prevState = prevStateMap[prevPath]
-      if (prevState) {
-        field.setSourceState(state => {
+      const currentField = graph.get(currentPath) as IField
+      if (prevField && currentField) {
+        prevField.setSourceState(state => {
+          Object.assign(state, currentState)
+        })
+        currentField.setSourceState(state => {
           Object.assign(state, prevState)
         })
       }
