@@ -115,6 +115,17 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       this.updates = []
     }
 
+    dirtyCheck(path: string[], currentValue: any, nextValue: any) {
+      if (path[0] === 'value') {
+        if (this.isArrayList()) {
+          //如果是ArrayList，不再做精准判断，因为数组内部侵入了Symbol，使用isEqual判断会有问题
+          return true
+        }
+      }
+
+      return !isEqual(currentValue, nextValue)
+    }
+
     getValueFromProps() {
       if (isFn(this.props?.getValue)) {
         return this.props.getValue(this.state.name)
