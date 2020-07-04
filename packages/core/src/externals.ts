@@ -988,9 +988,10 @@ export const createFormExternals = (
       },
       move($from: number, $to: number) {
         const arr = toArr(getValue()).slice()
-        const item = arr[$from]
-        arr.splice($from, 1)
-        arr.splice($to, 0, item)
+        const fromItem = arr[$from]
+        const toItem = arr[$to]
+        arr[$from] = toItem
+        arr[$to] = fromItem
         setValue(arr)
         return arr
       },
