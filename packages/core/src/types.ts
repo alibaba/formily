@@ -67,8 +67,11 @@ export enum LifeCycleTypes {
   ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
 
-export interface FormGraphProps {
-  matchStrategy?: (pattern: FormPathPattern, field: any) => boolean
+export type FormGraphProps = {
+  matchStrategy?: (
+    pattern: FormPathPattern,
+    nodePath: FormPathPattern
+  ) => boolean
 }
 
 export type FormGraphNodeMap<T> = {

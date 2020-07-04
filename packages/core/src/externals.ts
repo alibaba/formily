@@ -153,6 +153,7 @@ export const createFormExternals = (
   }
 
   function exchangeState(
+    parentPath: FormPathPattern,
     prevPattern: FormPathPattern,
     currentPattern: FormPathPattern
   ) {
@@ -163,21 +164,25 @@ export const createFormExternals = (
         return Number(args[args.length - 1])
       }
     )
-    graph.select(calculateMathTag(prevPattern), (prevField: IField) => {
-      const prevPath = prevField.state.path
-      const prevState = prevField.getState(getExchangeState)
-      const currentPath = calculateMovePath(prevPath, currentIndex)
-      const currentState = getFieldState(currentPath, getExchangeState)
-      const currentField = graph.get(currentPath) as IField
-      if (prevField && currentField) {
-        prevField.setSourceState(state => {
-          Object.assign(state, currentState)
-        })
-        currentField.setSourceState(state => {
-          Object.assign(state, prevState)
-        })
+    graph.eachChildren(
+      parentPath,
+      calculateMathTag(prevPattern),
+      (prevField: IField) => {
+        const prevPath = prevField.state.path
+        const prevState = prevField.getState(getExchangeState)
+        const currentPath = calculateMovePath(prevPath, currentIndex)
+        const currentState = getFieldState(currentPath, getExchangeState)
+        const currentField = graph.get(currentPath) as IField
+        if (prevField && currentField) {
+          prevField.setSourceState(state => {
+            Object.assign(state, currentState)
+          })
+          currentField.setSourceState(state => {
+            Object.assign(state, prevState)
+          })
+        }
       }
-    })
+    )
   }
 
   function eachParentFields(field: IField, callback: (field: IField) => void) {
@@ -201,7 +206,9 @@ export const createFormExternals = (
           const currentTags = parseArrayTags(published.value)
           if (!isEqual(prevTags, currentTags)) {
             const removedTags = calculateRemovedTags(prevTags, currentTags)
-            eachArrayExchanges(field.prevState, published, exchangeState)
+            eachArrayExchanges(field.prevState, published, (prev, current) =>
+              exchangeState(path, prev, current)
+            )
             removeArrayNodes(removedTags)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
