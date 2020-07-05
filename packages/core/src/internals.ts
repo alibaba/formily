@@ -147,7 +147,10 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }, FormPath.getPath(''))
   }
 
-  function matchStrategy(pattern: FormPathPattern, nodePath: FormPathPattern) {
+  function matchStrategy(
+    pattern: FormPathPattern,
+    nodePath: FormPathPattern
+  ): boolean {
     const matchPattern = FormPath.parse(pattern)
     const node = graph.get(nodePath)
     if (!node) return false
