@@ -889,6 +889,52 @@ exports[`test grid layout style gridStyle autoRow false 1`] = `
 />
 `;
 
+exports[`test grid layout style gridStyle autoRow false(enableSafeWidth=false) 1`] = `
+.c0 > .next-form-item {
+  width: 100%;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper,
+.c0 > .next-form-item-control > .mega-layout-item-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+.c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
+
+@media (max-width:720px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(1,1fr);
+  }
+}
+
+@media (min-width:720px) and (max-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(2,1fr);
+  }
+}
+
+@media (min-width:1200px) {
+  .c0 > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid,
+  .c0 > .next-form-item-control > .mega-layout-item-content > .mega-layout-container-content.grid {
+    grid-template-columns: repeat(3,1fr);
+  }
+}
+
+<div
+  className="c0"
+/>
+`;
+
 exports[`test grid layout style gridStyle autoRow true 1`] = `
 .c0 > .next-form-item {
   width: 100%;

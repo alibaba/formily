@@ -85,7 +85,7 @@ const MegaLayout = (props: ILayoutProps) => {
         children={(layout) => {
             const { inline, required, columns, label, labelAlign,
                 grid, gutter, autoRow, span, contextColumns,
-                full, context, isRoot, responsive, inset, hasBorder,
+                full, context, isRoot, responsive, inset, hasBorder, enableSafeWidth
             } = layout
             const isSecondary = context.isRoot
             const itemProps: any = {
@@ -104,6 +104,7 @@ const MegaLayout = (props: ILayoutProps) => {
               size,
               inset,
               hasBorder,
+              enableSafeWidth,
             }
 
             if (label) {
@@ -114,7 +115,7 @@ const MegaLayout = (props: ILayoutProps) => {
                 const wrapperCol = computeAttr(layoutProps.wrapperCol, context.wrapperCol, -1)
                 const labelAlign = computeAttr(layoutProps.labelAlign, context.labelAlign, -1)
 
-                if (labelAlign) itemProps.labelAlign = normalizeCol(labelAlign)
+                if (labelAlign) itemProps.labelAlign = labelAlign
                 if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
                 if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
                 if (labelWidth !== -1) itemProps.labelWidth = labelWidth
@@ -161,7 +162,7 @@ const MegaLayoutItem = (props) => {
     if (layoutProps) {
       const { addonBefore, addonAfter } = megaProps
       const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
-       responsive, size, inset, hasBorder, context
+       responsive, size, inset, hasBorder, context, enableSafeWidth
       } = layoutProps;
 
       const isSecondary = context.isRoot
@@ -176,6 +177,7 @@ const MegaLayoutItem = (props) => {
       itemProps.columns = columns
       itemProps.full = full
       itemProps.responsive = responsive
+      itemProps.enableSafeWidth = enableSafeWidth
 
       if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
       if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
