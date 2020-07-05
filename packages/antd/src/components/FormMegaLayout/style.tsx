@@ -18,6 +18,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
         hasBorder,
         // lg, m, s,
         responsive,
+        enableSafeWidth,
     } = props
     const { lg, m, s } = responsive || {}
     const labelWidth = formatPx(props.labelWidth)
@@ -29,6 +30,9 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
     }
 
     result.antdV3Style = `
+        .ant-form-item-control:first-child:not([class^='ant-col-']):not([class*=' ant-col-']) {
+            width: 100%;
+        }
         &.ant-row {
             display: flex;
             flex-flow: row wrap;
@@ -44,7 +48,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                 }
             }
 
-            > .ant-form-item-control-wrapper {
+            > .ant-form-item-control-wrapper:not([class*='ant-col-']) {
                 float: none;
                 flex: 1 1 0;
             }
@@ -208,20 +212,21 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
     }
 
     const gridContainerStyle = (nested?: boolean) => {
-        const frStyle = nested ? '1fr' : 'minmax(100px, 1fr)';
+        // 保护宽度机制，即列数过多时，内容挤压严重，此时使用保底的100px作为最小宽度保护
+        const frStyle = (!enableSafeWidth || nested) ? '1fr' : 'minmax(100px, 1fr)';
         const containerStyle = !disabledResponsive && responsive ? `
             @media (max-width: 720px) {
-                grid-template-columns: repeat(${autoRow ? s : 'auto-fit'}, ${frStyle});
+                grid-template-columns: repeat(${(!enableSafeWidth || autoRow) ? s : 'auto-fit'}, ${frStyle});
             }
             
             @media (min-width: 720px) and (max-width: 1200px) {
-                grid-template-columns: repeat(${autoRow ? m : 'auto-fit'}, ${frStyle});
+                grid-template-columns: repeat(${(!enableSafeWidth || autoRow) ? m : 'auto-fit'}, ${frStyle});
             }
             @media (min-width: 1200px) {
-                grid-template-columns: repeat(${autoRow ? lg : 'auto-fit'}, ${frStyle});
+                grid-template-columns: repeat(${(!enableSafeWidth || autoRow) ? lg : 'auto-fit'}, ${frStyle});
             }
         ` : `
-            grid-template-columns: repeat(${autoRow ? columns : 'auto-fit'}, ${frStyle});
+            grid-template-columns: repeat(${(!enableSafeWidth || autoRow) ? columns : 'auto-fit'}, ${frStyle});
         `
         return `
             display: grid;

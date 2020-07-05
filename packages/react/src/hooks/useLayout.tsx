@@ -32,6 +32,7 @@ export const useLayout = (props: ILayoutProps) => {
     const labelAlign = computeAttr(props.labelAlign, context.labelAlign, 'right')
     const labelWidth = computeAttr(props.labelWidth, context.labelWidth, -1)
     const wrapperWidth = computeAttr(props.wrapperWidth, context.wrapperWidth, -1)
+    const enableSafeWidth = computeAttr(props.enableSafeWidth, context.enableSafeWidth, true)
     let labelCol = computeAttr(props.labelCol, context.labelCol, -1)
     let wrapperCol = computeAttr(props.wrapperCol, context.wrapperCol, -1)
     const span = computeAttr(props.span, 1, 1)
@@ -79,6 +80,7 @@ export const useLayout = (props: ILayoutProps) => {
         context,
         responsive,
         contextResponsive,
+        enableSafeWidth,
         size,
     }
 }

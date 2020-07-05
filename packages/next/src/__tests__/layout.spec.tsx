@@ -125,7 +125,8 @@ describe('test grid layout style', () => {
   test('normal', () => {
     let layoutProps = {
       gutter: 20,
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -152,6 +153,7 @@ describe('test grid layout style', () => {
       context: {},
       grid: true,
       columns: 3,
+      enableSafeWidth: true,
     }
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -169,7 +171,8 @@ describe('test grid layout style', () => {
       autoRow: true,
       responsive: { s: 1, m: 2, lg: 3 },
       context: {},
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -198,7 +201,8 @@ describe('test grid layout style', () => {
       autoRow: false,
       responsive: { s: 1, m: 2, lg: 3 },
       context: {},
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -215,6 +219,36 @@ describe('test grid layout style', () => {
         media: '(min-width:720px) and (max-width:1200px)'
       })
     expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(min-width:1200px)'
+      })
+  })
+
+  test('gridStyle autoRow false(enableSafeWidth=false)', () => {
+    let layoutProps = {
+      gutter: 20,
+      autoRow: false,
+      responsive: { s: 1, m: 2, lg: 3 },
+      context: {},
+      grid: true,
+      enableSafeWidth: false,
+    }
+    const styleResult = computeNextStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.gridStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(1,1fr)`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(max-width:720px)'
+      })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(2,1fr)`,
+      {
+        modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+        media: '(min-width:720px) and (max-width:1200px)'
+      })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`,
       {
         modifier: `& > .next-form-item-control > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
         media: '(min-width:1200px)'
@@ -360,7 +394,8 @@ describe('nest grid layout container', () => {
       context: {
         grid: true,
       },
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -395,7 +430,8 @@ describe('nest grid layout container', () => {
       autoRow: true,
       contextColumns: 2,
       context: { grid: true },
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeNextStyleBase(layoutProps)
     const Mega = styled.div`

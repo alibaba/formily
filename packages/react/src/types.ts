@@ -31,6 +31,7 @@ export interface ILayoutProps {
   autoRow?: boolean
   columns?: number
   flex?: boolean
+  enableSafeWidth?: boolean
   labelWidth?: number | string
   wrapperWidth?: number | string
   labelCol?: number
