@@ -1,7 +1,5 @@
 import { globalThisPolyfill } from '@formily/shared'
-
-const documentStyle = globalThisPolyfill?.document?.documentElement?.style
-const isIECompat = !documentStyle || !('grid-column-gap' in documentStyle)
+const isIECompat = !('grid-column-gap' in (globalThisPolyfill?.document?.documentElement?.style || {}))
 
 const getIEGridContainerStyle = (opts) => {
     if (isIECompat) {
