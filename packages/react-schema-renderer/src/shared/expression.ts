@@ -8,6 +8,7 @@ import {
 } from '@formily/shared'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
+const actionsSymbol = Symbol.for("__REVA_ACTIONS")
 
 export const complieExpression = <Source = any, Context = any>(
   source: Source,
@@ -25,6 +26,9 @@ export const complieExpression = <Source = any, Context = any>(
     } else if (isArr(source)) {
       return source.map(value => complie(value))
     } else if (isPlainObj(source)) {
+      if (source[actionsSymbol]) {
+        return source
+      }
       if (source['_isAMomentObject']) {
         return source
       }
