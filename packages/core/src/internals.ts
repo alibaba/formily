@@ -303,10 +303,10 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     form.setState((state: IFormState) => {
       state.initialized = true
       if (isValid(options.initialValues)) {
-        state.initialValues = options.initialValues
+        state.initialValues = clone(options.initialValues)
       }
       if (isValid(options.values)) {
-        state.values = options.values
+        state.values = clone(options.values)
       }
       if (!isValid(state.values)) {
         state.values = state.initialValues
