@@ -77,3 +77,47 @@ test('createFormActions', async () => {
   expect(queryByTestId('inputA').getAttribute('value')).toEqual(VALUE_A)
   expect(queryByTestId('inputB').getAttribute('value')).toEqual(VALUE_B)
 })
+
+test('createFormActions', async () => {
+  const actionsSymbol = Symbol.for("__REVA_ACTIONS")
+  const actions = createFormActions()
+  const actions2 = createFormActions()
+  expect(actions[actionsSymbol]).toEqual(true)
+  expect(actions2[actionsSymbol]).toEqual(true)
+  const TestComponent = () => (
+    <SchemaForm
+      actions={actions}
+      effects={($, { setFieldState }) => {
+        $('onFormInit').subscribe(() => {
+          setFieldState('aaa', state => {
+            state.value = 'change value of aaa field onFormInit'
+          })
+        })
+      }}
+      components={{ SchemaForm }}
+    >
+      <Field name="nested"
+        x-component="SchemaForm"
+        x-component-props={{
+          actions: actions2
+        }}
+      />
+      <Field
+        name="aaa"
+        type="string"
+        x-props={{
+          'data-testid': 'inputA'
+        }}
+      />
+    </SchemaForm>
+  )
+
+  const { queryByTestId } = render(<TestComponent />)
+  expect(queryByTestId('inputA').getAttribute('value')).toEqual(
+    'change value of aaa field onFormInit'
+  )
+  actions.setFormState(state => (state.values = { aaa: 123 }))
+  await wait()
+  expect(actions[actionsSymbol]).toEqual(true)
+  expect(actions2[actionsSymbol]).toEqual(true)
+})
