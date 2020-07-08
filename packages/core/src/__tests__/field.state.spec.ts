@@ -287,22 +287,7 @@ test('subscribe/unsubscribe', () => {
   expect(cb).toBeCalledTimes(1)
   expect(cb).toBeCalledWith(paylaod)
 })
-test('batch', () => {
-  const state = new Field()
-  const cb = jest.fn()
-  state.batch(cb)
-  expect(cb).toBeCalledTimes(1)
-  expect(cb).toBeCalledWith()
-  // force run getState
-  const susCb = jest.fn()
-  state.subscribe(susCb)
-  state.dirtyCount = 1
-  state.batch(cb)
-  expect(cb).toBeCalledTimes(2)
-  expect(cb).toBeCalledWith()
-  expect(susCb).toBeCalledTimes(1)
-  expect(susCb).toBeCalledWith(state.state)
-})
+
 test('getState', () => {
   const state = new Field()
   const cb = jest.fn()
@@ -424,7 +409,7 @@ test('isDirty', () => {
   expect(state.isDirty()).toEqual(true)
   state.dirtyCount = 0
   expect(state.isDirty()).toEqual(false)
-  state.dirtys.validating = true
+  state.dirtys = { validating: true }
   expect(state.isDirty()).toEqual(false)
   expect(state.isDirty('validating')).toEqual(true)
 })
