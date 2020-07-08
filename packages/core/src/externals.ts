@@ -383,6 +383,12 @@ export const createFormExternals = (
         },
         unControlledValueChanged() {
           nextTick(() => {
+            //非受控值变化，需要mock一个dirty信息，否则hasChanged判断会失效
+            field.dirtys = {
+              value: true,
+              values: true
+            }
+            field.dirtyCount = 2
             heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
             heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
           })
