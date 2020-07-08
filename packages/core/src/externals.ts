@@ -79,17 +79,21 @@ export const createFormExternals = (
     eacher: (prevPath: string, currentPath: string) => void
   ) {
     const exchanged = {}
+    const prevValue = prevState.value
+    const currentValue = currentState.value
+    const minLengthValue =
+      prevValue?.length < currentValue?.length ? prevValue : currentValue
     //删除元素正向循环，添加或移动使用逆向循环
     each(
-      currentState?.value,
+      minLengthValue,
       (item, index) => {
-        const prev = prevState.value?.[index]?.[ARRAY_UNIQUE_TAG]
-        const current = item?.[ARRAY_UNIQUE_TAG]
+        const prev = prevValue?.[index]?.[ARRAY_UNIQUE_TAG]
+        const current = currentValue?.[index]?.[ARRAY_UNIQUE_TAG]
         if (prev === current) return
         if (prev === undefined || current === undefined) {
           return
         }
-        if (currentState.value?.length === prevState.value?.length) {
+        if (currentValue?.length === prevValue?.length) {
           if (exchanged[prev] || exchanged[current]) return
           exchanged[prev] = true
           exchanged[current] = true
@@ -164,6 +168,7 @@ export const createFormExternals = (
         return Number(args[args.length - 1])
       }
     )
+    const exchanged = {}
     graph.eachChildren(
       parentPath,
       calculateMathTag(prevPattern),
@@ -173,6 +178,7 @@ export const createFormExternals = (
         const currentPath = calculateMovePath(prevPath, currentIndex)
         const currentState = getFieldState(currentPath, getExchangeState)
         const currentField = graph.get(currentPath) as IField
+        if (exchanged[prevPath + currentPath]) return
         if (prevField && currentField) {
           prevField.setSourceState(state => {
             Object.assign(state, currentState)
@@ -180,6 +186,7 @@ export const createFormExternals = (
           currentField.setSourceState(state => {
             Object.assign(state, prevState)
           })
+          exchanged[prevPath + currentPath] = true
         }
       }
     )
