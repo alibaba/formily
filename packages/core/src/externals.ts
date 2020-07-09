@@ -193,8 +193,8 @@ export const createFormExternals = (
               delete patchState.values
               Object.assign(state, patchState)
             }
-            syncFormMessages('errors', state, true)
-            syncFormMessages('warnings', state, true)
+            syncFormMessages('errors', state)
+            syncFormMessages('warnings', state)
           })
         }
         if (currentField) {
@@ -228,9 +228,11 @@ export const createFormExternals = (
           const currentTags = parseArrayTags(published.value)
           if (!isEqual(prevTags, currentTags)) {
             const removedTags = calculateRemovedTags(prevTags, currentTags)
-            eachArrayExchanges(field.prevState, published, (prev, current) =>
-              exchangeState(path, prev, current)
-            )
+            form.batch(() => {
+              eachArrayExchanges(field.prevState, published, (prev, current) =>
+                exchangeState(path, prev, current)
+              )
+            })
             removeArrayNodes(removedTags)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
