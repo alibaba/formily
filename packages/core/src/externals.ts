@@ -38,8 +38,7 @@ import {
   Field,
   ARRAY_UNIQUE_TAG,
   tagArrayList,
-  parseArrayTags,
-  getDefaultFieldState
+  parseArrayTags
 } from './models/field'
 import { VirtualField } from './models/virtual-field'
 
@@ -77,7 +76,7 @@ export const createFormExternals = (
   function eachArrayExchanges(
     prevState: IFieldState,
     currentState: IFieldState,
-    eacher: (prevPath: string, currentPath: string) => void
+    eacher: (prevPath: string, currentPath: string, lastResults: any) => void
   ) {
     const exchanged = {}
     const prevValue = prevState.value
@@ -85,6 +84,7 @@ export const createFormExternals = (
     const maxLengthValue =
       prevValue?.length > currentValue?.length ? prevValue : currentValue
     //删除元素正向循环，添加或移动使用逆向循环
+    let lastResults: any
     each(
       maxLengthValue,
       (item, index) => {
@@ -99,7 +99,7 @@ export const createFormExternals = (
           exchanged[prev] = true
           exchanged[current] = true
         }
-        eacher(prev, current)
+        lastResults = eacher(prev, current, lastResults)
       },
       currentState?.value?.length >= prevState?.value?.length
     )
@@ -160,7 +160,8 @@ export const createFormExternals = (
   function exchangeState(
     parentPath: FormPathPattern,
     prevPattern: FormPathPattern,
-    currentPattern: FormPathPattern
+    currentPattern: FormPathPattern,
+    lastCurrentStates: any
   ) {
     const currentIndex = FormPath.transform(
       currentPattern,
@@ -170,6 +171,7 @@ export const createFormExternals = (
       }
     )
     const exchanged = {}
+    const currentStates = {}
     graph.eachChildren(
       parentPath,
       calculateMathTag(prevPattern),
@@ -186,18 +188,17 @@ export const createFormExternals = (
               Object.assign(state, currentState)
             } else {
               //补位交换
-              const patchState = getDefaultFieldState()
-              delete patchState.name
-              delete patchState.path
-              delete patchState.value
-              delete patchState.values
-              Object.assign(state, patchState)
+              Object.assign(
+                state,
+                getExchangeState(lastCurrentStates[prevPath])
+              )
             }
             syncFormMessages('errors', state)
             syncFormMessages('warnings', state)
           })
         }
         if (currentField) {
+          currentStates[currentPath] = currentField.getState()
           currentField.setSourceState(state => {
             Object.assign(state, prevState)
           })
@@ -205,6 +206,7 @@ export const createFormExternals = (
         exchanged[prevPath + currentPath] = true
       }
     )
+    return currentStates
   }
 
   function eachParentFields(field: IField, callback: (field: IField) => void) {
@@ -229,8 +231,11 @@ export const createFormExternals = (
           if (!isEqual(prevTags, currentTags)) {
             const removedTags = calculateRemovedTags(prevTags, currentTags)
             form.batch(() => {
-              eachArrayExchanges(field.prevState, published, (prev, current) =>
-                exchangeState(path, prev, current)
+              eachArrayExchanges(
+                field.prevState,
+                published,
+                (prev, current, lastResults) =>
+                  exchangeState(path, prev, current, lastResults)
               )
             })
             removeArrayNodes(removedTags)
