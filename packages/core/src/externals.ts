@@ -38,7 +38,8 @@ import {
   Field,
   ARRAY_UNIQUE_TAG,
   tagArrayList,
-  parseArrayTags
+  parseArrayTags,
+  getDefaultFieldState
 } from './models/field'
 import { VirtualField } from './models/virtual-field'
 
@@ -81,16 +82,16 @@ export const createFormExternals = (
     const exchanged = {}
     const prevValue = prevState.value
     const currentValue = currentState.value
-    const minLengthValue =
-      prevValue?.length < currentValue?.length ? prevValue : currentValue
+    const maxLengthValue =
+      prevValue?.length > currentValue?.length ? prevValue : currentValue
     //删除元素正向循环，添加或移动使用逆向循环
     each(
-      minLengthValue,
+      maxLengthValue,
       (item, index) => {
         const prev = prevValue?.[index]?.[ARRAY_UNIQUE_TAG]
         const current = currentValue?.[index]?.[ARRAY_UNIQUE_TAG]
         if (prev === current) return
-        if (prev === undefined || current === undefined) {
+        if (prev === undefined) {
           return
         }
         if (currentValue?.length === prevValue?.length) {
@@ -179,15 +180,29 @@ export const createFormExternals = (
         const currentState = getFieldState(currentPath, getExchangeState)
         const currentField = graph.get(currentPath) as IField
         if (exchanged[prevPath + currentPath]) return
-        if (prevField && currentField) {
+        if (prevField) {
           prevField.setSourceState(state => {
-            Object.assign(state, currentState)
+            if (currentState) {
+              Object.assign(state, currentState)
+            } else {
+              //补位交换
+              const patchState = getDefaultFieldState()
+              delete patchState.name
+              delete patchState.path
+              delete patchState.value
+              delete patchState.values
+              Object.assign(state, patchState)
+            }
+            syncFormMessages('errors', state, true)
+            syncFormMessages('warnings', state, true)
           })
+        }
+        if (currentField) {
           currentField.setSourceState(state => {
             Object.assign(state, prevState)
           })
-          exchanged[prevPath + currentPath] = true
         }
+        exchanged[prevPath + currentPath] = true
       }
     )
   }

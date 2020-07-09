@@ -225,7 +225,11 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }
   }
 
-  function syncFormMessages(type: string, fieldState: IFieldState) {
+  function syncFormMessages(
+    type: string,
+    fieldState: Partial<IFieldState>,
+    silent?: boolean
+  ) {
     const { name, path } = fieldState
     const messages = fieldState[type]
     form.setState(state => {
@@ -249,7 +253,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
           messages
         })
       }
-    })
+    }, silent)
   }
 
   function batchRunTaskQueue(

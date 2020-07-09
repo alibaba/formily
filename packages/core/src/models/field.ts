@@ -55,6 +55,44 @@ export const tagArrayList = (current: any[], name: string, force?: boolean) => {
   })
 }
 
+export const getDefaultFieldState = () => {
+  return {
+    name: '',
+    path: '',
+    dataType: 'any',
+    initialized: false,
+    pristine: true,
+    valid: true,
+    modified: false,
+    touched: false,
+    active: false,
+    visited: false,
+    invalid: false,
+    visible: true,
+    display: true,
+    loading: false,
+    validating: false,
+    errors: [],
+    values: [],
+    ruleErrors: [],
+    ruleWarnings: [],
+    effectErrors: [],
+    warnings: [],
+    effectWarnings: [],
+    editable: true,
+    selfEditable: undefined,
+    formEditable: undefined,
+    value: undefined,
+    visibleCacheValue: undefined,
+    initialValue: undefined,
+    rules: [],
+    required: false,
+    mounted: false,
+    unmounted: false,
+    props: {}
+  }
+}
+
 export const Field = createModel<IFieldState, IFieldStateProps>(
   class FieldStateFactory implements IModelSpec<IFieldState, IFieldStateProps> {
     nodePath: FormPath
@@ -69,41 +107,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
 
     lastCompareResults?: boolean
 
-    state = {
-      name: '',
-      path: '',
-      dataType: 'any',
-      initialized: false,
-      pristine: true,
-      valid: true,
-      modified: false,
-      touched: false,
-      active: false,
-      visited: false,
-      invalid: false,
-      visible: true,
-      display: true,
-      loading: false,
-      validating: false,
-      errors: [],
-      values: [],
-      ruleErrors: [],
-      ruleWarnings: [],
-      effectErrors: [],
-      warnings: [],
-      effectWarnings: [],
-      editable: true,
-      selfEditable: undefined,
-      formEditable: undefined,
-      value: undefined,
-      visibleCacheValue: undefined,
-      initialValue: undefined,
-      rules: [],
-      required: false,
-      mounted: false,
-      unmounted: false,
-      props: {}
-    }
+    state = getDefaultFieldState()
 
     constructor(props: IFieldStateProps = {}) {
       this.nodePath = FormPath.getPath(props.nodePath)
