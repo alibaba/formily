@@ -181,6 +181,7 @@ export const createFormExternals = (
         const currentPath = calculateMovePath(prevPath, currentIndex)
         const currentState = getFieldState(currentPath, getExchangeState)
         const currentField = graph.get(currentPath) as IField
+        if (!isField(prevField) || !isField(currentField)) return
         if (exchanged[prevPath + currentPath]) return
         if (prevField) {
           prevField.setSourceState(state => {
