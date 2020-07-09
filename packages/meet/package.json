@@ -1,6 +1,6 @@
 {
   "name": "@formily/meet",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -25,10 +25,10 @@
   },
   "dependencies": {
     "@alifd/meet": "^1.0.0-beta.25",
-    "@formily/react": "^1.2.4",
-    "@formily/react-schema-renderer": "^1.2.4",
-    "@formily/react-shared-components": "^1.2.4",
-    "@formily/shared": "^1.2.4",
+    "@formily/react": "^1.2.5",
+    "@formily/react-schema-renderer": "^1.2.5",
+    "@formily/react-shared-components": "^1.2.5",
+    "@formily/shared": "^1.2.5",
     "@rax-ui/locale": "^1.0.0-beta.10",
     "classnames": "^2.2.6",
     "rax": "^1.1.1",
