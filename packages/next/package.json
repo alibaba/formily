@@ -22,7 +22,7 @@
   "peerDependencies": {
     "@alifd/next": "^1.19.1",
     "@types/classnames": "^2.2.9",
-    "@types/styled-components": "^4.1.19",
+    "@types/styled-components": "^4.1.19 || ^5.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "styled-components": "^4.1.1"

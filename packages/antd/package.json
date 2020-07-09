@@ -25,7 +25,7 @@
     "jest-styled-components": "^6.3.3"
   },
   "peerDependencies": {
-    "@types/styled-components": "^4.1.19",
+    "@types/styled-components": "^4.1.19 || ^5.0.0",
     "antd": "^3.14.1 || ^4.0.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
