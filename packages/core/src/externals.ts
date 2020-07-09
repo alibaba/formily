@@ -234,7 +234,7 @@ export const createFormExternals = (
               eachArrayExchanges(
                 field.prevState,
                 published,
-                (prev, current, lastResults) =>
+                (prev, current, lastResults = {}) =>
                   exchangeState(path, prev, current, lastResults)
               )
             })
