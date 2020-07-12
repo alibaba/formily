@@ -68,6 +68,7 @@ const StyledLayoutNestWrapper = styled(props => {
   return <div style={style} className={classnames('mega-layout-nest-container', className)}>{children}</div>
 })`${props => computeStyle(props, true)}`
 
+
 const MegaLayout = (props: ILayoutProps) => {
     const { children, addonBefore, addonAfter, description, className: megaLayoutClassName, ...others } = props
     const layoutProps = props.layoutProps || {}
@@ -215,7 +216,7 @@ const MegaLayoutItem = (props) => {
   })
 }
 
-const FormMegaLayout = createVirtualBox<ILayoutProps>('mega-layout', MegaLayout)
+const FormMegaLayout = createVirtualBox<Omit<ILayoutProps, 'children'> & { children: React.ReactNode }>('mega-layout', MegaLayout)
 
 export {
     MegaLayout,
