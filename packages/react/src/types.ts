@@ -21,8 +21,10 @@ export interface ILayoutProps {
   isRoot?: boolean
   isLayout?: boolean
   defaultSettings?: any
-  children?: ((props: ILayoutProps) => React.ReactElement) | React.ReactNode
+  children?: (props: ILayoutProps) => React.ReactElement
   full?: boolean
+  layoutProps?: any
+  className?: string
   label?: any
   required?: boolean
   labelAlign?: ILayoutLabelAlign
