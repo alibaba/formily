@@ -90,8 +90,8 @@ function propertyIsUnsafe(target, key) {
 
 function mergeObject(target: any, source: any, options: Options) {
   const destination = options.assign ? target : {}
-
-  if (!options.assign && options.isMergeableObject(target)) {
+  if (!options.isMergeableObject(target)) return target
+  if (!options.assign) {
     getKeys(target).forEach(function(key) {
       destination[key] = cloneUnlessOtherwiseSpecified(target[key], options)
     })
