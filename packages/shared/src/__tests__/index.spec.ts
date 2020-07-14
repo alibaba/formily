@@ -653,7 +653,9 @@ describe('merge', () => {
     }
 
     const { proxy } = Proxy.revocable(target, traps)
-    expect(merge(proxy, source)).toEqual({
+    expect(merge(proxy, source, {
+      assign: true
+    })).toEqual({
       a: 1
     })
   })
