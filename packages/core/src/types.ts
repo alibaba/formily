@@ -154,6 +154,7 @@ export interface IFieldState<FieldProps = any> {
   formEditable: boolean | ((name: string) => boolean)
   loading: boolean
   modified: boolean
+  inputed: boolean
   active: boolean
   visited: boolean
   validating: boolean
