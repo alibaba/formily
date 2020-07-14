@@ -624,6 +624,39 @@ describe('merge', () => {
       }
     })
   })
+
+  test('bad', () => {
+    const target = {
+      a: 1
+    }
+    const source = {
+      a: 2
+    }
+    const key = 'a'
+
+    // rn
+    Object.defineProperty(target, key, {
+      get() {
+        return target[key]
+      }
+    })
+
+    // immer
+    const traps = {
+      getOwnPropertyDescriptor(state, prop) {
+        const desc = Reflect.getOwnPropertyDescriptor(state, prop)
+        if (desc) {
+          desc.writable = true
+        }
+        return desc
+      },
+    }
+
+    const { proxy } = Proxy.revocable(target, traps)
+    expect(merge(proxy, source)).toEqual({
+      a: 2
+    })
+  })
 })
 
 describe('BigData', () => {
