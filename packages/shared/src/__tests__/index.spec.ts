@@ -625,7 +625,7 @@ describe('merge', () => {
     })
   })
 
-  test('bad', () => {
+  test('bad getOwnPropertyDescriptor', () => {
     const target = {
       a: 1
     }
@@ -654,7 +654,7 @@ describe('merge', () => {
 
     const { proxy } = Proxy.revocable(target, traps)
     expect(merge(proxy, source)).toEqual({
-      a: 2
+      a: 1
     })
   })
 })
