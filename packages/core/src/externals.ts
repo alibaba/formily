@@ -410,9 +410,10 @@ export const createFormExternals = (
             //非受控值变化，需要mock一个dirty信息，否则hasChanged判断会失效
             field.dirtys = {
               value: true,
-              values: true
+              values: true,
+              modified: true
             }
-            field.dirtyCount = 2
+            field.dirtyCount = 3
             heart.publish(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, field)
             heart.publish(LifeCycleTypes.ON_FIELD_CHANGE, field)
           })
@@ -934,6 +935,7 @@ export const createFormExternals = (
       field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
         state.value = values[0]
         state.values = values
+        state.inputed = true
       })
       heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
       heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, form)
@@ -945,11 +947,15 @@ export const createFormExternals = (
         const childNodePath = FormPath.parse(nodePath).concat(key)
         setFieldState(childNodePath, state => {
           state.value = undefined
+          state.values = []
+          state.inputed = true
         })
         deleteFormValuesIn(childNodePath)
       } else {
         field.setState(state => {
           state.value = undefined
+          state.values = []
+          state.inputed = true
         })
         deleteFormValuesIn(nodePath)
       }
@@ -1041,7 +1047,7 @@ export const createFormExternals = (
       },
       moveDown(index: number) {
         const len = toArr(getValue()).length
-        return mutators.move(index, index + 1 > len ? 0 : index + 1)
+        return mutators.move(index, index + 1 >= len ? 0 : index + 1)
       },
       validate(opts?: IFormExtendedValidateFieldOptions) {
         return validate(
