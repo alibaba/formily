@@ -77,6 +77,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       pristine: true,
       valid: true,
       modified: false,
+      inputed: false,
       touched: false,
       active: false,
       visited: false,
@@ -157,6 +158,14 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         initialValue = this.tagArrayList(toArr(initialValue))
       }
 
+      const valueChanged = !isEqual(this.state.value, value)
+
+      if (!this.state.inputed) {
+        if (isEqual(value, this.state.initialValue)) {
+          value = initialValue
+        }
+      }
+      
       const state = {
         ...this.state,
         initialValue,
@@ -166,15 +175,15 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
           formEditable,
           this.state.name
         ),
+        modified: this.state.modified || valueChanged,
         value,
         values: [value].concat(this.state.values.slice(1))
       }
-      const compareResults = isEqual(this.state.value, value)
-      if (!compareResults && compareResults !== this.lastCompareResults) {
+      if (valueChanged && valueChanged !== this.lastCompareResults) {
         this.state.value = value
         this.props?.unControlledValueChanged?.()
       }
-      this.lastCompareResults = compareResults
+      this.lastCompareResults = valueChanged
       return state
     }
 
