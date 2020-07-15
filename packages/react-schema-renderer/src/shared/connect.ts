@@ -54,6 +54,19 @@ const bindEffects = (
   return props
 }
 
+const getFormSchemaProps = (schemaComponentProps, fieldProps: ISchemaFieldComponentProps) => {
+  if (!schemaComponentProps.schema && fieldProps.schema.isForm())  {
+    const { properties } = fieldProps.schema.toJSON()
+    return {
+      schema: new Schema({
+        type: 'object',
+        properties
+      })
+    }
+  }
+  return {}
+}
+
 export const connect = <ExtendsComponentKey extends string = ''>(
   options?: IConnectOptions
 ) => {
@@ -71,9 +84,11 @@ export const connect = <ExtendsComponentKey extends string = ''>(
       const { value, name, mutators, form, editable, props } = fieldProps
       const schema = new Schema(props)
       const schemaComponentProps = schema.getExtendsComponentProps()
+      const formComponentProps = getFormSchemaProps(schemaComponentProps, fieldProps)
       let componentProps: IConnectProps = {
         ...options.defaultProps,
         ...schemaComponentProps,
+        ...formComponentProps,
         [options.valueName]: value,
         [options.eventName]: (event: any, ...args: any[]) => {
           mutators.change(

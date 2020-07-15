@@ -26,7 +26,7 @@ export const SchemaMarkupField: React.FC<IMarkupSchemaFieldProps> = ({
 }) => {
   const parentSchema = useContext(MarkupContext)
   if (!parentSchema) return <Fragment />
-  if (parentSchema.isObject()) {
+  if (parentSchema.isObject() || parentSchema.isForm()) {
     props.name = props.name || getRandomName()
     const schema = parentSchema.setProperty(props.name, props)
     return (
