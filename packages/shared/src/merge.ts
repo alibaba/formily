@@ -87,7 +87,7 @@ function propertyIsUnsafe(target, key) {
         Object.propertyIsEnumerable.call(target, key)
       )
     ) // and also unsafe if they're nonenumerable.
-  } catch (e) {
+  } catch (_) {
     return true
   }
 }
