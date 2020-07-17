@@ -226,7 +226,7 @@ export const createFormExternals = (
       if (dirtys.initialized) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
-      if (dirtys.value) {
+      if (dirtys.value || dirtys.values) {
         const isArrayList = /array/gi.test(published.dataType)
         if (isArrayList) {
           const prevTags = parseArrayTags(field.prevState.value)
