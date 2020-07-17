@@ -123,7 +123,6 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
           return true
         }
       }
-
       return !isEqual(currentValue, nextValue)
     }
 
@@ -154,18 +153,11 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       let initialValue = this.getInitialValueFromProps()
       let formEditable = this.getEditableFromProps()
       if (this.isArrayList()) {
-        value = this.tagArrayList(toArr(value))
-        initialValue = this.tagArrayList(toArr(initialValue))
+        value = toArr(value)
+        initialValue = toArr(initialValue)
       }
-
       const valueChanged = !isEqual(this.state.value, value)
 
-      if (!this.state.inputed) {
-        if (isEqual(value, this.state.initialValue)) {
-          value = initialValue
-        }
-      }
-      
       const state = {
         ...this.state,
         initialValue,
