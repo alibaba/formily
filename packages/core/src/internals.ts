@@ -9,7 +9,8 @@ import {
   isValid,
   isEqual,
   clone,
-  isFn
+  isFn,
+  defaults
 } from '@formily/shared'
 import {
   LifeCycleTypes,
@@ -29,6 +30,11 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       notifyFormValuesChange()
     }
     if (dirtys.initialValues) {
+      if (!env.uploading) {
+        form.setState(state => {
+          state.values = defaults(published.initialValues, published.values)
+        })
+      }
       notifyFormInitialValuesChange()
     }
     if (dirtys.unmounted && published.unmounted) {
@@ -366,10 +372,16 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     return true
   }
 
+  function upload(callback: () => void) {
+    env.uploading = true
+    callback()
+    env.uploading = false
+  }
+
   const graph = new FormGraph({
     matchStrategy
   })
-  const form = new Form(options)
+  const form = new Form()
   const validator = new FormValidator({
     ...options,
     matchStrategy
@@ -392,6 +404,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     hostRendering: false,
     publishing: {},
     taskQueue: [],
+    uploading: false,
     taskIndexes: {},
     realRemoveTags: [],
     lastShownStates: {},
@@ -410,6 +423,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     validator,
     heart,
     env,
+    upload,
     nextTick,
     afterUnmount,
     getDataPath,
