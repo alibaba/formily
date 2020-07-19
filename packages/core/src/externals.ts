@@ -146,7 +146,26 @@ export const createFormExternals = (
     return prevTags.slice(currentTags.length - prevTags.length)
   }
 
-  function removeArrayNodes(tags: string[]) {
+  function removeArrayNodes(field: IField, tags: string[]) {
+    if (tags.length < 0) return
+
+    const removeAll = field.state.value?.length === tags.length
+    const matchTag = (node: IField) => (tag: string) =>
+      FormPath.parse(calculateMathTag(tag)).matchAliasGroup(
+        node.state.name,
+        node.state.path
+      )
+
+    graph.eachChildren(field.state.path, node => {
+      if (removeAll) {
+        graph.remove(node.state.path)
+      } else {
+        if (tags.some(matchTag(node))) {
+          graph.remove(node.state.path)
+        }
+      }
+    })
+
     tags.forEach(tag => {
       graph.select(calculateMathTag(tag), (node: IField) => {
         graph.remove(node.state.path)
@@ -233,15 +252,17 @@ export const createFormExternals = (
           const currentTags = parseArrayTags(published.value)
           if (!isEqual(prevTags, currentTags)) {
             const removedTags = calculateRemovedTags(prevTags, currentTags)
-            form.batch(() => {
-              eachArrayExchanges(
-                field.prevState,
-                published,
-                (prev, current, lastResults = {}) =>
-                  exchangeState(path, prev, current, lastResults)
-              )
-            })
-            removeArrayNodes(removedTags)
+            if (prevTags.length && currentTags.length) {
+              form.batch(() => {
+                eachArrayExchanges(
+                  field.prevState,
+                  published,
+                  (prev, current, lastResults = {}) =>
+                    exchangeState(path, prev, current, lastResults)
+                )
+              })
+            }
+            removeArrayNodes(field, removedTags)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
               field.state.name,
