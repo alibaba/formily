@@ -147,9 +147,7 @@ export const createFormExternals = (
   }
 
   function removeArrayNodes(field: IField, tags: string[]) {
-    if (tags.length < 0) return
-
-    const removeAll = field.state.value?.length === tags.length
+    if (tags.length <= 0) return
     const matchTag = (node: IField) => (tag: string) =>
       FormPath.parse(calculateMathTag(tag)).matchAliasGroup(
         node.state.name,
@@ -157,12 +155,8 @@ export const createFormExternals = (
       )
 
     graph.eachChildren(field.state.path, node => {
-      if (removeAll) {
+      if (tags.some(matchTag(node))) {
         graph.remove(node.state.path)
-      } else {
-        if (tags.some(matchTag(node))) {
-          graph.remove(node.state.path)
-        }
       }
     })
 
