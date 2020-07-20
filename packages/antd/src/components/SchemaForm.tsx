@@ -5,7 +5,6 @@ import { autoScrollInValidateFailed } from '../shared'
 
 export const SchemaForm: React.FC<IAntdSchemaFormProps> = props => {
   const formRef = useRef<HTMLDivElement>()
-  console.log('===SchemaForm: ', props)
   return (
     <div ref={formRef}>
       <SchemaMarkupForm

@@ -861,13 +861,11 @@ const toggleDialogShow = (values) => {
 
   if (values && !('target' in values)) {
     actions.setFieldState('dialog.nestedForm', state => {    
-      state.props['x-component-props'].values = values
+      state.props['x-component-props'].value = values
     })
-  }
-
-  if (values && !('target' in values)) {
-    actions.setFieldState('dialog.hello', state => {    
-      state.props['x-component-props'].values = values
+  } else {
+    actions.setFieldState('dialog.nestedForm', state => {    
+      state.props['x-component-props'].value = {}
     })
   }
 
@@ -902,11 +900,19 @@ const App = () => {
         },
       }}
     >
-      <FormMegaLayout grid>
+      <FormMegaLayout grid columns={4} autoRow>
         <Field name="username" title="姓名" x-component="Input" />
         <Field name="age" title="年龄" x-component="Input" />
         <Field name="inputBox" title="输入框" x-component="Input" />
+
+        <FormSlot>
+          <div>
+            <Button type="primary">搜索</Button>
+          </div>
+        </FormSlot>
       </FormMegaLayout>
+
+      <SchemaButton type="primary" onClick="{{toggleDialogShow}}" style={{ marginBottom: '12px' }}>新建</SchemaButton>
 
       <SchemaTable
         dataSource={[
@@ -957,6 +963,268 @@ const App = () => {
         </NestedSchemaForm>
       </SchemaDialog>
     </SchemaForm>    
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+### 完全基于Schema描述CRUD场景
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import { Button } from 'antd'
+import {
+  NestedSchemaForm,
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  createVirtualBox,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { message, Modal, Table } from 'antd'
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const SchemaDialog = createVirtualBox('Modal', Modal)
+const SchemaFormButtonGroup = createVirtualBox('buttonGroup', FormButtonGroup)
+const SchemaButton = createVirtualBox('button', Button)
+const SchemaSubmit = createVirtualBox('submit', Submit)
+const SchemaReset = createVirtualBox('reset', Reset)
+const SchemaTable = createVirtualBox('table', Table)
+const Hello = createVirtualBox('hello', (props) => {
+  console.log('====>>hello', props)
+  const mrProps = JSON.stringify((props.values || {}))
+  return <div>{mrProps}</div>
+})
+SchemaTable.Column = createVirtualBox('table.column', Table.Column)
+
+const actions = createFormActions()
+const actions2 = createFormActions()
+
+const toggleDialogShow = (values) => {
+  const dialogVisible = actions.getFieldState('dialog', state => state.props['x-component-props'].visible)
+  if (dialogVisible) {
+    // actions2.reset()
+  }
+
+  if (values && !('target' in values)) {
+    actions.setFieldState('dialog.nestedForm', state => {    
+      state.props['x-component-props'].value = values
+    })
+  } else {
+    actions.setFieldState('dialog.nestedForm', state => {    
+      state.props['x-component-props'].value = {}
+    })
+  }
+
+  actions.setFieldState('dialog', state => {    
+    state.props['x-component-props'].visible = !state.props['x-component-props'].visible
+  })
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const components = { Input }
+
+const App = () => {
+  return (
+    <Printer>
+    <SchemaForm
+      actions={actions}
+      components={components}
+      expressionScope={{
+        components,
+        actions2,
+        toggleDialogShow,
+        renderOperation: (val, record) => {
+          return <Button onClick={() => {
+            toggleDialogShow(record)
+          }}>编辑</Button>
+        },
+        onDialogSubmit: async (values) => {
+          console.log('====弹窗表单 values===', values)
+          await sleep(500)
+          message.success('弹窗提交成功')
+          toggleDialogShow()
+        },
+      }}
+      schema={{
+          "type": "object",
+          "properties": {
+            "NO_NAME_FIELD_$0": {
+              "key": "NO_NAME_FIELD_$0",
+              "type": "object",
+              "name": "NO_NAME_FIELD_$0",
+              "x-component": "mega-layout",
+              "x-component-props": {
+                "grid": true,
+                "columns": 4,
+                "autoRow": true
+              },
+              "properties": {
+                "username": {
+                  "key": "username",
+                  "name": "username",
+                  "title": "姓名",
+                  "x-component": "input"
+                },
+                "age": {
+                  "key": "age",
+                  "name": "age",
+                  "title": "年龄",
+                  "x-component": "input"
+                },
+                "inputBox": {
+                  "key": "inputBox",
+                  "name": "inputBox",
+                  "title": "输入框",
+                  "x-component": "input"
+                },
+                "NO_NAME_FIELD_$1": {
+                  "key": "NO_NAME_FIELD_$1",
+                  "type": "object",
+                  "name": "NO_NAME_FIELD_$1"
+                }
+              }
+            },
+            "NO_NAME_FIELD_$2": {
+              "key": "NO_NAME_FIELD_$2",
+              "type": "object",
+              "name": "NO_NAME_FIELD_$2",
+              "x-component": "button",
+              "x-component-props": {
+                "type": "primary",
+                "onClick": "{{toggleDialogShow}}",
+                "style": {
+                  "marginBottom": "12px"
+                },
+                "children": "新建"
+              }
+            },
+            "NO_NAME_FIELD_$3": {
+              "key": "NO_NAME_FIELD_$3",
+              "type": "object",
+              "name": "NO_NAME_FIELD_$3",
+              "x-component": "table",
+              "x-component-props": {
+                "dataSource": [
+                  {
+                    "key": "1",
+                    "username": "billy",
+                    "age": 23
+                  },
+                  {
+                    "key": "2",
+                    "username": "joe",
+                    "age": 21
+                  }
+                ],
+                "columns": [
+                  {
+                    "title": "姓名",
+                    "dataIndex": "username",
+                    "key": "name"
+                  },
+                  {
+                    "title": "年龄",
+                    "dataIndex": "age",
+                    "key": "age"
+                  },
+                  {
+                    "title": "操作",
+                    "render": "{{renderOperation}}"
+                  }
+                ]
+              }
+            },
+            "dialog": {
+              "key": "dialog",
+              "type": "object",
+              "name": "dialog",
+              "x-component": "modal",
+              "x-component-props": {
+                "title": "弹窗",
+                "onCancel": "{{toggleDialogShow}}",
+                "footer": null
+              },
+              "properties": {
+                "nestedForm": {
+                  "key": "nestedForm",
+                  "type": "object",
+                  "name": "nestedForm",
+                  "x-component": "schemaform",
+                  "x-component-props": {
+                    "components": "{{components}}",
+                    "onSubmit": "{{onDialogSubmit}}",
+                    "actions": "{{actions2}}"
+                  },
+                  "properties": {
+                    "NO_NAME_FIELD_$4": {
+                      "key": "NO_NAME_FIELD_$4",
+                      "type": "object",
+                      "name": "NO_NAME_FIELD_$4",
+                      "x-component": "mega-layout",
+                      "x-component-props": {
+                        "labelCol": 4
+                      },
+                      "properties": {
+                        "username": {
+                          "key": "username",
+                          "name": "username",
+                          "title": "姓名",
+                          "x-component": "input"
+                        },
+                        "age": {
+                          "key": "age",
+                          "name": "age",
+                          "title": "年龄",
+                          "x-component": "input"
+                        }
+                      }
+                    },
+                    "NO_NAME_FIELD_$5": {
+                      "key": "NO_NAME_FIELD_$5",
+                      "type": "object",
+                      "name": "NO_NAME_FIELD_$5",
+                      "x-component": "buttongroup",
+                      "x-component-props": {
+                        "align": "center"
+                      },
+                      "properties": {
+                        "NO_NAME_FIELD_$6": {
+                          "key": "NO_NAME_FIELD_$6",
+                          "type": "object",
+                          "name": "NO_NAME_FIELD_$6",
+                          "x-component": "submit",
+                          "x-component-props": {
+                            "children": "提交"
+                          }
+                        },
+                        "NO_NAME_FIELD_$7": {
+                          "key": "NO_NAME_FIELD_$7",
+                          "type": "object",
+                          "name": "NO_NAME_FIELD_$7",
+                          "x-component": "reset",
+                          "x-component-props": {
+                            "children": "重置"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }}
+    />
     </Printer>
   )
 }
