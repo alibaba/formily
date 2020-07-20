@@ -61,7 +61,10 @@ export * from './context'
 export * from './hooks/useFormTableQuery'
 export * from './types'
 
+const NestedSchemaForm = createVirtualBox('SchemaForm', SchemaForm)
+
 export {
+  NestedSchemaForm,
   SchemaForm,
   Form,
   Field,

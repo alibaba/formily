@@ -18,7 +18,8 @@ import { Schema } from '../shared/schema'
 import {
   FormSchemaContext,
   FormComponentsContext,
-  FormExpressionScopeContext
+  FormExpressionScopeContext,
+  FormRootPathContext
 } from '../shared/context'
 import { complieExpression } from '../shared/expression'
 
@@ -45,9 +46,17 @@ const computeSchemaState = (draft: IFieldState, prevState: IFieldState) => {
 export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
 ) => {
-  const path = FormPath.parse(props.path)
+  const formRootPath = useContext(FormRootPathContext)
   const formSchema = useContext(FormSchemaContext)
-  const fieldSchema = new Schema(props.schema || formSchema.get(path))
+  let path = FormPath.parse(props.path)  
+  let fieldSchema = new Schema(props.schema || formSchema.get(path))
+
+  // 嵌套表单，需要处理path及fieldSchema，去除外噪声路径
+  if (formRootPath && path.entire.includes(formRootPath)) {
+    path = FormPath.parse(path.entire.replace(`${formRootPath}.`, ''))
+    fieldSchema.path = path.entire
+  }
+
   const formRegistry = useContext(FormComponentsContext)
   const expressionScope = useContext(FormExpressionScopeContext)
   const ErrorTipPathStr = path.toString()
@@ -243,10 +252,19 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
               )
               return null
             }
-            return React.createElement(
+            
+            const ele = React.createElement(
               formRegistry.virtualFields[stateComponent],
               props
             )
+            if (props.schema?.isForm()) {
+              return React.createElement(FormRootPathContext.Provider, {
+                value: props.path,
+                children: ele
+              })
+            }
+
+            return ele
           }
 
           if (isFn(schemaRenderer)) {

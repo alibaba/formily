@@ -5,7 +5,8 @@ import {
   ISchemaFormRegistry,
   ISchemaFieldComponent,
   ISchemaFieldComponentProps,
-  ISchemaVirtualFieldComponentProps
+  ISchemaVirtualFieldComponentProps,
+  ISchemaVirtualFieldComponent
 } from '../types'
 import pascalCase from 'pascal-case'
 
@@ -82,6 +83,15 @@ export function registerFormFields(object: ISchemaFormRegistry['fields']) {
     object,
     (component, key) => {
       registerFormField(key, component)
+    }
+  )
+}
+
+export function registerVirtualFields(object: ISchemaFormRegistry['virtualFields']) {
+  each<ISchemaFormRegistry['virtualFields'], ISchemaVirtualFieldComponent>(
+    object,
+    (component, key) => {
+      registerVirtualBox(key, component)
     }
   )
 }
