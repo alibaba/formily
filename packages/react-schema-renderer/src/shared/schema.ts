@@ -484,7 +484,7 @@ export class Schema implements ISchema {
   }
 
   isForm() {
-    return this.getExtendsComponent() === 'schemaform'
+    return this.getExtendsComponent() === 'schemaform' || this.getExtendsComponentProps().isForm
   }
 
   mapProperties(callback?: (schema: Schema, key: string) => any) {
