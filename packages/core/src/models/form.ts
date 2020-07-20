@@ -5,7 +5,7 @@ import {
   IFormStateProps,
   FormStateDirtyMap
 } from '../types'
-import { toArr, defaults } from '@formily/shared'
+import { toArr } from '@formily/shared'
 import { Draft } from 'immer'
 
 const normalizeMessages = (messages: any) => toArr(messages).filter(v => !!v)
@@ -29,6 +29,12 @@ export const Form = createModel<IFormState, IFormStateProps>(
       unmounted: false
     }
 
+    props: IFormStateProps
+
+    constructor(props: IFormStateProps) {
+      this.props = props
+    }
+
     produce(draft: Draft<IFormState>, dirtys: FormStateDirtyMap) {
       if (dirtys.errors) {
         draft.errors = normalizeMessages(draft.errors)
@@ -47,9 +53,6 @@ export const Form = createModel<IFormState, IFormStateProps>(
         if (dirtys.values) {
           draft.modified = true
         }
-      }
-      if (dirtys.initialValues) {
-        draft.values = defaults(draft.initialValues, draft.values)
       }
       if (dirtys.validating) {
         if (draft.validating === true) {

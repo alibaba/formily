@@ -274,15 +274,14 @@ export interface IFormState<FormProps = any> {
 
 export type FormStateDirtyMap = StateDirtyMap<IFormState>
 
-export interface IFormStateProps {
+export type IFormStateProps = {}
+
+export interface IFormCreatorOptions {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
-}
-
-export interface IFormCreatorOptions extends IFormStateProps {
   onChange?: (values: IFormState['values']) => void
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void

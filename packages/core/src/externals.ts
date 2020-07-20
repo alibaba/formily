@@ -53,6 +53,7 @@ export const createFormExternals = (
     heart,
     graph,
     validator,
+    upload,
     hostUpdate,
     afterUnmount,
     nextTick,
@@ -145,7 +146,20 @@ export const createFormExternals = (
     return prevTags.slice(currentTags.length - prevTags.length)
   }
 
-  function removeArrayNodes(tags: string[]) {
+  function removeArrayNodes(field: IField, tags: string[]) {
+    if (tags.length <= 0) return
+    const matchTag = (node: IField) => (tag: string) =>
+      FormPath.parse(calculateMathTag(tag)).matchAliasGroup(
+        node.state.name,
+        node.state.path
+      )
+
+    graph.eachChildren(field.state.path, node => {
+      if (tags.some(matchTag(node))) {
+        graph.remove(node.state.path)
+      }
+    })
+
     tags.forEach(tag => {
       graph.select(calculateMathTag(tag), (node: IField) => {
         graph.remove(node.state.path)
@@ -225,22 +239,24 @@ export const createFormExternals = (
       if (dirtys.initialized) {
         heart.publish(LifeCycleTypes.ON_FIELD_INIT, field)
       }
-      if (dirtys.value) {
+      if (dirtys.value || dirtys.values) {
         const isArrayList = /array/gi.test(published.dataType)
         if (isArrayList) {
           const prevTags = parseArrayTags(field.prevState.value)
           const currentTags = parseArrayTags(published.value)
           if (!isEqual(prevTags, currentTags)) {
             const removedTags = calculateRemovedTags(prevTags, currentTags)
-            form.batch(() => {
-              eachArrayExchanges(
-                field.prevState,
-                published,
-                (prev, current, lastResults = {}) =>
-                  exchangeState(path, prev, current, lastResults)
-              )
-            })
-            removeArrayNodes(removedTags)
+            if (prevTags.length && currentTags.length) {
+              form.batch(() => {
+                eachArrayExchanges(
+                  field.prevState,
+                  published,
+                  (prev, current, lastResults = {}) =>
+                    exchangeState(path, prev, current, lastResults)
+                )
+              })
+            }
+            removeArrayNodes(field, removedTags)
             //重置TAG，保证下次状态交换是没问题的
             setFormValuesIn(
               field.state.name,
@@ -393,14 +409,20 @@ export const createFormExternals = (
           return form.getState(state => state.editable)
         },
         setValue(name, value) {
-          setFormValuesIn(name, value)
+          upload(() => {
+            setFormValuesIn(name, value)
+          })
         },
         setInitialValue(name, value) {
-          setFormInitialValuesIn(name, value)
+          upload(() => {
+            setFormInitialValuesIn(name, value)
+          })
         },
         removeValue(name) {
           if (!graph.get(nodePath)) return
-          deleteFormValuesIn(name)
+          upload(() => {
+            deleteFormValuesIn(name)
+          })
         },
         getInitialValue(name) {
           return getFormInitialValuesIn(name)
