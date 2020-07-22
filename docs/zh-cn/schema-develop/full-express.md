@@ -1231,3 +1231,171 @@ const App = () => {
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+
+**案例解析**
+
+- 弹窗和基于 `VirtualField` 的 **Table** 实现列表 + 弹窗表单的 CRUD 场景
+
+
+## 一体化 CRUD 场景
+
+接下里把完全描述页面的能力应用在更加场景的 `CRUD` 场景
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import { Button } from 'antd'
+import {
+  NestedSchemaForm,
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  createVirtualBox,
+  Submit,
+  Reset
+} from '@formily/antd' // 或者 @formily/next
+import { message, Modal, Table } from 'antd'
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const SchemaDialog = (props) => {  
+  const SchemaDialogBase = createVirtualBox('Modal', (props) => {
+    const { visible, title, onCancel, footer, children, ...others } = props
+    console.log('===>>>props: ', props)
+    return <Modal
+      visible={visible}
+      title={title}
+      onCancel={onCancel}
+      footer={footer}
+    >
+      <SchemaForm {...others}>
+        {children}
+      </SchemaForm>
+    </Modal>
+  })
+
+  return React.createElement(SchemaDialogBase, {
+    ...props,
+    isForm: true
+  })
+}
+
+const SchemaFormButtonGroup = createVirtualBox('buttonGroup', FormButtonGroup)
+const SchemaButton = createVirtualBox('button', Button)
+const SchemaSubmit = createVirtualBox('submit', Submit)
+const SchemaReset = createVirtualBox('reset', Reset)
+const SchemaTable = createVirtualBox('table', Table)
+const actions = createFormActions()
+const actions2 = createFormActions()
+
+const toggleDialogShow = (values) => {
+  const dialogVisible = actions.getFieldState('dialog', state => state.props['x-component-props'].visible)
+  
+  actions.setFieldState('dialog', state => {    
+    state.props['x-component-props'].visible = !state.props['x-component-props'].visible
+    if (dialogVisible) {
+      state.props['x-component-props'].value = {}
+    }
+    if (values && !('target' in values)) {
+      state.props['x-component-props'].value = values
+    } else {
+      state.props['x-component-props'].value = {}
+    }
+  })
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+const components = { Input }
+
+const App = () => {
+  return (
+    <Printer>
+    <SchemaForm
+      actions={actions}
+      components={components}
+      expressionScope={{
+        components,
+        actions2,
+        toggleDialogShow,
+        renderOperation: (val, record) => {
+          return <Button onClick={() => {
+            toggleDialogShow(record)
+          }}>编辑</Button>
+        },
+        onDialogSubmit: async (values) => {
+          console.log('====弹窗表单 values===', values)
+          await sleep(500)
+          message.success('弹窗提交成功')
+          toggleDialogShow()
+        },
+      }}
+    >
+      <FormMegaLayout grid columns={4} autoRow>
+        <Field name="username" title="姓名" x-component="Input" />
+        <Field name="age" title="年龄" x-component="Input" />
+        <Field name="inputBox" title="输入框" x-component="Input" />
+
+        <FormSlot>
+          <div>
+            <Button type="primary">搜索</Button>
+          </div>
+        </FormSlot>
+      </FormMegaLayout>
+
+      <SchemaButton type="primary" onClick="{{toggleDialogShow}}" style={{ marginBottom: '12px' }}>新建</SchemaButton>
+
+      <SchemaTable
+        dataSource={[
+          { key: '1', username: 'billy', age: 23 },
+          { key: '2', username: 'joe', age: 21 }
+        ]}
+        columns={[
+          {
+            title: '姓名',
+            dataIndex: 'username',
+            key: 'name',
+          },
+          {
+            title: '年龄',
+            dataIndex: 'age',
+            key: 'age',
+          },
+          {
+            title: '操作',
+            render: "{{renderOperation}}"
+          },
+        ]}
+      />
+
+      {/* 弹窗表单1 */}
+      <SchemaDialog
+        name="dialog"
+        title="弹窗"
+        onCancel="{{toggleDialogShow}}"
+        footer={null}        
+        components="{{components}}"
+        onSubmit="{{onDialogSubmit}}"
+        actions="{{actions2}}"
+      >
+        <FormMegaLayout labelCol={4}>
+          <Field name="username" title="姓名" x-component="Input" />
+          <Field name="age" title="年龄" x-component="Input" />            
+        </FormMegaLayout>
+
+        <SchemaFormButtonGroup align="center">
+          <SchemaSubmit>提交</SchemaSubmit>
+          <SchemaReset>重置</SchemaReset>
+        </SchemaFormButtonGroup>
+      </SchemaDialog>
+    </SchemaForm>    
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
