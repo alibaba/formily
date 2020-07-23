@@ -483,10 +483,6 @@ export class Schema implements ISchema {
     return this.type === 'array'
   }
 
-  isForm() {
-    return this.getExtendsComponent() === 'schemaform' || this.getExtendsComponentProps().isForm
-  }
-
   mapProperties(callback?: (schema: Schema, key: string) => any) {
     return this.getOrderProperties().map(({ schema, key }) => {
       return callback(schema, key)
