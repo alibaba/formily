@@ -177,19 +177,6 @@ export interface IFieldState<FieldProps = any> {
   [key: string]: any
 }
 
-export type IFieldUserState<FieldProps = any> = Omit<
-  IFieldState<FieldProps>,
-  | 'errors'
-  | 'effectErrors'
-  | 'ruleErrors'
-  | 'warnings'
-  | 'effectWarnings'
-  | 'ruleWarnings'
-> & {
-  errors: React.ReactNode | React.ReactNode[]
-  warnings: React.ReactNode | React.ReactNode[]
-}
-
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IFieldStateProps {
