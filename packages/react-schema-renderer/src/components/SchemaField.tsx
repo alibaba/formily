@@ -44,11 +44,10 @@ const computeSchemaState = (draft: IFieldState, prevState: IFieldState) => {
 
 export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
-) => {  
+) => {
   const path = FormPath.parse(props.path)
   const formSchema = useContext(FormSchemaContext)
   const fieldSchema = new Schema(props.schema || formSchema.get(path))
-
   const formRegistry = useContext(FormComponentsContext)
   const expressionScope = useContext(FormExpressionScopeContext)
   const ErrorTipPathStr = path.toString()
