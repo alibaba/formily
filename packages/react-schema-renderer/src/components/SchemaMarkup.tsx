@@ -1,5 +1,4 @@
 import React, { Fragment, createContext, useContext } from 'react'
-import { FormPath } from '@formily/shared'
 import { registerVirtualBox } from '../shared/registry'
 import { SchemaForm } from './SchemaForm'
 import { Schema } from '../shared/schema'
@@ -10,8 +9,6 @@ import {
   ISchemaVirtualFieldComponentProps,
   IVirtualBoxProps
 } from '../types'
-import { FormRootPathContext } from '../shared/context'
-import { SchemaField } from './SchemaField'
 
 const env = {
   nonameId: 0

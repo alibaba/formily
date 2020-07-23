@@ -18,7 +18,7 @@ import { Schema } from '../shared/schema'
 import {
   FormSchemaContext,
   FormComponentsContext,
-  FormExpressionScopeContext,
+  FormExpressionScopeContext
 } from '../shared/context'
 import { complieExpression } from '../shared/expression'
 
@@ -44,10 +44,10 @@ const computeSchemaState = (draft: IFieldState, prevState: IFieldState) => {
 
 export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   props: ISchemaFieldProps
-) => {
+) => {  
+  const path = FormPath.parse(props.path)
   const formSchema = useContext(FormSchemaContext)
-  let path = FormPath.parse(props.path)  
-  let fieldSchema = new Schema(props.schema || formSchema.get(path))
+  const fieldSchema = new Schema(props.schema || formSchema.get(path))
 
   const formRegistry = useContext(FormComponentsContext)
   const expressionScope = useContext(FormExpressionScopeContext)
@@ -244,7 +244,6 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
               )
               return null
             }
-            
             return React.createElement(
               formRegistry.virtualFields[stateComponent],
               props
