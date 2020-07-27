@@ -307,7 +307,12 @@ export const createFormExternals = (
         syncFormMessages('warnings', published)
       }
 
-      if (dirtys.visible || dirtys.display || dirtys.editable) {
+      if (
+        dirtys.visible ||
+        dirtys.display ||
+        dirtys.editable ||
+        dirtys.unmounted
+      ) {
         //fix #682
         if (dirtys.unmounted) {
           if (supportUnmountClearStates(published.path)) {
