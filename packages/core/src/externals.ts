@@ -1024,6 +1024,11 @@ export const createFormExternals = (
           setValue(arr)
           return arr
         }
+        if (origin.length === index) {
+          const arr = origin.concat([value])
+          setValue(arr)
+          return arr
+        }
         const arr = origin.reduce((buf, item, idx) => {
           return idx === index ? buf.concat([value, item]) : buf.concat(item)
         }, [])
