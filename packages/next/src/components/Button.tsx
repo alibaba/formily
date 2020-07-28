@@ -7,6 +7,7 @@ export const Submit = ({ showLoading, onSubmit, ...props }: ISubmitProps) => {
   return (
     <FormSpy
       selector={[
+        LifeCycleTypes.ON_FORM_MOUNT,
         LifeCycleTypes.ON_FORM_SUBMIT_START,
         LifeCycleTypes.ON_FORM_SUBMIT_END
       ]}

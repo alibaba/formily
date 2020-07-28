@@ -34,6 +34,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
                 ...formComponentProps,
                 onSubmit: (e: any) => {
                   if (e && e.preventDefault) e.preventDefault()
+                  if (e && e.stopPropagation) e.stopPropagation()
                   form.submit().catch(e => log.warn(e))
                 },
                 onReset: () => {
