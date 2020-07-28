@@ -877,9 +877,10 @@ const actions = createFormActions()
 const actions2 = createFormActions()
 
 const toggleDialogShow = (values) => {
+  const targetValues = values && 'tatget' in values ? {} : values
   actions.setFieldState('dialog', state => {    
     state.props['x-component-props'].visible = !state.props['x-component-props'].visible
-    state.props['x-component-props'].value = 'tatget' in values ? {} : values
+    state.props['x-component-props'].value = targetValues
   })
 }
 
@@ -1027,9 +1028,10 @@ const actions = createFormActions()
 const actions2 = createFormActions()
 
 const toggleDialogShow = (values) => {
+  const targetValues = values && 'tatget' in values ? {} : values
   actions.setFieldState('dialog', state => {    
     state.props['x-component-props'].visible = !state.props['x-component-props'].visible
-    state.props['x-component-props'].value = 'tatget' in values ? {} : values
+    state.props['x-component-props'].value = targetValues
   })
 }
 
