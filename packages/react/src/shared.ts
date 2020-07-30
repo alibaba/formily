@@ -15,8 +15,8 @@ import {
   IEffectProviderHandler,
   IEffectMiddleware
 } from './types'
-import { Observable } from 'rxjs/internal/Observable'
-import { filter } from 'rxjs/internal/operators/filter'
+import { Observable } from 'rxjs'
+import { filter } from 'rxjs/operators'
 import { createActions, createAsyncActions } from 'react-eva'
 import {
   LifeCycleTypes,
