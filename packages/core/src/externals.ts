@@ -1064,7 +1064,7 @@ export const createFormExternals = (
       shift() {
         return mutators.remove(0)
       },
-      swap() {
+      swap($from: number, $to: number) {
         const arr = toArr(getValue()).slice()
         const fromItem = arr[$from]
         const toItem = arr[$to]
