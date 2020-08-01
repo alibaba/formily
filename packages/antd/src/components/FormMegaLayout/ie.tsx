@@ -9,12 +9,41 @@ const getIEGridContainerStyle = (opts) => {
             display: flex;
             ${autoRow ? 'flex-flow: row wrap;' : ''}
             margin: -${halfGutter}px -${halfGutter}px;
+            grid-column-gap: 0;
+            grid-row-gap: 0;
             
             .button-group {
                 padding-left: ${halfGutter}px;
                 display: flex;
                 align-items: center;   
             }
+        `
+    }
+
+    return ''
+}
+
+const getIEContainerAntd3Style = (opts) => {
+    if (isIECompat) {
+        return `
+            .ant-form-item-control-wrapper {
+                display: flex;
+                flex-direction: column;
+
+                > .ant-form-item-control {
+
+                    > .ant-form-item-children {
+                        display: flex;
+                        flex-direction: column;
+                        min-height: 32px;
+                    }
+                }
+            }
+
+            > .ant-form-item-control-wrapper {
+                flex: 1;
+            }
+            
         `
     }
 
@@ -69,6 +98,7 @@ const getIEGridItemStyle = (opts) => {
 }
 
 export {
+    getIEContainerAntd3Style,
     getIEGridContainerStyle,
     getIEGridItemStyle,
 }
