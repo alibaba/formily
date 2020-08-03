@@ -26,6 +26,9 @@ export const complieExpression = <Source = any, Context = any>(
     } else if (isArr(source)) {
       return source.map(value => complie(value))
     } else if (isPlainObj(source)) {
+      if('$$typeof' in source && '_owner' in source){
+        return source
+      }
       if (source[actionsSymbol]) {
         return source
       }
