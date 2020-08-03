@@ -1,6 +1,6 @@
 import { css } from 'styled-components'
 import insetStyle from './inset'
-import { getIEGridContainerStyle, getIEGridItemStyle } from './ie'
+import { getIEContainerAntd3Style, getIEGridContainerStyle, getIEGridItemStyle } from './ie'
 
 const formatPx = num => (typeof num === 'string' ? num.replace('px', '') : num)
 export const computeAntdStyleBase = (props, debug?: boolean) => {
@@ -53,6 +53,7 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                 flex: 1 1 0;
             }
         }
+        ${getIEContainerAntd3Style()}
     `
 
     // 嵌套不需要执行响应
@@ -187,11 +188,17 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                     display: inline-block;
                     vertical-align: top;
                 }
-                > .ant-form-item-control-wrapper,
+
                 > .ant-form-item-control {
                     display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
                 }                
-            }                  
+            }
+
+            &.mega-layout-item {
+                > .ant-form-item-control-wrapper {
+                    display: ${labelAlign !== 'top' ? 'inline-block' : 'block'};
+                } 
+            }
         `
 
         if (!isLayout) {

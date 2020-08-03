@@ -37,8 +37,11 @@ exports[`inline style gutter item 1`] = `
   vertical-align: top;
 }
 
-.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
+  display: inline-block;
+}
+
+.c0.mega-layout-item > .ant-form-item-control-wrapper {
   display: inline-block;
 }
 
@@ -72,8 +75,11 @@ exports[`inline style item 1`] = `
   vertical-align: top;
 }
 
-.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
+  display: inline-block;
+}
+
+.c0.mega-layout-item > .ant-form-item-control-wrapper {
   display: inline-block;
 }
 
@@ -107,8 +113,11 @@ exports[`inline style labelAlign:top item 1`] = `
   vertical-align: top;
 }
 
-.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
+  display: block;
+}
+
+.c0.mega-layout-item > .ant-form-item-control-wrapper {
   display: block;
 }
 
@@ -142,8 +151,11 @@ exports[`inline style labelAlign:top layout 1`] = `
   vertical-align: top;
 }
 
-.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
+  display: block;
+}
+
+.c0.mega-layout-item > .ant-form-item-control-wrapper {
   display: block;
 }
 
@@ -163,8 +175,11 @@ exports[`inline style layout 1`] = `
   vertical-align: top;
 }
 
-.c0 > .ant-form-item-control-wrapper,
 .c0 > .ant-form-item-control {
+  display: inline-block;
+}
+
+.c0.mega-layout-item > .ant-form-item-control-wrapper {
   display: inline-block;
 }
 
