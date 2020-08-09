@@ -18,7 +18,8 @@ import { Schema } from '../shared/schema'
 import {
   FormSchemaContext,
   FormComponentsContext,
-  FormExpressionScopeContext
+  FormExpressionScopeContext,
+  VirtualFieldContext
 } from '../shared/context'
 import { complieExpression } from '../shared/expression'
 
@@ -158,7 +159,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
       </VirtualField>
     )
   }
-
+  
   if (fieldSchema.isObject() && !schemaComponent) {
     const properties = fieldSchema.mapProperties(
       (schema: Schema, key: string) => {
@@ -242,6 +243,13 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
                 `Can not found the virtual field component <${stateComponent}>.Its key is ${ErrorTipPathStr}.`
               )
               return null
+            }
+            if ((formRegistry.virtualFields[stateComponent] as any).isVirtualFieldComponent) {
+              return React.createElement(VirtualFieldContext.Provider, {
+                value: props,
+                children: React.createElement(formRegistry.virtualFields[stateComponent],
+                  props.schema.getExtendsComponentProps() as ISchemaVirtualFieldComponentProps)
+              })
             }
             return React.createElement(
               formRegistry.virtualFields[stateComponent],

@@ -3,6 +3,11 @@ import {
   createSchemaFormActions
 } from './shared/actions'
 import {
+  useRootSchema,
+  useCurrentSchema,
+  useVirtualFieldProps,
+} from './hooks/useVirtualField'
+import {
   Field as InternalField,
   Form as InternalForm,
   FieldList as InternalFieldList,
@@ -67,5 +72,8 @@ export {
   useFormSpy,
   useFormState,
   useVirtualField,
-  useFormQuery
+  useFormQuery,
+  useRootSchema,
+  useCurrentSchema,
+  useVirtualFieldProps,
 }

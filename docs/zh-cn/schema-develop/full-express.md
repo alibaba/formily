@@ -100,6 +100,135 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+## 像表单组件一样拓展VirtualField
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import { Button } from 'antd'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  createVirtualBox,
+  Submit,
+  Reset,
+  useVirtualField,
+  useRootSchema,
+  useCurrentSchema,
+  useVirtualFieldProps,
+} from '@formily/antd' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/antd-components'
+import Printer from '@formily/printer'
+import 'antd/dist/antd.css'
+
+const Header = (props) => {
+  const { color = '#333' } = props
+  const rootSchema = useRootSchema()
+  console.log('查看 rootSchema', rootSchema)
+
+  const currentSchema = useCurrentSchema()
+  console.log('查看 currentSchema', currentSchema)
+
+  const virtualProps = useVirtualFieldProps()
+  console.log('查询 virtualField 完整属性', virtualProps)
+  return <div style={{ marginBottom: '16px', color }}>{props.children}</div>
+}
+Header.isVirtualFieldComponent = true
+
+const Description = (props) => {
+  return <div style={{ marginBottom: '16px', color: '#999' }}>{props.children}</div>
+}
+Description.isVirtualFieldComponent = true
+
+const Body = (props) => {
+  return <div style={{ marginBottom: '16px', padding: '16px', background: '#f5f5f5' }}>{props.children}</div>
+}
+Body.isVirtualFieldComponent = true
+
+const SchemaFormButtonGroup = createVirtualBox('buttonGroup', FormButtonGroup)
+const SchemaButton = createVirtualBox('button', Button)
+const SchemaSubmit = createVirtualBox('submit', Submit)
+const SchemaReset = createVirtualBox('reset', Reset)
+const actions = createFormActions()
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm
+        actions={actions}
+        components={{
+          Input,
+          Header,
+          Description,
+          Body,
+        }}
+        expressionScope={{
+          renderHeader: <div>页面标题 <a href="#" >返回</a></div>,
+          renderDesc: '页面描述',
+          toggleHeaderColor: () => {
+            actions.setFieldState('header', state => {
+              state.props['x-component-props'].color = state.props['x-component-props'].color === 'red' ? '#333' : 'red'
+            })
+          },
+          toggleShowHeader: () => {
+            actions.setFieldState('header', state => state.visible = !state.visible)
+          },
+          toggleShowBody: () => {
+            actions.setFieldState('body', state => state.visible = !state.visible)
+          },
+          setDesc: () => {
+            actions.setFieldState('desc', state => {
+              state.props['x-component-props'].children = <div>随机数:{`${Math.random()}`.slice(2)}</div>
+            })
+          }
+        }}
+      >
+        <Field
+          name="header"
+          x-component="Header"
+          x-component-props={{
+            children: "{{renderHeader}}"
+          }}
+        />
+
+        <Field
+          name="desc"
+          x-component="Description"
+          x-component-props={{
+            children: "{{renderDesc}}"
+          }}
+        />
+
+        <Field name="body" x-component="Body">
+          <FormMegaLayout labelCol={4}>
+            <Field name="username" title="姓名" x-component="Input" />
+            <Field name="age" title="年龄" x-component="Input" />
+          </FormMegaLayout>
+
+          <SchemaFormButtonGroup align="center">
+            <SchemaSubmit>提交</SchemaSubmit>
+            <SchemaReset>重置</SchemaReset>
+          </SchemaFormButtonGroup>
+        </Field>
+
+        <SchemaFormButtonGroup>
+          <SchemaButton onClick="{{toggleHeaderColor}}">改变Header字体颜色</SchemaButton>
+          <SchemaButton onClick="{{toggleShowHeader}}">显示或隐藏Header</SchemaButton>
+          <SchemaButton onClick="{{toggleShowBody}}">显示或隐藏Body</SchemaButton>
+          <SchemaButton onClick="{{setDesc}}">动态修改页面描述</SchemaButton>
+        </SchemaFormButtonGroup>
+      </SchemaForm>      
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ### 完全基于Schema描述页面
 
 ```jsx

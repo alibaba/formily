@@ -22,25 +22,37 @@ const lowercaseKeys = (obj: any) => {
 const ConnectedComponent = Symbol.for('connected')
 
 const transformComponents = (components: any) => {
-  return map(components, component => {
+  const virtualFields = {}
+  const fields = {}
+  each(components, (component, key) => {
     if (!isFn(component) && !component['styledComponentId'])
       return () => {
         return createElement('div', {}, 'Can not found any component.')
       }
-    let FinalComponent: any
-    if (
-      component['__ALREADY_CONNECTED__'] ||
-      (component as any).isFieldComponent
-    ) {
-      FinalComponent = component
-    } else if (!component[ConnectedComponent]) {
-      component[ConnectedComponent] = connect()(component)
-      FinalComponent = component[ConnectedComponent]
+    let FinalComponent: any    
+    if ((component as any).isVirtualFieldComponent) {
+      virtualFields[key] = component
     } else {
-      FinalComponent = component[ConnectedComponent]
-    }
-    return FinalComponent
+      if (
+        component['__ALREADY_CONNECTED__'] ||
+        (component as any).isFieldComponent
+      ) {
+        FinalComponent = component
+      } else if (!component[ConnectedComponent]) {
+        component[ConnectedComponent] = connect()(component as any)
+        FinalComponent = component[ConnectedComponent]
+      } else {
+        FinalComponent = component[ConnectedComponent]
+      }
+
+      fields[key] = FinalComponent
+    }    
   })
+
+  return {
+    virtualFields,
+    fields,
+  }
 }
 
 const useInternalSchemaForm = (props: ISchemaFormProps) => {
@@ -80,6 +92,11 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     return result
   }, [propsSchema])
   const registry = getRegistry()
+  const {
+    fields: transformFields,
+    virtualFields: transformVirtualFields
+  } = transformComponents(components)
+
   return {
     form: useForm({
       ...props,
@@ -99,11 +116,12 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     fields: lowercaseKeys({
       ...registry.fields,
       ...fields,
-      ...transformComponents(components)
+      ...transformFields,
     }),
     virtualFields: lowercaseKeys({
       ...registry.virtualFields,
-      ...virtualFields
+      ...virtualFields,
+      ...transformVirtualFields,
     }),
     formComponent: formComponent ? formComponent : registry.formComponent,
     formItemComponent: formItemComponent
