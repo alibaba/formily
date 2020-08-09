@@ -5,7 +5,7 @@ import {
 import {
   useRootSchema,
   useCurrentSchema,
-  useVirtualFieldProps,
+  useVirtualFieldProps
 } from './hooks/useVirtualField'
 import {
   Field as InternalField,
@@ -75,5 +75,5 @@ export {
   useFormQuery,
   useRootSchema,
   useCurrentSchema,
-  useVirtualFieldProps,
+  useVirtualFieldProps
 }
