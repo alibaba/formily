@@ -23,6 +23,7 @@ export const Form: React.FC<IAntdFormProps &
     form,
     useDirty,
     onValidateFailed,
+    previewPlaceholder,
     editable,
     validateFirst,
     ...rest
