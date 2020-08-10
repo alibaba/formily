@@ -23,6 +23,7 @@ export const Form: React.FC<INextFormProps &
     form,
     useDirty,
     onValidateFailed,
+    previewPlaceholder,
     validateFirst,
     ...rest
   } = props
