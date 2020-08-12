@@ -153,8 +153,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       let initialValue = this.getInitialValueFromProps()
       let formEditable = this.getEditableFromProps()
       if (this.isArrayList()) {
-        value = toArr(value)
-        initialValue = toArr(initialValue)
+        value = this.fixArrayListTags(toArr(value))
+        initialValue = this.fixArrayListTags(toArr(initialValue))
       }
       const valueChanged = !isEqual(this.state.value, value)
 
@@ -312,6 +312,14 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       } else {
         draft.invalid = false
         draft.valid = true
+      }
+    }
+
+    fixArrayListTags(value: any[]) {
+      if (value?.[0]?.[ARRAY_UNIQUE_TAG]) {
+        return value
+      } else {
+        return this.tagArrayList(value)
       }
     }
 
