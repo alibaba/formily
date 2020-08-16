@@ -2036,7 +2036,7 @@ interface IFormActions {
   }): Promise<void | IFormValidateResult>
 
   /*
-   * 校验表单, 当校验失败时抛出异常
+   * 校验表单, 当校验失败时抛出异常(注意：该校验只针对对x-rules进行校验，不会校验手动设置的errors)
    */
   validate(
     path?: FormPathPattern,
