@@ -159,21 +159,22 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     )
   }
 
+  const renderProperties = () => {
+    return fieldSchema.mapProperties((schema: Schema, key: string) => {
+      const childPath = path.concat(key)
+      return (
+        <SchemaField
+          schema={schema}
+          key={childPath.toString()}
+          path={childPath}
+        />
+      )
+    })
+  }
+
   if (fieldSchema.isObject() && !schemaComponent) {
-    const properties = fieldSchema.mapProperties(
-      (schema: Schema, key: string) => {
-        const childPath = path.concat(key)
-        return (
-          <SchemaField
-            schema={schema}
-            key={childPath.toString()}
-            path={childPath}
-          />
-        )
-      }
-    )
     if (path.length == 0 || props.onlyRenderProperties) {
-      return <Fragment>{properties}</Fragment>
+      return <Fragment>{renderProperties()}</Fragment>
     }
     return renderFieldDelegate(props => {
       const renderComponent = () => {
@@ -186,7 +187,7 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         return React.createElement(
           formRegistry.formItemComponent,
           props,
-          properties
+          renderProperties()
         )
       }
       if (isFn(schemaRenderer)) {
