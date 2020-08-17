@@ -18,7 +18,8 @@ import { Schema } from '../shared/schema'
 import {
   FormSchemaContext,
   FormComponentsContext,
-  FormExpressionScopeContext
+  FormExpressionScopeContext,
+  SchemaFieldPropsContext
 } from '../shared/context'
 import { complieExpression } from '../shared/expression'
 
@@ -108,7 +109,11 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             mutators,
             renderField
           }
-          return callback(props)
+          return (
+            <SchemaFieldPropsContext.Provider value={props}>
+              {callback(props)}
+            </SchemaFieldPropsContext.Provider>
+          )
         }}
       </Field>
     )
@@ -153,7 +158,11 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
             )
           }
 
-          return callback(props)
+          return (
+            <SchemaFieldPropsContext.Provider value={props}>
+              {callback(props)}
+            </SchemaFieldPropsContext.Provider>
+          )
         }}
       </VirtualField>
     )

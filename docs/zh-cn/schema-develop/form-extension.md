@@ -327,6 +327,8 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 扩展 Schema VirtualField 组件，其实就是扩展布局组件，我们的扩展方式主要有：
 
+- SchemaForm 中传入 components 只要组件拥有 isVirtualFieldComponent 静态属性，那么会被当做虚拟组件，同时组件属性可以拿到 VirtualFieldProps
+
 - registerVirtualBox 全局扩展
 
 - createVirtualBox 全局扩展
@@ -358,6 +360,12 @@ const CustomComponent = props => {
   )
 }
 
+const InstanceLayoutComponent = ({ children }) => {
+  return <div>实例级布局组件{children}</div>
+}
+
+InstanceLayoutComponent.isVirtualFieldComponent = true
+
 registerFormFields({ CustomComponent3: connect()(CustomComponent) })
 
 registerVirtualBox('CustomLayout', ({ children, schema }) => {
@@ -376,21 +384,30 @@ const App = () => {
       onChange={values => {
         setValue(values)
       }}
+      components={{
+        InstanceLayoutComponent
+      }}
     >
       <Field
         type="object"
-        name="layout"
-        x-component="CustomLayout"
-        x-component-props={{
-          say: 'hello'
-        }}
+        name="instance-layout"
+        x-component="InstanceLayoutComponent"
       >
         <Field
-          type="string"
-          name="name"
-          title="Name"
-          x-component="CustomComponent3"
-        />
+          type="object"
+          name="layout"
+          x-component="CustomLayout"
+          x-component-props={{
+            say: 'hello'
+          }}
+        >
+          <Field
+            type="string"
+            name="name"
+            title="Name"
+            x-component="CustomComponent3"
+          />
+        </Field>
       </Field>
       {JSON.stringify(value, null, 2)}
     </SchemaForm>

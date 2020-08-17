@@ -45,6 +45,9 @@ export interface ISchemaFieldComponentProps extends IFieldState {
     reactKey?: string | number
   ) => React.ReactElement
 }
+
+export type ISchemaFieldContextProps = Partial<ISchemaFieldComponentProps>
+
 export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
   schema: Schema
   form: IForm
