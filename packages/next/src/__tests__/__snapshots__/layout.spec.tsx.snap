@@ -177,7 +177,7 @@ exports[`inset mode inset style 1`] = `
   display: flex;
 }
 
-.c0 .next-form-item.mega-layout-item {
+.c0.mega-layout-item .next-form-item {
   padding-left: 0;
   border: none;
 }
@@ -295,7 +295,7 @@ exports[`inset mode item inset style(hasBorder) 1`] = `
   display: flex;
 }
 
-.c0 .next-form-item.mega-layout-item {
+.c0.mega-layout-item .next-form-item {
   padding-left: 0;
   border: none;
 }

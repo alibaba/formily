@@ -702,8 +702,8 @@ describe('inset mode', () => {
     expect(tree).toHaveStyleRule('color', 'red', { modifier: `.mega-layout-item-inset-has-error .mega-layout-item-inset-help` })
     expect(tree).toHaveStyleRule('color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .mega-layout-item-inset-help` })
     expect(tree).toHaveStyleRule('display', 'none', { modifier: `.next-form-item-help` })
-    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.next-form-item.mega-layout-item` })
-    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.next-form-item.mega-layout-item` })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `&.mega-layout-item .next-form-item` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `&.mega-layout-item .next-form-item` })
   })
 
   test('inset style(hasBorder)', () => {
@@ -745,8 +745,8 @@ describe('inset mode', () => {
     const tree = renderer.create(<Mega />).toJSON()
 
     expect(tree).toMatchSnapshot()    
-    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `.next-form-item.mega-layout-item` })
-    expect(tree).toHaveStyleRule('border', 'none', { modifier: `.next-form-item.mega-layout-item` })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `&.mega-layout-item .next-form-item` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `&.mega-layout-item .next-form-item` })
     expect(tree).not.toHaveStyleRule('display', 'none', { modifier: `.next-form-item-help` })
     expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
     expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
