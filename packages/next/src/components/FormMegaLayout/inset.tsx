@@ -13,7 +13,7 @@ const insetStyle = (props) => {
                 border-radius: 4px;
             }
         ` : `
-            .next-form-item.mega-layout-item {
+            &.mega-layout-item .next-form-item {
                 padding-left: 0;
                 border: none;
             }

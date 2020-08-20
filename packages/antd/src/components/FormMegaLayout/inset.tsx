@@ -24,7 +24,7 @@ const insetStyle = (props) => {
                 border-radius: 4px;
             }
         ` : `
-            .ant-form-item.mega-layout-item.ant-row {
+            &.mega-layout-item .ant-form-item.ant-row {
                 padding-left: 0;
                 border: none;
             }

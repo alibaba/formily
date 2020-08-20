@@ -297,7 +297,7 @@ exports[`inset mode inset style 1`] = `
   max-width: 100%;
 }
 
-.c0 .ant-form-item.mega-layout-item.ant-row {
+.c0.mega-layout-item .ant-form-item.ant-row {
   padding-left: 0;
   border: none;
 }
@@ -575,7 +575,7 @@ exports[`inset mode item inset style(hasBorder) 1`] = `
   max-width: 100%;
 }
 
-.c0 .ant-form-item.mega-layout-item.ant-row {
+.c0.mega-layout-item .ant-form-item.ant-row {
   padding-left: 0;
   border: none;
 }
