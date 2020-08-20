@@ -17,7 +17,6 @@ const insetStyle = (props) => {
                 }
             }
         }
-        content: ${props.hasBorder ? 'hasBorder' : 'nn'};
         ${props.hasBorder ? `
             .ant-form-item.ant-row {
                 padding-left: 12px;

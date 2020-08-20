@@ -189,10 +189,6 @@ exports[`inline style layout 1`] = `
 `;
 
 exports[`inset mode inset style 1`] = `
-.c0 {
-  content: nn;
-}
-
 .c0 .mega-layout-item-inset {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
@@ -312,10 +308,6 @@ exports[`inset mode inset style 1`] = `
 `;
 
 exports[`inset mode inset style of component 1`] = `
-.c0 {
-  content: hasBorder;
-}
-
 .c0 .mega-layout-item-inset {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
@@ -436,10 +428,6 @@ exports[`inset mode inset style of component 1`] = `
 `;
 
 exports[`inset mode inset style(hasBorder) 1`] = `
-.c0 {
-  content: hasBorder;
-}
-
 .c0 .mega-layout-item-inset {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
@@ -560,10 +548,6 @@ exports[`inset mode inset style(hasBorder) 1`] = `
 `;
 
 exports[`inset mode item inset style(hasBorder) 1`] = `
-.c0 {
-  content: nn;
-}
-
 .c0 .ant-form-item.ant-row {
   display: -webkit-box;
   display: -webkit-flex;
