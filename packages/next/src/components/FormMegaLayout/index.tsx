@@ -17,6 +17,7 @@ const computeAttr = (propAttr, layoutAttr, defaultValue) => {
 const StyledLayoutItem = styled((props) => {
     const { className, grid, children, addonBefore, addonAfter, labelAlign, ...others } = props
     const formItemProps = pickFormItemProps(others)
+    formItemProps.style = props.style || {}
     const cls = classnames({
       [className]: true,      
       'mega-layout-item': true,
