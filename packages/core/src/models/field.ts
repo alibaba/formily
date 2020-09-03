@@ -202,7 +202,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         draft.ruleWarnings = normalizeMessages(draft.ruleWarnings)
       }
       draft.errors = [...draft.ruleErrors, ...draft.effectErrors]
-      draft.warnings = [...draft.warnings, ...draft.warnings]
+      draft.warnings = [...draft.ruleWarnings, ...draft.effectWarnings]
     }
 
     produceEditable(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
