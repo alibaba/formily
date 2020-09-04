@@ -89,7 +89,7 @@ function propertyIsUnsafe(target, key) {
 }
 
 function mergeObject(target: any, source: any, options: Options) {
-  const destination = options.assign ? target : {}
+  const destination = options.assign ? target || {} : {}
   if (!options.isMergeableObject(target)) return target
   if (!options.assign) {
     getKeys(target).forEach(function(key) {
@@ -105,7 +105,7 @@ function mergeObject(target: any, source: any, options: Options) {
       options.isMergeableObject(source[key])
     ) {
       destination[key] = getMergeFunction(key, options)(
-        target[key],
+        target[key] || {},
         source[key],
         options
       )
