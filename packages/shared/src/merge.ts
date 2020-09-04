@@ -100,12 +100,15 @@ function mergeObject(target: any, source: any, options: Options) {
     if (propertyIsUnsafe(target, key)) {
       return
     }
+    if (!target[key]) {
+      destination[key] = source[key]
+    }
     if (
       propertyIsOnObject(target, key) &&
       options.isMergeableObject(source[key])
     ) {
       destination[key] = getMergeFunction(key, options)(
-        target[key] || {},
+        target[key],
         source[key],
         options
       )
