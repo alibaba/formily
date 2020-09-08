@@ -137,6 +137,7 @@ export const ArrayTable: any = styled(
     if (draggable) {
       columns.unshift({
         width: 20,
+        key: 'dragHandler',
         render: () => {
           return <DragHandler className="drag-handler" />
         }
