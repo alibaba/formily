@@ -1383,12 +1383,12 @@ const App = () => {
                 type: 'warning',
                 message: '第一阶梯'
               }
-            } else if ((value >= 100) & (value < 500)) {
+            } else if ((value >= 100) && (value < 500)) {
               return {
                 type: 'warning',
                 message: '第二阶梯'
               }
-            } else if ((value >= 500) & (value < 1000)) {
+            } else if ((value >= 500) && (value < 1000)) {
               return {
                 type: 'warning',
                 message: '第三阶梯'
