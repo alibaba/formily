@@ -81,6 +81,9 @@ const insetStyle = (props) => {
                     padding-right: 0;
                 }
 
+                .ant-radio-group {
+                    line-height: 1.5715;
+                }
                 .ant-checkbox-group {
                     padding-left: 0;
                 }

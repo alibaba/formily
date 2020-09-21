@@ -232,6 +232,10 @@ exports[`inset mode inset style 1`] = `
   padding-right: 0;
 }
 
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-radio-group {
+  line-height: 1.5715;
+}
+
 .c0 .ant-form-item.ant-row .mega-layout-item-content .ant-checkbox-group {
   padding-left: 0;
 }
@@ -349,6 +353,10 @@ exports[`inset mode inset style of component 1`] = `
 .c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker {
   width: 100%;
   padding-right: 0;
+}
+
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-radio-group {
+  line-height: 1.5715;
 }
 
 .c0 .ant-form-item.ant-row .mega-layout-item-content .ant-checkbox-group {
@@ -469,6 +477,10 @@ exports[`inset mode inset style(hasBorder) 1`] = `
 .c0 .ant-form-item.ant-row .mega-layout-item-content .ant-picker {
   width: 100%;
   padding-right: 0;
+}
+
+.c0 .ant-form-item.ant-row .mega-layout-item-content .ant-radio-group {
+  line-height: 1.5715;
 }
 
 .c0 .ant-form-item.ant-row .mega-layout-item-content .ant-checkbox-group {
