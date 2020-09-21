@@ -135,6 +135,8 @@ export const createFormExternals = (
       delete results.value
       delete results.values
     }
+    delete results.mounted
+    delete results.unmounted
     return results
   }
 

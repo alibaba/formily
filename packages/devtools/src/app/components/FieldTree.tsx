@@ -7,21 +7,33 @@ import SerachBox from './SearchBox'
 
 const createTree = (dataSource: any, cursor?: any) => {
   const tree: any = {}
+  const getParentPath = (key: string) => {
+    let parentPath: FormPath = FormPath.parse(key)
+    let i = 0
+    while (true) {
+      parentPath = parentPath.parent()
+      if (dataSource[parentPath.toString()]) {
+        return parentPath
+      }
+      if (i > parentPath.segments.length) return parentPath
+      i++
+    }
+  }
   const findParent = (key: string): any => {
-    const parentPath = FormPath.parse(key).parent()
-    let node = tree
-    for (let i = 0; i < parentPath.segments.length; i++) {
-      const segment = parentPath.segments[i]
-      if (node && node.children) {
-        node.children.forEach(({ path }, index) => {
-          const parsed = FormPath.parse(path)
-          if (parsed.segments[parsed.segments.length - 1] === segment) {
-            node = node.children[index]
+    const parentPath = getParentPath(key)
+    const _findParent = (node: any) => {
+      if (FormPath.parse(node.path).match(parentPath)) {
+        return node
+      } else {
+        for (let i = 0; i < node?.children?.length; i++) {
+          const parent = _findParent(node.children[i])
+          if (parent) {
+            return parent
           }
-        })
+        }
       }
     }
-    return node
+    return _findParent(tree)
   }
   Object.keys(dataSource || {}).forEach(key => {
     if (key == '') {
@@ -45,14 +57,16 @@ const createTree = (dataSource: any, cursor?: any) => {
         cursor.current = node
       }
       const parent = findParent(key)
-      node.name = (node.path || '').slice(
-        parent && parent.path ? parent.path.length + 1 : 0
-      )
-      parent.children = parent.children || []
-      parent.children.push(node)
+      if (parent) {
+        node.name = (node.path || '').slice(
+          parent && parent.path ? parent.path.length + 1 : 0
+        )
+        parent.children = parent.children || []
+        parent.children.push(node)
+      }
     }
   })
-
+  console.log(tree)
   return tree
 }
 
@@ -180,7 +194,7 @@ const ToolBar = styled.div`
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   const allDataRef = useRef(createTree(dataSource))
   const cursor = useRef(allDataRef.current)
-
+  const searchTimer = useRef(null)
   const [data, setData] = useState(allDataRef.current)
 
   const onToggle = (node: any, toggled: boolean) => {
@@ -197,13 +211,16 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   }
 
   const onFilterMouseUp = ({ target: { value } }) => {
-    const filter = value.trim();
-    if (!filter) {
+    clearTimeout(searchTimer.current)
+    searchTimer.current = setTimeout(() => {
+      const filter = value.trim()
+      if (!filter) {
         return setData(allDataRef.current)
-    }
-    let filtered = filters.filterTree(data, filter);
-    filtered = filters.expandFilteredNodes(filtered, filter);
-    setData(filtered);
+      }
+      let filtered = filters.filterTree(data, filter)
+      filtered = filters.expandFilteredNodes(filtered, filter)
+      setData(filtered)
+    }, 400)
   }
 
   useEffect(() => {
@@ -213,10 +230,10 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
 
   return (
     <div className={className}>
-      <ToolBar >
+      <ToolBar>
         <SerachBox onKeyUp={onFilterMouseUp} />
       </ToolBar>
-      
+
       <Treebeard
         data={data}
         onToggle={onToggle}
