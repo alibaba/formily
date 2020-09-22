@@ -48,6 +48,7 @@ export const Form: React.FC<INextFormProps &
                   labelCol={normalizeCol(props.labelCol)}
                   wrapperCol={normalizeCol(props.wrapperCol)}
                   field={false}
+                  inline={inline}
                   onSubmit={e => {
                     if (e && e.preventDefault) e.preventDefault()
                     if (e && e.stopPropagation) e.stopPropagation()
