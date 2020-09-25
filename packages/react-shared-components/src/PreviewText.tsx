@@ -43,6 +43,12 @@ export const PreviewText: React.FC<IPreviewTextProps> & {
       value = String(
         props.value === undefined || props.value === null ? '' : props.value
       )
+      // 如果有换行符，拆分成多行
+      if (value.match('\n')) {
+        value = value
+          .split('\n')
+          .map((subStr, index) => <div key={index}>{subStr}</div>)
+      }
     }
   }
   const placeholder = isFn(context.previewPlaceholder)
