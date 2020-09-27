@@ -961,13 +961,13 @@ export const createFormExternals = (
       field = input
     }
     function setValue(...values: any[]) {
+      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, form)
       field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
         state.value = values[0]
         state.values = values
         state.inputed = true
       })
-      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
-      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, form)
     }
 
     function removeValue(key: string | number) {
