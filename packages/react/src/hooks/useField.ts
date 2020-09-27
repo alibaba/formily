@@ -90,7 +90,11 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
     const cacheProps = ref.current.field.getCache(ref.current.uid)
     if (cacheProps) {
-      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
+      const props = inspectChanged(
+        cacheProps,
+        options.props,
+        INSPECT_PROPS_KEYS
+      )
       if (props) {
         ref.current.field.setState((state: IFieldState) => {
           merge(state, props, {
@@ -99,9 +103,9 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
           })
         })
       }
-      ref.current.field.setCache(ref.current.uid, options)
+      ref.current.field.setCache(ref.current.uid, options.props)
     } else {
-      ref.current.field.setCache(ref.current.uid, options)
+      ref.current.field.setCache(ref.current.uid, options.props)
     }
   })
 
