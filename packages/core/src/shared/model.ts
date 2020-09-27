@@ -284,7 +284,7 @@ export const createModel = <
             FormPath.getIn(this.state, path)
           )
         } else {
-          return this.dirtys[pattern]
+          return !!this.dirtys[pattern]
         }
       }
     }
