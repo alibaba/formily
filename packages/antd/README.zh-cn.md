@@ -1667,6 +1667,43 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+#### registerPreviewTextComponent
+
+全局扩展 `<PreviewText/>` UI 组件
+
+```typescript
+function registerPreviewTextComponent(
+  component: React.JSXElementConstructor<any>
+)
+```
+
+**用法**
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  registerPreviewTextComponent
+} from '@formily/antd'
+import { Input } from '@formily/antd-components'
+
+registerPreviewTextComponent(props => {
+  return <div>**自定义PreviewText**</div>
+})
+
+const App = () => {
+  return (
+    <SchemaForm components={{ Input }} editable={false}>
+      <Field type="string" name="name" title="Name" x-component="Input" />
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 #### registerFormField
 
 ```typescript
