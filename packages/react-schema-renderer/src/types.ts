@@ -97,6 +97,7 @@ export interface ISchemaFormRegistry {
   wrappers?: ISchemaFieldWrapper[]
   formItemComponent: React.JSXElementConstructor<any>
   formComponent: string | React.JSXElementConstructor<any>
+  previewText?: React.JSXElementConstructor<any>
 }
 
 export type SchemaMessage = React.ReactNode

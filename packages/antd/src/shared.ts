@@ -2,7 +2,8 @@ import React from 'react'
 import { PreviewText } from '@formily/react-shared-components'
 import {
   IConnectProps,
-  MergedFieldComponentProps
+  MergedFieldComponentProps,
+  getRegistry
 } from '@formily/react-schema-renderer'
 import { version } from 'antd'
 import { each } from '@formily/shared'
@@ -38,7 +39,7 @@ export const mapTextComponent = (
   const { editable } = fieldProps
   if (editable !== undefined) {
     if (editable === false) {
-      return PreviewText
+      return getRegistry().previewText || PreviewText
     }
   }
   return Target

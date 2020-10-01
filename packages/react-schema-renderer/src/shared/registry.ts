@@ -14,7 +14,8 @@ const registry: ISchemaFormRegistry = {
   virtualFields: {},
   wrappers: [],
   formItemComponent: ({ children }) => children,
-  formComponent: 'form'
+  formComponent: 'form',
+  previewText: null
 }
 
 export const getRegistry = () => {
@@ -22,7 +23,8 @@ export const getRegistry = () => {
     fields: registry.fields,
     virtualFields: registry.virtualFields,
     formItemComponent: registry.formItemComponent,
-    formComponent: registry.formComponent
+    formComponent: registry.formComponent,
+    previewText: registry.previewText
   }
 }
 
@@ -30,6 +32,7 @@ export const cleanRegistry = () => {
   registry.fields = {}
   registry.virtualFields = {}
   registry.wrappers = []
+  registry.previewText = null
 }
 
 export function registerFormComponent<Props = any>(
@@ -130,3 +133,11 @@ export const registerFieldMiddleware = deprecate<
     }
   )
 })
+
+export function registerPreviewTextComponent<Props = any>(
+  component: React.JSXElementConstructor<Props>
+) {
+  if (isFn(component)) {
+    registry.previewText = component
+  }
+}
