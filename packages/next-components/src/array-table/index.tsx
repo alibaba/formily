@@ -20,7 +20,6 @@ const SelectionRow = (Table as any).SelectionRow
 
 const ArrayComponents = {
   Wrapper: Table,
-  Item: Table.Column,
   CircleButton,
   TextButton,
   AdditionIcon: () => <Icon type="add" className="next-icon-first" />,
@@ -158,7 +157,7 @@ export const ArrayTable = styled(
           ...props.getExtendsProps()
         }
         return (
-          <ArrayList.Item
+          <Table.Column
             width={200}
             {...itemProps}
             title={complieExpression(props.title, expressionScope)}
@@ -198,7 +197,7 @@ export const ArrayTable = styled(
         >
           {columns}
           {editable && operations !== false && (
-            <ArrayList.Item
+            <Table.Column
               width={operationsWidth || 200}
               lock="right"
               {...operations}
