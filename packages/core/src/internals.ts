@@ -362,6 +362,14 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     env.clearStatesPatterns[path.toString()] = true
   }
 
+  function disableUnmountRemoveNode() {
+    env.unmountRemoveNode = false
+  }
+
+  function enableUnmountRemoveNode() {
+    env.unmountRemoveNode = true
+  }
+
   function supportUnmountClearStates(path: FormPathPattern) {
     for (const pattern in env.clearStatesPatterns) {
       const enable = env.clearStatesPatterns[pattern]
@@ -409,6 +417,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     realRemoveTags: [],
     lastShownStates: {},
     clearStatesPatterns: {},
+    unmountRemoveNode: false,
     submittingTask: undefined
   }
   form.subscription = {
@@ -437,6 +446,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     disableUnmountClearStates,
     enableUnmountClearStates,
     supportUnmountClearStates,
+    enableUnmountRemoveNode,
+    disableUnmountRemoveNode,
     resetFormMessages,
     syncFormMessages,
     batchRunTaskQueue,
