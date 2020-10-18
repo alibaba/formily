@@ -5,7 +5,6 @@ import {
   IForm,
   IField,
   IMutators,
-  IFieldRegistryProps,
   LifeCycleTypes
 } from '@formily/core'
 import { getValueFromEvent, inspectChanged } from '../shared'
