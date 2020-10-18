@@ -19,7 +19,8 @@ module.exports = {
   verbose: true,
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.jsx?$': 'babel-jest'
+    '^.+\\.jsx?$': 'babel-jest',
+    '^.+\\.vue$': 'vue-jest-babel7'
   },
   preset: 'ts-jest',
   testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
