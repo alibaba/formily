@@ -2,7 +2,6 @@
   "parser": "vue-eslint-parser",
   "extends": [
     "plugin:vue/recommended",
-    "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint"
   ],
@@ -14,8 +13,6 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "react",
-    "react-hooks",
     "prettier"
   ],
   "parserOptions": {
@@ -28,22 +25,10 @@
     },
     "extraFileExtensions": [".vue"]
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "rules": {
     "prettier/prettier": 2,
     // don't force es6 functions to include space before paren
     "space-before-function-paren": 0,
-    "react/prop-types": 0,
-    "react/no-find-dom-node": 0,
-    "react/display-name": 0,
-    // allow specifying true explicitly for boolean props
-    "react/jsx-boolean-value": 0,
-    "react-hooks/rules-of-hooks": 2,
-    "react/no-did-update-set-state": 0,
     // maybe we should no-public
     "@typescript-eslint/explicit-member-accessibility": 0,
     "@typescript-eslint/interface-name-prefix": 0,
@@ -69,6 +54,14 @@
     "no-var": 1,
     "@typescript-eslint/no-empty-function": 1,
     "prefer-rest-params": 1,
-    "vue/html-self-closing": 0
+    "vue/html-self-closing": 0,
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": 3,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
+      }
+    }],
+    "react-hooks/rules-of-hooks": 0
   }
 }
