@@ -2,29 +2,14 @@
   <Field v-bind="$attrs">
     <template #default="{state, mutators}">
       <div>
-        <div>show input</div>
         <input
-          data-testid="radio1"
-          type="radio"
-          value="1"
-          :name="$attrs.name"
-          :checked="state.value === '1'"
+          :data-testid="`input-${$attrs.name}`"
           :disabled="!state.editable"
+          :value="state.value || ''"
           @change="mutators.change"
+          @blur="mutators.blur"
+          @focus="mutators.focus"
         />
-        Yes
-        <br />
-        <input
-          data-testid="radio2"
-          type="radio"
-          value="0"
-          :name="$attrs.name"
-          :checked="state.value === '0'"
-          :disabled="!state.editable"
-          @change="mutators.change"
-        />
-        No
-        <br />
         <div data-testid="field-errors">
           {{ state.errors }}
         </div>

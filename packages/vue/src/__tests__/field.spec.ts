@@ -1,23 +1,37 @@
-import { render, screen, fireEvent } from '@testing-library/vue'
-import Button from './test-components/field/button.vue'
+import { render, fireEvent } from '@testing-library/vue'
+import FormComponent from './test-components/field/form.vue'
+import { createFormActions, createAsyncFormActions } from '../index'
+import { IFormActions, IFormAsyncActions } from '../types'
 
-test('increments value on click', async () => {
-  // The `render` method renders the component into the document.
-  // It also binds to `screen` all the available queries to interact with
-  // the component.
-  render(Button)
+describe('test all apis', () => {
+  let actions: IFormActions
+  let asyncActions: IFormAsyncActions
 
-  // queryByText returns the first matching node for the provided text
-  // or returns null.
-  expect(screen.queryByText('Times clicked: 0')).toBeTruthy()
+  const renderForm = (isAsync = false) =>
+    render(FormComponent, {
+      props: { actions: isAsync ? asyncActions : actions }
+    })
 
-  // getByText returns the first matching node for the provided text
-  // or throws an error.
-  const button = screen.getByText('increment')
+  beforeAll(() => {
+    actions = createFormActions()
+    asyncActions = createAsyncFormActions()
+  })
 
-  // Click a couple of times.
-  await fireEvent.click(button)
-  await fireEvent.click(button)
-
-  expect(screen.queryByText('Times clicked: 2')).toBeTruthy()
+  test('field visible and display', () => {
+    const { queryByTestId } = renderForm()
+    const radio1Ele = queryByTestId('radio1')
+    fireEvent.click(radio1Ele)
+    const inputA2 = queryByTestId('input-a2')
+    fireEvent.change(inputA2, { target: { value: '123' } })
+    const inputA3 = queryByTestId('input-a3')
+    fireEvent.change(inputA3, { target: { value: '456' } })
+    let formState = actions.getFormState()
+    expect(formState.values.a2).toEqual('123')
+    expect(formState.values.a3).toEqual('456')
+    const radio2Ele = queryByTestId('radio2')
+    fireEvent.click(radio2Ele)
+    formState = actions.getFormState()
+    expect(formState.values.a2).toBeUndefined()
+    expect(formState.values.a3).toEqual('456')
+  })
 })
