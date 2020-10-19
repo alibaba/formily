@@ -1,17 +1,17 @@
-import { reactive } from '@vue/composition-api'
+import { ref } from '@vue/composition-api'
 import { isEqual } from '@formily/shared'
 
 export const useDirty = (input: any = {}, keys: string[] = []) => {
-  const ref = reactive<any>({ data: { ...input }, dirtys: {}, num: 0 })
-  ref.num = 0
+  const dirtyRef = ref<any>({ data: { ...input }, dirtys: {}, num: 0 })
+  dirtyRef.value.num = 0
   keys.forEach(key => {
-    if (!isEqual(input[key], ref.data[key])) {
-      ref.data[key] = input[key]
-      ref.dirtys[key] = true
-      ref.num++
+    if (!isEqual(input[key], dirtyRef.value.data[key])) {
+      dirtyRef.value.data[key] = input[key]
+      dirtyRef.value.dirtys[key] = true
+      dirtyRef.value.num++
     } else {
-      ref.dirtys[key] = false
+      dirtyRef.value.dirtys[key] = false
     }
   })
-  return ref
+  return dirtyRef.value
 }

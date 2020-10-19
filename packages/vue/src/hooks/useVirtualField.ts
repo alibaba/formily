@@ -1,51 +1,26 @@
 import { inject, ref, watchEffect, computed } from '@vue/composition-api'
-import { isFn, merge } from '@formily/shared'
 import {
-  IFieldState,
+  IVirtualFieldRegistryProps,
+  IVirtualFieldState,
   IForm,
-  IField,
-  IMutators,
+  IVirtualField,
   LifeCycleTypes
 } from '@formily/core'
-import { getValueFromEvent, inspectChanged } from '../shared'
+import { merge } from '@formily/shared'
 // import { useForceUpdate } from './useForceUpdate'
-import { IFieldHook, IFieldStateUIProps } from '../types'
+import { IVirtualFieldHook } from '../types'
+import { inspectChanged } from '../shared'
 import { FormSymbol } from '../constants'
 
-const extendMutators = (
-  mutators: IMutators,
-  props: IFieldStateUIProps
-): IMutators => {
-  return {
-    ...mutators,
-    change: (...args) => {
-      args[0] = isFn(props.getValueFromEvent)
-        ? props.getValueFromEvent(...args)
-        : args[0]
-      mutators.change(...args.map(event => getValueFromEvent(event)))
-    },
-    blur: () => {
-      mutators.blur()
-      if (props.triggerType === 'onBlur') {
-        mutators.validate({ throwErrors: false })
-      }
-    }
-  }
-}
+const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 
-const INSPECT_PROPS_KEYS = [
-  'props',
-  'rules',
-  'required',
-  'editable',
-  'visible',
-  'display'
-]
-
-export const useField = (options: IFieldStateUIProps): IFieldHook => {
+export const useVirtualField = (
+  options: IVirtualFieldRegistryProps
+): IVirtualFieldHook => {
   // const forceUpdate = useForceUpdate()
+  //const dirty = useDirty(options, ['props', 'visible', 'display'])
   const fieldRef = ref<{
-    field: IField
+    field: IVirtualField
     unmounted: boolean
     subscriberId: number
     uid: symbol
@@ -59,29 +34,20 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   if (!form) {
     throw new Error('Form object cannot be found from context.')
   }
-
-  const mutators = computed(() => {
+  computed(() => {
     let initialized = false
-    fieldRef.value.field = form.registerField(options)
+    fieldRef.value.field = form.registerVirtualField(options)
     fieldRef.value.subscriberId = fieldRef.value.field.subscribe(() => {
       if (fieldRef.value.unmounted) return
       /**
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在formily core内部
        */
       if (initialized) {
-        if (options.triggerType === 'onChange') {
-          if (fieldRef.value.field.hasChanged('value')) {
-            mutators.value.validate({ throwErrors: false })
-          }
-        }
-        // if (!form.isHostRendering()) {
-        //   forceUpdate()
-        // }
+        // forceUpdate()
       }
     })
     fieldRef.value.uid = Symbol()
     initialized = true
-    return extendMutators(form.createMutators(fieldRef.value.field), options)
   })
 
   watchEffect(() => {
@@ -90,14 +56,14 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     if (cacheProps) {
       const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
       if (props) {
-        fieldRef.value.field.setState((state: IFieldState) => {
+        fieldRef.value.field.setState((state: IVirtualFieldState) => {
           merge(state, props, {
             assign: true,
             arrayMerge: (target, source) => source
           })
         })
+        fieldRef.value.field.setCache(fieldRef.value.uid, options)
       }
-      fieldRef.value.field.setCache(fieldRef.value.uid, options)
     } else {
       fieldRef.value.field.setCache(fieldRef.value.uid, options)
     }
@@ -113,7 +79,7 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       fieldRef.value.field.removeCache(fieldRef.value.uid)
       fieldRef.value.unmounted = true
       fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
-      fieldRef.value.field.setState((state: IFieldState) => {
+      fieldRef.value.field.setState((state: IVirtualFieldState) => {
         state.unmounted = true
       }) //must notify,need to trigger remove value
     }
@@ -122,12 +88,11 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const state = fieldRef.value.field.getState()
 
   return {
-    form,
-    field: fieldRef.value.field,
     state,
-    mutators: mutators.value,
+    field: fieldRef.value.field,
+    form,
     props: state.props
   }
 }
 
-export default useField
+export default useVirtualField

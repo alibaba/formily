@@ -1,4 +1,4 @@
-import { inject, reactive, watchEffect, computed } from '@vue/composition-api'
+import { inject, ref, watchEffect, computed } from '@vue/composition-api'
 import {
   createForm,
   IFormCreatorOptions,
@@ -23,7 +23,7 @@ const useInternalForm = (
   options: IFormCreatorOptions & { form?: IForm } = {}
 ) => {
   // const forceUpdate = useForceUpdate()
-  const ref = reactive({
+  const subscribeRef = ref({
     subscribeId: null
   })
   const dirty = useDirty(options, ['initialValues', 'values', 'editable'])
@@ -32,7 +32,7 @@ const useInternalForm = (
   const form = computed(() => {
     const form = alreadyHaveForm ? options.form : createForm(options)
     if (!alreadyHaveForm) {
-      ref.subscribeId = form.subscribe(({ type }) => {
+      subscribeRef.value.subscribeId = form.subscribe(({ type }) => {
         if (type === LifeCycleTypes.ON_FORM_HOST_RENDER) {
           // forceUpdate()
         }
@@ -68,7 +68,7 @@ const useInternalForm = (
       globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
     }
     return () => {
-      form.value.unsubscribe(ref.subscribeId)
+      form.value.unsubscribe(subscribeRef.value.subscribeId)
       form.value.setFormState(state => {
         state.unmounted = true
       })
@@ -89,12 +89,12 @@ export const useForm = <
 >(
   props: IFormProps<Value, DefaultValue, EffectPayload, EffectAction>
 ) => {
-  let actionsRef = reactive<any>(null)
-  actionsRef = actionsRef || props.actions || createFormActions()
+  const actionsRef = ref<any>(null)
+  actionsRef.value = actionsRef.value || props.actions || createFormActions()
   const broadcast = inject<Broadcast>(BroadcastSymbol)
   const { implementActions, dispatch } = useEva({
-    actions: actionsRef.current,
-    effects: createFormEffects(props.effects, actionsRef.current)
+    actions: actionsRef.value,
+    effects: createFormEffects(props.effects, actionsRef.value)
   })
   const lifecycles = [
     new FormLifeCycle(({ type, payload }) => {
@@ -119,15 +119,15 @@ export const useForm = <
       }
     )
   ]
-  const optionsRef = reactive<any>({
+  const optionsRef = ref<{ [key: string]: any }>({
     ...props,
     initialValues: props.initialValues || props.defaultValue
   })
 
-  Object.assign(optionsRef, props)
-  optionsRef.values = props.value
-  optionsRef.lifecycles = lifecycles
-  const form = useInternalForm(optionsRef)
+  Object.assign(optionsRef.value, props)
+  optionsRef.value.values = props.value
+  optionsRef.value.lifecycles = lifecycles
+  const form = useInternalForm(optionsRef.value)
   return form
 }
 
