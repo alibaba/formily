@@ -26,10 +26,10 @@
         No
         <br />
         <div data-testid="field-errors">
-          {{ state.errors }}
+          {{ state.errors.length > 0 ? state.errors : '' }}
         </div>
         <div data-testid="field-warnings">
-          {{ state.warnings }}
+          {{ state.warnings.length > 0 ? state.warnings : '' }}
         </div>
       </div>
     </template>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { Field } from '../index'
+import { Field } from '../../../index'
 
 export default {
   components: { Field }

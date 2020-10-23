@@ -1,24 +1,29 @@
 <template>
-  <Form
-    :actions="actions"
-    :effects="handleFieldChange"
-    @submit="handleSubmit"
-    @reset="handleSubmit"
-    @change="handleChange"
-    @validate-failed="handleValidateFailed"
-  >
-    <Radio name="a1" required />
-    <Input name="a2" required />
-    <Input name="a3" required />
-  </Form>
+  <div>
+    <Form
+      :actions="actions"
+      :effects="handleFieldChange"
+      :on-submit="handleSubmit"
+      :on-reset="handleSubmit"
+      :on-change="handleChange"
+      :on-validate-failed="handleValidateFailed"
+    >
+      <Radio name="a1" required initial-value="1" />
+      <Input name="a2" required />
+      <Input name="a3" required />
+    </Form>
+  </div>
 </template>
 
 <script>
 import Radio from './radio.vue'
 import Input from './input.vue'
+import { Form, FormEffectHooks } from '../../../index'
+
+const { onFieldValueChange$ } = FormEffectHooks
 
 export default {
-  components: { Radio, Input },
+  components: { Form, Radio, Input },
   props: {
     actions: {
       type: Object,
@@ -26,7 +31,8 @@ export default {
     }
   },
   methods: {
-    handleFieldChange($, { setFieldState }) {
+    handleFieldChange($, actions) {
+      const { setFieldState } = actions
       // run effect after form mount
       onFieldValueChange$('a1').subscribe(x => {
         if (x.value === '0') {

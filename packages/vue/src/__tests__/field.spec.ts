@@ -1,4 +1,5 @@
 import { render, fireEvent } from '@testing-library/vue'
+import { VueClass } from '@vue/test-utils'
 import FormComponent from './test-components/field/form.vue'
 import { createFormActions, createAsyncFormActions } from '../index'
 import { IFormActions, IFormAsyncActions } from '../types'
@@ -8,7 +9,7 @@ describe('test all apis', () => {
   let asyncActions: IFormAsyncActions
 
   const renderForm = (isAsync = false) =>
-    render(FormComponent, {
+    render(FormComponent as VueClass<FormComponent>, {
       props: { actions: isAsync ? asyncActions : actions }
     })
 
