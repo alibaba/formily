@@ -1,4 +1,11 @@
-import { inject, ref, watchEffect, computed } from '@vue/composition-api'
+import {
+  inject,
+  shallowRef,
+  watchEffect,
+  computed,
+  getCurrentInstance,
+  onBeforeUpdate
+} from '@vue/composition-api'
 import {
   IVirtualFieldRegistryProps,
   IVirtualFieldState,
@@ -7,7 +14,7 @@ import {
   LifeCycleTypes
 } from '@formily/core'
 import { merge } from '@formily/shared'
-// import { useForceUpdate } from './useForceUpdate'
+import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
 import { inspectChanged } from '../shared'
 import { FormSymbol } from '../constants'
@@ -17,9 +24,9 @@ const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 export const useVirtualField = (
   options: IVirtualFieldRegistryProps
 ): IVirtualFieldHook => {
-  // const forceUpdate = useForceUpdate()
+  const forceUpdate = useForceUpdate()
   //const dirty = useDirty(options, ['props', 'visible', 'display'])
-  const fieldRef = ref<{
+  const fieldRef = shallowRef<{
     field: IVirtualField
     unmounted: boolean
     subscriberId: number
@@ -43,7 +50,7 @@ export const useVirtualField = (
        * 同步Field状态只需要forceUpdate一下触发重新渲染，因为字段状态全部代理在formily core内部
        */
       if (initialized) {
-        // forceUpdate()
+        forceUpdate()
       }
     })
     fieldRef.value.uid = Symbol()
@@ -86,10 +93,14 @@ export const useVirtualField = (
   })
 
   const state = fieldRef.value.field.getState()
+  onBeforeUpdate(() => {
+    const $vm = getCurrentInstance() as any
+    $vm.state = fieldRef.value.field.getState()
+  })
 
   return {
     state,
-    field: fieldRef.value.field,
+    field: fieldRef.value.field as IVirtualField,
     form,
     props: state.props
   }

@@ -25,7 +25,7 @@ export default defineComponent({
       return new Broadcast()
     })
 
-    provide(BroadcastSymbol, broadcast)
+    provide(BroadcastSymbol, broadcast.value)
   }
 })
 </script>

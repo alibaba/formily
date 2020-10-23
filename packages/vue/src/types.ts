@@ -1,4 +1,4 @@
-import React from 'react'
+import { Ref } from '@vue/composition-api'
 import {
   IFieldRegistryProps,
   IVirtualFieldRegistryProps,
@@ -99,10 +99,6 @@ export interface IFormProps<
   onSubmit?: (values: Value) => void | Promise<Value>
   onReset?: () => void
   onValidateFailed?: (valideted: IFormValidateResult) => void
-  children?:
-    | React.ReactElement
-    | React.ReactElement[]
-    | ((form: IForm) => React.ReactElement)
   useDirty?: boolean
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
@@ -124,14 +120,9 @@ export interface IVirtualFieldAPI {
 export interface IFieldStateUIProps extends IFieldRegistryProps {
   triggerType?: 'onChange' | 'onBlur' | 'none'
   getValueFromEvent?: (...args: any[]) => any
-  children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 
-export interface IVirtualFieldStateUIProps extends IVirtualFieldRegistryProps {
-  children?:
-    | React.ReactElement
-    | ((api: IVirtualFieldAPI) => React.ReactElement)
-}
+export type IVirtualFieldStateUIProps = IVirtualFieldRegistryProps
 
 export interface IFormSpyAPI {
   form: IForm
@@ -147,7 +138,6 @@ export interface IFormSpyProps {
     form: IForm
   ) => any
   initialState?: any
-  children?: React.ReactElement | ((api: IFormSpyAPI) => React.ReactElement)
 }
 
 export interface IFormConsumerAPI {
@@ -159,9 +149,6 @@ export interface IFormConsumerAPI {
 
 export interface IFormConsumerProps {
   selector?: string | string[] | string[][]
-  children?:
-    | React.ReactElement
-    | ((api: IFormConsumerAPI) => React.ReactElement)
 }
 
 export interface IFieldHook {
@@ -182,7 +169,7 @@ export interface IVirtualFieldHook {
 export interface ISpyHook {
   form: IForm
   state: any
-  type: string
+  type: Ref<string>
 }
 
 type OMitActions =

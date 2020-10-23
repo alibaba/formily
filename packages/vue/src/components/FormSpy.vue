@@ -1,6 +1,11 @@
 <template>
   <div>
-    <slot v-if="this.$scopedSlots.default" v-bind="childProps"></slot>
+    <slot
+      v-if="this.$scopedSlots.default"
+      :form="form"
+      :type="type"
+      :state="state"
+    ></slot>
     <slot v-if="this.$slots.default"></slot>
   </div>
 </template>
@@ -27,9 +32,8 @@ export default defineComponent({
     }
   },
   setup(props) {
-    return {
-      childProps: useFormSpy(props)
-    }
+    const { form, type, state } = useFormSpy(props)
+    return { form, type, state }
   }
 })
 </script>

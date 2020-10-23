@@ -1,4 +1,4 @@
-import { inject, ref, watchEffect, computed } from '@vue/composition-api'
+import { inject, ref, watchEffect } from '@vue/composition-api'
 import { FormHeartSubscriber, LifeCycleTypes, IForm } from '@formily/core'
 import { isStr, FormPath, isArr, isFn } from '@formily/shared'
 import { IFormSpyProps, ISpyHook } from '../types'
@@ -8,8 +8,8 @@ import { useState } from '../utils/useState'
 import { useReducer } from '../utils/useReducer'
 
 export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
-  const broadcast = inject<Broadcast>(BroadcastSymbol)
-  const form = inject<IForm>(FormSymbol)
+  const broadcast = inject<Broadcast>(BroadcastSymbol, null)
+  const form = inject<IForm>(FormSymbol, null)
   const initializedRef = ref(false)
   const unmountRef = ref(false)
   const timerRef = ref({})
@@ -61,7 +61,8 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
       }
     })
   }
-  computed(() => {
+
+  const init = () => {
     initializedRef.value = true
     if (broadcast) {
       subscriberId.value = broadcast.subscribe(subscriber)
@@ -69,18 +70,23 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
       subscriberId.value = form.subscribe(subscriber)
     }
     initializedRef.value = false
-  })
-  watchEffect(() => {
-    return () => {
+  }
+
+  init()
+
+  watchEffect(onInvalidate => {
+    onInvalidate(() => {
       if (form) {
         form.unsubscribe(subscriberId.value)
       } else if (broadcast) {
         broadcast.unsubscribe(subscriberId.value)
       }
       unmountRef.value = true
-    }
+    })
   })
+
   const formApi: IForm = broadcast ? broadcast && broadcast.getContext() : form
+
   return {
     form: formApi,
     type,

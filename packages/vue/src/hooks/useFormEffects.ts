@@ -1,4 +1,4 @@
-import { inject, watchEffect, computed } from '@vue/composition-api'
+import { inject, watchEffect } from '@vue/composition-api'
 import { isStateModel, IForm } from '@formily/core'
 import { FormSymbol } from '../constants'
 import { useEva } from '../utils/eva'
@@ -10,16 +10,14 @@ export function useFormEffects(effects: IFormEffect<any, IFormActions>) {
   const { dispatch } = useEva({
     effects: createFormEffects(effects, form)
   })
-  const subscribeId = computed(() =>
-    form.subscribe(({ type, payload }) => {
-      dispatch.lazy(type, () => {
-        return isStateModel(payload) ? payload.getState() : payload
-      })
+  const subscribeId = form.subscribe(({ type, payload }) => {
+    dispatch.lazy(type, () => {
+      return isStateModel(payload) ? payload.getState() : payload
     })
-  )
-  watchEffect(() => {
-    return () => {
-      form.unsubscribe(subscribeId.value)
-    }
+  })
+  watchEffect(onInvalidate => {
+    onInvalidate(() => {
+      form.unsubscribe(subscribeId)
+    })
   })
 }

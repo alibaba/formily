@@ -1,4 +1,3 @@
-import { computed } from '@vue/composition-api'
 import { Subject } from 'rxjs/internal/Subject'
 import { filter } from 'rxjs/internal/operators/filter'
 
@@ -156,11 +155,12 @@ export const useEva = ({
   subscribes = null,
   autoRun = true
 } = {}) => {
-  return computed(() => {
+  const getManager = () => {
     const manager = createEva(actions, effects, subscribes)
     if (autoRun) {
       manager.subscription()
     }
     return manager
-  }).value
+  }
+  return getManager()
 }

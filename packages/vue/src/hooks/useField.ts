@@ -1,14 +1,15 @@
-import { inject, ref, watchEffect, computed } from '@vue/composition-api'
-import { isFn, merge } from '@formily/shared'
 import {
-  IFieldState,
-  IForm,
-  IField,
-  IMutators,
-  LifeCycleTypes
-} from '@formily/core'
+  inject,
+  shallowRef,
+  watchEffect,
+  watch,
+  getCurrentInstance,
+  onBeforeUpdate
+} from '@vue/composition-api'
+import { isFn, merge } from '@formily/shared'
+import { IFieldState, IField, IMutators, LifeCycleTypes } from '@formily/core'
 import { getValueFromEvent, inspectChanged } from '../shared'
-// import { useForceUpdate } from './useForceUpdate'
+import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import { FormSymbol } from '../constants'
 
@@ -43,8 +44,8 @@ const INSPECT_PROPS_KEYS = [
 ]
 
 export const useField = (options: IFieldStateUIProps): IFieldHook => {
-  // const forceUpdate = useForceUpdate()
-  const fieldRef = ref<{
+  const forceUpdate = useForceUpdate()
+  const fieldRef = shallowRef<{
     field: IField
     unmounted: boolean
     subscriberId: number
@@ -55,12 +56,12 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     subscriberId: null,
     uid: null
   })
-  const form = inject<IForm>(FormSymbol)
+  const form = inject(FormSymbol, null)
   if (!form) {
     throw new Error('Form object cannot be found from context.')
   }
 
-  const mutators = computed(() => {
+  const createMutators = () => {
     let initialized = false
     fieldRef.value.field = form.registerField(options)
     fieldRef.value.subscriberId = fieldRef.value.field.subscribe(() => {
@@ -71,18 +72,25 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
       if (initialized) {
         if (options.triggerType === 'onChange') {
           if (fieldRef.value.field.hasChanged('value')) {
-            mutators.value.validate({ throwErrors: false })
+            mutators.validate({ throwErrors: false })
           }
         }
-        // if (!form.isHostRendering()) {
-        //   forceUpdate()
-        // }
+        if (!form.isHostRendering()) {
+          forceUpdate()
+        }
       }
     })
     fieldRef.value.uid = Symbol()
     initialized = true
     return extendMutators(form.createMutators(fieldRef.value.field), options)
-  })
+  }
+
+  let mutators = createMutators()
+
+  watch(
+    [() => options.name, () => options.path],
+    () => (mutators = createMutators())
+  )
 
   watchEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
@@ -103,29 +111,33 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     }
   })
 
-  watchEffect(() => {
+  watchEffect(onInvalidate => {
     fieldRef.value.field.setState(state => {
       state.mounted = true
     }, !fieldRef.value.field.state.unmounted) //must notify,need to trigger restore value
     form.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldRef.value.field)
     fieldRef.value.unmounted = false
-    return () => {
+    onInvalidate(() => {
       fieldRef.value.field.removeCache(fieldRef.value.uid)
       fieldRef.value.unmounted = true
       fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
       fieldRef.value.field.setState((state: IFieldState) => {
         state.unmounted = true
       }) //must notify,need to trigger remove value
-    }
+    })
   })
 
   const state = fieldRef.value.field.getState()
+  onBeforeUpdate(() => {
+    const $vm = getCurrentInstance() as any
+    $vm.state = fieldRef.value.field.getState()
+  })
 
   return {
     form,
-    field: fieldRef.value.field,
+    field: fieldRef.value.field as IField,
     state,
-    mutators: mutators.value,
+    mutators,
     props: state.props
   }
 }

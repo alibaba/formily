@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import {
   FormEffectHooks,
   createEffectHook,
@@ -16,6 +18,7 @@ import {
   FormPath,
   BigData
 } from '@formily/core'
+
 import Form from './components/Form.vue'
 import Field from './components/Field.vue'
 import FieldList from './components/FieldList.vue'
@@ -34,6 +37,8 @@ export * from './hooks/useVirtualField'
 export * from './hooks/useFormEffects'
 export * from './hooks/useFormQuery'
 export * from './types'
+
+Vue.use(VueCompositionAPI)
 
 export {
   Form,
