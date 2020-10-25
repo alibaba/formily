@@ -25,9 +25,11 @@ export default {
   },
   data() {
     return {
-      typeList: [],
       LifeCycleTypes
     }
+  },
+  created() {
+    this.typeList = []
   },
   methods: {
     getTypeList() {

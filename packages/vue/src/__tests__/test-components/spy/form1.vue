@@ -24,10 +24,8 @@ export default {
     actions: Object,
     form: Object
   },
-  data() {
-    return {
-      typeList: []
-    }
+  created() {
+    this.typeList = []
   },
   methods: {
     getTypeList() {
