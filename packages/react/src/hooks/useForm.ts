@@ -41,20 +41,22 @@ const useInternalForm = (
     return form
   }, [])
 
-  if (alreadyHaveHookForm) return
-  if (dirty.num > 0) {
-    form.setFormState(state => {
-      if (dirty.dirtys.values && isValid(options.values)) {
-        state.values = options.values
-      }
-      if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
-        state.initialValues = options.initialValues
-      }
-      if (dirty.dirtys.editable && isValid(options.editable)) {
-        state.editable = options.editable
-      }
-    })
-  }
+  useEffect(() => {
+    if (alreadyHaveHookForm) return
+    if (dirty.num > 0) {
+      form.setFormState(state => {
+        if (dirty.dirtys.values && isValid(options.values)) {
+          state.values = options.values
+        }
+        if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
+          state.initialValues = options.initialValues
+        }
+        if (dirty.dirtys.editable && isValid(options.editable)) {
+          state.editable = options.editable
+        }
+      })
+    }
+  })
 
   useEffect(() => {
     if (alreadyHaveHookForm) return

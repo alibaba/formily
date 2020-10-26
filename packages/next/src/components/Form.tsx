@@ -1,7 +1,13 @@
 import React, { useRef } from 'react'
 import { Form as NextForm } from '@alifd/next'
 import { InternalForm } from '@formily/react-schema-renderer'
-import { normalizeCol, autoScrollInValidateFailed,log } from '../shared'
+import {
+  normalizeCol,
+  autoScrollInValidateFailed,
+  log,
+  isFn,
+  cloneChlildren
+} from '../shared'
 import { FormItemDeepProvider } from '../context'
 import { INextFormProps } from '../types'
 import {
@@ -25,6 +31,7 @@ export const Form: React.FC<INextFormProps &
     onValidateFailed,
     previewPlaceholder,
     validateFirst,
+    children,
     ...rest
   } = props
   const formRef = useRef<HTMLDivElement>()
@@ -57,7 +64,13 @@ export const Form: React.FC<INextFormProps &
                   onReset={() => {
                     form.reset({ validate: false, forceClear: false })
                   }}
-                />
+                >
+                  {() => {
+                    return isFn(children)
+                      ? children(form)
+                      : cloneChlildren(children)
+                  }}
+                </NextForm>
               </div>
             </FormItemDeepProvider>
           </PreviewText.ConfigProvider>

@@ -1,13 +1,20 @@
 import React, { useRef, useMemo } from 'react'
 import { Form as AntdForm } from 'antd'
 import { InternalForm } from '@formily/react-schema-renderer'
-import { normalizeCol, autoScrollInValidateFailed, isAntdV4,log } from '../shared'
+import {
+  normalizeCol,
+  autoScrollInValidateFailed,
+  isAntdV4,
+  log,
+  cloneChlildren
+} from '../shared'
 import { FormItemDeepProvider } from '../context'
 import { IAntdFormProps } from '../types'
 import {
   PreviewText,
   PreviewTextConfigProps
 } from '@formily/react-shared-components'
+import { isFn } from '@formily/shared'
 
 export const Form: React.FC<IAntdFormProps &
   PreviewTextConfigProps> = props => {
@@ -26,6 +33,7 @@ export const Form: React.FC<IAntdFormProps &
     previewPlaceholder,
     editable,
     validateFirst,
+    children,
     ...rest
   } = props
   const formRef = useRef<HTMLDivElement>()
@@ -70,7 +78,13 @@ export const Form: React.FC<IAntdFormProps &
                   labelCol={normalizeCol(props.labelCol)}
                   wrapperCol={normalizeCol(props.wrapperCol)}
                   layout={inline ? 'inline' : props.layout}
-                />
+                >
+                  {() => {
+                    return isFn(children)
+                      ? children(form)
+                      : cloneChlildren(children)
+                  }}
+                </AntdForm>
               </div>
             </FormItemDeepProvider>
           </PreviewText.ConfigProvider>
