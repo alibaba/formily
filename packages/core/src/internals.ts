@@ -327,11 +327,11 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     })
   }
 
-  function hostUpdate(callback?: () => any): any {
+  function hostUpdate(callback?: () => any, forceUpdate?: boolean): any {
     if (isFn(callback)) {
       env.hostRendering = true
       const result = callback()
-      if (env.hostRendering) {
+      if (env.hostRendering || forceUpdate) {
         heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, form)
       }
       env.hostRendering = false
