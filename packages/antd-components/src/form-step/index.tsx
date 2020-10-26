@@ -101,7 +101,7 @@ export const FormStep: React.FC<IVirtualBoxProps<IFormStep>> &
                   state.display = index === value
                 })
               })
-            })
+            }, true)
           })
         }
       )

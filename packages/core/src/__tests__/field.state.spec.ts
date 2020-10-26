@@ -216,11 +216,11 @@ test('computeState erors/warning', () => {
   state.setState(draft => {
     draft.editable = false
   })
-  expect(state.getState().invalid).toEqual(true)
-  expect(state.getState().valid).toEqual(false)
-  expect(state.getState().errors).toEqual(ruleErrors)
+  expect(state.getState().invalid).toEqual(false)
+  expect(state.getState().valid).toEqual(true)
+  expect(state.getState().errors).toEqual([])
   expect(state.getState().effectErrors).toEqual([])
-  expect(state.getState().warnings).toEqual(ruleWarnings)
+  expect(state.getState().warnings).toEqual([])
   expect(state.getState().effectWarnings).toEqual([])
   expect(state.getState().ruleErrors).toEqual(ruleErrors)
   expect(state.getState().ruleWarnings).toEqual(ruleWarnings)
