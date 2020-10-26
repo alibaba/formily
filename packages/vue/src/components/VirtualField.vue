@@ -15,11 +15,26 @@ import { useVirtualField } from '../hooks/useVirtualField'
 
 export default defineComponent({
   name: 'VueInternalVirtualField',
+  /* eslint-disable vue/require-prop-types  */
+  /* eslint-disable vue/require-default-prop */
   props: {
     path: {
       type: String,
       default: ''
-    }
+    },
+    name: {
+      default: ''
+    },
+    visible: {
+      type: Boolean,
+      default: true
+    },
+    display: {
+      type: Boolean,
+      default: true
+    },
+    computeState: Function,
+    props: Object
   },
   setup(props) {
     const { state, field, props: innerProps, form } = useVirtualField(props)

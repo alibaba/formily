@@ -2,7 +2,7 @@ import {
   inject,
   shallowRef,
   watchEffect,
-  computed,
+  watch,
   getCurrentInstance,
   onBeforeUpdate
 } from '@vue/composition-api'
@@ -41,7 +41,8 @@ export const useVirtualField = (
   if (!form) {
     throw new Error('Form object cannot be found from context.')
   }
-  computed(() => {
+
+  const updateSubscriber = () => {
     let initialized = false
     fieldRef.value.field = form.registerVirtualField(options)
     fieldRef.value.subscriberId = fieldRef.value.field.subscribe(() => {
@@ -55,7 +56,11 @@ export const useVirtualField = (
     })
     fieldRef.value.uid = Symbol()
     initialized = true
-  })
+  }
+
+  updateSubscriber()
+
+  watch([() => options.name, () => options.path], () => updateSubscriber())
 
   watchEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
@@ -76,20 +81,20 @@ export const useVirtualField = (
     }
   })
 
-  watchEffect(() => {
+  watchEffect(onInvalidate => {
     fieldRef.value.field.setState(state => {
       state.mounted = true
     }, !fieldRef.value.field.state.unmounted) //must notify,need to trigger restore value
     form.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldRef.value.field)
     fieldRef.value.unmounted = false
-    return () => {
+    onInvalidate(() => {
       fieldRef.value.field.removeCache(fieldRef.value.uid)
       fieldRef.value.unmounted = true
       fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
       fieldRef.value.field.setState((state: IVirtualFieldState) => {
         state.unmounted = true
       }) //must notify,need to trigger remove value
-    }
+    })
   })
 
   const state = fieldRef.value.field.getState()
