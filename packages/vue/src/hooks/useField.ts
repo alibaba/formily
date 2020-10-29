@@ -1,10 +1,12 @@
 import {
   inject,
   shallowRef,
-  watchEffect,
+  reactive,
   watch,
   getCurrentInstance,
-  onBeforeUpdate
+  onBeforeUpdate,
+  onMounted,
+  onBeforeUnmount
 } from '@vue/composition-api'
 import { isFn, merge } from '@formily/shared'
 import { IFieldState, IField, IMutators, LifeCycleTypes } from '@formily/core'
@@ -12,6 +14,7 @@ import { getValueFromEvent, inspectChanged } from '../shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import { FormSymbol } from '../constants'
+import { cloneDeep } from 'lodash'
 
 const extendMutators = (
   mutators: IMutators,
@@ -43,8 +46,10 @@ const INSPECT_PROPS_KEYS = [
   'display'
 ]
 
-export const useField = (options: IFieldStateUIProps): IFieldHook => {
+export const useField = (_options: IFieldStateUIProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
+  const options = cloneDeep(_options) as IFieldStateUIProps
+  const reactiveOptions = reactive(_options) as IFieldStateUIProps
   const fieldRef = shallowRef<{
     field: IField
     unmounted: boolean
@@ -85,52 +90,69 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     return extendMutators(form.createMutators(fieldRef.value.field), options)
   }
 
-  let mutators = createMutators()
+  const mutators = createMutators()
 
-  watch(
-    [() => options.name, () => options.path],
-    () => (mutators = createMutators())
+  onMounted(() =>
+    watch(
+      reactiveOptions,
+      newOptions => {
+        //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
+        const cacheProps = fieldRef.value.field.getCache(fieldRef.value.uid)
+        if (cacheProps) {
+          const props = inspectChanged(
+            cacheProps,
+            newOptions,
+            INSPECT_PROPS_KEYS
+          )
+          if (props) {
+            fieldRef.value.field.setState((state: IFieldState) => {
+              merge(state, props, {
+                assign: true,
+                arrayMerge: (target, source) => source
+              })
+            })
+          }
+          fieldRef.value.field.setCache(fieldRef.value.uid, newOptions)
+        } else {
+          fieldRef.value.field.setCache(fieldRef.value.uid, newOptions)
+        }
+      },
+      { immediate: true, deep: true }
+    )
   )
 
-  watchEffect(() => {
-    //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
-    const cacheProps = fieldRef.value.field.getCache(fieldRef.value.uid)
-    if (cacheProps) {
-      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
-      if (props) {
-        fieldRef.value.field.setState((state: IFieldState) => {
-          merge(state, props, {
-            assign: true,
-            arrayMerge: (target, source) => source
-          })
-        })
-      }
-      fieldRef.value.field.setCache(fieldRef.value.uid, options)
-    } else {
-      fieldRef.value.field.setCache(fieldRef.value.uid, options)
-    }
-  })
-
-  watchEffect(onInvalidate => {
+  onMounted(() => {
     fieldRef.value.field.setState(state => {
       state.mounted = true
     }, !fieldRef.value.field.state.unmounted) //must notify,need to trigger restore value
     form.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldRef.value.field)
     fieldRef.value.unmounted = false
-    onInvalidate(() => {
-      fieldRef.value.field.removeCache(fieldRef.value.uid)
-      fieldRef.value.unmounted = true
-      fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
-      fieldRef.value.field.setState((state: IFieldState) => {
-        state.unmounted = true
-      }) //must notify,need to trigger remove value
-    })
+  })
+
+  onBeforeUnmount(() => {
+    fieldRef.value.field.removeCache(fieldRef.value.uid)
+    fieldRef.value.unmounted = true
+    fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
+    fieldRef.value.field.setState((state: IFieldState) => {
+      state.unmounted = true
+    }) //must notify,need to trigger remove value
   })
 
   const state = fieldRef.value.field.getState()
-  onBeforeUpdate(() => {
+
+  // TODO: find a way to replace hard code below
+  watch([() => options.name, () => options.path], () => {
     const $vm = getCurrentInstance() as any
+    $vm.mutators = createMutators()
+  })
+
+  onBeforeUpdate(() => {
+    // because of "Immer drafts cannot have computed properties", states cann't be reactive
+    // so we need to update states in "onBeforeUpdate" hook
+    const $vm = getCurrentInstance() as any
+    $vm.field = fieldRef.value.field
     $vm.state = fieldRef.value.field.getState()
+    $vm.innerProps = $vm.state.props
   })
 
   return {

@@ -1,4 +1,10 @@
-import { inject, shallowRef, watchEffect } from '@vue/composition-api'
+import {
+  inject,
+  shallowRef,
+  watchEffect,
+  onMounted,
+  onBeforeMount
+} from '@vue/composition-api'
 import {
   createForm,
   IFormCreatorOptions,
@@ -42,24 +48,26 @@ const useInternalForm = (
   }
   const form = getForm()
 
-  watchEffect(() => {
-    if (alreadyHaveHookForm) return
-    if (dirty.num > 0) {
-      form.setFormState(state => {
-        if (dirty.dirtys.values && isValid(options.values)) {
-          state.values = options.values
-        }
-        if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
-          state.initialValues = options.initialValues
-        }
-        if (dirty.dirtys.editable && isValid(options.editable)) {
-          state.editable = options.editable
-        }
-      })
-    }
-  })
+  onMounted(() =>
+    watchEffect(() => {
+      if (alreadyHaveHookForm) return
+      if (dirty.num > 0) {
+        form.setFormState(state => {
+          if (dirty.dirtys.values && isValid(options.values)) {
+            state.values = options.values
+          }
+          if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
+            state.initialValues = options.initialValues
+          }
+          if (dirty.dirtys.editable && isValid(options.editable)) {
+            state.editable = options.editable
+          }
+        })
+      }
+    })
+  )
 
-  watchEffect(onInvalidate => {
+  onMounted(() => {
     if (alreadyHaveHookForm) return
     form.setFormState(state => {
       state.mounted = true
@@ -68,15 +76,16 @@ const useInternalForm = (
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].inject(formID, form)
     }
-    onInvalidate(() => {
-      form.unsubscribe(subscribeRef.value.subscribeId)
-      form.setFormState(state => {
-        state.unmounted = true
-      })
-      if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
-        globalThisPolyfill[DEV_TOOLS_HOOK].unmount(formID)
-      }
+  })
+
+  onBeforeMount(() => {
+    form.unsubscribe(subscribeRef.value.subscribeId)
+    form.setFormState(state => {
+      state.unmounted = true
     })
+    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+      globalThisPolyfill[DEV_TOOLS_HOOK].unmount(formID)
+    }
   })
   ;(form as any)[FormHookSymbol] = true
   return form

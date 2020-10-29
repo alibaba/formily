@@ -4,7 +4,9 @@ import {
   watchEffect,
   watch,
   getCurrentInstance,
-  onBeforeUpdate
+  onBeforeUpdate,
+  onMounted,
+  onBeforeUnmount
 } from '@vue/composition-api'
 import {
   IVirtualFieldRegistryProps,
@@ -62,39 +64,42 @@ export const useVirtualField = (
 
   watch([() => options.name, () => options.path], () => updateSubscriber())
 
-  watchEffect(() => {
-    //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
-    const cacheProps = fieldRef.value.field.getCache(fieldRef.value.uid)
-    if (cacheProps) {
-      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
-      if (props) {
-        fieldRef.value.field.setState((state: IVirtualFieldState) => {
-          merge(state, props, {
-            assign: true,
-            arrayMerge: (target, source) => source
+  onMounted(() =>
+    watchEffect(() => {
+      //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
+      const cacheProps = fieldRef.value.field.getCache(fieldRef.value.uid)
+      if (cacheProps) {
+        const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
+        if (props) {
+          fieldRef.value.field.setState((state: IVirtualFieldState) => {
+            merge(state, props, {
+              assign: true,
+              arrayMerge: (target, source) => source
+            })
           })
-        })
+          fieldRef.value.field.setCache(fieldRef.value.uid, options)
+        }
+      } else {
         fieldRef.value.field.setCache(fieldRef.value.uid, options)
       }
-    } else {
-      fieldRef.value.field.setCache(fieldRef.value.uid, options)
-    }
-  })
+    })
+  )
 
-  watchEffect(onInvalidate => {
+  onMounted(() => {
     fieldRef.value.field.setState(state => {
       state.mounted = true
     }, !fieldRef.value.field.state.unmounted) //must notify,need to trigger restore value
     form.notify(LifeCycleTypes.ON_FIELD_MOUNT, fieldRef.value.field)
     fieldRef.value.unmounted = false
-    onInvalidate(() => {
-      fieldRef.value.field.removeCache(fieldRef.value.uid)
-      fieldRef.value.unmounted = true
-      fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
-      fieldRef.value.field.setState((state: IVirtualFieldState) => {
-        state.unmounted = true
-      }) //must notify,need to trigger remove value
-    })
+  })
+
+  onBeforeUnmount(() => {
+    fieldRef.value.field.removeCache(fieldRef.value.uid)
+    fieldRef.value.unmounted = true
+    fieldRef.value.field.unsubscribe(fieldRef.value.subscriberId)
+    fieldRef.value.field.setState((state: IVirtualFieldState) => {
+      state.unmounted = true
+    }) //must notify,need to trigger remove value
   })
 
   const state = fieldRef.value.field.getState()
