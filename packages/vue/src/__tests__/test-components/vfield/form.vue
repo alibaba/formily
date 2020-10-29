@@ -22,7 +22,7 @@
 <script>
 import Radio from './radio.vue'
 import Input from './input.vue'
-import FieldBlock from './field-block.vue'
+import FieldBlock from './fieldBlock.vue'
 import { Form, FormEffectHooks } from '../../../index'
 
 const { onFieldValueChange$ } = FormEffectHooks
