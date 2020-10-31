@@ -141,7 +141,7 @@ export const useField = (_options: IFieldStateUIProps): IFieldHook => {
   const state = fieldRef.value.field.getState()
 
   // TODO: find a way to replace hard code below
-  watch([() => options.name, () => options.path], () => {
+  watch([() => reactiveOptions.name, () => reactiveOptions.path], () => {
     const $vm = getCurrentInstance() as any
     $vm.mutators = createMutators()
   })
