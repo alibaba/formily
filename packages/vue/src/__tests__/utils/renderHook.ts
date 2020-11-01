@@ -1,17 +1,24 @@
-// https://github.com/xiaoping027/vue-renderhook/blob/master/src/index.ts
-import { mount, createLocalVue } from '@vue/test-utils'
+import Vue, { Component } from 'vue'
+import { mount } from '@vue/test-utils'
 import VueCompositionAPI, { defineComponent } from '@vue/composition-api'
 
-const localVue = createLocalVue()
+Vue.use(VueCompositionAPI)
 
-localVue.use(VueCompositionAPI)
-
-export default function renderHook<V>(setup: () => V) {
+export default function renderHook(
+  setup: () => any,
+  options: {
+    template?: string
+    components?: { [key: string]: Component }
+    wrapper?: Component
+  } = {}
+) {
+  const { template = '<div></div>', components = {}, wrapper } = options
   const App = defineComponent({
+    components: components,
     setup,
-    template: '<div></div>'
+    template: template
   })
-  return mount<Vue & V>(App, {
-    localVue
+  return mount(App, {
+    parentComponent: wrapper
   })
 }
