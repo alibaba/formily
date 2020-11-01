@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, computed } from '@vue/composition-api'
+import { defineComponent, provide } from '@vue/composition-api'
 import { BroadcastSymbol } from '../constants'
 import { Broadcast } from '../shared'
 
@@ -21,11 +21,8 @@ export default defineComponent({
     }
   },
   setup() {
-    const broadcast = computed<Broadcast>(() => {
-      return new Broadcast()
-    })
-
-    provide(BroadcastSymbol, broadcast.value)
+    const broadcast = new Broadcast()
+    provide(BroadcastSymbol, broadcast)
   }
 })
 </script>
