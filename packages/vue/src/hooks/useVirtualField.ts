@@ -1,12 +1,12 @@
 import {
   inject,
   shallowRef,
-  watchEffect,
   watch,
   getCurrentInstance,
   onBeforeUpdate,
   onMounted,
-  onBeforeUnmount
+  onBeforeUnmount,
+  reactive
 } from '@vue/composition-api'
 import {
   IVirtualFieldRegistryProps,
@@ -20,14 +20,16 @@ import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
 import { inspectChanged } from '../shared'
 import { FormSymbol } from '../constants'
+import { cloneDeep } from 'lodash'
 
 const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 
 export const useVirtualField = (
-  options: IVirtualFieldRegistryProps
+  _options: IVirtualFieldRegistryProps
 ): IVirtualFieldHook => {
   const forceUpdate = useForceUpdate()
-  //const dirty = useDirty(options, ['props', 'visible', 'display'])
+  const options = cloneDeep(_options) as IVirtualFieldRegistryProps
+  const reactiveOptions = reactive(_options) as IVirtualFieldRegistryProps
   const fieldRef = shallowRef<{
     field: IVirtualField
     unmounted: boolean
@@ -62,27 +64,33 @@ export const useVirtualField = (
 
   updateSubscriber()
 
-  watch([() => options.name, () => options.path], () => updateSubscriber())
-
   onMounted(() =>
-    watchEffect(() => {
-      //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
-      const cacheProps = fieldRef.value.field.getCache(fieldRef.value.uid)
-      if (cacheProps) {
-        const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
-        if (props) {
-          fieldRef.value.field.setState((state: IVirtualFieldState) => {
-            merge(state, props, {
-              assign: true,
-              arrayMerge: (target, source) => source
+    watch(
+      reactiveOptions,
+      newOptions => {
+        //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
+        const cacheProps = fieldRef.value.field.getCache(fieldRef.value.uid)
+        if (cacheProps) {
+          const props = inspectChanged(
+            cacheProps,
+            newOptions,
+            INSPECT_PROPS_KEYS
+          )
+          if (props) {
+            fieldRef.value.field.setState((state: IVirtualFieldState) => {
+              merge(state, props, {
+                assign: true,
+                arrayMerge: (target, source) => source
+              })
             })
-          })
-          fieldRef.value.field.setCache(fieldRef.value.uid, options)
+            fieldRef.value.field.setCache(fieldRef.value.uid, newOptions)
+          }
+        } else {
+          fieldRef.value.field.setCache(fieldRef.value.uid, newOptions)
         }
-      } else {
-        fieldRef.value.field.setCache(fieldRef.value.uid, options)
-      }
-    })
+      },
+      { immediate: true, deep: true }
+    )
   )
 
   onMounted(() => {
@@ -103,9 +111,16 @@ export const useVirtualField = (
   })
 
   const state = fieldRef.value.field.getState()
+
+  // TODO: find a way to replace hard code below
+  watch([() => reactiveOptions.name, () => reactiveOptions.path], () =>
+    updateSubscriber()
+  )
+
   onBeforeUpdate(() => {
     const $vm = getCurrentInstance() as any
     $vm.state = fieldRef.value.field.getState()
+    $vm.innerProps = $vm.state.props
   })
 
   return {
