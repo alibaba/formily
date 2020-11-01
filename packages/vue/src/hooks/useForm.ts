@@ -2,8 +2,10 @@ import {
   inject,
   shallowRef,
   watchEffect,
+  reactive,
   onMounted,
-  onBeforeMount
+  onBeforeUnmount,
+  watch
 } from '@vue/composition-api'
 import {
   createForm,
@@ -25,18 +27,25 @@ const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
 let formID = 0
 
-const useInternalForm = (
-  options: IFormCreatorOptions & { form?: IForm } = {}
-) => {
+type IInternalFormOptions = IFormCreatorOptions & { form?: IForm }
+
+const useInternalForm = (reactiveOptions: IInternalFormOptions = {}) => {
   const forceUpdate = useForceUpdate()
   const subscribeRef = shallowRef({
     subscribeId: null
   })
-  const dirty = useDirty(options, ['initialValues', 'values', 'editable'])
-  const alreadyHaveForm = !!options.form
-  const alreadyHaveHookForm = options.form && options.form[FormHookSymbol]
+  const dirty = useDirty(reactiveOptions, [
+    'initialValues',
+    'values',
+    'editable'
+  ])
+  const alreadyHaveForm = !!reactiveOptions.form
+  const alreadyHaveHookForm =
+    reactiveOptions.form && reactiveOptions.form[FormHookSymbol]
   const getForm = () => {
-    const form = alreadyHaveForm ? options.form : createForm(options)
+    const form = alreadyHaveForm
+      ? reactiveOptions.form
+      : createForm(reactiveOptions)
     if (!alreadyHaveForm) {
       subscribeRef.value.subscribeId = form.subscribe(({ type }) => {
         if (type === LifeCycleTypes.ON_FORM_HOST_RENDER) {
@@ -53,14 +62,17 @@ const useInternalForm = (
       if (alreadyHaveHookForm) return
       if (dirty.num > 0) {
         form.setFormState(state => {
-          if (dirty.dirtys.values && isValid(options.values)) {
-            state.values = options.values
+          if (dirty.dirtys.values && isValid(reactiveOptions.values)) {
+            state.values = reactiveOptions.values
           }
-          if (dirty.dirtys.initialValues && isValid(options.initialValues)) {
-            state.initialValues = options.initialValues
+          if (
+            dirty.dirtys.initialValues &&
+            isValid(reactiveOptions.initialValues)
+          ) {
+            state.initialValues = reactiveOptions.initialValues
           }
-          if (dirty.dirtys.editable && isValid(options.editable)) {
-            state.editable = options.editable
+          if (dirty.dirtys.editable && isValid(reactiveOptions.editable)) {
+            state.editable = reactiveOptions.editable
           }
         })
       }
@@ -78,7 +90,7 @@ const useInternalForm = (
     }
   })
 
-  onBeforeMount(() => {
+  onBeforeUnmount(() => {
     form.unsubscribe(subscribeRef.value.subscribeId)
     form.setFormState(state => {
       state.unmounted = true
@@ -99,8 +111,8 @@ export const useForm = <
 >(
   props: IFormProps<Value, DefaultValue, EffectPayload, EffectAction>
 ) => {
-  const actionsRef = shallowRef<any>(null)
-  actionsRef.value = actionsRef.value || props.actions || createFormActions()
+  const reactiveProps = reactive(props)
+  const actionsRef = shallowRef<any>(props.actions || createFormActions())
   const broadcast = inject<Broadcast>(BroadcastSymbol, null)
   const { implementActions, dispatch } = useEva({
     actions: actionsRef.value,
@@ -134,9 +146,16 @@ export const useForm = <
     initialValues: props.initialValues || props.defaultValue
   })
 
-  Object.assign(optionsRef.value, props)
-  optionsRef.value.values = props.value
-  optionsRef.value.lifecycles = lifecycles
+  watch(
+    reactiveProps,
+    newProps => {
+      Object.assign(optionsRef.value, newProps)
+      optionsRef.value.values = newProps.value
+      optionsRef.value.lifecycles = lifecycles
+    },
+    { deep: true, immediate: true }
+  )
+
   const form = useInternalForm(optionsRef.value)
   return form
 }
