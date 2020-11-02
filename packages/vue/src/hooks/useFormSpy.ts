@@ -34,7 +34,7 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
         })
       } else if (isArr(props.selector)) {
         if (
-          !!(props.selector as any[]).find(str => {
+          (props.selector as any[]).find(str => {
             if (isStr(str)) {
               return str === type
             } else if (isArr(str)) {
@@ -50,7 +50,7 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
                 )
               }
             }
-          })
+          }) !== undefined
         ) {
           setType(type)
           dispatch({
