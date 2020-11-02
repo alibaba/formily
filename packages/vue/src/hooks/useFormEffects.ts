@@ -1,4 +1,4 @@
-import { inject, watchEffect } from '@vue/composition-api'
+import { inject, onBeforeUnmount } from '@vue/composition-api'
 import { isStateModel, IForm } from '@formily/core'
 import { FormSymbol } from '../constants'
 import { useEva } from '../utils/eva'
@@ -15,9 +15,7 @@ export function useFormEffects(effects: IFormEffect<any, IFormActions>) {
       return isStateModel(payload) ? payload.getState() : payload
     })
   })
-  watchEffect(onInvalidate => {
-    onInvalidate(() => {
-      form.unsubscribe(subscribeId)
-    })
+  onBeforeUnmount(() => {
+    form.unsubscribe(subscribeId)
   })
 }
