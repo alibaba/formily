@@ -1,49 +1,58 @@
 import {
   inject,
-  ref,
-  watchEffect,
-  computed,
+  onBeforeUnmount,
   onBeforeUpdate,
   getCurrentInstance
 } from '@vue/composition-api'
-import { LifeCycleTypes, IFormState, IForm } from '@formily/core'
+import { LifeCycleTypes, IForm } from '@formily/core'
 import { useForceUpdate } from './useForceUpdate'
 import { FormSymbol } from '../constants'
+import { set, get } from 'lodash'
+
+type KeysInHook = {
+  [key: string]: string
+}
 
 export const useFormState = <T extends {}>(defaultState: T) => {
   const forceUpdate = useForceUpdate()
-  const stateRef = ref<{ state?: IFormState; subscribeId?: number }>({})
   const form = inject<IForm>(FormSymbol)
-  stateRef.value.subscribeId = computed(() => {
-    form.setFormState(state => {
-      Object.assign(state, defaultState)
-    })
-    return form.subscribe(({ type }) => {
-      if (type === LifeCycleTypes.ON_FORM_CHANGE) {
-        forceUpdate()
-      }
-    })
-  }).value
+  form.setFormState(state => {
+    Object.assign(state, defaultState)
+  })
 
-  stateRef.value.state = form.getFormState()
-  onBeforeUpdate(() => {
-    const $vm = getCurrentInstance() as any
-    if ($vm?.state) {
-      $vm.state = form.getFormState()
+  const valueMap = {
+    state: form.getFormState()
+  }
+
+  const subscribeId = form.subscribe(({ type }) => {
+    valueMap.state = form.getFormState()
+    if (type === LifeCycleTypes.ON_FORM_CHANGE) {
+      forceUpdate()
     }
   })
-  watchEffect(onInvalidate => {
-    onInvalidate(() => {
-      form.unsubscribe(stateRef.value.subscribeId)
+
+  const syncValueBeforeUpdate = (keyMap: KeysInHook = {}) => {
+    const keys = Object.keys(keyMap)
+    const $vm = getCurrentInstance()
+    onBeforeUpdate(() => {
+      keys.forEach(key => {
+        set($vm, keyMap[key], get(valueMap, key))
+      })
     })
+  }
+
+  onBeforeUnmount(() => {
+    form.unsubscribe(subscribeId)
   })
+
   return [
-    stateRef.value.state,
+    valueMap.state,
     (nextState?: {}) => {
       if (!nextState) return
       form.setFormState(state => {
         Object.assign(state, nextState)
       })
-    }
+    },
+    syncValueBeforeUpdate
   ]
 }
