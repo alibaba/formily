@@ -1,15 +1,16 @@
 /* eslint-disable vue/one-component-per-file */
 import Vue from 'vue'
-import VueCompositionAPI from '@vue/composition-api'
+import VueCompositionAPI, {
+  defineComponent,
+  provide
+} from '@vue/composition-api'
 import { queryByText } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import useForm from '../hooks/useForm'
 import useField from '../hooks/useField'
 import { FormSymbol } from '../constants'
-import { createForm } from '@formily/core'
-import { FormLifeCycle, LifeCycleTypes } from '@formily/core'
+import { FormLifeCycle, LifeCycleTypes, createForm } from '@formily/core'
 import UseFieldComponent from './test-components/useField/useField.vue'
-import { defineComponent, provide } from '@vue/composition-api'
 
 Vue.use(VueCompositionAPI)
 
