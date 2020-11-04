@@ -15,9 +15,16 @@ export default defineComponent({
   /* eslint-disable vue/require-default-prop */
   props: ['initialProps'],
   setup({ initialProps }) {
-    const { state = {}, field, props: innerProps, mutators, form } = useField(
-      initialProps
-    )
+    const [res, syncValueBeforeUpdate] = useField(initialProps)
+    const { state = {}, field, props: innerProps, mutators, form } = res
+
+    syncValueBeforeUpdate({
+      field: 'field',
+      state: 'state',
+      mutators: 'mutators',
+      'state.props': 'innerProps'
+    })
+
     return {
       state,
       field,

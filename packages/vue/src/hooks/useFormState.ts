@@ -1,17 +1,8 @@
-import {
-  inject,
-  onBeforeUnmount,
-  onBeforeUpdate,
-  getCurrentInstance
-} from '@vue/composition-api'
+import { inject, onBeforeUnmount } from '@vue/composition-api'
 import { LifeCycleTypes, IForm } from '@formily/core'
 import { useForceUpdate } from './useForceUpdate'
 import { FormSymbol } from '../constants'
-import { set, get } from 'lodash'
-
-type KeysInHook = {
-  [key: string]: string
-}
+import { useValueSynchronizer } from '../utils/useValueSynchronizer'
 
 export const useFormState = <T extends {}>(defaultState: T) => {
   const forceUpdate = useForceUpdate()
@@ -31,15 +22,7 @@ export const useFormState = <T extends {}>(defaultState: T) => {
     }
   })
 
-  const syncValueBeforeUpdate = (keyMap: KeysInHook = {}) => {
-    const keys = Object.keys(keyMap)
-    const $vm = getCurrentInstance()
-    onBeforeUpdate(() => {
-      keys.forEach(key => {
-        set($vm, keyMap[key], get(valueMap, key))
-      })
-    })
-  }
+  const syncValueBeforeUpdate = useValueSynchronizer(valueMap)
 
   onBeforeUnmount(() => {
     form.unsubscribe(subscribeId)

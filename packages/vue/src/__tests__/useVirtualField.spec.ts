@@ -31,7 +31,15 @@ describe('useVirtualField hook', () => {
     })
     const TestComponent = defineComponent({
       setup() {
-        return useVirtualField({ name: 'username' })
+        const [res, syncValueBeforeUpdate] = useVirtualField({
+          name: 'username'
+        })
+
+        syncValueBeforeUpdate({
+          state: 'state',
+          'state.props': 'props'
+        })
+        return res
       },
       template: '<div></div>'
     })
@@ -69,7 +77,15 @@ describe('useVirtualField hook', () => {
     let globalForm
     const TestComponent = defineComponent({
       setup() {
-        return useVirtualField({ name: 'username' })
+        const [res, syncValueBeforeUpdate] = useVirtualField({
+          name: 'username'
+        })
+
+        syncValueBeforeUpdate({
+          state: 'state',
+          'state.props': 'props'
+        })
+        return res
       },
       template: '<div></div>'
     })
@@ -102,7 +118,15 @@ describe('useVirtualField hook', () => {
   test('mounted change', async () => {
     const TestComponent = defineComponent({
       setup() {
-        return useVirtualField({ name: 'username' })
+        const [res, syncValueBeforeUpdate] = useVirtualField({
+          name: 'username'
+        })
+
+        syncValueBeforeUpdate({
+          state: 'state',
+          'state.props': 'props'
+        })
+        return res
       },
       template: '<div></div>'
     })
@@ -135,7 +159,14 @@ describe('useVirtualField hook', () => {
     }
     const TestComponent = defineComponent({
       setup() {
-        const { props: innerProps, state } = useVirtualField(initialProps)
+        const [res, syncValueBeforeUpdate] = useVirtualField(initialProps)
+        const { props: innerProps, state } = res
+
+        syncValueBeforeUpdate({
+          state: 'state',
+          'state.props': 'innerProps'
+        })
+
         return {
           innerProps,
           state

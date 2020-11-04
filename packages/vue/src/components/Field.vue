@@ -58,9 +58,15 @@ export default defineComponent({
     }
   },
   setup(props: IFieldStateUIProps) {
-    const { state = {}, field, props: innerProps, mutators, form } = useField(
-      props
-    )
+    const [res, syncValueBeforeUpdate] = useField(props)
+    const { state = {}, field, props: innerProps, mutators, form } = res
+
+    syncValueBeforeUpdate({
+      field: 'field',
+      state: 'state',
+      mutators: 'mutators',
+      'state.props': 'innerProps'
+    })
 
     provide(FieldSymbol, field)
 

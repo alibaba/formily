@@ -3,8 +3,6 @@ import {
   shallowRef,
   reactive,
   watch,
-  getCurrentInstance,
-  onBeforeUpdate,
   onMounted,
   onBeforeUnmount
 } from '@vue/composition-api'
@@ -15,6 +13,7 @@ import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import { FormSymbol } from '../constants'
 import { cloneDeep } from 'lodash'
+import { useValueSynchronizer } from '../utils/useValueSynchronizer'
 
 const extendMutators = (
   mutators: IMutators,
@@ -46,7 +45,9 @@ const INSPECT_PROPS_KEYS = [
   'display'
 ]
 
-export const useField = (_options: IFieldStateUIProps): IFieldHook => {
+export const useField = (
+  _options: IFieldStateUIProps
+): [IFieldHook, (keyMap: { [key: string]: string }) => void] => {
   const forceUpdate = useForceUpdate()
   const options = cloneDeep(_options) as IFieldStateUIProps
   const reactiveOptions = reactive(_options) as IFieldStateUIProps
@@ -91,6 +92,12 @@ export const useField = (_options: IFieldStateUIProps): IFieldHook => {
   }
 
   const mutators = createMutators()
+
+  const valueMap = {
+    field: fieldRef.value.field,
+    mutators,
+    state: fieldRef.value.field.getState()
+  }
 
   onMounted(() =>
     watch(
@@ -138,30 +145,24 @@ export const useField = (_options: IFieldStateUIProps): IFieldHook => {
     }) //must notify,need to trigger remove value
   })
 
-  const state = fieldRef.value.field.getState()
-
-  // TODO: find a way to replace hard code below
   watch([() => reactiveOptions.name, () => reactiveOptions.path], () => {
-    const $vm = getCurrentInstance() as any
-    $vm.mutators = createMutators()
+    valueMap.mutators = createMutators()
   })
 
-  onBeforeUpdate(() => {
-    // because of "Immer drafts cannot have computed properties", states cann't be reactive
-    // so we need to update states in "onBeforeUpdate" hook
-    const $vm = getCurrentInstance() as any
-    $vm.field = fieldRef.value.field
-    $vm.state = fieldRef.value.field.getState()
-    $vm.innerProps = $vm.state.props
+  const syncValueBeforeUpdate = useValueSynchronizer(valueMap, () => {
+    valueMap.state = fieldRef.value.field.getState()
   })
 
-  return {
-    form,
-    field: fieldRef.value.field as IField,
-    state,
-    mutators,
-    props: state.props
-  }
+  return [
+    {
+      form,
+      field: fieldRef.value.field as IField,
+      state: valueMap.state,
+      mutators,
+      props: valueMap.state.props
+    },
+    syncValueBeforeUpdate
+  ]
 }
 
 export default useField

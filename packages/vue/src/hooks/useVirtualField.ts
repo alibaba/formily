@@ -21,12 +21,13 @@ import { IVirtualFieldHook } from '../types'
 import { inspectChanged } from '../shared'
 import { FormSymbol } from '../constants'
 import { cloneDeep } from 'lodash'
+import { useValueSynchronizer } from '../utils/useValueSynchronizer'
 
 const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 
 export const useVirtualField = (
   _options: IVirtualFieldRegistryProps
-): IVirtualFieldHook => {
+): [IVirtualFieldHook, (keyMap: { [key: string]: string }) => void] => {
   const forceUpdate = useForceUpdate()
   const options = cloneDeep(_options) as IVirtualFieldRegistryProps
   const reactiveOptions = reactive(_options) as IVirtualFieldRegistryProps
@@ -63,6 +64,11 @@ export const useVirtualField = (
   }
 
   updateSubscriber()
+
+  const valueMap = {
+    field: fieldRef.value.field,
+    state: fieldRef.value.field.getState()
+  }
 
   onMounted(() =>
     watch(
@@ -112,10 +118,13 @@ export const useVirtualField = (
 
   const state = fieldRef.value.field.getState()
 
-  // TODO: find a way to replace hard code below
   watch([() => reactiveOptions.name, () => reactiveOptions.path], () =>
     updateSubscriber()
   )
+
+  const syncValueBeforeUpdate = useValueSynchronizer(valueMap, () => {
+    valueMap.state = fieldRef.value.field.getState()
+  })
 
   onBeforeUpdate(() => {
     const $vm = getCurrentInstance() as any
@@ -123,12 +132,15 @@ export const useVirtualField = (
     $vm.innerProps = $vm.state.props
   })
 
-  return {
-    state,
-    field: fieldRef.value.field as IVirtualField,
-    form,
-    props: state.props
-  }
+  return [
+    {
+      state,
+      field: fieldRef.value.field as IVirtualField,
+      form,
+      props: state.props
+    },
+    syncValueBeforeUpdate
+  ]
 }
 
 export default useVirtualField

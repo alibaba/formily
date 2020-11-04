@@ -37,7 +37,14 @@ export default defineComponent({
     props: Object
   },
   setup(props) {
-    const { state, field, props: innerProps, form } = useVirtualField(props)
+    const [res, syncValueBeforeUpdate] = useVirtualField(props)
+    const { state, field, props: innerProps, form } = res
+
+    syncValueBeforeUpdate({
+      state: 'state',
+      'state.props': 'innerProps'
+    })
+
     provide(FieldSymbol, field)
 
     return {
