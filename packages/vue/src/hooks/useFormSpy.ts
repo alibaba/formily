@@ -1,4 +1,4 @@
-import { inject, ref, watchEffect } from '@vue/composition-api'
+import { inject, onBeforeUnmount, ref } from '@vue/composition-api'
 import { FormHeartSubscriber, LifeCycleTypes, IForm } from '@formily/core'
 import { isStr, FormPath, isArr, isFn } from '@formily/shared'
 import { IFormSpyProps, ISpyHook } from '../types'
@@ -74,15 +74,13 @@ export const useFormSpy = (props: IFormSpyProps): ISpyHook => {
 
   init()
 
-  watchEffect(onInvalidate => {
-    onInvalidate(() => {
-      if (form) {
-        form.unsubscribe(subscriberId.value)
-      } else if (broadcast) {
-        broadcast.unsubscribe(subscriberId.value)
-      }
-      unmountRef.value = true
-    })
+  onBeforeUnmount(() => {
+    if (form) {
+      form.unsubscribe(subscriberId.value)
+    } else if (broadcast) {
+      broadcast.unsubscribe(subscriberId.value)
+    }
+    unmountRef.value = true
   })
 
   const formApi: IForm = broadcast ? broadcast && broadcast.getContext() : form

@@ -67,9 +67,17 @@ export const useField = (
     throw new Error('Form object cannot be found from context.')
   }
 
+  const valueMap = {
+    field: null,
+    mutators: null,
+    state: null
+  }
+
   const createMutators = () => {
     let initialized = false
     fieldRef.value.field = form.registerField(options)
+    valueMap.field = fieldRef.value.field
+    valueMap.state = fieldRef.value.field.getState()
     fieldRef.value.subscriberId = fieldRef.value.field.subscribe(() => {
       if (fieldRef.value.unmounted) return
       /**
@@ -78,7 +86,7 @@ export const useField = (
       if (initialized) {
         if (options.triggerType === 'onChange') {
           if (fieldRef.value.field.hasChanged('value')) {
-            mutators.validate({ throwErrors: false })
+            valueMap.mutators.validate({ throwErrors: false })
           }
         }
         if (!form.isHostRendering()) {
@@ -91,13 +99,7 @@ export const useField = (
     return extendMutators(form.createMutators(fieldRef.value.field), options)
   }
 
-  const mutators = createMutators()
-
-  const valueMap = {
-    field: fieldRef.value.field,
-    mutators,
-    state: fieldRef.value.field.getState()
-  }
+  valueMap.mutators = createMutators()
 
   onMounted(() =>
     watch(
@@ -156,9 +158,9 @@ export const useField = (
   return [
     {
       form,
-      field: fieldRef.value.field as IField,
+      field: valueMap.field as IField,
       state: valueMap.state,
-      mutators,
+      mutators: valueMap.mutators,
       props: valueMap.state.props
     },
     syncValueBeforeUpdate
