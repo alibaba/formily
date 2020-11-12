@@ -68,6 +68,20 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
   ) => {
     return <SchemaField key={reactKey} path={path.concat(addtionKey)} />
   }
+  const getPropsFromInterceptor = (stateProps) => {
+    let adapProps = {}
+    if (isFn(formRegistry.componentPropsInterceptor)) {
+      adapProps = formRegistry.componentPropsInterceptor(props) || {}
+    }
+    return {
+      ...stateProps,
+      ['x-component-props']: {
+        ...(stateProps['x-component-props'] || {}),
+        ...adapProps,
+      }
+    }
+  }
+
   const renderFieldDelegate = (
     callback: (props: ISchemaFieldComponentProps) => React.ReactElement
   ) => {
@@ -102,9 +116,11 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         computeState={computeSchemaState}
       >
         {({ state, mutators, form }) => {
+          const stateProps = getPropsFromInterceptor(state.props)
           const props: ISchemaFieldComponentProps = {
             ...state,
-            schema: new Schema(fieldSchema).merge(state.props),
+            props: stateProps,
+            schema: new Schema(fieldSchema).merge(stateProps),
             form,
             mutators,
             renderField
@@ -140,9 +156,11 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
         )}
       >
         {({ state, form }) => {
+          const stateProps = getPropsFromInterceptor(state.props)
           const props: ISchemaVirtualFieldComponentProps = {
             ...state,
-            schema: new Schema(fieldSchema).merge(state.props),
+            props: stateProps,
+            schema: new Schema(fieldSchema).merge(stateProps),
             form,
             renderField,
             children: fieldSchema.mapProperties(

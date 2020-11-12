@@ -15,6 +15,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
     fields,
     virtualFields,
     formComponent,
+    componentPropsInterceptor,
     formItemComponent,
     formComponentProps,
     schema,
@@ -23,7 +24,7 @@ export const SchemaForm: React.FC<ISchemaFormProps> = props => {
   } = useSchemaForm(props)
   return (
     <FormComponentsContext.Provider
-      value={{ fields, virtualFields, formComponent, formItemComponent }}
+      value={{ fields, virtualFields, formComponent, formItemComponent, componentPropsInterceptor }}
     >
       <FormExpressionScopeContext.Provider value={props.expressionScope}>
         <FormSchemaContext.Provider value={schema}>
