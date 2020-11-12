@@ -53,6 +53,12 @@ export const computeAntdStyleBase = (props, debug?: boolean) => {
                 flex: 1 1 0;
             }
         }
+
+        .mega-layout-item-content {
+            .ant-radio-wrapper {
+                vertical-align: middle;
+            }
+        }
         ${getIEContainerAntd3Style()}
     `
 

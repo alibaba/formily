@@ -233,10 +233,11 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         }
       }
       if (
-        dirtys.editable ||
-        dirtys.selfEditable ||
+        draft.editable === false ||
+        draft.selfEditable === false ||
         draft.visible === false ||
-        (dirtys.unmounted && draft.unmounted === true && supportClearStates)
+        draft.display === false ||
+        (draft.unmounted === true && supportClearStates)
       ) {
         draft.errors = []
         draft.effectErrors = []

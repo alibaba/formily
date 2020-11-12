@@ -95,6 +95,7 @@ export interface ISchemaFormRegistry {
     [key: string]: ISchemaVirtualFieldComponent
   }
   wrappers?: ISchemaFieldWrapper[]
+  componentPropsInterceptor?: (schema: ISchema) => any
   formItemComponent: React.JSXElementConstructor<any>
   formComponent: string | React.JSXElementConstructor<any>
   previewText?: React.JSXElementConstructor<any>
@@ -184,6 +185,7 @@ export interface ISchemaFormProps<
   virtualFields?: ISchemaFormRegistry['virtualFields']
   formComponent?: ISchemaFormRegistry['formComponent']
   formItemComponent?: ISchemaFormRegistry['formItemComponent']
+  componentPropsInterceptor?: ISchemaFormRegistry['componentPropsInterceptor']
   expressionScope?: { [key: string]: any }
 }
 

@@ -327,11 +327,11 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     })
   }
 
-  function hostUpdate(callback?: () => any): any {
+  function hostUpdate(callback?: () => any, forceUpdate?: boolean): any {
     if (isFn(callback)) {
       env.hostRendering = true
       const result = callback()
-      if (env.hostRendering) {
+      if (env.hostRendering || forceUpdate) {
         heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, form)
       }
       env.hostRendering = false
@@ -360,6 +360,14 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
   function enableUnmountClearStates(pattern: FormPathPattern = '*') {
     const path = FormPath.parse(pattern)
     env.clearStatesPatterns[path.toString()] = true
+  }
+
+  function disableUnmountRemoveNode() {
+    env.unmountRemoveNode = false
+  }
+
+  function enableUnmountRemoveNode() {
+    env.unmountRemoveNode = true
   }
 
   function supportUnmountClearStates(path: FormPathPattern) {
@@ -409,6 +417,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     realRemoveTags: [],
     lastShownStates: {},
     clearStatesPatterns: {},
+    unmountRemoveNode: false,
     submittingTask: undefined
   }
   form.subscription = {
@@ -437,6 +446,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     disableUnmountClearStates,
     enableUnmountClearStates,
     supportUnmountClearStates,
+    enableUnmountRemoveNode,
+    disableUnmountRemoveNode,
     resetFormMessages,
     syncFormMessages,
     batchRunTaskQueue,

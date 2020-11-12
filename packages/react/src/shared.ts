@@ -55,7 +55,9 @@ export const createFormActions = (): IFormActions => {
     'setFieldInitialValue',
     'getFieldInitialValue',
     'disableUnmountClearStates',
-    'enableUnmountClearStates'
+    'enableUnmountClearStates',
+    'enableUnmountRemoveNode',
+    'disableUnmountRemoveNode'
   ) as IFormActions
 }
 
@@ -84,7 +86,9 @@ export const createAsyncFormActions = (): IFormAsyncActions =>
     'setFieldInitialValue',
     'getFieldInitialValue',
     'disableUnmountClearStates',
-    'enableUnmountClearStates'
+    'enableUnmountClearStates',
+    'enableUnmountRemoveNode',
+    'disableUnmountRemoveNode'
   ) as IFormAsyncActions
 
 export interface IEventTargetOption {

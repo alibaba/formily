@@ -5,8 +5,19 @@ import {
   IConnectProps,
   getRegistry
 } from '@formily/react-schema-renderer'
-import { each } from '@formily/shared'
+import { each, isArr } from '@formily/shared'
 export * from '@formily/shared'
+
+export const cloneChlildren = (children: any, props?: any) => {
+  return React.isValidElement(children)
+    ? React.cloneElement(children, {
+        ...props,
+        children: cloneChlildren(children.props['children'])
+      })
+    : isArr(children)
+    ? children.map((child, key) => cloneChlildren(child, { key }))
+    : children
+}
 
 export const autoScrollInValidateFailed = (formRef: any) => {
   if (formRef.current) {

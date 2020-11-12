@@ -68,6 +68,8 @@ export const createFormExternals = (
     supportUnmountClearStates,
     disableUnmountClearStates,
     enableUnmountClearStates,
+    enableUnmountRemoveNode,
+    disableUnmountRemoveNode,
     resetFormMessages,
     syncFormMessages,
     batchRunTaskQueue,
@@ -295,6 +297,9 @@ export const createFormExternals = (
           env.realRemoveTags = []
         })
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
+        if (env.unmountRemoveNode) {
+          graph.remove(field.state.path)
+        }
       }
 
       if (dirtys.mounted && published.mounted) {
@@ -363,6 +368,9 @@ export const createFormExternals = (
           env.realRemoveTags = []
         })
         heart.publish(LifeCycleTypes.ON_FIELD_UNMOUNT, field)
+        if (env.unmountRemoveNode) {
+          graph.remove(field.state.path)
+        }
       }
       if (dirtys.mounted && published.mounted) {
         heart.publish(LifeCycleTypes.ON_FIELD_MOUNT, field)
@@ -961,13 +969,13 @@ export const createFormExternals = (
       field = input
     }
     function setValue(...values: any[]) {
-      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
-      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, form)
       field.setState((state: IFieldState<FormilyCore.FieldProps>) => {
         state.value = values[0]
         state.values = values
         state.inputed = true
       })
+      heart.publish(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, field)
+      heart.publish(LifeCycleTypes.ON_FORM_INPUT_CHANGE, form)
     }
 
     function removeValue(key: string | number) {
@@ -1143,6 +1151,8 @@ export const createFormExternals = (
     getFieldInitialValue,
     disableUnmountClearStates,
     enableUnmountClearStates,
+    enableUnmountRemoveNode,
+    disableUnmountRemoveNode,
     isHostRendering,
     hostUpdate,
     subscribe,

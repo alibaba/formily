@@ -54,6 +54,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     components,
     formComponent,
     formItemComponent,
+    componentPropsInterceptor,
     schema: propsSchema,
     defaultValue,
     value,
@@ -118,6 +119,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
       ? formItemComponent
       : registry.formItemComponent,
     schema,
+    componentPropsInterceptor,
     children
   }
 }

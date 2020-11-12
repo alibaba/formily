@@ -21,7 +21,7 @@ type ColSpanType = number | string
 
 export type IAntdSchemaFormProps = Omit<
   FormProps,
-  'onSubmit' | 'defaultValue' | 'labelCol' | 'wrapperCol'
+  'onSubmit' | 'defaultValue' | 'labelCol' | 'wrapperCol' | 'children'
 > &
   IFormItemTopProps &
   PreviewTextConfigProps &
@@ -31,7 +31,7 @@ export type IAntdSchemaFieldProps = IMarkupSchemaFieldProps
 
 export type IAntdFormProps = Omit<
   FormProps,
-  'onSubmit' | 'defaultValue' | 'labelCol' | 'wrapperCol'
+  'onSubmit' | 'defaultValue' | 'labelCol' | 'wrapperCol' | 'children'
 > &
   IFormItemTopProps &
   IFormProps<any, any>
