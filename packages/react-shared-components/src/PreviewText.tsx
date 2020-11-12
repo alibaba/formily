@@ -11,7 +11,9 @@ export const PreviewText: React.FC<IPreviewTextProps> & {
   if (props.dataSource && props.dataSource.length) {
     if (Array.isArray(props.value)) {
       value = props.value.map((val, index) => {
-        const finded = props.dataSource.find(item => isEqual(item.value, val))
+        const finded = props.dataSource.find(
+          item => item.value == val || isEqual(item.value, val)
+        )
         if (finded) {
           return (
             <span key={index}>
