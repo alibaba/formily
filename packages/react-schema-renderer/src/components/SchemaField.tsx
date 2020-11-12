@@ -69,15 +69,15 @@ export const SchemaField: React.FunctionComponent<ISchemaFieldProps> = (
     return <SchemaField key={reactKey} path={path.concat(addtionKey)} />
   }
   const getPropsFromInterceptor = (stateProps) => {
-    let adapProps = {}
+    let interceptorProps = {}
     if (isFn(formRegistry.componentPropsInterceptor)) {
-      adapProps = formRegistry.componentPropsInterceptor(props) || {}
+      interceptorProps = formRegistry.componentPropsInterceptor(props) || {}
     }
     return {
       ...stateProps,
       ['x-component-props']: {
         ...(stateProps['x-component-props'] || {}),
-        ...adapProps,
+        ...interceptorProps,
       }
     }
   }
