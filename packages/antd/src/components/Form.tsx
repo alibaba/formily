@@ -56,6 +56,9 @@ export const Form: React.FC<IAntdFormProps &
         const onReset = () => {
           form.reset({ validate: false, forceClear: false })
         }
+        const renderedChildren = isFn(children)
+          ? children(form)
+          : cloneChlildren(children)
         return (
           <PreviewText.ConfigProvider value={props}>
             <FormItemDeepProvider {...props}>
@@ -79,11 +82,7 @@ export const Form: React.FC<IAntdFormProps &
                   wrapperCol={normalizeCol(props.wrapperCol)}
                   layout={inline ? 'inline' : props.layout}
                 >
-                  {() => {
-                    return isFn(children)
-                      ? children(form)
-                      : cloneChlildren(children)
-                  }}
+                  {renderedChildren}
                 </AntdForm>
               </div>
             </FormItemDeepProvider>

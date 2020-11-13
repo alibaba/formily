@@ -46,6 +46,9 @@ export const Form: React.FC<INextFormProps &
       }}
     >
       {form => {
+        const renderedChildren = isFn(children)
+          ? children(form)
+          : cloneChlildren(children)
         return (
           <PreviewText.ConfigProvider value={props}>
             <FormItemDeepProvider {...props}>
@@ -65,11 +68,7 @@ export const Form: React.FC<INextFormProps &
                     form.reset({ validate: false, forceClear: false })
                   }}
                 >
-                  {() => {
-                    return isFn(children)
-                      ? children(form)
-                      : cloneChlildren(children)
-                  }}
+                  {renderedChildren}
                 </NextForm>
               </div>
             </FormItemDeepProvider>
