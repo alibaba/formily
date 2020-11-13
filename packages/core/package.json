@@ -21,13 +21,11 @@
   "devDependencies": {
     "typescript": "~3.8.0"
   },
-  "peerDependencies": {
-    "scheduler": ">=0.11.2"
-  },
   "dependencies": {
     "@formily/shared": "^1.3.6",
     "@formily/validator": "^1.3.6",
-    "immer": "^6.0.3"
+    "immer": "^6.0.3",
+    "mobx": "^6.0.3"
   },
   "publishConfig": {
     "access": "public"
