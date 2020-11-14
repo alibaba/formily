@@ -79,11 +79,18 @@ export const createFormExternals = (
   function eachArrayExchanges(
     prevState: IFieldState,
     currentState: IFieldState,
-    eacher: (prevPath: string, currentPath: string, lastResults: any) => void
+    eacher: (
+      prevPath: string,
+      currentPath: string,
+      lastResults: any,
+      isRemoveAction: boolean
+    ) => void
   ) {
     const exchanged = {}
     const prevValue = prevState.value
     const currentValue = currentState.value
+    const isRemoveAction =
+      currentState?.value?.length < prevState?.value?.length
     const maxLengthValue =
       prevValue?.length > currentValue?.length ? prevValue : currentValue
     //删除元素正向循环，添加或移动使用逆向循环
@@ -102,9 +109,9 @@ export const createFormExternals = (
           exchanged[prev] = true
           exchanged[current] = true
         }
-        lastResults = eacher(prev, current, lastResults)
+        lastResults = eacher(prev, current, lastResults, isRemoveAction)
       },
-      currentState?.value?.length >= prevState?.value?.length
+      !isRemoveAction
     )
   }
 
@@ -179,7 +186,8 @@ export const createFormExternals = (
     parentPath: FormPathPattern,
     prevPattern: FormPathPattern,
     currentPattern: FormPathPattern,
-    lastCurrentStates: any
+    lastCurrentStates: any,
+    isRemoveAction: boolean
   ) {
     const currentIndex = FormPath.transform(
       currentPattern,
@@ -217,7 +225,7 @@ export const createFormExternals = (
             }
           })
         }
-        if (currentField) {
+        if (!isRemoveAction && currentField) {
           currentStates[currentPath] = currentField.getState()
           currentField.setSourceState(state => {
             Object.assign(state, prevState)
@@ -255,8 +263,8 @@ export const createFormExternals = (
                 eachArrayExchanges(
                   field.prevState,
                   published,
-                  (prev, current, lastResults = {}) =>
-                    exchangeState(path, prev, current, lastResults)
+                  (prev, current, lastResults = {}, isRemoveAction) =>
+                    exchangeState(path, prev, current, lastResults, isRemoveAction)
                 )
               })
             }
