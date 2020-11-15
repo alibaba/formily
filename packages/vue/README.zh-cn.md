@@ -39,9 +39,16 @@ npm install --save @formily/vue
   - [`combo字段`](#combo字段)
   - [`跨文件消费表单数据`](#跨文件消费表单数据)
 
-### 使用方式
+### 使用前置
 
----
+依赖@vue/composition-api, 需要提前引入。
+
+```javascript
+import App from './App.vue'
+import VueCompositionAPI from '@vue/composition-api'
+
+Vue.use(VueCompositionAPI)
+```
 
 #### 快速开始
 
@@ -162,7 +169,7 @@ Form:
       name="age"
       :rules="[
         val =>
-          val === undefined
+          val === ''
             ? { type: 'error', message: 'age is required' }
             : undefined
       ]"
@@ -174,7 +181,7 @@ Form:
       name="gender"
       :rules="[
         val =>
-          val === undefined
+          val === ''
             ? { type: 'warning', message: 'gender is required' }
             : undefined
       ]"
@@ -228,7 +235,7 @@ Form:
 
 <script>
   import { Form, createFormActions } from '@formily/vue'
-  import InputField from './input.vue'
+  import InputField from './components/input.vue'
 
   export default {
     components: { Form, InputField },
@@ -302,7 +309,6 @@ Form:
       }"
     >
       <template #default="{ state, mutators }">
-        {{ state.value }}
         <template v-for="(value, key) in state.value">
           <template v-if="!mutators.exist(key)"></template>
           <div v-else :key="key">
@@ -407,7 +413,6 @@ Form:
   <form :actions="actions">
     <Field name="idList" :initial-value="['1', '2', '3']">
       <template #default="{ state, mutators }">
-        {{ state.value }}
         <template v-for="(item, index) in state.value">
           <div :key="`${index}-${item}`">
             <InputField :name="`idList[${index}]`" />
