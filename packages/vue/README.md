@@ -1,49 +1,49 @@
 # @formily/vue
 
-> Formily 在 vue（v2.x） 层的实现，内置表单状态核心管理(@formily/core), 依赖@vue/composition-api
-> @formily/vue 中主要包含了以下部分：
->
-> - Form 表单容器
-> - Field 表单字段
-> - VirtualField 虚拟表单字段
-> - FormaSpy 表单替身
-> - FormProvider 表单核心提供者
-> - FormConsumer 表单核心消费者(即将废弃，请使用 FormSpy)
-> - createFormActions 创建表单核心操作 API 实例
-> - createAsyncFormActions 创建表单核心操作 API 实例（异步）
-> - FormEffectHooks 表单生命周期 hook
+English | [简体中文](./README.zh-cn.md)
 
-### 安装
+> @formily/vue is based on `vue`(v2.x with `@vue/composition-api`) and @formily/core is already built in. It provide API to manuplate form state and components for rendering support.
+> it mainly includes:
+>
+> - Form
+> - Field
+> - VirtualField
+> - FormaSpy
+> - FormProvider
+> - FormConsumer(deprecated，pls using FormSpy)
+> - createFormActions (create sync API to manuplate form state)
+> - createAsyncFormActions (create async API to manuplate form state)
+> - FormEffectHooks (LifeCycles Hook)
+
+### Install
 
 ```bash
 npm install --save @formily/vue
 ```
 
-### 目录
+### Table Of Contents
 
 <!-- toc -->
 
-- [使用方式](#使用方式)
-  - [`快速开始`](#快速开始)
-  - [`基础类型字段`](#基础类型字段)
-  - [`字段校验`](#字段校验)
-  - [`对象类型字段`](#对象类型字段)
-  - [`简单数组类型字段`](#简单数组类型字段)
-  - [`对象数组类型字段`](#对象数组类型字段)
-  - [`display与visible`](#display-visible)
-  - [`简单联动`](#简单联动)
-  - [`异步联动`](#异步联动)
-  - [`联动校验`](#联动校验)
-  - [`复杂联动`](#复杂联动)
-  - [`复用Effects`](#复用Effects)
-  - [`combo字段`](#combo字段)
-  - [`跨文件消费表单数据`](#跨文件消费表单数据)
+- [`Usage`](#Usage)
+  - [`Quick Start`](#Quick-Start)
+  - [`Basic Field`](#Basic-Field)
+  - [`Validation`](#Validation)
+  - [`Object Field`](#Object-Field)
+  - [`ArrayField`](#ArrayField)
+  - [`ArrayField<Object>`](#ArrayField<Object>)
+  - [`display and visible`](#display-visible)
+  - [`Linkage`](#Linkage)
+  - [`Async Linkage`](#Async-Linkage)
+  - [`Linkage Validation`](#Linkage-Validation)
+  - [`Complex Linkage`](#Complex-Linkage)
+  - [`Reuse Effects`](#Reuse-Effects)
+  - [`Combo`](#Combo)
+  - [`Provide and FormSpy`](#Provide-and-FormSpy)
 
-### 使用方式
+### Usage
 
-#### 使用前置
-
-依赖@vue/composition-api, 需要提前引入。
+#### Preparation
 
 ```javascript
 import App from './App.vue'
@@ -52,7 +52,7 @@ import VueCompositionAPI from '@vue/composition-api'
 Vue.use(VueCompositionAPI)
 ```
 
-#### 快速开始
+#### Quick Start
 
 ```html
 <template>
@@ -83,10 +83,10 @@ Vue.use(VueCompositionAPI)
       const actions = createFormActions()
       const effects = () => {
         onFormInit$().subscribe(() => {
-          console.log('初始化')
+          console.log('initialized')
         })
         onFieldValueChange$().subscribe(state => {
-          console.log('输入变化', state)
+          console.log('field change', state)
         })
       }
 
@@ -99,9 +99,9 @@ Vue.use(VueCompositionAPI)
 </script>
 ```
 
-#### 基础类型字段
+#### Basic Field
 
-示例：以输入框为例，如何快速绑定表单字段，后续例子都基于此字段拓展。
+Example：Show you how to bind the `<input>` field and subsequent examples are based on this field
 
 ```html
 <Field v-bind="$attrs">
@@ -118,10 +118,10 @@ Vue.use(VueCompositionAPI)
 </Field>
 ```
 
-#### 字段校验
+#### Validation
 
-示例：必填校验 + error 类型校验 + warning 类型校验 + 自定义校验
-校验的类型可以是 [ValidatePatternRules](#ValidatePatternRules)，即 [InternalFormats](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
+Example：required validation + error type validation + warning type validation + custom validation
+The type of rules is [ValidatePatternRules](#ValidatePatternRules) which is [InternalFormats](#InternalFormats) | [CustomValidator](#CustomValidator) | [ValidateDescription](#ValidateDescription) | [ValidateArrayRules](#ValidateArrayRules)
 
 InputField:
 
@@ -260,9 +260,9 @@ Form:
 </script>
 ```
 
-#### 对象类型字段
+#### Object Field
 
-示例：用户信息 `user(username, age)`
+Example：User info `user(username, age)`
 
 InputField:
 
@@ -371,9 +371,9 @@ Form:
 </script>
 ```
 
-#### 简单数组类型字段
+#### ArrayField
 
-示例：用户 id 列表，增删改查
+Example：Id list
 
 InputField:
 
@@ -447,9 +447,9 @@ Form:
 </script>
 ```
 
-#### 对象数组类型字段
+#### ArrayField<Object>
 
-示例：用户 id 列表，增删改查
+Example：User list
 
 InputField:
 
@@ -738,9 +738,9 @@ Form:
 </script>
 ```
 
-#### 简单联动
+#### Linkage
 
-示例：显示及隐藏，修改 props 和 value
+Example：Show/hide field and modified props/value by using effects
 
 InputField:
 
@@ -859,9 +859,9 @@ Form:
 </script>
 ```
 
-#### 异步联动
+#### Async Linkage
 
-示例：异步切换 select 的 dataSource
+Example：Change dataSource in select asynchronously by effects
 
 CheckedField:
 
@@ -989,9 +989,9 @@ Form:
 </script>
 ```
 
-#### 联动校验
+#### Linkage Validation
 
-示例：初始化校验，字段 change 时自动重新触发校验
+Example：validation when form mounted and re-trigger validation when field change
 
 InputField:
 
@@ -1065,9 +1065,9 @@ Form:
 </script>
 ```
 
-#### 复杂联动
+#### Complex Linkage
 
-示例：ArrayField 复杂联动
+Example：See how ArrayField communicate with other field by using effects
 
 InputField:
 
@@ -1218,9 +1218,9 @@ Form:
 </script>
 ```
 
-#### 复用 Effects
+#### Reuse Effects
 
-自定义可复用的 effects
+Make your own reusable effects.
 
 InputField:
 
@@ -1346,9 +1346,9 @@ Form:
 </script>
 ```
 
-#### combo 字段
+#### Combo
 
-示例：combo username 和 age 字段, 更多用法，请点击[FormSpy](#FormSpy)查看
+Example：Combo value of username and age. Check [FormSpy](#FormSpy) for more inforation.
 
 InputField:
 
@@ -1420,16 +1420,16 @@ Form:
 </script>
 ```
 
-#### 跨文件消费表单数据
+#### Provide and FormSpy
 
 ```typescript
-文件目录
+Dictionary
 --app
   |---components
   |---customForm
 ```
 
-示例：跨文件消费表单数据, 更多用法，请参考[FormProvider](#FormProvider) 和 [FormSpy](#FormSpy)
+Example：Cross-file consumption form state, Check [FormProvider](#FormProvider) and [FormSpy](#FormSpy) for more infomation.
 
 InputField:
 
