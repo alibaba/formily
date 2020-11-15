@@ -200,7 +200,9 @@ export const createFormEffects = <
       env.currentActions = null
     }
   } else {
-    return () => {}
+    return () => {
+      /* Empty */
+    }
   }
 }
 
@@ -373,7 +375,9 @@ export const createEffectsProvider = <
           if (!queue[type][i]) return payload
           const response = queue[type][i++](payload, next)
           if (response === undefined) {
-            return new Promise(() => {})
+            return new Promise(() => {
+              /* Empty */
+            })
           }
           return Promise.resolve(response)
         }

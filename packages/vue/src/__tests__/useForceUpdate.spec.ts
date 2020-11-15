@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
-import renderHook from './utils/renderHook'
+import renderHook from '../__test-utils__/renderHook'
 import { useForceUpdate } from '../hooks/useForceUpdate'
 import { getCurrentInstance, onBeforeUpdate } from '@vue/composition-api'
 

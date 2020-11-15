@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
-import renderHook from './utils/renderHook'
+import renderHook from '../__test-utils__/renderHook'
 import { useDirty } from '../hooks/useDirty'
 
 Vue.use(VueCompositionAPI)
