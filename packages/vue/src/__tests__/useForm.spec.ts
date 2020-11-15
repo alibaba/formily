@@ -1,15 +1,15 @@
 /* eslint-disable vue/one-component-per-file */
 import Vue from 'vue'
+import VueCompositionAPI, {
+  defineComponent,
+  provide
+} from '@vue/composition-api'
 import { mount } from '@vue/test-utils'
 import { Broadcast } from '../shared'
 import { BroadcastSymbol } from '../constants'
 import { createForm } from '@formily/core'
 import useForm from '../hooks/useForm'
 import { createFormActions, createAsyncFormActions } from '../index'
-import VueCompositionAPI, {
-  defineComponent,
-  provide
-} from '@vue/composition-api'
 
 Vue.use(VueCompositionAPI)
 

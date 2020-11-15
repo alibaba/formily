@@ -1,8 +1,8 @@
 /* eslint-disable vue/one-component-per-file */
 import Vue from 'vue'
+import VueCompositionAPI, { defineComponent } from '@vue/composition-api'
 import { mount } from '@vue/test-utils'
 import { useFieldState, Form, Field, VirtualField } from '../index'
-import VueCompositionAPI, { defineComponent } from '@vue/composition-api'
 
 Vue.use(VueCompositionAPI)
 

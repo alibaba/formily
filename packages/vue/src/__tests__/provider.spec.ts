@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import { fireEvent, getByTestId, queryByTestId } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import { Broadcast } from '../shared'
@@ -5,6 +7,8 @@ import { createForm } from '@formily/core'
 import { createFormActions } from '../index'
 import ProviderComponent1 from './test-components/provider/provider1.vue'
 import ProviderComponent2 from './test-components/provider/provider2.vue'
+
+Vue.use(VueCompositionAPI)
 
 describe('provider hook', () => {
   test('basic', async () => {

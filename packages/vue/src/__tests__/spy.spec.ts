@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import { fireEvent, getByTestId, queryByTestId } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import { createForm } from '@formily/core'
@@ -5,6 +7,8 @@ import { createFormActions, LifeCycleTypes } from '../index'
 import FormComponent1 from './test-components/spy/form1.vue'
 import FormComponent2 from './test-components/spy/form2.vue'
 import FormComponent3 from './test-components/spy/form3.vue'
+
+Vue.use(VueCompositionAPI)
 
 const sleep = (duration = 100) =>
   new Promise(resolve => setTimeout(resolve, duration))

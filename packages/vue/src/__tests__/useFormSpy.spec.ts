@@ -1,6 +1,10 @@
 /* eslint-disable vue/one-component-per-file */
-import { createForm } from '@formily/core'
 import Vue from 'vue'
+import VueCompositionAPI, {
+  defineComponent,
+  watchEffect
+} from '@vue/composition-api'
+import { createForm } from '@formily/core'
 import { mount } from '@vue/test-utils'
 import {
   LifeCycleTypes,
@@ -9,10 +13,6 @@ import {
   Field,
   createFormActions
 } from '../index'
-import VueCompositionAPI, {
-  defineComponent,
-  watchEffect
-} from '@vue/composition-api'
 
 Vue.use(VueCompositionAPI)
 

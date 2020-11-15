@@ -1,7 +1,11 @@
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import { render, fireEvent } from '@testing-library/vue'
 import { createFormActions, createAsyncFormActions } from '../index'
 import { IFormActions, IFormAsyncActions } from '../types'
 import FormComponent from './test-components/vfield/form.vue'
+
+Vue.use(VueCompositionAPI)
 
 describe('test all apis', () => {
   let actions: IFormActions

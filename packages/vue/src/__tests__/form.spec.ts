@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import VueCompositionAPI from '@vue/composition-api'
 import { render, fireEvent, waitFor } from '@testing-library/vue'
 import { VueClass } from '@vue/test-utils'
 import { createFormActions } from '../index'
@@ -5,6 +7,8 @@ import { LifeCycleTypes } from '@formily/core'
 import FormComponent1 from './test-components/form/form1.vue'
 import FormComponent2 from './test-components/form/form2.vue'
 import FormComponent3 from './test-components/form/form3.vue'
+
+Vue.use(VueCompositionAPI)
 
 describe('test all apis', () => {
   test('Form', async () => {

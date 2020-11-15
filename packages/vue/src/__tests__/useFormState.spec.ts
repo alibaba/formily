@@ -1,7 +1,7 @@
 /* eslint-disable vue/one-component-per-file */
 import Vue from 'vue'
-import { mount } from '@vue/test-utils'
 import VueCompositionAPI, { defineComponent } from '@vue/composition-api'
+import { mount } from '@vue/test-utils'
 import { Form, useFormState } from '../index'
 
 Vue.use(VueCompositionAPI)
