@@ -1,5 +1,3 @@
-import Vue from 'vue'
-import VueCompositionAPI from '@vue/composition-api'
 import {
   FormEffectHooks,
   createEffectHook,
@@ -37,8 +35,6 @@ export * from './hooks/useVirtualField'
 export * from './hooks/useFormEffects'
 export * from './hooks/useFormQuery'
 export * from './types'
-
-Vue.use(VueCompositionAPI)
 
 export {
   Form,
