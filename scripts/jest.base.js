@@ -17,8 +17,7 @@ const alias = packages
 module.exports = {
   collectCoverage: true,
   verbose: true,
-  testEnvironment: 'jest-environment-jsdom-sixteen',
-  // testEnvironment: 'jsdom',
+  testEnvironment: 'jsdom',
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.vue$': 'vue-jest-babel7'
