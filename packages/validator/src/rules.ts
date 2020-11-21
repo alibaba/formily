@@ -1,4 +1,3 @@
-import { getMessage } from './message'
 import {
   isEmpty,
   isValid,
@@ -9,7 +8,9 @@ import {
   toArr,
   isBool
 } from '@formily/shared'
-import { ValidateDescription, ValidateRulesMap } from './types'
+import { getValidateFormats } from './registry'
+import { ValidatorRules } from './types'
+
 const isValidateEmpty = (value: any) => {
   if (isArr(value)) {
     for (let i = 0; i < value.length; i++) {
@@ -24,87 +25,54 @@ const isValidateEmpty = (value: any) => {
 const getLength = (value: any) =>
   isStr(value) ? stringLength(value) : value ? value.length : 0
 
-const intersection = (arr1: string[], arr2: string[]) => {
-  return arr1.filter(key => arr2.includes(key))
-}
-
-const getRuleMessage = (rule: any, type: string, rules?: ValidateRulesMap) => {
-  const allRuleKeys = Object.keys(rules || {})
-  const currentRuleKeys = Object.keys(rule || {})
-  if (
-    isFn(rule.validator) ||
-    intersection(currentRuleKeys, allRuleKeys).length > 2
-  ) {
-    if (rule.format) {
-      return rule.message || getMessage(type)
-    }
-    return getMessage(type)
-  } else {
-    return rule.message || getMessage(type)
-  }
-}
-
 export default {
-  required(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  required(value: any, rule: ValidatorRules) {
     if (rule.required === false) return ''
-    return isValidateEmpty(value) ? getRuleMessage(rule, 'required', rules) : ''
+    return isValidateEmpty(value) ? rule.message : ''
   },
-  max(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  max(value: any, rule: ValidatorRules) {
     const length = getLength(value)
     const max = Number(rule.max)
-    return length > max ? getRuleMessage(rule, 'max', rules) : ''
+    return length > max ? rule.message : ''
   },
-  maximum(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
-    return Number(value) > Number(rule.maximum)
-      ? getRuleMessage(rule, 'maximum', rules)
-      : ''
+  maximum(value: any, rule: ValidatorRules) {
+    return Number(value) > Number(rule.maximum) ? rule.message : ''
   },
-  exclusiveMaximum(
-    value: any,
-    rule: ValidateDescription,
-    rules: ValidateRulesMap
-  ) {
-    return Number(value) >= Number(rule.maximum)
-      ? getRuleMessage(rule, 'exclusiveMaximum', rules)
-      : ''
+  exclusiveMaximum(value: any, rule: ValidatorRules) {
+    return Number(value) >= Number(rule.maximum) ? rule.message : ''
   },
-  minimum(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
-    return Number(value) < Number(rule.minimum)
-      ? getRuleMessage(rule, 'minimum', rules)
-      : ''
+  minimum(value: any, rule: ValidatorRules) {
+    return Number(value) < Number(rule.minimum) ? rule.message : ''
   },
-  exclusiveMinimum(
-    value: any,
-    rule: ValidateDescription,
-    rules: ValidateRulesMap
-  ) {
-    return Number(value) <= Number(rule.minimum)
-      ? getRuleMessage(rule, 'exclusiveMinimum', rules)
-      : ''
+  exclusiveMinimum(value: any, rule: ValidatorRules) {
+    return Number(value) <= Number(rule.minimum) ? rule.message : ''
   },
-  len(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  len(value: any, rule: ValidatorRules) {
     const length = getLength(value)
     const len = Number(rule.len)
-    return length !== len ? getRuleMessage(rule, 'len', rules) : ''
+    return length !== len ? rule.message : ''
   },
-  min(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  min(value: any, rule: ValidatorRules) {
     const length = getLength(value)
     const min = Number(rule.min)
-    return length < min ? getRuleMessage(rule, 'min', rules) : ''
+    return length < min ? rule.message : ''
   },
-  pattern(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  format(value: any, rule: ValidatorRules) {
     if (isValidateEmpty(value)) return ''
-    return !new RegExp(rule.pattern).test(value)
-      ? getRuleMessage(rule, 'pattern', rules)
-      : ''
+    const pattern = getValidateFormats(rule.format)
+    if (pattern) {
+      return !new RegExp(rule.pattern).test(value) ? rule.message : ''
+    }
   },
-  async validator(
-    value: any,
-    rule: ValidateDescription,
-    rules: ValidateRulesMap
-  ) {
+  pattern(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
+    return !new RegExp(rule.pattern).test(value) ? rule.message : ''
+  },
+  async validator(value: any, rule: ValidatorRules, context: any) {
     if (isFn(rule.validator)) {
-      const response = await Promise.resolve(rule.validator(value, rule, rules))
+      const response = await Promise.resolve(
+        rule.validator(value, rule, context)
+      )
       if (isBool(response)) {
         return response ? rule.message : ''
       } else {
@@ -113,17 +81,13 @@ export default {
     }
     throw new Error("The rule's validator property must be a function.")
   },
-  whitespace(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  whitespace(value: any, rule: ValidatorRules) {
     if (rule.whitespace) {
-      return /^\s+$/.test(value)
-        ? getRuleMessage(rule, 'whitespace', rules)
-        : ''
+      return /^\s+$/.test(value) ? rule.message : ''
     }
   },
-  enum(value: any, rule: ValidateDescription, rules: ValidateRulesMap) {
+  enum(value: any, rule: ValidatorRules) {
     const enums = toArr(rule.enum)
-    return enums.indexOf(value) === -1
-      ? getRuleMessage(rule, 'enum', rules)
-      : ''
+    return enums.indexOf(value) === -1 ? rule.message : ''
   }
 }

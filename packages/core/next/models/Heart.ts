@@ -1,8 +1,16 @@
 import { isFn, isStr, isArr, Subscribable } from '@formily/shared'
-import { FormLifeCycle } from './FormLifeCycle'
+import { LifeCycle } from './LifeCycle'
 
-export class FormHeart<Payload = any, Context = any> extends Subscribable {
-  private lifecycles: FormLifeCycle<Payload>[]
+export type HeartSubscriber = ({
+  type,
+  payload
+}: {
+  type: string
+  payload: any
+}) => void
+
+export class Heart<Payload = any, Context = any> extends Subscribable {
+  private lifecycles: LifeCycle<Payload>[]
 
   private context: Context
 
@@ -20,7 +28,7 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
     beforeNotify,
     afterNotify
   }: {
-    lifecycles?: FormLifeCycle[]
+    lifecycles?: LifeCycle[]
     context?: Context
     beforeNotify?: (...args: any[]) => void
     afterNotify?: (...args: any[]) => void
@@ -33,9 +41,9 @@ export class FormHeart<Payload = any, Context = any> extends Subscribable {
     this.afterNotify = afterNotify
   }
 
-  buildLifeCycles(lifecycles: FormLifeCycle[]) {
+  buildLifeCycles(lifecycles: LifeCycle[]) {
     return lifecycles.reduce((buf, item) => {
-      if (item instanceof FormLifeCycle) {
+      if (item instanceof LifeCycle) {
         return buf.concat(item)
       } else {
         if (typeof item === 'object') {

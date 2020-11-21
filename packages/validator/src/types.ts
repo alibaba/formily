@@ -1,26 +1,4 @@
-import { FormPathPattern } from '@formily/shared'
-
-export interface ValidatorOptions {
-  validateFirst?: boolean
-  matchStrategy?: (pattern: FormPathPattern, field: any) => boolean
-}
-
-export type ValidateNode = (
-  options: ValidateFieldOptions
-) => Promise<{
-  errors: string[]
-  warnings: string[]
-}>
-
-export type ValidateNodeMap = {
-  [key in string]: ValidateNode
-}
-
-export type ValidateFormatsMap = {
-  [key in string]: RegExp
-}
-
-export type InternalFormats =
+export type ValidatorFormats =
   | 'url'
   | 'email'
   | 'ipv6'
@@ -35,9 +13,42 @@ export type InternalFormats =
   | 'zip'
   | string
 
-export interface ValidateDescription {
-  format?: InternalFormats
-  validator?: CustomValidator
+export type ValidateResult = {
+  type: 'error' | 'warning' | 'success'
+  message: string
+}
+
+export const isValidateResult = (obj: any): obj is ValidateResult =>
+  !!obj['type'] && !!obj['message']
+
+export type ValidateResults = ValidateResult[]
+
+export type ValidatorFunctionResponse = null | string | boolean | ValidateResult
+
+export type ValidatorFunction<Context = any> = (
+  value: any,
+  rule: ValidatorRules<Context>,
+  ctx: Context
+) => ValidatorFunctionResponse | Promise<ValidatorFunctionResponse> | null
+
+export type ValidatorParsedFunction<Context = any> = (
+  value: any,
+  ctx: Context
+) => ValidateResult | Promise<ValidateResult> | null
+
+export type ValidatorTriggerType =
+  | 'onInput'
+  | 'onFocus'
+  | 'onBlur'
+  | 'onMount'
+  | 'onUnmount'
+  | 'onInit'
+  | 'onReset'
+
+export type ValidatorRules<Context = any> = {
+  triggerType?: ValidatorTriggerType
+  format?: ValidatorFormats
+  validator?: ValidatorFunction<Context>
   required?: boolean
   pattern?: RegExp | string
   max?: number
@@ -50,69 +61,23 @@ export interface ValidateDescription {
   whitespace?: boolean
   enum?: any[]
   message?: string
-  [key: string]: any
 }
 
-export type ValidateRules = ValidateDescription[]
+export type ValidatorDescription<Context = any> =
+  | ValidatorFormats
+  | ValidatorFunction<Context>
+  | ValidatorRules<Context>
 
-export type ValidateArrayRules = Array<
-  InternalFormats | CustomValidator | ValidateDescription
->
+export type MultiValidator<Context = any> = ValidatorDescription<Context>[]
 
-export type ValidatePatternRules =
-  | InternalFormats
-  | CustomValidator
-  | ValidateDescription
-  | ValidateArrayRules
+export type Validator<Context = any> =
+  | ValidatorFormats
+  | ValidatorFunction<Context>
+  | ValidatorRules<Context>
+  | MultiValidator<Context>
 
-export type CustomValidator = (
-  value: any,
-  description?: ValidateDescription,
-  rules?: ValidateRulesMap
-) => ValidateResponse
-
-export type SyncValidateResponse =
-  | null
-  | string
-  | boolean
-  | {
-      type?: 'error' | 'warning'
-      message: string
-    }
-
-export type ValidateResponse = SyncValidateResponse | AsyncValidateResponse
-
-export type AsyncValidateResponse = Promise<SyncValidateResponse>
-
-export type ValidateRulesMap = {
-  [key in string]: (
-    value: any,
-    description: ValidateDescription,
-    rules: ValidateRulesMap
-  ) => ValidateResponse | Promise<ValidateResponse>
-}
-
-export interface ValidateFieldOptions {
-  first?: boolean
-}
-
-export type ValidateCalculator = (
-  validate: (
-    value: any,
-    rules: ValidatePatternRules
-  ) => Promise<{
-    errors: string[]
-    warnings: string[]
-  }>
-) => void
-
-export interface ValidateNodeResult {
-  errors: Array<{
-    path: string
-    messages: string[]
-  }>
-  warnings: Array<{
-    path: string
-    messages: string[]
-  }>
+export interface IValidatorOptions<Context = any> {
+  validateFirst?: boolean
+  triggerType?: ValidatorTriggerType
+  context?: Context
 }

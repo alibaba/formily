@@ -16,7 +16,8 @@ export const isBool = isType<boolean>('Boolean')
 export const isNum = isType<number>('Number')
 export const isObj = (val: unknown): val is object => typeof val === 'object'
 export const isRegExp = isType<RegExp>('RegExp')
-
+export const isReactElement = (obj: any): obj is React.ReactElement<any> =>
+  obj && obj['$$typeof'] && obj['_owner']
 export type Subscriber<S> = (payload: S) => void
 
 export interface Subscription<S> {

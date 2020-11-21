@@ -1,30 +1,43 @@
-import { action, makeObservable, observable, observe } from 'mobx'
-import { Subscribable } from '@formily/shared'
+import {
+  action,
+  makeObservable,
+  observable,
+  observe,
+  runInAction,
+  toJS
+} from 'mobx'
+import {
+  each,
+  FormPath,
+  FormPathPattern,
+  isArr,
+  isFn,
+  isStr,
+  isValid
+} from '@formily/shared'
 import {
   ValidatePatternRules,
   ValidateNodeResult,
   ValidateFieldOptions
 } from '@formily/validator'
-import { LifeCycleTypes, FormLifeCycle } from './FormLifeCycle'
-import { FormHeart } from './FormHeart'
+import { LifeCycleTypes, LifeCycle } from './LifeCycle'
+import { Heart, HeartSubscriber } from './Heart'
+import { IFieldProps, Field } from './Field'
+import { FunctionComponent } from '../types'
+import { Feedback } from './Feedback'
+
+export type FormPatternTypes =
+  | 'editable'
+  | 'readOnly'
+  | 'disabled'
+  | 'readPretty'
 
 export interface IFormState {
-  valid: boolean
-  invalid: boolean
-  loading: boolean
-  validating: boolean
-  modified: boolean
-  submitting: boolean
   initialized: boolean
-  editable: boolean | ((name: string) => boolean)
-  errors: Array<{
-    path: string
-    messages: string[]
-  }>
-  warnings: Array<{
-    path: string
-    messages: string[]
-  }>
+  validating: boolean
+  submitting: boolean
+  modified: boolean
+  editable: boolean
   values: any
   initialValues: any
   mounted: boolean
@@ -32,99 +45,257 @@ export interface IFormState {
   [key: string]: any
 }
 
-export interface IFormProps {
-  initialValues?: {}
-  values?: {}
-  lifecycles?: FormLifeCycle[]
-  editable?: boolean | ((name: string) => boolean)
-  validateFirst?: boolean
-  onChange?: (values: IFormState['values']) => void
-  onSubmit?: (values: IFormState['values']) => any | Promise<any>
-  onReset?: () => void
-  onValidateFailed?: (validated: ValidateNodeResult) => void
+export interface IFieldsMap {
+  [key: string]: Field
 }
 
-export class Form extends Subscribable {
-  state = {
-    valid: true,
-    invalid: false,
-    loading: false,
-    validating: false,
-    initialized: false,
-    submitting: false,
-    editable: true,
-    modified: false,
-    errors: [],
-    warnings: [],
-    values: {},
-    initialValues: {},
-    mounted: false,
-    unmounted: false
-  }
+export interface IFormProps {
+  values?: {}
+  initialValues?: {}
+  pattern?: FormPatternTypes
+  lifecycles?: LifeCycle[]
+  editable?: boolean
+  validateFirst?: boolean
+}
+
+export interface ICreateFieldProps<
+  D extends FunctionComponent,
+  C extends FunctionComponent
+> extends Omit<IFieldProps<D, C>, 'path'> {
+  name: FormPathPattern
+  basePath?: FormPathPattern
+}
+
+export class Form {
+  initialized: boolean
+
+  validating: boolean
+
+  submitting: boolean
+
+  modified: boolean
+
+  pattern: FormPatternTypes
+
+  values: any
+
+  initialValues: any
+
+  mounted: boolean
+
+  unmounted: boolean
 
   props: IFormProps
 
-  heart: FormHeart
+  heart: Heart
+
+  feedback: Feedback
+
+  fields: IFieldsMap
 
   constructor(props: IFormProps) {
-    super()
+    this.initialize(props)
     this.makeObservable()
     this.makeSubscrible()
-    this.initialize(props)
   }
 
-  setFormValues(values: any) {
-    this.state.values = values
+  initialize(props: IFormProps) {
+    this.feedback = new Feedback()
+    this.props = { ...Form.defaultProps, ...props }
+    this.initialized = false
+    this.submitting = false
+    this.validating = false
+    this.modified = false
+    this.mounted = false
+    this.unmounted = false
+    this.pattern = this.props.pattern
+    this.values = this.props.values
+    this.initialValues = this.props.initialValues
   }
 
-  getFormValues() {
-    return this.state.values
+  /** 创建字段 **/
+
+  createField<
+    Decorator extends FunctionComponent,
+    Component extends FunctionComponent
+  >(props: ICreateFieldProps<Decorator, Component>) {}
+
+  /** 状态操作模型 **/
+
+  setValues(values: any) {
+    this.modified = true
+    this.values = values
+    this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
 
-  setFormInitialValues(initialValues: any) {
-    this.state.initialValues = initialValues
+  setValuesIn(path: FormPathPattern, value: any) {
+    FormPath.setIn(this.values, path, value)
   }
 
-  getFormInitialValues() {
-    return this.state.initialValues
+  getValuesIn(path: FormPathPattern) {
+    return FormPath.getIn(this.values, path)
   }
+
+  setInitialValues(initialValues: any) {
+    this.initialValues = initialValues
+    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+  }
+
+  setInitialValuesIn(path: FormPathPattern, initialValue: any) {
+    FormPath.setIn(this.initialValues, path, initialValue)
+  }
+
+  getInitialValuesIn(path: FormPathPattern) {
+    return FormPath.getIn(this.initialValues, path)
+  }
+
+  setSubmitting(submitting: boolean) {
+    if (submitting) {
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_START)
+    }
+    this.submitting = submitting
+    if (!submitting) {
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_END)
+    }
+  }
+
+  setValidating(validating: boolean) {
+    if (validating) {
+      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
+    }
+    this.validating = validating
+    if (!validating) {
+      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
+    }
+  }
+
+  setPattern(pattern: FormPatternTypes) {
+    this.pattern = pattern
+  }
+
+  onInit() {
+    this.initialized = true
+    this.notify(LifeCycleTypes.ON_FORM_INIT)
+  }
+
+  onMount() {
+    this.mounted = true
+    this.notify(LifeCycleTypes.ON_FORM_MOUNT)
+  }
+
+  onUnmount() {
+    this.unmounted = true
+    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
+  }
+
+  query(
+    pattern: FormPathPattern,
+    callback?: (field: Field, path: string) => void
+  ): Field {
+    //each(this.fields, callback)
+    return {} as any
+  }
+
+  queryAll(
+    pattern: FormPathPattern,
+    callback?: (field: Field, path: string) => void
+  ): Field[] {
+    return {} as any
+  }
+
+  /** 观察者模型 **/
 
   makeObservable() {
     makeObservable(this, {
-      state: observable,
-      setFormValues: action,
-      setFormInitialValues: action
+      initialized: observable,
+      validating: observable,
+      submitting: observable,
+      modified: observable,
+      pattern: observable,
+      values: observable,
+      initialValues: observable,
+      mounted: observable,
+      unmounted: observable,
+      setValues: action,
+      setValuesIn: action,
+      setInitialValues: action,
+      setInitialValuesIn: action,
+      setSubmitting: action,
+      setValidating: action
     })
   }
 
   makeSubscrible() {
-    observe(this.state, change => {
-      if (!this.state.mounted) return
-      if (change.name === 'values') {
-        this.publish(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-      }
-      if (change.name === 'initialValues') {
-        this.publish(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-      }
-      if (change.name === 'mounted') {
-        this.publish(LifeCycleTypes.ON_FORM_MOUNT)
-      }
-      if (change.name === 'unmounted') {
-        this.publish(LifeCycleTypes.ON_FORM_UNMOUNT)
-      }
-      this.publish(LifeCycleTypes.ON_FORM_CHANGE)
+    this.heart = new Heart(this.props)
+  }
+
+  notify(type: LifeCycleTypes, payload?: any) {
+    this.heart.publish(type, isValid(payload) ? payload : this)
+  }
+
+  subscribe(subscriber?: HeartSubscriber) {
+    return this.heart.subscribe(subscriber)
+  }
+
+  unsubscribe(id: number) {
+    this.heart.unsubscribe(id)
+  }
+
+  /**节点模型**/
+
+  toJSON() {}
+
+  fromJSON() {}
+
+  async validate() {
+    this.setValidating(true)
+    const tasks = []
+    this.query('*', field => {
+      tasks.push(field.validate())
     })
+    await Promise.all(tasks)
+    this.setValidating(false)
+    if (this.feedback.invalid) {
+      throw this.feedback.errors
+    }
   }
 
-  publish(type: LifeCycleTypes) {
-    this.heart.publish(type, this)
+  async submit(onSubmit?: (values: any) => Promise<any> | null) {
+    this.setSubmitting(true)
+    this.feedback.clear({
+      code: 'SubmitError'
+    })
+    try {
+      await this.validate()
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS)
+    } catch (e) {
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED)
+    }
+    let results: any
+    try {
+      if (isFn(onSubmit) && this.feedback.valid) {
+        results = await onSubmit(toJS(this.values))
+      }
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
+    } catch (e) {
+      this.feedback.update({
+        code: 'SubmitError',
+        type: 'error',
+        messages: e
+      })
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
+      new Promise(() => {
+        throw e
+      })
+    }
+    this.setSubmitting(false)
+    return results
   }
 
-  initialize(props: IFormProps) {
-    this.props = { ...Form.defaultProps, ...props }
-    this.heart = new FormHeart()
-    this.publish(LifeCycleTypes.ON_FORM_INIT)
-  }
+  async reset() {}
 
-  static defaultProps: IFormProps = {}
+  static defaultProps: IFormProps = {
+    initialValues: {},
+    lifecycles: []
+  }
 }
