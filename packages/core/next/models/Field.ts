@@ -169,9 +169,9 @@ export class Field<
     this.validating = validating
   }
 
-  setComponent<Component extends FunctionComponent>(
-    component: Component,
-    props?: Parameters<Component>[0]
+  setComponent<C extends FunctionComponent>(
+    component: C,
+    props?: Parameters<C>[0]
   ) {
     if (component) {
       this.component[0] = component as any
@@ -181,15 +181,15 @@ export class Field<
     }
   }
 
-  setComponentProps<Component extends FunctionComponent>(
-    props?: Parameters<Component>[0]
+  setComponentProps<C extends FunctionComponent = Component>(
+    props?: Parameters<C>[0]
   ) {
     Object.assign(this.component[1], props)
   }
 
-  setDecorator<Component extends FunctionComponent>(
-    component: Component,
-    props?: Parameters<Component>[0]
+  setDecorator<D extends FunctionComponent>(
+    component: D,
+    props?: Parameters<D>[0]
   ) {
     if (component) {
       this.decorator[0] = component as any
@@ -199,8 +199,8 @@ export class Field<
     }
   }
 
-  setDecoratorProps<Component extends FunctionComponent>(
-    props?: Parameters<Component>[0]
+  setDecoratorProps<D extends FunctionComponent = Decorator>(
+    props?: Parameters<D>[0]
   ) {
     Object.assign(this.decorator[1], props)
   }
