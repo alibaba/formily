@@ -1,6 +1,6 @@
-import { FormPath } from '@formily/shared'
+import { FormPath, isValid } from '@formily/shared'
 import { validate, ValidatorTriggerType, Validator } from '@formily/validator'
-import { action, makeObservable, observable, runInAction } from 'mobx'
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
 import { FunctionComponent } from '../types'
 import { FeedbackMessage } from './Feedback'
 import { Form } from './Form'
@@ -30,6 +30,7 @@ export interface IFieldProps<
   Decorator extends FunctionComponent = any,
   Component extends FunctionComponent = any
 > {
+  value?: any
   initialValue?: any
   void?: boolean
   display?: FieldDisplayTypes
@@ -57,11 +58,9 @@ export class Field<
   modified: boolean
   active: boolean
   visited: boolean
-  value: any
   inputValue: any
   inputValues: any[]
   recycledValue: any
-  initialValue: any
   initialized: boolean
   mounted: boolean
   unmounted: boolean
@@ -75,6 +74,8 @@ export class Field<
   constructor(props: IFieldProps<Decorator, Component>) {
     this.initialize(props)
     this.makeObservable()
+    this.setValue(props.value)
+    this.setInitialValue(props.initialValue)
   }
 
   initialize(props: IFieldProps<Decorator, Component>) {
@@ -93,11 +94,17 @@ export class Field<
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
-    this.initialValue = this.props.initialValue
     this.recycledValue = null
     this.inputValue = null
-    this.value = null
     this.inputValues = []
+  }
+
+  get parent() {
+    const path = this.path.parent()
+    const identifier = path.toString()
+    if (this.form.fields[identifier]) {
+      return this.form.fields[identifier]
+    }
   }
 
   get errors() {
@@ -110,6 +117,18 @@ export class Field<
 
   get successes() {
     return this.form.feedback.find({ path: this.path, type: 'success' })
+  }
+
+  get value() {
+    const value = this.form.getValuesIn(this.path)
+    if (this.modified) {
+      return value
+    }
+    return isValid(value) ? value : this.initialValue
+  }
+
+  get initialValue() {
+    return this.form.getInitialValuesIn(this.path)
   }
 
   setErrors(messages: FeedbackMessage) {
@@ -131,14 +150,12 @@ export class Field<
   }
 
   setValue(value?: any) {
-    this.value = value
     this.form.setValuesIn(this.path, value)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
   }
 
   setInitialValue(initialValue?: any) {
-    this.initialValue = initialValue
     this.form.setInitialValuesIn(this.path, initialValue)
     this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, this.form)
@@ -151,14 +168,34 @@ export class Field<
         this.recycledValue = null
       }
     } else if (type === 'none') {
-      this.recycledValue = this.value
+      this.recycledValue = toJS(this.value)
       this.setValue()
     }
     this.display = type
   }
 
+  getComputedDisplay() {
+    if (this.display) return this.display
+    let parent = this.parent
+    while (parent) {
+      if (parent.display) return parent.display
+      parent = parent.parent
+    }
+    return 'visibility'
+  }
+
   setPattern(type: FieldPatternTypes) {
     this.pattern = type
+  }
+
+  getComputedPattern() {
+    if (this.pattern) return this.pattern
+    let parent = this.parent
+    while (parent) {
+      if (parent.pattern) return parent.pattern
+      parent = parent.parent
+    }
+    return this.form.pattern
   }
 
   setLoading(loading: boolean) {
@@ -221,12 +258,12 @@ export class Field<
   onUnmount() {
     this.mounted = false
     this.unmounted = true
+    this.setValue()
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
     this.validate('onUnmount')
   }
 
   onInput(...args: any[]) {
-    this.value = args[0]
     this.inputValue = args[0]
     this.inputValues = args
     this.modified = true
@@ -350,10 +387,9 @@ export class Field<
         this.setInitialValue(undefined)
       }
       if (options?.forceClear) {
-        this.value = undefined
         this.inputValue = undefined
         this.inputValues = []
-        this.form.setValuesIn(this.path, this.value)
+        this.setValue()
       } else {
         this.setValue(this.initialValue)
       }
