@@ -36,6 +36,7 @@ export enum LifeCycleTypes {
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
   ON_FIELD_VALIDATE_START = 'onFieldValidateStart',
   ON_FIELD_VALIDATE_END = 'onFieldValidateEnd',
+  ON_FIELD_RESET = 'onFieldReset',
   ON_FIELD_MOUNT = 'onFieldMount',
   ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }

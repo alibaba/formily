@@ -1,6 +1,6 @@
 import { FormPath } from '@formily/shared'
 import { validate, ValidatorTriggerType, Validator } from '@formily/validator'
-import { action, makeObservable, observable } from 'mobx'
+import { action, makeObservable, observable, runInAction } from 'mobx'
 import { FunctionComponent } from '../types'
 import { FeedbackMessage } from './Feedback'
 import { Form } from './Form'
@@ -30,7 +30,6 @@ export interface IFieldProps<
   Decorator extends FunctionComponent = any,
   Component extends FunctionComponent = any
 > {
-  path?: FormPath
   initialValue?: any
   void?: boolean
   display?: FieldDisplayTypes
@@ -39,6 +38,13 @@ export interface IFieldProps<
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
 }
+
+export interface IFieldResetOptions {
+  forceClear?: boolean
+  validate?: boolean
+  clearInitialValue?: boolean
+}
+
 export class Field<
   Decorator extends FunctionComponent = any,
   Component extends FunctionComponent = any
@@ -66,15 +72,13 @@ export class Field<
   form: Form
   path: FormPath
   props: IFieldProps<Decorator, Component>
-  constructor(props: IFieldProps<Decorator, Component>, form: Form) {
-    this.initialize(props, form)
+  constructor(props: IFieldProps<Decorator, Component>) {
+    this.initialize(props)
     this.makeObservable()
   }
 
-  initialize(props: IFieldProps<Decorator, Component>, form: Form) {
+  initialize(props: IFieldProps<Decorator, Component>) {
     this.props = { ...Field.defaultProps, ...props }
-    this.path = props.path
-    this.form = form
     this.initialized = false
     this.loading = false
     this.validating = false
@@ -100,6 +104,14 @@ export class Field<
     return this.form.feedback.find({ path: this.path, type: 'error' })
   }
 
+  get warnings() {
+    return this.form.feedback.find({ path: this.path, type: 'warning' })
+  }
+
+  get successes() {
+    return this.form.feedback.find({ path: this.path, type: 'success' })
+  }
+
   setErrors(messages: FeedbackMessage) {
     this.form.feedback.update({
       type: 'error',
@@ -107,10 +119,6 @@ export class Field<
       path: this.path,
       messages
     })
-  }
-
-  get warnings() {
-    return this.form.feedback.find({ path: this.path, type: 'warning' })
   }
 
   setWarnings(messages: FeedbackMessage) {
@@ -126,12 +134,14 @@ export class Field<
     this.value = value
     this.form.setValuesIn(this.path, value)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
   }
 
   setInitialValue(initialValue?: any) {
     this.initialValue = initialValue
     this.form.setInitialValuesIn(this.path, initialValue)
     this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, this.form)
   }
 
   setDisplay(type: FieldDisplayTypes) {
@@ -153,6 +163,46 @@ export class Field<
 
   setLoading(loading: boolean) {
     this.loading = loading
+  }
+
+  setValidating(validating: boolean) {
+    this.validating = validating
+  }
+
+  setComponent<Component extends FunctionComponent>(
+    component: Component,
+    props?: Parameters<Component>[0]
+  ) {
+    if (component) {
+      this.component[0] = component as any
+    }
+    if (props) {
+      this.component[1] = props as any
+    }
+  }
+
+  setComponentProps<Component extends FunctionComponent>(
+    props?: Parameters<Component>[0]
+  ) {
+    Object.assign(this.component[1], props)
+  }
+
+  setDecorator<Component extends FunctionComponent>(
+    component: Component,
+    props?: Parameters<Component>[0]
+  ) {
+    if (component) {
+      this.decorator[0] = component as any
+    }
+    if (props) {
+      this.decorator[1] = props as any
+    }
+  }
+
+  setDecoratorProps<Component extends FunctionComponent>(
+    props?: Parameters<Component>[0]
+  ) {
+    Object.assign(this.decorator[1], props)
   }
 
   onInit() {
@@ -181,8 +231,10 @@ export class Field<
     this.inputValues = args
     this.modified = true
     this.form.modified = true
-    FormPath.setIn(this.form.values, this.path, this.value)
+    this.form.setValuesIn(this.path, this.value)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
     this.validate('onInput')
   }
 
@@ -223,8 +275,13 @@ export class Field<
       setPattern: action,
       setInitialValue: action,
       setLoading: action,
+      setValidating: action,
       setErrors: action,
       setWarnings: action,
+      setComponent: action,
+      setComponentProps: action,
+      setDecorator: action,
+      setDecoratorProps: action,
       onInput: action,
       onMount: action,
       onUnmount: action,
@@ -233,7 +290,9 @@ export class Field<
     })
   }
 
-  async validate(triggerType: ValidatorTriggerType = 'onInput') {
+  async validate(triggerType?: ValidatorTriggerType) {
+    this.setValidating(true)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
     const results = await validate(this.value, this.validator, {
       triggerType,
       validateFirst: this.form?.props?.validateFirst,
@@ -271,6 +330,8 @@ export class Field<
         messages: successes
       })
     }
+    this.setValidating(false)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     return {
       errors,
       warnings,
@@ -278,7 +339,30 @@ export class Field<
     }
   }
 
-  async reset() {}
+  async reset(options?: IFieldResetOptions) {
+    runInAction(() => {
+      this.modified = false
+      this.visited = false
+      this.form.feedback.clear({
+        path: this.path
+      })
+      if (options?.clearInitialValue) {
+        this.setInitialValue(undefined)
+      }
+      if (options?.forceClear) {
+        this.value = undefined
+        this.inputValue = undefined
+        this.inputValues = []
+        this.form.setValuesIn(this.path, this.value)
+      } else {
+        this.setValue(this.initialValue)
+      }
+      this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
+    })
+    if (options?.validate) {
+      return await this.validate()
+    }
+  }
 
   static defaultProps: IFieldProps = {
     void: false,

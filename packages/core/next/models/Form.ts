@@ -1,28 +1,14 @@
+import { action, makeObservable, observable, toJS } from 'mobx'
 import {
-  action,
-  makeObservable,
-  observable,
-  observe,
-  runInAction,
-  toJS
-} from 'mobx'
-import {
-  each,
   FormPath,
   FormPathPattern,
-  isArr,
   isFn,
-  isStr,
+  isRegExp,
   isValid
 } from '@formily/shared'
-import {
-  ValidatePatternRules,
-  ValidateNodeResult,
-  ValidateFieldOptions
-} from '@formily/validator'
 import { LifeCycleTypes, LifeCycle } from './LifeCycle'
 import { Heart, HeartSubscriber } from './Heart'
-import { IFieldProps, Field } from './Field'
+import { IFieldProps, IFieldResetOptions, Field } from './Field'
 import { FunctionComponent } from '../types'
 import { Feedback } from './Feedback'
 
@@ -61,7 +47,7 @@ export interface IFormProps {
 export interface ICreateFieldProps<
   D extends FunctionComponent,
   C extends FunctionComponent
-> extends Omit<IFieldProps<D, C>, 'path'> {
+> extends IFieldProps<D, C> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
@@ -113,12 +99,41 @@ export class Form {
     this.initialValues = this.props.initialValues
   }
 
+  get valid() {
+    return this.feedback.valid
+  }
+
+  get invalid() {
+    return this.feedback.invalid
+  }
+
+  get errors() {
+    return this.feedback.errors
+  }
+
+  get warnings() {
+    return this.feedback.warnings
+  }
+
+  get successes() {
+    return this.feedback.successes
+  }
+
   /** 创建字段 **/
 
   createField<
     Decorator extends FunctionComponent,
     Component extends FunctionComponent
-  >(props: ICreateFieldProps<Decorator, Component>) {}
+  >(props: ICreateFieldProps<Decorator, Component>) {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new Field(props)
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
 
   /** 状态操作模型 **/
 
@@ -128,12 +143,12 @@ export class Form {
     this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
 
-  setValuesIn(path: FormPathPattern, value: any) {
-    FormPath.setIn(this.values, path, value)
+  setValuesIn(pattern: FormPathPattern, value: any) {
+    FormPath.setIn(this.values, this.getDataPath(pattern), value)
   }
 
-  getValuesIn(path: FormPathPattern) {
-    return FormPath.getIn(this.values, path)
+  getValuesIn(pattern: FormPathPattern) {
+    return FormPath.getIn(this.values, this.getDataPath(pattern))
   }
 
   setInitialValues(initialValues: any) {
@@ -141,12 +156,28 @@ export class Form {
     this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
   }
 
-  setInitialValuesIn(path: FormPathPattern, initialValue: any) {
-    FormPath.setIn(this.initialValues, path, initialValue)
+  setInitialValuesIn(pattern: FormPathPattern, initialValue: any) {
+    FormPath.setIn(this.initialValues, this.getDataPath(pattern), initialValue)
   }
 
-  getInitialValuesIn(path: FormPathPattern) {
-    return FormPath.getIn(this.initialValues, path)
+  getInitialValuesIn(pattern: FormPathPattern) {
+    return FormPath.getIn(this.initialValues, this.getDataPath(pattern))
+  }
+
+  getDataPath(pattern: FormPathPattern) {
+    const path = FormPath.parse(pattern)
+    if (path.isMatchPattern)
+      throw new Error('Cannot use matching mode when read or writing values')
+    return path.reduce((path: FormPath, key: string, index: number) => {
+      if (index >= path.length - 1) return path.concat([key])
+      const np = path.slice(0, index + 1)
+      const dp = path.concat([key])
+      const field = this.fields[np.toString()]
+      if (field.void) {
+        return path
+      }
+      return dp
+    }, new FormPath(''))
   }
 
   setSubmitting(submitting: boolean) {
@@ -189,18 +220,63 @@ export class Form {
   }
 
   query(
-    pattern: FormPathPattern,
-    callback?: (field: Field, path: string) => void
+    pattern: FormPathPattern | RegExp,
+    filter?: (field: Field, path: string) => boolean | void
   ): Field {
-    //each(this.fields, callback)
-    return {} as any
+    for (let identifier in this.fields) {
+      const field = this.fields[identifier]
+      if (isRegExp(pattern)) {
+        if (pattern.test(field.path.toString())) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) return field
+          } else {
+            return field
+          }
+        }
+      } else {
+        if (FormPath.parse(pattern).match(field.path)) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) return field
+          } else {
+            return field
+          }
+        }
+      }
+    }
   }
 
   queryAll(
-    pattern: FormPathPattern,
-    callback?: (field: Field, path: string) => void
+    pattern: FormPathPattern | RegExp,
+    filter?: (field: Field, path: string) => boolean | void
   ): Field[] {
-    return {} as any
+    const results = []
+    for (let identifier in this.fields) {
+      const field = this.fields[identifier]
+      if (isRegExp(pattern)) {
+        if (pattern.test(field.path.toString())) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) {
+              results.push(field)
+              break
+            }
+          } else {
+            results.push(field)
+          }
+        }
+      } else {
+        if (FormPath.parse(pattern).match(field.path)) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) {
+              results.push(field)
+              break
+            }
+          } else {
+            results.push(field)
+          }
+        }
+      }
+    }
+    return results
   }
 
   /** 观察者模型 **/
@@ -247,14 +323,16 @@ export class Form {
 
   fromJSON() {}
 
-  async validate() {
+  async validate(pattern: FormPathPattern | RegExp = '*') {
     this.setValidating(true)
+    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
-    this.query('*', field => {
+    this.query(pattern, field => {
       tasks.push(field.validate())
     })
     await Promise.all(tasks)
     this.setValidating(false)
+    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
     if (this.feedback.invalid) {
       throw this.feedback.errors
     }
@@ -292,7 +370,17 @@ export class Form {
     return results
   }
 
-  async reset() {}
+  async reset(
+    pattern: FormPathPattern | RegExp = '*',
+    options?: IFieldResetOptions
+  ) {
+    const tasks = []
+    this.query(pattern, field => {
+      tasks.push(field.reset(options))
+    })
+    this.notify(LifeCycleTypes.ON_FORM_RESET)
+    await Promise.all(tasks)
+  }
 
   static defaultProps: IFormProps = {
     initialValues: {},
