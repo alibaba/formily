@@ -1,5 +1,10 @@
-import { isFn, isStr, isObj, each } from '@formily/shared'
+import { isFn, isStr, isObj, each, FormPathPattern } from '@formily/shared'
+import { FunctionComponent } from '../types'
+import { Field } from './Field'
 
+export const LIFE_CYCLE_ENV = {
+  lifecycles: []
+}
 
 export enum LifeCycleTypes {
   /**
@@ -23,12 +28,12 @@ export enum LifeCycleTypes {
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
   ON_FORM_VALIDATE_END = 'onFormValidateEnd',
-  ON_FORM_INPUT_VALUES_CHANGE = 'onFormInputValuesChange'，
+  ON_FORM_INPUT_VALUES_CHANGE = 'onFormInputValuesChange',
 
   /**
    * Field LifeCycle
    **/
-  
+
   ON_FIELD_INIT = 'onFieldInit',
   ON_FIELD_CHANGE = 'onFieldChange',
   ON_FIELD_INPUT_CHANGE = 'onFieldInputChange',
@@ -89,5 +94,22 @@ export class LifeCycle<Payload = any> {
     if (isStr(type)) {
       this.listener.call(ctx, { type, payload }, ctx)
     }
+  }
+}
+
+export const createLifeCycle = <
+  F extends (payload: any, ctx: any) => FunctionComponent
+>(
+  type: string,
+  callback: F
+) => {
+  return (...args: Parameters<ReturnType<F>>) => {
+    LIFE_CYCLE_ENV.lifecycles.push(
+      new LifeCycle(type, (payload, ctx) => {
+        if (isFn(callback)) {
+          callback(payload, ctx)(...args)
+        }
+      })
+    )
   }
 }

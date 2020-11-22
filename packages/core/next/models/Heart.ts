@@ -1,4 +1,4 @@
-import { isFn, isStr, isArr, Subscribable } from '@formily/shared'
+import { isStr, isArr, Subscribable } from '@formily/shared'
 import { LifeCycle } from './LifeCycle'
 
 export type HeartSubscriber = ({
@@ -9,36 +9,20 @@ export type HeartSubscriber = ({
   payload: any
 }) => void
 
+export interface IHeartProps<Context> {
+  lifecycles?: LifeCycle[]
+  context?: Context
+}
+
 export class Heart<Payload = any, Context = any> extends Subscribable {
   private lifecycles: LifeCycle<Payload>[]
 
   private context: Context
 
-  private beforeNotify?: (...args: any[]) => void
-
-  private afterNotify?: (...args: any[]) => void
-
-  private batching?: boolean
-
-  private buffer?: any[]
-
-  constructor({
-    lifecycles,
-    context,
-    beforeNotify,
-    afterNotify
-  }: {
-    lifecycles?: LifeCycle[]
-    context?: Context
-    beforeNotify?: (...args: any[]) => void
-    afterNotify?: (...args: any[]) => void
-  } = {}) {
+  constructor({ lifecycles, context }: IHeartProps<Context> = {}) {
     super()
     this.lifecycles = this.buildLifeCycles(lifecycles || [])
     this.context = context
-    this.buffer = []
-    this.beforeNotify = beforeNotify
-    this.afterNotify = afterNotify
   }
 
   buildLifeCycles(lifecycles: LifeCycle[]) {
@@ -57,32 +41,8 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
     }, [])
   }
 
-  batch = (callback?: () => void) => {
-    if (isFn(callback)) {
-      this.batching = true
-      this.buffer = []
-      callback()
-      this.batching = false
-      this.buffer.forEach(({ type, payload, context }) => {
-        this.publish(type, payload, context)
-      })
-      this.buffer = []
-    }
-  }
-
   publish = <P, C>(type: any, payload: P, context?: C) => {
-    if (this.batching) {
-      this.buffer.push({
-        type,
-        payload,
-        context
-      })
-      return
-    }
     if (isStr(type)) {
-      if (isFn(this.beforeNotify)) {
-        this.beforeNotify(type, payload, context)
-      }
       this.lifecycles.forEach(lifecycle => {
         lifecycle.notify(type, payload, context || this.context)
       })
@@ -90,9 +50,6 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
         type,
         payload
       })
-      if (isFn(this.afterNotify)) {
-        this.afterNotify(type, payload, context)
-      }
     }
   }
 }

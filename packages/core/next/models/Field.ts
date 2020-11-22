@@ -100,11 +100,11 @@ export class Field<
   }
 
   get parent() {
-    const path = this.path.parent()
-    const identifier = path.toString()
-    if (this.form.fields[identifier]) {
-      return this.form.fields[identifier]
+    let parent = this.path.parent()
+    while (!this.form.fields[parent.toString()]) {
+      parent = parent.parent()
     }
+    return this.form.fields[parent.toString()]
   }
 
   get errors() {
@@ -131,32 +131,14 @@ export class Field<
     return this.form.getInitialValuesIn(this.path)
   }
 
-  get inheritedDisplay() {
-    let parent = this.parent
-    while (parent) {
-      if (parent.display) return parent.display
-      parent = parent.parent
-    }
-    return 'visibility'
-  }
-
-  get inheritedPattern() {
-    let parent = this.parent
-    while (parent) {
-      if (parent.pattern) return parent.pattern
-      parent = parent.parent
-    }
-    return this.form.pattern
-  }
-
   get computedDisplay() {
     if (this.display) return this.display
-    return this.inheritedDisplay
+    return this.parent?.display
   }
 
   get computedPattern() {
     if (this.pattern) return this.pattern
-    return this.inheritedPattern
+    return this.parent?.pattern
   }
 
   setErrors(messages: FeedbackMessage) {

@@ -6,7 +6,7 @@ import {
   isRegExp,
   isValid
 } from '@formily/shared'
-import { LifeCycleTypes, LifeCycle } from './LifeCycle'
+import { LifeCycleTypes, LIFE_CYCLE_ENV } from './LifeCycle'
 import { Heart, HeartSubscriber } from './Heart'
 import { IFieldProps, IFieldResetOptions, Field } from './Field'
 import { FunctionComponent } from '../types'
@@ -39,7 +39,7 @@ export interface IFormProps {
   values?: {}
   initialValues?: {}
   pattern?: FormPatternTypes
-  lifecycles?: LifeCycle[]
+  effects?: (form: Form) => void
   editable?: boolean
   validateFirst?: boolean
 }
@@ -119,6 +119,14 @@ export class Form {
     return this.feedback.successes
   }
 
+  get lifecycles() {
+    LIFE_CYCLE_ENV.lifecycles = []
+    if (isFn(this.props.effects)) {
+      this.props.effects(this)
+    }
+    return LIFE_CYCLE_ENV.lifecycles
+  }
+
   /** 创建字段 **/
 
   createField<
@@ -129,6 +137,7 @@ export class Form {
     const identifier = path.toString()
     if (!this.fields[identifier]) {
       this.fields[identifier] = new Field(props)
+      this.fields[identifier].onInit()
     }
     this.fields[identifier].path = path
     this.fields[identifier].form = this
@@ -302,7 +311,11 @@ export class Form {
   }
 
   makeSubscrible() {
-    this.heart = new Heart(this.props)
+    this.heart = new Heart({
+      lifecycles: this.lifecycles,
+      context: this
+    })
+    this.onInit()
   }
 
   notify(type: LifeCycleTypes, payload?: any) {
@@ -383,7 +396,6 @@ export class Form {
   }
 
   static defaultProps: IFormProps = {
-    initialValues: {},
-    lifecycles: []
+    initialValues: {}
   }
 }

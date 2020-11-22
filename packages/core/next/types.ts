@@ -1,10 +1,6 @@
-import { FormPathPattern } from '@formily/shared'
-
+import { Form, IFormProps } from './models/Form'
 export type FunctionComponent = (...args: any[]) => any
 
-export type FormFeedbacks = {
-  type: 'error' | 'warning' | 'exception'
-  code: string
-  path: string
-  messages: string[]
-}[]
+export interface ICreateFormOptions extends IFormProps {
+  effects?: (form: Form) => void
+}
