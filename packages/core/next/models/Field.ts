@@ -131,6 +131,34 @@ export class Field<
     return this.form.getInitialValuesIn(this.path)
   }
 
+  get inheritedDisplay() {
+    let parent = this.parent
+    while (parent) {
+      if (parent.display) return parent.display
+      parent = parent.parent
+    }
+    return 'visibility'
+  }
+
+  get inheritedPattern() {
+    let parent = this.parent
+    while (parent) {
+      if (parent.pattern) return parent.pattern
+      parent = parent.parent
+    }
+    return this.form.pattern
+  }
+
+  get computedDisplay() {
+    if (this.display) return this.display
+    return this.inheritedDisplay
+  }
+
+  get computedPattern() {
+    if (this.pattern) return this.pattern
+    return this.inheritedPattern
+  }
+
   setErrors(messages: FeedbackMessage) {
     this.form.feedback.update({
       type: 'error',
@@ -174,28 +202,8 @@ export class Field<
     this.display = type
   }
 
-  getComputedDisplay() {
-    if (this.display) return this.display
-    let parent = this.parent
-    while (parent) {
-      if (parent.display) return parent.display
-      parent = parent.parent
-    }
-    return 'visibility'
-  }
-
   setPattern(type: FieldPatternTypes) {
     this.pattern = type
-  }
-
-  getComputedPattern() {
-    if (this.pattern) return this.pattern
-    let parent = this.parent
-    while (parent) {
-      if (parent.pattern) return parent.pattern
-      parent = parent.parent
-    }
-    return this.form.pattern
   }
 
   setLoading(loading: boolean) {
@@ -258,7 +266,12 @@ export class Field<
   onUnmount() {
     this.mounted = false
     this.unmounted = true
-    this.setValue()
+    if (
+      this.computedDisplay === 'none' ||
+      this.computedDisplay === 'visibility'
+    ) {
+      this.setValue()
+    }
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
     this.validate('onUnmount')
   }
