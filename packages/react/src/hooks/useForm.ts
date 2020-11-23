@@ -4,7 +4,7 @@ import { createForm, onFormValuesChange } from '@formily/core'
 import { IFormProps } from '../types'
 import { toJS } from 'mobx'
 
-export const useForm = (props?: IFormProps, deps: any[] = []) => {
+export const useForm = (props?: IFormProps<any>, deps: any[] = []) => {
   const ctx = useContext(FormContext)
   return useMemo(() => {
     if (props.form) return props.form
