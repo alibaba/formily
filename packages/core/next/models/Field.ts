@@ -1,10 +1,21 @@
-import { FormPath, isValid } from '@formily/shared'
-import { validate, ValidatorTriggerType, Validator } from '@formily/validator'
+import {
+  FormPath,
+  isValid,
+  isArr,
+  FormPathPattern,
+  isNum,
+  isObj
+} from '@formily/shared'
+import {
+  validate,
+  ValidatorTriggerType,
+  Validator,
+  parseDescriptions
+} from '@formily/validator'
 import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
-import { FunctionComponent } from '../types'
+import { FunctionComponent, LifeCycleTypes } from '../types'
 import { FeedbackMessage } from './Feedback'
 import { Form } from './Form'
-import { LifeCycleTypes } from './LifeCycle'
 
 export type FieldDecorator<Decorator extends FunctionComponent> =
   | [Decorator, Parameters<Decorator>[0]]
@@ -94,17 +105,39 @@ export class Field<
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
-    this.recycledValue = null
-    this.inputValue = null
     this.inputValues = []
   }
 
   get parent() {
     let parent = this.path.parent()
-    while (!this.form.fields[parent.toString()]) {
+    let identifier = parent.toString()
+    while (!this.form.fields[identifier]) {
       parent = parent.parent()
+      identifier = parent.toString()
     }
-    return this.form.fields[parent.toString()]
+    return this.form.fields[identifier]
+  }
+
+  get array() {
+    let parent = this.path.parent()
+    let identifier = parent.toString()
+    while (!isArr(this.form.fields[identifier]?.value)) {
+      parent = parent.parent()
+      identifier = parent.toString()
+      if (!identifier) return
+    }
+    return this.form.fields[identifier]
+  }
+
+  get key() {
+    return this.path?.segments[this.path.segments.length - 1]
+  }
+
+  get index() {
+    for (let i = this.path?.segments.length - 1; i >= 0; i--) {
+      const item = this.path.segments[i]
+      if (isNum(item)) return item
+    }
   }
 
   get errors() {
@@ -141,6 +174,43 @@ export class Field<
     return this.parent?.pattern
   }
 
+  get required() {
+    return parseDescriptions(this.validator).some(desc => desc.required)
+  }
+
+  getSibling(key: string) {
+    const sibling = this.path?.parent()?.concat(key)
+    const identifier = sibling?.toString()
+    if (identifier && this.form.fields[identifier]) {
+      return this.form.fields[identifier]
+    }
+  }
+
+  getArraySibling(index: number, key?: FormPathPattern) {
+    const array = this.array
+    const sibling = array?.path?.concat(index).concat(key)
+    const identifier = sibling?.toString()
+    if (identifier && this.form.fields[identifier]) {
+      return this.form.fields[identifier]
+    }
+  }
+
+  getArrayBeforeSibling(key: FormPathPattern, step: number = 1) {
+    return this.getArraySibling(this.index - step, key)
+  }
+
+  getArrayAfterSibling(key: FormPathPattern, step: number = 1) {
+    return this.getArraySibling(this.index + step, key)
+  }
+
+  getChildren(key: number | string) {
+    const children = this.path?.concat(key)
+    const identifier = children.toString()
+    if (this.form.fields[identifier]) {
+      return this.form.fields[identifier]
+    }
+  }
+
   setErrors(messages: FeedbackMessage) {
     this.form.feedback.update({
       type: 'error',
@@ -159,13 +229,46 @@ export class Field<
     })
   }
 
+  setValidator(validator: FieldValidator) {
+    this.validator = validator
+  }
+
+  setRequired(required: boolean) {
+    const hasRequired = parseDescriptions(this.validator).some(
+      desc => 'required' in desc
+    )
+    if (hasRequired) {
+      if (isObj(this.validator)) {
+        this.validator['required'] = required
+      } else if (isArr(this.validator)) {
+        this.validator = this.validator.map(desc => {
+          if ('required' in desc) {
+            desc.required = required
+            return desc
+          }
+          return desc
+        })
+      }
+    } else {
+      if (isObj(this.validator)) {
+        this.validator['required'] = required
+      } else if (isArr(this.validator)) {
+        this.validator.push({
+          required: true
+        })
+      }
+    }
+  }
+
   setValue(value?: any) {
+    if (this.void) return
     this.form.setValuesIn(this.path, value)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
   }
 
   setInitialValue(initialValue?: any) {
+    if (this.void) return
     this.form.setInitialValuesIn(this.path, initialValue)
     this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, this.form)
@@ -241,24 +344,29 @@ export class Field<
   onMount() {
     this.mounted = true
     this.unmounted = false
-    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
     this.validate('onMount')
+    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }
 
   onUnmount() {
     this.mounted = false
     this.unmounted = true
-    if (
-      this.computedDisplay === 'none' ||
-      this.computedDisplay === 'visibility'
-    ) {
-      this.setValue()
-    }
-    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
     this.validate('onUnmount')
+    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    if (FormPath.existIn(this.form.values, this.path)) {
+      if (
+        this.computedDisplay === 'none' ||
+        this.computedDisplay === 'visibility'
+      ) {
+        this.setValue()
+      }
+    } else {
+      delete this.form.fields[this.path.toString()]
+    }
   }
 
   onInput(...args: any[]) {
+    if (this.void) return
     this.inputValue = args[0]
     this.inputValues = args
     this.modified = true
@@ -267,6 +375,7 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
+    this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     this.validate('onInput')
   }
 
@@ -310,6 +419,8 @@ export class Field<
       setValidating: action,
       setErrors: action,
       setWarnings: action,
+      setValidator: action,
+      setRequired: action,
       setComponent: action,
       setComponentProps: action,
       setDecorator: action,
@@ -397,8 +508,6 @@ export class Field<
 
   static defaultProps: IFieldProps = {
     void: false,
-    display: 'visibility',
-    pattern: 'editable',
     decorator: [],
     component: []
   }

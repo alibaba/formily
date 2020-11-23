@@ -31,7 +31,7 @@ const getRuleMessage = (rule: ValidatorRules, type: string) => {
   }
 }
 
-export const parseValidatorDescription = (
+export const parseDescription = (
   description: ValidatorDescription
 ): ValidatorRules => {
   const rules: ValidatorRules = {}
@@ -44,6 +44,15 @@ export const parseValidatorDescription = (
   Object.assign(rules, description)
   rules.triggerType = rules.triggerType || 'onInput'
   return rules
+}
+
+export const parseDescriptions = <Context = any>(
+  validator: Validator<Context>
+): ValidatorRules[] => {
+  const array = isArr(validator) ? validator : [validator]
+  return array.map(description => {
+    return parseDescription(description)
+  })
 }
 
 export const parseRules = (
@@ -112,7 +121,7 @@ export const parseValidator = <Context = any>(
 ): ValidatorParsedFunction<Context>[] => {
   const array = isArr(validator) ? validator : [validator]
   return array.reduce((buf, description) => {
-    const rules = parseValidatorDescription(description)
+    const rules = parseDescription(description)
     if (options.triggerType && options.triggerType !== rules.triggerType)
       return buf
     return rules ? buf.concat(parseRules(rules)) : buf

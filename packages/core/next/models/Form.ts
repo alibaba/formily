@@ -6,11 +6,13 @@ import {
   isRegExp,
   isValid
 } from '@formily/shared'
-import { LifeCycleTypes, LIFE_CYCLE_ENV } from './LifeCycle'
 import { Heart, HeartSubscriber } from './Heart'
 import { IFieldProps, IFieldResetOptions, Field } from './Field'
-import { FunctionComponent } from '../types'
+import { FunctionComponent, LifeCycleTypes } from '../types'
 import { Feedback } from './Feedback'
+import { ArrayField } from './ArrayField'
+import { ObjectField } from './ObjectField'
+import { getLifecyclesFromEffects } from '../hook'
 
 export type FormPatternTypes =
   | 'editable'
@@ -120,11 +122,7 @@ export class Form {
   }
 
   get lifecycles() {
-    LIFE_CYCLE_ENV.lifecycles = []
-    if (isFn(this.props.effects)) {
-      this.props.effects(this)
-    }
-    return LIFE_CYCLE_ENV.lifecycles
+    return getLifecyclesFromEffects(this.props.effects, this)
   }
 
   /** 创建字段 **/
@@ -144,6 +142,36 @@ export class Form {
     return this.fields[identifier]
   }
 
+  createArrayField<
+    Decorator extends FunctionComponent,
+    Component extends FunctionComponent
+  >(props: ICreateFieldProps<Decorator, Component>) {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new ArrayField(props)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
+  createObjectField<
+    Decorator extends FunctionComponent,
+    Component extends FunctionComponent
+  >(props: ICreateFieldProps<Decorator, Component>) {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new ObjectField(props)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
   /** 状态操作模型 **/
 
   setValues(values: any) {
@@ -154,6 +182,14 @@ export class Form {
 
   setValuesIn(pattern: FormPathPattern, value: any) {
     FormPath.setIn(this.values, this.getDataPath(pattern), value)
+  }
+
+  deleteValuesIn(pattern: FormPathPattern) {
+    FormPath.deleteIn(this.values, this.getDataPath(pattern))
+  }
+
+  existValuesIn(pattern: FormPathPattern) {
+    return FormPath.existIn(this.values, this.getDataPath(pattern))
   }
 
   getValuesIn(pattern: FormPathPattern) {
@@ -167,6 +203,14 @@ export class Form {
 
   setInitialValuesIn(pattern: FormPathPattern, initialValue: any) {
     FormPath.setIn(this.initialValues, this.getDataPath(pattern), initialValue)
+  }
+
+  deleteIntialValuesIn(pattern: FormPathPattern) {
+    FormPath.deleteIn(this.initialValues, this.getDataPath(pattern))
+  }
+
+  existInitialValuesIn(pattern: FormPathPattern) {
+    return FormPath.existIn(this.initialValues, this.getDataPath(pattern))
   }
 
   getInitialValuesIn(pattern: FormPathPattern) {
@@ -292,6 +336,7 @@ export class Form {
 
   makeObservable() {
     makeObservable(this, {
+      fields: observable.shallow,
       initialized: observable,
       validating: observable,
       submitting: observable,

@@ -1,9 +1,6 @@
 import { Form } from './models/Form'
-import { LifeCycleTypes, createLifeCycle } from './models/LifeCycle'
-import { ICreateFormOptions } from './types'
-
-export { LifeCycleTypes, createLifeCycle }
-
-export const createForm = (options: ICreateFormOptions) => {
+export * from './hook'
+export * from './hooks'
+export const createForm = (options: Formily.ICreateFormOptions) => {
   return new Form(options)
 }
