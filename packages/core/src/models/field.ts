@@ -1,489 +1,577 @@
-import { createModel } from '../shared/model'
-import {
-  IModelSpec,
-  IFieldState,
-  IFieldStateProps,
-  FieldStateDirtyMap
-} from '../types'
 import {
   FormPath,
-  isFn,
-  toArr,
   isValid,
-  isEqual,
-  isEmpty,
   isArr,
-  isPlainObj
+  FormPathPattern,
+  isNum,
+  isObj,
+  isFn
 } from '@formily/shared'
-import { Draft } from 'immer'
+import {
+  validate,
+  ValidatorTriggerType,
+  Validator,
+  parseDescriptions
+} from '@formily/validator'
+import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
+import { FunctionComponent, LifeCycleTypes } from '../types'
+import { FeedbackInformation, FeedbackMessage } from './Feedback'
+import { Form } from './Form'
 
-const normalizeMessages = (messages: any) => toArr(messages).filter(v => !!v)
+export type FieldDecorator<Decorator extends FunctionComponent> =
+  | [Decorator, Parameters<Decorator>[0]]
+  | []
+  | [Decorator]
 
-const calculateEditable = (
-  selfEditable: boolean,
-  formEditable: boolean | ((name: string) => boolean),
-  name: string
-) => {
-  return isValid(selfEditable)
-    ? selfEditable
-    : isValid(formEditable)
-    ? isFn(formEditable)
-      ? formEditable(name)
-      : formEditable
-    : true
+export type FieldComponent<Component extends FunctionComponent> =
+  | [Component, Parameters<Component>[0]]
+  | []
+  | [Component]
+
+export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
+
+export type FieldPatternTypes =
+  | 'editable'
+  | 'readOnly'
+  | 'disabled'
+  | 'readPretty'
+
+export type FieldValidator = Validator
+
+export interface IFieldProps<
+  Decorator extends FunctionComponent = any,
+  Component extends FunctionComponent = any
+> {
+  value?: any
+  initialValue?: any
+  void?: boolean
+  display?: FieldDisplayTypes
+  pattern?: FieldPatternTypes
+  validator?: Validator
+  decorator?: FieldDecorator<Decorator>
+  component?: FieldComponent<Component>
 }
 
-export const ARRAY_UNIQUE_TAG = Symbol.for(
-  '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
-)
-
-export const parseArrayTags = (value: any[]) => {
-  if (!isArr(value)) return []
-  return value?.reduce?.((buf, item: any) => {
-    return item?.[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
-  }, [])
+export interface IFieldResetOptions {
+  forceClear?: boolean
+  validate?: boolean
+  clearInitialValue?: boolean
 }
 
-export const tagArrayList = (current: any[], name: string, force?: boolean) => {
-  return current?.map?.((item, index) => {
-    if (isPlainObj(item)) {
-      item[ARRAY_UNIQUE_TAG] = force
-        ? `${name}.${index}`
-        : item[ARRAY_UNIQUE_TAG] || `${name}.${index}`
-    }
-    return item
-  })
+export interface IFieldState {
+  void: boolean
+  display: FieldDisplayTypes
+  pattern: FieldPatternTypes
+  loading: boolean
+  validating: boolean
+  modified: boolean
+  active: boolean
+  visited: boolean
+  inputValue: any
+  inputValues: any[]
+  recycledValue: any
+  initialized: boolean
+  mounted: boolean
+  unmounted: boolean
+  validator: FieldValidator
+  decorator: FieldDecorator<any>
+  component: FieldComponent<any>
+  warnings: FeedbackInformation[]
+  errors: FeedbackInformation[]
+  successes: FeedbackInformation[]
+  value: any
+  initialValue: any
+}
+export interface IFieldMiddleware {
+  (state: IFieldState): IFieldState
 }
 
-export const Field = createModel<IFieldState, IFieldStateProps>(
-  class FieldStateFactory implements IModelSpec<IFieldState, IFieldStateProps> {
-    nodePath: FormPath
+export class Field<
+  Decorator extends FunctionComponent = any,
+  Component extends FunctionComponent = any
+> {
+  void: boolean
+  display: FieldDisplayTypes
+  pattern: FieldPatternTypes
+  loading: boolean
+  validating: boolean
+  modified: boolean
+  active: boolean
+  visited: boolean
+  inputValue: any
+  inputValues: any[]
+  recycledValue: any
+  initialized: boolean
+  mounted: boolean
+  unmounted: boolean
+  validator: FieldValidator
+  decorator: FieldDecorator<Decorator>
+  component: FieldComponent<Component>
 
-    dataPath: FormPath
+  form: Form
+  path: FormPath
+  props: IFieldProps<Decorator, Component>
+  constructor(props: IFieldProps<Decorator, Component>) {
+    this.initialize(props)
+    this.makeObservable()
+    this.setValue(props.value)
+    this.setInitialValue(props.initialValue)
+  }
 
-    props: IFieldStateProps
+  initialize(props: IFieldProps<Decorator, Component>) {
+    this.props = { ...Field.defaultProps, ...props }
+    this.initialized = false
+    this.loading = false
+    this.validating = false
+    this.modified = false
+    this.active = false
+    this.visited = false
+    this.mounted = false
+    this.unmounted = false
+    this.void = this.props.void
+    this.display = this.props.display
+    this.pattern = this.props.pattern
+    this.validator = this.props.validator
+    this.decorator = this.props.decorator
+    this.component = this.props.component
+    this.inputValues = []
+  }
 
-    prevState: IFieldState
-
-    updates: Array<'value' | 'initialValue'>
-
-    lastCompareResults?: boolean
-
-    state = {
-      name: '',
-      path: '',
-      dataType: 'any',
-      initialized: false,
-      pristine: true,
-      valid: true,
-      modified: false,
-      inputed: false,
-      touched: false,
-      active: false,
-      visited: false,
-      invalid: false,
-      visible: true,
-      display: true,
-      loading: false,
-      validating: false,
-      errors: [],
-      values: [],
-      ruleErrors: [],
-      ruleWarnings: [],
-      effectErrors: [],
-      warnings: [],
-      effectWarnings: [],
-      editable: true,
-      selfEditable: undefined,
-      formEditable: undefined,
-      value: undefined,
-      visibleCacheValue: undefined,
-      initialValue: undefined,
-      rules: [],
-      required: false,
-      mounted: false,
-      unmounted: false,
-      props: {}
+  get parent() {
+    let parent = this.path.parent()
+    let identifier = parent.toString()
+    while (!this.form.fields[identifier]) {
+      parent = parent.parent()
+      identifier = parent.toString()
     }
+    return this.form.fields[identifier]
+  }
 
-    constructor(props: IFieldStateProps = {}) {
-      this.nodePath = FormPath.getPath(props.nodePath)
-      this.dataPath = FormPath.getPath(props.dataPath)
-      this.state.name = this.dataPath.entire
-      this.state.path = this.nodePath.entire
-      this.state.dataType = props.dataType
-      this.props = props
-      this.updates = []
+  get array() {
+    let parent = this.path.parent()
+    let identifier = parent.toString()
+    while (!isArr(this.form.fields[identifier]?.value)) {
+      parent = parent.parent()
+      identifier = parent.toString()
+      if (!identifier) return
     }
+    return this.form.fields[identifier]
+  }
 
-    dirtyCheck(path: string[], currentValue: any, nextValue: any) {
-      if (path[0] === 'value') {
-        if (this.isArrayList()) {
-          //如果是ArrayList，不再做精准判断，因为数组内部侵入了Symbol，使用isEqual判断会有问题
-          return true
-        }
-      }
-      return !isEqual(currentValue, nextValue)
+  get key() {
+    return this.path?.segments[this.path.segments.length - 1]
+  }
+
+  get index() {
+    for (let i = this.path?.segments.length - 1; i >= 0; i--) {
+      const item = this.path.segments[i]
+      if (isNum(item)) return item
     }
+  }
 
-    getValueFromProps() {
-      if (isFn(this.props?.getValue)) {
-        return this.props.getValue(this.state.name)
-      }
-      return this.state.value
+  get errors() {
+    return this.form.feedback.find({ path: this.path, type: 'error' })
+  }
+
+  get warnings() {
+    return this.form.feedback.find({ path: this.path, type: 'warning' })
+  }
+
+  get successes() {
+    return this.form.feedback.find({ path: this.path, type: 'success' })
+  }
+
+  get value() {
+    const value = this.form.getValuesIn(this.path)
+    if (this.modified) {
+      return value
     }
+    return isValid(value) ? value : this.initialValue
+  }
 
-    getEditableFromProps() {
-      return this.props?.getEditable?.()
+  get initialValue() {
+    return this.form.getInitialValuesIn(this.path)
+  }
+
+  get computedDisplay() {
+    if (this.display) return this.display
+    return this.parent?.display
+  }
+
+  get computedPattern() {
+    if (this.pattern) return this.pattern
+    return this.parent?.pattern
+  }
+
+  get required() {
+    return parseDescriptions(this.validator).some(desc => desc.required)
+  }
+
+  getState() {
+    const base = {
+      void: this.void,
+      display: this.computedDisplay,
+      pattern: this.computedPattern,
+      loading: this.loading,
+      validating: this.validating,
+      modified: this.modified,
+      active: this.active,
+      visited: this.visited,
+      value: this.value,
+      initialValue: this.initialValue,
+      required: this.required,
+      inputValue: this.inputValue,
+      inputValues: this.inputValues,
+      recycledValue: this.recycledValue,
+      initialized: this.initialized,
+      mounted: this.mounted,
+      unmounted: this.unmounted,
+      validator: this.validator,
+      decorator: this.decorator,
+      component: this.component,
+      errors: this.errors,
+      warnings: this.warnings,
+      successes: this.successes
     }
+    return (
+      this.form.props?.middlewares?.reduce((buf, middleware) => {
+        if (!isFn(middleware)) return buf
+        return Object.assign(buf, middleware(buf))
+      }, base) || base
+    )
+  }
 
-    getInitialValueFromProps() {
-      if (isFn(this.props?.getInitialValue)) {
-        const initialValue = this.props.getInitialValue(this.state.name)
-        return isValid(this.state.initialValue)
-          ? this.state.initialValue
-          : initialValue
-      }
-      return this.state.initialValue
+  getSibling(key: string) {
+    const sibling = this.path?.parent()?.concat(key)
+    const identifier = sibling?.toString()
+    if (identifier && this.form.fields[identifier]) {
+      return this.form.fields[identifier]
     }
+  }
 
-    getState = () => {
-      if (!this.state.initialized) return this.state
-      let value = this.getValueFromProps()
-      let initialValue = this.getInitialValueFromProps()
-      let formEditable = this.getEditableFromProps()
-      if (this.isArrayList()) {
-        value = this.fixArrayListTags(toArr(value))
-        initialValue = this.fixArrayListTags(toArr(initialValue))
-      }
-      const valueChanged = !isEqual(this.state.value, value)
-
-      const state = {
-        ...this.state,
-        initialValue,
-        formEditable,
-        editable: calculateEditable(
-          this.state.selfEditable,
-          formEditable,
-          this.state.name
-        ),
-        modified: this.state.modified || valueChanged,
-        value,
-        values: [value].concat(this.state.values.slice(1))
-      }
-      if (valueChanged && valueChanged !== this.lastCompareResults) {
-        this.state.value = value
-        this.props?.unControlledValueChanged?.()
-      }
-      this.lastCompareResults = valueChanged
-      return state
+  getArraySibling(index: number, key?: FormPathPattern) {
+    const array = this.array
+    const sibling = array?.path?.concat(index).concat(key)
+    const identifier = sibling?.toString()
+    if (identifier && this.form.fields[identifier]) {
+      return this.form.fields[identifier]
     }
+  }
 
-    produceErrorsAndWarnings(
-      draft: Draft<IFieldState>,
-      dirtys: FieldStateDirtyMap
-    ) {
-      if (dirtys.errors) {
-        draft.effectErrors = normalizeMessages(draft.errors)
-      }
-      if (dirtys.warnings) {
-        draft.effectWarnings = normalizeMessages(draft.warnings)
-      }
-      if (dirtys.effectErrors) {
-        draft.effectErrors = normalizeMessages(draft.effectErrors)
-      }
-      if (dirtys.effectWarnings) {
-        draft.effectWarnings = normalizeMessages(draft.effectWarnings)
-      }
-      if (dirtys.ruleErrors) {
-        draft.ruleErrors = normalizeMessages(draft.ruleErrors)
-      }
-      if (dirtys.ruleWarnings) {
-        draft.ruleWarnings = normalizeMessages(draft.ruleWarnings)
-      }
-      draft.errors = draft.ruleErrors.concat(draft.effectErrors)
-      draft.warnings = draft.ruleWarnings.concat(draft.effectWarnings)
+  getArrayBeforeSibling(key: FormPathPattern, step: number = 1) {
+    return this.getArraySibling(this.index - step, key)
+  }
+
+  getArrayAfterSibling(key: FormPathPattern, step: number = 1) {
+    return this.getArraySibling(this.index + step, key)
+  }
+
+  getChildren(key: number | string) {
+    const children = this.path?.concat(key)
+    const identifier = children.toString()
+    if (this.form.fields[identifier]) {
+      return this.form.fields[identifier]
     }
+  }
 
-    produceEditable(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      if (dirtys.editable) {
-        draft.selfEditable = draft.editable
+  setErrors(messages: FeedbackMessage) {
+    this.form.feedback.update({
+      type: 'error',
+      code: 'EffectError',
+      path: this.path,
+      messages
+    })
+  }
+
+  setWarnings(messages: FeedbackMessage) {
+    this.form.feedback.update({
+      type: 'warning',
+      code: 'EffectWarning',
+      path: this.path,
+      messages
+    })
+  }
+
+  setValidator(validator: FieldValidator) {
+    this.validator = validator
+  }
+
+  setRequired(required: boolean) {
+    const hasRequired = parseDescriptions(this.validator).some(
+      desc => 'required' in desc
+    )
+    if (hasRequired) {
+      if (isObj(this.validator)) {
+        this.validator['required'] = required
+      } else if (isArr(this.validator)) {
+        this.validator = this.validator.map(desc => {
+          if ('required' in desc) {
+            desc.required = required
+            return desc
+          }
+          return desc
+        })
       }
-      draft.editable = calculateEditable(
-        draft.selfEditable,
-        draft.formEditable,
-        draft.name
-      )
+    } else {
+      if (isObj(this.validator)) {
+        this.validator['required'] = required
+      } else if (isArr(this.validator)) {
+        this.validator.push({
+          required: true
+        })
+      }
     }
+  }
 
-    supportUnmountClearStates() {
-      if (isFn(this.props?.supportUnmountClearStates)) {
-        return this.props?.supportUnmountClearStates(this.state.path)
+  setValue(value?: any) {
+    if (this.void) return
+    this.form.setValuesIn(this.path, value)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
+  }
+
+  setInitialValue(initialValue?: any) {
+    if (this.void) return
+    this.form.setInitialValuesIn(this.path, initialValue)
+    this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, this.form)
+  }
+
+  setDisplay(type: FieldDisplayTypes) {
+    if (type === 'visibility') {
+      if (this.display === 'none') {
+        this.setValue(this.recycledValue)
+        this.recycledValue = null
       }
-      return true
+    } else if (type === 'none') {
+      this.recycledValue = toJS(this.value)
+      this.setValue()
     }
+    this.display = type
+  }
 
-    produceSideEffects(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      const supportClearStates = this.supportUnmountClearStates()
-      if (dirtys.validating) {
-        if (draft.validating === true) {
-          draft.loading = true
-        } else if (draft.validating === false) {
-          draft.loading = false
-        }
-      }
+  setPattern(type: FieldPatternTypes) {
+    this.pattern = type
+  }
+
+  setLoading(loading: boolean) {
+    this.loading = loading
+  }
+
+  setValidating(validating: boolean) {
+    this.validating = validating
+  }
+
+  setComponent<C extends FunctionComponent>(
+    component: C,
+    props?: Parameters<C>[0]
+  ) {
+    if (component) {
+      this.component[0] = component as any
+    }
+    if (props) {
+      this.component[1] = props as any
+    }
+  }
+
+  setComponentProps<C extends FunctionComponent = Component>(
+    props?: Parameters<C>[0]
+  ) {
+    Object.assign(this.component[1], props)
+  }
+
+  setDecorator<D extends FunctionComponent>(
+    component: D,
+    props?: Parameters<D>[0]
+  ) {
+    if (component) {
+      this.decorator[0] = component as any
+    }
+    if (props) {
+      this.decorator[1] = props as any
+    }
+  }
+
+  setDecoratorProps<D extends FunctionComponent = Decorator>(
+    props?: Parameters<D>[0]
+  ) {
+    Object.assign(this.decorator[1], props)
+  }
+
+  onInit() {
+    this.initialized = true
+    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.validate('onInit')
+  }
+
+  onMount() {
+    this.mounted = true
+    this.unmounted = false
+    this.validate('onMount')
+    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+  }
+
+  onUnmount() {
+    this.mounted = false
+    this.unmounted = true
+    this.validate('onUnmount')
+    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    if (FormPath.existIn(this.form.values, this.path)) {
       if (
-        dirtys.editable ||
-        dirtys.selfEditable ||
-        draft.visible === false ||
-        (dirtys.unmounted && draft.unmounted === true && supportClearStates)
+        this.computedDisplay === 'none' ||
+        this.computedDisplay === 'visibility'
       ) {
-        draft.errors = []
-        draft.effectErrors = []
-        draft.warnings = []
-        draft.effectWarnings = []
+        this.setValue()
       }
-      if (!isValid(draft.props)) {
-        draft.props = {}
-      }
-      if (draft.mounted === true && dirtys.mounted) {
-        draft.unmounted = false
-      }
-      if (draft.mounted === false && dirtys.mounted) {
-        draft.unmounted = true
-      }
-      if (draft.unmounted === true && dirtys.unmounted) {
-        draft.mounted = false
-      }
-      if (draft.unmounted === false && dirtys.unmounted) {
-        draft.mounted = true
-      }
-      if (dirtys.visible || dirtys.mounted || dirtys.unmounted) {
-        if (supportClearStates) {
-          if (draft.display) {
-            if (draft.visible === false || draft.unmounted === true) {
-              if (!dirtys.visibleCacheValue) {
-                draft.visibleCacheValue = isValid(draft.value)
-                  ? draft.value
-                  : isValid(draft.visibleCacheValue)
-                  ? draft.visibleCacheValue
-                  : draft.initialValue
-              }
-              draft.value = undefined
-              draft.values = toArr(draft.values)
-              draft.values[0] = undefined
-              this.updates.push('value')
-            } else if (
-              draft.visible === true ||
-              draft.mounted === true ||
-              draft.unmounted === false
-            ) {
-              if (!isValid(draft.value)) {
-                draft.value = draft.visibleCacheValue
-                this.updates.push('value')
-              }
-            }
-          }
-        } else {
-          if (draft.display) {
-            if (draft.visible === false) {
-              if (!dirtys.visibleCacheValue) {
-                draft.visibleCacheValue = isValid(draft.value)
-                  ? draft.value
-                  : isValid(draft.visibleCacheValue)
-                  ? draft.visibleCacheValue
-                  : draft.initialValue
-              }
-              draft.value = undefined
-              draft.values = toArr(draft.values)
-              draft.values[0] = undefined
-            } else if (draft.visible === true) {
-              if (!isValid(draft.value)) {
-                draft.value = draft.visibleCacheValue
-              }
-            }
-          }
-        }
-      }
-
-      if (draft.errors.length) {
-        draft.invalid = true
-        draft.valid = false
-      } else {
-        draft.invalid = false
-        draft.valid = true
-      }
+    } else {
+      delete this.form.fields[this.path.toString()]
     }
+  }
 
-    fixArrayListTags(value: any[]) {
-      if (value?.[0]?.[ARRAY_UNIQUE_TAG]) {
-        return value
-      } else {
-        return this.tagArrayList(value)
-      }
-    }
+  onInput(...args: any[]) {
+    if (this.void) return
+    this.inputValue = args[0]
+    this.inputValues = args
+    this.modified = true
+    this.form.modified = true
+    this.form.setValuesIn(this.path, this.value)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
+    this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
+    this.validate('onInput')
+  }
 
-    tagArrayList(value: any[]) {
-      return tagArrayList(value, this.state.name)
-    }
+  onFocus() {
+    this.active = true
+    this.visited = true
+    this.validate('onFocus')
+  }
 
-    isArrayList() {
-      return /array/gi.test(this.state.dataType)
-    }
+  onBlur() {
+    this.active = false
+    this.validate('onBlur')
+  }
 
-    produceValue(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      let valueOrInitialValueChanged =
-        dirtys.values || dirtys.value || dirtys.initialValue
-      let valueChanged = dirtys.values || dirtys.value
-      if (dirtys.values) {
-        draft.values = toArr(draft.values)
-        if (this.isArrayList()) {
-          draft.values[0] = this.tagArrayList(toArr(draft.values[0]))
-        }
-        draft.value = draft.values[0]
-        draft.modified = true
-      }
-      if (dirtys.value) {
-        if (this.isArrayList()) {
-          draft.value = this.tagArrayList(toArr(draft.value))
-        }
-        draft.values[0] = draft.value
-        draft.modified = true
-      }
-      if (dirtys.initialized) {
-        const isEmptyValue = !isValid(draft.value) || isEmpty(draft.value)
-        if (isEmptyValue && isValid(draft.initialValue)) {
-          draft.value = draft.initialValue
-          draft.values = toArr(draft.values)
-          draft.values[0] = draft.value
-          valueChanged = true
-          valueOrInitialValueChanged = true
-        }
-      }
-      if (valueChanged) {
-        this.updates.push('value')
-      }
-      if (dirtys.initialValue) {
-        this.updates.push('initialValue')
-      }
-      if (valueOrInitialValueChanged) {
-        if (isEqual(draft.initialValue, draft.value)) {
-          draft.pristine = true
-        } else {
-          draft.pristine = false
-        }
-      }
-    }
+  makeObservable() {
+    makeObservable(this, {
+      void: observable,
+      display: observable,
+      pattern: observable,
+      loading: observable,
+      validating: observable,
+      modified: observable,
+      active: observable,
+      visited: observable,
+      value: observable,
+      inputValue: observable,
+      inputValues: observable,
+      recycledValue: observable,
+      initialValue: observable,
+      initialized: observable,
+      mounted: observable,
+      unmounted: observable,
+      validator: observable,
+      decorator: observable,
+      component: observable,
+      setDisplay: action,
+      setValue: action,
+      setPattern: action,
+      setInitialValue: action,
+      setLoading: action,
+      setValidating: action,
+      setErrors: action,
+      setWarnings: action,
+      setValidator: action,
+      setRequired: action,
+      setComponent: action,
+      setComponentProps: action,
+      setDecorator: action,
+      setDecoratorProps: action,
+      onInput: action,
+      onMount: action,
+      onUnmount: action,
+      onFocus: action,
+      onBlur: action
+    })
+  }
 
-    getRulesFromRulesAndRequired(
-      rules: IFieldState['rules'],
-      required: boolean
-    ) {
-      if (isValid(required)) {
-        if (rules.length) {
-          if (!rules.some(rule => rule && isValid(rule!['required']))) {
-            return rules.concat([{ required }])
-          } else {
-            return rules.reduce((buf: any[], item: any) => {
-              const keys = Object.keys(item || {})
-              if (isValid(item.required)) {
-                if (isValid(item.message)) {
-                  if (keys.length > 2) {
-                    return buf.concat({
-                      ...item,
-                      required
-                    })
-                  }
-                } else {
-                  if (keys.length > 1) {
-                    return buf.concat({
-                      ...item,
-                      required
-                    })
-                  }
-                }
-              }
-              if (isValid(item.required)) {
-                return buf.concat({
-                  ...item,
-                  required
-                })
-              }
-              return buf.concat(item)
-            }, [])
-          }
-        } else {
-          if (required === true) {
-            return rules.concat([
-              {
-                required
-              }
-            ])
-          }
-        }
-      }
-      return rules
-    }
-
-    getRequiredFromRulesAndRequired(rules: any[], required: boolean) {
-      for (let i = 0; i < rules.length; i++) {
-        if (isValid(rules[i].required)) {
-          return rules[i].required
-        }
-      }
-      return required
-    }
-
-    produceRules(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      if (isValid(draft.rules)) {
-        draft.rules = toArr(draft.rules)
-      }
-      if ((dirtys.required && dirtys.rules) || dirtys.required) {
-        const rules = this.getRulesFromRulesAndRequired(
-          draft.rules,
-          draft.required
-        )
-        draft.required = draft.required
-        draft.rules = rules
-      } else if (dirtys.rules) {
-        draft.required = this.getRequiredFromRulesAndRequired(
-          draft.rules,
-          draft.required
-        )
-      }
-    }
-
-    beforeProduce() {
-      this.updates = []
-    }
-
-    produce(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
-      this.produceErrorsAndWarnings(draft, dirtys)
-      this.produceEditable(draft, dirtys)
-      this.produceValue(draft, dirtys)
-      this.produceSideEffects(draft, dirtys)
-      this.produceRules(draft, dirtys)
-    }
-
-    afterProduce() {
-      //Because the draft data cannot be consumed externally, I can only cache the changes and handle it uniformly
-      this.updates.forEach(type => {
-        if (type === 'value') {
-          this.props?.setValue?.(this.state.name, this.state.value)
-        } else {
-          this.props?.setInitialValue?.(
-            this.state.name,
-            this.state.initialValue
-          )
-        }
+  async validate(triggerType?: ValidatorTriggerType) {
+    this.setValidating(true)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
+    const results = await validate(this.value, this.validator, {
+      triggerType,
+      validateFirst: this.form?.props?.validateFirst,
+      context: this
+    })
+    const errors = []
+    const warnings = []
+    const successes = []
+    results.forEach(({ type, message }) => {
+      if (type === 'error') errors.push(message)
+      if (type === 'warning') warnings.push(message)
+      if (type === 'success') warnings.push(message)
+    })
+    if (errors.length) {
+      this.form.feedback.update({
+        type: 'error',
+        code: 'ValidateError',
+        path: this.path,
+        messages: errors
       })
     }
-
-    static defaultProps = {
-      path: '',
-      dataType: 'any'
+    if (warnings.length) {
+      this.form.feedback.update({
+        type: 'warning',
+        code: 'ValidateWarning',
+        path: this.path,
+        messages: warnings
+      })
     }
-
-    static displayName = 'FieldState'
+    if (successes.length) {
+      this.form.feedback.update({
+        type: 'success',
+        code: 'ValidateSuccess',
+        path: this.path,
+        messages: successes
+      })
+    }
+    this.setValidating(false)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
+    return {
+      errors,
+      warnings,
+      successes
+    }
   }
-)
+
+  async reset(options?: IFieldResetOptions) {
+    runInAction(() => {
+      this.modified = false
+      this.visited = false
+      this.form.feedback.clear({
+        path: this.path
+      })
+      if (options?.clearInitialValue) {
+        this.setInitialValue(undefined)
+      }
+      if (options?.forceClear) {
+        this.inputValue = undefined
+        this.inputValues = []
+        this.setValue()
+      } else {
+        this.setValue(this.initialValue)
+      }
+      this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
+    })
+    if (options?.validate) {
+      return await this.validate()
+    }
+  }
+
+  static defaultProps: IFieldProps = {
+    void: false,
+    decorator: [],
+    component: []
+  }
+}

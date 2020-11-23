@@ -107,6 +107,7 @@
     "majo": "^0.7.1",
     "markdown-toc": "^1.2.0",
     "mfetch": "^0.2.27",
+    "mobx": "^6.0.4",
     "moment": "^2.24.0",
     "monaco-editor": "^0.18.1",
     "node-sass": "^4.13.0",

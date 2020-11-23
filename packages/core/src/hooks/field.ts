@@ -15,7 +15,7 @@ export const createFieldHook = (type: LifeCycleTypes) => {
   return createHook(
     type,
     (field: Field, form: Form) => (
-      pattern: FormPathPattern | RegExp,
+      pattern: string | RegExp,
       callback: (field: Field, form: Form) => void
     ) => {
       if (isFn(callback)) {
@@ -57,10 +57,7 @@ export function onFieldChange(
   pattern: FormPathPattern | RegExp,
   callback: (field: Field, form: Form) => void
 ): void
-export function onFieldChange(
-  pattern: FormPathPattern | RegExp,
-  ...args: any[]
-) {
+export function onFieldChange(pattern: string | RegExp, ...args: any[]) {
   let callback = isFn(args[0]) ? args[0] : args[1]
   let watches = isArr(args[0]) ? args[0] : []
   onFieldInit(pattern, (field, form) => {

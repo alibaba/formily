@@ -1,25 +1,25 @@
 import React from 'react'
-import { isFn } from '@formily/shared'
-import { useForm } from '../hooks/useForm'
-import FormContext from '../context'
-import { IFormProps, IFormActions, IFormAsyncActions } from '../types'
+import { FormContext } from '../context'
+import { useForm } from '../hooks'
+import { IFormProps } from '../types'
 
-export const Form: React.FunctionComponent<IFormProps<
-  any,
-  any,
-  any,
-  IFormActions | IFormAsyncActions
->> = (props = {}) => {
+export const Form: React.FC<IFormProps> = props => {
   const form = useForm(props)
+  const Form = props.component
   return (
     <FormContext.Provider value={form}>
-      {isFn(props.children)
-        ? props.children(form)
-        : React.Children.map(props.children, (node: React.ReactElement) => {
-            return React.cloneElement(node)
-          })}
+      <Form
+        onSubmit={e => {
+          e?.preventDefault()
+          form.submit(props.onSubmit)
+        }}
+      >
+        {props.children}
+      </Form>
     </FormContext.Provider>
   )
 }
-
-Form.displayName = 'ReactInternalForm'
+Form.defaultProps = {
+  component: 'form',
+  middlewares: []
+}
