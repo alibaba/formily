@@ -1,8 +1,15 @@
-import { FormPath, FormPathPattern, isFn, isRegExp } from '@formily/shared'
+import {
+  FormPath,
+  FormPathPattern,
+  isArr,
+  isFn,
+  isRegExp
+} from '@formily/shared'
 import { Form } from '../models/Form'
 import { LifeCycleTypes } from '../types'
 import { createHook } from '../hook'
 import { Field } from '../models/Field'
+import { deepObserve } from '../shared'
 
 export const createFieldHook = (type: LifeCycleTypes) => {
   return createHook(
@@ -41,3 +48,32 @@ export const onFieldValidateStart = createFieldHook(
 export const onFieldValidateEnd = createFieldHook(
   LifeCycleTypes.ON_FIELD_VALIDATE_END
 )
+export function onFieldChange(
+  pattern: FormPathPattern | RegExp,
+  watches: string[],
+  callback: (field: Field, form: Form) => void
+): void
+export function onFieldChange(
+  pattern: FormPathPattern | RegExp,
+  callback: (field: Field, form: Form) => void
+): void
+export function onFieldChange(
+  pattern: FormPathPattern | RegExp,
+  ...args: any[]
+) {
+  let callback = isFn(args[0]) ? args[0] : args[1]
+  let watches = isArr(args[0]) ? args[0] : []
+  onFieldInit(pattern, (field, form) => {
+    if (isFn(callback)) {
+      deepObserve(field, (change, path) => {
+        if (watches.length) {
+          if (watches.some(item => FormPath.parse(item).match(path))) {
+            callback(field, form)
+          }
+        } else {
+          callback(field, form)
+        }
+      })
+    }
+  })
+}
