@@ -398,61 +398,6 @@ export class Field<
     Object.assign(this.decorator[1], props)
   }
 
-  onInit() {
-    this.initialized = true
-    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-    this.validate('onInit')
-  }
-
-  onMount() {
-    this.mounted = true
-    this.unmounted = false
-    this.validate('onMount')
-    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
-  }
-
-  onUnmount() {
-    this.mounted = false
-    this.unmounted = true
-    this.validate('onUnmount')
-    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
-    if (FormPath.existIn(this.form.values, this.path)) {
-      if (
-        this.computedDisplay === 'none' ||
-        this.computedDisplay === 'visibility'
-      ) {
-        this.setValue()
-      }
-    } else {
-      delete this.form.fields[this.path.toString()]
-    }
-  }
-
-  onInput(...args: any[]) {
-    if (this.void) return
-    this.inputValue = args[0]
-    this.inputValues = args
-    this.modified = true
-    this.form.modified = true
-    this.form.setValuesIn(this.path, this.value)
-    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
-    this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
-    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
-    this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
-    this.validate('onInput')
-  }
-
-  onFocus() {
-    this.active = true
-    this.visited = true
-    this.validate('onFocus')
-  }
-
-  onBlur() {
-    this.active = false
-    this.validate('onBlur')
-  }
-
   makeObservable() {
     makeObservable(this, {
       void: observable,
@@ -494,6 +439,61 @@ export class Field<
       onFocus: action,
       onBlur: action
     })
+  }
+
+  onInit = () => {
+    this.initialized = true
+    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    this.validate('onInit')
+  }
+
+  onMount = () => {
+    this.mounted = true
+    this.unmounted = false
+    this.validate('onMount')
+    this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
+  }
+
+  onUnmount = () => {
+    this.mounted = false
+    this.unmounted = true
+    this.validate('onUnmount')
+    this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+    if (FormPath.existIn(this.form.values, this.path)) {
+      if (
+        this.computedDisplay === 'none' ||
+        this.computedDisplay === 'visibility'
+      ) {
+        this.setValue()
+      }
+    } else {
+      delete this.form.fields[this.path.toString()]
+    }
+  }
+
+  onInput = (...args: any[]) => {
+    if (this.void) return
+    this.inputValue = args[0]
+    this.inputValues = args
+    this.modified = true
+    this.form.modified = true
+    this.form.setValuesIn(this.path, this.value)
+    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
+    this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
+    this.validate('onInput')
+  }
+
+  onFocus = () => {
+    this.active = true
+    this.visited = true
+    this.validate('onFocus')
+  }
+
+  onBlur = () => {
+    this.active = false
+    this.validate('onBlur')
   }
 
   async validate(triggerType?: ValidatorTriggerType) {

@@ -263,21 +263,6 @@ export class Form {
     this.pattern = pattern
   }
 
-  onInit() {
-    this.initialized = true
-    this.notify(LifeCycleTypes.ON_FORM_INIT)
-  }
-
-  onMount() {
-    this.mounted = true
-    this.notify(LifeCycleTypes.ON_FORM_MOUNT)
-  }
-
-  onUnmount() {
-    this.unmounted = true
-    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
-  }
-
   query(
     pattern: FormPathPattern | RegExp,
     filter?: (field: Field, path: string) => boolean | void
@@ -379,6 +364,23 @@ export class Form {
 
   unsubscribe(id: number) {
     this.heart.unsubscribe(id)
+  }
+
+  /**事件钩子**/
+
+  onInit = () => {
+    this.initialized = true
+    this.notify(LifeCycleTypes.ON_FORM_INIT)
+  }
+
+  onMount = () => {
+    this.mounted = true
+    this.notify(LifeCycleTypes.ON_FORM_MOUNT)
+  }
+
+  onUnmount = () => {
+    this.unmounted = true
+    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
   }
 
   /**节点模型**/
