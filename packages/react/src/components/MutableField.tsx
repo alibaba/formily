@@ -6,6 +6,7 @@ interface IInternalFieldProps {
 }
 
 const InternalField: React.FC<IInternalFieldProps> = ({ field, children }) => {
+  if (!field) return null
   const state = field.getState()
   if (!state) return null
   if (state.display !== 'visibility') return null

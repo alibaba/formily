@@ -1,11 +1,12 @@
 import { useContext, useMemo } from 'react'
-import { FormContext } from '../shared'
 import { createForm } from '@formily/core'
+import { FormContext } from '../shared'
 import { IFormProps } from '../types'
+import { useAttach } from './useAttach'
 
 export const useForm = (props?: IFormProps, deps: any[] = []) => {
   const ctx = useContext(FormContext)
-  return useMemo(() => {
+  const form = useMemo(() => {
     if (props.form) return props.form
     if (ctx) return ctx
     return createForm({
@@ -14,4 +15,6 @@ export const useForm = (props?: IFormProps, deps: any[] = []) => {
       initialValues: props.initialValues
     })
   }, deps)
+  useAttach(form)
+  return form
 }

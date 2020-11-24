@@ -1,5 +1,6 @@
 import React from 'react'
 import { useForm, useField } from '../hooks'
+import { useAttach } from '../hooks/useAttach'
 import { MutableField } from './MutableField'
 import { IReactComponent } from '../types'
 
@@ -12,5 +13,6 @@ export const ObjectField = <
   const form = useForm()
   const base = useField()
   const field = form.createObjectField({ basePath: base?.path, ...props })
+  useAttach(field)
   return <MutableField field={field}>{props.children}</MutableField>
 }

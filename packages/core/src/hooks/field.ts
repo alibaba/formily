@@ -10,6 +10,8 @@ import { LifeCycleTypes } from '../types'
 import { createHook } from '../hook'
 import { Field } from '../models/Field'
 import { deepObserve } from '../shared'
+import { autorun } from 'mobx'
+import { onFormUnMount } from './form'
 
 export const createFieldHook = (type: LifeCycleTypes) => {
   return createHook(
@@ -72,5 +74,24 @@ export function onFieldChange(pattern: string | RegExp, ...args: any[]) {
         }
       })
     }
+  })
+}
+
+export const onFieldReact = (
+  pattern: string | RegExp,
+  callback?: (field: Field, form: Form) => void
+) => {
+  const disposers = []
+  onFieldInit(pattern, (field, form) => {
+    disposers.push(
+      autorun(() => {
+        callback(field, form)
+      })
+    )
+  })
+  onFormUnMount(() => {
+    disposers.forEach(dispose => {
+      dispose()
+    })
   })
 }
