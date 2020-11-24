@@ -13,20 +13,36 @@ import {
   Validator,
   parseDescriptions
 } from '@formily/validator'
-import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+  toJS
+} from 'mobx'
 import { IReactComponent, LifeCycleTypes } from '../types'
 import { FeedbackInformation, FeedbackMessage } from './Feedback'
 import { Form } from './Form'
 
+type FieldRequests = {
+  validate?: NodeJS.Timeout
+}
+
+type FieldCaches = {
+  value?: any
+  initialValue?: any
+}
+
 export type FieldDecorator<Decorator extends IReactComponent> =
   | [Decorator]
   | [Decorator, React.ComponentProps<Decorator>]
-  | []
+  | boolean
 
 export type FieldComponent<Component extends IReactComponent> =
   | [Component]
   | [Component, React.ComponentProps<Component>]
-  | []
+  | boolean
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
 
@@ -69,13 +85,8 @@ export interface IFieldState {
   visited: boolean
   inputValue: any
   inputValues: any[]
-  recycledValue: any
-  initialized: boolean
-  mounted: boolean
-  unmounted: boolean
-  validator: FieldValidator
-  decorator: FieldDecorator<any>
-  component: FieldComponent<any>
+  decorator: any[]
+  component: any[]
   warnings: FeedbackInformation[]
   errors: FeedbackInformation[]
   successes: FeedbackInformation[]
@@ -88,7 +99,8 @@ export interface IFieldMiddleware {
 
 export class Field<
   Decorator extends IReactComponent = any,
-  Component extends IReactComponent = any
+  Component extends IReactComponent = any,
+  ValueType = any
 > {
   void: boolean
   display: FieldDisplayTypes
@@ -98,27 +110,36 @@ export class Field<
   modified: boolean
   active: boolean
   visited: boolean
-  inputValue: any
+  inputValue: ValueType
   inputValues: any[]
-  recycledValue: any
   initialized: boolean
   mounted: boolean
   unmounted: boolean
   validator: FieldValidator
-  decorator: FieldDecorator<Decorator>
-  component: FieldComponent<Component>
+  decorator: FieldDecorator<any>
+  component: FieldComponent<any>
 
   form: Form
   path: FormPath
   props: IFieldProps<Decorator, Component>
-  constructor(props: IFieldProps<Decorator, Component>) {
-    this.initialize(props)
+  caches: FieldCaches = {}
+  requests: FieldRequests = {}
+  constructor(
+    path: FormPath,
+    props: IFieldProps<Decorator, Component>,
+    form: Form
+  ) {
+    this.initialize(path, props, form)
     this.makeObservable()
-    this.setValue(props.value)
-    this.setInitialValue(props.initialValue)
   }
 
-  initialize(props: IFieldProps<Decorator, Component>) {
+  initialize(
+    path: FormPath,
+    props: IFieldProps<Decorator, Component>,
+    form: Form
+  ) {
+    this.form = form
+    this.path = path
     this.props = { ...Field.defaultProps, ...props }
     this.initialized = false
     this.loading = false
@@ -128,13 +149,15 @@ export class Field<
     this.visited = false
     this.mounted = false
     this.unmounted = false
+    this.inputValues = []
     this.void = this.props.void
     this.display = this.props.display
     this.pattern = this.props.pattern
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
-    this.inputValues = []
+    this.caches.value = this.props.value
+    this.caches.initialValue = this.props.initialValue
   }
 
   get parent() {
@@ -143,6 +166,7 @@ export class Field<
     while (!this.form.fields[identifier]) {
       parent = parent.parent()
       identifier = parent.toString()
+      if (!identifier) return
     }
     return this.form.fields[identifier]
   }
@@ -181,33 +205,38 @@ export class Field<
     return this.form.feedback.find({ path: this.path, type: 'success' })
   }
 
-  get value() {
+  get value(): ValueType {
     const value = this.form.getValuesIn(this.path)
     if (this.modified) {
       return value
     }
-    return isValid(value) ? value : this.initialValue
+    return isValid(value)
+      ? value
+      : isValid(this.initialValue)
+      ? this.initialValue
+      : this.caches.value
   }
 
-  get initialValue() {
-    return this.form.getInitialValuesIn(this.path)
+  get initialValue(): ValueType {
+    const iniialValue = this.form.getInitialValuesIn(this.path)
+    return isValid(iniialValue) ? iniialValue : this.caches.initialValue
   }
 
   get computedDisplay() {
     if (this.display) return this.display
-    return this.parent?.display
+    return this.parent?.display || 'visibility'
   }
 
   get computedPattern() {
     if (this.pattern) return this.pattern
-    return this.parent?.pattern
+    return this.parent?.pattern || 'editable'
   }
 
   get required() {
     return parseDescriptions(this.validator).some(desc => desc.required)
   }
 
-  getState() {
+  getState(): IFieldState {
     const base = {
       void: this.void,
       display: this.computedDisplay,
@@ -222,21 +251,16 @@ export class Field<
       required: this.required,
       inputValue: this.inputValue,
       inputValues: this.inputValues,
-      recycledValue: this.recycledValue,
-      initialized: this.initialized,
-      mounted: this.mounted,
-      unmounted: this.unmounted,
-      validator: this.validator,
       decorator: this.decorator,
       component: this.component,
-      errors: this.errors,
-      warnings: this.warnings,
-      successes: this.successes
-    }
+      errors: toJS(this.errors),
+      warnings: toJS(this.warnings),
+      successes: toJS(this.successes)
+    } as any
     return (
       this.form.props?.middlewares?.reduce((buf, middleware) => {
         if (!isFn(middleware)) return buf
-        return Object.assign(buf, middleware(buf, this))
+        return { ...buf, ...middleware(buf, this) }
       }, base) || base
     )
   }
@@ -340,11 +364,11 @@ export class Field<
   setDisplay(type: FieldDisplayTypes) {
     if (type === 'visibility') {
       if (this.display === 'none') {
-        this.setValue(this.recycledValue)
-        this.recycledValue = null
+        this.setValue(this.caches.value)
+        this.caches.value = null
       }
     } else if (type === 'none') {
-      this.recycledValue = toJS(this.value)
+      this.caches.value = toJS(this.value)
       this.setValue()
     }
     this.display = type
@@ -359,43 +383,42 @@ export class Field<
   }
 
   setValidating(validating: boolean) {
-    this.validating = validating
+    clearTimeout(this.requests.validate)
+    if (validating) {
+      this.requests.validate = setTimeout(() => {
+        runInAction(() => {
+          this.validating = validating
+        })
+      }, 100)
+    } else {
+      this.validating = validating
+    }
   }
 
   setComponent<C extends IReactComponent>(
     component: C,
     props?: React.ComponentProps<C>
   ) {
-    if (component) {
-      this.component[0] = component as any
-    }
-    if (props) {
-      this.component[1] = props as any
-    }
+    this.component = [component, { ...this.component?.[1], ...props }]
   }
 
   setComponentProps<C extends IReactComponent = Component>(
     props?: React.ComponentProps<C>
   ) {
-    Object.assign(this.component[1], props)
+    this.component = [this.component?.[0], { ...this.component?.[1], ...props }]
   }
 
   setDecorator<D extends IReactComponent>(
     component: D,
     props?: React.ComponentProps<D>
   ) {
-    if (component) {
-      this.decorator[0] = component as any
-    }
-    if (props) {
-      this.decorator[1] = props as any
-    }
+    this.decorator = [component, { ...this.decorator?.[1], ...props }]
   }
 
   setDecoratorProps<D extends IReactComponent = Decorator>(
     props?: React.ComponentProps<D>
   ) {
-    Object.assign(this.decorator[1], props)
+    this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
   }
 
   makeObservable() {
@@ -408,17 +431,16 @@ export class Field<
       modified: observable,
       active: observable,
       visited: observable,
-      value: observable,
-      inputValue: observable,
-      inputValues: observable,
-      recycledValue: observable,
-      initialValue: observable,
       initialized: observable,
       mounted: observable,
       unmounted: observable,
-      validator: observable,
-      decorator: observable,
-      component: observable,
+      inputValue: observable.ref,
+      inputValues: observable.ref,
+      validator: observable.ref,
+      decorator: observable.ref,
+      component: observable.ref,
+      value: computed,
+      initialValue: computed,
       setDisplay: action,
       setValue: action,
       setPattern: action,
@@ -444,20 +466,17 @@ export class Field<
   onInit = () => {
     this.initialized = true
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-    this.validate('onInit')
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    this.validate('onMount')
     this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }
 
   onUnmount = () => {
     this.mounted = false
     this.unmounted = true
-    this.validate('onUnmount')
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
     if (FormPath.existIn(this.form.values, this.path)) {
       if (
@@ -477,7 +496,7 @@ export class Field<
     this.inputValues = args
     this.modified = true
     this.form.modified = true
-    this.form.setValuesIn(this.path, this.value)
+    this.form.setValuesIn(this.path, args[0])
     this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
@@ -499,7 +518,7 @@ export class Field<
   async validate(triggerType?: ValidatorTriggerType) {
     this.setValidating(true)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
-    const results = await validate(this.value, this.validator, {
+    const results = await validate(this.value, toJS(this.validator), {
       triggerType,
       validateFirst: this.form?.props?.validateFirst,
       context: this
@@ -570,8 +589,6 @@ export class Field<
   }
 
   static defaultProps: IFieldProps = {
-    void: false,
-    decorator: [],
-    component: []
+    void: false
   }
 }

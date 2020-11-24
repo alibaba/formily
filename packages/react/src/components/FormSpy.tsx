@@ -8,9 +8,8 @@ export interface IFormSpyProps {
 }
 
 export const FormSpy: React.FC<IFormSpyProps> = observer(props => {
-  return (
-    <Fragment>
-      {isFn(props.children) ? props.children(useForm()) : null}
-    </Fragment>
-  )
+  const children = isFn(props.children) ? props.children(useForm()) : null
+  return <Fragment>{children}</Fragment>
 })
+
+FormSpy.displayName = 'FormSpy'

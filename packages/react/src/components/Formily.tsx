@@ -13,3 +13,4 @@ export const Formily: React.FC<IFormProps> = props => {
 Formily.defaultProps = {
   middlewares: []
 }
+Formily.displayName = 'Formily'

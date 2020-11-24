@@ -2,17 +2,24 @@ import React from 'react'
 import { useForm, useField } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { MutableField } from './MutableField'
-import { IReactComponent } from '../types'
+import { FieldContext } from '../shared'
+import { IReactComponent, IFieldProps } from '../types'
 
 export const VirtualField = <
   D extends IReactComponent,
   C extends IReactComponent
 >(
-  props: React.PropsWithChildren<FormilyCore.ICreateFieldProps<D, C>>
+  props: IFieldProps<D, C>
 ) => {
   const form = useForm()
-  const base = useField()
-  const field = form.createField({ basePath: base?.path, ...props, void: true })
+  const parent = useField()
+  const field = form.createObjectField({ basePath: parent?.path, ...props })
   useAttach(field)
-  return <MutableField field={field}>{props.children}</MutableField>
+  return (
+    <FieldContext.Provider value={field}>
+      <MutableField field={field}>{props.children}</MutableField>
+    </FieldContext.Provider>
+  )
 }
+
+VirtualField.displayName = 'VirtualField'

@@ -1,17 +1,26 @@
 import { Field, IFieldProps } from './Field'
 import { IReactComponent } from '../types'
-import { FormPathPattern, isObj } from '@formily/shared'
+import { FormPath, FormPathPattern, isObj } from '@formily/shared'
+import { Form } from './Form'
 
 export class ObjectField<
   Decorator extends IReactComponent = any,
   Component extends IReactComponent = any
-> extends Field {
-  constructor(props: IFieldProps<Decorator, Component>) {
-    super({
-      ...props,
-      void: false,
-      value: isObj(props.value) ? props.value : {}
-    })
+> extends Field<Decorator, Component, Record<string, any>> {
+  constructor(
+    path: FormPath,
+    props: IFieldProps<Decorator, Component>,
+    form: Form
+  ) {
+    super(
+      path,
+      {
+        ...props,
+        void: false,
+        value: isObj(props.value) ? props.value : {}
+      },
+      form
+    )
   }
 
   addProperty(key: FormPathPattern, value: any) {

@@ -1,12 +1,18 @@
 /* eslint-disable */
-import { Field, IFieldProps, IFieldResetOptions } from './models/Field'
+import { LifeCycleTypes, ICreateFormOptions } from './types'
 import { LifeCycle } from './models/LifeCycle'
 import { Feedback } from './models/Feedback'
 import { Heart, HeartSubscriber, IHeartProps } from './models/Heart'
 import { ArrayField } from './models/ArrayField'
 import { ObjectField } from './models/ObjectField'
 import { Form, IFormProps, ICreateFieldProps } from './models/Form'
-import { LifeCycleTypes, ICreateFormOptions } from './types'
+import {
+  Field,
+  IFieldMiddleware,
+  IFieldProps,
+  IFieldResetOptions,
+  IFieldState
+} from './models/Field'
 
 declare global {
   namespace FormilyCore {
@@ -20,6 +26,8 @@ declare global {
       IFormProps,
       ICreateFormOptions,
       ICreateFieldProps,
+      IFieldMiddleware,
+      IFieldState,
       IFieldProps,
       IFieldResetOptions,
       Form,

@@ -42,7 +42,7 @@ export function each<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): void
-export function each<T extends {}, TValue>(
+export function each<T extends {}, TValue extends T[keyof T]>(
   val: T,
   iterator: EachObjectIterator<TValue>,
   revert?: boolean
@@ -84,7 +84,7 @@ export function map<TItem, TResult>(
   iterator: MapArrayIterator<TItem, TResult>,
   revert?: boolean
 ): any
-export function map<T extends {}, TResult>(
+export function map<T extends {}, TResult extends T[keyof T]>(
   val: T,
   iterator: MapObjectIterator<T[keyof T], TResult>,
   revert?: boolean
@@ -118,7 +118,7 @@ export function reduce<T>(
   accumulator?: T,
   revert?: boolean
 ): T
-export function reduce<T extends {}, TValue, TResult = any>(
+export function reduce<T extends {}, TValue extends T[keyof T], TResult = any>(
   val: T,
   iterator: MemoObjectIterator<TValue, TResult>,
   accumulator?: TResult,
@@ -151,7 +151,7 @@ export function every<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): boolean
-export function every<T extends {}, TValue>(
+export function every<T extends {}, TValue extends T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -181,7 +181,7 @@ export function some<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): boolean
-export function some<T extends {}, TValue>(
+export function some<T extends {}, TValue extends T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -211,7 +211,7 @@ export function findIndex<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): number
-export function findIndex<T extends {}, TValue>(
+export function findIndex<T extends {}, TValue extends T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean
@@ -245,7 +245,7 @@ export function find<T>(
   iterator: EachArrayIterator<T>,
   revert?: boolean
 ): T
-export function find<T extends {}, TValue>(
+export function find<T extends {}, TValue extends T[keyof T]>(
   val: T,
   iterator: EachObjectIterator,
   revert?: boolean

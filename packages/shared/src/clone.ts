@@ -70,7 +70,7 @@ export const clone = (values: any, filter?: Filter) => {
       return BigData.clone(values)
     }
     if (isFn(values.toJS)) {
-      return values
+      return clone(values.toJS(), filter)
     }
     if (isFn(values.toJSON)) {
       return values

@@ -10,3 +10,13 @@ export type IFormProps = Omit<
   value?: any
   initialValues?: any
 }
+
+export interface IFieldProps<
+  D extends IReactComponent,
+  C extends IReactComponent,
+  Field = FormilyCore.Field
+> extends FormilyCore.ICreateFieldProps<D, C> {
+  children?:
+    | ((field: Field, form: FormilyCore.Form) => React.ReactChild)
+    | React.ReactNode
+}

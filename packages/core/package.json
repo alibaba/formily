@@ -19,7 +19,8 @@
     "build": "rimraf -rf lib && tsc --declaration"
   },
   "peerDependencies": {
-    "mobx": "^6.0.3"
+    "mobx": "^6.0.3",
+    "@types/react": ">=16.8.0 || >=17.0.0"
   },
   "devDependencies": {
     "typescript": "~3.8.0",

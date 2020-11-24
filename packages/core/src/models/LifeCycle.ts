@@ -31,7 +31,7 @@ export class LifeCycle<Payload = any> {
           }
           index++
         } else if (isObj(item)) {
-          each(item, (handler, type) => {
+          each<any, any>(item, (handler, type) => {
             if (isFn(handler) && isStr(type)) {
               if (type === payload.type) {
                 handler.call(this, payload.payload, ctx)

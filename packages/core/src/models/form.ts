@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, toJS } from 'mobx'
+import { action, makeObservable, observable, toJS, runInAction } from 'mobx'
 import {
   FormPath,
   FormPathPattern,
@@ -85,7 +85,9 @@ export class Form {
 
   feedback: Feedback
 
-  fields: IFieldsMap
+  fields: IFieldsMap = {}
+
+  validateTimer: any
 
   constructor(props: IFormProps) {
     this.initialize(props)
@@ -103,8 +105,8 @@ export class Form {
     this.mounted = false
     this.unmounted = false
     this.pattern = this.props.pattern
-    this.values = this.props.values
-    this.initialValues = this.props.initialValues
+    this.values = this.props.values || {}
+    this.initialValues = this.props.initialValues || {}
   }
 
   get valid() {
@@ -140,7 +142,7 @@ export class Form {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new Field(props)
+      this.fields[identifier] = new Field(path, props, this)
       this.fields[identifier].onInit()
     }
     this.fields[identifier].path = path
@@ -155,7 +157,7 @@ export class Form {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new ArrayField(props)
+      this.fields[identifier] = new ArrayField(path, props, this)
       this.fields[identifier].onInit()
     }
     this.fields[identifier].path = path
@@ -170,7 +172,7 @@ export class Form {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new ObjectField(props)
+      this.fields[identifier] = new ObjectField(path, props, this)
       this.fields[identifier].onInit()
     }
     this.fields[identifier].path = path
@@ -250,17 +252,34 @@ export class Form {
   }
 
   setValidating(validating: boolean) {
+    clearTimeout(this.validateTimer)
     if (validating) {
-      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
-    }
-    this.validating = validating
-    if (!validating) {
+      this.validateTimer = setTimeout(() => {
+        runInAction(() => {
+          this.validating = validating
+          this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
+        })
+      }, 100)
+    } else if (this.validating !== validating) {
+      this.validating = validating
       this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
     }
   }
 
   setPattern(pattern: FormPatternTypes) {
     this.pattern = pattern
+  }
+
+  addEffects(id: string, effects: IFormProps['effects']) {
+    this.heart.addLifeCycles(id, getLifecyclesFromEffects(effects))
+  }
+
+  removeEffects(id: string) {
+    this.heart.removeLifeCycles(id)
+  }
+
+  setEffects(effects: IFormProps['effects']) {
+    this.heart.setLifeCycles(getLifecyclesFromEffects(effects))
   }
 
   query(
@@ -341,6 +360,8 @@ export class Form {
       setValuesIn: action,
       setInitialValues: action,
       setInitialValuesIn: action,
+      deleteIntialValuesIn: action,
+      deleteValuesIn: action,
       setSubmitting: action,
       setValidating: action
     })
@@ -381,6 +402,7 @@ export class Form {
   onUnmount = () => {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
+    this.heart.clear()
   }
 
   /**节点模型**/

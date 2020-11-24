@@ -34,14 +34,14 @@ const getRuleMessage = (rule: ValidatorRules, type: string) => {
 export const parseDescription = (
   description: ValidatorDescription
 ): ValidatorRules => {
-  const rules: ValidatorRules = {}
+  let rules: ValidatorRules = {}
   if (isStr(description)) {
     rules.format = description
-  }
-  if (isFn(description)) {
+  } else if (isFn(description)) {
     rules.validator = description
+  } else {
+    rules = Object.assign(rules, description)
   }
-  Object.assign(rules, description)
   rules.triggerType = rules.triggerType || 'onInput'
   return rules
 }
@@ -63,25 +63,18 @@ export const parseRules = (
   )
   const createValidate = (
     callback: ValidatorFunction,
-    message: string
+    getMessage: () => string
   ) => async (value: any, context: any) => {
-    const results = await callback(
-      value,
-      {
-        ...rules,
-        message
-      },
-      {
-        ...rules,
-        ...context
-      }
-    )
+    const results = await callback(value, rules, {
+      ...rules,
+      ...context
+    })
     if (isBool(results)) {
       if (!results) {
         return render(
           {
             type: 'error',
-            message
+            message: getMessage()
           },
           {
             ...rules,
@@ -106,11 +99,10 @@ export const parseRules = (
       )
     }
   }
-
   return rulesKeys.reduce((buf, key) => {
     const callback = getValidateRules(key)
     return callback
-      ? buf.concat(createValidate(callback, getRuleMessage(rules, key)))
+      ? buf.concat(createValidate(callback, () => getRuleMessage(rules, key)))
       : buf
   }, [])
 }
