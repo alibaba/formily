@@ -623,7 +623,7 @@ To implement a self-incrementing list component with recursive rendering is supe
 
 #### How to implement ultra-complex custom components?
 
-This problem is no solution in the old Formily.It happens that because our business complexity is high to a certain extent, we are limited by this problem, so we must find a way to solve this problem. We can define what is a super complex custom component:
+This problem is no solution in the old FormilyCore.It happens that because our business complexity is high to a certain extent, we are limited by this problem, so we must find a way to solve this problem. We can define what is a super complex custom component:
 
 - There are a large number of form components inside the component, and there are also a large number of linkage relationships inside.
 - There is a private server dynamic rendering scheme inside the component.

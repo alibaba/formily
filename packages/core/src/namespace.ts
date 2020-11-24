@@ -9,7 +9,7 @@ import { Form, IFormProps, ICreateFieldProps } from './models/Form'
 import { LifeCycleTypes, ICreateFormOptions } from './types'
 
 declare global {
-  namespace Formily {
+  namespace FormilyCore {
     export {
       Feedback,
       Heart,

@@ -14,19 +14,19 @@ import {
   parseDescriptions
 } from '@formily/validator'
 import { action, makeObservable, observable, runInAction, toJS } from 'mobx'
-import { FunctionComponent, LifeCycleTypes } from '../types'
+import { IReactComponent, LifeCycleTypes } from '../types'
 import { FeedbackInformation, FeedbackMessage } from './Feedback'
 import { Form } from './Form'
 
-export type FieldDecorator<Decorator extends FunctionComponent> =
-  | [Decorator, Parameters<Decorator>[0]]
-  | []
+export type FieldDecorator<Decorator extends IReactComponent> =
   | [Decorator]
-
-export type FieldComponent<Component extends FunctionComponent> =
-  | [Component, Parameters<Component>[0]]
+  | [Decorator, React.ComponentProps<Decorator>]
   | []
+
+export type FieldComponent<Component extends IReactComponent> =
   | [Component]
+  | [Component, React.ComponentProps<Component>]
+  | []
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
 
@@ -39,8 +39,8 @@ export type FieldPatternTypes =
 export type FieldValidator = Validator
 
 export interface IFieldProps<
-  Decorator extends FunctionComponent = any,
-  Component extends FunctionComponent = any
+  Decorator extends IReactComponent = any,
+  Component extends IReactComponent = any
 > {
   value?: any
   initialValue?: any
@@ -87,8 +87,8 @@ export interface IFieldMiddleware {
 }
 
 export class Field<
-  Decorator extends FunctionComponent = any,
-  Component extends FunctionComponent = any
+  Decorator extends IReactComponent = any,
+  Component extends IReactComponent = any
 > {
   void: boolean
   display: FieldDisplayTypes
@@ -362,9 +362,9 @@ export class Field<
     this.validating = validating
   }
 
-  setComponent<C extends FunctionComponent>(
+  setComponent<C extends IReactComponent>(
     component: C,
-    props?: Parameters<C>[0]
+    props?: React.ComponentProps<C>
   ) {
     if (component) {
       this.component[0] = component as any
@@ -374,15 +374,15 @@ export class Field<
     }
   }
 
-  setComponentProps<C extends FunctionComponent = Component>(
-    props?: Parameters<C>[0]
+  setComponentProps<C extends IReactComponent = Component>(
+    props?: React.ComponentProps<C>
   ) {
     Object.assign(this.component[1], props)
   }
 
-  setDecorator<D extends FunctionComponent>(
+  setDecorator<D extends IReactComponent>(
     component: D,
-    props?: Parameters<D>[0]
+    props?: React.ComponentProps<D>
   ) {
     if (component) {
       this.decorator[0] = component as any
@@ -392,8 +392,8 @@ export class Field<
     }
   }
 
-  setDecoratorProps<D extends FunctionComponent = Decorator>(
-    props?: Parameters<D>[0]
+  setDecoratorProps<D extends IReactComponent = Decorator>(
+    props?: React.ComponentProps<D>
   ) {
     Object.assign(this.decorator[1], props)
   }

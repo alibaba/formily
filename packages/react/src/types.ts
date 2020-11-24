@@ -1,17 +1,20 @@
-import React from 'react'
-
-type IReactComponent =
+export type IReactComponent =
   | keyof JSX.IntrinsicElements
   | React.JSXElementConstructor<any>
 
-export type IFormProps<Component extends IReactComponent> = Omit<
-  Formily.ICreateFormOptions,
+export type IFormProps = Omit<
+  FormilyCore.ICreateFormOptions,
   'values' | 'initialValues'
 > & {
-  form?: Formily.Form
+  form?: FormilyCore.Form
   value?: any
   initialValues?: any
-  onChange?: (values: any) => void
-  onSubmit?: (values: any) => Promise<any> | void
-  component?: Component
-} & Omit<React.ComponentProps<Component>, 'component' | 'onSubmit'>
+}
+
+export type IFieldProps<
+  Decorator extends IReactComponent,
+  Component extends IReactComponent
+> = Omit<FormilyCore.ICreateFieldProps<any, any>, 'component' | 'decorator'> & {
+  component: [Component] | [Component, React.ComponentProps<Component>] | []
+  decorator: [Decorator] | [Decorator, React.ComponentProps<Decorator>] | []
+}

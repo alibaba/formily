@@ -1,6 +1,6 @@
 import { isFn, isValid } from '@formily/shared'
 import { LifeCycle } from './models/LifeCycle'
-import { FunctionComponent } from './types'
+import { AnyFunction } from './types'
 
 const __FORM_HOOK_ENVS__ = {
   lifecycles: [],
@@ -10,7 +10,7 @@ const __FORM_HOOK_ENVS__ = {
 }
 
 export const createHook = <
-  F extends (payload: any, ...ctxs: any[]) => FunctionComponent
+  F extends (payload: any, ...ctxs: any[]) => AnyFunction
 >(
   type: string,
   callback: F

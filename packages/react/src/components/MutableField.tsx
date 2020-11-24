@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from '../observer'
 
 interface IInternalFieldProps {
-  field: Formily.Field
+  field: FormilyCore.Field
 }
 
 const InternalField: React.FC<IInternalFieldProps> = ({ field, children }) => {

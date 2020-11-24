@@ -1,10 +1,10 @@
 import { Field, IFieldProps } from './Field'
-import { FunctionComponent } from '../types'
+import { IReactComponent } from '../types'
 import { FormPathPattern, isObj } from '@formily/shared'
 
 export class ObjectField<
-  Decorator extends FunctionComponent = any,
-  Component extends FunctionComponent = any
+  Decorator extends IReactComponent = any,
+  Component extends IReactComponent = any
 > extends Field {
   constructor(props: IFieldProps<Decorator, Component>) {
     super({

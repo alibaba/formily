@@ -3,6 +3,6 @@ export { FormPath, FormPathPattern } from '@formily/shared'
 export * from './namespace'
 export * from './hook'
 export * from './hooks'
-export const createForm = (options: Formily.ICreateFormOptions) => {
+export const createForm = (options: FormilyCore.ICreateFormOptions) => {
   return new Form(options)
 }

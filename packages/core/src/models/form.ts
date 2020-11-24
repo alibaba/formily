@@ -13,7 +13,7 @@ import {
   Field,
   IFieldMiddleware
 } from './Field'
-import { FunctionComponent, LifeCycleTypes } from '../types'
+import { IReactComponent, LifeCycleTypes } from '../types'
 import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
@@ -53,8 +53,8 @@ export interface IFormProps {
 }
 
 export interface ICreateFieldProps<
-  D extends FunctionComponent,
-  C extends FunctionComponent
+  D extends IReactComponent,
+  C extends IReactComponent
 > extends IFieldProps<D, C> {
   name: FormPathPattern
   basePath?: FormPathPattern
@@ -134,8 +134,8 @@ export class Form {
   /** 创建字段 **/
 
   createField<
-    Decorator extends FunctionComponent,
-    Component extends FunctionComponent
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
   >(props: ICreateFieldProps<Decorator, Component>) {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
@@ -149,8 +149,8 @@ export class Form {
   }
 
   createArrayField<
-    Decorator extends FunctionComponent,
-    Component extends FunctionComponent
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
   >(props: ICreateFieldProps<Decorator, Component>) {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
@@ -164,8 +164,8 @@ export class Form {
   }
 
   createObjectField<
-    Decorator extends FunctionComponent,
-    Component extends FunctionComponent
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
   >(props: ICreateFieldProps<Decorator, Component>) {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()

@@ -1,6 +1,6 @@
 import { Form, IFormProps } from './models/Form'
 
-export type FunctionComponent = (...args: any[]) => any
+export type AnyFunction = (...args: any[]) => any
 
 export enum LifeCycleTypes {
   /**
@@ -45,3 +45,7 @@ export enum LifeCycleTypes {
 export interface ICreateFormOptions extends IFormProps {
   effects?: (form: Form) => void
 }
+
+export type IReactComponent =
+  | keyof JSX.IntrinsicElements
+  | React.JSXElementConstructor<any>

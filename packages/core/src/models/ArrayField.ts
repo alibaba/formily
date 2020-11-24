@@ -1,10 +1,10 @@
 import { Field, IFieldProps } from './Field'
-import { FunctionComponent } from '../types'
+import { IReactComponent } from '../types'
 import { isArr } from '@formily/shared'
 
 export class ArrayField<
-  Decorator extends FunctionComponent = any,
-  Component extends FunctionComponent = any
+  Decorator extends IReactComponent = any,
+  Component extends IReactComponent = any
 > extends Field {
   constructor(props: IFieldProps<Decorator, Component>) {
     super({
