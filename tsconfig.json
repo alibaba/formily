@@ -14,8 +14,8 @@
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
-      "rxjs/*": [
-        "./node_modules/rxjs/*"
+      "@formily/*": [
+        "./packages/*"
       ]
     }
   }

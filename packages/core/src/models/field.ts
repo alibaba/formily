@@ -34,6 +34,9 @@ type FieldCaches = {
   initialValue?: any
 }
 
+const isNumberIndex = (index: any): index is Number =>
+  isNum(index) || /^\d+$/.test(index)
+
 export type FieldDecorator<Decorator extends IReactComponent> =
   | [Decorator]
   | [Decorator, React.ComponentProps<Decorator>]
@@ -189,7 +192,7 @@ export class Field<
   get index() {
     for (let i = this.path?.segments.length - 1; i >= 0; i--) {
       const item = this.path.segments[i]
-      if (isNum(item)) return item
+      if (isNumberIndex(item)) return item
     }
   }
 
@@ -229,7 +232,7 @@ export class Field<
 
   get computedPattern() {
     if (this.pattern) return this.pattern
-    return this.parent?.pattern || 'editable'
+    return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
   get required() {

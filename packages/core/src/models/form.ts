@@ -360,6 +360,7 @@ export class Form {
       setValuesIn: action,
       setInitialValues: action,
       setInitialValuesIn: action,
+      setPattern: action,
       deleteIntialValuesIn: action,
       deleteValuesIn: action,
       setSubmitting: action,

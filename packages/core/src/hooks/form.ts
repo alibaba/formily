@@ -1,8 +1,8 @@
-import { isFn, FormPath, isArr } from '@formily/shared'
+import { isFn } from '@formily/shared'
+import { autorun, runInAction } from 'mobx'
 import { Form } from '../models/Form'
 import { LifeCycleTypes } from '../types'
 import { createHook } from '../hook'
-import { deepObserve } from '../shared'
 export const createFormHook = (type: LifeCycleTypes) => {
   return createHook(type, (form: Form) => (callback: (form: Form) => void) => {
     if (isFn(callback)) {
@@ -49,26 +49,16 @@ export const onFormValidateStart = createFormHook(
 export const onFormValidateEnd = createFormHook(
   LifeCycleTypes.ON_FORM_VALIDATE_END
 )
-
-export function onFormChange(
-  watches: string[],
-  callback: (form: Form) => void
-): void
-export function onFormChange(callback: (form: Form) => void): void
-export function onFormChange(...args: any[]) {
-  let callback = isFn(args[0]) ? args[0] : args[1]
-  let watches = isArr(args[0]) ? args[0] : []
+export const onFormReact = (callback?: (form: Form) => void) => {
+  let dispose = null
   onFormInit(form => {
-    if (isFn(callback)) {
-      deepObserve(form, (change, path) => {
-        if (watches.length) {
-          if (watches.some(item => FormPath.parse(item).match(path))) {
-            callback(form)
-          }
-        } else {
-          callback(form)
-        }
+    dispose = autorun(() => {
+      runInAction(() => {
+        callback(form)
       })
-    }
+    })
+  })
+  onFormUnMount(() => {
+    if (dispose) dispose()
   })
 }

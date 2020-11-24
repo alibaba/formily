@@ -1,7 +1,5 @@
 import {
   FormPath,
-  FormPathPattern,
-  isArr,
   isFn,
   isRegExp
 } from '@formily/shared'
@@ -9,8 +7,7 @@ import { Form } from '../models/Form'
 import { LifeCycleTypes } from '../types'
 import { createHook } from '../hook'
 import { Field } from '../models/Field'
-import { deepObserve } from '../shared'
-import { autorun } from 'mobx'
+import { autorun, runInAction } from 'mobx'
 import { onFormUnMount } from './form'
 
 export const createFieldHook = (type: LifeCycleTypes) => {
@@ -50,32 +47,6 @@ export const onFieldValidateStart = createFieldHook(
 export const onFieldValidateEnd = createFieldHook(
   LifeCycleTypes.ON_FIELD_VALIDATE_END
 )
-export function onFieldChange(
-  pattern: FormPathPattern | RegExp,
-  watches: string[],
-  callback: (field: Field, form: Form) => void
-): void
-export function onFieldChange(
-  pattern: FormPathPattern | RegExp,
-  callback: (field: Field, form: Form) => void
-): void
-export function onFieldChange(pattern: string | RegExp, ...args: any[]) {
-  let callback = isFn(args[0]) ? args[0] : args[1]
-  let watches = isArr(args[0]) ? args[0] : []
-  onFieldInit(pattern, (field, form) => {
-    if (isFn(callback)) {
-      deepObserve(field, (change, path) => {
-        if (watches.length) {
-          if (watches.some(item => FormPath.parse(item).match(path))) {
-            callback(field, form)
-          }
-        } else {
-          callback(field, form)
-        }
-      })
-    }
-  })
-}
 
 export const onFieldReact = (
   pattern: string | RegExp,
@@ -85,7 +56,9 @@ export const onFieldReact = (
   onFieldInit(pattern, (field, form) => {
     disposers.push(
       autorun(() => {
-        callback(field, form)
+        runInAction(() => {
+          callback(field, form)
+        })
       })
     )
   })

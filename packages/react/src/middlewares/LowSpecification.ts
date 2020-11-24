@@ -18,6 +18,8 @@ export const LowSpecification: FormilyCore.IFieldMiddleware = (
   const componentName = isArr(state.component) && state.component[0]
   const componentProps = isArr(state.component) && state.component[1]
   const value = componentName === 'input' ? state.value || '' : state.value
+  const disabled = state.pattern === 'disabled'
+  const readOnly = state.pattern === 'readOnly'
   const onChange = (event: any, ...args: any[]) => {
     const value = getValueFromEvent(event)
     field.onInput(value, ...args)
@@ -36,6 +38,8 @@ export const LowSpecification: FormilyCore.IFieldMiddleware = (
     {
       ...componentProps,
       value,
+      disabled,
+      readOnly,
       onChange,
       onFocus,
       onBlur

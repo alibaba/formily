@@ -10,17 +10,17 @@ import {
 
 export default () => {
   const form = useForm({
+    pattern: 'disabled',
     effects: () => {
-      // onFieldReact('aa', (field, form) => {
-      //   field.setComponentProps({
-      //     disabled: form.values.bb === '123'
-      //   })
-      // })
+      onFieldReact('aa.cc.*.dd', field => {
+        field.setComponentProps({
+          disabled: field.getArraySibling(field.index, 'ee')?.value === '123'
+        })
+      })
     }
   })
   return (
     <Formily form={form}>
-      
       <Field name="bb" component={['input']} />
       <Field name="aa">
         <ArrayField name="cc">
@@ -30,11 +30,10 @@ export default () => {
               <div>
                 {value.map((_, index) => {
                   return (
-                    <Field
-                      key={index}
-                      name={`${index}.dd`}
-                      component={['input']}
-                    />
+                    <div key={index}>
+                      <Field name={`${index}.dd`} component={['input']} />
+                      <Field name={`${index}.ee`} component={['input']} />
+                    </div>
                   )
                 })}
                 <button
@@ -60,6 +59,20 @@ export default () => {
         }}
       >
         提交
+      </button>
+      <button
+        onClick={() => {
+          form.setPattern('editable')
+        }}
+      >
+        编辑
+      </button>
+      <button
+        onClick={() => {
+          form.setPattern('disabled')
+        }}
+      >
+        禁用
       </button>
     </Formily>
   )
