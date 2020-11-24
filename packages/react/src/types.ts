@@ -11,6 +11,10 @@ export type IFormProps = Omit<
   initialValues?: any
 }
 
+export interface IFormSpyProps {
+  children?: (form: FormilyCore.Form) => React.ReactChild
+}
+
 export interface IFieldProps<
   D extends IReactComponent,
   C extends IReactComponent,
@@ -19,4 +23,10 @@ export interface IFieldProps<
   children?:
     | ((field: Field, form: FormilyCore.Form) => React.ReactChild)
     | React.ReactNode
+}
+
+declare global {
+  namespace FormilyReact {
+    export { IFormProps, IFieldProps, IFormSpyProps }
+  }
 }
