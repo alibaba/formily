@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react'
-import { FormContext } from '../context'
+import { FormContext } from '../shared'
 import { createForm } from '@formily/core'
 import { IFormProps } from '../types'
 

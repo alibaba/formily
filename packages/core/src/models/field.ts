@@ -83,7 +83,7 @@ export interface IFieldState {
   initialValue: any
 }
 export interface IFieldMiddleware {
-  (state: IFieldState): IFieldState
+  (state: IFieldState, field: Field): IFieldState
 }
 
 export class Field<
@@ -236,7 +236,7 @@ export class Field<
     return (
       this.form.props?.middlewares?.reduce((buf, middleware) => {
         if (!isFn(middleware)) return buf
-        return Object.assign(buf, middleware(buf))
+        return Object.assign(buf, middleware(buf, this))
       }, base) || base
     )
   }

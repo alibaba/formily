@@ -1,5 +1,5 @@
 import React from 'react'
-import { observer } from '../observer'
+import { observer } from '../shared'
 
 interface IInternalFieldProps {
   field: FormilyCore.Field

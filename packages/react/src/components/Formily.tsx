@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormContext } from '../context'
+import { FormContext } from '../shared'
 import { useForm } from '../hooks'
 import { IFormProps } from '../types'
 
@@ -10,6 +10,6 @@ export const Formily: React.FC<IFormProps> = props => {
   )
 }
 
-FormilyCore.defaultProps = {
+Formily.defaultProps = {
   middlewares: []
 }

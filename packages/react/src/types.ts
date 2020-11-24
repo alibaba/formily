@@ -10,11 +10,3 @@ export type IFormProps = Omit<
   value?: any
   initialValues?: any
 }
-
-export type IFieldProps<
-  Decorator extends IReactComponent,
-  Component extends IReactComponent
-> = Omit<FormilyCore.ICreateFieldProps<any, any>, 'component' | 'decorator'> & {
-  component: [Component] | [Component, React.ComponentProps<Component>] | []
-  decorator: [Decorator] | [Decorator, React.ComponentProps<Decorator>] | []
-}

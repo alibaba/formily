@@ -1,5 +1,5 @@
 import React, { forwardRef, memo } from 'react'
-import { useObserver, UpdateScheduler } from './hooks/useObserver'
+import { useObserver, UpdateScheduler } from '../hooks/useObserver'
 
 export { useObserver }
 
