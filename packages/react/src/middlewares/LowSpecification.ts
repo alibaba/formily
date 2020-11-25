@@ -42,10 +42,10 @@ export const LowSpecification: FormilyCore.IFieldMiddleware = (
   const component = [
     componentName,
     {
-      ...componentProps,
-      value,
       disabled,
       readOnly,
+      ...componentProps,
+      value,
       onChange,
       onFocus,
       onBlur

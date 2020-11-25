@@ -52,9 +52,7 @@ export const onFieldReact = (
   onFieldInit(pattern, (field, form) => {
     disposers.push(
       autorun(() => {
-        runInAction(() => {
           callback(field, form)
-        })
       })
     )
   })

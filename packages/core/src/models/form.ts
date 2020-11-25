@@ -93,7 +93,11 @@ export class Form {
       deleteValuesIn: action,
       setSubmitting: action,
       setValidating: action,
-      setFormGraph: action
+      setFormGraph: action,
+      createField: action,
+      createArrayField: action,
+      createObjectField: action,
+      createVoidField: action
     })
   }
 

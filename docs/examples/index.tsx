@@ -34,6 +34,7 @@ export default () => {
   return (
     <Formily form={form}>
       <Field name="bb" required component={['input']} validator="url" />
+      <Field name="kk" required component={['input']} />
       <Field name="aa">
         <ArrayField name="cc">
           {field => {
@@ -45,7 +46,6 @@ export default () => {
                     <div key={index}>
                       <Field
                         name={`${index}.dd`}
-                        decorator={[FormItem]}
                         required
                         component={['input']}
                       />
