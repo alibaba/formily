@@ -18,23 +18,20 @@ const createButtonCls = (props: any = {}, hasText: any) => {
   }
 }
 
-ArrayList.useArrayList = useArrayList
-ArrayList.useComponent = useComponent
-
-ArrayList.Wrapper = ({ children, ...props }) => {
-  const WrapperComponent = ArrayList.useComponent('Wrapper')
+const Wrapper = ({ children, ...props }) => {
+  const WrapperComponent = useComponent('Wrapper')
   return <WrapperComponent {...props}>{children}</WrapperComponent>
 }
 
-ArrayList.Item = ({ children, ...props }) => {
-  const ItemComponent = ArrayList.useComponent('Item')
+const Item = ({ children, ...props }) => {
+  const ItemComponent = useComponent('Item')
   return <ItemComponent {...props}>{children}</ItemComponent>
 }
 
-ArrayList.Remove = ({ children, component, index, ...props }) => {
-  const { allowRemove, renderWith } = ArrayList.useArrayList(index)
-  const Button = ArrayList.useComponent(component)
-  const RemoveIcon = ArrayList.useComponent('RemoveIcon')
+const Remove = ({ children, component, index, ...props }) => {
+  const { allowRemove, renderWith } = useArrayList(index)
+  const Button = useComponent(component)
+  const RemoveIcon = useComponent('RemoveIcon')
   if (allowRemove) {
     return renderWith(
       'renderRemove',
@@ -51,14 +48,14 @@ ArrayList.Remove = ({ children, component, index, ...props }) => {
   return React.createElement(React.Fragment)
 }
 
-ArrayList.Remove.defaultProps = {
+Remove.defaultProps = {
   component: 'CircleButton'
 }
 
-ArrayList.Addition = ({ children, component, ...props }) => {
-  const { allowAddition, renderWith } = ArrayList.useArrayList()
-  const Button = ArrayList.useComponent(component)
-  const AdditionIcon = ArrayList.useComponent('AdditionIcon')
+const Addition = ({ children, component, ...props }) => {
+  const { allowAddition, renderWith } = useArrayList()
+  const Button = useComponent(component)
+  const AdditionIcon = useComponent('AdditionIcon')
 
   if (allowAddition) {
     return renderWith(
@@ -75,14 +72,14 @@ ArrayList.Addition = ({ children, component, ...props }) => {
   return React.createElement(React.Fragment)
 }
 
-ArrayList.Addition.defaultProps = {
+Addition.defaultProps = {
   component: 'TextButton'
 }
 
-ArrayList.MoveUp = ({ children, component, index, ...props }) => {
-  const { allowMoveUp, renderWith } = ArrayList.useArrayList(index)
-  const Button = ArrayList.useComponent(component)
-  const MoveUpIcon = ArrayList.useComponent('MoveUpIcon')
+const MoveUp = ({ children, component, index, ...props }) => {
+  const { allowMoveUp, renderWith } = useArrayList(index)
+  const Button = useComponent(component)
+  const MoveUpIcon = useComponent('MoveUpIcon')
 
   if (allowMoveUp) {
     return renderWith(
@@ -99,14 +96,14 @@ ArrayList.MoveUp = ({ children, component, index, ...props }) => {
   return React.createElement(React.Fragment)
 }
 
-ArrayList.MoveUp.defaultProps = {
+MoveUp.defaultProps = {
   component: 'CircleButton'
 }
 
-ArrayList.MoveDown = ({ children, component, index, ...props }) => {
-  const { allowMoveDown, renderWith } = ArrayList.useArrayList(index)
-  const Button = ArrayList.useComponent(component)
-  const MoveUpIcon = ArrayList.useComponent('MoveDownIcon')
+const MoveDown = ({ children, component, index, ...props }) => {
+  const { allowMoveDown, renderWith } = useArrayList(index)
+  const Button = useComponent(component)
+  const MoveUpIcon = useComponent('MoveDownIcon')
 
   if (allowMoveDown) {
     return renderWith(
@@ -123,14 +120,14 @@ ArrayList.MoveDown = ({ children, component, index, ...props }) => {
   return React.createElement(React.Fragment)
 }
 
-ArrayList.MoveDown.defaultProps = {
+MoveDown.defaultProps = {
   component: 'CircleButton'
 }
 
-ArrayList.Empty = ({ children, component, ...props }) => {
-  const { allowAddition, isEmpty, renderWith } = ArrayList.useArrayList()
-  const Button = ArrayList.useComponent(component)
-  const AdditionIcon = ArrayList.useComponent('AdditionIcon')
+const Empty = ({ children, component, ...props }) => {
+  const { allowAddition, isEmpty, renderWith } = useArrayList()
+  const Button = useComponent(component)
+  const AdditionIcon = useComponent('AdditionIcon')
   let addtion: any
   if (allowAddition) {
     addtion = renderWith('renderAddition', text => (
@@ -164,6 +161,16 @@ ArrayList.Empty = ({ children, component, ...props }) => {
   return React.createElement(React.Fragment)
 }
 
-ArrayList.Empty.defaultProps = {
+Empty.defaultProps = {
   component: 'TextButton'
 }
+
+ArrayList.useArrayList = useArrayList
+ArrayList.useComponent = useComponent
+ArrayList.Wrapper = Wrapper
+ArrayList.Item = Item
+ArrayList.Remove = Remove
+ArrayList.Addition = Addition
+ArrayList.Empty = Empty
+ArrayList.MoveDown = MoveDown
+ArrayList.MoveUp = MoveUp

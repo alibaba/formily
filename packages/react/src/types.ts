@@ -24,9 +24,3 @@ export interface IFieldProps<
     | ((field: Field, form: FormilyCore.Form) => React.ReactChild)
     | React.ReactNode
 }
-
-declare global {
-  namespace FormilyReact {
-    export { IFormProps, IFieldProps, IFormSpyProps }
-  }
-}

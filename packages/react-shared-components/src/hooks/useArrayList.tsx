@@ -16,7 +16,7 @@ export const useArrayList = (index: number = 0) => {
   const renderWith = (
     name: string,
     render: (node: any) => React.ReactElement,
-    wrapper: any
+    wrapper?: any
   ) => {
     let children: any
     if (renders && renders[name]) {

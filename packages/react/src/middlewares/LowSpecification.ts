@@ -27,10 +27,16 @@ export const LowSpecification: FormilyCore.IFieldMiddleware = (
       componentProps.onChange(event, ...args)
     }
   }
-  const onFocus = () => {
+  const onFocus = (event: React.UIEvent<HTMLElement>, ...args: any[]) => {
+    if (isFn(componentProps?.onFocus)) {
+      componentProps.onFocus(event, ...args)
+    }
     field.onFocus()
   }
-  const onBlur = () => {
+  const onBlur = (event: React.UIEvent<HTMLElement>, ...args: any[]) => {
+    if (isFn(componentProps?.onBlur)) {
+      componentProps.onBlur(event, ...args)
+    }
     field.onBlur()
   }
   const component = [
