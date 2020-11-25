@@ -5,7 +5,7 @@ import { MutableField } from './MutableField'
 import { FieldContext } from '../shared'
 import { IReactComponent, IFieldProps } from '../types'
 
-export const VirtualField = <
+export const VoidField = <
   D extends IReactComponent,
   C extends IReactComponent
 >(
@@ -13,7 +13,7 @@ export const VirtualField = <
 ) => {
   const form = useForm()
   const parent = useField()
-  const field = form.createObjectField({ basePath: parent?.path, ...props })
+  const field = form.createVoidField({ basePath: parent?.path, ...props })
   useAttach(field)
   return (
     <FieldContext.Provider value={field}>
@@ -22,4 +22,4 @@ export const VirtualField = <
   )
 }
 
-VirtualField.displayName = 'VirtualField'
+VoidField.displayName = 'VoidField'

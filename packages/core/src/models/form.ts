@@ -18,6 +18,7 @@ import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { getLifecyclesFromEffects } from '../hook'
+import { VoidField } from './VoidField'
 
 export type FormPatternTypes =
   | 'editable'
@@ -143,6 +144,21 @@ export class Form {
     const identifier = path.toString()
     if (!this.fields[identifier]) {
       this.fields[identifier] = new Field(path, props, this)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
+  createVoidField<
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
+  >(props: ICreateFieldProps<Decorator, Component>) {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new VoidField(path, props, this)
       this.fields[identifier].onInit()
     }
     this.fields[identifier].path = path

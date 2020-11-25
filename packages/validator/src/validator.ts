@@ -1,5 +1,5 @@
 import { parseValidator } from './parser'
-import { ValidateResult, Validator, IValidatorOptions } from './types'
+import { ValidateResults, Validator, IValidatorOptions } from './types'
 import {
   registerValidateFormats,
   registerValidateLocale,
@@ -19,16 +19,14 @@ export const validate = async <Context = any>(
   value: any,
   validator: Validator<Context>,
   options?: IValidatorOptions<Context>
-): Promise<ValidateResult[]> => {
-  const callbacks = parseValidator(validator, options)
-  return callbacks.reduce(async (previous, validate) => {
-    const feedbacks = await previous
-    const result = await validate(value, options.context)
-    if (options?.validateFirst) {
-      if (result) {
-        throw feedbacks.concat(result)
-      }
-    }
-    return feedbacks.concat(result)
-  }, Promise.resolve([]))
+): Promise<ValidateResults> => {
+  const validates = parseValidator(validator, options)
+  const results = {}
+  for (let i = 0; i < validates.length; i++) {
+    const result = await validates[i](value, options.context)
+    const { type, message } = result
+    results[type] = results[type] || []
+    if (message) results[type].push(message)
+  }
+  return results
 }

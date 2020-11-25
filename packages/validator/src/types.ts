@@ -18,10 +18,14 @@ export type ValidateResult = {
   message: string
 }
 
+export type ValidateResults = {
+  error?: string[]
+  warning?: string[]
+  success?: string[]
+}
+
 export const isValidateResult = (obj: any): obj is ValidateResult =>
   !!obj['type'] && !!obj['message']
-
-export type ValidateResults = ValidateResult[]
 
 export type ValidatorFunctionResponse = null | string | boolean | ValidateResult
 

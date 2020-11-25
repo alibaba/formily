@@ -21,7 +21,7 @@ export default () => {
   })
   return (
     <Formily form={form}>
-      <Field name="bb" component={['input']} />
+      <Field name="bb" required component={['input']} validator="url" />
       <Field name="aa">
         <ArrayField name="cc">
           {field => {
@@ -51,6 +51,11 @@ export default () => {
       <FormSpy>
         {form => {
           return JSON.stringify(form.query('aa')?.value)
+        }}
+      </FormSpy>
+      <FormSpy>
+        {form => {
+          return JSON.stringify(form.errors)
         }}
       </FormSpy>
       <button

@@ -18,13 +18,13 @@ const intersection = (arr1: string[], arr2: string[]) => {
 const getRuleMessage = (rule: ValidatorRules, type: string) => {
   const registryRuleKeys = Object.keys(getValidateRules() || {})
   const currentRuleKeys = Object.keys(rule || {})
+  if (rule.format) {
+    return rule.message || getValidateLocale(rule.format)
+  }
   if (
     isFn(rule.validator) ||
     intersection(currentRuleKeys, registryRuleKeys).length > 2
   ) {
-    if (rule.format) {
-      return rule.message || getValidateLocale(type)
-    }
     return getValidateLocale(type)
   } else {
     return rule.message || getValidateLocale(type)
@@ -61,48 +61,54 @@ export const parseRules = (
   const rulesKeys = Object.keys(rules || {}).sort(key =>
     key === 'validator' ? 1 : -1
   )
-  const createValidate = (
-    callback: ValidatorFunction,
-    getMessage: () => string
-  ) => async (value: any, context: any) => {
-    const results = await callback(value, rules, {
+  const getContext = (context: any) => {
+    return {
       ...rules,
       ...context
-    })
+    }
+  }
+  const createValidate = (
+    callback: ValidatorFunction,
+    message: string
+  ) => async (value: any, context: any) => {
+    const results = await callback(
+      value,
+      { ...rules, message },
+      getContext(context)
+    )
     if (isBool(results)) {
       if (!results) {
         return render(
           {
             type: 'error',
-            message: getMessage()
+            message
           },
-          {
-            ...rules,
-            ...context
-          }
+          getContext(getContext(context))
         )
       }
       return
     } else if (results) {
       if (isValidateResult(results)) {
-        return render(results, context)
+        return render(results, getContext(context))
       }
       return render(
         {
           type: 'error',
-          message: results
+          message
         },
-        {
-          ...rules,
-          ...context
-        }
+        getContext(context)
       )
+    }
+
+    return {
+      type: 'error',
+      message: undefined
     }
   }
   return rulesKeys.reduce((buf, key) => {
     const callback = getValidateRules(key)
     return callback
-      ? buf.concat(createValidate(callback, () => getRuleMessage(rules, key)))
+      ? buf.concat(createValidate(callback, getRuleMessage(rules, key)))
       : buf
   }, [])
 }

@@ -26,43 +26,49 @@ const getLength = (value: any) =>
   isStr(value) ? stringLength(value) : value ? value.length : 0
 
 export default {
+  format(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
+    return !new RegExp(getValidateFormats(rule.format) || '').test(value)
+      ? rule.message
+      : ''
+  },
   required(value: any, rule: ValidatorRules) {
     if (rule.required === false) return ''
     return isValidateEmpty(value) ? rule.message : ''
   },
   max(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     const length = getLength(value)
     const max = Number(rule.max)
     return length > max ? rule.message : ''
   },
   maximum(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     return Number(value) > Number(rule.maximum) ? rule.message : ''
   },
   exclusiveMaximum(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     return Number(value) >= Number(rule.maximum) ? rule.message : ''
   },
   minimum(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     return Number(value) < Number(rule.minimum) ? rule.message : ''
   },
   exclusiveMinimum(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     return Number(value) <= Number(rule.minimum) ? rule.message : ''
   },
   len(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     const length = getLength(value)
     const len = Number(rule.len)
     return length !== len ? rule.message : ''
   },
   min(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     const length = getLength(value)
     const min = Number(rule.min)
     return length < min ? rule.message : ''
-  },
-  format(value: any, rule: ValidatorRules) {
-    if (isValidateEmpty(value)) return ''
-    const pattern = getValidateFormats(rule.format)
-    if (pattern) {
-      return !new RegExp(rule.pattern).test(value) ? rule.message : ''
-    }
   },
   pattern(value: any, rule: ValidatorRules) {
     if (isValidateEmpty(value)) return ''
@@ -87,6 +93,7 @@ export default {
     }
   },
   enum(value: any, rule: ValidatorRules) {
+    if (isValidateEmpty(value)) return ''
     const enums = toArr(rule.enum)
     return enums.indexOf(value) === -1 ? rule.message : ''
   }

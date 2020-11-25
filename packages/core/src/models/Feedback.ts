@@ -2,7 +2,8 @@ import { FormPathPattern, FormPath, isArr } from '@formily/shared'
 import { action, makeObservable, observable } from 'mobx'
 
 export type FeedbackInformation = {
-  type: 'error' | 'warning' | 'success'
+  triggerType?: string
+  type: string
   code?: string
   path?: FormPathPattern
   messages?: FeedbackMessage
@@ -47,10 +48,13 @@ export class Feedback {
     })
   }
 
-  update(info: FeedbackInformation) {
+  update(...infos: FeedbackInformation[]) {
+    if (infos.length > 1) return infos.forEach(info => this.update(info))
+    if (infos.length === 0) return
+    const info = infos[0]
     const target = {
-      path: '__TOP__',
-      ...info
+      ...info,
+      path: info?.path ? String(info.path) : '@root'
     }
     const searched = this.find(target)
     if (searched?.length) {
@@ -69,6 +73,8 @@ export class Feedback {
       if (info.path && !FormPath.parse(info.path).match(item.path)) return false
       if (isArr(item.messages) && !item.messages.length) return false
       if (!item.messages) return false
+      if (info.triggerType && info.triggerType !== item.triggerType)
+        return false
       return true
     })
   }
@@ -78,6 +84,7 @@ export class Feedback {
       if (info.type && info.type !== item.type) return true
       if (info.code && info.code !== item.code) return true
       if (info.path && !FormPath.parse(info.path).match(item.path)) return true
+      if (info.triggerType && info.triggerType !== item.triggerType) return true
       return false
     })
   }
