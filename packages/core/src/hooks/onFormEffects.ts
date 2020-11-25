@@ -2,14 +2,16 @@ import { isFn } from '@formily/shared'
 import { autorun, runInAction } from 'mobx'
 import { Form } from '../models/Form'
 import { LifeCycleTypes } from '../types'
-import { createHook } from '../hook'
-export const createFormHook = (type: LifeCycleTypes) => {
-  return createHook(type, (form: Form) => (callback: (form: Form) => void) => {
+import { createEffectHook } from '../effect'
+
+const createFormHook = (type: LifeCycleTypes) => {
+  return createEffectHook(type, (form: Form) => (callback: (form: Form) => void) => {
     if (isFn(callback)) {
       callback(form)
     }
   })
 }
+
 export const onFormInit = createFormHook(LifeCycleTypes.ON_FORM_INIT)
 export const onFormMount = createFormHook(LifeCycleTypes.ON_FORM_MOUNT)
 export const onFormUnMount = createFormHook(LifeCycleTypes.ON_FORM_UNMOUNT)

@@ -1,5 +1,5 @@
 import { isFn, isValid } from '@formily/shared'
-import { LifeCycle } from './models/LifeCycle'
+import { LifeCycle } from './models'
 import { AnyFunction } from './types'
 
 const __FORM_HOOK_ENVS__ = {
@@ -9,7 +9,7 @@ const __FORM_HOOK_ENVS__ = {
   effectEnd: false
 }
 
-export const createHook = <
+export const createEffectHook = <
   F extends (payload: any, ...ctxs: any[]) => AnyFunction
 >(
   type: string,
@@ -32,7 +32,7 @@ export const createHook = <
   }
 }
 
-export const createHookContext = <T = any>(defaultValue?: T) => {
+export const createEffectContext = <T = any>(defaultValue?: T) => {
   const index = __FORM_HOOK_ENVS__.context.length
   return {
     provide(value?: T) {

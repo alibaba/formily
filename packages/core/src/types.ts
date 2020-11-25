@@ -1,6 +1,24 @@
-import { Form, IFormProps } from './models/Form'
+import { Validator } from '@formily/validator'
+import { FormPath } from '@formily/shared'
+import { Form } from './models/Form'
+import { Field } from './models/Field'
+import { LifeCycle } from './models/LifeCycle'
 
 export type AnyFunction = (...args: any[]) => any
+
+export type JSXComponent =
+  | keyof JSX.IntrinsicElements
+  | React.JSXElementConstructor<any>
+
+export type LifeCycleHandler<T> = (payload: T, context: any) => void
+
+export type LifeCyclePayload<T> = (
+  params: {
+    type: string
+    payload: T
+  },
+  context: any
+) => void
 
 export enum LifeCycleTypes {
   /**
@@ -42,10 +60,164 @@ export enum LifeCycleTypes {
   ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
 
+export type HeartSubscriber = ({
+  type,
+  payload
+}: {
+  type: string
+  payload: any
+}) => void
+
+export interface IHeartProps<Context> {
+  lifecycles?: LifeCycle[]
+  context?: Context
+}
+
+export type FeedbackInformation = {
+  triggerType?: string
+  type: string
+  code?: string
+  path?: FormPathPattern
+  messages?: FeedbackMessage
+}
+
+export type FeedbackMessage = any[]
+
+export type FormRequests = {
+  validate?: NodeJS.Timeout
+}
+
+export type FormPatternTypes =
+  | 'editable'
+  | 'readOnly'
+  | 'disabled'
+  | 'readPretty'
+
+export type FormPathPattern =
+  | string
+  | number
+  | Array<string | number>
+  | FormPath
+  | (((path: Array<string | number>) => boolean) & {
+      path: FormPath
+    })
+
 export interface ICreateFormOptions extends IFormProps {
   effects?: (form: Form) => void
 }
+export interface IFormState {
+  displayName: string
+  id: string
+  initialized: boolean
+  validating: boolean
+  submitting: boolean
+  modified: boolean
+  pattern: FormPatternTypes
+  values: any
+  initialValues: any
+  mounted: boolean
+  unmounted: boolean
+  valid: boolean
+  invalid: boolean
+  errors: FeedbackInformation[]
+  successes: FeedbackInformation[]
+  warnings: FeedbackInformation[]
+}
 
-export type IReactComponent =
-  | keyof JSX.IntrinsicElements
-  | React.JSXElementConstructor<any>
+export type IFormGraph = Record<string, IFieldState | IFormState>
+
+export interface IFormProps {
+  values?: {}
+  initialValues?: {}
+  pattern?: FormPatternTypes
+  effects?: (form: Form) => void
+  editable?: boolean
+  validateFirst?: boolean
+  middlewares?: IFieldMiddleware[]
+}
+
+export interface ICreateFieldProps<
+  D extends JSXComponent,
+  C extends JSXComponent
+> extends IFieldProps<D, C> {
+  name: FormPathPattern
+  basePath?: FormPathPattern
+}
+
+export type FieldRequests = {
+  validate?: NodeJS.Timeout
+}
+
+export type FieldCaches = {
+  value?: any
+  initialValue?: any
+}
+
+export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
+
+export type FieldPatternTypes =
+  | 'editable'
+  | 'readOnly'
+  | 'disabled'
+  | 'readPretty'
+
+export type FieldValidator = Validator
+
+export type FieldComponent<Component extends JSXComponent> =
+  | [Component]
+  | [Component, React.ComponentProps<Component>]
+  | boolean
+  | any[]
+
+export type FieldDecorator<Decorator extends JSXComponent> =
+  | [Decorator]
+  | [Decorator, React.ComponentProps<Decorator>]
+  | boolean
+  | any[]
+
+export interface IFieldProps<
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any
+> {
+  value?: any
+  initialValue?: any
+  void?: boolean
+  required?: boolean
+  display?: FieldDisplayTypes
+  pattern?: FieldPatternTypes
+  validator?: Validator
+  decorator?: FieldDecorator<Decorator>
+  component?: FieldComponent<Component>
+}
+
+export interface IFieldResetOptions {
+  forceClear?: boolean
+  validate?: boolean
+  clearInitialValue?: boolean
+}
+
+export interface IFieldState {
+  displayName: string
+  path: string
+  void: boolean
+  display: FieldDisplayTypes
+  pattern: FieldPatternTypes
+  loading: boolean
+  validating: boolean
+  required: boolean
+  modified: boolean
+  active: boolean
+  visited: boolean
+  inputValue: any
+  inputValues: any[]
+  decorator: FieldDecorator<any>
+  component: FieldComponent<any>
+  warnings: FeedbackInformation[]
+  errors: FeedbackInformation[]
+  successes: FeedbackInformation[]
+  value: any
+  initialValue: any
+}
+export interface IFieldMiddleware {
+  (state: IFieldState, field: Field): IFieldState
+}

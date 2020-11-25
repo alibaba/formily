@@ -3,19 +3,13 @@ import {
   isValid,
   isArr,
   FormPathPattern,
-  isNum,
   isObj,
   isFn,
   isBool,
   each,
   isEqual
 } from '@formily/shared'
-import {
-  validate,
-  ValidatorTriggerType,
-  Validator,
-  parseDescriptions
-} from '@formily/validator'
+import { ValidatorTriggerType, parseDescriptions } from '@formily/validator'
 import {
   action,
   computed,
@@ -26,94 +20,27 @@ import {
   toJS,
   IReactionDisposer
 } from 'mobx'
-import { IReactComponent, LifeCycleTypes } from '../types'
-import { FeedbackInformation, FeedbackMessage } from './Feedback'
 import { Form } from './Form'
-
-type FieldRequests = {
-  validate?: NodeJS.Timeout
-}
-
-type FieldCaches = {
-  value?: any
-  initialValue?: any
-}
-
-const isNumberIndex = (index: any): index is Number =>
-  isNum(index) || /^\d+$/.test(index)
-
-export type FieldDecorator<Decorator extends IReactComponent> =
-  | [Decorator]
-  | [Decorator, React.ComponentProps<Decorator>]
-  | boolean
-  | any[]
-
-export type FieldComponent<Component extends IReactComponent> =
-  | [Component]
-  | [Component, React.ComponentProps<Component>]
-  | boolean
-  | any[]
-
-export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
-
-export type FieldPatternTypes =
-  | 'editable'
-  | 'readOnly'
-  | 'disabled'
-  | 'readPretty'
-
-export type FieldValidator = Validator
-
-export interface IFieldProps<
-  Decorator extends IReactComponent = any,
-  Component extends IReactComponent = any
-> {
-  value?: any
-  initialValue?: any
-  void?: boolean
-  required?: boolean
-  display?: FieldDisplayTypes
-  pattern?: FieldPatternTypes
-  validator?: Validator
-  decorator?: FieldDecorator<Decorator>
-  component?: FieldComponent<Component>
-}
-
-export interface IFieldResetOptions {
-  forceClear?: boolean
-  validate?: boolean
-  clearInitialValue?: boolean
-}
-
-export interface IFieldState {
-  displayName: string
-  path: string
-  void: boolean
-  display: FieldDisplayTypes
-  pattern: FieldPatternTypes
-  loading: boolean
-  validating: boolean
-  required: boolean
-  modified: boolean
-  active: boolean
-  visited: boolean
-  inputValue: any
-  inputValues: any[]
-  decorator: FieldDecorator<any>
-  component: FieldComponent<any>
-  warnings: FeedbackInformation[]
-  errors: FeedbackInformation[]
-  successes: FeedbackInformation[]
-  value: any
-  initialValue: any
-}
-export interface IFieldMiddleware {
-  (state: IFieldState, field: Field): IFieldState
-}
+import {
+  JSXComponent,
+  LifeCycleTypes,
+  FeedbackMessage,
+  FieldCaches,
+  FieldRequests,
+  FieldDisplayTypes,
+  FieldPatternTypes,
+  FieldValidator,
+  FieldDecorator,
+  FieldComponent,
+  IFieldProps,
+  IFieldState,
+  IFieldResetOptions
+} from '../types'
+import { isNumberIndex, validateField } from '../shared'
 
 export class Field<
-  Decorator extends IReactComponent = any,
-  Component extends IReactComponent = any,
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any,
   ValueType = any
 > {
   void: boolean
@@ -230,7 +157,6 @@ export class Field<
         () => {
           this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
           this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
-          if (this.modified && this.mounted) this.validate('valueChange')
         }
       ),
       reaction(
@@ -437,23 +363,23 @@ export class Field<
     }
   }
 
-  setValue = (value?: any) => {
+  setValue = (value?: ValueType) => {
     if (this.void) return
     this.modified = true
     this.form.modified = true
     this.form.setValuesIn(this.path, value)
   }
 
-  setCacheValue = (value?: any) => {
+  setCacheValue = (value?: ValueType) => {
     this.caches.value = value
   }
 
-  setInitialValue = (initialValue?: any) => {
+  setInitialValue = (initialValue?: ValueType) => {
     if (this.void) return
     this.form.setInitialValuesIn(this.path, initialValue)
   }
 
-  setCacheInitialValue = (initialValue?: any) => {
+  setCacheInitialValue = (initialValue?: ValueType) => {
     this.caches.initialValue = initialValue
   }
 
@@ -491,27 +417,27 @@ export class Field<
     }
   }
 
-  setComponent = <C extends IReactComponent>(
+  setComponent = <C extends JSXComponent>(
     component: C,
     props?: React.ComponentProps<C>
   ) => {
     this.component = [component, { ...this.component?.[1], ...props }]
   }
 
-  setComponentProps = <C extends IReactComponent = Component>(
+  setComponentProps = <C extends JSXComponent = Component>(
     props?: React.ComponentProps<C>
   ) => {
     this.component = [this.component?.[0], { ...this.component?.[1], ...props }]
   }
 
-  setDecorator = <D extends IReactComponent>(
+  setDecorator = <D extends JSXComponent>(
     component: D,
     props?: React.ComponentProps<D>
   ) => {
     this.decorator = [component, { ...this.decorator?.[1], ...props }]
   }
 
-  setDecoratorProps = <D extends IReactComponent = Decorator>(
+  setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: React.ComponentProps<D>
   ) => {
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
@@ -539,14 +465,6 @@ export class Field<
       ) {
         this.setValue()
       }
-    } else {
-      delete this.form.fields[this.path.toString()]
-      this.form.feedback.clear({
-        path: this.path
-      })
-      this.disposers.forEach(dispose => {
-        dispose()
-      })
     }
   }
 
@@ -574,32 +492,13 @@ export class Field<
   }
 
   validate = async (triggerType?: ValidatorTriggerType) => {
-    const internalValidate = async (triggerType?: ValidatorTriggerType) => {
-      const results = await validate(this.value, this.validator, {
-        triggerType,
-        validateFirst: this.form?.props?.validateFirst,
-        context: this
-      })
-      if (this.unmounted) return
-      each(results, (messages, type) => {
-        this.form.feedback.update({
-          triggerType,
-          type,
-          code: 'ValidateError',
-          path: this.path,
-          messages
-        })
-      })
-      return results
-    }
-
     if (!triggerType) {
       const allTriggerTypes = parseDescriptions(this.validator).map(
         desc => desc.triggerType
       )
       const results = {}
       for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await internalValidate(allTriggerTypes[i])
+        const payload = await validateField(this, allTriggerTypes[i])
         each(payload, (result, key) => {
           results[key] = results[key] || []
           results[key] = results[key].concat(result)
@@ -609,7 +508,7 @@ export class Field<
     }
     this.setValidating(true)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
-    const results = await internalValidate(triggerType)
+    const results = await validateField(this, triggerType)
     this.setValidating(false)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     return results

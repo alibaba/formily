@@ -1,8 +1,8 @@
-import { Form } from './models/Form'
-export { FormPath, FormPathPattern } from '@formily/shared'
+import { ICreateFormOptions } from './types'
+import { Form } from './models'
 export * from './namespace'
-export * from './hook'
+export * from './effect'
 export * from './hooks'
-export const createForm = (options: FormilyCore.ICreateFormOptions) => {
+export const createForm = (options: ICreateFormOptions) => {
   return new Form(options)
 }

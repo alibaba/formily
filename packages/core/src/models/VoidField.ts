@@ -1,11 +1,11 @@
-import { Field, IFieldProps } from './Field'
-import { IReactComponent } from '../types'
 import { FormPath } from '@formily/shared'
+import { JSXComponent, IFieldProps } from '../types'
+import { Field } from './Field'
 import { Form } from './Form'
 
 export class VoidField<
-  Decorator extends IReactComponent = any,
-  Component extends IReactComponent = any
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any
 > extends Field<Decorator, Component, any[]> {
   displayName = 'VoidField'
   constructor(
@@ -22,5 +22,4 @@ export class VoidField<
       form
     )
   }
-
 }

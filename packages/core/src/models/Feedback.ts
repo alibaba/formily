@@ -1,16 +1,6 @@
-import { FormPathPattern, FormPath, isArr } from '@formily/shared'
+import { FormPath, isArr } from '@formily/shared'
 import { action, makeObservable, observable } from 'mobx'
-
-export type FeedbackInformation = {
-  triggerType?: string
-  type: string
-  code?: string
-  path?: FormPathPattern
-  messages?: FeedbackMessage
-}
-
-export type FeedbackMessage = any[]
-
+import { FeedbackInformation } from '../types'
 export class Feedback {
   informations: FeedbackInformation[] = []
   constructor(informations?: FeedbackInformation[]) {

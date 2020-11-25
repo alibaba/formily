@@ -1,15 +1,5 @@
 import { isFn, isStr, isObj, each } from '@formily/shared'
-
-export type LifeCycleHandler<T> = (payload: T, context: any) => void
-
-export type LifeCyclePayload<T> = (
-  params: {
-    type: string
-    payload: T
-  },
-  context: any
-) => void
-
+import { LifeCycleHandler, LifeCyclePayload } from '../types'
 export class LifeCycle<Payload = any> {
   private listener: LifeCyclePayload<Payload>
 

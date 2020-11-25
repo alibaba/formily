@@ -10,87 +10,29 @@ import {
   uid,
   globalThisPolyfill
 } from '@formily/shared'
-import { Heart, HeartSubscriber } from './Heart'
+import { Heart } from './Heart'
+import { Field } from './Field'
 import {
-  IFieldProps,
-  IFieldResetOptions,
-  Field,
-  IFieldMiddleware,
-  IFieldState
-} from './Field'
-import { IReactComponent, LifeCycleTypes } from '../types'
-import { Feedback, FeedbackInformation } from './Feedback'
+  JSXComponent,
+  LifeCycleTypes,
+  HeartSubscriber,
+  FormPatternTypes,
+  FormRequests,
+  IFormGraph,
+  ICreateFieldProps,
+  IFieldState,
+  IFormState,
+  IFormProps,
+  IFieldResetOptions
+} from '../types'
+import { transformAccessorPath } from '../shared'
+import { getLifecyclesFromEffects } from '../effect'
+import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
-import { getLifecyclesFromEffects } from '../hook'
 import { VoidField } from './VoidField'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
-
-const transformAccessorPath = (pattern: FormPathPattern, form: Form) => {
-  const path = FormPath.parse(pattern)
-  if (path.isMatchPattern)
-    throw new Error('Cannot use matching mode when read or writing values')
-  return path.reduce((path: FormPath, key: string, index: number) => {
-    if (index >= path.length - 1) return path.concat([key])
-    const np = path.slice(0, index + 1)
-    const dp = path.concat([key])
-    const field = form.fields[np.toString()]
-    if (field.void) {
-      return path
-    }
-    return dp
-  }, new FormPath(''))
-}
-
-type FormRequests = {
-  validate?: NodeJS.Timeout
-}
-
-export type FormPatternTypes =
-  | 'editable'
-  | 'readOnly'
-  | 'disabled'
-  | 'readPretty'
-
-export interface IFormState {
-  displayName: string
-  id: string
-  initialized: boolean
-  validating: boolean
-  submitting: boolean
-  modified: boolean
-  pattern: FormPatternTypes
-  values: any
-  initialValues: any
-  mounted: boolean
-  unmounted: boolean
-  valid: boolean
-  invalid: boolean
-  errors: FeedbackInformation[]
-  successes: FeedbackInformation[]
-  warnings: FeedbackInformation[]
-}
-
-export type IFormGraph = Record<string, IFieldState | IFormState>
-
-export interface IFormProps {
-  values?: {}
-  initialValues?: {}
-  pattern?: FormPatternTypes
-  effects?: (form: Form) => void
-  editable?: boolean
-  validateFirst?: boolean
-  middlewares?: IFieldMiddleware[]
-}
-
-export interface ICreateFieldProps<
-  D extends IReactComponent,
-  C extends IReactComponent
-> extends IFieldProps<D, C> {
-  name: FormPathPattern
-  basePath?: FormPathPattern
-}
 
 export class Form {
   id: string
@@ -132,7 +74,7 @@ export class Form {
 
   makeObservable() {
     makeObservable(this, {
-      fields: observable.shallow,
+      fields: observable,
       initialized: observable,
       validating: observable,
       submitting: observable,
@@ -190,8 +132,8 @@ export class Form {
   /** 创建字段 **/
 
   createField = <
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
+    Decorator extends JSXComponent,
+    Component extends JSXComponent
   >(
     props: ICreateFieldProps<Decorator, Component>
   ) => {
@@ -207,8 +149,8 @@ export class Form {
   }
 
   createVoidField = <
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
+    Decorator extends JSXComponent,
+    Component extends JSXComponent
   >(
     props: ICreateFieldProps<Decorator, Component>
   ) => {
@@ -224,8 +166,8 @@ export class Form {
   }
 
   createArrayField = <
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
+    Decorator extends JSXComponent,
+    Component extends JSXComponent
   >(
     props: ICreateFieldProps<Decorator, Component>
   ) => {
@@ -241,8 +183,8 @@ export class Form {
   }
 
   createObjectField = <
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
+    Decorator extends JSXComponent,
+    Component extends JSXComponent
   >(
     props: ICreateFieldProps<Decorator, Component>
   ) => {
@@ -488,12 +430,16 @@ export class Form {
 
   setFormGraph = (graph: IFormGraph) => {
     each(graph, (state, path) => {
-      if (this.fields[path]) {
-        this.fields[path].fromJSON(state)
-      } else {
-        this.fields[path] = new Field(FormPath.parse(path), {}, this)
-        this.fields[path].fromJSON(state)
-        this.fields[path].onInit()
+      if (Form.isFieldState(state)) {
+        if (this.fields[path]) {
+          this.fields[path].fromJSON(state)
+        } else {
+          this.fields[path] = new Field(FormPath.parse(path), {}, this)
+          this.fields[path].fromJSON(state)
+          this.fields[path].onInit()
+        }
+      } else if (Form.isFormState(state)) {
+        this.fromJSON(state)
       }
     })
   }
@@ -559,5 +505,35 @@ export class Form {
 
   static defaultProps: IFormProps = {
     initialValues: {}
+  }
+
+  static isForm = (node: any): node is Form => {
+    if (!isFn(node.initialize)) return false
+    return node?.displayName === 'Form'
+  }
+
+  static isArrayField = (node: any): node is ArrayField => {
+    if (!isFn(node.initialize)) return false
+    return node?.displayName === 'ArrayField'
+  }
+
+  static isObjectField = (node: any): node is ObjectField => {
+    if (!isFn(node.initialize)) return false
+    return node?.displayName === 'ObjectField'
+  }
+
+  static isVoidField = (node: any): node is VoidField => {
+    if (!isFn(node.initialize)) return false
+    return node?.displayName === 'VoidField'
+  }
+
+  static isFormState = (state: any): state is IFormState => {
+    if (isFn(state.initialize)) return false
+    return state?.displayName === 'Form'
+  }
+
+  static isFieldState = (state: any): state is IFieldState => {
+    if (isFn(state.initialize)) return false
+    return state?.displayName?.indexOf('Field') > -1
   }
 }

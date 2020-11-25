@@ -24,9 +24,9 @@ export default () => {
   const form = useForm({
     pattern: 'disabled',
     effects: () => {
-      onFieldReact('aa.cc.*.dd', field => {
+      onFieldReact('aa.cc.*.dd', (field) => {
         field.setComponentProps({
-          disabled: field.getArraySibling(field.index, 'ee')?.value === '123'
+          disabled: field.getSibling('ee')?.value === '123'
         })
       })
     }

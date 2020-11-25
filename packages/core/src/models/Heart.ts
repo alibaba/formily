@@ -1,19 +1,6 @@
 import { isStr, isArr, Subscribable, each } from '@formily/shared'
 import { LifeCycle } from './LifeCycle'
-
-export type HeartSubscriber = ({
-  type,
-  payload
-}: {
-  type: string
-  payload: any
-}) => void
-
-export interface IHeartProps<Context> {
-  lifecycles?: LifeCycle[]
-  context?: Context
-}
-
+import { IHeartProps } from '../types'
 export class Heart<Payload = any, Context = any> extends Subscribable {
   private lifecycles: LifeCycle<Payload>[] = []
 

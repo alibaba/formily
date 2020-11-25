@@ -1,11 +1,12 @@
-import { Field, IFieldProps } from './Field'
-import { IReactComponent } from '../types'
 import { FormPath, isArr } from '@formily/shared'
+import { setFieldValue } from '../shared'
+import { Field } from './Field'
 import { Form } from './Form'
+import { JSXComponent, IFieldProps } from '../types'
 
 export class ArrayField<
-  Decorator extends IReactComponent = any,
-  Component extends IReactComponent = any
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any
 > extends Field<Decorator, Component, any[]> {
   displayName = 'ArrayField'
   constructor(
@@ -24,11 +25,15 @@ export class ArrayField<
     )
   }
 
+  setValue = () => {
+    throw new Error('Cannot use setValue method in `ArrayField`')
+  }
+
   push = (...items: any[]) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const pushed = copy.push(...items)
-    this.setValue(copy)
+    setFieldValue(this, copy)
     return pushed
   }
 
@@ -36,7 +41,7 @@ export class ArrayField<
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const last = copy.pop()
-    this.setValue(copy)
+    setFieldValue(this, copy)
     return last
   }
 
@@ -44,21 +49,21 @@ export class ArrayField<
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     copy.splice(index, 0, value)
-    this.setValue(copy)
+    setFieldValue(this, copy)
   }
 
   remove = (index: number) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     copy.splice(index, 1)
-    this.setValue(copy)
+    setFieldValue(this, copy)
   }
 
   shift = () => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const shifted = copy.shift()
-    this.setValue(copy)
+    setFieldValue(this, copy)
     return shifted
   }
 
@@ -66,7 +71,7 @@ export class ArrayField<
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const shifted = copy.unshift(...items)
-    this.setValue(copy)
+    setFieldValue(this, copy)
     return shifted
   }
 
@@ -76,7 +81,7 @@ export class ArrayField<
     const fromItem = copy[fromIndex]
     copy.splice(fromIndex, 1)
     copy.splice(toIndex, 0, fromItem)
-    this.setValue(copy)
+    setFieldValue(this, copy)
   }
 
   moveUp = (index: number) => {

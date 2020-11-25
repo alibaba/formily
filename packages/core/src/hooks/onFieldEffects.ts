@@ -1,25 +1,16 @@
 import { FormPath, isFn, isRegExp } from '@formily/shared'
 import { Form } from '../models/Form'
-import { LifeCycleTypes } from '../types'
-import { createHook } from '../hook'
+import { LifeCycleTypes, FormPathPattern } from '../types'
+import { createEffectHook } from '../effect'
 import { Field } from '../models/Field'
 import { autorun, runInAction } from 'mobx'
-import { onFormUnMount } from './form'
+import { onFormUnMount } from './onFormEffects'
 
-type PathPattern =
-  | string
-  | number
-  | Array<string | number>
-  | FormPath
-  | (((path: Array<string | number>) => boolean) & {
-      path: FormPath
-    })
-
-export const createFieldHook = (type: LifeCycleTypes) => {
-  return createHook(
+const createFieldHook = (type: LifeCycleTypes) => {
+  return createEffectHook(
     type,
     (field: Field, form: Form) => (
-      pattern: PathPattern | RegExp,
+      pattern: FormPathPattern | RegExp,
       callback: (field: Field, form: Form) => void
     ) => {
       if (isFn(callback)) {
