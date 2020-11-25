@@ -1,6 +1,4 @@
 //inject content script
-import { IForm } from '@formily/core'
-const globalThis: any = window
 
 const serializeObject = (obj: any) => {
   if (Array.isArray(obj)) {
@@ -31,14 +29,14 @@ const send = ({
 }: {
   type: string
   id?: string | number
-  form?: IForm
+  form?: any
 }) => {
   window.postMessage(
     {
       source: '@formily-devtools-inject-script',
       type,
       id,
-      graph: form && JSON.stringify(serializeObject(form.getFormGraph()))
+      graph: form && JSON.stringify(serializeObject(form?.getFormGraph()))
     },
     '*'
   )
@@ -52,7 +50,7 @@ const HOOK = {
   hasFormilyInstance: false,
   hasOpenDevtools: false,
   store: {},
-  inject(id: number, form: IForm) {
+  inject(id: number, form: any) {
     this.hasFormilyInstance = true
     this.store[id] = form
     send({
@@ -89,7 +87,7 @@ const HOOK = {
   unmount(id: number) {
     delete this.store[id]
     send({
-      type: 'install',
+      type: 'uninstall',
       id
     })
   }

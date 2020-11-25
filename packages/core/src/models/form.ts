@@ -1,24 +1,31 @@
 import { action, makeObservable, observable, toJS, runInAction } from 'mobx'
 import {
+  each,
   FormPath,
   FormPathPattern,
   isFn,
   isRegExp,
-  isValid
+  isValid,
+  map,
+  uid,
+  globalThisPolyfill
 } from '@formily/shared'
 import { Heart, HeartSubscriber } from './Heart'
 import {
   IFieldProps,
   IFieldResetOptions,
   Field,
-  IFieldMiddleware
+  IFieldMiddleware,
+  IFieldState
 } from './Field'
 import { IReactComponent, LifeCycleTypes } from '../types'
-import { Feedback } from './Feedback'
+import { Feedback, FeedbackInformation } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { getLifecyclesFromEffects } from '../hook'
 import { VoidField } from './VoidField'
+
+const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
 const transformAccessorPath = (pattern: FormPathPattern, form: Form) => {
   const path = FormPath.parse(pattern)
@@ -36,6 +43,10 @@ const transformAccessorPath = (pattern: FormPathPattern, form: Form) => {
   }, new FormPath(''))
 }
 
+type FormRequests = {
+  validate?: NodeJS.Timeout
+}
+
 export type FormPatternTypes =
   | 'editable'
   | 'readOnly'
@@ -43,21 +54,25 @@ export type FormPatternTypes =
   | 'readPretty'
 
 export interface IFormState {
+  displayName: string
+  id: string
   initialized: boolean
   validating: boolean
   submitting: boolean
   modified: boolean
-  editable: boolean
+  pattern: FormPatternTypes
   values: any
   initialValues: any
   mounted: boolean
   unmounted: boolean
-  [key: string]: any
+  valid: boolean
+  invalid: boolean
+  errors: FeedbackInformation[]
+  successes: FeedbackInformation[]
+  warnings: FeedbackInformation[]
 }
 
-export interface IFieldsMap {
-  [key: string]: Field
-}
+export type IFormGraph = Record<string, IFieldState | IFormState>
 
 export interface IFormProps {
   values?: {}
@@ -78,34 +93,22 @@ export interface ICreateFieldProps<
 }
 
 export class Form {
+  id: string
   initialized: boolean
-
   validating: boolean
-
   submitting: boolean
-
   modified: boolean
-
   pattern: FormPatternTypes
-
   values: any
-
   initialValues: any
-
   mounted: boolean
-
   unmounted: boolean
-
   props: IFormProps
-
   heart: Heart
-
   feedback: Feedback
-
-  fields: IFieldsMap = {}
-
-  validateTimer: any
-
+  fields: Record<string, Field> = {}
+  requests: FormRequests = {}
+  displayName = 'Form'
   constructor(props: IFormProps) {
     this.initialize(props)
     this.makeObservable()
@@ -113,6 +116,7 @@ export class Form {
   }
 
   initialize(props: IFormProps) {
+    this.id = uid()
     this.feedback = new Feedback()
     this.props = { ...Form.defaultProps, ...props }
     this.initialized = false
@@ -146,7 +150,8 @@ export class Form {
       deleteIntialValuesIn: action,
       deleteValuesIn: action,
       setSubmitting: action,
-      setValidating: action
+      setValidating: action,
+      setFormGraph: action
     })
   }
 
@@ -318,9 +323,9 @@ export class Form {
   }
 
   setValidating = (validating: boolean) => {
-    clearTimeout(this.validateTimer)
+    clearTimeout(this.requests.validate)
     if (validating) {
-      this.validateTimer = setTimeout(() => {
+      this.requests.validate = setTimeout(() => {
         runInAction(() => {
           this.validating = validating
           this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
@@ -430,19 +435,68 @@ export class Form {
   onMount = () => {
     this.mounted = true
     this.notify(LifeCycleTypes.ON_FORM_MOUNT)
+    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+      globalThisPolyfill[DEV_TOOLS_HOOK].inject(this.id, this)
+    }
   }
 
   onUnmount = () => {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
+    if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
+      globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
+    }
   }
 
   /**节点模型**/
 
-  toJSON() {}
+  toJSON = (): IFormState => {
+    return {
+      displayName: this.displayName,
+      id: this.id,
+      validating: this.validating,
+      values: toJS(this.values),
+      initialValues: toJS(this.initialValues),
+      submitting: this.submitting,
+      valid: this.valid,
+      invalid: this.invalid,
+      initialized: this.initialized,
+      mounted: this.mounted,
+      unmounted: this.unmounted,
+      modified: this.modified,
+      errors: toJS(this.errors),
+      warnings: toJS(this.warnings),
+      successes: toJS(this.successes),
+      pattern: this.pattern
+    }
+  }
 
-  fromJSON() {}
+  fromJSON = (state: IFormState) => {}
+
+  getFormGraph = (): IFormGraph => {
+    const graph = Object.assign(
+      map(this.fields, field => {
+        return field.toJSON()
+      }),
+      {
+        '': this.toJSON()
+      }
+    )
+    return graph
+  }
+
+  setFormGraph = (graph: IFormGraph) => {
+    each(graph, (state, path) => {
+      if (this.fields[path]) {
+        this.fields[path].fromJSON(state)
+      } else {
+        this.fields[path] = new Field(FormPath.parse(path), {}, this)
+        this.fields[path].fromJSON(state)
+        this.fields[path].onInit()
+      }
+    })
+  }
 
   validate = async (pattern: FormPathPattern | RegExp = '*') => {
     this.setValidating(true)

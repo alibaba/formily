@@ -42,7 +42,7 @@ export const parseDescription = (
   } else {
     rules = Object.assign(rules, description)
   }
-  rules.triggerType = rules.triggerType || 'onInput'
+  rules.triggerType = rules.triggerType || 'valueChange'
   return rules
 }
 

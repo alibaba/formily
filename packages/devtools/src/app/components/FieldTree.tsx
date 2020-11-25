@@ -66,7 +66,6 @@ const createTree = (dataSource: any, cursor?: any) => {
       }
     }
   })
-  console.log(tree)
   return tree
 }
 
@@ -184,7 +183,7 @@ const ToolBar = styled.div`
   height: 30px;
   padding: 10px 10;
   padding: 5px;
-  overflow: scroll;
+  overflow: auto;
   position: sticky;
   top: 0;
   background: #282c34;
@@ -247,7 +246,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   )
 })`
   position: relative;
-  overflow: scroll;
+  overflow: auto;
   height: calc(100% - 40px);
   user-select: none;
   .highlight {

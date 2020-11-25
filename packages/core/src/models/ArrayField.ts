@@ -7,6 +7,7 @@ export class ArrayField<
   Decorator extends IReactComponent = any,
   Component extends IReactComponent = any
 > extends Field<Decorator, Component, any[]> {
+  displayName = 'ArrayField'
   constructor(
     path: FormPath,
     props: IFieldProps<Decorator, Component>,

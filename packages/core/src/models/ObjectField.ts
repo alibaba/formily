@@ -7,6 +7,7 @@ export class ObjectField<
   Decorator extends IReactComponent = any,
   Component extends IReactComponent = any
 > extends Field<Decorator, Component, Record<string, any>> {
+  displayName = 'ObjectField'
   constructor(
     path: FormPath,
     props: IFieldProps<Decorator, Component>,

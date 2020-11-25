@@ -7,6 +7,7 @@ export class VoidField<
   Decorator extends IReactComponent = any,
   Component extends IReactComponent = any
 > extends Field<Decorator, Component, any[]> {
+  displayName = 'VoidField'
   constructor(
     path: FormPath,
     props: IFieldProps<Decorator, Component>,

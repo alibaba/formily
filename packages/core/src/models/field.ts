@@ -7,7 +7,8 @@ import {
   isObj,
   isFn,
   isBool,
-  each
+  each,
+  isEqual
 } from '@formily/shared'
 import {
   validate,
@@ -20,8 +21,10 @@ import {
   computed,
   makeObservable,
   observable,
+  reaction,
   runInAction,
-  toJS
+  toJS,
+  IReactionDisposer
 } from 'mobx'
 import { IReactComponent, LifeCycleTypes } from '../types'
 import { FeedbackInformation, FeedbackMessage } from './Feedback'
@@ -43,11 +46,13 @@ export type FieldDecorator<Decorator extends IReactComponent> =
   | [Decorator]
   | [Decorator, React.ComponentProps<Decorator>]
   | boolean
+  | any[]
 
 export type FieldComponent<Component extends IReactComponent> =
   | [Component]
   | [Component, React.ComponentProps<Component>]
   | boolean
+  | any[]
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
 
@@ -81,18 +86,21 @@ export interface IFieldResetOptions {
 }
 
 export interface IFieldState {
+  displayName: string
+  path: string
   void: boolean
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
   loading: boolean
   validating: boolean
+  required: boolean
   modified: boolean
   active: boolean
   visited: boolean
   inputValue: any
   inputValues: any[]
-  decorator: any[]
-  component: any[]
+  decorator: FieldDecorator<any>
+  component: FieldComponent<any>
   warnings: FeedbackInformation[]
   errors: FeedbackInformation[]
   successes: FeedbackInformation[]
@@ -122,14 +130,17 @@ export class Field<
   mounted: boolean
   unmounted: boolean
   validator: FieldValidator
-  decorator: FieldDecorator<any>
-  component: FieldComponent<any>
+  decorator: FieldDecorator<Decorator>
+  component: FieldComponent<Component>
 
   form: Form
   path: FormPath
   props: IFieldProps<Decorator, Component>
   caches: FieldCaches = {}
   requests: FieldRequests = {}
+  disposers: IReactionDisposer[] = []
+  displayName = 'Field'
+
   constructor(
     path: FormPath,
     props: IFieldProps<Decorator, Component>,
@@ -137,6 +148,7 @@ export class Field<
   ) {
     this.initialize(path, props, form)
     this.makeObservable()
+    this.makeReactive()
   }
 
   initialize(
@@ -195,6 +207,7 @@ export class Field<
       setValidating: action,
       setErrors: action,
       setWarnings: action,
+      setSuccesses: action,
       setValidator: action,
       setRequired: action,
       setComponent: action,
@@ -205,8 +218,32 @@ export class Field<
       onMount: action,
       onUnmount: action,
       onFocus: action,
-      onBlur: action
+      onBlur: action,
+      fromJSON: action
     })
+  }
+
+  makeReactive() {
+    this.disposers.push(
+      reaction(
+        () => this.value,
+        () => {
+          this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+          this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
+          if (this.modified && this.mounted) this.validate('valueChange')
+        }
+      ),
+      reaction(
+        () => this.initialValue,
+        () => {
+          this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
+          this.form.notify(
+            LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE,
+            this.form
+          )
+        }
+      )
+    )
   }
 
   get parent() {
@@ -286,31 +323,12 @@ export class Field<
   }
 
   getState = (): IFieldState => {
-    const base = {
-      void: this.void,
-      display: this.computedDisplay,
-      pattern: this.computedPattern,
-      loading: this.loading,
-      validating: this.validating,
-      modified: this.modified,
-      active: this.active,
-      visited: this.visited,
-      value: this.value,
-      initialValue: this.initialValue,
-      required: this.required,
-      inputValue: this.inputValue,
-      inputValues: this.inputValues,
-      decorator: this.decorator,
-      component: this.component,
-      errors: toJS(this.errors),
-      warnings: toJS(this.warnings),
-      successes: toJS(this.successes)
-    } as any
+    const baseState = this.toJSON()
     return (
       this.form.props?.middlewares?.reduce((buf, middleware) => {
         if (!isFn(middleware)) return buf
         return { ...buf, ...middleware(buf, this) }
-      }, base) || base
+      }, baseState) || baseState
     )
   }
 
@@ -365,6 +383,15 @@ export class Field<
     })
   }
 
+  setSuccesses = (messages: FeedbackMessage) => {
+    this.form.feedback.update({
+      type: 'success',
+      code: 'EffectSuccess',
+      path: this.path,
+      messages
+    })
+  }
+
   setValidator = (validator: FieldValidator) => {
     this.validator = validator
   }
@@ -412,9 +439,9 @@ export class Field<
 
   setValue = (value?: any) => {
     if (this.void) return
+    this.modified = true
+    this.form.modified = true
     this.form.setValuesIn(this.path, value)
-    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
-    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
   }
 
   setCacheValue = (value?: any) => {
@@ -424,8 +451,6 @@ export class Field<
   setInitialValue = (initialValue?: any) => {
     if (this.void) return
     this.form.setInitialValuesIn(this.path, initialValue)
-    this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
-    this.form.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE, this.form)
   }
 
   setCacheInitialValue = (initialValue?: any) => {
@@ -516,6 +541,12 @@ export class Field<
       }
     } else {
       delete this.form.fields[this.path.toString()]
+      this.form.feedback.clear({
+        path: this.path
+      })
+      this.disposers.forEach(dispose => {
+        dispose()
+      })
     }
   }
 
@@ -526,9 +557,7 @@ export class Field<
     this.modified = true
     this.form.modified = true
     this.form.setValuesIn(this.path, args[0])
-    this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
-    this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     this.validate('onInput')
   }
@@ -551,6 +580,7 @@ export class Field<
         validateFirst: this.form?.props?.validateFirst,
         context: this
       })
+      if (this.unmounted) return
       each(results, (messages, type) => {
         this.form.feedback.update({
           triggerType,
@@ -577,7 +607,6 @@ export class Field<
       }
       return results
     }
-
     this.setValidating(true)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
     const results = await internalValidate(triggerType)
@@ -594,7 +623,7 @@ export class Field<
         path: this.path
       })
       if (options?.clearInitialValue) {
-        this.setInitialValue(undefined)
+        this.setInitialValue()
       }
       if (options?.forceClear) {
         this.inputValue = undefined
@@ -607,6 +636,107 @@ export class Field<
     })
     if (options?.validate) {
       return await this.validate()
+    }
+  }
+
+  toJSON = (): IFieldState => {
+    return {
+      displayName: this.displayName,
+      path: this.path.toString(),
+      void: this.void,
+      display: this.computedDisplay,
+      pattern: this.computedPattern,
+      loading: this.loading,
+      validating: this.validating,
+      modified: this.modified,
+      active: this.active,
+      visited: this.visited,
+      value: this.value,
+      initialValue: this.initialValue,
+      required: this.required,
+      inputValue: this.inputValue,
+      inputValues: this.inputValues,
+      decorator: this.decorator,
+      component: this.component,
+      errors: toJS(this.errors),
+      warnings: toJS(this.warnings),
+      successes: toJS(this.successes)
+    }
+  }
+
+  fromJSON = (state: IFieldState) => {
+    if (!state) return
+    if (isValid(state.void) && !isEqual(state.void, this.void)) {
+      this.void = state.void
+    }
+    if (isValid(state.modified) && !isEqual(state.modified, this.modified)) {
+      this.modified = state.modified
+    }
+    if (isValid(state.active) && !isEqual(state.active, this.active)) {
+      this.active = state.active
+    }
+    if (isValid(state.visited) && !isEqual(state.visited, this.visited)) {
+      this.visited = state.visited
+    }
+    if (
+      isValid(state.inputValue) &&
+      !isEqual(state.inputValue, this.inputValue)
+    ) {
+      this.inputValue = state.inputValue
+    }
+    if (
+      isValid(state.inputValues) &&
+      !isEqual(state.inputValues, this.inputValues)
+    ) {
+      this.inputValues = state.inputValues
+    }
+    if (isValid(state.component) && !isEqual(state.component, this.component)) {
+      this.component = state.component
+    }
+    if (isValid(state.decorator) && !isEqual(state.decorator, this.decorator)) {
+      this.decorator = state.decorator
+    }
+    if (isValid(state.value) && !isEqual(state.value, this.value)) {
+      this.setValue(state.value)
+    }
+    if (isValid(state.errors) && isEqual(state.errors, this.errors)) {
+      this.form.feedback.update(...state.errors)
+    }
+    if (isValid(state.warnings) && isEqual(state.warnings, this.warnings)) {
+      this.form.feedback.update(...state.warnings)
+    }
+    if (isValid(state.successes) && isEqual(state.successes, this.successes)) {
+      this.form.feedback.update(...state.successes)
+    }
+    if (
+      isValid(state.initialValue) &&
+      !isEqual(state.initialValue, this.initialValue)
+    ) {
+      this.setValue(state.initialValue)
+    }
+    if (isValid(state.required) && !isEqual(state.required, this.required)) {
+      this.setRequired(state.required)
+    }
+    if (
+      isValid(state.display) &&
+      !isEqual(state.display, this.computedDisplay)
+    ) {
+      this.setDisplay(state.display)
+    }
+    if (
+      isValid(state.pattern) &&
+      !isEqual(state.pattern, this.computedPattern)
+    ) {
+      this.setPattern(state.pattern)
+    }
+    if (isValid(state.loading) && !isEqual(state.loading, this.loading)) {
+      this.setLoading(state.loading)
+    }
+    if (
+      isValid(state.validating) &&
+      !isEqual(state.validating, this.validating)
+    ) {
+      this.setValidating(state.validating)
     }
   }
 

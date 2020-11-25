@@ -21,7 +21,7 @@ export const RightPanel = styled(({ className, dataSource }) => {
 })`
   border-left: 1px solid #3d424a;
   flex-grow: 2;
-  overflow: scroll;
+  overflow: auto;
   padding: 10px;
   .react-json-view {
     background: none !important;

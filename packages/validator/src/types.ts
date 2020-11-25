@@ -41,6 +41,7 @@ export type ValidatorParsedFunction<Context = any> = (
 ) => ValidateResult | Promise<ValidateResult> | null
 
 export type ValidatorTriggerType =
+  | 'valueChange'
   | 'onInput'
   | 'onFocus'
   | 'onBlur'

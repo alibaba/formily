@@ -7,17 +7,18 @@ import { IFormProps } from '../types'
 
 export const useForm = (props?: IFormProps, deps: any[] = []) => {
   const ctx = useContext(FormContext)
+  const outerForm = props?.form || ctx
   const middlewares = props?.middlewares || []
   const form = useMemo(() => {
-    if (props?.form) return props.form
-    if (ctx) return ctx
-    return createForm({
+    if (outerForm) return outerForm
+    const form = createForm({
       ...props,
       middlewares: [...DefaultMiddlewares, ...middlewares],
       values: props.value,
       initialValues: props.initialValues
     })
+    return form
   }, deps)
-  useAttach(form)
+  useAttach(form, () => !outerForm)
   return form
 }

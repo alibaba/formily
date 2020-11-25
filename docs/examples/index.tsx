@@ -2,13 +2,25 @@ import React from 'react'
 import {
   Formily,
   Field,
+  useField,
   ArrayField,
   FormSpy,
   onFieldReact,
   useForm
 } from '@formily/react'
 
+const FormItem = props => {
+  const field = useField()
+  return (
+    <div>
+      {props.children}
+      {field.errors?.map(err => err.messages.join(',')).join(',')}
+    </div>
+  )
+}
+
 export default () => {
+
   const form = useForm({
     pattern: 'disabled',
     effects: () => {
@@ -28,17 +40,45 @@ export default () => {
             const value = field.value || []
             return (
               <div>
-                {value.map((_, index) => {
+                {value.map((item, index) => {
                   return (
                     <div key={index}>
-                      <Field name={`${index}.dd`} component={['input']} />
+                      <Field
+                        name={`${index}.dd`}
+                        decorator={[FormItem]}
+                        required
+                        component={['input']}
+                      />
                       <Field name={`${index}.ee`} component={['input']} />
+                      <button
+                        onClick={() => {
+                          field.moveUp(index)
+                        }}
+                      >
+                        上移
+                      </button>
+                      <button
+                        onClick={() => {
+                          field.moveDown(index)
+                        }}
+                      >
+                        下移
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault()
+                          field.remove(index)
+                        }}
+                      >
+                        移除
+                      </button>
                     </div>
                   )
                 })}
                 <button
-                  onClick={() => {
-                    field.push({})
+                  onClick={(e) => {
+                    e.preventDefault()
+                    field.push({id:new Date().getTime()})
                   }}
                 >
                   添加
