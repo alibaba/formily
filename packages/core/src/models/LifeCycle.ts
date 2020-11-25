@@ -19,7 +19,7 @@ export class LifeCycle<Payload = any> {
   constructor(...params: any[]) {
     this.listener = this.buildListener(params)
   }
-  buildListener(params: any[]) {
+  buildListener = (params: any[]) => {
     return function(payload: { type: string; payload: Payload }, ctx: any) {
       for (let index = 0; index < params.length; index++) {
         let item = params[index]

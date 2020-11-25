@@ -29,7 +29,7 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
     this.context = context
   }
 
-  buildLifeCycles(lifecycles: LifeCycle[]) {
+  buildLifeCycles = (lifecycles: LifeCycle[]) => {
     return lifecycles.reduce((buf, item) => {
       if (item instanceof LifeCycle) {
         return buf.concat(item)
@@ -45,15 +45,15 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
     }, [])
   }
 
-  addLifeCycles(id: string, lifecycles: LifeCycle[] = []) {
+  addLifeCycles = (id: string, lifecycles: LifeCycle[] = []) => {
     this.outerLifecycles[id] = this.buildLifeCycles(lifecycles)
   }
 
-  removeLifeCycles(id: string) {
+  removeLifeCycles = (id: string) => {
     delete this.outerLifecycles[id]
   }
 
-  setLifeCycles(lifecycles: LifeCycle[] = []) {
+  setLifeCycles = (lifecycles: LifeCycle[] = []) => {
     this.lifecycles = this.buildLifeCycles(lifecycles || [])
   }
 
@@ -74,7 +74,7 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
     }
   }
 
-  clear() {
+  clear = () => {
     this.lifecycles = []
     this.unsubscribe()
   }

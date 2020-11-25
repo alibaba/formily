@@ -23,7 +23,7 @@ export class ArrayField<
     )
   }
 
-  push(...items: any[]) {
+  push = (...items: any[]) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const pushed = copy.push(...items)
@@ -31,7 +31,7 @@ export class ArrayField<
     return pushed
   }
 
-  pop() {
+  pop = () => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const last = copy.pop()
@@ -39,21 +39,21 @@ export class ArrayField<
     return last
   }
 
-  insert(index: number, value: any) {
+  insert = (index: number, value: any) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     copy.splice(index, 0, value)
     this.setValue(copy)
   }
 
-  remove(index: number) {
+  remove = (index: number) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     copy.splice(index, 1)
     this.setValue(copy)
   }
 
-  shift() {
+  shift = () => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const shifted = copy.shift()
@@ -61,7 +61,7 @@ export class ArrayField<
     return shifted
   }
 
-  unshift(...items: any[]) {
+  unshift = (...items: any[]) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const shifted = copy.unshift(...items)
@@ -69,7 +69,7 @@ export class ArrayField<
     return shifted
   }
 
-  move(fromIndex: number, toIndex: number) {
+  move = (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const fromItem = copy[fromIndex]
@@ -78,12 +78,12 @@ export class ArrayField<
     this.setValue(copy)
   }
 
-  moveUp(index: number) {
+  moveUp = (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index - 1 < 0 ? this.value.length - 1 : index - 1)
   }
 
-  moveDown(index: number) {
+  moveDown = (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index + 1 >= this.value.length ? 0 : index + 1)
   }

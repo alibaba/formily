@@ -23,15 +23,15 @@ export class ObjectField<
     )
   }
 
-  addProperty(key: FormPathPattern, value: any) {
+  addProperty = (key: FormPathPattern, value: any) => {
     this.form.setValuesIn(this.path.concat(key), value)
   }
 
-  removeProperty(key: FormPathPattern) {
+  removeProperty = (key: FormPathPattern) => {
     this.form.deleteValuesIn(this.path.concat(key))
   }
 
-  existProperty(key: FormPathPattern) {
+  existProperty = (key: FormPathPattern) => {
     return this.form.existValuesIn(this.path.concat(key))
   }
 }

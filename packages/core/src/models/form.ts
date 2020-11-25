@@ -110,256 +110,6 @@ export class Form {
     this.initialValues = this.props.initialValues || {}
   }
 
-  get valid() {
-    return this.feedback.valid
-  }
-
-  get invalid() {
-    return this.feedback.invalid
-  }
-
-  get errors() {
-    return this.feedback.errors
-  }
-
-  get warnings() {
-    return this.feedback.warnings
-  }
-
-  get successes() {
-    return this.feedback.successes
-  }
-
-  get lifecycles() {
-    return getLifecyclesFromEffects(this.props.effects, this)
-  }
-
-  /** 创建字段 **/
-
-  createField<
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
-  >(props: ICreateFieldProps<Decorator, Component>) {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
-    if (!this.fields[identifier]) {
-      this.fields[identifier] = new Field(path, props, this)
-      this.fields[identifier].onInit()
-    }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
-    return this.fields[identifier]
-  }
-
-  createVoidField<
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
-  >(props: ICreateFieldProps<Decorator, Component>) {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
-    if (!this.fields[identifier]) {
-      this.fields[identifier] = new VoidField(path, props, this)
-      this.fields[identifier].onInit()
-    }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
-    return this.fields[identifier]
-  }
-
-  createArrayField<
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
-  >(props: ICreateFieldProps<Decorator, Component>) {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
-    if (!this.fields[identifier]) {
-      this.fields[identifier] = new ArrayField(path, props, this)
-      this.fields[identifier].onInit()
-    }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
-    return this.fields[identifier]
-  }
-
-  createObjectField<
-    Decorator extends IReactComponent,
-    Component extends IReactComponent
-  >(props: ICreateFieldProps<Decorator, Component>) {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
-    if (!this.fields[identifier]) {
-      this.fields[identifier] = new ObjectField(path, props, this)
-      this.fields[identifier].onInit()
-    }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
-    return this.fields[identifier]
-  }
-
-  /** 状态操作模型 **/
-
-  setValues(values: any) {
-    this.modified = true
-    this.values = values
-    this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-  }
-
-  setValuesIn(pattern: FormPathPattern, value: any) {
-    FormPath.setIn(this.values, this.getDataPath(pattern), value)
-  }
-
-  deleteValuesIn(pattern: FormPathPattern) {
-    FormPath.deleteIn(this.values, this.getDataPath(pattern))
-  }
-
-  existValuesIn(pattern: FormPathPattern) {
-    return FormPath.existIn(this.values, this.getDataPath(pattern))
-  }
-
-  getValuesIn(pattern: FormPathPattern) {
-    return FormPath.getIn(this.values, this.getDataPath(pattern))
-  }
-
-  setInitialValues(initialValues: any) {
-    this.initialValues = initialValues
-    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-  }
-
-  setInitialValuesIn(pattern: FormPathPattern, initialValue: any) {
-    FormPath.setIn(this.initialValues, this.getDataPath(pattern), initialValue)
-  }
-
-  deleteIntialValuesIn(pattern: FormPathPattern) {
-    FormPath.deleteIn(this.initialValues, this.getDataPath(pattern))
-  }
-
-  existInitialValuesIn(pattern: FormPathPattern) {
-    return FormPath.existIn(this.initialValues, this.getDataPath(pattern))
-  }
-
-  getInitialValuesIn(pattern: FormPathPattern) {
-    return FormPath.getIn(this.initialValues, this.getDataPath(pattern))
-  }
-
-  getDataPath(pattern: FormPathPattern) {
-    const path = FormPath.parse(pattern)
-    if (path.isMatchPattern)
-      throw new Error('Cannot use matching mode when read or writing values')
-    return path.reduce((path: FormPath, key: string, index: number) => {
-      if (index >= path.length - 1) return path.concat([key])
-      const np = path.slice(0, index + 1)
-      const dp = path.concat([key])
-      const field = this.fields[np.toString()]
-      if (field.void) {
-        return path
-      }
-      return dp
-    }, new FormPath(''))
-  }
-
-  setSubmitting(submitting: boolean) {
-    if (submitting) {
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_START)
-    }
-    this.submitting = submitting
-    if (!submitting) {
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_END)
-    }
-  }
-
-  setValidating(validating: boolean) {
-    clearTimeout(this.validateTimer)
-    if (validating) {
-      this.validateTimer = setTimeout(() => {
-        runInAction(() => {
-          this.validating = validating
-          this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
-        })
-      }, 100)
-    } else if (this.validating !== validating) {
-      this.validating = validating
-      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
-    }
-  }
-
-  setPattern(pattern: FormPatternTypes) {
-    this.pattern = pattern
-  }
-
-  addEffects(id: string, effects: IFormProps['effects']) {
-    this.heart.addLifeCycles(id, getLifecyclesFromEffects(effects))
-  }
-
-  removeEffects(id: string) {
-    this.heart.removeLifeCycles(id)
-  }
-
-  setEffects(effects: IFormProps['effects']) {
-    this.heart.setLifeCycles(getLifecyclesFromEffects(effects))
-  }
-
-  query(
-    pattern: FormPathPattern | RegExp,
-    filter?: (field: Field, path: string) => boolean | void
-  ): Field {
-    for (let identifier in this.fields) {
-      const field = this.fields[identifier]
-      if (isRegExp(pattern)) {
-        if (pattern.test(field.path.toString())) {
-          if (isFn(filter)) {
-            if (filter(field, identifier) === true) return field
-          } else {
-            return field
-          }
-        }
-      } else {
-        if (FormPath.parse(pattern).match(field.path)) {
-          if (isFn(filter)) {
-            if (filter(field, identifier) === true) return field
-          } else {
-            return field
-          }
-        }
-      }
-    }
-  }
-
-  queryAll(
-    pattern: FormPathPattern | RegExp,
-    filter?: (field: Field, path: string) => boolean | void
-  ): Field[] {
-    const results = []
-    for (let identifier in this.fields) {
-      const field = this.fields[identifier]
-      if (isRegExp(pattern)) {
-        if (pattern.test(field.path.toString())) {
-          if (isFn(filter)) {
-            if (filter(field, identifier) === true) {
-              results.push(field)
-              break
-            }
-          } else {
-            results.push(field)
-          }
-        }
-      } else {
-        if (FormPath.parse(pattern).match(field.path)) {
-          if (isFn(filter)) {
-            if (filter(field, identifier) === true) {
-              results.push(field)
-              break
-            }
-          } else {
-            results.push(field)
-          }
-        }
-      }
-    }
-    return results
-  }
-
-  /** 观察者模型 **/
-
   makeObservable() {
     makeObservable(this, {
       fields: observable.shallow,
@@ -392,15 +142,271 @@ export class Form {
     this.onInit()
   }
 
-  notify(type: LifeCycleTypes, payload?: any) {
+  get valid() {
+    return this.feedback.valid
+  }
+
+  get invalid() {
+    return this.feedback.invalid
+  }
+
+  get errors() {
+    return this.feedback.errors
+  }
+
+  get warnings() {
+    return this.feedback.warnings
+  }
+
+  get successes() {
+    return this.feedback.successes
+  }
+
+  get lifecycles() {
+    return getLifecyclesFromEffects(this.props.effects, this)
+  }
+
+  /** 创建字段 **/
+
+  createField = <
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
+  >(
+    props: ICreateFieldProps<Decorator, Component>
+  ) => {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new Field(path, props, this)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
+  createVoidField = <
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
+  >(
+    props: ICreateFieldProps<Decorator, Component>
+  ) => {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new VoidField(path, props, this)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
+  createArrayField = <
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
+  >(
+    props: ICreateFieldProps<Decorator, Component>
+  ) => {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new ArrayField(path, props, this)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
+  createObjectField = <
+    Decorator extends IReactComponent,
+    Component extends IReactComponent
+  >(
+    props: ICreateFieldProps<Decorator, Component>
+  ) => {
+    const path = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = path.toString()
+    if (!this.fields[identifier]) {
+      this.fields[identifier] = new ObjectField(path, props, this)
+      this.fields[identifier].onInit()
+    }
+    this.fields[identifier].path = path
+    this.fields[identifier].form = this
+    return this.fields[identifier]
+  }
+
+  /** 状态操作模型 **/
+
+  setValues = (values: any) => {
+    this.modified = true
+    this.values = values
+    this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+  }
+
+  setValuesIn = (pattern: FormPathPattern, value: any) => {
+    FormPath.setIn(this.values, this.getDataPath(pattern), value)
+  }
+
+  deleteValuesIn = (pattern: FormPathPattern) => {
+    FormPath.deleteIn(this.values, this.getDataPath(pattern))
+  }
+
+  existValuesIn = (pattern: FormPathPattern) => {
+    return FormPath.existIn(this.values, this.getDataPath(pattern))
+  }
+
+  getValuesIn = (pattern: FormPathPattern) => {
+    return FormPath.getIn(this.values, this.getDataPath(pattern))
+  }
+
+  setInitialValues = (initialValues: any) => {
+    this.initialValues = initialValues
+    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+  }
+
+  setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
+    FormPath.setIn(this.initialValues, this.getDataPath(pattern), initialValue)
+  }
+
+  deleteIntialValuesIn = (pattern: FormPathPattern) => {
+    FormPath.deleteIn(this.initialValues, this.getDataPath(pattern))
+  }
+
+  existInitialValuesIn = (pattern: FormPathPattern) => {
+    return FormPath.existIn(this.initialValues, this.getDataPath(pattern))
+  }
+
+  getInitialValuesIn = (pattern: FormPathPattern) => {
+    return FormPath.getIn(this.initialValues, this.getDataPath(pattern))
+  }
+
+  getDataPath = (pattern: FormPathPattern) => {
+    const path = FormPath.parse(pattern)
+    if (path.isMatchPattern)
+      throw new Error('Cannot use matching mode when read or writing values')
+    return path.reduce((path: FormPath, key: string, index: number) => {
+      if (index >= path.length - 1) return path.concat([key])
+      const np = path.slice(0, index + 1)
+      const dp = path.concat([key])
+      const field = this.fields[np.toString()]
+      if (field.void) {
+        return path
+      }
+      return dp
+    }, new FormPath(''))
+  }
+
+  setSubmitting = (submitting: boolean) => {
+    if (submitting) {
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_START)
+    }
+    this.submitting = submitting
+    if (!submitting) {
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_END)
+    }
+  }
+
+  setValidating = (validating: boolean) => {
+    clearTimeout(this.validateTimer)
+    if (validating) {
+      this.validateTimer = setTimeout(() => {
+        runInAction(() => {
+          this.validating = validating
+          this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
+        })
+      }, 100)
+    } else if (this.validating !== validating) {
+      this.validating = validating
+      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
+    }
+  }
+
+  setPattern = (pattern: FormPatternTypes) => {
+    this.pattern = pattern
+  }
+
+  addEffects = (id: string, effects: IFormProps['effects']) => {
+    this.heart.addLifeCycles(id, getLifecyclesFromEffects(effects))
+  }
+
+  removeEffects = (id: string) => {
+    this.heart.removeLifeCycles(id)
+  }
+
+  setEffects = (effects: IFormProps['effects']) => {
+    this.heart.setLifeCycles(getLifecyclesFromEffects(effects))
+  }
+
+  query = (
+    pattern: FormPathPattern | RegExp,
+    filter?: (field: Field, path: string) => boolean | void
+  ): Field => {
+    for (let identifier in this.fields) {
+      const field = this.fields[identifier]
+      if (isRegExp(pattern)) {
+        if (pattern.test(field.path.toString())) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) return field
+          } else {
+            return field
+          }
+        }
+      } else {
+        if (FormPath.parse(pattern).match(field.path)) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) return field
+          } else {
+            return field
+          }
+        }
+      }
+    }
+  }
+
+  queryAll = (
+    pattern: FormPathPattern | RegExp,
+    filter?: (field: Field, path: string) => boolean | void
+  ): Field[] => {
+    const results = []
+    for (let identifier in this.fields) {
+      const field = this.fields[identifier]
+      if (isRegExp(pattern)) {
+        if (pattern.test(field.path.toString())) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) {
+              results.push(field)
+              break
+            }
+          } else {
+            results.push(field)
+          }
+        }
+      } else {
+        if (FormPath.parse(pattern).match(field.path)) {
+          if (isFn(filter)) {
+            if (filter(field, identifier) === true) {
+              results.push(field)
+              break
+            }
+          } else {
+            results.push(field)
+          }
+        }
+      }
+    }
+    return results
+  }
+
+  notify = (type: LifeCycleTypes, payload?: any) => {
     this.heart.publish(type, isValid(payload) ? payload : this)
   }
 
-  subscribe(subscriber?: HeartSubscriber) {
+  subscribe = (subscriber?: HeartSubscriber) => {
     return this.heart.subscribe(subscriber)
   }
 
-  unsubscribe(id: number) {
+  unsubscribe = (id: number) => {
     this.heart.unsubscribe(id)
   }
 
@@ -428,7 +434,7 @@ export class Form {
 
   fromJSON() {}
 
-  async validate(pattern: FormPathPattern | RegExp = '*') {
+  validate = async (pattern: FormPathPattern | RegExp = '*') => {
     this.setValidating(true)
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
@@ -443,7 +449,7 @@ export class Form {
     }
   }
 
-  async submit(onSubmit?: (values: any) => Promise<any> | void) {
+  submit = async (onSubmit?: (values: any) => Promise<any> | void) => {
     this.setSubmitting(true)
     this.feedback.clear({
       code: 'SubmitError'
@@ -475,10 +481,10 @@ export class Form {
     return results
   }
 
-  async reset(
+  reset = async (
     pattern: FormPathPattern | RegExp = '*',
     options?: IFieldResetOptions
-  ) {
+  ) => {
     const tasks = []
     this.query(pattern, field => {
       tasks.push(field.reset(options))
