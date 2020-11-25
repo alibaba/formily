@@ -20,6 +20,22 @@ import { ObjectField } from './ObjectField'
 import { getLifecyclesFromEffects } from '../hook'
 import { VoidField } from './VoidField'
 
+const transformAccessorPath = (pattern: FormPathPattern, form: Form) => {
+  const path = FormPath.parse(pattern)
+  if (path.isMatchPattern)
+    throw new Error('Cannot use matching mode when read or writing values')
+  return path.reduce((path: FormPath, key: string, index: number) => {
+    if (index >= path.length - 1) return path.concat([key])
+    const np = path.slice(0, index + 1)
+    const dp = path.concat([key])
+    const field = form.fields[np.toString()]
+    if (field.void) {
+      return path
+    }
+    return dp
+  }, new FormPath(''))
+}
+
 export type FormPatternTypes =
   | 'editable'
   | 'readOnly'
@@ -245,19 +261,19 @@ export class Form {
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.values, this.getDataPath(pattern), value)
+    FormPath.setIn(this.values, transformAccessorPath(pattern, this), value)
   }
 
   deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.values, this.getDataPath(pattern))
+    FormPath.deleteIn(this.values, transformAccessorPath(pattern, this))
   }
 
   existValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.values, this.getDataPath(pattern))
+    return FormPath.existIn(this.values, transformAccessorPath(pattern, this))
   }
 
   getValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.values, this.getDataPath(pattern))
+    return FormPath.getIn(this.values, transformAccessorPath(pattern, this))
   }
 
   setInitialValues = (initialValues: any) => {
@@ -266,35 +282,29 @@ export class Form {
   }
 
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
-    FormPath.setIn(this.initialValues, this.getDataPath(pattern), initialValue)
+    FormPath.setIn(
+      this.initialValues,
+      transformAccessorPath(pattern, this),
+      initialValue
+    )
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, this.getDataPath(pattern))
+    FormPath.deleteIn(this.initialValues, transformAccessorPath(pattern, this))
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.initialValues, this.getDataPath(pattern))
+    return FormPath.existIn(
+      this.initialValues,
+      transformAccessorPath(pattern, this)
+    )
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.initialValues, this.getDataPath(pattern))
-  }
-
-  getDataPath = (pattern: FormPathPattern) => {
-    const path = FormPath.parse(pattern)
-    if (path.isMatchPattern)
-      throw new Error('Cannot use matching mode when read or writing values')
-    return path.reduce((path: FormPath, key: string, index: number) => {
-      if (index >= path.length - 1) return path.concat([key])
-      const np = path.slice(0, index + 1)
-      const dp = path.concat([key])
-      const field = this.fields[np.toString()]
-      if (field.void) {
-        return path
-      }
-      return dp
-    }, new FormPath(''))
+    return FormPath.getIn(
+      this.initialValues,
+      transformAccessorPath(pattern, this)
+    )
   }
 
   setSubmitting = (submitting: boolean) => {

@@ -26,7 +26,7 @@
     "@types/react": ">=16.8.0 || >=17.0.0"
   },
   "devDependencies": {
-    "typescript": "~3.8.0"
+    "typescript": "^4.1.2"
   },
   "dependencies": {
     "camel-case": "~3.0.0",
