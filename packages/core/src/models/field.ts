@@ -36,7 +36,7 @@ import {
   IFieldState,
   IFieldResetOptions
 } from '../types'
-import { isNumberIndex, validateField } from '../shared'
+import { isNumberIndex, setFieldValue, validateField } from '../shared'
 
 export class Field<
   Decorator extends JSXComponent = any,
@@ -365,9 +365,7 @@ export class Field<
 
   setValue = (value?: ValueType) => {
     if (this.void) return
-    this.modified = true
-    this.form.modified = true
-    this.form.setValuesIn(this.path, value)
+    setFieldValue(this, value)
   }
 
   setCacheValue = (value?: ValueType) => {
@@ -458,14 +456,6 @@ export class Field<
     this.mounted = false
     this.unmounted = true
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
-    if (FormPath.existIn(this.form.values, this.path)) {
-      if (
-        this.computedDisplay === 'none' ||
-        this.computedDisplay === 'visibility'
-      ) {
-        this.setValue()
-      }
-    }
   }
 
   onInput = (...args: any[]) => {

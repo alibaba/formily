@@ -20,11 +20,18 @@ const FormItem = props => {
 }
 
 export default () => {
-
   const form = useForm({
     pattern: 'disabled',
+    middlewares: [
+      state => {
+        return {
+          ...state,
+          decorator: [FormItem]
+        }
+      }
+    ],
     effects: () => {
-      onFieldReact('aa.cc.*.dd', (field) => {
+      onFieldReact('aa.cc.*.dd', field => {
         field.setComponentProps({
           disabled: field.getSibling('ee')?.value === '123'
         })
@@ -43,7 +50,7 @@ export default () => {
               <div>
                 {value.map((item, index) => {
                   return (
-                    <div key={index}>
+                    <div key={item.id}>
                       <Field
                         name={`${index}.dd`}
                         required
@@ -65,7 +72,7 @@ export default () => {
                         下移
                       </button>
                       <button
-                        onClick={(e) => {
+                        onClick={e => {
                           e.preventDefault()
                           field.remove(index)
                         }}
@@ -76,9 +83,9 @@ export default () => {
                   )
                 })}
                 <button
-                  onClick={(e) => {
+                  onClick={e => {
                     e.preventDefault()
-                    field.push({id:new Date().getTime()})
+                    field.push({ id: new Date().getTime() })
                   }}
                 >
                   添加
