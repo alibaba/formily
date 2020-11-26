@@ -45,10 +45,10 @@ export class ArrayField<
     return last
   }
 
-  insert = (index: number, value: any) => {
+  insert = (index: number, ...items: any[]) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
-    copy.splice(index, 0, value)
+    copy.splice(index, 0, items)
     setFieldValue(this, copy)
   }
 
