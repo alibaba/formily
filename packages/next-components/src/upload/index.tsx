@@ -93,14 +93,14 @@ const getImageByUrl = (url, options) => {
 const normalizeFileList = fileList => {
   if (fileList && fileList.length) {
     return fileList.map(file => {
-      return {
+      return file.response ? {
         name: file.name,
         downloadURL: file.downloadURL || file.imgURL,
         ...file.response,
         imgURL: file.imgURL || getImageByUrl(file.downloadURL, {
           exclude: ['.png', '.jpg', '.jpeg', '.gif']
         })
-      }
+      } : file;
     })
   }
   return []

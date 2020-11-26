@@ -106,7 +106,7 @@ const getImageByUrl = (url, options) => {
 const normalizeFileList = fileList => {
   if (fileList && fileList.length) {
     return fileList.map(file => {
-      return {
+      return file.response ? {
         uid: file.uid,
         status: file.status,
         name: file.name,
@@ -115,7 +115,7 @@ const normalizeFileList = fileList => {
         thumbUrl: file.imgURL || getImageByUrl(file.downloadURL || file.url, {
           exclude: ['.png', '.jpg', '.jpeg', '.gif']
         })
-      }
+      } : file;
     })
   }
   return []
