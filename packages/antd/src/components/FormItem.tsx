@@ -26,6 +26,9 @@ const computeStatus = (props: any) => {
   if (props.warnings && props.warnings.length) {
     return 'warning'
   }
+  if(props.active){
+    return 'success'
+  }
   return ''
 }
 
