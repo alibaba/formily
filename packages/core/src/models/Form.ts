@@ -6,9 +6,9 @@ import {
   isFn,
   isRegExp,
   isValid,
-  map,
   uid,
-  globalThisPolyfill
+  globalThisPolyfill,
+  isEqual
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -49,8 +49,8 @@ export class Form {
   heart: Heart
   feedback: Feedback
   fields: Record<string, Field> = {}
-  requests: FormRequests = {}
-  displayName = 'Form'
+  protected requests: FormRequests = {}
+  readonly displayName = 'Form'
   constructor(props: IFormProps) {
     this.initialize(props)
     this.makeObservable()
@@ -372,12 +372,13 @@ export class Form {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
+    this.query('*', field => {
+      field.dispose()
+    })
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }
   }
-
-  /**节点模型**/
 
   toJSON = (): IFormState => {
     return {
@@ -400,17 +401,66 @@ export class Form {
     }
   }
 
-  fromJSON = (state: IFormState) => {}
+  fromJSON = (state: IFormState) => {
+    if (isValid(state.id) && !isEqual(this.id, state.id)) {
+      this.id = state.id
+    }
+    if (
+      isValid(state.initialized) &&
+      !isEqual(this.initialized, state.initialized)
+    ) {
+      this.initialized = state.initialized
+    }
+    if (
+      isValid(state.validating) &&
+      !isEqual(this.validating, state.validating)
+    ) {
+      this.validating = state.validating
+    }
+    if (
+      isValid(state.submitting) &&
+      !isEqual(this.submitting, state.submitting)
+    ) {
+      this.submitting = state.submitting
+    }
+    if (isValid(state.values) && !isEqual(this.values, state.values)) {
+      this.values = state.values
+    }
+    if (
+      isValid(state.initialValues) &&
+      !isEqual(this.initialValues, state.initialValues)
+    ) {
+      this.initialValues = state.initialValues
+    }
+    if (isValid(state.mounted) && !isEqual(this.mounted, state.mounted)) {
+      this.mounted = state.mounted
+    }
+    if (isValid(state.unmounted) && !isEqual(this.unmounted, state.unmounted)) {
+      this.unmounted = state.unmounted
+    }
+    if (isValid(state.modified) && !isEqual(this.modified, state.modified)) {
+      this.modified = state.modified
+    }
+    if (isValid(state.pattern) && !isEqual(this.pattern, state.pattern)) {
+      this.pattern = state.pattern
+    }
+    if (isValid(state.errors) && !isEqual(this.errors, state.errors)) {
+      this.feedback.update(...state.errors)
+    }
+    if (isValid(state.warnings) && !isEqual(this.warnings, state.warnings)) {
+      this.feedback.update(...state.warnings)
+    }
+    if (isValid(state.successes) && !isEqual(this.successes, state.successes)) {
+      this.feedback.update(...state.successes)
+    }
+  }
 
   getFormGraph = (): IFormGraph => {
-    const graph = Object.assign(
-      map(this.fields, field => {
-        return field.toJSON()
-      }),
-      {
-        '': this.toJSON()
-      }
-    )
+    const graph = {}
+    graph[''] = this.toJSON()
+    this.query('*', (field, path) => {
+      graph[path] = field.toJSON()
+    })
     return graph
   }
 

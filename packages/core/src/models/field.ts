@@ -47,6 +47,7 @@ export class Field<
   Component extends JSXComponent = any,
   ValueType = any
 > {
+  displayName = 'Field'
   void: boolean
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
@@ -67,10 +68,10 @@ export class Field<
   form: Form
   path: FormPath
   props: IFieldProps<Decorator, Component>
-  caches: FieldCaches = {}
-  requests: FieldRequests = {}
-  disposers: IReactionDisposer[] = []
-  displayName = 'Field'
+  
+  protected caches: FieldCaches = {}
+  protected requests: FieldRequests = {}
+  protected disposers: IReactionDisposer[] = []
 
   constructor(
     path: FormPath,
