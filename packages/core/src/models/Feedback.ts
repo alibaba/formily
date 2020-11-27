@@ -3,7 +3,7 @@ import { action, makeObservable, observable } from 'mobx'
 import {
   FeedbackInformation,
   IFeedbackInformation,
-  IFeedbackVisitor
+  IFeedbackReducer
 } from '../types'
 export class Feedback {
   informations: FeedbackInformation[] = []
@@ -13,7 +13,7 @@ export class Feedback {
       informations: observable,
       update: action,
       clear: action,
-      traverse: action
+      reduce: action
     })
   }
 
@@ -43,8 +43,8 @@ export class Feedback {
     })
   }
 
-  traverse = (visitor?: IFeedbackVisitor) => {
-    this.informations = this.informations.map(visitor)
+  reduce = (reducer?: IFeedbackReducer) => {
+    this.informations = this.informations.reduce(reducer, [])
   }
 
   update = (...infos: IFeedbackInformation[]) => {

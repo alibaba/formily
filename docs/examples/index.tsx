@@ -32,9 +32,9 @@ export default () => {
     ],
     effects: () => {
       onFieldReact('aa.cc.*.dd', field => {
-        field.setComponentProps({
-          disabled: field.getSibling('ee')?.value === '123'
-        })
+        field.setPattern(
+          field.getSibling('ee')?.value === '123' ? 'disabled' : 'editable'
+        )
       })
     }
   })

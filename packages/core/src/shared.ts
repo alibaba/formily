@@ -77,6 +77,13 @@ export const spliceArrayState = (
     const index = Number(afterStr.match(/^\d+/))
     return index > startIndex + deleteCount - 1
   }
+  const isDeleteNode = (identifier: string) => {
+    const afterStr = identifier.slice(basePath.length + 1)
+    const index = Number(afterStr.match(/^\d+/))
+    return deleteCount > 0
+      ? index >= startIndex && index < startIndex + deleteCount
+      : false
+  }
   const moveIndex = (identifier: string) => {
     if (moveStep === 0) return identifier
     const preStr = identifier.slice(0, basePath.length + 1)
@@ -87,6 +94,7 @@ export const spliceArrayState = (
 
   runInAction(() => {
     const changes = {}
+    const deletes = {}
     each(fields, (field, identifier) => {
       if (!isArrayChildren(identifier)) {
         results[identifier] = field
@@ -95,14 +103,17 @@ export const spliceArrayState = (
         results[newIdentifier] = field
         changes[identifier] = newIdentifier
         field.path = FormPath.parse(newIdentifier)
+      } else if (isDeleteNode(identifier)) {
+        deletes[identifier] = true
       } else {
         results[identifier] = field
       }
     })
     field.form.fields = results
-    field.form.feedback.traverse(info => {
+    field.form.feedback.reduce((infos, info) => {
+      if (deletes[info.path]) return infos
       info.path = changes[info.path] || info.path
-      return info
+      return infos.concat(info)
     })
   })
 }
@@ -159,9 +170,9 @@ export const exchangeArrayState = (
       }
     })
     field.form.fields = results
-    field.form.feedback.traverse(info => {
+    field.form.feedback.reduce((infos, info) => {
       info.path = changes[info.path] || info.path
-      return info
+      return infos.concat(info)
     })
   })
 }

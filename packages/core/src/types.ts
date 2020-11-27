@@ -71,8 +71,12 @@ export interface IHeartProps<Context> {
   context?: Context
 }
 
-export interface IFeedbackVisitor {
-  (informations: FeedbackInformation): FeedbackInformation
+export interface IFeedbackReducer {
+  (
+    informations: FeedbackInformation[],
+    infomation: FeedbackInformation,
+    index: number
+  ): FeedbackInformation[]
 }
 
 export interface IFeedbackInformation {
