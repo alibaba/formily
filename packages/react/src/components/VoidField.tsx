@@ -3,11 +3,11 @@ import { useForm, useField } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { MutableField } from './MutableField'
 import { FieldContext } from '../shared'
-import { IReactComponent, IFieldProps } from '../types'
+import { JSXComponent, IFieldProps } from '../types'
 
 export const VoidField = <
-  D extends IReactComponent,
-  C extends IReactComponent
+  D extends JSXComponent,
+  C extends JSXComponent
 >(
   props: IFieldProps<D, C>
 ) => {

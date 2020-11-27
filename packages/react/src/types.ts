@@ -1,4 +1,4 @@
-export type IReactComponent =
+export type JSXComponent =
   | keyof JSX.IntrinsicElements
   | React.JSXElementConstructor<any>
 
@@ -16,8 +16,8 @@ export interface IFormSpyProps {
 }
 
 export interface IFieldProps<
-  D extends IReactComponent,
-  C extends IReactComponent,
+  D extends JSXComponent,
+  C extends JSXComponent,
   Field = FormilyCore.Field
 > extends FormilyCore.ICreateFieldProps<D, C> {
   children?:

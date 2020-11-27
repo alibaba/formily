@@ -9,7 +9,7 @@ const __FORM_HOOK_ENVS__ = {
   effectEnd: false
 }
 
-export const createEffectHook = <
+export const createEffect = <
   F extends (payload: any, ...ctxs: any[]) => AnyFunction
 >(
   type: string,

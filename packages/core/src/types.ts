@@ -1,8 +1,6 @@
 import { Validator } from '@formily/validator'
 import { FormPath } from '@formily/shared'
-import { Form } from './models/Form'
-import { Field } from './models/Field'
-import { LifeCycle } from './models/LifeCycle'
+import { Form, Field, LifeCycle } from './models'
 
 export type AnyFunction = (...args: any[]) => any
 
@@ -50,7 +48,7 @@ export enum LifeCycleTypes {
 
   ON_FIELD_INIT = 'onFieldInit',
   ON_FIELD_CHANGE = 'onFieldChange',
-  ON_FIELD_INPUT_CHANGE = 'onFieldInputChange',
+  ON_FIELD_INPUT_VALUE_CHANGE = 'onFieldInputValueChange',
   ON_FIELD_VALUE_CHANGE = 'onFieldValueChange',
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
   ON_FIELD_VALIDATE_START = 'onFieldValidateStart',
@@ -220,4 +218,15 @@ export interface IFieldState {
 }
 export interface IFieldMiddleware {
   (state: IFieldState, field: Field): IFieldState
+}
+
+export interface ISpliceArrayStateProps {
+  startIndex?: number
+  deleteCount?: number
+  insertCount?: number
+}
+
+export interface IExchangeArrayStateProps {
+  fromIndex?: number
+  toIndex?: number
 }

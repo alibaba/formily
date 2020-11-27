@@ -57,7 +57,7 @@ export class Form {
     this.makeSubscrible()
   }
 
-  initialize(props: IFormProps) {
+  protected initialize(props: IFormProps) {
     this.id = uid()
     this.feedback = new Feedback()
     this.props = { ...Form.defaultProps, ...props }
@@ -72,7 +72,7 @@ export class Form {
     this.initialValues = this.props.initialValues || {}
   }
 
-  makeObservable() {
+  protected makeObservable() {
     makeObservable(this, {
       fields: observable,
       initialized: observable,
@@ -101,7 +101,7 @@ export class Form {
     })
   }
 
-  makeSubscrible() {
+  protected makeSubscrible() {
     this.heart = new Heart({
       lifecycles: this.lifecycles,
       context: this

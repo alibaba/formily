@@ -9,7 +9,10 @@ import {
   each,
   isEqual
 } from '@formily/shared'
-import { ValidatorTriggerType, parseDescriptions } from '@formily/validator'
+import {
+  ValidatorTriggerType,
+  parseValidatorDescriptions
+} from '@formily/validator'
 import {
   action,
   computed,
@@ -36,7 +39,7 @@ import {
   IFieldState,
   IFieldResetOptions
 } from '../types'
-import { isNumberIndex, setFieldValue, validateField } from '../shared'
+import { isNumberIndex, internalValidate } from '../shared'
 
 export class Field<
   Decorator extends JSXComponent = any,
@@ -78,14 +81,18 @@ export class Field<
     this.makeReactive()
   }
 
-  initialize(
+  protected getFieldProps(props: IFieldProps<Decorator, Component>) {
+    return props
+  }
+
+  protected initialize(
     path: FormPath,
     props: IFieldProps<Decorator, Component>,
     form: Form
   ) {
     this.form = form
     this.path = path
-    this.props = { ...Field.defaultProps, ...props }
+    this.props = this.getFieldProps({ ...Field.defaultProps, ...props })
     this.initialized = false
     this.loading = false
     this.validating = false
@@ -106,7 +113,7 @@ export class Field<
     this.setRequired(this.props.required)
   }
 
-  makeObservable() {
+  protected makeObservable() {
     makeObservable(this, {
       void: observable,
       display: observable,
@@ -150,7 +157,7 @@ export class Field<
     })
   }
 
-  makeReactive() {
+  protected makeReactive() {
     this.disposers.push(
       reaction(
         () => this.value,
@@ -245,7 +252,9 @@ export class Field<
   }
 
   get required() {
-    return parseDescriptions(this.validator).some(desc => desc.required)
+    return parseValidatorDescriptions(this.validator).some(
+      desc => desc.required
+    )
   }
 
   getState = (): IFieldState => {
@@ -324,7 +333,7 @@ export class Field<
 
   setRequired = (required: boolean) => {
     if (!isBool(required)) return
-    const hasRequired = parseDescriptions(this.validator).some(
+    const hasRequired = parseValidatorDescriptions(this.validator).some(
       desc => 'required' in desc
     )
     if (hasRequired) {
@@ -365,7 +374,9 @@ export class Field<
 
   setValue = (value?: ValueType) => {
     if (this.void) return
-    setFieldValue(this, value)
+    this.modified = true
+    this.form.modified = true
+    this.form.setValuesIn(this.path, value)
   }
 
   setCacheValue = (value?: ValueType) => {
@@ -465,7 +476,7 @@ export class Field<
     this.modified = true
     this.form.modified = true
     this.form.setValuesIn(this.path, args[0])
-    this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_CHANGE, this)
+    this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     this.validate('onInput')
   }
@@ -483,12 +494,12 @@ export class Field<
 
   validate = async (triggerType?: ValidatorTriggerType) => {
     if (!triggerType) {
-      const allTriggerTypes = parseDescriptions(this.validator).map(
+      const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
         desc => desc.triggerType
       )
       const results = {}
       for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await validateField(this, allTriggerTypes[i])
+        const payload = await internalValidate(this, allTriggerTypes[i])
         each(payload, (result, key) => {
           results[key] = results[key] || []
           results[key] = results[key].concat(result)
@@ -498,7 +509,7 @@ export class Field<
     }
     this.setValidating(true)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
-    const results = await validateField(this, triggerType)
+    const results = await internalValidate(this, triggerType)
     this.setValidating(false)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     return results

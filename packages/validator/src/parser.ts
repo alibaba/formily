@@ -31,7 +31,7 @@ const getRuleMessage = (rule: ValidatorRules, type: string) => {
   }
 }
 
-export const parseDescription = (
+export const parseValidatorDescription = (
   description: ValidatorDescription
 ): ValidatorRules => {
   let rules: ValidatorRules = {}
@@ -46,16 +46,16 @@ export const parseDescription = (
   return rules
 }
 
-export const parseDescriptions = <Context = any>(
+export const parseValidatorDescriptions = <Context = any>(
   validator: Validator<Context>
 ): ValidatorRules[] => {
   const array = isArr(validator) ? validator : [validator]
   return array.map(description => {
-    return parseDescription(description)
+    return parseValidatorDescription(description)
   })
 }
 
-export const parseRules = (
+export const parseValidatorRules = (
   rules: ValidatorRules
 ): ValidatorParsedFunction[] => {
   const rulesKeys = Object.keys(rules || {}).sort(key =>
@@ -119,9 +119,9 @@ export const parseValidator = <Context = any>(
 ): ValidatorParsedFunction<Context>[] => {
   const array = isArr(validator) ? validator : [validator]
   return array.reduce((buf, description) => {
-    const rules = parseDescription(description)
+    const rules = parseValidatorDescription(description)
     if (options.triggerType && options.triggerType !== rules.triggerType)
       return buf
-    return rules ? buf.concat(parseRules(rules)) : buf
+    return rules ? buf.concat(parseValidatorRules(rules)) : buf
   }, [])
 }

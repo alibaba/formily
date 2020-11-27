@@ -3,9 +3,9 @@ import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { MutableField } from './MutableField'
 import { FieldContext } from '../shared'
-import { IReactComponent, IFieldProps } from '../types'
+import { JSXComponent, IFieldProps } from '../types'
 
-export const Field = <D extends IReactComponent, C extends IReactComponent>(
+export const Field = <D extends JSXComponent, C extends JSXComponent>(
   props: IFieldProps<D, C>
 ) => {
   const form = useForm()
