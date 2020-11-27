@@ -472,7 +472,6 @@ export class Form {
         } else {
           this.fields[path] = new Field(FormPath.parse(path), {}, this)
           this.fields[path].fromJSON(state)
-          this.fields[path].onInit()
         }
       } else if (Form.isFormState(state)) {
         this.fromJSON(state)
