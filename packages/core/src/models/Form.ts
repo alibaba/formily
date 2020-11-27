@@ -25,7 +25,7 @@ import {
   IFormProps,
   IFieldResetOptions
 } from '../types'
-import { transformAccessorPath } from '../shared'
+import { ignoreVoidPath } from '../shared'
 import { getLifecyclesFromEffects } from '../effect'
 import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
@@ -212,19 +212,19 @@ export class Form {
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.values, transformAccessorPath(pattern, this), value)
+    FormPath.setIn(this.values, ignoreVoidPath(pattern, this), value)
   }
 
   deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.values, transformAccessorPath(pattern, this))
+    FormPath.deleteIn(this.values, ignoreVoidPath(pattern, this))
   }
 
   existValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.values, transformAccessorPath(pattern, this))
+    return FormPath.existIn(this.values, ignoreVoidPath(pattern, this))
   }
 
   getValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.values, transformAccessorPath(pattern, this))
+    return FormPath.getIn(this.values, ignoreVoidPath(pattern, this))
   }
 
   setInitialValues = (initialValues: any) => {
@@ -235,26 +235,26 @@ export class Form {
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
     FormPath.setIn(
       this.initialValues,
-      transformAccessorPath(pattern, this),
+      ignoreVoidPath(pattern, this),
       initialValue
     )
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, transformAccessorPath(pattern, this))
+    FormPath.deleteIn(this.initialValues, ignoreVoidPath(pattern, this))
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
     return FormPath.existIn(
       this.initialValues,
-      transformAccessorPath(pattern, this)
+      ignoreVoidPath(pattern, this)
     )
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
     return FormPath.getIn(
       this.initialValues,
-      transformAccessorPath(pattern, this)
+      ignoreVoidPath(pattern, this)
     )
   }
 

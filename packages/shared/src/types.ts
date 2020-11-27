@@ -14,6 +14,8 @@ export const isPlainObj = isType<object>('Object')
 export const isStr = isType<string>('String')
 export const isBool = isType<boolean>('Boolean')
 export const isNum = isType<number>('Number')
+export const isNumberLike = (index: any): index is number =>
+  isNum(index) || /^\d+$/.test(index)
 export const isObj = (val: unknown): val is object => typeof val === 'object'
 export const isRegExp = isType<RegExp>('RegExp')
 export const isReactElement = (obj: any): obj is React.ReactElement<any> =>

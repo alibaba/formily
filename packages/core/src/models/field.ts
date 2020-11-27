@@ -7,7 +7,8 @@ import {
   isFn,
   isBool,
   each,
-  isEqual
+  isEqual,
+  isNumberLike
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -39,7 +40,7 @@ import {
   IFieldState,
   IFieldResetOptions
 } from '../types'
-import { isNumberIndex, internalValidate } from '../shared'
+import { internalValidate } from '../shared'
 
 export class Field<
   Decorator extends JSXComponent = any,
@@ -208,7 +209,7 @@ export class Field<
   get index() {
     for (let i = this.path?.segments.length - 1; i >= 0; i--) {
       const item = this.path.segments[i]
-      if (isNumberIndex(item)) return item
+      if (isNumberLike(item)) return item
     }
   }
 

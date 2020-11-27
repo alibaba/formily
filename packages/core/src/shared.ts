@@ -1,4 +1,4 @@
-import { FormPath, FormPathPattern, isNum, each } from '@formily/shared'
+import { FormPath, FormPathPattern, each } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
 import { Form, Field } from './models'
@@ -22,7 +22,7 @@ export const pascalCase = (value: string) => {
   return input
 }
 
-export const transformAccessorPath = (pattern: FormPathPattern, form: Form) => {
+export const ignoreVoidPath = (pattern: FormPathPattern, form: Form) => {
   const path = FormPath.parse(pattern)
   if (path.isMatchPattern)
     throw new Error('Cannot use matching mode when read or writing values')
@@ -37,9 +37,6 @@ export const transformAccessorPath = (pattern: FormPathPattern, form: Form) => {
     return dp
   }, new FormPath(''))
 }
-
-export const isNumberIndex = (index: any): index is number =>
-  isNum(index) || /^\d+$/.test(index)
 
 export const internalValidate = async (
   field: Field,
