@@ -80,6 +80,7 @@ export class Field<
     this.initialize(path, props, form)
     this.makeObservable()
     this.makeReactive()
+    this.onInit()
   }
 
   protected getFieldProps(props: IFieldProps<Decorator, Component>) {
@@ -639,6 +640,14 @@ export class Field<
     ) {
       this.setValidating(state.validating)
     }
+  }
+
+  dispose = () => {
+    this.disposers.forEach(dispose => {
+      if (isFn(dispose)) {
+        dispose()
+      }
+    })
   }
 
   static defaultProps: IFieldProps = {

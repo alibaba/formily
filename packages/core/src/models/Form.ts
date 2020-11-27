@@ -55,6 +55,7 @@ export class Form {
     this.initialize(props)
     this.makeObservable()
     this.makeSubscrible()
+    this.onInit()
   }
 
   protected initialize(props: IFormProps) {
@@ -106,7 +107,6 @@ export class Form {
       lifecycles: this.lifecycles,
       context: this
     })
-    this.onInit()
   }
 
   get valid() {
@@ -145,10 +145,7 @@ export class Form {
     const identifier = path.toString()
     if (!this.fields[identifier]) {
       this.fields[identifier] = new Field(path, props, this)
-      this.fields[identifier].onInit()
     }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
     return this.fields[identifier]
   }
 
@@ -162,10 +159,7 @@ export class Form {
     const identifier = path.toString()
     if (!this.fields[identifier]) {
       this.fields[identifier] = new VoidField(path, props, this)
-      this.fields[identifier].onInit()
     }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
     return this.fields[identifier]
   }
 
@@ -179,10 +173,7 @@ export class Form {
     const identifier = path.toString()
     if (!this.fields[identifier]) {
       this.fields[identifier] = new ArrayField(path, props, this)
-      this.fields[identifier].onInit()
     }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
     return this.fields[identifier]
   }
 
@@ -196,10 +187,7 @@ export class Form {
     const identifier = path.toString()
     if (!this.fields[identifier]) {
       this.fields[identifier] = new ObjectField(path, props, this)
-      this.fields[identifier].onInit()
     }
-    this.fields[identifier].path = path
-    this.fields[identifier].form = this
     return this.fields[identifier]
   }
 
@@ -245,17 +233,11 @@ export class Form {
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(
-      this.initialValues,
-      ignoreVoidPath(pattern, this)
-    )
+    return FormPath.existIn(this.initialValues, ignoreVoidPath(pattern, this))
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(
-      this.initialValues,
-      ignoreVoidPath(pattern, this)
-    )
+    return FormPath.getIn(this.initialValues, ignoreVoidPath(pattern, this))
   }
 
   setSubmitting = (submitting: boolean) => {
