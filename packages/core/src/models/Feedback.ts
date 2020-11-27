@@ -1,6 +1,10 @@
 import { FormPath, isArr } from '@formily/shared'
 import { action, makeObservable, observable } from 'mobx'
-import { FeedbackInformation } from '../types'
+import {
+  FeedbackInformation,
+  IFeedbackInformation,
+  IFeedbackVisitor
+} from '../types'
 export class Feedback {
   informations: FeedbackInformation[] = []
   constructor(informations?: FeedbackInformation[]) {
@@ -8,7 +12,8 @@ export class Feedback {
     makeObservable(this, {
       informations: observable,
       update: action,
-      clear: action
+      clear: action,
+      traverse: action
     })
   }
 
@@ -38,7 +43,11 @@ export class Feedback {
     })
   }
 
-  update = (...infos: FeedbackInformation[]) => {
+  traverse = (visitor?: IFeedbackVisitor) => {
+    this.informations = this.informations.map(visitor)
+  }
+
+  update = (...infos: IFeedbackInformation[]) => {
     if (infos.length > 1) return infos.forEach(info => this.update(info))
     if (infos.length === 0) return
     const info = infos[0]
@@ -56,7 +65,7 @@ export class Feedback {
     }
   }
 
-  find = (info: Partial<FeedbackInformation>) => {
+  find = (info: IFeedbackInformation) => {
     return this.informations.filter(item => {
       if (info.type && info.type !== item.type) return false
       if (info.code && info.code !== item.code) return false
@@ -69,7 +78,7 @@ export class Feedback {
     })
   }
 
-  clear = (info?: Partial<FeedbackInformation>) => {
+  clear = (info?: IFeedbackInformation) => {
     this.informations = this.informations.filter(item => {
       if (info.type && info.type !== item.type) return true
       if (info.code && info.code !== item.code) return true

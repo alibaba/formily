@@ -71,11 +71,23 @@ export interface IHeartProps<Context> {
   context?: Context
 }
 
-export type FeedbackInformation = {
+export interface IFeedbackVisitor {
+  (informations: FeedbackInformation): FeedbackInformation
+}
+
+export interface IFeedbackInformation {
   triggerType?: string
-  type: string
+  type?: string
   code?: string
   path?: FormPathPattern
+  messages?: FeedbackMessage
+}
+
+export type FeedbackInformation = {
+  triggerType?: string
+  type?: string
+  code?: string
+  path?: string
   messages?: FeedbackMessage
 }
 

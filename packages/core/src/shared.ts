@@ -86,18 +86,24 @@ export const spliceArrayState = (
   }
 
   runInAction(() => {
+    const changes = {}
     each(fields, (field, identifier) => {
       if (!isArrayChildren(identifier)) {
         results[identifier] = field
       } else if (isAfterNode(identifier)) {
         const newIdentifier = moveIndex(identifier)
-        results[basePath] = field
+        results[newIdentifier] = field
+        changes[identifier] = newIdentifier
         field.path = FormPath.parse(newIdentifier)
       } else {
         results[identifier] = field
       }
     })
     field.form.fields = results
+    field.form.feedback.traverse(info => {
+      info.path = changes[info.path] || info.path
+      return info
+    })
   })
 }
 
@@ -134,21 +140,28 @@ export const exchangeArrayState = (
     return `${preStr}${afterStr.replace(/^\d+/, String(index))}`
   }
   runInAction(() => {
+    const changes = {}
     each(fields, (field, identifier) => {
       if (!isArrayChildren(identifier)) {
         results[identifier] = field
       } else if (isFromNode(identifier)) {
         const newIdentifier = moveIndex(identifier, toIndex)
-        results[basePath] = field
+        results[newIdentifier] = field
+        changes[identifier] = newIdentifier
         field.path = FormPath.parse(newIdentifier)
       } else if (isToNode(identifier)) {
         const newIdentifier = moveIndex(identifier, fromIndex)
-        results[basePath] = field
+        results[newIdentifier] = field
+        changes[identifier] = newIdentifier
         field.path = FormPath.parse(newIdentifier)
       } else {
         results[identifier] = field
       }
     })
     field.form.fields = results
+    field.form.feedback.traverse(info => {
+      info.path = changes[info.path] || info.path
+      return info
+    })
   })
 }
