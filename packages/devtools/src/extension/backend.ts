@@ -46,6 +46,11 @@ send({
   type: 'init'
 })
 
+interface IIdleDeadline {
+  didTimeout: boolean
+  timeRemaining: () => DOMHighResTimeStamp
+}
+
 const HOOK = {
   hasFormilyInstance: false,
   hasOpenDevtools: false,
@@ -62,13 +67,12 @@ const HOOK = {
     form.subscribe(() => {
       clearTimeout(timer)
       timer = setTimeout(() => {
-        globalThis.requestIdleCallback(() => {
-          globalThis.requestAnimationFrame(() => {
-            send({
-              type: 'update',
-              id,
-              form
-            })
+        globalThis.requestIdleCallback((deadline: IIdleDeadline) => {
+          if (deadline.timeRemaining() < 16 || !this.store[id]) return
+          send({
+            type: 'update',
+            id,
+            form
           })
         })
       }, 300)

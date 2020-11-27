@@ -35,6 +35,7 @@ export default styled(({ className, dataSource }) => {
   bottom: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
   color: #36d4c7;
   background: #282c34;
 `

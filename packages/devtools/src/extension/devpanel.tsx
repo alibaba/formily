@@ -32,18 +32,14 @@ const Devtools = () => {
     backgroundPageConnection.onMessage.addListener(({ type, id, graph }) => {
       if (type == 'init') {
         store = {}
-      } else if (type !== 'uninstall' && graph) {
-        const data = JSON.parse(graph)
-        if (Object.keys(data || {}).length) {
-          store[id] = data
-        }
+      } else if (type !== 'uninstall') {
+        store[id] = JSON.parse(graph)
       } else {
         delete store[id]
       }
       update()
     })
   }, [])
-
   return <App dataSource={state} />
 }
 
