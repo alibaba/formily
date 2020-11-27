@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { isFn } from '@formily/shared'
-import { observer } from '../shared'
+import { observer } from 'mobx-react-lite'
 interface IInternalFieldProps {
   field: FormilyCore.Field
   children?:
