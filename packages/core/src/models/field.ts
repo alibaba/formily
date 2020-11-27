@@ -40,7 +40,7 @@ import {
   IFieldState,
   IFieldResetOptions
 } from '../types'
-import { internalValidate } from '../shared'
+import { validateToFeedback } from '../shared'
 
 export class Field<
   Decorator extends JSXComponent = any,
@@ -500,7 +500,7 @@ export class Field<
       )
       const results = {}
       for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await internalValidate(this, allTriggerTypes[i])
+        const payload = await validateToFeedback(this, allTriggerTypes[i])
         each(payload, (result, key) => {
           results[key] = results[key] || []
           results[key] = results[key].concat(result)
@@ -510,7 +510,7 @@ export class Field<
     }
     this.setValidating(true)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
-    const results = await internalValidate(this, triggerType)
+    const results = await validateToFeedback(this, triggerType)
     this.setValidating(false)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     return results

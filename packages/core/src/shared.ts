@@ -1,26 +1,8 @@
-import { FormPath, FormPathPattern, each } from '@formily/shared'
+import { FormPath, FormPathPattern, each, pascalCase } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
 import { Form, Field } from './models'
 import { ISpliceArrayStateProps, IExchangeArrayStateProps } from './types'
-
-export const pascalCase = (value: string) => {
-  const titlecase = (input: string) =>
-    input[0].toLocaleUpperCase() + input.slice(1)
-  if (value === null || value === void 0) return ''
-  if (typeof value.toString !== 'function') return ''
-
-  const input = value.toString().trim()
-  if (input === '') return ''
-  if (input.length === 1) return input.toLocaleUpperCase()
-
-  const match = input.match(/[a-zA-Z0-9]+/g)
-  if (match) {
-    return match.map(m => titlecase(m)).join('')
-  }
-
-  return input
-}
 
 export const ignoreVoidPath = (pattern: FormPathPattern, form: Form) => {
   const path = FormPath.parse(pattern)
@@ -38,7 +20,7 @@ export const ignoreVoidPath = (pattern: FormPathPattern, form: Form) => {
   }, new FormPath(''))
 }
 
-export const internalValidate = async (
+export const validateToFeedback = async (
   field: Field,
   triggerType?: ValidatorTriggerType
 ) => {
