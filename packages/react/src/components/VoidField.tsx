@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm, useField } from '../hooks'
 import { useAutoRecycle } from '../hooks/useAutoRecycle'
-import { MutableField } from './MutableField'
+import { ReactiveField } from './ReactiveField'
 import { FieldContext } from '../shared'
 import { JSXComponent, IFieldProps } from '../types'
 
@@ -15,7 +15,7 @@ export const VoidField = <D extends JSXComponent, C extends JSXComponent>(
   )
   return (
     <FieldContext.Provider value={field}>
-      <MutableField field={field}>{props.children}</MutableField>
+      <ReactiveField field={field}>{props.children}</ReactiveField>
     </FieldContext.Provider>
   )
 }

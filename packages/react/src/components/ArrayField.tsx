@@ -3,7 +3,7 @@ import { useForm, useField } from '../hooks'
 import { useAutoRecycle } from '../hooks/useAutoRecycle'
 import { FieldContext } from '../shared'
 import { JSXComponent, IFieldProps } from '../types'
-import { MutableField } from './MutableField'
+import { ReactiveField } from './ReactiveField'
 
 export const ArrayField = <D extends JSXComponent, C extends JSXComponent>(
   props: IFieldProps<D, C, FormilyCore.ArrayField>
@@ -15,7 +15,7 @@ export const ArrayField = <D extends JSXComponent, C extends JSXComponent>(
   )
   return (
     <FieldContext.Provider value={field}>
-      <MutableField field={field}>{props.children}</MutableField>
+      <ReactiveField field={field}>{props.children}</ReactiveField>
     </FieldContext.Provider>
   )
 }

@@ -1,14 +1,15 @@
 import React, { Fragment } from 'react'
-import { isFn } from '@formily/shared'
 import { observer } from 'mobx-react-lite'
-interface IInternalFieldProps {
+import { isFn } from '@formily/shared'
+
+interface IReactiveFieldProps {
   field: FormilyCore.Field
   children?:
     | ((field: FormilyCore.Field, form: FormilyCore.Form) => React.ReactChild)
     | React.ReactNode
 }
 
-const MutableInnerField: React.FC<IInternalFieldProps> = ({
+const ReactiveInternal: React.FC<IReactiveFieldProps> = ({
   field,
   children
 }) => {
@@ -37,6 +38,6 @@ const MutableInnerField: React.FC<IInternalFieldProps> = ({
   return <Fragment>{results}</Fragment>
 }
 
-export const MutableField = observer(MutableInnerField)
+ReactiveInternal.displayName = 'ReactiveField'
 
-MutableField.displayName = 'MutableField'
+export const ReactiveField = observer(ReactiveInternal)
