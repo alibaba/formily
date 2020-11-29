@@ -47,8 +47,8 @@ export class Field<
   ValueType = any
 > {
   displayName = 'Field'
-  selfDisplay: FieldDisplayTypes
-  selfPattern: FieldPatternTypes
+  display_: FieldDisplayTypes
+  pattern_: FieldPatternTypes
   loading: boolean
   validating: boolean
   modified: boolean
@@ -103,8 +103,8 @@ export class Field<
     this.mounted = false
     this.unmounted = false
     this.inputValues = []
-    this.selfDisplay = this.props.display
-    this.selfPattern = this.props.pattern
+    this.display_ = this.props.display
+    this.pattern_ = this.props.pattern
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
@@ -115,8 +115,8 @@ export class Field<
 
   protected makeObservable() {
     makeObservable(this, {
-      selfDisplay: observable,
-      selfPattern: observable,
+      display_: observable,
+      pattern_: observable,
       loading: observable,
       validating: observable,
       modified: observable,
@@ -130,6 +130,11 @@ export class Field<
       validator: observable.ref,
       decorator: observable.ref,
       component: observable.ref,
+      errors: computed,
+      warnings: computed,
+      successes: computed,
+      display: computed,
+      pattern: computed,
       value: computed,
       initialValue: computed,
       setDisplay: action,
@@ -219,28 +224,18 @@ export class Field<
   }
 
   get display() {
-    if (this.selfDisplay) return this.selfDisplay
+    if (this.display_) return this.display_
     return this.parent?.display || 'visibility'
   }
 
   get pattern() {
-    if (this.selfPattern) return this.selfPattern
+    if (this.pattern_) return this.pattern_
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
   get required() {
     return parseValidatorDescriptions(this.validator).some(
       desc => desc.required
-    )
-  }
-
-  get state(): IFieldState {
-    const baseState = this.toJSON()
-    return (
-      this.form.props?.middlewares?.reduce((buf, middleware) => {
-        if (!isFn(middleware)) return buf
-        return { ...buf, ...middleware(buf, this) }
-      }, baseState) || baseState
     )
   }
 
@@ -344,11 +339,11 @@ export class Field<
       this.setCacheValue(toJS(this.value))
       this.setValue()
     }
-    this.selfDisplay = type
+    this.display_ = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.selfPattern = type
+    this.pattern_ = type
   }
 
   setLoading = (loading: boolean) => {
@@ -478,6 +473,16 @@ export class Field<
     if (options?.validate) {
       return await this.validate()
     }
+  }
+
+  reduce = (): IFieldState => {
+    const baseState = this.toJSON()
+    return (
+      this.form.props?.middlewares?.reduce((buf, middleware) => {
+        if (!isFn(middleware)) return buf
+        return { ...buf, ...middleware(buf, this) }
+      }, baseState) || baseState
+    )
   }
 
   toJSON = (): IFieldState => {

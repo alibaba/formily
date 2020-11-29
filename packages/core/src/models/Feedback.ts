@@ -1,5 +1,5 @@
 import { FormPath, isArr } from '@formily/shared'
-import { action, makeObservable, observable } from 'mobx'
+import { action, computed, makeObservable, observable } from 'mobx'
 import {
   FeedbackInformation,
   IFeedbackInformation,
@@ -11,6 +11,11 @@ export class Feedback {
     this.informations = informations || []
     makeObservable(this, {
       informations: observable,
+      valid: computed,
+      invalid: computed,
+      errors: computed,
+      successes: computed,
+      warnings: computed,
       update: action,
       clear: action,
       reduce: action

@@ -5,7 +5,7 @@ import {
   isFn,
   FormPathPattern
 } from '@formily/shared'
-import { makeObservable, observable, action } from 'mobx'
+import { makeObservable, observable, action, computed } from 'mobx'
 import {
   JSXComponent,
   LifeCycleTypes,
@@ -25,8 +25,8 @@ export class VirtualField<
 > {
   displayName = 'VirtualField'
 
-  selfDisplay: FieldDisplayTypes
-  selfPattern: FieldPatternTypes
+  display_: FieldDisplayTypes
+  pattern_: FieldPatternTypes
   initialized: boolean
   mounted: boolean
   unmounted: boolean
@@ -61,21 +61,23 @@ export class VirtualField<
     this.props = this.getProps(props)
     this.mounted = false
     this.unmounted = false
-    this.selfDisplay = this.props.display
-    this.selfPattern = this.props.pattern
+    this.display_ = this.props.display
+    this.pattern_ = this.props.pattern
     this.decorator = this.props.decorator
     this.component = this.props.component
   }
 
   protected makeObservable() {
     makeObservable(this, {
-      selfDisplay: observable,
-      selfPattern: observable,
+      display_: observable,
+      pattern_: observable,
       initialized: observable,
       mounted: observable,
       unmounted: observable,
       decorator: observable.ref,
       component: observable.ref,
+      display: computed,
+      pattern: computed,
       setDisplay: action,
       setPattern: action,
       setComponent: action,
@@ -98,31 +100,21 @@ export class VirtualField<
   }
 
   get display() {
-    if (this.selfDisplay) return this.selfDisplay
+    if (this.display_) return this.display_
     return this.parent?.display || 'visibility'
   }
 
   get pattern() {
-    if (this.selfPattern) return this.selfPattern
+    if (this.pattern_) return this.pattern_
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
-  get state(): IVirtualFieldState {
-    const baseState = this.toJSON()
-    return (
-      this.form.props?.middlewares?.reduce((buf, middleware) => {
-        if (!isFn(middleware)) return buf
-        return { ...buf, ...middleware(buf, this) }
-      }, baseState) || baseState
-    )
-  }
-
   setDisplay = (type: FieldDisplayTypes) => {
-    this.selfDisplay = type
+    this.display_ = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.selfPattern = type
+    this.pattern_ = type
   }
 
   setComponent = <C extends JSXComponent>(
@@ -166,6 +158,16 @@ export class VirtualField<
     this.mounted = false
     this.unmounted = true
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+  }
+
+  reduce = (): IVirtualFieldState => {
+    const baseState = this.toJSON()
+    return (
+      this.form.props?.middlewares?.reduce((buf, middleware) => {
+        if (!isFn(middleware)) return buf
+        return { ...buf, ...middleware(buf, this) }
+      }, baseState) || baseState
+    )
   }
 
   toJSON = (): IVirtualFieldState => {

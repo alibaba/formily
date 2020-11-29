@@ -17,7 +17,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = ({
   children
 }) => {
   if (!field) return null
-  const state = field.state
+  const state = field.reduce()
   const results = isFn(children) ? children(field, field.form) : children
   if (!state) return null
   if (state.display !== 'visibility') return null
