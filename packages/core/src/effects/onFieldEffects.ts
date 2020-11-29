@@ -2,7 +2,7 @@ import { FormPath, isFn, isRegExp } from '@formily/shared'
 import { autorun } from 'mobx'
 import { Form, Field } from '../models'
 import { LifeCycleTypes, FormPathPattern } from '../types'
-import { createEffect } from '../effect'
+import { createEffect } from '../shared'
 import { onFormUnMount } from './onFormEffects'
 
 const createFieldEffect = (type: LifeCycleTypes) => {

@@ -22,18 +22,18 @@
     "typescript": "^4.1.2"
   },
   "peerDependencies": {
-    "@types/react": "^16.8.23",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "react-eva": "^1.1.7",
-    "rxjs": "^6.5.1"
+    "@types/react": ">=16.8.0 || >=17.0.0",
+    "@types/react-dom": ">=16.8.0 || >=17.0.0",
+    "mobx": "^6.0.3",
+    "mobx-react-lite": "^3.1.6",
+    "react": ">=16.8.0 || >=17.0.0",
+    "react-dom": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@formily/core": "^1.3.6",
     "@formily/react": "^1.3.6",
+    "@formily/core": "^1.3.6",
     "@formily/shared": "^1.3.6",
-    "@formily/validator": "^1.3.6",
-    "pascal-case": "^2.0.1"
+    "@formily/validator": "^1.3.6"
   },
   "publishConfig": {
     "access": "public"

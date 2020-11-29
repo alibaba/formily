@@ -7,8 +7,7 @@ import {
   isFn,
   isBool,
   each,
-  isEqual,
-  isNumberLike
+  isEqual
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -48,9 +47,8 @@ export class Field<
   ValueType = any
 > {
   displayName = 'Field'
-  void: boolean
-  display: FieldDisplayTypes
-  pattern: FieldPatternTypes
+  selfDisplay: FieldDisplayTypes
+  selfPattern: FieldPatternTypes
   loading: boolean
   validating: boolean
   modified: boolean
@@ -67,14 +65,14 @@ export class Field<
 
   form: Form
   path: FormPath
+
   props: IFieldProps<Decorator, Component>
-  
-  protected caches: FieldCaches = {}
-  protected requests: FieldRequests = {}
-  protected disposers: IReactionDisposer[] = []
+  caches: FieldCaches = {}
+  requests: FieldRequests = {}
+  disposers: IReactionDisposer[] = []
 
   constructor(
-    path: FormPath,
+    path: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
     form: Form
   ) {
@@ -84,18 +82,18 @@ export class Field<
     this.onInit()
   }
 
-  protected getFieldProps(props: IFieldProps<Decorator, Component>) {
+  protected getProps(props: IFieldProps<Decorator, Component>) {
     return props
   }
 
   protected initialize(
-    path: FormPath,
+    path: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
     form: Form
   ) {
     this.form = form
-    this.path = path
-    this.props = this.getFieldProps({ ...Field.defaultProps, ...props })
+    this.path = FormPath.parse(path)
+    this.props = this.getProps(props)
     this.initialized = false
     this.loading = false
     this.validating = false
@@ -105,9 +103,8 @@ export class Field<
     this.mounted = false
     this.unmounted = false
     this.inputValues = []
-    this.void = this.props.void
-    this.display = this.props.display
-    this.pattern = this.props.pattern
+    this.selfDisplay = this.props.display
+    this.selfPattern = this.props.pattern
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
@@ -118,9 +115,8 @@ export class Field<
 
   protected makeObservable() {
     makeObservable(this, {
-      void: observable,
-      display: observable,
-      pattern: observable,
+      selfDisplay: observable,
+      selfPattern: observable,
       loading: observable,
       validating: observable,
       modified: observable,
@@ -193,28 +189,6 @@ export class Field<
     return this.form.fields[identifier]
   }
 
-  get array() {
-    let parent = this.path.parent()
-    let identifier = parent.toString()
-    while (!isArr(this.form.fields[identifier]?.value)) {
-      parent = parent.parent()
-      identifier = parent.toString()
-      if (!identifier) return
-    }
-    return this.form.fields[identifier]
-  }
-
-  get key() {
-    return this.path?.segments[this.path.segments.length - 1]
-  }
-
-  get index() {
-    for (let i = this.path?.segments.length - 1; i >= 0; i--) {
-      const item = this.path.segments[i]
-      if (isNumberLike(item)) return item
-    }
-  }
-
   get errors() {
     return this.form.feedback.find({ path: this.path, type: 'error' })
   }
@@ -244,13 +218,13 @@ export class Field<
     return isValid(iniialValue) ? iniialValue : this.caches.initialValue
   }
 
-  get computedDisplay() {
-    if (this.display) return this.display
+  get display() {
+    if (this.selfDisplay) return this.selfDisplay
     return this.parent?.display || 'visibility'
   }
 
-  get computedPattern() {
-    if (this.pattern) return this.pattern
+  get pattern() {
+    if (this.selfPattern) return this.selfPattern
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
@@ -260,7 +234,7 @@ export class Field<
     )
   }
 
-  getState = (): IFieldState => {
+  get state(): IFieldState {
     const baseState = this.toJSON()
     return (
       this.form.props?.middlewares?.reduce((buf, middleware) => {
@@ -268,39 +242,6 @@ export class Field<
         return { ...buf, ...middleware(buf, this) }
       }, baseState) || baseState
     )
-  }
-
-  getSibling = (key: string) => {
-    const sibling = this.path?.parent()?.concat(key)
-    const identifier = sibling?.toString()
-    if (identifier && this.form.fields[identifier]) {
-      return this.form.fields[identifier]
-    }
-  }
-
-  getArraySibling = (index: number, key?: FormPathPattern) => {
-    const array = this.array
-    const sibling = array?.path?.concat(index).concat(key)
-    const identifier = sibling?.toString()
-    if (identifier && this.form.fields[identifier]) {
-      return this.form.fields[identifier]
-    }
-  }
-
-  getArrayBeforeSibling = (key: FormPathPattern, step: number = 1) => {
-    return this.getArraySibling(this.index - step, key)
-  }
-
-  getArrayAfterSibling = (key: FormPathPattern, step: number = 1) => {
-    return this.getArraySibling(this.index + step, key)
-  }
-
-  getChildren = (key: number | string) => {
-    const children = this.path?.concat(key)
-    const identifier = children.toString()
-    if (this.form.fields[identifier]) {
-      return this.form.fields[identifier]
-    }
   }
 
   setErrors = (messages: FeedbackMessage) => {
@@ -376,7 +317,6 @@ export class Field<
   }
 
   setValue = (value?: ValueType) => {
-    if (this.void) return
     this.modified = true
     this.form.modified = true
     this.form.setValuesIn(this.path, value)
@@ -387,7 +327,6 @@ export class Field<
   }
 
   setInitialValue = (initialValue?: ValueType) => {
-    if (this.void) return
     this.form.setInitialValuesIn(this.path, initialValue)
   }
 
@@ -405,11 +344,11 @@ export class Field<
       this.setCacheValue(toJS(this.value))
       this.setValue()
     }
-    this.display = type
+    this.selfDisplay = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.pattern = type
+    this.selfPattern = type
   }
 
   setLoading = (loading: boolean) => {
@@ -473,7 +412,6 @@ export class Field<
   }
 
   onInput = (...args: any[]) => {
-    if (this.void) return
     this.inputValue = args[0]
     this.inputValues = args
     this.modified = true
@@ -546,9 +484,8 @@ export class Field<
     return {
       displayName: this.displayName,
       path: this.path.toString(),
-      void: this.void,
-      display: this.computedDisplay,
-      pattern: this.computedPattern,
+      display: this.display,
+      pattern: this.pattern,
       loading: this.loading,
       validating: this.validating,
       modified: this.modified,
@@ -569,9 +506,6 @@ export class Field<
 
   fromJSON = (state: IFieldState) => {
     if (!state) return
-    if (isValid(state.void) && !isEqual(state.void, this.void)) {
-      this.void = state.void
-    }
     if (isValid(state.modified) && !isEqual(state.modified, this.modified)) {
       this.modified = state.modified
     }
@@ -620,16 +554,10 @@ export class Field<
     if (isValid(state.required) && !isEqual(state.required, this.required)) {
       this.setRequired(state.required)
     }
-    if (
-      isValid(state.display) &&
-      !isEqual(state.display, this.computedDisplay)
-    ) {
+    if (isValid(state.display) && !isEqual(state.display, this.display)) {
       this.setDisplay(state.display)
     }
-    if (
-      isValid(state.pattern) &&
-      !isEqual(state.pattern, this.computedPattern)
-    ) {
+    if (isValid(state.pattern) && !isEqual(state.pattern, this.pattern)) {
       this.setPattern(state.pattern)
     }
     if (isValid(state.loading) && !isEqual(state.loading, this.loading)) {
@@ -649,9 +577,5 @@ export class Field<
         dispose()
       }
     })
-  }
-
-  static defaultProps: IFieldProps = {
-    void: false
   }
 }

@@ -3,9 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { isFn } from '@formily/shared'
 
 interface IReactiveFieldProps {
-  field: FormilyCore.Field
+  field: Formily.Core.Types.GeneralField
   children?:
-    | ((field: FormilyCore.Field, form: FormilyCore.Form) => React.ReactChild)
+    | ((
+        field: Formily.Core.Types.GeneralField,
+        form: Formily.Core.Models.Form
+      ) => React.ReactChild)
     | React.ReactNode
 }
 
@@ -14,7 +17,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = ({
   children
 }) => {
   if (!field) return null
-  const state = field.getState()
+  const state = field.state
   const results = isFn(children) ? children(field, field.form) : children
   if (!state) return null
   if (state.display !== 'visibility') return null

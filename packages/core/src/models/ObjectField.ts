@@ -8,7 +8,7 @@ export class ObjectField<
 > extends Field<Decorator, Component, Record<string, any>> {
   displayName = 'ObjectField'
 
-  protected getFieldProps(props: IFieldProps<Decorator, Component>) {
+  protected getProps(props: IFieldProps<Decorator, Component>) {
     return {
       ...props,
       void: false,

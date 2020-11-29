@@ -3,7 +3,7 @@ import { uid } from '@formily/shared'
 import { useForm } from './useForm'
 
 export const useFormEffects = (
-  effects?: (form: FormilyCore.Form) => void,
+  effects?: (form: Formily.Core.Models.Form) => void,
   deps = []
 ) => {
   const ref = useRef(null)

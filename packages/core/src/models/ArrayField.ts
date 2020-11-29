@@ -14,7 +14,7 @@ export class ArrayField<
 > extends Field<Decorator, Component, any[]> {
   displayName = 'ArrayField'
 
-  protected getFieldProps(props: IFieldProps<Decorator, Component>) {
+  protected getProps(props: IFieldProps<Decorator, Component>) {
     return {
       ...props,
       void: false,

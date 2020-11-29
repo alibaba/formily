@@ -1,6 +1,13 @@
 import { Validator } from '@formily/validator'
 import { FormPath } from '@formily/shared'
-import { Form, Field, LifeCycle } from './models'
+import {
+  Form,
+  Field,
+  LifeCycle,
+  ArrayField,
+  VirtualField,
+  ObjectField
+} from './models'
 
 export type AnyFunction = (...args: any[]) => any
 
@@ -101,6 +108,8 @@ export type FormRequests = {
   validate?: NodeJS.Timeout
 }
 
+export type FormFields = Record<string, GeneralField>
+
 export type FormPatternTypes =
   | 'editable'
   | 'readOnly'
@@ -116,9 +125,6 @@ export type FormPathPattern =
       path: FormPath
     })
 
-export interface ICreateFormOptions extends IFormProps {
-  effects?: (form: Form) => void
-}
 export interface IFormState {
   displayName: string
   id: string
@@ -138,7 +144,7 @@ export interface IFormState {
   warnings: FeedbackInformation[]
 }
 
-export type IFormGraph = Record<string, IFieldState | IFormState>
+export type IFormGraph = Record<string, IGeneralFieldState | IFormState>
 
 export interface IFormProps {
   values?: {}
@@ -150,10 +156,18 @@ export interface IFormProps {
   middlewares?: IFieldMiddleware[]
 }
 
-export interface ICreateFieldProps<
+export interface IFieldFactoryProps<
   D extends JSXComponent,
   C extends JSXComponent
 > extends IFieldProps<D, C> {
+  name: FormPathPattern
+  basePath?: FormPathPattern
+}
+
+export interface IVirtualFieldFactoryProps<
+  D extends JSXComponent,
+  C extends JSXComponent
+> extends IVirtualFieldProps<D, C> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
@@ -195,11 +209,20 @@ export interface IFieldProps<
 > {
   value?: any
   initialValue?: any
-  void?: boolean
   required?: boolean
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
   validator?: Validator
+  decorator?: FieldDecorator<Decorator>
+  component?: FieldComponent<Component>
+}
+
+export interface IVirtualFieldProps<
+  Decorator extends JSXComponent = any,
+  Component extends JSXComponent = any
+> {
+  display?: FieldDisplayTypes
+  pattern?: FieldPatternTypes
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
 }
@@ -213,7 +236,6 @@ export interface IFieldResetOptions {
 export interface IFieldState {
   displayName: string
   path: string
-  void: boolean
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
   loading: boolean
@@ -232,8 +254,22 @@ export interface IFieldState {
   value: any
   initialValue: any
 }
+
+export interface IVirtualFieldState {
+  displayName: string
+  path: string
+  display: FieldDisplayTypes
+  pattern: FieldPatternTypes
+  decorator: FieldDecorator<any>
+  component: FieldComponent<any>
+}
+
+export type IGeneralFieldState = IFieldState | IVirtualFieldState
+
+export type GeneralField = Field | VirtualField | ArrayField | ObjectField
+
 export interface IFieldMiddleware {
-  (state: IFieldState, field: Field): IFieldState
+  (state: IGeneralFieldState, field: GeneralField): IGeneralFieldState
 }
 
 export interface ISpliceArrayStateProps {

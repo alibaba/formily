@@ -15,7 +15,7 @@ import { Schema } from './shared/schema'
 export * from '@formily/react'
 
 declare global {
-  namespace FormilyCore {
+  namespace Formily.Core {
     // eslint-disable-next-line
     export interface FieldProps extends ISchema {}
     // eslint-disable-next-line

@@ -1,10 +1,11 @@
 import { FormPath, FormPathPattern, each, pascalCase } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
-import { Form, Field } from './models'
-import { ISpliceArrayStateProps, IExchangeArrayStateProps } from './types'
+import { Form, Field, ArrayField } from '../models'
+import { ISpliceArrayStateProps, IExchangeArrayStateProps } from '../types'
+import { isVirtualField } from './externals'
 
-export const ignoreVoidPath = (pattern: FormPathPattern, form: Form) => {
+export const skipVirtualFieldPath = (pattern: FormPathPattern, form: Form) => {
   const path = FormPath.parse(pattern)
   if (path.isMatchPattern)
     throw new Error('Cannot use matching mode when read or writing values')
@@ -13,7 +14,7 @@ export const ignoreVoidPath = (pattern: FormPathPattern, form: Form) => {
     const np = path.slice(0, index + 1)
     const dp = path.concat([key])
     const field = form.fields[np.toString()]
-    if (field.void) {
+    if (isVirtualField(field)) {
       return path
     }
     return dp
@@ -30,8 +31,8 @@ export const validateToFeedback = async (
     context: this
   })
   const shouldSkipValidate =
-    field.computedDisplay !== 'visibility' ||
-    field.computedPattern !== 'editable' ||
+    field.display !== 'visibility' ||
+    field.pattern !== 'editable' ||
     field.unmounted
   each(results, (messages, type) => {
     field.form.feedback.update({
@@ -45,7 +46,7 @@ export const validateToFeedback = async (
   return results
 }
 
-export const updateArrayValue = (field: Field, value: any) => {
+export const updateArrayValue = (field: ArrayField, value: any) => {
   runInAction(() => {
     field.modified = true
     field.form.modified = true
@@ -54,7 +55,7 @@ export const updateArrayValue = (field: Field, value: any) => {
 }
 
 export const spliceArrayState = (
-  field: Field,
+  field: ArrayField,
   props?: ISpliceArrayStateProps
 ) => {
   const { startIndex, deleteCount, insertCount } = {
@@ -119,7 +120,7 @@ export const spliceArrayState = (
 }
 
 export const exchangeArrayState = (
-  field: Field,
+  field: ArrayField,
   props: IExchangeArrayStateProps
 ) => {
   const { fromIndex, toIndex } = {

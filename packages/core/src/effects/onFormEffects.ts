@@ -2,7 +2,7 @@ import { isFn } from '@formily/shared'
 import { autorun, runInAction } from 'mobx'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
-import { createEffect } from '../effect'
+import { createEffect } from '../shared'
 
 const createFormEffect = (type: LifeCycleTypes) => {
   return createEffect(type, (form: Form) => (callback: (form: Form) => void) => {

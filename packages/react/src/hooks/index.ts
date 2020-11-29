@@ -1,3 +1,6 @@
 export * from './useForm'
 export * from './useField'
+export * from './useArrayField'
+export * from './useObjectField'
+export * from './useVirtualField'
 export * from './useFormEffects'
