@@ -1,7 +1,6 @@
 import { isArr } from '@formily/shared'
 import { runInAction } from 'mobx'
 import {
-  updateArrayValue,
   spliceArrayState,
   exchangeArrayState
 } from '../shared'
@@ -22,15 +21,11 @@ export class ArrayField<
     }
   }
 
-  setValue = () => {
-    throw new Error('Cannot use setValue method in `ArrayField`')
-  }
-
   push = (...items: any[]) => {
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const pushed = copy.push(...items)
-    updateArrayValue(this, copy)
+    this.setValue(copy)
     return pushed
   }
 
@@ -38,7 +33,7 @@ export class ArrayField<
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const last = copy.pop()
-    updateArrayValue(this, copy)
+    this.setValue(copy)
     return last
   }
 
@@ -47,7 +42,7 @@ export class ArrayField<
     const copy = this.value.slice()
     copy.splice(index, 0, items)
     runInAction(() => {
-      updateArrayValue(this, copy)
+      this.setValue(copy)
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length
@@ -60,7 +55,7 @@ export class ArrayField<
     const copy = this.value.slice()
     copy.splice(index, 1)
     runInAction(() => {
-      updateArrayValue(this, copy)
+      this.setValue(copy)
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1
@@ -72,7 +67,7 @@ export class ArrayField<
     if (!isArr(this.value)) return
     const copy = this.value.slice()
     const shifted = copy.shift()
-    updateArrayValue(this, copy)
+    this.setValue(copy)
     return shifted
   }
 
@@ -81,7 +76,7 @@ export class ArrayField<
     const copy = this.value.slice()
     const shifted = copy.unshift(...items)
     runInAction(() => {
-      updateArrayValue(this, copy)
+      this.setValue(copy)
       spliceArrayState(this, {
         insertCount: items.length
       })
@@ -96,7 +91,7 @@ export class ArrayField<
     copy.splice(fromIndex, 1)
     copy.splice(toIndex, 0, fromItem)
     runInAction(() => {
-      updateArrayValue(this, copy)
+      this.setValue(copy)
       exchangeArrayState(this, {
         fromIndex,
         toIndex

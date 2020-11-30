@@ -46,13 +46,6 @@ export const validateToFeedback = async (
   return results
 }
 
-export const updateArrayValue = (field: ArrayField, value: any) => {
-  runInAction(() => {
-    field.modified = true
-    field.form.modified = true
-    field.form.setValuesIn(field.path, value)
-  })
-}
 
 export const spliceArrayState = (
   field: ArrayField,
