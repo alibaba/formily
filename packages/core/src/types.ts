@@ -5,7 +5,7 @@ import {
   Field,
   LifeCycle,
   ArrayField,
-  VirtualField,
+  VoidField,
   ObjectField
 } from './models'
 
@@ -164,10 +164,10 @@ export interface IFieldFactoryProps<
   basePath?: FormPathPattern
 }
 
-export interface IVirtualFieldFactoryProps<
+export interface IVoidFieldFactoryProps<
   D extends JSXComponent,
   C extends JSXComponent
-> extends IVirtualFieldProps<D, C> {
+> extends IVoidFieldProps<D, C> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
@@ -217,7 +217,7 @@ export interface IFieldProps<
   component?: FieldComponent<Component>
 }
 
-export interface IVirtualFieldProps<
+export interface IVoidFieldProps<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
 > {
@@ -255,7 +255,7 @@ export interface IFieldState {
   initialValue: any
 }
 
-export interface IVirtualFieldState {
+export interface IVoidFieldState {
   displayName: string
   path: string
   display: FieldDisplayTypes
@@ -264,9 +264,9 @@ export interface IVirtualFieldState {
   component: FieldComponent<any>
 }
 
-export type IGeneralFieldState = IFieldState | IVirtualFieldState
+export type IGeneralFieldState = IFieldState | IVoidFieldState
 
-export type GeneralField = Field | VirtualField | ArrayField | ObjectField
+export type GeneralField = Field | VoidField | ArrayField | ObjectField
 
 export interface IFieldMiddleware {
   (state: IGeneralFieldState, field: GeneralField): IGeneralFieldState

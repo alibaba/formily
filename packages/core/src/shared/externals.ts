@@ -5,14 +5,14 @@ import {
   Field,
   ArrayField,
   ObjectField,
-  VirtualField
+  VoidField
 } from '../models'
 import {
   AnyFunction,
   IFormProps,
   IFormState,
   IFieldState,
-  IVirtualFieldState,
+  IVoidFieldState,
   GeneralField,
   IGeneralFieldState
 } from '../types'
@@ -113,9 +113,9 @@ export const isObjectField = (node: any): node is ObjectField => {
   return node?.displayName === 'ObjectField'
 }
 
-export const isVirtualField = (node: any): node is VirtualField => {
+export const isVoidField = (node: any): node is VoidField => {
   if (!isFn(node.initialize)) return false
-  return node?.displayName === 'VirtualField'
+  return node?.displayName === 'VoidField'
 }
 
 export const isFormState = (state: any): state is IFormState => {
@@ -143,11 +143,11 @@ export const isObjectFieldState = (state: any): state is IFieldState => {
   return state?.displayName === 'ObjectField'
 }
 
-export const isVirtualFieldState = (
+export const isVoidFieldState = (
   state: any
-): state is IVirtualFieldState => {
+): state is IVoidFieldState => {
   if (isFn(state.initialize)) return false
-  return state?.displayName === 'VirtualField'
+  return state?.displayName === 'VoidField'
 }
 
 export const createForm = (options: IFormProps) => {

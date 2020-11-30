@@ -3,9 +3,9 @@ import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
 import { Form, Field, ArrayField } from '../models'
 import { ISpliceArrayStateProps, IExchangeArrayStateProps } from '../types'
-import { isVirtualField } from './externals'
+import { isVoidField } from './externals'
 
-export const skipVirtualFieldPath = (pattern: FormPathPattern, form: Form) => {
+export const skipVoidFieldPath = (pattern: FormPathPattern, form: Form) => {
   const path = FormPath.parse(pattern)
   if (path.isMatchPattern)
     throw new Error('Cannot use matching mode when read or writing values')
@@ -14,7 +14,7 @@ export const skipVirtualFieldPath = (pattern: FormPathPattern, form: Form) => {
     const np = path.slice(0, index + 1)
     const dp = path.concat([key])
     const field = form.fields[np.toString()]
-    if (isVirtualField(field)) {
+    if (isVoidField(field)) {
       return path
     }
     return dp

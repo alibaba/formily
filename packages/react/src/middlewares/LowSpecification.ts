@@ -1,5 +1,5 @@
 import { isArr, isFn } from '@formily/shared'
-import { isVirtualField, isFieldState } from '@formily/core'
+import { isVoidField, isFieldState } from '@formily/core'
 const isHTMLElement = (target: any): target is EventTarget => {
   return Object.prototype.toString.call(target).indexOf('HTML') > -1
 }
@@ -27,7 +27,7 @@ export const LowSpecification: Formily.Core.Types.IFieldMiddleware = (
 
   const onChange = (event: any, ...args: any[]) => {
     const value = getValueFromEvent(event)
-    if (!isVirtualField(field)) {
+    if (!isVoidField(field)) {
       field.onInput(value, ...args)
     }
     if (isFn(componentProps?.onChange)) {
@@ -35,7 +35,7 @@ export const LowSpecification: Formily.Core.Types.IFieldMiddleware = (
     }
   }
   const onFocus = (event: React.UIEvent<HTMLElement>, ...args: any[]) => {
-    if (!isVirtualField(field)) {
+    if (!isVoidField(field)) {
       field.onFocus()
     }
     if (isFn(componentProps?.onFocus)) {
@@ -43,7 +43,7 @@ export const LowSpecification: Formily.Core.Types.IFieldMiddleware = (
     }
   }
   const onBlur = (event: React.UIEvent<HTMLElement>, ...args: any[]) => {
-    if (!isVirtualField(field)) {
+    if (!isVoidField(field)) {
       field.onBlur()
     }
     if (isFn(componentProps?.onBlur)) {

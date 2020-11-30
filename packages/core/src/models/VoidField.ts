@@ -14,16 +14,16 @@ import {
   FieldPatternTypes,
   FieldDecorator,
   FieldComponent,
-  IVirtualFieldProps,
-  IVirtualFieldState
+  IVoidFieldProps,
+  IVoidFieldState
 } from '../types'
 import { Form } from './Form'
 
-export class VirtualField<
+export class VoidField<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
 > {
-  displayName = 'VirtualField'
+  displayName = 'VoidField'
 
   display_: FieldDisplayTypes
   pattern_: FieldPatternTypes
@@ -35,11 +35,11 @@ export class VirtualField<
 
   form: Form
   path: FormPath
-  props: IVirtualFieldProps<Decorator, Component>
+  props: IVoidFieldProps<Decorator, Component>
 
   constructor(
     path: FormPathPattern,
-    props: IVirtualFieldProps<Decorator, Component>,
+    props: IVoidFieldProps<Decorator, Component>,
     form: Form
   ) {
     this.initialize(path, props, form)
@@ -160,7 +160,7 @@ export class VirtualField<
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
   }
 
-  reduce = (): IVirtualFieldState => {
+  reduce = (): IVoidFieldState => {
     const baseState = this.toJSON()
     return (
       this.form.props?.middlewares?.reduce((buf, middleware) => {
@@ -170,7 +170,7 @@ export class VirtualField<
     )
   }
 
-  toJSON = (): IVirtualFieldState => {
+  toJSON = (): IVoidFieldState => {
     return {
       displayName: this.displayName,
       path: this.path.toString(),
@@ -181,7 +181,7 @@ export class VirtualField<
     }
   }
 
-  fromJSON = (state: IVirtualFieldState) => {
+  fromJSON = (state: IVoidFieldState) => {
     if (!state) return
 
     if (isValid(state.component) && !isEqual(state.component, this.component)) {

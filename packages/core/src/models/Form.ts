@@ -25,21 +25,21 @@ import {
   GeneralField,
   FormFields,
   IFieldFactoryProps,
-  IVirtualFieldFactoryProps
+  IVoidFieldFactoryProps
 } from '../types'
 import {
-  isVirtualField,
+  isVoidField,
   isFormState,
   isFieldState,
   isArrayFieldState,
   isObjectFieldState,
   getLifeCyclesByEffects,
-  skipVirtualFieldPath
+  skipVoidFieldPath
 } from '../shared'
 import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
-import { VirtualField } from './VirtualField'
+import { VoidField } from './VoidField'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
@@ -107,7 +107,7 @@ export class Form {
       createField: action,
       createArrayField: action,
       createObjectField: action,
-      createVirtualField: action
+      createVoidField: action
     })
   }
 
@@ -186,18 +186,18 @@ export class Form {
     return this.fields[identifier] as ObjectField<Decorator, Component>
   }
 
-  createVirtualField = <
+  createVoidField = <
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IVirtualFieldFactoryProps<Decorator, Component>
+    props: IVoidFieldFactoryProps<Decorator, Component>
   ) => {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new VirtualField(path, props, this)
+      this.fields[identifier] = new VoidField(path, props, this)
     }
-    return this.fields[identifier] as VirtualField<Decorator, Component>
+    return this.fields[identifier] as VoidField<Decorator, Component>
   }
 
   /** 状态操作模型 **/
@@ -209,19 +209,19 @@ export class Form {
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.values, skipVirtualFieldPath(pattern, this), value)
+    FormPath.setIn(this.values, skipVoidFieldPath(pattern, this), value)
   }
 
   deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.values, skipVirtualFieldPath(pattern, this))
+    FormPath.deleteIn(this.values, skipVoidFieldPath(pattern, this))
   }
 
   existValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.values, skipVirtualFieldPath(pattern, this))
+    return FormPath.existIn(this.values, skipVoidFieldPath(pattern, this))
   }
 
   getValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.values, skipVirtualFieldPath(pattern, this))
+    return FormPath.getIn(this.values, skipVoidFieldPath(pattern, this))
   }
 
   setInitialValues = (initialValues: any) => {
@@ -232,26 +232,26 @@ export class Form {
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
     FormPath.setIn(
       this.initialValues,
-      skipVirtualFieldPath(pattern, this),
+      skipVoidFieldPath(pattern, this),
       initialValue
     )
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, skipVirtualFieldPath(pattern, this))
+    FormPath.deleteIn(this.initialValues, skipVoidFieldPath(pattern, this))
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
     return FormPath.existIn(
       this.initialValues,
-      skipVirtualFieldPath(pattern, this)
+      skipVoidFieldPath(pattern, this)
     )
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
     return FormPath.getIn(
       this.initialValues,
-      skipVirtualFieldPath(pattern, this)
+      skipVoidFieldPath(pattern, this)
     )
   }
 
@@ -362,7 +362,7 @@ export class Form {
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
     this.query('*', field => {
-      if (!isVirtualField(field)) {
+      if (!isVoidField(field)) {
         field.dispose()
       }
     })
@@ -470,7 +470,7 @@ export class Form {
           } else if (isObjectFieldState(state)) {
             this.fields[path] = new ObjectField(path, {}, this)
           } else {
-            this.fields[path] = new VirtualField(path, {}, this)
+            this.fields[path] = new VoidField(path, {}, this)
           }
           this.fields[path].fromJSON(state as any)
         }
@@ -483,7 +483,7 @@ export class Form {
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
     this.query(pattern, field => {
-      if (!isVirtualField(field)) {
+      if (!isVoidField(field)) {
         tasks.push(field.validate())
       }
     })
@@ -533,7 +533,7 @@ export class Form {
   ) => {
     const tasks = []
     this.query(pattern, field => {
-      if (!isVirtualField(field)) {
+      if (!isVoidField(field)) {
         tasks.push(field.reset(options))
       }
     })

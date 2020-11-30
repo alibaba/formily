@@ -25,11 +25,11 @@ export interface IFieldProps<
     | React.ReactNode
 }
 
-export interface IVirtualFieldProps<
+export interface IVoidFieldProps<
   D extends JSXComponent,
   C extends JSXComponent,
-  Field = Formily.Core.Models.VirtualField
-> extends Formily.Core.Types.IVirtualFieldFactoryProps<D, C> {
+  Field = Formily.Core.Models.VoidField
+> extends Formily.Core.Types.IVoidFieldFactoryProps<D, C> {
   children?:
     | ((field: Field, form: Formily.Core.Models.Form) => React.ReactChild)
     | React.ReactNode
