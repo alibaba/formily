@@ -18,6 +18,7 @@ import {
   IVoidFieldState
 } from '../types'
 import { Form } from './Form'
+import { Query } from './Query'
 
 export class VoidField<
   Decorator extends JSXComponent = any,
@@ -158,6 +159,14 @@ export class VoidField<
     this.mounted = false
     this.unmounted = true
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
+  }
+
+  query = (pattern: FormPathPattern | RegExp) => {
+    return new Query({
+      pattern,
+      base: this.path,
+      form: this.form
+    })
   }
 
   reduce = (): IVoidFieldState => {

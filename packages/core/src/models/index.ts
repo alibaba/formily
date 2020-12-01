@@ -1,6 +1,7 @@
 export * from './Heart'
 export * from './LifeCycle'
 export * from './Feedback'
+export * from './Query'
 export * from './Form'
 export * from './Field'
 export * from './ArrayField'

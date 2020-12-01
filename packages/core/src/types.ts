@@ -282,3 +282,9 @@ export interface IExchangeArrayStateProps {
   fromIndex?: number
   toIndex?: number
 }
+
+export interface IQueryProps {
+  pattern: FormPathPattern | RegExp
+  base: FormPathPattern
+  form: Form
+}

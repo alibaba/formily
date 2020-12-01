@@ -40,6 +40,7 @@ import {
   IFieldResetOptions
 } from '../types'
 import { validateToFeedback } from '../shared'
+import { Query } from './Query'
 
 export class Field<
   Decorator extends JSXComponent = any,
@@ -473,6 +474,14 @@ export class Field<
     if (options?.validate) {
       return await this.validate()
     }
+  }
+
+  query = (pattern: FormPathPattern | RegExp) => {
+    return new Query({
+      pattern,
+      base: this.path,
+      form: this.form
+    })
   }
 
   reduce = (): IFieldState => {

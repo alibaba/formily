@@ -4,7 +4,6 @@ import {
   FormPath,
   FormPathPattern,
   isFn,
-  isRegExp,
   isValid,
   uid,
   globalThisPolyfill,
@@ -22,7 +21,6 @@ import {
   IFormState,
   IFormProps,
   IFieldResetOptions,
-  GeneralField,
   FormFields,
   IFieldFactoryProps,
   IVoidFieldFactoryProps
@@ -40,6 +38,7 @@ import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
+import { Query } from './Query'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
@@ -249,10 +248,7 @@ export class Form {
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(
-      this.initialValues,
-      skipVoidFieldPath(pattern, this)
-    )
+    return FormPath.getIn(this.initialValues, skipVoidFieldPath(pattern, this))
   }
 
   setSubmitting = (submitting: boolean) => {
@@ -296,38 +292,12 @@ export class Form {
     this.heart.setLifeCycles(getLifeCyclesByEffects(effects))
   }
 
-  query = (
-    pattern: FormPathPattern | RegExp,
-    filter?: (field: GeneralField, path: string) => boolean | void
-  ): GeneralField[] => {
-    const results = []
-    for (let identifier in this.fields) {
-      const field = this.fields[identifier]
-      if (isRegExp(pattern)) {
-        if (pattern.test(field.path.toString())) {
-          if (isFn(filter)) {
-            if (filter(field, identifier) === true) {
-              results.push(field)
-              break
-            }
-          } else {
-            results.push(field)
-          }
-        }
-      } else {
-        if (FormPath.parse(pattern).match(field.path)) {
-          if (isFn(filter)) {
-            if (filter(field, identifier) === true) {
-              results.push(field)
-              break
-            }
-          } else {
-            results.push(field)
-          }
-        }
-      }
-    }
-    return results
+  query = (pattern: FormPathPattern | RegExp) => {
+    return new Query({
+      pattern,
+      base: '',
+      form: this
+    })
   }
 
   notify = (type: LifeCycleTypes, payload?: any) => {
@@ -361,7 +331,7 @@ export class Form {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
-    this.query('*', field => {
+    this.query('*').getAll(field => {
       if (!isVoidField(field)) {
         field.dispose()
       }
@@ -449,8 +419,8 @@ export class Form {
   getFormGraph = (): IFormGraph => {
     const graph = {}
     graph[''] = this.toJSON()
-    this.query('*', (field, path) => {
-      graph[path] = field.toJSON()
+    this.query('*').getAll((field, path) => {
+      graph[path.toString()] = field.toJSON()
     })
     return graph
   }
@@ -482,7 +452,7 @@ export class Form {
     this.setValidating(true)
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
-    this.query(pattern, field => {
+    this.query(pattern).getAll(field => {
       if (!isVoidField(field)) {
         tasks.push(field.validate())
       }
@@ -532,7 +502,7 @@ export class Form {
     options?: IFieldResetOptions
   ) => {
     const tasks = []
-    this.query(pattern, field => {
+    this.query(pattern).getAll(field => {
       if (!isVoidField(field)) {
         tasks.push(field.reset(options))
       }
