@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm, useField } from '../hooks'
 import { useAutoRecycle } from '../hooks/useAutoRecycle'
 import { ReactiveField } from './ReactiveField'
-import { VoidFieldContext } from '../shared'
+import { FieldContext } from '../shared'
 import { JSXComponent, IVoidFieldProps } from '../types'
 
 export const VoidField = <D extends JSXComponent, C extends JSXComponent>(
@@ -14,9 +14,9 @@ export const VoidField = <D extends JSXComponent, C extends JSXComponent>(
     form.createVoidField({ basePath: parent?.path, ...props })
   )
   return (
-    <VoidFieldContext.Provider value={field}>
+    <FieldContext.Provider value={field}>
       <ReactiveField field={field}>{props.children}</ReactiveField>
-    </VoidFieldContext.Provider>
+    </FieldContext.Provider>
   )
 }
 

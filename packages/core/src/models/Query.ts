@@ -1,11 +1,12 @@
 import { FormPath, isFn, isRegExp } from '@formily/shared'
-import { GeneralField, IQueryProps } from '../types'
+import { IQueryProps } from '../types'
 import { ArrayField } from './ArrayField'
+import { Field } from './Field'
 import { Form } from './Form'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
 
-export class Query<T = GeneralField> {
+export class Query<T = Field> {
   private props: IQueryProps
   private pattern: FormPath | RegExp
   private form: Form
@@ -18,10 +19,9 @@ export class Query<T = GeneralField> {
     this.form = props.form
     this.type = type
   }
-
-  get<Result>(
-    getter?: (field: T, path: FormPath) => Result
-  ): Result extends unknown ? T : Result {
+  get(): T
+  get<Result>(getter: (field: T, path: FormPath) => Result): Result
+  get(getter?: any): any {
     if (isRegExp(this.pattern)) {
       for (let path in this.form.fields) {
         const field = this.form.fields[path]
@@ -53,10 +53,9 @@ export class Query<T = GeneralField> {
       }
     }
   }
-
-  getAll<Result>(
-    mapper?: (field: T, path: FormPath) => Result
-  ): Result extends unknown ? T[] : Result[] {
+  getAll(): T[]
+  getAll<Result>(mapper?: (field: T, path: FormPath) => Result): Result[]
+  getAll(mapper?: any): any {
     const results = []
     if (isRegExp(this.pattern)) {
       for (let path in this.form.fields) {

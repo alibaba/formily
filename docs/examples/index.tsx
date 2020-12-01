@@ -32,9 +32,8 @@ export default () => {
     ],
     effects: () => {
       onFieldReact('aa.cc.*.dd', field => {
-        field.setPattern(
-          field.getSibling('ee')?.value === '123' ? 'disabled' : 'editable'
-        )
+        const value = field.query('.ee').get(field => field.value)
+        field.setPattern(value === '123' ? 'disabled' : 'editable')
       })
     }
   })

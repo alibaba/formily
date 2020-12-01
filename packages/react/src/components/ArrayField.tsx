@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm, useField } from '../hooks'
 import { useAutoRecycle } from '../hooks/useAutoRecycle'
-import { ArrayFieldContext } from '../shared'
+import { FieldContext } from '../shared'
 import { JSXComponent, IFieldProps } from '../types'
 import { ReactiveField } from './ReactiveField'
 
@@ -14,9 +14,9 @@ export const ArrayField = <D extends JSXComponent, C extends JSXComponent>(
     form.createArrayField({ basePath: parent?.path, ...props })
   )
   return (
-    <ArrayFieldContext.Provider value={field}>
+    <FieldContext.Provider value={field}>
       <ReactiveField field={field}>{props.children}</ReactiveField>
-    </ArrayFieldContext.Provider>
+    </FieldContext.Provider>
   )
 }
 
