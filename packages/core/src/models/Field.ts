@@ -37,7 +37,9 @@ import {
   FieldComponent,
   IFieldProps,
   IFieldState,
-  IFieldResetOptions
+  IFieldResetOptions,
+  IFieldMiddleware,
+  FormPatternTypes
 } from '../types'
 import { validateToFeedback } from '../shared'
 import { Query } from './Query'
@@ -50,6 +52,7 @@ export class Field<
   displayName = 'Field'
   display_: FieldDisplayTypes
   pattern_: FieldPatternTypes
+  middlewares_: IFieldMiddleware[]
   loading: boolean
   validating: boolean
   modified: boolean
@@ -106,6 +109,7 @@ export class Field<
     this.inputValues = []
     this.display_ = this.props.display
     this.pattern_ = this.props.pattern
+    this.middlewares_ = this.props.middlewares
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
@@ -224,14 +228,25 @@ export class Field<
     return isValid(iniialValue) ? iniialValue : this.caches.initialValue
   }
 
-  get display() {
+  get display(): FieldDisplayTypes {
     if (this.display_) return this.display_
     return this.parent?.display || 'visibility'
   }
 
-  get pattern() {
+  get pattern(): FormPatternTypes {
     if (this.pattern_) return this.pattern_
     return this.parent?.pattern || this.form.pattern || 'editable'
+  }
+
+  get middlewares(): IFieldMiddleware[] {
+    const parents = this.parent?.middlewares || this.form.props?.middlewares
+    if (isArr(this.middlewares)) {
+      if (isArr(parents)) {
+        return parents.concat(this.middlewares)
+      }
+      return this.middlewares
+    }
+    return parents || []
   }
 
   get required() {
@@ -487,7 +502,7 @@ export class Field<
   reduce = (): IFieldState => {
     const baseState = this.toJSON()
     return (
-      this.form.props?.middlewares?.reduce((buf, middleware) => {
+      this.middlewares.reduce((buf, middleware) => {
         if (!isFn(middleware)) return buf
         return { ...buf, ...middleware(buf, this) }
       }, baseState) || baseState

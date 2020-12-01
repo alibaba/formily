@@ -3,6 +3,7 @@ import {
   isValid,
   isEqual,
   isFn,
+  isArr,
   FormPathPattern
 } from '@formily/shared'
 import { makeObservable, observable, action, computed } from 'mobx'
@@ -15,7 +16,9 @@ import {
   FieldDecorator,
   FieldComponent,
   IVoidFieldProps,
-  IVoidFieldState
+  IVoidFieldState,
+  IFieldMiddleware,
+  FormPatternTypes
 } from '../types'
 import { Form } from './Form'
 import { Query } from './Query'
@@ -28,6 +31,7 @@ export class VoidField<
 
   display_: FieldDisplayTypes
   pattern_: FieldPatternTypes
+  middlewares_: IFieldMiddleware[]
   initialized: boolean
   mounted: boolean
   unmounted: boolean
@@ -64,6 +68,7 @@ export class VoidField<
     this.unmounted = false
     this.display_ = this.props.display
     this.pattern_ = this.props.pattern
+    this.middlewares_ = this.props.middlewares
     this.decorator = this.props.decorator
     this.component = this.props.component
   }
@@ -100,14 +105,25 @@ export class VoidField<
     return this.form.fields[identifier]
   }
 
-  get display() {
+  get display(): FieldDisplayTypes {
     if (this.display_) return this.display_
     return this.parent?.display || 'visibility'
   }
 
-  get pattern() {
+  get pattern(): FormPatternTypes {
     if (this.pattern_) return this.pattern_
     return this.parent?.pattern || this.form.pattern || 'editable'
+  }
+
+  get middlewares(): IFieldMiddleware[] {
+    const parents = this.parent?.middlewares || this.form.props?.middlewares
+    if (isArr(this.middlewares)) {
+      if (isArr(parents)) {
+        return parents.concat(this.middlewares)
+      }
+      return this.middlewares
+    }
+    return parents || []
   }
 
   setDisplay = (type: FieldDisplayTypes) => {

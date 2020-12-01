@@ -215,6 +215,7 @@ export interface IFieldProps<
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
+  middlewares?: IFieldMiddleware[]
 }
 
 export interface IVoidFieldProps<
@@ -225,6 +226,7 @@ export interface IVoidFieldProps<
   pattern?: FieldPatternTypes
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
+  middlewares?: IFieldMiddleware[]
 }
 
 export interface IFieldResetOptions {
