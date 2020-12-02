@@ -201,15 +201,15 @@ export class Field<
   }
 
   get errors() {
-    return this.form.feedback.find({ path: this.path, type: 'error' })
+    return this.form.feedback.query({ path: this.path, type: 'error' })
   }
 
   get warnings() {
-    return this.form.feedback.find({ path: this.path, type: 'warning' })
+    return this.form.feedback.query({ path: this.path, type: 'warning' })
   }
 
   get successes() {
-    return this.form.feedback.find({ path: this.path, type: 'success' })
+    return this.form.feedback.query({ path: this.path, type: 'success' })
   }
 
   get value(): ValueType {

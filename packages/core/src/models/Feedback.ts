@@ -32,19 +32,19 @@ export class Feedback {
   }
 
   get errors() {
-    return this.find({
+    return this.query({
       type: 'error'
     })
   }
 
   get warnings() {
-    return this.find({
+    return this.query({
       type: 'warning'
     })
   }
 
   get successes() {
-    return this.find({
+    return this.query({
       type: 'success'
     })
   }
@@ -61,7 +61,7 @@ export class Feedback {
       ...info,
       path: info?.path ? String(info.path) : '@root'
     }
-    const searched = this.find(target)
+    const searched = this.query(target)
     if (searched?.length) {
       searched.forEach(item => {
         Object.assign(item, target)
@@ -71,7 +71,7 @@ export class Feedback {
     }
   }
 
-  find = (info: ISearchFeedbackInformation) => {
+  query = (info: ISearchFeedbackInformation) => {
     return this.informations.filter(item => {
       if (info.type && info.type !== item.type) return false
       if (info.code && info.code !== item.code) return false
