@@ -6,7 +6,9 @@ import {
   isFn,
   isValid,
   uid,
-  globalThisPolyfill
+  globalThisPolyfill,
+  clone,
+  defaults
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -71,8 +73,9 @@ export class Form {
     this.mounted = false
     this.unmounted = false
     this.pattern = this.props.pattern
-    this.values = this.props.values || {}
-    this.initialValues = this.props.initialValues || {}
+    this.values =
+      clone(this.props.values) || clone(this.props.initialValues) || {}
+    this.initialValues = clone(this.props.initialValues) || {}
     this.feedback = new Feedback()
     this.graph = new Graph(this)
     this.heart = new Heart({
@@ -218,6 +221,7 @@ export class Form {
 
   setInitialValues = (initialValues: any) => {
     this.initialValues = initialValues
+    this.values = defaults(this.initialValues, this.values)
     this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
   }
 

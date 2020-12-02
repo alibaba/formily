@@ -45,6 +45,7 @@ export class Graph {
       inputValues: field.inputValues,
       decorator: field.decorator,
       component: field.component,
+      validator: field.validator,
       errors: toJS(field.errors),
       warnings: toJS(field.warnings),
       successes: toJS(field.successes)

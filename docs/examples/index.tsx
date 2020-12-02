@@ -22,6 +22,9 @@ const FormItem = props => {
 export default () => {
   const form = useForm({
     pattern: 'disabled',
+    initialValues:{
+      bb:'123'
+    },
     middlewares: [
       state => {
         return {
@@ -31,6 +34,9 @@ export default () => {
       }
     ],
     effects: () => {
+      onFieldReact('kk', (field,form) => {
+        field.setDisplay(form.values.bb === '321' ? 'visibility' : 'none')
+      })
       onFieldReact('aa.cc.*.dd', field => {
         const value = field.query('.ee').get(field => field.value)
         field.setPattern(value === '123' ? 'disabled' : 'editable')
@@ -39,7 +45,7 @@ export default () => {
   })
   return (
     <Formily form={form}>
-      <Field name="bb" required component={['input']} validator="url" />
+      <Field name="bb" initialValue="123" required component={['input']} validator="url" />
       <Field name="kk" required component={['input']} />
       <Field name="aa">
         <ArrayField name="cc">

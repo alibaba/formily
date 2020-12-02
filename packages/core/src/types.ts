@@ -261,6 +261,7 @@ export interface IFieldState {
   visited: boolean
   inputValue: any
   inputValues: any[]
+  validator: FieldValidator
   decorator: FieldDecorator<any>
   component: FieldComponent<any>
   warnings: FeedbackInformation[]

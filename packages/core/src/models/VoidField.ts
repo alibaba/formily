@@ -89,7 +89,10 @@ export class VoidField<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
-      setMiddlewares: action
+      setMiddlewares: action,
+      onInit: action,
+      onMount: action,
+      onUnmount: action
     })
   }
 

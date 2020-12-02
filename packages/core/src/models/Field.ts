@@ -109,9 +109,6 @@ export class Field<
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
-    this.setCacheValue(this.props.value)
-    this.setCacheInitialValue(this.props.initialValue)
-    this.setRequired(this.props.required)
   }
 
   protected makeObservable() {
@@ -156,6 +153,7 @@ export class Field<
       setDecorator: action,
       setDecoratorProps: action,
       setMiddlewares: action,
+      onInit: action,
       onInput: action,
       onMount: action,
       onUnmount: action,
@@ -418,6 +416,17 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
+    if (!isValid(this.initialValue)) {
+      this.form.setInitialValuesIn(this.path, this.props.initialValue)
+    }
+    if (!isValid(this.value)) {
+      if (isValid(this.props.value)) {
+        this.form.setValuesIn(this.path, this.props.value)
+      } else {
+        this.form.setValuesIn(this.path, this.initialValue)
+      }
+    }
+    this.setRequired(this.props.required)
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 
