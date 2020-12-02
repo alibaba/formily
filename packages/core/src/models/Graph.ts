@@ -1,5 +1,5 @@
 import { toJS, makeObservable, action } from 'mobx'
-import { isValid, isEqual, each } from '@formily/shared'
+import { isValid, each } from '@formily/shared'
 import { IFieldState, IVoidFieldState, IFormState, IFormGraph } from '../types'
 import { Field } from './Field'
 import { Form } from './Form'
@@ -43,9 +43,9 @@ export class Graph {
       required: field.required,
       inputValue: field.inputValue,
       inputValues: field.inputValues,
-      decorator: field.decorator,
-      component: field.component,
-      validator: field.validator,
+      decorator: toJS(field.decorator),
+      component: toJS(field.component),
+      validator: toJS(field.validator),
       errors: toJS(field.errors),
       warnings: toJS(field.warnings),
       successes: toJS(field.successes)
@@ -58,8 +58,8 @@ export class Graph {
       path: field.path.toString(),
       display: field.display,
       pattern: field.pattern,
-      decorator: field.decorator,
-      component: field.component
+      decorator: toJS(field.decorator),
+      component: toJS(field.component)
     }
   }
 
@@ -87,74 +87,56 @@ export class Graph {
 
   setFieldState = (field: Field, state: IFieldState) => {
     if (!state) return
-    if (isValid(state.modified) && !isEqual(state.modified, field.modified)) {
+    if (isValid(state.modified)) {
       field.modified = state.modified
     }
-    if (isValid(state.active) && !isEqual(state.active, field.active)) {
+    if (isValid(state.active)) {
       field.active = state.active
     }
-    if (isValid(state.visited) && !isEqual(state.visited, field.visited)) {
+    if (isValid(state.visited)) {
       field.visited = state.visited
     }
-    if (
-      isValid(state.inputValue) &&
-      !isEqual(state.inputValue, field.inputValue)
-    ) {
+    if (isValid(state.inputValue)) {
       field.inputValue = state.inputValue
     }
-    if (
-      isValid(state.inputValues) &&
-      !isEqual(state.inputValues, field.inputValues)
-    ) {
+    if (isValid(state.inputValues)) {
       field.inputValues = state.inputValues
     }
-    if (
-      isValid(state.component) &&
-      !isEqual(state.component, field.component)
-    ) {
+    if (isValid(state.component)) {
       field.setComponent(state.component?.[0], state.component?.[1])
       field.component = state.component
     }
-    if (
-      isValid(state.decorator) &&
-      !isEqual(state.decorator, field.decorator)
-    ) {
+    if (isValid(state.decorator)) {
       field.setDecorator(state.decorator?.[0], state.decorator?.[1])
     }
-    if (isValid(state.value) && !isEqual(state.value, field.value)) {
+    if (isValid(state.value)) {
       field.setValue(state.value)
     }
-    if (isValid(state.errors) && isEqual(state.errors, field.errors)) {
+    if (isValid(state.errors)) {
       this.form.feedback.update(...state.errors)
     }
-    if (isValid(state.warnings) && isEqual(state.warnings, field.warnings)) {
+    if (isValid(state.warnings)) {
       this.form.feedback.update(...state.warnings)
     }
-    if (isValid(state.successes) && isEqual(state.successes, field.successes)) {
+    if (isValid(state.successes)) {
       this.form.feedback.update(...state.successes)
     }
-    if (
-      isValid(state.initialValue) &&
-      !isEqual(state.initialValue, field.initialValue)
-    ) {
+    if (isValid(state.initialValue)) {
       field.setValue(state.initialValue)
     }
-    if (isValid(state.required) && !isEqual(state.required, field.required)) {
+    if (isValid(state.required)) {
       field.setRequired(state.required)
     }
-    if (isValid(state.display) && !isEqual(state.display, field.display)) {
+    if (isValid(state.display)) {
       field.setDisplay(state.display)
     }
-    if (isValid(state.pattern) && !isEqual(state.pattern, field.pattern)) {
+    if (isValid(state.pattern)) {
       field.setPattern(state.pattern)
     }
-    if (isValid(state.loading) && !isEqual(state.loading, field.loading)) {
+    if (isValid(state.loading)) {
       field.setLoading(state.loading)
     }
-    if (
-      isValid(state.validating) &&
-      !isEqual(state.validating, field.validating)
-    ) {
+    if (isValid(state.validating)) {
       field.setValidating(state.validating)
     }
   }
@@ -162,77 +144,59 @@ export class Graph {
   setVoidFieldState = (field: VoidField, state: IVoidFieldState) => {
     if (!state) return
 
-    if (
-      isValid(state.component) &&
-      !isEqual(state.component, field.component)
-    ) {
+    if (isValid(state.component)) {
       field.component = state.component
     }
-    if (
-      isValid(state.decorator) &&
-      !isEqual(state.decorator, field.decorator)
-    ) {
+    if (isValid(state.decorator)) {
       field.decorator = state.decorator
     }
-    if (isValid(state.display) && !isEqual(state.display, field.display)) {
+    if (isValid(state.display)) {
       field.setDisplay(state.display)
     }
-    if (isValid(state.pattern) && !isEqual(state.pattern, field.pattern)) {
+    if (isValid(state.pattern)) {
       field.setPattern(state.pattern)
     }
   }
 
   setState = (state: IFormState) => {
     const form = this.form
-    if (isValid(state.id) && !isEqual(form.id, state.id)) {
+    if (isValid(state.id)) {
       form.id = state.id
     }
-    if (
-      isValid(state.initialized) &&
-      !isEqual(form.initialized, state.initialized)
-    ) {
+    if (isValid(state.initialized)) {
       form.initialized = state.initialized
     }
-    if (
-      isValid(state.validating) &&
-      !isEqual(form.validating, state.validating)
-    ) {
+    if (isValid(state.validating)) {
       form.validating = state.validating
     }
-    if (
-      isValid(state.submitting) &&
-      !isEqual(form.submitting, state.submitting)
-    ) {
+    if (isValid(state.submitting)) {
       form.submitting = state.submitting
     }
-    if (isValid(state.values) && !isEqual(form.values, state.values)) {
+    if (isValid(state.values)) {
       form.values = state.values
     }
-    if (
-      isValid(state.initialValues) &&
-      !isEqual(form.initialValues, state.initialValues)
-    ) {
+    if (isValid(state.initialValues)) {
       form.initialValues = state.initialValues
     }
-    if (isValid(state.mounted) && !isEqual(form.mounted, state.mounted)) {
+    if (isValid(state.mounted)) {
       form.mounted = state.mounted
     }
-    if (isValid(state.unmounted) && !isEqual(form.unmounted, state.unmounted)) {
+    if (isValid(state.unmounted)) {
       form.unmounted = state.unmounted
     }
-    if (isValid(state.modified) && !isEqual(form.modified, state.modified)) {
+    if (isValid(state.modified)) {
       form.modified = state.modified
     }
-    if (isValid(state.pattern) && !isEqual(form.pattern, state.pattern)) {
+    if (isValid(state.pattern)) {
       form.pattern = state.pattern
     }
-    if (isValid(state.errors) && !isEqual(form.errors, state.errors)) {
+    if (isValid(state.errors)) {
       form.feedback.update(...state.errors)
     }
-    if (isValid(state.warnings) && !isEqual(form.warnings, state.warnings)) {
+    if (isValid(state.warnings)) {
       form.feedback.update(...state.warnings)
     }
-    if (isValid(state.successes) && !isEqual(form.successes, state.successes)) {
+    if (isValid(state.successes)) {
       form.feedback.update(...state.successes)
     }
   }
