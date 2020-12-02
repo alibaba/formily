@@ -222,6 +222,7 @@ export interface IFieldProps<
   required?: boolean
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
+  validateFirst?: boolean
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>

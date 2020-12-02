@@ -27,7 +27,8 @@ export const validateToFeedback = async (
 ) => {
   const results = await validate(field.value, field.validator, {
     triggerType,
-    validateFirst: field.form?.props?.validateFirst,
+    validateFirst:
+      field.props?.validateFirst || field.form?.props?.validateFirst,
     context: this
   })
   const shouldSkipValidate =
@@ -45,7 +46,6 @@ export const validateToFeedback = async (
   })
   return results
 }
-
 
 export const spliceArrayState = (
   field: ArrayField,
