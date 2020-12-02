@@ -86,10 +86,6 @@ export class Field<
     this.onInit()
   }
 
-  protected getProps(props: IFieldProps<Decorator, Component>) {
-    return props
-  }
-
   protected initialize(
     path: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
@@ -97,7 +93,7 @@ export class Field<
   ) {
     this.form = form
     this.path = FormPath.parse(path)
-    this.props = this.getProps(props)
+    this.props = props
     this.initialized = false
     this.loading = false
     this.validating = false
@@ -120,17 +116,17 @@ export class Field<
 
   protected makeObservable() {
     makeObservable(this, {
-      display_: observable,
-      pattern_: observable,
+      display_: observable.ref,
+      pattern_: observable.ref,
       middlewares_: observable.ref,
-      loading: observable,
-      validating: observable,
-      modified: observable,
-      active: observable,
-      visited: observable,
-      initialized: observable,
-      mounted: observable,
-      unmounted: observable,
+      loading: observable.ref,
+      validating: observable.ref,
+      modified: observable.ref,
+      active: observable.ref,
+      visited: observable.ref,
+      initialized: observable.ref,
+      mounted: observable.ref,
+      unmounted: observable.ref,
       inputValue: observable.ref,
       inputValues: observable.ref,
       validator: observable.ref,
@@ -143,6 +139,7 @@ export class Field<
       pattern: computed,
       value: computed,
       initialValue: computed,
+      middlewares: computed,
       setDisplay: action,
       setValue: action,
       setPattern: action,

@@ -1,11 +1,9 @@
 import { isArr } from '@formily/shared'
 import { runInAction } from 'mobx'
-import {
-  spliceArrayState,
-  exchangeArrayState
-} from '../shared'
+import { spliceArrayState, exchangeArrayState } from '../shared'
 import { Field } from './Field'
-import { JSXComponent, IFieldProps } from '../types'
+import { Form } from './Form'
+import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
 
 export class ArrayField<
   Decorator extends JSXComponent = any,
@@ -13,12 +11,19 @@ export class ArrayField<
 > extends Field<Decorator, Component, any[]> {
   displayName = 'ArrayField'
 
-  protected getProps(props: IFieldProps<Decorator, Component>) {
-    return {
-      ...props,
-      void: false,
-      value: isArr(props.value) ? props.value : []
-    }
+  constructor(
+    path: FormPathPattern,
+    props: IFieldProps<Decorator, Component>,
+    form: Form
+  ) {
+    super(
+      path,
+      {
+        ...props,
+        value: isArr(props.value) ? props.value : []
+      },
+      form
+    )
   }
 
   push = (...items: any[]) => {

@@ -54,10 +54,6 @@ export class VoidField<
     this.onInit()
   }
 
-  protected getProps(props: IVoidFieldProps<Decorator, Component>) {
-    return props
-  }
-
   protected initialize(
     path: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
@@ -65,10 +61,10 @@ export class VoidField<
   ) {
     this.form = form
     this.path = FormPath.parse(path)
-    this.props = this.getProps(props)
+    this.props = props
     this.mounted = false
     this.unmounted = false
-    this.display_ = this.props.display
+    this.display_ = props.display
     this.pattern_ = this.props.pattern
     this.middlewares_ = this.props.middlewares
     this.decorator = this.props.decorator
@@ -77,12 +73,12 @@ export class VoidField<
 
   protected makeObservable() {
     makeObservable(this, {
-      display_: observable,
-      pattern_: observable,
+      display_: observable.ref,
+      pattern_: observable.ref,
       middlewares_: observable.ref,
-      initialized: observable,
-      mounted: observable,
-      unmounted: observable,
+      initialized: observable.ref,
+      mounted: observable.ref,
+      unmounted: observable.ref,
       decorator: observable.ref,
       component: observable.ref,
       display: computed,
