@@ -15,6 +15,7 @@ const createPages = pages => {
 
 export default {
   ...baseConfig,
+  mode: 'production',
   plugins: [
     ...createPages([
       {

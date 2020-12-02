@@ -15,7 +15,7 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "webpack-cli --config config/webpack.prod.ts",
+    "build": "webpack-cli --config config/webpack.prod.ts && rm package.zip && zip -r package.zip package",
     "start": "webpack-dev-server --config config/webpack.dev.ts"
   },
   "devDependencies": {

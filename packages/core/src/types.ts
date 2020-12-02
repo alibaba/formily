@@ -93,6 +93,13 @@ export interface IFeedbackInformation {
   path?: FormPathPattern
   messages?: FeedbackMessage
 }
+export interface ISearchFeedbackInformation {
+  triggerType?: string
+  type?: string
+  code?: string
+  path?: FormPathPattern | RegExp
+  messages?: FeedbackMessage
+}
 
 export type FeedbackInformation = {
   triggerType?: string
@@ -157,17 +164,19 @@ export interface IFormProps {
 }
 
 export interface IFieldFactoryProps<
-  D extends JSXComponent,
-  C extends JSXComponent
-> extends IFieldProps<D, C> {
+  Decorator extends JSXComponent,
+  Component extends JSXComponent,
+  InnerField = Field
+> extends IFieldProps<Decorator, Component, InnerField> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
 
 export interface IVoidFieldFactoryProps<
-  D extends JSXComponent,
-  C extends JSXComponent
-> extends IVoidFieldProps<D, C> {
+  Decorator extends JSXComponent,
+  Component extends JSXComponent,
+  InnerField = VoidField
+> extends IVoidFieldProps<Decorator, Component, InnerField> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
@@ -205,7 +214,8 @@ export type FieldDecorator<Decorator extends JSXComponent> =
 
 export interface IFieldProps<
   Decorator extends JSXComponent = any,
-  Component extends JSXComponent = any
+  Component extends JSXComponent = any,
+  InnerField = Field
 > {
   value?: any
   initialValue?: any
@@ -215,18 +225,21 @@ export interface IFieldProps<
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  middlewares?: IFieldMiddleware[]
+  reaction?: IFieldReaction<InnerField>
+  middlewares?: IFieldMiddleware<IFieldState, InnerField>[]
 }
 
 export interface IVoidFieldProps<
   Decorator extends JSXComponent = any,
-  Component extends JSXComponent = any
+  Component extends JSXComponent = any,
+  InnerField = VoidField
 > {
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  middlewares?: IFieldMiddleware[]
+  reaction?: IFieldReaction<InnerField>
+  middlewares?: IFieldMiddleware<IVoidFieldState, InnerField>[]
 }
 
 export interface IFieldResetOptions {
@@ -270,8 +283,15 @@ export type IGeneralFieldState = IFieldState | IVoidFieldState
 
 export type GeneralField = Field | VoidField | ArrayField | ObjectField
 
-export interface IFieldMiddleware {
+export interface IFieldMiddleware<
+  State = IGeneralFieldState,
+  Field = GeneralField
+> {
   (state: IGeneralFieldState, field: GeneralField): IGeneralFieldState
+}
+
+export interface IFieldReaction<InnerField = GeneralField> {
+  (field: InnerField, form: Form): void
 }
 
 export interface ISpliceArrayStateProps {

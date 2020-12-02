@@ -1,4 +1,4 @@
-import { JSONCondition } from '../shared/condition'
+import { JSONCondition } from './condition'
 import {
   FormEffectHooks,
   createFormActions,

@@ -6,8 +6,7 @@ import {
   isObj,
   isFn,
   isBool,
-  each,
-  isEqual
+  each
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -21,7 +20,8 @@ import {
   reaction,
   runInAction,
   toJS,
-  IReactionDisposer
+  IReactionDisposer,
+  autorun
 } from 'mobx'
 import { Form } from './Form'
 import {
@@ -122,6 +122,7 @@ export class Field<
     makeObservable(this, {
       display_: observable,
       pattern_: observable,
+      middlewares_: observable.ref,
       loading: observable,
       validating: observable,
       modified: observable,
@@ -157,12 +158,12 @@ export class Field<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
+      setMiddlewares: action,
       onInput: action,
       onMount: action,
       onUnmount: action,
       onFocus: action,
-      onBlur: action,
-      fromJSON: action
+      onBlur: action
     })
   }
 
@@ -186,6 +187,9 @@ export class Field<
         }
       )
     )
+    if (isFn(this.props.reaction)) {
+      this.disposers.push(autorun(() => this.props.reaction(this, this.form)))
+    }
   }
 
   get parent() {
@@ -240,11 +244,11 @@ export class Field<
 
   get middlewares(): IFieldMiddleware[] {
     const parents = this.parent?.middlewares || this.form.props?.middlewares
-    if (isArr(this.middlewares)) {
+    if (isArr(this.middlewares_)) {
       if (isArr(parents)) {
-        return parents.concat(this.middlewares)
+        return parents.concat(this.middlewares_)
       }
-      return this.middlewares
+      return this.middlewares_
     }
     return parents || []
   }
@@ -383,7 +387,10 @@ export class Field<
     component: C,
     props?: React.ComponentProps<C>
   ) => {
-    this.component = [component, { ...this.component?.[1], ...props }]
+    this.component = [
+      component || this.component?.[0],
+      { ...this.component?.[1], ...props }
+    ]
   }
 
   setComponentProps = <C extends JSXComponent = Component>(
@@ -396,13 +403,20 @@ export class Field<
     component: D,
     props?: React.ComponentProps<D>
   ) => {
-    this.decorator = [component, { ...this.decorator?.[1], ...props }]
+    this.decorator = [
+      component || this.decorator?.[0],
+      { ...this.decorator?.[1], ...props }
+    ]
   }
 
   setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: React.ComponentProps<D>
   ) => {
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
+  }
+
+  setMiddlewares = (middlewares: IFieldMiddleware[]) => {
+    this.middlewares_ = middlewares
   }
 
   onInit = () => {
@@ -500,104 +514,13 @@ export class Field<
   }
 
   reduce = (): IFieldState => {
-    const baseState = this.toJSON()
+    const baseState = this.form.graph.getFieldState(this)
     return (
       this.middlewares.reduce((buf, middleware) => {
         if (!isFn(middleware)) return buf
         return { ...buf, ...middleware(buf, this) }
       }, baseState) || baseState
     )
-  }
-
-  toJSON = (): IFieldState => {
-    return {
-      displayName: this.displayName,
-      path: this.path.toString(),
-      display: this.display,
-      pattern: this.pattern,
-      loading: this.loading,
-      validating: this.validating,
-      modified: this.modified,
-      active: this.active,
-      visited: this.visited,
-      value: this.value,
-      initialValue: this.initialValue,
-      required: this.required,
-      inputValue: this.inputValue,
-      inputValues: this.inputValues,
-      decorator: this.decorator,
-      component: this.component,
-      errors: toJS(this.errors),
-      warnings: toJS(this.warnings),
-      successes: toJS(this.successes)
-    }
-  }
-
-  fromJSON = (state: IFieldState) => {
-    if (!state) return
-    if (isValid(state.modified) && !isEqual(state.modified, this.modified)) {
-      this.modified = state.modified
-    }
-    if (isValid(state.active) && !isEqual(state.active, this.active)) {
-      this.active = state.active
-    }
-    if (isValid(state.visited) && !isEqual(state.visited, this.visited)) {
-      this.visited = state.visited
-    }
-    if (
-      isValid(state.inputValue) &&
-      !isEqual(state.inputValue, this.inputValue)
-    ) {
-      this.inputValue = state.inputValue
-    }
-    if (
-      isValid(state.inputValues) &&
-      !isEqual(state.inputValues, this.inputValues)
-    ) {
-      this.inputValues = state.inputValues
-    }
-    if (isValid(state.component) && !isEqual(state.component, this.component)) {
-      this.component = state.component
-    }
-    if (isValid(state.decorator) && !isEqual(state.decorator, this.decorator)) {
-      this.decorator = state.decorator
-    }
-    if (isValid(state.value) && !isEqual(state.value, this.value)) {
-      this.setValue(state.value)
-    }
-    if (isValid(state.errors) && isEqual(state.errors, this.errors)) {
-      this.form.feedback.update(...state.errors)
-    }
-    if (isValid(state.warnings) && isEqual(state.warnings, this.warnings)) {
-      this.form.feedback.update(...state.warnings)
-    }
-    if (isValid(state.successes) && isEqual(state.successes, this.successes)) {
-      this.form.feedback.update(...state.successes)
-    }
-    if (
-      isValid(state.initialValue) &&
-      !isEqual(state.initialValue, this.initialValue)
-    ) {
-      this.setValue(state.initialValue)
-    }
-    if (isValid(state.required) && !isEqual(state.required, this.required)) {
-      this.setRequired(state.required)
-    }
-    if (isValid(state.display) && !isEqual(state.display, this.display)) {
-      this.setDisplay(state.display)
-    }
-    if (isValid(state.pattern) && !isEqual(state.pattern, this.pattern)) {
-      this.setPattern(state.pattern)
-    }
-    if (isValid(state.loading) && !isEqual(state.loading, this.loading)) {
-      this.setLoading(state.loading)
-    }
-    if (
-      isValid(state.validating) &&
-      !isEqual(state.validating, this.validating)
-    ) {
-      this.setValidating(state.validating)
-    }
   }
 
   dispose = () => {

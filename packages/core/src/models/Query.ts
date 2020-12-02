@@ -1,5 +1,5 @@
 import { FormPath, isFn, isRegExp } from '@formily/shared'
-import { IQueryProps } from '../types'
+import { GeneralField, IQueryProps } from '../types'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
 import { Form } from './Form'
@@ -25,7 +25,10 @@ export class Query<T = Field> {
     if (isRegExp(this.pattern)) {
       for (let path in this.form.fields) {
         const field = this.form.fields[path]
-        if (this.pattern.test(path) && field.displayName === this.type) {
+        if (
+          this.pattern.test(path) &&
+          (field.displayName === this.type || this.type === 'ALL')
+        ) {
           if (isFn(getter)) {
             return getter(field as any, field.path) as any
           }
@@ -35,7 +38,7 @@ export class Query<T = Field> {
     } else if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const field = this.form.fields[identifier]
-      if (field && field.displayName === this.type) {
+      if (field && (field.displayName === this.type || this.type === 'ALL')) {
         if (isFn(getter)) {
           return getter(field as any, field.path) as any
         }
@@ -44,7 +47,10 @@ export class Query<T = Field> {
     } else {
       for (let path in this.form.fields) {
         const field = this.form.fields[path]
-        if (this.pattern.match(path) && field.displayName === this.type) {
+        if (
+          this.pattern.match(path) &&
+          (field.displayName === this.type || this.type === 'ALL')
+        ) {
           if (isFn(getter)) {
             return getter(field as any, field.path) as any
           }
@@ -60,7 +66,10 @@ export class Query<T = Field> {
     if (isRegExp(this.pattern)) {
       for (let path in this.form.fields) {
         const field = this.form.fields[path]
-        if (this.pattern.test(path) && field.displayName === this.type) {
+        if (
+          this.pattern.test(path) &&
+          (field.displayName === this.type || this.type === 'ALL')
+        ) {
           if (isFn(mapper)) {
             results.push(mapper(field as any, field.path))
           } else {
@@ -71,7 +80,7 @@ export class Query<T = Field> {
     } else if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const field = this.form.fields[identifier]
-      if (field && field.displayName === this.type) {
+      if (field && (field.displayName === this.type || this.type === 'ALL')) {
         if (isFn(mapper)) {
           results.push(mapper(field as any, field.path))
         } else {
@@ -81,7 +90,10 @@ export class Query<T = Field> {
     } else {
       for (let path in this.form.fields) {
         const field = this.form.fields[path]
-        if (this.pattern.match(path) && field.displayName === this.type) {
+        if (
+          this.pattern.match(path) &&
+          (field.displayName === this.type || this.type === 'ALL')
+        ) {
           if (isFn(mapper)) {
             results.push(mapper(field as any, field.path))
           } else {
@@ -103,5 +115,9 @@ export class Query<T = Field> {
 
   get void() {
     return new Query<VoidField>(this.props, 'VoidField')
+  }
+
+  get all() {
+    return new Query<GeneralField>(this.props, 'ALL')
   }
 }

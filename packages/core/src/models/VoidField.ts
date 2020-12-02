@@ -1,16 +1,15 @@
+import { FormPath, isFn, isArr, FormPathPattern } from '@formily/shared'
 import {
-  FormPath,
-  isValid,
-  isEqual,
-  isFn,
-  isArr,
-  FormPathPattern
-} from '@formily/shared'
-import { makeObservable, observable, action, computed } from 'mobx'
+  makeObservable,
+  observable,
+  action,
+  computed,
+  autorun,
+  IReactionDisposer
+} from 'mobx'
 import {
   JSXComponent,
   LifeCycleTypes,
-  IFieldProps,
   FieldDisplayTypes,
   FieldPatternTypes,
   FieldDecorator,
@@ -42,6 +41,8 @@ export class VoidField<
   path: FormPath
   props: IVoidFieldProps<Decorator, Component>
 
+  disposers: IReactionDisposer[] = []
+
   constructor(
     path: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
@@ -49,16 +50,17 @@ export class VoidField<
   ) {
     this.initialize(path, props, form)
     this.makeObservable()
+    this.makeReactive()
     this.onInit()
   }
 
-  protected getProps(props: IFieldProps<Decorator, Component>) {
+  protected getProps(props: IVoidFieldProps<Decorator, Component>) {
     return props
   }
 
   protected initialize(
     path: FormPathPattern,
-    props: IFieldProps<Decorator, Component>,
+    props: IVoidFieldProps<Decorator, Component>,
     form: Form
   ) {
     this.form = form
@@ -77,6 +79,7 @@ export class VoidField<
     makeObservable(this, {
       display_: observable,
       pattern_: observable,
+      middlewares_: observable.ref,
       initialized: observable,
       mounted: observable,
       unmounted: observable,
@@ -90,8 +93,14 @@ export class VoidField<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
-      fromJSON: action
+      setMiddlewares: action
     })
+  }
+
+  protected makeReactive() {
+    if (isFn(this.props.reaction)) {
+      this.disposers.push(autorun(() => this.props.reaction(this, this.form)))
+    }
   }
 
   get parent() {
@@ -117,9 +126,9 @@ export class VoidField<
 
   get middlewares(): IFieldMiddleware[] {
     const parents = this.parent?.middlewares || this.form.props?.middlewares
-    if (isArr(this.middlewares)) {
+    if (isArr(this.middlewares_)) {
       if (isArr(parents)) {
-        return parents.concat(this.middlewares)
+        return parents.concat(this.middlewares_)
       }
       return this.middlewares
     }
@@ -138,7 +147,10 @@ export class VoidField<
     component: C,
     props?: React.ComponentProps<C>
   ) => {
-    this.component = [component, { ...this.component?.[1], ...props }]
+    this.component = [
+      component || this.component?.[0],
+      { ...this.component?.[1], ...props }
+    ]
   }
 
   setComponentProps = <C extends JSXComponent = Component>(
@@ -151,13 +163,20 @@ export class VoidField<
     component: D,
     props?: React.ComponentProps<D>
   ) => {
-    this.decorator = [component, { ...this.decorator?.[1], ...props }]
+    this.decorator = [
+      component || this.decorator?.[0],
+      { ...this.decorator?.[1], ...props }
+    ]
   }
 
   setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: React.ComponentProps<D>
   ) => {
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
+  }
+
+  setMiddlewares = (middlewares: IFieldMiddleware[]) => {
+    this.middlewares_ = middlewares
   }
 
   onInit = () => {
@@ -186,7 +205,7 @@ export class VoidField<
   }
 
   reduce = (): IVoidFieldState => {
-    const baseState = this.toJSON()
+    const baseState = this.form.graph.getVoidFieldState(this)
     return (
       this.form.props?.middlewares?.reduce((buf, middleware) => {
         if (!isFn(middleware)) return buf
@@ -195,31 +214,11 @@ export class VoidField<
     )
   }
 
-  toJSON = (): IVoidFieldState => {
-    return {
-      displayName: this.displayName,
-      path: this.path.toString(),
-      display: this.display,
-      pattern: this.pattern,
-      decorator: this.decorator,
-      component: this.component
-    }
-  }
-
-  fromJSON = (state: IVoidFieldState) => {
-    if (!state) return
-
-    if (isValid(state.component) && !isEqual(state.component, this.component)) {
-      this.component = state.component
-    }
-    if (isValid(state.decorator) && !isEqual(state.decorator, this.decorator)) {
-      this.decorator = state.decorator
-    }
-    if (isValid(state.display) && !isEqual(state.display, this.display)) {
-      this.setDisplay(state.display)
-    }
-    if (isValid(state.pattern) && !isEqual(state.pattern, this.pattern)) {
-      this.setPattern(state.pattern)
-    }
+  dispose = () => {
+    this.disposers.forEach(dispose => {
+      if (isFn(dispose)) {
+        dispose()
+      }
+    })
   }
 }

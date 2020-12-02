@@ -1,8 +1,9 @@
-import { FormPath, isArr } from '@formily/shared'
+import { FormPath, isArr, isRegExp } from '@formily/shared'
 import { action, computed, makeObservable, observable } from 'mobx'
 import {
   FeedbackInformation,
   IFeedbackInformation,
+  ISearchFeedbackInformation,
   IFeedbackReducer
 } from '../types'
 export class Feedback {
@@ -70,11 +71,15 @@ export class Feedback {
     }
   }
 
-  find = (info: IFeedbackInformation) => {
+  find = (info: ISearchFeedbackInformation) => {
     return this.informations.filter(item => {
       if (info.type && info.type !== item.type) return false
       if (info.code && info.code !== item.code) return false
-      if (info.path && !FormPath.parse(info.path).match(item.path)) return false
+      if (info.path) {
+        if (isRegExp(info.path)) {
+          if (!info.path.test(item.path)) return false
+        } else if (!FormPath.parse(info.path).match(item.path)) return false
+      }
       if (isArr(item.messages) && !item.messages.length) return false
       if (!item.messages) return false
       if (info.triggerType && info.triggerType !== item.triggerType)
@@ -83,11 +88,15 @@ export class Feedback {
     })
   }
 
-  clear = (info?: IFeedbackInformation) => {
+  clear = (info?: ISearchFeedbackInformation) => {
     this.informations = this.informations.filter(item => {
       if (info.type && info.type !== item.type) return true
       if (info.code && info.code !== item.code) return true
-      if (info.path && !FormPath.parse(info.path).match(item.path)) return true
+      if (info.path) {
+        if (isRegExp(info.path)) {
+          if (!info.path.test(item.path)) return true
+        } else if (!FormPath.parse(info.path).match(item.path)) return true
+      }
       if (info.triggerType && info.triggerType !== item.triggerType) return true
       return false
     })

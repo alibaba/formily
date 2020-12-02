@@ -6,8 +6,7 @@ import {
   isFn,
   isValid,
   uid,
-  globalThisPolyfill,
-  isEqual
+  globalThisPolyfill
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -18,7 +17,6 @@ import {
   FormPatternTypes,
   FormRequests,
   IFormGraph,
-  IFormState,
   IFormProps,
   IFieldResetOptions,
   FormFields,
@@ -27,10 +25,6 @@ import {
 } from '../types'
 import {
   isVoidField,
-  isFormState,
-  isFieldState,
-  isArrayFieldState,
-  isObjectFieldState,
   getLifeCyclesByEffects,
   skipVoidFieldPath
 } from '../shared'
@@ -39,6 +33,7 @@ import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
 import { Query } from './Query'
+import { Graph } from './Graph'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
@@ -56,19 +51,18 @@ export class Form {
   unmounted: boolean
   props: IFormProps
   heart: Heart
+  graph: Graph
   feedback: Feedback
   fields: FormFields = {}
   requests: FormRequests = {}
   constructor(props: IFormProps) {
     this.initialize(props)
     this.makeObservable()
-    this.makeSubscrible()
     this.onInit()
   }
 
   protected initialize(props: IFormProps) {
     this.id = uid()
-    this.feedback = new Feedback()
     this.props = { ...Form.defaultProps, ...props }
     this.initialized = false
     this.submitting = false
@@ -79,6 +73,12 @@ export class Form {
     this.pattern = this.props.pattern
     this.values = this.props.values || {}
     this.initialValues = this.props.initialValues || {}
+    this.feedback = new Feedback()
+    this.graph = new Graph(this)
+    this.heart = new Heart({
+      lifecycles: this.lifecycles,
+      context: this
+    })
   }
 
   protected makeObservable() {
@@ -107,13 +107,6 @@ export class Form {
       createArrayField: action,
       createObjectField: action,
       createVoidField: action
-    })
-  }
-
-  protected makeSubscrible() {
-    this.heart = new Heart({
-      lifecycles: this.lifecycles,
-      context: this
     })
   }
 
@@ -161,7 +154,7 @@ export class Form {
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IFieldFactoryProps<Decorator, Component>
+    props: IFieldFactoryProps<Decorator, Component, ArrayField>
   ) => {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
@@ -175,7 +168,7 @@ export class Form {
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IFieldFactoryProps<Decorator, Component>
+    props: IFieldFactoryProps<Decorator, Component, ObjectField>
   ) => {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
@@ -189,7 +182,7 @@ export class Form {
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IVoidFieldFactoryProps<Decorator, Component>
+    props: IVoidFieldFactoryProps<Decorator, Component, VoidField>
   ) => {
     const path = FormPath.parse(props.basePath).concat(props.name)
     const identifier = path.toString()
@@ -292,6 +285,30 @@ export class Form {
     this.heart.setLifeCycles(getLifeCyclesByEffects(effects))
   }
 
+  clearErrors = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
+    this.feedback.clear({
+      type: 'error',
+      path: pattern,
+      code
+    })
+  }
+
+  clearWarnings = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
+    this.feedback.clear({
+      type: 'warning',
+      path: pattern,
+      code
+    })
+  }
+
+  clearSuccesses = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
+    this.feedback.clear({
+      type: 'success',
+      path: pattern,
+      code
+    })
+  }
+
   query = (pattern: FormPathPattern | RegExp) => {
     return new Query({
       pattern,
@@ -331,128 +348,27 @@ export class Form {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
-    this.query('*').getAll(field => {
-      if (!isVoidField(field)) {
-        field.dispose()
-      }
+    each(this.fields, field => {
+      field.dispose()
     })
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }
   }
 
-  toJSON = (): IFormState => {
-    return {
-      displayName: this.displayName,
-      id: this.id,
-      validating: this.validating,
-      values: toJS(this.values),
-      initialValues: toJS(this.initialValues),
-      submitting: this.submitting,
-      valid: this.valid,
-      invalid: this.invalid,
-      initialized: this.initialized,
-      mounted: this.mounted,
-      unmounted: this.unmounted,
-      modified: this.modified,
-      errors: toJS(this.errors),
-      warnings: toJS(this.warnings),
-      successes: toJS(this.successes),
-      pattern: this.pattern
-    }
-  }
-
-  fromJSON = (state: IFormState) => {
-    if (isValid(state.id) && !isEqual(this.id, state.id)) {
-      this.id = state.id
-    }
-    if (
-      isValid(state.initialized) &&
-      !isEqual(this.initialized, state.initialized)
-    ) {
-      this.initialized = state.initialized
-    }
-    if (
-      isValid(state.validating) &&
-      !isEqual(this.validating, state.validating)
-    ) {
-      this.validating = state.validating
-    }
-    if (
-      isValid(state.submitting) &&
-      !isEqual(this.submitting, state.submitting)
-    ) {
-      this.submitting = state.submitting
-    }
-    if (isValid(state.values) && !isEqual(this.values, state.values)) {
-      this.values = state.values
-    }
-    if (
-      isValid(state.initialValues) &&
-      !isEqual(this.initialValues, state.initialValues)
-    ) {
-      this.initialValues = state.initialValues
-    }
-    if (isValid(state.mounted) && !isEqual(this.mounted, state.mounted)) {
-      this.mounted = state.mounted
-    }
-    if (isValid(state.unmounted) && !isEqual(this.unmounted, state.unmounted)) {
-      this.unmounted = state.unmounted
-    }
-    if (isValid(state.modified) && !isEqual(this.modified, state.modified)) {
-      this.modified = state.modified
-    }
-    if (isValid(state.pattern) && !isEqual(this.pattern, state.pattern)) {
-      this.pattern = state.pattern
-    }
-    if (isValid(state.errors) && !isEqual(this.errors, state.errors)) {
-      this.feedback.update(...state.errors)
-    }
-    if (isValid(state.warnings) && !isEqual(this.warnings, state.warnings)) {
-      this.feedback.update(...state.warnings)
-    }
-    if (isValid(state.successes) && !isEqual(this.successes, state.successes)) {
-      this.feedback.update(...state.successes)
-    }
-  }
-
-  getFormGraph = (): IFormGraph => {
-    const graph = {}
-    graph[''] = this.toJSON()
-    this.query('*').getAll((field, path) => {
-      graph[path.toString()] = field.toJSON()
-    })
-    return graph
+  getFormGraph = () => {
+    return this.graph.getGraph()
   }
 
   setFormGraph = (graph: IFormGraph) => {
-    each(graph, (state, path) => {
-      if (isFormState(state)) {
-        this.fromJSON(state)
-      } else {
-        if (this.fields[path]) {
-          this.fields[path].fromJSON(state as any)
-        } else {
-          if (isFieldState(state)) {
-            this.fields[path] = new Field(path, {}, this)
-          } else if (isArrayFieldState(state)) {
-            this.fields[path] = new ArrayField(path, {}, this)
-          } else if (isObjectFieldState(state)) {
-            this.fields[path] = new ObjectField(path, {}, this)
-          } else {
-            this.fields[path] = new VoidField(path, {}, this)
-          }
-          this.fields[path].fromJSON(state as any)
-        }
-      }
-    })
+    this.graph.setGraph(graph)
   }
 
   validate = async (pattern: FormPathPattern | RegExp = '*') => {
     this.setValidating(true)
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
-    this.query(pattern).getAll(field => {
+    this.query(pattern).all.getAll(field => {
       if (!isVoidField(field)) {
         tasks.push(field.validate())
       }
@@ -502,7 +418,7 @@ export class Form {
     options?: IFieldResetOptions
   ) => {
     const tasks = []
-    this.query(pattern).getAll(field => {
+    this.query(pattern).all.getAll(field => {
       if (!isVoidField(field)) {
         tasks.push(field.reset(options))
       }
