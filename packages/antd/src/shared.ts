@@ -107,7 +107,8 @@ const NextFormItemProps = [
   'extra',
   'itemStyle',
   'itemClassName',
-  'addonAfter'
+  'addonAfter',
+  'tooltip'
 ]
 
 export const pickFormItemProps = (props: any) => {
