@@ -89,7 +89,12 @@ const App = () => {
         wrapperCol={6}
       >
         <Card title="基本信息" style={{ marginBottom: 15 }}>
-          <FormItem name="aaa" label="字段1" component={Input} />
+          <FormItem
+            name="aaa"
+            label="字段1"
+            component={Input}
+            tooltip="这是帮助信息"
+          />
           <FormItem
             name="bbb"
             label="控制详细信息显示隐藏"
@@ -99,6 +104,7 @@ const App = () => {
             ]}
             initialValue={true}
             component={Select}
+            tooltip="这是帮助信息"
           />
           <FormItem
             name="ccc"
@@ -109,6 +115,7 @@ const App = () => {
             ]}
             initialValue={true}
             component={Select}
+            tooltip="这是帮助信息"
           />
         </Card>
         <VirtualField name="detailCard">
