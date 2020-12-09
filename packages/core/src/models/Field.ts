@@ -4,7 +4,6 @@ import {
   isArr,
   FormPathPattern,
   isObj,
-  isFn,
   isBool,
   each
 } from '@formily/shared'
@@ -552,11 +551,4 @@ export class Field<
     })
   }
 
-  dispose = () => {
-    this.disposers.forEach(dispose => {
-      if (isFn(dispose)) {
-        dispose()
-      }
-    })
-  }
 }

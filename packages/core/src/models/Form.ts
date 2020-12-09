@@ -347,7 +347,11 @@ export class Form {
     this.heart.clear()
     each(this.fields, field => {
       if (!isVoidField(field)) {
-        field.dispose()
+        field.disposers.forEach(dispose => {
+          if (isFn(dispose)) {
+            dispose()
+          }
+        })
       }
     })
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
