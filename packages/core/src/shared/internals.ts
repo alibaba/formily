@@ -1,21 +1,34 @@
-import { FormPath, FormPathPattern, each, pascalCase } from '@formily/shared'
+import {
+  FormPath,
+  FormPathPattern,
+  each,
+  pascalCase,
+  isHTMLElement
+} from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
 import { Form, Field, ArrayField } from '../models'
 import { ISpliceArrayStateProps, IExchangeArrayStateProps } from '../types'
 import { isVoidField } from './externals'
 
-export const skipVoidFieldPath = (pattern: FormPathPattern, form: Form) => {
-  const path = FormPath.parse(pattern)
-  if (path.isMatchPattern)
+export const getValueFromEvent = (event: any) => {
+  if (isHTMLElement(event?.target)) {
+    return event.target.value
+  }
+  return event
+}
+
+export const skipVoidAddress = (pattern: FormPathPattern, form: Form) => {
+  const address = FormPath.parse(pattern)
+  if (address.isMatchPattern)
     throw new Error('Cannot use matching mode when read or writing values')
-  return path.reduce((path: FormPath, key: string, index: number) => {
-    if (index >= path.length - 1) return path.concat([key])
-    const np = path.slice(0, index + 1)
-    const dp = path.concat([key])
+  return address.reduce((address: FormPath, key: string, index: number) => {
+    if (index >= address.length - 1) return address.concat([key])
+    const np = address.slice(0, index + 1)
+    const dp = address.concat([key])
     const field = form.fields[np.toString()]
     if (isVoidField(field)) {
-      return path
+      return address
     }
     return dp
   }, new FormPath(''))
@@ -40,7 +53,7 @@ export const validateToFeedback = async (
       triggerType,
       type,
       code: pascalCase(`validate-${type}`),
-      path: field.path,
+      address: field.address,
       messages: shouldSkipValidate ? [] : messages
     })
   })
@@ -57,7 +70,7 @@ export const spliceArrayState = (
     insertCount: 0,
     ...props
   }
-  const basePath = field.path.toString()
+  const basePath = field.address.toString()
   const fields = field.form.fields
   const results = {}
   const moveStep = insertCount - deleteCount
@@ -96,7 +109,7 @@ export const spliceArrayState = (
         const newIdentifier = moveIndex(identifier)
         results[newIdentifier] = field
         changes[identifier] = newIdentifier
-        field.path = FormPath.parse(newIdentifier)
+        field.address = FormPath.parse(newIdentifier)
       } else if (isDeleteNode(identifier)) {
         deletes[identifier] = true
       } else {
@@ -105,8 +118,8 @@ export const spliceArrayState = (
     })
     field.form.fields = results
     field.form.feedback.reduce((infos, info) => {
-      if (deletes[info.path]) return infos
-      info.path = changes[info.path] || info.path
+      if (deletes[info.address]) return infos
+      info.address = changes[info.address] || info.address
       return infos.concat(info)
     })
   })
@@ -121,7 +134,7 @@ export const exchangeArrayState = (
     toIndex: 0,
     ...props
   }
-  const basePath = field.path.toString()
+  const basePath = field.address.toString()
   const fields = field.form.fields
   const results = {}
   const isArrayChildren = (identifier: string) => {
@@ -153,19 +166,19 @@ export const exchangeArrayState = (
         const newIdentifier = moveIndex(identifier, toIndex)
         results[newIdentifier] = field
         changes[identifier] = newIdentifier
-        field.path = FormPath.parse(newIdentifier)
+        field.address = FormPath.parse(newIdentifier)
       } else if (isToNode(identifier)) {
         const newIdentifier = moveIndex(identifier, fromIndex)
         results[newIdentifier] = field
         changes[identifier] = newIdentifier
-        field.path = FormPath.parse(newIdentifier)
+        field.address = FormPath.parse(newIdentifier)
       } else {
         results[identifier] = field
       }
     })
     field.form.fields = results
     field.form.feedback.reduce((infos, info) => {
-      info.path = changes[info.path] || info.path
+      info.address = changes[info.address] || info.address
       return infos.concat(info)
     })
   })

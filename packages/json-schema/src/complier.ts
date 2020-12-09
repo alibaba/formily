@@ -6,13 +6,14 @@ import {
   reduce,
   BigData
 } from '@formily/shared'
+import { isSchemaObject } from './schema'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 
-export const complieExpression = <Source = any, Context = any>(
+export const complieExpression = <Source = any, Scope = any>(
   source: Source,
-  context?: Context,
+  scope?: Scope,
   exclude?: (key: string, value: any) => boolean
 ): any => {
   const seenObjects = []
@@ -20,8 +21,8 @@ export const complieExpression = <Source = any, Context = any>(
     if (isStr(source)) {
       const matched = source.match(ExpRE)
       if (!matched) return source
-      const vars = Object.keys(context || {})
-      const params = vars.map(key => context[key])
+      const vars = Object.keys(scope || {})
+      const params = vars.map(key => scope[key])
       return new Function(...vars, `return (${matched[1]});`)(...params)
     } else if (isArr(source)) {
       return source.map((value: any) => complie(value))
@@ -35,8 +36,8 @@ export const complieExpression = <Source = any, Context = any>(
       if (source['_isAMomentObject']) {
         return source
       }
-      if (source['_isJSONSchemaObject']) {
-        return source
+      if (isSchemaObject(source)) {
+        return source.fromJSON(source, scope)
       }
       if (BigData.isBigData(source)) {
         return source
@@ -60,7 +61,7 @@ export const complieExpression = <Source = any, Context = any>(
               return buf
             }
           }
-          if (key == 'x-linkages') {
+          if (key === 'x-linkages' || key === 'x-reactions') {
             buf[key] = value
             return buf
           }

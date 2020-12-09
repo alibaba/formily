@@ -11,9 +11,9 @@ import {
 
 export type AnyFunction = (...args: any[]) => any
 
-export type JSXComponent =
-  | keyof JSX.IntrinsicElements
-  | React.JSXElementConstructor<any>
+export type JSXComponent = any
+
+export type JSXComponenntProps<P> = any
 
 export type LifeCycleHandler<T> = (payload: T, context: any) => void
 
@@ -90,6 +90,7 @@ export interface IFeedbackInformation {
   triggerType?: string
   type?: string
   code?: string
+  address?: FormPathPattern
   path?: FormPathPattern
   messages?: FeedbackMessage
 }
@@ -97,6 +98,7 @@ export interface ISearchFeedbackInformation {
   triggerType?: string
   type?: string
   code?: string
+  address?: FormPathPattern | RegExp
   path?: FormPathPattern | RegExp
   messages?: FeedbackMessage
 }
@@ -105,6 +107,7 @@ export type FeedbackInformation = {
   triggerType?: string
   type?: string
   code?: string
+  address?: string
   path?: string
   messages?: FeedbackMessage
 }
@@ -128,7 +131,7 @@ export type FormPathPattern =
   | number
   | Array<string | number>
   | FormPath
-  | (((path: Array<string | number>) => boolean) & {
+  | (((address: Array<string | number>) => boolean) & {
       path: FormPath
     })
 
@@ -160,14 +163,14 @@ export interface IFormProps {
   effects?: (form: Form) => void
   editable?: boolean
   validateFirst?: boolean
-  middlewares?: IFieldMiddleware[]
 }
 
 export interface IFieldFactoryProps<
   Decorator extends JSXComponent,
   Component extends JSXComponent,
-  InnerField = Field
-> extends IFieldProps<Decorator, Component, InnerField> {
+  TextType = any,
+  ValueType = any
+> extends IFieldProps<Decorator, Component, TextType, ValueType> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
@@ -175,8 +178,8 @@ export interface IFieldFactoryProps<
 export interface IVoidFieldFactoryProps<
   Decorator extends JSXComponent,
   Component extends JSXComponent,
-  InnerField = VoidField
-> extends IVoidFieldProps<Decorator, Component, InnerField> {
+  TextType = any
+> extends IVoidFieldProps<Decorator, Component, TextType> {
   name: FormPathPattern
   basePath?: FormPathPattern
 }
@@ -202,23 +205,26 @@ export type FieldValidator = Validator
 
 export type FieldComponent<Component extends JSXComponent> =
   | [Component]
-  | [Component, React.ComponentProps<Component>]
+  | [Component, JSXComponenntProps<Component>]
   | boolean
   | any[]
 
 export type FieldDecorator<Decorator extends JSXComponent> =
   | [Decorator]
-  | [Decorator, React.ComponentProps<Decorator>]
+  | [Decorator, JSXComponenntProps<Decorator>]
   | boolean
   | any[]
 
 export interface IFieldProps<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
-  InnerField = Field
+  TextType = any,
+  ValueType = any
 > {
-  value?: any
-  initialValue?: any
+  title?: TextType
+  description?: TextType
+  value?: ValueType
+  initialValue?: ValueType
   required?: boolean
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
@@ -226,21 +232,19 @@ export interface IFieldProps<
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  reaction?: IFieldReaction<InnerField>
-  middlewares?: IFieldMiddleware<IFieldState, InnerField>[]
 }
 
 export interface IVoidFieldProps<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
-  InnerField = VoidField
+  TextType = any
 > {
+  title?: TextType
+  description?: TextType
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  reaction?: IFieldReaction<InnerField>
-  middlewares?: IFieldMiddleware<IVoidFieldState, InnerField>[]
 }
 
 export interface IFieldResetOptions {
@@ -251,6 +255,7 @@ export interface IFieldResetOptions {
 
 export interface IFieldState {
   displayName: string
+  address: string
   path: string
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
@@ -263,6 +268,11 @@ export interface IFieldState {
   inputValue: any
   inputValues: any[]
   validator: FieldValidator
+  validateStatus: 'success' | 'error' | 'warning' | 'validating'
+  disabled: boolean
+  readOnly: boolean
+  editable: boolean
+  readPretty: boolean
   decorator: FieldDecorator<any>
   component: FieldComponent<any>
   warnings: FeedbackInformation[]
@@ -274,6 +284,7 @@ export interface IFieldState {
 
 export interface IVoidFieldState {
   displayName: string
+  address: string
   path: string
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
@@ -284,18 +295,6 @@ export interface IVoidFieldState {
 export type IGeneralFieldState = IFieldState | IVoidFieldState
 
 export type GeneralField = Field | VoidField | ArrayField | ObjectField
-
-export interface IFieldMiddleware<
-  State = IGeneralFieldState,
-  Field = GeneralField
-> {
-  (state: IGeneralFieldState, field: GeneralField): IGeneralFieldState
-}
-
-export interface IFieldReaction<InnerField = GeneralField> {
-  (field: InnerField, form: Form): void
-}
-
 export interface ISpliceArrayStateProps {
   startIndex?: number
   deleteCount?: number

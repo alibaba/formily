@@ -20,12 +20,12 @@ import {
   reaction,
   runInAction,
   toJS,
-  IReactionDisposer,
-  autorun
+  IReactionDisposer
 } from 'mobx'
 import { Form } from './Form'
 import {
   JSXComponent,
+  JSXComponenntProps,
   LifeCycleTypes,
   FeedbackMessage,
   FieldCaches,
@@ -36,23 +36,27 @@ import {
   FieldDecorator,
   FieldComponent,
   IFieldProps,
-  IFieldState,
   IFieldResetOptions,
-  IFieldMiddleware,
   FormPatternTypes
 } from '../types'
-import { validateToFeedback } from '../shared'
+import {
+  skipVoidAddress,
+  validateToFeedback,
+  getValueFromEvent
+} from '../shared'
 import { Query } from './Query'
 
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
+  TextType = any,
   ValueType = any
 > {
   displayName = 'Field'
+  title: TextType
+  description: TextType
   display_: FieldDisplayTypes
   pattern_: FieldPatternTypes
-  middlewares_: IFieldMiddleware[]
   loading: boolean
   validating: boolean
   modified: boolean
@@ -67,32 +71,32 @@ export class Field<
   decorator: FieldDecorator<Decorator>
   component: FieldComponent<Component>
 
-  form: Form
-  path: FormPath
+  address: FormPath
 
-  props: IFieldProps<Decorator, Component>
+  form: Form
+  props: IFieldProps<Decorator, Component, TextType, ValueType>
   caches: FieldCaches = {}
   requests: FieldRequests = {}
   disposers: IReactionDisposer[] = []
 
   constructor(
-    path: FormPathPattern,
-    props: IFieldProps<Decorator, Component>,
+    address: FormPathPattern,
+    props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form
   ) {
-    this.initialize(path, props, form)
+    this.initialize(address, props, form)
     this.makeObservable()
     this.makeReactive()
     this.onInit()
   }
 
   protected initialize(
-    path: FormPathPattern,
-    props: IFieldProps<Decorator, Component>,
+    address: FormPathPattern,
+    props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form
   ) {
     this.form = form
-    this.path = FormPath.parse(path)
+    this.address = FormPath.parse(address)
     this.props = props
     this.initialized = false
     this.loading = false
@@ -103,9 +107,10 @@ export class Field<
     this.mounted = false
     this.unmounted = false
     this.inputValues = []
+    this.title = props.title
+    this.description = props.description
     this.display_ = this.props.display
     this.pattern_ = this.props.pattern
-    this.middlewares_ = this.props.middlewares
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
@@ -113,9 +118,10 @@ export class Field<
 
   protected makeObservable() {
     makeObservable(this, {
+      title: observable.ref,
+      description: observable.ref,
       display_: observable.ref,
       pattern_: observable.ref,
-      middlewares_: observable.ref,
       loading: observable.ref,
       validating: observable.ref,
       modified: observable.ref,
@@ -136,8 +142,9 @@ export class Field<
       pattern: computed,
       value: computed,
       initialValue: computed,
-      middlewares: computed,
       setDisplay: action,
+      setTitle: action,
+      setDescription: action,
       setValue: action,
       setPattern: action,
       setInitialValue: action,
@@ -152,7 +159,6 @@ export class Field<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
-      setMiddlewares: action,
       onInit: action,
       onInput: action,
       onMount: action,
@@ -182,14 +188,16 @@ export class Field<
         }
       )
     )
-    if (isFn(this.props.reaction)) {
-      this.disposers.push(autorun(() => this.props.reaction(this, this.form)))
-    }
+  }
+
+  get path() {
+    return skipVoidAddress(this.address, this.form)
   }
 
   get parent() {
-    let parent = this.path.parent()
+    let parent = this.address.parent()
     let identifier = parent.toString()
+    if (!identifier) return
     while (!this.form.fields[identifier]) {
       parent = parent.parent()
       identifier = parent.toString()
@@ -199,15 +207,23 @@ export class Field<
   }
 
   get errors() {
-    return this.form.feedback.query({ path: this.path, type: 'error' })
+    return this.form.feedback.query({ address: this.address, type: 'error' })
+  }
+
+  get valid() {
+    return !this.errors?.length
+  }
+
+  get invalid() {
+    return !this.valid
   }
 
   get warnings() {
-    return this.form.feedback.query({ path: this.path, type: 'warning' })
+    return this.form.feedback.query({ address: this.address, type: 'warning' })
   }
 
   get successes() {
-    return this.form.feedback.query({ path: this.path, type: 'success' })
+    return this.form.feedback.query({ address: this.address, type: 'success' })
   }
 
   get value(): ValueType {
@@ -237,28 +253,48 @@ export class Field<
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
-  get middlewares(): IFieldMiddleware[] {
-    const parents = this.parent?.middlewares || this.form.props?.middlewares
-    if (isArr(this.middlewares_)) {
-      if (isArr(parents)) {
-        return parents.concat(this.middlewares_)
-      }
-      return this.middlewares_
-    }
-    return parents || []
-  }
-
   get required() {
     return parseValidatorDescriptions(this.validator).some(
       desc => desc.required
     )
   }
 
+  get disabled() {
+    return this.pattern === 'disabled'
+  }
+
+  get readOnly() {
+    return this.pattern === 'readOnly'
+  }
+
+  get readPretty() {
+    return this.pattern === 'readPretty'
+  }
+
+  get editable() {
+    return this.pattern === 'editable'
+  }
+
+  get validateStatus() {
+    if (this.invalid) return 'error'
+    if (this.validating) return 'validating'
+    if (this.warnings?.length) return 'warning'
+    if (this.successes?.length) return 'success'
+  }
+
+  setTitle = (title: TextType) => {
+    this.title = title
+  }
+
+  setDescription = (description: TextType) => {
+    this.description = description
+  }
+
   setErrors = (messages: FeedbackMessage) => {
     this.form.feedback.update({
       type: 'error',
       code: 'EffectError',
-      path: this.path,
+      address: this.address,
       messages
     })
   }
@@ -267,7 +303,7 @@ export class Field<
     this.form.feedback.update({
       type: 'warning',
       code: 'EffectWarning',
-      path: this.path,
+      address: this.address,
       messages
     })
   }
@@ -276,7 +312,7 @@ export class Field<
     this.form.feedback.update({
       type: 'success',
       code: 'EffectSuccess',
-      path: this.path,
+      address: this.address,
       messages
     })
   }
@@ -380,7 +416,7 @@ export class Field<
 
   setComponent = <C extends JSXComponent>(
     component: C,
-    props?: React.ComponentProps<C>
+    props?: JSXComponenntProps<C>
   ) => {
     this.component = [
       component || this.component?.[0],
@@ -389,14 +425,14 @@ export class Field<
   }
 
   setComponentProps = <C extends JSXComponent = Component>(
-    props?: React.ComponentProps<C>
+    props?: JSXComponenntProps<C>
   ) => {
     this.component = [this.component?.[0], { ...this.component?.[1], ...props }]
   }
 
   setDecorator = <D extends JSXComponent>(
     component: D,
-    props?: React.ComponentProps<D>
+    props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [
       component || this.decorator?.[0],
@@ -405,13 +441,9 @@ export class Field<
   }
 
   setDecoratorProps = <D extends JSXComponent = Decorator>(
-    props?: React.ComponentProps<D>
+    props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
-  }
-
-  setMiddlewares = (middlewares: IFieldMiddleware[]) => {
-    this.middlewares_ = middlewares
   }
 
   onInit = () => {
@@ -443,11 +475,12 @@ export class Field<
   }
 
   onInput = (...args: any[]) => {
-    this.inputValue = args[0]
-    this.inputValues = args
+    const value = getValueFromEvent(args[0])
+    this.inputValue = value
+    this.inputValues = [value].concat(args.slice(1))
     this.modified = true
     this.form.modified = true
-    this.form.setValuesIn(this.path, args[0])
+    this.form.setValuesIn(this.address, value)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     this.validate('onInput')
@@ -492,7 +525,7 @@ export class Field<
       this.modified = false
       this.visited = false
       this.form.feedback.clear({
-        path: this.path
+        address: this.address
       })
       if (options?.clearInitialValue) {
         this.setInitialValue()
@@ -514,19 +547,9 @@ export class Field<
   query = (pattern: FormPathPattern | RegExp) => {
     return new Query({
       pattern,
-      base: this.path,
+      base: this.address,
       form: this.form
     })
-  }
-
-  reduce = (): IFieldState => {
-    const baseState = this.form.graph.getFieldState(this)
-    return (
-      this.middlewares.reduce((buf, middleware) => {
-        if (!isFn(middleware)) return buf
-        return { ...buf, ...middleware(buf, this) }
-      }, baseState) || baseState
-    )
   }
 
   dispose = () => {

@@ -25,11 +25,7 @@ import {
   IFieldFactoryProps,
   IVoidFieldFactoryProps
 } from '../types'
-import {
-  isVoidField,
-  getLifeCyclesByEffects,
-  skipVoidFieldPath
-} from '../shared'
+import { isVoidField, getLifeCyclesByEffects } from '../shared'
 import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
@@ -145,10 +141,11 @@ export class Form {
   >(
     props: IFieldFactoryProps<Decorator, Component>
   ) => {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
+    const address = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = address.toString()
+    if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new Field(path, props, this)
+      this.fields[identifier] = new Field(address, props, this)
     }
     return this.fields[identifier] as Field<Decorator, Component>
   }
@@ -157,12 +154,13 @@ export class Form {
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IFieldFactoryProps<Decorator, Component, ArrayField>
+    props: IFieldFactoryProps<Decorator, Component>
   ) => {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
+    const address = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = address.toString()
+    if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new ArrayField(path, props, this)
+      this.fields[identifier] = new ArrayField(address, props, this)
     }
     return this.fields[identifier] as ArrayField<Decorator, Component>
   }
@@ -171,12 +169,13 @@ export class Form {
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IFieldFactoryProps<Decorator, Component, ObjectField>
+    props: IFieldFactoryProps<Decorator, Component>
   ) => {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
+    const address = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = address.toString()
+    if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new ObjectField(path, props, this)
+      this.fields[identifier] = new ObjectField(address, props, this)
     }
     return this.fields[identifier] as ObjectField<Decorator, Component>
   }
@@ -185,12 +184,13 @@ export class Form {
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(
-    props: IVoidFieldFactoryProps<Decorator, Component, VoidField>
+    props: IVoidFieldFactoryProps<Decorator, Component>
   ) => {
-    const path = FormPath.parse(props.basePath).concat(props.name)
-    const identifier = path.toString()
+    const address = FormPath.parse(props.basePath).concat(props.name)
+    const identifier = address.toString()
+    if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new VoidField(path, props, this)
+      this.fields[identifier] = new VoidField(address, props, this)
     }
     return this.fields[identifier] as VoidField<Decorator, Component>
   }
@@ -204,19 +204,19 @@ export class Form {
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.values, skipVoidFieldPath(pattern, this), value)
+    FormPath.setIn(this.values, pattern, value)
   }
 
   deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.values, skipVoidFieldPath(pattern, this))
+    FormPath.deleteIn(this.values, pattern)
   }
 
   existValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.values, skipVoidFieldPath(pattern, this))
+    return FormPath.existIn(this.values, pattern)
   }
 
   getValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.values, skipVoidFieldPath(pattern, this))
+    return FormPath.getIn(this.values, pattern)
   }
 
   setInitialValues = (initialValues: any) => {
@@ -226,26 +226,19 @@ export class Form {
   }
 
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
-    FormPath.setIn(
-      this.initialValues,
-      skipVoidFieldPath(pattern, this),
-      initialValue
-    )
+    FormPath.setIn(this.initialValues, pattern, initialValue)
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, skipVoidFieldPath(pattern, this))
+    FormPath.deleteIn(this.initialValues, pattern)
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(
-      this.initialValues,
-      skipVoidFieldPath(pattern, this)
-    )
+    return FormPath.existIn(this.initialValues, pattern)
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.initialValues, skipVoidFieldPath(pattern, this))
+    return FormPath.getIn(this.initialValues, pattern)
   }
 
   setSubmitting = (submitting: boolean) => {
@@ -292,7 +285,7 @@ export class Form {
   clearErrors = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
     this.feedback.clear({
       type: 'error',
-      path: pattern,
+      address: pattern,
       code
     })
   }
@@ -300,7 +293,7 @@ export class Form {
   clearWarnings = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
     this.feedback.clear({
       type: 'warning',
-      path: pattern,
+      address: pattern,
       code
     })
   }
@@ -308,7 +301,7 @@ export class Form {
   clearSuccesses = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
     this.feedback.clear({
       type: 'success',
-      path: pattern,
+      address: pattern,
       code
     })
   }
@@ -353,7 +346,9 @@ export class Form {
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
     each(this.fields, field => {
-      field.dispose()
+      if (!isVoidField(field)) {
+        field.dispose()
+      }
     })
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)

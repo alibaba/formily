@@ -9,12 +9,12 @@ export class ObjectField<
   displayName = 'ObjectField'
 
   constructor(
-    path: FormPathPattern,
+    address: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
     form: Form
   ) {
     super(
-      path,
+      address,
       {
         ...props,
         value: isObj(props.value) ? props.value : {}

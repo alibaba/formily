@@ -1,52 +1,99 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
-  Formily,
+  createForm,
+  FormProvider,
+  FormConsumer,
   Field,
-  useField,
   ArrayField,
-  FormSpy,
   onFieldReact,
-  useForm
+  connect,
+  mapProps,
+  mapReadPretty,
+  isVoidField
 } from '@formily/react'
+import { createSchemaField } from '@formily/react-schema-field'
+import { Form, Input as AntdInput, Select } from 'antd'
+import { PreviewText } from '@formily/react-shared-components'
+import 'antd/dist/antd.css'
 
-const FormItem = props => {
-  const field = useField()
-  return (
-    <div>
-      {props.children}
-      {field.errors?.map(err => err.messages.join(',')).join(',')}
-    </div>
-  )
-}
-
-export default () => {
-  const form = useForm({
-    pattern: 'disabled',
-    initialValues:{
-      bb:'123'
-    },
-    middlewares: [
-      state => {
+const FormItem = connect(
+  mapProps(
+    { extract: 'validateStatus' },
+    { extract: 'title', to: 'label' },
+    (props, field) => {
+      if (isVoidField(field)) return props
+      if (field.invalid) {
         return {
-          ...state,
-          decorator: [FormItem]
+          help: field.errors.reduce(
+            (msg, info) => msg.concat(info.messages),
+            []
+          )
+        }
+      } else {
+        return {
+          help: field.description
         }
       }
-    ],
-    effects: () => {
-      onFieldReact('kk', (field,form) => {
-        field.setDisplay(form.values.bb === '321' ? 'visibility' : 'none')
-      })
-      onFieldReact('aa.cc.*.dd', field => {
-        const value = field.query('.ee').get(field => field.value)
-        field.setPattern(value === '123' ? 'disabled' : 'editable')
-      })
     }
-  })
+  )
+)(Form.Item)
+
+const Input = connect(mapReadPretty(PreviewText))(AntdInput)
+
+const SchemaField = createSchemaField({
+  decorators: {
+    Select,
+    FormItem
+  },
+  components: {
+    Input,
+    Select
+  }
+})
+
+export default () => {
+  const form = useMemo(
+    () =>
+      createForm({
+        pattern: 'disabled',
+        initialValues: {
+          bb: '123'
+        },
+        effects: () => {
+          onFieldReact('kk', (field, form) => {
+            field.setDisplay(form.values.bb === '321' ? 'visibility' : 'none')
+          })
+          onFieldReact('aa.cc.*.dd', field => {
+            const value = field.query('.ee').get(field => field.value)
+            field.setPattern(value === '123' ? 'disabled' : 'editable')
+          })
+        }
+      }),
+    []
+  )
   return (
-    <Formily form={form}>
-      <Field name="bb" initialValue="123" required component={['input']} validator="url" />
-      <Field name="kk" required component={['input']} />
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Markup
+          name="ioo"
+          x-decorator="FormItem"
+          x-decorator-props={{ tooltip: 'asdasd' }}
+          title="IOO"
+          x-component="Input"
+          x-component-props={{ placeholder: 'asd' }}
+        />
+      </SchemaField>
+      <Field
+        name="bb"
+        initialValue="123"
+        required
+        description={<div>122333</div>}
+        title="BB"
+        decorator={[FormItem]}
+        component={[Input]}
+        validator="url"
+      />
+      <Field name="kk" required component={[Input]} />
       <Field name="aa">
         <ArrayField name="cc">
           {field => {
@@ -59,9 +106,9 @@ export default () => {
                       <Field
                         name={`${index}.dd`}
                         required
-                        component={['input']}
+                        component={[Input]}
                       />
-                      <Field name={`${index}.ee`} component={['input']} />
+                      <Field name={`${index}.ee`} component={[Input]} />
                       <button
                         onClick={() => {
                           field.moveUp(index)
@@ -100,16 +147,16 @@ export default () => {
           }}
         </ArrayField>
       </Field>
-      <FormSpy>
+      <FormConsumer>
         {form => {
-          return JSON.stringify(form.query('aa')?.value)
+          return JSON.stringify(form.query('aa').get().value)
         }}
-      </FormSpy>
-      <FormSpy>
+      </FormConsumer>
+      <FormConsumer>
         {form => {
           return JSON.stringify(form.errors)
         }}
-      </FormSpy>
+      </FormConsumer>
       <button
         onClick={() => {
           form.submit(console.log)
@@ -131,6 +178,6 @@ export default () => {
       >
         禁用
       </button>
-    </Formily>
+    </FormProvider>
   )
 }

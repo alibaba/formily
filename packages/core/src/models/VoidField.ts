@@ -1,81 +1,77 @@
-import { FormPath, isFn, isArr, FormPathPattern } from '@formily/shared'
-import {
-  makeObservable,
-  observable,
-  action,
-  computed,
-  autorun,
-  IReactionDisposer
-} from 'mobx'
+import { FormPath, FormPathPattern } from '@formily/shared'
+import { makeObservable, observable, action, computed } from 'mobx'
 import {
   JSXComponent,
+  JSXComponenntProps,
   LifeCycleTypes,
   FieldDisplayTypes,
   FieldPatternTypes,
   FieldDecorator,
   FieldComponent,
   IVoidFieldProps,
-  IVoidFieldState,
-  IFieldMiddleware,
   FormPatternTypes
 } from '../types'
+import { skipVoidAddress } from '../shared'
 import { Form } from './Form'
 import { Query } from './Query'
 
 export class VoidField<
   Decorator extends JSXComponent = any,
-  Component extends JSXComponent = any
+  Component extends JSXComponent = any,
+  TextType = any
 > {
   displayName = 'VoidField'
+  
+  title: TextType
+  description: TextType
 
   display_: FieldDisplayTypes
   pattern_: FieldPatternTypes
-  middlewares_: IFieldMiddleware[]
   initialized: boolean
   mounted: boolean
   unmounted: boolean
   decorator: FieldDecorator<Decorator>
   component: FieldComponent<Component>
 
+  address: FormPath
+
   form: Form
-  path: FormPath
   props: IVoidFieldProps<Decorator, Component>
 
-  disposers: IReactionDisposer[] = []
-
   constructor(
-    path: FormPathPattern,
+    address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
     form: Form
   ) {
-    this.initialize(path, props, form)
+    this.initialize(address, props, form)
     this.makeObservable()
-    this.makeReactive()
     this.onInit()
   }
 
   protected initialize(
-    path: FormPathPattern,
+    address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
     form: Form
   ) {
     this.form = form
-    this.path = FormPath.parse(path)
+    this.address = FormPath.parse(address)
     this.props = props
     this.mounted = false
     this.unmounted = false
+    this.title = props.title
+    this.description = props.description
     this.display_ = props.display
     this.pattern_ = this.props.pattern
-    this.middlewares_ = this.props.middlewares
     this.decorator = this.props.decorator
     this.component = this.props.component
   }
 
   protected makeObservable() {
     makeObservable(this, {
+      title: observable.ref,
+      description: observable.ref,
       display_: observable.ref,
       pattern_: observable.ref,
-      middlewares_: observable.ref,
       initialized: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
@@ -83,27 +79,26 @@ export class VoidField<
       component: observable.ref,
       display: computed,
       pattern: computed,
+      setTitle: action,
+      setDescription: action,
       setDisplay: action,
       setPattern: action,
       setComponent: action,
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
-      setMiddlewares: action,
       onInit: action,
       onMount: action,
       onUnmount: action
     })
   }
 
-  protected makeReactive() {
-    if (isFn(this.props.reaction)) {
-      this.disposers.push(autorun(() => this.props.reaction(this, this.form)))
-    }
+  get path() {
+    return skipVoidAddress(this.address, this.form)
   }
 
   get parent() {
-    let parent = this.path.parent()
+    let parent = this.address.parent()
     let identifier = parent.toString()
     while (!this.form.fields[identifier]) {
       parent = parent.parent()
@@ -123,15 +118,12 @@ export class VoidField<
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
-  get middlewares(): IFieldMiddleware[] {
-    const parents = this.parent?.middlewares || this.form.props?.middlewares
-    if (isArr(this.middlewares_)) {
-      if (isArr(parents)) {
-        return parents.concat(this.middlewares_)
-      }
-      return this.middlewares
-    }
-    return parents || []
+  setTitle = (title: TextType) => {
+    this.title = title
+  }
+
+  setDescription = (description: TextType) => {
+    this.description = description
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
@@ -144,7 +136,7 @@ export class VoidField<
 
   setComponent = <C extends JSXComponent>(
     component: C,
-    props?: React.ComponentProps<C>
+    props?: JSXComponenntProps<C>
   ) => {
     this.component = [
       component || this.component?.[0],
@@ -153,14 +145,14 @@ export class VoidField<
   }
 
   setComponentProps = <C extends JSXComponent = Component>(
-    props?: React.ComponentProps<C>
+    props?: JSXComponenntProps<C>
   ) => {
     this.component = [this.component?.[0], { ...this.component?.[1], ...props }]
   }
 
   setDecorator = <D extends JSXComponent>(
     component: D,
-    props?: React.ComponentProps<D>
+    props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [
       component || this.decorator?.[0],
@@ -169,13 +161,9 @@ export class VoidField<
   }
 
   setDecoratorProps = <D extends JSXComponent = Decorator>(
-    props?: React.ComponentProps<D>
+    props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
-  }
-
-  setMiddlewares = (middlewares: IFieldMiddleware[]) => {
-    this.middlewares_ = middlewares
   }
 
   onInit = () => {
@@ -198,26 +186,8 @@ export class VoidField<
   query = (pattern: FormPathPattern | RegExp) => {
     return new Query({
       pattern,
-      base: this.path,
+      base: this.address,
       form: this.form
-    })
-  }
-
-  reduce = (): IVoidFieldState => {
-    const baseState = this.form.graph.getVoidFieldState(this)
-    return (
-      this.form.props?.middlewares?.reduce((buf, middleware) => {
-        if (!isFn(middleware)) return buf
-        return { ...buf, ...middleware(buf, this) }
-      }, baseState) || baseState
-    )
-  }
-
-  dispose = () => {
-    this.disposers.forEach(dispose => {
-      if (isFn(dispose)) {
-        dispose()
-      }
     })
   }
 }

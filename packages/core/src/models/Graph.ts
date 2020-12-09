@@ -30,6 +30,7 @@ export class Graph {
   getFieldState = (field: Field): IFieldState => {
     return {
       displayName: field.displayName,
+      address: field.address.toString(),
       path: field.path.toString(),
       display: field.display,
       pattern: field.pattern,
@@ -41,6 +42,11 @@ export class Graph {
       value: field.value,
       initialValue: field.initialValue,
       required: field.required,
+      disabled: field.disabled,
+      readOnly: field.readOnly,
+      readPretty: field.readPretty,
+      editable: field.editable,
+      validateStatus: field.validateStatus,
       inputValue: field.inputValue,
       inputValues: field.inputValues,
       decorator: toJS(field.decorator),
@@ -55,6 +61,7 @@ export class Graph {
   getVoidFieldState = (field: VoidField): IVoidFieldState => {
     return {
       displayName: field.displayName,
+      address: field.address.toString(),
       path: field.path.toString(),
       display: field.display,
       pattern: field.pattern,
@@ -216,11 +223,11 @@ export class Graph {
 
   setGraph = (graph: IFormGraph) => {
     const form = this.form
-    each(graph, (state, path) => {
+    each(graph, (state, address) => {
       if (isFormState(state)) {
         this.setState(state)
       } else {
-        const field = form.fields[path]
+        const field = form.fields[address]
         if (field) {
           if (isVoidField(field)) {
             this.setVoidFieldState(field, state)
@@ -229,17 +236,17 @@ export class Graph {
           }
         } else {
           if (isFieldState(state)) {
-            form.fields[path] = new Field(path, {}, form)
-            this.setFieldState(form.fields[path] as any, state)
+            form.fields[address] = new Field(address, {}, form)
+            this.setFieldState(form.fields[address] as any, state)
           } else if (isArrayFieldState(state)) {
-            form.fields[path] = new ArrayField(path, {}, form)
-            this.setFieldState(form.fields[path] as any, state)
+            form.fields[address] = new ArrayField(address, {}, form)
+            this.setFieldState(form.fields[address] as any, state)
           } else if (isObjectFieldState(state)) {
-            form.fields[path] = new ObjectField(path, {}, form)
-            this.setFieldState(form.fields[path] as any, state)
+            form.fields[address] = new ObjectField(address, {}, form)
+            this.setFieldState(form.fields[address] as any, state)
           } else {
-            form.fields[path] = new VoidField(path, {}, form)
-            this.setVoidFieldState(form.fields[path] as any, state)
+            form.fields[address] = new VoidField(address, {}, form)
+            this.setVoidFieldState(form.fields[address] as any, state)
           }
         }
       }

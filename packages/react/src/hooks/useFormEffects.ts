@@ -9,7 +9,6 @@ export const useFormEffects = (
   const ref = useRef(null)
   const form = useForm()
   ref.current = useMemo(() => {
-    if (!form) return
     if (ref.current) {
       form.removeEffects(ref.current)
     }
@@ -19,7 +18,6 @@ export const useFormEffects = (
   }, deps)
   useEffect(() => {
     return () => {
-      if (!form) return
       form.removeEffects(ref.current)
     }
   }, [])

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 import { isFn } from '@formily/shared'
+import { isVoidField } from '@formily/core'
 
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
@@ -12,33 +13,47 @@ interface IReactiveFieldProps {
     | React.ReactNode
 }
 
-const ReactiveInternal: React.FC<IReactiveFieldProps> = ({
-  field,
-  children
-}) => {
-  if (!field) return null
-  const state = field.reduce()
-  const results = isFn(children) ? children(field, field.form) : children
-  if (!state) return null
-  if (state.display !== 'visibility') return null
-  if (state.decorator) {
-    return React.createElement(
-      state.decorator[0] || React.Fragment,
-      state.decorator[0] ? state.decorator[1] : {},
-      React.createElement(
-        state.component[0] || React.Fragment,
-        state.component[0] ? state.component[1] : {},
-        results
-      )
-    )
-  } else if (state.component) {
-    return React.createElement(
-      state.component[0] || React.Fragment,
-      state.component[0] ? state.component[1] : {},
-      results
+const ReactiveInternal: React.FC<IReactiveFieldProps> = props => {
+  if (!props.field) {
+    return (
+      <Fragment>
+        {isFn(props.children) ? props.children(null, null) : props.children}
+      </Fragment>
     )
   }
-  return <Fragment>{results}</Fragment>
+  const field = props.field
+  const children = isFn(props.children)
+    ? props.children(props.field, props.field.form)
+    : props.children
+  if (field.display !== 'visibility') return null
+
+  const renderDecorator = (children: React.ReactNode) => {
+    if (!field?.decorator?.[0]) return <Fragment>{children}</Fragment>
+    return React.createElement(
+      field.decorator[0],
+      field.decorator[1] || {},
+      children
+    )
+  }
+
+  const renderComponent = () => {
+    if (!field?.component?.[0]) return <Fragment>{children}</Fragment>
+    const value = !isVoidField(field) && field.value
+    const onChange = !isVoidField(field) && field.onInput
+    const disabled = !isVoidField(field)
+      ? field.pattern === 'disabled'
+      : undefined
+    const readOnly = !isVoidField(field)
+      ? field.pattern === 'readOnly'
+      : undefined
+    return React.createElement(
+      field.component[0],
+      { ...field.component[1], value, onChange, disabled, readOnly },
+      children
+    )
+  }
+
+  return renderDecorator(renderComponent())
 }
 
 ReactiveInternal.displayName = 'ReactiveField'

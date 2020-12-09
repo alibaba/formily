@@ -3,25 +3,27 @@ import {
   SchemaEnum,
   SchemaProperties,
   SchemaExtendLinkage,
-  SchemaExtendReaction
+  SchemaExtendReaction,
+  SchemaTypes
 } from './types'
-import { map, each } from '@formily/shared'
+import { map, each, isFn, instOf } from '@formily/shared'
+import { complieExpression } from './complier'
 export class Schema<
-  Decorator,
-  Component,
-  DecoratorProps,
-  ComponentProps,
-  Pattern,
-  Display,
-  Validator,
-  Message = string
+  Decorator = any,
+  Component = any,
+  DecoratorProps = any,
+  ComponentProps = any,
+  Pattern = any,
+  Display = any,
+  Validator = any,
+  Message = any
 > implements ISchema {
   title?: Message
   description?: Message
   default?: any
   readOnly?: boolean
   writeOnly?: boolean
-  type?: 'string' | 'object' | 'array' | 'number' | 'boolean' | string
+  type?: SchemaTypes
   enum?: SchemaEnum<Message>
   const?: any
   multipleOf?: number
@@ -141,9 +143,10 @@ export class Schema<
       Display,
       Validator,
       Message
-    >
+    >,
+    scope?: any
   ) {
-    this.fromJSON(json)
+    return this.fromJSON(json, scope)
   }
 
   addProperty = (
@@ -161,10 +164,12 @@ export class Schema<
   ) => {
     this.properties = this.properties || {}
     this.properties[key] = new Schema(schema)
+    return this.properties[key]
   }
 
   removeProperty = (key: string) => {
     delete this.properties[key]
+    return this
   }
 
   setProperties = (
@@ -182,6 +187,7 @@ export class Schema<
     for (const key in properties) {
       this.addProperty(key, properties[key])
     }
+    return this
   }
 
   addPatternProperty = (
@@ -200,10 +206,12 @@ export class Schema<
     if (!schema) return
     this.patternProperties = this.patternProperties || {}
     this.patternProperties[key] = new Schema(schema)
+    return this.patternProperties[key]
   }
 
   removePatternProperty = (key: string) => {
     delete this.patternProperties[key]
+    return this
   }
 
   setPatternProperties = (
@@ -218,10 +226,11 @@ export class Schema<
       Message
     >
   ) => {
-    if (!properties) return
+    if (!properties) return this
     for (const key in properties) {
       this.addPatternProperty(key, properties[key])
     }
+    return this
   }
 
   setAdditionalProperties = (
@@ -238,6 +247,7 @@ export class Schema<
   ) => {
     if (!properties) return
     this.additionalProperties = new Schema(properties)
+    return this.additionalProperties
   }
 
   setItems = (
@@ -269,6 +279,7 @@ export class Schema<
     } else {
       this.items = new Schema(schema)
     }
+    return this.items
   }
 
   setAdditionalItems = (
@@ -285,6 +296,7 @@ export class Schema<
   ) => {
     if (!items) return
     this.additionalItems = new Schema(items)
+    return this.additionalItems
   }
 
   mapProperties = <T>(
@@ -329,6 +341,25 @@ export class Schema<
     )
   }
 
+  complie = (scope: any) => {
+    const excludes = [
+      'properties',
+      'patternProperties',
+      'additionalProperties',
+      'items',
+      'additionalItems',
+      'x-linkages',
+      'x-reactions'
+    ]
+    each(this, (value, key) => {
+      if (isFn(value)) return
+      if (!excludes.includes(key)) {
+        this[key] = complieExpression(value, scope)
+      }
+    })
+    return this
+  }
+
   fromJSON = (
     json: ISchema<
       Decorator,
@@ -339,10 +370,13 @@ export class Schema<
       Display,
       Validator,
       Message
-    >
+    >,
+    scope?: any
   ) => {
-    if (!json) return
+    if (!json) return this
+    if (isSchemaObject(json)) return json
     each(json, (value, key) => {
+      if (isFn(value)) return
       if (key === 'properties') {
         this.setProperties(value)
       } else if (key === 'patternProperties') {
@@ -353,10 +387,13 @@ export class Schema<
         this.setItems(value)
       } else if (key === 'additionalItems') {
         this.setAdditionalItems(value)
-      } else {
+      } else if (key === 'x-linkages' || key === 'x-reactions') {
         this[key] = value
+      } else {
+        this[key] = complieExpression(value, scope)
       }
     })
+    return this
   }
 
   toJSON = (): ISchema<
@@ -392,11 +429,10 @@ export class Schema<
     schema: ISchema = {},
     propertiesName: keyof ISchema = 'properties'
   ) => {
-    const newSchema = new Schema(schema)
     const orderProperties = []
     const unorderProperties = []
-    for (const key in newSchema[propertiesName]) {
-      const item = newSchema[propertiesName][key]
+    for (const key in schema[propertiesName]) {
+      const item = schema[propertiesName][key]
       const index = item['x-index']
       if (!isNaN(index)) {
         orderProperties[index] = { schema: item, key }
@@ -406,4 +442,8 @@ export class Schema<
     }
     return orderProperties.concat(unorderProperties).filter(item => !!item)
   }
+}
+
+export const isSchemaObject = (value: any): value is Schema => {
+  return instOf(value, Schema)
 }

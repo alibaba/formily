@@ -40,14 +40,7 @@ export type ValidatorParsedFunction<Context = any> = (
   ctx: Context
 ) => ValidateResult | Promise<ValidateResult> | null
 
-export type ValidatorTriggerType =
-  | 'onInput'
-  | 'onFocus'
-  | 'onBlur'
-  | 'onMount'
-  | 'onUnmount'
-  | 'onInit'
-  | 'onReset'
+export type ValidatorTriggerType = 'onInput' | 'onFocus' | 'onBlur'
 
 export type ValidatorRules<Context = any> = {
   triggerType?: ValidatorTriggerType

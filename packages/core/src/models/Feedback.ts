@@ -59,7 +59,8 @@ export class Feedback {
     const info = infos[0]
     const target = {
       ...info,
-      path: info?.path ? String(info.path) : '@root'
+      address: info?.address ? String(info.address) : '@root',
+      path: info?.path ? String(info.path) : ''
     }
     const searched = this.query(target)
     if (searched?.length) {
@@ -75,6 +76,12 @@ export class Feedback {
     return this.informations.filter(item => {
       if (info.type && info.type !== item.type) return false
       if (info.code && info.code !== item.code) return false
+      if (info.address) {
+        if (isRegExp(info.address)) {
+          if (!info.address.test(item.address)) return false
+        } else if (!FormPath.parse(info.address).match(item.address))
+          return false
+      }
       if (info.path) {
         if (isRegExp(info.path)) {
           if (!info.path.test(item.path)) return false
@@ -92,6 +99,12 @@ export class Feedback {
     this.informations = this.informations.filter(item => {
       if (info.type && info.type !== item.type) return true
       if (info.code && info.code !== item.code) return true
+      if (info.address) {
+        if (isRegExp(info.address)) {
+          if (!info.address.test(item.address)) return true
+        } else if (!FormPath.parse(info.address).match(item.address))
+          return true
+      }
       if (info.path) {
         if (isRegExp(info.path)) {
           if (!info.path.test(item.path)) return true

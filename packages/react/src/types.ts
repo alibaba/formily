@@ -2,13 +2,8 @@ export type JSXComponent =
   | keyof JSX.IntrinsicElements
   | React.JSXElementConstructor<any>
 
-export type IFormProps = Omit<
-  Formily.Core.Types.IFormProps,
-  'values' | 'initialValues'
-> & {
-  form?: Formily.Core.Models.Form
-  value?: any
-  initialValues?: any
+export type IProviderProps = {
+  form: Formily.Core.Models.Form
 }
 
 export interface IFormSpyProps {
@@ -34,3 +29,15 @@ export interface IVoidFieldProps<
     | ((field: Field, form: Formily.Core.Models.Form) => React.ReactChild)
     | React.ReactNode
 }
+
+export interface IComponentMapper {
+  (target: JSXComponent): JSXComponent
+}
+
+export type IStateMapper =
+  | {
+      extract: string
+      to?: string
+      transform?: (value: any) => any
+    }
+  | ((props: any, field: Formily.Core.Types.GeneralField) => any)

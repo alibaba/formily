@@ -20,39 +20,30 @@ export class Query<T = Field> {
     this.type = type
   }
   get(): T
-  get<Result>(getter: (field: T, path: FormPath) => Result): Result
+  get<Result>(getter: (field: T, address: FormPath) => Result): Result
   get(getter?: any): any {
     if (isRegExp(this.pattern)) {
-      for (let path in this.form.fields) {
-        const field = this.form.fields[path]
+      for (let address in this.form.fields) {
+        const field = this.form.fields[address]
         if (
-          this.pattern.test(path) &&
+          this.pattern.test(address) &&
           (field.displayName === this.type || this.type === 'ALL')
         ) {
           if (isFn(getter)) {
-            return getter(field as any, field.path) as any
+            return getter(field as any, field.address) as any
           }
           return field as any
         }
       }
-    } else if (!this.pattern.isMatchPattern) {
-      const identifier = this.pattern.toString()
-      const field = this.form.fields[identifier]
-      if (field && (field.displayName === this.type || this.type === 'ALL')) {
-        if (isFn(getter)) {
-          return getter(field as any, field.path) as any
-        }
-        return field as any
-      }
     } else {
-      for (let path in this.form.fields) {
-        const field = this.form.fields[path]
+      for (let address in this.form.fields) {
+        const field = this.form.fields[address]
         if (
-          this.pattern.match(path) &&
+          this.pattern.matchAliasGroup(field.address, field.path) &&
           (field.displayName === this.type || this.type === 'ALL')
         ) {
           if (isFn(getter)) {
-            return getter(field as any, field.path) as any
+            return getter(field as any, field.address) as any
           }
           return field as any
         }
@@ -60,42 +51,32 @@ export class Query<T = Field> {
     }
   }
   getAll(): T[]
-  getAll<Result>(mapper?: (field: T, path: FormPath) => Result): Result[]
+  getAll<Result>(mapper?: (field: T, address: FormPath) => Result): Result[]
   getAll(mapper?: any): any {
     const results = []
     if (isRegExp(this.pattern)) {
-      for (let path in this.form.fields) {
-        const field = this.form.fields[path]
+      for (let address in this.form.fields) {
+        const field = this.form.fields[address]
         if (
-          this.pattern.test(path) &&
+          this.pattern.test(address) &&
           (field.displayName === this.type || this.type === 'ALL')
         ) {
           if (isFn(mapper)) {
-            results.push(mapper(field as any, field.path))
+            results.push(mapper(field as any, field.address))
           } else {
             results.push(field)
           }
         }
       }
-    } else if (!this.pattern.isMatchPattern) {
-      const identifier = this.pattern.toString()
-      const field = this.form.fields[identifier]
-      if (field && (field.displayName === this.type || this.type === 'ALL')) {
-        if (isFn(mapper)) {
-          results.push(mapper(field as any, field.path))
-        } else {
-          results.push(field)
-        }
-      }
     } else {
-      for (let path in this.form.fields) {
-        const field = this.form.fields[path]
+      for (let address in this.form.fields) {
+        const field = this.form.fields[address]
         if (
-          this.pattern.match(path) &&
+          this.pattern.matchAliasGroup(field.address, field.path) &&
           (field.displayName === this.type || this.type === 'ALL')
         ) {
           if (isFn(mapper)) {
-            results.push(mapper(field as any, field.path))
+            results.push(mapper(field as any, field.address))
           } else {
             results.push(field)
           }

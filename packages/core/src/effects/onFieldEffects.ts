@@ -14,10 +14,12 @@ const createFieldEffect = (type: LifeCycleTypes) => {
     ) => {
       if (isFn(callback)) {
         if (isRegExp(pattern)) {
-          if (pattern.test(field.path?.toString())) {
+          if (pattern.test(field.address?.toString())) {
             callback(field, form)
           }
-        } else if (FormPath.parse(pattern).match(field.path)) {
+        } else if (
+          FormPath.parse(pattern).matchAliasGroup(field.address, field.path)
+        ) {
           callback(field, form)
         }
       }

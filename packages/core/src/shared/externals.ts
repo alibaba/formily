@@ -1,4 +1,4 @@
-import { isFn, isValid } from '@formily/shared'
+import { isFn, isValid, instOf } from '@formily/shared'
 import {
   LifeCycle,
   Form,
@@ -89,33 +89,27 @@ export const getLifeCyclesByEffects = <Context>(
 }
 
 export const isForm = (node: any): node is Form => {
-  if (!isFn(node.initialize)) return false
-  return node?.displayName === 'Form'
+  return instOf(node, Form)
 }
 
 export const isField = (node: any): node is Field => {
-  if (!isFn(node.initialize)) return false
-  return node?.displayName === 'Field'
+  return instOf(node, Field)
 }
 
 export const isGeneralField = (node: any): node is GeneralField => {
-  if (!isFn(node.initialize)) return false
-  return node?.displayName?.indexOf('Field') > -1
+  return instOf(node, Field) || instOf(node, VoidField)
 }
 
 export const isArrayField = (node: any): node is ArrayField => {
-  if (!isFn(node.initialize)) return false
-  return node?.displayName === 'ArrayField'
+  return instOf(node, ArrayField)
 }
 
 export const isObjectField = (node: any): node is ObjectField => {
-  if (!isFn(node.initialize)) return false
-  return node?.displayName === 'ObjectField'
+  return instOf(node, ObjectField)
 }
 
 export const isVoidField = (node: any): node is VoidField => {
-  if (!isFn(node.initialize)) return false
-  return node?.displayName === 'VoidField'
+  return instOf(node, VoidField)
 }
 
 export const isFormState = (state: any): state is IFormState => {
@@ -143,9 +137,7 @@ export const isObjectFieldState = (state: any): state is IFieldState => {
   return state?.displayName === 'ObjectField'
 }
 
-export const isVoidFieldState = (
-  state: any
-): state is IVoidFieldState => {
+export const isVoidFieldState = (state: any): state is IVoidFieldState => {
   if (isFn(state.initialize)) return false
   return state?.displayName === 'VoidField'
 }

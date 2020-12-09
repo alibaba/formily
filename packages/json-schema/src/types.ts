@@ -5,6 +5,16 @@ export type SchemaEnum<Message> = Array<
   | { key: any; title: Message; [key: string]: any }
 >
 
+export type SchemaTypes =
+  | 'string'
+  | 'object'
+  | 'array'
+  | 'number'
+  | 'boolean'
+  | 'void'
+  | 'date'
+  | 'datetime'
+
 export type SchemaProperties<
   Decorator,
   Component,
@@ -35,6 +45,7 @@ export type SchemaExtendLinkage = {
   state?: any
   schema?: any
   otherwise?: any
+  [key: string]: any
 }
 
 export type SchemaExtendReaction = {
@@ -96,7 +107,7 @@ export interface ISchema<
   default?: any
   readOnly?: boolean
   writeOnly?: boolean
-  type?: 'string' | 'object' | 'array' | 'number' | 'boolean' | string
+  type?: SchemaTypes
   enum?: SchemaEnum<Message>
   const?: any
   multipleOf?: number

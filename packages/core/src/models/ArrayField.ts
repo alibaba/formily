@@ -12,12 +12,12 @@ export class ArrayField<
   displayName = 'ArrayField'
 
   constructor(
-    path: FormPathPattern,
+    address: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
     form: Form
   ) {
     super(
-      path,
+      address,
       {
         ...props,
         value: isArr(props.value) ? props.value : []
