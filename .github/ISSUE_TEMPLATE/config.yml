@@ -1,0 +1,12 @@
+
+blank_issues_enabled: false
+contact_links:
+  - name: ✨ Feature Request / idea
+    url: https://github.com/alibaba/formily/discussions/new
+    about: Missing something in Formily? Let us know.
+  - name: 💬 Question / Discussion
+    about: Feel free to ask anything
+    url: https://github.com/alibaba/formily/discussions/new
+  - name: 📖 View documentation
+    url: https://formilyjs.org
+    about: Official Formily documentation    
