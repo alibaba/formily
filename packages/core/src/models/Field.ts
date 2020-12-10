@@ -3,7 +3,6 @@ import {
   isValid,
   isArr,
   FormPathPattern,
-  isObj,
   isBool,
   each,
   isFn,
@@ -223,7 +222,11 @@ export class Field<
   }
 
   get errors() {
-    return this.form.feedback.query({ address: this.address, type: 'error' })
+    return this.form.feedback.queryMessages({
+      path: this.path,
+      address: this.address,
+      type: 'error'
+    })
   }
 
   get valid() {
@@ -235,11 +238,19 @@ export class Field<
   }
 
   get warnings() {
-    return this.form.feedback.query({ address: this.address, type: 'warning' })
+    return this.form.feedback.queryMessages({
+      path: this.path,
+      address: this.address,
+      type: 'warning'
+    })
   }
 
   get successes() {
-    return this.form.feedback.query({ address: this.address, type: 'success' })
+    return this.form.feedback.queryMessages({
+      path: this.path,
+      address: this.address,
+      type: 'success'
+    })
   }
 
   get value(): ValueType {
@@ -315,6 +326,7 @@ export class Field<
       type: 'error',
       code: 'EffectError',
       address: this.address,
+      path: this.path,
       messages
     })
   }
@@ -324,6 +336,7 @@ export class Field<
       type: 'warning',
       code: 'EffectWarning',
       address: this.address,
+      path: this.path,
       messages
     })
   }
@@ -333,6 +346,7 @@ export class Field<
       type: 'success',
       code: 'EffectSuccess',
       address: this.address,
+      path: this.path,
       messages
     })
   }
@@ -347,7 +361,7 @@ export class Field<
       desc => 'required' in desc
     )
     if (hasRequired) {
-      if (isObj(this.validator)) {
+      if (isPlainObj(this.validator)) {
         this.validator['required'] = required
       } else if (isArr(this.validator)) {
         this.validator = this.validator.map(desc => {

@@ -25,10 +25,7 @@ const FormItem = connect(
       if (isVoidField(field)) return props
       if (field.invalid) {
         return {
-          help: field.errors.reduce(
-            (msg, info) => msg.concat(info.messages),
-            []
-          )
+          help: field.errors
         }
       } else {
         return {
@@ -69,6 +66,7 @@ export default () => {
       }),
     []
   )
+
   return (
     <FormProvider form={form}>
       <SchemaField>
@@ -92,7 +90,26 @@ export default () => {
                 when: '{{$deps[0] == 123}}',
                 fullfill: {
                   state: {
-                    value: '3333'
+                    value: '3333',
+                    errors: ['xxxx']
+                  },
+                  schema: {
+                    'x-component-props': {
+                      placeholder: '哈哈哈'
+                    },
+                    required: false
+                  }
+                },
+                otherwise: {
+                  state: {
+                    value: '0000',
+                    errors: []
+                  },
+                  schema: {
+                    'x-component-props': {
+                      placeholder: '哈哈哈9999'
+                    },
+                    required: true
                   }
                 }
               }

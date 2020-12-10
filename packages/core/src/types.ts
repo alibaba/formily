@@ -289,9 +289,9 @@ export interface IFieldState {
   readPretty: boolean
   decorator: FieldDecorator<any>
   component: FieldComponent<any>
-  warnings: FeedbackInformation[]
-  errors: FeedbackInformation[]
-  successes: FeedbackInformation[]
+  warnings: any[]
+  errors: any[]
+  successes: any[]
   value: any
   initialValue: any
 }

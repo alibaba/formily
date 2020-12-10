@@ -102,7 +102,7 @@ const getValidatorBySchema = (
   if (isValid(schema['x-validator'])) {
     rules = rules.concat(schema['x-validator'])
   }
-  return rules
+  if (rules.length) return rules
 }
 
 const getFieldDataSourceBySchema = (schema: ISchema) => {
@@ -207,24 +207,17 @@ const useSchemaFieldReactions = (
       reactions.forEach(reaction => {
         if (!reaction) return
         const complie = (expression: any) => {
+          const $self = field
+          const $form = field.form
+          const $deps = parseDependencies(field, reaction.dependencies)
+          const $dependencies = $deps
           return complieExpression(expression, {
             ...options.scope,
             ...scope,
-            get $value() {
-              return field.value
-            },
-            get $form() {
-              return field.form
-            },
-            get $self() {
-              return field
-            },
-            get $dependencies() {
-              return parseDependencies(field, reaction.dependencies)
-            },
-            get $deps() {
-              return parseDependencies(field, reaction.dependencies)
-            }
+            $form,
+            $self,
+            $deps,
+            $dependencies
           })
         }
         if (complie(reaction.when)) {

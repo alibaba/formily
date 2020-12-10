@@ -60,7 +60,7 @@ export class Feedback {
     const target = {
       ...info,
       address: info?.address ? String(info.address) : '@root',
-      path: info?.path ? String(info.path) : ''
+      path: info?.path ? String(info.path) : '@root'
     }
     const searched = this.query(target)
     if (searched?.length) {
@@ -93,6 +93,10 @@ export class Feedback {
         return false
       return true
     })
+  }
+
+  queryMessages = (info: ISearchFeedbackInformation) => {
+    return this.query(info).reduce((buf, info) => buf.concat(info.messages), [])
   }
 
   clear = (info?: ISearchFeedbackInformation) => {

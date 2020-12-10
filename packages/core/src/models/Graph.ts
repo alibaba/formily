@@ -133,13 +133,13 @@ export class Graph {
       field.setValue(state.value)
     }
     if (isValid(state.errors)) {
-      this.form.feedback.update(...state.errors)
+      field.setErrors(state.errors)
     }
     if (isValid(state.warnings)) {
-      this.form.feedback.update(...state.warnings)
+      field.setWarnings(state.warnings)
     }
     if (isValid(state.successes)) {
-      this.form.feedback.update(...state.successes)
+      field.setSuccesses(state.successes)
     }
     if (isValid(state.initialValue)) {
       field.setValue(state.initialValue)
