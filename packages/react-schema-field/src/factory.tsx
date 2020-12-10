@@ -60,9 +60,11 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
 
     return (
-      <SchemaRequiredContext.Provider value={schema_.required}>
-        {render()}
-      </SchemaRequiredContext.Provider>
+      <SchemaContext.Provider value={schema_}>
+        <SchemaRequiredContext.Provider value={schema_.required}>
+          {render()}
+        </SchemaRequiredContext.Provider>
+      </SchemaContext.Provider>
     )
   }
 
@@ -95,10 +97,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
 
     return (
-      <SchemaContext.Provider value={schema}>
+      <Fragment>
         {renderMarkup()}
         {renderChildren()}
-      </SchemaContext.Provider>
+      </Fragment>
     )
   }
 
