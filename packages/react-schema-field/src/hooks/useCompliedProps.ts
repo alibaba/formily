@@ -14,24 +14,7 @@ import { getValidateLocale } from '@formily/validator'
 import { SchemaExpressionScopeContext, SchemaRequiredContext } from '../shared'
 import { ISchemaFieldFactoryOptions, ISchemaFieldUpdateRequest } from '../types'
 
-const useSchemaFieldRequired = (name: string, schema: ISchema) => {
-  const required = useContext(SchemaRequiredContext)
-  if (isBool(schema.required)) {
-    return schema.required
-  }
-  if (isStr(required)) {
-    if (FormPath.parse(required).match(name)) {
-      return true
-    }
-  }
-  if (isArr(required)) {
-    if (required.some(parent => FormPath.parse(parent).match(name))) {
-      return true
-    }
-  }
-}
-
-const useSchemaFieldValidator = (
+const getValidatorBySchema = (
   schema: ISchema
 ): Formily.Core.Types.FieldValidator => {
   let rules = []
@@ -119,7 +102,53 @@ const useSchemaFieldValidator = (
   if (isValid(schema['x-validator'])) {
     rules = rules.concat(schema['x-validator'])
   }
-  return rules
+  if (rules.length) {
+    return rules
+  }
+}
+
+const getStateBySchema = (
+  schema: ISchema,
+  options: ISchemaFieldFactoryOptions
+) => {
+  return {
+    validator: getValidatorBySchema(schema),
+    initialValue: schema.default,
+    title: schema.title,
+    description: schema.description,
+    display: schema['x-display'],
+    pattern: schema['x-pattern'],
+    decorator: [
+      options?.components?.[schema['x-decorator']],
+      schema['x-decorator-props']
+    ],
+    component: [
+      options?.components?.[schema['x-component']],
+      {
+        ...schema['x-component-props'],
+        dataSource: schema['enum']
+          ? schema['enum']
+          : schema?.['x-component-props']?.['dataSource']
+      }
+    ]
+  }
+}
+
+const useSchemaFieldRequired = (name: string, schema: ISchema) => {
+  const required = useContext(SchemaRequiredContext)
+  if (isBool(schema.required)) {
+    return schema.required
+  }
+  if (isStr(required)) {
+    if (FormPath.parse(required).match(name)) {
+      return true
+    }
+  }
+  if (isArr(required)) {
+    if (required.some(parent => FormPath.parse(parent).match(name))) {
+      return true
+    }
+  }
 }
 
 const useSchemaFieldReactions = (
@@ -127,29 +156,6 @@ const useSchemaFieldReactions = (
   options: ISchemaFieldFactoryOptions
 ) => {
   const scope = useContext(SchemaExpressionScopeContext)
-
-  const getStateBySchema = (schema: ISchema) => {
-    return {
-      initialValue: schema.default,
-      title: schema.title,
-      description: schema.description,
-      display: schema['x-display'],
-      pattern: schema['x-pattern'],
-      decorator: [
-        options?.components?.[schema['x-decorator']],
-        schema['x-decorator-props']
-      ],
-      component: [
-        options?.components?.[schema['x-component']],
-        {
-          ...schema['x-component-props'],
-          dataSource: schema['enum']
-            ? schema['enum']
-            : schema?.['x-component-props']?.['dataSource']
-        }
-      ]
-    }
-  }
 
   const setSchemaFieldState = (
     field: Formily.Core.Types.GeneralField,
@@ -161,7 +167,7 @@ const useSchemaFieldReactions = (
         field.setState(complie(request.state))
       }
       if (request.schema) {
-        field.setState(getStateBySchema(complie(request.schema)))
+        field.setState(getStateBySchema(complie(request.schema), options))
       }
       if (isStr(request.run)) {
         complie(`async function(){${request.run}}`)()
@@ -226,30 +232,12 @@ export const useCompliedProps = (
   options: ISchemaFieldFactoryOptions
 ): Formily.React.Types.IFieldProps<any, any, any> => {
   const required = useSchemaFieldRequired(name, schema)
-  const validator = useSchemaFieldValidator(schema)
   const reactions = useSchemaFieldReactions(schema, options)
+  const state = getStateBySchema(schema, options)
   return {
     required,
-    validator,
     reactions: [reactions],
     name: name,
-    initialValue: schema.default,
-    title: schema.title,
-    description: schema.description,
-    display: schema['x-display'],
-    pattern: schema['x-pattern'],
-    decorator: [
-      options?.components?.[schema['x-decorator']],
-      schema['x-decorator-props']
-    ],
-    component: [
-      options?.components?.[schema['x-component']],
-      {
-        ...schema['x-component-props'],
-        dataSource: schema['enum']
-          ? schema['enum']
-          : schema?.['x-component-props']?.['dataSource']
-      }
-    ]
+    ...state
   }
 }
