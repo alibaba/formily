@@ -111,7 +111,6 @@ export class Graph {
     }
     if (isValid(state.component)) {
       field.setComponent(state.component?.[0], state.component?.[1])
-      field.component = state.component
     }
     if (isValid(state.decorator)) {
       field.setDecorator(state.decorator?.[0], state.decorator?.[1])
@@ -152,10 +151,10 @@ export class Graph {
     if (!state) return
 
     if (isValid(state.component)) {
-      field.component = state.component
+      field.setComponent(state.component?.[0], state.component?.[1])
     }
     if (isValid(state.decorator)) {
-      field.decorator = state.decorator
+      field.setDecorator(state.decorator?.[0], state.decorator?.[1])
     }
     if (isValid(state.display)) {
       field.setDisplay(state.display)
