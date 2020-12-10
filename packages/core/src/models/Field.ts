@@ -6,7 +6,8 @@ import {
   isObj,
   isBool,
   each,
-  isFn
+  isFn,
+  isPlainObj
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -358,7 +359,7 @@ export class Field<
         })
       }
     } else {
-      if (isObj(this.validator)) {
+      if (isPlainObj(this.validator)) {
         this.validator['required'] = required
       } else if (isArr(this.validator)) {
         this.validator.push({

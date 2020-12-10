@@ -172,6 +172,7 @@ const useSchemaFieldReactions = (
     request: ISchemaFieldUpdateRequest,
     complie: (expression: any) => any
   ) => {
+    if (!request) return
     runInAction(() => {
       if (request.state) {
         field.setState(complie(request.state))
@@ -247,7 +248,7 @@ export const useCompliedProps = (
   return {
     ...props,
     required,
-    reactions: [reactions],
-    name: name
+    name,
+    reactions: [reactions]
   }
 }

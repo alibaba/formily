@@ -20,6 +20,7 @@ const FormItem = connect(
   mapProps(
     { extract: 'validateStatus' },
     { extract: 'title', to: 'label' },
+    { extract: 'required' },
     (props, field) => {
       if (isVoidField(field)) return props
       if (field.invalid) {
@@ -79,28 +80,25 @@ export default () => {
           x-component="Input"
           x-component-props={{ placeholder: 'asd' }}
         />
-        <SchemaField.Markup
-          name="poo"
-          x-decorator="FormItem"
-          title="POO"
-          x-component="Input"
-          x-reactions={[
-            {
-              dependencies:['ioo#value'],
-              when:'{{$deps[0] == 123}}',
-              fullfill:{
-                state:{
-                  value:'3333'
-                }
-              },
-              otherwise:{
-                state:{
-                  value:'0000'
+        <SchemaField.Markup type="object" name="yuu" required={['poo']}>
+          <SchemaField.Markup
+            name="poo"
+            x-decorator="FormItem"
+            title="POO"
+            x-component="Input"
+            x-reactions={[
+              {
+                dependencies: ['ioo#inputValue'],
+                when: '{{$deps[0] == 123}}',
+                fullfill: {
+                  state: {
+                    value: '3333'
+                  }
                 }
               }
-            }
-          ]}
-        />
+            ]}
+          />
+        </SchemaField.Markup>
       </SchemaField>
       <Field
         name="bb"

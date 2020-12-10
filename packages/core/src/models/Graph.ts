@@ -144,6 +144,9 @@ export class Graph {
     if (isValid(state.initialValue)) {
       field.setValue(state.initialValue)
     }
+    if (isValid(state.validator)) {
+      field.setValidator(state.validator)
+    }
     if (isValid(state.required)) {
       field.setRequired(state.required)
     }
