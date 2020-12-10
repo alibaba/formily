@@ -201,6 +201,15 @@ export type FieldPatternTypes =
 
 export type FieldValidator = Validator
 
+export type FieldDataSource = {
+  label?: string
+  value?: string
+  title?: string
+  key?: string
+  text?: string
+  [key: string]: any
+}[]
+
 export type FieldComponent<Component extends JSXComponent> =
   | [Component]
   | [Component, JSXComponenntProps<Component>]
@@ -227,6 +236,7 @@ export interface IFieldProps<
   required?: boolean
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
+  dataSource?: FieldDataSource
   validateFirst?: boolean
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
@@ -258,6 +268,9 @@ export interface IFieldState {
   displayName: string
   address: string
   path: string
+  title: string
+  description: string
+  dataSource: FieldDataSource
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
   loading: boolean
@@ -285,6 +298,8 @@ export interface IFieldState {
 
 export interface IVoidFieldState {
   displayName: string
+  title: string
+  description: string
   address: string
   path: string
   display: FieldDisplayTypes

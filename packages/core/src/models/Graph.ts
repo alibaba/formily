@@ -30,6 +30,9 @@ export class Graph {
   getFieldState = (field: Field): IFieldState => {
     return {
       displayName: field.displayName,
+      title: field.title,
+      description: field.description,
+      dataSource: field.dataSource,
       address: field.address.toString(),
       path: field.path.toString(),
       display: field.display,
@@ -61,6 +64,8 @@ export class Graph {
   getVoidFieldState = (field: VoidField): IVoidFieldState => {
     return {
       displayName: field.displayName,
+      title: field.title,
+      description: field.description,
       address: field.address.toString(),
       path: field.path.toString(),
       display: field.display,
@@ -94,6 +99,15 @@ export class Graph {
 
   setFieldState = (field: Field, state: Partial<IFieldState>) => {
     if (!state) return
+    if (isValid(state.title)) {
+      field.title = state.title
+    }
+    if (isValid(state.description)) {
+      field.description = state.description
+    }
+    if (isValid(state.dataSource)) {
+      field.dataSource = state.dataSource
+    }
     if (isValid(state.modified)) {
       field.modified = state.modified
     }
@@ -149,7 +163,12 @@ export class Graph {
 
   setVoidFieldState = (field: VoidField, state: Partial<IVoidFieldState>) => {
     if (!state) return
-
+    if (isValid(state.title)) {
+      field.title = state.title
+    }
+    if (isValid(state.description)) {
+      field.description = state.description
+    }
     if (isValid(state.component)) {
       field.setComponent(state.component?.[0], state.component?.[1])
     }

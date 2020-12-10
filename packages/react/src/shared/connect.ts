@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFn } from '@formily/shared'
+import { isFn, FormPath } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { observer } from 'mobx-react-lite'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
@@ -15,9 +15,13 @@ export function mapProps(...args: IStateMapper[]) {
             if (isFn(mapper)) {
               props = Object.assign(props, mapper(props, field))
             } else {
-              props[mapper.to || mapper.extract] = isFn(mapper.transform)
-                ? mapper.transform(field[mapper.extract])
-                : field[mapper.extract]
+              const extract = FormPath.getIn(field, mapper.extract)
+              const target = mapper.to || mapper.extract
+              FormPath.setIn(
+                props,
+                target,
+                isFn(mapper.transform) ? mapper.transform(extract) : extract
+              )
             }
             return props
           },

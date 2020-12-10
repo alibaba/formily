@@ -105,12 +105,28 @@ const getValidatorBySchema = (
   return rules
 }
 
+const getFieldDataSourceBySchema = (schema: ISchema) => {
+  if (isArr(schema['enum'])) {
+    return schema['enum'].map(item => {
+      if (typeof item === 'object') {
+        return item
+      } else {
+        return {
+          label: item,
+          value: item
+        }
+      }
+    })
+  }
+}
+
 const getFieldPropsBySchema = (
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
 ) => {
   return {
     validator: getValidatorBySchema(schema),
+    dataSource: getFieldDataSourceBySchema(schema),
     required: isBool(schema.required) ? schema.required : undefined,
     initialValue: schema.default,
     title: schema.title,
@@ -123,12 +139,7 @@ const getFieldPropsBySchema = (
     ],
     component: [
       options?.components?.[schema['x-component']],
-      {
-        ...schema['x-component-props'],
-        dataSource: schema['enum']
-          ? schema['enum']
-          : schema?.['x-component-props']?.['dataSource']
-      }
+      schema['x-component-props']
     ]
   }
 }

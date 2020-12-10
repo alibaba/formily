@@ -36,6 +36,7 @@ import {
   FieldValidator,
   FieldDecorator,
   FieldComponent,
+  FieldDataSource,
   IFieldProps,
   IFieldResetOptions,
   FormPatternTypes,
@@ -67,6 +68,7 @@ export class Field<
   inputValue: ValueType
   inputValues: any[]
   initialized: boolean
+  dataSource: FieldDataSource
   mounted: boolean
   unmounted: boolean
   validator: FieldValidator
@@ -114,6 +116,7 @@ export class Field<
     this.description = props.description
     this.selfDisplay = this.props.display
     this.selfPattern = this.props.pattern
+    this.dataSource = this.props.dataSource
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
@@ -123,6 +126,7 @@ export class Field<
     makeObservable(this, {
       title: observable.ref,
       description: observable.ref,
+      dataSource: observable.ref,
       selfDisplay: observable.ref,
       selfPattern: observable.ref,
       loading: observable.ref,
@@ -148,6 +152,7 @@ export class Field<
       setDisplay: action,
       setTitle: action,
       setDescription: action,
+      setDataSource: action,
       setValue: action,
       setPattern: action,
       setInitialValue: action,
@@ -298,6 +303,10 @@ export class Field<
 
   setDescription = (description: TextType) => {
     this.description = description
+  }
+
+  setDataSource = (dataSource: FieldDataSource) => {
+    this.dataSource = dataSource
   }
 
   setErrors = (messages: FeedbackMessage) => {
