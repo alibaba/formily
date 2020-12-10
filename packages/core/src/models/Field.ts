@@ -5,7 +5,8 @@ import {
   FormPathPattern,
   isObj,
   isBool,
-  each
+  each,
+  isFn
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -19,7 +20,8 @@ import {
   reaction,
   runInAction,
   toJS,
-  IReactionDisposer
+  IReactionDisposer,
+  autorun
 } from 'mobx'
 import { Form } from './Form'
 import {
@@ -36,7 +38,8 @@ import {
   FieldComponent,
   IFieldProps,
   IFieldResetOptions,
-  FormPatternTypes
+  FormPatternTypes,
+  IFieldState
 } from '../types'
 import {
   skipVoidAddress,
@@ -54,8 +57,8 @@ export class Field<
   displayName = 'Field'
   title: TextType
   description: TextType
-  display_: FieldDisplayTypes
-  pattern_: FieldPatternTypes
+  selfDisplay: FieldDisplayTypes
+  selfPattern: FieldPatternTypes
   loading: boolean
   validating: boolean
   modified: boolean
@@ -74,9 +77,10 @@ export class Field<
 
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
-  caches: FieldCaches = {}
-  requests: FieldRequests = {}
-  disposers: IReactionDisposer[] = []
+
+  private caches: FieldCaches = {}
+  private requests: FieldRequests = {}
+  private disposers: IReactionDisposer[] = []
 
   constructor(
     address: FormPathPattern,
@@ -108,8 +112,8 @@ export class Field<
     this.inputValues = []
     this.title = props.title
     this.description = props.description
-    this.display_ = this.props.display
-    this.pattern_ = this.props.pattern
+    this.selfDisplay = this.props.display
+    this.selfPattern = this.props.pattern
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
@@ -119,8 +123,8 @@ export class Field<
     makeObservable(this, {
       title: observable.ref,
       description: observable.ref,
-      display_: observable.ref,
-      pattern_: observable.ref,
+      selfDisplay: observable.ref,
+      selfPattern: observable.ref,
       loading: observable.ref,
       validating: observable.ref,
       modified: observable.ref,
@@ -187,6 +191,13 @@ export class Field<
         }
       )
     )
+    if (isArr(this.props.reactions)) {
+      this.props.reactions.forEach(reaction => {
+        if (isFn(reaction)) {
+          this.disposers.push(autorun(() => reaction(this)))
+        }
+      })
+    }
   }
 
   get path() {
@@ -243,12 +254,12 @@ export class Field<
   }
 
   get display(): FieldDisplayTypes {
-    if (this.display_) return this.display_
+    if (this.selfDisplay) return this.selfDisplay
     return this.parent?.display || 'visibility'
   }
 
   get pattern(): FormPatternTypes {
-    if (this.pattern_) return this.pattern_
+    if (this.selfPattern) return this.selfPattern
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
@@ -389,11 +400,11 @@ export class Field<
       this.setCacheValue(toJS(this.value))
       this.setValue()
     }
-    this.display_ = type
+    this.selfDisplay = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.pattern_ = type
+    this.selfPattern = type
   }
 
   setLoading = (loading: boolean) => {
@@ -443,6 +454,10 @@ export class Field<
     props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
+  }
+
+  setState = (state?: Partial<IFieldState>) => {
+    this.form.graph.setFieldState(this, state)
   }
 
   onInit = () => {
@@ -551,4 +566,11 @@ export class Field<
     })
   }
 
+  dispose = () => {
+    this.disposers.forEach(dispose => {
+      if (isFn(dispose)) {
+        dispose()
+      }
+    })
+  }
 }

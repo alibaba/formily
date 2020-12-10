@@ -1,5 +1,12 @@
-import { FormPath, FormPathPattern } from '@formily/shared'
-import { makeObservable, observable, action, computed } from 'mobx'
+import { FormPath, FormPathPattern, isFn, isArr } from '@formily/shared'
+import {
+  makeObservable,
+  observable,
+  action,
+  computed,
+  IReactionDisposer,
+  autorun
+} from 'mobx'
 import {
   JSXComponent,
   JSXComponenntProps,
@@ -9,7 +16,8 @@ import {
   FieldDecorator,
   FieldComponent,
   IVoidFieldProps,
-  FormPatternTypes
+  FormPatternTypes,
+  IVoidFieldState
 } from '../types'
 import { skipVoidAddress } from '../shared'
 import { Form } from './Form'
@@ -21,12 +29,12 @@ export class VoidField<
   TextType = any
 > {
   displayName = 'VoidField'
-  
+
   title: TextType
   description: TextType
 
-  display_: FieldDisplayTypes
-  pattern_: FieldPatternTypes
+  selfDisplay: FieldDisplayTypes
+  selfPattern: FieldPatternTypes
   initialized: boolean
   mounted: boolean
   unmounted: boolean
@@ -38,6 +46,8 @@ export class VoidField<
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
+  private disposers: IReactionDisposer[] = []
+
   constructor(
     address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
@@ -45,6 +55,7 @@ export class VoidField<
   ) {
     this.initialize(address, props, form)
     this.makeObservable()
+    this.makeReactive()
     this.onInit()
   }
 
@@ -60,8 +71,8 @@ export class VoidField<
     this.unmounted = false
     this.title = props.title
     this.description = props.description
-    this.display_ = props.display
-    this.pattern_ = this.props.pattern
+    this.selfDisplay = props.display
+    this.selfPattern = this.props.pattern
     this.decorator = this.props.decorator
     this.component = this.props.component
   }
@@ -70,8 +81,8 @@ export class VoidField<
     makeObservable(this, {
       title: observable.ref,
       description: observable.ref,
-      display_: observable.ref,
-      pattern_: observable.ref,
+      selfDisplay: observable.ref,
+      selfPattern: observable.ref,
       initialized: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
@@ -93,6 +104,16 @@ export class VoidField<
     })
   }
 
+  protected makeReactive() {
+    if (isArr(this.props.reactions)) {
+      this.props.reactions.forEach(reaction => {
+        if (isFn(reaction)) {
+          this.disposers.push(autorun(() => reaction(this)))
+        }
+      })
+    }
+  }
+
   get path() {
     return skipVoidAddress(this.address, this.form)
   }
@@ -109,12 +130,12 @@ export class VoidField<
   }
 
   get display(): FieldDisplayTypes {
-    if (this.display_) return this.display_
+    if (this.selfDisplay) return this.selfDisplay
     return this.parent?.display || 'visibility'
   }
 
   get pattern(): FormPatternTypes {
-    if (this.pattern_) return this.pattern_
+    if (this.selfPattern) return this.selfPattern
     return this.parent?.pattern || this.form.pattern || 'editable'
   }
 
@@ -127,11 +148,11 @@ export class VoidField<
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
-    this.display_ = type
+    this.selfDisplay = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.pattern_ = type
+    this.selfPattern = type
   }
 
   setComponent = <C extends JSXComponent>(
@@ -166,6 +187,10 @@ export class VoidField<
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
   }
 
+  setState = (state?: Partial<IVoidFieldState>) => {
+    this.form.graph.setVoidFieldState(this, state)
+  }
+
   onInit = () => {
     this.initialized = true
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
@@ -188,6 +213,14 @@ export class VoidField<
       pattern,
       base: this.address,
       form: this.form
+    })
+  }
+
+  dispose = () => {
+    this.disposers.forEach(dispose => {
+      if (isFn(dispose)) {
+        dispose()
+      }
     })
   }
 }

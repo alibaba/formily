@@ -54,6 +54,7 @@ export const validateToFeedback = async (
       type,
       code: pascalCase(`validate-${type}`),
       address: field.address,
+      path: field.path,
       messages: shouldSkipValidate ? [] : messages
     })
   })

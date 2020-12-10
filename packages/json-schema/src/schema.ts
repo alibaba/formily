@@ -2,7 +2,6 @@ import {
   ISchema,
   SchemaEnum,
   SchemaProperties,
-  SchemaExtendLinkage,
   SchemaExtendReaction,
   SchemaTypes
 } from './types'
@@ -126,8 +125,6 @@ export class Schema<
   ['x-component']?: Component;
   //组件属性
   ['x-component-props']?: ComponentProps;
-
-  ['x-linkages']?: SchemaExtendLinkage[];
 
   ['x-reactions']?: SchemaExtendReaction[]
 

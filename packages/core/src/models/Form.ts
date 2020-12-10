@@ -346,13 +346,7 @@ export class Form {
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
     each(this.fields, field => {
-      if (!isVoidField(field)) {
-        field.disposers.forEach(dispose => {
-          if (isFn(dispose)) {
-            dispose()
-          }
-        })
-      }
+      field.dispose()
     })
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)

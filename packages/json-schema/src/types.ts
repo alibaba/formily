@@ -38,26 +38,18 @@ export type SchemaProperties<
   >
 >
 
-export type SchemaExtendLinkage = {
-  type?: string
-  condition?: string
-  target?: string
-  state?: any
-  schema?: any
-  otherwise?: any
-  [key: string]: any
-}
-
 export type SchemaExtendReaction = {
   dependencies?: string[]
   when?: string
   fullfill?: {
     state?: any
     schema?: any
+    run?: string
   }
   otherwise?: {
     state?: any
     schema?: any
+    run?: string
   }
 }
 
@@ -193,8 +185,6 @@ export interface ISchema<
   ['x-component']?: Component
   //组件属性
   ['x-component-props']?: ComponentProps
-
-  ['x-linkages']?: SchemaExtendLinkage[]
-
+  //组件响应器
   ['x-reactions']?: SchemaExtendReaction[]
 }

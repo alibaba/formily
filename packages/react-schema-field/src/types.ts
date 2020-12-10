@@ -6,14 +6,10 @@ export type JSXComponent =
 
 export type SchemaComponents = Record<string, JSXComponent>
 
-export type SchemaDecorators = Record<string, JSXComponent>
-
 export interface ISchemaFieldFactoryOptions<
-  Decorators extends SchemaDecorators = any,
   Components extends SchemaComponents = any
 > {
   components?: Components
-  decorators?: Decorators
   scope?: any
 }
 
@@ -32,21 +28,26 @@ export interface ISchemaFieldProps<
   children?: React.ReactNode
 }
 
+export interface ISchemaFieldUpdateRequest {
+  state?: Formily.Core.Types.IFieldState
+  schema?: ISchema
+  run?: string
+}
+
 export interface IRecusionFieldProps {
   schema: Schema
   name: string
 }
 
 export interface ISchemaMarkupFieldProps<
-  Decorators extends SchemaDecorators,
   Components extends SchemaComponents,
-  Decorator extends keyof Decorators,
+  Decorator extends keyof Components,
   Component extends keyof Components
 >
   extends ISchema<
     Decorator,
     Component,
-    React.ComponentProps<Decorators[Decorator]>,
+    React.ComponentProps<Components[Decorator]>,
     React.ComponentProps<Components[Component]>,
     Formily.Core.Types.FormPatternTypes,
     Formily.Core.Types.FieldDisplayTypes,

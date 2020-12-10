@@ -92,7 +92,7 @@ export class Graph {
     }
   }
 
-  setFieldState = (field: Field, state: IFieldState) => {
+  setFieldState = (field: Field, state: Partial<IFieldState>) => {
     if (!state) return
     if (isValid(state.modified)) {
       field.modified = state.modified
@@ -148,7 +148,7 @@ export class Graph {
     }
   }
 
-  setVoidFieldState = (field: VoidField, state: IVoidFieldState) => {
+  setVoidFieldState = (field: VoidField, state: Partial<IVoidFieldState>) => {
     if (!state) return
 
     if (isValid(state.component)) {
@@ -165,7 +165,7 @@ export class Graph {
     }
   }
 
-  setState = (state: IFormState) => {
+  setState = (state: Partial<IFormState>) => {
     const form = this.form
     if (isValid(state.id)) {
       form.id = state.id

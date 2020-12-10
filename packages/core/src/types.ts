@@ -31,7 +31,6 @@ export enum LifeCycleTypes {
    **/
 
   ON_FORM_INIT = 'onFormInit',
-  ON_FORM_CHANGE = 'onFormChange', //ChangeType精准控制响应
   ON_FORM_MOUNT = 'onFormMount',
   ON_FORM_UNMOUNT = 'onFormUnmount',
   ON_FORM_SUBMIT = 'onFormSubmit',
@@ -54,7 +53,6 @@ export enum LifeCycleTypes {
    **/
 
   ON_FIELD_INIT = 'onFieldInit',
-  ON_FIELD_CHANGE = 'onFieldChange',
   ON_FIELD_INPUT_VALUE_CHANGE = 'onFieldInputValueChange',
   ON_FIELD_VALUE_CHANGE = 'onFieldValueChange',
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
@@ -215,6 +213,7 @@ export type FieldDecorator<Decorator extends JSXComponent> =
   | boolean
   | any[]
 
+export type FieldReaction = (field: Field) => void
 export interface IFieldProps<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -232,6 +231,7 @@ export interface IFieldProps<
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
+  reactions?: FieldReaction[]
 }
 
 export interface IVoidFieldProps<
@@ -245,6 +245,7 @@ export interface IVoidFieldProps<
   pattern?: FieldPatternTypes
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
+  reactions?: FieldReaction[]
 }
 
 export interface IFieldResetOptions {

@@ -46,7 +46,7 @@ export const onFieldValidateEnd = createFieldEffect(
 )
 
 export const onFieldReact = (
-  pattern: string | RegExp,
+  pattern: FormPathPattern | RegExp,
   callback?: (field: GeneralField, form: Form) => void
 ) => {
   const disposers = []

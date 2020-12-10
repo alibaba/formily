@@ -41,13 +41,10 @@ const FormItem = connect(
 const Input = connect(mapReadPretty(PreviewText))(AntdInput)
 
 const SchemaField = createSchemaField({
-  decorators: {
-    Select,
-    FormItem
-  },
   components: {
     Input,
-    Select
+    Select,
+    FormItem
   }
 })
 
@@ -81,6 +78,28 @@ export default () => {
           title="IOO"
           x-component="Input"
           x-component-props={{ placeholder: 'asd' }}
+        />
+        <SchemaField.Markup
+          name="poo"
+          x-decorator="FormItem"
+          title="POO"
+          x-component="Input"
+          x-reactions={[
+            {
+              dependencies:['ioo#value'],
+              when:'{{$deps[0] == 123}}',
+              fullfill:{
+                state:{
+                  value:'3333'
+                }
+              },
+              otherwise:{
+                state:{
+                  value:'0000'
+                }
+              }
+            }
+          ]}
         />
       </SchemaField>
       <Field

@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from 'react'
-import { Schema } from '@formily/json-schema'
+import { isSchemaObject, Schema } from '@formily/json-schema'
 import { ObjectField, ArrayField, Field, VoidField } from '@formily/react'
 import {
   render,
@@ -13,7 +13,6 @@ import {
   JSXComponent,
   ISchemaFieldFactoryOptions,
   SchemaComponents,
-  SchemaDecorators,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
   IRecusionFieldProps
@@ -27,10 +26,9 @@ const getRandomName = () => {
   return `NO_NAME_FIELD_$${env.nonameId++}`
 }
 
-export function createSchemaField<
-  Decorators extends SchemaDecorators,
-  Components extends SchemaComponents
->(options: ISchemaFieldFactoryOptions<Components, Decorators>) {
+export function createSchemaField<Components extends SchemaComponents>(
+  options: ISchemaFieldFactoryOptions<Components>
+) {
   function RecusionField(props: IRecusionFieldProps) {
     const schema_ = useCompliedSchema(props.schema, options)
     const props_ = useCompliedProps(props.name, schema_, options)
@@ -72,10 +70,12 @@ export function createSchemaField<
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(props: ISchemaFieldProps<Decorator, Component>) {
-    const schema = new Schema({
-      type: 'object',
-      ...props.schema
-    })
+    const schema = isSchemaObject(props.schema)
+      ? props.schema
+      : new Schema({
+          type: 'object',
+          ...props.schema
+        })
 
     const renderMarkup = () => {
       env.nonameId = 0
@@ -103,11 +103,9 @@ export function createSchemaField<
   }
 
   function MarkupField<
-    Decorator extends keyof Decorators,
+    Decorator extends keyof Components,
     Component extends keyof Components
-  >(
-    props: ISchemaMarkupFieldProps<Components, Decorators, Component, Decorator>
-  ) {
+  >(props: ISchemaMarkupFieldProps<Components, Component, Decorator>) {
     const parent = useContext(SchemaMarkupContext)
     if (!parent) return <Fragment />
     if (parent.type === 'object' || parent.type === 'void') {

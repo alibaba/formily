@@ -1,5 +1,6 @@
 import { useContext } from 'react'
-import { ISchema } from '@formily/json-schema'
+import { runInAction } from 'mobx'
+import { ISchema, complieExpression } from '@formily/json-schema'
 import {
   isBool,
   isArr,
@@ -10,8 +11,25 @@ import {
   isEqual
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
-import { SchemaRequiredContext } from '../shared'
-import { ISchemaFieldFactoryOptions } from '../types'
+import { SchemaExpressionScopeContext, SchemaRequiredContext } from '../shared'
+import { ISchemaFieldFactoryOptions, ISchemaFieldUpdateRequest } from '../types'
+
+const useSchemaFieldRequired = (name: string, schema: ISchema) => {
+  const required = useContext(SchemaRequiredContext)
+  if (isBool(schema.required)) {
+    return schema.required
+  }
+  if (isStr(required)) {
+    if (FormPath.parse(required).match(name)) {
+      return true
+    }
+  }
+  if (isArr(required)) {
+    if (required.some(parent => FormPath.parse(parent).match(name))) {
+      return true
+    }
+  }
+}
 
 const useSchemaFieldValidator = (
   schema: ISchema
@@ -104,19 +122,100 @@ const useSchemaFieldValidator = (
   return rules
 }
 
-const useSchemaFieldRequired = (name: string, schema: ISchema) => {
-  const required = useContext(SchemaRequiredContext)
-  if (isBool(schema.required)) {
-    return schema.required
-  }
-  if (isStr(required)) {
-    if (FormPath.parse(required).match(name)) {
-      return true
+const useSchemaFieldReactions = (
+  schema: ISchema,
+  options: ISchemaFieldFactoryOptions
+) => {
+  const scope = useContext(SchemaExpressionScopeContext)
+
+  const getStateBySchema = (schema: ISchema) => {
+    return {
+      initialValue: schema.default,
+      title: schema.title,
+      description: schema.description,
+      display: schema['x-display'],
+      pattern: schema['x-pattern'],
+      decorator: [
+        options?.components?.[schema['x-decorator']],
+        schema['x-decorator-props']
+      ],
+      component: [
+        options?.components?.[schema['x-component']],
+        {
+          ...schema['x-component-props'],
+          dataSource: schema['enum']
+            ? schema['enum']
+            : schema?.['x-component-props']?.['dataSource']
+        }
+      ]
     }
   }
-  if (isArr(required)) {
-    if (required.some(parent => FormPath.parse(parent).match(name))) {
-      return true
+
+  const setSchemaFieldState = (
+    field: Formily.Core.Types.GeneralField,
+    request: ISchemaFieldUpdateRequest,
+    complie: (expression: any) => any
+  ) => {
+    runInAction(() => {
+      if (request.state) {
+        field.setState(complie(request.state))
+      }
+      if (request.schema) {
+        field.setState(getStateBySchema(complie(request.schema)))
+      }
+      if (isStr(request.run)) {
+        complie(`async function(){${request.run}}`)()
+      }
+    })
+  }
+
+  const parseDependencies = (
+    field: Formily.Core.Models.Field,
+    dependencies: string[]
+  ) => {
+    if (isArr(dependencies)) {
+      return dependencies.map(pattern => {
+        const [target, path] = String(pattern).split(/\s*#\s*/)
+        return field
+          .query(target)
+          .all.get(field => (path ? FormPath.getIn(field, path) : field))
+      })
+    }
+    return []
+  }
+
+  return (field: Formily.Core.Models.Field) => {
+    const reactions = schema['x-reactions']
+    if (isArr(reactions)) {
+      reactions.forEach(reaction => {
+        if (!reaction) return
+        const complie = (expression: any) => {
+          return complieExpression(expression, {
+            ...options.scope,
+            ...scope,
+            get $value() {
+              return field.value
+            },
+            get $form() {
+              return field.form
+            },
+            get $self() {
+              return field
+            },
+            get $dependencies() {
+              return parseDependencies(field, reaction.dependencies)
+            },
+            get $deps() {
+              return parseDependencies(field, reaction.dependencies)
+            }
+          })
+        }
+        if (complie(reaction.when)) {
+          setSchemaFieldState(field, reaction.fullfill, complie)
+        } else {
+          setSchemaFieldState(field, reaction.otherwise, complie)
+        }
+      })
     }
   }
 }
@@ -125,12 +224,14 @@ export const useCompliedProps = (
   name: string,
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
-) => {
+): Formily.React.Types.IFieldProps<any, any, any> => {
   const required = useSchemaFieldRequired(name, schema)
   const validator = useSchemaFieldValidator(schema)
+  const reactions = useSchemaFieldReactions(schema, options)
   return {
     required,
     validator,
+    reactions: [reactions],
     name: name,
     initialValue: schema.default,
     title: schema.title,
@@ -138,7 +239,7 @@ export const useCompliedProps = (
     display: schema['x-display'],
     pattern: schema['x-pattern'],
     decorator: [
-      options?.decorators?.[schema['x-decorator']],
+      options?.components?.[schema['x-decorator']],
       schema['x-decorator-props']
     ],
     component: [
