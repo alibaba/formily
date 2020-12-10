@@ -102,17 +102,16 @@ const getValidatorBySchema = (
   if (isValid(schema['x-validator'])) {
     rules = rules.concat(schema['x-validator'])
   }
-  if (rules.length) {
-    return rules
-  }
+  return rules
 }
 
-const getStateBySchema = (
+const getFieldPropsBySchema = (
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
 ) => {
   return {
     validator: getValidatorBySchema(schema),
+    required: isBool(schema.required) ? schema.required : undefined,
     initialValue: schema.default,
     title: schema.title,
     description: schema.description,
@@ -167,7 +166,7 @@ const useSchemaFieldReactions = (
         field.setState(complie(request.state))
       }
       if (request.schema) {
-        field.setState(getStateBySchema(complie(request.schema), options))
+        field.setState(getFieldPropsBySchema(complie(request.schema), options))
       }
       if (isStr(request.run)) {
         complie(`async function(){${request.run}}`)()
@@ -233,11 +232,11 @@ export const useCompliedProps = (
 ): Formily.React.Types.IFieldProps<any, any, any> => {
   const required = useSchemaFieldRequired(name, schema)
   const reactions = useSchemaFieldReactions(schema, options)
-  const state = getStateBySchema(schema, options)
+  const props = getFieldPropsBySchema(schema, options)
   return {
+    ...props,
     required,
     reactions: [reactions],
-    name: name,
-    ...state
+    name: name
   }
 }
