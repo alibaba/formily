@@ -42,7 +42,7 @@ export class VoidField<
   component: FieldComponent<Component>
 
   address: FormPath
-
+  path: FormPath
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
@@ -53,19 +53,24 @@ export class VoidField<
     props: IVoidFieldProps<Decorator, Component>,
     form: Form
   ) {
-    this.initialize(address, props, form)
+    this.initialize(props, form)
+    this.makeIndexes(address)
     this.makeObservable()
     this.makeReactive()
     this.onInit()
   }
 
+  protected makeIndexes(address: FormPathPattern) {
+    this.address = FormPath.parse(address)
+    this.path = skipVoidAddress(this.address, this.form)
+    this.form.indexes.set(this.path.toString(),this.address.toString())
+  }
+
   protected initialize(
-    address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
     form: Form
   ) {
     this.form = form
-    this.address = FormPath.parse(address)
     this.props = props
     this.mounted = false
     this.unmounted = false
@@ -112,10 +117,6 @@ export class VoidField<
         }
       })
     }
-  }
-
-  get path() {
-    return skipVoidAddress(this.address, this.form)
   }
 
   get parent() {

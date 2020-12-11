@@ -53,6 +53,7 @@ export class Form {
   feedback: Feedback
   fields: FormFields = {}
   requests: FormRequests = {}
+  indexes: Map<string, string> = new Map()
   constructor(props: IFormProps) {
     this.initialize(props)
     this.makeObservable()

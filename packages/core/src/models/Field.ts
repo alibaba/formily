@@ -76,6 +76,7 @@ export class Field<
   component: FieldComponent<Component>
 
   address: FormPath
+  path: FormPath
 
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
@@ -89,19 +90,24 @@ export class Field<
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form
   ) {
-    this.initialize(address, props, form)
+    this.initialize(props, form)
+    this.makeIndexes(address)
     this.makeObservable()
     this.makeReactive()
     this.onInit()
   }
 
+  protected makeIndexes(address: FormPathPattern) {
+    this.address = FormPath.parse(address)
+    this.path = skipVoidAddress(this.address, this.form)
+    this.form.indexes.set(this.path.toString(),this.address.toString())
+  }
+
   protected initialize(
-    address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form
   ) {
     this.form = form
-    this.address = FormPath.parse(address)
     this.props = props
     this.initialized = false
     this.loading = false
@@ -203,10 +209,6 @@ export class Field<
         }
       })
     }
-  }
-
-  get path() {
-    return skipVoidAddress(this.address, this.form)
   }
 
   get parent() {

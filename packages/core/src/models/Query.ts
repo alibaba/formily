@@ -22,30 +22,32 @@ export class Query<T = Field> {
   get(): T
   get<Result>(getter: (field: T, address: FormPath) => Result): Result
   get(getter?: any): any {
+    const output = (field: GeneralField) => {
+      if (!field) return
+      if (field.displayName === this.type || this.type === 'ALL') {
+        if (isFn(getter)) {
+          return getter(field as any, field.address) as any
+        }
+        return field as any
+      }
+    }
     if (isRegExp(this.pattern)) {
       for (let address in this.form.fields) {
         const field = this.form.fields[address]
-        if (
-          this.pattern.test(address) &&
-          (field.displayName === this.type || this.type === 'ALL')
-        ) {
-          if (isFn(getter)) {
-            return getter(field as any, field.address) as any
-          }
-          return field as any
+        if (this.pattern.test(address)) {
+          return output(field)
         }
       }
+    } else if (!this.pattern.isMatchPattern) {
+      const identifier = this.pattern.toString()
+      const index = this.form.indexes.get(identifier)
+      const field = this.form.fields[identifier] || this.form.fields[index]
+      return output(field)
     } else {
       for (let address in this.form.fields) {
         const field = this.form.fields[address]
-        if (
-          this.pattern.matchAliasGroup(field.address, field.path) &&
-          (field.displayName === this.type || this.type === 'ALL')
-        ) {
-          if (isFn(getter)) {
-            return getter(field as any, field.address) as any
-          }
-          return field as any
+        if (this.pattern.matchAliasGroup(field.address, field.path)) {
+          return output(field)
         }
       }
     }
@@ -54,32 +56,33 @@ export class Query<T = Field> {
   getAll<Result>(mapper?: (field: T, address: FormPath) => Result): Result[]
   getAll(mapper?: any): any {
     const results = []
+    const output = (field: GeneralField) => {
+      if (!field) return
+      if (field.displayName === this.type || this.type === 'ALL') {
+        if (isFn(mapper)) {
+          results.push(mapper(field as any, field.address))
+        } else {
+          results.push(field)
+        }
+      }
+    }
     if (isRegExp(this.pattern)) {
       for (let address in this.form.fields) {
         const field = this.form.fields[address]
-        if (
-          this.pattern.test(address) &&
-          (field.displayName === this.type || this.type === 'ALL')
-        ) {
-          if (isFn(mapper)) {
-            results.push(mapper(field as any, field.address))
-          } else {
-            results.push(field)
-          }
+        if (this.pattern.test(address)) {
+          output(field)
         }
       }
+    } else if (!this.pattern.isMatchPattern) {
+      const identifier = this.pattern.toString()
+      const index = this.form.indexes.get(identifier)
+      const field = this.form.fields[identifier] || this.form.fields[index]
+      return output(field)
     } else {
       for (let address in this.form.fields) {
         const field = this.form.fields[address]
-        if (
-          this.pattern.matchAliasGroup(field.address, field.path) &&
-          (field.displayName === this.type || this.type === 'ALL')
-        ) {
-          if (isFn(mapper)) {
-            results.push(mapper(field as any, field.address))
-          } else {
-            results.push(field)
-          }
+        if (this.pattern.matchAliasGroup(field.address, field.path)) {
+          output(field)
         }
       }
     }
