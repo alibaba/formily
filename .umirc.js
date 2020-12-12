@@ -59,7 +59,7 @@ export default {
   ],
   styles: [
     `.__dumi-default-navbar-logo{
-      height: 70px !important;
+      height: 60px !important;
       width: 135px !important;
       padding-left:0 !important;
       color: transparent !important;
@@ -144,16 +144,24 @@ export default {
             path: '/guide/practice/mixin-develop'
           },
           {
-            title: '实现联动逻辑',
-            path: '/guide/practice/linkages'
+            title: '实现表单布局',
+            path: '/guide/practice/layouts'
           },
           {
             title: '实现表单校验',
             path: '/guide/practice/validations'
           },
           {
-            title: '实现表单布局',
-            path: '/guide/practice/layouts'
+            title: '实现异步数据源',
+            path: '/guide/practice/asyncs'
+          },
+          {
+            title: '实现联动逻辑',
+            path: '/guide/practice/linkages'
+          },
+          {
+            title: '实现联动计算器',
+            path: '/guide/practice/caculator'
           },
           {
             title: '管理业务逻辑',
