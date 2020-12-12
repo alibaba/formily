@@ -188,8 +188,12 @@ export default {
             path: '/api/core/models'
           },
           {
-            title: 'Interfaces',
-            path: '/api/core/interfaces'
+            title: 'TypeChecker',
+            path: '/api/core/checker'
+          },
+          {
+            title: 'Effects',
+            path: '/api/core/effects'
           }
         ]
       },
@@ -218,6 +222,10 @@ export default {
           {
             title: 'Package',
             path: '/api/react-schema'
+          },
+          {
+            title: 'Components',
+            path: '/api/react-schema/components'
           },
           {
             title: 'React Hooks',

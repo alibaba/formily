@@ -1,21 +1,18 @@
 import React, { useContext, Fragment } from 'react'
 import { isSchemaObject, Schema } from '@formily/json-schema'
-import { ObjectField, ArrayField, Field, VoidField } from '@formily/react'
+import { RecursionField } from './components'
 import {
   render,
-  SchemaContext,
   SchemaMarkupContext,
-  SchemaRequiredContext,
-  SchemaExpressionScopeContext
+  SchemaExpressionScopeContext,
+  SchemaOptionsContext
 } from './shared'
-import { useCompliedProps, useCompliedSchema } from './hooks'
 import {
   JSXComponent,
   ISchemaFieldFactoryOptions,
   SchemaComponents,
   ISchemaFieldProps,
-  ISchemaMarkupFieldProps,
-  IRecusionFieldProps
+  ISchemaMarkupFieldProps
 } from './types'
 
 const env = {
@@ -29,45 +26,6 @@ const getRandomName = () => {
 export function createSchemaField<Components extends SchemaComponents>(
   options: ISchemaFieldFactoryOptions<Components>
 ) {
-  function RecusionField(props: IRecusionFieldProps) {
-    const schema_ = useCompliedSchema(props.schema, options)
-    const props_ = useCompliedProps(props.name, schema_, options)
-    const render = () => {
-      if (schema_.type === 'object') {
-        return (
-          <ObjectField {...props_} name={props.name}>
-            {() =>
-              schema_.mapProperties((schema, key) => {
-                return <RecusionField schema={schema} key={key} name={key} />
-              })
-            }
-          </ObjectField>
-        )
-      } else if (schema_.type === 'array') {
-        return <ArrayField {...props_} name={props.name} />
-      } else if (schema_.type === 'void') {
-        return (
-          <VoidField {...props_} name={props.name}>
-            {() =>
-              schema_.mapProperties((schema, key) => {
-                return <RecusionField schema={schema} key={key} name={key} />
-              })
-            }
-          </VoidField>
-        )
-      }
-      return <Field {...props_} name={props.name} />
-    }
-
-    return (
-      <SchemaContext.Provider value={schema_}>
-        <SchemaRequiredContext.Provider value={schema_.required}>
-          {render()}
-        </SchemaRequiredContext.Provider>
-      </SchemaContext.Provider>
-    )
-  }
-
   function SchemaField<
     Decorator extends JSXComponent,
     Component extends JSXComponent
@@ -91,16 +49,16 @@ export function createSchemaField<Components extends SchemaComponents>(
     const renderChildren = () => {
       return (
         <SchemaExpressionScopeContext.Provider value={props.scope}>
-          <RecusionField schema={schema} name={props.name} />
+          <RecursionField {...props} schema={schema} />
         </SchemaExpressionScopeContext.Provider>
       )
     }
 
     return (
-      <Fragment>
+      <SchemaOptionsContext.Provider value={options}>
         {renderMarkup()}
         {renderChildren()}
-      </Fragment>
+      </SchemaOptionsContext.Provider>
     )
   }
 

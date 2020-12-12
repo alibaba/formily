@@ -1,5 +1,6 @@
 import '@formily/react'
 import { ISchema, Schema } from '@formily/json-schema'
+import { FormPathPattern } from '@formily/shared/lib'
 export type JSXComponent =
   | keyof JSX.IntrinsicElements
   | React.JSXElementConstructor<any>
@@ -34,9 +35,10 @@ export interface ISchemaFieldUpdateRequest {
   run?: string
 }
 
-export interface IRecusionFieldProps {
+export interface IRecursionFieldProps {
   schema: Schema
-  name: string
+  name?: string
+  basePath?: FormPathPattern
 }
 
 export interface ISchemaMarkupFieldProps<

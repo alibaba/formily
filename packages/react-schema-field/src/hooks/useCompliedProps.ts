@@ -134,11 +134,11 @@ const getFieldPropsBySchema = (
     display: schema['x-display'],
     pattern: schema['x-pattern'],
     decorator: [
-      options?.components?.[schema['x-decorator']],
+      FormPath.getIn(options?.components, schema['x-decorator']),
       schema['x-decorator-props']
     ],
     component: [
-      options?.components?.[schema['x-component']],
+      FormPath.getIn(options?.components, schema['x-component']),
       schema['x-component-props']
     ]
   }
