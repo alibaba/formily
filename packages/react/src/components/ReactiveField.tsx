@@ -41,7 +41,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = props => {
     const value = !isVoidField(field) && field.value
     const onChange = !isVoidField(field) && field.onInput
     const disabled = !isVoidField(field)
-      ? field.pattern === 'disabled'
+      ? field.pattern === 'disabled' || field.pattern === 'readPretty'
       : undefined
     const readOnly = !isVoidField(field)
       ? field.pattern === 'readOnly'

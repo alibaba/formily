@@ -1,15 +1,17 @@
-import { connect } from '@formily/react-schema-renderer'
+import { connect, mapReadPretty } from '@formily/react'
 import { Input as AntdInput } from 'antd'
-import { acceptEnum, mapStyledProps, mapTextComponent } from '../shared'
+import { InputProps, TextAreaProps } from 'antd/lib/input'
+import { PreviewText } from '../preview-text'
 
-export const Input = connect<'TextArea'>({
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
-})(acceptEnum(AntdInput))
+type ComposedInput = React.FC<InputProps> & {
+  TextArea?: React.FC<TextAreaProps>
+}
 
-Input.TextArea = connect({
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
-})(acceptEnum(AntdInput.TextArea))
+export const Input: ComposedInput = connect(
+  AntdInput,
+  mapReadPretty(PreviewText.Input)
+)
+
+Input.TextArea = connect(AntdInput.TextArea, mapReadPretty(PreviewText.Input))
 
 export default Input

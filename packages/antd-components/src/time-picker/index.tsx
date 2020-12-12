@@ -1,50 +1,48 @@
-import { connect } from '@formily/react-schema-renderer'
 import moment from 'moment'
+import { connect, mapProps, mapReadPretty } from '@formily/react'
 import { TimePicker as AntdTimePicker } from 'antd'
-import {
-  mapStyledProps,
-  mapTextComponent,
-  compose,
-  isStr,
-  isArr,
-} from '../shared'
+import { TimePickerProps, TimeRangePickerProps } from 'antd/lib/time-picker'
+import { PreviewText } from '../preview-text'
+import { formatMomentValue } from '../shared'
 
-const transformMoment = (value) => {
-  if (value === '') return undefined
-  return value
+type FormilyTimePickerProps<PickerProps> = Exclude<
+  PickerProps,
+  'value' | 'onChange'
+> & {
+  value: string
+  onChange: (value: string | string[]) => void
 }
 
-const mapMomentValue = (props: any, fieldProps: any) => {
-  const { value } = props
-  if (!fieldProps.editable) return props
-  try {
-    if (isStr(value) && value) {
-      props.value = moment(value, 'HH:mm:ss')
-    } else if (isArr(value) && value.length) {
-      props.value = value.map(
-        (item) => (item && moment(item, 'HH:mm:ss')) || ''
-      )
+type ComposedTimePicker = React.FC<TimePickerProps> & {
+  RangePicker?: React.FC<TimeRangePickerProps>
+}
+
+const mapTimeFormat = function() {
+  return (props: FormilyTimePickerProps<TimePickerProps>): TimePickerProps => {
+    const format = props['format'] || 'HH:mm:ss'
+    return {
+      ...props,
+      format,
+      value: moment(props.value),
+      onChange: (value: moment.Moment | moment.Moment[]) => {
+        if (props.onChange) {
+          props.onChange(formatMomentValue(value, format))
+        }
+      }
     }
-  } catch (e) {
-    throw new Error(e)
   }
-  return props
 }
 
-export const TimePicker = connect<'RangePicker'>({
-  getValueFromEvent(_, value) {
-    return transformMoment(value)
-  },
-  getProps: compose(mapStyledProps, mapMomentValue),
-  getComponent: mapTextComponent,
-})(AntdTimePicker)
+export const TimePicker: ComposedTimePicker = connect(
+  AntdTimePicker,
+  mapProps(mapTimeFormat()),
+  mapReadPretty(PreviewText.TimePicker)
+)
 
-TimePicker.RangePicker = connect({
-  getValueFromEvent(_, [startDate, endDate]) {
-    return [transformMoment(startDate), transformMoment(endDate)]
-  },
-  getProps: compose(mapStyledProps, mapMomentValue),
-  getComponent: mapTextComponent,
-})(AntdTimePicker.RangePicker)
+TimePicker.RangePicker = connect(
+  AntdTimePicker.RangePicker,
+  mapProps(mapTimeFormat()),
+  mapReadPretty(PreviewText.TimeRangePicker)
+)
 
 export default TimePicker

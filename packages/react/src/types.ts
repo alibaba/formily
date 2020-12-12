@@ -30,14 +30,14 @@ export interface IVoidFieldProps<
     | React.ReactNode
 }
 
-export interface IComponentMapper {
-  (target: JSXComponent): JSXComponent
+export interface IComponentMapper<T extends JSXComponent> {
+  (target: T): JSXComponent
 }
 
-export type IStateMapper =
+export type IStateMapper<Props> =
   | {
-      extract: string
-      to?: string
+      extract: keyof Formily.Core.Models.Field
+      to?: keyof Props
       transform?: (value: any) => any
     }
   | ((props: any, field: Formily.Core.Types.GeneralField) => any)

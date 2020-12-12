@@ -1,10 +1,10 @@
-import { connect } from '@formily/react-schema-renderer'
+import { connect, mapReadPretty } from '@formily/react'
 import { InputNumber } from 'antd'
-import { acceptEnum, mapStyledProps, mapTextComponent } from '../shared'
+import { PreviewText } from '../preview-text'
 
-export const NumberPicker = connect({
-  getProps: mapStyledProps,
-  getComponent: mapTextComponent
-})(acceptEnum(InputNumber))
+export const NumberPicker = connect(
+  InputNumber,
+  mapReadPretty(PreviewText.Input)
+)
 
 export default NumberPicker

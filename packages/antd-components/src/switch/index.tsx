@@ -1,10 +1,14 @@
 import { Switch as AntdSwitch } from 'antd'
-import { connect } from '@formily/react-schema-renderer'
-import { acceptEnum, mapStyledProps } from '../shared'
+import { connect, mapProps, mapReadPretty } from '@formily/react'
+import { PreviewText } from '@formily/react-shared-components'
 
-export const Switch = connect({
-  valueName: 'checked',
-  getProps: mapStyledProps
-})(acceptEnum(AntdSwitch))
+export const Switch = connect(
+  AntdSwitch,
+  mapProps({
+    extract: 'value',
+    to: 'checked'
+  }),
+  mapReadPretty(PreviewText)
+)
 
-export default Switch;
+export default Switch

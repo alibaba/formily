@@ -1,105 +1,60 @@
-import React from 'react'
-import { connect } from '@formily/react-schema-renderer'
 import moment from 'moment'
+import { connect, mapProps, mapReadPretty } from '@formily/react'
 import { DatePicker as AntdDatePicker } from 'antd'
-import {
-  mapStyledProps,
-  mapTextComponent,
-  compose,
-  isStr,
-  isArr
-} from '../shared'
+import { DatePickerProps, RangePickerProps } from 'antd/lib/date-picker'
+import { PreviewText } from '../preview-text'
+import { formatMomentValue } from '../shared'
+type FormilyDatePickerProps<PickerProps> = Exclude<
+  PickerProps,
+  'value' | 'onChange'
+> & {
+  value: string
+  onChange: (value: string | string[]) => void
+}
 
-class YearPicker extends React.Component {
-  public render() {
-    return <AntdDatePicker {...this.props} picker={'year'} />
+type ComposedDatePicker = React.FC<DatePickerProps> & {
+  RangePicker?: React.FC<RangePickerProps>
+}
+
+const mapDateFormat = function() {
+  const getDefaultFormat = (props: FormilyDatePickerProps<DatePickerProps>) => {
+    if (props['picker'] === 'month') {
+      return 'YYYY-MM'
+    } else if (props['picker'] === 'quarter') {
+      return 'YYYY-\\QQ'
+    } else if (props['picker'] === 'year') {
+      return 'YYYY'
+    } else if (props['picker'] === 'week') {
+      return 'YYYY-wo'
+    }
+    return props['showTime'] ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+  }
+
+  return (props: FormilyDatePickerProps<DatePickerProps>): DatePickerProps => {
+    const format = props['format'] || getDefaultFormat(props)
+    return {
+      ...props,
+      format,
+      value: moment(props.value),
+      onChange: (value: moment.Moment | moment.Moment[]) => {
+        if (props.onChange) {
+          props.onChange(formatMomentValue(value, format))
+        }
+      }
+    }
   }
 }
 
-const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
-  if (value === '') return undefined
-  return value && value.format ? value.format(format) : value
-}
+export const DatePicker: ComposedDatePicker = connect(
+  AntdDatePicker,
+  mapProps(mapDateFormat()),
+  mapReadPretty(PreviewText.DatePicker)
+)
 
-const mapMomentValue = (props: any, fieldProps: any) => {
-  const { value, showTime = false } = props
-  if (!fieldProps.editable) return props
-  try {
-    if (isStr(value) && value) {
-      props.value = moment(
-        value,
-        showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
-      )
-    } else if (isArr(value) && value.length) {
-      props.value = value.map(
-        item =>
-          (item &&
-            moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
-          ''
-      )
-    }
-  } catch (e) {
-    throw new Error(e)
-  }
-  return props
-}
-
-export const DatePicker = connect<
-  'RangePicker' | 'MonthPicker' | 'YearPicker' | 'WeekPicker'
->({
-  getValueFromEvent(_, value) {
-    const props = this.props || {}
-    return transformMoment(
-      value,
-      props.format || (props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
-    )
-  },
-  getProps: compose(mapStyledProps, mapMomentValue),
-  getComponent: mapTextComponent
-})(AntdDatePicker)
-
-DatePicker.RangePicker = connect({
-  getValueFromEvent(_, [startDate, endDate]) {
-    const props = this.props || {}
-    const format =
-      props.format || (props.showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
-    return [
-      transformMoment(startDate, format),
-      transformMoment(endDate, format)
-    ]
-  },
-  getProps: compose(mapStyledProps, mapMomentValue),
-  getComponent: mapTextComponent
-})(AntdDatePicker.RangePicker)
-
-DatePicker.MonthPicker = connect({
-  getValueFromEvent(_, value) {
-    return transformMoment(value)
-  },
-  getProps: compose(mapStyledProps, mapMomentValue),
-  getComponent: mapTextComponent
-})(AntdDatePicker.MonthPicker)
-
-DatePicker.WeekPicker = connect({
-  getValueFromEvent(_, value) {
-    return transformMoment(value, 'gggg-wo')
-  },
-  getProps: compose(mapStyledProps, props => {
-    if (isStr(props.value) && props.value) {
-      const parsed = props.value.match(/\D*(\d+)\D*(\d+)\D*/) || ['', '', '']
-      props.value = moment(parsed[1], 'YYYY').add(parsed[2] - 1, 'weeks')
-    }
-    return props
-  }),
-  getComponent: mapTextComponent
-})(AntdDatePicker.WeekPicker)
-
-DatePicker.YearPicker = connect({
-  getValueFromEvent(_, value) {
-    return transformMoment(value, 'YYYY')
-  },
-  getProps: compose(mapStyledProps, mapMomentValue),
-  getComponent: mapTextComponent
-})(YearPicker)
+DatePicker.RangePicker = connect(
+  AntdDatePicker.RangePicker,
+  mapProps(mapDateFormat()),
+  mapReadPretty(PreviewText.DateRangePicker)
+)
 
 export default DatePicker

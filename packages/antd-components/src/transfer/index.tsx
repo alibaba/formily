@@ -1,10 +1,17 @@
-import { connect } from '@formily/react-schema-renderer'
+import { connect, mapProps } from '@formily/react'
 import { Transfer as AntdTransfer } from 'antd'
-import { mapStyledProps } from '../shared'
 
-export const Transfer = connect({
-  getProps: mapStyledProps,
-  valueName: 'targetKeys'
-})(AntdTransfer)
+export const Transfer = connect(
+  AntdTransfer,
+  mapProps(
+    {
+      extract: 'value',
+      to: 'targetKeys'
+    },
+    {
+      extract: 'dataSource'
+    }
+  )
+)
 
 export default Transfer

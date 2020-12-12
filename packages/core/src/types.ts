@@ -207,6 +207,7 @@ export type FieldDataSource = {
   title?: string
   key?: string
   text?: string
+  children?: FieldDataSource
   [key: string]: any
 }[]
 
