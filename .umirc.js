@@ -218,6 +218,10 @@ export default {
           {
             title: 'Package',
             path: '/api/react-schema'
+          },
+          {
+            title: 'React Hooks',
+            path: '/api/react-schema/hooks'
           }
         ]
       }
