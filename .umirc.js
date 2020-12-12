@@ -164,6 +164,10 @@ export default {
             path: '/guide/practice/caculator'
           },
           {
+            title: '实现自定义组件',
+            path: '/guide/practice/custom-component'
+          },
+          {
             title: '管理业务逻辑',
             path: '/guide/practice/best-practice'
           }
