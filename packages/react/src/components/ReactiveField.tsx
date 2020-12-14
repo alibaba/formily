@@ -38,7 +38,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = props => {
 
   const renderComponent = () => {
     if (!field?.component?.[0]) return <Fragment>{children}</Fragment>
-    const value = !isVoidField(field) && field.value
+    const value = !isVoidField(field) ? field.value : undefined
     const onChange = !isVoidField(field) ? field.onInput : undefined
     const disabled = !isVoidField(field)
       ? field.pattern === 'disabled' || field.pattern === 'readPretty'
