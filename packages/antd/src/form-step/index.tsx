@@ -76,8 +76,8 @@ export const FormStep: ComposedFormTab = connect(({ formStep, ...props }) => {
   )
 })
 
-export const StepPane: React.FC<StepProps> = () => {
-  return <Fragment />
+export const StepPane: React.FC<StepProps> = ({ children }) => {
+  return <Fragment>{children}</Fragment>
 }
 
 FormStep.StepPane = StepPane

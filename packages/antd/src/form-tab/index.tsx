@@ -5,6 +5,7 @@ import { TabPaneProps, TabsProps } from 'antd/lib/tabs'
 import { useField } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema } from '@formily/json-schema'
+import { observer } from 'mobx-react-lite'
 
 interface IFormTab {
   activeKey: string
@@ -51,20 +52,24 @@ export const useFormTab = (defaultActiveKey?: string, deps = []) => {
   }, deps)
 }
 
-export const FormTab: ComposedFormTab = ({ formTab, ...props }) => {
+export const FormTab: ComposedFormTab = observer(props => {
   const schema = useSchema()
   const field = useField()
   const tabs = parseTabs(schema)
+  const formTab = useMemo(() => {
+    return props.formTab ? props.formTab : createFormTab()
+  }, [])
   const activeKey = props.activeKey || formTab?.activeKey
 
   const badgedTab = (key: string, props: any) => {
+    if (!activeKey) return props.tab
     if (activeKey === props?.key) return props.tab
     const errors = field.form.feedback.queryMessages({
-      path: `${field.path.concat(key)}.*`
+      address: `${field.address.concat(key)}.*`
     })
     if (errors.length) {
       return (
-        <Badge offset={[12, 0]} count={errors.length}>
+        <Badge size="small" count={errors.length}>
           {props.tab}
         </Badge>
       )
@@ -81,22 +86,17 @@ export const FormTab: ComposedFormTab = ({ formTab, ...props }) => {
         formTab?.setActiveKey?.(key)
       }}
     >
-      {tabs.map(({ props, schema, name }, key) => (
-        <Tabs.TabPane
-          {...props}
-          key={key}
-          tab={badgedTab(name, props)}
-          forceRender
-        >
+      {tabs.map(({ props, schema, name }) => (
+        <Tabs.TabPane {...props} tab={badgedTab(name, props)} forceRender>
           <RecursionField schema={schema} name={name} />
         </Tabs.TabPane>
       ))}
     </Tabs>
   )
-}
+})
 
-export const TabPane: React.FC<TabPaneProps> = () => {
-  return <Fragment />
+export const TabPane: React.FC<TabPaneProps> = ({ children }) => {
+  return <Fragment>{children}</Fragment>
 }
 
 FormTab.TabPane = TabPane

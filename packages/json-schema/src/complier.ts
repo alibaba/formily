@@ -6,6 +6,7 @@ import {
   reduce,
   BigData
 } from '@formily/shared'
+import { isObservable } from 'mobx'
 import { isSchemaObject } from './schema'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
@@ -31,6 +32,9 @@ export const complieExpression = <Source = any, Scope = any>(
         return source
       }
       if (source[actionsSymbol]) {
+        return source
+      }
+      if (isObservable(source)) {
         return source
       }
       if (source['_isAMomentObject']) {

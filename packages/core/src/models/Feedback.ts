@@ -79,8 +79,9 @@ export class Feedback {
       if (info.address) {
         if (isRegExp(info.address)) {
           if (!info.address.test(item.address)) return false
-        } else if (!FormPath.parse(info.address).match(item.address))
+        } else if (!FormPath.parse(info.address).match(item.address)) {
           return false
+        }
       }
       if (info.path) {
         if (isRegExp(info.path)) {
