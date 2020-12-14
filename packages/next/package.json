@@ -16,9 +16,7 @@
   "engines": {
     "npm": ">=3.0.0"
   },
-  "scripts": {
-    "build": "ts-node --project ../../tsconfig.build.json build.ts"
-  },
+  "scripts": {},
   "peerDependencies": {
     "@alifd/next": "^1.19.1",
     "@types/classnames": "^2.2.9",

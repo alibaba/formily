@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, Fragment } from 'react'
 import { ObjectField, ArrayField, Field, VoidField } from '@formily/react'
 import {
   SchemaContext,
@@ -16,11 +16,14 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
     if (schema_.type === 'object') {
       return (
         <ObjectField {...props_} name={props.name} basePath={props.basePath}>
-          {() =>
-            schema_.mapProperties((schema, key) => {
-              return <RecursionField schema={schema} key={key} name={key} />
-            })
-          }
+          {() => (
+            <Fragment>
+              {schema_.mapProperties((schema, key) => {
+                return <RecursionField schema={schema} key={key} name={key} />
+              })}
+              {schema_['x-content']}
+            </Fragment>
+          )}
         </ObjectField>
       )
     } else if (schema_.type === 'array') {
@@ -30,15 +33,22 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
     } else if (schema_.type === 'void') {
       return (
         <VoidField {...props_} name={props.name} basePath={props.basePath}>
-          {() =>
-            schema_.mapProperties((schema, key) => {
-              return <RecursionField schema={schema} key={key} name={key} />
-            })
-          }
+          {() => (
+            <Fragment>
+              {schema_.mapProperties((schema, key) => {
+                return <RecursionField schema={schema} key={key} name={key} />
+              })}
+              {schema_['x-content']}
+            </Fragment>
+          )}
         </VoidField>
       )
     }
-    return <Field {...props_} name={props.name} basePath={props.basePath} />
+    return (
+      <Field {...props_} name={props.name} basePath={props.basePath}>
+        {schema_['x-content']}
+      </Field>
+    )
   }
 
   return (

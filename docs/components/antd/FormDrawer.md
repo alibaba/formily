@@ -1,6 +1,6 @@
 ```tsx
 import React from 'react'
-import { FormDialog, FormItem, Input, DialogFooter } from '@formily/antd'
+import { FormDrawer, FormItem, Input, DrawerFooter } from '@formily/antd'
 import { Field, useForm } from '@formily/react'
 import { Button } from 'antd'
 import 'antd/dist/antd.css'
@@ -9,7 +9,7 @@ export default () => {
   return (
     <Button
       onClick={() => {
-        FormDialog('弹窗表单', () => {
+        FormDrawer('抽屉表单', (resolve, reject) => {
           return (
             <>
               <Field
@@ -18,6 +18,15 @@ export default () => {
                 decorator={[FormItem]}
                 component={[Input]}
               />
+              <DrawerFooter>
+                <Button
+                  onClick={() => {
+                    resolve()
+                  }}
+                >
+                  提交
+                </Button>
+              </DrawerFooter>
             </>
           )
         })

@@ -187,4 +187,6 @@ export interface ISchema<
   ['x-component-props']?: ComponentProps
   //组件响应器
   ['x-reactions']?: SchemaExtendReaction[]
+  //内容
+  ['x-content']?: any
 }

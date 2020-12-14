@@ -126,7 +126,9 @@ export class Schema<
   //组件属性
   ['x-component-props']?: ComponentProps;
 
-  ['x-reactions']?: SchemaExtendReaction[]
+  ['x-reactions']?: SchemaExtendReaction[];
+
+  ['x-content']?: any
 
   _isJSONSchemaObject = true
 

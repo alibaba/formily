@@ -379,7 +379,9 @@ export class Form {
     }
   }
 
-  submit = async (onSubmit?: (values: any) => Promise<any> | void) => {
+  submit = async <T>(
+    onSubmit?: (values: any) => Promise<T> | void
+  ): Promise<T> => {
     this.setSubmitting(true)
     this.feedback.clear({
       code: 'SubmitError'
