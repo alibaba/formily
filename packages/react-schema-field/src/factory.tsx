@@ -8,6 +8,7 @@ import {
   SchemaOptionsContext
 } from './shared'
 import {
+  ReactComponentPath,
   JSXComponent,
   ISchemaFieldFactoryOptions,
   SchemaComponents,
@@ -63,8 +64,8 @@ export function createSchemaField<Components extends SchemaComponents>(
   }
 
   function MarkupField<
-    Decorator extends keyof Components,
-    Component extends keyof Components
+    Decorator extends ReactComponentPath<Components>,
+    Component extends ReactComponentPath<Components>
   >(props: ISchemaMarkupFieldProps<Components, Component, Decorator>) {
     const parent = useContext(SchemaMarkupContext)
     if (!parent) return <Fragment />

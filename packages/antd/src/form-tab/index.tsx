@@ -16,8 +16,12 @@ interface IFormTabProps extends TabsProps {
   formTab?: IFormTab
 }
 
+interface IFormTabPaneProps extends TabPaneProps {
+  key: string | number
+}
+
 type ComposedFormTab = React.FC<IFormTabProps> & {
-  TabPane?: React.FC<TabPaneProps>
+  TabPane?: React.FC<IFormTabPaneProps>
   useFormTab?: (defaultActiveKey?: string, deps?: any[]) => IFormTab
   createFormTab?: (defaultActiveKey?: string) => IFormTab
 }
@@ -63,7 +67,8 @@ export const FormTab: ComposedFormTab = observer(props => {
 
   const badgedTab = (key: string, props: any) => {
     if (!activeKey) return props.tab
-    if (activeKey === props?.key) return props.tab
+    if (activeKey === props?.key || activeKey === props?.tabKey)
+      return props.tab
     const errors = field.form.feedback.queryMessages({
       address: `${field.address.concat(key)}.*`
     })
@@ -95,7 +100,9 @@ export const FormTab: ComposedFormTab = observer(props => {
   )
 })
 
-export const TabPane: React.FC<TabPaneProps> = ({ children }) => {
+export const TabPane: React.FC<IFormTabPaneProps> = ({
+  children
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

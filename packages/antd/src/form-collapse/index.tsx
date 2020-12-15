@@ -107,7 +107,9 @@ export const FormCollapse: ComposedFormCollapse = observer(props => {
   )
 })
 
-export const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
+export const CollapsePanel: React.FC<CollapsePanelProps> = ({
+  children
+}) => {
   return <Fragment>{children}</Fragment>
 }
 

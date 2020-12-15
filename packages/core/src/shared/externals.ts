@@ -142,6 +142,6 @@ export const isVoidFieldState = (state: any): state is IVoidFieldState => {
   return state?.displayName === 'VoidField'
 }
 
-export const createForm = (options: IFormProps) => {
+export const createForm = (options?: IFormProps) => {
   return new Form(options)
 }
