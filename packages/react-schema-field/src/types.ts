@@ -39,6 +39,8 @@ export interface IRecursionFieldProps {
   schema: Schema
   name?: string
   basePath?: FormPathPattern
+  onlyRenderProperties?:boolean
+  onlyRenderSelf?:boolean
 }
 
 export type ObjectKey = string | number | boolean | symbol
@@ -100,4 +102,8 @@ export interface ISchemaMarkupFieldProps<
   > {
   name?: string
   children?: React.ReactNode
+}
+
+export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
+  required?:ISchema['required']
 }

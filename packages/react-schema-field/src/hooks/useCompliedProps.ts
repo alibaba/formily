@@ -12,7 +12,11 @@ import {
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { SchemaExpressionScopeContext, SchemaRequiredContext } from '../shared'
-import { ISchemaFieldFactoryOptions, ISchemaFieldUpdateRequest } from '../types'
+import {
+  ISchemaFieldFactoryOptions,
+  ISchemaFieldUpdateRequest,
+  ISchemaTransformerOptions
+} from '../types'
 
 const getValidatorBySchema = (
   schema: ISchema
@@ -120,7 +124,7 @@ const getFieldDataSourceBySchema = (schema: ISchema) => {
   }
 }
 
-const getFieldPropsBySchema = (
+const getFieldInternalPropsBySchema = (
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
 ) => {
@@ -134,18 +138,23 @@ const getFieldPropsBySchema = (
     display: schema['x-display'],
     pattern: schema['x-pattern'],
     decorator: [
-      schema['x-decorator'] && FormPath.getIn(options?.components, schema['x-decorator']),
+      schema['x-decorator'] &&
+        FormPath.getIn(options?.components, schema['x-decorator']),
       schema['x-decorator-props']
     ],
     component: [
-      schema['x-component'] && FormPath.getIn(options?.components, schema['x-component']),
+      schema['x-component'] &&
+        FormPath.getIn(options?.components, schema['x-component']),
       schema['x-component-props']
     ]
   }
 }
 
-const useSchemaFieldRequired = (name: string, schema: ISchema) => {
-  const required = useContext(SchemaRequiredContext)
+const getSchemaFieldRequired = (
+  schema: ISchema,
+  name: string,
+  required: ISchema['required']
+) => {
   if (isBool(schema.required)) {
     return schema.required
   }
@@ -161,12 +170,10 @@ const useSchemaFieldRequired = (name: string, schema: ISchema) => {
   }
 }
 
-const useSchemaFieldReactions = (
+const getSchemaFieldReactions = (
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
 ) => {
-  const scope = useContext(SchemaExpressionScopeContext)
-
   const setSchemaFieldState = (
     field: Formily.Core.Types.GeneralField,
     request: ISchemaFieldUpdateRequest,
@@ -178,7 +185,9 @@ const useSchemaFieldReactions = (
         field.setState(complie(request.state))
       }
       if (request.schema) {
-        field.setState(getFieldPropsBySchema(complie(request.schema), options))
+        field.setState(
+          getFieldInternalPropsBySchema(complie(request.schema), options)
+        )
       }
       if (isStr(request.run)) {
         complie(`async function(){${request.run}}`)()
@@ -213,7 +222,6 @@ const useSchemaFieldReactions = (
           const $dependencies = $deps
           return complieExpression(expression, {
             ...options.scope,
-            ...scope,
             $form,
             $self,
             $deps,
@@ -230,18 +238,35 @@ const useSchemaFieldReactions = (
   }
 }
 
-export const useCompliedProps = (
+export const transformSchemaToFieldProps = (
   name: string,
   schema: ISchema,
-  options: ISchemaFieldFactoryOptions
-): Formily.React.Types.IFieldProps<any, any, any> => {
-  const required = useSchemaFieldRequired(name, schema)
-  const reactions = useSchemaFieldReactions(schema, options)
-  const props = getFieldPropsBySchema(schema, options)
+  options: ISchemaTransformerOptions
+) => {
+  const required = getSchemaFieldRequired(schema, name, options.required)
+  const reactions = getSchemaFieldReactions(schema, options)
+  const props = getFieldInternalPropsBySchema(schema, options)
   return {
     ...props,
     required,
     name,
     reactions: [reactions]
   }
+}
+
+export const useCompliedProps = (
+  name: string,
+  schema: ISchema,
+  options: ISchemaFieldFactoryOptions
+): Formily.React.Types.IFieldProps<any, any, any> => {
+  const required = useContext(SchemaRequiredContext)
+  const contextScope = useContext(SchemaExpressionScopeContext)
+  return transformSchemaToFieldProps(name, schema, {
+    ...options,
+    required,
+    scope: {
+      ...options.scope,
+      ...contextScope
+    }
+  })
 }

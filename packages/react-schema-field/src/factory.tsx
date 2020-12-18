@@ -69,12 +69,22 @@ export function createSchemaField<Components extends SchemaComponents>(
   >(props: ISchemaMarkupFieldProps<Components, Component, Decorator>) {
     const parent = useContext(SchemaMarkupContext)
     if (!parent) return <Fragment />
+    const renderChildren = () => {
+      if (props?.type === 'array') {
+        return React.createElement(
+          MarkupField,
+          { type: 'object' },
+          props.children
+        )
+      }
+      return props.children || <React.Fragment />
+    }
+    const name = props.name || getRandomName()
     if (parent.type === 'object' || parent.type === 'void') {
-      const name = props.name || getRandomName()
       const schema = parent.addProperty(name, props)
       return (
         <SchemaMarkupContext.Provider value={schema}>
-          {props.children}
+          {renderChildren()}
         </SchemaMarkupContext.Provider>
       )
     } else if (parent.type === 'array') {
@@ -83,11 +93,11 @@ export function createSchemaField<Components extends SchemaComponents>(
         <SchemaMarkupContext.Provider
           value={Array.isArray(schema) ? schema[0] : schema}
         >
-          {props.children}
+          {renderChildren()}
         </SchemaMarkupContext.Provider>
       )
     } else {
-      return (props.children as React.ReactElement) || <React.Fragment />
+      return renderChildren()
     }
   }
 

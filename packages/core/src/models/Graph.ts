@@ -1,5 +1,5 @@
 import { toJS, makeObservable, action } from 'mobx'
-import { isValid, each } from '@formily/shared'
+import { isValid, each, FormPath } from '@formily/shared'
 import { IFieldState, IVoidFieldState, IFormState, IFormGraph } from '../types'
 import { Field } from './Field'
 import { Form } from './Form'
@@ -39,6 +39,8 @@ export class Graph {
       loading: field.loading,
       validating: field.validating,
       modified: field.modified,
+      mounted: field.mounted,
+      unmounted: field.unmounted,
       active: field.active,
       visited: field.visited,
       value: field.value,
@@ -55,9 +57,7 @@ export class Graph {
       decorator: toJS(field.decorator),
       component: toJS(field.component),
       validator: toJS(field.validator),
-      errors: toJS(field.errors),
-      warnings: toJS(field.warnings),
-      successes: toJS(field.successes)
+      feedbacks: toJS(field.feedbacks)
     }
   }
 
@@ -70,6 +70,8 @@ export class Graph {
       path: field.path.toString(),
       display: field.display,
       pattern: field.pattern,
+      mounted: field.mounted,
+      unmounted: field.unmounted,
       decorator: toJS(field.decorator),
       component: toJS(field.component)
     }
@@ -108,6 +110,9 @@ export class Graph {
     if (isValid(state.dataSource)) {
       field.dataSource = state.dataSource
     }
+    if (isValid(state.feedbacks)) {
+      field.feedbacks = state.feedbacks
+    }
     if (isValid(state.modified)) {
       field.modified = state.modified
     }
@@ -131,15 +136,6 @@ export class Graph {
     }
     if (isValid(state.value)) {
       field.setValue(state.value)
-    }
-    if (isValid(state.errors)) {
-      field.setErrors(state.errors)
-    }
-    if (isValid(state.warnings)) {
-      field.setWarnings(state.warnings)
-    }
-    if (isValid(state.successes)) {
-      field.setSuccesses(state.successes)
     }
     if (isValid(state.initialValue)) {
       field.setValue(state.initialValue)
@@ -218,15 +214,6 @@ export class Graph {
     if (isValid(state.pattern)) {
       form.pattern = state.pattern
     }
-    if (isValid(state.errors)) {
-      form.feedback.update(...state.errors)
-    }
-    if (isValid(state.warnings)) {
-      form.feedback.update(...state.warnings)
-    }
-    if (isValid(state.successes)) {
-      form.feedback.update(...state.successes)
-    }
   }
 
   getGraph = (): IFormGraph => {
@@ -256,17 +243,19 @@ export class Graph {
             this.setFieldState(field, state as any)
           }
         } else {
+          const _address = FormPath.parse(address)
+          const name = _address.segments[_address.segments.length - 1]
           if (isFieldState(state)) {
-            form.fields[address] = new Field(address, {}, form)
+            form.fields[address] = new Field(address, { name }, form)
             this.setFieldState(form.fields[address] as any, state)
           } else if (isArrayFieldState(state)) {
-            form.fields[address] = new ArrayField(address, {}, form)
+            form.fields[address] = new ArrayField(address, { name }, form)
             this.setFieldState(form.fields[address] as any, state)
           } else if (isObjectFieldState(state)) {
-            form.fields[address] = new ObjectField(address, {}, form)
+            form.fields[address] = new ObjectField(address, { name }, form)
             this.setFieldState(form.fields[address] as any, state)
           } else {
-            form.fields[address] = new VoidField(address, {}, form)
+            form.fields[address] = new VoidField(address, { name }, form)
             this.setVoidFieldState(form.fields[address] as any, state)
           }
         }

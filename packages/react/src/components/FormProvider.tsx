@@ -1,14 +1,12 @@
 import React from 'react'
-import { useAutoRecycle } from '../hooks/useAutoRecycle'
+import { useAttach } from '../hooks/useAttach'
 import { FormContext } from '../shared'
 import { IProviderProps } from '../types'
 
 export const FormProvider: React.FC<IProviderProps> = props => {
-  useAutoRecycle(props.form)
+  const form = useAttach(props.form)
   return (
-    <FormContext.Provider value={props.form}>
-      {props.children}
-    </FormContext.Provider>
+    <FormContext.Provider value={form}>{props.children}</FormContext.Provider>
   )
 }
 

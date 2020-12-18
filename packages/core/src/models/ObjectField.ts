@@ -5,7 +5,7 @@ import { Form } from './Form'
 export class ObjectField<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
-> extends Field<Decorator, Component, Record<string, any>> {
+> extends Field<Decorator, Component, any, Record<string, any>> {
   displayName = 'ObjectField'
 
   constructor(

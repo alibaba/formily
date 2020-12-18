@@ -8,6 +8,7 @@ import {
   uid,
   globalThisPolyfill,
   clone,
+  reduce,
   defaults
 } from '@formily/shared'
 import { Heart } from './Heart'
@@ -26,7 +27,6 @@ import {
   IVoidFieldFactoryProps
 } from '../types'
 import { isVoidField, getLifeCyclesByEffects } from '../shared'
-import { Feedback } from './Feedback'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
@@ -50,7 +50,6 @@ export class Form {
   props: IFormProps
   heart: Heart
   graph: Graph
-  feedback: Feedback
   fields: FormFields = {}
   requests: FormRequests = {}
   indexes: Map<string, string> = new Map()
@@ -73,7 +72,6 @@ export class Form {
     this.values =
       clone(this.props.values) || clone(this.props.initialValues) || {}
     this.initialValues = clone(this.props.initialValues) || {}
-    this.feedback = new Feedback()
     this.graph = new Graph(this)
     this.heart = new Heart({
       lifecycles: this.lifecycles,
@@ -102,32 +100,55 @@ export class Form {
       deleteValuesIn: action,
       setSubmitting: action,
       setValidating: action,
-      setFormGraph: action,
-      createField: action,
-      createArrayField: action,
-      createObjectField: action,
-      createVoidField: action
+      setFormGraph: action
     })
   }
 
   get valid() {
-    return this.feedback.valid
+    return !this.invalid
   }
 
   get invalid() {
-    return this.feedback.invalid
+    return this.errors.length > 0
   }
 
   get errors() {
-    return this.feedback.errors
+    return reduce(
+      this.fields,
+      (messages, field) => {
+        if (!isVoidField(field)) {
+          return messages.concat(field.errors)
+        }
+        return messages
+      },
+      []
+    )
   }
 
   get warnings() {
-    return this.feedback.warnings
+    return reduce(
+      this.fields,
+      (messages, field) => {
+        if (!isVoidField(field)) {
+          return messages.concat(field.warnings)
+        }
+        return messages
+      },
+      []
+    )
   }
 
   get successes() {
-    return this.feedback.successes
+    return reduce(
+      this.fields,
+      (messages, field) => {
+        if (!isVoidField(field)) {
+          return messages.concat(field.successes)
+        }
+        return messages
+      },
+      []
+    )
   }
 
   get lifecycles() {
@@ -146,7 +167,9 @@ export class Form {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new Field(address, props, this)
+      runInAction(() => {
+        this.fields[identifier] = new Field(address, props, this)
+      })
     }
     return this.fields[identifier] as Field<Decorator, Component>
   }
@@ -161,7 +184,9 @@ export class Form {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new ArrayField(address, props, this)
+      runInAction(() => {
+        this.fields[identifier] = new ArrayField(address, props, this)
+      })
     }
     return this.fields[identifier] as ArrayField<Decorator, Component>
   }
@@ -176,7 +201,9 @@ export class Form {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new ObjectField(address, props, this)
+      runInAction(() => {
+        this.fields[identifier] = new ObjectField(address, props, this)
+      })
     }
     return this.fields[identifier] as ObjectField<Decorator, Component>
   }
@@ -191,7 +218,9 @@ export class Form {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      this.fields[identifier] = new VoidField(address, props, this)
+      runInAction(() => {
+        this.fields[identifier] = new VoidField(address, props, this)
+      })
     }
     return this.fields[identifier] as VoidField<Decorator, Component>
   }
@@ -284,26 +313,35 @@ export class Form {
   }
 
   clearErrors = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
-    this.feedback.clear({
-      type: 'error',
-      address: pattern,
-      code
+    this.query(pattern).all.getAll(field => {
+      if (!isVoidField(field)) {
+        field.setFeedback({
+          type: 'error',
+          messages: []
+        })
+      }
     })
   }
 
   clearWarnings = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
-    this.feedback.clear({
-      type: 'warning',
-      address: pattern,
-      code
+    this.query(pattern).all.getAll(field => {
+      if (!isVoidField(field)) {
+        field.setFeedback({
+          type: 'warning',
+          messages: []
+        })
+      }
     })
   }
 
   clearSuccesses = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
-    this.feedback.clear({
-      type: 'success',
-      address: pattern,
-      code
+    this.query(pattern).all.getAll(field => {
+      if (!isVoidField(field)) {
+        field.setFeedback({
+          type: 'success',
+          messages: []
+        })
+      }
     })
   }
 
@@ -346,6 +384,8 @@ export class Form {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.heart.clear()
+    this.fields = {}
+    this.indexes.clear()
     each(this.fields, field => {
       field.dispose()
     })
@@ -374,8 +414,8 @@ export class Form {
     await Promise.all(tasks)
     this.setValidating(false)
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
-    if (this.feedback.invalid) {
-      throw this.feedback.errors
+    if (this.invalid) {
+      throw this.errors
     }
   }
 
@@ -383,9 +423,6 @@ export class Form {
     onSubmit?: (values: any) => Promise<T> | void
   ): Promise<T> => {
     this.setSubmitting(true)
-    this.feedback.clear({
-      code: 'SubmitError'
-    })
     try {
       await this.validate()
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS)
@@ -394,20 +431,14 @@ export class Form {
     }
     let results: any
     try {
-      if (isFn(onSubmit) && this.feedback.valid) {
+      if (isFn(onSubmit) && this.valid) {
         results = await onSubmit(toJS(this.values))
       }
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
     } catch (e) {
-      this.feedback.update({
-        code: 'SubmitError',
-        type: 'error',
-        messages: e
-      })
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
-      new Promise(() => {
-        throw e
-      })
+      this.setSubmitting(false)
+      throw e
     }
     this.setSubmitting(false)
     return results

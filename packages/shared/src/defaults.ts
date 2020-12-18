@@ -1,5 +1,5 @@
 import { each } from './array'
-import { isValid } from './isEmpty'
+import { isEmpty, isValid } from './isEmpty'
 import { isPlainObj, isArr, getType } from './types'
 import { BigData } from './big-data'
 const isUnNormalObject = (value: any) => {
@@ -35,7 +35,7 @@ export const defaults = (defaults_: any, targets: any) => {
     !isPlainValue(defaults_) ||
     !isPlainValue(targets)
   ) {
-    return isValid(targets) ? targets : defaults_
+    return !isEmpty(targets) ? targets : defaults_
   } else {
     const results = isPlainObj(defaults_) ? {} : []
     each(targets, (value, key) => {

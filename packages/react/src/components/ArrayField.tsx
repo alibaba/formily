@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm, useField } from '../hooks'
-import { useAutoRecycle } from '../hooks/useAutoRecycle'
+import { useAttach } from '../hooks/useAttach'
 import { FieldContext } from '../shared'
 import { JSXComponent, IFieldProps } from '../types'
 import { ReactiveField } from './ReactiveField'
@@ -10,8 +10,8 @@ export const ArrayField = <D extends JSXComponent, C extends JSXComponent>(
 ) => {
   const form = useForm()
   const parent = useField()
-  const field = useAutoRecycle(
-    form.createArrayField({ basePath: parent?.path, ...props })
+  const field = useAttach(
+    form.createArrayField({ basePath: parent?.address, ...props })
   )
   return (
     <FieldContext.Provider value={field}>

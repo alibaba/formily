@@ -19,7 +19,7 @@ import {
   FormPatternTypes,
   IVoidFieldState
 } from '../types'
-import { skipVoidAddress } from '../shared'
+import { buildNodeIndexes } from '../shared'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -61,9 +61,7 @@ export class VoidField<
   }
 
   protected makeIndexes(address: FormPathPattern) {
-    this.address = FormPath.parse(address)
-    this.path = skipVoidAddress(this.address, this.form)
-    this.form.indexes.set(this.path.toString(),this.address.toString())
+    buildNodeIndexes(this, address)
   }
 
   protected initialize(

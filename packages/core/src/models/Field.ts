@@ -6,7 +6,8 @@ import {
   isBool,
   each,
   isFn,
-  isPlainObj
+  isPlainObj,
+  isEmpty
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -28,6 +29,7 @@ import {
   JSXComponent,
   JSXComponenntProps,
   LifeCycleTypes,
+  Feedback,
   FeedbackMessage,
   FieldCaches,
   FieldRequests,
@@ -43,8 +45,10 @@ import {
   IFieldState
 } from '../types'
 import {
-  skipVoidAddress,
+  buildNodeIndexes,
   validateToFeedback,
+  updateFeedback,
+  queryFeedbackMessages,
   getValueFromEvent
 } from '../shared'
 import { Query } from './Query'
@@ -74,7 +78,7 @@ export class Field<
   validator: FieldValidator
   decorator: FieldDecorator<Decorator>
   component: FieldComponent<Component>
-
+  feedbacks: Feedback[]
   address: FormPath
   path: FormPath
 
@@ -98,9 +102,7 @@ export class Field<
   }
 
   protected makeIndexes(address: FormPathPattern) {
-    this.address = FormPath.parse(address)
-    this.path = skipVoidAddress(this.address, this.form)
-    this.form.indexes.set(this.path.toString(),this.address.toString())
+    buildNodeIndexes(this, address)
   }
 
   protected initialize(
@@ -118,6 +120,8 @@ export class Field<
     this.mounted = false
     this.unmounted = false
     this.inputValues = []
+    this.inputValue = null
+    this.feedbacks = []
     this.title = props.title
     this.description = props.description
     this.selfDisplay = this.props.display
@@ -148,6 +152,7 @@ export class Field<
       validator: observable.ref,
       decorator: observable.ref,
       component: observable.ref,
+      feedbacks: observable.ref,
       errors: computed,
       warnings: computed,
       successes: computed,
@@ -164,6 +169,7 @@ export class Field<
       setInitialValue: action,
       setLoading: action,
       setValidating: action,
+      setFeedback: action,
       setErrors: action,
       setWarnings: action,
       setSuccesses: action,
@@ -200,6 +206,18 @@ export class Field<
             this.form
           )
         }
+      ),
+      reaction(
+        () => this.display,
+        display => {
+          if (display === 'none') {
+            this.setCacheValue(toJS(this.value))
+            this.setValue()
+          } else if (display === 'visibility') {
+            this.setValue(this.caches.value)
+            this.setCacheValue()
+          }
+        }
       )
     )
     if (isArr(this.props.reactions)) {
@@ -224,11 +242,30 @@ export class Field<
   }
 
   get errors() {
-    return this.form.feedback.queryMessages({
-      path: this.path,
-      address: this.address,
-      type: 'error'
-    })
+    return queryFeedbackMessages(
+      {
+        type: 'error'
+      },
+      this.feedbacks
+    )
+  }
+
+  get warnings() {
+    return queryFeedbackMessages(
+      {
+        type: 'warning'
+      },
+      this.feedbacks
+    )
+  }
+
+  get successes() {
+    return queryFeedbackMessages(
+      {
+        type: 'success'
+      },
+      this.feedbacks
+    )
   }
 
   get valid() {
@@ -239,37 +276,13 @@ export class Field<
     return !this.valid
   }
 
-  get warnings() {
-    return this.form.feedback.queryMessages({
-      path: this.path,
-      address: this.address,
-      type: 'warning'
-    })
-  }
-
-  get successes() {
-    return this.form.feedback.queryMessages({
-      path: this.path,
-      address: this.address,
-      type: 'success'
-    })
-  }
-
   get value(): ValueType {
-    const value = this.form.getValuesIn(this.path)
-    if (this.modified) {
-      return value
-    }
-    return isValid(value)
-      ? value
-      : isValid(this.initialValue)
-      ? this.initialValue
-      : this.caches.value
+    return this.form.getValuesIn(this.path)
   }
 
   get initialValue(): ValueType {
     const iniialValue = this.form.getInitialValuesIn(this.path)
-    return isValid(iniialValue) ? iniialValue : this.caches.initialValue
+    return isValid(iniialValue) ? iniialValue : undefined
   }
 
   get display(): FieldDisplayTypes {
@@ -323,32 +336,30 @@ export class Field<
     this.dataSource = dataSource
   }
 
+  setFeedback = (feedback: Feedback) => {
+    this.feedbacks = updateFeedback(this.feedbacks, feedback)
+  }
+
   setErrors = (messages: FeedbackMessage) => {
-    this.form.feedback.update({
+    this.setFeedback({
       type: 'error',
       code: 'EffectError',
-      address: this.address,
-      path: this.path,
       messages
     })
   }
 
   setWarnings = (messages: FeedbackMessage) => {
-    this.form.feedback.update({
+    this.setFeedback({
       type: 'warning',
       code: 'EffectWarning',
-      address: this.address,
-      path: this.path,
       messages
     })
   }
 
   setSuccesses = (messages: FeedbackMessage) => {
-    this.form.feedback.update({
+    this.setFeedback({
       type: 'success',
       code: 'EffectSuccess',
-      address: this.address,
-      path: this.path,
       messages
     })
   }
@@ -417,15 +428,6 @@ export class Field<
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
-    if (type === 'visibility') {
-      if (this.display === 'none') {
-        this.setValue(this.caches.value)
-        this.setCacheValue()
-      }
-    } else if (type === 'none') {
-      this.setCacheValue(toJS(this.value))
-      this.setValue()
-    }
     this.selfDisplay = type
   }
 
@@ -491,9 +493,13 @@ export class Field<
     if (!isValid(this.initialValue)) {
       this.form.setInitialValuesIn(this.path, this.props.initialValue)
     }
-    if (!isValid(this.value)) {
+    if (isEmpty(this.value)) {
       if (isValid(this.props.value)) {
-        this.form.setValuesIn(this.path, this.props.value)
+        if (isEmpty(this.props.value) && !isEmpty(this.initialValue)) {
+          this.form.setValuesIn(this.path, this.initialValue)
+        } else {
+          this.form.setValuesIn(this.path, this.props.value)
+        }
       } else {
         this.form.setValuesIn(this.path, this.initialValue)
       }
@@ -520,7 +526,7 @@ export class Field<
     this.inputValues = [value].concat(args.slice(1))
     this.modified = true
     this.form.modified = true
-    this.form.setValuesIn(this.address, value)
+    this.form.setValuesIn(this.path, value)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     this.validate('onInput')
@@ -564,9 +570,7 @@ export class Field<
     runInAction(() => {
       this.modified = false
       this.visited = false
-      this.form.feedback.clear({
-        address: this.address
-      })
+      this.feedbacks = []
       if (options?.clearInitialValue) {
         this.setInitialValue()
       }

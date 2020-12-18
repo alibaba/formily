@@ -17,6 +17,7 @@ export class Schema<
   Validator = any,
   Message = any
 > implements ISchema {
+  name?: string | number
   title?: Message
   description?: Message
   default?: any
@@ -163,6 +164,7 @@ export class Schema<
   ) => {
     this.properties = this.properties || {}
     this.properties[key] = new Schema(schema)
+    this.properties[key].name = key
     return this.properties[key]
   }
 
@@ -340,6 +342,56 @@ export class Schema<
     )
   }
 
+  reduceProperties = <P, R>(
+    callback?: (
+      buffer: P,
+      schema: Schema<
+        Decorator,
+        Component,
+        DecoratorProps,
+        ComponentProps,
+        Pattern,
+        Display,
+        Validator,
+        Message
+      >,
+      key: string
+    ) => R,
+    predicate?: P
+  ): R => {
+    let results: any = predicate
+    Schema.getOrderProperties(this, 'properties').forEach(({ schema, key }) => {
+      results = callback(results, schema, key)
+    })
+    return results
+  }
+
+  reducePatternProperties = <P, R>(
+    callback?: (
+      buffer: P,
+      schema: Schema<
+        Decorator,
+        Component,
+        DecoratorProps,
+        ComponentProps,
+        Pattern,
+        Display,
+        Validator,
+        Message
+      >,
+      key: string
+    ) => R,
+    predicate?: P
+  ): R => {
+    let results: any = predicate
+    Schema.getOrderProperties(this, 'patternProperties').forEach(
+      ({ schema, key }) => {
+        results = callback(results, schema, key)
+      }
+    )
+    return results
+  }
+
   complie = (scope: any) => {
     const excludes = [
       'properties',
@@ -353,7 +405,7 @@ export class Schema<
     each(this, (value, key) => {
       if (isFn(value)) return
       if (!excludes.includes(key)) {
-        this[key] = complieExpression(value, scope)
+        this[key] = value ? complieExpression(value, scope) : value
       }
     })
     return this

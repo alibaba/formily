@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm, useField } from '../hooks'
-import { useAutoRecycle } from '../hooks/useAutoRecycle'
+import { useAttach } from '../hooks/useAttach'
 import { ReactiveField } from './ReactiveField'
 import { FieldContext } from '../shared'
 import { JSXComponent, IFieldProps } from '../types'
@@ -10,8 +10,8 @@ export const ObjectField = <D extends JSXComponent, C extends JSXComponent>(
 ) => {
   const form = useForm()
   const parent = useField()
-  const field = useAutoRecycle(
-    form.createObjectField({ basePath: parent?.path, ...props })
+  const field = useAttach(
+    form.createObjectField({ basePath: parent?.address, ...props })
   )
 
   return (

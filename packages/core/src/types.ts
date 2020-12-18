@@ -71,42 +71,30 @@ export type HeartSubscriber = ({
   payload: any
 }) => void
 
+export interface INodePatch<T> {
+  type: 'remove' | 'update'
+  address: string
+  payload?: T
+}
+
 export interface IHeartProps<Context> {
   lifecycles?: LifeCycle[]
   context?: Context
 }
 
-export interface IFeedbackReducer {
-  (
-    informations: FeedbackInformation[],
-    infomation: FeedbackInformation,
-    index: number
-  ): FeedbackInformation[]
-}
-
-export interface IFeedbackInformation {
+export type Feedback = {
   triggerType?: string
   type?: string
   code?: string
-  address?: FormPathPattern
-  path?: FormPathPattern
   messages?: FeedbackMessage
 }
-export interface ISearchFeedbackInformation {
+
+export interface ISearchFeedback {
   triggerType?: string
   type?: string
   code?: string
   address?: FormPathPattern | RegExp
   path?: FormPathPattern | RegExp
-  messages?: FeedbackMessage
-}
-
-export type FeedbackInformation = {
-  triggerType?: string
-  type?: string
-  code?: string
-  address?: string
-  path?: string
   messages?: FeedbackMessage
 }
 
@@ -147,9 +135,9 @@ export interface IFormState {
   unmounted: boolean
   valid: boolean
   invalid: boolean
-  errors: FeedbackInformation[]
-  successes: FeedbackInformation[]
-  warnings: FeedbackInformation[]
+  errors: Feedback[]
+  successes: Feedback[]
+  warnings: Feedback[]
 }
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>
@@ -230,6 +218,8 @@ export interface IFieldProps<
   TextType = any,
   ValueType = any
 > {
+  name: FormPathPattern
+  basePath?: FormPathPattern
   title?: TextType
   description?: TextType
   value?: ValueType
@@ -250,6 +240,8 @@ export interface IVoidFieldProps<
   Component extends JSXComponent = any,
   TextType = any
 > {
+  name: FormPathPattern
+  basePath?: FormPathPattern
   title?: TextType
   description?: TextType
   display?: FieldDisplayTypes
@@ -280,6 +272,8 @@ export interface IFieldState {
   modified: boolean
   active: boolean
   visited: boolean
+  mounted: boolean
+  unmounted: boolean
   inputValue: any
   inputValues: any[]
   validator: FieldValidator
@@ -290,9 +284,7 @@ export interface IFieldState {
   readPretty: boolean
   decorator: FieldDecorator<any>
   component: FieldComponent<any>
-  warnings: any[]
-  errors: any[]
-  successes: any[]
+  feedbacks: Feedback[]
   value: any
   initialValue: any
 }
@@ -305,6 +297,8 @@ export interface IVoidFieldState {
   path: string
   display: FieldDisplayTypes
   pattern: FieldPatternTypes
+  mounted: boolean
+  unmounted: boolean
   decorator: FieldDecorator<any>
   component: FieldComponent<any>
 }

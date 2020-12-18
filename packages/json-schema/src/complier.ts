@@ -1,5 +1,4 @@
 import {
-  isPlainObj,
   isArr,
   isFn,
   isStr,
@@ -27,7 +26,7 @@ export const complieExpression = <Source = any, Scope = any>(
       return new Function(...vars, `return (${matched[1]});`)(...params)
     } else if (isArr(source)) {
       return source.map((value: any) => complie(value))
-    } else if (isPlainObj(source)) {
+    } else if (typeof source === 'object') {
       if ('$$typeof' in source && '_owner' in source) {
         return source
       }

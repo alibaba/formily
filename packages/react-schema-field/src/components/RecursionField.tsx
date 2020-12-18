@@ -15,21 +15,30 @@ import { useCompliedProps, useCompliedSchema } from '../hooks'
 import { IRecursionFieldProps } from '../types'
 
 export const RecursionField: React.FC<IRecursionFieldProps> = props => {
-  const field = useField()
+  const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const schema_ = useCompliedSchema(props.schema, options)
   const props_ = useCompliedProps(props.name, schema_, options)
-  const basePath = props.basePath || field?.address
+  const getBasePath = () => {
+    if (props.onlyRenderProperties) {
+      return props.basePath || parent?.address?.concat(props.name)
+    }
+    return props.basePath || parent?.address
+  }
+
+  const basePath = getBasePath()
   const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
+    if (props.onlyRenderSelf) return
     return (
       <Fragment>
-        {schema_.mapProperties((schema, key) => {
+        {schema_.mapProperties((schema, name) => {
+          const base = field?.address || basePath
           return (
             <RecursionField
               schema={schema}
-              key={key}
-              name={key}
-              basePath={field?.address}
+              key={name}
+              name={name}
+              basePath={base}
             />
           )
         })}
@@ -41,6 +50,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
   const render = () => {
     if (!props.name) return renderProperties()
     if (schema_.type === 'object') {
+      if (props.onlyRenderProperties) return renderProperties()
       return (
         <ObjectField {...props_} name={props.name} basePath={basePath}>
           {renderProperties}
@@ -49,6 +59,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
     } else if (schema_.type === 'array') {
       return <ArrayField {...props_} name={props.name} basePath={basePath} />
     } else if (schema_.type === 'void') {
+      if (props.onlyRenderProperties) return renderProperties()
       return (
         <VoidField {...props_} name={props.name} basePath={basePath}>
           {renderProperties}

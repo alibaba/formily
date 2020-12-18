@@ -8,7 +8,7 @@ import { JSXComponent, IFieldProps, FormPathPattern } from '../types'
 export class ArrayField<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any
-> extends Field<Decorator, Component, any[]> {
+> extends Field<Decorator, Component, any, any[]> {
   displayName = 'ArrayField'
 
   constructor(
@@ -28,26 +28,22 @@ export class ArrayField<
 
   push = (...items: any[]) => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    const pushed = copy.push(...items)
-    this.setValue(copy)
-    return pushed
+    return runInAction(() => {
+      return this.value?.push(...items)
+    })
   }
 
   pop = () => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    const last = copy.pop()
-    this.setValue(copy)
-    return last
+    return runInAction(() => {
+      return this.value?.pop()
+    })
   }
 
   insert = (index: number, ...items: any[]) => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    copy.splice(index, 0, items)
     runInAction(() => {
-      this.setValue(copy)
+      this.value?.splice(index, 0, items)
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length
@@ -57,10 +53,8 @@ export class ArrayField<
 
   remove = (index: number) => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    copy.splice(index, 1)
     runInAction(() => {
-      this.setValue(copy)
+      this.value?.splice(index, 1)
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1
@@ -70,33 +64,28 @@ export class ArrayField<
 
   shift = () => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    const shifted = copy.shift()
-    this.setValue(copy)
-    return shifted
+    return runInAction(() => {
+      return this.value?.shift()
+    })
   }
 
   unshift = (...items: any[]) => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    const shifted = copy.unshift(...items)
-    runInAction(() => {
-      this.setValue(copy)
+    return runInAction(() => {
+      const shifted = this.value.unshift(...items)
       spliceArrayState(this, {
         insertCount: items.length
       })
+      return shifted
     })
-    return shifted
   }
 
   move = (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
-    const copy = this.value.slice()
-    const fromItem = copy[fromIndex]
-    copy.splice(fromIndex, 1)
-    copy.splice(toIndex, 0, fromItem)
     runInAction(() => {
-      this.setValue(copy)
+      const fromItem = this.value[fromIndex]
+      this.value.splice(fromIndex, 1)
+      this.value.splice(toIndex, 0, fromItem)
       exchangeArrayState(this, {
         fromIndex,
         toIndex
