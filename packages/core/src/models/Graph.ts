@@ -32,7 +32,6 @@ export class Graph {
       displayName: field.displayName,
       title: field.title,
       description: field.description,
-      validatable: field.validatable,
       address: field.address.toString(),
       path: field.path.toString(),
       display: field.display,
@@ -116,9 +115,6 @@ export class Graph {
     }
     if (isValid(state.modified)) {
       field.modified = state.modified
-    }
-    if (isValid(state.validatable)) {
-      field.validatable = state.validatable
     }
     if (isValid(state.active)) {
       field.active = state.active

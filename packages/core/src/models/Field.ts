@@ -74,7 +74,6 @@ export class Field<
   inputValue: ValueType
   inputValues: any[]
   initialized: boolean
-  validatable: boolean
   dataSource: FieldDataSource
   mounted: boolean
   unmounted: boolean
@@ -122,7 +121,6 @@ export class Field<
     this.visited = false
     this.mounted = false
     this.unmounted = false
-    this.validatable = true
     this.inputValues = []
     this.inputValue = null
     this.feedbacks = []
@@ -149,7 +147,6 @@ export class Field<
       active: observable.ref,
       visited: observable.ref,
       initialized: observable.ref,
-      validatable: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
       inputValue: observable.ref,
@@ -179,7 +176,6 @@ export class Field<
       setWarnings: action,
       setSuccesses: action,
       setValidator: action,
-      setValidatable: action,
       setRequired: action,
       setComponent: action,
       setComponentProps: action,
@@ -220,8 +216,10 @@ export class Field<
             this.caches.value = toJS(this.value)
             this.setValue()
           } else if (display === 'visibility') {
-            this.setValue(this.caches.value)
-            this.caches.value = undefined
+            if (isEmpty(this.value)) {
+              this.setValue(this.caches.value)
+              this.caches.value = undefined
+            }
           }
         }
       )
@@ -359,16 +357,6 @@ export class Field<
       code: 'EffectSuccess',
       messages
     })
-  }
-
-  setValidatable = (validatable?: boolean) => {
-    this.validatable = !!validatable
-    if (!this.validatable) {
-      this.caches.feedbacks = this.feedbacks || []
-      this.feedbacks = []
-    } else {
-      this.feedbacks = this.caches.feedbacks || []
-    }
   }
 
   setValidator = (validator?: FieldValidator) => {

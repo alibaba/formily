@@ -27,12 +27,12 @@ export const getValueFromEvent = (event: any) => {
 }
 
 export const skipVoidAddress = (pattern: FormPathPattern, form: Form) => {
-  const address = FormPath.parse(pattern)
-  if (address.isMatchPattern)
+  const base = FormPath.parse(pattern)
+  if (base.isMatchPattern)
     throw new Error('Cannot use matching mode when read or writing values')
-  return address.reduce((address: FormPath, key: string, index: number) => {
-    if (index >= address.length - 1) return address.concat([key])
-    const np = address.slice(0, index + 1)
+  return base.reduce((address: FormPath, key: string, index: number) => {
+    if (index >= base.length - 1) return address.concat([key])
+    const np = base.slice(0, index + 1)
     const dp = address.concat([key])
     const field = form.fields[np.toString()]
     if (isVoidField(field)) {
@@ -145,9 +145,7 @@ export const validateToFeedbacks = async (
     context: this
   })
   const shouldSkipValidate =
-    field.display !== 'visibility' ||
-    field.pattern !== 'editable' ||
-    field.validatable !== true
+    field.display !== 'visibility' || field.pattern !== 'editable'
   runInAction(() => {
     each(results, (messages, type) => {
       field.setFeedback({

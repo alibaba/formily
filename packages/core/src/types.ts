@@ -287,7 +287,6 @@ export interface IFieldState {
   pattern: FieldPatternTypes
   loading: boolean
   validating: boolean
-  validatable: boolean
   required: boolean
   modified: boolean
   active: boolean
