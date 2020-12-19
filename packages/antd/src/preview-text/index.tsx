@@ -1,5 +1,6 @@
 import React from 'react'
 import { isArr } from '@formily/shared'
+import { useField } from '@formily/react'
 import { InputProps } from 'antd/lib/input'
 import { SelectProps } from 'antd/lib/select'
 import { TreeSelectProps } from 'antd/lib/tree-select'
@@ -25,6 +26,12 @@ const Input: React.FC<InputProps> = props => {
 }
 
 const Select: React.FC<SelectProps<any>> = props => {
+  const field = useField<Formily.Core.Models.Field>()
+  const dataSource: any[] = field?.dataSource?.length
+    ? field.dataSource
+    : props?.options?.length
+    ? props.options
+    : []
   const getSelected = () => {
     const value = props.value
     if (props.mode === 'multiple' || props.mode === 'tags') {
@@ -49,7 +56,7 @@ const Select: React.FC<SelectProps<any>> = props => {
     return selected.map(({ value, label }, key) => {
       return (
         <Tag key={key}>
-          {props?.options?.find(item => item.value == value)?.label || label}
+          {dataSource?.find(item => item.value == value)?.label || label}
         </Tag>
       )
     })
@@ -58,6 +65,12 @@ const Select: React.FC<SelectProps<any>> = props => {
 }
 
 const TreeSelect: React.FC<TreeSelectProps<any>> = props => {
+  const field = useField<Formily.Core.Models.Field>()
+  const dataSource = field?.dataSource?.length
+    ? field.dataSource
+    : props?.options?.length
+    ? props.options
+    : []
   const getSelected = () => {
     const value = props.value
     if (props.multiple) {
@@ -93,7 +106,7 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = props => {
     const selected = getSelected()
     return selected
       .map(({ value, label }) => {
-        return findLabel(props?.treeData, value) || label
+        return findLabel(value, dataSource) || label
       })
       .join(', ')
   }
@@ -101,6 +114,12 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = props => {
 }
 
 const Cascader: React.FC<CascaderProps> = props => {
+  const field = useField<Formily.Core.Models.Field>()
+  const dataSource: any[] = field?.dataSource?.length
+    ? field.dataSource
+    : props?.options?.length
+    ? props.options
+    : []
   const getSelected = () => {
     return isArr(props.value) ? props.value : []
   }
@@ -108,7 +127,7 @@ const Cascader: React.FC<CascaderProps> = props => {
     const selected = getSelected()
     return selected
       .map(value => {
-        return props?.options?.find(item => item.value == value)?.label
+        return dataSource?.find(item => item.value == value)?.label
       })
       .join('/')
   }

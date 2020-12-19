@@ -11,12 +11,12 @@ export const formatMomentValue = (
       if (isFn(_format)) {
         return _format(date)
       }
-      return date.format(_format)
+      return date?.format ? date.format(_format) : date
     } else {
       if (isFn(format)) {
         return format(date)
       }
-      return date.format(format)
+      return date?.format ? date.format(format) : date
     }
   }
   if (isArr(value)) {
