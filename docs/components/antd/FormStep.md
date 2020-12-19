@@ -89,7 +89,7 @@ export default () => {
             <Button
               disabled={formStep.allowNext}
               onClick={() => {
-                form.submit(console.log)
+                formStep.submit(console.log)
               }}
             >
               提交

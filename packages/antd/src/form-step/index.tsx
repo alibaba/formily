@@ -13,6 +13,7 @@ interface IFormStep {
   allowNext: boolean
   allowBack: boolean
   setCurrent(key: number): void
+  submit: Formily.Core.Models.Form['submit']
   next(): void
   back(): void
 }
@@ -111,6 +112,9 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
     },
     async back() {
       back()
+    },
+    async submit(onSubmit) {
+      return env.form?.submit?.(onSubmit)
     }
   })
   return formStep
