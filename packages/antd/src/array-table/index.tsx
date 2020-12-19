@@ -262,15 +262,16 @@ export const ArrayTable: ComposedArrayTable = observer(
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
+    const defaultRowKey = record => {
+      return dataSource.indexOf(record)
+    }
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
         {dataSource => (
           <ArrayTableContext.Provider value={field}>
             <Table
               size="small"
-              rowKey={record => {
-                return dataSource.indexOf(record)
-              }}
+              rowKey={defaultRowKey}
               {...props}
               pagination={false}
               columns={columns}
