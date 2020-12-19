@@ -307,13 +307,14 @@ export const ArrayTable: ComposedArrayTable = observer(
             <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
             {sources.map((column, key) => {
               //专门用来承接对Column的状态管理
-              if (isOperationsComponent(column.schema)) return null
-              return React.createElement(RecursionField, {
-                name: column.name,
-                schema: column.schema,
-                onlyRenderSelf: true,
-                key
-              })
+              if (isColumnComponent(column.schema)) {
+                return React.createElement(RecursionField, {
+                  name: column.name,
+                  schema: column.schema,
+                  onlyRenderSelf: true,
+                  key
+                })
+              }
             })}
           </ArrayTableContext.Provider>
         )}
