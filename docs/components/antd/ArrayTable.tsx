@@ -109,7 +109,7 @@ export default () => {
           <SchemaField.Markup
             type="void"
             x-component-props={{ title: '操作', dataIndex: 'operations' }}
-            x-component="ArrayTable.Operations"
+            x-component="ArrayTable.Column"
           >
             <SchemaField.Markup type="void" x-component="FormItem">
               <SchemaField.Markup type="void" x-component="ArrayTable.Remove" />

@@ -59,11 +59,9 @@ type ComposedArrayTable = React.FC<TableProps<any>> & {
   SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayTableAdditionProps>
   Column?: React.FC<ColumnProps<any>>
-  Operations?: React.FC<ColumnProps<any>>
   Remove?: React.FC<AntdIconProps>
   MoveUp?: React.FC<AntdIconProps>
   MoveDown?: React.FC<AntdIconProps>
-  DragHandle?: React.FC
   useArrayTable?: () => Formily.Core.Models.ArrayField
   useArrayTableIndex?: () => number
 }
@@ -147,6 +145,7 @@ const useArrayTableColumns = (
 ): TableProps<any>['columns'] => {
   return sources.reduce((buf, { name, columnProps, schema, display }, key) => {
     if (display === 'none' || display === 'hidden') return buf
+    if (!isColumnComponent(schema)) return buf
     return buf.concat({
       ...columnProps,
       key,
@@ -364,10 +363,6 @@ ArrayTable.Addition = props => {
       {field.title || props.title}
     </Button>
   )
-}
-
-ArrayTable.Operations = props => {
-  return <Form.Item>{props.children}</Form.Item>
 }
 
 ArrayTable.Remove = React.forwardRef((props, ref) => {
