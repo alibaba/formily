@@ -1,4 +1,4 @@
-import { FormPath, isFn, isRegExp } from '@formily/shared'
+import { FormPath, isFn } from '@formily/shared'
 import { GeneralField, IQueryProps } from '../types'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
@@ -8,14 +8,12 @@ import { VoidField } from './VoidField'
 
 export class Query<T = Field> {
   private props: IQueryProps
-  private pattern: FormPath | RegExp
+  private pattern: FormPath
   private form: Form
   private type: string = 'Field'
   constructor(props: IQueryProps, type = 'Field') {
     this.props = props
-    this.pattern = isRegExp(props.pattern)
-      ? props.pattern
-      : FormPath.parse(props.pattern, props.base)
+    this.pattern = FormPath.parse(props.pattern, props.base)
     this.form = props.form
     this.type = type
   }
@@ -31,14 +29,7 @@ export class Query<T = Field> {
         return field as any
       }
     }
-    if (isRegExp(this.pattern)) {
-      for (let address in this.form.fields) {
-        const field = this.form.fields[address]
-        if (this.pattern.test(address)) {
-          return output(field)
-        }
-      }
-    } else if (!this.pattern.isMatchPattern) {
+    if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)
       const field = this.form.fields[identifier] || this.form.fields[index]
@@ -66,14 +57,7 @@ export class Query<T = Field> {
         }
       }
     }
-    if (isRegExp(this.pattern)) {
-      for (let address in this.form.fields) {
-        const field = this.form.fields[address]
-        if (this.pattern.test(address)) {
-          output(field)
-        }
-      }
-    } else if (!this.pattern.isMatchPattern) {
+    if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)
       const field = this.form.fields[identifier] || this.form.fields[index]

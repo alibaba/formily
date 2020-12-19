@@ -19,6 +19,8 @@ import {
   HeartSubscriber,
   FormPatternTypes,
   FormRequests,
+  FormFeedback,
+  ISearchFeedback,
   IFormGraph,
   IFormProps,
   IFieldResetOptions,
@@ -113,42 +115,21 @@ export class Form {
   }
 
   get errors() {
-    return reduce(
-      this.fields,
-      (messages, field) => {
-        if (!isVoidField(field)) {
-          return messages.concat(field.errors)
-        }
-        return messages
-      },
-      []
-    )
+    return this.queryFeedbacks({
+      type: 'error'
+    })
   }
 
   get warnings() {
-    return reduce(
-      this.fields,
-      (messages, field) => {
-        if (!isVoidField(field)) {
-          return messages.concat(field.warnings)
-        }
-        return messages
-      },
-      []
-    )
+    return this.queryFeedbacks({
+      type: 'warning'
+    })
   }
 
   get successes() {
-    return reduce(
-      this.fields,
-      (messages, field) => {
-        if (!isVoidField(field)) {
-          return messages.concat(field.successes)
-        }
-        return messages
-      },
-      []
-    )
+    return this.queryFeedbacks({
+      type: 'success'
+    })
   }
 
   get lifecycles() {
@@ -312,7 +293,7 @@ export class Form {
     this.heart.setLifeCycles(getLifeCyclesByEffects(effects))
   }
 
-  clearErrors = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
+  clearErrors = (pattern: FormPathPattern = '*') => {
     this.query(pattern).all.getAll(field => {
       if (!isVoidField(field)) {
         field.setFeedback({
@@ -323,7 +304,7 @@ export class Form {
     })
   }
 
-  clearWarnings = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
+  clearWarnings = (pattern: FormPathPattern = '*') => {
     this.query(pattern).all.getAll(field => {
       if (!isVoidField(field)) {
         field.setFeedback({
@@ -334,7 +315,7 @@ export class Form {
     })
   }
 
-  clearSuccesses = (pattern: FormPathPattern | RegExp = '*', code?: string) => {
+  clearSuccesses = (pattern: FormPathPattern) => {
     this.query(pattern).all.getAll(field => {
       if (!isVoidField(field)) {
         field.setFeedback({
@@ -345,12 +326,25 @@ export class Form {
     })
   }
 
-  query = (pattern: FormPathPattern | RegExp) => {
+  query = (pattern: FormPathPattern) => {
     return new Query({
       pattern,
       base: '',
       form: this
     })
+  }
+
+  queryFeedbacks = (search: ISearchFeedback): FormFeedback[] => {
+    return reduce(
+      this.fields,
+      (messages, field) => {
+        if (!isVoidField(field)) {
+          return messages.concat(field.queryFeedbacks(search))
+        }
+        return messages
+      },
+      []
+    )
   }
 
   notify = (type: LifeCycleTypes, payload?: any) => {
@@ -402,7 +396,7 @@ export class Form {
     this.graph.setGraph(graph)
   }
 
-  validate = async (pattern: FormPathPattern | RegExp = '*') => {
+  validate = async (pattern: FormPathPattern = '*') => {
     this.setValidating(true)
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
@@ -444,10 +438,7 @@ export class Form {
     return results
   }
 
-  reset = async (
-    pattern: FormPathPattern | RegExp = '*',
-    options?: IFieldResetOptions
-  ) => {
+  reset = async (pattern: FormPathPattern, options?: IFieldResetOptions) => {
     const tasks = []
     this.query(pattern).all.getAll(field => {
       if (!isVoidField(field)) {

@@ -112,7 +112,6 @@ export default () => {
           <SchemaField.Markup
             type="void"
             x-component="ArrayTable.Addition"
-            x-component-props={{ method: 'unshift' }}
           />
         </SchemaField.Markup>
       </SchemaField>
@@ -130,7 +129,7 @@ export default () => {
       <Button
         onClick={() => {
           form.setInitialValues({
-            array: range(10000)
+            array: range(1000)
           })
         }}
       >

@@ -69,12 +69,13 @@ export const FormTab: ComposedFormTab = observer(props => {
     if (!activeKey) return props.tab
     if (activeKey === props?.key || activeKey === props?.tabKey)
       return props.tab
-    const errors = field.form.feedback.queryMessages({
+    const errors = field.form.queryFeedbacks({
+      type: 'error',
       address: `${field.address.concat(key)}.*`
     })
     if (errors.length) {
       return (
-        <Badge size="small" count={errors.length}>
+        <Badge size="small" className="errors-badge" count={errors.length}>
           {props.tab}
         </Badge>
       )
@@ -100,9 +101,7 @@ export const FormTab: ComposedFormTab = observer(props => {
   )
 })
 
-export const TabPane: React.FC<IFormTabPaneProps> = ({
-  children
-}) => {
+export const TabPane: React.FC<IFormTabPaneProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
 }
 

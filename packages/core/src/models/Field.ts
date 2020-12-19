@@ -39,6 +39,7 @@ import {
   FieldDecorator,
   FieldComponent,
   FieldDataSource,
+  ISearchFeedback,
   IFieldProps,
   IFieldResetOptions,
   FormPatternTypes,
@@ -46,8 +47,9 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  validateToFeedback,
+  validateToFeedbacks,
   updateFeedback,
+  queryFeedbacks,
   queryFeedbackMessages,
   getValueFromEvent
 } from '../shared'
@@ -72,6 +74,7 @@ export class Field<
   inputValue: ValueType
   inputValues: any[]
   initialized: boolean
+  validatable: boolean
   dataSource: FieldDataSource
   mounted: boolean
   unmounted: boolean
@@ -119,6 +122,7 @@ export class Field<
     this.visited = false
     this.mounted = false
     this.unmounted = false
+    this.validatable = true
     this.inputValues = []
     this.inputValue = null
     this.feedbacks = []
@@ -145,6 +149,7 @@ export class Field<
       active: observable.ref,
       visited: observable.ref,
       initialized: observable.ref,
+      validatable: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
       inputValue: observable.ref,
@@ -174,6 +179,7 @@ export class Field<
       setWarnings: action,
       setSuccesses: action,
       setValidator: action,
+      setValidatable: action,
       setRequired: action,
       setComponent: action,
       setComponentProps: action,
@@ -211,11 +217,11 @@ export class Field<
         () => this.display,
         display => {
           if (display === 'none') {
-            this.setCacheValue(toJS(this.value))
+            this.caches.value = toJS(this.value)
             this.setValue()
           } else if (display === 'visibility') {
             this.setValue(this.caches.value)
-            this.setCacheValue()
+            this.caches.value = undefined
           }
         }
       )
@@ -242,30 +248,21 @@ export class Field<
   }
 
   get errors() {
-    return queryFeedbackMessages(
-      {
-        type: 'error'
-      },
-      this.feedbacks
-    )
+    return queryFeedbackMessages(this, {
+      type: 'error'
+    })
   }
 
   get warnings() {
-    return queryFeedbackMessages(
-      {
-        type: 'warning'
-      },
-      this.feedbacks
-    )
+    return queryFeedbackMessages(this, {
+      type: 'warning'
+    })
   }
 
   get successes() {
-    return queryFeedbackMessages(
-      {
-        type: 'success'
-      },
-      this.feedbacks
-    )
+    return queryFeedbackMessages(this, {
+      type: 'success'
+    })
   }
 
   get valid() {
@@ -337,7 +334,7 @@ export class Field<
   }
 
   setFeedback = (feedback: Feedback) => {
-    this.feedbacks = updateFeedback(this.feedbacks, feedback)
+    updateFeedback(this, feedback)
   }
 
   setErrors = (messages: FeedbackMessage) => {
@@ -364,11 +361,21 @@ export class Field<
     })
   }
 
-  setValidator = (validator: FieldValidator) => {
+  setValidatable = (validatable?: boolean) => {
+    this.validatable = !!validatable
+    if (!this.validatable) {
+      this.caches.feedbacks = this.feedbacks || []
+      this.feedbacks = []
+    } else {
+      this.feedbacks = this.caches.feedbacks || []
+    }
+  }
+
+  setValidator = (validator?: FieldValidator) => {
     this.validator = validator
   }
 
-  setRequired = (required: boolean) => {
+  setRequired = (required?: boolean) => {
     if (!isBool(required)) return
     const hasRequired = parseValidatorDescriptions(this.validator).some(
       desc => 'required' in desc
@@ -415,16 +422,8 @@ export class Field<
     this.form.setValuesIn(this.path, value)
   }
 
-  setCacheValue = (value?: ValueType) => {
-    this.caches.value = value
-  }
-
   setInitialValue = (initialValue?: ValueType) => {
     this.form.setInitialValuesIn(this.path, initialValue)
-  }
-
-  setCacheInitialValue = (initialValue?: ValueType) => {
-    this.caches.initialValue = initialValue
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
@@ -550,7 +549,7 @@ export class Field<
       )
       const results = {}
       for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await validateToFeedback(this, allTriggerTypes[i])
+        const payload = await validateToFeedbacks(this, allTriggerTypes[i])
         each(payload, (result, key) => {
           results[key] = results[key] || []
           results[key] = results[key].concat(result)
@@ -560,7 +559,7 @@ export class Field<
     }
     this.setValidating(true)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
-    const results = await validateToFeedback(this, triggerType)
+    const results = await validateToFeedbacks(this, triggerType)
     this.setValidating(false)
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     return results
@@ -588,12 +587,16 @@ export class Field<
     }
   }
 
-  query = (pattern: FormPathPattern | RegExp) => {
+  query = (pattern: FormPathPattern) => {
     return new Query({
       pattern,
       base: this.address,
       form: this.form
     })
+  }
+
+  queryFeedbacks = (search: ISearchFeedback): Feedback[] => {
+    return queryFeedbacks(this, search)
   }
 
   dispose = () => {

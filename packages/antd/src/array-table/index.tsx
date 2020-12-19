@@ -1,4 +1,4 @@
-import React, { createContext, Fragment, useContext } from 'react'
+import React, { createContext, Fragment, useContext, useState } from 'react'
 import { Table, Button, Form } from 'antd'
 import {
   MinusCircleOutlined,
@@ -157,12 +157,44 @@ const useArrayTableColumns = (
   }, [])
 }
 
+const useArrayTablePagination = (
+  props: TableProps<any>['pagination'] = {}
+): TableProps<any>['pagination'] => {
+  const [current, setCurrent] = useState(1)
+  if (isBool(props)) {
+    return props
+  }
+
+  const pageSize = props.pageSize || 10
+  const size = props.size || 'default'
+  return {
+    position: ['bottomCenter'],
+    ...props,
+    pageSize,
+    size,
+    hideOnSinglePage: true,
+    showSizeChanger: false,
+    current,
+    onChange: (current: number) => {
+      setCurrent(current)
+    },
+    itemRender: (page, type, element) => {
+      if (type === 'page') {
+        return <div style={{ color: 'red' }}>{element}</div>
+      } else {
+        return element
+      }
+    }
+  }
+}
+
 export const ArrayTable: ComposedArrayTable = observer(
   (props: TableProps<any>) => {
     const field = useField<Formily.Core.Models.ArrayField>()
     const dataSource = Array.isArray(field.value) ? [...field.value] : []
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
+    const pagination = useArrayTablePagination(props.pagination)
     return (
       <ArrayTableContext.Provider value={field}>
         <Table
@@ -171,25 +203,7 @@ export const ArrayTable: ComposedArrayTable = observer(
             return dataSource.indexOf(record)
           }}
           {...props}
-          pagination={
-            isBool(props.pagination)
-              ? props.pagination
-              : {
-                  position: ['bottomCenter'],
-                  ...props.pagination,
-                  pageSize: 10,
-                  size: 'default',
-                  hideOnSinglePage: true,
-                  showSizeChanger: false,
-                  itemRender: (page, type, element) => {
-                    if (type === 'page') {
-                      return <div style={{ color: 'red' }}>{element}</div>
-                    } else {
-                      return element
-                    }
-                  }
-                }
-          }
+          pagination={pagination}
           columns={columns}
           onChange={() => {}}
           dataSource={dataSource}

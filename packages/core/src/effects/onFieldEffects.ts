@@ -1,4 +1,4 @@
-import { FormPath, isFn, isRegExp } from '@formily/shared'
+import { FormPath, isFn } from '@formily/shared'
 import { autorun } from 'mobx'
 import { Form, Field } from '../models'
 import { LifeCycleTypes, FormPathPattern, GeneralField } from '../types'
@@ -9,15 +9,11 @@ const createFieldEffect = (type: LifeCycleTypes) => {
   return createEffect(
     type,
     (field: Field, form: Form) => (
-      pattern: FormPathPattern | RegExp,
+      pattern: FormPathPattern,
       callback: (field: GeneralField, form: Form) => void
     ) => {
       if (isFn(callback)) {
-        if (isRegExp(pattern)) {
-          if (pattern.test(field.address?.toString())) {
-            callback(field, form)
-          }
-        } else if (
+        if (
           FormPath.parse(pattern).matchAliasGroup(field.address, field.path)
         ) {
           callback(field, form)
@@ -46,7 +42,7 @@ export const onFieldValidateEnd = createFieldEffect(
 )
 
 export const onFieldReact = (
-  pattern: FormPathPattern | RegExp,
+  pattern: FormPathPattern,
   callback?: (field: GeneralField, form: Form) => void
 ) => {
   const disposers = []

@@ -1,4 +1,4 @@
-import { Validator } from '@formily/validator'
+import { Validator, ValidatorTriggerType } from '@formily/validator'
 import { FormPath } from '@formily/shared'
 import {
   Form,
@@ -83,18 +83,23 @@ export interface IHeartProps<Context> {
 }
 
 export type Feedback = {
-  triggerType?: string
-  type?: string
-  code?: string
+  triggerType?: FieldFeedbackTriggerTypes
+  type?: FieldFeedbackTypes
+  code?: FieldFeedbackCodeTypes
   messages?: FeedbackMessage
 }
 
+export type FormFeedback = Feedback & {
+  path?: FormPath
+  address?: FormPath
+}
+
 export interface ISearchFeedback {
-  triggerType?: string
-  type?: string
-  code?: string
-  address?: FormPathPattern | RegExp
-  path?: FormPathPattern | RegExp
+  triggerType?: FieldFeedbackTriggerTypes
+  type?: FieldFeedbackTypes
+  code?: FieldFeedbackCodeTypes
+  address?: FormPathPattern
+  path?: FormPathPattern
   messages?: FeedbackMessage
 }
 
@@ -105,6 +110,18 @@ export type FormRequests = {
 }
 
 export type FormFields = Record<string, GeneralField>
+
+export type FieldFeedbackTypes = 'error' | 'success' | 'warning'
+
+export type FieldFeedbackTriggerTypes = ValidatorTriggerType
+
+export type FieldFeedbackCodeTypes =
+  | 'ValidateError'
+  | 'ValidateSuccess'
+  | 'ValidateWarning'
+  | 'EffectError'
+  | 'EffectSuccess'
+  | 'EffectWarning'
 
 export type FormPatternTypes =
   | 'editable'
@@ -117,6 +134,7 @@ export type FormPathPattern =
   | number
   | Array<string | number>
   | FormPath
+  | RegExp
   | (((address: Array<string | number>) => boolean) & {
       path: FormPath
     })
@@ -177,6 +195,7 @@ export type FieldRequests = {
 export type FieldCaches = {
   value?: any
   initialValue?: any
+  feedbacks?: Feedback[]
 }
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
@@ -268,6 +287,7 @@ export interface IFieldState {
   pattern: FieldPatternTypes
   loading: boolean
   validating: boolean
+  validatable: boolean
   required: boolean
   modified: boolean
   active: boolean
@@ -318,7 +338,7 @@ export interface IExchangeArrayStateProps {
 }
 
 export interface IQueryProps {
-  pattern: FormPathPattern | RegExp
+  pattern: FormPathPattern
   base: FormPathPattern
   form: Form
 }

@@ -9,6 +9,7 @@ import {
   RangePickerProps as DateRangePickerProps
 } from 'antd/lib/date-picker'
 import { TimePickerProps, TimeRangePickerProps } from 'antd/lib/time-picker'
+import { Tag } from 'antd'
 import { formatMomentValue } from '../shared'
 
 const Input: React.FC<InputProps> = props => {
@@ -45,11 +46,13 @@ const Select: React.FC<SelectProps<any>> = props => {
 
   const getLabels = () => {
     const selected = getSelected()
-    return selected
-      .map(({ value, label }) => {
-        return props?.options?.find(item => item.value == value)?.label || label
-      })
-      .join(', ')
+    return selected.map(({ value, label }, key) => {
+      return (
+        <Tag key={key}>
+          {props?.options?.find(item => item.value == value)?.label || label}
+        </Tag>
+      )
+    })
   }
   return <div className="ant-form-text">{getLabels()}</div>
 }

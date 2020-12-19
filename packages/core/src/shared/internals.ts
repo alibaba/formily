@@ -14,7 +14,8 @@ import {
   ISearchFeedback,
   Feedback,
   INodePatch,
-  GeneralField
+  GeneralField,
+  FormFeedback
 } from '../types'
 import { isVoidField } from './externals'
 
@@ -66,64 +67,74 @@ export const applyFieldPatches = (
   })
 }
 
-export const matchFeedback = (search: ISearchFeedback, feedback: Feedback) => {
+export const matchFeedback = (
+  search: ISearchFeedback,
+  feedback: FormFeedback
+) => {
   if (!search || !feedback) return false
   if (search.type && search.type !== feedback.type) return false
   if (search.code && search.code !== feedback.code) return false
+  if (search.path && feedback.path) {
+    if (!FormPath.parse(search.path).match(feedback.path)) return false
+  }
+  if (search.address && feedback.address) {
+    if (!FormPath.parse(search.address).match(feedback.address)) return false
+  }
   if (search.triggerType && search.triggerType !== feedback.triggerType)
     return false
   return true
 }
 
-export const queryFeedback = (
-  search: ISearchFeedback,
-  feedbacks: Feedback[]
-) => {
-  return feedbacks.filter(feedback => {
-    return matchFeedback(search, feedback)
+export const queryFeedbacks = (field: Field, search: ISearchFeedback) => {
+  return field.feedbacks.filter(feedback => {
+    return matchFeedback(search, {
+      ...feedback,
+      address: field.address,
+      path: field.path
+    })
   })
 }
 
 export const queryFeedbackMessages = (
-  search: ISearchFeedback,
-  feedbacks: Feedback[]
+  field: Field,
+  search: ISearchFeedback
 ) => {
-  return queryFeedback(search, feedbacks).reduce(
+  return queryFeedbacks(field, search).reduce(
     (buf, info) => buf.concat(info.messages),
     []
   )
 }
 
-export const updateFeedback = (
-  feedbacks: Feedback[],
-  feedback: Feedback
-): Feedback[] => {
-  if (!feedbacks?.length) {
-    if (!feedback?.messages?.length) {
-      return []
-    }
-    return [feedback]
-  } else {
-    const searched = queryFeedback(feedback, feedbacks)
-    if (searched?.length) {
-      return feedbacks?.reduce((buf, item) => {
-        if (searched.includes(item)) {
-          if (feedback?.messages?.length) {
-            item.messages = feedback.messages
-            return buf.concat(item)
+export const updateFeedback = (field: Field, feedback: Feedback) => {
+  return runInAction(() => {
+    if (!field.feedbacks?.length) {
+      if (!feedback?.messages?.length) {
+        return
+      }
+      field.feedbacks = [feedback]
+    } else {
+      const searched = queryFeedbacks(field, feedback)
+      if (searched?.length) {
+        field.feedbacks = field.feedbacks?.reduce((buf, item) => {
+          if (searched.includes(item)) {
+            if (feedback?.messages?.length) {
+              item.messages = feedback.messages
+              return buf.concat(item)
+            } else {
+              return buf
+            }
           } else {
-            return buf
+            return buf.concat(item)
           }
-        } else {
-          return buf.concat(item)
-        }
-      }, [])
+        }, [])
+        return
+      }
+      field.feedbacks = field.feedbacks?.concat(feedback)
     }
-    return feedbacks?.concat(feedback)
-  }
+  })
 }
 
-export const validateToFeedback = async (
+export const validateToFeedbacks = async (
   field: Field,
   triggerType?: ValidatorTriggerType
 ) => {
@@ -136,7 +147,7 @@ export const validateToFeedback = async (
   const shouldSkipValidate =
     field.display !== 'visibility' ||
     field.pattern !== 'editable' ||
-    field.unmounted
+    field.validatable !== true
   runInAction(() => {
     each(results, (messages, type) => {
       field.setFeedback({
@@ -144,7 +155,7 @@ export const validateToFeedback = async (
         type,
         code: pascalCase(`validate-${type}`),
         messages: shouldSkipValidate ? [] : messages
-      })
+      } as any)
     })
   })
   return results
@@ -175,6 +186,13 @@ export const spliceArrayState = (
     if (number === undefined) return false
     const index = Number(number)
     return index > startIndex + deleteCount - 1
+  }
+  const isInsertNode = (identifier: string) => {
+    const afterStr = identifier.slice(basePath.length)
+    const number = afterStr.match(/^\.(\d+)/)?.[1]
+    if (number === undefined) return false
+    const index = Number(number)
+    return index <= startIndex + moveStep
   }
   const isDeleteNode = (identifier: string) => {
     const preStr = identifier.slice(0, basePath.length)
@@ -208,9 +226,9 @@ export const spliceArrayState = (
             address: newIdentifier,
             payload: buildNodeIndexes(field, newIdentifier)
           })
-          if (isDeleteNode(identifier)) {
-            fieldPatches.push({ type: 'remove', address: identifier })
-          }
+        }
+        if (isInsertNode(identifier) || isDeleteNode(identifier)) {
+          fieldPatches.push({ type: 'remove', address: identifier })
         }
       }
     })

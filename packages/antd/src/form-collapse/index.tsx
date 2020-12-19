@@ -76,12 +76,13 @@ export const FormCollapse: ComposedFormCollapse = observer(props => {
     if (isArr(activeKey) && activeKey.includes(props?.key)) {
       return props.header
     } else if (activeKey === props?.key) return props.header
-    const errors = field.form.feedback.queryMessages({
+    const errors = field.form.queryFeedbacks({
+      type: 'error',
       address: `${field.address.concat(key)}.*`
     })
     if (errors.length) {
       return (
-        <Badge size="small" count={errors.length}>
+        <Badge size="small" className="errors-badge" count={errors.length}>
           {props.header}
         </Badge>
       )
@@ -107,9 +108,7 @@ export const FormCollapse: ComposedFormCollapse = observer(props => {
   )
 })
 
-export const CollapsePanel: React.FC<CollapsePanelProps> = ({
-  children
-}) => {
+export const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
 }
 
