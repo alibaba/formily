@@ -51,7 +51,6 @@ export default {
     return Number(value) >= Number(rule.maximum) ? rule.message : ''
   },
   minimum(value: any, rule: ValidatorRules) {
-    if (isValidateEmpty(value)) return ''
     return Number(value) < Number(rule.minimum) ? rule.message : ''
   },
   exclusiveMinimum(value: any, rule: ValidatorRules) {
@@ -65,7 +64,6 @@ export default {
     return length !== len ? rule.message : ''
   },
   min(value: any, rule: ValidatorRules) {
-    if (isValidateEmpty(value)) return ''
     const length = getLength(value)
     const min = Number(rule.min)
     return length < min ? rule.message : ''

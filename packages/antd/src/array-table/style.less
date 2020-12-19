@@ -13,7 +13,12 @@
 
 .ant-array-table-addition {
   transition: all .25s ease-in-out;
-  margin-bottom: 10px;
+}
+
+.ant-form-item-has-error {
+  .ant-table {
+    border: 1px solid @error-color  !important;
+  }
 }
 
 .ant-array-table-move-down {
@@ -46,7 +51,6 @@
 .ant-array-table-pagination {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
 
   .ant-array-table-status-select.has-error {
     .ant-select-selector {

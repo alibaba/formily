@@ -45,7 +45,10 @@ interface IArrayTableAdditionProps extends ButtonProps {
 
 interface IArrayTablePaginationProps extends PaginationProps {
   dataSource?: any[]
-  children?: (dataSource: any[]) => React.ReactElement
+  children?: (
+    dataSource: any[],
+    pagination: React.ReactNode
+  ) => React.ReactElement
 }
 
 interface IStatusSelectProps extends SelectProps<any> {
@@ -159,9 +162,6 @@ const useArrayTableColumns = (
             />
           </ArrayTableIndexContext.Provider>
         )
-        if (isOperationsComponent(schema)) {
-          return <Form.Item>{children}</Form.Item>
-        }
         return children
       }
     })
@@ -192,7 +192,8 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(props => {
 
   return (
     <Select
-      {...props}
+      value={props.value}
+      onChange={props.onChange}
       options={options}
       className={cls('ant-array-table-status-select', {
         'has-error': errors?.length
@@ -209,7 +210,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = props => {
   const startIndex = (current - 1) * pageSize
   const endIndex = startIndex + pageSize - 1
   const total = dataSource?.length || 0
-  const totalPage = Math.round(total / pageSize)
+  const totalPage = Math.ceil(total / pageSize)
   const pages = Array.from(new Array(totalPage)).map((_, index) => {
     const page = index + 1
     return {
@@ -222,7 +223,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = props => {
   }
 
   const renderPagination = () => {
-    if (current > totalPage) return
+    if (totalPage <= 1) return
     return (
       <div className="ant-array-table-pagination">
         <Space>
@@ -249,8 +250,10 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = props => {
 
   return (
     <Fragment>
-      {props.children?.(dataSource?.slice(startIndex, endIndex + 1))}
-      {renderPagination()}
+      {props.children?.(
+        dataSource?.slice(startIndex, endIndex + 1),
+        renderPagination()
+      )}
     </Fragment>
   )
 }
@@ -262,17 +265,18 @@ export const ArrayTable: ComposedArrayTable = observer(
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
-    const defaultRowKey = record => {
+    const defaultRowKey = (record: any) => {
       return dataSource.indexOf(record)
     }
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
-        {dataSource => (
+        {(dataSource, pager) => (
           <ArrayTableContext.Provider value={field}>
             <Table
               size="small"
               rowKey={defaultRowKey}
               {...props}
+              bordered
               pagination={false}
               columns={columns}
               onChange={() => {}}
@@ -300,8 +304,10 @@ export const ArrayTable: ComposedArrayTable = observer(
                 }
               }}
             />
+            <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
             {sources.map((column, key) => {
               //专门用来承接对Column的状态管理
+              if (isOperationsComponent(column.schema)) return null
               return React.createElement(RecursionField, {
                 name: column.name,
                 schema: column.schema,
@@ -359,8 +365,8 @@ ArrayTable.Addition = props => {
   )
 }
 
-ArrayTable.Operations = () => {
-  return <Fragment />
+ArrayTable.Operations = props => {
+  return <Form.Item>{props.children}</Form.Item>
 }
 
 ArrayTable.Remove = React.forwardRef((props, ref) => {

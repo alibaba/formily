@@ -32,7 +32,13 @@ export default () => {
           type="string"
           x-component="Input"
         />
-        <SchemaField.Markup name="array" type="array" x-component="ArrayTable">
+        <SchemaField.Markup
+          name="array"
+          minItems={5}
+          x-decorator="FormItem"
+          type="array"
+          x-component="ArrayTable"
+        >
           <SchemaField.Markup
             type="void"
             x-component="ArrayTable.Column"
@@ -105,14 +111,16 @@ export default () => {
             x-component-props={{ title: '操作', dataIndex: 'operations' }}
             x-component="ArrayTable.Operations"
           >
-            <SchemaField.Markup type="void" x-component="ArrayTable.Remove" />
-            <SchemaField.Markup type="void" x-component="ArrayTable.MoveDown" />
-            <SchemaField.Markup type="void" x-component="ArrayTable.MoveUp" />
+            <SchemaField.Markup type="void" x-component="FormItem">
+              <SchemaField.Markup type="void" x-component="ArrayTable.Remove" />
+              <SchemaField.Markup
+                type="void"
+                x-component="ArrayTable.MoveDown"
+              />
+              <SchemaField.Markup type="void" x-component="ArrayTable.MoveUp" />
+            </SchemaField.Markup>
           </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
-            x-component="ArrayTable.Addition"
-          />
+          <SchemaField.Markup type="void" x-component="ArrayTable.Addition" />
         </SchemaField.Markup>
       </SchemaField>
       <Button

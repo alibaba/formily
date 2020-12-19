@@ -29,14 +29,17 @@ export class ArrayField<
   push = (...items: any[]) => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      return this.value?.push(...items)
+      this.value?.push(...items)
+      this.validate('onInput')
     })
   }
 
   pop = () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      return this.value?.pop()
+      const poped = this.value?.pop()
+      this.validate('onInput')
+      return poped()
     })
   }
 
@@ -48,6 +51,7 @@ export class ArrayField<
         startIndex: index,
         insertCount: items.length
       })
+      this.validate('onInput')
     })
   }
 
@@ -59,24 +63,28 @@ export class ArrayField<
         startIndex: index,
         deleteCount: 1
       })
+      this.validate('onInput')
     })
   }
 
   shift = () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      return this.value?.shift()
+      const shifted = this.value?.shift()
+      this.validate('onInput')
+      return shifted
     })
   }
 
   unshift = (...items: any[]) => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      const shifted = this.value.unshift(...items)
+      const unshifted = this.value.unshift(...items)
       spliceArrayState(this, {
         insertCount: items.length
       })
-      return shifted
+      this.validate('onInput')
+      return unshifted
     })
   }
 
@@ -90,6 +98,7 @@ export class ArrayField<
         fromIndex,
         toIndex
       })
+      this.validate('onInput')
     })
   }
 
