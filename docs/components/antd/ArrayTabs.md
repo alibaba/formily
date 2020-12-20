@@ -26,28 +26,19 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField>
-        <SchemaField.Markup
+        <SchemaField.Array
           name="array"
           x-decorator="FormItem"
-          type="array"
           maxItems={3}
           x-component="ArrayTabs"
         >
-          <SchemaField.Markup
+          <SchemaField.String
             x-decorator="FormItem"
             required
             name="aaa"
-            type="string"
             x-component="Input"
           />
-          <SchemaField.Markup
-            x-decorator="FormItem"
-            required
-            name="bbb"
-            type="string"
-            x-component="Input"
-          />
-        </SchemaField.Markup>
+        </SchemaField.Array>
       </SchemaField>
     </FormProvider>
   )

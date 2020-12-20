@@ -31,7 +31,7 @@ export default () => {
           required
           x-component="Input"
         />
-        <SchemaField.Array
+        <SchemaField.ObjectList
           name="array"
           minItems={5}
           x-decorator="FormItem"
@@ -118,7 +118,7 @@ export default () => {
             </SchemaField.Void>
           </SchemaField.Void>
           <SchemaField.Void x-component="ArrayTable.Addition" />
-        </SchemaField.Array>
+        </SchemaField.ObjectList>
       </SchemaField>
       <Space>
         <Button

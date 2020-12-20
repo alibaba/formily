@@ -74,9 +74,6 @@ export function createSchemaField<Components extends SchemaComponents>(
     const parent = useContext(SchemaMarkupContext)
     if (!parent) return <Fragment />
     const renderChildren = () => {
-      if (props?.type === 'array') {
-        return <MarkupField type="object">{props.children}</MarkupField>
-      }
       return <React.Fragment>{props.children}</React.Fragment>
     }
     const name = props.name || getRandomName()
@@ -93,14 +90,13 @@ export function createSchemaField<Components extends SchemaComponents>(
         <SchemaMarkupContext.Provider
           value={Array.isArray(schema) ? schema[0] : schema}
         >
-          {renderChildren()}
+          {props.children}
         </SchemaMarkupContext.Provider>
       )
     } else {
       return renderChildren()
     }
   }
-
 
   MarkupField.displayName = 'MarkupField'
 
@@ -130,6 +126,19 @@ export function createSchemaField<Components extends SchemaComponents>(
   }
 
   ArrayField.displayName = 'ArrayField'
+
+  function ObjectListField<
+    Decorator extends ReactComponentPath<Components>,
+    Component extends ReactComponentPath<Components>
+  >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    return (
+      <MarkupField {...props} type="array">
+        <MarkupField type="object">{props.children}</MarkupField>
+      </MarkupField>
+    )
+  }
+
+  ObjectListField.displayName = 'ObjectListField'
 
   function BooleanField<
     Decorator extends ReactComponentPath<Components>,
@@ -185,6 +194,6 @@ export function createSchemaField<Components extends SchemaComponents>(
   SchemaField.DateTime = DateTimeField
   SchemaField.Void = VoidField
   SchemaField.Number = NumberField
-
+  SchemaField.ObjectList = ObjectListField
   return SchemaField
 }
