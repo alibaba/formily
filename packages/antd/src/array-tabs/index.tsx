@@ -14,13 +14,15 @@ export const ArrayTabs: React.FC<TabsProps> = observer(props => {
     if (type == 'add') {
       field.push({})
     } else if (type == 'remove') {
-      if (typeof targetKey === 'number') {
-        field.remove(targetKey)
+      const index = targetKey.match(/-(\d+)/)?.[1]
+      field.remove(Number(index))
+      if (activeKey === targetKey) {
+        setActiveKey(`tab-${index - 1}`)
       }
     }
   }
   const badgedTab = (index: number, key: string) => {
-    const tab = `${field.title || 'Untitled'} ${index}`
+    const tab = `${field.title || 'Untitled'} ${index + 1}`
     if (!activeKey) return tab
     if (activeKey === key) return tab
     const errors = field.form.queryFeedbacks({
