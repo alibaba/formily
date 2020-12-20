@@ -42,13 +42,25 @@ export default () => {
           <SchemaField.Markup
             type="void"
             x-component="ArrayTable.Column"
-            x-component-props={{ width: 30 }}
+            x-component-props={{ width: 50, title: '排序', align: 'center' }}
           >
             <SchemaField.Markup
               x-decorator="FormItem"
               required
               type="string"
               x-component="ArrayTable.SortHandle"
+            />
+          </SchemaField.Markup>
+          <SchemaField.Markup
+            type="void"
+            x-component="ArrayTable.Column"
+            x-component-props={{ width: 50, title: '索引', align: 'center' }}
+          >
+            <SchemaField.Markup
+              x-decorator="FormItem"
+              required
+              type="string"
+              x-component="ArrayTable.Index"
             />
           </SchemaField.Markup>
           <SchemaField.Markup
@@ -75,6 +87,7 @@ export default () => {
               required
               type="string"
               x-component="Input"
+              x-component-props={{ placeholder: '输入123联动相邻列显示' }}
             />
           </SchemaField.Markup>
           <SchemaField.Markup

@@ -1,4 +1,5 @@
 export * from './array-table'
+export * from './array-tabs'
 export * from './form-dialog'
 export * from './form-drawer'
 export * from './form-item'

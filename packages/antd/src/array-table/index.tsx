@@ -29,7 +29,7 @@ import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import './style.less'
 
-type ObservableColumnSource = {
+interface ObservableColumnSource {
   field: Formily.Core.Models.VoidField
   fieldProps: Formily.Core.Types.IVoidFieldFactoryProps<any, any>
   columnProps: ColumnProps<any>
@@ -37,7 +37,6 @@ type ObservableColumnSource = {
   display: Formily.Core.Types.FieldDisplayTypes
   name: string
 }
-
 interface IArrayTableAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
@@ -58,6 +57,7 @@ interface IStatusSelectProps extends SelectProps<any> {
 type ComposedArrayTable = React.FC<TableProps<any>> & {
   SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayTableAdditionProps>
+  Index?: React.FC
   Column?: React.FC<ColumnProps<any>>
   Remove?: React.FC<AntdIconProps>
   MoveUp?: React.FC<AntdIconProps>
@@ -340,6 +340,11 @@ ArrayTable.SortHandle = SortableHandle((props: any) => {
     />
   )
 }) as any
+
+ArrayTable.Index = props => {
+  const index = ArrayTable.useArrayTableIndex()
+  return <span>{index + 1}</span>
+}
 
 ArrayTable.Addition = props => {
   const field = ArrayTable.useArrayTable()
