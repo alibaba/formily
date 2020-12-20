@@ -1,10 +1,4 @@
-import {
-  isArr,
-  isFn,
-  isStr,
-  reduce,
-  BigData
-} from '@formily/shared'
+import { isArr, isFn, isStr, reduce, BigData } from '@formily/shared'
 import { isObservable } from 'mobx'
 import { isSchemaObject } from './schema'
 

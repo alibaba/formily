@@ -30,6 +30,7 @@ export default () => {
           name="array"
           x-decorator="FormItem"
           type="array"
+          maxItems={3}
           x-component="ArrayTabs"
         >
           <SchemaField.Markup

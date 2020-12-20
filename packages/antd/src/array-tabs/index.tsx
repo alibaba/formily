@@ -4,15 +4,16 @@ import { useField } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { TabsProps } from 'antd/lib/tabs'
 import { observer } from 'mobx-react-lite'
-
 export const ArrayTabs: React.FC<TabsProps> = observer(props => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useSchema()
   const [activeKey, setActiveKey] = useState('tab-0')
-  const value = Array.isArray(field.value) ? [...field.value] : [{}]
+  const value = Array.isArray(field.value) ? [...field.value] : []
+  const dataSource = value?.length ? value : [{}]
   const onEdit = (targetKey: any, type: 'add' | 'remove') => {
     if (type == 'add') {
       field.push({})
+      setActiveKey(`tab-${dataSource.length}`)
     } else if (type == 'remove') {
       const index = targetKey.match(/-(\d+)/)?.[1]
       field.remove(Number(index))
@@ -38,7 +39,6 @@ export const ArrayTabs: React.FC<TabsProps> = observer(props => {
     }
     return tab
   }
-  const dataSource = value?.length ? value : [{}]
   return (
     <Tabs
       {...props}
@@ -55,12 +55,12 @@ export const ArrayTabs: React.FC<TabsProps> = observer(props => {
           : schema.items
         const key = `tab-${index}`
         return (
-          <Tabs.TabPane key={key} tab={badgedTab(index, key)} forceRender>
-            <RecursionField
-              schema={items}
-              name={`${index}`}
-              onlyRenderProperties
-            />
+          <Tabs.TabPane
+            key={key}
+            closable={index !== 0}
+            tab={badgedTab(index, key)}
+          >
+            <RecursionField schema={items} name={`${index}`} />
           </Tabs.TabPane>
         )
       })}

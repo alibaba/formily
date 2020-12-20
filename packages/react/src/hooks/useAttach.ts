@@ -6,18 +6,20 @@ interface IRecycleTarget {
 }
 
 export const useAttach = <T extends IRecycleTarget>(target: T): T => {
-  const ref = useRef<IRecycleTarget>(null)
+  const oldTargetRef = useRef<IRecycleTarget>(null)
   const targetRef = useRef<IRecycleTarget>(null)
   targetRef.current = target
   useEffect(() => {
-    if(ref.current && targetRef.current !== ref.current){
-      ref.current.onUnmount()
-    }
     targetRef.current.onMount()
-    ref.current = targetRef.current
+    oldTargetRef.current = targetRef.current
     return () => {
       targetRef.current.onUnmount()
     }
   }, [])
+  useEffect(() => {
+    if (oldTargetRef.current && targetRef.current !== oldTargetRef.current) {
+      oldTargetRef.current.onUnmount()
+    }
+  }, [targetRef.current])
   return target
 }

@@ -189,11 +189,17 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(props => {
     }
   })
 
+  const width = String(options?.length).length * 15
+
   return (
     <Select
       value={props.value}
       onChange={props.onChange}
       options={options}
+      virtual
+      style={{
+        width: width < 60 ? 60 : width
+      }}
       className={cls('ant-array-table-status-select', {
         'has-error': errors?.length
       })}
@@ -306,14 +312,12 @@ export const ArrayTable: ComposedArrayTable = observer(
             <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
             {sources.map((column, key) => {
               //专门用来承接对Column的状态管理
-              if (isColumnComponent(column.schema)) {
-                return React.createElement(RecursionField, {
-                  name: column.name,
-                  schema: column.schema,
-                  onlyRenderSelf: true,
-                  key
-                })
-              }
+              return React.createElement(RecursionField, {
+                name: column.name,
+                schema: column.schema,
+                onlyRenderSelf: true,
+                key
+              })
             })}
           </ArrayTableContext.Provider>
         )}

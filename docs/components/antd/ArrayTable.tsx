@@ -2,7 +2,7 @@ import React from 'react'
 import { FormTab, FormItem, Input, ArrayTable } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button } from 'antd'
+import { Button, Space } from 'antd'
 import 'antd/dist/antd.css'
 
 const SchemaField = createSchemaField({
@@ -136,26 +136,30 @@ export default () => {
           <SchemaField.Markup type="void" x-component="ArrayTable.Addition" />
         </SchemaField.Markup>
       </SchemaField>
-      <Button
-        onClick={() => {
-          form
-            .query('array.a3')
-            .void.get(field =>
-              field.setDisplay(field.display === 'none' ? 'visibility' : 'none')
-            )
-        }}
-      >
-        显示/隐藏列
-      </Button>
-      <Button
-        onClick={() => {
-          form.setInitialValues({
-            array: range(1000)
-          })
-        }}
-      >
-        加载数据
-      </Button>
+      <Space>
+        <Button
+          onClick={() => {
+            form
+              .query('array.a3')
+              .void.get(field =>
+                field.setDisplay(
+                  field.display === 'none' ? 'visibility' : 'none'
+                )
+              )
+          }}
+        >
+          显示/隐藏列
+        </Button>
+        <Button
+          onClick={() => {
+            form.setInitialValues({
+              array: range(100)
+            })
+          }}
+        >
+          加载数据
+        </Button>
+      </Space>
     </FormProvider>
   )
 }

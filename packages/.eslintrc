@@ -31,7 +31,7 @@
     }
   },
   "rules": {
-    "prettier/prettier": 2,
+    "prettier/prettier": 0,
     // don't force es6 functions to include space before paren
     "space-before-function-paren": 0,
     "react/prop-types": 0,
@@ -52,6 +52,8 @@
     "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/no-unused-vars": 1,
     "@typescript-eslint/no-namespace": 0,
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
     "no-console": [
       "error",
       {
@@ -64,7 +66,7 @@
     ],
     "prefer-const": 1,
     "no-var": 1,
-    "@typescript-eslint/no-empty-function":1,
-    "prefer-rest-params":1
+    "@typescript-eslint/no-empty-function": 1,
+    "prefer-rest-params": 1
   }
 }
