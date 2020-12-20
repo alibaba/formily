@@ -172,7 +172,7 @@ export const spliceArrayState = (
   const basePath = field.address.toString()
   const fields = field.form.fields
   const fieldPatches: INodePatch<GeneralField>[] = []
-  const moveStep = insertCount - deleteCount
+  const offset = insertCount - deleteCount
   const isArrayChildren = (identifier: string) => {
     return (
       identifier.indexOf(basePath) === 0 && identifier.length > basePath.length
@@ -190,7 +190,7 @@ export const spliceArrayState = (
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
-    return index <= startIndex + moveStep
+    return index >= startIndex && index < startIndex + insertCount
   }
   const isDeleteNode = (identifier: string) => {
     const preStr = identifier.slice(0, basePath.length)
@@ -205,12 +205,12 @@ export const spliceArrayState = (
     return !fields[target]
   }
   const moveIndex = (identifier: string) => {
-    if (moveStep === 0) return identifier
+    if (offset === 0) return identifier
     const preStr = identifier.slice(0, basePath.length)
     const afterStr = identifier.slice(basePath.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return identifier
-    const index = Number(number) + moveStep
+    const index = Number(number) + offset
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
   }
 

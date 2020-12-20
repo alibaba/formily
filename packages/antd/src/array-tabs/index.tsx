@@ -55,8 +55,12 @@ export const ArrayTabs: React.FC<TabsProps> = observer(props => {
           : schema.items
         const key = `tab-${index}`
         return (
-          <Tabs.TabPane key={key} tab={badgedTab(index, key)}>
-            <RecursionField schema={items} name={`${index}`} />
+          <Tabs.TabPane key={key} tab={badgedTab(index, key)} forceRender>
+            <RecursionField
+              schema={items}
+              name={`${index}`}
+              onlyRenderProperties
+            />
           </Tabs.TabPane>
         )
       })}
