@@ -64,6 +64,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     )
   }
 
+  SchemaField.displayName = 'SchemaField'
   function MarkupField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
@@ -100,12 +101,17 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   }
 
+
+  MarkupField.displayName = 'MarkupField'
+
   function StringField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
   >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
     return <MarkupField {...props} type="string" />
   }
+
+  StringField.displayName = 'StringField'
 
   function ObjectField<
     Decorator extends ReactComponentPath<Components>,
@@ -114,12 +120,16 @@ export function createSchemaField<Components extends SchemaComponents>(
     return <MarkupField {...props} type="object" />
   }
 
+  ObjectField.displayName = 'ObjectField'
+
   function ArrayField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
   >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
     return <MarkupField {...props} type="array" />
   }
+
+  ArrayField.displayName = 'ArrayField'
 
   function BooleanField<
     Decorator extends ReactComponentPath<Components>,
@@ -128,12 +138,16 @@ export function createSchemaField<Components extends SchemaComponents>(
     return <MarkupField {...props} type="boolean" />
   }
 
+  BooleanField.displayName = 'BooleanField'
+
   function NumberField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
   >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
     return <MarkupField {...props} type="number" />
   }
+
+  NumberField.displayName = 'NumberField'
 
   function DateField<
     Decorator extends ReactComponentPath<Components>,
@@ -142,12 +156,16 @@ export function createSchemaField<Components extends SchemaComponents>(
     return <MarkupField {...props} type="date" />
   }
 
+  DateField.displayName = 'DateField'
+
   function DateTimeField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
   >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
     return <MarkupField {...props} type="datetime" />
   }
+
+  DateTimeField.displayName = 'DateTimeField'
 
   function VoidField<
     Decorator extends ReactComponentPath<Components>,
@@ -156,8 +174,8 @@ export function createSchemaField<Components extends SchemaComponents>(
     return <MarkupField {...props} type="void" />
   }
 
-  MarkupField.displayName = 'SchemaMarkupField'
-  SchemaField.displayName = 'SchemaField'
+  VoidField.displayName = 'VoidField'
+
   SchemaField.Markup = MarkupField
   SchemaField.String = StringField
   SchemaField.Object = ObjectField
