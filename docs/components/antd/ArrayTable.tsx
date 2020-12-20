@@ -25,81 +25,69 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField>
-        <SchemaField.Markup
+        <SchemaField.String
           name="aaa"
           x-decorator="FormItem"
           required
-          type="string"
           x-component="Input"
         />
-        <SchemaField.Markup
+        <SchemaField.Array
           name="array"
           minItems={5}
           x-decorator="FormItem"
-          type="array"
           x-component="ArrayTable"
         >
-          <SchemaField.Markup
-            type="void"
+          <SchemaField.Void
             x-component="ArrayTable.Column"
             x-component-props={{ width: 50, title: '排序', align: 'center' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               x-decorator="FormItem"
               required
-              type="string"
               x-component="ArrayTable.SortHandle"
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
             x-component="ArrayTable.Column"
             x-component-props={{ width: 50, title: '索引', align: 'center' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               x-decorator="FormItem"
               required
-              type="string"
               x-component="ArrayTable.Index"
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
             x-component="ArrayTable.Column"
             x-component-props={{ title: 'A1', dataIndex: 'a1' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               name="aaa"
               x-decorator="FormItem"
               required
-              type="string"
               x-component="Input"
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
             x-component="ArrayTable.Column"
             x-component-props={{ title: 'A2', dataIndex: 'a2' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               name="bbb"
               x-decorator="FormItem"
               required
-              type="string"
               x-component="Input"
               x-component-props={{ placeholder: '输入123联动相邻列显示' }}
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
             x-component="ArrayTable.Column"
             x-component-props={{ title: 'A3', dataIndex: 'a3' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               name="ccc"
               x-decorator="FormItem"
               required
-              type="string"
               x-reactions={[
                 {
                   dependencies: ['.bbb#value'],
@@ -118,23 +106,19 @@ export default () => {
               ]}
               x-component="Input"
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
             x-component-props={{ title: '操作', dataIndex: 'operations' }}
             x-component="ArrayTable.Column"
           >
-            <SchemaField.Markup type="void" x-component="FormItem">
-              <SchemaField.Markup type="void" x-component="ArrayTable.Remove" />
-              <SchemaField.Markup
-                type="void"
-                x-component="ArrayTable.MoveDown"
-              />
-              <SchemaField.Markup type="void" x-component="ArrayTable.MoveUp" />
-            </SchemaField.Markup>
-          </SchemaField.Markup>
-          <SchemaField.Markup type="void" x-component="ArrayTable.Addition" />
-        </SchemaField.Markup>
+            <SchemaField.Void x-component="FormItem">
+              <SchemaField.Void x-component="ArrayTable.Remove" />
+              <SchemaField.Void x-component="ArrayTable.MoveDown" />
+              <SchemaField.Void x-component="ArrayTable.MoveUp" />
+            </SchemaField.Void>
+          </SchemaField.Void>
+          <SchemaField.Void x-component="ArrayTable.Addition" />
+        </SchemaField.Array>
       </SchemaField>
       <Space>
         <Button

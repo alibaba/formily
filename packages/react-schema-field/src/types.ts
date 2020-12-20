@@ -104,6 +104,12 @@ export interface ISchemaMarkupFieldProps<
   children?: React.ReactNode
 }
 
+export type ISchemaTypeFieldProps<
+Components extends SchemaComponents,
+Decorator extends ReactComponentPath<Components>,
+Component extends ReactComponentPath<Components>
+> = Omit<ISchemaMarkupFieldProps<Components,Decorator,Component>,'type'>
+
 export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
   required?:ISchema['required']
 }
