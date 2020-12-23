@@ -66,9 +66,9 @@ type ComposedArrayTable = React.FC<TableProps<any>> & {
   useArrayTableIndex?: () => number
 }
 
-const ArrayTableContext = createContext<Formily.Core.Models.ArrayField>(null)
+const ArrayContext = createContext<Formily.Core.Models.ArrayField>(null)
 
-const ArrayTableIndexContext = createContext<number>(null)
+const ArrayIndexContext = createContext<number>(null)
 
 const SortableRow = SortableElement((props: any) => <tr {...props} />)
 const SortableBody = SortableContainer((props: any) => <tbody {...props} />)
@@ -153,18 +153,28 @@ const useArrayTableColumns = (
       render: (value: any, record: any) => {
         const index = dataSource.indexOf(record)
         const children = (
-          <ArrayTableIndexContext.Provider key={index} value={index}>
+          <ArrayIndexContext.Provider key={index} value={index}>
             <RecursionField
               schema={schema}
               name={`${index}`}
               onlyRenderProperties
             />
-          </ArrayTableIndexContext.Provider>
+          </ArrayIndexContext.Provider>
         )
         return children
       }
     })
   }, [])
+}
+
+const useAddition = () => {
+  const schema = useSchema()
+  return schema.reduceProperties((addition, schema) => {
+    if (isAdditionComponent(schema)) {
+      return <RecursionField schema={schema} name="addition" />
+    }
+    return addition
+  }, null)
 }
 
 const StatusSelect: React.FC<IStatusSelectProps> = observer(props => {
@@ -270,13 +280,14 @@ export const ArrayTable: ComposedArrayTable = observer(
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
+    const addition = useAddition()
     const defaultRowKey = (record: any) => {
       return dataSource.indexOf(record)
     }
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
         {(dataSource, pager) => (
-          <ArrayTableContext.Provider value={field}>
+          <ArrayContext.Provider value={field}>
             <Table
               size="small"
               rowKey={defaultRowKey}
@@ -291,7 +302,8 @@ export const ArrayTable: ComposedArrayTable = observer(
                   wrapper: (props: any) => (
                     <SortableBody
                       useDragHandle
-                      helperClass="row-dragging"
+                      lockAxis="y"
+                      helperClass="ant-array-table-row-dragging"
                       onSortEnd={({ oldIndex, newIndex }) => {
                         field.move(oldIndex, newIndex)
                       }}
@@ -319,7 +331,8 @@ export const ArrayTable: ComposedArrayTable = observer(
                 key
               })
             })}
-          </ArrayTableContext.Provider>
+            {addition}
+          </ArrayContext.Provider>
         )}
       </ArrayTablePagination>
     )
@@ -328,18 +341,15 @@ export const ArrayTable: ComposedArrayTable = observer(
 
 ArrayTable.displayName = 'ArrayTable'
 
-ArrayTable.useArrayTable = () => useContext(ArrayTableContext)
+ArrayTable.useArrayTable = () => useContext(ArrayContext)
 
-ArrayTable.useArrayTableIndex = () => useContext(ArrayTableIndexContext)
+ArrayTable.useArrayTableIndex = () => useContext(ArrayIndexContext)
 
 ArrayTable.SortHandle = SortableHandle((props: any) => {
   return (
     <MenuOutlined
       {...props}
-      className={cls(
-        'ant-array-table-sort-handler drag-visible',
-        props.className
-      )}
+      className={cls('ant-array-table-sort-handler', props.className)}
       style={{ ...props.style }}
     />
   )
@@ -347,7 +357,7 @@ ArrayTable.SortHandle = SortableHandle((props: any) => {
 
 ArrayTable.Index = props => {
   const index = ArrayTable.useArrayTableIndex()
-  return <span>{index + 1}</span>
+  return <span>#{index + 1}.</span>
 }
 
 ArrayTable.Addition = props => {
@@ -355,6 +365,7 @@ ArrayTable.Addition = props => {
   return (
     <Button
       type="dashed"
+      block
       className={cls('ant-array-table-addition', props.className)}
       {...props}
       onClick={e => {
@@ -366,10 +377,9 @@ ArrayTable.Addition = props => {
           field.push({})
         }
       }}
-      block
       icon={<PlusOutlined />}
     >
-      {field.title || props.title}
+      {props.title}
     </Button>
   )
 }

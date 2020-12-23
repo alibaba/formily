@@ -31,12 +31,12 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
     if (props.onlyRenderSelf) return
     return (
       <Fragment>
-        {schema_.mapProperties((schema, name) => {
+        {schema_.mapProperties((schema, name, index) => {
           const base = field?.address || basePath
           return (
             <RecursionField
               schema={schema}
-              key={name}
+              key={index}
               name={name}
               basePath={base}
             />

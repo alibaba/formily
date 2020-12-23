@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from 'react'
-import { isSchemaObject, Schema } from '@formily/json-schema'
+import { ISchema, isSchemaObject, Schema } from '@formily/json-schema'
 import { RecursionField } from './components'
 import {
   render,
@@ -76,6 +76,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     const renderChildren = () => {
       return <React.Fragment>{props.children}</React.Fragment>
     }
+    const appendArraySchema = (schema: ISchema) => {
+      if (parent.items) {
+        return parent.addProperty(name, schema)
+      } else {
+        return parent.setItems(props)
+      }
+    }
     const name = props.name || getRandomName()
     if (parent.type === 'object' || parent.type === 'void') {
       const schema = parent.addProperty(name, props)
@@ -85,7 +92,7 @@ export function createSchemaField<Components extends SchemaComponents>(
         </SchemaMarkupContext.Provider>
       )
     } else if (parent.type === 'array') {
-      const schema = parent.setItems(props)
+      const schema = appendArraySchema(props)
       return (
         <SchemaMarkupContext.Provider
           value={Array.isArray(schema) ? schema[0] : schema}

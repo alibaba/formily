@@ -7,7 +7,7 @@ import {
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
-import { Form, Field, ArrayField } from '../models'
+import { Field, ArrayField } from '../models'
 import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
@@ -17,7 +17,7 @@ import {
   GeneralField,
   FormFeedback
 } from '../types'
-import { isVoidField } from './externals'
+import { isArrayField, isVoidField } from './externals'
 
 export const getValueFromEvent = (event: any) => {
   if (isHTMLElement(event?.target)) {
@@ -26,19 +26,29 @@ export const getValueFromEvent = (event: any) => {
   return event
 }
 
-export const skipVoidAddress = (pattern: FormPathPattern, form: Form) => {
-  const base = FormPath.parse(pattern)
-  if (base.isMatchPattern)
-    throw new Error('Cannot use matching mode when read or writing values')
-  return base.reduce((address: FormPath, key: string, index: number) => {
-    if (index >= base.length - 1) return address.concat([key])
-    const np = base.slice(0, index + 1)
-    const dp = address.concat([key])
-    const field = form.fields[np.toString()]
-    if (isVoidField(field)) {
-      return address
+export const buildFieldPath = (field: GeneralField) => {
+  let prevArray = false
+  return field.address.reduce((path: FormPath, key: string, index: number) => {
+    const currentPath = path.concat([key])
+    const currentAddress = field.address.slice(0, index + 1)
+    const current = field.form.fields[currentAddress.toString()]
+    if (index >= field.address.length - 1) {
+      if (isVoidField(field)) {
+        return currentPath
+      }
+      if (prevArray) return path
+      return currentPath
     }
-    return dp
+    if (isVoidField(current)) {
+      if (isArrayField(current.parent)) {
+        prevArray = true
+        return currentPath
+      }
+      return path
+    } else {
+      prevArray = false
+    }
+    return currentPath
   }, new FormPath(''))
 }
 
@@ -47,7 +57,7 @@ export const buildNodeIndexes = (
   address: FormPathPattern
 ) => {
   field.address = FormPath.parse(address)
-  field.path = skipVoidAddress(field.address, field.form)
+  field.path = buildFieldPath(field)
   field.form.indexes.set(field.path.toString(), field.address.toString())
   return field
 }
@@ -169,32 +179,32 @@ export const spliceArrayState = (
     insertCount: 0,
     ...props
   }
-  const basePath = field.address.toString()
+  const address = field.address.toString()
   const fields = field.form.fields
   const fieldPatches: INodePatch<GeneralField>[] = []
   const offset = insertCount - deleteCount
   const isArrayChildren = (identifier: string) => {
     return (
-      identifier.indexOf(basePath) === 0 && identifier.length > basePath.length
+      identifier.indexOf(address) === 0 && identifier.length > address.length
     )
   }
   const isAfterNode = (identifier: string) => {
-    const afterStr = identifier.slice(basePath.length)
+    const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return index > startIndex + deleteCount - 1
   }
   const isInsertNode = (identifier: string) => {
-    const afterStr = identifier.slice(basePath.length)
+    const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
     return index >= startIndex && index < startIndex + insertCount
   }
   const isDeleteNode = (identifier: string) => {
-    const preStr = identifier.slice(0, basePath.length)
-    const afterStr = identifier.slice(basePath.length)
+    const preStr = identifier.slice(0, address.length)
+    const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
@@ -206,8 +216,8 @@ export const spliceArrayState = (
   }
   const moveIndex = (identifier: string) => {
     if (offset === 0) return identifier
-    const preStr = identifier.slice(0, basePath.length)
-    const afterStr = identifier.slice(basePath.length)
+    const preStr = identifier.slice(0, address.length)
+    const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return identifier
     const index = Number(number) + offset
@@ -243,16 +253,16 @@ export const exchangeArrayState = (
     toIndex: 0,
     ...props
   }
-  const basePath = field.address.toString()
+  const address = field.address.toString()
   const fields = field.form.fields
   const fieldPatches: INodePatch<GeneralField>[] = []
   const isArrayChildren = (identifier: string) => {
     return (
-      identifier.indexOf(basePath) === 0 && identifier.length > basePath.length
+      identifier.indexOf(address) === 0 && identifier.length > address.length
     )
   }
   const isCrossNode = (identifier: string) => {
-    const afterStr = identifier.slice(basePath.length)
+    const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return false
     const index = Number(number)
@@ -262,8 +272,8 @@ export const exchangeArrayState = (
     )
   }
   const moveIndex = (identifier: string) => {
-    const preStr = identifier.slice(0, basePath.length)
-    const afterStr = identifier.slice(basePath.length)
+    const preStr = identifier.slice(0, address.length)
+    const afterStr = identifier.slice(address.length)
     const number = afterStr.match(/^\.(\d+)/)?.[1]
     if (number === undefined) return identifier
     const current = Number(number)

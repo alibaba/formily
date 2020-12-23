@@ -102,7 +102,10 @@ export class Form {
       deleteValuesIn: action,
       setSubmitting: action,
       setValidating: action,
-      setFormGraph: action
+      setFormGraph: action,
+      onMount: action,
+      onUnmount: action,
+      onInit: action
     })
   }
 

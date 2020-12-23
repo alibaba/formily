@@ -31,94 +31,96 @@ export default () => {
           required
           x-component="Input"
         />
-        <SchemaField.ObjectList
+        <SchemaField.Array
           name="array"
           minItems={5}
           x-decorator="FormItem"
           x-component="ArrayTable"
         >
-          <SchemaField.Void
-            x-component="ArrayTable.Column"
-            x-component-props={{ width: 50, title: '排序', align: 'center' }}
-          >
-            <SchemaField.String
-              x-decorator="FormItem"
-              required
-              x-component="ArrayTable.SortHandle"
-            />
-          </SchemaField.Void>
-          <SchemaField.Void
-            x-component="ArrayTable.Column"
-            x-component-props={{ width: 50, title: '索引', align: 'center' }}
-          >
-            <SchemaField.String
-              x-decorator="FormItem"
-              required
-              x-component="ArrayTable.Index"
-            />
-          </SchemaField.Void>
-          <SchemaField.Void
-            x-component="ArrayTable.Column"
-            x-component-props={{ title: 'A1', dataIndex: 'a1' }}
-          >
-            <SchemaField.String
-              name="aaa"
-              x-decorator="FormItem"
-              required
-              x-component="Input"
-            />
-          </SchemaField.Void>
-          <SchemaField.Void
-            x-component="ArrayTable.Column"
-            x-component-props={{ title: 'A2', dataIndex: 'a2' }}
-          >
-            <SchemaField.String
-              name="bbb"
-              x-decorator="FormItem"
-              required
-              x-component="Input"
-              x-component-props={{ placeholder: '输入123联动相邻列显示' }}
-            />
-          </SchemaField.Void>
-          <SchemaField.Void
-            x-component="ArrayTable.Column"
-            x-component-props={{ title: 'A3', dataIndex: 'a3' }}
-          >
-            <SchemaField.String
-              name="ccc"
-              x-decorator="FormItem"
-              required
-              x-reactions={[
-                {
-                  dependencies: ['.bbb#value'],
-                  when: '{{$deps[0] == 123}}',
-                  fullfill: {
-                    state: {
-                      display: 'visibility'
-                    }
-                  },
-                  otherwise: {
-                    state: {
-                      display: 'none'
+          <SchemaField.Object>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ width: 50, title: '排序', align: 'center' }}
+            >
+              <SchemaField.String
+                x-decorator="FormItem"
+                required
+                x-component="ArrayTable.SortHandle"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ width: 50, title: '索引', align: 'center' }}
+            >
+              <SchemaField.String
+                x-decorator="FormItem"
+                required
+                x-component="ArrayTable.Index"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A1', dataIndex: 'a1' }}
+            >
+              <SchemaField.String
+                name="aaa"
+                x-decorator="FormItem"
+                required
+                x-component="Input"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A2', dataIndex: 'a2' }}
+            >
+              <SchemaField.String
+                name="bbb"
+                x-decorator="FormItem"
+                required
+                x-component="Input"
+                x-component-props={{ placeholder: '输入123联动相邻列显示' }}
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A3', dataIndex: 'a3' }}
+            >
+              <SchemaField.String
+                name="ccc"
+                x-decorator="FormItem"
+                required
+                x-reactions={[
+                  {
+                    dependencies: ['.bbb#value'],
+                    when: '{{$deps[0] == 123}}',
+                    fullfill: {
+                      state: {
+                        display: 'visibility'
+                      }
+                    },
+                    otherwise: {
+                      state: {
+                        display: 'none'
+                      }
                     }
                   }
-                }
-              ]}
-              x-component="Input"
-            />
-          </SchemaField.Void>
-          <SchemaField.Void
-            x-component-props={{ title: '操作', dataIndex: 'operations' }}
-            x-component="ArrayTable.Column"
-          >
-            <SchemaField.Void x-component="FormItem">
-              <SchemaField.Void x-component="ArrayTable.Remove" />
-              <SchemaField.Void x-component="ArrayTable.MoveDown" />
-              <SchemaField.Void x-component="ArrayTable.MoveUp" />
+                ]}
+                x-component="Input"
+              />
             </SchemaField.Void>
-          </SchemaField.Void>
+            <SchemaField.Void
+              x-component-props={{ title: '操作', dataIndex: 'operations' }}
+              x-component="ArrayTable.Column"
+            >
+              <SchemaField.Void x-component="FormItem">
+                <SchemaField.Void x-component="ArrayTable.Remove" />
+                <SchemaField.Void x-component="ArrayTable.MoveDown" />
+                <SchemaField.Void x-component="ArrayTable.MoveUp" />
+              </SchemaField.Void>
+            </SchemaField.Void>
+          </SchemaField.Object>
           <SchemaField.Void x-component="ArrayTable.Addition" />
-        </SchemaField.ObjectList>
+        </SchemaField.Array>
       </SchemaField>
       <Space>
         <Button

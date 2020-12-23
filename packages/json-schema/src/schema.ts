@@ -312,11 +312,12 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string
+      key: string,
+      index: number
     ) => T
   ): T[] => {
-    return Schema.getOrderProperties(this).map(({ schema, key }) => {
-      return callback(schema, key)
+    return Schema.getOrderProperties(this).map(({ schema, key }, index) => {
+      return callback(schema, key, index)
     })
   }
 
@@ -332,12 +333,13 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string
+      key: string,
+      index: number
     ) => T
   ): T[] => {
     return Schema.getOrderProperties(this, 'patternProperties').map(
-      ({ schema, key }) => {
-        return callback(schema, key)
+      ({ schema, key }, index) => {
+        return callback(schema, key, index)
       }
     )
   }
@@ -355,14 +357,17 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string
+      key: string,
+      index: number
     ) => R,
     predicate?: P
   ): R => {
     let results: any = predicate
-    Schema.getOrderProperties(this, 'properties').forEach(({ schema, key }) => {
-      results = callback(results, schema, key)
-    })
+    Schema.getOrderProperties(this, 'properties').forEach(
+      ({ schema, key }, index) => {
+        results = callback(results, schema, key, index)
+      }
+    )
     return results
   }
 
@@ -379,14 +384,15 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string
+      key: string,
+      index: number
     ) => R,
     predicate?: P
   ): R => {
     let results: any = predicate
     Schema.getOrderProperties(this, 'patternProperties').forEach(
-      ({ schema, key }) => {
-        results = callback(results, schema, key)
+      ({ schema, key }, index) => {
+        results = callback(results, schema, key, index)
       }
     )
     return results

@@ -90,6 +90,7 @@ export class ArrayField<
 
   move = (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
+    if (fromIndex === toIndex) return
     runInAction(() => {
       const fromItem = this.value[fromIndex]
       this.value.splice(fromIndex, 1)
