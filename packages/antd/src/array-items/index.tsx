@@ -36,13 +36,21 @@ type ComposedArrayItems = React.FC & {
   useArrayItemsIndex?: () => number
 }
 
-const SortableItem = SortableElement((props: React.PropsWithChildren<any>) => {
-  return <div {...props}>{props.children}</div>
-})
+const SortableItem = SortableElement(
+  (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
+    return (
+      <div {...props} className={cls('ant-array-items-item', props.className)}>
+        {props.children}
+      </div>
+    )
+  }
+)
 
 const SortableList = SortableContainer(
-  (props: React.PropsWithChildren<any>) => (
-    <div {...props}>{props.children}</div>
+  (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
+    <div {...props} className={cls('ant-array-items-list', props.className)}>
+      {props.children}
+    </div>
   )
 )
 
@@ -86,7 +94,9 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
           return (
             <ArrayIndexContext.Provider key={index} value={index}>
               <SortableItem key={`item-${index}`} index={index}>
-                <RecursionField schema={items} name={index} />
+                <div className="ant-array-items-item-inner">
+                  <RecursionField schema={items} name={index} />
+                </div>
               </SortableItem>
             </ArrayIndexContext.Provider>
           )
@@ -124,6 +134,7 @@ ArrayItems.Addition = (props) => {
   return (
     <Button
       type="dashed"
+      block
       className={cls('ant-array-items-addition', props.className)}
       {...props}
       onClick={() => {
