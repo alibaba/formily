@@ -12,13 +12,13 @@ const SchemaField = createSchemaField({
     Space,
     FormTab,
     Input,
-    ArrayItems
-  }
+    ArrayItems,
+  },
 })
 
 const range = (count: number) =>
   Array.from(new Array(count)).map((_, key) => ({
-    aaa: key
+    aaa: key,
   }))
 
 const form = createForm()
@@ -61,7 +61,10 @@ export default () => {
               x-component="ArrayItems.MoveDown"
             />
           </SchemaField.Void>
-          <SchemaField.Void x-component="ArrayItems.Addition" />
+          <SchemaField.Void
+            x-component="ArrayItems.Addition"
+            title="添加条目"
+          />
         </SchemaField.Array>
       </SchemaField>
     </FormProvider>

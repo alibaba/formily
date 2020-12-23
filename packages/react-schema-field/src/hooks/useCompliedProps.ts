@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { runInAction } from 'mobx'
-import { ISchema, complieExpression } from '@formily/json-schema'
+import { ISchema, SchemaKey, complieExpression } from '@formily/json-schema'
 import {
   isBool,
   isArr,
@@ -8,14 +8,14 @@ import {
   FormPath,
   isValid,
   toArr,
-  isEqual
+  isEqual,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { SchemaExpressionScopeContext, SchemaRequiredContext } from '../shared'
 import {
   ISchemaFieldFactoryOptions,
   ISchemaFieldUpdateRequest,
-  ISchemaTransformerOptions
+  ISchemaTransformerOptions,
 } from '../types'
 
 const getValidatorBySchema = (
@@ -56,7 +56,7 @@ const getValidatorBySchema = (
     rules.push({
       validator: (value: any) => {
         return value === schema.const ? '' : getValidateLocale('schema.const')
-      }
+      },
     })
   }
   if (isValid(schema.multipleOf)) {
@@ -65,7 +65,7 @@ const getValidatorBySchema = (
         return value % schema.multipleOf === 0
           ? ''
           : getValidateLocale('schema.multipleOf')
-      }
+      },
     })
   }
   if (isValid(schema.maxProperties)) {
@@ -74,7 +74,7 @@ const getValidatorBySchema = (
         return Object.keys(value || {}).length <= schema.maxProperties
           ? ''
           : getValidateLocale('schema.maxProperties')
-      }
+      },
     })
   }
   if (isValid(schema.minProperties)) {
@@ -83,7 +83,7 @@ const getValidatorBySchema = (
         return Object.keys(value || {}).length >= schema.minProperties
           ? ''
           : getValidateLocale('schema.minProperties')
-      }
+      },
     })
   }
   if (isValid(schema.uniqueItems) && schema.uniqueItems) {
@@ -99,7 +99,7 @@ const getValidatorBySchema = (
         })
           ? getValidateLocale('schema.uniqueItems')
           : ''
-      }
+      },
     })
   }
 
@@ -111,13 +111,13 @@ const getValidatorBySchema = (
 
 const getFieldDataSourceBySchema = (schema: ISchema) => {
   if (isArr(schema['enum'])) {
-    return schema['enum'].map(item => {
+    return schema['enum'].map((item) => {
       if (typeof item === 'object') {
         return item
       } else {
         return {
           label: item,
-          value: item
+          value: item,
         }
       }
     })
@@ -140,19 +140,19 @@ const getFieldInternalPropsBySchema = (
     decorator: [
       schema['x-decorator'] &&
         FormPath.getIn(options?.components, schema['x-decorator']),
-      schema['x-decorator-props']
+      schema['x-decorator-props'],
     ],
     component: [
       schema['x-component'] &&
         FormPath.getIn(options?.components, schema['x-component']),
-      schema['x-component-props']
-    ]
+      schema['x-component-props'],
+    ],
   }
 }
 
 const getSchemaFieldRequired = (
   schema: ISchema,
-  name: string,
+  name: SchemaKey,
   required: ISchema['required']
 ) => {
   if (isBool(schema.required)) {
@@ -164,7 +164,7 @@ const getSchemaFieldRequired = (
     }
   }
   if (isArr(required)) {
-    if (required.some(parent => FormPath.parse(parent).match(name))) {
+    if (required.some((parent) => FormPath.parse(parent).match(name))) {
       return true
     }
   }
@@ -200,11 +200,11 @@ const getSchemaFieldReactions = (
     dependencies: string[]
   ) => {
     if (isArr(dependencies)) {
-      return dependencies.map(pattern => {
+      return dependencies.map((pattern) => {
         const [target, path] = String(pattern).split(/\s*#\s*/)
         return field
           .query(target)
-          .all.get(field => (path ? FormPath.getIn(field, path) : field))
+          .all.get((field) => (path ? FormPath.getIn(field, path) : field))
       })
     }
     return []
@@ -213,7 +213,7 @@ const getSchemaFieldReactions = (
   return (field: Formily.Core.Models.Field) => {
     const reactions = schema['x-reactions']
     if (isArr(reactions)) {
-      reactions.forEach(reaction => {
+      reactions.forEach((reaction) => {
         if (!reaction) return
         const complie = (expression: any) => {
           const $self = field
@@ -225,7 +225,7 @@ const getSchemaFieldReactions = (
             $form,
             $self,
             $deps,
-            $dependencies
+            $dependencies,
           })
         }
         if (complie(reaction.when)) {
@@ -239,7 +239,7 @@ const getSchemaFieldReactions = (
 }
 
 export const transformSchemaToFieldProps = (
-  name: string,
+  name: SchemaKey,
   schema: ISchema,
   options: ISchemaTransformerOptions
 ) => {
@@ -250,12 +250,12 @@ export const transformSchemaToFieldProps = (
     ...props,
     required,
     name,
-    reactions: [reactions]
+    reactions: [reactions],
   }
 }
 
 export const useCompliedProps = (
-  name: string,
+  name: SchemaKey,
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
 ): Formily.React.Types.IFieldProps<any, any, any> => {
@@ -266,7 +266,7 @@ export const useCompliedProps = (
     required,
     scope: {
       ...options.scope,
-      ...contextScope
-    }
+      ...contextScope,
+    },
   })
 }

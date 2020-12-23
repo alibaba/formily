@@ -5,7 +5,7 @@ import {
   DownCircleOutlined,
   UpCircleOutlined,
   PlusOutlined,
-  MenuOutlined
+  MenuOutlined,
 } from '@ant-design/icons'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
@@ -17,13 +17,13 @@ import cls from 'classnames'
 import {
   SortableContainer,
   SortableElement,
-  SortableHandle
+  SortableHandle,
 } from 'react-sortable-hoc'
 import { useForm, useField } from '@formily/react'
 import {
   useSchema,
   RecursionField,
-  transformSchemaToFieldProps
+  transformSchemaToFieldProps,
 } from '@formily/react-schema-field'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
@@ -114,8 +114,8 @@ const useArrayTableSources = () => {
           field,
           fieldProps,
           schema,
-          columnProps
-        }
+          columnProps,
+        },
       ]
     } else if (schema.properties) {
       return schema.reduceProperties((buf, schema) => {
@@ -154,15 +154,11 @@ const useArrayTableColumns = (
         const index = dataSource.indexOf(record)
         const children = (
           <ArrayIndexContext.Provider key={index} value={index}>
-            <RecursionField
-              schema={schema}
-              name={`${index}`}
-              onlyRenderProperties
-            />
+            <RecursionField schema={schema} name={index} onlyRenderProperties />
           </ArrayIndexContext.Provider>
         )
         return children
-      }
+      },
     })
   }, [])
 }
@@ -177,16 +173,17 @@ const useAddition = () => {
   }, null)
 }
 
-const StatusSelect: React.FC<IStatusSelectProps> = observer(props => {
+const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
   const form = useForm()
   const field = useField<Formily.Core.Models.ArrayField>()
   const errors = form.queryFeedbacks({
     type: 'error',
-    address: `${field.address}.*`
+    address: `${field.address}.*`,
   })
   const createIndexPattern = (page: number) => {
-    const pattern = `${field.address}.*[${(page - 1) * props.pageSize}:${page *
-      props.pageSize}].*`
+    const pattern = `${field.address}.*[${(page - 1) * props.pageSize}:${
+      page * props.pageSize
+    }].*`
     return FormPath.parse(pattern)
   }
   const options = props.options?.map(({ label, value }) => {
@@ -195,7 +192,7 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(props => {
     })
     return {
       label: hasError ? <Badge dot>{label}</Badge> : label,
-      value
+      value,
     }
   })
 
@@ -208,16 +205,16 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer(props => {
       options={options}
       virtual
       style={{
-        width: width < 60 ? 60 : width
+        width: width < 60 ? 60 : width,
       }}
       className={cls('ant-array-table-status-select', {
-        'has-error': errors?.length
+        'has-error': errors?.length,
       })}
     />
   )
 })
 
-const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = props => {
+const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)
   const pageSize = props.pageSize || 10
   const size = props.size || 'default'
@@ -230,7 +227,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = props => {
     const page = index + 1
     return {
       label: page,
-      value: page
+      value: page,
     }
   })
   const handleChange = (current: number) => {
@@ -317,18 +314,19 @@ export const ArrayTable: ComposedArrayTable = observer(
                         {...props}
                       />
                     )
-                  }
-                }
+                  },
+                },
               }}
             />
             <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
             {sources.map((column, key) => {
               //专门用来承接对Column的状态管理
+              if (!isColumnComponent(column.schema)) return
               return React.createElement(RecursionField, {
                 name: column.name,
                 schema: column.schema,
                 onlyRenderSelf: true,
-                key
+                key,
               })
             })}
             {addition}
@@ -355,12 +353,13 @@ ArrayTable.SortHandle = SortableHandle((props: any) => {
   )
 }) as any
 
-ArrayTable.Index = props => {
+ArrayTable.Index = (props) => {
   const index = ArrayTable.useArrayTableIndex()
   return <span>#{index + 1}.</span>
 }
 
-ArrayTable.Addition = props => {
+ArrayTable.Addition = (props) => {
+  const self = useField()
   const field = ArrayTable.useArrayTable()
   return (
     <Button
@@ -368,9 +367,7 @@ ArrayTable.Addition = props => {
       block
       className={cls('ant-array-table-addition', props.className)}
       {...props}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={(e) => {
         if (props.method === 'unshift') {
           field.unshift({})
         } else {
@@ -379,7 +376,7 @@ ArrayTable.Addition = props => {
       }}
       icon={<PlusOutlined />}
     >
-      {props.title}
+      {self.title || props.title}
     </Button>
   )
 }
@@ -392,9 +389,7 @@ ArrayTable.Remove = React.forwardRef((props, ref) => {
       {...props}
       className={cls('ant-array-table-remove', props.className)}
       ref={ref}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={(e) => {
         field.remove(index)
       }}
     />
@@ -409,9 +404,7 @@ ArrayTable.MoveDown = React.forwardRef((props, ref) => {
       {...props}
       className={cls('ant-array-table-move-down', props.className)}
       ref={ref}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={(e) => {
         field.moveDown(index)
       }}
     />
@@ -426,9 +419,7 @@ ArrayTable.MoveUp = React.forwardRef((props, ref) => {
       {...props}
       className={cls('ant-array-table-move-up', props.className)}
       ref={ref}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={(e) => {
         field.moveUp(index)
       }}
     />

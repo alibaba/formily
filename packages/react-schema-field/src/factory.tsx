@@ -133,20 +133,6 @@ export function createSchemaField<Components extends SchemaComponents>(
   }
 
   ArrayField.displayName = 'ArrayField'
-
-  function ObjectListField<
-    Decorator extends ReactComponentPath<Components>,
-    Component extends ReactComponentPath<Components>
-  >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
-    return (
-      <MarkupField {...props} type="array">
-        <MarkupField type="object">{props.children}</MarkupField>
-      </MarkupField>
-    )
-  }
-
-  ObjectListField.displayName = 'ObjectListField'
-
   function BooleanField<
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
@@ -201,6 +187,5 @@ export function createSchemaField<Components extends SchemaComponents>(
   SchemaField.DateTime = DateTimeField
   SchemaField.Void = VoidField
   SchemaField.Number = NumberField
-  SchemaField.ObjectList = ObjectListField
   return SchemaField
 }

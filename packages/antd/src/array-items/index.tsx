@@ -5,7 +5,7 @@ import {
   DownCircleOutlined,
   UpCircleOutlined,
   PlusOutlined,
-  MenuOutlined
+  MenuOutlined,
 } from '@ant-design/icons'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
@@ -16,7 +16,7 @@ import cls from 'classnames'
 import {
   SortableContainer,
   SortableElement,
-  SortableHandle
+  SortableHandle,
 } from 'react-sortable-hoc'
 import { ISchema } from '@formily/json-schema'
 import './style.less'
@@ -64,7 +64,7 @@ const useAddition = () => {
   }, null)
 }
 
-export const ArrayItems: ComposedArrayItems = observer(props => {
+export const ArrayItems: ComposedArrayItems = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useSchema()
   const addition = useAddition()
@@ -86,7 +86,7 @@ export const ArrayItems: ComposedArrayItems = observer(props => {
           return (
             <ArrayIndexContext.Provider key={index} value={index}>
               <SortableItem key={`item-${index}`} index={index}>
-                <RecursionField schema={items} name={`${index}`} />
+                <RecursionField schema={items} name={index} />
               </SortableItem>
             </ArrayIndexContext.Provider>
           )
@@ -113,22 +113,20 @@ ArrayItems.SortHandle = SortableHandle((props: any) => {
   )
 }) as any
 
-ArrayItems.Index = props => {
+ArrayItems.Index = (props) => {
   const index = ArrayItems.useArrayItemsIndex()
   return <span>#{index + 1}.</span>
 }
 
-ArrayItems.Addition = props => {
+ArrayItems.Addition = (props) => {
+  const self = useField()
   const field = ArrayItems.useArrayItems()
   return (
     <Button
       type="dashed"
-      block
       className={cls('ant-array-items-addition', props.className)}
       {...props}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={() => {
         if (props.method === 'unshift') {
           field.unshift(null)
         } else {
@@ -137,7 +135,7 @@ ArrayItems.Addition = props => {
       }}
       icon={<PlusOutlined />}
     >
-      {props.title}
+      {self.title || props.title}
     </Button>
   )
 }
@@ -150,9 +148,7 @@ ArrayItems.Remove = React.forwardRef((props, ref) => {
       {...props}
       className={cls('ant-array-items-remove', props.className)}
       ref={ref}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={() => {
         field.remove(index)
       }}
     />
@@ -167,9 +163,7 @@ ArrayItems.MoveDown = React.forwardRef((props, ref) => {
       {...props}
       className={cls('ant-array-items-move-down', props.className)}
       ref={ref}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={() => {
         field.moveDown(index)
       }}
     />
@@ -184,9 +178,7 @@ ArrayItems.MoveUp = React.forwardRef((props, ref) => {
       {...props}
       className={cls('ant-array-items-move-up', props.className)}
       ref={ref}
-      onClick={e => {
-        e.preventDefault()
-        e.stopPropagation()
+      onClick={() => {
         field.moveUp(index)
       }}
     />

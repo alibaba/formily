@@ -3,7 +3,8 @@ import {
   SchemaEnum,
   SchemaProperties,
   SchemaExtendReaction,
-  SchemaTypes
+  SchemaTypes,
+  SchemaKey
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
 import { complieExpression } from './complier'
@@ -17,7 +18,7 @@ export class Schema<
   Validator = any,
   Message = any
 > implements ISchema {
-  name?: string | number
+  name?: SchemaKey
   title?: Message
   description?: Message
   default?: any
@@ -150,7 +151,7 @@ export class Schema<
   }
 
   addProperty = (
-    key: string,
+    key: SchemaKey,
     schema: ISchema<
       Decorator,
       Component,
@@ -168,7 +169,7 @@ export class Schema<
     return this.properties[key]
   }
 
-  removeProperty = (key: string) => {
+  removeProperty = (key: SchemaKey) => {
     delete this.properties[key]
     return this
   }
@@ -192,7 +193,7 @@ export class Schema<
   }
 
   addPatternProperty = (
-    key: string,
+    key: SchemaKey,
     schema: ISchema<
       Decorator,
       Component,
@@ -210,7 +211,7 @@ export class Schema<
     return this.patternProperties[key]
   }
 
-  removePatternProperty = (key: string) => {
+  removePatternProperty = (key: SchemaKey) => {
     delete this.patternProperties[key]
     return this
   }
@@ -276,7 +277,7 @@ export class Schema<
   ) => {
     if (!schema) return
     if (Array.isArray(schema)) {
-      this.items = schema.map(item => new Schema(item))
+      this.items = schema.map((item) => new Schema(item))
     } else {
       this.items = new Schema(schema)
     }
@@ -312,7 +313,7 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string,
+      key: SchemaKey,
       index: number
     ) => T
   ): T[] => {
@@ -333,7 +334,7 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string,
+      key: SchemaKey,
       index: number
     ) => T
   ): T[] => {
@@ -357,7 +358,7 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string,
+      key: SchemaKey,
       index: number
     ) => R,
     predicate?: P
@@ -384,7 +385,7 @@ export class Schema<
         Validator,
         Message
       >,
-      key: string,
+      key: SchemaKey,
       index: number
     ) => R,
     predicate?: P
@@ -406,7 +407,7 @@ export class Schema<
       'items',
       'additionalItems',
       'x-linkages',
-      'x-reactions'
+      'x-reactions',
     ]
     each(this, (value, key) => {
       if (isFn(value)) return
@@ -466,12 +467,12 @@ export class Schema<
     const results = {}
     each(this, (value: any, key) => {
       if (key === 'properties' || key === 'patternProperties') {
-        results[key] = map(value, item => item?.toJSON())
+        results[key] = map(value, (item) => item?.toJSON())
       } else if (key === 'additionalProperties' || key === 'additionalItems') {
         results[key] = value?.toJSON()
       } else if (key === 'items') {
         if (Array.isArray(value)) {
-          results[key] = value.map(item => item?.toJSON())
+          results[key] = value.map((item) => item?.toJSON())
         } else {
           results[key] = value?.toJSON()
         }
@@ -497,7 +498,7 @@ export class Schema<
         unorderProperties.push({ schema: item, key })
       }
     }
-    return orderProperties.concat(unorderProperties).filter(item => !!item)
+    return orderProperties.concat(unorderProperties).filter((item) => !!item)
   }
 }
 

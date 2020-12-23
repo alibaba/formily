@@ -38,6 +38,8 @@ export type SchemaProperties<
   >
 >
 
+export type SchemaKey = string | number
+
 export type SchemaExtendReaction = {
   dependencies?: string[]
   when?: string
@@ -94,6 +96,7 @@ export interface ISchema<
   Validator = any,
   Message = any
 > {
+  name?: SchemaKey
   title?: Message
   description?: Message
   default?: any

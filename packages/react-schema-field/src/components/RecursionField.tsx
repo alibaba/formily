@@ -1,20 +1,22 @@
-import React, { useContext, Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import {
   ObjectField,
   ArrayField,
   Field,
   VoidField,
-  useField
+  useField,
 } from '@formily/react'
 import {
   SchemaContext,
   SchemaRequiredContext,
-  SchemaOptionsContext
+  SchemaOptionsContext,
 } from '../shared'
 import { useCompliedProps, useCompliedSchema } from '../hooks'
 import { IRecursionFieldProps } from '../types'
+import { isBool, isFn, isValid } from '@formily/shared'
+import { Schema } from '@formily/json-schema'
 
-export const RecursionField: React.FC<IRecursionFieldProps> = props => {
+export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const schema_ = useCompliedSchema(props.schema, options)
@@ -25,14 +27,22 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
     }
     return props.basePath || parent?.address
   }
-
   const basePath = getBasePath()
   const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
     if (props.onlyRenderSelf) return
     return (
       <Fragment>
-        {schema_.mapProperties((schema, name, index) => {
+        {schema_.mapProperties((item, name, index) => {
           const base = field?.address || basePath
+          let schema: Schema = item
+          if (isFn(props.mapProperties)) {
+            const mapped = props.mapProperties(item, name)
+            if (!isBool(mapped)) {
+              schema = mapped
+            } else if (mapped === false) {
+              return null
+            }
+          }
           return (
             <RecursionField
               schema={schema}
@@ -48,7 +58,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = props => {
   }
 
   const render = () => {
-    if (!props.name) return renderProperties()
+    if (!isValid(props.name)) return renderProperties()
     if (schema_.type === 'object') {
       if (props.onlyRenderProperties) return renderProperties()
       return (
