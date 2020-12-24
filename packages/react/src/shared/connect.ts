@@ -10,7 +10,7 @@ export function mapProps<T extends JSXComponent>(
 ) {
   return (target: T) => {
     return observer(
-      props => {
+      (props: any) => {
         const field = useField()
         const results = args.reduce(
           (props, mapper) => {
@@ -32,7 +32,7 @@ export function mapProps<T extends JSXComponent>(
         return React.createElement(target, results)
       },
       {
-        forwardRef: true
+        forwardRef: true,
       }
     )
   }
@@ -42,31 +42,40 @@ export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
   component: C
 ) {
   return (target: T) => {
-    return observer(props => {
-      const field = useField()
-      return React.createElement(
-        !isVoidField(field) && field.pattern === 'readPretty'
-          ? component
-          : target,
-        props
-      )
-    })
+    return observer(
+      (props) => {
+        const field = useField()
+        return React.createElement(
+          !isVoidField(field) && field.pattern === 'readPretty'
+            ? component
+            : target,
+          props
+        )
+      },
+      {
+        forwardRef: true,
+      }
+    )
   }
 }
 
-export function connect<T extends JSXComponent>(
+export function connect<T extends React.JSXElementConstructor<any>>(
   target: T,
   ...args: IComponentMapper<T>[]
 ) {
-  const Component = args.reduce((target, mapper) => {
+  const Target = args.reduce((target, mapper) => {
     return mapper(target)
   }, target)
 
-  const Wrapper: React.FC<React.ComponentProps<T>> = function(props) {
-    return React.createElement(Component, props)
-  }
+  const Destination = React.forwardRef(
+    (props: React.ComponentProps<T>, ref) => {
+      return React.createElement(Target, { ...props, ref })
+    }
+  )
 
-  if (target['displayName']) Wrapper.displayName = target['displayName']
+  if (target['displayName']) Destination.displayName = target['displayName']
 
-  return Wrapper
+  return Destination
 }
+
+export { observer }

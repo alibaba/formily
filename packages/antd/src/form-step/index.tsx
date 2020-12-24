@@ -1,8 +1,7 @@
 import React, { Fragment, useMemo } from 'react'
-import { connect, useField } from '@formily/react'
+import { connect, useField, observer } from '@formily/react'
 import { Schema } from '@formily/json-schema'
 import { makeAutoObservable } from 'mobx'
-import { observer } from 'mobx-react-lite'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Steps } from 'antd'
 import { StepsProps, StepProps } from 'antd/lib/steps'
@@ -47,7 +46,7 @@ export const parseSteps = (schema: Schema) => {
       steps.push({
         name,
         props: schema['x-component-props'],
-        schema
+        schema,
       })
     }
   })
@@ -58,13 +57,13 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
   const env: FormStepEnv = {
     form: null,
     field: null,
-    steps: []
+    steps: [],
   }
 
   const setDisplay = (target: number) => {
     const currentStep = env.steps[target]
     env.steps.forEach(({ name }) => {
-      env.form.query(`${env.field.address}.${name}`).all.get(field => {
+      env.form.query(`${env.field.address}.${name}`).all.get((field) => {
         if (name === currentStep.name) {
           field.setDisplay('visibility')
         } else {
@@ -115,7 +114,7 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
     },
     async submit(onSubmit) {
       return env.form?.submit?.(onSubmit)
-    }
+    },
   })
   return formStep
 }

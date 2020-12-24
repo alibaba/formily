@@ -2,11 +2,10 @@ import React, { Fragment, useMemo } from 'react'
 import { Collapse, Badge } from 'antd'
 import { makeAutoObservable } from 'mobx'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
-import { useField } from '@formily/react'
+import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema } from '@formily/json-schema'
 import { isArr } from '@formily/shared/lib'
-import { observer } from 'mobx-react-lite'
 interface IFormCollapse {
   activeKey: CollapseProps['activeKey']
   setActiveKey(key: CollapseProps['activeKey']): void
@@ -34,7 +33,7 @@ export const parsePanels = (schema: Schema) => {
       panels.push({
         name,
         props: schema['x-component-props'],
-        schema
+        schema,
       })
     }
   })
@@ -48,7 +47,7 @@ export const createFormCollapse = (
     activeKey: defaultActiveKey,
     setActiveKey(keys: CollapseProps['activeKey']) {
       formCollapse.activeKey = keys
-    }
+    },
   })
   return formCollapse
 }
@@ -62,7 +61,7 @@ export const useFormCollapse = (
   }, deps)
 }
 
-export const FormCollapse: ComposedFormCollapse = observer(props => {
+export const FormCollapse: ComposedFormCollapse = observer((props) => {
   const schema = useSchema()
   const field = useField()
   const panels = parsePanels(schema)
@@ -78,7 +77,7 @@ export const FormCollapse: ComposedFormCollapse = observer(props => {
     } else if (activeKey === props?.key) return props.header
     const errors = field.form.queryFeedbacks({
       type: 'error',
-      address: `${field.address.concat(key)}.*`
+      address: `${field.address.concat(key)}.*`,
     })
     if (errors.length) {
       return (
@@ -94,7 +93,7 @@ export const FormCollapse: ComposedFormCollapse = observer(props => {
     <Collapse
       {...props}
       activeKey={activeKey}
-      onChange={key => {
+      onChange={(key) => {
         props?.onChange?.(key)
         formCollapse?.setActiveKey?.(key)
       }}

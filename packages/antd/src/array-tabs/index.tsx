@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { Tabs, Badge } from 'antd'
-import { useField } from '@formily/react'
+import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { TabsProps } from 'antd/lib/tabs'
-import { observer } from 'mobx-react-lite'
 
 export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()

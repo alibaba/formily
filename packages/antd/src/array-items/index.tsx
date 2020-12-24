@@ -9,9 +9,8 @@ import {
 } from '@ant-design/icons'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
-import { useField } from '@formily/react'
+import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
-import { observer } from 'mobx-react-lite'
 import cls from 'classnames'
 import {
   SortableContainer,

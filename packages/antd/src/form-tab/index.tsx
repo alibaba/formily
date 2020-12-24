@@ -2,10 +2,9 @@ import React, { Fragment, useMemo } from 'react'
 import { Tabs, Badge } from 'antd'
 import { makeAutoObservable } from 'mobx'
 import { TabPaneProps, TabsProps } from 'antd/lib/tabs'
-import { useField } from '@formily/react'
+import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema } from '@formily/json-schema'
-import { observer } from 'mobx-react-lite'
 
 interface IFormTab {
   activeKey: string
@@ -33,7 +32,7 @@ export const parseTabs = (schema: Schema) => {
       tabs.push({
         name,
         props: schema['x-component-props'],
-        schema
+        schema,
       })
     }
   })
@@ -45,7 +44,7 @@ export const createFormTab = (defaultActiveKey?: string) => {
     activeKey: defaultActiveKey,
     setActiveKey(key: string) {
       formTab.activeKey = key
-    }
+    },
   })
   return formTab
 }
@@ -56,7 +55,7 @@ export const useFormTab = (defaultActiveKey?: string, deps = []) => {
   }, deps)
 }
 
-export const FormTab: ComposedFormTab = observer(props => {
+export const FormTab: ComposedFormTab = observer((props) => {
   const schema = useSchema()
   const field = useField()
   const tabs = parseTabs(schema)
@@ -71,7 +70,7 @@ export const FormTab: ComposedFormTab = observer(props => {
       return props.tab
     const errors = field.form.queryFeedbacks({
       type: 'error',
-      address: `${field.address.concat(key)}.*`
+      address: `${field.address.concat(key)}.*`,
     })
     if (errors.length) {
       return (
@@ -87,7 +86,7 @@ export const FormTab: ComposedFormTab = observer(props => {
     <Tabs
       {...props}
       activeKey={activeKey}
-      onChange={key => {
+      onChange={(key) => {
         props.onChange?.(key)
         formTab?.setActiveKey?.(key)
       }}

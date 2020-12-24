@@ -12,14 +12,13 @@ import { ButtonProps } from 'antd/lib/button'
 import { PaginationProps } from 'antd/lib/pagination'
 import { TableProps, ColumnProps } from 'antd/lib/table'
 import { SelectProps } from 'antd/lib/select'
-import { observer } from 'mobx-react-lite'
 import cls from 'classnames'
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
 } from 'react-sortable-hoc'
-import { useForm, useField } from '@formily/react'
+import { useForm, useField, observer } from '@formily/react'
 import {
   useSchema,
   RecursionField,

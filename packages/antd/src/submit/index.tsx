@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import { ButtonProps } from 'antd/lib/button'
-import { useForm } from '@formily/react'
-import { observer } from 'mobx-react-lite'
+import { useForm, observer } from '@formily/react'
 
 interface ISubmitProps extends ButtonProps {
   onSubmit?: (values: any) => Promise<any> | any

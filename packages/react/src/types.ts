@@ -40,4 +40,4 @@ export type IStateMapper<Props> =
       to?: keyof Props
       transform?: (value: any) => any
     }
-  | ((props: any, field: Formily.Core.Types.GeneralField) => any)
+  | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
