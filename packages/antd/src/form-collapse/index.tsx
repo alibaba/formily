@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
-import { Schema } from '@formily/json-schema'
+import { Schema, SchemaKey } from '@formily/json-schema'
 import { isArr } from '@formily/shared/lib'
 interface IFormCollapse {
   activeKey: CollapseProps['activeKey']
@@ -27,7 +27,7 @@ type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
 }
 
 export const parsePanels = (schema: Schema) => {
-  const panels: { name: string; props: any; schema: Schema }[] = []
+  const panels: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
     if (schema['x-component']?.indexOf('CollapsePanel') > -1) {
       panels.push({
@@ -70,7 +70,7 @@ export const FormCollapse: ComposedFormCollapse = observer((props) => {
   }, [])
   const activeKey = props.activeKey || formCollapse?.activeKey
 
-  const badgedTab = (key: string, props: any) => {
+  const badgedTab = (key: SchemaKey, props: any) => {
     if (!activeKey) return props.header
     if (isArr(activeKey) && activeKey.includes(props?.key)) {
       return props.header

@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx'
 import { TabPaneProps, TabsProps } from 'antd/lib/tabs'
 import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
-import { Schema } from '@formily/json-schema'
+import { Schema, SchemaKey } from '@formily/json-schema'
 
 interface IFormTab {
   activeKey: string
@@ -26,7 +26,7 @@ type ComposedFormTab = React.FC<IFormTabProps> & {
 }
 
 export const parseTabs = (schema: Schema) => {
-  const tabs: { name: string; props: any; schema: Schema }[] = []
+  const tabs: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
     if (schema['x-component']?.indexOf('TabPane') > -1) {
       tabs.push({
@@ -64,7 +64,7 @@ export const FormTab: ComposedFormTab = observer((props) => {
   }, [])
   const activeKey = props.activeKey || formTab?.activeKey
 
-  const badgedTab = (key: string, props: any) => {
+  const badgedTab = (key: SchemaKey, props: any) => {
     if (!activeKey) return props.tab
     if (activeKey === props?.key || activeKey === props?.tabKey)
       return props.tab

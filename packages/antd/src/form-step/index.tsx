@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { connect, useField, observer } from '@formily/react'
-import { Schema } from '@formily/json-schema'
+import { Schema, SchemaKey } from '@formily/json-schema'
 import { makeAutoObservable } from 'mobx'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Steps } from 'antd'
@@ -28,7 +28,7 @@ type ComposedFormTab = React.FC<IFormStepProps> & {
 }
 
 type SchemaStep = {
-  name: string
+  name: SchemaKey
   props: any
   schema: Schema
 }
@@ -65,7 +65,7 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
     env.steps.forEach(({ name }) => {
       env.form.query(`${env.field.address}.${name}`).all.get((field) => {
         if (name === currentStep.name) {
-          field.setDisplay('visibility')
+          field.setDisplay('visible')
         } else {
           field.setDisplay('hidden')
         }
