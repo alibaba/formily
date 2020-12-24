@@ -4,13 +4,7 @@
  * 3. 行内布局
  * 4. 吸底布局
  */
-import React, {
-  useRef,
-  useLayoutEffect,
-  useState,
-  createContext,
-  useContext,
-} from 'react'
+import React, { useRef, useLayoutEffect, useState } from 'react'
 import StickyBox, { StickyBoxMode } from 'react-sticky-box'
 import { Form } from 'antd'
 import { FormItemProps } from 'antd/lib/form'
@@ -26,6 +20,7 @@ interface IStickyProps {
   style?: React.CSSProperties
   className?: string
   padding?: number
+  align?: React.CSSProperties['textAlign']
 }
 
 type ComposedButtonGroup = React.FC<FormItemProps> & {
@@ -58,15 +53,12 @@ function getDefaultBackground() {
   return bg
 }
 
-const PaddingContext = createContext(0)
-
 export const FormButtonGroup: ComposedButtonGroup = (props) => {
-  const padding = useContext(PaddingContext)
   return (
     <Form.Item
       {...props}
-      style={{ paddingTop: padding, paddingBottom: padding, ...props?.style }}
       label=" "
+      style={{ margin: 0, padding: 0, ...props.style }}
       colon={false}
     >
       {props.children}
@@ -77,6 +69,7 @@ export const FormButtonGroup: ComposedButtonGroup = (props) => {
 FormButtonGroup.Sticky = (props) => {
   const ref = useRef()
   const [color, setColor] = useState('transparent')
+
   useLayoutEffect(() => {
     if (ref.current) {
       const computed = getInheritedBackgroundColor(ref.current)
@@ -88,12 +81,16 @@ FormButtonGroup.Sticky = (props) => {
   return (
     <StickyBox
       {...props}
-      style={{ ...props.style, backgroundColor: color }}
+      style={{
+        textAlign: props.align,
+        backgroundColor: color,
+        paddingTop: 10,
+        paddingBottom: 10,
+        ...props.style,
+      }}
       bottom
     >
-      <PaddingContext.Provider value={props.padding || 10}>
-        <div ref={ref}>{props.children}</div>
-      </PaddingContext.Provider>
+      <div ref={ref}>{props.children}</div>
     </StickyBox>
   )
 }
