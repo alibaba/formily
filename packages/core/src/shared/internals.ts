@@ -155,7 +155,7 @@ export const validateToFeedbacks = async (
     context: this
   })
   const shouldSkipValidate =
-    field.display !== 'visibility' || field.pattern !== 'editable'
+    field.display !== 'visible' || field.pattern !== 'editable'
   runInAction(() => {
     each(results, (messages, type) => {
       field.setFeedback({

@@ -18,7 +18,7 @@ export default defineComponent({
         return h('div', slots.default && slots.default())
       }
 
-      if (field.display !== 'visibility') {
+      if (field.display !== 'visible') {
         return h('')
       } else {
         const renderDecorator = (children: Vue.VNode[]) => {

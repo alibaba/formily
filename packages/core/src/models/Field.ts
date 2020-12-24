@@ -215,7 +215,7 @@ export class Field<
           if (display === 'none') {
             this.caches.value = toJS(this.value)
             this.setValue()
-          } else if (display === 'visibility') {
+          } else if (display === 'visible') {
             if (isEmpty(this.value)) {
               this.setValue(this.caches.value)
               this.caches.value = undefined
@@ -282,7 +282,7 @@ export class Field<
 
   get display(): FieldDisplayTypes {
     if (this.selfDisplay) return this.selfDisplay
-    return this.parent?.display || 'visibility'
+    return this.parent?.display || 'visible'
   }
 
   get pattern(): FormPatternTypes {

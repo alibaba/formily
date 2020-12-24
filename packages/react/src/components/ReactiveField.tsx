@@ -25,7 +25,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = props => {
   const children = isFn(props.children)
     ? props.children(props.field, props.field.form)
     : props.children
-  if (field.display !== 'visibility') return null
+  if (field.display !== 'visible') return null
 
   const renderDecorator = (children: React.ReactNode) => {
     if (!field?.decorator?.[0]) return <Fragment>{children}</Fragment>

@@ -198,7 +198,7 @@ export type FieldCaches = {
   feedbacks?: Feedback[]
 }
 
-export type FieldDisplayTypes = 'none' | 'hidden' | 'visibility'
+export type FieldDisplayTypes = 'none' | 'hidden' | 'visible'
 
 export type FieldPatternTypes =
   | 'editable'

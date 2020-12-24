@@ -130,7 +130,7 @@ export class VoidField<
 
   get display(): FieldDisplayTypes {
     if (this.selfDisplay) return this.selfDisplay
-    return this.parent?.display || 'visibility'
+    return this.parent?.display || 'visible'
   }
 
   get pattern(): FormPatternTypes {

@@ -21,3 +21,5 @@ export const FormItem = connect(
     }
   )
 )
+
+export default FormItem

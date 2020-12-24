@@ -237,3 +237,5 @@ ArrayCards.MoveUp = React.forwardRef((props, ref) => {
     />
   )
 })
+
+export default ArrayCards
