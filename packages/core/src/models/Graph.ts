@@ -11,7 +11,7 @@ import {
   isFieldState,
   isArrayFieldState,
   isObjectFieldState,
-  isVoidField
+  isVoidField,
 } from '../shared'
 
 export class Graph {
@@ -23,7 +23,7 @@ export class Graph {
       setGraph: action,
       setFieldState: action,
       setState: action,
-      setVoidFieldState: action
+      setVoidFieldState: action,
     })
   }
 
@@ -57,7 +57,7 @@ export class Graph {
       decorator: toJS(field.decorator),
       component: toJS(field.component),
       validator: toJS(field.validator),
-      feedbacks: toJS(field.feedbacks)
+      feedbacks: toJS(field.feedbacks),
     }
   }
 
@@ -73,7 +73,7 @@ export class Graph {
       mounted: field.mounted,
       unmounted: field.unmounted,
       decorator: toJS(field.decorator),
-      component: toJS(field.component)
+      component: toJS(field.component),
     }
   }
 
@@ -95,7 +95,7 @@ export class Graph {
       errors: toJS(form.errors),
       warnings: toJS(form.warnings),
       successes: toJS(form.successes),
-      pattern: form.pattern
+      pattern: form.pattern,
     }
   }
 

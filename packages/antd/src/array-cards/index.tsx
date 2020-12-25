@@ -82,6 +82,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
               if (!isIndexComponent(schema)) return false
               return schema
             }}
+            onlyRenderProperties
           />
           {props.title || field.title}
         </span>
@@ -95,6 +96,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
               if (!isOperationComponent(schema)) return false
               return schema
             }}
+            onlyRenderProperties
           />
           {props.extra}
         </span>

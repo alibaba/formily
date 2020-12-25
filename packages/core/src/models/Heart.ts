@@ -46,17 +46,17 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
 
   publish = <P, C>(type: any, payload: P, context?: C) => {
     if (isStr(type)) {
-      this.lifecycles.forEach(lifecycle => {
+      this.lifecycles.forEach((lifecycle) => {
         lifecycle.notify(type, payload, context || this.context)
       })
-      each(this.outerLifecycles, lifecycles => {
-        lifecycles.forEach(lifecycle => {
+      each(this.outerLifecycles, (lifecycles) => {
+        lifecycles.forEach((lifecycle) => {
           lifecycle.notify(type, payload, context || this.context)
         })
       })
       this.notify({
         type,
-        payload
+        payload,
       })
     }
   }

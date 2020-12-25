@@ -2,7 +2,6 @@ import React, { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
 import { isFn } from '@formily/shared'
 import { isVoidField } from '@formily/core'
-
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
   children?:
@@ -13,7 +12,7 @@ interface IReactiveFieldProps {
     | React.ReactNode
 }
 
-const ReactiveInternal: React.FC<IReactiveFieldProps> = props => {
+const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   if (!props.field) {
     return (
       <Fragment>
@@ -59,5 +58,5 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = props => {
 ReactiveInternal.displayName = 'ReactiveField'
 
 export const ReactiveField = observer(ReactiveInternal, {
-  forwardRef: true
+  forwardRef: true,
 })

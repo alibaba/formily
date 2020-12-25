@@ -3,7 +3,7 @@ import {
   FormPathPattern,
   each,
   pascalCase,
-  isHTMLElement
+  isHTMLElement,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction } from 'mobx'
@@ -15,7 +15,7 @@ import {
   Feedback,
   INodePatch,
   GeneralField,
-  FormFeedback
+  FormFeedback,
 } from '../types'
 import { isArrayField, isVoidField } from './externals'
 
@@ -96,11 +96,11 @@ export const matchFeedback = (
 }
 
 export const queryFeedbacks = (field: Field, search: ISearchFeedback) => {
-  return field.feedbacks.filter(feedback => {
+  return field.feedbacks.filter((feedback) => {
     return matchFeedback(search, {
       ...feedback,
       address: field.address,
-      path: field.path
+      path: field.path,
     })
   })
 }
@@ -152,7 +152,7 @@ export const validateToFeedbacks = async (
     triggerType,
     validateFirst:
       field.props?.validateFirst || field.form?.props?.validateFirst,
-    context: this
+    context: this,
   })
   const shouldSkipValidate =
     field.display !== 'visible' || field.pattern !== 'editable'
@@ -162,7 +162,7 @@ export const validateToFeedbacks = async (
         triggerType,
         type,
         code: pascalCase(`validate-${type}`),
-        messages: shouldSkipValidate ? [] : messages
+        messages: shouldSkipValidate ? [] : messages,
       } as any)
     })
   })
@@ -177,7 +177,7 @@ export const spliceArrayState = (
     startIndex: 0,
     deleteCount: 0,
     insertCount: 0,
-    ...props
+    ...props,
   }
   const address = field.address.toString()
   const fields = field.form.fields
@@ -232,7 +232,7 @@ export const spliceArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
-            payload: buildNodeIndexes(field, newIdentifier)
+            payload: buildNodeIndexes(field, newIdentifier),
           })
         }
         if (isInsertNode(identifier) || isDeleteNode(identifier)) {
@@ -251,7 +251,7 @@ export const exchangeArrayState = (
   const { fromIndex, toIndex } = {
     fromIndex: 0,
     toIndex: 0,
-    ...props
+    ...props,
   }
   const address = field.address.toString()
   const fields = field.form.fields
@@ -298,7 +298,7 @@ export const exchangeArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
-            payload: buildNodeIndexes(field, newIdentifier)
+            payload: buildNodeIndexes(field, newIdentifier),
           })
         }
       }

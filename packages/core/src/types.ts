@@ -6,7 +6,7 @@ import {
   LifeCycle,
   ArrayField,
   VoidField,
-  ObjectField
+  ObjectField,
 } from './models'
 
 export type AnyFunction = (...args: any[]) => any
@@ -60,12 +60,12 @@ export enum LifeCycleTypes {
   ON_FIELD_VALIDATE_END = 'onFieldValidateEnd',
   ON_FIELD_RESET = 'onFieldReset',
   ON_FIELD_MOUNT = 'onFieldMount',
-  ON_FIELD_UNMOUNT = 'onFieldUnmount'
+  ON_FIELD_UNMOUNT = 'onFieldUnmount',
 }
 
 export type HeartSubscriber = ({
   type,
-  payload
+  payload,
 }: {
   type: string
   payload: any

@@ -5,7 +5,7 @@ import {
   Field,
   ArrayField,
   ObjectField,
-  VoidField
+  VoidField,
 } from '../models'
 import {
   AnyFunction,
@@ -14,14 +14,14 @@ import {
   IFieldState,
   IVoidFieldState,
   GeneralField,
-  IGeneralFieldState
+  IGeneralFieldState,
 } from '../types'
 
 const __FORM_HOOK_ENVS__ = {
   lifecycles: [],
   context: [],
   effectStart: false,
-  effectEnd: false
+  effectEnd: false,
 }
 
 export const createEffect = <
@@ -68,7 +68,7 @@ export const createEffectContext = <T = any>(defaultValue?: T) => {
         )
       }
       return __FORM_HOOK_ENVS__.context[index]
-    }
+    },
   }
 }
 

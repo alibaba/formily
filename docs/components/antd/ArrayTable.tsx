@@ -95,7 +95,7 @@ export default () => {
                     when: '{{$deps[0] == 123}}',
                     fullfill: {
                       state: {
-                        display: 'visibility'
+                        display: 'visible'
                       }
                     },
                     otherwise: {

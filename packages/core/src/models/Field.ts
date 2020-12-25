@@ -7,11 +7,11 @@ import {
   each,
   isFn,
   isPlainObj,
-  isEmpty
+  isEmpty,
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
-  parseValidatorDescriptions
+  parseValidatorDescriptions,
 } from '@formily/validator'
 import {
   action,
@@ -22,7 +22,7 @@ import {
   runInAction,
   toJS,
   IReactionDisposer,
-  autorun
+  autorun,
 } from 'mobx'
 import { Form } from './Form'
 import {
@@ -43,7 +43,7 @@ import {
   IFieldProps,
   IFieldResetOptions,
   FormPatternTypes,
-  IFieldState
+  IFieldState,
 } from '../types'
 import {
   buildNodeIndexes,
@@ -51,7 +51,7 @@ import {
   updateFeedback,
   queryFeedbacks,
   queryFeedbackMessages,
-  getValueFromEvent
+  getValueFromEvent,
 } from '../shared'
 import { Query } from './Query'
 
@@ -132,6 +132,7 @@ export class Field<
     this.validator = this.props.validator
     this.decorator = this.props.decorator
     this.component = this.props.component
+    this.required = this.props.required
   }
 
   protected makeObservable() {
@@ -186,7 +187,7 @@ export class Field<
       onMount: action,
       onUnmount: action,
       onFocus: action,
-      onBlur: action
+      onBlur: action,
     })
   }
 
@@ -211,7 +212,7 @@ export class Field<
       ),
       reaction(
         () => this.display,
-        display => {
+        (display) => {
           if (display === 'none') {
             this.caches.value = toJS(this.value)
             this.setValue()
@@ -225,7 +226,7 @@ export class Field<
       )
     )
     if (isArr(this.props.reactions)) {
-      this.props.reactions.forEach(reaction => {
+      this.props.reactions.forEach((reaction) => {
         if (isFn(reaction)) {
           this.disposers.push(autorun(() => reaction(this)))
         }
@@ -247,19 +248,19 @@ export class Field<
 
   get errors() {
     return queryFeedbackMessages(this, {
-      type: 'error'
+      type: 'error',
     })
   }
 
   get warnings() {
     return queryFeedbackMessages(this, {
-      type: 'warning'
+      type: 'warning',
     })
   }
 
   get successes() {
     return queryFeedbackMessages(this, {
-      type: 'success'
+      type: 'success',
     })
   }
 
@@ -292,7 +293,7 @@ export class Field<
 
   get required() {
     return parseValidatorDescriptions(this.validator).some(
-      desc => desc.required
+      (desc) => desc.required
     )
   }
 
@@ -319,6 +320,47 @@ export class Field<
     if (this.successes?.length) return 'success'
   }
 
+  set required(required: boolean) {
+    if (!isBool(required)) return
+    const hasRequired = parseValidatorDescriptions(this.validator).some(
+      (desc) => 'required' in desc
+    )
+    if (hasRequired) {
+      if (isPlainObj(this.validator)) {
+        this.validator['required'] = required
+      } else if (isArr(this.validator)) {
+        this.validator = this.validator.map((desc) => {
+          if ('required' in desc) {
+            desc.required = required
+            return desc
+          }
+          return desc
+        })
+      }
+    } else {
+      if (isPlainObj(this.validator)) {
+        this.validator['required'] = required
+      } else if (isArr(this.validator)) {
+        this.validator.push({
+          required,
+        })
+      } else if (this.validator) {
+        this.validator = [
+          this.validator,
+          {
+            required,
+          },
+        ]
+      } else {
+        this.validator = [
+          {
+            required,
+          },
+        ]
+      }
+    }
+  }
+
   setTitle = (title: TextType) => {
     this.title = title
   }
@@ -339,7 +381,7 @@ export class Field<
     this.setFeedback({
       type: 'error',
       code: 'EffectError',
-      messages
+      messages,
     })
   }
 
@@ -347,7 +389,7 @@ export class Field<
     this.setFeedback({
       type: 'warning',
       code: 'EffectWarning',
-      messages
+      messages,
     })
   }
 
@@ -355,7 +397,7 @@ export class Field<
     this.setFeedback({
       type: 'success',
       code: 'EffectSuccess',
-      messages
+      messages,
     })
   }
 
@@ -364,44 +406,7 @@ export class Field<
   }
 
   setRequired = (required?: boolean) => {
-    if (!isBool(required)) return
-    const hasRequired = parseValidatorDescriptions(this.validator).some(
-      desc => 'required' in desc
-    )
-    if (hasRequired) {
-      if (isPlainObj(this.validator)) {
-        this.validator['required'] = required
-      } else if (isArr(this.validator)) {
-        this.validator = this.validator.map(desc => {
-          if ('required' in desc) {
-            desc.required = required
-            return desc
-          }
-          return desc
-        })
-      }
-    } else {
-      if (isPlainObj(this.validator)) {
-        this.validator['required'] = required
-      } else if (isArr(this.validator)) {
-        this.validator.push({
-          required
-        })
-      } else if (this.validator) {
-        this.validator = [
-          this.validator,
-          {
-            required
-          }
-        ]
-      } else {
-        this.validator = [
-          {
-            required
-          }
-        ]
-      }
-    }
+    this.required = required
   }
 
   setValue = (value?: ValueType) => {
@@ -445,7 +450,7 @@ export class Field<
   ) => {
     this.component = [
       component || this.component?.[0],
-      { ...this.component?.[1], ...props }
+      { ...this.component?.[1], ...props },
     ]
   }
 
@@ -461,7 +466,7 @@ export class Field<
   ) => {
     this.decorator = [
       component || this.decorator?.[0],
-      { ...this.decorator?.[1], ...props }
+      { ...this.decorator?.[1], ...props },
     ]
   }
 
@@ -477,6 +482,12 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
+    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+  }
+
+  onMount = () => {
+    this.mounted = true
+    this.unmounted = false
     if (!isValid(this.initialValue)) {
       this.form.setInitialValuesIn(this.path, this.props.initialValue)
     }
@@ -491,13 +502,6 @@ export class Field<
         this.form.setValuesIn(this.path, this.initialValue)
       }
     }
-    this.setRequired(this.props.required)
-    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-  }
-
-  onMount = () => {
-    this.mounted = true
-    this.unmounted = false
     this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }
 
@@ -533,7 +537,7 @@ export class Field<
   validate = async (triggerType?: ValidatorTriggerType) => {
     if (!triggerType) {
       const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
-        desc => desc.triggerType
+        (desc) => desc.triggerType
       )
       const results = {}
       for (let i = 0; i < allTriggerTypes.length; i++) {
@@ -579,7 +583,7 @@ export class Field<
     return new Query({
       pattern,
       base: this.address,
-      form: this.form
+      form: this.form,
     })
   }
 
@@ -588,7 +592,7 @@ export class Field<
   }
 
   dispose = () => {
-    this.disposers.forEach(dispose => {
+    this.disposers.forEach((dispose) => {
       if (isFn(dispose)) {
         dispose()
       }

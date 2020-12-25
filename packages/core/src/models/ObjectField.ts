@@ -17,7 +17,7 @@ export class ObjectField<
       address,
       {
         ...props,
-        value: isObj(props.value) ? props.value : {}
+        value: isObj(props.value) ? props.value : {},
       },
       form
     )

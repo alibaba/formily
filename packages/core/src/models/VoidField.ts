@@ -5,7 +5,7 @@ import {
   action,
   computed,
   IReactionDisposer,
-  autorun
+  autorun,
 } from 'mobx'
 import {
   JSXComponent,
@@ -17,7 +17,7 @@ import {
   FieldComponent,
   IVoidFieldProps,
   FormPatternTypes,
-  IVoidFieldState
+  IVoidFieldState,
 } from '../types'
 import { buildNodeIndexes } from '../shared'
 import { Form } from './Form'
@@ -103,13 +103,13 @@ export class VoidField<
       setDecoratorProps: action,
       onInit: action,
       onMount: action,
-      onUnmount: action
+      onUnmount: action,
     })
   }
 
   protected makeReactive() {
     if (isArr(this.props.reactions)) {
-      this.props.reactions.forEach(reaction => {
+      this.props.reactions.forEach((reaction) => {
         if (isFn(reaction)) {
           this.disposers.push(autorun(() => reaction(this)))
         }
@@ -160,7 +160,7 @@ export class VoidField<
   ) => {
     this.component = [
       component || this.component?.[0],
-      { ...this.component?.[1], ...props }
+      { ...this.component?.[1], ...props },
     ]
   }
 
@@ -176,7 +176,7 @@ export class VoidField<
   ) => {
     this.decorator = [
       component || this.decorator?.[0],
-      { ...this.decorator?.[1], ...props }
+      { ...this.decorator?.[1], ...props },
     ]
   }
 
@@ -211,12 +211,12 @@ export class VoidField<
     return new Query({
       pattern,
       base: this.address,
-      form: this.form
+      form: this.form,
     })
   }
 
   dispose = () => {
-    this.disposers.forEach(dispose => {
+    this.disposers.forEach((dispose) => {
       if (isFn(dispose)) {
         dispose()
       }

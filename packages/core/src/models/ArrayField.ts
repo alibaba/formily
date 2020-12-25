@@ -20,7 +20,7 @@ export class ArrayField<
       address,
       {
         ...props,
-        value: isArr(props.value) ? props.value : []
+        value: isArr(props.value) ? props.value : [],
       },
       form
     )
@@ -49,7 +49,7 @@ export class ArrayField<
       this.value?.splice(index, 0, items)
       spliceArrayState(this, {
         startIndex: index,
-        insertCount: items.length
+        insertCount: items.length,
       })
       this.validate('onInput')
     })
@@ -61,7 +61,7 @@ export class ArrayField<
       this.value?.splice(index, 1)
       spliceArrayState(this, {
         startIndex: index,
-        deleteCount: 1
+        deleteCount: 1,
       })
       this.validate('onInput')
     })
@@ -81,7 +81,7 @@ export class ArrayField<
     return runInAction(() => {
       const unshifted = this.value.unshift(...items)
       spliceArrayState(this, {
-        insertCount: items.length
+        insertCount: items.length,
       })
       this.validate('onInput')
       return unshifted
@@ -97,7 +97,7 @@ export class ArrayField<
       this.value.splice(toIndex, 0, fromItem)
       exchangeArrayState(this, {
         fromIndex,
-        toIndex
+        toIndex,
       })
       this.validate('onInput')
     })
