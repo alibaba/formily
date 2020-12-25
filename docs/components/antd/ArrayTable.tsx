@@ -129,7 +129,7 @@ export default () => {
               .query('array.a3')
               .void.get(field =>
                 field.setDisplay(
-                  field.display === 'none' ? 'visibility' : 'none'
+                  field.display === 'none' ? 'visible' : 'none'
                 )
               )
           }}
@@ -139,7 +139,7 @@ export default () => {
         <Button
           onClick={() => {
             form.setInitialValues({
-              array: range(100)
+              array: range(1000)
             })
           }}
         >

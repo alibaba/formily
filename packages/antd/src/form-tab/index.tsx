@@ -25,9 +25,13 @@ type ComposedFormTab = React.FC<IFormTabProps> & {
   createFormTab?: (defaultActiveKey?: string) => IFormTab
 }
 
-export const parseTabs = (schema: Schema) => {
+export const useTabs = () => {
+  const tabsField = useField()
+  const schema = useSchema()
   const tabs: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
+    const field = tabsField.query(tabsField.address.concat(name)).void.get()
+    if (field?.display === 'none' || field?.display === 'hidden') return
     if (schema['x-component']?.indexOf('TabPane') > -1) {
       tabs.push({
         name,
@@ -56,18 +60,14 @@ export const useFormTab = (defaultActiveKey?: string, deps = []) => {
 }
 
 export const FormTab: ComposedFormTab = observer((props) => {
-  const schema = useSchema()
   const field = useField()
-  const tabs = parseTabs(schema)
+  const tabs = useTabs()
   const formTab = useMemo(() => {
     return props.formTab ? props.formTab : createFormTab()
   }, [])
   const activeKey = props.activeKey || formTab?.activeKey
 
   const badgedTab = (key: SchemaKey, props: any) => {
-    if (!activeKey) return props.tab
-    if (activeKey === props?.key || activeKey === props?.tabKey)
-      return props.tab
     const errors = field.form.queryFeedbacks({
       type: 'error',
       address: `${field.address.concat(key)}.*`,

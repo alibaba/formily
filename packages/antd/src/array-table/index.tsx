@@ -86,7 +86,6 @@ const isAdditionComponent = (schema: Schema) => {
 
 const useArrayTableSources = () => {
   const arrayField = useField()
-  const form = useForm()
   const schema = useSchema()
   const parseSources = (schema: Schema): ObservableColumnSource[] => {
     if (
@@ -97,10 +96,7 @@ const useArrayTableSources = () => {
       if (!schema['x-component-props']?.['dataIndex'] && !schema['name'])
         return []
       const name = schema['x-component-props']?.['dataIndex'] || schema['name']
-      const path = arrayField.address.concat(name)
-      const field = form.fields[
-        path.toString()
-      ] as Formily.Core.Models.VoidField
+      const field = arrayField.query(arrayField.address.concat(name)).void.get()
       const fieldProps =
         field?.props || transformSchemaToFieldProps(name, schema, {})
       const columnProps =
@@ -143,7 +139,7 @@ const useArrayTableColumns = (
   sources: ObservableColumnSource[]
 ): TableProps<any>['columns'] => {
   return sources.reduce((buf, { name, columnProps, schema, display }, key) => {
-    if (display === 'none' || display === 'hidden') return buf
+    if (display !== 'visible') return buf
     if (!isColumnComponent(schema)) return buf
     return buf.concat({
       ...columnProps,

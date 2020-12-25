@@ -9,7 +9,7 @@ import {
   globalThisPolyfill,
   clone,
   reduce,
-  defaults
+  defaults,
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -26,7 +26,7 @@ import {
   IFieldResetOptions,
   FormFields,
   IFieldFactoryProps,
-  IVoidFieldFactoryProps
+  IVoidFieldFactoryProps,
 } from '../types'
 import { isVoidField, getLifeCyclesByEffects } from '../shared'
 import { ArrayField } from './ArrayField'
@@ -77,7 +77,7 @@ export class Form {
     this.graph = new Graph(this)
     this.heart = new Heart({
       lifecycles: this.lifecycles,
-      context: this
+      context: this,
     })
   }
 
@@ -105,7 +105,7 @@ export class Form {
       setFormGraph: action,
       onMount: action,
       onUnmount: action,
-      onInit: action
+      onInit: action,
     })
   }
 
@@ -119,19 +119,19 @@ export class Form {
 
   get errors() {
     return this.queryFeedbacks({
-      type: 'error'
+      type: 'error',
     })
   }
 
   get warnings() {
     return this.queryFeedbacks({
-      type: 'warning'
+      type: 'warning',
     })
   }
 
   get successes() {
     return this.queryFeedbacks({
-      type: 'success'
+      type: 'success',
     })
   }
 
@@ -297,33 +297,33 @@ export class Form {
   }
 
   clearErrors = (pattern: FormPathPattern = '*') => {
-    this.query(pattern).all.getAll(field => {
+    this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({
           type: 'error',
-          messages: []
+          messages: [],
         })
       }
     })
   }
 
   clearWarnings = (pattern: FormPathPattern = '*') => {
-    this.query(pattern).all.getAll(field => {
+    this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({
           type: 'warning',
-          messages: []
+          messages: [],
         })
       }
     })
   }
 
   clearSuccesses = (pattern: FormPathPattern) => {
-    this.query(pattern).all.getAll(field => {
+    this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({
           type: 'success',
-          messages: []
+          messages: [],
         })
       }
     })
@@ -333,7 +333,7 @@ export class Form {
     return new Query({
       pattern,
       base: '',
-      form: this
+      form: this,
     })
   }
 
@@ -343,10 +343,10 @@ export class Form {
       (messages, field) => {
         if (!isVoidField(field)) {
           return messages.concat(
-            field.queryFeedbacks(search).map(feedback => ({
+            field.queryFeedbacks(search).map((feedback) => ({
               ...feedback,
               address: field.address.toString(),
-              path: field.path.toString()
+              path: field.path.toString(),
             }))
           )
         }
@@ -389,7 +389,7 @@ export class Form {
     this.heart.clear()
     this.fields = {}
     this.indexes.clear()
-    each(this.fields, field => {
+    each(this.fields, (field) => {
       field.dispose()
     })
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
@@ -409,7 +409,7 @@ export class Form {
     this.setValidating(true)
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
-    this.query(pattern).all.getAll(field => {
+    this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
         tasks.push(field.validate())
       }
@@ -449,7 +449,7 @@ export class Form {
 
   reset = async (pattern: FormPathPattern, options?: IFieldResetOptions) => {
     const tasks = []
-    this.query(pattern).all.getAll(field => {
+    this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
         tasks.push(field.reset(options))
       }
@@ -459,6 +459,6 @@ export class Form {
   }
 
   static defaultProps: IFormProps = {
-    initialValues: {}
+    initialValues: {},
   }
 }

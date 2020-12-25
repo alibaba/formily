@@ -5,7 +5,6 @@ import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema, SchemaKey } from '@formily/json-schema'
-import { isArr } from '@formily/shared/lib'
 interface IFormCollapse {
   activeKey: CollapseProps['activeKey']
   setActiveKey(key: CollapseProps['activeKey']): void
@@ -26,9 +25,15 @@ type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
   ) => IFormCollapse
 }
 
-export const parsePanels = (schema: Schema) => {
+export const usePanels = () => {
+  const collapseField = useField()
+  const schema = useSchema()
   const panels: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
+    const field = collapseField
+      .query(collapseField.address.concat(name))
+      .void.get()
+    if (field?.display === 'none' || field?.display === 'hidden') return
     if (schema['x-component']?.indexOf('CollapsePanel') > -1) {
       panels.push({
         name,
@@ -62,19 +67,14 @@ export const useFormCollapse = (
 }
 
 export const FormCollapse: ComposedFormCollapse = observer((props) => {
-  const schema = useSchema()
   const field = useField()
-  const panels = parsePanels(schema)
+  const panels = usePanels()
   const formCollapse = useMemo(() => {
     return props.formCollapse ? props.formCollapse : createFormCollapse()
   }, [])
   const activeKey = props.activeKey || formCollapse?.activeKey
 
-  const badgedTab = (key: SchemaKey, props: any) => {
-    if (!activeKey) return props.header
-    if (isArr(activeKey) && activeKey.includes(props?.key)) {
-      return props.header
-    } else if (activeKey === props?.key) return props.header
+  const badgedHeader = (key: SchemaKey, props: any) => {
     const errors = field.form.queryFeedbacks({
       type: 'error',
       address: `${field.address.concat(key)}.*`,
@@ -99,7 +99,11 @@ export const FormCollapse: ComposedFormCollapse = observer((props) => {
       }}
     >
       {panels.map(({ props, schema, name }) => (
-        <Collapse.Panel {...props} header={badgedTab(name, props)} forceRender>
+        <Collapse.Panel
+          {...props}
+          header={badgedHeader(name, props)}
+          forceRender
+        >
           <RecursionField schema={schema} name={name} />
         </Collapse.Panel>
       ))}
