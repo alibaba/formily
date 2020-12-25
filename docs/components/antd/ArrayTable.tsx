@@ -10,13 +10,13 @@ const SchemaField = createSchemaField({
     FormItem,
     FormTab,
     Input,
-    ArrayTable
-  }
+    ArrayTable,
+  },
 })
 
 const range = (count: number) =>
   Array.from(new Array(count)).map((_, key) => ({
-    aaa: key
+    aaa: key,
   }))
 
 const form = createForm()
@@ -95,15 +95,15 @@ export default () => {
                     when: '{{$deps[0] == 123}}',
                     fullfill: {
                       state: {
-                        display: 'visible'
-                      }
+                        display: 'visible',
+                      },
                     },
                     otherwise: {
                       state: {
-                        display: 'none'
-                      }
-                    }
-                  }
+                        display: 'none',
+                      },
+                    },
+                  },
                 ]}
                 x-component="Input"
               />
@@ -127,10 +127,8 @@ export default () => {
           onClick={() => {
             form
               .query('array.a3')
-              .void.get(field =>
-                field.setDisplay(
-                  field.display === 'none' ? 'visible' : 'none'
-                )
+              .void.get((field) =>
+                field.setDisplay(field.display === 'none' ? 'visible' : 'none')
               )
           }}
         >
@@ -139,7 +137,7 @@ export default () => {
         <Button
           onClick={() => {
             form.setInitialValues({
-              array: range(1000)
+              array: range(1000),
             })
           }}
         >

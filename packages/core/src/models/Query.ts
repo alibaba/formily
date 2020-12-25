@@ -1,4 +1,5 @@
-import { FormPath, isFn } from '@formily/shared'
+import { FormPath, isFn, each } from '@formily/shared'
+import { untracked } from 'mobx'
 import { GeneralField, IQueryProps } from '../types'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
@@ -6,41 +7,59 @@ import { Form } from './Form'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
 
-export class Query<T = Field> {
+export class Query<T = Field | ArrayField | ObjectField> {
   private props: IQueryProps
   private pattern: FormPath
   private form: Form
-  private type: string = 'Field'
-  constructor(props: IQueryProps, type = 'Field') {
+  private type: string
+  constructor(props: IQueryProps, type?: string) {
     this.props = props
     this.pattern = FormPath.parse(props.pattern, props.base)
     this.form = props.form
     this.type = type
   }
+
+  match(field: GeneralField) {
+    if (!this.type)
+      return (
+        field.displayName === 'Field' ||
+        field.displayName === 'ArrayField' ||
+        field.displayName === 'ObjectField'
+      )
+    return field.displayName === this.type || this.type === 'ALL'
+  }
+
   get(): T
   get<Result>(getter: (field: T, address: FormPath) => Result): Result
   get(getter?: any): any {
     const output = (field: GeneralField) => {
       if (!field) return
-      if (field.displayName === this.type || this.type === 'ALL') {
+      if (this.match(field)) {
         if (isFn(getter)) {
           return getter(field as any, field.address) as any
         }
         return field as any
       }
     }
+
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)
       const field = this.form.fields[identifier] || this.form.fields[index]
       return output(field)
     } else {
-      for (let address in this.form.fields) {
-        const field = this.form.fields[address]
-        if (this.pattern.matchAliasGroup(field.address, field.path)) {
-          return output(field)
-        }
-      }
+      return output(
+        this.form.fields[
+          untracked(() => {
+            for (let address in this.form.fields) {
+              const field = this.form.fields[address]
+              if (this.pattern.matchAliasGroup(field.address, field.path)) {
+                return address
+              }
+            }
+          })
+        ]
+      )
     }
   }
   getAll(): T[]
@@ -49,7 +68,7 @@ export class Query<T = Field> {
     const results = []
     const output = (field: GeneralField) => {
       if (!field) return
-      if (field.displayName === this.type || this.type === 'ALL') {
+      if (this.match(field)) {
         if (isFn(mapper)) {
           results.push(mapper(field as any, field.address))
         } else {
@@ -63,14 +82,19 @@ export class Query<T = Field> {
       const field = this.form.fields[identifier] || this.form.fields[index]
       return output(field)
     } else {
-      for (let address in this.form.fields) {
-        const field = this.form.fields[address]
-        if (this.pattern.matchAliasGroup(field.address, field.path)) {
-          output(field)
-        }
-      }
+      untracked(() => {
+        const results = []
+        each(this.form.fields, (field, address) => {
+          if (this.pattern.matchAliasGroup(field.address, field.path)) {
+            results.push(address)
+          }
+        })
+        return results
+      }).forEach((address) => {
+        output(this.form.fields[address])
+      })
     }
-    return results as any
+    return results
   }
 
   get object() {

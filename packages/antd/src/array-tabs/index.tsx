@@ -28,8 +28,6 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   }
   const badgedTab = (index: number, key: string) => {
     const tab = `${field.title || 'Untitled'} ${index + 1}`
-    if (!activeKey) return tab
-    if (activeKey === key) return tab
     const path = field.address.concat(index)
     const errors = field.form.queryFeedbacks({
       type: 'error',

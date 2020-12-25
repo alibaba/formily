@@ -1,6 +1,5 @@
 import { action, makeObservable, observable, toJS, runInAction } from 'mobx'
 import {
-  each,
   FormPath,
   FormPathPattern,
   isFn,
@@ -8,7 +7,6 @@ import {
   uid,
   globalThisPolyfill,
   clone,
-  reduce,
   defaults,
 } from '@formily/shared'
 import { Heart } from './Heart'
@@ -338,22 +336,17 @@ export class Form {
   }
 
   queryFeedbacks = (search: ISearchFeedback): FormFeedback[] => {
-    return reduce(
-      this.fields,
-      (messages, field) => {
-        if (!isVoidField(field)) {
-          return messages.concat(
-            field.queryFeedbacks(search).map((feedback) => ({
-              ...feedback,
-              address: field.address.toString(),
-              path: field.path.toString(),
-            }))
-          )
-        }
-        return messages
-      },
-      []
-    )
+    return this.query(search.address || search.path || '*')
+      .getAll()
+      .reduce((messages, field) => {
+        return messages.concat(
+          field.queryFeedbacks(search).map((feedback) => ({
+            ...feedback,
+            address: field.address.toString(),
+            path: field.path.toString(),
+          }))
+        )
+      }, [])
   }
 
   notify = (type: LifeCycleTypes, payload?: any) => {
@@ -389,9 +382,7 @@ export class Form {
     this.heart.clear()
     this.fields = {}
     this.indexes.clear()
-    each(this.fields, (field) => {
-      field.dispose()
-    })
+    this.query('*').all.get((field) => field.dispose())
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }
