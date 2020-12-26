@@ -361,6 +361,40 @@ export class Field<
     }
   }
 
+  set value(value: ValueType) {
+    this.modified = true
+    this.form.modified = true
+    this.form.setValuesIn(this.path, value)
+  }
+
+  set initialValue(initialValue: ValueType) {
+    this.form.setInitialValuesIn(this.path, initialValue)
+  }
+
+  set errors(messages: FeedbackMessage) {
+    this.setFeedback({
+      type: 'error',
+      code: 'EffectError',
+      messages,
+    })
+  }
+
+  set warnings(messages: FeedbackMessage) {
+    this.setFeedback({
+      type: 'warning',
+      code: 'EffectWarning',
+      messages,
+    })
+  }
+
+  set successes(messages: FeedbackMessage) {
+    this.setFeedback({
+      type: 'success',
+      code: 'EffectSuccess',
+      messages,
+    })
+  }
+
   setTitle = (title: TextType) => {
     this.title = title
   }
@@ -378,27 +412,15 @@ export class Field<
   }
 
   setErrors = (messages: FeedbackMessage) => {
-    this.setFeedback({
-      type: 'error',
-      code: 'EffectError',
-      messages,
-    })
+    this.errors = messages
   }
 
   setWarnings = (messages: FeedbackMessage) => {
-    this.setFeedback({
-      type: 'warning',
-      code: 'EffectWarning',
-      messages,
-    })
+    this.warnings = messages
   }
 
   setSuccesses = (messages: FeedbackMessage) => {
-    this.setFeedback({
-      type: 'success',
-      code: 'EffectSuccess',
-      messages,
-    })
+    this.successes = messages
   }
 
   setValidator = (validator?: FieldValidator) => {
@@ -410,13 +432,11 @@ export class Field<
   }
 
   setValue = (value?: ValueType) => {
-    this.modified = true
-    this.form.modified = true
-    this.form.setValuesIn(this.path, value)
+    this.value = value
   }
 
   setInitialValue = (initialValue?: ValueType) => {
-    this.form.setInitialValuesIn(this.path, initialValue)
+    this.initialValue = initialValue
   }
 
   setDisplay = (type: FieldDisplayTypes) => {

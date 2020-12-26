@@ -1,9 +1,15 @@
-import React, { createContext, Fragment, useContext, useState } from 'react'
+import React, {
+  createContext,
+  Fragment,
+  useContext,
+  useState,
+  useRef,
+} from 'react'
 import { Table, Button, Pagination, Space, Select, Badge } from 'antd'
 import {
-  MinusCircleOutlined,
-  DownCircleOutlined,
-  UpCircleOutlined,
+  DeleteOutlined,
+  DownOutlined,
+  UpOutlined,
   PlusOutlined,
   MenuOutlined,
 } from '@ant-design/icons'
@@ -267,6 +273,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
 
 export const ArrayTable: ComposedArrayTable = observer(
   (props: TableProps<any>) => {
+    const ref = useRef<HTMLDivElement>()
     const field = useField<Formily.Core.Models.ArrayField>()
     const dataSource = Array.isArray(field.value) ? [...field.value] : []
     const sources = useArrayTableSources()
@@ -276,56 +283,78 @@ export const ArrayTable: ComposedArrayTable = observer(
     const defaultRowKey = (record: any) => {
       return dataSource.indexOf(record)
     }
+    const addTdStyles = (node: HTMLElement) => {
+      const helper = document.body.querySelector(
+        '.ant-array-table-sort-helper'
+      )
+      if (helper) {
+        const tds = node.querySelectorAll('td')
+        helper.querySelectorAll('td').forEach((td, index) => {
+          if (tds[index]) {
+            td.style.width = getComputedStyle(tds[index]).width
+          }
+        })
+      }
+    }
+
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
         {(dataSource, pager) => (
-          <ArrayContext.Provider value={field}>
-            <Table
-              size="small"
-              rowKey={defaultRowKey}
-              {...props}
-              bordered
-              pagination={false}
-              columns={columns}
-              onChange={() => {}}
-              dataSource={dataSource}
-              components={{
-                body: {
-                  wrapper: (props: any) => (
-                    <SortableBody
-                      useDragHandle
-                      lockAxis="y"
-                      helperClass="ant-array-table-row-dragging"
-                      onSortEnd={({ oldIndex, newIndex }) => {
-                        field.move(oldIndex, newIndex)
-                      }}
-                      {...props}
-                    />
-                  ),
-                  row: (props: any) => {
-                    return (
-                      <SortableRow
-                        index={props['data-row-key'] || 0}
+          <div ref={ref} className="ant-array-table">
+            <ArrayContext.Provider value={field}>
+              <Table
+                size="small"
+                rowKey={defaultRowKey}
+                {...props}
+                bordered
+                pagination={false}
+                columns={columns}
+                onChange={() => {}}
+                dataSource={dataSource}
+                components={{
+                  body: {
+                    wrapper: (props: any) => (
+                      <SortableBody
+                        useDragHandle
+                        lockAxis="y"
+                        helperClass="ant-array-table-sort-helper"
+                        helperContainer={() => {
+                          return ref.current?.querySelector('tbody')
+                        }}
+                        onSortStart={({ node }) => {
+                          addTdStyles(node)
+                        }}
+                        onSortEnd={({ oldIndex, newIndex }) => {
+                          field.move(oldIndex, newIndex)
+                        }}
                         {...props}
                       />
-                    )
+                    ),
+                    row: (props: any) => {
+                      return (
+                        <SortableRow
+                          index={props['data-row-key'] || 0}
+                          {...props}
+                        />
+                      )
+                    },
                   },
-                },
-              }}
-            />
-            <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
-            {sources.map((column, key) => {
-              //专门用来承接对Column的状态管理
-              if (!isColumnComponent(column.schema)) return
-              return React.createElement(RecursionField, {
-                name: column.name,
-                schema: column.schema,
-                onlyRenderSelf: true,
-                key,
-              })
-            })}
-            {addition}
-          </ArrayContext.Provider>
+                }}
+              />
+              <div style={{ marginTop: 5, marginBottom: 5 }}>{pager}</div>
+              {sources.map((column, key) => {
+                //专门用来承接对Column的状态管理
+                if (!isColumnComponent(column.schema)) return
+                return React.createElement(RecursionField, {
+                  name: column.name,
+                  schema: column.schema,
+                  onlyRenderSelf: true,
+                  key,
+                })
+              })}
+              {addition}
+            </ArrayContext.Provider>
+          </div>
         )}
       </ArrayTablePagination>
     )
@@ -380,7 +409,7 @@ ArrayTable.Remove = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
   return (
-    <MinusCircleOutlined
+    <DeleteOutlined
       {...props}
       className={cls('ant-array-table-remove', props.className)}
       ref={ref}
@@ -395,7 +424,7 @@ ArrayTable.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
   return (
-    <DownCircleOutlined
+    <DownOutlined
       {...props}
       className={cls('ant-array-table-move-down', props.className)}
       ref={ref}
@@ -410,7 +439,7 @@ ArrayTable.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
   return (
-    <UpCircleOutlined
+    <UpOutlined
       {...props}
       className={cls('ant-array-table-move-up', props.className)}
       ref={ref}

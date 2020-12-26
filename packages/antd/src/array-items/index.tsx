@@ -1,9 +1,9 @@
 import React, { createContext, useContext } from 'react'
 import { Button } from 'antd'
 import {
-  MinusCircleOutlined,
-  DownCircleOutlined,
-  UpCircleOutlined,
+  DeleteOutlined,
+  DownOutlined,
+  UpOutlined,
   PlusOutlined,
   MenuOutlined,
 } from '@ant-design/icons'
@@ -154,7 +154,7 @@ ArrayItems.Remove = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
   return (
-    <MinusCircleOutlined
+    <DeleteOutlined
       {...props}
       className={cls('ant-array-items-remove', props.className)}
       ref={ref}
@@ -169,7 +169,7 @@ ArrayItems.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
   return (
-    <DownCircleOutlined
+    <DownOutlined
       {...props}
       className={cls('ant-array-items-move-down', props.className)}
       ref={ref}
@@ -184,7 +184,7 @@ ArrayItems.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
   return (
-    <UpCircleOutlined
+    <UpOutlined
       {...props}
       className={cls('ant-array-items-move-up', props.className)}
       ref={ref}
