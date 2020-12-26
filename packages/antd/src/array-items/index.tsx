@@ -24,7 +24,7 @@ interface IArrayItemsAdditionProps extends ButtonProps {
   method?: 'push' | 'unshift'
 }
 
-type ComposedArrayItems = React.FC & {
+type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> & {
   SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayItemsAdditionProps>
   Index?: React.FC
@@ -78,30 +78,36 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
   return (
     <ArrayContext.Provider value={field}>
-      <SortableList
-        useDragHandle
-        lockAxis="y"
-        helperClass="ant-array-items-dragging"
-        onSortEnd={({ oldIndex, newIndex }) => {
-          field.move(oldIndex, newIndex)
-        }}
+      <div
+        {...props}
+        onChange={() => {}}
+        className={cls('ant-array-items', props.className)}
       >
-        {dataSource?.map((item, index) => {
-          const items = Array.isArray(schema.items)
-            ? schema.items[index] || schema.items[0]
-            : schema.items
-          return (
-            <ArrayIndexContext.Provider key={index} value={index}>
-              <SortableItem key={`item-${index}`} index={index}>
-                <div className="ant-array-items-item-inner">
-                  <RecursionField schema={items} name={index} />
-                </div>
-              </SortableItem>
-            </ArrayIndexContext.Provider>
-          )
-        })}
-      </SortableList>
-      {addition}
+        <SortableList
+          useDragHandle
+          lockAxis="y"
+          helperClass="ant-array-items-dragging"
+          onSortEnd={({ oldIndex, newIndex }) => {
+            field.move(oldIndex, newIndex)
+          }}
+        >
+          {dataSource?.map((item, index) => {
+            const items = Array.isArray(schema.items)
+              ? schema.items[index] || schema.items[0]
+              : schema.items
+            return (
+              <ArrayIndexContext.Provider key={index} value={index}>
+                <SortableItem key={`item-${index}`} index={index}>
+                  <div className="ant-array-items-item-inner">
+                    <RecursionField schema={items} name={index} />
+                  </div>
+                </SortableItem>
+              </ArrayIndexContext.Provider>
+            )
+          })}
+        </SortableList>
+        {addition}
+      </div>
     </ArrayContext.Provider>
   )
 })
