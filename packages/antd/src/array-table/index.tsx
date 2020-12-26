@@ -284,15 +284,15 @@ export const ArrayTable: ComposedArrayTable = observer(
       return dataSource.indexOf(record)
     }
     const addTdStyles = (node: HTMLElement) => {
-      const helper = document.body.querySelector(
-        '.ant-array-table-sort-helper'
-      )
+      const helper = document.body.querySelector('.ant-array-table-sort-helper')
       if (helper) {
         const tds = node.querySelectorAll('td')
-        helper.querySelectorAll('td').forEach((td, index) => {
-          if (tds[index]) {
-            td.style.width = getComputedStyle(tds[index]).width
-          }
+        requestAnimationFrame(() => {
+          helper.querySelectorAll('td').forEach((td, index) => {
+            if (tds[index]) {
+              td.style.width = getComputedStyle(tds[index]).width
+            }
+          })
         })
       }
     }

@@ -36,11 +36,15 @@ export default () => {
           minItems={5}
           x-decorator="FormItem"
           x-component="ArrayTable"
+          x-component-props={{
+            pagination: { pageSize: 10 },
+            scroll: { x: '100%' },
+          }}
         >
           <SchemaField.Object>
             <SchemaField.Void
               x-component="ArrayTable.Column"
-              x-component-props={{ width: 50, title: '排序', align: 'center' }}
+              x-component-props={{ width: 50, title: 'Sort', align: 'center' }}
             >
               <SchemaField.String
                 x-decorator="FormItem"
@@ -50,7 +54,7 @@ export default () => {
             </SchemaField.Void>
             <SchemaField.Void
               x-component="ArrayTable.Column"
-              x-component-props={{ width: 50, title: '索引', align: 'center' }}
+              x-component-props={{ width: 80, title: 'Index', align: 'center' }}
             >
               <SchemaField.String
                 x-decorator="FormItem"
@@ -60,7 +64,7 @@ export default () => {
             </SchemaField.Void>
             <SchemaField.Void
               x-component="ArrayTable.Column"
-              x-component-props={{ title: 'A1', dataIndex: 'a1' }}
+              x-component-props={{ title: 'A1', dataIndex: 'a1', width: 200 }}
             >
               <SchemaField.String
                 name="aaa"
@@ -71,7 +75,47 @@ export default () => {
             </SchemaField.Void>
             <SchemaField.Void
               x-component="ArrayTable.Column"
-              x-component-props={{ title: 'A2', dataIndex: 'a2' }}
+              x-component-props={{ title: 'A2', width: 200 }}
+            >
+              <SchemaField.String
+                x-decorator="FormItem"
+                required
+                x-component="Input"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A3', width: 200 }}
+            >
+              <SchemaField.String
+                x-decorator="FormItem"
+                required
+                x-component="Input"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A4', width: 200 }}
+            >
+              <SchemaField.String
+                x-decorator="FormItem"
+                required
+                x-component="Input"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A5', width: 200 }}
+            >
+              <SchemaField.String
+                x-decorator="FormItem"
+                required
+                x-component="Input"
+              />
+            </SchemaField.Void>
+            <SchemaField.Void
+              x-component="ArrayTable.Column"
+              x-component-props={{ title: 'A6', dataIndex: 'a2', width: 200 }}
             >
               <SchemaField.String
                 name="bbb"
@@ -83,7 +127,7 @@ export default () => {
             </SchemaField.Void>
             <SchemaField.Void
               x-component="ArrayTable.Column"
-              x-component-props={{ title: 'A3', dataIndex: 'a3' }}
+              x-component-props={{ title: 'A7', dataIndex: 'a3', width: 200 }}
             >
               <SchemaField.String
                 name="ccc"
@@ -109,8 +153,13 @@ export default () => {
               />
             </SchemaField.Void>
             <SchemaField.Void
-              x-component-props={{ title: '操作', dataIndex: 'operations' }}
               x-component="ArrayTable.Column"
+              x-component-props={{
+                title: 'Operations',
+                dataIndex: 'operations',
+                width: 200,
+                fixed: 'right',
+              }}
             >
               <SchemaField.Void x-component="FormItem">
                 <SchemaField.Void x-component="ArrayTable.Remove" />
@@ -137,7 +186,7 @@ export default () => {
         <Button
           onClick={() => {
             form.setInitialValues({
-              array: range(1000),
+              array: range(10000),
             })
           }}
         >
