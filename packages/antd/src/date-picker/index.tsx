@@ -1,9 +1,12 @@
 import moment from 'moment'
 import { connect, mapProps, mapReadPretty } from '@formily/react'
 import { DatePicker as AntdDatePicker } from 'antd'
-import { DatePickerProps as AntdDatePickerProps, RangePickerProps } from 'antd/lib/date-picker'
+import {
+  DatePickerProps as AntdDatePickerProps,
+  RangePickerProps,
+} from 'antd/lib/date-picker'
 import { PreviewText } from '../preview-text'
-import { formatMomentValue } from '../shared'
+import { formatMomentValue, momentable } from '../shared'
 
 type DatePickerProps<PickerProps> = Exclude<
   PickerProps,
@@ -17,7 +20,7 @@ type ComposedDatePicker = React.FC<AntdDatePickerProps> & {
   RangePicker?: React.FC<RangePickerProps>
 }
 
-const mapDateFormat = function() {
+const mapDateFormat = function () {
   const getDefaultFormat = (props: DatePickerProps<AntdDatePickerProps>) => {
     if (props['picker'] === 'month') {
       return 'YYYY-MM'
@@ -31,17 +34,18 @@ const mapDateFormat = function() {
     return props['showTime'] ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
   }
 
-  return (props: DatePickerProps<AntdDatePickerProps>): DatePickerProps => {
+  return (props: any) => {
     const format = props['format'] || getDefaultFormat(props)
+    const onChange = props.onChange
     return {
       ...props,
       format,
-      value: moment(props.value),
+      value: momentable(props.value),
       onChange: (value: moment.Moment | moment.Moment[]) => {
-        if (props.onChange) {
-          props.onChange(formatMomentValue(value, format))
+        if (onChange) {
+          onChange(formatMomentValue(value, format))
         }
-      }
+      },
     }
   }
 }

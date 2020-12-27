@@ -1,0 +1,28 @@
+@import '~antd/lib/style/themes/default.less';
+
+.ant-editable {
+  cursor: pointer;
+  .ant-form-text {
+    .ant-tag{
+      transition: none !important;
+    }
+    .ant-tag:last-child {
+      margin-right: 0 !important;
+    }
+  }
+  .ant-editable-edit-btn,
+  .ant-editable-close-btn {
+    transition: all .25s ease-in-out;
+    color: #aaa;
+    font-size: 12px;
+
+    &:hover {
+      color: @primary-5;
+    }
+  }
+
+  .ant-form-text {
+    display: flex;
+    align-items: center;
+  }
+}

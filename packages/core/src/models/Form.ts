@@ -68,7 +68,7 @@ export class Form {
     this.modified = false
     this.mounted = false
     this.unmounted = false
-    this.pattern = this.props.pattern
+    this.pattern = this.props.pattern || 'editable'
     this.values =
       clone(this.props.values) || clone(this.props.initialValues) || {}
     this.initialValues = clone(this.props.initialValues) || {}

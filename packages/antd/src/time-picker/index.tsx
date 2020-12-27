@@ -1,9 +1,12 @@
 import moment from 'moment'
 import { connect, mapProps, mapReadPretty } from '@formily/react'
 import { TimePicker as AntdTimePicker } from 'antd'
-import { TimePickerProps as AntdTimePickerProps, TimeRangePickerProps } from 'antd/lib/time-picker'
+import {
+  TimePickerProps as AntdTimePickerProps,
+  TimeRangePickerProps,
+} from 'antd/lib/time-picker'
 import { PreviewText } from '../preview-text'
-import { formatMomentValue } from '../shared'
+import { formatMomentValue, momentable } from '../shared'
 
 type TimePickerProps<PickerProps> = Exclude<
   PickerProps,
@@ -17,18 +20,19 @@ type ComposedTimePicker = React.FC<AntdTimePickerProps> & {
   RangePicker?: React.FC<TimeRangePickerProps>
 }
 
-const mapTimeFormat = function() {
+const mapTimeFormat = function () {
   return (props: TimePickerProps<AntdTimePickerProps>): TimePickerProps => {
     const format = props['format'] || 'HH:mm:ss'
+    const onChange = props.onChange
     return {
       ...props,
       format,
-      value: moment(props.value),
+      value: momentable(props.value),
       onChange: (value: moment.Moment | moment.Moment[]) => {
-        if (props.onChange) {
-          props.onChange(formatMomentValue(value, format))
+        if (onChange) {
+          onChange(formatMomentValue(value, format))
         }
-      }
+      },
     }
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormTab, FormItem, Input, ArrayTable } from '@formily/antd'
+import { FormTab, FormItem, Input, ArrayTable, Editable } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Space } from 'antd'
@@ -8,6 +8,7 @@ import 'antd/dist/antd.css'
 const SchemaField = createSchemaField({
   components: {
     FormItem,
+    Editable,
     FormTab,
     Input,
     ArrayTable,
@@ -68,7 +69,7 @@ export default () => {
             >
               <SchemaField.String
                 name="aaa"
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-component="Input"
               />
@@ -78,7 +79,7 @@ export default () => {
               x-component-props={{ title: 'A2', width: 200 }}
             >
               <SchemaField.String
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-component="Input"
               />
@@ -88,7 +89,7 @@ export default () => {
               x-component-props={{ title: 'A3', width: 200 }}
             >
               <SchemaField.String
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-component="Input"
               />
@@ -98,7 +99,7 @@ export default () => {
               x-component-props={{ title: 'A4', width: 200 }}
             >
               <SchemaField.String
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-component="Input"
               />
@@ -108,7 +109,7 @@ export default () => {
               x-component-props={{ title: 'A5', width: 200 }}
             >
               <SchemaField.String
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-component="Input"
               />
@@ -119,7 +120,7 @@ export default () => {
             >
               <SchemaField.String
                 name="bbb"
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-component="Input"
                 x-component-props={{ placeholder: '输入123联动相邻列显示' }}
@@ -131,7 +132,7 @@ export default () => {
             >
               <SchemaField.String
                 name="ccc"
-                x-decorator="FormItem"
+                x-decorator="Editable"
                 required
                 x-reactions={[
                   {

@@ -273,7 +273,8 @@ export class Field<
   }
 
   get value(): ValueType {
-    return this.form.getValuesIn(this.path)
+    const value = this.form.getValuesIn(this.path)
+    return isValid(value) ? value : undefined
   }
 
   get initialValue(): ValueType {
