@@ -28,6 +28,7 @@ type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> & {
   SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayItemsAdditionProps>
   Index?: React.FC
+  Card?: React.FC<React.HTMLAttributes<HTMLDivElement>>
   Remove?: React.FC<AntdIconProps>
   MoveUp?: React.FC<AntdIconProps>
   MoveDown?: React.FC<AntdIconProps>
@@ -200,5 +201,13 @@ ArrayItems.MoveUp = React.forwardRef((props, ref) => {
     />
   )
 })
+
+ArrayItems.Card = (props) => {
+  return (
+    <div {...props} className={cls('ant-array-items-card', props.className)}>
+      {props.children}
+    </div>
+  )
+}
 
 export default ArrayItems

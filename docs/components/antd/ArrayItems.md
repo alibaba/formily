@@ -44,48 +44,33 @@ export default () => {
           name="array"
           title="数组项"
           x-decorator="FormItem"
-          maxItems={3}
           x-component="ArrayItems"
+          x-component-props={{ style: { width: 200 } }}
         >
           <SchemaField.Object>
-            <SchemaField.Void x-component="Space">
+            <SchemaField.Void x-component="ArrayItems.Card">
               <SchemaField.Void
                 x-decorator="FormItem"
                 x-component="ArrayItems.SortHandle"
               />
-              <SchemaField.Void
-                x-decorator="FormItem"
-                x-component="ArrayItems.Index"
-              />
-              <SchemaField.String
-                x-decorator="Editable"
+              <SchemaField.Object
+                x-decorator="Editable.Popover"
                 required
-                x-component="Input"
-              />
-              <SchemaField.String
-                x-decorator="Editable"
-                required
-                enum={[
-                  {
-                    label: '选项1',
-                    value: 1,
-                  },
-                  {
-                    label: '选项2',
-                    value: 2,
-                  },
-                  {
-                    label: '选项3',
-                    value: 3,
-                  },
-                ]}
-                x-component="Radio.Group"
-              />
-              <SchemaField.String
-                x-decorator="Editable"
-                required
-                x-component="DatePicker.RangePicker"
-              />
+                title="配置复杂数据"
+              >
+                <SchemaField.String
+                  x-decorator="FormItem"
+                  required
+                  title="日期"
+                  x-component="DatePicker.RangePicker"
+                />
+                <SchemaField.String
+                  x-decorator="FormItem"
+                  required
+                  title="输入框"
+                  x-component="Input"
+                />
+              </SchemaField.Object>
               <SchemaField.Void
                 x-decorator="FormItem"
                 x-component="ArrayItems.Remove"

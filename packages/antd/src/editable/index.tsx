@@ -1,12 +1,11 @@
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useField, useForm, observer, isVoidField } from '@formily/react'
-import { Form, Space } from 'antd'
+import { Form, Space, Popover } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { FormItemProps } from 'antd/lib/form'
 import { PopoverProps } from 'antd/lib/popover'
-import { ModalProps } from 'antd/lib/modal'
-import { DrawerProps } from 'antd/lib/drawer'
 import { useClickAway } from '../shared'
+import cls from 'classnames'
 import './style.less'
 /**
  * 默认Inline展示
@@ -14,14 +13,12 @@ import './style.less'
 
 type ComposedEditable = React.FC<FormItemProps> & {
   Popover?: React.FC<PopoverProps>
-  Dialog?: React.FC<ModalProps>
-  Drawer?: React.FC<DrawerProps>
 }
 
 const useEditable = (): [boolean, (payload: boolean) => void] => {
   const form = useForm()
   const field = useField<Formily.Core.Models.Field>()
-  useLayoutEffect(() => {
+  useMemo(() => {
     if (form.pattern === 'editable') {
       if (field.pattern === 'editable') {
         field.setPattern('readPretty')
@@ -81,6 +78,7 @@ export const Editable: ComposedEditable = observer((props) => {
     const target = e.target as HTMLElement
     if (target?.closest('.ant-select-dropdown')) return
     if (target?.closest('.ant-picker-dropdown')) return
+    if (target?.closest('.ant-cascader-menus')) return
     recover()
   }, innerRef)
 
@@ -111,5 +109,51 @@ export const Editable: ComposedEditable = observer((props) => {
         {renderCloseHelper()}
       </Space>
     </div>
+  )
+})
+
+Editable.Popover = observer((props) => {
+  const field = useField()
+  const [editable, setEditable] = useEditable()
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
+  return (
+    <Popover
+      {...props}
+      title={field.title}
+      visible={editable && visible}
+      className={cls('ant-editable', props.className)}
+      content={editable ? props.children : undefined}
+      trigger="click"
+      onVisibleChange={(visible) => {
+        if (visible) return
+        const errors = field.form.queryFeedbacks({
+          type: 'error',
+          address: `*(${field.address},${field.address}.*)`,
+        })
+        if (errors?.length) return
+        setVisible(false)
+        clearTimeout(ref.current)
+        ref.current = setTimeout(() => {
+          setEditable(false)
+        }, 1000)
+      }}
+    >
+      <div
+        className="ant-editable"
+        onClick={() => {
+          clearTimeout(ref.current)
+          setEditable(true)
+          setVisible(true)
+        }}
+      >
+        <Form.Item>
+          <Space>
+            {field.title}
+            <EditOutlined className="ant-editable-edit-btn" />
+          </Space>
+        </Form.Item>
+      </div>
+    </Popover>
   )
 })

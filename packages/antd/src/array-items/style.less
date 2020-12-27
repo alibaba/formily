@@ -1,45 +1,60 @@
 @import '~antd/lib/style/themes/default.less';
 
-.ant-array-items-remove {
-  transition: all .25s ease-in-out;
-  color: @text-color;
-  font-size: 16px;
+.ant-array-items {
+  .ant-array-items-remove {
+    transition: all .25s ease-in-out;
+    color: @text-color;
+    font-size: 16px;
 
-  &:hover {
-    color: @primary-5;
+    &:hover {
+      color: @primary-5;
+    }
   }
-}
 
-.ant-array-items-addition {
-  transition: all .25s ease-in-out;
-}
-
-
-.ant-array-items-move-down {
-  transition: all .25s ease-in-out;
-  color: @text-color;
-  font-size: 16px;
-
-  &:hover {
-    color: @primary-5;
+  .ant-array-items-addition {
+    transition: all .25s ease-in-out;
   }
-}
 
-.ant-array-items-move-up {
-  transition: all .25s ease-in-out;
-  color: @text-color;
-  font-size: 16px;
 
-  &:hover {
-    color: @primary-5;
+  .ant-array-items-move-down {
+    transition: all .25s ease-in-out;
+    color: @text-color;
+    font-size: 16px;
+
+    &:hover {
+      color: @primary-5;
+    }
   }
+
+  .ant-array-items-move-up {
+    transition: all .25s ease-in-out;
+    color: @text-color;
+    font-size: 16px;
+
+    &:hover {
+      color: @primary-5;
+    }
+  }
+
+  .ant-array-items-sort-handler {
+    cursor: move;
+    color: #888 !important;
+  }
+
+  .ant-array-items-item-inner {
+    visibility: visible;
+  }
+
 }
 
-.ant-array-items-sort-handler {
-  cursor: move;
-  color: #888 !important;
-}
-
-.ant-array-items-item-inner {
-  visibility: visible;
+.ant-array-items-card {
+  display: flex;
+  border: 1px solid #eee;
+  margin-bottom: 10px;
+  padding: 3px 6px;
+  background: #fff;
+  justify-content: space-between;
+  .ant-form-item {
+    margin-bottom: 0;
+  }
 }
