@@ -25,7 +25,7 @@ const serializeObject = (obj: any) => {
 const send = ({
   type,
   id,
-  form
+  form,
 }: {
   type: string
   id?: string | number
@@ -36,14 +36,14 @@ const send = ({
       source: '@formily-devtools-inject-script',
       type,
       id,
-      graph: form && JSON.stringify(serializeObject(form?.getFormGraph()))
+      graph: form && JSON.stringify(serializeObject(form?.getFormGraph())),
     },
     '*'
   )
 }
 
 send({
-  type: 'init'
+  type: 'init',
 })
 
 interface IIdleDeadline {
@@ -61,30 +61,36 @@ const HOOK = {
     send({
       type: 'install',
       id,
-      form
+      form,
     })
     let timer = null
+    const task = () => {
+      globalThis.requestIdleCallback((deadline: IIdleDeadline) => {
+        if (this.store[id]) {
+          if (deadline.timeRemaining() < 16) {
+            task()
+          } else {
+            send({
+              type: 'update',
+              id,
+              form,
+            })
+          }
+        }
+      })
+    }
     form.subscribe(() => {
       clearTimeout(timer)
-      timer = setTimeout(() => {
-        globalThis.requestIdleCallback((deadline: IIdleDeadline) => {
-          if (deadline.timeRemaining() < 16 || !this.store[id]) return
-          send({
-            type: 'update',
-            id,
-            form
-          })
-        })
-      }, 300)
+      timer = setTimeout(task, 300)
     })
   },
   update() {
     const keys = Object.keys(this.store || {})
-    keys.forEach(id => {
+    keys.forEach((id) => {
       send({
         type: 'update',
         id,
-        form: this.store[id]
+        form: this.store[id],
       })
     })
   },
@@ -92,9 +98,9 @@ const HOOK = {
     delete this.store[id]
     send({
       type: 'uninstall',
-      id
+      id,
     })
-  }
+  },
 }
 
 globalThis.__FORMILY_DEV_TOOLS_HOOK__ = HOOK

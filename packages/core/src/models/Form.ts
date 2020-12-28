@@ -1,4 +1,10 @@
-import { action, makeObservable, observable, toJS, runInAction } from 'mobx'
+import {
+  action,
+  makeObservable,
+  observable,
+  toJS,
+  runInAction
+} from 'mobx'
 import {
   FormPath,
   FormPathPattern,
@@ -53,6 +59,7 @@ export class Form {
   fields: FormFields = {}
   requests: FormRequests = {}
   indexes: Map<string, string> = new Map()
+
   constructor(props: IFormProps) {
     this.initialize(props)
     this.makeObservable()
@@ -152,6 +159,7 @@ export class Form {
       runInAction(() => {
         this.fields[identifier] = new Field(address, props, this)
       })
+      this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
     return this.fields[identifier] as Field<Decorator, Component>
   }
@@ -169,6 +177,7 @@ export class Form {
       runInAction(() => {
         this.fields[identifier] = new ArrayField(address, props, this)
       })
+      this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
     return this.fields[identifier] as ArrayField<Decorator, Component>
   }
@@ -186,6 +195,7 @@ export class Form {
       runInAction(() => {
         this.fields[identifier] = new ObjectField(address, props, this)
       })
+      this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
     return this.fields[identifier] as ObjectField<Decorator, Component>
   }
@@ -203,6 +213,7 @@ export class Form {
       runInAction(() => {
         this.fields[identifier] = new VoidField(address, props, this)
       })
+      this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
     }
     return this.fields[identifier] as VoidField<Decorator, Component>
   }

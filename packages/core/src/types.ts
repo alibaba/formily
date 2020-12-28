@@ -48,6 +48,8 @@ export enum LifeCycleTypes {
   ON_FORM_VALIDATE_END = 'onFormValidateEnd',
   ON_FORM_INPUT_CHANGE = 'onFormInputChange',
 
+  ON_FORM_GRAPH_CHANGE = 'onFormGraphChange',
+
   /**
    * Field LifeCycle
    **/

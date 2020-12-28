@@ -16,6 +16,7 @@ import {
   INodePatch,
   GeneralField,
   FormFeedback,
+  LifeCycleTypes,
 } from '../types'
 import { isArrayField, isVoidField } from './externals'
 
@@ -242,6 +243,7 @@ export const spliceArrayState = (
     })
     applyFieldPatches(fields, fieldPatches)
   })
+  field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
 export const exchangeArrayState = (
@@ -309,7 +311,7 @@ export const exchangeArrayState = (
         }
       }
     })
-
     applyFieldPatches(fields, fieldPatches)
   })
+  field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
