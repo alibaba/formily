@@ -278,8 +278,8 @@ export class Field<
   }
 
   get initialValue(): ValueType {
-    const iniialValue = this.form.getInitialValuesIn(this.path)
-    return isValid(iniialValue) ? iniialValue : undefined
+    const initialValue = this.form.getInitialValuesIn(this.path)
+    return isValid(initialValue) ? initialValue : undefined
   }
 
   get display(): FieldDisplayTypes {
