@@ -54,20 +54,23 @@ export default () => {
                 x-component="ArrayItems.SortHandle"
               />
               <SchemaField.Object
-                x-decorator="Editable.Popover"
+                x-component="Editable.Popover"
                 required
                 title="配置复杂数据"
+                x-component-props={{ dataIndex: 'input' }}
               >
                 <SchemaField.String
                   x-decorator="FormItem"
                   required
                   title="日期"
+                  name="date"
                   x-component="DatePicker.RangePicker"
                 />
                 <SchemaField.String
                   x-decorator="FormItem"
                   required
                   title="输入框"
+                  name="input"
                   x-component="Input"
                 />
               </SchemaField.Object>

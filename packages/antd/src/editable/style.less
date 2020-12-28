@@ -2,14 +2,17 @@
 
 .ant-editable {
   cursor: pointer;
+
   .ant-form-text {
-    .ant-tag{
+    .ant-tag {
       transition: none !important;
     }
+
     .ant-tag:last-child {
       margin-right: 0 !important;
     }
   }
+
   .ant-editable-edit-btn,
   .ant-editable-close-btn {
     transition: all .25s ease-in-out;
@@ -24,5 +27,14 @@
   .ant-form-text {
     display: flex;
     align-items: center;
+  }
+
+  .ant-editable-preview {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    max-width: 100px;
+    display: block;
   }
 }

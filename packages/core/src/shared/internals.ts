@@ -300,6 +300,12 @@ export const exchangeArrayState = (
             address: newIdentifier,
             payload: buildNodeIndexes(field, newIdentifier),
           })
+          if (!fields[newIdentifier]) {
+            fieldPatches.push({
+              type: 'remove',
+              address: identifier,
+            })
+          }
         }
       }
     })

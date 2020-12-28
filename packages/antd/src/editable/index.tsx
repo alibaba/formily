@@ -1,5 +1,6 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useField, useForm, observer, isVoidField } from '@formily/react'
+import { FormPath, isStr } from '@formily/shared'
 import { Form, Space, Popover } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { FormItemProps } from 'antd/lib/form'
@@ -11,14 +12,18 @@ import './style.less'
  * 默认Inline展示
  */
 
+interface IPopoverProps extends PopoverProps {
+  dataIndex?: string
+}
+
 type ComposedEditable = React.FC<FormItemProps> & {
-  Popover?: React.FC<PopoverProps>
+  Popover?: React.FC<IPopoverProps>
 }
 
 const useEditable = (): [boolean, (payload: boolean) => void] => {
   const form = useForm()
   const field = useField<Formily.Core.Models.Field>()
-  useMemo(() => {
+  useLayoutEffect(() => {
     if (form.pattern === 'editable') {
       if (field.pattern === 'editable') {
         field.setPattern('readPretty')
@@ -113,43 +118,53 @@ export const Editable: ComposedEditable = observer((props) => {
 })
 
 Editable.Popover = observer((props) => {
-  const field = useField()
+  const field = useField<Formily.Core.Models.Field>()
   const [editable, setEditable] = useEditable()
   const [visible, setVisible] = useState(false)
-  const ref = useRef(null)
+  const timer = useRef(null)
+  const preview = FormPath.getIn(field.value, props.dataIndex || '')
+  const placeholder = isStr(preview) ? preview : ''
+  const closePopover = () => {
+    const errors = field.form.queryFeedbacks({
+      type: 'error',
+      address: `*(${field.address},${field.address}.*)`,
+    })
+    if (errors?.length) return
+    setVisible(false)
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => {
+      setEditable(false)
+    }, 1000)
+  }
+  const openPopover = () => {
+    clearTimeout(timer.current)
+    setEditable(true)
+    setVisible(true)
+  }
   return (
     <Popover
       {...props}
       title={field.title}
       visible={editable && visible}
       className={cls('ant-editable', props.className)}
-      content={editable ? props.children : undefined}
+      content={props.children}
       trigger="click"
       onVisibleChange={(visible) => {
         if (visible) return
-        const errors = field.form.queryFeedbacks({
-          type: 'error',
-          address: `*(${field.address},${field.address}.*)`,
-        })
-        if (errors?.length) return
-        setVisible(false)
-        clearTimeout(ref.current)
-        ref.current = setTimeout(() => {
-          setEditable(false)
-        }, 1000)
+        closePopover()
       }}
     >
       <div
         className="ant-editable"
         onClick={() => {
-          clearTimeout(ref.current)
-          setEditable(true)
-          setVisible(true)
+          openPopover()
         }}
       >
         <Form.Item>
           <Space>
-            {field.title}
+            <span className="ant-editable-preview">
+              {placeholder || field.title}
+            </span>
             <EditOutlined className="ant-editable-edit-btn" />
           </Space>
         </Form.Item>
