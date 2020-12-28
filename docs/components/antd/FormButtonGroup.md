@@ -4,7 +4,6 @@ import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Form, Space } from 'antd'
-import 'antd/dist/antd.css'
 
 const SchemaField = createSchemaField({
   components: {

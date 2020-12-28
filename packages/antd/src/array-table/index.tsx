@@ -32,7 +32,6 @@ import {
 } from '@formily/react-schema-field'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
-import './style.less'
 
 interface ObservableColumnSource {
   field: Formily.Core.Models.VoidField

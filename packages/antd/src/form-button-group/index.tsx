@@ -8,7 +8,7 @@ import React, { useRef, useLayoutEffect, useState } from 'react'
 import StickyBox, { StickyBoxMode } from 'react-sticky-box'
 import { Form } from 'antd'
 import { FormItemProps } from 'antd/lib/form'
-
+import cls from 'classnames'
 interface IStickyProps {
   offsetTop?: number
   offsetBottom?: number
@@ -57,6 +57,7 @@ export const FormButtonGroup: ComposedButtonGroup = (props) => {
   return (
     <Form.Item
       {...props}
+      className={cls('ant-form-button-group', props.className)}
       label=" "
       style={{ margin: 0, padding: 0, ...props.style }}
       colon={false}
@@ -81,6 +82,7 @@ FormButtonGroup.Sticky = (props) => {
   return (
     <StickyBox
       {...props}
+      className={cls('ant-form-button-sticky', props.className)}
       style={{
         textAlign: props.align,
         backgroundColor: color,

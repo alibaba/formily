@@ -3,7 +3,6 @@ import React from 'react'
 import { FormDialog, FormItem, Input, DialogFooter } from '@formily/antd'
 import { Field, useForm } from '@formily/react'
 import { Button } from 'antd'
-import 'antd/dist/antd.css'
 
 export default () => {
   return (

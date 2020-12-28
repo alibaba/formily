@@ -18,7 +18,6 @@ import {
   SortableHandle,
 } from 'react-sortable-hoc'
 import { ISchema } from '@formily/json-schema'
-import './style.less'
 interface IArrayItemsAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'

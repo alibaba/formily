@@ -7,7 +7,6 @@ import { FormItemProps } from 'antd/lib/form'
 import { PopoverProps } from 'antd/lib/popover'
 import { useClickAway } from '../shared'
 import cls from 'classnames'
-import './style.less'
 /**
  * 默认Inline展示
  */

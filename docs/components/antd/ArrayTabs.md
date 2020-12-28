@@ -4,20 +4,19 @@ import { FormTab, FormItem, Input, ArrayTabs } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button } from 'antd'
-import 'antd/dist/antd.css'
 
 const SchemaField = createSchemaField({
   components: {
     FormItem,
     FormTab,
     Input,
-    ArrayTabs
-  }
+    ArrayTabs,
+  },
 })
 
 const range = (count: number) =>
   Array.from(new Array(count)).map((_, key) => ({
-    aaa: key
+    aaa: key,
   }))
 
 const form = createForm()

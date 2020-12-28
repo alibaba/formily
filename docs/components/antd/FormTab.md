@@ -4,14 +4,13 @@ import { FormTab, FormItem, Input } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button } from 'antd'
-import 'antd/dist/antd.css'
 
 const SchemaField = createSchemaField({
   components: {
     FormItem,
     FormTab,
-    Input
-  }
+    Input,
+  },
 })
 
 const form = createForm()

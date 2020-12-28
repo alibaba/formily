@@ -13,7 +13,6 @@ import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import cls from 'classnames'
 import { ISchema } from '@formily/json-schema'
-import './style.less'
 interface IArrayCardsAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'

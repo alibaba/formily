@@ -4,13 +4,12 @@ import { PreviewText, FormItem } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Form } from 'antd'
-import 'antd/dist/antd.css'
 
 const SchemaField = createSchemaField({
   components: {
     FormItem,
-    PreviewText
-  }
+    PreviewText,
+  },
 })
 
 const form = createForm()
@@ -33,12 +32,12 @@ export default () => {
             title="选择项预览"
             x-component="PreviewText.Select"
             x-component-props={{
-              mode: 'multiple'
+              mode: 'multiple',
             }}
             default={['123', '222']}
             enum={[
               { label: 'A111', value: '123' },
-              { label: 'A222', value: '222' }
+              { label: 'A222', value: '222' },
             ]}
           />
           <SchemaField.Markup
@@ -57,12 +56,12 @@ export default () => {
             enum={[
               {
                 label: '杭州',
-                value: 'hangzhou'
+                value: 'hangzhou',
               },
               {
                 label: '余杭',
-                value: 'yuhang'
-              }
+                value: 'yuhang',
+              },
             ]}
           />
         </SchemaField>

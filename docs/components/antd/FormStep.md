@@ -3,15 +3,14 @@ import React from 'react'
 import { FormStep, FormItem, Input } from '@formily/antd'
 import { FormProvider, createForm, FormConsumer } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button } from 'antd'
-import 'antd/dist/antd.css'
+import { Button, Space } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
     FormItem,
     FormStep,
-    Input
-  }
+    Input,
+  },
 })
 
 const form = createForm()
@@ -69,7 +68,7 @@ export default () => {
       </SchemaField>
       <FormConsumer>
         {() => (
-          <>
+          <Space>
             <Button
               disabled={!formStep.allowBack}
               onClick={() => {
@@ -94,7 +93,7 @@ export default () => {
             >
               提交
             </Button>
-          </>
+          </Space>
         )}
       </FormConsumer>
     </FormProvider>

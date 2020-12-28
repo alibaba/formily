@@ -1,3 +1,4 @@
+import './style'
 export * from './array-table'
 export * from './array-tabs'
 export * from './array-cards'
