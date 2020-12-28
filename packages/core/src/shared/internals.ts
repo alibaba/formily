@@ -293,16 +293,19 @@ export const exchangeArrayState = (
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
   }
   runInAction(() => {
+    const deleted = {}
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier)) {
         if (isCrossNode(identifier)) {
           const newIdentifier = moveIndex(identifier)
+          if (deleted[newIdentifier]) return
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
             payload: buildNodeIndexes(field, newIdentifier),
           })
           if (!fields[newIdentifier]) {
+            deleted[identifier] = true
             fieldPatches.push({
               type: 'remove',
               address: identifier,
