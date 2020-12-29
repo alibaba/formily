@@ -14,6 +14,7 @@ export type SchemaTypes =
   | 'void'
   | 'date'
   | 'datetime'
+  | (string & {})
 
 export type SchemaProperties<
   Decorator,
@@ -181,11 +182,11 @@ export interface ISchema<
   //校验器
   ['x-validator']?: Validator
   //装饰器
-  ['x-decorator']?: Decorator
+  ['x-decorator']?: Decorator | (string & {})
   //装饰器属性
   ['x-decorator-props']?: DecoratorProps
   //组件
-  ['x-component']?: Component
+  ['x-component']?: Component | (string & {})
   //组件属性
   ['x-component-props']?: ComponentProps
   //组件响应器

@@ -11,10 +11,10 @@ export type ValidatorFormats =
   | 'zh'
   | 'date'
   | 'zip'
-  | string
+  | (string & {})
 
 export type ValidateResult = {
-  type: 'error' | 'warning' | 'success'
+  type: 'error' | 'warning' | 'success' | (string & {})
   message: string
 }
 
@@ -40,7 +40,7 @@ export type ValidatorParsedFunction<Context = any> = (
   ctx: Context
 ) => ValidateResult | Promise<ValidateResult> | null
 
-export type ValidatorTriggerType = 'onInput' | 'onFocus' | 'onBlur'
+export type ValidatorTriggerType = 'onInput' | 'onFocus' | 'onBlur' | (string & {})
 
 export type ValidatorRules<Context = any> = {
   triggerType?: ValidatorTriggerType
