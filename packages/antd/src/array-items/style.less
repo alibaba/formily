@@ -1,53 +1,54 @@
 @import '~antd/lib/style/themes/default.less';
 
-.ant-array-items {
-  .ant-array-items-remove {
-    transition: all .25s ease-in-out;
-    color: @text-color;
-    font-size: 16px;
 
-    &:hover {
-      color: @primary-5;
-    }
+@array-items-prefix-cls: ~'@{ant-prefix}-array-items';
+
+.@{array-items-prefix-cls}-remove {
+  transition: all .25s ease-in-out;
+  color: @text-color;
+  font-size: 16px;
+
+  &:hover {
+    color: @primary-5;
   }
-
-  .ant-array-items-addition {
-    transition: all .25s ease-in-out;
-  }
-
-
-  .ant-array-items-move-down {
-    transition: all .25s ease-in-out;
-    color: @text-color;
-    font-size: 16px;
-
-    &:hover {
-      color: @primary-5;
-    }
-  }
-
-  .ant-array-items-move-up {
-    transition: all .25s ease-in-out;
-    color: @text-color;
-    font-size: 16px;
-
-    &:hover {
-      color: @primary-5;
-    }
-  }
-
-  .ant-array-items-sort-handler {
-    cursor: move;
-    color: #888 !important;
-  }
-
-  .ant-array-items-item-inner {
-    visibility: visible;
-  }
-
 }
 
-.ant-array-items-card {
+.@{array-items-prefix-cls}-addition {
+  transition: all .25s ease-in-out;
+}
+
+
+.@{array-items-prefix-cls}-move-down {
+  transition: all .25s ease-in-out;
+  color: @text-color;
+  font-size: 16px;
+
+  &:hover {
+    color: @primary-5;
+  }
+}
+
+.@{array-items-prefix-cls}-move-up {
+  transition: all .25s ease-in-out;
+  color: @text-color;
+  font-size: 16px;
+
+  &:hover {
+    color: @primary-5;
+  }
+}
+
+.@{array-items-prefix-cls}-sort-handler {
+  cursor: move;
+  color: #888 !important;
+}
+
+.@{array-items-prefix-cls}-item-inner {
+  visibility: visible;
+}
+
+
+.@{array-items-prefix-cls}-card {
   display: flex;
   border: 1px solid #eee;
   margin-bottom: 10px;
@@ -55,7 +56,7 @@
   background: #fff;
   justify-content: space-between;
 
-  .ant-form-item {
+  .@{ant-prefix}-form-item {
     margin-bottom: 0;
   }
 
@@ -64,4 +65,5 @@
   &:hover {
     border: 1px solid #aaa;
   }
+
 }

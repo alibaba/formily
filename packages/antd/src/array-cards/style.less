@@ -1,41 +1,46 @@
 @import '~antd/lib/style/themes/default.less';
 
-.ant-array-cards-remove {
+@array-cards-prefix-cls: ~'@{ant-prefix}-array-cards';
+
+.@{array-cards-prefix-cls}-remove {
   transition: all .25s ease-in-out;
   color: @text-color;
   font-size: 16px;
   margin-left: 6px;
+
   &:hover {
     color: @primary-5;
   }
 }
 
-.ant-array-cards-addition {
+.@{array-cards-prefix-cls}-addition {
   transition: all .25s ease-in-out;
 }
 
 
-.ant-array-cards-move-down {
+.@{array-cards-prefix-cls}-move-down {
   transition: all .25s ease-in-out;
   color: @text-color;
   font-size: 16px;
   margin-left: 6px;
+
   &:hover {
     color: @primary-5;
   }
 }
 
-.ant-array-cards-move-up {
+.@{array-cards-prefix-cls}-move-up {
   transition: all .25s ease-in-out;
   color: @text-color;
   font-size: 16px;
   margin-left: 6px;
+
   &:hover {
     color: @primary-5;
   }
 }
 
 
-.ant-array-cards-item {
+.@{array-cards-prefix-cls}-item {
   margin-bottom: 10px !important;
 }

@@ -1,20 +1,22 @@
 @import '~antd/lib/style/themes/default.less';
 
-.ant-editable {
+@editable-prefix-cls: ~'@{ant-prefix}-editable';
+
+.@{editable-prefix-cls} {
   cursor: pointer;
 
-  .ant-form-text {
-    .ant-tag {
+  .@{ant-prefix}-form-text {
+    .@{ant-prefix}-tag {
       transition: none !important;
     }
 
-    .ant-tag:last-child {
+    .@{ant-prefix}-tag:last-child {
       margin-right: 0 !important;
     }
   }
 
-  .ant-editable-edit-btn,
-  .ant-editable-close-btn {
+  .@{editable-prefix-cls}-edit-btn,
+  .@{editable-prefix-cls}-close-btn {
     transition: all .25s ease-in-out;
     color: #aaa;
     font-size: 12px;
@@ -24,12 +26,12 @@
     }
   }
 
-  .ant-form-text {
+  .@{ant-prefix}-form-text {
     display: flex;
     align-items: center;
   }
 
-  .ant-editable-preview {
+  .@{editable-prefix-cls}-preview {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

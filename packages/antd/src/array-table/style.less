@@ -1,7 +1,9 @@
 @import '~antd/lib/style/themes/default.less';
 
-.ant-array-table {
-  .ant-array-table-remove {
+@array-table-prefix-cls: ~'@{ant-prefix}-array-table';
+
+.@{array-table-prefix-cls} {
+  .@{array-table-prefix-cls}-remove {
     transition: all .25s ease-in-out;
     color: @text-color;
     font-size: 16px;
@@ -12,7 +14,7 @@
     }
   }
 
-  .ant-array-table-addition {
+  .@{array-table-prefix-cls}-addition {
     transition: all .25s ease-in-out;
   }
 
@@ -22,7 +24,7 @@
     }
   }
 
-  .ant-array-table-move-down {
+  .@{array-table-prefix-cls}-move-down {
     transition: all .25s ease-in-out;
     color: @text-color;
     font-size: 16px;
@@ -33,7 +35,7 @@
     }
   }
 
-  .ant-array-table-move-up {
+  .@{array-table-prefix-cls}-move-up {
     transition: all .25s ease-in-out;
     color: @text-color;
     font-size: 16px;
@@ -44,30 +46,30 @@
     }
   }
 
-  .ant-array-table-sort-handler {
+  .@{array-table-prefix-cls}-sort-handler {
     cursor: move;
     color: #888 !important;
   }
 
-  .ant-array-table-pagination {
+  .@{array-table-prefix-cls}-pagination {
     display: flex;
     justify-content: center;
 
-    .ant-array-table-status-select.has-error {
+    .@{array-table-prefix-cls}-status-select.has-error {
       .ant-select-selector {
         border-color: @error-color  !important;
       }
     }
   }
 
-  .ant-table {
+  .@{ant-prefix}-table {
     td {
       visibility: visible;
 
-      .ant-form-item {
+      .@{ant-prefix}-form-item {
         margin-bottom: 0 !important;
 
-        .ant-form-item-explain {
+        .@{ant-prefix}-form-item-explain {
           position: absolute;
           font-size: 12px;
           top: 100%;
@@ -83,7 +85,7 @@
     }
   }
 
-  .ant-array-table-sort-helper {
+  .@{array-table-prefix-cls}-sort-helper {
     background: #fff;
     border: 1px solid #eee;
     z-index: 10;
