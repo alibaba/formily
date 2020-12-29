@@ -151,6 +151,7 @@ Editable.Popover = observer((props) => {
       className={cls(prefixCls, props.className)}
       content={props.children}
       trigger="click"
+      destroyTooltipOnHide
       onVisibleChange={(visible) => {
         if (visible) return
         closePopover()
