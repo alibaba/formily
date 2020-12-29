@@ -219,7 +219,7 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
       let filtered = filters.filterTree(data, filter)
       filtered = filters.expandFilteredNodes(filtered, filter)
       setData(filtered)
-    }, 400)
+    }, 100)
   }
 
   useEffect(() => {

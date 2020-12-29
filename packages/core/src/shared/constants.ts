@@ -8,5 +8,26 @@ export const ReservedProperties = [
   'heart',
   'graph',
   'indexes',
-  'fields'
+  'fields',
+  'lifecycles',
+]
+
+export const GetterSetterProperties = [
+  'errors',
+  'warnings',
+  'successes',
+  'valid',
+  'invalid',
+  'value',
+  'initialValue',
+  'display',
+  'pattern',
+  'required',
+  'hidden',
+  'visible',
+  'disbaled',
+  'readOnly',
+  'readPretty',
+  'validateStatus',
+  'editable',
 ]

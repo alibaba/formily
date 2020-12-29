@@ -22,7 +22,7 @@ import {
   LifeCycleTypes,
 } from '../types'
 import { isArrayField, isVoidField } from './externals'
-import { ReservedProperties } from './constants'
+import { ReservedProperties, GetterSetterProperties } from './constants'
 
 export const getValueFromEvent = (event: any) => {
   if (isHTMLElement(event?.target)) {
@@ -327,6 +327,11 @@ export const setModelState = (model: any, setter: any) => {
   if (isFn(setter)) {
     setter(model)
   } else {
+    each(GetterSetterProperties, (key) => {
+      if (isValid(setter[key])) {
+        model[key] = setter[key]
+      }
+    })
     each(setter, (value, key) => {
       if (isFn(value)) return
       if (ReservedProperties.includes(key)) return
@@ -341,15 +346,27 @@ export const getModelState = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
+    const results = {}
+    each(GetterSetterProperties, (key) => {
+      if (isValid(model[key])) {
+        results[key] = model[key]
+      }
+    })
     return reduce(
       model,
       (buf, value, key) => {
-        if (isFn(value)) return buf
+        if (isFn(value)) {
+          return buf
+        }
         if (ReservedProperties.includes(key)) return buf
+        if (value && value instanceof FormPath) {
+          buf[key] = value.toString()
+          return buf
+        }
         buf[key] = toJS(value)
         return buf
       },
-      {}
+      results
     )
   }
 }
