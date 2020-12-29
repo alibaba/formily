@@ -5,11 +5,16 @@ import { LifeCycleTypes } from '../types'
 import { createEffect } from '../shared'
 
 const createFormEffect = (type: LifeCycleTypes) => {
-  return createEffect(type, (form: Form) => (callback: (form: Form) => void) => {
-    if (isFn(callback)) {
-      callback(form)
+  return createEffect(
+    type,
+    (form: Form) => (callback: (form: Form) => void) => {
+      if (isFn(callback)) {
+        runInAction(() => {
+          callback(form)
+        })
+      }
     }
-  })
+  )
 }
 
 export const onFormInit = createFormEffect(LifeCycleTypes.ON_FORM_INIT)
@@ -29,7 +34,9 @@ export const onFormReset = createFormEffect(LifeCycleTypes.ON_FORM_RESET)
 export const onFormSubmitStart = createFormEffect(
   LifeCycleTypes.ON_FORM_SUBMIT_START
 )
-export const onFormSubmitEnd = createFormEffect(LifeCycleTypes.ON_FORM_SUBMIT_END)
+export const onFormSubmitEnd = createFormEffect(
+  LifeCycleTypes.ON_FORM_SUBMIT_END
+)
 export const onFormSubmitSuccess = createFormEffect(
   LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS
 )
@@ -53,7 +60,7 @@ export const onFormValidateEnd = createFormEffect(
 )
 export const onFormReact = (callback?: (form: Form) => void) => {
   let dispose = null
-  onFormInit(form => {
+  onFormInit((form) => {
     dispose = autorun(() => {
       runInAction(() => {
         callback(form)

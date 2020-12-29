@@ -9,6 +9,12 @@ import {
   ObjectField,
 } from './models'
 
+export type NonFunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends Function ? never : K
+}[keyof T]
+
+export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>
+
 export type AnyFunction = (...args: any[]) => any
 
 export type JSXComponent = any
@@ -141,24 +147,16 @@ export type FormPathPattern =
       path: FormPath
     })
 
-export interface IFormState {
-  displayName: string
-  id: string
-  initialized: boolean
-  validating: boolean
-  submitting: boolean
-  modified: boolean
-  pattern: FormPatternTypes
-  values: any
-  initialValues: any
-  mounted: boolean
-  unmounted: boolean
-  valid: boolean
-  invalid: boolean
-  errors: Feedback[]
-  successes: Feedback[]
-  warnings: Feedback[]
-}
+type OmitStateMethod<P> = Omit<
+  P,
+  'setState' | 'getState' | 'getFormGraph' | 'setFormGraph'
+>
+
+export type IFieldState = NonFunctionProperties<OmitStateMethod<Field>>
+
+export type IVoidFieldState = NonFunctionProperties<OmitStateMethod<VoidField>>
+
+export type IFormState = NonFunctionProperties<OmitStateMethod<Form>>
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>
 
@@ -278,52 +276,6 @@ export interface IFieldResetOptions {
   clearInitialValue?: boolean
 }
 
-export interface IFieldState {
-  displayName: string
-  address: string
-  path: string
-  title: string
-  description: string
-  dataSource: FieldDataSource
-  display: FieldDisplayTypes
-  pattern: FieldPatternTypes
-  loading: boolean
-  validating: boolean
-  required: boolean
-  modified: boolean
-  active: boolean
-  visited: boolean
-  mounted: boolean
-  unmounted: boolean
-  inputValue: any
-  inputValues: any[]
-  validator: FieldValidator
-  validateStatus: 'success' | 'error' | 'warning' | 'validating'
-  disabled: boolean
-  readOnly: boolean
-  editable: boolean
-  readPretty: boolean
-  decorator: FieldDecorator<any>
-  component: FieldComponent<any>
-  feedbacks: Feedback[]
-  value: any
-  initialValue: any
-}
-
-export interface IVoidFieldState {
-  displayName: string
-  title: string
-  description: string
-  address: string
-  path: string
-  display: FieldDisplayTypes
-  pattern: FieldPatternTypes
-  mounted: boolean
-  unmounted: boolean
-  decorator: FieldDecorator<any>
-  component: FieldComponent<any>
-}
-
 export type IGeneralFieldState = IFieldState | IVoidFieldState
 
 export type GeneralField = Field | VoidField | ArrayField | ObjectField
@@ -342,4 +294,15 @@ export interface IQueryProps {
   pattern: FormPathPattern
   base: FormPathPattern
   form: Form
+}
+
+export interface IModelSetter<P> {
+  (setter: (state: P) => void): void
+  (setter: Partial<P>): void
+  (): void
+}
+
+export interface IModelGetter<P> {
+  <Getter extends (state: P) => any>(getter: Getter): ReturnType<Getter>
+  (): P
 }

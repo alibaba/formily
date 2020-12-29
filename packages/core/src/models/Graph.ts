@@ -1,6 +1,6 @@
-import { toJS, makeObservable, action } from 'mobx'
-import { isValid, each, FormPath } from '@formily/shared'
-import { IFieldState, IVoidFieldState, IFormState, IFormGraph } from '../types'
+import { makeObservable, action } from 'mobx'
+import { each, FormPath } from '@formily/shared'
+import { IFormGraph } from '../types'
 import { Field } from './Field'
 import { Form } from './Form'
 import { ArrayField } from './ArrayField'
@@ -11,7 +11,6 @@ import {
   isFieldState,
   isArrayFieldState,
   isObjectFieldState,
-  isVoidField,
 } from '../shared'
 
 export class Graph {
@@ -21,210 +20,14 @@ export class Graph {
     this.form = form
     makeObservable(this, {
       setGraph: action,
-      setFieldState: action,
-      setState: action,
-      setVoidFieldState: action,
     })
-  }
-
-  getFieldState = (field: Field): IFieldState => {
-    return {
-      displayName: field.displayName,
-      title: field.title,
-      description: field.description,
-      address: field.address.toString(),
-      path: field.path.toString(),
-      display: field.display,
-      pattern: field.pattern,
-      loading: field.loading,
-      validating: field.validating,
-      modified: field.modified,
-      mounted: field.mounted,
-      unmounted: field.unmounted,
-      active: field.active,
-      visited: field.visited,
-      value: field.value,
-      initialValue: field.initialValue,
-      required: field.required,
-      disabled: field.disabled,
-      readOnly: field.readOnly,
-      readPretty: field.readPretty,
-      editable: field.editable,
-      validateStatus: field.validateStatus,
-      inputValue: field.inputValue,
-      inputValues: field.inputValues,
-      dataSource: toJS(field.dataSource),
-      decorator: toJS(field.decorator),
-      component: toJS(field.component),
-      validator: toJS(field.validator),
-      feedbacks: toJS(field.feedbacks),
-    }
-  }
-
-  getVoidFieldState = (field: VoidField): IVoidFieldState => {
-    return {
-      displayName: field.displayName,
-      title: field.title,
-      description: field.description,
-      address: field.address.toString(),
-      path: field.path.toString(),
-      display: field.display,
-      pattern: field.pattern,
-      mounted: field.mounted,
-      unmounted: field.unmounted,
-      decorator: toJS(field.decorator),
-      component: toJS(field.component),
-    }
-  }
-
-  getState = () => {
-    const form = this.form
-    return {
-      displayName: form.displayName,
-      id: form.id,
-      validating: form.validating,
-      values: toJS(form.values),
-      initialValues: toJS(form.initialValues),
-      submitting: form.submitting,
-      valid: form.valid,
-      invalid: form.invalid,
-      initialized: form.initialized,
-      mounted: form.mounted,
-      unmounted: form.unmounted,
-      modified: form.modified,
-      errors: toJS(form.errors),
-      warnings: toJS(form.warnings),
-      successes: toJS(form.successes),
-      pattern: form.pattern,
-    }
-  }
-
-  setFieldState = (field: Field, state: Partial<IFieldState>) => {
-    if (!state) return
-    if (isValid(state.title)) {
-      field.title = state.title
-    }
-    if (isValid(state.description)) {
-      field.description = state.description
-    }
-    if (isValid(state.dataSource)) {
-      field.dataSource = state.dataSource
-    }
-    if (isValid(state.feedbacks)) {
-      field.feedbacks = state.feedbacks
-    }
-    if (isValid(state.modified)) {
-      field.modified = state.modified
-    }
-    if (isValid(state.active)) {
-      field.active = state.active
-    }
-    if (isValid(state.visited)) {
-      field.visited = state.visited
-    }
-    if (isValid(state.inputValue)) {
-      field.inputValue = state.inputValue
-    }
-    if (isValid(state.inputValues)) {
-      field.inputValues = state.inputValues
-    }
-    if (isValid(state.component)) {
-      field.setComponent(state.component?.[0], state.component?.[1])
-    }
-    if (isValid(state.decorator)) {
-      field.setDecorator(state.decorator?.[0], state.decorator?.[1])
-    }
-    if (isValid(state.value)) {
-      field.setValue(state.value)
-    }
-    if (isValid(state.initialValue)) {
-      field.setValue(state.initialValue)
-    }
-    if (isValid(state.validator)) {
-      field.setValidator(state.validator)
-    }
-    if (isValid(state.required)) {
-      field.setRequired(state.required)
-    }
-    if (isValid(state.display)) {
-      field.setDisplay(state.display)
-    }
-    if (isValid(state.pattern)) {
-      field.setPattern(state.pattern)
-    }
-    if (isValid(state.loading)) {
-      field.setLoading(state.loading)
-    }
-    if (isValid(state.validating)) {
-      field.setValidating(state.validating)
-    }
-  }
-
-  setVoidFieldState = (field: VoidField, state: Partial<IVoidFieldState>) => {
-    if (!state) return
-    if (isValid(state.title)) {
-      field.title = state.title
-    }
-    if (isValid(state.description)) {
-      field.description = state.description
-    }
-    if (isValid(state.component)) {
-      field.setComponent(state.component?.[0], state.component?.[1])
-    }
-    if (isValid(state.decorator)) {
-      field.setDecorator(state.decorator?.[0], state.decorator?.[1])
-    }
-    if (isValid(state.display)) {
-      field.setDisplay(state.display)
-    }
-    if (isValid(state.pattern)) {
-      field.setPattern(state.pattern)
-    }
-  }
-
-  setState = (state: Partial<IFormState>) => {
-    const form = this.form
-    if (isValid(state.id)) {
-      form.id = state.id
-    }
-    if (isValid(state.initialized)) {
-      form.initialized = state.initialized
-    }
-    if (isValid(state.validating)) {
-      form.validating = state.validating
-    }
-    if (isValid(state.submitting)) {
-      form.submitting = state.submitting
-    }
-    if (isValid(state.values)) {
-      form.values = state.values
-    }
-    if (isValid(state.initialValues)) {
-      form.initialValues = state.initialValues
-    }
-    if (isValid(state.mounted)) {
-      form.mounted = state.mounted
-    }
-    if (isValid(state.unmounted)) {
-      form.unmounted = state.unmounted
-    }
-    if (isValid(state.modified)) {
-      form.modified = state.modified
-    }
-    if (isValid(state.pattern)) {
-      form.pattern = state.pattern
-    }
   }
 
   getGraph = (): IFormGraph => {
     const graph = {}
-    graph[''] = this.getState()
-    each(this.form.fields, (field, identifier) => {
-      if (isVoidField(field)) {
-        graph[identifier] = this.getVoidFieldState(field)
-      } else {
-        graph[identifier] = this.getFieldState(field)
-      }
+    graph[''] = this.form.getState()
+    each(this.form.fields, (field: any, identifier) => {
+      graph[identifier] = field.getState()
     })
     return graph
   }
@@ -233,31 +36,24 @@ export class Graph {
     const form = this.form
     each(graph, (state, address) => {
       if (isFormState(state)) {
-        this.setState(state)
+        form.setState(state)
       } else {
         const field = form.fields[address]
         if (field) {
-          if (isVoidField(field)) {
-            this.setVoidFieldState(field, state)
-          } else {
-            this.setFieldState(field, state as any)
-          }
+          field.setState(state as any)
         } else {
           const _address = FormPath.parse(address)
           const name = _address.segments[_address.segments.length - 1]
           if (isFieldState(state)) {
             form.fields[address] = new Field(address, { name }, form)
-            this.setFieldState(form.fields[address] as any, state)
           } else if (isArrayFieldState(state)) {
             form.fields[address] = new ArrayField(address, { name }, form)
-            this.setFieldState(form.fields[address] as any, state)
           } else if (isObjectFieldState(state)) {
             form.fields[address] = new ObjectField(address, { name }, form)
-            this.setFieldState(form.fields[address] as any, state)
           } else {
             form.fields[address] = new VoidField(address, { name }, form)
-            this.setVoidFieldState(form.fields[address] as any, state)
           }
+          form.fields[address].setState(state as any)
         }
       }
     })

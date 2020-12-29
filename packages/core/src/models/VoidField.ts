@@ -18,8 +18,14 @@ import {
   IVoidFieldProps,
   FormPatternTypes,
   IVoidFieldState,
+  IModelSetter,
+  IModelGetter,
 } from '../types'
-import { buildNodeIndexes } from '../shared'
+import {
+  buildNodeIndexes,
+  createModelGetter,
+  createModelSetter,
+} from '../shared'
 import { Form } from './Form'
 import { Query } from './Query'
 
@@ -101,6 +107,7 @@ export class VoidField<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
+      setState: action,
       onInit: action,
       onMount: action,
       onUnmount: action,
@@ -136,6 +143,86 @@ export class VoidField<
   get pattern(): FormPatternTypes {
     if (this.selfPattern) return this.selfPattern
     return this.parent?.pattern || this.form.pattern || 'editable'
+  }
+
+  get editable() {
+    return this.pattern === 'editable'
+  }
+
+  get disabled() {
+    return this.pattern === 'disabled'
+  }
+
+  get readOnly() {
+    return this.pattern === 'readOnly'
+  }
+
+  get readPretty() {
+    return this.pattern === 'readPretty'
+  }
+
+  get hidden() {
+    return this.display === 'hidden'
+  }
+
+  get visible() {
+    return this.display === 'visible'
+  }
+
+  set hidden(hidden: boolean) {
+    if (hidden) {
+      this.display = 'hidden'
+    } else {
+      this.display = 'visible'
+    }
+  }
+
+  set visible(visible: boolean) {
+    if (visible) {
+      this.display = 'visible'
+    } else {
+      this.display = 'none'
+    }
+  }
+
+  set editable(editable: boolean) {
+    if (editable) {
+      this.selfPattern = 'editable'
+    } else {
+      this.selfPattern = 'readPretty'
+    }
+  }
+
+  set readOnly(readOnly: boolean) {
+    if (readOnly) {
+      this.selfPattern = 'readOnly'
+    } else {
+      this.selfPattern = 'editable'
+    }
+  }
+
+  set disabled(disabled: boolean) {
+    if (disabled) {
+      this.selfPattern = 'disabled'
+    } else {
+      this.selfPattern = 'editable'
+    }
+  }
+
+  set readPretty(readPretty: boolean) {
+    if (readPretty) {
+      this.selfPattern = 'readPretty'
+    } else {
+      this.selfPattern = 'editable'
+    }
+  }
+
+  set pattern(pattern: FieldPatternTypes) {
+    this.selfPattern = pattern
+  }
+
+  set display(display: FieldDisplayTypes) {
+    this.selfDisplay = display
   }
 
   setTitle = (title: TextType) => {
@@ -186,9 +273,9 @@ export class VoidField<
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
   }
 
-  setState = (state?: Partial<IVoidFieldState>) => {
-    this.form.graph.setVoidFieldState(this, state)
-  }
+  setState: IModelSetter<IVoidFieldState> = createModelSetter(this)
+
+  getState: IModelGetter<IVoidFieldState> = createModelGetter(this)
 
   onInit = () => {
     this.initialized = true

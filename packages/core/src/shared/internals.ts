@@ -2,11 +2,14 @@ import {
   FormPath,
   FormPathPattern,
   each,
+  reduce,
   pascalCase,
   isHTMLElement,
+  isFn,
+  isValid,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { runInAction } from 'mobx'
+import { runInAction, toJS } from 'mobx'
 import { Field, ArrayField } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -19,6 +22,7 @@ import {
   LifeCycleTypes,
 } from '../types'
 import { isArrayField, isVoidField } from './externals'
+import { ReservedProperties } from './constants'
 
 export const getValueFromEvent = (event: any) => {
   if (isHTMLElement(event?.target)) {
@@ -317,4 +321,43 @@ export const exchangeArrayState = (
     applyFieldPatches(fields, fieldPatches)
   })
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
+}
+
+export const setModelState = (model: any, setter: any) => {
+  if (isFn(setter)) {
+    setter(model)
+  } else {
+    each(setter, (value, key) => {
+      if (isFn(value)) return
+      if (ReservedProperties.includes(key)) return
+      if (isValid(value)) {
+        model[key] = value
+      }
+    })
+  }
+}
+
+export const getModelState = (model: any, getter?: any) => {
+  if (isFn(getter)) {
+    return getter(model)
+  } else {
+    return reduce(
+      model,
+      (buf, value, key) => {
+        if (isFn(value)) return buf
+        if (ReservedProperties.includes(key)) return buf
+        buf[key] = toJS(value)
+        return buf
+      },
+      {}
+    )
+  }
+}
+
+export const createModelSetter = (model: any) => {
+  return (state?: any) => setModelState(model, state)
+}
+
+export const createModelGetter = (model: any) => {
+  return (getter?: any) => getModelState(model, getter)
 }

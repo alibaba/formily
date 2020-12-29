@@ -44,6 +44,8 @@ import {
   IFieldResetOptions,
   FormPatternTypes,
   IFieldState,
+  IModelSetter,
+  IModelGetter,
 } from '../types'
 import {
   buildNodeIndexes,
@@ -52,6 +54,8 @@ import {
   queryFeedbacks,
   queryFeedbackMessages,
   getValueFromEvent,
+  createModelSetter,
+  createModelGetter,
 } from '../shared'
 import { Query } from './Query'
 
@@ -182,12 +186,14 @@ export class Field<
       setComponentProps: action,
       setDecorator: action,
       setDecoratorProps: action,
+      setState: action,
       onInit: action,
       onInput: action,
       onMount: action,
       onUnmount: action,
       onFocus: action,
       onBlur: action,
+      reset: action,
     })
   }
 
@@ -298,6 +304,30 @@ export class Field<
     )
   }
 
+  get hidden() {
+    return this.display === 'hidden'
+  }
+
+  get visible() {
+    return this.display === 'visible'
+  }
+
+  set hidden(hidden: boolean) {
+    if (hidden) {
+      this.display = 'hidden'
+    } else {
+      this.display = 'visible'
+    }
+  }
+
+  set visible(visible: boolean) {
+    if (visible) {
+      this.display = 'visible'
+    } else {
+      this.display = 'none'
+    }
+  }
+
   get disabled() {
     return this.pattern === 'disabled'
   }
@@ -319,6 +349,46 @@ export class Field<
     if (this.validating) return 'validating'
     if (this.warnings?.length) return 'warning'
     if (this.successes?.length) return 'success'
+  }
+
+  set readOnly(readOnly: boolean) {
+    if (readOnly) {
+      this.selfPattern = 'readOnly'
+    } else {
+      this.selfPattern = 'editable'
+    }
+  }
+
+  set editable(editable: boolean) {
+    if (editable) {
+      this.selfPattern = 'editable'
+    } else {
+      this.selfPattern = 'readPretty'
+    }
+  }
+
+  set disabled(disabled: boolean) {
+    if (disabled) {
+      this.selfPattern = 'disabled'
+    } else {
+      this.selfPattern = 'editable'
+    }
+  }
+
+  set readPretty(readPretty: boolean) {
+    if (readPretty) {
+      this.selfPattern = 'readPretty'
+    } else {
+      this.selfPattern = 'editable'
+    }
+  }
+
+  set pattern(pattern: FieldPatternTypes) {
+    this.selfPattern = pattern
+  }
+
+  set display(display: FieldDisplayTypes) {
+    this.selfDisplay = display
   }
 
   set required(required: boolean) {
@@ -497,9 +567,9 @@ export class Field<
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
   }
 
-  setState = (state?: Partial<IFieldState>) => {
-    this.form.graph.setFieldState(this, state)
-  }
+  setState: IModelSetter<IFieldState> = createModelSetter(this)
+
+  getState: IModelGetter<IFieldState> = createModelGetter(this)
 
   onInit = () => {
     this.initialized = true
@@ -579,22 +649,21 @@ export class Field<
   }
 
   reset = async (options?: IFieldResetOptions) => {
-    runInAction(() => {
-      this.modified = false
-      this.visited = false
-      this.feedbacks = []
-      if (options?.clearInitialValue) {
-        this.setInitialValue()
-      }
-      if (options?.forceClear) {
-        this.inputValue = undefined
-        this.inputValues = []
-        this.setValue()
-      } else {
-        this.setValue(this.initialValue)
-      }
-      this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
-    })
+    this.modified = false
+    this.visited = false
+    this.feedbacks = []
+    if (options?.clearInitialValue) {
+      this.setInitialValue()
+    }
+    if (options?.forceClear) {
+      this.inputValue = undefined
+      this.inputValues = []
+      this.setValue()
+    } else {
+      this.setValue(this.initialValue)
+    }
+    this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
+
     if (options?.validate) {
       return await this.validate()
     }

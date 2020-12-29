@@ -1,5 +1,5 @@
 import { FormPath, isFn } from '@formily/shared'
-import { autorun } from 'mobx'
+import { autorun, runInAction } from 'mobx'
 import { Form, Field } from '../models'
 import { LifeCycleTypes, FormPathPattern, GeneralField } from '../types'
 import { createEffect } from '../shared'
@@ -16,7 +16,9 @@ const createFieldEffect = (type: LifeCycleTypes) => {
         if (
           FormPath.parse(pattern).matchAliasGroup(field.address, field.path)
         ) {
-          callback(field, form)
+          runInAction(() => {
+            callback(field, form)
+          })
         }
       }
     }
@@ -54,7 +56,7 @@ export const onFieldReact = (
     )
   })
   onFormUnMount(() => {
-    disposers.forEach(dispose => {
+    disposers.forEach((dispose) => {
       dispose()
     })
   })

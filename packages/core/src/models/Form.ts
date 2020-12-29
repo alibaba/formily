@@ -1,10 +1,4 @@
-import {
-  action,
-  makeObservable,
-  observable,
-  toJS,
-  runInAction
-} from 'mobx'
+import { action, makeObservable, observable, toJS, runInAction } from 'mobx'
 import {
   FormPath,
   FormPathPattern,
@@ -31,8 +25,16 @@ import {
   FormFields,
   IFieldFactoryProps,
   IVoidFieldFactoryProps,
+  IFormState,
+  IModelGetter,
+  IModelSetter,
 } from '../types'
-import { isVoidField, getLifeCyclesByEffects } from '../shared'
+import {
+  isVoidField,
+  getLifeCyclesByEffects,
+  createModelGetter,
+  createModelSetter,
+} from '../shared'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
 import { VoidField } from './VoidField'
@@ -103,6 +105,7 @@ export class Form {
       setInitialValues: action,
       setInitialValuesIn: action,
       setPattern: action,
+      setState: action,
       deleteIntialValuesIn: action,
       deleteValuesIn: action,
       setSubmitting: action,
@@ -292,6 +295,10 @@ export class Form {
   setPattern = (pattern: FormPatternTypes) => {
     this.pattern = pattern
   }
+
+  setState: IModelSetter<IFormState> = createModelSetter(this)
+
+  getState: IModelGetter<IFormState> = createModelGetter(this)
 
   addEffects = (id: string, effects: IFormProps['effects']) => {
     this.heart.addLifeCycles(id, getLifeCyclesByEffects(effects))
