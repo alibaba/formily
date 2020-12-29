@@ -8,6 +8,7 @@ import React, { useRef, useLayoutEffect, useState } from 'react'
 import StickyBox, { StickyBoxMode } from 'react-sticky-box'
 import { Form } from 'antd'
 import { FormItemProps } from 'antd/lib/form'
+import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 interface IStickyProps {
   offsetTop?: number
@@ -54,10 +55,11 @@ function getDefaultBackground() {
 }
 
 export const FormButtonGroup: ComposedButtonGroup = (props) => {
+  const prefixCls = usePrefixCls('form-button-group')
   return (
     <Form.Item
       {...props}
-      className={cls('ant-form-button-group', props.className)}
+      className={cls(prefixCls, props.className)}
       label=" "
       style={{ margin: 0, padding: 0, ...props.style }}
       colon={false}

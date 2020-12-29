@@ -32,6 +32,7 @@ import {
 } from '@formily/react-schema-field'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
+import { usePrefixCls } from '../__builtins__'
 
 interface ObservableColumnSource {
   field: Formily.Core.Models.VoidField
@@ -176,6 +177,7 @@ const useAddition = () => {
 const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
   const form = useForm()
   const field = useField<Formily.Core.Models.ArrayField>()
+  const prefixCls = usePrefixCls('array-table')
   const errors = form.queryFeedbacks({
     type: 'error',
     address: `${field.address}.*`,
@@ -207,7 +209,7 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
       style={{
         width: width < 60 ? 60 : width,
       }}
-      className={cls('ant-array-table-status-select', {
+      className={cls(`${prefixCls}-status-select`, {
         'has-error': errors?.length,
       })}
     />
@@ -216,6 +218,7 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
 
 const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)
+  const prefixCls = usePrefixCls('array-table')
   const pageSize = props.pageSize || 10
   const size = props.size || 'default'
   const dataSource = props.dataSource || []
@@ -237,7 +240,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   const renderPagination = () => {
     if (totalPage <= 1) return
     return (
-      <div className="ant-array-table-pagination">
+      <div className={`${prefixCls}-pagination`}>
         <Space>
           <StatusSelect
             value={current}
@@ -274,6 +277,7 @@ export const ArrayTable: ComposedArrayTable = observer(
   (props: TableProps<any>) => {
     const ref = useRef<HTMLDivElement>()
     const field = useField<Formily.Core.Models.ArrayField>()
+    const prefixCls = usePrefixCls('array-table')
     const dataSource = Array.isArray(field.value) ? [...field.value] : []
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
@@ -283,7 +287,7 @@ export const ArrayTable: ComposedArrayTable = observer(
       return dataSource.indexOf(record)
     }
     const addTdStyles = (node: HTMLElement) => {
-      const helper = document.body.querySelector('.ant-array-table-sort-helper')
+      const helper = document.body.querySelector(`${prefixCls}-sort-helper`)
       if (helper) {
         const tds = node.querySelectorAll('td')
         requestAnimationFrame(() => {
@@ -299,7 +303,7 @@ export const ArrayTable: ComposedArrayTable = observer(
     return (
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
         {(dataSource, pager) => (
-          <div ref={ref} className="ant-array-table">
+          <div ref={ref} className={prefixCls}>
             <ArrayContext.Provider value={field}>
               <Table
                 size="small"
@@ -316,7 +320,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                       <SortableBody
                         useDragHandle
                         lockAxis="y"
-                        helperClass="ant-array-table-sort-helper"
+                        helperClass={`${prefixCls}-sort-helper`}
                         helperContainer={() => {
                           return ref.current?.querySelector('tbody')
                         }}
@@ -367,10 +371,11 @@ ArrayTable.useArrayTable = () => useContext(ArrayContext)
 ArrayTable.useArrayTableIndex = () => useContext(ArrayIndexContext)
 
 ArrayTable.SortHandle = SortableHandle((props: any) => {
+  const prefixCls = usePrefixCls('array-table')
   return (
     <MenuOutlined
       {...props}
-      className={cls('ant-array-table-sort-handler', props.className)}
+      className={cls(`${prefixCls}-sort-handler`, props.className)}
       style={{ ...props.style }}
     />
   )
@@ -384,11 +389,12 @@ ArrayTable.Index = (props) => {
 ArrayTable.Addition = (props) => {
   const self = useField()
   const field = ArrayTable.useArrayTable()
+  const prefixCls = usePrefixCls('array-table')
   return (
     <Button
       type="dashed"
       block
-      className={cls('ant-array-table-addition', props.className)}
+      className={cls(`${prefixCls}-addition`, props.className)}
       {...props}
       onClick={(e) => {
         if (props.method === 'unshift') {
@@ -407,10 +413,11 @@ ArrayTable.Addition = (props) => {
 ArrayTable.Remove = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
+  const prefixCls = usePrefixCls('array-table')
   return (
     <DeleteOutlined
       {...props}
-      className={cls('ant-array-table-remove', props.className)}
+      className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={(e) => {
         field.remove(index)
@@ -422,10 +429,11 @@ ArrayTable.Remove = React.forwardRef((props, ref) => {
 ArrayTable.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
+  const prefixCls = usePrefixCls('array-table')
   return (
     <DownOutlined
       {...props}
-      className={cls('ant-array-table-move-down', props.className)}
+      className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={(e) => {
         field.moveDown(index)
@@ -437,10 +445,11 @@ ArrayTable.MoveDown = React.forwardRef((props, ref) => {
 ArrayTable.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
+  const prefixCls = usePrefixCls('array-table')
   return (
     <UpOutlined
       {...props}
-      className={cls('ant-array-table-move-up', props.className)}
+      className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={(e) => {
         field.moveUp(index)

@@ -13,18 +13,23 @@ import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import cls from 'classnames'
 import { ISchema } from '@formily/json-schema'
+import { usePrefixCls } from '../__builtins__'
 interface IArrayCardsAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
+}
+
+type SupportPrefixCls<P> = P & {
+  prefixCls?: string
 }
 
 type ComposedArrayCards = React.FC<CardProps> & {
   SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayCardsAdditionProps>
   Index?: React.FC
-  Remove?: React.FC<AntdIconProps>
-  MoveUp?: React.FC<AntdIconProps>
-  MoveDown?: React.FC<AntdIconProps>
+  Remove?: React.FC<SupportPrefixCls<AntdIconProps>>
+  MoveUp?: React.FC<SupportPrefixCls<AntdIconProps>>
+  MoveDown?: React.FC<SupportPrefixCls<AntdIconProps>>
   useArrayCards?: () => Formily.Core.Models.ArrayField
   useArrayCardsIndex?: () => number
 }
@@ -66,7 +71,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useSchema()
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
-
+  const prefixCls = usePrefixCls('array-cards', props)
   const renderItems = () => {
     return dataSource?.map((item, index) => {
       const items = Array.isArray(schema.items)
@@ -116,7 +121,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
           <Card
             {...props}
             onChange={() => {}}
-            className={cls('ant-array-cards-item', props.className)}
+            className={cls(`${prefixCls}-item`, props.className)}
             title={title}
             extra={extra}
           >
@@ -141,7 +146,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
     return (
       <Card
         {...props}
-        className={cls('ant-array-cards-item', props.className)}
+        className={cls(`${prefixCls}-item`, props.className)}
         title={props.title || field.title}
         onChange={() => {}}
       >
@@ -173,11 +178,12 @@ ArrayCards.Index = (props) => {
 ArrayCards.Addition = (props) => {
   const self = useField()
   const field = ArrayCards.useArrayCards()
+  const prefixCls = usePrefixCls('array-cards', props)
   return (
     <Button
       type="dashed"
       block
-      className={cls('ant-array-cards-addition', props.className)}
+      className={cls(`${prefixCls}-addition`, props.className)}
       {...props}
       onClick={() => {
         if (props.method === 'unshift') {
@@ -196,10 +202,11 @@ ArrayCards.Addition = (props) => {
 ArrayCards.Remove = React.forwardRef((props, ref) => {
   const index = ArrayCards.useArrayCardsIndex()
   const field = ArrayCards.useArrayCards()
+  const prefixCls = usePrefixCls('array-cards', props)
   return (
     <DeleteOutlined
       {...props}
-      className={cls('ant-array-cards-remove', props.className)}
+      className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={() => {
         field.remove(index)
@@ -211,10 +218,11 @@ ArrayCards.Remove = React.forwardRef((props, ref) => {
 ArrayCards.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayCards.useArrayCardsIndex()
   const field = ArrayCards.useArrayCards()
+  const prefixCls = usePrefixCls('array-cards', props)
   return (
     <DownOutlined
       {...props}
-      className={cls('ant-array-cards-move-down', props.className)}
+      className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={() => {
         field.moveDown(index)
@@ -226,10 +234,11 @@ ArrayCards.MoveDown = React.forwardRef((props, ref) => {
 ArrayCards.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayCards.useArrayCardsIndex()
   const field = ArrayCards.useArrayCards()
+  const prefixCls = usePrefixCls('array-cards', props)
   return (
     <UpOutlined
       {...props}
-      className={cls('ant-array-cards-move-up', props.className)}
+      className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={() => {
         field.moveUp(index)

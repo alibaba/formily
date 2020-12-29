@@ -5,7 +5,7 @@ import { Form, Space, Popover } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { FormItemProps } from 'antd/lib/form'
 import { PopoverProps } from 'antd/lib/popover'
-import { useClickAway } from '../shared'
+import { useClickAway, usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 /**
  * 默认Inline展示
@@ -53,6 +53,8 @@ export const Editable: ComposedEditable = observer((props) => {
   const [editable, setEditable] = useEditable()
   const itemProps = useFormItemProps()
   const field = useField<Formily.Core.Models.Field>()
+  const basePrefixCls = usePrefixCls()
+  const prefixCls = usePrefixCls('editable')
   const ref = useRef<boolean>()
   const innerRef = useRef<HTMLDivElement>()
   const recover = () => {
@@ -64,7 +66,7 @@ export const Editable: ComposedEditable = observer((props) => {
     if (editable) return
     return (
       <Form.Item {...itemProps}>
-        <EditOutlined className="ant-editable-edit-btn" />
+        <EditOutlined className={`${prefixCls}-edit-btn`} />
       </Form.Item>
     )
   }
@@ -73,22 +75,22 @@ export const Editable: ComposedEditable = observer((props) => {
     if (!editable) return
     return (
       <Form.Item>
-        <CloseOutlined className="ant-editable-close-btn" />
+        <CloseOutlined className={`${prefixCls}-close-btn`} />
       </Form.Item>
     )
   }
 
   useClickAway((e) => {
     const target = e.target as HTMLElement
-    if (target?.closest('.ant-select-dropdown')) return
-    if (target?.closest('.ant-picker-dropdown')) return
-    if (target?.closest('.ant-cascader-menus')) return
+    if (target?.closest(`.${basePrefixCls}-select-dropdown`)) return
+    if (target?.closest(`.${basePrefixCls}-picker-dropdown`)) return
+    if (target?.closest(`.${basePrefixCls}-cascader-menus`)) return
     recover()
   }, innerRef)
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const target = e.target as HTMLElement
-    const close = innerRef.current.querySelector('.ant-editable-close-btn')
+    const close = innerRef.current.querySelector(`.${prefixCls}-close-btn`)
     if (target?.contains(close) || close?.contains(target)) {
       recover()
     } else if (!ref.current) {
@@ -104,7 +106,7 @@ export const Editable: ComposedEditable = observer((props) => {
   ref.current = editable
 
   return (
-    <div className="ant-editable" ref={innerRef} onClick={onClick}>
+    <div className={prefixCls} ref={innerRef} onClick={onClick}>
       <Space>
         <Form.Item {...props} {...itemProps}>
           {props.children}
@@ -120,6 +122,7 @@ Editable.Popover = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const [editable, setEditable] = useEditable()
   const [visible, setVisible] = useState(false)
+  const prefixCls = usePrefixCls('editable')
   const timer = useRef(null)
   const preview = FormPath.getIn(field.value, props.dataIndex || '')
   const placeholder = isStr(preview) ? preview : ''
@@ -145,7 +148,7 @@ Editable.Popover = observer((props) => {
       {...props}
       title={field.title}
       visible={editable && visible}
-      className={cls('ant-editable', props.className)}
+      className={cls(prefixCls, props.className)}
       content={props.children}
       trigger="click"
       onVisibleChange={(visible) => {
@@ -154,17 +157,16 @@ Editable.Popover = observer((props) => {
       }}
     >
       <div
-        className="ant-editable"
         onClick={() => {
           openPopover()
         }}
       >
         <Form.Item>
           <Space>
-            <span className="ant-editable-preview">
+            <span className={`${prefixCls}-preview`}>
               {placeholder || field.title}
             </span>
-            <EditOutlined className="ant-editable-edit-btn" />
+            <EditOutlined className={`${prefixCls}-edit-btn`} />
           </Space>
         </Form.Item>
       </div>

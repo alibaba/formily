@@ -11,7 +11,8 @@ import {
 } from 'antd/lib/date-picker'
 import { TimePickerProps, TimeRangePickerProps } from 'antd/lib/time-picker'
 import { Tag } from 'antd'
-import { formatMomentValue } from '../shared'
+import cls from 'classnames'
+import { formatMomentValue, usePrefixCls } from '../__builtins__'
 
 const PlaceholderContext = createContext<string>('N/A')
 
@@ -23,8 +24,9 @@ const usePlaceholder = (value?: any) => {
 }
 
 const Input: React.FC<InputProps> = (props) => {
+  const prefixCls = usePrefixCls('form-text', props)
   return (
-    <div className="ant-form-text">
+    <div className={cls(prefixCls, props.className)}>
       <span>{props.addonBefore}</span>
       <span>{props.prefix}</span>
       {usePlaceholder(props.value)}
@@ -36,6 +38,7 @@ const Input: React.FC<InputProps> = (props) => {
 
 const Select: React.FC<SelectProps<any>> = (props) => {
   const field = useField<Formily.Core.Models.Field>()
+  const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
     ? field.dataSource
     : props?.options?.length
@@ -70,12 +73,13 @@ const Select: React.FC<SelectProps<any>> = (props) => {
       return <Tag key={key}>{text || placeholder}</Tag>
     })
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 const TreeSelect: React.FC<TreeSelectProps<any>> = (props) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
   const dataSource = field?.dataSource?.length
     ? field.dataSource
     : props?.options?.length
@@ -123,12 +127,13 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = (props) => {
       )
     })
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 const Cascader: React.FC<CascaderProps> = (props) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
     ? field.dataSource
     : props?.options?.length
@@ -147,43 +152,47 @@ const Cascader: React.FC<CascaderProps> = (props) => {
       })
       .join('/')
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 const DatePicker: React.FC<DatePickerProps> = (props) => {
   const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = (props) => {
   const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 const TimePicker: React.FC<TimePickerProps> = (props) => {
   const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 const TimeRangePicker: React.FC<TimeRangePickerProps> = (props) => {
   const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
   const getLabels = () => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className="ant-form-text">{getLabels()}</div>
+  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
 export const PreviewText = {

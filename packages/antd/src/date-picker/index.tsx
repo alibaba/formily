@@ -6,7 +6,7 @@ import {
   RangePickerProps,
 } from 'antd/lib/date-picker'
 import { PreviewText } from '../preview-text'
-import { formatMomentValue, momentable } from '../shared'
+import { formatMomentValue, momentable } from '../__builtins__'
 
 type DatePickerProps<PickerProps> = Exclude<
   PickerProps,

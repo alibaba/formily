@@ -6,22 +6,14 @@ import {
   TimeRangePickerProps,
 } from 'antd/lib/time-picker'
 import { PreviewText } from '../preview-text'
-import { formatMomentValue, momentable } from '../shared'
-
-type TimePickerProps<PickerProps> = Exclude<
-  PickerProps,
-  'value' | 'onChange'
-> & {
-  value: string
-  onChange: (value: string | string[]) => void
-}
+import { formatMomentValue, momentable } from '../__builtins__'
 
 type ComposedTimePicker = React.FC<AntdTimePickerProps> & {
   RangePicker?: React.FC<TimeRangePickerProps>
 }
 
 const mapTimeFormat = function () {
-  return (props: TimePickerProps<AntdTimePickerProps>): TimePickerProps => {
+  return (props: any) => {
     const format = props['format'] || 'HH:mm:ss'
     const onChange = props.onChange
     return {

@@ -18,6 +18,8 @@ import {
   SortableHandle,
 } from 'react-sortable-hoc'
 import { ISchema } from '@formily/json-schema'
+import { usePrefixCls } from '../__builtins__'
+
 interface IArrayItemsAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
@@ -37,8 +39,9 @@ type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> & {
 
 const SortableItem = SortableElement(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
+    const prefixCls = usePrefixCls('array-items')
     return (
-      <div {...props} className={cls('ant-array-items-item', props.className)}>
+      <div {...props} className={cls(`${prefixCls}-item`, props.className)}>
         {props.children}
       </div>
     )
@@ -46,11 +49,14 @@ const SortableItem = SortableElement(
 )
 
 const SortableList = SortableContainer(
-  (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => (
-    <div {...props} className={cls('ant-array-items-list', props.className)}>
-      {props.children}
-    </div>
-  )
+  (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
+    const prefixCls = usePrefixCls('array-items')
+    return (
+      <div {...props} className={cls(`${prefixCls}-list`, props.className)}>
+        {props.children}
+      </div>
+    )
+  }
 )
 
 const ArrayContext = createContext<Formily.Core.Models.ArrayField>(null)
@@ -73,6 +79,7 @@ const useAddition = () => {
 
 export const ArrayItems: ComposedArrayItems = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
+  const prefixCls = usePrefixCls('array-items')
   const schema = useSchema()
   const addition = useAddition()
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
@@ -81,12 +88,12 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
       <div
         {...props}
         onChange={() => {}}
-        className={cls('ant-array-items', props.className)}
+        className={cls(prefixCls, props.className)}
       >
         <SortableList
           useDragHandle
           lockAxis="y"
-          helperClass="ant-array-items-dragging"
+          helperClass={`${prefixCls}-sort-helper`}
           onSortEnd={({ oldIndex, newIndex }) => {
             field.move(oldIndex, newIndex)
           }}
@@ -98,7 +105,7 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
             return (
               <ArrayIndexContext.Provider key={index} value={index}>
                 <SortableItem key={`item-${index}`} index={index}>
-                  <div className="ant-array-items-item-inner">
+                  <div className={`${prefixCls}-item-inner`}>
                     <RecursionField schema={items} name={index} />
                   </div>
                 </SortableItem>
@@ -119,10 +126,11 @@ ArrayItems.useArrayItems = () => useContext(ArrayContext)
 ArrayItems.useArrayItemsIndex = () => useContext(ArrayIndexContext)
 
 ArrayItems.SortHandle = SortableHandle((props: any) => {
+  const prefixCls = usePrefixCls('array-items')
   return (
     <MenuOutlined
       {...props}
-      className={cls('ant-array-items-sort-handler', props.className)}
+      className={cls(`${prefixCls}-sort-handler`, props.className)}
       style={{ ...props.style }}
     />
   )
@@ -136,11 +144,12 @@ ArrayItems.Index = (props) => {
 ArrayItems.Addition = (props) => {
   const self = useField()
   const field = ArrayItems.useArrayItems()
+  const prefixCls = usePrefixCls('array-items')
   return (
     <Button
       type="dashed"
       block
-      className={cls('ant-array-items-addition', props.className)}
+      className={cls(`${prefixCls}-addition`, props.className)}
       {...props}
       onClick={() => {
         if (props.method === 'unshift') {
@@ -159,10 +168,11 @@ ArrayItems.Addition = (props) => {
 ArrayItems.Remove = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
+  const prefixCls = usePrefixCls('array-items')
   return (
     <DeleteOutlined
       {...props}
-      className={cls('ant-array-items-remove', props.className)}
+      className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={() => {
         field.remove(index)
@@ -174,10 +184,11 @@ ArrayItems.Remove = React.forwardRef((props, ref) => {
 ArrayItems.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
+  const prefixCls = usePrefixCls('array-items')
   return (
     <DownOutlined
       {...props}
-      className={cls('ant-array-items-move-down', props.className)}
+      className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={() => {
         field.moveDown(index)
@@ -189,10 +200,11 @@ ArrayItems.MoveDown = React.forwardRef((props, ref) => {
 ArrayItems.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
+  const prefixCls = usePrefixCls('array-items')
   return (
     <UpOutlined
       {...props}
-      className={cls('ant-array-items-move-up', props.className)}
+      className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={() => {
         field.moveUp(index)
@@ -202,8 +214,9 @@ ArrayItems.MoveUp = React.forwardRef((props, ref) => {
 })
 
 ArrayItems.Card = (props) => {
+  const prefixCls = usePrefixCls('array-items')
   return (
-    <div {...props} className={cls('ant-array-items-card', props.className)}>
+    <div {...props} className={cls(`${prefixCls}-card`, props.className)}>
       {props.children}
     </div>
   )

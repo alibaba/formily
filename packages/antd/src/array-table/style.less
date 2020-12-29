@@ -18,8 +18,8 @@
     transition: all .25s ease-in-out;
   }
 
-  .ant-form-item-has-error {
-    .ant-table {
+  .@{ant-prefix}-form-item-has-error {
+    .@{ant-prefix}-table {
       border: 1px solid @error-color  !important;
     }
   }
@@ -56,7 +56,7 @@
     justify-content: center;
 
     .@{array-table-prefix-cls}-status-select.has-error {
-      .ant-select-selector {
+      .@{ant-prefix}-select-selector {
         border-color: @error-color  !important;
       }
     }
