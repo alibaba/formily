@@ -287,7 +287,7 @@ export const ArrayTable: ComposedArrayTable = observer(
       return dataSource.indexOf(record)
     }
     const addTdStyles = (node: HTMLElement) => {
-      const helper = document.body.querySelector(`${prefixCls}-sort-helper`)
+      const helper = document.body.querySelector(`.${prefixCls}-sort-helper`)
       if (helper) {
         const tds = node.querySelectorAll('td')
         requestAnimationFrame(() => {

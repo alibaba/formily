@@ -43,8 +43,8 @@ const merge = () => {}
 const form = createForm({
   effects: (form) => {
     onFieldChange('input', ['value'], (field) => {
-      form.setFieldState('array.*.config.input', (target) => {
-        target.visible = field.value == '123'
+      form.setFieldState('date', (target) => {
+        target.disabled = field.value == '123'
       })
     })
   },
@@ -58,6 +58,7 @@ export default () => {
           name="input"
           title="输入框"
           x-decorator="FormItem"
+          default="123"
           x-component="Input"
         />
         <SchemaField.String
