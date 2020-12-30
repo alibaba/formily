@@ -10,7 +10,12 @@ import {
   DatePicker,
   ArrayItems,
 } from '@formily/antd'
-import { FormProvider, createForm } from '@formily/react'
+import {
+  FormProvider,
+  createForm,
+  onFieldReact,
+  onFieldChange,
+} from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Space } from 'antd'
 
@@ -33,12 +38,34 @@ const range = (count: number) =>
     aaa: key,
   }))
 
-const form = createForm()
+const merge = () => {}
+
+const form = createForm({
+  effects: (form) => {
+    onFieldChange('input', ['value'], (field) => {
+      form.setFieldState('array.*.config.input', (target) => {
+        target.visible = field.value == '123'
+      })
+    })
+  },
+})
 
 export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField>
+        <SchemaField.String
+          name="input"
+          title="输入框"
+          x-decorator="FormItem"
+          x-component="Input"
+        />
+        <SchemaField.String
+          name="date"
+          title="日期"
+          x-decorator="FormItem"
+          x-component="DatePicker"
+        />
         <SchemaField.Array
           name="array"
           title="数组项"
@@ -53,6 +80,7 @@ export default () => {
                 x-component="ArrayItems.SortHandle"
               />
               <SchemaField.Object
+                name="config"
                 x-component="Editable.Popover"
                 required
                 title="配置复杂数据"

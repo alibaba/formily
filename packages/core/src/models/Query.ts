@@ -1,5 +1,5 @@
 import { FormPath, isFn, each } from '@formily/shared'
-import { untracked } from 'mobx'
+import { untracked, action } from 'mobx'
 import { GeneralField, IQueryProps } from '../types'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
@@ -32,15 +32,15 @@ export class Query<T = Field | ArrayField | ObjectField> {
   get(): T
   get<Result>(getter: (field: T, address: FormPath) => Result): Result
   get(getter?: any): any {
-    const output = (field: GeneralField) => {
-      if (!field) return
+    const output = action((field: GeneralField) => {
+      if (!field) return {}
       if (this.match(field)) {
         if (isFn(getter)) {
           return getter(field as any, field.address) as any
         }
         return field as any
       }
-    }
+    })
 
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
@@ -53,7 +53,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
           untracked(() => {
             for (let address in this.form.fields) {
               const field = this.form.fields[address]
-              if (this.pattern.matchAliasGroup(field.address, field.path)) {
+              if (field.match(this.pattern)) {
                 return address
               }
             }
@@ -66,7 +66,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
   getAll<Result>(mapper?: (field: T, address: FormPath) => Result): Result[]
   getAll(mapper?: any): any {
     const results = []
-    const output = (field: GeneralField) => {
+    const output = action((field: GeneralField) => {
       if (!field) return
       if (this.match(field)) {
         if (isFn(mapper)) {
@@ -75,7 +75,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
           results.push(field)
         }
       }
-    }
+    })
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)
@@ -85,7 +85,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
       untracked(() => {
         const results = []
         each(this.form.fields, (field, address) => {
-          if (this.pattern.matchAliasGroup(field.address, field.path)) {
+          if (field.match(this.pattern)) {
             results.push(address)
           }
         })
@@ -111,5 +111,17 @@ export class Query<T = Field | ArrayField | ObjectField> {
 
   get all() {
     return new Query<GeneralField>(this.props, 'ALL')
+  }
+
+  get value() {
+    return this.get()?.['value']
+  }
+
+  get initialValue() {
+    return this.get()?.['initialValue']
+  }
+
+  get inputValue() {
+    return this.get()?.['inputValue']
   }
 }

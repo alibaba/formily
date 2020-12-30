@@ -4,7 +4,7 @@ import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
 import { createEffect } from '../shared'
 
-const createFormEffect = (type: LifeCycleTypes) => {
+function createFormEffect(type: LifeCycleTypes) {
   return createEffect(
     type,
     (form: Form) => (callback: (form: Form) => void) => {
@@ -58,7 +58,7 @@ export const onFormValidateStart = createFormEffect(
 export const onFormValidateEnd = createFormEffect(
   LifeCycleTypes.ON_FORM_VALIDATE_END
 )
-export const onFormReact = (callback?: (form: Form) => void) => {
+export function onFormReact(callback?: (form: Form) => void) {
   let dispose = null
   onFormInit((form) => {
     dispose = autorun(() => {

@@ -1,11 +1,16 @@
-import { FormPath, isFn } from '@formily/shared'
-import { autorun, runInAction } from 'mobx'
+import { FormPath, isFn, toArr } from '@formily/shared'
+import { autorun, reaction, runInAction } from 'mobx'
 import { Form, Field } from '../models'
-import { LifeCycleTypes, FormPathPattern, GeneralField } from '../types'
+import {
+  LifeCycleTypes,
+  FormPathPattern,
+  GeneralField,
+  IFieldState,
+} from '../types'
 import { createEffect } from '../shared'
 import { onFormUnMount } from './onFormEffects'
 
-const createFieldEffect = (type: LifeCycleTypes) => {
+function createFieldEffect(type: LifeCycleTypes) {
   return createEffect(
     type,
     (field: Field, form: Form) => (
@@ -43,16 +48,44 @@ export const onFieldValidateEnd = createFieldEffect(
   LifeCycleTypes.ON_FIELD_VALIDATE_END
 )
 
-export const onFieldReact = (
+export function onFieldReact(
   pattern: FormPathPattern,
   callback?: (field: GeneralField, form: Form) => void
-) => {
+) {
   const disposers = []
   onFieldInit(pattern, (field, form) => {
     disposers.push(
       autorun(() => {
-        callback(field, form)
+        if (isFn(callback)) callback(field, form)
       })
+    )
+  })
+  onFormUnMount(() => {
+    disposers.forEach((dispose) => {
+      dispose()
+    })
+  })
+}
+
+export function onFieldChange(
+  pattern: FormPathPattern,
+  watches: (keyof IFieldState)[] = ['value'],
+  callback?: (field: GeneralField, form: Form) => void
+) {
+  const disposers = []
+  onFieldInit(pattern, (field, form) => {
+    if (isFn(callback)) callback(field, form)
+    disposers.push(
+      reaction(
+        () => {
+          return toArr(watches).map((key) => {
+            return field[key]
+          })
+        },
+        () => {
+          if (isFn(callback)) callback(field, form)
+        }
+      )
     )
   })
   onFormUnMount(() => {

@@ -10,7 +10,7 @@ import {
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { runInAction, toJS } from 'mobx'
-import { Field, ArrayField } from '../models'
+import { Field, ArrayField, Form } from '../models'
 import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
@@ -320,6 +320,57 @@ export const exchangeArrayState = (
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
+export const publishUpdate = (field: GeneralField) => {
+  const form = field.form
+  const updates = FormPath.ensureIn(form, 'requests.updates', [])
+  const indexes = FormPath.ensureIn(form, 'requests.updateIndexes', {})
+  for (let index = 0; index < updates.length; index++) {
+    const { pattern, callbacks } = updates[index]
+    let removed = false
+    if (field.match(pattern)) {
+      callbacks.forEach((callback) => {
+        field.setState(callback)
+      })
+      if (!pattern.isWildMatchPattern && !pattern.isMatchPattern) {
+        updates.splice(index--, 1)
+        removed = true
+      }
+    }
+    if (!removed) {
+      indexes[pattern.toString()] = index
+    } else {
+      delete indexes[pattern.toString()]
+    }
+  }
+}
+
+export const subscribeUpdate = (
+  form: Form,
+  pattern: FormPath,
+  callback: (...args: any[]) => void
+) => {
+  const updates = FormPath.ensureIn(form, 'requests.updates', [])
+  const indexes = FormPath.ensureIn(form, 'requests.updateIndexes', {})
+  const id = pattern.toString()
+  const current = indexes[id]
+  if (isValid(current)) {
+    if (
+      updates[current] &&
+      !updates[current].callbacks.some((fn: any) =>
+        fn.toString() === callback.toString() ? fn === callback : false
+      )
+    ) {
+      updates[current].callbacks.push(callback)
+    }
+  } else {
+    indexes[id] = updates.length
+    updates.push({
+      pattern,
+      callbacks: [callback],
+    })
+  }
+}
+
 export const setModelState = (model: any, setter: any) => {
   if (isFn(setter)) {
     setter(model)
@@ -368,10 +419,32 @@ export const getModelState = (model: any, getter?: any) => {
   }
 }
 
-export const createModelSetter = (model: any) => {
+export const createModelStateSetter = (model: any) => {
   return (state?: any) => setModelState(model, state)
 }
 
-export const createModelGetter = (model: any) => {
+export const createModelStateGetter = (model: any) => {
   return (getter?: any) => getModelState(model, getter)
+}
+
+export const createFieldStateSetter = (form: Form) => {
+  return (pattern: FormPathPattern, payload?: any) => {
+    let matchCount = 0,
+      path = FormPath.parse(pattern)
+    form.query(path).all.getAll((field) => {
+      field.setState(payload)
+      matchCount++
+    })
+
+    if (matchCount === 0 || path.isWildMatchPattern) {
+      subscribeUpdate(form, path, payload)
+    }
+  }
+}
+export const createFieldStateGetter = (form: Form) => {
+  return (pattern: FormPathPattern, payload?: any) => {
+    return form.query(pattern).all.get((field: any) => {
+      return field.getState(payload)
+    })
+  }
 }

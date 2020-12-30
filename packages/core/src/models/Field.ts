@@ -50,12 +50,13 @@ import {
 import {
   buildNodeIndexes,
   validateToFeedbacks,
+  publishUpdate,
   updateFeedback,
   queryFeedbacks,
   queryFeedbackMessages,
   getValueFromEvent,
-  createModelSetter,
-  createModelGetter,
+  createModelStateSetter,
+  createModelStateGetter,
 } from '../shared'
 import { Query } from './Query'
 
@@ -567,13 +568,14 @@ export class Field<
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
   }
 
-  setState: IModelSetter<IFieldState> = createModelSetter(this)
+  setState: IModelSetter<IFieldState> = createModelStateSetter(this)
 
-  getState: IModelGetter<IFieldState> = createModelGetter(this)
+  getState: IModelGetter<IFieldState> = createModelStateGetter(this)
 
   onInit = () => {
     this.initialized = true
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    publishUpdate(this)
   }
 
   onMount = () => {
@@ -687,5 +689,9 @@ export class Field<
         dispose()
       }
     })
+  }
+
+  match = (pattern: FormPathPattern) => {
+    return FormPath.parse(pattern).matchAliasGroup(this.address, this.path)
   }
 }

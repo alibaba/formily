@@ -2,7 +2,11 @@ import { isArr, isFn } from '@formily/shared'
 import moment from 'moment'
 
 export const momentable = (value: any) => {
-  return Array.isArray(value) ? value.map((val) => moment(val)) : moment(value)
+  return Array.isArray(value)
+    ? value.map((val) => moment(val))
+    : value
+    ? moment(value)
+    : value
 }
 
 export const formatMomentValue = (
@@ -30,6 +34,6 @@ export const formatMomentValue = (
       return formatDate(val, format, index)
     })
   } else {
-    return formatDate(value, format)
+    return value ? formatDate(value, format) : value
   }
 }

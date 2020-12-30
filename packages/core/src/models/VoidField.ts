@@ -23,8 +23,9 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  createModelGetter,
-  createModelSetter,
+  createModelStateGetter,
+  createModelStateSetter,
+  publishUpdate,
 } from '../shared'
 import { Form } from './Form'
 import { Query } from './Query'
@@ -273,13 +274,14 @@ export class VoidField<
     this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
   }
 
-  setState: IModelSetter<IVoidFieldState> = createModelSetter(this)
+  setState: IModelSetter<IVoidFieldState> = createModelStateSetter(this)
 
-  getState: IModelGetter<IVoidFieldState> = createModelGetter(this)
+  getState: IModelGetter<IVoidFieldState> = createModelStateGetter(this)
 
   onInit = () => {
     this.initialized = true
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    publishUpdate(this)
   }
 
   onMount = () => {
@@ -308,5 +310,9 @@ export class VoidField<
         dispose()
       }
     })
+  }
+
+  match = (pattern: FormPathPattern) => {
+    return FormPath.parse(pattern).matchAliasGroup(this.address, this.path)
   }
 }

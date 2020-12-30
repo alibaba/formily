@@ -28,12 +28,16 @@ import {
   IFormState,
   IModelGetter,
   IModelSetter,
+  IFieldStateGetter,
+  IFieldStateSetter,
 } from '../types'
 import {
   isVoidField,
   getLifeCyclesByEffects,
-  createModelGetter,
-  createModelSetter,
+  createModelStateGetter,
+  createModelStateSetter,
+  createFieldStateSetter,
+  createFieldStateGetter,
 } from '../shared'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
@@ -296,10 +300,6 @@ export class Form {
     this.pattern = pattern
   }
 
-  setState: IModelSetter<IFormState> = createModelSetter(this)
-
-  getState: IModelGetter<IFormState> = createModelGetter(this)
-
   addEffects = (id: string, effects: IFormProps['effects']) => {
     this.heart.addLifeCycles(id, getLifeCyclesByEffects(effects))
   }
@@ -405,6 +405,18 @@ export class Form {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }
   }
+
+  setState: IModelSetter<IFormState> = createModelStateSetter(this)
+
+  getState: IModelGetter<IFormState> = createModelStateGetter(this)
+
+  setFormState: IModelSetter<IFormState> = createModelStateSetter(this)
+
+  getFormState: IModelGetter<IFormState> = createModelStateGetter(this)
+
+  setFieldState: IFieldStateSetter = createFieldStateSetter(this)
+
+  getFieldState: IFieldStateGetter = createFieldStateGetter(this)
 
   getFormGraph = () => {
     return this.graph.getGraph()

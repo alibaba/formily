@@ -113,8 +113,15 @@ export interface ISearchFeedback {
 
 export type FeedbackMessage = any[]
 
+export type FieldUpdate = {
+  pattern: FormPath
+  callbacks: ((...args: any[]) => any)[]
+}
+
 export type FormRequests = {
   validate?: NodeJS.Timeout
+  updates?: FieldUpdate[]
+  updateIndexes?: Record<string, number>
 }
 
 export type FormFields = Record<string, GeneralField>
@@ -149,7 +156,12 @@ export type FormPathPattern =
 
 type OmitStateMethod<P> = Omit<
   P,
-  'setState' | 'getState' | 'getFormGraph' | 'setFormGraph'
+  | 'setState'
+  | 'getState'
+  | 'getFormGraph'
+  | 'setFormGraph'
+  | 'setFormState'
+  | 'getFormState'
 >
 
 export type IFieldState = NonFunctionProperties<OmitStateMethod<Field>>
@@ -305,4 +317,18 @@ export interface IModelSetter<P> {
 export interface IModelGetter<P> {
   <Getter extends (state: P) => any>(getter: Getter): ReturnType<Getter>
   (): P
+}
+
+export interface IFieldStateSetter {
+  (pattern: FormPathPattern, setter: (state: IFieldState) => void): void
+  (pattern: FormPathPattern, setter: Partial<IFieldState>): void
+  (pattern: FormPathPattern): void
+}
+
+export interface IFieldStateGetter {
+  <Getter extends (state: IFieldState) => any>(
+    pattern: FormPathPattern,
+    getter: Getter
+  ): ReturnType<Getter>
+  (pattern: FormPathPattern): IFieldState
 }
