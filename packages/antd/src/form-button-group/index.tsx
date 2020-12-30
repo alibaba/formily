@@ -72,6 +72,7 @@ export const FormButtonGroup: ComposedButtonGroup = (props) => {
 FormButtonGroup.Sticky = (props) => {
   const ref = useRef()
   const [color, setColor] = useState('transparent')
+  const prefixCls = usePrefixCls('form-button-group')
 
   useLayoutEffect(() => {
     if (ref.current) {
@@ -84,7 +85,7 @@ FormButtonGroup.Sticky = (props) => {
   return (
     <StickyBox
       {...props}
-      className={cls('ant-form-button-sticky', props.className)}
+      className={cls(`${prefixCls}-sticky`, props.className)}
       style={{
         textAlign: props.align,
         backgroundColor: color,

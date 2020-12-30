@@ -4,6 +4,7 @@ import { FormProvider, createForm } from '@formily/react'
 import { isNum, isStr, isBool, isFn } from '@formily/shared'
 import { Drawer } from 'antd'
 import { DrawerProps } from 'antd/lib/drawer'
+import { usePrefixCls } from '../__builtins__'
 
 type FormDrawerContent =
   | React.ReactElement
@@ -123,14 +124,15 @@ export const DrawerFooter: React.FC = props => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()
+  const prefixCls = usePrefixCls('drawer')
   useLayoutEffect(() => {
-    const content = ref.current?.closest('.ant-drawer-wrapper-body')
+    const content = ref.current?.closest(`.${prefixCls}-wrapper-body`)
     if (content) {
       if (!footerRef.current) {
-        footerRef.current = content.querySelector('.ant-drawer-footer')
+        footerRef.current = content.querySelector(`.${prefixCls}-footer`)
         if (!footerRef.current) {
           footerRef.current = document.createElement('div')
-          footerRef.current.classList.add('ant-drawer-footer')
+          footerRef.current.classList.add(`.${prefixCls}-footer`)
           content.appendChild(footerRef.current)
         }
       }
