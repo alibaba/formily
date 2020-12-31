@@ -4,7 +4,9 @@ import { Schema, SchemaKey } from '@formily/json-schema'
 import { makeAutoObservable } from 'mobx'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Steps } from 'antd'
+import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
+import { usePrefixCls } from '../__builtins__'
 
 interface IFormStep {
   connect: (steps: SchemaStep[], field: Formily.Core.Models.VoidField) => void
@@ -126,14 +128,15 @@ export const useFormStep = (defaultCurrent?: number, deps: any[] = []) => {
 }
 
 export const FormStep: ComposedFormTab = connect(
-  observer(({ formStep, ...props }: IFormStepProps) => {
+  observer(({ formStep, className, ...props }: IFormStepProps) => {
     const field = useField<Formily.Core.Models.VoidField>()
+    const prefixCls = usePrefixCls('formily-step', props)
     const schema = useSchema()
     const steps = parseSteps(schema)
     const current = props.current || formStep?.current || 0
     formStep?.connect?.(steps, field)
     return (
-      <Fragment>
+      <div className={cls(prefixCls, className)}>
         <Steps
           {...props}
           style={{ marginBottom: 10, ...props.style }}
@@ -147,7 +150,7 @@ export const FormStep: ComposedFormTab = connect(
           if (key !== current) return
           return <RecursionField key={key} name={name} schema={schema} />
         })}
-      </Fragment>
+      </div>
     )
   })
 )

@@ -1,5 +1,5 @@
 import { FormPath, isFn, each } from '@formily/shared'
-import { untracked, action } from 'mobx'
+import { untracked } from 'mobx'
 import { GeneralField, IQueryProps } from '../types'
 import { ArrayField } from './ArrayField'
 import { Field } from './Field'
@@ -32,7 +32,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
   get(): T
   get<Result>(getter: (field: T, address: FormPath) => Result): Result
   get(getter?: any): any {
-    const output = action((field: GeneralField) => {
+    const output = (field: GeneralField) => {
       if (!field) return {}
       if (this.match(field)) {
         if (isFn(getter)) {
@@ -40,7 +40,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
         }
         return field as any
       }
-    })
+    }
 
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
@@ -66,7 +66,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
   getAll<Result>(mapper?: (field: T, address: FormPath) => Result): Result[]
   getAll(mapper?: any): any {
     const results = []
-    const output = action((field: GeneralField) => {
+    const output = (field: GeneralField) => {
       if (!field) return
       if (this.match(field)) {
         if (isFn(mapper)) {
@@ -75,7 +75,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
           results.push(field)
         }
       }
-    })
+    }
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)

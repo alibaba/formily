@@ -177,7 +177,7 @@ const useAddition = () => {
 const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
   const form = useForm()
   const field = useField<Formily.Core.Models.ArrayField>()
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   const errors = form.queryFeedbacks({
     type: 'error',
     address: `${field.address}.*`,
@@ -218,7 +218,7 @@ const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
 
 const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   const pageSize = props.pageSize || 10
   const size = props.size || 'default'
   const dataSource = props.dataSource || []
@@ -277,7 +277,7 @@ export const ArrayTable: ComposedArrayTable = observer(
   (props: TableProps<any>) => {
     const ref = useRef<HTMLDivElement>()
     const field = useField<Formily.Core.Models.ArrayField>()
-    const prefixCls = usePrefixCls('array-table')
+    const prefixCls = usePrefixCls('formily-array-table')
     const dataSource = Array.isArray(field.value) ? [...field.value] : []
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
@@ -371,7 +371,7 @@ ArrayTable.useArrayTable = () => useContext(ArrayContext)
 ArrayTable.useArrayTableIndex = () => useContext(ArrayIndexContext)
 
 ArrayTable.SortHandle = SortableHandle((props: any) => {
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   return (
     <MenuOutlined
       {...props}
@@ -389,7 +389,7 @@ ArrayTable.Index = (props) => {
 ArrayTable.Addition = (props) => {
   const self = useField()
   const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   return (
     <Button
       type="dashed"
@@ -413,7 +413,7 @@ ArrayTable.Addition = (props) => {
 ArrayTable.Remove = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   return (
     <DeleteOutlined
       {...props}
@@ -429,7 +429,7 @@ ArrayTable.Remove = React.forwardRef((props, ref) => {
 ArrayTable.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   return (
     <DownOutlined
       {...props}
@@ -445,7 +445,7 @@ ArrayTable.MoveDown = React.forwardRef((props, ref) => {
 ArrayTable.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayTable.useArrayTableIndex()
   const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('array-table')
+  const prefixCls = usePrefixCls('formily-array-table')
   return (
     <UpOutlined
       {...props}

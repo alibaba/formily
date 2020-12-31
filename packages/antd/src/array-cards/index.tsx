@@ -71,7 +71,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useSchema()
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
-  const prefixCls = usePrefixCls('array-cards', props)
+  const prefixCls = usePrefixCls('formily-array-cards', props)
   const renderItems = () => {
     return dataSource?.map((item, index) => {
       const items = Array.isArray(schema.items)
@@ -178,7 +178,7 @@ ArrayCards.Index = (props) => {
 ArrayCards.Addition = (props) => {
   const self = useField()
   const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('array-cards', props)
+  const prefixCls = usePrefixCls('formily-array-cards', props)
   return (
     <Button
       type="dashed"
@@ -202,7 +202,7 @@ ArrayCards.Addition = (props) => {
 ArrayCards.Remove = React.forwardRef((props, ref) => {
   const index = ArrayCards.useArrayCardsIndex()
   const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('array-cards', props)
+  const prefixCls = usePrefixCls('formily-array-cards', props)
   return (
     <DeleteOutlined
       {...props}
@@ -218,7 +218,7 @@ ArrayCards.Remove = React.forwardRef((props, ref) => {
 ArrayCards.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayCards.useArrayCardsIndex()
   const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('array-cards', props)
+  const prefixCls = usePrefixCls('formily-array-cards', props)
   return (
     <DownOutlined
       {...props}
@@ -234,7 +234,7 @@ ArrayCards.MoveDown = React.forwardRef((props, ref) => {
 ArrayCards.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayCards.useArrayCardsIndex()
   const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('array-cards', props)
+  const prefixCls = usePrefixCls('formily-array-cards', props)
   return (
     <UpOutlined
       {...props}

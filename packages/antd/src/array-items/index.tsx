@@ -39,7 +39,7 @@ type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> & {
 
 const SortableItem = SortableElement(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
-    const prefixCls = usePrefixCls('array-items')
+    const prefixCls = usePrefixCls('formily-array-items')
     return (
       <div {...props} className={cls(`${prefixCls}-item`, props.className)}>
         {props.children}
@@ -50,7 +50,7 @@ const SortableItem = SortableElement(
 
 const SortableList = SortableContainer(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
-    const prefixCls = usePrefixCls('array-items')
+    const prefixCls = usePrefixCls('formily-array-items')
     return (
       <div {...props} className={cls(`${prefixCls}-list`, props.className)}>
         {props.children}
@@ -79,7 +79,7 @@ const useAddition = () => {
 
 export const ArrayItems: ComposedArrayItems = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   const schema = useSchema()
   const addition = useAddition()
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
@@ -126,7 +126,7 @@ ArrayItems.useArrayItems = () => useContext(ArrayContext)
 ArrayItems.useArrayItemsIndex = () => useContext(ArrayIndexContext)
 
 ArrayItems.SortHandle = SortableHandle((props: any) => {
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   return (
     <MenuOutlined
       {...props}
@@ -144,7 +144,7 @@ ArrayItems.Index = (props) => {
 ArrayItems.Addition = (props) => {
   const self = useField()
   const field = ArrayItems.useArrayItems()
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   return (
     <Button
       type="dashed"
@@ -168,7 +168,7 @@ ArrayItems.Addition = (props) => {
 ArrayItems.Remove = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   return (
     <DeleteOutlined
       {...props}
@@ -184,7 +184,7 @@ ArrayItems.Remove = React.forwardRef((props, ref) => {
 ArrayItems.MoveDown = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   return (
     <DownOutlined
       {...props}
@@ -200,7 +200,7 @@ ArrayItems.MoveDown = React.forwardRef((props, ref) => {
 ArrayItems.MoveUp = React.forwardRef((props, ref) => {
   const index = ArrayItems.useArrayItemsIndex()
   const field = ArrayItems.useArrayItems()
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   return (
     <UpOutlined
       {...props}
@@ -214,7 +214,7 @@ ArrayItems.MoveUp = React.forwardRef((props, ref) => {
 })
 
 ArrayItems.Card = (props) => {
-  const prefixCls = usePrefixCls('array-items')
+  const prefixCls = usePrefixCls('formily-array-items')
   return (
     <div {...props} className={cls(`${prefixCls}-card`, props.className)}>
       {props.children}

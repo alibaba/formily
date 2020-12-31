@@ -5,6 +5,8 @@ import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema, SchemaKey } from '@formily/json-schema'
+import cls from 'classnames'
+import { usePrefixCls } from '../__builtins__'
 interface IFormCollapse {
   activeKey: CollapseProps['activeKey']
   setActiveKey(key: CollapseProps['activeKey']): void
@@ -69,6 +71,7 @@ export const useFormCollapse = (
 export const FormCollapse: ComposedFormCollapse = observer((props) => {
   const field = useField()
   const panels = usePanels()
+  const prefixCls = usePrefixCls('formily-collapse', props)
   const formCollapse = useMemo(() => {
     return props.formCollapse ? props.formCollapse : createFormCollapse()
   }, [])
@@ -88,10 +91,10 @@ export const FormCollapse: ComposedFormCollapse = observer((props) => {
     }
     return props.header
   }
-
   return (
     <Collapse
       {...props}
+      className={cls(prefixCls, props.className)}
       activeKey={activeKey}
       onChange={(key) => {
         props?.onChange?.(key)

@@ -55,7 +55,7 @@ function getDefaultBackground() {
 }
 
 export const FormButtonGroup: ComposedButtonGroup = (props) => {
-  const prefixCls = usePrefixCls('form-button-group')
+  const prefixCls = usePrefixCls('formily-button-group')
   return (
     <Form.Item
       {...props}
@@ -72,7 +72,7 @@ export const FormButtonGroup: ComposedButtonGroup = (props) => {
 FormButtonGroup.Sticky = (props) => {
   const ref = useRef()
   const [color, setColor] = useState('transparent')
-  const prefixCls = usePrefixCls('form-button-group')
+  const prefixCls = usePrefixCls('formily-button-group')
 
   useLayoutEffect(() => {
     if (ref.current) {

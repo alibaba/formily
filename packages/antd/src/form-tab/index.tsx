@@ -5,7 +5,8 @@ import { TabPaneProps, TabsProps } from 'antd/lib/tabs'
 import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema, SchemaKey } from '@formily/json-schema'
-
+import cls from 'classnames'
+import { usePrefixCls } from '../__builtins__'
 interface IFormTab {
   activeKey: string
   setActiveKey(key: string): void
@@ -65,6 +66,7 @@ export const FormTab: ComposedFormTab = observer((props) => {
   const formTab = useMemo(() => {
     return props.formTab ? props.formTab : createFormTab()
   }, [])
+  const prefixCls = usePrefixCls('formily-tab', props)
   const activeKey = props.activeKey || formTab?.activeKey
 
   const badgedTab = (key: SchemaKey, props: any) => {
@@ -85,6 +87,7 @@ export const FormTab: ComposedFormTab = observer((props) => {
   return (
     <Tabs
       {...props}
+      className={cls(prefixCls, props.className)}
       activeKey={activeKey}
       onChange={(key) => {
         props.onChange?.(key)

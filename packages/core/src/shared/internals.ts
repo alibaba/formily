@@ -9,7 +9,7 @@ import {
   isValid,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { runInAction, toJS } from 'mobx'
+import { action, runInAction, toJS } from 'mobx'
 import { Field, ArrayField, Form } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -420,7 +420,7 @@ export const getModelState = (model: any, getter?: any) => {
 }
 
 export const createModelStateSetter = (model: any) => {
-  return (state?: any) => setModelState(model, state)
+  return action((state?: any) => setModelState(model, state))
 }
 
 export const createModelStateGetter = (model: any) => {
@@ -428,7 +428,7 @@ export const createModelStateGetter = (model: any) => {
 }
 
 export const createFieldStateSetter = (form: Form) => {
-  return (pattern: FormPathPattern, payload?: any) => {
+  return action((pattern: FormPathPattern, payload?: any) => {
     let matchCount = 0,
       path = FormPath.parse(pattern)
     form.query(path).all.getAll((field) => {
@@ -439,7 +439,7 @@ export const createFieldStateSetter = (form: Form) => {
     if (matchCount === 0 || path.isWildMatchPattern) {
       subscribeUpdate(form, path, payload)
     }
-  }
+  })
 }
 export const createFieldStateGetter = (form: Form) => {
   return (pattern: FormPathPattern, payload?: any) => {

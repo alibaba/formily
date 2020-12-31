@@ -54,7 +54,7 @@ export const Editable: ComposedEditable = observer((props) => {
   const itemProps = useFormItemProps()
   const field = useField<Formily.Core.Models.Field>()
   const basePrefixCls = usePrefixCls()
-  const prefixCls = usePrefixCls('editable')
+  const prefixCls = usePrefixCls('formily-editable')
   const ref = useRef<boolean>()
   const innerRef = useRef<HTMLDivElement>()
   const recover = () => {
@@ -122,7 +122,7 @@ Editable.Popover = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const [editable, setEditable] = useEditable()
   const [visible, setVisible] = useState(false)
-  const prefixCls = usePrefixCls('editable')
+  const prefixCls = usePrefixCls('formily-editable')
   const timer = useRef(null)
   const preview = FormPath.getIn(field.value, props.dataIndex || '')
   const placeholder = isStr(preview) ? preview : ''
