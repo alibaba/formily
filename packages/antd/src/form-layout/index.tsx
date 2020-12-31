@@ -20,7 +20,7 @@ export interface FormLayoutProps {
   direction?: 'rtl' | 'ltr'
   inset?: boolean
   shallow?: boolean
-  helpLayout?: 'loose' | 'terse' | 'popover'
+  feedbackLayout?: 'loose' | 'terse' | 'popover'
   bordered?: boolean
 }
 
