@@ -1,0 +1,59 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+$array-cards-prefix-cls: $css-prefix+"formily-array-cards";
+
+.#{$css-prefix}empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: scale(.8);
+  }
+}
+
+.#{$array-cards-prefix-cls}-remove {
+  transition: all .25s ease-in-out;
+  color: $color-text1-3;
+  font-size: 16px;
+  margin-left: 6px;
+
+  &:hover {
+    color: $color-text1-1;
+  }
+}
+
+.#{$array-cards-prefix-cls}-addition {
+  transition: all .25s ease-in-out;
+}
+
+
+.#{$array-cards-prefix-cls}-move-down {
+  transition: all .25s ease-in-out;
+  color: $color-text1-3;
+  font-size: 16px;
+  margin-left: 6px;
+
+  &:hover {
+    color: $color-text1-1;
+  }
+}
+
+.#{$array-cards-prefix-cls}-move-up {
+  transition: all .25s ease-in-out;
+  color: $color-text1-3;
+  font-size: 16px;
+  margin-left: 6px;
+
+  &:hover {
+    color: $color-text1-1;
+  }
+}
+
+
+.#{$array-cards-prefix-cls}-item {
+  margin-bottom: 10px !important;
+}

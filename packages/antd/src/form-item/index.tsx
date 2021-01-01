@@ -11,11 +11,11 @@ export const FormItem = connect(
       if (isVoidField(field)) return props
       if (field.invalid) {
         return {
-          help: field.errors
+          help: field.editable ? field.errors : field.description,
         }
       } else {
         return {
-          help: field.description
+          help: field.description,
         }
       }
     }

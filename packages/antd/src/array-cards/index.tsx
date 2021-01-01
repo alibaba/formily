@@ -24,7 +24,6 @@ type SupportPrefixCls<P> = P & {
 }
 
 type ComposedArrayCards = React.FC<CardProps> & {
-  SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayCardsAdditionProps>
   Index?: React.FC
   Remove?: React.FC<SupportPrefixCls<AntdIconProps>>
@@ -183,8 +182,8 @@ ArrayCards.Addition = (props) => {
     <Button
       type="dashed"
       block
-      className={cls(`${prefixCls}-addition`, props.className)}
       {...props}
+      className={cls(`${prefixCls}-addition`, props.className)}
       onClick={() => {
         if (props.method === 'unshift') {
           field.unshift(null)

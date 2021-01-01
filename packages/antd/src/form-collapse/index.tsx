@@ -17,7 +17,7 @@ interface IFormCollapseProps extends CollapseProps {
 }
 
 type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
-  CollapsePanel?: React.FC<IFormCollapseProps>
+  CollapsePanel?: React.FC<CollapsePanelProps>
   useFormCollapse?: (
     defaultActiveKeys?: CollapseProps['activeKey'],
     deps?: any[]

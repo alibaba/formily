@@ -394,8 +394,9 @@ ArrayTable.Addition = (props) => {
     <Button
       type="dashed"
       block
-      className={cls(`${prefixCls}-addition`, props.className)}
       {...props}
+      style={{ display: 'block', width: '100%', ...props.style }}
+      className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
         if (props.method === 'unshift') {
           field.unshift({})

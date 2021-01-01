@@ -1,0 +1,200 @@
+import React, { createContext, useContext } from 'react'
+import { isArr, isEmpty } from '@formily/shared'
+import { useField } from '@formily/react'
+import { InputProps } from '@alifd/next/lib/input'
+import { SelectProps } from '@alifd/next/lib/select'
+import { TreeSelectProps } from '@alifd/next/lib/tree-select'
+import { CascaderProps } from '@alifd/next/lib/cascader'
+import {
+  DatePickerProps,
+  RangePickerProps as DateRangePickerProps,
+} from '@alifd/next/lib/date-picker'
+import { TimePickerProps } from '@alifd/next/lib/time-picker'
+import { Tag } from '@alifd/next'
+import cls from 'classnames'
+import { formatMomentValue, usePrefixCls } from '../__builtins__'
+
+const PlaceholderContext = createContext<string>('N/A')
+
+const Placeholder = PlaceholderContext.Provider
+
+const usePlaceholder = (value?: any) => {
+  const placeholder = useContext(PlaceholderContext) || 'N/A'
+  return !isEmpty(value) ? value : placeholder
+}
+
+const Input: React.FC<InputProps> = (props) => {
+  const prefixCls = usePrefixCls('form-text', props)
+  return (
+    <p className={cls(prefixCls, props.className)}>
+      <span>{props.addonBefore}</span>
+      <span>{props.innerBefore}</span>
+      {usePlaceholder(props.value)}
+      <span>{props.innerAfter}</span>
+      <span>{props.addonAfter}</span>
+    </p>
+  )
+}
+
+const Select: React.FC<SelectProps> = (props) => {
+  const field = useField<Formily.Core.Models.Field>()
+  const prefixCls = usePrefixCls('form-text', props)
+  const dataSource: any[] = field?.dataSource?.length
+    ? field.dataSource
+    : props?.dataSource?.length
+    ? props.dataSource
+    : []
+  const placeholder = usePlaceholder()
+  const getSelected = () => {
+    const value = props.value
+    if (props.mode === 'multiple' || props.mode === 'tag') {
+      if (props.useDetailValue) {
+        return isArr(value) ? value : []
+      } else {
+        return isArr(value)
+          ? value.map((val) => ({ label: val, value: val }))
+          : []
+      }
+    } else {
+      if (props.useDetailValue) {
+        return value ? [value] : []
+      } else {
+        return value ? [{ label: value, value }] : []
+      }
+    }
+  }
+
+  const getLabels = () => {
+    const selected = getSelected()
+    if (!selected.length) return <Tag>{placeholder}</Tag>
+    return selected.map(({ value, label }, key) => {
+      const text =
+        dataSource?.find((item) => item.value == value)?.label || label
+      return <Tag key={key}>{text || placeholder}</Tag>
+    })
+  }
+  return <p className={cls(prefixCls, props.className)}>{getLabels()}</p>
+}
+
+const TreeSelect: React.FC<TreeSelectProps> = (props) => {
+  const field = useField<Formily.Core.Models.Field>()
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const dataSource = field?.dataSource?.length
+    ? field.dataSource
+    : props?.dataSource?.length
+    ? props.dataSource
+    : []
+  const getSelected = () => {
+    const value = props.value
+    if (props.multiple) {
+      if (props['useDetailValue']) {
+        return isArr(value) ? value : []
+      } else {
+        return isArr(value)
+          ? value.map((val) => ({ label: val, value: val }))
+          : []
+      }
+    } else {
+      if (props['useDetailValue']) {
+        return value ? [value] : []
+      } else {
+        return value ? [{ label: value, value }] : []
+      }
+    }
+  }
+
+  const findLabel = (value: any, dataSource: any[]) => {
+    for (let i = 0; i < dataSource?.length; i++) {
+      const item = dataSource[i]
+      if (item?.value === value) {
+        return item?.label
+      } else {
+        const childLabel = findLabel(value, item?.children)
+        if (childLabel) return childLabel
+      }
+    }
+  }
+
+  const getLabels = () => {
+    const selected = getSelected()
+    if (!selected?.length) return <Tag>{placeholder}</Tag>
+    return selected.map(({ value, label }, key) => {
+      return (
+        <Tag key={key}>
+          {findLabel(value, dataSource) || label || placeholder}
+        </Tag>
+      )
+    })
+  }
+  return <p className={cls(prefixCls, props.className)}>{getLabels()}</p>
+}
+
+const Cascader: React.FC<CascaderProps> = (props) => {
+  const field = useField<Formily.Core.Models.Field>()
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const dataSource: any[] = field?.dataSource?.length
+    ? field.dataSource
+    : props?.dataSource?.length
+    ? props.dataSource
+    : []
+  const getSelected = () => {
+    return isArr(props.value) ? props.value : []
+  }
+  const getLabels = () => {
+    const selected = getSelected()
+    return selected
+      .map((value) => {
+        return (
+          dataSource?.find((item) => item.value == value)?.label || placeholder
+        )
+      })
+      .join('/')
+  }
+  return <p className={cls(prefixCls, props.className)}>{getLabels()}</p>
+}
+
+const DatePicker: React.FC<DatePickerProps> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
+  }
+  return <p className={cls(prefixCls, props.className)}>{getLabels()}</p>
+}
+
+const DateRangePicker: React.FC<DateRangePickerProps> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
+  }
+  return <p className={cls(prefixCls, props.className)}>{getLabels()}</p>
+}
+
+const TimePicker: React.FC<TimePickerProps> = (props) => {
+  const placeholder = usePlaceholder()
+  const prefixCls = usePrefixCls('form-text', props)
+  const getLabels = () => {
+    const labels = formatMomentValue(props.value, props.format, placeholder)
+    return isArr(labels) ? labels.join('~') : labels
+  }
+  return <p className={cls(prefixCls, props.className)}>{getLabels()}</p>
+}
+
+export const PreviewText = {
+  Input,
+  Select,
+  TreeSelect,
+  Cascader,
+  DatePicker,
+  DateRangePicker,
+  TimePicker,
+  Placeholder,
+  usePlaceholder,
+}
+
+export default PreviewText

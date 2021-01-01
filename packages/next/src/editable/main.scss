@@ -1,0 +1,63 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+$editable-prefix-cls: $css-prefix+"formily-editable";
+$editable-popover-prefix-cls: $css-prefix+"formily-editable-popover";
+
+.#{$editable-prefix-cls} {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  .#{$css-prefix}form-text {
+    .#{$css-prefix}tag {
+      transition: none !important;
+    }
+
+    .#{$css-prefix}tag:last-child {
+      margin-right: 0 !important;
+    }
+  }
+
+  .#{$editable-prefix-cls}-edit-btn,
+  .#{$editable-prefix-cls}-close-btn {
+    transition: all .25s ease-in-out;
+    color: #aaa;
+    font-size: 12px;
+    margin-left: 3px;
+    &:hover {
+      color: $color-text1-1;
+    }
+  }
+
+  .#{$css-prefix}form-text {
+    display: flex;
+    align-items: center;
+  }
+
+  .#{$editable-prefix-cls}-preview {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+    max-width: 100px;
+    display: block;
+  }
+}
+
+.#{$editable-popover-prefix-cls} {
+  &-trigger {
+    cursor: pointer;
+
+    .#{$css-prefix}form-item-control {
+      &>* {
+        margin-right: 3px;
+      }
+    }
+
+  }
+
+  &-edit-btn {
+    color: #aaa;
+  }
+
+}

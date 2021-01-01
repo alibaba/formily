@@ -43,8 +43,12 @@ const useFormItemProps = (): FormItemProps => {
     return {}
   } else {
     return {
-      validateStatus: field.validateStatus,
-      help: field.errors?.length ? field.errors : field.description,
+      validateStatus: field.editable ? field.validateStatus : '',
+      help: field.editable
+        ? field.errors?.length
+          ? field.errors
+          : field.description
+        : field.description,
     }
   }
 }
@@ -153,24 +157,21 @@ Editable.Popover = observer((props) => {
       trigger="click"
       destroyTooltipOnHide
       onVisibleChange={(visible) => {
-        if (visible) return
-        closePopover()
+        if (visible) {
+          openPopover()
+        } else {
+          closePopover()
+        }
       }}
     >
-      <div
-        onClick={() => {
-          openPopover()
-        }}
-      >
-        <Form.Item>
-          <Space>
-            <span className={`${prefixCls}-preview`}>
-              {placeholder || field.title}
-            </span>
-            <EditOutlined className={`${prefixCls}-edit-btn`} />
-          </Space>
-        </Form.Item>
-      </div>
+      <Form.Item className={`${prefixCls}-trigger`}>
+        <Space>
+          <span className={`${prefixCls}-preview`}>
+            {placeholder || field.title}
+          </span>
+          <EditOutlined className={`${prefixCls}-edit-btn`} />
+        </Space>
+      </Form.Item>
     </Popover>
   )
 })

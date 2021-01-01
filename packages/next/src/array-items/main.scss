@@ -1,0 +1,69 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+
+$array-items-prefix-cls: $css-prefix+"formily-array-items";
+
+.#{$array-items-prefix-cls}-remove {
+  transition: all .25s ease-in-out;
+  color: $color-text1-3;
+  font-size: 16px;
+
+  &:hover {
+    color: $color-text1-1;
+  }
+}
+
+.#{$array-items-prefix-cls}-addition {
+  transition: all .25s ease-in-out;
+}
+
+
+.#{array-items-prefix-cls}-move-down {
+  transition: all .25s ease-in-out;
+  color: $color-text1-3;
+  font-size: 16px;
+
+  &:hover {
+    color: $color-text1-1;
+  }
+}
+
+.#{$array-items-prefix-cls}-move-up {
+  transition: all .25s ease-in-out;
+  color: $color-text1-3;
+  font-size: 16px;
+
+  &:hover {
+    color: $color-text1-1;
+  }
+}
+
+.#{$array-items-prefix-cls}-sort-handler {
+  cursor: move;
+  color: #888 !important;
+}
+
+.#{$array-items-prefix-cls}-item-inner {
+  visibility: visible;
+}
+
+
+.#{$array-items-prefix-cls}-card {
+  display: flex;
+  border: 1px solid #eee;
+  margin-bottom: 10px;
+  padding: 3px 6px;
+  background: #fff;
+  justify-content: space-between;
+
+  .#{$css-prefix}form-item {
+    margin-bottom: 0;
+  }
+
+  transition: all .35s;
+
+  &:hover {
+    border: 1px solid #aaa;
+  }
+
+}

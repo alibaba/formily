@@ -93,7 +93,7 @@ export const Upload: ComposedUpload = connect(
   })
 )
 
-export const Dragger = connect(
+const Dragger = connect(
   (props: DraggerProps) => {
     const handleChange = (param: UploadChangeParam<UploadFile>) => {
       props.onChange?.(normalizeFileList([...param.fileList]))

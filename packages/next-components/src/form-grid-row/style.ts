@@ -1,1 +1,0 @@
-import '@alifd/next/lib/grid/style'
