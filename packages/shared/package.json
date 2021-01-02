@@ -3,6 +3,7 @@
 	"version": "1.3.6",
 	"license": "MIT",
 	"main": "lib",
+  "module": "esm",
 	"types": "lib/index.d.ts",
 	"repository": {
 		"type": "git",
@@ -20,7 +21,9 @@
 	},
 	"gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
 	"scripts": {
-    "build": "tsc --declaration"
+    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --declaration",
+    "build:esm": "tsc --declaration --module es2015 --outDir esm"
   },
 	"peerDependencies": {
 		"@types/react": ">=16.8.0 || >=17.0.0"

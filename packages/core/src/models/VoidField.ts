@@ -79,6 +79,7 @@ export class VoidField<
     this.props = props
     this.mounted = false
     this.unmounted = false
+    this.initialized = false
     this.title = props.title
     this.description = props.description
     this.selfDisplay = props.display

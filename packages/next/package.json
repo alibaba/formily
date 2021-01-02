@@ -17,12 +17,27 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "ts-node --project ../../tsconfig.build.json build.ts"
+    "start": "dumi dev",
+    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --declaration",
+    "build:esm": "tsc --declaration --module es2015 --outDir esm"
+  },
+  "resolutions": {
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0"
+  },
+  "devDependencies": {
+    "@alifd/next": "^1.19.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "ts-node": "^8.3.0",
+    "dumi": "^1.1.0",
+    "@umijs/plugin-sass": "^1.1.1"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
-    "@alifd/next": "^1.19.1",
+    "@alifd/next": "^1.19.0",
     "mobx": "^6.0.3",
     "mobx-react-lite": "^3.1.6",
     "react": ">=16.8.0 || >=17.0.0",
@@ -37,12 +52,6 @@
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"
-  },
-  "devDependencies": {
-    "@alifd/next": "^1.19.1",
-    "@types/classnames": "^2.2.9",
-    "@types/styled-components": "^4.1.19",
-    "jest-styled-components": "^6.3.3"
   },
   "publishConfig": {
     "access": "public"

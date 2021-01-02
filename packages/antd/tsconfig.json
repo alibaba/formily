@@ -1,7 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "paths": {
+      "@formily/*": [
+        "../*"
+      ]
+    }
   },
   "include": [
     "./src/**/*.ts",

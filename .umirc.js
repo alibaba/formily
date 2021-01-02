@@ -31,11 +31,11 @@ export default {
       children: [
         {
           title: 'Antd Design',
-          path: '/components/antd'
+          path: '//antd.formilyjs.org'
         },
         {
           title: 'Alibaba Fusion',
-          path: '/components/fusion'
+          path: '//fusion.formilyjs.org'
         }
       ]
     },
@@ -74,28 +74,6 @@ export default {
       {
         title: '介绍',
         path: '/guide'
-      },
-      {
-        title: 'CRUD快速开始',
-        path: '/guide/crud/query-list',
-        children: [
-          {
-            title: '实现查询列表',
-            path: '/guide/crud/query-list'
-          },
-          {
-            title: '实现创建记录页',
-            path: '/guide/crud/create'
-          },
-          {
-            title: '实现编辑记录页',
-            path: '/guide/crud/edit'
-          },
-          {
-            title: '实现查看详情页',
-            path: '/guide/crud/detail'
-          }
-        ]
       },
       {
         title: '概念',
@@ -142,10 +120,6 @@ export default {
           {
             title: '混合开发',
             path: '/guide/practice/mixin-develop'
-          },
-          {
-            title: '实现表单布局',
-            path: '/guide/practice/layouts'
           },
           {
             title: '实现表单校验',
@@ -230,6 +204,42 @@ export default {
           {
             title: 'React Hooks',
             path: '/api/react-schema/hooks'
+          }
+        ]
+      },
+      {
+        title: 'Vue API',
+        path: '/api/vue',
+        children: [
+          {
+            title: 'Package',
+            path: '/api/vue'
+          },
+          {
+            title: 'Components',
+            path: '/api/vue/components'
+          },
+          {
+            title: 'Vue Hooks',
+            path: '/api/vue/hooks'
+          }
+        ]
+      },
+      {
+        title: 'Vue Schema API',
+        path: '/api/vue-schema',
+        children: [
+          {
+            title: 'Package',
+            path: '/api/vue-schema'
+          },
+          {
+            title: 'Components',
+            path: '/api/vue-schema/components'
+          },
+          {
+            title: 'Vue Hooks',
+            path: '/api/vue-schema/hooks'
           }
         ]
       }

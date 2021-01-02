@@ -3,6 +3,7 @@
   "version": "1.3.6",
   "license": "MIT",
   "main": "lib",
+  "module": "esm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
@@ -16,7 +17,9 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "rimraf -rf lib && tsc --declaration"
+    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc --declaration",
+    "build:esm": "tsc --declaration --module es2015 --outDir esm"
   },
   "peerDependencies": {
     "mobx": "^6.0.3",

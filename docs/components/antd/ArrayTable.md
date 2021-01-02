@@ -1,1 +1,0 @@
-<code src="./ArrayTable.tsx">
