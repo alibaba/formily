@@ -1,23 +1,25 @@
 <script lang="ts">
-import { h, defineComponent } from '@vue/composition-api'
+import { h } from '@vue/composition-api'
+import { defineObservableComponent } from '../utils/define-observable-component'
 import { isVoidField } from '@formily/core'
 
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
 }
 
-export default defineComponent({
+export default defineObservableComponent({
   name: 'ReactiveField',
   // eslint-disable-next-line vue/require-prop-types
   props: ['field'],
-  setup(props: IReactiveFieldProps, { slots }) {
+  observableSetup(collect, props: IReactiveFieldProps, { slots }) {
     const field = props.field
-
+    collect({
+      field
+    })
     return () => {
       if (!field) {
         return h('div', slots.default && slots.default())
       }
-
       if (field.display !== 'visible') {
         return h('')
       } else {

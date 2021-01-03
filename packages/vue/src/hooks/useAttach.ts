@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount, ref } from '@vue/composition-api'
+import { onMounted, onBeforeUnmount, ref, watch } from '@vue/composition-api'
 
 interface IRecycleTarget {
   onMount: () => void
@@ -6,19 +6,24 @@ interface IRecycleTarget {
 }
 
 export const useAttach = <T extends IRecycleTarget>(target: T): T => {
-  const currentRef = ref<IRecycleTarget>(null)
-  const targetRef = ref<IRecycleTarget>(target)
+  const oldTargetRef = ref<IRecycleTarget>(null)
+
+  const unmountOldTarget = (newTarget: T) => {
+    if (oldTargetRef.value && newTarget !== oldTargetRef.value) {
+      oldTargetRef.value.onUnmount()
+    }
+    oldTargetRef.value = newTarget
+    newTarget.onMount()
+  }
+
+  watch(() => target, unmountOldTarget)
 
   onMounted(() => {
-    if (currentRef.value && targetRef.value !== currentRef.value) {
-      currentRef.value.onUnmount()
-    }
-    targetRef.value.onMount()
-    currentRef.value = targetRef.value
+    unmountOldTarget(target)
   })
 
   onBeforeUnmount(() => {
-    targetRef.value.onUnmount()
+    target.onUnmount()
   })
   return target
 }

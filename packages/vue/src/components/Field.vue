@@ -24,6 +24,7 @@ export default defineObservableComponent({
     description: {},
     value: {},
     initialValue: {},
+    basePath: {},
     decorator: Array,
     component: Array,
     required: Boolean,
@@ -39,10 +40,11 @@ export default defineObservableComponent({
   ) {
     const form = useForm()
     const parent = useField()
+    const basePath = props.basePath ? props.basePath : parent?.address
     const field = useAttach(
       form.createField({
-        basePath: parent?.address,
-        ...props
+        ...props,
+        basePath
       })
     )
     provide(FieldSymbol, field)

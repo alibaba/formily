@@ -17,7 +17,7 @@ const defineObservableComponent = (originalOptions: any) => {
 
   const { observableSetup } = originalOptions
   const setup = (...args: Data[]) => {
-    const vm = getCurrentInstance()
+    const vm = getCurrentInstance().proxy
     const collect = (data: Data) =>
       Object.keys(data).reduce((result: any, field) => {
         const value = data[field]
