@@ -19,6 +19,11 @@ export function mapProps<T extends JSXComponent>(
             } else {
               const extract = FormPath.getIn(field, mapper.extract)
               const target = mapper.to || mapper.extract
+              if (mapper.extract === 'value') {
+                if (mapper.to !== mapper.extract) {
+                  delete props.value
+                }
+              }
               FormPath.setIn(
                 props,
                 target as any,

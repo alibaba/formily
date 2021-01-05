@@ -111,7 +111,7 @@ export const Editable: ComposedEditable = observer((props) => {
 
   return (
     <div className={prefixCls} ref={innerRef} onClick={onClick}>
-      <Space>
+      <Space size={4} style={{ margin: '0 4px' }}>
         <Form.Item {...props} {...itemProps}>
           {props.children}
         </Form.Item>
@@ -165,7 +165,7 @@ Editable.Popover = observer((props) => {
       }}
     >
       <Form.Item className={`${prefixCls}-trigger`}>
-        <Space>
+        <Space size={4} style={{ margin: '0 4px' }}>
           <span className={`${prefixCls}-preview`}>
             {placeholder || field.title}
           </span>

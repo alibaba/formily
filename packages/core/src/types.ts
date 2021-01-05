@@ -7,6 +7,7 @@ import {
   ArrayField,
   VoidField,
   ObjectField,
+  Query,
 } from './models'
 
 export type NonFunctionPropertyNames<T> = {
@@ -258,6 +259,12 @@ export interface IFieldProps<
   required?: boolean
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
+  hidden?: boolean
+  visible?: boolean
+  editable?: boolean
+  disabled?: boolean
+  readOnly?: boolean
+  readPretty?: boolean
   dataSource?: FieldDataSource
   validateFirst?: boolean
   validator?: Validator
@@ -277,6 +284,12 @@ export interface IVoidFieldProps<
   description?: TextType
   display?: FieldDisplayTypes
   pattern?: FieldPatternTypes
+  hidden?: boolean
+  visible?: boolean
+  editable?: boolean
+  disabled?: boolean
+  readOnly?: boolean
+  readPretty?: boolean
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
   reactions?: FieldReaction[]
@@ -308,27 +321,29 @@ export interface IQueryProps {
   form: Form
 }
 
-export interface IModelSetter<P> {
+export interface IModelSetter<P = any> {
   (setter: (state: P) => void): void
   (setter: Partial<P>): void
   (): void
 }
 
-export interface IModelGetter<P> {
+export interface IModelGetter<P = any> {
   <Getter extends (state: P) => any>(getter: Getter): ReturnType<Getter>
   (): P
 }
 
+export type FieldMatchPattern = FormPathPattern | Query | GeneralField
+
 export interface IFieldStateSetter {
-  (pattern: FormPathPattern, setter: (state: IFieldState) => void): void
-  (pattern: FormPathPattern, setter: Partial<IFieldState>): void
-  (pattern: FormPathPattern): void
+  (pattern: FieldMatchPattern, setter: (state: IFieldState) => void): void
+  (pattern: FieldMatchPattern, setter: Partial<IFieldState>): void
+  (pattern: FieldMatchPattern): void
 }
 
 export interface IFieldStateGetter {
   <Getter extends (state: IFieldState) => any>(
-    pattern: FormPathPattern,
+    pattern: FieldMatchPattern,
     getter: Getter
   ): ReturnType<Getter>
-  (pattern: FormPathPattern): IFieldState
+  (pattern: FieldMatchPattern): IFieldState
 }

@@ -54,7 +54,7 @@ import {
   updateFeedback,
   queryFeedbacks,
   queryFeedbackMessages,
-  getValueFromEvent,
+  getValuesFromEvent,
   createModelStateSetter,
   createModelStateGetter,
 } from '../shared'
@@ -131,8 +131,14 @@ export class Field<
     this.feedbacks = []
     this.title = props.title
     this.description = props.description
-    this.selfDisplay = this.props.display
-    this.selfPattern = this.props.pattern
+    this.editable = this.props.editable
+    this.disabled = this.props.disabled
+    this.readOnly = this.props.readOnly
+    this.readPretty = this.props.readPretty
+    this.visible = this.props.visible
+    this.hidden = this.props.hidden
+    this.display = this.props.display
+    this.pattern = this.props.pattern
     this.dataSource = this.props.dataSource
     this.validator = this.props.validator
     this.decorator = this.props.decorator
@@ -322,6 +328,7 @@ export class Field<
   }
 
   set hidden(hidden: boolean) {
+    if (!isValid(hidden)) return
     if (hidden) {
       this.display = 'hidden'
     } else {
@@ -330,6 +337,7 @@ export class Field<
   }
 
   set visible(visible: boolean) {
+    if (!isValid(visible)) return
     if (visible) {
       this.display = 'visible'
     } else {
@@ -361,43 +369,47 @@ export class Field<
   }
 
   set readOnly(readOnly: boolean) {
+    if (!isValid(readOnly)) return
     if (readOnly) {
-      this.selfPattern = 'readOnly'
+      this.pattern = 'readOnly'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set editable(editable: boolean) {
+    if (!isValid(editable)) return
     if (editable) {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     } else {
-      this.selfPattern = 'readPretty'
+      this.pattern = 'readPretty'
     }
   }
 
   set disabled(disabled: boolean) {
+    if (!isValid(disabled)) return
     if (disabled) {
-      this.selfPattern = 'disabled'
+      this.pattern = 'disabled'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set readPretty(readPretty: boolean) {
+    if (!isValid(readPretty)) return
     if (readPretty) {
-      this.selfPattern = 'readPretty'
+      this.pattern = 'readPretty'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set pattern(pattern: FieldPatternTypes) {
-    this.selfPattern = pattern
+    this.selfPattern = pattern || 'editable'
   }
 
   set display(display: FieldDisplayTypes) {
-    this.selfDisplay = display
+    this.selfDisplay = display || 'visible'
   }
 
   set required(required: boolean) {
@@ -613,9 +625,10 @@ export class Field<
   }
 
   onInput = (...args: any[]) => {
-    const value = getValueFromEvent(args[0])
+    const values = getValuesFromEvent(args)
+    const value = values[0]
     this.inputValue = value
-    this.inputValues = [value].concat(args.slice(1))
+    this.inputValues = values
     this.modified = true
     this.form.modified = true
     this.form.setValuesIn(this.path, value)

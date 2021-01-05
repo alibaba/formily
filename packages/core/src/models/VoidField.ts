@@ -1,4 +1,10 @@
-import { FormPath, FormPathPattern, isFn, isArr } from '@formily/shared'
+import {
+  FormPath,
+  FormPathPattern,
+  isFn,
+  isArr,
+  isValid,
+} from '@formily/shared'
 import {
   makeObservable,
   observable,
@@ -82,8 +88,14 @@ export class VoidField<
     this.initialized = false
     this.title = props.title
     this.description = props.description
-    this.selfDisplay = props.display
-    this.selfPattern = this.props.pattern
+    this.editable = this.props.editable
+    this.disabled = this.props.disabled
+    this.readOnly = this.props.readOnly
+    this.readPretty = this.props.readPretty
+    this.visible = this.props.visible
+    this.hidden = this.props.hidden
+    this.display = props.display
+    this.pattern = this.props.pattern
     this.decorator = this.props.decorator
     this.component = this.props.component
   }
@@ -178,6 +190,7 @@ export class VoidField<
   }
 
   set hidden(hidden: boolean) {
+    if (!isValid(hidden)) return
     if (hidden) {
       this.display = 'hidden'
     } else {
@@ -186,6 +199,7 @@ export class VoidField<
   }
 
   set visible(visible: boolean) {
+    if (!isValid(visible)) return
     if (visible) {
       this.display = 'visible'
     } else {
@@ -194,43 +208,47 @@ export class VoidField<
   }
 
   set editable(editable: boolean) {
+    if (!isValid(editable)) return
     if (editable) {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     } else {
-      this.selfPattern = 'readPretty'
+      this.pattern = 'readPretty'
     }
   }
 
   set readOnly(readOnly: boolean) {
+    if (!isValid(readOnly)) return
     if (readOnly) {
-      this.selfPattern = 'readOnly'
+      this.pattern = 'readOnly'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set disabled(disabled: boolean) {
+    if (!isValid(disabled)) return
     if (disabled) {
-      this.selfPattern = 'disabled'
+      this.pattern = 'disabled'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set readPretty(readPretty: boolean) {
+    if (!isValid(readPretty)) return
     if (readPretty) {
-      this.selfPattern = 'readPretty'
+      this.pattern = 'readPretty'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set pattern(pattern: FieldPatternTypes) {
-    this.selfPattern = pattern
+    this.selfPattern = pattern || 'editable'
   }
 
   set display(display: FieldDisplayTypes) {
-    this.selfDisplay = display
+    this.selfDisplay = display || 'visible'
   }
 
   setTitle = (title: TextType) => {

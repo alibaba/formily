@@ -113,7 +113,8 @@ export interface ISchemaMarkupFieldProps<
     Formily.Core.Types.FormPatternTypes,
     Formily.Core.Types.FieldDisplayTypes,
     Formily.Core.Types.FieldValidator,
-    React.ReactNode
+    React.ReactNode,
+    Formily.Core.Types.GeneralField
   > {
   children?: React.ReactNode
 }

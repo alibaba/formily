@@ -1,24 +1,24 @@
+# ArrayCards
+
+> 卡片列表，对于每行字段数量较多，联动较多的场景比较适合使用 ArrayCards
+>
+> 注意：该组件只适用于 Schema 场景
+
+## Markup Schema 案例
+
 ```tsx
 import React from 'react'
-import { FormTab, FormItem, Input, ArrayCards } from '@formily/antd'
+import { FormItem, Input, ArrayCards } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
     FormItem,
-    Space,
-    FormTab,
     Input,
     ArrayCards,
   },
 })
-
-const range = (count: number) =>
-  Array.from(new Array(count)).map((_, key) => ({
-    aaa: key,
-  }))
 
 const form = createForm()
 
@@ -27,8 +27,33 @@ export default () => {
     <FormProvider form={form}>
       <SchemaField>
         <SchemaField.Array
+          name="string_array"
+          title="字符串数组"
+          maxItems={3}
+          x-component="ArrayCards"
+        >
+          <SchemaField.Void>
+            <SchemaField.Void x-component="ArrayCards.Index" />
+            <SchemaField.String
+              name="input"
+              x-decorator="FormItem"
+              title="Input"
+              required
+              x-component="Input"
+            />
+            <SchemaField.Void x-component="ArrayCards.Remove" />
+            <SchemaField.Void x-component="ArrayCards.MoveUp" />
+            <SchemaField.Void x-component="ArrayCards.MoveDown" />
+          </SchemaField.Void>
+          <SchemaField.Void
+            x-component="ArrayCards.Addition"
+            x-component-props={{ style: { marginBottom: 10 } }}
+            title="添加条目"
+          />
+        </SchemaField.Array>
+        <SchemaField.Array
           name="array"
-          title="数组项"
+          title="对象数组"
           maxItems={3}
           x-component="ArrayCards"
         >
@@ -37,6 +62,7 @@ export default () => {
             <SchemaField.String
               name="input"
               x-decorator="FormItem"
+              title="Input"
               required
               x-component="Input"
             />
@@ -54,3 +80,327 @@ export default () => {
   )
 }
 ```
+
+## JSON Schema 案例
+
+```tsx
+import React from 'react'
+import { FormItem, Input, ArrayCards } from '@formily/antd'
+import { FormProvider, createForm } from '@formily/react'
+import { createSchemaField } from '@formily/react-schema-field'
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    ArrayCards,
+  },
+})
+
+const form = createForm()
+
+const schema = {
+  type: 'object',
+  properties: {
+    string_array: {
+      type: 'array',
+      'x-component': 'ArrayCards',
+      maxItems: 3,
+      title: '字符串数组',
+      items: {
+        type: 'void',
+        properties: {
+          index: {
+            type: 'void',
+            'x-component': 'ArrayCards.Index',
+          },
+          input: {
+            type: 'string',
+            'x-decorator': 'FormItem',
+            title: 'Input',
+            required: true,
+            'x-component': 'Input',
+          },
+          remove: {
+            type: 'void',
+            'x-component': 'ArrayCards.Remove',
+          },
+          moveUp: {
+            type: 'void',
+            'x-component': 'ArrayCards.MoveUp',
+          },
+          moveDown: {
+            type: 'void',
+            'x-component': 'ArrayCards.MoveDown',
+          },
+        },
+      },
+      properties: {
+        addition: {
+          type: 'void',
+          'x-component': 'ArrayCards.Addition',
+          'x-component-props': {
+            style: {
+              marginBottom: 10,
+            },
+          },
+        },
+      },
+    },
+    array: {
+      type: 'array',
+      'x-component': 'ArrayCards',
+      maxItems: 3,
+      title: '对象数组',
+      items: {
+        type: 'object',
+        properties: {
+          index: {
+            type: 'void',
+            'x-component': 'ArrayCards.Index',
+          },
+          input: {
+            type: 'string',
+            'x-decorator': 'FormItem',
+            title: 'Input',
+            required: true,
+            'x-component': 'Input',
+          },
+          remove: {
+            type: 'void',
+            'x-component': 'ArrayCards.Remove',
+          },
+          moveUp: {
+            type: 'void',
+            'x-component': 'ArrayCards.MoveUp',
+          },
+          moveDown: {
+            type: 'void',
+            'x-component': 'ArrayCards.MoveDown',
+          },
+        },
+      },
+      properties: {
+        addition: {
+          type: 'void',
+          'x-component': 'ArrayCards.Addition',
+        },
+      },
+    },
+  },
+}
+
+export default () => {
+  return (
+    <FormProvider form={form}>
+      <SchemaField schema={schema} />
+    </FormProvider>
+  )
+}
+```
+
+## Effects 联动案例
+
+```tsx
+import React from 'react'
+import { FormItem, Input, ArrayCards } from '@formily/antd'
+import {
+  FormProvider,
+  createForm,
+  onFieldChange,
+  onFieldReact,
+} from '@formily/react'
+import { createSchemaField } from '@formily/react-schema-field'
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    ArrayCards,
+  },
+})
+
+const form = createForm({
+  effects: () => {
+    //主动联动模式
+    onFieldChange('array.*.aa', ['value'], (field, form) => {
+      form.setFieldState(field.query('.bb'), (state) => {
+        state.visible = field.value != '123'
+      })
+    })
+    //被动联动模式
+    onFieldReact('array.*.dd', (field) => {
+      field.visible = field.query('.cc').value != '123'
+    })
+  },
+})
+
+export default () => {
+  return (
+    <FormProvider form={form}>
+      <SchemaField>
+        <SchemaField.Array
+          name="array"
+          title="对象数组"
+          maxItems={3}
+          x-component="ArrayCards"
+        >
+          <SchemaField.Object>
+            <SchemaField.Void x-component="ArrayCards.Index" />
+            <SchemaField.String
+              name="aa"
+              x-decorator="FormItem"
+              title="AA"
+              required
+              description="AA输入123时隐藏BB"
+              x-component="Input"
+            />
+            <SchemaField.String
+              name="bb"
+              x-decorator="FormItem"
+              title="BB"
+              required
+              x-component="Input"
+            />
+            <SchemaField.String
+              name="cc"
+              x-decorator="FormItem"
+              title="CC"
+              required
+              description="CC输入123时隐藏BB"
+              x-component="Input"
+            />
+            <SchemaField.String
+              name="dd"
+              x-decorator="FormItem"
+              title="DD"
+              required
+              x-component="Input"
+            />
+            <SchemaField.Void x-component="ArrayCards.Remove" />
+            <SchemaField.Void x-component="ArrayCards.MoveUp" />
+            <SchemaField.Void x-component="ArrayCards.MoveDown" />
+          </SchemaField.Object>
+          <SchemaField.Void
+            x-component="ArrayCards.Addition"
+            title="添加条目"
+          />
+        </SchemaField.Array>
+      </SchemaField>
+    </FormProvider>
+  )
+}
+```
+
+## JSON Schema 联动案例
+
+```tsx
+import React from 'react'
+import { FormItem, Input, ArrayCards } from '@formily/antd'
+import { FormProvider, createForm } from '@formily/react'
+import { createSchemaField } from '@formily/react-schema-field'
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    ArrayCards,
+  },
+})
+
+const form = createForm()
+
+const schema = {
+  type: 'object',
+  properties: {
+    array: {
+      type: 'array',
+      'x-component': 'ArrayCards',
+      maxItems: 3,
+      title: '对象数组',
+      items: {
+        type: 'object',
+        properties: {
+          index: {
+            type: 'void',
+            'x-component': 'ArrayCards.Index',
+          },
+          aa: {
+            type: 'string',
+            'x-decorator': 'FormItem',
+            title: 'AA',
+            required: true,
+            'x-component': 'Input',
+            description: '输入123',
+          },
+          bb: {
+            type: 'string',
+            title: 'BB',
+            required: true,
+            'x-decorator': 'FormItem',
+            'x-component': 'Input',
+            'x-reactions': [
+              {
+                dependencies: ['.aa'],
+                when: "{{$deps[0] != '123'}}",
+                fullfill: {
+                  schema: {
+                    title: 'BB',
+                    'x-disabled': true,
+                  },
+                },
+                otherwise: {
+                  schema: {
+                    title: 'Changed',
+                    'x-disabled': false,
+                  },
+                },
+              },
+            ],
+          },
+          remove: {
+            type: 'void',
+            'x-component': 'ArrayCards.Remove',
+          },
+          moveUp: {
+            type: 'void',
+            'x-component': 'ArrayCards.MoveUp',
+          },
+          moveDown: {
+            type: 'void',
+            'x-component': 'ArrayCards.MoveDown',
+          },
+        },
+      },
+      properties: {
+        addition: {
+          type: 'void',
+          'x-component': 'ArrayCards.Addition',
+        },
+      },
+    },
+  },
+}
+
+export default () => {
+  return (
+    <FormProvider form={form}>
+      <SchemaField schema={schema} />
+    </FormProvider>
+  )
+}
+```
+
+## API
+
+### ArrayCards
+
+### ArrayCards.Addition
+
+### ArrayCards.Remove
+
+### ArrayCards.MoveDown
+
+### ArrayCards.MoveUp
+
+### ArrayCards.Index

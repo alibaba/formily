@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 export default {
   mode: 'site',
   logo: '//img.alicdn.com/tfs/TB1La8Uu7Y2gK0jSZFgXXc5OFXa-372-194.png',

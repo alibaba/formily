@@ -4,7 +4,6 @@ import {
   each,
   reduce,
   pascalCase,
-  isHTMLElement,
   isFn,
   isValid,
 } from '@formily/shared'
@@ -20,15 +19,20 @@ import {
   GeneralField,
   FormFeedback,
   LifeCycleTypes,
+  FieldMatchPattern,
 } from '../types'
-import { isArrayField, isVoidField } from './externals'
+import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties, GetterSetterProperties } from './constants'
 
-export const getValueFromEvent = (event: any) => {
-  if (isHTMLElement(event?.target)) {
-    return event.target.value
-  }
-  return event
+export const getValuesFromEvent = (args: any[]) => {
+  return args.map((event) => {
+    if (event?.target) {
+      if (isValid(event.target?.value)) return event.target?.value
+      if (isValid(event.target?.checked)) return event.target?.checked
+      return
+    }
+    return event
+  })
 }
 
 export const buildFieldPath = (field: GeneralField) => {
@@ -428,23 +432,37 @@ export const createModelStateGetter = (model: any) => {
 }
 
 export const createFieldStateSetter = (form: Form) => {
-  return action((pattern: FormPathPattern, payload?: any) => {
-    let matchCount = 0,
-      path = FormPath.parse(pattern)
-    form.query(path).all.getAll((field) => {
-      field.setState(payload)
-      matchCount++
-    })
+  return action((pattern: FieldMatchPattern, payload?: any) => {
+    if (isQuery(pattern)) {
+      pattern.all.get((field) => {
+        field.setState(payload)
+      })
+    } else if (isGeneralField(pattern)) {
+      pattern.setState(payload)
+    } else {
+      let matchCount = 0,
+        path = FormPath.parse(pattern)
+      form.query(path).all.getAll((field) => {
+        field.setState(payload)
+        matchCount++
+      })
 
-    if (matchCount === 0 || path.isWildMatchPattern) {
-      subscribeUpdate(form, path, payload)
+      if (matchCount === 0 || path.isWildMatchPattern) {
+        subscribeUpdate(form, path, payload)
+      }
     }
   })
 }
 export const createFieldStateGetter = (form: Form) => {
-  return (pattern: FormPathPattern, payload?: any) => {
-    return form.query(pattern).all.get((field: any) => {
-      return field.getState(payload)
-    })
+  return (pattern: FieldMatchPattern, payload?: any) => {
+    if (isQuery(pattern)) {
+      return pattern.all.get(payload)
+    } else if (isGeneralField(pattern)) {
+      return (pattern as any).getState(payload)
+    } else {
+      return form.query(pattern).all.get((field: any) => {
+        return field.getState(payload)
+      })
+    }
   }
 }

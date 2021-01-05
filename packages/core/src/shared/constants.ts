@@ -25,7 +25,7 @@ export const GetterSetterProperties = [
   'required',
   'hidden',
   'visible',
-  'disbaled',
+  'disabled',
   'readOnly',
   'readPretty',
   'validateStatus',
