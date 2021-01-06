@@ -6,7 +6,8 @@
  */
 import React, { useRef, useLayoutEffect, useState } from 'react'
 import StickyBox, { StickyBoxMode } from 'react-sticky-box'
-import { Form } from 'antd'
+import { Space, Form } from 'antd'
+import { SpaceProps } from 'antd/lib/space'
 import { FormItemProps } from 'antd/lib/form'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
@@ -24,8 +25,18 @@ interface IStickyProps {
   align?: React.CSSProperties['textAlign']
 }
 
-type ComposedButtonGroup = React.FC<FormItemProps> & {
+type IFormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
+  align?: React.CSSProperties['textAlign']
+  gutter?: number
+}
+
+type IFormItemProps = FormItemProps & {
+  gutter?: number
+}
+
+type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
   Sticky: React.FC<IStickyProps>
+  FormItem: React.FC<IFormItemProps>
 }
 
 function getInheritedBackgroundColor(el: HTMLElement) {
@@ -54,22 +65,56 @@ function getDefaultBackground() {
   return bg
 }
 
-export const FormButtonGroup: ComposedButtonGroup = (props) => {
+export const FormButtonGroup: ComposedButtonGroup = ({
+  align,
+  gutter,
+  ...props
+}) => {
   const prefixCls = usePrefixCls('formily-button-group')
+  return (
+    <Space
+      {...props}
+      size={gutter}
+      className={cls(prefixCls, props.className)}
+      style={{
+        ...props.style,
+        justifyContent:
+          align === 'left'
+            ? 'flex-start'
+            : align === 'right'
+            ? 'flex-end'
+            : 'center',
+        display: 'flex',
+      }}
+    >
+      {props.children}
+    </Space>
+  )
+}
+
+FormButtonGroup.defaultProps = {
+  align: 'left',
+}
+
+FormButtonGroup.FormItem = ({ gutter, ...props }) => {
   return (
     <Form.Item
       {...props}
-      className={cls(prefixCls, props.className)}
       label=" "
-      style={{ margin: 0, padding: 0, ...props.style }}
+      style={{
+        margin: 0,
+        padding: 0,
+        ...props.style,
+        width: '100%',
+      }}
       colon={false}
     >
-      {props.children}
+      <Space size={gutter}>{props.children}</Space>
     </Form.Item>
   )
 }
 
-FormButtonGroup.Sticky = (props) => {
+FormButtonGroup.Sticky = ({ align, ...props }) => {
   const ref = useRef()
   const [color, setColor] = useState('transparent')
   const prefixCls = usePrefixCls('formily-button-group')
@@ -87,17 +132,33 @@ FormButtonGroup.Sticky = (props) => {
       {...props}
       className={cls(`${prefixCls}-sticky`, props.className)}
       style={{
-        textAlign: props.align,
         backgroundColor: color,
-        paddingTop: 10,
-        paddingBottom: 10,
         ...props.style,
       }}
       bottom
     >
-      <div ref={ref}>{props.children}</div>
+      <div
+        ref={ref}
+        className={`${prefixCls}-sticky-inner`}
+        style={{
+          ...props.style,
+          justifyContent:
+            align === 'left'
+              ? 'flex-start'
+              : align === 'right'
+              ? 'flex-end'
+              : 'center',
+          display: 'flex',
+        }}
+      >
+        {props.children}
+      </div>
     </StickyBox>
   )
+}
+
+FormButtonGroup.Sticky.defaultProps = {
+  align: 'left',
 }
 
 export default FormButtonGroup

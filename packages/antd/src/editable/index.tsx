@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useField, useForm, observer, isVoidField } from '@formily/react'
-import { FormPath, isStr } from '@formily/shared'
+import { isStr } from '@formily/shared'
 import { Form, Space, Popover } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { FormItemProps } from 'antd/lib/form'
@@ -12,7 +12,7 @@ import cls from 'classnames'
  */
 
 interface IPopoverProps extends PopoverProps {
-  dataIndex?: string
+  renderPreview?: (field: Formily.Core.Types.GeneralField) => React.ReactNode
 }
 
 type ComposedEditable = React.FC<FormItemProps> & {
@@ -128,7 +128,7 @@ Editable.Popover = observer((props) => {
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')
   const timer = useRef(null)
-  const preview = FormPath.getIn(field.value, props.dataIndex || '')
+  const preview = props?.renderPreview?.(field)
   const placeholder = isStr(preview) ? preview : ''
   const closePopover = () => {
     const errors = field.form.queryFeedbacks({

@@ -36,7 +36,10 @@ export const useTabs = () => {
     if (schema['x-component']?.indexOf('TabPane') > -1) {
       tabs.push({
         name,
-        props: schema['x-component-props'],
+        props: {
+          key: schema?.['x-component-props']?.key || name,
+          ...schema?.['x-component-props'],
+        },
         schema,
       })
     }
@@ -60,14 +63,14 @@ export const useFormTab = (defaultActiveKey?: string, deps = []) => {
   }, deps)
 }
 
-export const FormTab: ComposedFormTab = observer((props) => {
+export const FormTab: ComposedFormTab = observer(({formTab,...props}) => {
   const field = useField()
   const tabs = useTabs()
-  const formTab = useMemo(() => {
-    return props.formTab ? props.formTab : createFormTab()
+  const _formTab = useMemo(() => {
+    return formTab ? formTab : createFormTab()
   }, [])
   const prefixCls = usePrefixCls('formily-tab', props)
-  const activeKey = props.activeKey || formTab?.activeKey
+  const activeKey = props.activeKey || _formTab?.activeKey
 
   const badgedTab = (key: SchemaKey, props: any) => {
     const errors = field.form.queryFeedbacks({

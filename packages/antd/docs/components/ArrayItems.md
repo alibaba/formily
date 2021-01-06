@@ -15,6 +15,8 @@ import {
   Select,
   DatePicker,
   ArrayItems,
+  FormButtonGroup,
+  Submit,
 } from '@formily/antd'
 import {
   FormProvider,
@@ -135,7 +137,7 @@ export default () => {
           x-component="ArrayItems"
           x-component-props={{ style: { width: 300 } }}
         >
-          <SchemaField.Object x-decorator="ArrayItems.Card">
+          <SchemaField.Object x-decorator="ArrayItems.Item">
             <SchemaField.Void
               x-decorator="FormItem"
               x-component="ArrayItems.SortHandle"
@@ -152,7 +154,9 @@ export default () => {
               x-component="Editable.Popover"
               required
               title="配置复杂数据"
-              x-component-props={{ dataIndex: 'input' }}
+              x-component-props={{
+                renderPreview: (field) => field.value?.input,
+              }}
             >
               <SchemaField.String
                 x-decorator="FormItem"
@@ -181,6 +185,9 @@ export default () => {
           />
         </SchemaField.Array>
       </SchemaField>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -198,6 +205,8 @@ import {
   Radio,
   DatePicker,
   ArrayItems,
+  FormButtonGroup,
+  Submit,
 } from '@formily/antd'
 import {
   FormProvider,
@@ -334,7 +343,7 @@ const schema = {
       title: '对象数组',
       items: {
         type: 'object',
-        'x-decorator': 'ArrayItems.Card',
+        'x-decorator': 'ArrayItems.Item',
         properties: {
           sort: {
             type: 'void',
@@ -356,7 +365,7 @@ const schema = {
             title: '配置复杂数据',
             'x-component': 'Editable.Popover',
             'x-component-props': {
-              dataIndex: 'input',
+              renderPreview: '{{(field)=>field.value && field.value.input}}',
             },
             properties: {
               date: {
@@ -415,6 +424,9 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -424,7 +436,14 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayItems, Editable } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayItems,
+  Editable,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import {
   FormProvider,
   createForm,
@@ -475,7 +494,7 @@ export default () => {
             },
           }}
         >
-          <SchemaField.Object x-decorator="ArrayItems.Card">
+          <SchemaField.Object x-decorator="ArrayItems.Item">
             <SchemaField.Void x-component="Space">
               <SchemaField.Void
                 x-decorator="FormItem"
@@ -539,6 +558,9 @@ export default () => {
           />
         </SchemaField.Array>
       </SchemaField>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -548,7 +570,14 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayItems, Editable } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayItems,
+  Editable,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import {
   FormProvider,
   createForm,
@@ -582,7 +611,7 @@ const schema = {
       'x-component-props': { style: { width: 300 } },
       items: {
         type: 'object',
-        'x-decorator': 'ArrayItems.Card',
+        'x-decorator': 'ArrayItems.Item',
         properties: {
           left: {
             type: 'void',
@@ -675,6 +704,9 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -684,7 +716,7 @@ export default () => {
 
 ### ArrayItems
 
-### ArrayItems.Card
+### ArrayItems.Item
 
 ### ArrayItems.SortHandle
 

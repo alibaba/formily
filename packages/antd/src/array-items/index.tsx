@@ -29,7 +29,7 @@ type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> & {
   SortHandle?: React.FC<AntdIconProps>
   Addition?: React.FC<IArrayItemsAdditionProps>
   Index?: React.FC
-  Card?: React.FC<React.HTMLAttributes<HTMLDivElement>>
+  Item?: React.FC<React.HTMLAttributes<HTMLDivElement>>
   Remove?: React.FC<AntdIconProps>
   MoveUp?: React.FC<AntdIconProps>
   MoveDown?: React.FC<AntdIconProps>
@@ -213,7 +213,7 @@ ArrayItems.MoveUp = React.forwardRef((props, ref) => {
   )
 })
 
-ArrayItems.Card = (props) => {
+ArrayItems.Item = (props) => {
   const prefixCls = usePrefixCls('formily-array-items')
   return (
     <div {...props} className={cls(`${prefixCls}-card`, props.className)}>

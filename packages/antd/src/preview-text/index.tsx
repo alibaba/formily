@@ -10,7 +10,7 @@ import {
   RangePickerProps as DateRangePickerProps,
 } from 'antd/lib/date-picker'
 import { TimePickerProps, TimeRangePickerProps } from 'antd/lib/time-picker'
-import { Tag } from 'antd'
+import { Tag, Space } from 'antd'
 import cls from 'classnames'
 import { formatMomentValue, usePrefixCls } from '../__builtins__'
 
@@ -20,19 +20,19 @@ const Placeholder = PlaceholderContext.Provider
 
 const usePlaceholder = (value?: any) => {
   const placeholder = useContext(PlaceholderContext) || 'N/A'
-  return isValid(value) ? value : placeholder
+  return isValid(value) && value !== '' ? value : placeholder
 }
 
 const Input: React.FC<InputProps> = (props) => {
   const prefixCls = usePrefixCls('form-text', props)
   return (
-    <div className={cls(prefixCls, props.className)}>
-      <span>{props.addonBefore}</span>
-      <span>{props.prefix}</span>
+    <Space className={cls(prefixCls, props.className)}>
+      {props.addonBefore}
+      {props.prefix}
       {usePlaceholder(props.value)}
-      <span>{props.suffix}</span>
-      <span>{props.addonAfter}</span>
-    </div>
+      {props.suffix}
+      {props.addonAfter}
+    </Space>
   )
 }
 

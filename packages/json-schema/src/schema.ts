@@ -460,10 +460,8 @@ export class Schema<
         this.setItems(value)
       } else if (key === 'additionalItems') {
         this.setAdditionalItems(value)
-      } else if (key === 'x-linkages' || key === 'x-reactions') {
-        this[key] = value
       } else {
-        this[key] = complie(value, scope)
+        this[key] = value
       }
     })
     return this

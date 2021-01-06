@@ -243,6 +243,23 @@ export class Field<
               this.caches.value = undefined
             }
           }
+          if (display === 'none' || display === 'hidden') {
+            this.setFeedback({
+              type: 'error',
+              messages: [],
+            })
+          }
+        }
+      ),
+      reaction(
+        () => this.pattern,
+        (pattern) => {
+          if (pattern !== 'editable') {
+            this.setFeedback({
+              type: 'error',
+              messages: [],
+            })
+          }
         }
       )
     )
@@ -304,13 +321,15 @@ export class Field<
   }
 
   get display(): FieldDisplayTypes {
-    if (this.selfDisplay) return this.selfDisplay
-    return this.parent?.display || 'visible'
+    const parentDisplay = this.parent?.display
+    if (isValid(this.selfDisplay)) return this.selfDisplay
+    return parentDisplay || 'visible'
   }
 
   get pattern(): FormPatternTypes {
-    if (this.selfPattern) return this.selfPattern
-    return this.parent?.pattern || this.form.pattern || 'editable'
+    const parentPattern = this.parent?.pattern
+    if (isValid(this.selfPattern)) return this.selfPattern
+    return parentPattern || this.form.pattern || 'editable'
   }
 
   get required() {
@@ -405,11 +424,11 @@ export class Field<
   }
 
   set pattern(pattern: FieldPatternTypes) {
-    this.selfPattern = pattern || 'editable'
+    this.selfPattern = pattern
   }
 
   set display(display: FieldDisplayTypes) {
-    this.selfDisplay = display || 'visible'
+    this.selfDisplay = display
   }
 
   set required(required: boolean) {
@@ -532,11 +551,11 @@ export class Field<
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
-    this.selfDisplay = type
+    this.display = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.selfPattern = type
+    this.pattern = type
   }
 
   setLoading = (loading: boolean) => {

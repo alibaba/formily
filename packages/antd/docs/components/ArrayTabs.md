@@ -8,7 +8,13 @@
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayTabs } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayTabs,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 
@@ -64,6 +70,9 @@ export default () => {
           </SchemaField.Object>
         </SchemaField.Array>
       </SchemaField>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -73,7 +82,13 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayTabs } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayTabs,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 
@@ -136,6 +151,9 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }

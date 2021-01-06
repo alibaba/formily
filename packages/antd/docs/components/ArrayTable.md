@@ -8,7 +8,14 @@
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayTable, Editable } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayTable,
+  Editable,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Space, Alert } from 'antd'
@@ -119,16 +126,19 @@ export default () => {
           />
         </SchemaField.Array>
       </SchemaField>
-      <Button
-        block
-        onClick={() => {
-          form.setInitialValues({
-            array: range(100000),
-          })
-        }}
-      >
-        加载10W条超大数据
-      </Button>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+        <Button
+          block
+          onClick={() => {
+            form.setInitialValues({
+              array: range(100000),
+            })
+          }}
+        >
+          加载10W条超大数据
+        </Button>
+      </FormButtonGroup>
       <Alert
         style={{ marginTop: 10 }}
         message="注意：开启formily插件的页面，因为后台有数据通信，会占用浏览器算力，最好在无痕模式(无formily插件)下测试"
@@ -143,7 +153,14 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayTable, Editable } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayTable,
+  Editable,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Space } from 'antd'
@@ -277,6 +294,9 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -286,7 +306,14 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayTable, Switch } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayTable,
+  Switch,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import {
   FormProvider,
   createForm,
@@ -429,6 +456,9 @@ export default () => {
           />
         </SchemaField.Array>
       </SchemaField>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -438,7 +468,14 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayTable, Switch } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayTable,
+  Switch,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Space } from 'antd'
@@ -613,12 +650,15 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-### API
+## API
 
 ### ArrayTable
 

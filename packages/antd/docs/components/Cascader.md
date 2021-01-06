@@ -2,11 +2,11 @@
 
 > 联级选择器
 
-### Markup Schema 案例
+## Markup Schema 案例
 
 ```tsx
 import React from 'react'
-import { Cascader, FormItem } from '@formily/antd'
+import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, FormProvider, onFieldReact } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { LoadingOutlined } from '@ant-design/icons'
@@ -79,15 +79,18 @@ export default () => (
         }}
       />
     </SchemaField>
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-### JOSN Schema 案例
+## JOSN Schema 案例
 
 ```tsx
 import React from 'react'
-import { Cascader, FormItem } from '@formily/antd'
+import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, FormProvider, onFieldReact } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { LoadingOutlined } from '@ant-design/icons'
@@ -168,10 +171,15 @@ export default () => (
       schema={schema}
       scope={{ useAsyncDataSource, transformAddress }}
     />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
   </FormProvider>
 )
 ```
 
-### API
+## 纯 JSX 案例
+
+## API
 
 参考 https://ant.design/components/cascader-cn/

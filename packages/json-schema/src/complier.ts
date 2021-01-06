@@ -26,7 +26,7 @@ export const complie = <Source = any, Scope = any>(
   scope?: Scope,
   exclude?: (key: string, value: any) => boolean
 ): any => {
-  const seenObjects = []
+  const seenObjects = new WeakMap()
   const complie = (source: any) => {
     if (isStr(source)) {
       return shallowComplie(source, scope)
@@ -57,10 +57,10 @@ export const complie = <Source = any, Scope = any>(
       if (isFn(source['toJSON'])) {
         return source
       }
-      if (seenObjects.includes(source)) {
+      if (seenObjects.get(source)) {
         return source
       }
-      seenObjects.push(source)
+      seenObjects.set(source, true)
       return reduce(
         source,
         (buf, value, key) => {

@@ -41,7 +41,7 @@ type FormStepEnv = {
   steps: SchemaStep[]
 }
 
-export const parseSteps = (schema: Schema) => {
+const parseSteps = (schema: Schema) => {
   const steps: SchemaStep[] = []
   schema.mapProperties((schema, name) => {
     if (schema['x-component']?.indexOf('StepPane') > -1) {

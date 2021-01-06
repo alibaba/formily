@@ -8,11 +8,11 @@ interface ISubmitProps extends ButtonProps {
 }
 
 export const Submit: React.FC<ISubmitProps> = observer(
-  (props: ISubmitProps) => {
+  ({ onSubmit, ...props }: ISubmitProps) => {
     const form = useForm()
     return (
       <Button
-        htmlType={props.onSubmit ? 'button' : 'submit'}
+        htmlType={onSubmit ? 'button' : 'submit'}
         type="primary"
         {...props}
         loading={props.loading !== undefined ? props.loading : form.submitting}
@@ -20,8 +20,8 @@ export const Submit: React.FC<ISubmitProps> = observer(
           if (props.onClick) {
             props.onClick(e)
           }
-          if (props.onSubmit) {
-            form.submit(props.onSubmit)
+          if (onSubmit) {
+            form.submit(onSubmit)
           }
         }}
       >

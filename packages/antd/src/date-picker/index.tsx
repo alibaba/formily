@@ -29,7 +29,7 @@ const mapDateFormat = function () {
     } else if (props['picker'] === 'year') {
       return 'YYYY'
     } else if (props['picker'] === 'week') {
-      return 'YYYY-wo'
+      return 'YYYY-w'
     }
     return props['showTime'] ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
   }
@@ -38,7 +38,7 @@ const mapDateFormat = function () {
     const onChange = props.onChange
     return {
       ...props,
-      format,
+      format: format === 'YYYY-w' ? 'YYYY-wo' : format,
       value: momentable(props.value, format),
       onChange: (value: moment.Moment | moment.Moment[]) => {
         if (onChange) {

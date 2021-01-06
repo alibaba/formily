@@ -21,7 +21,7 @@ const isDrawerTitle = (props: any): props is DrawerTitle => {
 const getDrawerProps = (props: any): DrawerProps => {
   if (isDrawerTitle(props)) {
     return {
-      title: props
+      title: props,
     }
   } else {
     return props
@@ -51,10 +51,11 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
   const env = {
     root: document.createElement('div'),
     form: null,
-    promise: null
+    promise: null,
   }
   const props = getDrawerProps(title)
   const drawer = {
+    width: '40%',
     ...props,
     onClose: (e: any) => {
       props?.onClose?.(e)
@@ -66,7 +67,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
       ReactDOM.unmountComponentAtNode(env.root)
       env.root?.parentNode?.removeChild(env.root)
       env.root = undefined
-    }
+    },
   }
   const component = (props: IFormDrawerComponentProps) => {
     return (
@@ -84,7 +85,7 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
           {React.createElement(component, {
             content,
             resolve,
-            reject
+            reject,
           })}
         </FormProvider>
       </Drawer>,
@@ -96,9 +97,9 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
     open: (props: Formily.Core.Types.IFormProps) => {
       if (env.promise) return env.promise
       env.form = env.form || createForm(props)
-      env.promise = new Promise(resolve => {
+      env.promise = new Promise((resolve) => {
         render(
-          true,
+          false,
           () => {
             env.form.submit((values: any) => {
               resolve(values)
@@ -109,18 +110,32 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
             formDrawer.close()
           }
         )
+        setTimeout(() => {
+          render(
+            true,
+            () => {
+              env.form.submit((values: any) => {
+                resolve(values)
+                formDrawer.close()
+              })
+            },
+            () => {
+              formDrawer.close()
+            }
+          )
+        })
       })
       return env.promise
     },
     close: () => {
       if (!env.root) return
       render(false)
-    }
+    },
   }
   return formDrawer
 }
 
-export const DrawerFooter: React.FC = props => {
+const DrawerFooter: React.FC = (props) => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()
@@ -132,7 +147,7 @@ export const DrawerFooter: React.FC = props => {
         footerRef.current = content.querySelector(`.${prefixCls}-footer`)
         if (!footerRef.current) {
           footerRef.current = document.createElement('div')
-          footerRef.current.classList.add(`.${prefixCls}-footer`)
+          footerRef.current.classList.add(`${prefixCls}-footer`)
           content.appendChild(footerRef.current)
         }
       }
@@ -149,6 +164,6 @@ export const DrawerFooter: React.FC = props => {
   )
 }
 
-FormDrawer.DrawerFooter = DrawerFooter
+FormDrawer.Footer = DrawerFooter
 
 export default FormDrawer

@@ -151,6 +151,58 @@ export class Form {
     return getLifeCyclesByEffects(this.props.effects, this)
   }
 
+  get editable() {
+    return this.pattern === 'editable'
+  }
+
+  set editable(editable) {
+    if (!isValid(editable)) return
+    if (editable) {
+      this.pattern = 'editable'
+    } else {
+      this.pattern = 'readPretty'
+    }
+  }
+
+  get readOnly() {
+    return this.pattern === 'readOnly'
+  }
+
+  set readOnly(readOnly) {
+    if (!isValid(readOnly)) return
+    if (readOnly) {
+      this.pattern = 'readOnly'
+    } else {
+      this.pattern = 'editable'
+    }
+  }
+
+  get disabled() {
+    return this.pattern === 'disabled'
+  }
+
+  set disabled(disabled) {
+    if (!isValid(disabled)) return
+    if (disabled) {
+      this.pattern = 'disabled'
+    } else {
+      this.pattern = 'editable'
+    }
+  }
+
+  get readPretty() {
+    return this.pattern === 'readPretty'
+  }
+
+  set readPretty(readPretty) {
+    if (!isValid(readPretty)) return
+    if (readPretty) {
+      this.pattern = 'readPretty'
+    } else {
+      this.pattern = 'editable'
+    }
+  }
+
   /** 创建字段 **/
 
   createField = <

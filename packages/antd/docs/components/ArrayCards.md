@@ -8,7 +8,13 @@
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayCards } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayCards,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 
@@ -28,9 +34,12 @@ export default () => {
       <SchemaField>
         <SchemaField.Array
           name="string_array"
-          title="字符串数组"
           maxItems={3}
+          x-decorator="FormItem"
           x-component="ArrayCards"
+          x-component-props={{
+            title: '字符串数组',
+          }}
         >
           <SchemaField.Void>
             <SchemaField.Void x-component="ArrayCards.Index" />
@@ -47,15 +56,17 @@ export default () => {
           </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayCards.Addition"
-            x-component-props={{ style: { marginBottom: 10 } }}
             title="添加条目"
           />
         </SchemaField.Array>
         <SchemaField.Array
           name="array"
-          title="对象数组"
           maxItems={3}
+          x-decorator="FormItem"
           x-component="ArrayCards"
+          x-component-props={{
+            title: '对象数组',
+          }}
         >
           <SchemaField.Object>
             <SchemaField.Void x-component="ArrayCards.Index" />
@@ -76,6 +87,9 @@ export default () => {
           />
         </SchemaField.Array>
       </SchemaField>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -85,7 +99,13 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayCards } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayCards,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 
@@ -106,7 +126,10 @@ const schema = {
       type: 'array',
       'x-component': 'ArrayCards',
       maxItems: 3,
-      title: '字符串数组',
+      'x-decorator': 'FormItem',
+      'x-component-props': {
+        title: '字符串数组',
+      },
       items: {
         type: 'void',
         properties: {
@@ -139,11 +162,6 @@ const schema = {
         addition: {
           type: 'void',
           'x-component': 'ArrayCards.Addition',
-          'x-component-props': {
-            style: {
-              marginBottom: 10,
-            },
-          },
         },
       },
     },
@@ -151,7 +169,10 @@ const schema = {
       type: 'array',
       'x-component': 'ArrayCards',
       maxItems: 3,
-      title: '对象数组',
+      'x-decorator': 'FormItem',
+      'x-component-props': {
+        title: '对象数组',
+      },
       items: {
         type: 'object',
         properties: {
@@ -194,6 +215,9 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -203,7 +227,13 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayCards } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayCards,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import {
   FormProvider,
   createForm,
@@ -241,9 +271,12 @@ export default () => {
       <SchemaField>
         <SchemaField.Array
           name="array"
-          title="对象数组"
           maxItems={3}
           x-component="ArrayCards"
+          x-decorator="FormItem"
+          x-component-props={{
+            title: '对象数组',
+          }}
         >
           <SchemaField.Object>
             <SchemaField.Void x-component="ArrayCards.Index" />
@@ -287,6 +320,9 @@ export default () => {
           />
         </SchemaField.Array>
       </SchemaField>
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }
@@ -296,7 +332,13 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormItem, Input, ArrayCards } from '@formily/antd'
+import {
+  FormItem,
+  Input,
+  ArrayCards,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 
@@ -386,6 +428,9 @@ export default () => {
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} />
+      <FormButtonGroup>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup>
     </FormProvider>
   )
 }

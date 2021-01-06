@@ -260,11 +260,11 @@ export class VoidField<
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
-    this.selfDisplay = type
+    this.display = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.selfPattern = type
+    this.pattern = type
   }
 
   setComponent = <C extends JSXComponent>(
