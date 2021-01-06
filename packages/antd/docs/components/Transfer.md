@@ -7,10 +7,8 @@
 ```tsx
 import React from 'react'
 import { Transfer, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider, onFieldReact } from '@formily/react'
+import { createForm, FormProvider } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
 
 const SchemaField = createSchemaField({
   components: {
@@ -50,10 +48,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Transfer, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider, onFieldReact } from '@formily/react'
+import { createForm, FormProvider } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
 
 const SchemaField = createSchemaField({
   components: {
@@ -88,6 +84,39 @@ const renderTitle = (item) => item.title
 export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} scope={{ renderTitle }} />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
+## 纯 JSX 案例
+
+```tsx
+import React from 'react'
+import { Transfer, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="transfer"
+      title="穿梭框"
+      dataSource={[
+        { title: '选项1', key: 1 },
+        { title: '选项2', key: 2 },
+      ]}
+      decorator={[FormItem]}
+      component={[
+        Transfer,
+        {
+          render: (item) => item.title,
+        },
+      ]}
+    />
     <FormButtonGroup>
       <Submit onSubmit={console.log}>提交</Submit>
     </FormButtonGroup>

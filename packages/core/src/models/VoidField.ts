@@ -4,6 +4,7 @@ import {
   isFn,
   isArr,
   isValid,
+  toArr,
 } from '@formily/shared'
 import {
   makeObservable,
@@ -96,8 +97,8 @@ export class VoidField<
     this.hidden = this.props.hidden
     this.display = props.display
     this.pattern = this.props.pattern
-    this.decorator = this.props.decorator
-    this.component = this.props.component
+    this.decorator = toArr(this.props.decorator)
+    this.component = toArr(this.props.component)
   }
 
   protected makeObservable() {

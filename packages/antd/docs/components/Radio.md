@@ -97,6 +97,38 @@ export default () => (
 
 ## 纯 JSX 案例
 
+```tsx
+import React from 'react'
+import { Radio, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="radio"
+      title="单选"
+      dataSource={[
+        {
+          label: '选项1',
+          value: 1,
+        },
+        {
+          label: '选项2',
+          value: 2,
+        },
+      ]}
+      decorator={FormItem}
+      component={Radio.Group}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
 ## API
 
 参考 https://ant.design/components/radio-cn/

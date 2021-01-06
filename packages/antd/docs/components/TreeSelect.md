@@ -7,10 +7,8 @@
 ```tsx
 import React from 'react'
 import { TreeSelect, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider, onFieldReact } from '@formily/react'
+import { createForm, FormProvider } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
 
 const SchemaField = createSchemaField({
   components: {
@@ -552,8 +550,251 @@ export default () => (
 
 ## 纯 JSX 同步数据源案例
 
+```tsx
+import React from 'react'
+import { TreeSelect, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="select"
+      title="选择框"
+      dataSource={[
+        {
+          label: '选项1',
+          value: 1,
+          children: [
+            {
+              title: 'Child Node1',
+              value: '0-0-0',
+              key: '0-0-0',
+            },
+            {
+              title: 'Child Node2',
+              value: '0-0-1',
+              key: '0-0-1',
+            },
+            {
+              title: 'Child Node3',
+              value: '0-0-2',
+              key: '0-0-2',
+            },
+          ],
+        },
+        {
+          label: '选项2',
+          value: 2,
+          children: [
+            {
+              title: 'Child Node3',
+              value: '0-1-0',
+              key: '0-1-0',
+            },
+            {
+              title: 'Child Node4',
+              value: '0-1-1',
+              key: '0-1-1',
+            },
+            {
+              title: 'Child Node5',
+              value: '0-1-2',
+              key: '0-1-2',
+            },
+          ],
+        },
+      ]}
+      decorator={[FormItem]}
+      component={[TreeSelect]}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
 ## 纯 JSX 异步联动数据源案例
+
+```tsx
+import React from 'react'
+import {
+  TreeSelect,
+  Select,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
+import { createForm, FormProvider, onFieldReact, Field } from '@formily/react'
+import { LoadingOutlined } from '@ant-design/icons'
+import { action } from 'mobx'
+
+const useAsyncDataSource = (
+  pattern: Formily.Core.Types.FormPathPattern,
+  service: (
+    field: Formily.Core.Models.Field
+  ) => Promise<{ label: string; value: any }[]>
+) => {
+  onFieldReact(pattern, (field) => {
+    field.setComponentProps({
+      suffixIcon: <LoadingOutlined />,
+    })
+    service(field).then(
+      action((data) => {
+        field.setDataSource(data)
+        field.setComponentProps({
+          suffixIcon: undefined,
+        })
+      })
+    )
+  })
+}
+
+const form = createForm({
+  effects: () => {
+    useAsyncDataSource('select', async (field) => {
+      const linkage = field.query('linkage').value
+      if (!linkage) return []
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          if (linkage === 1) {
+            resolve([
+              {
+                label: 'AAA',
+                value: 'aaa',
+                children: [
+                  {
+                    title: 'Child Node1',
+                    value: '0-0-0',
+                    key: '0-0-0',
+                  },
+                  {
+                    title: 'Child Node2',
+                    value: '0-0-1',
+                    key: '0-0-1',
+                  },
+                  {
+                    title: 'Child Node3',
+                    value: '0-0-2',
+                    key: '0-0-2',
+                  },
+                ],
+              },
+              {
+                label: 'BBB',
+                value: 'ccc',
+                children: [
+                  {
+                    title: 'Child Node1',
+                    value: '0-1-0',
+                    key: '0-1-0',
+                  },
+                  {
+                    title: 'Child Node2',
+                    value: '0-1-1',
+                    key: '0-1-1',
+                  },
+                  {
+                    title: 'Child Node3',
+                    value: '0-1-2',
+                    key: '0-1-2',
+                  },
+                ],
+              },
+            ])
+          } else if (linkage === 2) {
+            resolve([
+              {
+                label: 'CCC',
+                value: 'ccc',
+                children: [
+                  {
+                    title: 'Child Node1',
+                    value: '0-0-0',
+                    key: '0-0-0',
+                  },
+                  {
+                    title: 'Child Node2',
+                    value: '0-0-1',
+                    key: '0-0-1',
+                  },
+                  {
+                    title: 'Child Node3',
+                    value: '0-0-2',
+                    key: '0-0-2',
+                  },
+                ],
+              },
+              {
+                label: 'DDD',
+                value: 'ddd',
+                children: [
+                  {
+                    title: 'Child Node1',
+                    value: '0-1-0',
+                    key: '0-1-0',
+                  },
+                  {
+                    title: 'Child Node2',
+                    value: '0-1-1',
+                    key: '0-1-1',
+                  },
+                  {
+                    title: 'Child Node3',
+                    value: '0-1-2',
+                    key: '0-1-2',
+                  },
+                ],
+              },
+            ])
+          }
+        }, 1500)
+      })
+    })
+  },
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="linkage"
+      title="联动选择框"
+      dataSource={[
+        { label: '发请求1', value: 1 },
+        { label: '发请求2', value: 2 },
+      ]}
+      decorator={[FormItem]}
+      component={[
+        Select,
+        {
+          style: {
+            width: 200,
+          },
+        },
+      ]}
+    />
+    <Field
+      name="select"
+      title="异步选择框"
+      decorator={[FormItem]}
+      component={[
+        TreeSelect,
+        {
+          style: {
+            width: 200,
+          },
+        },
+      ]}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
 
 ## API
 
-参考 https://ant.design/components/select-cn/
+参考 https://ant.design/components/tree-select-cn/

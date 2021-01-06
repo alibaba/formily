@@ -47,6 +47,9 @@ export default () => (
         }}
       />
     </SchemaField>
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
   </FormProvider>
 )
 ```
@@ -55,7 +58,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Input, FormItem, FormButtonGroup } from '@formily/antd'
+import { Input, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, FormProvider } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 
@@ -99,11 +102,58 @@ const schema = {
 export default () => (
   <FormProvider form={form}>
     <SchemaField schema={schema} />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
   </FormProvider>
 )
 ```
 
 ## 纯 JSX 案例
+
+```tsx
+import React from 'react'
+import { Input, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="input"
+      title="输入框"
+      required
+      decorator={[FormItem]}
+      component={[
+        Input,
+        {
+          style: {
+            width: 240,
+          },
+        },
+      ]}
+    />
+    <Field
+      name="textarea"
+      title="文本框"
+      required
+      decorator={[FormItem]}
+      component={[
+        Input.TextArea,
+        {
+          style: {
+            width: 400,
+          },
+        },
+      ]}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
 
 ## API
 

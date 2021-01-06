@@ -4,7 +4,7 @@ import { Upload as AntdUpload } from 'antd'
 import {
   UploadChangeParam,
   UploadProps as AntdUploadProps,
-  DraggerProps as AntdDraggerProps
+  DraggerProps as AntdDraggerProps,
 } from 'antd/lib/upload'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { isArr } from '@formily/shared'
@@ -15,11 +15,11 @@ const testOpts = (
   options: { exclude?: string[]; include?: string[] }
 ) => {
   if (options && isArr(options.include)) {
-    return options.include.some(url => ext.test(url))
+    return options.include.some((url) => ext.test(url))
   }
 
   if (options && isArr(options.exclude)) {
-    return !options.exclude.some(url => ext.test(url))
+    return !options.exclude.some((url) => ext.test(url))
   }
 
   return true
@@ -39,20 +39,31 @@ const getImageByUrl = (url: string, options: any) => {
 }
 
 const normalizeFileList = (fileList: UploadFile[]) => {
+  const getURL = (target: any) => {
+    return target?.['url'] || target?.['downloadURL'] || target?.['imgURL']
+  }
+  const getThumbURL = (target: any) => {
+    return (
+      target?.['thumbUrl'] ||
+      target?.['url'] ||
+      target?.['downloadURL'] ||
+      target?.['imgURL']
+    )
+  }
   if (fileList && fileList.length) {
-    return fileList.map(file => {
+    return fileList.map((file) => {
       return {
+        ...file.response,
         uid: file.uid,
         status: file.status,
         name: file.name,
-        url: file['downloadURL'] || file['imgURL'] || file.url,
-        ...file.response,
-        thumbUrl:
-          file.thumbUrl ||
-          file['imgURL'] ||
-          getImageByUrl(file['downloadURL'] || file.url, {
-            exclude: ['.png', '.jpg', '.jpeg', '.gif']
-          })
+        url: getURL(file) || getURL(file?.response),
+        thumbUrl: getImageByUrl(
+          getThumbURL(file) || getThumbURL(file?.response),
+          {
+            exclude: ['.png', '.jpg', '.jpeg', '.gif'],
+          }
+        ),
       }
     })
   }
@@ -77,19 +88,11 @@ export const Upload: ComposedUpload = connect(
       props.onChange?.(normalizeFileList([...param.fileList]))
     }
 
-    const handleRemove = (file: UploadFile) => {
-      props.onChange?.(
-        props.fileList?.filter?.(v => v.url !== file.uid && v.url !== file.url)
-      )
-    }
-
-    return (
-      <AntdUpload {...props} onChange={handleChange} onRemove={handleRemove} />
-    )
+    return <AntdUpload {...props} onChange={handleChange} />
   },
   mapProps({
     extract: 'value',
-    to: 'fileList'
+    to: 'fileList',
   })
 )
 
@@ -99,23 +102,11 @@ const Dragger = connect(
       props.onChange?.(normalizeFileList([...param.fileList]))
     }
 
-    const handleRemove = (file: UploadFile) => {
-      props.onChange?.(
-        props.fileList?.filter?.(v => v.url !== file.uid && v.url !== file.url)
-      )
-    }
-
-    return (
-      <AntdUpload.Dragger
-        {...props}
-        onChange={handleChange}
-        onRemove={handleRemove}
-      />
-    )
+    return <AntdUpload.Dragger {...props} onChange={handleChange} />
   },
   mapProps({
     extract: 'value',
-    to: 'fileList'
+    to: 'fileList',
   })
 )
 

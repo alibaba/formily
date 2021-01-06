@@ -8,6 +8,7 @@ import {
   isFn,
   isPlainObj,
   isEmpty,
+  toArr,
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -141,8 +142,8 @@ export class Field<
     this.pattern = this.props.pattern
     this.dataSource = this.props.dataSource
     this.validator = this.props.validator
-    this.decorator = this.props.decorator
-    this.component = this.props.component
+    this.decorator = toArr(this.props.decorator)
+    this.component = toArr(this.props.component)
     this.required = this.props.required
   }
 

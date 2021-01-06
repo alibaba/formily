@@ -202,6 +202,99 @@ export default () => (
 
 ## 纯 JSX 案例
 
+```tsx
+import React from 'react'
+import {
+  Input,
+  DatePicker,
+  Editable,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
+import {
+  createForm,
+  FormProvider,
+  Field,
+  VoidField,
+  ObjectField,
+} from '@formily/react'
+import { action } from 'mobx'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="date"
+      title="日期"
+      decorator={[Editable]}
+      component={[DatePicker]}
+    />
+    <Field
+      name="input"
+      title="输入框"
+      decorator={[Editable]}
+      component={[Input]}
+    />
+    <VoidField
+      name="void"
+      title="虚拟节点容器"
+      component={[
+        Editable.Popover,
+        {
+          renderPreview: (field) => {
+            return field.query('.date2').value
+          },
+        },
+      ]}
+    >
+      <Field
+        name="date2"
+        title="日期"
+        decorator={[FormItem]}
+        component={[DatePicker]}
+      />
+      <Field
+        name="input2"
+        title="输入框"
+        decorator={[FormItem]}
+        component={[Input]}
+      />
+    </VoidField>
+    <ObjectField
+      name="iobject"
+      title="对象节点容器"
+      component={[
+        Editable.Popover,
+        {
+          renderPreview: (field) => {
+            return field.value?.date
+          },
+        },
+      ]}
+    >
+      <Field
+        name="date"
+        title="日期"
+        decorator={[FormItem]}
+        component={[DatePicker]}
+      />
+      <Field
+        name="input"
+        title="输入框"
+        decorator={[FormItem]}
+        component={[Input]}
+      />
+    </ObjectField>
+
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
 ## API
 
 ### Editable

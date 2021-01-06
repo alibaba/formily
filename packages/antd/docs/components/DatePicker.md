@@ -76,7 +76,7 @@ export default () => (
       />
       <SchemaField.String
         name="range_week"
-        title="周选择"
+        title="周范围选择"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -85,7 +85,7 @@ export default () => (
       />
       <SchemaField.String
         name="range_month"
-        title="月选择"
+        title="月范围选择"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -94,7 +94,7 @@ export default () => (
       />
       <SchemaField.String
         name="range_quarter"
-        title="财年选择"
+        title="财年范围选择"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -103,7 +103,7 @@ export default () => (
       />
       <SchemaField.String
         name="range_year"
-        title="年选择"
+        title="年范围选择"
         x-decorator="FormItem"
         x-component="DatePicker.RangePicker"
         x-component-props={{
@@ -190,7 +190,7 @@ const schema = {
       type: 'string',
     },
     range_week: {
-      title: '周选择',
+      title: '周范围选择',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -199,7 +199,7 @@ const schema = {
       type: 'string',
     },
     range_month: {
-      title: '月选择',
+      title: '月范围选择',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -208,7 +208,7 @@ const schema = {
       type: 'string',
     },
     range_quarter: {
-      title: '财年选择',
+      title: '财年范围选择',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -218,7 +218,7 @@ const schema = {
     },
     range_year: {
       name: 'range_year',
-      title: '年选择',
+      title: '年范围选择',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
       'x-component-props': {
@@ -240,6 +240,111 @@ export default () => (
 ```
 
 ## 纯 JSX 案例
+
+```tsx
+import React from 'react'
+import { DatePicker, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="date"
+      title="日期选择"
+      decorator={[FormItem]}
+      component={[DatePicker]}
+    />
+    <Field
+      name="week"
+      title="周选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker,
+        {
+          picker: 'week',
+        },
+      ]}
+    />
+    <Field
+      name="quarter"
+      title="财年选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker,
+        {
+          picker: 'month',
+        },
+      ]}
+    />
+    <Field
+      name="year"
+      title="年选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker,
+        {
+          picker: 'year',
+        },
+      ]}
+    />
+    <Field
+      name="[startDate,endDate]"
+      title="日期范围选择"
+      decorator={[FormItem]}
+      component={[DatePicker.RangePicker]}
+    />
+    <Field
+      name="range_week"
+      title="周范围选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker.RangePicker,
+        {
+          picker: 'week',
+        },
+      ]}
+    />
+    <Field
+      name="range_month"
+      title="月范围选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker.RangePicker,
+        {
+          picker: 'month',
+        },
+      ]}
+    />
+    <Field
+      name="range_quarter"
+      title="财年范围选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker.RangePicker,
+        {
+          picker: 'quarter',
+        },
+      ]}
+    />
+    <Field
+      name="range_year"
+      title="年范围选择"
+      decorator={[FormItem]}
+      component={[
+        DatePicker.RangePicker,
+        {
+          picker: 'year',
+        },
+      ]}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
 
 ## API
 

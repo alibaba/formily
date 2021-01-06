@@ -88,6 +88,36 @@ export default () => (
 
 ## 纯 JSX 案例
 
+```tsx
+import React from 'react'
+import { NumberPicker, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field
+      name="input"
+      title="输入框"
+      required
+      decorator={[FormItem]}
+      component={[
+        NumberPicker,
+        {
+          style: {
+            width: 240,
+          },
+        },
+      ]}
+    />
+    <FormButtonGroup>
+      <Submit onSubmit={console.log}>提交</Submit>
+    </FormButtonGroup>
+  </FormProvider>
+)
+```
+
 ## API
 
 参考 https://ant.design/components/input-number-cn/
