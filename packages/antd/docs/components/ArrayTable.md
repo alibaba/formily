@@ -181,6 +181,7 @@ const schema = {
   properties: {
     array: {
       type: 'array',
+      'x-decorator': 'FormItem',
       'x-component': 'ArrayTable',
       'x-component-props': {
         pagination: { pageSize: 10 },
@@ -502,6 +503,7 @@ const schema = {
     },
     array: {
       type: 'array',
+      'x-decorator': 'FormItem',
       'x-component': 'ArrayTable',
       'x-component-props': {
         pagination: { pageSize: 10 },
