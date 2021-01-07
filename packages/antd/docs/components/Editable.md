@@ -299,4 +299,16 @@ export default () => (
 
 ### Editable
 
+> 内联编辑
+
+参考 https://ant.design/components/form-cn/ 中的 FormItem 属性
+
 ### Editable.Popover
+
+> 浮层编辑
+
+| 属性名        | 类型                                                 | 描述       | 默认值 |
+| ------------- | ---------------------------------------------------- | ---------- | ------ |
+| renderPreview | `(field:Formily.Core.Types.GeneralField)=>ReactNode` | 预览渲染器 |        |
+
+其余参考 https://ant.design/components/popover-cn/

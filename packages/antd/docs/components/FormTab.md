@@ -226,8 +226,39 @@ export default () => {
 
 ### FormTab
 
+| 属性名  | 类型     | 描述                                             | 默认值 |
+| ------- | -------- | ------------------------------------------------ | ------ |
+| formTab | IFormTab | 传入通过 createFormTab/useFormTab 创建出来的模型 |        |
+
+其余参考 https://ant.design/components/tabs-cn/
+
 ### FormTab.TabPane
+
+参考 https://ant.design/components/tabs-cn/
 
 ### FormTab.createFormTab
 
+```ts pure
+type ActiveKey = string | number
+
+interface createFormTab {
+  (defaultActiveKey?: ActiveKey): IFormTab
+}
+
+interface IFormTab {
+  //激活主键
+  activeKey: ActiveKey
+  //设置激活主键
+  setActiveKey(key: ActiveKey): void
+}
+```
+
 ### FormTab.useFormTab
+
+> React Hook 用法
+
+```ts pure
+interface useFormTab {
+  (defaultActiveKey?: ActiveKey): IFormTab
+}
+```

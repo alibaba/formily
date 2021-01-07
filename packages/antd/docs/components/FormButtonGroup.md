@@ -274,4 +274,23 @@ export default () => {
 
 ### FormButtonGroup
 
+> 该组件主要用来处理按钮组间隙
+
+| 属性名 | 类型                        | 描述     | 默认值   |
+| ------ | --------------------------- | -------- | -------- |
+| gutter | number                      | 间隙大小 | 8px      |
+| align  | `'left'\|'center'\|'right'` | 对齐方式 | `'left'` |
+
+### FormButtonGroup.FormItem
+
+> 该组件主要用来处理按钮组与主表单 FormItem 对齐问题
+
+参考 https://ant.design/components/form-cn/ 中的 FormItem 属性
+
 ### FormButtonGroup.Sticky
+
+> 该组件主要用来处理按钮组浮动定位问题
+
+| 属性名 | 类型                        | 描述     | 默认值   |
+| ------ | --------------------------- | -------- | -------- |
+| align  | `'left'\|'center'\|'right'` | 对齐方式 | `'left'` |

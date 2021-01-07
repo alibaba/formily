@@ -234,8 +234,47 @@ export default () => {
 
 ### FormCollapse
 
+| 属性名       | 类型          | 描述                                                       | 默认值 |
+| ------------ | ------------- | ---------------------------------------------------------- | ------ |
+| formCollapse | IFormCollapse | 传入通过 createFormCollapse/useFormCollapse 创建出来的模型 |        |
+
+其余参考 https://ant.design/components/collapse-cn/
+
 ### FormCollapse.CollapsePanel
+
+参考 https://ant.design/components/collapse-cn/
 
 ### FormCollapse.createFormCollapse
 
+```ts pure
+type ActiveKey = string | number | Array<string | number>
+
+interface createFormCollapse {
+  (defaultActiveKey?: ActiveKey): IFormCollpase
+}
+
+interface IFormCollapse {
+  //激活主键
+  activeKey: ActiveKey
+  //是否存在该激活主键
+  hasActiveKey(key: ActiveKey): boolean
+  //设置激活主键
+  setActiveKey(key: ActiveKey): void
+  //添加激活主键
+  addActiveKey(key: ActiveKey): void
+  //删除激活主键
+  removeActiveKey(key: ActiveKey): void
+  //开关切换激活主键
+  toggleActiveKey(key: ActiveKey): void
+}
+```
+
 ### FormCollapse.useFormCollapse
+
+> React Hook 用法
+
+```ts pure
+interface useFormCollapse {
+  (defaultActiveKey?: ActiveKey): IFormCollpase
+}
+```
