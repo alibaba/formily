@@ -6,7 +6,7 @@ interface IRecycleTarget {
 }
 
 export const useAttach = <T extends IRecycleTarget>(target: T): T => {
-  const oldTargetRef = ref<IRecycleTarget>(null)
+  const oldTargetRef = ref<IRecycleTarget | null>(null)
 
   const unmountOldTarget = (newTarget: T) => {
     if (oldTargetRef.value && newTarget !== oldTargetRef.value) {

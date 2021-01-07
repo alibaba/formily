@@ -8,7 +8,7 @@
 import { provide } from '@vue/composition-api'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
-import { FieldSymbol } from '../shared'
+import { FieldSymbol } from '../shared/context'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField.vue'
 import { defineObservableComponent } from '../utils/define-observable-component'

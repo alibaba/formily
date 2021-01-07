@@ -1,11 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib"
+    "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }],
+    "module": "ESNext"
   },
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx"
+    "./src/**/*.tsx",
+    "./src/**/*.vue"
   ],
   "exclude": [
     "./src/__tests__/*"
