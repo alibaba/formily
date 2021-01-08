@@ -1,8 +1,9 @@
 import { resolve } from 'path'
 export default {
   mode: 'site',
-  logo: '//img.alicdn.com/tfs/TB1La8Uu7Y2gK0jSZFgXXc5OFXa-372-194.png',
+  logo: '//img.alicdn.com/imgextra/i2/O1CN01f6Rq6L1IRCkxNn447_!!6000000000889-55-tps-600-89.svg',
   title: 'Formily',
+  hash: true,
   outputPath: './doc-site',
   navs: [
     {
