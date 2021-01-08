@@ -20,7 +20,8 @@
     "start": "dumi dev",
     "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm"
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:docs": "dumi build"
   },
   "resolutions": {
     "@types/react": "^17.0.0",
