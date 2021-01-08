@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
   },
-  "types": "lib/index.d.ts",
+  "types": "esm/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/formily/issues"
   },

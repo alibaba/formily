@@ -3,7 +3,7 @@
   "version": "2.0.0-beta.3",
   "license": "MIT",
   "main": "lib/formily.common.js",
-  "types": "lib/index.d.ts",
+  "types": "esm/index.d.ts",
   "engines": {
     "npm": ">=3.0.0"
   },

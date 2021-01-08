@@ -15,7 +15,7 @@
 	"engines": {
 		"npm": ">=3.0.0"
 	},
-	"types": "lib/index.d.ts",
+	"types": "esm/index.d.ts",
 	"scripts": {
     "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --declaration",

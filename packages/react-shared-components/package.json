@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"main": "lib",
   "module": "esm",
-	"types": "lib/index.d.ts",
+	"types": "esm/index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/alibaba/formily.git"
