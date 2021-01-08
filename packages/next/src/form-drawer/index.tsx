@@ -54,16 +54,17 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
     promise: null,
   }
   const props = getDrawerProps(title)
-  const drawer = {
+  const drawer: DrawerProps = {
+    width: '40%',
     ...props,
     onClose: (reason: string, e: any) => {
       props?.onClose?.(reason, e)
       formDrawer.close()
-      setTimeout(() => {
-        ReactDOM.unmountComponentAtNode(env.root)
-        env.root?.parentNode?.removeChild(env.root)
-        env.root = undefined
-      })
+    },
+    afterClose() {
+      ReactDOM.unmountComponentAtNode(env.root)
+      env.root?.parentNode?.removeChild(env.root)
+      env.root = undefined
     },
   }
   const component = (props: IFormDrawerComponentProps) => {
@@ -118,20 +119,23 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
   return formDrawer
 }
 
-export const DrawerFooter: React.FC = (props) => {
+const DrawerFooter: React.FC = (props) => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()
   const prefixCls = usePrefixCls('drawer')
   useLayoutEffect(() => {
-    const content = ref.current?.closest(`.${prefixCls}-wrapper-body`)
+    const content = ref.current?.closest(`.${prefixCls}`)
     if (content) {
       if (!footerRef.current) {
         footerRef.current = content.querySelector(`.${prefixCls}-footer`)
-        if (!footerRef.current) {
+        const body = content.querySelector(`.${prefixCls}-body`)
+        if (!footerRef.current && body) {
           footerRef.current = document.createElement('div')
-          footerRef.current.classList.add(`.${prefixCls}-footer`)
-          content.appendChild(footerRef.current)
+          footerRef.current.classList.add(`${prefixCls}-footer`)
+          footerRef.current.style.padding = '20px'
+          footerRef.current.style.borderTop = '1px solid #eee'
+          body.after(footerRef.current)
         }
       }
       setFooter(footerRef.current)
@@ -147,6 +151,6 @@ export const DrawerFooter: React.FC = (props) => {
   )
 }
 
-FormDrawer.DrawerFooter = DrawerFooter
+FormDrawer.Footer = DrawerFooter
 
 export default FormDrawer

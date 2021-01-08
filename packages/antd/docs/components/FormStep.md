@@ -8,10 +8,10 @@
 
 ```tsx
 import React from 'react'
-import { FormStep, FormItem, Input } from '@formily/antd'
+import { FormStep, FormItem, Input, FormButtonGroup } from '@formily/antd'
 import { FormProvider, createForm, FormConsumer } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -70,7 +70,7 @@ export default () => {
       </SchemaField>
       <FormConsumer>
         {() => (
-          <Space>
+          <FormButtonGroup>
             <Button
               disabled={!formStep.allowBack}
               onClick={() => {
@@ -95,7 +95,7 @@ export default () => {
             >
               提交
             </Button>
-          </Space>
+          </FormButtonGroup>
         )}
       </FormConsumer>
     </FormProvider>
@@ -107,10 +107,10 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormStep, FormItem, Input } from '@formily/antd'
+import { FormStep, FormItem, Input, FormButtonGroup } from '@formily/antd'
 import { FormProvider, createForm, FormConsumer } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -192,7 +192,7 @@ export default () => {
       <SchemaField schema={schema} scope={{ formStep }} />
       <FormConsumer>
         {() => (
-          <Space>
+          <FormButtonGroup>
             <Button
               disabled={!formStep.allowBack}
               onClick={() => {
@@ -217,7 +217,7 @@ export default () => {
             >
               提交
             </Button>
-          </Space>
+          </FormButtonGroup>
         )}
       </FormConsumer>
     </FormProvider>

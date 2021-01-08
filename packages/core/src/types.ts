@@ -138,6 +138,7 @@ export type FieldFeedbackCodeTypes =
   | 'EffectError'
   | 'EffectSuccess'
   | 'EffectWarning'
+  | (string & {})
 
 export type FormPatternTypes =
   | 'editable'

@@ -18,7 +18,7 @@ import {
 } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space, Alert } from 'antd'
+import { Button, Alert } from 'antd'
 import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
@@ -163,7 +163,7 @@ import {
 } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -322,7 +322,7 @@ import {
   onFieldReact,
 } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -479,7 +479,7 @@ import {
 } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {

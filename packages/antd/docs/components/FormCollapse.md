@@ -17,7 +17,7 @@ import {
 } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Form, Space } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -122,7 +122,7 @@ import {
 } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Form, Space } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -247,19 +247,20 @@ export default () => {
 ### FormCollapse.createFormCollapse
 
 ```ts pure
-type ActiveKey = string | number | Array<string | number>
+type ActiveKey = string | number
+type ActiveKeys = string | number | Array<string | number>
 
 interface createFormCollapse {
-  (defaultActiveKey?: ActiveKey): IFormCollpase
+  (defaultActiveKeys?: ActiveKeys): IFormCollpase
 }
 
 interface IFormCollapse {
-  //激活主键
-  activeKey: ActiveKey
+  //激活主键列表
+  activeKeys: ActiveKeys
   //是否存在该激活主键
   hasActiveKey(key: ActiveKey): boolean
-  //设置激活主键
-  setActiveKey(key: ActiveKey): void
+  //设置激活主键列表
+  setActiveKeys(keys: ActiveKeys): void
   //添加激活主键
   addActiveKey(key: ActiveKey): void
   //删除激活主键
@@ -275,6 +276,6 @@ interface IFormCollapse {
 
 ```ts pure
 interface useFormCollapse {
-  (defaultActiveKey?: ActiveKey): IFormCollpase
+  (defaultActiveKeys?: ActiveKeys): IFormCollpase
 }
 ```

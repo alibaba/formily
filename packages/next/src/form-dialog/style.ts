@@ -1,1 +1,1 @@
-import 'antd/lib/modal/style/index'
+import '@alifd/next/lib/dialog/style'

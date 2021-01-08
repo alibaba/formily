@@ -17,6 +17,7 @@ import {
   ArrayItems,
   FormButtonGroup,
   Submit,
+  Space,
 } from '@formily/antd'
 import {
   FormProvider,
@@ -25,7 +26,7 @@ import {
   onFieldChange,
 } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -207,6 +208,7 @@ import {
   ArrayItems,
   FormButtonGroup,
   Submit,
+  Space,
 } from '@formily/antd'
 import {
   FormProvider,
@@ -215,7 +217,7 @@ import {
   onFieldChange,
 } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -443,6 +445,7 @@ import {
   Editable,
   FormButtonGroup,
   Submit,
+  Space,
 } from '@formily/antd'
 import {
   FormProvider,
@@ -451,7 +454,6 @@ import {
   onFieldReact,
 } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Space } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -577,6 +579,7 @@ import {
   Editable,
   FormButtonGroup,
   Submit,
+  Space,
 } from '@formily/antd'
 import {
   FormProvider,
@@ -585,7 +588,6 @@ import {
   onFieldReact,
 } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Space } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {

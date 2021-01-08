@@ -25,15 +25,14 @@ type ComposedDatePicker = React.FC<NextDatePickerProps> & {
   WeekPicker?: React.FC<NextDatePickerProps>
 }
 
-const mapDateFormat = function () {
+const mapDateFormat = function (type?: 'month' | 'year' | 'week') {
   const getDefaultFormat = (props: DatePickerProps<NextDatePickerProps>) => {
-    if (props['picker'] === 'month') {
+    const _type = props['type'] || type
+    if (_type === 'month') {
       return 'YYYY-MM'
-    } else if (props['picker'] === 'quarter') {
-      return 'YYYY-\\QQ'
-    } else if (props['picker'] === 'year') {
+    } else if (_type === 'year') {
       return 'YYYY'
-    } else if (props['picker'] === 'week') {
+    } else if (_type === 'week') {
       return 'YYYY-wo'
     }
     return props['showTime'] ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
@@ -44,8 +43,8 @@ const mapDateFormat = function () {
     const onChange = props.onChange
     return {
       ...props,
-      format,
-      value: momentable(props.value),
+      format: format === 'YYYY-MM-DD HH:mm:ss' ? 'YYYY-MM-DD' : format,
+      value: momentable(props.value, format === 'YYYY-wo' ? 'YYYY-w' : format),
       onChange: (value: moment.Moment | moment.Moment[]) => {
         if (onChange) {
           onChange(formatMomentValue(value, format))
@@ -69,19 +68,19 @@ DatePicker.RangePicker = connect(
 
 DatePicker.YearPicker = connect(
   NextDatePicker.YearPicker,
-  mapProps(mapDateFormat()),
+  mapProps(mapDateFormat('year')),
   mapReadPretty(PreviewText.DatePicker)
 )
 
 DatePicker.MonthPicker = connect(
   NextDatePicker.MonthPicker,
-  mapProps(mapDateFormat()),
+  mapProps(mapDateFormat('month')),
   mapReadPretty(PreviewText.DatePicker)
 )
 
 DatePicker.WeekPicker = connect(
   NextDatePicker.WeekPicker,
-  mapProps(mapDateFormat()),
+  mapProps(mapDateFormat('week')),
   mapReadPretty(PreviewText.DatePicker)
 )
 

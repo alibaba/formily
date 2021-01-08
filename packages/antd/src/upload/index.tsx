@@ -1,14 +1,34 @@
-import React from 'react'
-import { connect, mapProps } from '@formily/react'
+import React, { useEffect } from 'react'
+import { connect, mapProps, useField } from '@formily/react'
 import { Upload as AntdUpload } from 'antd'
 import {
   UploadChangeParam,
   UploadProps as AntdUploadProps,
   DraggerProps as AntdDraggerProps,
 } from 'antd/lib/upload'
+import { reaction } from 'mobx'
 import { UploadFile } from 'antd/lib/upload/interface'
-import { isArr } from '@formily/shared'
+import { isArr, toArr } from '@formily/shared'
 import { UPLOAD_PLACEHOLDER } from './placeholder'
+
+type UploadProps = Omit<AntdUploadProps, 'onChange'> & {
+  onChange?: (fileList: UploadFile[]) => void
+  serviceErrorMessage?: string
+}
+
+type DraggerProps = Omit<AntdDraggerProps, 'onChange'> & {
+  onChange?: (fileList: UploadFile[]) => void
+  serviceErrorMessage?: string
+}
+
+type ComposedUpload = React.FC<UploadProps> & {
+  Dragger?: React.FC<DraggerProps>
+}
+
+type IUploadProps = {
+  serviceErrorMessage?: string
+  onChange?: (...args: any) => void
+}
 
 const testOpts = (
   ext: RegExp,
@@ -38,25 +58,42 @@ const getImageByUrl = (url: string, options: any) => {
   return url
 }
 
+const getURL = (target: any) => {
+  return target?.['url'] || target?.['downloadURL'] || target?.['imgURL']
+}
+const getThumbURL = (target: any) => {
+  return (
+    target?.['thumbUrl'] ||
+    target?.['url'] ||
+    target?.['downloadURL'] ||
+    target?.['imgURL']
+  )
+}
+
+const getErrorMessage = (target: any) => {
+  return target?.errorMessage ||
+    target?.errMsg ||
+    target?.errorMsg ||
+    target?.message ||
+    typeof target?.error === 'string'
+    ? target.error
+    : ''
+}
+
+const getState = (target: any) => {
+  if (target?.success === false) return 'error'
+  if (target?.failed === true) return 'error'
+  if (target?.error) return 'error'
+  return target?.state || target?.status
+}
+
 const normalizeFileList = (fileList: UploadFile[]) => {
-  const getURL = (target: any) => {
-    return target?.['url'] || target?.['downloadURL'] || target?.['imgURL']
-  }
-  const getThumbURL = (target: any) => {
-    return (
-      target?.['thumbUrl'] ||
-      target?.['url'] ||
-      target?.['downloadURL'] ||
-      target?.['imgURL']
-    )
-  }
   if (fileList && fileList.length) {
-    return fileList.map((file) => {
+    return fileList.map((file, index) => {
       return {
-        ...file.response,
-        uid: file.uid,
-        status: file.status,
-        name: file.name,
+        ...file,
+        uid: file.uid || `${index}`,
+        status: getState(file.response) || getState(file),
         url: getURL(file) || getURL(file?.response),
         thumbUrl: getImageByUrl(
           getThumbURL(file) || getThumbURL(file?.response),
@@ -70,25 +107,58 @@ const normalizeFileList = (fileList: UploadFile[]) => {
   return []
 }
 
-type UploadProps = Omit<AntdUploadProps, 'onChange'> & {
-  onChange?: (fileList: UploadFile[]) => void
+const useValidator = (validator: (value: any) => string) => {
+  const field = useField<Formily.Core.Models.Field>()
+  useEffect(() => {
+    const dispose = reaction(
+      () => field.value,
+      (value) => {
+        const message = validator(value)
+        field.setFeedback({
+          type: 'error',
+          code: 'UploadError',
+          messages: message ? [message] : [],
+        })
+      }
+    )
+    return () => {
+      dispose()
+    }
+  }, [])
 }
 
-type DraggerProps = Omit<AntdDraggerProps, 'onChange'> & {
-  onChange?: (fileList: UploadFile[]) => void
+const useUploadValidator = (serviceErrorMessage = 'Upload Service Error') => {
+  useValidator((value) => {
+    const list = toArr(value)
+    for (let i = 0; i < list.length; i++) {
+      if (list[i]?.status === 'error') {
+        return (
+          getErrorMessage(list[i]?.response) ||
+          getErrorMessage(list[i]) ||
+          serviceErrorMessage
+        )
+      }
+    }
+  })
 }
 
-type ComposedUpload = React.FC<UploadProps> & {
-  Dragger?: React.FC<DraggerProps>
+function useUploadProps<T extends IUploadProps = UploadProps>({
+  serviceErrorMessage,
+  ...props
+}: T) {
+  useUploadValidator(serviceErrorMessage)
+  const onChange = (param: UploadChangeParam<UploadFile>) => {
+    props.onChange?.(normalizeFileList([...param.fileList]))
+  }
+  return {
+    ...props,
+    onChange,
+  }
 }
 
 export const Upload: ComposedUpload = connect(
   (props: UploadProps) => {
-    const handleChange = (param: UploadChangeParam<UploadFile>) => {
-      props.onChange?.(normalizeFileList([...param.fileList]))
-    }
-
-    return <AntdUpload {...props} onChange={handleChange} />
+    return <AntdUpload {...useUploadProps(props)} />
   },
   mapProps({
     extract: 'value',
@@ -98,11 +168,7 @@ export const Upload: ComposedUpload = connect(
 
 const Dragger = connect(
   (props: DraggerProps) => {
-    const handleChange = (param: UploadChangeParam<UploadFile>) => {
-      props.onChange?.(normalizeFileList([...param.fileList]))
-    }
-
-    return <AntdUpload.Dragger {...props} onChange={handleChange} />
+    return <AntdUpload.Dragger {...useUploadProps(props)} />
   },
   mapProps({
     extract: 'value',

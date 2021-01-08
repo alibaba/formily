@@ -9,7 +9,7 @@ import React from 'react'
 import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Form, Space } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -97,7 +97,7 @@ import React from 'react'
 import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Form, Space } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -187,7 +187,7 @@ import React from 'react'
 import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Form, Space } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {

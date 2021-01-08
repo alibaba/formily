@@ -38,7 +38,7 @@ const CardUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <UploadOutlined />
+      <UploadOutlined style={{ fontSize: 20 }} />
     </Upload>
   )
 }
@@ -142,7 +142,7 @@ const CardUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <UploadOutlined />
+      <UploadOutlined style={{ fontSize: 20 }} />
     </Upload>
   )
 }
@@ -250,7 +250,7 @@ const CardUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <UploadOutlined />
+      <UploadOutlined style={{ fontSize: 20 }} />
     </Upload>
   )
 }

@@ -9,7 +9,7 @@ import React from 'react'
 import { FormDialog, FormItem, Input } from '@formily/antd'
 import { Field, useForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space, Form } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -82,7 +82,7 @@ import React from 'react'
 import { FormDialog, FormItem, Input } from '@formily/antd'
 import { Field, useForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
-import { Button, Space, Form } from 'antd'
+import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -159,7 +159,7 @@ export default () => {
 import React from 'react'
 import { FormDialog, FormItem, Input, DialogFooter } from '@formily/antd'
 import { Field, useForm } from '@formily/react'
-import { Button, Space, Form } from 'antd'
+import { Button, Form } from 'antd'
 
 export default () => {
   return (

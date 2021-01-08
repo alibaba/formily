@@ -161,6 +161,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
+          title: '添加条目',
           'x-component': 'ArrayCards.Addition',
         },
       },
@@ -204,6 +205,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
+          title: '添加条目',
           'x-component': 'ArrayCards.Addition',
         },
       },
@@ -417,6 +419,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
+          title: '添加条目',
           'x-component': 'ArrayCards.Addition',
         },
       },

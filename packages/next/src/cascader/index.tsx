@@ -1,9 +1,9 @@
 import { connect, mapReadPretty, mapProps } from '@formily/react'
-import { Cascader as NextCascader } from '@alifd/next'
+import { CascaderSelect } from '@alifd/next'
 import { PreviewText } from '../preview-text'
 
 export const Cascader = connect(
-  NextCascader,
+  CascaderSelect,
   mapProps({
     extract: 'dataSource',
   }),
