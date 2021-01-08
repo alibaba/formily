@@ -8,7 +8,7 @@
 import { provide } from '@vue/composition-api'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
-import { FieldSymbol } from '../shared'
+import { FieldSymbol } from '../shared/context'
 import { VueComponent, IVoidFieldProps } from '../types'
 import ReactiveField from './ReactiveField.vue'
 import { defineObservableComponent } from '../utils/define-observable-component'
@@ -22,6 +22,7 @@ export default defineObservableComponent({
     name: {},
     title: {},
     description: {},
+    basePath: {},
     decorator: Array,
     component: Array,
     display: String,
@@ -34,10 +35,11 @@ export default defineObservableComponent({
   ) {
     const form = useForm()
     const parent = useField()
+    const basePath = props.basePath ? props.basePath : parent?.address
     const field = useAttach(
       form.createVoidField({
-        basePath: parent?.address,
-        ...props
+        ...props,
+        basePath
       })
     )
     provide(FieldSymbol, field)

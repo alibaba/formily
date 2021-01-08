@@ -4,12 +4,12 @@ import { isFn } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { defineObservableComponent } from '../utils/define-observable-component'
 import { VueComponent, IComponentMapper, IStateMapper } from '../types'
-import { useField } from '../hooks'
+import { useField } from '../hooks/useField'
 
 export function mapProps(...args: IStateMapper[]) {
   return (target: VueComponent) => {
     return defineObservableComponent({
-      observableSetup(collect, props: { [key: string]: any }, { slots }) {
+      observableSetup(collect, props, { slots }) {
         const field = useField()
         collect({
           field
@@ -20,8 +20,8 @@ export function mapProps(...args: IStateMapper[]) {
               props = Object.assign(props, mapper(props, field))
             } else {
               props[mapper.to || mapper.extract] = isFn(mapper.transform)
-                ? mapper.transform(field[mapper.extract])
-                : field[mapper.extract]
+                ? mapper.transform(field[mapper.extract as keyof Formily.Core.Types.GeneralField])
+                : field[mapper.extract as keyof Formily.Core.Types.GeneralField]
             }
             return props
           },
@@ -64,14 +64,14 @@ export function mapReadPretty(component: VueComponent) {
 }
 
 export function connect(...args: IComponentMapper[]) {
-  return function<T extends VueComponent>(target: T) {
-    const Component = args.reduce((target, mapper) => {
+  return function(target: VueComponent) {
+    const Component = args.reduce((target: VueComponent, mapper) => {
       return mapper(target)
-    }, target)
+    }, target) as VueComponent
 
     return defineComponent({
-      name: target['displayName'],
-      setup(props, { slots }) {
+      name: target['name'],
+      setup(props: { [key: string]: any; }, { slots }) {
         return () =>
           h(
             Component,

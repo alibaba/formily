@@ -1,13 +1,3 @@
-## Usage
-
-### Preparation
-
-```js
-import VueCompositionAPI from '@vue/composition-api'
-
-Vue.use(VueCompositionAPI)
-```
-
 ### Quick Start
 
 ```html

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, provide } from '@vue/composition-api'
-import { FormSymbol } from '../shared'
+import { FormSymbol } from '../shared/context'
 import { IProviderProps } from '../types'
 import { useAttach } from '../hooks/useAttach'
 

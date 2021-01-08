@@ -2,9 +2,9 @@
 
 import Vue from 'vue'
 import { isObservable, Reaction } from 'mobx'
-import { getCurrentInstance } from '@vue/composition-api'
+import { getCurrentInstance, SetupContext } from '@vue/composition-api'
 
-type Data = { [key: string]: unknown }
+type Data = { [key: string]: any }
 
 const noop = () => {
   /* empty */
@@ -12,36 +12,45 @@ const noop = () => {
 
 const disposerSymbol = Symbol('disposerSymbol')
 
-const defineObservableComponent = (originalOptions: any) => {
+interface ComponentOptions {
+  observableSetup?: (collect?: (data: Data) => any, props?: Data, context?: SetupContext) => any
+  [key: string]: any
+}
+
+const defineObservableComponent = (originalOptions: ComponentOptions) => {
   const name = originalOptions.name || 'ObservableComponent'
 
   const { observableSetup } = originalOptions
-  const setup = (...args: Data[]) => {
-    const vm = getCurrentInstance()
-    const collect = (data: Data) =>
-      Object.keys(data).reduce((result: any, field) => {
-        const value = data[field]
-        if (isObservable(value)) {
-          Object.defineProperty(vm, field, {
-            configurable: true,
-            get() {
-              return value
-            },
-            // @formatter:off
-            // tslint:disable-next-line
-            set() {}
-            // @formatter:on
-          })
-        } else {
-          result[field] = value
-        }
-
-        return result
-      }, {})
-    return observableSetup(collect, ...args)
+  let setup = originalOptions.setup
+  if (observableSetup) {
+    setup = (props: Data, context: SetupContext) => {
+      const vm = getCurrentInstance()?.proxy
+      const collect = (data: Data) =>
+        Object.keys(data).reduce((result: any, field) => {
+          const value = data[field]
+          if (isObservable(value)) {
+            Object.defineProperty(vm, field, {
+              configurable: true,
+              get() {
+                return value
+              },
+              // @formatter:off
+              // tslint:disable-next-line
+              set() {}
+              // @formatter:on
+            })
+          } else {
+            result[field] = value
+          }
+  
+          return result
+        }, {})
+      return observableSetup(collect, props, context)
+    }
+  
+    delete originalOptions.observableSetup
   }
-
-  delete originalOptions.observableSetup
+  
 
   const newOptions = {
     name,
@@ -50,7 +59,7 @@ const defineObservableComponent = (originalOptions: any) => {
     // overrider the cached constructor to avoid extending skip
     // @see https://github.com/vuejs/vue/blob/6cc070063bd211229dff5108c99f7d11b6778550/src/core/global-api/extend.js#L24
     _Ctor: {}
-  }
+  } as any
 
   const Component = Vue.extend(newOptions)
 

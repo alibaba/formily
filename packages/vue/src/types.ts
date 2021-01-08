@@ -1,4 +1,4 @@
-export type VueComponent = Vue.Component
+export type VueComponent = Vue.VueConstructor<Vue> | Vue.FunctionalComponentOptions<any> | Vue.ComponentOptions<never, any, any, any, any>
 
 export type IProviderProps = {
   form: Formily.Core.Models.Form
