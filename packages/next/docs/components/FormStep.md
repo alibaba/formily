@@ -233,11 +233,11 @@ export default () => {
 | -------- | --------- | -------------------------------------------------- | ------ |
 | formStep | IFormStep | 传入通过 createFormStep/useFormStep 创建出来的模型 |        |
 
-其余参考 https://ant.design/components/steps-cn/
+其余参考 https://fusion.design/pc/component/basic/step
 
 ### FormStep.StepPane
 
-参考 https://ant.design/components/steps-cn/ Steps.Step 属性
+参考 https://fusion.design/pc/component/basic/step Steps.Step 属性
 
 ### FormStep.createFormStep
 

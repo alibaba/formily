@@ -301,7 +301,7 @@ export default () => (
 
 > 内联编辑
 
-参考 https://ant.design/components/form-cn/ 中的 FormItem 属性
+参考 https://fusion.design/pc/component/basic/form 中的 FormItem 属性
 
 ### Editable.Popover
 
@@ -311,4 +311,4 @@ export default () => (
 | ------------- | ---------------------------------------------------- | ---------- | ------ |
 | renderPreview | `(field:Formily.Core.Types.GeneralField)=>ReactNode` | 预览渲染器 |        |
 
-其余参考 https://ant.design/components/popover-cn/
+其余参考 https://fusion.design/pc/component/basic/balloon

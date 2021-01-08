@@ -182,4 +182,4 @@ export default () => (
 
 ### Reset
 
-其余 API 参考 https://ant.design/components/button-cn/
+其余 API 参考 https://fusion.design/pc/component/basic/button

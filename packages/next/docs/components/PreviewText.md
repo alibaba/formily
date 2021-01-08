@@ -173,36 +173,42 @@ export default () => {
 
 ### PreviewText.Input
 
-参考 https://ant.design/components/input-cn/
+参考 https://fusion.design/pc/component/basic/input
 
 ### PreviewText.Select
 
-参考 https://ant.design/components/select-cn/
+参考 https://fusion.design/pc/component/basic/select
 
 ### PreviewText.TreeSelect
 
-参考 https://ant.design/components/tree-select-cn/
+参考 https://fusion.design/pc/component/basic/tree-select
 
 ### PreviewText.Cascader
 
-参考 https://ant.design/components/cascader-cn/
+参考 https://fusion.design/pc/component/basic/cascader-select
 
 ### PreviewText.DatePicker
 
-参考 https://ant.design/components/date-picker-cn/
+参考 https://fusion.design/pc/component/basic/date-picker
 
 ### PreviewText.DateRangePicker
 
-参考 https://ant.design/components/date-picker-cn/
+参考 https://fusion.design/pc/component/basic/date-picker
 
 ### PreviewText.TimePicker
 
-参考 https://ant.design/components/time-picker-cn/
-
-### PreviewText.TimeRangePicker
-
-参考 https://ant.design/components/time-picker-cn/
+参考 https://fusion.design/pc/component/basic/time-picker
 
 ### PreviewText.Placeholder
 
+| 属性名 | 类型   | 描述       | 默认值 |
+| ------ | ------ | ---------- | ------ |
+| value  | stirng | 缺省占位符 | N/A    |
+
 ### PreviewText.usePlaceholder
+
+```ts pure
+interface usePlaceholder {
+  (): string
+}
+```

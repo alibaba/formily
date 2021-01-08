@@ -238,11 +238,11 @@ export default () => {
 | ------------ | ------------- | ---------------------------------------------------------- | ------ |
 | formCollapse | IFormCollapse | 传入通过 createFormCollapse/useFormCollapse 创建出来的模型 |        |
 
-其余参考 https://ant.design/components/collapse-cn/
+其余参考 https://fusion.design/pc/component/basic/collapse
 
 ### FormCollapse.CollapsePanel
 
-参考 https://ant.design/components/collapse-cn/
+参考 https://fusion.design/pc/component/basic/collapse
 
 ### FormCollapse.createFormCollapse
 

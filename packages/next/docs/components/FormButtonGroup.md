@@ -285,7 +285,7 @@ export default () => {
 
 > 该组件主要用来处理按钮组与主表单 FormItem 对齐问题
 
-参考 https://ant.design/components/form-cn/ 中的 FormItem 属性
+参考 https://fusion.design/pc/component/basic/form 中的 FormItem 属性
 
 ### FormButtonGroup.Sticky
 

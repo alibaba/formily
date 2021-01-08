@@ -205,4 +205,14 @@ export default () => {
 
 ### PreviewText.Placeholder
 
+| 属性名 | 类型   | 描述       | 默认值 |
+| ------ | ------ | ---------- | ------ |
+| value  | stirng | 缺省占位符 | N/A    |
+
 ### PreviewText.usePlaceholder
+
+```ts pure
+interface usePlaceholder {
+  (): string
+}
+```

@@ -115,4 +115,4 @@ export default () => (
 
 ## API
 
-参考 https://ant.design/components/transfer-cn/
+参考 https://fusion.design/pc/component/basic/transfer

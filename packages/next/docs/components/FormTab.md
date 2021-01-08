@@ -230,11 +230,11 @@ export default () => {
 | ------- | -------- | ------------------------------------------------ | ------ |
 | formTab | IFormTab | 传入通过 createFormTab/useFormTab 创建出来的模型 |        |
 
-其余参考 https://ant.design/components/tabs-cn/
+其余参考 https://fusion.design/pc/component/basic/tab
 
 ### FormTab.TabPane
 
-参考 https://ant.design/components/tabs-cn/
+参考 https://fusion.design/pc/component/basic/tab 的 Item 属性
 
 ### FormTab.createFormTab
 
