@@ -3,6 +3,8 @@ export default {
   mode: 'site',
   logo: '//img.alicdn.com/tfs/TB1La8Uu7Y2gK0jSZFgXXc5OFXa-372-194.png',
   title: 'Formily',
+  favicon:
+    '//img.alicdn.com/imgextra/i4/O1CN013NYra11W7sfH2qLl8_!!6000000002742-55-tps-360-360.svg',
   hash: true,
   outputPath: './doc-site',
   navs: [
