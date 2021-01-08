@@ -4,7 +4,6 @@ export default {
   logo: '//img.alicdn.com/tfs/TB1La8Uu7Y2gK0jSZFgXXc5OFXa-372-194.png',
   title: 'Formily',
   outputPath: './doc-site',
-  base: '/components',
   navs: [
     {
       title: 'Ant Design',
