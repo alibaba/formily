@@ -1,28 +1,17 @@
+import { resolve } from 'path'
 export default {
   mode: 'site',
   logo: '//img.alicdn.com/tfs/TB1La8Uu7Y2gK0jSZFgXXc5OFXa-372-194.png',
   title: 'Formily',
+  outputPath: './doc-site',
   navs: [
     {
-      title: '组件库',
+      title: 'Ant Design',
       path: '/components',
     },
     {
-      title: '例子',
-      path: '/examples',
-    },
-    {
-      title: '论坛',
-      path: '//github.com/alibaba/formily/discussions',
-    },
-    {
-      title: '表单编辑器',
-      path: '//github.com/alibaba/formily-editor',
-    },
-    {
-      title: 'Chrome扩展',
-      path:
-        '//chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+      title: '主站',
+      path: '//formilyjs.org',
     },
     {
       title: 'GITHUB',

@@ -126,7 +126,7 @@ export function FormDialog(title: any, content: any): IFormDialog {
   return formDialog
 }
 
-export const DialogFooter: React.FC = (props) => {
+const DialogFooter: React.FC = (props) => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()
@@ -155,6 +155,6 @@ export const DialogFooter: React.FC = (props) => {
   )
 }
 
-FormDialog.DialogFooter = DialogFooter
+FormDialog.Footer = DialogFooter
 
 export default FormDialog

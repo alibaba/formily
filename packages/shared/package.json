@@ -1,10 +1,10 @@
 {
 	"name": "@formily/shared",
-	"version": "1.3.6",
+	"version": "2.0.0-beta.3",
 	"license": "MIT",
 	"main": "lib",
   "module": "esm",
-	"types": "lib/index.d.ts",
+	"types": "esm/index.d.ts",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/alibaba/formily.git"

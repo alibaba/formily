@@ -1,6 +1,6 @@
 {
   "name": "@formily/json-schema",
-  "version": "1.3.6",
+  "version": "2.0.0-beta.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
   },
-  "types": "lib/index.d.ts",
+  "types": "esm/index.d.ts",
   "bugs": {
     "url": "https://github.com/alibaba/formily/issues"
   },
@@ -23,11 +23,13 @@
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
-    "typescript": "^4.1.2",
-    "@formily/shared":"^1.3.6"
+    "typescript": "^4.1.2"
   },
   "peerDependencies": {
     "mobx": "^6.0.3"
+  },
+  "dependencies": {
+    "@formily/shared":"^2.0.0-beta.3"
   },
   "publishConfig": {
     "access": "public"

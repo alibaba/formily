@@ -7,9 +7,18 @@ import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Schema, SchemaKey } from '@formily/json-schema'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
+import { toArr } from '@formily/shared'
+
+type ActiveKeys = string | number | Array<string | number>
+
+type ActiveKey = string | number
 interface IFormCollapse {
-  activeKey: CollapseProps['activeKey']
-  setActiveKey(key: CollapseProps['activeKey']): void
+  activeKeys: ActiveKeys
+  hasActiveKey(key: ActiveKey): boolean
+  setActiveKeys(key: ActiveKeys): void
+  addActiveKey(key: ActiveKey): void
+  removeActiveKey(key: ActiveKey): void
+  toggleActiveKey(key: ActiveKey): void
 }
 
 interface IFormCollapseProps extends CollapseProps {
@@ -19,12 +28,10 @@ interface IFormCollapseProps extends CollapseProps {
 type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
   CollapsePanel?: React.FC<CollapsePanelProps>
   useFormCollapse?: (
-    defaultActiveKeys?: CollapseProps['activeKey'],
+    defaultActiveKeys?: ActiveKeys,
     deps?: any[]
   ) => IFormCollapse
-  createFormCollapse?: (
-    defaultActiveKeys?: CollapseProps['activeKey']
-  ) => IFormCollapse
+  createFormCollapse?: (defaultActiveKeys?: ActiveKeys) => IFormCollapse
 }
 
 export const usePanels = () => {
@@ -39,7 +46,10 @@ export const usePanels = () => {
     if (schema['x-component']?.indexOf('CollapsePanel') > -1) {
       panels.push({
         name,
-        props: schema['x-component-props'],
+        props: {
+          ...schema?.['x-component-props'],
+          key: schema?.['x-component-props']?.key || name,
+        },
         schema,
       })
     }
@@ -47,13 +57,41 @@ export const usePanels = () => {
   return panels
 }
 
-export const createFormCollapse = (
-  defaultActiveKey?: CollapseProps['activeKey']
-) => {
+export const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
   const formCollapse = makeAutoObservable({
-    activeKey: defaultActiveKey,
-    setActiveKey(keys: CollapseProps['activeKey']) {
-      formCollapse.activeKey = keys
+    activeKeys: defaultActiveKeys || [],
+    setActiveKeys(keys: ActiveKeys) {
+      formCollapse.activeKeys = keys
+    },
+    hasActiveKey(key: ActiveKey) {
+      if (Array.isArray(formCollapse.activeKeys)) {
+        if (formCollapse.activeKeys.includes(key)) {
+          return true
+        }
+      } else if (formCollapse.activeKeys == key) {
+        return true
+      }
+      return false
+    },
+    addActiveKey(key: ActiveKey) {
+      if (formCollapse.hasActiveKey(key)) return
+      formCollapse.activeKeys = toArr(formCollapse.activeKeys).concat(key)
+    },
+    removeActiveKey(key: ActiveKey) {
+      if (Array.isArray(formCollapse.activeKeys)) {
+        formCollapse.activeKeys = formCollapse.activeKeys.filter(
+          (item) => item != key
+        )
+      } else {
+        formCollapse.activeKeys = ''
+      }
+    },
+    toggleActiveKey(key: ActiveKey) {
+      if (formCollapse.hasActiveKey(key)) {
+        formCollapse.removeActiveKey(key)
+      } else {
+        formCollapse.addActiveKey(key)
+      }
     },
   })
   return formCollapse
@@ -68,51 +106,53 @@ export const useFormCollapse = (
   }, deps)
 }
 
-export const FormCollapse: ComposedFormCollapse = observer((props) => {
-  const field = useField()
-  const panels = usePanels()
-  const prefixCls = usePrefixCls('formily-collapse', props)
-  const formCollapse = useMemo(() => {
-    return props.formCollapse ? props.formCollapse : createFormCollapse()
-  }, [])
-  const activeKey = props.activeKey || formCollapse?.activeKey
+export const FormCollapse: ComposedFormCollapse = observer(
+  ({ formCollapse, ...props }) => {
+    const field = useField()
+    const panels = usePanels()
+    const prefixCls = usePrefixCls('formily-collapse', props)
+    const _formCollapse = useMemo(() => {
+      return formCollapse ? formCollapse : createFormCollapse()
+    }, [])
+    const activeKey = props.activeKey || _formCollapse?.activeKeys
 
-  const badgedHeader = (key: SchemaKey, props: any) => {
-    const errors = field.form.queryFeedbacks({
-      type: 'error',
-      address: `${field.address.concat(key)}.*`,
-    })
-    if (errors.length) {
-      return (
-        <Badge size="small" className="errors-badge" count={errors.length}>
-          {props.header}
-        </Badge>
-      )
+    const badgedHeader = (key: SchemaKey, props: any) => {
+      const errors = field.form.queryFeedbacks({
+        type: 'error',
+        address: `${field.address.concat(key)}.*`,
+      })
+      if (errors.length) {
+        return (
+          <Badge size="small" className="errors-badge" count={errors.length}>
+            {props.header}
+          </Badge>
+        )
+      }
+      return props.header
     }
-    return props.header
+    return (
+      <Collapse
+        {...props}
+        className={cls(prefixCls, props.className)}
+        activeKey={activeKey}
+        onChange={(key) => {
+          props?.onChange?.(key)
+          formCollapse?.setActiveKeys?.(key)
+        }}
+      >
+        {panels.map(({ props, schema, name }) => (
+          <Collapse.Panel
+            {...props}
+            header={badgedHeader(name, props)}
+            forceRender
+          >
+            <RecursionField schema={schema} name={name} />
+          </Collapse.Panel>
+        ))}
+      </Collapse>
+    )
   }
-  return (
-    <Collapse
-      {...props}
-      className={cls(prefixCls, props.className)}
-      activeKey={activeKey}
-      onChange={(key) => {
-        props?.onChange?.(key)
-        formCollapse?.setActiveKey?.(key)
-      }}
-    >
-      {panels.map(({ props, schema, name }) => (
-        <Collapse.Panel
-          {...props}
-          header={badgedHeader(name, props)}
-          forceRender
-        >
-          <RecursionField schema={schema} name={name} />
-        </Collapse.Panel>
-      ))}
-    </Collapse>
-  )
-})
+)
 
 export const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>

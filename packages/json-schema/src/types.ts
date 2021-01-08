@@ -41,20 +41,22 @@ export type SchemaProperties<
 
 export type SchemaKey = string | number
 
-export type SchemaExtendReaction = {
-  dependencies?: string[]
-  when?: string
-  fullfill?: {
-    state?: any
-    schema?: any
-    run?: string
-  }
-  otherwise?: {
-    state?: any
-    schema?: any
-    run?: string
-  }
-}
+export type SchemaExtendReaction<Field = any> =
+  | {
+      dependencies?: string[]
+      when?: string
+      fullfill?: {
+        state?: any
+        schema?: any
+        run?: string
+      }
+      otherwise?: {
+        state?: any
+        schema?: any
+        run?: string
+      }
+    }
+  | ((field: Field) => void)
 
 export type SchemaItems<
   Decorator,
@@ -95,7 +97,8 @@ export interface ISchema<
   Pattern = any,
   Display = any,
   Validator = any,
-  Message = any
+  Message = any,
+  ReactionField = any
 > {
   name?: SchemaKey
   title?: Message
@@ -190,7 +193,19 @@ export interface ISchema<
   //组件属性
   ['x-component-props']?: ComponentProps
   //组件响应器
-  ['x-reactions']?: SchemaExtendReaction[]
+  ['x-reactions']?: SchemaExtendReaction<ReactionField>[]
   //内容
   ['x-content']?: any
+
+  ['x-visible']?: boolean
+
+  ['x-hidden']?: boolean
+
+  ['x-disabled']?: boolean
+
+  ['x-editable']?: boolean
+
+  ['x-read-only']?: boolean
+
+  ['x-read-pretty']?: boolean
 }

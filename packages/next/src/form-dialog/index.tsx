@@ -56,6 +56,10 @@ export function FormDialog(title: any, content: any): IFormDialog {
   const props = getModelProps(title)
   const modal = {
     ...props,
+    style: {
+      width: '40%',
+      ...props.style,
+    },
     afterClose: () => {
       props?.afterClose?.()
       ReactDOM.unmountComponentAtNode(env.root)
@@ -77,6 +81,10 @@ export function FormDialog(title: any, content: any): IFormDialog {
       <Dialog
         {...modal}
         visible={visible}
+        onClose={(trigger, e) => {
+          modal?.onClose?.(trigger, e)
+          formDialog.close()
+        }}
         onCancel={(e) => {
           modal?.onCancel?.(e)
           formDialog.close()
@@ -126,13 +134,13 @@ export function FormDialog(title: any, content: any): IFormDialog {
   return formDialog
 }
 
-export const DialogFooter: React.FC = (props) => {
+const DialogFooter: React.FC = (props) => {
   const ref = useRef<HTMLDivElement>()
   const [footer, setFooter] = useState<HTMLDivElement>()
   const footerRef = useRef<HTMLDivElement>()
   const prefixCls = usePrefixCls('dialog')
   useLayoutEffect(() => {
-    const content = ref.current?.closest(`.${prefixCls}-content`)
+    const content = ref.current?.closest(`.${prefixCls}`)
     if (content) {
       if (!footerRef.current) {
         footerRef.current = content.querySelector(`.${prefixCls}-footer`)
@@ -155,6 +163,6 @@ export const DialogFooter: React.FC = (props) => {
   )
 }
 
-FormDialog.DialogFooter = DialogFooter
+FormDialog.Footer = DialogFooter
 
 export default FormDialog

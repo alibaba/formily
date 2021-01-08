@@ -1,18 +1,19 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useField, useForm, observer, isVoidField } from '@formily/react'
-import { FormPath, isStr } from '@formily/shared'
+import { isStr } from '@formily/shared'
 import { Form, Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { ItemProps as FormItemProps } from '@alifd/next/lib/form'
 import { BalloonProps as PopoverProps } from '@alifd/next/lib/balloon'
 import { useClickAway, usePrefixCls } from '../__builtins__'
+import { Space } from '../space'
 import cls from 'classnames'
 /**
  * 默认Inline展示
  */
 
 interface IPopoverProps extends PopoverProps {
-  dataIndex?: string
+  renderPreview?: (field: Formily.Core.Types.GeneralField) => React.ReactNode
 }
 
 type ComposedEditable = React.FC<FormItemProps> & {
@@ -86,9 +87,7 @@ export const Editable: ComposedEditable = observer((props) => {
 
   useClickAway((e) => {
     const target = e.target as HTMLElement
-    if (target?.closest(`.${basePrefixCls}-select-dropdown`)) return
-    if (target?.closest(`.${basePrefixCls}-picker-dropdown`)) return
-    if (target?.closest(`.${basePrefixCls}-cascader-menus`)) return
+    if (target?.closest(`.${basePrefixCls}-overlay-wrapper`)) return
     recover()
   }, innerRef)
 
@@ -111,23 +110,24 @@ export const Editable: ComposedEditable = observer((props) => {
 
   return (
     <div className={prefixCls} ref={innerRef} onClick={onClick}>
-      <Form.Item {...props} {...itemProps}>
-        {props.children}
-      </Form.Item>
-      {renderEditHelper()}
-      {renderCloseHelper()}
+      <Space size={4} style={{ margin: '0 4px' }}>
+        <Form.Item {...props} {...itemProps}>
+          {props.children}
+        </Form.Item>
+        {renderEditHelper()}
+        {renderCloseHelper()}
+      </Space>
     </div>
   )
 })
 
-Editable.Popover = observer(({ dataIndex, ...props }) => {
+Editable.Popover = observer(({ renderPreview, ...props }) => {
   const field = useField<Formily.Core.Models.Field>()
   const [editable, setEditable] = useEditable()
   const [visible, setVisible] = useState(false)
   const [destroy, setDestroy] = useState(true)
   const prefixCls = usePrefixCls('formily-editable-popover')
-  const timer = useRef(null)
-  const preview = FormPath.getIn(field.value, dataIndex || '')
+  const preview = renderPreview?.(field)
   const placeholder = isStr(preview) ? preview : ''
   const closePopover = () => {
     const errors = field.form.queryFeedbacks({
@@ -138,12 +138,10 @@ Editable.Popover = observer(({ dataIndex, ...props }) => {
     setVisible(false)
   }
   const openPopover = () => {
-    clearTimeout(timer.current)
     setVisible(true)
     setDestroy(false)
     setEditable(true)
   }
-
   return (
     <Balloon
       {...props}
@@ -165,10 +163,12 @@ Editable.Popover = observer(({ dataIndex, ...props }) => {
       closable={false}
       trigger={
         <Form.Item className={`${prefixCls}-trigger`}>
-          <span className={`${prefixCls}-preview`}>
-            {placeholder || field.title}
-          </span>
-          <EditOutlined className={`${prefixCls}-edit-btn`} />
+          <Space size={4} style={{ margin: '0 4px' }}>
+            <span className={`${prefixCls}-preview`}>
+              {placeholder || field.title}
+            </span>
+            <EditOutlined className={`${prefixCls}-edit-btn`} />
+          </Space>
         </Form.Item>
       }
     >

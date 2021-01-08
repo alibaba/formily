@@ -5,19 +5,31 @@ import { isSchemaObject } from './schema'
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 
-export const complieExpression = <Source = any, Scope = any>(
+export const shallowComplie = <Source = any, Scope = any>(
+  source: Source,
+  scope?: Scope
+) => {
+  if (isStr(source)) {
+    const matched = source.match(ExpRE)
+    if (!matched) return source
+    const vars = Object.keys(scope || {})
+    const params = vars.map((key) => scope[key])
+    return new Function(...vars, `return (${matched[1]});`)(...params)
+  } else if (isArr(source)) {
+    return source.map((item) => shallowComplie(item, scope))
+  }
+  return source
+}
+
+export const complie = <Source = any, Scope = any>(
   source: Source,
   scope?: Scope,
   exclude?: (key: string, value: any) => boolean
 ): any => {
-  const seenObjects = []
+  const seenObjects = new WeakMap()
   const complie = (source: any) => {
     if (isStr(source)) {
-      const matched = source.match(ExpRE)
-      if (!matched) return source
-      const vars = Object.keys(scope || {})
-      const params = vars.map(key => scope[key])
-      return new Function(...vars, `return (${matched[1]});`)(...params)
+      return shallowComplie(source, scope)
     } else if (isArr(source)) {
       return source.map((value: any) => complie(value))
     } else if (typeof source === 'object') {
@@ -45,10 +57,10 @@ export const complieExpression = <Source = any, Scope = any>(
       if (isFn(source['toJSON'])) {
         return source
       }
-      if (seenObjects.includes(source)) {
+      if (seenObjects.get(source)) {
         return source
       }
-      seenObjects.push(source)
+      seenObjects.set(source, true)
       return reduce(
         source,
         (buf, value, key) => {

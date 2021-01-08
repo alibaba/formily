@@ -6,6 +6,7 @@ import {
   ArrayField,
   ObjectField,
   VoidField,
+  Query,
 } from '../models'
 import {
   AnyFunction,
@@ -132,6 +133,16 @@ export const isArrayFieldState = (state: any): state is IFieldState => {
   return state?.displayName === 'ArrayField'
 }
 
+export const isDataField = (node: any) => {
+  return isField(node) || isArrayField(node) || isObjectField(node)
+}
+
+export const isDataFieldState = (node: any) => {
+  return (
+    isFieldState(node) || isObjectFieldState(node) || isArrayFieldState(node)
+  )
+}
+
 export const isObjectFieldState = (state: any): state is IFieldState => {
   if (isFn(state.initialize)) return false
   return state?.displayName === 'ObjectField'
@@ -140,6 +151,10 @@ export const isObjectFieldState = (state: any): state is IFieldState => {
 export const isVoidFieldState = (state: any): state is IVoidFieldState => {
   if (isFn(state.initialize)) return false
   return state?.displayName === 'VoidField'
+}
+
+export const isQuery = (query: any): query is Query => {
+  return query && query instanceof Query
 }
 
 export const createForm = (options?: IFormProps) => {

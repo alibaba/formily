@@ -5,7 +5,7 @@ import {
   render,
   SchemaMarkupContext,
   SchemaExpressionScopeContext,
-  SchemaOptionsContext
+  SchemaOptionsContext,
 } from './shared'
 import {
   ReactComponentPath,
@@ -14,11 +14,11 @@ import {
   SchemaComponents,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
-  ISchemaTypeFieldProps
+  ISchemaTypeFieldProps,
 } from './types'
 
 const env = {
-  nonameId: 0
+  nonameId: 0,
 }
 
 const getRandomName = () => {
@@ -36,7 +36,7 @@ export function createSchemaField<Components extends SchemaComponents>(
       ? props.schema
       : new Schema({
           type: 'object',
-          ...props.schema
+          ...props.schema,
         })
 
     const renderMarkup = () => {
@@ -49,17 +49,15 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
 
     const renderChildren = () => {
-      return (
-        <SchemaExpressionScopeContext.Provider value={props.scope}>
-          <RecursionField {...props} schema={schema} />
-        </SchemaExpressionScopeContext.Provider>
-      )
+      return <RecursionField {...props} schema={schema} />
     }
 
     return (
       <SchemaOptionsContext.Provider value={options}>
-        {renderMarkup()}
-        {renderChildren()}
+        <SchemaExpressionScopeContext.Provider value={props.scope}>
+          {renderMarkup()}
+          {renderChildren()}
+        </SchemaExpressionScopeContext.Provider>
       </SchemaOptionsContext.Provider>
     )
   }

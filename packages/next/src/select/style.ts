@@ -1,1 +1,1 @@
-import 'antd/lib/select/style/index'
+import '@alifd/next/lib/select/style'

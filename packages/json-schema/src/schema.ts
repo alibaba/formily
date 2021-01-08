@@ -4,10 +4,10 @@ import {
   SchemaProperties,
   SchemaExtendReaction,
   SchemaTypes,
-  SchemaKey
+  SchemaKey,
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
-import { complieExpression } from './complier'
+import { complie, shallowComplie } from './complier'
 export class Schema<
   Decorator = any,
   Component = any,
@@ -16,7 +16,8 @@ export class Schema<
   Pattern = any,
   Display = any,
   Validator = any,
-  Message = any
+  Message = any,
+  ReactionField = any
 > implements ISchema {
   name?: SchemaKey
   title?: Message
@@ -128,9 +129,21 @@ export class Schema<
   //组件属性
   ['x-component-props']?: ComponentProps;
 
-  ['x-reactions']?: SchemaExtendReaction[];
+  ['x-reactions']?: SchemaExtendReaction<ReactionField>[];
 
-  ['x-content']?: any
+  ['x-content']?: any;
+
+  ['x-visible']?: boolean;
+
+  ['x-hidden']?: boolean;
+
+  ['x-disabled']?: boolean;
+
+  ['x-editable']?: boolean;
+
+  ['x-read-only']?: boolean;
+
+  ['x-read-pretty']?: boolean
 
   _isJSONSchemaObject = true
 
@@ -400,7 +413,7 @@ export class Schema<
   }
 
   complie = (scope: any) => {
-    const excludes = [
+    const shallows = [
       'properties',
       'patternProperties',
       'additionalProperties',
@@ -411,8 +424,10 @@ export class Schema<
     ]
     each(this, (value, key) => {
       if (isFn(value)) return
-      if (!excludes.includes(key)) {
-        this[key] = value ? complieExpression(value, scope) : value
+      if (!shallows.includes(key)) {
+        this[key] = value ? complie(value, scope) : value
+      } else {
+        this[key] = value ? shallowComplie(value, scope) : value
       }
     })
     return this
@@ -445,10 +460,8 @@ export class Schema<
         this.setItems(value)
       } else if (key === 'additionalItems') {
         this.setAdditionalItems(value)
-      } else if (key === 'x-linkages' || key === 'x-reactions') {
-        this[key] = value
       } else {
-        this[key] = complieExpression(value, scope)
+        this[key] = value
       }
     })
     return this
@@ -499,6 +512,14 @@ export class Schema<
       }
     }
     return orderProperties.concat(unorderProperties).filter((item) => !!item)
+  }
+
+  static complie = (data: any, scope: any) => {
+    return complie(data, scope)
+  }
+
+  static shallowComplie = (data: any, scope: any) => {
+    return shallowComplie(data, scope)
   }
 }
 

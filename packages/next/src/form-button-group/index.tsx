@@ -9,6 +9,7 @@ import StickyBox, { StickyBoxMode } from 'react-sticky-box'
 import { Form } from '@alifd/next'
 import { ItemProps as FormItemProps } from '@alifd/next/lib/form'
 import { usePrefixCls } from '../__builtins__'
+import { ISpaceProps, Space } from '../space'
 import cls from 'classnames'
 interface IStickyProps {
   offsetTop?: number
@@ -24,7 +25,17 @@ interface IStickyProps {
   align?: React.CSSProperties['textAlign']
 }
 
-type ComposedButtonGroup = React.FC<FormItemProps> & {
+type IFormButtonGroupProps = Omit<ISpaceProps, 'align' | 'size'> & {
+  align?: React.CSSProperties['textAlign']
+  gutter?: number
+}
+
+type IFormItemProps = FormItemProps & {
+  gutter?: number
+}
+
+type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
+  FormItem: React.FC<IFormItemProps>
   Sticky: React.FC<IStickyProps>
 }
 
@@ -54,16 +65,50 @@ function getDefaultBackground() {
   return bg
 }
 
-export const FormButtonGroup: ComposedButtonGroup = (props) => {
+export const FormButtonGroup: ComposedButtonGroup = ({
+  align,
+  gutter,
+  ...props
+}) => {
   const prefixCls = usePrefixCls('formily-button-group')
+  return (
+    <Space
+      {...props}
+      size={gutter}
+      className={cls(prefixCls, props.className)}
+      style={{
+        ...props.style,
+        display: 'flex',
+        justifyContent:
+          align === 'left'
+            ? 'flex-start'
+            : align === 'right'
+            ? 'flex-end'
+            : 'center'
+      }}
+    >
+      {props.children}
+    </Space>
+  )
+}
+
+FormButtonGroup.defaultProps = {
+  align: 'left',
+}
+
+FormButtonGroup.FormItem = ({ gutter, ...props }) => {
   return (
     <Form.Item
       {...props}
-      className={cls(prefixCls, props.className)}
       label=" "
-      style={{ margin: 0, padding: 0, ...props.style }}
+      style={{
+        margin: 0,
+        padding: 0,
+        ...props.style,
+        width: '100%',
+      }}
     >
-      {props.children}
+      <Space size={gutter}>{props.children}</Space>
     </Form.Item>
   )
 }

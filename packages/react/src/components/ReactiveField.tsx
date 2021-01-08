@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
-import { isFn } from '@formily/shared'
+import { isFn, isValid } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
@@ -38,7 +38,23 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   const renderComponent = () => {
     if (!field?.component?.[0]) return <Fragment>{children}</Fragment>
     const value = !isVoidField(field) ? field.value : undefined
-    const onChange = !isVoidField(field) ? field.onInput : undefined
+    const onChange = !isVoidField(field)
+      ? (...args: any[]) => {
+          const params = args.map((arg) => {
+            if (arg?.target) {
+              if (isValid(arg?.target?.value)) {
+                return arg?.target?.value
+              }
+              if (isValid(arg?.target?.checked)) {
+                return arg?.target?.checked
+              }
+            }
+            return arg
+          })
+          field.onInput(...params)
+          field?.component?.[1]?.onChange?.(...args)
+        }
+      : undefined
     const disabled = !isVoidField(field)
       ? field.pattern === 'disabled' || field.pattern === 'readPretty'
       : undefined
@@ -47,7 +63,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       : undefined
     return React.createElement(
       field.component[0],
-      { ...field.component[1], value, onChange, disabled, readOnly },
+      { disabled, readOnly, ...field.component[1], value, onChange },
       children
     )
   }

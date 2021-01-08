@@ -5,7 +5,7 @@ $editable-popover-prefix-cls: $css-prefix+"formily-editable-popover";
 
 .#{$editable-prefix-cls} {
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
 
   .#{$css-prefix}form-text {
@@ -23,7 +23,7 @@ $editable-popover-prefix-cls: $css-prefix+"formily-editable-popover";
     transition: all .25s ease-in-out;
     color: #aaa;
     font-size: 12px;
-    margin-left: 3px;
+
     &:hover {
       color: $color-text1-1;
     }
@@ -47,12 +47,8 @@ $editable-popover-prefix-cls: $css-prefix+"formily-editable-popover";
 .#{$editable-popover-prefix-cls} {
   &-trigger {
     cursor: pointer;
-
-    .#{$css-prefix}form-item-control {
-      &>* {
-        margin-right: 3px;
-      }
-    }
+    display: inline-flex;
+    outline: none;
 
   }
 

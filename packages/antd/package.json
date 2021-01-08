@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd",
-  "version": "1.3.6",
+  "version": "2.0.0-beta.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -20,7 +20,8 @@
     "start": "dumi dev",
     "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm"
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:docs": "dumi build"
   },
   "resolutions": {
     "@types/react": "^17.0.0",
@@ -44,10 +45,11 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/json-schema": "^1.3.6",
-    "@formily/react": "^1.3.6",
-    "@formily/react-schema-field": "^1.3.6",
-    "@formily/shared": "^1.3.6",
+    "@formily/json-schema": "^2.0.0-beta.3",
+    "@formily/react": "^2.0.0-beta.3",
+    "@formily/react-schema-field": "^2.0.0-beta.3",
+    "@formily/react-shared-components": "^2.0.0-beta.3",
+    "@formily/shared": "^2.0.0-beta.3",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"

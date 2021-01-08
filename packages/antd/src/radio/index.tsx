@@ -1,4 +1,4 @@
-import { connect, isVoidField, mapProps, mapReadPretty } from '@formily/react'
+import { connect, mapProps, mapReadPretty } from '@formily/react'
 import { Radio as AntdRadio } from 'antd'
 import { RadioProps, RadioGroupProps } from 'antd/lib/radio'
 import { PreviewText } from '../preview-text'
@@ -26,22 +26,10 @@ Radio.__ANT_RADIO = true
 
 Radio.Group = connect(
   AntdRadio.Group,
-  mapProps(
-    {
-      extract: 'dataSource',
-      to: 'options',
-    },
-    (props, field) => {
-      if (isVoidField(field)) return props
-      return {
-        ...props,
-        value: field.value,
-        onChange: (e) => {
-          field?.onInput(e.target.value)
-        },
-      }
-    }
-  ),
+  mapProps({
+    extract: 'dataSource',
+    to: 'options',
+  }),
   mapReadPretty(PreviewText.Select)
 )
 

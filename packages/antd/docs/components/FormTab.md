@@ -1,6 +1,20 @@
+# FormTab
+
+> 选项卡表单
+>
+> 注意：该组件只适用于 Schema 场景
+
+## Markup Schema 案例
+
 ```tsx
 import React from 'react'
-import { FormTab, FormItem, Input } from '@formily/antd'
+import {
+  FormTab,
+  FormItem,
+  Input,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { FormProvider, createForm } from '@formily/react'
 import { createSchemaField } from '@formily/react-schema-field'
 import { Button } from 'antd'
@@ -16,52 +30,235 @@ const SchemaField = createSchemaField({
 const form = createForm()
 
 export default () => {
+  const formTab = FormTab.useFormTab()
   return (
     <FormProvider form={form}>
       <SchemaField>
-        <SchemaField.Markup type="void" x-component="FormTab">
-          <SchemaField.Markup
+        <SchemaField.Void
+          type="void"
+          x-component="FormTab"
+          x-component-props={{ formTab }}
+        >
+          <SchemaField.Void
             type="void"
+            name="tab1"
             x-component="FormTab.TabPane"
-            x-component-props={{ key: '1', tab: 'A1' }}
+            x-component-props={{ tab: 'A1' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               name="aaa"
               x-decorator="FormItem"
+              title="AAA"
               required
-              type="string"
               x-component="Input"
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
+            name="tab2"
             x-component="FormTab.TabPane"
-            x-component-props={{ key: '2', tab: 'A2' }}
+            x-component-props={{ tab: 'A2' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               name="bbb"
               x-decorator="FormItem"
+              title="BBB"
               required
-              type="string"
               x-component="Input"
             />
-          </SchemaField.Markup>
-          <SchemaField.Markup
-            type="void"
+          </SchemaField.Void>
+          <SchemaField.Void
+            name="tab3"
             x-component="FormTab.TabPane"
-            x-component-props={{ key: '3', tab: 'A3' }}
+            x-component-props={{ tab: 'A3' }}
           >
-            <SchemaField.Markup
+            <SchemaField.String
               name="ccc"
               x-decorator="FormItem"
+              title="CCC"
               required
-              type="string"
               x-component="Input"
             />
-          </SchemaField.Markup>
-        </SchemaField.Markup>
+          </SchemaField.Void>
+        </SchemaField.Void>
       </SchemaField>
+      <FormButtonGroup.FormItem>
+        <Button
+          onClick={() => {
+            form.query('tab3').void.get((field) => {
+              field.visible = !field.visible
+            })
+          }}
+        >
+          显示/隐藏最后一个Tab
+        </Button>
+        <Button
+          onClick={() => {
+            formTab.setActiveKey('tab2')
+          }}
+        >
+          切换第二个Tab
+        </Button>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup.FormItem>
     </FormProvider>
   )
+}
+```
+
+## JSON Schema 案例
+
+```tsx
+import React from 'react'
+import {
+  FormTab,
+  FormItem,
+  Input,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
+import { FormProvider, createForm } from '@formily/react'
+import { createSchemaField } from '@formily/react-schema-field'
+import { Button } from 'antd'
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    FormTab,
+    Input,
+  },
+})
+
+const form = createForm()
+
+const schema = {
+  type: 'object',
+  properties: {
+    collapse: {
+      type: 'void',
+      'x-component': 'FormTab',
+      'x-component-props': {
+        formTab: '{{formTab}}',
+      },
+      properties: {
+        tab1: {
+          type: 'void',
+          'x-component': 'FormTab.TabPane',
+          'x-component-props': {
+            tab: 'A1',
+          },
+          properties: {
+            aaa: {
+              type: 'string',
+              title: 'AAA',
+              'x-decorator': 'FormItem',
+              required: true,
+              'x-component': 'Input',
+            },
+          },
+        },
+        tab2: {
+          type: 'void',
+          'x-component': 'FormTab.TabPane',
+          'x-component-props': {
+            tab: 'A2',
+          },
+          properties: {
+            bbb: {
+              type: 'string',
+              title: 'BBB',
+              'x-decorator': 'FormItem',
+              required: true,
+              'x-component': 'Input',
+            },
+          },
+        },
+        tab3: {
+          type: 'void',
+          'x-component': 'FormTab.TabPane',
+          'x-component-props': {
+            tab: 'A3',
+          },
+          properties: {
+            ccc: {
+              type: 'string',
+              title: 'CCC',
+              'x-decorator': 'FormItem',
+              required: true,
+              'x-component': 'Input',
+            },
+          },
+        },
+      },
+    },
+  },
+}
+
+export default () => {
+  const formTab = FormTab.useFormTab()
+  return (
+    <FormProvider form={form}>
+      <SchemaField schema={schema} scope={{ formTab }} />
+      <FormButtonGroup.FormItem>
+        <Button
+          onClick={() => {
+            form.query('tab3').void.get((field) => {
+              field.visible = !field.visible
+            })
+          }}
+        >
+          显示/隐藏最后一个Tab
+        </Button>
+        <Button
+          onClick={() => {
+            formTab.setActiveKey('tab2')
+          }}
+        >
+          切换第二个Tab
+        </Button>
+        <Submit onSubmit={console.log}>提交</Submit>
+      </FormButtonGroup.FormItem>
+    </FormProvider>
+  )
+}
+```
+
+## API
+
+### FormTab
+
+| 属性名  | 类型     | 描述                                             | 默认值 |
+| ------- | -------- | ------------------------------------------------ | ------ |
+| formTab | IFormTab | 传入通过 createFormTab/useFormTab 创建出来的模型 |        |
+
+其余参考 https://ant.design/components/tabs-cn/
+
+### FormTab.TabPane
+
+参考 https://ant.design/components/tabs-cn/
+
+### FormTab.createFormTab
+
+```ts pure
+type ActiveKey = string | number
+
+interface createFormTab {
+  (defaultActiveKey?: ActiveKey): IFormTab
+}
+
+interface IFormTab {
+  //激活主键
+  activeKey: ActiveKey
+  //设置激活主键
+  setActiveKey(key: ActiveKey): void
+}
+```
+
+### FormTab.useFormTab
+
+> React Hook 用法
+
+```ts pure
+interface useFormTab {
+  (defaultActiveKey?: ActiveKey): IFormTab
 }
 ```

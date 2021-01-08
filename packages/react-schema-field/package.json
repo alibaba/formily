@@ -1,6 +1,6 @@
 {
 	"name": "@formily/react-schema-field",
-	"version": "1.3.6",
+	"version": "2.0.0-beta.3",
 	"license": "MIT",
 	"main": "lib",
   "module": "esm",
@@ -15,7 +15,7 @@
 	"engines": {
 		"npm": ">=3.0.0"
 	},
-	"types": "lib/index.d.ts",
+	"types": "esm/index.d.ts",
 	"scripts": {
     "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --declaration",
@@ -33,8 +33,10 @@
 		"react-dom": ">=16.8.0 || >=17.0.0"
 	},
 	"dependencies": {
-    "@formily/react": "^1.3.6",
-    "@formily/json-schema":"^1.3.6"
+    "@formily/react": "^2.0.0-beta.3",
+    "@formily/shared": "^2.0.0-beta.3",
+    "@formily/json-schema":"^2.0.0-beta.3",
+    "@formily/validator":"^2.0.0-beta.3"
   },
 	"publishConfig": {
 		"access": "public"

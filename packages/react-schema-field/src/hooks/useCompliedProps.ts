@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 import { runInAction } from 'mobx'
-import { ISchema, SchemaKey, complieExpression } from '@formily/json-schema'
+import { ISchema, SchemaKey, Schema } from '@formily/json-schema'
 import {
   isBool,
   isArr,
@@ -9,6 +9,8 @@ import {
   isValid,
   toArr,
   isEqual,
+  each,
+  isFn,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { SchemaExpressionScopeContext, SchemaRequiredContext } from '../shared'
@@ -135,6 +137,14 @@ const getFieldInternalPropsBySchema = (
     initialValue: schema.default,
     title: schema.title,
     description: schema.description,
+    disabled: schema['x-disabled'],
+    editable: schema['x-editable'],
+    readOnly: isValid(schema['x-read-only'])
+      ? schema['x-read-only']
+      : schema['readOnly'],
+    readPretty: schema['x-read-pretty'],
+    visible: schema['x-visible'],
+    hidden: schema['x-hidden'],
     display: schema['x-display'],
     pattern: schema['x-pattern'],
     decorator: [
@@ -148,6 +158,30 @@ const getFieldInternalPropsBySchema = (
       schema['x-component-props'],
     ],
   }
+}
+
+const patchState = (state: any, target: any) => {
+  each(target, (value, key) => {
+    if (key === 'component') {
+      state[key] = [
+        value?.[0] ? value[0] : state?.component?.[0],
+        {
+          ...state?.component?.[1],
+          ...value?.[1],
+        },
+      ]
+    } else if (key === 'decorator') {
+      state[key] = [
+        value?.[0] ? value[0] : state?.decorator?.[0],
+        {
+          ...state?.decorator?.[1],
+          ...value?.[1],
+        },
+      ]
+    } else if (isValid(value)) {
+      state[key] = value
+    }
+  })
 }
 
 const getSchemaFieldRequired = (
@@ -182,11 +216,14 @@ const getSchemaFieldReactions = (
     if (!request) return
     runInAction(() => {
       if (request.state) {
-        field.setState(complie(request.state))
+        field.setState((state) => patchState(state, complie(request.state)))
       }
       if (request.schema) {
-        field.setState(
-          getFieldInternalPropsBySchema(complie(request.schema), options)
+        field.setState((state) =>
+          patchState(
+            state,
+            getFieldInternalPropsBySchema(complie(request.schema), options)
+          )
         )
       }
       if (isStr(request.run)) {
@@ -204,7 +241,7 @@ const getSchemaFieldReactions = (
         const [target, path] = String(pattern).split(/\s*#\s*/)
         return field
           .query(target)
-          .all.get((field) => (path ? FormPath.getIn(field, path) : field))
+          .all.get((field) => FormPath.getIn(field, path || 'value'))
       })
     }
     return []
@@ -215,20 +252,25 @@ const getSchemaFieldReactions = (
     if (isArr(reactions)) {
       reactions.forEach((reaction) => {
         if (!reaction) return
-        const complie = (expression: any) => {
-          const $self = field
-          const $form = field.form
-          const $deps = parseDependencies(field, reaction.dependencies)
-          const $dependencies = $deps
-          return complieExpression(expression, {
-            ...options.scope,
-            $form,
-            $self,
-            $deps,
-            $dependencies,
-          })
+        if (isFn(reaction)) {
+          return reaction(field)
         }
-        if (complie(reaction.when)) {
+        const $self = field
+        const $form = field.form
+        const $deps = parseDependencies(field, reaction.dependencies)
+        const $dependencies = $deps
+        const scope = {
+          ...options.scope,
+          $form,
+          $self,
+          $deps,
+          $dependencies,
+        }
+        const when = Schema.complie(reaction?.when, scope)
+        const complie = (expression: any) => {
+          return Schema.complie(expression, scope)
+        }
+        if (when) {
           setSchemaFieldState(field, reaction.fullfill, complie)
         } else {
           setSchemaFieldState(field, reaction.otherwise, complie)

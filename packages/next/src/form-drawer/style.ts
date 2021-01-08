@@ -1,1 +1,1 @@
-import 'antd/lib/drawer/style/index'
+import '@alifd/next/lib/drawer/style'

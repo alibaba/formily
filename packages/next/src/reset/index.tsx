@@ -5,7 +5,12 @@ import { useForm } from '@formily/react'
 
 export type IResetProps = Formily.Core.Types.IFieldResetOptions & ButtonProps
 
-export const Reset: React.FC<IResetProps> = (props: IResetProps) => {
+export const Reset: React.FC<IResetProps> = ({
+  forceClear,
+  validate,
+  clearInitialValue,
+  ...props
+}: IResetProps) => {
   const form = useForm()
   return (
     <Button
@@ -14,7 +19,11 @@ export const Reset: React.FC<IResetProps> = (props: IResetProps) => {
         if (props.onClick) {
           props.onClick(e)
         }
-        form.reset('*', props)
+        form.reset('*', {
+          forceClear,
+          validate,
+          clearInitialValue,
+        })
       }}
     >
       {props.children}

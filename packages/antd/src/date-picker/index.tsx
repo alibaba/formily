@@ -33,14 +33,13 @@ const mapDateFormat = function () {
     }
     return props['showTime'] ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
   }
-
   return (props: any) => {
     const format = props['format'] || getDefaultFormat(props)
     const onChange = props.onChange
     return {
       ...props,
-      format,
-      value: momentable(props.value),
+      format: format,
+      value: momentable(props.value, format === 'YYYY-wo' ? 'YYYY-w' : format),
       onChange: (value: moment.Moment | moment.Moment[]) => {
         if (onChange) {
           onChange(formatMomentValue(value, format))

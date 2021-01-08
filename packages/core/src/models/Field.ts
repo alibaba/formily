@@ -8,6 +8,7 @@ import {
   isFn,
   isPlainObj,
   isEmpty,
+  toArr,
 } from '@formily/shared'
 import {
   ValidatorTriggerType,
@@ -54,7 +55,7 @@ import {
   updateFeedback,
   queryFeedbacks,
   queryFeedbackMessages,
-  getValueFromEvent,
+  getValuesFromEvent,
   createModelStateSetter,
   createModelStateGetter,
 } from '../shared'
@@ -131,12 +132,18 @@ export class Field<
     this.feedbacks = []
     this.title = props.title
     this.description = props.description
-    this.selfDisplay = this.props.display
-    this.selfPattern = this.props.pattern
+    this.editable = this.props.editable
+    this.disabled = this.props.disabled
+    this.readOnly = this.props.readOnly
+    this.readPretty = this.props.readPretty
+    this.visible = this.props.visible
+    this.hidden = this.props.hidden
+    this.display = this.props.display
+    this.pattern = this.props.pattern
     this.dataSource = this.props.dataSource
     this.validator = this.props.validator
-    this.decorator = this.props.decorator
-    this.component = this.props.component
+    this.decorator = toArr(this.props.decorator)
+    this.component = toArr(this.props.component)
     this.required = this.props.required
   }
 
@@ -237,6 +244,23 @@ export class Field<
               this.caches.value = undefined
             }
           }
+          if (display === 'none' || display === 'hidden') {
+            this.setFeedback({
+              type: 'error',
+              messages: [],
+            })
+          }
+        }
+      ),
+      reaction(
+        () => this.pattern,
+        (pattern) => {
+          if (pattern !== 'editable') {
+            this.setFeedback({
+              type: 'error',
+              messages: [],
+            })
+          }
         }
       )
     )
@@ -298,13 +322,15 @@ export class Field<
   }
 
   get display(): FieldDisplayTypes {
-    if (this.selfDisplay) return this.selfDisplay
-    return this.parent?.display || 'visible'
+    const parentDisplay = this.parent?.display
+    if (isValid(this.selfDisplay)) return this.selfDisplay
+    return parentDisplay || 'visible'
   }
 
   get pattern(): FormPatternTypes {
-    if (this.selfPattern) return this.selfPattern
-    return this.parent?.pattern || this.form.pattern || 'editable'
+    const parentPattern = this.parent?.pattern
+    if (isValid(this.selfPattern)) return this.selfPattern
+    return parentPattern || this.form.pattern || 'editable'
   }
 
   get required() {
@@ -322,6 +348,7 @@ export class Field<
   }
 
   set hidden(hidden: boolean) {
+    if (!isValid(hidden)) return
     if (hidden) {
       this.display = 'hidden'
     } else {
@@ -330,6 +357,7 @@ export class Field<
   }
 
   set visible(visible: boolean) {
+    if (!isValid(visible)) return
     if (visible) {
       this.display = 'visible'
     } else {
@@ -361,34 +389,38 @@ export class Field<
   }
 
   set readOnly(readOnly: boolean) {
+    if (!isValid(readOnly)) return
     if (readOnly) {
-      this.selfPattern = 'readOnly'
+      this.pattern = 'readOnly'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set editable(editable: boolean) {
+    if (!isValid(editable)) return
     if (editable) {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     } else {
-      this.selfPattern = 'readPretty'
+      this.pattern = 'readPretty'
     }
   }
 
   set disabled(disabled: boolean) {
+    if (!isValid(disabled)) return
     if (disabled) {
-      this.selfPattern = 'disabled'
+      this.pattern = 'disabled'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
   set readPretty(readPretty: boolean) {
+    if (!isValid(readPretty)) return
     if (readPretty) {
-      this.selfPattern = 'readPretty'
+      this.pattern = 'readPretty'
     } else {
-      this.selfPattern = 'editable'
+      this.pattern = 'editable'
     }
   }
 
@@ -520,11 +552,11 @@ export class Field<
   }
 
   setDisplay = (type: FieldDisplayTypes) => {
-    this.selfDisplay = type
+    this.display = type
   }
 
   setPattern = (type: FieldPatternTypes) => {
-    this.selfPattern = type
+    this.pattern = type
   }
 
   setLoading = (loading: boolean) => {
@@ -613,9 +645,10 @@ export class Field<
   }
 
   onInput = (...args: any[]) => {
-    const value = getValueFromEvent(args[0])
+    const values = getValuesFromEvent(args)
+    const value = values[0]
     this.inputValue = value
-    this.inputValues = [value].concat(args.slice(1))
+    this.inputValues = values
     this.modified = true
     this.form.modified = true
     this.form.setValuesIn(this.path, value)

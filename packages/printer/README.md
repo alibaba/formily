@@ -1,3 +1,0 @@
-# @formily/printer
-
-> Formily Printer
