@@ -23,11 +23,13 @@
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
-    "typescript": "^4.1.2",
-    "@formily/shared":"^2.0.0-beta.3"
+    "typescript": "^4.1.2"
   },
   "peerDependencies": {
     "mobx": "^6.0.3"
+  },
+  "dependencies": {
+    "@formily/shared":"^2.0.0-beta.3"
   },
   "publishConfig": {
     "access": "public"
