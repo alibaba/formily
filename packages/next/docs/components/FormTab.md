@@ -85,7 +85,7 @@ export default () => {
         <Button
           onClick={() => {
             form.query('tab3').void.get((field) => {
-              field.setDisplay(field.display === 'none' ? 'visible' : 'none')
+              field.visible = !field.visible
             })
           }}
         >
@@ -202,7 +202,7 @@ export default () => {
         <Button
           onClick={() => {
             form.query('tab3').void.get((field) => {
-              field.setDisplay(field.display === 'none' ? 'visible' : 'none')
+              field.visible = !field.visible
             })
           }}
         >

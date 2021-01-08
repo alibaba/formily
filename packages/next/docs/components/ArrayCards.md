@@ -302,7 +302,7 @@ export default () => {
               x-decorator="FormItem"
               title="CC"
               required
-              description="CC输入123时隐藏BB"
+              description="CC输入123时隐藏DD"
               x-component="Input"
             />
             <SchemaField.String
