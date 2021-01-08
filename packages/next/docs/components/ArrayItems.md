@@ -164,7 +164,10 @@ export default () => {
                 title="日期"
                 name="date"
                 x-component="DatePicker.RangePicker"
-                x-component-props={{ style: { width: '100%' } }}
+                x-component-props={{
+                  style: { width: '100%' },
+                  followTrigger: true,
+                }}
               />
               <SchemaField.String
                 x-decorator="FormItem"
@@ -375,6 +378,7 @@ const schema = {
                   style: {
                     width: 160,
                   },
+                  followTrigger: true,
                 },
               },
               input: {

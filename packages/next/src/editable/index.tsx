@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useField, useForm, observer, isVoidField } from '@formily/react'
 import { isStr } from '@formily/shared'
-import { Form, Balloon, ConfigProvider } from '@alifd/next'
+import { Form, Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { ItemProps as FormItemProps } from '@alifd/next/lib/form'
 import { BalloonProps as PopoverProps } from '@alifd/next/lib/balloon'
@@ -123,7 +123,6 @@ export const Editable: ComposedEditable = observer((props) => {
 
 Editable.Popover = observer(({ renderPreview, ...props }) => {
   const field = useField<Formily.Core.Models.Field>()
-  const refId = useMemo(() => `balloon_${new Date().getTime()}`, [])
   const [editable, setEditable] = useEditable()
   const [visible, setVisible] = useState(false)
   const [destroy, setDestroy] = useState(true)
@@ -144,40 +143,36 @@ Editable.Popover = observer(({ renderPreview, ...props }) => {
     setEditable(true)
   }
   return (
-    <ConfigProvider popupContainer={() => document.getElementById(refId)}>
-      <Balloon
-        {...props}
-        id={refId}
-        title={field.title}
-        visible={visible && editable}
-        className={cls(prefixCls, props.className)}
-        onVisibleChange={(visible) => {
-          if (visible) {
-            openPopover()
-          } else {
-            closePopover()
-          }
-        }}
-        afterClose={() => {
-          setEditable(false)
-          setDestroy(true)
-        }}
-        followTrigger
-        triggerType="click"
-        closable={false}
-        trigger={
-          <Form.Item className={`${prefixCls}-trigger`}>
-            <Space size={4} style={{ margin: '0 4px' }}>
-              <span className={`${prefixCls}-preview`}>
-                {placeholder || field.title}
-              </span>
-              <EditOutlined className={`${prefixCls}-edit-btn`} />
-            </Space>
-          </Form.Item>
+    <Balloon
+      {...props}
+      title={field.title}
+      visible={visible && editable}
+      className={cls(prefixCls, props.className)}
+      onVisibleChange={(visible) => {
+        if (visible) {
+          openPopover()
+        } else {
+          closePopover()
         }
-      >
-        {!destroy && props.children}
-      </Balloon>
-    </ConfigProvider>
+      }}
+      afterClose={() => {
+        setEditable(false)
+        setDestroy(true)
+      }}
+      triggerType="click"
+      closable={false}
+      trigger={
+        <Form.Item className={`${prefixCls}-trigger`}>
+          <Space size={4} style={{ margin: '0 4px' }}>
+            <span className={`${prefixCls}-preview`}>
+              {placeholder || field.title}
+            </span>
+            <EditOutlined className={`${prefixCls}-edit-btn`} />
+          </Space>
+        </Form.Item>
+      }
+    >
+      {!destroy && props.children}
+    </Balloon>
   )
 })

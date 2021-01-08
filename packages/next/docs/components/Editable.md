@@ -61,6 +61,9 @@ export default () => (
           title="日期"
           x-decorator="FormItem"
           x-component="DatePicker"
+          x-component-props={{
+            followTrigger: true,
+          }}
         />
         <SchemaField.String
           name="input2"
@@ -84,6 +87,9 @@ export default () => (
           title="日期"
           x-decorator="FormItem"
           x-component="DatePicker"
+          x-component-props={{
+            followTrigger: true,
+          }}
         />
         <SchemaField.String
           name="input"
@@ -156,6 +162,9 @@ const schema = {
           title: '日期',
           'x-decorator': 'FormItem',
           'x-component': 'DatePicker',
+          'x-component-props': {
+            followTrigger: true,
+          },
         },
         input2: {
           type: 'string',
@@ -178,6 +187,9 @@ const schema = {
           title: '日期',
           'x-decorator': 'FormItem',
           'x-component': 'DatePicker',
+          'x-component-props': {
+            followTrigger: true,
+          },
         },
         input: {
           type: 'string',
@@ -253,7 +265,12 @@ export default () => (
         name="date2"
         title="日期"
         decorator={[FormItem]}
-        component={[DatePicker]}
+        component={[
+          DatePicker,
+          {
+            followTrigger: true,
+          },
+        ]}
       />
       <Field
         name="input2"
@@ -278,7 +295,12 @@ export default () => (
         name="date"
         title="日期"
         decorator={[FormItem]}
-        component={[DatePicker]}
+        component={[
+          DatePicker,
+          {
+            followTrigger: true,
+          },
+        ]}
       />
       <Field
         name="input"
@@ -310,5 +332,7 @@ export default () => (
 | 属性名        | 类型                                                 | 描述       | 默认值 |
 | ------------- | ---------------------------------------------------- | ---------- | ------ |
 | renderPreview | `(field:Formily.Core.Types.GeneralField)=>ReactNode` | 预览渲染器 |        |
+
+注意：如果在 Popover 内部有 Select/DatePicker 之类的浮层组件，需要在浮层组件上配置 followTrigger=true
 
 其余参考 https://fusion.design/pc/component/basic/balloon
