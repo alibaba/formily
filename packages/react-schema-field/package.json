@@ -33,8 +33,8 @@
 		"react-dom": ">=16.8.0 || >=17.0.0"
 	},
 	"dependencies": {
-    "@formily/react": "^1.3.6",
-    "@formily/json-schema":"^1.3.6"
+    "@formily/react": "^2.0.0-beta.3",
+    "@formily/json-schema":"^2.0.0-beta.3"
   },
 	"publishConfig": {
 		"access": "public"

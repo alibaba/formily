@@ -30,6 +30,6 @@
 	},
 	"dependencies": {
 		"react-drag-listview": "^0.1.6",
-		"@formily/shared": "^1.3.6"
+		"@formily/shared": "^2.0.0-beta.3"
 	}
 }

@@ -33,8 +33,8 @@
     "webpack-dev-server": "^3.10.1"
   },
   "dependencies": {
-    "@formily/core": "^1.3.6",
-    "@formily/shared": "^1.3.6",
+    "@formily/core": "^2.0.0-beta.3",
+    "@formily/shared": "^2.0.0-beta.3",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-json-view": "^1.19.1",
