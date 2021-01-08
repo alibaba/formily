@@ -22,4 +22,5 @@ tsconfig.tsbuildinfo
 package/
 package.zip
 .umi
+.cjsescache
 doc-site

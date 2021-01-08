@@ -6,11 +6,11 @@ export const useFormEffects = (
   effects?: (form: Formily.Core.Models.Form) => void,
   deps = []
 ): void => {
-  const idRef = ref(null)
+  const idRef = ref<string | null>(null)
   const form = useForm()
 
   const getId = () => {
-    if (idRef.value) {
+    if (idRef.value !== null) {
       form.removeEffects(idRef.value)
     }
     const id = uid()
@@ -29,6 +29,8 @@ export const useFormEffects = (
   )
 
   onBeforeUnmount(() => {
-    form.removeEffects(idRef.value)
+    if (idRef.value !== null) {
+      form.removeEffects(idRef.value)
+    }
   })
 }

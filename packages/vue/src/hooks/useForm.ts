@@ -1,5 +1,5 @@
 import { inject } from '@vue/composition-api'
-import { FormSymbol } from '../shared'
+import { FormSymbol } from '../shared/context'
 
 export const useForm = (): Formily.Core.Models.Form => {
   const form = inject(FormSymbol, null)
