@@ -31,7 +31,7 @@ export default {
     nav a{
       text-decoration: none !important;
     }
-    body{
+    body .markdown{
       font-size:14px;
     }
     `,
