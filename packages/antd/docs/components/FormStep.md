@@ -22,9 +22,9 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+const formStep = FormStep.createFormStep()
 
 export default () => {
-  const formStep = FormStep.useFormStep()
   return (
     <FormProvider form={form}>
       <SchemaField>
@@ -121,6 +121,7 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+const formStep = FormStep.createFormStep()
 
 const schema = {
   type: 'object',
@@ -186,7 +187,6 @@ const schema = {
 }
 
 export default () => {
-  const formStep = FormStep.useFormStep()
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} scope={{ formStep }} />
@@ -261,15 +261,5 @@ interface IFormTab {
   next(): void
   //向前
   back(): void
-}
-```
-
-### FormStep.useFormStep
-
-> React Hook 用法
-
-```ts pure
-interface useFormStep {
-  (current?: number): IFormStep
 }
 ```

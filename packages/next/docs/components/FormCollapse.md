@@ -28,9 +28,9 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+const formCollapse = FormCollapse.createFormCollapse()
 
 export default () => {
-  const formCollapse = FormCollapse.useFormCollapse()
   return (
     <FormProvider form={form}>
       <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
@@ -133,6 +133,7 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+const formCollapse = FormCollapse.createFormCollapse()
 
 const schema = {
   type: 'object',
@@ -200,7 +201,6 @@ const schema = {
 }
 
 export default () => {
-  const formCollapse = FormCollapse.useFormCollapse()
   return (
     <FormProvider form={form}>
       <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
@@ -267,15 +267,5 @@ interface IFormCollapse {
   removeActiveKey(key: ActiveKey): void
   //开关切换激活主键
   toggleActiveKey(key: ActiveKey): void
-}
-```
-
-### FormCollapse.useFormCollapse
-
-> React Hook 用法
-
-```ts pure
-interface useFormCollapse {
-  (defaultActiveKeys?: ActiveKeys): IFormCollpase
 }
 ```

@@ -31,16 +31,12 @@ interface IFormCollapseProps extends CollapseProps {
 
 type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
   CollapsePanel?: React.FC<CollapsePanelProps>
-  useFormCollapse?: (
-    defaultActiveKeys?: CollapseProps['expandedKeys'],
-    deps?: any[]
-  ) => IFormCollapse
   createFormCollapse?: (
     defaultActiveKeys?: CollapseProps['expandedKeys']
   ) => IFormCollapse
 }
 
-export const usePanels = () => {
+const usePanels = () => {
   const collapseField = useField()
   const schema = useSchema()
   const panels: { name: SchemaKey; props: any; schema: Schema }[] = []
@@ -64,7 +60,7 @@ export const usePanels = () => {
   return panels
 }
 
-export const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
+const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
   const formCollapse = makeAutoObservable({
     activeKeys: defaultActiveKeys || [],
     setActiveKeys(keys: ActiveKeys) {
@@ -102,15 +98,6 @@ export const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
     },
   })
   return formCollapse
-}
-
-export const useFormCollapse = (
-  defaultActiveKey?: CollapseProps['expandedKeys'],
-  deps = []
-) => {
-  return useMemo(() => {
-    return createFormCollapse(defaultActiveKey)
-  }, deps)
 }
 
 export const FormCollapse: ComposedFormCollapse = observer(
@@ -157,12 +144,11 @@ export const FormCollapse: ComposedFormCollapse = observer(
   }
 )
 
-export const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
+const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
 }
 
 FormCollapse.CollapsePanel = CollapsePanel
-FormCollapse.useFormCollapse = useFormCollapse
 FormCollapse.createFormCollapse = createFormCollapse
 
 export default FormCollapse

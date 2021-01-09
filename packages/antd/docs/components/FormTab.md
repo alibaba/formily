@@ -28,9 +28,9 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+const formTab = FormTab.createFormTab()
 
 export default () => {
-  const formTab = FormTab.useFormTab()
   return (
     <FormProvider form={form}>
       <SchemaField>
@@ -129,6 +129,7 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm()
+const formTab = FormTab.createFormTab()
 
 const schema = {
   type: 'object',
@@ -194,7 +195,6 @@ const schema = {
 }
 
 export default () => {
-  const formTab = FormTab.useFormTab()
   return (
     <FormProvider form={form}>
       <SchemaField schema={schema} scope={{ formTab }} />
@@ -250,15 +250,5 @@ interface IFormTab {
   activeKey: ActiveKey
   //设置激活主键
   setActiveKey(key: ActiveKey): void
-}
-```
-
-### FormTab.useFormTab
-
-> React Hook 用法
-
-```ts pure
-interface useFormTab {
-  (defaultActiveKey?: ActiveKey): IFormTab
 }
 ```

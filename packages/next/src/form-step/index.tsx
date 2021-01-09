@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from 'react'
+import React, { Fragment } from 'react'
 import { connect, useField, observer } from '@formily/react'
 import { Schema, SchemaKey } from '@formily/json-schema'
 import { makeAutoObservable } from 'mobx'
@@ -28,7 +28,6 @@ interface IFormStepProps extends StepsProps {
 
 type ComposedFormTab = React.FC<IFormStepProps> & {
   StepPane?: React.FC<StepProps>
-  useFormStep?: (defaultCurrent?: number, deps?: any[]) => IFormStep
   createFormStep?: (defaultCurrent?: number) => IFormStep
 }
 
@@ -44,7 +43,7 @@ type FormStepEnv = {
   steps: SchemaStep[]
 }
 
-export const parseSteps = (schema: Schema) => {
+const parseSteps = (schema: Schema) => {
   const steps: SchemaStep[] = []
   schema.mapProperties((schema, name) => {
     if (schema['x-component']?.indexOf('StepPane') > -1) {
@@ -58,7 +57,7 @@ export const parseSteps = (schema: Schema) => {
   return steps
 }
 
-export const createFormStep = (defaultCurrent = 0): IFormStep => {
+const createFormStep = (defaultCurrent = 0): IFormStep => {
   const env: FormStepEnv = {
     form: null,
     field: null,
@@ -124,12 +123,6 @@ export const createFormStep = (defaultCurrent = 0): IFormStep => {
   return formStep
 }
 
-export const useFormStep = (defaultCurrent?: number, deps: any[] = []) => {
-  return useMemo(() => {
-    return createFormStep(defaultCurrent)
-  }, deps)
-}
-
 export const FormStep: ComposedFormTab = connect(
   observer(({ formStep, className, ...props }: IFormStepProps) => {
     const field = useField<Formily.Core.Models.VoidField>()
@@ -158,12 +151,11 @@ export const FormStep: ComposedFormTab = connect(
   })
 )
 
-export const StepPane: React.FC<StepProps> = ({ children }) => {
+const StepPane: React.FC<StepProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
 }
 
 FormStep.StepPane = StepPane
-FormStep.useFormStep = useFormStep
 FormStep.createFormStep = createFormStep
 
 export default FormStep

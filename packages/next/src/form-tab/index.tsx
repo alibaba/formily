@@ -25,11 +25,10 @@ interface IFormTabPaneProps extends TabPaneProps {
 
 type ComposedFormTab = React.FC<IFormTabProps> & {
   TabPane?: React.FC<IFormTabPaneProps>
-  useFormTab?: (defaultActiveKey?: React.ReactText, deps?: any[]) => IFormTab
   createFormTab?: (defaultActiveKey?: React.ReactText) => IFormTab
 }
 
-export const useTabs = () => {
+const useTabs = () => {
   const tabsField = useField()
   const schema = useSchema()
   const tabs: { name: SchemaKey; props: any; schema: Schema }[] = []
@@ -50,7 +49,7 @@ export const useTabs = () => {
   return tabs
 }
 
-export const createFormTab = (defaultActiveKey?: string) => {
+const createFormTab = (defaultActiveKey?: string) => {
   const formTab = makeAutoObservable({
     activeKey: defaultActiveKey,
     setActiveKey(key: string) {
@@ -60,13 +59,7 @@ export const createFormTab = (defaultActiveKey?: string) => {
   return formTab
 }
 
-export const useFormTab = (defaultActiveKey?: string, deps = []) => {
-  return useMemo(() => {
-    return createFormTab(defaultActiveKey)
-  }, deps)
-}
-
-export const FormTab: ComposedFormTab = observer(({formTab,...props}) => {
+export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
   const field = useField()
   const tabs = useTabs()
   const _formTab = useMemo(() => {
@@ -110,12 +103,11 @@ export const FormTab: ComposedFormTab = observer(({formTab,...props}) => {
   )
 })
 
-export const TabPane: React.FC<IFormTabPaneProps> = ({ children }) => {
+const TabPane: React.FC<IFormTabPaneProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
 }
 
 FormTab.TabPane = TabPane
-FormTab.useFormTab = useFormTab
 FormTab.createFormTab = createFormTab
 
 export default FormTab
