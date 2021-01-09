@@ -449,7 +449,6 @@ export class Form {
   onUnmount = () => {
     this.unmounted = true
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
-    this.heart.clear()
     this.fields = {}
     this.indexes.clear()
     this.query('*').all.get((field) => field.dispose())
