@@ -14,14 +14,14 @@ export type IVoidFieldProps<
   C extends VueComponent
 > = Formily.Core.Types.IVoidFieldFactoryProps<D, C>
 
-export interface IComponentMapper {
-  (target: VueComponent): VueComponent
-}
-
-export type IStateMapper =
-  | {
-      extract: string
-      to?: string
-      transform?: (value: any) => any
-    }
-  | ((props: any, field: Formily.Core.Types.GeneralField) => any)
+  export interface IComponentMapper<T extends VueComponent = any> {
+    (target: T): VueComponent
+  }
+  
+  export type IStateMapper<Props = any> =
+    | {
+        extract: keyof Formily.Core.Models.Field
+        to?: keyof Props
+        transform?: (value: any) => any
+      }
+    | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)

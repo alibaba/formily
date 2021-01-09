@@ -1,6 +1,6 @@
 /* eslint-disable vue/one-component-per-file */
 import { h, defineComponent } from '@vue/composition-api'
-import { isFn } from '@formily/shared'
+import { isFn, FormPath } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { defineObservableComponent } from '../utils/define-observable-component'
 import { VueComponent, IComponentMapper, IStateMapper } from '../types'
@@ -12,16 +12,25 @@ export function mapProps(...args: IStateMapper[]) {
       observableSetup(collect, props, { slots }) {
         const field = useField()
         collect({
-          field
+          field,
         })
         const results = args.reduce(
           (props, mapper) => {
             if (isFn(mapper)) {
               props = Object.assign(props, mapper(props, field))
             } else {
-              props[mapper.to || mapper.extract] = isFn(mapper.transform)
-                ? mapper.transform(field[mapper.extract as keyof Formily.Core.Types.GeneralField])
-                : field[mapper.extract as keyof Formily.Core.Types.GeneralField]
+              const extract = FormPath.getIn(field, mapper.extract)
+              const target = mapper.to || mapper.extract
+              if (mapper.extract === 'value') {
+                if (mapper.to !== mapper.extract) {
+                  delete props.value
+                }
+              }
+              FormPath.setIn(
+                props,
+                target as any,
+                isFn(mapper.transform) ? mapper.transform(extract) : extract
+              )
             }
             return props
           },
@@ -31,11 +40,11 @@ export function mapProps(...args: IStateMapper[]) {
           h(
             target,
             {
-              props: results
+              props: results,
             },
             slots.default && slots.default()
           )
-      }
+      },
     })
   }
 }
@@ -46,7 +55,7 @@ export function mapReadPretty(component: VueComponent) {
       observableSetup(collect, props: { [key: string]: any }, { slots }) {
         const field = useField()
         collect({
-          field
+          field,
         })
         return () =>
           h(
@@ -54,33 +63,31 @@ export function mapReadPretty(component: VueComponent) {
               ? component
               : target,
             {
-              props: props
+              props: props,
             },
             slots.default && slots.default()
           )
-      }
+      },
     })
   }
 }
 
-export function connect(...args: IComponentMapper[]) {
-  return function(target: VueComponent) {
-    const Component = args.reduce((target: VueComponent, mapper) => {
-      return mapper(target)
-    }, target) as VueComponent
+export function connect(target: VueComponent, ...args: IComponentMapper[]) {
+  const Component = args.reduce((target: VueComponent, mapper) => {
+    return mapper(target)
+  }, target) as VueComponent
 
-    return defineComponent({
-      name: target['name'],
-      setup(props: { [key: string]: any; }, { slots }) {
-        return () =>
-          h(
-            Component,
-            {
-              props: props
-            },
-            slots.default && slots.default()
-          )
-      }
-    })
-  }
+  return defineComponent({
+    name: target['name'],
+    setup(props: { [key: string]: any }, { slots }) {
+      return () =>
+        h(
+          Component,
+          {
+            props: props,
+          },
+          slots.default && slots.default()
+        )
+    },
+  })
 }
