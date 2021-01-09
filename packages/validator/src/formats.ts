@@ -29,11 +29,11 @@ export default {
       '(?:\\.(?:25[0-4]|2[0-4]\\d|1\\d\\d|[1-9]\\d?))' +
       '|' +
       // host name
-      '(?:(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)' +
+      '(?:(?:[a-z\\u00a1-\\uffff0-9_]-*)*[a-z\\u00a1-\\uffff0-9_]+)' +
       // domain name
-      '(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*' +
+      '(?:\\.(?:[a-z\\u00a1-\\uffff0-9_]-*)*[a-z\\u00a1-\\uffff0-9_]+)*' +
       // TLD identifier
-      '(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))' +
+      '(?:\\.(?:[a-z\\u00a1-\\uffff_]{2,}))' +
       ')' +
       // port number
       '(?::\\d{2,5})?' +
