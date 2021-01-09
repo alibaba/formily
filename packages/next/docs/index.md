@@ -25,7 +25,7 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 ## 安装
 
 ```bash
-$ npm install --save antd mobx mobx-react-lite moment
+$ npm install --save @alifd/next mobx mobx-react-lite moment
 $ npm install --save @formily/next @formily/react @formily/react-schema-field
 
 ```
