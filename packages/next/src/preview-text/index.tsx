@@ -66,11 +66,11 @@ const Select: React.FC<SelectProps> = (props) => {
 
   const getLabels = () => {
     const selected = getSelected()
-    if (!selected.length) return <Tag>{placeholder}</Tag>
+    if (!selected.length) return <Tag type="primary" size="small">{placeholder}</Tag>
     return selected.map(({ value, label }, key) => {
       const text =
         dataSource?.find((item) => item.value == value)?.label || label
-      return <Tag key={key}>{text || placeholder}</Tag>
+      return <Tag type="primary" size="small" key={key}>{text || placeholder}</Tag>
     })
   }
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
@@ -118,10 +118,10 @@ const TreeSelect: React.FC<TreeSelectProps> = (props) => {
 
   const getLabels = () => {
     const selected = getSelected()
-    if (!selected?.length) return <Tag>{placeholder}</Tag>
+    if (!selected?.length) return <Tag type="primary" size="small">{placeholder}</Tag>
     return selected.map(({ value, label }, key) => {
       return (
-        <Tag key={key}>
+        <Tag type="primary" size="small" key={key}>
           {findLabel(value, dataSource) || label || placeholder}
         </Tag>
       )

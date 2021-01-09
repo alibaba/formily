@@ -31,7 +31,7 @@ export default {
     nav a{
       text-decoration: none !important;
     }
-    body .markdown{
+    body .__dumi-default-previewer{
       font-size:14px;
     }
     `,
