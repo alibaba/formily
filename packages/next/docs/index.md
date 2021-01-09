@@ -2,8 +2,8 @@
 title: Formily - 阿里巴巴统一前端表单解决方案
 order: 10
 hero:
-  title: FORMILY ANTD
-  desc: 基于Ant Design封装的优雅且易用的Formily2.x组件体系
+  title: FORMILY NEXT
+  desc: 基于Alibaba Fusion封装的优雅且易用的Formily2.x组件体系
   actions:
     - text: 核心库文档
       link: //formilyjs.org
@@ -26,7 +26,7 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 
 ```bash
 $ npm install --save antd mobx mobx-react-lite moment
-$ npm install --save @formily/antd @formily/react @formily/react-schema-field
+$ npm install --save @formily/next @formily/react @formily/react-schema-field
 
 ```
 
@@ -37,7 +37,7 @@ $ npm install --save @formily/antd @formily/react @formily/react-schema-field
  * defaultShowCode: true
  */
 import React from 'react'
-import { NumberPicker, FormItem, Space } from '@formily/antd'
+import { NumberPicker, FormItem, Space } from '@formily/next'
 import { createForm, FormProvider, FormConsumer, Field } from '@formily/react'
 
 const form = createForm()

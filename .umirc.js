@@ -29,11 +29,18 @@ export default {
           title: 'React Schema API',
           path: '/api/react-schema',
         },
+        {
+          title: 'Vue API',
+          path: '/api/vue',
+        },
+        {
+          title: 'Vue Schema API',
+          path: '/api/vue-schema',
+        },
       ],
     },
     {
       title: '组件库',
-      path: '/components',
       children: [
         {
           title: 'Antd Design',

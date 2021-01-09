@@ -8,6 +8,7 @@ export const FormItem = connect(
     { extract: 'title', to: 'label' },
     { extract: 'required' },
     (props, field) => {
+      if (!field) return props
       if (isVoidField(field)) return props
       if (field.invalid) {
         return {
