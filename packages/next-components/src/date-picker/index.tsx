@@ -56,7 +56,7 @@ DatePicker.WeekPicker = connect({
 
 DatePicker.MonthPicker = connect({
   getValueFromEvent(value) {
-    return transformMoment(value)
+    return transformMoment(value, 'YYYY-MM')
   },
   getProps: mapStyledProps,
   getComponent: mapTextComponent
