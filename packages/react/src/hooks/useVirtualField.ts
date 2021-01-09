@@ -1,6 +1,6 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
 import {
-  IVirtualFieldStateProps,
+  IVirtualFieldRegistryProps,
   IVirtualFieldState,
   IForm,
   IVirtualField,
@@ -15,7 +15,7 @@ import FormContext from '../context'
 const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 
 export const useVirtualField = (
-  options: IVirtualFieldStateProps
+  options: IVirtualFieldRegistryProps
 ): IVirtualFieldHook => {
   const forceUpdate = useForceUpdate()
   //const dirty = useDirty(options, ['props', 'visible', 'display'])
@@ -48,7 +48,7 @@ export const useVirtualField = (
     })
     ref.current.uid = Symbol()
     initialized = true
-  }, [])
+  }, [options.name,options.path])
 
   useEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上

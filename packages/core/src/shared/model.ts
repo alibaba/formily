@@ -5,13 +5,20 @@ import {
   FormPath,
   FormPathPattern,
   defaults,
-  shallowClone
+  shallowClone,
+  isStr,
+  isValid
 } from '@formily/shared'
-import { produce, enableAllPlugins, setAutoFreeze, Draft } from 'immer'
+import { Immer, enableAllPlugins, Draft, setAutoFreeze } from 'immer'
 import { StateDirtyMap, IDirtyModelFactory, NormalRecord } from '../types'
 
 enableAllPlugins()
+
 setAutoFreeze(false)
+
+const { produce } = new Immer({
+  autoFreeze: false
+})
 
 type Recipe<State> = (state?: State) => any
 
@@ -46,15 +53,14 @@ export const createModel = <
 >(
   Factory: IDirtyModelFactory<State, Props>
 ) => {
-  //type State = Partial<SourceState>
   return class Model extends Subscribable {
     factory: InstanceType<IDirtyModelFactory<State, Props>>
     state: State
     prevState: State
     props: Props
     patches: Patch[]
-    dirtys: StateDirtyMap<State>
-    dirtyCount: number
+    dirtyStack: StateDirtyMap<State>[]
+    dirtyCountStack: number[]
     batching: boolean
     cache: Map<any, any>
     displayName: string
@@ -67,9 +73,41 @@ export const createModel = <
       this.state = this.factory.state as any
       this.state.displayName = this.displayName
       this.prevState = this.state
-      this.dirtyCount = 0
-      this.dirtys = {}
       this.batching = false
+      this.dirtyStack = []
+      this.dirtyCountStack = []
+    }
+
+    enterCalculateDirtys() {
+      this.dirtyStack.push({})
+      this.dirtyCountStack.push(0)
+    }
+
+    existCalculateDirtys() {
+      this.dirtyStack.pop()
+      this.dirtyCountStack.pop()
+    }
+
+    get dirtys(): StateDirtyMap<State> {
+      return this.dirtyStack[this.dirtyStack.length - 1] || {}
+    }
+
+    set dirtys(dirtys: StateDirtyMap<State>) {
+      if (this.dirtyStack.length === 0) {
+        this.dirtyStack.push({})
+      }
+      this.dirtyStack[this.dirtyStack.length - 1] = dirtys
+    }
+
+    get dirtyCount() {
+      return this.dirtyCountStack[this.dirtyCountStack.length - 1] || 0
+    }
+
+    set dirtyCount(value) {
+      if (this.dirtyCountStack.length === 0) {
+        this.dirtyCountStack.push(0)
+      }
+      this.dirtyCountStack[this.dirtyCountStack.length - 1] = value
     }
 
     getBaseState() {
@@ -80,11 +118,17 @@ export const createModel = <
       }
     }
 
-    getDirtys(patches: Patch[]): StateDirtyMap<State> {
-      return patches.reduce((buf, { path }) => {
-        buf[path[0]] = true
-        return buf
-      }, {})
+    getDirtysFromPatches(
+      patches: Patch[],
+      refresh?: boolean
+    ): StateDirtyMap<State> {
+      return patches.reduce(
+        (buf, { path }) => {
+          buf[path[0]] = true
+          return buf
+        },
+        refresh ? {} : this.batching ? this.dirtys : {}
+      )
     }
 
     dirtyCheck(path: FormPathPattern, nextValue: any) {
@@ -102,7 +146,7 @@ export const createModel = <
         if (isFn(this.props.dirtyCheck)) {
           return this.props.dirtyCheck(path, currentValue, nextValue)
         } else {
-          return currentValue !== nextValue
+          return !isEqual(currentValue, nextValue)
         }
       }
     }
@@ -110,11 +154,14 @@ export const createModel = <
     setState(recipe?: Recipe<State>, silent: boolean = false) {
       if (!isFn(recipe)) return
       const base = this.getBaseState()
-      this.dirtyCount = 0
       this.patches = []
       this.prevState = base
       this.factory.prevState = base
       this.factory.state = base
+      this.factory?.beforeProduce?.()
+      if (!this.batching) {
+        this.enterCalculateDirtys()
+      }
       produce(
         base,
         draft => {
@@ -131,38 +178,33 @@ export const createModel = <
         base,
         draft => {
           applyPatches(draft, this.patches)
-          const dirtys = this.getDirtys(this.patches)
+          const dirtys = this.getDirtysFromPatches(this.patches, true)
           if (isFn(this.factory.produce)) {
             this.factory.produce(draft, dirtys)
           }
         },
         patches => {
-          if (isFn(this.factory.dirtyCheck)) {
-            patches.forEach(patch => {
-              const { path, value } = patch
-              if (this.dirtyCheck(path, value)) {
-                this.patches.push(patch)
-                this.dirtyCount++
-              }
-            })
-          } else {
-            this.patches = this.patches.concat(patches)
-            this.dirtyCount += patches.length
-          }
+          patches.forEach(patch => {
+            const { path, value } = patch
+            if (this.dirtyCheck(path, value)) {
+              this.patches.push(patch)
+              this.dirtyCount++
+            }
+          })
         }
       )
       this.factory.state = produced
       this.state = produced
-      this.dirtys = this.getDirtys(this.patches)
+      this.dirtys = this.getDirtysFromPatches(this.patches)
+      this.patches = []
+      this.factory?.afterProduce?.()
       if (this.dirtyCount > 0 && !silent) {
         if (this.batching) {
           return
         }
         this.notify(this.getState(), silent)
       }
-      this.dirtyCount = 0
-      this.dirtys = {}
-      this.patches = []
+      this.existCalculateDirtys()
     }
 
     setSourceState(recipe?: Recipe<State>) {
@@ -186,6 +228,7 @@ export const createModel = <
 
     batch(callback?: () => void) {
       this.batching = true
+      this.enterCalculateDirtys()
       const prevState = this.state
       if (isFn(callback)) {
         callback()
@@ -195,17 +238,27 @@ export const createModel = <
         this.notify(this.getState())
       }
       this.batching = false
-      this.dirtys = {}
-      this.dirtyCount = 0
-      this.patches = []
+      this.existCalculateDirtys()
     }
 
     setCache(key: CacheKey, value: any) {
-      this.cache.set(key, shallowClone(value))
+      this.cache.set(
+        key,
+        typeof value === 'object' ? shallowClone(value) : value
+      )
     }
 
     getCache(key: CacheKey) {
-      return this.cache.get(key)
+      const value = this.cache.get(key)
+      if (isValid(value)) return value
+      if (this.cache.size === 1) {
+        let findKey = null
+        this.cache.forEach((value, key) => {
+          findKey = key
+        })
+        return this.cache.get(findKey)
+      }
+      return value
     }
 
     removeCache(key: CacheKey) {
@@ -220,13 +273,20 @@ export const createModel = <
       }
     }
 
-    hasChanged = (path?: FormPathPattern) => {
-      return path
-        ? !isEqual(
+    hasChanged = (pattern?: FormPathPattern) => {
+      if (!pattern) {
+        return this.dirtyCount > 0
+      } else {
+        const path = FormPath.parse(pattern)
+        if (path.length > 1 || !isStr(pattern)) {
+          return !isEqual(
             FormPath.getIn(this.prevState, path),
             FormPath.getIn(this.state, path)
           )
-        : !isEqual(this.prevState, this.state)
+        } else {
+          return !!this.dirtys[pattern]
+        }
+      }
     }
   }
 }

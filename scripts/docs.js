@@ -14,6 +14,7 @@ window.codeSandBoxDependencies = {
   '@formily/react': 'latest',
   '@formily/printer': 'latest',
   '@babel/runtime':'latest',
+  'styled-components':'^4.0.0',
   'mfetch':'latest',
   antd: 'latest'
 }

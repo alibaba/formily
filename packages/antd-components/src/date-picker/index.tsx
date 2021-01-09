@@ -22,19 +22,22 @@ const transformMoment = (value, format = 'YYYY-MM-DD HH:mm:ss') => {
 }
 
 const mapMomentValue = (props: any, fieldProps: any) => {
-  const { value, showTime = false } = props
+  const { value, showTime = false, format } = props
   if (!fieldProps.editable) return props
   try {
     if (isStr(value) && value) {
       props.value = moment(
         value,
-        showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+        format || (showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
       )
     } else if (isArr(value) && value.length) {
       props.value = value.map(
         item =>
           (item &&
-            moment(item, showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')) ||
+            moment(
+              item,
+              format || (showTime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD')
+            )) ||
           ''
       )
     }

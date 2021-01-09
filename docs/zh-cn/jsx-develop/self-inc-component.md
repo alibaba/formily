@@ -17,6 +17,7 @@ const App = () => {
           return (
             <div>
               {state.value.map((item, index) => {
+                const onInsertAfter = index => mutators.insert(index + 1, {})
                 const onRemove = index => mutators.remove(index)
                 const onMoveUp = index => mutators.moveUp(index)
                 const onMoveDown = index => mutators.moveDown(index)
@@ -32,6 +33,9 @@ const App = () => {
                       component={Input}
                       title="年龄"
                     />
+                    <Button onClick={onInsertAfter.bind(null, index)}>
+                      insertAfter
+                    </Button>
                     <Button onClick={onRemove.bind(null, index)}>remove</Button>
                     <Button onClick={onMoveUp.bind(null, index)}>up</Button>
                     <Button onClick={onMoveDown.bind(null, index)}>down</Button>
@@ -87,6 +91,7 @@ const App = () => {
           return (
             <div>
               {state.value.map((item, index) => {
+                const onInsertAfter = index => mutators.insert(index + 1, {})
                 const onRemove = index => mutators.remove(index)
                 const onMoveUp = index => mutators.moveUp(index)
                 const onMoveDown = index => mutators.moveDown(index)
@@ -102,6 +107,9 @@ const App = () => {
                       component={Input}
                       title="年龄"
                     />
+                    <Button onClick={onInsertAfter.bind(null, index)}>
+                      insertAfter
+                    </Button>
                     <Button onClick={onRemove.bind(null, index)}>remove</Button>
                     <Button onClick={onMoveUp.bind(null, index)}>up</Button>
                     <Button onClick={onMoveDown.bind(null, index)}>down</Button>

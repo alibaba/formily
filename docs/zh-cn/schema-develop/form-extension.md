@@ -170,7 +170,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 扩展 Schema Field 组件可以说是我们平时用的最多的扩展方案，主要是用于扩展具体字段 UI 组件，目前我们提供的扩展方式主要有：
 
 - SchemaForm 中传入 components 扩展(要求组件满足 value/onChange API)
-- SchemaForm 中传入 components 组件拥有 isFieldComponent 静态属性，可以拿到 FieldProps
+- SchemaForm 中传入 components 组件拥有 isFieldComponent 静态属性，可以拿到 FieldProps, 获取更多内容，则可以通过 useSchemaProps 方法
 - registerFormField 全局注册扩展组件，要求传入组件名和具体组件，同时，如果针对满足 value/onChange 的组件，需要用 connect 包装，不包装，需要手动同步状态(借助 mutators)
 - registerFormFields 全局批量注册扩展组件，同时，如果针对满足 value/onChange 的组件，需要用 connect 包装，不包装，需要手动同步状态(借助 mutators)
 
@@ -179,7 +179,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```tsx
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { SchemaForm, SchemaMarkupField as Field } from '@formily/antd' // 或者 @formily/next
+import { SchemaForm, SchemaMarkupField as Field, useSchemaProps } from '@formily/antd' // 或者 @formily/next
 import 'antd/dist/antd.css'
 
 const CustomComponent = props => {
@@ -192,6 +192,7 @@ const CustomComponent = props => {
 }
 
 const CustomFieldComponent = props => {
+  const schemaProps = useSchemaProps()
   return (
     <input
       value={props.value || ''}
@@ -327,11 +328,63 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 扩展 Schema VirtualField 组件，其实就是扩展布局组件，我们的扩展方式主要有：
 
+- SchemaForm 中传入 components 只要组件拥有 isVirtualFieldComponent 静态属性，那么会被当做虚拟组件，同时组件属性可以拿到 VirtualFieldProps
+
+- 通过 isVirtualFieldComponent (推荐)
+
 - registerVirtualBox 全局扩展
 
 - createVirtualBox 全局扩展
 
 - createControllerBox 全局扩展
+
+
+**通过 isVirtualFieldComponent (推荐)**
+
+通过 `isVirtualFieldComponent` 声明为 `VirtualBox`，可以通过 `useSchemaProps` 拿到完整上下文内容。
+
+```jsx
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  SchemaMarkupField as Field,
+  useSchemaProps,
+} from '@formily/antd' // 或者 @formily/next
+import { Input } from '@formily/antd-components'
+import 'antd/dist/antd.css'
+
+const CustomLayout = (props) => {
+  const { children } = props
+  const schemaProps = useSchemaProps()
+  return <div style={{ border: '1px solid red', padding: 10 }}>
+    {children}
+  </div>
+}
+
+CustomLayout.isVirtualFieldComponent = true
+
+const App = () => {
+  return (
+    <SchemaForm
+      components={{
+        Input,
+        CustomLayout,
+      }}
+    >
+      <Field
+        x-component="CustomLayout"
+        type="object"
+      >
+        <Field name="name" title="Name" x-component="Input" />
+      </Field>
+    </SchemaForm>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 
 **registerVirtualBox 全局扩展**
 
@@ -358,6 +411,12 @@ const CustomComponent = props => {
   )
 }
 
+const InstanceLayoutComponent = ({ children }) => {
+  return <div>实例级布局组件{children}</div>
+}
+
+InstanceLayoutComponent.isVirtualFieldComponent = true
+
 registerFormFields({ CustomComponent3: connect()(CustomComponent) })
 
 registerVirtualBox('CustomLayout', ({ children, schema }) => {
@@ -376,21 +435,30 @@ const App = () => {
       onChange={values => {
         setValue(values)
       }}
+      components={{
+        InstanceLayoutComponent
+      }}
     >
       <Field
         type="object"
-        name="layout"
-        x-component="CustomLayout"
-        x-component-props={{
-          say: 'hello'
-        }}
+        name="instance-layout"
+        x-component="InstanceLayoutComponent"
       >
         <Field
-          type="string"
-          name="name"
-          title="Name"
-          x-component="CustomComponent3"
-        />
+          type="object"
+          name="layout"
+          x-component="CustomLayout"
+          x-component-props={{
+            say: 'hello'
+          }}
+        >
+          <Field
+            type="string"
+            name="name"
+            title="Name"
+            x-component="CustomComponent3"
+          />
+        </Field>
       </Field>
       {JSON.stringify(value, null, 2)}
     </SchemaForm>

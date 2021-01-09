@@ -125,7 +125,8 @@ describe('test grid layout style',() => {
   test('normal', () => {
     let layoutProps = {
       gutter: 20,
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -152,6 +153,7 @@ describe('test grid layout style',() => {
       context: {},
       grid: true,
       columns: 3,
+      enableSafeWidth: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -168,7 +170,8 @@ describe('test grid layout style',() => {
       autoRow: true,
       responsive: { s: 1, m: 2, lg: 3 },
       context: {},
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -194,7 +197,8 @@ describe('test grid layout style',() => {
       autoRow: false,
       responsive: { s: 1, m: 2, lg: 3 },
       context: {},
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -209,6 +213,33 @@ describe('test grid layout style',() => {
       media: '(min-width:720px) and (max-width:1200px)'
     })
     expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, 
+    { modifier: `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+      media: '(min-width:1200px)'
+    })
+  })
+
+  test('gridStyle autoRow false(enableSafeWidth=false)', () => {
+    let layoutProps = {
+      gutter: 20,
+      autoRow: false,
+      responsive: { s: 1, m: 2, lg: 3 },
+      context: {},
+      grid: true,
+      enableSafeWidth: false,
+    }
+    const styleResult = computeAntdStyleBase(layoutProps)
+    const Mega = styled.div`${styleResult.gridStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(1,1fr)`, 
+    { modifier: `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+      media: '(max-width:720px)'
+    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(2,1fr)`, 
+    { modifier: `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
+      media: '(min-width:720px) and (max-width:1200px)'
+    })
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`, 
     { modifier: `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`,
       media: '(min-width:1200px)'
     })
@@ -353,7 +384,8 @@ describe('nest grid layout container', () => {
       context: {
         grid: true,
       },
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`${styleResult.gridStyle}`
@@ -366,15 +398,15 @@ describe('nest grid layout container', () => {
     expect(tree).toHaveStyleRule('grid-row-gap', `20px`, {
       modifier: `${cls}`,
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(max-width: 720px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(min-width: 720px) and (max-width: 1200px)'
     })
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(auto-fit,1fr)`, {
       modifier: `${cls}`,
       media: '(min-width: 1200px)'
     })
@@ -388,7 +420,8 @@ describe('nest grid layout container', () => {
       autoRow: true,
       contextColumns: 2,
       context: { grid: true },
-      grid: true
+      grid: true,
+      enableSafeWidth: true,
     }
     const styleResult = computeAntdStyleBase(layoutProps)
     const Mega = styled.div`
@@ -398,7 +431,7 @@ describe('nest grid layout container', () => {
     const tree = renderer.create(<Mega className="mega-layout-nest-container" />).toJSON();
     const cls = `& > .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content.grid`
     expect(tree).toMatchSnapshot()
-    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,minmax(100px,1fr))`, {
+    expect(tree).toHaveStyleRule('grid-template-columns', `repeat(3,1fr)`, {
       modifier: `${cls}`,
     })
 
@@ -579,5 +612,105 @@ describe('layoutMarginStyle',() => {
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item-col > .mega-layout-item' })
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-item' })
     expect(tree).toHaveStyleRule('margin-bottom', '0', { modifier: '> .ant-form-item-control > .ant-form-item-control-input > .ant-form-item-control-input-content > .mega-layout-container-wrapper > .mega-layout-container-content > .mega-layout-container:last-child' })
+  })
+})
+
+describe('inset mode', () => {
+  test('inset style', () => {
+    const styleResult = computeAntdStyleBase({
+      inset: true,
+      isLayout: true
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).toHaveStyleRule('border-color', 'red', { modifier: `.mega-layout-item-inset-has-error .ant-form-item` })
+    expect(tree).toHaveStyleRule('border-color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .ant-form-item` })
+    expect(tree).toHaveStyleRule('color', 'red', { modifier: `.mega-layout-item-inset-has-error .mega-layout-item-inset-help` })
+    expect(tree).toHaveStyleRule('color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .mega-layout-item-inset-help` })
+    expect(tree).toHaveStyleRule('display', 'none', { modifier: `.ant-form-item-explain` })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `&.mega-layout-item .ant-form-item.ant-row` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `&.mega-layout-item .ant-form-item.ant-row` })
+  })
+
+  test('inset style(hasBorder)', () => {
+    const styleResult = computeAntdStyleBase({
+      inset: true,
+      isLayout: true,
+      hasBorder: true,
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    expect(tree).toHaveStyleRule('padding-left', '12px', { modifier: `.ant-form-item.ant-row` })
+    expect(tree).toHaveStyleRule('border', '1px solid #D8D8D8', { modifier: `.ant-form-item.ant-row` })
+    expect(tree).toHaveStyleRule('border-radius', '4px', { modifier: `.ant-form-item.ant-row` })
+  })
+
+  test('inset style of component', () => {
+    const styleResult = computeAntdStyleBase({
+      inset: true,
+      isLayout: true,
+      hasBorder: true,
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()
+    const prefix = `.ant-form-item.ant-row .mega-layout-item-content `
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-picker' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-select-single:not(.ant-select-customize-input) .ant-select-selector' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-select-selector' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-picker-input input' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-input-number' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-time-picker-input' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-select-selection' })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: prefix + '.ant-input' })
+
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-picker' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-select-single:not(.ant-select-customize-input) .ant-select-selector' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-select-selector' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-picker-input input' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-input-number' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-time-picker-input' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-select-selection' })
+    expect(tree).toHaveStyleRule('box-shadow', 'none', { modifier: prefix + '.ant-input' })
+
+    expect(tree).toHaveStyleRule('width', '100%', { modifier: prefix + '.ant-picker' })
+    expect(tree).toHaveStyleRule('padding-right', '0', { modifier: prefix + '.ant-picker' })
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: prefix + '.ant-checkbox-group' })
+    expect(tree).toHaveStyleRule('padding-right', '11px', { modifier: prefix + '.ant-picker-range' })
+    expect(tree).toHaveStyleRule('padding', '0 11px', { modifier: prefix + '.ant-picker-input' })
+    expect(tree).toHaveStyleRule('display', 'flex', { modifier: prefix + '.ant-picker-range' })
+    expect(tree).toHaveStyleRule('display', 'flex', { modifier: prefix + '.ant-picker-input' })
+    expect(tree).toHaveStyleRule('flex', '1', { modifier: prefix + '.ant-picker-range .ant-picker-input' })
+    expect(tree).toHaveStyleRule('flex', 'initial', { modifier: prefix + '.ant-picker-input .ant-picker-suffix' })
+    expect(tree).toHaveStyleRule('flex', '1', { modifier: prefix + '.ant-picker-input > input' })
+  })
+
+  test('item inset style(hasBorder)', () => {
+    const styleResult = computeAntdStyleBase({
+      inset: true,
+      isLayout: false,
+      hasBorder: false,
+    });
+    const Mega = styled.div`${styleResult.insetStyle}`
+    const tree = renderer.create(<Mega />).toJSON()
+
+    expect(tree).toMatchSnapshot()    
+    expect(tree).toHaveStyleRule('padding-left', '0', { modifier: `&.mega-layout-item .ant-form-item.ant-row` })
+    expect(tree).toHaveStyleRule('border', 'none', { modifier: `&.mega-layout-item .ant-form-item.ant-row` })
+    expect(tree).not.toHaveStyleRule('display', 'none', { modifier: `.ant-form-item-explain` })
+    expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).not.toHaveStyleRule('flex-direction', 'column', { modifier: `.mega-layout-item-inset` })
+    expect(tree).not.toHaveStyleRule('border-color', 'red', { modifier: `.mega-layout-item-inset-has-error .ant-form-item` })
+    expect(tree).not.toHaveStyleRule('border-color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .ant-form-item` })
+    expect(tree).not.toHaveStyleRule('color', 'red', { modifier: `.mega-layout-item-inset-has-error .mega-layout-item-inset-help` })
+    expect(tree).not.toHaveStyleRule('color', '#FF6A00', { modifier: `.mega-layout-item-inset-has-warning .mega-layout-item-inset-help` })
+    expect(tree).not.toHaveStyleRule('display', 'none', { modifier: `.ant-form-item-explain` })
   })
 })

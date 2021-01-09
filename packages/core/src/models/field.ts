@@ -11,35 +11,42 @@ import {
   toArr,
   isValid,
   isEqual,
-  isEmpty
+  isEmpty,
+  isArr,
+  isPlainObj
 } from '@formily/shared'
-import { Draft, original } from 'immer'
+import { Draft } from 'immer'
 
 const normalizeMessages = (messages: any) => toArr(messages).filter(v => !!v)
 
-const DEEP_INSPECT_PROPERTY_KEYS = [
-  'props',
-  'rules',
-  'errors',
-  'warnings',
-  'effectErrors',
-  'effectWarnings',
-  'ruleErrors',
-  'ruleWarnings'
-]
-
-const getOriginalValue = (value: any) => {
-  const origin = original(value)
-  return isValid(origin) ? origin : value
+const calculateEditable = (
+  selfEditable: boolean,
+  formEditable: boolean | ((name: string) => boolean),
+  name: string
+) => {
+  return isValid(selfEditable)
+    ? selfEditable
+    : isValid(formEditable)
+    ? isFn(formEditable)
+      ? formEditable(name)
+      : formEditable
+    : true
 }
 
 export const ARRAY_UNIQUE_TAG = Symbol.for(
   '@@__YOU_CAN_NEVER_REMOVE_ARRAY_UNIQUE_TAG__@@'
 )
 
+export const parseArrayTags = (value: any[]) => {
+  if (!isArr(value)) return []
+  return value?.reduce?.((buf, item: any) => {
+    return item?.[ARRAY_UNIQUE_TAG] ? buf.concat(item[ARRAY_UNIQUE_TAG]) : buf
+  }, [])
+}
+
 export const tagArrayList = (current: any[], name: string, force?: boolean) => {
   return current?.map?.((item, index) => {
-    if (typeof item === 'object') {
+    if (isPlainObj(item)) {
       item[ARRAY_UNIQUE_TAG] = force
         ? `${name}.${index}`
         : item[ARRAY_UNIQUE_TAG] || `${name}.${index}`
@@ -58,6 +65,8 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
 
     prevState: IFieldState
 
+    updates: Array<'value' | 'initialValue'>
+
     lastCompareResults?: boolean
 
     state = {
@@ -68,6 +77,7 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       pristine: true,
       valid: true,
       modified: false,
+      inputed: false,
       touched: false,
       active: false,
       visited: false,
@@ -93,17 +103,27 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       required: false,
       mounted: false,
       unmounted: false,
-      unmountRemoveValue: true,
       props: {}
     }
 
-    constructor(props: IFieldStateProps) {
+    constructor(props: IFieldStateProps = {}) {
       this.nodePath = FormPath.getPath(props.nodePath)
       this.dataPath = FormPath.getPath(props.dataPath)
       this.state.name = this.dataPath.entire
       this.state.path = this.nodePath.entire
       this.state.dataType = props.dataType
       this.props = props
+      this.updates = []
+    }
+
+    dirtyCheck(path: string[], currentValue: any, nextValue: any) {
+      if (path[0] === 'value') {
+        if (this.isArrayList()) {
+          //如果是ArrayList，不再做精准判断，因为数组内部侵入了Symbol，使用isEqual判断会有问题
+          return true
+        }
+      }
+      return !isEqual(currentValue, nextValue)
     }
 
     getValueFromProps() {
@@ -111,6 +131,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         return this.props.getValue(this.state.name)
       }
       return this.state.value
+    }
+
+    getEditableFromProps() {
+      return this.props?.getEditable?.()
     }
 
     getInitialValueFromProps() {
@@ -123,35 +147,35 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       return this.state.initialValue
     }
 
-    dirtyCheck(path: string[], value: any, nextValue: any) {
-      const propName = path[0]
-      if (DEEP_INSPECT_PROPERTY_KEYS.includes(propName)) {
-        return !isEqual(value, nextValue)
-      } else {
-        return value !== nextValue
-      }
-    }
-
     getState = () => {
       if (!this.state.initialized) return this.state
       let value = this.getValueFromProps()
       let initialValue = this.getInitialValueFromProps()
+      let formEditable = this.getEditableFromProps()
       if (this.isArrayList()) {
-        value = this.tagArrayList(toArr(value))
-        initialValue = this.tagArrayList(toArr(initialValue))
+        value = this.fixArrayListTags(toArr(value))
+        initialValue = this.fixArrayListTags(toArr(initialValue))
       }
+      const valueChanged = !isEqual(this.state.value, value)
 
       const state = {
         ...this.state,
         initialValue,
+        formEditable,
+        editable: calculateEditable(
+          this.state.selfEditable,
+          formEditable,
+          this.state.name
+        ),
+        modified: this.state.modified || valueChanged,
         value,
         values: [value].concat(this.state.values.slice(1))
       }
-      const compareResults = isEqual(this.state.value, value)
-      if (!compareResults && compareResults !== this.lastCompareResults) {
-        this.lastCompareResults = compareResults
-        this.props?.unControlledValueChanged()
+      if (valueChanged && valueChanged !== this.lastCompareResults) {
+        this.state.value = value
+        this.props?.unControlledValueChanged?.()
       }
+      this.lastCompareResults = valueChanged
       return state
     }
 
@@ -185,16 +209,22 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       if (dirtys.editable) {
         draft.selfEditable = draft.editable
       }
-      draft.editable = isValid(draft.selfEditable)
-        ? draft.selfEditable
-        : isValid(draft.formEditable)
-        ? isFn(draft.formEditable)
-          ? draft.formEditable(draft.name)
-          : draft.formEditable
-        : true
+      draft.editable = calculateEditable(
+        draft.selfEditable,
+        draft.formEditable,
+        draft.name
+      )
+    }
+
+    supportUnmountClearStates() {
+      if (isFn(this.props?.supportUnmountClearStates)) {
+        return this.props?.supportUnmountClearStates(this.state.path)
+      }
+      return true
     }
 
     produceSideEffects(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
+      const supportClearStates = this.supportUnmountClearStates()
       if (dirtys.validating) {
         if (draft.validating === true) {
           draft.loading = true
@@ -203,10 +233,11 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         }
       }
       if (
-        dirtys.editable ||
-        dirtys.selfEditable ||
+        draft.editable === false ||
+        draft.selfEditable === false ||
         draft.visible === false ||
-        draft.unmounted === true
+        draft.display === false ||
+        (draft.unmounted === true && supportClearStates)
       ) {
         draft.errors = []
         draft.effectErrors = []
@@ -229,18 +260,20 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         draft.mounted = true
       }
       if (dirtys.visible || dirtys.mounted || dirtys.unmounted) {
-        if (draft.unmountRemoveValue) {
+        if (supportClearStates) {
           if (draft.display) {
             if (draft.visible === false || draft.unmounted === true) {
-              draft.visibleCacheValue = isValid(draft.value)
-                ? draft.value
-                : isValid(draft.visibleCacheValue)
-                ? draft.visibleCacheValue
-                : draft.initialValue
+              if (!dirtys.visibleCacheValue) {
+                draft.visibleCacheValue = isValid(draft.value)
+                  ? draft.value
+                  : isValid(draft.visibleCacheValue)
+                  ? draft.visibleCacheValue
+                  : draft.initialValue
+              }
               draft.value = undefined
               draft.values = toArr(draft.values)
               draft.values[0] = undefined
-              this.props.setValue?.(this.state.name, undefined)
+              this.updates.push('value')
             } else if (
               draft.visible === true ||
               draft.mounted === true ||
@@ -248,10 +281,26 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
             ) {
               if (!isValid(draft.value)) {
                 draft.value = draft.visibleCacheValue
-                this.props.setValue?.(
-                  this.state.name,
-                  getOriginalValue(draft.value)
-                )
+                this.updates.push('value')
+              }
+            }
+          }
+        } else {
+          if (draft.display) {
+            if (draft.visible === false) {
+              if (!dirtys.visibleCacheValue) {
+                draft.visibleCacheValue = isValid(draft.value)
+                  ? draft.value
+                  : isValid(draft.visibleCacheValue)
+                  ? draft.visibleCacheValue
+                  : draft.initialValue
+              }
+              draft.value = undefined
+              draft.values = toArr(draft.values)
+              draft.values[0] = undefined
+            } else if (draft.visible === true) {
+              if (!isValid(draft.value)) {
+                draft.value = draft.visibleCacheValue
               }
             }
           }
@@ -264,6 +313,14 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       } else {
         draft.invalid = false
         draft.valid = true
+      }
+    }
+
+    fixArrayListTags(value: any[]) {
+      if (value?.[0]?.[ARRAY_UNIQUE_TAG]) {
+        return value
+      } else {
+        return this.tagArrayList(value)
       }
     }
 
@@ -305,13 +362,10 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
         }
       }
       if (valueChanged) {
-        this.props.setValue?.(this.state.name, getOriginalValue(draft.value))
+        this.updates.push('value')
       }
       if (dirtys.initialValue) {
-        this.props.setInitialValue?.(
-          this.state.name,
-          getOriginalValue(draft.initialValue)
-        )
+        this.updates.push('initialValue')
       }
       if (valueOrInitialValueChanged) {
         if (isEqual(draft.initialValue, draft.value)) {
@@ -382,6 +436,9 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
     }
 
     produceRules(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
+      if (isValid(draft.rules)) {
+        draft.rules = toArr(draft.rules)
+      }
       if ((dirtys.required && dirtys.rules) || dirtys.required) {
         const rules = this.getRulesFromRulesAndRequired(
           draft.rules,
@@ -397,12 +454,30 @@ export const Field = createModel<IFieldState, IFieldStateProps>(
       }
     }
 
+    beforeProduce() {
+      this.updates = []
+    }
+
     produce(draft: Draft<IFieldState>, dirtys: FieldStateDirtyMap) {
       this.produceErrorsAndWarnings(draft, dirtys)
       this.produceEditable(draft, dirtys)
       this.produceValue(draft, dirtys)
       this.produceSideEffects(draft, dirtys)
       this.produceRules(draft, dirtys)
+    }
+
+    afterProduce() {
+      //Because the draft data cannot be consumed externally, I can only cache the changes and handle it uniformly
+      this.updates.forEach(type => {
+        if (type === 'value') {
+          this.props?.setValue?.(this.state.name, this.state.value)
+        } else {
+          this.props?.setInitialValue?.(
+            this.state.name,
+            this.state.initialValue
+          )
+        }
+      })
     }
 
     static defaultProps = {

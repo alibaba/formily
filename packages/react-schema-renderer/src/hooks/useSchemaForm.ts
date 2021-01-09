@@ -1,7 +1,7 @@
 import { useMemo, useRef, createElement } from 'react'
 import { useForm } from '@formily/react'
 import { Schema } from '../shared/schema'
-import { deprecate, each, map, lowercase, isFn } from '@formily/shared'
+import { deprecate, each, lowercase, isFn } from '@formily/shared'
 import { useEva } from 'react-eva'
 import { ISchemaFormProps } from '../types'
 import { createSchemaFormActions } from '../shared/actions'
@@ -22,25 +22,29 @@ const lowercaseKeys = (obj: any) => {
 const ConnectedComponent = Symbol.for('connected')
 
 const transformComponents = (components: any) => {
-  return map(components, component => {
+  const fieldComponents = {}
+  const virtualFieldComponents = {}
+  each(components, (component: any, name) => {
     if (!isFn(component) && !component['styledComponentId'])
-      return () => {
+      fieldComponents[name] = () => {
         return createElement('div', {}, 'Can not found any component.')
       }
-    let FinalComponent: any
-    if (
-      component['__ALREADY_CONNECTED__'] ||
-      (component as any).isFieldComponent
-    ) {
-      FinalComponent = component
+    if (component['__ALREADY_CONNECTED__'] || component['isFieldComponent']) {
+      fieldComponents[name] = component
+    } else if (component['__VIRTUAL_BOX__']) {
+      virtualFieldComponents[component['__VIRTUAL_BOX__']['key']] =
+        component['__VIRTUAL_BOX__']['component']
+    } else if (component['isVirtualFieldComponent']) {
+      virtualFieldComponents[name] = component
     } else if (!component[ConnectedComponent]) {
       component[ConnectedComponent] = connect()(component)
-      FinalComponent = component[ConnectedComponent]
+      fieldComponents[name] = component[ConnectedComponent]
     } else {
-      FinalComponent = component[ConnectedComponent]
+      fieldComponents[name] = component[ConnectedComponent]
     }
-    return FinalComponent
   })
+
+  return { fieldComponents, virtualFieldComponents }
 }
 
 const useInternalSchemaForm = (props: ISchemaFormProps) => {
@@ -50,6 +54,7 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     components,
     formComponent,
     formItemComponent,
+    componentPropsInterceptor,
     schema: propsSchema,
     defaultValue,
     value,
@@ -80,6 +85,9 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     return result
   }, [propsSchema])
   const registry = getRegistry()
+  const { fieldComponents, virtualFieldComponents } = transformComponents(
+    components
+  )
   return {
     form: useForm({
       ...props,
@@ -99,17 +107,19 @@ const useInternalSchemaForm = (props: ISchemaFormProps) => {
     fields: lowercaseKeys({
       ...registry.fields,
       ...fields,
-      ...transformComponents(components)
+      ...fieldComponents
     }),
     virtualFields: lowercaseKeys({
       ...registry.virtualFields,
-      ...virtualFields
+      ...virtualFields,
+      ...virtualFieldComponents
     }),
     formComponent: formComponent ? formComponent : registry.formComponent,
     formItemComponent: formItemComponent
       ? formItemComponent
       : registry.formItemComponent,
     schema,
+    componentPropsInterceptor,
     children
   }
 }

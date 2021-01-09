@@ -1,8 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { Form } from '@alifd/next'
-import { Layout, LayoutItem } from '@formily/react'
-import { createVirtualBox } from '@formily/react-schema-renderer'
+import { createVirtualBox, Layout, LayoutItem, ILayoutProps } from '@formily/react-schema-renderer'
 import styled from 'styled-components'
 import { useDeepFormItem } from '../../context'
 import { normalizeCol, pickFormItemProps, pickNotFormItemProps } from '../../shared'
@@ -18,27 +17,41 @@ const computeAttr = (propAttr, layoutAttr, defaultValue) => {
 const StyledLayoutItem = styled((props) => {
     const { className, grid, children, addonBefore, addonAfter, labelAlign, ...others } = props
     const formItemProps = pickFormItemProps(others)
+    formItemProps.style = props.style || {}
     const cls = classnames({
-      [className]: true,
+      [className]: true,      
       'mega-layout-item': true,
       'mega-layout-item-col': grid,
     });
 
-    const finalFormItem = <Form.Item className={cls} {...formItemProps}>
+    let finalHelpInfo = null
+    if (props.inset && formItemProps.validateState) {      
+      finalHelpInfo = <div className="mega-layout-item-inset-help">
+        {formItemProps.help[0]}
+      </div>
+    }
+
+    const finalFormItem = (cls) => (<Form.Item className={cls} {...formItemProps}>
       <div className="mega-layout-item-content">
         { addonBefore ? <p className="formily-mega-item-before">{addonBefore}</p> : null }
         {children}
         { addonAfter ? <p className="formily-mega-item-after">{addonAfter}</p> : null }
       </div>
-    </Form.Item>
+    </Form.Item>)
 
     if (grid) {
-      return <div className={cls}>
-        {finalFormItem}
+      return <div className={classnames({
+        [cls]: true,
+        'mega-layout-item-inset': props.inset,
+        'mega-layout-item-inset-has-error': formItemProps.validateState === 'error',
+        'mega-layout-item-inset-has-warning': formItemProps.validateState === 'warning',
+      })}>
+        {finalFormItem(className)}
+        {finalHelpInfo}
       </div>
     }
 
-    return finalFormItem
+    return finalFormItem(cls)
 })`${props => computeStyle(props)}`
 
 
@@ -56,8 +69,8 @@ const StyledLayoutNestWrapper = styled(props => {
 return <div style={style} className={classnames('mega-layout-nest-container', className)}>{children}</div>
 })`${props => computeStyle(props)}`
 
-const MegaLayout = (props => {
-    const { children, addonBefore, addonAfter, description, ...others } = props
+const MegaLayout = (props: ILayoutProps) => {
+    const { children, addonBefore, addonAfter, description, className: megaLayoutClassName, ...others } = props
     const layoutProps = props.layoutProps || {}
     const { size } = useDeepFormItem()
 
@@ -73,9 +86,11 @@ const MegaLayout = (props => {
         children={(layout) => {
             const { inline, required, columns, label, labelAlign,
                 grid, gutter, autoRow, span, contextColumns,
-                full, context, isRoot, responsive
+                full, context, isRoot, responsive, inset, hasBorder, enableSafeWidth
             } = layout
+            const isSecondary = context.isRoot
             const itemProps: any = {
+              isSecondary,
               inline,
               grid,
               autoRow,
@@ -87,7 +102,10 @@ const MegaLayout = (props => {
               isRoot,
               isLayout: true,    
               responsive,
-              size
+              size,
+              inset,
+              hasBorder,
+              enableSafeWidth,
             }
 
             if (label) {
@@ -98,7 +116,7 @@ const MegaLayout = (props => {
                 const wrapperCol = computeAttr(layoutProps.wrapperCol, context.wrapperCol, -1)
                 const labelAlign = computeAttr(layoutProps.labelAlign, context.labelAlign, -1)
 
-                if (labelAlign) itemProps.labelAlign = normalizeCol(labelAlign)
+                if (labelAlign) itemProps.labelAlign = labelAlign
                 if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
                 if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
                 if (labelWidth !== -1) itemProps.labelWidth = labelWidth
@@ -106,7 +124,7 @@ const MegaLayout = (props => {
             }
 
             let ele = <StyledLayoutWrapper
-                className="mega-layout-container"
+                className={classnames("mega-layout-container", megaLayoutClassName || '')}
                 label={label}
                 required={required}
                 help={description}
@@ -124,7 +142,7 @@ const MegaLayout = (props => {
 
             // 嵌套布局
             if (!props.grid && grid) {   
-              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, context, responsive}}>
+              return <StyledLayoutNestWrapper nested {...{span, columns, contextColumns, gutter, isSecondary, context, responsive}}>
                 {ele}
               </StyledLayoutNestWrapper>
             }
@@ -132,7 +150,7 @@ const MegaLayout = (props => {
             return ele
         }}
     />
-});
+};
 
 const MegaLayoutItem = (props) => {
   const { children, schemaChildren, itemProps, ...others } = props
@@ -145,8 +163,13 @@ const MegaLayoutItem = (props) => {
     if (layoutProps) {
       const { addonBefore, addonAfter } = megaProps
       const { columns, span, gutter, grid, inline, labelWidth, wrapperWidth, labelAlign, labelCol, wrapperCol, full,
-       responsive, size
+       responsive, size, inset, hasBorder, context, enableSafeWidth
       } = layoutProps;
+
+      const isSecondary = context.isRoot
+      itemProps.isSecondary = isSecondary
+      itemProps.hasBorder = hasBorder
+      itemProps.inset = inset
       itemProps.labelAlign = labelAlign
       itemProps.inline = inline
       itemProps.grid = grid
@@ -155,6 +178,7 @@ const MegaLayoutItem = (props) => {
       itemProps.columns = columns
       itemProps.full = full
       itemProps.responsive = responsive
+      itemProps.enableSafeWidth = enableSafeWidth
 
       if (labelCol !== -1) itemProps.labelCol = normalizeCol(labelCol)
       if (wrapperCol !== -1) itemProps.wrapperCol = normalizeCol(wrapperCol)
@@ -168,7 +192,7 @@ const MegaLayoutItem = (props) => {
         componentProps.style = {
           ...(componentProps.style || {}),
           width: '100%',
-          flex: 1,
+          flex: '1 1 0%',
         }
       }
 
@@ -192,7 +216,7 @@ const MegaLayoutItem = (props) => {
   })
 }
 
-const FormMegaLayout = createVirtualBox('mega-layout', MegaLayout)
+const FormMegaLayout = createVirtualBox<Omit<ILayoutProps, 'children'> & { children: React.ReactNode }>('mega-layout', MegaLayout)
 
 export {
     MegaLayout,

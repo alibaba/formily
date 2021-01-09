@@ -1,5 +1,5 @@
 {
-  "version": "0.1.5",
+  "version": "0.1.6",
   "name": "Formily DevTools",
   "short_name": "Formily DevTools",
   "description": "Formily DevTools for debugging application's state changes.",

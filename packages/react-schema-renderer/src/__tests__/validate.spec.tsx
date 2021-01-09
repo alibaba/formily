@@ -117,6 +117,39 @@ test('basic validate', async () => {
   expect(getByText('This field is required')).toBeVisible()
 })
 
+test('object validate', async () => {
+  const handleSubmit = jest.fn()
+  const handleValidateFailed = jest.fn()
+  const TestComponent = () => (
+    <SchemaForm onSubmit={handleSubmit} onValidateFailed={handleValidateFailed}>
+      <Fragment>
+        <Field
+          type="object"
+          name="user"
+          required={['username', 'age']}
+        >
+          <Field type="string" name="username" title="username" />
+          <Field type="string" name="age" title="age" />
+        </Field>
+        <button type="submit" data-testid="btn">
+          Submit
+        </button>
+      </Fragment>
+    </SchemaForm>
+  )
+
+  const { getByTestId, findAllByText } = render(<TestComponent />)
+
+  fireEvent.click(getByTestId('btn'))
+  await wait()
+  fireEvent.click(getByTestId('btn'))
+  await wait()
+  expect(handleSubmit).toHaveBeenCalledTimes(0)
+  expect(handleValidateFailed).toHaveBeenCalledTimes(2)
+  const errTexts = await findAllByText('This field is required')
+  expect(errTexts).toHaveLength(2)
+})
+
 test('validate in init', async () => {
   const handleSubmit = jest.fn()
   const handleValidateFailed = jest.fn()

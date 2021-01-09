@@ -132,11 +132,22 @@ const App = () => {
           renderMoveUp: () => null,
           renderAddition: () => '+add',
           renderRemove: idx => {
+            const mutators = actions.createMutators('userList')
             return (
               <FormSpy
                 selector={[['onFieldValueChange', `userList.${idx}.username`]]}
               >
-                {({ state }) => (state.value === 'morally' ? null : 'remove')}
+                {({ state }) => {
+                  return state.value === 'morally' ? null : (
+                    <Button
+                      onClick={() => {
+                        mutators.remove(idx)
+                      }}
+                    >
+                      remove
+                    </Button>
+                  )
+                }}
               </FormSpy>
             )
           }
@@ -227,6 +238,7 @@ import { SchemaForm, SchemaField, toArr, FormPath } from '@formily/antd'
 const ArrayCustom = props => {
   const { value, schema, className, editable, path, mutators } = props
   const componentProps = schema.getExtendsComponentProps() || {}
+
   const onAdd = () => mutators.push(schema.items.getEmptyValue())
   const onRemove = index => mutators.remove(index)
   const onMoveUp = index => mutators.moveUp(index)

@@ -45,6 +45,9 @@ export interface ISchemaFieldComponentProps extends IFieldState {
     reactKey?: string | number
   ) => React.ReactElement
 }
+
+export type ISchemaFieldContextProps = Partial<ISchemaFieldComponentProps>
+
 export interface ISchemaVirtualFieldComponentProps extends IVirtualFieldState {
   schema: Schema
   form: IForm
@@ -92,8 +95,10 @@ export interface ISchemaFormRegistry {
     [key: string]: ISchemaVirtualFieldComponent
   }
   wrappers?: ISchemaFieldWrapper[]
+  componentPropsInterceptor?: (schema: ISchema) => any
   formItemComponent: React.JSXElementConstructor<any>
   formComponent: string | React.JSXElementConstructor<any>
+  previewText?: React.JSXElementConstructor<any>
 }
 
 export type SchemaMessage = React.ReactNode
@@ -180,6 +185,7 @@ export interface ISchemaFormProps<
   virtualFields?: ISchemaFormRegistry['virtualFields']
   formComponent?: ISchemaFormRegistry['formComponent']
   formItemComponent?: ISchemaFormRegistry['formItemComponent']
+  componentPropsInterceptor?: ISchemaFormRegistry['componentPropsInterceptor']
   expressionScope?: { [key: string]: any }
 }
 

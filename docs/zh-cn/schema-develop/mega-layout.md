@@ -682,6 +682,73 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+### 安全宽度机制
+
+栅格模式非 `autoRow` 的情况下，考虑到容器宽度以及设定列数`columns`不匹配的情况下，可能会出现积压内容严重的情况，默认会加入`安全宽度100px`的保护机制保证交互体验，但可能会与设定列数冲突，可通过 `enableSafeWidth` 来控制。
+
+> autoRow 模式下，会取消安全宽度，这是为了保证多行的内容的展示和设置一致。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import { FormMegaLayout, Input, DatePicker } from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{ DatePicker, Input }}>
+        <FormSlot>
+          <h3 style={{ marginTop: '16px' }}>默认enableSafeWidth=true，最小宽度100px，超出部分自动换行</h3>
+        </FormSlot>
+        <FormMegaLayout grid full columns={10}>
+          <Field name="swf1" title="标题1" x-component="DatePicker" />
+          <Field name="swf2" title="标题2" x-component="DatePicker" />
+          <Field name="swf3" title="标题3" x-component="DatePicker" />
+          <Field name="swf4" title="标题4" x-component="DatePicker" />
+          <Field name="swf5" title="标题5" x-component="DatePicker" />
+          <Field name="swf6" title="标题6" x-component="DatePicker" />
+          <Field name="swf7" title="标题7" x-component="DatePicker" />
+          <Field name="swf8" title="标题8" x-component="DatePicker" />
+          <Field name="swf9" title="标题9" x-component="DatePicker" />
+          <Field name="swf10" title="标题10" x-component="DatePicker" />
+        </FormMegaLayout>
+
+        <FormSlot>
+          <h3 style={{ marginTop: '16px' }}>enableSafeWidth=false 禁用保护宽度机制，强制压缩，保证列数一致</h3>
+        </FormSlot>
+        <FormMegaLayout grid full columns={10} enableSafeWidth={false}>
+          <Field name="swff1" title="标题1" x-component="DatePicker" />
+          <Field name="swff2" title="标题2" x-component="DatePicker" />
+          <Field name="swff3" title="标题3" x-component="DatePicker" />
+          <Field name="swff4" title="标题4" x-component="DatePicker" />
+          <Field name="swff5" title="标题5" x-component="DatePicker" />
+          <Field name="swff6" title="标题6" x-component="DatePicker" />
+          <Field name="swff7" title="标题7" x-component="DatePicker" />
+          <Field name="swff8" title="标题8" x-component="DatePicker" />
+          <Field name="swff9" title="标题9" x-component="DatePicker" />
+          <Field name="swff10" title="标题10" x-component="DatePicker" />
+        </FormMegaLayout>
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
 ### 联动控制 display / visible
 
 ```jsx
@@ -1171,6 +1238,144 @@ const App = () => {
           <Field name="组件5" title="字段5" x-component="DatePicker" />          
           <FormSlot>
             <FormButtonGroup style={{ marginTop: '32px' }} align="right">
+              <Submit>提交</Submit>
+              <Reset>重置</Reset>
+            </FormButtonGroup>
+          </FormSlot>
+        </FormMegaLayout>        
+      </SchemaForm>
+    </Printer>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+列表布局常使用 **inset** 模式，使用 `FormMegaLayout` 可以快速实现此种布局。配合 **hasBorder** 可以指定某些元素是否需要边框。
+
+```jsx
+import React, { useEffect } from 'react'
+import ReactDOM from 'react-dom'
+import {
+  createVirtualBox,
+  SchemaForm,
+  FormSlot,
+  SchemaMarkupField as Field,
+  FormButtonGroup,
+  createFormActions,
+  Submit,
+  Reset
+} from '@formily/next' // 或者 @formily/next
+import styled, { css } from 'styled-components'
+import {
+  FormMegaLayout,
+  Input,
+  Radio,
+  Checkbox,
+  Select,
+  DatePicker,
+  NumberPicker,
+  TimePicker,
+  Switch,
+  Range,
+  Rating
+} from '@formily/next-components'
+import Printer from '@formily/printer'
+
+import '@alifd/next/dist/next.css'
+
+const App = () => {
+  return (
+    <Printer>
+      <SchemaForm components={{
+        Input,
+        Radio: Radio.Group,
+        Checkbox: Checkbox.Group,
+        NumberPicker,
+        Select,
+        Switch,
+        DatePicker,
+        DateRangePicker: DatePicker.RangePicker,
+        YearPicker: DatePicker.YearPicker,
+        MonthPicker: DatePicker.MonthPicker,
+        WeekPicker: DatePicker.WeekPicker,
+        TimePicker,
+        Rating,
+      }}>
+        <FormMegaLayout
+          inset
+          grid
+          full
+          autoRow
+          labelAlign="top"
+          responsive={{ lg: 3, m: 2, s: 1 }}
+        >
+          <Field title="String" name="string"
+            x-component="Input"
+            required
+            x-rules={value => {
+              if (value > 0 && value < 100) {
+                return {
+                  type: 'warning',
+                  message: '第一阶梯'
+                }
+              } else {
+                return ''
+              }
+            }}
+          />
+          <Field
+            enum={['1', '2', '3', '4']}
+            title="Radio"
+            name="radio"
+            x-component="Radio"
+          />
+          <Field
+            enum={['1', '2', '3', '4']}
+            title="Select"
+            name="select"
+            x-component="Select"
+          />
+          <Field
+            enum={['1', '2', '3', '4']}
+            title="Checkbox"
+            name="checkbox"
+            x-component="Checkbox"
+          />
+          <Field
+            title="数字选择"
+            name="number"
+            x-component="NumberPicker"
+          />
+          <Field
+            title="开关选择"
+            name="boolean"
+            x-component="Switch"
+            x-mega-props={{ full: false, hasBorder: false }}
+          />
+          <Field
+            title="日期选择"
+            name="date"
+            x-component="DatePicker"
+          />
+          <Field
+            title="日期范围"
+            default={['2018-12-19', '2018-12-19']}
+            name="daterange"
+            x-mega-props={{ span: 2 }}
+            x-component="DateRangePicker"
+          />
+          <Field type="string" title="年份" name="year" x-component="YearPicker" />
+          <Field
+            title="月份"
+            name="month"
+            x-component="MonthPicker"
+          />
+          <Field type="string" title="周" name="week" x-component="WeekPicker" />
+          <Field type="string" title="时间" name="time" x-component="TimePicker"  />          
+          <Field title="等级" name="rating" x-component="Rating" />
+          <FormSlot>
+            <FormButtonGroup align="right">
               <Submit>提交</Submit>
               <Reset>重置</Reset>
             </FormButtonGroup>

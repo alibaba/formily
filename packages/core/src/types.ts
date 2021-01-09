@@ -67,8 +67,11 @@ export enum LifeCycleTypes {
   ON_FIELD_UNMOUNT = 'onFieldUnmount'
 }
 
-export interface FormGraphProps {
-  matchStrategy?: (pattern: FormPathPattern, field: any) => boolean
+export type FormGraphProps = {
+  matchStrategy?: (
+    pattern: FormPathPattern,
+    nodePath: FormPathPattern
+  ) => boolean
 }
 
 export type FormGraphNodeMap<T> = {
@@ -89,6 +92,7 @@ export type FormGraph<T> = (
 export interface FormGraphNodeRef {
   parent?: FormGraphNodeRef
   path: FormPath
+  dataPath?: FormPath
   children: FormPath[]
 }
 
@@ -118,6 +122,8 @@ export interface IModelSpec<
   props?: Props
   prevState?: Partial<State>
   getState?: (state?: State) => any
+  beforeProduce?: () => void
+  afterProduce?: () => void
   dirtyCheck?: (path: FormPathPattern, value: any, nextValue: any) => boolean
   produce?: (draft: Draft<State>, dirtys: StateDirtyMap<State>) => void
 }
@@ -148,6 +154,7 @@ export interface IFieldState<FieldProps = any> {
   formEditable: boolean | ((name: string) => boolean)
   loading: boolean
   modified: boolean
+  inputed: boolean
   active: boolean
   visited: boolean
   validating: boolean
@@ -170,30 +177,19 @@ export interface IFieldState<FieldProps = any> {
   [key: string]: any
 }
 
-export type IFieldUserState<FieldProps = any> = Omit<
-  IFieldState<FieldProps>,
-  | 'errors'
-  | 'effectErrors'
-  | 'ruleErrors'
-  | 'warnings'
-  | 'effectWarnings'
-  | 'ruleWarnings'
-> & {
-  errors: React.ReactNode | React.ReactNode[]
-  warnings: React.ReactNode | React.ReactNode[]
-}
-
 export type FieldStateDirtyMap = StateDirtyMap<IFieldState>
 
 export interface IFieldStateProps {
   nodePath?: FormPathPattern
   dataPath?: FormPathPattern
   dataType?: string
+  getEditable?: () => boolean | ((name: string) => boolean)
   getValue?: (name: FormPathPattern) => any
   getInitialValue?: (name: FormPathPattern) => any
   setValue?: (name: FormPathPattern, value: any) => void
   removeValue?: (name: FormPathPattern) => void
   setInitialValue?: (name: FormPathPattern, initialValue: any) => void
+  supportUnmountClearStates?: (path: FormPathPattern) => boolean
   computeState?: (draft: IFieldState, prevState: IFieldState) => void
   unControlledValueChanged?: () => void
 }
@@ -247,8 +243,14 @@ export interface IFormState<FormProps = any> {
   submitting: boolean
   initialized: boolean
   editable: boolean | ((name: string) => boolean)
-  errors: string[]
-  warnings: string[]
+  errors: Array<{
+    path: string
+    messages: string[]
+  }>
+  warnings: Array<{
+    path: string
+    messages: string[]
+  }>
   values: any
   initialValues: any
   mounted: boolean
@@ -259,15 +261,14 @@ export interface IFormState<FormProps = any> {
 
 export type FormStateDirtyMap = StateDirtyMap<IFormState>
 
-export interface IFormStateProps {
+export type IFormStateProps = {}
+
+export interface IFormCreatorOptions {
   initialValues?: {}
   values?: {}
   lifecycles?: FormLifeCycle[]
   editable?: boolean | ((name: string) => boolean)
   validateFirst?: boolean
-}
-
-export interface IFormCreatorOptions extends IFormStateProps {
   onChange?: (values: IFormState['values']) => void
   onSubmit?: (values: IFormState['values']) => any | Promise<any>
   onReset?: () => void

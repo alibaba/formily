@@ -16,12 +16,15 @@ export * from '@formily/core'
 
 type ILayoutLabelAlign = 'top' | 'left' | 'right'
 export interface ILayoutProps {
+  hasBorder?: boolean
   context?: any
   isRoot?: boolean
   isLayout?: boolean
   defaultSettings?: any
-  children?: (props: ILayoutProps) => React.ReactElement
+  children?: any
   full?: boolean
+  layoutProps?: any
+  className?: string
   label?: any
   required?: boolean
   labelAlign?: ILayoutLabelAlign
@@ -30,6 +33,7 @@ export interface ILayoutProps {
   autoRow?: boolean
   columns?: number
   flex?: boolean
+  enableSafeWidth?: boolean
   labelWidth?: number | string
   wrapperWidth?: number | string
   labelCol?: number
@@ -123,7 +127,7 @@ export interface IFieldStateUIProps extends IFieldRegistryProps {
   children?: React.ReactElement | ((api: IFieldAPI) => React.ReactElement)
 }
 
-export interface IVirtualFieldProps extends IVirtualFieldRegistryProps {
+export interface IVirtualFieldStateUIProps extends IVirtualFieldRegistryProps {
   children?:
     | React.ReactElement
     | ((api: IVirtualFieldAPI) => React.ReactElement)

@@ -2045,6 +2045,8 @@ import { MegaLayout } from '@formily/antd-components'
 | addonAfter   | FormMegaLayout 后辅助文案   | any  |        |
 | description | FormMegaLayout 底部辅助文案 | any  |        |
 | inline | 是否启用行内布局 | boolean | false  |
+| inset | 是否启用内嵌布局 | boolean | false  |
+| hasBorder | 内嵌布局情况下，是否显示边框 | boolean | true  |
 | grid    | 是否启用栅格布局 | boolean | false  |
 | columns | 栅格布局总共列数 | number  | 3      |
 | autoRow | 是否自动换行     | boolean | false  |
@@ -2065,6 +2067,7 @@ import { MegaLayout } from '@formily/antd-components'
 | :--------- | :------------- | :--------------------- | :------ |
 | ['x-mega-props'].labelAlign | label 对齐方式 | `left`, `right`, `top` | `right` |
 | ['x-mega-props'].full   | 表单组件是否撑满 | boolean | false  |
+| ['x-mega-props'].hasBorder   | 内嵌布局情况下，是否显示边框 | boolean | true  |
 | ['x-mega-props'].labelCol   | label 所占列数   | number(0-24) |        |
 | ['x-mega-props'].wrapperCol | wrapper 所占列数 | number(0-24) |        |
 | ['x-mega-props'].labelWidth   | label 宽度   | number |        |

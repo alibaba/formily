@@ -367,7 +367,7 @@ describe('reset', () => {
     })
     await form.reset({ forceClear: true })
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
+    expect(form.getFormState(state => state.values)).toEqual({ aa: {} })
     expect(form.getFormState(state => state.initialValues)).toEqual(
       resetInitValues
     )
@@ -413,7 +413,7 @@ describe('reset', () => {
     expect(form.getFormGraph()).toMatchSnapshot()
     await form.reset()
     expect(form.getFormGraph()).toMatchSnapshot()
-    expect(form.getFormState(state => state.values)).toEqual({ aa: { bb: [] } })
+    expect(form.getFormState(state => state.values)).toEqual({ aa: {} })
     expect(form.getFormState(state => state.initialValues)).toEqual({})
   })
 
@@ -774,14 +774,14 @@ describe('setFormState', () => {
     })
     a.getState() //手动同步
     expect(form.getFormState(state => state.values)).toEqual({ a: '1234' })
-    expect(fieldChange).toBeCalledTimes(2)
+    expect(fieldChange).toBeCalledTimes(1)
     expect(formChange).toBeCalledTimes(2)
 
     form.setFormState(state => (state.values = { a: '5678' }), true)
     a.getState() //手动同步
     expect(form.getFormState(state => state.values)).toEqual({ a: '5678' })
     expect(formChange).toBeCalledTimes(2)
-    expect(fieldChange).toBeCalledTimes(2)
+    expect(fieldChange).toBeCalledTimes(1)
   })
 })
 
@@ -1035,7 +1035,7 @@ describe('setFieldState', () => {
     // 初始化
     expect(state.editable).toEqual(true)
     expect(state.selfEditable).toEqual(undefined)
-    expect(state.formEditable).toEqual(undefined)
+    expect(state.formEditable).toEqual(true)
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // 简单设置 (editable会影响selfEditable)
     form.setFieldState('a', state => (state.editable = false))
@@ -1045,18 +1045,18 @@ describe('setFieldState', () => {
     form.setFieldState('a', state => (state.selfEditable = true))
     expect(form.getFieldState('a', state => state.editable)).toEqual(true)
     // 设置影响计算的值formEditable(selfEditable优先级高于formEditable)
-    form.setFieldState('a', state => (state.selfEditable = undefined))
-    form.setFieldState('a', state => (state.formEditable = false))
+    form.setFieldState('a', state => (state.selfEditable = false))
+    form.setFieldState('a', state => (state.formEditable = true))
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
     // 支持函数(UI层传入)
     form.setFieldState('a', state => (state.formEditable = () => true))
-    expect(form.getFieldState('a', state => state.editable)).toEqual(true)
+    expect(form.getFieldState('a', state => state.editable)).toEqual(false)
     // editable会影响selfEditable, 设置顺序又因为 editable > selfEditable > formEditable
     // 前两者都无效时，最终返回formEditable的值
-    form.setFieldState('a', state => (state.editable = undefined))
+    form.setFieldState('a', state => (state.editable = false))
     form.setFieldState('a', state => (state.formEditable = () => false))
     expect(form.getFieldState('a', state => state.selfEditable)).toEqual(
-      undefined
+      false
     )
     expect(form.getFieldState('a', state => state.editable)).toEqual(false)
   })
@@ -1235,7 +1235,7 @@ describe('registerField', () => {
     form.registerField({ path: 'd', initialValue: 'z', value: 's' })
     expect(form.getFieldValue('a')).toEqual(1)
     expect(form.getFieldValue('b')).toEqual('x')
-    expect(form.getFieldValue('c')).toEqual('y') // false, 得到y
+    expect(form.getFieldValue('c')).toEqual(3) // false, 得到y
     expect(form.getFieldValue('d')).toEqual('s')
   })
 })
@@ -1556,7 +1556,11 @@ describe('major sences', () => {
 
   test('nested dynamic remove', () => {
     const form = createForm()
-    const aa = form.registerField({ path: 'aa', value: [], dataType: 'array' })
+    const aa = form.registerField({
+      path: 'aa',
+      value: [{}, {}],
+      dataType: 'array'
+    })
     form.registerField({ path: 'aa.0' })
     form.registerField({ path: 'aa.0.aa' })
     form.registerField({ path: 'aa.0.bb' })

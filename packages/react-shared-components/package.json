@@ -1,6 +1,6 @@
 {
   "name": "@formily/react-shared-components",
-  "version": "2.0.0-beta.0",
+  "version": "1.3.8",
   "license": "MIT",
   "main": "lib",
   "types": "lib/index.d.ts",
@@ -18,7 +18,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
+  "gitHead": "67e5a3154ac3077039501c80e0f206b0e64344b6",
   "scripts": {
     "build": "tsc --declaration"
   },
@@ -26,7 +26,7 @@
     "typescript": "~3.8.0"
   },
   "dependencies": {
-    "@formily/shared": "^2.0.0-beta.0",
+    "@formily/shared": "^1.3.8",
     "react-drag-listview": "^0.1.6"
   }
 }

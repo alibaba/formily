@@ -26,11 +26,13 @@ export const useLayout = (props: ILayoutProps) => {
     const contextResponsive = responsive ? responsive : context.contextResponsive
     const size = computeAttr(props.size, context.size, undefined)
     const gutter = computeAttr(props.gutter, context.gutter, defaultSettings.gutter || 0)
+    const hasBorder = computeAttr(props.hasBorder, context.hasBorder, true)
     const inset = computeAttr(props.inset, context.inset, false)
     const full = computeAttr(props.full, context.full, false)
     const labelAlign = computeAttr(props.labelAlign, context.labelAlign, 'right')
     const labelWidth = computeAttr(props.labelWidth, context.labelWidth, -1)
     const wrapperWidth = computeAttr(props.wrapperWidth, context.wrapperWidth, -1)
+    const enableSafeWidth = computeAttr(props.enableSafeWidth, context.enableSafeWidth, true)
     let labelCol = computeAttr(props.labelCol, context.labelCol, -1)
     let wrapperCol = computeAttr(props.wrapperCol, context.wrapperCol, -1)
     const span = computeAttr(props.span, 1, 1)
@@ -64,6 +66,7 @@ export const useLayout = (props: ILayoutProps) => {
         autoRow,
         flex,
         inset,
+        hasBorder,
         columns,
         contextColumns: context.columns,
         full,
@@ -77,6 +80,7 @@ export const useLayout = (props: ILayoutProps) => {
         context,
         responsive,
         contextResponsive,
+        enableSafeWidth,
         size,
     }
 }

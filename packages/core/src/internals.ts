@@ -9,7 +9,8 @@ import {
   isValid,
   isEqual,
   clone,
-  isFn
+  isFn,
+  defaults
 } from '@formily/shared'
 import {
   LifeCycleTypes,
@@ -18,8 +19,7 @@ import {
   IVirtualFieldState,
   IFieldState,
   IField,
-  IVirtualField,
-  isField
+  IVirtualField
 } from './types'
 
 export const createFormInternals = (options: IFormCreatorOptions = {}) => {
@@ -30,18 +30,12 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       notifyFormValuesChange()
     }
     if (dirtys.initialValues) {
-      notifyFormInitialValuesChange()
-    }
-    if (dirtys.editable) {
-      hostUpdate(() => {
-        graph.eachChildren((field: IField | IVirtualField) => {
-          if (isField(field)) {
-            field.setState(state => {
-              state.formEditable = published.editable
-            })
-          }
+      if (!env.uploading) {
+        form.setState(state => {
+          state.values = defaults(published.initialValues, published.values)
         })
-      })
+      }
+      notifyFormInitialValuesChange()
     }
     if (dirtys.unmounted && published.unmounted) {
       heart.publish(LifeCycleTypes.ON_FORM_UNMOUNT, form)
@@ -54,7 +48,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }
     heart.publish(LifeCycleTypes.ON_FORM_CHANGE, form)
     if (env.hostRendering) {
-      env.hostRendering = dirtys.values || dirtys.initialValues
+      env.hostRendering =
+        dirtys.values || dirtys.initialValues || dirtys.editable
     }
     return env.hostRendering
   }
@@ -158,7 +153,10 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }, FormPath.getPath(''))
   }
 
-  function matchStrategy(pattern: FormPathPattern, nodePath: FormPathPattern) {
+  function matchStrategy(
+    pattern: FormPathPattern,
+    nodePath: FormPathPattern
+  ): boolean {
     const matchPattern = FormPath.parse(pattern)
     const node = graph.get(nodePath)
     if (!node) return false
@@ -206,48 +204,54 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
       unmounted === true ||
       display === false
     ) {
-      form.setSourceState(state => {
-        state.errors = state.errors || []
-        state.warnings = state.warnings || []
-        state.errors = state.errors.reduce((buf: any, item: any) => {
+      form.setState(state => {
+        const newErrors = state.errors?.reduce?.((buf: any, item: any) => {
           if (item.path === path) {
             return buf
           } else {
             return buf.concat(item)
           }
         }, [])
-        state.warnings = state.warnings.reduce((buf: any, item: any) => {
+        const newWarnings = state.warnings?.reduce?.((buf: any, item: any) => {
           if (item.path === path) {
             return buf
           } else {
             return buf.concat(item)
           }
         }, [])
-        if (state.errors.length) {
-          state.invalid = true
-          state.valid = false
-        } else {
-          state.invalid = false
-          state.valid = true
+        const errorsChanged = !isEqual(state.errors, newErrors)
+        const warningsChanged = !isEqual(state.warnings, newWarnings)
+        if (warningsChanged) {
+          state.warnings = newWarnings
+        }
+        if (errorsChanged) {
+          state.errors = newErrors
         }
       })
     }
   }
 
-  function syncFormMessages(type: string, fieldState: IFieldState) {
+  function syncFormMessages(
+    type: string,
+    fieldState: Partial<IFieldState>,
+    silent?: boolean
+  ) {
     const { name, path } = fieldState
     const messages = fieldState[type]
-    form.setSourceState(state => {
+    form.setState(state => {
       let foundField = false
-      state[type] = state[type] || []
-      state[type] = state[type].reduce((buf: any, item: any) => {
+      const newMessages = state[type]?.reduce?.((buf: any, item: any) => {
         if (item.path === path) {
           foundField = true
-          return messages.length ? buf.concat({ path, messages }) : buf
+          return messages.length ? buf.concat({ name, path, messages }) : buf
         } else {
           return buf.concat(item)
         }
       }, [])
+      const messageChanged = !isEqual(state[type], newMessages)
+      if (messageChanged) {
+        state[type] = newMessages
+      }
       if (!foundField && messages.length) {
         state[type].push({
           name,
@@ -255,14 +259,7 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
           messages
         })
       }
-      if (state.errors.length) {
-        state.invalid = true
-        state.valid = false
-      } else {
-        state.invalid = false
-        state.valid = true
-      }
-    })
+    }, silent)
   }
 
   function batchRunTaskQueue(
@@ -295,8 +292,8 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     if (isValid(taskIndex)) {
       if (
         env.taskQueue[taskIndex] &&
-        !env.taskQueue[taskIndex].callbacks.some(fn =>
-          isEqual(fn, callback) ? fn === callback : false
+        !env.taskQueue[taskIndex].callbacks.some((fn: any) =>
+          fn.toString() === callback.toString() ? fn === callback : false
         )
       ) {
         env.taskQueue[taskIndex].callbacks.push(callback)
@@ -312,14 +309,14 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
 
   function init<T>(actions: T) {
     heart.publish(LifeCycleTypes.ON_FORM_WILL_INIT, form, actions)
-    graph.appendNode('', form)
+    graph.appendNode(form)
     form.setState((state: IFormState) => {
       state.initialized = true
       if (isValid(options.initialValues)) {
-        state.initialValues = options.initialValues
+        state.initialValues = clone(options.initialValues)
       }
       if (isValid(options.values)) {
-        state.values = options.values
+        state.values = clone(options.values)
       }
       if (!isValid(state.values)) {
         state.values = state.initialValues
@@ -330,11 +327,11 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     })
   }
 
-  function hostUpdate(callback?: () => any): any {
+  function hostUpdate(callback?: () => any, forceUpdate?: boolean): any {
     if (isFn(callback)) {
       env.hostRendering = true
       const result = callback()
-      if (env.hostRendering) {
+      if (env.hostRendering || forceUpdate) {
         heart.publish(LifeCycleTypes.ON_FORM_HOST_RENDER, form)
       }
       env.hostRendering = false
@@ -342,14 +339,57 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     }
   }
 
+  function nextTick(callback?: () => void) {
+    setTimeout(callback)
+  }
+
+  function afterUnmount(callback?: () => void) {
+    clearTimeout(env.unmountTimer)
+    env.unmountTimer = setTimeout(callback, 1000)
+  }
+
   function isHostRendering() {
     return env.hostRendering
+  }
+
+  function disableUnmountClearStates(pattern: FormPathPattern = '*') {
+    const path = FormPath.parse(pattern)
+    env.clearStatesPatterns[path.toString()] = false
+  }
+
+  function enableUnmountClearStates(pattern: FormPathPattern = '*') {
+    const path = FormPath.parse(pattern)
+    env.clearStatesPatterns[path.toString()] = true
+  }
+
+  function disableUnmountRemoveNode() {
+    env.unmountRemoveNode = false
+  }
+
+  function enableUnmountRemoveNode() {
+    env.unmountRemoveNode = true
+  }
+
+  function supportUnmountClearStates(path: FormPathPattern) {
+    for (const pattern in env.clearStatesPatterns) {
+      const enable = env.clearStatesPatterns[pattern]
+      if (matchStrategy(pattern, path)) {
+        return enable
+      }
+    }
+    return true
+  }
+
+  function upload(callback: () => void) {
+    env.uploading = true
+    callback()
+    env.uploading = false
   }
 
   const graph = new FormGraph({
     matchStrategy
   })
-  const form = new Form(options)
+  const form = new Form()
   const validator = new FormValidator({
     ...options,
     matchStrategy
@@ -365,15 +405,19 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
   })
   const env = {
     validateTimer: null,
+    unmountTimer: null,
     syncFormStateTimer: null,
     onChangeTimer: null,
     graphChangeTimer: null,
     hostRendering: false,
     publishing: {},
     taskQueue: [],
+    uploading: false,
     taskIndexes: {},
-    removeNodes: {},
+    realRemoveTags: [],
     lastShownStates: {},
+    clearStatesPatterns: {},
+    unmountRemoveNode: false,
     submittingTask: undefined
   }
   form.subscription = {
@@ -388,6 +432,9 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     validator,
     heart,
     env,
+    upload,
+    nextTick,
+    afterUnmount,
     getDataPath,
     getFormValuesIn,
     getFormInitialValuesIn,
@@ -396,6 +443,11 @@ export const createFormInternals = (options: IFormCreatorOptions = {}) => {
     existFormValuesIn,
     deleteFormValuesIn,
     updateRecoverableShownState,
+    disableUnmountClearStates,
+    enableUnmountClearStates,
+    supportUnmountClearStates,
+    enableUnmountRemoveNode,
+    disableUnmountRemoveNode,
     resetFormMessages,
     syncFormMessages,
     batchRunTaskQueue,

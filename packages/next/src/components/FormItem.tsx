@@ -11,7 +11,7 @@ import {
   pickFormItemProps,
   log
 } from '../shared'
-import { MegaLayoutItem } from './FormMegaLayout';
+import { MegaLayoutItem } from './FormMegaLayout'
 import { useDeepFormItem } from '../context'
 import { INextFormItemProps } from '../types'
 
@@ -55,6 +55,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
     required,
     editable,
     triggerType,
+    unmountRemoveValue,
     valueName,
     eventName,
     getValueFromEvent,
@@ -69,9 +70,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
   const renderComponent = ({ props, state, mutators, form }) => {
     if (!component) {
       if (children) return <Fragment>{children}</Fragment>
-      log.error(
-        `Can't fount the component. Its key is ${name}.`
-      )
+      log.error(`Can't fount the component. Its key is ${name}.`)
       return null
     }
     if (!component['__ALREADY_CONNECTED__']) {
@@ -114,21 +113,34 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
       validateState: computeStatus(state),
       help: computeMessage(errors, warnings) || help,
       addonBefore,
-      addonAfter,
+      addonAfter
     }
 
-    return <MegaLayoutItem itemProps={itemProps} {...props}>
-      {(megaComponentProps) => {
-        if (megaComponentProps) {
-          return renderComponent({ props: megaComponentProps, state, mutators, form })
-        }
-
-        const { addonBefore, addonAfter, ...otherItemProps } = itemProps
-        return <NextFormItem {...otherItemProps}>
-          {renderComponent({ props: componentProps, state, mutators, form })}
-        </NextFormItem>
-      }}      
-    </MegaLayoutItem>
+    return (
+      <MegaLayoutItem itemProps={itemProps} {...props}>
+        {megaComponentProps => {
+          if (megaComponentProps) {
+            return renderComponent({
+              props: megaComponentProps,
+              state,
+              mutators,
+              form
+            })
+          }
+          const { addonBefore, addonAfter, ...otherItemProps } = itemProps
+          return (
+            <NextFormItem {...otherItemProps}>
+              {renderComponent({
+                props: componentProps,
+                state,
+                mutators,
+                form
+              })}
+            </NextFormItem>
+          )
+        }}
+      </MegaLayoutItem>
+    )
   }
 
   if (!component && children) {
@@ -152,6 +164,7 @@ export const FormItem: React.FC<INextFormItemProps> = topProps => {
     <InternalField
       name={name}
       initialValue={initialValue}
+      unmountRemoveValue={unmountRemoveValue}
       value={value}
       visible={visible}
       display={display}

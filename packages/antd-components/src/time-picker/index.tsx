@@ -15,14 +15,14 @@ const transformMoment = (value) => {
 }
 
 const mapMomentValue = (props: any, fieldProps: any) => {
-  const { value } = props
+  const { value, format = 'HH:mm:ss' } = props
   if (!fieldProps.editable) return props
   try {
     if (isStr(value) && value) {
-      props.value = moment(value, 'HH:mm:ss')
+      props.value = moment(value, format)
     } else if (isArr(value) && value.length) {
       props.value = value.map(
-        (item) => (item && moment(item, 'HH:mm:ss')) || ''
+        (item) => (item && moment(item, format)) || ''
       )
     }
   } catch (e) {
