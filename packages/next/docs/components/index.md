@@ -71,3 +71,7 @@ $ npm install --save @formily/next @formily/react @formily/react-schema-field
 问：为什么 ArrayCards/ArrayTable/FormStep 这类组件只支持 Schema 模式，不支持纯 JSX 模式？
 
 答：这就是 Schema 模式的核心优势，借助协议，我们可以做场景化抽象，相反，纯 JSX 模式，受限于 JSX 的不可解析性，我们很难做到 UI 级别的场景化抽象，更多的只是抽象 Hook。
+
+问：为什么没有 ArrayTabs 组件？
+
+答：因为 Fusion 的 Tab 组件并不支持新增 Tab 能力，所以暂时不支持 ArrayTabs 组件。
