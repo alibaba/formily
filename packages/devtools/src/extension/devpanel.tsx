@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom'
 import App from '../app'
 
 const backgroundPageConnection = chrome.runtime.connect({
-  name: '@formily-devtools-panel-script'
+  name: '@formily-devtools-panel-script',
 })
 
 backgroundPageConnection.postMessage({
   name: 'init',
-  tabId: chrome.devtools.inspectedWindow.tabId
+  tabId: chrome.devtools.inspectedWindow.tabId,
 })
 
 chrome.devtools.inspectedWindow.eval(
@@ -21,7 +21,7 @@ const Devtools = () => {
     let store = {}
     const update = () => {
       setState(
-        Object.keys(store).map(key => {
+        Object.keys(store).map((key) => {
           return store[key]
         })
       )
@@ -30,9 +30,7 @@ const Devtools = () => {
       'window.__FORMILY_DEV_TOOLS_HOOK__.update()'
     )
     backgroundPageConnection.onMessage.addListener(({ type, id, graph }) => {
-      if (type == 'init') {
-        store = {}
-      } else if (type !== 'uninstall') {
+      if (type !== 'uninstall') {
         store[id] = JSON.parse(graph)
       } else {
         delete store[id]

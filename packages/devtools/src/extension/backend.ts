@@ -1,27 +1,36 @@
 //inject content script
 
 const serializeObject = (obj: any) => {
-  if (Array.isArray(obj)) {
-    return obj.map(serializeObject)
-  } else if (typeof obj === 'function') {
-    return `f ${obj.displayName || obj.name}(){ }`
-  } else if (typeof obj === 'object') {
-    if (!obj) return obj
-    if ('$$typeof' in obj && '_owner' in obj) {
-      return '#ReactNode'
-    } else if (obj.toJS) {
-      return obj.toJS()
-    } else if (obj.toJSON) {
-      return obj.toJSON()
-    } else {
-      const result = {}
-      for (let key in obj) {
-        result[key] = serializeObject(obj[key])
+  const seens = new WeakMap()
+  const serialize = (obj: any) => {
+    if (Array.isArray(obj)) {
+      return obj.map(serialize)
+    } else if (typeof obj === 'function') {
+      return `f ${obj.displayName || obj.name}(){ }`
+    } else if (typeof obj === 'object') {
+      if (seens.get(obj)) return '#CircularReference'
+      if (!obj) return obj
+      if ('$$typeof' in obj && '_owner' in obj) {
+        seens.set(obj, true)
+        return '#ReactNode'
+      } else if (obj.toJS) {
+        seens.set(obj, true)
+        return obj.toJS()
+      } else if (obj.toJSON) {
+        seens.set(obj, true)
+        return obj.toJSON()
+      } else {
+        seens.set(obj, true)
+        const result = {}
+        for (let key in obj) {
+          result[key] = serialize(obj[key])
+        }
+        return result
       }
-      return result
     }
+    return obj
   }
-  return obj
+  return serialize(obj)
 }
 
 const send = ({
@@ -33,12 +42,13 @@ const send = ({
   id?: string | number
   form?: any
 }) => {
+  const graph = serializeObject(form?.getFormGraph())
   window.postMessage(
     {
       source: '@formily-devtools-inject-script',
       type,
       id,
-      graph: form && JSON.stringify(serializeObject(form?.getFormGraph())),
+      graph: form && JSON.stringify(graph),
     },
     '*'
   )
@@ -57,6 +67,12 @@ const HOOK = {
   hasFormilyInstance: false,
   hasOpenDevtools: false,
   store: {},
+  openDevtools() {
+    this.hasOpenDevtools = true
+  },
+  closeDevtools() {
+    this.hasOpenDevtools = false
+  },
   inject(id: number, form: any) {
     this.hasFormilyInstance = true
     this.store[id] = form
@@ -82,6 +98,7 @@ const HOOK = {
       })
     }
     form.subscribe(() => {
+      if (!this.hasOpenDevtools) return
       clearTimeout(timer)
       timer = setTimeout(task, 300)
     })
