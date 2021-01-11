@@ -115,6 +115,7 @@ export class Form {
       setSubmitting: action,
       setValidating: action,
       setFormGraph: action,
+      clearFormGraph: action,
       onMount: action,
       onUnmount: action,
       onInit: action,
@@ -475,6 +476,10 @@ export class Form {
 
   setFormGraph = (graph: IFormGraph) => {
     this.graph.setGraph(graph)
+  }
+
+  clearFormGraph = () => {
+    this.fields = {}
   }
 
   validate = async (pattern: FormPathPattern = '*') => {
