@@ -101,4 +101,6 @@ ArrayItems.Item = (props) => {
   )
 }
 
+ArrayBase.mixin(ArrayItems)
+
 export default ArrayItems

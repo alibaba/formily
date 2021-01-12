@@ -7,6 +7,7 @@ import {
   PlusOutlined,
   MenuOutlined,
 } from '@ant-design/icons'
+import { isValid } from '@formily/shared'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from '@alifd/next/lib/button'
 import { useField } from '@formily/react'
@@ -19,6 +20,7 @@ import cls from 'classnames'
 interface IAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
+  defaultValue?: any
 }
 
 interface IContext {
@@ -61,6 +63,20 @@ const useIndex = () => {
   return useContext(ItemContext)?.index
 }
 
+const getDefaultValue = (defaultValue: any, schema: Schema) => {
+  if (isValid(defaultValue)) return defaultValue
+  if (Array.isArray(schema?.items))
+    return getDefaultValue(defaultValue, schema.items[0])
+  if (schema?.items?.type === 'array') return []
+  if (schema?.items?.type === 'boolean') return true
+  if (schema?.items?.type === 'date') return ''
+  if (schema?.items?.type === 'datetime') return ''
+  if (schema?.items?.type === 'number') return 0
+  if (schema?.items?.type === 'object') return {}
+  if (schema?.items?.type === 'string') return ''
+  return null
+}
+
 export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useSchema()
@@ -101,10 +117,11 @@ ArrayBase.Addition = (props) => {
       className={cls(`${prefixCls}-addition`, props.className)}
       style={{ display: 'block', width: '100%', ...props.style }}
       onClick={() => {
+        const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
-          array?.field?.unshift(null)
+          array?.field?.unshift(defaultValue)
         } else {
-          array?.field?.push(null)
+          array?.field?.push(defaultValue)
         }
       }}
     >

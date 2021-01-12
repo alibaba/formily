@@ -10,6 +10,7 @@ import {
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from 'antd/lib/button'
 import { useField } from '@formily/react'
+import { isValid } from '@formily/shared'
 import { useSchema } from '@formily/react-schema-field'
 import { Schema } from 'packages/json-schema'
 import { SortableHandle } from 'react-sortable-hoc'
@@ -61,6 +62,20 @@ const useIndex = () => {
   return useContext(ItemContext)?.index
 }
 
+const getDefaultValue = (defaultValue: any, schema: Schema) => {
+  if (isValid(defaultValue)) return defaultValue
+  if (Array.isArray(schema?.items))
+    return getDefaultValue(defaultValue, schema.items[0])
+  if (schema?.items?.type === 'array') return []
+  if (schema?.items?.type === 'boolean') return true
+  if (schema?.items?.type === 'date') return ''
+  if (schema?.items?.type === 'datetime') return ''
+  if (schema?.items?.type === 'number') return 0
+  if (schema?.items?.type === 'object') return {}
+  if (schema?.items?.type === 'string') return ''
+  return null
+}
+
 export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useSchema()
@@ -93,7 +108,7 @@ ArrayBase.Index = () => {
 
 ArrayBase.Addition = (props) => {
   const self = useField()
-  const base = useArray()
+  const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
   return (
     <Button
@@ -102,10 +117,11 @@ ArrayBase.Addition = (props) => {
       {...props}
       className={cls(`${prefixCls}-addition`, props.className)}
       onClick={(e) => {
+        const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
-          base?.field?.unshift({})
+          array?.field?.unshift(defaultValue)
         } else {
-          base?.field?.push({})
+          array?.field?.push(defaultValue)
         }
       }}
       icon={<PlusOutlined />}
