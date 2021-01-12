@@ -1,41 +1,14 @@
-import React, { createContext, useContext } from 'react'
-import { Button, Card, Empty } from 'antd'
-import {
-  DeleteOutlined,
-  DownOutlined,
-  UpOutlined,
-  PlusOutlined,
-} from '@ant-design/icons'
-import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
-import { ButtonProps } from 'antd/lib/button'
+import React from 'react'
+import { Card, Empty } from 'antd'
 import { CardProps } from 'antd/lib/card'
 import { useField, observer } from '@formily/react'
 import { useSchema, RecursionField } from '@formily/react-schema-field'
 import cls from 'classnames'
 import { ISchema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
-interface IArrayCardsAdditionProps extends ButtonProps {
-  title?: string
-  method?: 'push' | 'unshift'
-}
+import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
-type SupportPrefixCls<P> = P & {
-  prefixCls?: string
-}
-
-type ComposedArrayCards = React.FC<CardProps> & {
-  Addition?: React.FC<IArrayCardsAdditionProps>
-  Index?: React.FC
-  Remove?: React.FC<SupportPrefixCls<AntdIconProps>>
-  MoveUp?: React.FC<SupportPrefixCls<AntdIconProps>>
-  MoveDown?: React.FC<SupportPrefixCls<AntdIconProps>>
-  useArrayCards?: () => Formily.Core.Models.ArrayField
-  useArrayCardsIndex?: () => number
-}
-
-const ArrayContext = createContext<Formily.Core.Models.ArrayField>(null)
-
-const ArrayIndexContext = createContext<number>(null)
+type ComposedArrayCards = React.FC<CardProps> & ArrayBaseMixins
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema['x-component']?.indexOf('Addition') > -1
@@ -116,7 +89,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         />
       )
       return (
-        <ArrayIndexContext.Provider key={index} value={index}>
+        <ArrayBase.Item key={index} index={index}>
           <Card
             {...props}
             onChange={() => {}}
@@ -126,7 +99,7 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
           >
             {content}
           </Card>
-        </ArrayIndexContext.Provider>
+        </ArrayBase.Item>
       )
     })
   }
@@ -155,95 +128,16 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
   }
 
   return (
-    <ArrayContext.Provider value={field}>
+    <ArrayBase>
       {renderEmpty()}
       {renderItems()}
       {renderAddition()}
-    </ArrayContext.Provider>
+    </ArrayBase>
   )
 })
 
 ArrayCards.displayName = 'ArrayCards'
 
-ArrayCards.useArrayCards = () => useContext(ArrayContext)
-
-ArrayCards.useArrayCardsIndex = () => useContext(ArrayIndexContext)
-
-ArrayCards.Index = (props) => {
-  const index = ArrayCards.useArrayCardsIndex()
-  return <span>#{index + 1}.</span>
-}
-
-ArrayCards.Addition = (props) => {
-  const self = useField()
-  const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('formily-array-cards', props)
-  return (
-    <Button
-      type="dashed"
-      block
-      {...props}
-      className={cls(`${prefixCls}-addition`, props.className)}
-      onClick={() => {
-        if (props.method === 'unshift') {
-          field.unshift(null)
-        } else {
-          field.push(null)
-        }
-      }}
-      icon={<PlusOutlined />}
-    >
-      {self.title || props.title}
-    </Button>
-  )
-}
-
-ArrayCards.Remove = React.forwardRef((props, ref) => {
-  const index = ArrayCards.useArrayCardsIndex()
-  const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('formily-array-cards', props)
-  return (
-    <DeleteOutlined
-      {...props}
-      className={cls(`${prefixCls}-remove`, props.className)}
-      ref={ref}
-      onClick={() => {
-        field.remove(index)
-      }}
-    />
-  )
-})
-
-ArrayCards.MoveDown = React.forwardRef((props, ref) => {
-  const index = ArrayCards.useArrayCardsIndex()
-  const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('formily-array-cards', props)
-  return (
-    <DownOutlined
-      {...props}
-      className={cls(`${prefixCls}-move-down`, props.className)}
-      ref={ref}
-      onClick={() => {
-        field.moveDown(index)
-      }}
-    />
-  )
-})
-
-ArrayCards.MoveUp = React.forwardRef((props, ref) => {
-  const index = ArrayCards.useArrayCardsIndex()
-  const field = ArrayCards.useArrayCards()
-  const prefixCls = usePrefixCls('formily-array-cards', props)
-  return (
-    <UpOutlined
-      {...props}
-      className={cls(`${prefixCls}-move-up`, props.className)}
-      ref={ref}
-      onClick={() => {
-        field.moveUp(index)
-      }}
-    />
-  )
-})
+ArrayBase.mixin(ArrayCards)
 
 export default ArrayCards

@@ -1,20 +1,5 @@
-import React, {
-  createContext,
-  Fragment,
-  useContext,
-  useState,
-  useRef,
-} from 'react'
-import { Table, Button, Pagination, Select, Badge } from '@alifd/next'
-import {
-  DeleteOutlined,
-  DownOutlined,
-  UpOutlined,
-  PlusOutlined,
-  MenuOutlined,
-} from '@ant-design/icons'
-import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
-import { ButtonProps } from '@alifd/next/lib/button'
+import React, { Fragment, useState, useRef } from 'react'
+import { Table, Pagination, Select, Badge } from '@alifd/next'
 import { PaginationProps } from '@alifd/next/lib/pagination'
 import { TableProps, ColumnProps } from '@alifd/next/lib/table'
 import { SelectProps } from '@alifd/next/lib/select'
@@ -28,6 +13,7 @@ import {
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
+import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
 interface ObservableColumnSource {
   field: Formily.Core.Models.VoidField
@@ -36,10 +22,6 @@ interface ObservableColumnSource {
   schema: Schema
   display: Formily.Core.Types.FieldDisplayTypes
   name: string
-}
-interface IArrayTableAdditionProps extends ButtonProps {
-  title?: string
-  method?: 'push' | 'unshift'
 }
 
 interface IArrayTablePaginationProps extends PaginationProps {
@@ -58,21 +40,10 @@ interface ExtendTableProps extends TableProps {
   pagination?: PaginationProps
 }
 
-type ComposedArrayTable = React.FC<ExtendTableProps> & {
-  SortHandle?: React.FC<AntdIconProps>
-  Addition?: React.FC<IArrayTableAdditionProps>
-  Index?: React.FC
-  Column?: React.FC<ColumnProps>
-  Remove?: React.FC<AntdIconProps>
-  MoveUp?: React.FC<AntdIconProps>
-  MoveDown?: React.FC<AntdIconProps>
-  useArrayTable?: () => Formily.Core.Models.ArrayField
-  useArrayTableIndex?: () => number
-}
-
-const ArrayContext = createContext<Formily.Core.Models.ArrayField>(null)
-
-const ArrayIndexContext = createContext<number>(null)
+type ComposedArrayTable = React.FC<ExtendTableProps> &
+  ArrayBaseMixins & {
+    Column?: React.FC<ColumnProps>
+  }
 
 const isColumnComponent = (schema: Schema) => {
   return schema['x-component']?.indexOf('Column') > -1
@@ -150,9 +121,9 @@ const useArrayTableColumns = (
       cell: (value: any, _: number, record: any) => {
         const index = dataSource.indexOf(record)
         const children = (
-          <ArrayIndexContext.Provider key={index} value={index}>
+          <ArrayBase.Item key={index} index={index}>
             <RecursionField schema={schema} name={index} onlyRenderProperties />
-          </ArrayIndexContext.Provider>
+          </ArrayBase.Item>
         )
         return children
       },
@@ -292,7 +263,7 @@ export const ArrayTable: ComposedArrayTable = observer(
       <ArrayTablePagination {...pagination} dataSource={dataSource}>
         {(dataSource, pager) => (
           <div ref={ref} className={prefixCls}>
-            <ArrayContext.Provider value={field}>
+            <ArrayBase>
               <Table
                 size="small"
                 {...omit(props, ['value', 'onChange', 'pagination'])}
@@ -311,7 +282,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                 })
               })}
               {addition}
-            </ArrayContext.Provider>
+            </ArrayBase>
           </div>
         )}
       </ArrayTablePagination>
@@ -321,98 +292,10 @@ export const ArrayTable: ComposedArrayTable = observer(
 
 ArrayTable.displayName = 'ArrayTable'
 
-ArrayTable.useArrayTable = () => useContext(ArrayContext)
-
-ArrayTable.useArrayTableIndex = () => useContext(ArrayIndexContext)
-
-ArrayTable.SortHandle = (props: any) => {
-  const prefixCls = usePrefixCls('formily-array-table')
-  return (
-    <MenuOutlined
-      {...props}
-      className={cls(`${prefixCls}-sort-handler`, props.className)}
-      style={{ ...props.style }}
-    />
-  )
-}
-
-ArrayTable.Index = (props) => {
-  const index = ArrayTable.useArrayTableIndex()
-  return <span>#{index + 1}.</span>
-}
-
-ArrayTable.Addition = (props) => {
-  const self = useField()
-  const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('formily-array-table')
-  return (
-    <Button
-      {...props}
-      style={{ display: 'block', width: '100%', ...props.style }}
-      className={cls(`${prefixCls}-addition`, props.className)}
-      onClick={(e) => {
-        if (props.method === 'unshift') {
-          field.unshift({})
-        } else {
-          field.push({})
-        }
-      }}
-    >
-      <PlusOutlined /> {self.title || props.title}
-    </Button>
-  )
-}
-
-ArrayTable.Remove = React.forwardRef((props, ref) => {
-  const index = ArrayTable.useArrayTableIndex()
-  const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('formily-array-table')
-  return (
-    <DeleteOutlined
-      {...props}
-      className={cls(`${prefixCls}-remove`, props.className)}
-      ref={ref}
-      onClick={(e) => {
-        field.remove(index)
-      }}
-    />
-  )
-})
-
-ArrayTable.MoveDown = React.forwardRef((props, ref) => {
-  const index = ArrayTable.useArrayTableIndex()
-  const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('formily-array-table')
-  return (
-    <DownOutlined
-      {...props}
-      className={cls(`${prefixCls}-move-down`, props.className)}
-      ref={ref}
-      onClick={(e) => {
-        field.moveDown(index)
-      }}
-    />
-  )
-})
-
-ArrayTable.MoveUp = React.forwardRef((props, ref) => {
-  const index = ArrayTable.useArrayTableIndex()
-  const field = ArrayTable.useArrayTable()
-  const prefixCls = usePrefixCls('formily-array-table')
-  return (
-    <UpOutlined
-      {...props}
-      className={cls(`${prefixCls}-move-up`, props.className)}
-      ref={ref}
-      onClick={(e) => {
-        field.moveUp(index)
-      }}
-    />
-  )
-})
-
 ArrayTable.Column = () => {
   return <Fragment />
 }
+
+ArrayBase.mixin(ArrayTable)
 
 export default ArrayTable

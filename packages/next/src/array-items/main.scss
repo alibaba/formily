@@ -9,41 +9,6 @@ $array-items-prefix-cls: $css-prefix+"formily-array-items";
   }
 }
 
-.#{$array-items-prefix-cls}-remove {
-  transition: all .25s ease-in-out;
-  color: $color-text1-3;
-  font-size: 16px;
-
-  &:hover {
-    color: $color-text1-1;
-  }
-}
-
-.#{$array-items-prefix-cls}-addition {
-  transition: all .25s ease-in-out;
-}
-
-
-.#{array-items-prefix-cls}-move-down {
-  transition: all .25s ease-in-out;
-  color: $color-text1-3;
-  font-size: 16px;
-
-  &:hover {
-    color: $color-text1-1;
-  }
-}
-
-.#{$array-items-prefix-cls}-move-up {
-  transition: all .25s ease-in-out;
-  color: $color-text1-3;
-  font-size: 16px;
-
-  &:hover {
-    color: $color-text1-1;
-  }
-}
-
 .#{$array-items-prefix-cls}-sort-handler {
   cursor: move;
   color: #888 !important;

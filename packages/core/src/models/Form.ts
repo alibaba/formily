@@ -513,8 +513,10 @@ export class Form {
     try {
       if (isFn(onSubmit) && this.valid) {
         results = await onSubmit(toJS(this.values))
+        this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
+      } else if (this.invalid) {
+        throw this.errors
       }
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
     } catch (e) {
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
       this.setSubmitting(false)
