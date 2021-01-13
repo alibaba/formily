@@ -79,7 +79,7 @@ export function map<T>(
   iterator: MapStringIterator<T>,
   revert?: boolean
 ): T[]
-export function map<TItem extends any[], TResult>(
+export function map<TItem, TResult>(
   val: TItem[],
   iterator: MapArrayIterator<TItem, TResult>,
   revert?: boolean
@@ -89,7 +89,7 @@ export function map<T extends {}, TResult>(
   iterator: MapObjectIterator<T[keyof T], TResult>,
   revert?: boolean
 ): Record<keyof T, TResult>
-export function map(val: any, iterator: any, revert?: boolean): any {
+export function map(val: any, iterator: any, revert?: any): any {
   const res = isArr(val) || isStr(val) ? [] : {}
   each(
     val,
