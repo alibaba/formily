@@ -5,7 +5,5 @@ const baseConfig = require('./scripts/jest.base')
 // yarn add --dev babel-jest 'babel-core@^7.0.0-bridge' @babel/core
 
 module.exports = {
-  ...baseConfig,
-  rootDir: '.',
-  projects: ['<rootDir>/pacakges/*/jest.config.js']
+  ...baseConfig
 }

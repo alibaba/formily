@@ -12,7 +12,7 @@ import {
   reduce
 } from '../array'
 import { clone } from '../clone'
-import { lowercase } from '../case'
+import { lowerCase } from '../case'
 import { deprecate } from '../deprecate'
 import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
@@ -149,8 +149,8 @@ describe('array', () => {
 
 describe('case', () => {
   test('lowercase', () => {
-    expect(lowercase('SOME_UPPER_CASE_TEXT')).toEqual('some_upper_case_text')
-    expect(lowercase('')).toEqual('')
+    expect(lowerCase('SOME_UPPER_CASE_TEXT')).toEqual('some_upper_case_text')
+    expect(lowerCase('')).toEqual('')
   })
 })
 

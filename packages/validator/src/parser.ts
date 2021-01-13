@@ -115,12 +115,12 @@ export const parseValidatorRules = (
 
 export const parseValidator = <Context = any>(
   validator: Validator<Context>,
-  options?: IValidatorOptions
+  options: IValidatorOptions = {}
 ): ValidatorParsedFunction<Context>[] => {
   const array = isArr(validator) ? validator : [validator]
   return array.reduce((buf, description) => {
     const rules = parseValidatorDescription(description)
-    if (options.triggerType && options.triggerType !== rules.triggerType)
+    if (options?.triggerType && options.triggerType !== rules.triggerType)
       return buf
     return rules ? buf.concat(parseValidatorRules(rules)) : buf
   }, [])

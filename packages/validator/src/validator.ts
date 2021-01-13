@@ -23,7 +23,7 @@ export const validate = async <Context = any>(
   const validates = parseValidator(validator, options)
   const results = {}
   for (let i = 0; i < validates.length; i++) {
-    const result = await validates[i](value, options.context)
+    const result = await validates[i](value, options?.context)
     const { type, message } = result
     results[type] = results[type] || []
     if (message) results[type].push(message)

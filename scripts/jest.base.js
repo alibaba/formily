@@ -25,14 +25,13 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.[jt]s?(x)'],
   setupFilesAfterEnv: [
     require.resolve('jest-dom/extend-expect'),
-    require.resolve('@testing-library/react/cleanup-after-each'),
     './scripts/global.ts'
   ],
   moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
       babelConfig: true,
-      tsConfig: 'tsconfig.jest.json',
+      tsconfig: 'tsconfig.jest.json',
       diagnostics: false
     }
   },
