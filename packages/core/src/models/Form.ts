@@ -32,6 +32,7 @@ import {
   IFieldStateSetter,
 } from '../types'
 import {
+  observer,
   isVoidField,
   getLifeCyclesByEffects,
   createModelStateGetter,
@@ -65,10 +66,12 @@ export class Form {
   fields: FormFields = {}
   requests: FormRequests = {}
   indexes: Map<string, string> = new Map()
+  disposers: (() => void)[] = []
 
   constructor(props: IFormProps) {
     this.initialize(props)
     this.makeObservable()
+    this.makeReactive()
     this.onInit()
   }
 
@@ -120,6 +123,17 @@ export class Form {
       onUnmount: action,
       onInit: action,
     })
+  }
+
+  protected makeReactive() {
+    this.disposers.push(
+      observer(this.initialValues, () => {
+        this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+      }),
+      observer(this.values, () => {
+        this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+      })
+    )
   }
 
   get valid() {
@@ -449,10 +463,10 @@ export class Form {
 
   onUnmount = () => {
     this.unmounted = true
-    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     this.fields = {}
     this.indexes.clear()
     this.query('*').all.get((field) => field.dispose())
+    this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)
     }

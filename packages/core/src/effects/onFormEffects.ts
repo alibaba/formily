@@ -62,9 +62,7 @@ export function onFormReact(callback?: (form: Form) => void) {
   let dispose = null
   onFormInit((form) => {
     dispose = autorun(() => {
-      runInAction(() => {
-        callback(form)
-      })
+      callback(form)
     })
   })
   onFormUnMount(() => {

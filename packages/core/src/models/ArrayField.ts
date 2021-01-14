@@ -37,16 +37,21 @@ export class ArrayField<
   pop = () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
+      const index = this.value?.length - 1
       const poped = this.value?.pop()
+      spliceArrayState(this, {
+        startIndex: index,
+        deleteCount: 1,
+      })
       this.validate('onInput')
-      return poped()
+      return poped
     })
   }
 
   insert = (index: number, ...items: any[]) => {
     if (!isArr(this.value)) return
     runInAction(() => {
-      this.value?.splice(index, 0, items)
+      this.value?.splice(index, 0, ...items)
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
@@ -81,6 +86,7 @@ export class ArrayField<
     return runInAction(() => {
       const unshifted = this.value.unshift(...items)
       spliceArrayState(this, {
+        startIndex: 0,
         insertCount: items.length,
       })
       this.validate('onInput')

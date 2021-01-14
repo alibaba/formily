@@ -216,23 +216,6 @@ export class Field<
   protected makeReactive() {
     this.disposers.push(
       reaction(
-        () => this.value,
-        () => {
-          this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
-          this.form.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE, this.form)
-        }
-      ),
-      reaction(
-        () => this.initialValue,
-        () => {
-          this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
-          this.form.notify(
-            LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE,
-            this.form
-          )
-        }
-      ),
-      reaction(
         () => this.display,
         (display) => {
           if (display === 'none') {
@@ -631,7 +614,7 @@ export class Field<
         } else {
           this.form.setValuesIn(this.path, this.props.value)
         }
-      } else {
+      } else if (isValid(this.initialValue)) {
         this.form.setValuesIn(this.path, this.initialValue)
       }
     }
