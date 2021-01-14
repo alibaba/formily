@@ -40,7 +40,11 @@ export type ValidatorParsedFunction<Context = any> = (
   ctx: Context
 ) => ValidateResult | Promise<ValidateResult> | null
 
-export type ValidatorTriggerType = 'onInput' | 'onFocus' | 'onBlur' | (string & {})
+export type ValidatorTriggerType =
+  | 'onInput'
+  | 'onFocus'
+  | 'onBlur'
+  | (string & {})
 
 export type ValidatorRules<Context = any> = {
   triggerType?: ValidatorTriggerType
@@ -58,6 +62,7 @@ export type ValidatorRules<Context = any> = {
   whitespace?: boolean
   enum?: any[]
   message?: string
+  [key: string]: any
 }
 
 export type ValidatorDescription<Context = any> =
@@ -68,9 +73,7 @@ export type ValidatorDescription<Context = any> =
 export type MultiValidator<Context = any> = ValidatorDescription<Context>[]
 
 export type Validator<Context = any> =
-  | ValidatorFormats
-  | ValidatorFunction<Context>
-  | ValidatorRules<Context>
+  | ValidatorDescription<Context>
   | MultiValidator<Context>
 
 export interface IValidatorOptions<Context = any> {

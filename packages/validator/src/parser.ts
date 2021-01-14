@@ -6,13 +6,13 @@ import {
   Validator,
   ValidatorRules,
   isValidateResult,
-  IValidatorOptions
+  IValidatorOptions,
 } from './types'
 import { getValidateRules, getValidateLocale } from './registry'
 import { render } from './template'
 
 const intersection = (arr1: string[], arr2: string[]) => {
-  return arr1.filter(key => arr2.includes(key))
+  return arr1.filter((key) => arr2.includes(key))
 }
 
 const getRuleMessage = (rule: ValidatorRules, type: string) => {
@@ -50,7 +50,7 @@ export const parseValidatorDescriptions = <Context = any>(
   validator: Validator<Context>
 ): ValidatorRules[] => {
   const array = isArr(validator) ? validator : [validator]
-  return array.map(description => {
+  return array.map((description) => {
     return parseValidatorDescription(description)
   })
 }
@@ -58,13 +58,13 @@ export const parseValidatorDescriptions = <Context = any>(
 export const parseValidatorRules = (
   rules: ValidatorRules
 ): ValidatorParsedFunction[] => {
-  const rulesKeys = Object.keys(rules || {}).sort(key =>
+  const rulesKeys = Object.keys(rules || {}).sort((key) =>
     key === 'validator' ? 1 : -1
   )
   const getContext = (context: any) => {
     return {
       ...rules,
-      ...context
+      ...context,
     }
   }
   const createValidate = (
@@ -81,7 +81,7 @@ export const parseValidatorRules = (
         return render(
           {
             type: 'error',
-            message
+            message,
           },
           getContext(getContext(context))
         )
@@ -94,7 +94,7 @@ export const parseValidatorRules = (
       return render(
         {
           type: 'error',
-          message
+          message: results,
         },
         getContext(context)
       )
@@ -102,7 +102,7 @@ export const parseValidatorRules = (
 
     return {
       type: 'error',
-      message: undefined
+      message: undefined,
     }
   }
   return rulesKeys.reduce((buf, key) => {
@@ -116,12 +116,13 @@ export const parseValidatorRules = (
 export const parseValidator = <Context = any>(
   validator: Validator<Context>,
   options: IValidatorOptions = {}
-): ValidatorParsedFunction<Context>[] => {
+) => {
   const array = isArr(validator) ? validator : [validator]
+  const results: ValidatorParsedFunction<Context>[] = []
   return array.reduce((buf, description) => {
     const rules = parseValidatorDescription(description)
     if (options?.triggerType && options.triggerType !== rules.triggerType)
       return buf
     return rules ? buf.concat(parseValidatorRules(rules)) : buf
-  }, [])
+  }, results)
 }

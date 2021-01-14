@@ -3,7 +3,6 @@ import {
   each,
   globalThisPolyfill,
   merge as deepmerge,
-  log,
   isFn,
   isStr
 } from '@formily/shared'
@@ -71,11 +70,6 @@ export const getValidateLocale = (path: string) => {
     registry.locales.messages,
     `${getISOCode(registry.locales.langugage)}.${path}`
   )
-  if (!message) {
-    log.error(
-      `field is not valid,but not found ${path} error message. Please set the language pack first through setValidationLocale`
-    )
-  }
   return message || 'Field is invalid'
 }
 
