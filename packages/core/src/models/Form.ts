@@ -507,10 +507,13 @@ export class Form {
     })
     await Promise.all(tasks)
     this.setValidating(false)
-    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
     if (this.invalid) {
+      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_FAILED)
+      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
       throw this.errors
     }
+    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS)
+    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
   }
 
   submit = async <T>(
@@ -518,29 +521,36 @@ export class Form {
   ): Promise<T> => {
     this.setSubmitting(true)
     try {
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_START)
       await this.validate()
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_SUCCESS)
     } catch (e) {
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_FAILED)
     }
+    this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END)
     let results: any
     try {
       if (isFn(onSubmit) && this.valid) {
         results = await onSubmit(toJS(this.values))
-        this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
       } else if (this.invalid) {
         throw this.errors
       }
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
     } catch (e) {
-      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
       this.setSubmitting(false)
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT_FAILED)
+      this.notify(LifeCycleTypes.ON_FORM_SUBMIT)
       throw e
     }
     this.setSubmitting(false)
+    this.notify(LifeCycleTypes.ON_FORM_SUBMIT)
     return results
   }
 
-  reset = async (pattern: FormPathPattern, options?: IFieldResetOptions) => {
+  reset = async (
+    pattern: FormPathPattern = '*',
+    options?: IFieldResetOptions
+  ) => {
     const tasks = []
     this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {

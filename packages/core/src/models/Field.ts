@@ -216,6 +216,18 @@ export class Field<
   protected makeReactive() {
     this.disposers.push(
       reaction(
+        () => this.value,
+        () => {
+          this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+        }
+      ),
+      reaction(
+        () => this.initialValue,
+        () => {
+          this.form.notify(LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE, this)
+        }
+      ),
+      reaction(
         () => this.display,
         (display) => {
           if (display === 'none') {
@@ -670,6 +682,11 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
     const results = await validateToFeedbacks(this, triggerType)
     this.setValidating(false)
+    if (this.valid) {
+      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS, this)
+    } else {
+      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED, this)
+    }
     this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     return results
   }

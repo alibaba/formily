@@ -9,11 +9,12 @@ import {
   find,
   includes,
   map,
-  reduce
+  reduce,
 } from '../array'
 import { clone } from '../clone'
 import { lowerCase } from '../case'
 import { deprecate } from '../deprecate'
+import { globalThisPolyfill } from '../global'
 import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
@@ -34,12 +35,12 @@ describe('array', () => {
     const values2 = []
     const values3 = { a: 1, b: 2, c: 3 }
     const values4 = {}
-    expect(some(values1, item => item === 3)).toBeTruthy()
-    expect(some(values1, item => item === 6)).toBeFalsy()
+    expect(some(values1, (item) => item === 3)).toBeTruthy()
+    expect(some(values1, (item) => item === 6)).toBeFalsy()
     expect(some(values2, () => true)).toBeFalsy()
     expect(some(values2, () => false)).toBeFalsy()
-    expect(some(values3, item => item === 3)).toBeTruthy()
-    expect(some(values3, item => item === 6)).toBeFalsy()
+    expect(some(values3, (item) => item === 3)).toBeTruthy()
+    expect(some(values3, (item) => item === 6)).toBeFalsy()
     expect(some(values4, () => true)).toBeFalsy()
     expect(some(values4, () => false)).toBeFalsy()
   })
@@ -49,13 +50,13 @@ describe('array', () => {
     const values2 = []
     const values3 = { a: 1, b: 2, c: 3 }
     const values4 = {}
-    expect(every(values1, item => item < 6)).toBeTruthy()
-    expect(every(values1, item => item < 3)).toBeFalsy()
+    expect(every(values1, (item) => item < 6)).toBeTruthy()
+    expect(every(values1, (item) => item < 3)).toBeFalsy()
     expect(every(values2, () => true)).toBeTruthy()
     expect(every(values2, () => false)).toBeTruthy()
     expect(every(values2, () => false)).toBeTruthy()
-    expect(every(values3, item => item < 6)).toBeTruthy()
-    expect(every(values3, item => item < 3)).toBeFalsy()
+    expect(every(values3, (item) => item < 6)).toBeTruthy()
+    expect(every(values3, (item) => item < 3)).toBeFalsy()
     expect(every(values4, () => false)).toBeTruthy()
     expect(every(values4, () => false)).toBeTruthy()
   })
@@ -64,19 +65,19 @@ describe('array', () => {
     const value = [1, 2, 3, 4, 5]
     expect(
       isEqual(
-        findIndex(value, item => item > 3),
+        findIndex(value, (item) => item > 3),
         3
       )
     ).toBeTruthy()
     expect(
       isEqual(
-        findIndex(value, item => item < 3, true),
+        findIndex(value, (item) => item < 3, true),
         1
       )
     ).toBeTruthy()
     expect(
       isEqual(
-        findIndex(value, item => item > 6),
+        findIndex(value, (item) => item > 6),
         -1
       )
     ).toBeTruthy()
@@ -86,19 +87,19 @@ describe('array', () => {
     const value = [1, 2, 3, 4, 5]
     expect(
       isEqual(
-        find(value, item => item > 3),
+        find(value, (item) => item > 3),
         4
       )
     ).toBeTruthy()
     expect(
       isEqual(
-        find(value, item => item < 3, true),
+        find(value, (item) => item < 3, true),
         2
       )
     ).toBeTruthy()
     expect(
       isEqual(
-        find(value, item => item > 6),
+        find(value, (item) => item > 6),
         void 0
       )
     ).toBeTruthy()
@@ -118,13 +119,13 @@ describe('array', () => {
     const obj = { k1: 'v1', k2: 'v2' }
     expect(
       isEqual(
-        map(value, item => item + 1, true),
+        map(value, (item) => item + 1, true),
         [6, 5, 4, 3, 2]
       )
     ).toBeTruthy()
     expect(
       isEqual(
-        map(stringVal, item => item),
+        map(stringVal, (item) => item),
         stringVal.split('')
       )
     ).toBeTruthy()
@@ -230,7 +231,7 @@ describe('clone and compare', () => {
         // eslint-disable-next-line no-console
         console.log('123')
       },
-      dd
+      dd,
       // ee,
       // ff,
       // gg
@@ -250,13 +251,13 @@ describe('clone and compare', () => {
   test('filter equal', () => {
     var a = {
       aa: {
-        bb: 123
-      }
+        bb: 123,
+      },
     }
     var b = {
       aa: {
-        bb: 123
-      }
+        bb: 123,
+      },
     }
 
     expect(isEqual(a, b)).toBeTruthy()
@@ -266,11 +267,11 @@ describe('clone and compare', () => {
   test('filter clone', () => {
     var a = {
       aa: {
-        bb: 123
+        bb: 123,
       },
       cc: {
-        dd: [1, 3, 4, 5]
-      }
+        dd: [1, 3, 4, 5],
+      },
     }
 
     var b = clone(a, (_, key) => key !== 'aa')
@@ -332,8 +333,8 @@ describe('isEmpty', () => {
     expect(isEmpty('')).toBeTruthy()
 
     // val - function
-    const emptyFunc = function() {}
-    const nonEmptyFunc = function(payload) {
+    const emptyFunc = function () {}
+    const nonEmptyFunc = function (payload) {
       console.log(payload)
     }
     expect(isEmpty(emptyFunc)).toBeTruthy()
@@ -371,7 +372,7 @@ describe('string', () => {
 
 describe('shared Subscribable', () => {
   test('Subscribable', () => {
-    const cb = jest.fn(payload => payload)
+    const cb = jest.fn((payload) => payload)
 
     // defualt subscribable
     const obj = new Subscribable()
@@ -387,12 +388,12 @@ describe('shared Subscribable', () => {
 
     // subscribable with custom filter
     const objWithCustomFilter = new Subscribable()
-    const customFilter = payload => {
+    const customFilter = (payload) => {
       payload.key2 = 'val2'
       return payload
     }
     objWithCustomFilter.subscription = {
-      filter: customFilter
+      filter: customFilter,
     }
     objWithCustomFilter.subscribe(cb)
     const handlerIdx2 = objWithCustomFilter.subscribe(cb)
@@ -403,12 +404,12 @@ describe('shared Subscribable', () => {
 
     // subscribable with custom notify
     const objWithCustomNotify = new Subscribable()
-    const customNotify = jest.fn(payload => {
+    const customNotify = jest.fn((payload) => {
       console.log(payload)
       return false
     })
     objWithCustomNotify.subscription = {
-      notify: customNotify
+      notify: customNotify,
     }
     objWithCustomNotify.subscribe(cb)
     objWithCustomNotify.notify({ key3: 'val3' })
@@ -440,97 +441,97 @@ describe('log', () => {
   test('log api', () => {
     expect(FormilyLog.log(SomeString)).toEqual({
       content: SomeString,
-      keyword: Keyword
+      keyword: Keyword,
     })
     expect(FormilyLog.log(SomeObject)).toEqual({
       content: SomeObject,
-      keyword: Keyword
+      keyword: Keyword,
     })
   })
   test('info api', () => {
     expect(FormilyLog.info(SomeString)).toEqual({
       content: SomeString,
-      keyword: Keyword
+      keyword: Keyword,
     })
     expect(FormilyLog.info(SomeObject)).toEqual({
       content: SomeObject,
-      keyword: Keyword
+      keyword: Keyword,
     })
   })
   test('warn api', () => {
     expect(FormilyLog.warn(SomeString)).toEqual({
       content: SomeString,
-      keyword: Keyword
+      keyword: Keyword,
     })
     expect(FormilyLog.warn(SomeObject)).toEqual({
       content: SomeObject,
-      keyword: Keyword
+      keyword: Keyword,
     })
 
     expect(FormilyLog.warn(SomeString, Tips)).toEqual({
       content: SomeString,
       keyword: Keyword,
-      tips: Tips
+      tips: Tips,
     })
     expect(FormilyLog.warn(SomeObject, Tips)).toEqual({
       content: SomeObject,
       keyword: Keyword,
-      tips: Tips
+      tips: Tips,
     })
   })
   test('error api', () => {
     expect(FormilyLog.error(SomeString)).toEqual({
       content: SomeString,
-      keyword: Keyword
+      keyword: Keyword,
     })
     expect(FormilyLog.error(SomeObject)).toEqual({
       content: SomeObject,
-      keyword: Keyword
+      keyword: Keyword,
     })
 
     expect(FormilyLog.error(SomeString, Tips)).toEqual({
       content: SomeString,
       keyword: Keyword,
-      tips: Tips
+      tips: Tips,
     })
     expect(FormilyLog.error(SomeObject, Tips)).toEqual({
       content: SomeObject,
       keyword: Keyword,
-      tips: Tips
+      tips: Tips,
     })
   })
   test('close open', () => {
     expect(FormilyLog.log(SomeString)).toEqual({
       content: SomeString,
-      keyword: Keyword
+      keyword: Keyword,
     })
     FormilyLog.close()
     expect(FormilyLog.log(SomeString)).toEqual({
       content: undefined,
-      keyword: Keyword
+      keyword: Keyword,
     })
     FormilyLog.open()
     expect(FormilyLog.log(SomeString)).toEqual({
       content: SomeString,
-      keyword: Keyword
+      keyword: Keyword,
     })
 
     expect(FormilyLog.warn(SomeString, Tips)).toEqual({
       content: SomeString,
       keyword: Keyword,
-      tips: Tips
+      tips: Tips,
     })
     FormilyLog.close()
     expect(FormilyLog.log(SomeString)).toEqual({
       content: undefined,
       keyword: Keyword,
-      tips: undefined
+      tips: undefined,
     })
     FormilyLog.open()
     expect(FormilyLog.warn(SomeString, Tips)).toEqual({
       content: SomeString,
       keyword: Keyword,
-      tips: Tips
+      tips: Tips,
     })
   })
 })
@@ -541,44 +542,44 @@ describe('merge', () => {
       aa: {
         bb: {
           cc: {
-            dd: 123
-          }
-        }
-      }
+            dd: 123,
+          },
+        },
+      },
     }
     const source = {
       aa: {
         bb: {
           cc: {
-            ee: '1234'
-          }
-        }
-      }
+            ee: '1234',
+          },
+        },
+      },
     }
 
     expect(
       merge(target, source, {
-        assign: true
+        assign: true,
       })
     ).toEqual({
       aa: {
         bb: {
           cc: {
             dd: 123,
-            ee: '1234'
-          }
-        }
-      }
+            ee: '1234',
+          },
+        },
+      },
     })
     expect(target).toEqual({
       aa: {
         bb: {
           cc: {
             dd: 123,
-            ee: '1234'
-          }
-        }
-      }
+            ee: '1234',
+          },
+        },
+      },
     })
   })
 
@@ -587,41 +588,39 @@ describe('merge', () => {
       aa: {
         bb: {
           cc: {
-            dd: 123
-          }
-        }
-      }
+            dd: 123,
+          },
+        },
+      },
     }
     const source = {
       aa: {
         bb: {
           cc: {
-            ee: '1234'
-          }
-        }
-      }
+            ee: '1234',
+          },
+        },
+      },
     }
 
-    expect(
-      merge(target, source)
-    ).toEqual({
+    expect(merge(target, source)).toEqual({
       aa: {
         bb: {
           cc: {
             dd: 123,
-            ee: '1234'
-          }
-        }
-      }
+            ee: '1234',
+          },
+        },
+      },
     })
     expect(target).toEqual({
       aa: {
         bb: {
           cc: {
-            dd: 123
-          }
-        }
-      }
+            dd: 123,
+          },
+        },
+      },
     })
   })
 })
@@ -633,17 +632,17 @@ describe('BigData', () => {
     const bigData1 = structure.create({
       ff: {
         gg: {
-          hh: 123
-        }
-      }
+          hh: 123,
+        },
+      },
     })
 
     const bigData2 = {
       ff: {
         gg: {
-          hh: 123
-        }
-      }
+          hh: 123,
+        },
+      },
     }
 
     const merged1 = merge(
@@ -651,19 +650,19 @@ describe('BigData', () => {
         aa: {
           bb: {
             cc: {
-              dd: 123
-            }
-          }
-        }
+              dd: 123,
+            },
+          },
+        },
       },
       {
         aa: {
           bb: {
             cc: {
-              ee: bigData1
-            }
-          }
-        }
+              ee: bigData1,
+            },
+          },
+        },
       }
     )
 
@@ -672,23 +671,27 @@ describe('BigData', () => {
         aa: {
           bb: {
             cc: {
-              dd: 123
-            }
-          }
-        }
+              dd: 123,
+            },
+          },
+        },
       },
       {
         aa: {
           bb: {
             cc: {
-              ee: bigData2
-            }
-          }
-        }
+              ee: bigData2,
+            },
+          },
+        },
       }
     )
 
     expect(merged1.aa.bb.cc.ee === bigData1).toBeTruthy()
     expect(merged2.aa.bb.cc.ee === bigData2).toBeFalsy()
   })
+})
+
+describe('globalThis', () => {
+  expect(globalThisPolyfill.requestAnimationFrame).not.toBeUndefined()
 })

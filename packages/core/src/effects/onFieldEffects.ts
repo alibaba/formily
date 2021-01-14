@@ -47,7 +47,12 @@ export const onFieldValidateStart = createFieldEffect(
 export const onFieldValidateEnd = createFieldEffect(
   LifeCycleTypes.ON_FIELD_VALIDATE_END
 )
-
+export const onFieldValidateFailed = createFieldEffect(
+  LifeCycleTypes.ON_FIELD_VALIDATE_FAILED
+)
+export const onFieldValidateSuccess = createFieldEffect(
+  LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS
+)
 export function onFieldReact(
   pattern: FormPathPattern,
   callback?: (field: GeneralField, form: Form) => void

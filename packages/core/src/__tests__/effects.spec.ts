@@ -24,9 +24,12 @@ import {
   onFormSubmitValidateFailed,
   onFormSubmitValidateStart,
   onFormSubmitValidateSuccess,
+  onFormSubmitValidateEnd,
   onFormUnMount,
   onFormValidateEnd,
   onFormValidateStart,
+  onFormValidateFailed,
+  onFormValidateSuccess,
   onFormValuesChange,
 } from '../'
 import { attach } from './shared'
@@ -123,4 +126,131 @@ test('onFormReact', () => {
   expect(react).not.toBeCalled()
   form.setValues({ aa: 123 })
   expect(react).toBeCalled()
+})
+
+test('onFormReset', async () => {
+  const reset = jest.fn()
+  const form = attach(
+    createForm({
+      initialValues: {
+        aa: 123,
+      },
+      effects() {
+        onFormReset(reset)
+      },
+    })
+  )
+
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+
+  field.setValue('xxxx')
+
+  expect(field.value).toEqual('xxxx')
+  expect(form.values.aa).toEqual('xxxx')
+  expect(reset).not.toBeCalled()
+  await form.reset()
+  expect(field.value).toEqual(123)
+  expect(form.values.aa).toEqual(123)
+  expect(reset).toBeCalled()
+})
+
+test('onFormSubmit', async () => {
+  const submit = jest.fn()
+  const submitStart = jest.fn()
+  const submitEnd = jest.fn()
+  const submitSuccess = jest.fn()
+  const submitFailed = jest.fn()
+  const submitValidateStart = jest.fn()
+  const submitValidateFailed = jest.fn()
+  const submitValidateSuccess = jest.fn()
+  const submitValidateEnd = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFormSubmitStart(submitStart)
+        onFormSubmit(submit)
+        onFormSubmitEnd(submitEnd)
+        onFormSubmitFailed(submitFailed)
+        onFormSubmitSuccess(submitSuccess)
+        onFormSubmitValidateStart(submitValidateStart)
+        onFormSubmitValidateFailed(submitValidateFailed)
+        onFormSubmitValidateSuccess(submitValidateSuccess)
+        onFormSubmitValidateEnd(submitValidateEnd)
+      },
+    })
+  )
+
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  try {
+    await form.submit()
+  } catch {}
+  expect(submitStart).toBeCalled()
+  expect(submit).toBeCalled()
+  expect(submitEnd).toBeCalled()
+  expect(submitSuccess).not.toBeCalled()
+  expect(submitFailed).toBeCalled()
+  expect(submitValidateStart).toBeCalled()
+  expect(submitValidateFailed).toBeCalled()
+  expect(submitValidateSuccess).not.toBeCalled()
+  expect(submitValidateEnd).toBeCalled()
+  field.onInput('123')
+  try {
+    await form.submit()
+  } catch (e) {}
+  expect(submitStart).toBeCalledTimes(2)
+  expect(submit).toBeCalledTimes(2)
+  expect(submitEnd).toBeCalledTimes(2)
+  expect(submitSuccess).toBeCalledTimes(1)
+  expect(submitFailed).toBeCalledTimes(1)
+  expect(submitValidateStart).toBeCalledTimes(2)
+  expect(submitValidateFailed).toBeCalledTimes(1)
+  expect(submitValidateSuccess).toBeCalledTimes(1)
+  expect(submitValidateEnd).toBeCalledTimes(2)
+})
+
+test('onFormValidate', async () => {
+  const validateStart = jest.fn()
+  const validateEnd = jest.fn()
+  const validateFailed = jest.fn()
+  const validateSuccess = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFormValidateStart(validateStart)
+        onFormValidateEnd(validateEnd)
+        onFormValidateFailed(validateFailed)
+        onFormValidateSuccess(validateSuccess)
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  try {
+    await form.validate()
+  } catch {}
+  expect(validateStart).toBeCalled()
+  expect(validateEnd).toBeCalled()
+  expect(validateFailed).toBeCalled()
+  expect(validateSuccess).not.toBeCalled()
+  field.onInput('123')
+  try {
+    await form.validate()
+  } catch {}
+  expect(validateStart).toBeCalledTimes(2)
+  expect(validateEnd).toBeCalledTimes(2)
+  expect(validateFailed).toBeCalledTimes(1)
+  expect(validateSuccess).toBeCalledTimes(1)
 })
