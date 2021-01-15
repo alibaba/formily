@@ -1,11 +1,7 @@
 import { makeObservable, action } from 'mobx'
 import { each, FormPath } from '@formily/shared'
-import { IFormGraph } from '../types'
-import { Field } from './Field'
+import { GeneralField, IFormGraph } from '../types'
 import { Form } from './Form'
-import { ArrayField } from './ArrayField'
-import { ObjectField } from './ObjectField'
-import { VoidField } from './VoidField'
 import {
   isFormState,
   isFieldState,
@@ -42,18 +38,20 @@ export class Graph {
         if (field) {
           field.setState(state as any)
         } else {
+          let _field: GeneralField
           const _address = FormPath.parse(address)
           const name = _address.segments[_address.segments.length - 1]
+          const basePath = _address.parent()
           if (isFieldState(state)) {
-            form.fields[address] = new Field(address, { name }, form)
+            _field = this.form.createField({ name, basePath })
           } else if (isArrayFieldState(state)) {
-            form.fields[address] = new ArrayField(address, { name }, form)
+            _field = this.form.createArrayField({ name, basePath })
           } else if (isObjectFieldState(state)) {
-            form.fields[address] = new ObjectField(address, { name }, form)
+            _field = this.form.createObjectField({ name, basePath })
           } else {
-            form.fields[address] = new VoidField(address, { name }, form)
+            _field = this.form.createVoidField({ name, basePath })
           }
-          form.fields[address].setState(state as any)
+          _field.setState(state as any)
         }
       }
     })

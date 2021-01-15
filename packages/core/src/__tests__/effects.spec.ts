@@ -9,6 +9,8 @@ import {
   onFieldUnMount,
   onFieldValidateEnd,
   onFieldValidateStart,
+  onFieldValidateFailed,
+  onFieldValidateSuccess,
   onFieldValueChange,
   onFormInit,
   onFormInitialValuesChange,
@@ -31,6 +33,7 @@ import {
   onFormValidateFailed,
   onFormValidateSuccess,
   onFormValuesChange,
+  isVoidField,
 } from '../'
 import { attach } from './shared'
 
@@ -253,4 +256,163 @@ test('onFormValidate', async () => {
   expect(validateEnd).toBeCalledTimes(2)
   expect(validateFailed).toBeCalledTimes(1)
   expect(validateSuccess).toBeCalledTimes(1)
+})
+
+test('onFieldChange', () => {
+  const fieldChange = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldChange(
+          'aa',
+          [
+            'value',
+            'disabled',
+            'initialized',
+            'inputValue',
+            'loading',
+            'visible',
+            'editable',
+          ],
+          fieldChange
+        )
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(fieldChange).toBeCalledTimes(1)
+  field.setValue('123')
+  expect(fieldChange).toBeCalledTimes(2)
+  field.onInput('321')
+  expect(fieldChange).toBeCalledTimes(3)
+  field.setLoading(true)
+  expect(fieldChange).toBeCalledTimes(4)
+  field.setPattern('disabled')
+  expect(fieldChange).toBeCalledTimes(5)
+  field.setDisplay('none')
+  expect(fieldChange).toBeCalledTimes(6)
+})
+
+test('onFieldInit/onFieldMount/onFieldUnmount', () => {
+  const fieldInit = jest.fn()
+  const fieldMount = jest.fn()
+  const fieldUnmount = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldInit('aa', fieldInit)
+        onFieldMount('aa', fieldMount)
+        onFieldUnMount('aa', fieldUnmount)
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(fieldInit).toBeCalledTimes(1)
+  expect(fieldMount).toBeCalledTimes(1)
+  expect(fieldUnmount).toBeCalledTimes(0)
+  field.onUnmount()
+  expect(fieldUnmount).toBeCalledTimes(1)
+})
+
+test('onFieldInitialValueChange/onFieldValueChange/onFieldInputValueChange', () => {
+  const fieldValueChange = jest.fn()
+  const fieldInitialValueChange = jest.fn()
+  const fieldInputValueChange = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldInitialValueChange('aa', fieldInitialValueChange)
+        onFieldValueChange('aa', fieldValueChange)
+        onFieldInputValueChange('aa', fieldInputValueChange)
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  field.setValue('123')
+  expect(fieldValueChange).toBeCalledTimes(1)
+  expect(fieldInitialValueChange).toBeCalledTimes(0)
+  expect(fieldInputValueChange).toBeCalledTimes(0)
+  field.setInitialValue('xxx')
+  expect(fieldValueChange).toBeCalledTimes(1)
+  expect(fieldInitialValueChange).toBeCalledTimes(1)
+  expect(fieldInputValueChange).toBeCalledTimes(0)
+  field.onInput('321')
+  expect(fieldValueChange).toBeCalledTimes(2)
+  expect(fieldInitialValueChange).toBeCalledTimes(1)
+  expect(fieldInputValueChange).toBeCalledTimes(1)
+})
+
+test('onFieldReact', () => {
+  const react = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldReact('aa', (field) => {
+          if (isVoidField(field)) return
+          if (field.value) {
+            react()
+          }
+          if (field.display === 'hidden') {
+            react()
+          }
+        })
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(react).not.toBeCalled()
+  form.setValues({ aa: 123 })
+  expect(react).toBeCalledTimes(1)
+  field.setDisplay('hidden')
+  expect(react).toBeCalledTimes(3)
+})
+
+test('onFieldValidate', async () => {
+  const validateStart = jest.fn()
+  const validateFailed = jest.fn()
+  const validateSuccess = jest.fn()
+  const validateEnd = jest.fn()
+  const form = attach(
+    createForm({
+      effects() {
+        onFieldValidateStart('aa', validateStart)
+        onFieldValidateEnd('aa', validateEnd)
+        onFieldValidateFailed('aa', validateFailed)
+        onFieldValidateSuccess('aa', validateSuccess)
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  await field.validate()
+  expect(validateStart).toBeCalled()
+  expect(validateFailed).toBeCalled()
+  expect(validateSuccess).not.toBeCalled()
+  expect(validateEnd).toBeCalled()
+  field.setValue('123')
+  await field.validate()
+  expect(validateStart).toBeCalledTimes(2)
+  expect(validateFailed).toBeCalledTimes(1)
+  expect(validateSuccess).toBeCalledTimes(1)
+  expect(validateEnd).toBeCalledTimes(2)
 })

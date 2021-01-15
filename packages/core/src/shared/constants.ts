@@ -9,7 +9,7 @@ export const ReservedProperties = [
   'graph',
   'indexes',
   'fields',
-  'lifecycles',
+  'lifecycles'
 ]
 
 export const GetterSetterProperties = [

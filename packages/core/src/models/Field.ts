@@ -458,7 +458,7 @@ export class Field<
             required,
           },
         ]
-      } else {
+      } else if (required) {
         this.validator = [
           {
             required,
@@ -644,9 +644,9 @@ export class Field<
     const value = values[0]
     this.inputValue = value
     this.inputValues = values
+    this.value = value
     this.modified = true
     this.form.modified = true
-    this.form.setValuesIn(this.path, value)
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     this.validate('onInput')
@@ -664,6 +664,20 @@ export class Field<
   }
 
   validate = async (triggerType?: ValidatorTriggerType) => {
+    const start = () => {
+      this.setValidating(true)
+      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
+    }
+    const end = () => {
+      this.setValidating(false)
+      if (this.valid) {
+        this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS, this)
+      } else {
+        this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED, this)
+      }
+      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
+    }
+    start()
     if (!triggerType) {
       const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
         (desc) => desc.triggerType
@@ -676,18 +690,11 @@ export class Field<
           results[key] = results[key].concat(result)
         })
       }
+      end()
       return results
     }
-    this.setValidating(true)
-    this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_START, this)
     const results = await validateToFeedbacks(this, triggerType)
-    this.setValidating(false)
-    if (this.valid) {
-      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS, this)
-    } else {
-      this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_FAILED, this)
-    }
-    this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
+    end()
     return results
   }
 

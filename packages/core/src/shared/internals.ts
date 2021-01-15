@@ -376,19 +376,52 @@ export const subscribeUpdate = (
 }
 
 export const setModelState = (model: any, setter: any) => {
+  const isSkipProperty = (key: string) => {
+    if (key === 'address' || key === 'path') return true
+    if (key === 'errors' || key === 'warnings' || key === 'successes') {
+      if (setter.feedbacks?.length) {
+        return true
+      }
+    }
+    if (
+      (key === 'display' || key === 'visible' || key === 'hidden') &&
+      'selfDisplay' in setter &&
+      !isValid(setter.selfDisplay)
+    ) {
+      return true
+    }
+    if (
+      (key === 'pattern' ||
+        key === 'editable' ||
+        key === 'disabled' ||
+        key === 'readOnly' ||
+        key === 'readPretty') &&
+      'selfPattern' in setter &&
+      !isValid(setter.selfPattern)
+    ) {
+      return true
+    }
+    return false
+  }
   if (isFn(setter)) {
     setter(model)
   } else {
     each(GetterSetterProperties, (key) => {
+      if (isSkipProperty(key)) return
       if (isValid(setter[key])) {
-        model[key] = setter[key]
+        try {
+          model[key] = setter[key]
+        } catch {}
       }
     })
     each(setter, (value, key) => {
       if (isFn(value)) return
       if (ReservedProperties.includes(key)) return
+      if (isSkipProperty(key)) return
       if (isValid(value)) {
-        model[key] = value
+        try {
+          model[key] = value
+        } catch {}
       }
     })
   }
@@ -411,7 +444,7 @@ export const getModelState = (model: any, getter?: any) => {
           return buf
         }
         if (ReservedProperties.includes(key)) return buf
-        if (value && value instanceof FormPath) {
+        if (key === 'address' || key === 'path') {
           buf[key] = value.toString()
           return buf
         }
