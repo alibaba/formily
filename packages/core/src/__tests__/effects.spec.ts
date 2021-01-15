@@ -129,6 +129,7 @@ test('onFormReact', () => {
   expect(react).not.toBeCalled()
   form.setValues({ aa: 123 })
   expect(react).toBeCalled()
+  form.onUnmount()
 })
 
 test('onFormReset', async () => {
@@ -381,6 +382,7 @@ test('onFieldReact', () => {
   expect(react).toBeCalledTimes(1)
   field.setDisplay('hidden')
   expect(react).toBeCalledTimes(3)
+  form.onUnmount()
 })
 
 test('onFieldValidate', async () => {

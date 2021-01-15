@@ -375,10 +375,13 @@ export const subscribeUpdate = (
   }
 }
 
-export const setModelState = (model: any, setter: any) => {
+export const setModelState = (model: any, setter: any, exclude?: string[]) => {
   const isSkipProperty = (key: string) => {
+    if (exclude?.includes?.(key)) return true
     if (key === 'address' || key === 'path') return true
+    if (key === 'valid' || key === 'invalid') return true
     if (key === 'errors' || key === 'warnings' || key === 'successes') {
+      if (model?.displayName === 'Form') return true
       if (setter.feedbacks?.length) {
         return true
       }
@@ -409,9 +412,7 @@ export const setModelState = (model: any, setter: any) => {
     each(GetterSetterProperties, (key) => {
       if (isSkipProperty(key)) return
       if (isValid(setter[key])) {
-        try {
-          model[key] = setter[key]
-        } catch {}
+        model[key] = setter[key]
       }
     })
     each(setter, (value, key) => {
@@ -419,20 +420,19 @@ export const setModelState = (model: any, setter: any) => {
       if (ReservedProperties.includes(key)) return
       if (isSkipProperty(key)) return
       if (isValid(value)) {
-        try {
-          model[key] = value
-        } catch {}
+        model[key] = value
       }
     })
   }
 }
 
-export const getModelState = (model: any, getter?: any) => {
+export const getModelState = (model: any, getter?: any, exclude?: string[]) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
     const results = {}
     each(GetterSetterProperties, (key) => {
+      if (exclude?.includes?.(key)) return
       if (isValid(model[key])) {
         results[key] = model[key]
       }
@@ -443,6 +443,7 @@ export const getModelState = (model: any, getter?: any) => {
         if (isFn(value)) {
           return buf
         }
+        if (exclude?.includes?.(key)) return buf
         if (ReservedProperties.includes(key)) return buf
         if (key === 'address' || key === 'path') {
           buf[key] = value.toString()
@@ -456,12 +457,12 @@ export const getModelState = (model: any, getter?: any) => {
   }
 }
 
-export const createModelStateSetter = (model: any) => {
-  return action((state?: any) => setModelState(model, state))
+export const createModelStateSetter = (model: any, exclude?: string[]) => {
+  return action((state?: any) => setModelState(model, state, exclude))
 }
 
-export const createModelStateGetter = (model: any) => {
-  return (getter?: any) => getModelState(model, getter)
+export const createModelStateGetter = (model: any, exclude?: string[]) => {
+  return (getter?: any) => getModelState(model, getter, exclude)
 }
 
 export const createFieldStateSetter = (form: Form) => {
