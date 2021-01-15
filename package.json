@@ -21,6 +21,7 @@
     "test:react-schema":"jest packages/react-schema-field/src/__tests__/*.spec.tsx",
     "test:react-schema:watch":"npm run test:react-schema --- --watch",
     "test:watch": "cross-env RTL_SKIP_AUTO_CLEANUP=true jest --watch",
+    "test:prod": "cross-env TEST_ENV=production npm run build && npm test",
     "coverage": "npm run test -- --coverage",
     "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
     "prevesion": "npm run build && npm run lint && npm run test",

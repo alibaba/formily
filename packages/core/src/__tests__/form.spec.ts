@@ -7,3 +7,7 @@ test('create form', () => {
 })
 
 test('valid/invalid/errors/warnings/successes', () => {})
+
+test('pattern/editable/readOnly/disabled/readPretty', () => {})
+
+test('createField/createArrayField/createObjectField/createVoidField', () => {})
