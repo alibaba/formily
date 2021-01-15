@@ -6,8 +6,8 @@ import {
   isValid,
   uid,
   globalThisPolyfill,
-  clone,
   defaults,
+  isEmpty,
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -56,8 +56,8 @@ export class Form {
   submitting: boolean
   modified: boolean
   pattern: FormPatternTypes
-  values: any
-  initialValues: any
+  originValues: any
+  originInitialValues: any
   mounted: boolean
   unmounted: boolean
   props: IFormProps
@@ -85,9 +85,8 @@ export class Form {
     this.mounted = false
     this.unmounted = false
     this.pattern = this.props.pattern || 'editable'
-    this.values =
-      clone(this.props.values) || clone(this.props.initialValues) || {}
-    this.initialValues = clone(this.props.initialValues) || {}
+    this.originValues = this.props.values || {}
+    this.originInitialValues = this.props.initialValues || {}
     this.graph = new Graph(this)
     this.heart = new Heart({
       lifecycles: this.lifecycles,
@@ -105,8 +104,8 @@ export class Form {
       pattern: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
-      values: observable,
-      initialValues: observable,
+      originValues: observable,
+      originInitialValues: observable,
       setValues: action,
       setValuesIn: action,
       setInitialValues: action,
@@ -127,10 +126,10 @@ export class Form {
 
   protected makeReactive() {
     this.disposers.push(
-      observer(this.initialValues, () => {
+      observer(this.originInitialValues, () => {
         this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
       }),
-      observer(this.values, () => {
+      observer(this.originValues, () => {
         this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
       })
     )
@@ -294,48 +293,65 @@ export class Form {
 
   /** 状态操作模型 **/
 
-  setValues = (values: any) => {
+  set values(values: any) {
     this.modified = true
-    this.values = values
+    this.originValues = defaults(this.originValues, values)
     this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
 
-  setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.values, pattern, value)
+  get values() {
+    return defaults(this.originInitialValues, this.originValues)
   }
 
-  deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.values, pattern)
+  set initialValues(initialValues: any) {
+    this.originInitialValues = defaults(this.originInitialValues, initialValues)
+    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
   }
 
-  existValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.values, pattern)
+  get initialValues() {
+    return this.originInitialValues
   }
 
-  getValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.values, pattern)
+  setValues = (values: any) => {
+    this.values = values
   }
 
   setInitialValues = (initialValues: any) => {
     this.initialValues = initialValues
-    this.values = defaults(this.initialValues, this.values)
-    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+  }
+
+  setValuesIn = (pattern: FormPathPattern, value: any) => {
+    FormPath.setIn(this.originValues, pattern, value)
+  }
+
+  deleteValuesIn = (pattern: FormPathPattern) => {
+    FormPath.deleteIn(this.originValues, pattern)
+  }
+
+  existValuesIn = (pattern: FormPathPattern) => {
+    return FormPath.existIn(this.originValues, pattern)
+  }
+
+  getValuesIn = (pattern: FormPathPattern) => {
+    const value = FormPath.getIn(this.originValues, pattern)
+    const initialValue = FormPath.getIn(this.originInitialValues, pattern)
+    return isEmpty(value) && isValid(initialValue) ? initialValue : value
   }
 
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
-    FormPath.setIn(this.initialValues, pattern, initialValue)
+    FormPath.setIn(this.originInitialValues, pattern, initialValue)
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, pattern)
+    FormPath.deleteIn(this.originInitialValues, pattern)
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.initialValues, pattern)
+    return FormPath.existIn(this.originInitialValues, pattern)
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.initialValues, pattern)
+    return FormPath.getIn(this.originInitialValues, pattern)
   }
 
   setSubmitting = (submitting: boolean) => {

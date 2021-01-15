@@ -35,8 +35,8 @@
   "dependencies": {
     "@formily/core": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "react-json-view": "^1.19.1",
     "react-treebeard": "^3.2.4"
   },

@@ -307,13 +307,11 @@ export class Field<
   }
 
   get value(): ValueType {
-    const value = this.form.getValuesIn(this.path)
-    return isValid(value) ? value : undefined
+    return this.form.getValuesIn(this.path)
   }
 
   get initialValue(): ValueType {
-    const initialValue = this.form.getInitialValuesIn(this.path)
-    return isValid(initialValue) ? initialValue : undefined
+    return this.form.getInitialValuesIn(this.path)
   }
 
   get display(): FieldDisplayTypes {
@@ -616,19 +614,11 @@ export class Field<
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    if (!isValid(this.initialValue)) {
+    if (isEmpty(this.initialValue) && isValid(this.props.initialValue)) {
       this.form.setInitialValuesIn(this.path, this.props.initialValue)
     }
-    if (isEmpty(this.value)) {
-      if (isValid(this.props.value)) {
-        if (isEmpty(this.props.value) && !isEmpty(this.initialValue)) {
-          this.form.setValuesIn(this.path, this.initialValue)
-        } else {
-          this.form.setValuesIn(this.path, this.props.value)
-        }
-      } else if (isValid(this.initialValue)) {
-        this.form.setValuesIn(this.path, this.initialValue)
-      }
+    if (isEmpty(this.value) && isValid(this.props.value)) {
+      this.form.setValuesIn(this.path, this.props.value)
     }
     this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }

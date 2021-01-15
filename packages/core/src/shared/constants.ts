@@ -9,7 +9,9 @@ export const ReservedProperties = [
   'graph',
   'indexes',
   'fields',
-  'lifecycles'
+  'lifecycles',
+  'originValues',
+  'originInitialValues',
 ]
 
 export const GetterSetterProperties = [
@@ -20,6 +22,8 @@ export const GetterSetterProperties = [
   'invalid',
   'value',
   'initialValue',
+  'values',
+  'initialValues',
   'display',
   'pattern',
   'required',
