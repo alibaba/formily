@@ -1,7 +1,7 @@
 import { createForm } from '../'
 import { attach } from './shared'
 
-test('create field', () => {
+test('getGraph/setGraph', () => {
   const form = attach(createForm())
   attach(
     form.createField({
