@@ -151,6 +151,7 @@ export type FormPatternTypes =
   | 'readOnly'
   | 'disabled'
   | 'readPretty'
+export type FormDisplayTypes = 'none' | 'hidden' | 'visible'
 
 export type FormPathPattern =
   | string
@@ -206,8 +207,14 @@ export interface IFormProps {
   values?: {}
   initialValues?: {}
   pattern?: FormPatternTypes
-  effects?: (form: Form) => void
+  display?: FormDisplayTypes
+  hidden?: boolean
+  visible?: boolean
   editable?: boolean
+  disabled?: boolean
+  readOnly?: boolean
+  readPretty?: boolean
+  effects?: (form: Form) => void
   validateFirst?: boolean
 }
 

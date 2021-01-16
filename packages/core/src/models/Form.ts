@@ -30,6 +30,7 @@ import {
   IModelSetter,
   IFieldStateGetter,
   IFieldStateSetter,
+  FormDisplayTypes,
 } from '../types'
 import {
   observer,
@@ -56,6 +57,7 @@ export class Form<ValueType = any> {
   submitting: boolean
   modified: boolean
   pattern: FormPatternTypes
+  display: FormDisplayTypes
   originValues: ValueType
   originInitialValues: ValueType
   mounted: boolean
@@ -84,6 +86,13 @@ export class Form<ValueType = any> {
     this.modified = false
     this.mounted = false
     this.unmounted = false
+    this.editable = this.props.editable
+    this.disabled = this.props.disabled
+    this.readOnly = this.props.readOnly
+    this.readPretty = this.props.readPretty
+    this.visible = this.props.visible
+    this.hidden = this.props.hidden
+    this.display = this.props.display || 'visible'
     this.pattern = this.props.pattern || 'editable'
     this.originValues = this.props.values || ({} as any)
     this.originInitialValues = this.props.initialValues || ({} as any)
@@ -102,6 +111,7 @@ export class Form<ValueType = any> {
       submitting: observable.ref,
       modified: observable.ref,
       pattern: observable.ref,
+      display: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
       originValues: observable,
@@ -163,6 +173,32 @@ export class Form<ValueType = any> {
 
   get lifecycles() {
     return getLifeCyclesByEffects(this.props.effects, this)
+  }
+
+  get hidden() {
+    return this.display === 'hidden'
+  }
+
+  get visible() {
+    return this.display === 'visible'
+  }
+
+  set hidden(hidden: boolean) {
+    if (!isValid(hidden)) return
+    if (hidden) {
+      this.display = 'hidden'
+    } else {
+      this.display = 'visible'
+    }
+  }
+
+  set visible(visible: boolean) {
+    if (!isValid(visible)) return
+    if (visible) {
+      this.display = 'visible'
+    } else {
+      this.display = 'none'
+    }
   }
 
   get editable() {
@@ -396,6 +432,10 @@ export class Form<ValueType = any> {
       }
       this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
     }
+  }
+
+  setDisplay = (display: FormDisplayTypes) => {
+    this.display = display
   }
 
   setPattern = (pattern: FormPatternTypes) => {

@@ -317,7 +317,7 @@ export class Field<
   get display(): FieldDisplayTypes {
     const parentDisplay = this.parent?.display
     if (isValid(this.selfDisplay)) return this.selfDisplay
-    return parentDisplay || 'visible'
+    return parentDisplay || this.form.display || 'visible'
   }
 
   get pattern(): FormPatternTypes {

@@ -478,6 +478,8 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
 
 test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {})
 
+test('setDisplay/display/visible/hidden', () => {})
+
 test('submit', () => {})
 
 test('reset', () => {})
