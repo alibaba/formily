@@ -104,7 +104,7 @@ export const matchFeedback = (
   return true
 }
 
-export const queryFeedbacks = (field: Field, search: ISearchFeedback) => {
+export const queryFeedbacks = (field: Field, search?: ISearchFeedback) => {
   return field.feedbacks.filter((feedback) => {
     return matchFeedback(search, {
       ...feedback,
@@ -124,7 +124,8 @@ export const queryFeedbackMessages = (
   )
 }
 
-export const updateFeedback = (field: Field, feedback: Feedback) => {
+export const updateFeedback = (field: Field, feedback?: Feedback) => {
+  if (!feedback) return
   return runInAction(() => {
     if (!field.feedbacks?.length) {
       if (!feedback?.messages?.length) {

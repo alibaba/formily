@@ -158,7 +158,7 @@ export class VoidField<
 
   get display(): FieldDisplayTypes {
     if (this.selfDisplay) return this.selfDisplay
-    return this.parent?.display || 'visible'
+    return this.parent?.display || this.form.display || 'visible'
   }
 
   get pattern(): FormPatternTypes {
@@ -252,11 +252,11 @@ export class VoidField<
     this.selfDisplay = display || 'visible'
   }
 
-  setTitle = (title: TextType) => {
+  setTitle = (title?: TextType) => {
     this.title = title
   }
 
-  setDescription = (description: TextType) => {
+  setDescription = (description?: TextType) => {
     this.description = description
   }
 
@@ -269,7 +269,7 @@ export class VoidField<
   }
 
   setComponent = <C extends JSXComponent>(
-    component: C,
+    component?: C,
     props?: JSXComponenntProps<C>
   ) => {
     this.component = [
@@ -285,7 +285,7 @@ export class VoidField<
   }
 
   setDecorator = <D extends JSXComponent>(
-    component: D,
+    component?: D,
     props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [

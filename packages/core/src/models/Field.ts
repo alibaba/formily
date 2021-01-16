@@ -498,31 +498,31 @@ export class Field<
     })
   }
 
-  setTitle = (title: TextType) => {
+  setTitle = (title?: TextType) => {
     this.title = title
   }
 
-  setDescription = (description: TextType) => {
+  setDescription = (description?: TextType) => {
     this.description = description
   }
 
-  setDataSource = (dataSource: FieldDataSource) => {
+  setDataSource = (dataSource?: FieldDataSource) => {
     this.dataSource = dataSource
   }
 
-  setFeedback = (feedback: Feedback) => {
+  setFeedback = (feedback?: Feedback) => {
     updateFeedback(this, feedback)
   }
 
-  setErrors = (messages: FeedbackMessage) => {
+  setErrors = (messages?: FeedbackMessage) => {
     this.errors = messages
   }
 
-  setWarnings = (messages: FeedbackMessage) => {
+  setWarnings = (messages?: FeedbackMessage) => {
     this.warnings = messages
   }
 
-  setSuccesses = (messages: FeedbackMessage) => {
+  setSuccesses = (messages?: FeedbackMessage) => {
     this.successes = messages
   }
 
@@ -568,7 +568,7 @@ export class Field<
   }
 
   setComponent = <C extends JSXComponent>(
-    component: C,
+    component?: C,
     props?: JSXComponenntProps<C>
   ) => {
     this.component = [
@@ -584,7 +584,7 @@ export class Field<
   }
 
   setDecorator = <D extends JSXComponent>(
-    component: D,
+    component?: D,
     props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [
@@ -715,7 +715,7 @@ export class Field<
     })
   }
 
-  queryFeedbacks = (search: ISearchFeedback): Feedback[] => {
+  queryFeedbacks = (search?: ISearchFeedback): Feedback[] => {
     return queryFeedbacks(this, search)
   }
 
