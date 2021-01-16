@@ -273,7 +273,7 @@ test('onFieldChange', () => {
             'inputValue',
             'loading',
             'visible',
-            'editable',
+            'editable'
           ],
           fieldChange
         )

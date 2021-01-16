@@ -11,7 +11,7 @@ import {
 } from './models'
 
 export type NonFunctionPropertyNames<T> = {
-  [K in keyof T]: T[K] extends Function ? never : K
+  [K in keyof T]: T[K] extends (...args: any) => any ? never : K
 }[keyof T]
 
 export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>
@@ -126,6 +126,7 @@ export type FieldUpdate = {
 
 export type FormRequests = {
   validate?: NodeJS.Timeout
+  submit?: NodeJS.Timeout
   updates?: FieldUpdate[]
   updateIndexes?: Record<string, number>
 }
@@ -171,9 +172,13 @@ type OmitStateMethod<P> = Omit<
   | 'getFormState'
 >
 
-export type IFieldState = NonFunctionProperties<OmitStateMethod<Field>>
+export type IFieldState = NonFunctionProperties<
+  OmitStateMethod<Field<any, any, string, string>>
+>
 
-export type IVoidFieldState = NonFunctionProperties<OmitStateMethod<VoidField>>
+export type IVoidFieldState = NonFunctionProperties<
+  OmitStateMethod<VoidField<any, any, string>>
+>
 
 export type IFormState = NonFunctionProperties<OmitStateMethod<Form>>
 

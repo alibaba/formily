@@ -1,5 +1,11 @@
 import { createForm } from '../'
+import { onFieldValueChange } from '../effects'
 import { attach } from './shared'
+
+const sleep = (duration = 100) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, duration)
+  })
 
 test('create form', () => {
   const form = attach(createForm())
@@ -92,11 +98,44 @@ test('setValues/setInitialValues', () => {
   expect(field2.value).toEqual('www2')
 })
 
-test('setSubmitting/setValidating', () => {})
+test('setSubmitting/setValidating', async () => {
+  const form = attach(createForm())
+  form.setSubmitting(true)
+  expect(form.submitting).toBeFalsy()
+  await sleep()
+  expect(form.submitting).toBeTruthy()
+  form.setSubmitting(false)
+  expect(form.submitting).toBeFalsy()
+  form.setValidating(true)
+  expect(form.validating).toBeFalsy()
+  await sleep()
+  expect(form.validating).toBeTruthy()
+  form.setValidating(false)
+  expect(form.validating).toBeFalsy()
+})
 
-test('setEffects/removeEffects/clearEffects', () => {})
-
-test('clearErrors/clearWarnings/clearSuccesses', () => {})
+test('setEffects/removeEffects', () => {
+  const form = attach(createForm())
+  const valueChange = jest.fn()
+  form.addEffects('e1', () => {
+    onFieldValueChange('aa', valueChange)
+  })
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  field.setValue('123')
+  expect(valueChange).toBeCalledTimes(1)
+  form.removeEffects('e1')
+  field.setValue('321')
+  expect(valueChange).toBeCalledTimes(1)
+  form.addEffects('e2', () => {
+    onFieldValueChange('aa', valueChange)
+  })
+  field.setValue('444')
+  expect(valueChange).toBeCalledTimes(2)
+})
 
 test('query', () => {})
 
@@ -106,7 +145,7 @@ test('notify/subscribe/unsubscribe', () => {})
 
 test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', () => {})
 
-test('validate/valid/invalid/errors/warnings/successes', () => {})
+test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses', () => {})
 
 test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {})
 

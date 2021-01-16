@@ -564,7 +564,7 @@ export class Field<
           this.validating = validating
         })
       }, 100)
-    } else {
+    } else if (this.validating !== validating) {
       this.validating = validating
     }
   }

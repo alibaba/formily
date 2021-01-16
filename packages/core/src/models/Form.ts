@@ -355,11 +355,18 @@ export class Form {
   }
 
   setSubmitting = (submitting: boolean) => {
+    clearTimeout(this.requests.submit)
     if (submitting) {
+      this.requests.submit = setTimeout(() => {
+        runInAction(() => {
+          this.submitting = submitting
+        })
+      }, 100)
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_START)
-    }
-    this.submitting = submitting
-    if (!submitting) {
+    } else {
+      if (this.submitting !== submitting) {
+        this.submitting = submitting
+      }
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_END)
     }
   }
@@ -370,11 +377,13 @@ export class Form {
       this.requests.validate = setTimeout(() => {
         runInAction(() => {
           this.validating = validating
-          this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
         })
       }, 100)
-    } else if (this.validating !== validating) {
-      this.validating = validating
+      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
+    } else {
+      if (this.validating !== validating) {
+        this.validating = validating
+      }
       this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
     }
   }
@@ -514,7 +523,6 @@ export class Form {
 
   validate = async (pattern: FormPathPattern = '*') => {
     this.setValidating(true)
-    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     const tasks = []
     this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
@@ -525,11 +533,9 @@ export class Form {
     this.setValidating(false)
     if (this.invalid) {
       this.notify(LifeCycleTypes.ON_FORM_VALIDATE_FAILED)
-      this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
       throw this.errors
     }
     this.notify(LifeCycleTypes.ON_FORM_VALIDATE_SUCCESS)
-    this.notify(LifeCycleTypes.ON_FORM_VALIDATE_END)
   }
 
   submit = async <T>(
