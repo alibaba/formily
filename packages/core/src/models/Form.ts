@@ -476,7 +476,7 @@ export class Form<ValueType = any> {
     })
   }
 
-  clearSuccesses = (pattern: FormPathPattern) => {
+  clearSuccesses = (pattern: FormPathPattern = '*') => {
     this.query(pattern).all.getAll((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({

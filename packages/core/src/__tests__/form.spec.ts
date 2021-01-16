@@ -474,6 +474,27 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       address: 'bb',
     }).length
   ).toEqual(1)
+  aa.setValue('')
+  bb.setValue('')
+  form.clearErrors()
+  form.clearSuccesses()
+  form.clearWarnings()
+  try {
+    await form.validate('aa')
+  } catch {}
+  expect(
+    form.queryFeedbacks({
+      type: 'error',
+    }).length
+  ).toEqual(1)
+  try {
+    await form.validate('*')
+  } catch {}
+  expect(
+    form.queryFeedbacks({
+      type: 'error',
+    }).length
+  ).toEqual(2)
 })
 
 test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {})
