@@ -162,8 +162,24 @@ export type FormPathPattern =
       path: FormPath
     })
 
-type OmitStateMethod<P> = Omit<
+type OmitState<P> = Omit<
   P,
+  | 'selfDisplay'
+  | 'selfPattern'
+  | 'originValues'
+  | 'originInitialValues'
+  | 'id'
+  | 'address'
+  | 'path'
+  | 'lifecycles'
+  | 'disposers'
+  | 'requests'
+  | 'fields'
+  | 'graph'
+  | 'heart'
+  | 'indexes'
+  | 'props'
+  | 'displayName'
   | 'setState'
   | 'getState'
   | 'getFormGraph'
@@ -173,14 +189,16 @@ type OmitStateMethod<P> = Omit<
 >
 
 export type IFieldState = NonFunctionProperties<
-  OmitStateMethod<Field<any, any, string, string>>
+  OmitState<Field<any, any, string, string>>
 >
 
 export type IVoidFieldState = NonFunctionProperties<
-  OmitStateMethod<VoidField<any, any, string>>
+  OmitState<VoidField<any, any, string>>
 >
 
-export type IFormState = NonFunctionProperties<OmitStateMethod<Form>>
+export type IFormState = NonFunctionProperties<
+  OmitState<Form<{ [key: string]: any }>>
+>
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>
 

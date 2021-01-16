@@ -48,7 +48,7 @@ import { Graph } from './Graph'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
-export class Form {
+export class Form<ValueType = any> {
   displayName = 'Form'
   id: string
   initialized: boolean
@@ -56,8 +56,8 @@ export class Form {
   submitting: boolean
   modified: boolean
   pattern: FormPatternTypes
-  originValues: any
-  originInitialValues: any
+  originValues: ValueType
+  originInitialValues: ValueType
   mounted: boolean
   unmounted: boolean
   props: IFormProps
@@ -85,8 +85,8 @@ export class Form {
     this.mounted = false
     this.unmounted = false
     this.pattern = this.props.pattern || 'editable'
-    this.originValues = this.props.values || {}
-    this.originInitialValues = this.props.initialValues || {}
+    this.originValues = this.props.values || ({} as any)
+    this.originInitialValues = this.props.initialValues || ({} as any)
     this.graph = new Graph(this)
     this.heart = new Heart({
       lifecycles: this.lifecycles,
@@ -217,6 +217,25 @@ export class Form {
     }
   }
 
+  set values(values: ValueType) {
+    this.modified = true
+    this.originValues = values
+    this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+  }
+
+  get values() {
+    return defaults(this.originInitialValues, this.originValues)
+  }
+
+  set initialValues(initialValues: ValueType) {
+    this.originInitialValues = initialValues
+    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+  }
+
+  get initialValues() {
+    return this.originInitialValues
+  }
+
   /** 创建字段 **/
 
   createField = <
@@ -293,31 +312,23 @@ export class Form {
 
   /** 状态操作模型 **/
 
-  set values(values: any) {
-    this.modified = true
-    this.originValues = defaults(this.originValues, values)
-    this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+  setValues = (values: any, strategy: 'overwrite' | 'merge' = 'merge') => {
+    if (strategy === 'merge') {
+      this.values = defaults(this.originValues, values)
+    } else {
+      this.values = values
+    }
   }
 
-  get values() {
-    return defaults(this.originInitialValues, this.originValues)
-  }
-
-  set initialValues(initialValues: any) {
-    this.originInitialValues = defaults(this.originInitialValues, initialValues)
-    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-  }
-
-  get initialValues() {
-    return this.originInitialValues
-  }
-
-  setValues = (values: any) => {
-    this.values = values
-  }
-
-  setInitialValues = (initialValues: any) => {
-    this.initialValues = initialValues
+  setInitialValues = (
+    initialValues: any,
+    strategy: 'overwrite' | 'merge' = 'merge'
+  ) => {
+    if (strategy === 'merge') {
+      this.initialValues = defaults(this.originInitialValues, initialValues)
+    } else {
+      this.initialValues = initialValues
+    }
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
@@ -459,7 +470,7 @@ export class Form {
       }, [])
   }
 
-  notify = (type: LifeCycleTypes, payload?: any) => {
+  notify = (type: string, payload?: any) => {
     this.heart.publish(type, isValid(payload) ? payload : this)
   }
 

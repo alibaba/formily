@@ -12,7 +12,6 @@
     "sourceMap": false,
     "declaration": true,
     "experimentalDecorators": true,
-    "noErrorTruncation": true,
     "baseUrl": ".",
     "paths": {
       "@formily/*": [

@@ -380,6 +380,7 @@ export const setModelState = (model: any, setter: any, exclude?: string[]) => {
     if (exclude?.includes?.(key)) return true
     if (key === 'address' || key === 'path') return true
     if (key === 'valid' || key === 'invalid') return true
+    if (key === 'validateStatus') return true
     if (key === 'errors' || key === 'warnings' || key === 'successes') {
       if (model?.displayName === 'Form') return true
       if (setter.feedbacks?.length) {
@@ -411,7 +412,7 @@ export const setModelState = (model: any, setter: any, exclude?: string[]) => {
   } else {
     each(GetterSetterProperties, (key) => {
       if (isSkipProperty(key)) return
-      if (isValid(setter[key])) {
+      if (key in setter) {
         model[key] = setter[key]
       }
     })
@@ -419,9 +420,7 @@ export const setModelState = (model: any, setter: any, exclude?: string[]) => {
       if (isFn(value)) return
       if (ReservedProperties.includes(key)) return
       if (isSkipProperty(key)) return
-      if (isValid(value)) {
-        model[key] = value
-      }
+      model[key] = value
     })
   }
 }
@@ -433,8 +432,8 @@ export const getModelState = (model: any, getter?: any, exclude?: string[]) => {
     const results = {}
     each(GetterSetterProperties, (key) => {
       if (exclude?.includes?.(key)) return
-      if (isValid(model[key])) {
-        results[key] = model[key]
+      if (key in model) {
+        results[key] = toJS(model[key])
       }
     })
     return reduce(

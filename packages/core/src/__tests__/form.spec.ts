@@ -1,6 +1,7 @@
 import { createForm } from '../'
 import { onFieldValueChange } from '../effects'
 import { attach } from './shared'
+import { LifeCycleTypes } from '../types'
 
 const sleep = (duration = 100) =>
   new Promise((resolve) => {
@@ -137,15 +138,103 @@ test('setEffects/removeEffects', () => {
   expect(valueChange).toBeCalledTimes(2)
 })
 
-test('query', () => {})
+test('query', () => {
+  const form = attach(createForm())
+  attach(
+    form.createObjectField({
+      name: 'object',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 'void',
+      basePath: 'object',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'normal',
+      basePath: 'object.void',
+    })
+  )
+  expect(form.query('object').get()).not.toBeUndefined()
+  expect(form.query('object').object.get()).not.toBeUndefined()
+  expect(form.query('object.void').void.get()).not.toBeUndefined()
+  expect(form.query('object.void.normal').get()).not.toBeUndefined()
+  expect(form.query('object.normal').get()).not.toBeUndefined()
+  expect(
+    form.query('object.*').all.getAll((field) => field.path.toString())
+  ).toEqual(['object.void', 'object.normal'])
+  expect(form.query('*').all.getAll((field) => field.path.toString())).toEqual([
+    'object',
+    'object.void',
+    'object.normal',
+  ])
+})
 
-test('queryFeedbacks', () => {})
+test('notify/subscribe/unsubscribe', () => {
+  const form = attach(createForm())
+  const subscribe = jest.fn()
+  form.subscribe(subscribe)
+  expect(subscribe).toBeCalledTimes(0)
+  form.setInitialValues({ aa: 123 })
+  expect(subscribe).toBeCalledTimes(1)
+  form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+  expect(subscribe).toBeCalledTimes(2)
+})
 
-test('notify/subscribe/unsubscribe', () => {})
+test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', () => {
+  const form = attach(createForm())
+  const state = form.getState()
+  form.setState((state) => {
+    state.pattern = 'disabled'
+    state.values = { aa: 123 }
+  })
+  expect(form.pattern).toEqual('disabled')
+  expect(form.disabled).toBeTruthy()
+  expect(form.values.aa).toEqual(123)
+  form.setState(state)
+  expect(form.pattern).toEqual('editable')
+  expect(form.disabled).toBeFalsy()
+  expect(form.values.aa).toBeUndefined()
+  form.setFormState((state) => {
+    state.pattern = 'readOnly'
+    state.values = { bb: 321 }
+  })
+  expect(form.pattern).toEqual('readOnly')
+  expect(form.disabled).toBeFalsy()
+  expect(form.readOnly).toBeTruthy()
+  expect(form.values.aa).toBeUndefined()
+  expect(form.values.bb).toEqual(321)
+  form.setFormState(state)
+  expect(form.pattern).toEqual('editable')
+  expect(form.disabled).toBeFalsy()
+  expect(form.readOnly).toBeFalsy()
+  expect(form.values.aa).toBeUndefined()
+  expect(form.values.bb).toBeUndefined()
+  attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  const fieldState = form.getFieldState('aa')
+  form.setFieldState('aa', (state) => {
+    state.title = 'AA'
+    state.description = 'This is AA'
+    state.value = '123'
+  })
+  expect(form.getFieldState('aa', (state) => state.title)).toEqual('AA')
+  expect(form.getFieldState('aa', (state) => state.description)).toEqual(
+    'This is AA'
+  )
+  expect(form.getFieldState('aa', (state) => state.value)).toEqual('123')
+  form.setFieldState('aa', fieldState)
+  expect(form.getFieldState('aa', (state) => state.title)).toBeUndefined()
+  expect(form.getFieldState('aa', (state) => state.description)).toBeUndefined()
+  expect(form.getFieldState('aa', (state) => state.value)).toBeUndefined()
+})
 
-test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', () => {})
-
-test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses', () => {})
+test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses/queryFeedbacks', () => {})
 
 test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {})
 
