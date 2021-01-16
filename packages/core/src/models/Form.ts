@@ -218,7 +218,6 @@ export class Form<ValueType = any> {
   }
 
   set values(values: ValueType) {
-    this.modified = true
     this.originValues = values
     this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
   }
@@ -448,7 +447,7 @@ export class Form<ValueType = any> {
     })
   }
 
-  query = (pattern: FormPathPattern) => {
+  query = (pattern: FormPathPattern): Query => {
     return new Query({
       pattern,
       base: '',
@@ -461,11 +460,14 @@ export class Form<ValueType = any> {
       .getAll()
       .reduce((messages, field) => {
         return messages.concat(
-          field.queryFeedbacks(search).map((feedback) => ({
-            ...feedback,
-            address: field.address.toString(),
-            path: field.path.toString(),
-          }))
+          field
+            .queryFeedbacks(search)
+            .map((feedback) => ({
+              ...feedback,
+              address: field.address.toString(),
+              path: field.path.toString(),
+            }))
+            .filter((feedback) => feedback.messages?.length > 0)
         )
       }, [])
   }

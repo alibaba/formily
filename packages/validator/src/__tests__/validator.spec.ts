@@ -24,6 +24,8 @@ test('empty string validate', async () => {
   const results = await validate('', { required: true })
   expect(results).toEqual({
     error: ['This field is required'],
+    success: [],
+    warning: [],
   })
 })
 
@@ -31,6 +33,8 @@ test('empty array validate', async () => {
   const results = await validate([], { required: true })
   expect(results).toEqual({
     error: ['This field is required'],
+    success: [],
+    warning: [],
   })
 })
 
@@ -38,6 +42,8 @@ test('empty object validate', async () => {
   const results = await validate({}, { required: true })
   expect(results).toEqual({
     error: ['This field is required'],
+    success: [],
+    warning: [],
   })
 })
 
@@ -45,6 +51,8 @@ test('empty number validate', async () => {
   const results = await validate(0, { required: true })
   expect(results).toEqual({
     error: [],
+    success: [],
+    warning: [],
   })
 })
 
@@ -57,6 +65,8 @@ test('multi validate', async () => {
   })
   expect(results).toEqual({
     error: ['This field is required', 'validate error'],
+    success: [],
+    warning: [],
   })
 })
 
@@ -75,6 +85,8 @@ test('first validate', async () => {
   )
   expect(results).toEqual({
     error: ['This field is required'],
+    success: [],
+    warning: [],
   })
 })
 
@@ -94,7 +106,11 @@ test('filter trigger type(unmatch)', async () => {
         triggerType: 'onInput',
       }
     )
-  ).toEqual({})
+  ).toEqual({
+    error: [],
+    success: [],
+    warning: [],
+  })
 })
 
 test('filter trigger type(match first validte)', async () => {
@@ -115,6 +131,8 @@ test('filter trigger type(match first validte)', async () => {
     )
   ).toEqual({
     error: ['This field is required'],
+    success: [],
+    warning: [],
   })
 })
 
@@ -135,6 +153,8 @@ test('filter trigger type(match multi validte)', async () => {
     )
   ).toEqual({
     error: ['This field is required', 'validate error'],
+    success: [],
+    warning: [],
   })
 })
 

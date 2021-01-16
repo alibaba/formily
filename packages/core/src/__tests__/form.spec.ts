@@ -234,7 +234,247 @@ test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', 
   expect(form.getFieldState('aa', (state) => state.value)).toBeUndefined()
 })
 
-test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses/queryFeedbacks', () => {})
+test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses/queryFeedbacks', async () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+      validator(value) {
+        if (value == '123') {
+          return {
+            type: 'success',
+            message: 'success',
+          }
+        } else if (value == '321') {
+          return {
+            type: 'warning',
+            message: 'warning',
+          }
+        } else if (value == '111') {
+          return 'error'
+        }
+      },
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      required: true,
+    })
+  )
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.invalid).toBeTruthy()
+  expect(form.valid).toBeFalsy()
+  expect(form.errors).toEqual([
+    {
+      type: 'error',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+    {
+      type: 'error',
+      address: 'bb',
+      path: 'bb',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+  ])
+  await aa.onInput('123')
+  expect(form.errors).toEqual([
+    {
+      type: 'error',
+      address: 'bb',
+      path: 'bb',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+  ])
+  expect(form.successes).toEqual([
+    {
+      type: 'success',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateSuccess',
+      triggerType: 'onInput',
+      messages: ['success'],
+    },
+  ])
+  await aa.onInput('321')
+  expect(form.errors).toEqual([
+    {
+      type: 'error',
+      address: 'bb',
+      path: 'bb',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+  ])
+  expect(form.warnings).toEqual([
+    {
+      type: 'warning',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateWarning',
+      triggerType: 'onInput',
+      messages: ['warning'],
+    },
+  ])
+  await aa.onInput('111')
+  expect(form.errors).toEqual([
+    {
+      type: 'error',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['error'],
+    },
+    {
+      type: 'error',
+      address: 'bb',
+      path: 'bb',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+  ])
+  await aa.onInput('yes')
+  await bb.onInput('yes')
+  await form.validate()
+  expect(form.invalid).toBeFalsy()
+  expect(form.valid).toBeTruthy()
+  expect(form.errors).toEqual([])
+  expect(form.successes).toEqual([])
+  expect(form.warnings).toEqual([])
+  await aa.onInput('')
+  await bb.onInput('')
+  try {
+    await form.validate()
+  } catch {}
+  expect(form.errors).toEqual([
+    {
+      type: 'error',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+    {
+      type: 'error',
+      address: 'bb',
+      path: 'bb',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+  ])
+  form.clearErrors('aa')
+  expect(form.errors).toEqual([
+    {
+      type: 'error',
+      address: 'bb',
+      path: 'bb',
+      code: 'ValidateError',
+      triggerType: 'onInput',
+      messages: ['This field is required'],
+    },
+  ])
+  form.clearErrors('*')
+  expect(form.errors).toEqual([])
+  await aa.onInput('123')
+  expect(form.errors).toEqual([])
+  expect(form.successes).toEqual([
+    {
+      type: 'success',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateSuccess',
+      triggerType: 'onInput',
+      messages: ['success'],
+    },
+  ])
+  form.clearSuccesses('aa')
+  expect(form.successes).toEqual([])
+  await aa.onInput('321')
+  expect(form.errors).toEqual([])
+  expect(form.successes).toEqual([])
+  expect(form.warnings).toEqual([
+    {
+      type: 'warning',
+      address: 'aa',
+      path: 'aa',
+      code: 'ValidateWarning',
+      triggerType: 'onInput',
+      messages: ['warning'],
+    },
+  ])
+  form.clearWarnings('*')
+  expect(form.errors).toEqual([])
+  expect(form.successes).toEqual([])
+  expect(form.warnings).toEqual([])
+  await aa.onInput('123')
+  await bb.onInput('')
+  expect(
+    form.queryFeedbacks({
+      type: 'error',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      type: 'success',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      code: 'ValidateError',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      code: 'ValidateSuccess',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      code: 'EffectError',
+    }).length
+  ).toEqual(0)
+  expect(
+    form.queryFeedbacks({
+      code: 'EffectSuccess',
+    }).length
+  ).toEqual(0)
+  expect(
+    form.queryFeedbacks({
+      path: 'aa',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      path: 'bb',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      address: 'aa',
+    }).length
+  ).toEqual(1)
+  expect(
+    form.queryFeedbacks({
+      address: 'bb',
+    }).length
+  ).toEqual(1)
+})
 
 test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {})
 

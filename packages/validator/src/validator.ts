@@ -21,7 +21,11 @@ export const validate = async <Context = any>(
   options?: IValidatorOptions<Context>
 ): Promise<ValidateResults> => {
   const validates = parseValidator(validator, options)
-  const results: ValidateResults = {}
+  const results: ValidateResults = {
+    error: [],
+    success: [],
+    warning: [],
+  }
   for (let i = 0; i < validates.length; i++) {
     const result = await validates[i](value, options?.context)
     const { type, message } = result

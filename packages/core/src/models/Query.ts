@@ -67,7 +67,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
   getAll(mapper?: any): any {
     const results = []
     const output = (field: GeneralField) => {
-      if (!field) return
+      if (!field) return []
       if (this.match(field)) {
         if (isFn(mapper)) {
           results.push(mapper(field as any, field.address))
@@ -75,6 +75,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
           results.push(field)
         }
       }
+      return results
     }
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()

@@ -467,8 +467,6 @@ export class Field<
   }
 
   set value(value: ValueType) {
-    this.modified = true
-    this.form.modified = true
     this.form.setValuesIn(this.path, value)
   }
 
@@ -629,7 +627,7 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_UNMOUNT, this)
   }
 
-  onInput = (...args: any[]) => {
+  onInput = async (...args: any[]) => {
     const values = getValuesFromEvent(args)
     const value = values[0]
     this.inputValue = value
@@ -639,18 +637,18 @@ export class Field<
     this.form.modified = true
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
-    this.validate('onInput')
+    await this.validate('onInput')
   }
 
-  onFocus = () => {
+  onFocus = async () => {
     this.active = true
     this.visited = true
-    this.validate('onFocus')
+    await this.validate('onFocus')
   }
 
-  onBlur = () => {
+  onBlur = async () => {
     this.active = false
-    this.validate('onBlur')
+    await this.validate('onBlur')
   }
 
   validate = async (triggerType?: ValidatorTriggerType) => {
