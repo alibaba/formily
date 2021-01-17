@@ -345,8 +345,91 @@ test('query', () => {
   expect(bbb.query('.void.ccc').get()).toBeUndefined()
 })
 
-test('reset', () => {})
+test('reset', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        bb: 123,
+      },
+      initialValues: {
+        aa: 123,
+      },
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      required: true,
+    })
+  )
+  expect(aa.value).toEqual(123)
+  expect(bb.value).toEqual(123)
+  expect(form.values.aa).toEqual(123)
+  expect(form.values.bb).toEqual(123)
+  aa.onInput('xxxxx')
+  expect(form.values.aa).toEqual('xxxxx')
+  aa.reset()
+  expect(aa.value).toEqual(123)
+  expect(form.values.aa).toEqual(123)
+  bb.onInput('xxxxx')
+  expect(form.values.bb).toEqual('xxxxx')
+  bb.reset()
+  expect(bb.value).toBeUndefined()
+  expect(form.values.bb).toBeUndefined()
+  aa.reset({
+    forceClear: true,
+  })
+  expect(aa.value).toBeUndefined()
+  expect(form.values.aa).toBeUndefined()
+  expect(aa.valid).toBeTruthy()
+  await aa.reset({
+    forceClear: true,
+    validate: true,
+  })
+  expect(aa.valid).toBeFalsy()
+})
 
-test('match', () => {})
+test('match', () => {
+  const form = attach(
+    createForm({
+      values: {
+        bb: 123,
+      },
+      initialValues: {
+        aa: 123,
+      },
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  expect(aa.match('aa')).toBeTruthy()
+  expect(aa.match('*')).toBeTruthy()
+  expect(aa.match('a~')).toBeTruthy()
+  expect(aa.match('*(aa,bb)')).toBeTruthy()
+})
 
 test('setState/getState', () => {})
+
+test('setDataSource', () => {})
+
+test('setTitle/setDescription', () => {})
+
+test('setFeedback', () => {})
+
+test('setErrors/setWarnings/setSuccesses', () => {})
+
+test('setValidator', () => {})
+
+test('reactions props', () => {})
+
+test('dispose reactions', () => {})

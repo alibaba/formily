@@ -92,6 +92,29 @@ test('setValues/setInitialValues', () => {
   expect(form.values.cc.pp).toEqual('www2')
   expect(form.initialValues.cc.pp).toEqual('www2')
   expect(field2.value).toEqual('www2')
+  form.setInitialValues({}, 'overwrite')
+  expect(form.initialValues?.cc?.pp).toBeUndefined()
+  form.setValues({}, 'overwrite')
+  expect(form.values.aa).toBeUndefined()
+})
+
+test('deleteValuesIn/deleteInitialValuesIn', () => {
+  const form = attach(
+    createForm({
+      values: {
+        aa: 123,
+      },
+      initialValues: {
+        bb: 123,
+      },
+    })
+  )
+  expect(form.values.aa).toEqual(123)
+  expect(form.values.bb).toEqual(123)
+  form.deleteValuesIn('aa')
+  form.deleteIntialValuesIn('bb')
+  expect(form.existValuesIn('aa')).toBeFalsy()
+  expect(form.existInitialValuesIn('bb')).toBeFalsy()
 })
 
 test('setSubmitting/setValidating', async () => {
@@ -110,9 +133,10 @@ test('setSubmitting/setValidating', async () => {
   expect(form.validating).toBeFalsy()
 })
 
-test('setEffects/removeEffects', () => {
+test('setEffects/addEffects/removeEffects', () => {
   const form = attach(createForm())
   const valueChange = jest.fn()
+  const valueChange2 = jest.fn()
   form.addEffects('e1', () => {
     onFieldValueChange('aa', valueChange)
   })
@@ -131,6 +155,12 @@ test('setEffects/removeEffects', () => {
   })
   field.setValue('444')
   expect(valueChange).toBeCalledTimes(2)
+  form.setEffects(() => {
+    onFieldValueChange('aa', valueChange2)
+  })
+  field.setValue('555')
+  expect(valueChange).toBeCalledTimes(3)
+  expect(valueChange2).toBeCalledTimes(1)
 })
 
 test('query', () => {
@@ -170,10 +200,13 @@ test('query', () => {
 test('notify/subscribe/unsubscribe', () => {
   const form = attach(createForm())
   const subscribe = jest.fn()
-  form.subscribe(subscribe)
+  const id = form.subscribe(subscribe)
   expect(subscribe).toBeCalledTimes(0)
   form.setInitialValues({ aa: 123 })
   expect(subscribe).toBeCalledTimes(1)
+  form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+  expect(subscribe).toBeCalledTimes(2)
+  form.unsubscribe(id)
   form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
   expect(subscribe).toBeCalledTimes(2)
 })
@@ -683,19 +716,6 @@ test('reset', async () => {
     })
   } catch {}
   expect(form.valid).toBeTruthy()
-  expect(form.values.aa).toEqual(123)
-  expect(field.value).toEqual(123)
-  expect(form.values.bb).toBeUndefined()
-  expect(field2.value).toBeUndefined()
-  field.onInput('aaa')
-  field2.onInput('bbb')
-  try {
-    await form.reset('*', {
-      forceClear: true,
-      clearInitialValue: true,
-    })
-  } catch {}
-  expect(form.valid).toBeTruthy()
   expect(form.values.aa).toBeUndefined()
   expect(field.value).toBeUndefined()
   expect(form.values.bb).toBeUndefined()
@@ -705,7 +725,6 @@ test('reset', async () => {
   try {
     await form.reset('aa', {
       forceClear: true,
-      clearInitialValue: true,
     })
   } catch {}
   expect(form.valid).toBeTruthy()

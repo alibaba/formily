@@ -335,7 +335,6 @@ export interface IVoidFieldProps<
 export interface IFieldResetOptions {
   forceClear?: boolean
   validate?: boolean
-  clearInitialValue?: boolean
 }
 
 export type IGeneralFieldState = IFieldState | IVoidFieldState

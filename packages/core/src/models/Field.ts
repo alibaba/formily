@@ -699,15 +699,11 @@ export class Field<
     this.modified = false
     this.visited = false
     this.feedbacks = []
-    if (options?.clearInitialValue) {
-      this.setInitialValue()
-    }
+    this.inputValue = undefined
+    this.inputValues = []
+    this.value = undefined
     if (options?.forceClear) {
-      this.inputValue = undefined
-      this.inputValues = []
-      this.setValue()
-    } else {
-      this.setValue(this.initialValue)
+      this.initialValue = undefined
     }
     this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
 

@@ -298,6 +298,7 @@ test('onFieldChange', async () => {
   expect(fieldChange).toBeCalledTimes(5)
   field.setDisplay('none')
   expect(fieldChange).toBeCalledTimes(6)
+  form.onUnmount()
 })
 
 test('onFieldInit/onFieldMount/onFieldUnmount', () => {
