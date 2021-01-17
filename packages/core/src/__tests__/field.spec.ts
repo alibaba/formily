@@ -261,6 +261,10 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
           triggerType: 'onBlur',
           format: 'url',
         },
+        {
+          triggerType: 'onFocus',
+          format: 'date',
+        },
       ],
     })
   )
@@ -289,6 +293,10 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
           triggerType: 'onBlur',
           format: 'url',
         },
+        {
+          triggerType: 'onFocus',
+          format: 'date',
+        },
       ],
     })
   )
@@ -297,7 +305,7 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
   expect(field.invalid).toBeTruthy()
   expect(field.errors.length).toEqual(1)
   expect(field2.invalid).toBeTruthy()
-  expect(field2.errors.length).toEqual(2)
+  expect(field2.errors.length).toEqual(3)
   await field.onInput('123')
   expect(field.successes).toEqual(['success'])
   await field.onInput('321')
@@ -306,6 +314,12 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
   expect(field.errors).toEqual(['error'])
   await field.onBlur()
   expect(field.errors).toEqual(['This field is a invalid url', 'error'])
+  await field.onFocus()
+  expect(field.errors).toEqual([
+    'This field is a invalid url',
+    'This field is not a valid date format',
+    'error',
+  ])
 })
 
 test('query', () => {
@@ -418,11 +432,75 @@ test('match', () => {
   expect(aa.match('*(aa,bb)')).toBeTruthy()
 })
 
-test('setState/getState', () => {})
+test('setState/getState', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  const state = aa.getState()
+  aa.setState((state) => {
+    state.value = '123'
+    state.title = 'AAA'
+  })
+  expect(aa.value).toEqual('123')
+  expect(aa.title).toEqual('AAA')
+  aa.setState(state)
+  expect(aa.value).toBeUndefined()
+  expect(aa.title).toBeUndefined()
+  aa.setState((state) => {
+    state.hidden = false
+  })
+  expect(aa.display).toEqual('visible')
+  aa.setState((state) => {
+    state.visible = true
+  })
+  expect(aa.display).toEqual('visible')
+  aa.setState((state) => {
+    state.readOnly = false
+  })
+  expect(aa.pattern).toEqual('editable')
+  aa.setState((state) => {
+    state.disabled = false
+  })
+  expect(aa.pattern).toEqual('editable')
+})
 
-test('setDataSource', () => {})
+test('setDataSource', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  aa.setDataSource([
+    { label: 's1', value: 's1' },
+    { label: 's2', value: 's2' },
+  ])
+  expect(aa.dataSource).toEqual([
+    { label: 's1', value: 's1' },
+    { label: 's2', value: 's2' },
+  ])
+})
 
-test('setTitle/setDescription', () => {})
+test('setTitle/setDescription', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  aa.setTitle('AAA')
+  aa.setDescription('This is AAA')
+  expect(aa.title).toEqual('AAA')
+  expect(aa.description).toEqual('This is AAA')
+})
+
+test('required/setRequired', () => {})
 
 test('setFeedback', () => {})
 
