@@ -3,19 +3,16 @@ sudo: required
 language: node_js
 
 before_install:
-  - npm i -g npm@6
+  - npm i -g yarn
 
 node_js:
   - "10"
   - "11"
 
 before_script:
-  - rm -rf node_modules
-  - npm install
-  - lerna clean --yes
-  - lerna bootstrap --no-ci
+  - yarn install
 
 script:
-  - npm run lint
-  - npm run build
-  - npm run test:prod
+  - yarn run lint
+  - yarn run build
+  - yarn run test
