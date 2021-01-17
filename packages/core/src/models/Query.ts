@@ -33,7 +33,7 @@ export class Query<T = Field | ArrayField | ObjectField> {
   get<Result>(getter: (field: T, address: FormPath) => Result): Result
   get(getter?: any): any {
     const output = (field: GeneralField) => {
-      if (!field) return {}
+      if (!field) return
       if (this.match(field)) {
         if (isFn(getter)) {
           return getter(field as any, field.address) as any

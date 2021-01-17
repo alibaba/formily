@@ -132,14 +132,14 @@ export class Field<
     this.feedbacks = []
     this.title = props.title
     this.description = props.description
+    this.display = this.props.display
+    this.pattern = this.props.pattern
     this.editable = this.props.editable
     this.disabled = this.props.disabled
     this.readOnly = this.props.readOnly
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
     this.hidden = this.props.hidden
-    this.display = this.props.display
-    this.pattern = this.props.pattern
     this.dataSource = this.props.dataSource
     this.validator = this.props.validator
     this.decorator = toArr(this.props.decorator)
@@ -542,19 +542,28 @@ export class Field<
     this.initialValue = initialValue
   }
 
-  setDisplay = (type: FieldDisplayTypes) => {
+  setDisplay = (type?: FieldDisplayTypes) => {
     this.display = type
   }
 
-  setPattern = (type: FieldPatternTypes) => {
+  setPattern = (type?: FieldPatternTypes) => {
     this.pattern = type
   }
 
-  setLoading = (loading: boolean) => {
-    this.loading = loading
+  setLoading = (loading?: boolean) => {
+    clearTimeout(this.requests.loader)
+    if (loading) {
+      this.requests.loader = setTimeout(() => {
+        runInAction(() => {
+          this.loading = loading
+        })
+      }, 100)
+    } else if (this.loading !== loading) {
+      this.loading = loading
+    }
   }
 
-  setValidating = (validating: boolean) => {
+  setValidating = (validating?: boolean) => {
     clearTimeout(this.requests.validate)
     if (validating) {
       this.requests.validate = setTimeout(() => {
@@ -596,7 +605,7 @@ export class Field<
   setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: JSXComponenntProps<D>
   ) => {
-    this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
+    this.decorator = [this.decorator?.[0], { ...this.decorator?.[1], ...props }]
   }
 
   setState: IModelSetter<IFieldState> = createModelStateSetter(this)

@@ -89,13 +89,13 @@ export class VoidField<
     this.initialized = false
     this.title = props.title
     this.description = props.description
+    this.hidden = this.props.hidden
+    this.display = props.display
     this.editable = this.props.editable
     this.disabled = this.props.disabled
     this.readOnly = this.props.readOnly
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
-    this.hidden = this.props.hidden
-    this.display = props.display
     this.pattern = this.props.pattern
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
@@ -157,13 +157,15 @@ export class VoidField<
   }
 
   get display(): FieldDisplayTypes {
-    if (this.selfDisplay) return this.selfDisplay
-    return this.parent?.display || this.form.display || 'visible'
+    const parentDisplay = this.parent?.display
+    if (isValid(this.selfDisplay)) return this.selfDisplay
+    return parentDisplay || this.form.display || 'visible'
   }
 
   get pattern(): FormPatternTypes {
-    if (this.selfPattern) return this.selfPattern
-    return this.parent?.pattern || this.form.pattern || 'editable'
+    const parentPattern = this.parent?.pattern
+    if (isValid(this.selfPattern)) return this.selfPattern
+    return parentPattern || this.form.pattern || 'editable'
   }
 
   get editable() {
@@ -245,11 +247,11 @@ export class VoidField<
   }
 
   set pattern(pattern: FieldPatternTypes) {
-    this.selfPattern = pattern || 'editable'
+    this.selfPattern = pattern
   }
 
   set display(display: FieldDisplayTypes) {
-    this.selfDisplay = display || 'visible'
+    this.selfDisplay = display
   }
 
   setTitle = (title?: TextType) => {
@@ -260,11 +262,11 @@ export class VoidField<
     this.description = description
   }
 
-  setDisplay = (type: FieldDisplayTypes) => {
+  setDisplay = (type?: FieldDisplayTypes) => {
     this.display = type
   }
 
-  setPattern = (type: FieldPatternTypes) => {
+  setPattern = (type?: FieldPatternTypes) => {
     this.pattern = type
   }
 

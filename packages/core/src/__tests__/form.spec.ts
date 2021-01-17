@@ -1,12 +1,7 @@
 import { createForm } from '../'
 import { onFieldValueChange } from '../effects'
-import { attach } from './shared'
+import { attach, sleep } from './shared'
 import { LifeCycleTypes } from '../types'
-
-const sleep = (duration = 100) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, duration)
-  })
 
 test('create form', () => {
   const form = attach(createForm())

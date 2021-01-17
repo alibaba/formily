@@ -239,6 +239,7 @@ export interface IVoidFieldFactoryProps<
 
 export type FieldRequests = {
   validate?: NodeJS.Timeout
+  loader?: NodeJS.Timeout
 }
 
 export type FieldCaches = {

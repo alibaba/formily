@@ -1,4 +1,11 @@
-import { action, makeObservable, observable, toJS, runInAction } from 'mobx'
+import {
+  action,
+  makeObservable,
+  observable,
+  toJS,
+  runInAction,
+  isObservable,
+} from 'mobx'
 import {
   FormPath,
   FormPathPattern,
@@ -8,6 +15,7 @@ import {
   globalThisPolyfill,
   defaults,
   isEmpty,
+  clone,
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -94,8 +102,12 @@ export class Form<ValueType = any> {
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
     this.hidden = this.props.hidden
-    this.originValues = this.props.values || ({} as any)
-    this.originInitialValues = this.props.initialValues || ({} as any)
+    this.originValues = isObservable(this.props.values)
+      ? this.props.values
+      : clone(this.props.values) || ({} as any)
+    this.originInitialValues = isObservable(this.props.values)
+      ? this.props.initialValues
+      : clone(this.props.initialValues) || ({} as any)
     this.graph = new Graph(this)
     this.heart = new Heart({
       lifecycles: this.lifecycles,
@@ -121,6 +133,7 @@ export class Form<ValueType = any> {
       setInitialValues: action,
       setInitialValuesIn: action,
       setPattern: action,
+      setDisplay: action,
       setState: action,
       deleteIntialValuesIn: action,
       deleteValuesIn: action,

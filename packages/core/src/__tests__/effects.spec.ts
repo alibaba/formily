@@ -35,7 +35,7 @@ import {
   onFormValuesChange,
   isVoidField,
 } from '../'
-import { attach } from './shared'
+import { attach, sleep } from './shared'
 
 test('onFormInit/onFormMount/onFormUnmount', () => {
   const mount = jest.fn()
@@ -259,7 +259,7 @@ test('onFormValidate', async () => {
   expect(validateSuccess).toBeCalledTimes(1)
 })
 
-test('onFieldChange', () => {
+test('onFieldChange', async () => {
   const fieldChange = jest.fn()
   const form = attach(
     createForm({
@@ -273,7 +273,7 @@ test('onFieldChange', () => {
             'inputValue',
             'loading',
             'visible',
-            'editable'
+            'editable',
           ],
           fieldChange
         )
@@ -291,6 +291,8 @@ test('onFieldChange', () => {
   field.onInput('321')
   expect(fieldChange).toBeCalledTimes(3)
   field.setLoading(true)
+  expect(fieldChange).toBeCalledTimes(3)
+  await sleep()
   expect(fieldChange).toBeCalledTimes(4)
   field.setPattern('disabled')
   expect(fieldChange).toBeCalledTimes(5)
