@@ -497,10 +497,225 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
   ).toEqual(2)
 })
 
-test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {})
+test('setPattern/pattern/editable/readOnly/disabled/readPretty', () => {
+  const form = attach(
+    createForm({
+      pattern: 'disabled',
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(form.pattern).toEqual('disabled')
+  expect(form.disabled).toBeTruthy()
+  expect(field.pattern).toEqual('disabled')
+  expect(field.disabled).toBeTruthy()
+  form.setPattern('readOnly')
+  expect(form.pattern).toEqual('readOnly')
+  expect(form.readOnly).toBeTruthy()
+  expect(field.pattern).toEqual('readOnly')
+  expect(field.readOnly).toBeTruthy()
+  form.setPattern('readPretty')
+  expect(form.pattern).toEqual('readPretty')
+  expect(form.readPretty).toBeTruthy()
+  expect(field.pattern).toEqual('readPretty')
+  expect(field.readPretty).toBeTruthy()
+  const form2 = attach(
+    createForm({
+      editable: false,
+    })
+  )
+  expect(form2.pattern).toEqual('readPretty')
+  expect(form2.readPretty).toBeTruthy()
+  const form3 = attach(
+    createForm({
+      disabled: true,
+    })
+  )
+  expect(form3.pattern).toEqual('disabled')
+  expect(form3.disabled).toBeTruthy()
+  const form4 = attach(
+    createForm({
+      readOnly: true,
+    })
+  )
+  expect(form4.pattern).toEqual('readOnly')
+  expect(form4.readOnly).toBeTruthy()
+  const form5 = attach(
+    createForm({
+      readPretty: true,
+    })
+  )
+  expect(form5.pattern).toEqual('readPretty')
+  expect(form5.readPretty).toBeTruthy()
+})
 
-test('setDisplay/display/visible/hidden', () => {})
+test('setDisplay/display/visible/hidden', () => {
+  const form = attach(
+    createForm({
+      display: 'hidden',
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  expect(form.display).toEqual('hidden')
+  expect(form.hidden).toBeTruthy()
+  expect(field.display).toEqual('hidden')
+  expect(field.hidden).toBeTruthy()
+  form.setDisplay('visible')
+  expect(form.display).toEqual('visible')
+  expect(form.visible).toBeTruthy()
+  expect(field.display).toEqual('visible')
+  expect(field.visible).toBeTruthy()
+  form.setDisplay('none')
+  expect(form.display).toEqual('none')
+  expect(form.visible).toBeFalsy()
+  expect(field.display).toEqual('none')
+  expect(field.visible).toBeFalsy()
+  const form2 = attach(
+    createForm({
+      hidden: true,
+    })
+  )
+  expect(form2.display).toEqual('hidden')
+  expect(form2.hidden).toBeTruthy()
+  expect(form2.visible).toBeFalsy()
+  const form3 = attach(
+    createForm({
+      visible: false,
+    })
+  )
+  expect(form3.display).toEqual('none')
+  expect(form3.visible).toBeFalsy()
+})
 
-test('submit', () => {})
+test('submit', async () => {
+  const form = attach(createForm())
+  const onSubmit = jest.fn()
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  let errors1: Error
+  try {
+    await form.submit(onSubmit)
+  } catch (e) {
+    errors1 = e
+  }
+  expect(errors1).not.toBeUndefined()
+  expect(onSubmit).toBeCalledTimes(0)
+  field.onInput('123')
+  await form.submit(onSubmit)
+  expect(onSubmit).toBeCalledTimes(1)
+  let errors2: Error
+  try {
+    await form.submit(() => {
+      throw new Error('xxx')
+    })
+  } catch (e) {
+    errors2 = e
+  }
+  expect(errors2).not.toBeUndefined()
+  expect(form.valid).toBeTruthy()
+})
 
-test('reset', () => {})
+test('reset', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        bb: 123,
+      },
+      initialValues: {
+        aa: 123,
+      },
+    })
+  )
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      required: true,
+    })
+  )
+  const field2 = attach(
+    form.createField({
+      name: 'bb',
+      required: true,
+    })
+  )
+  expect(field.value).toEqual(123)
+  expect(field2.value).toEqual(123)
+  expect(form.values.aa).toEqual(123)
+  expect(form.values.bb).toEqual(123)
+  field.onInput('xxxxx')
+  expect(form.values.aa).toEqual('xxxxx')
+  try {
+    await form.reset()
+  } catch {}
+  expect(form.valid).toBeTruthy()
+  expect(form.values.aa).toEqual(123)
+  expect(field.value).toEqual(123)
+  expect(form.values.bb).toBeUndefined()
+  expect(field2.value).toBeUndefined()
+  field.onInput('aaa')
+  field2.onInput('bbb')
+  expect(form.valid).toBeTruthy()
+  expect(form.values.aa).toEqual('aaa')
+  expect(field.value).toEqual('aaa')
+  expect(form.values.bb).toEqual('bbb')
+  expect(field2.value).toEqual('bbb')
+  try {
+    await form.reset('*', {
+      validate: true,
+    })
+  } catch {}
+  expect(form.valid).toBeFalsy()
+  expect(form.values.aa).toEqual(123)
+  expect(field.value).toEqual(123)
+  expect(form.values.bb).toBeUndefined()
+  expect(field2.value).toBeUndefined()
+  field.onInput('aaa')
+  field2.onInput('bbb')
+  try {
+    await form.reset('*', {
+      forceClear: true,
+    })
+  } catch {}
+  expect(form.valid).toBeTruthy()
+  expect(form.values.aa).toEqual(123)
+  expect(field.value).toEqual(123)
+  expect(form.values.bb).toBeUndefined()
+  expect(field2.value).toBeUndefined()
+  field.onInput('aaa')
+  field2.onInput('bbb')
+  try {
+    await form.reset('*', {
+      forceClear: true,
+      clearInitialValue: true,
+    })
+  } catch {}
+  expect(form.valid).toBeTruthy()
+  expect(form.values.aa).toBeUndefined()
+  expect(field.value).toBeUndefined()
+  expect(form.values.bb).toBeUndefined()
+  expect(field2.value).toBeUndefined()
+  field.onInput('aaa')
+  field2.onInput('bbb')
+  try {
+    await form.reset('aa', {
+      forceClear: true,
+      clearInitialValue: true,
+    })
+  } catch {}
+  expect(form.valid).toBeTruthy()
+  expect(form.values.aa).toBeUndefined()
+  expect(field.value).toBeUndefined()
+  expect(form.values.bb).toEqual('bbb')
+  expect(field2.value).toEqual('bbb')
+})
