@@ -29,6 +29,7 @@ const getIn = FormPath.getIn
 const self: any = globalThisPolyfill
 
 const getBrowserlanguage = () => {
+  /* istanbul ignore next */ 
   if (!self.navigator) {
     return 'en'
   }

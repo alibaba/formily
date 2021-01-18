@@ -2,18 +2,25 @@ import {
   validate,
   registerValidateRules,
   registerValidateFormats,
+  setValidateLanguage,
+  registerValidateMessageTemplateEnigne,
 } from '../index'
 
 registerValidateRules({
   custom: (value) => (value === '123' ? 'custom error' : ''),
+  customBool: () => false,
+  customBool2: () => true,
 })
 
 registerValidateFormats({
   custom: /^[\u4e00-\u9fa5]+$/,
 })
 
-const hasError = (results: any) => {
-  return expect(results?.error?.[0]).not.toBeUndefined()
+const hasError = (results: any, message?: string) => {
+  if (!message) {
+    return expect(results?.error?.[0]).not.toBeUndefined()
+  }
+  return expect(results?.error?.[0]).toEqual(message)
 }
 
 const noError = (results: any) => {
@@ -204,4 +211,52 @@ test('validate custom formats', async () => {
   hasError(await validate('aa asd', 'custom'))
   hasError(await validate('aa asd 中文', 'custom'))
   noError(await validate('中文', 'custom'))
+})
+
+test('validator return boolean', async () => {
+  hasError(
+    await validate('123', {
+      customBool: true,
+      message: 'custom error',
+    }),
+    'custom error'
+  )
+  noError(
+    await validate('123', {
+      customBool2: true,
+      message: 'custom error',
+    })
+  )
+})
+
+test('language', async () => {
+  setValidateLanguage('zh-CN')
+  hasError(
+    await validate('', {
+      required: true,
+    }),
+    '该字段是必填字段'
+  )
+  setValidateLanguage('en-US')
+  hasError(
+    await validate('', {
+      required: true,
+    }),
+    'This field is required'
+  )
+})
+
+test('validator template', async () => {
+  registerValidateMessageTemplateEnigne((message) => {
+    if (typeof message !== 'string') return message
+    return message.replace(/\<\<\s*([\w.]+)\s*\>\>/g, (_, $0) => {
+      return { aa: 123 }[$0]
+    })
+  })
+  hasError(
+    await validate('', () => {
+      return `<<aa>>=123`
+    }),
+    '123=123'
+  )
 })

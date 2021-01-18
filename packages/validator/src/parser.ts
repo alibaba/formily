@@ -86,7 +86,10 @@ export const parseValidatorRules = (
           getContext(getContext(context))
         )
       }
-      return
+      return {
+        type: 'error',
+        message: undefined,
+      }
     } else if (results) {
       if (isValidateResult(results)) {
         return render(results, getContext(context))
