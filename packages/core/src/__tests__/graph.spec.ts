@@ -8,9 +8,30 @@ test('getGraph/setGraph', () => {
       name: 'normal',
     })
   )
+  attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'object',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 'void',
+    })
+  )
   const graph = form.getFormGraph()
   form.clearFormGraph()
   form.setFormGraph(graph)
   const graph2 = form.getFormGraph()
   expect(graph).toEqual(graph2)
+  form.setFormGraph({
+    object: {
+      value: 123,
+    },
+  })
+  expect(form.query('object').value).toEqual(123)
 })

@@ -39,6 +39,12 @@ test('array field methods', () => {
   expect(array.value).toEqual([{ cc: 33 }, { dd: 44 }, { ee: 55 }])
   array.move(0, 2)
   expect(array.value).toEqual([{ dd: 44 }, { ee: 55 }, { cc: 33 }])
+  array.shift()
+  expect(array.value).toEqual([{ ee: 55 }, { cc: 33 }])
+  array.moveDown(0)
+  expect(array.value).toEqual([{ cc: 33 }, { ee: 55 }])
+  array.moveUp(1)
+  expect(array.value).toEqual([{ ee: 55 }, { cc: 33 }])
 })
 
 test('array field children state exchanges', () => {

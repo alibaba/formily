@@ -553,10 +553,10 @@ export class Form<ValueType = any> {
   }
 
   onUnmount = () => {
+    this.query('*').all.get((field) => field.dispose())
     this.unmounted = true
     this.fields = {}
     this.indexes.clear()
-    this.query('*').all.get((field) => field.dispose())
     this.notify(LifeCycleTypes.ON_FORM_UNMOUNT)
     if (globalThisPolyfill[DEV_TOOLS_HOOK]) {
       globalThisPolyfill[DEV_TOOLS_HOOK].unmount(this.id)

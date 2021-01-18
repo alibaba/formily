@@ -34,7 +34,7 @@ export class LifeCycle<Payload = any> {
     }
   }
 
-  notify = <Payload>(type: any, payload: Payload, ctx?: any) => {
+  notify = <Payload>(type: any, payload?: Payload, ctx?: any) => {
     if (isStr(type)) {
       this.listener.call(ctx, { type, payload }, ctx)
     }

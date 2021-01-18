@@ -13,3 +13,18 @@ test('create object field', () => {
   expect(object.removeProperty).toBeDefined()
   expect(object.existProperty).toBeDefined()
 })
+
+test('create object field methods', () => {
+  const form = attach(createForm())
+  const object = attach(
+    form.createObjectField({
+      name: 'object',
+    })
+  )
+  expect(object.value).toEqual({})
+  object.addProperty('aaa', 123)
+  expect(object.value).toEqual({ aaa: 123 })
+  object.removeProperty('aaa')
+  expect(object.value).toEqual({})
+  expect(object.existProperty('aaa')).toBeFalsy()
+})

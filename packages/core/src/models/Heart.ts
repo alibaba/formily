@@ -2,13 +2,13 @@ import { isStr, isArr, Subscribable, each } from '@formily/shared'
 import { LifeCycle } from './LifeCycle'
 import { IHeartProps } from '../types'
 export class Heart<Payload = any, Context = any> extends Subscribable {
-  private lifecycles: LifeCycle<Payload>[] = []
+  lifecycles: LifeCycle<Payload>[] = []
 
-  private outerLifecycles: {
+  outerLifecycles: {
     [key: string]: LifeCycle<Payload>[]
   } = {}
 
-  private context: Context
+  context: Context
 
   constructor({ lifecycles, context }: IHeartProps<Context> = {}) {
     super()
@@ -21,11 +21,11 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
       if (item instanceof LifeCycle) {
         return buf.concat(item)
       } else {
-        if (typeof item === 'object') {
+        if (isArr(item)) {
+          return this.buildLifeCycles(item)
+        } else if (typeof item === 'object') {
           this.context = item
           return buf
-        } else if (isArr(item)) {
-          return this.buildLifeCycles(item)
         }
         return buf
       }
@@ -44,7 +44,7 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
     this.lifecycles = this.buildLifeCycles(lifecycles || [])
   }
 
-  publish = <P, C>(type: any, payload: P, context?: C) => {
+  publish = <P, C>(type: any, payload?: P, context?: C) => {
     if (isStr(type)) {
       this.lifecycles.forEach((lifecycle) => {
         lifecycle.notify(type, payload, context || this.context)

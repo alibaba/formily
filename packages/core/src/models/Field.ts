@@ -6,7 +6,6 @@ import {
   isBool,
   each,
   isFn,
-  isPlainObj,
   isEmpty,
   toArr,
 } from '@formily/shared'
@@ -142,9 +141,9 @@ export class Field<
     this.hidden = this.props.hidden
     this.dataSource = this.props.dataSource
     this.validator = this.props.validator
+    this.required = this.props.required
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
-    this.required = this.props.required
   }
 
   protected makeObservable() {
@@ -431,24 +430,24 @@ export class Field<
       (desc) => 'required' in desc
     )
     if (hasRequired) {
-      if (isPlainObj(this.validator)) {
-        this.validator['required'] = required
-      } else if (isArr(this.validator)) {
-        this.validator = this.validator.map((desc) => {
-          if ('required' in desc) {
+      if (isArr(this.validator)) {
+        this.validator = this.validator.map((desc: any) => {
+          if (Object.prototype.hasOwnProperty.call(desc, 'required')) {
             desc.required = required
             return desc
           }
           return desc
         })
+      } else if (typeof this.validator === 'object') {
+        this.validator['required'] = required
       }
     } else {
-      if (isPlainObj(this.validator)) {
-        this.validator['required'] = required
-      } else if (isArr(this.validator)) {
+      if (isArr(this.validator)) {
         this.validator.push({
           required,
         })
+      } else if (typeof this.validator === 'object') {
+        this.validator['required'] = required
       } else if (this.validator) {
         this.validator = [
           this.validator,

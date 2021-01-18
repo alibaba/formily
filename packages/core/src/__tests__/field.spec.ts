@@ -466,6 +466,22 @@ test('setState/getState', () => {
     state.disabled = false
   })
   expect(aa.pattern).toEqual('editable')
+  aa.setState((state) => {
+    state.editable = true
+  })
+  expect(aa.pattern).toEqual('editable')
+  aa.setState((state) => {
+    state.editable = false
+  })
+  expect(aa.pattern).toEqual('readPretty')
+  aa.setState((state) => {
+    state.readPretty = true
+  })
+  expect(aa.pattern).toEqual('readPretty')
+  aa.setState((state) => {
+    state.readPretty = false
+  })
+  expect(aa.pattern).toEqual('editable')
 })
 
 test('setDataSource', () => {
@@ -500,14 +516,120 @@ test('setTitle/setDescription', () => {
   expect(aa.description).toEqual('This is AAA')
 })
 
-test('required/setRequired', () => {})
+test('required/setRequired', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  aa.setRequired(true)
+  expect(aa.required).toBeTruthy()
+  aa.setRequired(false)
+  expect(aa.required).toBeFalsy()
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      validator: {
+        max: 3,
+        required: true,
+      },
+    })
+  )
+  expect(bb.required).toBeTruthy()
+  bb.setRequired(false)
+  expect(bb.required).toBeFalsy()
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+      validator: [
+        'date',
+        {
+          max: 3,
+        },
+        {
+          required: true,
+        },
+      ],
+    })
+  )
+  expect(cc.required).toBeTruthy()
+  cc.setRequired(false)
+  expect(cc.required).toBeFalsy()
+  const dd = attach(
+    form.createField({
+      name: 'dd',
+      validator: {
+        max: 3,
+      },
+    })
+  )
+  expect(dd.required).toBeFalsy()
+  dd.setRequired(true)
+  expect(dd.required).toBeTruthy()
+})
 
-test('setFeedback', () => {})
+test('setErrors/setWarnings/setSuccesses/setValidator', async () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  aa.setErrors(['error'])
+  aa.setWarnings(['warning'])
+  aa.setSuccesses(['success'])
+  expect(aa.errors).toEqual(['error'])
+  expect(aa.valid).toBeFalsy()
+  expect(aa.warnings).toEqual(['warning'])
+  expect(aa.successes).toEqual(['success'])
+  aa.setValidator('date')
+  await aa.onInput('123')
+  expect(aa.errors.length).toEqual(2)
+})
 
-test('setErrors/setWarnings/setSuccesses', () => {})
-
-test('setValidator', () => {})
-
-test('reactions props', () => {})
-
-test('dispose reactions', () => {})
+test('reactions', async () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+      reactions: [
+        (field) => {
+          const aa = field.query('aa')
+          if (aa.value === '123') {
+            field.visible = false
+          } else {
+            field.visible = true
+          }
+          if (aa.inputValue === '333') {
+            field.editable = false
+          } else if (aa.inputValue === '444') {
+            field.editable = true
+          }
+          if (aa.initialValue === '555') {
+            field.readOnly = true
+          } else if (aa.initialValue === '666') {
+            field.readOnly = false
+          }
+        },
+      ],
+    })
+  )
+  expect(bb.visible).toBeTruthy()
+  aa.setValue('123')
+  expect(bb.visible).toBeFalsy()
+  await aa.onInput('333')
+  expect(bb.editable).toBeFalsy()
+  await aa.onInput('444')
+  expect(bb.editable).toBeTruthy()
+  aa.setInitialValue('555')
+  expect(bb.readOnly).toBeTruthy()
+  aa.setInitialValue('666')
+  expect(bb.readOnly).toBeFalsy()
+  form.onUnmount()
+})

@@ -189,16 +189,22 @@ type OmitState<P> = Omit<
   | 'getFormState'
 >
 
-export type IFieldState = NonFunctionProperties<
-  OmitState<Field<any, any, string, string>>
+export type IFieldState = Partial<
+  Pick<
+    Field,
+    NonFunctionPropertyNames<OmitState<Field<any, any, string, string>>>
+  >
 >
 
-export type IVoidFieldState = NonFunctionProperties<
-  OmitState<VoidField<any, any, string>>
+export type IVoidFieldState = Partial<
+  Pick<
+    VoidField,
+    NonFunctionPropertyNames<OmitState<VoidField<any, any, string>>>
+  >
 >
 
-export type IFormState = NonFunctionProperties<
-  OmitState<Form<{ [key: string]: any }>>
+export type IFormState = Partial<
+  Pick<Form, NonFunctionPropertyNames<OmitState<Form<{ [key: string]: any }>>>>
 >
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>

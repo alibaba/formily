@@ -182,6 +182,11 @@ test('query', () => {
       basePath: 'object.void',
     })
   )
+  attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
   expect(form.query('object').get()).not.toBeUndefined()
   expect(form.query('object').object.get()).not.toBeUndefined()
   expect(form.query('object.void').void.get()).not.toBeUndefined()
@@ -194,7 +199,9 @@ test('query', () => {
     'object',
     'object.void',
     'object.normal',
+    'array'
   ])
+  expect(form.query('array').array.get()).not.toBeUndefined()
 })
 
 test('notify/subscribe/unsubscribe', () => {
@@ -732,4 +739,13 @@ test('reset', async () => {
   expect(field.value).toBeUndefined()
   expect(form.values.bb).toEqual('bbb')
   expect(field2.value).toEqual('bbb')
+})
+
+test('devtools', () => {
+  window['__FORMILY_DEV_TOOLS_HOOK__'] = {
+    inject() {},
+    unmount() {},
+  }
+  const form = attach(createForm())
+  form.onUnmount()
 })
