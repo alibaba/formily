@@ -23,6 +23,9 @@ test('getGraph/setGraph', () => {
       name: 'void',
     })
   )
+  form.query('normal').get((field) => {
+    field.errors = ['error']
+  })
   const graph = form.getFormGraph()
   form.clearFormGraph()
   form.setFormGraph(graph)

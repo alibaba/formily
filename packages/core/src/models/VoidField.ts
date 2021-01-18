@@ -89,14 +89,14 @@ export class VoidField<
     this.initialized = false
     this.title = props.title
     this.description = props.description
-    this.hidden = this.props.hidden
+    this.pattern = this.props.pattern
     this.display = props.display
+    this.hidden = this.props.hidden
     this.editable = this.props.editable
     this.disabled = this.props.disabled
     this.readOnly = this.props.readOnly
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
-    this.pattern = this.props.pattern
     this.decorator = toArr(this.props.decorator)
     this.component = toArr(this.props.component)
   }
@@ -299,7 +299,7 @@ export class VoidField<
   setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: JSXComponenntProps<D>
   ) => {
-    this.decorator = [this.decorator?.[0], { ...this.component?.[1], ...props }]
+    this.decorator = [this.decorator?.[0], { ...this.decorator?.[1], ...props }]
   }
 
   setState: IModelSetter<IVoidFieldState> = createModelStateSetter(this)

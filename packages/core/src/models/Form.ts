@@ -553,7 +553,7 @@ export class Form<ValueType = any> {
   }
 
   onUnmount = () => {
-    this.query('*').all.get((field) => field.dispose())
+    this.query('*').all.getAll((field) => field.dispose())
     this.unmounted = true
     this.fields = {}
     this.indexes.clear()

@@ -124,7 +124,7 @@ export const isFieldState = (state: any): state is IFieldState => {
 }
 
 export const isGeneralFieldState = (node: any): node is IGeneralFieldState => {
-  if (!isFn(node.initialize)) return false
+  if (isFn(node.initialize)) return false
   return node?.displayName?.indexOf('Field') > -1
 }
 

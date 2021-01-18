@@ -202,6 +202,7 @@ test('query', () => {
     'array'
   ])
   expect(form.query('array').array.get()).not.toBeUndefined()
+  expect(form.query('*').all.get()).not.toBeUndefined()
 })
 
 test('notify/subscribe/unsubscribe', () => {

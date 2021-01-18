@@ -1,5 +1,6 @@
 import {
   createForm,
+  createEffectContext,
   onFieldChange,
   onFieldInit,
   onFieldInitialValueChange,
@@ -420,4 +421,71 @@ test('onFieldValidate', async () => {
   expect(validateFailed).toBeCalledTimes(1)
   expect(validateSuccess).toBeCalledTimes(1)
   expect(validateEnd).toBeCalledTimes(2)
+})
+
+test('async use will throw error', async () => {
+  const valueChange = jest.fn()
+  let error
+  const form = attach(
+    createForm({
+      effects() {
+        setTimeout(() => {
+          try {
+            onFieldValueChange('aa', valueChange)
+          } catch (e) {
+            error = e
+          }
+        })
+      },
+    })
+  )
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+    })
+  )
+  await sleep(10)
+  aa.setValue('123')
+  expect(valueChange).toBeCalledTimes(0)
+  expect(error).not.toBeUndefined()
+})
+
+test('effect context', async () => {
+  const context = createEffectContext<number>()
+  const context2 = createEffectContext<number>()
+  let results: any
+  let error: any
+  let error2: any
+  const consumer = () => {
+    results = context.consume()
+  }
+  const consumer2 = () => {
+    setTimeout(() => {
+      try {
+        results = context2.consume()
+      } catch (e) {
+        error2 = e
+      }
+    })
+  }
+  attach(
+    createForm({
+      effects() {
+        context.provide(123)
+        consumer()
+        setTimeout(() => {
+          try {
+            context2.provide(123)
+          } catch (e) {
+            error = e
+          }
+        })
+        consumer2()
+      },
+    })
+  )
+  await sleep(10)
+  expect(results).toEqual(123)
+  expect(error).not.toBeUndefined()
+  expect(error2).not.toBeUndefined()
 })

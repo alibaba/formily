@@ -482,6 +482,40 @@ test('setState/getState', () => {
     state.readPretty = false
   })
   expect(aa.pattern).toEqual('editable')
+  form.setFieldState('bb', (state) => {
+    state.value = 'bbb'
+  })
+  form.setFieldState('bb', (state) => {
+    state.visible = false
+  })
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+    })
+  )
+  expect(bb.value).toEqual('bbb')
+  expect(bb.visible).toBeFalsy()
+  form.setFieldState('*', (state) => {
+    state.value = '123'
+  })
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+    })
+  )
+  expect(aa.value).toEqual('123')
+  expect(bb.value).toEqual('123')
+  expect(cc.value).toEqual('123')
+  form.setFieldState(form.query('cc'), (state) => {
+    state.value = 'ccc'
+  })
+  expect(cc.value).toEqual('ccc')
+  form.setFieldState(cc, (state) => {
+    state.value = '123'
+  })
+  expect(cc.value).toEqual('123')
+  expect(form.getFieldState(aa)).not.toBeUndefined()
+  expect(form.getFieldState(form.query('aa'))).not.toBeUndefined()
 })
 
 test('setDataSource', () => {

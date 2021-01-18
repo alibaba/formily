@@ -45,6 +45,8 @@ test('array field methods', () => {
   expect(array.value).toEqual([{ cc: 33 }, { ee: 55 }])
   array.moveUp(1)
   expect(array.value).toEqual([{ ee: 55 }, { cc: 33 }])
+  array.move(1, 0)
+  expect(array.value).toEqual([{ cc: 33 }, { ee: 55 }])
 })
 
 test('array field children state exchanges', () => {
@@ -122,4 +124,67 @@ test('array field children state exchanges', () => {
   expect(form.query('array.0.value').value).toEqual(44)
   expect(form.query('array.1.value').value).toEqual(55)
   expect(form.query('array.2.value').value).toEqual(33)
+  array.move(2, 0)
+  expect(array.value).toEqual([{ value: 33 }, { value: 44 }, { value: 55 }])
+  expect(form.query('array.0.value').value).toEqual(33)
+  expect(form.query('array.1.value').value).toEqual(44)
+  expect(form.query('array.2.value').value).toEqual(55)
+})
+
+test('void children', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 0,
+      basePath: 'array',
+    })
+  )
+  const aaa = attach(
+    form.createField({
+      name: 'aaa',
+      basePath: 'array.0',
+      value: 123,
+    })
+  )
+  expect(aaa.value).toEqual(123)
+  expect(array.value).toEqual([123])
+})
+
+test('exchange children', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: '0.aaa',
+      basePath: 'array',
+      value: '123',
+    })
+  )
+  attach(
+    form.createField({
+      name: '0.bbb',
+      basePath: 'array',
+      value: '321',
+    })
+  )
+  attach(
+    form.createField({
+      name: '1.bbb',
+      basePath: 'array',
+      value: 'kkk',
+    })
+  )
+  expect(array.value).toEqual([{ aaa: '123', bbb: '321' }, { bbb: 'kkk' }])
+  array.move(0, 1)
+  expect(array.value).toEqual([{ bbb: 'kkk' }, { aaa: '123', bbb: '321' }])
+  expect(form.query('array.0.aaa').get()).toBeUndefined()
 })
