@@ -11,17 +11,18 @@ import {
   map,
   reduce,
 } from '../array'
-import { clone } from '../clone'
+import { clone, shallowClone } from '../clone'
 import { lowerCase } from '../case'
 import { deprecate } from '../deprecate'
 import { globalThisPolyfill } from '../global'
 import { isValid, isEmpty } from '../isEmpty'
 import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
-import { BigData } from '../big-data'
 import { merge } from '../merge'
-import { isFn } from '../types'
+import { instOf } from '../instanceof'
+import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../types'
 import { log } from '../log'
+import { defaults } from '../defaults'
 
 describe('array', () => {
   test('toArr', () => {
@@ -164,13 +165,6 @@ describe('compare', () => {
     isEqual([{ k1: 'v1' }, { k2: 'v2' }], [{ k1: 'v1' }, { k2: 'v2' }])
   ).toBeTruthy()
   expect(isEqual([{ k1: 'v1' }, { k2: 'v2' }], [{ k1: 'v1' }])).toBeFalsy()
-  expect(
-    isEqual(
-      [{ k1: 'v1' }, { k2: 'v2' }],
-      [{ k1: 'v1' }],
-      (_, key) => key !== 'k1'
-    )
-  ).toBeFalsy()
 
   // moment
   const momentA = moment('2019-11-11', 'YYYY-MM-DD')
@@ -211,18 +205,68 @@ describe('compare', () => {
   expect(isEqual(objA, { key: 'val' })).toBeTruthy()
   expect(isEqual(objA, objB)).toBeFalsy()
   expect(isEqual(objA, objC)).toBeFalsy()
+  expect(isEqual([11, 22], [33, 44])).toBeFalsy()
+  expect(isEqual([11, 22], {})).toBeFalsy()
+  expect(isEqual(new URL('https://aa.test'), {})).toBeFalsy()
+  expect(instOf(new URL('https://aa.test'), 'URL')).toBeTruthy()
+  expect(instOf(new Date(), 'Date')).toBeTruthy()
+  expect(
+    isEqual(new URL('https://aa.test'), new URL('https://aa.test'))
+  ).toBeTruthy()
+  expect(
+    isEqual(
+      {
+        $$typeof: true,
+        _owner: true,
+        aaa: 123,
+      },
+      {
+        $$typeof: true,
+        _owner: true,
+        aaa: 123,
+      }
+    )
+  ).toBeTruthy()
+  expect(
+    isEqual(
+      {
+        $$typeof: true,
+        _owner: true,
+        aaa: 123,
+      },
+      {
+        $$typeof: true,
+        _owner: true,
+        bbb: 123,
+      }
+    )
+  ).toBeFalsy()
+  expect(
+    isEqual(
+      {
+        $$typeof: true,
+        _owner: true,
+        aaa: 123,
+      },
+      {
+        $$typeof: true,
+        _owner: true,
+        aaa: 333,
+      }
+    )
+  ).toBeFalsy()
 })
 
 describe('clone and compare', () => {
   test('clone form data', () => {
     var dd = new Map()
     dd.set('aaa', { bb: 123 })
-    // var ee = new WeakMap()
-    // ee.set({}, 1)
-    // var ff = new WeakSet()
-    // ff.add({})
-    // var gg = new Set()
-    // gg.add(3)
+    var ee = new WeakMap()
+    ee.set({}, 1)
+    var ff = new WeakSet()
+    ff.add({})
+    var gg = new Set()
+    gg.add(3)
 
     var a = {
       aa: 123123,
@@ -232,53 +276,95 @@ describe('clone and compare', () => {
         console.log('123')
       },
       dd,
-      // ee,
-      // ff,
-      // gg
+      ee,
+      ff,
+      gg,
     }
     var cloned = clone(a)
     expect(isEqual(cloned, a)).toBeTruthy()
     expect(a === cloned).toBeFalsy()
     expect(a.bb[0] === cloned.bb[0]).toBeFalsy()
-    expect(a.dd === cloned.dd).toBeFalsy()
+    expect(a.dd === cloned.dd).toBeTruthy()
     expect(a.dd.get('aaa') === cloned.dd.get('aaa')).toBeTruthy()
     expect(a.cc === cloned.cc).toBeTruthy()
-    // expect(a.ee === cloned.ee).toBeTruthy()
-    // expect(a.ff === cloned.ff).toBeTruthy()
-    // expect(a.gg === cloned.gg).toBeTruthy()
-  })
-
-  test('filter equal', () => {
-    var a = {
+    expect(a.ee === cloned.ee).toBeTruthy()
+    expect(a.ff === cloned.ff).toBeTruthy()
+    expect(a.gg === cloned.gg).toBeTruthy()
+    expect(
+      clone({
+        aa: {
+          _isAMomentObject: true,
+        },
+        bb: {
+          _isJSONSchemaObject: true,
+        },
+        cc: {
+          $$typeof: true,
+          _owner: true,
+        },
+      })
+    ).toEqual({
       aa: {
-        bb: 123,
+        _isAMomentObject: true,
       },
-    }
-    var b = {
-      aa: {
-        bb: 123,
-      },
-    }
-
-    expect(isEqual(a, b)).toBeTruthy()
-    expect(isEqual(a, b, (_, key) => key !== 'aa')).toBeTruthy()
-  })
-
-  test('filter clone', () => {
-    var a = {
-      aa: {
-        bb: 123,
+      bb: {
+        _isJSONSchemaObject: true,
       },
       cc: {
-        dd: [1, 3, 4, 5],
+        $$typeof: true,
+        _owner: true,
       },
+    })
+    expect(
+      clone({
+        toJS() {
+          return 123
+        },
+      })
+    ).toEqual(123)
+    expect(
+      clone({
+        toJSON() {
+          return 123
+        },
+      })
+    ).toEqual(123)
+    const symbol = {
+      [Symbol('xxx')]: 123,
     }
+    expect(clone(symbol) === symbol).toBeTruthy()
+  })
 
-    var b = clone(a, (_, key) => key !== 'aa')
+  test('native clone', () => {
+    const map = new Map()
+    map.set('key', 123)
+    expect(clone(map) === map).toBeTruthy()
+    const weakMap = new WeakMap()
+    const key = {}
+    weakMap.set(key, 123)
+    expect(clone(weakMap) === weakMap).toBeTruthy()
+    const weakSet = new WeakSet()
+    const key2 = {}
+    weakMap.set(key2, 123)
+    expect(clone(weakSet) === weakSet).toBeTruthy()
+    const set = new Set()
+    expect(clone(set) === set).toBeTruthy()
+    const date = new Date()
+    expect(clone(date) === date).toBeTruthy()
+    const file = new File([''], 'filename')
+    expect(clone(file) === file).toBeTruthy()
+    const url = new URL('https://test.com')
+    expect(clone(url) === url).toBeTruthy()
+    const regexp = /\d+/
+    expect(clone(regexp) === regexp).toBeTruthy()
+    const promise = Promise.resolve(1)
+    expect(clone(promise) === promise).toBeTruthy()
+  })
 
-    expect(a.aa === b.aa).toBeTruthy()
-    expect(a.cc === b.cc).toBeFalsy()
-    expect(isEqual(a.cc, b.cc)).toBeTruthy()
+  test('shallowClone', () => {
+    expect(shallowClone({ aa: 123 })).toEqual({ aa: 123 })
+    expect(shallowClone([123])).toEqual([123])
+    expect(shallowClone(/\d+/)).toEqual(/\d+/)
   })
 })
 
@@ -430,6 +516,17 @@ describe('types', () => {
     expect(isFn(undefined)).toBeFalsy()
     expect(isFn(['🦄'])).toBeFalsy()
   })
+  test('isNumberLike', () => {
+    expect(isNumberLike(123)).toBeTruthy()
+    expect(isNumberLike('123')).toBeTruthy()
+    expect(isNumberLike('aa')).toBeFalsy()
+  })
+  test('isReactElement', () => {
+    expect(isReactElement({ $$typeof: true, _owner: true })).toBeTruthy()
+  })
+  test('isHTMLElement', () => {
+    expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
+  })
 })
 
 describe('log', () => {
@@ -496,40 +593,6 @@ describe('log', () => {
     })
     expect(FormilyLog.error(SomeObject, Tips)).toEqual({
       content: SomeObject,
-      keyword: Keyword,
-      tips: Tips,
-    })
-  })
-  test('close open', () => {
-    expect(FormilyLog.log(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    FormilyLog.close()
-    expect(FormilyLog.log(SomeString)).toEqual({
-      content: undefined,
-      keyword: Keyword,
-    })
-    FormilyLog.open()
-    expect(FormilyLog.log(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-
-    expect(FormilyLog.warn(SomeString, Tips)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-      tips: Tips,
-    })
-    FormilyLog.close()
-    expect(FormilyLog.log(SomeString)).toEqual({
-      content: undefined,
-      keyword: Keyword,
-      tips: undefined,
-    })
-    FormilyLog.open()
-    expect(FormilyLog.warn(SomeString, Tips)).toEqual({
-      content: SomeString,
       keyword: Keyword,
       tips: Tips,
     })
@@ -623,75 +686,82 @@ describe('merge', () => {
       },
     })
   })
-})
-
-describe('BigData', () => {
-  test('merge', () => {
-    const structure = new BigData()
-
-    const bigData1 = structure.create({
-      ff: {
-        gg: {
-          hh: 123,
-        },
-      },
+  test('merge array', () => {
+    expect(merge([11, 22], [333])).toEqual([11, 22, 333])
+  })
+  test('merge custom', () => {
+    expect(
+      merge(
+        { aa: { cc: 123 } },
+        { aa: { bb: 321 } },
+        {
+          customMerge() {
+            return (a, b) => ({ ...a, ...b })
+          },
+        }
+      )
+    ).toEqual({ aa: { cc: 123, bb: 321 } })
+  })
+  test('merge symbols', () => {
+    const symbol = Symbol('xxx')
+    expect(merge({ [symbol]: 123 }, { aa: 321 })).toEqual({
+      [symbol]: 123,
+      aa: 321,
     })
-
-    const bigData2 = {
-      ff: {
-        gg: {
-          hh: 123,
-        },
-      },
-    }
-
-    const merged1 = merge(
-      {
-        aa: {
-          bb: {
-            cc: {
-              dd: 123,
-            },
-          },
-        },
-      },
-      {
-        aa: {
-          bb: {
-            cc: {
-              ee: bigData1,
-            },
-          },
-        },
-      }
-    )
-
-    const merged2 = merge(
-      {
-        aa: {
-          bb: {
-            cc: {
-              dd: 123,
-            },
-          },
-        },
-      },
-      {
-        aa: {
-          bb: {
-            cc: {
-              ee: bigData2,
-            },
-          },
-        },
-      }
-    )
-
-    expect(merged1.aa.bb.cc.ee === bigData1).toBeTruthy()
-    expect(merged2.aa.bb.cc.ee === bigData2).toBeFalsy()
+  })
+  test('merge unmatch', () => {
+    expect(merge({ aa: 123 }, [111])).toEqual([111])
   })
 })
 
 describe('globalThis', () => {
   expect(globalThisPolyfill.requestAnimationFrame).not.toBeUndefined()
+})
+
+describe('instanceof', () => {
+  test('instOf', () => {
+    expect(instOf(123, 123)).toBeFalsy()
+  })
+})
+
+test('defaults', () => {
+  const toJSON = () => {}
+  const toJS = () => {}
+  expect(
+    defaults(
+      {
+        aa: {
+          _isAMomentObject: true,
+        },
+        bb: {
+          _isJSONSchemaObject: true,
+        },
+        cc: {
+          $$typeof: true,
+          _owner: true,
+        },
+        dd: {
+          toJSON,
+        },
+        ee: {
+          toJS,
+        },
+      },
+      {
+        aa: { value: 111 },
+        bb: { value: 222 },
+        cc: { value: 333 },
+        dd: { value: 444 },
+        ee: { value: 555 },
+        mm: { value: 123 },
+      }
+    )
+  ).toEqual({
+    aa: { value: 111 },
+    bb: { value: 222 },
+    cc: { value: 333 },
+    dd: { value: 444 },
+    ee: { value: 555 },
+    mm: { value: 123 },
+  })
 })

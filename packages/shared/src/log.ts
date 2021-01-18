@@ -1,6 +1,3 @@
-enum TYPE_STRING {
-  UNDEFINED = 'undefined'
-}
 enum CONSOLE_METHODS {
   DEBUG = 'debug',
   ERROR = 'error',
@@ -27,7 +24,7 @@ enum CONSOLE_METHODS {
   CONTEXT = 'context',
   MEMORY = 'memory',
   // custom name
-  TIPS = 'tips'
+  TIPS = 'tips',
 }
 type ILogData<C, T> = {
   content: C
@@ -37,43 +34,15 @@ type ILogData<C, T> = {
 
 class Log {
   private keyword = 'APP'
-  private defaultMethods = [
-    CONSOLE_METHODS.LOG,
-    CONSOLE_METHODS.ERROR,
-    CONSOLE_METHODS.WARN
-  ]
-  private disabled = true
-  private methods: CONSOLE_METHODS[] = []
-  constructor(keyword: string, methods: CONSOLE_METHODS[]) {
+  constructor(keyword: string) {
     this.keyword = keyword
-    this.methods = methods
-    this.initConsole()
   }
-  private initConsole(): void {
-    const hasConsole = typeof console === TYPE_STRING.UNDEFINED
-    this.disabled = hasConsole
-    this.methods.forEach((name: CONSOLE_METHODS) => {
-      if (this.defaultMethods.indexOf(name) > -1) return
-      this[name] = this.wrap(name)
-    })
-  }
-  private wrap(name: CONSOLE_METHODS): (content: any) => void {
-    return (content: any) => {
-      this.callConsole<any, any>(name, content)
-    }
-  }
+
   private getKeyWordStyle(name: CONSOLE_METHODS): string {
     return `[ ${this.keyword} ${name} ]: `
   }
   private callConsole<C, T>(name: CONSOLE_METHODS, content: C, tips?: T) {
     const logData: ILogData<C, T> = { content, keyword: this.keyword }
-    if (this.disabled) {
-      logData.content = void 0
-      if (tips) {
-        logData.tips = void 0
-      }
-      return logData
-    }
     const Console = console
     const keyword = this.getKeyWordStyle(name)
     Console[name] && Console[name](keyword, content)
@@ -95,12 +64,6 @@ class Log {
   public info<C, T>(content: C) {
     return this.callConsole<C, T>(CONSOLE_METHODS.INFO, content)
   }
-  public close() {
-    this.disabled = true
-  }
-  public open() {
-    this.initConsole()
-  }
 }
 
-export const log = new Log('Formily', [])
+export const log = new Log('Formily')

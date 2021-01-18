@@ -1,4 +1,3 @@
-import { BigData } from './big-data'
 import { isValid } from './isEmpty'
 
 function defaultIsMergeableObject(value: any) {
@@ -33,17 +32,13 @@ function emptyTarget(val: any) {
 
 function cloneUnlessOtherwiseSpecified(value: any, options: Options) {
   if (options.clone !== false && options.isMergeableObject(value)) {
-    if (BigData.isBigData(value)) {
-      return BigData.clone(value)
-    } else {
-      return deepmerge(emptyTarget(value), value, options)
-    }
+    return deepmerge(emptyTarget(value), value, options)
   }
   return value
 }
 
 function defaultArrayMerge(target: any, source: any, options: Options) {
-  return target.concat(source).map(function(element) {
+  return target.concat(source).map(function (element) {
     return cloneUnlessOtherwiseSpecified(element, options)
   })
 }
@@ -58,7 +53,7 @@ function getMergeFunction(key: string, options: Options) {
 
 function getEnumerableOwnPropertySymbols(target: any): any {
   return Object.getOwnPropertySymbols
-    ? Object.getOwnPropertySymbols(target).filter(function(symbol) {
+    ? Object.getOwnPropertySymbols(target).filter(function (symbol) {
         return target.propertyIsEnumerable(symbol)
       })
     : []
@@ -70,6 +65,7 @@ function getKeys(target: any) {
 }
 
 function propertyIsOnObject(object: any, property: any) {
+  /* istanbul ignore next */
   try {
     return property in object
   } catch (_) {
@@ -92,11 +88,12 @@ function mergeObject(target: any, source: any, options: Options) {
   const destination = options.assign ? target || {} : {}
   if (!options.isMergeableObject(target)) return target
   if (!options.assign) {
-    getKeys(target).forEach(function(key) {
+    getKeys(target).forEach(function (key) {
       destination[key] = cloneUnlessOtherwiseSpecified(target[key], options)
     })
   }
-  getKeys(source).forEach(function(key) {
+  getKeys(source).forEach(function (key) {
+    /* istanbul ignore next */
     if (propertyIsUnsafe(target, key)) {
       return
     }
@@ -157,18 +154,5 @@ function deepmerge(target: any, source: any, options: any) {
     return mergeObject(target, source, options)
   }
 }
-function deepmergeAll(objects: object[], options?: Options): object
-function deepmergeAll<T>(objects: Partial<T>[], options?: Options): T
-function deepmergeAll(array: any, options: any) {
-  if (!Array.isArray(array)) {
-    throw new Error('first argument should be an array')
-  }
-
-  return array.reduce(function(prev, next) {
-    return deepmerge(prev, next, options)
-  }, {})
-}
-
-deepmerge.all = deepmergeAll
 
 export const merge = deepmerge

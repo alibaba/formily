@@ -1,30 +1,17 @@
-import { isFn, isArr } from './types'
+import { isArr } from './types'
 import { instOf } from './instanceof'
-import { BigData } from './big-data'
 const isArray = isArr
 const keyList = Object.keys
 const hasProp = Object.prototype.hasOwnProperty
 
-type Filter = (comparies: { a: any; b: any }, key: string) => boolean
-
 /* eslint-disable */
-function equal(a: any, b: any, filter?: Filter) {
+function equal(a: any, b: any) {
   // fast-deep-equal index.js 2.0.1
   if (a === b) {
     return true
   }
 
   if (a && b && typeof a === 'object' && typeof b === 'object') {
-    const bigDataA = BigData.isBigData(a)
-    const bigDataB = BigData.isBigData(b)
-
-    if (bigDataA !== bigDataB) {
-      return false
-    }
-    if (bigDataA && bigDataB) {
-      return BigData.compare(a, b)
-    }
-
     const arrA = isArray(a)
     const arrB = isArray(b)
     let i: number
@@ -37,7 +24,7 @@ function equal(a: any, b: any, filter?: Filter) {
         return false
       }
       for (i = length; i-- !== 0; ) {
-        if (!equal(a[i], b[i], filter)) {
+        if (!equal(a[i], b[i])) {
           return false
         }
       }
@@ -47,7 +34,6 @@ function equal(a: any, b: any, filter?: Filter) {
     if (arrA !== arrB) {
       return false
     }
-
     const momentA = a && a._isAMomentObject
     const momentB = b && b._isAMomentObject
     if (momentA !== momentB) return false
@@ -64,10 +50,6 @@ function equal(a: any, b: any, filter?: Filter) {
     if (dateA && dateB) {
       return a.getTime() === b.getTime()
     }
-    const schemaA = a && a.toJSON
-    const schemaB = b && b.toJSON
-    if (schemaA !== schemaB) return false
-    if (schemaA && schemaB) return equal(a.toJSON(), b.toJSON(), filter)
     const regexpA = instOf(a, 'RegExp')
     const regexpB = instOf(b, 'RegExp')
     if (regexpA !== regexpB) {
@@ -78,9 +60,19 @@ function equal(a: any, b: any, filter?: Filter) {
     }
     const urlA = instOf(a, 'URL')
     const urlB = instOf(b, 'URL')
+
+    if (urlA !== urlB) {
+      return false
+    }
+
     if (urlA && urlB) {
       return a.href === b.href
     }
+
+    const schemaA = a && a.toJSON
+    const schemaB = b && b.toJSON
+    if (schemaA !== schemaB) return false
+    if (schemaA && schemaB) return equal(a.toJSON(), b.toJSON())
 
     const keys = keyList(a)
     length = keys.length
@@ -107,17 +99,9 @@ function equal(a: any, b: any, filter?: Filter) {
         // .$$typeof and ._store on just reasonable markers of a react element
         continue
       } else {
-        if (isFn(filter)) {
-          if (filter({ a: a[key], b: b[key] }, key)) {
-            if (!equal(a[key], b[key], filter)) {
-              return false
-            }
-          }
-        } else {
-          // all other properties should be traversed as usual
-          if (!equal(a[key], b[key], filter)) {
-            return false
-          }
+        // all other properties should be traversed as usual
+        if (!equal(a[key], b[key])) {
+          return false
         }
       }
     }
@@ -130,10 +114,11 @@ function equal(a: any, b: any, filter?: Filter) {
 }
 // end fast-deep-equal
 
-export const isEqual = function exportedEqual(a: any, b: any, filter?: Filter) {
+export const isEqual = function exportedEqual(a: any, b: any) {
   try {
-    return equal(a, b, filter)
+    return equal(a, b)
   } catch (error) {
+    /* istanbul ignore next */ 
     if (
       (error.message && error.message.match(/stack|recursion/i)) ||
       error.number === -2146828260
@@ -151,6 +136,7 @@ export const isEqual = function exportedEqual(a: any, b: any, filter?: Filter) {
       return false
     }
     // some other error. we should definitely know about these
+    /* istanbul ignore next */ 
     throw error
   }
 }
