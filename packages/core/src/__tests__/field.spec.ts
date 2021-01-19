@@ -90,6 +90,13 @@ test('nested display/pattern', () => {
       basePath: 'object',
     })
   )
+  const ddd = attach(
+    form.createField({
+      name: 'ddd',
+    })
+  )
+  expect(ddd.visible).toBeTruthy()
+  expect(ddd.editable).toBeTruthy()
   object_.setPattern('readPretty')
   expect(void_.pattern).toEqual('readPretty')
   expect(aaa.pattern).toEqual('readPretty')
@@ -191,6 +198,7 @@ test('setLoading/setValidating', async () => {
   await sleep()
   expect(field.loading).toBeTruthy()
   field.setLoading(false)
+  field.setLoading(false)
   expect(field.loading).toBeFalsy()
   field.setValidating(true)
   expect(field.validating).toBeFalsy()
@@ -201,14 +209,16 @@ test('setLoading/setValidating', async () => {
 })
 
 test('setComponent/setComponentProps', () => {
+  const component = () => null
   const form = attach(createForm())
   const field = attach(
     form.createField({
       name: 'aa',
     })
   )
-  const component = () => null
-  field.setComponent(component, { props: 123 })
+
+  field.setComponent(undefined, { props: 123 })
+  field.setComponent(component)
   expect(field.component[0]).toEqual(component)
   expect(field.component[1]).toEqual({ props: 123 })
   field.setComponentProps({
@@ -218,14 +228,15 @@ test('setComponent/setComponentProps', () => {
 })
 
 test('setDecorator/setDecoratorProps', () => {
+  const component = () => null
   const form = attach(createForm())
   const field = attach(
     form.createField({
       name: 'aa',
     })
   )
-  const component = () => null
-  field.setDecorator(component, { props: 123 })
+  field.setDecorator(undefined, { props: 123 })
+  field.setDecorator(component)
   expect(field.decorator[0]).toEqual(component)
   expect(field.decorator[1]).toEqual({ props: 123 })
   field.setDecoratorProps({
@@ -610,16 +621,41 @@ test('setErrors/setWarnings/setSuccesses/setValidator', async () => {
       name: 'aa',
     })
   )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+    })
+  )
+  const cc = attach(
+    form.createField({
+      name: 'cc',
+    })
+  )
+  const dd = attach(
+    form.createField({
+      name: 'dd',
+      validator() {
+        return new Promise(() => {})
+      },
+    })
+  )
   aa.setErrors(['error'])
   aa.setWarnings(['warning'])
   aa.setSuccesses(['success'])
+  bb.setSuccesses(['success'])
+  cc.setWarnings(['warning'])
   expect(aa.errors).toEqual(['error'])
   expect(aa.valid).toBeFalsy()
   expect(aa.warnings).toEqual(['warning'])
   expect(aa.successes).toEqual(['success'])
+  expect(bb.validateStatus).toEqual('success')
+  expect(cc.validateStatus).toEqual('warning')
   aa.setValidator('date')
   await aa.onInput('123')
   expect(aa.errors.length).toEqual(2)
+  dd.onInput('123')
+  await sleep()
+  expect(dd.validateStatus).toEqual('validating')
 })
 
 test('reactions', async () => {
@@ -651,6 +687,7 @@ test('reactions', async () => {
             field.readOnly = false
           }
         },
+        null,
       ],
     })
   )
@@ -666,4 +703,33 @@ test('reactions', async () => {
   aa.setInitialValue('666')
   expect(bb.readOnly).toBeFalsy()
   form.onUnmount()
+})
+
+test('fault tolerance', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'aa',
+      value: 123,
+    })
+  )
+  field.setDisplay('none')
+  expect(field.value).toBeUndefined()
+  field.setDisplay('visible')
+  expect(field.value).toEqual(123)
+  field.setDisplay('none')
+  expect(field.value).toBeUndefined()
+  field.setValue(321)
+  expect(field.value).toEqual(321)
+  field.setDisplay('visible')
+  expect(field.value).toEqual(321)
+  form.setDisplay(null)
+  form.setPattern(null)
+  const field2 = attach(
+    form.createField({
+      name: 'xxx',
+    })
+  )
+  expect(field2.display).toEqual('visible')
+  expect(field2.pattern).toEqual('editable')
 })

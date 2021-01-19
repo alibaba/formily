@@ -29,7 +29,7 @@ export const createEffect = <
   F extends (payload: any, ...ctxs: any[]) => AnyFunction
 >(
   type: string,
-  callback: F
+  callback?: F
 ) => {
   return (...args: Parameters<ReturnType<F>>) => {
     if (__FORM_HOOK_ENVS__.effectStart) {
@@ -114,22 +114,22 @@ export const isVoidField = (node: any): node is VoidField => {
 }
 
 export const isFormState = (state: any): state is IFormState => {
-  if (isFn(state.initialize)) return false
+  if (isFn(state?.initialize)) return false
   return state?.displayName === 'Form'
 }
 
 export const isFieldState = (state: any): state is IFieldState => {
-  if (isFn(state.initialize)) return false
+  if (isFn(state?.initialize)) return false
   return state?.displayName === 'Field'
 }
 
 export const isGeneralFieldState = (node: any): node is IGeneralFieldState => {
-  if (isFn(node.initialize)) return false
+  if (isFn(node?.initialize)) return false
   return node?.displayName?.indexOf('Field') > -1
 }
 
 export const isArrayFieldState = (state: any): state is IFieldState => {
-  if (isFn(state.initialize)) return false
+  if (isFn(state?.initialize)) return false
   return state?.displayName === 'ArrayField'
 }
 
@@ -144,12 +144,12 @@ export const isDataFieldState = (node: any) => {
 }
 
 export const isObjectFieldState = (state: any): state is IFieldState => {
-  if (isFn(state.initialize)) return false
+  if (isFn(state?.initialize)) return false
   return state?.displayName === 'ObjectField'
 }
 
 export const isVoidFieldState = (state: any): state is IVoidFieldState => {
-  if (isFn(state.initialize)) return false
+  if (isFn(state?.initialize)) return false
   return state?.displayName === 'VoidField'
 }
 

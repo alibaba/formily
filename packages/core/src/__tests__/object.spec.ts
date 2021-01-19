@@ -19,6 +19,7 @@ test('create object field methods', () => {
   const object = attach(
     form.createObjectField({
       name: 'object',
+      value: {},
     })
   )
   expect(object.value).toEqual({})

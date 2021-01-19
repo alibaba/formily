@@ -2,6 +2,7 @@ import { createForm } from '../'
 import { onFieldValueChange } from '../effects'
 import { attach, sleep } from './shared'
 import { LifeCycleTypes } from '../types'
+import { makeAutoObservable, runInAction } from 'mobx'
 
 test('create form', () => {
   const form = attach(createForm())
@@ -16,13 +17,28 @@ test('createField/createArrayField/createObjectField/createVoidField', () => {
       basePath: 'parent',
     })
   )
+  const normal2 = attach(
+    form.createField({
+      name: 'normal',
+      basePath: 'parent',
+    })
+  )
   const array_ = attach(
+    form.createArrayField({ name: 'array', basePath: 'parent' })
+  )
+  const array2_ = attach(
     form.createArrayField({ name: 'array', basePath: 'parent' })
   )
   const object_ = attach(
     form.createObjectField({ name: 'object', basePath: 'parent' })
   )
+  const object2_ = attach(
+    form.createObjectField({ name: 'object', basePath: 'parent' })
+  )
   const void_ = attach(
+    form.createVoidField({ name: 'void', basePath: 'parent' })
+  )
+  const void2_ = attach(
     form.createVoidField({ name: 'void', basePath: 'parent' })
   )
   const children_ = attach(
@@ -42,6 +58,14 @@ test('createField/createArrayField/createObjectField/createVoidField', () => {
   expect(void_.path.toString()).toEqual('parent.void')
   expect(children_.address.toString()).toEqual('parent.void.children')
   expect(children_.path.toString()).toEqual('parent.children')
+  expect(form.createField({ name: '' })).toBeUndefined()
+  expect(form.createArrayField({ name: '' })).toBeUndefined()
+  expect(form.createObjectField({ name: '' })).toBeUndefined()
+  expect(form.createVoidField({ name: '' })).toBeUndefined()
+  expect(array_ === array2_).toBeTruthy()
+  expect(object_ === object2_).toBeTruthy()
+  expect(void_ === void2_).toBeTruthy()
+  expect(normal === normal2).toBeTruthy()
 })
 
 test('setValues/setInitialValues', () => {
@@ -96,6 +120,27 @@ test('setValues/setInitialValues', () => {
   expect(form.initialValues?.cc?.pp).toBeUndefined()
   form.setValues({}, 'overwrite')
   expect(form.values.aa).toBeUndefined()
+})
+
+test('observable values/initialValues', () => {
+  const values: any = makeAutoObservable({
+    aa: 123,
+    bb: 321,
+  })
+  const initialValues: any = makeAutoObservable({
+    cc: 321,
+    dd: 444,
+  })
+  const form = attach(
+    createForm({
+      values,
+      initialValues,
+    })
+  )
+  runInAction(() => {
+    values.kk = 321
+  })
+  expect(form.values.kk).toEqual(321)
 })
 
 test('deleteValuesIn/deleteInitialValuesIn', () => {
@@ -199,10 +244,29 @@ test('query', () => {
     'object',
     'object.void',
     'object.normal',
-    'array'
+    'array',
   ])
   expect(form.query('array').array.get()).not.toBeUndefined()
   expect(form.query('*').all.get()).not.toBeUndefined()
+  expect(form.query('*(oo)').all.get()).toBeUndefined()
+  expect(form.query('*(oo)').all.getAll()).toEqual([])
+  expect(form.query('object.void').value).toBeUndefined()
+  expect(form.query('object.void').initialValue).toBeUndefined()
+  expect(form.query('object.void').inputValue).toBeUndefined()
+  expect(form.query('array').value).toEqual([])
+  expect(form.query('array').initialValue).toBeUndefined()
+  expect(form.query('array').inputValue).toBeNull()
+  form.setFieldState('array', (state) => {
+    state.value = [111]
+    state.initialValue = [111]
+    state.inputValue = [111]
+  })
+  expect(form.query('array').value).toEqual([111])
+  expect(form.query('array').initialValue).toEqual([111])
+  expect(form.query('array').inputValue).toEqual([111])
+  expect(form.query('opo').value).toBeUndefined()
+  expect(form.query('opo').initialValue).toBeUndefined()
+  expect(form.query('opo').inputValue).toBeUndefined()
 })
 
 test('notify/subscribe/unsubscribe', () => {
@@ -268,6 +332,10 @@ test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', 
   expect(form.getFieldState('aa', (state) => state.title)).toBeUndefined()
   expect(form.getFieldState('aa', (state) => state.description)).toBeUndefined()
   expect(form.getFieldState('aa', (state) => state.value)).toBeUndefined()
+  form.setState((state) => {
+    state.display = 'none'
+  })
+  expect(form.getFieldState('aa', (state) => state.visible)).toBeFalsy()
 })
 
 test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses/queryFeedbacks', async () => {
@@ -297,6 +365,11 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
     form.createField({
       name: 'bb',
       required: true,
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 'cc',
     })
   )
   try {
@@ -683,6 +756,11 @@ test('reset', async () => {
     form.createField({
       name: 'bb',
       required: true,
+    })
+  )
+  attach(
+    form.createVoidField({
+      name: 'cc',
     })
   )
   expect(field.value).toEqual(123)

@@ -29,7 +29,7 @@ export class ArrayField<
   push = (...items: any[]) => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      this.value?.push(...items)
+      this.value.push(...items)
       this.validate('onInput')
     })
   }
@@ -37,8 +37,8 @@ export class ArrayField<
   pop = () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      const index = this.value?.length - 1
-      const poped = this.value?.pop()
+      const index = this.value.length - 1
+      const poped = this.value.pop()
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
@@ -51,7 +51,7 @@ export class ArrayField<
   insert = (index: number, ...items: any[]) => {
     if (!isArr(this.value)) return
     runInAction(() => {
-      this.value?.splice(index, 0, ...items)
+      this.value.splice(index, 0, ...items)
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
@@ -63,7 +63,7 @@ export class ArrayField<
   remove = (index: number) => {
     if (!isArr(this.value)) return
     runInAction(() => {
-      this.value?.splice(index, 1)
+      this.value.splice(index, 1)
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
@@ -75,7 +75,7 @@ export class ArrayField<
   shift = () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      const shifted = this.value?.shift()
+      const shifted = this.value.shift()
       this.validate('onInput')
       return shifted
     })

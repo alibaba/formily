@@ -41,7 +41,7 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
   }
 
   setLifeCycles = (lifecycles: LifeCycle[] = []) => {
-    this.lifecycles = this.buildLifeCycles(lifecycles || [])
+    this.lifecycles = this.buildLifeCycles(lifecycles)
   }
 
   publish = <P, C>(type: any, payload?: P, context?: C) => {

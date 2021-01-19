@@ -75,15 +75,35 @@ test('setTitle/setDescription', () => {
   expect(aa.description).toEqual('This is AAA')
 })
 
-test('setDecorator/setDecoratorProps', () => {
+test('setComponent/setComponentProps', () => {
+  const component = () => null
   const form = attach(createForm())
   const field = attach(
     form.createVoidField({
       name: 'aa',
     })
   )
+
+  field.setComponent(undefined, { props: 123 })
+  field.setComponent(component)
+  expect(field.component[0]).toEqual(component)
+  expect(field.component[1]).toEqual({ props: 123 })
+  field.setComponentProps({
+    hello: 'world',
+  })
+  expect(field.component[1]).toEqual({ props: 123, hello: 'world' })
+})
+
+test('setDecorator/setDecoratorProps', () => {
   const component = () => null
-  field.setDecorator(component, { props: 123 })
+  const form = attach(createForm())
+  const field = attach(
+    form.createVoidField({
+      name: 'aa',
+    })
+  )
+  field.setDecorator(undefined, { props: 123 })
+  field.setDecorator(component)
   expect(field.decorator[0]).toEqual(component)
   expect(field.decorator[1]).toEqual({ props: 123 })
   field.setDecoratorProps({
@@ -138,6 +158,7 @@ test('setState/getState', () => {
     state.readPretty = false
   })
   expect(aa.pattern).toEqual('editable')
+  expect(aa.parent).toBeUndefined()
 })
 
 test('nested display/pattern', () => {
@@ -151,6 +172,12 @@ test('nested display/pattern', () => {
     form.createVoidField({
       name: 'void',
       basePath: 'object',
+    })
+  )
+  const void2_ = attach(
+    form.createVoidField({
+      name: 'void',
+      basePath: 'object.void.0',
     })
   )
   const aaa = attach(
@@ -195,6 +222,7 @@ test('nested display/pattern', () => {
   expect(aaa.display).toEqual('visible')
   expect(bbb.display).toEqual('visible')
   void_.onUnmount()
+  expect(void2_.parent === void_).toBeTruthy()
 })
 
 test('reactions', async () => {
@@ -226,6 +254,7 @@ test('reactions', async () => {
             field.readOnly = false
           }
         },
+        null,
       ],
     })
   )
@@ -241,4 +270,17 @@ test('reactions', async () => {
   aa.setInitialValue('666')
   expect(bb.readOnly).toBeFalsy()
   form.onUnmount()
+})
+
+test('fault tolerance', () => {
+  const form = attach(createForm())
+  form.setDisplay(null)
+  form.setPattern(null)
+  const field = attach(
+    form.createVoidField({
+      name: 'xxx',
+    })
+  )
+  expect(field.display).toEqual('visible')
+  expect(field.pattern).toEqual('editable')
 })

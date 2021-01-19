@@ -1,4 +1,3 @@
-import { isFn } from '@formily/shared'
 import { autorun, runInAction } from 'mobx'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
@@ -8,11 +7,9 @@ function createFormEffect(type: LifeCycleTypes) {
   return createEffect(
     type,
     (form: Form) => (callback: (form: Form) => void) => {
-      if (isFn(callback)) {
-        runInAction(() => {
-          callback(form)
-        })
-      }
+      runInAction(() => {
+        callback(form)
+      })
     }
   )
 }
@@ -75,6 +72,6 @@ export function onFormReact(callback?: (form: Form) => void) {
     })
   })
   onFormUnMount(() => {
-    if (dispose) dispose()
+    dispose()
   })
 }

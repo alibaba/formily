@@ -262,6 +262,8 @@ test('onFormValidate', async () => {
 
 test('onFieldChange', async () => {
   const fieldChange = jest.fn()
+  const valueChange = jest.fn()
+  const valueChange2 = jest.fn()
   const form = attach(
     createForm({
       effects() {
@@ -278,6 +280,9 @@ test('onFieldChange', async () => {
           ],
           fieldChange
         )
+        onFieldChange('aa', valueChange)
+        onFieldChange('aa', undefined, valueChange2)
+        onFieldChange('aa')
       },
     })
   )
@@ -300,6 +305,8 @@ test('onFieldChange', async () => {
   field.setDisplay('none')
   expect(fieldChange).toBeCalledTimes(6)
   form.onUnmount()
+  expect(valueChange).toBeCalledTimes(4)
+  expect(valueChange2).toBeCalledTimes(4)
 })
 
 test('onFieldInit/onFieldMount/onFieldUnmount', () => {
@@ -331,12 +338,14 @@ test('onFieldInitialValueChange/onFieldValueChange/onFieldInputValueChange', () 
   const fieldValueChange = jest.fn()
   const fieldInitialValueChange = jest.fn()
   const fieldInputValueChange = jest.fn()
+  const notTrigger = jest.fn()
   const form = attach(
     createForm({
       effects() {
         onFieldInitialValueChange('aa', fieldInitialValueChange)
         onFieldValueChange('aa', fieldValueChange)
         onFieldInputValueChange('aa', fieldInputValueChange)
+        onFieldValueChange('xx', notTrigger)
       },
     })
   )
@@ -357,6 +366,7 @@ test('onFieldInitialValueChange/onFieldValueChange/onFieldInputValueChange', () 
   expect(fieldValueChange).toBeCalledTimes(2)
   expect(fieldInitialValueChange).toBeCalledTimes(1)
   expect(fieldInputValueChange).toBeCalledTimes(1)
+  expect(notTrigger).toBeCalledTimes(0)
 })
 
 test('onFieldReact', () => {
@@ -373,6 +383,7 @@ test('onFieldReact', () => {
             react()
           }
         })
+        onFieldReact('aa', null)
       },
     })
   )
@@ -453,6 +464,7 @@ test('async use will throw error', async () => {
 test('effect context', async () => {
   const context = createEffectContext<number>()
   const context2 = createEffectContext<number>()
+  const context3 = createEffectContext<number>(123)
   let results: any
   let error: any
   let error2: any
@@ -472,6 +484,7 @@ test('effect context', async () => {
     createForm({
       effects() {
         context.provide(123)
+        context3.provide()
         consumer()
         setTimeout(() => {
           try {

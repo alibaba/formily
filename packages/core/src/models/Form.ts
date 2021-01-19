@@ -87,7 +87,7 @@ export class Form<ValueType = any> {
 
   protected initialize(props: IFormProps) {
     this.id = uid()
-    this.props = { ...Form.defaultProps, ...props }
+    this.props = { ...props }
     this.initialized = false
     this.submitting = false
     this.validating = false
@@ -520,7 +520,7 @@ export class Form<ValueType = any> {
               address: field.address.toString(),
               path: field.path.toString(),
             }))
-            .filter((feedback) => feedback.messages?.length > 0)
+            .filter((feedback) => feedback.messages.length > 0)
         )
       }, [])
   }
@@ -647,9 +647,5 @@ export class Form<ValueType = any> {
     })
     this.notify(LifeCycleTypes.ON_FORM_RESET)
     await Promise.all(tasks)
-  }
-
-  static defaultProps: IFormProps = {
-    initialValues: {},
   }
 }

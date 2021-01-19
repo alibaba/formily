@@ -34,12 +34,10 @@ export class Query<T = Field | ArrayField | ObjectField> {
   get(getter?: any): any {
     const output = (field: GeneralField) => {
       if (!field) return
-      if (this.match(field)) {
-        if (isFn(getter)) {
-          return getter(field as any, field.address) as any
-        }
-        return field as any
+      if (isFn(getter)) {
+        return getter(field as any, field.address) as any
       }
+      return field as any
     }
 
     if (!this.pattern.isMatchPattern) {

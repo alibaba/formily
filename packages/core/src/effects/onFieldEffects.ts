@@ -17,14 +17,10 @@ function createFieldEffect(type: LifeCycleTypes) {
       pattern: FormPathPattern,
       callback: (field: GeneralField, form: Form) => void
     ) => {
-      if (isFn(callback)) {
-        if (
-          FormPath.parse(pattern).matchAliasGroup(field.address, field.path)
-        ) {
-          runInAction(() => {
-            callback(field, form)
-          })
-        }
+      if (FormPath.parse(pattern).matchAliasGroup(field.address, field.path)) {
+        runInAction(() => {
+          callback(field, form)
+        })
       }
     }
   )
@@ -71,12 +67,26 @@ export function onFieldReact(
     })
   })
 }
-
 export function onFieldChange(
   pattern: FormPathPattern,
-  watches: (keyof IFieldState)[] = ['value'],
   callback?: (field: GeneralField, form: Form) => void
-) {
+): void
+export function onFieldChange(
+  pattern: FormPathPattern,
+  watches: (keyof IFieldState)[],
+  callback?: (field: GeneralField, form: Form) => void
+): void
+export function onFieldChange(
+  pattern: FormPathPattern,
+  watches: any,
+  callback?: (field: GeneralField, form: Form) => void
+): void {
+  if (isFn(watches)) {
+    callback = watches
+    watches = ['value']
+  } else {
+    watches = watches || ['value']
+  }
   const disposers = []
   onFieldInit(pattern, (field, form) => {
     if (isFn(callback)) callback(field, form)

@@ -25,6 +25,7 @@ test('array field methods', () => {
   const array = attach(
     form.createArrayField({
       name: 'array',
+      value: [],
     })
   )
   array.push({ aa: 11 }, { bb: 22 })
@@ -187,4 +188,36 @@ test('exchange children', () => {
   array.move(0, 1)
   expect(array.value).toEqual([{ bbb: 'kkk' }, { aaa: '123', bbb: '321' }])
   expect(form.query('array.0.aaa').get()).toBeUndefined()
+})
+
+test('fault tolerance', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  const array2 = attach(
+    form.createArrayField({
+      name: 'array2',
+      value: [1, 2],
+    })
+  )
+  array.setValue({} as any)
+  array.push(11)
+  array.pop()
+  array.remove(1)
+  array.shift()
+  array.unshift(1)
+  array.move(0, 1)
+  array.moveUp(1)
+  array.moveDown(1)
+  array.insert(1)
+  expect(array.value).toEqual({})
+  array2.move(1, 1)
+  array2.moveUp(2)
+  array2.moveUp(0)
+  array2.moveDown(0)
+  array2.moveDown(1)
+  array2.moveDown(2)
 })

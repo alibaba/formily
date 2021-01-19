@@ -298,7 +298,7 @@ export class Field<
   }
 
   get valid() {
-    return !this.errors?.length
+    return !this.errors.length
   }
 
   get invalid() {
@@ -376,8 +376,8 @@ export class Field<
   get validateStatus() {
     if (this.invalid) return 'error'
     if (this.validating) return 'validating'
-    if (this.warnings?.length) return 'warning'
-    if (this.successes?.length) return 'success'
+    if (this.warnings.length) return 'warning'
+    if (this.successes.length) return 'success'
   }
 
   set readOnly(readOnly: boolean) {
@@ -438,7 +438,7 @@ export class Field<
           }
           return desc
         })
-      } else if (typeof this.validator === 'object') {
+      } else {
         this.validator['required'] = required
       }
     } else {
@@ -580,15 +580,18 @@ export class Field<
     props?: JSXComponenntProps<C>
   ) => {
     this.component = [
-      component || this.component?.[0],
-      { ...this.component?.[1], ...props },
+      component || FormPath.getIn(this.component, 0),
+      { ...FormPath.getIn(this.component, 1), ...props },
     ]
   }
 
   setComponentProps = <C extends JSXComponent = Component>(
     props?: JSXComponenntProps<C>
   ) => {
-    this.component = [this.component?.[0], { ...this.component?.[1], ...props }]
+    this.component = [
+      FormPath.getIn(this.component, 0),
+      { ...FormPath.getIn(this.component, 1), ...props },
+    ]
   }
 
   setDecorator = <D extends JSXComponent>(
@@ -596,15 +599,18 @@ export class Field<
     props?: JSXComponenntProps<D>
   ) => {
     this.decorator = [
-      component || this.decorator?.[0],
-      { ...this.decorator?.[1], ...props },
+      component || FormPath.getIn(this.decorator, 0),
+      { ...FormPath.getIn(this.decorator, 1), ...props },
     ]
   }
 
   setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: JSXComponenntProps<D>
   ) => {
-    this.decorator = [this.decorator?.[0], { ...this.decorator?.[1], ...props }]
+    this.decorator = [
+      FormPath.getIn(this.decorator, 0),
+      { ...FormPath.getIn(this.decorator, 1), ...props },
+    ]
   }
 
   setState: IModelSetter<IFieldState> = createModelStateSetter(this)
@@ -725,9 +731,7 @@ export class Field<
 
   dispose = () => {
     this.disposers.forEach((dispose) => {
-      if (isFn(dispose)) {
-        dispose()
-      }
+      dispose()
     })
   }
 

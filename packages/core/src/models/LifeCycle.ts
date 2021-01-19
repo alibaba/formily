@@ -1,12 +1,15 @@
-import { isFn, isStr, isObj, each } from '@formily/shared'
+import { isFn, isStr, each } from '@formily/shared'
 import { LifeCycleHandler, LifeCyclePayload } from '../types'
+
+type LifeCycleParams<Payload> = Array<
+  | string
+  | LifeCycleHandler<Payload>
+  | { [key: string]: LifeCycleHandler<Payload> }
+>
 export class LifeCycle<Payload = any> {
   private listener: LifeCyclePayload<Payload>
 
-  constructor(handler: LifeCycleHandler<Payload>)
-  constructor(type: string, handler: LifeCycleHandler<Payload>)
-  constructor(handlerMap: { [key: string]: LifeCycleHandler<Payload> })
-  constructor(...params: any[]) {
+  constructor(...params: LifeCycleParams<Payload>) {
     this.listener = this.buildListener(params)
   }
   buildListener = (params: any[]) => {
@@ -20,7 +23,7 @@ export class LifeCycle<Payload = any> {
             params[index + 1].call(this, payload.payload, ctx)
           }
           index++
-        } else if (isObj(item)) {
+        } else {
           each<any, any>(item, (handler, type) => {
             if (isFn(handler) && isStr(type)) {
               if (type === payload.type) {
