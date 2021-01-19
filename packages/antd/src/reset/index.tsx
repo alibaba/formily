@@ -8,7 +8,6 @@ export type IResetProps = Formily.Core.Types.IFieldResetOptions & ButtonProps
 export const Reset: React.FC<IResetProps> = ({
   forceClear,
   validate,
-  clearInitialValue,
   ...props
 }) => {
   const form = useForm()
@@ -22,7 +21,6 @@ export const Reset: React.FC<IResetProps> = ({
         form.reset('*', {
           forceClear,
           validate,
-          clearInitialValue,
         })
       }}
     >
