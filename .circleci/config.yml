@@ -29,6 +29,11 @@ jobs:
           paths:
             - ./node_modules
             - ~/.cache/yarn
+
+      - run:
+          name: Run Build
+          command: yarn build
+
       - run:
           name: Run Tests
           command: yarn test
