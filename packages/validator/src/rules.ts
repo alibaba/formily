@@ -6,7 +6,8 @@ import {
   isArr,
   isFn,
   toArr,
-  isBool
+  isBool,
+  isNum,
 } from '@formily/shared'
 import { getValidateFormats } from './registry'
 import { ValidatorRules } from './types'
@@ -38,25 +39,33 @@ export default {
   },
   max(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
-    const length = getLength(value)
+    const length = isNum(value) ? value : getLength(value)
     const max = Number(rule.max)
     return length > max ? rule.message : ''
   },
   maximum(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
-    return Number(value) > Number(rule.maximum) ? rule.message : ''
+    const length = isNum(value) ? value : getLength(value)
+    const max = Number(rule.maximum)
+    return length > max ? rule.message : ''
   },
   exclusiveMaximum(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
-    return Number(value) >= Number(rule.maximum) ? rule.message : ''
+    const length = isNum(value) ? value : getLength(value)
+    const max = Number(rule.exclusiveMaximum)
+    return length >= max ? rule.message : ''
   },
   minimum(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
-    return Number(value) < Number(rule.minimum) ? rule.message : ''
+    const length = isNum(value) ? value : getLength(value)
+    const min = Number(rule.minimum)
+    return length < min ? rule.message : ''
   },
   exclusiveMinimum(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
-    return Number(value) <= Number(rule.minimum) ? rule.message : ''
+    const length = isNum(value) ? value : getLength(value)
+    const min = Number(rule.exclusiveMinimum)
+    return length <= min ? rule.message : ''
   },
   len(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
@@ -66,7 +75,7 @@ export default {
   },
   min(value: any, rule: ValidatorRules) {
     if (!isValid(value)) return ''
-    const length = getLength(value)
+    const length = isNum(value) ? value : getLength(value)
     const min = Number(rule.min)
     return length < min ? rule.message : ''
   },
@@ -80,11 +89,12 @@ export default {
         rule.validator(value, rule, context)
       )
       if (isBool(response)) {
-        return response ? rule.message : ''
+        return !response ? rule.message : ''
       } else {
         return response
       }
     }
+    /* istanbul ignore next */
     throw new Error("The rule's validator property must be a function.")
   },
   whitespace(value: any, rule: ValidatorRules) {
@@ -97,5 +107,5 @@ export default {
     if (!isValid(value)) return ''
     const enums = toArr(rule.enum)
     return enums.indexOf(value) === -1 ? rule.message : ''
-  }
+  },
 }

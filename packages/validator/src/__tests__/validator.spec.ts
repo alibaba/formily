@@ -43,6 +43,7 @@ test('empty array validate', async () => {
     success: [],
     warning: [],
   })
+  noError(await validate([''], { required: true }))
 })
 
 test('empty object validate', async () => {
@@ -95,6 +96,86 @@ test('first validate', async () => {
     success: [],
     warning: [],
   })
+})
+
+test('max/min/maximum/exclusiveMaximum/minimum/exclusiveMinimum/len', async () => {
+  hasError(await validate(6, { max: 5 }))
+  noError(await validate(5, { max: 5 }))
+  hasError(await validate([1, 2, 3, 4, 5, 6], { max: 5 }))
+  noError(await validate([1, 2, 3, 4, 5], { max: 5 }))
+  hasError(await validate('123456', { max: 5 }))
+  noError(await validate('12345', { max: 5 }))
+  hasError(await validate(2, { min: 3 }))
+  noError(await validate(3, { min: 3 }))
+  hasError(await validate([1, 2], { min: 3 }))
+  noError(await validate([1, 2, 3], { min: 3 }))
+  hasError(await validate('12', { min: 3 }))
+  noError(await validate('123', { min: 3 }))
+
+  hasError(await validate(6, { maximum: 5 }))
+  noError(await validate(5, { maximum: 5 }))
+  hasError(await validate([1, 2, 3, 4, 5, 6], { maximum: 5 }))
+  noError(await validate([1, 2, 3, 4, 5], { maximum: 5 }))
+  hasError(await validate('123456', { maximum: 5 }))
+  noError(await validate('12345', { maximum: 5 }))
+  hasError(await validate(2, { minimum: 3 }))
+  noError(await validate(3, { minimum: 3 }))
+  hasError(await validate([1, 2], { minimum: 3 }))
+  noError(await validate([1, 2, 3], { minimum: 3 }))
+  hasError(await validate('12', { minimum: 3 }))
+  noError(await validate('123', { minimum: 3 }))
+
+  hasError(await validate(6, { exclusiveMaximum: 5 }))
+  hasError(await validate(5, { exclusiveMaximum: 5 }))
+  hasError(await validate([1, 2, 3, 4, 5, 6], { exclusiveMaximum: 5 }))
+  hasError(await validate([1, 2, 3, 4, 5], { exclusiveMaximum: 5 }))
+  hasError(await validate('123456', { exclusiveMaximum: 5 }))
+  hasError(await validate('12345', { exclusiveMaximum: 5 }))
+  hasError(await validate(2, { exclusiveMinimum: 3 }))
+  hasError(await validate(3, { exclusiveMinimum: 3 }))
+  hasError(await validate([1, 2], { exclusiveMinimum: 3 }))
+  hasError(await validate([1, 2, 3], { exclusiveMinimum: 3 }))
+  hasError(await validate('12', { exclusiveMinimum: 3 }))
+  hasError(await validate('123', { exclusiveMinimum: 3 }))
+
+  hasError(await validate('1234', { len: 3 }))
+})
+
+test('pattern', async () => {
+  hasError(await validate('aaa', { pattern: /^\d+$/ }))
+})
+
+test('validator', async () => {
+  hasError(
+    await validate('aaa', {
+      validator() {
+        return false
+      },
+      message: 'error',
+    }),
+    'error'
+  )
+})
+
+test('whitespace', async () => {
+  hasError(
+    await validate(' ', {
+      whitespace: true,
+    })
+  )
+})
+
+test('enum', async () => {
+  hasError(
+    await validate('11', {
+      enum: ['22', '33'],
+    })
+  )
+  noError(
+    await validate('11', {
+      enum: ['22', '33', '11'],
+    })
+  )
 })
 
 test('filter trigger type(unmatch)', async () => {

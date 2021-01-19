@@ -11,24 +11,11 @@ import {
 import { getValidateRules, getValidateLocale } from './registry'
 import { render } from './template'
 
-const intersection = (arr1: string[], arr2: string[]) => {
-  return arr1.filter((key) => arr2.includes(key))
-}
-
 const getRuleMessage = (rule: ValidatorRules, type: string) => {
-  const registryRuleKeys = Object.keys(getValidateRules() || {})
-  const currentRuleKeys = Object.keys(rule || {})
   if (rule.format) {
     return rule.message || getValidateLocale(rule.format)
   }
-  if (
-    isFn(rule.validator) ||
-    intersection(currentRuleKeys, registryRuleKeys).length > 2
-  ) {
-    return getValidateLocale(type)
-  } else {
-    return rule.message || getValidateLocale(type)
-  }
+  return rule.message || getValidateLocale(type)
 }
 
 export const parseValidatorDescription = (
