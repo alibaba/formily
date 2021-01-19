@@ -18,5 +18,9 @@
         "./packages/*"
       ]
     }
-  }
+  },
+  "exclude": [
+    "packages/*/esm/*",
+    "packages/*/lib/*"
+  ]
 }
