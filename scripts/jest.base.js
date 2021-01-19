@@ -32,6 +32,7 @@ module.exports = {
       diagnostics: false,
     },
   },
+  testPathIgnorePatterns: ['/lib/', '/esm', '/node_modules/'],
   //watchPlugins: ['jest-watch-lerna-packages'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
