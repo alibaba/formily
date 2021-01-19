@@ -27,8 +27,8 @@ import { ReservedProperties, GetterSetterProperties } from './constants'
 export const getValuesFromEvent = (args: any[]) => {
   return args.map((event) => {
     if (event?.target) {
-      if (isValid(event.target?.value)) return event.target?.value
-      if (isValid(event.target?.checked)) return event.target?.checked
+      if (isValid(event.target.value)) return event.target.value
+      if (isValid(event.target.checked)) return event.target.checked
       return
     }
     return event
@@ -87,8 +87,8 @@ export const applyFieldPatches = (
 }
 
 export const matchFeedback = (
-  search: ISearchFeedback,
-  feedback: FormFeedback
+  search?: ISearchFeedback,
+  feedback?: FormFeedback
 ) => {
   if (!search || !feedback) return false
   if (search.type && search.type !== feedback.type) return false
@@ -127,17 +127,17 @@ export const queryFeedbackMessages = (
 export const updateFeedback = (field: Field, feedback?: Feedback) => {
   if (!feedback) return
   return runInAction(() => {
-    if (!field.feedbacks?.length) {
-      if (!feedback?.messages?.length) {
+    if (!field.feedbacks.length) {
+      if (!feedback.messages?.length) {
         return
       }
       field.feedbacks = [feedback]
     } else {
       const searched = queryFeedbacks(field, feedback)
-      if (searched?.length) {
-        field.feedbacks = field.feedbacks?.reduce((buf, item) => {
+      if (searched.length) {
+        field.feedbacks = field.feedbacks.reduce((buf, item) => {
           if (searched.includes(item)) {
-            if (feedback?.messages?.length) {
+            if (feedback.messages?.length) {
               item.messages = feedback.messages
               return buf.concat(item)
             } else {
@@ -149,7 +149,7 @@ export const updateFeedback = (field: Field, feedback?: Feedback) => {
         }, [])
         return
       }
-      field.feedbacks = field.feedbacks?.concat(feedback)
+      field.feedbacks = field.feedbacks.concat(feedback)
     }
   })
 }
@@ -160,8 +160,7 @@ export const validateToFeedbacks = async (
 ) => {
   const results = await validate(field.value, field.validator, {
     triggerType,
-    validateFirst:
-      field.props?.validateFirst || field.form?.props?.validateFirst,
+    validateFirst: field.props.validateFirst || field.form.props.validateFirst,
     context: this,
   })
   const shouldSkipValidate =
@@ -376,9 +375,8 @@ export const subscribeUpdate = (
   }
 }
 
-export const setModelState = (model: any, setter: any, exclude?: string[]) => {
+export const setModelState = (model: any, setter: any) => {
   const isSkipProperty = (key: string) => {
-    if (exclude?.includes?.(key)) return true
     if (key === 'address' || key === 'path') return true
     if (key === 'valid' || key === 'invalid') return true
     if (key === 'validateStatus') return true
@@ -426,13 +424,12 @@ export const setModelState = (model: any, setter: any, exclude?: string[]) => {
   }
 }
 
-export const getModelState = (model: any, getter?: any, exclude?: string[]) => {
+export const getModelState = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
     const results = {}
     each(GetterSetterProperties, (key) => {
-      if (exclude?.includes?.(key)) return
       if (key in model) {
         results[key] = toJS(model[key])
       }
@@ -443,7 +440,6 @@ export const getModelState = (model: any, getter?: any, exclude?: string[]) => {
         if (isFn(value)) {
           return buf
         }
-        if (exclude?.includes?.(key)) return buf
         if (ReservedProperties.includes(key)) return buf
         if (key === 'address' || key === 'path') {
           buf[key] = value.toString()
@@ -457,12 +453,12 @@ export const getModelState = (model: any, getter?: any, exclude?: string[]) => {
   }
 }
 
-export const createModelStateSetter = (model: any, exclude?: string[]) => {
-  return action((state?: any) => setModelState(model, state, exclude))
+export const createModelStateSetter = (model: any) => {
+  return action((state?: any) => setModelState(model, state))
 }
 
-export const createModelStateGetter = (model: any, exclude?: string[]) => {
-  return (getter?: any) => getModelState(model, getter, exclude)
+export const createModelStateGetter = (model: any) => {
+  return (getter?: any) => getModelState(model, getter)
 }
 
 export const createFieldStateSetter = (form: Form) => {

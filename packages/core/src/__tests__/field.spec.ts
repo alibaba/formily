@@ -311,6 +311,17 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
       ],
     })
   )
+  const field3 = attach(
+    form.createField({
+      name: 'xxx',
+    })
+  )
+  const field4 = attach(
+    form.createField({
+      name: 'ppp',
+      required: true,
+    })
+  )
   await field.validate()
   await field2.validate()
   expect(field.invalid).toBeTruthy()
@@ -331,6 +342,40 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
     'This field is not a valid date format',
     'error',
   ])
+  field.setFeedback()
+  expect(field.errors).toEqual([
+    'This field is a invalid url',
+    'This field is not a valid date format',
+    'error',
+  ])
+  expect(field3.feedbacks).toEqual([])
+  field3.setFeedback()
+  field3.setFeedback({ messages: null })
+  field3.setFeedback({ messages: ['error'], code: 'EffectError' })
+  field3.setFeedback({ messages: ['error2'], code: 'EffectError' })
+  expect(field3.feedbacks).toEqual([
+    { code: 'EffectError', messages: ['error2'] },
+  ])
+  expect(
+    field3.queryFeedbacks({
+      address: 'xxx',
+    })
+  ).toEqual([{ code: 'EffectError', messages: ['error2'] }])
+  expect(
+    field3.queryFeedbacks({
+      address: 'yyy',
+    })
+  ).toEqual([])
+  expect(
+    field3.queryFeedbacks({
+      path: 'yyy',
+    })
+  ).toEqual([])
+  field3.setFeedback({ messages: null, code: 'EffectError' })
+  field3.setFeedback({ messages: [], code: 'EffectError' })
+  field4.setDisplay('none')
+  await field4.validate()
+  expect(field4.errors).toEqual([])
 })
 
 test('query', () => {
@@ -458,6 +503,7 @@ test('setState/getState', () => {
   })
   expect(aa.value).toEqual('123')
   expect(aa.title).toEqual('AAA')
+  state['setState'] = () => {}
   aa.setState(state)
   expect(aa.value).toBeUndefined()
   expect(aa.title).toBeUndefined()

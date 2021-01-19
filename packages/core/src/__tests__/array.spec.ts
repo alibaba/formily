@@ -58,6 +58,12 @@ test('array field children state exchanges', () => {
       name: 'array',
     })
   )
+  attach(
+    form.createField({
+      name: 'other',
+      basePath: 'array',
+    })
+  )
   array.push({ value: 11 }, { value: 22 })
   attach(
     form.createField({
@@ -78,6 +84,7 @@ test('array field children state exchanges', () => {
     'array',
     'array.0.value',
     'array.1.value',
+    'array.other',
   ])
   array.pop()
   expect(array.value).toEqual([{ value: 11 }])
@@ -140,6 +147,12 @@ test('void children', () => {
     })
   )
   attach(
+    form.createField({
+      name: 'other',
+      basePath: 'array',
+    })
+  )
+  attach(
     form.createVoidField({
       name: 0,
       basePath: 'array',
@@ -161,6 +174,12 @@ test('exchange children', () => {
   const array = attach(
     form.createArrayField({
       name: 'array',
+    })
+  )
+  attach(
+    form.createField({
+      name: 'other',
+      basePath: 'array',
     })
   )
   attach(
