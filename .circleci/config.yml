@@ -22,7 +22,7 @@ jobs:
 
       - run:
           name: Install Dependencies
-          command: yarn --frozen-lockfile
+          command: yarn install
 
       - save_cache:
           key: node-modules-{{ checksum "package.json" }}
