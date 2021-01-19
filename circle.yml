@@ -1,0 +1,44 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest-browsers
+
+    environment:
+      CI: true
+      NODE_ENV: test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: node-modules-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Dependencies
+          command: yarn --frozen-lockfile
+
+      - save_cache:
+          key: node-modules-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ~/.cache/yarn
+
+      - run:
+          name: Run Build
+          command: yarn build
+
+      - run:
+          name: Run Tests
+          command: yarn test:prod -- --forceExit --detectOpenHandles --runInBand --maxWorkers=2
+          no_output_timeout: 300m
+
+      - run:
+          name: Generate coverage
+          command: bash <(curl -s https://codecov.io/bash)
