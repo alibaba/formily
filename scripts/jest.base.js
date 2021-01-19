@@ -32,7 +32,6 @@ module.exports = {
       diagnostics: false,
     },
   },
-  testPathIgnorePatterns: ['/lib/', '/esm', '/node_modules/'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/esm/',
