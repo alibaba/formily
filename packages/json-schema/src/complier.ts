@@ -1,4 +1,4 @@
-import { isArr, isFn, isStr, reduce, BigData } from '@formily/shared'
+import { isArr, isFn, isStr, reduce } from '@formily/shared'
 import { isObservable } from 'mobx'
 import { isSchemaObject } from './schema'
 
@@ -47,9 +47,6 @@ export const complie = <Source = any, Scope = any>(
       }
       if (isSchemaObject(source)) {
         return source.fromJSON(source, scope)
-      }
-      if (BigData.isBigData(source)) {
-        return source
       }
       if (isFn(source['toJS'])) {
         return source
