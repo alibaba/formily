@@ -37,8 +37,6 @@ jobs:
       - run:
           name: Run Tests
           command: yarn test
-          no_output_timeout: 300m
-
       - run:
           name: Generate coverage
           command: bash <(curl -s https://codecov.io/bash)
