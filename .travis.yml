@@ -3,7 +3,7 @@ sudo: required
 language: node_js
 
 before_install:
-  - npm i -g yarn
+  - npm install yarn
 
 node_js:
   - "10"
