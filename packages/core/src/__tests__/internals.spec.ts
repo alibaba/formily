@@ -2,6 +2,7 @@ import {
   getValuesFromEvent,
   matchFeedback,
   applyFieldPatches,
+  setModelState,
 } from '../shared/internals'
 
 test('getValuesFromEvent', () => {
@@ -24,4 +25,16 @@ test('applyFieldPatches', () => {
     { type: 'update3' as any, address: 'aaa', payload: null },
   ])
   expect(fields).toEqual({})
+})
+
+test('setModelState', () => {
+  expect(setModelState(null, null)).toBeUndefined()
+  expect(
+    setModelState(
+      {},
+      {
+        parent: null,
+      }
+    )
+  ).toEqual({})
 })

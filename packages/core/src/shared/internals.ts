@@ -284,8 +284,7 @@ export const exchangeArrayState = (
   const moveIndex = (identifier: string) => {
     const preStr = identifier.slice(0, address.length)
     const afterStr = identifier.slice(address.length)
-    const number = afterStr.match(/^\.(\d+)/)?.[1]
-    if (number === undefined) return identifier
+    const number = afterStr.match(/^\.(\d+)/)[1]
     const current = Number(number)
     let index = current
     if (index === fromIndex) {
@@ -376,12 +375,13 @@ export const subscribeUpdate = (
 }
 
 export const setModelState = (model: any, setter: any) => {
+  if (!model) return
   const isSkipProperty = (key: string) => {
     if (key === 'address' || key === 'path') return true
     if (key === 'valid' || key === 'invalid') return true
     if (key === 'validateStatus') return true
     if (key === 'errors' || key === 'warnings' || key === 'successes') {
-      if (model?.displayName === 'Form') return true
+      if (model.displayName === 'Form') return true
       if (setter.feedbacks?.length) {
         return true
       }
@@ -422,6 +422,7 @@ export const setModelState = (model: any, setter: any) => {
       model[key] = value
     })
   }
+  return model
 }
 
 export const getModelState = (model: any, getter?: any) => {

@@ -336,6 +336,28 @@ test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', 
     state.display = 'none'
   })
   expect(form.getFieldState('aa', (state) => state.visible)).toBeFalsy()
+  const update = (value: any) => (state: any) => {
+    state.value = value
+  }
+  const update2 = (state: any) => {
+    state.value = 123
+  }
+  form.setFieldState('kk', update(123))
+  form.setFieldState('kk', update(321))
+  form.setFieldState('oo', update2)
+  form.setFieldState('oo', update2)
+  const oo = attach(
+    form.createField({
+      name: 'oo',
+    })
+  )
+  const kk = attach(
+    form.createField({
+      name: 'kk',
+    })
+  )
+  expect(oo.value).toEqual(123)
+  expect(kk.value).toEqual(321)
 })
 
 test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings/clearSuccesses/queryFeedbacks', async () => {

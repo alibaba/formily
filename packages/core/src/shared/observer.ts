@@ -21,6 +21,7 @@ type Entry = {
 }
 
 function buildPath(entry: Entry | undefined): string {
+  /* istanbul ignore next */
   if (!entry) return 'ROOT'
   const res: string[] = []
   while (entry.parent) {
@@ -100,6 +101,7 @@ export function observer<T = any>(
         ) {
           if (isRecursivelyObservable(change.object[i])) {
             const entry = entrySet.get(change.object[i])
+            /* istanbul ignore next */
             if (entry) entry.path = '' + i
           }
         }
@@ -113,7 +115,9 @@ export function observer<T = any>(
     path: string
   ) {
     if (isRecursivelyObservable(thing)) {
+      /* istanbul ignore next */
       const entry = entrySet.get(thing)
+      /* istanbul ignore next */ 
       if (entry) {
         /* istanbul ignore next */
         if (entry.parent !== parent || entry.path !== path)
@@ -143,6 +147,7 @@ export function observer<T = any>(
   }
 
   function unobserveRecursively(thing: any) {
+    /* istanbul ignore next */
     if (isRecursivelyObservable(thing)) {
       const entry = entrySet.get(thing)
       if (!entry) return
