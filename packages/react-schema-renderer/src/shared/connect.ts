@@ -7,19 +7,19 @@ import {
   IConnectOptions,
   ISchemaFieldComponentProps,
   IConnectProps,
-  MixinConnectedComponent,
+  MixinConnectedComponent
 } from '../types'
 import { Schema } from './schema'
 
 const createEnum = (enums: any) => {
   if (isArr(enums)) {
-    return enums.map((item) => {
+    return enums.map(item => {
       if (typeof item === 'object') {
         return item
       } else {
         return {
           label: item,
-          value: item,
+          value: item
         }
       }
     })
@@ -61,7 +61,7 @@ export const connect = <ExtendsComponentKey extends string = ''>(
   options = defaults(
     {
       valueName: 'value',
-      eventName: 'onChange',
+      eventName: 'onChange'
     },
     options
   )
@@ -83,7 +83,7 @@ export const connect = <ExtendsComponentKey extends string = ''>(
                   {
                     props: componentProps,
                     schema,
-                    field: fieldProps,
+                    field: fieldProps
                   },
                   event,
                   ...args
@@ -106,7 +106,7 @@ export const connect = <ExtendsComponentKey extends string = ''>(
           if (isFn(schemaComponentProps['onFocus'])) {
             schemaComponentProps['onFocus'](...args)
           }
-        },
+        }
       }
       if (isValid(editable)) {
         if (isFn(editable)) {
@@ -170,7 +170,7 @@ export const connect = <ExtendsComponentKey extends string = ''>(
     }) as any
 
     Object.assign(ConnectedComponent, {
-      __ALREADY_CONNECTED__: true,
+      __ALREADY_CONNECTED__: true
     })
 
     hoistNonReactStatics(ConnectedComponent, Component)
