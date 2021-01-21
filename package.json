@@ -23,6 +23,7 @@
     "test:react-schema": "jest packages/react-schema-field/src/__tests__/*.spec.tsx",
     "test:react-schema:watch": "npm run test:react-schema --- --watch",
     "test:watch": "jest --watch",
+    "test:prod": "jest --coverage --silent",
     "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
     "prevesion": "npm run build && npm run lint && npm run test",
     "version:alpha": "npm run prevesion && lerna version prerelease --preid alpha --force-publish=* --no-git-tag-version -m \"chore(versions): publish packages %s\"",

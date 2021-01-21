@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
-import { isFn, isValid } from '@formily/shared'
+import { isFn } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
@@ -27,7 +27,9 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   if (field.display !== 'visible') return null
 
   const renderDecorator = (children: React.ReactNode) => {
-    if (!field?.decorator?.[0]) return <Fragment>{children}</Fragment>
+    if (!field.decorator[0]) {
+      return <Fragment>{children}</Fragment>
+    }
     return React.createElement(
       field.decorator[0],
       field.decorator[1] || {},
@@ -36,23 +38,12 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   }
 
   const renderComponent = () => {
-    if (!field?.component?.[0]) return <Fragment>{children}</Fragment>
+    if (!field.component[0]) return <Fragment>{children}</Fragment>
     const value = !isVoidField(field) ? field.value : undefined
     const onChange = !isVoidField(field)
       ? (...args: any[]) => {
-          const params = args.map((arg) => {
-            if (arg?.target) {
-              if (isValid(arg?.target?.value)) {
-                return arg?.target?.value
-              }
-              if (isValid(arg?.target?.checked)) {
-                return arg?.target?.checked
-              }
-            }
-            return arg
-          })
-          field.onInput(...params)
-          field?.component?.[1]?.onChange?.(...args)
+          field.onInput(...args)
+          field.component[1]?.onChange?.(...args)
         }
       : undefined
     const disabled = !isVoidField(field)

@@ -41,7 +41,7 @@ jobs:
 
       - run:
           name: Run Tests
-          command: yarn test
+          command: yarn test:prod
       - run:
           name: Generate coverage
           command: bash <(curl -s https://codecov.io/bash)
