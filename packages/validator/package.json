@@ -4,6 +4,10 @@
   "license": "MIT",
   "main": "lib",
   "module": "esm",
+  "umd:main": "dist/formily.validator.umd.production.js",
+  "unpkg": "dist/formily.validator.umd.production.js",
+  "jsdelivr": "dist/formily.validator.umd.production.js",
+  "jsnext:main": "esm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
@@ -17,12 +21,10 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
+    "build": "rimraf -rf lib esm dist lib && npm run build:cjs && npm run build:esm && npm run build:umd",
     "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm"
-  },
-  "devDependencies": {
-    "typescript": "^4.1.2"
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config"
   },
   "dependencies": {
     "@formily/shared": "^2.0.0-beta.3"

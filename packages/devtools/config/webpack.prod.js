@@ -1,6 +1,6 @@
-import baseConfig from './webpack.base'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import path from 'path'
+const baseConfig = require('./webpack.base')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 
 const createPages = pages => {
   return pages.map(({ filename, template, chunk }) => {
@@ -13,7 +13,7 @@ const createPages = pages => {
   })
 }
 
-export default {
+module.exports = {
   ...baseConfig,
   mode: 'production',
   plugins: [

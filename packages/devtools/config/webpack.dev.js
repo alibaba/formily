@@ -1,17 +1,17 @@
-import baseConfig from './webpack.base'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
-import webpack from 'webpack'
-import path from 'path'
+const baseConfig = require('./webpack.base')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+const path = require('path')
 
 const PORT = 3000
 
-const createPages = pages => {
+const createPages = (pages) => {
   return pages.map(({ filename, template, chunk }) => {
     return new HtmlWebpackPlugin({
       filename,
       template,
       inject: 'body',
-      chunks: [chunk]
+      chunks: [chunk],
     })
   })
 }
@@ -25,20 +25,23 @@ for (let key in baseConfig.entry) {
   }
 }
 
-export default {
+module.exports = {
   ...baseConfig,
   plugins: [
     ...createPages([
       {
         filename: 'index.html',
-        template: path.resolve(__dirname, '../src/extension/views/devtools.ejs'),
-        chunk: 'demo'
-      }
+        template: path.resolve(
+          __dirname,
+          '../src/extension/views/devtools.ejs'
+        ),
+        chunk: 'demo',
+      },
     ]),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
     open: true,
-    port: PORT
-  }
+    port: PORT,
+  },
 }

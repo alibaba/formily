@@ -3,7 +3,11 @@
 	"version": "2.0.0-beta.3",
 	"license": "MIT",
 	"main": "lib",
-  "module": "esm",
+	"module": "esm",
+	"umd:main": "dist/formily.react-schema-field.umd.production.js",
+  "unpkg": "dist/formily.react-schema-field.umd.production.js",
+  "jsdelivr": "dist/formily.react-schema-field.umd.production.js",
+  "jsnext:main": "esm",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/alibaba/formily.git"
@@ -17,13 +21,11 @@
 	},
 	"types": "esm/index.d.ts",
 	"scripts": {
-    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
     "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm"
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config"
   },
-	"devDependencies": {
-		"typescript": "^4.1.2"
-	},
 	"peerDependencies": {
 		"@types/react": ">=16.8.0 || >=17.0.0",
 		"@types/react-dom": ">=16.8.0 || >=17.0.0",

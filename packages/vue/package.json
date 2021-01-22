@@ -4,29 +4,21 @@
   "license": "MIT",
   "main": "lib",
   "module": "esm",
+  "umd:main": "dist/formily.vue.umd.production.js",
+  "unpkg": "dist/formily.vue.umd.production.js",
+  "jsdelivr": "dist/formily.vue.umd.production.js",
+  "jsnext:main": "esm",
   "types": "lib/index.d.ts",
   "engines": {
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "build": "rollup --config"
+    "build": "rimraf -rf lib esm dist && rollup --config"
   },
   "dependencies": {
     "@formily/core": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "@formily/validator": "^2.0.0-beta.3"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^17.0.0",
-    "@vue/composition-api": "^1.0.0-beta.23",
-    "@vuedx/typescript-plugin-vue": "^0.4.1",
-    "mobx": "^6.0.3",
-    "rollup": "^2.35.1",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-typescript2": "^0.29.0",
-    "rollup-plugin-vue": "^5.0.0",
-    "typescript": "^4.1.3",
-    "vue": ">=2.6.0"
   },
   "peerDependencies": {
     "@vue/composition-api": "^1.0.0-beta.23",

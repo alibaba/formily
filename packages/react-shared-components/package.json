@@ -3,7 +3,11 @@
 	"version": "2.0.0-beta.3",
 	"license": "MIT",
 	"main": "lib",
-  "module": "esm",
+	"module": "esm",
+	"umd:main": "dist/formily.react-shared-components.umd.production.js",
+  "unpkg": "dist/formily.react-shared-components.umd.production.js",
+  "jsdelivr": "dist/formily.react-shared-components.umd.production.js",
+  "jsnext:main": "esm",
 	"types": "esm/index.d.ts",
 	"repository": {
 		"type": "git",
@@ -21,12 +25,10 @@
 	},
 	"gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
 	"scripts": {
-		"build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
-    "build:cjs": "tsc --declaration",
-    "build:esm": "tsc --declaration --module es2015 --outDir esm"
-	},
-	"devDependencies": {
-		"typescript": "^4.1.2"
+		"build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+		"build:cjs": "tsc --declaration",
+		"build:esm": "tsc --declaration --module es2015 --outDir esm",
+		"build:umd": "rollup --config"
 	},
 	"dependencies": {
 		"react-drag-listview": "^0.1.6",

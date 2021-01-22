@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "dumi dev",
-    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm",
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:docs": "dumi build"
@@ -26,14 +26,6 @@
   "resolutions": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0"
-  },
-  "devDependencies": {
-    "@alifd/next": "^1.19.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "ts-node": "^8.3.0",
-    "dumi": "^1.1.0",
-    "@umijs/plugin-sass": "^1.1.1"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
