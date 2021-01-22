@@ -1,6 +1,15 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "jsx": "react"
-  }
+    "jsx": "react",
+    "paths": {
+      "@formily/*": [
+        "./packages/*/src"
+      ]
+    }
+  },
+  "exclude": [
+    "./packages/*/esm",
+    "./packages/*/lib"
+  ]
 }

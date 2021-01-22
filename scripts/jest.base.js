@@ -34,6 +34,7 @@ module.exports = {
   },
   coveragePathIgnorePatterns: [
     '/node_modules/',
+    '/__tests__/',
     '/esm/',
     '/lib/',
     'package.json',
