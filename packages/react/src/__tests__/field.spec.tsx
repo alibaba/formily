@@ -159,10 +159,8 @@ test('useFormEffects', () => {
     </FormProvider>
   )
   expect(queryByTestId('custom-value').textContent).toEqual('')
-  form.query('aa').get((aa) => {
-    if (isField(aa)) {
-      aa.setValue('123')
-    }
+  form.query('aa').get((aa: Formily.Core.Models.Field) => {
+    aa.setValue('123')
   })
   expect(queryByTestId('custom-value').textContent).toEqual('123')
   rerender(
@@ -212,8 +210,7 @@ test('connect', async () => {
     )
   }
   const { queryByText } = render(<MyComponent />)
-  form.query('aa').get((field) => {
-    if (!isField(field)) return
+  form.query('aa').get((field: Formily.Core.Models.Field) => {
     field.setValue('123')
   })
   await waitFor(() => {
