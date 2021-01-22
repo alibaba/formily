@@ -10,6 +10,7 @@ const plugins = [
   typescript({
     tsconfig: './tsconfig.json',
     tsconfigOverride: {
+      module: 'ESNext',
       compilerOptions: { declaration: false },
     },
   }),
