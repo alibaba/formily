@@ -43,7 +43,7 @@ import {
 import {
   observer,
   isVoidField,
-  getLifeCyclesByEffects,
+  runEffects,
   createModelStateGetter,
   createModelStateSetter,
   createFieldStateSetter,
@@ -185,7 +185,7 @@ export class Form<ValueType = any> {
   }
 
   get lifecycles() {
-    return getLifeCyclesByEffects(this.props.effects, this)
+    return runEffects(this, this.props.effects)
   }
 
   get hidden() {
@@ -456,7 +456,7 @@ export class Form<ValueType = any> {
   }
 
   addEffects = (id: string, effects: IFormProps['effects']) => {
-    this.heart.addLifeCycles(id, getLifeCyclesByEffects(effects))
+    this.heart.addLifeCycles(id, runEffects(this, effects))
   }
 
   removeEffects = (id: string) => {
@@ -464,7 +464,7 @@ export class Form<ValueType = any> {
   }
 
   setEffects = (effects: IFormProps['effects']) => {
-    this.heart.setLifeCycles(getLifeCyclesByEffects(effects))
+    this.heart.setLifeCycles(runEffects(this, effects))
   }
 
   clearErrors = (pattern: FormPathPattern = '*') => {

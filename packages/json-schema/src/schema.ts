@@ -147,6 +147,8 @@ export class Schema<
 
   _isJSONSchemaObject = true
 
+  version = '2.0'
+
   constructor(
     json: ISchema<
       Decorator,

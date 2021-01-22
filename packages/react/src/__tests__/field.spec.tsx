@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 import {
   FormProvider,
   createForm,
@@ -8,12 +8,22 @@ import {
   VoidField,
   Field,
   useField,
+  useFormEffects,
+  observer,
+  connect,
+  mapProps,
+  mapReadPretty,
 } from '../'
 import { ReactiveField } from '../components/ReactiveField'
 import { expectThrowError } from './shared'
+import { isField, isVoidField, onFieldChange } from '@formily/core'
 type InputProps = {
   value?: string
   onChange?: (...args: any) => void
+}
+
+type CustomProps = {
+  list?: string[]
 }
 
 const Decorator: React.FC = (props) => <div>{props.children}</div>
@@ -112,4 +122,110 @@ test('render field no context', () => {
 test('ReactiveField', () => {
   render(<ReactiveField field={null} />)
   render(<ReactiveField field={null}>{() => <div></div>}</ReactiveField>)
+})
+
+test('useAttch', () => {
+  const form = createForm()
+  const MyComponent = (props: any) => {
+    return (
+      <FormProvider form={form}>
+        <Field name={props.name} decorator={[Decorator]} component={[Input]} />
+      </FormProvider>
+    )
+  }
+  const { rerender } = render(<MyComponent name="aa" />)
+  expect(form.query('aa').get().mounted).toBeTruthy()
+  rerender(<MyComponent name="bb" />)
+  expect(form.query('aa').get().mounted).toBeFalsy()
+  expect(form.query('bb').get().mounted).toBeTruthy()
+})
+
+test('useFormEffects', () => {
+  const form = createForm()
+  const CustomField = observer((props: { tag?: string }) => {
+    const field = useField<Formily.Core.Models.Field>()
+    useFormEffects(() => {
+      onFieldChange('aa', ['value'], (target) => {
+        if (isVoidField(target)) return
+        field.setValue(target.value)
+      })
+    })
+    return <div data-testid="custom-value">{field.value}</div>
+  })
+  const { queryByTestId, rerender } = render(
+    <FormProvider form={form}>
+      <Field name="aa" decorator={[Decorator]} component={[Input]} />
+      <Field name="bb" component={[CustomField, { tag: 'xxx' }]} />
+    </FormProvider>
+  )
+  expect(queryByTestId('custom-value').textContent).toEqual('')
+  form.query('aa').get((aa) => {
+    if (isField(aa)) {
+      aa.setValue('123')
+    }
+  })
+  expect(queryByTestId('custom-value').textContent).toEqual('123')
+  rerender(
+    <FormProvider form={form}>
+      <Field name="aa" decorator={[Decorator]} component={[Input]} />
+      <Field name="bb" component={[CustomField, { tag: 'yyy' }]} />
+    </FormProvider>
+  )
+})
+
+test('connect', async () => {
+  const CustomField = connect(
+    (props: CustomProps) => {
+      return <div>{props.list}</div>
+    },
+    mapProps(
+      { extract: 'value', to: 'list' },
+      { extract: 'loading' },
+      {
+        extract: 'mounted',
+        transform(value) {
+          return value ? 1 : 2
+        },
+      },
+      (props) => {
+        return props
+      }
+    ),
+    mapReadPretty(() => <div>read pretty</div>)
+  )
+  const BaseComponent = (props: any) => {
+    return <div>{props.value}</div>
+  }
+  BaseComponent.displayName = 'BaseComponent'
+  const CustomField2 = connect(
+    BaseComponent,
+    mapProps({ extract: 'value', to: 'value' }, { extract: 'loading' }),
+    mapReadPretty(() => <div>read pretty</div>)
+  )
+  const form = createForm()
+  const MyComponent = () => {
+    return (
+      <FormProvider form={form}>
+        <Field name="aa" decorator={[Decorator]} component={[CustomField]} />
+        <Field name="bb" decorator={[Decorator]} component={[CustomField2]} />
+      </FormProvider>
+    )
+  }
+  const { queryByText } = render(<MyComponent />)
+  form.query('aa').get((field) => {
+    if (!isField(field)) return
+    field.setValue('123')
+  })
+  await waitFor(() => {
+    expect(queryByText('123')).toBeVisible()
+  })
+
+  form.query('aa').get((field) => {
+    if (!isField(field)) return
+    field.readPretty = true
+  })
+  await waitFor(() => {
+    expect(queryByText('123')).toBeNull()
+    expect(queryByText('read pretty')).toBeVisible()
+  })
 })

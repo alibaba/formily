@@ -300,7 +300,7 @@ export const useCompliedProps = (
   name: SchemaKey,
   schema: ISchema,
   options: ISchemaFieldFactoryOptions
-): Formily.React.Types.IFieldProps<any, any, any> => {
+) => {
   const required = useContext(SchemaRequiredContext)
   const contextScope = useContext(SchemaExpressionScopeContext)
   return transformSchemaToFieldProps(name, schema, {
@@ -310,5 +310,5 @@ export const useCompliedProps = (
       ...options.scope,
       ...contextScope,
     },
-  })
+  }) as Formily.React.Types.IFieldProps<any, any, any>
 }

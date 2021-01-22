@@ -1,3 +1,4 @@
+export * from '@formily/json-schema'
 export * from './factory'
 export * from './hooks'
 export * from './components'

@@ -100,6 +100,7 @@ export interface ISchema<
   Message = any,
   ReactionField = any
 > {
+  version?: string
   name?: SchemaKey
   title?: Message
   description?: Message

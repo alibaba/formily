@@ -73,17 +73,27 @@ export const createEffectContext = <T = any>(defaultValue?: T) => {
   }
 }
 
-export const getLifeCyclesByEffects = <Context>(
-  effects?: (context: Context) => void,
-  context?: Context
+const FormEffectContext = createEffectContext<Form>()
+
+export const useFormInEffects = FormEffectContext.consume
+
+export const runEffects = <Context>(
+  context?: Context,
+  ...args: ((context: Context) => void)[]
 ): LifeCycle[] => {
   __FORM_HOOK_ENVS__.lifecycles = []
   __FORM_HOOK_ENVS__.context = []
   __FORM_HOOK_ENVS__.effectStart = true
   __FORM_HOOK_ENVS__.effectEnd = false
-  if (isFn(effects)) {
-    effects(context)
+  if (isForm(context)) {
+    FormEffectContext.provide(context)
   }
+  args.forEach((effects) => {
+    if (isFn(effects)) {
+      effects(context)
+    }
+  })
+  __FORM_HOOK_ENVS__.context = []
   __FORM_HOOK_ENVS__.effectStart = false
   __FORM_HOOK_ENVS__.effectEnd = true
   return __FORM_HOOK_ENVS__.lifecycles

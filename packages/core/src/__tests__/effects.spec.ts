@@ -35,6 +35,7 @@ import {
   onFormValidateSuccess,
   onFormValuesChange,
   isVoidField,
+  runEffects,
 } from '../'
 import { attach, sleep } from './shared'
 
@@ -501,4 +502,12 @@ test('effect context', async () => {
   expect(results).toEqual(123)
   expect(error).not.toBeUndefined()
   expect(error2).not.toBeUndefined()
+})
+
+test('runEffects', () => {
+  expect(
+    runEffects(123, () => {
+      onFormMount(() => {})
+    }).length
+  ).toEqual(1)
 })

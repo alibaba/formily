@@ -7,7 +7,7 @@ import {
   GeneralField,
   IFieldState,
 } from '../types'
-import { createEffect } from '../shared'
+import { createEffect, useFormInEffects } from '../shared'
 import { onFormUnMount } from './onFormEffects'
 
 function createFieldEffect(type: LifeCycleTypes) {
@@ -25,7 +25,7 @@ function createFieldEffect(type: LifeCycleTypes) {
     }
   )
 }
-export const onFieldInit = createFieldEffect(LifeCycleTypes.ON_FIELD_INIT)
+const _onFieldInit = createFieldEffect(LifeCycleTypes.ON_FIELD_INIT)
 export const onFieldMount = createFieldEffect(LifeCycleTypes.ON_FIELD_MOUNT)
 export const onFieldUnMount = createFieldEffect(LifeCycleTypes.ON_FIELD_UNMOUNT)
 export const onFieldValueChange = createFieldEffect(
@@ -49,6 +49,22 @@ export const onFieldValidateFailed = createFieldEffect(
 export const onFieldValidateSuccess = createFieldEffect(
   LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS
 )
+
+export function onFieldInit(
+  pattern: FormPathPattern,
+  callback?: (field: GeneralField, form: Form) => void
+) {
+  const form = useFormInEffects()
+  let count = 0
+  form.query(pattern).all.getAll((field) => {
+    callback(field, form)
+    count++
+  })
+  if (count === 0) {
+    _onFieldInit(pattern, callback)
+  }
+}
+
 export function onFieldReact(
   pattern: FormPathPattern,
   callback?: (field: GeneralField, form: Form) => void
@@ -103,6 +119,7 @@ export function onFieldChange(
       )
     )
   })
+
   onFormUnMount(() => {
     disposers.forEach((dispose) => {
       dispose()
