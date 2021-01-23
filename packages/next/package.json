@@ -36,6 +36,10 @@
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0"
   },
+  "devDependencies": {
+    "dumi": "^1.1.0-rc.8",
+    "@umijs/plugin-sass": "^1.1.1"
+  },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
     "@formily/json-schema": "^2.0.0-beta.3",

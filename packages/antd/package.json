@@ -28,11 +28,8 @@
     "@types/react-dom": "^17.0.0"
   },
   "devDependencies": {
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "antd": "^4.0.0",
-    "ts-node": "^8.3.0",
-    "dumi": "^1.1.0"
+    "dumi": "^1.1.0-rc.8",
+    "@umijs/plugin-sass": "^1.1.1"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",

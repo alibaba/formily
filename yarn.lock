@@ -7324,7 +7324,7 @@ dumi-theme-default@1.0.2:
     prismjs "^1.21.0"
     rc-tabs "^11.7.1"
 
-dumi@^1.1.0, dumi@^1.1.0-rc.8:
+dumi@^1.1.0-rc.8:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/dumi/-/dumi-1.1.2.tgz#66c6e1e6e20bf5fe624d90a457125f4ab6611487"
   integrity sha512-L+Atu0eWnWEmODoVp33of5nmg3/YFGEzWlWRV9FEYOUSD8mp4dzwZnJERq+wxwie4W1HcDFlXhqQtFsbqeY1Xw==
@@ -17778,17 +17778,6 @@ ts-loader@^7.0.4:
     loader-utils "^1.0.2"
     micromatch "^4.0.0"
     semver "^6.0.0"
-
-ts-node@^8.3.0:
-  version "8.10.2"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.10.2.tgz#eee03764633b1234ddd37f8db9ec10b75ec7fb8d"
-  integrity sha512-ISJJGgkIpDdBhWVu3jufsWpK3Rzo7bdiIXJjQc0ynKxVOVcg2oIrf2H2cejminGrptVc6q6/uynAHNCuWGbpVA==
-  dependencies:
-    arg "^4.1.0"
-    diff "^4.0.1"
-    make-error "^1.1.1"
-    source-map-support "^0.5.17"
-    yn "3.1.1"
 
 ts-node@^9.1.1:
   version "9.1.1"

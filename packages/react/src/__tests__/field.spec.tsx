@@ -100,7 +100,7 @@ test('render field', async () => {
   expect(getByTestId('dd-children')).not.toBeUndefined()
   expect(queryByTestId('ee')).toBeNull()
   expect(form.query('aa').get('value')).toEqual('123')
-  expect(form.query('kk').get("value")).toEqual('123')
+  expect(form.query('kk').get('value')).toEqual('123')
   unmount()
 })
 
@@ -159,8 +159,10 @@ test('useFormEffects', () => {
     </FormProvider>
   )
   expect(queryByTestId('custom-value').textContent).toEqual('')
-  form.query('aa').take((aa: Formily.Core.Models.Field) => {
-    aa.setValue('123')
+  form.query('aa').take((aa) => {
+    if (isField(aa)) {
+      aa.setValue('123')
+    }
   })
   expect(queryByTestId('custom-value').textContent).toEqual('123')
   rerender(
