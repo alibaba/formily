@@ -241,7 +241,7 @@ const getSchemaFieldReactions = (
         const [target, path] = String(pattern).split(/\s*#\s*/)
         return field
           .query(target)
-          .all.get((field) => FormPath.getIn(field, path || 'value'))
+          .take((field) => FormPath.getIn(field, path || 'value'))
       })
     }
     return []

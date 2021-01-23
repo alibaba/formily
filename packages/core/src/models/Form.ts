@@ -468,7 +468,7 @@ export class Form<ValueType = any> {
   }
 
   clearErrors = (pattern: FormPathPattern = '*') => {
-    this.query(pattern).all.getAll((field) => {
+    this.query(pattern).forEach((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({
           type: 'error',
@@ -479,7 +479,7 @@ export class Form<ValueType = any> {
   }
 
   clearWarnings = (pattern: FormPathPattern = '*') => {
-    this.query(pattern).all.getAll((field) => {
+    this.query(pattern).forEach((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({
           type: 'warning',
@@ -490,7 +490,7 @@ export class Form<ValueType = any> {
   }
 
   clearSuccesses = (pattern: FormPathPattern = '*') => {
-    this.query(pattern).all.getAll((field) => {
+    this.query(pattern).forEach((field) => {
       if (!isVoidField(field)) {
         field.setFeedback({
           type: 'success',
@@ -509,9 +509,9 @@ export class Form<ValueType = any> {
   }
 
   queryFeedbacks = (search: ISearchFeedback): FormFeedback[] => {
-    return this.query(search.address || search.path || '*')
-      .getAll()
-      .reduce((messages, field) => {
+    return this.query(search.address || search.path || '*').reduce(
+      (messages, field) => {
+        if (isVoidField(field)) return messages
         return messages.concat(
           field
             .queryFeedbacks(search)
@@ -522,7 +522,9 @@ export class Form<ValueType = any> {
             }))
             .filter((feedback) => feedback.messages.length > 0)
         )
-      }, [])
+      },
+      []
+    )
   }
 
   notify = (type: string, payload?: any) => {
@@ -553,7 +555,7 @@ export class Form<ValueType = any> {
   }
 
   onUnmount = () => {
-    this.query('*').all.getAll((field) => field.dispose())
+    this.query('*').forEach((field) => field.dispose())
     this.unmounted = true
     this.fields = {}
     this.indexes.clear()
@@ -590,7 +592,7 @@ export class Form<ValueType = any> {
   validate = async (pattern: FormPathPattern = '*') => {
     this.setValidating(true)
     const tasks = []
-    this.query(pattern).all.getAll((field) => {
+    this.query(pattern).forEach((field) => {
       if (!isVoidField(field)) {
         tasks.push(field.validate())
       }
@@ -640,7 +642,7 @@ export class Form<ValueType = any> {
     options?: IFieldResetOptions
   ) => {
     const tasks = []
-    this.query(pattern).all.getAll((field) => {
+    this.query(pattern).forEach((field) => {
       if (!isVoidField(field)) {
         tasks.push(field.reset(options))
       }

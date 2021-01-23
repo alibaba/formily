@@ -232,41 +232,41 @@ test('query', () => {
       name: 'array',
     })
   )
-  expect(form.query('object').get()).not.toBeUndefined()
-  expect(form.query('object').object.get()).not.toBeUndefined()
-  expect(form.query('object.void').void.get()).not.toBeUndefined()
-  expect(form.query('object.void.normal').get()).not.toBeUndefined()
-  expect(form.query('object.normal').get()).not.toBeUndefined()
+  expect(form.query('object').take()).not.toBeUndefined()
+  expect(form.query('object').take()).not.toBeUndefined()
+  expect(form.query('object.void').take()).not.toBeUndefined()
+  expect(form.query('object.void.normal').take()).not.toBeUndefined()
+  expect(form.query('object.normal').take()).not.toBeUndefined()
   expect(
-    form.query('object.*').all.getAll((field) => field.path.toString())
+    form.query('object.*').map((field) => field.path.toString())
   ).toEqual(['object.void', 'object.normal'])
-  expect(form.query('*').all.getAll((field) => field.path.toString())).toEqual([
+  expect(form.query('*').map((field) => field.path.toString())).toEqual([
     'object',
     'object.void',
     'object.normal',
     'array',
   ])
-  expect(form.query('array').array.get()).not.toBeUndefined()
-  expect(form.query('*').all.get()).not.toBeUndefined()
-  expect(form.query('*(oo)').all.get()).toBeUndefined()
-  expect(form.query('*(oo)').all.getAll()).toEqual([])
-  expect(form.query('object.void').value).toBeUndefined()
-  expect(form.query('object.void').initialValue).toBeUndefined()
-  expect(form.query('object.void').inputValue).toBeUndefined()
-  expect(form.query('array').value).toEqual([])
-  expect(form.query('array').initialValue).toBeUndefined()
-  expect(form.query('array').inputValue).toBeNull()
+  expect(form.query('array').take()).not.toBeUndefined()
+  expect(form.query('*').take()).not.toBeUndefined()
+  expect(form.query('*(oo)').take()).toBeUndefined()
+  expect(form.query('*(oo)').map()).toEqual([])
+  expect(form.query('object.void').get('value')).toBeUndefined()
+  expect(form.query('object.void').get('initialValue')).toBeUndefined()
+  expect(form.query('object.void').get('inputValue')).toBeUndefined()
+  expect(form.query('array').get('value')).toEqual([])
+  expect(form.query('array').get('initialValue')).toBeUndefined()
+  expect(form.query('array').get('inputValue')).toBeNull()
   form.setFieldState('array', (state) => {
     state.value = [111]
     state.initialValue = [111]
     state.inputValue = [111]
   })
-  expect(form.query('array').value).toEqual([111])
-  expect(form.query('array').initialValue).toEqual([111])
-  expect(form.query('array').inputValue).toEqual([111])
-  expect(form.query('opo').value).toBeUndefined()
-  expect(form.query('opo').initialValue).toBeUndefined()
-  expect(form.query('opo').inputValue).toBeUndefined()
+  expect(form.query('array').get('value')).toEqual([111])
+  expect(form.query('array').get('initialValue')).toEqual([111])
+  expect(form.query('array').get('inputValue')).toEqual([111])
+  expect(form.query('opo').get('value')).toBeUndefined()
+  expect(form.query('opo').get('initialValue')).toBeUndefined()
+  expect(form.query('opo').get('inputValue')).toBeUndefined()
 })
 
 test('notify/subscribe/unsubscribe', () => {

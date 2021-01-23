@@ -343,7 +343,7 @@ export interface IFieldResetOptions {
   validate?: boolean
 }
 
-export type IGeneralFieldState = IFieldState | IVoidFieldState
+export type IGeneralFieldState = IFieldState & IVoidFieldState
 
 export type GeneralField = Field | VoidField | ArrayField | ObjectField
 export interface ISpliceArrayStateProps {

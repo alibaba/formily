@@ -262,7 +262,7 @@ const form = createForm({
     })
     //被动联动模式
     onFieldReact('array.*.dd', (field) => {
-      field.visible = field.query('.cc').value != '123'
+      field.visible = field.query('.cc').get('value') != '123'
     })
   },
 })

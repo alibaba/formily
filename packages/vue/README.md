@@ -112,7 +112,7 @@ Vue.use(VueCompositionAPI)
     </Field>
     <FormConsumer>
       <template #default="{ form }">
-        {{ JSON.stringify(form.query('aa').get().value) }}
+        {{ JSON.stringify(form.query('aa').get(.get("value")) }}
       </template>
     </FormConsumer>
     <FormConsumer>

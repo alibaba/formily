@@ -338,16 +338,16 @@ const form = createForm({
   effects: () => {
     //主动联动模式
     onFieldChange('hideFirstColumn', ['value'], (field) => {
-      field.query('array.column4').void.get((target) => {
+      field.query('array.column4').take((target) => {
         target.visible = !field.value
       })
-      field.query('array.*.a2').void.get((target) => {
+      field.query('array.*.a2').take((target) => {
         target.visible = !field.value
       })
     })
     //被动联动模式
     onFieldReact('array.*.a2', (field) => {
-      field.visible = !field.query('.a1').value
+      field.visible = !field.query('.a1').get('value')
     })
   },
 })

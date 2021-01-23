@@ -17,7 +17,7 @@ import { usePrefixCls } from '../__builtins__'
 import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
 interface ObservableColumnSource {
-  field: Formily.Core.Models.VoidField
+  field: Formily.Core.Types.GeneralField
   fieldProps: Formily.Core.Types.IVoidFieldFactoryProps<any, any>
   columnProps: ColumnProps<any>
   schema: Schema
@@ -68,7 +68,7 @@ const useArrayTableSources = () => {
       if (!schema['x-component-props']?.['dataIndex'] && !schema['name'])
         return []
       const name = schema['x-component-props']?.['dataIndex'] || schema['name']
-      const field = arrayField.query(arrayField.address.concat(name)).void.get()
+      const field = arrayField.query(arrayField.address.concat(name)).take()
       const fieldProps =
         field?.props || transformSchemaToFieldProps(name, schema, {})
       const columnProps =

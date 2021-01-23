@@ -84,7 +84,7 @@ export default () => {
       <FormButtonGroup.FormItem>
         <Button
           onClick={() => {
-            form.query('tab3').void.get((field) => {
+            form.query('tab3').take((field) => {
               field.visible = !field.visible
             })
           }}
@@ -201,7 +201,7 @@ export default () => {
       <FormButtonGroup.FormItem>
         <Button
           onClick={() => {
-            form.query('tab3').void.get((field) => {
+            form.query('tab3').take((field) => {
               field.visible = !field.visible
             })
           }}

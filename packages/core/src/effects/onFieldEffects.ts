@@ -55,11 +55,10 @@ export function onFieldInit(
   callback?: (field: GeneralField, form: Form) => void
 ) {
   const form = useFormInEffects()
-  let count = 0
-  form.query(pattern).all.getAll((field) => {
+  const count = form.query(pattern).reduce((count, field) => {
     callback(field, form)
-    count++
-  })
+    return count + 1
+  }, 0)
   if (count === 0) {
     _onFieldInit(pattern, callback)
   }

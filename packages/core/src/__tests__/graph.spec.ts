@@ -1,4 +1,5 @@
 import { createForm } from '../'
+import { isVoidField } from '../shared'
 import { attach } from './shared'
 
 test('getGraph/setGraph', () => {
@@ -23,7 +24,8 @@ test('getGraph/setGraph', () => {
       name: 'void',
     })
   )
-  form.query('normal').get((field) => {
+  form.query('normal').take((field) => {
+    if (isVoidField(field)) return
     field.errors = ['error']
   })
   const graph = form.getFormGraph()
@@ -36,5 +38,5 @@ test('getGraph/setGraph', () => {
       value: 123,
     },
   })
-  expect(form.query('object').value).toEqual(123)
+  expect(form.query('object').get('value')).toEqual(123)
 })

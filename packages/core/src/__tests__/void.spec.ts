@@ -238,19 +238,19 @@ test('reactions', async () => {
       reactions: [
         (field) => {
           const aa = field.query('aa')
-          if (aa.value === '123') {
+          if (aa.get('value') === '123') {
             field.visible = false
           } else {
             field.visible = true
           }
-          if (aa.inputValue === '333') {
+          if (aa.get('inputValue') === '333') {
             field.editable = false
-          } else if (aa.inputValue === '444') {
+          } else if (aa.get('inputValue') === '444') {
             field.editable = true
           }
-          if (aa.initialValue === '555') {
+          if (aa.get('initialValue') === '555') {
             field.readOnly = true
-          } else if (aa.initialValue === '666') {
+          } else if (aa.get('initialValue') === '666') {
             field.readOnly = false
           }
         },

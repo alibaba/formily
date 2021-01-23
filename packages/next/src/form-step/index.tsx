@@ -67,7 +67,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
   const setDisplay = (target: number) => {
     const currentStep = env.steps[target]
     env.steps.forEach(({ name }) => {
-      env.form.query(`${env.field.address}.${name}`).all.get((field) => {
+      env.form.query(`${env.field.address}.${name}`).take((field) => {
         if (name === currentStep.name) {
           field.setDisplay('visible')
         } else {

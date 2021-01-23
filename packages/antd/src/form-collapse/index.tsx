@@ -37,7 +37,7 @@ const usePanels = () => {
   schema.mapProperties((schema, name) => {
     const field = collapseField
       .query(collapseField.address.concat(name))
-      .void.get()
+      .take()
     if (field?.display === 'none' || field?.display === 'hidden') return
     if (schema['x-component']?.indexOf('CollapsePanel') > -1) {
       panels.push({

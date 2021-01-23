@@ -465,7 +465,7 @@ export const createModelStateGetter = (model: any) => {
 export const createFieldStateSetter = (form: Form) => {
   return action((pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
-      pattern.all.get((field) => {
+      pattern.forEach((field) => {
         field.setState(payload)
       })
     } else if (isGeneralField(pattern)) {
@@ -473,7 +473,7 @@ export const createFieldStateSetter = (form: Form) => {
     } else {
       let matchCount = 0,
         path = FormPath.parse(pattern)
-      form.query(path).all.getAll((field) => {
+      form.query(path).forEach((field) => {
         field.setState(payload)
         matchCount++
       })
@@ -487,11 +487,11 @@ export const createFieldStateSetter = (form: Form) => {
 export const createFieldStateGetter = (form: Form) => {
   return (pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
-      return pattern.all.get(payload)
+      return pattern.take(payload)
     } else if (isGeneralField(pattern)) {
       return (pattern as any).getState(payload)
     } else {
-      return form.query(pattern).all.get((field: any) => {
+      return form.query(pattern).take((field: any) => {
         return field.getState(payload)
       })
     }

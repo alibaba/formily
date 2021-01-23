@@ -87,7 +87,7 @@ const useAsyncDataSource = (
 const form = createForm({
   effects: () => {
     useAsyncDataSource('select', async (field) => {
-      const linkage = field.query('linkage').value
+      const linkage = field.query('linkage').get('value')
       if (!linkage) return []
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -223,7 +223,7 @@ const SchemaField = createSchemaField({
 })
 
 const loadData = async (field) => {
-  const linkage = field.query('linkage').value
+  const linkage = field.query('linkage').get('value')
   if (!linkage) return []
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -382,7 +382,7 @@ const useAsyncDataSource = (
 const form = createForm({
   effects: () => {
     useAsyncDataSource('select', async (field) => {
-      const linkage = field.query('linkage').value
+      const linkage = field.query('linkage').get('value')
       if (!linkage) return []
       return new Promise((resolve) => {
         setTimeout(() => {

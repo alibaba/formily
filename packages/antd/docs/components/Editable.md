@@ -52,7 +52,7 @@ export default () => (
         x-component="Editable.Popover"
         x-component-props={{
           renderPreview: (field) => {
-            return field.query('.date2').value
+            return field.query('.date2').get('value')
           },
         }}
       >
@@ -148,7 +148,7 @@ const schema = {
       title: '虚拟节点容器',
       'x-component': 'Editable.Popover',
       'x-component-props': {
-        renderPreview: "{{(field) => field.query('.date2').value}}",
+        renderPreview: "{{(field) => field.query('.date2').get('value')}}",
       },
       properties: {
         date2: {
@@ -244,7 +244,7 @@ export default () => (
         Editable.Popover,
         {
           renderPreview: (field) => {
-            return field.query('.date2').value
+            return field.query('.date2').get('value')
           },
         },
       ]}

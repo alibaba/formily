@@ -81,10 +81,10 @@ test('render field', async () => {
     </FormProvider>
   )
   expect(form.mounted).toBeTruthy()
-  expect(form.query('aa').get().mounted).toBeTruthy()
-  expect(form.query('bb').get().mounted).toBeTruthy()
-  expect(form.query('cc').get().mounted).toBeTruthy()
-  expect(form.query('dd').void.get().mounted).toBeTruthy()
+  expect(form.query('aa').take().mounted).toBeTruthy()
+  expect(form.query('bb').take().mounted).toBeTruthy()
+  expect(form.query('cc').take().mounted).toBeTruthy()
+  expect(form.query('dd').take().mounted).toBeTruthy()
   fireEvent.change(getByTestId('aa'), {
     target: {
       value: '123',
@@ -99,8 +99,8 @@ test('render field', async () => {
   expect(getByTestId('bb-children')).not.toBeUndefined()
   expect(getByTestId('dd-children')).not.toBeUndefined()
   expect(queryByTestId('ee')).toBeNull()
-  expect(form.query('aa').value).toEqual('123')
-  expect(form.query('kk').value).toEqual('123')
+  expect(form.query('aa').get('value')).toEqual('123')
+  expect(form.query('kk').get("value")).toEqual('123')
   unmount()
 })
 
@@ -134,10 +134,10 @@ test('useAttch', () => {
     )
   }
   const { rerender } = render(<MyComponent name="aa" />)
-  expect(form.query('aa').get().mounted).toBeTruthy()
+  expect(form.query('aa').take().mounted).toBeTruthy()
   rerender(<MyComponent name="bb" />)
-  expect(form.query('aa').get().mounted).toBeFalsy()
-  expect(form.query('bb').get().mounted).toBeTruthy()
+  expect(form.query('aa').take().mounted).toBeFalsy()
+  expect(form.query('bb').take().mounted).toBeTruthy()
 })
 
 test('useFormEffects', () => {
@@ -159,7 +159,7 @@ test('useFormEffects', () => {
     </FormProvider>
   )
   expect(queryByTestId('custom-value').textContent).toEqual('')
-  form.query('aa').get((aa: Formily.Core.Models.Field) => {
+  form.query('aa').take((aa: Formily.Core.Models.Field) => {
     aa.setValue('123')
   })
   expect(queryByTestId('custom-value').textContent).toEqual('123')
@@ -210,14 +210,14 @@ test('connect', async () => {
     )
   }
   const { queryByText } = render(<MyComponent />)
-  form.query('aa').get((field: Formily.Core.Models.Field) => {
+  form.query('aa').take((field: Formily.Core.Models.Field) => {
     field.setValue('123')
   })
   await waitFor(() => {
     expect(queryByText('123')).toBeVisible()
   })
 
-  form.query('aa').get((field) => {
+  form.query('aa').take((field) => {
     if (!isField(field)) return
     field.readPretty = true
   })

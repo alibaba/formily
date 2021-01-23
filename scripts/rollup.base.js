@@ -10,8 +10,10 @@ const plugins = [
   typescript({
     tsconfig: './tsconfig.json',
     tsconfigOverride: {
-      module: 'ESNext',
-      compilerOptions: { declaration: false },
+      compilerOptions: {
+        module: 'ESNext',
+        declaration: false,
+      },
     },
   }),
   vue(),

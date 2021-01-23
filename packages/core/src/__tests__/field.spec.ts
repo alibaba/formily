@@ -403,16 +403,16 @@ test('query', () => {
       basePath: 'object',
     })
   )
-  expect(object_.query('object.void').void.get()).not.toBeUndefined()
-  expect(object_.query('object.void.aaa').get()).not.toBeUndefined()
+  expect(object_.query('object.void').take()).not.toBeUndefined()
+  expect(object_.query('object.void.aaa').take()).not.toBeUndefined()
   expect(void_.query('.')).not.toBeUndefined()
-  expect(void_.query('.bbb').get()).not.toBeUndefined()
-  expect(aaa.query('.ccc').get()).toBeUndefined()
-  expect(aaa.query('..').get()).not.toBeUndefined()
-  expect(aaa.query('..bbb').get()).not.toBeUndefined()
-  expect(bbb.query('.void').void.get()).not.toBeUndefined()
-  expect(bbb.query('.void.aaa').get()).not.toBeUndefined()
-  expect(bbb.query('.void.ccc').get()).toBeUndefined()
+  expect(void_.query('.bbb').take()).not.toBeUndefined()
+  expect(aaa.query('.ccc').take()).toBeUndefined()
+  expect(aaa.query('..').take()).not.toBeUndefined()
+  expect(aaa.query('..bbb').take()).not.toBeUndefined()
+  expect(bbb.query('.void').take()).not.toBeUndefined()
+  expect(bbb.query('.void.aaa').take()).not.toBeUndefined()
+  expect(bbb.query('.void.ccc').take()).toBeUndefined()
 })
 
 test('reset', async () => {
@@ -717,19 +717,19 @@ test('reactions', async () => {
       reactions: [
         (field) => {
           const aa = field.query('aa')
-          if (aa.value === '123') {
+          if (aa.get('value') === '123') {
             field.visible = false
           } else {
             field.visible = true
           }
-          if (aa.inputValue === '333') {
+          if (aa.get('inputValue') === '333') {
             field.editable = false
-          } else if (aa.inputValue === '444') {
+          } else if (aa.get('inputValue') === '444') {
             field.editable = true
           }
-          if (aa.initialValue === '555') {
+          if (aa.get('initialValue')=== '555') {
             field.readOnly = true
-          } else if (aa.initialValue === '666') {
+          } else if (aa.get('initialValue') === '666') {
             field.readOnly = false
           }
         },

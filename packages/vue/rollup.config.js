@@ -18,6 +18,11 @@ export default [
     plugins: [
       typescript({
         tsconfig: path.resolve(__dirname, 'tsconfig.json'),
+        tsconfigOverride: {
+          compilerOptions: {
+            module: 'ESNext',
+          },
+        },
       }),
       vue(),
       resolve(),
@@ -36,6 +41,11 @@ export default [
     plugins: [
       typescript({
         tsconfig: path.resolve(__dirname, 'tsconfig.json'),
+        tsconfigOverride: {
+          compilerOptions: {
+            module: 'ESNext',
+          },
+        },
       }),
       vue(),
       resolve(),

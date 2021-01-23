@@ -1,87 +1,36 @@
-import { FormPath, isFn, each } from '@formily/shared'
+import { FormPath, isFn, each, FormPathPattern } from '@formily/shared'
 import { untracked } from 'mobx'
-import { GeneralField, IQueryProps } from '../types'
-import { ArrayField } from './ArrayField'
-import { Field } from './Field'
+import { GeneralField, IGeneralFieldState, IQueryProps } from '../types'
 import { Form } from './Form'
-import { ObjectField } from './ObjectField'
-import { VoidField } from './VoidField'
 
-export class Query<T = Field | ArrayField | ObjectField> {
-  private props: IQueryProps
+const output = (
+  field: GeneralField,
+  taker: (field: GeneralField, address: FormPath) => any
+) => {
+  if (!field) return
+  if (isFn(taker)) {
+    return taker(field, field.address)
+  }
+  return field
+}
+
+export class Query {
   private pattern: FormPath
+  private addresses: string[] = []
   private form: Form
-  private type: string
-  constructor(props: IQueryProps, type?: string) {
-    this.props = props
+  constructor(props: IQueryProps) {
     this.pattern = FormPath.parse(props.pattern, props.base)
     this.form = props.form
-    this.type = type
-  }
-
-  match(field: GeneralField) {
-    if (!this.type)
-      return (
-        field.displayName === 'Field' ||
-        field.displayName === 'ArrayField' ||
-        field.displayName === 'ObjectField'
-      )
-    return field.displayName === this.type || this.type === 'ALL'
-  }
-
-  get(): T
-  get<Result>(getter: (field: T, address: FormPath) => Result): Result
-  get(getter?: any): any {
-    const output = (field: GeneralField) => {
-      if (!field) return
-      if (isFn(getter)) {
-        return getter(field as any, field.address) as any
-      }
-      return field as any
-    }
-
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)
-      const field = this.form.fields[identifier] || this.form.fields[index]
-      return output(field)
-    } else {
-      return output(
-        this.form.fields[
-          untracked(() => {
-            for (let address in this.form.fields) {
-              const field = this.form.fields[address]
-              if (field.match(this.pattern)) {
-                return address
-              }
-            }
-          })
-        ]
-      )
-    }
-  }
-  getAll(): T[]
-  getAll<Result>(mapper?: (field: T, address: FormPath) => Result): Result[]
-  getAll(mapper?: any): any {
-    const results = []
-    const output = (field: GeneralField) => {
-      if (!field) return []
-      if (this.match(field)) {
-        if (isFn(mapper)) {
-          results.push(mapper(field as any, field.address))
-        } else {
-          results.push(field)
-        }
+      if (this.form.fields[identifier]) {
+        this.addresses = [identifier]
+      } else if (this.form.fields[index]) {
+        this.addresses = [index]
       }
-      return results
-    }
-    if (!this.pattern.isMatchPattern) {
-      const identifier = this.pattern.toString()
-      const index = this.form.indexes.get(identifier)
-      const field = this.form.fields[identifier] || this.form.fields[index]
-      return output(field)
     } else {
-      untracked(() => {
+      this.addresses = untracked(() => {
         const results = []
         each(this.form.fields, (field, address) => {
           if (field.match(this.pattern)) {
@@ -89,38 +38,55 @@ export class Query<T = Field | ArrayField | ObjectField> {
           }
         })
         return results
-      }).forEach((address) => {
-        output(this.form.fields[address])
       })
     }
-    return results
   }
 
-  get object() {
-    return new Query<ObjectField>(this.props, 'ObjectField')
+  take(): GeneralField
+  take<Result>(
+    getter: (field: GeneralField, address: FormPath) => Result
+  ): Result
+  take(taker?: any): any {
+    return output(this.form.fields[this.addresses[0]], taker)
   }
 
-  get array() {
-    return new Query<ArrayField>(this.props, 'ArrayField')
+  map(): GeneralField[]
+  map<Result>(
+    mapper?: (field: GeneralField, address: FormPath) => Result
+  ): Result[]
+  map(mapper?: any): any {
+    return this.addresses.map((address) =>
+      output(this.form.fields[address], mapper)
+    )
   }
 
-  get void() {
-    return new Query<VoidField>(this.props, 'VoidField')
+  forEach<Result>(eacher: (field: GeneralField, address: FormPath) => Result) {
+    return this.addresses.forEach((address) =>
+      output(this.form.fields[address], eacher)
+    )
   }
 
-  get all() {
-    return new Query<GeneralField>(this.props, 'ALL')
+  reduce<Result>(
+    reducer: (value: Result, field: GeneralField, address: FormPath) => Result,
+    initial?: Result
+  ): Result {
+    return this.addresses.reduce(
+      (value, address) =>
+        output(this.form.fields[address], (field, address) =>
+          reducer(value, field, address)
+        ),
+      initial
+    )
   }
 
-  get value() {
-    return this.get()?.['value']
+  get<K extends keyof IGeneralFieldState>(key: K): IGeneralFieldState[K] {
+    const results: any = this.take()
+    if (results) {
+      return results[key]
+    }
   }
 
-  get initialValue() {
-    return this.get()?.['initialValue']
-  }
-
-  get inputValue() {
-    return this.get()?.['inputValue']
+  getIn(pattern?: FormPathPattern) {
+    return FormPath.getIn(this.take(), pattern)
   }
 }
