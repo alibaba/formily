@@ -47,6 +47,7 @@ Object {
       "default": "123",
       "key": "aa",
       "type": "string",
+      "version": "1.0",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -119,6 +120,7 @@ Object {
       "default": "123",
       "key": "aa",
       "type": "string",
+      "version": "1.0",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -177,6 +179,7 @@ Object {
     "props": Object {
       "key": "cc",
       "type": "object",
+      "version": "1.0",
       "x-component": "box",
     },
     "unmounted": false,
@@ -206,6 +209,7 @@ Object {
       "default": "123",
       "key": "aa",
       "type": "string",
+      "version": "1.0",
       "x-props": Object {
         "data-testid": "input",
       },

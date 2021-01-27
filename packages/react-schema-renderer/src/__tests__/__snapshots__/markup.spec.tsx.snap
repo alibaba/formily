@@ -48,6 +48,7 @@ Object {
       "key": "aa",
       "name": "aa",
       "type": "string",
+      "version": "1.0",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -108,6 +109,7 @@ Object {
       "key": "NO_NAME_FIELD_$0",
       "name": "NO_NAME_FIELD_$0",
       "type": "object",
+      "version": "1.0",
       "visible": undefined,
       "x-component": "card",
       "x-component-props": Object {
@@ -142,6 +144,7 @@ Object {
       "key": "aa",
       "name": "aa",
       "type": "string",
+      "version": "1.0",
       "x-props": Object {
         "data-testid": "input",
       },
@@ -180,12 +183,14 @@ Object {
           "key": "aa",
           "name": "aa",
           "type": "string",
+          "version": "1.0",
           "x-props": Object {
             "data-testid": "input",
           },
         },
       },
       "type": "object",
+      "version": "1.0",
       "visible": undefined,
       "x-component": "card",
       "x-component-props": Object {
@@ -194,5 +199,6 @@ Object {
     },
   },
   "type": "object",
+  "version": "1.0",
 }
 `;
