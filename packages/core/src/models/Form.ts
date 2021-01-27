@@ -14,7 +14,6 @@ import {
   uid,
   globalThisPolyfill,
   defaults,
-  isEmpty,
   clone,
 } from '@formily/shared'
 import { Heart } from './Heart'
@@ -48,6 +47,7 @@ import {
   createModelStateSetter,
   createFieldStateSetter,
   createFieldStateGetter,
+  applyValuesPatch,
 } from '../shared'
 import { ArrayField } from './ArrayField'
 import { ObjectField } from './ObjectField'
@@ -66,8 +66,8 @@ export class Form<ValueType = any> {
   modified: boolean
   pattern: FormPatternTypes
   display: FormDisplayTypes
-  originValues: ValueType
-  originInitialValues: ValueType
+  values: ValueType
+  initialValues: ValueType
   mounted: boolean
   unmounted: boolean
   props: IFormProps
@@ -80,6 +80,7 @@ export class Form<ValueType = any> {
 
   constructor(props: IFormProps) {
     this.initialize(props)
+    this.makeInitialValues()
     this.makeObservable()
     this.makeReactive()
     this.onInit()
@@ -102,17 +103,21 @@ export class Form<ValueType = any> {
     this.readPretty = this.props.readPretty
     this.visible = this.props.visible
     this.hidden = this.props.hidden
-    this.originValues = isObservable(this.props.values)
-      ? this.props.values
-      : clone(this.props.values) || ({} as any)
-    this.originInitialValues = isObservable(this.props.values)
-      ? this.props.initialValues
-      : clone(this.props.initialValues) || ({} as any)
     this.graph = new Graph(this)
     this.heart = new Heart({
       lifecycles: this.lifecycles,
       context: this,
     })
+  }
+
+  protected makeInitialValues() {
+    this.values = isObservable(this.props.values)
+      ? this.props.values
+      : clone(this.props.values) || ({} as any)
+    this.initialValues = isObservable(this.props.initialValues)
+      ? this.props.initialValues
+      : clone(this.props.initialValues) || ({} as any)
+    applyValuesPatch(this, [], this.initialValues)
   }
 
   protected makeObservable() {
@@ -126,8 +131,8 @@ export class Form<ValueType = any> {
       display: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
-      originValues: observable,
-      originInitialValues: observable,
+      values: observable,
+      initialValues: observable,
       setValues: action,
       setValuesIn: action,
       setInitialValues: action,
@@ -149,12 +154,21 @@ export class Form<ValueType = any> {
 
   protected makeReactive() {
     this.disposers.push(
-      observer(this.originInitialValues, () => {
-        this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-      }),
-      observer(this.originValues, () => {
-        this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-      })
+      observer(
+        () => this.initialValues,
+        (change, path) => {
+          if (change.type === 'add' || change.type === 'update') {
+            applyValuesPatch(this, path, change.newValue)
+          }
+          this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+        }
+      ),
+      observer(
+        () => this.values,
+        () => {
+          this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+        }
+      )
     )
   }
 
@@ -266,24 +280,6 @@ export class Form<ValueType = any> {
     }
   }
 
-  set values(values: ValueType) {
-    this.originValues = values
-    this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-  }
-
-  get values() {
-    return defaults(this.originInitialValues, this.originValues)
-  }
-
-  set initialValues(initialValues: ValueType) {
-    this.originInitialValues = initialValues
-    this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
-  }
-
-  get initialValues() {
-    return this.originInitialValues
-  }
-
   /** 创建字段 **/
 
   createField = <
@@ -362,7 +358,7 @@ export class Form<ValueType = any> {
 
   setValues = (values: any, strategy: 'overwrite' | 'merge' = 'merge') => {
     if (strategy === 'merge') {
-      this.values = defaults(this.originValues, values)
+      this.values = defaults(this.values, values)
     } else {
       this.values = values
     }
@@ -373,44 +369,42 @@ export class Form<ValueType = any> {
     strategy: 'overwrite' | 'merge' = 'merge'
   ) => {
     if (strategy === 'merge') {
-      this.initialValues = defaults(this.originInitialValues, initialValues)
+      this.initialValues = defaults(this.initialValues, initialValues)
     } else {
       this.initialValues = initialValues
     }
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.originValues, pattern, value)
+    FormPath.setIn(this.values, pattern, value)
   }
 
   deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.originValues, pattern)
+    FormPath.deleteIn(this.values, pattern)
   }
 
   existValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.originValues, pattern)
+    return FormPath.existIn(this.values, pattern)
   }
 
   getValuesIn = (pattern: FormPathPattern) => {
-    const value = FormPath.getIn(this.originValues, pattern)
-    const initialValue = FormPath.getIn(this.originInitialValues, pattern)
-    return isEmpty(value) && isValid(initialValue) ? initialValue : value
+    return FormPath.getIn(this.values, pattern)
   }
 
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
-    FormPath.setIn(this.originInitialValues, pattern, initialValue)
+    FormPath.setIn(this.initialValues, pattern, initialValue)
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.originInitialValues, pattern)
+    FormPath.deleteIn(this.initialValues, pattern)
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.existIn(this.originInitialValues, pattern)
+    return FormPath.existIn(this.initialValues, pattern)
   }
 
   getInitialValuesIn = (pattern: FormPathPattern) => {
-    return FormPath.getIn(this.originInitialValues, pattern)
+    return FormPath.getIn(this.initialValues, pattern)
   }
 
   setSubmitting = (submitting: boolean) => {

@@ -6,6 +6,9 @@ import {
   pascalCase,
   isFn,
   isValid,
+  isEmpty,
+  isArr,
+  isPlainObj,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { action, runInAction, toJS } from 'mobx'
@@ -496,4 +499,35 @@ export const createFieldStateGetter = (form: Form) => {
       })
     }
   }
+}
+
+export const applyValuesPatch = (form: Form, path: string[], source: any) => {
+  const patch = (source: any, path: string[] = []) => {
+    const targetValue = form.getValuesIn(path)
+    const targetField = form.query(path).take()
+    if (isEmpty(targetValue)) {
+      if (isEmpty(source)) return
+      form.setValuesIn(path, toJS(source))
+    } else {
+      const arrA = isArr(targetValue)
+      const arrB = isArr(source)
+      const objA = isPlainObj(targetValue)
+      const objB = isPlainObj(source)
+      if ((arrA && arrA === arrB) || (objA && objA === objB)) {
+        each(source, (value, key) => {
+          if (isEmpty(value)) return
+          patch(value, path.concat(key))
+        })
+      } else {
+        if (targetField) {
+          if (!isVoidField(targetField) && !targetField.modified) {
+            form.setValuesIn(path, toJS(source))
+          }
+        } else {
+          form.setValuesIn(path, toJS(source))
+        }
+      }
+    }
+  }
+  patch(source, path)
 }

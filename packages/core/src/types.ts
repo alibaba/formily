@@ -9,6 +9,17 @@ import {
   ObjectField,
   Query,
 } from './models'
+import { IObjectDidChange, IArrayDidChange, IMapDidChange } from 'mobx'
+
+export type IMobxChange = IObjectDidChange | IArrayDidChange | IMapDidChange
+
+export type IMobxDisposer = () => void
+
+export type IMobxEntry = {
+  dispose: IMobxDisposer
+  path: string
+  parent: IMobxEntry | undefined
+}
 
 export type NonFunctionPropertyNames<T> = {
   [K in keyof T]: T[K] extends (...args: any) => any ? never : K

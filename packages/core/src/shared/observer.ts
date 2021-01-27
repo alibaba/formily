@@ -3,32 +3,22 @@ import {
   isObservableMap,
   isObservableObject,
   isObservableArray,
-  IObjectDidChange,
-  IArrayDidChange,
-  IMapDidChange,
   values,
   entries,
+  reaction,
 } from 'mobx'
+import { IMobxChange, IMobxDisposer, IMobxEntry } from '../types'
 
-type IDisposer = () => void
-
-type IChange = IObjectDidChange | IArrayDidChange | IMapDidChange
-
-type Entry = {
-  dispose: IDisposer
-  path: string
-  parent: Entry | undefined
-}
-
-function buildPath(entry: Entry | undefined): string {
+function buildPath(entry: IMobxEntry | undefined, name: string) {
   /* istanbul ignore next */
-  if (!entry) return 'ROOT'
+  if (!entry) return name ? [].concat(name) : []
   const res: string[] = []
   while (entry.parent) {
     res.push(entry.path)
     entry = entry.parent
   }
-  return res.reverse().join('/')
+  const path = res.reverse()
+  return name ? path.concat(name) : path
 }
 
 function isRecursivelyObservable(thing: any) {
@@ -58,18 +48,18 @@ function isRecursivelyObservable(thing: any) {
  * })
  */
 export function observer<T = any>(
-  target: T,
-  listener: (change: IChange, path: string, root: T) => void
-): IDisposer {
-  const entrySet = new WeakMap<any, Entry>()
+  getTarget: () => T,
+  listener: (change: IMobxChange, path: string[], root: T) => void
+): IMobxDisposer {
+  const entrySet = new WeakMap<any, IMobxEntry>()
 
-  function genericListener(change: IChange) {
+  const genericListener = (path: string) => (change: IMobxChange) => {
     const entry = entrySet.get(change.object)!
     processChange(change, entry)
-    listener(change, buildPath(entry), target)
+    listener(change, buildPath(entry, path || change['name']), getTarget())
   }
 
-  function processChange(change: IChange, parent: Entry) {
+  function processChange(change: IMobxChange, parent: IMobxEntry) {
     switch (change.type) {
       // Object changes
       case 'add': // also for map
@@ -111,13 +101,13 @@ export function observer<T = any>(
 
   function observeRecursively(
     thing: any,
-    parent: Entry | undefined,
+    parent: IMobxEntry | undefined,
     path: string
   ) {
     if (isRecursivelyObservable(thing)) {
       /* istanbul ignore next */
       const entry = entrySet.get(thing)
-      /* istanbul ignore next */ 
+      /* istanbul ignore next */
       if (entry) {
         /* istanbul ignore next */
         if (entry.parent !== parent || entry.path !== path)
@@ -127,16 +117,18 @@ export function observer<T = any>(
           /* istanbul ignore next */
           throw new Error(
             `The same observable object cannot appear twice in the same tree,` +
-              ` trying to assign it to '${buildPath(parent)}/${path}',` +
-              ` but it already exists at '${buildPath(entry.parent)}/${
-                entry.path
-              }'`
+              ` trying to assign it to '${buildPath(parent, path).join(
+                '.'
+              )}',` +
+              ` but it already exists at '${buildPath(entry.parent, path).join(
+                '.'
+              )}'`
           )
       } else {
         const entry = {
           parent,
           path,
-          dispose: observe(thing, genericListener),
+          dispose: observe(thing, genericListener(path)),
         }
         entrySet.set(thing, entry)
         entries(thing).forEach(([key, value]) =>
@@ -157,9 +149,30 @@ export function observer<T = any>(
     }
   }
 
-  observeRecursively(target, undefined, '')
+  observeRecursively(getTarget(), undefined, '')
+
+  const dispose = reaction(
+    () => {
+      return getTarget()
+    },
+    (value, oldValue) => {
+      unobserveRecursively(oldValue)
+      observeRecursively(value, undefined, '')
+      listener(
+        {
+          type: 'update',
+          name: '',
+          newValue: value,
+          oldValue,
+        } as any,
+        [],
+        value
+      )
+    }
+  )
   /* istanbul ignore next */
   return () => {
-    unobserveRecursively(target)
+    dispose()
+    unobserveRecursively(getTarget())
   }
 }

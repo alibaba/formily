@@ -619,6 +619,18 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
+    if (isEmpty(this.initialValue)) {
+      if (isValid(this.props.initialValue)) {
+        this.initialValue = this.props.initialValue
+      }
+    }
+    if (isEmpty(this.value)) {
+      if (isValid(this.props.value)) {
+        this.value = this.props.value
+      } else if (!isEmpty(this.initialValue)) {
+        this.value = this.initialValue
+      }
+    }
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
     publishUpdate(this)
   }
@@ -706,9 +718,10 @@ export class Field<
     this.feedbacks = []
     this.inputValue = undefined
     this.inputValues = []
-    this.value = undefined
     if (options?.forceClear) {
-      this.initialValue = undefined
+      this.value = undefined
+    } else {
+      this.value = this.initialValue
     }
     this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
 

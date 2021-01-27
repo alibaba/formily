@@ -26,78 +26,75 @@ export class ArrayField<
     )
   }
 
-  push = (...items: any[]) => {
+  push = async (...items: any[]) => {
     if (!isArr(this.value)) return
     return runInAction(() => {
       this.value.push(...items)
-      this.validate('onInput')
+      return this.onInput(this.value)
     })
   }
 
-  pop = () => {
+  pop = async () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
       const index = this.value.length - 1
-      const poped = this.value.pop()
+      this.value.pop()
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
       })
-      this.validate('onInput')
-      return poped
+      return this.onInput(this.value)
     })
   }
 
-  insert = (index: number, ...items: any[]) => {
+  insert = async (index: number, ...items: any[]) => {
     if (!isArr(this.value)) return
-    runInAction(() => {
+    return runInAction(() => {
       this.value.splice(index, 0, ...items)
       spliceArrayState(this, {
         startIndex: index,
         insertCount: items.length,
       })
-      this.validate('onInput')
+      return this.onInput(this.value)
     })
   }
 
-  remove = (index: number) => {
+  remove = async (index: number) => {
     if (!isArr(this.value)) return
-    runInAction(() => {
+    return runInAction(() => {
       this.value.splice(index, 1)
       spliceArrayState(this, {
         startIndex: index,
         deleteCount: 1,
       })
-      this.validate('onInput')
+      return this.onInput(this.value)
     })
   }
 
-  shift = () => {
+  shift = async () => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      const shifted = this.value.shift()
-      this.validate('onInput')
-      return shifted
+      this.value.shift()
+      return this.onInput(this.value)
     })
   }
 
-  unshift = (...items: any[]) => {
+  unshift = async (...items: any[]) => {
     if (!isArr(this.value)) return
     return runInAction(() => {
-      const unshifted = this.value.unshift(...items)
+      this.value.unshift(...items)
       spliceArrayState(this, {
         startIndex: 0,
         insertCount: items.length,
       })
-      this.validate('onInput')
-      return unshifted
+      return this.onInput(this.value)
     })
   }
 
-  move = (fromIndex: number, toIndex: number) => {
+  move = async (fromIndex: number, toIndex: number) => {
     if (!isArr(this.value)) return
     if (fromIndex === toIndex) return
-    runInAction(() => {
+    return runInAction(() => {
       const fromItem = this.value[fromIndex]
       this.value.splice(fromIndex, 1)
       this.value.splice(toIndex, 0, fromItem)
@@ -105,16 +102,16 @@ export class ArrayField<
         fromIndex,
         toIndex,
       })
-      this.validate('onInput')
+      return this.onInput(this.value)
     })
   }
 
-  moveUp = (index: number) => {
+  moveUp = async (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index - 1 < 0 ? this.value.length - 1 : index - 1)
   }
 
-  moveDown = (index: number) => {
+  moveDown = async (index: number) => {
     if (!isArr(this.value)) return
     return this.move(index, index + 1 >= this.value.length ? 0 : index + 1)
   }

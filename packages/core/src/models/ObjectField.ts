@@ -23,12 +23,14 @@ export class ObjectField<
     )
   }
 
-  addProperty = (key: FormPathPattern, value: any) => {
+  addProperty = async (key: FormPathPattern, value: any) => {
     this.form.setValuesIn(this.path.concat(key), value)
+    return this.onInput(this.value)
   }
 
-  removeProperty = (key: FormPathPattern) => {
+  removeProperty = async (key: FormPathPattern) => {
     this.form.deleteValuesIn(this.path.concat(key))
+    return this.onInput(this.value)
   }
 
   existProperty = (key: FormPathPattern) => {
