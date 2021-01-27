@@ -619,6 +619,13 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
+    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
+    publishUpdate(this)
+  }
+
+  onMount = () => {
+    this.mounted = true
+    this.unmounted = false
     if (isEmpty(this.initialValue)) {
       if (isValid(this.props.initialValue)) {
         this.initialValue = this.props.initialValue
@@ -630,19 +637,6 @@ export class Field<
       } else if (!isEmpty(this.initialValue)) {
         this.value = this.initialValue
       }
-    }
-    this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-    publishUpdate(this)
-  }
-
-  onMount = () => {
-    this.mounted = true
-    this.unmounted = false
-    if (isEmpty(this.initialValue) && isValid(this.props.initialValue)) {
-      this.form.setInitialValuesIn(this.path, this.props.initialValue)
-    }
-    if (isEmpty(this.value) && isValid(this.props.value)) {
-      this.form.setValuesIn(this.path, this.props.value)
     }
     this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }

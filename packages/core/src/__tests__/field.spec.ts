@@ -727,7 +727,7 @@ test('reactions', async () => {
           } else if (aa.get('inputValue') === '444') {
             field.editable = true
           }
-          if (aa.get('initialValue')=== '555') {
+          if (aa.get('initialValue') === '555') {
             field.readOnly = true
           } else if (aa.get('initialValue') === '666') {
             field.readOnly = false
@@ -778,4 +778,18 @@ test('fault tolerance', () => {
   )
   expect(field2.display).toEqual('visible')
   expect(field2.pattern).toEqual('editable')
+})
+
+test('initialValue', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createField({
+      name: 'aaa',
+      initialValue: 123,
+    })
+  )
+  expect(form.values.aaa).toEqual(123)
+  expect(form.initialValues.aaa).toEqual(123)
+  expect(field.value).toEqual(123)
+  expect(field.initialValue).toEqual(123)
 })
