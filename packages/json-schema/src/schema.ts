@@ -5,9 +5,13 @@ import {
   SchemaExtendReaction,
   SchemaTypes,
   SchemaKey,
+  SchemaPatch,
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
 import { complie, shallowComplie } from './complier'
+
+const patches: SchemaPatch[] = []
+
 export class Schema<
   Decorator = any,
   Component = any,
@@ -159,10 +163,9 @@ export class Schema<
       Display,
       Validator,
       Message
-    >,
-    scope?: any
+    >
   ) {
-    return this.fromJSON(json, scope)
+    return this.fromJSON(json)
   }
 
   addProperty = (
@@ -445,27 +448,32 @@ export class Schema<
       Display,
       Validator,
       Message
-    >,
-    scope?: any
+    >
   ) => {
     if (!json) return this
-    if (isSchemaObject(json)) return json
-    each(json, (value, key) => {
-      if (isFn(value)) return
-      if (key === 'properties') {
-        this.setProperties(value)
-      } else if (key === 'patternProperties') {
-        this.setPatternProperties(value)
-      } else if (key === 'additionalProperties') {
-        this.setAdditionalProperties(value)
-      } else if (key === 'items') {
-        this.setItems(value)
-      } else if (key === 'additionalItems') {
-        this.setAdditionalItems(value)
-      } else {
-        this[key] = value
+    if (Schema.isSchemaInstance(json)) return json
+
+    each(
+      patches.reduce((buf, patch) => {
+        return patch(buf)
+      }, json),
+      (value, key) => {
+        if (isFn(value)) return
+        if (key === 'properties') {
+          this.setProperties(value)
+        } else if (key === 'patternProperties') {
+          this.setPatternProperties(value)
+        } else if (key === 'additionalProperties') {
+          this.setAdditionalProperties(value)
+        } else if (key === 'items') {
+          this.setItems(value)
+        } else if (key === 'additionalItems') {
+          this.setAdditionalItems(value)
+        } else {
+          this[key] = value
+        }
       }
-    })
+    )
     return this
   }
 
@@ -523,8 +531,16 @@ export class Schema<
   static shallowComplie = (data: any, scope: any) => {
     return shallowComplie(data, scope)
   }
-}
 
-export const isSchemaObject = (value: any): value is Schema => {
-  return instOf(value, Schema)
+  static isSchemaInstance = (value: any): value is Schema => {
+    return instOf(value, Schema)
+  }
+
+  static registerPatches = (...args: SchemaPatch[]) => {
+    args.forEach((patch) => {
+      if (isFn(patch)) {
+        patches.push(patch)
+      }
+    })
+  }
 }

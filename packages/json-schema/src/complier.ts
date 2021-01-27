@@ -1,6 +1,6 @@
 import { isArr, isFn, isStr, reduce } from '@formily/shared'
 import { isObservable } from 'mobx'
-import { isSchemaObject } from './schema'
+import { Schema } from './schema'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
@@ -45,8 +45,8 @@ export const complie = <Source = any, Scope = any>(
       if (source['_isAMomentObject']) {
         return source
       }
-      if (isSchemaObject(source)) {
-        return source.fromJSON(source, scope)
+      if (Schema.isSchemaInstance(source)) {
+        return source.fromJSON(source)
       }
       if (isFn(source['toJS'])) {
         return source

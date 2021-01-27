@@ -39,12 +39,15 @@ export type SchemaProperties<
   >
 >
 
+export type SchemaPatch = (schema: ISchema) => ISchema
+
 export type SchemaKey = string | number
 
 export type SchemaExtendReaction<Field = any> =
   | {
       dependencies?: string[]
       when?: string
+      target?: string
       fullfill?: {
         state?: any
         schema?: any

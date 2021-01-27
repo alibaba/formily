@@ -1,5 +1,5 @@
 import React, { useContext, Fragment } from 'react'
-import { ISchema, isSchemaObject, Schema } from '@formily/json-schema'
+import { ISchema, Schema } from '@formily/json-schema'
 import { RecursionField } from './components'
 import {
   render,
@@ -32,7 +32,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     Decorator extends JSXComponent,
     Component extends JSXComponent
   >(props: ISchemaFieldProps<Decorator, Component>) {
-    const schema = isSchemaObject(props.schema)
+    const schema = Schema.isSchemaInstance(props.schema)
       ? props.schema
       : new Schema({
           type: 'object',
