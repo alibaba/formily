@@ -271,9 +271,21 @@ const getSchemaFieldReactions = (
           return Schema.complie(expression, scope)
         }
         if (when) {
-          setSchemaFieldState(field, reaction.fullfill, complie)
+          if (reaction.target) {
+            field.query(reaction.target).forEach((field) => {
+              setSchemaFieldState(field, reaction.fullfill, complie)
+            })
+          } else {
+            setSchemaFieldState(field, reaction.fullfill, complie)
+          }
         } else {
-          setSchemaFieldState(field, reaction.otherwise, complie)
+          if (reaction.target) {
+            field.query(reaction.target).forEach((field) => {
+              setSchemaFieldState(field, reaction.otherwise, complie)
+            })
+          } else {
+            setSchemaFieldState(field, reaction.otherwise, complie)
+          }
         }
       })
     }

@@ -1,5 +1,6 @@
 import { Schema } from '../schema'
-import { toArr, isArr, isStr, lowerCase } from '@formily/shared'
+import { toArr, isArr, isStr, lowerCase, isValid } from '@formily/shared'
+import { ISchema } from '../types'
 
 const VOID_COMPONENTS = [
   'card',
@@ -45,10 +46,10 @@ const transformXLinkage = (linkages: any[]) => {
           target: item.target,
           when: transformCondition(item.condition),
           fullfill: {
-            schema: item.schema,
+            schema: transformSchema({ version: '1.0', ...item.schema }),
           },
           otherwise: {
-            schema: item.otherwise,
+            schema: transformSchema({ version: '1.0', ...item.otherwise }),
           },
         })
       } else if (item.type === 'value:state') {
@@ -67,49 +68,50 @@ const transformXLinkage = (linkages: any[]) => {
   }
 }
 
-Schema.registerPatches((schema) => {
-  if (schema.version === '1.0') {
-    if (schema['editable']) {
-      schema['x-editable'] = schema['editable']
-      delete schema['editable']
-    }
-    if (schema['visible']) {
-      schema['x-visible'] = schema['visible']
-      delete schema['visible']
-    }
-    if (schema['display']) {
-      schema['x-display'] = schema['display'] ? 'visible' : 'hidden'
-      delete schema['display']
-    }
-    if (schema['x-props']) {
-      schema['x-decorator-props'] = schema['x-props']
-      delete schema['display']
-    }
-    if (!schema['x-decorator']) {
-      schema['x-decorator'] = 'FormItem'
-    }
-    if (schema['x-linkages']) {
-      schema['x-reactions'] = toArr(schema['x-reactions']).concat(
-        transformXLinkage(schema['x-linkages'])
+const transformSchema = (schema: ISchema) => {
+  if (!schema) return schema
+  if (isValid(schema['editable'])) {
+    schema['x-editable'] = schema['x-editable'] || schema['editable']
+    delete schema['editable']
+  }
+  if (isValid(schema['visible'])) {
+    schema['x-visible'] = schema['x-visible'] || schema['visible']
+    delete schema['visible']
+  }
+  if (isValid(schema['display'])) {
+    schema['x-display'] = schema['x-display'] || schema['display'] ? 'visible' : 'hidden'
+    delete schema['display']
+  }
+  if (isValid(schema['x-props'])) {
+    schema['x-decorator-props'] = schema['x-decorator-props'] || schema['x-props']
+    delete schema['display']
+  }
+  if (schema['x-linkages']) {
+    schema['x-reactions'] = toArr(schema['x-reactions']).concat(
+      transformXLinkage(schema['x-linkages'])
+    )
+    delete schema['x-linkages']
+  }
+  if (schema['x-component']) {
+    if (
+      VOID_COMPONENTS.some(
+        (component) => lowerCase(component) === lowerCase(schema['x-component'])
       )
+    ) {
+      schema['type'] = 'void'
     }
-    if (schema['x-component']) {
-      if (
-        VOID_COMPONENTS.some(
-          (component) =>
-            lowerCase(component) === lowerCase(schema['x-component'])
-        )
-      ) {
-        schema['type'] = 'void'
-      }
-    } else {
-      if (TYPE_DEFAULT_COMPONENTS[schema['type']]) {
-        schema['x-component'] = TYPE_DEFAULT_COMPONENTS[schema['type']]
-      }
+  } else {
+    if (TYPE_DEFAULT_COMPONENTS[schema['type']]) {
+      schema['x-component'] = TYPE_DEFAULT_COMPONENTS[schema['type']]
     }
   }
+  if (!schema['x-decorator'] && schema['type'] !== 'void') {
+    schema['x-decorator'] = schema['x-decorator'] || 'FormItem'
+  }
   return schema
-})
+}
+
+Schema.registerPatches(transformSchema)
 
 export const registerVoidComponents = (components: string[]) => {
   VOID_COMPONENTS.push(...components)

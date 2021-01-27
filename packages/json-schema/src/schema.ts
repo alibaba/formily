@@ -452,11 +452,13 @@ export class Schema<
   ) => {
     if (!json) return this
     if (Schema.isSchemaInstance(json)) return json
-
     each(
-      patches.reduce((buf, patch) => {
-        return patch(buf)
-      }, json),
+      patches.reduce(
+        (buf, patch) => {
+          return patch(buf)
+        },
+        { ...json }
+      ),
       (value, key) => {
         if (isFn(value)) return
         if (key === 'properties') {
