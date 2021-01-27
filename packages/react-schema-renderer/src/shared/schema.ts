@@ -138,6 +138,8 @@ export class Schema implements ISchema {
 
   public path?: string
 
+  version = '1.0'
+
   constructor(json: ISchema, parent?: Schema, key?: string) {
     if (parent) {
       this.parent = parent
@@ -310,7 +312,10 @@ export class Schema implements ISchema {
   getExtendsRequired() {
     if (isBool(this.required)) {
       return this.required
-    } else if (isArr(this.parent?.required) && this.parent?.required.includes(this.key)) {
+    } else if (
+      isArr(this.parent?.required) &&
+      this.parent?.required.includes(this.key)
+    ) {
       return true
     }
   }
@@ -342,7 +347,11 @@ export class Schema implements ISchema {
   }
 
   getMegaLayoutProps() {
-    return this['x-mega-props'] || this.getExtendsComponentProps()['mega-props'] || {}
+    return (
+      this['x-mega-props'] ||
+      this.getExtendsComponentProps()['mega-props'] ||
+      {}
+    )
   }
 
   getExtendsTriggerType() {
