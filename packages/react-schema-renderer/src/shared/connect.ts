@@ -172,7 +172,7 @@ export const connect = <ExtendsComponentKey extends string = ''>(
     Object.assign(ConnectedComponent, {
       __ALREADY_CONNECTED__: true
     })
-    if (!Component) {
+    if (Component) {
       hoistNonReactStatics(ConnectedComponent, Component)
     }
 
