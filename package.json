@@ -42,7 +42,8 @@
     "postinstall": "opencollective-postinstall"
   },
   "resolutions": {
-    "@types/react": "^16.9.41"
+    "@types/react": "^16.9.41",
+    "@types/react-native": "^0.63.46"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",
@@ -126,7 +127,7 @@
     "scheduler": "^0.15.0",
     "semver-regex": "^2.0.0",
     "staged-git-files": "^1.1.2",
-    "styled-components": "4.4.1",
+    "styled-components": "^4.4.1",
     "sw-precache-webpack-plugin": "^1.0.0",
     "ts-import-plugin": "1.6.1",
     "ts-jest": "^24.0.2",
