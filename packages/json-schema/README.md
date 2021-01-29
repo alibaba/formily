@@ -1,1 +1,1 @@
-# @formily/react
+# @formily/json-schema

@@ -8,7 +8,7 @@ import {
   SchemaPatch,
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
-import { complie, shallowComplie } from './complier'
+import { complie, shallowComplie, registerComplier } from './complier'
 
 const patches: SchemaPatch[] = []
 
@@ -537,6 +537,8 @@ export class Schema<
   static isSchemaInstance = (value: any): value is Schema => {
     return instOf(value, Schema)
   }
+
+  static registerComplier = registerComplier
 
   static registerPatches = (...args: SchemaPatch[]) => {
     args.forEach((patch) => {

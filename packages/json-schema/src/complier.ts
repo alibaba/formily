@@ -4,6 +4,21 @@ import { Schema } from './schema'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
+const ENVS = {
+  complie(expression: string, scope: any) {
+    const vars = Object.keys(scope || {})
+    const params = vars.map((key) => scope[key])
+    return new Function(...vars, `return (${expression});`)(...params)
+  },
+}
+
+export const registerComplier = (
+  complier: (expression: string, scope: any) => any
+) => {
+  if (isFn(complier)) {
+    ENVS.complie = complier
+  }
+}
 
 export const shallowComplie = <Source = any, Scope = any>(
   source: Source,
@@ -12,9 +27,7 @@ export const shallowComplie = <Source = any, Scope = any>(
   if (isStr(source)) {
     const matched = source.match(ExpRE)
     if (!matched) return source
-    const vars = Object.keys(scope || {})
-    const params = vars.map((key) => scope[key])
-    return new Function(...vars, `return (${matched[1]});`)(...params)
+    return ENVS.complie(matched[1], scope)
   } else if (isArr(source)) {
     return source.map((item) => shallowComplie(item, scope))
   }
