@@ -268,7 +268,6 @@ Object {
   "toJSON": [Function],
   "type": "object",
   "version": "2.0",
-  "x-decorator": "FormItem",
   "x-reactions": null,
 }
 `;
@@ -541,7 +540,6 @@ Object {
   "toJSON": [Function],
   "type": "object",
   "version": "2.0",
-  "x-decorator": "FormItem",
   "x-reactions": null,
 }
 `;
@@ -684,7 +682,6 @@ Object {
   "toJSON": [Function],
   "type": "object",
   "version": "2.0",
-  "x-decorator": "FormItem",
   "x-reactions": null,
 }
 `;
@@ -755,7 +752,6 @@ Object {
   "toJSON": [Function],
   "type": "object",
   "version": "2.0",
-  "x-decorator": "FormItem",
 }
 `;
 
@@ -788,7 +784,6 @@ Object {
   "toJSON": [Function],
   "type": "object",
   "version": "2.0",
-  "x-decorator": "FormItem",
 }
 `;
 
@@ -1035,7 +1030,6 @@ Object {
           "toJSON": [Function],
           "type": "object",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
       ],
       "mapPatternProperties": [Function],
@@ -1234,6 +1228,5 @@ Object {
   "toJSON": [Function],
   "type": "object",
   "version": "2.0",
-  "x-decorator": "FormItem",
 }
 `;

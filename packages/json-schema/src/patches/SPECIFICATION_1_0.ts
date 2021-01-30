@@ -107,7 +107,11 @@ const transformSchema = (schema: ISchema) => {
       schema['x-component'] = TYPE_DEFAULT_COMPONENTS[schema['type']]
     }
   }
-  if (!schema['x-decorator'] && schema['type'] !== 'void') {
+  if (
+    !schema['x-decorator'] &&
+    schema['type'] !== 'void' &&
+    schema['type'] !== 'object'
+  ) {
     schema['x-decorator'] = schema['x-decorator'] || 'FormItem'
   }
   return schema
