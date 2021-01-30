@@ -4,7 +4,7 @@ import { isVoidField } from '@formily/core'
 import { observer } from 'mobx-react-lite'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
 import { useField } from '../hooks'
-
+import hoistNonReactStatics from 'hoist-non-react-statics'
 export function mapProps<T extends JSXComponent>(
   ...args: IStateMapper<React.ComponentProps<T>>[]
 ) {
@@ -78,7 +78,7 @@ export function connect<T extends React.JSXElementConstructor<any>>(
     }
   )
 
-  if (target['displayName']) Destination.displayName = target['displayName']
+  if (target) hoistNonReactStatics(Destination, target)
 
   return Destination
 }
