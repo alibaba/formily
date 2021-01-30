@@ -66,10 +66,10 @@ const transformXLinkage = (linkages: any[]) => {
       }
     }, [])
   }
+  return []
 }
 
 const transformSchema = (schema: ISchema) => {
-  if (!schema) return schema
   if (isValid(schema['editable'])) {
     schema['x-editable'] = schema['x-editable'] || schema['editable']
     delete schema['editable']
@@ -79,11 +79,13 @@ const transformSchema = (schema: ISchema) => {
     delete schema['visible']
   }
   if (isValid(schema['display'])) {
-    schema['x-display'] = schema['x-display'] || schema['display'] ? 'visible' : 'hidden'
+    schema['x-display'] =
+      schema['x-display'] || schema['display'] ? 'visible' : 'hidden'
     delete schema['display']
   }
   if (isValid(schema['x-props'])) {
-    schema['x-decorator-props'] = schema['x-decorator-props'] || schema['x-props']
+    schema['x-decorator-props'] =
+      schema['x-decorator-props'] || schema['x-props']
     delete schema['display']
   }
   if (schema['x-linkages']) {

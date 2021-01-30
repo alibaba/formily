@@ -1,3 +1,3 @@
 export * from './schema'
-export * from './polyfills'
+export * from './patches'
 export * from './types'

@@ -46,16 +46,16 @@ export type SchemaKey = string | number
 export type SchemaExtendReaction<Field = any> =
   | {
       dependencies?: string[]
-      when?: string
+      when?: string | boolean
       target?: string
       fullfill?: {
         state?: any
-        schema?: any
+        schema?: ISchema
         run?: string
       }
       otherwise?: {
         state?: any
-        schema?: any
+        schema?: ISchema
         run?: string
       }
     }

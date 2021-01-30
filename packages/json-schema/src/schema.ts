@@ -417,7 +417,7 @@ export class Schema<
     return results
   }
 
-  complie = (scope: any) => {
+  complie = (scope?: any) => {
     const shallows = [
       'properties',
       'patternProperties',
@@ -492,14 +492,14 @@ export class Schema<
     const results = {}
     each(this, (value: any, key) => {
       if (key === 'properties' || key === 'patternProperties') {
-        results[key] = map(value, (item) => item?.toJSON())
+        results[key] = map(value, (item) => item?.toJSON?.())
       } else if (key === 'additionalProperties' || key === 'additionalItems') {
-        results[key] = value?.toJSON()
+        results[key] = value?.toJSON?.()
       } else if (key === 'items') {
         if (Array.isArray(value)) {
-          results[key] = value.map((item) => item?.toJSON())
+          results[key] = value.map((item) => item?.toJSON?.())
         } else {
-          results[key] = value?.toJSON()
+          results[key] = value?.toJSON?.()
         }
       } else {
         results[key] = value
@@ -526,12 +526,12 @@ export class Schema<
     return orderProperties.concat(unorderProperties).filter((item) => !!item)
   }
 
-  static complie = (data: any, scope: any) => {
-    return complie(data, scope)
+  static complie = (expression: any, scope?: any) => {
+    return complie(expression, scope)
   }
 
-  static shallowComplie = (data: any, scope: any) => {
-    return shallowComplie(data, scope)
+  static shallowComplie = (expression: any, scope?: any) => {
+    return shallowComplie(expression, scope)
   }
 
   static isSchemaInstance = (value: any): value is Schema => {

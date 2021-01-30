@@ -1,4 +1,4 @@
-import { isArr, isFn, isStr, reduce } from '@formily/shared'
+import { isArr, isFn, isPlainObj, isStr, reduce } from '@formily/shared'
 import { isObservable } from 'mobx'
 import { Schema } from './schema'
 
@@ -36,8 +36,7 @@ export const shallowComplie = <Source = any, Scope = any>(
 
 export const complie = <Source = any, Scope = any>(
   source: Source,
-  scope?: Scope,
-  exclude?: (key: string, value: any) => boolean
+  scope?: Scope
 ): any => {
   const seenObjects = new WeakMap()
   const complie = (source: any) => {
@@ -45,7 +44,7 @@ export const complie = <Source = any, Scope = any>(
       return shallowComplie(source, scope)
     } else if (isArr(source)) {
       return source.map((value: any) => complie(value))
-    } else if (typeof source === 'object') {
+    } else if (isPlainObj(source)) {
       if ('$$typeof' in source && '_owner' in source) {
         return source
       }
@@ -74,20 +73,6 @@ export const complie = <Source = any, Scope = any>(
       return reduce(
         source,
         (buf, value, key) => {
-          if (isFn(exclude)) {
-            if (exclude(key, value)) {
-              buf[key] = value
-              return buf
-            }
-          }
-          if (key === 'x-linkages' || key === 'x-reactions') {
-            buf[key] = value
-            return buf
-          }
-          if (value && value['_owner'] && value['$$typeof']) {
-            buf[key] = value
-            return buf
-          }
           buf[key] = complie(value)
           return buf
         },
