@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "webpack-cli --config config/webpack.prod.js",
-    "build:zip": "rm package.zip && zip -r package.zip package",
+    "build:zip": "rimraf package.zip && zip -r package.zip package",
     "start": "webpack-dev-server --config config/webpack.dev.js"
   },
   "dependencies": {
