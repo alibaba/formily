@@ -18,8 +18,8 @@ export interface IFieldProps<
   children?:
     | ((field: Field, form: Formily.Core.Models.Form) => React.ReactChild)
     | React.ReactNode
-  decorator?: [] | [D] | [D, React.ComponentProps<D>]
-  component?: [] | [C] | [C, React.ComponentProps<C>]
+  decorator?: [] | [D] | [D, React.ComponentProps<D>] | any[]
+  component?: [] | [C] | [C, React.ComponentProps<C>] | any[]
 }
 
 export interface IVoidFieldProps<
@@ -30,8 +30,8 @@ export interface IVoidFieldProps<
   children?:
     | ((field: Field, form: Formily.Core.Models.Form) => React.ReactChild)
     | React.ReactNode
-  decorator?: [] | [D] | [D, React.ComponentProps<D>]
-  component?: [] | [C] | [C, React.ComponentProps<C>]
+  decorator?: [] | [D] | [D, React.ComponentProps<D>] | any[]
+  component?: [] | [C] | [C, React.ComponentProps<C>] | any[]
 }
 
 export interface IComponentMapper<T extends JSXComponent> {

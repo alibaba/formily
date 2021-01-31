@@ -8,10 +8,9 @@ import {
 } from '@formily/react'
 import {
   SchemaContext,
-  SchemaRequiredContext,
   SchemaOptionsContext,
+  SchemaExpressionScopeContext,
 } from '../shared'
-import { useCompliedProps, useCompliedSchema } from '../hooks'
 import { IRecursionFieldProps } from '../types'
 import { isBool, isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
@@ -19,8 +18,12 @@ import { Schema } from '@formily/json-schema'
 export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
-  const schema_ = useCompliedSchema(props.schema, options)
-  const props_ = useCompliedProps(props.name, schema_, options)
+  const scope = useContext(SchemaExpressionScopeContext)
+  const fieldSchema = props?.schema?.complie({
+    ...options.scope,
+    ...scope,
+  })
+  const fieldProps = props?.schema?.toFieldProps(options)
   const getBasePath = () => {
     if (props.onlyRenderProperties) {
       return props.basePath || parent?.address?.concat(props.name)
@@ -32,7 +35,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     if (props.onlyRenderSelf) return
     return (
       <Fragment>
-        {schema_.mapProperties((item, name, index) => {
+        {fieldSchema.mapProperties((item, name, index) => {
           const base = field?.address || basePath
           let schema: Schema = item
           if (isFn(props.mapProperties)) {
@@ -52,42 +55,42 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
             />
           )
         })}
-        {schema_['x-content']}
+        {fieldSchema['x-content']}
       </Fragment>
     )
   }
 
   const render = () => {
     if (!isValid(props.name)) return renderProperties()
-    if (schema_.type === 'object') {
+    if (fieldSchema.type === 'object') {
       if (props.onlyRenderProperties) return renderProperties()
       return (
-        <ObjectField {...props_} name={props.name} basePath={basePath}>
+        <ObjectField {...fieldProps} name={props.name} basePath={basePath}>
           {renderProperties}
         </ObjectField>
       )
-    } else if (schema_.type === 'array') {
-      return <ArrayField {...props_} name={props.name} basePath={basePath} />
-    } else if (schema_.type === 'void') {
+    } else if (fieldSchema.type === 'array') {
+      return (
+        <ArrayField {...fieldProps} name={props.name} basePath={basePath} />
+      )
+    } else if (fieldSchema.type === 'void') {
       if (props.onlyRenderProperties) return renderProperties()
       return (
-        <VoidField {...props_} name={props.name} basePath={basePath}>
+        <VoidField {...fieldProps} name={props.name} basePath={basePath}>
           {renderProperties}
         </VoidField>
       )
     }
     return (
-      <Field {...props_} name={props.name} basePath={basePath}>
-        {schema_['x-content']}
+      <Field {...fieldProps} name={props.name} basePath={basePath}>
+        {fieldSchema['x-content']}
       </Field>
     )
   }
 
   return (
-    <SchemaContext.Provider value={schema_}>
-      <SchemaRequiredContext.Provider value={schema_.required}>
-        {render()}
-      </SchemaRequiredContext.Provider>
+    <SchemaContext.Provider value={fieldSchema}>
+      {render()}
     </SchemaContext.Provider>
   )
 }

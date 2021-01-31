@@ -92,6 +92,25 @@ export type SchemaItems<
       Message
     >[]
 
+export type SchemaComponents = Record<string, (...args: any[]) => any>
+
+export interface ISchemaFieldFactoryOptions<
+  Components extends SchemaComponents = any
+> {
+  components?: Components
+  scope?: any
+}
+
+export interface ISchemaFieldUpdateRequest {
+  state?: Formily.Core.Types.IFieldState
+  schema?: ISchema
+  run?: string
+}
+
+export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
+  required?: ISchema['required']
+}
+
 export interface ISchema<
   Decorator = any,
   Component = any,

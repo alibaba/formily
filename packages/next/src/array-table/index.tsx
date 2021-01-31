@@ -5,11 +5,7 @@ import { TableProps, ColumnProps } from '@alifd/next/lib/table'
 import { SelectProps } from '@alifd/next/lib/select'
 import cls from 'classnames'
 import { useForm, useField, observer } from '@formily/react'
-import {
-  useSchema,
-  RecursionField,
-  transformSchemaToFieldProps,
-} from '@formily/react-schema-field'
+import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
@@ -70,8 +66,7 @@ const useArrayTableSources = () => {
         return []
       const name = schema['x-component-props']?.['dataIndex'] || schema['name']
       const field = arrayField.query(arrayField.address.concat(name)).take()
-      const fieldProps =
-        field?.props || transformSchemaToFieldProps(name, schema, {})
+      const fieldProps = field?.props || schema.toFieldProps()
       const columnProps =
         field?.component?.[1] || schema['x-component-props'] || {}
       const display = field?.display || schema['x-display']

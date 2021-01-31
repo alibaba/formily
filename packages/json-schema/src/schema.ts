@@ -6,9 +6,11 @@ import {
   SchemaTypes,
   SchemaKey,
   SchemaPatch,
+  ISchemaTransformerOptions,
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
 import { complie, shallowComplie, registerComplier } from './complier'
+import { transformSchemaToFieldProps } from './transformer'
 
 const patches: SchemaPatch[] = []
 
@@ -23,6 +25,7 @@ export class Schema<
   Message = any,
   ReactionField = any
 > implements ISchema {
+  parent?: Schema
   name?: SchemaKey
   title?: Message
   description?: Message
@@ -163,8 +166,12 @@ export class Schema<
       Display,
       Validator,
       Message
-    >
+    >,
+    parent?: Schema
   ) {
+    if (parent) {
+      this.parent = parent
+    }
     return this.fromJSON(json)
   }
 
@@ -182,7 +189,7 @@ export class Schema<
     >
   ) => {
     this.properties = this.properties || {}
-    this.properties[key] = new Schema(schema)
+    this.properties[key] = new Schema(schema, this)
     this.properties[key].name = key
     return this.properties[key]
   }
@@ -225,7 +232,8 @@ export class Schema<
   ) => {
     if (!schema) return
     this.patternProperties = this.patternProperties || {}
-    this.patternProperties[key] = new Schema(schema)
+    this.patternProperties[key] = new Schema(schema, this)
+    this.patternProperties[key].name = key
     return this.patternProperties[key]
   }
 
@@ -295,9 +303,9 @@ export class Schema<
   ) => {
     if (!schema) return
     if (Array.isArray(schema)) {
-      this.items = schema.map((item) => new Schema(item))
+      this.items = schema.map((item) => new Schema(item, this))
     } else {
-      this.items = new Schema(schema)
+      this.items = new Schema(schema, this)
     }
     return this.items
   }
@@ -315,7 +323,7 @@ export class Schema<
     >
   ) => {
     if (!items) return
-    this.additionalItems = new Schema(items)
+    this.additionalItems = new Schema(items, this)
     return this.additionalItems
   }
 
@@ -491,6 +499,7 @@ export class Schema<
   > => {
     const results = {}
     each(this, (value: any, key) => {
+      if (isFn(value) || key === 'parent') return
       if (key === 'properties' || key === 'patternProperties') {
         results[key] = map(value, (item) => item?.toJSON?.())
       } else if (key === 'additionalProperties' || key === 'additionalItems') {
@@ -506,6 +515,10 @@ export class Schema<
       }
     })
     return results
+  }
+
+  toFieldProps = (options?: ISchemaTransformerOptions) => {
+    return transformSchemaToFieldProps(this, options)
   }
 
   static getOrderProperties = (

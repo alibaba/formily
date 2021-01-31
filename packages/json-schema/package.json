@@ -30,7 +30,8 @@
     "mobx": "^6.0.3"
   },
   "dependencies": {
-    "@formily/shared":"^2.0.0-beta.3"
+    "@formily/core": "^2.0.0-beta.3",
+    "@formily/shared": "^2.0.0-beta.3"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,4 @@
-import { useContext } from 'react'
 import { runInAction } from 'mobx'
-import { ISchema, SchemaKey, Schema } from '@formily/json-schema'
 import {
   isBool,
   isArr,
@@ -13,15 +11,16 @@ import {
   isFn,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
-import { SchemaExpressionScopeContext, SchemaRequiredContext } from '../shared'
+import { Schema } from './schema'
 import {
+  ISchema,
   ISchemaFieldFactoryOptions,
   ISchemaFieldUpdateRequest,
-  ISchemaTransformerOptions,
-} from '../types'
+} from './types'
+import '@formily/core'
 
 const getValidatorBySchema = (
-  schema: ISchema
+  schema: Schema
 ): Formily.Core.Types.FieldValidator => {
   let rules = []
   if (schema.format) {
@@ -111,7 +110,7 @@ const getValidatorBySchema = (
   if (rules.length) return rules
 }
 
-const getFieldDataSourceBySchema = (schema: ISchema) => {
+const getFieldDataSourceBySchema = (schema: Schema) => {
   if (isArr(schema['enum'])) {
     return schema['enum'].map((item) => {
       if (typeof item === 'object') {
@@ -127,7 +126,7 @@ const getFieldDataSourceBySchema = (schema: ISchema) => {
 }
 
 const getFieldInternalPropsBySchema = (
-  schema: ISchema,
+  schema: Schema,
   options: ISchemaFieldFactoryOptions
 ) => {
   return {
@@ -184,24 +183,26 @@ const patchState = (state: any, target: any) => {
   })
 }
 
-const getSchemaFieldRequired = (
-  schema: ISchema,
-  name: SchemaKey,
-  required: ISchema['required']
-) => {
+const getSchemaFieldRequired = (schema: Schema) => {
   if (isBool(schema.required)) {
     return schema.required
   }
-  if (isStr(required)) {
-    if (FormPath.parse(required).match(name)) {
-      return true
+  let parent: Schema = schema.parent
+  while (parent) {
+    if (isStr(parent.required)) {
+      if (FormPath.parse(parent.required).match(schema.name)) return true
+    } else if (isArr(parent.required)) {
+      if (
+        parent.required.some((parent) =>
+          FormPath.parse(parent).match(schema.name)
+        )
+      ) {
+        return true
+      }
     }
+    parent = parent.parent
   }
-  if (isArr(required)) {
-    if (required.some((parent) => FormPath.parse(parent).match(name))) {
-      return true
-    }
-  }
+  return false
 }
 
 const getSchemaFieldReactions = (
@@ -293,34 +294,16 @@ const getSchemaFieldReactions = (
 }
 
 export const transformSchemaToFieldProps = (
-  name: SchemaKey,
-  schema: ISchema,
-  options: ISchemaTransformerOptions
+  schema: Schema,
+  options: ISchemaFieldFactoryOptions
 ) => {
-  const required = getSchemaFieldRequired(schema, name, options.required)
+  const required = getSchemaFieldRequired(schema)
   const reactions = getSchemaFieldReactions(schema, options)
   const props = getFieldInternalPropsBySchema(schema, options)
   return {
     ...props,
     required,
-    name,
+    name: schema.name,
     reactions: [reactions],
   }
-}
-
-export const useCompliedProps = (
-  name: SchemaKey,
-  schema: ISchema,
-  options: ISchemaFieldFactoryOptions
-) => {
-  const required = useContext(SchemaRequiredContext)
-  const contextScope = useContext(SchemaExpressionScopeContext)
-  return transformSchemaToFieldProps(name, schema, {
-    ...options,
-    required,
-    scope: {
-      ...options.scope,
-      ...contextScope,
-    },
-  }) as Formily.React.Types.IFieldProps<any, any, any>
 }
