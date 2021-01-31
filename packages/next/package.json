@@ -23,10 +23,6 @@
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:docs": "dumi build"
   },
-  "resolutions": {
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0"
-  },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
