@@ -12,6 +12,7 @@ Object {
   "patternProperties": Object {
     "^[a-zA-Z0-9]*$": Object {
       "_isJSONSchemaObject": true,
+      "name": "^[a-zA-Z0-9]*$",
       "properties": Object {
         "made": Object {
           "_isJSONSchemaObject": true,
@@ -108,6 +109,7 @@ Object {
   "patternProperties": Object {
     "^[a-zA-Z0-9]*$": Object {
       "_isJSONSchemaObject": true,
+      "name": "^[a-zA-Z0-9]*$",
       "properties": Object {
         "made": Object {
           "_isJSONSchemaObject": true,
@@ -304,6 +306,7 @@ Object {
   "patternProperties": Object {
     "^[a-zA-Z0-9]*$": Object {
       "_isJSONSchemaObject": true,
+      "name": "^[a-zA-Z0-9]*$",
       "properties": Object {
         "made": Object {
           "_isJSONSchemaObject": true,
