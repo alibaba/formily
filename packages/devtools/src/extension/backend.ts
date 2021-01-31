@@ -25,6 +25,7 @@ const serializeObject = (obj: any) => {
         for (let key in obj) {
           result[key] = serialize(obj[key])
         }
+        seens.set(obj, false)
         return result
       }
     }

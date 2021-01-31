@@ -70,7 +70,7 @@ export const complie = <Source = any, Scope = any>(
         return source
       }
       seenObjects.set(source, true)
-      return reduce(
+      const results = reduce(
         source,
         (buf, value, key) => {
           buf[key] = complie(value)
@@ -78,6 +78,8 @@ export const complie = <Source = any, Scope = any>(
         },
         {}
       )
+      seenObjects.set(source, false)
+      return results
     }
     return source
   }
