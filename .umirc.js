@@ -14,28 +14,20 @@ export default {
       path: '/guide',
     },
     {
-      title: 'API手册',
+      title: '核心库API',
       path: '/api',
       children: [
         {
           title: 'Core API',
-          path: '/api/core',
+          path: '//core.formilyjs.org',
         },
         {
           title: 'React API',
-          path: '/api/react',
-        },
-        {
-          title: 'React Schema API',
-          path: '/api/react-schema',
+          path: '//react.formilyjs.org',
         },
         {
           title: 'Vue API',
-          path: '/api/vue',
-        },
-        {
-          title: 'Vue Schema API',
-          path: '/api/vue-schema',
+          path: '//vue.formilyjs.org',
         },
       ],
     },
@@ -157,102 +149,6 @@ export default {
           {
             title: '管理业务逻辑',
             path: '/guide/practice/best-practice',
-          },
-        ],
-      },
-    ],
-    '/api': [
-      {
-        title: 'Core API',
-        path: '/api/core',
-        children: [
-          {
-            title: 'Package',
-            path: '/api/core',
-          },
-          {
-            title: 'Models',
-            path: '/api/core/models',
-          },
-          {
-            title: 'TypeChecker',
-            path: '/api/core/checker',
-          },
-          {
-            title: 'Effects',
-            path: '/api/core/effects',
-          },
-        ],
-      },
-      {
-        title: 'React API',
-        path: '/api/react',
-        children: [
-          {
-            title: 'Package',
-            path: '/api/react',
-          },
-          {
-            title: 'Components',
-            path: '/api/react/components',
-          },
-          {
-            title: 'React Hooks',
-            path: '/api/react/hooks',
-          },
-        ],
-      },
-      {
-        title: 'React Schema API',
-        path: '/api/react-schema',
-        children: [
-          {
-            title: 'Package',
-            path: '/api/react-schema',
-          },
-          {
-            title: 'Components',
-            path: '/api/react-schema/components',
-          },
-          {
-            title: 'React Hooks',
-            path: '/api/react-schema/hooks',
-          },
-        ],
-      },
-      {
-        title: 'Vue API',
-        path: '/api/vue',
-        children: [
-          {
-            title: 'Package',
-            path: '/api/vue',
-          },
-          {
-            title: 'Components',
-            path: '/api/vue/components',
-          },
-          {
-            title: 'Vue Hooks',
-            path: '/api/vue/hooks',
-          },
-        ],
-      },
-      {
-        title: 'Vue Schema API',
-        path: '/api/vue-schema',
-        children: [
-          {
-            title: 'Package',
-            path: '/api/vue-schema',
-          },
-          {
-            title: 'Components',
-            path: '/api/vue-schema/components',
-          },
-          {
-            title: 'Vue Hooks',
-            path: '/api/vue-schema/hooks',
           },
         ],
       },

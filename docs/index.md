@@ -39,13 +39,13 @@ $ npm install --save @alifd/next mobx mobx-react-lite moment
 ## 安装 Formily
 
 ```bash
-$ npm install --save @formily/antd @formily/react @formily/react-schema-field
+$ npm install --save @formily/antd @formily/react
 
 ```
 
 or
 
 ```bash
-$ npm install --save @formily/next @formily/react @formily/react-schema-field
+$ npm install --save @formily/next @formily/react
 
 ```
