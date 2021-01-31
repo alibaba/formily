@@ -2,7 +2,7 @@ import React from 'react'
 import { connect, mapReadPretty } from '@formily/react'
 import { Input } from 'antd'
 import { PasswordProps } from 'antd/lib/input'
-import { PasswordStrength } from '@formily/react-shared-components'
+import { PasswordStrength } from './PasswordStrength'
 import { PreviewText } from '../preview-text'
 
 export interface IPasswordProps extends PasswordProps {

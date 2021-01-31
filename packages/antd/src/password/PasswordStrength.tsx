@@ -1,24 +1,32 @@
 import React, { Fragment } from 'react'
-import { IPasswordStrengthProps } from './types'
 import { isFn } from '@formily/shared'
 
-const isNum = function(c) {
+type ReactRenderPropsChildren<T = any> =
+  | React.ReactNode
+  | ((props: T) => React.ReactElement)
+
+interface IPasswordStrengthProps {
+  value?: React.ReactText
+  children?: ReactRenderPropsChildren<number>
+}
+
+const isNum = function (c) {
   return c >= 48 && c <= 57
 }
-const isLower = function(c) {
+const isLower = function (c) {
   return c >= 97 && c <= 122
 }
-const isUpper = function(c) {
+const isUpper = function (c) {
   return c >= 65 && c <= 90
 }
-const isSymbol = function(c) {
+const isSymbol = function (c) {
   return !(isLower(c) || isUpper(c) || isNum(c))
 }
-const isLetter = function(c) {
+const isLetter = function (c) {
   return isLower(c) || isUpper(c)
 }
 
-const getStrength = val => {
+const getStrength = (val) => {
   if (!val) return 0
   let num = 0
   let lower = 0
@@ -147,7 +155,7 @@ const getStrength = val => {
   }
 }
 
-export const PasswordStrength: React.FC<IPasswordStrengthProps> = props => {
+export const PasswordStrength: React.FC<IPasswordStrengthProps> = (props) => {
   if (isFn(props.children)) {
     return props.children(getStrength(String(props.value)))
   } else {
