@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { Tabs, Badge } from 'antd'
-import { useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import { TabsProps } from 'antd/lib/tabs'
 
 export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const [activeKey, setActiveKey] = useState('tab-0')
   const value = Array.isArray(field.value) ? [...field.value] : []
   const dataSource = value?.length ? value : [{}]

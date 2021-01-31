@@ -15,8 +15,7 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { FormProvider, createForm } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { FormProvider, createForm, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -89,8 +88,7 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { FormProvider, createForm } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { FormProvider, createForm, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {

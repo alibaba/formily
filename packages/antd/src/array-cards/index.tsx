@@ -1,8 +1,12 @@
 import React from 'react'
 import { Card, Empty } from 'antd'
 import { CardProps } from 'antd/lib/card'
-import { useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import cls from 'classnames'
 import { ISchema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
@@ -41,7 +45,7 @@ const isOperationComponent = (schema: ISchema) => {
 
 export const ArrayCards: ComposedArrayCards = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
   const prefixCls = usePrefixCls('formily-array-cards', props)
   const renderItems = () => {

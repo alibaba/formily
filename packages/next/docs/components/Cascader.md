@@ -7,8 +7,12 @@
 ```tsx
 import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/next'
-import { createForm, FormProvider, onFieldReact } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import {
+  createForm,
+  FormProvider,
+  onFieldReact,
+  createSchemaField,
+} from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
 import { action } from 'mobx'
 
@@ -91,8 +95,12 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/next'
-import { createForm, FormProvider, onFieldReact } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import {
+  createForm,
+  FormProvider,
+  onFieldReact,
+  createSchemaField,
+} from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
 import { action } from 'mobx'
 

@@ -10,8 +10,7 @@ import {
 import { isValid } from '@formily/shared'
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon'
 import { ButtonProps } from '@alifd/next/lib/button'
-import { useField } from '@formily/react'
-import { useSchema } from '@formily/react-schema-field'
+import { useField, useFieldSchema } from '@formily/react'
 import { Schema } from 'packages/json-schema'
 import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
@@ -79,7 +78,7 @@ const getDefaultValue = (defaultValue: any, schema: Schema) => {
 
 export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   return (
     <ArrayBaseContext.Provider value={{ field, schema }}>
       {props.children}

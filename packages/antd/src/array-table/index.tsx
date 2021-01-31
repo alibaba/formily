@@ -5,8 +5,13 @@ import { TableProps, ColumnProps } from 'antd/lib/table'
 import { SelectProps } from 'antd/lib/select'
 import cls from 'classnames'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
-import { useForm, useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useForm,
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
@@ -54,7 +59,7 @@ const isAdditionComponent = (schema: Schema) => {
 
 const useArrayTableSources = () => {
   const arrayField = useField()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const parseSources = (schema: Schema): ObservableColumnSource[] => {
     if (
       isColumnComponent(schema) ||
@@ -126,7 +131,7 @@ const useArrayTableColumns = (
 }
 
 const useAddition = () => {
-  const schema = useSchema()
+  const schema = useFieldSchema()
   return schema.reduceProperties((addition, schema) => {
     if (isAdditionComponent(schema)) {
       return <RecursionField schema={schema} name="addition" />

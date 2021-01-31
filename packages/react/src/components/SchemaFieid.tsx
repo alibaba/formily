@@ -1,12 +1,12 @@
 import React, { useContext, Fragment } from 'react'
 import { ISchema, Schema } from '@formily/json-schema'
-import { RecursionField } from './components'
+import { RecursionField } from '../components'
+import { render } from '../shared/render'
 import {
-  render,
   SchemaMarkupContext,
   SchemaExpressionScopeContext,
   SchemaOptionsContext,
-} from './shared'
+} from '../shared'
 import {
   ReactComponentPath,
   JSXComponent,
@@ -15,8 +15,7 @@ import {
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
-} from './types'
-
+} from '../types'
 const env = {
   nonameId: 0,
 }

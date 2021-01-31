@@ -1,11 +1,16 @@
 import React, { Fragment } from 'react'
-import { connect, useField, observer } from '@formily/react'
-import { Schema, SchemaKey } from '@formily/json-schema'
 import { makeAutoObservable } from 'mobx'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
+import {
+  connect,
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
+import { Schema, SchemaKey } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
 
 interface IFormStep {
@@ -124,7 +129,7 @@ export const FormStep: ComposedFormTab = connect(
   observer(({ formStep, className, ...props }: IFormStepProps) => {
     const field = useField<Formily.Core.Models.VoidField>()
     const prefixCls = usePrefixCls('formily-step', props)
-    const schema = useSchema()
+    const schema = useFieldSchema()
     const steps = parseSteps(schema)
     const current = props.current || formStep?.current || 0
     formStep?.connect?.(steps, field)

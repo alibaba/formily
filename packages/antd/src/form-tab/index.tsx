@@ -2,8 +2,12 @@ import React, { Fragment, useMemo } from 'react'
 import { Tabs, Badge } from 'antd'
 import { makeAutoObservable } from 'mobx'
 import { TabPaneProps, TabsProps } from 'antd/lib/tabs'
-import { useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import { Schema, SchemaKey } from '@formily/json-schema'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
@@ -27,7 +31,7 @@ type ComposedFormTab = React.FC<IFormTabProps> & {
 
 const useTabs = () => {
   const tabsField = useField()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const tabs: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
     const field = tabsField.query(tabsField.address.concat(name)).take()

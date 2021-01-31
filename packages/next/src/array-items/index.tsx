@@ -1,6 +1,10 @@
 import React from 'react'
-import { useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import cls from 'classnames'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 import { ISchema } from '@formily/json-schema'
@@ -39,7 +43,7 @@ const isAdditionComponent = (schema: ISchema) => {
 }
 
 const useAddition = () => {
-  const schema = useSchema()
+  const schema = useFieldSchema()
   return schema.reduceProperties((addition, schema) => {
     if (isAdditionComponent(schema)) {
       return <RecursionField schema={schema} name="addition" />
@@ -51,7 +55,7 @@ const useAddition = () => {
 export const ArrayItems: ComposedArrayItems = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const prefixCls = usePrefixCls('formily-array-items')
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const addition = useAddition()
   const dataSource = Array.isArray(field.value) ? [...field.value] : []
   return (

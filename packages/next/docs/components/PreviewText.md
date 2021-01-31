@@ -7,8 +7,7 @@
 ```tsx
 import React from 'react'
 import { PreviewText, FormItem } from '@formily/next'
-import { FormProvider, createForm } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { FormProvider, createForm, createSchemaField } from '@formily/react'
 import { Button, Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
@@ -83,8 +82,8 @@ import {
   createForm,
   mapReadPretty,
   connect,
+  createSchemaField,
 } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
 import { Button, Form, Input as AntdInput } from '@alifd/next'
 
 const Input = connect(AntdInput, mapReadPretty(PreviewText.Input))

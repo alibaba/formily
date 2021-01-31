@@ -2,8 +2,12 @@ import React, { Fragment, useMemo } from 'react'
 import { Collapse, Badge } from 'antd'
 import { makeAutoObservable } from 'mobx'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
-import { useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import { Schema, SchemaKey } from '@formily/json-schema'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
@@ -32,12 +36,10 @@ type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
 
 const usePanels = () => {
   const collapseField = useField()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const panels: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
-    const field = collapseField
-      .query(collapseField.address.concat(name))
-      .take()
+    const field = collapseField.query(collapseField.address.concat(name)).take()
     if (field?.display === 'none' || field?.display === 'hidden') return
     if (schema['x-component']?.indexOf('CollapsePanel') > -1) {
       panels.push({

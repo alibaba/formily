@@ -61,7 +61,7 @@
 
 ```bash
 $ npm install --save antd mobx mobx-react-lite moment
-$ npm install --save @formily/antd @formily/react @formily/react-schema-field
+$ npm install --save @formily/antd @formily/react
 
 ```
 

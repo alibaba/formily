@@ -24,8 +24,8 @@ import {
   createForm,
   onFieldReact,
   onFieldChange,
+  createSchemaField,
 } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
@@ -215,8 +215,8 @@ import {
   createForm,
   onFieldReact,
   onFieldChange,
+  createSchemaField,
 } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
@@ -452,8 +452,8 @@ import {
   createForm,
   onFieldChange,
   onFieldReact,
+  createSchemaField,
 } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
 
 const SchemaField = createSchemaField({
   components: {
@@ -586,8 +586,8 @@ import {
   createForm,
   onFieldChange,
   onFieldReact,
+  createSchemaField,
 } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
 
 const SchemaField = createSchemaField({
   components: {

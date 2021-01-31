@@ -9,8 +9,7 @@
 ```tsx
 import React from 'react'
 import { Upload, FormItem, FormButtonGroup, Submit } from '@formily/next'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { Button, Form } from '@alifd/next'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
@@ -115,8 +114,7 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Upload, FormItem, FormButtonGroup, Submit } from '@formily/next'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { Button, Form } from '@alifd/next'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 

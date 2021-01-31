@@ -7,8 +7,7 @@
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
 
 const SchemaField = createSchemaField({
@@ -51,8 +50,12 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider, onFieldReact } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import {
+  createForm,
+  FormProvider,
+  onFieldReact,
+  createSchemaField,
+} from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
 import { action } from 'mobx'
 
@@ -162,8 +165,7 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -210,8 +212,7 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
 import { action } from 'mobx'
 

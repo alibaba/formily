@@ -1,19 +1,17 @@
 import React, { Fragment, useContext } from 'react'
-import {
-  ObjectField,
-  ArrayField,
-  Field,
-  VoidField,
-  useField,
-} from '@formily/react'
+import { isBool, isFn, isValid } from '@formily/shared'
+import { Schema } from '@formily/json-schema'
 import {
   SchemaContext,
   SchemaOptionsContext,
   SchemaExpressionScopeContext,
 } from '../shared'
 import { IRecursionFieldProps } from '../types'
-import { isBool, isFn, isValid } from '@formily/shared'
-import { Schema } from '@formily/json-schema'
+import { useField } from '../hooks'
+import { ObjectField } from './ObjectField'
+import { ArrayField } from './ArrayField'
+import { Field } from './Field'
+import { VoidField } from './VoidField'
 
 export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const parent = useField()

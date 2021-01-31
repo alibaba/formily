@@ -4,8 +4,13 @@ import { PaginationProps } from '@alifd/next/lib/pagination'
 import { TableProps, ColumnProps } from '@alifd/next/lib/table'
 import { SelectProps } from '@alifd/next/lib/select'
 import cls from 'classnames'
-import { useForm, useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useForm,
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { usePrefixCls } from '../__builtins__'
@@ -55,7 +60,7 @@ const isAdditionComponent = (schema: Schema) => {
 
 const useArrayTableSources = () => {
   const arrayField = useField()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const parseSources = (schema: Schema): ObservableColumnSource[] => {
     if (
       isColumnComponent(schema) ||
@@ -127,7 +132,7 @@ const useArrayTableColumns = (
 }
 
 const useAddition = () => {
-  const schema = useSchema()
+  const schema = useFieldSchema()
   return schema.reduceProperties((addition, schema) => {
     if (isAdditionComponent(schema)) {
       return <RecursionField schema={schema} name="addition" />

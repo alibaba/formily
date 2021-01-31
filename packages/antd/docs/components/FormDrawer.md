@@ -14,8 +14,7 @@ import {
   Reset,
   FormButtonGroup,
 } from '@formily/antd'
-import { Field, useForm } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { Field, useForm, createSchemaField } from '@formily/react'
 import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({
@@ -97,8 +96,7 @@ import {
   Reset,
   FormButtonGroup,
 } from '@formily/antd'
-import { Field, useForm } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { Field, useForm, createSchemaField } from '@formily/react'
 import { Button, Form } from 'antd'
 
 const SchemaField = createSchemaField({

@@ -5,8 +5,12 @@ import {
   CollapseProps,
   PanelProps as CollapsePanelProps,
 } from '@alifd/next/lib/collapse'
-import { useField, observer } from '@formily/react'
-import { useSchema, RecursionField } from '@formily/react-schema-field'
+import {
+  useField,
+  observer,
+  useFieldSchema,
+  RecursionField,
+} from '@formily/react'
 import { Schema, SchemaKey } from '@formily/json-schema'
 import { toArr } from '@formily/shared'
 import cls from 'classnames'
@@ -38,12 +42,10 @@ type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
 
 const usePanels = () => {
   const collapseField = useField()
-  const schema = useSchema()
+  const schema = useFieldSchema()
   const panels: { name: SchemaKey; props: any; schema: Schema }[] = []
   schema.mapProperties((schema, name) => {
-    const field = collapseField
-      .query(collapseField.address.concat(name))
-      .take()
+    const field = collapseField.query(collapseField.address.concat(name)).take()
     if (field?.display === 'none' || field?.display === 'hidden') return
     if (schema['x-component']?.indexOf('CollapsePanel') > -1) {
       panels.push({

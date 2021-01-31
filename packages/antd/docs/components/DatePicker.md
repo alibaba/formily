@@ -7,8 +7,7 @@
 ```tsx
 import React from 'react'
 import { DatePicker, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { Schema } from '@formily/json-schema'
 
 const SchemaField = createSchemaField({
@@ -123,8 +122,7 @@ export default () => (
 ```tsx
 import React from 'react'
 import { DatePicker, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {

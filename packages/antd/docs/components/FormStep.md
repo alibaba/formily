@@ -9,8 +9,12 @@
 ```tsx
 import React from 'react'
 import { FormStep, FormItem, Input, FormButtonGroup } from '@formily/antd'
-import { FormProvider, createForm, FormConsumer } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import {
+  FormProvider,
+  createForm,
+  FormConsumer,
+  createSchemaField,
+} from '@formily/react'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
@@ -108,8 +112,12 @@ export default () => {
 ```tsx
 import React from 'react'
 import { FormStep, FormItem, Input, FormButtonGroup } from '@formily/antd'
-import { FormProvider, createForm, FormConsumer } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import {
+  FormProvider,
+  createForm,
+  FormConsumer,
+  createSchemaField,
+} from '@formily/react'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({

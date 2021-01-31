@@ -16,8 +16,7 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { Schema } from '@formily/json-schema'
 import { action } from 'mobx'
 
@@ -118,8 +117,7 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import { createForm, FormProvider } from '@formily/react'
-import { createSchemaField } from '@formily/react-schema-field'
+import { createForm, FormProvider, createSchemaField } from '@formily/react'
 import { Schema } from '@formily/json-schema'
 import { action } from 'mobx'
 
