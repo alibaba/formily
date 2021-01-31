@@ -11,6 +11,7 @@ export const RightPanel = styled(({ className, dataSource }) => {
         theme="hopscotch"
         displayDataTypes={false}
         enableClipboard={false}
+        sortKeys={true}
         onEdit={false}
         onAdd={false}
         onDelete={false}
@@ -25,5 +26,6 @@ export const RightPanel = styled(({ className, dataSource }) => {
   padding: 10px;
   .react-json-view {
     background: none !important;
+    font-size: 12px !important;
   }
 `

@@ -30,7 +30,12 @@ const Devtools = () => {
       'window.__FORMILY_DEV_TOOLS_HOOK__.update()'
     )
     backgroundPageConnection.onMessage.addListener(({ type, id, graph }) => {
-      if (type !== 'uninstall') {
+      if (type === 'init') {
+        store = {}
+        chrome.devtools.inspectedWindow.eval(
+          'window.__FORMILY_DEV_TOOLS_HOOK__.openDevtools()'
+        )
+      } else if (type !== 'uninstall') {
         store[id] = JSON.parse(graph)
       } else {
         delete store[id]

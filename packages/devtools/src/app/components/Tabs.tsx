@@ -24,10 +24,10 @@ export const Tabs = styled(({ className, dataSource, current, onChange }) => {
     </div>
   )
 })`
-  height: 40px;
+  height: 36px;
   border-bottom: 1px solid #3d424a;
   display: flex;
-  line-height: 40px;
+  line-height: 36px;
   width: 100%;
   overflow: scroll;
   &::-webkit-scrollbar {

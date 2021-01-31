@@ -35,7 +35,7 @@ const createTree = (dataSource: any, cursor?: any) => {
     }
     return _findParent(tree)
   }
-  Object.keys(dataSource || {}).forEach(key => {
+  Object.keys(dataSource || {}).forEach((key) => {
     if (key == '') {
       tree.name = 'Form'
       tree.path = key
@@ -50,7 +50,7 @@ const createTree = (dataSource: any, cursor?: any) => {
         name: key,
         path: key,
         toggled: true,
-        data: dataSource[key]
+        data: dataSource[key],
       }
       if (cursor && cursor.current && cursor.current.path === key) {
         node.active = true
@@ -79,21 +79,21 @@ const theme = {
       fontFamily: 'lucida grande ,tahoma,verdana,arial,sans-serif',
       fontSize: '8px',
       background: 'none',
-      marginBottom: '50px'
+      marginBottom: '50px',
     },
     node: {
       base: {
         position: 'relative',
-        background: 'none'
+        background: 'none',
       },
       link: {
         cursor: 'pointer',
         position: 'relative',
         padding: '0px 5px',
-        display: 'block'
+        display: 'block',
       },
       activeLink: {
-        background: '#3D424A'
+        background: '#3D424A',
       },
       toggle: {
         base: {
@@ -103,7 +103,7 @@ const theme = {
           marginLeft: '-5px',
           height: '22px',
           width: '20px',
-          zIndex: 2
+          zIndex: 2,
         },
         wrapper: {
           position: 'absolute',
@@ -114,20 +114,20 @@ const theme = {
           height: 6,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
         },
         height: 6,
         width: 4,
         arrow: {
           fill: '#9DA5AB',
-          strokeWidth: 0
-        }
+          strokeWidth: 0,
+        },
       },
       header: {
         base: {
           display: 'inline-block',
           verticalAlign: 'top',
-          color: '#9DA5AB'
+          color: '#9DA5AB',
         },
         connector: {
           width: '2px',
@@ -136,26 +136,27 @@ const theme = {
           borderBottom: 'solid 2px black',
           position: 'absolute',
           top: '0px',
-          left: '-21px'
+          left: '-21px',
         },
         title: {
           lineHeight: '24px',
-          verticalAlign: 'middle'
-        }
+          verticalAlign: 'middle',
+        },
       },
       subtree: {
         listStyle: 'none',
-        paddingLeft: '19px'
+        paddingLeft: '19px',
       },
       loading: {
-        color: '#E2C089'
-      }
-    }
-  }
+        color: '#E2C089',
+      },
+    },
+  },
 }
 
-const Header = props => {
+const Header = (props) => {
   const { node, style, customStyles } = props
+  const title = node.data?.title ? node.data.title : ''
   return (
     <div
       className="node-header"
@@ -171,8 +172,22 @@ const Header = props => {
             : style.title
         }
       >
-        <span style={{ zIndex: 1, position: 'relative' }}>{node.name}</span>
-        <div className={`highlight ${node.active ? 'active' : ''}`}></div>
+        <span
+          style={{
+            zIndex: 1,
+            position: 'relative',
+            fontSize: 12,
+          }}
+        >
+          {node.name}
+        </span>
+        <span style={{ zIndex: 1, position: 'absolute', right: 12 }}>
+          {title}
+        </span>
+        <div
+          className={`highlight ${node.active ? 'active' : ''}`}
+          style={{ transition: '.15s all ease-in' }}
+        ></div>
       </div>
     </div>
   )
@@ -180,7 +195,7 @@ const Header = props => {
 
 const ToolBar = styled.div`
   border-bottom: 1px solid #3d424a;
-  height: 30px;
+  height: 20px;
   padding: 10px 10;
   padding: 5px;
   overflow: auto;
@@ -193,8 +208,15 @@ const ToolBar = styled.div`
 export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   const allDataRef = useRef(createTree(dataSource))
   const cursor = useRef(allDataRef.current)
+  const [keyword, setKeyword] = useState('')
   const searchTimer = useRef(null)
   const [data, setData] = useState(allDataRef.current)
+
+  const filterData = () => {
+    if (!keyword) return data
+    const finded = filters.filterTree(data, keyword)
+    return filters.expandFilteredNodes(finded, keyword)
+  }
 
   const onToggle = (node: any, toggled: boolean) => {
     cursor.current.active = false
@@ -209,16 +231,10 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
     }
   }
 
-  const onFilterMouseUp = ({ target: { value } }) => {
+  const onSearch = ({ target: { value } }) => {
     clearTimeout(searchTimer.current)
     searchTimer.current = setTimeout(() => {
-      const filter = value.trim()
-      if (!filter) {
-        return setData(allDataRef.current)
-      }
-      let filtered = filters.filterTree(data, filter)
-      filtered = filters.expandFilteredNodes(filtered, filter)
-      setData(filtered)
+      setKeyword(value.trim())
     }, 100)
   }
 
@@ -230,15 +246,15 @@ export const FieldTree = styled(({ className, dataSource, onSelect }) => {
   return (
     <div className={className}>
       <ToolBar>
-        <SerachBox onKeyUp={onFilterMouseUp} />
+        <SerachBox onSearch={onSearch} />
       </ToolBar>
 
       <Treebeard
-        data={data}
+        data={filterData()}
         onToggle={onToggle}
         decorators={{
           ...decorators,
-          Header
+          Header,
         }}
         style={theme}
       />
