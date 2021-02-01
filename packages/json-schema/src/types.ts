@@ -49,12 +49,12 @@ export type SchemaExtendReaction<Field = any> =
       when?: string | boolean
       target?: string
       fullfill?: {
-        state?: any
+        state?: Formily.Core.Types.IGeneralFieldState
         schema?: ISchema
         run?: string
       }
       otherwise?: {
-        state?: any
+        state?: Formily.Core.Types.IGeneralFieldState
         schema?: ISchema
         run?: string
       }

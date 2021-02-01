@@ -37,7 +37,6 @@ export function createSchemaField<Components extends SchemaComponents>(
           type: 'object',
           ...props.schema,
         })
-
     const renderMarkup = () => {
       env.nonameId = 0
       return render(

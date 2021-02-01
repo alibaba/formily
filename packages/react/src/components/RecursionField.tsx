@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from 'react'
-import { isBool, isFn, isValid } from '@formily/shared'
+import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import {
   SchemaContext,
@@ -17,11 +17,11 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
-  const fieldSchema = props?.schema?.complie({
+  const fieldSchema = props.schema?.complie?.({
     ...options.scope,
     ...scope,
   })
-  const fieldProps = props?.schema?.toFieldProps(options)
+  const fieldProps = props.schema?.toFieldProps?.(options) as any
   const getBasePath = () => {
     if (props.onlyRenderProperties) {
       return props.basePath || parent?.address?.concat(props.name)
@@ -38,9 +38,12 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
           let schema: Schema = item
           if (isFn(props.mapProperties)) {
             const mapped = props.mapProperties(item, name)
-            if (!isBool(mapped)) {
+            if (mapped) {
               schema = mapped
-            } else if (mapped === false) {
+            }
+          }
+          if (isFn(props.filterProperties)) {
+            if (props.filterProperties(schema, name) === false) {
               return null
             }
           }

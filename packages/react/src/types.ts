@@ -79,9 +79,12 @@ export interface ISchemaFieldUpdateRequest {
 }
 
 export interface ISchemaMapper {
-  (schema: Schema, name: SchemaKey): Schema | boolean
+  (schema: Schema, name: SchemaKey): Schema
 }
 
+export interface ISchemaFilter {
+  (schema: Schema, name: SchemaKey): boolean
+}
 export interface IRecursionFieldProps {
   schema: Schema
   name?: SchemaKey
@@ -89,6 +92,7 @@ export interface IRecursionFieldProps {
   onlyRenderProperties?: boolean
   onlyRenderSelf?: boolean
   mapProperties?: ISchemaMapper
+  filterProperties?: ISchemaFilter
 }
 
 export type ObjectKey = string | number | boolean | symbol

@@ -58,9 +58,9 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
           <RecursionField
             schema={items}
             name={index}
-            mapProperties={(schema) => {
+            filterProperties={(schema) => {
               if (!isIndexComponent(schema)) return false
-              return schema
+              return true
             }}
             onlyRenderProperties
           />
@@ -72,9 +72,9 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
           <RecursionField
             schema={items}
             name={index}
-            mapProperties={(schema) => {
+            filterProperties={(schema) => {
               if (!isOperationComponent(schema)) return false
-              return schema
+              return true
             }}
             onlyRenderProperties
           />
@@ -85,10 +85,10 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         <RecursionField
           schema={items}
           name={index}
-          mapProperties={(schema) => {
+          filterProperties={(schema) => {
             if (isIndexComponent(schema)) return false
             if (isOperationComponent(schema)) return false
-            return schema
+            return true
           }}
         />
       )
