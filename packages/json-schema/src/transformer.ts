@@ -87,7 +87,7 @@ const getValidatorBySchema = (
       },
     })
   }
-  if (isValid(schema.uniqueItems) && schema.uniqueItems) {
+  if (isValid(schema.uniqueItems)) {
     rules.push({
       validator: (value: any) => {
         value = toArr(value)

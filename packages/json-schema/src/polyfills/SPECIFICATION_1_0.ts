@@ -1,4 +1,4 @@
-import { Schema } from '../schema'
+import { registerPatches } from '../patches'
 import { toArr, isArr, isStr, lowerCase, isValid } from '@formily/shared'
 import { ISchema } from '../types'
 
@@ -46,10 +46,13 @@ const transformXLinkage = (linkages: any[]) => {
           target: item.target,
           when: transformCondition(item.condition),
           fullfill: {
-            schema: transformSchema({ version: '1.0', ...item.schema }),
+            schema: SpecificationV1Polyfill({ version: '1.0', ...item.schema }),
           },
           otherwise: {
-            schema: transformSchema({ version: '1.0', ...item.otherwise }),
+            schema: SpecificationV1Polyfill({
+              version: '1.0',
+              ...item.otherwise,
+            }),
           },
         })
       } else if (item.type === 'value:state') {
@@ -69,7 +72,7 @@ const transformXLinkage = (linkages: any[]) => {
   return []
 }
 
-const transformSchema = (schema: ISchema) => {
+const SpecificationV1Polyfill = (schema: ISchema) => {
   if (isValid(schema['editable'])) {
     schema['x-editable'] = schema['x-editable'] || schema['editable']
     delete schema['editable']
@@ -80,7 +83,7 @@ const transformSchema = (schema: ISchema) => {
   }
   if (isValid(schema['display'])) {
     schema['x-display'] =
-      schema['x-display'] || schema['display'] ? 'visible' : 'hidden'
+      schema['x-display'] || (schema['display'] ? 'visible' : 'hidden')
     delete schema['display']
   }
   if (isValid(schema['x-props'])) {
@@ -114,10 +117,15 @@ const transformSchema = (schema: ISchema) => {
   ) {
     schema['x-decorator'] = schema['x-decorator'] || 'FormItem'
   }
+  if (schema['x-rules']) {
+    schema['x-validator'] = []
+      .concat(schema['x-validator'] || [])
+      .concat(schema['x-rules'])
+  }
   return schema
 }
 
-Schema.registerPatches(transformSchema)
+registerPatches(SpecificationV1Polyfill)
 
 export const registerVoidComponents = (components: string[]) => {
   VOID_COMPONENTS.push(...components)

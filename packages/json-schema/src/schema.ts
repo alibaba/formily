@@ -5,15 +5,16 @@ import {
   SchemaExtendReaction,
   SchemaTypes,
   SchemaKey,
-  SchemaPatch,
   ISchemaTransformerOptions,
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
 import { complie, shallowComplie, registerComplier } from './complier'
 import { transformSchemaToFieldProps } from './transformer'
-
-const patches: SchemaPatch[] = []
-
+import { reducePatches, registerPatches } from './patches'
+import {
+  registerVoidComponents,
+  registerTypeDefaultComponents,
+} from './polyfills'
 export class Schema<
   Decorator = any,
   Component = any,
@@ -460,30 +461,22 @@ export class Schema<
   ) => {
     if (!json) return this
     if (Schema.isSchemaInstance(json)) return json
-    each(
-      patches.reduce(
-        (buf, patch) => {
-          return patch(buf)
-        },
-        { ...json }
-      ),
-      (value, key) => {
-        if (isFn(value)) return
-        if (key === 'properties') {
-          this.setProperties(value)
-        } else if (key === 'patternProperties') {
-          this.setPatternProperties(value)
-        } else if (key === 'additionalProperties') {
-          this.setAdditionalProperties(value)
-        } else if (key === 'items') {
-          this.setItems(value)
-        } else if (key === 'additionalItems') {
-          this.setAdditionalItems(value)
-        } else {
-          this[key] = value
-        }
+    each(reducePatches(json), (value, key) => {
+      if (isFn(value) && !key.includes('x-')) return
+      if (key === 'properties') {
+        this.setProperties(value)
+      } else if (key === 'patternProperties') {
+        this.setPatternProperties(value)
+      } else if (key === 'additionalProperties') {
+        this.setAdditionalProperties(value)
+      } else if (key === 'items') {
+        this.setItems(value)
+      } else if (key === 'additionalItems') {
+        this.setAdditionalItems(value)
+      } else {
+        this[key] = value
       }
-    )
+    })
     return this
   }
 
@@ -517,7 +510,9 @@ export class Schema<
     return results
   }
 
-  toFieldProps = (options?: ISchemaTransformerOptions) => {
+  toFieldProps = (
+    options?: ISchemaTransformerOptions
+  ): Formily.Core.Types.IFieldFactoryProps<any, any> => {
     return transformSchemaToFieldProps(this, options)
   }
 
@@ -553,11 +548,9 @@ export class Schema<
 
   static registerComplier = registerComplier
 
-  static registerPatches = (...args: SchemaPatch[]) => {
-    args.forEach((patch) => {
-      if (isFn(patch)) {
-        patches.push(patch)
-      }
-    })
-  }
+  static registerPatches = registerPatches
+
+  static registerVoidComponents = registerVoidComponents
+
+  static registerTypeDefaultComponents = registerTypeDefaultComponents
 }

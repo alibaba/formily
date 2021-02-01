@@ -14,19 +14,18 @@ export default {
       path: '/guide',
     },
     {
-      title: '核心库API',
-      path: '/api',
+      title: '核心库',
       children: [
         {
-          title: 'Core API',
+          title: '基础内核层',
           path: '//core.formilyjs.org',
         },
         {
-          title: 'React API',
+          title: 'React桥接层',
           path: '//react.formilyjs.org',
         },
         {
-          title: 'Vue API',
+          title: 'Vue桥接层',
           path: '//vue.formilyjs.org',
         },
       ],
@@ -81,58 +80,83 @@ export default {
         path: '/guide',
       },
       {
+        title: '如何看文档',
+        path: '/guide',
+      },
+
+      {
         title: '概念',
         path: '/guide/concept/mvvm',
         children: [
           {
-            title: 'MVVM',
+            title: '表单架构',
             path: '/guide/concept/mvvm',
           },
           {
-            title: '充血模型',
+            title: '领域模型',
             path: '/guide/concept/model',
           },
           {
-            title: '生命周期',
+            title: '表单生命周期',
             path: '/guide/concept/lifecycle',
           },
           {
-            title: '路径系统',
+            title: '表单路径系统',
             path: '/guide/concept/path',
           },
           {
-            title: 'JSON Schema',
+            title: '表单值管理',
+            path: '/guide/concept/model',
+          },
+          {
+            title: '表单协议标准',
+            path: '/guide/concept/json-schema',
+          },
+          {
+            title: '三种研发模式',
+            path: '/guide/concept/json-schema',
+          },
+          {
+            title: '表单扩展机制',
             path: '/guide/concept/json-schema',
           },
         ],
       },
       {
-        title: '开发实践',
-        path: '/guide/practice/jsx-develop',
+        title: '场景案例',
         children: [
           {
-            title: '纯JSX驱动开发',
-            path: '/guide/practice/jsx-develop',
+            title: '登陆表单',
           },
           {
-            title: 'JSON Schema驱动开发',
-            path: '/guide/practice/schema-develop',
+            title: '查询列表',
           },
           {
-            title: 'JSX Schema驱动开发',
-            path: '/guide/practice/jsx-schema-develop',
+            title: '编辑与详情',
           },
           {
-            title: '混合开发',
-            path: '/guide/practice/mixin-develop',
+            title: '弹窗与抽屉',
           },
+        ],
+      },
+      {
+        title: '进阶指南',
+        children: [
           {
             title: '实现表单校验',
             path: '/guide/practice/validations',
           },
           {
+            title: '实现表单布局',
+            path: '/guide/practice/validations',
+          },
+          {
             title: '实现异步数据源',
             path: '/guide/practice/asyncs',
+          },
+          {
+            title: '实现值受控',
+            path: '/guide/practice/validations',
           },
           {
             title: '实现联动逻辑',
@@ -150,7 +174,23 @@ export default {
             title: '管理业务逻辑',
             path: '/guide/practice/best-practice',
           },
+          {
+            title: '国际化',
+            path: '/guide/practice/validations',
+          },
+          {
+            title: '按需打包',
+            path: '/guide/practice/validations',
+          },
         ],
+      },
+      {
+        title: 'v2升级指南',
+        path: '/guide',
+      },
+      {
+        title: '贡献指南',
+        path: '/guide',
       },
     ],
   },

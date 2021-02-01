@@ -92,7 +92,7 @@ export type SchemaItems<
       Message
     >[]
 
-export type SchemaComponents = Record<string, (...args: any[]) => any>
+export type SchemaComponents = Record<string, any>
 
 export interface ISchemaFieldFactoryOptions<
   Components extends SchemaComponents = any

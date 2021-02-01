@@ -86,6 +86,8 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     )
   }
 
+  if (!fieldSchema) return <Fragment />
+
   return (
     <SchemaContext.Provider value={fieldSchema}>
       {render()}

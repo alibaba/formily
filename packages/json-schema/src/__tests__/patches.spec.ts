@@ -2,7 +2,7 @@ import { Schema } from '../schema'
 import {
   registerTypeDefaultComponents,
   registerVoidComponents,
-} from '../patches'
+} from '../polyfills'
 
 registerVoidComponents(['MyCard'])
 registerTypeDefaultComponents({
@@ -153,4 +153,9 @@ test('v1 polyfill', () => {
     'x-component': 'MyCard',
     'x-linkages': [{}],
   } as any)
+  const schema8 = new Schema({
+    type: 'string',
+    'x-rules': ['phone'],
+  } as any)
+  expect(schema8.toFieldProps().validator).toEqual(['phone'])
 })
