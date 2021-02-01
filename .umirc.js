@@ -81,44 +81,38 @@ export default {
       },
       {
         title: '如何看文档',
-        path: '/guide',
+        path: '/guide/learn-ducuments',
       },
 
       {
         title: '概念',
-        path: '/guide/concept/mvvm',
         children: [
           {
             title: '表单架构',
-            path: '/guide/concept/mvvm',
           },
           {
             title: '领域模型',
-            path: '/guide/concept/model',
           },
           {
             title: '表单生命周期',
-            path: '/guide/concept/lifecycle',
           },
           {
             title: '表单路径系统',
-            path: '/guide/concept/path',
           },
           {
             title: '表单值管理',
-            path: '/guide/concept/model',
+          },
+          {
+            title: '表单节点树',
           },
           {
             title: '表单协议标准',
-            path: '/guide/concept/json-schema',
           },
           {
             title: '三种研发模式',
-            path: '/guide/concept/json-schema',
           },
           {
             title: '表单扩展机制',
-            path: '/guide/concept/json-schema',
           },
         ],
       },
@@ -143,54 +137,44 @@ export default {
         title: '进阶指南',
         children: [
           {
-            title: '实现表单校验',
-            path: '/guide/practice/validations',
+            title: '实现表单校验'
           },
           {
-            title: '实现表单布局',
-            path: '/guide/practice/validations',
+            title: '实现表单布局'
           },
           {
-            title: '实现异步数据源',
-            path: '/guide/practice/asyncs',
+            title: '实现异步数据源'
           },
           {
-            title: '实现值受控',
-            path: '/guide/practice/validations',
+            title: '实现值受控'
           },
           {
-            title: '实现联动逻辑',
-            path: '/guide/practice/linkages',
+            title: '实现联动逻辑'
           },
           {
-            title: '实现联动计算器',
-            path: '/guide/practice/caculator',
+            title: '实现联动计算器'
           },
           {
-            title: '实现自定义组件',
-            path: '/guide/practice/custom-component',
+            title: '实现自定义组件'
           },
           {
-            title: '管理业务逻辑',
-            path: '/guide/practice/best-practice',
+            title: '管理业务逻辑'
           },
           {
-            title: '国际化',
-            path: '/guide/practice/validations',
+            title: '国际化'
           },
           {
-            title: '按需打包',
-            path: '/guide/practice/validations',
+            title: '按需打包'
           },
         ],
       },
       {
         title: 'v2升级指南',
-        path: '/guide',
+        path: '/guide/upgrade',
       },
       {
         title: '贡献指南',
-        path: '/guide',
+        path: '/guide/contribution',
       },
     ],
   },
