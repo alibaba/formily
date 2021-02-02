@@ -88,10 +88,7 @@ export default {
         title: '概念',
         children: [
           {
-            title: '表单架构',
-          },
-          {
-            title: '领域模型',
+            title: '表单领域模型',
           },
           {
             title: '表单生命周期',
@@ -103,7 +100,7 @@ export default {
             title: '表单值管理',
           },
           {
-            title: '表单节点树',
+            title: '表单状态树',
           },
           {
             title: '表单协议标准',
