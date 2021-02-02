@@ -83,7 +83,10 @@ export default {
         title: '如何看文档',
         path: '/guide/learn-ducuments',
       },
-
+      {
+        title: '快速开始',
+        path: '/guide/quick-start',
+      },
       {
         title: '概念',
         children: [
