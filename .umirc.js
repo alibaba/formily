@@ -88,35 +88,6 @@ export default {
         path: '/guide/quick-start',
       },
       {
-        title: '概念',
-        children: [
-          {
-            title: '表单领域模型',
-          },
-          {
-            title: '表单生命周期',
-          },
-          {
-            title: '表单路径系统',
-          },
-          {
-            title: '表单值管理',
-          },
-          {
-            title: '表单状态树',
-          },
-          {
-            title: '表单协议标准',
-          },
-          {
-            title: '三种研发模式',
-          },
-          {
-            title: '表单扩展机制',
-          },
-        ],
-      },
-      {
         title: '场景案例',
         children: [
           {
@@ -146,7 +117,7 @@ export default {
             title: '实现异步数据源'
           },
           {
-            title: '实现值受控'
+            title: '实现值受控表单'
           },
           {
             title: '实现联动逻辑'
