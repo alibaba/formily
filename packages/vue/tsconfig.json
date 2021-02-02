@@ -1,16 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "plugins": [
-      {
-        "name": "@vuedx/typescript-plugin-vue"
-      }
-    ]
+    "outDir": "./lib"
   },
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./src/**/*.vue"
+    "./src/**/*.tsx"
   ],
   "exclude": [
     "./src/__tests__/*",

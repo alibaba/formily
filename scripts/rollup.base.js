@@ -1,9 +1,7 @@
 import typescript from 'rollup-plugin-typescript2'
 import resolve from 'rollup-plugin-node-resolve'
-import path from 'path'
 import commonjs from '@rollup/plugin-commonjs'
 import externalGlobals from 'rollup-plugin-external-globals'
-import vue from 'rollup-plugin-vue'
 import { uglify } from 'rollup-plugin-uglify'
 
 const plugins = [
@@ -16,7 +14,6 @@ const plugins = [
       },
     },
   }),
-  vue(),
   resolve(),
   commonjs(),
   externalGlobals({

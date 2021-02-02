@@ -1,6 +1,14 @@
-export type VueComponent = Vue.VueConstructor<Vue> | Vue.FunctionalComponentOptions<any> | Vue.ComponentOptions<never, any, any, any, any>
+import Vue, { ComponentOptions } from 'vue'
+import { SetupContext } from 'vue-demi'
 
-export type IProviderProps = {
+export type VueComponent = ComponentOptions<Vue, any, any, any, any>
+
+export interface ObservableComponentOptions {
+  observableSetup?: (collect?: (data: Record<string, any>) => any, props?: Record<string, any>, context?: SetupContext) => any
+  [key: string]: any
+}
+
+export interface IProviderProps {
   form: Formily.Core.Models.Form
 }
 
@@ -14,14 +22,14 @@ export type IVoidFieldProps<
   C extends VueComponent
 > = Formily.Core.Types.IVoidFieldFactoryProps<D, C>
 
-  export interface IComponentMapper<T extends VueComponent = any> {
-    (target: T): VueComponent
-  }
-  
-  export type IStateMapper<Props = any> =
-    | {
-        extract: keyof Formily.Core.Models.Field
-        to?: keyof Props
-        transform?: (value: any) => any
-      }
-    | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
+export interface IComponentMapper<T extends VueComponent = any> {
+  (target: T): VueComponent
+}
+
+export type IStateMapper<Props> =
+  | {
+      extract: keyof Formily.Core.Models.Field
+      to?: keyof Props
+      transform?: (value: any) => any
+    }
+  | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)

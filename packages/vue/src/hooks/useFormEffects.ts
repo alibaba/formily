@@ -1,4 +1,4 @@
-import { watch, onBeforeUnmount, ref } from '@vue/composition-api'
+import { watch, onBeforeUnmount, ref } from 'vue-demi'
 import { uid } from '@formily/shared'
 import { useForm } from './useForm'
 

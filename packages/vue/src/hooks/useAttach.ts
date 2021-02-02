@@ -1,4 +1,4 @@
-import { onMounted, onBeforeUnmount, ref, watch } from '@vue/composition-api'
+import { onMounted, onBeforeUnmount, ref, watch } from 'vue-demi'
 
 interface IRecycleTarget {
   onMount: () => void
