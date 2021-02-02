@@ -2,7 +2,7 @@
 
 ## 问题
 
-总所周知，表单场景一直都是前端中后台领域最复杂的场景，它的复杂度主要在哪里呢？
+众所周知，表单场景一直都是前端中后台领域最复杂的场景，它的复杂度主要在哪里呢？
 
 - 字段数量多，如何让性能不随字段数量增加而变差？
 - 字段关联逻辑复杂，如何更简单的实现复杂的联动逻辑？字段与字段关联时，如何保证不影响表单性能？
@@ -101,8 +101,8 @@ interface Field {
 interface Field {
    path:string[],
    value:any,
-   visible:boolean,,
-   disabled:boolean
+   visible:boolean,
+   disabled:boolean,
    component:[Component,ComponentProps]
 }
 ```
