@@ -1,13 +1,14 @@
 /* eslint-disable vue/one-component-per-file */
-import { h, defineComponent } from '@vue/composition-api'
+import { defineComponent } from 'vue-demi'
 import { isFn, FormPath } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { defineObservableComponent } from '../utils/define-observable-component'
 import { VueComponent, IComponentMapper, IStateMapper } from '../types'
 import { useField } from '../hooks/useField'
+import h from '../utils/compatible-create-element'
 
-export function mapProps(...args: IStateMapper[]) {
-  return (target: VueComponent) => {
+export function mapProps<T extends VueComponent>(...args: IStateMapper<T['props']>[]) {
+  return (target: T) => {
     return defineObservableComponent({
       observableSetup(collect, props, { slots }) {
         const field = useField()
@@ -42,15 +43,15 @@ export function mapProps(...args: IStateMapper[]) {
             {
               props: results,
             },
-            slots.default && slots.default()
+            slots
           )
       },
     })
   }
 }
 
-export function mapReadPretty(component: VueComponent) {
-  return (target: VueComponent) => {
+export function mapReadPretty<T extends VueComponent, C extends VueComponent>(component: C) {
+  return (target: T) => {
     return defineObservableComponent({
       observableSetup(collect, props: { [key: string]: any }, { slots }) {
         const field = useField()
@@ -65,28 +66,28 @@ export function mapReadPretty(component: VueComponent) {
             {
               props: props,
             },
-            slots.default && slots.default()
+            slots
           )
       },
     })
   }
 }
 
-export function connect(target: VueComponent, ...args: IComponentMapper[]) {
+export function connect<T extends VueComponent>(target: T, ...args: IComponentMapper[]) {
   const Component = args.reduce((target: VueComponent, mapper) => {
     return mapper(target)
-  }, target) as VueComponent
-
+  }, target)
+  
   return defineComponent({
     name: target['name'],
-    setup(props: { [key: string]: any }, { slots }) {
+    setup(props: T['props'], { slots }) {
       return () =>
         h(
           Component,
           {
             props: props,
           },
-          slots.default && slots.default()
+          slots
         )
     },
   })

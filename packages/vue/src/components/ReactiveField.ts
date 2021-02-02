@@ -1,7 +1,7 @@
-<script lang="ts">
-import { h } from '@vue/composition-api'
 import { defineObservableComponent } from '../utils/define-observable-component'
 import { isVoidField } from '@formily/core'
+import { VNode, Component } from 'vue'
+import h from '../utils/compatible-create-element'
 
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
@@ -18,36 +18,38 @@ export default defineObservableComponent({
     })
     return () => {
       if (!field) {
-        return h('div', slots.default && slots.default())
+        return h('div', {}, slots)
       }
       if (field.display !== 'visible') {
-        return h('')
+        return ''
       } else {
-        const renderDecorator = (children: Vue.VNode[]) => {
+        const renderDecorator = (children: VNode[]) => {
           if (!field?.decorator?.[0]) {
-            return h('div', children)
+            return h('div', {}, {
+              default: () => children
+            })
           }
-          const decorator = field.decorator[0] as Vue.Component
+          const decorator = field.decorator[0] as Component
           const decoratorData = field.decorator[1] || {}
           return h(
             decorator,
             {
               props: decoratorData
             },
-            children
+            {
+              default: () => children
+            }
           )
         }
 
         const renderComponent = () => {
-          const children =
-            (slots.default &&
-              slots.default({
+          if (!field?.component?.[0]) {
+            return h('div', {}, {
+              default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              })) ||
-            []
-          if (!field?.component?.[0]) {
-            return h('div', children)
+              })
+            })
           }
           const value = !isVoidField(field) ? field.value : undefined
           const onChange = !isVoidField(field) ? field.onInput : undefined
@@ -59,7 +61,7 @@ export default defineObservableComponent({
           const readOnly = !isVoidField(field)
             ? field.pattern === 'readOnly'
             : undefined
-          const component = field.component[0] as Vue.Component
+          const component = field.component[0] as Component
           const originData = field.component[1] || {}
           const componentData = {
             ...originData,
@@ -77,7 +79,12 @@ export default defineObservableComponent({
                 blur: onBlur
               }
             },
-            children
+            {
+              default: () => slots.default && slots.default({
+                field: props.field,
+                form: props.field.form
+              })
+            }
           )
         }
         return renderDecorator([renderComponent()])
@@ -85,4 +92,3 @@ export default defineObservableComponent({
     }
   }
 })
-</script>

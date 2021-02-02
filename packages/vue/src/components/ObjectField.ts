@@ -1,17 +1,12 @@
-<template>
-  <ReactiveField :field="field">
-    <slot :field="field" :form="field.form"></slot>
-  </ReactiveField>
-</template>
-
-<script lang="ts">
-import { provide } from '@vue/composition-api'
+import { provide } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
-import { FieldSymbol } from '../shared/context'
 import { VueComponent, IFieldProps } from '../types'
-import ReactiveField from './ReactiveField.vue'
+import ReactiveField from './ReactiveField'
 import { defineObservableComponent } from '../utils/define-observable-component'
+import { FieldSymbol } from '../shared/context'
+import h from '../utils/compatible-create-element'
+import { getRowComponentFromProps } from '../utils/get-row-component-from-props'
 
 export default defineObservableComponent({
   name: 'ObjectField',
@@ -32,11 +27,12 @@ export default defineObservableComponent({
     pattern: String,
     validateFirst: Boolean,
     validator: {},
-    reactions: Array
+    reactions: Array,
   },
   observableSetup<D extends VueComponent, C extends VueComponent>(
     collect,
-    props: IFieldProps<D, C>
+    props: IFieldProps<D, C>,
+    { slots }
   ) {
     const form = useForm()
     const parent = useField()
@@ -44,14 +40,30 @@ export default defineObservableComponent({
     const field = useAttach(
       form.createObjectField({
         ...props,
-        basePath
+        basePath,
+        ...getRowComponentFromProps(props)
       })
     )
     provide(FieldSymbol, field)
 
-    return collect({
-      field
+    collect({
+      field,
+      form: field.form
     })
+
+    return () => h(
+      ReactiveField, 
+      {
+        props: {
+          field
+        }
+      },
+      {
+        default: () => slots.default && slots.default({
+          field,
+          form: field.form
+        })
+      }
+    )
   }
 })
-</script>

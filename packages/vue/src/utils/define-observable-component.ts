@@ -1,116 +1,16 @@
 // some from mobx-vue: https://github.com/mobxjs/mobx-vue
 
-import Vue from 'vue'
-import { isObservable, Reaction } from 'mobx'
-import { getCurrentInstance, SetupContext } from '@vue/composition-api'
+import { isVue2 } from 'vue-demi'
+import { defineObservableComponent as defineObservableComponentV2 } from './observer-in-vue2'
+import { defineObservableComponent as defineObservableComponentV3 } from './observer-in-vue3'
+import { ObservableComponentOptions } from '../types'
 
-type Data = { [key: string]: any }
-
-const noop = () => {
-  /* empty */
-}
-
-const disposerSymbol = Symbol('disposerSymbol')
-
-interface ComponentOptions {
-  observableSetup?: (collect?: (data: Data) => any, props?: Data, context?: SetupContext) => any
-  [key: string]: any
-}
-
-const defineObservableComponent = (originalOptions: ComponentOptions) => {
-  const name = originalOptions.name || 'ObservableComponent'
-
-  const { observableSetup } = originalOptions
-  let setup = originalOptions.setup
-  if (observableSetup) {
-    setup = (props: Data, context: SetupContext) => {
-      const vm = getCurrentInstance()?.proxy
-      const collect = (data: Data) =>
-        Object.keys(data).reduce((result: any, field) => {
-          const value = data[field]
-          if (isObservable(value)) {
-            Object.defineProperty(vm, field, {
-              configurable: true,
-              get() {
-                return value
-              },
-              // @formatter:off
-              // tslint:disable-next-line
-              set() {}
-              // @formatter:on
-            })
-          } else {
-            result[field] = value
-          }
-  
-          return result
-        }, {})
-      return observableSetup(collect, props, context)
-    }
-  
-    delete originalOptions.observableSetup
+const defineObservableComponent = (originalOptions: ObservableComponentOptions) => {
+  if (isVue2) {
+    return defineObservableComponentV2(originalOptions)
+  } else {
+    return defineObservableComponentV3(originalOptions)
   }
-  
-
-  const newOptions = {
-    name,
-    ...originalOptions,
-    setup,
-    // overrider the cached constructor to avoid extending skip
-    // @see https://github.com/vuejs/vue/blob/6cc070063bd211229dff5108c99f7d11b6778550/src/core/global-api/extend.js#L24
-    _Ctor: {}
-  } as any
-
-  const Component = Vue.extend(newOptions)
-
-  const { $mount, $destroy } = Component.prototype
-
-  Component.prototype.$mount = function(this: any, ...args: any[]) {
-    let mounted = false
-    this[disposerSymbol] = noop
-
-    let nativeRenderOfVue: any
-    const reactiveRender = () => {
-      reaction.track(() => {
-        if (!mounted) {
-          $mount.apply(this, args)
-          mounted = true
-          nativeRenderOfVue = this._watcher.getter
-          // rewrite the native render method of vue with our reactive tracker render
-          // thus if component updated by vue watcher, we could re track and collect dependencies by mobx
-          this._watcher.getter = reactiveRender
-        } else {
-          nativeRenderOfVue.call(this, this)
-        }
-      })
-
-      return this
-    }
-
-    const reaction = new Reaction(`${name}.render()`, reactiveRender)
-
-    this[disposerSymbol] = reaction.getDisposer_()
-
-    return reactiveRender()
-  }
-
-  Component.prototype.$destroy = function(this: Vue) {
-    ;(this as any)[disposerSymbol]()
-    $destroy.apply(this)
-  }
-
-  const extendedComponentNamePropertyDescriptor =
-    Object.getOwnPropertyDescriptor(Component, 'name') || {}
-  if (extendedComponentNamePropertyDescriptor.configurable === true) {
-    Object.defineProperty(Component, 'name', {
-      writable: false,
-      value: name,
-      enumerable: false,
-      configurable: false
-    })
-  }
-
-  return Component
 }
 
 export { defineObservableComponent }
