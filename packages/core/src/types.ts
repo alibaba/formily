@@ -324,7 +324,7 @@ export interface IFieldProps<
   validator?: Validator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  reactions?: FieldReaction[]
+  reactions?: FieldReaction[] | FieldReaction
 }
 
 export interface IVoidFieldProps<
@@ -346,7 +346,7 @@ export interface IVoidFieldProps<
   readPretty?: boolean
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  reactions?: FieldReaction[]
+  reactions?: FieldReaction[] | FieldReaction
 }
 
 export interface IFieldResetOptions {

@@ -1,4 +1,4 @@
-import { isFn, isValid, instOf } from '@formily/shared'
+import { isFn, isValid, instOf, FormPath } from '@formily/shared'
 import {
   LifeCycle,
   Form,
@@ -17,7 +17,13 @@ import {
   GeneralField,
   IGeneralFieldState,
 } from '../types'
-
+import {
+  setValidateLanguage,
+  registerValidateFormats,
+  registerValidateLocale,
+  registerValidateMessageTemplateEnigne,
+  registerValidateRules,
+} from '@formily/validator'
 const __FORM_HOOK_ENVS__ = {
   lifecycles: [],
   context: [],
@@ -169,4 +175,13 @@ export const isQuery = (query: any): query is Query => {
 
 export const createForm = (options?: IFormProps) => {
   return new Form(options)
+}
+
+export {
+  FormPath,
+  setValidateLanguage,
+  registerValidateFormats,
+  registerValidateLocale,
+  registerValidateMessageTemplateEnigne,
+  registerValidateRules,
 }

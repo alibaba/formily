@@ -88,6 +88,10 @@ export default {
         path: '/guide/quick-start',
       },
       {
+        title: 'V2升级指南',
+        path: '/guide/upgrade',
+      },
+      {
         title: '场景案例',
         children: [
           {
@@ -108,41 +112,38 @@ export default {
         title: '进阶指南',
         children: [
           {
-            title: '实现表单校验'
+            title: '实现表单校验',
           },
           {
-            title: '实现表单布局'
+            title: '实现表单布局',
           },
           {
-            title: '实现异步数据源'
+            title: '实现异步数据源',
           },
           {
-            title: '实现值受控表单'
+            title: '实现值受控表单',
           },
           {
-            title: '实现联动逻辑'
+            title: '实现联动逻辑',
           },
           {
-            title: '实现联动计算器'
+            title: '实现联动计算器',
           },
           {
-            title: '实现自定义组件'
+            title: '实现自定义组件',
           },
           {
-            title: '管理业务逻辑'
+            title: '管理业务逻辑',
           },
           {
-            title: '国际化'
+            title: '国际化',
           },
           {
-            title: '按需打包'
+            title: '按需打包',
           },
         ],
       },
-      {
-        title: 'v2升级指南',
-        path: '/guide/upgrade',
-      },
+
       {
         title: '贡献指南',
         path: '/guide/contribution',

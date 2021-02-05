@@ -2,7 +2,6 @@ import {
   FormPath,
   FormPathPattern,
   isFn,
-  isArr,
   isValid,
   toArr,
 } from '@formily/shared'
@@ -136,13 +135,12 @@ export class VoidField<
   }
 
   protected makeReactive() {
-    if (isArr(this.props.reactions)) {
-      this.props.reactions.forEach((reaction) => {
-        if (isFn(reaction)) {
-          this.disposers.push(autorun(() => reaction(this)))
-        }
-      })
-    }
+    const reactions = toArr(this.props.reactions)
+    reactions.forEach((reaction) => {
+      if (isFn(reaction)) {
+        this.disposers.push(autorun(() => reaction(this)))
+      }
+    })
   }
 
   get parent() {

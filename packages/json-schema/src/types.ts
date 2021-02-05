@@ -61,6 +61,10 @@ export type SchemaExtendReaction<Field = any> =
     }
   | ((field: Field) => void)
 
+export type SchemaExtendReactions<Field = any> =
+  | SchemaExtendReaction<Field>
+  | SchemaExtendReaction<Field>[]
+
 export type SchemaItems<
   Decorator,
   Component,
@@ -216,7 +220,7 @@ export interface ISchema<
   //组件属性
   ['x-component-props']?: ComponentProps
   //组件响应器
-  ['x-reactions']?: SchemaExtendReaction<ReactionField>[]
+  ['x-reactions']?: SchemaExtendReactions<ReactionField>
   //内容
   ['x-content']?: any
 
