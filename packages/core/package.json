@@ -21,14 +21,19 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
+    "start": "dumi dev",
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
-    "build:umd": "rollup --config"
+    "build:umd": "rollup --config",
+    "build:docs": "dumi build"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "mobx": "^6.0.3"
+  },
+  "devDependencies": {
+    "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
     "@formily/shared": "^2.0.0-beta.3",

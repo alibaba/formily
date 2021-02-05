@@ -5,7 +5,7 @@ hero:
   title: FORMILY NEXT
   desc: 基于Alibaba Fusion封装的优雅且易用的Formily2.x组件体系
   actions:
-    - text: 核心库文档
+    - text: 主站文档
       link: //formilyjs.org
     - text: 组件文档
       link: /components
