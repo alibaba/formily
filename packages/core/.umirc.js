@@ -60,6 +60,7 @@ export default {
         children: [
           {
             title: 'MVVM',
+            path: '/guide/mvvm',
           },
           {
             title: '表单模型',

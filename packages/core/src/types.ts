@@ -346,7 +346,7 @@ export interface IVoidFieldProps<
   readPretty?: boolean
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
-  reactions?: FieldReaction[]
+  reactions?: FieldReaction[] | FieldReaction
 }
 
 export interface IFieldResetOptions {

@@ -9,6 +9,7 @@ import {
   isEqual,
   each,
   isFn,
+  isPlainObj,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { Schema } from './schema'
@@ -16,6 +17,7 @@ import {
   ISchema,
   ISchemaFieldFactoryOptions,
   ISchemaFieldUpdateRequest,
+  SchemaExtendReactions,
 } from './types'
 import '@formily/core'
 
@@ -160,27 +162,16 @@ const getFieldInternalPropsBySchema = (
 }
 
 const patchState = (state: any, target: any) => {
-  each(target, (value, key) => {
-    if (key === 'component') {
-      state[key] = [
-        value?.[0] ? value[0] : state?.component?.[0],
-        {
-          ...state?.component?.[1],
-          ...value?.[1],
-        },
-      ]
-    } else if (key === 'decorator') {
-      state[key] = [
-        value?.[0] ? value[0] : state?.decorator?.[0],
-        {
-          ...state?.decorator?.[1],
-          ...value?.[1],
-        },
-      ]
-    } else if (isValid(value)) {
-      state[key] = value
+  const patch = (target: any, path: string[]) => {
+    if (isArr(target) || isPlainObj(target)) {
+      each(target, (value, key) => {
+        patch(value, path.concat(key))
+      })
+    } else if (path.length && isValid(target)) {
+      FormPath.setIn(state, path, target)
     }
-  })
+  }
+  patch(target, [])
 }
 
 const getSchemaFieldRequired = (schema: Schema) => {
@@ -249,47 +240,45 @@ const getSchemaFieldReactions = (
   }
 
   return (field: Formily.Core.Models.Field) => {
-    const reactions = schema['x-reactions']
-    if (isArr(reactions)) {
-      reactions.forEach((reaction) => {
-        if (!reaction) return
-        if (isFn(reaction)) {
-          return reaction(field)
-        }
-        const $self = field
-        const $form = field.form
-        const $deps = parseDependencies(field, reaction.dependencies)
-        const $dependencies = $deps
-        const scope = {
-          ...options.scope,
-          $form,
-          $self,
-          $deps,
-          $dependencies,
-        }
-        const when = Schema.complie(reaction?.when, scope)
-        const complie = (expression: any) => {
-          return Schema.complie(expression, scope)
-        }
-        if (when) {
-          if (reaction.target) {
-            field.query(reaction.target).forEach((field) => {
-              setSchemaFieldState(field, reaction.fullfill, complie)
-            })
-          } else {
+    const reactions: SchemaExtendReactions = toArr(schema['x-reactions'])
+    reactions.forEach((reaction) => {
+      if (!reaction) return
+      if (isFn(reaction)) {
+        return reaction(field)
+      }
+      const $self = field
+      const $form = field.form
+      const $deps = parseDependencies(field, reaction.dependencies)
+      const $dependencies = $deps
+      const scope = {
+        ...options.scope,
+        $form,
+        $self,
+        $deps,
+        $dependencies,
+      }
+      const when = Schema.complie(reaction?.when, scope)
+      const complie = (expression: any) => {
+        return Schema.complie(expression, scope)
+      }
+      if (when) {
+        if (reaction.target) {
+          field.query(reaction.target).forEach((field) => {
             setSchemaFieldState(field, reaction.fullfill, complie)
-          }
+          })
         } else {
-          if (reaction.target) {
-            field.query(reaction.target).forEach((field) => {
-              setSchemaFieldState(field, reaction.otherwise, complie)
-            })
-          } else {
-            setSchemaFieldState(field, reaction.otherwise, complie)
-          }
+          setSchemaFieldState(field, reaction.fullfill, complie)
         }
-      })
-    }
+      } else {
+        if (reaction.target) {
+          field.query(reaction.target).forEach((field) => {
+            setSchemaFieldState(field, reaction.otherwise, complie)
+          })
+        } else {
+          setSchemaFieldState(field, reaction.otherwise, complie)
+        }
+      }
+    })
   }
 }
 
