@@ -1,12 +1,12 @@
 ## Usage
 
-### Preparation
+### Requirement
 
-```js
-import VueCompositionAPI from '@vue/composition-api'
+vue^2.6.0 + @vue/composition-api^1.0.0-beta.1
 
-Vue.use(VueCompositionAPI)
-```
+Or
+
+vue>=3.0.0-rc.0
 
 ### Quick Start
 
@@ -41,7 +41,6 @@ Vue.use(VueCompositionAPI)
       >
         <template #default="{ field }">
           <div>
-            {{ log(field) }}
             <div v-for="(item, index) in field.value || []" :key="item.id">
               <Field :name="`${index}.dd`" required :component="[Input]" />
               <Field :name="`${index}.ee`" :component="[Input]" />
@@ -112,7 +111,7 @@ Vue.use(VueCompositionAPI)
     </Field>
     <FormConsumer>
       <template #default="{ form }">
-        {{ JSON.stringify(form.query('aa').get(.get("value")) }}
+        {{ JSON.stringify(form.query('aa').get().value) }}
       </template>
     </FormConsumer>
     <FormConsumer>
@@ -144,7 +143,7 @@ Vue.use(VueCompositionAPI)
   </FormProvider>
 </template>
 
-<script lang="ts">
+<script>
   import { Form, Input, Select, Card, Button } from 'ant-design-vue'
   import {
     createForm,
@@ -157,9 +156,10 @@ Vue.use(VueCompositionAPI)
     connect,
     mapProps,
     isVoidField,
-  } from '../src/index'
+  } from '@formily/vue'
 
   const FormItem = connect(
+    Form.Item,
     mapProps(
       { extract: 'validateStatus' },
       { extract: 'title', to: 'label' },
@@ -179,9 +179,10 @@ Vue.use(VueCompositionAPI)
         }
       }
     )
-  )(Form.Item)
+  )
 
   export default {
+    name: 'demo',
     components: {
       FormProvider,
       FormConsumer,
@@ -222,8 +223,8 @@ Vue.use(VueCompositionAPI)
       }
     },
     methods: {
-      log(v) {
-        console.log(v)
+      log(...v) {
+        console.log(...v)
       },
     },
   }
