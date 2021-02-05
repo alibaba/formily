@@ -43,7 +43,8 @@
     "@formily/shared": "^2.0.0-beta.3",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3"
+    "react-sticky-box": "^0.9.3",
+    "yarn": "^1.22.10"
   },
   "publishConfig": {
     "access": "public"
