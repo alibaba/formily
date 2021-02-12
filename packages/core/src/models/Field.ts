@@ -29,7 +29,7 @@ import {
   JSXComponent,
   JSXComponenntProps,
   LifeCycleTypes,
-  Feedback,
+  FieldFeedback,
   FeedbackMessage,
   FieldCaches,
   FieldRequests,
@@ -42,7 +42,6 @@ import {
   ISearchFeedback,
   IFieldProps,
   IFieldResetOptions,
-  FormPatternTypes,
   IFieldState,
   IModelSetter,
   IModelGetter,
@@ -85,7 +84,7 @@ export class Field<
   validator: FieldValidator
   decorator: FieldDecorator<Decorator>
   component: FieldComponent<Component>
-  feedbacks: Feedback[]
+  feedbacks: FieldFeedback[]
   address: FormPath
   path: FormPath
 
@@ -318,7 +317,7 @@ export class Field<
     return parentDisplay || this.form.display || 'visible'
   }
 
-  get pattern(): FormPatternTypes {
+  get pattern(): FieldPatternTypes {
     const parentPattern = this.parent?.pattern
     if (isValid(this.selfPattern)) return this.selfPattern
     return parentPattern || this.form.pattern || 'editable'
@@ -508,7 +507,7 @@ export class Field<
     this.dataSource = dataSource
   }
 
-  setFeedback = (feedback?: Feedback) => {
+  setFeedback = (feedback?: FieldFeedback) => {
     updateFeedback(this, feedback)
   }
 
@@ -731,7 +730,7 @@ export class Field<
     })
   }
 
-  queryFeedbacks = (search?: ISearchFeedback): Feedback[] => {
+  queryFeedbacks = (search?: ISearchFeedback): FieldFeedback[] => {
     return queryFeedbacks(this, search)
   }
 

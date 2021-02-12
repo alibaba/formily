@@ -4,32 +4,23 @@ import {
   globalThisPolyfill,
   merge as deepmerge,
   isFn,
-  isStr
+  isStr,
 } from '@formily/shared'
-import { ValidatorFunctionResponse, ValidatorFunction } from './types'
-
-export interface IRegistryLocaleMessages {
-  [key: string]: string | IRegistryLocaleMessages
-}
-
-export interface IRegistryLocales {
-  [language: string]: IRegistryLocaleMessages
-}
-
-export interface IRegistryRules<Context = any> {
-  [key: string]: ValidatorFunction<Context>
-}
-
-export interface IRegistryFormats {
-  [key: string]: string | RegExp
-}
+import {
+  ValidatorFunctionResponse,
+  ValidatorFunction,
+  IRegistryFormats,
+  IRegistryLocaleMessages,
+  IRegistryLocales,
+  IRegistryRules,
+} from './types'
 
 const getIn = FormPath.getIn
 
 const self: any = globalThisPolyfill
 
 const getBrowserlanguage = () => {
-  /* istanbul ignore next */ 
+  /* istanbul ignore next */
   if (!self.navigator) {
     return 'en'
   }
@@ -39,11 +30,11 @@ const getBrowserlanguage = () => {
 const registry = {
   locales: {
     messages: {},
-    langugage: getBrowserlanguage()
+    langugage: getBrowserlanguage(),
   },
   formats: {},
   rules: {},
-  template: null
+  template: null,
 }
 
 const getISOCode = (langugage: string) => {

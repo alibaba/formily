@@ -1,10 +1,10 @@
 import { autorun, runInAction } from 'mobx'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
-import { createEffect } from '../shared'
+import { createEffectHook } from '../shared'
 
 function createFormEffect(type: LifeCycleTypes) {
-  return createEffect(
+  return createEffectHook(
     type,
     (form: Form) => (callback: (form: Form) => void) => {
       runInAction(() => {
@@ -16,7 +16,7 @@ function createFormEffect(type: LifeCycleTypes) {
 
 export const onFormInit = createFormEffect(LifeCycleTypes.ON_FORM_INIT)
 export const onFormMount = createFormEffect(LifeCycleTypes.ON_FORM_MOUNT)
-export const onFormUnMount = createFormEffect(LifeCycleTypes.ON_FORM_UNMOUNT)
+export const onFormUnmount = createFormEffect(LifeCycleTypes.ON_FORM_UNMOUNT)
 export const onFormValuesChange = createFormEffect(
   LifeCycleTypes.ON_FORM_VALUES_CHANGE
 )
@@ -71,7 +71,7 @@ export function onFormReact(callback?: (form: Form) => void) {
       callback(form)
     })
   })
-  onFormUnMount(() => {
+  onFormUnmount(() => {
     dispose()
   })
 }

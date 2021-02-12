@@ -17,7 +17,7 @@ import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
   ISearchFeedback,
-  Feedback,
+  FieldFeedback,
   INodePatch,
   GeneralField,
   FormFeedback,
@@ -111,8 +111,8 @@ export const queryFeedbacks = (field: Field, search?: ISearchFeedback) => {
   return field.feedbacks.filter((feedback) => {
     return matchFeedback(search, {
       ...feedback,
-      address: field.address,
-      path: field.path,
+      address: field.address?.toString(),
+      path: field.path?.toString(),
     })
   })
 }
@@ -127,7 +127,7 @@ export const queryFeedbackMessages = (
   )
 }
 
-export const updateFeedback = (field: Field, feedback?: Feedback) => {
+export const updateFeedback = (field: Field, feedback?: FieldFeedback) => {
   if (!feedback) return
   return runInAction(() => {
     if (!field.feedbacks.length) {

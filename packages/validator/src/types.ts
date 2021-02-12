@@ -13,32 +13,36 @@ export type ValidatorFormats =
   | 'zip'
   | (string & {})
 
-export type ValidateResult = {
+export interface IValidateResult {
   type: 'error' | 'warning' | 'success' | (string & {})
   message: string
 }
 
-export type ValidateResults = {
+export interface IValidateResults {
   error?: string[]
   warning?: string[]
   success?: string[]
 }
 
-export const isValidateResult = (obj: any): obj is ValidateResult =>
+export const isValidateResult = (obj: any): obj is IValidateResult =>
   !!obj['type'] && !!obj['message']
 
-export type ValidatorFunctionResponse = null | string | boolean | ValidateResult
+export type ValidatorFunctionResponse =
+  | null
+  | string
+  | boolean
+  | IValidateResult
 
 export type ValidatorFunction<Context = any> = (
   value: any,
-  rule: ValidatorRules<Context>,
+  rule: IValidatorRules<Context>,
   ctx: Context
 ) => ValidatorFunctionResponse | Promise<ValidatorFunctionResponse> | null
 
 export type ValidatorParsedFunction<Context = any> = (
   value: any,
   ctx: Context
-) => ValidateResult | Promise<ValidateResult> | null
+) => IValidateResult | Promise<IValidateResult> | null
 
 export type ValidatorTriggerType =
   | 'onInput'
@@ -46,7 +50,7 @@ export type ValidatorTriggerType =
   | 'onBlur'
   | (string & {})
 
-export type ValidatorRules<Context = any> = {
+export interface IValidatorRules<Context = any> {
   triggerType?: ValidatorTriggerType
   format?: ValidatorFormats
   validator?: ValidatorFunction<Context>
@@ -65,10 +69,26 @@ export type ValidatorRules<Context = any> = {
   [key: string]: any
 }
 
+export interface IRegistryLocaleMessages {
+  [key: string]: string | IRegistryLocaleMessages
+}
+
+export interface IRegistryLocales {
+  [language: string]: IRegistryLocaleMessages
+}
+
+export interface IRegistryRules<Context = any> {
+  [key: string]: ValidatorFunction<Context>
+}
+
+export interface IRegistryFormats {
+  [key: string]: string | RegExp
+}
+
 export type ValidatorDescription<Context = any> =
   | ValidatorFormats
   | ValidatorFunction<Context>
-  | ValidatorRules<Context>
+  | IValidatorRules<Context>
 
 export type MultiValidator<Context = any> = ValidatorDescription<Context>[]
 

@@ -107,16 +107,16 @@ export interface IHeartProps<Context> {
   context?: Context
 }
 
-export type Feedback = {
+export type FieldFeedback = {
   triggerType?: FieldFeedbackTriggerTypes
   type?: FieldFeedbackTypes
   code?: FieldFeedbackCodeTypes
   messages?: FeedbackMessage
 }
 
-export type FormFeedback = Feedback & {
-  path?: FormPath
-  address?: FormPath
+export type FormFeedback = FieldFeedback & {
+  path?: string
+  address?: string
 }
 
 export interface ISearchFeedback {
@@ -162,7 +162,8 @@ export type FormPatternTypes =
   | 'readOnly'
   | 'disabled'
   | 'readPretty'
-export type FormDisplayTypes = 'none' | 'hidden' | 'visible'
+  | ({} & string)
+export type FormDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)
 
 export type FormPathPattern =
   | string
@@ -262,16 +263,17 @@ export type FieldRequests = {
 export type FieldCaches = {
   value?: any
   initialValue?: any
-  feedbacks?: Feedback[]
+  feedbacks?: FieldFeedback[]
 }
 
-export type FieldDisplayTypes = 'none' | 'hidden' | 'visible'
+export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)
 
 export type FieldPatternTypes =
   | 'editable'
   | 'readOnly'
   | 'disabled'
   | 'readPretty'
+  | ({} & string)
 
 export type FieldValidator = Validator
 
@@ -321,7 +323,7 @@ export interface IFieldProps<
   readPretty?: boolean
   dataSource?: FieldDataSource
   validateFirst?: boolean
-  validator?: Validator
+  validator?: FieldValidator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
   reactions?: FieldReaction[] | FieldReaction

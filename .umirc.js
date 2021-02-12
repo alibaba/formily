@@ -80,8 +80,8 @@ export default {
         path: '/guide',
       },
       {
-        title: '如何看文档',
-        path: '/guide/learn-ducuments',
+        title: '如何学习Formily',
+        path: '/guide/learn-formily',
       },
       {
         title: '快速开始',

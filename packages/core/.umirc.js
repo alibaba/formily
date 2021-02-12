@@ -64,34 +64,13 @@ export default {
           },
           {
             title: '表单模型',
+            path: '/guide/form',
           },
           {
             title: '字段模型',
-          },
-          {
-            title: '路径模型',
-          },
-          {
-            title: '数据模型',
-          },
-          {
-            title: '校验模型',
-          },
-          {
-            title: '联动模型',
+            path: '/guide/field',
           },
         ],
-      },
-    ],
-    '/api': [
-      {
-        title: '入口',
-      },
-      {
-        title: '模型',
-      },
-      {
-        title: '类型',
       },
     ],
   },
