@@ -86,7 +86,7 @@ Formily is born for this purpose.
 
 **FormPath/FormPathPattern** Is an abstract data path form, FormPath is a path class, and FormPathPattern is a path form that can be parsed by FormPath. [Cool-path](https://github.com/janrywang/cool-path) Path parsing matching, ability to evaluate values
 
-**The virtual field** Is a special Field data structure. The difference between the Field and the Field is that it does not manage values. That is to say, it has no relevance to the value of the Form. Usually we use it, more importantly, it acts as a proxy for the status of a UI container. For example, the layout component FormBlock in Formily exists as an independent node in the whole Form Graph, however, this node type is a VirtualField, but when the final data is submitted, the FormBlock does not pollute the data structure of the submitted data.
+**The virtual field** Is a special Field data structure. The difference between the Virtual Field and the Field is that it does not manage values. That is to say, it has no relevance to the value of the Form. Usually we use it, more importantly, it acts as a proxy for the status of a UI container. For example, the layout component FormBlock in Formily exists as an independent node in the whole Form Graph, however, this node type is a VirtualField, but when the final data is submitted, the FormBlock does not pollute the data structure of the submitted data.
 
 **Observable Graph** Form is a unique Observer Tree. With the help of the observer tree, many forms-related internal linkage logic can be implemented.
 
