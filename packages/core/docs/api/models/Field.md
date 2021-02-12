@@ -462,11 +462,11 @@ interface onBlur {
 
 ```ts
 interface validate {
-  (triggerType?: 'onInput' | 'onFocus' | 'onBlur'): Promise<ValidateResults>
+  (triggerType?: 'onInput' | 'onFocus' | 'onBlur'): Promise<IValidateResults>
 }
 ```
 
-ValidateResults 参考 [ValidateResults](#validateresults)
+IValidateResults 参考 [IValidateResults](#validateresults)
 
 ### reset
 
@@ -478,13 +478,13 @@ ValidateResults 参考 [ValidateResults](#validateresults)
 
 ```ts
 interface reset {
-  (options?: IFieldResetOptions): Promise<ValidateResults>
+  (options?: IFieldResetOptions): Promise<IValidateResults>
 }
 ```
 
 IFieldResetOptions 参考 [IFieldResetOptions](#ifieldresetoptions)
 
-ValidateResults 参考 [ValidateResults](#validateresults)
+IValidateResults 参考 [IValidateResults](#validateresults)
 
 ### query
 
@@ -558,8 +558,6 @@ FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
 注意：如果要手动消费类型，直接消费全局namespace中的Formily.Core.Types中的类型即可
 </Alert>
 
-### ValidateResults
-
 ### FieldValidator
 
 ### FieldMessage
@@ -579,6 +577,8 @@ FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
 ### IGeneralField
 
 ### IGeneralFieldState
+
+### IValidateResults
 
 > Formily Typescript 类型约定
 >
