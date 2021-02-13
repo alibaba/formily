@@ -33,7 +33,18 @@ export default {
       padding-left:0 !important;
       color: transparent !important;
     }
-    .__dumi-default-layout-hero {
+    .__dumi-default-layout-hero{
+      position:relative;
+    }
+    .__dumi-default-layout-hero::after {
+      content:"";
+      display:block;
+      position:absolute;
+      width:100%;
+      height:100%;
+      top: 0;
+      opacity: 0.4;
+      left: 0;
       background-image: url(//img.alicdn.com/imgextra/i2/O1CN01DzlqfN1XV4L580ET8_!!6000000002928-55-tps-750-500.svg);
       background-size: cover;
       background-repeat: no-repeat;

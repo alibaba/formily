@@ -148,7 +148,7 @@ interface setValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### setInitialValuesIn
 
@@ -164,7 +164,7 @@ interface setInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### existValuesIn
 
@@ -180,7 +180,7 @@ interface existValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### existInitialValuesIn
 
@@ -196,7 +196,7 @@ interface existInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### getValuesIn
 
@@ -212,7 +212,7 @@ interface getValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### getInitialValuesIn
 
@@ -228,7 +228,7 @@ interface getInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### deleteValuesIn
 
@@ -244,7 +244,7 @@ interface deleteValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### deleteIntialValuesIn
 
@@ -260,7 +260,7 @@ interface deleteInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### setSubmitting
 
@@ -378,7 +378,7 @@ interface clearErrors {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### clearWarnings
 
@@ -394,7 +394,7 @@ interface clearWarnings {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### clearSuccesses
 
@@ -410,7 +410,7 @@ interface clearSuccesses {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ### query
 
@@ -426,7 +426,7 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 Query 对象 API 参考 [Query](/api/models/query)
 
@@ -589,7 +589,7 @@ interface setFieldState {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
@@ -608,7 +608,7 @@ interface getFieldState<T> {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
@@ -698,7 +698,7 @@ interface reset {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 IFieldResetOptions 参考 [IFieldResetOptions](/api/models/field/#ifieldresetoptions)
 

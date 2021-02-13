@@ -19,8 +19,8 @@ order: 1
 | initialized    | 字段是否已被初始化                                                         | Boolean                                     | 否       | `false`      |
 | mounted        | 字段是否已挂载                                                             | Boolean                                     | 否       | `false`      |
 | unmounted      | 字段是否已卸载                                                             | Boolean                                     | 否       | `false`      |
-| address        | 字段节点路径                                                               | [FormPath](/api/package/form-path)          | 是       |              |
-| path           | 字段数据路径                                                               | [FormPath](/api/package/form-path)          | 是       |              |
+| address        | 字段节点路径                                                               | [FormPath](/api/entry/form-path)            | 是       |              |
+| path           | 字段数据路径                                                               | [FormPath](/api/entry/form-path)            | 是       |              |
 | title          | 字段标题                                                                   | [FieldMessage](#fieldmessage)               | 否       | `""`         |
 | description    | 字段描述                                                                   | [FieldMessage](#fieldmessage)               | 否       | `""`         |
 | loading        | 字段加载状态                                                               | Boolean                                     | 否       | `false`      |
@@ -510,7 +510,7 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 Query 对象 API 参考 [Query](/api/models/query)
 
@@ -560,7 +560,7 @@ interface match {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
 
 ## 类型
 
