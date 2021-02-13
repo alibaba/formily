@@ -66,7 +66,7 @@ const useLayout = (props: ILayoutProps): ILayout => {
     colWrap,
   } = props
   const ref = useRef<HTMLDivElement>(null)
-  const formGridPrefixCls = usePrefixCls('form-grid')
+  const formGridPrefixCls = usePrefixCls('formily-grid')
   const observer = useRef(null)
   const [responsiveColumns] = useState(undefined)
   const [layoutParams, setLayout] = useState({})
