@@ -1,6 +1,7 @@
 import React, { Fragment, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM, { createPortal } from 'react-dom'
-import { FormProvider, createForm } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider } from '@formily/react'
 import { isNum, isStr, isBool, isFn } from '@formily/shared'
 import { Drawer } from '@alifd/next'
 import { DrawerProps } from '@alifd/next/lib/drawer'

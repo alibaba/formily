@@ -1,5 +1,6 @@
 import { Form } from 'antd'
-import { connect, mapProps, isVoidField } from '@formily/react'
+import { isVoidField } from '@formily/core'
+import { connect, mapProps } from '@formily/react'
 
 export const FormItem = connect(
   Form.Item,
