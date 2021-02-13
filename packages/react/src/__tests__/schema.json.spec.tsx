@@ -1,5 +1,6 @@
 import React from 'react'
-import { FormProvider, createForm, createSchemaField } from '../index'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '../index'
 import { Schema } from '@formily/json-schema'
 import { render } from '@testing-library/react'
 

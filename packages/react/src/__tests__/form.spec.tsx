@@ -1,6 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { FormProvider, createForm } from '../'
+import { createForm } from '@formily/core'
+import { FormProvider } from '../'
 import { FormConsumer } from '../components'
 
 test('render form', () => {
