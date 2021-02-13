@@ -4,7 +4,9 @@ order: 4
 
 # VoidField
 
-核心[字段模型](/guide/field)API，以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，Mobx 便会响应从而触发 UI 更新。
+调用[createVoidField](/api/models/form#createvoidfield)所返回的 VoidField 模型。
+
+以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，Mobx 便会响应从而触发 UI 更新。
 
 <Alert>
 
@@ -14,26 +16,36 @@ order: 4
 
 ## 属性
 
-| 属性        | 描述                                                                       | 类型                                    | 是否只读 | 默认值       |
-| ----------- | -------------------------------------------------------------------------- | --------------------------------------- | -------- | ------------ |
-| initialized | 字段是否已被初始化                                                         | Boolean                                 | 否       | `false`      |
-| mounted     | 字段是否已挂载                                                             | Boolean                                 | 否       | `false`      |
-| unmounted   | 字段是否已卸载                                                             | Boolean                                 | 否       | `false`      |
-| address     | 字段节点路径                                                               | [FormPath](/api/entry/form-path)        | 是       |              |
-| path        | 字段数据路径                                                               | [FormPath](/api/entry/form-path)        | 是       |              |
-| title       | 字段标题                                                                   | [FieldMessage](#fieldmessage)           | 否       | `""`         |
-| description | 字段描述                                                                   | [FieldMessage](#fieldmessage)           | 否       | `""`         |
-| decorator   | 字段装饰器                                                                 | Any                                     | 否       | `null`       |
-| component   | 字段组件                                                                   | Any                                     | 否       | `null`       |
-| parent      | 父级字段                                                                   | [GeneralField](#generalfield)           | 是       | `null`       |
-| display     | 字段展示状态                                                               | [FieldDisplayTypes](#fielddisplaytypes) | 否       | `"visible"`  |
-| pattern     | 字段交互模式                                                               | [FieldPatternTypes](#fieldpatterntypes) | 否       | `"editable"` |
-| hidden      | 字段是否隐藏，为 true 是 display 为 hidden，为 false 是 display 为 visible | Boolean                                 | 否       | `false`      |
-| visible     | 字段是否显示，为 true 是 display 为 visible，为 false 是 display 为 none   | Boolean                                 | 否       | `true`       |
-| disabled    | 字段是否禁用                                                               | Boolean                                 | 否       | `false`      |
-| readOnly    | 字段是否只读                                                               | Boolean                                 | 否       | `false`      |
-| readPretty  | 字段是否为阅读态                                                           | Boolean                                 | 否       | `false`      |
-| editable    | 字段是可编辑                                                               | Boolean                                 | 否       | `true`       |
+| 属性        | 描述               | 类型                                    | 是否只读 | 默认值       |
+| ----------- | ------------------ | --------------------------------------- | -------- | ------------ |
+| initialized | 字段是否已被初始化 | Boolean                                 | 否       | `false`      |
+| mounted     | 字段是否已挂载     | Boolean                                 | 否       | `false`      |
+| unmounted   | 字段是否已卸载     | Boolean                                 | 否       | `false`      |
+| address     | 字段节点路径       | [FormPath](/api/entry/form-path)        | 是       |              |
+| path        | 字段数据路径       | [FormPath](/api/entry/form-path)        | 是       |              |
+| title       | 字段标题           | [FieldMessage](#fieldmessage)           | 否       | `""`         |
+| description | 字段描述           | [FieldMessage](#fieldmessage)           | 否       | `""`         |
+| decorator   | 字段装饰器         | Any                                     | 否       | `null`       |
+| component   | 字段组件           | Any                                     | 否       | `null`       |
+| parent      | 父级字段           | [GeneralField](#generalfield)           | 是       | `null`       |
+| display     | 字段展示状态       | [FieldDisplayTypes](#fielddisplaytypes) | 否       | `"visible"`  |
+| pattern     | 字段交互模式       | [FieldPatternTypes](#fieldpatterntypes) | 否       | `"editable"` |
+| hidden      | 字段是否隐藏       | Boolean                                 | 否       | `false`      |
+| visible     | 字段是否显示       | Boolean                                 | 否       | `true`       |
+| disabled    | 字段是否禁用       | Boolean                                 | 否       | `false`      |
+| readOnly    | 字段是否只读       | Boolean                                 | 否       | `false`      |
+| readPretty  | 字段是否为阅读态   | Boolean                                 | 否       | `false`      |
+| editable    | 字段是可编辑       | Boolean                                 | 否       | `true`       |
+
+#### 详细解释
+
+**hidden**
+
+为 true 时是 display 为 hidden，为 false 时是 display 为 visible
+
+**visible**
+
+为 true 时是 display 为 visible，为 false 时是 display 为 none
 
 ## 方法
 

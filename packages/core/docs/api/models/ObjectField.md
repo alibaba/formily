@@ -4,6 +4,8 @@ order: 3
 
 # ObjectField
 
+调用[createObjectField](/api/models/form#createobjectfield)所返回的 ObjectField 模型。
+
 因为 ObjectField 是继承至 [Field](/api/models/field) 模型的，所以大部分 API 参考 Field 模型即可，该文档只讲解扩展方法
 
 ## 方法

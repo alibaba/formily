@@ -1,3 +1,7 @@
+---
+order: 5
+---
+
 # FormPath
 
 FormPath 在 Formily 中核心是解决 2 类问题：

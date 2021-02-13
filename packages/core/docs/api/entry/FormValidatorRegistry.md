@@ -1,3 +1,7 @@
+---
+order: 6
+---
+
 # Form Validator Registry
 
 ## setValidateLanguage
