@@ -4,6 +4,8 @@ order: 5
 
 # Query
 
+调用[Form](/api/models/form#query)或[Field](/api/models/field#query)实例中的 query 方法所返回的 Query 对象
+
 ## 方法
 
 ### take
