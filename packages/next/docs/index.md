@@ -25,8 +25,8 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 ## 安装
 
 ```bash
-$ npm install --save @alifd/next mobx mobx-react-lite moment
-$ npm install --save @formily/next @formily/react
+$ npm install --save @alifd/next mobx moment
+$ npm install --save @formily/core @formily/react @formily/next
 
 ```
 
@@ -38,7 +38,8 @@ $ npm install --save @formily/next @formily/react
  */
 import React from 'react'
 import { NumberPicker, FormItem, Space } from '@formily/next'
-import { createForm, FormProvider, FormConsumer, Field } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, FormConsumer, Field } from '@formily/react'
 
 const form = createForm()
 

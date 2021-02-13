@@ -9,7 +9,8 @@
 ```tsx
 import React from 'react'
 import { Input, FormItem, FormButtonGroup, Reset } from '@formily/next'
-import { createForm, FormProvider, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -51,7 +52,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Input, FormItem, FormButtonGroup, Reset } from '@formily/next'
-import { createForm, FormProvider, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -93,7 +95,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Input, FormItem, FormButtonGroup, Reset } from '@formily/next'
-import { createForm, FormProvider, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -135,7 +138,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Input, FormItem, FormButtonGroup, Reset } from '@formily/next'
-import { createForm, FormProvider, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
