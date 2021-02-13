@@ -23,13 +23,13 @@ import {
   LifeCycleTypes,
   HeartSubscriber,
   FormPatternTypes,
-  FormRequests,
-  FormFeedback,
+  IFormRequests,
+  IFormFeedback,
   ISearchFeedback,
   IFormGraph,
   IFormProps,
   IFieldResetOptions,
-  FormFields,
+  IFormFields,
   IFieldFactoryProps,
   IVoidFieldFactoryProps,
   IFormState,
@@ -73,8 +73,8 @@ export class Form<ValueType = any> {
   props: IFormProps
   heart: Heart
   graph: Graph
-  fields: FormFields = {}
-  requests: FormRequests = {}
+  fields: IFormFields = {}
+  requests: IFormRequests = {}
   indexes: Map<string, string> = new Map()
   disposers: (() => void)[] = []
 
@@ -502,7 +502,7 @@ export class Form<ValueType = any> {
     })
   }
 
-  queryFeedbacks = (search: ISearchFeedback): FormFeedback[] => {
+  queryFeedbacks = (search: ISearchFeedback): IFormFeedback[] => {
     return this.query(search.address || search.path || '*').reduce(
       (messages, field) => {
         if (isVoidField(field)) return messages

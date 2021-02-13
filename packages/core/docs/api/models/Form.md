@@ -28,9 +28,9 @@ order: 0
 | initialValues | 表单默认值             | Object                                | 否       | `{}`              |
 | valid         | 表单是否合法           | Boolean                               | 是       | `true`            |
 | invalid       | 表单是否非法           | Boolean                               | 是       | `false`           |
-| errors        | 表单校验错误消息       | [FormFeedback](#formfeedback)[]       | 是       | `[]`              |
-| warnings      | 表单校验警告消息       | [FormFeedback](#formfeedback)[]       | 是       | `[]`              |
-| successes     | 表单校验成功消息       | [FormFeedback](#formfeedback)[]       | 是       | `[]`              |
+| errors        | 表单校验错误消息       | [IFormFeedback](#iformfeedback)[]     | 是       | `[]`              |
+| warnings      | 表单校验警告消息       | [IFormFeedback](#iformfeedback)[]     | 是       | `[]`              |
+| successes     | 表单校验成功消息       | [IFormFeedback](#iformfeedback)[]     | 是       | `[]`              |
 | hidden        | 表单是否隐藏           | Boolean                               | 否       | `false`           |
 | visible       | 表单是否显示           | Boolean                               | 否       | `true`            |
 | editable      | 表单是否可编辑         | Boolean                               | 否       | `true`            |
@@ -440,13 +440,13 @@ Query 对象 API 参考 [Query](/api/models/query)
 
 ```ts
 interface queryFeedbacks {
-  (search: ISearchFeedback): FormFeedback[]
+  (search: ISearchFeedback): IFormFeedback[]
 }
 ```
 
 ISearchFeedback 参考 [ISearchFeedback](/api/models/field#isearchfeedback)
 
-FormFeedback 参考[FormFeedback](#formfeedback)
+IFormFeedback 参考[IFormFeedback](#iformfeedback)
 
 ### notify
 
@@ -487,6 +487,20 @@ interface subscibe<T> {
 ```ts
 interface unsubscribe {
   (id: number): void
+}
+```
+
+### onInit
+
+#### 描述
+
+触发表单初始化，默认不需要手动调用
+
+#### 签名
+
+```ts
+interface onInit {
+  (): void
 }
 ```
 
@@ -646,7 +660,7 @@ interface clearFormGraph {
 
 #### 描述
 
-表单校验触发器，可以按照指定路径校验，如果校验成功是不会有任何返回，校验失败会在 promise reject 中返回[FormFeedback](#formfeedback)[]
+表单校验触发器，可以按照指定路径校验，如果校验成功是不会有任何返回，校验失败会在 promise reject 中返回[IFormFeedback](#iformfeedback)[]
 
 #### 签名
 
@@ -706,10 +720,10 @@ type FormPatternTypes = 'editable' | 'disabled' | 'readOnly' | 'readPretty'
 type FormDisplayTypes = 'none' | 'hidden' | 'visible'
 ```
 
-### FormFeedback
+### IFormFeedback
 
 ```ts
-interface FormFeedback {
+interface IFormFeedback {
   path?: string //校验字段数据路径
   address?: string //校验字段绝对路径
   triggerType?: 'onInput' | 'onFocus' | 'onBlur' //校验触发类型
@@ -747,9 +761,9 @@ interface IFormState {
   unmounted?: boolean
   readonly valid?: boolean
   readonly invalid?: boolean
-  readonly errors?: FormFeedback[]
-  readonly warnings?: FormFeedback[]
-  readonly successes?: FormFeedback[]
+  readonly errors?: IFormFeedback[]
+  readonly warnings?: IFormFeedback[]
+  readonly successes?: IFormFeedback[]
 }
 ```
 

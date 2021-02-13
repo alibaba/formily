@@ -17,10 +17,10 @@ import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
   ISearchFeedback,
-  FieldFeedback,
+  IFieldFeedback,
   INodePatch,
   GeneralField,
-  FormFeedback,
+  IFormFeedback,
   LifeCycleTypes,
   FieldMatchPattern,
 } from '../types'
@@ -91,7 +91,7 @@ export const applyFieldPatches = (
 
 export const matchFeedback = (
   search?: ISearchFeedback,
-  feedback?: FormFeedback
+  feedback?: IFormFeedback
 ) => {
   if (!search || !feedback) return false
   if (search.type && search.type !== feedback.type) return false
@@ -127,7 +127,7 @@ export const queryFeedbackMessages = (
   )
 }
 
-export const updateFeedback = (field: Field, feedback?: FieldFeedback) => {
+export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
   if (!feedback) return
   return runInAction(() => {
     if (!field.feedbacks.length) {

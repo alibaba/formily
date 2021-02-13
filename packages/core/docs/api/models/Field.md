@@ -34,7 +34,7 @@ order: 1
 | validator      | 字段校验器                                                                 | [FieldValidator](#fieldvalidator)           | 否       | `null`       |
 | decorator      | 字段装饰器                                                                 | Any                                         | 否       | `null`       |
 | component      | 字段组件                                                                   | Any                                         | 否       | `null`       |
-| feedbacks      | 字段反馈信息                                                               | [FieldFeedback](#fieldfeedback)[]           | 否       | `[]`         |
+| feedbacks      | 字段反馈信息                                                               | [IFieldFeedback](#ifieldfeedback)[]         | 否       | `[]`         |
 | parent         | 父级字段                                                                   | [GeneralField](#generalfield)               | 是       | `null`       |
 | errors         | 字段错误消息                                                               | [FieldMessage](#fieldmessage)[]             | 否       | `[]`         |
 | warnings       | 字段警告消息                                                               | [FieldMessage](#fieldmessage)[]             | 否       | `[]`         |
@@ -98,9 +98,11 @@ FieldMessage 参考 [FieldMessage](#fieldmessage)
 
 ```ts
 interface setDataSource {
-  (dataSource?: any[]): void
+  (dataSource?: FieldDataSource): void
 }
 ```
+
+FieldDataSource 参考 [FieldDataSource](#fielddatasource)
 
 ### setFeedback
 
@@ -112,11 +114,11 @@ interface setDataSource {
 
 ```ts
 interface setFeedback {
-  (feedback?: FieldFeedback): void
+  (feedback?: IFieldFeedback): void
 }
 ```
 
-FieldFeedback 参考 [FieldFeedback](#fieldfeedback)
+IFieldFeedback 参考 [IFieldFeedback](#ifieldfeedback)
 
 ### setErrors
 
@@ -200,9 +202,11 @@ interface setRequired {
 
 ```ts
 interface setValue {
-  (value?: any): void
+  (value?: FieldValue): void
 }
 ```
+
+FieldValue 参考 [FieldValue](#fieldvalue)
 
 ### setInitialValue
 
@@ -214,9 +218,11 @@ interface setValue {
 
 ```ts
 interface setInitialValue {
-  (initialValue?: any): void
+  (initialValue?: FieldValue): void
 }
 ```
+
+FieldValue 参考 [FieldValue](#fieldvalue)
 
 ### setDisplay
 
@@ -288,9 +294,11 @@ interface setValidating {
 
 ```ts
 interface setComponent {
-  (component?: any, props?: any): void
+  (component?: FieldComponent, props?: any): void
 }
 ```
+
+FieldComponent 参考 [FieldComponent](#fieldcomponent)
 
 ### setComponentProps
 
@@ -316,9 +324,11 @@ interface setComponentProps {
 
 ```ts
 interface setDecorator {
-  (decorator?: any, props?: any): void
+  (decorator?: FieldDecorator, props?: any): void
 }
 ```
+
+FieldDecorator 参考 [FieldDecorator](#fielddecorator)
 
 ### setDecoratorProps
 
@@ -466,7 +476,7 @@ interface validate {
 }
 ```
 
-IValidateResults 参考 [IValidateResults](#validateresults)
+IValidateResults 参考 [IValidateResults](#ivalidateresults)
 
 ### reset
 
@@ -484,7 +494,7 @@ interface reset {
 
 IFieldResetOptions 参考 [IFieldResetOptions](#ifieldresetoptions)
 
-IValidateResults 参考 [IValidateResults](#validateresults)
+IValidateResults 参考 [IValidateResults](#ivalidateresults)
 
 ### query
 
@@ -514,13 +524,13 @@ Query 对象 API 参考 [Query](/api/models/query)
 
 ```ts
 interface queryFeedbacks {
-  (search: ISearchFeedback): FieldFeedback[]
+  (search: ISearchFeedback): IFieldFeedback[]
 }
 ```
 
 ISearchFeedback 参考 [ISearchFeedback](/api/models/field#isearchfeedback)
 
-FieldFeedback 参考[FieldFeedback](#fieldfeedback)
+IFieldFeedback 参考[IFieldFeedback](#ifieldfeedback)
 
 ### dispose
 
@@ -560,25 +570,237 @@ FormPathPattern API 参考 [FormPath](/api/package/FormPath#formpathpattern)
 
 ### FieldValidator
 
+字段校验器，类型较为复杂，需要用户仔细消化
+
+```ts
+//字符串型格式校验器
+type ValidatorFormats =
+  | 'url'
+  | 'email'
+  | 'ipv6'
+  | 'ipv4'
+  | 'idcard'
+  | 'taodomain'
+  | 'qq'
+  | 'phone'
+  | 'money'
+  | 'zh'
+  | 'date'
+  | 'zip'
+  | (string & {}) //其他格式校验器需要通过registerValidateFormats进行注册
+
+//对象型校验结果
+interface IValidateResult {
+  type: 'error' | 'warning' | 'success' | (string & {})
+  message: string
+}
+//对象型校验器
+interface IValidatorRules<Context = any> {
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur'
+  format?: ValidatorFormats
+  validator?: ValidatorFunction<Context>
+  required?: boolean
+  pattern?: RegExp | string
+  max?: number
+  maximum?: number
+  exclusiveMaximum?: number
+  exclusiveMinimum?: number
+  minimum?: number
+  min?: number
+  len?: number
+  whitespace?: boolean
+  enum?: any[]
+  message?: string
+  [key: string]: any //其他属性需要通过registerValidateRules进行注册
+}
+//函数型校验器校验结果类型
+type ValidatorFunctionResponse = null | string | boolean | IValidateResult
+
+//函数型校验器
+type ValidatorFunction<Context = any> = (
+  value: any,
+  rule: IValidatorRules<Context>,
+  ctx: Context
+) => ValidatorFunctionResponse | Promise<ValidatorFunctionResponse> | null
+
+//非数组型校验器
+type ValidatorDescription =
+  | ValidatorFormats
+  | ValidatorFunction<Context>
+  | IValidatorRules<Context>
+
+//数组型校验器
+type MultiValidator<Context = any> = ValidatorDescription<Context>[]
+
+type FieldValidator<Context = any> =
+  | ValidatorDescription<Context>
+  | MultiValidator<Context>
+```
+
 ### FieldMessage
 
-### FieldFeedback
+```ts
+type FieldMessage = string | JSXElement
+```
+
+如果在支持 JSX 的 UI 框架下，我们可以直接传 JSX 的 Node，否则，我们只能传字符串
+
+### FieldDataSource
+
+```ts
+type FieldDataSource<ValueType> = Array<{
+  label: string | JSXElement
+  value: ValueType
+  [key: string]: any
+}>
+```
+
+字段数据源其实就是一个数组，内容是啥形式由用户定，只是我们推荐用户都以 label/value 形式来表达数据源，这里需要注意的是，如果要在 UI 框架中使用，不是设置了就直接能生效，dataSource 属性必须是与具体 UI 组件产生了绑定才能生效，比如使用@formily/react，想要绑定状态，可以使用 connect 函数，也可以直接在组件内通过 useField 拿到字段实例，直接消费。
+
+### FieldValue
+
+字段值类型其实是`Any`类型，只是需要着重提一下，如果在 ArrayField 中是强制数组类型，ObjectField 中是强制对象类型
+
+### FieldComponent
+
+```ts
+type FieldComponent = string | JSXComponentConstructor
+```
+
+字段组件，如果我们在支持 JSX 的框架中使用，FieldComponent 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
+
+### FieldDecorator
+
+```ts
+type FieldDecorator = string | JSXComponentConstructor
+```
+
+字段装饰器，如果我们在支持 JSX 的框架中使用，FieldDecorator 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
 
 ### FieldDisplayTypes
 
+```ts
+type FieldDisplayTypes = 'none' | 'hidden' | 'visible'
+```
+
 ### FieldPatternTypes
+
+```ts
+type FieldPatternTypes = 'editable' | 'disabled' | 'readOnly' | 'readPretty'
+```
 
 ### FieldValidateStatus
 
+```ts
+type FieldValidateStatus = 'error' | 'warning' | 'success' | 'validating'
+```
+
+### GeneralField
+
+```ts
+type GeneralField = Field | VoidField | ArrayField | ObjectField
+```
+
+VoidField 参考 [VoidField](/api/models/void-field)
+
+ArrayField 参考 [ArrayField](/api/models/array-field)
+
+ObjectField 参考 [ObjectField](/api/models/object-field)
+
+### IFieldFeedback
+
+```ts
+interface IFieldFeedback {
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //校验触发类型
+  type?: 'error' | 'success' | 'warning' //反馈类型
+  code?: //反馈编码
+  | 'ValidateError'
+    | 'ValidateSuccess'
+    | 'ValidateWarning'
+    | 'EffectError'
+    | 'EffectSuccess'
+    | 'EffectWarning'
+  messages?: string[] //反馈消息
+}
+```
+
 ### ISearchFeedback
+
+```ts
+interface ISearchFeedback {
+  triggerType?: 'onInput' | 'onFocus' | 'onBlur' //校验触发类型
+  type?: 'error' | 'success' | 'warning' //反馈类型
+  code?: //反馈编码
+  | 'ValidateError'
+    | 'ValidateSuccess'
+    | 'ValidateWarning'
+    | 'EffectError'
+    | 'EffectSuccess'
+    | 'EffectWarning'
+  address?: FormPathPattern
+  path?: FormPathPattern
+  messages?: string[]
+}
+```
 
 ### IFieldState
 
-### IGeneralField
+```ts
+interface IFieldState {
+  hidden?: boolean
+  visible?: boolean
+  editable?: boolean
+  readOnly?: boolean
+  disabled?: boolean
+  readPretty?: boolean
+  title?: any
+  description?: any
+  loading?: boolean
+  validating?: boolean
+  modified?: boolean
+  active?: boolean
+  visited?: boolean
+  inputValue?: FieldValue
+  inputValues?: any[]
+  initialized?: boolean
+  dataSource?: FieldDataSource
+  mounted?: boolean
+  unmounted?: boolean
+  validator?: FieldValidator
+  decorator?: FieldDecorator
+  component?: FieldComponent
+  readonly parent?: GeneralField
+  errors?: FieldMessage[]
+  warnings?: FieldMessage[]
+  successes?: FieldMessage[]
+  readonly valid?: boolean
+  readonly invalid?: boolean
+  value?: FieldValue
+  initialValue?: FieldValue
+  display?: FieldDisplayTypes
+  pattern?: FieldPatternTypes
+  required?: boolean
+  readonly validateStatus?: 'error' | 'success' | 'warning' | 'validating'
+}
+```
 
 ### IGeneralFieldState
 
+```ts
+type IGeneralFieldState = IFieldState & IVoidFieldState
+```
+
+IVoidFieldState 参考 [IVoidFieldState](/api/models/void-field#ivoidfieldstate)
+
 ### IValidateResults
+
+```ts
+interface IValidateResults {
+  error?: string[]
+  warning?: string[]
+  success?: string[]
+}
+```
 
 > Formily Typescript 类型约定
 >

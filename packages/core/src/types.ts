@@ -107,14 +107,14 @@ export interface IHeartProps<Context> {
   context?: Context
 }
 
-export type FieldFeedback = {
+export interface IFieldFeedback {
   triggerType?: FieldFeedbackTriggerTypes
   type?: FieldFeedbackTypes
   code?: FieldFeedbackCodeTypes
   messages?: FeedbackMessage
 }
 
-export type FormFeedback = FieldFeedback & {
+export type IFormFeedback = IFieldFeedback & {
   path?: string
   address?: string
 }
@@ -130,19 +130,19 @@ export interface ISearchFeedback {
 
 export type FeedbackMessage = any[]
 
-export type FieldUpdate = {
+export type IFieldUpdate = {
   pattern: FormPath
   callbacks: ((...args: any[]) => any)[]
 }
 
-export type FormRequests = {
+export interface IFormRequests {
   validate?: NodeJS.Timeout
   submit?: NodeJS.Timeout
-  updates?: FieldUpdate[]
+  updates?: IFieldUpdate[]
   updateIndexes?: Record<string, number>
 }
 
-export type FormFields = Record<string, GeneralField>
+export type IFormFields = Record<string, GeneralField>
 
 export type FieldFeedbackTypes = 'error' | 'success' | 'warning'
 
@@ -255,15 +255,15 @@ export interface IVoidFieldFactoryProps<
   basePath?: FormPathPattern
 }
 
-export type FieldRequests = {
+export interface IFieldRequests {
   validate?: NodeJS.Timeout
   loader?: NodeJS.Timeout
 }
 
-export type FieldCaches = {
+export interface IFieldCaches {
   value?: any
   initialValue?: any
-  feedbacks?: FieldFeedback[]
+  feedbacks?: IFieldFeedback[]
 }
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)

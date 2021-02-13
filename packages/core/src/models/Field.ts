@@ -29,10 +29,10 @@ import {
   JSXComponent,
   JSXComponenntProps,
   LifeCycleTypes,
-  FieldFeedback,
+  IFieldFeedback,
   FeedbackMessage,
-  FieldCaches,
-  FieldRequests,
+  IFieldCaches,
+  IFieldRequests,
   FieldDisplayTypes,
   FieldPatternTypes,
   FieldValidator,
@@ -84,15 +84,15 @@ export class Field<
   validator: FieldValidator
   decorator: FieldDecorator<Decorator>
   component: FieldComponent<Component>
-  feedbacks: FieldFeedback[]
+  feedbacks: IFieldFeedback[]
   address: FormPath
   path: FormPath
 
   form: Form
   props: IFieldProps<Decorator, Component, TextType, ValueType>
 
-  private caches: FieldCaches = {}
-  private requests: FieldRequests = {}
+  private caches: IFieldCaches = {}
+  private requests: IFieldRequests = {}
   private disposers: IReactionDisposer[] = []
 
   constructor(
@@ -507,7 +507,7 @@ export class Field<
     this.dataSource = dataSource
   }
 
-  setFeedback = (feedback?: FieldFeedback) => {
+  setFeedback = (feedback?: IFieldFeedback) => {
     updateFeedback(this, feedback)
   }
 
@@ -730,7 +730,7 @@ export class Field<
     })
   }
 
-  queryFeedbacks = (search?: ISearchFeedback): FieldFeedback[] => {
+  queryFeedbacks = (search?: ISearchFeedback): IFieldFeedback[] => {
     return queryFeedbacks(this, search)
   }
 
