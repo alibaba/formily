@@ -20,7 +20,7 @@ features:
     title: 优雅的联动写法
     desc: 灵活，完备，优雅
   - icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
-    title: 难得的领域模型
+    title: 完备的领域模型
     desc: 跨终端，跨框架，UI无关
   - icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
     title: 友好的调试体验
