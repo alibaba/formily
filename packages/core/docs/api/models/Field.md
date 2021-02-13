@@ -677,6 +677,12 @@ type FieldDecorator = string | JSXComponentConstructor
 
 字段装饰器，如果我们在支持 JSX 的框架中使用，FieldDecorator 推荐直接存储 JSX 组件引用，否则可以存储一个组件标识字符串，在实际渲染的时候做一次分发。
 
+### FieldReaction
+
+```ts
+type FieldReaction = (field: GeneralField) => void
+```
+
 ### FieldDisplayTypes
 
 ```ts
