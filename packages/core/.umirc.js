@@ -36,8 +36,13 @@ export default {
     .__dumi-default-layout-hero{
       position:relative;
     }
+    .__dumi-default-layout-hero > * {
+      z-index:2;
+      position:relative;
+    }
     .__dumi-default-layout-hero::after {
       content:"";
+      z-index:0;
       display:block;
       position:absolute;
       width:100%;
