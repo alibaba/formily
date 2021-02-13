@@ -96,8 +96,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { createForm } from '@formily/core'
-import { FormProvider, onFieldReact, createSchemaField } from '@formily/react'
+import { createForm, onFieldReact } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
 import { action } from 'mobx'
 
