@@ -24,7 +24,7 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 
 ```bash
 
-$ npm install --save antd mobx mobx-react-lite moment
+$ npm install --save antd mobx moment
 
 ```
 
@@ -32,20 +32,20 @@ or
 
 ```bash
 
-$ npm install --save @alifd/next mobx mobx-react-lite moment
+$ npm install --save @alifd/next mobx moment
 
 ```
 
 ## 安装 Formily
 
 ```bash
-$ npm install --save @formily/antd @formily/react
+$ npm install --save @formily/core @formily/react @formily/antd
 
 ```
 
 or
 
 ```bash
-$ npm install --save @formily/next @formily/react
+$ npm install --save @formily/core @formily/react @formily/next
 
 ```

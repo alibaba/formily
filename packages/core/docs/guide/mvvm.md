@@ -4,7 +4,7 @@
 
 **MVVM**（**Model–view–viewmodel**）是一种 OOP 软件架构模式，它的核心是将我们的应用程序的逻辑与视图做分离，提升代码可维护性与应用健壮性。我们可以用一张图来描述：
 
-![](//img.alicdn.com/imgextra/i4/O1CN01mKeuXs1NniJ1EJtjd_!!6000000001615-55-tps-1095-299.svg)
+![](//img.alicdn.com/imgextra/i3/O1CN01jiB7h723ZFf0lBCTo_!!6000000007269-55-tps-1244-432.svg)
 
 解释一下就是，View(视图层)负责维护 UI 结构与样式，同时负责与 ViewModel(视图模型)做数据绑定，这里的数据绑定关系是双向的，也就是，ViewModel(视图模型)的数据发生变化，会触发 View(视图层)的更新，同时视图层的数据变化又会触发 ViewModel(视图模型)的变化。Model 则更偏实际业务数据处理模型。ViewModel 和 Model 都是充血模型，两者都注入了不同领域的业务逻辑，比如 ViewModel 的业务逻辑更偏视图交互层的领域逻辑，而 Model 的业务逻辑则更偏业务数据的处理逻辑。
 

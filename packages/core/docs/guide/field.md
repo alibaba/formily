@@ -39,7 +39,7 @@ ArrayField 和 ObjectField 都是继承自 Field，Field 的定位就是维护�
 
 所以，我们其实还需要一个数据路径作为专门用于数据字段写入数据和读取数据的，这里我们用 path 来描述字段的数据路径，大概的规则可以看看这张图：
 
-![](//img.alicdn.com/imgextra/i2/O1CN01i1fwdH1gxlhQVncKw_!!6000000004209-55-tps-1753-1021.svg)
+![](//img.alicdn.com/imgextra/i1/O1CN01cdzULJ1et4PBak8si_!!6000000003928-2-tps-3506-2042.png)
 
 总结下来就是，Address 永远是代表节点的绝对路径，Path 是会跳过 VoidField 的节点路径，但是如果是 VoidField 的 Path，是会保留它自身的路径位置。
 
@@ -193,7 +193,7 @@ interface Feedback {
 
 ArrayField 相比于 Field，仅仅只是在继承 Field 的基础上扩展了数组相关的方法，比如 push/pop/insert/move 这些，为什么要提供这些方法，它的能力不只是对字段的数据做处理，它内部还提供了对 ArrayField 子节点的状态转置处理主要为了保证字段的顺序与数据的顺序是一致。可以举个例子：
 
-![](//img.alicdn.com/imgextra/i4/O1CN01neKaCW1KO7JzbYOmz_!!6000000001153-55-tps-2322-720.svg)
+![](//img.alicdn.com/imgextra/i3/O1CN01mpGugu1QFlnfQ4qfo_!!6000000001947-2-tps-3506-1794.png)
 
 这是一个 move 调用的过程，数组元素的值会发生移动，同时对应字段的状态也会发生移动。
 

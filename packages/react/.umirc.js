@@ -4,14 +4,18 @@ export default {
   logo:
     '//img.alicdn.com/imgextra/i2/O1CN01f6Rq6L1IRCkxNn447_!!6000000000889-55-tps-600-89.svg',
   title: 'Formily',
+  hash: true,
   favicon:
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
-  hash: true,
   outputPath: './doc-site',
   navs: [
     {
-      title: 'Alibaba Fusion',
-      path: '/components',
+      title: '指南',
+      path: '/guide',
+    },
+    {
+      title: 'API',
+      path: '/api',
     },
     {
       title: '主站',
@@ -39,4 +43,35 @@ export default {
     }
     `,
   ],
+  menus: {
+    '/guide': [
+      {
+        title: '概览',
+        children: [
+          {
+            title: '介绍',
+            path: '/guide',
+          },
+          { title: '核心架构', path: '/guide/architecture' },
+        ],
+      },
+      {
+        title: '概念',
+        children: [
+          {
+            title: 'JSX Develop',
+            path: '/guide/jsx',
+          },
+          {
+            title: 'JSON Schema Develop',
+            path: '/guide/json-schema',
+          },
+          {
+            title: 'JSX Schema Develop',
+            path: '/guide/jsx-schema',
+          },
+        ],
+      },
+    ],
+  },
 }

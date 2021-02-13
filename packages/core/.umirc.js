@@ -34,23 +34,7 @@ export default {
       color: transparent !important;
     }
     .__dumi-default-layout-hero{
-      position:relative;
-    }
-    .__dumi-default-layout-hero > * {
-      z-index:2;
-      position:relative;
-    }
-    .__dumi-default-layout-hero::after {
-      content:"";
-      z-index:0;
-      display:block;
-      position:absolute;
-      width:100%;
-      height:100%;
-      top: 0;
-      opacity: 0.4;
-      left: 0;
-      background-image: url(//img.alicdn.com/imgextra/i2/O1CN01DzlqfN1XV4L580ET8_!!6000000002928-55-tps-750-500.svg);
+      background-image: url(//img.alicdn.com/imgextra/i4/O1CN01ZcvS4e26XMsdsCkf9_!!6000000007671-2-tps-6001-4001.png);
       background-size: cover;
       background-repeat: no-repeat;
     }
@@ -65,7 +49,7 @@ export default {
         title: '概览',
         children: [
           {
-            title: '能力说明',
+            title: '介绍',
             path: '/guide',
           },
           { title: '核心架构', path: '/guide/architecture' },
