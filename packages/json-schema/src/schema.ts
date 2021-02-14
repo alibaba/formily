@@ -8,7 +8,7 @@ import {
   ISchemaTransformerOptions,
 } from './types'
 import { map, each, isFn, instOf } from '@formily/shared'
-import { complie, shallowComplie, registerComplier } from './complier'
+import { compile, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
 import { reducePatches, registerPatches } from './patches'
 import {
@@ -426,7 +426,7 @@ export class Schema<
     return results
   }
 
-  complie = (scope?: any) => {
+  compile = (scope?: any) => {
     const shallows = [
       'properties',
       'patternProperties',
@@ -439,9 +439,9 @@ export class Schema<
     each(this, (value, key) => {
       if (isFn(value)) return
       if (!shallows.includes(key)) {
-        this[key] = value ? complie(value, scope) : value
+        this[key] = value ? compile(value, scope) : value
       } else {
-        this[key] = value ? shallowComplie(value, scope) : value
+        this[key] = value ? shallowCompile(value, scope) : value
       }
     })
     return this
@@ -534,19 +534,19 @@ export class Schema<
     return orderProperties.concat(unorderProperties).filter((item) => !!item)
   }
 
-  static complie = (expression: any, scope?: any) => {
-    return complie(expression, scope)
+  static compile = (expression: any, scope?: any) => {
+    return compile(expression, scope)
   }
 
-  static shallowComplie = (expression: any, scope?: any) => {
-    return shallowComplie(expression, scope)
+  static shallowCompile = (expression: any, scope?: any) => {
+    return shallowCompile(expression, scope)
   }
 
   static isSchemaInstance = (value: any): value is Schema => {
     return instOf(value, Schema)
   }
 
-  static registerComplier = registerComplier
+  static registerCompiler = registerCompiler
 
   static registerPatches = registerPatches
 

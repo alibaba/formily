@@ -38,7 +38,7 @@ const RecursionField = defineObservableComponent({
     const parent = useField()
     const options = inject(SchemaOptionsSymbol)
     const scope = inject(SchemaExpressionScopeSymbol)
-    const fieldSchema = props.schema?.complie?.({
+    const fieldSchema = props.schema?.compile?.({
       ...options.scope,
       ...scope,
     })
