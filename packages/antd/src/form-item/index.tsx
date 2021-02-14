@@ -88,6 +88,7 @@ export const FormItemBase = (props) => {
   </div>
 }
 
+// 适配
 export const FormItem = connect(
   FormItemBase,
   mapProps(
