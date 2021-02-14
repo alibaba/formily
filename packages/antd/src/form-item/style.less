@@ -1,0 +1,127 @@
+@import '~antd/lib/style/themes/default.less';
+
+@form-item-cls: ~'@{ant-prefix}-formily-form-item';
+
+.@{form-item-cls} {
+    display: flex;
+}
+
+.@{form-item-cls}-label {
+    flex: initial;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.@{form-item-cls}-label-align-left {
+    .@{form-item-cls}-label {
+        text-align: left;
+    } 
+}
+.@{form-item-cls}-label-align-right {
+    .@{form-item-cls}-label {
+        text-align: right;
+    } 
+}
+
+.@{form-item-cls}-label-wrap {
+    .@{form-item-cls}-label {
+        white-space: pre-line;
+    }
+}
+
+.@{form-item-cls}-control {
+    
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .@{form-item-cls}-control-content {
+        display: flex;
+        
+        .@{form-item-cls}-control-content-component {
+            flex: 1;
+        }
+
+        .@{form-item-cls}-addon-before {
+            margin-right: 8px;
+        }
+        .@{form-item-cls}-addon-after {
+            margin-left: 8px;
+        }
+    }
+}
+.@{form-item-cls}-control-align-left {
+    .@{form-item-cls}-control {
+        text-align: left;
+    }
+}
+.@{form-item-cls}-control-align-right {
+    .@{form-item-cls}-control {
+        text-align: right;
+    }
+}
+.@{form-item-cls}-control-wrap {
+    .@{form-item-cls}-control {
+        white-space: pre-line;
+    }
+}
+
+.@{form-item-cls}-asterisk {
+    color: #ff4d4f;
+    margin-right: 4px;
+    line-height: 1;
+    display: inline-block;
+    font-family: SimSun,sans-serif;
+}
+.@{form-item-cls}-colon {
+    margin-left: 2px;
+    margin-right: 8px;
+}
+
+.@{form-item-cls}-help,
+.@{form-item-cls}-extra {
+    clear: both;
+    min-height: 24px;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+    line-height: 1.5715;
+    transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+    padding-top: 0px;
+}
+
+.@{form-item-cls}-fullness {
+    > .@{form-item-cls}-control {
+        > .@{form-item-cls}-control-content {
+            > .@{form-item-cls}-control-content-component {
+                > * {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.@{form-item-cls}-error {
+    .ant-input,
+    .ant-input-affix-wrapper,
+    .ant-input-affix-wrapper:hover,
+    .ant-input:hover {
+        background-color: #fff;
+        border-color: #ff4d4f;
+    }
+
+    .ant-input-affix-wrapper-focused, 
+    .ant-input-affix-wrapper:focus,
+    .ant-input-focused, 
+    .ant-input:focus {
+        border-color: #ff7875;
+        border-right-width: 1px!important;
+        outline: 0;
+        box-shadow: 0 0 0 2px #ff4d4f33;
+    }
+
+    .@{form-item-cls}-help {
+        color: #ff4d4f;
+    }
+}
