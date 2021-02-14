@@ -3,13 +3,13 @@ import { defineComponent } from 'vue-demi'
 import { isFn, FormPath } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { defineObservableComponent } from '../utils/define-observable-component'
-import { VueComponent, IComponentMapper, IStateMapper } from '../types'
+import { VueComponent, IComponentMapper, IStateMapper, VueComponentProps } from '../types'
 import { useField } from '../hooks/useField'
 import h from '../utils/compatible-create-element'
 
-export function mapProps<T extends VueComponent>(...args: IStateMapper<T['props']>[]) {
+export function mapProps<T extends VueComponent>(...args: IStateMapper<VueComponentProps<T>>[]) {
   return (target: T) => {
-    return defineObservableComponent({
+    return defineObservableComponent<T>({
       observableSetup(collect, props, { slots }) {
         const field = useField()
         collect({
@@ -24,7 +24,7 @@ export function mapProps<T extends VueComponent>(...args: IStateMapper<T['props'
               const target = mapper.to || mapper.extract
               if (mapper.extract === 'value') {
                 if (mapper.to !== mapper.extract) {
-                  delete props.value
+                  delete props['value']
                 }
               }
               FormPath.setIn(
@@ -80,7 +80,7 @@ export function connect<T extends VueComponent>(target: T, ...args: IComponentMa
   
   return defineComponent({
     name: target['name'],
-    setup(props: T['props'], { slots }) {
+    setup(props: VueComponentProps<T>, { slots }) {
       return () =>
         h(
           Component,
