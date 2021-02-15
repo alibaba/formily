@@ -52,9 +52,12 @@ export default defineObservableComponent({
             })
           }
           const value = !isVoidField(field) ? field.value : undefined
-          const onChange = !isVoidField(field) ? field.onInput : undefined
-          const onFocus = !isVoidField(field) ? field.onFocus : undefined
-          const onBlur = !isVoidField(field) ? field.onBlur : undefined
+          const events = {} as Record<string, any>
+          if (!isVoidField(field)) {
+            events.change = field.onInput
+            events.focus = field.onFocus
+            events.blur = field.onBlur
+          }
           const disabled = !isVoidField(field)
             ? field.pattern === 'disabled' || field.pattern === 'readPretty'
             : undefined
@@ -73,11 +76,7 @@ export default defineObservableComponent({
             component,
             {
               props: componentData,
-              on: {
-                change: onChange,
-                focus: onFocus,
-                blur: onBlur
-              }
+              on: events
             },
             {
               default: () => slots.default && slots.default({

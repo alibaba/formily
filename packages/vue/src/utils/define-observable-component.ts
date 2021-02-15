@@ -3,9 +3,9 @@
 import { isVue2 } from 'vue-demi'
 import { defineObservableComponent as defineObservableComponentV2 } from './observer-in-vue2'
 import { defineObservableComponent as defineObservableComponentV3 } from './observer-in-vue3'
-import { ObservableComponentOptions } from '../types'
+import { ObservableComponentOptions, VueComponent } from '../types'
 
-const defineObservableComponent = (originalOptions: ObservableComponentOptions) => {
+function defineObservableComponent <T = VueComponent> (originalOptions: ObservableComponentOptions<T>) {
   if (isVue2) {
     return defineObservableComponentV2(originalOptions)
   } else {

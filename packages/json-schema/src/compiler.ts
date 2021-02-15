@@ -5,45 +5,45 @@ import { Schema } from './schema'
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 const ENVS = {
-  complie(expression: string, scope: any) {
+  compile(expression: string, scope: any) {
     const vars = Object.keys(scope || {})
     const params = vars.map((key) => scope[key])
     return new Function(...vars, `return (${expression});`)(...params)
   },
 }
 
-export const registerComplier = (
-  complier: (expression: string, scope: any) => any
+export const registerCompiler = (
+  compiler: (expression: string, scope: any) => any
 ) => {
-  if (isFn(complier)) {
-    ENVS.complie = complier
+  if (isFn(compiler)) {
+    ENVS.compile = compiler
   }
 }
 
-export const shallowComplie = <Source = any, Scope = any>(
+export const shallowCompile = <Source = any, Scope = any>(
   source: Source,
   scope?: Scope
 ) => {
   if (isStr(source)) {
     const matched = source.match(ExpRE)
     if (!matched) return source
-    return ENVS.complie(matched[1], scope)
+    return ENVS.compile(matched[1], scope)
   } else if (isArr(source)) {
-    return source.map((item) => shallowComplie(item, scope))
+    return source.map((item) => shallowCompile(item, scope))
   }
   return source
 }
 
-export const complie = <Source = any, Scope = any>(
+export const compile = <Source = any, Scope = any>(
   source: Source,
   scope?: Scope
 ): any => {
   const seenObjects = new WeakMap()
-  const complie = (source: any) => {
+  const compile = (source: any) => {
     if (isStr(source)) {
-      return shallowComplie(source, scope)
+      return shallowCompile(source, scope)
     } else if (isArr(source)) {
-      return source.map((value: any) => complie(value))
+      return source.map((value: any) => compile(value))
     } else if (isPlainObj(source)) {
       if ('$$typeof' in source && '_owner' in source) {
         return source
@@ -73,7 +73,7 @@ export const complie = <Source = any, Scope = any>(
       const results = reduce(
         source,
         (buf, value, key) => {
-          buf[key] = complie(value)
+          buf[key] = compile(value)
           return buf
         },
         {}
@@ -83,5 +83,5 @@ export const complie = <Source = any, Scope = any>(
     }
     return source
   }
-  return complie(source)
+  return compile(source)
 }
