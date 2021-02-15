@@ -16,7 +16,7 @@ features:
   - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
     title: 更高效
     desc: 傻瓜写法，超高性能
-  - icon: https://img.alicdn.com/imgextra/i1/O1CN01GSZPrz1ZGWzfHPnA8_!!6000000003167-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i3/O1CN01xlETZk1G0WSQT6Xii_!!6000000000560-55-tps-800-800.svg
     title: 更专业
     desc: 完备，灵活，优雅
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self

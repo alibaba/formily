@@ -1,221 +1,85 @@
 # 核心概念
 
-@formily/react 本身架构不复杂，因为它只是提供了一系列的组件和 Hooks 给用户使用，所以，这里更多的是需要用户灵活组合使用，在使用之前，必须要理解 3 个顶层概念：
+@formily/react 本身架构不复杂，因为它只是提供了一系列的组件和 Hooks 给用户使用，但是我们还是需要理解以下几个概念：
 
-- 统一表单上下文
-- 字段状态是如何绑定的
-- 协议驱动是如何驱动渲染的
+- 表单上下文
+- 字段上下文
+- 协议上下文
+- 模型绑定
+- 协议驱动
+- 三种开发模式
 
-## 统一表单上下文
+## 表单上下文
 
-从上图中我们可以看到 FormProvider 是作为表单统一上下文而存在，它的地位非常重要，主要用于将@formily/core 创建出来的[Form](//core.formilyjs.org/api/models/form)实例下发到所有子组件中，不管是在内置组件还是用户扩展的组件，都能通过[useForm](/api/hooks/use-form)读取到[Form](//core.formilyjs.org/api/models/form)实例
+从[架构图](/guide/architecture)中我们可以看到 FormProvider 是作为表单统一上下文而存在，它的地位非常重要，主要用于将@formily/core 创建出来的[Form](//core.formilyjs.org/api/models/form)实例下发到所有子组件中，不管是在内置组件还是用户扩展的组件，都能通过[useForm](/api/hooks/use-form)读取到[Form](//core.formilyjs.org/api/models/form)实例
 
-## 字段状态绑定
+## 字段上下文
 
-因为 Formily 是推崇[MVVM](//core.formilyjs.org/guide/mvvm)架构模式的，而且@formily/core 也是作为 ViewModel 而存在，所以@formily/react 就是专门负责绑定 View 和 ViewModel 的，具体怎么绑定，我们看看下面伪代码：
+从[架构图](/guide/architecture)中我们可以看到不管是 Field/ArrayField/ObjectField/VoidField，会给子树下发一个 FieldContext，我们可以在自定义组件中读取到当前字段模型，主要是使用[useField](/api/hooks/use-field)来读取，这样非常方便于做模型映射
 
-```tsx pure
-observer(() => (
-  <FormItem //------------------------ field.decorator[0]
-    {...field.decorator[1]}
-    label={field.title}
-    help={field.errors}
-    extra={field.description}
-  >
-    <Select //------------------------ field.component[0]
-      {...field.component[1]}
-      value={field.value}
-      onChange={field.onInput}
-      options={field.dataSource}
-    />
-  </FormItem>
-))
-```
+## 协议上下文
 
-以上伪代码描述了@formily/react 内部是如何进行状态绑定的，核心就几点：
+从[架构图](/guide/architecture)中我们可以看到[RecursionField](/api/components/recursion-field)会给子树下发一个 FieldSchemaContext，我们可以再自定义组件中读取到当前字段的 Schema 描述，主要是使用[useFieldSchema](/api/hooks/useFieldSchema)来读取，注意，该 Hook 只能用在[SchemaField](/api/components/SchemaField)和[RecursionField](/api/components/recursion-field)子树中使用
 
-- 字段模型中的 field.component[0]等价于 Select，这个需要用户手动传入 Select
-- 字段模型中的 value/onInput 会自动传入 Select，无需手动映射
-- 字段模型中的 dataSource 等价于 Select 的 options，需要用户手动映射
-- 字段模型中的 decorator 等价于 FormItem
-- observer 函数代表需要对字段模型的属性做依赖追踪，如果发生变化则重新渲染
+## 模型绑定
 
-然后我们再看看实际代码：
+想要理解模型绑定，需要先理解什么是[MVVM](//core.formilyjs.org/guide/mvvm)，理解了之后我们再看看这张图：
 
-```tsx pure
-import React from 'react'
-import { createForm } from '@formily/core'
-import { FormProvider, Field, observer, useField } from '@formily/react'
-import { Form, Select as AntdSelect } from 'antd'
+![](https://img.alicdn.com/imgextra/i1/O1CN01A03C191KwT1raxnDg_!!6000000001228-55-tps-2200-869.svg)
 
-const FormItem = observer((props) => {
-  const field = useField()
-  return (
-    <Form.Item
-      {...props}
-      validateStatus={field.validateStatus}
-      label={field.title}
-      help={field.errors}
-      extra={field.description}
-    >
-      {props.children}
-    </Form.Item>
-  )
-})
+在 Formily 中，@formily/core 就是 ViewModel，Component 和 Decorator 就是 View，@formily/react 就是将 ViewModel 和 View 绑定起来的胶水层，ViewModel 和 View 的绑定就叫做模型绑定，实现模型绑定的手段主要有[useField](/api/hooks/use-field)，也能使用[connect](/api/shared/connect)和[mapProps](/api/shared/map-props)，需要注意的是，Component 只需要支持 value/onChange 属性即可自动实现数据层的双向绑定。
 
-const Select = observer(({ value, onChange, ...props }) => {
-  const field = useField()
-  return (
-    <AntdSelect
-      {...props}
-      value={value}
-      onChange={onChange}
-      options={field.dataSource}
-    />
-  )
-})
-
-const form = createForm()
-
-export default () => (
-  <FormProvider form={form}>
-    <Field
-      name="select"
-      title="下拉框"
-      description="这是一段描述"
-      required
-      dataSource={[
-        { label: '选项1', value: 1 },
-        { label: '选项2', value: 2 },
-      ]}
-      decorator={[FormItem]}
-      component={[Select, { allowClear: true }]}
-    />
-  </FormProvider>
-)
-```
-
-以上绑定是基于组件的二次封装来进行绑定的，可以看到 Select 组件可以直接从 props 上拿到 value/onChange 属性，不需要单独从 field 中读取。
-
-如果我们不想二次封装，则可以使用[connect](/api/shared/connect)和[mapProps](/api/shared/mapProps)
-
-```tsx pure
-import React from 'react'
-import { createForm } from '@formily/core'
-import {
-  FormProvider,
-  Field,
-  observer,
-  useField,
-  connect,
-  mapProps,
-} from '@formily/react'
-import { Form, Select as AntdSelect } from 'antd'
-import 'antd/lib/form/style'
-import 'antd/lib/select/style'
-
-const FormItem = connect(
-  Form.Item,
-  mapProps(
-    {
-      extract: 'validateStatus',
-    },
-    {
-      extract: 'title',
-      to: 'label',
-    },
-    {
-      extract: 'description',
-      to: 'extra',
-    },
-    {
-      extract: 'errors',
-      to: 'help',
-    }
-  )
-)
-
-const Select = connect(
-  AntdSelect,
-  mapProps({
-    extract: 'dataSource',
-    to: 'options',
-  })
-)
-
-const form = createForm()
-
-export default () => (
-  <FormProvider form={form}>
-    <Field
-      name="select"
-      title="下拉框"
-      description="这是一段描述"
-      required
-      dataSource={[
-        { label: '选项1', value: 1 },
-        { label: '选项2', value: 2 },
-      ]}
-      decorator={[FormItem]}
-      component={[Select, { allowClear: true }]}
-    />
-  </FormProvider>
-)
-```
-
-从这两个例子中可以看到，想要实现自定义组件接入@formily/react，只要组件支持 value/onChange 属性就能实现无感接入，除非还需要[@formily/core](//core.formilyjs.org)代理其他状态，比如 title/description/dataSource 这些是需要手动映射状态的，只不过这些映射都是一次性的映射成本，映射好了之后，下次使用就直接使用映射完的组件，这样开发效率就会大大提升，所以，这也是[@formily/antd](//antd.formilyjs.org)和[@formily/next](//next.formilyjs.org)的意义所在，它们就是负责给用户提前映射组件，方便用户开箱即用。
-
-## 协议驱动渲染
+## 协议驱动
 
 协议驱动渲染算是@formily/react 中学习成本最高的部分了，但是学会了之后，它给业务带来的收益也是很高，总共需要理解 4 个核心概念：
 
-- JSON Schema
+- Schema
 - 递归渲染
 - 协议绑定
 - 三种开发模式
 
-### JSON Schema
+### Schema
 
 formily 的协议驱动主要是基于标准 JSON Schema 来进行驱动渲染的，同时我们在标准之上又扩展了一些`x-*`属性来表达 UI，使得整个协议可以具备完整描述一个复杂表单的能力，具体 Schema 协议，参考[Schema](/api/shared/schema) API 文档
 
 ### 递归渲染
 
-何为递归渲染？看看以下伪代码：
+何为递归渲染？递归渲染就是组件 A 在某些条件下会继续用组件 A 来渲染内容，看看以下伪代码：
 
 ```json
-{ <---- RecursionField(渲染权：RecursionField)
+{ <---- RecursionField(条件：object；渲染权：RecursionField)
   "type":"object",
   "properties":{
-    "username":{ <---- RecursionField(渲染权：RecursionField)
+    "username":{ <---- RecursionField(条件：string；渲染权：RecursionField)
       "type":"string",
       "x-component":"Input"
     },
-    "phone":{ <---- RecursionField(渲染权：RecursionField)
+    "phone":{ <---- RecursionField(条件：string；渲染权：RecursionField)
       "type":"string",
       "x-component":"Input",
       "x-validator":"phone"
     },
-    "email":{ <---- RecursionField(渲染权：RecursionField)
+    "email":{ <---- RecursionField(条件：string；渲染权：RecursionField)
       "type":"string",
       "x-component":"Input",
       "x-validator":"email"
     },
-    "contacts":{ <---- RecursionField(渲染权：RecursionField)
+    "contacts":{ <---- RecursionField(条件：array；渲染权：RecursionField)
       "type":"array",
       "x-component":"ArrayTable",
-      "items":{ <---- RecursionField(渲染权：ArrayTable)
+      "items":{ <---- RecursionField(条件：object；渲染权：ArrayTable组件)
         "type":"object",
         "properties":{
-          "username":{ <---- RecursionField(渲染权：RecursionField)
+          "username":{ <---- RecursionField(条件：string；渲染权：RecursionField)
             "type":"string",
             "x-component":"Input"
           },
-          "phone":{ <---- RecursionField(渲染权：RecursionField)
+          "phone":{ <---- RecursionField(条件：string；渲染权：RecursionField)
             "type":"string",
             "x-component":"Input",
             "x-validator":"phone"
           },
-          "email":{ <---- RecursionField(渲染权：RecursionField)
+          "email":{ <---- RecursionField(条件：string；渲染权：RecursionField)
             "type":"string",
             "x-component":"Input",
             "x-validator":"email"
@@ -227,7 +91,10 @@ formily 的协议驱动主要是基于标准 JSON Schema 来进行驱动渲染�
 }
 ```
 
-@formily/react 递归渲染的入口是[SchemaField](/api/components/schema-field)，但它内部实际是使用 [RecursionField](/api/components/recursion-field) 来渲染的，因为 JSON-Schema 就是一个递归型结构，所以 [RecursionField](/api/components/recursion-field) 在渲染的时候会从顶层 Schema 节点解析，如果是非 object 和 array 类型则直接渲染具体组件，如果是 object，则会遍历 properties 继续用 [RecursionField](/api/components/recursion-field) 渲染子级 Schema 节点，这里有点特殊的情况是 array 类型的自增列表渲染，需要用户在自定义组件内使用[RecursionField](/api/components/recursion-field)进行递归渲染，因为自增列表的 UI 个性化定制程度很高，所以就把递归渲染权交给用户来渲染了，这样设计也能让协议驱动渲染变得更加灵活。
+@formily/react 递归渲染的入口是[SchemaField](/api/components/schema-field)，但它内部实际是使用 [RecursionField](/api/components/recursion-field) 来渲染的，因为 JSON-Schema 就是一个递归型结构，所以 [RecursionField](/api/components/recursion-field) 在渲染的时候会从顶层 Schema 节点解析，如果是非 object 和 array 类型则直接渲染具体组件，如果是 object，则会遍历 properties 继续用 [RecursionField](/api/components/recursion-field) 渲染子级 Schema 节点。
+
+这里有点特殊的情况是 array 类型的自增列表渲染，需要用户在自定义组件内使用[RecursionField](/api/components/recursion-field)进行递归渲染，因为自增列表的 UI 个性化定制程度很高，所以就把递归渲染权交给用户来渲染了，这样设计也能让协议驱动渲染变得更加灵活。
+
 那 SchemaField 和 RecursionField 有啥差别呢？主要有两点：
 
 - SchemaField 是支持 Markup 语法的，它会提前解析 Markup 语法生成[JSON Schema](/api/shared/schema)移交给 RecursionField 渲染，所以 RecursionField 只能基于 [JSON Schema](/api/shared/schema) 渲染
@@ -235,4 +102,118 @@ formily 的协议驱动主要是基于标准 JSON Schema 来进行驱动渲染�
 
 ### 协议绑定
 
-### 三种开发模式
+前面讲了模型绑定，而协议绑定则是将 Schema 协议转换成模型绑定的过程，因为 JSON-Schema 协议是 JSON 字符串，可离线存储的，而模型绑定则是内存间的绑定关系，是 Runtime 层的，比如`x-component`在 Schema 中是组件的字符串标识，但是在模型中的 component 则是需要组件引用，所以 JSON 字符串与 Runtime 层是需要转换的。然后我们就可以继续完善一下以上模型绑定的图：
+
+![](https://img.alicdn.com/imgextra/i3/O1CN01jLCRxH1aa3V0x6nw4_!!6000000003345-55-tps-2200-1147.svg)
+
+总结下来，在@formily/react 中，主要有 2 层绑定关系，Schema 绑定模型，模型绑定组件，实现绑定的胶水层就是@formily/react，需要注意的是，Schema 绑定字段模型之后，字段模型中是感知不到 Schema 的，比如要修改`enum`，就是修改字段模型中的`dataSource`属性了，总之，想要更新字段模型，参考[Field](//core.formilyjs.org/models/field)，想要理解 Schema 与字段模型的映射关系可以参考[Schema](/api/shared/schema)文档
+
+## 三种开发模式
+
+从[架构图](/guide/architecture)中我们其实已经看到整个@formily/react 是有三种开发模式的，对应不同用户：
+
+- JSX 开发模式
+- JSON Schema 开发模式
+- Markup Schema 开发模式
+
+我们可以看看具体例子
+
+#### JSX 开发模式
+
+该模式主要是使用 Field/ArrayField/ObjectField/VoidField 组件
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, Field } from '@formily/react'
+import { Input } from 'antd'
+import 'antd/lib/input/style'
+
+const form = createForm()
+
+export default () => (
+  <FormProvider form={form}>
+    <Field name="input" component={[Input, { placeholder: '请输入' }]} />
+  </FormProvider>
+)
+```
+
+#### JSON Schema 开发模式
+
+该模式是给 SchemaField 的 schema 属性传递 JSON Schema 即可
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+import { Input } from 'antd'
+import 'antd/lib/input/style'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+  },
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <SchemaField
+      schema={{
+        type: 'object',
+        properties: {
+          input: {
+            type: 'string',
+            'x-component': 'Input',
+            'x-component-props': {
+              placeholder: '请输入',
+            },
+          },
+        },
+      }}
+    />
+  </FormProvider>
+)
+```
+
+#### Markup Schema 开发模式
+
+该模式算是一个对源码开发比较友好的 Schema 开发模式，同样是使用 SchemaField 组件。
+
+因为用 JSON Schema 在 JSX 环境下很难得到最好的智能提示体验，而且也不方便维护，用标签的形式可维护性会更好，智能提示也很强。
+
+Markup Schema 模式主要有以下几个特点：
+
+- 主要依赖 SchemaField.String/SchemaField.Array/SchemaField.Object...这类描述标签来表达 Schema
+- 每个描述标签都代表一个 Schema 节点，与 JSON-Schema 等价
+- SchemaField 子节点不能随意插 UI 元素，因为 SchemaField 只会解析子节点的所有 Schema 描述标签，然后转换成 JSON Schema，最终交给[RecursionField](/api/components/recursion-field)渲染，如果想要插入 UI 元素，可以在 VoidDield 上传`x-content`属性来插入 UI 元素
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+import { Input } from 'antd'
+import 'antd/lib/input/style'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+  },
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <SchemaField>
+      <SchemaField.String
+        x-component="Input"
+        x-component-props={{ placeholder: '请输入' }}
+      />
+      <div>我不会被渲染</div>
+      <SchemaField.Void x-content={<div>我会被渲染</div>} />
+    </SchemaField>
+  </FormProvider>
+)
+```
