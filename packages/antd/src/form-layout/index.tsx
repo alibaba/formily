@@ -12,6 +12,7 @@ export interface FormLayoutProps {
   labelWrap?: boolean
   labelWidth?: number
   wrapperWidth?: number
+  wrapperWrap?: boolean
   labelCol?: number
   wrapperCol?: number
   fullness?: boolean
