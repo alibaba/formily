@@ -31,7 +31,7 @@ export type AnyFunction = (...args: any[]) => any
 
 export type JSXComponent = any
 
-export type JSXComponenntProps<P> = any
+export type JSXComponenntProps<P> = Record<string, any>
 
 export type LifeCycleHandler<T> = (payload: T, context: any) => void
 

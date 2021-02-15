@@ -34,8 +34,8 @@ order: 1
 | inputValues    | 字段输入值集合     | Array                                       | 否       | `[]`         |
 | dataSource     | 字段数据源         | Array                                       | 否       | `[]`         |
 | validator      | 字段校验器         | [FieldValidator](#fieldvalidator)           | 否       | `null`       |
-| decorator      | 字段装饰器         | Any                                         | 否       | `null`       |
-| component      | 字段组件           | Any                                         | 否       | `null`       |
+| decorator      | 字段装饰器         | Any[]                                       | 否       | `null`       |
+| component      | 字段组件           | Any[]                                       | 否       | `null`       |
 | feedbacks      | 字段反馈信息       | [IFieldFeedback](#ifieldfeedback)[]         | 否       | `[]`         |
 | parent         | 父级字段           | [GeneralField](#generalfield)               | 是       | `null`       |
 | errors         | 字段错误消息       | [FieldMessage](#fieldmessage)[]             | 否       | `[]`         |

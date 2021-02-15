@@ -46,32 +46,11 @@ export default {
   menus: {
     '/guide': [
       {
-        title: '概览',
-        children: [
-          {
-            title: '介绍',
-            path: '/guide',
-          },
-          { title: '核心架构', path: '/guide/architecture' },
-        ],
+        title: '介绍',
+        path: '/guide',
       },
-      {
-        title: '概念',
-        children: [
-          {
-            title: 'JSX Develop',
-            path: '/guide/jsx',
-          },
-          {
-            title: 'JSON Schema Develop',
-            path: '/guide/json-schema',
-          },
-          {
-            title: 'JSX Schema Develop',
-            path: '/guide/jsx-schema',
-          },
-        ],
-      },
+      { title: '核心架构', path: '/guide/architecture' },
+      { title: '核心概念', path: '/guide/concept' },
     ],
   },
 }

@@ -36,11 +36,7 @@ import {
 import { Form } from './Form'
 import { Query } from './Query'
 
-export class VoidField<
-  Decorator extends JSXComponent = any,
-  Component extends JSXComponent = any,
-  TextType = any
-> {
+export class VoidField<Decorator = any, Component = any, TextType = any> {
   displayName = 'VoidField'
 
   title: TextType
@@ -51,8 +47,11 @@ export class VoidField<
   initialized: boolean
   mounted: boolean
   unmounted: boolean
-  decorator: FieldDecorator<Decorator>
-  component: FieldComponent<Component>
+
+  decoratorType: Decorator
+  decoratorProps: Record<string, any>
+  componentType: Component
+  componentProps: Record<string, any>
 
   address: FormPath
   path: FormPath
@@ -109,8 +108,10 @@ export class VoidField<
       initialized: observable.ref,
       mounted: observable.ref,
       unmounted: observable.ref,
-      decorator: observable.ref,
-      component: observable.ref,
+      decoratorType: observable.ref,
+      decoratorProps: observable,
+      componentType: observable.ref,
+      componentProps: observable,
       display: computed,
       pattern: computed,
       editable: computed,
@@ -152,6 +153,26 @@ export class VoidField<
       if (!identifier) return
     }
     return this.form.fields[identifier]
+  }
+
+  get component() {
+    return [this.componentType, this.componentProps]
+  }
+
+  set component(value: FieldComponent<Component>) {
+    const component = toArr(value)
+    this.componentType = component[0]
+    this.componentProps = component[1] || {}
+  }
+
+  get decorator() {
+    return [this.decoratorType, this.decoratorProps]
+  }
+
+  set decorator(value: FieldDecorator<Decorator>) {
+    const decorator = toArr(value)
+    this.decoratorType = decorator[0]
+    this.decoratorProps = decorator[1] || {}
   }
 
   get display(): FieldDisplayTypes {
@@ -272,38 +293,44 @@ export class VoidField<
     component?: C,
     props?: JSXComponenntProps<C>
   ) => {
-    this.component = [
-      component || FormPath.getIn(this.component, 0),
-      { ...FormPath.getIn(this.component, 1), ...props },
-    ]
+    if (component) {
+      this.componentType = component as any
+    }
+    if (props) {
+      this.componentProps = this.componentProps || {}
+      Object.assign(this.componentProps, props)
+    }
   }
 
   setComponentProps = <C extends JSXComponent = Component>(
     props?: JSXComponenntProps<C>
   ) => {
-    this.component = [
-      FormPath.getIn(this.component, 0),
-      { ...FormPath.getIn(this.component, 1), ...props },
-    ]
+    if (props) {
+      this.componentProps = this.componentProps || {}
+      Object.assign(this.componentProps, props)
+    }
   }
 
   setDecorator = <D extends JSXComponent>(
     component?: D,
     props?: JSXComponenntProps<D>
   ) => {
-    this.decorator = [
-      component || FormPath.getIn(this.decorator, 0),
-      { ...FormPath.getIn(this.decorator, 1), ...props },
-    ]
+    if (component) {
+      this.decoratorType = component as any
+    }
+    if (props) {
+      this.decoratorProps = this.decoratorProps || {}
+      Object.assign(this.decoratorProps, props)
+    }
   }
 
   setDecoratorProps = <D extends JSXComponent = Decorator>(
     props?: JSXComponenntProps<D>
   ) => {
-    this.decorator = [
-      FormPath.getIn(this.decorator, 0),
-      { ...FormPath.getIn(this.decorator, 1), ...props },
-    ]
+    if (props) {
+      this.decoratorProps = this.decoratorProps || {}
+      Object.assign(this.decoratorProps, props)
+    }
   }
 
   setState: IModelSetter<IVoidFieldState> = createModelStateSetter(this)

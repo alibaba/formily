@@ -25,8 +25,8 @@ order: 4
 | path        | 字段数据路径       | [FormPath](/api/entry/form-path)        | 是       |              |
 | title       | 字段标题           | [FieldMessage](#fieldmessage)           | 否       | `""`         |
 | description | 字段描述           | [FieldMessage](#fieldmessage)           | 否       | `""`         |
-| decorator   | 字段装饰器         | Any                                     | 否       | `null`       |
-| component   | 字段组件           | Any                                     | 否       | `null`       |
+| decorator   | 字段装饰器         | Any[]                                   | 否       | `null`       |
+| component   | 字段组件           | Any[]                                   | 否       | `null`       |
 | parent      | 父级字段           | [GeneralField](#generalfield)           | 是       | `null`       |
 | display     | 字段展示状态       | [FieldDisplayTypes](#fielddisplaytypes) | 否       | `"visible"`  |
 | pattern     | 字段交互模式       | [FieldPatternTypes](#fieldpatterntypes) | 否       | `"editable"` |

@@ -21,7 +21,7 @@ order: 0
 | submitting    | 表单是否正在提交       | Boolean                               | 否       | `false`           |
 | modified      | 表单值是否已被手动修改 | Boolean                               | 否       | `false`           |
 | pattern       | 表单交互模式           | [FormPatternTypes](#formpatterntypes) | 否       | `"editable"`      |
-| display       | 表单展示形态           | [FormDisplayTypes](#Formdisplaytypes) | 否       | `"visible"`       |
+| display       | 表单展示形态           | [FormDisplayTypes](#formdisplaytypes) | 否       | `"visible"`       |
 | mounted       | 表单是否已挂载         | Boolean                               | 否       | `false`           |
 | unmounted     | 表单是否已卸载         | Boolean                               | 否       | `false`           |
 | values        | 表单值                 | Object                                | 否       | `{}`              |

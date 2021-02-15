@@ -382,6 +382,8 @@ export const setModelState = (model: any, setter: any) => {
   const isSkipProperty = (key: string) => {
     if (key === 'address' || key === 'path') return true
     if (key === 'valid' || key === 'invalid') return true
+    if (key === 'componentType' || key === 'componentProps') return true
+    if (key === 'decoratorType' || key === 'decoratorProps') return true
     if (key === 'validateStatus') return true
     if (key === 'errors' || key === 'warnings' || key === 'successes') {
       if (model.displayName === 'Form') return true

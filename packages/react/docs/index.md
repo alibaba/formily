@@ -10,23 +10,23 @@ hero:
     - text: 开发指南
       link: /guide
 features:
-  - icon: https://img.alicdn.com/imgextra/i3/O1CN01pjiJq11h1tGS8ND76_!!6000000004218-55-tps-800-800.svg
-    title: 超高的性能
+  - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
+    title: 超高性能
     desc: 依赖追踪，高效更新，按需渲染
+  - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
+    title: 开箱即用
+    desc: 组件状态自动绑定，接入成本极低
+  - icon: https://img.alicdn.com/imgextra/i3/O1CN01JHzg8U1FZV5Mvt012_!!6000000000501-55-tps-800-800.svg
+    title: 协议驱动
+    desc: 标准JSON-Schema
   - icon: https://img.alicdn.com/imgextra/i3/O1CN0194OqFF1ui6mMT4g7O_!!6000000006070-55-tps-800-800.svg
-    title: 极佳的复用性
-    desc: 副作用独立，逻辑可拔插
-  - icon: https://img.alicdn.com/imgextra/i2/O1CN01QnfYS71E44I1ZpxU9_!!6000000000297-55-tps-800-800.svg
-    title: 优雅的联动写法
-    desc: 灵活，完备，优雅
-  - icon: https://img.alicdn.com/imgextra/i2/O1CN01YqmcpN1tDalwgyHBH_!!6000000005868-55-tps-800-800.svg
-    title: 完备的领域模型
-    desc: 跨终端，跨框架，UI无关
+    title: 场景复用
+    desc: 基于协议驱动，抽象场景组件
   - icon: https://img.alicdn.com/imgextra/i4/O1CN018vDmpl2186xdLu6KI_!!6000000006939-55-tps-800-800.svg
-    title: 友好的调试体验
+    title: 调试友好
     desc: 天然对接Formily DevTools
   - icon: https://img.alicdn.com/imgextra/i4/O1CN01u6jHgs1ZMwXpjAYnh_!!6000000003181-55-tps-800-800.svg
-    title: 完美的智能提示
+    title: 智能提示
     desc: 拥抱Typescript
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self
 ---

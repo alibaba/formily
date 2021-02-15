@@ -10,7 +10,7 @@ hero:
     - text: 内核文档
       link: /guide
 features:
-  - icon: https://img.alicdn.com/imgextra/i3/O1CN01pjiJq11h1tGS8ND76_!!6000000004218-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
     title: 超高的性能
     desc: 依赖追踪，高效更新，按需渲染
   - icon: https://img.alicdn.com/imgextra/i3/O1CN0194OqFF1ui6mMT4g7O_!!6000000006070-55-tps-800-800.svg
