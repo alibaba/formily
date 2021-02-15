@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react-lite'
-import { isFn, clone } from '@formily/shared'
+import { isFn } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
@@ -32,7 +32,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     }
     return React.createElement(
       field.decorator[0],
-      { ...clone(field.decorator[1]) },
+      { ...field.decorator[1] },
       children
     )
   }
@@ -54,7 +54,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       : undefined
     return React.createElement(
       field.component[0],
-      { disabled, readOnly, ...clone(field.component[1]), value, onChange },
+      { disabled, readOnly, ...field.component[1], value, onChange },
       children
     )
   }

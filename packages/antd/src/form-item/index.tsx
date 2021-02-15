@@ -199,7 +199,7 @@ export const FormItem: ComposeFormItem = connect(
     { extract: 'required' },
     (props, field) => {
       if (isVoidField(field)) return props
-
+      if(!field) return props
       const takeMessage = () => {
         if (props.feedbackText) return props.feedbackText
         if (field.errors.length) return field.errors
@@ -214,6 +214,7 @@ export const FormItem: ComposeFormItem = connect(
     },
     (props, field) => {
       if (isVoidField(field)) return props
+      if(!field) return props
       return {
         feedbackStatus:
           field.validateStatus === 'validating'
@@ -223,6 +224,7 @@ export const FormItem: ComposeFormItem = connect(
     },
     (props, field) => {
       if (isVoidField(field)) return props
+      if(!field) return props
       let asterisk = false
       if (field.required) {
         asterisk = true

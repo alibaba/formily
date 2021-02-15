@@ -19,6 +19,7 @@
     "build:umd": "rollup --config"
   },
   "dependencies": {
+    "@formily/json-schema": "^2.0.0-beta.3",
     "@formily/core": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "@formily/validator": "^2.0.0-beta.3",
