@@ -35,8 +35,8 @@ const useFormItemLayout = (props) => {
 export const FormItemBase = (props) => {
   const { children, ...others } = props;
   const formLayout = useFormItemLayout(others);
-  const { label, colon = true, addonBefore, addonAfter, asterisk, feedbackStatus, extra, help,
-    fullness, feedbackLayout,
+  const { label, colon = true, addonBefore, addonAfter, asterisk, feedbackStatus, extra, feedbackText,
+    fullness, feedbackLayout, inset,
     labelWidth, wrapperWidth, labelCol, wrapperCol,
     labelAlign = 'right', wrapperAlign = 'left',
     size, labelWrap, wrapperWrap, tooltip,
@@ -66,7 +66,8 @@ export const FormItemBase = (props) => {
     [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
     [`${prefixCls}-size-${size}`]: !!size,
     [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
-    [`${prefixCls}-fullness`]: !!fullness,
+    [`${prefixCls}-fullness`]: !!fullness || !!inset,
+    [`${prefixCls}-inset`]: !!inset,
     [`${prefixCls}-label-align-${labelAlign}`]: true,
     [`${prefixCls}-control-align-${wrapperAlign}`]: true,
     [`${prefixCls}-label-wrap`]: !!labelWrap,
@@ -92,7 +93,7 @@ export const FormItemBase = (props) => {
         <div style={wrapperStyle} className={cls(`${prefixCls}-control-content-component`)}>{children}</div>
         {addonAfter && <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>}
       </div>
-      {help && <div className={cls(`${prefixCls}-help`)}>{help}</div>}
+      {feedbackText && <div className={cls(`${prefixCls}-help`)}>{feedbackText}</div>}
       {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
     </div>
   </div>

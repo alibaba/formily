@@ -284,23 +284,141 @@ export default () => {
       />
 
       <SchemaField.String
-        title="帮助信息description"
+        title="帮助信息feedbackText"
         x-decorator="FormItem"
         x-component="Input"
-        description="description"
+        x-decorator-props={{
+          feedbackText: 'feedbackText'
+        }}
       />
 
       <SchemaField.String
         title="额外信息extra"
         x-decorator="FormItem"
         x-component="Input"
-        description="description"
         x-decorator-props={{
+          feedbackText: 'feedbackText',
           extra: 'extra',
         }}
       />
       
 
+    </SchemaField>
+  </FormProvider>
+}
+```
+
+## inset
+
+```tsx
+import React, { useState } from 'react'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, onFieldChange } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const Title = props => <h3>{props.text}</h3>
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    Select,
+    Cascader,
+    TreeSelect,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Radio,
+    FormItem,
+    Title,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  return <FormProvider form={form}>
+    <SchemaField>
+      
+      <SchemaField.String
+          name="input"
+          title="Input"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="Select"
+          title="Select"
+          x-decorator="FormItem"
+          x-component="Select"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="Select"
+          title="Select"
+          x-decorator="FormItem"
+          x-component="Select"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="Cascader"
+          title="Cascader"
+          x-decorator="FormItem"
+          x-component="Cascader"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="DatePicker"
+          title="DatePicker"
+          x-decorator="FormItem"
+          x-component="DatePicker"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="InputNumber"
+          title="InputNumber"
+          x-decorator="FormItem"
+          x-component="InputNumber"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="TreeSelect"
+          title="TreeSelect"
+          x-decorator="FormItem"
+          x-component="TreeSelect"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
+        <SchemaField.String
+          name="Switch"
+          title="Switch"
+          x-decorator="FormItem"
+          x-component="Switch"
+          required
+          x-decorator-props={{
+            inset: true
+          }}
+        />
     </SchemaField>
   </FormProvider>
 }

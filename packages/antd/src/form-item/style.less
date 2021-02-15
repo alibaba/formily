@@ -13,6 +13,16 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.@{form-item-cls}-label > label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+}
+
 .@{form-item-cls}-label-align-left {
     .@{form-item-cls}-label {
         text-align: left;
@@ -117,13 +127,23 @@
         
         .@{form-item-cls}-control-content-component {
             flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 32px;
         }
 
         .@{form-item-cls}-addon-before {
             margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
         }
         .@{form-item-cls}-addon-after {
             margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
         }
     }
 }
@@ -355,6 +375,20 @@
             }
         }
     }
+}
+
+.@{form-item-cls}-inset {
+    border-radius: 2px;
+    border: 1px solid #d9d9d9;
+    padding-left: 12px;
+
+    .ant-picker,
+    .ant-cascader-picker:focus .ant-cascader-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-input {
+        border: none;
+        box-shadow: none;
+    }    
 }
 
 .@{form-item-cls}-error {
