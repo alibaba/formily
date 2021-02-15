@@ -39,26 +39,10 @@ export default () => (
             addonAfter: 'addonAfter',
         }}
       />
-      <SchemaField.String
-        name="select"
-        title="下拉框"
-        x-decorator="FormItem"
-        x-component="Select"
-        required
-        // description="description"
-        x-decorator-props={{
-            // help: 'help',
-            fullness: true,
-            extra: 'extra',
-        }}
-      />
     </SchemaField>
     <FormButtonGroup>
       <Submit onSubmit={console.log}>提交</Submit>
     </FormButtonGroup>
-    <Form.Item labelCol={4} validateStatus="error" label="hello" help="help" extra="extra">
-        <NextInput />
-    </Form.Item>
   </FormProvider>
 )
 ```
@@ -138,6 +122,378 @@ export default () => (
     </FormButtonGroup>
   </FormProvider>
 )
+```
+
+## 常用属性展示
+
+```tsx
+import React, { useState } from 'react'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, onFieldChange } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const Title = props => <h3>{props.text}</h3>
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    Select,
+    Cascader,
+    TreeSelect,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Radio,
+    FormItem,
+    Title,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  return <FormProvider form={form}>
+    <SchemaField>
+      
+      <SchemaField.Void x-component="Title" x-component-props={{ text: '冒号' }} />
+      <SchemaField.String
+        title="默认"
+        x-decorator="FormItem"
+        x-component="Input"
+      />
+      <SchemaField.String
+        title="无冒号(colon=false)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          colon: false,
+        }}
+      />
+
+      <SchemaField.Void x-component="Title" x-component-props={{ text: '固定宽度设置' }} />
+      <SchemaField.String
+        title="固定label宽度(labelWidth)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          labelWidth: 300,
+        }}
+      />
+      <SchemaField.String
+        title="固定内容宽度(wraperWidth)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          labelWidth: 300,
+          wrapperWidth: 300,
+        }}
+      />
+
+      <SchemaField.Void x-component="Title" x-component-props={{ text: '对齐方式设置' }} />
+      <SchemaField.String
+        title="label左对齐(labelAlign=left)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          labelWidth: 300,
+          labelAlign: 'left'
+        }}
+      />
+      <SchemaField.String
+        title="label右对齐(labelAlign=right默认)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          labelWidth: 300,
+          labelAlign: 'right'
+        }}
+      />
+
+      <SchemaField.String
+        title="内容左对齐(wrapperAlign=left默认)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          labelWidth: 300,
+          wrapperWidth: 240,
+          wrapperAlign: 'left'
+        }}
+      />
+      <SchemaField.String
+        title="内容右对齐(wrapperAlign=right)"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          labelWidth: 300,
+          wrapperWidth: 240,
+          wrapperAlign: 'right'
+        }}
+      />
+
+      <SchemaField.String
+        title="tooltip"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          tooltip: 'tooltip',
+        }}
+      />
+
+      <SchemaField.Void x-component="Title" x-component-props={{ text: '是否撑满' }} />
+
+      <SchemaField.String
+        title="默认不撑满(fullness=false)"
+        x-decorator="FormItem"
+        x-component="Select"
+      />
+      <SchemaField.String
+        title="撑满(fullness=true)"
+        x-decorator="FormItem"
+        x-component="Select"
+        x-decorator-props={{
+          fullness: true,
+        }}
+      />
+
+      <SchemaField.Void x-component="Title" x-component-props={{ text: '辅助信息' }} />
+
+      <SchemaField.String
+        title="必填星号"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          asterisk: true,
+        }}
+      />
+
+      <SchemaField.String
+        title="前缀"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          addonBefore: 'addonBefore',
+        }}
+      />
+      <SchemaField.String
+        title="后缀"
+        x-decorator="FormItem"
+        x-component="Input"
+        x-decorator-props={{
+          addonAfter: 'addonAfter',
+        }}
+      />
+
+      <SchemaField.String
+        title="帮助信息description"
+        x-decorator="FormItem"
+        x-component="Input"
+        description="description"
+      />
+
+      <SchemaField.String
+        title="额外信息extra"
+        x-decorator="FormItem"
+        x-component="Input"
+        description="description"
+        x-decorator-props={{
+          extra: 'extra',
+        }}
+      />
+      
+
+    </SchemaField>
+  </FormProvider>
+}
+```
+
+## 反馈信息
+
+```tsx
+import React, { useState } from 'react'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, onFieldChange } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const Title = props => <h3>{props.text}</h3>
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    Select,
+    Cascader,
+    TreeSelect,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Radio,
+    FormItem,
+    Title,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  return <FormProvider form={form}>
+    <SchemaField>
+      
+      <SchemaField.String
+        title="错误状态(feedbackStatus=error)"
+        x-decorator="FormItem"
+        x-component="Input"
+        description="description"
+        x-decorator-props={{
+          feedbackStatus: 'error'
+        }}
+      />
+
+      <SchemaField.String
+        title="警告状态(feedbackStatus=warning)"
+        x-decorator="FormItem"
+        x-component="Input"
+        description="description"
+        x-decorator-props={{
+          feedbackStatus: 'warning'
+        }}
+      />
+
+      <SchemaField.String
+        title="成功状态(feedbackStatus=success)"
+        x-decorator="FormItem"
+        x-component="Input"
+        description="description"
+        x-decorator-props={{
+          feedbackStatus: 'success'
+        }}
+      />
+
+      <SchemaField.String
+        title="加载状态(feedbackStatus=loading)"
+        x-decorator="FormItem"
+        x-component="Input"
+        description="description"
+        x-decorator-props={{
+          feedbackStatus: 'loading'
+        }}
+      />
+    </SchemaField>
+  </FormProvider>
+}
+```
+
+## Size
+
+```tsx
+import React, { useState } from 'react'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, onFieldChange } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const Div = props => <div {...props} />
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    Select,
+    Cascader,
+    TreeSelect,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Radio,
+    FormItem,
+    Div,
+  },
+})
+
+const form = createForm({
+    effects: () => {
+      onFieldChange('size', ['value'], (field, form) => {
+        form.setFieldState('sizeWrap.*', (state) => {
+          if (!state.props['x-decorator-props']) {
+            state.props['x-decorator-props'] = {};
+          }
+          state.props['x-decorator-props'].size = field.value;
+        })
+      })
+    },
+})
+
+export default () => {
+  return <FormProvider form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="size"
+        title="Radio.Group"
+        x-decorator="FormItem"
+        x-component="Radio.Group"
+        enum={[
+          { value: "small", label: 'Small' },
+          { value: "default", label: 'Default' },
+          { value: "large", label: 'Large' }
+        ]}
+      />
+      <SchemaField.Void name="sizeWrap" x-component="Div">
+        <SchemaField.String
+          name="input"
+          title="Input"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+        />
+        <SchemaField.String
+          name="Select"
+          title="Select"
+          x-decorator="FormItem"
+          x-component="Select"
+          required
+        />
+        <SchemaField.String
+          name="Select"
+          title="Select"
+          x-decorator="FormItem"
+          x-component="Select"
+          required
+        />
+        <SchemaField.String
+          name="Cascader"
+          title="Cascader"
+          x-decorator="FormItem"
+          x-component="Cascader"
+          required
+        />
+        <SchemaField.String
+          name="DatePicker"
+          title="DatePicker"
+          x-decorator="FormItem"
+          x-component="DatePicker"
+          required
+        />
+        <SchemaField.String
+          name="InputNumber"
+          title="InputNumber"
+          x-decorator="FormItem"
+          x-component="InputNumber"
+          required
+        />
+        <SchemaField.String
+          name="TreeSelect"
+          title="TreeSelect"
+          x-decorator="FormItem"
+          x-component="TreeSelect"
+          required
+        />
+        <SchemaField.String
+          name="Switch"
+          title="Switch"
+          x-decorator="FormItem"
+          x-component="Switch"
+          required
+        />
+      </SchemaField.Void>
+    </SchemaField>
+  </FormProvider>
+}
 ```
 
 ## API
