@@ -28,7 +28,7 @@ const useFormItemLayout = (props) => {
     inset: props.inset ?? layout.inset,
     asterisk: props.asterisk ?? layout.asterisk,
     bordered: props.bordered ?? layout.bordered,
-    feedbackIcon: props.feedbackIcon ?? layout.feedbackIcon,
+    feedbackIcon: props.feedbackIcon,
   }
 }
 
@@ -36,7 +36,7 @@ export const FormItemBase = (props) => {
   const { children, ...others } = props;
   const formLayout = useFormItemLayout(others);
   const { label, colon = true, addonBefore, addonAfter, asterisk, feedbackStatus, extra, feedbackText,
-    fullness, feedbackLayout, inset,
+    fullness, feedbackLayout, feedbackIcon, inset, bordered = true,
     labelWidth, wrapperWidth, labelCol, wrapperCol,
     labelAlign = 'right', wrapperAlign = 'left',
     size, labelWrap, wrapperWrap, tooltip,
@@ -66,12 +66,13 @@ export const FormItemBase = (props) => {
     [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
     [`${prefixCls}-size-${size}`]: !!size,
     [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
-    [`${prefixCls}-fullness`]: !!fullness || !!inset,
+    [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
     [`${prefixCls}-inset`]: !!inset,
     [`${prefixCls}-label-align-${labelAlign}`]: true,
     [`${prefixCls}-control-align-${wrapperAlign}`]: true,
     [`${prefixCls}-label-wrap`]: !!labelWrap,
     [`${prefixCls}-control-wrap`]: !!wrapperWrap,
+    [`${prefixCls}-bordered-none`]: bordered === false || !!inset || !!feedbackIcon,
     [props.className]: !!props.className,
   })}>
     <div className={cls({
@@ -90,10 +91,16 @@ export const FormItemBase = (props) => {
     })}>
       <div className={cls(`${prefixCls}-control-content`)}>
         {addonBefore && <div className={cls(`${prefixCls}-addon-before`)}>{addonBefore}</div>}
-        <div style={wrapperStyle} className={cls(`${prefixCls}-control-content-component`)}>{children}</div>
+        <div style={wrapperStyle} className={cls({
+          [`${prefixCls}-control-content-component`]: true,
+          [`${prefixCls}-control-content-component-has-feedback-icon`]: !!feedbackIcon,
+        })}>
+          {children}
+          { feedbackIcon && <div className={cls(`${prefixCls}-feedback-icon`)}>{feedbackIcon}</div> }
+        </div>
         {addonAfter && <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>}
       </div>
-      {feedbackText && <div className={cls(`${prefixCls}-help`)}>{feedbackText}</div>}
+      {!!feedbackText?.length && <div className={cls(`${prefixCls}-help`)}>{feedbackText}</div>}
       {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
     </div>
   </div>
@@ -107,16 +114,9 @@ export const FormItem = connect(
     { extract: 'title', to: 'label' },
     { extract: 'required' },
     (props, field) => {
-      if (!field) return props
-      if (isVoidField(field)) return props
-      if (field.invalid) {
-        return {
-          help: field.editable ? field.errors : field.description,
-        }
-      } else {
-        return {
-          help: field.description,
-        }
+      return {
+        feedbackText: props.feedbackText || field.errors || field.warnings || field.successes,
+        extra: props.extra || field.description
       }
     },
     (props, field) => {

@@ -26,18 +26,10 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="input"
-        title="输入框输入框输入框"
+        title="输入框"
         x-decorator="FormItem"
         x-component="Input"
         required
-        // description="description"
-        x-decorator-props={{
-            // help: 'help',
-            extra: 'extra',
-            labelWidth: 100,
-            addonBefore: 'addonBefore',
-            addonAfter: 'addonAfter',
-        }}
       />
     </SchemaField>
     <FormButtonGroup>
@@ -128,7 +120,7 @@ export default () => (
 
 ```tsx
 import React, { useState } from 'react'
-import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, NumberPicker, Switch, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldChange } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -141,7 +133,7 @@ const SchemaField = createSchemaField({
     Cascader,
     TreeSelect,
     DatePicker,
-    InputNumber,
+    NumberPicker,
     Switch,
     Radio,
     FormItem,
@@ -308,11 +300,13 @@ export default () => {
 }
 ```
 
-## inset
+## bordered
+
+设置去除组件边框，仅限antd表单组件
 
 ```tsx
 import React, { useState } from 'react'
-import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, NumberPicker, Switch, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldChange } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -325,7 +319,125 @@ const SchemaField = createSchemaField({
     Cascader,
     TreeSelect,
     DatePicker,
-    InputNumber,
+    NumberPicker,
+    Switch,
+    Radio,
+    FormItem,
+    Title,
+  },
+})
+
+const form = createForm()
+
+export default () => {
+  return <FormProvider form={form}>
+    <SchemaField>
+      
+      <SchemaField.String
+          name="input"
+          title="Input"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="Select"
+          title="Select"
+          x-decorator="FormItem"
+          x-component="Select"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="Select"
+          title="Select"
+          x-decorator="FormItem"
+          x-component="Select"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="Cascader"
+          title="Cascader"
+          x-decorator="FormItem"
+          x-component="Cascader"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="DatePicker"
+          title="DatePicker"
+          x-decorator="FormItem"
+          x-component="DatePicker"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="NumberPicker"
+          title="NumberPicker"
+          x-decorator="FormItem"
+          x-component="NumberPicker"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="TreeSelect"
+          title="TreeSelect"
+          x-decorator="FormItem"
+          x-component="TreeSelect"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+        <SchemaField.String
+          name="Switch"
+          title="Switch"
+          x-decorator="FormItem"
+          x-component="Switch"
+          required
+          x-decorator-props={{
+            bordered: false
+          }}
+        />
+    </SchemaField>
+  </FormProvider>
+}
+```
+
+## inset
+
+设置表单组件为内嵌模式，仅限antd表单组件
+
+```tsx
+import React, { useState } from 'react'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, NumberPicker, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { createForm, onFieldChange } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+
+const Title = props => <h3>{props.text}</h3>
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+    Select,
+    Cascader,
+    TreeSelect,
+    DatePicker,
+    NumberPicker,
     Switch,
     Radio,
     FormItem,
@@ -390,10 +502,10 @@ export default () => {
           }}
         />
         <SchemaField.String
-          name="InputNumber"
-          title="InputNumber"
+          name="NumberPicker"
+          title="NumberPicker"
           x-decorator="FormItem"
-          x-component="InputNumber"
+          x-component="NumberPicker"
           required
           x-decorator-props={{
             inset: true
@@ -416,7 +528,7 @@ export default () => {
           x-component="Switch"
           required
           x-decorator-props={{
-            inset: true
+            inset: false
           }}
         />
     </SchemaField>
@@ -426,12 +538,14 @@ export default () => {
 
 ## 反馈信息
 
+可通过 `feedbackIcon` 传入指定反馈的按钮, 仅限于antd表单组件
+
 ```tsx
 import React, { useState } from 'react'
-import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, NumberPicker, Switch, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldChange } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-
+import { CheckCircleFilled, LoadingOutlined } from '@ant-design/icons'
 const Title = props => <h3>{props.text}</h3>
 
 const SchemaField = createSchemaField({
@@ -441,7 +555,7 @@ const SchemaField = createSchemaField({
     Cascader,
     TreeSelect,
     DatePicker,
-    InputNumber,
+    NumberPicker,
     Switch,
     Radio,
     FormItem,
@@ -481,7 +595,8 @@ export default () => {
         x-component="Input"
         description="description"
         x-decorator-props={{
-          feedbackStatus: 'success'
+          feedbackStatus: 'success',
+          feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />
         }}
       />
 
@@ -491,9 +606,61 @@ export default () => {
         x-component="Input"
         description="description"
         x-decorator-props={{
-          feedbackStatus: 'loading'
+          feedbackStatus: 'loading',
+          feedbackIcon: <LoadingOutlined style={{ color: '#1890ff' }} />
         }}
       />
+
+      <SchemaField.String
+        title="Select"
+        x-decorator="FormItem"
+        x-component="Select"
+        x-decorator-props={{
+          feedbackStatus: 'success',
+          feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />
+        }}
+      />
+
+      <SchemaField.String
+        title="DatePicker"
+        x-decorator="FormItem"
+        x-component="DatePicker"
+        x-decorator-props={{
+          feedbackStatus: 'success',
+          feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />
+        }}
+      />
+
+      <SchemaField.String
+        title="NumberPicker"
+        x-decorator="FormItem"
+        x-component="NumberPicker"
+        x-decorator-props={{
+          feedbackStatus: 'success',
+          feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />
+        }}
+      />
+
+      <SchemaField.String
+        title="TreeSelect"
+        x-decorator="FormItem"
+        x-component="TreeSelect"
+        x-decorator-props={{
+          feedbackStatus: 'success',
+          feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />
+        }}
+      />
+
+      <SchemaField.String
+        title="Cascader"
+        x-decorator="FormItem"
+        x-component="Cascader"
+        x-decorator-props={{
+          feedbackStatus: 'success',
+          feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />
+        }}
+      />
+
     </SchemaField>
   </FormProvider>
 }
@@ -503,7 +670,7 @@ export default () => {
 
 ```tsx
 import React, { useState } from 'react'
-import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, InputNumber, Switch, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, Radio, TreeSelect, Cascader, Select, DatePicker, FormItem, NumberPicker, Switch, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldChange } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -516,7 +683,7 @@ const SchemaField = createSchemaField({
     Cascader,
     TreeSelect,
     DatePicker,
-    InputNumber,
+    NumberPicker,
     Switch,
     Radio,
     FormItem,
@@ -588,10 +755,10 @@ export default () => {
           required
         />
         <SchemaField.String
-          name="InputNumber"
-          title="InputNumber"
+          name="NumberPicker"
+          title="NumberPicker"
           x-decorator="FormItem"
-          x-component="InputNumber"
+          x-component="NumberPicker"
           required
         />
         <SchemaField.String
