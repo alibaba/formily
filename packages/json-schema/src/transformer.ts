@@ -203,23 +203,23 @@ const getSchemaFieldReactions = (
   const setSchemaFieldState = (
     field: Formily.Core.Types.GeneralField,
     request: ISchemaFieldUpdateRequest,
-    complie: (expression: any) => any
+    compile: (expression: any) => any
   ) => {
     if (!request) return
     runInAction(() => {
       if (request.state) {
-        field.setState((state) => patchState(state, complie(request.state)))
+        field.setState((state) => patchState(state, compile(request.state)))
       }
       if (request.schema) {
         field.setState((state) =>
           patchState(
             state,
-            getFieldInternalPropsBySchema(complie(request.schema), options)
+            getFieldInternalPropsBySchema(compile(request.schema), options)
           )
         )
       }
       if (isStr(request.run)) {
-        complie(`async function(){${request.run}}`)()
+        compile(`async function(){${request.run}}`)()
       }
     })
   }
@@ -257,25 +257,25 @@ const getSchemaFieldReactions = (
         $deps,
         $dependencies,
       }
-      const when = Schema.complie(reaction?.when, scope)
-      const complie = (expression: any) => {
-        return Schema.complie(expression, scope)
+      const when = Schema.compile(reaction?.when, scope)
+      const compile = (expression: any) => {
+        return Schema.compile(expression, scope)
       }
       if (when) {
         if (reaction.target) {
           field.query(reaction.target).forEach((field) => {
-            setSchemaFieldState(field, reaction.fullfill, complie)
+            setSchemaFieldState(field, reaction.fullfill, compile)
           })
         } else {
-          setSchemaFieldState(field, reaction.fullfill, complie)
+          setSchemaFieldState(field, reaction.fullfill, compile)
         }
       } else {
         if (reaction.target) {
           field.query(reaction.target).forEach((field) => {
-            setSchemaFieldState(field, reaction.otherwise, complie)
+            setSchemaFieldState(field, reaction.otherwise, compile)
           })
         } else {
-          setSchemaFieldState(field, reaction.otherwise, complie)
+          setSchemaFieldState(field, reaction.otherwise, compile)
         }
       }
     })

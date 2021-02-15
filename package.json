@@ -101,6 +101,7 @@
     "onchange": "^5.2.0",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",
+    "param-case": "^3.0.4",
     "prettier": "^2.2.1",
     "pretty-format": "^24.0.0",
     "raw-loader": "^4.0.0",
