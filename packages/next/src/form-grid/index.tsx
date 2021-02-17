@@ -3,15 +3,15 @@ import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 import { isValid, isNum, isBool } from '@formily/shared'
 import ResizeObserver from 'resize-observer-polyfill'
-// import './style.less';
+
 interface ILayout {
   ref: React.MutableRefObject<HTMLDivElement>
   formGridPrefixCls: string
-  responsiveColumns: number
   layoutParams: {
     minWidth?: number
     columns?: number
     colWrap?: boolean
+    maxWidth?: number
   }
 }
 
@@ -41,17 +41,14 @@ interface IStyle {
 }
 
 interface IStyleProps extends IFormGridProps {
-  responsiveColumns?: number
   layoutParams?: {
     minWidth?: number
     columns?: number
     colWrap?: boolean
+    maxWidth?: number
   }
 }
 
-// const MAX_COLUMN_WIDTH = 300;
-// const MIN_COLUMN_WIDTH = 100;
-// const DEFAULT_COLUMNS = 4;
 const S = 720
 const MD = 1280
 const LG = 1920
@@ -62,13 +59,12 @@ const useLayout = (props: ILayoutProps): ILayout => {
     minColumns,
     maxColumns,
     minWidth,
-    // maxWidth,
+    maxWidth,
     colWrap,
   } = props
   const ref = useRef<HTMLDivElement>(null)
   const formGridPrefixCls = usePrefixCls('form-grid')
   const observer = useRef(null)
-  const [responsiveColumns] = useState(undefined)
   const [layoutParams, setLayout] = useState({})
 
   const calculateSmartColumns = (target: HTMLElement) => {
@@ -80,14 +76,8 @@ const useLayout = (props: ILayoutProps): ILayout => {
       }
     })
 
-    if (!isValid(maxColumns) && !isValid(maxColumns)) {
-      const minWidthUnderMinColumns = clientWidth / minColumns[index]
-      // console.log('@@:', minColumns[index], minWidthUnderMinColumns, minWidth)
-      // console.log({
-      //   minWidth: minWidthUnderMinColumns > minWidth[index] ? minWidth[index] : minWidthUnderMinColumns,
-      //   columns: target.childNodes.length,
-      //   colWrap: colWrap[index]
-      // })
+    if (!isValid(maxWidth) && !isValid(maxColumns)) {
+      const minWidthUnderMinColumns = ((clientWidth - (minColumns[index] -1)) * props.columnGap) / minColumns[index]
       return {
         minWidth: isValid(minWidth)
           ? minWidthUnderMinColumns > minWidth[index]
@@ -104,27 +94,38 @@ const useLayout = (props: ILayoutProps): ILayout => {
         colWrap: colWrap[index],
       }
     } else {
-      // const currentMinColumn = minColumns[index];
-      // const currentMaxColumn = maxColumns[index];
-      // const currentMinWidth = minWidth[index];
-      // const currentMaxWidth = maxWidth[index];
-      // const minColumnsUnderMinWidth = Math.ceil(clientWidth / currentMinWidth);
-      // const maxColumnsUnderMaxWidth = Math.floor(clientWidth / currentMaxWidth);
-      // const minColumn = minColumnsUnderMinWidth > currentMinColumn ? minColumnsUnderMinWidth : currentMinColumn
+      // maxWidth 优先级 高于maxColumns
+      const minWidthUnderMinColumns = ((clientWidth - (minColumns[index] -1)) * props.columnGap) / minColumns[index]
+      return {
+        maxWidth: isValid(maxWidth) ? maxWidth[index] : Math.floor((clientWidth - (maxColumns[index] - 1) * props.columnGap) / maxColumns[index]),
+        minWidth: isValid(minWidth)
+          ? minWidthUnderMinColumns > minWidth[index]
+            ? minWidth[index]
+            : minWidthUnderMinColumns
+          : isValid(minColumns[index])
+          ? Math.floor(
+              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
+                minColumns[index]
+            )
+          : //
+            0,
+        columns: target.childNodes.length,
+        colWrap: colWrap[index]
+      }
     }
   }
 
   useLayoutEffect(() => {
     if (ref.current) {
       observer.current = new ResizeObserver((entries) => {
-        requestAnimationFrame(() => {
+        // requestAnimationFrame(() => {
           entries.forEach((entry) => {
             const target = entry.target as HTMLElement
             const params = calculateSmartColumns(target)
             // setColumns(columns)
             setLayout(params)
           })
-        })
+        // })
       }) as any
       observer.current.observe(ref.current)
     }
@@ -135,28 +136,37 @@ const useLayout = (props: ILayoutProps): ILayout => {
   return {
     ref,
     formGridPrefixCls,
-    responsiveColumns,
     layoutParams,
   }
 }
 
 const useStyle = (props: IStyleProps): IStyle => {
-  const { responsiveColumns, columnGap, rowGap, layoutParams } = props
+  const { columnGap, rowGap, layoutParams } = props
+  const max = layoutParams.maxWidth ? `${layoutParams.maxWidth}px` : '1fr';
 
-  const style = isNum(responsiveColumns)
-    ? {
-        gridTemplateColumns: `repeat(${responsiveColumns},1fr)`,
-        gridGap: `${rowGap}px ${columnGap}px`,
+  const getMinMax = (minWidth: number, maxWidth: number) => {
+    let minmax 
+    if (minWidth === Infinity) {
+      if (!isValid(maxWidth)) {
+        minmax = '1fr'
+      } else {
+        minmax = `minmax(0px,${maxWidth}px)`
       }
-    : {
-        // 自动换行必须指定最小宽度
-        // 比自动换行
+    } else {
+      minmax = `minmax(${minWidth}px,${isValid(maxWidth) ? `${maxWidth}px` : '1fr'})`
+    }
+    return minmax
+  }
+  const style = {
+        // 如果 colWarp true minWidth生效优先级高于minColumn 并且必须给minWidth | minColumn
+        // 如果 colWarap false minWidth生效优先级高于minColumn
+        // maxWidth 优先级高于 maxColumn
         gridTemplateColumns: layoutParams.colWrap
-          ? `repeat(auto-fill, minmax(${layoutParams.minWidth}px,1fr))`
-          : `repeat(${layoutParams.columns}, minmax(${layoutParams.minWidth}px,1fr))`,
+          ? `repeat(auto-fill, minmax(${layoutParams.minWidth}px,${max}))`
+          // : `repeat(${layoutParams.columns},${layoutParams.minWidth === Infinity ? '1fr' : `minmax(${layoutParams.minWidth}px,${max})`})`,
+          : `repeat(${layoutParams.columns}, ${getMinMax(layoutParams.minWidth, layoutParams.maxWidth)})`,
         gridGap: `${rowGap}px ${columnGap}px`,
       }
-
   return style
 }
 
@@ -201,7 +211,7 @@ export const FormGrid: React.FC<IFormGridProps> = (props) => {
   }
   const { children, columnGap, rowGap, breakpoints } = props
   const normalizedProps = normalizeProps(props)
-  const { ref, formGridPrefixCls, responsiveColumns, layoutParams } = useLayout(
+  const { ref, formGridPrefixCls, layoutParams } = useLayout(
     normalizedProps
   )
 
@@ -209,15 +219,12 @@ export const FormGrid: React.FC<IFormGridProps> = (props) => {
     columnGap,
     rowGap,
     breakpoints,
-    responsiveColumns,
     layoutParams,
   })
 
   return (
     <div
-      className={cls(`${formGridPrefixCls}-layout`, {
-        flex: !isNum(responsiveColumns),
-      })}
+      className={cls(`${formGridPrefixCls}-layout`)}
       style={styles}
       ref={ref}
     >
@@ -229,10 +236,7 @@ export const FormGrid: React.FC<IFormGridProps> = (props) => {
 FormGrid.defaultProps = {
   columnGap: 10,
   rowGap: 5,
-  // minWidth: 0,
-  // maxWidth: Infinity,
   minColumns: 0,
-  // maxColumns: 5,
   breakpoints: [S, MD, LG],
   colWrap: false,
 }
