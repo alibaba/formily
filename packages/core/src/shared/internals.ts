@@ -17,10 +17,10 @@ import {
   ISpliceArrayStateProps,
   IExchangeArrayStateProps,
   ISearchFeedback,
-  Feedback,
+  IFieldFeedback,
   INodePatch,
   GeneralField,
-  FormFeedback,
+  IFormFeedback,
   LifeCycleTypes,
   FieldMatchPattern,
 } from '../types'
@@ -91,7 +91,7 @@ export const applyFieldPatches = (
 
 export const matchFeedback = (
   search?: ISearchFeedback,
-  feedback?: FormFeedback
+  feedback?: IFormFeedback
 ) => {
   if (!search || !feedback) return false
   if (search.type && search.type !== feedback.type) return false
@@ -111,8 +111,8 @@ export const queryFeedbacks = (field: Field, search?: ISearchFeedback) => {
   return field.feedbacks.filter((feedback) => {
     return matchFeedback(search, {
       ...feedback,
-      address: field.address,
-      path: field.path,
+      address: field.address?.toString(),
+      path: field.path?.toString(),
     })
   })
 }
@@ -127,7 +127,7 @@ export const queryFeedbackMessages = (
   )
 }
 
-export const updateFeedback = (field: Field, feedback?: Feedback) => {
+export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
   if (!feedback) return
   return runInAction(() => {
     if (!field.feedbacks.length) {
@@ -382,6 +382,8 @@ export const setModelState = (model: any, setter: any) => {
   const isSkipProperty = (key: string) => {
     if (key === 'address' || key === 'path') return true
     if (key === 'valid' || key === 'invalid') return true
+    if (key === 'componentType' || key === 'componentProps') return true
+    if (key === 'decoratorType' || key === 'decoratorProps') return true
     if (key === 'validateStatus') return true
     if (key === 'errors' || key === 'warnings' || key === 'successes') {
       if (model.displayName === 'Form') return true

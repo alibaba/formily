@@ -1,5 +1,5 @@
 import { parseValidator } from './parser'
-import { ValidateResults, Validator, IValidatorOptions } from './types'
+import { IValidateResults, Validator, IValidatorOptions } from './types'
 import {
   registerValidateFormats,
   registerValidateLocale,
@@ -19,9 +19,9 @@ export const validate = async <Context = any>(
   value: any,
   validator: Validator<Context>,
   options?: IValidatorOptions<Context>
-): Promise<ValidateResults> => {
+): Promise<IValidateResults> => {
   const validates = parseValidator(validator, options)
-  const results: ValidateResults = {
+  const results: IValidateResults = {
     error: [],
     success: [],
     warning: [],

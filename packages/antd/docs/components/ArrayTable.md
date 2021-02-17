@@ -16,7 +16,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Button, Alert } from 'antd'
 import 'antd/lib/alert/style'
 
@@ -160,7 +161,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
@@ -313,13 +315,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import {
-  FormProvider,
-  createForm,
-  onFieldChange,
-  onFieldReact,
-  createSchemaField,
-} from '@formily/react'
+import { createForm, onFieldChange, onFieldReact } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
@@ -475,7 +472,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Button } from 'antd'
 
 const SchemaField = createSchemaField({

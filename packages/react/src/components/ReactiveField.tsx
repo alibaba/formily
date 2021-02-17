@@ -32,7 +32,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     }
     return React.createElement(
       field.decorator[0],
-      field.decorator[1] || {},
+      { ...field.decorator[1] },
       children
     )
   }

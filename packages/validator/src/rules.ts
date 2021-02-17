@@ -10,7 +10,7 @@ import {
   isNum,
 } from '@formily/shared'
 import { getValidateFormats } from './registry'
-import { ValidatorRules } from './types'
+import { IValidatorRules, IRegistryRules } from './types'
 
 const isValidateEmpty = (value: any) => {
   if (isArr(value)) {
@@ -26,64 +26,64 @@ const isValidateEmpty = (value: any) => {
 const getLength = (value: any) =>
   isStr(value) ? stringLength(value) : value ? value.length : 0
 
-export default {
-  format(value: any, rule: ValidatorRules) {
+const RULES: IRegistryRules = {
+  format(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     return !new RegExp(getValidateFormats(rule.format) || '').test(value)
       ? rule.message
       : ''
   },
-  required(value: any, rule: ValidatorRules) {
+  required(value: any, rule: IValidatorRules) {
     if (rule.required === false) return ''
     return isValidateEmpty(value) ? rule.message : ''
   },
-  max(value: any, rule: ValidatorRules) {
+  max(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = isNum(value) ? value : getLength(value)
     const max = Number(rule.max)
     return length > max ? rule.message : ''
   },
-  maximum(value: any, rule: ValidatorRules) {
+  maximum(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = isNum(value) ? value : getLength(value)
     const max = Number(rule.maximum)
     return length > max ? rule.message : ''
   },
-  exclusiveMaximum(value: any, rule: ValidatorRules) {
+  exclusiveMaximum(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = isNum(value) ? value : getLength(value)
     const max = Number(rule.exclusiveMaximum)
     return length >= max ? rule.message : ''
   },
-  minimum(value: any, rule: ValidatorRules) {
+  minimum(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = isNum(value) ? value : getLength(value)
     const min = Number(rule.minimum)
     return length < min ? rule.message : ''
   },
-  exclusiveMinimum(value: any, rule: ValidatorRules) {
+  exclusiveMinimum(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = isNum(value) ? value : getLength(value)
     const min = Number(rule.exclusiveMinimum)
     return length <= min ? rule.message : ''
   },
-  len(value: any, rule: ValidatorRules) {
+  len(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = getLength(value)
     const len = Number(rule.len)
     return length !== len ? rule.message : ''
   },
-  min(value: any, rule: ValidatorRules) {
+  min(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const length = isNum(value) ? value : getLength(value)
     const min = Number(rule.min)
     return length < min ? rule.message : ''
   },
-  pattern(value: any, rule: ValidatorRules) {
+  pattern(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     return !new RegExp(rule.pattern).test(value) ? rule.message : ''
   },
-  async validator(value: any, rule: ValidatorRules, context: any) {
+  async validator(value: any, rule: IValidatorRules, context: any) {
     if (isFn(rule.validator)) {
       const response = await Promise.resolve(
         rule.validator(value, rule, context)
@@ -97,15 +97,17 @@ export default {
     /* istanbul ignore next */
     throw new Error("The rule's validator property must be a function.")
   },
-  whitespace(value: any, rule: ValidatorRules) {
+  whitespace(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     if (rule.whitespace) {
       return /^\s+$/.test(value) ? rule.message : ''
     }
   },
-  enum(value: any, rule: ValidatorRules) {
+  enum(value: any, rule: IValidatorRules) {
     if (!isValid(value)) return ''
     const enums = toArr(rule.enum)
     return enums.indexOf(value) === -1 ? rule.message : ''
   },
 }
+
+export default RULES

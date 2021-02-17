@@ -1,11 +1,11 @@
 import { isFn, isStr, FormPath } from '@formily/shared'
-import { ValidateResult, ValidatorRules } from './types'
+import { IValidateResult, IValidatorRules } from './types'
 import { getValidateMessageTemplateEngine } from './registry'
 
 export const render = (
-  result: ValidateResult,
-  rules: ValidatorRules
-): ValidateResult => {
+  result: IValidateResult,
+  rules: IValidatorRules
+): IValidateResult => {
   const { message } = result
   if (isStr(result.message)) {
     const template = getValidateMessageTemplateEngine()

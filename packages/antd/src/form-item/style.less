@@ -1,0 +1,451 @@
+@import '~antd/lib/style/themes/default.less';
+
+@form-item-cls: ~'@{ant-prefix}-formily-form-item';
+
+.@{form-item-cls} {
+    display: flex;
+    margin-bottom: 24px;
+}
+
+.@{form-item-cls}-label {
+    flex: initial;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.@{form-item-cls}-label > label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 32px;
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+}
+
+.@{form-item-cls}-label-align-left {
+    .@{form-item-cls}-label {
+        text-align: left;
+    } 
+}
+.@{form-item-cls}-label-align-right {
+    .@{form-item-cls}-label {
+        text-align: right;
+    } 
+}
+
+.@{form-item-cls}-label-wrap {
+    .@{form-item-cls}-label {
+        white-space: pre-line;
+    }
+}
+
+.@{form-item-cls}-size-small {
+    .@{form-item-cls}-control-content {
+        min-height: 24px;
+    }
+    .@{form-item-cls}-label > label {
+        height: 24px;
+    }
+
+    .ant-input-number input {
+        padding: 0px 7px;
+        height: 22px;
+    }
+
+    .ant-btn {
+        height: 24px;
+        padding: 0 7px;
+        font-size: 14px;
+        border-radius: 2px;
+    }
+
+    .ant-picker,
+    .ant-input {
+        padding: 0px 7px;
+    }
+
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        padding: 0px 7px;
+        height: 24px;
+    }
+
+    .ant-switch {
+        min-width: 28px;
+        height: 16px;
+        line-height: 16px;
+    }
+}
+
+.@{form-item-cls}-size-large {
+    .@{form-item-cls}-control-content {
+        min-height: 40px;
+    }
+    .@{form-item-cls}-label > label {
+        height: 40px;
+    }
+
+    .ant-picker {
+        padding: 6.5px 11px;
+    }
+
+    .ant-input-number input {
+        height: 38px;
+    }
+
+    .ant-btn {
+        height: 40px;
+        padding: 6.4px 15px;
+        font-size: 16px;
+        border-radius: 2px;
+    }
+
+    .ant-select {
+        font-size: 16px;
+    }
+
+    .ant-input {
+        padding: 6.5px 11px;
+        font-size: 16px;
+    }
+
+    .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+        padding: 0 11px;
+        height: 40px;
+    }
+}
+
+.@{form-item-cls}-control {
+    
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .@{form-item-cls}-control-content {
+        display: flex;
+        
+        .@{form-item-cls}-control-content-component {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            min-height: 32px;
+        }
+
+        .@{form-item-cls}-addon-before {
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
+        }
+        .@{form-item-cls}-addon-after {
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
+        }
+    }
+}
+
+.@{form-item-cls}-tooltip {
+    margin-left: 4px;
+    color: #00000073;
+}
+
+.@{form-item-cls}-item-col-24 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 100%;
+            flex: 0 0 100%;
+    max-width: 100%;
+}
+.@{form-item-cls}-item-col-23 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 95.83333333%;
+            flex: 0 0 95.83333333%;
+    max-width: 95.83333333%;
+}
+.@{form-item-cls}-item-col-22 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 91.66666667%;
+            flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+}
+.@{form-item-cls}-item-col-21 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 87.5%;
+            flex: 0 0 87.5%;
+    max-width: 87.5%;
+}
+.@{form-item-cls}-item-col-20 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 83.33333333%;
+            flex: 0 0 83.33333333%;
+    max-width: 83.33333333%;
+}
+.@{form-item-cls}-item-col-19 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 79.16666667%;
+            flex: 0 0 79.16666667%;
+    max-width: 79.16666667%;
+}
+.@{form-item-cls}-item-col-18 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 75%;
+            flex: 0 0 75%;
+    max-width: 75%;
+}
+.@{form-item-cls}-item-col-17 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 70.83333333%;
+            flex: 0 0 70.83333333%;
+    max-width: 70.83333333%;
+}
+.@{form-item-cls}-item-col-16 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 66.66666667%;
+            flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+}
+.@{form-item-cls}-item-col-15 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 62.5%;
+            flex: 0 0 62.5%;
+    max-width: 62.5%;
+}
+.@{form-item-cls}-item-col-14 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 58.33333333%;
+            flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+}
+.@{form-item-cls}-item-col-13 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 54.16666667%;
+            flex: 0 0 54.16666667%;
+    max-width: 54.16666667%;
+}
+.@{form-item-cls}-item-col-12 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 50%;
+            flex: 0 0 50%;
+    max-width: 50%;
+}
+.@{form-item-cls}-item-col-11 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 45.83333333%;
+            flex: 0 0 45.83333333%;
+    max-width: 45.83333333%;
+}
+.@{form-item-cls}-item-col-10 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 41.66666667%;
+            flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+}
+.@{form-item-cls}-item-col-9 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 37.5%;
+            flex: 0 0 37.5%;
+    max-width: 37.5%;
+}
+.@{form-item-cls}-item-col-8 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 33.33333333%;
+            flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+}
+.@{form-item-cls}-item-col-7 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 29.16666667%;
+            flex: 0 0 29.16666667%;
+    max-width: 29.16666667%;
+}
+.@{form-item-cls}-item-col-6 {
+    display: block;
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 25%;
+          flex: 0 0 25%;
+  max-width: 25%;
+}
+.@{form-item-cls}-item-col-5 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 20.83333333%;
+            flex: 0 0 20.83333333%;
+    max-width: 20.83333333%;
+}
+.@{form-item-cls}-item-col-4 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 16.66666667%;
+            flex: 0 0 16.66666667%;
+    max-width: 16.66666667%;
+}
+.@{form-item-cls}-item-col-3 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 12.5%;
+            flex: 0 0 12.5%;
+    max-width: 12.5%;
+}
+.@{form-item-cls}-item-col-2 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 8.33333333%;
+            flex: 0 0 8.33333333%;
+    max-width: 8.33333333%;
+}
+.@{form-item-cls}-item-col-1 {
+    display: block;
+    -webkit-box-flex: 0;
+        -ms-flex: 0 0 4.16666667%;
+            flex: 0 0 4.16666667%;
+    max-width: 4.16666667%;
+}
+.@{form-item-cls}-item-col-0 {
+    display: none;
+}
+
+
+.@{form-item-cls}-control-align-left {
+    .@{form-item-cls}-control-content {
+        justify-content: flex-start;
+    }
+}
+.@{form-item-cls}-control-align-right {
+    .@{form-item-cls}-control-content {
+        justify-content: flex-end;
+    }
+}
+.@{form-item-cls}-control-wrap {
+    .@{form-item-cls}-control {
+        white-space: pre-line;
+    }
+}
+
+.@{form-item-cls}-asterisk {
+    color: #ff4d4f;
+    margin-right: 4px;
+    line-height: 1;
+    display: inline-block;
+    font-family: SimSun,sans-serif;
+}
+.@{form-item-cls}-colon {
+    margin-left: 2px;
+    margin-right: 8px;
+}
+
+.@{form-item-cls}-help,
+.@{form-item-cls}-extra {
+    clear: both;
+    min-height: 24px;
+    color: rgba(0, 0, 0, 0.45);
+    font-size: 14px;
+    line-height: 1.5715;
+    transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+    padding-top: 0px;
+}
+
+.@{form-item-cls}-fullness {
+    > .@{form-item-cls}-control {
+        > .@{form-item-cls}-control-content {
+            > .@{form-item-cls}-control-content-component {
+                > *:first-child {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+
+.@{form-item-cls}-control-content-component-has-feedback-icon {
+    border-radius: 2px;
+    border: 1px solid #d9d9d9;
+    padding-right: 8px;
+}
+
+
+.@{form-item-cls}-bordered-none {
+    .ant-input-number,
+    .ant-picker,
+    .ant-cascader-picker:focus .ant-cascader-input,
+    .ant-select:not(.ant-select-customize-input) .ant-select-selector,
+    .ant-input {
+        border: none;
+        box-shadow: none;
+    }    
+}
+
+.@{form-item-cls}-inset {
+    border-radius: 2px;
+    border: 1px solid #d9d9d9;
+    padding-left: 12px;
+}
+
+.@{form-item-cls}-error {
+    .ant-input,
+    .ant-input-affix-wrapper,
+    .ant-input-affix-wrapper:hover,
+    .ant-input:hover {
+        background-color: #fff;
+        border-color: #ff4d4f;
+    }
+
+    .ant-input-affix-wrapper-focused, 
+    .ant-input-affix-wrapper:focus,
+    .ant-input-focused, 
+    .ant-input:focus {
+        border-color: #ff7875;
+        border-right-width: 1px!important;
+        outline: 0;
+        box-shadow: 0 0 0 2px #ff4d4f33;
+    }
+
+    .@{form-item-cls}-help {
+        color: #ff4d4f;
+    }
+}
+
+.@{form-item-cls}-warning {
+    .ant-input,
+    .ant-input-affix-wrapper,
+    .ant-input-affix-wrapper:hover,
+    .ant-input:hover {
+        background-color: #fff;
+        border-color: #faad14;
+    }
+
+    .ant-input-affix-wrapper-focused, 
+    .ant-input-affix-wrapper:focus,
+    .ant-input-focused, 
+    .ant-input:focus {
+        border-color: #ffc53d;
+        border-right-width: 1px!important;
+        outline: 0;
+        box-shadow: 0 0 0 2px #faad1433;
+    }
+
+    .@{form-item-cls}-help {
+        color: #faad14;
+    }
+}

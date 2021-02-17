@@ -1,8 +1,8 @@
 import React from 'react'
 import { render, fireEvent, waitFor } from '@testing-library/react'
+import { createForm } from '@formily/core'
 import {
   FormProvider,
-  createForm,
   ArrayField,
   ObjectField,
   VoidField,

@@ -7,7 +7,7 @@ import {
   onFieldInputValueChange,
   onFieldMount,
   onFieldReact,
-  onFieldUnMount,
+  onFieldUnmount,
   onFieldValidateEnd,
   onFieldValidateStart,
   onFieldValidateFailed,
@@ -28,15 +28,15 @@ import {
   onFormSubmitValidateStart,
   onFormSubmitValidateSuccess,
   onFormSubmitValidateEnd,
-  onFormUnMount,
+  onFormUnmount,
   onFormValidateEnd,
   onFormValidateStart,
   onFormValidateFailed,
   onFormValidateSuccess,
   onFormValuesChange,
   isVoidField,
-  runEffects,
 } from '../'
+import { runEffects } from '../shared'
 import { attach, sleep } from './shared'
 
 test('onFormInit/onFormMount/onFormUnmount', () => {
@@ -48,7 +48,7 @@ test('onFormInit/onFormMount/onFormUnmount', () => {
       effects() {
         onFormInit(init)
         onFormMount(mount)
-        onFormUnMount(unmount)
+        onFormUnmount(unmount)
       },
     })
   )
@@ -319,7 +319,7 @@ test('onFieldInit/onFieldMount/onFieldUnmount', () => {
       effects() {
         onFieldInit('aa', fieldInit)
         onFieldMount('aa', fieldMount)
-        onFieldUnMount('aa', fieldUnmount)
+        onFieldUnmount('aa', fieldUnmount)
       },
     })
   )

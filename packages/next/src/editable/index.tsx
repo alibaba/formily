@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
-import { useField, useForm, observer, isVoidField } from '@formily/react'
+import { isVoidField } from '@formily/core'
+import { useField, useForm, observer } from '@formily/react'
 import { isStr } from '@formily/shared'
 import { Form, Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'

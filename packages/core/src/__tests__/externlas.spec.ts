@@ -15,7 +15,7 @@ import {
   isQuery,
   isVoidField,
   isVoidFieldState,
-  createEffect,
+  createEffectHook,
 } from '../shared/externals'
 import { attach } from './shared'
 
@@ -91,15 +91,15 @@ test('type checkers', () => {
   expect(isQuery(form.query('*'))).toBeTruthy()
 })
 
-test('createEffect', () => {
+test('createEffectHook', () => {
   try {
-    createEffect('xxx')()
+    createEffectHook('xxx')()
   } catch {}
   const form = attach(
     createForm({
       effects() {
-        createEffect('xxx')()
-        createEffect('yyy', () => () => {})()
+        createEffectHook('xxx')()
+        createEffectHook('yyy', () => () => {})()
       },
     })
   )

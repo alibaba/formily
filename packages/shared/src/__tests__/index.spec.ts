@@ -329,10 +329,6 @@ describe('clone and compare', () => {
         },
       })
     ).toEqual(123)
-    const symbol = {
-      [Symbol('xxx')]: 123,
-    }
-    expect(clone(symbol) === symbol).toBeTruthy()
   })
 
   test('native clone', () => {

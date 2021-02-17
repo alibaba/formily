@@ -15,7 +15,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -105,7 +106,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -234,13 +236,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import {
-  FormProvider,
-  createForm,
-  onFieldChange,
-  onFieldReact,
-  createSchemaField,
-} from '@formily/react'
+import { createForm, onFieldChange, onFieldReact } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {
@@ -339,7 +336,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 
 const SchemaField = createSchemaField({
   components: {

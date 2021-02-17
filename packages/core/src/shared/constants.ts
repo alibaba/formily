@@ -11,6 +11,10 @@ export const ReservedProperties = [
   'fields',
   'lifecycles',
   'originValues',
+  'componentType',
+  'componentProps',
+  'decoratorType',
+  'decoratorProps',
   'originInitialValues',
 ]
 
@@ -34,4 +38,6 @@ export const GetterSetterProperties = [
   'readPretty',
   'validateStatus',
   'editable',
+  'component',
+  'decorator',
 ]

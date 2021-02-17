@@ -21,24 +21,29 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
+    "start": "dumi dev",
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
-    "build:umd": "rollup --config"
+    "build:umd": "rollup --config",
+    "build:docs": "dumi build"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "mobx": "^6.0.3",
-    "mobx-react-lite": "^3.1.6",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0 || >=17.0.0"
+  },
+  "devDependencies": {
+    "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
     "@formily/core": "^2.0.0-beta.3",
     "@formily/json-schema": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "@formily/validator": "^2.0.0-beta.3",
+    "mobx-react-lite": "^3.1.6",
     "hoist-non-react-statics": "^3.3.2"
   },
   "publishConfig": {

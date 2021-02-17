@@ -16,9 +16,9 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { createForm, FormProvider, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Schema } from '@formily/json-schema'
-import { action } from 'mobx'
 
 const SchemaField = createSchemaField({
   components: {
@@ -111,9 +111,9 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { createForm, FormProvider, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Schema } from '@formily/json-schema'
-import { action } from 'mobx'
 
 const SchemaField = createSchemaField({
   components: {
@@ -210,14 +210,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import {
-  createForm,
-  FormProvider,
-  Field,
-  VoidField,
-  ObjectField,
-} from '@formily/react'
-import { action } from 'mobx'
+import { createForm } from '@formily/core'
+import { FormProvider, Field, VoidField, ObjectField } from '@formily/react'
 
 const form = createForm()
 

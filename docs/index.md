@@ -8,13 +8,13 @@ hero:
     - text: 快速开始
       link: /guide
 features:
-  - icon: https://gw.alipayobjects.com/zos/bmw-prod/881dc458-f20b-407b-947a-95104b5ec82b/k79dm8ih_w144_h144.png
+  - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
     title: 更易用
     desc: 开箱即用，案例丰富
-  - icon: https://gw.alipayobjects.com/zos/bmw-prod/d60657df-0822-4631-9d7c-e7a869c2f21c/k79dmz3q_w126_h126.png
+  - icon: https://img.alicdn.com/imgextra/i1/O1CN01bHdrZJ1rEOESvXEi5_!!6000000005599-55-tps-800-800.svg
     title: 更高效
     desc: 傻瓜写法，超高性能
-  - icon: https://img.alicdn.com/imgextra/i1/O1CN01GSZPrz1ZGWzfHPnA8_!!6000000003167-55-tps-800-800.svg
+  - icon: https://img.alicdn.com/imgextra/i3/O1CN01xlETZk1G0WSQT6Xii_!!6000000000560-55-tps-800-800.svg
     title: 更专业
     desc: 完备，灵活，优雅
 footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by self
@@ -24,7 +24,7 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 
 ```bash
 
-$ npm install --save antd mobx mobx-react-lite moment
+$ npm install --save antd mobx moment
 
 ```
 
@@ -32,20 +32,20 @@ or
 
 ```bash
 
-$ npm install --save @alifd/next mobx mobx-react-lite moment
+$ npm install --save @alifd/next mobx moment
 
 ```
 
 ## 安装 Formily
 
 ```bash
-$ npm install --save @formily/antd @formily/react
+$ npm install --save @formily/core @formily/react @formily/antd
 
 ```
 
 or
 
 ```bash
-$ npm install --save @formily/next @formily/react
+$ npm install --save @formily/core @formily/react @formily/next
 
 ```

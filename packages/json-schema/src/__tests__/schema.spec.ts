@@ -27,10 +27,10 @@ test('has methods', () => {
   expect(isFn(schema.mapProperties)).toBeTruthy()
 
   expect(isFn(Schema.isSchemaInstance)).toBeTruthy()
-  expect(isFn(Schema.registerComplier)).toBeTruthy()
+  expect(isFn(Schema.registerCompiler)).toBeTruthy()
   expect(isFn(Schema.registerPatches)).toBeTruthy()
-  expect(isFn(Schema.shallowComplie)).toBeTruthy()
-  expect(isFn(Schema.complie)).toBeTruthy()
+  expect(isFn(Schema.shallowCompile)).toBeTruthy()
+  expect(isFn(Schema.compile)).toBeTruthy()
   expect(isFn(Schema.getOrderProperties)).toBeTruthy()
 })
 
@@ -237,15 +237,15 @@ test('all methods', () => {
   expect(schema.properties.string).toBeUndefined()
   schema.removePatternProperty('^[a-zA-Z0-9]*$')
   expect(schema.patternProperties['^[a-zA-Z0-9]*$']).toBeUndefined()
-  expect(schema.complie()).toMatchSnapshot()
-  expect(string.complie()).toMatchSnapshot()
+  expect(schema.compile()).toMatchSnapshot()
+  expect(string.compile()).toMatchSnapshot()
   expect(schema3.toJSON()).toMatchSnapshot()
   expect(schema4.toJSON()).toMatchSnapshot()
 })
 
 describe('all static methods', () => {
-  expect(Schema.complie({ aa: '{{123}}' })).toEqual({ aa: 123 })
-  expect(Schema.shallowComplie('{{123}}')).toEqual(123)
+  expect(Schema.compile({ aa: '{{123}}' })).toEqual({ aa: 123 })
+  expect(Schema.shallowCompile('{{123}}')).toEqual(123)
   expect(Schema.getOrderProperties()).toEqual([])
   Schema.registerPatches(null)
 })

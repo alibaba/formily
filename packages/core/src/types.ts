@@ -31,7 +31,7 @@ export type AnyFunction = (...args: any[]) => any
 
 export type JSXComponent = any
 
-export type JSXComponenntProps<P> = any
+export type JSXComponenntProps<P> = Record<string, any>
 
 export type LifeCycleHandler<T> = (payload: T, context: any) => void
 
@@ -107,16 +107,16 @@ export interface IHeartProps<Context> {
   context?: Context
 }
 
-export type Feedback = {
+export interface IFieldFeedback {
   triggerType?: FieldFeedbackTriggerTypes
   type?: FieldFeedbackTypes
   code?: FieldFeedbackCodeTypes
   messages?: FeedbackMessage
 }
 
-export type FormFeedback = Feedback & {
-  path?: FormPath
-  address?: FormPath
+export type IFormFeedback = IFieldFeedback & {
+  path?: string
+  address?: string
 }
 
 export interface ISearchFeedback {
@@ -130,19 +130,19 @@ export interface ISearchFeedback {
 
 export type FeedbackMessage = any[]
 
-export type FieldUpdate = {
+export type IFieldUpdate = {
   pattern: FormPath
   callbacks: ((...args: any[]) => any)[]
 }
 
-export type FormRequests = {
+export interface IFormRequests {
   validate?: NodeJS.Timeout
   submit?: NodeJS.Timeout
-  updates?: FieldUpdate[]
+  updates?: IFieldUpdate[]
   updateIndexes?: Record<string, number>
 }
 
-export type FormFields = Record<string, GeneralField>
+export type IFormFields = Record<string, GeneralField>
 
 export type FieldFeedbackTypes = 'error' | 'success' | 'warning'
 
@@ -162,7 +162,8 @@ export type FormPatternTypes =
   | 'readOnly'
   | 'disabled'
   | 'readPretty'
-export type FormDisplayTypes = 'none' | 'hidden' | 'visible'
+  | ({} & string)
+export type FormDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)
 
 export type FormPathPattern =
   | string
@@ -254,24 +255,25 @@ export interface IVoidFieldFactoryProps<
   basePath?: FormPathPattern
 }
 
-export type FieldRequests = {
+export interface IFieldRequests {
   validate?: NodeJS.Timeout
   loader?: NodeJS.Timeout
 }
 
-export type FieldCaches = {
+export interface IFieldCaches {
   value?: any
   initialValue?: any
-  feedbacks?: Feedback[]
+  feedbacks?: IFieldFeedback[]
 }
 
-export type FieldDisplayTypes = 'none' | 'hidden' | 'visible'
+export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)
 
 export type FieldPatternTypes =
   | 'editable'
   | 'readOnly'
   | 'disabled'
   | 'readPretty'
+  | ({} & string)
 
 export type FieldValidator = Validator
 
@@ -321,7 +323,7 @@ export interface IFieldProps<
   readPretty?: boolean
   dataSource?: FieldDataSource
   validateFirst?: boolean
-  validator?: Validator
+  validator?: FieldValidator
   decorator?: FieldDecorator<Decorator>
   component?: FieldComponent<Component>
   reactions?: FieldReaction[] | FieldReaction

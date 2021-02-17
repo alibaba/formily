@@ -7,7 +7,8 @@
 ```tsx
 import React from 'react'
 import { PreviewText, FormItem } from '@formily/next'
-import { FormProvider, createForm, createSchemaField } from '@formily/react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
 import { Button, Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
@@ -77,9 +78,9 @@ export default () => {
 ```tsx
 import React from 'react'
 import { PreviewText, FormItem, FormButtonGroup } from '@formily/next'
+import { createForm } from '@formily/core'
 import {
   FormProvider,
-  createForm,
   mapReadPretty,
   connect,
   createSchemaField,

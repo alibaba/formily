@@ -17,7 +17,7 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
-  const fieldSchema = props.schema?.complie?.({
+  const fieldSchema = props.schema?.compile?.({
     ...options.scope,
     ...scope,
   })

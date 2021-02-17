@@ -68,6 +68,11 @@ export default {
       padding-left:0 !important;
       color: transparent !important;
     }
+    .__dumi-default-layout-hero{
+      background-image: url(//img.alicdn.com/imgextra/i4/O1CN01ZcvS4e26XMsdsCkf9_!!6000000007671-2-tps-6001-4001.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
     nav a{
       text-decoration: none !important;
     }
@@ -80,8 +85,8 @@ export default {
         path: '/guide',
       },
       {
-        title: '如何看文档',
-        path: '/guide/learn-ducuments',
+        title: '如何学习Formily',
+        path: '/guide/learn-formily',
       },
       {
         title: '快速开始',

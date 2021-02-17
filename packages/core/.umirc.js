@@ -33,8 +33,8 @@ export default {
       padding-left:0 !important;
       color: transparent !important;
     }
-    .__dumi-default-layout-hero {
-      background-image: url(//img.alicdn.com/imgextra/i2/O1CN01DzlqfN1XV4L580ET8_!!6000000002928-55-tps-750-500.svg);
+    .__dumi-default-layout-hero{
+      background-image: url(//img.alicdn.com/imgextra/i4/O1CN01ZcvS4e26XMsdsCkf9_!!6000000007671-2-tps-6001-4001.png);
       background-size: cover;
       background-repeat: no-repeat;
     }
@@ -49,7 +49,7 @@ export default {
         title: '概览',
         children: [
           {
-            title: '能力说明',
+            title: '介绍',
             path: '/guide',
           },
           { title: '核心架构', path: '/guide/architecture' },
@@ -64,34 +64,13 @@ export default {
           },
           {
             title: '表单模型',
+            path: '/guide/form',
           },
           {
             title: '字段模型',
-          },
-          {
-            title: '路径模型',
-          },
-          {
-            title: '数据模型',
-          },
-          {
-            title: '校验模型',
-          },
-          {
-            title: '联动模型',
+            path: '/guide/field',
           },
         ],
-      },
-    ],
-    '/api': [
-      {
-        title: '入口',
-      },
-      {
-        title: '模型',
-      },
-      {
-        title: '类型',
       },
     ],
   },
