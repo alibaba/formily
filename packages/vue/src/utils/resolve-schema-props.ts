@@ -1,4 +1,4 @@
-import { paramCase } from "param-case";
+import { paramCase } from "@formily/shared";
 
 export const resolveSchemaProps = (props: Record<string, any>) => {
   const newProps = {}
