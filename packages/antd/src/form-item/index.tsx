@@ -4,7 +4,7 @@ import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, useFormShallowLayout } from '../form-layout'
-import { Tooltip } from 'antd'
+import { Tooltip, Popover } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 
 export interface IFormItemProps {
@@ -113,12 +113,20 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     enableCol = true
   }
 
+  const formatChildren = (feedbackLayout === 'popover' && feedbackText) ? (<Popover
+    content={feedbackText}
+    visible={true}
+    >
+      {children}
+  </Popover>) : children;
+
   const prefixCls = usePrefixCls('formily-form-item', props)
   return (
     <div
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
+        [`${prefixCls}-feedback-status-${!!feedbackStatus ? 'valid' : 'invalid'}`]: true,
         [`${prefixCls}-size-${size}`]: !!size,
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
         [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
@@ -132,7 +140,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         [props.className]: !!props.className,
       })}
     >
-      <div
+      { label !== undefined && <div
         className={cls({
           [`${prefixCls}-label`]: true,
           [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
@@ -148,8 +156,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <QuestionCircleOutlined className={cls(`${prefixCls}-tooltip`)} />
           </Tooltip>
         )}
-        {colon && <span className={cls(`${prefixCls}-colon`)}>{':'}</span>}
-      </div>
+        { label && <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>}
+      </div> }
 
       <div
         className={cls({
@@ -170,7 +178,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               [`${prefixCls}-control-content-component-has-feedback-icon`]: !!feedbackIcon,
             })}
           >
-            {children}
+            {formatChildren}
             {feedbackIcon && (
               <div className={cls(`${prefixCls}-feedback-icon`)}>
                 {feedbackIcon}
@@ -181,7 +189,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>
           )}
         </div>
-        {!!feedbackText && (
+        {(!!feedbackText && feedbackLayout !== 'popover') && (
           <div className={cls(`${prefixCls}-help`)}>{feedbackText}</div>
         )}
         {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
@@ -219,7 +227,7 @@ export const FormItem: ComposeFormItem = connect(
         feedbackStatus:
           field.validateStatus === 'validating'
             ? 'pending'
-            : field.validateStatus,
+            : field.decorator[1]?.feedbackStatus || field.validateStatus,
       }
     },
     (props, field) => {
@@ -235,7 +243,7 @@ export const FormItem: ComposeFormItem = connect(
       return {
         asterisk,
       }
-    }
+    },
   )
 )
 

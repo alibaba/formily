@@ -161,13 +161,32 @@ export default () => {
       <SchemaField>
         <SchemaField.Void
           x-component="Title"
+          x-component-props={{ text: 'label为空时的展示' }}
+        />
+        <SchemaField.String
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            labelWidth: 300,
+          }}
+        />
+        <SchemaField.String
+          title=""
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            labelWidth: 300,
+          }}
+        />
+        <SchemaField.Void
+          x-component="Title"
           x-component-props={{ text: '冒号' }}
         />
         <SchemaField.String
           title="默认"
           x-decorator="FormItem"
           x-component="Input"
-        />
+        />        
         <SchemaField.String
           title="无冒号(colon=false)"
           x-decorator="FormItem"
@@ -665,14 +684,66 @@ export default () => {
         />
 
         <SchemaField.String
-          title="加载状态(feedbackStatus=loading)"
+          title="加载状态(feedbackStatus=pending)"
           x-decorator="FormItem"
           x-component="Input"
           description="description"
           x-decorator-props={{
-            feedbackStatus: 'loading',
+            feedbackStatus: 'pending',
             feedbackIcon: <LoadingOutlined style={{ color: '#1890ff' }} />,
           }}
+        />
+
+        <SchemaField.Void
+          x-component="Title"
+          x-component-props={{ text: '反馈信息的布局' }}
+        />
+
+        <SchemaField.String
+          title="紧凑模式有feedback(feedbackLayout=terse)"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            feedbackStatus: 'error',
+            feedbackText: 'error message',
+            feedbackLayout: 'terse'
+          }}
+        />
+
+        <SchemaField.String
+          title="紧凑模式无feedback(feedbackLayout=terse)"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            feedbackLayout: 'terse'
+          }}
+        />
+
+        <SchemaField.String
+          title="松散模式(feedbackLayout=loose)"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            feedbackStatus: 'error',
+            feedbackText: 'error message',
+            feedbackLayout: 'loose'
+          }}
+        />
+
+        <SchemaField.String
+          title="弹出模式(feedbackLayout=popover)"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            feedbackStatus: 'error',
+            feedbackText: 'error message',
+            feedbackLayout: 'popover'
+          }}
+        />
+
+        <SchemaField.Void
+          x-component="Title"
+          x-component-props={{ text: '组件的适配情况' }}
         />
 
         <SchemaField.String
@@ -768,13 +839,15 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm({
+  values: {
+    size: 'default',
+  },
   effects: () => {
     onFieldChange('size', ['value'], (field, form) => {
       form.setFieldState('sizeWrap.*', (state) => {
-        if (!state.props['x-decorator-props']) {
-          state.props['x-decorator-props'] = {}
+        if (state.decorator[1]) {
+          state.decorator[1].size = field.value
         }
-        state.props['x-decorator-props'].size = field.value
       })
     })
   },
