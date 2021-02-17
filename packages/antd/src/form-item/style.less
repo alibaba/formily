@@ -4,7 +4,7 @@
 
 .@{form-item-cls} {
     display: flex;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .@{form-item-cls}-label {
@@ -357,7 +357,7 @@
 .@{form-item-cls}-help,
 .@{form-item-cls}-extra {
     clear: both;
-    min-height: 24px;
+    min-height: 16px;
     color: rgba(0, 0, 0, 0.45);
     font-size: 14px;
     line-height: 1.5715;
@@ -447,5 +447,11 @@
 
     .@{form-item-cls}-help {
         color: #faad14;
+    }
+}
+
+.@{form-item-cls}-feedback-layout-terse {
+    &.@{form-item-cls}-feedback-status-valid {
+        margin-bottom: 0;
     }
 }
