@@ -11,7 +11,10 @@ export const ArrayField = <D extends JSXComponent, C extends JSXComponent>(
   const form = useForm()
   const parent = useField()
   const field = useAttach(
-    form.createArrayField({ basePath: parent?.address, ...props })
+    form.createArrayField({
+      basePath: parent?.address,
+      ...props,
+    })
   )
   return (
     <FieldContext.Provider value={field}>

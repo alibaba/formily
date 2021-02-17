@@ -17,11 +17,12 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
-  const fieldSchema = props.schema?.compile?.({
+  const schema = new Schema(props.schema)
+  const fieldSchema = schema.compile?.({
     ...options.scope,
     ...scope,
   })
-  const fieldProps = props.schema?.toFieldProps?.(options) as any
+  const fieldProps = schema.toFieldProps?.(options) as any
   const getBasePath = () => {
     if (props.onlyRenderProperties) {
       return props.basePath || parent?.address?.concat(props.name)
