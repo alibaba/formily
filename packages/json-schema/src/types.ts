@@ -43,7 +43,7 @@ export type SchemaPatch = (schema: ISchema) => ISchema
 
 export type SchemaKey = string | number
 
-export type SchemaExtendReaction<Field = any> =
+export type SchemaReaction<Field = any> =
   | {
       dependencies?: string[]
       when?: string | boolean
@@ -61,9 +61,9 @@ export type SchemaExtendReaction<Field = any> =
     }
   | ((field: Field) => void)
 
-export type SchemaExtendReactions<Field = any> =
-  | SchemaExtendReaction<Field>
-  | SchemaExtendReaction<Field>[]
+export type SchemaReactions<Field = any> =
+  | SchemaReaction<Field>
+  | SchemaReaction<Field>[]
 
 export type SchemaItems<
   Decorator,
@@ -220,7 +220,7 @@ export interface ISchema<
   //组件属性
   ['x-component-props']?: ComponentProps
   //组件响应器
-  ['x-reactions']?: SchemaExtendReactions<ReactionField>
+  ['x-reactions']?: SchemaReactions<ReactionField>
   //内容
   ['x-content']?: any
 

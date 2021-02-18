@@ -63,7 +63,7 @@ export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
   }
 }
 
-export function connect<T extends React.JSXElementConstructor<any>>(
+export function connect<T extends React.FC>(
   target: T,
   ...args: IComponentMapper<T>[]
 ) {

@@ -28,7 +28,7 @@ type ComposeSchemaField = React.FC<ISchemaFieldProps> & {
 //工厂函数参数属性
 interface ISchemaFieldFactoryProps {
   components?: {
-    [key: string]: React.JSXElementConstructor<any> //组件列表
+    [key: string]: React.FC //组件列表
   }
   scope?: any //全局作用域，用于实现协议表达式变量注入
 }

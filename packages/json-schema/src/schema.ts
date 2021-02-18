@@ -2,7 +2,7 @@ import {
   ISchema,
   SchemaEnum,
   SchemaProperties,
-  SchemaExtendReaction,
+  SchemaReaction,
   SchemaTypes,
   SchemaKey,
   ISchemaTransformerOptions,
@@ -137,7 +137,7 @@ export class Schema<
   //组件属性
   ['x-component-props']?: ComponentProps;
 
-  ['x-reactions']?: SchemaExtendReaction<ReactionField>[];
+  ['x-reactions']?: SchemaReaction<ReactionField>[];
 
   ['x-content']?: any;
 
@@ -196,8 +196,9 @@ export class Schema<
   }
 
   removeProperty = (key: SchemaKey) => {
+    const schema = this.properties[key]
     delete this.properties[key]
-    return this
+    return schema
   }
 
   setProperties = (
@@ -239,8 +240,9 @@ export class Schema<
   }
 
   removePatternProperty = (key: SchemaKey) => {
+    const schema = this.patternProperties[key]
     delete this.patternProperties[key]
-    return this
+    return schema
   }
 
   setPatternProperties = (

@@ -4,6 +4,10 @@
 
 主要用在自定义组件内读取当前字段属性，操作字段状态等，在所有 Field 组件的子树内都能使用，注意，拿到的是[GeneralField](https://core.formilyjs.org/api/models/field#generalfield)，如果需要对不同类型的字段做处理，请使用[Type Checker](https://core.formilyjs.org/api/entry/form-checker)
 
+<Alert>
+注意：如果要在自定义组件内使用useField，并响应字段模型变化，那需要给自定义组件包装observer
+</Alert>
+
 ## 签名
 
 ```ts
@@ -45,19 +49,6 @@ const FormItem = observer(({ children }) => {
 
 export default () => {
   const form = useMemo(() => createForm({ validateFirst: true }))
-
-  const createPasswordEqualValidate = (equalName) => (field) => {
-    if (
-      form.values.confirm_password &&
-      field.value &&
-      form.values[equalName] !== field.value
-    ) {
-      field.errors = ['Password does not match Confirm Password.']
-    } else {
-      field.errors = []
-    }
-  }
-
   return (
     <FormProvider form={form}>
       <Form layout="vertical">
@@ -67,22 +58,6 @@ export default () => {
           required
           decorator={[FormItem]}
           component={[Input, { placeholder: 'Please Input' }]}
-        />
-        <Field
-          name="password"
-          title="Password"
-          required
-          decorator={[FormItem]}
-          component={[Input, { type: 'password', placeholder: 'Please Input' }]}
-          reactions={createPasswordEqualValidate('confirm_password')}
-        />
-        <Field
-          name="confirm_password"
-          title="Confirm Password"
-          required
-          decorator={[FormItem]}
-          component={[Input, { type: 'password', placeholder: 'Please Input' }]}
-          reactions={createPasswordEqualValidate('password')}
         />
         <code>
           <pre>

@@ -17,7 +17,7 @@ import {
   ISchema,
   ISchemaFieldFactoryOptions,
   ISchemaFieldUpdateRequest,
-  SchemaExtendReactions,
+  SchemaReactions,
 } from './types'
 import '@formily/core'
 
@@ -139,7 +139,9 @@ const getFieldInternalPropsBySchema = (
     title: schema.title,
     description: schema.description,
     disabled: schema['x-disabled'],
-    editable: schema['x-editable'],
+    editable: isValid(schema['x-editable'])
+      ? schema['x-editable']
+      : schema['writeOnly'],
     readOnly: isValid(schema['x-read-only'])
       ? schema['x-read-only']
       : schema['readOnly'],
@@ -219,7 +221,7 @@ const getSchemaFieldReactions = (
         )
       }
       if (isStr(request.run)) {
-        compile(`async function(){${request.run}}`)()
+        compile(`{{async function(){${request.run}}}}`)()
       }
     })
   }
@@ -240,7 +242,7 @@ const getSchemaFieldReactions = (
   }
 
   return (field: Formily.Core.Models.Field) => {
-    const reactions: SchemaExtendReactions = toArr(schema['x-reactions'])
+    const reactions: SchemaReactions = toArr(schema['x-reactions'])
     reactions.forEach((reaction) => {
       if (!reaction) return
       if (isFn(reaction)) {
@@ -258,10 +260,11 @@ const getSchemaFieldReactions = (
         $dependencies,
       }
       const when = Schema.compile(reaction?.when, scope)
+      const condition = isValid(when) ? when : true
       const compile = (expression: any) => {
         return Schema.compile(expression, scope)
       }
-      if (when) {
+      if (condition) {
         if (reaction.target) {
           field.query(reaction.target).forEach((field) => {
             setSchemaFieldState(field, reaction.fullfill, compile)
