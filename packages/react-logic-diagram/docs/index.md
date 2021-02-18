@@ -2,8 +2,8 @@
 title: React 版逻辑图布局组件
 order: 10
 hero:
-  title: FORMILY REACT LOGIC DIAGRAM
-  desc: React 版逻辑图布局组件
+  title: LOGIC DIAGRAM
+  desc: Formily React 版逻辑图布局组件
   actions:
     - text: 主站文档
       link: //formilyjs.org
