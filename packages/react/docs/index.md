@@ -54,38 +54,24 @@ import {
   useField,
   observer,
 } from '@formily/react'
+import { Input, Form, Button } from 'antd'
+import 'antd/lib/input/style'
+import 'antd/lib/form/style'
 
 // FormItem UI组件
 const FormItem = observer(({ children }) => {
   const field = useField()
   return (
-    <div>
-      <div style={{ height: 20 }}>{field.title}:</div>
+    <Form.Item
+      label={field.title}
+      help={field.errors?.length ? field.errors : undefined}
+      extra={field.description}
+      validateStatus={field.validateStatus}
+    >
       {children}
-      <div style={{ height: 20, fontSize: 12, color: 'red' }}>
-        {field.errors.join(',')}
-      </div>
-    </div>
+    </Form.Item>
   )
 })
-
-// Input UI组件
-const Input = (props) => {
-  return (
-    <input
-      {...props}
-      value={props.value || ''}
-      style={{
-        ...props.style,
-        border: '2px solid rgb(186 203 255)',
-        borderRadius: 6,
-        width: '100%',
-        height: 28,
-        padding: '0 5px',
-      }}
-    />
-  )
-}
 
 /*
  * 以上逻辑都已经在 @formily/antd 中实现，实际使用无需重复编写
@@ -111,36 +97,38 @@ export default () => {
 
   return (
     <FormProvider form={form}>
-      <Field
-        name="name"
-        title="Name"
-        required
-        decorator={[FormItem]}
-        component={[Input, { placeholder: 'Please Input' }]}
-      />
-      <Field
-        name="password"
-        title="Password"
-        required
-        decorator={[FormItem]}
-        component={[Input, { type: 'password', placeholder: 'Please Input' }]}
-        reactions={createPasswordEqualValidate('confirm_password')}
-      />
-      <Field
-        name="confirm_password"
-        title="Confirm Password"
-        required
-        decorator={[FormItem]}
-        component={[Input, { type: 'password', placeholder: 'Please Input' }]}
-        reactions={createPasswordEqualValidate('password')}
-      />
-      <code>
-        <pre>
-          <FormConsumer>
-            {(form) => JSON.stringify(form.values, null, 2)}
-          </FormConsumer>
-        </pre>
-      </code>
+      <Form layout="vertical">
+        <Field
+          name="name"
+          title="Name"
+          required
+          decorator={[FormItem]}
+          component={[Input, { placeholder: 'Please Input' }]}
+        />
+        <Field
+          name="password"
+          title="Password"
+          required
+          decorator={[FormItem]}
+          component={[Input, { type: 'password', placeholder: 'Please Input' }]}
+          reactions={createPasswordEqualValidate('confirm_password')}
+        />
+        <Field
+          name="confirm_password"
+          title="Confirm Password"
+          required
+          decorator={[FormItem]}
+          component={[Input, { type: 'password', placeholder: 'Please Input' }]}
+          reactions={createPasswordEqualValidate('password')}
+        />
+        <code>
+          <pre>
+            <FormConsumer>
+              {(form) => JSON.stringify(form.values, null, 2)}
+            </FormConsumer>
+          </pre>
+        </code>
+      </Form>
     </FormProvider>
   )
 }

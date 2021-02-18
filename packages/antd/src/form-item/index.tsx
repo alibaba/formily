@@ -113,12 +113,14 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     enableCol = true
   }
 
-  const formatChildren = (feedbackLayout === 'popover' && feedbackText) ? (<Popover
-    content={feedbackText}
-    visible={true}
-    >
-      {children}
-  </Popover>) : children;
+  const formatChildren =
+    feedbackLayout === 'popover' && feedbackText ? (
+      <Popover content={feedbackText} visible={true}>
+        {children}
+      </Popover>
+    ) : (
+      children
+    )
 
   const prefixCls = usePrefixCls('formily-form-item', props)
   return (
@@ -126,7 +128,9 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
-        [`${prefixCls}-feedback-status-${!!feedbackStatus ? 'valid' : 'invalid'}`]: true,
+        [`${prefixCls}-feedback-status-${
+          !!feedbackStatus ? 'valid' : 'invalid'
+        }`]: true,
         [`${prefixCls}-size-${size}`]: !!size,
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
         [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
@@ -140,24 +144,30 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         [props.className]: !!props.className,
       })}
     >
-      { label !== undefined && <div
-        className={cls({
-          [`${prefixCls}-label`]: true,
-          [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
-        })}
-        style={labelStyle}
-      >
-        {asterisk && (
-          <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
-        )}
-        <label>{label}</label>
-        {tooltip && (
-          <Tooltip placement="bottom" title={tooltip}>
-            <QuestionCircleOutlined className={cls(`${prefixCls}-tooltip`)} />
-          </Tooltip>
-        )}
-        { label && <span className={cls(`${prefixCls}-colon`)}>{colon ? ':' : ''}</span>}
-      </div> }
+      {label !== undefined && (
+        <div
+          className={cls({
+            [`${prefixCls}-label`]: true,
+            [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
+          })}
+          style={labelStyle}
+        >
+          {asterisk && (
+            <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
+          )}
+          <label>{label}</label>
+          {tooltip && (
+            <Tooltip placement="bottom" title={tooltip}>
+              <QuestionCircleOutlined className={cls(`${prefixCls}-tooltip`)} />
+            </Tooltip>
+          )}
+          {label && (
+            <span className={cls(`${prefixCls}-colon`)}>
+              {colon ? ':' : ''}
+            </span>
+          )}
+        </div>
+      )}
 
       <div
         className={cls({
@@ -189,7 +199,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>
           )}
         </div>
-        {(!!feedbackText && feedbackLayout !== 'popover') && (
+        {!!feedbackText && feedbackLayout !== 'popover' && (
           <div className={cls(`${prefixCls}-help`)}>{feedbackText}</div>
         )}
         {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
@@ -202,12 +212,10 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 export const FormItem: ComposeFormItem = connect(
   BaseItem,
   mapProps(
-    { extract: 'validateStatus' },
-    { extract: 'title', to: 'label' },
-    { extract: 'required' },
+    { validateStatus: true, title: 'label', required: true },
     (props, field) => {
       if (isVoidField(field)) return props
-      if(!field) return props
+      if (!field) return props
       const takeMessage = () => {
         if (props.feedbackText) return props.feedbackText
         if (field.errors.length) return field.errors
@@ -222,7 +230,7 @@ export const FormItem: ComposeFormItem = connect(
     },
     (props, field) => {
       if (isVoidField(field)) return props
-      if(!field) return props
+      if (!field) return props
       return {
         feedbackStatus:
           field.validateStatus === 'validating'
@@ -232,7 +240,7 @@ export const FormItem: ComposeFormItem = connect(
     },
     (props, field) => {
       if (isVoidField(field)) return props
-      if(!field) return props
+      if (!field) return props
       let asterisk = false
       if (field.required) {
         asterisk = true
@@ -243,7 +251,7 @@ export const FormItem: ComposeFormItem = connect(
       return {
         asterisk,
       }
-    },
+    }
   )
 )
 

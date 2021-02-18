@@ -3,15 +3,10 @@ import { Transfer as AntdTransfer } from 'antd'
 
 export const Transfer = connect(
   AntdTransfer,
-  mapProps(
-    {
-      extract: 'value',
-      to: 'targetKeys'
-    },
-    {
-      extract: 'dataSource'
-    }
-  )
+  mapProps({
+    value: 'targetKeys',
+    dataSource: true,
+  })
 )
 
 export default Transfer

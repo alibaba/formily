@@ -6,11 +6,8 @@ export const Select = connect(
   AntdSelect,
   mapProps(
     {
-      extract: 'dataSource',
-      to: 'options'
-    },
-    {
-      extract: 'loading'
+      dataSource: 'options',
+      loading: true,
     }
   ),
   mapReadPretty(PreviewText.Select)

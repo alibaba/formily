@@ -1,10 +1,11 @@
 import React from 'react'
-import { isFn, FormPath } from '@formily/shared'
+import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { observer } from 'mobx-react-lite'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
 import { useField } from '../hooks'
 import hoistNonReactStatics from 'hoist-non-react-statics'
+
 export function mapProps<T extends JSXComponent>(
   ...args: IStateMapper<React.ComponentProps<T>>[]
 ) {
@@ -17,18 +18,16 @@ export function mapProps<T extends JSXComponent>(
             if (isFn(mapper)) {
               props = Object.assign(props, mapper(props, field))
             } else {
-              const extract = FormPath.getIn(field, mapper.extract)
-              const target = mapper.to || mapper.extract
-              if (mapper.extract === 'value') {
-                if (mapper.to !== mapper.extract) {
-                  delete props.value
+              each(mapper, (to, extract) => {
+                const extractValue = FormPath.getIn(field, extract)
+                const targetValue = isStr(to) ? to : (extract as any)
+                if (extract === 'value') {
+                  if (to !== extract) {
+                    delete props.value
+                  }
                 }
-              }
-              FormPath.setIn(
-                props,
-                target as any,
-                isFn(mapper.transform) ? mapper.transform(extract) : extract
-              )
+                FormPath.setIn(props, targetValue, extractValue)
+              })
             }
             return props
           },

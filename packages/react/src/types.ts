@@ -43,9 +43,7 @@ export interface IComponentMapper<T extends JSXComponent> {
 
 export type IStateMapper<Props> =
   | {
-      extract: keyof Formily.Core.Models.Field
-      to?: keyof Props
-      transform?: (value: any) => any
+      [key in keyof Formily.Core.Models.Field]?: keyof Props | boolean
     }
   | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
 

@@ -5,9 +5,7 @@ import { connect, mapProps } from '@formily/react'
 export const FormItem = connect(
   Form.Item,
   mapProps(
-    { extract: 'validateStatus', to: 'validateState' },
-    { extract: 'title', to: 'label' },
-    { extract: 'required' },
+    { validateStatus: 'validateState', title: 'label', required: true },
     (props, field) => {
       if (!field) return props
       if (isVoidField(field)) return props

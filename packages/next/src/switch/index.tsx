@@ -4,8 +4,7 @@ import { connect, mapProps } from '@formily/react'
 export const Switch = connect(
   NextSwitch,
   mapProps({
-    extract: 'value',
-    to: 'checked',
+    value: 'checked',
   })
 )
 

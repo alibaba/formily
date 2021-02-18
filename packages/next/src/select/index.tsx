@@ -5,7 +5,7 @@ import { PreviewText } from '../preview-text'
 export const Select = connect(
   NextSelect,
   mapProps({
-    extract: 'dataSource',
+    dataSource: true,
   }),
   mapReadPretty(PreviewText.Select)
 )

@@ -13,15 +13,14 @@ type ComposedRadio = React.FC<RadioProps> & {
 export const Radio: ComposedRadio = connect(
   NextRadio,
   mapProps({
-    extract: 'value',
-    to: 'checked',
+    value: 'checked',
   })
 )
 
 Radio.Group = connect(
   NextRadio.Group,
   mapProps({
-    extract: 'dataSource',
+    dataSource: true,
   }),
   mapReadPretty(PreviewText.Select)
 )

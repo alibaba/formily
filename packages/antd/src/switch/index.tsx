@@ -5,8 +5,7 @@ export const Switch = connect(
   AntdSwitch,
   mapProps(
     {
-      extract: 'value',
-      to: 'checked',
+      value: 'checked',
     },
     (props) => {
       const onChange = props.onChange

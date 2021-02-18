@@ -5,8 +5,7 @@ import { PreviewText } from '../preview-text'
 export const TreeSelect = connect(
   AntdTreeSelect,
   mapProps({
-    extract: 'dataSource',
-    to: 'treeData'
+    dataSource: 'treeData',
   }),
   mapReadPretty(PreviewText.TreeSelect)
 )

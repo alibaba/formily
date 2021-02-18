@@ -12,22 +12,16 @@ type ComposedCheckbox = React.FC<CheckboxProps> & {
 
 export const Checkbox: ComposedCheckbox = connect(
   NextCheckbox,
-  mapProps(
-    {
-      extract: 'value',
-      to: 'checked',
-    },
-    {
-      extract: 'onInput',
-      to: 'onChange',
-    }
-  )
+  mapProps({
+    value: 'checked',
+    onInput: 'onChange',
+  })
 )
 
 Checkbox.Group = connect(
   NextCheckbox.Group,
   mapProps({
-    extract: 'dataSource',
+    dataSource: true,
   }),
   mapReadPretty(PreviewText.Select)
 )

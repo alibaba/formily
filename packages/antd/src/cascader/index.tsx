@@ -5,8 +5,7 @@ import { PreviewText } from '../preview-text'
 export const Cascader = connect(
   AntdCascader,
   mapProps({
-    extract: 'dataSource',
-    to: 'options'
+    dataSource: 'options',
   }),
   mapReadPretty(PreviewText.Cascader)
 )

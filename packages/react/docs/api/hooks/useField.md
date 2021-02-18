@@ -60,7 +60,7 @@ export default () => {
 
   return (
     <FormProvider form={form}>
-      <Form labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
+      <Form layout="vertical">
         <Field
           name="name"
           title="Name"
@@ -84,25 +84,21 @@ export default () => {
           component={[Input, { type: 'password', placeholder: 'Please Input' }]}
           reactions={createPasswordEqualValidate('password')}
         />
-        <Form.Item label=" " colon={false}>
-          <code>
-            <pre>
-              <FormConsumer>
-                {(form) => JSON.stringify(form.values, null, 2)}
-              </FormConsumer>
-            </pre>
-          </code>
-        </Form.Item>
-        <Form.Item label=" " colon={false}>
-          <Button
-            type="primary"
-            onClick={() => {
-              form.submit(console.log)
-            }}
-          >
-            Submit
-          </Button>
-        </Form.Item>
+        <code>
+          <pre>
+            <FormConsumer>
+              {(form) => JSON.stringify(form.values, null, 2)}
+            </FormConsumer>
+          </pre>
+        </code>
+        <Button
+          type="primary"
+          onClick={() => {
+            form.submit(console.log)
+          }}
+        >
+          Submit
+        </Button>
       </Form>
     </FormProvider>
   )

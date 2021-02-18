@@ -161,8 +161,7 @@ export const Upload: ComposedUpload = connect(
     return <AntdUpload {...useUploadProps(props)} />
   },
   mapProps({
-    extract: 'value',
-    to: 'fileList',
+    value: 'fileList',
   })
 )
 
@@ -171,8 +170,7 @@ const Dragger = connect(
     return <AntdUpload.Dragger {...useUploadProps(props)} />
   },
   mapProps({
-    extract: 'value',
-    to: 'fileList',
+    value: 'fileList',
   })
 )
 

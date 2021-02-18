@@ -178,19 +178,12 @@ test('connect', async () => {
     (props: CustomProps) => {
       return <div>{props.list}</div>
     },
-    mapProps(
-      { extract: 'value', to: 'list' },
-      { extract: 'loading' },
-      {
-        extract: 'mounted',
-        transform(value) {
-          return value ? 1 : 2
-        },
-      },
-      (props) => {
-        return props
+    mapProps({ value: 'list', loading: true }, (props, field) => {
+      return {
+        ...props,
+        mounted: field.mounted ? 1 : 2,
       }
-    ),
+    }),
     mapReadPretty(() => <div>read pretty</div>)
   )
   const BaseComponent = (props: any) => {
@@ -199,7 +192,7 @@ test('connect', async () => {
   BaseComponent.displayName = 'BaseComponent'
   const CustomField2 = connect(
     BaseComponent,
-    mapProps({ extract: 'value', to: 'value' }, { extract: 'loading' }),
+    mapProps({ value: true, loading: true }),
     mapReadPretty(() => <div>read pretty</div>)
   )
   const form = createForm()
@@ -212,8 +205,10 @@ test('connect', async () => {
     )
   }
   const { queryByText } = render(<MyComponent />)
-  form.query('aa').take((field: Formily.Core.Models.Field) => {
-    field.setValue('123')
+  form.query('aa').take((field) => {
+    field.setState((state) => {
+      state.value = '123'
+    })
   })
   await waitFor(() => {
     expect(queryByText('123')).toBeVisible()

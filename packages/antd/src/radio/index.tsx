@@ -10,16 +10,10 @@ type ComposedRadio = React.FC<RadioProps> & {
 
 export const Radio: ComposedRadio = connect(
   AntdRadio,
-  mapProps(
-    {
-      extract: 'value',
-      to: 'checked',
-    },
-    {
-      extract: 'onInput',
-      to: 'onChange',
-    }
-  )
+  mapProps({
+    value: 'checked',
+    onInput: 'onChange',
+  })
 )
 
 Radio.__ANT_RADIO = true
@@ -27,8 +21,7 @@ Radio.__ANT_RADIO = true
 Radio.Group = connect(
   AntdRadio.Group,
   mapProps({
-    extract: 'dataSource',
-    to: 'options',
+    dataSource: 'options',
   }),
   mapReadPretty(PreviewText.Select)
 )

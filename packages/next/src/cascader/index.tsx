@@ -5,7 +5,7 @@ import { PreviewText } from '../preview-text'
 export const Cascader = connect(
   CascaderSelect,
   mapProps({
-    extract: 'dataSource',
+    dataSource: true,
   }),
   mapReadPretty(PreviewText.Cascader)
 )

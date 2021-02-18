@@ -5,7 +5,7 @@ import { PreviewText } from '../preview-text'
 export const TreeSelect = connect(
   NextTreeSelect,
   mapProps({
-    extract: 'dataSource',
+    dataSource: true,
   }),
   mapReadPretty(PreviewText.TreeSelect)
 )
