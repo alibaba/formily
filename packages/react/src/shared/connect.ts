@@ -63,7 +63,7 @@ export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
   }
 }
 
-export function connect<T extends React.FC>(
+export function connect<T extends JSXComponent>(
   target: T,
   ...args: IComponentMapper<T>[]
 ) {
@@ -77,7 +77,7 @@ export function connect<T extends React.FC>(
     }
   )
 
-  if (target) hoistNonReactStatics(Destination, target)
+  if (target) hoistNonReactStatics(Destination, target as any)
 
   return Destination
 }
