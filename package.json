@@ -159,6 +159,7 @@
     "url": "https://opencollective.com/formily"
   },
   "dependencies": {
-    "@ant-design/icons": "^4.0.2"
+    "@ant-design/icons": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }

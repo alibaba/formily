@@ -2,7 +2,8 @@ import typescript from 'rollup-plugin-typescript2'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import externalGlobals from 'rollup-plugin-external-globals'
-import { uglify } from 'rollup-plugin-uglify'
+// import { uglify } from 'rollup-plugin-uglify'
+import { terser } from "rollup-plugin-terser";
 
 const plugins = [
   typescript({
@@ -50,6 +51,6 @@ export default (filename, targetName) => [
       file: `dist/${filename}.umd.production.js`,
       name: targetName,
     },
-    plugins: [...plugins, uglify({ sourcemap: true })],
+    plugins: [...plugins, terser()],
   },
 ]
