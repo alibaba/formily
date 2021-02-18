@@ -4,7 +4,7 @@
 
 .@{form-item-cls} {
     display: flex;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .@{form-item-cls}-label {
@@ -41,6 +41,16 @@
 }
 
 .@{form-item-cls}-size-small {
+    & {
+        margin-bottom: 16px;
+    }
+
+    .@{form-item-cls}-help,
+    .@{form-item-cls}-extra {
+        min-height: 16px;
+        line-height: 16px;
+    }
+
     .@{form-item-cls}-control-content {
         min-height: 24px;
     }
@@ -78,6 +88,16 @@
 }
 
 .@{form-item-cls}-size-large {
+    & {
+        margin-bottom: 24px;
+    }
+
+    .@{form-item-cls}-help,
+    .@{form-item-cls}-extra {
+        min-height: 24px;
+        line-height: 24px;
+    }
+
     .@{form-item-cls}-control-content {
         min-height: 40px;
     }
@@ -357,10 +377,11 @@
 .@{form-item-cls}-help,
 .@{form-item-cls}-extra {
     clear: both;
-    min-height: 16px;
+    min-height: 20px;
     color: rgba(0, 0, 0, 0.45);
     font-size: 14px;
-    line-height: 1.5715;
+    // line-height: 1.5715;
+    line-height: 20px;
     transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
     padding-top: 0px;
 }
@@ -420,10 +441,12 @@
         outline: 0;
         box-shadow: 0 0 0 2px #ff4d4f33;
     }
-
-    .@{form-item-cls}-help {
-        color: #ff4d4f;
-    }
+}
+.@{form-item-cls}-error-help {
+    color: #ff4d4f;
+}
+.@{form-item-cls}-warning-help {
+    color: #faad14;
 }
 
 .@{form-item-cls}-warning {
@@ -444,14 +467,93 @@
         outline: 0;
         box-shadow: 0 0 0 2px #faad1433;
     }
-
-    .@{form-item-cls}-help {
-        color: #faad14;
-    }
 }
 
 .@{form-item-cls}-feedback-layout-terse {
     &.@{form-item-cls}-feedback-status-valid {
         margin-bottom: 0;
+    }
+}
+
+@-webkit-keyframes antShowHelpIn {
+    0% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+        opacity: 0
+    }
+
+    to {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1
+    }
+}
+
+.@{form-item-cls}-help-appear,
+.@{form-item-cls}-help-enter,
+.@{form-item-cls}-help-leave {
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused
+}
+
+.@{form-item-cls}-help-appear.@{form-item-cls}-help-appear-active,
+.@{form-item-cls}-help-enter.@{form-item-cls}-help-enter-active {
+    -webkit-animation-name: antShowHelpIn;
+    animation-name: antShowHelpIn;
+    -webkit-animation-play-state: running;
+    animation-play-state: running
+}
+
+.@{form-item-cls}-help-leave.@{form-item-cls}-help-leave-active {
+    -webkit-animation-name: antShowHelpOut;
+    animation-name: antShowHelpOut;
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    pointer-events: none
+}
+
+.@{form-item-cls}-help-appear,
+.@{form-item-cls}-help-enter {
+    opacity: 0
+}
+
+.@{form-item-cls}-help-appear,
+.@{form-item-cls}-help-enter,
+.@{form-item-cls}-help-leave {
+    -webkit-animation-timing-function: cubic-bezier(.645,.045,.355,1);
+    animation-timing-function: cubic-bezier(.645,.045,.355,1)
+}
+
+@keyframes antShowHelpIn {
+    0% {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+        opacity: 0
+    }
+
+    to {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1
+    }
+}
+
+@-webkit-keyframes antShowHelpOut {
+    to {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+        opacity: 0
+    }
+}
+
+@keyframes antShowHelpOut {
+    to {
+        -webkit-transform: translateY(-5px);
+        transform: translateY(-5px);
+        opacity: 0
     }
 }
