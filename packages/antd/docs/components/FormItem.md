@@ -698,6 +698,16 @@ export default () => {
           x-component="Title"
           x-component-props={{ text: '反馈信息的布局' }}
         />
+        
+        <SchemaField.String
+          title="紧凑模式required"
+          x-decorator="FormItem"
+          x-component="Input"
+          required
+          x-decorator-props={{
+            feedbackLayout: 'terse'
+          }}
+        />
 
         <SchemaField.String
           title="紧凑模式有feedback(feedbackLayout=terse)"
@@ -727,6 +737,17 @@ export default () => {
             feedbackStatus: 'error',
             feedbackText: 'error message',
             feedbackLayout: 'loose'
+          }}
+        />
+
+        <SchemaField.String
+          title="弹出模式(feedbackLayout=popover)"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            feedbackStatus: 'warning',
+            feedbackText: 'warning message',
+            feedbackLayout: 'popover'
           }}
         />
 

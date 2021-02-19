@@ -5,7 +5,7 @@ import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, useFormShallowLayout } from '../form-layout'
 import { Tooltip, Popover } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 
 export interface IFormItemProps {
   className?: string
@@ -113,16 +113,19 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     enableCol = true
   }
 
+  const prefixCls = usePrefixCls('formily-form-item', props)
   const formatChildren =
     feedbackLayout === 'popover' && feedbackText ? (
-      <Popover content={feedbackText} visible={true}>
+      <Popover autoAdjustOverflow content={<div className={cls({
+        [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
+        [`${prefixCls}-help`]: true,
+      })}><ExclamationCircleOutlined /> {feedbackText}</div>} visible={true}>
         {children}
       </Popover>
     ) : (
       children
     )
-
-  const prefixCls = usePrefixCls('formily-form-item', props)
+  
   return (
     <div
       className={cls({
@@ -200,7 +203,14 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
           )}
         </div>
         {!!feedbackText && feedbackLayout !== 'popover' && (
-          <div className={cls(`${prefixCls}-help`)}>{feedbackText}</div>
+          <div className={cls({
+            [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
+            [`${prefixCls}-help`]: true,
+            [`${prefixCls}-help-enter`]: !!feedbackStatus,
+            [`${prefixCls}-help-enter-active`]: !!feedbackStatus,
+            [`${prefixCls}-help-leave`]: !feedbackStatus,
+            [`${prefixCls}-help-leave-active`]: !feedbackStatus,
+          })}>{feedbackText}</div>
         )}
         {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
       </div>
