@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, useFormShallowLayout } from '../form-layout'
 import { Tooltip, Popover } from 'antd'
-import { QuestionCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import {
+  QuestionCircleOutlined,
+  CloseCircleOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons'
 
 export interface IFormItemProps {
   className?: string
@@ -44,12 +49,15 @@ type ComposeFormItem = React.FC<IFormItemProps> & {
 const useFormItemLayout = (props: IFormItemProps) => {
   const shallowFormLayout = useFormShallowLayout()
   const formLayout = useFormLayout()
-  const layout = shallowFormLayout || formLayout || {}
-
+  const layout = { ...formLayout, ...shallowFormLayout }
   return {
     ...props,
+    layout: layout.layout ?? 'horizontal',
     colon: props.colon ?? layout.colon,
-    labelAlign: props.labelAlign ?? layout.labelAlign,
+    labelAlign:
+      layout.layout === 'vertical'
+        ? props.labelAlign ?? layout.labelAlign ?? 'left'
+        : props.labelAlign ?? layout.labelAlign ?? 'right',
     labelWrap: props.labelWrap ?? layout.labelWrap,
     labelWidth: props.labelWidth ?? layout.labelWidth,
     wrapperWidth: props.wrapperWidth ?? layout.wrapperWidth,
@@ -66,11 +74,19 @@ const useFormItemLayout = (props: IFormItemProps) => {
   }
 }
 
+const ICON_MAP = {
+  error: <CloseCircleOutlined />,
+  success: <CheckCircleOutlined />,
+  warning: <ExclamationCircleOutlined />,
+}
+
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
+  const popoverContainerRef = useRef()
   const formLayout = useFormItemLayout(others)
   const {
     label,
+    layout,
     colon = true,
     addonBefore,
     addonAfter,
@@ -87,7 +103,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     wrapperWidth,
     labelCol,
     wrapperCol,
-    labelAlign = 'right',
+    labelAlign,
     wrapperAlign = 'left',
     size,
     labelWrap,
@@ -96,7 +112,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   } = formLayout
   const labelStyle: any = {}
   const wrapperStyle: any = {}
-
   // 固定宽度
   let enableCol = false
   if (labelWidth || wrapperWidth) {
@@ -115,25 +130,37 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 
   const prefixCls = usePrefixCls('formily-form-item', props)
   const formatChildren =
-    feedbackLayout === 'popover' && feedbackText ? (
-      <Popover autoAdjustOverflow content={<div className={cls({
-        [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
-        [`${prefixCls}-help`]: true,
-      })}><ExclamationCircleOutlined /> {feedbackText}</div>} visible={true}>
+    feedbackLayout === 'popover' ? (
+      <Popover
+        autoAdjustOverflow
+        placement="top"
+        getPopupContainer={() => popoverContainerRef.current}
+        content={
+          <div
+            className={cls({
+              [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
+              [`${prefixCls}-help`]: true,
+            })}
+          >
+            {ICON_MAP[feedbackStatus]} {feedbackText}
+          </div>
+        }
+        visible={!!feedbackText}
+      >
         {children}
       </Popover>
     ) : (
       children
     )
-  
+
   return (
     <div
+      ref={popoverContainerRef}
       className={cls({
         [`${prefixCls}`]: true,
+        [`${prefixCls}-layout-${layout}`]: true,
         [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
-        [`${prefixCls}-feedback-status-${
-          !!feedbackStatus ? 'valid' : 'invalid'
-        }`]: true,
+        [`${prefixCls}-feedback-has-text`]: !!feedbackText,
         [`${prefixCls}-size-${size}`]: !!size,
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
         [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
@@ -155,14 +182,22 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
           })}
           style={labelStyle}
         >
-          {asterisk && (
-            <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
-          )}
-          <label>{label}</label>
+          <div className={cls(`${prefixCls}-label-content`)}>
+            {asterisk && (
+              <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
+            )}
+            <label>{label}</label>
+          </div>
           {tooltip && (
-            <Tooltip placement="bottom" title={tooltip}>
-              <QuestionCircleOutlined className={cls(`${prefixCls}-tooltip`)} />
-            </Tooltip>
+            <span className={cls(`${prefixCls}-label-tooltip`)}>
+              <Tooltip
+                placement="top"
+                title={tooltip}
+                getPopupContainer={() => popoverContainerRef.current}
+              >
+                <QuestionCircleOutlined />
+              </Tooltip>
+            </span>
           )}
           {label && (
             <span className={cls(`${prefixCls}-colon`)}>
@@ -203,19 +238,25 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
           )}
         </div>
         {!!feedbackText && feedbackLayout !== 'popover' && (
-          <div className={cls({
-            [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
-            [`${prefixCls}-help`]: true,
-            [`${prefixCls}-help-enter`]: !!feedbackStatus,
-            [`${prefixCls}-help-enter-active`]: !!feedbackStatus,
-            [`${prefixCls}-help-leave`]: !feedbackStatus,
-            [`${prefixCls}-help-leave-active`]: !feedbackStatus,
-          })}>{feedbackText}</div>
+          <div
+            className={cls({
+              [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
+              [`${prefixCls}-help`]: true,
+              [`${prefixCls}-help-enter`]: true,
+              [`${prefixCls}-help-enter-active`]: true,
+            })}
+          >
+            {feedbackText}
+          </div>
         )}
         {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
       </div>
     </div>
   )
+}
+
+BaseItem.defaultProps = {
+  feedbackLayout: 'loose',
 }
 
 // 适配

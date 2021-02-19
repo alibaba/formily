@@ -186,7 +186,7 @@ export default () => {
           title="默认"
           x-decorator="FormItem"
           x-component="Input"
-        />        
+        />
         <SchemaField.String
           title="无冒号(colon=false)"
           x-decorator="FormItem"
@@ -206,6 +206,27 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             labelWidth: 300,
+          }}
+        />
+        <SchemaField.String
+          title="固定label宽度(labelWidth)溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出溢出"
+          description="描述描述"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            labelWidth: 300,
+            tooltip: '提示提示',
+          }}
+        />
+        <SchemaField.String
+          title="固定label宽度(labelWidth)换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行换行"
+          description="描述描述"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            labelWidth: 300,
+            labelWrap: true,
+            tooltip: '提示提示',
           }}
         />
         <SchemaField.String
@@ -301,6 +322,8 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             asterisk: true,
+            labelCol: 6,
+            wrapperCol: 10,
           }}
         />
 
@@ -310,6 +333,8 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             addonBefore: 'addonBefore',
+            labelCol: 6,
+            wrapperCol: 10,
           }}
         />
         <SchemaField.String
@@ -318,6 +343,8 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             addonAfter: 'addonAfter',
+            labelCol: 6,
+            wrapperCol: 10,
           }}
         />
 
@@ -327,6 +354,8 @@ export default () => {
           x-component="Input"
           x-decorator-props={{
             feedbackText: 'feedbackText',
+            labelCol: 6,
+            wrapperCol: 10,
           }}
         />
 
@@ -337,6 +366,8 @@ export default () => {
           x-decorator-props={{
             feedbackText: 'feedbackText',
             extra: 'extra',
+            labelCol: 6,
+            wrapperCol: 10,
           }}
         />
       </SchemaField>
@@ -478,7 +509,7 @@ export default () => {
 
 ## inset
 
-设置表单组件为内嵌模式，仅限 antd 表单组件
+设置表单组件为内嵌模式
 
 ```tsx
 import React, { useState } from 'react'
@@ -609,7 +640,7 @@ export default () => {
 
 ## 反馈信息
 
-可通过 `feedbackIcon` 传入指定反馈的按钮, 仅限于 antd 表单组件
+可通过 `feedbackIcon` 传入指定反馈的按钮
 
 ```tsx
 import React, { useState } from 'react'
@@ -620,7 +651,9 @@ import {
   Cascader,
   Select,
   DatePicker,
+  TimePicker,
   FormItem,
+  FormLayout,
   NumberPicker,
   Switch,
   FormButtonGroup,
@@ -638,11 +671,13 @@ const SchemaField = createSchemaField({
     Cascader,
     TreeSelect,
     DatePicker,
+    TimePicker,
     NumberPicker,
     Switch,
     Radio,
     FormItem,
     Title,
+    FormLayout,
   },
 })
 
@@ -698,14 +733,14 @@ export default () => {
           x-component="Title"
           x-component-props={{ text: '反馈信息的布局' }}
         />
-        
+
         <SchemaField.String
           title="紧凑模式required"
           x-decorator="FormItem"
           x-component="Input"
           required
           x-decorator-props={{
-            feedbackLayout: 'terse'
+            feedbackLayout: 'terse',
           }}
         />
 
@@ -716,7 +751,7 @@ export default () => {
           x-decorator-props={{
             feedbackStatus: 'error',
             feedbackText: 'error message',
-            feedbackLayout: 'terse'
+            feedbackLayout: 'terse',
           }}
         />
 
@@ -725,7 +760,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="Input"
           x-decorator-props={{
-            feedbackLayout: 'terse'
+            feedbackLayout: 'terse',
           }}
         />
 
@@ -736,7 +771,7 @@ export default () => {
           x-decorator-props={{
             feedbackStatus: 'error',
             feedbackText: 'error message',
-            feedbackLayout: 'loose'
+            feedbackLayout: 'loose',
           }}
         />
 
@@ -747,7 +782,7 @@ export default () => {
           x-decorator-props={{
             feedbackStatus: 'warning',
             feedbackText: 'warning message',
-            feedbackLayout: 'popover'
+            feedbackLayout: 'popover',
           }}
         />
 
@@ -758,7 +793,17 @@ export default () => {
           x-decorator-props={{
             feedbackStatus: 'error',
             feedbackText: 'error message',
-            feedbackLayout: 'popover'
+            feedbackLayout: 'popover',
+          }}
+        />
+        <SchemaField.String
+          title="弹出模式(feedbackLayout=popover)"
+          x-decorator="FormItem"
+          x-component="Input"
+          x-decorator-props={{
+            feedbackStatus: 'success',
+            feedbackText: 'success message',
+            feedbackLayout: 'popover',
           }}
         />
 
@@ -766,56 +811,95 @@ export default () => {
           x-component="Title"
           x-component-props={{ text: '组件的适配情况' }}
         />
+        <SchemaField.Void
+          x-component="FormLayout"
+          x-component-props={{ layout: 'vertical' }}
+        >
+          <SchemaField.String
+            title="Select"
+            x-decorator="FormItem"
+            x-component="Select"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
 
-        <SchemaField.String
-          title="Select"
-          x-decorator="FormItem"
-          x-component="Select"
-          x-decorator-props={{
-            feedbackStatus: 'success',
-            feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
-          }}
-        />
+          <SchemaField.String
+            title="DatePicker"
+            x-decorator="FormItem"
+            x-component="DatePicker"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
+          <SchemaField.String
+            title="DatePicker.RangePicker"
+            x-decorator="FormItem"
+            x-component="DatePicker.RangePicker"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
+          <SchemaField.String
+            title="DatePicker.YearPicker"
+            x-decorator="FormItem"
+            x-component="DatePicker.YearPicker"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
+          <SchemaField.String
+            title="DatePicker.MonthPicker"
+            x-decorator="FormItem"
+            x-component="DatePicker.MonthPicker"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
+          <SchemaField.String
+            title="DatePicker.TimePicker"
+            x-decorator="FormItem"
+            x-component="TimePicker"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
+          <SchemaField.String
+            title="NumberPicker"
+            x-decorator="FormItem"
+            x-component="NumberPicker"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
 
-        <SchemaField.String
-          title="DatePicker"
-          x-decorator="FormItem"
-          x-component="DatePicker"
-          x-decorator-props={{
-            feedbackStatus: 'success',
-            feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
-          }}
-        />
+          <SchemaField.String
+            title="TreeSelect"
+            x-decorator="FormItem"
+            x-component="TreeSelect"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
 
-        <SchemaField.String
-          title="NumberPicker"
-          x-decorator="FormItem"
-          x-component="NumberPicker"
-          x-decorator-props={{
-            feedbackStatus: 'success',
-            feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
-          }}
-        />
-
-        <SchemaField.String
-          title="TreeSelect"
-          x-decorator="FormItem"
-          x-component="TreeSelect"
-          x-decorator-props={{
-            feedbackStatus: 'success',
-            feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
-          }}
-        />
-
-        <SchemaField.String
-          title="Cascader"
-          x-decorator="FormItem"
-          x-component="Cascader"
-          x-decorator-props={{
-            feedbackStatus: 'success',
-            feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
-          }}
-        />
+          <SchemaField.String
+            title="Cascader"
+            x-decorator="FormItem"
+            x-component="Cascader"
+            x-decorator-props={{
+              feedbackStatus: 'success',
+              feedbackIcon: <CheckCircleFilled style={{ color: '#52c41a' }} />,
+            }}
+          />
+        </SchemaField.Void>
       </SchemaField>
     </FormProvider>
   )
@@ -959,6 +1043,7 @@ export default () => {
 
 | 属性名         | 类型                                                   | 描述                                        | 默认值    |
 | -------------- | ------------------------------------------------------ | ------------------------------------------- | --------- |
+| label          | ReactNode                                              | 标签                                        | -         |
 | colon          | boolean                                                | 冒号                                        | true      |
 | tooltip        | ReactNode                                              | 问号提示                                    | -         |
 | labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |

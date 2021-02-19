@@ -2,9 +2,9 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 import { isVoidField } from '@formily/core'
 import { useField, useForm, observer } from '@formily/react'
 import { isStr } from '@formily/shared'
-import { Form, Space, Popover } from 'antd'
+import { Space, Popover } from 'antd'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
-import { FormItemProps } from 'antd/lib/form'
+import { BaseItem, IFormItemProps } from '../form-item'
 import { PopoverProps } from 'antd/lib/popover'
 import { useClickAway, usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
@@ -16,7 +16,7 @@ interface IPopoverProps extends PopoverProps {
   renderPreview?: (field: Formily.Core.Types.GeneralField) => React.ReactNode
 }
 
-type ComposedEditable = React.FC<FormItemProps> & {
+type ComposedEditable = React.FC<IFormItemProps> & {
   Popover?: React.FC<IPopoverProps>
 }
 
@@ -38,19 +38,21 @@ const useEditable = (): [boolean, (payload: boolean) => void] => {
   ]
 }
 
-const useFormItemProps = (): FormItemProps => {
+const useFormItemProps = (): IFormItemProps => {
   const field = useField()
-  if (isVoidField(field)) {
-    return {}
-  } else {
-    return {
-      validateStatus: field.editable ? field.validateStatus : '',
-      help: field.editable
-        ? field.errors?.length
-          ? field.errors
-          : field.description
-        : field.description,
-    }
+  if (isVoidField(field)) return {}
+  if (!field) return {}
+  const takeMessage = () => {
+    if (field.errors.length) return field.errors
+    if (field.warnings.length) return field.warnings
+    if (field.successes.length) return field.successes
+  }
+
+  return {
+    feedbackStatus:
+      field.validateStatus === 'validating' ? 'pending' : field.validateStatus,
+    feedbackText: takeMessage(),
+    extra: field.description,
   }
 }
 
@@ -70,18 +72,18 @@ export const Editable: ComposedEditable = observer((props) => {
   const renderEditHelper = () => {
     if (editable) return
     return (
-      <Form.Item {...itemProps}>
+      <BaseItem {...props} {...itemProps}>
         <EditOutlined className={`${prefixCls}-edit-btn`} />
-      </Form.Item>
+      </BaseItem>
     )
   }
 
   const renderCloseHelper = () => {
     if (!editable) return
     return (
-      <Form.Item>
+      <BaseItem {...props}>
         <CloseOutlined className={`${prefixCls}-close-btn`} />
-      </Form.Item>
+      </BaseItem>
     )
   }
 
@@ -113,9 +115,9 @@ export const Editable: ComposedEditable = observer((props) => {
   return (
     <div className={prefixCls} ref={innerRef} onClick={onClick}>
       <Space size={4} style={{ margin: '0 4px' }}>
-        <Form.Item {...props} {...itemProps}>
+        <BaseItem {...props} {...itemProps}>
           {props.children}
-        </Form.Item>
+        </BaseItem>
         {renderEditHelper()}
         {renderCloseHelper()}
       </Space>
@@ -165,14 +167,16 @@ Editable.Popover = observer((props) => {
         }
       }}
     >
-      <Form.Item className={`${prefixCls}-trigger`}>
-        <Space size={4} style={{ margin: '0 4px' }}>
-          <span className={`${prefixCls}-preview`}>
-            {placeholder || field.title}
-          </span>
-          <EditOutlined className={`${prefixCls}-edit-btn`} />
-        </Space>
-      </Form.Item>
+      <div>
+        <BaseItem className={`${prefixCls}-trigger`}>
+          <Space size={4} style={{ margin: '0 4px' }}>
+            <span className={`${prefixCls}-preview`}>
+              {placeholder || field.title}
+            </span>
+            <EditOutlined className={`${prefixCls}-edit-btn`} />
+          </Space>
+        </BaseItem>
+      </div>
     </Popover>
   )
 })

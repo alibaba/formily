@@ -3,12 +3,6 @@
 @array-table-prefix-cls: ~'@{ant-prefix}-formily-array-table';
 
 .@{array-table-prefix-cls} {
-  
-  .@{ant-prefix}-form-item-has-error {
-    .@{ant-prefix}-table {
-      border: 1px solid @error-color  !important;
-    }
-  }
 
   .@{array-table-prefix-cls}-pagination {
     display: flex;
@@ -25,10 +19,10 @@
     td {
       visibility: visible;
 
-      .@{ant-prefix}-form-item {
+      .@{ant-prefix}-formily-form-item {
         margin-bottom: 0 !important;
 
-        .@{ant-prefix}-form-item-explain {
+        .@{ant-prefix}-formily-form-item-help {
           position: absolute;
           font-size: 12px;
           top: 100%;
