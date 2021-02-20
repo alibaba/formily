@@ -8,7 +8,7 @@
 import React from 'react'
 import { FormItem, Input, FormGrid } from '@formily/antd'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm } from '@formily/core'
 
 const SchemaField = createSchemaField({
   components: {
@@ -18,13 +18,7 @@ const SchemaField = createSchemaField({
   },
 })
 
-const form = createForm({
-  effects(form) {
-    onFieldReact('*(ccc,ddd,eee,fff,ggg)', (field) => {
-      field.visible = form.values.aaa !== '123'
-    })
-  },
-})
+const form = createForm()
 
 export default () => {
   return (
@@ -92,7 +86,7 @@ export default () => {
 import React from 'react'
 import { FormItem, Input, FormGrid } from '@formily/antd'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm } from '@formily/core'
 
 const SchemaField = createSchemaField({
   components: {
@@ -102,13 +96,7 @@ const SchemaField = createSchemaField({
   },
 })
 
-const form = createForm({
-  effects(form) {
-    onFieldReact('*(ccc,ddd,eee,fff,ggg)', (field) => {
-      field.visible = form.values.aaa !== '123'
-    })
-  },
-})
+const form = createForm()
 
 const schema = {
   type: 'object',

@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState, useContext } from 'react'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
-import { isValid, isNum, isBool } from '@formily/shared'
+import { isValid, isNum, isBool, isEqual } from '@formily/shared'
 import ResizeObserver from 'resize-observer-polyfill'
 import { FormGridContext } from './context'
 
@@ -163,7 +163,9 @@ const useLayout = (props: ILayoutProps): ILayout => {
       const params = calculateSmartColumns(ref.current)
       setLayout(params)
       const style = getStyle({ columnGap, rowGap, layoutParams: params, ref })
-      setStyles(style)
+      if (!isEqual(style, styles)) {
+        setStyles(style)
+      }
     }
     const resizeObserver = new ResizeObserver(observer)
     const mutationObserver = new MutationObserver(observer)
