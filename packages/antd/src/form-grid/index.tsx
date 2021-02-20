@@ -3,7 +3,7 @@ import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 import { isValid, isNum, isBool } from '@formily/shared'
 import ResizeObserver from 'resize-observer-polyfill'
-import { FormGridContext } from './context';
+import { FormGridContext } from './context'
 
 interface ILayout {
   ref: React.MutableRefObject<HTMLDivElement>
@@ -67,7 +67,6 @@ type ComposedFormGrid = React.FC<IFormGridProps> & {
   useGridSpan: (gridSpan: number) => number
 }
 
-
 const S = 720
 const MD = 1280
 const LG = 1920
@@ -85,7 +84,6 @@ const useLayout = (props: ILayoutProps): ILayout => {
   } = props
   const ref = useRef<HTMLDivElement>(null)
   const formGridPrefixCls = usePrefixCls('formily-grid')
-  const observer = useRef(null)
   const [layoutParams, setLayout] = useState({})
   const [styles, setStyles] = useState({})
 
@@ -102,13 +100,25 @@ const useLayout = (props: ILayoutProps): ILayout => {
         minWidth: isValid(minWidth)
           ? minWidth[index]
           : isValid(maxColumns[index])
-          ? maxColumns ? Math.floor((clientWidth - (maxColumns[index] - 1) * props.columnGap) / maxColumns[index]) : minWidth
+          ? maxColumns
+            ? Math.floor(
+                (clientWidth - (maxColumns[index] - 1) * props.columnGap) /
+                  maxColumns[index]
+              )
+            : minWidth
           : 0,
-        maxWidth: isValid(maxWidth) 
-          ? maxWidth[index] 
-          : Infinity === Math.floor((clientWidth - (minColumns[index] - 1) * props.columnGap) / minColumns[index])
+        maxWidth: isValid(maxWidth)
+          ? maxWidth[index]
+          : Infinity ===
+            Math.floor(
+              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
+                minColumns[index]
+            )
           ? clientWidth
-          : Math.floor((clientWidth - (minColumns[index] - 1) * props.columnGap) / minColumns[index]),
+          : Math.floor(
+              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
+                minColumns[index]
+            ),
         columns: target.childNodes.length,
         colWrap: colWrap[index],
         minColumns: minColumns ? minColumns[index] : 1,
@@ -119,15 +129,26 @@ const useLayout = (props: ILayoutProps): ILayout => {
       // maxWidth 优先级 高于maxColumns
       // const minWidthUnderMinColumns = (clientWidth - (maxColumns[index] - 1) * props.columnGap) / maxColumns[index]
       return {
-        maxWidth: isValid(maxWidth) 
-          ? maxWidth[index] 
-          : Infinity === Math.floor((clientWidth - (minColumns[index] - 1) * props.columnGap) / minColumns[index])
-            ? clientWidth
-            : Math.floor((clientWidth - (minColumns[index] - 1) * props.columnGap) / minColumns[index]),
+        maxWidth: isValid(maxWidth)
+          ? maxWidth[index]
+          : Infinity ===
+            Math.floor(
+              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
+                minColumns[index]
+            )
+          ? clientWidth
+          : Math.floor(
+              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
+                minColumns[index]
+            ),
         minWidth: isValid(minWidth)
           ? minWidth[index]
           : isValid(maxColumns[index])
-          ? Math.floor((clientWidth - (maxColumns[index] - 1) * props.columnGap) / maxColumns[index]): 0,
+          ? Math.floor(
+              (clientWidth - (maxColumns[index] - 1) * props.columnGap) /
+                maxColumns[index]
+            )
+          : 0,
         minColumns: minColumns ? minColumns[index] : 1,
         maxColumns: maxColumns ? maxColumns[index] : undefined,
         columns: target.childNodes.length,
@@ -138,29 +159,30 @@ const useLayout = (props: ILayoutProps): ILayout => {
   }
 
   useLayoutEffect(() => {
+    const observer = () => {
+      const params = calculateSmartColumns(ref.current)
+      setLayout(params)
+      const style = getStyle({ columnGap, rowGap, layoutParams: params, ref })
+      setStyles(style)
+    }
+    const resizeObserver = new ResizeObserver(observer)
+    const mutationObserver = new MutationObserver(observer)
     if (ref.current) {
-      observer.current = new ResizeObserver((entries) => {
-        // requestAnimationFrame(() => {
-          entries.forEach((entry) => {
-            const target = entry.target as HTMLElement
-            const params = calculateSmartColumns(target)
-            setLayout(params)
-            const style = getStyle({ columnGap, rowGap, layoutParams: params, ref })
-            setStyles(style)
-          })
-        // })
-      }) as any
-      observer.current.observe(ref.current)
+      resizeObserver.observe(ref.current)
+      mutationObserver.observe(ref.current, {
+        childList: true,
+      })
     }
     return () => {
-      observer.current?.unobserve(ref.current)
+      resizeObserver.unobserve(ref.current)
+      mutationObserver.disconnect()
     }
   }, [])
   return {
     ref,
     formGridPrefixCls,
     layoutParams,
-    styles
+    styles,
   }
 }
 
@@ -169,7 +191,7 @@ const getStyle = (props: IStyleProps): IStyle => {
   // const max = layoutParams.maxWidth ? `${layoutParams.maxWidth}px` : '1fr';
   const { clientWidth, minWidth, maxColumns, minColumns } = layoutParams
   const getMinMax = (minWidth: number, maxWidth: number) => {
-    let minmax 
+    let minmax
     if (minWidth === Infinity) {
       if (!isValid(maxWidth)) {
         minmax = '1fr'
@@ -177,15 +199,25 @@ const getStyle = (props: IStyleProps): IStyle => {
         minmax = `minmax(0px,${maxWidth}px)`
       }
     } else {
-      minmax = `minmax(${minWidth}px,${isValid(maxWidth) ? `${maxWidth}px` : '1fr'})`
+      minmax = `minmax(${minWidth}px,${
+        isValid(maxWidth) ? `${maxWidth}px` : '1fr'
+      })`
     }
     return minmax
   }
-  
-  const spans = Array.from(ref.current?.childNodes || []).reduce((buf, cur: HTMLElement) => {
-    const span = isValid(maxColumns) ? Math.min((Number(cur.getAttribute('data-span')) || 1) as number, maxColumns) : (Number(cur.getAttribute('data-span')) || 1)
-    return buf + Number(span)
-  }, 0)
+
+  const spans = Array.from(ref.current?.childNodes || []).reduce(
+    (buf, cur: HTMLElement) => {
+      const span = isValid(maxColumns)
+        ? Math.min(
+            (Number(cur.getAttribute('data-span')) || 1) as number,
+            maxColumns
+          )
+        : Number(cur.getAttribute('data-span')) || 1
+      return buf + Number(span)
+    },
+    0
+  )
 
   const calc = Math.floor((clientWidth + columnGap) / (minWidth + columnGap))
   let finalColumns
@@ -193,21 +225,22 @@ const getStyle = (props: IStyleProps): IStyle => {
   if (isValid(maxColumns)) {
     finalColumns = Math.min(spans, calc, maxColumns)
   } else {
-
     finalColumns = Math.min(spans, calc)
   }
 
   if (isValid(minColumns)) {
-    if(finalColumns < minColumns) {
+    if (finalColumns < minColumns) {
       finalColumns = minColumns
     }
   }
 
   const style = {
-        gridTemplateColumns: 
-          `repeat(${finalColumns}, ${getMinMax(layoutParams.minWidth, layoutParams.maxWidth)})`,
-        gridGap: `${rowGap}px ${columnGap}px`,
-      }
+    gridTemplateColumns: `repeat(${finalColumns}, ${getMinMax(
+      layoutParams.minWidth,
+      layoutParams.maxWidth
+    )})`,
+    gridGap: `${rowGap}px ${columnGap}px`,
+  }
   return style
 }
 
@@ -257,7 +290,7 @@ export const FormGrid: ComposedFormGrid = (props) => {
   )
   return (
     <FormGridContext.Provider
-      value={{columnGap: props.columnGap, ...layoutParams}}
+      value={{ columnGap: props.columnGap, ...layoutParams }}
     >
       <div
         className={cls(`${formGridPrefixCls}-layout`)}
@@ -271,31 +304,38 @@ export const FormGrid: ComposedFormGrid = (props) => {
 }
 
 const GridColumn: React.FC<IGridColumnProps> = ({ gridSpan, children }) => {
- 
   const span = FormGrid.useGridSpan(gridSpan)
   return (
-    <div style={{ gridColumnStart: `span ${span}` }} data-span={span || 1}>{children}</div>
+    <div style={{ gridColumnStart: `span ${span}` }} data-span={span || 1}>
+      {children}
+    </div>
   )
 }
 
-
 GridColumn.defaultProps = {
-  gridSpan: 1
+  gridSpan: 1,
 }
 
 FormGrid.useGridSpan = (gridSpan: number) => {
-  const params = useContext(FormGridContext);
+  const params = useContext(FormGridContext)
   if (!isValid(params)) {
     return gridSpan
   }
-  const { colWrap, columns, clientWidth, minWidth, columnGap, maxColumns } = params
+  const {
+    colWrap,
+    columns,
+    clientWidth,
+    minWidth,
+    columnGap,
+    maxColumns,
+  } = params
   const calc = Math.floor((clientWidth + columnGap) / (minWidth + columnGap)) // 算出实际一行最多能塞进的格子数
   if (colWrap === true) {
     if (Math.min(calc, columns) >= gridSpan) {
       if (isValid(maxColumns)) {
         return Math.min(gridSpan, maxColumns)
       }
-     return gridSpan
+      return gridSpan
     } else {
       if (isValid(maxColumns)) {
         return Math.min(calc, columns, maxColumns)
@@ -310,10 +350,10 @@ FormGrid.useGridSpan = (gridSpan: number) => {
       return gridSpan
     } else {
       if (isValid(maxColumns)) {
-        return Math.min(calc,columns, maxColumns)
+        return Math.min(calc, columns, maxColumns)
       }
-      return Math.min(calc,columns)
-    } 
+      return Math.min(calc, columns)
+    }
   }
 }
 FormGrid.GridColumn = GridColumn
