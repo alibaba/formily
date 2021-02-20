@@ -6,9 +6,9 @@
  */
 import React, { useRef, useLayoutEffect, useState } from 'react'
 import StickyBox, { StickyBoxMode } from 'react-sticky-box'
-import { Space, Form } from 'antd'
+import { Space } from 'antd'
 import { SpaceProps } from 'antd/lib/space'
-import { FormItemProps } from 'antd/lib/form'
+import { BaseItem, IFormItemProps } from '../form-item'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 interface IStickyProps {
@@ -30,13 +30,13 @@ type IFormButtonGroupProps = Omit<SpaceProps, 'align' | 'size'> & {
   gutter?: number
 }
 
-type IFormItemProps = FormItemProps & {
-  gutter?: number
-}
-
 type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
   Sticky: React.FC<IStickyProps>
-  FormItem: React.FC<IFormItemProps>
+  FormItem: React.FC<
+    IFormItemProps & {
+      gutter?: number
+    }
+  >
 }
 
 function getInheritedBackgroundColor(el: HTMLElement) {
@@ -98,7 +98,7 @@ FormButtonGroup.defaultProps = {
 
 FormButtonGroup.FormItem = ({ gutter, ...props }) => {
   return (
-    <Form.Item
+    <BaseItem
       {...props}
       label=" "
       style={{
@@ -110,7 +110,7 @@ FormButtonGroup.FormItem = ({ gutter, ...props }) => {
       colon={false}
     >
       <Space size={gutter}>{props.children}</Space>
-    </Form.Item>
+    </BaseItem>
   )
 }
 
@@ -148,7 +148,6 @@ FormButtonGroup.Sticky = ({ align, ...props }) => {
               : align === 'right'
               ? 'flex-end'
               : 'center',
-          display: 'flex',
         }}
       >
         {props.children}

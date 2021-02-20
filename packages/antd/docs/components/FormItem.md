@@ -1,12 +1,12 @@
 # FormItem
 
-> 表单字段组件，用于展示布局。
+> 全新的 FormItem 组件，相比于 Antd 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
 
 ## Markup Schema 案例
 
 ```tsx
 import React from 'react'
-import { Form, Input as NextInput, Select } from 'antd'
+import { Input as NextInput, Select } from 'antd'
 import { Input, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
@@ -116,7 +116,7 @@ export default () => (
 )
 ```
 
-## 常用属性展示
+## 常用属性案例
 
 ```tsx
 import React, { useState } from 'react'
@@ -376,7 +376,7 @@ export default () => {
 }
 ```
 
-## bordered
+## 无边框案例
 
 设置去除组件边框，仅限 antd 表单组件
 
@@ -507,7 +507,7 @@ export default () => {
 }
 ```
 
-## inset
+## 内嵌模式案例
 
 设置表单组件为内嵌模式
 
@@ -638,7 +638,7 @@ export default () => {
 }
 ```
 
-## 反馈信息
+## 反馈信息定制案例
 
 可通过 `feedbackIcon` 传入指定反馈的按钮
 
@@ -906,7 +906,7 @@ export default () => {
 }
 ```
 
-## Size
+## 尺寸控制案例
 
 ```tsx
 import React, { useState } from 'react'
@@ -1067,3 +1067,7 @@ export default () => {
 | asterisk       | boolean                                                | 星号提醒                                    | -         |
 | gridSpan       | number                                                 | ⽹格布局占宽                                | -         |
 | bordered       | boolean                                                | 是否有边框                                  | -         |
+
+### FormItem.BaseItem
+
+纯样式组件，属性与 FormItem 一样，与 Formily Core 不做状态桥接，主要用于一些需要依赖 FormItem 的样式布局能力，但不希望接入 Field 状态的场景

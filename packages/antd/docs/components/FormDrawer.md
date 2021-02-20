@@ -9,13 +9,14 @@ import React from 'react'
 import {
   FormDrawer,
   FormItem,
+  FormLayout,
   Input,
   Submit,
   Reset,
   FormButtonGroup,
 } from '@formily/antd'
 import { Field, useForm, createSchemaField } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -30,7 +31,7 @@ export default () => {
       onClick={() => {
         FormDrawer('抽屉表单', (resolve) => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
                 <SchemaField.String
                   name="aaa"
@@ -67,7 +68,7 @@ export default () => {
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -91,13 +92,14 @@ import React from 'react'
 import {
   FormDrawer,
   FormItem,
+  FormLayout,
   Input,
   Submit,
   Reset,
   FormButtonGroup,
 } from '@formily/antd'
 import { Field, useForm, createSchemaField } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -146,7 +148,7 @@ export default () => {
       onClick={() => {
         FormDrawer('弹窗表单', (resolve) => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDrawer.Footer>
                 <FormButtonGroup align="right">
@@ -154,7 +156,7 @@ export default () => {
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -178,13 +180,14 @@ import React from 'react'
 import {
   FormDrawer,
   FormItem,
+  FormLayout,
   Input,
   Submit,
   Reset,
   FormButtonGroup,
 } from '@formily/antd'
 import { Field, useForm } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 
 export default () => {
   return (
@@ -192,7 +195,7 @@ export default () => {
       onClick={() => {
         FormDrawer('弹窗表单', (resolve) => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={10}>
               <Field
                 name="aaa"
                 required
@@ -227,7 +230,7 @@ export default () => {
                   <Reset>重置</Reset>
                 </FormButtonGroup>
               </FormDrawer.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
