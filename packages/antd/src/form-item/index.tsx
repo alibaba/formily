@@ -1,9 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
-import { useFormLayout, useFormShallowLayout } from '../form-layout'
+import { reduce } from '@formily/shared'
+import {
+  useFormLayout,
+  useFormShallowLayout,
+  FormLayoutShallowContext,
+} from '../form-layout'
 import { Tooltip, Popover } from 'antd'
 import {
   QuestionCircleOutlined,
@@ -49,7 +54,7 @@ type ComposeFormItem = React.FC<IFormItemProps> & {
 const useFormItemLayout = (props: IFormItemProps) => {
   const shallowFormLayout = useFormShallowLayout()
   const formLayout = useFormLayout()
-  const layout = { ...formLayout, ...shallowFormLayout }
+  const layout = { ...shallowFormLayout, ...formLayout }
   return {
     ...props,
     layout: layout.layout ?? 'horizontal',
@@ -82,8 +87,10 @@ const ICON_MAP = {
 
 export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
+  const [active, setActice] = useState(false)
   const popoverContainerRef = useRef()
   const formLayout = useFormItemLayout(others)
+  const shallowFormLayout = useFormShallowLayout()
   const {
     label,
     layout,
@@ -128,7 +135,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     enableCol = true
   }
 
-  const prefixCls = usePrefixCls('formily-form-item', props)
+  const prefixCls = usePrefixCls('formily-item', props)
   const formatChildren =
     feedbackLayout === 'popover' ? (
       <Popover
@@ -165,6 +172,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
         [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
         [`${prefixCls}-inset`]: !!inset,
+        [`${prefixCls}-active`]: active,
+        [`${prefixCls}-inset-active`]: !!inset && active,
         [`${prefixCls}-label-align-${labelAlign}`]: true,
         [`${prefixCls}-control-align-${wrapperAlign}`]: true,
         [`${prefixCls}-label-wrap`]: !!labelWrap,
@@ -173,6 +182,12 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
           bordered === false || !!inset || !!feedbackIcon,
         [props.className]: !!props.className,
       })}
+      onFocus={() => {
+        setActice(true)
+      }}
+      onBlur={() => {
+        setActice(false)
+      }}
     >
       {label !== undefined && (
         <div
@@ -226,7 +241,18 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               [`${prefixCls}-control-content-component-has-feedback-icon`]: !!feedbackIcon,
             })}
           >
-            {formatChildren}
+            <FormLayoutShallowContext.Provider
+              value={reduce(
+                shallowFormLayout,
+                (buf, _, key) => {
+                  buf[key] = undefined
+                  return buf
+                },
+                {}
+              )}
+            >
+              {formatChildren}
+            </FormLayoutShallowContext.Provider>
             {feedbackIcon && (
               <div className={cls(`${prefixCls}-feedback-icon`)}>
                 {feedbackIcon}

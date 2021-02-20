@@ -6,9 +6,9 @@
 
 ```tsx
 import React from 'react'
-import { FormDialog, FormItem, Input } from '@formily/antd'
+import { FormDialog, FormItem, FormLayout, Input } from '@formily/antd'
 import { Field, useForm, createSchemaField } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -23,7 +23,7 @@ export default () => {
       onClick={() => {
         FormDialog('弹窗表单', () => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField>
                 <SchemaField.String
                   name="aaa"
@@ -57,7 +57,7 @@ export default () => {
               <FormDialog.Footer>
                 <span style={{ marginLeft: 4 }}>扩展文案</span>
               </FormDialog.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -78,9 +78,9 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormDialog, FormItem, Input } from '@formily/antd'
+import { FormDialog, FormItem, FormLayout, Input } from '@formily/antd'
 import { Field, useForm, createSchemaField } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -129,12 +129,12 @@ export default () => {
       onClick={() => {
         FormDialog('弹窗表单', () => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={10}>
               <SchemaField schema={schema} />
               <FormDialog.Footer>
                 <span style={{ marginLeft: 4 }}>扩展文案</span>
               </FormDialog.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({
@@ -155,9 +155,15 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormDialog, FormItem, Input, DialogFooter } from '@formily/antd'
+import {
+  FormDialog,
+  FormItem,
+  FormLayout,
+  Input,
+  DialogFooter,
+} from '@formily/antd'
 import { Field, useForm } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 
 export default () => {
   return (
@@ -165,7 +171,7 @@ export default () => {
       onClick={() => {
         FormDialog('弹窗表单', () => {
           return (
-            <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+            <FormLayout labelCol={6} wrapperCol={10}>
               <Field
                 name="aaa"
                 required
@@ -197,7 +203,7 @@ export default () => {
               <FormDialog.Footer>
                 <span style={{ marginLeft: 4 }}>扩展文案</span>
               </FormDialog.Footer>
-            </Form>
+            </FormLayout>
           )
         })
           .open({

@@ -8,10 +8,16 @@
 
 ```tsx
 import React from 'react'
-import { Upload, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import {
+  Upload,
+  FormItem,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 const NormalUpload = (props) => {
@@ -76,7 +82,7 @@ const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+    <FormLayout labelCol={6} wrapperCol={10}>
       <SchemaField>
         <SchemaField.Array
           name="upload"
@@ -103,7 +109,7 @@ export default () => (
       <FormButtonGroup.FormItem>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup.FormItem>
-    </Form>
+    </FormLayout>
   </FormProvider>
 )
 ```
@@ -112,10 +118,16 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Upload, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import {
+  Upload,
+  FormItem,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 const NormalUpload = (props) => {
@@ -207,12 +219,12 @@ const schema = {
 
 export default () => (
   <FormProvider form={form}>
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+    <FormLayout labelCol={6} wrapperCol={10}>
       <SchemaField schema={schema} />
       <FormButtonGroup.FormItem>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup.FormItem>
-    </Form>
+    </FormLayout>
   </FormProvider>
 )
 ```
@@ -221,10 +233,16 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Upload, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import {
+  Upload,
+  FormItem,
+  FormLayout,
+  FormButtonGroup,
+  Submit,
+} from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { Button, Form } from 'antd'
+import { Button } from 'antd'
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons'
 
 const NormalUpload = (props) => {
@@ -280,7 +298,7 @@ const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 14 }}>
+    <FormLayout labelCol={6} wrapperCol={10}>
       <Field
         name="upload"
         title="上传"
@@ -305,7 +323,7 @@ export default () => (
       <FormButtonGroup.FormItem>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup.FormItem>
-    </Form>
+    </FormLayout>
   </FormProvider>
 )
 ```

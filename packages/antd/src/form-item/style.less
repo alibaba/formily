@@ -3,21 +3,89 @@
 @import './grid.less';
 @import './animation.less';
 
-@form-item-cls: ~'@{ant-prefix}-formily-form-item';
+@form-item-cls: ~'@{ant-prefix}-formily-item';
 
 .@{form-item-cls} {
     display: flex;
     margin-bottom: @descriptions-title-margin-bottom;
     position: relative;
     line-height: @line-height-base;
+    font-size: @font-size-base;
 
-    .@{ant-prefix}-select {
-        min-width: 120px;
+    &-label * {
+        line-height: @height-base;
+    }
+
+    &-content-component {
+        line-height: @height-base;
+    }
+
+    textarea.@{ant-prefix}-input {
+        height: auto;
+    }
+
+    // input[type=file]
+    .@{ant-prefix}-upload {
+        background: transparent;
+    }
+
+    .@{ant-prefix}-upload.@{ant-prefix}-upload-drag {
+        background: @background-color-light;
+    }
+
+    input[type='radio'],
+    input[type='checkbox'] {
+        width: @font-size-base;
+        height: @font-size-base;
+    }
+
+    // Radios and checkboxes on same line
+    .@{ant-prefix}-radio-inline,
+    .@{ant-prefix}-checkbox-inline {
+        display: inline-block;
+        margin-left: 8px;
+        font-weight: normal;
+        vertical-align: middle;
+        cursor: pointer;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+
+    .@{ant-prefix}-checkbox-vertical,
+    .@{ant-prefix}-radio-vertical {
+        display: block;
+    }
+
+    .@{ant-prefix}-checkbox-vertical+.@{ant-prefix}-checkbox-vertical,
+    .@{ant-prefix}-radio-vertical+.@{ant-prefix}-radio-vertical {
+        margin-left: 0;
+    }
+
+    .@{ant-prefix}-input-number {
+        +.@{ant-prefix}-form-text {
+            margin-left: 8px;
+        }
+
+        &-handler-wrap {
+            z-index: 2; // https://github.com/ant-design/ant-design/issues/6289
+        }
+    }
+
+    .@{ant-prefix}-select,
+    .@{ant-prefix}-cascader-picker {
+        width: 100%;
+    }
+
+    // Don't impact select inside input group
+    .@{ant-prefix}-input-group .@{ant-prefix}-select,
+    .@{ant-prefix}-input-group .@{ant-prefix}-cascader-picker {
+        width: auto;
     }
 }
 
 .@{form-item-cls}-label {
-    line-height: @line-height-base;
     position: relative;
     display: flex;
 
@@ -25,16 +93,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-
-        &>* {
-            line-height: @height-base;
-        }
     }
 }
 
 .@{form-item-cls}-label label {
     color: rgba(0, 0, 0, .85);
-    font-size: @font-size-base;
 }
 
 .@{form-item-cls}-label-align-left {
@@ -81,7 +144,53 @@
     }
 }
 
+.@{form-item-cls}-control {
+    flex: 1;
+    .@{form-item-cls}-control-content {
+        display: flex;
+
+        .@{form-item-cls}-control-content-component {
+            width: 100%;
+            min-height: @height-base;
+            line-height: @height-base;
+            &-has-feedback-icon {
+                flex: 1;
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+        }
+
+        .@{form-item-cls}-addon-before {
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            min-height: @height-base;
+        }
+
+        .@{form-item-cls}-addon-after {
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            min-height: @height-base;
+        }
+    }
+}
+
 .@{form-item-cls}-size-small {
+    font-size: @font-size-sm;
+
+    .@{form-item-cls}-label * {
+        line-height: @height-sm;
+    }
+
+    .@{form-item-cls}-control-content {
+        .@{form-item-cls}-control-content-component {
+            line-height: @height-sm;
+            min-height: @height-sm;
+        }
+    }
+
     &.@{form-item-cls}-feedback-layout-terse {
         margin-bottom: 8px;
 
@@ -92,7 +201,7 @@
 
 
     &.@{form-item-cls}-feedback-layout-loose {
-        margin-bottom: 16px;
+        margin-bottom: 18px;
 
         &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
             margin-bottom: 0;
@@ -120,7 +229,7 @@
     .@{ant-prefix}-btn {
         height: @form-item-margin-bottom;
         padding: 0 7px;
-        font-size: 14px;
+        font-size: @font-size-base;
         border-radius: 2px;
     }
 
@@ -137,6 +246,18 @@
 }
 
 .@{form-item-cls}-size-large {
+    font-size: @font-size-lg;
+
+    .@{form-item-cls}-label * {
+        line-height: @height-lg;
+    }
+
+    .@{form-item-cls}-control-content {
+        .@{form-item-cls}-control-content-component {
+            line-height: @height-lg;
+            min-height: @height-lg;
+        }
+    }
 
     .@{form-item-cls}-help,
     .@{form-item-cls}-extra {
@@ -144,11 +265,11 @@
     }
 
     .@{form-item-cls}-control-content {
-        min-height: 40px;
+        min-height: @height-lg;
     }
 
     .@{form-item-cls}-label>label {
-        height: 40px;
+        height: @height-lg;
     }
 
     .@{ant-prefix}-picker {
@@ -156,28 +277,35 @@
     }
 
     .@{ant-prefix}-input-number input {
-        height: 38px;
+        height: @height-lg;
     }
 
     .@{ant-prefix}-btn {
-        height: 40px;
+        height: @height-lg;
         padding: 6.4px 15px;
-        font-size: 16px;
+        font-size: @font-size-lg;
         border-radius: 2px;
     }
 
     .@{ant-prefix}-select {
-        font-size: 16px;
+        font-size: @font-size-lg;
     }
 
     .@{ant-prefix}-input {
         padding: 6.5px 11px;
-        font-size: 16px;
+        font-size: @font-size-lg;
     }
 
     .@{ant-prefix}-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
         padding: 0 11px;
-        height: 40px;
+        height: @height-lg;
+    }
+
+    &.@{form-item-cls}-feedback-layout-loose {
+        margin-bottom: 25px;
+        &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
+            margin-bottom: 0;
+        }
     }
 }
 
@@ -185,42 +313,7 @@
     margin-bottom: 8px;
 }
 
-.@{form-item-cls}-control {
-    flex: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 
-    .@{form-item-cls}-control-content {
-        display: flex;
-
-        .@{form-item-cls}-control-content-component {
-            min-height: @height-base;
-            line-height: @height-base;
-            width: 100%;
-
-            &-has-feedback-icon {
-                flex: 1;
-                position: relative;
-                display: flex;
-                align-items: center;
-            }
-        }
-
-        .@{form-item-cls}-addon-before {
-            margin-right: 8px;
-            display: inline-flex;
-            align-items: center;
-            min-height: @height-base;
-        }
-
-        .@{form-item-cls}-addon-after {
-            margin-left: 8px;
-            display: inline-flex;
-            align-items: center;
-            min-height: @height-base;
-        }
-    }
-}
 
 .@{form-item-cls}-label-tooltip {
     margin-left: 4px;
@@ -228,7 +321,6 @@
     display: flex;
     align-items: center;
     height: @height-base;
-    line-height: @height-base;
     cursor: pointer;
 }
 
@@ -263,7 +355,6 @@
 .@{form-item-cls}-colon {
     margin-left: 2px;
     margin-right: 8px;
-    line-height: @height-base;
 }
 
 .@{form-item-cls}-help,
@@ -271,7 +362,6 @@
     clear: both;
     min-height: @descriptions-title-margin-bottom;
     color: rgba(0, 0, 0, 0.45);
-    font-size: 14px;
     transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
     padding-top: 0px;
 }
@@ -321,9 +411,23 @@
     &:hover {
         .hover();
     }
+}
 
-    &:focus,
-    &-active {
+.@{form-item-cls}-inset-active {
+    .active();
+}
+
+
+.@{form-item-cls}-active {
+    .@{form-item-cls}-control-content-component-has-feedback-icon {
+        .active();
+    }
+
+    .@{ant-prefix}-input-number,
+    .@{ant-prefix}-picker,
+    .@{ant-prefix}-cascader-picker:focus .@{ant-prefix}-cascader-input,
+    .@{ant-prefix}-select:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector,
+    .@{ant-prefix}-input {
         .active();
     }
 }
@@ -343,20 +447,6 @@
         }
     }
 
-    &:focus,
-    &-active {
-        .@{form-item-cls}-control-content-component-has-feedback-icon {
-            .active();
-        }
-
-        .@{ant-prefix}-input-number,
-        .@{ant-prefix}-picker,
-        .@{ant-prefix}-cascader-picker:focus .@{ant-prefix}-cascader-input,
-        .@{ant-prefix}-select:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector,
-        .@{ant-prefix}-input {
-            .active();
-        }
-    }
 }
 
 .@{form-item-cls}-error {
@@ -365,17 +455,16 @@
     .@{ant-prefix}-input-affix-wrapper,
     .@{ant-prefix}-input-affix-wrapper:hover,
     .@{ant-prefix}-input:hover {
-        border-color: @error-color !important;
+        border-color: @error-color  !important;
     }
 
     .@{ant-prefix}-input-affix-wrapper-focused,
     .@{ant-prefix}-input-affix-wrapper:focus,
     .@{ant-prefix}-input-focused,
     .@{ant-prefix}-input:focus {
-        border-color: @error-color !important;
+        border-color: @error-color  !important;
         border-right-width: 1px !important;
         outline: 0;
-        box-shadow: 0 0 0 2px #ff4d4f33;
     }
 
 }
@@ -398,17 +487,16 @@
     .@{ant-prefix}-input-affix-wrapper,
     .@{ant-prefix}-input-affix-wrapper:hover,
     .@{ant-prefix}-input:hover {
-        border-color: @warning-color !important;
+        border-color: @warning-color  !important;
     }
 
     .@{ant-prefix}-input-affix-wrapper-focused,
     .@{ant-prefix}-input-affix-wrapper:focus,
     .@{ant-prefix}-input-focused,
     .@{ant-prefix}-input:focus {
-        border-color: @warning-color !important;
+        border-color: @warning-color  !important;
         border-right-width: 1px !important;
         outline: 0;
-        box-shadow: 0 0 0 2px #faad1433;
     }
 }
 
@@ -418,16 +506,15 @@
     .@{ant-prefix}-input-affix-wrapper,
     .@{ant-prefix}-input-affix-wrapper:hover,
     .@{ant-prefix}-input:hover {
-        border-color: @success-color !important;
+        border-color: @success-color  !important;
     }
 
     .@{ant-prefix}-input-affix-wrapper-focused,
     .@{ant-prefix}-input-affix-wrapper:focus,
     .@{ant-prefix}-input-focused,
     .@{ant-prefix}-input:focus {
-        border-color: @success-color !important;
+        border-color: @success-color  !important;
         border-right-width: 1px !important;
         outline: 0;
-        box-shadow: 0 0 0 2px #faad1433;
     }
 }
