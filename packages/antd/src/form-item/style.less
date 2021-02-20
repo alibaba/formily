@@ -64,6 +64,8 @@
     }
 
     .@{ant-prefix}-input-number {
+        width: 100%;
+
         +.@{ant-prefix}-form-text {
             margin-left: 8px;
         }
@@ -74,7 +76,8 @@
     }
 
     .@{ant-prefix}-select,
-    .@{ant-prefix}-cascader-picker {
+    .@{ant-prefix}-cascader-picker,
+    .@{ant-prefix}-picker {
         width: 100%;
     }
 
@@ -146,6 +149,7 @@
 
 .@{form-item-cls}-control {
     flex: 1;
+
     .@{form-item-cls}-control-content {
         display: flex;
 
@@ -153,6 +157,7 @@
             width: 100%;
             min-height: @height-base;
             line-height: @height-base;
+
             &-has-feedback-icon {
                 flex: 1;
                 position: relative;
@@ -303,6 +308,7 @@
 
     &.@{form-item-cls}-feedback-layout-loose {
         margin-bottom: 25px;
+
         &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
             margin-bottom: 0;
         }
@@ -399,6 +405,14 @@
     .@{ant-prefix}-input {
         border: none !important;
         box-shadow: none !important;
+    }
+
+    .@{ant-prefix}-input-number-handler-wrap {
+        border: none !important;
+
+        .@{ant-prefix}-input-number-handler {
+            border: none !important;
+        }
     }
 }
 
