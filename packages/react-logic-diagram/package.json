@@ -5,9 +5,9 @@
 	"main": "lib",
 	"module": "esm",
 	"umd:main": "dist/formily.react-logic-diagram.umd.production.js",
-  "unpkg": "dist/formily.react-logic-diagram.umd.production.js",
-  "jsdelivr": "dist/formily.react-logic-diagram.umd.production.js",
-  "jsnext:main": "esm",
+	"unpkg": "dist/formily.react-logic-diagram.umd.production.js",
+	"jsdelivr": "dist/formily.react-logic-diagram.umd.production.js",
+	"jsnext:main": "esm",
 	"types": "esm/index.d.ts",
 	"repository": {
 		"type": "git",
@@ -36,11 +36,12 @@
 		"@types/react": ">=16.8.0 || >=17.0.0",
 		"@types/react-dom": ">=16.8.0 || >=17.0.0",
 		"react": ">=16.8.0 || >=17.0.0",
-    "react-dom": ">=16.8.0 || >=17.0.0"
+		"react-dom": ">=16.8.0 || >=17.0.0"
 	},
 	"devDependencies": {
-    "dumi": "^1.1.0-rc.8"
-  },
+		"@types/d3-hierarchy": "^2.0.0",
+		"dumi": "^1.1.0-rc.8"
+	},
 	"dependencies": {
 		"d3-hierarchy": "^2.0.0"
 	}
