@@ -1,8 +1,7 @@
 export enum NodeTypes {
-  RELATION = 'relation',
-  RULE = 'rule',
-  ACTION = 'action',
-  DROP = 'drop',
+  NON_LEAF = 'non_leaf',
+  LEAF = 'leaf',
+  EXTRA = 'extra',
 }
 
 export type RenderNodeFN = (
@@ -13,12 +12,11 @@ export type RenderNodeFN = (
 
 export interface ILogicDiagramProps {
   data?: any
-  disabled?: boolean
   childrenKey?: string
   nonLeafNodeWidth?: number
   nodeHeight?: number
-  nodeSpaceVertical?: number
-  nodeSpaceHorizontal?: number
+  nodeMarginY?: number
+  nodeMarginX?: number
   renderNode: RenderNodeFN
   linkColor?: string
   className?: string

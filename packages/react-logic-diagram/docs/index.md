@@ -48,7 +48,6 @@ export default () => {
   }
   return (
     <LogicDiagram
-      disabled
       data={{
         logicOperator: '||',
         children: [
@@ -66,13 +65,13 @@ export default () => {
       nonLeafNodeWidth={48}
       renderNode={(path, type, data) => {
         switch (type) {
-          case NodeTypes.RELATION:
+          case NodeTypes.NON_LEAF:
             return (
               <div style={{ lineHeight: '24px', padding: 8 }}>
                 {logicOperatorMap[data.logicOperator]}
               </div>
             )
-          case NodeTypes.RULE:
+          case NodeTypes.LEAF:
             return (
               <div style={{ lineHeight: '24px', padding: 8 }}>
                 <span>{data.field}</span>
