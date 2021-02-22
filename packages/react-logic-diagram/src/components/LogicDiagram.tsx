@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { hierarchy, HierarchyNode } from 'd3-hierarchy'
 import { ILogicDiagramProps, NodeTypes } from '../types'
 import { Link } from './Link'
