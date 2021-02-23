@@ -2,7 +2,6 @@ import {
   FormPath,
   FormPathPattern,
   each,
-  reduce,
   pascalCase,
   isFn,
   isValid,
@@ -25,7 +24,7 @@ import {
   FieldMatchPattern,
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties, GetterSetterProperties } from './constants'
+import { ReservedProperties } from './constants'
 
 export const getValuesFromEvent = (args: any[]) => {
   return args.map((event) => {
@@ -414,13 +413,8 @@ export const setModelState = (model: any, setter: any) => {
   if (isFn(setter)) {
     setter(model)
   } else {
-    each(GetterSetterProperties, (key) => {
-      if (isSkipProperty(key)) return
-      if (key in setter) {
-        model[key] = setter[key]
-      }
-    })
-    each(setter, (value, key) => {
+    Reflect.ownKeys(setter || {}).forEach((key: string) => {
+      const value = setter[key]
       if (isFn(value)) return
       if (ReservedProperties.includes(key)) return
       if (isSkipProperty(key)) return
@@ -434,28 +428,19 @@ export const getModelState = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
-    const results = {}
-    each(GetterSetterProperties, (key) => {
-      if (key in model) {
-        results[key] = toJS(model[key])
-      }
-    })
-    return reduce(
-      model,
-      (buf, value, key) => {
-        if (isFn(value)) {
-          return buf
-        }
-        if (ReservedProperties.includes(key)) return buf
-        if (key === 'address' || key === 'path') {
-          buf[key] = value.toString()
-          return buf
-        }
-        buf[key] = toJS(value)
+    return Reflect.ownKeys(model || {}).reduce((buf, key: string) => {
+      const value = model[key]
+      if (isFn(value)) {
         return buf
-      },
-      results
-    )
+      }
+      if (ReservedProperties.includes(key)) return buf
+      if (key === 'address' || key === 'path') {
+        buf[key] = value.toString()
+        return buf
+      }
+      buf[key] = toJS(value)
+      return buf
+    }, {})
   }
 }
 

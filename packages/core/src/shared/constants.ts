@@ -17,27 +17,3 @@ export const ReservedProperties = [
   'decoratorProps',
   'originInitialValues',
 ]
-
-export const GetterSetterProperties = [
-  'errors',
-  'warnings',
-  'successes',
-  'valid',
-  'invalid',
-  'value',
-  'initialValue',
-  'values',
-  'initialValues',
-  'display',
-  'pattern',
-  'required',
-  'hidden',
-  'visible',
-  'disabled',
-  'readOnly',
-  'readPretty',
-  'validateStatus',
-  'editable',
-  'component',
-  'decorator',
-]

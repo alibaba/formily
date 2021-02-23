@@ -277,12 +277,12 @@ test('notify/subscribe/unsubscribe', () => {
   const id = form.subscribe(subscribe)
   expect(subscribe).toBeCalledTimes(0)
   form.setInitialValues({ aa: 123 })
-  expect(subscribe).toBeCalledTimes(1)
-  form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
   expect(subscribe).toBeCalledTimes(2)
+  form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
+  expect(subscribe).toBeCalledTimes(3)
   form.unsubscribe(id)
   form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
-  expect(subscribe).toBeCalledTimes(2)
+  expect(subscribe).toBeCalledTimes(3)
 })
 
 test('setState/getState/setFormState/getFormState/setFieldState/getFieldState', () => {
