@@ -24,14 +24,6 @@ $logic-diagram-prefix-cls: $css-prefix + 'formily-logic-diagram';
       padding-right: 8px;
     }
 
-    // &:hover {
-    //   background-color: #f3f8ff;
-
-    //   .#{$logic-diagram-prefix-cls}-remove-action {
-    //     visibility: visible;
-    //   }
-    // }
-
     .#{$css-prefix}form-item {
       margin-bottom: 0;
 
@@ -53,13 +45,13 @@ $logic-diagram-prefix-cls: $css-prefix + 'formily-logic-diagram';
     align-items: center;
     .#{$logic-diagram-prefix-cls}-add-rule-btn-icon,
     .#{$logic-diagram-prefix-cls}-add-rule-group-btn-icon {
-      color: #1c74fb;
+      color: $color-brand1-6;
     }
   }
 
   &:not(.#{$logic-diagram-prefix-cls}-disabled) {
     .#{$logic-diagram-prefix-cls}-rule:hover {
-      background-color: #f3f8ff;
+      background-color: $color-fill1-2;
 
       .#{$logic-diagram-prefix-cls}-remove-action {
         visibility: visible;
