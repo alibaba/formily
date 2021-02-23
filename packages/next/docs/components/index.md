@@ -40,6 +40,7 @@
     - FormDialog
     - FormDrawer
     - Editable
+    - LogicDiagram
   - 阅读态组件
     - PreviewText
 - 主题定制能力
