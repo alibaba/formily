@@ -1,0 +1,69 @@
+@import '~@alifd/next/lib/core/index-noreset.scss';
+
+$logic-diagram-prefix-cls: $css-prefix + 'formily-logic-diagram';
+
+.#{$logic-diagram-prefix-cls} {
+  .#{$logic-diagram-prefix-cls}-relation {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .#{$css-prefix}form-item {
+      margin-bottom: 0;
+    }
+  }
+
+  .#{$logic-diagram-prefix-cls}-rule {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .#{$logic-diagram-prefix-cls}-remove-action {
+      visibility: hidden;
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    // &:hover {
+    //   background-color: #f3f8ff;
+
+    //   .#{$logic-diagram-prefix-cls}-remove-action {
+    //     visibility: visible;
+    //   }
+    // }
+
+    .#{$css-prefix}form-item {
+      margin-bottom: 0;
+
+      .#{$css-prefix}form-item-control {
+        position: relative;
+
+        .#{$css-prefix}form-item-help {
+          margin-top: 0;
+          position: absolute;
+          bottom: -18px;
+        }
+      }
+    }
+  }
+
+  .#{$logic-diagram-prefix-cls}-action {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    .#{$logic-diagram-prefix-cls}-add-rule-btn-icon,
+    .#{$logic-diagram-prefix-cls}-add-rule-group-btn-icon {
+      color: #1c74fb;
+    }
+  }
+
+  &:not(.#{$logic-diagram-prefix-cls}-disabled) {
+    .#{$logic-diagram-prefix-cls}-rule:hover {
+      background-color: #f3f8ff;
+
+      .#{$logic-diagram-prefix-cls}-remove-action {
+        visibility: visible;
+      }
+    }
+  }
+}
