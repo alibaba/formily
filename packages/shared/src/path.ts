@@ -1,3 +1,3 @@
-import FormPath, { Pattern as FormPathPattern } from 'cool-path'
+import FormPath, { Pattern as FormPathPattern } from 'depath'
 
 export { FormPath, FormPathPattern }

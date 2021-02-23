@@ -504,12 +504,20 @@ export const createFieldStateGetter = (form: Form) => {
 }
 
 export const applyValuesPatch = (form: Form, path: string[], source: any) => {
+  const merge = (path: any[], value: any, source: any) => {
+    if (path.length) {
+      form.setValuesIn(path, toJS(source))
+    } else {
+      Object.assign(value, toJS(source))
+    }
+  }
+
   const patch = (source: any, path: string[] = []) => {
     const targetValue = form.getValuesIn(path)
     const targetField = form.query(path).take()
     if (isEmpty(targetValue)) {
       if (isEmpty(source)) return
-      form.setValuesIn(path, toJS(source))
+      merge(path, targetValue, source)
     } else {
       const arrA = isArr(targetValue)
       const arrB = isArr(source)
@@ -523,10 +531,10 @@ export const applyValuesPatch = (form: Form, path: string[], source: any) => {
       } else {
         if (targetField) {
           if (!isVoidField(targetField) && !targetField.modified) {
-            form.setValuesIn(path, toJS(source))
+            merge(path, targetValue, source)
           }
         } else {
-          form.setValuesIn(path, toJS(source))
+          merge(path, targetValue, source)
         }
       }
     }

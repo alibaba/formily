@@ -27,7 +27,7 @@ const SchemaField = createSchemaField({
 })
 
 const form = createForm({
-  values: {
+  initialValues: {
     editable: true,
     logic: {
       relation: 'OR',

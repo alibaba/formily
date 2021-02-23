@@ -6353,7 +6353,7 @@ cookie@0.4.0:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.0.tgz#beb437e7022b3b6d49019d088665303ebe9c14ba"
   integrity sha512-+Hp8fLp57wnUSt0tY0tHEXh4voZRDnoIrZPqlo3DPiI4y9lwg/jqx+1Om94/W6ZaPDOUbnjOt/99w66zk+l1Xg==
 
-cool-path@^1.0.0, cool-path@^1.0.6:
+cool-path@^1.0.6:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/cool-path/-/cool-path-1.0.10.tgz#37f7cac1432abb36976c714a8c5310c0f7b4161d"
   integrity sha512-gutG+3EFqjuz8CNON+yz+Q1OhvSn/qzPvX2CmvhaWhIQBxvrOEjqdki3oEbfEsN4uGURp3igg+/VjouO9zpzkA==
@@ -7134,6 +7134,11 @@ delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
   integrity sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=
+
+depath@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/depath/-/depath-1.0.1.tgz#b979ddca32cacd36b6a55587d997d1201cddd93a"
+  integrity sha512-ao/UFSfgbGUNbGATQ5YejL2p+SYryW++k/bmCEw+zmeDd0Cpxg1bgsK3XsEESaT/u5xBwZ7cNdSui2Uv4HWGVg==
 
 depd@~1.1.2:
   version "1.1.2"
