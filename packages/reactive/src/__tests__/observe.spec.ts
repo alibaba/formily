@@ -124,7 +124,7 @@ test('dispose observe with reaction', () => {
   const dispose = observe(() => obs.aa, handler)
   obs.kk = 111
   expect(handler).toBeCalledTimes(0)
-  obs.aa = 222
+  obs.aa = { mm: '123' }
   expect(handler).toBeCalledTimes(1)
   obs.aa = 222
   expect(handler).toBeCalledTimes(1)
