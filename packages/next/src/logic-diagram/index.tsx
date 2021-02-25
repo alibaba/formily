@@ -11,6 +11,7 @@ import {
   Schema,
   useField,
   useFieldSchema,
+  useForm,
 } from '@formily/react'
 import { FormPath } from '@formily/core'
 import { usePrefixCls } from '../__builtins__'
@@ -19,7 +20,6 @@ import { ButtonProps } from '@alifd/next/lib/button'
 import { TooltipProps } from '@alifd/next/lib/balloon'
 import { IconProps } from '@alifd/next/types/icon'
 import cls from 'classnames'
-import { toJS } from 'mobx'
 
 interface ObservableDiagramSource {
   relationSchema?: Schema
@@ -333,6 +333,7 @@ LogicDiagram.AddRuleGroup = ({
 }
 
 LogicDiagram.RemoveRule = ({ iconProps, ...buttonProps }) => {
+  const form = useForm()
   const logicDiagram = useLogicDiagram()
   const nodePath = useNodePath()
   const prefixCls = usePrefixCls('formily-logic-diagram')
@@ -349,11 +350,18 @@ LogicDiagram.RemoveRule = ({ iconProps, ...buttonProps }) => {
             const siblingsPath = FormPath.parse(p).parent()
             const parentPath = siblingsPath.parent()
             const siblings = FormPath.getIn(
-              toJS(logicDiagram.field.value),
-              siblingsPath.toString()
+              logicDiagram.field.value,
+              siblingsPath
             )
             if (siblings.length > 1 || parentPath.length === 0) {
-              logicDiagram.field.removeProperty(p)
+              const cur = FormPath.getIn(logicDiagram.field.value, p)
+              const curIndex = siblings.indexOf(cur)
+              const newSiblings = [...siblings]
+              newSiblings.splice(curIndex, 1)
+              form.setValuesIn(
+                logicDiagram.field.address.concat(siblingsPath),
+                newSiblings
+              )
             } else {
               remove(parentPath.toString())
             }
