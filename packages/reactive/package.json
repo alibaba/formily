@@ -1,0 +1,40 @@
+{
+  "name": "@formily/reactive",
+  "version": "2.0.0-beta.3",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "umd:main": "dist/formily.reactive.umd.production.js",
+  "unpkg": "dist/formily.reactive.umd.production.js",
+  "jsdelivr": "dist/formily.reactive.umd.production.js",
+  "jsnext:main": "esm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build:cjs": "tsc --declaration",
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config",
+    "build:docs": "dumi build"
+  },
+  "devDependencies": {
+    "dumi": "^1.1.0-rc.8"
+  },
+  "dependencies": {
+    "@formily/shared": "^2.0.0-beta.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "4d068dad6183e8da294a4c899a158326c0b0b050"
+}
