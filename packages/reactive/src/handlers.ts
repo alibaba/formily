@@ -73,4 +73,15 @@ export const handlers: ProxyHandler<any> = {
     }
     return result
   },
+  deleteProperty(target, key) {
+    const res = Reflect.deleteProperty(target, key)
+    const oldValue = target[key]
+    queueReactionsForOperation({
+      target,
+      key,
+      oldValue,
+      type: 'delete',
+    })
+    return res
+  },
 }

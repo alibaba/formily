@@ -16,6 +16,7 @@
     "test": "jest --coverage",
     "test:sc": "jest packages/react-shared-components/src/__tests__/*.spec.tsx",
     "test:sc:watch": "npm run test:sc -- --watch",
+    "test:reactive": "jest packages/reactive/src/__tests__/*.spec.ts",
     "test:core": "jest packages/core/src/__tests__/*.spec.ts",
     "test:core:watch": "npm run test:core --- --watch",
     "test:schema": "jest packages/json-schema/src/__tests__/*.spec.ts",

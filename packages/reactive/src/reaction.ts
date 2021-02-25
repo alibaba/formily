@@ -79,8 +79,8 @@ export const addDependencyForOperation = (operation: IOperation) => {
 
 export const queueReactionsForOperation = (operation: IOperation) => {
   let { key, type, target } = operation
+  notify(operation)
   runReactions(target, key)
-  notify(target, operation)
   if (type === 'add' || type === 'delete' || type === 'clear') {
     key = Array.isArray(target) ? 'length' : ITERATION_KEY
     runReactions(target, key)

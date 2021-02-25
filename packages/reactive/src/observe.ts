@@ -9,12 +9,6 @@ export const observe = (
   deep = true
 ) => {
   const listener = (change: IChange) => {
-    if (change.type === 'delete') {
-      removeListener(change.value)
-    }
-    if (change.type === 'set') {
-      removeListener(change.oldValue)
-    }
     if (isFn(observer)) {
       observer(change)
     }
@@ -24,14 +18,12 @@ export const observe = (
     const raw = ProxyRaw.get(target) || target
     const node = RawNode.get(raw)
     if (node) {
-      if (isFn(listener)) {
-        if (deep) {
-          node.deepObservers.add(listener)
-        }
+      if (deep) {
+        node.deepObservers.add(listener)
+      } else {
         node.observers.add(listener)
       }
     }
-
     return () => {
       if (node) {
         node.deepObservers.delete(listener)
@@ -51,15 +43,13 @@ export const observe = (
     return addListener(target)
   } else if (isFn(target)) {
     let oldTarget = target()
+    addListener(oldTarget)
     const dispose = reaction(
-      () => {
-        const res = target()
-        addListener(res)
-        return res
-      },
+      () => target(),
       (target) => {
         if (oldTarget !== target) {
           removeListener(oldTarget)
+          addListener(target)
         }
         oldTarget = target
       }

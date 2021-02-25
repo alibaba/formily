@@ -4,7 +4,7 @@ import { handlers } from './handlers'
 import { traverseIn } from './traverse'
 import { isObservable } from './types'
 
-const createProxy = (target: any) => {
+const createProxy = <T extends object>(target: T): T => {
   if (isObservable(target)) {
     return target
   }
@@ -22,8 +22,9 @@ const createMasterObservable = (target: any, key: PropertyKey, value: any) => {
     if (parentNode) {
       RawNode.set(cloned, {
         path: parentNode.path.concat(key),
+        parent: parentNode,
         observers: new Set(),
-        deepObservers: parentNode.deepObservers,
+        deepObservers: new Set(),
         traverse: parentNode.traverse,
       })
     }
@@ -35,10 +36,13 @@ const createMasterObservable = (target: any, key: PropertyKey, value: any) => {
   return value
 }
 
-export const observable = (target: any, traverse = observable.deep) => {
+export function observable<T extends object>(
+  target: T,
+  traverse = observable.deep
+): T {
   if (isObservable(target)) return target
   if (isObj(target)) {
-    const cloned = Array.isArray(target) ? [] : {}
+    const cloned = (Array.isArray(target) ? [] : {}) as T
     RawNode.set(cloned, {
       path: [],
       observers: new Set(),

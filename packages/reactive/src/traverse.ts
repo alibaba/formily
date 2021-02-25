@@ -16,7 +16,7 @@ export const traverseIn = (target: any, key: PropertyKey, value: any) => {
         path,
         parent: parentNode,
         observers: new Set(),
-        deepObservers: parentNode.deepObservers,
+        deepObservers: new Set(),
         traverse: parentNode.traverse,
       })
     }
@@ -25,19 +25,41 @@ export const traverseIn = (target: any, key: PropertyKey, value: any) => {
   return value
 }
 
-export const notify = (target: any, operation: IOperation) => {
-  const node = RawNode.get(ProxyRaw.get(target) || target)
-  if (node) {
+export const notify = (operation: IOperation) => {
+  const targetNode = RawNode.get(
+    ProxyRaw.get(operation.target) || operation.target
+  )
+  const oldValueNode = RawNode.get(
+    ProxyRaw.get(operation.oldValue) || operation.oldValue
+  )
+  const newValueNode = RawNode.get(
+    ProxyRaw.get(operation.value) || operation.value
+  )
+  if (targetNode) {
     const change: IChange = {
-      path: node.path.concat(operation.key),
+      path: targetNode.path.concat(operation.key),
       type: operation.type,
       key: operation.key,
       value: operation.value,
       oldValue: operation.oldValue,
     }
-    node.observers.forEach((fn) => fn(change))
-    node.deepObservers.forEach((fn) => fn(change))
-    let parent = node.parent
+    if (oldValueNode && operation.type === 'set') {
+      oldValueNode.observers.forEach((fn) => fn(change))
+      oldValueNode.deepObservers.forEach((fn) => fn(change))
+      if (newValueNode) {
+        newValueNode.observers = oldValueNode.observers
+        newValueNode.deepObservers = oldValueNode.deepObservers
+      }
+      oldValueNode.observers = new Set()
+      oldValueNode.deepObservers = new Set()
+    }
+    if (oldValueNode && operation.type === 'delete') {
+      oldValueNode.observers = new Set()
+      oldValueNode.deepObservers = new Set()
+    }
+    targetNode.observers.forEach((fn) => fn(change))
+    targetNode.deepObservers.forEach((fn) => fn(change))
+    let parent = targetNode.parent
     while (!!parent) {
       parent.deepObservers.forEach((fn) => fn(change))
       parent = parent.parent
