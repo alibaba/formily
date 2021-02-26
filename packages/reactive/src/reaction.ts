@@ -101,8 +101,6 @@ export const publishToAllObservers = (operation: IOperation) => {
         newValueNode.observers = oldValueNode.observers
         newValueNode.deepObservers = oldValueNode.deepObservers
       }
-      oldValueNode.observers = new Set()
-      oldValueNode.deepObservers = new Set()
     }
     if (oldValueNode && operation.type === 'delete') {
       oldValueNode.observers = new Set()

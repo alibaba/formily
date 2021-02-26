@@ -81,8 +81,10 @@ test('root replace observe', () => {
   const handler1 = jest.fn()
   const handler = jest.fn()
   observe(obs, handler1)
-  observe(() => obs.aa, handler)
-  obs.aa = 123
+  observe(obs.aa, handler)
+  obs.aa = {
+    mm: 123,
+  }
   expect(handler1).toBeCalledTimes(1)
   expect(handler).toBeCalledTimes(1)
   obs.aa = {
@@ -92,7 +94,7 @@ test('root replace observe', () => {
   }
   obs.aa.bb.cc.push(44)
   expect(handler1).toBeCalledTimes(3)
-  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledTimes(3)
 })
 
 test('dispose observe', () => {
@@ -112,7 +114,7 @@ test('dispose observe', () => {
   expect(handler).toBeCalledTimes(1)
 })
 
-test('dispose observe with reaction', () => {
+test('dispose observe', () => {
   const obs = observable<any>({
     aa: {
       bb: {
@@ -121,14 +123,18 @@ test('dispose observe with reaction', () => {
     },
   })
   const handler = jest.fn()
-  const dispose = observe(() => obs.aa, handler)
+  const dispose = observe(obs.aa, handler)
   obs.kk = 111
   expect(handler).toBeCalledTimes(0)
-  obs.aa = { mm: '123' }
+  obs.aa = { mm: 222 }
   expect(handler).toBeCalledTimes(1)
-  obs.aa = 222
-  expect(handler).toBeCalledTimes(1)
+  obs.aa = { mm: 222 }
+  expect(handler).toBeCalledTimes(2)
+  obs.aa = { mm: '111' }
+  expect(handler).toBeCalledTimes(3)
+  obs.aa = { mm: 333 }
+  expect(handler).toBeCalledTimes(4)
   dispose()
-  obs.aa = 333
-  expect(handler).toBeCalledTimes(1)
+  obs.aa = { mm: 444 }
+  expect(handler).toBeCalledTimes(4)
 })
