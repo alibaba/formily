@@ -1,5 +1,5 @@
 import { isArr } from '@formily/shared'
-import { runInAction } from 'mobx'
+import { runInAction } from '@formily/reactive'
 import { spliceArrayState, exchangeArrayState } from '../shared'
 import { Field } from './Field'
 import { Form } from './Form'

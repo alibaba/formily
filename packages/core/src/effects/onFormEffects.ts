@@ -1,4 +1,4 @@
-import { autorun, runInAction } from 'mobx'
+import { autorun, runInAction } from '@formily/reactive'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
 import { createEffectHook } from '../shared'

@@ -1,11 +1,11 @@
 import {
-  action,
   makeObservable,
-  observable,
+  annotations,
   toJS,
   runInAction,
   isObservable,
-} from 'mobx'
+  observe,
+} from '@formily/reactive'
 import {
   FormPath,
   FormPathPattern,
@@ -40,7 +40,6 @@ import {
   FormDisplayTypes,
 } from '../types'
 import {
-  observer,
   isVoidField,
   runEffects,
   createModelStateGetter,
@@ -57,7 +56,7 @@ import { Graph } from './Graph'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
-export class Form<ValueType = any> {
+export class Form<ValueType extends object = any> {
   displayName = 'Form'
   id: string
   initialized: boolean
@@ -122,53 +121,47 @@ export class Form<ValueType = any> {
 
   protected makeObservable() {
     makeObservable(this, {
-      fields: observable.shallow,
-      initialized: observable.ref,
-      validating: observable.ref,
-      submitting: observable.ref,
-      modified: observable.ref,
-      pattern: observable.ref,
-      display: observable.ref,
-      mounted: observable.ref,
-      unmounted: observable.ref,
-      values: observable,
-      initialValues: observable,
-      setValues: action,
-      setValuesIn: action,
-      setInitialValues: action,
-      setInitialValuesIn: action,
-      setPattern: action,
-      setDisplay: action,
-      setState: action,
-      deleteIntialValuesIn: action,
-      deleteValuesIn: action,
-      setSubmitting: action,
-      setValidating: action,
-      setFormGraph: action,
-      clearFormGraph: action,
-      onMount: action,
-      onUnmount: action,
-      onInit: action,
+      fields: annotations.shallow,
+      initialized: annotations.ref,
+      validating: annotations.ref,
+      submitting: annotations.ref,
+      modified: annotations.ref,
+      pattern: annotations.ref,
+      display: annotations.ref,
+      mounted: annotations.ref,
+      unmounted: annotations.ref,
+      values: annotations.observable,
+      initialValues: annotations.observable,
+      setValues: annotations.action,
+      setValuesIn: annotations.action,
+      setInitialValues: annotations.action,
+      setInitialValuesIn: annotations.action,
+      setPattern: annotations.action,
+      setDisplay: annotations.action,
+      setState: annotations.action,
+      deleteIntialValuesIn: annotations.action,
+      deleteValuesIn: annotations.action,
+      setSubmitting: annotations.action,
+      setValidating: annotations.action,
+      setFormGraph: annotations.action,
+      clearFormGraph: annotations.action,
+      onMount: annotations.action,
+      onUnmount: annotations.action,
+      onInit: annotations.action,
     })
   }
 
   protected makeReactive() {
     this.disposers.push(
-      observer(
-        () => this.initialValues,
-        (change, path) => {
-          if (change.type === 'add' || change.type === 'update') {
-            applyValuesPatch(this, path, change.newValue)
-          }
-          this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+      observe(this.initialValues, (change) => {
+        if (change.type === 'add' || change.type === 'set') {
+          applyValuesPatch(this, change.path.slice(1) as any, change.value)
         }
-      ),
-      observer(
-        () => this.values,
-        () => {
-          this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-        }
-      )
+        this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+      }),
+      observe(this.values, () => {
+        this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+      })
     )
   }
 

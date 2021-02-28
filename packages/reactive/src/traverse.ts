@@ -1,5 +1,6 @@
 import { ProxyRaw, RawNode } from './environment'
-import { isObservable, isSupportObservable, IVisitor } from './types'
+import { isObservable, isSupportObservable } from './shared'
+import { IVisitor } from './types'
 
 export const buildObservableTree = ({
   target,

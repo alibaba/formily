@@ -1,19 +1,20 @@
-import { define, annotations, autorun } from '..'
+import { makeObservable, annotations, autorun } from '..'
 import { observe } from '../observe'
+import { FormPath } from '@formily/shared'
 
-describe('define', () => {
+describe('makeObservable', () => {
   test('observable annotation', () => {
     const target: any = {
       aa: {},
     }
-    define(target, {
+    makeObservable(target, {
       aa: annotations.observable,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
     const handler2 = jest.fn()
     autorun(() => {
-      handler(target.aa?.bb?.cc)
+      handler(FormPath.getIn(target, 'aa.bb.cc'))
     })
     observe(target, handler1)
     observe(target.aa, handler2)
@@ -27,14 +28,14 @@ describe('define', () => {
     const target: any = {
       aa: {},
     }
-    define(target, {
+    makeObservable(target, {
       aa: annotations.shallow,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
     const handler2 = jest.fn()
     autorun(() => {
-      handler(target.aa?.bb?.cc)
+      handler(FormPath.getIn(target, 'aa.bb.cc'))
     })
     observe(target, handler1)
     observe(target.aa, handler2)
@@ -48,7 +49,7 @@ describe('define', () => {
   })
   test('box annotation', () => {
     const target: any = {}
-    define(target, {
+    makeObservable(target, {
       aa: annotations.box,
     })
     const handler = jest.fn()
@@ -66,7 +67,7 @@ describe('define', () => {
   })
   test('ref annotation', () => {
     const target: any = {}
-    define(target, {
+    makeObservable(target, {
       aa: annotations.ref,
     })
     const handler = jest.fn()
@@ -90,7 +91,7 @@ describe('define', () => {
         target.aa.cc = 312
       },
     }
-    define(target, {
+    makeObservable(target, {
       aa: annotations.observable,
       setData: annotations.action,
     })
@@ -98,7 +99,7 @@ describe('define', () => {
     autorun(() => {
       handler([target.aa.bb, target.aa.cc])
     })
-   target.setData()
+    target.setData()
     expect(handler).toBeCalledTimes(2)
   })
 })

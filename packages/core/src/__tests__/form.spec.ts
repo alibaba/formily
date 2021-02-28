@@ -2,7 +2,7 @@ import { createForm } from '../'
 import { onFieldValueChange } from '../effects'
 import { attach, sleep } from './shared'
 import { LifeCycleTypes } from '../types'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { observable, runInAction } from '@formily/reactive'
 
 test('create form', () => {
   const form = attach(createForm())
@@ -123,11 +123,11 @@ test('setValues/setInitialValues', () => {
 })
 
 test('observable values/initialValues', () => {
-  const values: any = makeAutoObservable({
+  const values: any = observable({
     aa: 123,
     bb: 321,
   })
-  const initialValues: any = makeAutoObservable({
+  const initialValues: any = observable({
     cc: 321,
     dd: 444,
   })

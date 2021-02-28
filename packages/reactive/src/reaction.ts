@@ -12,6 +12,7 @@ import {
   ReactionKeysReactions,
   PendingReactions,
   BatchCount,
+  Untracking,
   ProxyRaw,
   RawNode,
 } from './environment'
@@ -53,6 +54,7 @@ const addReactionTargetKeys = (
 
 const addDependenciesToCurrentReaction = (target: any, key: PropertyKey) => {
   const current = ReactionStack[ReactionStack.length - 1]
+  if (Untracking.value) return
   if (current) {
     addReactionTargetKeys(current, addTargetKeysReactions(target, key, current))
   }
@@ -163,4 +165,5 @@ export const isBatching = () => BatchCount.value > 0
 
 export const excutePendingReactions = () => {
   PendingReactions.forEach((reaction) => reaction())
+  PendingReactions.clear()
 }

@@ -1,6 +1,3 @@
-import { isObj, isValid } from '@formily/shared'
-import { ProxyRaw, MakeObservableSymbol } from './environment'
-
 export type PropertyKey = string | number | symbol
 
 export type OperationType =
@@ -47,10 +44,10 @@ export interface IVisitor<Value = any, Target = any> {
   shallow?: boolean
 }
 
-export type Annotation = (...args: any[]) => void
+export type Annotation = (...args: any[]) => any
 
 export type Annotations<T = any> = {
-  [key in keyof T]: Annotation
+  [key in keyof T]?: Annotation
 }
 
 export type ObservableListener = (operation: IOperation) => void
@@ -64,15 +61,3 @@ export type ObservableTraverse<Value = any, Target = any> = (
 export type Reaction = (...args: any[]) => any
 
 export type KeysReactions = Map<PropertyKey, Set<Reaction>>
-
-export const isObservable = (target: any) => {
-  return ProxyRaw.has(target)
-}
-
-export const isAnnotation = (target: any): target is Annotation => {
-  return !!target[MakeObservableSymbol]
-}
-
-export const isSupportObservable = (target: any) => {
-  return isValid(target) && isObj(target)
-}

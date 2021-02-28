@@ -2,12 +2,8 @@ import { each, isFn } from '@formily/shared'
 import { RawProxy, ProxyRaw, MakeObservableSymbol } from './environment'
 import { handlers } from './handlers'
 import { traverseIn, buildObservableTree } from './traverse'
-import {
-  isObservable,
-  isSupportObservable,
-  ObservableTraverse,
-  IVisitor,
-} from './types'
+import { isObservable, isSupportObservable } from './shared'
+import { ObservableTraverse, IVisitor } from './types'
 
 export const createProxy = <T extends object>(target: T): T => {
   if (isObservable(target)) {

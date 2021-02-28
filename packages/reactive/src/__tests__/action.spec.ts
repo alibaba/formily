@@ -17,6 +17,7 @@ test('runInAction', () => {
     obs.aa.bb = 333
     obs.aa.bb = 444
   })
+  runInAction(() => {})
   expect(handler).toBeCalledTimes(4)
 })
 

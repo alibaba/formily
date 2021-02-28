@@ -10,7 +10,7 @@ import {
   isPlainObj,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { action, runInAction, toJS } from 'mobx'
+import { action, runInAction, toJS } from '@formily/reactive'
 import { Field, ArrayField, Form } from '../models'
 import {
   ISpliceArrayStateProps,

@@ -1,4 +1,4 @@
-import { isFn } from '@formily/shared/esm'
+import { isFn } from '@formily/shared'
 import { batchStart, batchEnd, excutePendingReactions } from './reaction'
 
 export const runInAction = <T>(callback?: () => T) => {

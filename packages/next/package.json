@@ -40,7 +40,6 @@
     "@formily/core": "^2.0.0-beta.3",
     "@formily/json-schema": "^2.0.0-beta.3",
     "@formily/react": "^2.0.0-beta.3",
-    "@formily/react-logic-diagram": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",

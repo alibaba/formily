@@ -11,7 +11,7 @@ const alias = packages
     const name = path.basename(_path)
     return {
       ...buf,
-      [`@formily/${name}`]: `${_path}/src`,
+      [`@formily/${name}$`]: `${_path}/src`,
     }
   }, {})
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
     require.resolve('jest-dom/extend-expect'),
     path.resolve(__dirname, './global.ts'),
   ],
-  moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
+ // moduleNameMapper: process.env.TEST_ENV === 'production' ? undefined : alias,
   globals: {
     'ts-jest': {
       babelConfig: true,

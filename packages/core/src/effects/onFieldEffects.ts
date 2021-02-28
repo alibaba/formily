@@ -1,5 +1,5 @@
 import { FormPath, isFn, toArr } from '@formily/shared'
-import { autorun, reaction, runInAction } from 'mobx'
+import { autorun, reaction, runInAction } from '@formily/reactive'
 import { Form, Field } from '../models'
 import {
   LifeCycleTypes,
