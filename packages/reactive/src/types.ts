@@ -1,4 +1,4 @@
-import { ProxyRaw } from './environment'
+import { ProxyRaw, MakeObservableSymbol } from './environment'
 
 export type PropertyKey = string | number | symbol
 
@@ -10,7 +10,6 @@ export type OperationType =
   | 'get'
   | 'iterate'
   | 'has'
-
 export interface IOperation {
   target?: any
   oldTarget?: any
@@ -35,23 +34,40 @@ export interface INode {
   parent?: INode
   observers?: Set<ObservableListener>
   deepObservers?: Set<ObservableListener>
+  shallow?: boolean
+}
+
+export interface IVisitor<Value = any, Target = any> {
+  target?: Target
+  key?: PropertyKey
+  value?: Value
+  path?: ObservablePath
+  traverse?: ObservableTraverse
+  shallow?: boolean
+}
+
+export type Annotation = (...args: any[]) => void
+
+export type Annotations<T = any> = {
+  [key in keyof T]: Annotation
 }
 
 export type ObservableListener = (operation: IOperation) => void
 
 export type ObservablePath = Array<PropertyKey>
 
-export type ObservableTraverse = (
-  target: any,
-  key: PropertyKey,
-  value: any,
-  path: ObservablePath
+export type ObservableTraverse<Value = any, Target = any> = (
+  visitor: IVisitor<Value, Target>
 ) => any
+
+export type Reaction = (...args: any[]) => any
+
+export type KeysReactions = Map<PropertyKey, Set<Reaction>>
 
 export const isObservable = (target: any) => {
   return ProxyRaw.has(target)
 }
 
-export type Reaction = (...args: any[]) => any
-
-export type KeysReactions = Map<PropertyKey, Set<Reaction>>
+export const isAnnotation = (target: any): target is Annotation => {
+  return !!target[MakeObservableSymbol]
+}

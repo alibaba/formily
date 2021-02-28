@@ -1,4 +1,6 @@
 export * from './action'
+export * from './annotations'
 export * from './observable'
+export * from './define'
 export * from './autorun'
 export * from './observe'

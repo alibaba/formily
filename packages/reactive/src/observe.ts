@@ -32,7 +32,7 @@ export const observe = (
       }
     }
   }
-  if (typeof target !== 'object')
+  if (target && typeof target !== 'object')
     throw Error(`Can not observe ${typeof target} type.`)
   return addListener(target)
 }

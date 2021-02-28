@@ -8,3 +8,4 @@ export const ReactionKeysReactions = new WeakMap<Reaction, KeysReactions>()
 export const ReactionStack: Reaction[] = []
 export const BatchCount = { value: 0 }
 export const PendingReactions = new Set<Reaction>()
+export const MakeObservableSymbol = Symbol('MakeObservableSymbol')
