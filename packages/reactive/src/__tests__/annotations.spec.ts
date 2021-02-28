@@ -62,3 +62,31 @@ test('ref annotation', () => {
   expect(handler).toBeCalledWith(333)
   expect(handler1).toBeCalledTimes(1)
 })
+
+test('action annotation', () => {
+  const obs = annotations.observable({})
+  const setData = annotations.action(() => {
+    obs.aa = 123
+    obs.bb = 321
+  })
+  const handler = jest.fn()
+  reaction(() => {
+    handler([obs.aa, obs.bb])
+  })
+  setData()
+  expect(handler).toBeCalledTimes(2)
+})
+
+test('no action annotation', () => {
+  const obs = annotations.observable({})
+  const setData = () => {
+    obs.aa = 123
+    obs.bb = 321
+  }
+  const handler = jest.fn()
+  reaction(() => {
+    handler([obs.aa, obs.bb])
+  })
+  setData()
+  expect(handler).toBeCalledTimes(3)
+})

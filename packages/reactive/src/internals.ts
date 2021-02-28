@@ -1,8 +1,13 @@
-import { each, isObj, isFn } from '@formily/shared'
+import { each, isFn } from '@formily/shared'
 import { RawProxy, ProxyRaw, MakeObservableSymbol } from './environment'
 import { handlers } from './handlers'
 import { traverseIn, buildObservableTree } from './traverse'
-import { isObservable, ObservableTraverse, IVisitor } from './types'
+import {
+  isObservable,
+  isSupportObservable,
+  ObservableTraverse,
+  IVisitor,
+} from './types'
 
 export const createProxy = <T extends object>(target: T): T => {
   if (isObservable(target)) {
@@ -17,7 +22,7 @@ export const createProxy = <T extends object>(target: T): T => {
 export const createObservable: ObservableTraverse = (visitor) => {
   const { value, target, key, traverse, shallow } = visitor
   if (isObservable(value)) return value
-  if (isObj(value)) {
+  if (isSupportObservable(value)) {
     const cloned = Array.isArray(value) ? [] : {}
     buildObservableTree({
       target,

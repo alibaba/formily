@@ -1,7 +1,7 @@
 import { define, annotations, autorun } from '..'
 import { observe } from '../observe'
 
-describe('makeObservable', () => {
+describe('define', () => {
   test('observable annotation', () => {
     const target: any = {
       aa: {},
@@ -78,5 +78,27 @@ describe('makeObservable', () => {
     target.aa = 123
     expect(handler).toBeCalledWith(123)
     expect(handler1).toBeCalledTimes(1)
+  })
+  test('action annotation', () => {
+    const target = {
+      aa: {
+        bb: null,
+        cc: null,
+      },
+      setData() {
+        target.aa.bb = 123
+        target.aa.cc = 312
+      },
+    }
+    define(target, {
+      aa: annotations.observable,
+      setData: annotations.action,
+    })
+    const handler = jest.fn()
+    autorun(() => {
+      handler([target.aa.bb, target.aa.cc])
+    })
+   target.setData()
+    expect(handler).toBeCalledTimes(2)
   })
 })

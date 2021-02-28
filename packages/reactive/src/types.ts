@@ -1,3 +1,4 @@
+import { isObj, isValid } from '@formily/shared'
 import { ProxyRaw, MakeObservableSymbol } from './environment'
 
 export type PropertyKey = string | number | symbol
@@ -70,4 +71,8 @@ export const isObservable = (target: any) => {
 
 export const isAnnotation = (target: any): target is Annotation => {
   return !!target[MakeObservableSymbol]
+}
+
+export const isSupportObservable = (target: any) => {
+  return isValid(target) && isObj(target)
 }

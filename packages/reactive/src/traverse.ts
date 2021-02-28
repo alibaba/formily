@@ -1,6 +1,5 @@
-import { isObj } from '@formily/shared/esm'
 import { ProxyRaw, RawNode } from './environment'
-import { isObservable, IVisitor } from './types'
+import { isObservable, isSupportObservable, IVisitor } from './types'
 
 export const buildObservableTree = ({
   target,
@@ -37,7 +36,7 @@ export const traverseIn = (target: any, key: PropertyKey, value: any) => {
   const parentNode = RawNode.get(parent)
   const node = RawNode.get(raw)
   if (parentNode) {
-    if (!isObj(value)) return value
+    if (!isSupportObservable(value)) return value
     const path = parentNode.path.concat(key)
     const shallow = parentNode.shallow
     if (!node) {
