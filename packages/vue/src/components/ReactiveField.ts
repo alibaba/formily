@@ -12,11 +12,12 @@ export default defineObservableComponent({
   // eslint-disable-next-line vue/require-prop-types
   props: ['field'],
   observableSetup(collect, props: IReactiveFieldProps, { slots }) {
-    const field = props.field
+    const { field } = props
     collect({
       field
     })
     return () => {
+  
       if (!field) {
         return h('div', {}, slots)
       }
@@ -34,7 +35,7 @@ export default defineObservableComponent({
           return h(
             decorator,
             {
-              props: decoratorData
+              attrs: decoratorData
             },
             {
               default: () => children
@@ -51,31 +52,23 @@ export default defineObservableComponent({
               })
             })
           }
-          const value = !isVoidField(field) ? field.value : undefined
           const events = {} as Record<string, any>
           if (!isVoidField(field)) {
             events.change = field.onInput
             events.focus = field.onFocus
             events.blur = field.onBlur
           }
-          const disabled = !isVoidField(field)
-            ? field.pattern === 'disabled' || field.pattern === 'readPretty'
-            : undefined
-          const readOnly = !isVoidField(field)
-            ? field.pattern === 'readOnly'
-            : undefined
           const component = field.component[0] as Component
           const originData = field.component[1] || {}
-          const componentData = {
-            ...originData,
-            value,
-            disabled,
-            readOnly
-          }
+          const componentData =  Object.assign({}, originData, {
+            value: !isVoidField(field) ? field.value : undefined,
+            disabled: !isVoidField(field) ? field.pattern === 'disabled' || field.pattern === 'readPretty' : undefined,
+            readOnly: !isVoidField(field) ? field.pattern === 'readOnly' : undefined
+          })
           return h(
             component,
             {
-              props: componentData,
+              attrs: componentData,
               on: events
             },
             {
