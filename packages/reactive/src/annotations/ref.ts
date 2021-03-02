@@ -1,6 +1,6 @@
 import { ProxyRaw, RawProxy } from '../environment'
 import { createAnnotation } from '../internals'
-import { buildObservableTree } from '../traverse'
+import { buildTreeNode } from '../traverse'
 import {
   addDependencyForOperation,
   queueReactionsForOperation,
@@ -10,6 +10,7 @@ export const ref = createAnnotation(({ target, key, value }) => {
   const store = {
     value: value,
   }
+  
   const proxy = {
     set value(value) {
       set(value)
@@ -19,7 +20,7 @@ export const ref = createAnnotation(({ target, key, value }) => {
     },
   }
 
-  buildObservableTree({
+  buildTreeNode({
     target,
     key,
     value: store,

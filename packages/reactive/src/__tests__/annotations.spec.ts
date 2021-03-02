@@ -1,6 +1,7 @@
 import { observable, batchable } from '../'
 import { reaction } from '../autorun'
 import { observe } from '../observe'
+import { isObservable } from '../shared'
 
 test('observable annotation', () => {
   const obs = observable<any>({
@@ -29,6 +30,9 @@ test('shallow annotation', () => {
     handler(obs.aa)
   })
   obs.aa = { bb: { cc: 123 } }
+  expect(isObservable(obs)).toBeTruthy()
+  expect(isObservable(obs.aa)).toBeFalsy()
+  expect(isObservable(obs.aa.bb)).toBeFalsy()
   obs.aa.bb = 333
   obs.cc = 444
   expect(handler).toBeCalledTimes(2)

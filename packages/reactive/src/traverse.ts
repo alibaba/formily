@@ -1,32 +1,39 @@
 import { ProxyRaw, RawNode } from './environment'
 import { isObservable, isSupportObservable } from './shared'
-import { IVisitor } from './types'
+import { INode, IVisitor } from './types'
 
-export const buildObservableTree = ({
+export const buildTreeNode = ({
   target,
   value,
   key,
   traverse,
   shallow,
 }: IVisitor) => {
+  const raw = ProxyRaw.get(value) || value
   const parentNode = RawNode.get(ProxyRaw.get(target) || target)
+  const currentNode = RawNode.get(raw)
+  if (currentNode) return currentNode
   if (parentNode) {
-    RawNode.set(value, {
+    const node: INode = {
       path: parentNode.path.concat(key as any),
       parent: parentNode,
       observers: new Set(),
       deepObservers: new Set(),
       shallow: shallow || parentNode.shallow,
       traverse: traverse || parentNode.traverse,
-    })
+    }
+    RawNode.set(value, node)
+    return node
   } else {
-    RawNode.set(value, {
+    const node: INode = {
       path: [],
       observers: new Set(),
       deepObservers: new Set(),
       shallow,
       traverse,
-    })
+    }
+    RawNode.set(value, node)
+    return node
   }
 }
 

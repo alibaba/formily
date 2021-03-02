@@ -1,5 +1,4 @@
 import { createAnnotation, createObservable } from '../internals'
-import { buildObservableTree } from '../traverse'
 import {
   addDependencyForOperation,
   queueReactionsForOperation,
@@ -13,12 +12,6 @@ export const observable = createAnnotation(({ target, key, value }) => {
       value,
     }),
   }
-
-  buildObservableTree({
-    target,
-    key,
-    value: store,
-  })
 
   function get() {
     addDependencyForOperation({

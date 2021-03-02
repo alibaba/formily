@@ -1,5 +1,5 @@
 import { each } from '@formily/shared'
-import { buildObservableTree } from './traverse'
+import { buildTreeNode } from './traverse'
 import { observable } from './observable'
 import { createObservable, getObservableMaker } from './internals'
 import { isObservable, isAnnotation } from './shared'
@@ -11,7 +11,7 @@ export function define<Target extends object = any>(
   traverse = createObservable
 ) {
   if (isObservable(target)) return target
-  buildObservableTree({
+  buildTreeNode({
     value: target,
     traverse,
   })

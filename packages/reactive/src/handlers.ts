@@ -1,10 +1,10 @@
 import {
   addDependencyForOperation,
-  hasRunningReaction,
   queueReactionsForOperation,
 } from './reaction'
 import { ProxyRaw, RawProxy } from './environment'
 import { traverseIn } from './traverse'
+import { isSupportObservable } from './shared'
 
 const wellKnownSymbols = new Set(
   Object.getOwnPropertyNames(Symbol)
@@ -22,7 +22,7 @@ export const handlers: ProxyHandler<any> = {
     }
     addDependencyForOperation({ target, key, receiver, type: 'get' })
     const observableResult = RawProxy.get(result)
-    if (hasRunningReaction() && typeof result === 'object' && result !== null) {
+    if (isSupportObservable(result)) {
       if (observableResult) {
         return observableResult
       }
