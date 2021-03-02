@@ -11,7 +11,25 @@ export const isAnnotation = (target: any): target is Annotation => {
 }
 
 export const isSupportObservable = (target: any) => {
-  return isValid(target) && isObj(target)
+  if (!isValid(target)) return false
+  if (isObj(target)) {
+    if ('$$typeof' in target && '_owner' in target) {
+      return false
+    }
+    if (target['_isAMomentObject']) {
+      return false
+    }
+    if (target['_isJSONSchemaObject']) {
+      return false
+    }
+    if (isFn(target['toJS'])) {
+      return false
+    }
+    if (isFn(target['toJSON'])) {
+      return false
+    }
+  }
+  return false
 }
 
 export const toJS = (target: any) => clone(target)

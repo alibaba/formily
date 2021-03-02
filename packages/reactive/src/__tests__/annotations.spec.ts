@@ -1,9 +1,9 @@
-import { annotations } from '../'
+import { observable, batchable } from '../'
 import { reaction } from '../autorun'
 import { observe } from '../observe'
 
 test('observable annotation', () => {
-  const obs = annotations.observable({
+  const obs = observable<any>({
     aa: 111,
   })
   const handler = jest.fn()
@@ -19,7 +19,7 @@ test('observable annotation', () => {
 })
 
 test('shallow annotation', () => {
-  const obs = annotations.shallow({
+  const obs = observable.shallow({
     aa: 111,
   })
   const handler = jest.fn()
@@ -36,7 +36,7 @@ test('shallow annotation', () => {
 })
 
 test('box annotation', () => {
-  const obs = annotations.box(123)
+  const obs = observable.box(123)
   const handler = jest.fn()
   const handler1 = jest.fn()
   observe(obs, handler1)
@@ -50,22 +50,22 @@ test('box annotation', () => {
 })
 
 test('ref annotation', () => {
-  const obs = annotations.ref(123)
+  const obs = observable.ref(123)
   const handler = jest.fn()
   const handler1 = jest.fn()
   observe(obs, handler1)
   reaction(() => {
-    handler(obs.current)
+    handler(obs.value)
   })
-  obs.current = 333
+  obs.value = 333
   expect(handler).toBeCalledWith(123)
   expect(handler).toBeCalledWith(333)
   expect(handler1).toBeCalledTimes(1)
 })
 
 test('action annotation', () => {
-  const obs = annotations.observable({})
-  const setData = annotations.action(() => {
+  const obs = observable<any>({})
+  const setData = batchable(() => {
     obs.aa = 123
     obs.bb = 321
   })
@@ -78,7 +78,7 @@ test('action annotation', () => {
 })
 
 test('no action annotation', () => {
-  const obs = annotations.observable({})
+  const obs = observable<any>({})
   const setData = () => {
     obs.aa = 123
     obs.bb = 321

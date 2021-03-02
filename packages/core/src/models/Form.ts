@@ -1,8 +1,8 @@
 import {
-  makeObservable,
-  annotations,
+  define,
+  observable,
+  batch,
   toJS,
-  runInAction,
   isObservable,
   observe,
 } from '@formily/reactive'
@@ -120,34 +120,34 @@ export class Form<ValueType extends object = any> {
   }
 
   protected makeObservable() {
-    makeObservable(this, {
-      fields: annotations.shallow,
-      initialized: annotations.ref,
-      validating: annotations.ref,
-      submitting: annotations.ref,
-      modified: annotations.ref,
-      pattern: annotations.ref,
-      display: annotations.ref,
-      mounted: annotations.ref,
-      unmounted: annotations.ref,
-      values: annotations.observable,
-      initialValues: annotations.observable,
-      setValues: annotations.action,
-      setValuesIn: annotations.action,
-      setInitialValues: annotations.action,
-      setInitialValuesIn: annotations.action,
-      setPattern: annotations.action,
-      setDisplay: annotations.action,
-      setState: annotations.action,
-      deleteIntialValuesIn: annotations.action,
-      deleteValuesIn: annotations.action,
-      setSubmitting: annotations.action,
-      setValidating: annotations.action,
-      setFormGraph: annotations.action,
-      clearFormGraph: annotations.action,
-      onMount: annotations.action,
-      onUnmount: annotations.action,
-      onInit: annotations.action,
+    define(this, {
+      fields: observable.shallow,
+      initialized: observable.ref,
+      validating: observable.ref,
+      submitting: observable.ref,
+      modified: observable.ref,
+      pattern: observable.ref,
+      display: observable.ref,
+      mounted: observable.ref,
+      unmounted: observable.ref,
+      values: observable,
+      initialValues: observable,
+      setValues: batch,
+      setValuesIn: batch,
+      setInitialValues: batch,
+      setInitialValuesIn: batch,
+      setPattern: batch,
+      setDisplay: batch,
+      setState: batch,
+      deleteIntialValuesIn: batch,
+      deleteValuesIn: batch,
+      setSubmitting: batch,
+      setValidating: batch,
+      setFormGraph: batch,
+      clearFormGraph: batch,
+      onMount: batch,
+      onUnmount: batch,
+      onInit: batch,
     })
   }
 
@@ -155,7 +155,7 @@ export class Form<ValueType extends object = any> {
     this.disposers.push(
       observe(this.initialValues, (change) => {
         if (change.type === 'add' || change.type === 'set') {
-          applyValuesPatch(this, change.path.slice(1) as any, change.value)
+          applyValuesPatch(this, change.path.slice(1), change.value)
         }
         this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
       }),
@@ -285,7 +285,7 @@ export class Form<ValueType extends object = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new Field(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -303,7 +303,7 @@ export class Form<ValueType extends object = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new ArrayField(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -321,7 +321,7 @@ export class Form<ValueType extends object = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new ObjectField(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -339,7 +339,7 @@ export class Form<ValueType extends object = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new VoidField(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -404,7 +404,7 @@ export class Form<ValueType extends object = any> {
     clearTimeout(this.requests.submit)
     if (submitting) {
       this.requests.submit = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.submitting = submitting
         })
       }, 100)
@@ -421,7 +421,7 @@ export class Form<ValueType extends object = any> {
     clearTimeout(this.requests.validate)
     if (validating) {
       this.requests.validate = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.validating = validating
         })
       }, 100)

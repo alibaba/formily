@@ -1,5 +1,5 @@
 import { FormPath, isFn, toArr } from '@formily/shared'
-import { autorun, reaction, runInAction } from '@formily/reactive'
+import { autorun, reaction, batch } from '@formily/reactive'
 import { Form, Field } from '../models'
 import {
   LifeCycleTypes,
@@ -18,7 +18,7 @@ function createFieldEffect(type: LifeCycleTypes) {
       callback: (field: GeneralField, form: Form) => void
     ) => {
       if (FormPath.parse(pattern).matchAliasGroup(field.address, field.path)) {
-        runInAction(() => {
+        batch(() => {
           callback(field, form)
         })
       }

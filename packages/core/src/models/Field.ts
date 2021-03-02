@@ -14,10 +14,10 @@ import {
   parseValidatorDescriptions,
 } from '@formily/validator'
 import {
-  makeObservable,
-  annotations,
+  define,
+  observable,
   reaction,
-  runInAction,
+  batch,
   toJS,
   autorun,
 } from '@formily/reactive'
@@ -145,55 +145,55 @@ export class Field<
   }
 
   protected makeObservable() {
-    makeObservable(this, {
-      title: annotations.ref,
-      description: annotations.ref,
-      dataSource: annotations.ref,
-      selfDisplay: annotations.ref,
-      selfPattern: annotations.ref,
-      loading: annotations.ref,
-      validating: annotations.ref,
-      modified: annotations.ref,
-      active: annotations.ref,
-      visited: annotations.ref,
-      initialized: annotations.ref,
-      mounted: annotations.ref,
-      unmounted: annotations.ref,
-      inputValue: annotations.ref,
-      inputValues: annotations.ref,
-      decoratorType: annotations.ref,
-      componentType: annotations.ref,
-      decoratorProps: annotations.shallow,
-      componentProps: annotations.shallow,
-      validator: annotations.observable,
-      feedbacks: annotations.observable,
-      setDisplay: annotations.action,
-      setTitle: annotations.action,
-      setDescription: annotations.action,
-      setDataSource: annotations.action,
-      setValue: annotations.action,
-      setPattern: annotations.action,
-      setInitialValue: annotations.action,
-      setLoading: annotations.action,
-      setValidating: annotations.action,
-      setFeedback: annotations.action,
-      setErrors: annotations.action,
-      setWarnings: annotations.action,
-      setSuccesses: annotations.action,
-      setValidator: annotations.action,
-      setRequired: annotations.action,
-      setComponent: annotations.action,
-      setComponentProps: annotations.action,
-      setDecorator: annotations.action,
-      setDecoratorProps: annotations.action,
-      setState: annotations.action,
-      onInit: annotations.action,
-      onInput: annotations.action,
-      onMount: annotations.action,
-      onUnmount: annotations.action,
-      onFocus: annotations.action,
-      onBlur: annotations.action,
-      reset: annotations.action,
+    define(this, {
+      title: observable.ref,
+      description: observable.ref,
+      dataSource: observable.ref,
+      selfDisplay: observable.ref,
+      selfPattern: observable.ref,
+      loading: observable.ref,
+      validating: observable.ref,
+      modified: observable.ref,
+      active: observable.ref,
+      visited: observable.ref,
+      initialized: observable.ref,
+      mounted: observable.ref,
+      unmounted: observable.ref,
+      inputValue: observable.ref,
+      inputValues: observable.ref,
+      decoratorType: observable.ref,
+      componentType: observable.ref,
+      decoratorProps: observable.shallow,
+      componentProps: observable.shallow,
+      validator: observable,
+      feedbacks: observable,
+      setDisplay: batch,
+      setTitle: batch,
+      setDescription: batch,
+      setDataSource: batch,
+      setValue: batch,
+      setPattern: batch,
+      setInitialValue: batch,
+      setLoading: batch,
+      setValidating: batch,
+      setFeedback: batch,
+      setErrors: batch,
+      setWarnings: batch,
+      setSuccesses: batch,
+      setValidator: batch,
+      setRequired: batch,
+      setComponent: batch,
+      setComponentProps: batch,
+      setDecorator: batch,
+      setDecoratorProps: batch,
+      setState: batch,
+      onInit: batch,
+      onInput: batch,
+      onMount: batch,
+      onUnmount: batch,
+      onFocus: batch,
+      onBlur: batch,
+      reset: batch,
     })
   }
 
@@ -557,7 +557,7 @@ export class Field<
     clearTimeout(this.requests.loader)
     if (loading) {
       this.requests.loader = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.loading = loading
         })
       }, 100)
@@ -570,7 +570,7 @@ export class Field<
     clearTimeout(this.requests.validate)
     if (validating) {
       this.requests.validate = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.validating = validating
         })
       }, 100)

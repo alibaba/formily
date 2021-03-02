@@ -12,7 +12,7 @@ export const buildObservableTree = ({
   const parentNode = RawNode.get(ProxyRaw.get(target) || target)
   if (parentNode) {
     RawNode.set(value, {
-      path: parentNode.path.concat(key),
+      path: parentNode.path.concat(key as any),
       parent: parentNode,
       observers: new Set(),
       deepObservers: new Set(),
@@ -38,7 +38,7 @@ export const traverseIn = (target: any, key: PropertyKey, value: any) => {
   const node = RawNode.get(raw)
   if (parentNode) {
     if (!isSupportObservable(value)) return value
-    const path = parentNode.path.concat(key)
+    const path = parentNode.path.concat(key as any)
     const shallow = parentNode.shallow
     if (!node) {
       RawNode.set(raw, {

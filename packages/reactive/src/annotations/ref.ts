@@ -8,13 +8,13 @@ import {
 
 export const ref = createAnnotation(({ target, key, value }) => {
   const store = {
-    current: value,
+    value: value,
   }
   const proxy = {
-    set current(value) {
+    set value(value) {
       set(value)
     },
-    get current() {
+    get value() {
       return get()
     },
   }
@@ -31,19 +31,19 @@ export const ref = createAnnotation(({ target, key, value }) => {
   function get() {
     addDependencyForOperation({
       target: target ? target : store,
-      key: target ? key : 'current',
+      key: target ? key : 'value',
       type: 'get',
     })
-    return store.current
+    return store.value
   }
 
   function set(value: any) {
-    const oldValue = store.current
-    store.current = value
+    const oldValue = store.value
+    store.value = value
     if (oldValue !== value) {
       queueReactionsForOperation({
         target: target ? target : store,
-        key: target ? key : 'current',
+        key: target ? key : 'value',
         type: 'set',
         oldValue,
         value,

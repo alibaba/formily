@@ -5,7 +5,7 @@ import {
   isValid,
   toArr,
 } from '@formily/shared'
-import { makeObservable, annotations, autorun } from '@formily/reactive'
+import { define, observable, autorun, batch } from '@formily/reactive'
 import {
   JSXComponent,
   JSXComponenntProps,
@@ -93,30 +93,30 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   }
 
   protected makeObservable() {
-    makeObservable(this, {
-      title: annotations.ref,
-      description: annotations.ref,
-      selfDisplay: annotations.ref,
-      selfPattern: annotations.ref,
-      initialized: annotations.ref,
-      mounted: annotations.ref,
-      unmounted: annotations.ref,
-      decoratorType: annotations.ref,
-      decoratorProps: annotations.shallow,
-      componentType: annotations.ref,
-      componentProps: annotations.shallow,
-      setTitle: annotations.action,
-      setDescription: annotations.action,
-      setDisplay: annotations.action,
-      setPattern: annotations.action,
-      setComponent: annotations.action,
-      setComponentProps: annotations.action,
-      setDecorator: annotations.action,
-      setDecoratorProps: annotations.action,
-      setState: annotations.action,
-      onInit: annotations.action,
-      onMount: annotations.action,
-      onUnmount: annotations.action,
+    define(this, {
+      title: observable.ref,
+      description: observable.ref,
+      selfDisplay: observable.ref,
+      selfPattern: observable.ref,
+      initialized: observable.ref,
+      mounted: observable.ref,
+      unmounted: observable.ref,
+      decoratorType: observable.ref,
+      decoratorProps: observable.shallow,
+      componentType: observable.ref,
+      componentProps: observable.shallow,
+      setTitle: batch,
+      setDescription: batch,
+      setDisplay: batch,
+      setPattern: batch,
+      setComponent: batch,
+      setComponentProps: batch,
+      setDecorator: batch,
+      setDecoratorProps: batch,
+      setState: batch,
+      onInit: batch,
+      onMount: batch,
+      onUnmount: batch,
     })
   }
 

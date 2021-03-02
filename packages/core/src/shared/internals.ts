@@ -10,7 +10,7 @@ import {
   isPlainObj,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { action, runInAction, toJS } from '@formily/reactive'
+import { batchable, batch, toJS } from '@formily/reactive'
 import { Field, ArrayField, Form } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -128,7 +128,7 @@ export const queryFeedbackMessages = (
 
 export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
   if (!feedback) return
-  return runInAction(() => {
+  return batch(() => {
     if (!field.feedbacks.length) {
       if (!feedback.messages?.length) {
         return
@@ -167,7 +167,7 @@ export const validateToFeedbacks = async (
   })
   const shouldSkipValidate =
     field.display !== 'visible' || field.pattern !== 'editable'
-  runInAction(() => {
+  batch(() => {
     each(results, (messages, type) => {
       field.setFeedback({
         triggerType,
@@ -235,7 +235,7 @@ export const spliceArrayState = (
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
   }
 
-  runInAction(() => {
+  batch(() => {
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier)) {
         if (isAfterNode(identifier)) {
@@ -301,7 +301,7 @@ export const exchangeArrayState = (
 
     return `${preStr}${afterStr.replace(/^\.\d+/, `.${index}`)}`
   }
-  runInAction(() => {
+  batch(() => {
     each(fields, (field, identifier) => {
       if (isArrayChildren(identifier)) {
         if (isCrossNode(identifier)) {
@@ -413,7 +413,7 @@ export const setModelState = (model: any, setter: any) => {
   if (isFn(setter)) {
     setter(model)
   } else {
-    Reflect.ownKeys(setter || {}).forEach((key: string) => {
+    Object.keys(setter || {}).forEach((key: string) => {
       const value = setter[key]
       if (isFn(value)) return
       if (ReservedProperties.includes(key)) return
@@ -428,24 +428,27 @@ export const getModelState = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
-    return Reflect.ownKeys(model || {}).reduce((buf, key: string) => {
-      const value = model[key]
-      if (isFn(value)) {
+    return Object.keys(model || {}).reduce(
+      (buf, key: string) => {
+        const value = model[key]
+        if (isFn(value)) {
+          return buf
+        }
+        if (ReservedProperties.includes(key)) return buf
+        if (key === 'address' || key === 'path') {
+          buf[key] = value.toString()
+          return buf
+        }
+        buf[key] = toJS(value)
         return buf
-      }
-      if (ReservedProperties.includes(key)) return buf
-      if (key === 'address' || key === 'path') {
-        buf[key] = value.toString()
-        return buf
-      }
-      buf[key] = toJS(value)
-      return buf
-    }, {})
+      },
+      {}
+    )
   }
 }
 
 export const createModelStateSetter = (model: any) => {
-  return action((state?: any) => setModelState(model, state))
+  return batchable((state?: any) => setModelState(model, state))
 }
 
 export const createModelStateGetter = (model: any) => {
@@ -453,7 +456,7 @@ export const createModelStateGetter = (model: any) => {
 }
 
 export const createFieldStateSetter = (form: Form) => {
-  return action((pattern: FieldMatchPattern, payload?: any) => {
+  return batchable((pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
       pattern.forEach((field) => {
         field.setState(payload)
@@ -488,21 +491,25 @@ export const createFieldStateGetter = (form: Form) => {
   }
 }
 
-export const applyValuesPatch = (form: Form, path: string[], source: any) => {
-  const merge = (path: any[], value: any, source: any) => {
+export const applyValuesPatch = (
+  form: Form,
+  path: Array<string | number>,
+  source: any
+) => {
+  const merge = (path: Array<string | number>, source: any) => {
     if (path.length) {
       form.setValuesIn(path, toJS(source))
     } else {
-      Object.assign(value, toJS(source))
+      Object.assign(form.values, source)
     }
   }
 
-  const patch = (source: any, path: string[] = []) => {
+  const patch = (source: any, path: Array<string | number> = []) => {
     const targetValue = form.getValuesIn(path)
     const targetField = form.query(path).take()
     if (isEmpty(targetValue)) {
       if (isEmpty(source)) return
-      merge(path, targetValue, source)
+      merge(path, source)
     } else {
       const arrA = isArr(targetValue)
       const arrB = isArr(source)
@@ -516,10 +523,10 @@ export const applyValuesPatch = (form: Form, path: string[], source: any) => {
       } else {
         if (targetField) {
           if (!isVoidField(targetField) && !targetField.modified) {
-            merge(path, targetValue, source)
+            merge(path, source)
           }
         } else {
-          merge(path, targetValue, source)
+          merge(path, source)
         }
       }
     }

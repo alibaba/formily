@@ -15,5 +15,4 @@ export const ReservedProperties = [
   'componentProps',
   'decoratorType',
   'decoratorProps',
-  'originInitialValues',
 ]

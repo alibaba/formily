@@ -8,7 +8,7 @@ import {
 
 export const box = createAnnotation(({ target, key, value }) => {
   const store = {
-    current: value,
+    value: value,
   }
   const proxy = {
     set,
@@ -29,12 +29,12 @@ export const box = createAnnotation(({ target, key, value }) => {
       key,
       type: 'get',
     })
-    return store.current
+    return store.value
   }
 
   function set(value: any) {
-    const oldValue = store.current
-    store.current = value
+    const oldValue = store.value
+    store.value = value
     if (oldValue !== value) {
       queueReactionsForOperation({
         target: store,

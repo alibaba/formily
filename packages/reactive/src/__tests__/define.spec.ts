@@ -1,14 +1,15 @@
-import { makeObservable, annotations, autorun } from '..'
+import { define, observable, autorun } from '..'
 import { observe } from '../observe'
 import { FormPath } from '@formily/shared'
+import { batch } from '../batch'
 
 describe('makeObservable', () => {
   test('observable annotation', () => {
     const target: any = {
       aa: {},
     }
-    makeObservable(target, {
-      aa: annotations.observable,
+    define(target, {
+      aa: observable,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
@@ -28,8 +29,8 @@ describe('makeObservable', () => {
     const target: any = {
       aa: {},
     }
-    makeObservable(target, {
-      aa: annotations.shallow,
+    define(target, {
+      aa: observable.shallow,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
@@ -49,8 +50,8 @@ describe('makeObservable', () => {
   })
   test('box annotation', () => {
     const target: any = {}
-    makeObservable(target, {
-      aa: annotations.box,
+    define(target, {
+      aa: observable.box,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
@@ -67,8 +68,8 @@ describe('makeObservable', () => {
   })
   test('ref annotation', () => {
     const target: any = {}
-    makeObservable(target, {
-      aa: annotations.ref,
+    define(target, {
+      aa: observable.ref,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
@@ -91,9 +92,9 @@ describe('makeObservable', () => {
         target.aa.cc = 312
       },
     }
-    makeObservable(target, {
-      aa: annotations.observable,
-      setData: annotations.action,
+    define(target, {
+      aa: observable,
+      setData: batch,
     })
     const handler = jest.fn()
     autorun(() => {

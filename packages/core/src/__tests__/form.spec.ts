@@ -2,7 +2,7 @@ import { createForm } from '../'
 import { onFieldValueChange } from '../effects'
 import { attach, sleep } from './shared'
 import { LifeCycleTypes } from '../types'
-import { observable, runInAction } from '@formily/reactive'
+import { observable, batch } from '@formily/reactive'
 
 test('create form', () => {
   const form = attach(createForm())
@@ -137,7 +137,7 @@ test('observable values/initialValues', () => {
       initialValues,
     })
   )
-  runInAction(() => {
+  batch(() => {
     values.kk = 321
   })
   expect(form.values.kk).toEqual(321)
@@ -237,9 +237,10 @@ test('query', () => {
   expect(form.query('object.void').take()).not.toBeUndefined()
   expect(form.query('object.void.normal').take()).not.toBeUndefined()
   expect(form.query('object.normal').take()).not.toBeUndefined()
-  expect(
-    form.query('object.*').map((field) => field.path.toString())
-  ).toEqual(['object.void', 'object.normal'])
+  expect(form.query('object.*').map((field) => field.path.toString())).toEqual([
+    'object.void',
+    'object.normal',
+  ])
   expect(form.query('*').map((field) => field.path.toString())).toEqual([
     'object',
     'object.void',
@@ -278,6 +279,7 @@ test('notify/subscribe/unsubscribe', () => {
   expect(subscribe).toBeCalledTimes(0)
   form.setInitialValues({ aa: 123 })
   expect(subscribe).toBeCalledTimes(2)
+  expect(form.values).toEqual({ aa: 123 })
   form.notify(LifeCycleTypes.ON_FORM_SUBMIT)
   expect(subscribe).toBeCalledTimes(3)
   form.unsubscribe(id)

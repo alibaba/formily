@@ -50,3 +50,12 @@ export function createAnnotation<T extends (visitor: IVisitor) => any>(
   }
   return annotation
 }
+
+export function getObservableMaker(target: any) {
+  if (target[MakeObservableSymbol]) {
+    if (!target[MakeObservableSymbol][MakeObservableSymbol]) {
+      return target[MakeObservableSymbol]
+    }
+    return getObservableMaker(target[MakeObservableSymbol])
+  }
+}

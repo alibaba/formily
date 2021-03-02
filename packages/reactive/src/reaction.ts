@@ -90,7 +90,7 @@ export const publishToAllObservers = (operation: IOperation) => {
   )
   if (targetNode) {
     const change: IChange = {
-      path: targetNode.path.concat(operation.key),
+      path: targetNode.path.concat(operation.key as any),
       type: operation.type,
       key: operation.key,
       value: operation.value,

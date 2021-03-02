@@ -52,7 +52,7 @@ export type Annotations<T = any> = {
 
 export type ObservableListener = (operation: IOperation) => void
 
-export type ObservablePath = Array<PropertyKey>
+export type ObservablePath = Array<string | number>
 
 export type ObservableTraverse<Value = any, Target = any> = (
   visitor: IVisitor<Value, Target>

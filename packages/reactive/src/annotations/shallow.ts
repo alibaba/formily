@@ -7,7 +7,7 @@ import {
 
 export const shallow = createAnnotation(({ target, key, value }) => {
   const store = {
-    current: createObservable({
+    value: createObservable({
       target,
       key,
       value,
@@ -27,18 +27,18 @@ export const shallow = createAnnotation(({ target, key, value }) => {
       key: key,
       type: 'get',
     })
-    return store.current
+    return store.value
   }
 
   function set(value: any) {
-    const oldValue = store.current
+    const oldValue = store.value
     value = createObservable({
       target: target,
       key: key,
       value,
       shallow: true,
     })
-    store.current = value
+    store.value = value
     queueReactionsForOperation({
       target: target,
       key: key,
@@ -55,5 +55,5 @@ export const shallow = createAnnotation(({ target, key, value }) => {
       configurable: false,
     })
   }
-  return store.current
+  return store.value
 })

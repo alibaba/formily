@@ -1,6 +1,6 @@
-import { observable, runInAction, action, autorun } from '../'
+import { observable, batchable, batch, autorun } from '..'
 
-test('runInAction', () => {
+test('batch', () => {
   const obs = observable({
     aa: {
       bb: 123,
@@ -13,22 +13,22 @@ test('runInAction', () => {
   obs.aa.bb = 111
   obs.aa.bb = 222
   expect(handler).toBeCalledTimes(3)
-  runInAction(() => {
+  batch(() => {
     obs.aa.bb = 333
     obs.aa.bb = 444
   })
-  runInAction(() => {})
+  batch(() => {})
   expect(handler).toBeCalledTimes(4)
 })
 
-test('action', () => {
+test('batchable', () => {
   const obs = observable({
     aa: {
       bb: 123,
     },
   })
   const handler = jest.fn()
-  const batch = action(() => {
+  const batch = batchable(() => {
     obs.aa.bb = 333
     obs.aa.bb = 444
   })
