@@ -28,6 +28,7 @@ export const isSupportObservable = (target: any) => {
     if (isFn(target['toJSON'])) {
       return false
     }
+    return true
   }
   return false
 }
