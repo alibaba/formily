@@ -38,11 +38,12 @@ const RecursionField = defineObservableComponent({
     const parent = useField()
     const options = inject(SchemaOptionsSymbol)
     const scope = inject(SchemaExpressionScopeSymbol)
-    const fieldSchema = props.schema?.compile?.({
+    const schema = new Schema(props.schema)
+    const fieldSchema = schema.compile?.({
       ...options.scope,
       ...scope,
     })
-    const fieldProps = props.schema?.toFieldProps?.(options) as any
+    const fieldProps = schema?.toFieldProps?.(options) as any
     const getBasePath = () => {
       if (props.onlyRenderProperties) {
         return props.basePath || parent?.address?.concat(props.name)
@@ -72,17 +73,19 @@ const RecursionField = defineObservableComponent({
             }
           }
           return h(RecursionField, {
+            key: index,
             attrs: {
               schema,
               name,
-              key: index,
               basePath: base
             }
           }, {})
         })
 
+        const content = typeof fieldSchema['x-content'] === 'object' ? h(fieldSchema['x-content'], {}, {}) : fieldSchema['x-content']
+
         return h('div', {}, {
-          default: () => [...children, fieldSchema['x-content']]
+          default: () => [...children, content]
         })
       }
 
@@ -97,7 +100,7 @@ const RecursionField = defineObservableComponent({
               basePath: basePath
             }
           }, {
-            default: () => [renderProperties()]
+            default: ({ field }) => [renderProperties(field)]
           })
         } else if (fieldSchema.type === 'array') {
           return h(ArrayField, {
@@ -116,9 +119,12 @@ const RecursionField = defineObservableComponent({
               basePath: basePath
             }
           }, {
-            default: () => [renderProperties()]
+            default: ({ field }) => [renderProperties(field)]
           })
         }
+
+        const content = typeof fieldSchema['x-content'] === 'object' ? h(fieldSchema['x-content'], {}, {}) : fieldSchema['x-content']
+
         return h(Field, {
           attrs: {
             ...fieldProps,
@@ -126,7 +132,7 @@ const RecursionField = defineObservableComponent({
             basePath: basePath
           }
         }, {
-          default: () => [fieldSchema['x-content']]
+          default: () => [content]
         })
       }
 

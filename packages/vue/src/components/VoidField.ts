@@ -1,4 +1,4 @@
-import { provide } from 'vue-demi'
+import { provide, markRaw } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IVoidFieldProps } from '../types'
@@ -22,7 +22,7 @@ export default defineObservableComponent({
     component: Array,
     display: String,
     pattern: String,
-    reactions: Array,
+    reactions: [Array, Function],
   },
   observableSetup<D extends VueComponent, C extends VueComponent>(
     collect,
@@ -31,13 +31,13 @@ export default defineObservableComponent({
   ) {
     const form = useForm()
     const parent = useField()
-    const basePath = props.basePath ? props.basePath : parent?.address
+    const basePath = props.basePath !== undefined ? props.basePath : parent?.address
     const field = useAttach(
-      form.createVoidField({
+      markRaw(form.createVoidField({
         ...props,
         basePath,
         ...getRowComponentFromProps(props)
-      })
+      }))
     )
     provide(FieldSymbol, field)
 

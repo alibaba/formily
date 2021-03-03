@@ -128,7 +128,9 @@ export function createSchemaField<Components extends SchemaComponents>(
           default: () => {
             const children = []
             if (slots.default) {
-              children.push(slots.default())
+              children.push(h('template', {}, {
+                default: () => slots.default()
+              }))
             }
             children.push(h(RecursionField, {
               attrs: {
@@ -182,13 +184,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'string'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -198,13 +200,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'object'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -214,13 +216,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'array'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -230,13 +232,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'boolean'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -246,13 +248,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'number'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -262,13 +264,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'date'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -278,13 +280,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'datetime'
         } 
-      }, {})
+      }, slots)
     }
   })
 
@@ -294,13 +296,13 @@ export function createSchemaField<Components extends SchemaComponents>(
     setup<
       Decorator extends ComponentPath<Components>,
       Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
           type: 'void'
         } 
-      }, {})
+      }, slots)
     }
   })
 

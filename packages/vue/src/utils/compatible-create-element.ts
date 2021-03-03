@@ -10,8 +10,28 @@ type Tag = string | Component<any, any, any, any> | AsyncComponent<any, any, any
 const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderChildren) => {
   if (isVue2) {
     const hInVue2 = h as ((tag: Tag, data: VNodeData, components: VNodeChildren) => VNode)
-    const children = Object.keys(components).map(key => components[key]())
-    return hInVue2(tag, data, children)
+    const scopedSlots = {}
+    const children = []
+    Object.keys(components).forEach(key => {
+      const func = components[key]
+      if (func.length !== 0) {
+        scopedSlots[key] = func
+      } else {
+        children.push(components[key]())
+      }
+    })
+    const newData = Object.assign({}, data)
+    if (Object.keys(scopedSlots).length > 0) {
+      if (!newData.scopedSlots) {
+        newData.scopedSlots = scopedSlots
+      } else {
+        newData.scopedSlots = {
+          ...newData.scopedSlots,
+          ...scopedSlots
+        }
+      }
+    }
+    return hInVue2(tag, newData, children)
   } else {
     const hInVue3 = h as ((tag: Tag, data: VNodeData, components: RenderChildren) => VNode)
     const newData = {}
