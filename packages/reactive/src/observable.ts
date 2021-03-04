@@ -14,4 +14,5 @@ observable.box = annotations.box
 observable.ref = annotations.ref
 observable.deep = annotations.observable
 observable.shallow = annotations.shallow
+observable.computed = annotations.computed
 observable[MakeObservableSymbol] = annotations.observable

@@ -3,31 +3,31 @@ import { Reaction } from './types'
 import { batchEnd, batchStart, disposeBindingReaction } from './reaction'
 import { isFn } from '@formily/shared'
 
-export const autorun = (reaction: Reaction) => {
-  const runner = () => {
+export const autorun = (runner: Reaction) => {
+  const reaction = () => {
     try {
-      ReactionStack.push(runner)
+      ReactionStack.push(reaction)
       batchStart()
-      reaction()
+      runner()
     } finally {
       batchEnd()
       ReactionStack.pop()
     }
   }
-  runner()
+  reaction()
   return () => {
-    disposeBindingReaction(runner)
+    disposeBindingReaction(reaction)
   }
 }
 
 export const reaction = <T>(
-  reaction: () => T,
+  runner: () => T,
   callback?: (payload: T) => void
 ) => {
   const initialValue = Symbol('initial-value')
   let oldValue: any = initialValue
   return autorun(() => {
-    const current = reaction()
+    const current = runner()
     if (current !== oldValue && oldValue !== initialValue) {
       if (isFn(callback)) callback(current)
     }

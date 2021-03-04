@@ -1,6 +1,6 @@
 import {
-  addDependencyForOperation,
-  queueReactionsForOperation,
+  bindTargetKeyWithCurrentReaction,
+  runReactionsFromTargetKey,
 } from './reaction'
 import { ProxyRaw, RawProxy } from './environment'
 import { traverseIn } from './traverse'
@@ -20,7 +20,7 @@ export const handlers: ProxyHandler<any> = {
     if (typeof key === 'symbol' && wellKnownSymbols.has(key)) {
       return result
     }
-    addDependencyForOperation({ target, key, receiver, type: 'get' })
+    bindTargetKeyWithCurrentReaction({ target, key, receiver, type: 'get' })
     const observableResult = RawProxy.get(result)
     if (isSupportObservable(result)) {
       if (observableResult) {
@@ -38,11 +38,11 @@ export const handlers: ProxyHandler<any> = {
   },
   has(target, key) {
     const result = Reflect.has(target, key)
-    addDependencyForOperation({ target, key, type: 'has' })
+    bindTargetKeyWithCurrentReaction({ target, key, type: 'has' })
     return result
   },
   ownKeys(target) {
-    addDependencyForOperation({ target, type: 'iterate' })
+    bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     return Reflect.ownKeys(target)
   },
   set(target, key, value, receiver) {
@@ -54,7 +54,7 @@ export const handlers: ProxyHandler<any> = {
       return result
     }
     if (!hadKey) {
-      queueReactionsForOperation({
+      runReactionsFromTargetKey({
         target,
         key,
         value: newValue,
@@ -62,7 +62,7 @@ export const handlers: ProxyHandler<any> = {
         type: 'add',
       })
     } else if (value !== oldValue) {
-      queueReactionsForOperation({
+      runReactionsFromTargetKey({
         target,
         key,
         value: newValue,
@@ -76,7 +76,7 @@ export const handlers: ProxyHandler<any> = {
   deleteProperty(target, key) {
     const res = Reflect.deleteProperty(target, key)
     const oldValue = target[key]
-    queueReactionsForOperation({
+    runReactionsFromTargetKey({
       target,
       key,
       oldValue,

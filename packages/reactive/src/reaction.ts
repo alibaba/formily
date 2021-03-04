@@ -11,6 +11,7 @@ import {
   TargetKeysReactions,
   ReactionKeysReactions,
   PendingReactions,
+  ComputedReactions,
   BatchCount,
   Untracking,
   ProxyRaw,
@@ -30,18 +31,13 @@ const addTargetKeysReactions = (
     if (reactions) {
       reactions.add(reaction)
     } else {
-      const set = new Set<Reaction>()
-      set.add(reaction)
-      keysReactions.set(key, set)
+      keysReactions.set(key, new Set([reaction]))
     }
     return keysReactions
   } else {
-    const map: KeysReactions = new Map()
-    const set = new Set<Reaction>()
-    set.add(reaction)
-    map.set(key, set)
-    TargetKeysReactions.set(target, map)
-    return map
+    const bindMap: KeysReactions = new Map([[key, new Set([reaction])]])
+    TargetKeysReactions.set(target, bindMap)
+    return bindMap
   }
 }
 
@@ -49,14 +45,13 @@ const addReactionTargetKeys = (
   reaction: Reaction,
   keysReactions: KeysReactions
 ) => {
-  ReactionKeysReactions.set(reaction, keysReactions)
-}
-
-const addDependenciesToCurrentReaction = (target: any, key: PropertyKey) => {
-  const current = ReactionStack[ReactionStack.length - 1]
-  if (Untracking.value) return
-  if (current) {
-    addReactionTargetKeys(current, addTargetKeysReactions(target, key, current))
+  const bindSet = ReactionKeysReactions.get(reaction)
+  if (bindSet) {
+    if (!bindSet.has(keysReactions)) {
+      bindSet.add(keysReactions)
+    }
+  } else {
+    ReactionKeysReactions.set(reaction, new Set([keysReactions]))
   }
 }
 
@@ -78,7 +73,7 @@ const runReactions = (target: any, key: PropertyKey) => {
   }
 }
 
-export const publishToAllObservers = (operation: IOperation) => {
+const notifyObservers = (operation: IOperation) => {
   const targetNode = RawNode.get(
     ProxyRaw.get(operation.target) || operation.target
   )
@@ -118,17 +113,39 @@ export const publishToAllObservers = (operation: IOperation) => {
   }
 }
 
-export const addDependencyForOperation = (operation: IOperation) => {
+export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   let { key, type, target } = operation
   if (type === 'iterate') {
     key = ITERATION_KEY
   }
-  addDependenciesToCurrentReaction(target, key)
+  const current = ReactionStack[ReactionStack.length - 1]
+  if (Untracking.value) return
+  if (current) {
+    addReactionTargetKeys(current, addTargetKeysReactions(target, key, current))
+  }
 }
 
-export const queueReactionsForOperation = (operation: IOperation) => {
+export const setComputedReaction = (reaction: Reaction) => {
+  if (isFn(reaction)) {
+    if (!ComputedReactions.has(reaction)) {
+      ComputedReactions.set(reaction, true)
+    }
+  }
+}
+
+export const unsetComputedReaction = (reaction: Reaction) => {
+  if (isFn(reaction)) {
+    ComputedReactions.delete(reaction)
+  }
+}
+
+export const isComputedReaction = (reaction: Reaction) => {
+  return ComputedReactions.has(reaction)
+}
+
+export const runReactionsFromTargetKey = (operation: IOperation) => {
   let { key, type, target } = operation
-  publishToAllObservers(operation)
+  notifyObservers(operation)
   runReactions(target, key)
   if (type === 'add' || type === 'delete' || type === 'clear') {
     key = Array.isArray(target) ? 'length' : ITERATION_KEY
@@ -141,10 +158,20 @@ export const hasRunningReaction = () => {
 }
 
 export const disposeBindingReaction = (reaction: Reaction) => {
-  const keysReactions = ReactionKeysReactions.get(reaction)
-  if (keysReactions) {
-    keysReactions.forEach((reactions) => {
-      reactions.delete(reaction)
+  const bindSet = ReactionKeysReactions.get(reaction)
+  if (bindSet) {
+    bindSet.forEach((keysReactions) => {
+      keysReactions.forEach((reactions) => {
+        reactions.delete(reaction)
+        if (reactions.size === 1) {
+          reactions.forEach((reaction) => {
+            if (isComputedReaction(reaction)) {
+              unsetComputedReaction(reaction)
+              reactions.delete(reaction)
+            }
+          })
+        }
+      })
     })
   }
   ReactionKeysReactions.delete(reaction)

@@ -2,15 +2,19 @@ import { ProxyRaw, RawProxy } from '../environment'
 import { createAnnotation } from '../internals'
 import { buildTreeNode } from '../traverse'
 import {
-  addDependencyForOperation,
-  queueReactionsForOperation,
+  bindTargetKeyWithCurrentReaction,
+  runReactionsFromTargetKey,
 } from '../reaction'
 
-export const box = createAnnotation(({ target, key, value }) => {
+export interface IBox {
+  <T>(target: T): { get(): T; set(value: T): void }
+}
+
+export const box: IBox = createAnnotation(({ target, key, value }) => {
   const store = {
-    value: value,
+    value,
   }
-  
+
   const proxy = {
     set,
     get,
@@ -26,7 +30,7 @@ export const box = createAnnotation(({ target, key, value }) => {
   })
 
   function get() {
-    addDependencyForOperation({
+    bindTargetKeyWithCurrentReaction({
       target: store,
       key,
       type: 'get',
@@ -38,7 +42,7 @@ export const box = createAnnotation(({ target, key, value }) => {
     const oldValue = store.value
     store.value = value
     if (oldValue !== value) {
-      queueReactionsForOperation({
+      runReactionsFromTargetKey({
         target: store,
         key,
         type: 'set',
