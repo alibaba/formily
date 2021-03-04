@@ -12,7 +12,7 @@ export interface IBox {
 
 export const box: IBox = createAnnotation(({ target, key, value }) => {
   const store = {
-    value,
+    value: target ? target[key] : value,
   }
 
   const proxy = {
@@ -59,6 +59,7 @@ export const box: IBox = createAnnotation(({ target, key, value }) => {
       configurable: false,
       writable: false,
     })
+    return target
   }
   return proxy
 })

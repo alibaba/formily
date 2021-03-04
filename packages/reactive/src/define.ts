@@ -7,7 +7,7 @@ import { Annotations } from './types'
 
 export function define<Target extends object = any>(
   target: Target,
-  annotations: Annotations<Target>,
+  annotations?: Annotations<Target>,
   traverse = createObservable
 ) {
   if (isObservable(target)) return target
@@ -22,7 +22,6 @@ export function define<Target extends object = any>(
         getObservableMaker(annotation)({
           target: value,
           key,
-          value: value[key],
         })
       }
     })

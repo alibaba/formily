@@ -7,7 +7,6 @@ import {
   bindComputedReactions,
   hasRunningReaction,
 } from '../reaction'
-import { isFn } from '@formily/shared'
 
 export interface IComputed {
   <T>(compute: () => T): { value: T }
@@ -17,7 +16,7 @@ export interface IComputed {
 }
 
 export const computed: IComputed = createAnnotation(
-  ({ target, key, value: params }) => {
+  ({ target, key, value }) => {
     const store = {
       value: undefined,
     }
@@ -33,27 +32,29 @@ export const computed: IComputed = createAnnotation(
 
     const context = target ? target : store
     const property = target ? key : 'value'
+    const getter = target
+      ? Reflect.getOwnPropertyDescriptor(target, key)?.get
+      : value
+    const setter = target
+      ? Reflect.getOwnPropertyDescriptor(target, key)?.set
+      : value?.set
 
-    function compute(getter: any) {
-      if (isFn(getter)) {
-        const oldValue = store.value
-        store.value = getter.call(context)
-        if (oldValue === store.value) return
-        runReactionsFromTargetKey({
-          target: context,
-          key: property,
-          oldValue,
-          value: store.value,
-        })
-      } else if (isFn(getter?.get)) {
-        compute(getter.get)
-      }
+    function compute() {
+      const oldValue = store.value
+      store.value = getter?.call?.(context)
+      if (oldValue === store.value) return
+      runReactionsFromTargetKey({
+        target: context,
+        key: property,
+        oldValue,
+        value: store.value,
+      })
     }
 
     function reaction() {
       try {
         ReactionStack.push(reaction)
-        compute(params)
+        compute()
       } finally {
         ReactionStack.pop()
       }
@@ -79,7 +80,7 @@ export const computed: IComputed = createAnnotation(
           reaction()
           reaction._active = true
         } else {
-          compute(params)
+          compute()
         }
       } else {
         if (hasRunningReaction()) {
@@ -95,11 +96,8 @@ export const computed: IComputed = createAnnotation(
     }
 
     function set(value: any) {
-      if (isFn(params.set)) {
-        params.set.call(this, value)
-      }
+      setter?.call?.(context, value)
     }
-
     if (target) {
       Object.defineProperty(target, key, {
         get,
@@ -107,6 +105,7 @@ export const computed: IComputed = createAnnotation(
         enumerable: true,
         configurable: false,
       })
+      return target
     }
     return proxy
   }

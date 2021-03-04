@@ -27,7 +27,8 @@ export const batchable = createAnnotation(({ target, key, value }) => {
     }
   }
   if (target) {
-    target[key] = action(value)
+    target[key] = action(target[key])
+    return target
   }
   return action(value)
 })

@@ -14,7 +14,7 @@ export const observable: IObservable = createAnnotation(
       value: createObservable({
         target,
         key,
-        value,
+        value: target ? target[key] : value,
       }),
     }
 
@@ -50,6 +50,7 @@ export const observable: IObservable = createAnnotation(
         enumerable: true,
         configurable: false,
       })
+      return target
     }
     return store.value
   }

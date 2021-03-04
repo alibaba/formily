@@ -11,7 +11,7 @@ export const shallow: IObservable = createAnnotation(
       value: createObservable({
         target,
         key,
-        value,
+        value: target ? target[key] : value,
         shallow: true,
       }),
     }
@@ -49,6 +49,7 @@ export const shallow: IObservable = createAnnotation(
         enumerable: true,
         configurable: false,
       })
+      return target
     }
     return store.value
   }

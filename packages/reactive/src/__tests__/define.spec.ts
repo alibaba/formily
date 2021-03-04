@@ -103,4 +103,32 @@ describe('makeObservable', () => {
     target.setData()
     expect(handler).toBeCalledTimes(2)
   })
+  test('computed annotation', () => {
+    const handler = jest.fn()
+    const target = {
+      aa: 11,
+      bb: 22,
+      get cc() {
+        handler()
+        return this.aa + this.bb
+      },
+    }
+    define(target, {
+      aa: observable,
+      bb: observable,
+      cc: observable.computed,
+    })
+    autorun(() => {
+      target.cc
+    })
+    expect(handler).toBeCalledTimes(1)
+    expect(target.cc).toEqual(33)
+    expect(handler).toBeCalledTimes(1)
+    expect(target.cc).toEqual(33)
+    expect(handler).toBeCalledTimes(1)
+    target.aa = 22
+    expect(handler).toBeCalledTimes(2)
+    expect(target.cc).toEqual(44)
+    expect(handler).toBeCalledTimes(2)
+  })
 })

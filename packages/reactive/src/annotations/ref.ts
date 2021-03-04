@@ -12,7 +12,7 @@ export interface IRef {
 
 export const ref: IRef = createAnnotation(({ target, key, value }) => {
   const store = {
-    value,
+    value: target ? target[key] : value,
   }
 
   const proxy = {
@@ -65,6 +65,7 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
       enumerable: true,
       configurable: false,
     })
+    return target
   }
   return proxy
 })
