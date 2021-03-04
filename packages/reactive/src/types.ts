@@ -58,6 +58,11 @@ export type ObservableTraverse<Value = any, Target = any> = (
   visitor: IVisitor<Value, Target>
 ) => any
 
-export type Reaction = (...args: any[]) => any
+export type Reaction = ((...args: any[]) => any) & {
+  _id?: string
+  _active?: boolean
+  _context?: any
+  _property?: PropertyKey
+}
 
 export type KeysReactions = Map<PropertyKey, Set<Reaction>>

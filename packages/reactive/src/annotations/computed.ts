@@ -3,11 +3,8 @@ import { createAnnotation } from '../internals'
 import { buildTreeNode } from '../traverse'
 import {
   bindTargetKeyWithCurrentReaction,
-  batchStart,
-  batchEnd,
   runReactionsFromTargetKey,
-  setComputedReaction,
-  isComputedReaction,
+  bindComputedReactions,
   hasRunningReaction,
 } from '../reaction'
 import { isFn } from '@formily/shared'
@@ -56,13 +53,15 @@ export const computed: IComputed = createAnnotation(
     function reaction() {
       try {
         ReactionStack.push(reaction)
-        batchStart()
         compute(params)
       } finally {
-        batchEnd()
         ReactionStack.pop()
       }
     }
+
+    reaction._context = context
+    reaction._property = property
+    reaction._active = false
 
     ProxyRaw.set(proxy, store)
     RawProxy.set(store, proxy)
@@ -74,12 +73,17 @@ export const computed: IComputed = createAnnotation(
     })
 
     function get() {
-      if (!isComputedReaction(reaction)) {
+      if (!reaction._active) {
         if (hasRunningReaction()) {
+          bindComputedReactions(reaction)
           reaction()
-          setComputedReaction(reaction)
+          reaction._active = true
         } else {
           compute(params)
+        }
+      } else {
+        if (hasRunningReaction()) {
+          bindComputedReactions(reaction)
         }
       }
       bindTargetKeyWithCurrentReaction({

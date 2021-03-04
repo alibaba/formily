@@ -11,7 +11,7 @@ import {
   TargetKeysReactions,
   ReactionKeysReactions,
   PendingReactions,
-  ComputedReactions,
+  ReactionComputeds,
   BatchCount,
   Untracking,
   ProxyRaw,
@@ -55,22 +55,24 @@ const addReactionTargetKeys = (
   }
 }
 
-const runReactions = (target: any, key: PropertyKey) => {
+const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const keysReactions = TargetKeysReactions.get(target)
   if (keysReactions) {
-    const reactions = keysReactions.get(key)
-    if (reactions) {
-      reactions.forEach((reaction) => {
-        if (isBatching()) {
-          if (!PendingReactions.has(reaction)) {
-            PendingReactions.add(reaction)
-          }
-        } else {
-          reaction()
-        }
-      })
-    }
+    return keysReactions.get(key) || new Set<Reaction>()
   }
+  return new Set<Reaction>()
+}
+
+const runReactions = (target: any, key: PropertyKey) => {
+  getReactionsFromTargetKey(target, key).forEach((reaction) => {
+    if (isBatching()) {
+      if (!PendingReactions.has(reaction)) {
+        PendingReactions.add(reaction)
+      }
+    } else {
+      reaction()
+    }
+  })
 }
 
 const notifyObservers = (operation: IOperation) => {
@@ -125,22 +127,36 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   }
 }
 
-export const setComputedReaction = (reaction: Reaction) => {
+export const bindComputedReactions = (reaction: Reaction) => {
   if (isFn(reaction)) {
-    if (!ComputedReactions.has(reaction)) {
-      ComputedReactions.set(reaction, true)
+    const current = ReactionStack[ReactionStack.length - 1]
+    if (current) {
+      const computeds = ReactionComputeds.get(current)
+      if (computeds) {
+        if (!computeds.has(reaction)) {
+          computeds.add(reaction)
+        }
+      } else {
+        ReactionComputeds.set(current, new Set([reaction]))
+      }
     }
   }
 }
 
-export const unsetComputedReaction = (reaction: Reaction) => {
-  if (isFn(reaction)) {
-    ComputedReactions.delete(reaction)
+export const suspendComputedReactions = (reaction: Reaction) => {
+  const computeds = ReactionComputeds.get(reaction)
+  if (computeds) {
+    computeds.forEach((reaction) => {
+      const reactions = getReactionsFromTargetKey(
+        reaction._context,
+        reaction._property
+      )
+      if (reactions.size === 0) {
+        disposeBindingReaction(reaction)
+        reaction._active = false
+      }
+    })
   }
-}
-
-export const isComputedReaction = (reaction: Reaction) => {
-  return ComputedReactions.has(reaction)
 }
 
 export const runReactionsFromTargetKey = (operation: IOperation) => {
@@ -158,23 +174,16 @@ export const hasRunningReaction = () => {
 }
 
 export const disposeBindingReaction = (reaction: Reaction) => {
-  const bindSet = ReactionKeysReactions.get(reaction)
-  if (bindSet) {
-    bindSet.forEach((keysReactions) => {
+  const bindingSet = ReactionKeysReactions.get(reaction)
+  if (bindingSet) {
+    bindingSet.forEach((keysReactions) => {
       keysReactions.forEach((reactions) => {
         reactions.delete(reaction)
-        if (reactions.size === 1) {
-          reactions.forEach((reaction) => {
-            if (isComputedReaction(reaction)) {
-              unsetComputedReaction(reaction)
-              reactions.delete(reaction)
-            }
-          })
-        }
       })
     })
   }
   ReactionKeysReactions.delete(reaction)
+  suspendComputedReactions(reaction)
 }
 
 export const batchStart = () => {
