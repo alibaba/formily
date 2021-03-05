@@ -32,12 +32,28 @@ export const computed: IComputed = createAnnotation(
 
     const context = target ? target : store
     const property = target ? key : 'value'
-    const getter = target
-      ? Reflect.getOwnPropertyDescriptor(target, key)?.get
-      : value
-    const setter = target
-      ? Reflect.getOwnPropertyDescriptor(target, key)?.set
-      : value?.set
+    const getter = getGetter(context)
+    const setter = getSetter(context)
+
+    function getGetter(target: any) {
+      if (!target) {
+        if (value?.get) return value?.get
+        return value
+      }
+      const descriptor = Reflect.getOwnPropertyDescriptor(target, property)
+      if (descriptor?.get) return descriptor.get
+      return getGetter(Object.getPrototypeOf(target))
+    }
+
+    function getSetter(target: any) {
+      if (!target) {
+        if (value?.set) return value?.set
+        return
+      }
+      const descriptor = Object.getOwnPropertyDescriptor(target, property)
+      if (descriptor?.set) return descriptor.set
+      return getSetter(Object.getPrototypeOf(target))
+    }
 
     function compute() {
       const oldValue = store.value
