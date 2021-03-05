@@ -6,12 +6,13 @@
     "module": "commonjs",
     "target": "es5",
     "allowJs": false,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": false,
     "declaration": true,
     "experimentalDecorators": true,
+    "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
       "@formily/*": [

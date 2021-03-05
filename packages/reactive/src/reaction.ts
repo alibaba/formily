@@ -28,7 +28,7 @@ const addTargetKeysReactions = (
   const keysReactions = TargetKeysReactions.get(target)
   if (keysReactions) {
     const reactions = keysReactions.get(key)
-    if (reactions) {
+    if (reactions && !reactions.has(reaction)) {
       reactions.add(reaction)
     } else {
       keysReactions.set(key, new Set([reaction]))
@@ -57,14 +57,18 @@ const addReactionTargetKeys = (
 
 const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const keysReactions = TargetKeysReactions.get(target)
+  const reactions = new Set<Reaction>()
   if (keysReactions) {
-    return keysReactions.get(key) || new Set<Reaction>()
+    keysReactions.get(key)?.forEach((reaction) => {
+      reactions.add(reaction)
+    })
   }
-  return new Set<Reaction>()
+  return reactions
 }
 
 const runReactions = (target: any, key: PropertyKey) => {
-  getReactionsFromTargetKey(target, key).forEach((reaction) => {
+  const reactions = getReactionsFromTargetKey(target, key)
+  reactions.forEach((reaction) => {
     if (isBatching()) {
       if (!PendingReactions.has(reaction)) {
         PendingReactions.add(reaction)
@@ -152,7 +156,7 @@ export const suspendComputedReactions = (reaction: Reaction) => {
         reaction._property
       )
       if (reactions.size === 0) {
-        disposeBindingReaction(reaction)
+        disposeBindingReactions(reaction)
         reaction._active = false
       }
     })
@@ -160,9 +164,15 @@ export const suspendComputedReactions = (reaction: Reaction) => {
 }
 
 export const runReactionsFromTargetKey = (operation: IOperation) => {
-  let { key, type, target } = operation
+  let { key, type, target, oldTarget } = operation
   notifyObservers(operation)
-  runReactions(target, key)
+  if (type === 'clear') {
+    oldTarget.forEach((_: any, key: PropertyKey) => {
+      runReactions(target, key)
+    })
+  } else {
+    runReactions(target, key)
+  }
   if (type === 'add' || type === 'delete' || type === 'clear') {
     key = Array.isArray(target) ? 'length' : ITERATION_KEY
     runReactions(target, key)
@@ -173,7 +183,7 @@ export const hasRunningReaction = () => {
   return ReactionStack.length > 0
 }
 
-export const disposeBindingReaction = (reaction: Reaction) => {
+export const releaseBindingReactions = (reaction: Reaction) => {
   const bindingSet = ReactionKeysReactions.get(reaction)
   if (bindingSet) {
     bindingSet.forEach((keysReactions) => {
@@ -183,6 +193,10 @@ export const disposeBindingReaction = (reaction: Reaction) => {
     })
   }
   ReactionKeysReactions.delete(reaction)
+}
+
+export const disposeBindingReactions = (reaction: Reaction) => {
+  releaseBindingReactions(reaction)
   suspendComputedReactions(reaction)
 }
 

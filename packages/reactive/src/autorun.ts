@@ -1,22 +1,28 @@
 import { ReactionStack } from './environment'
 import { Reaction } from './types'
-import { batchEnd, batchStart, disposeBindingReaction } from './reaction'
+import {
+  batchEnd,
+  batchStart,
+  disposeBindingReactions,
+} from './reaction'
 import { isFn } from '@formily/shared'
 
 export const autorun = (runner: Reaction) => {
   const reaction = () => {
-    try {
-      ReactionStack.push(reaction)
-      batchStart()
-      runner()
-    } finally {
-      batchEnd()
-      ReactionStack.pop()
+    if (ReactionStack.indexOf(reaction) === -1) {
+      try {
+        ReactionStack.push(reaction)
+        batchStart()
+        runner()
+      } finally {
+        batchEnd()
+        ReactionStack.pop()
+      }
     }
   }
   reaction()
   return () => {
-    disposeBindingReaction(reaction)
+    disposeBindingReactions(reaction)
   }
 }
 

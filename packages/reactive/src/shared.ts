@@ -1,4 +1,13 @@
-import { isObj, isValid, clone, isFn } from '@formily/shared'
+import {
+  isObj,
+  isValid,
+  clone,
+  isFn,
+  isMap,
+  isWeakMap,
+  isSet,
+  isWeakSet,
+} from '@formily/shared'
 import { ProxyRaw, MakeObservableSymbol, Untracking } from './environment'
 import { Annotation } from './types'
 
@@ -32,6 +41,14 @@ export const isSupportObservable = (target: any) => {
   }
   return false
 }
+
+export const isCollectionType = (target: any) => {
+  return (
+    isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target)
+  )
+}
+
+export const raw = (target: any) => ProxyRaw.get(target)
 
 export const toJS = (target: any) => clone(target)
 
