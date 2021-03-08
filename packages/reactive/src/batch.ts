@@ -1,5 +1,5 @@
 import { isFn } from '@formily/shared'
-import { batchStart, batchEnd, excutePendingReactions } from './reaction'
+import { batchStart, batchEnd } from './reaction'
 import { createAnnotation } from './internals'
 import { MakeObservableSymbol } from './environment'
 
@@ -11,9 +11,7 @@ export const batch = <T>(callback?: () => T) => {
       result = callback()
     }
   } finally {
-    batchEnd(() => {
-      excutePendingReactions()
-    })
+    batchEnd()
   }
   return result
 }

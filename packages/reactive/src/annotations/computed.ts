@@ -6,6 +6,9 @@ import {
   runReactionsFromTargetKey,
   bindComputedReactions,
   hasRunningReaction,
+  batchStart,
+  batchEnd,
+  isBatching,
 } from '../reaction'
 
 export interface IComputed {
@@ -59,12 +62,15 @@ export const computed: IComputed = createAnnotation(
       const oldValue = store.value
       store.value = getter?.call?.(context)
       if (oldValue === store.value) return
+      batchStart()
       runReactionsFromTargetKey({
         target: context,
         key: property,
         oldValue,
         value: store.value,
+        type: 'set',
       })
+      batchEnd()
     }
 
     function reaction() {
@@ -101,6 +107,8 @@ export const computed: IComputed = createAnnotation(
       } else {
         if (hasRunningReaction()) {
           bindComputedReactions(reaction)
+        } else if (isBatching()) {
+          compute()
         }
       }
       bindTargetKeyWithCurrentReaction({
@@ -112,7 +120,12 @@ export const computed: IComputed = createAnnotation(
     }
 
     function set(value: any) {
-      setter?.call?.(context, value)
+      try {
+        batchStart()
+        setter?.call?.(context, value)
+      } finally {
+        batchEnd()
+      }
     }
     if (target) {
       Object.defineProperty(target, key, {

@@ -28,8 +28,10 @@ const addTargetKeysReactions = (
   const keysReactions = TargetKeysReactions.get(target)
   if (keysReactions) {
     const reactions = keysReactions.get(key)
-    if (reactions && !reactions.has(reaction)) {
-      reactions.add(reaction)
+    if (reactions) {
+      if (!reactions.has(reaction)) {
+        reactions.add(reaction)
+      }
     } else {
       keysReactions.set(key, new Set([reaction]))
     }
@@ -204,16 +206,18 @@ export const batchStart = () => {
   BatchCount.value++
 }
 
-export const batchEnd = (callback?: () => void) => {
+export const batchEnd = () => {
   BatchCount.value--
   if (BatchCount.value === 0) {
-    if (isFn(callback)) callback()
+    excutePendingReactions()
   }
 }
 
 export const isBatching = () => BatchCount.value > 0
 
 export const excutePendingReactions = () => {
-  PendingReactions.forEach((reaction) => reaction())
-  PendingReactions.clear()
+  PendingReactions.forEach((reaction) => {
+    PendingReactions.delete(reaction)
+    reaction()
+  })
 }

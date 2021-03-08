@@ -550,7 +550,7 @@ test('setState/getState', () => {
       name: 'bb',
     })
   )
-  expect(bb.value).toEqual('bbb')
+  expect(bb.value).toEqual(undefined)
   expect(bb.visible).toBeFalsy()
   form.setFieldState('*', (state) => {
     state.value = '123'

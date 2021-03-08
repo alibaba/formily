@@ -6,18 +6,30 @@
 
 ```tsx
 import React from 'react'
-import { observable, autorun } from '@formily/reactive'
+import { createForm, onFieldChange } from '@formily/core'
 
-const obs = observable({ aa: 0 })
+const attach = <T extends { onMount: () => void }>(target: T): T => {
+  target.onMount()
+  return target
+}
 
-autorun(() => {
-  console.log(obs.aa)
+const form = attach(createForm({}))
+const field = attach(
+  form.createField({
+    name: 'aa',
+    required: true,
+  })
+)
+field.onInput('').then(() => {
+  console.log(field.value, field.errors)
 })
 
 export default () => (
   <button
     onClick={() => {
-      obs.aa++
+      field.onInput('123').then(() => {
+        console.log(field.value, field.errors)
+      })
     }}
   >
     click
