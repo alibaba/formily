@@ -1,5 +1,4 @@
 import { compile, registerCompiler, shallowCompile } from '../compiler'
-import { createModel } from '@formily/reactive'
 import { Schema } from '../schema'
 
 test('compile', () => {
@@ -40,14 +39,6 @@ test('compile', () => {
   const compiledActions = compile(actions)
   expect(compiledActions).toEqual(actions)
   expect(compiledActions['expression']).toEqual('{{123}}')
-  const observable = createModel({
-    aa: 123,
-    bb: 321,
-    expression: '{{123}}',
-  })
-  const compiledObservable = compile(observable)
-  expect(compiledObservable).toEqual(observable)
-  expect(compiledObservable['expression']).toEqual('{{123}}')
 
   const schema = new Schema({
     type: 'object',

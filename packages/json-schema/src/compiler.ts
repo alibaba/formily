@@ -51,9 +51,6 @@ export const compile = <Source = any, Scope = any>(
       if (source[actionsSymbol]) {
         return source
       }
-      if (isObservable(source)) {
-        return source
-      }
       if (source['_isAMomentObject']) {
         return source
       }
