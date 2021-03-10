@@ -1,4 +1,4 @@
-import { define, observable, autorun } from '..'
+import { defineModel, observable, autorun } from '..'
 import { observe } from '../observe'
 import { FormPath } from '@formily/shared'
 import { batch } from '../batch'
@@ -8,7 +8,7 @@ describe('makeObservable', () => {
     const target: any = {
       aa: {},
     }
-    define(target, {
+    defineModel(target, {
       aa: observable,
     })
     const handler = jest.fn()
@@ -29,7 +29,7 @@ describe('makeObservable', () => {
     const target: any = {
       aa: {},
     }
-    define(target, {
+    defineModel(target, {
       aa: observable.shallow,
     })
     const handler = jest.fn()
@@ -50,7 +50,7 @@ describe('makeObservable', () => {
   })
   test('box annotation', () => {
     const target: any = {}
-    define(target, {
+    defineModel(target, {
       aa: observable.box,
     })
     const handler = jest.fn()
@@ -68,7 +68,7 @@ describe('makeObservable', () => {
   })
   test('ref annotation', () => {
     const target: any = {}
-    define(target, {
+    defineModel(target, {
       aa: observable.ref,
     })
     const handler = jest.fn()
@@ -92,7 +92,7 @@ describe('makeObservable', () => {
         target.aa.cc = 312
       },
     }
-    define(target, {
+    defineModel(target, {
       aa: observable,
       setData: batch,
     })
@@ -113,7 +113,7 @@ describe('makeObservable', () => {
         return this.aa + this.bb
       },
     }
-    define(target, {
+    defineModel(target, {
       aa: observable,
       bb: observable,
       cc: observable.computed,

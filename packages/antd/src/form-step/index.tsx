@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { makeAutoObservable } from 'mobx'
+import { createModel } from '@formily/reactive'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
@@ -93,7 +93,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     }
   }
 
-  const formStep: IFormStep = makeAutoObservable({
+  const formStep: IFormStep = createModel({
     connect(steps, field) {
       env.steps = steps
       env.form = field?.form

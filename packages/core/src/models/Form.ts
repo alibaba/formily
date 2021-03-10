@@ -1,5 +1,5 @@
 import {
-  define,
+  defineModel,
   observable,
   batch,
   toJS,
@@ -120,7 +120,7 @@ export class Form<ValueType extends object = any> {
   }
 
   protected makeObservable() {
-    define(this, {
+    defineModel(this, {
       fields: observable.shallow,
       initialized: observable.ref,
       validating: observable.ref,

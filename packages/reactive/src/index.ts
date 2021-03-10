@@ -1,6 +1,6 @@
 export * from './batch'
 export * from './observable'
-export * from './define'
+export * from './model'
 export * from './autorun'
 export * from './tracker'
 export * from './observe'

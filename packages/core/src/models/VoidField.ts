@@ -5,7 +5,7 @@ import {
   isValid,
   toArr,
 } from '@formily/shared'
-import { define, observable, autorun, batch } from '@formily/reactive'
+import { defineModel, observable, autorun, batch } from '@formily/reactive'
 import {
   JSXComponent,
   JSXComponenntProps,
@@ -93,7 +93,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   }
 
   protected makeObservable() {
-    define(this, {
+    defineModel(this, {
       title: observable.ref,
       description: observable.ref,
       selfDisplay: observable.ref,

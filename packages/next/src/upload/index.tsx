@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useField } from '@formily/react'
-import { reaction } from 'mobx'
+import { reaction } from '@formily/reactive'
 import { Upload as NextUpload } from '@alifd/next'
 import { UploadProps, CardProps } from '@alifd/next/lib/upload'
 import { isArr, toArr } from '@formily/shared'

@@ -31,7 +31,6 @@
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "antd": "^4.0.0",
-    "mobx": "^6.0.3",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0"
   },
@@ -41,6 +40,8 @@
     "@formily/core": "^2.0.0-beta.3",
     "@formily/react": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
+    "@formily/reactive": "^2.0.0-beta.3",
+    "@formily/reactive-react": "^2.0.0-beta.3",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"

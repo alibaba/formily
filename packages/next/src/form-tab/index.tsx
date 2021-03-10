@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Tab as Tabs, Badge } from '@alifd/next'
-import { makeAutoObservable } from 'mobx'
+import { createModel } from '@formily/reactive'
 import {
   ItemProps as TabPaneProps,
   TabProps as TabsProps,
@@ -54,7 +54,7 @@ const useTabs = () => {
 }
 
 const createFormTab = (defaultActiveKey?: string) => {
-  const formTab = makeAutoObservable({
+  const formTab = createModel({
     activeKey: defaultActiveKey,
     setActiveKey(key: string) {
       formTab.activeKey = key

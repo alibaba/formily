@@ -1,5 +1,5 @@
 import { isArr, isFn, isPlainObj, isStr, reduce } from '@formily/shared'
-import { isObservable } from 'mobx'
+import { isObservable } from '@formily/reactive'
 import { Schema } from './schema'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/

@@ -1,4 +1,4 @@
-import { runInAction } from 'mobx'
+import { batch } from '@formily/reactive'
 import {
   isBool,
   isArr,
@@ -208,7 +208,7 @@ const getSchemaFieldReactions = (
     compile: (expression: any) => any
   ) => {
     if (!request) return
-    runInAction(() => {
+    batch(() => {
       if (request.state) {
         field.setState((state) => patchState(state, compile(request.state)))
       }

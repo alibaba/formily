@@ -14,7 +14,7 @@ import {
   parseValidatorDescriptions,
 } from '@formily/validator'
 import {
-  define,
+  defineModel,
   observable,
   reaction,
   batch,
@@ -145,7 +145,7 @@ export class Field<
   }
 
   protected makeObservable() {
-    define(this, {
+    defineModel(this, {
       title: observable.ref,
       description: observable.ref,
       dataSource: observable.ref,

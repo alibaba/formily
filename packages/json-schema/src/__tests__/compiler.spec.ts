@@ -1,5 +1,5 @@
 import { compile, registerCompiler, shallowCompile } from '../compiler'
-import { makeAutoObservable } from 'mobx'
+import { createModel } from '@formily/reactive'
 import { Schema } from '../schema'
 
 test('compile', () => {
@@ -40,7 +40,7 @@ test('compile', () => {
   const compiledActions = compile(actions)
   expect(compiledActions).toEqual(actions)
   expect(compiledActions['expression']).toEqual('{{123}}')
-  const observable = makeAutoObservable({
+  const observable = createModel({
     aa: 123,
     bb: 321,
     expression: '{{123}}',
