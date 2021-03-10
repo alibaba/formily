@@ -58,7 +58,7 @@ export const compile = <Source = any, Scope = any>(
         return source
       }
       if (Schema.isSchemaInstance(source)) {
-        return source.fromJSON(source)
+        return source.compile(scope)
       }
       if (isFn(source['toJS'])) {
         return source

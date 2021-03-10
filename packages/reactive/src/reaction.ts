@@ -76,7 +76,11 @@ const runReactions = (target: any, key: PropertyKey) => {
         PendingReactions.add(reaction)
       }
     } else {
-      reaction()
+      if (isFn(reaction._scheduler)) {
+        reaction._scheduler(reaction)
+      } else {
+        reaction()
+      }
     }
   })
 }
@@ -218,6 +222,10 @@ export const isBatching = () => BatchCount.value > 0
 export const excutePendingReactions = () => {
   PendingReactions.forEach((reaction) => {
     PendingReactions.delete(reaction)
-    reaction()
+    if (isFn(reaction._scheduler)) {
+      reaction._scheduler(reaction)
+    } else {
+      reaction()
+    }
   })
 }

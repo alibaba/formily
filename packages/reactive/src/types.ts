@@ -59,10 +59,10 @@ export type ObservableTraverse<Value = any, Target = any> = (
 ) => any
 
 export type Reaction = ((...args: any[]) => any) & {
-  _id?: string
   _active?: boolean
   _context?: any
   _property?: PropertyKey
+  _scheduler?: (reaction: Reaction) => void
 }
 
 export type KeysReactions = Map<PropertyKey, Set<Reaction>>
