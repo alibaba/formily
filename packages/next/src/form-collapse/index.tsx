@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Collapse, Badge } from '@alifd/next'
-import { createModel } from '@formily/reactive'
+import { model } from '@formily/reactive'
 import {
   CollapseProps,
   PanelProps as CollapsePanelProps,
@@ -63,7 +63,7 @@ const usePanels = () => {
 }
 
 const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
-  const formCollapse = createModel({
+  const formCollapse = model({
     activeKeys: defaultActiveKeys || [],
     setActiveKeys(keys: ActiveKeys) {
       formCollapse.activeKeys = keys

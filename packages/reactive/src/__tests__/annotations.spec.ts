@@ -1,4 +1,4 @@
-import { observable, batchable } from '../'
+import { observable, action } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../shared'
@@ -69,7 +69,7 @@ test('ref annotation', () => {
 
 test('action annotation', () => {
   const obs = observable<any>({})
-  const setData = batchable(() => {
+  const setData = action(() => {
     obs.aa = 123
     obs.bb = 321
   })

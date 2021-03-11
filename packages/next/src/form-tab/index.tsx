@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Tab as Tabs, Badge } from '@alifd/next'
-import { createModel } from '@formily/reactive'
+import { model } from '@formily/reactive'
 import {
   ItemProps as TabPaneProps,
   TabProps as TabsProps,
@@ -54,7 +54,7 @@ const useTabs = () => {
 }
 
 const createFormTab = (defaultActiveKey?: string) => {
-  const formTab = createModel({
+  const formTab = model({
     activeKey: defaultActiveKey,
     setActiveKey(key: string) {
       formTab.activeKey = key

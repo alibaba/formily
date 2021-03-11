@@ -34,6 +34,7 @@ export const shallow: IObservable = createAnnotation(
         shallow: true,
       })
       store.value = value
+      if(oldValue === value) return
       runReactionsFromTargetKey({
         target: target,
         key: key,

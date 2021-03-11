@@ -35,6 +35,7 @@ export const observable: IObservable = createAnnotation(
         value,
       })
       store.value = value
+      if(oldValue === value) return
       runReactionsFromTargetKey({
         target: target,
         key: key,

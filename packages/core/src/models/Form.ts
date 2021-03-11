@@ -42,8 +42,8 @@ import {
 import {
   isVoidField,
   runEffects,
-  createModelStateGetter,
-  createModelStateSetter,
+  modelStateGetter,
+  modelStateSetter,
   createFieldStateSetter,
   createFieldStateGetter,
   applyValuesPatch,
@@ -563,13 +563,13 @@ export class Form<ValueType extends object = any> {
     }
   }
 
-  setState: IModelSetter<IFormState> = createModelStateSetter(this)
+  setState: IModelSetter<IFormState> = modelStateSetter(this)
 
-  getState: IModelGetter<IFormState> = createModelStateGetter(this)
+  getState: IModelGetter<IFormState> = modelStateGetter(this)
 
-  setFormState: IModelSetter<IFormState> = createModelStateSetter(this)
+  setFormState: IModelSetter<IFormState> = modelStateSetter(this)
 
-  getFormState: IModelGetter<IFormState> = createModelStateGetter(this)
+  getFormState: IModelGetter<IFormState> = modelStateGetter(this)
 
   setFieldState: IFieldStateSetter = createFieldStateSetter(this)
 

@@ -10,7 +10,7 @@ import {
   isPlainObj,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
-import { batchable, batch, toJS } from '@formily/reactive'
+import { action, batch, toJS } from '@formily/reactive'
 import { Field, ArrayField, Form } from '../models'
 import {
   ISpliceArrayStateProps,
@@ -447,16 +447,16 @@ export const getModelState = (model: any, getter?: any) => {
   }
 }
 
-export const createModelStateSetter = (model: any) => {
-  return batchable((state?: any) => setModelState(model, state))
+export const modelStateSetter = (model: any) => {
+  return action((state?: any) => setModelState(model, state))
 }
 
-export const createModelStateGetter = (model: any) => {
+export const modelStateGetter = (model: any) => {
   return (getter?: any) => getModelState(model, getter)
 }
 
 export const createFieldStateSetter = (form: Form) => {
-  return batchable((pattern: FieldMatchPattern, payload?: any) => {
+  return action((pattern: FieldMatchPattern, payload?: any) => {
     if (isQuery(pattern)) {
       pattern.forEach((field) => {
         field.setState(payload)

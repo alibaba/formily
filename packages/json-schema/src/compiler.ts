@@ -63,6 +63,9 @@ export const compile = <Source = any, Scope = any>(
       if (isFn(source['toJSON'])) {
         return source
       }
+      if (isObservable(source)) {
+        return source
+      }
       if (seenObjects.get(source)) {
         return source
       }

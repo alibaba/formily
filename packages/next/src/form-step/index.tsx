@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { createModel } from '@formily/reactive'
+import { model } from '@formily/reactive'
 import cls from 'classnames'
 import {
   StepProps as StepsProps,
@@ -96,7 +96,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     }
   }
 
-  const formStep: IFormStep = createModel({
+  const formStep: IFormStep = model({
     connect(steps, field) {
       env.steps = steps
       env.form = field?.form

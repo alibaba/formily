@@ -51,8 +51,8 @@ import {
   queryFeedbacks,
   queryFeedbackMessages,
   getValuesFromEvent,
-  createModelStateSetter,
-  createModelStateGetter,
+  modelStateSetter,
+  modelStateGetter,
 } from '../shared'
 import { Query } from './Query'
 
@@ -642,9 +642,9 @@ export class Field<
     }
   }
 
-  setState: IModelSetter<IFieldState> = createModelStateSetter(this)
+  setState: IModelSetter<IFieldState> = modelStateSetter(this)
 
-  getState: IModelGetter<IFieldState> = createModelStateGetter(this)
+  getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
   onInit = () => {
     this.initialized = true

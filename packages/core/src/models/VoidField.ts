@@ -22,8 +22,8 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  createModelStateGetter,
-  createModelStateSetter,
+  modelStateGetter,
+  modelStateSetter,
   publishUpdate,
 } from '../shared'
 import { Form } from './Form'
@@ -328,9 +328,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-  setState: IModelSetter<IVoidFieldState> = createModelStateSetter(this)
+  setState: IModelSetter<IVoidFieldState> = modelStateSetter(this)
 
-  getState: IModelGetter<IVoidFieldState> = createModelStateGetter(this)
+  getState: IModelGetter<IVoidFieldState> = modelStateGetter(this)
 
   onInit = () => {
     this.initialized = true

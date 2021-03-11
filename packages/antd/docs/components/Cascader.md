@@ -10,7 +10,7 @@ import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
+import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
   components: {
@@ -94,7 +94,7 @@ import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
+import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
   components: {
@@ -186,7 +186,7 @@ import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
+import { action } from '@formily/reactive'
 
 const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
   const transform = (data = {}) => {

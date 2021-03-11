@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { createModel } from '@formily/reactive'
+import { action, model } from '@formily/reactive'
 import { Steps } from 'antd'
 import cls from 'classnames'
 import { StepsProps, StepProps } from 'antd/lib/steps'
@@ -66,7 +66,7 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
     steps: [],
   }
 
-  const setDisplay = (target: number) => {
+  const setDisplay = action((target: number) => {
     const currentStep = env.steps[target]
     env.steps.forEach(({ name }) => {
       env.form.query(`${env.field.address}.${name}`).take((field) => {
@@ -77,23 +77,23 @@ const createFormStep = (defaultCurrent = 0): IFormStep => {
         }
       })
     })
-  }
+  })
 
-  const next = () => {
+  const next = action(() => {
     if (formStep.allowNext) {
       setDisplay(formStep.current + 1)
       formStep.setCurrent(formStep.current + 1)
     }
-  }
+  })
 
-  const back = () => {
+  const back = action(() => {
     if (formStep.allowBack) {
       setDisplay(formStep.current - 1)
       formStep.setCurrent(formStep.current - 1)
     }
-  }
+  })
 
-  const formStep: IFormStep = createModel({
+  const formStep: IFormStep = model({
     connect(steps, field) {
       env.steps = steps
       env.form = field?.form

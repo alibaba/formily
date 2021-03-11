@@ -99,7 +99,7 @@ import {
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
+import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
   components: {
@@ -379,7 +379,7 @@ import {
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
+import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
   components: {
@@ -631,7 +631,7 @@ import {
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 import { LoadingOutlined } from '@ant-design/icons'
-import { action } from 'mobx'
+import { action } from '@formily/reactive'
 
 const useAsyncDataSource = (
   pattern: Formily.Core.Types.FormPathPattern,

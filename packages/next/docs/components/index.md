@@ -60,7 +60,7 @@
 ## 安装
 
 ```bash
-$ npm install --save @alifd/next mobx mobx-react-lite moment
+$ npm install --save @alifd/next moment
 $ npm install --save @formily/next @formily/react
 
 ```

@@ -30,20 +30,17 @@ export function defineModel<Target extends object = any>(
   })
 }
 
-export function createModel<Target extends object = any>(target: Target) {
-  return defineModel(
-    target,
-    reduce(
-      target,
-      (buf, value, key) => {
-        if (isFn(value)) {
-          buf[key] = batch
-        } else {
-          buf[key] = observable
-        }
-        return buf
-      },
-      {}
-    )
-  )
+export function model<Target extends object = any>(target: Target) {
+  const annotations = Object.keys(target || {}).reduce((buf, key) => {
+    const descriptor = Object.getOwnPropertyDescriptor(target, key)
+    if (descriptor && descriptor.get) {
+      buf[key] = observable.computed
+    } else if (isFn(target[key])) {
+      buf[key] = batch
+    } else {
+      buf[key] = observable
+    }
+    return buf
+  }, {})
+  return defineModel(target, annotations)
 }

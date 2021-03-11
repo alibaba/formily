@@ -34,7 +34,6 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 ## 安装
 
 ```bash
-$ npm install --save mobx
 $ npm install --save @formily/core @formily/react
 
 ```

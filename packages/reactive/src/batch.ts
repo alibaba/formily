@@ -16,7 +16,7 @@ export const batch = <T>(callback?: () => T) => {
   return result
 }
 
-export const batchable = createAnnotation(({ target, key, value }) => {
+export const action = createAnnotation(({ target, key, value }) => {
   const action = <T extends (...args: any[]) => any>(callback?: T) => {
     return function (...args: Parameters<T>): ReturnType<T> {
       return batch(() =>
@@ -31,4 +31,4 @@ export const batchable = createAnnotation(({ target, key, value }) => {
   return action(value)
 })
 
-batch[MakeObservableSymbol] = batchable
+batch[MakeObservableSymbol] = action

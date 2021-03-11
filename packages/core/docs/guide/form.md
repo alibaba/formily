@@ -71,7 +71,7 @@
 - 字段默认值(initialValue)管理
 - 值与默认值的选择合并策略
 
-表单值管理，其实就是一个对象结构的 values 属性，只是它是一个 Mobx observable 属性，同时借助了 Mobx 的深度 observer 能力，监听了它任意属性变化，如果发生变化，便会触发 onFormValuesChange 的生命周期钩子。
+表单值管理，其实就是一个对象结构的 values 属性，只是它是一个 @formily/reactive observable 属性，同时借助了 @formily/reactive 的深度 observer 能力，监听了它任意属性变化，如果发生变化，便会触发 onFormValuesChange 的生命周期钩子。
 
 同理，默认值管理其实也是一个对象结构的 initialValues 属性，同样会深度监听属性变化，触发 onFormInitialValues 的生命周期钩子。
 

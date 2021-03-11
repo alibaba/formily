@@ -1,4 +1,4 @@
-import { observable, batchable, batch, autorun } from '..'
+import { observable, action, batch, autorun } from '..'
 
 test('batch', () => {
   const obs = observable({
@@ -21,14 +21,14 @@ test('batch', () => {
   expect(handler).toBeCalledTimes(4)
 })
 
-test('batchable', () => {
+test('action', () => {
   const obs = observable({
     aa: {
       bb: 123,
     },
   })
   const handler = jest.fn()
-  const batch = batchable(() => {
+  const batch = action(() => {
     obs.aa.bb = 333
     obs.aa.bb = 444
   })
