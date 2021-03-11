@@ -25,6 +25,7 @@ export default () => (
       <SchemaField.String
         name="time"
         title="时间"
+        required
         x-decorator="FormItem"
         x-component="TimePicker"
       />

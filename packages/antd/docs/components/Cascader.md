@@ -70,6 +70,7 @@ export default () => (
       <SchemaField.String
         name="address"
         title="地址选择"
+        required
         x-decorator="FormItem"
         x-component="Cascader"
         x-component-props={{

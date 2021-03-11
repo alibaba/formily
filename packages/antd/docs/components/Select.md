@@ -28,11 +28,13 @@ export default () => (
         title="选择框"
         x-decorator="FormItem"
         x-component="Select"
+        required
         enum={[
           { label: '选项1', value: 1 },
           { label: '选项2', value: 2 },
         ]}
         x-component-props={{
+          allowClear: true,
           style: {
             width: 120,
           },
