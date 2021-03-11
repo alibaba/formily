@@ -115,7 +115,11 @@ export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
   required?: ISchema['required']
 }
 
-export interface ISchema<
+export type Stringify<P extends { [key: string]: any }> = {
+  [key in keyof P]?: P[key] | `{{${string}}}`
+}
+
+export type ISchema<
   Decorator = any,
   Component = any,
   DecoratorProps = any,
@@ -125,7 +129,7 @@ export interface ISchema<
   Validator = any,
   Message = any,
   ReactionField = any
-> {
+> = Stringify<{
   version?: string
   name?: SchemaKey
   title?: Message
@@ -235,4 +239,4 @@ export interface ISchema<
   ['x-read-only']?: boolean
 
   ['x-read-pretty']?: boolean
-}
+}>
