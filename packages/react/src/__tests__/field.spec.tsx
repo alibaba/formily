@@ -140,7 +140,7 @@ test('useAttch', () => {
   expect(form.query('bb').take().mounted).toBeTruthy()
 })
 
-test('useFormEffects', () => {
+test('useFormEffects', async () => {
   const form = createForm()
   const CustomField = observer((props: { tag?: string }) => {
     const field = useField<Formily.Core.Models.Field>()
@@ -164,7 +164,9 @@ test('useFormEffects', () => {
       aa.setValue('123')
     }
   })
-  expect(queryByTestId('custom-value').textContent).toEqual('123')
+  await waitFor(() => {
+    expect(queryByTestId('custom-value').textContent).toEqual('123')
+  })
   rerender(
     <FormProvider form={form}>
       <Field name="aa" decorator={[Decorator]} component={[Input]} />

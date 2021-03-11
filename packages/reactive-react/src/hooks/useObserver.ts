@@ -1,15 +1,9 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { Tracker } from '@formily/reactive'
 import { isFn } from '@formily/shared'
 import { GarbageCollector } from '../gc'
 import { IObserverOptions } from '../types'
 import { useForceUpdate } from './useForceUpdate'
-
-const batchUpdate =
-  React['batchUpdate'] ||
-  ReactDOM['batchUpdate'] ||
-  ReactDOM['unstable_batchedUpdates']
 
 class AutoCollector {}
 
@@ -18,23 +12,19 @@ export const useObserver = <T extends () => any>(
   options?: IObserverOptions
 ): ReturnType<T> => {
   const forceUpdate = useForceUpdate()
+  const unmountRef = React.useRef(false)
   const gcRef = React.useRef<GarbageCollector>()
+
   const tracker = React.useMemo(() => {
-    const updater = () => {
-      if (isFn(batchUpdate)) {
-        batchUpdate(() => forceUpdate())
+    return new Tracker(() => {
+      if (isFn(options?.scheduler)) {
+        options.scheduler(forceUpdate)
       } else {
         forceUpdate()
       }
-    }
-    return new Tracker(() => {
-      if (isFn(options?.scheduler)) {
-        options.scheduler(updater)
-      } else {
-        updater()
-      }
     })
   }, [])
+
   //StrictMode/ConcurrentMode会导致组件无法正确触发Unmount，所以只能自己做垃圾回收
   if (!gcRef.current) {
     const target = new AutoCollector()
@@ -47,8 +37,10 @@ export const useObserver = <T extends () => any>(
   }
 
   React.useEffect(() => {
+    unmountRef.current = false
     gcRef.current.close()
     return () => {
+      unmountRef.current = true
       if (tracker) {
         tracker.dispose()
       }

@@ -20,8 +20,9 @@ export interface IComputed {
 
 export const computed: IComputed = createAnnotation(
   ({ target, key, value }) => {
+    const initialValue = Symbol('initialValue')
     const store = {
-      value: undefined,
+      value: initialValue,
     }
 
     const proxy = {
@@ -61,7 +62,7 @@ export const computed: IComputed = createAnnotation(
     function compute() {
       const oldValue = store.value
       store.value = getter?.call?.(context)
-      if (oldValue === store.value) return
+      if (oldValue === store.value || oldValue === initialValue) return
       batchStart()
       runReactionsFromTargetKey({
         target: context,

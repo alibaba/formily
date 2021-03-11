@@ -2,20 +2,24 @@ import { each, isFn, reduce } from '@formily/shared'
 import { buildTreeNode } from './traverse'
 import { observable } from './observable'
 import { createObservable, getObservableMaker } from './internals'
-import { isObservable, isAnnotation } from './shared'
+import { isObservable, isAnnotation, isSupportObservable } from './shared'
 import { Annotations } from './types'
 import { batch } from './batch'
+import { ProxyRaw, RawProxy } from './environment'
 
-export function defineModel<Target extends object = any>(
+export function define<Target extends object = any>(
   target: Target,
   annotations?: Annotations<Target>,
   traverse = createObservable
 ) {
   if (isObservable(target)) return target
+  if (!isSupportObservable(target)) return target
   buildTreeNode({
     value: target,
     traverse,
   })
+  ProxyRaw.set(target, target)
+  RawProxy.set(target, target)
   return observable(target, ({ target, value }) => {
     if (target) return target
     each(annotations, (annotation, key) => {
@@ -42,5 +46,5 @@ export function model<Target extends object = any>(target: Target) {
     }
     return buf
   }, {})
-  return defineModel(target, annotations)
+  return define(target, annotations)
 }
