@@ -13,10 +13,23 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
+    "start": "vuepress dev docs",
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
-    "build:umd": "rollup --config"
+    "build:umd": "rollup --config",
+    "build:docs": "vuepress build docs"
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^2.1.1",
+    "@ant-design/icons-vue": "^2.0.0",
+    "@vuepress-dumi/vuepress-plugin-dumi-previewer": "0.3.3",
+    "@vuepress-dumi/vuepress-theme-dumi": "0.3.3",
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-medium-zoom": "^1.8.2",
+    "ant-design-vue": "^1.7.3",
+    "core-js": "^2.4.0",
+    "vuepress": "^1.8.2"
   },
   "dependencies": {
     "@formily/json-schema": "^2.0.0-beta.3",

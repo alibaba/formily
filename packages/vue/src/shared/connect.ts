@@ -1,5 +1,4 @@
 /* eslint-disable vue/one-component-per-file */
-import { defineComponent } from 'vue-demi'
 import { isFn, FormPath } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { defineObservableComponent } from '../utils/define-observable-component'
@@ -15,36 +14,37 @@ export function mapProps<T extends VueComponent>(...args: IStateMapper<VueCompon
         collect({
           field,
         })
-        const results = args.reduce(
-          (props, mapper) => {
-            if (isFn(mapper)) {
-              props = Object.assign(props, mapper(props, field))
-            } else {
-              const extract = FormPath.getIn(field, mapper.extract)
-              const target = mapper.to || mapper.extract
-              if (mapper.extract === 'value') {
-                if (mapper.to !== mapper.extract) {
-                  delete props['value']
+        return () =>{
+          const results = args.reduce(
+            (props, mapper) => {
+              if (isFn(mapper)) {
+                props = Object.assign(props, mapper(props, field))
+              } else {
+                const extract = FormPath.getIn(field, mapper.extract)
+                const target = mapper.to || mapper.extract
+                if (mapper.extract === 'value') {
+                  if (mapper.to !== mapper.extract) {
+                    delete props['value']
+                  }
                 }
+                FormPath.setIn(
+                  props,
+                  target as any,
+                  isFn(mapper.transform) ? mapper.transform(extract) : extract
+                )
               }
-              FormPath.setIn(
-                props,
-                target as any,
-                isFn(mapper.transform) ? mapper.transform(extract) : extract
-              )
-            }
-            return props
-          },
-          { ...props }
-        )
-        return () =>
-          h(
+              return props
+            },
+            { ...props }
+          )
+          return h(
             target,
             {
               props: results,
             },
             slots
           )
+        }
       },
     })
   }
@@ -74,21 +74,23 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(co
 }
 
 export function connect<T extends VueComponent>(target: T, ...args: IComponentMapper[]) {
+
   const Component = args.reduce((target: VueComponent, mapper) => {
     return mapper(target)
   }, target)
-  
-  return defineComponent({
+
+  return defineObservableComponent({
     name: target['name'],
-    setup(props: VueComponentProps<T>, { slots }) {
-      return () =>
-        h(
+    observableSetup(collect, props: VueComponentProps<T>, { slots }) {
+      return () => {
+        return h(
           Component,
           {
             props: props,
           },
           slots
         )
+      }
     },
   })
 }
