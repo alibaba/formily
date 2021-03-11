@@ -183,10 +183,14 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         [props.className]: !!props.className,
       })}
       onFocus={() => {
-        setActice(true)
+        if (feedbackIcon || inset) {
+          setActice(true)
+        }
       }}
       onBlur={() => {
-        setActice(false)
+        if (feedbackIcon || inset) {
+          setActice(false)
+        }
       }}
     >
       {label !== undefined && (
