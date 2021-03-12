@@ -24,7 +24,7 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 
 ```bash
 
-$ npm install --save antd mobx moment
+$ npm install --save antd moment
 
 ```
 
@@ -32,7 +32,7 @@ or
 
 ```bash
 
-$ npm install --save @alifd/next mobx moment
+$ npm install --save @alifd/next moment
 
 ```
 
