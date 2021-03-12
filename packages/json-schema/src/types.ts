@@ -116,7 +116,7 @@ export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
 }
 
 export type Stringify<P extends { [key: string]: any }> = {
-  [key in keyof P]?: P[key] | `{{${string}}}`
+  [key in keyof P]?: P[key] | string
 }
 
 export type ISchema<
