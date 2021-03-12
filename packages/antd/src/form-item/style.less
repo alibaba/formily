@@ -247,6 +247,13 @@
     .@{ant-prefix}-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
         padding: 0px 7px;
         height: @form-item-margin-bottom;
+      
+       .@{ant-prefix}-select-selection-search-input{
+          height: @height-sm - 2;
+       }
+      .@{ant-prefix}-select-selection-item{
+         line-height: @height-sm - 2;
+       }
     }
 
 }
@@ -307,11 +314,11 @@
         height: @height-lg;
 
         .@{ant-prefix}-select-selection-search-input {
-            height: @height-lg;
+            height: @height-lg - 2;
         }
 
         .@{ant-prefix}-select-selection-item {
-            line-height: @height-lg;
+            line-height: @height-lg - 2;
         }
     }
 
