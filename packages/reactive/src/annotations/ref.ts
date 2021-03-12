@@ -1,25 +1,33 @@
 import { ProxyRaw, RawProxy } from '../environment'
 import { createAnnotation } from '../internals'
-import { buildObservableTree } from '../traverse'
+import { buildTreeNode } from '../traverse'
 import {
-  addDependencyForOperation,
-  queueReactionsForOperation,
+  bindTargetKeyWithCurrentReaction,
+  runReactionsFromTargetKey,
 } from '../reaction'
 
-export const ref = createAnnotation(({ target, key, value }) => {
+export interface IRef {
+  <T>(target: T): { value: T }
+}
+
+export const ref: IRef = createAnnotation(({ target, key, value }) => {
   const store = {
-    current: value,
+    value: target ? target[key] : value,
   }
+
   const proxy = {
-    set current(value) {
+    set value(value) {
       set(value)
     },
-    get current() {
+    get value() {
       return get()
     },
   }
 
-  buildObservableTree({
+  const context = target ? target : store
+  const property = target ? key : 'value'
+
+  buildTreeNode({
     target,
     key,
     value: store,
@@ -29,21 +37,21 @@ export const ref = createAnnotation(({ target, key, value }) => {
   RawProxy.set(store, proxy)
 
   function get() {
-    addDependencyForOperation({
-      target: target ? target : store,
-      key: target ? key : 'current',
+    bindTargetKeyWithCurrentReaction({
+      target: context,
+      key: property,
       type: 'get',
     })
-    return store.current
+    return store.value
   }
 
   function set(value: any) {
-    const oldValue = store.current
-    store.current = value
+    const oldValue = store.value
+    store.value = value
     if (oldValue !== value) {
-      queueReactionsForOperation({
-        target: target ? target : store,
-        key: target ? key : 'current',
+      runReactionsFromTargetKey({
+        target: context,
+        key: property,
         type: 'set',
         oldValue,
         value,
@@ -57,6 +65,7 @@ export const ref = createAnnotation(({ target, key, value }) => {
       enumerable: true,
       configurable: false,
     })
+    return target
   }
   return proxy
 })

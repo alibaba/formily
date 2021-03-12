@@ -31,7 +31,6 @@
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
-    "mobx": "^6.0.3",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0 || >=17.0.0"
   },
@@ -43,7 +42,8 @@
     "@formily/json-schema": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "@formily/validator": "^2.0.0-beta.3",
-    "mobx-react-lite": "^3.1.6",
+    "@formily/reactive": "^2.0.0-beta.3",
+    "@formily/reactive-react": "^2.0.0-beta.3",
     "hoist-non-react-statics": "^3.3.2"
   },
   "publishConfig": {

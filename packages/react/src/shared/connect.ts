@@ -1,7 +1,7 @@
 import React from 'react'
 import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField } from '@formily/core'
-import { observer } from 'mobx-react-lite'
+import { observer } from '@formily/reactive-react'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
 import { useField } from '../hooks'
 import hoistNonReactStatics from 'hoist-non-react-statics'

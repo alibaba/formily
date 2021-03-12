@@ -6,13 +6,7 @@ order: 4
 
 调用[createVoidField](/api/models/form#createvoidfield)所返回的 VoidField 模型。
 
-以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，Mobx 便会响应从而触发 UI 更新。
-
-<Alert>
-
-注意，要在 mobx action 中修改属性。如果在 formily 给出的回调函数中直接修改，则不需要包装 action，如果在异步回调中则需要包装，当然你也可以直接调用 Setters 方法。
-
-</Alert>
+以下会列出所有模型属性，如果该属性是可写的，那么我们可以直接引用是修改该属性，@formily/reactive 便会响应从而触发 UI 更新。
 
 ## 属性
 

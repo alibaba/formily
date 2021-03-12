@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { observer } from 'mobx-react-lite'
+import { observer } from '@formily/reactive-react'
 import { isFn } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 interface IReactiveFieldProps {

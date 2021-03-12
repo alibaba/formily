@@ -3302,11 +3302,6 @@
   dependencies:
     "@types/node" "*"
 
-"@types/d3-hierarchy@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/@types/d3-hierarchy/download/@types/d3-hierarchy-2.0.0.tgz#92079d9dbcec1dfe2736fb050a8bf916e5850a1c"
-  integrity sha1-kgednbzsHf4nNvsFCov5FuWFChw=
-
 "@types/debug@4.1.5":
   version "4.1.5"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
@@ -7663,11 +7658,6 @@ cz-conventional-changelog@^2.1.0:
     longest "^1.0.1"
     right-pad "^1.0.1"
     word-wrap "^1.0.3"
-
-d3-hierarchy@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/d3-hierarchy/download/d3-hierarchy-2.0.0.tgz#dab88a58ca3e7a1bc6cab390e89667fcc6d20218"
-  integrity sha1-2riKWMo+ehvGyrOQ6JZn/MbSAhg=
 
 d@1, d@^1.0.1:
   version "1.0.1"

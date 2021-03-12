@@ -1,11 +1,11 @@
 import {
-  action,
-  makeObservable,
+  define,
   observable,
+  batch,
   toJS,
-  runInAction,
   isObservable,
-} from 'mobx'
+  observe,
+} from '@formily/reactive'
 import {
   FormPath,
   FormPathPattern,
@@ -40,11 +40,10 @@ import {
   FormDisplayTypes,
 } from '../types'
 import {
-  observer,
   isVoidField,
   runEffects,
-  createModelStateGetter,
-  createModelStateSetter,
+  modelStateGetter,
+  modelStateSetter,
   createFieldStateSetter,
   createFieldStateGetter,
   applyValuesPatch,
@@ -57,7 +56,7 @@ import { Graph } from './Graph'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
-export class Form<ValueType = any> {
+export class Form<ValueType extends object = any> {
   displayName = 'Form'
   id: string
   initialized: boolean
@@ -121,7 +120,7 @@ export class Form<ValueType = any> {
   }
 
   protected makeObservable() {
-    makeObservable(this, {
+    define(this, {
       fields: observable.shallow,
       initialized: observable.ref,
       validating: observable.ref,
@@ -133,42 +132,47 @@ export class Form<ValueType = any> {
       unmounted: observable.ref,
       values: observable,
       initialValues: observable,
-      setValues: action,
-      setValuesIn: action,
-      setInitialValues: action,
-      setInitialValuesIn: action,
-      setPattern: action,
-      setDisplay: action,
-      setState: action,
-      deleteIntialValuesIn: action,
-      deleteValuesIn: action,
-      setSubmitting: action,
-      setValidating: action,
-      setFormGraph: action,
-      clearFormGraph: action,
-      onMount: action,
-      onUnmount: action,
-      onInit: action,
+      valid: observable.computed,
+      invalid: observable.computed,
+      errors: observable.computed,
+      warnings: observable.computed,
+      successes: observable.computed,
+      hidden: observable.computed,
+      visible: observable.computed,
+      editable: observable.computed,
+      readOnly: observable.computed,
+      readPretty: observable.computed,
+      disabled: observable.computed,
+      setValues: batch,
+      setValuesIn: batch,
+      setInitialValues: batch,
+      setInitialValuesIn: batch,
+      setPattern: batch,
+      setDisplay: batch,
+      setState: batch,
+      deleteIntialValuesIn: batch,
+      deleteValuesIn: batch,
+      setSubmitting: batch,
+      setValidating: batch,
+      setFormGraph: batch,
+      clearFormGraph: batch,
+      onMount: batch,
+      onUnmount: batch,
+      onInit: batch,
     })
   }
 
   protected makeReactive() {
     this.disposers.push(
-      observer(
-        () => this.initialValues,
-        (change, path) => {
-          if (change.type === 'add' || change.type === 'update') {
-            applyValuesPatch(this, path, change.newValue)
-          }
-          this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+      observe(this.initialValues, (change) => {
+        if (change.type === 'add' || change.type === 'set') {
+          applyValuesPatch(this, change.path.slice(1), change.value)
         }
-      ),
-      observer(
-        () => this.values,
-        () => {
-          this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
-        }
-      )
+        this.notify(LifeCycleTypes.ON_FORM_INITIAL_VALUES_CHANGE)
+      }),
+      observe(this.values, () => {
+        this.notify(LifeCycleTypes.ON_FORM_VALUES_CHANGE)
+      })
     )
   }
 
@@ -292,7 +296,7 @@ export class Form<ValueType = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new Field(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -310,7 +314,7 @@ export class Form<ValueType = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new ArrayField(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -328,7 +332,7 @@ export class Form<ValueType = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new ObjectField(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -346,7 +350,7 @@ export class Form<ValueType = any> {
     const identifier = address.toString()
     if (!identifier) return
     if (!this.fields[identifier]) {
-      runInAction(() => {
+      batch(() => {
         this.fields[identifier] = new VoidField(address, props, this)
       })
       this.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
@@ -411,7 +415,7 @@ export class Form<ValueType = any> {
     clearTimeout(this.requests.submit)
     if (submitting) {
       this.requests.submit = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.submitting = submitting
         })
       }, 100)
@@ -428,7 +432,7 @@ export class Form<ValueType = any> {
     clearTimeout(this.requests.validate)
     if (validating) {
       this.requests.validate = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.validating = validating
         })
       }, 100)
@@ -559,13 +563,13 @@ export class Form<ValueType = any> {
     }
   }
 
-  setState: IModelSetter<IFormState> = createModelStateSetter(this)
+  setState: IModelSetter<IFormState> = modelStateSetter(this)
 
-  getState: IModelGetter<IFormState> = createModelStateGetter(this)
+  getState: IModelGetter<IFormState> = modelStateGetter(this)
 
-  setFormState: IModelSetter<IFormState> = createModelStateSetter(this)
+  setFormState: IModelSetter<IFormState> = modelStateSetter(this)
 
-  getFormState: IModelGetter<IFormState> = createModelStateGetter(this)
+  getFormState: IModelGetter<IFormState> = modelStateGetter(this)
 
   setFieldState: IFieldStateSetter = createFieldStateSetter(this)
 

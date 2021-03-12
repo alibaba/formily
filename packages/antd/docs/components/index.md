@@ -60,7 +60,7 @@
 ## 安装
 
 ```bash
-$ npm install --save antd mobx moment
+$ npm install --save antd moment
 $ npm install --save @formily/core @formily/react @formily/antd
 
 ```

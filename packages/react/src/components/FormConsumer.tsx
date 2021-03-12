@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { isFn } from '@formily/shared'
-import { observer } from 'mobx-react-lite'
+import { observer } from '@formily/reactive-react'
 import { useForm } from '../hooks'
 import { IFormSpyProps } from '../types'
 

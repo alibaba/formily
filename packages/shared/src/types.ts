@@ -1,19 +1,23 @@
 const isType = <T>(type: string | string[]) => (obj: unknown): obj is T =>
   obj != null &&
   (Array.isArray(type) ? type : [type]).some(
-    t => getType(obj) === `[object ${t}]`
+    (t) => getType(obj) === `[object ${t}]`
   )
 export const getType = (obj: any) => Object.prototype.toString.call(obj)
 export const isFn = isType<(...args: any[]) => any>([
   'Function',
   'AsyncFunction',
-  'GeneratorFunction'
+  'GeneratorFunction',
 ])
 export const isArr = Array.isArray
 export const isPlainObj = isType<object>('Object')
 export const isStr = isType<string>('String')
 export const isBool = isType<boolean>('Boolean')
 export const isNum = isType<number>('Number')
+export const isMap = isType('Map')
+export const isSet = isType('Set')
+export const isWeakMap = isType('WeakMap')
+export const isWeakSet = isType('WeakSet')
 export const isNumberLike = (index: any): index is number =>
   isNum(index) || /^\d+$/.test(index)
 export const isObj = (val: unknown): val is object => typeof val === 'object'

@@ -1,31 +1,39 @@
 import { ReactionStack } from './environment'
 import { Reaction } from './types'
-import { disposeBindingReaction } from './reaction'
+import {
+  batchEnd,
+  batchStart,
+  disposeBindingReactions,
+} from './reaction'
 import { isFn } from '@formily/shared'
 
-export const autorun = (reaction: Reaction) => {
-  const runner = () => {
-    try {
-      ReactionStack.push(runner)
-      reaction()
-    } finally {
-      ReactionStack.pop()
+export const autorun = (runner: Reaction) => {
+  const reaction = () => {
+    if (ReactionStack.indexOf(reaction) === -1) {
+      try {
+        ReactionStack.push(reaction)
+        batchStart()
+        runner()
+      } finally {
+        batchEnd()
+        ReactionStack.pop()
+      }
     }
   }
-  runner()
+  reaction()
   return () => {
-    disposeBindingReaction(runner)
+    disposeBindingReactions(reaction)
   }
 }
 
 export const reaction = <T>(
-  reaction: () => T,
+  runner: () => T,
   callback?: (payload: T) => void
 ) => {
   const initialValue = Symbol('initial-value')
   let oldValue: any = initialValue
   return autorun(() => {
-    const current = reaction()
+    const current = runner()
     if (current !== oldValue && oldValue !== initialValue) {
       if (isFn(callback)) callback(current)
     }

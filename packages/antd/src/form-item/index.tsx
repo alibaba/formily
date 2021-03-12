@@ -24,6 +24,7 @@ export interface IFormItemProps {
   label?: React.ReactNode
   colon?: boolean
   tooltip?: boolean
+  labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
   labelWidth?: number
@@ -32,6 +33,7 @@ export interface IFormItemProps {
   wrapperCol?: number
   wrapperAlign?: 'left' | 'right'
   wrapperWrap?: boolean
+  wrapperStyle?: React.CSSProperties
   fullness?: boolean
   addonBefore?: React.ReactNode
   addonAfter?: React.ReactNode
@@ -93,6 +95,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const shallowFormLayout = useFormShallowLayout()
   const {
     label,
+    style,
     layout,
     colon = true,
     addonBefore,
@@ -117,8 +120,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     wrapperWrap,
     tooltip,
   } = formLayout
-  const labelStyle: any = {}
-  const wrapperStyle: any = {}
+  const labelStyle: any = formLayout.labelStyle || {}
+  const wrapperStyle: any = formLayout.wrapperStyle || {}
   // 固定宽度
   let enableCol = false
   if (labelWidth || wrapperWidth) {
@@ -163,6 +166,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       ref={popoverContainerRef}
+      style={style}
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-layout-${layout}`]: true,
@@ -183,10 +187,14 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         [props.className]: !!props.className,
       })}
       onFocus={() => {
-        setActice(true)
+        if (feedbackIcon || inset) {
+          setActice(true)
+        }
       }}
       onBlur={() => {
-        setActice(false)
+        if (feedbackIcon || inset) {
+          setActice(false)
+        }
       }}
     >
       {label !== undefined && (

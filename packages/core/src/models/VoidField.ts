@@ -5,14 +5,7 @@ import {
   isValid,
   toArr,
 } from '@formily/shared'
-import {
-  makeObservable,
-  observable,
-  action,
-  computed,
-  IReactionDisposer,
-  autorun,
-} from 'mobx'
+import { define, observable, autorun, batch } from '@formily/reactive'
 import {
   JSXComponent,
   JSXComponenntProps,
@@ -29,8 +22,8 @@ import {
 } from '../types'
 import {
   buildNodeIndexes,
-  createModelStateGetter,
-  createModelStateSetter,
+  modelStateGetter,
+  modelStateSetter,
   publishUpdate,
 } from '../shared'
 import { Form } from './Form'
@@ -58,7 +51,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   form: Form
   props: IVoidFieldProps<Decorator, Component>
 
-  private disposers: IReactionDisposer[] = []
+  private disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
@@ -100,7 +93,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   }
 
   protected makeObservable() {
-    makeObservable(this, {
+    define(this, {
       title: observable.ref,
       description: observable.ref,
       selfDisplay: observable.ref,
@@ -109,29 +102,31 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
       mounted: observable.ref,
       unmounted: observable.ref,
       decoratorType: observable.ref,
-      decoratorProps: observable.shallow,
       componentType: observable.ref,
-      componentProps: observable.shallow,
-      display: computed,
-      pattern: computed,
-      editable: computed,
-      disabled: computed,
-      readOnly: computed,
-      readPretty: computed,
-      hidden: computed,
-      visible: computed,
-      setTitle: action,
-      setDescription: action,
-      setDisplay: action,
-      setPattern: action,
-      setComponent: action,
-      setComponentProps: action,
-      setDecorator: action,
-      setDecoratorProps: action,
-      setState: action,
-      onInit: action,
-      onMount: action,
-      onUnmount: action,
+      decoratorProps: observable,
+      componentProps: observable,
+      display: observable.computed,
+      pattern: observable.computed,
+      hidden: observable.computed,
+      visible: observable.computed,
+      disabled: observable.computed,
+      readOnly: observable.computed,
+      readPretty: observable.computed,
+      editable: observable.computed,
+      component: observable.computed,
+      decorator: observable.computed,
+      setTitle: batch,
+      setDescription: batch,
+      setDisplay: batch,
+      setPattern: batch,
+      setComponent: batch,
+      setComponentProps: batch,
+      setDecorator: batch,
+      setDecoratorProps: batch,
+      setState: batch,
+      onInit: batch,
+      onMount: batch,
+      onUnmount: batch,
     })
   }
 
@@ -333,9 +328,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     }
   }
 
-  setState: IModelSetter<IVoidFieldState> = createModelStateSetter(this)
+  setState: IModelSetter<IVoidFieldState> = modelStateSetter(this)
 
-  getState: IModelGetter<IVoidFieldState> = createModelStateGetter(this)
+  getState: IModelGetter<IVoidFieldState> = modelStateGetter(this)
 
   onInit = () => {
     this.initialized = true

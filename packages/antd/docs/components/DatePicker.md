@@ -25,6 +25,7 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="date"
+        required
         title="普通日期"
         x-decorator="FormItem"
         x-component="DatePicker"

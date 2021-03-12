@@ -1,9 +1,10 @@
-import { annotations } from '../'
-import { reaction } from '../autorun'
+import { observable, action } from '../'
+import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
+import { isObservable } from '../shared'
 
 test('observable annotation', () => {
-  const obs = annotations.observable({
+  const obs = observable<any>({
     aa: 111,
   })
   const handler = jest.fn()
@@ -19,7 +20,7 @@ test('observable annotation', () => {
 })
 
 test('shallow annotation', () => {
-  const obs = annotations.shallow({
+  const obs = observable.shallow<any>({
     aa: 111,
   })
   const handler = jest.fn()
@@ -29,6 +30,9 @@ test('shallow annotation', () => {
     handler(obs.aa)
   })
   obs.aa = { bb: { cc: 123 } }
+  expect(isObservable(obs)).toBeTruthy()
+  expect(isObservable(obs.aa)).toBeFalsy()
+  expect(isObservable(obs.aa.bb)).toBeFalsy()
   obs.aa.bb = 333
   obs.cc = 444
   expect(handler).toBeCalledTimes(2)
@@ -36,7 +40,7 @@ test('shallow annotation', () => {
 })
 
 test('box annotation', () => {
-  const obs = annotations.box(123)
+  const obs = observable.box(123)
   const handler = jest.fn()
   const handler1 = jest.fn()
   observe(obs, handler1)
@@ -50,22 +54,22 @@ test('box annotation', () => {
 })
 
 test('ref annotation', () => {
-  const obs = annotations.ref(123)
+  const obs = observable.ref(123)
   const handler = jest.fn()
   const handler1 = jest.fn()
   observe(obs, handler1)
   reaction(() => {
-    handler(obs.current)
+    handler(obs.value)
   })
-  obs.current = 333
+  obs.value = 333
   expect(handler).toBeCalledWith(123)
   expect(handler).toBeCalledWith(333)
   expect(handler1).toBeCalledTimes(1)
 })
 
 test('action annotation', () => {
-  const obs = annotations.observable({})
-  const setData = annotations.action(() => {
+  const obs = observable<any>({})
+  const setData = action(() => {
     obs.aa = 123
     obs.bb = 321
   })
@@ -78,7 +82,7 @@ test('action annotation', () => {
 })
 
 test('no action annotation', () => {
-  const obs = annotations.observable({})
+  const obs = observable<any>({})
   const setData = () => {
     obs.aa = 123
     obs.bb = 321
@@ -89,4 +93,102 @@ test('no action annotation', () => {
   })
   setData()
   expect(handler).toBeCalledTimes(3)
+})
+
+test('computed annotation', () => {
+  const obs = observable({
+    aa: 11,
+    bb: 22,
+  })
+  const handler = jest.fn(() => obs.aa + obs.bb)
+  const runner1 = jest.fn()
+  const runner2 = jest.fn()
+  const runner3 = jest.fn()
+  const compu = observable.computed(handler)
+  expect(compu.value).toEqual(33)
+  expect(handler).toBeCalledTimes(1)
+  obs.aa = 22
+  expect(handler).toBeCalledTimes(1)
+  const dispose = autorun(() => {
+    compu.value
+    runner1()
+  })
+  const dispose2 = autorun(() => {
+    compu.value
+    runner2()
+  })
+  expect(compu.value).toEqual(44)
+  expect(handler).toBeCalledTimes(2)
+  obs.bb = 33
+  expect(runner1).toBeCalledTimes(2)
+  expect(runner2).toBeCalledTimes(2)
+  expect(handler).toBeCalledTimes(3)
+  expect(compu.value).toEqual(55)
+  expect(handler).toBeCalledTimes(3)
+  obs.aa = 11
+  expect(runner1).toBeCalledTimes(3)
+  expect(runner2).toBeCalledTimes(3)
+  expect(handler).toBeCalledTimes(4)
+  expect(compu.value).toEqual(44)
+  expect(handler).toBeCalledTimes(4)
+  dispose()
+  obs.aa = 22
+  expect(runner1).toBeCalledTimes(3)
+  expect(runner2).toBeCalledTimes(4)
+  expect(handler).toBeCalledTimes(5)
+  expect(compu.value).toEqual(55)
+  expect(handler).toBeCalledTimes(5)
+  dispose2()
+  obs.aa = 33
+  expect(runner1).toBeCalledTimes(3)
+  expect(runner2).toBeCalledTimes(4)
+  expect(handler).toBeCalledTimes(5)
+  expect(compu.value).toEqual(66)
+  expect(handler).toBeCalledTimes(6)
+  expect(compu.value).toEqual(66)
+  expect(handler).toBeCalledTimes(7)
+  autorun(() => {
+    compu.value
+    runner3()
+  })
+  expect(compu.value).toEqual(66)
+  expect(handler).toBeCalledTimes(8)
+  expect(compu.value).toEqual(66)
+  expect(handler).toBeCalledTimes(8)
+  obs.aa = 11
+  expect(handler).toBeCalledTimes(9)
+  expect(compu.value).toEqual(44)
+  expect(handler).toBeCalledTimes(9)
+})
+
+test('computed chain annotation', () => {
+  const obs = observable({
+    aa: 11,
+    bb: 22,
+  })
+  const handler = jest.fn(() => obs.aa + obs.bb)
+  const compu1 = observable.computed(handler)
+  const handler1 = jest.fn(() => compu1.value + 33)
+  const compu2 = observable.computed(handler1)
+  const dispose = autorun(()=>{
+    compu2.value
+  })
+  expect(handler).toBeCalledTimes(1)
+  expect(handler1).toBeCalledTimes(1)
+  expect(compu2.value).toEqual(66)
+  expect(handler).toBeCalledTimes(1)
+  expect(handler1).toBeCalledTimes(1)
+  obs.aa = 22
+  expect(handler).toBeCalledTimes(2)
+  expect(handler1).toBeCalledTimes(2)
+  expect(compu2.value).toEqual(77)
+  expect(handler).toBeCalledTimes(2)
+  expect(handler1).toBeCalledTimes(2)
+  dispose()
+  obs.aa = 11
+  expect(handler).toBeCalledTimes(2)
+  expect(handler1).toBeCalledTimes(2)
+  expect(compu2.value).toEqual(66)
+  expect(handler).toBeCalledTimes(3)
+  expect(handler1).toBeCalledTimes(3)
 })

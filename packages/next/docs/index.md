@@ -25,7 +25,7 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 ## 安装
 
 ```bash
-$ npm install --save @alifd/next mobx moment
+$ npm install --save @alifd/next moment
 $ npm install --save @formily/core @formily/react @formily/next
 
 ```

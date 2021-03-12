@@ -1,6 +1,6 @@
 import React, { Fragment, useMemo } from 'react'
 import { Collapse, Badge } from 'antd'
-import { makeAutoObservable } from 'mobx'
+import { model } from '@formily/reactive'
 import { CollapseProps, CollapsePanelProps } from 'antd/lib/collapse'
 import {
   useField,
@@ -56,7 +56,7 @@ const usePanels = () => {
 }
 
 const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
-  const formCollapse = makeAutoObservable({
+  const formCollapse = model({
     activeKeys: defaultActiveKeys || [],
     setActiveKeys(keys: ActiveKeys) {
       formCollapse.activeKeys = keys

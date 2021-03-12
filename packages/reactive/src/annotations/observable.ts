@@ -1,57 +1,58 @@
 import { createAnnotation, createObservable } from '../internals'
-import { buildObservableTree } from '../traverse'
 import {
-  addDependencyForOperation,
-  queueReactionsForOperation,
+  bindTargetKeyWithCurrentReaction,
+  runReactionsFromTargetKey,
 } from '../reaction'
 
-export const observable = createAnnotation(({ target, key, value }) => {
-  const store = {
-    current: createObservable({
-      target,
-      key,
-      value,
-    }),
-  }
+export interface IObservable {
+  <T>(target: T): T
+}
 
-  buildObservableTree({
-    target,
-    key,
-    value: store,
-  })
+export const observable: IObservable = createAnnotation(
+  ({ target, key, value }) => {
+    const store = {
+      value: createObservable({
+        target,
+        key,
+        value: target ? target[key] : value,
+      }),
+    }
 
-  function get() {
-    addDependencyForOperation({
-      target: target,
-      key: key,
-      type: 'get',
-    })
-    return store.current
-  }
+    function get() {
+      bindTargetKeyWithCurrentReaction({
+        target: target,
+        key: key,
+        type: 'get',
+      })
+      return store.value
+    }
 
-  function set(value: any) {
-    const oldValue = store.current
-    value = createObservable({
-      target: target,
-      key: key,
-      value,
-    })
-    store.current = value
-    queueReactionsForOperation({
-      target: target,
-      key: key,
-      type: 'set',
-      oldValue,
-      value,
-    })
+    function set(value: any) {
+      const oldValue = store.value
+      value = createObservable({
+        target: target,
+        key: key,
+        value,
+      })
+      store.value = value
+      if(oldValue === value) return
+      runReactionsFromTargetKey({
+        target: target,
+        key: key,
+        type: 'set',
+        oldValue,
+        value,
+      })
+    }
+    if (target) {
+      Object.defineProperty(target, key, {
+        set,
+        get,
+        enumerable: true,
+        configurable: false,
+      })
+      return target
+    }
+    return store.value
   }
-  if (target) {
-    Object.defineProperty(target, key, {
-      set,
-      get,
-      enumerable: true,
-      configurable: false,
-    })
-  }
-  return store.current
-})
+)

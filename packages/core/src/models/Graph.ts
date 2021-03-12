@@ -1,4 +1,4 @@
-import { makeObservable, action } from 'mobx'
+import { define, batch } from '@formily/reactive'
 import { each, FormPath } from '@formily/shared'
 import { IFormGraph } from '../types'
 import { Form } from './Form'
@@ -14,8 +14,8 @@ export class Graph {
 
   constructor(form: Form) {
     this.form = form
-    makeObservable(this, {
-      setGraph: action,
+    define(this, {
+      setGraph: batch,
     })
   }
 

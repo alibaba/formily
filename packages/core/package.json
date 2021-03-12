@@ -29,13 +29,13 @@
     "build:docs": "dumi build"
   },
   "peerDependencies": {
-    "@types/react": ">=16.8.0 || >=17.0.0",
-    "mobx": "^6.0.3"
+    "@types/react": ">=16.8.0 || >=17.0.0"
   },
   "devDependencies": {
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
+    "@formily/reactive": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "@formily/validator": "^2.0.0-beta.3"
   },

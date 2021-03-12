@@ -34,7 +34,6 @@ footer: Open-source MIT Licensed | Copyright © 2019-present<br />Powered by sel
 ## 安装
 
 ```bash
-$ npm install --save mobx
 $ npm install --save @formily/core
 
 ```
@@ -57,7 +56,7 @@ $ npm install --save @formily/core
  */
 import React, { createContext, useMemo, useContext, useEffect } from 'react'
 import { createForm, setValidateLanguage } from '@formily/core'
-import { observer } from 'mobx-react-lite'
+import { observer } from '@formily/reactive-react'
 
 //创建上下文，方便Field消费
 const FormContext = createContext()

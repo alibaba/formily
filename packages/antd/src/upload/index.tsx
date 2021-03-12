@@ -6,7 +6,7 @@ import {
   UploadProps as AntdUploadProps,
   DraggerProps as AntdDraggerProps,
 } from 'antd/lib/upload'
-import { reaction } from 'mobx'
+import { reaction } from '@formily/reactive'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { isArr, toArr } from '@formily/shared'
 import { UPLOAD_PLACEHOLDER } from './placeholder'

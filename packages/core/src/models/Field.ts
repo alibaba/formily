@@ -14,16 +14,13 @@ import {
   parseValidatorDescriptions,
 } from '@formily/validator'
 import {
-  action,
-  computed,
-  makeObservable,
+  define,
   observable,
   reaction,
-  runInAction,
+  batch,
   toJS,
-  IReactionDisposer,
   autorun,
-} from 'mobx'
+} from '@formily/reactive'
 import { Form } from './Form'
 import {
   JSXComponent,
@@ -54,8 +51,8 @@ import {
   queryFeedbacks,
   queryFeedbackMessages,
   getValuesFromEvent,
-  createModelStateSetter,
-  createModelStateGetter,
+  modelStateSetter,
+  modelStateGetter,
 } from '../shared'
 import { Query } from './Query'
 
@@ -95,7 +92,7 @@ export class Field<
 
   private caches: IFieldCaches = {}
   private requests: IFieldRequests = {}
-  private disposers: IReactionDisposer[] = []
+  private disposers: (() => void)[] = []
 
   constructor(
     address: FormPathPattern,
@@ -148,7 +145,7 @@ export class Field<
   }
 
   protected makeObservable() {
-    makeObservable(this, {
+    define(this, {
       title: observable.ref,
       description: observable.ref,
       dataSource: observable.ref,
@@ -166,52 +163,56 @@ export class Field<
       inputValues: observable.ref,
       decoratorType: observable.ref,
       componentType: observable.ref,
-      decoratorProps: observable.shallow,
-      componentProps: observable.shallow,
+      decoratorProps: observable,
+      componentProps: observable,
       validator: observable,
       feedbacks: observable,
-      errors: computed,
-      warnings: computed,
-      successes: computed,
-      display: computed,
-      pattern: computed,
-      value: computed,
-      initialValue: computed,
-      editable: computed,
-      disabled: computed,
-      readOnly: computed,
-      readPretty: computed,
-      required: computed,
-      hidden: computed,
-      visible: computed,
-      validateStatus: computed,
-      setDisplay: action,
-      setTitle: action,
-      setDescription: action,
-      setDataSource: action,
-      setValue: action,
-      setPattern: action,
-      setInitialValue: action,
-      setLoading: action,
-      setValidating: action,
-      setFeedback: action,
-      setErrors: action,
-      setWarnings: action,
-      setSuccesses: action,
-      setValidator: action,
-      setRequired: action,
-      setComponent: action,
-      setComponentProps: action,
-      setDecorator: action,
-      setDecoratorProps: action,
-      setState: action,
-      onInit: action,
-      onInput: action,
-      onMount: action,
-      onUnmount: action,
-      onFocus: action,
-      onBlur: action,
-      reset: action,
+      component: observable.computed,
+      decorator: observable.computed,
+      errors: observable.computed,
+      warnings: observable.computed,
+      successes: observable.computed,
+      valid: observable.computed,
+      invalid: observable.computed,
+      validateStatus: observable.computed,
+      value: observable.computed,
+      initialValue: observable.computed,
+      display: observable.computed,
+      pattern: observable.computed,
+      required: observable.computed,
+      hidden: observable.computed,
+      visible: observable.computed,
+      disabled: observable.computed,
+      readOnly: observable.computed,
+      readPretty: observable.computed,
+      editable: observable.computed,
+      setDisplay: batch,
+      setTitle: batch,
+      setDescription: batch,
+      setDataSource: batch,
+      setValue: batch,
+      setPattern: batch,
+      setInitialValue: batch,
+      setLoading: batch,
+      setValidating: batch,
+      setFeedback: batch,
+      setErrors: batch,
+      setWarnings: batch,
+      setSuccesses: batch,
+      setValidator: batch,
+      setRequired: batch,
+      setComponent: batch,
+      setComponentProps: batch,
+      setDecorator: batch,
+      setDecoratorProps: batch,
+      setState: batch,
+      onInit: batch,
+      onInput: batch,
+      onMount: batch,
+      onUnmount: batch,
+      onFocus: batch,
+      onBlur: batch,
+      reset: batch,
     })
   }
 
@@ -575,7 +576,7 @@ export class Field<
     clearTimeout(this.requests.loader)
     if (loading) {
       this.requests.loader = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.loading = loading
         })
       }, 100)
@@ -588,7 +589,7 @@ export class Field<
     clearTimeout(this.requests.validate)
     if (validating) {
       this.requests.validate = setTimeout(() => {
-        runInAction(() => {
+        batch(() => {
           this.validating = validating
         })
       }, 100)
@@ -641,9 +642,9 @@ export class Field<
     }
   }
 
-  setState: IModelSetter<IFieldState> = createModelStateSetter(this)
+  setState: IModelSetter<IFieldState> = modelStateSetter(this)
 
-  getState: IModelGetter<IFieldState> = createModelStateGetter(this)
+  getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
   onInit = () => {
     this.initialized = true

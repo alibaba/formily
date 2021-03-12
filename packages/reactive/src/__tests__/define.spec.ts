@@ -1,19 +1,21 @@
-import { define, annotations, autorun } from '..'
+import { define, observable, autorun } from '..'
 import { observe } from '../observe'
+import { FormPath } from '@formily/shared'
+import { batch } from '../batch'
 
-describe('define', () => {
+describe('makeObservable', () => {
   test('observable annotation', () => {
     const target: any = {
       aa: {},
     }
     define(target, {
-      aa: annotations.observable,
+      aa: observable,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
     const handler2 = jest.fn()
     autorun(() => {
-      handler(target.aa?.bb?.cc)
+      handler(FormPath.getIn(target, 'aa.bb.cc'))
     })
     observe(target, handler1)
     observe(target.aa, handler2)
@@ -28,13 +30,13 @@ describe('define', () => {
       aa: {},
     }
     define(target, {
-      aa: annotations.shallow,
+      aa: observable.shallow,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
     const handler2 = jest.fn()
     autorun(() => {
-      handler(target.aa?.bb?.cc)
+      handler(FormPath.getIn(target, 'aa.bb.cc'))
     })
     observe(target, handler1)
     observe(target.aa, handler2)
@@ -49,7 +51,7 @@ describe('define', () => {
   test('box annotation', () => {
     const target: any = {}
     define(target, {
-      aa: annotations.box,
+      aa: observable.box,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
@@ -67,7 +69,7 @@ describe('define', () => {
   test('ref annotation', () => {
     const target: any = {}
     define(target, {
-      aa: annotations.ref,
+      aa: observable.ref,
     })
     const handler = jest.fn()
     const handler1 = jest.fn()
@@ -91,14 +93,42 @@ describe('define', () => {
       },
     }
     define(target, {
-      aa: annotations.observable,
-      setData: annotations.action,
+      aa: observable,
+      setData: batch,
     })
     const handler = jest.fn()
     autorun(() => {
       handler([target.aa.bb, target.aa.cc])
     })
-   target.setData()
+    target.setData()
+    expect(handler).toBeCalledTimes(2)
+  })
+  test('computed annotation', () => {
+    const handler = jest.fn()
+    const target = {
+      aa: 11,
+      bb: 22,
+      get cc() {
+        handler()
+        return this.aa + this.bb
+      },
+    }
+    define(target, {
+      aa: observable,
+      bb: observable,
+      cc: observable.computed,
+    })
+    autorun(() => {
+      target.cc
+    })
+    expect(handler).toBeCalledTimes(1)
+    expect(target.cc).toEqual(33)
+    expect(handler).toBeCalledTimes(1)
+    expect(target.cc).toEqual(33)
+    expect(handler).toBeCalledTimes(1)
+    target.aa = 22
+    expect(handler).toBeCalledTimes(2)
+    expect(target.cc).toEqual(44)
     expect(handler).toBeCalledTimes(2)
   })
 })

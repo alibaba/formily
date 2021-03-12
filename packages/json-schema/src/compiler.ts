@@ -1,5 +1,5 @@
 import { isArr, isFn, isPlainObj, isStr, reduce } from '@formily/shared'
-import { isObservable } from 'mobx'
+import { isObservable } from '@formily/reactive'
 import { Schema } from './schema'
 
 const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
@@ -51,19 +51,19 @@ export const compile = <Source = any, Scope = any>(
       if (source[actionsSymbol]) {
         return source
       }
-      if (isObservable(source)) {
-        return source
-      }
       if (source['_isAMomentObject']) {
         return source
       }
       if (Schema.isSchemaInstance(source)) {
-        return source.fromJSON(source)
+        return source.compile(scope)
       }
       if (isFn(source['toJS'])) {
         return source
       }
       if (isFn(source['toJSON'])) {
+        return source
+      }
+      if (isObservable(source)) {
         return source
       }
       if (seenObjects.get(source)) {

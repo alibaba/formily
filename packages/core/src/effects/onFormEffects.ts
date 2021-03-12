@@ -1,4 +1,4 @@
-import { autorun, runInAction } from 'mobx'
+import { autorun, batch } from '@formily/reactive'
 import { Form } from '../models'
 import { LifeCycleTypes } from '../types'
 import { createEffectHook } from '../shared'
@@ -7,7 +7,7 @@ function createFormEffect(type: LifeCycleTypes) {
   return createEffectHook(
     type,
     (form: Form) => (callback: (form: Form) => void) => {
-      runInAction(() => {
+      batch(() => {
         callback(form)
       })
     }
