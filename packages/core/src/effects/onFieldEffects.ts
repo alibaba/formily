@@ -1,21 +1,24 @@
 import { FormPath, isFn, toArr } from '@formily/shared'
 import { autorun, reaction, batch } from '@formily/reactive'
-import { Form, Field } from '../models'
+import { Form } from '../models'
 import {
   LifeCycleTypes,
   FormPathPattern,
   GeneralField,
+  DataField,
   IFieldState,
 } from '../types'
 import { createEffectHook, useEffectForm } from '../shared'
 import { onFormUnmount } from './onFormEffects'
 
-function createFieldEffect(type: LifeCycleTypes) {
+function createFieldEffect<Result extends GeneralField = GeneralField>(
+  type: LifeCycleTypes
+) {
   return createEffectHook(
     type,
-    (field: Field, form: Form) => (
+    (field: Result, form: Form) => (
       pattern: FormPathPattern,
-      callback: (field: GeneralField, form: Form) => void
+      callback: (field: Result, form: Form) => void
     ) => {
       if (FormPath.parse(pattern).matchAliasGroup(field.address, field.path)) {
         batch(() => {
@@ -28,25 +31,25 @@ function createFieldEffect(type: LifeCycleTypes) {
 const _onFieldInit = createFieldEffect(LifeCycleTypes.ON_FIELD_INIT)
 export const onFieldMount = createFieldEffect(LifeCycleTypes.ON_FIELD_MOUNT)
 export const onFieldUnmount = createFieldEffect(LifeCycleTypes.ON_FIELD_UNMOUNT)
-export const onFieldValueChange = createFieldEffect(
+export const onFieldValueChange = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALUE_CHANGE
 )
-export const onFieldInitialValueChange = createFieldEffect(
+export const onFieldInitialValueChange = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_INITIAL_VALUE_CHANGE
 )
-export const onFieldInputValueChange = createFieldEffect(
+export const onFieldInputValueChange = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE
 )
-export const onFieldValidateStart = createFieldEffect(
+export const onFieldValidateStart = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALIDATE_START
 )
-export const onFieldValidateEnd = createFieldEffect(
+export const onFieldValidateEnd = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALIDATE_END
 )
-export const onFieldValidateFailed = createFieldEffect(
+export const onFieldValidateFailed = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALIDATE_FAILED
 )
-export const onFieldValidateSuccess = createFieldEffect(
+export const onFieldValidateSuccess = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS
 )
 

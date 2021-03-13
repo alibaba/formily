@@ -993,7 +993,7 @@ export default () => {
             title="Select"
             x-decorator="FormItem"
             x-component="Select"
-            enum=[
+            enum={[
               {
                 label: '选项1',
                 value: 1,
@@ -1001,8 +1001,8 @@ export default () => {
               {
                 label: '选项2',
                 value: 2,
-              }
-            ]
+              },
+            ]}
             required
           />
           <SchemaField.String

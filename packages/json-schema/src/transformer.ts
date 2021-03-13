@@ -195,7 +195,7 @@ const getSchemaFieldRequired = (schema: Schema) => {
     }
     parent = parent.parent
   }
-  return false
+  return undefined
 }
 
 const getSchemaFieldReactions = (
