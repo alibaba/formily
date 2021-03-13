@@ -109,7 +109,7 @@ export default () => {
 从以上例子中，我们可以学到很多东西：
 
 - [createForm](https://core.formilyjs.org/api/entry/create-form)用来创建表单核心领域模型，它是作为[MVVM](https://core.formilyjs.org/guide/mvvm)设计模式的标准 ViewModel
-- [FormProvider](https://react.formilyjs.org/api/components/form-provider)组件是作为视图层桥接表单模型的入口，它只有一个参数，就是接收 createForm 创建出来的 Form 实例
+- [FormProvider](https://react.formilyjs.org/api/components/form-provider)组件是作为视图层桥接表单模型的入口，它只有一个参数，就是接收 createForm 创建出来的 Form 实例，并将 Form 实例以上下文形式传递到子组件中
 - [FormLayout](https://antd.formilyjs.org/components/form-layout)组件是用来批量控制[FormItem](https://antd.formilyjs.org/components/form-item)样式的组件，这里我们指定布局为上下布局，也就是标签在上，组件在下
 - [Field](https://react.formilyjs.org/api/components/field)组件是用来承接普通字段的组件
   - name 属性，标识字段在表单最终提交数据中的路径

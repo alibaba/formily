@@ -2,7 +2,7 @@ import React, { createContext, useContext } from 'react'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 
-export interface FormLayoutProps {
+export interface IFormLayoutProps {
   prefixCls?: string
   className?: string
   style?: React.CSSProperties
@@ -25,15 +25,15 @@ export interface FormLayoutProps {
   bordered?: boolean
 }
 
-export const FormLayoutContext = createContext<FormLayoutProps>(null)
+export const FormLayoutContext = createContext<IFormLayoutProps>(null)
 
-export const FormLayoutShallowContext = createContext<FormLayoutProps>(null)
+export const FormLayoutShallowContext = createContext<IFormLayoutProps>(null)
 
 export const useFormLayout = () => useContext(FormLayoutContext)
 
 export const useFormShallowLayout = () => useContext(FormLayoutShallowContext)
 
-export const FormLayout: React.FC<FormLayoutProps> = ({
+export const FormLayout: React.FC<IFormLayoutProps> = ({
   shallow,
   children,
   prefixCls,

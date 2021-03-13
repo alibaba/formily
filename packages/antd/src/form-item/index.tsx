@@ -41,7 +41,7 @@ export interface IFormItemProps {
   inset?: boolean
   extra?: React.ReactNode
   feedbackText?: React.ReactNode
-  feedbackLayout?: 'loose' | 'terse' | 'popover' | (string & {})
+  feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
   asterisk?: boolean
@@ -78,6 +78,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     asterisk: props.asterisk,
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
+    feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
   }
 }
 
@@ -271,26 +272,24 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>
           )}
         </div>
-        {!!feedbackText && feedbackLayout !== 'popover' && (
-          <div
-            className={cls({
-              [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
-              [`${prefixCls}-help`]: true,
-              [`${prefixCls}-help-enter`]: true,
-              [`${prefixCls}-help-enter-active`]: true,
-            })}
-          >
-            {feedbackText}
-          </div>
-        )}
+        {!!feedbackText &&
+          feedbackLayout !== 'popover' &&
+          feedbackLayout !== 'none' && (
+            <div
+              className={cls({
+                [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
+                [`${prefixCls}-help`]: true,
+                [`${prefixCls}-help-enter`]: true,
+                [`${prefixCls}-help-enter-active`]: true,
+              })}
+            >
+              {feedbackText}
+            </div>
+          )}
         {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
       </div>
     </div>
   )
-}
-
-BaseItem.defaultProps = {
-  feedbackLayout: 'loose',
 }
 
 // 适配

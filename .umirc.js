@@ -126,6 +126,9 @@ export default {
             title: '实现表单布局',
           },
           {
+            title: '实现受控表单',
+          },
+          {
             title: '实现异步数据源',
           },
           {
