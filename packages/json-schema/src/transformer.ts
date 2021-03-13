@@ -169,7 +169,7 @@ const patchState = (state: any, target: any) => {
       each(target, (value, key) => {
         patch(value, path.concat(key))
       })
-    } else if (path.length && isValid(target)) {
+    } else {
       FormPath.setIn(state, path, target)
     }
   }

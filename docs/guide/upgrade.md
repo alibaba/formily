@@ -161,6 +161,16 @@
 - V1 全局注册组件
 - V2 移除，不再支持全局注册
 
+**FormEffectHooks**
+
+- V1 RxJS 生命周期钩子
+- V2 移除，统一从@formily/core 中导出，且不会返回 RxJS Observable 对象
+
+**effects**
+
+- V1 支持回调函数`$`选择器
+- V2 移除`$`选择器
+
 ## 协议层差异
 
 > 这里主要指 JSON Schema 协议上的差异
