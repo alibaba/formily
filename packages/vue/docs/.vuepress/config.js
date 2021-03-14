@@ -54,17 +54,18 @@ module.exports = {
         //     '/api/hooks/useForm',
         //     '/api/hooks/useFormEffects',
         //   ]
-        // }, {
-        //   title: 'shared',
-        //   children: [
-        //     '/api/shared/connect',
-        //     '/api/shared/context',
-        //     '/api/shared/mapProps',
-        //     '/api/shared/mapReadPretty',
-        //     '/api/shared/observer',
-        //     '/api/shared/Schema',
-        //   ]
-        // }
+        // },
+        {
+          title: 'shared',
+          children: [
+            '/api/shared/connect',
+            '/api/shared/injections',
+            '/api/shared/mapProps',
+            '/api/shared/mapReadPretty',
+            '/api/shared/defineObservableComponent',
+            '/api/shared/Schema',
+          ]
+        }
       ]
     },
     lastUpdated: 'Last Updated',

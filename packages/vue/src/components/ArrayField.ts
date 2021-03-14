@@ -3,12 +3,14 @@ import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { defineObservableComponent } from '../utils/define-observable-component'
+import { defineObservableComponent } from '../shared/define-observable-component'
 import { FieldSymbol } from '../shared/context'
-import h from '../utils/compatible-create-element'
+import h from '../shared/compatible-create-element'
 import { getRowComponentFromProps } from '../utils/get-row-component-from-props'
 
-export default defineObservableComponent({
+interface ArrayField extends IFieldProps<VueComponent, VueComponent>, Vue {}
+
+export default defineObservableComponent<ArrayField>({
   name: 'ArrayField',
   components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
@@ -22,16 +24,47 @@ export default defineObservableComponent({
     basePath: {},
     decorator: Array,
     component: Array,
-    required: Boolean,
     display: String,
     pattern: String,
-    validateFirst: Boolean,
+    required: {
+      type: Boolean,
+      default: undefined
+    },
+    validateFirst: {
+      type: Boolean,
+      default: undefined
+    },
+    hidden: {
+      type: Boolean,
+      default: undefined
+    },
+    visible: {
+      type: Boolean,
+      default: undefined
+    },
+    editable: {
+      type: Boolean,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: undefined
+    },
+    readOnly: {
+      type: Boolean,
+      default: undefined
+    },
+    readPretty: {
+      type: Boolean,
+      default: undefined
+    },
+    dataSource: {},
     validator: {},
     reactions: [Array, Function],
   },
-  observableSetup<D extends VueComponent, C extends VueComponent>(
+  observableSetup(
     collect,
-    props: IFieldProps<D, C>,
+    props,
     { slots }
   ) {
     const form = useForm()

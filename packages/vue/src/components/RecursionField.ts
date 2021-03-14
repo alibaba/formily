@@ -12,8 +12,9 @@ import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import Field from './Field'
 import VoidField from './VoidField'
-import { defineObservableComponent } from '../utils/define-observable-component'
-import { h } from '../utils/compatible-create-element'
+import { defineObservableComponent } from '../shared/define-observable-component'
+import { h } from '../shared/compatible-create-element'
+import { Fragment } from '../shared/fragment-hack'
 
 const RecursionField = defineObservableComponent({
   name: 'RecursionField',
@@ -25,8 +26,14 @@ const RecursionField = defineObservableComponent({
     },
     name: [String, Number],
     basePath: {},
-    onlyRenderProperties: Boolean,
-    onlyRenderSelf: Boolean,
+    onlyRenderProperties: {
+      type: Boolean,
+      default: undefined
+    },
+    onlyRenderSelf: {
+      type: Boolean,
+      default: undefined
+    },
     mapProperties: {
       type: Object
     },
@@ -84,7 +91,7 @@ const RecursionField = defineObservableComponent({
 
         const content = typeof fieldSchema['x-content'] === 'object' ? h(fieldSchema['x-content'], {}, {}) : fieldSchema['x-content']
 
-        return h('div', {}, {
+        return h(Fragment, {}, {
           default: () => [...children, content]
         })
       }

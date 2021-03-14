@@ -1,8 +1,8 @@
 // some from mobx-vue: https://github.com/mobxjs/mobx-vue
 
 import { isVue2 } from 'vue-demi'
-import { defineObservableComponent as defineObservableComponentV2 } from './observer-in-vue2'
-import { defineObservableComponent as defineObservableComponentV3 } from './observer-in-vue3'
+import { defineObservableComponent as defineObservableComponentV2 } from '../utils/observer-in-vue2'
+import { defineObservableComponent as defineObservableComponentV3 } from '../utils/observer-in-vue3'
 import { ObservableComponentOptions, VueComponent } from '../types'
 
 function defineObservableComponent <T = VueComponent> (originalOptions: ObservableComponentOptions<T>) {

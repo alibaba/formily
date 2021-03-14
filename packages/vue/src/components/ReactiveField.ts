@@ -1,7 +1,8 @@
-import { defineObservableComponent } from '../utils/define-observable-component'
+import { defineObservableComponent } from '../shared/define-observable-component'
 import { isVoidField } from '@formily/core'
 import { VNode, Component } from 'vue'
-import h from '../utils/compatible-create-element'
+import h from '../shared/compatible-create-element'
+import { Fragment } from '../shared/fragment-hack'
 
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
@@ -16,36 +17,110 @@ export default defineObservableComponent({
     collect({
       field
     })
+    const key = Math.floor(Date.now() * Math.random()).toString(16)
     return () => {
-  
+      // if (!field) {
+      //   return h(Fragment, { key }, slots)
+      // }
+      // if (field.display !== 'visible') {
+      //   return h(Fragment, { key }, { default: () => [h('template', {}, {})] })
+      // } else {
+      //   const renderDecorator = (children: VNode[]) => {
+      //     if (!field?.decorator?.[0]) {
+      //       return h(Fragment, { key }, {
+      //         default: () => children
+      //       })
+      //     }
+      //     const decorator = field.decorator[0] as Component
+      //     const decoratorData = field.decorator[1] || {}
+      //     return h(
+      //       decorator,
+      //       {
+      //         // key,
+      //         attrs: decoratorData
+      //       },
+      //       {
+      //         default: () => children
+      //       }
+      //     )
+      //   }
+
+      //   const renderComponent = () => {
+      //     if (!field?.component?.[0]) {
+      //       return h(Fragment, {}, {
+      //         default: () => slots.default && slots.default({
+      //           field: props.field,
+      //           form: props.field.form
+      //         })
+      //       })
+      //     }
+      //     const events = {} as Record<string, any>
+      //     if (!isVoidField(field)) {
+      //       events.change = (...args: any[]) => {
+      //         field.onInput(...args)
+      //         // field.component[2]?.onChange?.(...args)
+      //       }
+      //       events.focus = field.onFocus
+      //       events.blur = field.onBlur
+      //     }
+      //     const component = field.component[0] as Component
+      //     const originData = field.component[1] || {}
+      //     const componentData =  {
+      //       disabled: !isVoidField(field)
+      //         ? field.pattern === 'disabled' || field.pattern === 'readPretty'
+      //         : undefined,
+      //       readOnly: !isVoidField(field)
+      //         ? field.pattern === 'readOnly'
+      //         : undefined,
+      //       ...originData,
+      //       value: !isVoidField(field) ? field.value : undefined,
+      //     }
+      //     return h(
+      //       component,
+      //       {
+      //         attrs: componentData,
+      //         on: events
+      //       },
+      //       {
+      //         default: () => slots.default && slots.default({
+      //           field: props.field,
+      //           form: props.field.form
+      //         })
+      //       }
+      //     )
+      //   }
+      //   return renderDecorator([renderComponent()])
+      // }
+
+
+      let children = {}
+
       if (!field) {
-        return h('div', {}, slots)
-      }
-      if (field.display !== 'visible') {
-        return ''
+        children = slots
+      } else if (field.display !== 'visible') {
+        children = { default: () => [h('template', {}, {})] }
       } else {
-        const renderDecorator = (children: VNode[]) => {
+        const renderDecorator = (childNodes: VNode[]) => {
           if (!field?.decorator?.[0]) {
-            return h('div', {}, {
-              default: () => children
-            })
-          }
-          const decorator = field.decorator[0] as Component
-          const decoratorData = field.decorator[1] || {}
-          return h(
-            decorator,
-            {
-              attrs: decoratorData
-            },
-            {
-              default: () => children
+            return {
+              default: () => childNodes
             }
-          )
+          } else {
+            const decorator = field.decorator[0] as Component
+            const decoratorData = field.decorator[1] || {}
+            return {
+              default: () => h( decorator, { attrs: decoratorData },
+                {
+                  default: () => childNodes
+                }
+              )
+            }
+          }
         }
 
         const renderComponent = () => {
           if (!field?.component?.[0]) {
-            return h('div', {}, {
+            return h(Fragment, {}, {
               default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
@@ -54,17 +129,25 @@ export default defineObservableComponent({
           }
           const events = {} as Record<string, any>
           if (!isVoidField(field)) {
-            events.change = field.onInput
+            events.change = (...args: any[]) => {
+              field.onInput(...args)
+              // field.component[2]?.onChange?.(...args)
+            }
             events.focus = field.onFocus
             events.blur = field.onBlur
           }
           const component = field.component[0] as Component
           const originData = field.component[1] || {}
-          const componentData =  Object.assign({}, originData, {
+          const componentData =  {
+            disabled: !isVoidField(field)
+              ? field.pattern === 'disabled' || field.pattern === 'readPretty'
+              : undefined,
+            readOnly: !isVoidField(field)
+              ? field.pattern === 'readOnly'
+              : undefined,
+            ...originData,
             value: !isVoidField(field) ? field.value : undefined,
-            disabled: !isVoidField(field) ? field.pattern === 'disabled' || field.pattern === 'readPretty' : undefined,
-            readOnly: !isVoidField(field) ? field.pattern === 'readOnly' : undefined
-          })
+          }
           return h(
             component,
             {
@@ -79,8 +162,11 @@ export default defineObservableComponent({
             }
           )
         }
-        return renderDecorator([renderComponent()])
+
+        children = renderDecorator([renderComponent()])
       }
+
+      return h(Fragment, { key }, children)
     }
   }
 })

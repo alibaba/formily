@@ -12,8 +12,8 @@ SchemaField 支持直接传入 [JSON-Schema](/api/shared/schema) 对象渲染表
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<SchemaField :schema="{
+  <FormProvider :form="form">
+    <SchemaField :schema="{
       type: 'object',
       properties: {
         input: {
@@ -22,8 +22,8 @@ SchemaField 支持直接传入 [JSON-Schema](/api/shared/schema) 对象渲染表
         },
       },
     }">
-</SchemaField>
-</FormProvider>
+    </SchemaField>
+  </FormProvider>
 </template>
 
 <script>

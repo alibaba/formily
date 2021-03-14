@@ -3,12 +3,14 @@ import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IVoidFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { defineObservableComponent } from '../utils/define-observable-component'
+import { defineObservableComponent } from '../shared/define-observable-component'
 import { FieldSymbol } from '../shared/context'
-import h from '../utils/compatible-create-element'
+import h from '../shared/compatible-create-element'
 import { getRowComponentFromProps } from '../utils/get-row-component-from-props'
 
-export default defineObservableComponent({
+interface VoidField extends IVoidFieldProps<VueComponent, VueComponent>, Vue {}
+
+export default defineObservableComponent<VoidField>({
   name: 'VoidField',
   components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
@@ -22,11 +24,35 @@ export default defineObservableComponent({
     component: Array,
     display: String,
     pattern: String,
+    hidden: {
+      type: Boolean,
+      default: undefined
+    },
+    visible: {
+      type: Boolean,
+      default: undefined
+    },
+    editable: {
+      type: Boolean,
+      default: undefined
+    },
+    disabled: {
+      type: Boolean,
+      default: undefined
+    },
+    readOnly: {
+      type: Boolean,
+      default: undefined
+    },
+    readPretty: {
+      type: Boolean,
+      default: undefined
+    },
     reactions: [Array, Function],
   },
-  observableSetup<D extends VueComponent, C extends VueComponent>(
+  observableSetup(
     collect,
-    props: IVoidFieldProps<D, C>,
+    props,
     { slots }
   ) {
     const form = useForm()

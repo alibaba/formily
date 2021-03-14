@@ -16,14 +16,14 @@ Form 参考[Form](https://core.formilyjs.org/api/models/form)
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<Field name="input" :component="[Input]" />
-<FormConsumer>
-<template #default="{ form }">
-{{ form.values.input }}
-</template>
-</FormConsumer>
-</FormProvider>
+  <FormProvider :form="form">
+    <Field name="input" :component="[Input]" />
+    <FormConsumer>
+      <template #default="{ form }">
+        {{ form.values.input }}
+      </template>
+    </FormConsumer>
+  </FormProvider>
 </template>
 
 <script>

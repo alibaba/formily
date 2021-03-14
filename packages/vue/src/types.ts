@@ -5,10 +5,10 @@ import { ISchema, Schema, SchemaKey } from '@formily/json-schema'
 
 export type VueComponent = ComponentOptions<Vue> | Component
 
-export type VueComponentProps<T extends VueComponent = VueComponent> = T extends Vue ? Exclude<T, keyof Vue> : (T extends ComponentOptions<Vue> ? T['props'] : Record<string, any>)
+export type VueComponentProps<T extends VueComponent = ComponentOptions<Vue>> = T extends Vue ? Exclude<T, keyof Vue> : (T extends ComponentOptions<Vue> ? T['props'] : Record<string, any>)
 
 export interface ObservableComponentOptions <T extends VueComponent = VueComponent> {
-  observableSetup?: (collect?: (data: Record<string, any>) => any, props?: VueComponentProps<T>, context?: SetupContext) => any
+  observableSetup?: (collect: (data: Record<string, any>) => any, props: VueComponentProps<T>, context: SetupContext) => any
   [key: string]: any
 }
 
@@ -32,9 +32,7 @@ export interface IComponentMapper<T extends VueComponent = any> {
 
 export type IStateMapper<Props> =
   | {
-      extract: keyof Formily.Core.Models.Field
-      to?: keyof Props
-      transform?: (value: any) => any
+      [key in keyof Formily.Core.Models.Field]?: keyof Props | boolean
     }
   | ((props: Props, field: Formily.Core.Types.GeneralField) => Props)
 
