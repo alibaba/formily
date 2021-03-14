@@ -1196,7 +1196,7 @@ export default () => {
             />
             <SchemaField.String
               name="old_password"
-              title="旧密码"
+              title="原始密码"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -1307,7 +1307,7 @@ const schema = {
     },
     oldPassword: {
       type: 'string',
-      title: '旧密码',
+      title: '原始密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
