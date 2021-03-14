@@ -27,6 +27,21 @@ import {
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties } from './constants'
 
+export const isHTMLInputEvent = (event: any) => {
+  if (event?.target) {
+    if (
+      event.target.tagName !== 'INPUT' &&
+      event.target.tagName !== 'TEXTAREA' &&
+      event.target.tagName !== 'SELECT'
+    ) {
+      return false
+    }
+    event.stopPropagation?.()
+    return true
+  }
+  return false
+}
+
 export const getValuesFromEvent = (args: any[]) => {
   return args.map((event) => {
     if (event?.target) {

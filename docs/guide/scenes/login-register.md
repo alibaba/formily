@@ -63,6 +63,9 @@ export default () => {
                   required
                   x-decorator="FormItem"
                   x-component="Input"
+                  x-validator={{
+                    required: true,
+                  }}
                   x-component-props={{
                     prefix: "{{icon('UserOutlined')}}",
                   }}
@@ -685,7 +688,7 @@ export default () => {
               x-decorator="FormItem"
               x-component="ArrayItems"
             >
-              <SchemaField.Object x-decorator="ArrayItems.Item">
+              <SchemaField.Object x-component="ArrayItems.Item">
                 <SchemaField.Void
                   x-decorator="FormItem"
                   x-component="ArrayItems.SortHandle"
@@ -1013,7 +1016,7 @@ const schema = {
       'x-component': 'ArrayItems',
       items: {
         type: 'object',
-        'x-decorator': 'ArrayItems.Item',
+        'x-component': 'ArrayItems.Item',
         properties: {
           sort: {
             type: 'void',

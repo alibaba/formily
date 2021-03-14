@@ -46,6 +46,18 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
           field.component[1]?.onChange?.(...args)
         }
       : undefined
+    const onFocus = !isVoidField(field)
+      ? (...args: any[]) => {
+          field.onFocus(...args)
+          field.component[1]?.onFocus?.(...args)
+        }
+      : undefined
+    const onBlur = !isVoidField(field)
+      ? (...args: any[]) => {
+          field.onBlur(...args)
+          field.component[1]?.onBlur?.(...args)
+        }
+      : undefined
     const disabled = !isVoidField(field)
       ? field.pattern === 'disabled' || field.pattern === 'readPretty'
       : undefined
@@ -54,7 +66,15 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
       : undefined
     return React.createElement(
       field.component[0],
-      { disabled, readOnly, ...field.component[1], value, onChange },
+      {
+        disabled,
+        readOnly,
+        ...field.component[1],
+        value,
+        onChange,
+        onFocus,
+        onBlur,
+      },
       children
     )
   }
