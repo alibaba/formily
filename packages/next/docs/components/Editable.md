@@ -47,12 +47,11 @@ export default () => (
         x-component="Input"
       />
       <SchemaField.Void
+        name="void"
         title="虚拟节点容器"
         x-component="Editable.Popover"
-        x-component-props={{
-          renderPreview: (field) => {
-            return field.query('.date2').get('value')
-          },
+        x-reactions={(field) => {
+          field.title = field.query('.void.date2').get('value') || field.title
         }}
       >
         <SchemaField.String
@@ -75,10 +74,8 @@ export default () => (
         name="iobject"
         title="对象节点容器"
         x-component="Editable.Popover"
-        x-component-props={{
-          renderPreview: (field) => {
-            return field.value?.date
-          },
+        x-reactions={(field) => {
+          field.title = field.value?.date || field.title
         }}
       >
         <SchemaField.String
@@ -151,9 +148,8 @@ const schema = {
       type: 'void',
       title: '虚拟节点容器',
       'x-component': 'Editable.Popover',
-      'x-component-props': {
-        renderPreview: "{{(field) => field.query('.date2').get('value')}}",
-      },
+      'x-reactions':
+        "{{(field) => field.title = field.query('.void.date2').get('value') || field.title}}",
       properties: {
         date2: {
           type: 'string',
@@ -176,9 +172,8 @@ const schema = {
       type: 'object',
       title: '对象节点容器',
       'x-component': 'Editable.Popover',
-      'x-component-props': {
-        renderPreview: '{{(field) => field.value && field.value.date}}',
-      },
+      'x-reactions':
+        '{{(field) => field.title = field.value && field.value.date || field.title}}',
       properties: {
         date: {
           type: 'string',
@@ -244,14 +239,10 @@ export default () => (
     <VoidField
       name="void"
       title="虚拟节点容器"
-      component={[
-        Editable.Popover,
-        {
-          renderPreview: (field) => {
-            return field.query('.date2').get('value')
-          },
-        },
-      ]}
+      reactions={(field) => {
+        field.title = field.query('.void.date2').get('value') || field.title
+      }}
+      component={[Editable.Popover]}
     >
       <Field
         name="date2"

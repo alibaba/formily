@@ -120,12 +120,6 @@
     }
 }
 
-.@{form-item-cls} {
-    &-layout-vertical {
-        display: block;
-    }
-}
-
 .@{form-item-cls}-label-wrap {
     .@{form-item-cls}-label {
         label {
@@ -304,10 +298,6 @@
         min-height: @height-lg;
     }
 
-    .@{form-item-cls}-label>label {
-        height: @height-lg;
-    }
-
     .@{ant-prefix}-picker {
         padding: 6.5px 11px;
     }
@@ -317,10 +307,7 @@
     }
 
     .@{ant-prefix}-btn {
-        height: @height-lg;
-        padding: 6.4px 15px;
-        font-size: @font-size-lg;
-        border-radius: 2px;
+        height: @height-lg - 5;
     }
 
     .@{ant-prefix}-select {
@@ -350,6 +337,19 @@
 
         &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
             margin-bottom: 0;
+        }
+    }
+}
+
+.@{form-item-cls} {
+    &-layout-vertical {
+        display: block;
+        .@{form-item-cls}-label * {
+            line-height: @height-base - 10 !important;
+        }
+    
+        .@{form-item-cls}-label-content {
+            min-height: @height-base - 10 !important;
         }
     }
 }

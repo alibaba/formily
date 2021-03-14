@@ -52,6 +52,11 @@
 - V1: 代表校验器校验操作的 errors 与 warnings
 - V2: 移除，统一使用 feedbacks
 
+**values**
+
+- V1: 代表 onChange 事件返回的所有参数
+- V2: 移除，统一使用 inputValues
+
 **rules**
 
 - V1:代表校验规则

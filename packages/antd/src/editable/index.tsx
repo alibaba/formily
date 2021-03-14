@@ -12,9 +12,7 @@ import cls from 'classnames'
  * 默认Inline展示
  */
 
-interface IPopoverProps extends PopoverProps {
-  renderPreview?: (field: Formily.Core.Types.GeneralField) => React.ReactNode
-}
+interface IPopoverProps extends PopoverProps {}
 
 type ComposedEditable = React.FC<IFormItemProps> & {
   Popover?: React.FC<IPopoverProps>
@@ -131,8 +129,6 @@ Editable.Popover = observer((props) => {
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')
   const timer = useRef(null)
-  const preview = props?.renderPreview?.(field)
-  const placeholder = isStr(preview) ? preview : ''
   const closePopover = () => {
     const errors = field.form.queryFeedbacks({
       type: 'error',
@@ -170,9 +166,7 @@ Editable.Popover = observer((props) => {
       <div>
         <BaseItem className={`${prefixCls}-trigger`}>
           <Space size={4} style={{ margin: '0 4px' }}>
-            <span className={`${prefixCls}-preview`}>
-              {placeholder || field.title}
-            </span>
+            <span className={`${prefixCls}-preview`}>{field.title}</span>
             <EditOutlined className={`${prefixCls}-edit-btn`} />
           </Space>
         </BaseItem>

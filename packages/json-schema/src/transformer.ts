@@ -10,6 +10,8 @@ import {
   each,
   isFn,
   isPlainObj,
+  reduce,
+  isEmpty,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { Schema } from './schema'
@@ -127,11 +129,24 @@ const getFieldDataSourceBySchema = (schema: Schema) => {
   }
 }
 
+const omitInvalid = (target: any) => {
+  return reduce(
+    target,
+    (buf, value, key) => {
+      if (!isEmpty(value)) {
+        buf[key] = value
+      }
+      return buf
+    },
+    {}
+  )
+}
+
 const getFieldInternalPropsBySchema = (
   schema: Schema,
   options: ISchemaFieldFactoryOptions
 ) => {
-  return {
+  return omitInvalid({
     validator: getValidatorBySchema(schema),
     dataSource: getFieldDataSourceBySchema(schema),
     required: isBool(schema.required) ? schema.required : undefined,
@@ -160,7 +175,7 @@ const getFieldInternalPropsBySchema = (
         FormPath.getIn(options?.components, schema['x-component']),
       schema['x-component-props'],
     ],
-  }
+  })
 }
 
 const patchState = (state: any, target: any) => {
