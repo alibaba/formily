@@ -466,17 +466,17 @@ export class Field<
       }
     } else {
       if (isArr(this.validator)) {
-        this.validator.push({
+        this.validator.unshift({
           required,
         })
       } else if (typeof this.validator === 'object') {
         this.validator['required'] = required
       } else if (this.validator) {
         this.validator = [
-          this.validator,
           {
             required,
           },
+          this.validator,
         ]
       } else if (required) {
         this.validator = [

@@ -94,12 +94,8 @@ export default () => {
                 <SchemaField.String
                   name="phone"
                   title="手机号"
-                  x-validator={[
-                    {
-                      required: true,
-                    },
-                    'phone',
-                  ]}
+                  required
+                  x-validator="phone"
                   x-decorator="FormItem"
                   x-component="Input"
                   x-component-props={{
@@ -217,6 +213,7 @@ const phoneSchema = {
       type: 'string',
       title: '手机号',
       required: true,
+      'x-validator': 'phone',
       'x-decorator': 'FormItem',
       'x-component': 'Input',
       'x-component-props': {
@@ -380,7 +377,8 @@ export default () => {
               <Field
                 name="phone"
                 title="手机号"
-                validator={[{ required: true }, 'phone']}
+                required
+                validator="phone"
                 decorator={[FormItem]}
                 component={[
                   Input,
@@ -739,7 +737,7 @@ export default () => {
                     name="phone"
                     required
                     title="手机号"
-                    x-validator={[{ required: true }, 'phone']}
+                    x-validator="phone"
                     x-decorator="FormItem"
                     x-component="Input"
                     x-component-props={{
@@ -960,9 +958,10 @@ const schema = {
     email: {
       type: 'string',
       title: '邮箱',
+      required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
-      'x-validator': [{ required: true }, 'email'],
+      'x-validator': 'email',
     },
     gender: {
       type: 'string',
@@ -1128,6 +1127,251 @@ export default () => {
 
 #### 纯 JSX 案例
 
+```tsx
+import React, { useState } from 'react'
+import { createForm } from '@formily/core'
+import { Field, VoidField } from '@formily/react'
+import {
+  Form,
+  FormItem,
+  FormLayout,
+  Input,
+  Select,
+  Password,
+  Cascader,
+  DatePicker,
+  Submit,
+  Space,
+  FormGrid,
+  Upload,
+  ArrayItems,
+  Editable,
+  FormButtonGroup,
+} from '@formily/antd'
+import { action } from '@formily/reactive'
+import { Card, Button } from 'antd'
+import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
+import 'antd/lib/tabs/style'
+import 'antd/lib/button/style'
+
+const form = createForm({
+  validateFirst: true,
+})
+
+const IDUpload = (props) => {
+  return (
+    <Upload
+      {...props}
+      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+      headers={{
+        authorization: 'authorization-text',
+      }}
+    >
+      <Button icon={<UploadOutlined />}>上传复印件</Button>
+    </Upload>
+  )
+}
+
+export default () => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        background: '#eee',
+        padding: '40px 0',
+      }}
+    >
+      <Card title="新用户注册" style={{ width: 620 }}>
+        <Form
+          form={form}
+          labelCol={5}
+          wrapperCol={16}
+          onAutoSubmit={console.log}
+        >
+          <Field
+            name="username"
+            title="用户名"
+            required
+            decorator={[FormItem]}
+            component={[Input]}
+          />
+          <Field
+            name="password"
+            title="密码"
+            required
+            decorator={[FormItem]}
+            component={[
+              Password,
+              {
+                checkStrength: true,
+              },
+            ]}
+            reactions={(field) => {
+              const confirm = field.query('.confirm_password')
+              field.errors =
+                confirm.get('value') &&
+                field.value &&
+                field.value !== confirm.get('value')
+                  ? '确认密码不匹配'
+                  : ''
+            }}
+          />
+          <Field
+            name="confirm_password"
+            title="确认密码"
+            required
+            decorator={[FormItem]}
+            component={[
+              Password,
+              {
+                checkStrength: true,
+              },
+            ]}
+            reactions={(field) => {
+              const password = field.query('.password')
+              field.errors =
+                password.get('value') &&
+                field.value &&
+                field.value !== password.get('value')
+                  ? '确认密码不匹配'
+                  : ''
+            }}
+          />
+          <VoidField
+            name="name"
+            title="姓名"
+            decorator={[
+              FormItem,
+              {
+                asterisk: true,
+                feedbackLayout: 'none',
+              },
+            ]}
+            component={[FormGrid]}
+          >
+            <Field
+              name="firstName"
+              decorator={[FormItem]}
+              component={[
+                Input,
+                {
+                  placeholder: '姓',
+                },
+              ]}
+              required
+            />
+            <Field
+              name="lastName"
+              decorator={[FormItem]}
+              component={[
+                Input,
+                {
+                  placeholder: '名',
+                },
+              ]}
+              required
+            />
+          </VoidField>
+          <Field
+            name="email"
+            title="邮箱"
+            required
+            validator="email"
+            decorator={[FormItem]}
+            component={[Input]}
+          />
+          <Field
+            name="gender"
+            title="性别"
+            decorator={[FormItem]}
+            component={[Select]}
+            dataSource={[
+              {
+                label: '男',
+                value: 1,
+              },
+              {
+                label: '女',
+                value: 2,
+              },
+              {
+                label: '第三性别',
+                value: 3,
+              },
+            ]}
+            required
+          />
+          <Field
+            name="birthday"
+            title="生日"
+            required
+            decorator={[FormItem]}
+            component={[DatePicker]}
+          />
+          <Field
+            name="address"
+            title="地址"
+            required
+            decorator={[FormItem]}
+            component={[Cascader]}
+            reactions={(field) => {
+              const transform = (data = {}) => {
+                return Object.entries(data).reduce((buf, [key, value]) => {
+                  if (typeof value === 'string')
+                    return buf.concat({
+                      label: value,
+                      value: key,
+                    })
+                  const { name, code, cities, districts } = value
+                  const _cities = transform(cities)
+                  const _districts = transform(districts)
+                  return buf.concat({
+                    label: name,
+                    value: code,
+                    children: _cities.length
+                      ? _cities
+                      : _districts.length
+                      ? _districts
+                      : undefined,
+                  })
+                }, [])
+              }
+
+              field.setComponentProps({
+                suffixIcon: <LoadingOutlined />,
+              })
+              fetch('//unpkg.com/china-location/dist/location.json')
+                .then((res) => res.json())
+                .then(
+                  action((data) => {
+                    field.setDataSource(transform(data))
+                    field.setComponentProps({
+                      suffixIcon: undefined,
+                    })
+                  })
+                )
+            }}
+          />
+          <Field
+            name="idCard"
+            title="身份证复印件"
+            required
+            decorator={[FormItem]}
+            component={[IDUpload]}
+          />
+          <FormButtonGroup.FormItem>
+            <Submit block size="large">
+              注册
+            </Submit>
+          </FormButtonGroup.FormItem>
+        </Form>
+      </Card>
+    </div>
+  )
+}
+```
+
 ## 忘记密码
 
 #### Markup Schema 案例
@@ -1190,7 +1434,8 @@ export default () => {
             <SchemaField.String
               name="email"
               title="邮箱"
-              x-validator={[{ required: true }, 'email']}
+              required
+              x-validator="email"
               x-decorator="FormItem"
               x-component="Input"
             />
@@ -1301,7 +1546,8 @@ const schema = {
     email: {
       type: 'string',
       title: '邮箱',
-      'x-validator': [{ required: true }, 'email'],
+      required: true,
+      'x-validator': 'email',
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
@@ -1388,3 +1634,118 @@ export default () => {
 ```
 
 #### 纯 JSX 案例
+
+```tsx
+import React, { useState } from 'react'
+import { createForm } from '@formily/core'
+import { Field } from '@formily/react'
+import {
+  Form,
+  FormItem,
+  Input,
+  Password,
+  DatePicker,
+  Submit,
+  FormButtonGroup,
+} from '@formily/antd'
+import { action } from '@formily/reactive'
+import { Card, Button } from 'antd'
+import { LoadingOutlined, UploadOutlined } from '@ant-design/icons'
+import 'antd/lib/button/style'
+
+const form = createForm({
+  validateFirst: true,
+})
+
+export default () => {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        background: '#eee',
+        padding: '40px 0',
+      }}
+    >
+      <Card title="变更密码" style={{ width: 620 }}>
+        <Form
+          form={form}
+          labelCol={5}
+          wrapperCol={16}
+          onAutoSubmit={console.log}
+        >
+          <Field
+            name="username"
+            title="用户名"
+            required
+            decorator={[FormItem]}
+            component={[Input]}
+          />
+          <Field
+            name="email"
+            title="邮箱"
+            required
+            validator="email"
+            decorator={[FormItem]}
+            component={[Input]}
+          />
+          <Field
+            name="old_password"
+            title="原始密码"
+            required
+            decorator={[FormItem]}
+            component={[Password]}
+          />
+          <Field
+            name="password"
+            title="新密码"
+            required
+            decorator={[FormItem]}
+            component={[
+              Password,
+              {
+                checkStrength: true,
+              },
+            ]}
+            reactions={(field) => {
+              const confirm = field.query('.confirm_password')
+              field.errors =
+                confirm.get('value') &&
+                field.value &&
+                field.value !== confirm.get('value')
+                  ? '确认密码不匹配'
+                  : ''
+            }}
+          />
+          <Field
+            name="confirm_password"
+            title="确认密码"
+            required
+            decorator={[FormItem]}
+            component={[
+              Password,
+              {
+                checkStrength: true,
+              },
+            ]}
+            reactions={(field) => {
+              const confirm = field.query('.password')
+              field.errors =
+                confirm.get('value') &&
+                field.value &&
+                field.value !== confirm.get('value')
+                  ? '确认密码不匹配'
+                  : ''
+            }}
+          />
+          <FormButtonGroup.FormItem>
+            <Submit block size="large">
+              确认变更
+            </Submit>
+          </FormButtonGroup.FormItem>
+        </Form>
+      </Card>
+    </div>
+  )
+}
+```
