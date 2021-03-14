@@ -1,6 +1,7 @@
-import { defineObservableComponent } from '../utils/define-observable-component'
+import { defineObservableComponent } from '../shared/define-observable-component'
 import { useForm } from '../hooks'
-import h from '../utils/compatible-create-element'
+import h from '../shared/compatible-create-element'
+import { Fragment } from '../shared/fragment-hack'
 
 export default defineObservableComponent({
   name: 'FormConsumer',
@@ -10,7 +11,7 @@ export default defineObservableComponent({
       form
     })
     return () => h(
-      'div',
+      Fragment,
       { attrs },
       {
         default: () => slots.default && slots.default({

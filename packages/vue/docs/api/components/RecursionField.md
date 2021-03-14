@@ -28,9 +28,9 @@ type RecursionField = Vue.Component<IRecursionFieldProps>
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<SchemaField>
-<SchemaObjectField
+  <FormProvider :form="form">
+    <SchemaField>
+      <SchemaObjectField
         name="custom"
         x-component="Custom"
         :x-component-props="{
@@ -45,8 +45,8 @@ type RecursionField = Vue.Component<IRecursionFieldProps>
           },
         }"
       />
-</SchemaField>
-</FormProvider>
+    </SchemaField>
+  </FormProvider>
 </template>
 
 <script>
@@ -55,6 +55,7 @@ import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField, RecursionField } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css';
 
+// functional component in vue2
 const Custom = {
   functional: true,
   render (h, { props }) {

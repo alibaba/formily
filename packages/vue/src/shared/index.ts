@@ -1,2 +1,5 @@
 export * from './context'
 export * from './connect'
+export * from './compatible-create-element'
+export * from './define-observable-component'
+export * from './fragment-hack'

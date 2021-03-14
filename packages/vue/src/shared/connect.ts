@@ -1,46 +1,53 @@
 /* eslint-disable vue/one-component-per-file */
-import { isFn, FormPath } from '@formily/shared'
+import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField } from '@formily/core'
-import { defineObservableComponent } from '../utils/define-observable-component'
+import { defineObservableComponent } from '../shared/define-observable-component'
 import { VueComponent, IComponentMapper, IStateMapper, VueComponentProps } from '../types'
+import { FunctionalComponentOptions } from 'vue'
 import { useField } from '../hooks/useField'
-import h from '../utils/compatible-create-element'
+import h from './compatible-create-element'
+import { isVue2, markRaw } from 'vue-demi'
 
-export function mapProps<T extends VueComponent>(...args: IStateMapper<VueComponentProps<T>>[]) {
+export function mapProps<T extends VueComponent = VueComponent>(...args: IStateMapper<VueComponentProps<T>>[]) {
   return (target: T) => {
     return defineObservableComponent<T>({
-      observableSetup(collect, props, { slots }) {
+      // listeners is needed for vue2
+      observableSetup(collect, props, { attrs, slots, listeners }) {
         const field = useField()
         collect({
           field,
         })
         return () =>{
-          const results = args.reduce(
+          const transform = (input: VueComponentProps<T>) => args.reduce(
             (props, mapper) => {
               if (isFn(mapper)) {
                 props = Object.assign(props, mapper(props, field))
               } else {
-                const extract = FormPath.getIn(field, mapper.extract)
-                const target = mapper.to || mapper.extract
-                if (mapper.extract === 'value') {
-                  if (mapper.to !== mapper.extract) {
-                    delete props['value']
+                each(mapper, (to, extract) => {
+                  const extractValue = FormPath.getIn(field, extract)
+                  const targetValue = isStr(to) ? to : (extract as any)
+                  if (extract === 'value') {
+                    if (to !== extract) {
+                      delete props['value']
+                    }
                   }
-                }
-                FormPath.setIn(
-                  props,
-                  target as any,
-                  isFn(mapper.transform) ? mapper.transform(extract) : extract
-                )
+                  FormPath.setIn(props, targetValue, extractValue)
+                })
               }
               return props
             },
-            { ...props }
+            input
           )
+          const newProps = transform({ ...props })
+          const newAttrs = transform({ ...attrs } as VueComponentProps<T>)
           return h(
             target,
             {
-              props: results,
+              attrs: {
+                ...newProps,
+                ...newAttrs
+              },
+              on: listeners
             },
             slots
           )
@@ -53,7 +60,7 @@ export function mapProps<T extends VueComponent>(...args: IStateMapper<VueCompon
 export function mapReadPretty<T extends VueComponent, C extends VueComponent>(component: C) {
   return (target: T) => {
     return defineObservableComponent({
-      observableSetup(collect, props: { [key: string]: any }, { slots }) {
+      observableSetup(collect, props: VueComponentProps<T>, { attrs, slots }) {
         const field = useField()
         collect({
           field,
@@ -64,7 +71,10 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(co
               ? component
               : target,
             {
-              props: props,
+              attrs: {
+                ...attrs,
+                ...props
+              },
             },
             slots
           )
@@ -79,18 +89,24 @@ export function connect<T extends VueComponent>(target: T, ...args: IComponentMa
     return mapper(target)
   }, target)
 
-  return defineObservableComponent({
-    name: target['name'],
-    observableSetup(collect, props: VueComponentProps<T>, { slots }) {
-      return () => {
-        return h(
-          Component,
-          {
-            props: props,
-          },
-          slots
-        )
+  if (isVue2) {
+    const functionalComponent = {
+      name: target['name'],
+      functional: true,
+      render(h, context) {
+        return h(Component, context.data, context.children)
       }
-    },
-  })
+    } as FunctionalComponentOptions
+    return markRaw(functionalComponent)
+  }  else {
+    const functionalComponent = defineObservableComponent({
+      name: target['name'],
+      setup(props: VueComponentProps<T>, { attrs, slots }) {
+        return () => {
+          return h(Component, { props, attrs }, slots)
+        }
+      },
+    })
+    return markRaw(functionalComponent)
+  }
 }
