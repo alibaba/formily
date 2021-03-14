@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { isVoidField } from '@formily/core'
 import { useField, useForm, observer } from '@formily/react'
-import { isStr } from '@formily/shared'
 import { Form, Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { ItemProps as FormItemProps } from '@alifd/next/lib/form'
@@ -126,10 +125,11 @@ Editable.Popover = observer(({ ...props }) => {
   const [visible, setVisible] = useState(false)
   const [destroy, setDestroy] = useState(true)
   const prefixCls = usePrefixCls('formily-editable-popover')
-  const closePopover = () => {
+  const closePopover = async () => {
+    await field.form.validate(`${field.address}.*`)
     const errors = field.form.queryFeedbacks({
       type: 'error',
-      address: `*(${field.address},${field.address}.*)`,
+      address: `${field.address}.*`,
     })
     if (errors?.length) return
     setVisible(false)

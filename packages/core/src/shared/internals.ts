@@ -8,6 +8,7 @@ import {
   isEmpty,
   isArr,
   isPlainObj,
+  toArr,
 } from '@formily/shared'
 import { ValidatorTriggerType, validate } from '@formily/validator'
 import { action, batch, toJS } from '@formily/reactive'
@@ -121,7 +122,7 @@ export const queryFeedbackMessages = (
   search: ISearchFeedback
 ) => {
   return queryFeedbacks(field, search).reduce(
-    (buf, info) => buf.concat(info.messages),
+    (buf, info) => (isEmpty(info.messages) ? buf : buf.concat(info.messages)),
     []
   )
 }
@@ -139,8 +140,9 @@ export const updateFeedback = (field: Field, feedback?: IFieldFeedback) => {
       if (searched.length) {
         field.feedbacks = field.feedbacks.reduce((buf, item) => {
           if (searched.includes(item)) {
-            if (feedback.messages?.length) {
-              item.messages = feedback.messages
+            const messages = toArr(feedback.messages)
+            if (messages?.length) {
+              item.messages = messages
               return buf.concat(item)
             } else {
               return buf
@@ -428,22 +430,19 @@ export const getModelState = (model: any, getter?: any) => {
   if (isFn(getter)) {
     return getter(model)
   } else {
-    return Object.keys(model || {}).reduce(
-      (buf, key: string) => {
-        const value = model[key]
-        if (isFn(value)) {
-          return buf
-        }
-        if (ReservedProperties.includes(key)) return buf
-        if (key === 'address' || key === 'path') {
-          buf[key] = value.toString()
-          return buf
-        }
-        buf[key] = toJS(value)
+    return Object.keys(model || {}).reduce((buf, key: string) => {
+      const value = model[key]
+      if (isFn(value)) {
         return buf
-      },
-      {}
-    )
+      }
+      if (ReservedProperties.includes(key)) return buf
+      if (key === 'address' || key === 'path') {
+        buf[key] = value.toString()
+        return buf
+      }
+      buf[key] = toJS(value)
+      return buf
+    }, {})
   }
 }
 

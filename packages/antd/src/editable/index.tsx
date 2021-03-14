@@ -129,10 +129,11 @@ Editable.Popover = observer((props) => {
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')
   const timer = useRef(null)
-  const closePopover = () => {
+  const closePopover = async () => {
+    await field.form.validate(`${field.address}.*`)
     const errors = field.form.queryFeedbacks({
       type: 'error',
-      address: `*(${field.address},${field.address}.*)`,
+      address: `${field.address}.*`,
     })
     if (errors?.length) return
     setVisible(false)
