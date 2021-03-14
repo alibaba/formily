@@ -1,6 +1,6 @@
 // https://github.com/umijs/neeko/blob/master/src/vue/observer.ts
 
-import { autorun } from 'mobx'
+import { autorun } from '@formily/reactive'
 import { SetupContext, defineComponent } from 'vue-demi'
 import { ObservableComponentOptions } from '../types'
 

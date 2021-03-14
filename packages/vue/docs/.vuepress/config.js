@@ -32,7 +32,7 @@ module.exports = {
       ],
       '/api/': [
         {
-          title: 'components',
+          title: 'Components',
           children: [
             '/api/components/Field',
             '/api/components/ArrayField',
@@ -46,17 +46,17 @@ module.exports = {
             '/api/components/FormConsumer',
           ]
         },
-        // {
-        //   title: 'hooks',
-        //   children: [
-        //     '/api/hooks/useField',
-        //     '/api/hooks/useFieldSchema',
-        //     '/api/hooks/useForm',
-        //     '/api/hooks/useFormEffects',
-        //   ]
-        // },
         {
-          title: 'shared',
+          title: 'Hooks',
+          children: [
+            '/api/hooks/useField',
+            '/api/hooks/useFieldSchema',
+            '/api/hooks/useForm',
+            '/api/hooks/useFormEffects',
+          ]
+        },
+        {
+          title: 'Shared',
           children: [
             '/api/shared/connect',
             '/api/shared/injections',

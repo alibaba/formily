@@ -36,6 +36,7 @@ interface mapProps<T extends Vue.Component> {
       />
       <FormConsumer>
         <template #default="{ form }">
+          <div style="white-space: pre; margin-bottom: 16px;">{{JSON.stringify(form.values, null, 2)}}</div>
           <Button
             type="primary"
             @click="() => {
@@ -44,7 +45,6 @@ interface mapProps<T extends Vue.Component> {
           >
             Submit
           </Button>
-          <div style="white-space: pre;">{{JSON.stringify(form.values, null, 2)}}</div>
         </template>
       </FormConsumer>
     </Form>

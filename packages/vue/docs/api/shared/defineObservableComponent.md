@@ -8,7 +8,6 @@ defineObservableComponent 是基于[mobx-vue](https://github.com/mobxjs/mobx-vue
 
 ## 用例
 
-
 ::: demo
 <template>
   <FormProvider :form="form">
