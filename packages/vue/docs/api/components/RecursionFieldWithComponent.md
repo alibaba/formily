@@ -8,15 +8,15 @@ order: 5
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<SchemaField>
-<SchemaArrayField name="custom" x-component="ArrayItems">
-<SchemaObjectField>
-<SchemaStringField name="input" x-component="Input" />
-</SchemaObjectField>
-</SchemaArrayField>
-</SchemaField>
-</FormProvider>
+  <FormProvider :form="form">
+    <SchemaField>
+      <SchemaArrayField name="custom" x-component="ArrayItems">
+        <SchemaObjectField>
+          <SchemaStringField name="input" x-component="Input" />
+        </SchemaObjectField>
+      </SchemaArrayField>
+    </SchemaField>
+  </FormProvider>
 </template>
 
 <script>

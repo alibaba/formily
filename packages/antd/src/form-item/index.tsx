@@ -41,7 +41,7 @@ export interface IFormItemProps {
   inset?: boolean
   extra?: React.ReactNode
   feedbackText?: React.ReactNode
-  feedbackLayout?: 'loose' | 'terse' | 'popover' | (string & {})
+  feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none' | (string & {})
   feedbackStatus?: 'error' | 'warning' | 'success' | 'pending' | (string & {})
   feedbackIcon?: React.ReactNode
   asterisk?: boolean
@@ -78,6 +78,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     asterisk: props.asterisk,
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
+    feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
   }
 }
 
@@ -271,26 +272,24 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>
           )}
         </div>
-        {!!feedbackText && feedbackLayout !== 'popover' && (
-          <div
-            className={cls({
-              [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
-              [`${prefixCls}-help`]: true,
-              [`${prefixCls}-help-enter`]: true,
-              [`${prefixCls}-help-enter-active`]: true,
-            })}
-          >
-            {feedbackText}
-          </div>
-        )}
+        {!!feedbackText &&
+          feedbackLayout !== 'popover' &&
+          feedbackLayout !== 'none' && (
+            <div
+              className={cls({
+                [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
+                [`${prefixCls}-help`]: true,
+                [`${prefixCls}-help-enter`]: true,
+                [`${prefixCls}-help-enter-active`]: true,
+              })}
+            >
+              {feedbackText}
+            </div>
+          )}
         {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
       </div>
     </div>
   )
-}
-
-BaseItem.defaultProps = {
-  feedbackLayout: 'loose',
 }
 
 // 适配
@@ -302,10 +301,19 @@ export const FormItem: ComposeFormItem = connect(
       if (isVoidField(field)) return props
       if (!field) return props
       const takeMessage = () => {
+        const split = (messages: any[]) => {
+          return messages.reduce((buf, text, index) => {
+            if (!text) return buf
+            return index < messages.length - 1
+              ? buf.concat([text, ', '])
+              : buf.concat([text])
+          }, [])
+        }
+
         if (props.feedbackText) return props.feedbackText
-        if (field.errors.length) return field.errors
-        if (field.warnings.length) return field.warnings
-        if (field.successes.length) return field.successes
+        if (field.errors.length) return split(field.errors)
+        if (field.warnings.length) return split(field.warnings)
+        if (field.successes.length) return split(field.successes)
       }
 
       return {
@@ -327,7 +335,7 @@ export const FormItem: ComposeFormItem = connect(
       if (isVoidField(field)) return props
       if (!field) return props
       let asterisk = false
-      if (field.required) {
+      if (field.required && field.pattern !== 'readPretty') {
         asterisk = true
       }
       if ('asterisk' in props) {

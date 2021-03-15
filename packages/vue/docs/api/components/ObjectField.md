@@ -22,41 +22,37 @@ type ObjectField = Vue.Component<any, any, any, IFieldFactoryProps>
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<ObjectField name="object">
-<template #default="{ field }">
-<div v-for="key in Object.keys(field.value || {})" :key="key" :style="{ marginBottom: '10px' }">
-<Space>
-<Field :name="key" :component="[Input, { placeholder: key }]" />
-<Button
-@click="() => {
-field.removeProperty(key)
-}" >
-Remove
-</Button>
-</Space>
-</div>
-<Space>
-<Field
+  <FormProvider :form="form">
+    <ObjectField name="object">
+      <template #default="{ field }">
+        <div v-for="key in Object.keys(field.value || {})" :key="key" :style="{ marginBottom: '10px' }">
+          <Space>
+            <Field :name="key" :component="[Input, { placeholder: key }]" />
+            <Button @click="() => field.removeProperty(key)" >
+              Remove
+            </Button>
+          </Space>
+        </div>
+        <Space>
+          <Field
             name="propertyName"
             basePath=""
             required
             :component="[Input, { placeholder: 'Property Name' }]"
           />
-<Button
-@click="() => {
-const name = form.values.propertyName
-if (name && !form.existValuesIn(`object.${name}`)) {
-field.addProperty(name, '')
-form.deleteValuesIn('propertyName')
-}
-}" >
-Add
-</Button>
-</Space>
-</template>
-</ObjectField>
-</FormProvider>
+          <Button @click="() => {
+            const name = form.values.propertyName
+            if (name && !form.existValuesIn(`object.${name}`)) {
+              field.addProperty(name, '')
+              form.deleteValuesIn('propertyName')
+            }
+          }">
+            Add
+          </Button>
+        </Space>
+      </template>
+    </ObjectField>
+  </FormProvider>
 </template>
 
 <script>

@@ -15,9 +15,10 @@ import {
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
 } from '../types'
-import { defineObservableComponent } from '../utils/define-observable-component'
-import { h } from '../utils/compatible-create-element'
+import { defineObservableComponent } from '../shared/define-observable-component'
+import { h } from '../shared/compatible-create-element'
 import { resolveSchemaProps } from '../utils/resolve-schema-props'
+import { Fragment } from '../shared/fragment-hack'
 
 const env = {
   nonameId: 0,
@@ -33,8 +34,14 @@ const markupProps = {
   title: {},
   description: {},
   default: {},
-  readOnly: Boolean,
-  writeOnly: Boolean,
+  readOnly: {
+    type: Boolean,
+    default: undefined
+  },
+  writeOnly: {
+    type: Boolean,
+    default: undefined
+  },
   enum: {},
   const: {},
   multipleOf: Number,
@@ -47,7 +54,10 @@ const markupProps = {
   pattern: {},
   maxItems: Number,
   minItems: Number,
-  uniqueItems: Boolean,
+  uniqueItems: {
+    type: Boolean,
+    default: undefined
+  },
   maxProperties: Number,
   minProperties: Number,
   required: [Array, String, Boolean],
@@ -67,12 +77,30 @@ const markupProps = {
   xComponentProps: {},
   xReactions: {},
   xContent: {},
-  xVisible: Boolean,
-  xHidden: Boolean,
-  xDisabled: Boolean,
-  xEditable: Boolean,
-  xReadOnly: Boolean,
-  xReadPretty: Boolean,
+  xVisible: {
+    type: Boolean,
+    default: undefined
+  },
+  xHidden: {
+    type: Boolean,
+    default: undefined
+  },
+  xDisabled: {
+    type: Boolean,
+    default: undefined
+  },
+  xEditable: {
+    type: Boolean,
+    default: undefined
+  },
+  xReadOnly: {
+    type: Boolean,
+    default: undefined
+  },
+  xReadPretty: {
+    type: Boolean,
+    default: undefined
+  },
 }
 
 export function createSchemaField<Components extends SchemaComponents>(
@@ -81,31 +109,53 @@ export function createSchemaField<Components extends SchemaComponents>(
   const SchemaField = defineObservableComponent({
     name: 'SchemaField',
     props: {
-      schema: {
-        type: Object,
-      },
+      schema: {},
       scope: {},
-      name: [String, Number],
       basePath: {},
       title: {},
       description: {},
       value: {},
       initialValue: {},
+      validator: {},
+      dataSource: {},
+      name: [String, Number],
       decorator: Array,
       component: Array,
-      required: Boolean,
+      reactions: Array,
       display: String,
       pattern: String,
-      validateFirst: Boolean,
-      validator: {},
-      reactions: Array,
-      hidden: Boolean,
-      visible: Boolean,
-      editable: Boolean,
-      disabled: Boolean,
-      readOnly: Boolean,
-      readPretty: Boolean,
-      dataSource: {},
+      required: {
+        type: Boolean,
+        default: undefined
+      },
+      validateFirst: {
+        type: Boolean,
+        default: undefined
+      },
+      hidden: {
+        type: Boolean,
+        default: undefined
+      },
+      visible: {
+        type: Boolean,
+        default: undefined
+      },
+      editable: {
+        type: Boolean,
+        default: undefined
+      },
+      disabled: {
+        type: Boolean,
+        default: undefined
+      },
+      readOnly: {
+        type: Boolean,
+        default: undefined
+      },
+      readPretty: {
+        type: Boolean,
+        default: undefined
+      },
     },
     setup<
       Decorator extends VueComponent,
@@ -124,7 +174,7 @@ export function createSchemaField<Components extends SchemaComponents>(
       return () => {
         env.nonameId = 0
 
-        return h('div', {}, {
+        return h(Fragment, {}, {
           default: () => {
             const children = []
             if (slots.default) {
@@ -162,18 +212,22 @@ export function createSchemaField<Components extends SchemaComponents>(
         }
       }
 
-      if (!parent) return () => { /* empty */ };
+      if (!parent) return () => h(Fragment, {}, {})
+
+      const renderChildren = () => h(Fragment, {}, {
+        default: () => slots.default && slots.default()
+      })
 
       if (parent.type === 'object' || parent.type === 'void') {
         const schema = parent.addProperty(name, resolveSchemaProps(props))
         provide(SchemaMarkupSymbol, schema)
-        return () => slots.default && slots.default()
+        return renderChildren
       } else if (parent.type === 'array') {
         const schema = appendArraySchema(resolveSchemaProps(props))
         provide(SchemaMarkupSymbol, Array.isArray(schema) ? schema[0] : schema)
-        return () => slots.default && slots.default()
+        return renderChildren
       } else {
-        return () => slots.default && slots.default()
+        return renderChildren
       }
     }
   })

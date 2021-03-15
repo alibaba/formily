@@ -31,15 +31,15 @@ $ npm install --save @formily/core @formily/vue
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<Field
+  <FormProvider :form="form">
+    <Field
       name="name"
       title="Name"
       required
       :decorator="[FormItem]"
       :component="[Input, { placeholder:'Please Input' }]"
     />
-<Field
+    <Field
       name="password"
       title="Password"
       required
@@ -47,7 +47,7 @@ $ npm install --save @formily/core @formily/vue
       :component="[Input, { type: 'password', placeholder:'Please Input' }]"
       :reactions="createPasswordEqualValidate('confirm_password')"
     />
-<Field
+    <Field
       name="confirm_password"
       title="Confirm Password"
       required
@@ -55,10 +55,10 @@ $ npm install --save @formily/core @formily/vue
       :component="[Input, { type: 'password', placeholder:'Please Input' }]"
       :reactions="createPasswordEqualValidate('password')"
     />
-<FormConsumer style="white-space: pre;">
-<template #default="{ form }">{{ JSON.stringify(form.values, null, 2) }}</template>
-</FormConsumer>
-</FormProvider>
+    <FormConsumer style="white-space: pre;">
+      <template #default="{ form }">{{ JSON.stringify(form.values, null, 2) }}</template>
+    </FormConsumer>
+  </FormProvider>
 </template>
 
 <script>
@@ -78,8 +78,7 @@ setValidateLanguage('en')
 const FormItem = connect(
   Form.Item,
   mapProps(
-    { extract: 'validateStatus', to: 'validateStatus' },
-    { extract: 'title', to: 'label' },
+    { validateStatus: true, title: 'label' },
     (props, field) => ({
       help: !isVoidField(field) ? (field.errors.length ? field.errors : undefined) : undefined,
       extra: field.description
@@ -115,5 +114,4 @@ export default {
   }
 }
 </script>
-
 :::

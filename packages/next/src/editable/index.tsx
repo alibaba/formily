@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { isVoidField } from '@formily/core'
 import { useField, useForm, observer } from '@formily/react'
-import { isStr } from '@formily/shared'
 import { Form, Balloon } from '@alifd/next'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons'
 import { ItemProps as FormItemProps } from '@alifd/next/lib/form'
@@ -13,9 +12,7 @@ import cls from 'classnames'
  * 默认Inline展示
  */
 
-interface IPopoverProps extends PopoverProps {
-  renderPreview?: (field: Formily.Core.Types.GeneralField) => React.ReactNode
-}
+interface IPopoverProps extends PopoverProps {}
 
 type ComposedEditable = React.FC<FormItemProps> & {
   Popover?: React.FC<IPopoverProps>
@@ -122,18 +119,17 @@ export const Editable: ComposedEditable = observer((props) => {
   )
 })
 
-Editable.Popover = observer(({ renderPreview, ...props }) => {
+Editable.Popover = observer(({ ...props }) => {
   const field = useField<Formily.Core.Models.Field>()
   const [editable, setEditable] = useEditable()
   const [visible, setVisible] = useState(false)
   const [destroy, setDestroy] = useState(true)
   const prefixCls = usePrefixCls('formily-editable-popover')
-  const preview = renderPreview?.(field)
-  const placeholder = isStr(preview) ? preview : ''
-  const closePopover = () => {
+  const closePopover = async () => {
+    await field.form.validate(`${field.address}.*`)
     const errors = field.form.queryFeedbacks({
       type: 'error',
-      address: `*(${field.address},${field.address}.*)`,
+      address: `${field.address}.*`,
     })
     if (errors?.length) return
     setVisible(false)
@@ -165,9 +161,7 @@ Editable.Popover = observer(({ renderPreview, ...props }) => {
       trigger={
         <Form.Item className={`${prefixCls}-trigger`}>
           <Space size={4} style={{ margin: '0 4px' }}>
-            <span className={`${prefixCls}-preview`}>
-              {placeholder || field.title}
-            </span>
+            <span className={`${prefixCls}-preview`}>{field.title}</span>
             <EditOutlined className={`${prefixCls}-edit-btn`} />
           </Space>
         </Form.Item>

@@ -150,8 +150,8 @@ export default () => {
               x-component="Editable.Popover"
               required
               title="配置复杂数据"
-              x-component-props={{
-                renderPreview: (field) => field.value?.input,
+              x-reactions={(field) => {
+                field.title = field.value?.input || field.title
               }}
             >
               <SchemaField.String
@@ -356,9 +356,8 @@ const schema = {
             type: 'object',
             title: '配置复杂数据',
             'x-component': 'Editable.Popover',
-            'x-component-props': {
-              renderPreview: '{{(field)=>field.value && field.value.input}}',
-            },
+            'x-reactions':
+              '{{(field)=>field.title = field.value && field.value.input || field.title}}',
             properties: {
               date: {
                 type: 'string',

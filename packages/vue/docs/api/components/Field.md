@@ -22,9 +22,9 @@ type Field = Vue.Component<any, any, any, IFieldFactoryProps>
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<Field name="input" :component="[Input, { placeholder:'请输入' }]" />
-</FormProvider>
+  <FormProvider :form="form">
+    <Field name="input" :component="[Input, { placeholder:'请输入' }]" />
+  </FormProvider>
 </template>
 
 <script>
@@ -43,5 +43,4 @@ export default {
   }
 }
 </script>
-
 :::

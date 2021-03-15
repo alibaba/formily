@@ -53,6 +53,7 @@ import {
   getValuesFromEvent,
   modelStateSetter,
   modelStateGetter,
+  isHTMLInputEvent,
 } from '../shared'
 import { Query } from './Query'
 
@@ -466,17 +467,17 @@ export class Field<
       }
     } else {
       if (isArr(this.validator)) {
-        this.validator.push({
+        this.validator.unshift({
           required,
         })
       } else if (typeof this.validator === 'object') {
         this.validator['required'] = required
       } else if (this.validator) {
         this.validator = [
-          this.validator,
           {
             required,
           },
+          this.validator,
         ]
       } else if (required) {
         this.validator = [
@@ -677,6 +678,9 @@ export class Field<
   }
 
   onInput = async (...args: any[]) => {
+    if (args[0]?.target) {
+      if (!isHTMLInputEvent(args[0])) return
+    }
     const values = getValuesFromEvent(args)
     const value = values[0]
     this.inputValue = value
@@ -689,13 +693,19 @@ export class Field<
     await this.validate('onInput')
   }
 
-  onFocus = async () => {
+  onFocus = async (...args: any[]) => {
+    if (args[0]?.target) {
+      if (!isHTMLInputEvent(args[0])) return
+    }
     this.active = true
     this.visited = true
     await this.validate('onFocus')
   }
 
-  onBlur = async () => {
+  onBlur = async (...args: any[]) => {
+    if (args[0]?.target) {
+      if (!isHTMLInputEvent(args[0])) return
+    }
     this.active = false
     await this.validate('onBlur')
   }

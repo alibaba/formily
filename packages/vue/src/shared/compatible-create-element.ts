@@ -1,14 +1,18 @@
-import { h, isVue2 } from 'vue-demi';
+import { h, isVue2, SetupContext } from 'vue-demi';
 import { Component, AsyncComponent, VNodeData, VNode, VNodeChildren } from 'vue';
+import { Fragment, FragmentComponent } from './fragment-hack'
 
 type RenderChildren = {
-  [key in string]?: (...args: any[]) => VNode[];
+  [key in string]?: (...args: any[]) => (VNode | string)[];
 }
 
-type Tag = string | Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component)
+type Tag = string | Component<any, any, any, any> | AsyncComponent<any, any, any, any> | (() => Component) | ((props: any, context: SetupContext) => SetupContext['slots'])
 
 const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderChildren) => {
   if (isVue2) {
+    if (tag === Fragment) {
+      tag = FragmentComponent
+    }
     const hInVue2 = h as ((tag: Tag, data: VNodeData, components: VNodeChildren) => VNode)
     const scopedSlots = {}
     const children = []
@@ -33,9 +37,11 @@ const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderCh
     }
     return hInVue2(tag, newData, children)
   } else {
-    const hInVue3 = h as ((tag: Tag, data: VNodeData, components: RenderChildren) => VNode)
-    const newData = {}
-    Object.assign(newData, data.props, data.attrs)
+    if (tag === Fragment) {
+      tag = FragmentComponent
+    }
+    const hInVue3 = h as ((tag: Tag, data?: VNodeData, components?: RenderChildren) => VNode)
+    const newData = Object.assign({}, data.domProps, data.attrs, data.props)
     if (data.on) {
       const events = Object.keys(data.on)
       events.forEach(event => {

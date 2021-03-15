@@ -5,6 +5,7 @@ import {
   toJS,
   isObservable,
   observe,
+  untracked,
 } from '@formily/reactive'
 import {
   FormPath,
@@ -361,30 +362,38 @@ export class Form<ValueType extends object = any> {
   /** 状态操作模型 **/
 
   setValues = (values: any, strategy: 'overwrite' | 'merge' = 'merge') => {
-    if (strategy === 'merge') {
-      this.values = defaults(this.values, values)
-    } else {
-      this.values = values
-    }
+    untracked(() => {
+      if (strategy === 'merge') {
+        this.values = defaults(this.values, values)
+      } else {
+        this.values = values
+      }
+    })
   }
 
   setInitialValues = (
     initialValues: any,
     strategy: 'overwrite' | 'merge' = 'merge'
   ) => {
-    if (strategy === 'merge') {
-      this.initialValues = defaults(this.initialValues, initialValues)
-    } else {
-      this.initialValues = initialValues
-    }
+    untracked(() => {
+      if (strategy === 'merge') {
+        this.initialValues = defaults(this.initialValues, initialValues)
+      } else {
+        this.initialValues = initialValues
+      }
+    })
   }
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
-    FormPath.setIn(this.values, pattern, value)
+    untracked(() => {
+      FormPath.setIn(this.values, pattern, value)
+    })
   }
 
   deleteValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.values, pattern)
+    untracked(() => {
+      FormPath.deleteIn(this.values, pattern)
+    })
   }
 
   existValuesIn = (pattern: FormPathPattern) => {

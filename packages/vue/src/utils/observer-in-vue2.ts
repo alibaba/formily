@@ -1,6 +1,6 @@
 // https://github.com/mobxjs/mobx-vue
 
-import { isObservable, Reaction } from 'mobx'
+import { isObservable, reaction } from '@formily/reactive'
 import { Vue, getCurrentInstance, SetupContext } from 'vue-demi'
 import { ObservableComponentOptions } from '../types'
 
@@ -61,24 +61,20 @@ const defineObservableComponent = (originalOptions: ObservableComponentOptions) 
     this[disposerSymbol] = noop
 
     let nativeRenderOfVue: any
+    
     const reactiveRender = () => {
-      reaction.track(() => {
-        if (!mounted) {
-          $mount.apply(this, args)
-          mounted = true
-          nativeRenderOfVue = this._watcher.getter
-          this._watcher.getter = reactiveRender
-        } else {
-          nativeRenderOfVue.call(this, this)
-        }
-      })
-
+      if (!mounted) {
+        $mount.apply(this, args)
+        mounted = true
+        nativeRenderOfVue = this._watcher.getter
+        this._watcher.getter = reactiveRender
+      } else {
+        nativeRenderOfVue.call(this, this)
+      }
       return this
     }
 
-    const reaction = new Reaction(`${name}.render()`, reactiveRender)
-
-    this[disposerSymbol] = reaction.getDisposer_()
+    this[disposerSymbol] = reaction(reactiveRender)
 
     return reactiveRender()
   }

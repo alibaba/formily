@@ -54,11 +54,11 @@ ISchema 参考 [ISchema](/api/shared/schema#ischema)
 
 ::: demo
 <template>
-<FormProvider :form="form">
-<SchemaField>
-<SchemaStringField name="input" x-component="Input" />
-</SchemaField>
-</FormProvider>
+  <FormProvider :form="form">
+    <SchemaField>
+      <SchemaStringField name="input" x-component="Input" />
+    </SchemaField>
+  </FormProvider>
 </template>
 
 <script>

@@ -32,7 +32,7 @@ module.exports = {
       ],
       '/api/': [
         {
-          title: 'components',
+          title: 'Components',
           children: [
             '/api/components/Field',
             '/api/components/ArrayField',
@@ -46,25 +46,26 @@ module.exports = {
             '/api/components/FormConsumer',
           ]
         },
-        // {
-        //   title: 'hooks',
-        //   children: [
-        //     '/api/hooks/useField',
-        //     '/api/hooks/useFieldSchema',
-        //     '/api/hooks/useForm',
-        //     '/api/hooks/useFormEffects',
-        //   ]
-        // }, {
-        //   title: 'shared',
-        //   children: [
-        //     '/api/shared/connect',
-        //     '/api/shared/context',
-        //     '/api/shared/mapProps',
-        //     '/api/shared/mapReadPretty',
-        //     '/api/shared/observer',
-        //     '/api/shared/Schema',
-        //   ]
-        // }
+        {
+          title: 'Hooks',
+          children: [
+            '/api/hooks/useField',
+            '/api/hooks/useFieldSchema',
+            '/api/hooks/useForm',
+            '/api/hooks/useFormEffects',
+          ]
+        },
+        {
+          title: 'Shared',
+          children: [
+            '/api/shared/connect',
+            '/api/shared/injections',
+            '/api/shared/mapProps',
+            '/api/shared/mapReadPretty',
+            '/api/shared/defineObservableComponent',
+            '/api/shared/Schema',
+          ]
+        }
       ]
     },
     lastUpdated: 'Last Updated',

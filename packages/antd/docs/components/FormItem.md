@@ -6,8 +6,7 @@
 
 ```tsx
 import React from 'react'
-import { Input as NextInput, Select } from 'antd'
-import { Input, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -1075,7 +1074,7 @@ export default () => {
 | inset          | boolean                                                | 是否是内嵌布局                              | false     |
 | extra          | ReactNode                                              | 扩展描述⽂案                                | -         |
 | feedbackText   | ReactNode                                              | 反馈⽂案                                    | -         |
-| feedbackLayout | `"loose"` \| `"terse"` \| `"popover"`                  | 反馈布局                                    | -         |
+| feedbackLayout | `"loose"` \| `"terse"` \| `"popover" \| "none"`        | 反馈布局                                    | -         |
 | feedbackStatus | `"error"` \| `"warning"` \| `"success"` \| `"pending"` | 反馈布局                                    | -         |
 | feedbackIcon   | ReactNode                                              | 反馈图标                                    | -         |
 | asterisk       | boolean                                                | 星号提醒                                    | -         |

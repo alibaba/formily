@@ -103,7 +103,8 @@ export default {
         title: '场景案例',
         children: [
           {
-            title: '登陆表单',
+            title: '登陆注册',
+            path: '/guide/scenes/login-register',
           },
           {
             title: '查询列表',
