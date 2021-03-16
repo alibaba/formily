@@ -1,5 +1,4 @@
 import {
-  isObj,
   isValid,
   clone,
   isFn,
@@ -7,9 +6,14 @@ import {
   isWeakMap,
   isSet,
   isWeakSet,
+  isPlainObj,
+  isArr,
 } from '@formily/shared'
 import { ProxyRaw, MakeObservableSymbol, Untracking } from './environment'
 import { Annotation } from './types'
+
+const RAW_TYPE = Symbol('RAW_TYPE')
+const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
 
 export const isObservable = (target: any) => {
   return ProxyRaw.has(target)
@@ -20,8 +24,16 @@ export const isAnnotation = (target: any): target is Annotation => {
 }
 
 export const isSupportObservable = (target: any) => {
+  if (isObservable(target)) return false
   if (!isValid(target)) return false
-  if (isObj(target)) {
+  if (isArr(target)) return true
+  if (isPlainObj(target)) {
+    if (target[RAW_TYPE]) {
+      return false
+    }
+    if (target[OBSERVABLE_TYPE]) {
+      return true
+    }
     if ('$$typeof' in target && '_owner' in target) {
       return false
     }
@@ -46,6 +58,22 @@ export const isCollectionType = (target: any) => {
   return (
     isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target)
   )
+}
+
+export const markRaw = (target: any) => {
+  if (isFn(target)) {
+    target.prototype[RAW_TYPE] = true
+  } else {
+    target[RAW_TYPE] = true
+  }
+}
+
+export const markObservable = (target: any) => {
+  if (isFn(target)) {
+    target.prototype[OBSERVABLE_TYPE] = true
+  } else {
+    target[OBSERVABLE_TYPE] = true
+  }
 }
 
 export const raw = (target: any) => ProxyRaw.get(target)

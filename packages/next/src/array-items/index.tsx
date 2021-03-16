@@ -57,7 +57,7 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
   const prefixCls = usePrefixCls('formily-array-items')
   const schema = useFieldSchema()
   const addition = useAddition()
-  const dataSource = Array.isArray(field.value) ? [...field.value] : []
+  const dataSource = Array.isArray(field.value) ? field.value : []
   return (
     <ArrayBase>
       <div

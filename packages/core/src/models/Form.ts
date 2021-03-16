@@ -405,11 +405,15 @@ export class Form<ValueType extends object = any> {
   }
 
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
-    FormPath.setIn(this.initialValues, pattern, initialValue)
+    untracked(() => {
+      FormPath.setIn(this.initialValues, pattern, initialValue)
+    })
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, pattern)
+    untracked(() => {
+      FormPath.deleteIn(this.initialValues, pattern)
+    })
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {

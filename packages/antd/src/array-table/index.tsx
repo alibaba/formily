@@ -103,6 +103,8 @@ const useArrayTableSources = () => {
     }, sources)
   }
 
+  if (!schema) throw new Error('can not found schema object')
+
   return parseArrayItems(schema.items)
 }
 
@@ -244,7 +246,7 @@ export const ArrayTable: ComposedArrayTable = observer(
     const ref = useRef<HTMLDivElement>()
     const field = useField<Formily.Core.Models.ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
-    const dataSource = Array.isArray(field.value) ? [...field.value] : []
+    const dataSource = Array.isArray(field.value) ? field.value : []
     const sources = useArrayTableSources()
     const columns = useArrayTableColumns(dataSource, sources)
     const pagination = isBool(props.pagination) ? {} : props.pagination
@@ -278,7 +280,6 @@ export const ArrayTable: ComposedArrayTable = observer(
                 bordered
                 pagination={false}
                 columns={columns}
-                onChange={() => {}}
                 dataSource={dataSource}
                 components={{
                   body: {

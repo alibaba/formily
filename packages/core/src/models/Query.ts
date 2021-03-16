@@ -89,4 +89,12 @@ export class Query {
   getIn(pattern?: FormPathPattern) {
     return FormPath.getIn(this.take(), pattern)
   }
+
+  value() {
+    return this.form.getValuesIn(this.pattern)
+  }
+
+  initialValue() {
+    return this.form.getInitialValuesIn(this.pattern)
+  }
 }

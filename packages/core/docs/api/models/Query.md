@@ -14,6 +14,8 @@ order: 5
 
 从查询结果集中提取第一个结果
 
+注意，必须要存在对应的节点才能读取
+
 #### 签名
 
 ```ts
@@ -28,6 +30,8 @@ interface take {
 #### 描述
 
 遍历并映射查询结果集
+
+注意，必须要存在对应的节点才能遍历
 
 #### 签名
 
@@ -46,6 +50,8 @@ interface map {
 
 遍历查询结果集
 
+注意，必须要存在对应的节点才能遍历
+
 #### 签名
 
 ```ts
@@ -59,6 +65,8 @@ interface forEach {
 #### 描述
 
 对查询结果集执行 reduce 操作
+
+注意，必须要存在对应的节点才能遍历
 
 #### 签名
 
@@ -77,6 +85,8 @@ interface reduce {
 
 从查询结果集中找到第一个结果，并读取其属性
 
+注意，必须要存在对应的节点才能读取
+
 #### 签名
 
 ```ts
@@ -91,10 +101,40 @@ interface get {
 
 从查询结果集中找到第一个结果，并读取其属性，支持 [FormPathPattern](/api/entry/form-path#formpathpattern) 路径语法
 
+注意，必须要存在对应的节点才能读取
+
 #### 签名
 
 ```ts
 interface getIn {
   (pattern?: FormPathPattern): any
+}
+```
+
+### value
+
+#### 描述
+
+查询指定路径值，不局限于 Field 节点
+
+#### 签名
+
+```ts
+interface value {
+  (): any
+}
+```
+
+### initialValue
+
+#### 描述
+
+查询指定路径初始值，不局限于 Field 节点
+
+#### 签名
+
+```ts
+interface initialValue {
+  (): any
 }
 ```

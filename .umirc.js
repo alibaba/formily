@@ -108,12 +108,19 @@ export default {
           },
           {
             title: '查询列表',
+            path: '/guide/scenes/query-list',
           },
           {
-            title: '编辑与详情',
+            title: '编辑详情',
+            path: '/guide/scenes/edit-detail',
           },
           {
             title: '弹窗与抽屉',
+            path: '/guide/scenes/dialog-drawer',
+          },
+          {
+            title: '更多场景',
+            path: '/guide/scenes/more',
           },
         ],
       },

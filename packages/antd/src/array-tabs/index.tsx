@@ -12,7 +12,7 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
   const [activeKey, setActiveKey] = useState('tab-0')
-  const value = Array.isArray(field.value) ? [...field.value] : []
+  const value = Array.isArray(field.value) ? field.value : []
   const dataSource = value?.length ? value : [{}]
   const onEdit = (targetKey: any, type: 'add' | 'remove') => {
     if (type == 'add') {

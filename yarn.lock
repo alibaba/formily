@@ -7906,10 +7906,10 @@ delegates@^1.0.0:
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
   integrity sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=
 
-depath@^1.0.0:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/depath/-/depath-1.0.1.tgz#b979ddca32cacd36b6a55587d997d1201cddd93a"
-  integrity sha512-ao/UFSfgbGUNbGATQ5YejL2p+SYryW++k/bmCEw+zmeDd0Cpxg1bgsK3XsEESaT/u5xBwZ7cNdSui2Uv4HWGVg==
+depath@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/depath/-/depath-1.0.3.tgz#ee788d4f3d36d4739820350234d2059591b858d3"
+  integrity sha512-HxG7JhrNKscj+X1DbyXuArYR13DJT+x4Ju986rcrY+qT0nUQB7hJHZkhtMJFWmxYQVB/fuek+qlD1wTp8cSfaw==
 
 depd@~1.1.2:
   version "1.1.2"

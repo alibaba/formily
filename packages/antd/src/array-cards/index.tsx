@@ -46,8 +46,11 @@ const isOperationComponent = (schema: ISchema) => {
 export const ArrayCards: ComposedArrayCards = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
-  const dataSource = Array.isArray(field.value) ? [...field.value] : []
+  const dataSource = Array.isArray(field.value) ? field.value : []
   const prefixCls = usePrefixCls('formily-array-cards', props)
+
+  if (!schema) throw new Error('can not found schema object')
+
   const renderItems = () => {
     return dataSource?.map((item, index) => {
       const items = Array.isArray(schema.items)
@@ -96,7 +99,6 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         <ArrayBase.Item key={index} index={index}>
           <Card
             {...props}
-            onChange={() => {}}
             className={cls(`${prefixCls}-item`, props.className)}
             title={title}
             extra={extra}
@@ -124,7 +126,6 @@ export const ArrayCards: ComposedArrayCards = observer((props) => {
         {...props}
         className={cls(`${prefixCls}-item`, props.className)}
         title={props.title || field.title}
-        onChange={() => {}}
       >
         <Empty />
       </Card>
