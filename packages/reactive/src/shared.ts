@@ -51,6 +51,8 @@ export const isSupportObservable = (target: any) => {
     }
     return true
   }
+  if (isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target))
+    return true
   return false
 }
 
