@@ -903,7 +903,8 @@ export default () => {
                         title="完善联系人信息"
                         component={[Editable.Popover]}
                         reactions={(field) => {
-                          field.title = field.query('.[].name').value()
+                          field.title =
+                            field.query('.[].name').value() || field.title
                         }}
                       >
                         <VoidField
@@ -1880,7 +1881,8 @@ export default () => {
                           title="完善联系人信息"
                           component={[Editable.Popover]}
                           reactions={(field) => {
-                            field.title = field.query('.[].name').value()
+                            field.title =
+                              field.query('.[].name').value() || field.title
                           }}
                         >
                           <VoidField

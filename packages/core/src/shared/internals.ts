@@ -100,6 +100,9 @@ export const applyFieldPatches = (
       if (payload) {
         target[address] = payload
       }
+      if (address && payload) {
+        buildNodeIndexes(payload, address)
+      }
     }
   })
 }
@@ -260,7 +263,7 @@ export const spliceArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
-            payload: buildNodeIndexes(field, newIdentifier),
+            payload: field,
           })
         }
         if (isInsertNode(identifier) || isDeleteNode(identifier)) {
@@ -326,7 +329,7 @@ export const exchangeArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
-            payload: buildNodeIndexes(field, newIdentifier),
+            payload: field,
           })
           if (!fields[newIdentifier]) {
             fieldPatches.push({
