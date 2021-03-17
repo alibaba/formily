@@ -522,7 +522,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 | sticky          | 是否吸附在页面底部 | boolean                                                                            |        |
 | itemStyle       | 每个 Btn 的样式    | React.CSSProperties                                                                |        |
 | align           | 对齐方式           | 'left' `or` 'right' `or` 'start' `or` 'end' `or` 'top' `or` 'bottom' `or` 'center' |        |
-| triggerDistance | 按钮间距离         | number                                                                             |        |
+| triggerDistance | 按钮吸底的偏移量，sticky 为 true 时生效 | number                                                                             |        |
 | zIndex          | z-index            | number                                                                             |        |
 | span            | 跨列配置           | number                                                                             | string |  |
 | offset          | 偏移配置           | number                                                                             | string |  |
