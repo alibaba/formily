@@ -59,41 +59,72 @@ const getValidatorBySchema = (
   }
   if (isValid(schema.const)) {
     rules.push({
-      validator: (value: any) => {
-        return value === schema.const ? '' : getValidateLocale('schema.const')
+      validator: (
+        value: any,
+        rule: any,
+        ctx: any,
+        format: (message: string, scope: any) => string
+      ) => {
+        if (isEmpty(value)) return ''
+        return value === schema.const
+          ? ''
+          : format(getValidateLocale('schema.const'), schema)
       },
     })
   }
   if (isValid(schema.multipleOf)) {
     rules.push({
-      validator: (value: any) => {
+      validator: (
+        value: any,
+        rule: any,
+        ctx: any,
+        format: (message: string, scope: any) => string
+      ) => {
+        if (isEmpty(value)) return ''
         return value % schema.multipleOf === 0
           ? ''
-          : getValidateLocale('schema.multipleOf')
+          : format(getValidateLocale('schema.multipleOf'), schema)
       },
     })
   }
   if (isValid(schema.maxProperties)) {
     rules.push({
-      validator: (value: any) => {
+      validator: (
+        value: any,
+        rule: any,
+        ctx: any,
+        format: (message: string, scope: any) => string
+      ) => {
+        if (isEmpty(value)) return ''
         return Object.keys(value || {}).length <= schema.maxProperties
           ? ''
-          : getValidateLocale('schema.maxProperties')
+          : format(getValidateLocale('schema.maxProperties'), schema)
       },
     })
   }
   if (isValid(schema.minProperties)) {
     rules.push({
-      validator: (value: any) => {
+      validator: (
+        value: any,
+        rule: any,
+        ctx: any,
+        format: (message: string, scope: any) => string
+      ) => {
+        if (isEmpty(value)) return ''
         return Object.keys(value || {}).length >= schema.minProperties
           ? ''
-          : getValidateLocale('schema.minProperties')
+          : format(getValidateLocale('schema.minProperties'), schema)
       },
     })
   }
   if (isValid(schema.uniqueItems)) {
     rules.push({
-      validator: (value: any) => {
+      validator: (
+        value: any,
+        rule: any,
+        ctx: any,
+        format: (message: string, scope: any) => string
+      ) => {
         value = toArr(value)
         return value.some((item: any, index: number) => {
           for (let start = index; start < value.length; start++) {
@@ -102,7 +133,7 @@ const getValidatorBySchema = (
             }
           }
         })
-          ? getValidateLocale('schema.uniqueItems')
+          ? format(getValidateLocale('schema.uniqueItems'), schema)
           : ''
       },
     })

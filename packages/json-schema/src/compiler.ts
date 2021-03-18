@@ -2,7 +2,7 @@ import { isArr, isFn, isPlainObj, isStr, reduce } from '@formily/shared'
 import { isObservable } from '@formily/reactive'
 import { Schema } from './schema'
 
-const ExpRE = /^\s*\{\{(.*)\}\}\s*$/
+const ExpRE = /^\s*\{\{([\s\S]*)\}\}\s*$/
 const actionsSymbol = Symbol.for('__REVA_ACTIONS')
 const ENVS = {
   compile(expression: string, scope: any) {

@@ -4,7 +4,6 @@ export type ValidatorFormats =
   | 'ipv6'
   | 'ipv4'
   | 'idcard'
-  | 'taodomain'
   | 'qq'
   | 'phone'
   | 'money'
@@ -36,7 +35,8 @@ export type ValidatorFunctionResponse =
 export type ValidatorFunction<Context = any> = (
   value: any,
   rule: IValidatorRules<Context>,
-  ctx: Context
+  ctx: Context,
+  format: (name: string, scope: any) => string
 ) => ValidatorFunctionResponse | Promise<ValidatorFunctionResponse> | null
 
 export type ValidatorParsedFunction<Context = any> = (

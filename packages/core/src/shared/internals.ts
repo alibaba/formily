@@ -30,6 +30,7 @@ import { ReservedProperties } from './constants'
 export const isHTMLInputEvent = (event: any) => {
   if (event?.target) {
     if (
+      event.target.tagName &&
       event.target.tagName !== 'INPUT' &&
       event.target.tagName !== 'TEXTAREA' &&
       event.target.tagName !== 'SELECT'

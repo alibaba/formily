@@ -56,8 +56,6 @@ export default {
 
   idcard: /^\d{15}$|^\d{17}(\d|x|X)$/,
 
-  taodomain: /^(https?\:)?(\/\/)?([a-zA-Z0-9\.\-]+\.)?(taobao|tmall|alitrip|yao\.95095)(\.daily)?\.(com|net|hk(\/hk)?)/,
-
   money: /^([\u0024\u00A2\u00A3\u00A4\u20AC\u00A5\u20B1\20B9\uFFE5]\s*)(\d+,?)+\.?\d*\s*$/,
 
   zh: /^[\u4e00-\u9fa5]+$/,

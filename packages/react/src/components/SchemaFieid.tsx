@@ -107,6 +107,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     Decorator extends ReactComponentPath<Components>,
     Component extends ReactComponentPath<Components>
   >(props: ISchemaTypeFieldProps<Components, Component, Decorator>) {
+    //@ts-ignore
     return <MarkupField {...props} type="string" />
   }
 

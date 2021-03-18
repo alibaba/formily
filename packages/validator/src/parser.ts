@@ -48,8 +48,9 @@ export const parseIValidatorRules = (
   const rulesKeys = Object.keys(rules || {}).sort((key) =>
     key === 'validator' ? 1 : -1
   )
-  const getContext = (context: any) => {
+  const getContext = (context: any, value: any) => {
     return {
+      value,
       ...rules,
       ...context,
     }
@@ -58,10 +59,20 @@ export const parseIValidatorRules = (
     callback: ValidatorFunction,
     message: string
   ) => async (value: any, context: any) => {
+    const context_ = getContext(context, value)
     const results = await callback(
       value,
       { ...rules, message },
-      getContext(context)
+      context_,
+      (message: string, scope: any) => {
+        return render(
+          {
+            type: 'error',
+            message,
+          },
+          { ...context_, ...scope }
+        )?.message
+      }
     )
     if (isBool(results)) {
       if (!results) {
@@ -70,7 +81,7 @@ export const parseIValidatorRules = (
             type: 'error',
             message,
           },
-          getContext(getContext(context))
+          context_
         )
       }
       return {
@@ -79,14 +90,14 @@ export const parseIValidatorRules = (
       }
     } else if (results) {
       if (isValidateResult(results)) {
-        return render(results, getContext(context))
+        return render(results, context_)
       }
       return render(
         {
           type: 'error',
           message: results,
         },
-        getContext(context)
+        context_
       )
     }
 

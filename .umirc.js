@@ -119,6 +119,14 @@ export default {
             path: '/guide/scenes/dialog-drawer',
           },
           {
+            title: '分步表单',
+            path: '/guide/scenes/step-form',
+          },
+          {
+            title: '选项卡/手风琴表单',
+            path: '/guide/scenes/tab-form',
+          },
+          {
             title: '更多场景',
             path: '/guide/scenes/more',
           },
@@ -129,33 +137,43 @@ export default {
         children: [
           {
             title: '实现表单校验',
+            path: '/guide/advanced/validate',
           },
           {
             title: '实现表单布局',
+            path: '/guide/advanced/layout',
           },
           {
             title: '实现异步数据源',
+            path: '/guide/advanced/async',
           },
           {
-            title: '实现值受控表单',
+            title: '实现表单受控',
+            path: '/guide/advanced/controlled',
           },
           {
             title: '实现联动逻辑',
+            path: '/guide/advanced/linkages',
           },
           {
             title: '实现联动计算器',
+            path: '/guide/advanced/calculator',
           },
           {
             title: '实现自定义组件',
+            path: '/guide/advanced/custom',
           },
           {
             title: '管理业务逻辑',
+            path: '/guide/advanced/business-logic',
           },
           {
-            title: '国际化',
+            title: '多语言定制',
+            path: '/guide/advanced/language',
           },
           {
             title: '按需打包',
+            path: '/guide/advanced/build',
           },
         ],
       },
