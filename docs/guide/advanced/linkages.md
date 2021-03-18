@@ -15,7 +15,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 一对多联动
 
@@ -23,7 +25,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 多对一联动
 
@@ -31,7 +35,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 多对多联动
 
@@ -39,7 +45,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 循环联动
 
@@ -47,7 +55,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ## 被动联动
 
@@ -57,7 +67,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 一对多联动
 
@@ -65,7 +77,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 多对一联动
 
@@ -73,7 +87,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 多对多联动
 
@@ -81,7 +97,9 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例
 
 ### 循环联动
 
@@ -89,4 +107,6 @@ Formily1.x中实现联动逻辑只有一种模式，也就是主动模式，必�
 
 #### Field reactions案例
 
-#### Schema x-reactions案例
+#### Schema 表达式x-reactions案例
+
+#### Schema 结构化x-reactions案例

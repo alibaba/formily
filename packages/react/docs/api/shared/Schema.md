@@ -834,4 +834,4 @@ type SchemaReactions<Field = any> =
 
 ### $form
 
-可以在任何表达式环境中使用，代表当前 Form 实例
+只能在 x-reactions 中的表达式消费，代表当前字段实例
