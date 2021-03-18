@@ -9,7 +9,6 @@ import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -42,17 +41,13 @@ const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
     }, [])
   }
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
-    })
+    field.loading = true
     fetch('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.json())
       .then(
         action((data) => {
-          field.setDataSource(transform(data))
-          field.setComponentProps({
-            suffixIcon: undefined,
-          })
+          field.dataSource = transform(data)
+          field.loading = false
         })
       )
   })
@@ -94,7 +89,6 @@ import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -129,17 +123,13 @@ const transformAddress = (data = {}) => {
 const useAsyncDataSource = (url: string, transform: (data: any) => any) => (
   field
 ) => {
-  field.setComponentProps({
-    suffixIcon: <LoadingOutlined />,
-  })
+  field.loading = true
   fetch(url)
     .then((res) => res.json())
     .then(
       action((data) => {
-        field.setDataSource(transform(data))
-        field.setComponentProps({
-          suffixIcon: undefined,
-        })
+        field.dataSource = transform(data)
+        field.loading = false
       })
     )
 }
@@ -186,7 +176,6 @@ import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
@@ -212,17 +201,13 @@ const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
     }, [])
   }
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
-    })
+    field.loading = true
     fetch('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.json())
       .then(
         action((data) => {
-          field.setDataSource(transform(data))
-          field.setComponentProps({
-            suffixIcon: undefined,
-          })
+          field.dataSource = transform(data)
+          field.loading = false
         })
       )
   })

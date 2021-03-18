@@ -1,6 +1,7 @@
 export default {
   en: {
-    pattern: 'This field  does not match any pattern',
+    pattern: 'This field is invalid',
+    invalid: 'This field is invalid',
     required: 'The field value is required',
     number: 'The field value is not a number',
     integer: 'The field value is not an integer number',
@@ -37,6 +38,7 @@ export default {
   },
   zh: {
     pattern: '该字段不是一个合法的字段',
+    invalid: '该字段不是一个合法的字段',
     required: '该字段是必填字段',
     number: '该字段不是合法的数字',
     integer: '该字段不是合法的整型数字',
@@ -69,7 +71,8 @@ export default {
     },
   },
   'en-US': {
-    pattern: 'This field  does not match any pattern',
+    pattern: 'This field is invalid',
+    invalid: 'This field is invalid',
     required: 'The field value is required',
     number: 'The field value is not a number',
     integer: 'The field value is not an integer number',
@@ -106,6 +109,7 @@ export default {
   },
   'zh-CN': {
     pattern: '该字段不是一个合法的字段',
+    invalid: '该字段不是一个合法的字段',
     required: '该字段是必填字段',
     number: '该字段不是合法的数字',
     integer: '该字段不是合法的整型数字',
@@ -139,6 +143,7 @@ export default {
   },
   'zh-TW': {
     pattern: '該字段不是一個合法的字段',
+    invalid: '該字段不是一個合法的字段',
     required: '該字段是必填字段',
     number: '該字段不是合法的數字',
     integer: '該字段不是合法的整型數字',
@@ -191,6 +196,7 @@ export default {
     money: 'このフィールドは通貨形式ではありません',
     number: 'このフィールドは数値ではありません',
     pattern: 'このフィールドはどのパターンとも一致しません',
+    invalid: 'このフィールドはどのパターンとも一致しません',
     phone: 'このフィールドは電話番号の形式ではありません',
     qq: 'このフィールドはqq数値形式ではありません',
     required: 'この項目は必須です',

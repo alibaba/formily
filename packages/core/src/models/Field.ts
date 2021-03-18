@@ -398,8 +398,8 @@ export class Field<
   }
 
   get validateStatus() {
-    if (this.invalid) return 'error'
     if (this.validating) return 'validating'
+    if (this.invalid) return 'error'
     if (this.warnings.length) return 'warning'
     if (this.successes.length) return 'success'
   }

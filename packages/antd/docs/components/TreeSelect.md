@@ -98,7 +98,6 @@ import {
 } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -116,15 +115,11 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
-    })
+    field.loading = true
     service(field).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          suffixIcon: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })
@@ -378,7 +373,6 @@ import {
 } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -490,15 +484,11 @@ const loadData = async (field) => {
 }
 
 const useAsyncDataSource = (service) => (field) => {
-  field.setComponentProps({
-    suffixIcon: <LoadingOutlined />,
-  })
+  field.loading = true
   service(field).then(
     action((data) => {
-      field.setDataSource(data)
-      field.setComponentProps({
-        suffixIcon: undefined,
-      })
+      field.dataSource = data
+      field.loading = false
     })
   )
 }
@@ -630,7 +620,6 @@ import {
 } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const useAsyncDataSource = (
@@ -640,15 +629,11 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
-    })
+    field.loading = true
     service(field).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          suffixIcon: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })
