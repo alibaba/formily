@@ -2,32 +2,14 @@
 
 异步数据源管理，核心体现在[Field](https://core.formilyjs.org/api/models/field)模型中的 dataSource 属性，我们可以在 effects 中修改 Field 的 dataSource，也可以在 reactions 中修改 dataSource 属性。
 
-字段组件(比如 Select)会自动消费 dataSource 属性，如果 dataSource 发生变化，对应组件会自动重渲染。
+如果字段组件内部(比如 Select)有消费 dataSource 属性，当 dataSource 发生变化时，对应组件会自动重渲染。
 
 <Alert>
-注意：所有字段组件要求是用 connect 做过状态映射，或者自定义组件内使用 useField 消费dataSource属性
+注意：如果是业务自定义组件，请手动映射dataSource到自定义组件中，可以使用 <a href="https://react.formilyjs.org/api/shared/connect">connect</a>，也可以使用 <a href="https://react.formilyjs.org/api/shared/observer">observer</a> + <a href="https://react.formilyjs.org/api/hooks/use-field">useField</a>
 </Alert>
 
-## 异步选择框
+具体案例可以参考：
 
-#### Markup Schema 案例
-
-#### JSON Schema 案例
-
-#### 纯 JSX 案例
-
-## 异步搜索选择框
-
-#### Markup Schema 案例
-
-#### JSON Schema 案例
-
-#### 纯 JSX 案例
-
-## 异步 Table 多选
-
-#### Markup Schema 案例
-
-#### JSON Schema 案例
-
-#### 纯 JSX 案例
+- [Select](https://antd.formilyjs.org/components/select)
+- [TreeSelect](https://antd.formilyjs.org/components/tree-select)
+- [Cascader](https://antd.formilyjs.org/components/cascader)

@@ -168,10 +168,6 @@ export default {
             path: '/guide/advanced/business-logic',
           },
           {
-            title: '多语言定制',
-            path: '/guide/advanced/language',
-          },
-          {
             title: '按需打包',
             path: '/guide/advanced/build',
           },

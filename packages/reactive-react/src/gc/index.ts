@@ -21,16 +21,18 @@ export class GarbageCollector {
       registry.register(this.target, () => {
         this.cleaner?.()
       })
+    } else {
+      this.request = setTimeout(() => {
+        this.cleaner?.()
+      }, this.expireTime)
     }
-    this.request = setTimeout(() => {
-      this.cleaner?.()
-    }, this.expireTime)
   }
 
   close() {
     if (registry) {
       registry.unregister(this.target)
+    } else {
+      clearTimeout(this.request)
     }
-    clearTimeout(this.request)
   }
 }
