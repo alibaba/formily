@@ -34,7 +34,7 @@
 		"@types/react": ">=16.8.0 || >=17.0.0"
 	},
 	"dependencies": {
-		"depath": "^1.0.5",
+		"@formily/path": "^2.0.0-beta.3",
 		"camel-case": "^4.1.1",
 		"lower-case": "^2.0.1",
     "no-case": "^3.0.4",

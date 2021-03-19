@@ -410,7 +410,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'aa',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
     {
       type: 'error',
@@ -418,7 +418,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'bb',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
   ])
   await aa.onInput('123')
@@ -429,7 +429,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'bb',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
   ])
   expect(form.successes).toEqual([
@@ -450,7 +450,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'bb',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
   ])
   expect(form.warnings).toEqual([
@@ -479,7 +479,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'bb',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
   ])
   await aa.onInput('yes')
@@ -502,7 +502,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'aa',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
     {
       type: 'error',
@@ -510,7 +510,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'bb',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
   ])
   form.clearErrors('aa')
@@ -521,7 +521,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
       path: 'bb',
       code: 'ValidateError',
       triggerType: 'onInput',
-      messages: ['This field is required'],
+      messages: ['The field value is required'],
     },
   ])
   form.clearErrors('*')

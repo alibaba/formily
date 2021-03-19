@@ -44,7 +44,7 @@ export const computed: IComputed = createAnnotation(
         if (value?.get) return value?.get
         return value
       }
-      const descriptor = Reflect.getOwnPropertyDescriptor(target, property)
+      const descriptor = Object.getOwnPropertyDescriptor(target, property)
       if (descriptor?.get) return descriptor.get
       return getGetter(Object.getPrototypeOf(target))
     }

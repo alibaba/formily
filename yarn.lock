@@ -7906,11 +7906,6 @@ delegates@^1.0.0:
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
   integrity sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=
 
-depath@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/depath/-/depath-1.0.5.tgz#e9e06fd27b1f5790b4e6a93eeb21e2642b0ff478"
-  integrity sha512-jmJNRvzU5EDMxxjNCZCy7H/g81d94D5/gG/6pjETXMNuPOmVr9W3ydvUprLAOMp2V7pjWXJBs+kT6FSRf/+SBA==
-
 depd@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/depd/-/depd-1.1.2.tgz#9bcd52e14c097763e749b274c4346ed2e560b5a9"
