@@ -24,7 +24,7 @@ import {
   buildNodeIndexes,
   modelStateGetter,
   modelStateSetter,
-  publishUpdate,
+  initFieldUpdate,
 } from '../shared'
 import { Form } from './Form'
 import { Query } from './Query'
@@ -334,8 +334,10 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   onInit = () => {
     this.initialized = true
+    batch.scope(() => {
+      initFieldUpdate(this)
+    })
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-    publishUpdate(this)
   }
 
   onMount = () => {

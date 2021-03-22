@@ -346,7 +346,22 @@ export const exchangeArrayState = (
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
-export const publishUpdate = (field: GeneralField) => {
+export const initFieldValue = (field: Field) => {
+  if (isEmpty(field.initialValue)) {
+    if (isValid(field.props.initialValue)) {
+      field.initialValue = field.props.initialValue
+    }
+  }
+  if (isEmpty(field.value)) {
+    if (isValid(field.props.value)) {
+      field.value = field.props.value
+    } else if (!isEmpty(field.initialValue)) {
+      field.value = field.initialValue
+    }
+  }
+}
+
+export const initFieldUpdate = (field: GeneralField) => {
   const form = field.form
   const updates = FormPath.ensureIn(form, 'requests.updates', [])
   const indexes = FormPath.ensureIn(form, 'requests.updateIndexes', {})

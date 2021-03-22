@@ -1,5 +1,10 @@
 import { isFn } from '@formily/shared'
-import { batchStart, batchEnd } from './reaction'
+import {
+  batchStart,
+  batchEnd,
+  batchScopeStart,
+  batchScopeEnd,
+} from './reaction'
 import { createAnnotation } from './internals'
 import { MakeObservableSymbol } from './environment'
 
@@ -12,6 +17,19 @@ export const batch = <T>(callback?: () => T) => {
     }
   } finally {
     batchEnd()
+  }
+  return result
+}
+
+batch.scope = <T>(callback?: () => T) => {
+  let result: T = null
+  batchScopeStart()
+  try {
+    if (isFn(callback)) {
+      result = callback()
+    }
+  } finally {
+    batchScopeEnd()
   }
   return result
 }

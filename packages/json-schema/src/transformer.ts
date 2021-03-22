@@ -254,22 +254,20 @@ const getSchemaFieldReactions = (
     compile: (expression: any) => any
   ) => {
     if (!request) return
-    batch(() => {
-      if (request.state) {
-        field.setState((state) => patchState(state, compile(request.state)))
-      }
-      if (request.schema) {
-        field.setState((state) =>
-          patchState(
-            state,
-            getFieldInternalPropsBySchema(compile(request.schema), options)
-          )
+    if (request.state) {
+      field.setState((state) => patchState(state, compile(request.state)))
+    }
+    if (request.schema) {
+      field.setState((state) =>
+        patchState(
+          state,
+          getFieldInternalPropsBySchema(compile(request.schema), options)
         )
-      }
-      if (isStr(request.run)) {
-        compile(`{{async function(){${request.run}}}}`)()
-      }
-    })
+      )
+    }
+    if (isStr(request.run)) {
+      compile(`{{async function(){${request.run}}}}`)()
+    }
   }
 
   const parseDependencies = (

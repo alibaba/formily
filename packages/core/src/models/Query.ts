@@ -30,14 +30,10 @@ export class Query {
         this.addresses = [index]
       }
     } else {
-      this.addresses = untracked(() => {
-        const results = []
-        each(this.form.fields, (field, address) => {
-          if (field.match(this.pattern)) {
-            results.push(address)
-          }
-        })
-        return results
+      each(this.form.fields, (field, address) => {
+        if (field.match(this.pattern)) {
+          this.addresses.push(address)
+        }
       })
     }
   }
