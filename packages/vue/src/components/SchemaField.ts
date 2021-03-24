@@ -1,4 +1,4 @@
-import { inject, provide } from 'vue-demi'
+import { inject, provide, defineComponent } from 'vue-demi'
 import { ISchema, Schema } from '@formily/json-schema'
 import { RecursionField } from '../components'
 import {
@@ -15,10 +15,9 @@ import {
   ISchemaMarkupFieldProps,
   ISchemaTypeFieldProps,
 } from '../types'
-import { defineObservableComponent } from '../shared/define-observable-component'
-import { h } from '../shared/compatible-create-element'
-import { resolveSchemaProps } from '../utils/resolve-schema-props'
-import { Fragment } from '../shared/fragment-hack'
+import { resolveSchemaProps } from '../utils/resolveSchemaProps'
+import { h } from '../shared/h'
+import { Fragment } from '../shared/fragment'
 
 const env = {
   nonameId: 0,
@@ -106,7 +105,7 @@ const markupProps = {
 export function createSchemaField<Components extends SchemaComponents>(
   options: ISchemaFieldFactoryOptions<Components>
 ) {
-  const SchemaField = defineObservableComponent({
+  const SchemaField = defineComponent({
     name: 'SchemaField',
     props: {
       schema: {},
@@ -195,7 +194,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const MarkupField = defineObservableComponent({
+  const MarkupField = defineComponent({
     name: 'MarkupField',
     props: Object.assign({}, markupProps, { type: String }),
     setup<
@@ -232,7 +231,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const StringField = defineObservableComponent({
+  const StringField = defineComponent({
     name: 'StringField',
     props: Object.assign({}, markupProps),
     setup<
@@ -248,7 +247,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const ObjectField = defineObservableComponent({
+  const ObjectField = defineComponent({
     name: 'ObjectField',
     props: Object.assign({}, markupProps),
     setup<
@@ -264,7 +263,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const ArrayField = defineObservableComponent({
+  const ArrayField = defineComponent({
     name: 'ArrayField',
     props: Object.assign({}, markupProps),
     setup<
@@ -280,7 +279,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const BooleanField = defineObservableComponent({
+  const BooleanField = defineComponent({
     name: 'BooleanField',
     props: Object.assign({}, markupProps),
     setup<
@@ -296,7 +295,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const NumberField = defineObservableComponent({
+  const NumberField = defineComponent({
     name: 'NumberField',
     props: Object.assign({}, markupProps),
     setup<
@@ -312,7 +311,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const DateField = defineObservableComponent({
+  const DateField = defineComponent({
     name: 'DateField',
     props: Object.assign({}, markupProps),
     setup<
@@ -328,7 +327,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const DateTimeField = defineObservableComponent({
+  const DateTimeField = defineComponent({
     name: 'DateTimeField',
     props: Object.assign({}, markupProps),
     setup<
@@ -344,7 +343,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const VoidField = defineObservableComponent({
+  const VoidField = defineComponent({
     name: 'VoidField',
     props: Object.assign({}, markupProps),
     setup<

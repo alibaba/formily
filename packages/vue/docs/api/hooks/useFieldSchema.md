@@ -40,18 +40,17 @@ Schema 参考[Schema](/api/shared/schema)
 </template>
 
 <script>
+import { defineComponent, h } from '@vue/composition-api'
 import { createForm } from '@formily/core'
-import { FormProvider, createSchemaField, useFieldSchema, defineObservableComponent, h } from '@formily/vue'
+import { FormProvider, createSchemaField, useFieldSchema } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css';
 
-const Custom = defineObservableComponent({
+const Custom = defineComponent({
   setup () {
     const schema = useFieldSchema()
     return () => h('div', {
       style: { whiteSpace: 'pre' }
-    }, {
-      default: () => [JSON.stringify(schema.toJSON(), null, 4)]
-    })
+    }, [JSON.stringify(schema.toJSON(), null, 4)])
   }
 })
 

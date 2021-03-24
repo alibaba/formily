@@ -1,6 +1,7 @@
-import { inject, provide } from 'vue-demi'
+import { inject, provide, defineComponent } from 'vue-demi'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
+import { observer, useObserver } from '@formily/reactive-vue'
 import {
   SchemaSymbol,
   SchemaOptionsSymbol,
@@ -12,11 +13,10 @@ import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import Field from './Field'
 import VoidField from './VoidField'
-import { defineObservableComponent } from '../shared/define-observable-component'
-import { h } from '../shared/compatible-create-element'
-import { Fragment } from '../shared/fragment-hack'
+import { h } from '../shared/h'
+import { Fragment } from '../shared/fragment'
 
-const RecursionField = defineObservableComponent({
+const RecursionField = observer(defineComponent({
   name: 'RecursionField',
   // eslint-disable-next-line vue/require-prop-types
   props: {
@@ -42,6 +42,7 @@ const RecursionField = defineObservableComponent({
     },
   },
   setup(props: IRecursionFieldProps) {
+    const { track } = useObserver()
     const parent = useField()
     const options = inject(SchemaOptionsSymbol)
     const scope = inject(SchemaExpressionScopeSymbol)
@@ -92,7 +93,7 @@ const RecursionField = defineObservableComponent({
         const content = typeof fieldSchema['x-content'] === 'object' ? h(fieldSchema['x-content'], {}, {}) : fieldSchema['x-content']
 
         return h(Fragment, {}, {
-          default: () => [...children, content]
+          default: track(() => [...children, content])
         })
       }
 
@@ -107,7 +108,7 @@ const RecursionField = defineObservableComponent({
               basePath: basePath
             }
           }, {
-            default: ({ field }) => [renderProperties(field)]
+            default: track(({ field }) => [renderProperties(field)])
           })
         } else if (fieldSchema.type === 'array') {
           return h(ArrayField, {
@@ -126,7 +127,7 @@ const RecursionField = defineObservableComponent({
               basePath: basePath
             }
           }, {
-            default: ({ field }) => [renderProperties(field)]
+            default: track(({ field }) => [renderProperties(field)])
           })
         }
 
@@ -148,6 +149,6 @@ const RecursionField = defineObservableComponent({
       return render()
     }
   }
-})
+}))
 
 export default RecursionField

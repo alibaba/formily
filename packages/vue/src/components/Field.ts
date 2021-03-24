@@ -1,16 +1,14 @@
-import { provide, markRaw } from 'vue-demi'
+import { provide, defineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { FieldSymbol } from '../shared/context'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { defineObservableComponent } from '../shared/define-observable-component'
-import h from '../shared/compatible-create-element'
-import { getRowComponentFromProps } from '../utils/get-row-component-from-props'
+import { observer, useObserver } from '@formily/reactive-vue'
+import h from '../shared/h'
+import { getRawComponent } from '../utils/getRawComponent'
 
-interface Field extends IFieldProps<VueComponent, VueComponent>, Vue {}
-
-export default defineObservableComponent<Field>({
+export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>({
   name: 'Field',
   components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
@@ -62,29 +60,22 @@ export default defineObservableComponent<Field>({
     validator: {},
     reactions: [Array, Function],
   },
-  observableSetup(
-    collect,
-    props,
-    { slots }
-  ) {
+  setup(props, { slots }) {
+    const { track } = useObserver()
     const form = useForm()
     const parent = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parent?.address
-    const field = useAttach(
-      markRaw(form.createField({
-        ...props,
-        basePath,
-        ...getRowComponentFromProps(props)
-      }))
-    )
-    provide(FieldSymbol, field)
+    
+    const fieldRef = useAttach(() => form.createField({
+      ...props,
+      basePath,
+      ...getRawComponent(props)
+    }), () => props.name)
 
-    collect({
-      field,
-      form: field.form
-    })
+    provide(FieldSymbol, fieldRef.value)
 
     return () => {
+      const field = fieldRef.value
       return h(
         ReactiveField, 
         {
@@ -93,12 +84,12 @@ export default defineObservableComponent<Field>({
           }
         },
         {
-          default: () => slots.default && slots.default({
+          default: track(() => slots.default && slots.default({
             field,
             form: field.form
-          })
+          }))
         }
       )
     }
   }
-})
+}))

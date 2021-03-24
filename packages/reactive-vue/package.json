@@ -1,14 +1,22 @@
 {
-  "name": "@formily/vue",
+  "name": "@formily/reactive-vue",
   "version": "2.0.0-beta.3",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
-  "umd:main": "dist/formily.vue.umd.production.js",
-  "unpkg": "dist/formily.vue.umd.production.js",
-  "jsdelivr": "dist/formily.vue.umd.production.js",
+  "umd:main": "dist/formily.reactive-vue.umd.production.js",
+  "unpkg": "dist/formily.reactive-vue.umd.production.js",
+  "jsdelivr": "dist/formily.reactive-vue.umd.production.js",
   "jsnext:main": "esm",
-  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
   "engines": {
     "npm": ">=3.0.0"
   },
@@ -20,34 +28,24 @@
     "build:umd": "rollup --config",
     "build:docs": "vuepress build docs"
   },
+  "peerDependencies": {
+    "vue": "^2.6.0 || >=3.0.0-rc.0"
+  },
   "devDependencies": {
-    "@ant-design/icons": "^2.1.1",
-    "@ant-design/icons-vue": "^2.0.0",
+    "@vue/test-utils": "1.0.0-beta.22",
     "@vuepress-dumi/vuepress-plugin-dumi-previewer": "0.3.3",
     "@vuepress-dumi/vuepress-theme-dumi": "0.3.3",
     "@vuepress/plugin-back-to-top": "^1.8.2",
     "@vuepress/plugin-medium-zoom": "^1.8.2",
-    "ant-design-vue": "^1.7.3",
     "core-js": "^2.4.0",
     "vuepress": "^1.8.2"
   },
   "dependencies": {
-    "@formily/core": "^2.0.0-beta.3",
-    "@formily/json-schema": "^2.0.0-beta.3",
-    "@formily/reactive": "^2.0.0-beta.3",
-    "@formily/reactive-vue": "^2.0.0-beta.3",
+    "@formily/reactive":"^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
-    "@formily/validator": "^2.0.0-beta.3",
-    "vue-demi": "latest",
-    "vue-frag": "^1.1.4"
+    "vue-demi": "latest"
   },
-  "peerDependencies": {
-    "@vue/composition-api": "^1.0.0-beta.1",
-    "vue": "^2.6.0 || >=3.0.0-rc.0"
-  },
-  "peerDependenciesMeta": {
-    "@vue/composition-api": {
-      "optional": true
-    }
+  "publishConfig": {
+    "access": "public"
   }
 }

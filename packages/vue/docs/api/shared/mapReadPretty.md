@@ -32,7 +32,7 @@ interface mapReadPretty {
 
 <script>
 import { Form, Input as AntdInput } from 'ant-design-vue';
-import { createForm, isVoidField, setValidateLanguage } from '@formily/core'
+import { createForm, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
   Field,

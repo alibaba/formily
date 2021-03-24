@@ -1,23 +1,22 @@
-import { defineObservableComponent } from '../shared/define-observable-component'
+import { defineComponent } from 'vue-demi'
+import { observer, useObserver } from '@formily/reactive-vue'
 import { useForm } from '../hooks'
-import h from '../shared/compatible-create-element'
-import { Fragment } from '../shared/fragment-hack'
+import h from '../shared/h'
+import { Fragment } from '../shared/fragment'
 
-export default defineObservableComponent({
+export default observer(defineComponent({
   name: 'FormConsumer',
-  observableSetup(collect, props, { attrs, slots }) {
+  setup(props, { attrs, slots }) {
     const form = useForm()
-    collect({
-      form
-    })
+    const { track } = useObserver()
     return () => h(
       Fragment,
       { attrs },
       {
-        default: () => slots.default && slots.default({
+        default: track(() => slots.default?.({
           form
-        })
+        }))
       }
     )
   }
-})
+}))

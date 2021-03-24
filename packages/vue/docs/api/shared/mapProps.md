@@ -53,7 +53,7 @@ interface mapProps<T extends Vue.Component> {
 
 <script>
 import { Form, Input, Button } from 'ant-design-vue';
-import { createForm, isVoidField, setValidateLanguage } from '@formily/core'
+import { createForm, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
   FormConsumer,

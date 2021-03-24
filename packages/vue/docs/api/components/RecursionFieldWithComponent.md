@@ -20,24 +20,18 @@ order: 5
 </template>
 
 <script>
-import { h } from '@vue/composition-api'
-// or "import { h } from 'vue'" if the version of vue > 3
+import { defineComponent, h } from '@vue/composition-api'
+// or "import { defineComponent, h } from 'vue'" if using vue3
 import { Input, Button, Space } from 'ant-design-vue';
 import { createForm } from '@formily/core'
-import { FormProvider, createSchemaField, RecursionField, defineObservableComponent, useField, useFieldSchema } from '@formily/vue'
+import { FormProvider, createSchemaField, RecursionField, defineObservableComponent, useField, useFieldSchema, observer } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css';
 
-const ArrayItems = defineObservableComponent({
+const ArrayItems = observer(defineComponent({
   props: ['value', 'disabled', 'readOnly'],
-  observableSetup (collect, props) {
+  setup (props) {
     const field = useField()
     const schema = useFieldSchema()
-
-    // make sure the component can respond to changes of field/schema
-    collect({
-      field,
-      schema
-    })
 
     return () => {
       const items = props.value?.map((item, index) => {
@@ -53,7 +47,7 @@ const ArrayItems = defineObservableComponent({
       return h('div', [items, button])
     }
   },
-})
+}))
 
 const { SchemaField, SchemaStringField, SchemaArrayField, SchemaObjectField } = createSchemaField({
   components: {

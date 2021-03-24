@@ -1,16 +1,16 @@
-import { provide, markRaw } from 'vue-demi'
+import { provide, defineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { defineObservableComponent } from '../shared/define-observable-component'
+import { observer, useObserver } from '@formily/reactive-vue'
 import { FieldSymbol } from '../shared/context'
-import h from '../shared/compatible-create-element'
-import { getRowComponentFromProps } from '../utils/get-row-component-from-props'
+import h from '../shared/h'
+import { getRawComponent } from '../utils/getRawComponent'
 
 interface ObjectField extends IFieldProps<VueComponent, VueComponent>, Vue {}
 
-export default defineObservableComponent<ObjectField>({
+export default observer(defineComponent<ObjectField>({
   name: 'ObjectField',
   components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
@@ -62,41 +62,32 @@ export default defineObservableComponent<ObjectField>({
     validator: {},
     reactions: [Array, Function],
   },
-  observableSetup(
-    collect,
-    props,
-    { slots }
-  ) {
+  setup(props, { slots }) {
+    const { track } = useObserver()
     const form = useForm()
     const parent = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parent?.address
-    const field = useAttach(
-      markRaw(form.createObjectField({
-        ...props,
-        basePath,
-        ...getRowComponentFromProps(props)
-      }))
-    )
-    provide(FieldSymbol, field)
+    const fieldRef = useAttach(() => form.createObjectField({
+      ...props,
+      basePath,
+      ...getRawComponent(props)
+    }), () => props.name)
 
-    collect({
-      field,
-      form: field.form
-    })
+    provide(FieldSymbol, fieldRef.value)
 
     return () => h(
       ReactiveField, 
       {
         props: {
-          field
+          field: fieldRef.value
         }
       },
       {
-        default: () => slots.default && slots.default({
-          field,
-          form: field.form
-        })
+        default: track(() => slots.default && slots.default({
+          field: fieldRef.value,
+          form: fieldRef.value.form
+        }))
       }
     )
   }
-})
+}))

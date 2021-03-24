@@ -1,16 +1,8 @@
-# useForm
+# observer
 
 ## 描述
 
-主要在自定义组件中读取当前[Form](https://core.formilyjs.org/api/models/form)实例，用于实现一些副作用依赖，比如依赖 Form 的 errors 信息之类的，用于实现一些较为复杂的场景化组件
-
-## 签名
-
-```ts
-interface useForm {
-  (): Form
-}
-```
+observer 是从 @formily/reactive-vue 中导出的 observer，API 完全一致，使用 observer 主要是将组件支持响应式更新能力。
 
 ## 用例
 
@@ -18,8 +10,13 @@ interface useForm {
 <template>
   <FormProvider :form="form">
     <Space>
-      <Field name="input" :component="[Input]" />
-      <Field name="custom" :component="[Custom]" />
+      <Field
+        name="name"
+        title="Name"
+        required
+        :component="[Input, { placeholder: 'Please Input' }]"
+      />
+      <FormPreviewer />
     </Space>
   </FormProvider>
 </template>
@@ -31,24 +28,25 @@ import { FormProvider, Field, useForm, observer } from '@formily/vue';
 import { Input, Space } from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
-const Custom = observer(defineComponent({
-  setup (props, context) {
+const FormPreviewer = observer(defineComponent({
+  name: 'FormPreviewer',
+  setup() {
     const form = useForm();
-    return () => h('div', {}, [form.values.input]);
-  },
-}));
+    return () => h('div', [JSON.stringify(form.values)])
+  }
+}))
 
 export default {
   components: {
     FormProvider,
     Field,
+    FormPreviewer,
     Space
   },
   data() {
     const form = createForm({ validateFirst: true })
     return {
       Input,
-      Custom,
       form
     }
   }

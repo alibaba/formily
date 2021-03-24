@@ -53,6 +53,7 @@ module.exports = {
             '/api/hooks/useFieldSchema',
             '/api/hooks/useForm',
             '/api/hooks/useFormEffects',
+            '/api/hooks/useObserver',
           ]
         },
         {
@@ -62,7 +63,7 @@ module.exports = {
             '/api/shared/injections',
             '/api/shared/mapProps',
             '/api/shared/mapReadPretty',
-            '/api/shared/defineObservableComponent',
+            '/api/shared/observer',
             '/api/shared/Schema',
           ]
         }
