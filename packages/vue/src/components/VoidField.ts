@@ -50,16 +50,16 @@ export default observer(defineComponent<IVoidFieldProps<VueComponent, VueCompone
   },
   setup(props, { slots }) {
     const { track } = useObserver()
-    const form = useForm()
-    const parent = useField()
-    const basePath = props.basePath !== undefined ? props.basePath : parent?.address
-    const fieldRef = useAttach(() => form.createVoidField({
+    const formRef = useForm()
+    const parentRef = useField()
+    const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
+    const fieldRef = useAttach(() => formRef.value.createVoidField({
       ...props,
       basePath,
       ...getRawComponent(props)
-    }), () => props.name)
+    }), [() => props.name, formRef])
 
-    provide(FieldSymbol, fieldRef.value)
+    provide(FieldSymbol, fieldRef)
 
     return () => h(
       ReactiveField, 

@@ -1,4 +1,4 @@
-import { inject, provide, defineComponent } from 'vue-demi'
+import { inject, provide, defineComponent, shallowRef, watch } from 'vue-demi'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { observer, useObserver } from '@formily/reactive-vue'
@@ -43,30 +43,39 @@ const RecursionField = observer(defineComponent({
   },
   setup(props: IRecursionFieldProps) {
     const { track } = useObserver()
-    const parent = useField()
+    const parentRef = useField()
     const options = inject(SchemaOptionsSymbol)
     const scope = inject(SchemaExpressionScopeSymbol)
-    const schema = new Schema(props.schema)
-    const fieldSchema = schema.compile?.({
+    const createSchema = (schemaProp: IRecursionFieldProps['schema']) => new Schema(schemaProp)
+    const createFieldSchema = (schema: Schema) => schema.compile?.({
       ...options.scope,
       ...scope,
     })
-    const fieldProps = schema?.toFieldProps?.(options) as any
+    const schemaRef = shallowRef(createSchema(props.schema))
+    const fieldSchemaRef = shallowRef(createFieldSchema(schemaRef.value))
+    watch(() => props.schema, () => {
+      schemaRef.value = createSchema(props.schema)
+      fieldSchemaRef.value = createFieldSchema(schemaRef.value)
+    })
+
     const getBasePath = () => {
       if (props.onlyRenderProperties) {
-        return props.basePath || parent?.address?.concat(props.name)
+        return props.basePath || parentRef?.value?.address?.concat(props.name)
       }
-      return props.basePath || parent?.address
+      return props.basePath || parentRef?.value?.address
     }
-    const basePath = getBasePath()
 
-    provide(SchemaSymbol, fieldSchema)
+    provide(SchemaSymbol, fieldSchemaRef)
 
     return () => {
+      
+      const basePath = getBasePath()
+
+      const fieldProps = schemaRef.value?.toFieldProps?.(options) as any
       const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
         if (props.onlyRenderSelf) return
-
-        const children = fieldSchema.mapProperties((item, name, index) => {
+        
+        const children = fieldSchemaRef.value.mapProperties((item, name, index) => {
           const base = field?.address || basePath
           let schema: Schema = item
           if (isFn(props.mapProperties)) {
@@ -90,7 +99,7 @@ const RecursionField = observer(defineComponent({
           }, {})
         })
 
-        const content = typeof fieldSchema['x-content'] === 'object' ? h(fieldSchema['x-content'], {}, {}) : fieldSchema['x-content']
+        const content = typeof fieldSchemaRef.value['x-content'] === 'object' ? h(fieldSchemaRef.value['x-content'], {}, {}) : fieldSchemaRef.value['x-content']
 
         return h(Fragment, {}, {
           default: track(() => [...children, content])
@@ -99,7 +108,7 @@ const RecursionField = observer(defineComponent({
 
       const render = () => {
         if (!isValid(props.name)) return renderProperties()
-        if (fieldSchema.type === 'object') {
+        if (fieldSchemaRef.value.type === 'object') {
           if (props.onlyRenderProperties) return renderProperties()
           return h(ObjectField, {
             attrs: {
@@ -110,7 +119,7 @@ const RecursionField = observer(defineComponent({
           }, {
             default: track(({ field }) => [renderProperties(field)])
           })
-        } else if (fieldSchema.type === 'array') {
+        } else if (fieldSchemaRef.value.type === 'array') {
           return h(ArrayField, {
             attrs: {
               ...fieldProps,
@@ -118,7 +127,7 @@ const RecursionField = observer(defineComponent({
               basePath: basePath
             }
           }, {})
-        } else if (fieldSchema.type === 'void') {
+        } else if (fieldSchemaRef.value.type === 'void') {
           if (props.onlyRenderProperties) return renderProperties()
           return h(VoidField, {
             attrs: {
@@ -131,7 +140,7 @@ const RecursionField = observer(defineComponent({
           })
         }
 
-        const content = typeof fieldSchema['x-content'] === 'object' ? h(fieldSchema['x-content'], {}, {}) : fieldSchema['x-content']
+        const content = typeof fieldSchemaRef.value['x-content'] === 'object' ? h(fieldSchemaRef.value['x-content'], {}, {}) : fieldSchemaRef.value['x-content']
 
         return h(Field, {
           attrs: {
@@ -144,7 +153,7 @@ const RecursionField = observer(defineComponent({
         })
       }
 
-      if (!fieldSchema) return ;
+      if (!fieldSchemaRef.value) return ;
 
       return render()
     }

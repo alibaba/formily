@@ -16,9 +16,9 @@ export default observer(defineComponent({
   props: ['field'],
   setup(props: IReactiveFieldProps, { slots }) {
     const { track } = useObserver()
-    const field = props.field
     const key = Math.floor(Date.now() * Math.random()).toString(16)
     return () => {
+      const field = props.field
       let children = {}
       if (!field) {
         children = slots

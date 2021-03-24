@@ -24,15 +24,18 @@ observer 是从 @formily/reactive-vue 中导出的 observer，API 完全一致�
 <script>
 import { defineComponent, h } from '@vue/composition-api'
 import { createForm } from '@formily/core'
-import { FormProvider, Field, useForm, observer } from '@formily/vue';
-import { Input, Space } from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import { FormProvider, Field, useForm, observer } from '@formily/vue'
+import { Input, Space } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
 const FormPreviewer = observer(defineComponent({
   name: 'FormPreviewer',
   setup() {
-    const form = useForm();
-    return () => h('div', [JSON.stringify(form.values)])
+    const formRef = useForm()
+    return () => {
+      const form = formRef.value
+      return h('div', [JSON.stringify(form.values)])
+    }
   }
 }))
 

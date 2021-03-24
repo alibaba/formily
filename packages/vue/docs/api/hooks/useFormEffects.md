@@ -25,9 +25,9 @@ interface useFormEffects {
 <script>
 import { defineComponent, h } from '@vue/composition-api'
 import { createForm, onFieldReact } from '@formily/core'
-import { FormProvider, Field, useFormEffects, observer } from '@formily/vue';
-import { Form, Input } from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import { FormProvider, Field, useFormEffects, observer } from '@formily/vue'
+import { Form, Input } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
 const Custom = defineComponent({
   setup (props, context) {
@@ -39,9 +39,9 @@ const Custom = defineComponent({
     return () => h('div', {}, [
       h(Field, { props: { name: 'aa', decorator: [Form.Item], component: [Input, { placeholder: 'aa' }] } }, {}),
       h(Field, { props: { name: 'bb', decorator: [Form.Item], component: [Input, { placeholder: 'bb' }] } }, {}),
-    ]);
+    ])
   },
-});
+})
 
 export default {
   components: {

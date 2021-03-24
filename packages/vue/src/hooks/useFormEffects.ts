@@ -5,12 +5,12 @@ import { useForm } from './useForm'
 export const useFormEffects = (
   effects?: (form: Formily.Core.Models.Form) => void
 ): void => {
-  const form = useForm()
+  const formRef = useForm()
 
   const id = uid()
-  form.addEffects(id, effects)
+  formRef.value.addEffects(id, effects)
 
   onBeforeUnmount(() => {
-    form.removeEffects(id)
+    formRef.value.removeEffects(id)
   })
 }

@@ -50,10 +50,10 @@ type RecursionField = Vue.Component<IRecursionFieldProps>
 </template>
 
 <script>
-import { Input } from 'ant-design-vue';
+import { Input } from 'ant-design-vue'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField, RecursionField } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 // functional component in vue2
 const Custom = {

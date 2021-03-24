@@ -8,7 +8,7 @@
 
 ```ts
 interface useFieldSchema {
-  (): Schema
+  (): Ref<Schema>
 }
 ```
 
@@ -43,14 +43,17 @@ Schema 参考[Schema](/api/shared/schema)
 import { defineComponent, h } from '@vue/composition-api'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField, useFieldSchema } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 const Custom = defineComponent({
   setup () {
-    const schema = useFieldSchema()
-    return () => h('div', {
-      style: { whiteSpace: 'pre' }
-    }, [JSON.stringify(schema.toJSON(), null, 4)])
+    const schemaRef = useFieldSchema()
+    return () => {
+      const schema = schemaRef.value
+      return h('div', {
+        style: { whiteSpace: 'pre' }
+      }, [JSON.stringify(schema.toJSON(), null, 4)])
+    }
   }
 })
 

@@ -13,9 +13,9 @@ export function mapProps<T extends VueComponent = VueComponent>(...args: IStateM
     return observer(defineComponent<T>({
       // listeners is needed for vue2
       setup(props: VueComponentProps<T>, { attrs, slots, listeners }) {
-        const field = useField()
+        const fieldRef = useField()
 
-        const transform = (input: VueComponentProps<T>) => args.reduce(
+        const transform = (input: VueComponentProps<T>, field: Formily.Core.Types.GeneralField) => args.reduce(
           (props, mapper) => {
             if (isFn(mapper)) {
               props = Object.assign(props, mapper(props, field))
@@ -37,7 +37,7 @@ export function mapProps<T extends VueComponent = VueComponent>(...args: IStateM
         )
 
         return () => {
-          const newAttrs = transform({ ...props, ...attrs } as VueComponentProps<T>)
+          const newAttrs = transform({ ...props, ...attrs } as VueComponentProps<T>, fieldRef.value)
           return h(
             target,
             {
@@ -58,10 +58,10 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(co
   return (target: T) => {
     return observer(defineComponent({
       setup(props: VueComponentProps<T>, { attrs, slots }) {
-        const field = useField()
+        const fieldRef = useField()
         return () =>
           h(
-            !isVoidField(field) && field.pattern === 'readPretty'
+            !isVoidField(fieldRef.value) && fieldRef.value.pattern === 'readPretty'
               ? component
               : target,
             {

@@ -5,7 +5,7 @@ interface IRecycleTarget {
   onUnmount: () => void
 }
 
-export const useAttach = <T extends IRecycleTarget>(creator: () => T, dependencies: () => any = () => null): Ref<T> => {
+export const useAttach = <T extends IRecycleTarget>(creator: () => T, dependencies: Parameters<typeof watch>[0]): Ref<T> => {
 
   const oldTargetRef = shallowRef<T>(null)
 

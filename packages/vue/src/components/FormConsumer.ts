@@ -7,14 +7,14 @@ import { Fragment } from '../shared/fragment'
 export default observer(defineComponent({
   name: 'FormConsumer',
   setup(props, { attrs, slots }) {
-    const form = useForm()
+    const formRef = useForm()
     const { track } = useObserver()
     return () => h(
       Fragment,
       { attrs },
       {
         default: track(() => slots.default?.({
-          form
+          form: formRef.value
         }))
       }
     )

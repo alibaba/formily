@@ -12,7 +12,7 @@
 
 ```ts
 interface useField {
-  (): Field
+  (): Ref<Field>
 }
 ```
 
@@ -48,7 +48,7 @@ interface useField {
 
 <script>
 import { defineComponent, h } from '@vue/composition-api'
-import { Form, Input, Button } from 'ant-design-vue';
+import { Form, Input, Button } from 'ant-design-vue'
 import { createForm, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
@@ -58,21 +58,24 @@ import {
   defineObservableComponent,
   observer
 } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 setValidateLanguage('en')
 
 const FormItem = observer(defineComponent({
   setup (props, { slots }) {
-    const field = useField()
-    return () => h(Form.Item, {
-      props: {
-        label: field.title,
-        help: field.errors?.length ? field.errors : undefined,
-        extra: field.description,
-        validateStatus: field.validateStatus,
-      }
-    }, slots?.default())
+    const fieldRef = useField()
+    return () => {
+      const field = fieldRef.value
+      return h(Form.Item, {
+        props: {
+          label: field.title,
+          help: field.errors?.length ? field.errors : undefined,
+          extra: field.description,
+          validateStatus: field.validateStatus,
+        }
+      }, slots?.default())
+    }
   }
 }))
 

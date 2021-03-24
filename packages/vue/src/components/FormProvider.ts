@@ -16,7 +16,7 @@ export default observer(defineComponent<IProviderProps>({
   },
   setup(props, { attrs, slots }) {
     const formRef = useAttach(() => toRaw(props.form), () => props.form)
-    provide(FormSymbol, formRef.value)
+    provide(FormSymbol, formRef)
 
     return () => h(
       Fragment,

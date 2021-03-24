@@ -27,10 +27,10 @@ SchemaField 支持直接传入 [JSON-Schema](/api/shared/schema) 对象渲染表
 </template>
 
 <script>
-import { Input } from 'ant-design-vue';
+import { Input } from 'ant-design-vue'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 const { SchemaField } = createSchemaField({
   components: {

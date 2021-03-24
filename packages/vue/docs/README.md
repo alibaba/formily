@@ -63,7 +63,7 @@ $ npm install --save @formily/core @formily/vue
 </template>
 
 <script>
-import { Form, Input } from 'ant-design-vue';
+import { Form, Input } from 'ant-design-vue'
 import { createForm, isVoidField, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
@@ -72,7 +72,7 @@ import {
   connect,
   mapProps,
 } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 setValidateLanguage('en')
 
