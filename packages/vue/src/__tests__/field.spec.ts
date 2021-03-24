@@ -35,8 +35,9 @@ const Decorator: FunctionalComponentOptions = {
 const Input = defineComponent({
   props: ['value'],
   setup (props, { attrs, listeners }) {
-    const field = useField()
+    const fieldRef = useField()
     return () => {
+      const field = fieldRef.value
       return h('input', { 
         attrs: {
           ...attrs,
@@ -165,11 +166,11 @@ test('useFormEffects', async () => {
   const CustomField = defineComponent({
     props: ['value'],
     setup (props) {
-      const field = useField<Formily.Core.Models.Field>()
+      const fieldRef = useField<Formily.Core.Models.Field>()
       useFormEffects(() => {
         onFieldChange('aa', ['value'], (target) => {
           if (isVoidField(target)) return
-          field.setValue(target.value)
+          fieldRef.value.setValue(target.value)
         })
       })
       return () => {
