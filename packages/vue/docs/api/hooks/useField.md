@@ -5,14 +5,14 @@
 主要用在自定义组件内读取当前字段属性，操作字段状态等，在所有 Field 组件的子树内都能使用，注意，拿到的是[GeneralField](https://core.formilyjs.org/api/models/field#generalfield)，如果需要对不同类型的字段做处理，请使用[Type Checker](https://core.formilyjs.org/api/entry/form-checker)
 
 ::: warning
-注意：如果要在自定义组件内使用useField，并响应字段模型变化，需要使用 [defineObservableComponent](/api/shared/defineObservableComponent) 创建自定义组件，并手动调用 `collect({ field })`
+注意：如果要在自定义组件内使用useField，并响应字段模型变化，需要使用 [observer](/api/shared/observer) 包裹自定义组件
 :::
 
 ## 签名
 
 ```ts
 interface useField {
-  (): Field
+  (): Ref<Field>
 }
 ```
 
@@ -47,7 +47,8 @@ interface useField {
 </template>
 
 <script>
-import { Form, Input, Button } from 'ant-design-vue';
+import { defineComponent, h } from '@vue/composition-api'
+import { Form, Input, Button } from 'ant-design-vue'
 import { createForm, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
@@ -55,28 +56,28 @@ import {
   Field,
   useField,
   defineObservableComponent,
-  h
+  observer
 } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 setValidateLanguage('en')
 
-const FormItem = defineObservableComponent({
-  observableSetup (collect, props, { slots }) {
-    const field = useField()
-
-    collect({ field })
-
-    return () => h(Form.Item, {
-      props: {
-        label: field.title,
-        help: field.errors?.length ? field.errors : undefined,
-        extra: field.description,
-        validateStatus: field.validateStatus,
-      }
-    }, slots)
+const FormItem = observer(defineComponent({
+  setup (props, { slots }) {
+    const fieldRef = useField()
+    return () => {
+      const field = fieldRef.value
+      return h(Form.Item, {
+        props: {
+          label: field.title,
+          help: field.errors?.length ? field.errors : undefined,
+          extra: field.description,
+          validateStatus: field.validateStatus,
+        }
+      }, slots?.default())
+    }
   }
-})
+}))
 
 export default {
   components: {

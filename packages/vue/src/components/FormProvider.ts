@@ -1,12 +1,12 @@
-import { defineObservableComponent } from '../shared/define-observable-component'
-import { provide } from 'vue-demi'
+import { observer } from '@formily/reactive-vue'
+import { provide, defineComponent, toRaw } from 'vue-demi'
 import { FormSymbol } from '../shared/context'
 import { IProviderProps } from '../types'
 import { useAttach } from '../hooks/useAttach'
-import h from '../shared/compatible-create-element'
-import { Fragment } from '../shared/fragment-hack'
+import h from '../shared/h'
+import { Fragment } from '../shared/fragment'
 
-export default defineObservableComponent({
+export default observer(defineComponent<IProviderProps>({
   name: 'FormProvider',
   props: {
     form: {
@@ -14,12 +14,9 @@ export default defineObservableComponent({
       required: true
     }
   },
-  provide () {
-    return { [FormSymbol as symbol]: this.form }
-  },
-  setup(props: IProviderProps, { attrs, slots }) {
-    useAttach(props.form)
-    provide(FormSymbol, props.form)
+  setup(props, { attrs, slots }) {
+    const formRef = useAttach(() => toRaw(props.form), () => props.form)
+    provide(FormSymbol, formRef)
 
     return () => h(
       Fragment,
@@ -27,4 +24,4 @@ export default defineObservableComponent({
       slots
     )
   }
-})
+}))

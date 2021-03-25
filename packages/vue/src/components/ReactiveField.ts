@@ -1,26 +1,25 @@
-import { defineObservableComponent } from '../shared/define-observable-component'
-import { isVoidField } from '@formily/core'
 import { VNode, Component } from 'vue'
-import h from '../shared/compatible-create-element'
-import { Fragment } from '../shared/fragment-hack'
+import { defineComponent } from 'vue-demi'
+import { isVoidField } from '@formily/core'
+import { observer, useObserver } from '@formily/reactive-vue'
+
+import h from '../shared/h'
+import { Fragment } from '../shared/fragment'
 
 interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
 }
 
-export default defineObservableComponent({
+export default observer(defineComponent({
   name: 'ReactiveField',
   // eslint-disable-next-line vue/require-prop-types
   props: ['field'],
-  observableSetup(collect, props: IReactiveFieldProps, { slots }) {
-    const { field } = props
-    collect({
-      field
-    })
+  setup(props: IReactiveFieldProps, { slots }) {
+    const { track } = useObserver()
     const key = Math.floor(Date.now() * Math.random()).toString(16)
     return () => {
+      const field = props.field
       let children = {}
-
       if (!field) {
         children = slots
       } else if (field.display !== 'visible') {
@@ -47,20 +46,26 @@ export default defineObservableComponent({
         const renderComponent = () => {
           if (!field?.component?.[0]) {
             return h(Fragment, {}, {
-              default: () => slots.default && slots.default({
+              default: track(() => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              })
+              }))
             })
           }
           const events = {} as Record<string, any>
           if (!isVoidField(field)) {
             events.change = (...args: any[]) => {
               field.onInput(...args)
-              // field.component[2]?.onChange?.(...args)
+              field.component[1]?.onChange?.(...args)
             }
-            events.focus = field.onFocus
-            events.blur = field.onBlur
+            events.focus = (...args: any[]) => {
+              field.onFocus(...args)
+              field.component[1]?.onFocus?.(...args)
+            }
+            events.blur = (...args: any[]) => {
+              field.onBlur(...args)
+              field.component[1]?.onBlur?.(...args)
+            }
           }
           const component = field.component[0] as Component
           const originData = field.component[1] || {}
@@ -81,10 +86,10 @@ export default defineObservableComponent({
               on: events
             },
             {
-              default: () => slots.default && slots.default({
+              default: track(() => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              })
+              }))
             }
           )
         }
@@ -95,4 +100,4 @@ export default defineObservableComponent({
       return h(Fragment, { key }, children)
     }
   }
-})
+}))

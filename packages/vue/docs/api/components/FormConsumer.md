@@ -27,10 +27,10 @@ Form 参考[Form](https://core.formilyjs.org/api/models/form)
 </template>
 
 <script>
-import { Input } from 'ant-design-vue';
+import { Input } from 'ant-design-vue'
 import { createForm } from '@formily/core'
 import { FormProvider, Field, FormConsumer } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 export default {
   components: { FormProvider, Field, FormConsumer },

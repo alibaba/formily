@@ -1,16 +1,14 @@
-import { provide, markRaw } from 'vue-demi'
+import { provide, defineComponent } from 'vue-demi'
+import { observer, useObserver } from '@formily/reactive-vue'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IVoidFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { defineObservableComponent } from '../shared/define-observable-component'
 import { FieldSymbol } from '../shared/context'
-import h from '../shared/compatible-create-element'
-import { getRowComponentFromProps } from '../utils/get-row-component-from-props'
+import h from '../shared/h'
+import { getRawComponent } from '../utils/getRawComponent'
 
-interface VoidField extends IVoidFieldProps<VueComponent, VueComponent>, Vue {}
-
-export default defineObservableComponent<VoidField>({
+export default observer(defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
   name: 'VoidField',
   components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
@@ -50,41 +48,32 @@ export default defineObservableComponent<VoidField>({
     },
     reactions: [Array, Function],
   },
-  observableSetup(
-    collect,
-    props,
-    { slots }
-  ) {
-    const form = useForm()
-    const parent = useField()
-    const basePath = props.basePath !== undefined ? props.basePath : parent?.address
-    const field = useAttach(
-      markRaw(form.createVoidField({
-        ...props,
-        basePath,
-        ...getRowComponentFromProps(props)
-      }))
-    )
-    provide(FieldSymbol, field)
+  setup(props, { slots }) {
+    const { track } = useObserver()
+    const formRef = useForm()
+    const parentRef = useField()
+    const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
+    const fieldRef = useAttach(() => formRef.value.createVoidField({
+      ...props,
+      basePath,
+      ...getRawComponent(props)
+    }), [() => props.name, formRef])
 
-    collect({
-      field,
-      form: field.form
-    })
+    provide(FieldSymbol, fieldRef)
 
     return () => h(
       ReactiveField, 
       {
         props: {
-          field
+          field: fieldRef.value
         }
       },
       {
-        default: () => slots.default && slots.default({
-          field,
-          form: field.form
-        })
+        default: track(() => slots.default && slots.default({
+          field: fieldRef.value,
+          form: fieldRef.value.form
+        }))
       }
     )
   }
-})
+}))
