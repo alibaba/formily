@@ -829,6 +829,10 @@ export default () => (
             state: {
               'component[1].style.backgroundColor': '{{$self.value}}',
             },
+            //以下用法也可以
+            // schema: {
+            //   'x-component-props.style.backgroundColor': '{{$self.value}}',
+            // },
           },
         }}
       />

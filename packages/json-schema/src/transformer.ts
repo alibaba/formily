@@ -33,6 +33,7 @@ import {
   onFieldValidateFailed,
   onFieldValidateSuccess,
 } from '@formily/core'
+import { IFieldState } from '@formily/core/esm/types'
 
 const FieldEffects = {
   onFieldInit,
@@ -197,9 +198,10 @@ const omitInvalid = (target: any) => {
   )
 }
 
-const getFieldInternalPropsBySchema = (
+const getStateFromSchema = (
   schema: Schema,
-  options: ISchemaFieldFactoryOptions
+  options: ISchemaFieldFactoryOptions,
+  state?: IFieldState
 ) => {
   return omitInvalid({
     validator: getValidatorBySchema(schema),
@@ -221,14 +223,16 @@ const getFieldInternalPropsBySchema = (
     display: schema['x-display'],
     pattern: schema['x-pattern'],
     decorator: [
-      schema['x-decorator'] &&
-        FormPath.getIn(options?.components, schema['x-decorator']),
-      schema['x-decorator-props'],
+      (schema['x-decorator'] &&
+        FormPath.getIn(options?.components, schema['x-decorator'])) ||
+        state?.decorator?.[0],
+      schema['x-decorator-props'] || state?.decorator?.[1],
     ],
     component: [
-      schema['x-component'] &&
-        FormPath.getIn(options?.components, schema['x-component']),
-      schema['x-component-props'],
+      (schema['x-component'] &&
+        FormPath.getIn(options?.components, schema['x-component'])) ||
+        state?.component?.[0],
+      schema['x-component-props'] || state?.component?.[1],
     ],
   })
 }
@@ -240,12 +244,13 @@ const patchState = (state: any, target: any) => {
         patch(value, path.concat(key))
       })
     } else {
-      untracked(() => {
-        FormPath.setIn(state, path, target)
-      })
+      FormPath.setIn(state, path, target)
     }
   }
-  patch(target, [])
+  untracked(() => {
+    patch(target, [])
+  })
+  return state
 }
 
 const getSchemaFieldRequired = (schema: Schema) => {
@@ -287,7 +292,11 @@ const getSchemaFieldReactions = (
       field.setState((state) =>
         patchState(
           state,
-          getFieldInternalPropsBySchema(compile(request.schema), options)
+          getStateFromSchema(
+            patchState({}, compile(request.schema)),
+            options,
+            state
+          )
         )
       )
     }
@@ -378,7 +387,7 @@ export const transformSchemaToFieldProps = (
 ) => {
   const required = getSchemaFieldRequired(schema)
   const reactions = getSchemaFieldReactions(schema, options)
-  const props = getFieldInternalPropsBySchema(schema, options)
+  const props = getStateFromSchema(schema, options)
   return {
     ...props,
     required,
