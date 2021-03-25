@@ -3,7 +3,7 @@ import { LifeCycle, Form } from '../models'
 import { AnyFunction } from '../types'
 import { isForm } from './checkers'
 
-const __FORM_EFFECT_ENVS__ = {
+const FormEffectState = {
   lifecycles: [],
   context: [],
   effectStart: false,
@@ -17,11 +17,11 @@ export const createEffectHook = <
   callback?: F
 ) => {
   return (...args: Parameters<ReturnType<F>>) => {
-    if (__FORM_EFFECT_ENVS__.effectStart) {
-      __FORM_EFFECT_ENVS__.lifecycles.push(
+    if (FormEffectState.effectStart) {
+      FormEffectState.lifecycles.push(
         new LifeCycle(type, (payload, ctx) => {
           if (isFn(callback)) {
-            callback(payload, ctx, ...__FORM_EFFECT_ENVS__.context)(...args)
+            callback(payload, ctx, ...FormEffectState.context)(...args)
           }
         })
       )
@@ -37,11 +37,9 @@ export const createEffectContext = <T = any>(defaultValue?: T) => {
   let index: number
   return {
     provide(value?: T) {
-      if (__FORM_EFFECT_ENVS__.effectStart) {
-        index = __FORM_EFFECT_ENVS__.context.length
-        __FORM_EFFECT_ENVS__.context[index] = isValid(value)
-          ? value
-          : defaultValue
+      if (FormEffectState.effectStart) {
+        index = FormEffectState.context.length
+        FormEffectState.context[index] = isValid(value) ? value : defaultValue
       } else {
         throw new Error(
           'Provide method cannot be used in asynchronous function body'
@@ -49,12 +47,12 @@ export const createEffectContext = <T = any>(defaultValue?: T) => {
       }
     },
     consume(): T {
-      if (!__FORM_EFFECT_ENVS__.effectStart) {
+      if (!FormEffectState.effectStart) {
         throw new Error(
           'Consume method cannot be used in asynchronous function body'
         )
       }
-      return __FORM_EFFECT_ENVS__.context[index]
+      return FormEffectState.context[index]
     },
   }
 }
@@ -67,10 +65,10 @@ export const runEffects = <Context>(
   context?: Context,
   ...args: ((context: Context) => void)[]
 ): LifeCycle[] => {
-  __FORM_EFFECT_ENVS__.lifecycles = []
-  __FORM_EFFECT_ENVS__.context = []
-  __FORM_EFFECT_ENVS__.effectStart = true
-  __FORM_EFFECT_ENVS__.effectEnd = false
+  FormEffectState.lifecycles = []
+  FormEffectState.context = []
+  FormEffectState.effectStart = true
+  FormEffectState.effectEnd = false
   if (isForm(context)) {
     FormEffectContext.provide(context)
   }
@@ -79,8 +77,8 @@ export const runEffects = <Context>(
       effects(context)
     }
   })
-  __FORM_EFFECT_ENVS__.context = []
-  __FORM_EFFECT_ENVS__.effectStart = false
-  __FORM_EFFECT_ENVS__.effectEnd = true
-  return __FORM_EFFECT_ENVS__.lifecycles
+  FormEffectState.context = []
+  FormEffectState.effectStart = false
+  FormEffectState.effectEnd = true
+  return FormEffectState.lifecycles
 }

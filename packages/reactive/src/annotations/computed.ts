@@ -9,7 +9,7 @@ import {
   batchStart,
   batchEnd,
   isBatching,
-  releaseBindingReactions,
+  isScopeBatching,
 } from '../reaction'
 
 export interface IComputed {
@@ -77,7 +77,6 @@ export const computed: IComputed = createAnnotation(
 
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
-        releaseBindingReactions(reaction)
         try {
           ReactionStack.push(reaction)
           compute()
@@ -111,7 +110,7 @@ export const computed: IComputed = createAnnotation(
       } else {
         if (hasRunningReaction()) {
           bindComputedReactions(reaction)
-        } else if (isBatching()) {
+        } else if (isBatching() || isScopeBatching()) {
           compute()
         }
       }

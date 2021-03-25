@@ -223,8 +223,7 @@ export class Field<
         () => this.value,
         () => {
           this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
-        },
-        this.address.toString()
+        }
       ),
       reaction(
         () => this.initialValue,
@@ -265,10 +264,12 @@ export class Field<
       )
     )
     const reactions = toArr(this.props.reactions)
-    reactions.forEach((reaction) => {
-      if (isFn(reaction)) {
-        this.disposers.push(autorun(() => reaction(this)))
-      }
+    this.form.addEffects(this, () => {
+      reactions.forEach((reaction) => {
+        if (isFn(reaction)) {
+          this.disposers.push(autorun(() => reaction(this)))
+        }
+      })
     })
   }
 
@@ -773,6 +774,7 @@ export class Field<
     this.disposers.forEach((dispose) => {
       dispose()
     })
+    this.form.removeEffects(this)
   }
 
   match = (pattern: FormPathPattern) => {

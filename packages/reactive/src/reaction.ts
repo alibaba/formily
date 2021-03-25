@@ -14,7 +14,7 @@ import {
   PendingReactions,
   ReactionComputeds,
   BatchCount,
-  Untracking,
+  UntrackCount,
   ProxyRaw,
   RawNode,
   BatchScope,
@@ -139,7 +139,7 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   }
 
   const current = ReactionStack[ReactionStack.length - 1]
-  if (Untracking.value) return
+  if (isUntracking()) return
   if (current) {
     addReactionTargetKeys(current, addTargetKeysReactions(target, key, current))
   }
@@ -241,7 +241,19 @@ export const batchScopeEnd = () => {
   })
 }
 
+export const untrackStart = () => {
+  UntrackCount.value++
+}
+
+export const untrackEnd = () => {
+  UntrackCount.value--
+}
+
 export const isBatching = () => BatchCount.value > 0
+
+export const isUntracking = () => UntrackCount.value > 0
+
+export const isScopeBatching = () => BatchScope.value
 
 export const excutePendingReactions = () => {
   PendingReactions.forEach((reaction) => {

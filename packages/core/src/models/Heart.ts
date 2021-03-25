@@ -4,9 +4,7 @@ import { IHeartProps } from '../types'
 export class Heart<Payload = any, Context = any> extends Subscribable {
   lifecycles: LifeCycle<Payload>[] = []
 
-  outerLifecycles: {
-    [key: string]: LifeCycle<Payload>[]
-  } = {}
+  outerLifecycles: Map<any, LifeCycle<Payload>[]> = new Map()
 
   context: Context
 
@@ -32,12 +30,16 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
     }, [])
   }
 
-  addLifeCycles = (id: string, lifecycles: LifeCycle[] = []) => {
-    this.outerLifecycles[id] = this.buildLifeCycles(lifecycles)
+  addLifeCycles = (id: any, lifecycles: LifeCycle[] = []) => {
+    this.outerLifecycles.set(id, this.buildLifeCycles(lifecycles))
   }
 
-  removeLifeCycles = (id: string) => {
-    delete this.outerLifecycles[id]
+  hasLifeCycles = (id: any) => {
+    return this.outerLifecycles.has(id)
+  }
+
+  removeLifeCycles = (id: any) => {
+    this.outerLifecycles.delete(id)
   }
 
   setLifeCycles = (lifecycles: LifeCycle[] = []) => {
@@ -49,7 +51,7 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
       this.lifecycles.forEach((lifecycle) => {
         lifecycle.notify(type, payload, context || this.context)
       })
-      each(this.outerLifecycles, (lifecycles) => {
+      this.outerLifecycles.forEach((lifecycles) => {
         lifecycles.forEach((lifecycle) => {
           lifecycle.notify(type, payload, context || this.context)
         })

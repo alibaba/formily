@@ -1,4 +1,4 @@
-import { observable, action } from '../'
+import { observable, action,model } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../shared'
@@ -191,4 +191,25 @@ test('computed chain annotation', () => {
   expect(compu2.value).toEqual(66)
   expect(handler).toBeCalledTimes(3)
   expect(handler1).toBeCalledTimes(3)
+})
+
+test('computed with array length',()=>{
+  const obs = model({
+    arr:[],
+    get isEmpty(){
+      return this.arr.length === 0
+    },
+    get isNotEmpty(){
+      return !this.isEmpty
+    }
+  })
+  const handler = jest.fn()
+  autorun(()=>{
+    handler(obs.isEmpty)
+    handler(obs.isNotEmpty)
+  })
+  expect(handler).toBeCalledTimes(2)
+  obs.arr = ['1']
+  obs.arr = []
+  expect(handler).toBeCalledTimes(6)
 })

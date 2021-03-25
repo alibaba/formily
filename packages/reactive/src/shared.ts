@@ -9,8 +9,9 @@ import {
   isPlainObj,
   isArr,
 } from '@formily/shared'
-import { ProxyRaw, MakeObservableSymbol, Untracking } from './environment'
+import { ProxyRaw, MakeObservableSymbol } from './environment'
 import { Annotation } from './types'
+import { untrackStart, untrackEnd } from './reaction'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
 const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
@@ -83,11 +84,11 @@ export const raw = (target: any) => ProxyRaw.get(target)
 export const toJS = (target: any) => clone(target)
 
 export const untracked = <T extends () => any>(callback?: T): ReturnType<T> => {
-  Untracking.value = true
+  untrackStart()
   let res: any
   if (isFn(callback)) {
     res = callback()
   }
-  Untracking.value = false
+  untrackEnd()
   return res
 }

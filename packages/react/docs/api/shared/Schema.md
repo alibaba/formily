@@ -551,11 +551,24 @@ Schema 联动协议，如果 reaction 对象里包含 target，则代表主动�
 #### 签名
 
 ```ts
+type SchemaReactionEffect =
+  | 'onFieldInit'
+  | 'onFieldMount'
+  | 'onFieldUnmount'
+  | 'onFieldValueChange'
+  | 'onFieldInputValueChange'
+  | 'onFieldInitialValueChange'
+  | 'onFieldValidateStart'
+  | 'onFieldValidateEnd'
+  | 'onFieldValidateFailed'
+  | 'onFieldValidateSuccess'
+
 type SchemaReaction<Field = any> =
   | {
       dependencies?: string[] //依赖的字段路径列表，只能以点路径描述依赖
       when?: string | boolean //联动条件
       target?: string //要操作的字段路径，支持FormPathPattern路径语法
+      effects?: SchemaReactionEffect[] //主动模式下的独立生命周期钩子
       fullfill?: {
         //满足条件
         state?: Formily.Core.Types.IGeneralFieldState //更新状态
@@ -717,6 +730,33 @@ type SchemaReactions<Field = any> =
 }
 ```
 
+写法六，基于生命周期钩子联动
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "x-component": "Input",
+      "x-reactions": {
+        "target": "target",
+        "effects": ["onFieldInputValueChange"],
+        "fullfill": {
+          "state": {
+            "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
+          }
+        }
+      }
+    },
+    "target": {
+      "type": "string",
+      "x-component": "Input"
+    }
+  }
+}
+```
+
 **被动联动**
 
 ```json
@@ -835,3 +875,7 @@ type SchemaReactions<Field = any> =
 ### $form
 
 只能在 x-reactions 中的表达式消费，代表当前字段实例
+
+### $target
+
+只能在 x-reactions 中的表达式消费，代表主动模式的 target 字段

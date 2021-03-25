@@ -32,7 +32,12 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
     }
     return React.createElement(
       field.decorator[0],
-      { ...field.decorator[1] },
+      {
+        ...field.decorator[1],
+        style: {
+          ...field.decorator[1]?.style,
+        },
+      },
       children
     )
   }
@@ -70,6 +75,9 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
         disabled,
         readOnly,
         ...field.component[1],
+        style: {
+          ...field.component[1]?.style,
+        },
         value,
         onChange,
         onFocus,
