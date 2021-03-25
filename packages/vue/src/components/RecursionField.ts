@@ -21,7 +21,6 @@ const RecursionField = observer(defineComponent({
   // eslint-disable-next-line vue/require-prop-types
   props: {
     schema: {
-      type: Object,
       required: true
     },
     name: [String, Number],
@@ -34,12 +33,8 @@ const RecursionField = observer(defineComponent({
       type: Boolean,
       default: undefined
     },
-    mapProperties: {
-      type: Object
-    },
-    filterProperties: {
-      type: Object
-    },
+    mapProperties: {},
+    filterProperties: {},
   },
   setup(props: IRecursionFieldProps) {
     const { track } = useObserver()

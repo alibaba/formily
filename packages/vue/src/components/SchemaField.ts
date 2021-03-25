@@ -155,11 +155,8 @@ export function createSchemaField<Components extends SchemaComponents>(
         default: undefined
       },
     },
-    setup<
-      Decorator extends VueComponent,
-      Component extends VueComponent
-    >(props: ISchemaFieldProps<Decorator, Component>, { slots }) {
-      const createSchema = (schemaProp: ISchemaFieldProps<Decorator, Component>['schema']) => Schema.isSchemaInstance(schemaProp)
+    setup(props: ISchemaFieldProps<VueComponent, VueComponent>, { slots }) {
+      const createSchema = (schemaProp: ISchemaFieldProps<VueComponent, VueComponent>['schema']) => Schema.isSchemaInstance(schemaProp)
         ? schemaProp
         : new Schema({
             type: 'object',
@@ -201,7 +198,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     name: 'MarkupField',
     props: Object.assign({}, markupProps, { type: String }),
     setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      const parentRef = inject(SchemaMarkupSymbol)
+      const parentRef = inject(SchemaMarkupSymbol, null)
       if (!parentRef || !parentRef.value) return () => h(Fragment, {}, {})
 
       const name = props.name || getRandomName()
