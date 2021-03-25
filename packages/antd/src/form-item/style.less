@@ -109,13 +109,13 @@
 }
 
 .@{form-item-cls}-label-align-left {
-    .@{form-item-cls}-label {
+    > .@{form-item-cls}-label {
         justify-content: flex-start;
     }
 }
 
 .@{form-item-cls}-label-align-right {
-    .@{form-item-cls}-label {
+    > .@{form-item-cls}-label {
         justify-content: flex-end;
     }
 }
@@ -347,7 +347,7 @@
         .@{form-item-cls}-label * {
             line-height: @height-base - 10 !important;
         }
-    
+
         .@{form-item-cls}-label-content {
             min-height: @height-base - 10 !important;
         }
