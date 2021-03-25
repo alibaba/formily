@@ -112,8 +112,9 @@ console.log(FormPath.parse('parent.[aa,bb]').toString()) //parent.[aa,bb]
 import { FormPath } from '@formily/core'
 
 console.log(FormPath.parse('.dd', 'aa.bb.cc').toString()) //aa.bb.dd
-console.log(FormPath.parse('..[+].dd', 'aa.1.cc').toString()) //aa.2.cc
-console.log(FormPath.parse('..[+10].dd', 'aa.1.cc').toString()) //aa.11.cc
+console.log(FormPath.parse('..[].dd', 'aa.1.cc').toString()) //aa.1.dd
+console.log(FormPath.parse('..[+].dd', 'aa.1.cc').toString()) //aa.2.dd
+console.log(FormPath.parse('..[+10].dd', 'aa.1.cc').toString()) //aa.11.dd
 ```
 
 ### 匹配路径语法

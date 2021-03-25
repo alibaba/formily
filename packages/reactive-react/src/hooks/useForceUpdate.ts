@@ -18,8 +18,10 @@ export function useForceUpdate() {
   const update = useCallback(() => {
     if (RENDER_COUNT.value === 0) {
       if (unmountRef.current) return
-      setTick((tick) => {
-        return tick + 1
+      batchUpdate(() => {
+        setTick((tick) => {
+          return tick + 1
+        })
       })
     } else {
       if (!RENDER_QUEUE.has(update)) {
@@ -34,6 +36,7 @@ export function useForceUpdate() {
     RENDER_COUNT.value--
     if (RENDER_COUNT.value === 0) {
       batchUpdate(() => {
+        if (unmountRef.current) return
         RENDER_QUEUE.forEach((update) => {
           RENDER_QUEUE.delete(update)
           update()

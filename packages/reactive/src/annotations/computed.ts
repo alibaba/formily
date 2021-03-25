@@ -9,6 +9,7 @@ import {
   batchStart,
   batchEnd,
   isBatching,
+  isScopeBatching,
 } from '../reaction'
 
 export interface IComputed {
@@ -44,7 +45,7 @@ export const computed: IComputed = createAnnotation(
         if (value?.get) return value?.get
         return value
       }
-      const descriptor = Reflect.getOwnPropertyDescriptor(target, property)
+      const descriptor = Object.getOwnPropertyDescriptor(target, property)
       if (descriptor?.get) return descriptor.get
       return getGetter(Object.getPrototypeOf(target))
     }
@@ -75,14 +76,15 @@ export const computed: IComputed = createAnnotation(
     }
 
     function reaction() {
-      try {
-        ReactionStack.push(reaction)
-        compute()
-      } finally {
-        ReactionStack.pop()
+      if (ReactionStack.indexOf(reaction) === -1) {
+        try {
+          ReactionStack.push(reaction)
+          compute()
+        } finally {
+          ReactionStack.pop()
+        }
       }
     }
-
     reaction._context = context
     reaction._property = property
     reaction._active = false
@@ -108,7 +110,7 @@ export const computed: IComputed = createAnnotation(
       } else {
         if (hasRunningReaction()) {
           bindComputedReactions(reaction)
-        } else if (isBatching()) {
+        } else if (isBatching() || isScopeBatching()) {
           compute()
         }
       }

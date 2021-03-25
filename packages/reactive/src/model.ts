@@ -1,4 +1,4 @@
-import { each, isFn, reduce } from '@formily/shared'
+import { each, isFn } from '@formily/shared'
 import { buildTreeNode } from './traverse'
 import { observable } from './observable'
 import { createObservable, getObservableMaker } from './internals'

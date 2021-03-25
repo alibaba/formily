@@ -309,7 +309,7 @@ export const FormItem: ComposeFormItem = connect(
               : buf.concat([text])
           }, [])
         }
-
+        if (field.validating) return
         if (props.feedbackText) return props.feedbackText
         if (field.errors.length) return split(field.errors)
         if (field.warnings.length) return split(field.warnings)

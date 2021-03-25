@@ -32,10 +32,10 @@ interface IItemProps {
 
 export type ArrayBaseMixins = {
   Addition?: React.FC<IAdditionProps>
-  Remove?: React.FC<AntdIconProps>
-  MoveUp?: React.FC<AntdIconProps>
-  MoveDown?: React.FC<AntdIconProps>
-  SortHandle?: React.FC<AntdIconProps>
+  Remove?: React.FC<AntdIconProps & { index?: number }>
+  MoveUp?: React.FC<AntdIconProps & { index?: number }>
+  MoveDown?: React.FC<AntdIconProps & { index?: number }>
+  SortHandle?: React.FC<AntdIconProps & { index?: number }>
   Index?: React.FC
   useArray?: () => IContext
   useIndex?: () => number
@@ -57,8 +57,9 @@ const useArray = () => {
   return useContext(ArrayBaseContext)
 }
 
-const useIndex = () => {
-  return useContext(ItemContext)?.index
+const useIndex = (index?: number) => {
+  const ctx = useContext(ItemContext)
+  return ctx ? ctx.index : index
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
@@ -89,7 +90,7 @@ ArrayBase.Item = ({ children, ...props }) => {
   return <ItemContext.Provider value={props}>{children}</ItemContext.Provider>
 }
 
-ArrayBase.SortHandle = SortableHandle((props: any) => {
+const SortHandle = SortableHandle((props: any) => {
   const prefixCls = usePrefixCls('formily-array-base')
   return (
     <MenuOutlined
@@ -100,6 +101,12 @@ ArrayBase.SortHandle = SortableHandle((props: any) => {
   )
 }) as any
 
+ArrayBase.SortHandle = () => {
+  const array = useArray()
+  if (array.field.pattern !== 'editable') return null
+  return <SortHandle />
+}
+
 ArrayBase.Index = () => {
   const index = useIndex()
   return <span>#{index + 1}.</span>
@@ -109,6 +116,7 @@ ArrayBase.Addition = (props) => {
   const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (array.field.pattern !== 'editable') return null
   return (
     <Button
       type="dashed"
@@ -131,9 +139,10 @@ ArrayBase.Addition = (props) => {
 }
 
 ArrayBase.Remove = React.forwardRef((props, ref) => {
-  const index = useIndex()
+  const index = useIndex(props.index)
   const base = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (base.field.pattern !== 'editable') return null
   return (
     <DeleteOutlined
       {...props}
@@ -147,9 +156,10 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
 })
 
 ArrayBase.MoveDown = React.forwardRef((props, ref) => {
-  const index = useIndex()
+  const index = useIndex(props.index)
   const base = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (base.field.pattern !== 'editable') return null
   return (
     <DownOutlined
       {...props}
@@ -163,9 +173,10 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
 })
 
 ArrayBase.MoveUp = React.forwardRef((props, ref) => {
-  const index = useIndex()
+  const index = useIndex(props.index)
   const base = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (base.field.pattern !== 'editable') return null
   return (
     <UpOutlined
       {...props}

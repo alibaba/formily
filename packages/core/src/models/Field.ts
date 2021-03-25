@@ -46,7 +46,7 @@ import {
 import {
   buildNodeIndexes,
   validateToFeedbacks,
-  publishUpdate,
+  initFieldUpdate,
   updateFeedback,
   queryFeedbacks,
   queryFeedbackMessages,
@@ -54,6 +54,7 @@ import {
   modelStateSetter,
   modelStateGetter,
   isHTMLInputEvent,
+  initFieldValue,
 } from '../shared'
 import { Query } from './Query'
 
@@ -207,7 +208,6 @@ export class Field<
       setDecorator: batch,
       setDecoratorProps: batch,
       setState: batch,
-      onInit: batch,
       onInput: batch,
       onMount: batch,
       onUnmount: batch,
@@ -264,10 +264,12 @@ export class Field<
       )
     )
     const reactions = toArr(this.props.reactions)
-    reactions.forEach((reaction) => {
-      if (isFn(reaction)) {
-        this.disposers.push(autorun(() => reaction(this)))
-      }
+    this.form.addEffects(this, () => {
+      reactions.forEach((reaction) => {
+        if (isFn(reaction)) {
+          this.disposers.push(autorun(() => reaction(this)))
+        }
+      })
     })
   }
 
@@ -398,8 +400,8 @@ export class Field<
   }
 
   get validateStatus() {
-    if (this.invalid) return 'error'
     if (this.validating) return 'validating'
+    if (this.invalid) return 'error'
     if (this.warnings.length) return 'warning'
     if (this.successes.length) return 'success'
   }
@@ -649,25 +651,18 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
+    batch.scope(() => {
+      initFieldValue(this)
+    })
+    batch.scope(() => {
+      initFieldUpdate(this)
+    })
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-    publishUpdate(this)
   }
 
   onMount = () => {
     this.mounted = true
     this.unmounted = false
-    if (isEmpty(this.initialValue)) {
-      if (isValid(this.props.initialValue)) {
-        this.initialValue = this.props.initialValue
-      }
-    }
-    if (isEmpty(this.value)) {
-      if (isValid(this.props.value)) {
-        this.value = this.props.value
-      } else if (!isEmpty(this.initialValue)) {
-        this.value = this.initialValue
-      }
-    }
     this.form.notify(LifeCycleTypes.ON_FIELD_MOUNT, this)
   }
 
@@ -779,6 +774,7 @@ export class Field<
     this.disposers.forEach((dispose) => {
       dispose()
     })
+    this.form.removeEffects(this)
   }
 
   match = (pattern: FormPathPattern) => {

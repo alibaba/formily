@@ -9,7 +9,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 
 const SchemaField = createSchemaField({
   components: {
@@ -51,9 +50,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm, onFieldReact, onFieldInit } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action, observable } from '@formily/reactive'
 import { fetch } from 'mfetch'
 
@@ -104,19 +102,21 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   const keyword = observable.ref('')
-  onFieldReact(pattern, (field) => {
+
+  onFieldInit(pattern, (field) => {
     field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
       onSearch: (value) => {
         keyword.value = value
       },
     })
+  })
+
+  onFieldReact(pattern, (field) => {
+    field.loading = true
     service({ field, keyword: keyword.value }).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          suffixIcon: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })
@@ -165,7 +165,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -182,15 +181,11 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
-    })
+    field.loading = true
     service(field).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          suffixIcon: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })
@@ -324,7 +319,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -367,15 +361,11 @@ const loadData = async (field) => {
 }
 
 const useAsyncDataSource = (service) => (field) => {
-  field.setComponentProps({
-    suffixIcon: <LoadingOutlined />,
-  })
+  field.loading = true
   service(field).then(
     action((data) => {
-      field.setDataSource(data)
-      field.setComponentProps({
-        suffixIcon: undefined,
-      })
+      field.dataSource = data
+      field.loading = false
     })
   )
 }
@@ -432,7 +422,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 
 const form = createForm()
 
@@ -469,7 +458,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const useAsyncDataSource = (
@@ -479,15 +467,11 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      suffixIcon: <LoadingOutlined />,
-    })
+    field.loading = true
     service(field).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          suffixIcon: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })

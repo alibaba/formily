@@ -2552,7 +2552,6 @@ type InternalFormats =
   | 'ipv6'
   | 'ipv4'
   | 'idcard'
-  | 'taodomain'
   | 'qq'
   | 'phone'
   | 'money'

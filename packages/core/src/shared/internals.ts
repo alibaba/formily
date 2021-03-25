@@ -30,6 +30,7 @@ import { ReservedProperties } from './constants'
 export const isHTMLInputEvent = (event: any) => {
   if (event?.target) {
     if (
+      event.target.tagName &&
       event.target.tagName !== 'INPUT' &&
       event.target.tagName !== 'TEXTAREA' &&
       event.target.tagName !== 'SELECT'
@@ -99,6 +100,9 @@ export const applyFieldPatches = (
     } else if (type === 'update') {
       if (payload) {
         target[address] = payload
+      }
+      if (address && payload) {
+        buildNodeIndexes(payload, address)
       }
     }
   })
@@ -260,7 +264,7 @@ export const spliceArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
-            payload: buildNodeIndexes(field, newIdentifier),
+            payload: field,
           })
         }
         if (isInsertNode(identifier) || isDeleteNode(identifier)) {
@@ -326,7 +330,7 @@ export const exchangeArrayState = (
           fieldPatches.push({
             type: 'update',
             address: newIdentifier,
-            payload: buildNodeIndexes(field, newIdentifier),
+            payload: field,
           })
           if (!fields[newIdentifier]) {
             fieldPatches.push({
@@ -342,7 +346,22 @@ export const exchangeArrayState = (
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
-export const publishUpdate = (field: GeneralField) => {
+export const initFieldValue = (field: Field) => {
+  if (isEmpty(field.initialValue)) {
+    if (isValid(field.props.initialValue)) {
+      field.initialValue = field.props.initialValue
+    }
+  }
+  if (isEmpty(field.value)) {
+    if (isValid(field.props.value)) {
+      field.value = field.props.value
+    } else if (!isEmpty(field.initialValue)) {
+      field.value = field.initialValue
+    }
+  }
+}
+
+export const initFieldUpdate = (field: GeneralField) => {
   const form = field.form
   const updates = FormPath.ensureIn(form, 'requests.updates', [])
   const indexes = FormPath.ensureIn(form, 'requests.updateIndexes', {})

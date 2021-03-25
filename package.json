@@ -11,7 +11,7 @@
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
     "build": "rimraf -rf packages/*/lib packages/*/esm && lerna run build",
-    "build:docs": "node ./scripts/docs.js build -i docs/zh-cn -o docs/zh-cn",
+    "build:docs": "dumi build",
     "start": "dumi dev",
     "test": "jest --coverage",
     "test:sc": "jest packages/react-shared-components/src/__tests__/*.spec.tsx",

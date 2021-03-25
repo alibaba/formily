@@ -26,7 +26,7 @@ const usePlaceholder = (value?: any) => {
 const Input: React.FC<InputProps> = (props) => {
   const prefixCls = usePrefixCls('form-text', props)
   return (
-    <Space className={cls(prefixCls, props.className)}>
+    <Space className={cls(prefixCls, props.className)} style={props.style}>
       {props.addonBefore}
       {props.prefix}
       {usePlaceholder(props.value)}
@@ -73,7 +73,11 @@ const Select: React.FC<SelectProps<any>> = (props) => {
       return <Tag key={key}>{text || placeholder}</Tag>
     })
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
 }
 
 const TreeSelect: React.FC<TreeSelectProps<any>> = (props) => {
@@ -127,7 +131,11 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = (props) => {
       )
     })
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
 }
 
 const Cascader: React.FC<CascaderProps> = (props) => {
@@ -142,17 +150,33 @@ const Cascader: React.FC<CascaderProps> = (props) => {
   const getSelected = () => {
     return isArr(props.value) ? props.value : []
   }
+  const findLabel = (value: any, dataSource: any[]) => {
+    for (let i = 0; i < dataSource?.length; i++) {
+      const item = dataSource[i]
+      if (item?.value === value) {
+        return item?.label
+      } else {
+        const childLabel = findLabel(value, item?.children)
+        if (childLabel) return childLabel
+      }
+    }
+  }
   const getLabels = () => {
     const selected = getSelected()
+    if (!selected?.length) {
+      return placeholder
+    }
     return selected
       .map((value) => {
-        return (
-          dataSource?.find((item) => item.value == value)?.label || placeholder
-        )
+        return findLabel(value, dataSource) || placeholder
       })
       .join('/')
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
 }
 
 const DatePicker: React.FC<DatePickerProps> = (props) => {
@@ -172,7 +196,11 @@ const DateRangePicker: React.FC<DateRangePickerProps> = (props) => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
 }
 
 const TimePicker: React.FC<TimePickerProps> = (props) => {
@@ -182,7 +210,11 @@ const TimePicker: React.FC<TimePickerProps> = (props) => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
 }
 
 const TimeRangePicker: React.FC<TimeRangePickerProps> = (props) => {
@@ -192,7 +224,11 @@ const TimeRangePicker: React.FC<TimeRangePickerProps> = (props) => {
     const labels = formatMomentValue(props.value, props.format, placeholder)
     return isArr(labels) ? labels.join('~') : labels
   }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {getLabels()}
+    </div>
+  )
 }
 
 export const PreviewText = {

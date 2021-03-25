@@ -62,7 +62,7 @@ export const getValidateLocale = (path: string) => {
     registry.locales.messages,
     `${getISOCode(registry.locales.langugage)}.${path}`
   )
-  return message || 'Field is invalid'
+  return message || getValidateLocale('pattern')
 }
 
 export const getValidateMessageTemplateEngine = () => registry.template

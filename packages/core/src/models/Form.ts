@@ -405,11 +405,15 @@ export class Form<ValueType extends object = any> {
   }
 
   setInitialValuesIn = (pattern: FormPathPattern, initialValue: any) => {
-    FormPath.setIn(this.initialValues, pattern, initialValue)
+    untracked(() => {
+      FormPath.setIn(this.initialValues, pattern, initialValue)
+    })
   }
 
   deleteIntialValuesIn = (pattern: FormPathPattern) => {
-    FormPath.deleteIn(this.initialValues, pattern)
+    untracked(() => {
+      FormPath.deleteIn(this.initialValues, pattern)
+    })
   }
 
   existInitialValuesIn = (pattern: FormPathPattern) => {
@@ -462,11 +466,13 @@ export class Form<ValueType extends object = any> {
     this.pattern = pattern
   }
 
-  addEffects = (id: string, effects: IFormProps['effects']) => {
-    this.heart.addLifeCycles(id, runEffects(this, effects))
+  addEffects = (id: any, effects: IFormProps['effects']) => {
+    if (!this.heart.hasLifeCycles(id)) {
+      this.heart.addLifeCycles(id, runEffects(this, effects))
+    }
   }
 
-  removeEffects = (id: string) => {
+  removeEffects = (id: any) => {
     this.heart.removeLifeCycles(id)
   }
 

@@ -335,17 +335,17 @@ test('validate/errors/warnings/successes/valid/invalid/validateStatus/queryFeedb
   await field.onInput('111')
   expect(field.errors).toEqual(['error'])
   await field.onBlur()
-  expect(field.errors).toEqual(['This field is a invalid url', 'error'])
+  expect(field.errors).toEqual(['The field value is a invalid url', 'error'])
   await field.onFocus()
   expect(field.errors).toEqual([
-    'This field is a invalid url',
-    'This field is not a valid date format',
+    'The field value is a invalid url',
+    'The field value is not a valid date format',
     'error',
   ])
   field.setFeedback()
   expect(field.errors).toEqual([
-    'This field is a invalid url',
-    'This field is not a valid date format',
+    'The field value is a invalid url',
+    'The field value is not a valid date format',
     'error',
   ])
   expect(field3.feedbacks).toEqual([])

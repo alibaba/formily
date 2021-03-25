@@ -151,4 +151,4 @@ subscribe(Dependencies, Reactions)
 - 它可以用来表达字段间关系的模型，借助路径系统，我们可以实现查找某个字段父亲，能查找父亲，也就能实现树级别的数据继承能力，同样，我们也能查找某个字段的相邻节点
 - 它可以用来实现字段数据的读写，带解构的数据读写
 
-整个路径系统，其实是基于[depath](github.com/janrywang/depath)的路径 DSL 来实现的，想要了解更多路径系统的内容，可以详细看看[FormPath API](/api/entry/form-path)篇
+整个路径系统，其实是基于@formily/path 的路径 DSL 来实现的，想要了解更多路径系统的内容，可以详细看看[FormPath API](/api/entry/form-path)篇

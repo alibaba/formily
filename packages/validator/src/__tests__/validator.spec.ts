@@ -30,7 +30,7 @@ const noError = (results: any) => {
 test('empty string validate', async () => {
   const results = await validate('', { required: true })
   expect(results).toEqual({
-    error: ['This field is required'],
+    error: ['The field value is required'],
     success: [],
     warning: [],
   })
@@ -39,7 +39,7 @@ test('empty string validate', async () => {
 test('empty array validate', async () => {
   const results = await validate([], { required: true })
   expect(results).toEqual({
-    error: ['This field is required'],
+    error: ['The field value is required'],
     success: [],
     warning: [],
   })
@@ -49,7 +49,7 @@ test('empty array validate', async () => {
 test('empty object validate', async () => {
   const results = await validate({}, { required: true })
   expect(results).toEqual({
-    error: ['This field is required'],
+    error: ['The field value is required'],
     success: [],
     warning: [],
   })
@@ -72,7 +72,7 @@ test('multi validate', async () => {
     },
   })
   expect(results).toEqual({
-    error: ['This field is required', 'validate error'],
+    error: ['The field value is required', 'validate error'],
     success: [],
     warning: [],
   })
@@ -92,7 +92,7 @@ test('first validate', async () => {
     }
   )
   expect(results).toEqual({
-    error: ['This field is required'],
+    error: ['The field value is required'],
     success: [],
     warning: [],
   })
@@ -218,7 +218,7 @@ test('filter trigger type(match first validte)', async () => {
       }
     )
   ).toEqual({
-    error: ['This field is required'],
+    error: ['The field value is required'],
     success: [],
     warning: [],
   })
@@ -240,14 +240,14 @@ test('filter trigger type(match multi validte)', async () => {
       }
     )
   ).toEqual({
-    error: ['This field is required', 'validate error'],
+    error: ['The field value is required', 'validate error'],
     success: [],
     warning: [],
   })
 })
 
 test('validate formats(date)', async () => {
-  hasError(await validate('', 'date'))
+  noError(await validate('', 'date'))
   hasError(await validate('2020-1', 'date'))
   hasError(await validate('2020-01- 11:23:33', 'date'))
   hasError(await validate('12/01/', 'date'))
@@ -263,7 +263,7 @@ test('validate formats(date)', async () => {
 })
 
 test('validate formats(number)', async () => {
-  hasError(await validate('', 'number'))
+  noError(await validate('', 'number'))
   hasError(await validate('12323d', 'number'))
   noError(await validate('12323', 'number'))
   noError(await validate('12323.12', 'number'))
@@ -272,13 +272,13 @@ test('validate formats(number)', async () => {
 })
 
 test('validate formats(integer)', async () => {
-  hasError(await validate('', 'integer'))
+  noError(await validate('', 'integer'))
   hasError(await validate('222.333', 'integer'))
   noError(await validate('12323', 'integer'))
 })
 
 test('validate formats(phone)', async () => {
-  hasError(await validate('', 'phone'))
+  noError(await validate('', 'phone'))
   hasError(await validate('222333', 'phone'))
   noError(await validate('15934567899', 'phone'))
 })
@@ -323,7 +323,7 @@ test('language', async () => {
     await validate('', {
       required: true,
     }),
-    'This field is required'
+    'The field value is required'
   )
 })
 

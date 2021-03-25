@@ -4,7 +4,8 @@
 
 .@{editable-prefix-cls} {
   cursor: pointer;
-  display: inline-block  !important;
+  display: inline-block !important;
+
   .@{ant-prefix}-form-text {
     .@{ant-prefix}-tag {
       transition: none !important;
@@ -12,6 +13,18 @@
 
     .@{ant-prefix}-tag:last-child {
       margin-right: 0 !important;
+    }
+  }
+
+  &-content {
+    display: flex;
+    align-items: center;
+
+    >* {
+      margin-right: 3px;
+      &:last-child{
+        margin-right: 0;
+      }
     }
   }
 

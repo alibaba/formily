@@ -24,7 +24,7 @@ import {
   buildNodeIndexes,
   modelStateGetter,
   modelStateSetter,
-  publishUpdate,
+  initFieldUpdate,
 } from '../shared'
 import { Form } from './Form'
 import { Query } from './Query'
@@ -132,10 +132,12 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   protected makeReactive() {
     const reactions = toArr(this.props.reactions)
-    reactions.forEach((reaction) => {
-      if (isFn(reaction)) {
-        this.disposers.push(autorun(() => reaction(this)))
-      }
+    this.form.addEffects(this, () => {
+      reactions.forEach((reaction) => {
+        if (isFn(reaction)) {
+          this.disposers.push(autorun(() => reaction(this)))
+        }
+      })
     })
   }
 
@@ -334,8 +336,10 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   onInit = () => {
     this.initialized = true
+    batch.scope(() => {
+      initFieldUpdate(this)
+    })
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
-    publishUpdate(this)
   }
 
   onMount = () => {
@@ -362,6 +366,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.disposers.forEach((dispose) => {
       dispose()
     })
+    this.form.removeEffects(this)
   }
 
   match = (pattern: FormPathPattern) => {

@@ -50,7 +50,7 @@ export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
       (props) => {
         const field = useField()
         return React.createElement(
-          !isVoidField(field) && field.pattern === 'readPretty'
+          !isVoidField(field) && field?.pattern === 'readPretty'
             ? component
             : target,
           props

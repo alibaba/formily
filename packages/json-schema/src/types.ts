@@ -43,11 +43,24 @@ export type SchemaPatch = (schema: ISchema) => ISchema
 
 export type SchemaKey = string | number
 
+export type SchemaEffectTypes =
+  | 'onFieldInit'
+  | 'onFieldMount'
+  | 'onFieldUnmount'
+  | 'onFieldValueChange'
+  | 'onFieldInputValueChange'
+  | 'onFieldInitialValueChange'
+  | 'onFieldValidateStart'
+  | 'onFieldValidateEnd'
+  | 'onFieldValidateFailed'
+  | 'onFieldValidateSuccess'
+
 export type SchemaReaction<Field = any> =
   | {
       dependencies?: string[]
       when?: string | boolean
       target?: string
+      effects?: SchemaEffectTypes[]
       fullfill?: {
         state?: Formily.Core.Types.IGeneralFieldState
         schema?: ISchema

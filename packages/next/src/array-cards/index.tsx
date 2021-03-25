@@ -102,7 +102,7 @@ const Empty = () => {
 export const ArrayCards: ComposedArrayCards = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
-  const dataSource = Array.isArray(field.value) ? [...field.value] : []
+  const dataSource = Array.isArray(field.value) ? field.value : []
   const prefixCls = usePrefixCls('formily-array-cards', props)
   const renderItems = () => {
     return dataSource?.map((item, index) => {
