@@ -1,5 +1,5 @@
 export default {
-  en: {
+  'en-US': {
     pattern: 'This field  does not match any pattern',
     required: 'This field is required',
     number: 'This field is not a number',
@@ -25,33 +25,7 @@ export default {
     max: 'The length or number of entries must be at most {{max}}',
     whitespace: 'This field cannot be blank string.'
   },
-  zh: {
-    pattern: '该字段不是一个合法的字段',
-    required: '该字段是必填字段',
-    number: '该字段不是合法的数字',
-    integer: '该字段不是合法的整型数字',
-    url: '该字段不是合法的url',
-    email: '该字段不是合法的邮箱格式',
-    ipv6: '该字段不是合法的ipv6格式',
-    ipv4: '该字段不是合法的ipv4格式',
-    idcard: '该字段不是合法的身份证格式',
-    taodomain: '该字段不符合淘系域名规则',
-    qq: '该字段不符合QQ号格式',
-    phone: '该字段不是有效的手机号',
-    money: '该字段不是有效货币格式',
-    zh: '该字段不是合法的中文字符串',
-    date: '该字段不是合法的日期格式',
-    zip: '该字段不是合法的邮编格式',
-    len: '长度或条目数必须为{{len}}',
-    min: '长度或条目数不能小于{{min}}',
-    max: '长度或条目数不能大于{{max}}',
-    maximum: '数值不能大于{{maximum}}',
-    exclusiveMaximum: '数值必须小于{{exclusiveMaximum}}',
-    minimum: '数值不能小于{{minimum}}',
-    exclusiveMinimum: '数值必须大于{{exclusiveMinimum}}',
-    whitespace: '不能为纯空白字符串'
-  },
-  'en-US': {
+  en: {
     pattern: 'This field  does not match any pattern',
     required: 'This field is required',
     number: 'This field is not a number',
@@ -128,6 +102,32 @@ export default {
     minimum: '數值不能小於{{minimum}}',
     exclusiveMinimum: '數值必須大於{{exclusiveMinimum}}',
     whitespace: '不能為純空白字符串'
+  },
+  zh: {
+    pattern: '该字段不是一个合法的字段',
+    required: '该字段是必填字段',
+    number: '该字段不是合法的数字',
+    integer: '该字段不是合法的整型数字',
+    url: '该字段不是合法的url',
+    email: '该字段不是合法的邮箱格式',
+    ipv6: '该字段不是合法的ipv6格式',
+    ipv4: '该字段不是合法的ipv4格式',
+    idcard: '该字段不是合法的身份证格式',
+    taodomain: '该字段不符合淘系域名规则',
+    qq: '该字段不符合QQ号格式',
+    phone: '该字段不是有效的手机号',
+    money: '该字段不是有效货币格式',
+    zh: '该字段不是合法的中文字符串',
+    date: '该字段不是合法的日期格式',
+    zip: '该字段不是合法的邮编格式',
+    len: '长度或条目数必须为{{len}}',
+    min: '长度或条目数不能小于{{min}}',
+    max: '长度或条目数不能大于{{max}}',
+    maximum: '数值不能大于{{maximum}}',
+    exclusiveMaximum: '数值必须小于{{exclusiveMaximum}}',
+    minimum: '数值不能小于{{minimum}}',
+    exclusiveMinimum: '数值必须大于{{exclusiveMinimum}}',
+    whitespace: '不能为纯空白字符串'
   },
   ja: {
     url: 'このフィールドは無効なURLです',
