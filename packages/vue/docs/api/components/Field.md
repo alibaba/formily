@@ -28,10 +28,10 @@ type Field = Vue.Component<any, any, any, IFieldFactoryProps>
 </template>
 
 <script>
-import { Input } from 'ant-design-vue';
+import { Input } from 'ant-design-vue'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 export default {
   components: { FormProvider, Field },

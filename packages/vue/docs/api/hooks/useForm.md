@@ -25,20 +25,21 @@ interface useForm {
 </template>
 
 <script>
+import { defineComponent, h } from '@vue/composition-api'
 import { createForm } from '@formily/core'
-import { FormProvider, Field, defineObservableComponent, useForm, h } from '@formily/vue';
-import { Input, Space } from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import { FormProvider, Field, useForm, observer } from '@formily/vue'
+import { Input, Space } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
-const Custom = defineObservableComponent({
-  observableSetup (collect, props, context) {
-    const form = useForm();
-    collect({ form });
-    return () => h('div', {}, {
-      default: () => [form.values.input]
-    });
+const Custom = observer(defineComponent({
+  setup (props, context) {
+    const formRef = useForm()
+    return () => {
+      const form = formRef.value
+      return h('div', {}, [form.values.input])
+    }
   },
-});
+}))
 
 export default {
   components: {

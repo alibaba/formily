@@ -1,16 +1,10 @@
 import Vue, { ComponentOptions, Component } from 'vue'
-import { SetupContext } from 'vue-demi'
 import { FormPathPattern } from '@formily/shared'
 import { ISchema, Schema, SchemaKey } from '@formily/json-schema'
 
 export type VueComponent = ComponentOptions<Vue> | Component
 
 export type VueComponentProps<T extends VueComponent = ComponentOptions<Vue>> = T extends Vue ? Exclude<T, keyof Vue> : (T extends ComponentOptions<Vue> ? T['props'] : Record<string, any>)
-
-export interface ObservableComponentOptions <T extends VueComponent = VueComponent> {
-  observableSetup?: (collect: (data: Record<string, any>) => any, props: VueComponentProps<T>, context: SetupContext) => any
-  [key: string]: any
-}
 
 export interface IProviderProps {
   form: Formily.Core.Models.Form
