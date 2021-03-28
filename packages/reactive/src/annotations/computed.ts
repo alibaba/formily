@@ -10,6 +10,7 @@ import {
   batchEnd,
   isBatching,
   isScopeBatching,
+  isUntracking
 } from '../reaction'
 
 export interface IComputed {
