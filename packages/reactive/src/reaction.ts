@@ -74,7 +74,7 @@ const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
 const runReactions = (target: any, key: PropertyKey) => {
   const reactions = getReactionsFromTargetKey(target, key)
   reactions.forEach((reaction) => {
-    if (BatchScope.value) {
+    if (isScopeBatching()) {
       if (!PendingScopeReactions.has(reaction)) {
         PendingScopeReactions.add(reaction)
       }
