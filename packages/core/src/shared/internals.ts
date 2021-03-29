@@ -335,7 +335,7 @@ export const exchangeArrayState = (
           if (!fields[newIdentifier]) {
             fieldPatches.push({
               type: 'remove',
-              address: identifier,
+              address: moveIndex(newIdentifier),
             })
           }
         }
