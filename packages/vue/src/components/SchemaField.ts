@@ -1,4 +1,4 @@
-import { inject, provide } from 'vue-demi'
+import { inject, provide, defineComponent, shallowRef, watch } from 'vue-demi'
 import { ISchema, Schema } from '@formily/json-schema'
 import { RecursionField } from '../components'
 import {
@@ -13,12 +13,10 @@ import {
   SchemaComponents,
   ISchemaFieldProps,
   ISchemaMarkupFieldProps,
-  ISchemaTypeFieldProps,
 } from '../types'
-import { defineObservableComponent } from '../shared/define-observable-component'
-import { h } from '../shared/compatible-create-element'
-import { resolveSchemaProps } from '../utils/resolve-schema-props'
-import { Fragment } from '../shared/fragment-hack'
+import { resolveSchemaProps } from '../utils/resolveSchemaProps'
+import { h } from '../shared/h'
+import { Fragment } from '../shared/fragment'
 
 const env = {
   nonameId: 0,
@@ -106,7 +104,7 @@ const markupProps = {
 export function createSchemaField<Components extends SchemaComponents>(
   options: ISchemaFieldFactoryOptions<Components>
 ) {
-  const SchemaField = defineObservableComponent({
+  const SchemaField = defineComponent({
     name: 'SchemaField',
     props: {
       schema: {},
@@ -157,17 +155,18 @@ export function createSchemaField<Components extends SchemaComponents>(
         default: undefined
       },
     },
-    setup<
-      Decorator extends VueComponent,
-      Component extends VueComponent
-    >(props: ISchemaFieldProps<Decorator, Component>, { slots }) {
-      const schema = Schema.isSchemaInstance(props.schema)
-        ? props.schema
+    setup(props: ISchemaFieldProps<VueComponent, VueComponent>, { slots }) {
+      const createSchema = (schemaProp: ISchemaFieldProps<VueComponent, VueComponent>['schema']) => Schema.isSchemaInstance(schemaProp)
+        ? schemaProp
         : new Schema({
             type: 'object',
-            ...props.schema,
+            ...schemaProp,
           })
-      provide(SchemaMarkupSymbol, schema)
+      const schemaRef = shallowRef(createSchema(props.schema))
+      watch(() => props.schema, () => {
+        schemaRef.value = createSchema(props.schema)
+      })
+      provide(SchemaMarkupSymbol, schemaRef)
       provide(SchemaOptionsSymbol, options)
       provide(SchemaExpressionScopeSymbol, props.scope)
 
@@ -185,7 +184,7 @@ export function createSchemaField<Components extends SchemaComponents>(
             children.push(h(RecursionField, {
               attrs: {
                 ...props,
-                schema
+                schema: schemaRef.value
               }
             }, {}))
             return children
@@ -195,50 +194,44 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const MarkupField = defineObservableComponent({
+  const MarkupField = defineComponent({
     name: 'MarkupField',
     props: Object.assign({}, markupProps, { type: String }),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaMarkupFieldProps<Components, Component, Decorator>, { slots }) {
-      const parent = inject(SchemaMarkupSymbol)
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
+      const parentRef = inject(SchemaMarkupSymbol, null)
+      if (!parentRef || !parentRef.value) return () => h(Fragment, {}, {})
+
       const name = props.name || getRandomName()
       const appendArraySchema = (schema: ISchema) => {
-        if (parent.items) {
-          return parent.addProperty(name, schema)
+        if (parentRef.value.items) {
+          return parentRef.value.addProperty(name, schema)
         } else {
-          return parent.setItems(resolveSchemaProps(props))
+          return parentRef.value.setItems(resolveSchemaProps(props))
         }
       }
 
-      if (!parent) return () => h(Fragment, {}, {})
-
-      const renderChildren = () => h(Fragment, {}, {
+      const schemaRef = shallowRef(null)
+      
+      watch(parentRef, () => {
+        if (parentRef.value.type === 'object' || parentRef.value.type === 'void') {
+          schemaRef.value = parentRef.value.addProperty(name, resolveSchemaProps(props))
+        } else if (parentRef.value.type === 'array') {
+          const schema = appendArraySchema(resolveSchemaProps(props))
+          schemaRef.value = Array.isArray(schema) ? schema[0] : schema
+        }
+      }, { immediate: true })
+      provide(SchemaMarkupSymbol, schemaRef)
+      
+      return () => h(Fragment, {}, {
         default: () => slots.default && slots.default()
       })
-
-      if (parent.type === 'object' || parent.type === 'void') {
-        const schema = parent.addProperty(name, resolveSchemaProps(props))
-        provide(SchemaMarkupSymbol, schema)
-        return renderChildren
-      } else if (parent.type === 'array') {
-        const schema = appendArraySchema(resolveSchemaProps(props))
-        provide(SchemaMarkupSymbol, Array.isArray(schema) ? schema[0] : schema)
-        return renderChildren
-      } else {
-        return renderChildren
-      }
     }
   })
 
-  const StringField = defineObservableComponent({
+  const StringField = defineComponent({
     name: 'StringField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -248,13 +241,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const ObjectField = defineObservableComponent({
+  const ObjectField = defineComponent({
     name: 'ObjectField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -264,13 +254,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const ArrayField = defineObservableComponent({
+  const ArrayField = defineComponent({
     name: 'ArrayField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -280,13 +267,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const BooleanField = defineObservableComponent({
+  const BooleanField = defineComponent({
     name: 'BooleanField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -296,13 +280,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const NumberField = defineObservableComponent({
+  const NumberField = defineComponent({
     name: 'NumberField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -312,13 +293,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const DateField = defineObservableComponent({
+  const DateField = defineComponent({
     name: 'DateField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -328,13 +306,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const DateTimeField = defineObservableComponent({
+  const DateTimeField = defineComponent({
     name: 'DateTimeField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,
@@ -344,13 +319,10 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const VoidField = defineObservableComponent({
+  const VoidField = defineComponent({
     name: 'VoidField',
     props: Object.assign({}, markupProps),
-    setup<
-      Decorator extends ComponentPath<Components>,
-      Component extends ComponentPath<Components>
-    >(props: ISchemaTypeFieldProps<Components, Component, Decorator>, { slots }) {
+    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       return () => h(MarkupField, { 
         attrs: {
           ...props,

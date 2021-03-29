@@ -829,6 +829,10 @@ export default () => (
             state: {
               'component[1].style.backgroundColor': '{{$self.value}}',
             },
+            //以下用法也可以
+            // schema: {
+            //   'x-component-props.style.backgroundColor': '{{$self.value}}',
+            // },
           },
         }}
       />
@@ -984,44 +988,780 @@ export default () => (
 
 ## 被动模式
 
+被动模式的核心是基于
+
+- [onFieldReact](https://core.formilyjs.org/api/entry/field-effect-hooks#onfieldreact)实现全局响应式逻辑
+- [FieldReaction](https://core.formilyjs.org/api/models/field#fieldreaction)实现局部响应式逻辑
+- [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions)实现 Schema 协议中的结构化逻辑描述(内部是基于 FieldReaction 来实现的)
+
 ### 一对一联动
 
 #### Effects 用例
 
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('input', (field) => {
+      field.display = field.query('select').value()
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default="visible"
+        enum={[
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
 #### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm, onFieldValueChange } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default="visible"
+        enum={[
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['select'],
+          fullfill: {
+            state: {
+              display: '{{$deps[0]}}',
+            },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### 一对多联动
 
 #### Effects 用例
 
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('*(input1,input2)', (field) => {
+      field.display = field.query('select').value()
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default="visible"
+        enum={[
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input1"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input2"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
 #### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm, onFieldValueChange } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default="visible"
+        enum={[
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input1"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['select'],
+          fullfill: {
+            state: {
+              display: '{{$deps[0]}}',
+            },
+          },
+        }}
+      />
+      <SchemaField.String
+        name="input2"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['select'],
+          fullfill: {
+            state: {
+              display: '{{$deps[0]}}',
+            },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### 依赖联动
 
 #### Effects 用例
 
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, NumberPicker } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('result', (field) => {
+      field.value = field.query('dim_1').value() * field.query('dim_2').value()
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    NumberPicker,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="dim_1"
+        title="控制者"
+        default={0}
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="dim_2"
+        title="控制者"
+        default={0}
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="result"
+        title="受控者"
+        x-pattern="readPretty"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
 #### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm, onFieldValueChange } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, NumberPicker } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    NumberPicker,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="dim_1"
+        title="控制者"
+        default={0}
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="dim_2"
+        title="控制者"
+        default={0}
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+      />
+      <SchemaField.Number
+        name="result"
+        title="受控者"
+        x-pattern="readPretty"
+        x-component="NumberPicker"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['dim_1', 'dim_2'],
+          fullfill: {
+            state: {
+              value: '{{$deps[0] * $deps[1]}}',
+            },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### 链式联动
 
 #### Effects 用例
 
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('input1', (field) => {
+      field.visible = !!field.query('select').value()
+    })
+    onFieldReact('input2', (field) => {
+      field.visible = !!field.query('input1').value()
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default={false}
+        enum={[
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input1"
+        title="受控者"
+        default={true}
+        enum={[
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input2"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
 #### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm, onFieldValueChange } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default={false}
+        enum={[
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input1"
+        title="受控者"
+        default={true}
+        enum={[
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['select'],
+          fullfill: {
+            state: {
+              visible: '{{!!$deps[0]}}',
+            },
+          },
+        }}
+      />
+      <SchemaField.String
+        name="input2"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-reactions={{
+          dependencies: ['input1'],
+          fullfill: {
+            state: {
+              visible: '{{!!$deps[0]}}',
+            },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### 循环联动
 
-#### Effects 用例
+被动模式实现循环联动会有问题，因为被动模式感知到的数据变化会引发链式联动
 
-#### SchemaReactions 用例
+链式联动就会出现无法打破循环的互斥联动，所以推荐用主动模式实现循环联动
 
 ### 自身联动
 
 #### Effects 用例
 
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input } from '@formily/antd'
+import './input.less'
+
+const form = createForm({
+  effects() {
+    onFieldReact('color', (field) => {
+      field.setComponentProps({
+        style: {
+          backgroundColor: field.value,
+        },
+      })
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="color"
+        default="#FFFFFF"
+        title="颜色"
+        x-component="Input"
+        x-decorator="FormItem"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
 #### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm, onFieldValueChange } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input } from '@formily/antd'
+import './input.less'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.Number
+        name="color"
+        default="#FFFFFF"
+        title="颜色"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-reactions={{
+          fullfill: {
+            state: {
+              'component[1].style.backgroundColor': '{{$self.value}}',
+            },
+            //以下用法也可以
+            // schema: {
+            //   'x-component-props.style.backgroundColor': '{{$self.value}}',
+            // },
+          },
+        }}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
 
 ### 异步联动
 
 #### Effects 用例
 
+```tsx
+import React from 'react'
+import { createForm, onFieldReact } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm({
+  effects() {
+    onFieldReact('input', (field) => {
+      const select = field.query('select').take()
+      const selectValue = select?.value
+      select.loading = true
+      if (selectValue) {
+        setTimeout(() => {
+          select.loading = false
+          field.display = selectValue
+        }, 1000)
+      }
+    })
+  },
+})
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default="visible"
+        enum={[
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-visible={false}
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```
+
 #### SchemaReactions 用例
+
+```tsx
+import React from 'react'
+import { createForm, onFieldValueChange } from '@formily/core'
+import { createSchemaField, FormConsumer } from '@formily/react'
+import { Form, FormItem, Input, Select } from '@formily/antd'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    FormItem,
+    Input,
+    Select,
+  },
+  scope: {
+    asyncVisible(field) {
+      const select = field.query('select').take()
+      const selectValue = select?.value
+      select.loading = true
+      if (selectValue) {
+        setTimeout(() => {
+          select.loading = false
+          field.display = selectValue
+        }, 1000)
+      }
+    },
+  },
+})
+
+export default () => (
+  <Form form={form}>
+    <SchemaField>
+      <SchemaField.String
+        name="select"
+        title="控制者"
+        default="visible"
+        enum={[
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
+        ]}
+        x-component="Select"
+        x-decorator="FormItem"
+      />
+      <SchemaField.String
+        name="input"
+        title="受控者"
+        x-component="Input"
+        x-decorator="FormItem"
+        x-visible={false}
+        x-reactions="{{asyncVisible}}"
+      />
+    </SchemaField>
+    <FormConsumer>
+      {() => (
+        <code>
+          <pre>{JSON.stringify(form.values, null, 2)}</pre>
+        </code>
+      )}
+    </FormConsumer>
+  </Form>
+)
+```

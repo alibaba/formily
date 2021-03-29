@@ -71,14 +71,14 @@ const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   return reactions
 }
 
-const runReactions = (target: any, key: PropertyKey) => {
+const runReactions = (target: any, key: PropertyKey, noBatch?: boolean) => {
   const reactions = getReactionsFromTargetKey(target, key)
   reactions.forEach((reaction) => {
-    if (BatchScope.value) {
+    if (!noBatch && isScopeBatching()) {
       if (!PendingScopeReactions.has(reaction)) {
         PendingScopeReactions.add(reaction)
       }
-    } else if (isBatching()) {
+    } else if (!noBatch && isBatching()) {
       if (!PendingReactions.has(reaction)) {
         PendingReactions.add(reaction)
       }
@@ -177,19 +177,22 @@ export const suspendComputedReactions = (reaction: Reaction) => {
   }
 }
 
-export const runReactionsFromTargetKey = (operation: IOperation) => {
+export const runReactionsFromTargetKey = (
+  operation: IOperation,
+  noBatch?: boolean
+) => {
   let { key, type, target, oldTarget } = operation
   notifyObservers(operation)
   if (type === 'clear') {
     oldTarget.forEach((_: any, key: PropertyKey) => {
-      runReactions(target, key)
+      runReactions(target, key, noBatch)
     })
   } else {
-    runReactions(target, key)
+    runReactions(target, key, noBatch)
   }
   if (type === 'add' || type === 'delete' || type === 'clear') {
     key = Array.isArray(target) ? 'length' : ITERATION_KEY
-    runReactions(target, key)
+    runReactions(target, key, noBatch)
   }
 }
 

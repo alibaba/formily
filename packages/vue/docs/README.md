@@ -23,7 +23,6 @@ footer: Open-source MIT Licensed | Copyright © 2019-present
 ## 安装
 
 ```bash
-$ npm install --save mobx
 $ npm install --save @formily/core @formily/vue
 ```
 
@@ -55,14 +54,16 @@ $ npm install --save @formily/core @formily/vue
       :component="[Input, { type: 'password', placeholder:'Please Input' }]"
       :reactions="createPasswordEqualValidate('password')"
     />
-    <FormConsumer style="white-space: pre;">
-      <template #default="{ form }">{{ JSON.stringify(form.values, null, 2) }}</template>
+    <FormConsumer>
+      <template #default="{ form }">
+        <div style="white-space: pre;">{{ JSON.stringify(form.values, null, 2) }}</div>
+      </template>
     </FormConsumer>
   </FormProvider>
 </template>
 
 <script>
-import { Form, Input } from 'ant-design-vue';
+import { Form, Input } from 'ant-design-vue'
 import { createForm, isVoidField, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
@@ -71,7 +72,7 @@ import {
   connect,
   mapProps,
 } from '@formily/vue'
-import 'ant-design-vue/dist/antd.css';
+import 'ant-design-vue/dist/antd.css'
 
 setValidateLanguage('en')
 
@@ -79,10 +80,12 @@ const FormItem = connect(
   Form.Item,
   mapProps(
     { validateStatus: true, title: 'label' },
-    (props, field) => ({
-      help: !isVoidField(field) ? (field.errors.length ? field.errors : undefined) : undefined,
-      extra: field.description
-    })
+    (props, field) => {
+      return {
+        help: !isVoidField(field) ? (field.errors.length ? field.errors : undefined) : undefined,
+        extra: field.description,
+      }
+    }
   )
 )
 

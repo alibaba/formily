@@ -39,6 +39,9 @@ const registry = {
 
 const getISOCode = (langugage: string) => {
   let isoCode = registry.locales.langugage
+  if (registry.locales.messages[langugage]) {
+    return langugage
+  }
   each(
     registry.locales.messages,
     (messages: IRegistryLocaleMessages, key: string) => {

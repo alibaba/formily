@@ -10,6 +10,7 @@ import {
   batchEnd,
   isBatching,
   isScopeBatching,
+  isUntracking,
 } from '../reaction'
 
 export interface IComputed {
@@ -64,15 +65,16 @@ export const computed: IComputed = createAnnotation(
       const oldValue = store.value
       store.value = getter?.call?.(context)
       if (oldValue === store.value || oldValue === initialValue) return
-      batchStart()
-      runReactionsFromTargetKey({
-        target: context,
-        key: property,
-        oldValue,
-        value: store.value,
-        type: 'set',
-      })
-      batchEnd()
+      runReactionsFromTargetKey(
+        {
+          target: context,
+          key: property,
+          oldValue,
+          value: store.value,
+          type: 'set',
+        },
+        true
+      )
     }
 
     function reaction() {
@@ -85,6 +87,7 @@ export const computed: IComputed = createAnnotation(
         }
       }
     }
+    reaction._name = 'ComputedReaction'
     reaction._context = context
     reaction._property = property
     reaction._active = false
@@ -99,7 +102,7 @@ export const computed: IComputed = createAnnotation(
     })
 
     function get() {
-      if (!reaction._active) {
+      if (!reaction._active && !isUntracking()) {
         if (hasRunningReaction()) {
           bindComputedReactions(reaction)
           reaction()

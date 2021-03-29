@@ -23,26 +23,25 @@ interface useFormEffects {
 </template>
 
 <script>
+import { defineComponent, h } from '@vue/composition-api'
 import { createForm, onFieldReact } from '@formily/core'
-import { FormProvider, Field, defineObservableComponent, useFormEffects, h } from '@formily/vue';
-import { Form, Input } from 'ant-design-vue';
-import 'ant-design-vue/dist/antd.css';
+import { FormProvider, Field, useFormEffects, observer } from '@formily/vue'
+import { Form, Input } from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 
-const Custom = defineObservableComponent({
+const Custom = defineComponent({
   setup (props, context) {
     useFormEffects(() => {
       onFieldReact('custom.bb', (field) => {
         field.value = field.query('.aa').get('value')
       })
     })
-    return () => h('div', {}, {
-      default: () => [
-        h(Field, { props: { name: 'aa', decorator: [Form.Item], component: [Input, { placeholder: 'aa' }] } }, {}),
-        h(Field, { props: { name: 'bb', decorator: [Form.Item], component: [Input, { placeholder: 'bb' }] } }, {}),
-      ]
-    });
+    return () => h('div', {}, [
+      h(Field, { props: { name: 'aa', decorator: [Form.Item], component: [Input, { placeholder: 'aa' }] } }, {}),
+      h(Field, { props: { name: 'bb', decorator: [Form.Item], component: [Input, { placeholder: 'bb' }] } }, {}),
+    ])
   },
-});
+})
 
 export default {
   components: {

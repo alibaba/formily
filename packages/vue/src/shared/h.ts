@@ -1,6 +1,6 @@
 import { h, isVue2, SetupContext } from 'vue-demi';
 import { Component, AsyncComponent, VNodeData, VNode, VNodeChildren } from 'vue';
-import { Fragment, FragmentComponent } from './fragment-hack'
+import { Fragment, FragmentComponent } from './fragment'
 
 type RenderChildren = {
   [key in string]?: (...args: any[]) => (VNode | string)[];

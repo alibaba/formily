@@ -35,6 +35,7 @@
     "@formily/core": "^2.0.0-beta.3",
     "@formily/json-schema": "^2.0.0-beta.3",
     "@formily/reactive": "^2.0.0-beta.3",
+    "@formily/reactive-vue": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "@formily/validator": "^2.0.0-beta.3",
     "vue-demi": "latest",
