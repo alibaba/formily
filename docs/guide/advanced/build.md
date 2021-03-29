@@ -2,6 +2,8 @@
 
 ## 基于Umi开发
 
+在 Umi@3 中，当插件使用`@umijs` 或者 `umi-plugin` 开头，只要安装就会被默认使用
+
 #### 安装插件
 ```shell
 npm install @umijs/plugin-antd --save-dev
@@ -14,9 +16,6 @@ yarn add @umijs/plugin-antd --dev
 #### 插件配置
 ```js
 export default {
-  plugins: [
-    '@umijs/plugin-antd'
-  ],
   //antd插件配置
   antd:{ 
     dark: true, //开启暗色主题。
