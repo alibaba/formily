@@ -12,6 +12,7 @@ import {
   isScopeBatching,
   isUntracking,
 } from '../reaction'
+import { batch } from '../batch'
 
 export interface IComputed {
   <T>(compute: () => T): { value: T }
@@ -62,19 +63,18 @@ export const computed: IComputed = createAnnotation(
     }
 
     function compute() {
-      const oldValue = store.value
-      store.value = getter?.call?.(context)
-      if (oldValue === store.value || oldValue === initialValue) return
-      runReactionsFromTargetKey(
-        {
+      batch.scope(() => {
+        const oldValue = store.value
+        store.value = getter?.call?.(context)
+        if (oldValue === store.value || oldValue === initialValue) return
+        runReactionsFromTargetKey({
           target: context,
           key: property,
           oldValue,
           value: store.value,
           type: 'set',
-        },
-        true
-      )
+        })
+      })
     }
 
     function reaction() {
