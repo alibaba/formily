@@ -211,7 +211,7 @@ test('computed with array length',()=>{
   expect(handler).toBeCalledTimes(2)
   obs.arr = ['1']
   obs.arr = []
-  expect(handler).toBeCalledTimes(8)
+  expect(handler).toBeCalledTimes(6)
 })
 
 test('computed with computed array length',()=>{

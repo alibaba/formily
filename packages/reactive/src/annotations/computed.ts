@@ -63,7 +63,7 @@ export const computed: IComputed = createAnnotation(
     }
 
     function compute() {
-      batch.scope(() => {
+      batch(() => {
         const oldValue = store.value
         store.value = getter?.call?.(context)
         if (oldValue === store.value || oldValue === initialValue) return
@@ -88,6 +88,7 @@ export const computed: IComputed = createAnnotation(
       }
     }
     reaction._name = 'ComputedReaction'
+    reaction._isComputed = true
     reaction._context = context
     reaction._property = property
     reaction._active = false
