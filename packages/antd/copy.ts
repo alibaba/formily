@@ -1,61 +1,58 @@
-import { copy, readFile, writeFile } from 'fs-extra'
+import { copy, readFile, writeFile, existsSync } from 'fs-extra'
 import glob from 'glob'
 
-const copyStyle = () =>
-  new Promise((resolve, reject) => {
-    glob(`./src/**/*.{less,scss}`, (err, files) => {
+export const runCopy = ({
+  esStr,
+  libStr,
+}: Record<'esStr' | 'libStr', string>) => {
+  const replaceOperation = async (filename: string) => {
+    if (!existsSync(filename)) {
+      return Promise.resolve()
+    }
+
+    const fileContent: string = (await readFile(filename)).toString()
+
+    return writeFile(
+      filename,
+      fileContent.replace(new RegExp(libStr, 'g'), esStr)
+    )
+  }
+
+  return new Promise((resolve, reject) => {
+    glob(`./src/**/*`, (err, files) => {
       if (err) {
         return reject(err)
       }
 
-      return Promise.all(
-        files.reduce(
-          (reproduces, filename) => [
-            ...reproduces,
-            copy(filename, filename.replace(/src\//, 'esm/')),
-            copy(filename, filename.replace(/src\//, 'lib/')),
-          ],
-          [] as Promise<void>[]
-        )
-      )
-        .then(resolve)
-        .catch(reject)
-    })
-  })
+      const all = [] as Promise<unknown>[]
 
-const esStr = 'antd/es/'
-const libStr = 'antd/lib/'
+      for (let i = 0; i < files.length; i += 1) {
+        const filename = files[i]
 
-const replaceLibWithEsRegExp = (flags?: 'g' | 'i' | 'm' | 'u' | 'y') =>
-  new RegExp(libStr, flags)
+        if (/\.(less|scss)$/.test(filename)) {
+          all.push(copy(filename, filename.replace(/src\//, 'esm/')))
+          all.push(copy(filename, filename.replace(/src\//, 'lib/')))
 
-const replaceLibWithEs = () =>
-  new Promise((resolve, reject) => {
-    glob(`./esm/**/style.js`, (err, files) => {
-      if (err) {
-        return reject(err)
-      }
-
-      const replaceOperation = async (filename: string) => {
-        const fileContent: string = (await readFile(filename)).toString()
-
-        if (!replaceLibWithEsRegExp().test(fileContent)) {
-          return Promise.resolve()
+          continue
         }
 
-        return writeFile(
-          filename,
-          fileContent.replace(replaceLibWithEsRegExp('g'), esStr)
-        )
+        if (/\/style.ts$/.test(filename)) {
+          replaceOperation(
+            filename.replace(/src\//, 'esm/').replace(/\.ts$/, '.js')
+          )
+
+          continue
+        }
       }
 
-      return Promise.all(files.map((filename) => replaceOperation(filename)))
-        .then(resolve)
-        .catch(reject)
+      return Promise.all(all).then(resolve).catch(reject)
     })
   })
+}
 
-;(async () => {
-  await copyStyle()
-  await replaceLibWithEs()
-})()
+if (Boolean(process.env.INIT_RUN)) {
+  runCopy({
+    esStr: 'antd/es/',
+    libStr: 'antd/lib/',
+  })
+}
