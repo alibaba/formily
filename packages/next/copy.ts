@@ -1,12 +1,6 @@
-import { copy } from 'fs-extra'
-import glob from 'glob'
+import { runCopy } from '../antd/copy'
 
-glob(`./src/**/*.{less,scss}`, (err, files) => {
-  if (err) {
-    throw err
-  }
-  files.forEach((filename) => {
-    copy(filename, filename.replace(/src\//, 'esm/'))
-    copy(filename, filename.replace(/src\//, 'lib/'))
-  })
+runCopy({
+  esStr: '@alifd/next/es/',
+  libStr: '@alifd/next/lib/',
 })
