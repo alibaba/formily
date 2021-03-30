@@ -7,7 +7,6 @@ export default {
   favicon:
     '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg',
   outputPath: './doc-site',
-  title: 'Formily',
   navs: [
     {
       title: '指南',
