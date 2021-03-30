@@ -8,11 +8,7 @@ import {
   hasRunningReaction,
   batchStart,
   batchEnd,
-  isBatching,
-  isScopeBatching,
-  isUntracking,
 } from '../reaction'
-import { batch } from '../batch'
 
 export interface IComputed {
   <T>(compute: () => T): { value: T }
@@ -61,37 +57,34 @@ export const computed: IComputed = createAnnotation(
       if (descriptor?.set) return descriptor.set
       return getSetter(Object.getPrototypeOf(target))
     }
-
-    function compute() {
-      batch(() => {
-        const oldValue = store.value
-        store.value = getter?.call?.(context)
-        if (oldValue === store.value || oldValue === initialValue) return
-        runReactionsFromTargetKey({
-          target: context,
-          key: property,
-          oldValue,
-          value: store.value,
-          type: 'set',
-        })
-      })
-    }
-
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
         try {
           ReactionStack.push(reaction)
-          compute()
+          store.value = getter?.call?.(context)
         } finally {
           ReactionStack.pop()
         }
       }
     }
     reaction._name = 'ComputedReaction'
+    reaction._scheduler = () => {
+      if (!reaction._dirty) {
+        reaction._dirty = true
+        batchStart()
+        runReactionsFromTargetKey({
+          target: context,
+          key: property,
+          value: store.value,
+          type: 'set',
+        })
+        batchEnd()
+      }
+    }
     reaction._isComputed = true
+    reaction._dirty = true
     reaction._context = context
     reaction._property = property
-    reaction._active = false
 
     ProxyRaw.set(proxy, store)
     RawProxy.set(store, proxy)
@@ -103,20 +96,12 @@ export const computed: IComputed = createAnnotation(
     })
 
     function get() {
-      if (!reaction._active && !isUntracking()) {
-        if (hasRunningReaction()) {
-          bindComputedReactions(reaction)
-          reaction()
-          reaction._active = true
-        } else {
-          compute()
-        }
-      } else {
-        if (hasRunningReaction()) {
-          bindComputedReactions(reaction)
-        } else if (isBatching() || isScopeBatching()) {
-          compute()
-        }
+      if (hasRunningReaction()) {
+        bindComputedReactions(reaction)
+      }
+      if (reaction._dirty) {
+        reaction()
+        reaction._dirty = false
       }
       bindTargetKeyWithCurrentReaction({
         target: context,

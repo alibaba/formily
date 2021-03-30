@@ -146,19 +146,19 @@ test('computed annotation', () => {
   expect(compu.value).toEqual(66)
   expect(handler).toBeCalledTimes(6)
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(7)
+  expect(handler).toBeCalledTimes(6)
   autorun(() => {
     compu.value
     runner3()
   })
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(8)
+  expect(handler).toBeCalledTimes(6)
   expect(compu.value).toEqual(66)
-  expect(handler).toBeCalledTimes(8)
+  expect(handler).toBeCalledTimes(6)
   obs.aa = 11
-  expect(handler).toBeCalledTimes(9)
+  expect(handler).toBeCalledTimes(7)
   expect(compu.value).toEqual(44)
-  expect(handler).toBeCalledTimes(9)
+  expect(handler).toBeCalledTimes(7)
 })
 
 test('computed chain annotation', () => {

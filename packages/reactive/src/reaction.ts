@@ -65,7 +65,9 @@ const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
   const reactions = new Set<Reaction>()
   if (keysReactions) {
     keysReactions.get(key)?.forEach((reaction) => {
-      reactions.add(reaction)
+      if (!reactions.has(reaction)) {
+        reactions.add(reaction)
+      }
     })
   }
   return reactions
@@ -74,11 +76,9 @@ const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
 const runReactions = (target: any, key: PropertyKey) => {
   const reactions = getReactionsFromTargetKey(target, key)
   reactions.forEach((reaction) => {
-    if (!reaction._isComputed && isScopeBatching()) {
-      if (!PendingScopeReactions.has(reaction)) {
-        PendingScopeReactions.add(reaction)
-      }
-    } else if (!reaction._isComputed && isBatching()) {
+    if (reaction._isComputed) {
+      reaction._scheduler(reaction)
+    } else if (isScopeBatching() || isBatching()) {
       if (!PendingReactions.has(reaction)) {
         PendingReactions.add(reaction)
       }
@@ -171,7 +171,7 @@ export const suspendComputedReactions = (reaction: Reaction) => {
       )
       if (reactions.size === 0) {
         disposeBindingReactions(reaction)
-        reaction._active = false
+        reaction._dirty = true
       }
     })
   }
