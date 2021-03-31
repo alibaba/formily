@@ -96,7 +96,7 @@ const SortHandle = SortableHandle((props: any) => {
   return (
     <MenuOutlined
       {...props}
-      className={cls(`${prefixCls}-handle`, props.className)}
+      className={cls(`${prefixCls}-sort-handle`, props.className)}
       style={{ ...props.style }}
     />
   )
