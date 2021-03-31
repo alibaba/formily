@@ -17,8 +17,21 @@
   background: #fff;
   justify-content: space-between;
 
-  .@{ant-prefix}-formily-item {
-    margin-bottom: 0;
+  .@{ant-prefix}-formily-item:not(.@{ant-prefix}-formily-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+
+    .@{ant-prefix}-formily-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: #fff;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #eee;
+    }
   }
 
   transition: all .35s;

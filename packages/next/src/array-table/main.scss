@@ -26,16 +26,19 @@ $array-table-prefix-cls: $css-prefix+"formily-array-table";
   }
 
   .#{$css-prefix}table {
-    .#{$css-prefix}table-cell-wrapper{
+    .#{$css-prefix}table-cell-wrapper {
       overflow: visible;
+      word-break: normal;
     }
+
     td {
       visibility: visible;
 
-      .#{$css-prefix}form-item {
+      .#{$css-prefix}formily-item:not(.#{$css-prefix}formily-item-feedback-layout-popover) {
         margin-bottom: 0 !important;
         position: relative;
-        .#{$css-prefix}form-item-help {
+
+        .#{$css-prefix}formily-item-help {
           position: absolute;
           font-size: 12px;
           top: 100%;

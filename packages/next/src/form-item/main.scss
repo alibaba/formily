@@ -5,7 +5,6 @@
 
 .#{$form-item-cls} {
     display: flex;
-    width: 100%;
     margin-bottom: $form-item-m-margin-b + 2;
     position: relative;
     line-height: $form-element-medium-height;
@@ -33,7 +32,7 @@
     &-inset {
         padding: 0 8px;
         border-radius: $form-element-large-corner;
-
+        width: 100%;
         .#{$css-prefix}input {
             border: none;
             outline: none;

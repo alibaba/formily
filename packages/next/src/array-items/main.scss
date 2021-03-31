@@ -31,6 +31,24 @@ $array-items-prefix-cls: $css-prefix+"formily-array-items";
 
   transition: all .35s;
 
+  .#{$css-prefix}formily-item:not(.#{$css-prefix}formily-item-feedback-layout-popover) {
+    margin-bottom: 0 !important;
+    position: relative;
+
+    .#{$css-prefix}formily-item-help {
+      position: absolute;
+      font-size: 12px;
+      top: 100%;
+      background: #fff;
+      width: 100%;
+      margin-top: 3px;
+      padding: 3px;
+      z-index: 1;
+      border-radius: 3px;
+      box-shadow: 0 0 10px #eee;
+    }
+  }
+
   &:hover {
     border: 1px solid #aaa;
   }
