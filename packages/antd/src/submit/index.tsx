@@ -3,7 +3,7 @@ import { Button } from 'antd'
 import { ButtonProps } from 'antd/lib/button'
 import { useForm, observer } from '@formily/react'
 
-interface ISubmitProps extends ButtonProps {
+export interface ISubmitProps extends ButtonProps {
   onSubmit?: (values: any) => Promise<any> | any
 }
 
