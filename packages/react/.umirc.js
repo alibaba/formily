@@ -2,7 +2,7 @@ import { resolve } from 'path'
 export default {
   mode: 'site',
   logo:
-    'https://img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+    '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
   title: 'Formily',
   hash: true,
   favicon:
@@ -19,11 +19,11 @@ export default {
     },
     {
       title: '主站',
-      path: '//formilyjs.org',
+      path: 'https://v2.formilyjs.org',
     },
     {
       title: 'GITHUB',
-      path: '//github.com/alibaba/formily',
+      path: 'https://github.com/alibaba/formily',
     },
   ],
   styles: [

@@ -5,6 +5,7 @@ import {
   GroupProps as CheckboxGroupProps,
 } from '@alifd/next/lib/checkbox'
 import { PreviewText } from '../preview-text'
+import { mapSize } from '../__builtins__'
 
 type ComposedCheckbox = React.FC<CheckboxProps> & {
   Group?: React.FC<CheckboxGroupProps>
@@ -12,17 +13,23 @@ type ComposedCheckbox = React.FC<CheckboxProps> & {
 
 export const Checkbox: ComposedCheckbox = connect(
   NextCheckbox,
-  mapProps({
-    value: 'checked',
-    onInput: 'onChange',
-  })
+  mapProps(
+    {
+      value: 'checked',
+      onInput: 'onChange',
+    },
+    mapSize
+  )
 )
 
 Checkbox.Group = connect(
   NextCheckbox.Group,
-  mapProps({
-    dataSource: true,
-  }),
+  mapProps(
+    {
+      dataSource: true,
+    },
+    mapSize
+  ),
   mapReadPretty(PreviewText.Select)
 )
 

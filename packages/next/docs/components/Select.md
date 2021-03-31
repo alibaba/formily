@@ -70,15 +70,11 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      state: 'loading',
-    })
+    field.loading = true
     service(field).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          state: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })
@@ -255,15 +251,11 @@ const loadData = async (field) => {
 }
 
 const useAsyncDataSource = (service) => (field) => {
-  field.setComponentProps({
-    state: 'loading',
-  })
+  field.loading = true
   service(field).then(
     action((data) => {
-      field.setDataSource(data)
-      field.setComponentProps({
-        state: undefined,
-      })
+      field.dataSource = data
+      field.loading = false
     })
   )
 }
@@ -367,15 +359,11 @@ const useAsyncDataSource = (
   ) => Promise<{ label: string; value: any }[]>
 ) => {
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      state: 'loading',
-    })
+    field.loading = true
     service(field).then(
       action((data) => {
-        field.setDataSource(data)
-        field.setComponentProps({
-          state: undefined,
-        })
+        field.dataSource = data
+        field.loading = false
       })
     )
   })

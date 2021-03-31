@@ -5,6 +5,7 @@ import {
   GroupProps as RadioGroupProps,
 } from '@alifd/next/lib/radio'
 import { PreviewText } from '../preview-text'
+import { mapSize } from '../__builtins__'
 
 type ComposedRadio = React.FC<RadioProps> & {
   Group?: React.FC<RadioGroupProps>
@@ -12,16 +13,22 @@ type ComposedRadio = React.FC<RadioProps> & {
 
 export const Radio: ComposedRadio = connect(
   NextRadio,
-  mapProps({
-    value: 'checked',
-  })
+  mapProps(
+    {
+      value: 'checked',
+    },
+    mapSize
+  )
 )
 
 Radio.Group = connect(
   NextRadio.Group,
-  mapProps({
-    dataSource: true,
-  }),
+  mapProps(
+    {
+      dataSource: true,
+    },
+    mapSize
+  ),
   mapReadPretty(PreviewText.Select)
 )
 

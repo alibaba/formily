@@ -1,7 +1,7 @@
 export default {
   mode: 'site',
   logo:
-    'https://img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+    '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
   title: 'Formily',
   hash: true,
   favicon:
@@ -17,15 +17,15 @@ export default {
       children: [
         {
           title: '基础内核层',
-          path: '//core.formilyjs.org',
+          path: 'https://core.formilyjs.org',
         },
         {
           title: 'React桥接层',
-          path: '//react.formilyjs.org',
+          path: 'https://react.formilyjs.org',
         },
         {
           title: 'Vue桥接层',
-          path: '//vue.formilyjs.org',
+          path: 'https://vue.formilyjs.org',
         },
       ],
     },
@@ -34,30 +34,30 @@ export default {
       children: [
         {
           title: 'Antd Design',
-          path: '//antd.formilyjs.org',
+          path: 'https://antd.formilyjs.org',
         },
         {
           title: 'Alibaba Fusion',
-          path: '//fusion.formilyjs.org',
+          path: 'https://fusion.formilyjs.org',
         },
       ],
     },
     {
       title: '论坛',
-      path: '//github.com/alibaba/formily/discussions',
+      path: 'https://github.com/alibaba/formily/discussions',
     },
     {
       title: '表单编辑器',
-      path: '//github.com/alibaba/formily-editor',
+      path: 'https://github.com/alibaba/formily-editor',
     },
     {
       title: 'Chrome扩展',
       path:
-        '//chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+        'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
     },
     {
       title: 'GITHUB',
-      path: '//github.com/alibaba/formily',
+      path: 'https://github.com/alibaba/formily',
     },
   ],
   styles: [

@@ -3,7 +3,12 @@ import { connect, mapProps, mapReadPretty } from '@formily/react'
 import { TimePicker as NextTimePicker } from '@alifd/next'
 import { TimePickerProps } from '@alifd/next/lib/time-picker'
 import { PreviewText } from '../preview-text'
-import { formatMomentValue, momentable } from '../__builtins__'
+import {
+  formatMomentValue,
+  momentable,
+  mapSize,
+  mapStatus,
+} from '../__builtins__'
 
 const mapTimeFormat = function () {
   return (props: any) => {
@@ -24,7 +29,7 @@ const mapTimeFormat = function () {
 
 export const TimePicker: React.FC<TimePickerProps> = connect(
   NextTimePicker,
-  mapProps(mapTimeFormat()),
+  mapProps(mapTimeFormat(), mapSize, mapStatus),
   mapReadPretty(PreviewText.TimePicker)
 )
 

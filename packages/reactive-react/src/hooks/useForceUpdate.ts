@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import ReactDOM from 'react-dom'
 
 const batchUpdate =
@@ -32,7 +38,7 @@ export function useForceUpdate() {
 
   RENDER_COUNT.value++
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     RENDER_COUNT.value--
     if (RENDER_COUNT.value === 0) {
       batchUpdate(() => {

@@ -2,7 +2,7 @@ import React, { createContext, useContext } from 'react'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 
-export interface FormLayoutProps {
+export interface IFormLayoutProps {
   prefix?: string
   className?: string
   style?: React.CSSProperties
@@ -12,6 +12,7 @@ export interface FormLayoutProps {
   labelWrap?: boolean
   labelWidth?: number
   wrapperWidth?: number
+  wrapperWrap?: boolean
   labelCol?: number
   wrapperCol?: number
   fullness?: boolean
@@ -24,22 +25,18 @@ export interface FormLayoutProps {
   bordered?: boolean
 }
 
-export const FormLayoutContext = createContext<FormLayoutProps>(null)
+export const FormLayoutContext = createContext<IFormLayoutProps>(null)
 
-export const FormLayoutShallowContext = createContext<FormLayoutProps>(null)
+export const FormLayoutShallowContext = createContext<IFormLayoutProps>(null)
 
 export const useFormLayout = () => useContext(FormLayoutContext)
 
 export const useFormShallowLayout = () => useContext(FormLayoutShallowContext)
 
-export const FormLayout: React.FC<FormLayoutProps> = ({
-  shallow,
-  children,
-  prefix,
-  className,
-  style,
-  ...props
-}) => {
+export const FormLayout: React.FC<IFormLayoutProps> & {
+  useFormLayout: () => IFormLayoutProps
+  useFormShallowLayout: () => IFormLayoutProps
+} = ({ shallow, children, prefix, className, style, ...props }) => {
   const formPrefixCls = usePrefixCls('form')
   const layoutPrefixCls = usePrefixCls('formily-layout', { prefix })
   const layoutClassName = cls(
@@ -76,5 +73,8 @@ export const FormLayout: React.FC<FormLayoutProps> = ({
 FormLayout.defaultProps = {
   shallow: true,
 }
+
+FormLayout.useFormLayout = useFormLayout
+FormLayout.useFormShallowLayout = useFormShallowLayout
 
 export default FormLayout
