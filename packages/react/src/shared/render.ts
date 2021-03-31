@@ -1,4 +1,5 @@
 import React from 'react'
+import { createPortal } from 'react-dom'
 import { globalThisPolyfill } from '@formily/shared'
 
 const env = {
@@ -9,7 +10,7 @@ export const render = (element: React.ReactElement) => {
   if (globalThisPolyfill['document']) {
     env.portalDOM =
       env.portalDOM || globalThisPolyfill['document'].createElement('div')
-    return require('react-dom').createPortal(element, env.portalDOM)
+    return createPortal(element, env.portalDOM)
   } else {
     return React.createElement('template', {}, element)
   }
