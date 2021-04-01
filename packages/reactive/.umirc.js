@@ -58,5 +58,94 @@ export default {
         path: '/guide/best-practice',
       },
     ],
+    '/api': [
+      {
+        title: '@formily/reactive',
+        children: [
+          {
+            title: 'observable',
+            path: '/api/observable',
+          },
+          {
+            title: 'autorun',
+            path: '/api/autorun',
+          },
+          {
+            title: 'reaction',
+            path: '/api/reaction',
+          },
+          {
+            title: 'Tracker',
+            path: '/api/tracker',
+          },
+          {
+            title: 'batch',
+            path: '/api/batch',
+          },
+          {
+            title: 'action',
+            path: '/api/action',
+          },
+          {
+            title: 'define',
+            path: '/api/define',
+          },
+          {
+            title: 'model',
+            path: '/api/model',
+          },
+          {
+            title: 'observe',
+            path: '/api/observe',
+          },
+          {
+            title: 'markRaw',
+            path: '/api/mark-raw',
+          },
+          {
+            title: 'markObservable',
+            path: '/api/mark-observable',
+          },
+          {
+            title: 'raw',
+            path: '/api/raw',
+          },
+          {
+            title: 'toJS',
+            path: '/api/toJS',
+          },
+          {
+            title: 'untracked',
+            path: '/api/untracked',
+          },
+          {
+            title: 'Type Chekcer',
+            path: '/api/type-checker',
+          },
+        ],
+      },
+      {
+        title: '@formily/reactive-react',
+        children: [
+          {
+            title: 'observer',
+            path: '/api/react/observer',
+          },
+        ],
+      },
+      {
+        title: '@formily/reactive-vue',
+        children: [
+          {
+            title: 'observer',
+            path: '/api/vue/observer',
+          },
+          {
+            title: 'useObserver',
+            path: '/api/vue/use-observer',
+          },
+        ],
+      },
+    ],
   },
 }
