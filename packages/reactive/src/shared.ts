@@ -86,9 +86,12 @@ export const toJS = (target: any) => clone(target)
 export const untracked = <T extends () => any>(callback?: T): ReturnType<T> => {
   untrackStart()
   let res: any
-  if (isFn(callback)) {
-    res = callback()
+  try {
+    if (isFn(callback)) {
+      res = callback()
+    }
+  } finally {
+    untrackEnd()
+    return res
   }
-  untrackEnd()
-  return res
 }

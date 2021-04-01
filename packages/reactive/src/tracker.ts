@@ -18,14 +18,14 @@ export class Tracker {
     this.track._name = name
   }
 
-  track: Reaction = (runner: Reaction) => {
+  track: Reaction = (tracker: Reaction) => {
     if (ReactionStack.indexOf(this.track) === -1) {
       releaseBindingReactions(this.track)
       try {
         ReactionStack.push(this.track)
         batchStart()
-        if (isFn(runner)) {
-          this.results = runner()
+        if (isFn(tracker)) {
+          this.results = tracker()
         }
       } finally {
         batchEnd()

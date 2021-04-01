@@ -1,4 +1,4 @@
-import { observable, action,model } from '../'
+import { observable, action, model } from '../'
 import { autorun, reaction } from '../autorun'
 import { observe } from '../observe'
 import { isObservable } from '../shared'
@@ -49,7 +49,7 @@ test('box annotation', () => {
   })
   obs.set(333)
   expect(handler).toBeCalledWith(123)
-  expect(handler).toBeCalledWith(333)
+  expect(handler).toBeCalledWith(123)
   expect(handler1).toBeCalledTimes(1)
 })
 
@@ -63,7 +63,7 @@ test('ref annotation', () => {
   })
   obs.value = 333
   expect(handler).toBeCalledWith(123)
-  expect(handler).toBeCalledWith(333)
+  expect(handler).toBeCalledWith(123)
   expect(handler1).toBeCalledTimes(1)
 })
 
@@ -75,10 +75,11 @@ test('action annotation', () => {
   })
   const handler = jest.fn()
   reaction(() => {
-    handler([obs.aa, obs.bb])
-  })
+    return [obs.aa, obs.bb]
+  }, handler)
   setData()
-  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledTimes(1)
+  expect(handler).toBeCalledWith([123, 321])
 })
 
 test('no action annotation', () => {
@@ -89,10 +90,12 @@ test('no action annotation', () => {
   }
   const handler = jest.fn()
   reaction(() => {
-    handler([obs.aa, obs.bb])
-  })
+    return [obs.aa, obs.bb]
+  }, handler)
   setData()
-  expect(handler).toBeCalledTimes(3)
+  expect(handler).toBeCalledTimes(2)
+  expect(handler).toBeCalledWith([123, undefined])
+  expect(handler).toBeCalledWith([123, 321])
 })
 
 test('computed annotation', () => {
@@ -170,7 +173,7 @@ test('computed chain annotation', () => {
   const compu1 = observable.computed(handler)
   const handler1 = jest.fn(() => compu1.value + 33)
   const compu2 = observable.computed(handler1)
-  const dispose = autorun(()=>{
+  const dispose = autorun(() => {
     compu2.value
   })
   expect(handler).toBeCalledTimes(1)
@@ -193,18 +196,18 @@ test('computed chain annotation', () => {
   expect(handler1).toBeCalledTimes(3)
 })
 
-test('computed with array length',()=>{
+test('computed with array length', () => {
   const obs = model({
-    arr:[],
-    get isEmpty(){
+    arr: [],
+    get isEmpty() {
       return this.arr.length === 0
     },
-    get isNotEmpty(){
+    get isNotEmpty() {
       return !this.isEmpty
-    }
+    },
   })
   const handler = jest.fn()
-  autorun(()=>{
+  autorun(() => {
     handler(obs.isEmpty)
     handler(obs.isNotEmpty)
   })
@@ -214,22 +217,22 @@ test('computed with array length',()=>{
   expect(handler).toBeCalledTimes(6)
 })
 
-test('computed with computed array length',()=>{
+test('computed with computed array length', () => {
   const obs = model({
     arr: [],
     get arr2() {
       return this.arr.map((item: number) => item + 1)
     },
-    get isEmpty(){
+    get isEmpty() {
       return this.arr2.length === 0
     },
-    get isNotEmpty(){
+    get isNotEmpty() {
       return !this.isEmpty
-    }
+    },
   })
   const handler = jest.fn()
   const handler2 = jest.fn()
-  autorun(()=>{
+  autorun(() => {
     handler(obs.isNotEmpty)
     handler2(obs.arr2)
   })
