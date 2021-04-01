@@ -1,5 +1,6 @@
 import React from 'react'
 import { FormProvider } from '@formily/react'
+import { SizeContextProvider } from 'antd/lib/config-provider/SizeContext'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 
 export interface FormProps
@@ -10,6 +11,9 @@ export interface FormProps
   onAutoSubmit?: (values: any) => any
 }
 
+const getAntdSize = (size?: FormProps['size']) =>
+  size !== 'default' ? size : 'middle'
+
 export const Form: React.FC<FormProps> = ({
   form,
   component,
@@ -17,21 +21,23 @@ export const Form: React.FC<FormProps> = ({
   ...props
 }) => {
   return (
-    <FormProvider form={form}>
-      <FormLayout {...props}>
-        {React.createElement(
-          component,
-          {
-            onSubmit(e: React.FormEvent) {
-              e?.stopPropagation?.()
-              e?.preventDefault?.()
-              form.submit(onAutoSubmit)
+    <SizeContextProvider size={getAntdSize(props.size)}>
+      <FormProvider form={form}>
+        <FormLayout {...props}>
+          {React.createElement(
+            component,
+            {
+              onSubmit(e: React.FormEvent) {
+                e?.stopPropagation?.()
+                e?.preventDefault?.()
+                form.submit(onAutoSubmit)
+              },
             },
-          },
-          props.children
-        )}
-      </FormLayout>
-    </FormProvider>
+            props.children
+          )}
+        </FormLayout>
+      </FormProvider>
+    </SizeContextProvider>
   )
 }
 

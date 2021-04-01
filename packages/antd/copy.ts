@@ -36,10 +36,11 @@ export const runCopy = ({
           continue
         }
 
-        if (/\/style.ts$/.test(filename)) {
-          replaceOperation(
-            filename.replace(/src\//, 'esm/').replace(/\.ts$/, '.js')
-          )
+        // 替换 style.js、form/index.js
+        if (/\/(style|form\/index)\.ts(x?)$/.test(filename)) {
+          all.push(replaceOperation(
+            filename.replace(/src\//, 'esm/').replace(/\.ts(x?)$/, '.js')
+          ))
 
           continue
         }
