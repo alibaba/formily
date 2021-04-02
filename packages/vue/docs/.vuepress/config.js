@@ -1,4 +1,5 @@
 module.exports = {
+  title: 'Formily Vue',
   dest: './doc-site',
   theme: '@vuepress-dumi/dumi',
   head: [
