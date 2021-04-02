@@ -3,7 +3,9 @@ import './global'
 
 const registry =
   globalThisPolyfill['FinalizationRegistry'] &&
-  new globalThisPolyfill['FinalizationRegistry']((clean: () => void) => clean())
+  new globalThisPolyfill['FinalizationRegistry']((token: any) =>
+    token?.clean?.()
+  )
 
 export class GarbageCollector {
   private target: object
@@ -18,8 +20,8 @@ export class GarbageCollector {
 
   open() {
     if (registry) {
-      registry.register(this.target, () => {
-        this.cleaner?.()
+      registry.register(this.target, {
+        clean: this.cleaner,
       })
     } else {
       this.request = setTimeout(() => {
