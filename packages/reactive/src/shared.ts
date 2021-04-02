@@ -63,7 +63,7 @@ export const isCollectionType = (target: any) => {
   )
 }
 
-export const markRaw = (target: object) => {
+export const markRaw = <T>(target: T): T => {
   if (!target) return
   if (isFn(target)) {
     target.prototype[RAW_TYPE] = true
@@ -73,7 +73,7 @@ export const markRaw = (target: object) => {
   return target
 }
 
-export const markObservable = (target: object) => {
+export const markObservable = <T>(target: T): T => {
   if (!target) return
   if (isFn(target)) {
     target.prototype[OBSERVABLE_TYPE] = true
@@ -83,9 +83,9 @@ export const markObservable = (target: object) => {
   return target
 }
 
-export const raw = (target: object) => ProxyRaw.get(target)
+export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
-export const toJS = (target: object) => clone(target)
+export const toJS = <T>(target: T): T => clone(target)
 
 export const untracked = <T extends () => any>(
   untracker?: T
