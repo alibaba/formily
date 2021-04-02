@@ -6,6 +6,7 @@ import {
   runReactionsFromTargetKey,
   bindComputedReactions,
   hasRunningReaction,
+  isUntracking,
   batchStart,
   batchEnd,
 } from '../reaction'
@@ -99,7 +100,8 @@ export const computed: IComputed = createAnnotation(
       if (hasRunningReaction()) {
         bindComputedReactions(reaction)
       }
-      if (reaction._dirty) {
+      if (reaction._dirty && !isUntracking()) {
+        //如果允许untracked过程中收集依赖，那么永远不会存在绑定，因为_dirty已经设置为false
         reaction()
         reaction._dirty = false
       }
