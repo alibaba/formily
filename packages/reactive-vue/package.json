@@ -41,7 +41,7 @@
     "vuepress": "^1.8.2"
   },
   "dependencies": {
-    "@formily/reactive":"^2.0.0-beta.3",
+    "@formily/reactive": "^2.0.0-beta.3",
     "@formily/shared": "^2.0.0-beta.3",
     "vue-demi": "latest"
   },

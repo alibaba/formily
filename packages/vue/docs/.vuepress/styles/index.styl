@@ -7,6 +7,14 @@
   width: 150px !important;
 }
 
+.navbar .site-name {
+  display: none;
+}
+
+.navbar .sidebar-button {
+  padding: 0;
+}
+
 .home .feature {
   margin-bottom: 40px;
   text-align: center;
@@ -63,3 +71,22 @@
 // .theme-dumi-content pre[class*="language-"] code {
 //   color: #000;
 // }
+
+.dumi-previewer .dumi-previewer-source,
+.dumi-previewer .dumi-previewer-demo {
+  overflow: auto;
+}
+
+@media (max-width: 719px) {
+  .sidebar-button + .home-link {
+    margin-left: 20px;
+  }
+}
+
+@media (max-width: 419px) {
+  .theme-dumi-content div[class*="language-"] {
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
