@@ -16,6 +16,10 @@ export default {
       title: '核心库',
       children: [
         {
+          title: '响应式状态管理方案',
+          path: 'https://reactive.formilyjs.org',
+        },
+        {
           title: '基础内核层',
           path: 'https://core.formilyjs.org',
         },
