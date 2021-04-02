@@ -74,10 +74,7 @@ export default {
             title: 'reaction',
             path: '/api/reaction',
           },
-          {
-            title: 'Tracker',
-            path: '/api/tracker',
-          },
+
           {
             title: 'batch',
             path: '/api/batch',
@@ -112,11 +109,15 @@ export default {
           },
           {
             title: 'toJS',
-            path: '/api/toJS',
+            path: '/api/to-js',
           },
           {
             title: 'untracked',
             path: '/api/untracked',
+          },
+          {
+            title: 'Tracker',
+            path: '/api/tracker',
           },
           {
             title: 'Type Chekcer',

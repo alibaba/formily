@@ -78,7 +78,11 @@ const runReactions = (target: any, key: PropertyKey) => {
   reactions.forEach((reaction) => {
     if (reaction._isComputed) {
       reaction._scheduler(reaction)
-    } else if (isScopeBatching() || isBatching()) {
+    } else if (isScopeBatching()) {
+      if (!PendingScopeReactions.has(reaction)) {
+        PendingScopeReactions.add(reaction)
+      }
+    } else if (isBatching()) {
       if (!PendingReactions.has(reaction)) {
         PendingReactions.add(reaction)
       }

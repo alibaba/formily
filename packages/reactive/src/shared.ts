@@ -63,32 +63,38 @@ export const isCollectionType = (target: any) => {
   )
 }
 
-export const markRaw = (target: any) => {
+export const markRaw = (target: object) => {
+  if (!target) return
   if (isFn(target)) {
     target.prototype[RAW_TYPE] = true
   } else {
     target[RAW_TYPE] = true
   }
+  return target
 }
 
-export const markObservable = (target: any) => {
+export const markObservable = (target: object) => {
+  if (!target) return
   if (isFn(target)) {
     target.prototype[OBSERVABLE_TYPE] = true
   } else {
     target[OBSERVABLE_TYPE] = true
   }
+  return target
 }
 
-export const raw = (target: any) => ProxyRaw.get(target)
+export const raw = (target: object) => ProxyRaw.get(target)
 
-export const toJS = (target: any) => clone(target)
+export const toJS = (target: object) => clone(target)
 
-export const untracked = <T extends () => any>(callback?: T): ReturnType<T> => {
+export const untracked = <T extends () => any>(
+  untracker?: T
+): ReturnType<T> => {
   untrackStart()
   let res: any
   try {
-    if (isFn(callback)) {
-      res = callback()
+    if (isFn(untracker)) {
+      res = untracker()
     }
   } finally {
     untrackEnd()
