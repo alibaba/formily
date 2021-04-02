@@ -56,6 +56,10 @@ export default {
         'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
     },
     {
+      title: 'V1',
+      path: 'https://formilyjs.org',
+    },
+    {
       title: 'GITHUB',
       path: 'https://github.com/alibaba/formily',
     },
