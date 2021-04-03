@@ -6,17 +6,17 @@
  * @since 2018-05-22 16:39
  */
 import { Tracker } from '@formily/reactive';
-import Vue, { ComponentOptions } from 'vue'
+import VueType, { ComponentOptions } from 'vue';
 import collectDataForVue from './collectData';
+import { Vue } from 'vue-demi'
 
-export type VueClass<V> = (new(...args: any[]) => V & Vue) & typeof Vue;
+export type VueClass<V> = (new (...args: any[]) => V & VueType) & typeof VueType;
 
-const noop = () => {};
+const noop = () => { };
 const disposerSymbol = Symbol('disposerSymbol');
 
-function observer<VC extends VueClass<Vue>>(Component: VC | ComponentOptions<Vue>): VC;
-function observer<VC extends VueClass<Vue>>(Component: VC | ComponentOptions<Vue>) {
-
+function observer<VC extends VueClass<VueType>>(Component: VC | ComponentOptions<VueType>): VC;
+function observer<VC extends VueClass<VueType>>(Component: VC | ComponentOptions<VueType>) {
   const name = (Component as any).name || (Component as any)._componentTag || (Component.constructor && Component.constructor.name) || '<component>';
 
   const originalOptions = typeof Component === 'object' ? Component : (Component as any).options;
@@ -25,7 +25,7 @@ function observer<VC extends VueClass<Vue>>(Component: VC | ComponentOptions<Vue
   const options = {
     name,
     ...originalOptions,
-    data(vm: Vue) {
+    data(vm: VueType) {
       return collectDataForVue(vm || this, dataDefinition);
     },
     // overrider the cached constructor to avoid extending skip
@@ -47,44 +47,30 @@ function observer<VC extends VueClass<Vue>>(Component: VC | ComponentOptions<Vue
     let nativeRenderOfVue: any;
 
     const reactiveRender = () => {
-			tracker.track(() => {
-				if (!mounted) {
-					$mount.apply(this, args);
-					mounted = true;
-					nativeRenderOfVue = this._watcher.getter;
-					// rewrite the native render method of vue with our reactive tracker render
-					// thus if component updated by vue watcher, we could re track and collect dependencies by @formily/reactive
-					this._watcher.getter = reactiveRender;
-				} else {
-					nativeRenderOfVue.call(this, this);
-				}
-			});
+      tracker.track(() => {
+        if (!mounted) {
+          $mount.apply(this, args);
+          mounted = true;
+          nativeRenderOfVue = this._watcher.getter;
+          // rewrite the native render method of vue with our reactive tracker render
+          // thus if component updated by vue watcher, we could re track and collect dependencies by @formily/reactive
+          this._watcher.getter = reactiveRender;
+        } else {
+          nativeRenderOfVue.call(this, this);
+        }
+      });
 
-			return this;
-		};
+      return this;
+    };
 
-		const tracker = new Tracker(reactiveRender);
+    const tracker = new Tracker(reactiveRender);
 
-		this[disposerSymbol] = tracker.dispose;
+    this[disposerSymbol] = tracker.dispose;
 
-		return reactiveRender();
-
-    // const reactiveRender = () => {
-    //   if (!mounted) {
-    //     $mount.apply(this, args)
-    //     mounted = true
-    //     nativeRenderOfVue = this._watcher.getter
-    //     this._watcher.getter = reactiveRender
-    //   } else {
-    //     nativeRenderOfVue.call(this, this)
-    //   }
-    //   return this
-    // }
-
-    // this[disposerSymbol] = autorun(reactiveRender)
+    return reactiveRender();
   };
 
-  ExtendedComponent.prototype.$destroy = function (this: Vue) {
+  ExtendedComponent.prototype.$destroy = function (this: VueType) {
     (this as any)[disposerSymbol]();
     $destroy.apply(this);
   };
