@@ -58,11 +58,15 @@ export const computed: IComputed = createAnnotation(
       if (descriptor?.set) return descriptor.set
       return getSetter(Object.getPrototypeOf(target))
     }
+
+    function compute() {
+      store.value = getter?.call?.(context)
+    }
     function reaction() {
       if (ReactionStack.indexOf(reaction) === -1) {
         try {
           ReactionStack.push(reaction)
-          store.value = getter?.call?.(context)
+          compute()
         } finally {
           ReactionStack.pop()
         }
@@ -100,10 +104,14 @@ export const computed: IComputed = createAnnotation(
       if (hasRunningReaction()) {
         bindComputedReactions(reaction)
       }
-      if (reaction._dirty && !isUntracking()) {
+      if (!isUntracking()) {
         //如果允许untracked过程中收集依赖，那么永远不会存在绑定，因为_dirty已经设置为false
-        reaction()
-        reaction._dirty = false
+        if (reaction._dirty) {
+          reaction()
+          reaction._dirty = false
+        }
+      } else {
+        compute()
       }
       bindTargetKeyWithCurrentReaction({
         target: context,
