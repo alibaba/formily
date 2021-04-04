@@ -41,26 +41,3 @@ test('action', () => {
   batch()
   expect(handler).toBeCalledTimes(4)
 })
-
-test('batch scope', () => {
-  const obs = observable<any>({})
-
-  const handler = jest.fn()
-
-  autorun(() => {
-    handler(obs.aa, obs.bb, obs.cc, obs.dd)
-  })
-
-  batch(() => {
-    batch.scope(() => {
-      obs.aa = 123
-    })
-    batch.scope(() => {
-      obs.cc = 'ccccc'
-    })
-    obs.bb = 321
-    obs.dd = 'ddddd'
-  })
-
-  expect(handler).toBeCalledTimes(4)
-})

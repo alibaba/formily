@@ -131,9 +131,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
   }
 
   protected makeReactive() {
-    const reactions = toArr(this.props.reactions)
     this.form.addEffects(this, () => {
-      reactions.forEach((reaction) => {
+      toArr(this.props.reactions).forEach((reaction) => {
         if (isFn(reaction)) {
           this.disposers.push(autorun(() => reaction(this)))
         }
@@ -336,9 +335,7 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   onInit = () => {
     this.initialized = true
-    batch.scope(() => {
-      initFieldUpdate(this)
-    })
+    initFieldUpdate(this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 

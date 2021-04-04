@@ -11,7 +11,6 @@ import {
 } from '@formily/shared'
 import { ProxyRaw, MakeObservableSymbol } from './environment'
 import { Annotation } from './types'
-import { untrackStart, untrackEnd } from './reaction'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
 const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
@@ -86,18 +85,3 @@ export const markObservable = <T>(target: T): T => {
 export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
 export const toJS = <T>(target: T): T => clone(target)
-
-export const untracked = <T extends () => any>(
-  untracker?: T
-): ReturnType<T> => {
-  untrackStart()
-  let res: any
-  try {
-    if (isFn(untracker)) {
-      res = untracker()
-    }
-  } finally {
-    untrackEnd()
-    return res
-  }
-}

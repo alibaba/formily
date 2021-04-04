@@ -651,12 +651,8 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
-    batch.scope(() => {
-      initFieldValue(this)
-    })
-    batch.scope(() => {
-      initFieldUpdate(this)
-    })
+    initFieldValue(this)
+    initFieldUpdate(this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 
