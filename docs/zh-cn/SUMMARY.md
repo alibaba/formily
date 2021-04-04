@@ -61,4 +61,5 @@
   - Rax Meet
     - [meet](../../packages/meet/README.zh-cn.md)
     - [meet-components](../../packages/meet-components/README.zh-cn.md)
+- [V2](https://v2.formilyjs.org)
 - [GITHUB](https://github.com/alibaba/formily)
