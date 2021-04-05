@@ -2,7 +2,12 @@
   "env": {
     "node": true
   },
-  "extends": "plugin:markdown/recommended",
+  "extends": [
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:markdown/recommended"
+  ],
   "globals": {
     "sleep": true,
     "prettyFormat": true
@@ -16,8 +21,16 @@
   },
   "parser": "@typescript-eslint/parser",
   "plugins": [
+    "@typescript-eslint",
+    "react",
+    "prettier",
     "markdown"
   ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "overrides": [
     {
       "files": [
@@ -30,7 +43,9 @@
         "**/*.md/*.{js,tsx}"
       ],
       "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-unused-vars": "error",
+        "react/display-name": "off",
         "no-unused-vars": "error",
         "no-console": "off"
       }
