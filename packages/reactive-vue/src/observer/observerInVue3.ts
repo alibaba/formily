@@ -17,7 +17,7 @@ export const observer = function (opts: any) {
         this.$props,
         this.$.setupState,
         this.$data,
-        this.$options,
+        this.$options
       )
 
       this.$forceUpdate()
@@ -29,7 +29,6 @@ export const observer = function (opts: any) {
   const unmounted = function () {
     dispose?.()
   }
-  
 
   return defineComponent({
     name,

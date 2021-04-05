@@ -3,7 +3,14 @@ import { VNode } from 'vue'
 import { getCurrentInstance, onBeforeUnmount, isVue2 } from 'vue-demi'
 
 // types for vue3
-type VNodeChildAtom = VNode | string | number | boolean | null | undefined | void;
+type VNodeChildAtom =
+  | VNode
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | void
 type RawChildren = VNodeChildAtom | VNodeChildAtom[] | (() => any)
 
 export const useObserver = () => {
@@ -15,8 +22,15 @@ export const useObserver = () => {
     let handler: () => void
     handler = () => {
       const proxy = vm.proxy as any
-      proxy.$.render(proxy, proxy.$.renderCache, proxy.$props, proxy.$.setupState, proxy.$data, proxy.$options);
-      proxy.$forceUpdate();
+      proxy.$.render(
+        proxy,
+        proxy.$.renderCache,
+        proxy.$props,
+        proxy.$.setupState,
+        proxy.$data,
+        proxy.$options
+      )
+      proxy.$forceUpdate()
     }
 
     const tracker = new Tracker(handler)
@@ -29,7 +43,8 @@ export const useObserver = () => {
 
     const track = (slot: (...args: any[]) => RawChildren) => {
       if (slot.length !== 0) {
-        const scopedSlot = (...args: any[]) => tracker.track(slot.bind(vm, ...args))
+        const scopedSlot = (...args: any[]) =>
+          tracker.track(slot.bind(vm, ...args))
         scopedSlot.length = slot.length
         return scopedSlot
       } else {
