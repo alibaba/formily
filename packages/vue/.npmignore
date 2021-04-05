@@ -9,3 +9,5 @@ __tests__
 jest.config.js
 vue.config.js
 tsconfig.json
+.umi
+src

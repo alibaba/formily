@@ -1,6 +1,6 @@
 {
   "name": "@formily/validator",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0-beta.4",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -27,10 +27,10 @@
     "build:umd": "rollup --config"
   },
   "dependencies": {
-    "@formily/shared": "^2.0.0-beta.3"
+    "@formily/shared": "^2.0.0-beta.4"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b"
+  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
 }

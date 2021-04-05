@@ -8,3 +8,5 @@ __tests__
 .eslintrc
 jest.config.js
 tsconfig.json
+.umi
+src
