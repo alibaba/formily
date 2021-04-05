@@ -1,7 +1,6 @@
 node_modules
 *.log
 build
-dist
 docs
 doc-site
 __tests__
