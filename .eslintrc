@@ -2,6 +2,7 @@
   "env": {
     "node": true
   },
+  "extends": "plugin:markdown/recommended",
   "globals": {
     "sleep": true,
     "prettyFormat": true
@@ -13,4 +14,26 @@
       "jsx": true
     }
   },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "markdown"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "**/*.md"
+      ],
+      "processor": "markdown/markdown"
+    },
+    {
+      "files": [
+        "**/*.md/*.{js,tsx}"
+      ],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "error",
+        "no-unused-vars": "error",
+        "no-console": "off"
+      }
+    }
+  ]
 }

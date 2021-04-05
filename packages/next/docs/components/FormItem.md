@@ -118,7 +118,7 @@ export default () => (
 ## 常用属性案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Input,
   Radio,
@@ -129,10 +129,8 @@ import {
   FormItem,
   NumberPicker,
   Switch,
-  FormButtonGroup,
-  Submit,
 } from '@formily/next'
-import { createForm, onFieldChange } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
 const Title = (props) => <h3>{props.text}</h3>
@@ -380,7 +378,7 @@ export default () => {
 设置去除组件边框，仅限 antd 表单组件
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Input,
   Radio,
@@ -391,10 +389,8 @@ import {
   FormItem,
   NumberPicker,
   Switch,
-  FormButtonGroup,
-  Submit,
 } from '@formily/next'
-import { createForm, onFieldChange } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
 const Title = (props) => <h3>{props.text}</h3>
@@ -511,7 +507,7 @@ export default () => {
 设置表单组件为内嵌模式
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Input,
   Radio,
@@ -522,10 +518,8 @@ import {
   FormItem,
   NumberPicker,
   Switch,
-  FormButtonGroup,
-  Submit,
 } from '@formily/next'
-import { createForm, onFieldChange } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
 const Title = (props) => <h3>{props.text}</h3>
@@ -642,7 +636,7 @@ export default () => {
 可通过 `feedbackIcon` 传入指定反馈的按钮
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Input,
   Radio,
@@ -655,10 +649,8 @@ import {
   FormLayout,
   NumberPicker,
   Switch,
-  FormButtonGroup,
-  Submit,
 } from '@formily/next'
-import { createForm, onFieldChange } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { CheckCircleFilled, LoadingOutlined } from '@ant-design/icons'
 const Title = (props) => <h3>{props.text}</h3>
@@ -908,7 +900,7 @@ export default () => {
 ## 尺寸控制案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Input,
   Radio,
@@ -919,8 +911,6 @@ import {
   FormItem,
   NumberPicker,
   Switch,
-  FormButtonGroup,
-  Submit,
 } from '@formily/next'
 import { createForm, onFieldChange } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'

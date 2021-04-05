@@ -414,13 +414,11 @@ interface registerCompiler {
 #### 签名
 
 ```ts
-
 type SchemaPatch = (schema: ISchema) => ISchema
 
 interface registerPatches {
-  (...args: SchemaPatch[]) => void
+  (...args: SchemaPatch[]): void
 }
-
 ```
 
 ### registerVoidComponents
@@ -455,7 +453,7 @@ Schema.registerVoidComponents(['card', 'tab', 'step'])
 
 ```ts
 interface registerTypeDefaultComponents {
-  (maps: Record<string, string>) => void
+  (maps: Record<string, string>): void
 }
 ```
 

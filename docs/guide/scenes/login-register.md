@@ -5,11 +5,11 @@
 #### Markup Schema 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
-import { Tabs, Card, Space, Button } from 'antd'
+import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
 import 'antd/lib/tabs/style'
@@ -151,11 +151,11 @@ export default () => {
 #### JSON Schema 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
-import { Tabs, Card, Space, Button } from 'antd'
+import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
 import 'antd/lib/tabs/style'
@@ -304,11 +304,11 @@ export default () => {
 #### 纯 JSX 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
 import { Field } from '@formily/react'
 import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
-import { Tabs, Card, Space, Button } from 'antd'
+import { Tabs, Card } from 'antd'
 import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
 import 'antd/lib/tabs/style'
@@ -435,9 +435,9 @@ export default () => {
 #### Markup Schema 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import {
   Form,
   FormItem,
@@ -772,9 +772,9 @@ export default () => {
 #### JSON Schema 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import {
   Form,
   FormItem,
@@ -1123,24 +1123,20 @@ export default () => {
 #### 纯 JSX 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
 import { Field, VoidField } from '@formily/react'
 import {
   Form,
   FormItem,
-  FormLayout,
   Input,
   Select,
   Password,
   Cascader,
   DatePicker,
   Submit,
-  Space,
   FormGrid,
   Upload,
-  ArrayItems,
-  Editable,
   FormButtonGroup,
 } from '@formily/antd'
 import { action } from '@formily/reactive'
@@ -1368,21 +1364,18 @@ export default () => {
 #### Markup Schema 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import {
   Form,
   FormItem,
   Input,
   Password,
-  DatePicker,
   Submit,
   FormButtonGroup,
 } from '@formily/antd'
-import { action } from '@formily/reactive'
-import { Card, Button } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Card } from 'antd'
 import 'antd/lib/button/style'
 
 const form = createForm({
@@ -1495,21 +1488,18 @@ export default () => {
 #### JSON Schema 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import {
   Form,
   FormItem,
   Input,
   Password,
-  DatePicker,
   Submit,
   FormButtonGroup,
 } from '@formily/antd'
-import { action } from '@formily/reactive'
-import { Card, Button } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Card } from 'antd'
 import 'antd/lib/button/style'
 
 const form = createForm({
@@ -1627,7 +1617,7 @@ export default () => {
 #### 纯 JSX 案例
 
 ```tsx
-import React, { useState } from 'react'
+import React from 'react'
 import { createForm } from '@formily/core'
 import { Field } from '@formily/react'
 import {
@@ -1635,13 +1625,10 @@ import {
   FormItem,
   Input,
   Password,
-  DatePicker,
   Submit,
   FormButtonGroup,
 } from '@formily/antd'
-import { action } from '@formily/reactive'
-import { Card, Button } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Card } from 'antd'
 import 'antd/lib/button/style'
 
 const form = createForm({

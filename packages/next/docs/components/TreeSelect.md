@@ -98,7 +98,6 @@ import {
 } from '@formily/next'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -271,13 +270,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import {
-  TreeSelect,
-  Select,
-  FormItem,
-  FormButtonGroup,
-  Submit,
-} from '@formily/next'
+import { TreeSelect, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -372,9 +365,8 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/next'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -629,7 +621,6 @@ import {
 } from '@formily/next'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const useAsyncDataSource = (

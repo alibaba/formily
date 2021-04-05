@@ -9,7 +9,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 
 const SchemaField = createSchemaField({
   components: {
@@ -53,7 +52,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -208,7 +206,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -312,7 +309,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 
 const form = createForm()
 
@@ -349,7 +345,6 @@ import React from 'react'
 import { Select, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const useAsyncDataSource = (

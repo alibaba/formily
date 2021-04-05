@@ -19,8 +19,8 @@ interface useField {
 ## 用例
 
 ```tsx
-import React, { createContext, useMemo, useContext, useEffect } from 'react'
-import { createForm, setValidateLanguage } from '@formily/core'
+import React, { useMemo } from 'react'
+import { createForm } from '@formily/core'
 import {
   FormProvider,
   FormConsumer,

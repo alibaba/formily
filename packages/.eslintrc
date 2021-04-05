@@ -3,24 +3,21 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint"
+    "prettier/@typescript-eslint",
+    "plugin:markdown/recommended"
   ],
   "env": {
-    "browser": true,
-    "es6": true,
-    "jest": true,
-    "commonjs": true
+    "node": true
   },
   "plugins": [
     "@typescript-eslint",
     "react",
-    "react-hooks",
-    "prettier"
+    "prettier",
+    "markdown"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json",
     "sourceType": "module",
-    "ecmaVersion": 6,
+    "ecmaVersion": 10,
     "ecmaFeatures": {
       "jsx": true
     }
@@ -39,7 +36,6 @@
     "react/display-name": 0,
     // allow specifying true explicitly for boolean props
     "react/jsx-boolean-value": 0,
-    "react-hooks/rules-of-hooks": 2,
     "react/no-did-update-set-state": 0,
     // maybe we should no-public
     "@typescript-eslint/explicit-member-accessibility": 0,
@@ -50,10 +46,11 @@
     "@typescript-eslint/array-type": 0,
     "@typescript-eslint/no-object-literal-type-assertion": 0,
     "@typescript-eslint/no-use-before-define": 0,
-    "@typescript-eslint/no-unused-vars": 1,
+    "@typescript-eslint/no-unused-vars": 0,
     "@typescript-eslint/no-namespace": 0,
     "@typescript-eslint/ban-types": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-empty-function": 0,
     "no-console": [
       "error",
       {
@@ -66,7 +63,24 @@
     ],
     "prefer-const": 1,
     "no-var": 1,
-    "@typescript-eslint/no-empty-function": 1,
     "prefer-rest-params": 1
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.md"
+      ],
+      "processor": "markdown/markdown"
+    },
+    {
+      "files": [
+        "**/*.md/*.{jsx,tsx}"
+      ],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "error",
+        "no-unused-vars": "error",
+        "no-console": "off"
+      }
+    }
+  ]
 }

@@ -9,7 +9,6 @@ import React from 'react'
 import { PreviewText, FormItem, FormLayout } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
