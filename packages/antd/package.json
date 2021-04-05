@@ -1,9 +1,13 @@
 {
   "name": "@formily/antd",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.5",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
+  "umd:main": "dist/formily.antd.umd.production.js",
+  "unpkg": "dist/formily.antd.umd.production.js",
+  "jsdelivr": "dist/formily.antd.umd.production.js",
+  "jsnext:main": "esm",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
@@ -16,12 +20,19 @@
   "engines": {
     "npm": ">=3.0.0"
   },
+  "sideEffects": [
+    "dist/*",
+    "esm/**/style.js",
+    "lib/**/style.js",
+    "*.less"
+  ],
   "scripts": {
     "start": "dumi dev",
-    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm && npm run copy:style",
+    "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm && npm run build:umd && npm run copy:style",
     "copy:style": "cross-env INIT_RUN=true ts-node copy",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config",
     "build:docs": "dumi build"
   },
   "devDependencies": {
@@ -37,12 +48,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/core": "^2.0.0-beta.4",
-    "@formily/json-schema": "^2.0.0-beta.4",
-    "@formily/react": "^2.0.0-beta.4",
-    "@formily/reactive": "^2.0.0-beta.4",
-    "@formily/reactive-react": "^2.0.0-beta.4",
-    "@formily/shared": "^2.0.0-beta.4",
+    "@formily/core": "^2.0.0-beta.5",
+    "@formily/json-schema": "^2.0.0-beta.5",
+    "@formily/react": "^2.0.0-beta.5",
+    "@formily/reactive": "^2.0.0-beta.5",
+    "@formily/reactive-react": "^2.0.0-beta.5",
+    "@formily/shared": "^2.0.0-beta.5",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3",
