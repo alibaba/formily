@@ -475,7 +475,7 @@ export class Schema implements ISchema {
     } else if (!isEmpty(json.items)) {
       this.items = isArr(json.items)
         ? map(json.items, item => new Schema(item, this))
-        : new Schema(json.items)
+        : new Schema(json.items, this)
       if (isValid(json.additionalItems)) {
         this.additionalItems = new Schema(json.additionalItems, this)
       }
