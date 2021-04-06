@@ -43,7 +43,7 @@ export default () => (
 )
 ```
 
-## JOSN Schema 案例
+## JSON Schema 案例
 
 ```tsx
 import React from 'react'

@@ -354,7 +354,7 @@ export default () => (
 )
 ```
 
-## JOSN Schema 异步联动数据源案例
+## JSON Schema 异步联动数据源案例
 
 ```tsx
 import React from 'react'
