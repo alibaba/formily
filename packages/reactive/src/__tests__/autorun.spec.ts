@@ -1,4 +1,6 @@
 import { observable, reaction, autorun } from '../'
+import { batch } from '../batch'
+import { define } from '../model'
 
 test('autorun', () => {
   const obs = observable({
@@ -38,6 +40,23 @@ test('reaction', () => {
   expect(handler).toBeCalledTimes(1)
 })
 
-test('reaction nested', () => {})
+test('reaction dirty check', () => {
+  const obs: any = {
+    aa: 123,
+  }
+  define(obs, {
+    aa: observable.ref,
+  })
+  const handler = jest.fn()
+  reaction(() => {
+    return obs.aa
+  }, handler)
+  batch(() => {
+    obs.aa = 123
+    obs.aa = 123
+  })
+
+  expect(handler).toBeCalledTimes(0)
+})
 
 test('action in reaction', () => {})
