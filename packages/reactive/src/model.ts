@@ -10,7 +10,7 @@ import { ProxyRaw, RawProxy } from './environment'
 export function define<Target extends object = any>(
   target: Target,
   annotations?: Annotations<Target>
-) {
+): Target {
   if (isObservable(target)) return target
   if (!isSupportObservable(target)) return target
   buildTreeNode({
@@ -33,7 +33,7 @@ export function define<Target extends object = any>(
   })
 }
 
-export function model<Target extends object = any>(target: Target) {
+export function model<Target extends object = any>(target: Target): Target {
   const annotations = Object.keys(target || {}).reduce((buf, key) => {
     const descriptor = Object.getOwnPropertyDescriptor(target, key)
     if (descriptor && descriptor.get) {

@@ -64,7 +64,7 @@ export const reaction = <T>(
   return autorun(() => {
     value.currentValue = tracker()
     dirty.current = dirtyCheck()
-    if (dirty && tracked.current) {
+    if (dirty.current && tracked.current) {
       untracked(() => {
         if (isFn(subscriber)) subscriber(value.currentValue)
       })
