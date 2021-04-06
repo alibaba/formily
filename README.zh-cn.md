@@ -23,57 +23,15 @@
 - 🏅 副作用逻辑独立管理，涵盖各种复杂联动校验逻辑
 - 🌯 支持各种表单复杂布局方案
 
-## 安装
-
-使用 Ant Design：
-
-```bash
-npm install --save antd @formily/antd @formily/antd-components
-```
-
-使用 Fusion Design：
-
-```bash
-npm install --save @alifd/next @formily/next @formily/next-components
-```
-
-使用 Formily React 渲染引擎包:
-
-```bash
-npm install --save @formily/react-schema-renderer
-```
-
-使用 Formily React 包:
-
-```bash
-npm install --save @formily/react
-```
-
-使用 Formily 核心包:
-
-```bash
-npm install --save @formily/core
-```
-
 ## 官网
 
+2.0
+
+https://v2.formilyjs.org
+
+1.0
+
 https://formilyjs.org
-
-## 架构
-
-![](https://img.alicdn.com/tfs/TB1BvlRu4D1gK0jSZFsXXbldVXa-1882-1144.png)
-
-## 文档
-
-- [@formily/antd](./packages/antd/README.zh-cn.md)
-- [@formily/next](./packages/next/README.zh-cn.md)
-- [@formily/react-schema-renderer](./packages/react-schema-renderer/README.zh-cn.md)
-- [@formily/react](./packages/react/README.zh-cn.md)
-- [@formily/core](./packages/core/README.zh-cn.md)
-
-## 入门案例
-
-[codesandbox](https://codesandbox.io/s/o5up7)
 
 ## 集团其他产品
 

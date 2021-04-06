@@ -23,57 +23,15 @@ In React, the whole tree rendering performance problem of the form is very obvio
 - 🏅 Side effects are managed independently, making form data linkages easier than ever before.
 - 🌯 Override most complicated form layout use cases.
 
-## Install
-
-Use Ant Design：
-
-```bash
-npm install --save antd @formily/antd @formily/antd-components
-```
-
-Use Fusion Design：
-
-```bash
-npm install --save @alifd/next @formily/next @formily/next-components
-```
-
-Use formily react render engine pacakge:
-
-```bash
-npm install --save @formily/react-schema-renderer
-```
-
-Use formily react package:
-
-```bash
-npm install --save @formily/react
-```
-
-Use formily core package:
-
-```bash
-npm install --save @formily/core
-```
-
-## Architecture
-
-![](https://img.alicdn.com/tfs/TB1BvlRu4D1gK0jSZFsXXbldVXa-1882-1144.png)
-
 ## WebSite
 
+2.0
+
+https://v2.formilyjs.org
+
+1.0
+
 https://formilyjs.org
-
-## Documents
-
-- [@formily/antd](./packages/antd/README.md)
-- [@formily/next](./packages/next/README.md)
-- [@formily/react-schema-renderer](./packages/react-schema-renderer/README.md)
-- [@formily/react](./packages/react/README.md)
-- [@formily/core](./packages/core/README.md)
-
-## Demo
-
-[codesandbox](https://codesandbox.io/s/o5up7)
 
 ## Community
 
