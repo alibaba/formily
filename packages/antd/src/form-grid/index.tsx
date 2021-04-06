@@ -246,6 +246,47 @@ const getStyle = (props: IStyleProps): IStyle => {
   return style
 }
 
+export const useGridSpan = (gridSpan = 1) => {
+  const params = useContext(FormGridContext)
+  if (!isValid(params)) {
+    return gridSpan
+  }
+  const {
+    colWrap,
+    columns,
+    clientWidth,
+    minWidth,
+    columnGap,
+    maxColumns,
+  } = params
+  const calc = Math.floor((clientWidth + columnGap) / (minWidth + columnGap)) // 算出实际一行最多能塞进的格子数
+  if (colWrap === true) {
+    if (Math.min(calc, columns) >= gridSpan) {
+      if (isValid(maxColumns)) {
+        return Math.min(gridSpan, maxColumns)
+      }
+      return gridSpan
+    } else {
+      if (isValid(maxColumns)) {
+        return Math.min(calc, columns, maxColumns)
+      }
+      return Math.min(calc, columns)
+    }
+  } else {
+    if (Math.min(calc, columns) >= gridSpan) {
+      if (isValid(maxColumns)) {
+        return Math.min(gridSpan, maxColumns)
+      }
+      return gridSpan
+    } else {
+      if (isValid(maxColumns)) {
+        return Math.min(calc, columns, maxColumns)
+      }
+      return Math.min(calc, columns)
+    }
+  }
+}
+
 export const FormGrid: ComposedFormGrid = (props) => {
   const normalizeProps = (props: IFormGridProps): ILayoutProps => {
     const { breakpoints } = props
@@ -305,7 +346,7 @@ export const FormGrid: ComposedFormGrid = (props) => {
   )
 }
 
-const GridColumn: React.FC<IGridColumnProps> = ({ gridSpan, children }) => {
+export const GridColumn: React.FC<IGridColumnProps> = ({ gridSpan, children }) => {
   const span = FormGrid.useGridSpan(gridSpan)
   return (
     <div style={{ gridColumnStart: `span ${span}` }} data-span={span || 1}>
@@ -318,46 +359,7 @@ GridColumn.defaultProps = {
   gridSpan: 1,
 }
 
-FormGrid.useGridSpan = (gridSpan: number) => {
-  const params = useContext(FormGridContext)
-  if (!isValid(params)) {
-    return gridSpan
-  }
-  const {
-    colWrap,
-    columns,
-    clientWidth,
-    minWidth,
-    columnGap,
-    maxColumns,
-  } = params
-  const calc = Math.floor((clientWidth + columnGap) / (minWidth + columnGap)) // 算出实际一行最多能塞进的格子数
-  if (colWrap === true) {
-    if (Math.min(calc, columns) >= gridSpan) {
-      if (isValid(maxColumns)) {
-        return Math.min(gridSpan, maxColumns)
-      }
-      return gridSpan
-    } else {
-      if (isValid(maxColumns)) {
-        return Math.min(calc, columns, maxColumns)
-      }
-      return Math.min(calc, columns)
-    }
-  } else {
-    if (Math.min(calc, columns) >= gridSpan) {
-      if (isValid(maxColumns)) {
-        return Math.min(gridSpan, maxColumns)
-      }
-      return gridSpan
-    } else {
-      if (isValid(maxColumns)) {
-        return Math.min(calc, columns, maxColumns)
-      }
-      return Math.min(calc, columns)
-    }
-  }
-}
+FormGrid.useGridSpan = useGridSpan
 FormGrid.GridColumn = GridColumn
 
 FormGrid.defaultProps = {

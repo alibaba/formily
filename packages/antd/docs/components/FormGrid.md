@@ -35,6 +35,7 @@ export default () => {
             name="aaa"
             title="aaa"
             x-decorator="FormItem"
+            x-decorator-props={{ gridSpan: 2 }}
             x-component="Input"
           />
           <SchemaField.String

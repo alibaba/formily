@@ -9,6 +9,7 @@ import {
   useFormShallowLayout,
   FormLayoutShallowContext,
 } from '../form-layout'
+import { useGridSpan } from '../form-grid'
 import { Tooltip, Popover } from 'antd'
 import {
   QuestionCircleOutlined,
@@ -167,7 +168,10 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   return (
     <div
       ref={popoverContainerRef}
-      style={style}
+      style={{
+        ...style,
+        gridColumnStart: `span ${useGridSpan(props.gridSpan)}`,
+      }}
       className={cls({
         [`${prefixCls}`]: true,
         [`${prefixCls}-layout-${layout}`]: true,
