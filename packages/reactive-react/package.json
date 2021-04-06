@@ -1,6 +1,6 @@
 {
   "name": "@formily/reactive-react",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0-beta.7",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -38,8 +38,8 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/reactive": "^2.0.0-beta.6",
-    "@formily/shared": "^2.0.0-beta.6",
+    "@formily/reactive": "^2.0.0-beta.7",
+    "@formily/shared": "^2.0.0-beta.7",
     "hoist-non-react-statics": "^3.3.2"
   },
   "publishConfig": {
