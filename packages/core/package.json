@@ -27,7 +27,7 @@
   "dependencies": {
     "@formily/shared": "^1.3.13",
     "@formily/validator": "^1.3.13",
-    "immer": "^6.0.3"
+    "immer": "^8.0.1"
   },
   "publishConfig": {
     "access": "public"
