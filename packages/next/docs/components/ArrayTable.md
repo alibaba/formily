@@ -164,7 +164,6 @@ import {
 } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -483,7 +482,6 @@ import {
 } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {

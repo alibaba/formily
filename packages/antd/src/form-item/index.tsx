@@ -253,11 +253,17 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <FormLayoutShallowContext.Provider
               value={reduce(
                 shallowFormLayout,
-                (buf, _, key) => {
-                  buf[key] = undefined
+                (buf: any, _, key) => {
+                  if (key === 'size') {
+                    buf.size = size
+                  } else {
+                    buf[key] = undefined
+                  }
                   return buf
                 },
-                {}
+                {
+                  size,
+                }
               )}
             >
               {formatChildren}

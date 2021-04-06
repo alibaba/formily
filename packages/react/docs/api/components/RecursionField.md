@@ -31,12 +31,7 @@ type RecursionField = React.FC<IRecursionFieldProps>
 ```tsx
 import React from 'react'
 import { createForm } from '@formily/core'
-import {
-  FormProvider,
-  createSchemaField,
-  RecursionField,
-  useField,
-} from '@formily/react'
+import { FormProvider, createSchemaField, RecursionField } from '@formily/react'
 import { Input } from 'antd'
 import 'antd/lib/input/style'
 

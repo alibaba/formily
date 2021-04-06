@@ -34,7 +34,7 @@ const form = createForm({
   },
 })
 
-const Custom = (props) => {
+const Custom = () => {
   useFormEffects(() => {
     onFieldReact('custom.bb', (field) => {
       field.value = field.query('.aa').get('value')

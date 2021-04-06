@@ -9,14 +9,13 @@ import { ProxyRaw, RawProxy } from './environment'
 
 export function define<Target extends object = any>(
   target: Target,
-  annotations?: Annotations<Target>,
-  traverse = createObservable
+  annotations?: Annotations<Target>
 ) {
   if (isObservable(target)) return target
   if (!isSupportObservable(target)) return target
   buildTreeNode({
     value: target,
-    traverse,
+    traverse: createObservable,
   })
   ProxyRaw.set(target, target)
   RawProxy.set(target, target)

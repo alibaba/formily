@@ -7,7 +7,7 @@
 ```tsx
 import React, { useState, useEffect } from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import {
   Form,
   FormItem,
@@ -332,7 +332,7 @@ export default () => {
 ```tsx
 import React, { useState, useEffect } from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field } from '@formily/react'
+import { createSchemaField } from '@formily/react'
 import {
   Form,
   FormItem,
@@ -988,7 +988,7 @@ export default () => {
 ```tsx
 import React, { useState, useEffect } from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field, useField } from '@formily/react'
+import { createSchemaField, useField } from '@formily/react'
 import {
   Form,
   FormItem,
@@ -1310,7 +1310,7 @@ export default () => {
 ```tsx
 import React, { useState, useEffect } from 'react'
 import { createForm } from '@formily/core'
-import { createSchemaField, Field, useField } from '@formily/react'
+import { createSchemaField, useField } from '@formily/react'
 import {
   Form,
   FormItem,

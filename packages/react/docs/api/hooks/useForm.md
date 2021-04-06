@@ -23,7 +23,7 @@ import 'antd/lib/input/style'
 
 const form = createForm()
 
-const Custom = observer((props) => {
+const Custom = observer(() => {
   const form = useForm()
   return <div>{form.values.input}</div>
 })

@@ -68,3 +68,8 @@ export type Reaction = ((...args: any[]) => any) & {
 }
 
 export type KeysReactions = Map<PropertyKey, Set<Reaction>>
+
+export interface IReactionOptions<T> {
+  name?: string
+  equals?: (oldValue: T, newValue: T) => boolean
+}

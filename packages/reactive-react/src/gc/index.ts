@@ -3,34 +3,35 @@ import './global'
 
 const registry =
   globalThisPolyfill['FinalizationRegistry'] &&
-  new globalThisPolyfill['FinalizationRegistry']((clean: () => void) => clean())
+  new globalThisPolyfill['FinalizationRegistry']((token: any) =>
+    token?.clean?.()
+  )
 
-export class GarbageCollector {
-  private target: object
-  private cleaner: () => void
+type Token = { clean: () => void }
+export class GarbageCollector<T = any> {
   private expireTime: number
   private request: NodeJS.Timeout
-  constructor(target: object, cleaner?: () => void, expireTime = 10_000) {
-    this.target = target
-    this.cleaner = cleaner
+  private token: Token
+  constructor(clean?: () => void, expireTime = 10_000) {
+    this.token = {
+      clean,
+    }
     this.expireTime = expireTime
   }
 
-  open() {
+  open(target: T) {
     if (registry) {
-      registry.register(this.target, () => {
-        this.cleaner?.()
-      })
+      registry.register(target, this.token, this.token)
     } else {
       this.request = setTimeout(() => {
-        this.cleaner?.()
+        this.token?.clean?.()
       }, this.expireTime)
     }
   }
 
   close() {
     if (registry) {
-      registry.unregister(this.target)
+      registry.unregister(this.token)
     } else {
       clearTimeout(this.request)
     }

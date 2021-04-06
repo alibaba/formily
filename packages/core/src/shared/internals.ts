@@ -27,7 +27,7 @@ import {
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties } from './constants'
 
-export const isHTMLInputEvent = (event: any) => {
+export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
     if (
       event.target.tagName &&
@@ -37,7 +37,7 @@ export const isHTMLInputEvent = (event: any) => {
     ) {
       return false
     }
-    event.stopPropagation?.()
+    if (stopPropagation) event.stopPropagation?.()
     return true
   }
   return false

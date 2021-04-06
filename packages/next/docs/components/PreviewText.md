@@ -9,7 +9,7 @@ import React from 'react'
 import { PreviewText, FormItem } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
+import { Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {

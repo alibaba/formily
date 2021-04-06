@@ -44,7 +44,7 @@ $ npm install --save @formily/core @formily/react
 /**
  * defaultShowCode: true
  */
-import React, { createContext, useMemo, useContext, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { createForm, setValidateLanguage } from '@formily/core'
 import {
   FormProvider,
@@ -53,7 +53,7 @@ import {
   useField,
   observer,
 } from '@formily/react'
-import { Input, Form, Button } from 'antd'
+import { Input, Form } from 'antd'
 import 'antd/lib/input/style'
 import 'antd/lib/form/style'
 

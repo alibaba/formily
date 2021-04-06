@@ -16,12 +16,13 @@ export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   const dataSource = value?.length ? value : [{}]
   const onEdit = (targetKey: any, type: 'add' | 'remove') => {
     if (type == 'add') {
+      const id = dataSource.length
       if (field?.value?.length) {
         field.push(null)
       } else {
         field.push(null, null)
       }
-      setActiveKey(`tab-${dataSource.length}`)
+      setActiveKey(`tab-${id}`)
     } else if (type == 'remove') {
       const index = targetKey.match(/-(\d+)/)?.[1]
       field.remove(Number(index))

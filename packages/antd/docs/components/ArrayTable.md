@@ -163,7 +163,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -474,7 +473,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {

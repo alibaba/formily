@@ -11,7 +11,6 @@ import {
 } from '@formily/shared'
 import { ProxyRaw, MakeObservableSymbol } from './environment'
 import { Annotation } from './types'
-import { untrackStart, untrackEnd } from './reaction'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
 const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
@@ -63,32 +62,26 @@ export const isCollectionType = (target: any) => {
   )
 }
 
-export const markRaw = (target: any) => {
+export const markRaw = <T>(target: T): T => {
+  if (!target) return
   if (isFn(target)) {
     target.prototype[RAW_TYPE] = true
   } else {
     target[RAW_TYPE] = true
   }
+  return target
 }
 
-export const markObservable = (target: any) => {
+export const markObservable = <T>(target: T): T => {
+  if (!target) return
   if (isFn(target)) {
     target.prototype[OBSERVABLE_TYPE] = true
   } else {
     target[OBSERVABLE_TYPE] = true
   }
+  return target
 }
 
-export const raw = (target: any) => ProxyRaw.get(target)
+export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
-export const toJS = (target: any) => clone(target)
-
-export const untracked = <T extends () => any>(callback?: T): ReturnType<T> => {
-  untrackStart()
-  let res: any
-  if (isFn(callback)) {
-    res = callback()
-  }
-  untrackEnd()
-  return res
-}
+export const toJS = <T>(target: T): T => clone(target)

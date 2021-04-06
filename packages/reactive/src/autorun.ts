@@ -1,22 +1,35 @@
-import { ReactionStack } from './environment'
-import { Reaction } from './types'
 import {
   batchEnd,
   batchStart,
   disposeBindingReactions,
   releaseBindingReactions,
 } from './reaction'
+import { untracked } from './untracked'
 import { isFn } from '@formily/shared'
-import { untracked } from './shared'
+import { ReactionStack } from './environment'
+import { Reaction, IReactionOptions } from './types'
 
-export const autorun = (runner: Reaction, name = 'AutoRun') => {
+interface IValue {
+  currentValue?: any
+  oldValue?: any
+}
+
+interface ITracked {
+  current?: boolean
+}
+
+interface IDirty {
+  current?: boolean
+}
+
+export const autorun = (tracker: Reaction, name = 'AutoRun') => {
   const reaction = () => {
     if (ReactionStack.indexOf(reaction) === -1) {
       releaseBindingReactions(reaction)
       try {
         ReactionStack.push(reaction)
         batchStart()
-        runner()
+        if (isFn(tracker)) tracker()
       } finally {
         batchEnd()
         ReactionStack.pop()
@@ -31,19 +44,32 @@ export const autorun = (runner: Reaction, name = 'AutoRun') => {
 }
 
 export const reaction = <T>(
-  runner: () => T,
-  callback?: (payload: T) => void,
-  name = 'Reaction'
+  tracker: () => T,
+  subscriber?: (payload: T) => void,
+  options?: IReactionOptions<T>
 ) => {
-  const initialValue = Symbol('initial-value')
-  let oldValue: any = initialValue
+  const realOptions = {
+    name: 'Reaction',
+    ...options,
+  }
+  const value: IValue = {}
+  const tracked: ITracked = {}
+  const dirty: IDirty = {}
+  const dirtyCheck = () => {
+    if (isFn(realOptions.equals))
+      return !realOptions.equals(value.oldValue, value.currentValue)
+    return value.oldValue !== value.currentValue
+  }
+
   return autorun(() => {
-    const current = runner()
-    if (current !== oldValue && oldValue !== initialValue) {
+    value.currentValue = tracker()
+    dirty.current = dirtyCheck()
+    if (dirty && tracked.current) {
       untracked(() => {
-        if (isFn(callback)) callback(current)
+        if (isFn(subscriber)) subscriber(value.currentValue)
       })
     }
-    oldValue = current
-  }, name)
+    value.oldValue = value.currentValue
+    tracked.current = true
+  }, realOptions.name)
 }

@@ -270,13 +270,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import {
-  TreeSelect,
-  Select,
-  FormItem,
-  FormButtonGroup,
-  Submit,
-} from '@formily/antd'
+import { TreeSelect, FormItem, FormButtonGroup, Submit } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -371,7 +365,7 @@ import {
   FormButtonGroup,
   Submit,
 } from '@formily/antd'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { action } from '@formily/reactive'
 

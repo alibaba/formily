@@ -6,10 +6,16 @@
 
 ```tsx
 import React from 'react'
-import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/next'
+import {
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItem,
+  Input,
+  FormLayout,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -23,7 +29,7 @@ const form = createForm()
 export default () => {
   return (
     <FormProvider form={form}>
-      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+      <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.String
             title="输入框"
@@ -84,7 +90,7 @@ export default () => {
           <Submit onSubmit={console.log}>提交</Submit>
           <Reset>重置</Reset>
         </FormButtonGroup.FormItem>
-      </Form>
+      </FormLayout>
     </FormProvider>
   )
 }
@@ -94,10 +100,16 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/next'
+import {
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItem,
+  FormLayout,
+  Input,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -111,7 +123,7 @@ const form = createForm()
 export default () => {
   return (
     <FormProvider form={form}>
-      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+      <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.String
             title="输入框"
@@ -174,7 +186,7 @@ export default () => {
             <Reset>重置</Reset>
           </FormButtonGroup.FormItem>
         </FormButtonGroup.Sticky>
-      </Form>
+      </FormLayout>
     </FormProvider>
   )
 }
@@ -184,10 +196,16 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { FormButtonGroup, Submit, Reset, FormItem, Input } from '@formily/next'
+import {
+  FormButtonGroup,
+  Submit,
+  Reset,
+  FormItem,
+  FormLayout,
+  Input,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -201,7 +219,7 @@ const form = createForm()
 export default () => {
   return (
     <FormProvider form={form}>
-      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+      <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.String
             title="输入框"
@@ -264,7 +282,7 @@ export default () => {
             <Reset>重置</Reset>
           </FormButtonGroup>
         </FormButtonGroup.Sticky>
-      </Form>
+      </FormLayout>
     </FormProvider>
   )
 }
@@ -285,7 +303,7 @@ export default () => {
 
 > 该组件主要用来处理按钮组与主表单 FormItem 对齐问题
 
-参考 https://fusion.design/pc/component/basic/form 中的 FormItem 属性
+参考 https://ant.design/components/form-cn/ 中的 FormItem 属性
 
 ### FormButtonGroup.Sticky
 

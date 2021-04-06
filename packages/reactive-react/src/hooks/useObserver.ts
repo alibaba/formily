@@ -27,13 +27,12 @@ export const useObserver = <T extends () => any>(
 
   //StrictMode/ConcurrentMode会导致组件无法正确触发Unmount，所以只能自己做垃圾回收
   if (!gcRef.current) {
-    const target = new AutoCollector()
-    gcRef.current = new GarbageCollector(target, () => {
+    gcRef.current = new GarbageCollector(() => {
       if (tracker) {
         tracker.dispose()
       }
     })
-    gcRef.current.open()
+    gcRef.current.open(new AutoCollector())
   }
 
   React.useEffect(() => {

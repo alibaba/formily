@@ -77,29 +77,34 @@ $ yarn start
 内核项目文档
 
 ```bash
-$ cd packages/core && yarn start
+$ yarn workspace @formily/core start
 ```
 
 React 项目文档
 
 ```bash
-$ cd packages/react && yarn start
+$ yarn workspace @formily/react start
 ```
 
 Vue 项目文档
 
 ```bash
-$ cd packages/vue && yarn start
+$ yarn workspace @formily/vue start
 ```
 
 Antd 项目文档
 
 ```bash
-$ cd packages/antd && yarn start
+$ yarn workspace @formily/antd start
 ```
 
 Fusion 项目文档
 
 ```bash
-$ cd packages/next && yarn start
+$ yarn workspace @formily/next start
+```
+Reactive 项目文档
+
+```bash
+$ yarn workspace @formily/reactive start
 ```

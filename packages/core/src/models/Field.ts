@@ -651,12 +651,8 @@ export class Field<
 
   onInit = () => {
     this.initialized = true
-    batch.scope(() => {
-      initFieldValue(this)
-    })
-    batch.scope(() => {
-      initFieldUpdate(this)
-    })
+    initFieldValue(this)
+    initFieldUpdate(this)
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 
@@ -690,7 +686,7 @@ export class Field<
 
   onFocus = async (...args: any[]) => {
     if (args[0]?.target) {
-      if (!isHTMLInputEvent(args[0])) return
+      if (!isHTMLInputEvent(args[0], false)) return
     }
     this.active = true
     this.visited = true
@@ -699,7 +695,7 @@ export class Field<
 
   onBlur = async (...args: any[]) => {
     if (args[0]?.target) {
-      if (!isHTMLInputEvent(args[0])) return
+      if (!isHTMLInputEvent(args[0], false)) return
     }
     this.active = false
     await this.validate('onBlur')

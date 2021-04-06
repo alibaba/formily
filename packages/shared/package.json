@@ -1,13 +1,13 @@
 {
 	"name": "@formily/shared",
-	"version": "2.0.0-beta.3",
+	"version": "2.0.0-beta.7",
 	"license": "MIT",
 	"main": "lib",
 	"module": "esm",
 	"umd:main": "dist/formily.shared.umd.production.js",
-  "unpkg": "dist/formily.shared.umd.production.js",
-  "jsdelivr": "dist/formily.shared.umd.production.js",
-  "jsnext:main": "esm",
+	"unpkg": "dist/formily.shared.umd.production.js",
+	"jsdelivr": "dist/formily.shared.umd.production.js",
+	"jsnext:main": "esm",
 	"types": "esm/index.d.ts",
 	"repository": {
 		"type": "git",
@@ -23,7 +23,7 @@
 	"publishConfig": {
 		"access": "public"
 	},
-	"gitHead": "f513fc2dcca781b3f7aa588c4419bce20cba2d8b",
+	"gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec",
 	"scripts": {
 		"build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
 		"build:cjs": "tsc --declaration",
@@ -34,10 +34,10 @@
 		"@types/react": ">=16.8.0 || >=17.0.0"
 	},
 	"dependencies": {
-		"@formily/path": "^2.0.0-beta.3",
+		"@formily/path": "^2.0.0-beta.7",
 		"camel-case": "^4.1.1",
 		"lower-case": "^2.0.1",
-    "no-case": "^3.0.4",
+		"no-case": "^3.0.4",
 		"param-case": "^3.0.4",
 		"pascal-case": "^3.1.1",
 		"upper-case": "^2.0.1"

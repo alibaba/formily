@@ -58,8 +58,9 @@ const useArray = () => {
   return useContext(ArrayBaseContext)
 }
 
-const useIndex = () => {
-  return useContext(ItemContext)?.index
+const useIndex = (index?: number) => {
+  const ctx = useContext(ItemContext)
+  return ctx ? ctx.index : index
 }
 
 const getDefaultValue = (defaultValue: any, schema: Schema) => {
@@ -90,16 +91,22 @@ ArrayBase.Item = ({ children, ...props }) => {
   return <ItemContext.Provider value={props}>{children}</ItemContext.Provider>
 }
 
-ArrayBase.SortHandle = SortableHandle((props: any) => {
+const SortHandle = SortableHandle((props: any) => {
   const prefixCls = usePrefixCls('formily-array-base')
   return (
     <MenuOutlined
       {...props}
-      className={cls(`${prefixCls}-handle`, props.className)}
+      className={cls(`${prefixCls}-sort-handle`, props.className)}
       style={{ ...props.style }}
     />
   )
 }) as any
+
+ArrayBase.SortHandle = () => {
+  const array = useArray()
+  if (array.field.pattern !== 'editable') return null
+  return <SortHandle />
+}
 
 ArrayBase.Index = () => {
   const index = useIndex()
@@ -110,6 +117,7 @@ ArrayBase.Addition = (props) => {
   const self = useField()
   const array = useArray()
   const prefixCls = usePrefixCls('formily-array-base')
+  if (array.field.pattern !== 'editable') return null
   return (
     <Button
       {...props}

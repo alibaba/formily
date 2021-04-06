@@ -1,19 +1,4 @@
-const fs = require('fs-extra')
 const path = require('path')
-const packagesDir = path.resolve(process.cwd(), './packages')
-const packages = fs.readdirSync(packagesDir)
-const alias = packages
-  .map((v) => path.join(packagesDir, v))
-  .filter((v) => {
-    return !fs.statSync(v).isFile()
-  })
-  .reduce((buf, _path) => {
-    const name = path.basename(_path)
-    return {
-      ...buf,
-      [`@formily/${name}$`]: `${_path}/src`,
-    }
-  }, {})
 module.exports = {
   collectCoverage: true,
   verbose: true,

@@ -1646,7 +1646,8 @@ const form = createForm({
   effects() {
     onFieldReact('input', (field) => {
       const select = field.query('select').take()
-      const selectValue = select?.value
+      if (!select) return
+      const selectValue = select.value
       select.loading = true
       if (selectValue) {
         setTimeout(() => {
@@ -1719,7 +1720,8 @@ const SchemaField = createSchemaField({
   scope: {
     asyncVisible(field) {
       const select = field.query('select').take()
-      const selectValue = select?.value
+      if(!select) return
+      const selectValue = select.value
       select.loading = true
       if (selectValue) {
         setTimeout(() => {

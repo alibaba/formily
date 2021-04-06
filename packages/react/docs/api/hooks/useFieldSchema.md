@@ -20,12 +20,11 @@ Schema 参考[Schema](/api/shared/schema)
 import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField, useFieldSchema } from '@formily/react'
-import { Input } from 'antd'
 import 'antd/lib/input/style'
 
 const form = createForm()
 
-const Custom = (props) => {
+const Custom = () => {
   const schema = useFieldSchema()
   return (
     <code>

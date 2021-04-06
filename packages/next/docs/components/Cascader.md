@@ -9,7 +9,6 @@ import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm, onFieldReact } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -42,17 +41,13 @@ const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
     }, [])
   }
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      state: 'loading',
-    })
+    field.loading = true
     fetch('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.json())
       .then(
         action((data) => {
-          field.setDataSource(transform(data))
-          field.setComponentProps({
-            state: undefined,
-          })
+          field.dataSource = transform(data)
+          field.loading = false
         })
       )
   })
@@ -91,9 +86,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/next'
-import { createForm, onFieldReact } from '@formily/core'
+import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
 import { action } from '@formily/reactive'
 
 const SchemaField = createSchemaField({
@@ -128,17 +122,13 @@ const transformAddress = (data = {}) => {
 const useAsyncDataSource = (url: string, transform: (data: any) => any) => (
   field
 ) => {
-  field.setComponentProps({
-    state: 'loading',
-  })
+  field.loading = true
   fetch(url)
     .then((res) => res.json())
     .then(
       action((data) => {
-        field.setDataSource(transform(data))
-        field.setComponentProps({
-          state: undefined,
-        })
+        field.dataSource = transform(data)
+        field.loading = false
       })
     )
 }
@@ -183,9 +173,8 @@ export default () => (
 ```tsx
 import React from 'react'
 import { Cascader, FormItem, FormButtonGroup, Submit } from '@formily/next'
-import { createForm } from '@formily/core'
-import { FormProvider, onFieldReact, Field } from '@formily/react'
-import { LoadingOutlined } from '@ant-design/icons'
+import { createForm, onFieldReact } from '@formily/core'
+import { FormProvider, Field } from '@formily/react'
 import { action } from '@formily/reactive'
 
 const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
@@ -211,17 +200,13 @@ const useAddress = (pattern: Formily.Core.Types.FormPathPattern) => {
     }, [])
   }
   onFieldReact(pattern, (field) => {
-    field.setComponentProps({
-      state: 'loading',
-    })
+    field.loading = true
     fetch('//unpkg.com/china-location/dist/location.json')
       .then((res) => res.json())
       .then(
         action((data) => {
-          field.setDataSource(transform(data))
-          field.setComponentProps({
-            state: undefined,
-          })
+          field.dataSource = transform(data)
+          field.loading = false
         })
       )
   })

@@ -2,6 +2,7 @@ import { connect, mapReadPretty, mapProps } from '@formily/react'
 import { Input as NextInput } from '@alifd/next'
 import { InputProps, TextAreaProps } from '@alifd/next/lib/input'
 import { PreviewText } from '../preview-text'
+import { mapSize, mapStatus } from '../__builtins__'
 
 type ComposedInput = React.FC<InputProps> & {
   TextArea?: React.FC<TextAreaProps>
@@ -9,14 +10,7 @@ type ComposedInput = React.FC<InputProps> & {
 
 export const Input: ComposedInput = connect(
   NextInput,
-  mapProps((props) => {
-    const onChange = props.onChange
-    return {
-      onChange(value) {
-        onChange(value, null)
-      },
-    }
-  }),
+  mapProps(mapSize, mapStatus),
   mapReadPretty(PreviewText.Input)
 )
 

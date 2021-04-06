@@ -15,17 +15,16 @@ interface mapReadPretty {
 ## 用例
 
 ```tsx
-import React, { createContext, useMemo, useContext, useEffect } from 'react'
-import { createForm, setValidateLanguage } from '@formily/core'
+import React, { useMemo } from 'react'
+import { createForm } from '@formily/core'
 import {
   FormProvider,
-  FormConsumer,
   Field,
   connect,
   mapProps,
   mapReadPretty,
 } from '@formily/react'
-import { Input as AntdInput, Form, Button } from 'antd'
+import { Input as AntdInput, Form } from 'antd'
 import 'antd/lib/input/style'
 import 'antd/lib/form/style'
 

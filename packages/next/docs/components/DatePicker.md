@@ -9,7 +9,6 @@ import React from 'react'
 import { DatePicker, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Schema } from '@formily/json-schema'
 
 const SchemaField = createSchemaField({
   components: {

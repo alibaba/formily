@@ -1,7 +1,6 @@
 node_modules
 *.log
 build
-dist
 docs
 doc-site
 __tests__
@@ -9,3 +8,5 @@ __tests__
 jest.config.js
 vue.config.js
 tsconfig.json
+.umi
+src

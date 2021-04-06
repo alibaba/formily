@@ -1,11 +1,12 @@
 module.exports = {
+  title: 'Formily Vue',
   dest: './doc-site',
   theme: '@vuepress-dumi/dumi',
   head: [
     ['link', { rel: 'icon', href: '//img.alicdn.com/imgextra/i3/O1CN01XtT3Tv1Wd1b5hNVKy_!!6000000002810-55-tps-360-360.svg' }]
   ],
   themeConfig: {
-    logo: 'https://img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+    logo: '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
     nav: [
       {
         text: '指南',
