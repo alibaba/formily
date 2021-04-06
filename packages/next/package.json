@@ -20,12 +20,6 @@
   "engines": {
     "npm": ">=3.0.0"
   },
-  "sideEffects": [
-    "dist/*",
-    "esm/**/style.js",
-    "lib/**/style.js",
-    "*.scss"
-  ],
   "scripts": {
     "start": "dumi dev",
     "build": "rimraf -rf lib && npm run build:cjs && npm run build:esm && npm run build:umd && npm run copy:style",
