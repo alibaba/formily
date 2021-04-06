@@ -6,6 +6,6 @@ export default baseConfig(
   'formily.next',
   'Formily.Next',
   postcss({
-    extract: path.resolve('dist/formily.next.css'),
+    extract: path.resolve('dist/next.css'),
   })
 )

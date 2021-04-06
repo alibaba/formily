@@ -7,7 +7,7 @@ export default baseConfig(
   'formily.antd',
   'Formily.Antd',
   postcss({
-    extract: path.resolve('dist/formily.antd.css'),
+    extract: path.resolve('dist/antd.css'),
     use: [
       [
         'less',
