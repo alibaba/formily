@@ -971,14 +971,28 @@ export default () => {
             required
           />
           <SchemaField.String
-            name="Select"
-            title="Select"
+            name="select1"
+            title="Multiple Select"
             x-decorator="FormItem"
             x-component="Select"
+            enum={[
+              {
+                label: '选项1',
+                value: 1,
+              },
+              {
+                label: '选项2',
+                value: 2,
+              },
+            ]}
+            x-component-props={{
+              mode: 'multiple',
+              placeholder: '请选择',
+            }}
             required
           />
           <SchemaField.String
-            name="Select"
+            name="select2"
             title="Select"
             x-decorator="FormItem"
             x-component="Select"
@@ -992,6 +1006,9 @@ export default () => {
                 value: 2,
               },
             ]}
+            x-component-props={{
+              placeholder: '请选择',
+            }}
             required
           />
           <SchemaField.String

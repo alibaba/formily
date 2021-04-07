@@ -280,6 +280,43 @@
         }
     }
 
+    .@{ant-prefix}-select-multiple:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        padding: 0px 2px;
+        height: @height-sm - 2;
+        font-size: @font-size-sm;
+        line-height: @height-sm;
+
+        &::after {
+            height: @height-sm - 8;
+            line-height: @height-sm - 8;
+        }
+
+        .@{ant-prefix}-select-selection-search {
+            height: @height-sm - 8;
+            line-height: @height-sm - 8;
+            margin-inline-start: 0;
+            &-input {
+                height: @height-sm - 12;
+                line-height: @height-sm - 12;
+            }
+        }
+
+        .@{ant-prefix}-select-selection-placeholder {
+            line-height: @height-sm - 8;
+            height: @height-sm - 8;
+            left: 4px;
+        }
+
+        .@{ant-prefix}-select-selection-overflow-item {
+            align-self: flex-start;
+        }
+
+        .@{ant-prefix}-select-selection-item {
+            line-height: @height-sm - 10;
+            height: @height-sm - 8;
+        }
+    }
+
     &.@{form-item-cls}-feedback-layout-terse {
         margin-bottom: 8px;
 
@@ -381,6 +418,41 @@
         .@{ant-prefix}-select-selection-item {
             line-height: @height-lg - 2;
             height: @height-lg;
+        }
+    }
+
+    .@{ant-prefix}-select-multiple:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        padding: 0px 2px;
+        height: @height-lg - 2;
+        font-size: @font-size-lg;
+        line-height: @height-lg;
+
+        &::after {
+            height: @height-lg - 8;
+            line-height: @height-lg - 8;
+        }
+
+        .@{ant-prefix}-select-selection-search {
+            height: @height-lg - 8;
+            line-height: @height-lg - 8;
+            &-input {
+                height: @height-lg - 12;
+                line-height: @height-lg - 12;
+            }
+        }
+
+        .@{ant-prefix}-select-selection-placeholder {
+            line-height: @height-lg - 8;
+            height: @height-lg - 8;
+        }
+
+        .@{ant-prefix}-select-selection-overflow-item {
+            align-self: flex-start;
+        }
+
+        .@{ant-prefix}-select-selection-item {
+            line-height: @height-lg - 10;
+            height: @height-lg - 8;
         }
     }
 
