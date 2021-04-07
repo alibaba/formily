@@ -1,6 +1,6 @@
 {
   "name": "@formily/devtools",
-  "version": "2.0.0-beta.15",
+  "version": "2.0.0-beta.16",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,8 +20,8 @@
     "start": "webpack-dev-server --config config/webpack.dev.js"
   },
   "dependencies": {
-    "@formily/core": "^2.0.0-beta.15",
-    "@formily/shared": "^2.0.0-beta.15",
+    "@formily/core": "^2.0.0-beta.16",
+    "@formily/shared": "^2.0.0-beta.16",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-json-view": "^1.19.1",
