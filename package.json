@@ -116,6 +116,7 @@
     "mfetch": "^0.2.27",
     "mobx": "^6.0.4",
     "mobx-react-lite": "^3.1.6",
+    "escape-string-regexp":"^4.0.0",
     "onchange": "^5.2.0",
     "opencollective": "^1.0.3",
     "opencollective-postinstall": "^2.0.2",

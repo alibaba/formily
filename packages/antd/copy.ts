@@ -1,6 +1,6 @@
-import { copy, readFile, writeFile, existsSync } from 'fs-extra'
+import { copySync, readFileSync, writeFileSync, existsSync } from 'fs-extra'
 import glob from 'glob'
-
+import excape from 'escape-string-regexp'
 export const runCopy = ({
   esStr,
   libStr,
@@ -10,42 +10,29 @@ export const runCopy = ({
       return Promise.resolve()
     }
 
-    const fileContent: string = (await readFile(filename)).toString()
-
-    return writeFile(
+    const fileContent: string = readFileSync(filename, 'utf-8')
+    writeFileSync(
       filename,
-      fileContent.replace(new RegExp(libStr, 'g'), esStr)
+      fileContent.replace(new RegExp(excape(libStr), 'g'), esStr),
+      {
+        encoding: 'utf-8',
+      }
     )
   }
 
-  return new Promise((resolve, reject) => {
-    glob(`./src/**/*`, (err, files) => {
-      if (err) {
-        return reject(err)
+  glob(`./src/**/*`, (err, files) => {
+    if (err) {
+      throw err
+    }
+    files.forEach((filename) => {
+      if (/\.(less|scss)$/.test(filename)) {
+        copySync(filename, filename.replace(/src\//, 'esm/'))
+        copySync(filename, filename.replace(/src\//, 'lib/'))
+      } else if (/\/style.ts$/.test(filename)) {
+        replaceOperation(
+          filename.replace(/src\//, 'esm/').replace(/\.ts$/, '.js')
+        )
       }
-
-      const all = [] as Promise<unknown>[]
-
-      for (let i = 0; i < files.length; i += 1) {
-        const filename = files[i]
-
-        if (/\.(less|scss)$/.test(filename)) {
-          all.push(copy(filename, filename.replace(/src\//, 'esm/')))
-          all.push(copy(filename, filename.replace(/src\//, 'lib/')))
-
-          continue
-        }
-
-        if (/\/style.ts$/.test(filename)) {
-          replaceOperation(
-            filename.replace(/src\//, 'esm/').replace(/\.ts$/, '.js')
-          )
-
-          continue
-        }
-      }
-
-      return Promise.all(all).then(resolve).catch(reject)
     })
   })
 }
