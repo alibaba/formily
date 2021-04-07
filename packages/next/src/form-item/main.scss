@@ -33,6 +33,7 @@
         padding: 0 8px;
         border-radius: $form-element-large-corner;
         width: 100%;
+
         .#{$css-prefix}input {
             border: none !important;
             box-shadow: none !important;
@@ -42,7 +43,8 @@
 
     &-bordered-none:not(.#{$form-item-cls}-inset) {
         .#{$css-prefix}input {
-            border: none;
+            border: none !important;
+            box-shadow: none !important;
             outline: none;
         }
     }
@@ -129,6 +131,9 @@
 
                 .#{$css-prefix}input {
                     height: 100%;
+                    border: none !important;
+                    box-shadow: none !important;
+                    outline: none;
                 }
             }
         }
