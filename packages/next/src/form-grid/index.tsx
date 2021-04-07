@@ -95,66 +95,62 @@ const useLayout = (props: ILayoutProps): ILayout => {
         return true
       }
     })
-    if (!isValid(maxWidth) && !isValid(maxColumns)) {
-      return {
-        minWidth: isValid(minWidth)
-          ? minWidth[index]
-          : isValid(maxColumns[index])
-          ? maxColumns
-            ? Math.floor(
-                (clientWidth - (maxColumns[index] - 1) * props.columnGap) /
-                  maxColumns[index]
-              )
-            : minWidth
-          : 0,
-        maxWidth: isValid(maxWidth)
-          ? maxWidth[index]
-          : Infinity ===
-            Math.floor(
-              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
-                minColumns[index]
-            )
-          ? clientWidth
-          : Math.floor(
-              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
-                minColumns[index]
-            ),
-        columns: target.childNodes.length,
-        colWrap: colWrap[index],
-        minColumns: minColumns ? minColumns[index] : 1,
-        maxColumns: maxColumns ? maxColumns[index] : undefined,
-        clientWidth,
+
+    const takeMaxColumns = () => {
+      return maxColumns?.[index] || maxColumns
+    }
+
+    const takeMinColumns = () => {
+      return minColumns?.[index] || minColumns || 1
+    }
+
+    const takeColwrap = (): boolean => {
+      return colWrap?.[index] || colWrap as any || true
+    }
+
+    const takeMinWidth = () => {
+      const rMaxColumns = takeMaxColumns()
+      if (isValid(minWidth)) {
+        return minWidth[index] || 0
+      } else {
+        if (isValid(rMaxColumns)) {
+          return Math.floor(
+            (clientWidth - (rMaxColumns - 1) * props.columnGap) / rMaxColumns
+          )
+        } else {
+          return 0
+        }
       }
-    } else {
-      // maxWidth 优先级 高于maxColumns
-      // const minWidthUnderMinColumns = (clientWidth - (maxColumns[index] - 1) * props.columnGap) / maxColumns[index]
-      return {
-        maxWidth: isValid(maxWidth)
-          ? maxWidth[index]
-          : Infinity ===
-            Math.floor(
-              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
-                minColumns[index]
-            )
-          ? clientWidth
-          : Math.floor(
-              (clientWidth - (minColumns[index] - 1) * props.columnGap) /
-                minColumns[index]
-            ),
-        minWidth: isValid(minWidth)
-          ? minWidth[index]
-          : isValid(maxColumns[index])
-          ? Math.floor(
-              (clientWidth - (maxColumns[index] - 1) * props.columnGap) /
-                maxColumns[index]
-            )
-          : 0,
-        minColumns: minColumns ? minColumns[index] : 1,
-        maxColumns: maxColumns ? maxColumns[index] : undefined,
-        columns: target.childNodes.length,
-        colWrap: colWrap[index],
-        clientWidth,
+    }
+
+    const takeMaxWidth = () => {
+      const rMinColumns = takeMinColumns()
+      if (isValid(maxWidth)) {
+        return maxWidth[index] || 0
+      } else {
+        if (isValid(rMinColumns)) {
+          const calculated = Math.floor(
+            (clientWidth - (minColumns[index] - 1) * props.columnGap) /
+              minColumns[index]
+          )
+          if (Infinity === calculated) {
+            return clientWidth
+          }
+          return calculated
+        } else {
+          return Infinity
+        }
       }
+    }
+
+    return {
+      minWidth: takeMinWidth(),
+      maxWidth: takeMaxWidth(),
+      columns: target?.childNodes?.length,
+      colWrap: takeColwrap(),
+      minColumns: takeMinColumns(),
+      maxColumns: takeMaxColumns(),
+      clientWidth,
     }
   }
 
@@ -193,7 +189,7 @@ const getStyle = (props: IStyleProps): IStyle => {
   // const max = layoutParams.maxWidth ? `${layoutParams.maxWidth}px` : '1fr';
   const { clientWidth, minWidth, maxColumns, minColumns } = layoutParams
   const getMinMax = (minWidth: number, maxWidth: number) => {
-    let minmax
+    let minmax: string
     if (minWidth === Infinity) {
       if (!isValid(maxWidth)) {
         minmax = '1fr'
@@ -222,7 +218,7 @@ const getStyle = (props: IStyleProps): IStyle => {
   )
 
   const calc = Math.floor((clientWidth + columnGap) / (minWidth + columnGap))
-  let finalColumns
+  let finalColumns: number
   finalColumns = Math.min(spans, calc)
   if (isValid(maxColumns)) {
     finalColumns = Math.min(spans, calc, maxColumns)
@@ -346,7 +342,10 @@ export const FormGrid: ComposedFormGrid = (props) => {
   )
 }
 
-export const GridColumn: React.FC<IGridColumnProps> = ({ gridSpan, children }) => {
+export const GridColumn: React.FC<IGridColumnProps> = ({
+  gridSpan,
+  children,
+}) => {
   const span = FormGrid.useGridSpan(gridSpan)
   return (
     <div style={{ gridColumnStart: `span ${span}` }} data-span={span || 1}>

@@ -34,7 +34,8 @@
         border-radius: $form-element-large-corner;
         width: 100%;
         .#{$css-prefix}input {
-            border: none;
+            border: none !important;
+            box-shadow: none !important;
             outline: none;
         }
     }
