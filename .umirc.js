@@ -13,54 +13,65 @@ export default {
       path: '/guide',
     },
     {
-      title: '核心库',
+      title: '基础核心库',
       children: [
         {
-          title: '响应式状态管理方案',
+          title: '@formily/reactive',
           path: 'https://reactive.formilyjs.org',
         },
         {
-          title: '基础内核层',
+          title: '@formily/core',
           path: 'https://core.formilyjs.org',
         },
         {
-          title: 'React桥接层',
+          title: '@formily/react',
           path: 'https://react.formilyjs.org',
         },
         {
-          title: 'Vue桥接层',
+          title: '@formily/vue',
           path: 'https://vue.formilyjs.org',
         },
       ],
     },
     {
-      title: '组件库',
+      title: '组件生态',
       children: [
         {
-          title: 'Antd Design',
+          title: '@formily/antd',
           path: 'https://antd.formilyjs.org',
         },
         {
-          title: 'Alibaba Fusion',
+          title: '@formily/next',
           path: 'https://fusion.formilyjs.org',
         },
       ],
     },
     {
-      title: '论坛',
-      path: 'https://github.com/alibaba/formily/discussions',
+      title: '工具',
+      children: [
+        {
+          title: '表单编辑器',
+          path: 'https://github.com/alibaba/formily-editor',
+        },
+        {
+          title: 'Chrome扩展',
+          path:
+            'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+        },
+      ],
     },
     {
-      title: '表单编辑器',
-      path: 'https://github.com/alibaba/formily-editor',
+      title: '社区',
+      children: [
+        {
+          title: '论坛',
+          path: 'https://github.com/alibaba/formily/discussions',
+        },
+        { title: '知乎专栏', path: 'https://www.zhihu.com/column/uform' },
+      ],
     },
     {
-      title: 'Chrome扩展',
-      path:
-        'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
-    },
-    {
-      title: 'V1',
+      title: '1.x文档',
       path: 'https://formilyjs.org',
     },
     {
