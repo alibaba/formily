@@ -375,7 +375,7 @@ export default () => {
 
 ## 无边框案例
 
-设置去除组件边框，仅限 antd 表单组件
+设置去除组件边框
 
 ```tsx
 import React from 'react'

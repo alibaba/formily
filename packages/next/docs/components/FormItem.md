@@ -1,6 +1,6 @@
 # FormItem
 
-> 全新的 FormItem 组件，相比于 Antd 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
+> 全新的 FormItem 组件，相比于 Fusion Next 的 FormItem，它支持的功能更多，同时它的定位是纯样式组件，不管理表单状态，所以也会更轻量，更方便定制
 
 ## Markup Schema 案例
 
@@ -42,7 +42,7 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Input, FormItem, FormButtonGroup, Submit } from '@formily/antd'
+import { Input, FormItem, FormButtonGroup, Submit } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 
@@ -375,7 +375,7 @@ export default () => {
 
 ## 无边框案例
 
-设置去除组件边框，仅限 antd 表单组件
+设置去除组件边框
 
 ```tsx
 import React from 'react'

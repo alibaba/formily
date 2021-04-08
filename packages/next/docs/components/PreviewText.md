@@ -85,9 +85,9 @@ import {
   connect,
   createSchemaField,
 } from '@formily/react'
-import { Button, Form, Input as AntdInput } from '@alifd/next'
+import { Button, Form, Input as NextInput } from '@alifd/next'
 
-const Input = connect(AntdInput, mapReadPretty(PreviewText.Input))
+const Input = connect(NextInput, mapReadPretty(PreviewText.Input))
 
 const SchemaField = createSchemaField({
   components: {

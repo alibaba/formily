@@ -49,17 +49,7 @@
         }
     }
 
-    .anticon {
-        display: inline-block;
-        color: inherit;
-        font-style: normal;
-        font-size: $form-element-medium-font-size;
-        line-height: 0;
-        text-align: center;
-        text-transform: none;
-        vertical-align: -0.125em;
-        text-rendering: optimizeLegibility;
-    }
+  
 
 }
 
@@ -147,6 +137,7 @@
                     box-shadow: none !important;
                     outline: none;
                 }
+                
             }
         }
 
@@ -370,6 +361,17 @@
         align-items: center;
         margin-right: -2px;
         padding-left: 2px;
+        .anticon {
+            display: inline-block;
+            color: inherit;
+            font-style: normal;
+            font-size: $form-element-medium-font-size;
+            line-height: 0;
+            text-align: center;
+            text-transform: none;
+            vertical-align: -0.125em;
+            text-rendering: optimizeLegibility;
+        }
     }
 
 }
