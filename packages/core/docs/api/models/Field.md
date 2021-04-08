@@ -532,7 +532,7 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 Query 对象 API 参考 [Query](/api/models/query)
 
@@ -582,7 +582,7 @@ interface match {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ## 类型
 

@@ -142,7 +142,7 @@ interface setValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### setInitialValuesIn
 
@@ -158,7 +158,7 @@ interface setInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### existValuesIn
 
@@ -174,7 +174,7 @@ interface existValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### existInitialValuesIn
 
@@ -190,7 +190,7 @@ interface existInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### getValuesIn
 
@@ -206,7 +206,7 @@ interface getValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### getInitialValuesIn
 
@@ -222,7 +222,7 @@ interface getInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### deleteValuesIn
 
@@ -238,7 +238,7 @@ interface deleteValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### deleteIntialValuesIn
 
@@ -254,7 +254,7 @@ interface deleteInitialValuesIn {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### setSubmitting
 
@@ -372,7 +372,7 @@ interface clearErrors {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### clearWarnings
 
@@ -388,7 +388,7 @@ interface clearWarnings {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### clearSuccesses
 
@@ -404,7 +404,7 @@ interface clearSuccesses {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 ### query
 
@@ -420,7 +420,7 @@ interface query {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 Query 对象 API 参考 [Query](/api/models/query)
 
@@ -583,7 +583,7 @@ interface setFieldState {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
@@ -602,7 +602,7 @@ interface getFieldState<T> {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 IGeneralFieldState 参考 [IGeneralFieldState](/api/models/field/#igeneralfieldstate)
 
@@ -692,7 +692,7 @@ interface reset {
 }
 ```
 
-FormPathPattern API 参考 [FormPath](/api/entry/FormPath#formpathpattern)
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 IFieldResetOptions 参考 [IFieldResetOptions](/api/models/field/#ifieldresetoptions)
 
@@ -789,6 +789,8 @@ interface IFieldFactoryProps {
 }
 ```
 
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
+
 FieldValidator 参考 [FieldValidator](/api/models/field#fieldvalidator)
 
 FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
@@ -815,6 +817,8 @@ interface IFieldFactoryProps {
   reactions?: FieldReaction[] | FieldReaction //字段响应器
 }
 ```
+
+FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 FieldReaction 参考 [FieldReaction](/api/models/field#fieldreaction)
 
