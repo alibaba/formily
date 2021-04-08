@@ -335,7 +335,9 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
 
   onInit = () => {
     this.initialized = true
-    initFieldUpdate(this)
+    batch.scope(() => {
+      initFieldUpdate(this)
+    })
     this.form.notify(LifeCycleTypes.ON_FIELD_INIT, this)
   }
 

@@ -10,12 +10,14 @@ import {
   ReactionStack,
   TargetKeysReactions,
   ReactionKeysReactions,
+  PendingScopeReactions,
   PendingReactions,
   ReactionComputeds,
   BatchCount,
   UntrackCount,
   ProxyRaw,
   RawNode,
+  BatchScope,
 } from './environment'
 
 const ITERATION_KEY = Symbol('iteration key')
@@ -76,7 +78,11 @@ const runReactions = (target: any, key: PropertyKey) => {
   reactions.forEach((reaction) => {
     if (reaction._isComputed) {
       reaction._scheduler(reaction)
-    } else if (isBatching()) {
+    } else if (isScopeBatching()) {
+      if (!PendingScopeReactions.has(reaction)) {
+        PendingScopeReactions.add(reaction)
+      }
+    }  else if (isBatching()) {
       if (!PendingReactions.has(reaction)) {
         PendingReactions.add(reaction)
       }
@@ -223,6 +229,22 @@ export const batchEnd = () => {
   }
 }
 
+export const batchScopeStart = () => {
+  BatchScope.value = true
+}
+
+export const batchScopeEnd = () => {
+  BatchScope.value = false
+  PendingScopeReactions.forEach((reaction) => {
+    PendingScopeReactions.delete(reaction)
+    if (isFn(reaction._scheduler)) {
+      reaction._scheduler(reaction)
+    } else {
+      reaction()
+    }
+  })
+}
+
 export const untrackStart = () => {
   UntrackCount.value++
 }
@@ -232,6 +254,8 @@ export const untrackEnd = () => {
 }
 
 export const isBatching = () => BatchCount.value > 0
+
+export const isScopeBatching = () => BatchScope.value
 
 export const isUntracking = () => UntrackCount.value > 0
 
