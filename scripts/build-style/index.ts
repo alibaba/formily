@@ -3,11 +3,13 @@ import { buildAllStyles } from './buildAllStyles'
 import { buildStyle, BuildStyleOptions } from './buildStyle'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function build(
-  opts: CopyBaseOptions & Omit<BuildStyleOptions, 'filename'>
-) {
+export function build({
+  allStylesOutputFile,
+  ...opts
+}: CopyBaseOptions &
+  Omit<BuildStyleOptions, 'filename'> & { allStylesOutputFile: string }) {
   return Promise.all([
-    buildAllStyles(),
+    buildAllStyles(allStylesOutputFile),
     runCopy({
       ...opts,
       resolveForItem: (filename) => {
