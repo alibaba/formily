@@ -16,6 +16,8 @@ export const getRollupBasePlugin = () => [
         plugins: [new NpmImport({ prefix: '~' })],
         javascriptEnabled: true,
       },
+      sass: {},
+      stylus: {},
     },
   }),
 ]
