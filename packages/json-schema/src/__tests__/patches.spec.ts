@@ -38,7 +38,7 @@ test('v1 polyfill', () => {
   expect(schema3['x-reactions']).toEqual([
     {
       when: '{{$self.value == 123}}',
-      fullfill: {
+      fulfill: {
         state: {
           visible: true,
         },
@@ -70,7 +70,7 @@ test('v1 polyfill', () => {
     {
       when: '{{$self.value == 123}}',
       target: 'xxx',
-      fullfill: {
+      fulfill: {
         schema: {
           version: '1.0',
           title: 'xxx',
@@ -106,7 +106,7 @@ test('v1 polyfill', () => {
     {
       when: '{{$self.value == 123}}',
       target: 'xxx',
-      fullfill: {
+      fulfill: {
         state: {
           title: 'xxx',
         },

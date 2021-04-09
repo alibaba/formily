@@ -177,7 +177,7 @@ test('all methods', () => {
       {
         target: 'xxx',
         when: true,
-        fullfill: {
+        fulfill: {
           schema: {},
         },
       },

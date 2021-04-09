@@ -82,7 +82,7 @@ Object {
       "x-decorator": "FormItem",
       "x-reactions": Array [
         Object {
-          "fullfill": Object {
+          "fulfill": Object {
             "schema": Object {},
           },
           "target": "xxx",
@@ -179,7 +179,7 @@ Object {
       "x-decorator": "FormItem",
       "x-reactions": Array [
         Object {
-          "fullfill": Object {
+          "fulfill": Object {
             "schema": Object {},
           },
           "target": "xxx",
@@ -251,7 +251,7 @@ Object {
   "x-decorator": "FormItem",
   "x-reactions": Array [
     Object {
-      "fullfill": Object {
+      "fulfill": Object {
         "schema": Object {},
       },
       "target": "xxx",

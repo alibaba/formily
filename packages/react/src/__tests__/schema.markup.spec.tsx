@@ -430,7 +430,7 @@ test('schema reactions', async () => {
           x-reactions={[
             {
               when: '{{$form.values.aaa === "123"}}',
-              fullfill: {
+              fulfill: {
                 state: {
                   visible: true,
                 },
@@ -444,7 +444,7 @@ test('schema reactions', async () => {
             {
               when: '{{$self.value === "123"}}',
               target: 'ccc',
-              fullfill: {
+              fulfill: {
                 schema: {
                   'x-visible': true,
                 },

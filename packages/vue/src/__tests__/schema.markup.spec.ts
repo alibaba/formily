@@ -567,7 +567,7 @@ describe('recursion field', () => {
   //         reactions: [
   //           {
   //             when: '{{$form.values.aaa === "123"}}',
-  //             fullfill: {
+  //             fulfill: {
   //               state: {
   //                 visible: true,
   //               },
@@ -581,7 +581,7 @@ describe('recursion field', () => {
   //           {
   //             when: '{{$self.value === "123"}}',
   //             target: 'ccc',
-  //             fullfill: {
+  //             fulfill: {
   //               schema: {
   //                 'x-visible': true,
   //               },
