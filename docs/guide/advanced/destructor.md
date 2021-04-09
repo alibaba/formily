@@ -140,7 +140,7 @@ const schema = {
       'x-component': 'DatePicker.RangePicker',
       'x-reactions': {
         dependencies: ['visible_destructor'],
-        fullfill: {
+        fulfill: {
           state: {
             visible: '{{!!$deps[0]}}',
           },

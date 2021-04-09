@@ -569,7 +569,7 @@ type SchemaReaction<Field = any> =
       when?: string | boolean //联动条件
       target?: string //要操作的字段路径，支持FormPathPattern路径语法
       effects?: SchemaReactionEffect[] //主动模式下的独立生命周期钩子
-      fullfill?: {
+      fulfill?: {
         //满足条件
         state?: Formily.Core.Types.IGeneralFieldState //更新状态
         schema?: ISchema //更新Schema
@@ -605,7 +605,7 @@ type SchemaReactions<Field = any> =
       "x-reactions": {
         "target": "target",
         "when": "{{$self.value === '123'}}",
-        "fullfill": {
+        "fulfill": {
           "state": {
             "visible": false
           }
@@ -636,7 +636,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "target": "target",
-        "fullfill": {
+        "fulfill": {
           "state": {
             "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
           }
@@ -665,7 +665,7 @@ type SchemaReactions<Field = any> =
         "x-component": "Input",
         "x-reactions": {
           "target": ".target",
-          "fullfill": {
+          "fulfill": {
             "state": {
               "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
             }
@@ -692,7 +692,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "target": "target",
-        "fullfill": {
+        "fulfill": {
           "schema": {
             "x-visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
           }
@@ -717,7 +717,7 @@ type SchemaReactions<Field = any> =
       "type": "string",
       "x-component": "Input",
       "x-reactions": {
-        "fullfill": {
+        "fulfill": {
           "run": "$form.setFieldState('target',state=>{state.visible = $self.value === '123'})"
         }
       }
@@ -742,7 +742,7 @@ type SchemaReactions<Field = any> =
       "x-reactions": {
         "target": "target",
         "effects": ["onFieldInputValueChange"],
-        "fullfill": {
+        "fulfill": {
           "state": {
             "visible": "{{$self.value === '123'}}" //任意层次属性都支持表达式
           }
@@ -772,7 +772,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "dependencies": ["source"], //依赖路径写法默认是取value，如果依赖的是字段的其他属性，可以使用 source#modified，用#分割取详细属性
-        "fullfill": {
+        "fulfill": {
           "schema": {
             "x-visible": "{{$deps[0] === '123'}}" //任意层次属性都支持表达式
           }
@@ -815,7 +815,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "target": "target",
-        "fullfill": {
+        "fulfill": {
           "state": {
             "component[1].style.color": "{{$self.value === '123' ? 'red' : 'blue'}}" //任意层次属性都支持表达式，同时key是支持路径表达式的，可以实现精确操作属性
           }
@@ -841,7 +841,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "target": "target",
-        "fullfill": {
+        "fulfill": {
           "schema": {
             "x-component-props.style.color": "{{$self.value === '123' ? 'red' : 'blue'}}" //任意层次属性都支持表达式，同时key是支持路径表达式的，可以实现精确操作属性
           }

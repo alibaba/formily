@@ -39,7 +39,7 @@ onFieldReact('*(A,B,C)', (field) => {
 {
   "x-reactions": {
     "dependencies": ["aa"],
-    "fullfill": {
+    "fulfill": {
       "state": {
         "visible": "$deps[0] == '123'"
       }

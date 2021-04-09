@@ -61,7 +61,7 @@ export type SchemaReaction<Field = any> =
       when?: string | boolean
       target?: string
       effects?: SchemaEffectTypes[]
-      fullfill?: {
+      fulfill?: {
         state?: Formily.Core.Types.IGeneralFieldState
         schema?: ISchema
         run?: string

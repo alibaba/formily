@@ -257,7 +257,7 @@ export default () => {
                     }}
                     x-reactions={[
                       {
-                        fullfill: {
+                        fulfill: {
                           schema: {
                             title: '{{$self.query(".name").value() }}',
                           },
@@ -541,7 +541,7 @@ const schema = {
             },
             'x-reactions': [
               {
-                fullfill: {
+                fulfill: {
                   schema: {
                     title: '{{$self.query(".name").value() }}',
                   },
@@ -1239,7 +1239,7 @@ export default () => {
                       }}
                       x-reactions={[
                         {
-                          fullfill: {
+                          fulfill: {
                             schema: {
                               title: '{{$self.query(".name").value() }}',
                             },
@@ -1520,7 +1520,7 @@ const schema = {
             },
             'x-reactions': [
               {
-                fullfill: {
+                fulfill: {
                   schema: {
                     title: '{{$self.query(".name").value() }}',
                   },

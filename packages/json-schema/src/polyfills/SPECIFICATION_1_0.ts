@@ -30,7 +30,7 @@ const transformXLinkage = (linkages: any[]) => {
         return buf.concat({
           target: item.target,
           when: transformCondition(item.condition),
-          fullfill: {
+          fulfill: {
             state: {
               visible: true,
             },
@@ -45,7 +45,7 @@ const transformXLinkage = (linkages: any[]) => {
         return buf.concat({
           target: item.target,
           when: transformCondition(item.condition),
-          fullfill: {
+          fulfill: {
             schema: SpecificationV1Polyfill({ version: '1.0', ...item.schema }),
           },
           otherwise: {
@@ -59,7 +59,7 @@ const transformXLinkage = (linkages: any[]) => {
         return buf.concat({
           target: item.target,
           when: transformCondition(item.condition),
-          fullfill: {
+          fulfill: {
             state: item.state,
           },
           otherwise: {

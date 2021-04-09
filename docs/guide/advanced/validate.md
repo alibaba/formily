@@ -2012,7 +2012,7 @@ const schema = {
       required: true,
       'x-reactions': {
         dependencies: ['aa'],
-        fullfill: {
+        fulfill: {
           state: {
             errors: "{{$deps[0] <= $self.value ? 'AA必须大于BB' : ''}}",
           },

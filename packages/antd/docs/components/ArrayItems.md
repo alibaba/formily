@@ -631,7 +631,7 @@ const schema = {
                   {
                     dependencies: ['.aa'],
                     when: "{{$deps[0] != '123'}}",
-                    fullfill: {
+                    fulfill: {
                       schema: {
                         title: 'BB',
                         'x-disabled': true,

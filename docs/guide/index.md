@@ -192,7 +192,7 @@ interface Field {
         {
           "dependencies": ["source"],
           "when": "{{$deps[0] == '123'}}",
-          "fullfill": {
+          "fulfill": {
             "state": {
               "visible": true
             }
@@ -226,7 +226,7 @@ interface Field {
         {
           "when": "{{$self.value == '123'}}",
           "target": "target",
-          "fullfill": {
+          "fulfill": {
             "state": {
               "visible": true
             }

@@ -344,13 +344,13 @@ const getSchemaFieldReactions = (
           if (reaction.target) {
             field.query(reaction.target).forEach((field) => {
               scope.$target = field
-              setSchemaFieldState(field, reaction.fullfill, compile)
+              setSchemaFieldState(field, reaction.fulfill, compile)
             })
           } else {
-            setSchemaFieldState(field, reaction.fullfill, compile)
+            setSchemaFieldState(field, reaction.fulfill, compile)
           }
-          if (isStr(reaction.fullfill?.run)) {
-            compile(`{{async function(){${reaction.fullfill?.run}}}}`)()
+          if (isStr(reaction.fulfill?.run)) {
+            compile(`{{async function(){${reaction.fulfill?.run}}}}`)()
           }
         } else {
           if (reaction.target) {

@@ -561,7 +561,7 @@ const schema = {
               {
                 dependencies: ['hideFirstColumn'],
                 when: '{{$deps[0]}}',
-                fullfill: {
+                fulfill: {
                   schema: {
                     'x-visible': false,
                   },
@@ -583,7 +583,7 @@ const schema = {
                   {
                     dependencies: ['.a1', 'hideFirstColumn'],
                     when: '{{$deps[1] || $deps[0]}}',
-                    fullfill: {
+                    fulfill: {
                       schema: {
                         'x-visible': false,
                       },

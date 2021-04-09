@@ -117,7 +117,7 @@ export default () => {
                   x-reactions={[
                     {
                       dependencies: ['.phone#value', '.phone#valid'],
-                      fullfill: {
+                      fulfill: {
                         state: {
                           'component[1].readyPost': '{{$deps[0] && $deps[1]}}',
                           'component[1].phoneNumber': '{{$deps[0]}}',
@@ -235,7 +235,7 @@ const phoneSchema = {
       'x-reactions': [
         {
           dependencies: ['.phone#value', '.phone#valid'],
-          fullfill: {
+          fulfill: {
             state: {
               'component[1].readyPost': '{{$deps[0] && $deps[1]}}',
               'component[1].phoneNumber': '{{$deps[0]}}',
@@ -568,7 +568,7 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.confirm_password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -589,7 +589,7 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -700,7 +700,7 @@ export default () => {
                   x-reactions={[
                     {
                       dependencies: ['.popover.name'],
-                      fullfill: {
+                      fulfill: {
                         schema: {
                           title: '{{$deps[0]}}',
                         },
@@ -890,7 +890,7 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.confirm_password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -911,7 +911,7 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -1026,7 +1026,7 @@ const schema = {
             'x-reactions': [
               {
                 dependencies: ['.popover.name'],
-                fullfill: {
+                fulfill: {
                   schema: {
                     title: '{{$deps[0]}}',
                   },
@@ -1442,7 +1442,7 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.confirm_password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -1463,7 +1463,7 @@ export default () => {
               x-reactions={[
                 {
                   dependencies: ['.password'],
-                  fullfill: {
+                  fulfill: {
                     state: {
                       errors:
                         '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -1551,7 +1551,7 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.confirm_password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
@@ -1572,7 +1572,7 @@ const schema = {
       'x-reactions': [
         {
           dependencies: ['.password'],
-          fullfill: {
+          fulfill: {
             state: {
               errors:
                 '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',

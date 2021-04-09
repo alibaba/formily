@@ -110,7 +110,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: 'input',
-          fullfill: {
+          fulfill: {
             state: {
               display: '{{$self.value}}',
             },
@@ -237,7 +237,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: '*(input1,input2)',
-          fullfill: {
+          fulfill: {
             state: {
               display: '{{$self.value}}',
             },
@@ -371,7 +371,7 @@ export default () => (
         x-reactions={{
           dependencies: ['dim_2'],
           target: 'result',
-          fullfill: {
+          fulfill: {
             state: {
               value: '{{$self.value * $deps[0]}}',
             },
@@ -387,7 +387,7 @@ export default () => (
         x-reactions={{
           dependencies: ['dim_1'],
           target: 'result',
-          fullfill: {
+          fulfill: {
             state: {
               value: '{{$self.value * $deps[0]}}',
             },
@@ -524,7 +524,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: 'input1',
-          fullfill: {
+          fulfill: {
             state: {
               visible: '{{!!$self.value}}',
             },
@@ -543,7 +543,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: 'input2',
-          fullfill: {
+          fulfill: {
             state: {
               visible: '{{!!$self.value}}',
             },
@@ -680,7 +680,7 @@ export default () => (
             target: 'count',
             effects: ['onFieldInputValueChange'],
             dependencies: ['price'],
-            fullfill: {
+            fulfill: {
               state: {
                 value: '{{$deps[0] ? $self.value / $deps[0] : $target.value}}',
               },
@@ -690,7 +690,7 @@ export default () => (
             target: 'price',
             effects: ['onFieldInputValueChange'],
             dependencies: ['count'],
-            fullfill: {
+            fulfill: {
               state: {
                 value: '{{$deps[0] ? $self.value / $deps[0] : $target.value}}',
               },
@@ -707,7 +707,7 @@ export default () => (
           target: 'total',
           effects: ['onFieldInputValueChange'],
           dependencies: ['price'],
-          fullfill: {
+          fulfill: {
             state: {
               value:
                 '{{$deps[0] !== undefined ? $self.value * $deps[0] : $target.value}}',
@@ -724,7 +724,7 @@ export default () => (
           target: 'total',
           effects: ['onFieldInputValueChange'],
           dependencies: ['count'],
-          fullfill: {
+          fulfill: {
             state: {
               value:
                 '{{$deps[0] !== undefined ? $self.value * $deps[0] : $target.value}}',
@@ -825,7 +825,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           target: 'color',
-          fullfill: {
+          fulfill: {
             state: {
               'component[1].style.backgroundColor': '{{$self.value}}',
             },
@@ -962,7 +962,7 @@ export default () => (
         x-reactions={{
           target: 'input',
           effects: ['onFieldValueChange'],
-          fullfill: {
+          fulfill: {
             run: 'asyncVisible($self,$target)',
           },
         }}
@@ -1093,7 +1093,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           dependencies: ['select'],
-          fullfill: {
+          fulfill: {
             state: {
               display: '{{$deps[0]}}',
             },
@@ -1217,7 +1217,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           dependencies: ['select'],
-          fullfill: {
+          fulfill: {
             state: {
               display: '{{$deps[0]}}',
             },
@@ -1231,7 +1231,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           dependencies: ['select'],
-          fullfill: {
+          fulfill: {
             state: {
               display: '{{$deps[0]}}',
             },
@@ -1355,7 +1355,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           dependencies: ['dim_1', 'dim_2'],
-          fullfill: {
+          fulfill: {
             state: {
               value: '{{$deps[0] * $deps[1]}}',
             },
@@ -1490,7 +1490,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           dependencies: ['select'],
-          fullfill: {
+          fulfill: {
             state: {
               visible: '{{!!$deps[0]}}',
             },
@@ -1504,7 +1504,7 @@ export default () => (
         x-decorator="FormItem"
         x-reactions={{
           dependencies: ['input1'],
-          fullfill: {
+          fulfill: {
             state: {
               visible: '{{!!$deps[0]}}',
             },
@@ -1609,7 +1609,7 @@ export default () => (
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
-          fullfill: {
+          fulfill: {
             state: {
               'component[1].style.backgroundColor': '{{$self.value}}',
             },

@@ -103,7 +103,7 @@ export default () => {
                 x-reactions={{
                   dependencies: ['.price', '.count'],
                   when: '{{$deps[0] && $deps[1]}}',
-                  fullfill: {
+                  fulfill: {
                     state: {
                       value: '{{$deps[0] * $deps[1]}}',
                     },
@@ -141,7 +141,7 @@ export default () => {
           x-reactions={{
             dependencies: ['.projects'],
             when: '{{$deps.length > 0}}',
-            fullfill: {
+            fulfill: {
               state: {
                 value:
                   '{{$deps[0].reduce((total,item)=>item.total ? total+item.total : total,0)}}',
@@ -283,7 +283,7 @@ const schema = {
                 'x-reactions': {
                   dependencies: ['.price', '.count'],
                   when: '{{$deps[0] && $deps[1]}}',
-                  fullfill: {
+                  fulfill: {
                     state: {
                       value: '{{$deps[0] * $deps[1]}}',
                     },
@@ -341,7 +341,7 @@ const schema = {
       'x-reactions': {
         dependencies: ['.projects'],
         when: '{{$deps.length > 0}}',
-        fullfill: {
+        fulfill: {
           state: {
             value:
               '{{$deps[0].reduce((total,item)=>item.total ? total+item.total : total,0)}}',
