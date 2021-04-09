@@ -58,10 +58,14 @@ export const ArrayItems: ComposedArrayItems = observer((props) => {
   const schema = useFieldSchema()
   const addition = useAddition()
   const dataSource = Array.isArray(field.value) ? field.value : []
-  if(!schema) throw new Error('can not found schema object')
+  if (!schema) throw new Error('can not found schema object')
   return (
     <ArrayBase>
-      <div {...props} className={cls(prefixCls, props.className)}>
+      <div
+        {...props}
+        onChange={() => {}}
+        className={cls(prefixCls, props.className)}
+      >
         <SortableList
           useDragHandle
           lockAxis="y"

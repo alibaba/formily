@@ -28,12 +28,14 @@ import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties } from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
-  if (event?.currentTarget) {
+  if (event?.target) {
+    if (isValid(event.target.value) || isValid(event.target.checked))
+      return true
     if (
-      event.currentTarget.tagName &&
-      event.currentTarget.tagName !== 'INPUT' &&
-      event.currentTarget.tagName !== 'TEXTAREA' &&
-      event.currentTarget.tagName !== 'SELECT'
+      event.target.tagName &&
+      event.target.tagName !== 'INPUT' &&
+      event.target.tagName !== 'TEXTAREA' &&
+      event.target.tagName !== 'SELECT'
     ) {
       return false
     }

@@ -277,6 +277,7 @@ export const ArrayTable: ComposedArrayTable = observer(
                 size="small"
                 rowKey={defaultRowKey}
                 {...props}
+                onChange={() => {}}
                 bordered
                 pagination={false}
                 columns={columns}

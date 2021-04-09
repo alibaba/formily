@@ -36,7 +36,6 @@ const generateCssStyleInject = async (cssFilePath: string) => {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const buildAllStyles = async (outputFile: string) => {
-  const outputFilePath = 'dist/formily.css'
 
   await build({
     input: 'src/style.ts',
