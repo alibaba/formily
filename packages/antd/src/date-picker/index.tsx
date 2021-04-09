@@ -61,4 +61,5 @@ DatePicker.RangePicker = connect(
   mapReadPretty(PreviewText.DateRangePicker)
 )
 
+export function mapDateFormat
 export default DatePicker
