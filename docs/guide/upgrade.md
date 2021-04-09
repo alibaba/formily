@@ -72,7 +72,7 @@
 - V1: 代表虚拟字段
 - V2: 改名，统一使用[VoidField](https://core.formilyjs.org/api/models/void-field)
 
-## 桥阶层差异
+## 桥接层差异
 
 > 这里主要指@formily/react 和@formily/react-schema-renderer 的差异
 
