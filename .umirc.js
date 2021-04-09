@@ -182,6 +182,10 @@ export default {
             path: '/guide/advanced/custom',
           },
           {
+            title: '前后端数据差异兼容方案',
+            path: '/guide/advanced/destructor',
+          },
+          {
             title: '管理业务逻辑',
             path: '/guide/advanced/business-logic',
           },
