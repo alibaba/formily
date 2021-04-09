@@ -8,6 +8,7 @@ import {
   isNum,
   isRegExp,
   isPlainObj,
+  isAssignable,
 } from './shared'
 import {
   getDestructor,
@@ -24,24 +25,29 @@ import { Matcher } from './matcher'
 const REGISTRY: IRegistry = {
   accessors: {
     get(source: any, key: number | string | symbol) {
-      if (typeof source !== 'object') return source
-      return Reflect.get(source, key)
+      if (isAssignable(source)) {
+        return Reflect.get(source, key)
+      }
     },
     set(source: any, key: number | string | symbol, value: any) {
-      if (typeof source !== 'object') return
-      return Reflect.set(source, key, value)
+      if (isAssignable(source)) {
+        return Reflect.set(source, key, value)
+      }
     },
     has(source: any, key: number | string | symbol) {
-      if (typeof source !== 'object') return
-      return Reflect.has(source, key)
+      if (isAssignable(source)) {
+        return Reflect.has(source, key)
+      }
+      return false
     },
     delete(source: any, key: number | string | symbol) {
-      if (typeof source !== 'object') return
-      if (Array.isArray(source) && isNumberIndex(key)) {
-        source.splice(Number(key), 1)
-        return true
+      if (isAssignable(source)) {
+        if (Array.isArray(source) && isNumberIndex(key)) {
+          source.splice(Number(key), 1)
+          return true
+        }
+        return Reflect.deleteProperty(source, key)
       }
-      return Reflect.deleteProperty(source, key)
     },
   },
 }

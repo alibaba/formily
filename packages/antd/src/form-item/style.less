@@ -7,21 +7,17 @@
 
 .@{form-item-cls} {
     display: flex;
-    margin-bottom: @descriptions-title-margin-bottom;
+    margin-bottom: @form-item-margin-bottom - 2;
     position: relative;
-    line-height: @line-height-base;
     font-size: @font-size-base;
 
-    &-label * {
+    &-label {
         line-height: @height-base;
-    }
+        min-height: @height-base - 2;
 
-    &-label-content {
-        min-height: @height-base;
-    }
-
-    &-content-component {
-        line-height: @height-base;
+        * {
+            line-height: @height-base;
+        }
     }
 
     textarea.@{ant-prefix}-input {
@@ -162,8 +158,8 @@
 
         .@{form-item-cls}-control-content-component {
             width: 100%;
-            min-height: @height-base;
-            line-height: @height-base;
+            min-height: @height-base - 2;
+            line-height: @height-base + 2;
 
             &-has-feedback-icon {
                 flex: 1;
@@ -194,18 +190,130 @@
 .@{form-item-cls}-size-small {
     font-size: @font-size-sm;
 
-    .@{form-item-cls}-label * {
-        line-height: @height-sm;
-    }
+    line-height: @height-sm;
 
-    .@{form-item-cls}-label-content {
-        min-height: @height-sm;
+    .@{form-item-cls}-label {
+        line-height: @height-sm;
+        min-height: @height-sm - 2;
+
+        * {
+            line-height: @height-sm;
+        }
+
     }
 
     .@{form-item-cls}-control-content {
         .@{form-item-cls}-control-content-component {
-            line-height: @height-sm;
-            min-height: @height-sm;
+            min-height: @height-sm - 2;
+            line-height: @height-sm + 2;
+        }
+    }
+
+    .@{form-item-cls}-help,
+    .@{form-item-cls}-extra {
+        min-height: @height-sm - 4;
+        line-height: @height-sm - 4;
+    }
+
+    .@{form-item-cls}-control-content {
+        min-height: @height-sm - 2;
+    }
+
+    .@{form-item-cls}-label>label {
+        height: @height-sm - 2;
+    }
+
+
+    .@{ant-prefix}-input-affix-wrapper,
+    .@{ant-prefix}-input-number,
+    .@{ant-prefix}-picker {
+        padding: 0px 7px;
+
+        input {
+            height: @height-sm - 2;
+            font-size: @font-size-sm;
+
+        }
+    }
+
+    .@{ant-prefix}-btn {
+        height: @height-base;
+        padding: 0 7px;
+        font-size: @font-size-base;
+        border-radius: 2px;
+    }
+
+    .@{ant-prefix}-cascader-picker {
+        height: @height-sm - 2;
+
+        input {
+            padding: 0 7px;
+            height: @height-sm - 2;
+            font-size: @font-size-sm;
+        }
+    }
+
+    .@{ant-prefix}-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        padding: 0px 7px;
+        height: @height-sm - 2;
+        font-size: @font-size-sm;
+        line-height: @height-sm;
+
+        .@{ant-prefix}-select-selection-search {
+            height: @height-sm;
+            line-height: @height-sm - 2;
+
+            &-input {
+                height: @height-sm;
+                line-height: @height-sm - 2;
+            }
+        }
+
+        .@{ant-prefix}-select-selection-placeholder {
+            line-height: @height-sm - 2;
+            height: @height-sm;
+        }
+
+        .@{ant-prefix}-select-selection-item {
+            line-height: @height-sm - 2;
+            height: @height-sm;
+        }
+    }
+
+    .@{ant-prefix}-select-multiple:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        padding: 0px 2px;
+        height: @height-sm - 2;
+        font-size: @font-size-sm;
+        line-height: @height-sm;
+
+        &::after {
+            height: @height-sm - 8;
+            line-height: @height-sm - 8;
+        }
+
+        .@{ant-prefix}-select-selection-search {
+            height: @height-sm - 8;
+            line-height: @height-sm - 8;
+            margin-inline-start: 0;
+            &-input {
+                height: @height-sm - 12;
+                line-height: @height-sm - 12;
+            }
+        }
+
+        .@{ant-prefix}-select-selection-placeholder {
+            line-height: @height-sm - 8;
+            height: @height-sm - 8;
+            left: 4px;
+        }
+
+        .@{ant-prefix}-select-selection-overflow-item {
+            align-self: flex-start;
+        }
+
+        .@{ant-prefix}-select-selection-item {
+            line-height: @height-sm - 10;
+            height: @height-sm - 8;
         }
     }
 
@@ -219,53 +327,10 @@
 
 
     &.@{form-item-cls}-feedback-layout-loose {
-        margin-bottom: 18px;
+        margin-bottom: @height-sm - 4;
 
         &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
             margin-bottom: 0;
-        }
-    }
-
-    .@{form-item-cls}-help,
-    .@{form-item-cls}-extra {
-        min-height: 16px;
-    }
-
-    .@{form-item-cls}-control-content {
-        min-height: @form-item-margin-bottom;
-    }
-
-    .@{form-item-cls}-label>label {
-        height: @form-item-margin-bottom;
-    }
-
-    .@{ant-prefix}-input-number input {
-        padding: 0px 7px;
-        height: 22px;
-    }
-
-    .@{ant-prefix}-btn {
-        height: @form-item-margin-bottom;
-        padding: 0 7px;
-        font-size: @font-size-base;
-        border-radius: 2px;
-    }
-
-    .@{ant-prefix}-picker,
-    .@{ant-prefix}-input {
-        padding: 0px 7px;
-    }
-
-    .@{ant-prefix}-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
-        padding: 0px 7px;
-        height: @form-item-margin-bottom;
-
-        .@{ant-prefix}-select-selection-search-input {
-            height: @height-sm - 2;
-        }
-
-        .@{ant-prefix}-select-selection-item {
-            line-height: @height-sm - 2;
         }
     }
 
@@ -273,67 +338,134 @@
 
 .@{form-item-cls}-size-large {
     font-size: @font-size-lg;
+    line-height: @height-lg;
 
-    .@{form-item-cls}-label * {
+    .@{form-item-cls}-label {
         line-height: @height-lg;
-    }
+        min-height: @height-lg - 2;
 
-    .@{form-item-cls}-label-content {
-        min-height: @height-lg;
+        * {
+            line-height: @height-lg;
+        }
+
     }
 
     .@{form-item-cls}-control-content {
         .@{form-item-cls}-control-content-component {
+            min-height: @height-lg - 2;
             line-height: @height-lg;
-            min-height: @height-lg;
         }
     }
 
     .@{form-item-cls}-help,
     .@{form-item-cls}-extra {
         min-height: @form-item-margin-bottom;
+        line-height: @form-item-margin-bottom;
     }
 
     .@{form-item-cls}-control-content {
-        min-height: @height-lg;
+        min-height: @height-lg - 2;
     }
 
+    .@{ant-prefix}-input-affix-wrapper,
+    .@{ant-prefix}-input-number,
     .@{ant-prefix}-picker {
-        padding: 6.5px 11px;
-    }
+        padding: 0px 7px;
+        line-height: @height-lg - 2;
 
-    .@{ant-prefix}-input-number input {
-        height: @height-lg;
+        input {
+            height: @height-lg - 2;
+            font-size: @font-size-lg;
+        }
     }
 
     .@{ant-prefix}-btn {
-        height: @height-lg - 5;
+        height: @height-lg;
+        padding: 0px 8px;
     }
 
-    .@{ant-prefix}-select {
-        font-size: @font-size-lg;
-    }
+    .@{ant-prefix}-cascader-picker {
+        height: @height-lg - 2;
 
-    .@{ant-prefix}-input {
-        padding: 6.5px 11px;
-        font-size: @font-size-lg;
+        input {
+            padding: 0px 7px;
+            height: @height-lg - 2;
+            font-size: @font-size-lg;
+        }
     }
 
     .@{ant-prefix}-select-single:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
-        padding: 0 11px;
+        padding: 0px 7px;
         height: @height-lg;
+        font-size: @font-size-lg;
+        line-height: @height-lg;
 
-        .@{ant-prefix}-select-selection-search-input {
-            height: @height-lg - 2;
+        .@{ant-prefix}-select-selection-search {
+            height: @height-lg;
+            line-height: @height-lg - 2;
+
+            &-input {
+                height: @height-lg;
+                line-height: @height-lg - 2;
+            }
+        }
+
+        .@{ant-prefix}-select-selection-placeholder {
+            line-height: @height-lg - 2;
+            height: @height-lg;
         }
 
         .@{ant-prefix}-select-selection-item {
             line-height: @height-lg - 2;
+            height: @height-lg;
+        }
+    }
+
+    .@{ant-prefix}-select-multiple:not(.@{ant-prefix}-select-customize-input) .@{ant-prefix}-select-selector {
+        padding: 0px 2px;
+        height: @height-lg - 2;
+        font-size: @font-size-lg;
+        line-height: @height-lg;
+
+        &::after {
+            height: @height-lg - 8;
+            line-height: @height-lg - 8;
+        }
+
+        .@{ant-prefix}-select-selection-search {
+            height: @height-lg - 8;
+            line-height: @height-lg - 8;
+            &-input {
+                height: @height-lg - 12;
+                line-height: @height-lg - 12;
+            }
+        }
+
+        .@{ant-prefix}-select-selection-placeholder {
+            line-height: @height-lg - 8;
+            height: @height-lg - 8;
+        }
+
+        .@{ant-prefix}-select-selection-overflow-item {
+            align-self: flex-start;
+        }
+
+        .@{ant-prefix}-select-selection-item {
+            line-height: @height-lg - 10;
+            height: @height-lg - 8;
+        }
+    }
+
+    &.@{form-item-cls}-feedback-layout-terse {
+        margin-bottom: 8px;
+
+        &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
+            margin-bottom: 0;
         }
     }
 
     &.@{form-item-cls}-feedback-layout-loose {
-        margin-bottom: 25px;
+        margin-bottom: @form-item-margin-bottom;
 
         &.@{form-item-cls}-feedback-has-text:not(.@{form-item-cls}-inset) {
             margin-bottom: 0;
@@ -345,12 +477,14 @@
     &-layout-vertical {
         display: block;
 
-        .@{form-item-cls}-label * {
-            line-height: @height-base - 10 !important;
-        }
+        .@{form-item-cls}-label {
+            min-height: @height-base - 10;
+            line-height: 1.5715;
 
-        .@{form-item-cls}-label-content {
-            min-height: @height-base - 10 !important;
+            * {
+                min-height: @height-base - 10;
+                line-height: 1.5715;
+            }
         }
     }
 }
@@ -368,6 +502,10 @@
     align-items: center;
     height: @height-base;
     cursor: pointer;
+
+    span {
+        display: inline-flex;
+    }
 }
 
 
@@ -406,7 +544,7 @@
 .@{form-item-cls}-help,
 .@{form-item-cls}-extra {
     clear: both;
-    min-height: @descriptions-title-margin-bottom;
+    min-height: @form-item-margin-bottom - 2;
     color: rgba(0, 0, 0, 0.45);
     transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
     padding-top: 0px;

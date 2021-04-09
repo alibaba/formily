@@ -33,18 +33,23 @@
         padding: 0 8px;
         border-radius: $form-element-large-corner;
         width: 100%;
+
         .#{$css-prefix}input {
-            border: none;
+            border: none !important;
+            box-shadow: none !important;
             outline: none;
         }
     }
 
     &-bordered-none:not(.#{$form-item-cls}-inset) {
         .#{$css-prefix}input {
-            border: none;
+            border: none !important;
+            box-shadow: none !important;
             outline: none;
         }
     }
+
+  
 
 }
 
@@ -128,7 +133,11 @@
 
                 .#{$css-prefix}input {
                     height: 100%;
+                    border: none !important;
+                    box-shadow: none !important;
+                    outline: none;
                 }
+                
             }
         }
 
@@ -352,6 +361,17 @@
         align-items: center;
         margin-right: -2px;
         padding-left: 2px;
+        .anticon {
+            display: inline-block;
+            color: inherit;
+            font-style: normal;
+            font-size: $form-element-medium-font-size;
+            line-height: 0;
+            text-align: center;
+            text-transform: none;
+            vertical-align: -0.125em;
+            text-rendering: optimizeLegibility;
+        }
     }
 
 }
@@ -366,16 +386,4 @@
 
 .#{$form-item-cls}-success-help {
     color: $form-success-color;
-}
-
-.anticon {
-    display: inline-block;
-    color: inherit;
-    font-style: normal;
-    font-size: $form-element-medium-font-size;
-    line-height: 0;
-    text-align: center;
-    text-transform: none;
-    vertical-align: -0.125em;
-    text-rendering: optimizeLegibility;
 }

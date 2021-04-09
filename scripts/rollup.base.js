@@ -2,9 +2,9 @@ import typescript from 'rollup-plugin-typescript2'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import externalGlobals from 'rollup-plugin-external-globals'
-import { terser } from "rollup-plugin-terser";
+import { terser } from 'rollup-plugin-terser'
 
-const plugins = [
+const presets = () => [
   typescript({
     tsconfig: './tsconfig.json',
     tsconfigOverride: {
@@ -16,24 +16,33 @@ const plugins = [
   }),
   resolve(),
   commonjs(),
-  externalGlobals({
-    vue: 'Vue',
-    react: 'React',
-    mobx: 'mobx',
-    'mobx-react-lite': 'mobxReactLite',
-    'react-dom': 'ReactDOM',
-    '@vue/composition-api': 'VueCompositionAPI',
-    '@formily/shared': 'Formily.Shared',
-    '@formily/validator': 'Formily.Validator',
-    '@formily/core': 'Formily.Core',
-    '@formily/json-schema': 'Formily.JSONSchema',
-    '@formily/react': 'Formily.React',
-    '@formily/react-schema-field': 'Formily.React.SchemaField',
-    '@formily/react-shared-components': 'Formily.React.SharedComponents',
-  }),
+  externalGlobals(
+    {
+      antd: 'Antd',
+      vue: 'Vue',
+      react: 'React',
+      mobx: 'mobx',
+      moment: 'moment',
+      '@alifd/next': 'Next',
+      'mobx-react-lite': 'mobxReactLite',
+      'react-dom': 'ReactDOM',
+      '@vue/composition-api': 'VueCompositionAPI',
+      '@formily/reactive-react': 'Formily.ReactiveReact',
+      '@formily/reactive-vue': 'Formily.ReactiveVue',
+      '@formily/reactive': 'Formily.Reactive',
+      '@formily/shared': 'Formily.Shared',
+      '@formily/validator': 'Formily.Validator',
+      '@formily/core': 'Formily.Core',
+      '@formily/json-schema': 'Formily.JSONSchema',
+      '@formily/react': 'Formily.React',
+    },
+    {
+      exclude: ['**/*.{less,sass,scss}'],
+    }
+  ),
 ]
 
-export default (filename, targetName) => [
+export default (filename, targetName, ...plugins) => [
   {
     input: 'src/index.ts',
     output: {
@@ -41,7 +50,7 @@ export default (filename, targetName) => [
       file: `dist/${filename}.umd.development.js`,
       name: targetName,
     },
-    plugins,
+    plugins: [...presets(), ...plugins],
   },
   {
     input: 'src/index.ts',
@@ -50,6 +59,6 @@ export default (filename, targetName) => [
       file: `dist/${filename}.umd.production.js`,
       name: targetName,
     },
-    plugins: [...plugins, terser()],
+    plugins: [...presets(), terser(), ...plugins],
   },
 ]

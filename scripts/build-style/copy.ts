@@ -54,8 +54,6 @@ export const runCopy = ({
           continue
         }
       }
-
-      return Promise.all(all).then(resolve).catch(reject)
     })
   })
 }

@@ -1,8 +1,12 @@
 {
   "name": "@formily/next",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.18",
   "license": "MIT",
   "main": "lib",
+  "umd:main": "dist/formily.next.umd.production.js",
+  "unpkg": "dist/formily.next.umd.production.js",
+  "jsdelivr": "dist/formily.next.umd.production.js",
+  "jsnext:main": "esm",
   "module": "esm",
   "repository": {
     "type": "git",
@@ -22,6 +26,7 @@
     "build:style": "ts-node build-style",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config",
     "build:docs": "dumi build"
   },
   "peerDependencies": {
@@ -37,12 +42,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/core": "^2.0.0-beta.4",
-    "@formily/json-schema": "^2.0.0-beta.4",
-    "@formily/react": "^2.0.0-beta.4",
-    "@formily/reactive": "^2.0.0-beta.4",
-    "@formily/reactive-react": "^2.0.0-beta.4",
-    "@formily/shared": "^2.0.0-beta.4",
+    "@formily/core": "^2.0.0-beta.18",
+    "@formily/json-schema": "^2.0.0-beta.18",
+    "@formily/react": "^2.0.0-beta.18",
+    "@formily/reactive": "^2.0.0-beta.18",
+    "@formily/reactive-react": "^2.0.0-beta.18",
+    "@formily/shared": "^2.0.0-beta.18",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3",

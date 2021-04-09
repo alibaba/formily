@@ -17,7 +17,9 @@ const hasProp = Object.prototype.hasOwnProperty
 
 export const toArr = <T>(val: T | T[]): T[] =>
   Array.isArray(val) ? val : val !== undefined ? [val] : []
-
+export const isAssignable = (val: any) => {
+  return typeof val === 'object' || typeof val === 'function'
+}
 export const isEqual = (a: any, b: any) => {
   if (a === b) {
     return true
