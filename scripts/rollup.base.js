@@ -30,6 +30,7 @@ const presets = () => [
       '@formily/reactive-react': 'Formily.ReactiveReact',
       '@formily/reactive-vue': 'Formily.ReactiveVue',
       '@formily/reactive': 'Formily.Reactive',
+      '@formily/path': 'Formily.Path',
       '@formily/shared': 'Formily.Shared',
       '@formily/validator': 'Formily.Validator',
       '@formily/core': 'Formily.Core',
