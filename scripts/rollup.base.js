@@ -27,6 +27,7 @@ const presets = () => [
       '@alifd/next': 'Next',
       'mobx-react-lite': 'mobxReactLite',
       'react-dom': 'ReactDOM',
+      '@ant-design/icons': 'icons',
       '@vue/composition-api': 'VueCompositionAPI',
       '@formily/reactive-react': 'Formily.ReactiveReact',
       '@formily/reactive-vue': 'Formily.ReactiveVue',
