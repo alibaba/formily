@@ -47,7 +47,7 @@
 
 刚好，github 社区为这样的 MVVM 模型抽象出了一个叫 [Mobx](https://github.com/mobxjs/mobx) 的状态管理解决方案，Mobx 最核心的能力就是它的依赖追踪机制和响应式模型的抽象能力。
 
-所以，借助 Mobx，完全可以解决表单字段输入过程中的 O(n)问题，而且是可以很优雅的解决，但是 Formily2.x 在实现的过程中发现 Mobx 还是存在一些不兼容 Formily 核心思想的问题，最终，只能重新造了一个轮子，延续 Mobx 的核心思想的 [@formily/reactive](https://rective.formilyjs.org)
+所以，借助 Mobx，完全可以解决表单字段输入过程中的 O(n)问题，而且是可以很优雅的解决，但是 Formily2.x 在实现的过程中发现 Mobx 还是存在一些不兼容 Formily 核心思想的问题，最终，只能重新造了一个轮子，延续 Mobx 的核心思想的 [@formily/reactive](https://reactive.formilyjs.org)
 
 这里提一下 [react-hook-form](https://github.com/react-hook-form/react-hook-form) ，非常流行，号称业界性能第一的表单方案，我们看看它最简单的案例：
 
