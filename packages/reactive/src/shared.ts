@@ -1,6 +1,5 @@
 import {
   isValid,
-  clone,
   isFn,
   isMap,
   isWeakMap,
@@ -84,4 +83,40 @@ export const markObservable = <T>(target: T): T => {
 
 export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
-export const toJS = <T>(target: T): T => clone(target)
+export const toJS = <T>(values: T): T => {
+  if (!isObservable(values)) {
+    return values
+  }
+  if (Array.isArray(values)) {
+    const res: any = []
+    values.forEach((item) => {
+      res.push(toJS(item))
+    })
+    return res
+  } else if (isPlainObj(values)) {
+    if ('$$typeof' in values && '_owner' in values) {
+      return values
+    }
+    if (values['_isAMomentObject']) {
+      return values
+    }
+    if (values['_isJSONSchemaObject']) {
+      return values
+    }
+    if (isFn(values['toJS'])) {
+      return values['toJS']()
+    }
+    if (isFn(values['toJSON'])) {
+      return values['toJSON']()
+    }
+    const res: any = {}
+    for (const key in values) {
+      if (Object.hasOwnProperty.call(values, key)) {
+        res[key] = toJS(values[key])
+      }
+    }
+    return res
+  } else {
+    return values
+  }
+}

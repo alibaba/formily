@@ -31,7 +31,10 @@ export class Heart<Payload = any, Context = any> extends Subscribable {
   }
 
   addLifeCycles = (id: any, lifecycles: LifeCycle[] = []) => {
-    this.outerLifecycles.set(id, this.buildLifeCycles(lifecycles))
+    const observers = this.buildLifeCycles(lifecycles)
+    if (observers.length) {
+      this.outerLifecycles.set(id, this.buildLifeCycles(lifecycles))
+    }
   }
 
   hasLifeCycles = (id: any) => {
