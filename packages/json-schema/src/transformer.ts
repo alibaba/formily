@@ -12,6 +12,7 @@ import {
   isPlainObj,
   reduce,
   isEmpty,
+  FormPathPattern,
 } from '@formily/shared'
 import { getValidateLocale } from '@formily/validator'
 import { Schema } from './schema'
@@ -302,6 +303,32 @@ const getSchemaFieldReactions = (
     }
   }
 
+  const setSchemaFieldStateByTarget = (
+    form: Formily.Core.Models.Form,
+    target: FormPathPattern,
+    request: ISchemaFieldUpdateRequest,
+    compile: (expression: any) => any
+  ) => {
+    if (!request) return
+    if (request.state) {
+      form.setFieldState(target, (state) =>
+        patchState(state, compile(request.state, state))
+      )
+    }
+    if (request.schema) {
+      form.setFieldState(target, (state) =>
+        patchState(
+          state,
+          getStateFromSchema(
+            patchState({}, compile(request.schema, state)),
+            options,
+            state
+          )
+        )
+      )
+    }
+  }
+
   const parseDependencies = (
     field: Formily.Core.Models.Field,
     dependencies: string[]
@@ -335,17 +362,22 @@ const getSchemaFieldReactions = (
           $deps,
           $dependencies,
         }
-        const compile = (expression: any) => {
+        const compile = (expression: any, target?: any) => {
+          if (target) {
+            scope.$target = target
+          }
           return Schema.compile(expression, scope)
         }
         const when = Schema.compile(reaction?.when, scope)
         const condition = isValid(reaction?.when) ? when : true
         if (condition) {
           if (reaction.target) {
-            field.query(reaction.target).forEach((field) => {
-              scope.$target = field
-              setSchemaFieldState(field, reaction.fulfill, compile)
-            })
+            setSchemaFieldStateByTarget(
+              field.form,
+              reaction.target,
+              reaction.fulfill,
+              compile
+            )
           } else {
             setSchemaFieldState(field, reaction.fulfill, compile)
           }
@@ -354,10 +386,12 @@ const getSchemaFieldReactions = (
           }
         } else {
           if (reaction.target) {
-            field.query(reaction.target).forEach((field) => {
-              scope.$target = field
-              setSchemaFieldState(field, reaction.otherwise, compile)
-            })
+            setSchemaFieldStateByTarget(
+              field.form,
+              reaction.target,
+              reaction.otherwise,
+              compile
+            )
           } else {
             setSchemaFieldState(field, reaction.otherwise, compile)
           }
@@ -365,6 +399,11 @@ const getSchemaFieldReactions = (
             compile(`{{async function(){${reaction.otherwise?.run}}}}`)()
           }
         }
+      }
+      if (reaction.target) {
+        reaction.effects = reaction.effects?.length
+          ? reaction.effects
+          : ['onFieldInit', 'onFieldValueChange']
       }
       if (reaction.effects) {
         each(reaction.effects, (type) => {
