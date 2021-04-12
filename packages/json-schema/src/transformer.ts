@@ -307,7 +307,7 @@ const getSchemaFieldReactions = (
     form: Formily.Core.Models.Form,
     target: FormPathPattern,
     request: ISchemaFieldUpdateRequest,
-    compile: (expression: any) => any
+    compile: (expression: any, state?: any) => any
   ) => {
     if (!request) return
     if (request.state) {
