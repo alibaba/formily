@@ -18,7 +18,78 @@ order: 1
 type ArrayField = React.FC<IFieldFactoryProps>
 ```
 
-## 用例
+## 自定义组件用例
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import {
+  FormProvider,
+  Field,
+  ArrayField,
+  useField,
+  observer,
+} from '@formily/react'
+import { Input, Button, Space } from 'antd'
+import 'antd/lib/input/style'
+import 'antd/lib/button/style'
+import 'antd/lib/space/style'
+
+const form = createForm()
+
+const ArrayComponent = observer(() => {
+  const field = useField<Formily.Core.Models.ArrayField>()
+  return (
+    <>
+      <div>
+        {field.value?.map((item, index) => (
+          <div key={index} style={{ display: 'flex-block', marginBottom: 10 }}>
+            <Space>
+              <Field name={index} component={[Input]} />
+              <Button
+                onClick={() => {
+                  field.remove(index)
+                }}
+              >
+                Remove
+              </Button>
+              <Button
+                onClick={() => {
+                  field.moveUp(index)
+                }}
+              >
+                Move Up
+              </Button>
+              <Button
+                onClick={() => {
+                  field.moveDown(index)
+                }}
+              >
+                Move Down
+              </Button>
+            </Space>
+          </div>
+        ))}
+      </div>
+      <Button
+        onClick={() => {
+          field.push('')
+        }}
+      >
+        Add
+      </Button>
+    </>
+  )
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <ArrayField name="array" component={[ArrayComponent]} />
+  </FormProvider>
+)
+```
+
+## RenderProps 用例
 
 ```tsx
 import React from 'react'

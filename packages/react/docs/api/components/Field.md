@@ -31,7 +31,7 @@ const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Field name="input" component={[Input]} />
+    <Field name="input" component={[Input, { placeholder: 'Please Input' }]} />
   </FormProvider>
 )
 ```

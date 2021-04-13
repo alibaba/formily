@@ -18,7 +18,76 @@ order: 2
 type ObjectField = React.FC<IFieldFactoryProps>
 ```
 
-## 用例
+## 自定义组件用例
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import {
+  FormProvider,
+  Field,
+  ObjectField,
+  useField,
+  observer,
+} from '@formily/react'
+import { Input, Button, Space } from 'antd'
+import 'antd/lib/input/style'
+import 'antd/lib/button/style'
+import 'antd/lib/space/style'
+
+const form = createForm()
+
+const ObjectComponent = observer(() => {
+  const field = useField<Formily.Core.Models.ObjectField>()
+  return (
+    <>
+      <div>
+        {Object.keys(field.value || {}).map((key) => (
+          <div key={key} style={{ display: 'flex-block', marginBottom: 10 }}>
+            <Space>
+              <Field name={key} component={[Input, { placeholder: key }]} />
+              <Button
+                onClick={() => {
+                  field.removeProperty(key)
+                }}
+              >
+                Remove
+              </Button>
+            </Space>
+          </div>
+        ))}
+      </div>
+      <Space>
+        <Field
+          name="propertyName"
+          basePath={''}
+          required
+          component={[Input, { placeholder: 'Property Name' }]}
+        />
+        <Button
+          onClick={() => {
+            const name = form.values.propertyName
+            if (name && !form.existValuesIn(`object.${name}`)) {
+              field.addProperty(name, '')
+              form.deleteValuesIn('propertyName')
+            }
+          }}
+        >
+          Add
+        </Button>
+      </Space>
+    </>
+  )
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <ObjectField name="object" component={[ObjectComponent]} />
+  </FormProvider>
+)
+```
+
+## RenderProps 用例
 
 ```tsx
 import React from 'react'
