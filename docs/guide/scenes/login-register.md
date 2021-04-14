@@ -139,8 +139,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#new user registration">new user registration</a>
-          <a href="#forgot password">forgot password?</a>
+          <a href="#Sign up">Sign up</a>
+          <a href="#Forgot password">Forgot password?</a>
         </div>
       </Card>
     </div>
@@ -292,8 +292,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#new user registration">new user registration</a>
-          <a href="#forgot password">forgot password?</a>
+          <a href="#Sign up">Sign up</a>
+          <a href="#Forgot password">Forgot password?</a>
         </div>
       </Card>
     </div>
@@ -421,8 +421,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#new user registration">new user registration</a>
-          <a href="#忘记password">忘记password?</a>
+          <a href="#Sign up">Sign up</a>
+          <a href="#Forgot password">Forgot password?</a>
         </div>
       </Card>
     </div>
@@ -430,7 +430,7 @@ export default () => {
 }
 ```
 
-## New User Registration
+## Sign up
 
 #### Markup Schema Cases
 
@@ -541,7 +541,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="new user registration" style={{ width: 620 }}>
+      <Card title="Sign up" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1100,7 +1100,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="new user registration" style={{ width: 620 }}>
+      <Card title="Sign up" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1173,7 +1173,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="new user registration" style={{ width: 620 }}>
+      <Card title="Sign up" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
