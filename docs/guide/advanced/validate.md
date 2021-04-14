@@ -2069,9 +2069,9 @@ export default () => (
 )
 ```
 
-## Custom Verification Copy
+## Custom Verification Messages
 
-Mainly through [registerValidateLocale](https://core.formilyjs.org/api/entry/form-validator-registry#registervalidatelocale) to customize the built-in verification copy
+Mainly through [registerValidateLocale](https://core.formilyjs.org/api/entry/form-validator-registry#registervalidatelocale) to customize the built-in verification messages
 
 ```tsx
 import React from 'react'
@@ -2089,8 +2089,8 @@ const SchemaField = createSchemaField({
 })
 
 registerValidateLocale({
-  zh: {
-    required: 'Custom required verification copy',
+  en: {
+    required: 'Custom required verification message',
   },
 })
 
