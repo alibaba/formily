@@ -6,7 +6,7 @@ hero:
   desc: 阿里巴巴统一前端表单解决方案
   actions:
     - text: 快速开始
-      link: /guide
+      link: /zh-CN/guide
 features:
   - icon: https://img.alicdn.com/imgextra/i2/O1CN016i72sH1c5wh1kyy9U_!!6000000003550-55-tps-800-800.svg
     title: 更易用
