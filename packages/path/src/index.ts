@@ -18,7 +18,6 @@ import {
   existInByDestructor,
 } from './destructor'
 import { Segments, Node, Pattern, IRegistry, IAccessors } from './types'
-export * from './types'
 import { LRUMap } from './lru'
 import { Matcher } from './matcher'
 
@@ -630,4 +629,4 @@ export class Path {
   }
 }
 
-export default Path
+export { Pattern }
