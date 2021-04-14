@@ -1,4 +1,4 @@
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
 import {
   IOperation,
   IChange,

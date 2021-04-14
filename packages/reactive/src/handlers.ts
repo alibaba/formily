@@ -4,7 +4,7 @@ import {
 } from './reaction'
 import { ProxyRaw, RawProxy } from './environment'
 import { traverseIn } from './traverse'
-import { isSupportObservable } from './shared'
+import { isSupportObservable } from './externals'
 
 const wellKnownSymbols = new Set(
   Object.getOwnPropertyNames(Symbol)

@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import externalGlobals from 'rollup-plugin-external-globals'
 import { terser } from 'rollup-plugin-terser'
 
-const presets = (filename) => {
+const presets = () => {
   const externals = {
     antd: 'Antd',
     vue: 'Vue',
@@ -25,9 +25,6 @@ const presets = (filename) => {
     '@formily/core': 'Formily.Core',
     '@formily/json-schema': 'Formily.JSONSchema',
     '@formily/react': 'Formily.React',
-  }
-  if (filename === 'formily.reactive') {
-    delete externals['@formily/shared']
   }
   return [
     typescript({

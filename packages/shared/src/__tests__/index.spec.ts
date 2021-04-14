@@ -20,7 +20,7 @@ import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
 import { merge } from '../merge'
 import { instOf } from '../instanceof'
-import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../types'
+import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
 import { log } from '../log'
 import { defaults } from '../defaults'
 
@@ -259,16 +259,16 @@ describe('compare', () => {
 
 describe('clone and compare', () => {
   test('clone form data', () => {
-    var dd = new Map()
+    let dd = new Map()
     dd.set('aaa', { bb: 123 })
-    var ee = new WeakMap()
+    let ee = new WeakMap()
     ee.set({}, 1)
-    var ff = new WeakSet()
+    let ff = new WeakSet()
     ff.add({})
-    var gg = new Set()
+    let gg = new Set()
     gg.add(3)
 
-    var a = {
+    let a = {
       aa: 123123,
       bb: [{ bb: 111 }, { bb: 222 }],
       cc: () => {
@@ -280,7 +280,7 @@ describe('clone and compare', () => {
       ff,
       gg,
     }
-    var cloned = clone(a)
+    let cloned = clone(a)
     expect(isEqual(cloned, a)).toBeTruthy()
     expect(a === cloned).toBeFalsy()
     expect(a.bb[0] === cloned.bb[0]).toBeFalsy()

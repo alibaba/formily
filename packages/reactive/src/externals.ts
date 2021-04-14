@@ -7,7 +7,7 @@ import {
   isWeakSet,
   isPlainObj,
   isArr,
-} from '@formily/shared'
+} from './checkers'
 import { ProxyRaw, MakeObservableSymbol } from './environment'
 import { Annotation } from './types'
 
@@ -53,12 +53,6 @@ export const isSupportObservable = (target: any) => {
   if (isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target))
     return true
   return false
-}
-
-export const isCollectionType = (target: any) => {
-  return (
-    isMap(target) || isWeakMap(target) || isSet(target) || isWeakSet(target)
-  )
 }
 
 export const markRaw = <T>(target: T): T => {

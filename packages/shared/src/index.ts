@@ -1,6 +1,6 @@
 export * from './array'
 export * from './compare'
-export * from './types'
+export * from './checkers'
 export * from './clone'
 export * from './isEmpty'
 export * from './case'

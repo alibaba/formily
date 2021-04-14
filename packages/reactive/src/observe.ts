@@ -1,6 +1,6 @@
 import { IChange } from './types'
 import { RawNode, ProxyRaw } from './environment'
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
 
 export const observe = (
   target: object,

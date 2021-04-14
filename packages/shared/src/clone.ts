@@ -1,4 +1,4 @@
-import { isFn, isPlainObj } from './types'
+import { isFn, isPlainObj } from './checkers'
 
 export const shallowClone = (values: any) => {
   if (Array.isArray(values)) {

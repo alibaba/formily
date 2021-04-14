@@ -1,4 +1,4 @@
-import { isFn, Subscriber, Subscription } from './types'
+import { isFn, Subscriber, Subscription } from './checkers'
 import { each } from './array'
 
 export class Subscribable<Payload = any> {

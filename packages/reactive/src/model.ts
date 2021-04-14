@@ -1,8 +1,8 @@
-import { each, isFn } from '@formily/shared'
+import { isFn } from './checkers'
 import { buildTreeNode } from './traverse'
 import { observable } from './observable'
 import { createObservable, getObservableMaker } from './internals'
-import { isObservable, isAnnotation, isSupportObservable } from './shared'
+import { isObservable, isAnnotation, isSupportObservable } from './externals'
 import { Annotations } from './types'
 import { batch } from './batch'
 import { ProxyRaw, RawProxy } from './environment'
@@ -21,14 +21,15 @@ export function define<Target extends object = any>(
   RawProxy.set(target, target)
   return observable(target, ({ target, value }) => {
     if (target) return target
-    each(annotations, (annotation, key) => {
+    for (const key in annotations) {
+      const annotation = annotations[key]
       if (isAnnotation(annotation)) {
         getObservableMaker(annotation)({
           target: value,
           key,
         })
       }
-    })
+    }
     return value
   })
 }
