@@ -55,11 +55,11 @@ export default {
         title: 'Tools',
         children: [
           {
-            title: 'Form editor',
+            title: 'Form Editor',
             path: 'https://github.com/alibaba/formily-editor',
           },
           {
-            title: 'Chrome extension',
+            title: 'Chrome Extension',
             path:
               'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
           },
@@ -69,10 +69,10 @@ export default {
         title: 'Community',
         children: [
           {
-            title: 'forum',
+            title: 'Forum',
             path: 'https://github.com/alibaba/formily/discussions',
           },
-          { title: 'Zhihu column', path: 'https://www.zhihu.com/column/uform' },
+          { title: 'Zhihu', path: 'https://www.zhihu.com/column/uform' },
         ],
       },
       {
