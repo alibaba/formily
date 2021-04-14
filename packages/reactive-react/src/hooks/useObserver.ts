@@ -1,6 +1,5 @@
 import React from 'react'
 import { Tracker } from '@formily/reactive'
-import { isFn } from '@formily/shared'
 import { GarbageCollector } from '../gc'
 import { IObserverOptions } from '../types'
 import { useForceUpdate } from './useForceUpdate'
@@ -17,7 +16,7 @@ export const useObserver = <T extends () => any>(
 
   const tracker = React.useMemo(() => {
     return new Tracker(() => {
-      if (isFn(options?.scheduler)) {
+      if (typeof options?.scheduler === 'function') {
         options.scheduler(forceUpdate)
       } else {
         forceUpdate()

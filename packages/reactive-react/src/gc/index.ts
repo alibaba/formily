@@ -1,14 +1,13 @@
-import { globalThisPolyfill } from '@formily/shared'
-import './global'
+import { globalThisPolyfill } from './global'
 
-const registry =
+const registry: FinalizationRegistry<any> =
   globalThisPolyfill['FinalizationRegistry'] &&
   new globalThisPolyfill['FinalizationRegistry']((token: any) =>
     token?.clean?.()
   )
 
 type Token = { clean: () => void }
-export class GarbageCollector<T = any> {
+export class GarbageCollector<T extends object = any> {
   private expireTime: number
   private request: NodeJS.Timeout
   private token: Token
