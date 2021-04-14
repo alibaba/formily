@@ -1,11 +1,10 @@
-# Linkage Logic
+# 实现联动逻辑
 
-There is only one mode to realize linkage logic in Formily 1.x, that is, active mode. It is necessary to monitor the event changes of one or more fields to control the state of another or more fields.
-This is very convenient for one-to-many linkage scenarios, but it is very troublesome for many-to-one scenarios. It is necessary to monitor the changes of multiple fields to control the state of a field. Therefore, Formily 2.x provides a responsive mechanism that allows the linkage to support passive linkage. You only need to pay attention to the field that a field depends on. When the dependent field changes, the dependent field can be automatically linked.
+Formily1.x 中实现联动逻辑只有一种模式，也就是主动模式，必须要监听一个或多个字段的事件变化去控制另一个或者多个字段的状态，这样对于一对多联动场景很方便，但是对于多对一场景就很麻烦了，需要监听多个字段的变化去控制一个字段状态，所以 Formily2.x 提供了响应式机制，可以让联动支持被动式联动，只需要关注某个字段所依赖的字段即可，依赖字段变化了，被依赖的字段即可自动联动。
 
-## Active Mode
+## 主动模式
 
-The core of active linkage is based on
+主动联动核心是基于
 
 - [FormEffectHooks](https://core.formilyjs.org/api/entry/form-effect-hooks)
 - [FieldEffectHooks](https://core.formilyjs.org/api/entry/field-effect-hooks)
@@ -13,11 +12,11 @@ The core of active linkage is based on
 - [setFieldState](https://core.formilyjs.org/api/models/form#setfieldstate)
 - [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions)
 
-Realize active linkage, the advantage is that it is very convenient to realize one-to-many linkage. 
+实现主动联动，优点是实现一对多联动时非常方便
 
-### One-to-One Linkage
+### 一对一联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -29,7 +28,7 @@ const form = createForm({
   effects() {
     onFieldValueChange('select', (field) => {
       form.setFieldState('input', (state) => {
-        //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
+        //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
         state.display = field.value
       })
     })
@@ -49,19 +48,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -77,7 +76,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -100,12 +99,12 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
@@ -120,7 +119,7 @@ export default () => (
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -136,9 +135,9 @@ export default () => (
 )
 ```
 
-### One-to-Many Linkage
+### 一对多联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -150,7 +149,7 @@ const form = createForm({
   effects() {
     onFieldValueChange('select', (field) => {
       form.setFieldState('*(input1,input2)', (state) => {
-        //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
+        //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
         state.display = field.value
       })
     })
@@ -170,25 +169,25 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -204,7 +203,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -227,12 +226,12 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
@@ -247,13 +246,13 @@ export default () => (
       />
       <SchemaField.String
         name="input1"
-        title="controller"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input2"
-        title="controller"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -269,9 +268,9 @@ export default () => (
 )
 ```
 
-### Rely on Linkage
+### 依赖联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -311,21 +310,21 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="dim_1"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="dim_2"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="result"
-        title="controlled target"
+        title="受控者"
         x-pattern="readPretty"
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -342,7 +341,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -365,7 +364,7 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="dim_1"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -381,7 +380,7 @@ export default () => (
       />
       <SchemaField.Number
         name="dim_2"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -397,7 +396,7 @@ export default () => (
       />
       <SchemaField.Number
         name="result"
-        title="controller"
+        title="受控者"
         x-pattern="readPretty"
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -414,9 +413,9 @@ export default () => (
 )
 ```
 
-### Chain Linkage
+### 链式联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -428,13 +427,13 @@ const form = createForm({
   effects() {
     onFieldValueChange('select', (field) => {
       form.setFieldState('input1', (state) => {
-        //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
+        //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
         state.visible = !!field.value
       })
     })
     onFieldValueChange('input1', (field) => {
       form.setFieldState('input2', (state) => {
-        //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
+        //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
         state.visible = !!field.value
       })
     })
@@ -454,29 +453,29 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default={false}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         default={true}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -492,7 +491,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -515,11 +514,11 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default={false}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
@@ -534,11 +533,11 @@ export default () => (
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         default={true}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
@@ -553,7 +552,7 @@ export default () => (
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -569,9 +568,9 @@ export default () => (
 )
 ```
 
-### Loop Linkage
+### 循环联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -623,19 +622,19 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="total"
-        title="total price"
+        title="总价"
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="count"
-        title="quantity"
+        title="数量"
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="price"
-        title="unit price"
+        title="单价"
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
@@ -651,7 +650,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -672,7 +671,7 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="total"
-        title="total price"
+        title="总价"
         x-component="NumberPicker"
         x-decorator="FormItem"
         x-reactions={[
@@ -700,7 +699,7 @@ export default () => (
       />
       <SchemaField.Number
         name="count"
-        title="quantity"
+        title="数量"
         x-component="NumberPicker"
         x-decorator="FormItem"
         x-reactions={{
@@ -717,7 +716,7 @@ export default () => (
       />
       <SchemaField.Number
         name="price"
-        title="unit price"
+        title="单价"
         x-component="NumberPicker"
         x-decorator="FormItem"
         x-reactions={{
@@ -744,9 +743,9 @@ export default () => (
 )
 ```
 
-### Self Linkage
+### 自身联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -780,7 +779,7 @@ export default () => (
       <SchemaField.Number
         name="color"
         default="#FFFFFF"
-        title="color"
+        title="颜色"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -796,7 +795,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -820,7 +819,7 @@ export default () => (
       <SchemaField.Number
         name="color"
         default="#FFFFFF"
-        title="color"
+        title="颜色"
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
@@ -829,7 +828,7 @@ export default () => (
             state: {
               'component[1].style.backgroundColor': '{{$self.value}}',
             },
-            //The following usage is also possible
+            //以下用法也可以
             // schema: {
             //   'x-component-props.style.backgroundColor': '{{$self.value}}',
             // },
@@ -848,9 +847,9 @@ export default () => (
 )
 ```
 
-### Asynchronous Linkage
+### 异步联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -865,7 +864,7 @@ const form = createForm({
       setTimeout(() => {
         field.loading = false
         form.setFieldState('input', (state) => {
-          //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
+          //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
           state.display = field.value
         })
       }, 1000)
@@ -886,19 +885,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-visible={false}
@@ -915,7 +914,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -937,7 +936,7 @@ const SchemaField = createSchemaField({
       setTimeout(() => {
         field.loading = false
         form.setFieldState('input', (state) => {
-          //For the initial linkage, if the field cannot be found, setFieldState will push the update into the update queue until the field appears before performing the operation
+          //对于初始联动，如果字段找不到，setFieldState会将更新推入更新队列，直到字段出现再执行操作
           state.display = field.value
         })
       }, 1000)
@@ -950,12 +949,12 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
@@ -969,7 +968,7 @@ export default () => (
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-visible={false}
@@ -986,17 +985,17 @@ export default () => (
 )
 ```
 
-## Passive Mode
+## 被动模式
 
-The core of the passive mode is based on
+被动模式的核心是基于
 
-- [onFieldReact](https://core.formilyjs.org/api/entry/field-effect-hooks#onfieldreact) Implement global reactive logic
-- [FieldReaction](https://core.formilyjs.org/api/models/field#fieldreaction) Implement partial responsive logic
-- [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions) Implement the structured logical description in the Schema protocol (the internal implementation is based on FieldReaction)
+- [onFieldReact](https://core.formilyjs.org/api/entry/field-effect-hooks#onfieldreact)实现全局响应式逻辑
+- [FieldReaction](https://core.formilyjs.org/api/models/field#fieldreaction)实现局部响应式逻辑
+- [SchemaReactions](https://react.formilyjs.org/api/shared/schema#schemareactions)实现 Schema 协议中的结构化逻辑描述(内部是基于 FieldReaction 来实现的)
 
-### One-to-One Linkage
+### 一对一联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -1025,19 +1024,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -1053,7 +1052,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -1076,19 +1075,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
@@ -1112,9 +1111,9 @@ export default () => (
 )
 ```
 
-### One-to-Many Linkage
+### 一对多联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -1143,25 +1142,25 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -1177,7 +1176,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -1200,19 +1199,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
@@ -1226,7 +1225,7 @@ export default () => (
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
@@ -1250,9 +1249,9 @@ export default () => (
 )
 ```
 
-### Rely on Linkage
+### 依赖联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -1281,21 +1280,21 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="dim_1"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="dim_2"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="result"
-        title="controlled target"
+        title="受控者"
         x-pattern="readPretty"
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -1312,7 +1311,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -1335,21 +1334,21 @@ export default () => (
     <SchemaField>
       <SchemaField.Number
         name="dim_1"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="dim_2"
-        title="controller"
+        title="控制者"
         default={0}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="result"
-        title="controlled target"
+        title="受控者"
         x-pattern="readPretty"
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -1374,9 +1373,9 @@ export default () => (
 )
 ```
 
-### Chain Linkage
+### 链式联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -1408,29 +1407,29 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default={false}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         default={true}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -1446,7 +1445,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -1469,22 +1468,22 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default={false}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input1"
-        title="controlled target"
+        title="受控者"
         default={true}
         enum={[
-          { label: 'display', value: true },
-          { label: 'hide', value: false },
+          { label: '显示', value: true },
+          { label: '隐藏', value: false },
         ]}
         x-component="Select"
         x-decorator="FormItem"
@@ -1499,7 +1498,7 @@ export default () => (
       />
       <SchemaField.String
         name="input2"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
@@ -1523,13 +1522,15 @@ export default () => (
 )
 ```
 
-### Loop Linkage
+### 循环联动
 
-Passive mode will have problems to achieve cyclic linkage, because the data changes sensed by passive mode will trigger chain linkage. Chain linkage will cause mutually exclusive linkage that cannot break the cycle, so it is recommended to use active mode to achieve cyclic linkage
+被动模式实现循环联动会有问题，因为被动模式感知到的数据变化会引发链式联动
 
-### Self Linkage
+链式联动就会出现无法打破循环的互斥联动，所以推荐用主动模式实现循环联动
 
-#### Effects Use Cases
+### 自身联动
+
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -1563,7 +1564,7 @@ export default () => (
       <SchemaField.Number
         name="color"
         default="#FFFFFF"
-        title="color"
+        title="颜色"
         x-component="Input"
         x-decorator="FormItem"
       />
@@ -1579,7 +1580,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -1603,7 +1604,7 @@ export default () => (
       <SchemaField.Number
         name="color"
         default="#FFFFFF"
-        title="color"
+        title="颜色"
         x-component="Input"
         x-decorator="FormItem"
         x-reactions={{
@@ -1611,7 +1612,7 @@ export default () => (
             state: {
               'component[1].style.backgroundColor': '{{$self.value}}',
             },
-            //The following usage is also possible
+            //以下用法也可以
             // schema: {
             //   'x-component-props.style.backgroundColor': '{{$self.value}}',
             // },
@@ -1630,9 +1631,9 @@ export default () => (
 )
 ```
 
-### Asynchronous Linkage
+### 异步联动
 
-#### Effects Use Cases
+#### Effects 用例
 
 ```tsx
 import React from 'react'
@@ -1670,19 +1671,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-visible={false}
@@ -1699,7 +1700,7 @@ export default () => (
 )
 ```
 
-#### SchemaReactions Use Cases
+#### SchemaReactions 用例
 
 ```tsx
 import React from 'react'
@@ -1736,19 +1737,19 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="select"
-        title="controller"
+        title="控制者"
         default="visible"
         enum={[
-          { label: 'display', value: 'visible' },
-          { label: 'hide', value: 'none' },
-          { label: 'Hidden-reserved value', value: 'hidden' },
+          { label: '显示', value: 'visible' },
+          { label: '隐藏', value: 'none' },
+          { label: '隐藏-保留值', value: 'hidden' },
         ]}
         x-component="Select"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="input"
-        title="controlled target"
+        title="受控者"
         x-component="Input"
         x-decorator="FormItem"
         x-visible={false}

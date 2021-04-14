@@ -1,14 +1,14 @@
-# Form Controlled
+# 实现表单受控
 
-Formily 2.x has given up supporting controlled mode for form components and field components. Because the internal management state mode of the form itself is not a controlled mode, there will be many boundary problems in the process of changing the controlled mode to the uncontrolled mode. At the same time, the controlled mode will have a large number of dirty inspection processes, and the performance is very poor. Instead, the controlled mode itself can solve most of the problems.
+Formily2.x 已经放弃了给表单组件和字段组件支持受控模式，因为表单内部管理状态模式本身就不是受控模式，在将受控模式转为非受控模式的过程中会有很多边界问题，同时受控模式会存在大量的脏检查过程，性能很不好，反而非受控模式本身就可以解决大部分问题了。
 
-So Formily no longer supports the controlled mode, but if we insist on implementing ordinary React controlled, we can still support it. It can only achieve value control, not field-level control, which is the Field component we use. The properties will only take effect during the first rendering. Any changes to the properties in the future will not be automatically updated. If you want to update automatically, unless you recreate the Form instance (obviously this will lose all the previously maintained state).
+所以 Formily 就不再支持受控模式了，但是如果我们硬要实现普通 React 受控，还是可以支持的，只不过只能实现值受控，不能实现字段级受控，也就是我们使用的 Field 组件，属性只会在初次渲染时生效，未来属性发生任何变化都不会自动更新，想要自动更新，除非重新创建 Form 实例(显然这样会丢失所有之前维护好的状态)。
 
-Therefore, we more recommend using [@formily/reactive](https://reactive.formilyjs.org) to achieve responsive control, which can achieve both value control and field-level control.
+所以，我们更加推荐的是使用[@formily/reactive](https://reactive.formilyjs.org) 实现响应式受控，既能实现值受控，也能实现字段级受控
 
-## Value Controlled
+## 值受控
 
-Ordinary controlled mode, which will rely heavily on dirty checking to achieve data synchronization, and the number of component renderings will be very high.
+普通受控模式，会强依赖脏检查实现数据同步，同时组件渲染次数会非常高
 
 ```tsx
 import React, { useMemo, useState, useEffect, useRef } from 'react'
@@ -49,10 +49,10 @@ const MyForm = (props) => {
           name="input"
           x-decorator="FormItem"
           x-component="Input"
-          x-component-props={{ placeholder: 'controlled target' }}
+          x-component-props={{ placeholder: '受控者' }}
         />
       </SchemaField>
-      Form component rendering times：{count.current++}
+      Form组件渲染次数：{count.current++}
     </Form>
   )
 }
@@ -65,7 +65,7 @@ export default () => {
       <FormItem>
         <Input
           value={values.input}
-          placeholder="controller"
+          placeholder="控制者"
           onChange={(event) => {
             setValues({ ...values, input: event.target.value })
           }}
@@ -77,15 +77,15 @@ export default () => {
           setValues({ ...values })
         }}
       />
-      root component rendering times: {count.current++}
+      根组件渲染次数：{count.current++}
     </>
   )
 }
 ```
 
-## Responsive Value Controlled
+## 响应式值受控
 
-Responsive control is mainly to use [@formily/reactive](https://reactive.formilyjs.org) to achieve responsive updates, we can easily achieve two-way binding, while the performance is full of normal controlled updates.
+响应式受控主要是使用[@formily/reactive](https://reactive.formilyjs.org)实现响应式更新，我们可以轻松实现双向绑定，同时性能完爆普通受控更新
 
 ```tsx
 import React, { useMemo, useRef } from 'react'
@@ -119,10 +119,10 @@ const MyForm = (props) => {
           name="input"
           x-decorator="FormItem"
           x-component="Input"
-          x-component-props={{ placeholder: 'controlled target' }}
+          x-component-props={{ placeholder: '受控者' }}
         />
       </SchemaField>
-      Form component rendering times：{count.current++}
+      Form组件渲染次数：{count.current++}
     </Form>
   )
 }
@@ -133,12 +133,12 @@ const Controller = observer((props) => {
     <FormItem>
       <Input
         value={props.values.input}
-        placeholder="controller"
+        placeholder="控制者"
         onChange={(event) => {
           props.values.input = event.target.value
         }}
       />
-      Controller component rendering times：{count.current++}
+      Controller组件渲染次数：{count.current++}
     </FormItem>
   )
 })
@@ -154,15 +154,15 @@ export default () => {
     <>
       <Controller values={values} />
       <MyForm values={values} />
-      root component rendering times：{count.current++}
+      根组件渲染次数：{count.current++}
     </>
   )
 }
 ```
 
-## Schema Controlled
+## Schema 受控
 
-There will be a requirement for the form configuration scenario. The Schema of the form will change frequently. In fact, it is equivalent to frequently creating new forms. The state of the previous operation should be discarded.
+对于表单配置化场景会有一个需求，表单的 Schema 会发生频繁改变，其实就相当于频繁创建新表单了，之前操作的状态就应该丢弃了
 
 ```tsx
 import React, { useMemo, useState } from 'react'
@@ -245,11 +245,11 @@ export default () => {
 }
 ```
 
-## Field Level Control
+## 字段级受控
 
-### Best Practices
+### 最佳实践
 
-It is recommended to use [@formily/reactive](https://reactive.formilyjs.org) to achieve responsive control.
+推荐使用[@formily/reactive](https://reactive.formilyjs.org) 实现响应式受控
 
 ```tsx
 import React from 'react'
@@ -277,7 +277,7 @@ const Controller = observer(() => {
     <FormItem>
       <Input
         value={obs.input}
-        placeholder="controller"
+        placeholder="控制者"
         onChange={(event) => {
           obs.input = event.target.value
         }}
@@ -296,9 +296,9 @@ export default () => {
             name="input"
             x-decorator="FormItem"
             x-component="Input"
-            x-component-props={{ placeholder: 'controlled target' }}
+            x-component-props={{ placeholder: '受控者' }}
             x-reactions={(field) => {
-              field.component[1].placeholder = obs.input || 'controlled target'
+              field.component[1].placeholder = obs.input || '受控者'
             }}
           />
         </SchemaField>
@@ -308,9 +308,9 @@ export default () => {
 }
 ```
 
-### Anti-pattern
+### 反模式
 
-It is not possible to update automatically when using traditional controlled mode.
+使用传统受控模式是无法自动更新的
 
 ```tsx
 import React, { useState } from 'react'
@@ -334,7 +334,7 @@ export default () => {
       <FormItem>
         <Input
           value={value}
-          placeholder="controller"
+          placeholder="控制者"
           onChange={(event) => {
             setValue(event.target.value)
           }}
@@ -346,7 +346,7 @@ export default () => {
             name="input"
             x-decorator="FormItem"
             x-component="Input"
-            x-component-props={{ placeholder: value || 'controlled target' }}
+            x-component-props={{ placeholder: value || '受控者' }}
           />
         </SchemaField>
       </Form>

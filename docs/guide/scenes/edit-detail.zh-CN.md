@@ -1,8 +1,8 @@
-# Edit Details
+# 编辑详情
 
-## Edit
+## 编辑
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -42,7 +42,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      <Button icon={<UploadOutlined />}>上传复印件</Button>
     </Upload>
   )
 }
@@ -120,8 +120,8 @@ export default () => {
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
-          { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
+          { name: '张三', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          { name: '李四', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
       setLoading(false)
@@ -136,7 +136,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="Edit User" style={{ width: 620 }}>
+      <Card title="编辑用户" style={{ width: 620 }}>
         <Spin spinning={loading}>
           <Form
             form={form}
@@ -147,13 +147,13 @@ export default () => {
             <SchemaField>
               <SchemaField.String
                 name="username"
-                title="Username"
+                title="用户名"
                 required
                 x-decorator="FormItem"
                 x-component="Input"
               />
               <SchemaField.Void
-                title="Name"
+                title="姓名"
                 x-decorator="FormItem"
                 x-decorator-props={{
                   asterisk: true,
@@ -166,7 +166,7 @@ export default () => {
                   x-decorator="FormItem"
                   x-component="Input"
                   x-component-props={{
-                    placeholder: 'firstName',
+                    placeholder: '姓',
                   }}
                   required
                 />
@@ -175,14 +175,14 @@ export default () => {
                   x-decorator="FormItem"
                   x-component="Input"
                   x-component-props={{
-                    placeholder: 'lastname',
+                    placeholder: '名',
                   }}
                   required
                 />
               </SchemaField.Void>
               <SchemaField.String
                 name="email"
-                title="Email"
+                title="邮箱"
                 required
                 x-validator="email"
                 x-decorator="FormItem"
@@ -190,20 +190,20 @@ export default () => {
               />
               <SchemaField.String
                 name="gender"
-                title="Gender"
+                title="性别"
                 x-decorator="FormItem"
                 x-component="Select"
                 enum={[
                   {
-                    label: 'male',
+                    label: '男',
                     value: 1,
                   },
                   {
-                    label: 'female',
+                    label: '女',
                     value: 2,
                   },
                   {
-                    label: 'third gender',
+                    label: '第三性别',
                     value: 3,
                   },
                 ]}
@@ -211,14 +211,14 @@ export default () => {
               />
               <SchemaField.String
                 name="birthday"
-                title="Birthday"
+                title="生日"
                 required
                 x-decorator="FormItem"
                 x-component="DatePicker"
               />
               <SchemaField.String
                 name="address"
-                title="Address"
+                title="地址"
                 required
                 x-decorator="FormItem"
                 x-component="Cascader"
@@ -226,14 +226,14 @@ export default () => {
               />
               <SchemaField.String
                 name="idCard"
-                title="ID"
+                title="身份证复印件"
                 required
                 x-decorator="FormItem"
                 x-component="IDUpload"
               />
               <SchemaField.Array
                 name="contacts"
-                title="Contacts"
+                title="联系人信息"
                 required
                 x-decorator="FormItem"
                 x-component="ArrayItems"
@@ -245,7 +245,7 @@ export default () => {
                   />
                   <SchemaField.Void
                     name="popover"
-                    title="Contact Informations"
+                    title="维护联系人信息"
                     x-decorator="Editable.Popover"
                     x-component="FormLayout"
                     x-component-props={{
@@ -264,7 +264,7 @@ export default () => {
                     <SchemaField.String
                       name="name"
                       required
-                      title="Name"
+                      title="姓名"
                       x-decorator="FormItem"
                       x-component="Input"
                       x-component-props={{
@@ -275,7 +275,7 @@ export default () => {
                     />
                     <SchemaField.String
                       name="email"
-                      title="Email"
+                      title="邮箱"
                       x-validator={[{ required: true }, 'email']}
                       x-decorator="FormItem"
                       x-component="Input"
@@ -288,7 +288,7 @@ export default () => {
                     <SchemaField.String
                       name="phone"
                       required
-                      title="Phone Number"
+                      title="手机号"
                       x-validator="phone"
                       x-decorator="FormItem"
                       x-component="Input"
@@ -306,13 +306,13 @@ export default () => {
                 </SchemaField.Object>
                 <SchemaField.Void
                   x-component="ArrayItems.Addition"
-                  title="Add Contact"
+                  title="新增联系人"
                 />
               </SchemaField.Array>
             </SchemaField>
             <FormButtonGroup.FormItem>
               <Submit block size="large">
-                Submit
+                提交
               </Submit>
             </FormButtonGroup.FormItem>
           </Form>
@@ -323,7 +323,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -363,7 +363,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      <Button icon={<UploadOutlined />}>上传复印件</Button>
     </Upload>
   )
 }
@@ -423,14 +423,14 @@ const schema = {
   properties: {
     username: {
       type: 'string',
-      title: 'Username',
+      title: '用户名',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     name: {
       type: 'void',
-      title: 'Name',
+      title: '姓名',
       'x-decorator': 'FormItem',
       'x-decorator-props': {
         asterisk: true,
@@ -444,7 +444,7 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: 'firstName',
+            placeholder: '姓',
           },
         },
         lastName: {
@@ -453,14 +453,14 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: 'lastname',
+            placeholder: '名',
           },
         },
       },
     },
     email: {
       type: 'string',
-      title: 'Email',
+      title: '邮箱',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -468,18 +468,18 @@ const schema = {
     },
     gender: {
       type: 'string',
-      title: 'Gender',
+      title: '性别',
       enum: [
         {
-          label: 'male',
+          label: '男',
           value: 1,
         },
         {
-          label: 'female',
+          label: '女',
           value: 2,
         },
         {
-          label: 'third gender',
+          label: '第三性别',
           value: 3,
         },
       ],
@@ -489,14 +489,14 @@ const schema = {
     birthday: {
       type: 'string',
       required: true,
-      title: 'Birthday',
+      title: '生日',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker',
     },
     address: {
       type: 'string',
       required: true,
-      title: 'Address',
+      title: '地址',
       'x-decorator': 'FormItem',
       'x-component': 'Cascader',
       'x-reactions': '{{fetchAddress}}',
@@ -504,14 +504,14 @@ const schema = {
     idCard: {
       type: 'string',
       required: true,
-      title: 'ID',
+      title: '身份证复印件',
       'x-decorator': 'FormItem',
       'x-component': 'IDUpload',
     },
     contacts: {
       type: 'array',
       required: true,
-      title: 'Contacts',
+      title: '联系人信息',
       'x-decorator': 'FormItem',
       'x-component': 'ArrayItems',
       items: {
@@ -525,7 +525,7 @@ const schema = {
           },
           popover: {
             type: 'void',
-            title: 'Contact Informations',
+            title: '完善联系人信息',
             'x-decorator': 'Editable.Popover',
             'x-component': 'FormLayout',
             'x-component-props': {
@@ -543,7 +543,7 @@ const schema = {
             properties: {
               name: {
                 type: 'string',
-                title: 'Name',
+                title: '姓名',
                 required: true,
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
@@ -555,7 +555,7 @@ const schema = {
               },
               email: {
                 type: 'string',
-                title: 'Email',
+                title: '邮箱',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'email'],
@@ -567,7 +567,7 @@ const schema = {
               },
               phone: {
                 type: 'string',
-                title: 'Phone Number',
+                title: '手机号',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'phone'],
@@ -589,7 +589,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: 'Add Contact',
+          title: '新增联系人',
           'x-component': 'ArrayItems.Addition',
         },
       },
@@ -620,8 +620,8 @@ export default () => {
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
-          { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
+          { name: '张三', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          { name: '李四', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
       setLoading(false)
@@ -636,7 +636,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="Edit User" style={{ width: 620 }}>
+      <Card title="编辑用户" style={{ width: 620 }}>
         <Spin spinning={loading}>
           <Form
             form={form}
@@ -647,7 +647,7 @@ export default () => {
             <SchemaField schema={schema} />
             <FormButtonGroup.FormItem>
               <Submit block size="large">
-                Submit
+                提交
               </Submit>
             </FormButtonGroup.FormItem>
           </Form>
@@ -658,7 +658,7 @@ export default () => {
 }
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -698,7 +698,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      <Button icon={<UploadOutlined />}>上传复印件</Button>
     </Upload>
   )
 }
@@ -760,8 +760,8 @@ export default () => {
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
-          { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
+          { name: '张三', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          { name: '李四', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
       setLoading(false)
@@ -776,7 +776,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="Edit User" style={{ width: 620 }}>
+      <Card title="编辑用户" style={{ width: 620 }}>
         <Spin spinning={loading}>
           <Form
             form={form}
@@ -786,14 +786,14 @@ export default () => {
           >
             <Field
               name="username"
-              title="Username"
+              title="用户名"
               required
               decorator={[FormItem]}
               component={[Input]}
             />
             <VoidField
               name="name"
-              title="Name"
+              title="姓名"
               decorator={[
                 FormItem,
                 {
@@ -809,7 +809,7 @@ export default () => {
                 component={[
                   Input,
                   {
-                    placeholder: 'firstName',
+                    placeholder: '姓',
                   },
                 ]}
                 required
@@ -820,7 +820,7 @@ export default () => {
                 component={[
                   Input,
                   {
-                    placeholder: 'lastname',
+                    placeholder: '名',
                   },
                 ]}
                 required
@@ -828,7 +828,7 @@ export default () => {
             </VoidField>
             <Field
               name="email"
-              title="Email"
+              title="邮箱"
               required
               validator="email"
               decorator={[FormItem]}
@@ -836,20 +836,20 @@ export default () => {
             />
             <Field
               name="gender"
-              title="Gender"
+              title="性别"
               decorator={[FormItem]}
               component={[Select]}
               dataSource={[
                 {
-                  label: 'male',
+                  label: '男',
                   value: 1,
                 },
                 {
-                  label: 'female',
+                  label: '女',
                   value: 2,
                 },
                 {
-                  label: 'third gender',
+                  label: '第三性别',
                   value: 3,
                 },
               ]}
@@ -857,14 +857,14 @@ export default () => {
             />
             <Field
               name="birthday"
-              title="Birthday"
+              title="生日"
               required
               decorator={[FormItem]}
               component={[DatePicker]}
             />
             <Field
               name="address"
-              title="Address"
+              title="地址"
               required
               decorator={[FormItem]}
               component={[Cascader]}
@@ -872,14 +872,14 @@ export default () => {
             />
             <Field
               name="idCard"
-              title="ID"
+              title="身份证复印件"
               required
               decorator={[FormItem]}
               component={[IDUpload]}
             />
             <ArrayField
               name="contacts"
-              title="Contacts"
+              title="联系人信息"
               decorator={[FormItem]}
             >
               {(field) => (
@@ -888,7 +888,7 @@ export default () => {
                     <div key={index} className="array-items-item">
                       <Field
                         name={`${index}`}
-                        title="Contact Informations"
+                        title="完善联系人信息"
                         component={[Editable.Popover]}
                         reactions={(field) => {
                           field.title =
@@ -901,7 +901,7 @@ export default () => {
                         >
                           <Field
                             name="name"
-                            title="Name"
+                            title="姓名"
                             required
                             decorator={[FormItem]}
                             component={[
@@ -915,7 +915,7 @@ export default () => {
                           />
                           <Field
                             name="email"
-                            title="Email"
+                            title="邮箱"
                             required
                             validator="email"
                             decorator={[FormItem]}
@@ -930,7 +930,7 @@ export default () => {
                           />
                           <Field
                             name="phone"
-                            title="Phone Number"
+                            title="手机号"
                             required
                             validator="phone"
                             decorator={[FormItem]}
@@ -952,13 +952,13 @@ export default () => {
                       </FormItem.BaseItem>
                     </div>
                   ))}
-                  <ArrayBase.Addition title="Add Contact" />
+                  <ArrayBase.Addition title="新增联系人" />
                 </ArrayBase>
               )}
             </ArrayField>
             <FormButtonGroup.FormItem>
               <Submit block size="large">
-                Submit
+                提交
               </Submit>
             </FormButtonGroup.FormItem>
           </Form>
@@ -969,9 +969,9 @@ export default () => {
 }
 ```
 
-## Details
+## 详情
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -1012,7 +1012,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      {field.editable && <Button icon={<UploadOutlined />}>Upload a copy</Button>}
+      {field.editable && <Button icon={<UploadOutlined />}>上传复印件</Button>}
     </Upload>
   )
 }
@@ -1090,8 +1090,8 @@ export default () => {
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
-          { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
+          { name: '张三', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          { name: '李四', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
       setLoading(false)
@@ -1107,7 +1107,7 @@ export default () => {
       }}
     >
       <PreviewText.Placeholder value="-">
-        <Card title="User Details" style={{ width: 620 }}>
+        <Card title="用户详情" style={{ width: 620 }}>
           <Spin spinning={loading}>
             <Form
               form={form}
@@ -1118,13 +1118,13 @@ export default () => {
               <SchemaField>
                 <SchemaField.String
                   name="username"
-                  title="Username"
+                  title="用户名"
                   required
                   x-decorator="FormItem"
                   x-component="Input"
                 />
                 <SchemaField.Void
-                  title="Name"
+                  title="姓名"
                   x-decorator="FormItem"
                   x-decorator-props={{
                     feedbackLayout: 'none',
@@ -1136,7 +1136,7 @@ export default () => {
                     x-decorator="FormItem"
                     x-component="Input"
                     x-component-props={{
-                      placeholder: 'firstName',
+                      placeholder: '姓',
                     }}
                     required
                   />
@@ -1145,14 +1145,14 @@ export default () => {
                     x-decorator="FormItem"
                     x-component="Input"
                     x-component-props={{
-                      placeholder: 'lastname',
+                      placeholder: '名',
                     }}
                     required
                   />
                 </SchemaField.Void>
                 <SchemaField.String
                   name="email"
-                  title="Email"
+                  title="邮箱"
                   required
                   x-validator="email"
                   x-decorator="FormItem"
@@ -1160,20 +1160,20 @@ export default () => {
                 />
                 <SchemaField.String
                   name="gender"
-                  title="Gender"
+                  title="性别"
                   x-decorator="FormItem"
                   x-component="Select"
                   enum={[
                     {
-                      label: 'male',
+                      label: '男',
                       value: 1,
                     },
                     {
-                      label: 'female',
+                      label: '女',
                       value: 2,
                     },
                     {
-                      label: 'third gender',
+                      label: '第三性别',
                       value: 3,
                     },
                   ]}
@@ -1181,14 +1181,14 @@ export default () => {
                 />
                 <SchemaField.String
                   name="birthday"
-                  title="Birthday"
+                  title="生日"
                   required
                   x-decorator="FormItem"
                   x-component="DatePicker"
                 />
                 <SchemaField.String
                   name="address"
-                  title="Address"
+                  title="地址"
                   required
                   x-decorator="FormItem"
                   x-component="Cascader"
@@ -1196,14 +1196,14 @@ export default () => {
                 />
                 <SchemaField.String
                   name="idCard"
-                  title="ID"
+                  title="身份证复印件"
                   required
                   x-decorator="FormItem"
                   x-component="IDUpload"
                 />
                 <SchemaField.Array
                   name="contacts"
-                  title="Contacts"
+                  title="联系人信息"
                   required
                   x-decorator="FormItem"
                   x-component="ArrayItems"
@@ -1215,7 +1215,7 @@ export default () => {
                     />
                     <SchemaField.Void
                       name="popover"
-                      title="Contact Informations"
+                      title="维护联系人信息"
                       x-decorator="Editable.Popover"
                       x-component="FormLayout"
                       x-component-props={{
@@ -1234,7 +1234,7 @@ export default () => {
                       <SchemaField.String
                         name="name"
                         required
-                        title="Name"
+                        title="姓名"
                         x-decorator="FormItem"
                         x-component="Input"
                         x-component-props={{
@@ -1245,7 +1245,7 @@ export default () => {
                       />
                       <SchemaField.String
                         name="email"
-                        title="Email"
+                        title="邮箱"
                         x-validator={[{ required: true }, 'email']}
                         x-decorator="FormItem"
                         x-component="Input"
@@ -1258,7 +1258,7 @@ export default () => {
                       <SchemaField.String
                         name="phone"
                         required
-                        title="Phone Number"
+                        title="手机号"
                         x-validator="phone"
                         x-decorator="FormItem"
                         x-component="Input"
@@ -1276,7 +1276,7 @@ export default () => {
                   </SchemaField.Object>
                   <SchemaField.Void
                     x-component="ArrayItems.Addition"
-                    title="Add Contact"
+                    title="新增联系人"
                   />
                 </SchemaField.Array>
               </SchemaField>
@@ -1289,7 +1289,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -1330,7 +1330,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      {field.editable && <Button icon={<UploadOutlined />}>Upload a copy</Button>}
+      {field.editable && <Button icon={<UploadOutlined />}>上传复印件</Button>}
     </Upload>
   )
 }
@@ -1390,14 +1390,14 @@ const schema = {
   properties: {
     username: {
       type: 'string',
-      title: 'Username',
+      title: '用户名',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     name: {
       type: 'void',
-      title: 'Name',
+      title: '姓名',
       'x-decorator': 'FormItem',
       'x-decorator-props': {
         asterisk: true,
@@ -1411,7 +1411,7 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: 'firstName',
+            placeholder: '姓',
           },
         },
         lastName: {
@@ -1420,14 +1420,14 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: 'lastname',
+            placeholder: '名',
           },
         },
       },
     },
     email: {
       type: 'string',
-      title: 'Email',
+      title: '邮箱',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -1435,18 +1435,18 @@ const schema = {
     },
     gender: {
       type: 'string',
-      title: 'Gender',
+      title: '性别',
       enum: [
         {
-          label: 'male',
+          label: '男',
           value: 1,
         },
         {
-          label: 'female',
+          label: '女',
           value: 2,
         },
         {
-          label: 'third gender',
+          label: '第三性别',
           value: 3,
         },
       ],
@@ -1456,14 +1456,14 @@ const schema = {
     birthday: {
       type: 'string',
       required: true,
-      title: 'Birthday',
+      title: '生日',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker',
     },
     address: {
       type: 'string',
       required: true,
-      title: 'Address',
+      title: '地址',
       'x-decorator': 'FormItem',
       'x-component': 'Cascader',
       'x-reactions': '{{fetchAddress}}',
@@ -1471,14 +1471,14 @@ const schema = {
     idCard: {
       type: 'string',
       required: true,
-      title: 'ID',
+      title: '身份证复印件',
       'x-decorator': 'FormItem',
       'x-component': 'IDUpload',
     },
     contacts: {
       type: 'array',
       required: true,
-      title: 'Contacts',
+      title: '联系人信息',
       'x-decorator': 'FormItem',
       'x-component': 'ArrayItems',
       items: {
@@ -1492,7 +1492,7 @@ const schema = {
           },
           popover: {
             type: 'void',
-            title: 'Contact Informations',
+            title: '完善联系人信息',
             'x-decorator': 'Editable.Popover',
             'x-component': 'FormLayout',
             'x-component-props': {
@@ -1510,7 +1510,7 @@ const schema = {
             properties: {
               name: {
                 type: 'string',
-                title: 'Name',
+                title: '姓名',
                 required: true,
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
@@ -1522,7 +1522,7 @@ const schema = {
               },
               email: {
                 type: 'string',
-                title: 'Email',
+                title: '邮箱',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'email'],
@@ -1534,7 +1534,7 @@ const schema = {
               },
               phone: {
                 type: 'string',
-                title: 'Phone Number',
+                title: '手机号',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'phone'],
@@ -1556,7 +1556,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: 'Add Contact',
+          title: '新增联系人',
           'x-component': 'ArrayItems.Addition',
         },
       },
@@ -1587,8 +1587,8 @@ export default () => {
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
-          { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
+          { name: '张三', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          { name: '李四', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
       setLoading(false)
@@ -1604,7 +1604,7 @@ export default () => {
       }}
     >
       <PreviewText.Placeholder value="-">
-        <Card title="User Details" style={{ width: 620 }}>
+        <Card title="用户详情" style={{ width: 620 }}>
           <Spin spinning={loading}>
             <Form
               form={form}
@@ -1622,7 +1622,7 @@ export default () => {
 }
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React, { useState, useEffect } from 'react'
@@ -1664,7 +1664,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      {field.editable && <Button icon={<UploadOutlined />}>Upload a copy</Button>}
+      {field.editable && <Button icon={<UploadOutlined />}>上传复印件</Button>}
     </Upload>
   )
 }
@@ -1726,8 +1726,8 @@ export default () => {
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
-          { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
+          { name: '张三', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          { name: '李四', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
       setLoading(false)
@@ -1743,7 +1743,7 @@ export default () => {
       }}
     >
       <PreviewText.Placeholder value="-">
-        <Card title="Edit User" style={{ width: 620 }}>
+        <Card title="编辑用户" style={{ width: 620 }}>
           <Spin spinning={loading}>
             <Form
               form={form}
@@ -1753,14 +1753,14 @@ export default () => {
             >
               <Field
                 name="username"
-                title="Username"
+                title="用户名"
                 required
                 decorator={[FormItem]}
                 component={[Input]}
               />
               <VoidField
                 name="name"
-                title="Name"
+                title="姓名"
                 decorator={[
                   FormItem,
                   {
@@ -1775,7 +1775,7 @@ export default () => {
                   component={[
                     Input,
                     {
-                      placeholder: 'firstName',
+                      placeholder: '姓',
                     },
                   ]}
                   required
@@ -1786,7 +1786,7 @@ export default () => {
                   component={[
                     Input,
                     {
-                      placeholder: 'lastname',
+                      placeholder: '名',
                     },
                   ]}
                   required
@@ -1794,7 +1794,7 @@ export default () => {
               </VoidField>
               <Field
                 name="email"
-                title="Email"
+                title="邮箱"
                 required
                 validator="email"
                 decorator={[FormItem]}
@@ -1802,20 +1802,20 @@ export default () => {
               />
               <Field
                 name="gender"
-                title="Gender"
+                title="性别"
                 decorator={[FormItem]}
                 component={[Select]}
                 dataSource={[
                   {
-                    label: 'male',
+                    label: '男',
                     value: 1,
                   },
                   {
-                    label: 'female',
+                    label: '女',
                     value: 2,
                   },
                   {
-                    label: 'third gender',
+                    label: '第三性别',
                     value: 3,
                   },
                 ]}
@@ -1823,14 +1823,14 @@ export default () => {
               />
               <Field
                 name="birthday"
-                title="Birthday"
+                title="生日"
                 required
                 decorator={[FormItem]}
                 component={[DatePicker]}
               />
               <Field
                 name="address"
-                title="Address"
+                title="地址"
                 required
                 decorator={[FormItem]}
                 component={[Cascader]}
@@ -1838,14 +1838,14 @@ export default () => {
               />
               <Field
                 name="idCard"
-                title="ID"
+                title="身份证复印件"
                 required
                 decorator={[FormItem]}
                 component={[IDUpload]}
               />
               <ArrayField
                 name="contacts"
-                title="Contacts"
+                title="联系人信息"
                 decorator={[FormItem]}
               >
                 {(field) => (
@@ -1854,7 +1854,7 @@ export default () => {
                       <div key={index} className="array-items-item">
                         <Field
                           name={`${index}`}
-                          title="Contact Informations"
+                          title="完善联系人信息"
                           component={[Editable.Popover]}
                           reactions={(field) => {
                             field.title =
@@ -1867,7 +1867,7 @@ export default () => {
                           >
                             <Field
                               name="name"
-                              title="Name"
+                              title="姓名"
                               required
                               decorator={[FormItem]}
                               component={[
@@ -1881,7 +1881,7 @@ export default () => {
                             />
                             <Field
                               name="email"
-                              title="Email"
+                              title="邮箱"
                               required
                               validator="email"
                               decorator={[FormItem]}
@@ -1896,7 +1896,7 @@ export default () => {
                             />
                             <Field
                               name="phone"
-                              title="Phone Number"
+                              title="手机号"
                               required
                               validator="phone"
                               decorator={[FormItem]}
@@ -1913,7 +1913,7 @@ export default () => {
                         </Field>
                       </div>
                     ))}
-                    <ArrayBase.Addition title="Add Contact" />
+                    <ArrayBase.Addition title="新增联系人" />
                   </ArrayBase>
                 )}
               </ArrayField>

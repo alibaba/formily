@@ -1,10 +1,10 @@
-# 实现表单布局
+# Form Layout
 
-表单布局主要是使用[@formily/antd](https://antd.formilyjs.org) 或 [@formily/next](https://next.formilyjs.org) 中的：
+The form layout mainly uses [@formily/antd](https://antd.formilyjs.org) or [@formily/next](https://next.formilyjs.org): 
 
-- [FormLayout](https://antd.formilyjs.org/components/form-layout) 组件
-- [FormItem](https://antd.formilyjs.org/components/form-item) 组件
-- [FormGrid](https://antd.formilyjs.org/components/form-grid) 组件
-- [Space](https://antd.formilyjs.org/components/space) 组件
+- [FormLayout](http://antd.formilyjs.org/components/form-layout) Component
+- [FormItem](http://antd.formilyjs.org/components/form-item) Component
+- [FormGrid](http://antd.formilyjs.org/components/form-grid) Component
+- [Space](http://antd.formilyjs.org/components/space) Component
 
-这 4 个组件基本上能解决所有复杂表单布局场景，我们只需要灵活的组合使用这几个组件即可。
+These 4 components can basically solve all complex form layout scenarios, we only need to flexibly combine these components.

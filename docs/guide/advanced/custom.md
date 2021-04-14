@@ -1,7 +1,8 @@
-# 实现自定义组件
+# Custom Components
 
-实现业务自定义组件主要是使用[@formily/react](https://react.formilyjs.org) 或[@formily/vue](https://vue.formilyjs.org)中的 Hooks API 与 observer API
+The realization of business custom components mainly uses the Hooks API and observer API in [@formily/react](https://react.formilyjs.org) or [@formily/vue](https://vue.formilyjs.org).
 
-接入现成组件库的话，我们主要使用 connect/mapProps/mapReadPretty API
+To access the ready-made component library, we mainly use connect/mapProps/mapReadPretty API.
 
-如果想要实现一些更复杂的自定义组件，我们强烈推荐直接看[@formily/antd](https://github.com/alibaba/formily/tree/master/packages/antd/src)或 [@formily/next](https://github.com/alibaba/formily/tree/master/packages/next/src)的源码
+If you want to implement some more complex custom components, we strongly recommend looking directly at the source code of [@formily/antd](https://github.com/alibaba/formily/tree/master/packages/antd/src) or [@formily/next](https://github.com/alibaba/formily/tree/master/packages/next/src).
+

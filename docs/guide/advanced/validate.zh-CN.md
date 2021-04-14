@@ -1,17 +1,17 @@
-# Form Validation
+# 表单校验
 
-Formily's form validation uses the extremely powerful and flexible @formily/validator validation engine. There are two main scenarios for validation:
+Formily 的表单校验使用了极其强大且灵活的@formily/validator 校验引擎，校验主要分两种场景：
 
-- Markup(JSON) Schema scene protocol verification property verification, using JSON Schema's own verification property and x-validator property to achieve verification
-- Pure JSX scene verification properties, use validator property to achieve verification
+- Markup(JSON) Schema 场景协议校验属性校验，使用 JSON Schema 本身的校验属性与 x-validator 属性实现校验
+- 纯 JSX 场景校验属性，使用 validator 属性实现校验
 
-At the same time, we can also implement linkage verification in effects or x-reactions/reactions
+同时我们还能在 effects 或者 x-reactions/reactions 中实现联动校验
 
-Specific rule verification document reference [FieldValidator](https://core.formilyjs.org/api/models/field#fieldvalidator)
+具体规则校验文档参考 [FieldValidator](https://core.formilyjs.org/api/models/field#fieldvalidator)
 
-## Built-in rule check
+## 内置规则校验
 
-#### Markup Schema Use Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -34,63 +34,63 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="required_1"
-        title="Required"
+        title="必填"
         required
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="required_2"
-        title="Required"
+        title="必填"
         x-validator={{ required: true }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="required_3"
-        title="Required"
+        title="必填"
         x-validator={[{ required: true }]}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="max_1"
-        title="Maximum value (>5 error)"
+        title="最大值(>5报错)"
         maximum={5}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="max_2"
-        title="Maximum value (>5 error)"
+        title="最大值(>5报错)"
         x-validator={{ maximum: 5 }}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="max_3"
-        title="Maximum value (>5 error)"
+        title="最大值(>5报错)"
         x-validator={[{ maximum: 5 }]}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="max_4"
-        title="Maximum value (>=5 error)"
+        title="最大值(>=5报错)"
         exclusiveMaximum={5}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="max_5"
-        title="Maximum value (>=5 error)"
+        title="最大值(>=5报错)"
         x-validator={{ exclusiveMaximum: 5 }}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="max_6"
-        title="Maximum value (>=5 error)"
+        title="最大值(>=5报错)"
         x-validator={[{ exclusiveMaximum: 5 }]}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -98,42 +98,42 @@ export default () => (
 
       <SchemaField.Number
         name="min_1"
-        title="Minimum value (<5 error)"
+        title="最小值(<5报错)"
         minimum={5}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="min_2"
-        title="Minimum value (<5 error)"
+        title="最小值(<5报错)"
         x-validator={{ minimum: 5 }}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="min_3"
-        title="Minimum value (<5 error)"
+        title="最小值(<5报错)"
         x-validator={[{ minimum: 5 }]}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="min_4"
-        title="Minimum value (<=5 error)"
+        title="最小值(<=5报错)"
         exclusiveMinimum={5}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="min_5"
-        title="Minimum value (<=5 error)"
+        title="最小值(<=5报错)"
         x-validator={{ exclusiveMinimum: 5 }}
         x-component="NumberPicker"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="min_6"
-        title="Minimum value (<=5 error)"
+        title="最小值(<=5报错)"
         x-validator={[{ exclusiveMinimum: 5 }]}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -141,14 +141,14 @@ export default () => (
 
       <SchemaField.String
         name="length_1"
-        title="Length is 5"
+        title="长度为5"
         x-validator={{ len: 5 }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="length_2"
-        title="Length is 5"
+        title="长度为5"
         x-validator={[{ len: 5 }]}
         x-component="Input"
         x-decorator="FormItem"
@@ -156,21 +156,21 @@ export default () => (
 
       <SchemaField.String
         name="maxlength_1"
-        title="Maximum length is 5"
+        title="最大长度为5"
         maxLength={5}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="maxlength_2"
-        title="Maximum length is 5"
+        title="最大长度为5"
         x-validator={{ max: 5 }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="maxlength_3"
-        title="Maximum length is 5"
+        title="最大长度为5"
         x-validator={[{ max: 5 }]}
         x-component="Input"
         x-decorator="FormItem"
@@ -178,21 +178,21 @@ export default () => (
 
       <SchemaField.String
         name="maxlength_4"
-        title="Minimum length is 5"
+        title="最小长度为5"
         minLength={5}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="maxlength_5"
-        title="Minimum length is 5"
+        title="最小长度为5"
         x-validator={{ min: 5 }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="maxlength_6"
-        title="Minimum length is 5"
+        title="最小长度为5"
         x-validator={[{ min: 5 }]}
         x-component="Input"
         x-decorator="FormItem"
@@ -200,7 +200,7 @@ export default () => (
 
       <SchemaField.String
         name="whitespace"
-        title="Exclude pure whitespace characters"
+        title="排除纯空白字符"
         x-validator={[{ whitespace: true }]}
         x-component="Input"
         x-decorator="FormItem"
@@ -208,7 +208,7 @@ export default () => (
 
       <SchemaField.String
         name="enum"
-        title="Enumeration match"
+        title="枚举匹配"
         x-validator={[{ enum: ['1', '2', '3'] }]}
         x-component="Input"
         x-decorator="FormItem"
@@ -216,7 +216,7 @@ export default () => (
 
       <SchemaField.String
         name="const"
-        title="Constant match"
+        title="常量匹配"
         const="123"
         x-component="Input"
         x-decorator="FormItem"
@@ -224,7 +224,7 @@ export default () => (
 
       <SchemaField.String
         name="multipleOf"
-        title="Divisible match"
+        title="整除匹配"
         multipleOf={2}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -234,7 +234,7 @@ export default () => (
 )
 ```
 
-#### JSON Schema Use Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -257,7 +257,7 @@ const schema = {
   properties: {
     required_1: {
       name: 'required_1',
-      title: 'Required',
+      title: '必填',
       type: 'string',
       required: true,
       'x-decorator': 'FormItem',
@@ -265,7 +265,7 @@ const schema = {
     },
     required_2: {
       name: 'required_2',
-      title: 'Required',
+      title: '必填',
       type: 'string',
       'x-validator': {
         required: true,
@@ -275,7 +275,7 @@ const schema = {
     },
     required_3: {
       name: 'required_3',
-      title: 'Required',
+      title: '必填',
       type: 'string',
       'x-validator': [
         {
@@ -287,7 +287,7 @@ const schema = {
     },
     max_1: {
       name: 'max_1',
-      title: 'Maximum value (>5 error)',
+      title: '最大值(>5报错)',
       type: 'number',
       maximum: 5,
       'x-decorator': 'FormItem',
@@ -295,7 +295,7 @@ const schema = {
     },
     max_2: {
       name: 'max_2',
-      title: 'Maximum value (>5 error)',
+      title: '最大值(>5报错)',
       type: 'number',
       'x-validator': {
         maximum: 5,
@@ -305,7 +305,7 @@ const schema = {
     },
     max_3: {
       name: 'max_3',
-      title: 'Maximum value (>5 error)',
+      title: '最大值(>5报错)',
       type: 'number',
       'x-validator': [
         {
@@ -317,7 +317,7 @@ const schema = {
     },
     max_4: {
       name: 'max_4',
-      title: 'Maximum value (>=5 error))',
+      title: '最大值(>=5报错)',
       type: 'number',
       exclusiveMaximum: 5,
       'x-decorator': 'FormItem',
@@ -325,7 +325,7 @@ const schema = {
     },
     max_5: {
       name: 'max_5',
-      title: 'Maximum value (>=5 error))',
+      title: '最大值(>=5报错)',
       type: 'number',
       'x-validator': {
         exclusiveMaximum: 5,
@@ -335,7 +335,7 @@ const schema = {
     },
     max_6: {
       name: 'max_6',
-      title: 'Maximum value (>=5 error))',
+      title: '最大值(>=5报错)',
       type: 'number',
       'x-validator': [
         {
@@ -347,7 +347,7 @@ const schema = {
     },
     min_1: {
       name: 'min_1',
-      title: 'Minimum value (<5 error))',
+      title: '最小值(<5报错)',
       type: 'number',
       minimum: 5,
       'x-decorator': 'FormItem',
@@ -355,7 +355,7 @@ const schema = {
     },
     min_2: {
       name: 'min_2',
-      title: 'Minimum value (<5 error))',
+      title: '最小值(<5报错)',
       type: 'number',
       'x-validator': {
         minimum: 5,
@@ -365,7 +365,7 @@ const schema = {
     },
     min_3: {
       name: 'min_3',
-      title: 'Minimum value (<5 error))',
+      title: '最小值(<5报错)',
       type: 'string',
       'x-validator': [
         {
@@ -377,7 +377,7 @@ const schema = {
     },
     min_4: {
       name: 'min_4',
-      title: 'Minimum value (<=5 error))',
+      title: '最小值(<=5报错)',
       type: 'number',
       exclusiveMinimum: 5,
       'x-decorator': 'FormItem',
@@ -385,7 +385,7 @@ const schema = {
     },
     min_5: {
       name: 'min_5',
-      title: 'Minimum value (<=5 error))',
+      title: '最小值(<=5报错)',
       type: 'number',
       'x-validator': {
         exclusiveMinimum: 5,
@@ -395,7 +395,7 @@ const schema = {
     },
     min_6: {
       name: 'min_6',
-      title: 'Minimum value (<=5 error))',
+      title: '最小值(<=5报错)',
       type: 'number',
       'x-validator': [
         {
@@ -407,7 +407,7 @@ const schema = {
     },
     length_1: {
       name: 'length_1',
-      title: 'Length is 5',
+      title: '长度为5',
       type: 'string',
       'x-validator': {
         len: 5,
@@ -417,7 +417,7 @@ const schema = {
     },
     length_2: {
       name: 'length_2',
-      title: 'Length is 5',
+      title: '长度为5',
       type: 'string',
       'x-validator': [
         {
@@ -429,7 +429,7 @@ const schema = {
     },
     maxlength_1: {
       name: 'maxlength_1',
-      title: 'Maximum length is 5',
+      title: '最大长度为5',
       type: 'string',
       maxLength: 5,
       'x-decorator': 'FormItem',
@@ -437,7 +437,7 @@ const schema = {
     },
     maxlength_2: {
       name: 'maxlength_2',
-      title: 'Maximum length is 5',
+      title: '最大长度为5',
       type: 'string',
       'x-validator': {
         max: 5,
@@ -447,7 +447,7 @@ const schema = {
     },
     maxlength_3: {
       name: 'maxlength_3',
-      title: 'Maximum length is 5',
+      title: '最大长度为5',
       type: 'string',
       'x-validator': [
         {
@@ -459,7 +459,7 @@ const schema = {
     },
     minlength_1: {
       name: 'minlength_1',
-      title: 'Minimum length is 5',
+      title: '最小长度为5',
       type: 'string',
       minLength: 5,
       'x-decorator': 'FormItem',
@@ -467,7 +467,7 @@ const schema = {
     },
     minlength_2: {
       name: 'minlength_2',
-      title: 'Minimum length is 5',
+      title: '最小长度为5',
       type: 'string',
       'x-validator': {
         min: 5,
@@ -477,7 +477,7 @@ const schema = {
     },
     minlength_3: {
       name: 'minlength_3',
-      title: 'Minimum length is 5',
+      title: '最小长度为5',
       type: 'string',
       'x-validator': [
         {
@@ -489,7 +489,7 @@ const schema = {
     },
     whitespace: {
       name: 'whitespace',
-      title: 'Exclude pure whitespace characters',
+      title: '排除纯空白字符',
       type: 'string',
       'x-validator': [
         {
@@ -501,7 +501,7 @@ const schema = {
     },
     enum: {
       name: 'enum',
-      title: 'Enumeration match',
+      title: '枚举匹配',
       type: 'string',
       'x-validator': [
         {
@@ -513,7 +513,7 @@ const schema = {
     },
     const: {
       name: 'const',
-      title: 'Constant match',
+      title: '常量匹配',
       type: 'string',
       const: '123',
       'x-decorator': 'FormItem',
@@ -521,7 +521,7 @@ const schema = {
     },
     multipleOf: {
       name: 'multipleOf',
-      title: 'Divisible match',
+      title: '整除匹配',
       type: 'string',
       multipleOf: 2,
       'x-decorator': 'FormItem',
@@ -537,7 +537,7 @@ export default () => (
 )
 ```
 
-#### Pure JSX Case
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -551,77 +551,77 @@ export default () => (
   <Form form={form} labelCol={6} wrapperCol={10}>
     <Field
       name="required_1"
-      title="Required"
+      title="必填"
       required
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="required_2"
-      title="Required"
+      title="必填"
       validator={{ required: true }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="required_3"
-      title="Required"
+      title="必填"
       validator={[{ required: true }]}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="max_1"
-      title="Maximum value (>5 error)"
+      title="最大值(>5报错)"
       validator={{ maximum: 5 }}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="max_2"
-      title="Maximum value (>5 error)"
+      title="最大值(>5报错)"
       validator={[{ maximum: 5 }]}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="max_3"
-      title="Maximum value (>=5 error)"
+      title="最大值(>=5报错)"
       validator={{ exclusiveMaximum: 5 }}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="max_4"
-      title="Maximum value (>=5 error)"
+      title="最大值(>=5报错)"
       validator={[{ exclusiveMaximum: 5 }]}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="min_1"
-      title="Minimum value (<5 error)"
+      title="最小值(<5报错)"
       validator={{ minimum: 5 }}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="min_2"
-      title="Minimum value (<5 error)"
+      title="最小值(<5报错)"
       validator={[{ minimum: 5 }]}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="min_3"
-      title="Minimum value (<=5 error)"
+      title="最小值(<=5报错)"
       validator={{ exclusiveMinimum: 5 }}
       component={[NumberPicker]}
       decorator={[FormItem]}
     />
     <Field
       name="min_4"
-      title="Minimum value (<=5 error)"
+      title="最小值(<=5报错)"
       validator={[{ exclusiveMinimum: 5 }]}
       component={[NumberPicker]}
       decorator={[FormItem]}
@@ -629,42 +629,42 @@ export default () => (
 
     <Field
       name="length_1"
-      title="Length is 5"
+      title="长度为5"
       validator={{ len: 5 }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="length_2"
-      title="Length is 5"
+      title="长度为5"
       validator={[{ len: 5 }]}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="maxlength_1"
-      title="Maximum length is 5"
+      title="最大长度为5"
       validator={{ max: 5 }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="maxlength_2"
-      title="Maximum length is 5"
+      title="最大长度为5"
       validator={[{ max: 5 }]}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="minlength_1"
-      title="Minimum length is 5"
+      title="最小长度为5"
       validator={{ min: 5 }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="minlength_2"
-      title="Minimum length is 5"
+      title="最小长度为5"
       validator={[{ min: 5 }]}
       component={[Input]}
       decorator={[FormItem]}
@@ -672,7 +672,7 @@ export default () => (
 
     <Field
       name="whitespace"
-      title="Exclude pure whitespace characters"
+      title="排除纯空白字符"
       validator={[{ whitespace: true }]}
       component={[Input]}
       decorator={[FormItem]}
@@ -681,9 +681,9 @@ export default () => (
 )
 ```
 
-## Built-in Format Verification
+## 内置格式校验
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React, { Fragment } from 'react'
@@ -705,7 +705,7 @@ const renderFormat = (format: string, key: number) => {
     <Fragment key={key}>
       <SchemaField.String
         name={`${format}_1`}
-        title={`${format} format`}
+        title={`${format}格式`}
         format={format}
         required
         x-component="Input"
@@ -713,7 +713,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <SchemaField.String
         name={`${format}_2`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         x-validator={format}
         x-component="Input"
@@ -721,7 +721,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <SchemaField.String
         name={`${format}_3`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         x-validator={{ format }}
         x-component="Input"
@@ -729,7 +729,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <SchemaField.String
         name={`${format}_4`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         x-validator={[format]}
         x-component="Input"
@@ -737,7 +737,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <SchemaField.String
         name={`${format}_5`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         x-validator={[{ format }]}
         x-component="Input"
@@ -770,7 +770,7 @@ export default () => (
 )
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -804,7 +804,7 @@ const FORMATS = [
 FORMATS.forEach((key) => {
   Object.assign(schema.properties, {
     [`${key}_1`]: {
-      title: `${key} format`,
+      title: `${key}格式`,
       type: 'string',
       required: true,
       format: key,
@@ -812,7 +812,7 @@ FORMATS.forEach((key) => {
       'x-component': 'Input',
     },
     [`${key}_2`]: {
-      title: `${key} format`,
+      title: `${key}格式`,
       type: 'string',
       required: true,
       'x-validator': key,
@@ -820,7 +820,7 @@ FORMATS.forEach((key) => {
       'x-component': 'Input',
     },
     [`${key}_3`]: {
-      title: `${key} format`,
+      title: `${key}格式`,
       type: 'string',
       required: true,
       'x-validator': {
@@ -830,7 +830,7 @@ FORMATS.forEach((key) => {
       'x-component': 'Input',
     },
     [`${key}_4`]: {
-      title: `${key} format`,
+      title: `${key}格式`,
       type: 'string',
       required: true,
       'x-validator': [key],
@@ -839,7 +839,7 @@ FORMATS.forEach((key) => {
     },
 
     [`${key}_5`]: {
-      title: `${key} format`,
+      title: `${key}格式`,
       type: 'string',
       required: true,
       'x-validator': [
@@ -867,7 +867,7 @@ export default () => (
 )
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React, { Fragment } from 'react'
@@ -882,7 +882,7 @@ const renderFormat = (format: string, key: number) => {
     <Fragment key={key}>
       <Field
         name={`${format}_1`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         validator={format}
         component={[Input]}
@@ -890,7 +890,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <Field
         name={`${format}_2`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         validator={{ format }}
         component={[Input]}
@@ -898,7 +898,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <Field
         name={`${format}_3`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         validator={[format]}
         component={[Input]}
@@ -906,7 +906,7 @@ const renderFormat = (format: string, key: number) => {
       />
       <Field
         name={`${format}_4`}
-        title={`${format} format`}
+        title={`${format}格式`}
         required
         validator={[{ format }]}
         component={[Input]}
@@ -939,9 +939,9 @@ export default () => (
 )
 ```
 
-## Custom Rule Verification
+## 自定义规则校验
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -962,7 +962,7 @@ const SchemaField = createSchemaField({
 registerValidateRules({
   global_1(value) {
     if (!value) return ''
-    return value !== '123' ? 'error❎' : ''
+    return value !== '123' ? '错误了❎' : ''
   },
   global_2(value, rule) {
     if (!value) return ''
@@ -977,17 +977,17 @@ registerValidateRules({
     if (value < 10) {
       return {
         type: 'error',
-        message: 'The value cannot be less than 10',
+        message: '数值不能小于10',
       }
     } else if (value < 100) {
       return {
         type: 'warning',
-        message: 'The value is within 100',
+        message: '数值在100以内',
       }
     } else if (value < 1000) {
       return {
         type: 'success',
-        message: 'The value is greater than 100 and less than 1000',
+        message: '数值大于100小于1000',
       }
     }
   },
@@ -998,7 +998,7 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="global_style_1"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={{
           global_1: true,
@@ -1008,29 +1008,29 @@ export default () => (
       />
       <SchemaField.String
         name="global_style_2"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={{
           global_2: true,
-          message: 'error❎',
+          message: '错误了❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="global_style_3"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={{
           global_3: true,
-          message: 'error❎',
+          message: '错误了❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="global_style_4"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={{
           global_4: true,
@@ -1041,63 +1041,63 @@ export default () => (
 
       <SchemaField.String
         name="validator_style_1"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         x-validator={(value) => {
           if (!value) return ''
-          return value !== '123' ? 'error❎' : ''
+          return value !== '123' ? '错误了❎' : ''
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="validator_style_2"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         x-validator={{
           validator(value, rule) {
             if (!value) return ''
             return value !== '123' ? rule.message : ''
           },
-          message: 'error❎',
+          message: '错误了❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="validator_style_3"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         x-validator={{
           validator(value, rule) {
             if (!value) return ''
             return value === '123'
           },
-          message: 'error❎',
+          message: '错误了❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.Number
         name="validator_style_4"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         x-validator={(value, rule) => {
           if (!value) return ''
           if (value < 10) {
             return {
               type: 'error',
-              message: 'The value cannot be less than 10',
+              message: '数值不能小于10',
             }
           } else if (value < 100) {
             return {
               type: 'warning',
-              message: 'The value is within 100',
+              message: '数值在100以内',
             }
           } else if (value < 1000) {
             return {
               type: 'success',
-              message: 'The value is greater than 100 and less than 1000',
+              message: '数值大于100小于1000',
             }
           }
         }}
@@ -1109,7 +1109,7 @@ export default () => (
 )
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1130,7 +1130,7 @@ const SchemaField = createSchemaField({
 registerValidateRules({
   global_1(value) {
     if (!value) return ''
-    return value !== '123' ? 'error❎' : ''
+    return value !== '123' ? '错误了❎' : ''
   },
   global_2(value, rule) {
     if (!value) return ''
@@ -1145,17 +1145,17 @@ registerValidateRules({
     if (value < 10) {
       return {
         type: 'error',
-        message: 'The value cannot be less than 10',
+        message: '数值不能小于10',
       }
     } else if (value < 100) {
       return {
         type: 'warning',
-        message: 'The value is within 100',
+        message: '数值在100以内',
       }
     } else if (value < 1000) {
       return {
         type: 'success',
-        message: 'The value is greater than 100 and less than 1000',
+        message: '数值大于100小于1000',
       }
     }
   },
@@ -1165,7 +1165,7 @@ const schema = {
   type: 'object',
   properties: {
     global_style_1: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': {
         global_1: true,
@@ -1174,27 +1174,27 @@ const schema = {
       'x-decorator': 'FormItem',
     },
     global_style_2: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': {
         global_2: true,
-        message: 'error❎',
+        message: '错误了❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     global_style_3: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': {
         global_3: true,
-        message: 'error❎',
+        message: '错误了❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     global_style_4: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': {
         global_4: true,
@@ -1204,60 +1204,60 @@ const schema = {
     },
 
     validator_style_1: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       'x-validator': `{{(value)=> {
             if (!value) return ''
-            return value !== '123' ? 'error❎' : ''
+            return value !== '123' ? '错误了❎' : ''
           }}}`,
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_2: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       'x-validator': {
         validator: `{{(value, rule)=> {
             if (!value) return ''
             return value !== '123' ? rule.message : ''
           }}}`,
-        message: 'error❎',
+        message: '错误了❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_3: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       'x-validator': {
         validator: `{{(value, rule)=> {
           if (!value) return ''
           return value === '123'
         }}}`,
-        message: 'error❎',
+        message: '错误了❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_4: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       'x-validator': `{{(value, rule)=> {
           if (!value) return ''
           if (value < 10) {
             return {
               type: 'error',
-              message: 'The value cannot be less than 10',
+              message: '数值不能小于10',
             }
           } else if (value < 100) {
             return {
               type: 'warning',
-              message: 'The value is within 100',
+              message: '数值在100以内',
             }
           } else if (value < 1000) {
             return {
               type: 'success',
-              message: 'The value is greater than 100 and less than 1000',
+              message: '数值大于100小于1000',
             }
           }
         }}}`,
@@ -1274,7 +1274,7 @@ export default () => (
 )
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -1287,7 +1287,7 @@ const form = createForm()
 registerValidateRules({
   global_1(value) {
     if (!value) return ''
-    return value !== '123' ? 'error❎' : ''
+    return value !== '123' ? '错误了❎' : ''
   },
   global_2(value, rule) {
     if (!value) return ''
@@ -1302,17 +1302,17 @@ registerValidateRules({
     if (value < 10) {
       return {
         type: 'error',
-        message: 'The value cannot be less than 10',
+        message: '数值不能小于10',
       }
     } else if (value < 100) {
       return {
         type: 'warning',
-        message: 'The value is within 100',
+        message: '数值在100以内',
       }
     } else if (value < 1000) {
       return {
         type: 'success',
-        message: 'The value is greater than 100 and less than 1000',
+        message: '数值大于100小于1000',
       }
     }
   },
@@ -1322,7 +1322,7 @@ export default () => (
   <Form form={form} labelCol={6} wrapperCol={10}>
     <Field
       name="global_style_1"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={{
         global_1: true,
@@ -1332,29 +1332,29 @@ export default () => (
     />
     <Field
       name="global_style_2"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={{
         global_2: true,
-        message: 'error❎',
+        message: '错误了❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="global_style_3"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={{
         global_3: true,
-        message: 'error❎',
+        message: '错误了❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="global_style_4"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={{
         global_4: true,
@@ -1365,63 +1365,63 @@ export default () => (
 
     <Field
       name="validator_style_1"
-      title="Locally defined style"
+      title="局部定义风格"
       required
       validator={(value) => {
         if (!value) return ''
-        return value !== '123' ? 'error❎' : ''
+        return value !== '123' ? '错误了❎' : ''
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="validator_style_2"
-      title="Locally defined style"
+      title="局部定义风格"
       required
       validator={{
         validator(value, rule) {
           if (!value) return ''
           return value !== '123' ? rule.message : ''
         },
-        message: 'error❎',
+        message: '错误了❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="validator_style_3"
-      title="Locally defined style"
+      title="局部定义风格"
       required
       validator={{
         validator(value, rule) {
           if (!value) return ''
           return value === '123'
         },
-        message: 'error❎',
+        message: '错误了❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="validator_style_4"
-      title="Locally defined style"
+      title="局部定义风格"
       required
       validator={(value, rule) => {
         if (!value) return ''
         if (value < 10) {
           return {
             type: 'error',
-            message: 'The value cannot be less than 10',
+            message: '数值不能小于10',
           }
         } else if (value < 100) {
           return {
             type: 'warning',
-            message: 'The value is within 100',
+            message: '数值在100以内',
           }
         } else if (value < 1000) {
           return {
             type: 'success',
-            message: 'The value is greater than 100 and less than 1000',
+            message: '数值大于100小于1000',
           }
         }
       }}
@@ -1432,9 +1432,9 @@ export default () => (
 )
 ```
 
-## Custom Format Verification
+## 自定义格式校验
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1460,18 +1460,18 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="global_style_1"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={{
           format: 'custom_format',
-          message: 'error❎',
+          message: '错误❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="global_style_2"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={'custom_format'}
         x-component="Input"
@@ -1479,7 +1479,7 @@ export default () => (
       />
       <SchemaField.String
         name="global_style_3"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={['custom_format']}
         x-component="Input"
@@ -1487,11 +1487,11 @@ export default () => (
       />
       <SchemaField.Number
         name="global_style_4"
-        title="Global registration style"
+        title="全局注册风格"
         required
         x-validator={{
           format: 'custom_format',
-          message: 'error❎',
+          message: '错误❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
@@ -1499,7 +1499,7 @@ export default () => (
 
       <SchemaField.String
         name="validator_style_1"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         pattern={/123/}
         x-component="Input"
@@ -1507,7 +1507,7 @@ export default () => (
       />
       <SchemaField.String
         name="validator_style_2"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         pattern="123"
         x-component="Input"
@@ -1515,22 +1515,22 @@ export default () => (
       />
       <SchemaField.String
         name="validator_style_3"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         x-validator={{
           pattern: /123/,
-          message: 'error❎',
+          message: '错误了❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
       />
       <SchemaField.String
         name="validator_style_4"
-        title="Locally defined style"
+        title="局部定义风格"
         required
         x-validator={{
           pattern: '123',
-          message: 'error❎',
+          message: '错误了❎',
         }}
         x-component="Input"
         x-decorator="FormItem"
@@ -1540,7 +1540,7 @@ export default () => (
 )
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1565,69 +1565,69 @@ const schema = {
   type: 'object',
   properties: {
     global_style_1: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': {
         format: 'custom_format',
-        message: 'error❎',
+        message: '错误❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     global_style_2: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': 'custom_format',
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     global_style_3: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': ['custom_format'],
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     global_style_4: {
-      title: 'Global registration style',
+      title: '全局注册风格',
       required: true,
       'x-validator': {
         format: 'custom_format',
-        message: 'error❎',
+        message: '错误❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_1: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       pattern: /123/,
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_2: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       pattern: '123',
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_3: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       'x-validator': {
         pattern: /123/,
-        message: 'error❎',
+        message: '错误了❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
     },
     validator_style_4: {
-      title: 'Locally defined style',
+      title: '局部定义风格',
       required: true,
       'x-validator': {
         pattern: '123',
-        message: 'error❎',
+        message: '错误了❎',
       },
       'x-component': 'Input',
       'x-decorator': 'FormItem',
@@ -1642,7 +1642,7 @@ export default () => (
 )
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -1660,18 +1660,18 @@ export default () => (
   <Form form={form} labelCol={6} wrapperCol={10}>
     <Field
       name="global_style_1"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={{
         format: 'custom_format',
-        message: 'error❎',
+        message: '错误❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="global_style_2"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={'custom_format'}
       component={[Input]}
@@ -1679,7 +1679,7 @@ export default () => (
     />
     <Field
       name="global_style_3"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={['custom_format']}
       component={[Input]}
@@ -1687,33 +1687,33 @@ export default () => (
     />
     <Field
       name="global_style_4"
-      title="Global registration style"
+      title="全局注册风格"
       required
       validator={{
         format: 'custom_format',
-        message: 'error❎',
+        message: '错误❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="validator_style_1"
-      title="Locally defined style"
+      title="局部定义风格"
       required
       validator={{
         pattern: /123/,
-        message: 'error❎',
+        message: '错误了❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
     />
     <Field
       name="validator_style_2"
-      title="Locally defined style"
+      title="局部定义风格"
       required
       validator={{
         pattern: '123',
-        message: 'error❎',
+        message: '错误了❎',
       }}
       component={[Input]}
       decorator={[FormItem]}
@@ -1722,9 +1722,9 @@ export default () => (
 )
 ```
 
-## Asynchronous Verification
+## 异步校验
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1746,7 +1746,7 @@ export default () => (
     <SchemaField>
       <SchemaField.String
         name="async_validate"
-        title="Asynchronous verification"
+        title="异步校验"
         required
         x-validator={(value) => {
           return new Promise((resolve) => {
@@ -1757,7 +1757,7 @@ export default () => (
               if (value === '123') {
                 resolve('')
               } else {
-                resolve('error❎')
+                resolve('错误❎')
               }
             }, 1000)
           })
@@ -1767,7 +1767,7 @@ export default () => (
       />
       <SchemaField.String
         name="async_validate_2"
-        title="Asynchronous verification (onBlur trigger)"
+        title="异步校验(onBlur触发)"
         required
         x-validator={{
           triggerType: 'onBlur',
@@ -1780,7 +1780,7 @@ export default () => (
                 if (value === '123') {
                   resolve('')
                 } else {
-                  resolve('error❎')
+                  resolve('错误❎')
                 }
               }, 1000)
             })
@@ -1794,7 +1794,7 @@ export default () => (
 )
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1815,7 +1815,7 @@ const schema = {
   type: 'object',
   properties: {
     async_validate: {
-      title: 'Asynchronous verification',
+      title: '异步校验',
       required: true,
       'x-validator': `{{(value) => {
         return new Promise((resolve) => {
@@ -1826,7 +1826,7 @@ const schema = {
             if (value === '123') {
               resolve('')
             } else {
-              resolve('error❎')
+              resolve('错误❎')
             }
           }, 1000)
         })
@@ -1835,7 +1835,7 @@ const schema = {
       'x-decorator': 'FormItem',
     },
     async_validate_2: {
-      title: 'Asynchronous verification (onBlur trigger)',
+      title: '异步校验(onBlur触发)',
       required: true,
       'x-validator': {
         triggerType: 'onBlur',
@@ -1867,7 +1867,7 @@ export default () => (
 )
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -1881,7 +1881,7 @@ export default () => (
   <Form form={form} labelCol={6} wrapperCol={10}>
     <Field
       name="async_validate"
-      title="Asynchronous verification"
+      title="异步校验"
       required
       validator={(value) => {
         return new Promise((resolve) => {
@@ -1892,7 +1892,7 @@ export default () => (
             if (value === '123') {
               resolve('')
             } else {
-              resolve('error❎')
+              resolve('错误❎')
             }
           }, 1000)
         })
@@ -1902,7 +1902,7 @@ export default () => (
     />
     <Field
       name="async_validate_2"
-      title="Asynchronous verification (onBlur trigger)"
+      title="异步校验(onBlur触发)"
       required
       validator={{
         triggerType: 'onBlur',
@@ -1915,7 +1915,7 @@ export default () => (
               if (value === '123') {
                 resolve('')
               } else {
-                resolve('error ❎')
+                resolve('错误❎')
               }
             }, 1000)
           })
@@ -1928,9 +1928,9 @@ export default () => (
 )
 ```
 
-## Linkage Verification
+## 联动校验
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1956,7 +1956,7 @@ export default () => (
         required
         x-reactions={(field) => {
           field.errors =
-            field.query('bb').value() >= field.value ? 'AA must be greater than BB' : ''
+            field.query('bb').value() >= field.value ? 'AA必须大于BB' : ''
         }}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -1967,7 +1967,7 @@ export default () => (
         required
         x-reactions={(field) => {
           field.errors =
-            field.query('aa').value() <= field.value ? 'AA must be greater than BB' : ''
+            field.query('aa').value() <= field.value ? 'AA必须大于BB' : ''
         }}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -1977,7 +1977,7 @@ export default () => (
 )
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -2002,7 +2002,7 @@ const schema = {
       required: true,
       'x-reactions': `{{(field) => {
           field.errors =
-            field.query('bb').value() >= field.value ? 'AA must be greater than BB' : ''
+            field.query('bb').value() >= field.value ? 'AA必须大于BB' : ''
       }}}`,
       'x-component': 'NumberPicker',
       'x-decorator': 'FormItem',
@@ -2014,7 +2014,7 @@ const schema = {
         dependencies: ['aa'],
         fulfill: {
           state: {
-            errors: "{{$deps[0] <= $self.value ? 'AA must be greater than BB' : ''}}",
+            errors: "{{$deps[0] <= $self.value ? 'AA必须大于BB' : ''}}",
           },
         },
       },
@@ -2031,7 +2031,7 @@ export default () => (
 )
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -2049,7 +2049,7 @@ export default () => (
       required
       reactions={(field) => {
         field.errors =
-          field.query('bb').value() >= field.value ? 'AA must be greater than BB' : ''
+          field.query('bb').value() >= field.value ? 'AA必须大于BB' : ''
       }}
       component={[NumberPicker]}
       decorator={[FormItem]}
@@ -2060,7 +2060,7 @@ export default () => (
       required
       reactions={(field) => {
         field.errors =
-          field.query('aa').value() <= field.value ? 'AA must be greater than BB' : ''
+          field.query('aa').value() <= field.value ? 'AA必须大于BB' : ''
       }}
       component={[NumberPicker]}
       decorator={[FormItem]}
@@ -2069,9 +2069,9 @@ export default () => (
 )
 ```
 
-## Custom Verification Copy
+## 定制校验文案
 
-Mainly through [registerValidateLocale](https://core.formilyjs.org/api/entry/form-validator-registry#registervalidatelocale) to customize the built-in verification copy
+主要通过[registerValidateLocale](https://core.formilyjs.org/api/entry/form-validator-registry#registervalidatelocale)来定制内置校验文案
 
 ```tsx
 import React from 'react'
@@ -2090,7 +2090,7 @@ const SchemaField = createSchemaField({
 
 registerValidateLocale({
   zh: {
-    required: 'Custom required verification copy',
+    required: '定制的必填校验文案',
   },
 })
 

@@ -1,8 +1,8 @@
-# Log in&Sign up
+# 登陆注册
 
-## Log in
+## 登陆
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -49,7 +49,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="account login">
+          <Tabs.TabPane key="1" tab="账密登陆">
             <Form
               form={normalForm}
               layout="vertical"
@@ -59,7 +59,7 @@ export default () => {
               <SchemaField>
                 <SchemaField.String
                   name="username"
-                  title="Username"
+                  title="用户名"
                   required
                   x-decorator="FormItem"
                   x-component="Input"
@@ -72,7 +72,7 @@ export default () => {
                 />
                 <SchemaField.String
                   name="password"
-                  title="Password"
+                  title="密码"
                   required
                   x-decorator="FormItem"
                   x-component="Input"
@@ -82,11 +82,11 @@ export default () => {
                 />
               </SchemaField>
               <Submit block size="large">
-                Log in
+                登陆
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="mobile login">
+          <Tabs.TabPane key="2" tab="手机登陆">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -96,7 +96,7 @@ export default () => {
               <SchemaField>
                 <SchemaField.String
                   name="phone"
-                  title="Phone Number"
+                  title="手机号"
                   required
                   x-validator="phone"
                   x-decorator="FormItem"
@@ -107,7 +107,7 @@ export default () => {
                 />
                 <SchemaField.String
                   name="verifyCode"
-                  title="Verification Code"
+                  title="验证码"
                   required
                   x-decorator="FormItem"
                   x-component="VerifyCode"
@@ -128,7 +128,7 @@ export default () => {
                 />
               </SchemaField>
               <Submit block size="large">
-                Log in
+                登陆
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -139,8 +139,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#new user registration">new user registration</a>
-          <a href="#forgot password">forgot password?</a>
+          <a href="#新用户注册">新用户注册</a>
+          <a href="#忘记密码">忘记密码?</a>
         </div>
       </Card>
     </div>
@@ -148,7 +148,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -188,7 +188,7 @@ const normalSchema = {
   properties: {
     username: {
       type: 'string',
-      title: 'Username',
+      title: '用户名',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -198,7 +198,7 @@ const normalSchema = {
     },
     password: {
       type: 'string',
-      title: 'Password',
+      title: '密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -214,7 +214,7 @@ const phoneSchema = {
   properties: {
     phone: {
       type: 'string',
-      title: 'Phone Number',
+      title: '手机号',
       required: true,
       'x-validator': 'phone',
       'x-decorator': 'FormItem',
@@ -225,7 +225,7 @@ const phoneSchema = {
     },
     verifyCode: {
       type: 'string',
-      title: 'Verification Code',
+      title: '验证码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'VerifyCode',
@@ -259,7 +259,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="account login">
+          <Tabs.TabPane key="1" tab="账密登陆">
             <Form
               form={normalForm}
               layout="vertical"
@@ -268,11 +268,11 @@ export default () => {
             >
               <SchemaField schema={normalSchema} />
               <Submit block size="large">
-                Log in
+                登陆
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="Mobile login">
+          <Tabs.TabPane key="2" tab="手机登陆">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -281,7 +281,7 @@ export default () => {
             >
               <SchemaField schema={phoneSchema} />
               <Submit block size="large">
-                Log in
+                登陆
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -292,8 +292,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#new user registration">new user registration</a>
-          <a href="#forgot password">forgot password?</a>
+          <a href="#新用户注册">新用户注册</a>
+          <a href="#忘记密码">忘记密码?</a>
         </div>
       </Card>
     </div>
@@ -301,7 +301,7 @@ export default () => {
 }
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -334,7 +334,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="account login">
+          <Tabs.TabPane key="1" tab="账密登陆">
             <Form
               form={normalForm}
               layout="vertical"
@@ -343,7 +343,7 @@ export default () => {
             >
               <Field
                 name="username"
-                title="Username"
+                title="用户名"
                 required
                 decorator={[FormItem]}
                 component={[
@@ -355,7 +355,7 @@ export default () => {
               />
               <Field
                 name="password"
-                title="Password"
+                title="密码"
                 required
                 decorator={[FormItem]}
                 component={[
@@ -366,11 +366,11 @@ export default () => {
                 ]}
               />
               <Submit block size="large">
-                Log in
+                登陆
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="Mobile login">
+          <Tabs.TabPane key="2" tab="手机登陆">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -379,7 +379,7 @@ export default () => {
             >
               <Field
                 name="phone"
-                title="Phone Number"
+                title="手机号"
                 required
                 validator="phone"
                 decorator={[FormItem]}
@@ -392,7 +392,7 @@ export default () => {
               />
               <Field
                 name="verifyCode"
-                title="Verification Code"
+                title="验证码"
                 required
                 reactions={(field) => {
                   const phone = field.query('.phone')
@@ -410,7 +410,7 @@ export default () => {
                 ]}
               />
               <Submit block size="large">
-                Log in
+                登陆
               </Submit>
             </Form>
           </Tabs.TabPane>
@@ -421,8 +421,8 @@ export default () => {
             justifyContent: 'space-between',
           }}
         >
-          <a href="#new user registration">new user registration</a>
-          <a href="#忘记password">忘记password?</a>
+          <a href="#新用户注册">新用户注册</a>
+          <a href="#忘记密码">忘记密码?</a>
         </div>
       </Card>
     </div>
@@ -430,9 +430,9 @@ export default () => {
 }
 ```
 
-## New User Registration
+## 新用户注册
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -474,7 +474,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      <Button icon={<UploadOutlined />}>上传复印件</Button>
     </Upload>
   )
 }
@@ -541,7 +541,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="new user registration" style={{ width: 620 }}>
+      <Card title="新用户注册" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -551,14 +551,14 @@ export default () => {
           <SchemaField>
             <SchemaField.String
               name="username"
-              title="Username"
+              title="用户名"
               required
               x-decorator="FormItem"
               x-component="Input"
             />
             <SchemaField.String
               name="password"
-              title="Password"
+              title="密码"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -571,7 +571,7 @@ export default () => {
                   fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
                 },
@@ -579,7 +579,7 @@ export default () => {
             />
             <SchemaField.String
               name="confirm_password"
-              title="Confirm Password"
+              title="确认密码"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -592,14 +592,14 @@ export default () => {
                   fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
                 },
               ]}
             />
             <SchemaField.Void
-              title="name"
+              title="姓名"
               x-decorator="FormItem"
               x-decorator-props={{
                 asterisk: true,
@@ -612,7 +612,7 @@ export default () => {
                 x-decorator="FormItem"
                 x-component="Input"
                 x-component-props={{
-                  placeholder: 'firstname',
+                  placeholder: '姓',
                 }}
                 required
               />
@@ -621,14 +621,14 @@ export default () => {
                 x-decorator="FormItem"
                 x-component="Input"
                 x-component-props={{
-                  placeholder: 'lastname',
+                  placeholder: '名',
                 }}
                 required
               />
             </SchemaField.Void>
             <SchemaField.String
               name="email"
-              title="Email"
+              title="邮箱"
               required
               x-validator="email"
               x-decorator="FormItem"
@@ -636,20 +636,20 @@ export default () => {
             />
             <SchemaField.String
               name="gender"
-              title="Gender"
+              title="性别"
               x-decorator="FormItem"
               x-component="Select"
               enum={[
                 {
-                  label: 'male',
+                  label: '男',
                   value: 1,
                 },
                 {
-                  label: 'female',
+                  label: '女',
                   value: 2,
                 },
                 {
-                  label: 'third gender',
+                  label: '第三性别',
                   value: 3,
                 },
               ]}
@@ -657,14 +657,14 @@ export default () => {
             />
             <SchemaField.String
               name="birthday"
-              title="Birthday"
+              title="生日"
               required
               x-decorator="FormItem"
               x-component="DatePicker"
             />
             <SchemaField.String
               name="address"
-              title="Address"
+              title="地址"
               required
               x-decorator="FormItem"
               x-component="Cascader"
@@ -672,14 +672,14 @@ export default () => {
             />
             <SchemaField.String
               name="idCard"
-              title="ID"
+              title="身份证复印件"
               required
               x-decorator="FormItem"
               x-component="IDUpload"
             />
             <SchemaField.Array
               name="contacts"
-              title="Contacts"
+              title="联系人信息"
               required
               x-decorator="FormItem"
               x-component="ArrayItems"
@@ -691,7 +691,7 @@ export default () => {
                 />
                 <SchemaField.Void
                   name="popover"
-                  title="Contact Information"
+                  title="维护联系人信息"
                   x-decorator="Editable.Popover"
                   x-component="FormLayout"
                   x-component-props={{
@@ -711,7 +711,7 @@ export default () => {
                   <SchemaField.String
                     name="name"
                     required
-                    title="Name"
+                    title="姓名"
                     x-decorator="FormItem"
                     x-component="Input"
                     x-component-props={{
@@ -722,7 +722,7 @@ export default () => {
                   />
                   <SchemaField.String
                     name="email"
-                    title="Email"
+                    title="邮箱"
                     x-validator={[{ required: true }, 'email']}
                     x-decorator="FormItem"
                     x-component="Input"
@@ -735,7 +735,7 @@ export default () => {
                   <SchemaField.String
                     name="phone"
                     required
-                    title="Phone Number"
+                    title="手机号"
                     x-validator="phone"
                     x-decorator="FormItem"
                     x-component="Input"
@@ -753,13 +753,13 @@ export default () => {
               </SchemaField.Object>
               <SchemaField.Void
                 x-component="ArrayItems.Addition"
-                title="Add Contact"
+                title="新增联系人"
               />
             </SchemaField.Array>
           </SchemaField>
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              Sign up
+              注册
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -769,7 +769,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -873,14 +873,14 @@ const schema = {
   properties: {
     username: {
       type: 'string',
-      title: 'Username',
+      title: '用户名',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     password: {
       type: 'string',
-      title: 'Password',
+      title: '密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -893,7 +893,7 @@ const schema = {
           fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认password不匹配" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
         },
@@ -901,7 +901,7 @@ const schema = {
     },
     confirm_password: {
       type: 'string',
-      title: 'Confirm Password',
+      title: '确认密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -914,7 +914,7 @@ const schema = {
           fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
         },
@@ -922,7 +922,7 @@ const schema = {
     },
     name: {
       type: 'void',
-      title: 'name',
+      title: '姓名',
       'x-decorator': 'FormItem',
       'x-decorator-props': {
         asterisk: true,
@@ -936,7 +936,7 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: 'firstname',
+            placeholder: '姓',
           },
         },
         lastName: {
@@ -945,14 +945,14 @@ const schema = {
           'x-decorator': 'FormItem',
           'x-component': 'Input',
           'x-component-props': {
-            placeholder: 'lastname',
+            placeholder: '名',
           },
         },
       },
     },
     email: {
       type: 'string',
-      title: 'Email',
+      title: '邮箱',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
@@ -960,18 +960,18 @@ const schema = {
     },
     gender: {
       type: 'string',
-      title: 'Gender',
+      title: '性别',
       enum: [
         {
-          label: 'male',
+          label: '男',
           value: 1,
         },
         {
-          label: 'female',
+          label: '女',
           value: 2,
         },
         {
-          label: 'third gender',
+          label: '第三性别',
           value: 3,
         },
       ],
@@ -981,14 +981,14 @@ const schema = {
     birthday: {
       type: 'string',
       required: true,
-      title: 'Birthday',
+      title: '生日',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker',
     },
     address: {
       type: 'string',
       required: true,
-      title: 'Address',
+      title: '地址',
       'x-decorator': 'FormItem',
       'x-component': 'Cascader',
       'x-reactions': '{{fetchAddress}}',
@@ -996,14 +996,14 @@ const schema = {
     idCard: {
       type: 'string',
       required: true,
-      title: 'ID',
+      title: '身份证复印件',
       'x-decorator': 'FormItem',
       'x-component': 'IDUpload',
     },
     contacts: {
       type: 'array',
       required: true,
-      title: 'Contacts',
+      title: '联系人信息',
       'x-decorator': 'FormItem',
       'x-component': 'ArrayItems',
       items: {
@@ -1017,7 +1017,7 @@ const schema = {
           },
           popover: {
             type: 'void',
-            title: 'improve contact information',
+            title: '完善联系人信息',
             'x-decorator': 'Editable.Popover',
             'x-component': 'FormLayout',
             'x-component-props': {
@@ -1036,7 +1036,7 @@ const schema = {
             properties: {
               name: {
                 type: 'string',
-                title: 'Name',
+                title: '姓名',
                 required: true,
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
@@ -1048,7 +1048,7 @@ const schema = {
               },
               email: {
                 type: 'string',
-                title: 'Email',
+                title: '邮箱',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'email'],
@@ -1060,7 +1060,7 @@ const schema = {
               },
               phone: {
                 type: 'string',
-                title: 'Phone Number',
+                title: '手机号',
                 'x-decorator': 'FormItem',
                 'x-component': 'Input',
                 'x-validator': [{ required: true }, 'phone'],
@@ -1082,7 +1082,7 @@ const schema = {
       properties: {
         addition: {
           type: 'void',
-          title: 'Add Contact',
+          title: '新增联系人',
           'x-component': 'ArrayItems.Addition',
         },
       },
@@ -1100,7 +1100,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="new user registration" style={{ width: 620 }}>
+      <Card title="新用户注册" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1110,7 +1110,7 @@ export default () => {
           <SchemaField schema={schema} />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              Sign up
+              注册
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1120,7 +1120,7 @@ export default () => {
 }
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -1158,7 +1158,7 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      <Button icon={<UploadOutlined />}>上传复印件</Button>
     </Upload>
   )
 }
@@ -1173,7 +1173,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="new user registration" style={{ width: 620 }}>
+      <Card title="新用户注册" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1182,14 +1182,14 @@ export default () => {
         >
           <Field
             name="username"
-            title="Username"
+            title="用户名"
             required
             decorator={[FormItem]}
             component={[Input]}
           />
           <Field
             name="password"
-            title="Password"
+            title="密码"
             required
             decorator={[FormItem]}
             component={[
@@ -1204,13 +1204,13 @@ export default () => {
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
-                  ? 'Confirm that the password does not match'
+                  ? '确认密码不匹配'
                   : ''
             }}
           />
           <Field
             name="confirm_password"
-            title="Confirm Password"
+            title="确认密码"
             required
             decorator={[FormItem]}
             component={[
@@ -1225,13 +1225,13 @@ export default () => {
                 password.get('value') &&
                 field.value &&
                 field.value !== password.get('value')
-                  ? 'Confirm that the password does not match'
+                  ? '确认密码不匹配'
                   : ''
             }}
           />
           <VoidField
             name="name"
-            title="Name"
+            title="姓名"
             decorator={[
               FormItem,
               {
@@ -1247,7 +1247,7 @@ export default () => {
               component={[
                 Input,
                 {
-                  placeholder: 'firstname',
+                  placeholder: '姓',
                 },
               ]}
               required
@@ -1258,7 +1258,7 @@ export default () => {
               component={[
                 Input,
                 {
-                  placeholder: 'lastname',
+                  placeholder: '名',
                 },
               ]}
               required
@@ -1266,7 +1266,7 @@ export default () => {
           </VoidField>
           <Field
             name="email"
-            title="Email"
+            title="邮箱"
             required
             validator="email"
             decorator={[FormItem]}
@@ -1274,20 +1274,20 @@ export default () => {
           />
           <Field
             name="gender"
-            title="Gender"
+            title="性别"
             decorator={[FormItem]}
             component={[Select]}
             dataSource={[
               {
-                label: 'male',
+                label: '男',
                 value: 1,
               },
               {
-                label: 'female',
+                label: '女',
                 value: 2,
               },
               {
-                label: 'third gender',
+                label: '第三性别',
                 value: 3,
               },
             ]}
@@ -1295,14 +1295,14 @@ export default () => {
           />
           <Field
             name="birthday"
-            title="Birthday"
+            title="生日"
             required
             decorator={[FormItem]}
             component={[DatePicker]}
           />
           <Field
             name="address"
-            title="Address"
+            title="地址"
             required
             decorator={[FormItem]}
             component={[Cascader]}
@@ -1342,14 +1342,14 @@ export default () => {
           />
           <Field
             name="idCard"
-            title="ID"
+            title="身份证复印件"
             required
             decorator={[FormItem]}
             component={[IDUpload]}
           />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              Sign up
+              注册
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1359,9 +1359,9 @@ export default () => {
 }
 ```
 
-## Forgot password
+## 忘记密码
 
-#### Markup Schema Cases
+#### Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1400,7 +1400,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="change password" style={{ width: 620 }}>
+      <Card title="变更密码" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1410,14 +1410,14 @@ export default () => {
           <SchemaField>
             <SchemaField.String
               name="username"
-              title="Username"
+              title="用户名"
               required
               x-decorator="FormItem"
               x-component="Input"
             />
             <SchemaField.String
               name="email"
-              title="Email"
+              title="邮箱"
               required
               x-validator="email"
               x-decorator="FormItem"
@@ -1425,14 +1425,14 @@ export default () => {
             />
             <SchemaField.String
               name="old_password"
-              title="Old Password"
+              title="原始密码"
               required
               x-decorator="FormItem"
               x-component="Password"
             />
             <SchemaField.String
               name="password"
-              title="New Password"
+              title="新密码"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -1445,7 +1445,7 @@ export default () => {
                   fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
                 },
@@ -1453,7 +1453,7 @@ export default () => {
             />
             <SchemaField.String
               name="confirm_password"
-              title="Confirm Password"
+              title="确认密码"
               required
               x-decorator="FormItem"
               x-component="Password"
@@ -1466,7 +1466,7 @@ export default () => {
                   fulfill: {
                     state: {
                       errors:
-                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                        '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
                     },
                   },
                 },
@@ -1475,7 +1475,7 @@ export default () => {
           </SchemaField>
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              Confirm
+              确认变更
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1485,7 +1485,7 @@ export default () => {
 }
 ```
 
-#### JSON Schema Cases
+#### JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -1519,14 +1519,14 @@ const schema = {
   properties: {
     username: {
       type: 'string',
-      title: 'Username',
+      title: '用户名',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Input',
     },
     email: {
       type: 'string',
-      title: 'Email',
+      title: '邮箱',
       required: true,
       'x-validator': 'email',
       'x-decorator': 'FormItem',
@@ -1534,14 +1534,14 @@ const schema = {
     },
     oldPassword: {
       type: 'string',
-      title: 'Old Password',
+      title: '原始密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
     },
     password: {
       type: 'string',
-      title: 'New Password',
+      title: '新密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -1554,7 +1554,7 @@ const schema = {
           fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
         },
@@ -1562,7 +1562,7 @@ const schema = {
     },
     confirm_password: {
       type: 'string',
-      title: 'Confirm Password',
+      title: '确认密码',
       required: true,
       'x-decorator': 'FormItem',
       'x-component': 'Password',
@@ -1575,7 +1575,7 @@ const schema = {
           fulfill: {
             state: {
               errors:
-                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "Confirm that the password does not match" : ""}}',
+                '{{$deps[0] && $self.value && $self.value !== $deps[0] ? "确认密码不匹配" : ""}}',
             },
           },
         },
@@ -1594,7 +1594,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="change password" style={{ width: 620 }}>
+      <Card title="变更密码" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1604,7 +1604,7 @@ export default () => {
           <SchemaField schema={schema} />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              Confirm
+              确认变更
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>
@@ -1614,7 +1614,7 @@ export default () => {
 }
 ```
 
-#### Pure JSX Cases
+#### 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -1645,7 +1645,7 @@ export default () => {
         padding: '40px 0',
       }}
     >
-      <Card title="change password" style={{ width: 620 }}>
+      <Card title="变更密码" style={{ width: 620 }}>
         <Form
           form={form}
           labelCol={5}
@@ -1654,14 +1654,14 @@ export default () => {
         >
           <Field
             name="username"
-            title="Username"
+            title="用户名"
             required
             decorator={[FormItem]}
             component={[Input]}
           />
           <Field
             name="email"
-            title="Email"
+            title="邮箱"
             required
             validator="email"
             decorator={[FormItem]}
@@ -1669,14 +1669,14 @@ export default () => {
           />
           <Field
             name="old_password"
-            title="Old Password"
+            title="原始密码"
             required
             decorator={[FormItem]}
             component={[Password]}
           />
           <Field
             name="password"
-            title="New Password"
+            title="新密码"
             required
             decorator={[FormItem]}
             component={[
@@ -1691,13 +1691,13 @@ export default () => {
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
-                  ? 'Confirm that the password does not match'
+                  ? '确认密码不匹配'
                   : ''
             }}
           />
           <Field
             name="confirm_password"
-            title="Confirm Password"
+            title="确认密码"
             required
             decorator={[FormItem]}
             component={[
@@ -1712,13 +1712,13 @@ export default () => {
                 confirm.get('value') &&
                 field.value &&
                 field.value !== confirm.get('value')
-                  ? 'Confirm that the password does not match'
+                  ? '确认密码不匹配'
                   : ''
             }}
           />
           <FormButtonGroup.FormItem>
             <Submit block size="large">
-              Confirm change
+              确认变更
             </Submit>
           </FormButtonGroup.FormItem>
         </Form>

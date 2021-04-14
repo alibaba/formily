@@ -1,14 +1,14 @@
-# Compatible solution for front-end and back-end data differences
+# 前后端数据差异兼容方案
 
-Many times, we always encounter scenarios where the front-end data structure does not match the back-end data structure. The seemingly simple problem is actually very uncomfortable to solve. The most common problems are: 
+很多时候，我们总会遇到前端数据结构与后端数据结构不匹配的场景，看似很简单的问题，其实解决起来非常的让人难受，最常见的问题就是：
 
-The output of the front-end date range component is an array structure, but the format required by the back-end is to split a flat data structure. This problem is largely limited by the back-end domain model. Because from the perspective of back-end model design, splitting the flat structure is the best solution;
+前端日期范围组件输出的是数组结构，但是后端要求的格式是拆分扁平数据结构，这种问题很大程度是受后端领域模型所限制，因为从后端模型设计的角度来看，拆分扁平结构是最佳方案；
 
-But from the perspective of front-end componentization, the array structure is the best;
+但从前端组件化角度来看，数组结构又是最佳的；
 
-So each side has its truth, but unfortunately, it can only cancel such an unequal treaty at the front end every time. However, with Formily, you don’t need to feel uncomfortable for such an embarrassing situation. **Formily provides the ability to deconstruct the path, which can help users quickly solve such problems.** Let's take a look at an example
+所以哪一边都有其道理，可惜的是，每次都只能前端取消化这样一个不平等条约，不过，有了 Formily，你就完全不需要为这样一个尴尬局面而难受了，**Formily 提供了解构路径的能力，可以帮助用户快速解决这类问题。**，下面可以看看例子
 
-## Markup Schema Case
+## Markup Schema 案例
 
 ```tsx
 import React from 'react'
@@ -48,24 +48,24 @@ export default () => {
       <SchemaField>
         <SchemaField.Boolean
           name="visible_destructor"
-          title="Whether to display deconstructed fields"
+          title="是否显示解构字段"
           default={true}
           enum={[
-            { label: 'yes', value: true },
-            { label: 'no', value: false },
+            { label: '是', value: true },
+            { label: '否', value: false },
           ]}
           x-decorator="FormItem"
           x-component="Radio.Group"
         />
         <SchemaField.String
           name="undestructor"
-          title="before deconstruction"
+          title="解构前"
           x-decorator="FormItem"
           x-component="DatePicker.RangePicker"
         />
         <SchemaField.String
           name="[startDate,endDate]"
-          title="after deconstruction"
+          title="解构后"
           default={['2020-11-20', '2021-12-30']}
           x-decorator="FormItem"
           x-component="DatePicker.RangePicker"
@@ -79,14 +79,14 @@ export default () => {
         </pre>
       </code>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>submit</Submit>
+        <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup>
     </Form>
   )
 }
 ```
 
-## JSON Schema Cases
+## JSON Schema 案例
 
 ```tsx
 import React from 'react'
@@ -117,24 +117,24 @@ const schema = {
   properties: {
     visible_destructor: {
       type: 'boolean',
-      title: 'Whether to display deconstructed fields',
+      title: '是否显示解构字段',
       default: true,
       enum: [
-        { label: 'yes', value: true },
-        { label: 'no', value: false },
+        { label: '是', value: true },
+        { label: '否', value: false },
       ],
       'x-decorator': 'FormItem',
       'x-component': 'Radio.Group',
     },
     undestructor: {
       type: 'string',
-      title: 'before deconstruction',
+      title: '解构前',
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
     },
     '[startDate,endDate]': {
       type: 'string',
-      title: 'after deconstruction',
+      title: '解构后',
       default: ['2020-11-20', '2021-12-30'],
       'x-decorator': 'FormItem',
       'x-component': 'DatePicker.RangePicker',
@@ -162,14 +162,14 @@ export default () => {
         </pre>
       </code>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>submit</Submit>
+        <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup>
     </Form>
   )
 }
 ```
 
-## Pure JSX Case
+## 纯 JSX 案例
 
 ```tsx
 import React from 'react'
@@ -192,24 +192,24 @@ export default () => {
     <Form form={form} layout="vertical">
       <Field
         name="visible_destructor"
-        title="Whether to display deconstructed fields"
+        title="是否显示解构字段"
         initialValue={true}
         dataSource={[
-          { label: 'yes', value: true },
-          { label: 'no', value: false },
+          { label: '是', value: true },
+          { label: '否', value: false },
         ]}
         decorator={[FormItem]}
         component={[Radio.Group]}
       />
       <Field
         name="undestructor"
-        title="before deconstruction"
+        title="解构前"
         decorator={[FormItem]}
         component={[DatePicker.RangePicker]}
       />
       <Field
         name="[startDate,endDate]"
-        title="after deconstruction"
+        title="解构后"
         initialValue={['2020-11-20', '2021-12-30']}
         decorator={[FormItem]}
         component={[DatePicker.RangePicker]}
@@ -225,7 +225,7 @@ export default () => {
         </pre>
       </code>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>submit</Submit>
+        <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup>
     </Form>
   )
