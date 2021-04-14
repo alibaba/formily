@@ -49,7 +49,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="account login">
+          <Tabs.TabPane key="1" tab="Password Login">
             <Form
               form={normalForm}
               layout="vertical"
@@ -86,7 +86,7 @@ export default () => {
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="mobile login">
+          <Tabs.TabPane key="2" tab="Mobile Login">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -259,7 +259,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="account login">
+          <Tabs.TabPane key="1" tab="Password Login">
             <Form
               form={normalForm}
               layout="vertical"
@@ -272,7 +272,7 @@ export default () => {
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="Mobile login">
+          <Tabs.TabPane key="2" tab="Mobile Login">
             <Form
               form={phoneForm}
               layout="vertical"
@@ -334,7 +334,7 @@ export default () => {
     >
       <Card style={{ width: 400 }}>
         <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="account login">
+          <Tabs.TabPane key="1" tab="Password Login">
             <Form
               form={normalForm}
               layout="vertical"
@@ -370,7 +370,7 @@ export default () => {
               </Submit>
             </Form>
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="Mobile login">
+          <Tabs.TabPane key="2" tab="Mobile Login">
             <Form
               form={phoneForm}
               layout="vertical"
