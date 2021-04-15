@@ -19,7 +19,7 @@ export const isObservable = (target: any) => {
 }
 
 export const isAnnotation = (target: any): target is Annotation => {
-  return !!target[MakeObservableSymbol]
+  return target && !!target[MakeObservableSymbol]
 }
 
 export const isSupportObservable = (target: any) => {

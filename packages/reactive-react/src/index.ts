@@ -46,7 +46,7 @@ export function observer<P extends object, TRef = {}>(
   }
   const wrappedComponent = (props: P, ref: React.Ref<TRef>) => {
     //eslint-disable-next-line
-    return useObserver(() => baseComponent(props, ref))
+    return useObserver(() => baseComponent(props, ref), realOptions)
   }
   let memoComponent: any
   if (realOptions.forwardRef) {

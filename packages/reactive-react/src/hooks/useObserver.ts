@@ -21,7 +21,7 @@ export const useObserver = <T extends () => any>(
       } else {
         forceUpdate()
       }
-    })
+    }, options?.displayName)
   }, [])
 
   //StrictMode/ConcurrentMode会导致组件无法正确触发Unmount，所以只能自己做垃圾回收
