@@ -1,17 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
-import ReactDOM from 'react-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDidUpdate } from './useDidUpdate'
-
-const batchUpdate =
-  React['batchUpdate'] ||
-  ReactDOM['batchUpdate'] ||
-  ReactDOM['unstable_batchedUpdates'] ||
-  ((callback: any) => callback())
 
 const EMPTY_ARRAY: any[] = []
 const RENDER_COUNT = { value: 0 }
@@ -24,10 +12,8 @@ export function useForceUpdate() {
   const update = useCallback(() => {
     if (RENDER_COUNT.value === 0) {
       if (unmountRef.current) return
-      batchUpdate(() => {
-        setTick((tick) => {
-          return tick + 1
-        })
+      setTick((tick) => {
+        return tick + 1
       })
     } else {
       if (!RENDER_QUEUE.has(update)) {
@@ -41,12 +27,10 @@ export function useForceUpdate() {
   useDidUpdate(() => {
     RENDER_COUNT.value--
     if (RENDER_COUNT.value === 0) {
-      batchUpdate(() => {
-        if (unmountRef.current) return
-        RENDER_QUEUE.forEach((update) => {
-          RENDER_QUEUE.delete(update)
-          update()
-        })
+      if (unmountRef.current) return
+      RENDER_QUEUE.forEach((update) => {
+        RENDER_QUEUE.delete(update)
+        update()
       })
     }
   })

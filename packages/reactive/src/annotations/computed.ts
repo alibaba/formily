@@ -11,28 +11,19 @@ import {
   batchEnd,
 } from '../reaction'
 
+interface IValue<T = any> {
+  value?: T
+}
 export interface IComputed {
-  <T>(compute: () => T): { value: T }
-  <T>(compute: { get?: () => T; set?: (value: T) => void }): {
-    value: T
-  }
+  <T>(compute: () => T): IValue<T>
+  <T>(compute: { get?: () => T; set?: (value: T) => void }): IValue<T>
 }
 
 export const computed: IComputed = createAnnotation(
   ({ target, key, value }) => {
-    const initialValue = Symbol('initialValue')
-    const store = {
-      value: initialValue,
-    }
+    const store: IValue = {}
 
-    const proxy = {
-      set value(value: any) {
-        set(value)
-      },
-      get value() {
-        return get()
-      },
-    }
+    const proxy = {}
 
     const context = target ? target : store
     const property = target ? key : 'value'
@@ -137,6 +128,11 @@ export const computed: IComputed = createAnnotation(
         configurable: false,
       })
       return target
+    } else {
+      Object.defineProperty(proxy, 'value', {
+        set,
+        get,
+      })
     }
     return proxy
   }

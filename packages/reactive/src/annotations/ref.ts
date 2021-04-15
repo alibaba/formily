@@ -15,14 +15,7 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
     value: target ? target[key] : value,
   }
 
-  const proxy = {
-    set value(value) {
-      set(value)
-    },
-    get value() {
-      return get()
-    },
-  }
+  const proxy = {}
 
   const context = target ? target : store
   const property = target ? key : 'value'
@@ -66,6 +59,11 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
       configurable: false,
     })
     return target
+  } else {
+    Object.defineProperty(proxy, 'value', {
+      set,
+      get,
+    })
   }
   return proxy
 })

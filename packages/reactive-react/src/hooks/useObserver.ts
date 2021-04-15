@@ -1,6 +1,6 @@
 import React from 'react'
 import { Tracker } from '@formily/reactive'
-import { GarbageCollector } from '../gc'
+import { GarbageCollector } from '../shared'
 import { IObserverOptions } from '../types'
 import { useForceUpdate } from './useForceUpdate'
 

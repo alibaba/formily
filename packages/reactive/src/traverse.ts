@@ -10,7 +10,8 @@ export const buildTreeNode = ({
   shallow,
 }: IVisitor) => {
   const raw = ProxyRaw.get(value) || value
-  const parentNode = RawNode.get(ProxyRaw.get(target) || target)
+  const parentRaw = ProxyRaw.get(target) || target
+  const parentNode = RawNode.get(parentRaw)
   const currentNode = RawNode.get(raw)
   if (currentNode) return currentNode
   if (parentNode) {
