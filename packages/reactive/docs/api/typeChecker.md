@@ -41,17 +41,3 @@ interface isSupportObservable {
   (target: any): boolean
 }
 ```
-
-## isCollectionType
-
-#### 描述
-
-判断某个对象是否是集合类型(Set/Map/WeakSet/WeakMap)
-
-#### 签名
-
-```ts
-interface isCollectionType {
-  (target: any): boolean
-}
-```
