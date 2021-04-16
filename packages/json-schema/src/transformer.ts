@@ -329,15 +329,26 @@ const getSchemaFieldReactions = (
     }
   }
 
+  const queryDepdency = (field: Formily.Core.Models.Field, pattern: string) => {
+    const [target, path] = String(pattern).split(/\s*#\s*/)
+    return field.query(target).getIn(path || 'value')
+  }
+
   const parseDependencies = (
     field: Formily.Core.Models.Field,
-    dependencies: string[]
+    dependencies: string[] | object
   ) => {
     if (isArr(dependencies)) {
-      return dependencies.map((pattern) => {
-        const [target, path] = String(pattern).split(/\s*#\s*/)
-        return field.query(target).getIn(path || 'value')
-      })
+      return dependencies.map((pattern) => queryDepdency(field, pattern))
+    } else if (isPlainObj(dependencies)) {
+      return reduce(
+        dependencies,
+        (buf, pattern, key) => {
+          buf[key] = queryDepdency(field, pattern)
+          return buf
+        },
+        {}
+      )
     }
     return []
   }
