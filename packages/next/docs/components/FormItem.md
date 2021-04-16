@@ -1051,8 +1051,8 @@ export default () => {
 | tooltip        | ReactNode                                              | 问号提示                                    | -         |
 | labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |
 | labelWrap      | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip  | false     |
-| labelWidth     | number                                                 | 标签固定宽度                                | -         |
-| wrapperWidth   | number                                                 | 内容固定宽度                                | -         |
+| labelWidth     | `number \| string`                                     | 标签固定宽度                                | -         |
+| wrapperWidth   | `number \| string`                                     | 内容固定宽度                                | -         |
 | labelCol       | number                                                 | 标签⽹格所占列数，和内容列数加起来总和为 24 | -         |
 | wrapperCol     | number                                                 | 内容⽹格所占列数，和标签列数加起来总和为 24 | -         |
 | wrapperAlign   | `"left"` \| `"right"`                                  | 内容文本对齐方式⻬                          | `"left"`  |

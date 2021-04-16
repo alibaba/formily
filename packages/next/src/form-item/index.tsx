@@ -28,8 +28,8 @@ export interface IFormItemProps {
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
-  labelWidth?: number
-  wrapperWidth?: number
+  labelWidth?: number | string
+  wrapperWidth?: number | string
   labelCol?: number
   wrapperCol?: number
   wrapperAlign?: 'left' | 'right'
@@ -128,12 +128,12 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   let enableCol = false
   if (labelWidth || wrapperWidth) {
     if (labelWidth) {
-      labelStyle.width = `${labelWidth}px`
-      labelStyle.maxWidth = `${labelWidth}px`
+      labelStyle.width = labelWidth
+      labelStyle.maxWidth = labelWidth
     }
     if (wrapperWidth) {
-      wrapperStyle.width = `${wrapperWidth}px`
-      wrapperStyle.maxWidth = `${wrapperWidth}px`
+      wrapperStyle.width = wrapperWidth
+      wrapperStyle.maxWidth = wrapperWidth
     }
     // 栅格模式
   } else if (labelCol || wrapperCol) {
