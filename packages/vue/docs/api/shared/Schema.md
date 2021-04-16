@@ -565,7 +565,7 @@ type SchemaReactionEffect =
 
 type SchemaReaction<Field = any> =
   | {
-      dependencies?: string[] //依赖的字段路径列表，只能以点路径描述依赖
+      dependencies?: string[] | Record<string, string> //依赖的字段路径列表，只能以点路径描述依赖，如果是数组格式，那么读的时候也是数组格式，如果是对象格式，读的时候也是对象格式，只是对象格式相当于是一个alias
       when?: string | boolean //联动条件
       target?: string //要操作的字段路径，支持FormPathPattern路径语法
       effects?: SchemaReactionEffect[] //主动模式下的独立生命周期钩子
@@ -772,6 +772,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "dependencies": ["source"], //依赖路径写法默认是取value，如果依赖的是字段的其他属性，可以使用 source#modified，用#分割取详细属性
+        // "dependencies":{ aliasName:"source" }, //别名形式
         "fulfill": {
           "schema": {
             "x-visible": "{{$deps[0] === '123'}}" //任意层次属性都支持表达式
