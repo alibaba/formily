@@ -3,6 +3,7 @@ export const immediate = (callback?: () => void) => {
   Promise.resolve(0).then(() => {
     if (desposed) return
     callback()
+    desposed = true
   })
   return () => {
     desposed = true
