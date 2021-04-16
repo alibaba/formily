@@ -28,7 +28,7 @@ function createFieldEffect<Result extends GeneralField = GeneralField>(
     }
   )
 }
-const _onFieldInit = createFieldEffect(LifeCycleTypes.ON_FIELD_INIT)
+export const onFieldInit = createFieldEffect(LifeCycleTypes.ON_FIELD_INIT)
 export const onFieldMount = createFieldEffect(LifeCycleTypes.ON_FIELD_MOUNT)
 export const onFieldUnmount = createFieldEffect(LifeCycleTypes.ON_FIELD_UNMOUNT)
 export const onFieldValueChange = createFieldEffect<DataField>(
@@ -52,20 +52,6 @@ export const onFieldValidateFailed = createFieldEffect<DataField>(
 export const onFieldValidateSuccess = createFieldEffect<DataField>(
   LifeCycleTypes.ON_FIELD_VALIDATE_SUCCESS
 )
-
-export function onFieldInit(
-  pattern: FormPathPattern,
-  callback?: (field: GeneralField, form: Form) => void
-) {
-  const form = useEffectForm()
-  const count = form.query(pattern).reduce((count, field) => {
-    callback(field, form)
-    return count + 1
-  }, 0)
-  if (count === 0) {
-    _onFieldInit(pattern, callback)
-  }
-}
 
 export function onFieldReact(
   pattern: FormPathPattern,
