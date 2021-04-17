@@ -2,6 +2,15 @@ import { ProxyRaw, RawNode } from './environment'
 import { isObservable, isSupportObservable } from './externals'
 import { INode, IVisitor } from './types'
 
+const concat = (array: any[], target: any) => {
+  const arr = []
+  for (let i = 0; i < array.length; i++) {
+    arr.push(array[i])
+  }
+  arr.push(target)
+  return arr
+}
+
 export const buildTreeNode = ({
   target,
   value,
@@ -16,7 +25,7 @@ export const buildTreeNode = ({
   if (currentNode) return currentNode
   if (parentNode) {
     const node: INode = {
-      path: parentNode.path.concat(key as any),
+      path: concat(parentNode.path, key),
       parent: parentNode,
       observers: new Set(),
       deepObservers: new Set(),
