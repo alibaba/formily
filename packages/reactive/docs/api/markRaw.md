@@ -2,7 +2,7 @@
 
 ## 描述
 
-标记任意一个对象或者类原型为永远不可被 observable 劫持，优先级比 markObservable 低
+标记任意一个对象或者类原型为永远不可被 observable 劫持，优先级比 markObservable 高
 
 ## 签名
 
