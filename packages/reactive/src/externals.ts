@@ -78,39 +78,45 @@ export const markObservable = <T>(target: T): T => {
 export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
 
 export const toJS = <T>(values: T): T => {
-  if (!isObservable(values)) {
-    return values
-  }
-  if (Array.isArray(values)) {
-    const res: any = []
-    values.forEach((item) => {
-      res.push(toJS(item))
-    })
-    return res
-  } else if (isPlainObj(values)) {
-    if ('$$typeof' in values && '_owner' in values) {
+  const visited = new WeakSet<any>()
+
+  const tojs: typeof toJS = (values) => {
+    if (visited.has(values)) {
       return values
-    }
-    if (values['_isAMomentObject']) {
+    } else if (!isObservable(values)) {
       return values
-    }
-    if (values['_isJSONSchemaObject']) {
-      return values
-    }
-    if (isFn(values['toJS'])) {
-      return values['toJS']()
-    }
-    if (isFn(values['toJSON'])) {
-      return values['toJSON']()
-    }
-    const res: any = {}
-    for (const key in values) {
-      if (Object.hasOwnProperty.call(values, key)) {
-        res[key] = toJS(values[key])
+    } else if (isArr(values)) {
+      visited.add(values)
+      const res: any = []
+      values.forEach((item) => {
+        res.push(tojs(item))
+      })
+      return res
+    } else if (isPlainObj(values)) {
+      if ('$$typeof' in values && '_owner' in values) {
+        return values
+      } else if (values['_isAMomentObject']) {
+        return values
+      } else if (values['_isJSONSchemaObject']) {
+        return values
+      } else if (isFn(values['toJS'])) {
+        return values['toJS']()
+      } else if (isFn(values['toJSON'])) {
+        return values['toJSON']()
+      } else {
+        visited.add(values)
+        const res: any = {}
+        for (const key in values) {
+          if (Object.hasOwnProperty.call(values, key)) {
+            res[key] = tojs(values[key])
+          }
+        }
+        return res
       }
+    } else {
+      return values
     }
-    return res
-  } else {
-    return values
   }
+
+  return tojs(values)
 }

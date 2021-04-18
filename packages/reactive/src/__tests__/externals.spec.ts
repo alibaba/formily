@@ -1,4 +1,4 @@
-import { isObservable, isSupportObservable, markObservable, markRaw, observable } from ".."
+import { isObservable, isSupportObservable, markObservable, markRaw, observable, toJS } from ".."
 
 test('is support observable', () => {
   const obs = observable<any>({ aa: 111 })
@@ -64,4 +64,12 @@ describe('mark operation', () => {
     const obs = observable<any>(markObservable(markRaw({ aa: 111 })))
     expect(isObservable(obs)).toBeFalsy()
   })
+})
+
+test('recursive references tojs', () => {
+  const obj: any = { aa: 111 }
+  obj.obj = obj
+  const obs = observable<any>(obj)
+  obs.obs = obs
+  expect(toJS(obs)).toBeTruthy()
 })
