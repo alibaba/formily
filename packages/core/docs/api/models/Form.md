@@ -309,7 +309,7 @@ interface setDisplay {
 #### 签名
 
 ```ts
-interface setPatter {
+interface setPattern {
   (pattern: FormPatternTypes): void
 }
 ```
