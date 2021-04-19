@@ -5,22 +5,23 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 const HEAD_HTML = `
 <script>
 window.codeSandBoxDependencies = {
-  '@alifd/next': 'latest',
-  '@formily/next': 'latest',
-  '@formily/next-components': 'latest',
-  '@formily/antd': 'latest',
-  '@formily/antd-components': 'latest',
-  '@formily/shared': 'latest',
-  '@formily/react': 'latest',
-  '@formily/printer': 'latest',
+  '@alifd/next': '^1.x',
+  '@formily/next': '^1.x',
+  '@formily/next-components': '^1.x',
+  '@formily/antd': '^1.x',
+  '@formily/antd-components': '^1.x',
+  '@formily/shared': '^1.x',
+  '@formily/react': '^1.x',
+  '@formily/printer': '^1.x',
   '@babel/runtime':'latest',
-  'styled-components':'^4.0.0',
+  'styled-components':'^4.x',
   'mfetch':'latest',
   antd: 'latest'
 }
 
 window.codeSandBoxPeerDependencies = {
-  moment: 'latest'
+  moment: 'latest',
+  'styled-components':'^4.x',
 }
 if (window.parent !== window) {
   try {

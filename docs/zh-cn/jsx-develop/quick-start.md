@@ -23,7 +23,7 @@
 > 如果你使用的是 Ant Design
 
 ```bash
-npm install --save antd @formily/antd @formily/antd-components
+npm install --save antd @formily/antd@1.x @formily/antd-components
 ```
 
 @formily/antd 主要是作为 Form 核心库，@formily/antd-components 主要作为 Form 的 antd 扩展组件库
@@ -31,7 +31,7 @@ npm install --save antd @formily/antd @formily/antd-components
 > 如果你使用的是 Fusion Next
 
 ```bash
-npm install --save next @formily/next @formily/next-components
+npm install --save next @formily/next@1.x @formily/next-components
 ```
 
 @formily/next 主要是作为 Form 核心库，@formily/next-components 主要作为 Form 的 fusion 扩展组件库
