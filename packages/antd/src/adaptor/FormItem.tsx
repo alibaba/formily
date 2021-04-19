@@ -25,7 +25,7 @@ const computeStatus = (props: ISchemaFieldAdaptorProps) => {
 const computeHelp = (props: ISchemaFieldAdaptorProps) => {
   if (props.help) return props.help
   const messages = [].concat(props.errors || [], props.warnings || [])
-  if(messages.length) {
+  if (messages.length) {
     return messages.map((message, index) =>
       createElement(
         'span',
@@ -35,7 +35,7 @@ const computeHelp = (props: ISchemaFieldAdaptorProps) => {
       )
     )
   }
-  if(props.schema && props.schema.description) {
+  if (props.schema && props.schema.description) {
     return props.schema.description
   }
 }
