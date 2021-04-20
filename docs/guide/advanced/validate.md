@@ -1956,7 +1956,9 @@ export default () => (
         required
         x-reactions={(field) => {
           field.errors =
-            field.query('bb').value() >= field.value ? 'AA must be greater than BB' : ''
+            field.query('bb').value() >= field.value
+              ? 'AA must be greater than BB'
+              : ''
         }}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -1967,7 +1969,9 @@ export default () => (
         required
         x-reactions={(field) => {
           field.errors =
-            field.query('aa').value() <= field.value ? 'AA must be greater than BB' : ''
+            field.query('aa').value() <= field.value
+              ? 'AA must be greater than BB'
+              : ''
         }}
         x-component="NumberPicker"
         x-decorator="FormItem"
@@ -2014,7 +2018,8 @@ const schema = {
         dependencies: ['aa'],
         fulfill: {
           state: {
-            errors: "{{$deps[0] <= $self.value ? 'AA must be greater than BB' : ''}}",
+            errors:
+              "{{$deps[0] <= $self.value ? 'AA must be greater than BB' : ''}}",
           },
         },
       },
@@ -2049,7 +2054,9 @@ export default () => (
       required
       reactions={(field) => {
         field.errors =
-          field.query('bb').value() >= field.value ? 'AA must be greater than BB' : ''
+          field.query('bb').value() >= field.value
+            ? 'AA must be greater than BB'
+            : ''
       }}
       component={[NumberPicker]}
       decorator={[FormItem]}
@@ -2060,7 +2067,9 @@ export default () => (
       required
       reactions={(field) => {
         field.errors =
-          field.query('aa').value() <= field.value ? 'AA must be greater than BB' : ''
+          field.query('aa').value() <= field.value
+            ? 'AA must be greater than BB'
+            : ''
       }}
       component={[NumberPicker]}
       decorator={[FormItem]}
@@ -2075,7 +2084,11 @@ Mainly through [registerValidateLocale](https://core.formilyjs.org/api/entry/for
 
 ```tsx
 import React from 'react'
-import { createForm, registerValidateLocale } from '@formily/core'
+import {
+  createForm,
+  registerValidateLocale,
+  setValidateLanguage,
+} from '@formily/core'
 import { createSchemaField } from '@formily/react'
 import { Form, FormItem, Input } from '@formily/antd'
 
@@ -2088,8 +2101,10 @@ const SchemaField = createSchemaField({
   },
 })
 
+setValidateLanguage('en-US')
+
 registerValidateLocale({
-  en: {
+  'en-US': {
     required: 'Custom required verification message',
   },
 })

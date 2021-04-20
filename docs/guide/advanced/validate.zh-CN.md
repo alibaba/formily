@@ -2075,7 +2075,11 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { createForm, registerValidateLocale } from '@formily/core'
+import {
+  createForm,
+  registerValidateLocale,
+  setValidateLanguage,
+} from '@formily/core'
 import { createSchemaField } from '@formily/react'
 import { Form, FormItem, Input } from '@formily/antd'
 
@@ -2088,8 +2092,10 @@ const SchemaField = createSchemaField({
   },
 })
 
+setValidateLanguage('zh-CN')
+
 registerValidateLocale({
-  zh: {
+  'zh-CN': {
     required: '定制的必填校验文案',
   },
 })
