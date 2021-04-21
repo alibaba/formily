@@ -53,19 +53,17 @@ export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps
             })
           }
           const events = {} as Record<string, any>
-          if (!isVoidField(field)) {
-            events.change = (...args: any[]) => {
-              field.onInput(...args)
-              field.component[1]?.onChange?.(...args)
-            }
-            events.focus = (...args: any[]) => {
-              field.onFocus(...args)
-              field.component[1]?.onFocus?.(...args)
-            }
-            events.blur = (...args: any[]) => {
-              field.onBlur(...args)
-              field.component[1]?.onBlur?.(...args)
-            }
+          events.change = (...args: any[]) => {
+            if (!isVoidField(field)) field.onInput(...args)
+            field.component[1]?.onChange?.(...args)
+          }
+          events.focus = (...args: any[]) => {
+            if (!isVoidField(field)) field.onFocus(...args)
+            field.component[1]?.onFocus?.(...args)
+          }
+          events.blur = (...args: any[]) => {
+            if (!isVoidField(field)) field.onBlur(...args)
+            field.component[1]?.onBlur?.(...args)
           }
           const component = field.component[0] as VueComponent
           const originData = field.component[1] || {}

@@ -50,19 +50,19 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
           field.onInput(...args)
           field.component[1]?.onChange?.(...args)
         }
-      : undefined
+      : field.component[1]?.onChange
     const onFocus = !isVoidField(field)
       ? (...args: any[]) => {
           field.onFocus(...args)
           field.component[1]?.onFocus?.(...args)
         }
-      : undefined
+      : field.component[1]?.onFocus
     const onBlur = !isVoidField(field)
       ? (...args: any[]) => {
           field.onBlur(...args)
           field.component[1]?.onBlur?.(...args)
         }
-      : undefined
+      : field.component[1]?.onBlur
     const disabled = !isVoidField(field)
       ? field.pattern === 'disabled' || field.pattern === 'readPretty'
       : undefined
