@@ -22,8 +22,16 @@ footer: Open-source MIT Licensed | Copyright © 2019-present
 
 ## 安装
 
+vue3:
+
 ```bash
-$ npm install --save @formily/core @formily/vue
+npm install --save @formily/core @formily/vue
+```
+
+vue2:
+
+```bash
+npm install --save @formily/core @formily/vue @vue/composition-api
 ```
 
 ## 快速开始
@@ -79,7 +87,7 @@ setValidateLanguage('en')
 const FormItem = connect(
   Form.Item,
   mapProps(
-    { validateStatus: true, title: 'label' },
+    { validateStatus: true, title: 'label', required: true },
     (props, field) => {
       return {
         help: !isVoidField(field) ? (field.errors.length ? field.errors : undefined) : undefined,

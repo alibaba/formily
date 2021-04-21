@@ -16,10 +16,11 @@ import VoidField from './VoidField'
 import { h } from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
-const RecursionField = observer(defineComponent({
+const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursionFieldProps>({
   name: 'RecursionField',
+  inheritAttrs: false,
   // eslint-disable-next-line vue/require-prop-types
-  props: {
+  props: ({
     schema: {
       required: true
     },
@@ -35,7 +36,7 @@ const RecursionField = observer(defineComponent({
     },
     mapProperties: {},
     filterProperties: {},
-  },
+  } as any),
   setup(props: IRecursionFieldProps) {
     const { track } = useObserver()
     const parentRef = useField()

@@ -6,6 +6,7 @@ import { Fragment } from '../shared/fragment'
 
 export default observer(defineComponent({
   name: 'FormConsumer',
+  inheritAttrs: false,
   setup(props, { attrs, slots }) {
     const formRef = useForm()
     const { track } = useObserver()

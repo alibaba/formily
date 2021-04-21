@@ -1,5 +1,5 @@
 import { provide, defineComponent } from 'vue-demi'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { useObserver } from '@formily/reactive-vue'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IVoidFieldProps } from '../types'
@@ -8,12 +8,11 @@ import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
-export default observer(defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
+export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
   name: 'VoidField',
-  components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
-  props: {
+  props: ({
     name: {},
     title: {},
     description: {},
@@ -47,8 +46,8 @@ export default observer(defineComponent<IVoidFieldProps<VueComponent, VueCompone
       default: undefined
     },
     reactions: [Array, Function],
-  },
-  setup(props, { slots }) {
+  } as any),
+  setup(props: IVoidFieldProps<VueComponent, VueComponent>, { slots }) {
     const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
@@ -76,4 +75,4 @@ export default observer(defineComponent<IVoidFieldProps<VueComponent, VueCompone
       }
     )
   }
-}))
+})

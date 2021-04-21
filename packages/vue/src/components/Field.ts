@@ -4,16 +4,15 @@ import { useAttach } from '../hooks/useAttach'
 import { FieldSymbol } from '../shared/context'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { useObserver } from '@formily/reactive-vue'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
-export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>({
+export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
   name: 'Field',
-  components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
-  props: {
+  props: ({
     name: {},
     title: {},
     description: {},
@@ -59,8 +58,8 @@ export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>
     dataSource: {},
     validator: {},
     reactions: [Array, Function],
-  },
-  setup(props, { slots }) {
+  } as any),
+  setup(props: IFieldProps<VueComponent, VueComponent>, { slots }) {
     const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
@@ -91,4 +90,4 @@ export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>
       )
     }
   }
-}))
+})

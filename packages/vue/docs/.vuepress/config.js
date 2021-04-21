@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   title: 'Formily Vue',
   dest: './doc-site',
@@ -73,7 +75,16 @@ module.exports = {
     lastUpdated: 'Last Updated',
     smoothScroll: true
   },
-  plugins: ['@vuepress/back-to-top', '@vuepress/last-updated', '@vuepress-dumi/dumi-previewer', ['@vuepress/medium-zoom', {
+  plugins: ['vuepress-plugin-typescript', '@vuepress/back-to-top', '@vuepress/last-updated', '@vuepress-dumi/dumi-previewer', ['@vuepress/medium-zoom', {
     selector: '.content__default :not(a) > img'
   }]],
+  configureWebpack: (config, isServer) => {
+    return {
+      resolve: {
+        alias: {
+          '@formily/vue': path.resolve(__dirname, '../../src'),
+        },
+      },
+    }
+  }
 }

@@ -8,12 +8,11 @@ import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 import { observer, useObserver } from '@formily/reactive-vue'
 
-export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>({
+export default observer<IFieldProps<VueComponent, VueComponent>>(defineComponent<IFieldProps<VueComponent, VueComponent>>({
   name: 'ArrayField',
-  components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
-  props: {
+  props: ({
     name: {},
     title: {},
     description: {},
@@ -59,8 +58,8 @@ export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>
     dataSource: {},
     validator: {},
     reactions: [Array, Function],
-  },
-  setup(props, { slots }) {
+  } as any),
+  setup(props: IFieldProps<VueComponent, VueComponent>, { slots }) {
     const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()

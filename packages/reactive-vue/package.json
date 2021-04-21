@@ -22,7 +22,9 @@
   },
   "scripts": {
     "start": "vuepress dev docs",
-    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "switch:vue3": "vue-demi-switch 3 vue3",
+    "switch:vue2": "vue-demi-switch 2 vue",
+    "build": "npm run switch:vue3 && rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run switch:vue2",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
@@ -38,11 +40,12 @@
     "@vuepress/plugin-back-to-top": "^1.8.2",
     "@vuepress/plugin-medium-zoom": "^1.8.2",
     "core-js": "^2.4.0",
+    "vue3": "npm:vue@3",
     "vuepress": "^1.8.2"
   },
   "dependencies": {
     "@formily/reactive": "^2.0.0-beta.32",
-    "vue-demi": "latest"
+    "vue-demi": "^0.7.5"
   },
   "publishConfig": {
     "access": "public"
