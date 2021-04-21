@@ -854,3 +854,53 @@ test('devtools', () => {
   const form = attach(createForm())
   form.onUnmount()
 })
+
+test('reset array field', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        array: [{ value: 123 }],
+      },
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: 'array',
+      required: true,
+    })
+  )
+  expect(form.values).toEqual({
+    array: [{ value: 123 }],
+  })
+  await form.reset('*', {
+    forceClear: true,
+  })
+  expect(form.values).toEqual({
+    array: [],
+  })
+})
+
+test('reset object field', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        object: { value: 123 },
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'object',
+      required: true,
+    })
+  )
+  expect(form.values).toEqual({
+    object: { value: 123 },
+  })
+  await form.reset('*', {
+    forceClear: true,
+  })
+  expect(form.values).toEqual({
+    object: {},
+  })
+})

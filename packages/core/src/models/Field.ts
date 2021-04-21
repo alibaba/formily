@@ -55,6 +55,8 @@ import {
   modelStateGetter,
   isHTMLInputEvent,
   initFieldValue,
+  isArrayField,
+  isObjectField,
 } from '../shared'
 import { Query } from './Query'
 
@@ -747,7 +749,13 @@ export class Field<
     this.inputValue = undefined
     this.inputValues = []
     if (options?.forceClear) {
-      this.value = undefined
+      if (isArrayField(this)) {
+        this.value = [] as any
+      } else if (isObjectField(this)) {
+        this.value = {} as any
+      } else {
+        this.value = undefined
+      }
     } else {
       this.value = this.initialValue
     }
