@@ -12,6 +12,10 @@ order: 7
 
 Form 参考[Form](https://core.formilyjs.org/api/models/form)
 
+::: danger DANGER
+该组件对 vue3 的支持尚不完备，请关注后续更新
+:::
+
 ## 用例
 
 ::: demo

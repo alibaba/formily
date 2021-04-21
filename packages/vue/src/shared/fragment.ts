@@ -1,10 +1,10 @@
 import frag from 'vue-frag';
-import { Component, ComponentOptions } from 'vue';
-import { isVue2, Vue, defineComponent } from 'vue-demi';
+import { VueComponent } from '../types';
+import { isVue2, defineComponent } from 'vue-demi';
 
 export const Fragment = '#fragment'
 
-let FragmentComponent: ComponentOptions<Vue> | Component
+let FragmentComponent: VueComponent
 
 if (isVue2) {
   FragmentComponent = {
@@ -13,13 +13,14 @@ if (isVue2) {
       frag
     },
     render (h) {
+      const vm = this as any
       return h('div', {
         directives: [{
           name: 'frag'
         }],
-      }, this?.$slots?.default)
+      }, vm?.$slots?.default)
     }
-  } as ComponentOptions<Vue>
+  } as VueComponent
 } else {
   FragmentComponent = defineComponent({
     name: 'Fragment',
