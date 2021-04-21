@@ -1,10 +1,10 @@
 // https://github.com/umijs/neeko/blob/master/src/vue/observer.ts
 
-import { defineComponent } from 'vue-demi'
 import { autorun } from '@formily/reactive'
+import { IObserverOptions } from '../types'
 
-export const observer = function (opts: any) {
-  const name = opts.name || 'ObservableComponent'
+export const observer = function (opts: any, options?: IObserverOptions): any {
+  const name = options?.name || opts.name || 'ObservableComponent'
 
   let dispose: () => void
   const mounted = function (this: any) {
@@ -29,8 +29,8 @@ export const observer = function (opts: any) {
   const unmounted = function () {
     dispose?.()
   }
-
-  return defineComponent({
+  
+  return {
     name,
     ...opts,
     mounted() {
@@ -41,5 +41,5 @@ export const observer = function (opts: any) {
       opts?.unmounted?.call(this)
       unmounted.call(this)
     },
-  })
+  }
 }

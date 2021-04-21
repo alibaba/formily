@@ -10,12 +10,11 @@ import { getRawComponent } from '../utils/getRawComponent'
 
 interface ObjectField extends IFieldProps<VueComponent, VueComponent>, Vue {}
 
-export default observer(defineComponent<ObjectField>({
+export default observer<ObjectField>(defineComponent<ObjectField>({
   name: 'ObjectField',
-  components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
-  props: {
+  props: ({
     name: {},
     title: {},
     description: {},
@@ -61,8 +60,8 @@ export default observer(defineComponent<ObjectField>({
     dataSource: {},
     validator: {},
     reactions: [Array, Function],
-  },
-  setup(props, { slots }) {
+  } as any),
+  setup(props: ObjectField, { slots }) {
     const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()

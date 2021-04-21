@@ -1,10 +1,13 @@
-import Vue, { ComponentOptions, Component } from 'vue'
-import { FormPathPattern } from '@formily/shared'
-import { ISchema, Schema, SchemaKey } from '@formily/json-schema'
+import type { Vue2Component } from './vue2'
+import type { Vue3Component } from './vue3'
+import type { FormPathPattern } from '@formily/shared'
+import type { ISchema, Schema, SchemaKey } from '@formily/json-schema'
 
-export type VueComponent = ComponentOptions<Vue> | Component
-
-export type VueComponentProps<T extends VueComponent = ComponentOptions<Vue>> = T extends Vue ? Exclude<T, keyof Vue> : (T extends ComponentOptions<Vue> ? T['props'] : Record<string, any>)
+export type VueComponent<Props = Record<string, any>> = Vue2Component<Props> | Vue3Component<Props> | Props
+export type VueComponentOptionsWithProps = {
+  props: unknown
+}
+export type VueComponentProps<T extends VueComponent> = T extends VueComponentOptionsWithProps ? T['props'] : T
 
 export interface IProviderProps {
   form: Formily.Core.Models.Form

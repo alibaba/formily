@@ -1,21 +1,9 @@
 import { Tracker } from '@formily/reactive'
-import { VNode } from 'vue'
 import { getCurrentInstance, onBeforeUnmount, isVue2 } from 'vue-demi'
-
-// types for vue3
-type VNodeChildAtom =
-  | VNode
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | void
-type RawChildren = VNodeChildAtom | VNodeChildAtom[] | (() => any)
 
 export const useObserver = () => {
   if (isVue2) {
-    const track = (slot: (...args: any[]) => RawChildren) => slot
+    const track = (slot: (...args: any[]) => any) => slot
     return { track }
   } else {
     const vm = getCurrentInstance()
@@ -41,7 +29,7 @@ export const useObserver = () => {
       }
     })
 
-    const track = (slot: (...args: any[]) => RawChildren) => {
+    const track = (slot: (...args: any[]) => any) => {
       if (slot.length !== 0) {
         const scopedSlot = (...args: any[]) =>
           tracker.track(slot.bind(vm, ...args))

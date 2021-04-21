@@ -55,7 +55,6 @@ import {
   FormConsumer,
   Field,
   useField,
-  defineObservableComponent,
   observer
 } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css'

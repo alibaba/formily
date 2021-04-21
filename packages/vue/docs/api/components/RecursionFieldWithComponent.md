@@ -24,7 +24,7 @@ import { defineComponent, h } from '@vue/composition-api'
 // or "import { defineComponent, h } from 'vue'" if using vue3
 import { Input, Button, Space } from 'ant-design-vue'
 import { createForm } from '@formily/core'
-import { FormProvider, createSchemaField, RecursionField, defineObservableComponent, useField, useFieldSchema, observer } from '@formily/vue'
+import { FormProvider, createSchemaField, RecursionField, useField, useFieldSchema, observer } from '@formily/vue'
 import 'ant-design-vue/dist/antd.css'
 
 const ArrayItems = observer(defineComponent({

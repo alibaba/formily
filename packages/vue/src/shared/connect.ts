@@ -1,5 +1,5 @@
 /* eslint-disable vue/one-component-per-file */
-import { FunctionalComponentOptions } from 'vue'
+import { Vue2Component, FunctionalComponentOptions } from '../types/vue2'
 import { isVue2, markRaw, defineComponent } from 'vue-demi'
 import { isFn, isStr, FormPath, each } from '@formily/shared'
 import { isVoidField } from '@formily/core'
@@ -10,9 +10,9 @@ import h from './h'
 
 export function mapProps<T extends VueComponent = VueComponent>(...args: IStateMapper<VueComponentProps<T>>[]) {
   return (target: T) => {
-    return observer(defineComponent<T>({
+    return observer<VueComponentProps<T>>(defineComponent<VueComponentProps<T>>({
       // listeners is needed for vue2
-      setup(props: VueComponentProps<T>, { attrs, slots, listeners }) {
+      setup(props, { attrs, slots, listeners }: Record<string, any>) {
         const fieldRef = useField()
 
         const transform = (input: VueComponentProps<T>, field: Formily.Core.Types.GeneralField) => args.reduce(
@@ -37,7 +37,7 @@ export function mapProps<T extends VueComponent = VueComponent>(...args: IStateM
         )
 
         return () => {
-          const newAttrs = transform({ ...props, ...attrs } as VueComponentProps<T>, fieldRef.value)
+          const newAttrs = transform({ ...attrs } as VueComponentProps<T>, fieldRef.value)
           return h(
             target,
             {
@@ -56,8 +56,8 @@ export function mapProps<T extends VueComponent = VueComponent>(...args: IStateM
 
 export function mapReadPretty<T extends VueComponent, C extends VueComponent>(component: C) {
   return (target: T) => {
-    return observer(defineComponent({
-      setup(props: VueComponentProps<T>, { attrs, slots }) {
+    return observer<VueComponentProps<T>>(defineComponent({
+      setup(props, { attrs, slots }) {
         const fieldRef = useField()
         return () =>
           h(
@@ -67,7 +67,6 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(co
             {
               attrs: {
                 ...attrs,
-                ...props
               },
             },
             slots
@@ -87,7 +86,7 @@ export function connect<T extends VueComponent>(target: T, ...args: IComponentMa
     const functionalComponent = {
       functional: true,
       render(h, context) {
-        return h(Component, context.data, context.children)
+        return h((Component as Vue2Component), context.data, context.children)
       }
     } as FunctionalComponentOptions
     return markRaw(functionalComponent)

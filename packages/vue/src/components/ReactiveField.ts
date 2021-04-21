@@ -1,4 +1,4 @@
-import { VNode, Component } from 'vue'
+import { VueComponent } from '../types'
 import { defineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { observer, useObserver } from '@formily/reactive-vue'
@@ -10,14 +10,14 @@ interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
 }
 
-export default observer(defineComponent({
+export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps>({
   name: 'ReactiveField',
   // eslint-disable-next-line vue/require-prop-types
-  props: ['field'],
+  props: (['field'] as any),
   setup(props: IReactiveFieldProps, { slots }) {
     const { track } = useObserver()
     const key = Math.floor(Date.now() * Math.random()).toString(16)
-    return () => {
+    return track(() => {
       const field = props.field
       let children = {}
       if (!field) {
@@ -25,13 +25,13 @@ export default observer(defineComponent({
       } else if (field.display !== 'visible') {
         children = { default: () => [h('template', {}, {})] }
       } else {
-        const renderDecorator = (childNodes: VNode[]) => {
+        const renderDecorator = (childNodes: any[]) => {
           if (!field?.decorator?.[0]) {
             return {
               default: () => childNodes
             }
           } else {
-            const decorator = field.decorator[0] as Component
+            const decorator = field.decorator[0] as VueComponent
             const decoratorData = field.decorator[1] || {}
             return {
               default: () => h( decorator, { attrs: decoratorData },
@@ -67,7 +67,7 @@ export default observer(defineComponent({
               field.component[1]?.onBlur?.(...args)
             }
           }
-          const component = field.component[0] as Component
+          const component = field.component[0] as VueComponent
           const originData = field.component[1] || {}
           const componentData =  {
             disabled: !isVoidField(field)
@@ -98,6 +98,6 @@ export default observer(defineComponent({
       }
 
       return h(Fragment, { key }, children)
-    }
+    })
   }
 }))

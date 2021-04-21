@@ -66,9 +66,9 @@ const Input = connect(
   AntdInput,
   mapReadPretty({
     props: ['value'],
-    functional: true,
-    render (h, context) {
-      return h('div', [context.props.value])
+    // you need import "h" from "vue" in vue3
+    render (h) {
+      return h('div', [this.value])
     }
   })
 )
