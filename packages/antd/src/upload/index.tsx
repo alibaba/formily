@@ -10,6 +10,7 @@ import { reaction } from '@formily/reactive'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { isArr, toArr } from '@formily/shared'
 import { UPLOAD_PLACEHOLDER } from './placeholder'
+import { usePrefixCls } from '../__builtins__'
 
 type UploadProps = Omit<AntdUploadProps, 'onChange'> & {
   onChange?: (fileList: UploadFile[]) => void
@@ -167,7 +168,11 @@ export const Upload: ComposedUpload = connect(
 
 const Dragger = connect(
   (props: DraggerProps) => {
-    return <AntdUpload.Dragger {...useUploadProps(props)} />
+    return (
+      <div className={usePrefixCls('upload-dragger')}>
+        <AntdUpload.Dragger {...useUploadProps(props)} />
+      </div>
+    )
   },
   mapProps({
     value: 'fileList',
