@@ -1283,7 +1283,7 @@ Dictionary
   |---customForm
 ```
 
-Example：Cross-file consumption form state, Check [FormProvider](#FormProvider) and [FormSpy](#FormSpy) for more infomation.
+Example：Cross-file consumption form state, Check [FormProvider](#FormProvider) and [FormSpy](#FormSpy) for more information.
 
 ```jsx
 import React from 'react'
