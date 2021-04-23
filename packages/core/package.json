@@ -35,9 +35,9 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/reactive": "^2.0.0-beta.33",
-    "@formily/shared": "^2.0.0-beta.33",
-    "@formily/validator": "^2.0.0-beta.33"
+    "@formily/reactive": "2.0.0-beta.33",
+    "@formily/shared": "2.0.0-beta.33",
+    "@formily/validator": "2.0.0-beta.33"
   },
   "publishConfig": {
     "access": "public"

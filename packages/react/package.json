@@ -38,12 +38,12 @@
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/core": "^2.0.0-beta.33",
+    "@formily/core": "2.0.0-beta.33",
     "@formily/json-schema": "^2.0.0-beta.33",
-    "@formily/reactive": "^2.0.0-beta.33",
+    "@formily/reactive": "2.0.0-beta.33",
     "@formily/reactive-react": "^2.0.0-beta.33",
-    "@formily/shared": "^2.0.0-beta.33",
-    "@formily/validator": "^2.0.0-beta.33",
+    "@formily/shared": "2.0.0-beta.33",
+    "@formily/validator": "2.0.0-beta.33",
     "hoist-non-react-statics": "^3.3.2"
   },
   "publishConfig": {
