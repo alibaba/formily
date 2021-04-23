@@ -21,7 +21,6 @@ import { Subscribable } from '../subscribable'
 import { merge } from '../merge'
 import { instOf } from '../instanceof'
 import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
-import { log } from '../log'
 import { defaults } from '../defaults'
 
 describe('array', () => {
@@ -522,76 +521,6 @@ describe('types', () => {
   })
   test('isHTMLElement', () => {
     expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
-  })
-})
-
-describe('log', () => {
-  const SomeString = Date.now().toString(32)
-  const SomeObject = { v: SomeString }
-  const Keyword = 'Formily'
-  const Tips = 'you should do something'
-  const FormilyLog = log
-  test('log api', () => {
-    expect(FormilyLog.log(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.log(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-  })
-  test('info api', () => {
-    expect(FormilyLog.info(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.info(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-  })
-  test('warn api', () => {
-    expect(FormilyLog.warn(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.warn(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-
-    expect(FormilyLog.warn(SomeString, Tips)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-      tips: Tips,
-    })
-    expect(FormilyLog.warn(SomeObject, Tips)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-      tips: Tips,
-    })
-  })
-  test('error api', () => {
-    expect(FormilyLog.error(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.error(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-
-    expect(FormilyLog.error(SomeString, Tips)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-      tips: Tips,
-    })
-    expect(FormilyLog.error(SomeObject, Tips)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-      tips: Tips,
-    })
   })
 })
 

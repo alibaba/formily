@@ -199,6 +199,26 @@ const omitInvalid = (target: any) => {
   )
 }
 
+const findComponent = (
+  type: 'component' | 'decorator',
+  path: Formily.Core.Types.FormPathPattern,
+  options: ISchemaFieldFactoryOptions,
+  state: IFieldState
+) => {
+  if (path) {
+    const component =
+      FormPath.getIn(options?.components, path) || state?.[type]?.[0]
+    if (component) {
+      return component
+    }
+    //Todo: need to use __DEV__ keyword
+    console.error(
+      `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
+    )
+  }
+  return state?.[type]?.[0]
+}
+
 const getStateFromSchema = (
   schema: Schema,
   options: ISchemaFieldFactoryOptions,
@@ -224,15 +244,11 @@ const getStateFromSchema = (
     display: schema['x-display'],
     pattern: schema['x-pattern'],
     decorator: [
-      (schema['x-decorator'] &&
-        FormPath.getIn(options?.components, schema['x-decorator'])) ||
-        state?.decorator?.[0],
+      findComponent('decorator', schema['x-decorator'], options, state),
       schema['x-decorator-props'] || state?.decorator?.[1],
     ],
     component: [
-      (schema['x-component'] &&
-        FormPath.getIn(options?.components, schema['x-component'])) ||
-        state?.component?.[0],
+      findComponent('component', schema['x-component'], options, state),
       schema['x-component-props'] || state?.component?.[1],
     ],
   })
