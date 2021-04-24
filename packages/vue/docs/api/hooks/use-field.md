@@ -69,6 +69,7 @@ const FormItem = observer(defineComponent({
       return h(Form.Item, {
         props: {
           label: field.title,
+          required: field.required,
           help: field.errors?.length ? field.errors : undefined,
           extra: field.description,
           validateStatus: field.validateStatus,

@@ -141,10 +141,6 @@ export default {
             title: 'observer',
             path: '/api/vue/observer',
           },
-          {
-            title: 'useObserver',
-            path: '/api/vue/use-observer',
-          },
         ],
       },
     ],

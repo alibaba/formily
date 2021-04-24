@@ -6,7 +6,7 @@ import ReactiveField from './ReactiveField'
 import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { observer } from '@formily/reactive-vue'
 
 export default observer<IFieldProps<VueComponent, VueComponent>>(defineComponent<IFieldProps<VueComponent, VueComponent>>({
   name: 'ArrayField',
@@ -60,7 +60,6 @@ export default observer<IFieldProps<VueComponent, VueComponent>>(defineComponent
     reactions: [Array, Function],
   } as any),
   setup(props: IFieldProps<VueComponent, VueComponent>, { slots }) {
-    const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
@@ -80,10 +79,10 @@ export default observer<IFieldProps<VueComponent, VueComponent>>(defineComponent
         }
       },
       {
-        default: track(() => slots.default && slots.default({
+        default: () => slots.default && slots.default({
           field: fieldRef.value,
           form: fieldRef.value.form
-        }))
+        })
       }
     )
   }

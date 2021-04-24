@@ -12,10 +12,6 @@ order: 1
 我们在使用 ArrayField 组件的时候，一定要记得传 name 属性。同时要使用 scoped slots 形式来组织子组件
 :::
 
-::: danger DANGER
-该组件对 vue3 的支持尚不完备，请关注后续更新
-:::
-
 ## 签名
 
 ```ts
