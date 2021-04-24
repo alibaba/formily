@@ -3,7 +3,7 @@ import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { observer } from '@formily/reactive-vue'
 import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
@@ -62,7 +62,7 @@ export default observer<ObjectField>(defineComponent<ObjectField>({
     reactions: [Array, Function],
   } as any),
   setup(props: ObjectField, { slots }) {
-    const { track } = useObserver()
+    // const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
@@ -82,10 +82,10 @@ export default observer<ObjectField>(defineComponent<ObjectField>({
         }
       },
       {
-        default: track(() => slots.default && slots.default({
+        default: () => slots.default && slots.default({
           field: fieldRef.value,
           form: fieldRef.value.form
-        }))
+        })
       }
     )
   }

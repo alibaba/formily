@@ -1,7 +1,7 @@
 import { inject, provide, defineComponent, shallowRef, watch } from 'vue-demi'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { observer } from '@formily/reactive-vue'
 import {
   SchemaSymbol,
   SchemaOptionsSymbol,
@@ -38,7 +38,7 @@ const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursion
     filterProperties: {},
   } as any),
   setup(props: IRecursionFieldProps) {
-    const { track } = useObserver()
+    // const { track } = useObserver()
     const parentRef = useField()
     const options = inject(SchemaOptionsSymbol)
     const scope = inject(SchemaExpressionScopeSymbol)
@@ -98,7 +98,7 @@ const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursion
         const content = typeof fieldSchemaRef.value['x-content'] === 'object' ? h(fieldSchemaRef.value['x-content'], {}, {}) : fieldSchemaRef.value['x-content']
 
         return h(Fragment, {}, {
-          default: track(() => [...children, content])
+          default: () => [...children, content]
         })
       }
 
@@ -113,7 +113,7 @@ const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursion
               basePath: basePath
             }
           }, {
-            default: track(({ field }) => [renderProperties(field)])
+            default: ({ field }) => [renderProperties(field)]
           })
         } else if (fieldSchemaRef.value.type === 'array') {
           return h(ArrayField, {
@@ -132,7 +132,7 @@ const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursion
               basePath: basePath
             }
           }, {
-            default: track(({ field }) => [renderProperties(field)])
+            default: ({ field }) => [renderProperties(field)]
           })
         }
 

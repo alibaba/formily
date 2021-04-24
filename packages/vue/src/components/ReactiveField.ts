@@ -1,7 +1,7 @@
 import { VueComponent } from '../types'
 import { defineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { observer } from '@formily/reactive-vue'
 
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
@@ -15,9 +15,9 @@ export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps
   // eslint-disable-next-line vue/require-prop-types
   props: (['field'] as any),
   setup(props: IReactiveFieldProps, { slots }) {
-    const { track } = useObserver()
+    // const { track } = useObserver()
     const key = Math.floor(Date.now() * Math.random()).toString(16)
-    return track(() => {
+    return () => {
       const field = props.field
       let children = {}
       if (!field) {
@@ -46,10 +46,10 @@ export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps
         const renderComponent = () => {
           if (!field?.component?.[0]) {
             return h(Fragment, {}, {
-              default: track(() => slots.default && slots.default({
+              default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              }))
+              })
             })
           }
           const events = {} as Record<string, any>
@@ -84,10 +84,10 @@ export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps
               on: events
             },
             {
-              default: track(() => slots.default && slots.default({
+              default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              }))
+              })
             }
           )
         }
@@ -96,6 +96,6 @@ export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps
       }
 
       return h(Fragment, { key }, children)
-    })
+    }
   }
 }))
