@@ -16,7 +16,7 @@ module.exports = {
       },
       {
         text: 'API',
-        link: '/api/components/Field',
+        link: '/api/components/field',
       },
       {
         text: '主站',
@@ -37,26 +37,25 @@ module.exports = {
         {
           title: 'Components',
           children: [
-            '/api/components/Field',
-            '/api/components/ArrayField',
-            '/api/components/ObjectField',
-            '/api/components/VoidField',
-            '/api/components/SchemaField',
-            '/api/components/SchemaFieldWithSchema',
-            '/api/components/RecursionField',
-            '/api/components/RecursionFieldWithComponent',
-            '/api/components/FormProvider',
-            '/api/components/FormConsumer',
+            '/api/components/field',
+            '/api/components/array-field',
+            '/api/components/object-field',
+            '/api/components/void-field',
+            '/api/components/schema-field',
+            '/api/components/schema-field-with-schema',
+            '/api/components/recursion-field',
+            '/api/components/recursion-field-with-component',
+            '/api/components/form-provider',
+            '/api/components/form-consumer',
           ]
         },
         {
           title: 'Hooks',
           children: [
-            '/api/hooks/useField',
-            '/api/hooks/useFieldSchema',
-            '/api/hooks/useForm',
-            '/api/hooks/useFormEffects',
-            '/api/hooks/useObserver',
+            '/api/hooks/use-field',
+            '/api/hooks/use-field-schema',
+            '/api/hooks/use-form',
+            '/api/hooks/use-form-effects',
           ]
         },
         {
@@ -64,10 +63,10 @@ module.exports = {
           children: [
             '/api/shared/connect',
             '/api/shared/injections',
-            '/api/shared/mapProps',
-            '/api/shared/mapReadPretty',
+            '/api/shared/map-props',
+            '/api/shared/map-read-pretty',
             '/api/shared/observer',
-            '/api/shared/Schema',
+            '/api/shared/schema',
           ]
         }
       ]

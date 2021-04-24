@@ -35,7 +35,6 @@ npm install --save @formily/core @formily/vue @vue/composition-api
 ```
 
 ## 快速开始
-
 ::: demo
 <template>
   <FormProvider :form="form">
