@@ -57,7 +57,7 @@ export function mapProps<T extends VueComponent = VueComponent>(...args: IStateM
 export function mapReadPretty<T extends VueComponent, C extends VueComponent>(component: C) {
   return (target: T) => {
     return observer<VueComponentProps<T>>(defineComponent({
-      setup(props, { attrs, slots }) {
+      setup(props, { attrs, slots, listeners }: Record<string, any>) {
         const fieldRef = useField()
         return () =>
           h(
@@ -68,6 +68,7 @@ export function mapReadPretty<T extends VueComponent, C extends VueComponent>(co
               attrs: {
                 ...attrs,
               },
+              on: listeners
             },
             slots
           )
