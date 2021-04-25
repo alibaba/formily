@@ -10,7 +10,12 @@ import {
 import { map, each, isFn, instOf } from '@formily/shared'
 import { compile, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
-import { reducePatches, registerPatches } from './patches'
+import {
+  reducePatches,
+  registerPatches,
+  registerPolyfills,
+  enablePolyfills,
+} from './patches'
 import {
   registerVoidComponents,
   registerTypeDefaultComponents,
@@ -555,4 +560,8 @@ export class Schema<
   static registerVoidComponents = registerVoidComponents
 
   static registerTypeDefaultComponents = registerTypeDefaultComponents
+
+  static registerPolyfills = registerPolyfills
+  
+  static enablePolyfills = enablePolyfills
 }

@@ -469,6 +469,89 @@ Schema.registerTypeDefaultComponents({
 })
 ```
 
+### registerTypeDefaultComponents
+
+#### 描述
+
+给 Schema 类型标识默认组件类型
+
+#### 签名
+
+```ts
+interface registerTypeDefaultComponents {
+  (maps: Record<string, string>): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/react'
+
+Schema.registerTypeDefaultComponents({
+  string: 'Input',
+  number: 'NumberPicker',
+  array: 'ArrayTable',
+})
+```
+
+### registerPolyfills
+
+#### 描述
+
+注册协议兼容垫片
+
+#### 签名
+
+```ts
+type SchemaPatch = (schema: ISchema) => ISchema
+
+interface registerPolyfills {
+  (version: string, patch: SchemaPatch): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/react'
+
+Schema.registerPolyfills('1.0', (schema) => {
+  schema['x-decorator'] = 'FormItem'
+  return schema
+})
+```
+
+### enablePolyfills
+
+#### 描述
+
+开启协议垫片，默认内置 1.0 版本协议兼容垫片，主要兼容特性：
+
+- x-decorator 不声明，自动作为 FormItem
+- x-linkages 转换为 x-reactions
+- x-props 自动转换为 x-decorator-props
+- x-rules 转换为 x-validator
+- editable 转换为 x-editable
+- visible 转换为 x-visible
+- x-component 为 card/block/grid-row/grid-col/grid/layout/step/tab/text-box 自动转换 VoidField，
+
+#### 签名
+
+```ts
+interface enablePolyfills {
+  (versions: string[]): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/react'
+
+Schema.enablePolyfills(['1.0'])
+```
+
 ## 类型
 
 ### ISchema

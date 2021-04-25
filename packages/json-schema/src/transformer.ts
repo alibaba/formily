@@ -211,10 +211,12 @@ const findComponent = (
     if (component) {
       return component
     }
-    //Todo: need to use __DEV__ keyword
-    console.error(
-      `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
-    )
+    if (options?.components) {
+      //Todo: need to use __DEV__ keyword
+      console.error(
+        `[Formily JSON Schema]: Cannot find the '${path}' component mapped by Schema.x-${type}`
+      )
+    }
   }
   return state?.[type]?.[0]
 }

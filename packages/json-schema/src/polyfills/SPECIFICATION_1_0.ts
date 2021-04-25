@@ -1,4 +1,4 @@
-import { registerPatches } from '../patches'
+import { registerPolyfills } from '../patches'
 import { toArr, isArr, isStr, lowerCase, isValid } from '@formily/shared'
 import { ISchema } from '../types'
 
@@ -125,7 +125,7 @@ const SpecificationV1Polyfill = (schema: ISchema) => {
   return schema
 }
 
-registerPatches(SpecificationV1Polyfill)
+registerPolyfills('1.0', SpecificationV1Polyfill)
 
 export const registerVoidComponents = (components: string[]) => {
   VOID_COMPONENTS.push(...components)
