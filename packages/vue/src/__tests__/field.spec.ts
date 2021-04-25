@@ -38,11 +38,11 @@ const Input = defineComponent({
     const fieldRef = useField()
     return () => {
       const field = fieldRef.value
-      return h('input', { 
+      return h('input', {
         attrs: {
           ...attrs,
           value: props.value,
-          'data-testid': field.path.toString() 
+          'data-testid': field.path.toString()
         },
         on: {
           ...listeners,
@@ -235,14 +235,26 @@ test('connect', async () => {
       }
     })
   )
+
+  const CustomField3 = connect(
+    Input,
+    mapProps(),
+    mapReadPretty({
+      render(h) {
+        return h('div', 'read pretty')
+      }
+    })
+  )
+
   const form = createForm()
-  const { queryByText } = render({
+  const { queryByText, getByTestId } = render({
     data() {
-      return { form, Decorator, CustomField, CustomField2 }
+      return { form, Decorator, CustomField, CustomField2, CustomField3 }
     },
     template: `<FormProvider :form="form">
       <Field name="aa" :decorator="[Decorator]" :component="[CustomField]" />
       <Field name="bb" :decorator="[Decorator]" :component="[CustomField2]" />
+      <Field name="cc" :decorator="[Decorator]" :component="[CustomField3]" />
     </FormProvider>`
   })
   form.query('aa').take((field) => {
@@ -253,6 +265,10 @@ test('connect', async () => {
   await waitFor(() => {
     expect(queryByText('123')).toBeVisible()
   })
+
+  fireEvent.update(getByTestId('cc'), '123')
+  expect(queryByText('123')).toBeVisible()
+  expect(form.query('cc').get('value')).toEqual('123')
 
   form.query('aa').take((field) => {
     if (!isField(field)) return
