@@ -70,4 +70,4 @@ export default {
 
 :::
 
-使用[useField](/api/hooks/useField)和[useFieldSchema](/api/shared/use-field-schema)来获取当前字段上下文中的字段实例和字段 schema
+使用[useField](/api/hooks/use-field)和[useFieldSchema](/api/shared/use-field-schema)来获取当前字段上下文中的字段实例和字段 schema

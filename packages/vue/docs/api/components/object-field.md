@@ -12,10 +12,6 @@ order: 2
 我们在使用 ObjectField 组件的时候，一定要记得传 name 属性。同时要使用 scoped slot 形式来组织子组件
 :::
 
-::: danger danger
-该组件对 vue3 的支持尚不完备，请关注后续更新
-:::
-
 ## 签名
 
 ```ts
@@ -32,7 +28,7 @@ type ObjectField = Vue.Component<any, any, any, IFieldFactoryProps>
         <div v-for="key in Object.keys(field.value || {})" :key="key" :style="{ marginBottom: '10px' }">
           <Space>
             <Field :name="key" :component="[Input, { placeholder: key }]" />
-            <Button @click="() => field.removeProperty(key)" >
+            <Button @click="field.removeProperty(key)" >
               Remove
             </Button>
           </Space>
@@ -44,13 +40,7 @@ type ObjectField = Vue.Component<any, any, any, IFieldFactoryProps>
             required
             :component="[Input, { placeholder: 'Property Name' }]"
           />
-          <Button @click="() => {
-            const name = form.values.propertyName
-            if (name && !form.existValuesIn(`object.${name}`)) {
-              field.addProperty(name, '')
-              form.deleteValuesIn('propertyName')
-            }
-          }">
+          <Button @click="addPropertyToField(field)">
             Add
           </Button>
         </Space>
@@ -71,6 +61,15 @@ export default {
     return {
       Input,
       form: createForm()
+    }
+  },
+  methods: {
+    addPropertyToField(field) {
+      const name = this.form.values.propertyName
+      if (name && !this.form.existValuesIn(`object.${name}`)) {
+        field.addProperty(name, '')
+        this.form.deleteValuesIn('propertyName')
+      }
     }
   }
 }

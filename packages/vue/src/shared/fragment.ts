@@ -1,8 +1,8 @@
 import frag from 'vue-frag';
 import { VueComponent } from '../types';
-import { isVue2, defineComponent } from 'vue-demi';
+import { isVue2, defineComponent, Fragment as Vue3Fragment } from 'vue-demi';
 
-export const Fragment = '#fragment'
+export const Fragment = Vue3Fragment || '#fragment'
 
 let FragmentComponent: VueComponent
 

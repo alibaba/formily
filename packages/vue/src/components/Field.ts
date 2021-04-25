@@ -4,7 +4,6 @@ import { useAttach } from '../hooks/useAttach'
 import { FieldSymbol } from '../shared/context'
 import { VueComponent, IFieldProps } from '../types'
 import ReactiveField from './ReactiveField'
-import { useObserver } from '@formily/reactive-vue'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
@@ -60,7 +59,7 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
     reactions: [Array, Function],
   } as any),
   setup(props: IFieldProps<VueComponent, VueComponent>, { slots }) {
-    const { track } = useObserver()
+    // const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
@@ -82,10 +81,10 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
           }
         },
         {
-          default: track(() => slots.default && slots.default({
+          default: () => slots.default && slots.default({
             field,
             form: field.form
-          }))
+          })
         }
       )
     }

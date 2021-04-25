@@ -15,7 +15,7 @@ interface connect<T extends Vue.Component> {
 }
 ```
 
-入参传入第一个参数是要接入的组件，后面的参数都是组件映射器，每个映射器都是一个函数，通常我们会使用内置的[mapProps](/api/shared/mapProps)和[mapReadPretty](/api/shared/mapReadPretty)映射器
+入参传入第一个参数是要接入的组件，后面的参数都是组件映射器，每个映射器都是一个函数，通常我们会使用内置的[mapProps](/api/shared/map-props)和[mapReadPretty](/api/shared/map-read-pretty)映射器
 
 ## 用例
 

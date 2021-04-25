@@ -1,5 +1,4 @@
 import { provide, defineComponent } from 'vue-demi'
-import { useObserver } from '@formily/reactive-vue'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IVoidFieldProps } from '../types'
@@ -48,7 +47,7 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
     reactions: [Array, Function],
   } as any),
   setup(props: IVoidFieldProps<VueComponent, VueComponent>, { slots }) {
-    const { track } = useObserver()
+    // const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
@@ -68,10 +67,10 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
         }
       },
       {
-        default: track(() => slots.default && slots.default({
+        default: () => slots.default && slots.default({
           field: fieldRef.value,
           form: fieldRef.value.form
-        }))
+        })
       }
     )
   }
