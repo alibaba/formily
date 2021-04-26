@@ -1,4 +1,3 @@
-import { registerPolyfills } from '../patches'
 import { toArr, isArr, isStr, lowerCase, isValid } from '@formily/shared'
 import { ISchema } from '../types'
 
@@ -72,7 +71,7 @@ const transformXLinkage = (linkages: any[]) => {
   return []
 }
 
-const SpecificationV1Polyfill = (schema: ISchema) => {
+export const SpecificationV1Polyfill = (schema: ISchema) => {
   if (isValid(schema['editable'])) {
     schema['x-editable'] = schema['x-editable'] || schema['editable']
     delete schema['editable']
@@ -125,12 +124,12 @@ const SpecificationV1Polyfill = (schema: ISchema) => {
   return schema
 }
 
-registerPolyfills('1.0', SpecificationV1Polyfill)
-
-export const registerVoidComponents = (components: string[]) => {
+SpecificationV1Polyfill.registerVoidComponents = (components: string[]) => {
   VOID_COMPONENTS.push(...components)
 }
 
-export const registerTypeDefaultComponents = (maps: Record<string, string>) => {
+SpecificationV1Polyfill.registerTypeDefaultComponents = (
+  maps: Record<string, string>
+) => {
   Object.assign(TYPE_DEFAULT_COMPONENTS, maps)
 }

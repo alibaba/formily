@@ -1,15 +1,14 @@
 import { Schema } from '../schema'
 import {
-  registerTypeDefaultComponents,
-  registerVoidComponents,
+  SpecificationV1Polyfill
 } from '../polyfills'
 
-registerVoidComponents(['MyCard'])
-registerTypeDefaultComponents({
+SpecificationV1Polyfill.registerVoidComponents(['MyCard'])
+SpecificationV1Polyfill.registerTypeDefaultComponents({
   string: 'Input',
 })
 
-Schema.enablePolyfills(['1.0'])
+Schema.registerPatches(SpecificationV1Polyfill)
 
 test('v1 polyfill', () => {
   const schema = new Schema({
