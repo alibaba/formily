@@ -443,6 +443,10 @@ import { Schema } from '@formily/react'
 Schema.registerVoidComponents(['card', 'tab', 'step'])
 ```
 
+<Alert type="warning">
+  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+</Alert>
+
 ### registerTypeDefaultComponents
 
 #### 描述
@@ -468,6 +472,10 @@ Schema.registerTypeDefaultComponents({
   array: 'ArrayTable',
 })
 ```
+
+<Alert type="warning">
+  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+</Alert>
 
 ### registerPolyfills
 
