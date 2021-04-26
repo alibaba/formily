@@ -469,32 +469,6 @@ Schema.registerTypeDefaultComponents({
 })
 ```
 
-### registerTypeDefaultComponents
-
-#### 描述
-
-给 Schema 类型标识默认组件类型
-
-#### 签名
-
-```ts
-interface registerTypeDefaultComponents {
-  (maps: Record<string, string>): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.registerTypeDefaultComponents({
-  string: 'Input',
-  number: 'NumberPicker',
-  array: 'ArrayTable',
-})
-```
-
 ### registerPolyfills
 
 #### 描述
