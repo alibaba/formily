@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react'
-import { isArr, isEmpty } from '@formily/shared'
+import { isArr, isEmpty, isValid } from '@formily/shared'
 import { useField } from '@formily/react'
 import { InputProps } from '@alifd/next/lib/input'
 import { SelectProps } from '@alifd/next/lib/select'
@@ -57,9 +57,9 @@ const Select: React.FC<SelectProps> = (props) => {
       }
     } else {
       if (props.useDetailValue) {
-        return value ? [value] : []
+        return isValid(value) ? [value] : []
       } else {
-        return value ? [{ label: value, value }] : []
+        return isValid(value) ? [{ label: value, value }] : []
       }
     }
   }
