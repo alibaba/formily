@@ -421,137 +421,6 @@ interface registerPatches {
 }
 ```
 
-### registerVoidComponents
-
-#### 描述
-
-给字段组件打上标识，标识该组件是虚拟组件，与 formily1.x 做兼容
-
-#### 签名
-
-```ts
-interface registerVoidComponents {
-  (components: string[]): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.registerVoidComponents(['card', 'tab', 'step'])
-```
-
-### registerTypeDefaultComponents
-
-#### 描述
-
-给 Schema 类型标识默认组件类型
-
-#### 签名
-
-```ts
-interface registerTypeDefaultComponents {
-  (maps: Record<string, string>): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.registerTypeDefaultComponents({
-  string: 'Input',
-  number: 'NumberPicker',
-  array: 'ArrayTable',
-})
-```
-
-### registerTypeDefaultComponents
-
-#### 描述
-
-给 Schema 类型标识默认组件类型
-
-#### 签名
-
-```ts
-interface registerTypeDefaultComponents {
-  (maps: Record<string, string>): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.registerTypeDefaultComponents({
-  string: 'Input',
-  number: 'NumberPicker',
-  array: 'ArrayTable',
-})
-```
-
-### registerPolyfills
-
-#### 描述
-
-注册协议兼容垫片
-
-#### 签名
-
-```ts
-type SchemaPatch = (schema: ISchema) => ISchema
-
-interface registerPolyfills {
-  (version: string, patch: SchemaPatch): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.registerPolyfills('1.0', (schema) => {
-  schema['x-decorator'] = 'FormItem'
-  return schema
-})
-```
-
-### enablePolyfills
-
-#### 描述
-
-开启协议垫片，默认内置 1.0 版本协议兼容垫片，主要兼容特性：
-
-- x-decorator 不声明，自动作为 FormItem
-- x-linkages 转换为 x-reactions
-- x-props 自动转换为 x-decorator-props
-- x-rules 转换为 x-validator
-- editable 转换为 x-editable
-- visible 转换为 x-visible
-- x-component 为 card/block/grid-row/grid-col/grid/layout/step/tab/text-box 自动转换 VoidField，
-
-#### 签名
-
-```ts
-interface enablePolyfills {
-  (versions: string[]): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.enablePolyfills(['1.0'])
-```
-
 ## 类型
 
 ### ISchema
@@ -961,3 +830,76 @@ type SchemaReactions<Field = any> =
 ### $target
 
 只能在 x-reactions 中的表达式消费，代表主动模式的 target 字段
+
+## 兼容老版本 json-schema 规范
+
+### 内置的 SpecificationV1Polyfill 垫片
+
+主要兼容特性：
+
+- x-decorator 不声明，自动作为 FormItem
+- x-linkages 转换为 x-reactions
+- x-props 自动转换为 x-decorator-props
+- x-rules 转换为 x-validator
+- editable 转换为 x-editable
+- visible 转换为 x-visible
+- x-component 为 card/block/grid-row/grid-col/grid/layout/step/tab/text-box 自动转换 VoidField
+
+#### 用例
+
+1. 安装依赖：
+
+```sh
+yarn add @formily/json-schema
+```
+
+2. 使用
+
+```ts
+import { Schema } from '@formily/json-schema'
+import { SpecificationV1Polyfill } from '@formily/json-schema/esm/polyfills'
+
+// 根据需要来设置
+// SpecificationV1Polyfill.registerVoidComponents(['card', 'tab', 'step'])
+// SpecificationV1Polyfill.registerTypeDefaultComponents({
+//   string: 'Input',
+//   number: 'NumberPicker',
+//   array: 'ArrayTable',
+// })
+
+Schema.registerPatches(SpecificationV1Polyfill)
+```
+
+#### 静态方法
+
+##### SpecificationV1Polyfill.registerVoidComponents
+
+###### 描述
+
+给字段组件打上标识，标识该组件是虚拟组件，与 formily1.x 做兼容
+
+###### 签名
+
+```ts
+interface registerVoidComponents {
+  (components: string[]): void
+}
+```
+
+##### SpecificationV1Polyfill.registerTypeDefaultComponents
+
+###### 描述
+
+给 Schema 类型标识默认组件类型
+
+###### 签名
+
+```ts
+interface registerTypeDefaultComponents {
+  (maps: Record<string, string>): void
+}
+```
+
+### 自定义垫片
+
+参考 `SpecificationV1Polyfill` [源码](https://github.com/alibaba/formily/blob/formily_next/packages/json-schema/src/polyfills/SPECIFICATION_1_0.ts)
