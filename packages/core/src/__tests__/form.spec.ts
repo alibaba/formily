@@ -904,3 +904,23 @@ test('reset object field', async () => {
     object: {},
   })
 })
+
+test('initialValues merge values', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  form.values.array = [{ aa: '321' }]
+  const arr_0_aa = attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+      initialValue: '123',
+    })
+  )
+  expect(array.value).toEqual([{ aa: '321' }])
+  expect(arr_0_aa.value).toEqual('321')
+})

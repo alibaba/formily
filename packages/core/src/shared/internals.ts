@@ -25,7 +25,7 @@ import {
   FieldMatchPattern,
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties } from './constants'
+import { ReservedProperties, GlobalState } from './constants'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -349,6 +349,7 @@ export const exchangeArrayState = (
 }
 
 export const initFieldValue = (field: Field) => {
+  GlobalState.initializing = true
   if (isEmpty(field.initialValue)) {
     if (isValid(field.props.initialValue)) {
       field.initialValue = field.props.initialValue
@@ -361,6 +362,7 @@ export const initFieldValue = (field: Field) => {
       field.value = field.initialValue
     }
   }
+  GlobalState.initializing = false
 }
 
 export const initFieldUpdate = (field: GeneralField) => {
@@ -566,5 +568,6 @@ export const applyValuesPatch = (
       }
     }
   }
+  if (GlobalState.initializing) return
   patch(source, path)
 }
