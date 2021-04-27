@@ -1,6 +1,6 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-$array-base-prefix-cls: $css-prefix+"formily-array-base";
+$array-base-prefix-cls: #{$css-prefix}+"formily-array-base";
 
 
 .#{$array-base-prefix-cls}-remove {

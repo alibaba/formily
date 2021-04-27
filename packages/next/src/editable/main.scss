@@ -1,7 +1,7 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-$editable-prefix-cls: $css-prefix+"formily-editable";
-$editable-popover-prefix-cls: $css-prefix+"formily-editable-popover";
+$editable-prefix-cls: #{$css-prefix}+"formily-editable";
+$editable-popover-prefix-cls: #{$css-prefix}+"formily-editable-popover";
 
 .#{$editable-prefix-cls} {
   cursor: pointer;

@@ -1,6 +1,6 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-$array-table-prefix-cls: $css-prefix+"formily-array-table";
+$array-table-prefix-cls: #{$css-prefix}+"formily-array-table";
 
 .#{$array-table-prefix-cls} {
 

@@ -1,6 +1,6 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
-$form-text-prefix-cls: $css-prefix+"form-text";
+$form-text-prefix-cls: #{$css-prefix}+"form-text";
 
 .#{$form-text-prefix-cls} {
   font-size: 14px;
