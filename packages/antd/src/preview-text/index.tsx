@@ -57,9 +57,9 @@ const Select: React.FC<SelectProps<any>> = (props) => {
       }
     } else {
       if (props.labelInValue) {
-        return value ? [value] : []
+        return isValid(value) ? [value] : []
       } else {
-        return value ? [{ label: value, value }] : []
+        return isValid(value) ? [{ label: value, value }] : []
       }
     }
   }
