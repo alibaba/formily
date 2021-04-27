@@ -443,31 +443,9 @@ import { Schema } from '@formily/react'
 Schema.registerVoidComponents(['card', 'tab', 'step'])
 ```
 
-### registerTypeDefaultComponents
-
-#### 描述
-
-给 Schema 类型标识默认组件类型
-
-#### 签名
-
-```ts
-interface registerTypeDefaultComponents {
-  (maps: Record<string, string>): void
-}
-```
-
-#### 用例
-
-```ts
-import { Schema } from '@formily/react'
-
-Schema.registerTypeDefaultComponents({
-  string: 'Input',
-  number: 'NumberPicker',
-  array: 'ArrayTable',
-})
-```
+<Alert type="warning">
+  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+</Alert>
 
 ### registerTypeDefaultComponents
 
@@ -494,6 +472,10 @@ Schema.registerTypeDefaultComponents({
   array: 'ArrayTable',
 })
 ```
+
+<Alert type="warning">
+  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+</Alert>
 
 ### registerPolyfills
 
