@@ -1,6 +1,6 @@
 {
 	"name": "@formily/shared",
-	"version": "2.0.0-beta.36",
+	"version": "2.0.0-beta.37",
 	"license": "MIT",
 	"main": "lib",
 	"module": "esm",
@@ -34,7 +34,7 @@
 		"@types/react": ">=16.8.0 || >=17.0.0"
 	},
 	"dependencies": {
-		"@formily/path": "2.0.0-beta.36",
+		"@formily/path": "2.0.0-beta.37",
 		"camel-case": "^4.1.1",
 		"lower-case": "^2.0.1",
 		"no-case": "^3.0.4",
