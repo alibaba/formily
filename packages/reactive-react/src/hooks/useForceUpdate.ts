@@ -10,11 +10,15 @@ export function useForceUpdate() {
   const unmountRef = useRef(false)
 
   const update = useCallback(() => {
+    if (unmountRef.current) return
+    setTick((tick) => {
+      return tick + 1
+    })
+  }, EMPTY_ARRAY)
+
+  const scheduler = useCallback(() => {
     if (RENDER_COUNT.value === 0) {
-      if (unmountRef.current) return
-      setTick((tick) => {
-        return tick + 1
-      })
+      update()
     } else {
       if (!RENDER_QUEUE.has(update)) {
         RENDER_QUEUE.add(update)
@@ -42,5 +46,5 @@ export function useForceUpdate() {
     }
   }, [])
 
-  return update
+  return scheduler
 }
