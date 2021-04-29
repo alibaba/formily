@@ -34,7 +34,7 @@ const LOCALE = {
 const getMatchLang = (lang: string) => {
   let find = LOCALE.lang
   each(LOCALE.messages, (messages: ILocaleMessages, key: string) => {
-    if (key.indexOf(lang) > -1 || String(lang).indexOf(key) > -1) {
+    if (key.indexOf(lang) > -1 || String(key).indexOf(lang) > -1) {
       find = key
       return false
     }
