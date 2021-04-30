@@ -30,9 +30,6 @@
 		"build:esm": "tsc --declaration --module es2015 --outDir esm",
 		"build:umd": "rollup --config"
 	},
-	"peerDependencies": {
-		"@types/react": ">=16.8.0 || >=17.0.0"
-	},
 	"dependencies": {
 		"@formily/path": "2.0.0-beta.41",
 		"camel-case": "^4.1.1",

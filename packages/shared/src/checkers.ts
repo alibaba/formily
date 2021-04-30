@@ -18,7 +18,7 @@ export const isNumberLike = (index: any): index is number =>
   isNum(index) || /^\d+$/.test(index)
 export const isObj = (val: unknown): val is object => typeof val === 'object'
 export const isRegExp = isType<RegExp>('RegExp')
-export const isReactElement = (obj: any): obj is React.ReactElement<any> =>
+export const isReactElement = (obj: any): boolean =>
   obj && obj['$$typeof'] && obj['_owner']
 export const isHTMLElement = (target: any): target is EventTarget => {
   return Object.prototype.toString.call(target).indexOf('HTML') > -1
