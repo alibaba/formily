@@ -30,7 +30,7 @@ interface ILayoutProps {
   rowGap: number
 }
 
-interface IFormGridProps {
+export interface IFormGridProps {
   minWidth?: number | number[]
   maxWidth?: number | number[]
   minColumns?: number | number[]
@@ -58,7 +58,7 @@ interface IStyleProps extends IFormGridProps {
   ref: React.MutableRefObject<HTMLDivElement>
 }
 
-interface IGridColumnProps {
+export interface IGridColumnProps {
   gridSpan: number
 }
 
