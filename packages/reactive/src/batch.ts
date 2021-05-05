@@ -17,7 +17,7 @@ const createBatchAnnotation = <F extends (...args: any[]) => any>(method: F) =>
     const action = <T extends (...args: any[]) => any>(callback?: T) => {
       return function (...args: Parameters<T>): ReturnType<T> {
         return method(() =>
-          isFn(callback) ? callback.apply(this, args) : undefined
+          isFn(callback) ? callback.apply(target, args) : undefined
         )
       }
     }
