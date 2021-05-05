@@ -11,6 +11,7 @@ const presets = () => {
     vue: 'Vue',
     react: 'React',
     moment: 'moment',
+    'react-is': 'ReactIs',
     '@alifd/next': 'Next',
     'mobx-react-lite': 'mobxReactLite',
     'react-dom': 'ReactDOM',
