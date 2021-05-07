@@ -1,6 +1,6 @@
 ---
 name: 报告Bug
-about: 答疑问题，请到Discussion里！答疑问题，请到Discussion里！答疑问题，请到Discussion里！答疑问题，请到Discussion里！答疑问题，请到Discussion里！答疑问题，请到Discussion里！
+about: 答疑问题，请到Discussion里提！请到Discussion里提！请到Discussion里提！
 title: ''
 labels: ''
 assignees: ''
