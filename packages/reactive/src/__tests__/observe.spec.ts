@@ -1,12 +1,12 @@
 import { observable, observe } from '../'
-import { getProxyRaw, getRawNode } from '../environment'
+import { ProxyRaw, RawNode } from '../environment'
 
 const getObservers = (target: any) => {
-  return getRawNode(getProxyRaw(target))?.observers
+  return RawNode.get(ProxyRaw.get(target))?.observers
 }
 
 const getDeepObservers = (target: any) => {
-  return getRawNode(getProxyRaw(target))?.deepObservers
+  return RawNode.get(ProxyRaw.get(target))?.deepObservers
 }
 
 test('deep observe', () => {
@@ -57,16 +57,16 @@ test('auto dispose observe', () => {
   observe(obs, handler)
   observe(obs.aa, handler)
   observe(obs.aa.bb, handler)
-  expect(getDeepObservers(obs.aa).size).toEqual(1)
-  expect(getDeepObservers(obs.aa.bb).size).toEqual(1)
+  expect(getDeepObservers(obs.aa).length).toEqual(1)
+  expect(getDeepObservers(obs.aa.bb).length).toEqual(1)
   obs.aa.bb = { kk: 'mm' }
-  expect(getDeepObservers(obs.aa.bb).size).toEqual(1)
-  expect(getDeepObservers(obs.aa).size).toEqual(1)
-  expect(getObservers(obs.aa).size).toEqual(0)
+  expect(getDeepObservers(obs.aa.bb).length).toEqual(1)
+  expect(getDeepObservers(obs.aa).length).toEqual(1)
+  expect(getObservers(obs.aa).length).toEqual(0)
   expect(handler).toBeCalledTimes(3)
   observe(obs.aa, handler)
-  expect(getObservers(obs.aa).size).toEqual(0)
-  expect(getDeepObservers(obs.aa).size).toEqual(2)
+  expect(getObservers(obs.aa).length).toEqual(0)
+  expect(getDeepObservers(obs.aa).length).toEqual(2)
   delete obs.aa
 })
 

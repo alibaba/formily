@@ -5,7 +5,7 @@ import { createObservable, getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
 import { Annotations } from './types'
 import { batch } from './batch'
-import { setRawNode, setProxyRaw } from './environment'
+import { ProxyRaw, RawProxy } from './environment'
 
 export function define<Target extends object = any>(
   target: Target,
@@ -15,25 +15,19 @@ export function define<Target extends object = any>(
   if (!isSupportObservable(target)) return target
   buildTreeNode({
     value: target,
-    traverse: createObservable,
   })
-  setProxyRaw(target, target)
-  setRawNode(target, (node) => {
-    node.proxy = target
-  })
-  return observable(target, ({ target, value }) => {
-    if (target) return target
-    for (const key in annotations) {
-      const annotation = annotations[key]
-      if (isAnnotation(annotation)) {
-        getObservableMaker(annotation)({
-          target: value,
-          key,
-        })
-      }
+  ProxyRaw.set(target, target)
+  RawProxy.set(target, target)
+  for (const key in annotations) {
+    const annotation = annotations[key]
+    if (isAnnotation(annotation)) {
+      getObservableMaker(annotation)({
+        target,
+        key,
+      })
     }
-    return value
-  })
+  }
+  return target
 }
 
 export function model<Target extends object = any>(target: Target): Target {

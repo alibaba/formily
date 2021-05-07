@@ -9,13 +9,15 @@ import {
 import {
   ReactionStack,
   PendingScopeReactions,
+  RawReactionsMap,
   PendingReactions,
   BatchCount,
   UntrackCount,
-  getProxyRaw,
-  getRawNode,
+  ProxyRaw,
+  RawNode,
   BatchScope,
 } from './environment'
+import { concat } from './concat'
 
 const ITERATION_KEY = Symbol('iteration key')
 
@@ -24,46 +26,44 @@ const addRawReactionsMap = (
   key: PropertyKey,
   reaction: Reaction
 ) => {
-  const node = getRawNode(target)
-  const ReactionsMap = node.reactionsMap
-  if (ReactionsMap) {
-    const reactions = ReactionsMap.get(key)
+  const reactionsMap = RawReactionsMap.get(target)
+  if (reactionsMap) {
+    const reactions = reactionsMap.get(key)
     if (reactions) {
       if (!reactions.has(reaction)) {
         reactions.add(reaction)
       }
     } else {
-      ReactionsMap.set(key, new Set([reaction]))
+      reactionsMap.set(key, new Set([reaction]))
     }
-    return ReactionsMap
+    return reactionsMap
   } else {
-    const ReactionsMap: ReactionsMap = new Map([[key, new Set([reaction])]])
-    node.reactionsMap = ReactionsMap
-    return ReactionsMap
+    const reactionsMap: ReactionsMap = new Map([[key, new Set([reaction])]])
+    RawReactionsMap.set(target, reactionsMap)
+    return reactionsMap
   }
 }
 
-const addReactionTargetKeys = (
+const addReactionsMaptoReaction = (
   reaction: Reaction,
-  ReactionsMap: ReactionsMap
+  reactionsMap: ReactionsMap
 ) => {
   const bindSet = reaction._reactionsSet
   if (bindSet) {
-    if (!bindSet.has(ReactionsMap)) {
-      bindSet.add(ReactionsMap)
+    if (!bindSet.has(reactionsMap)) {
+      bindSet.add(reactionsMap)
     }
   } else {
-    reaction._reactionsSet = new Set([ReactionsMap])
+    reaction._reactionsSet = new Set([reactionsMap])
   }
   return bindSet
 }
 
 const getReactionsFromTargetKey = (target: any, key: PropertyKey) => {
-  const node = getRawNode(target)
-  const ReactionsMap = node.reactionsMap
+  const reactionsMap = RawReactionsMap.get(target)
   const reactions = new Set<Reaction>()
-  if (ReactionsMap) {
-    ReactionsMap.get(key)?.forEach((reaction) => {
+  if (reactionsMap) {
+    reactionsMap.get(key)?.forEach((reaction) => {
       if (!reactions.has(reaction)) {
         reactions.add(reaction)
       }
@@ -96,40 +96,44 @@ const runReactions = (target: any, key: PropertyKey) => {
 }
 
 const notifyObservers = (operation: IOperation) => {
-  const targetNode = getRawNode(
-    operation.target
+  const targetNode = RawNode.get(
+    ProxyRaw.get(operation.target) || operation.target
   )
-  const oldValueNode = getRawNode(
-    getProxyRaw(operation.oldValue) || operation.oldValue
+  const oldValueNode = RawNode.get(
+    ProxyRaw.get(operation.oldValue) || operation.oldValue
   )
-  const newValueNode = getRawNode(
-    getProxyRaw(operation.value) || operation.value
+  const newValueNode = RawNode.get(
+    ProxyRaw.get(operation.value) || operation.value
   )
   if (targetNode) {
-    const change: IChange = {
-      path: targetNode.path.concat(operation.key as any),
-      type: operation.type,
-      key: operation.key,
-      value: operation.value,
-      oldValue: operation.oldValue,
+    const getChange = () => {
+      return {
+        get path() {
+          return concat(targetNode.path, operation.key)
+        },
+        type: operation.type,
+        key: operation.key,
+        value: operation.value,
+        oldValue: operation.oldValue,
+      }
     }
     if (oldValueNode && operation.type === 'set') {
-      oldValueNode.observers.forEach((fn) => fn(change))
-      oldValueNode.deepObservers.forEach((fn) => fn(change))
+      oldValueNode.observers.forEach((fn) => fn(getChange()))
+      oldValueNode.deepObservers.forEach((fn) => fn(getChange()))
       if (newValueNode) {
         newValueNode.observers = oldValueNode.observers
         newValueNode.deepObservers = oldValueNode.deepObservers
       }
     }
     if (oldValueNode && operation.type === 'delete') {
-      oldValueNode.observers = new Set()
-      oldValueNode.deepObservers = new Set()
+      oldValueNode.observers = []
+      oldValueNode.deepObservers = []
     }
-    targetNode.observers.forEach((fn) => fn(change))
-    targetNode.deepObservers.forEach((fn) => fn(change))
+    targetNode.observers.forEach((fn) => fn(getChange()))
+    targetNode.deepObservers.forEach((fn) => fn(getChange()))
     let parent = targetNode.parent
     while (!!parent) {
-      parent.deepObservers.forEach((fn) => fn(change))
+      parent.deepObservers.forEach((fn) => fn(getChange()))
       parent = parent.parent
     }
   }
@@ -144,7 +148,7 @@ export const bindTargetKeyWithCurrentReaction = (operation: IOperation) => {
   const current = ReactionStack[ReactionStack.length - 1]
   if (isUntracking()) return
   if (current) {
-    addReactionTargetKeys(current, addRawReactionsMap(target, key, current))
+    addReactionsMaptoReaction(current, addRawReactionsMap(target, key, current))
   }
 }
 
@@ -203,8 +207,8 @@ export const hasRunningReaction = () => {
 export const releaseBindingReactions = (reaction: Reaction) => {
   const bindingSet = reaction._reactionsSet
   if (bindingSet) {
-    bindingSet.forEach((ReactionsMap) => {
-      ReactionsMap.forEach((reactions) => {
+    bindingSet.forEach((reactionsMap) => {
+      reactionsMap.forEach((reactions) => {
         reactions.delete(reaction)
       })
     })

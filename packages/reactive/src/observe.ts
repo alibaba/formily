@@ -1,5 +1,5 @@
 import { IChange } from './types'
-import { getProxyRaw,getRawNode } from './environment'
+import { RawNode, ProxyRaw } from './environment'
 import { isFn } from './checkers'
 
 export const observe = (
@@ -14,21 +14,29 @@ export const observe = (
   }
 
   const addListener = (target: any) => {
-    const raw = getProxyRaw(target) || target
-    const node = getRawNode(raw)
+    const raw = ProxyRaw.get(target) || target
+    const node = RawNode.get(raw)
     if (node) {
       if (deep) {
-        node.deepObservers.add(listener)
+        const id = node.deepObservers.length
+        node.deepObservers.push(listener)
+        listener['deep_detach'] = () => {
+          node.deepObservers.splice(id, 1)
+        }
       } else {
-        node.observers.add(listener)
+        const id = node.observers.length
+        node.observers.push(listener)
+        listener['detach'] = () => {
+          node.observers.splice(id, 1)
+        }
       }
     }
     return () => {
-      const raw = getProxyRaw(target) || target
-      const node = getRawNode(raw)
-      if (node) {
-        node.deepObservers.delete(listener)
-        node.observers.delete(listener)
+      if (listener['detach']) {
+        listener['detach']()
+      }
+      if (listener['deep_detach']) {
+        listener['deep_detach']()
       }
     }
   }

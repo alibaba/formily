@@ -1,68 +1,46 @@
-import { getProxyRaw, getRawNode, setRawNode } from './environment'
+import { ProxyRaw, RawNode } from './environment'
 import { isObservable, isSupportObservable } from './externals'
-import { IVisitor } from './types'
+import { IRawNode, IVisitor } from './types'
+import { concat } from './concat'
+import { createObservable } from './internals'
 
-const concat = (array: any[], target: any) => {
-  const arr = []
-  for (let i = 0; i < array.length; i++) {
-    arr.push(array[i])
-  }
-  arr.push(target)
-  return arr
-}
-
-export const buildTreeNode = ({
-  target,
-  value,
-  key,
-  traverse,
-  shallow,
-}: IVisitor) => {
-  const parentRaw = target
-  const raw = getProxyRaw(value) || value
-  const parentNode = getRawNode(parentRaw)
-  const currentNode = getRawNode(raw)
-  if (currentNode?.isConnected) return currentNode
+export const buildTreeNode = ({ target, value, key, shallow }: IVisitor) => {
+  const raw = ProxyRaw.get(value) || value
+  const currentNode = RawNode.get(raw)
+  if (currentNode) return currentNode
+  const parentRaw = ProxyRaw.get(target) || target
+  const parentNode = RawNode.get(parentRaw)
   if (parentNode) {
-    return setRawNode(value, (node) => {
-      node.path = concat(parentNode.path, key)
-      node.parent = parentNode
-      node.shallow = shallow || parentNode.shallow
-      node.traverse = traverse || parentNode.traverse
-      node.isConnected = true
-    })
+    const node: IRawNode = {
+      get path() {
+        return concat(parentNode.path, key)
+      },
+      parent: parentNode,
+      observers: [],
+      deepObservers: [],
+      shallow: shallow || parentNode.shallow,
+    }
+    RawNode.set(value, node)
   } else {
-    setRawNode(value, (node) => {
-      node.shallow = shallow
-      node.traverse = traverse
-      node.isConnected = true
-    })
+    const node: IRawNode = {
+      path: [],
+      observers: [],
+      deepObservers: [],
+      shallow,
+    }
+    RawNode.set(value, node)
+    return node
   }
 }
 
 export const traverseIn = (target: any, key: PropertyKey, value: any) => {
-  if (isObservable(value)) return value
-  const parent = getProxyRaw(target) || target
-  const raw = getProxyRaw(value) || value
-  const parentNode = getRawNode(parent)
-  const node = getRawNode(raw)
+  if (isObservable(value) || !isSupportObservable(value)) return value
+  const parent = ProxyRaw.get(target) || target
+  const parentNode = RawNode.get(parent)
   if (parentNode) {
-    if (!isSupportObservable(value) || node?.isTraversed) return value
-    const path = parentNode.path.concat(key as any)
     const shallow = parentNode.shallow
-    if (!node) {
-      setRawNode(raw, (node) => {
-        node.path = path
-        node.parent = parentNode
-        node.shallow = parentNode.shallow
-        node.traverse = parentNode.traverse
-        node.isConnected = true
-        node.isTraversed = true
-      })
-    } else {
-      node.isTraversed = true
-    }
-    return parentNode.traverse({ target, key, value, path, shallow })
+    if (shallow) return value
+    return createObservable({ target, key, value, shallow })
   }
   return value
 }

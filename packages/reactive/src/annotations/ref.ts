@@ -1,4 +1,4 @@
-import { setProxyRaw, setRawNode } from '../environment'
+import { ProxyRaw, RawProxy } from '../environment'
 import { createAnnotation } from '../internals'
 import { buildTreeNode } from '../traverse'
 import {
@@ -26,10 +26,8 @@ export const ref: IRef = createAnnotation(({ target, key, value }) => {
     value: store,
   })
 
-  setProxyRaw(proxy, store)
-  setRawNode(store, (node) => {
-    node.proxy = proxy
-  })
+  ProxyRaw.set(proxy, store)
+  RawProxy.set(store, proxy)
 
   function get() {
     bindTargetKeyWithCurrentReaction({

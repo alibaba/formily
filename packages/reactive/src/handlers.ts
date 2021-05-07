@@ -2,7 +2,7 @@ import {
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,
 } from './reaction'
-import { getProxyRaw, getRawNode } from './environment'
+import { ProxyRaw, RawProxy } from './environment'
 import { traverseIn } from './traverse'
 import { isSupportObservable } from './externals'
 
@@ -15,14 +15,14 @@ const wellKnownSymbols = new Set(
 const hasOwnProperty = Object.prototype.hasOwnProperty
 
 function findObservable(target: any, key: PropertyKey, value: any) {
-  const node = getRawNode(value)
+  const observableObj = RawProxy.get(value)
   if (isSupportObservable(value)) {
-    if (node?.proxy) {
-      return node.proxy
+    if (observableObj) {
+      return observableObj
     }
     return traverseIn(target, key, value)
   }
-  return node?.proxy || value
+  return observableObj || value
 }
 
 function patchIterator(
@@ -48,19 +48,19 @@ function patchIterator(
 
 const instrumentations = {
   has(key: PropertyKey) {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     bindTargetKeyWithCurrentReaction({ target, key, type: 'has' })
     return proto.has.apply(target, arguments)
   },
   get(key: PropertyKey) {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     bindTargetKeyWithCurrentReaction({ target, key, type: 'get' })
     return findObservable(target, key, proto.get.apply(target, arguments))
   },
   add(key: PropertyKey) {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     const hadKey = proto.has.call(target, key)
     // forward the operation before queueing reactions
@@ -71,7 +71,7 @@ const instrumentations = {
     return result
   },
   set(key: PropertyKey, value: any) {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     const hadKey = proto.has.call(target, key)
     const oldValue = proto.get.call(target, key)
@@ -85,7 +85,7 @@ const instrumentations = {
     return result
   },
   delete(key: PropertyKey) {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     const hadKey = proto.has.call(target, key)
     const oldValue = proto.get ? proto.get.call(target, key) : undefined
@@ -97,7 +97,7 @@ const instrumentations = {
     return result
   },
   clear() {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     const hadItems = target.size !== 0
     const oldTarget = target instanceof Map ? new Map(target) : new Set(target)
@@ -109,7 +109,7 @@ const instrumentations = {
     return result
   },
   forEach(cb: any, ...args: any[]) {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     // swap out the raw values with their observable pairs
@@ -119,34 +119,34 @@ const instrumentations = {
     return proto.forEach.call(target, wrappedCb, ...args)
   },
   keys() {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     return proto.keys.apply(target, arguments)
   },
   values() {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     const iterator = proto.values.apply(target, arguments)
     return patchIterator(target, '', iterator, false)
   },
   entries() {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this) as any
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     const iterator = proto.entries.apply(target, arguments)
     return patchIterator(target, '', iterator, true)
   },
   [Symbol.iterator]() {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this)
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     const iterator = proto[Symbol.iterator].apply(target, arguments)
     return patchIterator(target, '', iterator, target instanceof Map)
   },
   get size() {
-    const target = getProxyRaw(this)
+    const target = ProxyRaw.get(this)
     const proto = Reflect.getPrototypeOf(this)
     bindTargetKeyWithCurrentReaction({ target, type: 'iterate' })
     return Reflect.get(proto, 'size', target)
@@ -170,10 +170,10 @@ export const baseHandlers: ProxyHandler<any> = {
       return result
     }
     bindTargetKeyWithCurrentReaction({ target, key, receiver, type: 'get' })
-    const node = getRawNode(result)
+    const observableResult = RawProxy.get(result)
     if (isSupportObservable(result)) {
-      if (node?.proxy) {
-        return node.proxy
+      if (observableResult) {
+        return observableResult
       }
       const descriptor = Reflect.getOwnPropertyDescriptor(target, key)
       if (
@@ -183,7 +183,7 @@ export const baseHandlers: ProxyHandler<any> = {
         return traverseIn(target, key, result)
       }
     }
-    return node?.proxy || result
+    return observableResult || result
   },
   has(target, key) {
     const result = Reflect.has(target, key)
@@ -199,7 +199,7 @@ export const baseHandlers: ProxyHandler<any> = {
     const newValue = traverseIn(target, key, value)
     const oldValue = target[key]
     const result = Reflect.set(target, key, newValue, receiver)
-    if (target !== getProxyRaw(receiver)) {
+    if (target !== ProxyRaw.get(receiver)) {
       return result
     }
     if (!hadKey) {
@@ -223,7 +223,7 @@ export const baseHandlers: ProxyHandler<any> = {
     return result
   },
   deleteProperty(target, key) {
-    const result = Reflect.deleteProperty(target, key)
+    const res = Reflect.deleteProperty(target, key)
     const oldValue = target[key]
     runReactionsFromTargetKey({
       target,
@@ -231,6 +231,6 @@ export const baseHandlers: ProxyHandler<any> = {
       oldValue,
       type: 'delete',
     })
-    return result
+    return res
   },
 }

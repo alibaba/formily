@@ -1,5 +1,5 @@
 import { isFn, isCollectionType } from './checkers'
-import { setProxyRaw, setRawNode, MakeObservableSymbol } from './environment'
+import { RawProxy, ProxyRaw, MakeObservableSymbol } from './environment'
 import { baseHandlers, collectionHandlers } from './handlers'
 import { buildTreeNode } from './traverse'
 import { isObservable, isSupportObservable } from './externals'
@@ -13,10 +13,8 @@ export const createProxy = <T extends object>(target: T): T => {
     target,
     isCollectionType(target) ? collectionHandlers : baseHandlers
   )
-  setProxyRaw(proxy, target)
-  setRawNode(target, (node) => {
-    node.proxy = proxy
-  })
+  ProxyRaw.set(proxy, target)
+  RawProxy.set(target, proxy)
   return proxy
 }
 
@@ -24,7 +22,6 @@ export const createObservable: ObservableTraverse = ({
   value,
   target,
   key,
-  traverse,
   shallow,
 }) => {
   if (isObservable(value)) return value
@@ -33,8 +30,7 @@ export const createObservable: ObservableTraverse = ({
       target,
       key,
       value,
-      shallow,
-      traverse: traverse || createObservable,
+      shallow
     })
     return createProxy(value)
   }

@@ -27,25 +27,17 @@ export interface IChange {
 }
 
 export interface IRawNode {
-  proxy?: any
-  node?: IRawNode
-  reactionsMap?: ReactionsMap
-  traverse?: ObservableTraverse
   path?: ObservablePath
   parent?: IRawNode
-  observers?: Set<ObservableListener>
-  deepObservers?: Set<ObservableListener>
+  observers?: ObservableListener[]
+  deepObservers?: ObservableListener[]
   shallow?: boolean
-  isConnected?: boolean
-  isTraversed?: boolean
 }
 
 export interface IVisitor<Value = any, Target = any> {
   target?: Target
   key?: PropertyKey
   value?: Value
-  path?: ObservablePath
-  traverse?: ObservableTraverse
   shallow?: boolean
 }
 
