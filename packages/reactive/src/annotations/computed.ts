@@ -1,4 +1,4 @@
-import { ProxyRaw, RawProxy, ReactionStack } from '../environment'
+import { setProxyRaw, setRawNode, ReactionStack } from '../environment'
 import { createAnnotation } from '../internals'
 import { buildTreeNode } from '../traverse'
 import {
@@ -67,21 +67,23 @@ export const computed: IComputed = createAnnotation(
     reaction._scheduler = () => {
       reaction._dirty = true
       batchStart()
-        runReactionsFromTargetKey({
-          target: context,
-          key: property,
-          value: store.value,
-          type: 'set',
-        })
-        batchEnd()
+      runReactionsFromTargetKey({
+        target: context,
+        key: property,
+        value: store.value,
+        type: 'set',
+      })
+      batchEnd()
     }
     reaction._isComputed = true
     reaction._dirty = true
     reaction._context = context
     reaction._property = property
 
-    ProxyRaw.set(proxy, store)
-    RawProxy.set(store, proxy)
+    setProxyRaw(proxy, store)
+    setRawNode(store, (node) => {
+      node.proxy = proxy
+    })
 
     buildTreeNode({
       target,

@@ -5,7 +5,7 @@ import { createObservable, getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
 import { Annotations } from './types'
 import { batch } from './batch'
-import { ProxyRaw, RawProxy } from './environment'
+import { setRawNode, setProxyRaw } from './environment'
 
 export function define<Target extends object = any>(
   target: Target,
@@ -17,8 +17,10 @@ export function define<Target extends object = any>(
     value: target,
     traverse: createObservable,
   })
-  ProxyRaw.set(target, target)
-  RawProxy.set(target, target)
+  setProxyRaw(target, target)
+  setRawNode(target, (node) => {
+    node.proxy = target
+  })
   return observable(target, ({ target, value }) => {
     if (target) return target
     for (const key in annotations) {

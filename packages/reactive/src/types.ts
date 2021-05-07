@@ -26,13 +26,18 @@ export interface IChange {
   type?: OperationType
 }
 
-export interface INode {
+export interface IRawNode {
+  proxy?: any
+  node?: IRawNode
+  reactionsMap?: ReactionsMap
   traverse?: ObservableTraverse
   path?: ObservablePath
-  parent?: INode
+  parent?: IRawNode
   observers?: Set<ObservableListener>
   deepObservers?: Set<ObservableListener>
   shallow?: boolean
+  isConnected?: boolean
+  isTraversed?: boolean
 }
 
 export interface IVisitor<Value = any, Target = any> {
@@ -64,10 +69,12 @@ export type Reaction = ((...args: any[]) => any) & {
   _dirty?: boolean
   _context?: any
   _property?: PropertyKey
+  _computedsSet?: Set<Reaction>
+  _reactionsSet?: Set<ReactionsMap>
   _scheduler?: (reaction: Reaction) => void
 }
 
-export type KeysReactions = Map<PropertyKey, Set<Reaction>>
+export type ReactionsMap = Map<PropertyKey, Set<Reaction>>
 
 export interface IReactionOptions<T> {
   name?: string

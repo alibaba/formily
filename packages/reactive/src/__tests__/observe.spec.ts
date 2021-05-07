@@ -1,12 +1,12 @@
 import { observable, observe } from '../'
-import { ProxyRaw, RawNode } from '../environment'
+import { getProxyRaw, getRawNode } from '../environment'
 
 const getObservers = (target: any) => {
-  return RawNode.get(ProxyRaw.get(target))?.observers
+  return getRawNode(getProxyRaw(target))?.observers
 }
 
 const getDeepObservers = (target: any) => {
-  return RawNode.get(ProxyRaw.get(target))?.deepObservers
+  return getRawNode(getProxyRaw(target))?.deepObservers
 }
 
 test('deep observe', () => {
