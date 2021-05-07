@@ -26,10 +26,15 @@
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
-    "build:docs": "dumi build"
+    "build:docs": "dumi build",
+    "benchmark": "ts-node ./benchmark"
   },
   "devDependencies": {
-    "dumi": "^1.1.0-rc.8"
+    "dumi": "^1.1.0-rc.8",
+    "benny": "^3.6.15",
+    "@vue/reactivity": "^3.0.11",
+    "lodash": "^4.17.21",
+    "mobx": "^6.3.0"
   },
   "publishConfig": {
     "access": "public"

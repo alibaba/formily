@@ -8,14 +8,14 @@ import {
   isPlainObj,
   isArr,
 } from './checkers'
-import { ProxyRaw, MakeObservableSymbol } from './environment'
+import { getProxyRaw, hasProxyRaw, MakeObservableSymbol } from './environment'
 import { Annotation } from './types'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
 const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
 
 export const isObservable = (target: any) => {
-  return ProxyRaw.has(target)
+  return hasProxyRaw(target)
 }
 
 export const isAnnotation = (target: any): target is Annotation => {
@@ -75,7 +75,7 @@ export const markObservable = <T>(target: T): T => {
   return target
 }
 
-export const raw = <T>(target: T): T => ProxyRaw.get(target as any)
+export const raw = <T>(target: T): T => getProxyRaw(target as any)
 
 export const toJS = <T>(values: T): T => {
   const visited = new WeakSet<any>()
