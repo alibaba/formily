@@ -31,7 +31,7 @@ interface IFormCollapseProps extends CollapseProps {
 
 type ComposedFormCollapse = React.FC<IFormCollapseProps> & {
   CollapsePanel?: React.FC<CollapsePanelProps>
-  createFormCollapse?: (defaultActiveKeys?: ActiveKeys) => IFormCollapse
+  createFormCollapse: (defaultActiveKeys?: ActiveKeys) => IFormCollapse
 }
 
 const usePanels = () => {
@@ -129,8 +129,9 @@ export const FormCollapse: ComposedFormCollapse = observer(
           formCollapse?.setActiveKeys?.(key)
         }}
       >
-        {panels.map(({ props, schema, name }) => (
+        {panels.map(({ props, schema, name }, index) => (
           <Collapse.Panel
+            key={index}
             {...props}
             header={badgedHeader(name, props)}
             forceRender
