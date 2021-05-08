@@ -31,14 +31,12 @@ export interface IRawNode {
   parent?: IRawNode
   observers?: ObservableListener[]
   deepObservers?: ObservableListener[]
-  shallow?: boolean
 }
 
 export interface IVisitor<Value = any, Target = any> {
   target?: Target
   key?: PropertyKey
   value?: Value
-  shallow?: boolean
 }
 
 export type Annotation = (...args: any[]) => any
@@ -50,10 +48,6 @@ export type Annotations<T = any> = {
 export type ObservableListener = (operation: IOperation) => void
 
 export type ObservablePath = Array<string | number>
-
-export type ObservableTraverse<Value = any, Target = any> = (
-  visitor: IVisitor<Value, Target>
-) => any
 
 export type Reaction = ((...args: any[]) => any) & {
   _name?: string

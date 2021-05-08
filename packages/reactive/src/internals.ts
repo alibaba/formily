@@ -6,7 +6,7 @@ import {
   RawShallowProxy,
 } from './environment'
 import { baseHandlers, collectionHandlers } from './handlers'
-import { buildTreeNode } from './traverse'
+import { buildDataTree } from './datatree'
 import { isObservable, isSupportObservable } from './externals'
 import { PropertyKey, IVisitor } from './types'
 
@@ -14,9 +14,6 @@ export const createProxy = <T extends object>(
   target: T,
   shallow?: boolean
 ): T => {
-  if (isObservable(target)) {
-    return target
-  }
   const proxy = new Proxy(
     target,
     isCollectionType(target) ? collectionHandlers : baseHandlers
@@ -43,11 +40,7 @@ export const createObservable = (
   }
   if (isObservable(value)) return value
   if (isSupportObservable(value)) {
-    buildTreeNode({
-      target,
-      key,
-      value,
-    })
+    buildDataTree(target, key, value)
     return createProxy(value, shallow)
   }
   return value

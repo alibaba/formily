@@ -1,5 +1,5 @@
 import { isFn } from './checkers'
-import { buildTreeNode } from './traverse'
+import { buildDataTree } from './datatree'
 import { observable } from './observable'
 import { getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
@@ -13,9 +13,7 @@ export function define<Target extends object = any>(
 ): Target {
   if (isObservable(target)) return target
   if (!isSupportObservable(target)) return target
-  buildTreeNode({
-    value: target,
-  })
+  buildDataTree(undefined, undefined, target)
   ProxyRaw.set(target, target)
   RawProxy.set(target, target)
   for (const key in annotations) {
