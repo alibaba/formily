@@ -62,12 +62,12 @@ export type SchemaReaction<Field = any> =
       target?: string
       effects?: SchemaEffectTypes[]
       fulfill?: {
-        state?: Formily.Core.Types.IGeneralFieldState
+        state?: Stringify<Formily.Core.Types.IGeneralFieldState>
         schema?: ISchema
         run?: string
       }
       otherwise?: {
-        state?: Formily.Core.Types.IGeneralFieldState
+        state?: Stringify<Formily.Core.Types.IGeneralFieldState>
         schema?: ISchema
         run?: string
       }
@@ -119,7 +119,7 @@ export interface ISchemaFieldFactoryOptions<
 }
 
 export interface ISchemaFieldUpdateRequest {
-  state?: Formily.Core.Types.IFieldState
+  state?: Stringify<Formily.Core.Types.IFieldState>
   schema?: ISchema
   run?: string
 }
