@@ -136,8 +136,12 @@ export const FormCollapse: ComposedFormCollapse = observer(
           formCollapse?.setActiveKeys?.(keys)
         }}
       >
-        {panels.map(({ props, schema, name }) => (
-          <Collapse.Panel {...props} title={badgedHeader(name, props)}>
+        {panels.map(({ props, schema, name }, index) => (
+          <Collapse.Panel
+            key={index}
+            {...props}
+            title={badgedHeader(name, props)}
+          >
             <RecursionField schema={schema} name={name} />
           </Collapse.Panel>
         ))}

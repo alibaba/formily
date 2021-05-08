@@ -104,13 +104,13 @@ interface createVoidField {
 
 #### 描述
 
-设置表单值
+设置表单值，可以设置合并策略
 
 #### 签名
 
 ```ts
 interface setValues {
-  (values: object): void
+  (values: object, strategy: 'overwrite' | 'merge' = 'merge'): void
 }
 ```
 
@@ -118,13 +118,13 @@ interface setValues {
 
 #### 描述
 
-设置表单默认值
+设置表单默认值，可以设置合并策略
 
 #### 签名
 
 ```ts
 interface setInitialValues {
-  (initialValues: object): void
+  (initialValues: object, strategy: 'overwrite' | 'merge' = 'merge'): void
 }
 ```
 
