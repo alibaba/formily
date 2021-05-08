@@ -350,15 +350,15 @@ export const exchangeArrayState = (
 
 export const initFieldValue = (field: Field) => {
   GlobalState.initializing = true
-  if (isEmpty(field.initialValue)) {
+  if (!isValid(field.initialValue)) {
     if (isValid(field.props.initialValue)) {
       field.initialValue = field.props.initialValue
     }
   }
-  if (isEmpty(field.value)) {
+  if (!isValid(field.value)) {
     if (isValid(field.props.value)) {
       field.value = field.props.value
-    } else if (!isEmpty(field.initialValue)) {
+    } else if (isValid(field.initialValue)) {
       field.value = field.initialValue
     }
   }

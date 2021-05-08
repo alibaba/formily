@@ -16,6 +16,7 @@ import {
   globalThisPolyfill,
   defaults,
   clone,
+  isPlainObj,
 } from '@formily/shared'
 import { Heart } from './Heart'
 import { Field } from './Field'
@@ -362,11 +363,12 @@ export class Form<ValueType extends object = any> {
   /** 状态操作模型 **/
 
   setValues = (values: any, strategy: 'overwrite' | 'merge' = 'merge') => {
+    if (!isPlainObj(values)) return
     untracked(() => {
       if (strategy === 'merge') {
         this.values = defaults(this.values, values)
       } else {
-        this.values = values
+        this.values = values as any
       }
     })
   }
@@ -375,11 +377,12 @@ export class Form<ValueType extends object = any> {
     initialValues: any,
     strategy: 'overwrite' | 'merge' = 'merge'
   ) => {
+    if (!isPlainObj(initialValues)) return
     untracked(() => {
       if (strategy === 'merge') {
         this.initialValues = defaults(this.initialValues, initialValues)
       } else {
-        this.initialValues = initialValues
+        this.initialValues = initialValues as any
       }
     })
   }

@@ -415,6 +415,25 @@ test('query', () => {
   expect(bbb.query('.void.ccc').take()).toBeUndefined()
 })
 
+test('empty initialValue', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      initialValue: '',
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+    })
+  )
+  expect(aa.value).toEqual('')
+  expect(form.values.aa).toEqual('')
+  expect(bb.value).toEqual(undefined)
+  expect(form.values.bb).toEqual(undefined)
+})
+
 test('reset', async () => {
   const form = attach(
     createForm({
