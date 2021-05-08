@@ -1,7 +1,7 @@
 import { isFn } from './checkers'
 import { buildTreeNode } from './traverse'
 import { observable } from './observable'
-import { createObservable, getObservableMaker } from './internals'
+import { getObservableMaker } from './internals'
 import { isObservable, isAnnotation, isSupportObservable } from './externals'
 import { Annotations } from './types'
 import { batch } from './batch'

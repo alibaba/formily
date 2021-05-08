@@ -2,12 +2,17 @@ import { IChange } from './types'
 import { RawNode, ProxyRaw } from './environment'
 import { isFn } from './checkers'
 
+interface IListener {
+  (change: IChange): void
+  unobserve?(): void
+}
+
 export const observe = (
   target: object,
   observer?: (change: IChange) => void,
   deep = true
 ) => {
-  const listener = (change: IChange) => {
+  const listener: IListener = (change: IChange) => {
     if (isFn(observer)) {
       observer(change)
     }
@@ -20,24 +25,19 @@ export const observe = (
       if (deep) {
         const id = node.deepObservers.length
         node.deepObservers.push(listener)
-        listener['deep_detach'] = () => {
+        listener.unobserve = () => {
           node.deepObservers.splice(id, 1)
         }
       } else {
         const id = node.observers.length
         node.observers.push(listener)
-        listener['detach'] = () => {
+        listener.unobserve = () => {
           node.observers.splice(id, 1)
         }
       }
     }
     return () => {
-      if (listener['detach']) {
-        listener['detach']()
-      }
-      if (listener['deep_detach']) {
-        listener['deep_detach']()
-      }
+      listener?.unobserve()
     }
   }
   if (target && typeof target !== 'object')

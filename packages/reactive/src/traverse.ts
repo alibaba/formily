@@ -1,10 +1,8 @@
 import { ProxyRaw, RawNode } from './environment'
-import { isObservable, isSupportObservable } from './externals'
 import { IRawNode, IVisitor } from './types'
 import { concat } from './concat'
-import { createObservable } from './internals'
 
-export const buildTreeNode = ({ target, value, key, shallow }: IVisitor) => {
+export const buildTreeNode = ({ target, value, key }: IVisitor) => {
   const raw = ProxyRaw.get(value) || value
   const currentNode = RawNode.get(raw)
   if (currentNode) return currentNode
@@ -18,7 +16,6 @@ export const buildTreeNode = ({ target, value, key, shallow }: IVisitor) => {
       parent: parentNode,
       observers: [],
       deepObservers: [],
-      shallow: shallow || parentNode.shallow,
     }
     RawNode.set(value, node)
   } else {
@@ -26,21 +23,8 @@ export const buildTreeNode = ({ target, value, key, shallow }: IVisitor) => {
       path: [],
       observers: [],
       deepObservers: [],
-      shallow,
     }
     RawNode.set(value, node)
     return node
   }
-}
-
-export const traverseIn = (target: any, key: PropertyKey, value: any) => {
-  if (isObservable(value) || !isSupportObservable(value)) return value
-  const parent = ProxyRaw.get(target) || target
-  const parentNode = RawNode.get(parent)
-  if (parentNode) {
-    const shallow = parentNode.shallow
-    if (shallow) return value
-    return createObservable({ target, key, value, shallow })
-  }
-  return value
 }

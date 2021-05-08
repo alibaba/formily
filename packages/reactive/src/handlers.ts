@@ -3,8 +3,8 @@ import {
   runReactionsFromTargetKey,
 } from './reaction'
 import { ProxyRaw, RawProxy } from './environment'
-import { traverseIn } from './traverse'
 import { isSupportObservable } from './externals'
+import { createObservable } from './internals'
 
 const wellKnownSymbols = new Set(
   Object.getOwnPropertyNames(Symbol)
@@ -20,7 +20,7 @@ function findObservable(target: any, key: PropertyKey, value: any) {
     if (observableObj) {
       return observableObj
     }
-    return traverseIn(target, key, value)
+    return createObservable(target, key, value)
   }
   return observableObj || value
 }
@@ -180,7 +180,7 @@ export const baseHandlers: ProxyHandler<any> = {
         !descriptor ||
         !(descriptor.writable === false && descriptor.configurable === false)
       ) {
-        return traverseIn(target, key, result)
+        return createObservable(target, key, result)
       }
     }
     return observableResult || result
@@ -196,7 +196,7 @@ export const baseHandlers: ProxyHandler<any> = {
   },
   set(target, key, value, receiver) {
     const hadKey = hasOwnProperty.call(target, key)
-    const newValue = traverseIn(target, key, value)
+    const newValue = createObservable(target, key, value)
     const oldValue = target[key]
     const result = Reflect.set(target, key, newValue, receiver)
     if (target !== ProxyRaw.get(receiver)) {

@@ -1,11 +1,19 @@
 import { isFn, isCollectionType } from './checkers'
-import { RawProxy, ProxyRaw, MakeObservableSymbol } from './environment'
+import {
+  RawProxy,
+  ProxyRaw,
+  MakeObservableSymbol,
+  RawShallowProxy,
+} from './environment'
 import { baseHandlers, collectionHandlers } from './handlers'
 import { buildTreeNode } from './traverse'
 import { isObservable, isSupportObservable } from './externals'
-import { ObservableTraverse, IVisitor } from './types'
+import { PropertyKey, IVisitor } from './types'
 
-export const createProxy = <T extends object>(target: T): T => {
+export const createProxy = <T extends object>(
+  target: T,
+  shallow?: boolean
+): T => {
   if (isObservable(target)) {
     return target
   }
@@ -14,25 +22,33 @@ export const createProxy = <T extends object>(target: T): T => {
     isCollectionType(target) ? collectionHandlers : baseHandlers
   )
   ProxyRaw.set(proxy, target)
-  RawProxy.set(target, proxy)
+  if (shallow) {
+    RawShallowProxy.set(target, proxy)
+  } else {
+    RawProxy.set(target, proxy)
+  }
   return proxy
 }
 
-export const createObservable: ObservableTraverse = ({
-  value,
-  target,
-  key,
-  shallow,
-}) => {
+export const createObservable = (
+  target: any,
+  key?: PropertyKey,
+  value?: any,
+  shallow?: boolean
+) => {
+  if (target) {
+    const parentRaw = ProxyRaw.get(target) || target
+    const isShallowParent = RawShallowProxy.get(parentRaw)
+    if (isShallowParent) return value
+  }
   if (isObservable(value)) return value
   if (isSupportObservable(value)) {
     buildTreeNode({
       target,
       key,
       value,
-      shallow
     })
-    return createProxy(value)
+    return createProxy(value, shallow)
   }
   return value
 }

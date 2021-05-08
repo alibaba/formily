@@ -1,7 +1,6 @@
 import { isFn } from './checkers'
 import {
   IOperation,
-  IChange,
   ReactionsMap,
   Reaction,
   PropertyKey,

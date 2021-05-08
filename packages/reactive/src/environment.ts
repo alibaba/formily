@@ -2,6 +2,7 @@ import { IRawNode, Reaction, ReactionsMap } from './types'
 
 export const ProxyRaw = new WeakMap()
 export const RawProxy = new WeakMap()
+export const RawShallowProxy = new WeakMap()
 export const RawNode = new WeakMap<object, IRawNode>()
 export const RawReactionsMap = new WeakMap<object, ReactionsMap>()
 
