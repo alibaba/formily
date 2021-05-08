@@ -1,6 +1,6 @@
 {
   "name": "@formily/reactive",
-  "version": "2.0.0-beta.42",
+  "version": "2.0.0-beta.43",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -30,9 +30,9 @@
     "benchmark": "ts-node ./benchmark"
   },
   "devDependencies": {
-    "dumi": "^1.1.0-rc.8",
-    "benny": "^3.6.15",
     "@vue/reactivity": "^3.0.11",
+    "benny": "^3.6.15",
+    "dumi": "^1.1.0-rc.8",
     "lodash": "^4.17.21",
     "mobx": "^6.3.0"
   },
