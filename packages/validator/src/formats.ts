@@ -38,7 +38,8 @@ export default {
       // port number
       '(?::\\d{2,5})?' +
       // resource path
-      '(?:/\\S*)?$'
+      //  https://github.com/alibaba/formily/discussions/1365
+      '(?:/?\\S*)?$'
   ),
   email: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 
