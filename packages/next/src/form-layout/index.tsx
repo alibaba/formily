@@ -21,7 +21,7 @@ export interface IFormLayoutProps {
   direction?: 'rtl' | 'ltr'
   inset?: boolean
   shallow?: boolean
-  feedbackLayout?: 'loose' | 'terse' | 'popover'
+  feedbackLayout?: 'loose' | 'terse' | 'popover' | 'none'
   bordered?: boolean
 }
 
