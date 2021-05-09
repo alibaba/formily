@@ -38,7 +38,7 @@ export default {
       // port number
       '(?::\\d{2,5})?' +
       // resource path
-      '(?:/\\S*)?$'
+      '(?:/?\\S*)?$'
   ),
   email: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
 
