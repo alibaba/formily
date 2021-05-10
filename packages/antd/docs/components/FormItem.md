@@ -213,6 +213,7 @@ export default () => {
           x-decorator-props={{
             labelWidth: 300,
             tooltip: '提示提示',
+            tooltipLayout: 'text',
           }}
         />
         <SchemaField.String
@@ -1066,6 +1067,7 @@ export default () => {
 | className      | string                                                 | 组件样式类名                                | -         |
 | colon          | boolean                                                | 冒号                                        | true      |
 | tooltip        | ReactNode                                              | 问号提示                                    | -         |
+| tooltipLayout  | `"icon" \| "text"`                                     | 问提示布局                                  | `"icon"`  |
 | labelAlign     | `"left"` \| `"right"`                                  | 标签文本对齐方式                            | `"right"` |
 | labelWrap      | boolean                                                | 标签换⾏，否则出现省略号，hover 有 tooltip  | false     |
 | labelWidth     | `number \| string`                                     | 标签固定宽度                                | -         |

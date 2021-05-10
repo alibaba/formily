@@ -25,6 +25,7 @@ export interface IFormItemProps {
   label?: React.ReactNode
   colon?: boolean
   tooltip?: boolean
+  tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
@@ -80,6 +81,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
+    tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? 'icon',
   }
 }
 
@@ -121,6 +123,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     labelWrap,
     wrapperWrap,
     tooltip,
+    tooltipLayout,
   } = formLayout
   const labelStyle = { ...formLayout.labelStyle }
   const wrapperStyle = { ...formLayout.wrapperStyle }
@@ -165,6 +168,13 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       children
     )
 
+  const labelChildren = (
+    <div className={cls(`${prefixCls}-label-content`)}>
+      {asterisk && <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>}
+      <label>{label}</label>
+    </div>
+  )
+
   return (
     <div
       ref={popoverContainerRef}
@@ -207,17 +217,23 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         <div
           className={cls({
             [`${prefixCls}-label`]: true,
+            [`${prefixCls}-label-tooltip`]: tooltip && tooltipLayout === 'text',
             [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
           })}
           style={labelStyle}
         >
-          <div className={cls(`${prefixCls}-label-content`)}>
-            {asterisk && (
-              <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
-            )}
-            <label>{label}</label>
-          </div>
-          {tooltip && (
+          {tooltipLayout === 'text' ? (
+            <Balloon.Tooltip
+              align="t"
+              trigger={labelChildren}
+              popupContainer={() => popoverContainerRef.current}
+            >
+              {tooltip}
+            </Balloon.Tooltip>
+          ) : (
+            labelChildren
+          )}
+          {tooltip && tooltipLayout === 'icon' && (
             <span className={cls(`${prefixCls}-label-tooltip`)}>
               <Balloon.Tooltip
                 align="t"

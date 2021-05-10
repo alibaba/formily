@@ -63,9 +63,24 @@
         white-space: nowrap;
     }
 
+
     &-tooltip {
-        &>* {
+        cursor: help;
+
+        .#{$form-item-cls}-colon {
             display: flex;
+        }
+
+        *{
+            cursor: help;
+        }
+
+        &-colon {
+            cursor: help;
+        }
+
+        label {
+            border-bottom: 1px dashed currentColor;
         }
     }
 }
