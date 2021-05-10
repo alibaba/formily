@@ -224,6 +224,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
           {tooltipLayout === 'text' ? (
             <Tooltip
               placement="top"
+              align={{ offset: [0, 10] }}
               title={tooltip}
               getPopupContainer={() => popoverContainerRef.current}
             >
@@ -236,6 +237,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             <span className={cls(`${prefixCls}-label-tooltip`)}>
               <Tooltip
                 placement="top"
+                align={{ offset: [0, 2] }}
                 title={tooltip}
                 getPopupContainer={() => popoverContainerRef.current}
               >
