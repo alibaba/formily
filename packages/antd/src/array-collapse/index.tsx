@@ -1,5 +1,5 @@
 import React from 'react'
-import { ArrayBase, ArrayBaseMixins } from '@formily/antd'
+import { ArrayBase, ArrayBaseMixins } from '../array-base'
 import { ISchema } from '@formily/json-schema'
 import { observer } from '@formily/reactive-react'
 import { Card, Collapse, CollapsePanelProps, Empty } from 'antd'
