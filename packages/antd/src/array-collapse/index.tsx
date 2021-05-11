@@ -48,7 +48,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer((props) => {
 
   const renderItems = () => {
     return (
-      <Collapse>
+      <Collapse className={cls(`${prefixCls}-item`, props.className)}>
         {dataSource?.map((item, index) => {
           const items = Array.isArray(schema.items)
             ? schema.items[index] || schema.items[0]
