@@ -674,7 +674,8 @@ interface validate {
 
 ```ts
 interface submit<T> {
-  (onSubmit?: (values: any) => Promise<T> | void): Promise<T>
+  (): Promise<Form['values']>
+  (onSubmit?: (values: Form['values']) => Promise<T> | void): Promise<T>
 }
 ```
 
