@@ -636,10 +636,13 @@ export class Form<ValueType extends object = any> {
     this.notify(LifeCycleTypes.ON_FORM_SUBMIT_VALIDATE_END)
     let results: any
     try {
-      if (isFn(onSubmit) && this.valid) {
-        results = await onSubmit(toJS(this.values))
-      } else if (this.invalid) {
+      if (this.invalid) {
         throw this.errors
+      }
+      if (isFn(onSubmit)) {
+        results = await onSubmit(toJS(this.values))
+      } else {
+        results = toJS(this.values)
       }
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_SUCCESS)
     } catch (e) {
