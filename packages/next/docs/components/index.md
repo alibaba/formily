@@ -2,7 +2,7 @@
 
 ## 介绍
 
-@formily/next 是基于 Ant Design 封装的针对表单场景专业级(Professional)组件库，它主要有以下几个特点：
+@formily/next 是基于 Fusion Design 封装的针对表单场景专业级(Professional)组件库，它主要有以下几个特点：
 
 - 仅支持 Formily2.x
   - 大部分组件无法向后兼容
