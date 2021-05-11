@@ -25,7 +25,7 @@ const getRandomName = () => {
 }
 
 export function createSchemaField<Components extends SchemaComponents>(
-  options?: ISchemaFieldFactoryOptions<Components>
+  options: ISchemaFieldFactoryOptions<Components> = {}
 ) {
   function SchemaField<
     Decorator extends JSXComponent,
