@@ -190,6 +190,11 @@ const omitInvalid = (target: any) => {
   return reduce(
     target,
     (buf, value, key) => {
+      if (key === 'default') {
+        if (isValid(value)) {
+          buf[key] = value
+        }
+      }
       if (!isEmpty(value)) {
         buf[key] = value
       }
