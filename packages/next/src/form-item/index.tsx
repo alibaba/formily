@@ -95,6 +95,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
   const [active, setActice] = useState(false)
   const popoverContainerRef = useRef()
+  const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
   const shallowFormLayout = useFormShallowLayout()
   const {
@@ -175,12 +176,18 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     </div>
   )
 
+  const gridStyles: React.CSSProperties = {}
+
+  if (gridSpan) {
+    gridStyles.gridColumnStart = `span ${gridSpan}`
+  }
+
   return (
     <div
       ref={popoverContainerRef}
       style={{
         ...style,
-        gridColumnStart: `span ${useGridSpan(props.gridSpan)}`,
+        ...gridStyles,
       }}
       className={cls({
         [`${prefixCls}`]: true,
