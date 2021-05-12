@@ -14,16 +14,16 @@ import {
 import { Schema, SchemaKey } from '@formily/json-schema'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
-interface IFormTab {
+export interface IFormTab {
   activeKey: React.ReactText
   setActiveKey(key: React.ReactText): void
 }
 
-interface IFormTabProps extends TabsProps {
+export interface IFormTabProps extends TabsProps {
   formTab?: IFormTab
 }
 
-interface IFormTabPaneProps extends TabPaneProps {
+export interface IFormTabPaneProps extends TabPaneProps {
   key: React.ReactText
 }
 
@@ -98,8 +98,8 @@ export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
       }}
       lazyLoad={false}
     >
-      {tabs.map(({ props, schema, name }) => (
-        <Tabs.Item {...props} tab={badgedTab(name, props)}>
+      {tabs.map(({ props, schema, name }, key) => (
+        <Tabs.Item {...props} key={key} tab={badgedTab(name, props)}>
           <RecursionField schema={schema} name={name} />
         </Tabs.Item>
       ))}

@@ -11,16 +11,16 @@ import {
 import { Schema, SchemaKey } from '@formily/json-schema'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
-interface IFormTab {
+export interface IFormTab {
   activeKey: string
   setActiveKey(key: string): void
 }
 
-interface IFormTabProps extends TabsProps {
+export interface IFormTabProps extends TabsProps {
   formTab?: IFormTab
 }
 
-interface IFormTabPaneProps extends TabPaneProps {
+export interface IFormTabPaneProps extends TabPaneProps {
   key: string | number
 }
 
@@ -94,8 +94,13 @@ export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
         formTab?.setActiveKey?.(key)
       }}
     >
-      {tabs.map(({ props, schema, name }) => (
-        <Tabs.TabPane {...props} tab={badgedTab(name, props)} forceRender>
+      {tabs.map(({ props, schema, name }, key) => (
+        <Tabs.TabPane
+          {...props}
+          key={key}
+          tab={badgedTab(name, props)}
+          forceRender
+        >
           <RecursionField schema={schema} name={name} />
         </Tabs.TabPane>
       ))}
