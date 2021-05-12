@@ -331,7 +331,7 @@ export const createEffectsProvider = <
   const resolves = {}
 
   const resolvePayload = (payload: any) => {
-    return isFn(payload.getState) ? payload.getState() : payload
+    return isFn(payload.getState) ? payload?.getState() : payload
   }
 
   const waitFor = async <TPayload = any>(

@@ -1,37 +1,14 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: 报告Bug
+about: 答疑问题，请到Discussion里提！请到Discussion里提！请到Discussion里提！
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**问题**
 
-**To Reproduce**
-Please using Codesandbox
-- [@formily/next bug report template](https://codesandbox.io/s/boring-dawn-tixps)
-- [@formily/antd bug report template](https://codesandbox.io/s/lively-sky-pf5c3)
+**复现**
 
-
-**Expected behavior**
-A clear and concise description of what you expected to happen.
-
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
-
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+请用codesandbox提供复现地址

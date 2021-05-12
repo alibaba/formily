@@ -25,16 +25,19 @@ const computeStatus = (props: ISchemaFieldAdaptorProps) => {
 const computeHelp = (props: ISchemaFieldAdaptorProps) => {
   if (props.help) return props.help
   const messages = [].concat(props.errors || [], props.warnings || [])
-  return messages.length
-    ? messages.map((message, index) =>
-        createElement(
-          'span',
-          { key: index },
-          message,
-          messages.length - 1 > index ? ' ,' : ''
-        )
+  if (messages.length) {
+    return messages.map((message, index) =>
+      createElement(
+        'span',
+        { key: index },
+        message,
+        messages.length - 1 > index ? ' ,' : ''
       )
-    : props.schema && props.schema.description
+    )
+  }
+  if (props.schema && props.schema.description) {
+    return props.schema.description
+  }
 }
 
 const computeLabel = (props: ISchemaFieldAdaptorProps) => {
