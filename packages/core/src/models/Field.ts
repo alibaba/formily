@@ -756,8 +756,8 @@ export class Field<
       } else {
         this.value = undefined
       }
-    } else {
-      this.value = this.initialValue
+    } else if (isValid(this.value)) {
+      this.value = toJS(this.initialValue)
     }
     this.form.notify(LifeCycleTypes.ON_FIELD_RESET, this)
 

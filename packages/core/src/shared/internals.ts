@@ -358,8 +358,8 @@ export const initFieldValue = (field: Field) => {
   if (!isValid(field.value)) {
     if (isValid(field.props.value)) {
       field.value = field.props.value
-    } else if (isValid(field.initialValue)) {
-      field.value = field.initialValue
+    } else if (isValid(field.props.initialValue)) {
+      field.value = field.props.initialValue
     }
   }
   GlobalState.initializing = false
@@ -537,7 +537,7 @@ export const applyValuesPatch = (
     if (path.length) {
       form.setValuesIn(path, toJS(source))
     } else {
-      Object.assign(form.values, source)
+      Object.assign(form.values, toJS(source))
     }
   }
 

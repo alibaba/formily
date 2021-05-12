@@ -13,6 +13,7 @@ import { Annotation } from './types'
 
 const RAW_TYPE = Symbol('RAW_TYPE')
 const OBSERVABLE_TYPE = Symbol('OBSERVABLE_TYPE')
+const hasOwnProperty = Object.prototype.hasOwnProperty
 
 export const isObservable = (target: any) => {
   return ProxyRaw.has(target)
@@ -83,10 +84,13 @@ export const toJS = <T>(values: T): T => {
   const tojs: typeof toJS = (values) => {
     if (visited.has(values)) {
       return values
-    } else if (!isObservable(values)) {
-      return values
-    } else if (isArr(values)) {
-      visited.add(values)
+    }
+    const originValues = values
+    if (ProxyRaw.has(values as any)) {
+      values = ProxyRaw.get(values as any)
+    }
+    if (isArr(values)) {
+      visited.add(originValues)
       const res: any = []
       values.forEach((item) => {
         res.push(tojs(item))
@@ -104,10 +108,10 @@ export const toJS = <T>(values: T): T => {
       } else if (isFn(values['toJSON'])) {
         return values['toJSON']()
       } else {
-        visited.add(values)
+        visited.add(originValues)
         const res: any = {}
         for (const key in values) {
-          if (Object.hasOwnProperty.call(values, key)) {
+          if (hasOwnProperty.call(values, key)) {
             res[key] = tojs(values[key])
           }
         }

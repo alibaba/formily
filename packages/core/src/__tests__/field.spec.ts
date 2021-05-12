@@ -434,6 +434,61 @@ test('empty initialValue', () => {
   expect(form.values.bb).toEqual(undefined)
 })
 
+test('objectFieldWithInitialValue', async () => {
+  const form = attach(
+    createForm({
+      initialValues: {
+        obj: {
+          a: 'a',
+        }
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'obj',
+    })
+  );
+  const fieldObjA = attach(
+    form.createField({
+      name: 'obj.a',
+    })
+  );
+
+  expect(fieldObjA.initialValue).toEqual('a')
+  fieldObjA.value = 'aa'
+  expect(fieldObjA.value).toEqual('aa')
+  expect(fieldObjA.initialValue).toEqual('a')
+})
+
+test('resetObjectFieldWithInitialValue', async () => {
+  const form = attach(
+    createForm()
+  )
+  attach(
+    form.createObjectField({
+      name: 'obj',
+    })
+  );
+  const fieldObjA = attach(
+    form.createField({
+      name: 'obj.a',
+      initialValue: 'a',
+    })
+  );
+
+  fieldObjA.value = 'aa'
+  expect(fieldObjA.value).toEqual('aa')
+  await form.reset()
+  expect(fieldObjA.value).toEqual('a')
+
+  fieldObjA.value = 'aa'
+  expect(fieldObjA.value).toEqual('aa')
+  await form.reset()
+  expect(fieldObjA.initialValue).toEqual('a')
+  expect(fieldObjA.value).toEqual('a')
+})
+
 test('reset', async () => {
   const form = attach(
     createForm({
