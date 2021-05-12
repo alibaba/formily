@@ -10,6 +10,7 @@ import { CircleButton } from '../circle-button'
 import { TextButton } from '../text-button'
 import { Card } from '@alifd/next'
 import styled from 'styled-components'
+import cls from 'classnames'
 
 const ArrayComponents = {
   CircleButton,
@@ -68,7 +69,7 @@ export const ArrayCards = styled(
             return (
               <Card
                 {...componentProps}
-                className={`card-list-item`}
+                className={cls(`card-list-item`, componentProps.className)}
                 key={index}
                 contentHeight="auto"
                 title={

@@ -4,15 +4,13 @@ import {
   IVirtualFieldState,
   IForm,
   IVirtualField,
-  LifeCycleTypes
+  LifeCycleTypes,
+  FormPath
 } from '@formily/core'
-import { merge } from '@formily/shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IVirtualFieldHook } from '../types'
-import { inspectChanged } from '../shared'
+import { objectUpdateDiffs } from '../shared'
 import FormContext from '../context'
-
-const INSPECT_PROPS_KEYS = ['props', 'visible', 'display']
 
 export const useVirtualField = (
   options: IVirtualFieldRegistryProps
@@ -48,18 +46,17 @@ export const useVirtualField = (
     })
     ref.current.uid = Symbol()
     initialized = true
-  }, [options.name,options.path])
+  }, [options.name, options.path])
 
   useEffect(() => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
     const cacheProps = ref.current.field.getCache(ref.current.uid)
     if (cacheProps) {
-      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
-      if (props) {
+      const diffs = objectUpdateDiffs(cacheProps, options)
+      if (diffs.length) {
         ref.current.field.setState((state: IVirtualFieldState) => {
-          merge(state, props, {
-            assign: true,
-            arrayMerge: (target, source) => source
+          diffs.forEach(({ path, value }) => {
+            FormPath.setIn(state, path, value)
           })
         })
         ref.current.field.setCache(ref.current.uid, options)

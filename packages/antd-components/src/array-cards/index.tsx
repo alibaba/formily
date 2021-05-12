@@ -15,6 +15,7 @@ import {
   UpOutlined
 } from '@ant-design/icons'
 import styled from 'styled-components'
+import cls from 'classnames'
 
 const ArrayComponents = {
   CircleButton,
@@ -68,11 +69,12 @@ export const ArrayCards: any = styled(
               <Card
                 {...componentProps}
                 size="small"
-                className={`card-list-item`}
+                className={cls(`card-list-item`, componentProps.className)}
                 key={index}
                 title={
                   <span>
-                    {index + 1}<span>.</span> {componentProps.title || schema.title}
+                    {index + 1}
+                    <span>.</span> {componentProps.title || schema.title}
                   </span>
                 }
                 extra={
@@ -110,7 +112,9 @@ export const ArrayCards: any = styled(
                 <Card
                   {...componentProps}
                   size="small"
-                  className={`card-list-item card-list-empty ${allowAddition ? 'add-pointer' : ''}`}
+                  className={`card-list-item card-list-empty ${
+                    allowAddition ? 'add-pointer' : ''
+                  }`}
                   onClick={allowAddition ? onAdd : undefined}
                 >
                   <div className="empty-wrapper">{children}</div>

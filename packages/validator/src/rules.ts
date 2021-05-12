@@ -108,7 +108,7 @@ export default {
       if (isBool(response)) {
         return response ? rule.message : ''
       } else {
-        return response
+        return response || ''
       }
     }
     throw new Error("The rule's validator property must be a function.")

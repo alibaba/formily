@@ -32,14 +32,17 @@ const LOCALE = {
 }
 
 const getMatchLang = (lang: string) => {
-  let find = LOCALE.lang
+  let isoCode = LOCALE.lang
+  if (LOCALE.messages[lang]) {
+    return lang
+  }
   each(LOCALE.messages, (messages: ILocaleMessages, key: string) => {
     if (key.indexOf(lang) > -1 || String(lang).indexOf(key) > -1) {
-      find = key
+      isoCode = key
       return false
     }
   })
-  return find
+  return isoCode
 }
 
 export const setValidationLocale = (locale: ILocales) => {
