@@ -15,43 +15,43 @@ import { SortableHandle } from 'react-sortable-hoc'
 import { usePrefixCls } from '../__builtins__'
 import cls from 'classnames'
 
-interface IAdditionProps extends ButtonProps {
+export interface IArrayBaseAdditionProps extends ButtonProps {
   title?: string
   method?: 'push' | 'unshift'
   defaultValue?: any
 }
 
-interface IContext {
+export interface IArrayBaseContext {
   field: Formily.Core.Models.ArrayField
   schema: Schema
 }
 
-interface IItemProps {
+export interface IArrayBaseItemProps {
   index: number
 }
 
 export type ArrayBaseMixins = {
-  Addition?: React.FC<IAdditionProps>
+  Addition?: React.FC<IArrayBaseAdditionProps>
   Remove?: React.FC<AntdIconProps>
   MoveUp?: React.FC<AntdIconProps>
   MoveDown?: React.FC<AntdIconProps>
   SortHandle?: React.FC<AntdIconProps>
   Index?: React.FC
-  useArray?: () => IContext
+  useArray?: () => IArrayBaseContext
   useIndex?: () => number
 }
 
 type ComposedArrayBase = React.FC &
   ArrayBaseMixins & {
-    Item?: React.FC<IItemProps>
+    Item?: React.FC<IArrayBaseItemProps>
     mixin?: <T extends Formily.React.Types.JSXComponent>(
       target: T
     ) => T & ArrayBaseMixins
   }
 
-const ArrayBaseContext = createContext<IContext>(null)
+const ArrayBaseContext = createContext<IArrayBaseContext>(null)
 
-const ItemContext = createContext<IItemProps>(null)
+const ItemContext = createContext<IArrayBaseItemProps>(null)
 
 const useArray = () => {
   return useContext(ArrayBaseContext)
