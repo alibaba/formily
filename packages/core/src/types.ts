@@ -204,8 +204,11 @@ export type IVoidFieldState = Partial<
   >
 >
 
-export type IFormState = Partial<
-  Pick<Form, NonFunctionPropertyNames<OmitState<Form<{ [key: string]: any }>>>>
+export type IFormState<T extends Record<any, any> = any> = Partial<
+  Pick<
+    Form<T>,
+    NonFunctionPropertyNames<OmitState<Form<{ [key: string]: any }>>>
+  >
 >
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>

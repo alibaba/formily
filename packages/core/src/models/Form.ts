@@ -581,13 +581,13 @@ export class Form<ValueType extends object = any> {
     }
   }
 
-  setState: IModelSetter<IFormState> = modelStateSetter(this)
+  setState: IModelSetter<IFormState<ValueType>> = modelStateSetter(this)
 
-  getState: IModelGetter<IFormState> = modelStateGetter(this)
+  getState: IModelGetter<IFormState<ValueType>> = modelStateGetter(this)
 
-  setFormState: IModelSetter<IFormState> = modelStateSetter(this)
+  setFormState: IModelSetter<IFormState<ValueType>> = modelStateSetter(this)
 
-  getFormState: IModelGetter<IFormState> = modelStateGetter(this)
+  getFormState: IModelGetter<IFormState<ValueType>> = modelStateGetter(this)
 
   setFieldState: IFieldStateSetter = createFieldStateSetter(this)
 
