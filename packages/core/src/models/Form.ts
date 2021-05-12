@@ -71,7 +71,7 @@ export class Form<ValueType extends object = any> {
   initialValues: ValueType
   mounted: boolean
   unmounted: boolean
-  props: IFormProps
+  props: IFormProps<ValueType>
   heart: Heart
   graph: Graph
   fields: IFormFields = {}
@@ -79,7 +79,7 @@ export class Form<ValueType extends object = any> {
   indexes: Map<string, string> = new Map()
   disposers: (() => void)[] = []
 
-  constructor(props: IFormProps) {
+  constructor(props: IFormProps<ValueType>) {
     this.initialize(props)
     this.makeInitialValues()
     this.makeObservable()
@@ -87,7 +87,7 @@ export class Form<ValueType extends object = any> {
     this.onInit()
   }
 
-  protected initialize(props: IFormProps) {
+  protected initialize(props: IFormProps<ValueType>) {
     this.id = uid()
     this.props = { ...props }
     this.initialized = false

@@ -213,9 +213,9 @@ export type IFormState<T extends Record<any, any> = any> = Partial<
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>
 
-export interface IFormProps {
-  values?: {}
-  initialValues?: {}
+export interface IFormProps<T = any> {
+  values?: Partial<T>
+  initialValues?: Partial<T>
   pattern?: FormPatternTypes
   display?: FormDisplayTypes
   hidden?: boolean
