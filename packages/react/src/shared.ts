@@ -464,9 +464,14 @@ const INSPECT_PROPS_KEYS = [
 
 export const objectUpdateDiffs = (source: any, target: any) => {
   const diffs = []
+  const seened = new WeakSet()
   const diff = (source: any, target: any, path: string[]) => {
     if (isPlainObj(source)) {
+      if (seened.has(target)) {
+        return
+      }
       const diffed = new Set()
+      seened.add(target)
       each(source, (value, key) => {
         if (path.length === 0 && !INSPECT_PROPS_KEYS.includes(key)) {
           return
