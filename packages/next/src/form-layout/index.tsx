@@ -26,18 +26,24 @@ export interface IFormLayoutProps {
   bordered?: boolean
 }
 
-export const FormLayoutContext = createContext<IFormLayoutProps>(null)
-
-export const FormLayoutShallowContext = createContext<IFormLayoutProps>(null)
+export const FormLayoutContext = createContext<IFormLayoutProps>({})
 
 export const useFormLayout = () => useContext(FormLayoutContext)
 
-export const useFormShallowLayout = () => useContext(FormLayoutShallowContext)
-
 export const FormLayout: React.FC<IFormLayoutProps> & {
   useFormLayout: () => IFormLayoutProps
-  useFormShallowLayout: () => IFormLayoutProps
 } = ({ shallow, children, prefix, className, style, ...props }) => {
+  const parentLayout = useFormLayout()
+  const providerValue = shallow
+    ? {
+        size: parentLayout.size,
+        ...props,
+      }
+    : {
+        ...parentLayout,
+        ...props,
+      }
+
   const formPrefixCls = usePrefixCls('form')
   const layoutPrefixCls = usePrefixCls('formily-layout', { prefix })
   const layoutClassName = cls(
@@ -49,24 +55,12 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
     },
     className
   )
-  const renderChildren = () => {
-    if (shallow) {
-      return (
-        <FormLayoutShallowContext.Provider value={props}>
-          {children}
-        </FormLayoutShallowContext.Provider>
-      )
-    } else {
-      return (
-        <FormLayoutContext.Provider value={props}>
-          {children}
-        </FormLayoutContext.Provider>
-      )
-    }
-  }
+
   return (
     <div className={layoutClassName} style={style}>
-      {renderChildren()}
+      <FormLayoutContext.Provider value={providerValue}>
+        {children}
+      </FormLayoutContext.Provider>
     </div>
   )
 }
@@ -76,6 +70,5 @@ FormLayout.defaultProps = {
 }
 
 FormLayout.useFormLayout = useFormLayout
-FormLayout.useFormShallowLayout = useFormShallowLayout
 
 export default FormLayout
