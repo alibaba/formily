@@ -67,17 +67,13 @@ export function connect<T extends JSXComponent>(
   target: T,
   ...args: IComponentMapper<T>[]
 ) {
-  const Target = args.reduce((target, mapper) => {
+  const Destination = args.reduce((target, mapper) => {
     return mapper(target)
   }, target)
 
-  const Destination = React.forwardRef(
-    (props: React.ComponentProps<T>, ref) => {
-      return React.createElement(Target, { ...props, ref })
-    }
-  )
-
-  if (target) hoistNonReactStatics(Destination, target as any)
+  if (target && typeof Destination !== 'string') {
+    hoistNonReactStatics(Destination, target as any)
+  }
 
   return Destination
 }
