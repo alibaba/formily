@@ -26,7 +26,7 @@ export interface IFormLayoutProps {
   bordered?: boolean
 }
 
-export const FormLayoutContext = createContext<IFormLayoutProps>(null)
+export const FormLayoutContext = createContext<IFormLayoutProps>({})
 
 export const useFormLayout = () => useContext(FormLayoutContext)
 
