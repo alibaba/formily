@@ -149,6 +149,124 @@ export default () => (
 )
 ```
 
+## 使用 shallow 控制 layout 上下文的传递行为
+
+```tsx
+import React from 'react'
+import {
+  Input,
+  Select,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+  FormLayout,
+  IFormLayoutProps,
+} from '@formily/antd'
+import { createForm } from '@formily/core'
+import { FormProvider, Field } from '@formily/react'
+
+const form = createForm()
+
+const globalLayout: IFormLayoutProps = {
+  inset: true,
+  shallow: false,
+  labelWidth: 80,
+}
+
+const sonLayout: IFormLayoutProps = {
+  inset: false,
+  shallow: false,
+  fullness: true,
+  layout: 'vertical',
+}
+
+const grandsonLayout: IFormLayoutProps = {
+  layout: 'inline',
+}
+
+const LayoutContainer: React.FC<{
+  layout: IFormLayoutProps
+  borderColor: string
+}> = (props) => {
+  return (
+    <div style={{ padding: '12px', border: `2px solid ${props.borderColor}` }}>
+      <pre>布局配置：{JSON.stringify(props.layout, undefined, 2)}</pre>
+      {props.children}
+    </div>
+  )
+}
+
+export default () => (
+  <FormProvider form={form}>
+    <LayoutContainer borderColor="#f5222d" layout={globalLayout}>
+      <FormLayout {...globalLayout}>
+        <Field
+          name="input"
+          required
+          title="输入框"
+          decorator={[FormItem]}
+          component={[Input]}
+        />
+        <Field
+          name="select"
+          required
+          title="选择框"
+          decorator={[FormItem]}
+          component={[Select]}
+        />
+        <LayoutContainer borderColor="#1890ff" layout={sonLayout}>
+          <FormLayout {...sonLayout}>
+            <Field
+              name="input"
+              required
+              title="输入框"
+              decorator={[FormItem]}
+              component={[Input]}
+            />
+            <Field
+              name="select"
+              required
+              title="选择框"
+              decorator={[FormItem]}
+              component={[Select]}
+            />
+            <LayoutContainer borderColor="#52c41a" layout={grandsonLayout}>
+              <FormLayout {...grandsonLayout}>
+                <Field
+                  name="input"
+                  required
+                  title="输入框"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="select"
+                  required
+                  title="选择框"
+                  decorator={[FormItem]}
+                  component={[Select]}
+                />
+              </FormLayout>
+            </LayoutContainer>
+            <FormButtonGroup.FormItem>
+              <Submit>提交</Submit>
+            </FormButtonGroup.FormItem>
+          </FormLayout>
+        </LayoutContainer>
+      </FormLayout>
+    </LayoutContainer>
+  </FormProvider>
+)
+```
+
+## hook
+
+### useFormLayout
+
+```ts
+const layout = useFormLayout()
+```
+
 ## API
 
 | 属性名         | 类型                                        | 描述                    | 默认值     |
