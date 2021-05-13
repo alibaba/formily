@@ -35,7 +35,10 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
 } = ({ shallow, children, prefix, className, style, ...props }) => {
   const parentLayout = useFormLayout()
   const providerValue = shallow
-    ? props
+    ? {
+        size: parentLayout.size,
+        ...props,
+      }
     : {
         ...parentLayout,
         ...props,
