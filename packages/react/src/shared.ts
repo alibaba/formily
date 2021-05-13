@@ -6,8 +6,7 @@ import {
   isValid,
   toArr,
   isEqual,
-  each,
-  isPlainObj
+  each
 } from '@formily/shared'
 import {
   IFormEffect,
@@ -453,47 +452,21 @@ export const createQueryEffects = <
   )
 }
 
-const INSPECT_PROPS_KEYS = [
-  'props',
-  'rules',
-  'required',
-  'editable',
-  'visible',
-  'display'
-]
-
-export const objectUpdateDiffs = (source: any, target: any) => {
-  const diffs = []
-  const seened = new WeakSet()
-  const diff = (source: any, target: any, path: string[]) => {
-    if (isPlainObj(source)) {
-      if (seened.has(target)) {
-        return
-      }
-      const diffed = new Set()
-      seened.add(target)
-      each(source, (value, key) => {
-        if (path.length === 0 && !INSPECT_PROPS_KEYS.includes(key)) {
-          return
-        }
-        diffed.add(key)
-        diff(value, target[key], path.concat(key))
-      })
-      each(target, (value, key) => {
-        if (diffed.has(key)) return
-        if (path.length === 0 && !INSPECT_PROPS_KEYS.includes(key)) {
-          return
-        }
-        diffed.add(key)
-        diff(source[key], value, path.concat(key))
-      })
-    } else if (!isEqual(source, target)) {
-      diffs.push({
-        path,
-        value: target
-      })
+export const inspectChanged = (
+  source: any,
+  target: any,
+  keys: string[]
+): any => {
+  let changeNum = 0
+  const changedProps = {}
+  each(keys, (key: string) => {
+    if (!isEqual(source[key], target[key], true)) {
+      changeNum++
+      changedProps[key] = target[key]
     }
+  })
+
+  if (changeNum > 0) {
+    return changedProps
   }
-  diff(source, target, [])
-  return diffs
 }

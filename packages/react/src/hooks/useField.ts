@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useRef, useContext } from 'react'
-import { FormPath, isFn } from '@formily/shared'
+import { isFn, merge } from '@formily/shared'
 import {
   IFieldState,
   IForm,
@@ -7,7 +7,7 @@ import {
   IMutators,
   LifeCycleTypes
 } from '@formily/core'
-import { getValueFromEvent, objectUpdateDiffs } from '../shared'
+import { getValueFromEvent, inspectChanged } from '../shared'
 import { useForceUpdate } from './useForceUpdate'
 import { IFieldHook, IFieldStateUIProps } from '../types'
 import FormContext from '../context'
@@ -32,6 +32,15 @@ const extendMutators = (
     }
   }
 }
+
+const INSPECT_PROPS_KEYS = [
+  'props',
+  'rules',
+  'required',
+  'editable',
+  'visible',
+  'display'
+]
 
 export const useField = (options: IFieldStateUIProps): IFieldHook => {
   const forceUpdate = useForceUpdate()
@@ -81,11 +90,12 @@ export const useField = (options: IFieldStateUIProps): IFieldHook => {
     //考虑到组件被unmount，props diff信息会被销毁，导致diff异常，所以需要代理在一个持久引用上
     const cacheProps = ref.current.field.getCache(ref.current.uid)
     if (cacheProps) {
-      const diffs = objectUpdateDiffs(cacheProps, options)
-      if (diffs.length) {
+      const props = inspectChanged(cacheProps, options, INSPECT_PROPS_KEYS)
+      if (props) {
         ref.current.field.setState((state: IFieldState) => {
-          diffs.forEach(({ path, value }) => {
-            FormPath.setIn(state, path, value)
+          merge(state, props, {
+            assign: true,
+            arrayMerge: (target, source) => source
           })
         })
       }

@@ -1,14 +1,12 @@
-import { isFn, isArr } from './types'
+import { isArr } from './types'
 import { instOf } from './instanceof'
 import { BigData } from './big-data'
 const isArray = isArr
 const keyList = Object.keys
 const hasProp = Object.prototype.hasOwnProperty
 
-type Filter = (comparies: { a: any; b: any }, key: string) => boolean
-
 /* eslint-disable */
-function equal(a: any, b: any, filter?: Filter) {
+function equal(a: any, b: any, compareFunctionString = false) {
   // fast-deep-equal index.js 2.0.1
   if (a === b) {
     return true
@@ -37,7 +35,7 @@ function equal(a: any, b: any, filter?: Filter) {
         return false
       }
       for (i = length; i-- !== 0; ) {
-        if (!equal(a[i], b[i], filter)) {
+        if (!equal(a[i], b[i], compareFunctionString)) {
           return false
         }
       }
@@ -67,7 +65,8 @@ function equal(a: any, b: any, filter?: Filter) {
     const schemaA = a && a.toJSON
     const schemaB = b && b.toJSON
     if (schemaA !== schemaB) return false
-    if (schemaA && schemaB) return equal(a.toJSON(), b.toJSON(), filter)
+    if (schemaA && schemaB)
+      return equal(a.toJSON(), b.toJSON(), compareFunctionString)
     const regexpA = instOf(a, 'RegExp')
     const regexpB = instOf(b, 'RegExp')
     if (regexpA !== regexpB) {
@@ -107,17 +106,9 @@ function equal(a: any, b: any, filter?: Filter) {
         // .$$typeof and ._store on just reasonable markers of a react element
         continue
       } else {
-        if (isFn(filter)) {
-          if (filter({ a: a[key], b: b[key] }, key)) {
-            if (!equal(a[key], b[key], filter)) {
-              return false
-            }
-          }
-        } else {
-          // all other properties should be traversed as usual
-          if (!equal(a[key], b[key], filter)) {
-            return false
-          }
+        // all other properties should be traversed as usual
+        if (!equal(a[key], b[key], compareFunctionString)) {
+          return false
         }
       }
     }
@@ -125,14 +116,23 @@ function equal(a: any, b: any, filter?: Filter) {
     // fast-deep-equal index.js 2.0.1
     return true
   }
+  if (compareFunctionString) {
+    if (a && b && typeof a === 'function' && typeof b === 'function') {
+      return a.toString() === b.toString()
+    }
+  }
 
   return a !== a && b !== b
 }
 // end fast-deep-equal
 
-export const isEqual = function exportedEqual(a: any, b: any, filter?: Filter) {
+export const isEqual = function exportedEqual(
+  a: any,
+  b: any,
+  compareFunctionString = false
+) {
   try {
-    return equal(a, b, filter)
+    return equal(a, b, compareFunctionString)
   } catch (error) {
     if (
       (error.message && error.message.match(/stack|recursion/i)) ||
