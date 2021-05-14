@@ -6,10 +6,15 @@
 
 ```tsx
 import React from 'react'
-import { Password, FormItem, FormButtonGroup, Submit } from '@formily/next'
+import {
+  Password,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+  FormLayout,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -22,7 +27,7 @@ const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+    <FormLayout labelCol={6} wrapperCol={10}>
       <SchemaField>
         <SchemaField.String
           name="input"
@@ -38,7 +43,7 @@ export default () => (
       <FormButtonGroup.FormItem>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup.FormItem>
-    </Form>
+    </FormLayout>
   </FormProvider>
 )
 ```
@@ -47,10 +52,15 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Password, FormItem, FormButtonGroup, Submit } from '@formily/next'
+import {
+  Password,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+  FormLayout,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Form } from '@alifd/next'
 const SchemaField = createSchemaField({
   components: {
     Password,
@@ -77,12 +87,12 @@ const schema = {
 
 export default () => (
   <FormProvider form={form}>
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+    <FormLayout labelCol={6} wrapperCol={10}>
       <SchemaField schema={schema} />
       <FormButtonGroup.FormItem>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup.FormItem>
-    </Form>
+    </FormLayout>
   </FormProvider>
 )
 ```
@@ -91,15 +101,20 @@ export default () => (
 
 ```tsx
 import React from 'react'
-import { Password, FormItem, FormButtonGroup, Submit } from '@formily/next'
+import {
+  Password,
+  FormItem,
+  FormButtonGroup,
+  Submit,
+  FormLayout,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
-import { Form } from '@alifd/next'
 const form = createForm()
 
 export default () => (
   <FormProvider form={form}>
-    <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+    <FormLayout labelCol={6} wrapperCol={10}>
       <Field
         name="input"
         title="输入框"
@@ -115,7 +130,7 @@ export default () => (
       <FormButtonGroup.FormItem>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup.FormItem>
-    </Form>
+    </FormLayout>
   </FormProvider>
 )
 ```
