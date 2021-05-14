@@ -26,6 +26,7 @@ import {
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
 import { ReservedProperties, GlobalState } from './constants'
+import { isObjectField } from './checkers'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -348,15 +349,29 @@ export const exchangeArrayState = (
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
+export const isEmptyWithField = (field: GeneralField, value: any) => {
+  if (isArrayField(field) || isObjectField(field)) {
+    return isEmpty(value)
+  }
+  return !isValid(value)
+}
+
 export const initFieldValue = (field: Field) => {
   GlobalState.initializing = true
-  if (!isValid(field.initialValue)) {
+  if (isEmptyWithField(field, field.initialValue)) {
     if (isValid(field.props.initialValue)) {
       field.initialValue = field.props.initialValue
     }
   }
-  if (!isValid(field.value)) {
-    if (isValid(field.props.value)) {
+  if (isEmptyWithField(field, field.value)) {
+    const isEmptyValue = isEmptyWithField(field, field.props.value)
+    const isEmptyInitialValue = isEmptyWithField(
+      field,
+      field.props.initialValue
+    )
+    if (isEmptyValue && !isEmptyInitialValue) {
+      field.value = field.props.initialValue
+    } else if (isValid(field.props.value)) {
       field.value = field.props.value
     } else if (isValid(field.props.initialValue)) {
       field.value = field.props.initialValue

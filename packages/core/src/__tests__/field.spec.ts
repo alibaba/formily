@@ -440,7 +440,7 @@ test('objectFieldWithInitialValue', async () => {
       initialValues: {
         obj: {
           a: 'a',
-        }
+        },
       },
     })
   )
@@ -448,12 +448,12 @@ test('objectFieldWithInitialValue', async () => {
     form.createObjectField({
       name: 'obj',
     })
-  );
+  )
   const fieldObjA = attach(
     form.createField({
       name: 'obj.a',
     })
-  );
+  )
 
   expect(fieldObjA.initialValue).toEqual('a')
   fieldObjA.value = 'aa'
@@ -461,21 +461,33 @@ test('objectFieldWithInitialValue', async () => {
   expect(fieldObjA.initialValue).toEqual('a')
 })
 
-test('resetObjectFieldWithInitialValue', async () => {
-  const form = attach(
-    createForm()
+test('initialValueWithArray', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createArrayField({
+      name: 'aaa',
+      initialValue: [1, 2],
+    })
   )
+  expect(field.initialValue).toEqual([1, 2])
+  expect(field.value).toEqual([1, 2])
+  expect(form.initialValues.aaa).toEqual([1, 2])
+  expect(form.values.aaa).toEqual([1, 2])
+})
+
+test('resetObjectFieldWithInitialValue', async () => {
+  const form = attach(createForm())
   attach(
     form.createObjectField({
       name: 'obj',
     })
-  );
+  )
   const fieldObjA = attach(
     form.createField({
       name: 'obj.a',
       initialValue: 'a',
     })
-  );
+  )
 
   fieldObjA.value = 'aa'
   expect(fieldObjA.value).toEqual('aa')
@@ -491,7 +503,7 @@ test('resetObjectFieldWithInitialValue', async () => {
 
 test('reset', async () => {
   const form = attach(
-    createForm({
+    createForm<any>({
       values: {
         bb: 123,
       },
@@ -541,7 +553,7 @@ test('reset', async () => {
 
 test('match', () => {
   const form = attach(
-    createForm({
+    createForm<any>({
       values: {
         bb: 123,
       },
