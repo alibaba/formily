@@ -14,10 +14,11 @@ import {
   Input,
   FormButtonGroup,
   Submit,
+  FormLayout,
 } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
+import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -33,7 +34,7 @@ const formCollapse = FormCollapse.createFormCollapse()
 export default () => {
   return (
     <FormProvider form={form}>
-      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+      <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField>
           <SchemaField.Void
             title="折叠面板"
@@ -103,7 +104,7 @@ export default () => {
           </Button>
           <Submit onSubmit={console.log}>提交</Submit>
         </FormButtonGroup.FormItem>
-      </Form>
+      </FormLayout>
     </FormProvider>
   )
 }
@@ -119,10 +120,11 @@ import {
   Input,
   FormButtonGroup,
   Submit,
+  FormLayout,
 } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Button, Form } from '@alifd/next'
+import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -203,7 +205,7 @@ const schema = {
 export default () => {
   return (
     <FormProvider form={form}>
-      <Form labelCol={{ span: 6 }} wrapperCol={{ span: 10 }}>
+      <FormLayout labelCol={6} wrapperCol={10}>
         <SchemaField schema={schema} scope={{ formCollapse }} />
         <FormButtonGroup.FormItem>
           <Button
@@ -224,7 +226,7 @@ export default () => {
           </Button>
           <Submit onSubmit={console.log}>提交</Submit>
         </FormButtonGroup.FormItem>
-      </Form>
+      </FormLayout>
     </FormProvider>
   )
 }
