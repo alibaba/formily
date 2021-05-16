@@ -1,4 +1,4 @@
-import { provide, defineComponent } from 'vue-demi'
+import { provide, defineComponent, DefineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IFieldProps } from '../types'
@@ -8,13 +8,13 @@ import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
 
-interface ObjectField extends IFieldProps<VueComponent, VueComponent>, Vue {}
+type ObjectFieldProps = IFieldProps<VueComponent, VueComponent>
 
-export default observer<ObjectField>(defineComponent<ObjectField>({
+export default observer(defineComponent<ObjectFieldProps>({
   name: 'ObjectField',
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
-  props: ({
+  props: {
     name: {},
     title: {},
     description: {},
@@ -60,8 +60,8 @@ export default observer<ObjectField>(defineComponent<ObjectField>({
     dataSource: {},
     validator: {},
     reactions: [Array, Function],
-  } as any),
-  setup(props: ObjectField, { slots }) {
+  },
+  setup(props: ObjectFieldProps, { slots }) {
     // const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
@@ -89,4 +89,4 @@ export default observer<ObjectField>(defineComponent<ObjectField>({
       }
     )
   }
-}))
+}) as unknown  as DefineComponent<ObjectFieldProps>)

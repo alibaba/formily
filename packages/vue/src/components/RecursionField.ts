@@ -1,4 +1,4 @@
-import { inject, provide, defineComponent, shallowRef, watch } from 'vue-demi'
+import { inject, provide, defineComponent, shallowRef, watch, DefineComponent } from 'vue-demi'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { observer } from '@formily/reactive-vue'
@@ -16,11 +16,11 @@ import VoidField from './VoidField'
 import { h } from '../shared/h'
 import { Fragment } from '../shared/fragment'
 
-const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursionFieldProps>({
+const RecursionField = observer(defineComponent<IRecursionFieldProps>({
   name: 'RecursionField',
   inheritAttrs: false,
   // eslint-disable-next-line vue/require-prop-types
-  props: ({
+  props: {
     schema: {
       required: true
     },
@@ -36,7 +36,7 @@ const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursion
     },
     mapProperties: {},
     filterProperties: {},
-  } as any),
+  },
   setup(props: IRecursionFieldProps) {
     // const { track } = useObserver()
     const parentRef = useField()
@@ -154,6 +154,6 @@ const RecursionField = observer<IRecursionFieldProps>(defineComponent<IRecursion
       return render()
     }
   }
-}))
+}) as unknown as DefineComponent<IRecursionFieldProps>)
 
 export default RecursionField

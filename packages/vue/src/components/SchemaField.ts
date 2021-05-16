@@ -124,7 +124,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
   const SchemaField = defineComponent<ISchemaFieldProps<VueComponent, VueComponent>>({
     name: 'SchemaField',
     inheritAttrs: false,
-    props: ({
+    props: {
       schema: {},
       scope: {},
       basePath: {},
@@ -172,7 +172,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
         type: Boolean,
         default: undefined
       },
-    } as any),
+    },
     setup(props: ISchemaFieldProps<VueComponent, VueComponent>, { slots }) {
       const createSchema = (schemaProp: ISchemaFieldProps<VueComponent, VueComponent>['schema']) => Schema.isSchemaInstance(schemaProp)
         ? schemaProp
@@ -214,7 +214,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
 
   const MarkupField = defineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>({
     name: 'MarkupField',
-    props: Object.assign({}, markupProps, { type: String }) as any,
+    props: Object.assign({}, markupProps, { type: String }),
     setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       const parentRef = inject(SchemaMarkupSymbol, null)
       if (!parentRef || !parentRef.value) return () => h(Fragment, {}, {})
@@ -249,7 +249,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
   const SchemaFieldFactory = (type: SchemaTypes, name: string) => {
     return defineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>({
       name: name,
-      props: Object.assign({}, markupProps) as any,
+      props: Object.assign({}, markupProps),
       setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
         return () => h(MarkupField, { 
           attrs: {

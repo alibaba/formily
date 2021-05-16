@@ -1,4 +1,4 @@
-import { provide, defineComponent, toRaw } from 'vue-demi'
+import { provide, defineComponent, toRaw, DefineComponent } from 'vue-demi'
 import { FormSymbol } from '../shared/context'
 import { IProviderProps } from '../types'
 import { useAttach } from '../hooks/useAttach'
@@ -8,12 +8,12 @@ import { Fragment } from '../shared/fragment'
 export default defineComponent<IProviderProps>({
   name: 'FormProvider',
   inheritAttrs: false,
-  props: ({
+  props: {
     form: {
       type: Object,
       required: true
     }
-  } as any),
+  },
   setup(props: IProviderProps, { attrs, slots }) {
     const formRef = useAttach(() => toRaw(props.form), () => props.form)
     provide(FormSymbol, formRef)
@@ -24,4 +24,4 @@ export default defineComponent<IProviderProps>({
       slots
     )
   }
-})
+}) as unknown as DefineComponent<IProviderProps>

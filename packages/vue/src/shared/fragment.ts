@@ -1,8 +1,8 @@
 import frag from 'vue-frag';
 import { VueComponent } from '../types';
-import { isVue2, defineComponent, Fragment as Vue3Fragment } from 'vue-demi';
+import { isVue2, defineComponent } from 'vue-demi';
 
-export const Fragment = Vue3Fragment || '#fragment'
+export const Fragment = '#fragment'
 
 let FragmentComponent: VueComponent
 
@@ -20,7 +20,7 @@ if (isVue2) {
         }],
       }, vm?.$slots?.default)
     }
-  } as VueComponent
+  }
 } else {
   FragmentComponent = defineComponent({
     name: 'Fragment',

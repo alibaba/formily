@@ -1,4 +1,4 @@
-import { defineComponent } from 'vue-demi'
+import { defineComponent, DefineComponent } from 'vue-demi'
 import { observer } from '@formily/reactive-vue'
 import { useForm } from '../hooks'
 import h from '../shared/h'
@@ -20,4 +20,4 @@ export default observer(defineComponent({
       }
     )
   }
-}))
+}) as unknown  as DefineComponent)

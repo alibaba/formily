@@ -1,15 +1,15 @@
 import { h, isVue2 } from 'vue-demi';
 import { Fragment, FragmentComponent } from './fragment'
-import type { VNodeChildren as Vue2VNodeChildren } from '../types/vue2';
 
 type RenderChildren = {
   [key in string]?: (...args: any[]) => (VNode | string)[];
 }
 
+// TODO: need to compatible with vue2 & vue3
 type Tag = any
 type VNodeData = Record<string, any>
 type VNode = any
-type VNodeChildren = Vue2VNodeChildren | RenderChildren
+type VNodeChildren = any
 
 const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderChildren): any => {
   if (isVue2) {

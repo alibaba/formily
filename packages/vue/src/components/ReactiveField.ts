@@ -1,5 +1,5 @@
 import { VueComponent } from '../types'
-import { defineComponent } from 'vue-demi'
+import { defineComponent, DefineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { observer } from '@formily/reactive-vue'
 
@@ -10,10 +10,10 @@ interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
 }
 
-export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps>({
+export default observer(defineComponent<IReactiveFieldProps>({
   name: 'ReactiveField',
   // eslint-disable-next-line vue/require-prop-types
-  props: (['field'] as any),
+  props: ['field'],
   setup(props: IReactiveFieldProps, { slots }) {
     // const { track } = useObserver()
     const key = Math.floor(Date.now() * Math.random()).toString(16)
@@ -98,4 +98,4 @@ export default observer<IReactiveFieldProps>(defineComponent<IReactiveFieldProps
       return h(Fragment, { key }, children)
     }
   }
-}))
+}) as unknown as DefineComponent<IReactiveFieldProps>)

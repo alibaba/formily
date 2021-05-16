@@ -3,7 +3,7 @@ import type { Vue3Component } from './vue3'
 import type { FormPathPattern } from '@formily/shared'
 import type { ISchema, Schema, SchemaKey } from '@formily/json-schema'
 
-export type VueComponent<Props = Record<string, any>> = Vue2Component<Props> | Vue3Component<Props> | Props
+export type VueComponent<Props = Record<string, any>> = Vue2Component | Vue3Component<Props> | Props
 export type VueComponentOptionsWithProps = {
   props: unknown
 }
