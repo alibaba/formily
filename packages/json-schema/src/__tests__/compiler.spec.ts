@@ -50,8 +50,8 @@ test('compile', () => {
       },
     },
   })
-  const compiledSchema = compile(schema)
-  expect(compiledSchema).toEqual(schema)
+  const compiledSchema = schema.compile()
+  expect(compiledSchema.toJSON()).toEqual(schema.toJSON())
   expect(compiledSchema.properties['aa']['x-component-props']).toEqual(
     '{{123}}'
   )

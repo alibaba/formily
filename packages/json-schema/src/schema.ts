@@ -20,6 +20,16 @@ import {
   registerVoidComponents,
   registerTypeDefaultComponents,
 } from './polyfills'
+
+const ShallowCompileKeys = [
+  'properties',
+  'patternProperties',
+  'additionalProperties',
+  'items',
+  'additionalItems',
+  'x-linkages',
+  'x-reactions',
+]
 export class Schema<
   Decorator = any,
   Component = any,
@@ -434,24 +444,17 @@ export class Schema<
   }
 
   compile = (scope?: any) => {
-    const shallows = [
-      'properties',
-      'patternProperties',
-      'additionalProperties',
-      'items',
-      'additionalItems',
-      'x-linkages',
-      'x-reactions',
-    ]
+    const schema = new Schema({}, this.parent)
     each(this, (value, key) => {
       if (isFn(value)) return
-      if (!shallows.includes(key)) {
-        this[key] = value ? compile(value, scope) : value
+      if (key === 'parent') return
+      if (!ShallowCompileKeys.includes(key)) {
+        schema[key] = value ? compile(value, scope) : value
       } else {
-        this[key] = value ? shallowCompile(value, scope) : value
+        schema[key] = value ? shallowCompile(value, scope) : value
       }
     })
-    return this
+    return schema
   }
 
   fromJSON = (
@@ -562,6 +565,6 @@ export class Schema<
   static registerTypeDefaultComponents = registerTypeDefaultComponents
 
   static registerPolyfills = registerPolyfills
-  
+
   static enablePolyfills = enablePolyfills
 }
