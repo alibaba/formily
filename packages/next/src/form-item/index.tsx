@@ -3,12 +3,7 @@ import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
-import { reduce } from '@formily/shared'
-import {
-  useFormLayout,
-  useFormShallowLayout,
-  FormLayoutShallowContext,
-} from '../form-layout'
+import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { useGridSpan } from '../form-grid'
 import { Balloon } from '@alifd/next'
 import {
@@ -56,9 +51,7 @@ type ComposeFormItem = React.FC<IFormItemProps> & {
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
-  const shallowFormLayout = useFormShallowLayout()
-  const formLayout = useFormLayout()
-  const layout = { ...shallowFormLayout, ...formLayout }
+  const layout = useFormLayout()
   return {
     ...props,
     layout: layout.layout ?? 'horizontal',
@@ -97,7 +90,6 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const popoverContainerRef = useRef()
   const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
-  const shallowFormLayout = useFormShallowLayout()
   const {
     label,
     style,
@@ -275,28 +267,14 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             style={wrapperStyle}
             className={cls({
               [`${prefixCls}-control-content-component`]: true,
-              [`${prefixCls}-control-content-component-has-feedback-icon`]: !!feedbackIcon,
+              [`${prefixCls}-control-content-component-has-feedback-icon`]:
+                !!feedbackIcon,
               [`${prefix}-input`]: !!feedbackIcon,
               [`${prefixCls}-active`]: active,
               [`${prefix}-focus`]: active,
             })}
           >
-            <FormLayoutShallowContext.Provider
-              value={reduce(
-                shallowFormLayout,
-                (buf: any, _, key) => {
-                  if (key === 'size') {
-                    buf.size = size
-                  } else {
-                    buf[key] = undefined
-                  }
-                  return buf
-                },
-                {
-                  size,
-                }
-              )}
-            >
+            <FormLayoutShallowContext.Provider value={undefined}>
               {formatChildren}
             </FormLayoutShallowContext.Provider>
             {feedbackIcon && (

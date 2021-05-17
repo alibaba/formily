@@ -26,18 +26,25 @@ export interface IFormLayoutProps {
   bordered?: boolean
 }
 
-export const FormLayoutContext = createContext<IFormLayoutProps>(null)
+export const FormLayoutDeepContext = createContext<IFormLayoutProps>(null)
 
 export const FormLayoutShallowContext = createContext<IFormLayoutProps>(null)
 
-export const useFormLayout = () => useContext(FormLayoutContext)
+export const useFormDeepLayout = () => useContext(FormLayoutDeepContext)
 
 export const useFormShallowLayout = () => useContext(FormLayoutShallowContext)
 
+export const useFormLayout = () => ({
+  ...useFormDeepLayout(),
+  ...useFormShallowLayout(),
+})
+
 export const FormLayout: React.FC<IFormLayoutProps> & {
   useFormLayout: () => IFormLayoutProps
+  useFormDeepLayout: () => IFormLayoutProps
   useFormShallowLayout: () => IFormLayoutProps
 } = ({ shallow, children, prefixCls, className, style, ...props }) => {
+  const deepLayout = useFormDeepLayout()
   const formPrefixCls = usePrefixCls('form')
   const layoutPrefixCls = usePrefixCls('formily-layout', { prefixCls })
   const layoutClassName = cls(
@@ -50,19 +57,26 @@ export const FormLayout: React.FC<IFormLayoutProps> & {
     className
   )
   const renderChildren = () => {
-    if (shallow) {
-      return (
-        <FormLayoutShallowContext.Provider value={props}>
+    const newDeepLayout = {
+      ...deepLayout,
+    }
+    if (!shallow) {
+      Object.assign(newDeepLayout, props)
+    } else {
+      if (props.size) {
+        newDeepLayout.size = props.size
+      }
+      if (props.colon) {
+        newDeepLayout.colon = props.colon
+      }
+    }
+    return (
+      <FormLayoutDeepContext.Provider value={newDeepLayout}>
+        <FormLayoutShallowContext.Provider value={shallow ? props : undefined}>
           {children}
         </FormLayoutShallowContext.Provider>
-      )
-    } else {
-      return (
-        <FormLayoutContext.Provider value={props}>
-          {children}
-        </FormLayoutContext.Provider>
-      )
-    }
+      </FormLayoutDeepContext.Provider>
+    )
   }
   return (
     <div className={layoutClassName} style={style}>
@@ -75,7 +89,8 @@ FormLayout.defaultProps = {
   shallow: true,
 }
 
-FormLayout.useFormLayout = useFormLayout
+FormLayout.useFormDeepLayout = useFormDeepLayout
 FormLayout.useFormShallowLayout = useFormShallowLayout
+FormLayout.useFormLayout = useFormLayout
 
 export default FormLayout
