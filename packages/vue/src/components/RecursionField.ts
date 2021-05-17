@@ -1,4 +1,4 @@
-import { inject, provide, defineComponent, shallowRef, watch, DefineComponent } from 'vue-demi'
+import { inject, provide, defineComponent, computed, DefineComponent } from 'vue-demi'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import { observer } from '@formily/reactive-vue'
@@ -47,21 +47,15 @@ const RecursionField = observer(defineComponent<IRecursionFieldProps>({
     const parentRef = useField()
     const options = inject(SchemaOptionsSymbol)
     const scope = inject(SchemaExpressionScopeSymbol)
-    const createSchema = (schemaProp: IRecursionFieldProps['schema']) => new Schema(schemaProp)
-    const createFieldSchema = (schema: Schema) => schema.compile?.({
+    const schemaRef = computed(() => new Schema(props.schema))
+    const fieldSchemaRef = computed(() => schemaRef.value.compile?.({
       ...options.scope,
       ...scope,
-    })
-    const schemaRef = shallowRef(createSchema(props.schema))
-    const fieldSchemaRef = shallowRef(createFieldSchema(schemaRef.value))
-    watch(() => props.schema, () => {
-      schemaRef.value = createSchema(props.schema)
-      fieldSchemaRef.value = createFieldSchema(schemaRef.value)
-    })
-
+    }))
+    const fieldPropsRef = computed(() => schemaRef.value?.toFieldProps?.(options))
     const getBasePath = () => {
       if (props.onlyRenderProperties) {
-        return props.basePath || parentRef?.value?.address?.concat(props.name)
+        return props.basePath || parentRef?.value?.address.concat(props.name)
       }
       return props.basePath || parentRef?.value?.address
     }
@@ -69,13 +63,11 @@ const RecursionField = observer(defineComponent<IRecursionFieldProps>({
     provide(SchemaSymbol, fieldSchemaRef)
 
     return () => {
-      
       const basePath = getBasePath()
+      const fieldProps = fieldPropsRef.value
 
-      const fieldProps = schemaRef.value?.toFieldProps?.(options) as any
       const renderProperties = (field?: Formily.Core.Types.GeneralField) => {
         if (props.onlyRenderSelf) return
-        
         const children = fieldSchemaRef.value.mapProperties((item, name, index) => {
           const base = field?.address || basePath
           let schema: Schema = item
