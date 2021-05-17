@@ -6,10 +6,9 @@
 
 ```tsx
 import React from 'react'
-import { PreviewText, FormItem } from '@formily/next'
+import { PreviewText, FormItem, FormLayout } from '@formily/next'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Form } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -22,7 +21,7 @@ const form = createForm()
 
 export default () => {
   return (
-    <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+    <FormLayout labelCol={8} wrapperCol={16}>
       <FormProvider form={form}>
         <SchemaField>
           <SchemaField.String
@@ -68,7 +67,7 @@ export default () => {
           />
         </SchemaField>
       </FormProvider>
-    </Form>
+    </FormLayout>
   )
 }
 ```
@@ -77,7 +76,12 @@ export default () => {
 
 ```tsx
 import React from 'react'
-import { PreviewText, FormItem, FormButtonGroup } from '@formily/next'
+import {
+  PreviewText,
+  FormItem,
+  FormButtonGroup,
+  FormLayout,
+} from '@formily/next'
 import { createForm } from '@formily/core'
 import {
   FormProvider,
@@ -85,7 +89,7 @@ import {
   connect,
   createSchemaField,
 } from '@formily/react'
-import { Button, Form, Input as NextInput } from '@alifd/next'
+import { Button, Input as NextInput } from '@alifd/next'
 
 const Input = connect(NextInput, mapReadPretty(PreviewText.Input))
 
@@ -102,7 +106,7 @@ const form = createForm()
 export default () => {
   return (
     <PreviewText.Placeholder value="暂无数据">
-      <Form labelCol={{ span: 8 }} wrapperCol={{ span: 16 }}>
+      <FormLayout labelCol={8} wrapperCol={16}>
         <FormProvider form={form}>
           <SchemaField>
             <SchemaField.Markup
@@ -163,7 +167,7 @@ export default () => {
             </Button>
           </FormButtonGroup.FormItem>
         </FormProvider>
-      </Form>
+      </FormLayout>
     </PreviewText.Placeholder>
   )
 }
