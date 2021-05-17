@@ -3,7 +3,12 @@ import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
-import { useFormLayout } from '../form-layout'
+import { reduce } from '@formily/shared'
+import {
+  useFormLayout,
+  useFormShallowLayout,
+  FormLayoutShallowContext,
+} from '../form-layout'
 import { useGridSpan } from '../form-grid'
 import { Balloon } from '@alifd/next'
 import {
@@ -51,7 +56,9 @@ type ComposeFormItem = React.FC<IFormItemProps> & {
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
-  const layout = useFormLayout()
+  const shallowFormLayout = useFormShallowLayout()
+  const formLayout = useFormLayout()
+  const layout = { ...shallowFormLayout, ...formLayout }
   return {
     ...props,
     layout: layout.layout ?? 'horizontal',
@@ -90,6 +97,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const popoverContainerRef = useRef()
   const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
+  const shallowFormLayout = useFormShallowLayout()
   const {
     label,
     style,
@@ -273,7 +281,24 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               [`${prefix}-focus`]: active,
             })}
           >
-            {formatChildren}
+            <FormLayoutShallowContext.Provider
+              value={reduce(
+                shallowFormLayout,
+                (buf: any, _, key) => {
+                  if (key === 'size') {
+                    buf.size = size
+                  } else {
+                    buf[key] = undefined
+                  }
+                  return buf
+                },
+                {
+                  size,
+                }
+              )}
+            >
+              {formatChildren}
+            </FormLayoutShallowContext.Provider>
             {feedbackIcon && (
               <div className={cls(`${prefixCls}-feedback-icon`)}>
                 {feedbackIcon}

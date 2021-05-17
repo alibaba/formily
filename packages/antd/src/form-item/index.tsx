@@ -3,7 +3,12 @@ import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
-import { useFormLayout } from '../form-layout'
+import { reduce } from '@formily/shared'
+import {
+  useFormLayout,
+  useFormShallowLayout,
+  FormLayoutShallowContext,
+} from '../form-layout'
 import { useGridSpan } from '../form-grid'
 import { Tooltip, Popover } from 'antd'
 import {
@@ -51,7 +56,9 @@ type ComposeFormItem = React.FC<IFormItemProps> & {
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
-  const layout = useFormLayout()
+  const shallowFormLayout = useFormShallowLayout()
+  const formLayout = useFormLayout()
+  const layout = { ...shallowFormLayout, ...formLayout }
   return {
     ...props,
     layout: layout.layout ?? 'horizontal',
@@ -89,6 +96,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const [active, setActice] = useState(false)
   const popoverContainerRef = useRef()
   const formLayout = useFormItemLayout(others)
+  const shallowFormLayout = useFormShallowLayout()
   const gridSpan = useGridSpan(props.gridSpan)
   const {
     label,
@@ -271,7 +279,24 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               [`${prefixCls}-control-content-component-has-feedback-icon`]: !!feedbackIcon,
             })}
           >
-            {formatChildren}
+            <FormLayoutShallowContext.Provider
+              value={reduce(
+                shallowFormLayout,
+                (buf: any, _, key) => {
+                  if (key === 'size') {
+                    buf.size = size
+                  } else {
+                    buf[key] = undefined
+                  }
+                  return buf
+                },
+                {
+                  size,
+                }
+              )}
+            >
+              {formatChildren}
+            </FormLayoutShallowContext.Provider>
             {feedbackIcon && (
               <div className={cls(`${prefixCls}-feedback-icon`)}>
                 {feedbackIcon}
