@@ -13,10 +13,8 @@ type VNodeChildren = any
 
 const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderChildren): any => {
   if (isVue2) {
-    if (tag === Fragment) {
-      tag = FragmentComponent
-    }
-    const hInVue2 = h as ((tag: Tag, data: VNodeData, components: VNodeChildren) => VNode)
+    
+    const hInVue2 = h as ((tag: Tag, data?: VNodeData, components?: VNodeChildren) => VNode)
     const scopedSlots = {}
     const children = []
     Object.keys(components).forEach(key => {
@@ -41,6 +39,16 @@ const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderCh
           ...scopedSlots
         }
       }
+    }
+    if (tag === Fragment) {
+      if (Object.keys(newData).length === 0 && children.length === 1) {
+        if (!Array.isArray(children[0])) {
+          return children[0]
+        } else if (children[0].length === 1) {
+          return children[0][0]
+        }
+      }
+      tag = FragmentComponent
     }
     return hInVue2(tag, newData, children)
   } else {
