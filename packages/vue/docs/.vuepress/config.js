@@ -19,6 +19,10 @@ module.exports = {
         link: '/api/components/field',
       },
       {
+        text: 'Q&A',
+        link: '/questions/'
+      },
+      {
         text: '主站',
         link: 'https://v2.formilyjs.org',
       },

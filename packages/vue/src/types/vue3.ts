@@ -1,4 +1,4 @@
-import type { Component, ComponentOptions } from 'vue'
+import type { Component, ComponentOptions } from '@type-helper/vue3'
 
 export {
   Component as Vue3Component,

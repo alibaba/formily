@@ -1,4 +1,4 @@
-import { provide, defineComponent } from 'vue-demi'
+import { provide, defineComponent, DefineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { FieldSymbol } from '../shared/context'
@@ -11,7 +11,7 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
   name: 'Field',
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
-  props: ({
+  props: {
     name: {},
     title: {},
     description: {},
@@ -57,7 +57,7 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
     dataSource: {},
     validator: {},
     reactions: [Array, Function],
-  } as any),
+  },
   setup(props: IFieldProps<VueComponent, VueComponent>, { slots }) {
     // const { track } = useObserver()
     const formRef = useForm()
@@ -81,12 +81,13 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
           }
         },
         {
+          ...slots,
           default: () => slots.default && slots.default({
             field,
             form: field.form
-          })
+          }),
         }
       )
     }
   }
-})
+}) as unknown as DefineComponent<IFieldProps<VueComponent, VueComponent>>

@@ -1,4 +1,4 @@
-import { inject, provide, defineComponent, shallowRef, watch } from 'vue-demi'
+import { inject, provide, defineComponent, computed, shallowRef, watch } from 'vue-demi'
 import type { DefineComponent } from 'vue-demi'
 import { ISchema, Schema, SchemaTypes } from '@formily/json-schema'
 import { RecursionField } from '../components'
@@ -124,7 +124,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
   const SchemaField = defineComponent<ISchemaFieldProps<VueComponent, VueComponent>>({
     name: 'SchemaField',
     inheritAttrs: false,
-    props: ({
+    props: {
       schema: {},
       scope: {},
       basePath: {},
@@ -172,18 +172,15 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
         type: Boolean,
         default: undefined
       },
-    } as any),
+    },
     setup(props: ISchemaFieldProps<VueComponent, VueComponent>, { slots }) {
-      const createSchema = (schemaProp: ISchemaFieldProps<VueComponent, VueComponent>['schema']) => Schema.isSchemaInstance(schemaProp)
-        ? schemaProp
+      const schemaRef = computed(() => Schema.isSchemaInstance(props.schema)
+        ? props.schema
         : new Schema({
             type: 'object',
-            ...schemaProp,
-          })
-      const schemaRef = shallowRef(createSchema(props.schema))
-      watch(() => props.schema, () => {
-        schemaRef.value = createSchema(props.schema)
-      })
+            ...props.schema,
+          }))
+
       provide(SchemaMarkupSymbol, schemaRef)
       provide(SchemaOptionsSymbol, options)
       provide(SchemaExpressionScopeSymbol, props.scope)
@@ -214,7 +211,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
 
   const MarkupField = defineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>({
     name: 'MarkupField',
-    props: Object.assign({}, markupProps, { type: String }) as any,
+    props: Object.assign({}, markupProps, { type: String }),
     setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
       const parentRef = inject(SchemaMarkupSymbol, null)
       if (!parentRef || !parentRef.value) return () => h(Fragment, {}, {})
@@ -249,7 +246,7 @@ export function createSchemaField<Components extends SchemaComponents = SchemaCo
   const SchemaFieldFactory = (type: SchemaTypes, name: string) => {
     return defineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>({
       name: name,
-      props: Object.assign({}, markupProps) as any,
+      props: Object.assign({}, markupProps),
       setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
         return () => h(MarkupField, { 
           attrs: {
