@@ -24,11 +24,12 @@ const compatibleCreateElement = (tag: Tag, data: VNodeData, components: RenderCh
       if (typeof func === 'function') {
         if (func.length !== 0) {
           scopedSlots[key] = func
+        } else if (key !== 'default') {
+          scopedSlots[key] = func
         } else {
-          children.push(components[key]())
+          children.push(func())
         }
       }
-      
     })
     const newData = Object.assign({}, data)
     if (Object.keys(scopedSlots).length > 0) {

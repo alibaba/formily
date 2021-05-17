@@ -67,6 +67,7 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
         }
       },
       {
+        ...slots,
         default: () => slots.default && slots.default({
           field: fieldRef.value,
           form: fieldRef.value.form

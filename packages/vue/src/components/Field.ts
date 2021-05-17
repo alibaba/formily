@@ -81,10 +81,11 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
           }
         },
         {
+          ...slots,
           default: () => slots.default && slots.default({
             field,
             form: field.form
-          })
+          }),
         }
       )
     }

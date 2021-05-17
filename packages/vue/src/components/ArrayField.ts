@@ -81,6 +81,7 @@ export default observer(defineComponent<ArrayFieldProps>({
         }
       },
       {
+        ...slots,
         default: () => slots.default && slots.default({
           field: fieldRef.value,
           form: fieldRef.value.form

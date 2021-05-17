@@ -1,6 +1,7 @@
 import { VueComponent } from '../types'
 import { defineComponent, DefineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
+import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
 
 import h from '../shared/h'
@@ -23,7 +24,10 @@ export default observer(defineComponent<IReactiveFieldProps>({
       if (!field) {
         children = slots
       } else if (field.display !== 'visible') {
-        children = { default: () => [h('template', {}, {})] }
+        children = {
+          ...slots,
+          default: () => [h('template', {}, {})]
+        }
       } else {
         const renderDecorator = (childNodes: any[]) => {
           if (!field?.decorator?.[0]) {
@@ -52,22 +56,42 @@ export default observer(defineComponent<IReactiveFieldProps>({
               })
             })
           }
+          
+          const component = field.component[0] as VueComponent
+          const originData = clone(field.component[1]) || {}
           const events = {} as Record<string, any>
+          const originChange = originData['@change'] || originData['onChange']
+          const originFocus = originData['@focus'] || originData['onFocus']
+          const originBlur = originData['@blur'] || originData['onBlur']
+          
+          // '@xxx' has higher priority
+          Object.keys(originData)
+            .filter(key => key.startsWith('on'))
+            .forEach(eventKey => {
+              const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(3)}`
+              events[eventName] = originData[eventKey]
+            })
+
+          Object.keys(originData)
+            .filter(key => key.startsWith('@'))
+            .forEach(eventKey => {
+              events[eventKey.slice(1)] = originData[eventKey]
+              delete originData[eventKey]
+            })
+          
           events.change = (...args: any[]) => {
             if (!isVoidField(field)) field.onInput(...args)
-            field.component[1]?.onChange?.(...args)
+            originChange?.(...args)
           }
           events.focus = (...args: any[]) => {
             if (!isVoidField(field)) field.onFocus(...args)
-            field.component[1]?.onFocus?.(...args)
+            originFocus?.(...args)
           }
           events.blur = (...args: any[]) => {
             if (!isVoidField(field)) field.onBlur(...args)
-            field.component[1]?.onBlur?.(...args)
+            originBlur?.(...args)
           }
-          const component = field.component[0] as VueComponent
-          const originData = field.component[1] || {}
-          const componentData =  {
+          const attrs =  {
             disabled: !isVoidField(field)
               ? field.pattern === 'disabled' || field.pattern === 'readPretty'
               : undefined,
@@ -77,13 +101,16 @@ export default observer(defineComponent<IReactiveFieldProps>({
             ...originData,
             value: !isVoidField(field) ? field.value : undefined,
           }
+          const componentData = {
+            attrs: attrs,
+            on: events
+          }
+          
           return h(
             component,
+            componentData,
             {
-              attrs: componentData,
-              on: events
-            },
-            {
+              ...slots,
               default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
