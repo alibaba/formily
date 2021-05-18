@@ -224,6 +224,7 @@ export interface IFormProps<T extends object = any> {
   readPretty?: boolean
   effects?: (form: Form<T>) => void
   validateFirst?: boolean
+  controlled?: boolean
 }
 
 export interface IFieldFactoryProps<

@@ -297,7 +297,7 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier]) {
+    if (!this.fields[identifier] || this.props.controlled) {
       batch(() => {
         this.fields[identifier] = new Field(address, props, this)
       })
@@ -315,7 +315,7 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier]) {
+    if (!this.fields[identifier] || this.props.controlled) {
       batch(() => {
         this.fields[identifier] = new ArrayField(address, props, this)
       })
@@ -333,7 +333,7 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier]) {
+    if (!this.fields[identifier] || this.props.controlled) {
       batch(() => {
         this.fields[identifier] = new ObjectField(address, props, this)
       })
@@ -351,7 +351,7 @@ export class Form<ValueType extends object = any> {
     const address = FormPath.parse(props.basePath).concat(props.name)
     const identifier = address.toString()
     if (!identifier) return
-    if (!this.fields[identifier]) {
+    if (!this.fields[identifier] || props.controlled) {
       batch(() => {
         this.fields[identifier] = new VoidField(address, props, this)
       })
