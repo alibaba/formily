@@ -104,13 +104,13 @@ interface createVoidField {
 
 #### 描述
 
-设置表单值，可以设置合并策略
+设置表单值，可以设置合并策略 [IFormMergeStrategy](#IFormMergeStrategy)
 
 #### 签名
 
 ```ts
 interface setValues {
-  (values: object, strategy: 'overwrite' | 'merge' = 'merge'): void
+  (values: object, strategy: IFormMergeStrategy = 'merge'): void
 }
 ```
 
@@ -124,7 +124,7 @@ interface setValues {
 
 ```ts
 interface setInitialValues {
-  (initialValues: object, strategy: 'overwrite' | 'merge' = 'merge'): void
+  (initialValues: object, strategy: IFormMergeStrategy = 'merge'): void
 }
 ```
 
@@ -760,6 +760,12 @@ interface IFormState {
   readonly warnings?: IFormFeedback[]
   readonly successes?: IFormFeedback[]
 }
+```
+
+### IFormMergeStrategy
+
+```ts
+type IFormMergeStrategy = 'overwrite' | 'merge' | 'deepMerge' | 'shallowMerge'
 ```
 
 ### IFieldFactoryProps

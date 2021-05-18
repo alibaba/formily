@@ -231,6 +231,12 @@ export interface IFormProps<T extends object = any> {
   controlled?: boolean
 }
 
+export type IFormMergeStrategy =
+  | 'overwrite'
+  | 'merge'
+  | 'deepMerge'
+  | 'shallowMerge'
+
 export interface IFieldFactoryProps<
   Decorator extends JSXComponent,
   Component extends JSXComponent,
