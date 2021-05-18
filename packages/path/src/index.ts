@@ -1,15 +1,5 @@
 import { Parser } from './parser'
-import {
-  isStr,
-  isArr,
-  isFn,
-  isEqual,
-  isObj,
-  isNum,
-  isRegExp,
-  isPlainObj,
-  isAssignable,
-} from './shared'
+import { isStr, isArr, isFn, isEqual, isObj, isNum, isRegExp } from './shared'
 import {
   getDestructor,
   getInByDestructor,
@@ -21,37 +11,7 @@ import { Segments, Node, Pattern, IRegistry, IAccessors } from './types'
 import { LRUMap } from './lru'
 import { Matcher } from './matcher'
 
-const REGISTRY: IRegistry = {
-  accessors: {
-    get(source: any, key: number | string | symbol) {
-      if (isAssignable(source)) {
-        return Reflect.get(source, key)
-      }
-    },
-    set(source: any, key: number | string | symbol, value: any) {
-      if (isAssignable(source)) {
-        return Reflect.set(source, key, value)
-      }
-    },
-    has(source: any, key: number | string | symbol) {
-      if (isAssignable(source)) {
-        return Reflect.has(source, key)
-      }
-      return false
-    },
-    delete(source: any, key: number | string | symbol) {
-      if (isAssignable(source)) {
-        if (Array.isArray(source) && isNumberIndex(key)) {
-          source.splice(Number(key), 1)
-          return true
-        }
-        return Reflect.deleteProperty(source, key)
-      }
-    },
-  },
-}
-
-const pathCache = new LRUMap(1000)
+const pathCache = new LRUMap(10000)
 
 const isMatcher = Symbol('PATH_MATCHER')
 
@@ -59,14 +19,6 @@ const isValid = (val: any) => val !== undefined && val !== null
 
 const isNumberIndex = (val: any) =>
   isStr(val) ? /^\d+$/.test(val) : isNum(val)
-
-const arrayExist = (obj: any, key: string | number) => {
-  if (Array.isArray(obj)) {
-    const index = Number(key)
-    if (index < 0 || index > obj.length - 1) return false
-  }
-  return true
-}
 
 const getIn = (segments: Segments, source: any) => {
   for (let i = 0; i < segments.length; i++) {
@@ -79,11 +31,7 @@ const getIn = (segments: Segments, source: any) => {
         }
         break
       }
-      if (arrayExist(source, index)) {
-        source = REGISTRY.accessors.get(source, index)
-      } else {
-        return
-      }
+      source = source[index]
     } else {
       source = getInByDestructor(source, rules, { setIn, getIn })
       break
@@ -101,35 +49,18 @@ const setIn = (segments: Segments, source: any, value: any) => {
       if (isArr(source) && !isNumberIndex(index)) {
         return
       }
-      if (!arrayExist(source, index)) {
+      if (!isValid(source[index])) {
         if (!isValid(value)) {
           return
         }
         if (i < segments.length - 1) {
-          REGISTRY.accessors.set(
-            source,
-            index,
-            isNum(segments[i + 1]) ? [] : {}
-          )
-        }
-      } else if (!isValid(source[index])) {
-        if (!isValid(value)) {
-          return
-        }
-        if (i < segments.length - 1) {
-          REGISTRY.accessors.set(
-            source,
-            index,
-            isNum(segments[i + 1]) ? [] : {}
-          )
+          source[index] = isNum(segments[i + 1]) ? [] : {}
         }
       }
       if (i === segments.length - 1) {
-        REGISTRY.accessors.set(source, index, value)
+        source[index] = value
       }
-      if (arrayExist(source, index)) {
-        source = REGISTRY.accessors.get(source, index)
-      }
+      source = source[index]
     } else {
       setInByDestructor(source, rules, value, { setIn, getIn })
       break
@@ -143,17 +74,12 @@ const deleteIn = (segments: Segments, source: any) => {
     const rules = getDestructor(index as string)
     if (!rules) {
       if (i === segments.length - 1 && isValid(source)) {
-        REGISTRY.accessors.delete(source, index)
+        delete source[index]
         return
       }
 
       if (!isValid(source)) return
-      if (arrayExist(source, index)) {
-        source = REGISTRY.accessors.get(source, index)
-      } else {
-        return
-      }
-
+      source = source[index]
       if (!isObj(source)) {
         return
       }
@@ -168,6 +94,8 @@ const deleteIn = (segments: Segments, source: any) => {
   }
 }
 
+const hasOwnProperty = Object.prototype.hasOwnProperty
+
 const existIn = (segments: Segments, source: any, start: number | Path) => {
   if (start instanceof Path) {
     start = start.length
@@ -177,15 +105,11 @@ const existIn = (segments: Segments, source: any, start: number | Path) => {
     const rules = getDestructor(index as string)
     if (!rules) {
       if (i === segments.length - 1) {
-        return REGISTRY.accessors.has(source, index)
+        return hasOwnProperty.call(source, index)
       }
 
       if (!isValid(source)) return false
-      if (arrayExist(source, index)) {
-        source = REGISTRY.accessors.get(source, index)
-      } else {
-        return false
-      }
+      source = source[index]
 
       if (!isObj(source)) {
         return false
@@ -616,16 +540,6 @@ export class Path {
   static ensureIn = (source: any, pattern: Pattern, defaultValue?: any) => {
     const path = Path.parse(pattern)
     return path.ensureIn(source, defaultValue)
-  }
-
-  static registerAccessors = (accessors: IAccessors) => {
-    if (isPlainObj(accessors)) {
-      for (const name in accessors) {
-        if (isFn(accessors[name])) {
-          REGISTRY.accessors[name] = accessors[name]
-        }
-      }
-    }
   }
 }
 
