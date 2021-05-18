@@ -40,6 +40,7 @@ import {
   IFieldStateGetter,
   IFieldStateSetter,
   FormDisplayTypes,
+  IFormMergeStrategy,
 } from '../types'
 import {
   isVoidField,
@@ -362,11 +363,13 @@ export class Form<ValueType extends object = any> {
 
   /** 状态操作模型 **/
 
-  setValues = (values: any, strategy: 'overwrite' | 'merge' = 'merge') => {
+  setValues = (values: any, strategy: IFormMergeStrategy = 'merge') => {
     if (!isPlainObj(values)) return
     untracked(() => {
-      if (strategy === 'merge') {
+      if (strategy === 'merge' || strategy === 'deepMerge') {
         this.values = defaults(this.values, values)
+      } else if (strategy === 'shallowMerge') {
+        this.values = Object.assign(this.values, values)
       } else {
         this.values = values as any
       }
@@ -375,12 +378,14 @@ export class Form<ValueType extends object = any> {
 
   setInitialValues = (
     initialValues: any,
-    strategy: 'overwrite' | 'merge' = 'merge'
+    strategy: IFormMergeStrategy = 'merge'
   ) => {
     if (!isPlainObj(initialValues)) return
     untracked(() => {
-      if (strategy === 'merge') {
+      if (strategy === 'merge' || strategy === 'deepMerge') {
         this.initialValues = defaults(this.initialValues, initialValues)
+      } else if (strategy === 'shallowMerge') {
+        this.initialValues = Object.assign(this.initialValues, initialValues)
       } else {
         this.initialValues = initialValues as any
       }
