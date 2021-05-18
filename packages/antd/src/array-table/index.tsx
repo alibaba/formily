@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef, useContext } from 'react'
+import React, { Fragment, useState, useRef } from 'react'
 import { Table, Pagination, Space, Select, Badge } from 'antd'
 import { PaginationProps } from 'antd/lib/pagination'
 import { TableProps, ColumnProps } from 'antd/lib/table'
@@ -11,7 +11,6 @@ import {
   observer,
   useFieldSchema,
   RecursionField,
-  SchemaOptionsContext
 } from '@formily/react'
 import { FormPath, isArr, isBool } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
