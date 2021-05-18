@@ -101,12 +101,13 @@ export class Field<
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
-    form: Form
+    form: Form,
+    controlled: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable()
-    this.makeReactive()
+    this.makeObservable(controlled)
+    this.makeReactive(controlled)
     this.onInit()
   }
 
@@ -148,7 +149,8 @@ export class Field<
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable() {
+  protected makeObservable(controlled: boolean) {
+    if (controlled) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -219,7 +221,8 @@ export class Field<
     })
   }
 
-  protected makeReactive() {
+  protected makeReactive(controlled: boolean) {
+    if (controlled) return
     this.disposers.push(
       reaction(
         () => this.value,
@@ -583,6 +586,7 @@ export class Field<
       this.requests.loader = setTimeout(() => {
         batch(() => {
           this.loading = loading
+          this.form.notify(LifeCycleTypes.ON_FIELD_LOADING, this)
         })
       }, 100)
     } else if (this.loading !== loading) {
@@ -596,6 +600,7 @@ export class Field<
       this.requests.validate = setTimeout(() => {
         batch(() => {
           this.validating = validating
+          this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATING, this)
         })
       }, 100)
     } else if (this.validating !== validating) {
