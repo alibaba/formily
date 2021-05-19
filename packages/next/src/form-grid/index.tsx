@@ -264,9 +264,9 @@ export const useGridSpan = (gridSpan = 1) => {
       return gridSpan
     } else {
       if (isValid(maxColumns)) {
-        return Math.min(calc, columns, maxColumns)
+        return Math.min(calc, gridSpan, maxColumns)
       }
-      return Math.min(calc, columns)
+      return Math.min(calc, gridSpan)
     }
   } else {
     if (Math.min(calc, columns) >= gridSpan) {
