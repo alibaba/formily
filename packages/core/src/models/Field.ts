@@ -173,8 +173,8 @@ export class Field<
       componentType: observable.ref,
       decoratorProps: observable,
       componentProps: observable,
-      validator: observable,
-      feedbacks: observable,
+      validator: observable.shallow,
+      feedbacks: observable.shallow,
       component: observable.computed,
       decorator: observable.computed,
       errors: observable.computed,
@@ -733,41 +733,25 @@ export class Field<
       }
       this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     }
-    const runner = async () => {
-      if (!triggerType) {
-        const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
-          (desc) => desc.triggerType
-        )
-        const results = {}
-        for (let i = 0; i < allTriggerTypes.length; i++) {
-          const payload = await validateToFeedbacks(this, allTriggerTypes[i])
-          each(payload, (result, key) => {
-            results[key] = results[key] || []
-            results[key] = results[key].concat(result)
-          })
-        }
-        end()
-        return results
+    start()
+    if (!triggerType) {
+      const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
+        (desc) => desc.triggerType
+      )
+      const results = {}
+      for (let i = 0; i < allTriggerTypes.length; i++) {
+        const payload = await validateToFeedbacks(this, allTriggerTypes[i])
+        each(payload, (result, key) => {
+          results[key] = results[key] || []
+          results[key] = results[key].concat(result)
+        })
       }
-      const results = await validateToFeedbacks(this, triggerType)
       end()
-
       return results
     }
-
-    start()
-
-    return new Promise((resolve) => {
-      cancelAnimationFrame(this.requests.validate)
-
-      this.requests.validate = requestAnimationFrame(() => {
-        const results = runner()
-        this.requests.validateResolvers.forEach((resolve) => resolve(results))
-      })
-
-      this.requests.validateResolvers = this.requests.validateResolvers || []
-      this.requests.validateResolvers.push(resolve)
-    })
+    const results = await validateToFeedbacks(this, triggerType)
+    end()
+    return results
   }
 
   reset = async (options?: IFieldResetOptions) => {

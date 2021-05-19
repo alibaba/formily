@@ -257,8 +257,6 @@ export interface IVoidFieldFactoryProps<
 }
 
 export interface IFieldRequests {
-  validate?: number
-  validateResolvers?: Array<(value: any) => void>
   validating?: NodeJS.Timeout
   loading?: NodeJS.Timeout
   batch?: () => void
