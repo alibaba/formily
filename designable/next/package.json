@@ -1,0 +1,49 @@
+{
+  "name": "@formily/designable-next",
+  "version": "2.0.0-beta.51",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "umd:main": "dist/formily.designable.next.umd.production.js",
+  "unpkg": "dist/formily.designable.next.umd.production.js",
+  "jsdelivr": "dist/formily.designable.next.umd.production.js",
+  "jsnext:main": "esm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "types": "esm/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "scripts": {
+    "start": "dumi dev",
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:style",
+    "build:style": "ts-node build-style",
+    "build:cjs": "tsc --declaration",
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config",
+    "build:docs": "dumi build"
+  },
+  "devDependencies": {
+    "@umijs/plugin-sass": "^1.1.1",
+    "dumi": "^1.1.0-rc.8"
+  },
+  "peerDependencies": {
+    "@alifd/next": "^1.19.0",
+    "@types/react": ">=16.8.0 || >=17.0.0",
+    "@types/react-dom": ">=16.8.0 || >=17.0.0",
+    "react": ">=16.8.0 || >=17.0.0",
+    "react-dom": ">=16.8.0",
+    "react-is": ">=16.8.0 || >=17.0.0"
+  },
+  "dependencies": {},
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
+}
