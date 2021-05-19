@@ -109,7 +109,7 @@ export type ISchemaMarkupFieldProps<
     Formily.Core.Types.FormPatternTypes,
     Formily.Core.Types.FieldDisplayTypes,
     Formily.Core.Types.FieldValidator,
-    React.ReactNode,
+    string,
     Formily.Core.Types.GeneralField
   >
 
