@@ -257,8 +257,10 @@ export interface IVoidFieldFactoryProps<
 }
 
 export interface IFieldRequests {
-  validate?: NodeJS.Timeout
-  loader?: NodeJS.Timeout
+  validate?: number
+  validateResolvers?: Array<(value: any) => void>
+  validating?: NodeJS.Timeout
+  loading?: NodeJS.Timeout
   batch?: () => void
 }
 
@@ -266,6 +268,7 @@ export interface IFieldCaches {
   value?: any
   initialValue?: any
   feedbacks?: IFieldFeedback[]
+  inputing?: boolean
 }
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)

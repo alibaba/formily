@@ -59,6 +59,8 @@ import { Graph } from './Graph'
 
 const DEV_TOOLS_HOOK = '__FORMILY_DEV_TOOLS_HOOK__'
 
+const RESPONSE_REQUEST_DURATION = 100
+
 export class Form<ValueType extends object = any> {
   displayName = 'Form'
   id: string
@@ -462,7 +464,7 @@ export class Form<ValueType extends object = any> {
           this.submitting = submitting
           this.notify(LifeCycleTypes.ON_FORM_SUBMITTING)
         })
-      }, 100)
+      }, RESPONSE_REQUEST_DURATION)
       this.notify(LifeCycleTypes.ON_FORM_SUBMIT_START)
     } else {
       if (this.submitting !== submitting) {
@@ -480,7 +482,7 @@ export class Form<ValueType extends object = any> {
           this.validating = validating
           this.notify(LifeCycleTypes.ON_FORM_VALIDATING)
         })
-      }, 100)
+      }, RESPONSE_REQUEST_DURATION)
       this.notify(LifeCycleTypes.ON_FORM_VALIDATE_START)
     } else {
       if (this.validating !== validating) {

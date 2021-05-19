@@ -60,6 +60,8 @@ import {
 } from '../shared'
 import { Query } from './Query'
 
+const RESPONSE_REQUEST_DURATION = 100
+
 export class Field<
   Decorator extends JSXComponent = any,
   Component extends JSXComponent = any,
@@ -226,8 +228,11 @@ export class Field<
     this.disposers.push(
       reaction(
         () => this.value,
-        () => {
+        (value) => {
           this.form.notify(LifeCycleTypes.ON_FIELD_VALUE_CHANGE, this)
+          if (isValid(value) && this.modified && !this.caches.inputing) {
+            this.validate()
+          }
         }
       ),
       reaction(
@@ -581,28 +586,28 @@ export class Field<
   }
 
   setLoading = (loading?: boolean) => {
-    clearTimeout(this.requests.loader)
+    clearTimeout(this.requests.loading)
     if (loading) {
-      this.requests.loader = setTimeout(() => {
+      this.requests.loading = setTimeout(() => {
         batch(() => {
           this.loading = loading
           this.form.notify(LifeCycleTypes.ON_FIELD_LOADING, this)
         })
-      }, 100)
+      }, RESPONSE_REQUEST_DURATION)
     } else if (this.loading !== loading) {
       this.loading = loading
     }
   }
 
   setValidating = (validating?: boolean) => {
-    clearTimeout(this.requests.validate)
+    clearTimeout(this.requests.validating)
     if (validating) {
-      this.requests.validate = setTimeout(() => {
+      this.requests.validating = setTimeout(() => {
         batch(() => {
           this.validating = validating
           this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATING, this)
         })
-      }, 100)
+      }, RESPONSE_REQUEST_DURATION)
     } else if (this.validating !== validating) {
       this.validating = validating
     }
@@ -685,6 +690,7 @@ export class Field<
     }
     const values = getValuesFromEvent(args)
     const value = values[0]
+    this.caches.inputing = true
     this.inputValue = value
     this.inputValues = values
     this.value = value
@@ -693,6 +699,7 @@ export class Field<
     this.form.notify(LifeCycleTypes.ON_FIELD_INPUT_VALUE_CHANGE, this)
     this.form.notify(LifeCycleTypes.ON_FORM_INPUT_CHANGE, this.form)
     await this.validate('onInput')
+    this.caches.inputing = false
   }
 
   onFocus = async (...args: any[]) => {
@@ -726,25 +733,41 @@ export class Field<
       }
       this.form.notify(LifeCycleTypes.ON_FIELD_VALIDATE_END, this)
     }
-    start()
-    if (!triggerType) {
-      const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
-        (desc) => desc.triggerType
-      )
-      const results = {}
-      for (let i = 0; i < allTriggerTypes.length; i++) {
-        const payload = await validateToFeedbacks(this, allTriggerTypes[i])
-        each(payload, (result, key) => {
-          results[key] = results[key] || []
-          results[key] = results[key].concat(result)
-        })
+    const runner = async () => {
+      if (!triggerType) {
+        const allTriggerTypes = parseValidatorDescriptions(this.validator).map(
+          (desc) => desc.triggerType
+        )
+        const results = {}
+        for (let i = 0; i < allTriggerTypes.length; i++) {
+          const payload = await validateToFeedbacks(this, allTriggerTypes[i])
+          each(payload, (result, key) => {
+            results[key] = results[key] || []
+            results[key] = results[key].concat(result)
+          })
+        }
+        end()
+        return results
       }
+      const results = await validateToFeedbacks(this, triggerType)
       end()
+
       return results
     }
-    const results = await validateToFeedbacks(this, triggerType)
-    end()
-    return results
+
+    start()
+
+    return new Promise((resolve) => {
+      cancelAnimationFrame(this.requests.validate)
+
+      this.requests.validate = requestAnimationFrame(() => {
+        const results = runner()
+        this.requests.validateResolvers.forEach((resolve) => resolve(results))
+      })
+
+      this.requests.validateResolvers = this.requests.validateResolvers || []
+      this.requests.validateResolvers.push(resolve)
+    })
   }
 
   reset = async (options?: IFieldResetOptions) => {
