@@ -104,7 +104,7 @@
     "jest-localstorage-mock": "^2.3.0",
     "jest-styled-components": "6.3.3",
     "jest-watch-lerna-packages": "^1.1.0",
-    "lerna": "^3.10.1",
+    "lerna": "^4.0.0",
     "less": "^4.1.1",
     "less-plugin-npm-import": "^2.1.0",
     "postcss": "^8.0.0",

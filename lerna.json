@@ -1,8 +1,7 @@
 {
   "packages": [
     "packages/*",
-    "designable/*",
-    "devtools/*"
+    "designable/*"
   ],
   "version": "independent",
   "npmClient": "yarn",
@@ -11,17 +10,10 @@
     "--ignore-engines"
   ],
   "command": {
-    "publish": {
-      "ignoreChanges": [
-        "*.md"
-      ]
-    },
     "version": {
-      "forcePublish": [
-        "@formily/*"
-      ],
+      "conventionalCommits": true,
+      "forcePublish": "@formily/*",
       "exact": true,
-      "noGitTagVersion": true,
       "message": "chore(versions): publish packages %s"
     }
   }
