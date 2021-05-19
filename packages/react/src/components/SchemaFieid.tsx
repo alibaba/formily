@@ -60,7 +60,12 @@ export function createSchemaField<Components extends SchemaComponents>(
           },
         }}
       >
-        <SchemaExpressionScopeContext.Provider value={props.scope}>
+        <SchemaExpressionScopeContext.Provider
+          value={{
+            ...options.scope,
+            ...props.scope,
+          }}
+        >
           {renderMarkup()}
           {renderChildren()}
         </SchemaExpressionScopeContext.Provider>
