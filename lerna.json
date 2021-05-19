@@ -15,6 +15,14 @@
       "ignoreChanges": [
         "*.md"
       ]
+    },
+    "version": {
+      "forcePublish": [
+        "@formily/*"
+      ],
+      "exact": true,
+      "noGitTagVersion": true,
+      "message": "chore(versions): publish packages %s"
     }
   }
 }
