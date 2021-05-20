@@ -1,6 +1,6 @@
 {
   "name": "@formily/antd",
-  "version": "2.0.0-beta.51",
+  "version": "2.0.0-beta.52",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -43,16 +43,16 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/core": "2.0.0-beta.51",
-    "@formily/json-schema": "2.0.0-beta.51",
-    "@formily/react": "2.0.0-beta.51",
-    "@formily/reactive": "2.0.0-beta.51",
-    "@formily/reactive-react": "2.0.0-beta.51",
-    "@formily/shared": "2.0.0-beta.51",
+    "@formily/core": "2.0.0-beta.52",
+    "@formily/json-schema": "2.0.0-beta.52",
+    "@formily/react": "2.0.0-beta.52",
+    "@formily/reactive": "2.0.0-beta.52",
+    "@formily/reactive-react": "2.0.0-beta.52",
+    "@formily/shared": "2.0.0-beta.52",
+    "@juggle/resize-observer": "^3.3.1",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3",
-    "@juggle/resize-observer": "^3.3.1"
+    "react-sticky-box": "^0.9.3"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@formily/json-schema",
-  "version": "2.0.0-beta.51",
+  "version": "2.0.0-beta.52",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -27,9 +27,9 @@
     "build:umd": "rollup --config"
   },
   "dependencies": {
-    "@formily/core": "2.0.0-beta.51",
-    "@formily/reactive": "2.0.0-beta.51",
-    "@formily/shared": "2.0.0-beta.51"
+    "@formily/core": "2.0.0-beta.52",
+    "@formily/reactive": "2.0.0-beta.52",
+    "@formily/shared": "2.0.0-beta.52"
   },
   "publishConfig": {
     "access": "public"
