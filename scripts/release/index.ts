@@ -142,7 +142,7 @@ const generateChangeLogFile = () => {
   const file = `
 # Changelog
 ${tags
-  .slice(40)
+  .slice(0, 40)
   .map((newer, index) => {
     const older = tags[index + 1]
     if (older) {

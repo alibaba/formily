@@ -152,7 +152,7 @@
   },
   "config": {
     "ghooks": {
-      "pre-commit": "lint-staged && ts-node scripts/release changelog",
+      "pre-commit": "ts-node scripts/release changelog && lint-staged",
       "commit-msg": "node ./scripts/validate-commit-msg.js"
     },
     "commitizen": {
