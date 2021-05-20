@@ -8,6 +8,7 @@
   "command": {
     "version": {
       "exact": true,
+      "forcePublish": true,
       "conventionalCommits": true,
       "message": "chore(versions): 😊 publish %s"
     }
