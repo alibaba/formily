@@ -3,7 +3,7 @@
     "packages/*",
     "designable/*"
   ],
-  "version": "2.0.0-beta.51",
+  "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "npmClientArgs": [
