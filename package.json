@@ -105,6 +105,7 @@
     "jest-styled-components": "6.3.3",
     "jest-watch-lerna-packages": "^1.1.0",
     "lerna": "^4.0.0",
+    "lerna-changelog":"^1.0.1",
     "less": "^4.1.1",
     "less-plugin-npm-import": "^2.1.0",
     "postcss": "^8.0.0",
@@ -143,6 +144,25 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "changelog": {
+    "repo": "alibaba/formily",
+    "labels": {
+      "breaking": ":boom: Breaking Change",
+      "feat": ":tada: A new feature",
+      "bugfix": ":beetle: Bug Fix",
+      "doc": ":memo: Documentation",
+      "refactor": ":rose: Some Code Change",
+      "test":":construction: Update Test Cases",
+      "perf":":rocket: Improve Performace",
+      "build":":hammer_and_wrench: Update Workflow Scripts",
+      "chore":":blush: Improve Some Code"
+    },
+    "cacheDir": ".changelog"
   },
   "config": {
     "ghooks": {

@@ -1,0 +1,9 @@
+
+blank_issues_enabled: false
+contact_links:
+  - name: ✨ Question Answer / Idea 
+    url: https://github.com/alibaba/formily/discussions/new
+    about: All questions can be solved here. At the same time you can provide all your ideas here.
+  - name: 📖 View documentation
+    url: https://v2.formilyjs.org
+    about: Official Formily documentation    

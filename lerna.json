@@ -12,6 +12,7 @@
   "command": {
     "version": {
       "exact": true,
+      "conventionalCommits": true,
       "message": "chore(versions): publish packages %s"
     }
   }

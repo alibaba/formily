@@ -25,3 +25,4 @@ package.zip
 .umi-production
 .cjsescache
 doc-site
+.lerna-changelog
