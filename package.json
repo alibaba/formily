@@ -5,14 +5,12 @@
     "node": "8.x || 9.x || 10.x || 11.x"
   },
   "workspaces": [
-    "packages/*",
-    "designable/*",
-    "devtools/*"
+    "packages/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "clean": "lerna clean",
-    "build": "rimraf -rf packages/*/lib packages/*/esm && lerna run build",
+    "build": "rimraf -rf packages/*/{lib,esm} && lerna run build",
     "build:docs": "dumi build",
     "start": "dumi dev",
     "test": "jest --coverage",
@@ -105,7 +103,7 @@
     "jest-styled-components": "6.3.3",
     "jest-watch-lerna-packages": "^1.1.0",
     "lerna": "^4.0.0",
-    "lerna-changelog":"^1.0.1",
+    "lerna-changelog": "^1.0.1",
     "less": "^4.1.1",
     "less-plugin-npm-import": "^2.1.0",
     "postcss": "^8.0.0",
@@ -157,10 +155,10 @@
       "bugfix": ":beetle: Bug Fix",
       "doc": ":memo: Documentation",
       "refactor": ":rose: Some Code Change",
-      "test":":construction: Update Test Cases",
-      "perf":":rocket: Improve Performace",
-      "build":":hammer_and_wrench: Update Workflow Scripts",
-      "chore":":blush: Improve Some Code"
+      "test": ":construction: Update Test Cases",
+      "perf": ":rocket: Improve Performace",
+      "build": ":hammer_and_wrench: Update Workflow Scripts",
+      "chore": ":blush: Improve Some Code"
     },
     "cacheDir": ".changelog"
   },
