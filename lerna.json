@@ -1,8 +1,4 @@
 {
-  "packages": [
-    "packages/*",
-    "designable/*"
-  ],
   "version": "independent",
   "npmClient": "yarn",
   "useWorkspaces": true,
