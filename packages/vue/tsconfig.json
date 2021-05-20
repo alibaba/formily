@@ -1,7 +1,13 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib"
+    "outDir": "./lib",
+    "skipLibCheck": true,
+    "paths": {
+      "@formily/*": [
+        "../*"
+      ]
+    }
   },
   "include": [
     "./src/**/*.ts",
@@ -9,5 +15,7 @@
   ],
   "exclude": [
     "./src/__tests__/*",
+    "./esm/*",
+    "./lib/*",
   ]
 }

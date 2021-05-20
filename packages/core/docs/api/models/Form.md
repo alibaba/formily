@@ -104,13 +104,13 @@ interface createVoidField {
 
 #### 描述
 
-设置表单值
+设置表单值，可以设置合并策略 [IFormMergeStrategy](#IFormMergeStrategy)
 
 #### 签名
 
 ```ts
 interface setValues {
-  (values: object): void
+  (values: object, strategy: IFormMergeStrategy = 'merge'): void
 }
 ```
 
@@ -118,13 +118,13 @@ interface setValues {
 
 #### 描述
 
-设置表单默认值
+设置表单默认值，可以设置合并策略
 
 #### 签名
 
 ```ts
 interface setInitialValues {
-  (initialValues: object): void
+  (initialValues: object, strategy: IFormMergeStrategy = 'merge'): void
 }
 ```
 
@@ -309,7 +309,7 @@ interface setDisplay {
 #### 签名
 
 ```ts
-interface setPatter {
+interface setPattern {
   (pattern: FormPatternTypes): void
 }
 ```
@@ -674,7 +674,8 @@ interface validate {
 
 ```ts
 interface submit<T> {
-  (onSubmit?: (values: any) => Promise<T> | void): Promise<T>
+  (): Promise<Form['values']>
+  (onSubmit?: (values: Form['values']) => Promise<T> | void): Promise<T>
 }
 ```
 
@@ -759,6 +760,12 @@ interface IFormState {
   readonly warnings?: IFormFeedback[]
   readonly successes?: IFormFeedback[]
 }
+```
+
+### IFormMergeStrategy
+
+```ts
+type IFormMergeStrategy = 'overwrite' | 'merge' | 'deepMerge' | 'shallowMerge'
 ```
 
 ### IFieldFactoryProps

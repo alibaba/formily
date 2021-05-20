@@ -62,9 +62,9 @@
         ]
       }
     ],
-    "prefer-const": 1,
+    "prefer-const": 0,
     "no-var": 1,
-    "prefer-rest-params": 1
+    "prefer-rest-params": 0
   },
   "overrides": [
     {

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment, useContext, useMemo } from 'react'
 import { isFn, isValid } from '@formily/shared'
 import { Schema } from '@formily/json-schema'
 import {
@@ -14,18 +14,22 @@ import { Field } from './Field'
 import { VoidField } from './VoidField'
 
 export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
+  const schema = new Schema(props.schema)
   const parent = useField()
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
-  const schema = new Schema(props.schema)
-  const fieldSchema = schema.compile?.({
-    ...options.scope,
-    ...scope,
-  })
-  const fieldProps = schema.toFieldProps?.(options) as any
+  const fieldSchema = useMemo(() => {
+    return schema?.compile({
+      ...options.scope,
+      ...scope,
+    })
+  }, [schema])
+  const fieldProps = useMemo(() => fieldSchema?.toFieldProps(options) as any, [
+    fieldSchema,
+  ])
   const getBasePath = () => {
     if (props.onlyRenderProperties) {
-      return props.basePath || parent?.address?.concat(props.name)
+      return props.basePath || parent?.address.concat(props.name)
     }
     return props.basePath || parent?.address
   }

@@ -1,5 +1,6 @@
-import { inject, provide, defineComponent, shallowRef, watch } from 'vue-demi'
-import { ISchema, Schema } from '@formily/json-schema'
+import { inject, provide, defineComponent, computed, shallowRef, watch } from 'vue-demi'
+import type { DefineComponent } from 'vue-demi'
+import { ISchema, Schema, SchemaTypes } from '@formily/json-schema'
 import { RecursionField } from '../components'
 import {
   SchemaMarkupSymbol,
@@ -58,7 +59,10 @@ const markupProps = {
   },
   maxProperties: Number,
   minProperties: Number,
-  required: [Array, String, Boolean],
+  required: {
+    type: [Boolean, Array, String],
+    default: undefined
+  },
   format: String,
   properties: {},
   items: {},
@@ -101,11 +105,25 @@ const markupProps = {
   },
 }
 
-export function createSchemaField<Components extends SchemaComponents>(
+type SchemaFieldComponents<Components extends SchemaComponents> = {
+  SchemaField: DefineComponent<ISchemaFieldProps<VueComponent, VueComponent>>,
+  SchemaMarkupField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaStringField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaObjectField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaArrayField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaBooleanField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaDateField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaDateTimeField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaVoidField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+  SchemaNumberField: DefineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>,
+}
+
+export function createSchemaField<Components extends SchemaComponents = SchemaComponents>(
   options: ISchemaFieldFactoryOptions<Components>
-) {
-  const SchemaField = defineComponent({
+): SchemaFieldComponents<Components> {
+  const SchemaField = defineComponent<ISchemaFieldProps<VueComponent, VueComponent>>({
     name: 'SchemaField',
+    inheritAttrs: false,
     props: {
       schema: {},
       scope: {},
@@ -156,16 +174,13 @@ export function createSchemaField<Components extends SchemaComponents>(
       },
     },
     setup(props: ISchemaFieldProps<VueComponent, VueComponent>, { slots }) {
-      const createSchema = (schemaProp: ISchemaFieldProps<VueComponent, VueComponent>['schema']) => Schema.isSchemaInstance(schemaProp)
-        ? schemaProp
+      const schemaRef = computed(() => Schema.isSchemaInstance(props.schema)
+        ? props.schema
         : new Schema({
             type: 'object',
-            ...schemaProp,
-          })
-      const schemaRef = shallowRef(createSchema(props.schema))
-      watch(() => props.schema, () => {
-        schemaRef.value = createSchema(props.schema)
-      })
+            ...props.schema,
+          }))
+
       provide(SchemaMarkupSymbol, schemaRef)
       provide(SchemaOptionsSymbol, options)
       provide(SchemaExpressionScopeSymbol, props.scope)
@@ -194,7 +209,7 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const MarkupField = defineComponent({
+  const MarkupField = defineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>({
     name: 'MarkupField',
     props: Object.assign({}, markupProps, { type: String }),
     setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
@@ -228,120 +243,31 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
   })
 
-  const StringField = defineComponent({
-    name: 'StringField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'string'
-        } 
-      }, slots)
-    }
-  })
-
-  const ObjectField = defineComponent({
-    name: 'ObjectField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'object'
-        } 
-      }, slots)
-    }
-  })
-
-  const ArrayField = defineComponent({
-    name: 'ArrayField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'array'
-        } 
-      }, slots)
-    }
-  })
-
-  const BooleanField = defineComponent({
-    name: 'BooleanField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'boolean'
-        } 
-      }, slots)
-    }
-  })
-
-  const NumberField = defineComponent({
-    name: 'NumberField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'number'
-        } 
-      }, slots)
-    }
-  })
-
-  const DateField = defineComponent({
-    name: 'DateField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'date'
-        } 
-      }, slots)
-    }
-  })
-
-  const DateTimeField = defineComponent({
-    name: 'DateTimeField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'datetime'
-        } 
-      }, slots)
-    }
-  })
-
-  const VoidField = defineComponent({
-    name: 'VoidField',
-    props: Object.assign({}, markupProps),
-    setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
-      return () => h(MarkupField, { 
-        attrs: {
-          ...props,
-          type: 'void'
-        } 
-      }, slots)
-    }
-  })
+  const SchemaFieldFactory = (type: SchemaTypes, name: string) => {
+    return defineComponent<ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>>({
+      name: name,
+      props: Object.assign({}, markupProps),
+      setup (props: ISchemaMarkupFieldProps<Components, ComponentPath<Components>, ComponentPath<Components>>, { slots }) {
+        return () => h(MarkupField, { 
+          attrs: {
+            ...props,
+            type: type
+          } 
+        }, slots)
+      }
+    })
+  }
 
   return {
     SchemaField,
     SchemaMarkupField: MarkupField,
-    SchemaStringField: StringField,
-    SchemaObjectField: ObjectField,
-    SchemaArrayField: ArrayField,
-    SchemaBooleanField: BooleanField,
-    SchemaDateField: DateField,
-    SchemaDateTimeField: DateTimeField,
-    SchemaVoidField: VoidField,
-    SchemaNumberField: NumberField,
-  }
+    SchemaStringField: SchemaFieldFactory('string', 'SchemaStringField'),
+    SchemaObjectField: SchemaFieldFactory('object', 'SchemaObjectField'),
+    SchemaArrayField: SchemaFieldFactory('array', 'SchemaArrayField'),
+    SchemaBooleanField: SchemaFieldFactory('boolean', 'SchemaBooleanField'),
+    SchemaDateField: SchemaFieldFactory('date', 'SchemaDateField'),
+    SchemaDateTimeField: SchemaFieldFactory('datetime', 'SchemaDatetimeField'),
+    SchemaVoidField: SchemaFieldFactory('void', 'SchemaVoidField'),
+    SchemaNumberField: SchemaFieldFactory('number', 'SchemaNumberField'),
+  } as any
 }

@@ -25,7 +25,8 @@ import {
   FieldMatchPattern,
 } from '../types'
 import { isArrayField, isGeneralField, isQuery, isVoidField } from './externals'
-import { ReservedProperties } from './constants'
+import { ReservedProperties, GlobalState } from './constants'
+import { isObjectField } from './checkers'
 
 export const isHTMLInputEvent = (event: any, stopPropagation = true) => {
   if (event?.target) {
@@ -348,19 +349,35 @@ export const exchangeArrayState = (
   field.form.notify(LifeCycleTypes.ON_FORM_GRAPH_CHANGE)
 }
 
+export const isEmptyWithField = (field: GeneralField, value: any) => {
+  if (isArrayField(field) || isObjectField(field)) {
+    return isEmpty(value)
+  }
+  return !isValid(value)
+}
+
 export const initFieldValue = (field: Field) => {
-  if (isEmpty(field.initialValue)) {
+  GlobalState.initializing = true
+  if (isEmptyWithField(field, field.initialValue)) {
     if (isValid(field.props.initialValue)) {
       field.initialValue = field.props.initialValue
     }
   }
-  if (isEmpty(field.value)) {
-    if (isValid(field.props.value)) {
+  if (isEmptyWithField(field, field.value)) {
+    const isEmptyValue = isEmptyWithField(field, field.props.value)
+    const isEmptyInitialValue = isEmptyWithField(
+      field,
+      field.props.initialValue
+    )
+    if (isEmptyValue && !isEmptyInitialValue) {
+      field.value = field.props.initialValue
+    } else if (isValid(field.props.value)) {
       field.value = field.props.value
-    } else if (!isEmpty(field.initialValue)) {
-      field.value = field.initialValue
+    } else if (isValid(field.props.initialValue)) {
+      field.value = field.props.initialValue
     }
   }
+  GlobalState.initializing = false
 }
 
 export const initFieldUpdate = (field: GeneralField) => {
@@ -535,7 +552,7 @@ export const applyValuesPatch = (
     if (path.length) {
       form.setValuesIn(path, toJS(source))
     } else {
-      Object.assign(form.values, source)
+      Object.assign(form.values, toJS(source))
     }
   }
 
@@ -566,5 +583,6 @@ export const applyValuesPatch = (
       }
     }
   }
+  if (GlobalState.initializing) return
   patch(source, path)
 }

@@ -1,7 +1,7 @@
 @import '~@alifd/next/lib/core/index-noreset.scss';
 
 
-$array-items-prefix-cls: $css-prefix+"formily-array-items";
+$array-items-prefix-cls: '#{$css-prefix}formily-array-items';
 
 .#{$array-items-prefix-cls} {
   .#{$css-prefix}form-item {

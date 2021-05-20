@@ -1,11 +1,11 @@
-import { INode, KeysReactions, Reaction } from './types'
+import { IRawNode, Reaction, ReactionsMap } from './types'
 
 export const ProxyRaw = new WeakMap()
 export const RawProxy = new WeakMap()
-export const RawNode = new WeakMap<object, INode>()
-export const TargetKeysReactions = new WeakMap<object, KeysReactions>()
-export const ReactionKeysReactions = new WeakMap<Reaction, Set<KeysReactions>>()
-export const ReactionComputeds = new WeakMap<Reaction, Set<Reaction>>()
+export const RawShallowProxy = new WeakMap()
+export const RawNode = new WeakMap<object, IRawNode>()
+export const RawReactionsMap = new WeakMap<object, ReactionsMap>()
+
 export const ReactionStack: Reaction[] = []
 export const BatchCount = { value: 0 }
 export const UntrackCount = { value: 0 }

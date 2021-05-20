@@ -10,11 +10,26 @@ import {
 import { map, each, isFn, instOf } from '@formily/shared'
 import { compile, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
-import { reducePatches, registerPatches } from './patches'
+import {
+  reducePatches,
+  registerPatches,
+  registerPolyfills,
+  enablePolyfills,
+} from './patches'
 import {
   registerVoidComponents,
   registerTypeDefaultComponents,
 } from './polyfills'
+
+const ShallowCompileKeys = [
+  'properties',
+  'patternProperties',
+  'additionalProperties',
+  'items',
+  'additionalItems',
+  'x-linkages',
+  'x-reactions',
+]
 export class Schema<
   Decorator = any,
   Component = any,
@@ -429,24 +444,17 @@ export class Schema<
   }
 
   compile = (scope?: any) => {
-    const shallows = [
-      'properties',
-      'patternProperties',
-      'additionalProperties',
-      'items',
-      'additionalItems',
-      'x-linkages',
-      'x-reactions',
-    ]
+    const schema = new Schema({}, this.parent)
     each(this, (value, key) => {
       if (isFn(value)) return
-      if (!shallows.includes(key)) {
-        this[key] = value ? compile(value, scope) : value
+      if (key === 'parent') return
+      if (!ShallowCompileKeys.includes(key)) {
+        schema[key] = value ? compile(value, scope) : value
       } else {
-        this[key] = value ? shallowCompile(value, scope) : value
+        schema[key] = value ? shallowCompile(value, scope) : value
       }
     })
-    return this
+    return schema
   }
 
   fromJSON = (
@@ -555,4 +563,8 @@ export class Schema<
   static registerVoidComponents = registerVoidComponents
 
   static registerTypeDefaultComponents = registerTypeDefaultComponents
+
+  static registerPolyfills = registerPolyfills
+
+  static enablePolyfills = enablePolyfills
 }

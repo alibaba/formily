@@ -3,12 +3,7 @@ import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
-import { reduce } from '@formily/shared'
-import {
-  useFormLayout,
-  useFormShallowLayout,
-  FormLayoutShallowContext,
-} from '../form-layout'
+import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
 import { useGridSpan } from '../form-grid'
 import { Balloon } from '@alifd/next'
 import {
@@ -25,11 +20,12 @@ export interface IFormItemProps {
   label?: React.ReactNode
   colon?: boolean
   tooltip?: boolean
+  tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
   labelWrap?: boolean
-  labelWidth?: number
-  wrapperWidth?: number
+  labelWidth?: number | string
+  wrapperWidth?: number | string
   labelCol?: number
   wrapperCol?: number
   wrapperAlign?: 'left' | 'right'
@@ -55,9 +51,7 @@ type ComposeFormItem = React.FC<IFormItemProps> & {
 }
 
 const useFormItemLayout = (props: IFormItemProps) => {
-  const shallowFormLayout = useFormShallowLayout()
-  const formLayout = useFormLayout()
-  const layout = { ...shallowFormLayout, ...formLayout }
+  const layout = useFormLayout()
   return {
     ...props,
     layout: layout.layout ?? 'horizontal',
@@ -80,6 +74,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? 'loose',
+    tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? 'icon',
   }
 }
 
@@ -93,8 +88,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
   const { children, ...others } = props
   const [active, setActice] = useState(false)
   const popoverContainerRef = useRef()
+  const gridSpan = useGridSpan(props.gridSpan)
   const formLayout = useFormItemLayout(others)
-  const shallowFormLayout = useFormShallowLayout()
   const {
     label,
     style,
@@ -121,19 +116,20 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
     labelWrap,
     wrapperWrap,
     tooltip,
+    tooltipLayout,
   } = formLayout
-  const labelStyle: any = formLayout.labelStyle || {}
-  const wrapperStyle: any = formLayout.wrapperStyle || {}
+  const labelStyle = { ...formLayout.labelStyle }
+  const wrapperStyle = { ...formLayout.wrapperStyle }
   // 固定宽度
   let enableCol = false
   if (labelWidth || wrapperWidth) {
     if (labelWidth) {
-      labelStyle.width = `${labelWidth}px`
-      labelStyle.maxWidth = `${labelWidth}px`
+      labelStyle.width = labelWidth
+      labelStyle.maxWidth = labelWidth
     }
     if (wrapperWidth) {
-      wrapperStyle.width = `${wrapperWidth}px`
-      wrapperStyle.maxWidth = `${wrapperWidth}px`
+      wrapperStyle.width = wrapperWidth
+      wrapperStyle.maxWidth = wrapperWidth
     }
     // 栅格模式
   } else if (labelCol || wrapperCol) {
@@ -165,12 +161,25 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       children
     )
 
+  const labelChildren = (
+    <div className={cls(`${prefixCls}-label-content`)}>
+      {asterisk && <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>}
+      <label>{label}</label>
+    </div>
+  )
+
+  const gridStyles: React.CSSProperties = {}
+
+  if (gridSpan) {
+    gridStyles.gridColumnStart = `span ${gridSpan}`
+  }
+
   return (
     <div
       ref={popoverContainerRef}
       style={{
         ...style,
-        gridColumnStart: `span ${useGridSpan(props.gridSpan)}`,
+        ...gridStyles,
       }}
       className={cls({
         [`${prefixCls}`]: true,
@@ -207,17 +216,23 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         <div
           className={cls({
             [`${prefixCls}-label`]: true,
+            [`${prefixCls}-label-tooltip`]: tooltip && tooltipLayout === 'text',
             [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
           })}
           style={labelStyle}
         >
-          <div className={cls(`${prefixCls}-label-content`)}>
-            {asterisk && (
-              <span className={cls(`${prefixCls}-asterisk`)}>{'*'}</span>
-            )}
-            <label>{label}</label>
-          </div>
-          {tooltip && (
+          {tooltipLayout === 'text' ? (
+            <Balloon.Tooltip
+              align="t"
+              trigger={labelChildren}
+              popupContainer={() => popoverContainerRef.current}
+            >
+              {tooltip}
+            </Balloon.Tooltip>
+          ) : (
+            labelChildren
+          )}
+          {tooltip && tooltipLayout === 'icon' && (
             <span className={cls(`${prefixCls}-label-tooltip`)}>
               <Balloon.Tooltip
                 align="t"
@@ -252,28 +267,14 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
             style={wrapperStyle}
             className={cls({
               [`${prefixCls}-control-content-component`]: true,
-              [`${prefixCls}-control-content-component-has-feedback-icon`]: !!feedbackIcon,
+              [`${prefixCls}-control-content-component-has-feedback-icon`]:
+                !!feedbackIcon,
               [`${prefix}-input`]: !!feedbackIcon,
               [`${prefixCls}-active`]: active,
               [`${prefix}-focus`]: active,
             })}
           >
-            <FormLayoutShallowContext.Provider
-              value={reduce(
-                shallowFormLayout,
-                (buf: any, _, key) => {
-                  if (key === 'size') {
-                    buf.size = size
-                  } else {
-                    buf[key] = undefined
-                  }
-                  return buf
-                },
-                {
-                  size,
-                }
-              )}
-            >
+            <FormLayoutShallowContext.Provider value={undefined}>
               {formatChildren}
             </FormLayoutShallowContext.Provider>
             {feedbackIcon && (

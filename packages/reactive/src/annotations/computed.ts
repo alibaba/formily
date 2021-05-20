@@ -1,6 +1,6 @@
 import { ProxyRaw, RawProxy, ReactionStack } from '../environment'
 import { createAnnotation } from '../internals'
-import { buildTreeNode } from '../traverse'
+import { buildDataTree } from '../datatree'
 import {
   bindTargetKeyWithCurrentReaction,
   runReactionsFromTargetKey,
@@ -11,28 +11,19 @@ import {
   batchEnd,
 } from '../reaction'
 
+interface IValue<T = any> {
+  value?: T
+}
 export interface IComputed {
-  <T>(compute: () => T): { value: T }
-  <T>(compute: { get?: () => T; set?: (value: T) => void }): {
-    value: T
-  }
+  <T>(compute: () => T): IValue<T>
+  <T>(compute: { get?: () => T; set?: (value: T) => void }): IValue<T>
 }
 
 export const computed: IComputed = createAnnotation(
   ({ target, key, value }) => {
-    const initialValue = Symbol('initialValue')
-    const store = {
-      value: initialValue,
-    }
+    const store: IValue = {}
 
-    const proxy = {
-      set value(value: any) {
-        set(value)
-      },
-      get value() {
-        return get()
-      },
-    }
+    const proxy = {}
 
     const context = target ? target : store
     const property = target ? key : 'value'
@@ -74,17 +65,15 @@ export const computed: IComputed = createAnnotation(
     }
     reaction._name = 'ComputedReaction'
     reaction._scheduler = () => {
-      if (!reaction._dirty) {
-        reaction._dirty = true
-        batchStart()
-        runReactionsFromTargetKey({
-          target: context,
-          key: property,
-          value: store.value,
-          type: 'set',
-        })
-        batchEnd()
-      }
+      reaction._dirty = true
+      batchStart()
+      runReactionsFromTargetKey({
+        target: context,
+        key: property,
+        value: store.value,
+        type: 'set',
+      })
+      batchEnd()
     }
     reaction._isComputed = true
     reaction._dirty = true
@@ -94,11 +83,7 @@ export const computed: IComputed = createAnnotation(
     ProxyRaw.set(proxy, store)
     RawProxy.set(store, proxy)
 
-    buildTreeNode({
-      target,
-      key,
-      value: store,
-    })
+    buildDataTree(target, key, store)
 
     function get() {
       if (hasRunningReaction()) {
@@ -137,6 +122,11 @@ export const computed: IComputed = createAnnotation(
         configurable: false,
       })
       return target
+    } else {
+      Object.defineProperty(proxy, 'value', {
+        set,
+        get,
+      })
     }
     return proxy
   }

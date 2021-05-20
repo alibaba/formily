@@ -1,6 +1,6 @@
 {
   "name": "@formily/react",
-  "version": "2.0.0-beta.24",
+  "version": "2.0.0-beta.53",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -32,18 +32,19 @@
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "react": ">=16.8.0 || >=17.0.0",
-    "react-dom": ">=16.8.0 || >=17.0.0"
+    "react-dom": ">=16.8.0 || >=17.0.0",
+    "react-is": ">=16.8.0 || >=17.0.0"
   },
   "devDependencies": {
     "dumi": "^1.1.0-rc.8"
   },
   "dependencies": {
-    "@formily/core": "^2.0.0-beta.24",
-    "@formily/json-schema": "^2.0.0-beta.24",
-    "@formily/reactive": "^2.0.0-beta.24",
-    "@formily/reactive-react": "^2.0.0-beta.24",
-    "@formily/shared": "^2.0.0-beta.24",
-    "@formily/validator": "^2.0.0-beta.24",
+    "@formily/core": "2.0.0-beta.53",
+    "@formily/json-schema": "2.0.0-beta.53",
+    "@formily/reactive": "2.0.0-beta.53",
+    "@formily/reactive-react": "2.0.0-beta.53",
+    "@formily/shared": "2.0.0-beta.53",
+    "@formily/validator": "2.0.0-beta.53",
     "hoist-non-react-statics": "^3.3.2"
   },
   "publishConfig": {

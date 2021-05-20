@@ -20,8 +20,7 @@ import { stringLength } from '../string'
 import { Subscribable } from '../subscribable'
 import { merge } from '../merge'
 import { instOf } from '../instanceof'
-import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../types'
-import { log } from '../log'
+import { isFn, isHTMLElement, isNumberLike, isReactElement } from '../checkers'
 import { defaults } from '../defaults'
 
 describe('array', () => {
@@ -259,16 +258,16 @@ describe('compare', () => {
 
 describe('clone and compare', () => {
   test('clone form data', () => {
-    var dd = new Map()
+    let dd = new Map()
     dd.set('aaa', { bb: 123 })
-    var ee = new WeakMap()
+    let ee = new WeakMap()
     ee.set({}, 1)
-    var ff = new WeakSet()
+    let ff = new WeakSet()
     ff.add({})
-    var gg = new Set()
+    let gg = new Set()
     gg.add(3)
 
-    var a = {
+    let a = {
       aa: 123123,
       bb: [{ bb: 111 }, { bb: 222 }],
       cc: () => {
@@ -280,7 +279,7 @@ describe('clone and compare', () => {
       ff,
       gg,
     }
-    var cloned = clone(a)
+    let cloned = clone(a)
     expect(isEqual(cloned, a)).toBeTruthy()
     expect(a === cloned).toBeFalsy()
     expect(a.bb[0] === cloned.bb[0]).toBeFalsy()
@@ -522,76 +521,6 @@ describe('types', () => {
   })
   test('isHTMLElement', () => {
     expect(isHTMLElement(document.createElement('div'))).toBeTruthy()
-  })
-})
-
-describe('log', () => {
-  const SomeString = Date.now().toString(32)
-  const SomeObject = { v: SomeString }
-  const Keyword = 'Formily'
-  const Tips = 'you should do something'
-  const FormilyLog = log
-  test('log api', () => {
-    expect(FormilyLog.log(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.log(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-  })
-  test('info api', () => {
-    expect(FormilyLog.info(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.info(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-  })
-  test('warn api', () => {
-    expect(FormilyLog.warn(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.warn(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-
-    expect(FormilyLog.warn(SomeString, Tips)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-      tips: Tips,
-    })
-    expect(FormilyLog.warn(SomeObject, Tips)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-      tips: Tips,
-    })
-  })
-  test('error api', () => {
-    expect(FormilyLog.error(SomeString)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-    })
-    expect(FormilyLog.error(SomeObject)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-    })
-
-    expect(FormilyLog.error(SomeString, Tips)).toEqual({
-      content: SomeString,
-      keyword: Keyword,
-      tips: Tips,
-    })
-    expect(FormilyLog.error(SomeObject, Tips)).toEqual({
-      content: SomeObject,
-      keyword: Keyword,
-      tips: Tips,
-    })
   })
 })
 

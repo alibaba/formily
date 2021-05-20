@@ -9,6 +9,8 @@ registerTypeDefaultComponents({
   string: 'Input',
 })
 
+Schema.enablePolyfills(['1.0'])
+
 test('v1 polyfill', () => {
   const schema = new Schema({
     type: 'string',

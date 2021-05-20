@@ -1,6 +1,6 @@
 {
   "name": "@formily/next",
-  "version": "2.0.0-beta.24",
+  "version": "2.0.0-beta.53",
   "license": "MIT",
   "main": "lib",
   "umd:main": "dist/formily.next.umd.production.js",
@@ -34,7 +34,8 @@
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "react": ">=16.8.0 || >=17.0.0",
-    "react-dom": ">=16.8.0"
+    "react-dom": ">=16.8.0",
+    "react-is": ">=16.8.0 || >=17.0.0"
   },
   "devDependencies": {
     "@umijs/plugin-sass": "^1.1.1",
@@ -42,16 +43,16 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/core": "^2.0.0-beta.24",
-    "@formily/json-schema": "^2.0.0-beta.24",
-    "@formily/react": "^2.0.0-beta.24",
-    "@formily/reactive": "^2.0.0-beta.24",
-    "@formily/reactive-react": "^2.0.0-beta.24",
-    "@formily/shared": "^2.0.0-beta.24",
+    "@formily/core": "2.0.0-beta.53",
+    "@formily/json-schema": "2.0.0-beta.53",
+    "@formily/react": "2.0.0-beta.53",
+    "@formily/reactive": "2.0.0-beta.53",
+    "@formily/reactive-react": "2.0.0-beta.53",
+    "@formily/shared": "2.0.0-beta.53",
+    "@juggle/resize-observer": "^3.3.1",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3",
-    "resize-observer-polyfill": "^1.5.1"
+    "react-sticky-box": "^0.9.3"
   },
   "publishConfig": {
     "access": "public"

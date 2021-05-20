@@ -19,7 +19,6 @@ import { ArrayBase, ArrayBaseMixins } from '../array-base'
 
 interface ObservableColumnSource {
   field: Formily.Core.Types.GeneralField
-  fieldProps: Formily.Core.Types.IVoidFieldFactoryProps<any, any>
   columnProps: ColumnProps<any>
   schema: Schema
   display: Formily.Core.Types.FieldDisplayTypes
@@ -70,7 +69,6 @@ const useArrayTableSources = () => {
         return []
       const name = schema['x-component-props']?.['dataIndex'] || schema['name']
       const field = arrayField.query(arrayField.address.concat(name)).take()
-      const fieldProps = field?.props || schema.toFieldProps()
       const columnProps =
         field?.component?.[1] || schema['x-component-props'] || {}
       const display = field?.display || schema['x-display']
@@ -79,7 +77,6 @@ const useArrayTableSources = () => {
           name,
           display,
           field,
-          fieldProps,
           schema,
           columnProps,
         },

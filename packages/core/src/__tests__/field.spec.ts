@@ -415,9 +415,95 @@ test('query', () => {
   expect(bbb.query('.void.ccc').take()).toBeUndefined()
 })
 
-test('reset', async () => {
+test('empty initialValue', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createField({
+      name: 'aa',
+      initialValue: '',
+    })
+  )
+  const bb = attach(
+    form.createField({
+      name: 'bb',
+    })
+  )
+  expect(aa.value).toEqual('')
+  expect(form.values.aa).toEqual('')
+  expect(bb.value).toEqual(undefined)
+  expect(form.values.bb).toEqual(undefined)
+})
+
+test('objectFieldWithInitialValue', async () => {
   const form = attach(
     createForm({
+      initialValues: {
+        obj: {
+          a: 'a',
+        },
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'obj',
+    })
+  )
+  const fieldObjA = attach(
+    form.createField({
+      name: 'obj.a',
+    })
+  )
+
+  expect(fieldObjA.initialValue).toEqual('a')
+  fieldObjA.value = 'aa'
+  expect(fieldObjA.value).toEqual('aa')
+  expect(fieldObjA.initialValue).toEqual('a')
+})
+
+test('initialValueWithArray', () => {
+  const form = attach(createForm())
+  const field = attach(
+    form.createArrayField({
+      name: 'aaa',
+      initialValue: [1, 2],
+    })
+  )
+  expect(field.initialValue).toEqual([1, 2])
+  expect(field.value).toEqual([1, 2])
+  expect(form.initialValues.aaa).toEqual([1, 2])
+  expect(form.values.aaa).toEqual([1, 2])
+})
+
+test('resetObjectFieldWithInitialValue', async () => {
+  const form = attach(createForm())
+  attach(
+    form.createObjectField({
+      name: 'obj',
+    })
+  )
+  const fieldObjA = attach(
+    form.createField({
+      name: 'obj.a',
+      initialValue: 'a',
+    })
+  )
+
+  fieldObjA.value = 'aa'
+  expect(fieldObjA.value).toEqual('aa')
+  await form.reset()
+  expect(fieldObjA.value).toEqual('a')
+
+  fieldObjA.value = 'aa'
+  expect(fieldObjA.value).toEqual('aa')
+  await form.reset()
+  expect(fieldObjA.initialValue).toEqual('a')
+  expect(fieldObjA.value).toEqual('a')
+})
+
+test('reset', async () => {
+  const form = attach(
+    createForm<any>({
       values: {
         bb: 123,
       },
@@ -467,7 +553,7 @@ test('reset', async () => {
 
 test('match', () => {
   const form = attach(
-    createForm({
+    createForm<any>({
       values: {
         bb: 123,
       },

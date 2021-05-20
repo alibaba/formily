@@ -1,9 +1,11 @@
-# 查询列表
+# Query List
 
-查询列表目前formily对应的解决方案是阿里巴巴统一列表组件 [AList](https://alist.wiki)，具体参考AList写法
+The current query list solution corresponding to formily is [AList](https://alist.wiki), the unified list component of Alibaba.
+Specific reference to AList writing.
 
-在1.x中，我们提供了useFormTableQuery的React Hook给用户使用，但是发现，该Hook
-- 在简单场景，其实使用 [ahooks](https://ahooks.js.org/)中的useTable就能解决问题
-- 复杂场景，useFormTableQuery的抽象度又并不高，还是会导致很多样板代码，相反 [AList](https://alist.wiki) 在复杂场景的表现则很优秀
+In 1.x, we provided the React Hook of useFormTableQuery for users to use, but found that the Hook
+- In simple scenarios, the useTable in [ahooks](https://ahooks.js.org/) can actually solve the problem
+- In complex scenarios, the abstraction of useFormTableQuery is not high, and it will still lead to a lot of boilerplate code. On the contrary, [AList](https://alist.wiki) performs well in complex scenarios.
 
-所以，专业的领域就让专业的项目去解决吧，Formily的定位始终还是表单
+So, let the professional project solve the professional field. Formily's positioning is always the form.
+

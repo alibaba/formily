@@ -1,4 +1,4 @@
-import { isArr } from './types'
+import { isArr } from './checkers'
 import { instOf } from './instanceof'
 const isArray = isArr
 const keyList = Object.keys

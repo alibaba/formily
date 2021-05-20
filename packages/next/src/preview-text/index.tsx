@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
-import { isArr, isEmpty } from '@formily/shared'
-import { useField } from '@formily/react'
+import { isArr, isEmpty, isValid } from '@formily/shared'
+import { useField, observer } from '@formily/react'
 import { InputProps } from '@alifd/next/lib/input'
 import { SelectProps } from '@alifd/next/lib/select'
 import { TreeSelectProps } from '@alifd/next/lib/tree-select'
@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = (props) => {
   )
 }
 
-const Select: React.FC<SelectProps> = (props) => {
+const Select: React.FC<SelectProps> = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
@@ -57,26 +57,35 @@ const Select: React.FC<SelectProps> = (props) => {
       }
     } else {
       if (props.useDetailValue) {
-        return value ? [value] : []
+        return isValid(value) ? [value] : []
       } else {
-        return value ? [{ label: value, value }] : []
+        return isValid(value) ? [{ label: value, value }] : []
       }
     }
   }
 
   const getLabels = () => {
     const selected = getSelected()
-    if (!selected.length) return <Tag type="primary" size="small">{placeholder}</Tag>
+    if (!selected.length)
+      return (
+        <Tag type="primary" size="small">
+          {placeholder}
+        </Tag>
+      )
     return selected.map(({ value, label }, key) => {
       const text =
         dataSource?.find((item) => item.value == value)?.label || label
-      return <Tag type="primary" size="small" key={key}>{text || placeholder}</Tag>
+      return (
+        <Tag type="primary" size="small" key={key}>
+          {text || placeholder}
+        </Tag>
+      )
     })
   }
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-}
+})
 
-const TreeSelect: React.FC<TreeSelectProps> = (props) => {
+const TreeSelect: React.FC<TreeSelectProps> = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
@@ -118,7 +127,12 @@ const TreeSelect: React.FC<TreeSelectProps> = (props) => {
 
   const getLabels = () => {
     const selected = getSelected()
-    if (!selected?.length) return <Tag type="primary" size="small">{placeholder}</Tag>
+    if (!selected?.length)
+      return (
+        <Tag type="primary" size="small">
+          {placeholder}
+        </Tag>
+      )
     return selected.map(({ value, label }, key) => {
       return (
         <Tag type="primary" size="small" key={key}>
@@ -128,9 +142,9 @@ const TreeSelect: React.FC<TreeSelectProps> = (props) => {
     })
   }
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-}
+})
 
-const Cascader: React.FC<CascaderProps> = (props) => {
+const Cascader: React.FC<CascaderProps> = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
@@ -153,7 +167,7 @@ const Cascader: React.FC<CascaderProps> = (props) => {
       .join('/')
   }
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-}
+})
 
 const DatePicker: React.FC<DatePickerProps> = (props) => {
   const placeholder = usePlaceholder()

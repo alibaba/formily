@@ -443,6 +443,10 @@ import { Schema } from '@formily/react'
 Schema.registerVoidComponents(['card', 'tab', 'step'])
 ```
 
+<Alert type="warning">
+  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+</Alert>
+
 ### registerTypeDefaultComponents
 
 #### 描述
@@ -467,6 +471,67 @@ Schema.registerTypeDefaultComponents({
   number: 'NumberPicker',
   array: 'ArrayTable',
 })
+```
+
+<Alert type="warning">
+  注意，该 api 需要配合 <code>enablePolyfills(['1.0'])</code> 使用
+</Alert>
+
+### registerPolyfills
+
+#### 描述
+
+注册协议兼容垫片
+
+#### 签名
+
+```ts
+type SchemaPatch = (schema: ISchema) => ISchema
+
+interface registerPolyfills {
+  (version: string, patch: SchemaPatch): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/react'
+
+Schema.registerPolyfills('1.0', (schema) => {
+  schema['x-decorator'] = 'FormItem'
+  return schema
+})
+```
+
+### enablePolyfills
+
+#### 描述
+
+开启协议垫片，默认内置 1.0 版本协议兼容垫片，主要兼容特性：
+
+- x-decorator 不声明，自动作为 FormItem
+- x-linkages 转换为 x-reactions
+- x-props 自动转换为 x-decorator-props
+- x-rules 转换为 x-validator
+- editable 转换为 x-editable
+- visible 转换为 x-visible
+- x-component 为 card/block/grid-row/grid-col/grid/layout/step/tab/text-box 自动转换 VoidField，
+
+#### 签名
+
+```ts
+interface enablePolyfills {
+  (versions: string[]): void
+}
+```
+
+#### 用例
+
+```ts
+import { Schema } from '@formily/react'
+
+Schema.enablePolyfills(['1.0'])
 ```
 
 ## 类型
@@ -563,7 +628,7 @@ type SchemaReactionEffect =
 
 type SchemaReaction<Field = any> =
   | {
-      dependencies?: string[] //依赖的字段路径列表，只能以点路径描述依赖
+      dependencies?: string[] | Record<string, string> //依赖的字段路径列表，只能以点路径描述依赖，如果是数组格式，那么读的时候也是数组格式，如果是对象格式，读的时候也是对象格式，只是对象格式相当于是一个alias
       when?: string | boolean //联动条件
       target?: string //要操作的字段路径，支持FormPathPattern路径语法
       effects?: SchemaReactionEffect[] //主动模式下的独立生命周期钩子
@@ -770,6 +835,7 @@ type SchemaReactions<Field = any> =
       "x-component": "Input",
       "x-reactions": {
         "dependencies": ["source"], //依赖路径写法默认是取value，如果依赖的是字段的其他属性，可以使用 source#modified，用#分割取详细属性
+        // "dependencies":{ aliasName:"source" }, //别名形式
         "fulfill": {
           "schema": {
             "x-visible": "{{$deps[0] === '123'}}" //任意层次属性都支持表达式

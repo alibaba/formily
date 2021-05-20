@@ -1,50 +1,50 @@
-# 快速开始
+# Quick Start
 
-## 安装依赖
+## Install Dependencies
 
-### 安装内核库
+### Install the Core Library
 
-使用 Formily 必须要用到[@formily/core](https://core.formilyjs.org)，它负责管理表单的状态，表单校验，联动等等。
+To use Formily, you must use [@formily/core](https://core.formilyjs.org), which is responsible for managing the status of the form, form verification, linkage, and so on.
 
 ```bash
 $ npm install --save @formily/core
 ```
 
-### 安装 UI 桥接库
+### Install UI Bridge Library
 
-单纯有了内核还不够，我们还需要一个 UI 库来接入内核数据，用来实现最终的表单交互效果，对于不同框架的用户，我们有不同的桥接库。
+The kernel alone is not enough. We also need a UI library to access kernel data to achieve the final form interaction effect. For users of different frameworks, we have different bridge libraries.
 
-**React 用户**
+**React users**
 
 ```bash
 $ npm install --save @formily/react
 ```
 
-**Vue 用户**
+**Vue users**
 
 ```bash
 $ npm install --save @formily/vue
 ```
 
-### 安装组件库
+### Install component library
 
-想要快速实现漂亮的表单，通常我们都是需要使用业界优秀的组件库的，比如[Ant Design ](https://ant.design)和 [Alibaba Fusion](https://fusion.design)，但是这些优秀的组件库，在表单的某些场景上覆盖的还是不够全面，比如详情预览态的支持，Ant Design 是不支持的，还有一些场景化的组件它也是不支持的，所以 Formily 在此之上又封装了@formily/antd 和@formily/next，保证用户开箱即用。
+To quickly implement beautiful forms, we usually need to use industry-leading component libraries, such as A[nt Design](https://ant.design) and [Alibaba Fusion](https://fusion.design). However, these excellent component libraries are not fully covered in some scenes of the form. For example, the detailed preview state is not supported by Ant Design, and some scene-based components are not supported, so Formily is in On top of this, @formily/antd and @formily/next are encapsulated to ensure that users can use it out of the box.
 
-**Ant Design 用户**
+**Ant Design users**
 
 ```bash
 $ npm install --save antd moment @formily/antd
 ```
 
-**Alibaba Fusion 用户**
+**Alibaba Fusion users**
 
 ```bash
 $ npm install --save @alifd/next moment @formily/next
 ```
 
-## 导入依赖
+## Import Dependencies
 
-使用 ES Module import 语法导入依赖即可
+Use ES Module import syntax to import dependencies
 
 ```ts
 import React from 'react'
@@ -53,7 +53,7 @@ import { FormProvider, Field } from '@formily/react'
 import { FormItem, Input } from '@formily/antd'
 ```
 
-## 具体用例
+## Exmaple
 
 ```tsx
 /**
@@ -78,7 +78,7 @@ export default () => {
       <FormLayout layout="vertical">
         <Field
           name="input"
-          title="输入框"
+          title="Input box"
           required
           initialValue="Hello world"
           decorator={[FormItem]}
@@ -94,38 +94,38 @@ export default () => {
               border: '1px dashed #666',
             }}
           >
-            实时响应：{form.values.input}
+            Real-time response：{form.values.input}
           </div>
         )}
       </FormConsumer>
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>submit</Submit>
       </FormButtonGroup>
     </FormProvider>
   )
 }
 ```
 
-从以上例子中，我们可以学到很多东西：
+From the above examples, we can learn a lot:
 
-- [createForm](https://core.formilyjs.org/api/entry/create-form)用来创建表单核心领域模型，它是作为[MVVM](https://core.formilyjs.org/guide/mvvm)设计模式的标准 ViewModel
-- [FormProvider](https://react.formilyjs.org/api/components/form-provider)组件是作为视图层桥接表单模型的入口，它只有一个参数，就是接收 createForm 创建出来的 Form 实例，并将 Form 实例以上下文形式传递到子组件中
-- [FormLayout](https://antd.formilyjs.org/components/form-layout)组件是用来批量控制[FormItem](https://antd.formilyjs.org/components/form-item)样式的组件，这里我们指定布局为上下布局，也就是标签在上，组件在下
-- [Field](https://react.formilyjs.org/api/components/field)组件是用来承接普通字段的组件
-  - name 属性，标识字段在表单最终提交数据中的路径
-  - title 属性，标识字段的标题
-    - 如果 decorator 指定为 FormItem，那么在 FormItem 组件中会默认以接收 title 属性作为标签
-    - 如果指定为某个自定义组件，那么 title 的消费方则由自定义组件来承接
-    - 如果不指定 decorator，那么 title 则不会显示在 UI 上
-  - required 属性，必填校验的极简写法，标识该字段必填
-    - 如果 decorator 指定为 FormItem，那么会自动出现星号提示，同时校验失败也会有对应的状态反馈，这些都是 FormItem 内部做的默认处理
-    - 如果 decorator 指定为自定义组件，那么对应的 UI 样式则需要自定义组件实现方自己实现
-    - 如果不指定 decorator，那么 required 只是会阻塞提交，校验失败不会有任何 UI 反馈。
-  - initialValue 属性，代表字段的默认值
-  - decorator 属性，代表字段的 UI 装饰器，通常我们都会指定为 FormItem
-    - 注意 decorator 属性传递的是数组形式，第一个参数代表指定组件类型，第二个参数代表指定组件属性
-  - component 属性，代表字段的输入控件，可以是 Input，也可以是 Select，等等
-    - 注意 component 属性传递的是数组形式，第一个参数代表指定组件类型，第二个参数代表指定组件属性
-- [FormConsumer](https://react.formilyjs.org/api/components/form-consumer)组件是作为响应式模型的响应器而存在，它核心是一个 render props 模式，在作为 children 的回调函数中，会自动收集所有依赖，如果依赖发生变化，则会重新渲染，借助 FormConsumer 我们可以很方便的实现各种计算汇总的需求
-- [FormButtonGroup](https://antd.formilyjs.org/components/form-button-group)组件作为表单按钮组容器而存在，主要负责按钮的布局
-- [Submit](https://antd.formilyjs.org/components/submit)组件作为表单提交的动作触发器而存在，其实我们也可以直接使用 form.submit 方法进行提交，但是使用 Submit 的好处是不需要每次都在 Button 组件上写 onClick 事件处理器，同时它还处理了 Form 的 loading 状态，如果 onSubmit 方法返回一个 Promise，且 Promise 正在 pending 状态，那么按钮会自动进入 loading 状态
+- [createForm](https://core.formilyjs.org/api/entry/create-form) is used to create the core domain model of the form, which is the standard ViewModel as the [MVVM](https://core.formilyjs.org/guide/mvvm) design pattern. 
+- The [FormProvider](https://react.formilyjs.org/api/components/form-provider) component is used as the entrance to the view layer bridge form model. It has only one parameter, which is to receive the Form instance created by createForm and pass the Form instance to the child component in the form of context.
+- The [FormLayout](https://antd.formilyjs.org/components/form-layout) component is a component used to control the style of [FormItem](https://antd.formilyjs.org/components/form-item) in batches. Here we specify the layout as top and bottom layout, that is, the label is on the top and the component is on the bottom. 
+- The [Field](https://react.formilyjs.org/api/components/field) component is a component used to undertake common fields. 
+  - The name attribute identifies the path of the field in the final submitted data of the form.
+  - Title attribute, which identifies the title of the field
+    - If the decorator is specified as FormItem, then the title attribute will be received as the label by default in the FormItem component. 
+    - If specified as a custom component, the consumer of the title will be taken over by the custom component. 
+    - If decorator is not specified, then the title will not be displayed on the UI. 
+  - Required attribute, a shorthand for required verification, which identifies that the field is required
+    - If the decorator is specified as FormItem, then an asterisk prompt will automatically appear, and there will be corresponding status feedback if the verification fails. These are the default processing done inside the FormItem. 
+    - If the decorator is specified as a custom component, the corresponding UI style needs to be implemented by the custom component implementer.
+    - If decorator is not specified, then required will just block submission, and there will be no UI feedback for verification failure.
+  - InitialValue property, which represents the default value of the field
+  - Decorator attribute, representing the UI decorator of the field, usually we will specify it as FormItem
+    - Note that the decorator attribute is passed in the form of an array, the first parameter represents the specified component type, and the second parameter represents the specified component attribute.
+  - The component attribute, which represents the input control of the field, can be Input or Select, etc.
+    - Note that the component property is passed in the form of an array, the first parameter represents the specified component type, and the second parameter represents the specified component property.
+- The [FormConsumer](https://react.formilyjs.org/api/components/form-consumer) component exists as a responder of a responsive model. Its core is a render props mode. In the callback function as children, all dependencies are automatically collected. If the dependencies change, it will be re-rendered. With the help of FormConsumer, we can Conveniently realize the needs of various calculations and summaries. 
+- The [FormButtonGroup](https://antd.formilyjs.org/components/form-button-group) component exists as a form button group container and is mainly responsible for the layout of the buttons. 
+- The [Submit](https://antd.formilyjs.org/components/submit) component exists as an action trigger for form submission. In fact, we can also directly use the form.submit method to submit. But the advantage of using Submit is that there is no need to write the onClick event handler on the Button component every time, and it also handles the loading state of the Form. If the onSubmit method returns a Promise and the Promise is pending, the button will automatically enter the loading state.

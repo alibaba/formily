@@ -1,6 +1,6 @@
 import { each } from './array'
 import { isEmpty, isValid } from './isEmpty'
-import { getType, isArr } from './types'
+import { getType, isArr } from './checkers'
 
 const isUnNormalObject = (value: any) => {
   if (value?._owner && value?.$$typeof) {

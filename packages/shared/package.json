@@ -1,6 +1,6 @@
 {
 	"name": "@formily/shared",
-	"version": "2.0.0-beta.24",
+	"version": "2.0.0-beta.53",
 	"license": "MIT",
 	"main": "lib",
 	"module": "esm",
@@ -30,11 +30,8 @@
 		"build:esm": "tsc --declaration --module es2015 --outDir esm",
 		"build:umd": "rollup --config"
 	},
-	"peerDependencies": {
-		"@types/react": ">=16.8.0 || >=17.0.0"
-	},
 	"dependencies": {
-		"@formily/path": "^2.0.0-beta.24",
+		"@formily/path": "2.0.0-beta.53",
 		"camel-case": "^4.1.1",
 		"lower-case": "^2.0.1",
 		"no-case": "^3.0.4",

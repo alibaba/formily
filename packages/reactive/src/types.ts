@@ -26,22 +26,17 @@ export interface IChange {
   type?: OperationType
 }
 
-export interface INode {
-  traverse?: ObservableTraverse
+export interface IRawNode {
   path?: ObservablePath
-  parent?: INode
-  observers?: Set<ObservableListener>
-  deepObservers?: Set<ObservableListener>
-  shallow?: boolean
+  parent?: IRawNode
+  observers?: ObservableListener[]
+  deepObservers?: ObservableListener[]
 }
 
 export interface IVisitor<Value = any, Target = any> {
   target?: Target
   key?: PropertyKey
   value?: Value
-  path?: ObservablePath
-  traverse?: ObservableTraverse
-  shallow?: boolean
 }
 
 export type Annotation = (...args: any[]) => any
@@ -54,20 +49,18 @@ export type ObservableListener = (operation: IOperation) => void
 
 export type ObservablePath = Array<string | number>
 
-export type ObservableTraverse<Value = any, Target = any> = (
-  visitor: IVisitor<Value, Target>
-) => any
-
 export type Reaction = ((...args: any[]) => any) & {
   _name?: string
   _isComputed?: boolean
   _dirty?: boolean
   _context?: any
   _property?: PropertyKey
+  _computedsSet?: Set<Reaction>
+  _reactionsSet?: Set<ReactionsMap>
   _scheduler?: (reaction: Reaction) => void
 }
 
-export type KeysReactions = Map<PropertyKey, Set<Reaction>>
+export type ReactionsMap = Map<PropertyKey, Set<Reaction>>
 
 export interface IReactionOptions<T> {
   name?: string

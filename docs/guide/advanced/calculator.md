@@ -1,8 +1,8 @@
-# 实现联动计算器
+# Calculator
 
-联动计算器，主要用于在填写表单的过程中做求值汇总，在 Formily1.x 中实现这类需求的成本非常非常高，在 2.x 中，我们可以借助 reactions 轻松实现
+Linkage calculator is mainly used for evaluation and summarization in the process of filling in the form. In Formily 1.x, the cost of realizing this kind of demand is very high. In 2.x, we can easily implement it with the help of reactions.
 
-## Markup Schema 案例
+## Markup Schema Case
 
 ```tsx
 import React from 'react'
@@ -158,7 +158,7 @@ export default () => {
 }
 ```
 
-## JSON Schema 案例
+## JSON Schema Case
 
 ```tsx
 import React from 'react'
@@ -357,9 +357,10 @@ export default () => {
     <Form form={form} layout="vertical">
       <SchemaField schema={schema} />
       <FormButtonGroup>
-        <Submit onSubmit={console.log}>提交</Submit>
+        <Submit onSubmit={console.log}>submit</Submit>
       </FormButtonGroup>
     </Form>
   )
 }
 ```
+

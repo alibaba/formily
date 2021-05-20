@@ -1,20 +1,17 @@
-import Vue, { ComponentOptions } from 'vue'
 import { isVue2 } from 'vue-demi'
-import { observer as observerV2, VueClass } from './observerInVue2'
+import { observer as observerV2 } from './observerInVue2'
 import { observer as observerV3 } from './observerInVue3'
 import collectData from './collectData'
+import { IObserverOptions } from '../types'
 
-function observer<VC extends VueClass<Vue>>(
-  Component: VC | ComponentOptions<Vue>
-): VC
-function observer<VC extends VueClass<Vue>>(
-  Component: VC | ComponentOptions<Vue>
-) {
+export function observer<C>(baseComponent: C,
+  options?: IObserverOptions & { forwardRef: true }
+): C {
   if (isVue2) {
-    return observerV2(Component)
+    return observerV2(baseComponent, options)
   } else {
-    return observerV3(Component)
+    return observerV3(baseComponent, options)
   }
 }
 
-export { observer, collectData }
+export { collectData }

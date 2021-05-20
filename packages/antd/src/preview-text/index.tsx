@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react'
 import { isArr, isValid } from '@formily/shared'
-import { useField } from '@formily/react'
+import { observer, useField } from '@formily/react'
 import { InputProps } from 'antd/lib/input'
 import { SelectProps } from 'antd/lib/select'
 import { TreeSelectProps } from 'antd/lib/tree-select'
@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = (props) => {
   )
 }
 
-const Select: React.FC<SelectProps<any>> = (props) => {
+const Select: React.FC<SelectProps<any>> = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
@@ -57,9 +57,9 @@ const Select: React.FC<SelectProps<any>> = (props) => {
       }
     } else {
       if (props.labelInValue) {
-        return value ? [value] : []
+        return isValid(value) ? [value] : []
       } else {
-        return value ? [{ label: value, value }] : []
+        return isValid(value) ? [{ label: value, value }] : []
       }
     }
   }
@@ -78,9 +78,9 @@ const Select: React.FC<SelectProps<any>> = (props) => {
       {getLabels()}
     </div>
   )
-}
+})
 
-const TreeSelect: React.FC<TreeSelectProps<any>> = (props) => {
+const TreeSelect: React.FC<TreeSelectProps<any>> = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
@@ -136,9 +136,9 @@ const TreeSelect: React.FC<TreeSelectProps<any>> = (props) => {
       {getLabels()}
     </div>
   )
-}
+})
 
-const Cascader: React.FC<CascaderProps> = (props) => {
+const Cascader: React.FC<CascaderProps> = observer((props) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)
@@ -177,7 +177,7 @@ const Cascader: React.FC<CascaderProps> = (props) => {
       {getLabels()}
     </div>
   )
-}
+})
 
 const DatePicker: React.FC<DatePickerProps> = (props) => {
   const placeholder = usePlaceholder()

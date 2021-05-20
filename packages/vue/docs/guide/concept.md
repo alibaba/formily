@@ -19,7 +19,7 @@
 
 ## 协议上下文
 
-从[架构图](/guide/architecture)中我们可以看到[RecursionField](/api/components/recursion-field)会给子树下发一个 FieldSchemaContext，我们可以再自定义组件中读取到当前字段的 Schema 描述，主要是使用[useFieldSchema](/api/hooks/useFieldSchema)来读取，注意，该 Hook 只能用在[SchemaField](/api/components/SchemaField)和[RecursionField](/api/components/recursion-field)子树中使用
+从[架构图](/guide/architecture)中我们可以看到[RecursionField](/api/components/recursion-field)会给子树下发一个 FieldSchemaContext，我们可以在自定义组件中读取到当前字段的 Schema 描述，主要是使用[useFieldSchema](/api/hooks/use-field-schema)来读取。注意，该 Hook 只能用在[SchemaField](/api/components/schema-field)和[RecursionField](/api/components/recursion-field)子树中使用
 
 ## 模型绑定
 

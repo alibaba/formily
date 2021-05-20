@@ -65,6 +65,9 @@ export interface ISchemaFieldProps<
     'name'
   > {
   schema?: ISchema
+  components?: {
+    [key: string]: JSXComponent
+  }
   scope?: any
   name?: SchemaKey
   children?: React.ReactNode

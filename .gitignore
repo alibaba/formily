@@ -19,8 +19,10 @@ examples/test
 TODO.md
 tsconfig.tsbuildinfo
 package/
+benchmark
 package.zip
 .umi
 .umi-production
 .cjsescache
 doc-site
+.lerna-changelog

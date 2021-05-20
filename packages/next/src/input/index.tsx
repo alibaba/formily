@@ -14,6 +14,10 @@ export const Input: ComposedInput = connect(
   mapReadPretty(PreviewText.Input)
 )
 
-Input.TextArea = connect(NextInput.TextArea, mapReadPretty(PreviewText.Input))
+Input.TextArea = connect(
+  NextInput.TextArea,
+  mapProps(mapSize, mapStatus),
+  mapReadPretty(PreviewText.Input)
+)
 
 export default Input

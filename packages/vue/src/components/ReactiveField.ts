@@ -1,7 +1,8 @@
-import { VNode, Component } from 'vue'
-import { defineComponent } from 'vue-demi'
+import { VueComponent } from '../types'
+import { defineComponent, DefineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { clone } from '@formily/shared'
+import { observer } from '@formily/reactive-vue'
 
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
@@ -10,12 +11,12 @@ interface IReactiveFieldProps {
   field: Formily.Core.Types.GeneralField
 }
 
-export default observer(defineComponent({
+export default observer(defineComponent<IReactiveFieldProps>({
   name: 'ReactiveField',
   // eslint-disable-next-line vue/require-prop-types
   props: ['field'],
   setup(props: IReactiveFieldProps, { slots }) {
-    const { track } = useObserver()
+    // const { track } = useObserver()
     const key = Math.floor(Date.now() * Math.random()).toString(16)
     return () => {
       const field = props.field
@@ -23,15 +24,18 @@ export default observer(defineComponent({
       if (!field) {
         children = slots
       } else if (field.display !== 'visible') {
-        children = { default: () => [h('template', {}, {})] }
+        children = {
+          ...slots,
+          default: () => [h('template', {}, {})]
+        }
       } else {
-        const renderDecorator = (childNodes: VNode[]) => {
+        const renderDecorator = (childNodes: any[]) => {
           if (!field?.decorator?.[0]) {
             return {
               default: () => childNodes
             }
           } else {
-            const decorator = field.decorator[0] as Component
+            const decorator = field.decorator[0] as VueComponent
             const decoratorData = field.decorator[1] || {}
             return {
               default: () => h( decorator, { attrs: decoratorData },
@@ -46,30 +50,48 @@ export default observer(defineComponent({
         const renderComponent = () => {
           if (!field?.component?.[0]) {
             return h(Fragment, {}, {
-              default: track(() => slots.default && slots.default({
+              default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              }))
+              })
             })
           }
+          
+          const component = field.component[0] as VueComponent
+          const originData = clone(field.component[1]) || {}
           const events = {} as Record<string, any>
-          if (!isVoidField(field)) {
-            events.change = (...args: any[]) => {
-              field.onInput(...args)
-              field.component[1]?.onChange?.(...args)
-            }
-            events.focus = (...args: any[]) => {
-              field.onFocus(...args)
-              field.component[1]?.onFocus?.(...args)
-            }
-            events.blur = (...args: any[]) => {
-              field.onBlur(...args)
-              field.component[1]?.onBlur?.(...args)
-            }
+          const originChange = originData['@change'] || originData['onChange']
+          const originFocus = originData['@focus'] || originData['onFocus']
+          const originBlur = originData['@blur'] || originData['onBlur']
+          
+          // '@xxx' has higher priority
+          Object.keys(originData)
+            .filter(key => key.startsWith('on'))
+            .forEach(eventKey => {
+              const eventName = `${eventKey[2].toLowerCase()}${eventKey.slice(3)}`
+              events[eventName] = originData[eventKey]
+            })
+
+          Object.keys(originData)
+            .filter(key => key.startsWith('@'))
+            .forEach(eventKey => {
+              events[eventKey.slice(1)] = originData[eventKey]
+              delete originData[eventKey]
+            })
+          
+          events.change = (...args: any[]) => {
+            if (!isVoidField(field)) field.onInput(...args)
+            originChange?.(...args)
           }
-          const component = field.component[0] as Component
-          const originData = field.component[1] || {}
-          const componentData =  {
+          events.focus = (...args: any[]) => {
+            if (!isVoidField(field)) field.onFocus(...args)
+            originFocus?.(...args)
+          }
+          events.blur = (...args: any[]) => {
+            if (!isVoidField(field)) field.onBlur(...args)
+            originBlur?.(...args)
+          }
+          const attrs =  {
             disabled: !isVoidField(field)
               ? field.pattern === 'disabled' || field.pattern === 'readPretty'
               : undefined,
@@ -79,17 +101,20 @@ export default observer(defineComponent({
             ...originData,
             value: !isVoidField(field) ? field.value : undefined,
           }
+          const componentData = {
+            attrs: attrs,
+            on: events
+          }
+          
           return h(
             component,
+            componentData,
             {
-              attrs: componentData,
-              on: events
-            },
-            {
-              default: track(() => slots.default && slots.default({
+              ...slots,
+              default: () => slots.default && slots.default({
                 field: props.field,
                 form: props.field.form
-              }))
+              })
             }
           )
         }
@@ -100,4 +125,4 @@ export default observer(defineComponent({
       return h(Fragment, { key }, children)
     }
   }
-}))
+}) as unknown as DefineComponent<IReactiveFieldProps>)

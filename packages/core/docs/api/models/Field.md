@@ -819,6 +819,15 @@ type IGeneralFieldState = IFieldState & IVoidFieldState
 
 IVoidFieldState 参考 [IVoidFieldState](/api/models/void-field#ivoidfieldstate)
 
+### IFieldResetOptions
+
+```ts
+interface IFieldResetOptions {
+  forceClear?: boolean //是否强制清除
+  validate?: boolean //是否校验
+}
+```
+
 ### IValidateResults
 
 ```ts

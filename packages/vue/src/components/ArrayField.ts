@@ -1,4 +1,4 @@
-import { provide, defineComponent } from 'vue-demi'
+import { provide, defineComponent, DefineComponent } from 'vue-demi'
 import { useField, useForm } from '../hooks'
 import { useAttach } from '../hooks/useAttach'
 import { VueComponent, IFieldProps } from '../types'
@@ -6,11 +6,12 @@ import ReactiveField from './ReactiveField'
 import { FieldSymbol } from '../shared/context'
 import h from '../shared/h'
 import { getRawComponent } from '../utils/getRawComponent'
-import { observer, useObserver } from '@formily/reactive-vue'
+import { observer } from '@formily/reactive-vue'
 
-export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>({
+type ArrayFieldProps = IFieldProps<VueComponent, VueComponent>
+
+export default observer(defineComponent<ArrayFieldProps>({
   name: 'ArrayField',
-  components: { ReactiveField },
   /* eslint-disable vue/require-prop-types  */
   /* eslint-disable vue/require-default-prop */
   props: {
@@ -60,8 +61,7 @@ export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>
     validator: {},
     reactions: [Array, Function],
   },
-  setup(props, { slots }) {
-    const { track } = useObserver()
+  setup(props: ArrayFieldProps, { slots }) {
     const formRef = useForm()
     const parentRef = useField()
     const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
@@ -81,11 +81,12 @@ export default observer(defineComponent<IFieldProps<VueComponent, VueComponent>>
         }
       },
       {
-        default: track(() => slots.default && slots.default({
+        ...slots,
+        default: () => slots.default && slots.default({
           field: fieldRef.value,
           form: fieldRef.value.form
-        }))
+        })
       }
     )
   }
-}))
+}) as unknown as DefineComponent<ArrayFieldProps>)

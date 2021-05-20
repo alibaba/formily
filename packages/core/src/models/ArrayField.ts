@@ -14,7 +14,8 @@ export class ArrayField<
   constructor(
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component>,
-    form: Form
+    form: Form,
+    controlled: boolean
   ) {
     super(
       address,
@@ -22,7 +23,8 @@ export class ArrayField<
         ...props,
         value: isArr(props.value) ? props.value : [],
       },
-      form
+      form,
+      controlled
     )
   }
 

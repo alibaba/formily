@@ -1,6 +1,6 @@
 {
   "name": "@formily/vue",
-  "version": "2.0.0-beta.24",
+  "version": "2.0.0-beta.53",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
@@ -23,22 +23,26 @@
   "devDependencies": {
     "@ant-design/icons": "^2.1.1",
     "@ant-design/icons-vue": "^2.0.0",
+    "@vue/composition-api": "^1.0.0-rc.7",
     "@vuepress-dumi/vuepress-plugin-dumi-previewer": "0.3.3",
     "@vuepress-dumi/vuepress-theme-dumi": "0.3.3",
     "@vuepress/plugin-back-to-top": "^1.8.2",
     "@vuepress/plugin-medium-zoom": "^1.8.2",
     "ant-design-vue": "^1.7.3",
     "core-js": "^2.4.0",
-    "vuepress": "^1.8.2"
+    "vue": "^2.6.12",
+    "vuepress": "^1.8.2",
+    "vuepress-plugin-typescript": "^0.3.1"
   },
   "dependencies": {
-    "@formily/core": "^2.0.0-beta.24",
-    "@formily/json-schema": "^2.0.0-beta.24",
-    "@formily/reactive": "^2.0.0-beta.24",
-    "@formily/reactive-vue": "^2.0.0-beta.24",
-    "@formily/shared": "^2.0.0-beta.24",
-    "@formily/validator": "^2.0.0-beta.24",
-    "vue-demi": "latest",
+    "@formily/core": "2.0.0-beta.53",
+    "@formily/json-schema": "2.0.0-beta.53",
+    "@formily/reactive": "2.0.0-beta.53",
+    "@formily/reactive-vue": "2.0.0-beta.53",
+    "@formily/shared": "2.0.0-beta.53",
+    "@formily/validator": "2.0.0-beta.53",
+    "@type-helper/vue3": "npm:vue@3",
+    "vue-demi": "^0.9.0",
     "vue-frag": "^1.1.4"
   },
   "peerDependencies": {

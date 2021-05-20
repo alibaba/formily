@@ -1,4 +1,4 @@
-import { isArr, isObj, isStr } from './types'
+import { isArr, isObj, isStr } from './checkers'
 
 type EachArrayIterator<T> = (currentValue: T, key: number) => void | boolean
 type EachStringIterator = (currentValue: string, key: number) => void | boolean

@@ -11,7 +11,7 @@ import cls from 'classnames'
  * 默认Inline展示
  */
 
-interface IPopoverProps extends PopoverProps {}
+type IPopoverProps = PopoverProps
 
 type ComposedEditable = React.FC<IFormItemProps> & {
   Popover?: React.FC<IPopoverProps & { title?: React.ReactNode }>
@@ -138,13 +138,16 @@ Editable.Popover = observer((props) => {
   const [visible, setVisible] = useState(false)
   const prefixCls = usePrefixCls('formily-editable')
   const closePopover = async () => {
-    await field.form.validate(`${field.address}.*`)
-    const errors = field.form.queryFeedbacks({
-      type: 'error',
-      address: `${field.address}.*`,
-    })
-    if (errors?.length) return
-    setVisible(false)
+    try {
+      await field.form.validate(`${field.address}.*`)
+    } finally {
+      const errors = field.form.queryFeedbacks({
+        type: 'error',
+        address: `${field.address}.*`,
+      })
+      if (errors?.length) return
+      setVisible(false)
+    }
   }
   const openPopover = () => {
     setVisible(true)

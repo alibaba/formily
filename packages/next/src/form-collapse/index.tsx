@@ -20,7 +20,7 @@ type ActiveKeys = string | number | Array<string | number>
 
 type ActiveKey = string | number
 
-interface IFormCollapse {
+export interface IFormCollapse {
   activeKeys: ActiveKeys
   hasActiveKey(key: ActiveKey): boolean
   setActiveKeys(key: ActiveKeys): void
@@ -29,7 +29,7 @@ interface IFormCollapse {
   toggleActiveKey(key: ActiveKey): void
 }
 
-interface IFormCollapseProps extends CollapseProps {
+export interface IFormCollapseProps extends CollapseProps {
   formCollapse?: IFormCollapse
 }
 
@@ -136,8 +136,12 @@ export const FormCollapse: ComposedFormCollapse = observer(
           formCollapse?.setActiveKeys?.(keys)
         }}
       >
-        {panels.map(({ props, schema, name }) => (
-          <Collapse.Panel {...props} title={badgedHeader(name, props)}>
+        {panels.map(({ props, schema, name }, index) => (
+          <Collapse.Panel
+            key={index}
+            {...props}
+            title={badgedHeader(name, props)}
+          >
             <RecursionField schema={schema} name={name} />
           </Collapse.Panel>
         ))}

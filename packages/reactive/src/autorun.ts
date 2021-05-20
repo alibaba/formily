@@ -5,7 +5,7 @@ import {
   releaseBindingReactions,
 } from './reaction'
 import { untracked } from './untracked'
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
 import { ReactionStack } from './environment'
 import { Reaction, IReactionOptions } from './types'
 

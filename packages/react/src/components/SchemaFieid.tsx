@@ -25,7 +25,7 @@ const getRandomName = () => {
 }
 
 export function createSchemaField<Components extends SchemaComponents>(
-  options: ISchemaFieldFactoryOptions<Components>
+  options: ISchemaFieldFactoryOptions<Components> = {}
 ) {
   function SchemaField<
     Decorator extends JSXComponent,
@@ -51,8 +51,21 @@ export function createSchemaField<Components extends SchemaComponents>(
     }
 
     return (
-      <SchemaOptionsContext.Provider value={options}>
-        <SchemaExpressionScopeContext.Provider value={props.scope}>
+      <SchemaOptionsContext.Provider
+        value={{
+          ...options,
+          components: {
+            ...options.components,
+            ...props.components,
+          },
+        }}
+      >
+        <SchemaExpressionScopeContext.Provider
+          value={{
+            ...options.scope,
+            ...props.scope,
+          }}
+        >
           {renderMarkup()}
           {renderChildren()}
         </SchemaExpressionScopeContext.Provider>

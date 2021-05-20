@@ -854,3 +854,101 @@ test('devtools', () => {
   const form = attach(createForm())
   form.onUnmount()
 })
+
+test('reset array field', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        array: [{ value: 123 }],
+      },
+    })
+  )
+  attach(
+    form.createArrayField({
+      name: 'array',
+      required: true,
+    })
+  )
+  expect(form.values).toEqual({
+    array: [{ value: 123 }],
+  })
+  await form.reset('*', {
+    forceClear: true,
+  })
+  expect(form.values).toEqual({
+    array: [],
+  })
+})
+
+test('reset object field', async () => {
+  const form = attach(
+    createForm({
+      values: {
+        object: { value: 123 },
+      },
+    })
+  )
+  attach(
+    form.createObjectField({
+      name: 'object',
+      required: true,
+    })
+  )
+  expect(form.values).toEqual({
+    object: { value: 123 },
+  })
+  await form.reset('*', {
+    forceClear: true,
+  })
+  expect(form.values).toEqual({
+    object: {},
+  })
+})
+
+test('initialValues merge values before create field', () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+
+  form.values.array = [{ aa: '321' }]
+  const arr_0_aa = attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+      initialValue: '123',
+    })
+  )
+  expect(array.value).toEqual([{ aa: '321' }])
+  expect(arr_0_aa.value).toEqual('321')
+})
+
+
+test('initialValues merge values after create field', () => {
+  const form = attach(createForm())
+  const aa = attach(
+    form.createArrayField({
+      name: 'aa',
+      initialValue:'111'
+    })
+  )
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  const arr_0_aa = attach(
+    form.createField({
+      name: 'aa',
+      basePath: 'array.0',
+      initialValue: '123',
+    })
+  )
+  form.values.aa = '222'
+  form.values.array = [{ aa: '321' }]
+  expect(array.value).toEqual([{ aa: '321' }])
+  expect(arr_0_aa.value).toEqual('321')
+  expect(aa.value).toEqual('222')
+})

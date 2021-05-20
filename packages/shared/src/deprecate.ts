@@ -1,4 +1,4 @@
-import { isFn, isStr } from './types'
+import { isFn, isStr } from './checkers'
 
 const caches = {}
 

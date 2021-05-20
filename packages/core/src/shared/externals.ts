@@ -31,7 +31,9 @@ import {
   isVoidFieldState,
 } from './checkers'
 
-const createForm = (options?: IFormProps) => {
+const createForm = <T extends object = any>(
+  options?: IFormProps<T>
+) => {
   return new Form(options)
 }
 

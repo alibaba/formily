@@ -38,6 +38,9 @@ interface ISchemaFieldProps extends IFieldFactoryProps {
   schema?: ISchema //字段schema
   scope?: any //协议表达式作用域
   name?: string //字段名称
+  component?: {
+    [key: string]: React.FC //局部组件列表，注意：这里传的组件是享受不到智能提示的
+  }
 }
 
 //工厂函数
@@ -56,34 +59,9 @@ ISchema 参考 [ISchema](/api/shared/schema#ischema)
 import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
-import { Input } from 'antd'
+import { Input, Select } from 'antd'
 import 'antd/lib/input/style'
-
-const form = createForm()
-
-const SchemaField = createSchemaField({
-  components: {
-    Input,
-  },
-})
-
-export default () => (
-  <FormProvider form={form}>
-    <SchemaField>
-      <SchemaField.String name="input" x-component="Input" />
-    </SchemaField>
-  </FormProvider>
-)
-```
-
-## JSON Schema 用例
-
-```tsx
-import React from 'react'
-import { createForm } from '@formily/core'
-import { FormProvider, createSchemaField } from '@formily/react'
-import { Input } from 'antd'
-import 'antd/lib/input/style'
+import 'antd/lib/select/style'
 
 const form = createForm()
 
@@ -96,12 +74,66 @@ const SchemaField = createSchemaField({
 export default () => (
   <FormProvider form={form}>
     <SchemaField
+      components={{
+        Select,
+      }}
+    >
+      <SchemaField.String name="input" x-component="Input" />
+      <SchemaField.String
+        name="select"
+        x-component="Select"
+        x-component-props={{
+          style: {
+            width: 200,
+            marginTop: 20,
+          },
+        }}
+      />
+    </SchemaField>
+  </FormProvider>
+)
+```
+
+## JSON Schema 用例
+
+```tsx
+import React from 'react'
+import { createForm } from '@formily/core'
+import { FormProvider, createSchemaField } from '@formily/react'
+import { Input, Select } from 'antd'
+import 'antd/lib/input/style'
+import 'antd/lib/select/style'
+
+const form = createForm()
+
+const SchemaField = createSchemaField({
+  components: {
+    Input,
+  },
+})
+
+export default () => (
+  <FormProvider form={form}>
+    <SchemaField
+      components={{
+        Select,
+      }}
       schema={{
         type: 'object',
         properties: {
           input: {
             type: 'string',
             'x-component': 'Input',
+          },
+          select: {
+            type: 'string',
+            'x-component': 'Select',
+            'x-component-props': {
+              style: {
+                width: 200,
+                marginTop: 20,
+              },
+            },
           },
         },
       }}

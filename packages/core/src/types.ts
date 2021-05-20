@@ -43,6 +43,7 @@ export enum LifeCycleTypes {
   ON_FORM_SUBMIT = 'onFormSubmit',
   ON_FORM_RESET = 'onFormReset',
   ON_FORM_SUBMIT_START = 'onFormSubmitStart',
+  ON_FORM_SUBMITTING = 'onFormSubmitting',
   ON_FORM_SUBMIT_END = 'onFormSubmitEnd',
   ON_FORM_SUBMIT_VALIDATE_START = 'onFormSubmitValidateStart',
   ON_FORM_SUBMIT_VALIDATE_SUCCESS = 'onFormSubmitValidateSuccess',
@@ -53,6 +54,7 @@ export enum LifeCycleTypes {
   ON_FORM_VALUES_CHANGE = 'onFormValuesChange',
   ON_FORM_INITIAL_VALUES_CHANGE = 'onFormInitialValuesChange',
   ON_FORM_VALIDATE_START = 'onFormValidateStart',
+  ON_FORM_VALIDATING = 'onFormValidating',
   ON_FORM_VALIDATE_SUCCESS = 'onFormValidateSuccess',
   ON_FORM_VALIDATE_FAILED = 'onFormValidateFailed',
   ON_FORM_VALIDATE_END = 'onFormValidateEnd',
@@ -69,9 +71,11 @@ export enum LifeCycleTypes {
   ON_FIELD_VALUE_CHANGE = 'onFieldValueChange',
   ON_FIELD_INITIAL_VALUE_CHANGE = 'onFieldInitialValueChange',
   ON_FIELD_VALIDATE_START = 'onFieldValidateStart',
+  ON_FIELD_VALIDATING = 'onFieldValidating',
   ON_FIELD_VALIDATE_SUCCESS = 'onFieldValidateSuccess',
   ON_FIELD_VALIDATE_FAILED = 'onFieldValidateFailed',
   ON_FIELD_VALIDATE_END = 'onFieldValidateEnd',
+  ON_FIELD_LOADING = 'onFieldLoading',
   ON_FIELD_RESET = 'onFieldReset',
   ON_FIELD_MOUNT = 'onFieldMount',
   ON_FIELD_UNMOUNT = 'onFieldUnmount',
@@ -204,15 +208,16 @@ export type IVoidFieldState = Partial<
   >
 >
 
-export type IFormState = Partial<
-  Pick<Form, NonFunctionPropertyNames<OmitState<Form<{ [key: string]: any }>>>>
+export type IFormState<T extends Record<any, any> = any> = Pick<
+  Form<T>,
+  NonFunctionPropertyNames<OmitState<Form<{ [key: string]: any }>>>
 >
 
 export type IFormGraph = Record<string, IGeneralFieldState | IFormState>
 
-export interface IFormProps {
-  values?: {}
-  initialValues?: {}
+export interface IFormProps<T extends object = any> {
+  values?: Partial<T>
+  initialValues?: Partial<T>
   pattern?: FormPatternTypes
   display?: FormDisplayTypes
   hidden?: boolean
@@ -221,9 +226,16 @@ export interface IFormProps {
   disabled?: boolean
   readOnly?: boolean
   readPretty?: boolean
-  effects?: (form: Form) => void
+  effects?: (form: Form<T>) => void
   validateFirst?: boolean
+  controlled?: boolean
 }
+
+export type IFormMergeStrategy =
+  | 'overwrite'
+  | 'merge'
+  | 'deepMerge'
+  | 'shallowMerge'
 
 export interface IFieldFactoryProps<
   Decorator extends JSXComponent,
@@ -245,8 +257,8 @@ export interface IVoidFieldFactoryProps<
 }
 
 export interface IFieldRequests {
-  validate?: NodeJS.Timeout
-  loader?: NodeJS.Timeout
+  validating?: NodeJS.Timeout
+  loading?: NodeJS.Timeout
   batch?: () => void
 }
 
@@ -254,6 +266,7 @@ export interface IFieldCaches {
   value?: any
   initialValue?: any
   feedbacks?: IFieldFeedback[]
+  inputing?: boolean
 }
 
 export type FieldDisplayTypes = 'none' | 'hidden' | 'visible' | ({} & string)

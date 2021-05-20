@@ -1,13 +1,18 @@
 import { IChange } from './types'
 import { RawNode, ProxyRaw } from './environment'
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
+
+interface IListener {
+  (change: IChange): void
+  unobserve?(): void
+}
 
 export const observe = (
   target: object,
   observer?: (change: IChange) => void,
   deep = true
 ) => {
-  const listener = (change: IChange) => {
+  const listener: IListener = (change: IChange) => {
     if (isFn(observer)) {
       observer(change)
     }
@@ -18,18 +23,21 @@ export const observe = (
     const node = RawNode.get(raw)
     if (node) {
       if (deep) {
-        node.deepObservers.add(listener)
+        const id = node.deepObservers.length
+        node.deepObservers.push(listener)
+        listener.unobserve = () => {
+          node.deepObservers.splice(id, 1)
+        }
       } else {
-        node.observers.add(listener)
+        const id = node.observers.length
+        node.observers.push(listener)
+        listener.unobserve = () => {
+          node.observers.splice(id, 1)
+        }
       }
     }
     return () => {
-      const raw = ProxyRaw.get(target) || target
-      const node = RawNode.get(raw)
-      if (node) {
-        node.deepObservers.delete(listener)
-        node.observers.delete(listener)
-      }
+      listener?.unobserve()
     }
   }
   if (target && typeof target !== 'object')

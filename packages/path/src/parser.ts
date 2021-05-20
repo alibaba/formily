@@ -35,7 +35,7 @@ import {
 } from './types'
 import { parseDestructorRules, setDestructor } from './destructor'
 import { isNumberLike } from './shared'
-import Path from './index'
+import { Path } from './index'
 
 const createTreeBySegments = (segments: Segments = [], afterNode?: Node) => {
   const segLen = segments.length

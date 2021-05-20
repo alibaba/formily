@@ -1,4 +1,4 @@
-import { isFn } from '@formily/shared'
+import { isFn } from './checkers'
 import {
   batchStart,
   batchEnd,
@@ -8,12 +8,16 @@ import {
 import { createAnnotation } from './internals'
 import { MakeObservableSymbol } from './environment'
 
+interface IAction {
+  <T extends (...args: any[]) => any>(callback?: T): T
+}
+
 const createBatchAnnotation = <F extends (...args: any[]) => any>(method: F) =>
   createAnnotation(({ target, key, value }) => {
     const action = <T extends (...args: any[]) => any>(callback?: T) => {
       return function (...args: Parameters<T>): ReturnType<T> {
         return method(() =>
-          isFn(callback) ? callback.apply(this, args) : undefined
+          isFn(callback) ? callback.apply(target, args) : undefined
         )
       }
     }
@@ -37,7 +41,7 @@ export const batch = <T>(callback?: () => T) => {
   return result
 }
 
-export const action = createBatchAnnotation(batch)
+export const action: IAction = createBatchAnnotation(batch)
 
 batch.scope = <T>(callback?: () => T) => {
   let result: T = null

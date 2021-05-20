@@ -7,7 +7,6 @@ Object {
     "_isJSONSchemaObject": true,
     "type": "string",
     "version": "2.0",
-    "x-decorator": "FormItem",
   },
   "patternProperties": Object {
     "^[a-zA-Z0-9]*$": Object {
@@ -19,7 +18,6 @@ Object {
           "name": "made",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
           "x-index": 1,
         },
         "model": Object {
@@ -27,7 +25,6 @@ Object {
           "name": "model",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
           "x-index": 2,
         },
         "year": Object {
@@ -35,12 +32,10 @@ Object {
           "name": "year",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
           "x-index": 0,
         },
       },
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
   },
   "properties": Object {
@@ -50,27 +45,23 @@ Object {
         "_isJSONSchemaObject": true,
         "type": "string",
         "version": "2.0",
-        "x-decorator": "FormItem",
       },
       "items": Array [
         Object {
           "_isJSONSchemaObject": true,
           "type": "integer",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
         Object {
           "_isJSONSchemaObject": true,
           "type": "integer",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
       ],
       "name": "array",
       "title": "string",
       "type": "string",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "string": Object {
       "_isJSONSchemaObject": true,
@@ -79,7 +70,6 @@ Object {
       "title": "string",
       "type": "string",
       "version": "2.0",
-      "x-decorator": "FormItem",
       "x-reactions": Array [
         Object {
           "fulfill": Object {
@@ -104,7 +94,6 @@ Object {
     "_isJSONSchemaObject": true,
     "type": "string",
     "version": "2.0",
-    "x-decorator": "FormItem",
   },
   "patternProperties": Object {
     "^[a-zA-Z0-9]*$": Object {
@@ -116,7 +105,6 @@ Object {
           "name": "made",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
           "x-index": 1,
         },
         "model": Object {
@@ -124,7 +112,6 @@ Object {
           "name": "model",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
           "x-index": 2,
         },
         "year": Object {
@@ -132,12 +119,10 @@ Object {
           "name": "year",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
           "x-index": 0,
         },
       },
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
   },
   "properties": Object {
@@ -147,27 +132,23 @@ Object {
         "_isJSONSchemaObject": true,
         "type": "string",
         "version": "2.0",
-        "x-decorator": "FormItem",
       },
       "items": Array [
         Object {
           "_isJSONSchemaObject": true,
           "type": "integer",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
         Object {
           "_isJSONSchemaObject": true,
           "type": "integer",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
       ],
       "name": "array",
       "title": "string",
       "type": "string",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "string": Object {
       "_isJSONSchemaObject": true,
@@ -176,7 +157,6 @@ Object {
       "title": "string",
       "type": "string",
       "version": "2.0",
-      "x-decorator": "FormItem",
       "x-reactions": Array [
         Object {
           "fulfill": Object {
@@ -201,7 +181,6 @@ Object {
     "_isJSONSchemaObject": true,
     "type": "string",
     "version": "2.0",
-    "x-decorator": "FormItem",
   },
   "patternProperties": Object {},
   "properties": Object {
@@ -211,27 +190,23 @@ Object {
         "_isJSONSchemaObject": true,
         "type": "string",
         "version": "2.0",
-        "x-decorator": "FormItem",
       },
       "items": Array [
         Object {
           "_isJSONSchemaObject": true,
           "type": "integer",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
         Object {
           "_isJSONSchemaObject": true,
           "type": "integer",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
       ],
       "name": "array",
       "title": "string",
       "type": "string",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
   },
   "type": "object",
@@ -248,7 +223,6 @@ Object {
   "title": "string",
   "type": "string",
   "version": "2.0",
-  "x-decorator": "FormItem",
   "x-reactions": Array [
     Object {
       "fulfill": Object {
@@ -300,7 +274,6 @@ Object {
     "_isJSONSchemaObject": true,
     "type": "string",
     "version": "2.0",
-    "x-decorator": "FormItem",
   },
   "description": "description",
   "patternProperties": Object {
@@ -313,25 +286,21 @@ Object {
           "name": "made",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
         "model": Object {
           "_isJSONSchemaObject": true,
           "name": "model",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
         "year": Object {
           "_isJSONSchemaObject": true,
           "name": "year",
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
       },
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
   },
   "properties": Object {
@@ -341,18 +310,15 @@ Object {
         "_isJSONSchemaObject": true,
         "type": "number",
         "version": "2.0",
-        "x-decorator": "FormItem",
       },
       "items": Object {
         "_isJSONSchemaObject": true,
         "type": "string",
         "version": "2.0",
-        "x-decorator": "FormItem",
       },
       "name": "array",
       "type": "array",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "array2": Object {
       "_isJSONSchemaObject": true,
@@ -361,7 +327,6 @@ Object {
           "_isJSONSchemaObject": true,
           "type": "string",
           "version": "2.0",
-          "x-decorator": "FormItem",
         },
         Object {
           "_isJSONSchemaObject": true,
@@ -372,7 +337,6 @@ Object {
       "name": "array2",
       "type": "array",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "boolean": Object {
       "_isJSONSchemaObject": true,
@@ -380,7 +344,6 @@ Object {
       "name": "boolean",
       "type": "boolean",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "date": Object {
       "_isJSONSchemaObject": true,
@@ -388,7 +351,6 @@ Object {
       "name": "date",
       "type": "date",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "datetime": Object {
       "_isJSONSchemaObject": true,
@@ -396,7 +358,6 @@ Object {
       "name": "datetime",
       "type": "datetime",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "number": Object {
       "_isJSONSchemaObject": true,
@@ -404,7 +365,6 @@ Object {
       "name": "number",
       "type": "number",
       "version": "2.0",
-      "x-decorator": "FormItem",
     },
     "string": Object {
       "_isJSONSchemaObject": true,
