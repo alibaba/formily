@@ -40,8 +40,8 @@
     "version:minor": "npm run prevesion && lerna version minor",
     "version:preminor": "npm run prevesion && lerna version preminor --preid beta",
     "version:major": "npm run prevesion && lerna version major",
-    "release:force": "lerna publish from-package --yes",
-    "prelease:force": "lerna publish from-package --yes --dist-tag next",
+    "release:force": "lerna publish from-package --yes && ts-node scripts/release release",
+    "prelease:force": "lerna publish from-package --yes --dist-tag next && ts-node scripts/release release",
     "release": "lerna publish",
     "prelease": "lerna publish --dist-tag next",
     "lint": "eslint --ext .ts,.tsx,.js \"packages/*/src/**.@(ts|tsx|js)\" \"scripts/**/*.js\" --fix",
@@ -49,7 +49,8 @@
   },
   "resolutions": {
     "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0"
+    "@types/react-dom": "^17.0.0",
+    "yargs": "^16.x"
   },
   "devDependencies": {
     "@alifd/next": "^1.19.1",
@@ -77,6 +78,8 @@
     "cz-conventional-changelog": "^2.1.0",
     "dumi": "^1.1.0-rc.8",
     "eslint": "^7.14.0",
+    "semver":"^7.3.5",
+    "string-similarity":"^4.0.4",
     "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-node": "^11.1.0",
@@ -86,7 +89,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-markdown": "^2.0.1",
     "eslint-plugin-vue": "^7.0.1",
-    "execa": "^1.0.0",
+    "execa": "^5.0.0",
     "file-loader": "^5.0.2",
     "findup": "^0.1.5",
     "fs-extra": "^7.0.1",
@@ -103,7 +106,7 @@
     "jest-styled-components": "6.3.3",
     "jest-watch-lerna-packages": "^1.1.0",
     "lerna": "^4.0.0",
-    "lerna-changelog": "^1.0.1",
+    "gh-release": "^5.0.1",
     "less": "^4.1.1",
     "less-plugin-npm-import": "^2.1.0",
     "postcss": "^8.0.0",
@@ -147,24 +150,9 @@
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
   },
-  "changelog": {
-    "repo": "alibaba/formily",
-    "labels": {
-      "breaking": ":boom: Breaking Change",
-      "feat": ":tada: A new feature",
-      "bugfix": ":beetle: Bug Fix",
-      "doc": ":memo: Documentation",
-      "refactor": ":rose: Some Code Change",
-      "test": ":construction: Update Test Cases",
-      "perf": ":rocket: Improve Performace",
-      "build": ":hammer_and_wrench: Update Workflow Scripts",
-      "chore": ":blush: Improve Some Code"
-    },
-    "cacheDir": ".changelog"
-  },
   "config": {
     "ghooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "lint-staged && ts-node scripts/release changelog",
       "commit-msg": "node ./scripts/validate-commit-msg.js"
     },
     "commitizen": {
