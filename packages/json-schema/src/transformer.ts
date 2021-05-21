@@ -306,11 +306,7 @@ const getBaseProps = (
 
 const patchState = (state: any, target: any) => {
   const patch = (target: any, path: string[]) => {
-    if (
-      (isArr(target) || isPlainObj(target)) &&
-      path[0] !== 'dataSource' &&
-      path[0] !== 'enum'
-    ) {
+    if (isPlainObj(target)) {
       each(target, (value, key) => {
         patch(value, path.concat(key))
       })
