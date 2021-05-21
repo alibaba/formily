@@ -1,0 +1,13 @@
+name: PR Welcome
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-cool/pr-welcome@v1.1.2
+        with:
+          pr-emoji: '+1, heart'
