@@ -1,6 +1,27 @@
 
 # Changelog
 
+## v2.0.0-beta.54(2021-05-21)
+
+
+### :beetle: Bug Fixes
+
+1. [fix(json-schema): remove array patch state logic](https://github.com/alibaba/formily/commit/73bd9a47) :point_right: ( [janrywang](https://github.com/janrywang) )    
+  
+
+### :memo: Documents Changes
+
+1. [docs(readme): add v2 site link](https://github.com/alibaba/formily/commit/30df44b7) :point_right: ( [janrywang](https://github.com/janrywang) )    
+  
+
+### :blush: Other Changes
+
+1. [chore(scripts): slice changelog counts](https://github.com/alibaba/formily/commit/fead7843) :point_right: ( [janrywang](https://github.com/janrywang) )    
+
+1. [chore(project): add automatic changelog generator](https://github.com/alibaba/formily/commit/b9bef50a) :point_right: ( [janrywang](https://github.com/janrywang) )    
+  
+
+
 ## v2.0.0-beta.53(2021-05-20)
 
 
@@ -1407,19 +1428,6 @@
 ### :blush: Other Changes
 
 1. [chore(travis): Guaranteed dependency peering (#288)](https://github.com/alibaba/formily/commit/97885c2c) :point_right: ( [atzcl](https://github.com/atzcl) )    
-  
-
-
-## v0.3.11(2019-08-18)
-
-
-### :beetle: Bug Fixes
-
-1. [Chore fix typo (#264)](https://github.com/alibaba/formily/commit/a8cfd408) :point_right: ( [Harry Yu](https://github.com/Harry Yu) )    
-
-1. [fix(antd): improve week type moment parse regex (#254)](https://github.com/alibaba/formily/commit/88654b80) :point_right: ( [Wayne Zhu](https://github.com/Wayne Zhu) )    
-
-1. [fix(examples): remove the onChange of next/Detail (#257)](https://github.com/alibaba/formily/commit/62ae0cbb) :point_right: ( [atzcl](https://github.com/atzcl) )    
   
 
   
