@@ -37,6 +37,11 @@ https://formilyjs.org
 
 - [icejs](https://github.com/alibaba/ice)
 
+
+## 如何贡献
+
+- [贡献指南](https://v2.formilyjs.org/zh-CN/guide/contribution)
+
 ## 贡献者
 
 This project exists thanks to all the people who contribute.
