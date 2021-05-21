@@ -1,6 +1,15 @@
 
 # Changelog
 
+## v2.0.0-beta.55(2021-05-21)
+
+
+### :blush: Other Changes
+
+1. [chore(pkg): change the execution timing of the changelog generator](https://github.com/alibaba/formily/commit/0ff511f6) :point_right: ( [janrywang](https://github.com/janrywang) )    
+  
+
+
 ## v2.0.0-beta.54(2021-05-21)
 
 
@@ -1378,56 +1387,6 @@
 ### :blush: Other Changes
 
 1. [chore: unify ts dependencies (#296)](https://github.com/alibaba/formily/commit/5268ce80) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )    
-  
-
-
-## v0.4.0(2019-09-01)
-
-
-### :beetle: Bug Fixes
-
-1. [fix(@uform/core): fix async validate prevent submit (#290)](https://github.com/alibaba/formily/commit/efdf0bf2) :point_right: ( [Janry](https://github.com/Janry) )    
-
-1. [fix docs build errors (#282)](https://github.com/alibaba/formily/commit/40925aaa) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )    
-
-1. [fix(core): Increase lastValidateValue value processing during initialization (#276)](https://github.com/alibaba/formily/commit/045f6fea) :point_right: ( [atzcl](https://github.com/atzcl) )    
-
-1. [fix: getSchema returning undefined doesn't break setIn (#269)](https://github.com/alibaba/formily/commit/da1f7a21) :point_right: ( [Kiho · Cham](https://github.com/Kiho · Cham) )    
-
-1. [fix: remove react unstable concurrent (#270)](https://github.com/alibaba/formily/commit/0f7edab9) :point_right: ( [Kiho · Cham](https://github.com/Kiho · Cham) )    
-  
-
-### :boom: Breaking Changes
-
-1. [fix: getSchema returning undefined doesn't break setIn (#269)](https://github.com/alibaba/formily/commit/da1f7a21) :point_right: ( [Kiho · Cham](https://github.com/Kiho · Cham) )    
-  
-
-### :memo: Documents Changes
-
-1. [doc: add questions(customize action) (#289)](https://github.com/alibaba/formily/commit/baecbaab) :point_right: ( [xiaowanzi](https://github.com/xiaowanzi) )    
-
-1. [fix docs build errors (#282)](https://github.com/alibaba/formily/commit/40925aaa) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )    
-
-1. [refactor(build): add build docs flow in CI and remove dynamic style inject](https://github.com/alibaba/formily/commit/1fb5cc07) :point_right: ( [janrywang](https://github.com/janrywang) )    
-  
-
-### :rose: Improve code quality
-
-1. [refactor(build): add build docs flow in CI and remove dynamic style inject](https://github.com/alibaba/formily/commit/1fb5cc07) :point_right: ( [janrywang](https://github.com/janrywang) )    
-
-1. [refactor: refactoring and add typings  (#243)](https://github.com/alibaba/formily/commit/4009d783) :point_right: ( [atzcl](https://github.com/atzcl) )    
-  
-
-### :hammer_and_wrench: Update Workflow Scripts
-
-1. [fix docs build errors (#282)](https://github.com/alibaba/formily/commit/40925aaa) :point_right: ( [Kevin Tan](https://github.com/Kevin Tan) )    
-
-1. [refactor(build): add build docs flow in CI and remove dynamic style inject](https://github.com/alibaba/formily/commit/1fb5cc07) :point_right: ( [janrywang](https://github.com/janrywang) )    
-  
-
-### :blush: Other Changes
-
-1. [chore(travis): Guaranteed dependency peering (#288)](https://github.com/alibaba/formily/commit/97885c2c) :point_right: ( [atzcl](https://github.com/atzcl) )    
   
 
   
