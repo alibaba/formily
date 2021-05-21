@@ -8,7 +8,7 @@
 import React from 'react'
 import { FormDialog, FormItem, Input, FormLayout } from '@formily/next'
 import { createSchemaField } from '@formily/react'
-import { Button } from '@alifd/next'
+import { Button, ConfigProvider } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -19,57 +19,72 @@ const SchemaField = createSchemaField({
 
 export default () => {
   return (
-    <Button
-      onClick={() => {
-        FormDialog('弹窗表单', () => {
-          return (
-            <FormLayout labelCol={6} wrapperCol={14}>
-              <SchemaField>
-                <SchemaField.String
-                  name="aaa"
-                  required
-                  title="输入框1"
-                  x-decorator="FormItem"
-                  x-component="Input"
-                />
-                <SchemaField.String
-                  name="bbb"
-                  required
-                  title="输入框2"
-                  x-decorator="FormItem"
-                  x-component="Input"
-                />
-                <SchemaField.String
-                  name="ccc"
-                  required
-                  title="输入框3"
-                  x-decorator="FormItem"
-                  x-component="Input"
-                />
-                <SchemaField.String
-                  name="ddd"
-                  required
-                  title="输入框4"
-                  x-decorator="FormItem"
-                  x-component="Input"
-                />
-              </SchemaField>
-              <FormDialog.Footer>
-                <span style={{ marginLeft: 4 }}>扩展文案</span>
-              </FormDialog.Footer>
-            </FormLayout>
-          )
-        })
-          .open({
-            initialValues: {
-              aaa: '123',
-            },
-          })
-          .then(console.log)
+    <ConfigProvider
+      locale={{
+        Dialog: {
+          ok: 'OK',
+          cancel: 'Cancel',
+        },
+      }}
+      defaultPropsConfig={{
+        Dialog: {
+          isFullScreen: true,
+          footerActions: ['cancel', 'ok'],
+        },
       }}
     >
-      点我打开表单
-    </Button>
+      <Button
+        onClick={() => {
+          FormDialog('弹窗表单', () => {
+            return (
+              <FormLayout labelCol={6} wrapperCol={14}>
+                <SchemaField>
+                  <SchemaField.String
+                    name="aaa"
+                    required
+                    title="输入框1"
+                    x-decorator="FormItem"
+                    x-component="Input"
+                  />
+                  <SchemaField.String
+                    name="bbb"
+                    required
+                    title="输入框2"
+                    x-decorator="FormItem"
+                    x-component="Input"
+                  />
+                  <SchemaField.String
+                    name="ccc"
+                    required
+                    title="输入框3"
+                    x-decorator="FormItem"
+                    x-component="Input"
+                  />
+                  <SchemaField.String
+                    name="ddd"
+                    required
+                    title="输入框4"
+                    x-decorator="FormItem"
+                    x-component="Input"
+                  />
+                </SchemaField>
+                <FormDialog.Footer>
+                  <span style={{ marginLeft: 4 }}>扩展文案</span>
+                </FormDialog.Footer>
+              </FormLayout>
+            )
+          })
+            .open({
+              initialValues: {
+                aaa: '123',
+              },
+            })
+            .then(console.log)
+        }}
+      >
+        点我打开表单
+      </Button>
+    </ConfigProvider>
   )
 }
 ```
