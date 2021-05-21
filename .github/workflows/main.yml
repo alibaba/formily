@@ -27,4 +27,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Commit Linter
-        uses: agenthunt/conventional-commit-checker-action@v1.0.0
+        uses: wagoid/commitlint-github-action@v3
