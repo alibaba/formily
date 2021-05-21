@@ -19,7 +19,7 @@ import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 type ComposedArrayCollapse = React.FC<CollapseProps> &
   ArrayBaseMixins & {
-    Panel?: React.FC<CollapsePanelProps>
+    CollapsePanel?: React.FC<CollapsePanelProps>
   }
 
 const isAdditionComponent = (schema: ISchema) => {
@@ -182,7 +182,7 @@ const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
 }
 
 ArrayCollapse.displayName = 'ArrayCollapse'
-ArrayCollapse.Panel = CollapsePanel
+ArrayCollapse.CollapsePanel = CollapsePanel
 
 ArrayBase.mixin(ArrayCollapse)
 export default ArrayCollapse
