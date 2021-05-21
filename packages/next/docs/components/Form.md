@@ -76,6 +76,50 @@ export default () => (
 )
 ```
 
+## Fusion 多语言
+
+```tsx
+import React from 'react'
+import {
+  Input,
+  Select,
+  Form,
+  FormItem,
+  FormGrid,
+  FormButtonGroup,
+  Submit,
+} from '@formily/next'
+import { createForm } from '@formily/core'
+import { Field } from '@formily/react'
+import { ConfigProvider } from '@alifd/next'
+import enUS from '@alifd/next/lib/locale/en-us'
+
+const form = createForm()
+
+export default () => (
+  <ConfigProvider locale={enUS}>
+    <Form
+      form={form}
+      layout="vertical"
+      feedbackLayout="terse"
+      onAutoSubmit={console.log}
+    >
+      <Field
+        name="bb"
+        title="User Name"
+        required
+        decorator={[FormItem]}
+        component={[Input]}
+      />
+
+      <FormButtonGroup.FormItem>
+        <Submit>Submit</Submit>
+      </FormButtonGroup.FormItem>
+    </Form>
+  </ConfigProvider>
+)
+```
+
 <Alert style="margin-top:20px">
 注意：想要实现回车提交，我们在使用Submit组件的时候不能给其传onSubmit事件，否则回车提交会失效，这样做的目的是为了防止用户同时在多处写onSubmit事件监听器，处理逻辑不一致的话，提交时很难定位问题。
 </Alert>

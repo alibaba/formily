@@ -37,7 +37,7 @@ const registry = {
   template: null,
 }
 
-const getISOCode = (language: string) => {
+export const getISOCode = (language: string) => {
   let isoCode = registry.locales.language
   if (registry.locales.messages[language]) {
     return language
