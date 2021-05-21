@@ -38,7 +38,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="ArrayCollapse"
         >
-          <SchemaField.Void
+          <SchemaField.Object
             x-component="ArrayCollapse.Panel"
             x-component-props={{
               header: '字符串数组',
@@ -52,10 +52,17 @@ export default () => {
               required
               x-component="Input"
             />
+            <SchemaField.String
+              name="input2"
+              x-decorator="FormItem"
+              title="Input2"
+              required
+              x-component="Input"
+            />
             <SchemaField.Void x-component="ArrayCollapse.Remove" />
             <SchemaField.Void x-component="ArrayCollapse.MoveUp" />
             <SchemaField.Void x-component="ArrayCollapse.MoveDown" />
-          </SchemaField.Void>
+          </SchemaField.Object>
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目"
@@ -67,7 +74,7 @@ export default () => {
           x-decorator="FormItem"
           x-component="ArrayCollapse"
         >
-          <SchemaField.Void
+          <SchemaField.Object
             x-component="ArrayCollapse.Panel"
             x-component-props={{
               header: '对象数组',
@@ -81,10 +88,17 @@ export default () => {
               required
               x-component="Input"
             />
+            <SchemaField.String
+              name="input2"
+              x-decorator="FormItem"
+              title="Input2"
+              required
+              x-component="Input"
+            />
             <SchemaField.Void x-component="ArrayCollapse.Remove" />
             <SchemaField.Void x-component="ArrayCollapse.MoveUp" />
             <SchemaField.Void x-component="ArrayCollapse.MoveDown" />
-          </SchemaField.Void>
+          </SchemaField.Object>
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目"

@@ -1,4 +1,11 @@
-import { Card, Collapse, CollapsePanelProps, CollapseProps, Empty } from 'antd'
+import {
+  Badge,
+  Card,
+  Collapse,
+  CollapsePanelProps,
+  CollapseProps,
+  Empty,
+} from 'antd'
 import {
   RecursionField,
   useField,
@@ -84,20 +91,38 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
 
             const props: CollapsePanelProps = items['x-component-props']
 
-            const header = (
-              <ArrayBase.Item index={index}>
-                <RecursionField
-                  schema={items}
-                  name={index}
-                  filterProperties={(schema) => {
-                    if (!isIndexComponent(schema)) return false
-                    return true
-                  }}
-                  onlyRenderProperties
-                />
-                {props?.header || field.title}
-              </ArrayBase.Item>
-            )
+            const header = () => {
+              const header = `${props?.header || field.title}`
+              const path = field.address.concat(index)
+              const errors = field.form.queryFeedbacks({
+                type: 'error',
+                address: `*(${path},${path}.*)`,
+              })
+              return (
+                <ArrayBase.Item index={index}>
+                  <RecursionField
+                    schema={items}
+                    name={index}
+                    filterProperties={(schema) => {
+                      if (!isIndexComponent(schema)) return false
+                      return true
+                    }}
+                    onlyRenderProperties
+                  />
+                  {errors.length ? (
+                    <Badge
+                      size="small"
+                      className="errors-badge"
+                      count={errors.length}
+                    >
+                      {header}
+                    </Badge>
+                  ) : (
+                    header
+                  )}
+                </ArrayBase.Item>
+              )
+            }
 
             const extra = (
               <ArrayBase.Item index={index}>
@@ -130,7 +155,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
                 {...props}
                 forceRender
                 key={index}
-                header={header}
+                header={header()}
                 extra={extra}
               >
                 <ArrayBase.Item index={index} key={index}>
