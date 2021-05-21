@@ -31,7 +31,6 @@
     "test:reactive-vue:watch": "npm run test:reactive-vue --- --watch",
     "test:watch": "jest --watch",
     "test:prod": "jest --coverage --silent",
-    "coverage:upload": "rm -rf ./coverage && npm run coverage && node ./scripts/mapCoverage.js && codecov",
     "preversion": "npm run build && npm run lint && npm run test",
     "version": "ts-node scripts/release changelog && git add -A",
     "version:alpha": "lerna version prerelease --preid alpha",
