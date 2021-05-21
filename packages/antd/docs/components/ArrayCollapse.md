@@ -39,7 +39,7 @@ export default () => {
           x-component="ArrayCollapse"
         >
           <SchemaField.Object
-            x-component="ArrayCollapse.Panel"
+            x-component="ArrayCollapse.CollapsePanel"
             x-component-props={{
               header: '字符串数组',
             }}
@@ -49,13 +49,6 @@ export default () => {
               name="input"
               x-decorator="FormItem"
               title="Input"
-              required
-              x-component="Input"
-            />
-            <SchemaField.String
-              name="input2"
-              x-decorator="FormItem"
-              title="Input2"
               required
               x-component="Input"
             />
@@ -75,7 +68,7 @@ export default () => {
           x-component="ArrayCollapse"
         >
           <SchemaField.Object
-            x-component="ArrayCollapse.Panel"
+            x-component="ArrayCollapse.CollapsePanel"
             x-component-props={{
               header: '对象数组',
             }}
@@ -85,13 +78,6 @@ export default () => {
               name="input"
               x-decorator="FormItem"
               title="Input"
-              required
-              x-component="Input"
-            />
-            <SchemaField.String
-              name="input2"
-              x-decorator="FormItem"
-              title="Input2"
               required
               x-component="Input"
             />
@@ -147,7 +133,7 @@ const schema = {
       'x-decorator': 'FormItem',
       items: {
         type: 'object',
-        'x-component': 'ArrayCollapse.Panel',
+        'x-component': 'ArrayCollapse.CollapsePanel',
         'x-component-props': {
           header: '字符串数组',
         },
@@ -192,7 +178,7 @@ const schema = {
       'x-decorator': 'FormItem',
       items: {
         type: 'object',
-        'x-component': 'ArrayCollapse.Panel',
+        'x-component': 'ArrayCollapse.CollapsePanel',
         'x-component-props': {
           header: '对象数组',
         },
@@ -295,7 +281,12 @@ export default () => {
             title: '对象数组',
           }}
         >
-          <SchemaField.Object>
+          <SchemaField.Object
+            x-component="ArrayCollapse.CollapsePanel"
+            x-component-props={{
+              header: '对象数组',
+            }}
+          >
             <SchemaField.Void x-component="ArrayCollapse.Index" />
             <SchemaField.String
               name="aa"
@@ -379,6 +370,10 @@ const schema = {
       title: '对象数组',
       items: {
         type: 'object',
+        'x-component': 'ArrayCollapse.CollapsePanel',
+        'x-component-props': {
+          header: '对象数组',
+        },
         properties: {
           index: {
             type: 'void',
