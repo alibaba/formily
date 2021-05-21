@@ -151,6 +151,7 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
       className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={(e) => {
+        e.stopPropagation()
         base?.field.remove(index)
         if (props.onClick) {
           props.onClick(e)
@@ -171,6 +172,7 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
       className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={(e) => {
+        e.stopPropagation()
         base?.field.moveDown(index)
         if (props.onClick) {
           props.onClick(e)
@@ -191,6 +193,7 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
       className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={(e) => {
+        e.stopPropagation()
         base?.field?.moveUp(index)
         if (props.onClick) {
           props.onClick(e)
