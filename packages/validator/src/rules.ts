@@ -19,6 +19,10 @@ const isValidateEmpty = (value: any) => {
     }
     return true
   } else {
+    //compat to draft-js
+    if (value?.getCurrentContent) {
+      return !value.getCurrentContent()?.hasText()
+    }
     return isEmpty(value)
   }
 }
