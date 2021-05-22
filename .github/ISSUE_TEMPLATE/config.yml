@@ -1,6 +1,9 @@
 
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
+  - name: Create new issue
+    url: http://v2.formilyjs.org/guide/issue-helper
+    about: The issue which is not created via http://v2.formilyjs.org/guide/issue-helper will be closed immediately.
   - name: ✨ Question Answer / Idea 
     url: https://github.com/alibaba/formily/discussions/new
     about: All questions can be solved here. At the same time you can provide all your ideas here.
