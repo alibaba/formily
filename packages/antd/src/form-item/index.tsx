@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, ReactNode } from 'react'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 import { isVoidField } from '@formily/core'
@@ -19,7 +19,7 @@ export interface IFormItemProps {
   prefixCls?: string
   label?: React.ReactNode
   colon?: boolean
-  tooltip?: boolean
+  tooltip?: ReactNode
   tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
