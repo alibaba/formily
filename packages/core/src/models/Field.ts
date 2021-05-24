@@ -233,6 +233,9 @@ export class Field<
           if (isValid(value) && this.modified && !this.caches.inputing) {
             this.validate()
           }
+          if(value === undefined) {
+            this.form.deleteValuesIn(this.path)
+          }
         }
       ),
       reaction(
