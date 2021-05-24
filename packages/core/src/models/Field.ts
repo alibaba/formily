@@ -233,9 +233,6 @@ export class Field<
           if (isValid(value) && this.modified && !this.caches.inputing) {
             this.validate()
           }
-          if(value === undefined) {
-            this.form.deleteValuesIn(this.path)
-          }
         }
       ),
       reaction(
@@ -250,6 +247,7 @@ export class Field<
           if (display === 'none') {
             this.caches.value = toJS(this.value)
             this.setValue()
+            this.form.deleteValuesIn(this.path)
           } else if (display === 'visible') {
             if (isEmpty(this.value)) {
               this.setValue(this.caches.value)
