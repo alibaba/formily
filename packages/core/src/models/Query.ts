@@ -23,9 +23,11 @@ export class Query {
     if (!this.pattern.isMatchPattern) {
       const identifier = this.pattern.toString()
       const index = this.form.indexes.get(identifier)
-      if (this.form.fields[identifier]) {
+      const absoluteField = this.form.fields[identifier]
+      const indexField = this.form.fields[index]
+      if (absoluteField) {
         this.addresses = [identifier]
-      } else if (this.form.fields[index]) {
+      } else if (indexField) {
         this.addresses = [index]
       }
     } else {
