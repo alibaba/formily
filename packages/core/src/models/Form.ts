@@ -418,7 +418,11 @@ export class Form<ValueType extends object = any> {
 
   setValuesIn = (pattern: FormPathPattern, value: any) => {
     untracked(() => {
-      FormPath.setIn(this.values, pattern, value)
+      if (value === undefined) {
+        this.deleteValuesIn(pattern);
+      } else {
+        FormPath.setIn(this.values, pattern, value)
+      }
     })
   }
 
