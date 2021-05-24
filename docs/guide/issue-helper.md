@@ -252,7 +252,7 @@ export default () => {
                 feature?
               </p>
               <p>
-                An important design goal of Ant Design is keeping the API
+                An important design goal of Formily is keeping the API
                 surface small and straightforward. In general, we only consider
                 adding new features that solve a problem that cannot be easily
                 dealt with using existing APIs (i.e. not just an alternative way
