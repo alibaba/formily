@@ -132,6 +132,9 @@ ${expected || ''}
 ### What is actually happening?
 ${actually || ''}
 
+### Package
+${package}@${version}
+
 ---
 
 ${comment || ''}
