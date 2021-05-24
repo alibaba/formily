@@ -246,7 +246,6 @@ export class Field<
         (display) => {
           if (display === 'none') {
             this.caches.value = toJS(this.value)
-            this.setValue()
             this.form.deleteValuesIn(this.path)
           } else if (display === 'visible') {
             if (isEmpty(this.value)) {
