@@ -231,7 +231,17 @@ const TimeRangePicker: React.FC<TimeRangePickerProps> = (props) => {
   )
 }
 
-export const PreviewText = {
+const Text: React.FC<any> = (props) => {
+  const prefixCls = usePrefixCls('form-text', props)
+
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {usePlaceholder(props.value)}
+    </div>
+  )
+}
+
+const mountedComponents = {
   Input,
   Select,
   TreeSelect,
@@ -242,6 +252,10 @@ export const PreviewText = {
   TimeRangePicker,
   Placeholder,
   usePlaceholder,
-}
+} as const
+
+Object.assign(Text, mountedComponents)
+
+export const PreviewText = Text as typeof Text & typeof mountedComponents
 
 export default PreviewText
