@@ -249,3 +249,12 @@ describe('all static methods', () => {
   expect(Schema.getOrderProperties()).toEqual([])
   Schema.registerPatches(null)
 })
+
+test('single function x-reactions', () => {
+  const reactions = () => console.info('x-reactions')
+  const schema = new Schema({
+    type: 'string',
+    'x-reactions': reactions,
+  })
+  expect(schema.compile()['x-reactions']).toEqual(reactions)
+})

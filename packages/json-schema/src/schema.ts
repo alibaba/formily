@@ -40,7 +40,8 @@ export class Schema<
   Validator = any,
   Message = any,
   ReactionField = any
-> implements ISchema {
+> implements ISchema
+{
   parent?: Schema
   name?: SchemaKey
   title?: Message
@@ -446,7 +447,7 @@ export class Schema<
   compile = (scope?: any) => {
     const schema = new Schema({}, this.parent)
     each(this, (value, key) => {
-      if (isFn(value)) return
+      if (isFn(value) && !key.includes('x-')) return
       if (key === 'parent') return
       if (!ShallowCompileKeys.includes(key)) {
         schema[key] = value ? compile(value, scope) : value
