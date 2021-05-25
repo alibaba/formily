@@ -37,6 +37,9 @@ export default () => {
           maxItems={3}
           x-decorator="FormItem"
           x-component="ArrayCollapse"
+          x-component-props={{
+            defaultOpenPanelCount: 3,
+          }}
         >
           <SchemaField.Object
             x-component="ArrayCollapse.CollapsePanel"

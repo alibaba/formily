@@ -13,11 +13,15 @@ import {
   observer,
   ISchema,
 } from '@formily/react'
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import ArrayBase, { ArrayBaseMixins } from '../array-base'
 import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
-type ComposedArrayCollapse = React.FC<CollapseProps> &
+
+export interface IArrayCollapseProps extends CollapseProps {
+  defaultOpenPanelCount?: Array<string | number>
+}
+type ComposedArrayCollapse = React.FC<IArrayCollapseProps> &
   ArrayBaseMixins & {
     CollapsePanel?: React.FC<CollapsePanelProps>
   }
@@ -51,7 +55,7 @@ const isOperationComponent = (schema: ISchema) => {
   )
 }
 export const ArrayCollapse: ComposedArrayCollapse = observer(
-  (props: CollapseProps) => {
+  (props: IArrayCollapseProps) => {
     const field = useField<Formily.Core.Models.ArrayField>()
 
     const schema = useFieldSchema()
@@ -77,11 +81,16 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
 
+    const [key, setKey] = useState<Array<string | number>>(
+      new Array(props?.defaultOpenPanelCount || 1).fill(1).map((_, i) => i)
+    )
+
     const renderItems = () => {
       return (
         <Collapse
           {...props}
-          onChange={() => {}}
+          activeKey={key}
+          onChange={(key: string[]) => setKey(key)}
           className={cls(`${prefixCls}-item`, props.className)}
         >
           {dataSource?.map((item, index) => {
@@ -168,7 +177,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
     return (
-      <ArrayBase>
+      <ArrayBase onAdd={(index) => setKey([...key, index - 1])}>
         {renderEmpty()}
         {renderItems()}
         {renderAddition()}
