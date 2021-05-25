@@ -146,7 +146,7 @@ export type ReactComponentPropsByPathValue<
     ? Rest extends ReactComponentPath<T[Key]>
       ? ReactComponentPropsByPathValue<T[Key], Rest>
       : never
-    : never
+    : React.ComponentProps<T[P]>
   : P extends keyof T
   ? React.ComponentProps<T[P]>
   : never
