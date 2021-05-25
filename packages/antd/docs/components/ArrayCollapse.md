@@ -62,6 +62,9 @@ export default () => {
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目"
+            x-component-props={{
+              method: 'unshift',
+            }}
           />
         </SchemaField.Array>
         <SchemaField.Array

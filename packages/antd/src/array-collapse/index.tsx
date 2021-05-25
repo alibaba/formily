@@ -19,7 +19,7 @@ import cls from 'classnames'
 import { usePrefixCls } from '../__builtins__'
 
 export interface IArrayCollapseProps extends CollapseProps {
-  defaultOpenPanelCount?: Array<string | number>
+  defaultOpenPanelCount?: number
 }
 type ComposedArrayCollapse = React.FC<IArrayCollapseProps> &
   ArrayBaseMixins & {
@@ -82,7 +82,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
     }
 
     const [key, setKey] = useState<Array<string | number>>(
-      new Array(props?.defaultOpenPanelCount || 1).fill(1).map((_, i) => i)
+      Array.from({length:props?.defaultOpenPanelCount||1}).map((_,i)=>i)
     )
 
     const renderItems = () => {
@@ -177,7 +177,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
     return (
-      <ArrayBase onAdd={(index) => setKey([...key, index - 1])}>
+      <ArrayBase onAdd={(index) => setKey([...key, index])}>
         {renderEmpty()}
         {renderItems()}
         {renderAddition()}
