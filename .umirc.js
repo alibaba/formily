@@ -204,6 +204,14 @@ export default {
         path: '/guide/upgrade',
       },
       {
+        title: 'Contribution Guide',
+        path: '/guide/contribution',
+      },
+      {
+        title: 'Issue Helper',
+        path: '/guide/issue-helper',
+      },
+      {
         title: 'Scenes',
         children: [
           {
@@ -282,10 +290,7 @@ export default {
         ],
       },
 
-      {
-        title: 'Contribution Guide',
-        path: '/guide/contribution',
-      },
+      
     ],
 
     '/zh-CN/guide': [
@@ -304,6 +309,14 @@ export default {
       {
         title: 'V2升级指南',
         path: '/zh-CN/guide/upgrade',
+      },
+      {
+        title: '贡献指南',
+        path: '/zh-CN/guide/contribution',
+      },
+      {
+        title: '问题反馈',
+        path: '/zh-CN/guide/issue-helper',
       },
       {
         title: '场景案例',
@@ -384,10 +397,7 @@ export default {
         ],
       },
 
-      {
-        title: '贡献指南',
-        path: '/zh-CN/guide/contribution',
-      },
+      
     ],
   },
 }

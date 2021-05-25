@@ -1,6 +1,7 @@
 *Before* submitting a pull request, please make sure the following is done...
 
-- [ ] Fork the repo and create your branch from `master`.
+- [ ] Ensure the pull request title and commit message follow the [Commit Specific](https://github.com/alibaba/formily/blob/formily_next/.github/GIT_COMMIT_SPECIFIC.md) in **English**.
+- [ ] Fork the repo and create your branch from `master` or `formily_next`.
 - [ ] If you've added code that should be tested, add tests!
 - [ ] If you've changed APIs, update the documentation.
 - [ ] Ensure the test suite passes (`npm test`).

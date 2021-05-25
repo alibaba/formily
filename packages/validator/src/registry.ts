@@ -30,22 +30,22 @@ const getBrowserlanguage = () => {
 const registry = {
   locales: {
     messages: {},
-    langugage: getBrowserlanguage(),
+    language: getBrowserlanguage(),
   },
   formats: {},
   rules: {},
   template: null,
 }
 
-export const getISOCode = (langugage: string) => {
-  let isoCode = registry.locales.langugage
-  if (registry.locales.messages[langugage]) {
-    return langugage
+export const getISOCode = (language: string) => {
+  let isoCode = registry.locales.language
+  if (registry.locales.messages[language]) {
+    return language
   }
   each(
     registry.locales.messages,
     (messages: IRegistryLocaleMessages, key: string) => {
-      if (key.indexOf(langugage) > -1 || String(langugage).indexOf(key) > -1) {
+      if (key.indexOf(language) > -1 || String(language).indexOf(key) > -1) {
         isoCode = key
         return false
       }
@@ -55,15 +55,15 @@ export const getISOCode = (langugage: string) => {
 }
 
 export const setValidateLanguage = (lang: string) => {
-  registry.locales.langugage = lang
+  registry.locales.language = lang
 }
 
-export const getValidateLanguage = () => registry.locales.langugage
+export const getValidateLanguage = () => registry.locales.language
 
 export const getValidateLocale = (path: string) => {
   const message = getIn(
     registry.locales.messages,
-    `${getISOCode(registry.locales.langugage)}.${path}`
+    `${getISOCode(registry.locales.language)}.${path}`
   )
   return message || getValidateLocale('pattern')
 }

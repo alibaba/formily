@@ -1,12 +1,12 @@
 {
-  "name": "@formily/core",
-  "version": "2.0.0-beta.56",
+  "name": "@formily/designable-setters",
+  "version": "2.0.0-beta.51",
   "license": "MIT",
   "main": "lib",
   "module": "esm",
-  "umd:main": "dist/formily.core.umd.production.js",
-  "unpkg": "dist/formily.core.umd.production.js",
-  "jsdelivr": "dist/formily.core.umd.production.js",
+  "umd:main": "dist/formily.designable.antd.umd.production.js",
+  "unpkg": "dist/formily.designable.umd.production.js",
+  "jsdelivr": "dist/formily.designable.umd.production.js",
   "jsnext:main": "esm",
   "repository": {
     "type": "git",
@@ -22,23 +22,26 @@
   },
   "scripts": {
     "start": "dumi dev",
-    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && npm run build:style",
+    "build:style": "ts-node build-style",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
     "build:docs": "dumi build"
   },
-  "peerDependencies": {
-    "@types/react": ">=16.8.0 || >=17.0.0"
-  },
   "devDependencies": {
+    "@umijs/plugin-sass": "^1.1.1",
     "dumi": "^1.1.0-rc.8"
   },
-  "dependencies": {
-    "@formily/reactive": "2.0.0-beta.56",
-    "@formily/shared": "2.0.0-beta.56",
-    "@formily/validator": "2.0.0-beta.56"
+  "peerDependencies": {
+    "@types/react": ">=16.8.0 || >=17.0.0",
+    "@types/react-dom": ">=16.8.0 || >=17.0.0",
+    "antd": "^4.0.0",
+    "react": ">=16.8.0 || >=17.0.0",
+    "react-dom": ">=16.8.0",
+    "react-is": ">=16.8.0 || >=17.0.0"
   },
+  "dependencies": {},
   "publishConfig": {
     "access": "public"
   },

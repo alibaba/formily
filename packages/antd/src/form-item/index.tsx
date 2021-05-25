@@ -19,7 +19,7 @@ export interface IFormItemProps {
   prefixCls?: string
   label?: React.ReactNode
   colon?: boolean
-  tooltip?: boolean
+  tooltip?: React.ReactNode
   tooltipLayout?: 'icon' | 'text'
   labelStyle?: React.CSSProperties
   labelAlign?: 'left' | 'right'
