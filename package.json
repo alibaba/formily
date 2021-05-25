@@ -44,7 +44,7 @@
     "prelease:force": "lerna publish from-package --yes --dist-tag next && ts-node scripts/release release",
     "release": "lerna publish",
     "prelease": "lerna publish --dist-tag next",
-    "lint": "eslint --ext .ts,.tsx,.js \"packages/*/src/**.@(ts|tsx|js)\" \"scripts/**/*.js\" --fix",
+    "lint": "eslint --ext .ts,.tsx,.js  --fix",
     "postinstall": "opencollective-postinstall"
   },
   "resolutions": {
@@ -163,12 +163,12 @@
     }
   },
   "lint-staged": {
-    "**/*.@(ts|tsx|js)": [
-      "npm run lint",
+    "*.{ts,tsx,js}": [
+      "eslint --ext .ts,.tsx,.js",
       "pretty-quick --staged",
       "git add"
     ],
-    "packages/!(*vue)/**/*.md": [
+    "*.md": [
       "pretty-quick --staged",
       "git add"
     ]
