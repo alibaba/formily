@@ -78,8 +78,8 @@ test('array field children state exchanges', () => {
     })
   )
   expect(array.value).toEqual([{ value: 11 }, { value: 22 }])
-  expect(form.query('array.0.value').get("value")).toEqual(11)
-  expect(form.query('array.1.value').get("value")).toEqual(22)
+  expect(form.query('array.0.value').get('value')).toEqual(11)
+  expect(form.query('array.1.value').get('value')).toEqual(22)
   expect(Object.keys(form.fields).sort()).toEqual([
     'array',
     'array.0.value',
@@ -88,8 +88,8 @@ test('array field children state exchanges', () => {
   ])
   array.pop()
   expect(array.value).toEqual([{ value: 11 }])
-  expect(form.query('array.0.value').get("value")).toEqual(11)
-  expect(form.query('array.1.value').get("value")).toBeUndefined()
+  expect(form.query('array.0.value').get('value')).toEqual(11)
+  expect(form.query('array.1.value').get('value')).toBeUndefined()
   array.unshift({ value: 33 })
   attach(
     form.createField({
@@ -104,12 +104,12 @@ test('array field children state exchanges', () => {
     })
   )
   expect(array.value).toEqual([{ value: 33 }, { value: 11 }])
-  expect(form.query('array.0.value').get("value")).toEqual(33)
-  expect(form.query('array.1.value').get("value")).toEqual(11)
+  expect(form.query('array.0.value').get('value')).toEqual(33)
+  expect(form.query('array.1.value').get('value')).toEqual(11)
   array.remove(1)
   expect(array.value).toEqual([{ value: 33 }])
-  expect(form.query('array.0.value').get("value")).toEqual(33)
-  expect(form.query('array.1.value').get("value")).toBeUndefined()
+  expect(form.query('array.0.value').get('value')).toEqual(33)
+  expect(form.query('array.1.value').get('value')).toBeUndefined()
   array.insert(1, { value: 44 }, { value: 55 })
   attach(
     form.createField({
@@ -124,19 +124,19 @@ test('array field children state exchanges', () => {
     })
   )
   expect(array.value).toEqual([{ value: 33 }, { value: 44 }, { value: 55 }])
-  expect(form.query('array.0.value').get("value")).toEqual(33)
-  expect(form.query('array.1.value').get("value")).toEqual(44)
-  expect(form.query('array.2.value').get("value")).toEqual(55)
+  expect(form.query('array.0.value').get('value')).toEqual(33)
+  expect(form.query('array.1.value').get('value')).toEqual(44)
+  expect(form.query('array.2.value').get('value')).toEqual(55)
   array.move(0, 2)
   expect(array.value).toEqual([{ value: 44 }, { value: 55 }, { value: 33 }])
-  expect(form.query('array.0.value').get("value")).toEqual(44)
-  expect(form.query('array.1.value').get("value")).toEqual(55)
-  expect(form.query('array.2.value').get("value")).toEqual(33)
+  expect(form.query('array.0.value').get('value')).toEqual(44)
+  expect(form.query('array.1.value').get('value')).toEqual(55)
+  expect(form.query('array.2.value').get('value')).toEqual(33)
   array.move(2, 0)
   expect(array.value).toEqual([{ value: 33 }, { value: 44 }, { value: 55 }])
-  expect(form.query('array.0.value').get("value")).toEqual(33)
-  expect(form.query('array.1.value').get("value")).toEqual(44)
-  expect(form.query('array.2.value').get("value")).toEqual(55)
+  expect(form.query('array.0.value').get('value')).toEqual(33)
+  expect(form.query('array.1.value').get('value')).toEqual(44)
+  expect(form.query('array.2.value').get('value')).toEqual(55)
 })
 
 test('void children', () => {

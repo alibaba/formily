@@ -10,7 +10,9 @@ Vue.component('FormConsumer', FormConsumer)
 test('render form', () => {
   const form = createForm()
   render({
-    data() { return { form } },
+    data() {
+      return { form }
+    },
     template: `<FormProvider :form="form">
       <FormConsumer>
         <template #default="{ form }">
@@ -18,7 +20,7 @@ test('render form', () => {
         </template>
       </FormConsumer>
       <FormConsumer />
-    </FormProvider>`
+    </FormProvider>`,
   })
   expect(form.mounted).toBeTruthy()
 })

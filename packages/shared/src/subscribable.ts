@@ -6,7 +6,7 @@ export class Subscribable<Payload = any> {
     index?: number
     [key: number]: Subscriber<Payload>
   } = {
-    index: 0
+    index: 0,
   }
 
   subscription: Subscription<Payload>
@@ -25,7 +25,7 @@ export class Subscribable<Payload = any> {
       delete this.subscribers[index]
     } else if (!index) {
       this.subscribers = {
-        index: 0
+        index: 0,
       }
     }
   }

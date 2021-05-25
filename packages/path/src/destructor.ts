@@ -5,7 +5,7 @@ import {
   isArrayPattern,
   isObjectPattern,
   isIdentifier,
-  isDestructorExpression
+  isDestructorExpression,
 } from './types'
 import { isNum } from './shared'
 
@@ -32,9 +32,9 @@ export const parseDestructorRules = (node: Node): DestrcutorRules => {
   const rules = []
   if (isObjectPattern(node)) {
     let index = 0
-    node.properties.forEach(child => {
+    node.properties.forEach((child) => {
       rules[index] = {
-        path: []
+        path: [],
       }
       rules[index].key = child.key.value
       rules[index].path.push(child.key.value)
@@ -44,14 +44,14 @@ export const parseDestructorRules = (node: Node): DestrcutorRules => {
       const basePath = rules[index].path
       const childRules = parseDestructorRules(child.value as Node)
       let k = index
-      childRules.forEach(rule => {
+      childRules.forEach((rule) => {
         if (rules[k]) {
           rules[k].key = rule.key
           rules[k].path = basePath.concat(rule.path)
         } else {
           rules[k] = {
             key: rule.key,
-            path: basePath.concat(rule.path)
+            path: basePath.concat(rule.path),
           }
         }
         k++
@@ -67,7 +67,7 @@ export const parseDestructorRules = (node: Node): DestrcutorRules => {
     let index = 0
     node.elements.forEach((child, key) => {
       rules[index] = {
-        path: []
+        path: [],
       }
       rules[index].key = key
       rules[index].path.push(key)
@@ -77,14 +77,14 @@ export const parseDestructorRules = (node: Node): DestrcutorRules => {
       const basePath = rules[index].path
       const childRules = parseDestructorRules(child as Node)
       let k = index
-      childRules.forEach(rule => {
+      childRules.forEach((rule) => {
         if (rules[k]) {
           rules[k].key = rule.key
           rules[k].path = basePath.concat(rule.path)
         } else {
           rules[k] = {
             key: rule.key,
-            path: basePath.concat(rule.path)
+            path: basePath.concat(rule.path),
           }
         }
         k++

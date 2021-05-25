@@ -55,57 +55,56 @@ export const parseIValidatorRules = (
       ...context,
     }
   }
-  const createValidate = (
-    callback: ValidatorFunction,
-    message: string
-  ) => async (value: any, context: any) => {
-    const context_ = getContext(context, value)
-    const results = await callback(
-      value,
-      { ...rules, message },
-      context_,
-      (message: string, scope: any) => {
+  const createValidate =
+    (callback: ValidatorFunction, message: string) =>
+    async (value: any, context: any) => {
+      const context_ = getContext(context, value)
+      const results = await callback(
+        value,
+        { ...rules, message },
+        context_,
+        (message: string, scope: any) => {
+          return render(
+            {
+              type: 'error',
+              message,
+            },
+            { ...context_, ...scope }
+          )?.message
+        }
+      )
+      if (isBool(results)) {
+        if (!results) {
+          return render(
+            {
+              type: 'error',
+              message,
+            },
+            context_
+          )
+        }
+        return {
+          type: 'error',
+          message: undefined,
+        }
+      } else if (results) {
+        if (isValidateResult(results)) {
+          return render(results, context_)
+        }
         return render(
           {
             type: 'error',
-            message,
-          },
-          { ...context_, ...scope }
-        )?.message
-      }
-    )
-    if (isBool(results)) {
-      if (!results) {
-        return render(
-          {
-            type: 'error',
-            message,
+            message: results,
           },
           context_
         )
       }
+
       return {
         type: 'error',
         message: undefined,
       }
-    } else if (results) {
-      if (isValidateResult(results)) {
-        return render(results, context_)
-      }
-      return render(
-        {
-          type: 'error',
-          message: results,
-        },
-        context_
-      )
     }
-
-    return {
-      type: 'error',
-      message: undefined,
-    }
-  }
   return rulesKeys.reduce((buf, key) => {
     const callback = getValidateRules(key)
     return callback

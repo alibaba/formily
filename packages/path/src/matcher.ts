@@ -16,11 +16,11 @@ import {
   WildcardOperatorNode,
   GroupExpressionNode,
   RangeExpressionNode,
-  DotOperatorNode
+  DotOperatorNode,
 } from './types'
 import { isEqual, toArr } from './shared'
 
-const isValid = val => val !== undefined && val !== null && val !== ''
+const isValid = (val) => val !== undefined && val !== null && val !== ''
 
 export class Matcher {
   private tree: Node
@@ -155,7 +155,7 @@ export class Matcher {
     const current = this.pos
     this.excluding = !!node.isExclude
     const method = this.excluding ? 'every' : 'some'
-    const result = toArr(node.value)[method](_node => {
+    const result = toArr(node.value)[method]((_node) => {
       this.pos = current
       return this.excluding
         ? !this.matchAtom(path, _node)

@@ -96,21 +96,21 @@ export type DestrcutorRules = DestrcutorRule[]
 
 export type Segments = Array<string | number>
 
-export const isType = <T>(type: string) => (obj: any): obj is T => {
-  return obj && obj.type === type
-}
+export const isType =
+  <T>(type: string) =>
+  (obj: any): obj is T => {
+    return obj && obj.type === type
+  }
 
 export const isIdentifier = isType<IdentifierNode>('Identifier')
 
-export const isIgnoreExpression = isType<IgnoreExpressionNode>(
-  'IgnoreExpression'
-)
+export const isIgnoreExpression =
+  isType<IgnoreExpressionNode>('IgnoreExpression')
 
 export const isDotOperator = isType<DotOperatorNode>('DotOperator')
 
-export const isWildcardOperator = isType<WildcardOperatorNode>(
-  'WildcardOperator'
-)
+export const isWildcardOperator =
+  isType<WildcardOperatorNode>('WildcardOperator')
 
 export const isExpandOperator = isType<ExpandOperatorNode>('ExpandOperator')
 

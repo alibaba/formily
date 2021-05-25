@@ -1,5 +1,7 @@
-const isType = <T>(type: string | string[]) => (obj: unknown): obj is T =>
-  getType(obj) === `[object ${type}]`
+const isType =
+  <T>(type: string | string[]) =>
+  (obj: unknown): obj is T =>
+    getType(obj) === `[object ${type}]`
 export const getType = (obj: any) => Object.prototype.toString.call(obj)
 export const isFn = (val: any): val is Function => typeof val === 'function'
 export const isArr = Array.isArray

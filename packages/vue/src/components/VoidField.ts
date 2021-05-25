@@ -22,27 +22,27 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
     pattern: String,
     hidden: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     visible: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     editable: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     disabled: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     readOnly: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     readPretty: {
       type: Boolean,
-      default: undefined
+      default: undefined,
     },
     reactions: [Array, Function],
   },
@@ -50,29 +50,37 @@ export default defineComponent<IVoidFieldProps<VueComponent, VueComponent>>({
     // const { track } = useObserver()
     const formRef = useForm()
     const parentRef = useField()
-    const basePath = props.basePath !== undefined ? props.basePath : parentRef?.value?.address
-    const fieldRef = useAttach(() => formRef.value.createVoidField({
-      ...props,
-      basePath,
-      ...getRawComponent(props)
-    }), [() => props.name, formRef])
+    const basePath =
+      props.basePath !== undefined ? props.basePath : parentRef?.value?.address
+    const fieldRef = useAttach(
+      () =>
+        formRef.value.createVoidField({
+          ...props,
+          basePath,
+          ...getRawComponent(props),
+        }),
+      [() => props.name, formRef]
+    )
 
     provide(FieldSymbol, fieldRef)
 
-    return () => h(
-      ReactiveField, 
-      {
-        props: {
-          field: fieldRef.value
+    return () =>
+      h(
+        ReactiveField,
+        {
+          props: {
+            field: fieldRef.value,
+          },
+        },
+        {
+          ...slots,
+          default: () =>
+            slots.default &&
+            slots.default({
+              field: fieldRef.value,
+              form: fieldRef.value.form,
+            }),
         }
-      },
-      {
-        ...slots,
-        default: () => slots.default && slots.default({
-          field: fieldRef.value,
-          form: fieldRef.value.form
-        })
-      }
-    )
-  }
+      )
+  },
 }) as unknown as DefineComponent<IVoidFieldProps<VueComponent, VueComponent>>

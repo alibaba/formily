@@ -1,7 +1,9 @@
 import { IFieldProps, VueComponent } from '../types'
 import { toRaw } from 'vue-demi'
 
-export const getRawComponent = (props: IFieldProps<VueComponent, VueComponent>) => {
+export const getRawComponent = (
+  props: IFieldProps<VueComponent, VueComponent>
+) => {
   const { component, decorator } = props
   let newComponent: typeof props.component
   let newDecorator: typeof props.component

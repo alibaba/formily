@@ -27,14 +27,14 @@ Vue.component('ReactiveField', ReactiveField)
 
 const Decorator: FunctionalComponentOptions = {
   functional: true,
-  render (h, context) {
+  render(h, context) {
     return h('div', context.data, context.children)
-  }
+  },
 }
 
 const Input = defineComponent({
   props: ['value'],
-  setup (props, { attrs, listeners }) {
+  setup(props, { attrs, listeners }) {
     const fieldRef = useField()
     return () => {
       const field = fieldRef.value
@@ -42,40 +42,40 @@ const Input = defineComponent({
         attrs: {
           ...attrs,
           value: props.value,
-          'data-testid': field.path.toString()
+          'data-testid': field.path.toString(),
         },
         on: {
           ...listeners,
-          input: listeners.change
-        }
+          input: listeners.change,
+        },
       })
     }
-  }
+  },
 })
 
 const Normal: FunctionalComponentOptions = {
   functional: true,
-  render (h) {
+  render(h) {
     return h('div')
-  }
+  },
 }
-
 
 test('render field', async () => {
   const form = createForm()
   const onChange = jest.fn()
-  const { getByTestId, queryByTestId, unmount } = render(defineComponent({
-    name: 'TestComponent',
-    setup () {
-      return {
-        form,
-        Normal,
-        Input,
-        Decorator,
-        onChange
-      }
-    },
-    template: `<FormProvider :form="form">
+  const { getByTestId, queryByTestId, unmount } = render(
+    defineComponent({
+      name: 'TestComponent',
+      setup() {
+        return {
+          form,
+          Normal,
+          Input,
+          Decorator,
+          onChange,
+        }
+      },
+      template: `<FormProvider :form="form">
       <Field
         name="aa"
         :decorator="[Decorator]"
@@ -110,8 +110,9 @@ test('render field', async () => {
         :decorator="[Decorator]"
         :component="[Input, { onChange: null }]"
       />
-    </FormProvider>`
-  }))
+    </FormProvider>`,
+    })
+  )
   expect(form.mounted).toBeTruthy()
   expect(form.query('aa').take().mounted).toBeTruthy()
   expect(form.query('bb').take().mounted).toBeTruthy()
@@ -130,12 +131,12 @@ test('render field', async () => {
 
 test('ReactiveField', () => {
   render({
-    template: `<ReactiveField :field="null" />`
+    template: `<ReactiveField :field="null" />`,
   })
   render({
     template: `<ReactiveField :field="null">
       <div></div>
-    </ReactiveField>`
+    </ReactiveField>`,
   })
 })
 
@@ -143,17 +144,17 @@ test('useAttch', async () => {
   const form = createForm()
   const MyComponent = defineComponent({
     props: ['name'],
-    data () {
+    data() {
       return { form, Input, Decorator }
     },
     template: `<FormProvider :form="form">
       <Field :name="name" :decorator="[Decorator]" :component="[Input]" />
-    </FormProvider>`
+    </FormProvider>`,
   })
   const { updateProps } = render(MyComponent, {
     props: {
-      name: 'aa'
-    }
+      name: 'aa',
+    },
   })
   expect(form.query('aa').take().mounted).toBeTruthy()
   await updateProps({ name: 'bb' })
@@ -165,7 +166,7 @@ test('useFormEffects', async () => {
   const form = createForm()
   const CustomField = defineComponent({
     props: ['value'],
-    setup (props) {
+    setup(props) {
       const fieldRef = useField<Formily.Core.Models.Field>()
       useFormEffects(() => {
         onFieldChange('aa', ['value'], (target) => {
@@ -174,9 +175,11 @@ test('useFormEffects', async () => {
         })
       })
       return () => {
-        return h('div', { attrs: { 'data-testid': 'custom-value' } }, [props.value])
+        return h('div', { attrs: { 'data-testid': 'custom-value' } }, [
+          props.value,
+        ])
       }
-    }
+    },
   })
   const { queryByTestId } = render({
     data() {
@@ -185,7 +188,7 @@ test('useFormEffects', async () => {
     template: `<FormProvider :form="form">
       <Field name="aa" :decorator="[Decorator]" :component="[Input]" />
       <Field name="bb" :component="[CustomField]" />
-    </FormProvider>`
+    </FormProvider>`,
   })
   expect(queryByTestId('custom-value').textContent).toEqual('')
   form.query('aa').take((aa) => {
@@ -200,12 +203,13 @@ test('useFormEffects', async () => {
 })
 
 test('connect', async () => {
-  const CustomField = connect({
+  const CustomField = connect(
+    {
       functional: true,
       props: ['list'],
       render(h, context) {
         return h('div', [context.props.list])
-      }
+      },
     },
     mapProps({ value: 'list', loading: true }, (props, field) => {
       return {
@@ -216,7 +220,7 @@ test('connect', async () => {
     mapReadPretty({
       render(h) {
         return h('div', 'read pretty')
-      }
+      },
     })
   )
   const BaseComponent = {
@@ -224,7 +228,7 @@ test('connect', async () => {
     name: 'BaseComponent',
     render(h, context) {
       return h('div', [context.props.value])
-    }
+    },
   } as FunctionalComponentOptions
   const CustomField2 = connect(
     BaseComponent,
@@ -232,7 +236,7 @@ test('connect', async () => {
     mapReadPretty({
       render(h) {
         return h('div', 'read pretty')
-      }
+      },
     })
   )
 
@@ -242,7 +246,7 @@ test('connect', async () => {
     mapReadPretty({
       render(h) {
         return h('div', 'read pretty')
-      }
+      },
     })
   )
 
@@ -255,7 +259,7 @@ test('connect', async () => {
       <Field name="aa" :decorator="[Decorator]" :component="[CustomField]" />
       <Field name="bb" :decorator="[Decorator]" :component="[CustomField2]" />
       <Field name="cc" :decorator="[Decorator]" :component="[CustomField3]" />
-    </FormProvider>`
+    </FormProvider>`,
   })
   form.query('aa').take((field) => {
     field.setState((state) => {

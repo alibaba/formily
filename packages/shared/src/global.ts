@@ -1,4 +1,4 @@
-/* istanbul ignore next */ 
+/* istanbul ignore next */
 function globalSelf() {
   try {
     if (typeof self !== 'undefined') {

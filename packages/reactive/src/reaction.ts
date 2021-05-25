@@ -1,10 +1,5 @@
 import { isFn } from './checkers'
-import {
-  IOperation,
-  ReactionsMap,
-  Reaction,
-  PropertyKey,
-} from './types'
+import { IOperation, ReactionsMap, Reaction, PropertyKey } from './types'
 import {
   ReactionStack,
   PendingScopeReactions,

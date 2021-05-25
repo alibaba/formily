@@ -277,5 +277,5 @@ export function includes<T>(
 ): boolean
 export function includes(val: any, searchElement: any, revert?: boolean) {
   if (isStr(val)) return val.includes(searchElement)
-  return some(val, item => item === searchElement, revert)
+  return some(val, (item) => item === searchElement, revert)
 }

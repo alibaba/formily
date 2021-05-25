@@ -118,7 +118,7 @@ export const isEqual = function exportedEqual(a: any, b: any) {
   try {
     return equal(a, b)
   } catch (error) {
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     if (
       (error.message && error.message.match(/stack|recursion/i)) ||
       error.number === -2146828260
@@ -136,7 +136,7 @@ export const isEqual = function exportedEqual(a: any, b: any) {
       return false
     }
     // some other error. we should definitely know about these
-    /* istanbul ignore next */ 
+    /* istanbul ignore next */
     throw error
   }
 }

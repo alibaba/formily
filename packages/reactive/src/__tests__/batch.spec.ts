@@ -42,7 +42,6 @@ test('action', () => {
   expect(handler).toBeCalledTimes(4)
 })
 
-
 test('batch scope', () => {
   const obs = observable<any>({})
 

@@ -11,17 +11,16 @@ export default defineComponent<IProviderProps>({
   props: {
     form: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props: IProviderProps, { attrs, slots }) {
-    const formRef = useAttach(() => toRaw(props.form), () => props.form)
+    const formRef = useAttach(
+      () => toRaw(props.form),
+      () => props.form
+    )
     provide(FormSymbol, formRef)
 
-    return () => h(
-      Fragment,
-      { attrs },
-      slots
-    )
-  }
+    return () => h(Fragment, { attrs }, slots)
+  },
 }) as unknown as DefineComponent<IProviderProps>

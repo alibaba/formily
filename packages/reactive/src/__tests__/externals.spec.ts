@@ -1,4 +1,11 @@
-import { isObservable, isSupportObservable, markObservable, markRaw, observable, toJS } from ".."
+import {
+  isObservable,
+  isSupportObservable,
+  markObservable,
+  markRaw,
+  observable,
+  toJS,
+} from '..'
 
 test('is support observable', () => {
   const obs = observable<any>({ aa: 111 })

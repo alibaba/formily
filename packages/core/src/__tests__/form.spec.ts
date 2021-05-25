@@ -400,7 +400,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
   )
   try {
     await form.validate()
-  } catch { }
+  } catch {}
   expect(form.invalid).toBeTruthy()
   expect(form.valid).toBeFalsy()
   expect(form.errors).toEqual([
@@ -494,7 +494,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
   await bb.onInput('')
   try {
     await form.validate()
-  } catch { }
+  } catch {}
   expect(form.errors).toEqual([
     {
       type: 'error',
@@ -616,7 +616,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
   form.clearWarnings()
   try {
     await form.validate('aa')
-  } catch { }
+  } catch {}
   expect(
     form.queryFeedbacks({
       type: 'error',
@@ -624,7 +624,7 @@ test('validate/valid/invalid/errors/warnings/successes/clearErrors/clearWarnings
   ).toEqual(1)
   try {
     await form.validate('*')
-  } catch { }
+  } catch {}
   expect(
     form.queryFeedbacks({
       type: 'error',
@@ -797,7 +797,7 @@ test('reset', async () => {
   expect(form.values.aa).toEqual('xxxxx')
   try {
     await form.reset()
-  } catch { }
+  } catch {}
   expect(form.valid).toBeTruthy()
   expect(form.values.aa).toEqual(123)
   expect(field.value).toEqual(123)
@@ -814,7 +814,7 @@ test('reset', async () => {
     await form.reset('*', {
       validate: true,
     })
-  } catch { }
+  } catch {}
   expect(form.valid).toBeFalsy()
   expect(form.values.aa).toEqual(123)
   expect(field.value).toEqual(123)
@@ -826,7 +826,7 @@ test('reset', async () => {
     await form.reset('*', {
       forceClear: true,
     })
-  } catch { }
+  } catch {}
   expect(form.valid).toBeTruthy()
   expect(form.values.aa).toBeUndefined()
   expect(field.value).toBeUndefined()
@@ -838,7 +838,7 @@ test('reset', async () => {
     await form.reset('aa', {
       forceClear: true,
     })
-  } catch { }
+  } catch {}
   expect(form.valid).toBeTruthy()
   expect(form.values.aa).toBeUndefined()
   expect(field.value).toBeUndefined()
@@ -848,8 +848,8 @@ test('reset', async () => {
 
 test('devtools', () => {
   window['__FORMILY_DEV_TOOLS_HOOK__'] = {
-    inject() { },
-    unmount() { },
+    inject() {},
+    unmount() {},
   }
   const form = attach(createForm())
   form.onUnmount()
@@ -925,13 +925,12 @@ test('initialValues merge values before create field', () => {
   expect(arr_0_aa.value).toEqual('321')
 })
 
-
 test('initialValues merge values after create field', () => {
   const form = attach(createForm())
   const aa = attach(
     form.createArrayField({
       name: 'aa',
-      initialValue: '111'
+      initialValue: '111',
     })
   )
   const array = attach(
@@ -962,10 +961,10 @@ test('remove property of form values with undefined value', () => {
     })
   )
   expect(form.values).toMatchObject({ aaa: 123 })
-  field.display = "none";
-  expect(form.values.hasOwnProperty("aaa")).toBeFalsy()
-  field.display = "visible";
-  expect(form.values.hasOwnProperty("aaa")).toBeTruthy()
-  field.setValue(undefined);
-  expect(form.values.hasOwnProperty("aaa")).toBeTruthy()
+  field.display = 'none'
+  expect(form.values.hasOwnProperty('aaa')).toBeFalsy()
+  field.display = 'visible'
+  expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
+  field.setValue(undefined)
+  expect(form.values.hasOwnProperty('aaa')).toBeTruthy()
 })

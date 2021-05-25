@@ -15,14 +15,14 @@ export const useObserver = () => {
 
     Object.defineProperty(vm, 'update', {
       get() {
-        return vm['_updateEffect'];
+        return vm['_updateEffect']
       },
       set(newValue) {
         if (dispose) {
           dispose()
         }
         dispose = autorun(newValue)
-        vm['_updateEffect'] = newValue;
+        vm['_updateEffect'] = newValue
       },
     })
   }
