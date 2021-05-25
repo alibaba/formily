@@ -1,13 +1,13 @@
 import { build } from '../../scripts/build-style'
 
 build({
-  esStr: 'antd/es/',
-  libStr: 'antd/lib/',
-  styleEntry: 'style.less',
-  allStylesOutputFile: 'dist/antd.css',
+  esStr: '@alifd/next/es/',
+  libStr: '@alifd/next/lib/',
+  styleEntry: 'main.scss',
+  allStylesOutputFile: 'dist/next.css',
   // antd/es/button/style/index ===> antd/es/button/style/css
   importCssCompilerToCssTransform: (v) =>
-    v.replace(/'antd\/(es|lib)\/(.*)'/, (subStr) =>
-      subStr.replace(/\/style\/index'$/, `/style/css'`)
+    v.replace(/'@alifd\/next\/(es|lib)\/(.*)'/g, (subStr) =>
+      subStr.replace(/\/style'$/, `/index.css'`)
     ),
 })

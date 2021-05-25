@@ -1,0 +1,11 @@
+node_modules
+*.log
+build
+docs
+doc-site
+__tests__
+.eslintrc
+jest.config.js
+tsconfig.json
+.umi
+src
