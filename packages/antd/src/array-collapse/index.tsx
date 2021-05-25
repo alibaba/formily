@@ -82,7 +82,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
     }
 
     const [key, setKey] = useState<Array<string | number>>(
-      Array.from({length:props?.defaultOpenPanelCount||1}).map((_,i)=>i)
+      Array.from({ length: props?.defaultOpenPanelCount || 1 }).map((_, i) => i)
     )
 
     const renderItems = () => {
