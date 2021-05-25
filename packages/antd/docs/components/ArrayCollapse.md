@@ -62,9 +62,6 @@ export default () => {
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目"
-            x-component-props={{
-              method: 'unshift',
-            }}
           />
         </SchemaField.Array>
         <SchemaField.Array
@@ -94,6 +91,41 @@ export default () => {
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目"
+          />
+        </SchemaField.Array>
+        <SchemaField.Array
+          name="string_array_unshift"
+          maxItems={3}
+          x-decorator="FormItem"
+          x-component="ArrayCollapse"
+          x-component-props={{
+            defaultOpenPanelCount: 3,
+          }}
+        >
+          <SchemaField.Object
+            x-component="ArrayCollapse.CollapsePanel"
+            x-component-props={{
+              header: '字符串数组',
+            }}
+          >
+            <SchemaField.Void x-component="ArrayCollapse.Index" />
+            <SchemaField.String
+              name="input"
+              x-decorator="FormItem"
+              title="Input"
+              required
+              x-component="Input"
+            />
+            <SchemaField.Void x-component="ArrayCollapse.Remove" />
+            <SchemaField.Void x-component="ArrayCollapse.MoveUp" />
+            <SchemaField.Void x-component="ArrayCollapse.MoveDown" />
+          </SchemaField.Object>
+          <SchemaField.Void
+            x-component="ArrayCollapse.Addition"
+            title="添加条目（unshift）"
+            x-component-props={{
+              method: 'unshift',
+            }}
           />
         </SchemaField.Array>
       </SchemaField>
@@ -219,6 +251,54 @@ const schema = {
           type: 'void',
           title: '添加条目',
           'x-component': 'ArrayCollapse.Addition',
+        },
+      },
+    },
+    array_unshift: {
+      type: 'array',
+      'x-component': 'ArrayCollapse',
+      maxItems: 3,
+      'x-decorator': 'FormItem',
+      items: {
+        type: 'object',
+        'x-component': 'ArrayCollapse.CollapsePanel',
+        'x-component-props': {
+          header: '对象数组',
+        },
+        properties: {
+          index: {
+            type: 'void',
+            'x-component': 'ArrayCollapse.Index',
+          },
+          input: {
+            type: 'string',
+            'x-decorator': 'FormItem',
+            title: 'Input',
+            required: true,
+            'x-component': 'Input',
+          },
+          remove: {
+            type: 'void',
+            'x-component': 'ArrayCollapse.Remove',
+          },
+          moveUp: {
+            type: 'void',
+            'x-component': 'ArrayCollapse.MoveUp',
+          },
+          moveDown: {
+            type: 'void',
+            'x-component': 'ArrayCollapse.MoveDown',
+          },
+        },
+      },
+      properties: {
+        addition: {
+          type: 'void',
+          title: '添加条目(unshift)',
+          'x-component': 'ArrayCollapse.Addition',
+          'x-component-props': {
+            method: 'unshift',
+          },
         },
       },
     },
@@ -457,11 +537,15 @@ export default () => {
 
 ## API
 
-### ArrayCards
+### ArrayCollapse
 
-参考 https://ant.design/components/card-cn/
+参考 https://ant.design/components/collapse-cn/
 
-### ArrayCards.Addition
+### ArrayCollapse.CollapsePanel
+
+参考 https://ant.design/components/collapse-cn/
+
+### ArrayCollapse.Addition
 
 > 添加按钮
 
@@ -476,7 +560,7 @@ export default () => {
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCards.Remove
+### ArrayCollapse.Remove
 
 > 删除按钮
 
@@ -488,7 +572,7 @@ export default () => {
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCards.MoveDown
+### ArrayCollapse.MoveDown
 
 > 下移按钮
 
@@ -500,7 +584,7 @@ export default () => {
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCards.MoveUp
+### ArrayCollapse.MoveUp
 
 > 上移按钮
 
@@ -512,12 +596,12 @@ export default () => {
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
-### ArrayCards.Index
+### ArrayCollapse.Index
 
 > 索引渲染器
 
 无属性
 
-### ArrayItems.useIndex
+### ArrayCollapse.useIndex
 
 > 读取当前渲染行索引的 React Hook
