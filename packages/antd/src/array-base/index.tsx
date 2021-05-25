@@ -21,6 +21,7 @@ export interface IArrayBaseAdditionProps extends ButtonProps {
 }
 
 export interface IArrayBaseContext {
+  props: IArrayBaseProps
   field: Formily.Core.Models.ArrayField
   schema: Schema
 }
@@ -40,7 +41,14 @@ export type ArrayBaseMixins = {
   useIndex?: () => number
 }
 
-type ComposedArrayBase = React.FC &
+export interface IArrayBaseProps {
+  onAdd?: (index: number) => void
+  onRemove?: (index: number) => void
+  onMoveDown?: (index: number) => void
+  onMoveUp?: (index: number) => void
+}
+
+type ComposedArrayBase = React.FC<IArrayBaseProps> &
   ArrayBaseMixins & {
     Item?: React.FC<IArrayBaseItemProps>
     mixin?: <T extends Formily.React.Types.JSXComponent>(
@@ -79,7 +87,7 @@ export const ArrayBase: ComposedArrayBase = (props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
   return (
-    <ArrayBaseContext.Provider value={{ field, schema }}>
+    <ArrayBaseContext.Provider value={{ field, schema, props }}>
       {props.children}
     </ArrayBaseContext.Provider>
   )
@@ -125,9 +133,11 @@ ArrayBase.Addition = (props) => {
       onClick={(e) => {
         const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
-          array?.field?.unshift(defaultValue)
+          array?.field?.unshift?.(defaultValue)
+          array?.props?.onAdd?.(0)
         } else {
-          array?.field?.push(defaultValue)
+          array?.field?.push?.(defaultValue)
+          array?.props?.onAdd?.(array?.field?.value?.length)
         }
         if (props.onClick) {
           props.onClick(e)
@@ -152,7 +162,8 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
       ref={ref}
       onClick={(e) => {
         e.stopPropagation()
-        base?.field.remove(index)
+        base?.field?.remove?.(index)
+        base?.props?.onRemove?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
@@ -173,7 +184,8 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
       ref={ref}
       onClick={(e) => {
         e.stopPropagation()
-        base?.field.moveDown(index)
+        base?.field?.moveDown?.(index)
+        base?.props?.onMoveDown?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
@@ -195,6 +207,7 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
       onClick={(e) => {
         e.stopPropagation()
         base?.field?.moveUp(index)
+        base?.props?.onMoveUp?.(index)
         if (props.onClick) {
           props.onClick(e)
         }
