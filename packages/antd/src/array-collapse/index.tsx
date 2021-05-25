@@ -81,7 +81,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
 
-    const [key, setKey] = useState<Array<string | number>>(
+    const [activeKeys, setActiveKeys] = useState<Array<string | number>>(
       Array.from({ length: props?.defaultOpenPanelCount || 1 }).map((_, i) => i)
     )
 
@@ -89,8 +89,8 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       return (
         <Collapse
           {...props}
-          activeKey={key}
-          onChange={(key: string[]) => setKey(key)}
+          activeKey={activeKeys}
+          onChange={(key: string[]) => setActiveKeys(key)}
           className={cls(`${prefixCls}-item`, props.className)}
         >
           {dataSource?.map((item, index) => {
@@ -177,7 +177,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
     return (
-      <ArrayBase onAdd={(index) => setKey([...key, index])}>
+      <ArrayBase onAdd={(index) => setActiveKeys(activeKeys.concat(index))}>
         {renderEmpty()}
         {renderItems()}
         {renderAddition()}
