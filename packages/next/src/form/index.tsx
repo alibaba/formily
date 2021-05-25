@@ -2,8 +2,7 @@ import React, { useMemo } from 'react'
 import { FormProvider } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
 import { ConfigProvider } from '@alifd/next'
-import { registerValidateLocale, setValidateLanguage } from '@formily/core'
-import { getISOCode } from '@formily/validator'
+import { getValidateLocaleIOSCode, setValidateLanguage } from '@formily/core'
 
 export interface FormProps
   extends Formily.React.Types.IProviderProps,
@@ -22,7 +21,7 @@ export const Form: React.FC<FormProps> = ({
   // @ts-ignore
   const lang = ConfigProvider.getContext()?.locale?.momentLocale
   useMemo(() => {
-    if (getISOCode(lang)) {
+    if (getValidateLocaleIOSCode(lang)) {
       setValidateLanguage(lang)
     }
   }, [lang])

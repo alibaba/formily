@@ -2,6 +2,7 @@ import { FormPath } from '@formily/shared'
 import { Form } from '../models'
 import { IFormProps } from '../types'
 import {
+  getValidateLocaleIOSCode,
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
@@ -55,6 +56,7 @@ export {
   isQuery,
   isVoidField,
   isVoidFieldState,
+  getValidateLocaleIOSCode,
   setValidateLanguage,
   registerValidateFormats,
   registerValidateLocale,
