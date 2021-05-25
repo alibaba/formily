@@ -163,12 +163,9 @@
     }
   },
   "lint-staged": {
-    "packages/*/src/**.@(ts|tsx|js)": [
+    "**/*.@(ts|tsx|js)": [
       "npm run lint",
-      "git add"
-    ],
-    "scripts/**.@(ts|tsx|js)": [
-      "npm run lint",
+      "pretty-quick --staged",
       "git add"
     ],
     "packages/!(*vue)/**/*.md": [
