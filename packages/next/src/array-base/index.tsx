@@ -131,6 +131,7 @@ ArrayBase.Addition = (props) => {
       className={cls(`${prefixCls}-addition`, props.className)}
       style={{ display: 'block', width: '100%', ...props.style }}
       onClick={(e) => {
+        e.stopPropagation()
         const defaultValue = getDefaultValue(props.defaultValue, array.schema)
         if (props.method === 'unshift') {
           array?.field?.unshift?.(defaultValue)
@@ -160,6 +161,7 @@ ArrayBase.Remove = React.forwardRef((props, ref) => {
       className={cls(`${prefixCls}-remove`, props.className)}
       ref={ref}
       onClick={(e) => {
+        e.stopPropagation()
         base?.field?.remove?.(index)
         base?.props?.onRemove?.(index)
         if (props.onClick) {
@@ -180,6 +182,7 @@ ArrayBase.MoveDown = React.forwardRef((props, ref) => {
       className={cls(`${prefixCls}-move-down`, props.className)}
       ref={ref}
       onClick={(e) => {
+        e.stopPropagation()
         base?.field?.moveDown?.(index)
         base?.props?.onMoveDown?.(index)
         if (props.onClick) {
@@ -200,6 +203,7 @@ ArrayBase.MoveUp = React.forwardRef((props, ref) => {
       className={cls(`${prefixCls}-move-up`, props.className)}
       ref={ref}
       onClick={(e) => {
+        e.stopPropagation()
         base?.field?.moveUp?.(index)
         base?.props?.onMoveUp?.(index)
         if (props.onClick) {
