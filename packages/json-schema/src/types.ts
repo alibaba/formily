@@ -71,6 +71,7 @@ export type SchemaReaction<Field = any> =
         schema?: ISchema
         run?: string
       }
+      [key: string]: any
     }
   | ((field: Field) => void)
 
