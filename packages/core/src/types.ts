@@ -281,11 +281,11 @@ export type FieldPatternTypes =
 export type FieldValidator = Validator
 
 export type FieldDataSource = {
-  label?: string
-  value?: string
-  title?: string
-  key?: string
-  text?: string
+  label?: any
+  value?: any
+  title?: any
+  key?: any
+  text?: any
   children?: FieldDataSource
   [key: string]: any
 }[]
