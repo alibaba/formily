@@ -231,7 +231,7 @@ const TimeRangePicker: React.FC<TimeRangePickerProps> = (props) => {
   )
 }
 
-const Text: React.FC<any> = (props) => {
+const Text = (props: React.PropsWithChildren<any>) => {
   const prefixCls = usePrefixCls('form-text', props)
 
   return (
@@ -241,21 +241,17 @@ const Text: React.FC<any> = (props) => {
   )
 }
 
-const mountedComponents = {
-  Input,
-  Select,
-  TreeSelect,
-  Cascader,
-  DatePicker,
-  DateRangePicker,
-  TimePicker,
-  TimeRangePicker,
-  Placeholder,
-  usePlaceholder,
-} as const
+Text.Input = Input
+Text.Select = Select
+Text.TreeSelect = TreeSelect
+Text.Cascader = Cascader
+Text.DatePicker = DatePicker
+Text.DateRangePicker = DateRangePicker
+Text.TimePicker = TimePicker
+Text.TimeRangePicker = TimeRangePicker
+Text.Placeholder = Placeholder
+Text.usePlaceholder = usePlaceholder
 
-Object.assign(Text, mountedComponents)
-
-export const PreviewText = Text as typeof Text & typeof mountedComponents
+export const PreviewText = Text
 
 export default PreviewText
