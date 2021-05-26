@@ -3,7 +3,7 @@ import ReactDOM, { createPortal } from 'react-dom'
 import { createForm } from '@formily/core'
 import { FormProvider } from '@formily/react'
 import { isNum, isStr, isBool, isFn } from '@formily/shared'
-import { Drawer } from '@alifd/next'
+import { ConfigProvider, Drawer } from '@alifd/next'
 import { DrawerProps } from '@alifd/next/lib/drawer'
 import { usePrefixCls } from '../__builtins__'
 
@@ -54,6 +54,13 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
     form: null,
     promise: null,
   }
+
+  let contextProps = {}
+  try {
+    // @ts-ignore
+    contextProps = ConfigProvider.getContext()
+  } catch (e) {}
+
   const props = getDrawerProps(title)
   const drawer: DrawerProps = {
     width: '40%',
@@ -79,15 +86,17 @@ export function FormDrawer(title: any, content: any): IFormDrawer {
   }
   const render = (visible = true, resolve?: () => any, reject?: () => any) => {
     ReactDOM.render(
-      <Drawer {...drawer} visible={visible}>
-        <FormProvider form={env.form}>
-          {React.createElement(component, {
-            content,
-            resolve,
-            reject,
-          })}
-        </FormProvider>
-      </Drawer>,
+      <ConfigProvider {...contextProps}>
+        <Drawer {...drawer} visible={visible}>
+          <FormProvider form={env.form}>
+            {React.createElement(component, {
+              content,
+              resolve,
+              reject,
+            })}
+          </FormProvider>
+        </Drawer>
+      </ConfigProvider>,
       env.root
     )
   }
