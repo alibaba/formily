@@ -2,6 +2,7 @@
 
 <p align="center">
 <img src="https://img.alicdn.com/tfs/TB1DIpUu7L0gK0jSZFxXXXWHVXa-2500-1200.png">
+<img src="https://img.shields.io/npm/dy/@formily/core"/>
 <a href="https://www.npmjs.com/package/@formily/core"><img src="https://img.shields.io/npm/v/@formily/core.svg"></a>
 <a href="https://www.npmjs.com/package/@formily/react"><img src="https://img.shields.io/npm/v/@formily/react.svg"></a>
 <a href="https://travis-ci.com/alibaba/formily"><img src="https://travis-ci.com/alibaba/formily.svg?branch=master"></a>
@@ -36,7 +37,6 @@ https://formilyjs.org
 ## 集团其他产品
 
 - [icejs](https://github.com/alibaba/ice)
-
 
 ## 如何贡献
 
