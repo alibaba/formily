@@ -34,8 +34,6 @@ import {
   mapProps,
 } from '@formily/react'
 import { Input, Form, Button } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/form/style'
 
 // FormItem UI组件
 const FormItem = connect(

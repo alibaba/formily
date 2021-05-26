@@ -22,7 +22,6 @@ import {
 } from '@formily/antd'
 import { createForm, onFieldValueChange } from '@formily/core'
 import { createSchemaField, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -100,7 +99,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { createSchemaField, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -183,7 +181,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { Field, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const form = createForm()
 
@@ -213,7 +210,7 @@ export default () => {
         initialValue={['2020-11-20', '2021-12-30']}
         decorator={[FormItem]}
         component={[DatePicker.RangePicker]}
-        reactions={(field)=>{
+        reactions={(field) => {
           field.visible = !!field.query('visible_destructor').value()
         }}
       />

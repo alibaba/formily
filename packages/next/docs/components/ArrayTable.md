@@ -19,7 +19,6 @@ import {
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { Button, Message } from '@alifd/next'
-import '@alifd/next/lib/message/style'
 
 const SchemaField = createSchemaField({
   components: {

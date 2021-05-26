@@ -31,9 +31,6 @@ import {
   observer,
 } from '@formily/react'
 import { Input, Button, Space } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/button/style'
-import 'antd/lib/space/style'
 
 const form = createForm()
 
@@ -96,9 +93,6 @@ import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, Field, ArrayField } from '@formily/react'
 import { Input, Button, Space } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/button/style'
-import 'antd/lib/space/style'
 
 const form = createForm()
 

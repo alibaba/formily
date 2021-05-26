@@ -12,8 +12,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -158,8 +156,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -311,8 +307,6 @@ import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
 import { Tabs, Card } from 'antd'
 import { UserOutlined, LockOutlined, PhoneOutlined } from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -458,8 +452,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -795,8 +787,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1142,8 +1132,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1376,7 +1364,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1500,7 +1487,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -1629,7 +1615,6 @@ import {
   FormButtonGroup,
 } from '@formily/antd'
 import { Card } from 'antd'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,

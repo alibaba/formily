@@ -1,6 +1,6 @@
 # Compatible solution for front-end and back-end data differences
 
-Many times, we always encounter scenarios where the front-end data structure does not match the back-end data structure. The seemingly simple problem is actually very uncomfortable to solve. The most common problems are: 
+Many times, we always encounter scenarios where the front-end data structure does not match the back-end data structure. The seemingly simple problem is actually very uncomfortable to solve. The most common problems are:
 
 The output of the front-end date range component is an array structure, but the format required by the back-end is to split a flat data structure. This problem is largely limited by the back-end domain model. Because from the perspective of back-end model design, splitting the flat structure is the best solution;
 
@@ -22,7 +22,6 @@ import {
 } from '@formily/antd'
 import { createForm, onFieldValueChange } from '@formily/core'
 import { createSchemaField, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -100,7 +99,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { createSchemaField, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {
@@ -183,7 +181,6 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { Field, FormConsumer } from '@formily/react'
-import 'antd/lib/alert/style'
 
 const form = createForm()
 
@@ -213,7 +210,7 @@ export default () => {
         initialValue={['2020-11-20', '2021-12-30']}
         decorator={[FormItem]}
         component={[DatePicker.RangePicker]}
-        reactions={(field)=>{
+        reactions={(field) => {
           field.visible = !!field.query('visible_destructor').value()
         }}
       />

@@ -26,8 +26,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -115,12 +113,15 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          {
+            name: 'Zhang San',
+            phone: '13245633378',
+            email: 'zhangsan@gmail.com',
+          },
           { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
@@ -347,8 +348,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -615,12 +614,15 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          {
+            name: 'Zhang San',
+            phone: '13245633378',
+            email: 'zhangsan@gmail.com',
+          },
           { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
@@ -682,8 +684,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   validateFirst: true,
@@ -755,12 +755,15 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          {
+            name: 'Zhang San',
+            phone: '13245633378',
+            email: 'zhangsan@gmail.com',
+          },
           { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
@@ -877,11 +880,7 @@ export default () => {
               decorator={[FormItem]}
               component={[IDUpload]}
             />
-            <ArrayField
-              name="contacts"
-              title="Contacts"
-              decorator={[FormItem]}
-            >
+            <ArrayField name="contacts" title="Contacts" decorator={[FormItem]}>
               {(field) => (
                 <ArrayBase>
                   {field.value?.map((item, index) => (
@@ -994,8 +993,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   readPretty: true,
@@ -1012,7 +1009,9 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      {field.editable && <Button icon={<UploadOutlined />}>Upload a copy</Button>}
+      {field.editable && (
+        <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      )}
     </Upload>
   )
 }
@@ -1085,12 +1084,15 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          {
+            name: 'Zhang San',
+            phone: '13245633378',
+            email: 'zhangsan@gmail.com',
+          },
           { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
@@ -1312,8 +1314,6 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
 
 const form = createForm({
   readPretty: true,
@@ -1330,7 +1330,9 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      {field.editable && <Button icon={<UploadOutlined />}>Upload a copy</Button>}
+      {field.editable && (
+        <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      )}
     </Upload>
   )
 }
@@ -1582,12 +1584,15 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          {
+            name: 'Zhang San',
+            phone: '13245633378',
+            email: 'zhangsan@gmail.com',
+          },
           { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })
@@ -1645,8 +1650,7 @@ import {
 import { action } from '@formily/reactive'
 import { Card, Button, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
-import 'antd/lib/tabs/style'
-import 'antd/lib/button/style'
+
 import './index.less'
 
 const form = createForm({
@@ -1664,7 +1668,9 @@ const IDUpload = (props) => {
         authorization: 'authorization-text',
       }}
     >
-      {field.editable && <Button icon={<UploadOutlined />}>Upload a copy</Button>}
+      {field.editable && (
+        <Button icon={<UploadOutlined />}>Upload a copy</Button>
+      )}
     </Upload>
   )
 }
@@ -1721,12 +1727,15 @@ export default () => {
             thumbUrl:
               'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
             uid: 'rc-upload-1615825692847-2',
-            url:
-              'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
           },
         ],
         contacts: [
-          { name: 'Zhang San', phone: '13245633378', email: 'zhangsan@gmail.com' },
+          {
+            name: 'Zhang San',
+            phone: '13245633378',
+            email: 'zhangsan@gmail.com',
+          },
           { name: 'Li Si', phone: '16873452678', email: 'lisi@gmail.com' },
         ],
       })

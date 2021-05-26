@@ -1,7 +1,6 @@
 export default {
   mode: 'site',
-  logo:
-    '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
+  logo: '//img.alicdn.com/imgextra/i2/O1CN01Kq3OHU1fph6LGqjIz_!!6000000004056-55-tps-1141-150.svg',
   title: 'Formily',
   hash: true,
   favicon:
@@ -64,8 +63,7 @@ export default {
           },
           {
             title: 'Chrome Extension',
-            path:
-              'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+            path: 'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
           },
         ],
       },
@@ -140,8 +138,7 @@ export default {
           },
           {
             title: 'Chrome扩展',
-            path:
-              'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
+            path: 'https://chrome.google.com/webstore/detail/formily-devtools/kkocalmbfnplecdmbadaapgapdioecfm?hl=zh-CN',
           },
         ],
       },
@@ -165,6 +162,12 @@ export default {
       },
     ],
   },
+  links: [
+    {
+      rel: 'stylesheet',
+      href: 'https://unpkg.com/antd/dist/antd.css',
+    },
+  ],
   styles: [
     `.__dumi-default-navbar-logo{
       height: 60px !important;
@@ -289,8 +292,6 @@ export default {
           },
         ],
       },
-
-      
     ],
 
     '/zh-CN/guide': [
@@ -396,8 +397,6 @@ export default {
           },
         ],
       },
-
-      
     ],
   },
 }

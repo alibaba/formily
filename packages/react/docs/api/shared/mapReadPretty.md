@@ -25,8 +25,6 @@ import {
   mapReadPretty,
 } from '@formily/react'
 import { Input as AntdInput, Form } from 'antd'
-import 'antd/lib/input/style'
-import 'antd/lib/form/style'
 
 // FormItem UI组件
 const FormItem = connect(

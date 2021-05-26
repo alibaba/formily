@@ -77,11 +77,11 @@ function App() {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-Although the value management achieves accurate rendering, when the verification is triggered, the form will still be rendered in full. Because of the update of the errors state, the overall controlled rendering is necessary to achieve synchronization. This is only the full rendering of the verification meeting. In fact, there is linkage. To achieve linkage with react-hook-form, it also requires overall controlled rendering to achieve linkage. Therefore, if you want to truly achieve accurate rendering, it must be Reactive! 
+Although the value management achieves accurate rendering, when the verification is triggered, the form will still be rendered in full. Because of the update of the errors state, the overall controlled rendering is necessary to achieve synchronization. This is only the full rendering of the verification meeting. In fact, there is linkage. To achieve linkage with react-hook-form, it also requires overall controlled rendering to achieve linkage. Therefore, if you want to truly achieve accurate rendering, it must be Reactive!
 
 ### Domain Model
 
-As mentioned in the previous question, the linkage of forms is very complicated, including various relationships between fields. Let’s imagine that most form linkages are basically linkages triggered based on the values of certain fields. However, actual business requirements may be disgusting. It is not only necessary to trigger linkage based on certain field values, but also based on other side-effect values, such as application status, server data status, page URL, internal data of a UI component of a field, and current Other data status of the field itself, some special asynchronous events, etc. Use a picture to describe: 
+As mentioned in the previous question, the linkage of forms is very complicated, including various relationships between fields. Let’s imagine that most form linkages are basically linkages triggered based on the values of certain fields. However, actual business requirements may be disgusting. It is not only necessary to trigger linkage based on certain field values, but also based on other side-effect values, such as application status, server data status, page URL, internal data of a UI component of a field, and current Other data status of the field itself, some special asynchronous events, etc. Use a picture to describe:
 
 ![image-20210202081316031](//img.alicdn.com/imgextra/i3/O1CN01LWjBSt251w5BtGHW2_!!6000000007467-55-tps-1100-432.svg)
 
@@ -95,27 +95,27 @@ interface Field {
 }
 ```
 
-Of course, does the Field model only have these 3 attributes? Definitely not, if we want to express a field, then the path of the field must have, Because we want to describe the entire form tree structure, at the same time, we also need to manage the properties of the field corresponding to the UI component. For example, Input and Select have their properties. For example, the placeholder of Input is associated with some data, or the drop-down option of Select is associated with some data, so you can understand it. So, our Field model can look like this: 
+Of course, does the Field model only have these 3 attributes? Definitely not, if we want to express a field, then the path of the field must have, Because we want to describe the entire form tree structure, at the same time, we also need to manage the properties of the field corresponding to the UI component. For example, Input and Select have their properties. For example, the placeholder of Input is associated with some data, or the drop-down option of Select is associated with some data, so you can understand it. So, our Field model can look like this:
 
 ```typescript
 interface Field {
-   path:string[],
-   value:any,
-   visible:boolean,
-   disabled:boolean,
-   component:[Component,ComponentProps]
+  path: string[]
+  value: any
+  visible: boolean
+  disabled: boolean
+  component: [Component, ComponentProps]
 }
 ```
 
-We have added the component attribute, which represents the UI component and UI component attribute corresponding to the field, so that the ability to associate certain data with the field component attribute, or even the field component, is realized. Are there any more? Of course, there are also, such as the outer package container of the field, usually we call it FormItem, which is mainly responsible for the interactive style of the field, such as the field title, the style of error prompts, etc., If we want to include more linkage, such as the linkage between certain data and FormItem, then we have to add the outer package container. There are many other attributes, which are not listed here. 
+We have added the component attribute, which represents the UI component and UI component attribute corresponding to the field, so that the ability to associate certain data with the field component attribute, or even the field component, is realized. Are there any more? Of course, there are also, such as the outer package container of the field, usually we call it FormItem, which is mainly responsible for the interactive style of the field, such as the field title, the style of error prompts, etc., If we want to include more linkage, such as the linkage between certain data and FormItem, then we have to add the outer package container. There are many other attributes, which are not listed here.
 
-From the above ideas, we can see that in order to solve the linkage problem, no matter how abstract we are, the field model will eventually be abstracted. It contains all the states related to the field. As long as these states are manipulated, linkage can be triggered. 
+From the above ideas, we can see that in order to solve the linkage problem, no matter how abstract we are, the field model will eventually be abstracted. It contains all the states related to the field. As long as these states are manipulated, linkage can be triggered.
 
-Regarding accurate rendering, we have determined that we can choose a Reactive solution similar to Mobx. Although it is a reinvention of a wheel, the Reactive model is still very suitable for abstract responsive models. So based on the ability of Reactive, Formily, after constant trial and error and correction, finally designed a truly elegant form model. Such a form model solves the problem of the form domain, so it is also called a domain model. With such a domain model, we can make the linkage of the form enumerable and predictable, which also lays a solid foundation for the linkage of the protocol description to be discussed later. 
+Regarding accurate rendering, we have determined that we can choose a Reactive solution similar to Mobx. Although it is a reinvention of a wheel, the Reactive model is still very suitable for abstract responsive models. So based on the ability of Reactive, Formily, after constant trial and error and correction, finally designed a truly elegant form model. Such a form model solves the problem of the form domain, so it is also called a domain model. With such a domain model, we can make the linkage of the form enumerable and predictable, which also lays a solid foundation for the linkage of the protocol description to be discussed later.
 
 ### Path System
 
-The field model in the form domain model was mentioned earlier. If the design is more complete, it is not only a field model, but also a form model as the top-level model. The top-level model manages all the field models, and each field has its own Path. How to find these fields? The linkage relationship mentioned earlier is more of a passive dependency, but in some scenarios, we just need to modify the state of a field based on an asynchronous event action. Here is how to find a field elegantly. The same It has also undergone a lot of trial and error and correction. Formily's original path system @formily/path solves this problem very well. It not only makes the field lookup elegant, but it can also deal with the disgusting problem of inconsistent front-end and back-end data structures through destructuring expressions. 
+The field model in the form domain model was mentioned earlier. If the design is more complete, it is not only a field model, but also a form model as the top-level model. The top-level model manages all the field models, and each field has its own Path. How to find these fields? The linkage relationship mentioned earlier is more of a passive dependency, but in some scenarios, we just need to modify the state of a field based on an asynchronous event action. Here is how to find a field elegantly. The same It has also undergone a lot of trial and error and correction. Formily's original path system @formily/path solves this problem very well. It not only makes the field lookup elegant, but it can also deal with the disgusting problem of inconsistent front-end and back-end data structures through destructuring expressions.
 
 ### Life Cycle
 
@@ -131,7 +131,7 @@ So, if we choose JSON-Schema, how do we describe the UI and how do we describe t
 The solution of [react-jsonschema-form](https://github.com/rjsf-team/react-jsonschema-form) is that data is data and UI is UI. The advantage of this is that each protocol is a very pure protocol, but it brings a large maintenance cost and understanding cost.
 To develop a form, users need to constantly switch between the two protocols mentally. Therefore, if you look at such a split from a technical perspective, it is very reasonable, but from a product perspective, the split is to throw the cost to the user. Therefore, Formily's form protocol will be more inclined to expand on JSON-Schema.
 
-So, how to expand? In order not to pollute the standard JSON-Schema attributes, we uniformly express the extended attributes in the x-* format: 
+So, how to expand? In order not to pollute the standard JSON-Schema attributes, we uniformly express the extended attributes in the x-\* format:
 
 ```json
 {
@@ -211,7 +211,7 @@ In this way, a UI container can be described. Because the UI container can be de
 }
 ```
 
-The target field is described with the help of `x-reactions`, which depends on the value of the source field. If the value is `'123'`, the target field is displayed, otherwise it is hidden. This linkage method is a passive linkage. What if we want to achieve active linkage ? It can be like this: 
+The target field is described with the help of `x-reactions`, which depends on the value of the source field. If the value is `'123'`, the target field is displayed, otherwise it is hidden. This linkage method is a passive linkage. What if we want to achieve active linkage ? It can be like this:
 
 ```json
 {
@@ -261,26 +261,26 @@ It can be seen that our linkage is actually based on:
 - Condition-satisfied action
 - Unsatisfied action
 
-To achieve. Because the internal state management uses the [@formily/reactive](https://reactive.formilyjs.org) solution similar to Mobx, Formily easily realizes passive and active linkage scenarios, covering most business needs. 
+To achieve. Because the internal state management uses the [@formily/reactive](https://reactive.formilyjs.org) solution similar to Mobx, Formily easily realizes passive and active linkage scenarios, covering most business needs.
 
 Therefore, our form can be described by protocol, and it can be configurable no matter how complicated the layout is or the linkage is very complicated.
 
 ### Layered Architecture
 
-I talked about the solutions to various problems at the beginning, so how do we design now to make Formily more self-consistent and elegant? 
+I talked about the solutions to various problems at the beginning, so how do we design now to make Formily more self-consistent and elegant?
 
 ![](https://img.alicdn.com/imgextra/i3/O1CN0191vNVu1TYxFZA3KGN_!!6000000002395-55-tps-1939-1199.svg)
 
 This picture mainly divides Formily into the kernel layer, UI bridge layer, extended component layer, and configuration application layer.
 
-The kernel layer is UI-independent. It ensures that the logic and state of user management are not coupled to any framework. This has several advantages: 
+The kernel layer is UI-independent. It ensures that the logic and state of user management are not coupled to any framework. This has several advantages:
 
-- Logic and UI framework are decoupled, and framework-level migration will be done in the future, without extensive refactoring of business code. 
-- The learning cost is uniform. If the user uses @formily/react, the business will be migrated to @formily/vue in the future, and the user does not need to learn again. 
+- Logic and UI framework are decoupled, and framework-level migration will be done in the future, without extensive refactoring of business code.
+- The learning cost is uniform. If the user uses @formily/react, the business will be migrated to @formily/vue in the future, and the user does not need to learn again.
 
-JSON Schema exists independently and is consumed by the UI bridging layer, ensuring the absolute consistency of protocol drivers under different UI frameworks, and there is no need to repeatedly implement protocol parsing logic. 
+JSON Schema exists independently and is consumed by the UI bridging layer, ensuring the absolute consistency of protocol drivers under different UI frameworks, and there is no need to repeatedly implement protocol parsing logic.
 
-Extend the component layer to provide a series of form scene components to ensure that users can use it out of the box. No need to spend a lot of time for secondary development. 
+Extend the component layer to provide a series of form scene components to ensure that users can use it out of the box. No need to spend a lot of time for secondary development.
 
 ## Competitive Product Comparison
 
@@ -291,7 +291,6 @@ Extend the component layer to provide a series of form scene components to ensur
 import React from 'react'
 import { Table, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import 'antd/lib/table/style'
 
 const text = (content, tooltips) => {
   if (tooltips) {
@@ -321,14 +320,29 @@ const dataSource = [
   },
   {
     feature: 'performance',
-    antd: text('4.x performance is better', 'Only solved the value synchronization and accurate rendering'),
+    antd: text(
+      '4.x performance is better',
+      'Only solved the value synchronization and accurate rendering'
+    ),
     fusion: 'bad',
     formik: 'bad',
-    finalForm: text('better', 'But only solved the value synchronization and accurate rendering'),
+    finalForm: text(
+      'better',
+      'But only solved the value synchronization and accurate rendering'
+    ),
     schemaForm: 'bad',
-    hookForm: text('good', 'But only solved the value synchronization and accurate rendering'),
-    'formily1.x': text('excellent', 'Can solve the precise rendering in the linkage process'),
-    'formily2.x': text('excellent', 'Can solve the precise rendering in the linkage process'),
+    hookForm: text(
+      'good',
+      'But only solved the value synchronization and accurate rendering'
+    ),
+    'formily1.x': text(
+      'excellent',
+      'Can solve the precise rendering in the linkage process'
+    ),
+    'formily2.x': text(
+      'excellent',
+      'Can solve the precise rendering in the linkage process'
+    ),
   },
   {
     feature: 'Whether to support dynamic rendering',
@@ -369,7 +383,10 @@ const dataSource = [
     fusion: 'generalv',
     formik: 'general',
     finalForm: 'general',
-    schemaForm: text('low', 'Source code development requires manual maintenance of JSON'),
+    schemaForm: text(
+      'low',
+      'Source code development requires manual maintenance of JSON'
+    ),
     hookForm: 'general',
     'formily1.x': 'high',
     'formily2.x': 'high',

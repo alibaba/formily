@@ -19,7 +19,6 @@ import {
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { Button, Alert } from 'antd'
-import 'antd/lib/alert/style'
 
 const SchemaField = createSchemaField({
   components: {

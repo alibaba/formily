@@ -127,7 +127,6 @@ import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, Field } from '@formily/react'
 import { Input } from 'antd'
-import 'antd/lib/input/style'
 
 const form = createForm()
 
@@ -147,7 +146,6 @@ import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { Input } from 'antd'
-import 'antd/lib/input/style'
 
 const form = createForm()
 
@@ -194,7 +192,6 @@ import React from 'react'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
 import { Input } from 'antd'
-import 'antd/lib/input/style'
 
 const form = createForm()
 
