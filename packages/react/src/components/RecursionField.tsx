@@ -90,8 +90,8 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
     }
     return (
       <Field {...fieldProps} name={props.name} basePath={basePath}>
-        {fieldSchema['x-content']}
-        {fieldSchema['x-component-props']?.['children']}
+        {fieldSchema['x-content'] ||
+          fieldSchema['x-component-props']?.['children']}
       </Field>
     )
   }
