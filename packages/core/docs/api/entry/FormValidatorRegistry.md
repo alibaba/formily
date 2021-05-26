@@ -140,18 +140,17 @@ registerValidateRules({
 })
 ```
 
-
 ## getValidateLocaleIOSCode
 
 #### 描述
 
-根据IOS Code 获取 Locales
+获取内置存在的 ISO Code
 
 #### 签名
 
 ```ts
-interface getISOCode {
-  (language: string): Record<string, string> | undefined;
+interface getValidateLocaleIOSCode {
+  (language: string): string | undefined
 }
 ```
 
@@ -160,43 +159,7 @@ interface getISOCode {
 ```ts
 import { getValidateLocaleIOSCode } from '@formily/core'
 
-getValidateLocaleIOSCode('en');
+getValidateLocaleIOSCode('en')
 
-// {
-//   pattern: 'This field is invalid',
-//   invalid: 'This field is invalid',
-//   required: 'The field value is required',
-//   number: 'The field value is not a number',
-//   integer: 'The field value is not an integer number',
-//   url: 'The field value is a invalid url',
-//   email: 'The field value is not a email format',
-//   ipv6: 'The field value is not a ipv6 format',
-//   ipv4: 'The field value is not a ipv4 format',
-//   idcard: 'The field value is not an idcard format',
-//   qq: 'The field value is not a qq number format',
-//   phone: 'The field value is not a phone number format',
-//   money: 'The field value is not a currency format',
-//   zh: 'The field value is not a chinese string',
-//   date: 'The field value is not a valid date format',
-//   zip: 'The field value is not a zip format',
-//   len: 'The length or number of entries must be {{len}}',
-//   min: 'The length or number of entries must be at least {{min}}',
-//   maximum: 'The field value cannot be greater than {{maximum}}',
-//   exclusiveMaximum: 'The field value must be less than {{exclusiveMaximum}}',
-//   minimum: 'The field value cannot be less than {{minimum}}',
-//   exclusiveMinimum:
-//     'The field value must be greater than {{exclusiveMinimum}}',
-//   max: 'The field length or number of entries must be at most {{max}}',
-//   whitespace: 'This field value cannot be blank string.',
-//   enum: 'The field value must be one of {{enum}}',
-//   schema: {
-//     const: 'The field value must be equal to {{const}}',
-//     multipleOf: 'The field value must be divisible by {{multipleOf}}',
-//     maxProperties:
-//       'The number of field properties cannot be greater than {{maxProperties}}',
-//     minProperties:
-//       'The number of field properties cannot be less than {{maxProperties}}',
-//     uniqueItems: 'Array elements are not unique',
-//   }
-// }
+// ==>  en_US
 ```
