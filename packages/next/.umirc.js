@@ -24,7 +24,7 @@ export default {
   links: [
     {
       rel: 'stylesheet',
-      href: 'https://unpkg.com/@alifd/next/dist/next.css',
+      href: 'https://unpkg.com/@alifd/next/dist/next-noreset.css',
     },
   ],
   styles: [
