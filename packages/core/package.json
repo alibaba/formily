@@ -28,9 +28,6 @@
     "build:umd": "rollup --config",
     "build:docs": "dumi build"
   },
-  "peerDependencies": {
-    "@types/react": ">=16.8.0 || >=17.0.0"
-  },
   "devDependencies": {
     "dumi": "^1.1.0-rc.8"
   },
