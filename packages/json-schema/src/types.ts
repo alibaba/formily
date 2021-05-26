@@ -129,7 +129,10 @@ export interface ISchemaTransformerOptions extends ISchemaFieldFactoryOptions {
 }
 
 export type Stringify<P extends { [key: string]: any }> = {
-  [key in keyof P]?: P[key] | string
+  /**
+   * Use `string & {}` instead of string to keep Literal Type for ISchema#component and ISchema#decorator
+   */
+  [key in keyof P]?: P[key] | (string & {})
 }
 
 export type ISchema<
