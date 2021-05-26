@@ -172,7 +172,18 @@ export type ISchema<
   minProperties?: number
   required?: string[] | boolean | string
   format?: string
+  $ref?: string
   /** nested json schema spec **/
+  definitions?: SchemaProperties<
+    Decorator,
+    Component,
+    DecoratorProps,
+    ComponentProps,
+    Pattern,
+    Display,
+    Validator,
+    Message
+  >
   properties?: SchemaProperties<
     Decorator,
     Component,

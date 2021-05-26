@@ -7,7 +7,7 @@ import {
   SchemaKey,
   ISchemaTransformerOptions,
 } from './types'
-import { map, each, isFn, instOf } from '@formily/shared'
+import { map, each, isFn, instOf, FormPath, isStr } from '@formily/shared'
 import { compile, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
 import {
@@ -43,6 +43,7 @@ export class Schema<
 > implements ISchema
 {
   parent?: Schema
+  root?: Schema
   name?: SchemaKey
   title?: Message
   description?: Message
@@ -68,6 +69,19 @@ export class Schema<
   required?: string[] | boolean | string
   format?: string
   /** nested json schema spec **/
+  definitions?: Record<
+    string,
+    Schema<
+      Decorator,
+      Component,
+      DecoratorProps,
+      ComponentProps,
+      Pattern,
+      Display,
+      Validator,
+      Message
+    >
+  >
   properties?: Record<
     string,
     Schema<
@@ -188,6 +202,9 @@ export class Schema<
   ) {
     if (parent) {
       this.parent = parent
+      this.root = parent.root
+    } else {
+      this.root = this
     }
     return this.fromJSON(json)
   }
@@ -346,6 +363,12 @@ export class Schema<
     return this.additionalItems
   }
 
+  findDefinitions = (ref: string) => {
+    if (!ref || !this.root || !isStr(ref)) return
+    if (ref.indexOf('#/') !== 0) return
+    return FormPath.getIn(this.root, ref.substring(2).split('/'))
+  }
+
   mapProperties = <T>(
     callback?: (
       schema: Schema<
@@ -448,7 +471,7 @@ export class Schema<
     const schema = new Schema({}, this.parent)
     each(this, (value, key) => {
       if (isFn(value) && !key.includes('x-')) return
-      if (key === 'parent') return
+      if (key === 'parent' || key === 'root') return
       if (!ShallowCompileKeys.includes(key)) {
         schema[key] = value ? compile(value, scope) : value
       } else {
@@ -484,6 +507,8 @@ export class Schema<
         this.setItems(value)
       } else if (key === 'additionalItems') {
         this.setAdditionalItems(value)
+      } else if (key === '$ref') {
+        this.fromJSON(this.findDefinitions(value))
       } else {
         this[key] = value
       }
@@ -503,7 +528,7 @@ export class Schema<
   > => {
     const results = {}
     each(this, (value: any, key) => {
-      if (isFn(value) || key === 'parent') return
+      if (isFn(value) || key === 'parent' || key === 'root') return
       if (key === 'properties' || key === 'patternProperties') {
         results[key] = map(value, (item) => item?.toJSON?.())
       } else if (key === 'additionalProperties' || key === 'additionalItems') {
