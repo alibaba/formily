@@ -199,16 +199,26 @@ const TimePicker: React.FC<TimePickerProps> = (props) => {
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 }
 
-export const PreviewText = {
-  Input,
-  Select,
-  TreeSelect,
-  Cascader,
-  DatePicker,
-  DateRangePicker,
-  TimePicker,
-  Placeholder,
-  usePlaceholder,
+const Text = (props: React.PropsWithChildren<any>) => {
+  const prefixCls = usePrefixCls('form-text', props)
+
+  return (
+    <div className={cls(prefixCls, props.className)} style={props.style}>
+      {usePlaceholder(props.value)}
+    </div>
+  )
 }
+
+Text.Input = Input
+Text.Select = Select
+Text.TreeSelect = TreeSelect
+Text.Cascader = Cascader
+Text.DatePicker = DatePicker
+Text.DateRangePicker = DateRangePicker
+Text.TimePicker = TimePicker
+Text.Placeholder = Placeholder
+Text.usePlaceholder = usePlaceholder
+
+export const PreviewText = Text
 
 export default PreviewText
