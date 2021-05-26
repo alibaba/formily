@@ -81,8 +81,10 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
 
-    const [activeKeys, setActiveKeys] = useState<Array<string | number>>(
-      Array.from({ length: props?.defaultOpenPanelCount || 1 }).map((_, i) => i)
+    const [activeKeys, setActiveKeys] = useState<Array<string>>(
+      Array.from({ length: props?.defaultOpenPanelCount || 1 }).map((_, i) =>
+        String(i)
+      )
     )
 
     const renderItems = () => {
@@ -177,7 +179,13 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
     return (
-      <ArrayBase onAdd={(index) => setActiveKeys(activeKeys.concat(index))}>
+      <ArrayBase
+        onAdd={(index) => {
+          if (!activeKeys.includes(String(index))) {
+            setActiveKeys(activeKeys.concat(String(index)))
+          }
+        }}
+      >
         {renderEmpty()}
         {renderItems()}
         {renderAddition()}
