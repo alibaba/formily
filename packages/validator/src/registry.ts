@@ -54,6 +54,8 @@ const getISOCode = (language: string) => {
   return isoCode
 }
 
+export const getValidateLocaleIOSCode = getISOCode;
+
 export const setValidateLanguage = (lang: string) => {
   registry.locales.language = lang
 }

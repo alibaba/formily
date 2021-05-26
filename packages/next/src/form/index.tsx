@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { FormProvider } from '@formily/react'
 import { FormLayout, IFormLayoutProps } from '../form-layout'
+import { ConfigProvider } from '@alifd/next'
+import { getValidateLocaleIOSCode, setValidateLanguage } from '@formily/core'
 
 export interface FormProps
   extends Formily.React.Types.IProviderProps,
@@ -16,6 +18,14 @@ export const Form: React.FC<FormProps> = ({
   onAutoSubmit,
   ...props
 }) => {
+  // @ts-ignore
+  const lang = ConfigProvider.getContext()?.locale?.momentLocale
+  useMemo(() => {
+    if (getValidateLocaleIOSCode(lang)) {
+      setValidateLanguage(lang)
+    }
+  }, [lang])
+
   return (
     <FormProvider form={form}>
       <FormLayout {...props}>

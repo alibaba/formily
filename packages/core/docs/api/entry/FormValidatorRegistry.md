@@ -139,3 +139,27 @@ registerValidateRules({
   },
 })
 ```
+
+## getValidateLocaleIOSCode
+
+#### 描述
+
+获取内置存在的 ISO Code
+
+#### 签名
+
+```ts
+interface getValidateLocaleIOSCode {
+  (language: string): string | undefined
+}
+```
+
+#### 用例
+
+```ts
+import { getValidateLocaleIOSCode } from '@formily/core'
+
+getValidateLocaleIOSCode('en')
+
+// ==>  en_US
+```
