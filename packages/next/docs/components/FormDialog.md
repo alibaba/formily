@@ -8,7 +8,7 @@
 import React from 'react'
 import { FormDialog, FormItem, Input, FormLayout } from '@formily/next'
 import { createSchemaField } from '@formily/react'
-import { Button, ConfigProvider } from '@alifd/next'
+import { Button } from '@alifd/next'
 
 const SchemaField = createSchemaField({
   components: {
@@ -19,72 +19,57 @@ const SchemaField = createSchemaField({
 
 export default () => {
   return (
-    <ConfigProvider
-      locale={{
-        Dialog: {
-          ok: 'OK',
-          cancel: 'Cancel',
-        },
-      }}
-      defaultPropsConfig={{
-        Dialog: {
-          isFullScreen: true,
-          footerActions: ['cancel', 'ok'],
-        },
+    <Button
+      onClick={() => {
+        FormDialog('弹窗表单', () => {
+          return (
+            <FormLayout labelCol={6} wrapperCol={14}>
+              <SchemaField>
+                <SchemaField.String
+                  name="aaa"
+                  required
+                  title="输入框1"
+                  x-decorator="FormItem"
+                  x-component="Input"
+                />
+                <SchemaField.String
+                  name="bbb"
+                  required
+                  title="输入框2"
+                  x-decorator="FormItem"
+                  x-component="Input"
+                />
+                <SchemaField.String
+                  name="ccc"
+                  required
+                  title="输入框3"
+                  x-decorator="FormItem"
+                  x-component="Input"
+                />
+                <SchemaField.String
+                  name="ddd"
+                  required
+                  title="输入框4"
+                  x-decorator="FormItem"
+                  x-component="Input"
+                />
+              </SchemaField>
+              <FormDialog.Footer>
+                <span style={{ marginLeft: 4 }}>扩展文案</span>
+              </FormDialog.Footer>
+            </FormLayout>
+          )
+        })
+          .open({
+            initialValues: {
+              aaa: '123',
+            },
+          })
+          .then(console.log)
       }}
     >
-      <Button
-        onClick={() => {
-          FormDialog('弹窗表单', () => {
-            return (
-              <FormLayout labelCol={6} wrapperCol={14}>
-                <SchemaField>
-                  <SchemaField.String
-                    name="aaa"
-                    required
-                    title="输入框1"
-                    x-decorator="FormItem"
-                    x-component="Input"
-                  />
-                  <SchemaField.String
-                    name="bbb"
-                    required
-                    title="输入框2"
-                    x-decorator="FormItem"
-                    x-component="Input"
-                  />
-                  <SchemaField.String
-                    name="ccc"
-                    required
-                    title="输入框3"
-                    x-decorator="FormItem"
-                    x-component="Input"
-                  />
-                  <SchemaField.String
-                    name="ddd"
-                    required
-                    title="输入框4"
-                    x-decorator="FormItem"
-                    x-component="Input"
-                  />
-                </SchemaField>
-                <FormDialog.Footer>
-                  <span style={{ marginLeft: 4 }}>扩展文案</span>
-                </FormDialog.Footer>
-              </FormLayout>
-            )
-          })
-            .open({
-              initialValues: {
-                aaa: '123',
-              },
-            })
-            .then(console.log)
-        }}
-      >
-        点我打开表单
-      </Button>
-    </ConfigProvider>
+      点我打开表单
+    </Button>
   )
 }
 ```
@@ -225,6 +210,84 @@ export default () => {
     >
       点我打开表单
     </Button>
+  )
+}
+```
+
+## 使用 Fusion Context
+
+```tsx
+import React from 'react'
+import { FormDialog, FormItem, Input, FormLayout } from '@formily/next'
+import { Field } from '@formily/react'
+import { Button, ConfigProvider } from '@alifd/next'
+
+export default () => {
+  return (
+    <ConfigProvider
+      locale={{
+        Dialog: {
+          ok: 'OK',
+          cancel: 'Cancel',
+        },
+      }}
+      defaultPropsConfig={{
+        Dialog: {
+          isFullScreen: true,
+          footerActions: ['cancel', 'ok'],
+        },
+      }}
+    >
+      <Button
+        onClick={() => {
+          FormDialog('弹窗表单', () => {
+            return (
+              <FormLayout labelCol={6} wrapperCol={14}>
+                <Field
+                  name="aaa"
+                  required
+                  title="输入框1"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="bbb"
+                  required
+                  title="输入框2"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="ccc"
+                  required
+                  title="输入框3"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <Field
+                  name="ddd"
+                  required
+                  title="输入框4"
+                  decorator={[FormItem]}
+                  component={[Input]}
+                />
+                <FormDialog.Footer>
+                  <span style={{ marginLeft: 4 }}>扩展文案</span>
+                </FormDialog.Footer>
+              </FormLayout>
+            )
+          })
+            .open({
+              initialValues: {
+                aaa: '123',
+              },
+            })
+            .then(console.log)
+        }}
+      >
+        点我打开表单
+      </Button>
+    </ConfigProvider>
   )
 }
 ```
