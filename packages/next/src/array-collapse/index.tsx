@@ -69,10 +69,9 @@ const insertExpandedKeys = (expandedKeys: number[], index: number) => {
 }
 
 export const ArrayCollapse: ComposedArrayCollapse = observer(
-  (props: IArrayCollapseProps) => {
+  ({ defaultOpenPanelCount, ...props }: IArrayCollapseProps) => {
     const field = useField<Formily.Core.Models.ArrayField>()
     const dataSource = Array.isArray(field.value) ? field.value : []
-    const { defaultOpenPanelCount, ...collapseProps } = props
 
     const [expandKeys, setExpandKeys] = useState<number[]>(
       takeDefaultExpandedKeys(dataSource.length, defaultOpenPanelCount)
@@ -108,7 +107,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
     const renderItems = () => {
       return (
         <Collapse
-          {...collapseProps}
+          {...props}
           expandedKeys={expandKeys.map(String)}
           onExpand={(keys: string[]) => setExpandKeys(keys.map(Number))}
           className={cls(`${prefixCls}-item`, props.className)}
