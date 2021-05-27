@@ -1,8 +1,9 @@
 import {
   inject,
   provide,
+  watch,
   defineComponent,
-  computed,
+  shallowRef,
   DefineComponent,
 } from 'vue-demi'
 import { isFn, isValid } from '@formily/shared'
@@ -56,20 +57,30 @@ const RecursionField = observer(
       filterProperties: {},
     },
     setup(props: IRecursionFieldProps) {
-      // const { track } = useObserver()
       const parentRef = useField()
       const options = inject(SchemaOptionsSymbol)
-      const scope = inject(SchemaExpressionScopeSymbol)
-      const schemaRef = computed(() => new Schema(props.schema))
-      const fieldSchemaRef = computed(() =>
-        schemaRef.value.compile?.({
+      const scopeRef = inject(SchemaExpressionScopeSymbol)
+      const createSchema = (schemaProp: IRecursionFieldProps['schema']) =>
+        new Schema(schemaProp)
+      const createFieldSchema = (schema: Schema) =>
+        schema.compile?.({
           ...options.scope,
-          ...scope,
+          ...scopeRef.value,
         })
-      )
-      const fieldPropsRef = computed(() =>
-        schemaRef.value?.toFieldProps?.(options)
-      )
+      const schemaRef = shallowRef(createSchema(props.schema))
+      const fieldSchemaRef = shallowRef(createFieldSchema(schemaRef.value))
+      watch([() => props.schema, scopeRef], () => {
+        schemaRef.value = createSchema(props.schema)
+        fieldSchemaRef.value = createFieldSchema(schemaRef.value)
+      })
+
+      const getPropsFromSchema = (schema: Schema) =>
+        schema?.toFieldProps?.(options)
+      const fieldPropsRef = shallowRef(getPropsFromSchema(fieldSchemaRef.value))
+      watch(fieldSchemaRef, () => {
+        fieldPropsRef.value = getPropsFromSchema(fieldSchemaRef.value)
+      })
+
       const getBasePath = () => {
         if (props.onlyRenderProperties) {
           return props.basePath || parentRef?.value?.address.concat(props.name)
@@ -115,8 +126,10 @@ const RecursionField = observer(
             }
           )
 
-          const slots = {
-            default: () => [...children],
+          const slots: Record<string, () => any> = {}
+
+          if (children.length > 0) {
+            slots.default = () => [...children]
           }
 
           const xContent = fieldSchemaRef.value['x-content']
@@ -192,9 +205,26 @@ const RecursionField = observer(
             )
           }
 
-          const slots = {}
+          const slots: Record<string, () => any> = {}
 
           const xContent = fieldSchemaRef.value['x-content']
+
+          if (typeof xContent === 'string') {
+            slots['default'] = () => [xContent]
+          } else if (isVueOptions(xContent) || typeof xContent === 'function') {
+            // is vue component or functional component
+            slots['default'] = () => [h(xContent, {}, {})]
+          } else if (xContent && typeof xContent === 'object') {
+            // for named slots
+            Object.keys(xContent).forEach((key) => {
+              const child = xContent[key]
+              if (typeof child === 'string') {
+                slots[key] = () => [child]
+              } else if (isVueOptions(child) || typeof child === 'function') {
+                slots[key] = () => [h(child, {}, {})]
+              }
+            })
+          }
 
           if (typeof xContent === 'string') {
             slots['default'] = () => [xContent]

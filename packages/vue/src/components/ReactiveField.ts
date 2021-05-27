@@ -117,16 +117,18 @@ export default observer(
               attrs: attrs,
               on: events,
             }
-
-            return h(component, componentData, {
+            const children = {
               ...slots,
-              default: () =>
-                slots.default &&
+            }
+            if (slots.default) {
+              children.default = () =>
                 slots.default({
                   field: props.field,
                   form: props.field.form,
-                }),
-            })
+                })
+            }
+
+            return h(component, componentData, children)
           }
 
           children = renderDecorator([renderComponent()])

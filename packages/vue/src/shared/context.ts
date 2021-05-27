@@ -8,7 +8,8 @@ export const FieldSymbol: InjectionKey<Ref<Formily.Core.Types.GeneralField>> =
 export const SchemaMarkupSymbol: InjectionKey<Ref<Schema>> =
   Symbol('schemaMarkup')
 export const SchemaSymbol: InjectionKey<Ref<Schema>> = Symbol('schema')
-export const SchemaExpressionScopeSymbol: InjectionKey<any> =
-  Symbol('schemaExpression')
+export const SchemaExpressionScopeSymbol: InjectionKey<
+  Ref<Record<string, any>>
+> = Symbol('schemaExpression')
 export const SchemaOptionsSymbol: InjectionKey<ISchemaFieldFactoryOptions> =
   Symbol('schemaOptions')

@@ -78,23 +78,22 @@ export default defineComponent<IFieldProps<VueComponent, VueComponent>>({
 
     return () => {
       const field = fieldRef.value
-      return h(
-        ReactiveField,
-        {
-          props: {
-            field,
-          },
+      const componentData = {
+        props: {
+          field,
         },
-        {
-          ...slots,
-          default: () =>
-            slots.default &&
-            slots.default({
-              field,
-              form: field.form,
-            }),
-        }
-      )
+      }
+      const children = {
+        ...slots,
+      }
+      if (slots.default) {
+        children.default = () =>
+          slots.default({
+            field,
+            form: field.form,
+          })
+      }
+      return h(ReactiveField, componentData, children)
     }
   },
 }) as unknown as DefineComponent<IFieldProps<VueComponent, VueComponent>>

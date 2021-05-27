@@ -81,24 +81,25 @@ export default observer(
 
       provide(FieldSymbol, fieldRef)
 
-      return () =>
-        h(
-          ReactiveField,
-          {
-            props: {
-              field: fieldRef.value,
-            },
+      return () => {
+        const field = fieldRef.value
+        const componentData = {
+          props: {
+            field,
           },
-          {
-            ...slots,
-            default: () =>
-              slots.default &&
-              slots.default({
-                field: fieldRef.value,
-                form: fieldRef.value.form,
-              }),
-          }
-        )
+        }
+        const children = {
+          ...slots,
+        }
+        if (slots.default) {
+          children.default = () =>
+            slots.default({
+              field: field,
+              form: field.form,
+            })
+        }
+        return h(ReactiveField, componentData, children)
+      }
     },
   }) as unknown as DefineComponent<ArrayFieldProps>
 )
