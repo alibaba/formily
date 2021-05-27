@@ -1,6 +1,7 @@
 // auto generated code
 import './array-base/main.scss'
 import './array-cards/main.scss'
+import './array-collapse/main.scss'
 import './array-items/main.scss'
 import './array-table/main.scss'
 import './editable/main.scss'
