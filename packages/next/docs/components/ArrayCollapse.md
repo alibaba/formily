@@ -580,7 +580,7 @@ export default () => {
 | title  | ReactText             | 文案     |          |
 | method | `'push' \| 'unshift'` | 添加方式 | `'push'` |
 
-其余参考 https://fusion.design/pc/component/button
+其余参考 https://fusion.design/pc/component/basic/button
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
@@ -592,7 +592,7 @@ export default () => {
 | ------ | --------- | ---- | ------ |
 | title  | ReactText | 文案 |        |
 
-其余参考 https://fusion.design/pc/component/button
+其余参考 https://ant.design/components/icon-cn/
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
@@ -604,7 +604,7 @@ export default () => {
 | ------ | --------- | ---- | ------ |
 | title  | ReactText | 文案 |        |
 
-其余参考 https://fusion.design/pc/component/button
+其余参考 https://ant.design/components/icon-cn/
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
@@ -616,7 +616,7 @@ export default () => {
 | ------ | --------- | ---- | ------ |
 | title  | ReactText | 文案 |        |
 
-其余参考 https://fusion.design/pc/component/button
+其余参考 https://ant.design/components/icon-cn/
 
 注意：title 属性可以接收 Field 模型中的 title 映射，也就是在 Field 上传 title 也是生效的
 
