@@ -248,9 +248,11 @@ export function createSchemaField<
             })
       )
 
+      const scopeRef = computed(() => props.scope)
+
       provide(SchemaMarkupSymbol, schemaRef)
       provide(SchemaOptionsSymbol, options)
-      provide(SchemaExpressionScopeSymbol, props.scope)
+      provide(SchemaExpressionScopeSymbol, scopeRef)
 
       return () => {
         env.nonameId = 0
@@ -301,23 +303,17 @@ export function createSchemaField<
   >({
     name: 'MarkupField',
     props: Object.assign({}, markupProps, { type: String }),
-    setup(
-      props: ISchemaMarkupFieldProps<
-        Components,
-        ComponentPath<Components>,
-        ComponentPath<Components>
-      >,
-      { slots }
-    ) {
+    setup(props, { slots }) {
       const parentRef = inject(SchemaMarkupSymbol, null)
       if (!parentRef || !parentRef.value) return () => h(Fragment, {}, {})
+      const resolvedProps = resolveSchemaProps(props)
 
       const name = props.name || getRandomName()
       const appendArraySchema = (schema: ISchema) => {
         if (parentRef.value.items) {
           return parentRef.value.addProperty(name, schema)
         } else {
-          return parentRef.value.setItems(resolveSchemaProps(props))
+          return parentRef.value.setItems(resolvedProps)
         }
       }
 
@@ -330,12 +326,9 @@ export function createSchemaField<
             parentRef.value.type === 'object' ||
             parentRef.value.type === 'void'
           ) {
-            schemaRef.value = parentRef.value.addProperty(
-              name,
-              resolveSchemaProps(props)
-            )
+            schemaRef.value = parentRef.value.addProperty(name, resolvedProps)
           } else if (parentRef.value.type === 'array') {
-            const schema = appendArraySchema(resolveSchemaProps(props))
+            const schema = appendArraySchema(resolvedProps)
             schemaRef.value = Array.isArray(schema) ? schema[0] : schema
           }
         },
@@ -343,14 +336,13 @@ export function createSchemaField<
       )
       provide(SchemaMarkupSymbol, schemaRef)
 
-      return () =>
-        h(
-          Fragment,
-          {},
-          {
-            default: () => slots.default && slots.default(),
-          }
-        )
+      return () => {
+        const children: Record<string, () => any> = {}
+        if (slots.default) {
+          children.default = () => slots.default()
+        }
+        return h(Fragment, {}, children)
+      }
     },
   })
 

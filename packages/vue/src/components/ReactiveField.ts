@@ -3,6 +3,7 @@ import { defineComponent, DefineComponent } from 'vue-demi'
 import { isVoidField } from '@formily/core'
 import { clone } from '@formily/shared'
 import { observer } from '@formily/reactive-vue'
+import { toJS } from '@formily/reactive'
 
 import h from '../shared/h'
 import { Fragment } from '../shared/fragment'
@@ -111,22 +112,25 @@ export default observer(
                 ? field.pattern === 'readOnly'
                 : undefined,
               ...originData,
-              value: !isVoidField(field) ? field.value : undefined,
+              // toJS is used to avoid some render loop.
+              value: !isVoidField(field) ? toJS(field.value) : undefined,
             }
             const componentData = {
               attrs: attrs,
               on: events,
             }
-
-            return h(component, componentData, {
+            const children = {
               ...slots,
-              default: () =>
-                slots.default &&
+            }
+            if (slots.default) {
+              children.default = () =>
                 slots.default({
                   field: props.field,
                   form: props.field.form,
-                }),
-            })
+                })
+            }
+
+            return h(component, componentData, children)
           }
 
           children = renderDecorator([renderComponent()])
