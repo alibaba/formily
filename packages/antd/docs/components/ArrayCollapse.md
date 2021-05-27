@@ -17,6 +17,7 @@ import {
 } from '@formily/antd'
 import { createForm } from '@formily/core'
 import { FormProvider, createSchemaField } from '@formily/react'
+import { Button } from 'antd'
 
 const SchemaField = createSchemaField({
   components: {
@@ -41,7 +42,7 @@ export default () => {
             defaultOpenPanelCount: 3,
           }}
         >
-          <SchemaField.Object
+          <SchemaField.Void
             x-component="ArrayCollapse.CollapsePanel"
             x-component-props={{
               header: '字符串数组',
@@ -58,7 +59,7 @@ export default () => {
             <SchemaField.Void x-component="ArrayCollapse.Remove" />
             <SchemaField.Void x-component="ArrayCollapse.MoveUp" />
             <SchemaField.Void x-component="ArrayCollapse.MoveDown" />
-          </SchemaField.Object>
+          </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目"
@@ -99,10 +100,10 @@ export default () => {
           x-decorator="FormItem"
           x-component="ArrayCollapse"
           x-component-props={{
-            defaultOpenPanelCount: 3,
+            defaultOpenPanelCount: 8,
           }}
         >
-          <SchemaField.Object
+          <SchemaField.Void
             x-component="ArrayCollapse.CollapsePanel"
             x-component-props={{
               header: '字符串数组',
@@ -119,7 +120,7 @@ export default () => {
             <SchemaField.Void x-component="ArrayCollapse.Remove" />
             <SchemaField.Void x-component="ArrayCollapse.MoveUp" />
             <SchemaField.Void x-component="ArrayCollapse.MoveDown" />
-          </SchemaField.Object>
+          </SchemaField.Void>
           <SchemaField.Void
             x-component="ArrayCollapse.Addition"
             title="添加条目（unshift）"
@@ -130,6 +131,23 @@ export default () => {
         </SchemaField.Array>
       </SchemaField>
       <FormButtonGroup>
+        <Button
+          onClick={() => {
+            form.setInitialValues({
+              array: Array.from({ length: 10 }).map(() => ({
+                input: 'default value',
+              })),
+              string_array: Array.from({ length: 10 }).map(
+                () => 'default value'
+              ),
+              string_array_unshift: Array.from({ length: 10 }).map(
+                () => 'default value'
+              ),
+            })
+          }}
+        >
+          加载默认数据
+        </Button>
         <Submit onSubmit={console.log}>提交</Submit>
       </FormButtonGroup>
     </FormProvider>

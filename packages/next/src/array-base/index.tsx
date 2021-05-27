@@ -138,7 +138,7 @@ ArrayBase.Addition = (props) => {
           array?.props?.onAdd?.(0)
         } else {
           array?.field?.push?.(defaultValue)
-          array?.props?.onAdd?.(array?.field?.value?.length)
+          array?.props?.onAdd?.(array?.field?.value?.length - 1)
         }
         if (props.onClick) {
           props.onClick(e)

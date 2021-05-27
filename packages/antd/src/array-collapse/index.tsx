@@ -1,3 +1,4 @@
+import React, { Fragment, useState, useEffect } from 'react'
 import {
   Badge,
   Card,
@@ -13,9 +14,8 @@ import {
   observer,
   ISchema,
 } from '@formily/react'
-import React, { Fragment, useState } from 'react'
-import ArrayBase, { ArrayBaseMixins } from '../array-base'
 import cls from 'classnames'
+import ArrayBase, { ArrayBaseMixins } from '../array-base'
 import { usePrefixCls } from '../__builtins__'
 
 export interface IArrayCollapseProps extends CollapseProps {
@@ -54,14 +54,42 @@ const isOperationComponent = (schema: ISchema) => {
     isMoveUpComponent(schema)
   )
 }
+
+const range = (count: number) => Array.from({ length: count }).map((_, i) => i)
+
+const takeDefaultActiveKeys = (
+  dataSourceLength: number,
+  defaultOpenPanelCount: number
+) => {
+  if (dataSourceLength < defaultOpenPanelCount) return range(dataSourceLength)
+  return range(defaultOpenPanelCount)
+}
+
+const insertActiveKeys = (activeKeys: number[], index: number) => {
+  if (activeKeys.length <= index) return activeKeys.concat(index)
+  return activeKeys.reduce((buf, key) => {
+    if (key < index) return buf.concat(key)
+    if (key === index) return buf.concat([key, key + 1])
+    return buf.concat(key + 1)
+  }, [])
+}
+
 export const ArrayCollapse: ComposedArrayCollapse = observer(
   (props: IArrayCollapseProps) => {
     const field = useField<Formily.Core.Models.ArrayField>()
-
-    const schema = useFieldSchema()
     const dataSource = Array.isArray(field.value) ? field.value : []
+    const [activeKeys, setActiveKeys] = useState<number[]>(
+      takeDefaultActiveKeys(dataSource.length, props.defaultOpenPanelCount)
+    )
+    const schema = useFieldSchema()
     const prefixCls = usePrefixCls('formily-array-collapse', props)
-
+    useEffect(() => {
+      if (!field.modified && dataSource.length) {
+        setActiveKeys(
+          takeDefaultActiveKeys(dataSource.length, props.defaultOpenPanelCount)
+        )
+      }
+    }, [dataSource.length, field])
     if (!schema) throw new Error('can not found schema object')
 
     const renderAddition = () => {
@@ -73,7 +101,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       }, null)
     }
     const renderEmpty = () => {
-      if (dataSource?.length) return
+      if (dataSource.length) return
       return (
         <Card className={cls(`${prefixCls}-item`, props.className)}>
           <Empty />
@@ -81,21 +109,15 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       )
     }
 
-    const [activeKeys, setActiveKeys] = useState<Array<string>>(
-      Array.from({ length: props?.defaultOpenPanelCount || 1 }).map((_, i) =>
-        String(i)
-      )
-    )
-
     const renderItems = () => {
       return (
         <Collapse
           {...props}
           activeKey={activeKeys}
-          onChange={(key: string[]) => setActiveKeys(key)}
+          onChange={(keys: string[]) => setActiveKeys(keys.map(Number))}
           className={cls(`${prefixCls}-item`, props.className)}
         >
-          {dataSource?.map((item, index) => {
+          {dataSource.map((item, index) => {
             const items = Array.isArray(schema.items)
               ? schema.items[index] || schema.items[0]
               : schema.items
@@ -181,9 +203,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
     return (
       <ArrayBase
         onAdd={(index) => {
-          if (!activeKeys.includes(String(index))) {
-            setActiveKeys(activeKeys.concat(String(index)))
-          }
+          setActiveKeys(insertActiveKeys(activeKeys, index))
         }}
       >
         {renderEmpty()}
@@ -198,8 +218,14 @@ const CollapsePanel: React.FC<CollapsePanelProps> = ({ children }) => {
   return <Fragment>{children}</Fragment>
 }
 
+CollapsePanel.displayName = 'CollapsePanel'
+
+ArrayCollapse.defaultProps = {
+  defaultOpenPanelCount: 5,
+}
 ArrayCollapse.displayName = 'ArrayCollapse'
 ArrayCollapse.CollapsePanel = CollapsePanel
 
 ArrayBase.mixin(ArrayCollapse)
+
 export default ArrayCollapse
