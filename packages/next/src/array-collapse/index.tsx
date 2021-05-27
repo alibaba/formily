@@ -74,14 +74,14 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
     const dataSource = Array.isArray(field.value) ? field.value : []
     const { defaultOpenPanelCount, ...collapseProps } = props
 
-    const [activeKeys, setActiveKeys] = useState<number[]>(
+    const [expandKeys, setExpandKeys] = useState<number[]>(
       takeDefaultExpandedKeys(dataSource.length, defaultOpenPanelCount)
     )
     const schema = useFieldSchema()
     const prefixCls = usePrefixCls('formily-array-collapse', props)
     useEffect(() => {
       if (!field.modified && dataSource.length) {
-        setActiveKeys(
+        setExpandKeys(
           takeDefaultExpandedKeys(dataSource.length, defaultOpenPanelCount)
         )
       }
@@ -109,8 +109,8 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
       return (
         <Collapse
           {...collapseProps}
-          expandedKeys={activeKeys.map(String)}
-          onExpand={(keys: string[]) => setActiveKeys(keys.map(Number))}
+          expandedKeys={expandKeys.map(String)}
+          onExpand={(keys: string[]) => setExpandKeys(keys.map(Number))}
           className={cls(`${prefixCls}-item`, props.className)}
         >
           {dataSource.map((item, index) => {
@@ -191,7 +191,7 @@ export const ArrayCollapse: ComposedArrayCollapse = observer(
     return (
       <ArrayBase
         onAdd={(index) => {
-          setActiveKeys(insertExpandedKeys(activeKeys, index))
+          setExpandKeys(insertExpandedKeys(expandKeys, index))
         }}
       >
         {renderEmpty()}
