@@ -8,6 +8,7 @@ import {
   Schema,
 } from '../index'
 import { render } from '@testing-library/vue'
+import { mount, createLocalVue } from '@vue/test-utils'
 import Vue, { CreateElement } from 'vue'
 import { defineComponent, h } from '@vue/composition-api'
 
@@ -570,87 +571,94 @@ describe('recursion field', () => {
     expect(queryByTestId('input')).toBeNull()
   })
 
-  // test('schema reactions', async () => {
-  //   const form = createForm()
-  //   const components = createSchemaField({
-  //     components: {
-  //       Input,
-  //     },
-  //   })
-  //   const { queryByTestId } = render({
-  //     components: components,
-  //     data () {
-  //       return {
-  //         form,
-  //         reactions: [
-  //           {
-  //             when: '{{$form.values.aaa === "123"}}',
-  //             fulfill: {
-  //               state: {
-  //                 visible: true,
-  //               },
-  //             },
-  //             otherwise: {
-  //               state: {
-  //                 visible: false,
-  //               },
-  //             },
-  //           },
-  //           {
-  //             when: '{{$self.value === "123"}}',
-  //             target: 'ccc',
-  //             fulfill: {
-  //               schema: {
-  //                 'x-visible': true,
-  //               },
-  //             },
-  //             otherwise: {
-  //               schema: {
-  //                 'x-visible': false,
-  //               },
-  //             },
-  //           },
-  //         ]
-  //       }
-  //     },
-  //     template: `<FormProvider :form="form">
-  //     <SchemaField>
-  //       <SchemaStringField
-  //         name="aaa"
-  //         x-component="Input"
-  //         :x-component-props="{
-  //           'data-testid': 'aaa',
-  //         }"
-  //       />
-  //       <SchemaStringField
-  //         name="bbb"
-  //         x-component="Input"
-  //         :x-component-props="{
-  //           'data-testid': 'bbb',
-  //         }"
-  //         :x-reactions="reactions"
-  //       />
-  //       <SchemaStringField
-  //         name="ccc"
-  //         x-component="Input"
-  //         :x-component-props="{
-  //           'data-testid': 'ccc',
-  //         }"
-  //       />
-  //     </SchemaField>
-  //   </FormProvider>`
-  //   })
-  //   expect(queryByTestId('bbb')).toBeNull()
-  //   fireEvent.update(queryByTestId('aaa'), '123')
-  //   expect(form.query('aaa').get('value')).toEqual('123')
-  //   await waitFor(() => {
-  //     expect(queryByTestId('bbb')).toBeVisible()
-  //   })
-  //   expect(queryByTestId('ccc')).toBeNull()
-  //   fireEvent.update(queryByTestId('bbb'), '123')
-  //   expect(form.query('bbb').get('value')).toEqual('123')
-  //   await waitFor(() => {
-  //     expect(queryByTestId('ccc')).toBeVisible()
-  //   })
-  // })
+  test('schema reactions', async () => {
+    const div = document.createElement('div')
+    document.body.appendChild(div)
+    const form = createForm()
+    const components = createSchemaField({
+      components: {
+        Input,
+      },
+    })
+    const localVue = createLocalVue()
+    localVue.component('FormProvider', FormProvider)
+    const TestComponent = {
+      components: components,
+      data() {
+        return {
+          form,
+          reactions: [
+            {
+              when: '{{$form.values.aaa === "123"}}',
+              fulfill: {
+                state: {
+                  visible: true,
+                },
+              },
+              otherwise: {
+                state: {
+                  visible: false,
+                },
+              },
+            },
+            {
+              when: '{{$self.value === "123"}}',
+              target: 'ccc',
+              fulfill: {
+                schema: {
+                  'x-visible': true,
+                },
+              },
+              otherwise: {
+                schema: {
+                  'x-visible': false,
+                },
+              },
+            },
+          ],
+        }
+      },
+      template: `<FormProvider :form="form">
+        <SchemaField>
+          <SchemaStringField
+            name="aaa"
+            x-component="Input"
+            :x-component-props="{
+              'class': 'aaa',
+            }"
+          />
+          <SchemaStringField
+            name="bbb"
+            x-component="Input"
+            :x-component-props="{
+              'class': 'bbb',
+            }"
+            :x-reactions="reactions"
+          />
+          <SchemaStringField
+            name="ccc"
+            x-component="Input"
+            :x-component-props="{
+              'class': 'ccc',
+            }"
+          />
+        </SchemaField>
+      </FormProvider>`,
+    } as any
+    const wrapper = mount(TestComponent, {
+      attachTo: div,
+      localVue,
+    })
+    expect(wrapper.find('.bbb').exists()).toBeFalsy()
+    wrapper.find('.aaa').setValue('123')
+    expect(form.query('aaa').get('value')).toEqual('123')
+    await wrapper.vm.$forceUpdate()
+    expect(wrapper.find('.bbb').exists()).toBeTruthy()
+    expect(wrapper.find('.ccc').exists()).toBeFalsy()
+    wrapper.find('.bbb').setValue('123')
+    expect(form.query('bbb').get('value')).toEqual('123')
+    await wrapper.vm.$forceUpdate()
+    expect(wrapper.find('.ccc').exists()).toBeTruthy()
+    wrapper.destroy()
+  })
 })
