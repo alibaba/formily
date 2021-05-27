@@ -196,7 +196,7 @@ FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 #### 描述
 
-根据指定路径获取表单值是
+根据指定路径获取表单值
 
 #### 签名
 
@@ -212,7 +212,7 @@ FormPathPattern API 参考 [FormPath](/api/entry/form-path#formpathpattern)
 
 #### 描述
 
-根据指定路径获取表单默认值是
+根据指定路径获取表单默认值
 
 #### 签名
 
@@ -547,7 +547,7 @@ IFormState 参考 [IFormState](#iformstate)
 
 #### 描述
 
-设置表单状态
+获取表单状态
 
 #### 签名
 

@@ -174,7 +174,7 @@ interface setWarning {
 
 #### 描述
 
-设置字段成功信息，这里是以 EffectWarning 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
+设置字段成功信息，这里是以 EffectSuccess 为 code 的 feedback 更新，主要是防止污染校验器结果，如果希望强制覆盖，则可以使用 setFeedback
 
 #### 签名
 
