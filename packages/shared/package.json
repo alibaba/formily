@@ -1,42 +1,42 @@
 {
-	"name": "@formily/shared",
-	"version": "2.0.0-beta.56",
-	"license": "MIT",
-	"main": "lib",
-	"module": "esm",
-	"umd:main": "dist/formily.shared.umd.production.js",
-	"unpkg": "dist/formily.shared.umd.production.js",
-	"jsdelivr": "dist/formily.shared.umd.production.js",
-	"jsnext:main": "esm",
-	"types": "esm/index.d.ts",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/alibaba/formily.git"
-	},
-	"bugs": {
-		"url": "https://github.com/alibaba/formily/issues"
-	},
-	"homepage": "https://github.com/alibaba/formily#readme",
-	"engines": {
-		"npm": ">=3.0.0"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec",
-	"scripts": {
-		"build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
-		"build:cjs": "tsc --declaration",
-		"build:esm": "tsc --declaration --module es2015 --outDir esm",
-		"build:umd": "rollup --config"
-	},
-	"dependencies": {
-		"@formily/path": "2.0.0-beta.56",
-		"camel-case": "^4.1.1",
-		"lower-case": "^2.0.1",
-		"no-case": "^3.0.4",
-		"param-case": "^3.0.4",
-		"pascal-case": "^3.1.1",
-		"upper-case": "^2.0.1"
-	}
+  "name": "@formily/shared",
+  "version": "2.0.0-beta.57",
+  "license": "MIT",
+  "main": "lib",
+  "module": "esm",
+  "umd:main": "dist/formily.shared.umd.production.js",
+  "unpkg": "dist/formily.shared.umd.production.js",
+  "jsdelivr": "dist/formily.shared.umd.production.js",
+  "jsnext:main": "esm",
+  "types": "esm/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alibaba/formily.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alibaba/formily/issues"
+  },
+  "homepage": "https://github.com/alibaba/formily#readme",
+  "engines": {
+    "npm": ">=3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec",
+  "scripts": {
+    "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd",
+    "build:cjs": "tsc --declaration",
+    "build:esm": "tsc --declaration --module es2015 --outDir esm",
+    "build:umd": "rollup --config"
+  },
+  "dependencies": {
+    "@formily/path": "2.0.0-beta.57",
+    "camel-case": "^4.1.1",
+    "lower-case": "^2.0.1",
+    "no-case": "^3.0.4",
+    "param-case": "^3.0.4",
+    "pascal-case": "^3.1.1",
+    "upper-case": "^2.0.1"
+  }
 }
