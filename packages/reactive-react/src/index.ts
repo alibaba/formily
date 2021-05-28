@@ -1,33 +1,27 @@
-import {
-  memo,
-  forwardRef,
-  ForwardRefRenderFunction,
-  FunctionComponent,
-  MemoExoticComponent,
-  ForwardRefExoticComponent,
-  PropsWithoutRef,
-} from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
+import { forwardRef, memo } from 'react'
 import { useObserver } from './hooks'
 import { IObserverOptions } from './types'
 
 export function observer<
   Options extends IObserverOptions,
   Component extends Options extends { forwardRef: true }
-    ? ForwardRefRenderFunction<any, any>
-    : FunctionComponent<any>
+    ? React.ForwardRefRenderFunction<any, any>
+    : React.FunctionComponent<any>
 >(
   component: Component,
   options?: Options
 ): Options extends { forwardRef: true }
-  ? MemoExoticComponent<
-      ForwardRefExoticComponent<
-        PropsWithoutRef<Parameters<Component>[0]> & {
+  ? React.MemoExoticComponent<
+      React.ForwardRefExoticComponent<
+        React.PropsWithoutRef<Parameters<Component>[0]> & {
           ref?: Parameters<Component>[1]
         }
       >
     >
-  : MemoExoticComponent<FunctionComponent<Parameters<Component>[0]>> {
+  : React.MemoExoticComponent<
+      React.FunctionComponent<Parameters<Component>[0]>
+    > {
   const realOptions = {
     forwardRef: false,
     ...options,
