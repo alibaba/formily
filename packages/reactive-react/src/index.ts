@@ -12,9 +12,7 @@ export function observer<P, Options extends IObserverOptions>(
       ? React.PropsWithRef<P>
       : React.PropsWithoutRef<P>
   >
->
-
-export function observer(component: any, options?: any) {
+> {
   const realOptions = {
     forwardRef: false,
     ...options,
