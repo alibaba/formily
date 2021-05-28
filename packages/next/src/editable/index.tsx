@@ -12,10 +12,10 @@ import cls from 'classnames'
  * 默认Inline展示
  */
 
-type IPopoverProps = PopoverProps
+type IPopoverProps = PopoverProps & { title?: React.ReactNode }
 
 type ComposedEditable = React.FC<IFormItemProps> & {
-  Popover?: React.FC<IPopoverProps & { title?: React.ReactNode }>
+  Popover?: React.FC<IPopoverProps>
 }
 
 const useParentPattern = () => {
@@ -58,80 +58,82 @@ const useFormItemProps = (): IFormItemProps => {
   }
 }
 
-export const Editable: ComposedEditable = observer((props) => {
-  const [editable, setEditable] = useEditable()
-  const pattern = useParentPattern()
-  const itemProps = useFormItemProps()
-  const field = useField<Formily.Core.Models.Field>()
-  const basePrefixCls = usePrefixCls()
-  const prefixCls = usePrefixCls('formily-editable')
-  const ref = useRef<boolean>()
-  const innerRef = useRef<HTMLDivElement>()
-  const recover = () => {
-    if (ref.current && !field?.errors?.length) {
-      setEditable(false)
+export const Editable: ComposedEditable = observer(
+  (props: React.PropsWithChildren<IFormItemProps>) => {
+    const [editable, setEditable] = useEditable()
+    const pattern = useParentPattern()
+    const itemProps = useFormItemProps()
+    const field = useField<Formily.Core.Models.Field>()
+    const basePrefixCls = usePrefixCls()
+    const prefixCls = usePrefixCls('formily-editable')
+    const ref = useRef<boolean>()
+    const innerRef = useRef<HTMLDivElement>()
+    const recover = () => {
+      if (ref.current && !field?.errors?.length) {
+        setEditable(false)
+      }
     }
-  }
-  const renderEditHelper = () => {
-    if (editable) return
-    return (
-      <BaseItem {...props} {...itemProps}>
-        {pattern === 'editable' && (
-          <EditOutlined className={`${prefixCls}-edit-btn`} />
-        )}
-        {pattern !== 'editable' && (
-          <MessageOutlined className={`${prefixCls}-edit-btn`} />
-        )}
-      </BaseItem>
-    )
-  }
-
-  const renderCloseHelper = () => {
-    if (!editable) return
-    return (
-      <BaseItem {...props}>
-        <CloseOutlined className={`${prefixCls}-close-btn`} />
-      </BaseItem>
-    )
-  }
-
-  useClickAway((e) => {
-    const target = e.target as HTMLElement
-    if (target?.closest(`.${basePrefixCls}-overlay-wrapper`)) return
-    recover()
-  }, innerRef)
-
-  const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const target = e.target as HTMLElement
-    const close = innerRef.current.querySelector(`.${prefixCls}-close-btn`)
-    if (target?.contains(close) || close?.contains(target)) {
-      recover()
-    } else if (!ref.current) {
-      setTimeout(() => {
-        setEditable(true)
-        setTimeout(() => {
-          innerRef.current.querySelector('input')?.focus()
-        })
-      })
-    }
-  }
-
-  ref.current = editable
-
-  return (
-    <div className={prefixCls} ref={innerRef} onClick={onClick}>
-      <div className={`${prefixCls}-content`}>
+    const renderEditHelper = () => {
+      if (editable) return
+      return (
         <BaseItem {...props} {...itemProps}>
-          {props.children}
+          {pattern === 'editable' && (
+            <EditOutlined className={`${prefixCls}-edit-btn`} />
+          )}
+          {pattern !== 'editable' && (
+            <MessageOutlined className={`${prefixCls}-edit-btn`} />
+          )}
         </BaseItem>
-        {renderEditHelper()}
-        {renderCloseHelper()}
-      </div>
-    </div>
-  )
-})
+      )
+    }
 
-Editable.Popover = observer(({ ...props }) => {
+    const renderCloseHelper = () => {
+      if (!editable) return
+      return (
+        <BaseItem {...props}>
+          <CloseOutlined className={`${prefixCls}-close-btn`} />
+        </BaseItem>
+      )
+    }
+
+    useClickAway((e) => {
+      const target = e.target as HTMLElement
+      if (target?.closest(`.${basePrefixCls}-overlay-wrapper`)) return
+      recover()
+    }, innerRef)
+
+    const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      const target = e.target as HTMLElement
+      const close = innerRef.current.querySelector(`.${prefixCls}-close-btn`)
+      if (target?.contains(close) || close?.contains(target)) {
+        recover()
+      } else if (!ref.current) {
+        setTimeout(() => {
+          setEditable(true)
+          setTimeout(() => {
+            innerRef.current.querySelector('input')?.focus()
+          })
+        })
+      }
+    }
+
+    ref.current = editable
+
+    return (
+      <div className={prefixCls} ref={innerRef} onClick={onClick}>
+        <div className={`${prefixCls}-content`}>
+          <BaseItem {...props} {...itemProps}>
+            {props.children}
+          </BaseItem>
+          {renderEditHelper()}
+          {renderCloseHelper()}
+        </div>
+      </div>
+    )
+  }
+)
+
+Editable.Popover = observer((props: React.PropsWithChildren<IPopoverProps>) => {
   const field = useField<Formily.Core.Models.Field>()
   const pattern = useParentPattern()
   const [visible, setVisible] = useState(false)

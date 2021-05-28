@@ -99,7 +99,7 @@ const Empty = () => {
   )
 }
 
-export const ArrayCards: ComposedArrayCards = observer((props) => {
+export const ArrayCards: ComposedArrayCards = observer((props: CardProps) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
   const dataSource = Array.isArray(field.value) ? field.value : []

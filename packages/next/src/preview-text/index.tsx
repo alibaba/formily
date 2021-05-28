@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = (props) => {
   )
 }
 
-const Select: React.FC<SelectProps> = observer((props) => {
+const Select: React.FC<SelectProps> = observer((props: SelectProps) => {
   const field = useField<Formily.Core.Models.Field>()
   const prefixCls = usePrefixCls('form-text', props)
   const dataSource: any[] = field?.dataSource?.length
@@ -85,66 +85,68 @@ const Select: React.FC<SelectProps> = observer((props) => {
   return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
 })
 
-const TreeSelect: React.FC<TreeSelectProps> = observer((props) => {
-  const field = useField<Formily.Core.Models.Field>()
-  const placeholder = usePlaceholder()
-  const prefixCls = usePrefixCls('form-text', props)
-  const dataSource = field?.dataSource?.length
-    ? field.dataSource
-    : props?.dataSource?.length
-    ? props.dataSource
-    : []
-  const getSelected = () => {
-    const value = props.value
-    if (props.multiple) {
-      if (props['useDetailValue']) {
-        return isArr(value) ? value : []
+const TreeSelect: React.FC<TreeSelectProps> = observer(
+  (props: TreeSelectProps) => {
+    const field = useField<Formily.Core.Models.Field>()
+    const placeholder = usePlaceholder()
+    const prefixCls = usePrefixCls('form-text', props)
+    const dataSource = field?.dataSource?.length
+      ? field.dataSource
+      : props?.dataSource?.length
+      ? props.dataSource
+      : []
+    const getSelected = () => {
+      const value = props.value
+      if (props.multiple) {
+        if (props['useDetailValue']) {
+          return isArr(value) ? value : []
+        } else {
+          return isArr(value)
+            ? value.map((val) => ({ label: val, value: val }))
+            : []
+        }
       } else {
-        return isArr(value)
-          ? value.map((val) => ({ label: val, value: val }))
-          : []
-      }
-    } else {
-      if (props['useDetailValue']) {
-        return value ? [value] : []
-      } else {
-        return value ? [{ label: value, value }] : []
-      }
-    }
-  }
-
-  const findLabel = (value: any, dataSource: any[]) => {
-    for (let i = 0; i < dataSource?.length; i++) {
-      const item = dataSource[i]
-      if (item?.value === value) {
-        return item?.label
-      } else {
-        const childLabel = findLabel(value, item?.children)
-        if (childLabel) return childLabel
+        if (props['useDetailValue']) {
+          return value ? [value] : []
+        } else {
+          return value ? [{ label: value, value }] : []
+        }
       }
     }
-  }
 
-  const getLabels = () => {
-    const selected = getSelected()
-    if (!selected?.length)
-      return (
-        <Tag type="primary" size="small">
-          {placeholder}
-        </Tag>
-      )
-    return selected.map(({ value, label }, key) => {
-      return (
-        <Tag type="primary" size="small" key={key}>
-          {findLabel(value, dataSource) || label || placeholder}
-        </Tag>
-      )
-    })
-  }
-  return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
-})
+    const findLabel = (value: any, dataSource: any[]) => {
+      for (let i = 0; i < dataSource?.length; i++) {
+        const item = dataSource[i]
+        if (item?.value === value) {
+          return item?.label
+        } else {
+          const childLabel = findLabel(value, item?.children)
+          if (childLabel) return childLabel
+        }
+      }
+    }
 
-const Cascader: React.FC<CascaderProps> = observer((props) => {
+    const getLabels = () => {
+      const selected = getSelected()
+      if (!selected?.length)
+        return (
+          <Tag type="primary" size="small">
+            {placeholder}
+          </Tag>
+        )
+      return selected.map(({ value, label }, key) => {
+        return (
+          <Tag type="primary" size="small" key={key}>
+            {findLabel(value, dataSource) || label || placeholder}
+          </Tag>
+        )
+      })
+    }
+    return <div className={cls(prefixCls, props.className)}>{getLabels()}</div>
+  }
+)
+
+const Cascader: React.FC<CascaderProps> = observer((props: CascaderProps) => {
   const field = useField<Formily.Core.Models.Field>()
   const placeholder = usePlaceholder()
   const prefixCls = usePrefixCls('form-text', props)

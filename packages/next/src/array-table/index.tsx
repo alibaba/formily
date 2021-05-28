@@ -139,7 +139,7 @@ const useAddition = () => {
 }
 
 const StatusSelect: React.FC<IStatusSelectProps> = observer(
-  ({ pageSize, ...props }) => {
+  ({ pageSize, ...props }: IStatusSelectProps) => {
     const form = useForm()
     const field = useField<Formily.Core.Models.ArrayField>()
     const prefixCls = usePrefixCls('formily-array-table')
