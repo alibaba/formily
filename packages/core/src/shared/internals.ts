@@ -71,7 +71,8 @@ export const buildFieldPath = (field: GeneralField) => {
       return currentPath
     }
     if (isVoidField(current)) {
-      if (isArrayField(current.parent)) {
+      const parent = field.form.fields[path.toString()]
+      if (isArrayField(parent)) {
         prevArray = true
         return currentPath
       }
