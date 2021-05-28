@@ -1,53 +1,53 @@
-import React, { memo, forwardRef, ForwardedRef } from 'react'
+import {
+  memo,
+  forwardRef,
+  ForwardRefRenderFunction,
+  FunctionComponent,
+  MemoExoticComponent,
+  ForwardRefExoticComponent,
+  PropsWithoutRef,
+} from 'react'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import { useObserver } from './hooks'
 import { IObserverOptions } from './types'
 
-export function observer<P extends object>(
-  baseComponent: React.FunctionComponent<P>,
-  options?: IObserverOptions
-): IObserverOptions extends { forwardRef: true }
-  ? React.MemoExoticComponent<
-      React.ForwardRefExoticComponent<React.PropsWithoutRef<P>>
+export function observer<
+  Options extends IObserverOptions,
+  Component extends Options extends { forwardRef: true }
+    ? ForwardRefRenderFunction<any, any>
+    : FunctionComponent<any>
+>(
+  component: Component,
+  options?: Options
+): Options extends { forwardRef: true }
+  ? MemoExoticComponent<
+      ForwardRefExoticComponent<
+        PropsWithoutRef<Parameters<Component>[0]> & {
+          ref?: Parameters<Component>[1]
+        }
+      >
     >
-  : React.MemoExoticComponent<React.FunctionComponent<P>>
-
-export function observer<P extends object>(
-  baseComponent: React.FunctionComponent<P>,
-  options?: IObserverOptions
-) {
+  : MemoExoticComponent<FunctionComponent<Parameters<Component>[0]>> {
   const realOptions = {
     forwardRef: false,
     ...options,
   }
 
   const wrappedComponent = realOptions.forwardRef
-    ? forwardRef(
-        (
-          props: P,
-          ref: ForwardedRef<'ref' extends keyof P ? P['ref'] : any>
-        ) => {
-          return useObserver(
-            () =>
-              baseComponent({
-                ...props,
-                ...ref,
-              }),
-            realOptions
-          )
-        }
-      )
-    : (props: P) => {
-        return useObserver(() => baseComponent(props), realOptions)
+    ? forwardRef((props: any, ref: any) => {
+        return useObserver(() => component(props, ref), realOptions)
+      })
+    : (props: any) => {
+        return useObserver(() => component(props), realOptions)
       }
 
   const memoComponent = memo(wrappedComponent)
 
-  hoistNonReactStatics(memoComponent, baseComponent)
+  hoistNonReactStatics(memoComponent, component)
 
   if (realOptions.displayName) {
     memoComponent.displayName = realOptions.displayName
   }
 
-  return memoComponent
+  return memoComponent as any
 }
