@@ -3,25 +3,12 @@ import { forwardRef, memo } from 'react'
 import { useObserver } from './hooks'
 import { IObserverOptions } from './types'
 
-export function observer<
-  Options extends IObserverOptions,
-  Component extends Options extends { forwardRef: true }
-    ? React.ForwardRefRenderFunction<any, any>
-    : React.FunctionComponent<any>
->(
-  component: Component,
+export function observer<P, Options extends IObserverOptions>(
+  component: React.FunctionComponent<P>,
   options?: Options
 ): Options extends { forwardRef: true }
-  ? React.MemoExoticComponent<
-      React.ForwardRefExoticComponent<
-        React.PropsWithoutRef<Parameters<Component>[0]> & {
-          ref?: Parameters<Component>[1]
-        }
-      >
-    >
-  : React.MemoExoticComponent<
-      React.FunctionComponent<Parameters<Component>[0]>
-    > {
+  ? React.MemoExoticComponent<React.ForwardRefExoticComponent<P>>
+  : React.MemoExoticComponent<React.FunctionComponent<P>> {
   const realOptions = {
     forwardRef: false,
     ...options,
@@ -29,7 +16,7 @@ export function observer<
 
   const wrappedComponent = realOptions.forwardRef
     ? forwardRef((props: any, ref: any) => {
-        return useObserver(() => component(props, ref), realOptions)
+        return useObserver(() => component({ ...props, ref }), realOptions)
       })
     : (props: any) => {
         return useObserver(() => component(props), realOptions)
