@@ -47,16 +47,13 @@ export function mapReadPretty<T extends JSXComponent, C extends JSXComponent>(
 ) {
   return (target: T) => {
     return observer(
-      (props, ref) => {
+      (props) => {
         const field = useField()
         return React.createElement(
           !isVoidField(field) && field?.pattern === 'readPretty'
             ? component
             : target,
-          {
-            ...props,
-            ref,
-          }
+          props
         )
       },
       {
