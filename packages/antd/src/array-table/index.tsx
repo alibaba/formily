@@ -139,47 +139,49 @@ const useAddition = () => {
   }, null)
 }
 
-const StatusSelect: React.FC<IStatusSelectProps> = observer((props) => {
-  const form = useForm()
-  const field = useField<Formily.Core.Models.ArrayField>()
-  const prefixCls = usePrefixCls('formily-array-table')
-  const errors = form.queryFeedbacks({
-    type: 'error',
-    address: `${field.address}.*`,
-  })
-  const createIndexPattern = (page: number) => {
-    const pattern = `${field.address}.*[${(page - 1) * props.pageSize}:${
-      page * props.pageSize
-    }].*`
-    return FormPath.parse(pattern)
-  }
-  const options = props.options?.map(({ label, value }) => {
-    const hasError = errors.some(({ address }) => {
-      return createIndexPattern(value).match(address)
+const StatusSelect: React.FC<IStatusSelectProps> = observer(
+  (props: IStatusSelectProps) => {
+    const form = useForm()
+    const field = useField<Formily.Core.Models.ArrayField>()
+    const prefixCls = usePrefixCls('formily-array-table')
+    const errors = form.queryFeedbacks({
+      type: 'error',
+      address: `${field.address}.*`,
     })
-    return {
-      label: hasError ? <Badge dot>{label}</Badge> : label,
-      value,
+    const createIndexPattern = (page: number) => {
+      const pattern = `${field.address}.*[${(page - 1) * props.pageSize}:${
+        page * props.pageSize
+      }].*`
+      return FormPath.parse(pattern)
     }
-  })
+    const options = props.options?.map(({ label, value }) => {
+      const hasError = errors.some(({ address }) => {
+        return createIndexPattern(value).match(address)
+      })
+      return {
+        label: hasError ? <Badge dot>{label}</Badge> : label,
+        value,
+      }
+    })
 
-  const width = String(options?.length).length * 15
+    const width = String(options?.length).length * 15
 
-  return (
-    <Select
-      value={props.value}
-      onChange={props.onChange}
-      options={options}
-      virtual
-      style={{
-        width: width < 60 ? 60 : width,
-      }}
-      className={cls(`${prefixCls}-status-select`, {
-        'has-error': errors?.length,
-      })}
-    />
-  )
-})
+    return (
+      <Select
+        value={props.value}
+        onChange={props.onChange}
+        options={options}
+        virtual
+        style={{
+          width: width < 60 ? 60 : width,
+        }}
+        className={cls(`${prefixCls}-status-select`, {
+          'has-error': errors?.length,
+        })}
+      />
+    )
+  }
+)
 
 const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
   const [current, setCurrent] = useState(1)

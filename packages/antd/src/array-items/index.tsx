@@ -52,48 +52,50 @@ const useAddition = () => {
   }, null)
 }
 
-export const ArrayItems: ComposedArrayItems = observer((props) => {
-  const field = useField<Formily.Core.Models.ArrayField>()
-  const prefixCls = usePrefixCls('formily-array-items')
-  const schema = useFieldSchema()
-  const addition = useAddition()
-  const dataSource = Array.isArray(field.value) ? field.value : []
-  if (!schema) throw new Error('can not found schema object')
-  return (
-    <ArrayBase>
-      <div
-        {...props}
-        onChange={() => {}}
-        className={cls(prefixCls, props.className)}
-      >
-        <SortableList
-          useDragHandle
-          lockAxis="y"
-          helperClass={`${prefixCls}-sort-helper`}
-          onSortEnd={({ oldIndex, newIndex }) => {
-            field.move(oldIndex, newIndex)
-          }}
+export const ArrayItems: ComposedArrayItems = observer(
+  (props: React.HTMLAttributes<HTMLDivElement>) => {
+    const field = useField<Formily.Core.Models.ArrayField>()
+    const prefixCls = usePrefixCls('formily-array-items')
+    const schema = useFieldSchema()
+    const addition = useAddition()
+    const dataSource = Array.isArray(field.value) ? field.value : []
+    if (!schema) throw new Error('can not found schema object')
+    return (
+      <ArrayBase>
+        <div
+          {...props}
+          onChange={() => {}}
+          className={cls(prefixCls, props.className)}
         >
-          {dataSource?.map((item, index) => {
-            const items = Array.isArray(schema.items)
-              ? schema.items[index] || schema.items[0]
-              : schema.items
-            return (
-              <ArrayBase.Item key={index} index={index}>
-                <SortableItem key={`item-${index}`} index={index}>
-                  <div className={`${prefixCls}-item-inner`}>
-                    <RecursionField schema={items} name={index} />
-                  </div>
-                </SortableItem>
-              </ArrayBase.Item>
-            )
-          })}
-        </SortableList>
-        {addition}
-      </div>
-    </ArrayBase>
-  )
-})
+          <SortableList
+            useDragHandle
+            lockAxis="y"
+            helperClass={`${prefixCls}-sort-helper`}
+            onSortEnd={({ oldIndex, newIndex }) => {
+              field.move(oldIndex, newIndex)
+            }}
+          >
+            {dataSource?.map((item, index) => {
+              const items = Array.isArray(schema.items)
+                ? schema.items[index] || schema.items[0]
+                : schema.items
+              return (
+                <ArrayBase.Item key={index} index={index}>
+                  <SortableItem key={`item-${index}`} index={index}>
+                    <div className={`${prefixCls}-item-inner`}>
+                      <RecursionField schema={items} name={index} />
+                    </div>
+                  </SortableItem>
+                </ArrayBase.Item>
+              )
+            })}
+          </SortableList>
+          {addition}
+        </div>
+      </ArrayBase>
+    )
+  }
+)
 
 ArrayItems.displayName = 'ArrayItems'
 
