@@ -93,5 +93,5 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
 ReactiveInternal.displayName = 'ReactiveField'
 
 export const ReactiveField = observer(ReactiveInternal, {
-  forwardRef: false,
+  forwardRef: true,
 })
