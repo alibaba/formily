@@ -65,6 +65,91 @@ test('create field props', () => {
   expect(field5.initialValue).toEqual(123)
 })
 
+test('field display and value', () => {
+  const form = attach(createForm())
+  const objectField = attach(
+    form.createObjectField({
+      name: 'object',
+    })
+  )
+  const arrayField = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  const valueField = attach(
+    form.createField({
+      name: 'value',
+    })
+  )
+  expect(objectField.value).toEqual({})
+  expect(arrayField.value).toEqual([])
+  expect(valueField.value).toBeUndefined()
+
+  objectField.hidden = true
+  arrayField.hidden = true
+  valueField.hidden = true
+  expect(objectField.value).toEqual({})
+  expect(arrayField.value).toEqual([])
+  expect(valueField.value).toBeUndefined()
+
+  objectField.hidden = false
+  arrayField.hidden = false
+  valueField.hidden = false
+  expect(objectField.value).toEqual({})
+  expect(arrayField.value).toEqual([])
+  expect(valueField.value).toBeUndefined()
+
+  objectField.visible = false
+  arrayField.visible = false
+  valueField.visible = false
+  expect(objectField.value).toBeUndefined()
+  expect(arrayField.value).toBeUndefined()
+  expect(valueField.value).toBeUndefined()
+
+  objectField.visible = true
+  arrayField.visible = true
+  valueField.visible = true
+  expect(objectField.value).toEqual({})
+  expect(arrayField.value).toEqual([])
+  expect(valueField.value).toBeUndefined()
+
+  objectField.value = { value: '123' }
+  arrayField.value = ['123']
+  valueField.value = '123'
+  expect(objectField.value).toEqual({ value: '123' })
+  expect(arrayField.value).toEqual(['123'])
+  expect(valueField.value).toEqual('123')
+
+  objectField.hidden = true
+  arrayField.hidden = true
+  valueField.hidden = true
+  expect(objectField.value).toEqual({ value: '123' })
+  expect(arrayField.value).toEqual(['123'])
+  expect(valueField.value).toEqual('123')
+
+  objectField.hidden = false
+  arrayField.hidden = false
+  valueField.hidden = false
+  expect(objectField.value).toEqual({ value: '123' })
+  expect(arrayField.value).toEqual(['123'])
+  expect(valueField.value).toEqual('123')
+
+  objectField.visible = false
+  arrayField.visible = false
+  valueField.visible = false
+  expect(objectField.value).toBeUndefined()
+  expect(arrayField.value).toBeUndefined()
+  expect(valueField.value).toBeUndefined()
+
+  objectField.visible = true
+  arrayField.visible = true
+  valueField.visible = true
+  expect(objectField.value).toEqual({ value: '123' })
+  expect(arrayField.value).toEqual(['123'])
+  expect(valueField.value).toEqual('123')
+})
+
 test('nested display/pattern', () => {
   const form = attach(createForm())
   const object_ = attach(
