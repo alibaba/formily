@@ -9,7 +9,9 @@ export function observer<P, Options extends IObserverOptions>(
 ): React.MemoExoticComponent<
   React.FunctionComponent<
     Options extends { forwardRef: true }
-      ? React.PropsWithRef<P>
+      ? P & {
+          ref?: 'ref' extends keyof P ? P['ref'] : React.RefAttributes<any>
+        }
       : React.PropsWithoutRef<P>
   >
 > {
