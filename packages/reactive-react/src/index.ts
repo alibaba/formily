@@ -1,5 +1,5 @@
-import hoistNonReactStatics from 'hoist-non-react-statics'
 import React, { forwardRef, memo } from 'react'
+import hoistNonReactStatics from 'hoist-non-react-statics'
 import { useObserver } from './hooks'
 import { IObserverOptions } from './types'
 
