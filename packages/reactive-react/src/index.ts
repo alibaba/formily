@@ -36,5 +36,5 @@ export function observer<P, Options extends IObserverOptions>(
     memoComponent.displayName = realOptions.displayName
   }
 
-  return memoComponent as any
+  return memoComponent
 }
