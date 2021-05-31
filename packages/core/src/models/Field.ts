@@ -244,13 +244,15 @@ export class Field<
       reaction(
         () => this.display,
         (display) => {
-          if (display === 'none') {
-            this.caches.value = toJS(this.value)
-            this.form.deleteValuesIn(this.path)
-          } else if (display === 'visible') {
+          if (display === 'visible') {
             if (isEmpty(this.value)) {
               this.setValue(this.caches.value)
               this.caches.value = undefined
+            }
+          } else {
+            this.caches.value = toJS(this.value)
+            if (display === 'none') {
+              this.form.deleteValuesIn(this.path)
             }
           }
           if (display === 'none' || display === 'hidden') {
