@@ -8,7 +8,7 @@ import {
 } from '@formily/react'
 import { TabsProps } from 'antd/lib/tabs'
 
-export const ArrayTabs: React.FC<TabsProps> = observer((props: TabsProps) => {
+export const ArrayTabs: React.FC<TabsProps> = observer((props) => {
   const field = useField<Formily.Core.Models.ArrayField>()
   const schema = useFieldSchema()
   const [activeKey, setActiveKey] = useState('tab-0')

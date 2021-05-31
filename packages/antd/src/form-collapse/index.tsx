@@ -96,7 +96,7 @@ const createFormCollapse = (defaultActiveKeys?: ActiveKeys) => {
 }
 
 export const FormCollapse: ComposedFormCollapse = observer(
-  ({ formCollapse, ...props }: IFormCollapseProps) => {
+  ({ formCollapse, ...props }) => {
     const field = useField()
     const panels = usePanels()
     const prefixCls = usePrefixCls('formily-collapse', props)
