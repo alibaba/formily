@@ -8,6 +8,7 @@
   "jsdelivr": "dist/formily.next.umd.production.js",
   "jsnext:main": "esm",
   "module": "esm",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
