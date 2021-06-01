@@ -15,9 +15,7 @@
     "downlevelIteration": true,
     "baseUrl": ".",
     "paths": {
-      "@formily/*": [
-        "./packages/*"
-      ]
+      "@formily/*": ["./packages/*", "./designable/*"]
     }
   }
 }

@@ -357,7 +357,7 @@ export const isEmptyWithField = (field: GeneralField, value: any) => {
   return !isValid(value)
 }
 
-export const initFieldValue = (field: Field) => {
+export const initFieldValue = (field: Field, controlled: boolean) => {
   GlobalState.initializing = true
   if (isEmptyWithField(field, field.initialValue)) {
     if (isValid(field.props.initialValue)) {
@@ -376,6 +376,14 @@ export const initFieldValue = (field: Field) => {
       field.value = field.props.value
     } else if (isValid(field.props.initialValue)) {
       field.value = field.props.initialValue
+    }
+  }
+  if (controlled) {
+    if (isValid(field.props.initialValue)) {
+      field.initialValue = field.props.initialValue
+    }
+    if (isValid(field.props.value)) {
+      field.value = field.props.value
     }
   }
   GlobalState.initializing = false

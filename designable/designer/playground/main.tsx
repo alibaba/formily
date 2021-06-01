@@ -15,20 +15,24 @@ import {
   ViewportPanel,
   SettingsPanel,
 } from '@designable/react'
+import { Input, Select, Radio, Checkbox, FormItem } from '@formily/antd'
 import { SettingsForm } from '@designable/react-settings-form'
 import { createDesigner, registry } from '@designable/core'
 import { Space, Button } from 'antd'
 import { GithubOutlined } from '@ant-design/icons'
+import { SchemaRenderWidget } from '../src'
 import 'antd/dist/antd.less'
-import './theme.less'
 
 registry.registerDesignerProps({
   Root: {
     title: '表单',
+    defaultProps: {
+      labelCol: 6,
+      wrapperCol: 12,
+    },
   },
   Field: {
     draggable: true,
-    inlineLayout: true,
     propsSchema: {
       type: 'object',
       properties: {
@@ -96,16 +100,9 @@ registry.registerDesignerProps({
       },
     },
   },
-  Card: {
-    title: '卡片',
-    droppable: true,
-    inlineChildrenLayout: true,
-    allowAppend: (target, sources) =>
-      sources.every((node) => node.componentName === 'Field'),
-  },
 })
 
-registry.registerSourcesByGroup('form', [
+registry.registerSourcesByGroup('inputs', [
   {
     componentName: 'Field',
     props: {
@@ -116,12 +113,30 @@ registry.registerSourcesByGroup('form', [
     },
   },
   {
-    componentName: 'Card',
+    componentName: 'Field',
     props: {
-      title: '卡片',
-      type: 'void',
+      title: '下拉框',
+      type: 'string',
       'x-decorator': 'FormItem',
-      'x-component': 'Card',
+      'x-component': 'Select',
+    },
+  },
+  {
+    componentName: 'Field',
+    props: {
+      title: '单选框',
+      type: 'string',
+      'x-decorator': 'FormItem',
+      'x-component': 'Radio.Group',
+    },
+  },
+  {
+    componentName: 'Field',
+    props: {
+      title: '单选框',
+      type: 'string',
+      'x-decorator': 'FormItem',
+      'x-component': 'Checkbox.Group',
     },
   },
 ])
@@ -158,9 +173,8 @@ const App = () => {
             title="组件"
             icon={<IconWidget infer="Component" />}
           >
-            <DragSourceWidget title="输入控件" name="form" />
-            <DragSourceWidget title="展示控件" name="form" />
-            <DragSourceWidget title="反馈控件" name="form" />
+            <DragSourceWidget title="输入组件" name="inputs" />
+            <DragSourceWidget title="布局组件" name="layouts" />
           </CompositePanel.Item>
           <CompositePanel.Item
             title="大纲树"
@@ -207,9 +221,15 @@ const App = () => {
               {view === 'json' && <div>JSON 输入</div>}
               {view === 'design' && (
                 <Viewport>
-                  {/* <Sandbox
-                    jsAssets={['./runtime.bundle.js', './sandbox.bundle.js']}
-                  /> */}
+                  <SchemaRenderWidget
+                    components={{
+                      FormItem,
+                      Input,
+                      Select,
+                      Radio,
+                      Checkbox,
+                    }}
+                  />
                 </Viewport>
               )}
             </ViewportPanel>

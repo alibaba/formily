@@ -1,5 +1,5 @@
 import React from 'react'
-import { isFn, isStr, FormPath, each } from '@formily/shared'
+import { isFn, isStr, FormPath, each, isValid } from '@formily/shared'
 import { isVoidField } from '@formily/core'
 import { observer } from '@formily/reactive-react'
 import { JSXComponent, IComponentMapper, IStateMapper } from '../types'
@@ -20,12 +20,14 @@ export function mapProps<T extends JSXComponent>(
             } else {
               each(mapper, (to, extract) => {
                 const extractValue = FormPath.getIn(field, extract)
+                const originalValue = FormPath.getIn(props, targetValue)
                 const targetValue = isStr(to) ? to : (extract as any)
                 if (extract === 'value') {
                   if (to !== extract) {
                     delete props.value
                   }
                 }
+                if (isValid(originalValue) && !isValid(extractValue)) return
                 FormPath.setIn(props, targetValue, extractValue)
               })
             }

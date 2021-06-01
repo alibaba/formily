@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { HTMLAttributes, useRef, useState } from 'react'
 import cls from 'classnames'
-import { usePrefixCls } from '../__builtins__'
+import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
@@ -44,6 +44,7 @@ export interface IFormItemProps {
   asterisk?: boolean
   gridSpan?: number
   bordered?: boolean
+  htmlProps?: HTMLAttributes<HTMLDivElement> & { [key: string]: any }
 }
 
 type ComposeFormItem = React.FC<IFormItemProps> & {
@@ -176,6 +177,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 
   return (
     <div
+      {...pickDataProps(props)}
       ref={popoverContainerRef}
       style={{
         ...style,

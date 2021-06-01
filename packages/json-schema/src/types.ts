@@ -267,4 +267,6 @@ export type ISchema<
   ['x-read-only']?: boolean
 
   ['x-read-pretty']?: boolean
+
+  [key: string]: any
 }>

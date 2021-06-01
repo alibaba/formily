@@ -1,36 +1,28 @@
 import path from 'path'
 import fs from 'fs-extra'
+import { GlobSync } from 'glob'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 //import { getThemeVariables } from 'antd/dist/theme'
 
-const getAlias = () => {
-  const packagesDir = path.resolve(__dirname, '../../../packages')
-  const packages = fs.readdirSync(packagesDir)
-  const pkg = fs.readJSONSync(path.resolve(__dirname, '../package.json'))
-  const deps = Object.entries(pkg.dependencies).reduce((deps, [key]) => {
-    if (key.includes('@designable/')) {
-      return deps
-    } else if (key.includes('react')) {
-      deps[key] = require.resolve(key)
-      return deps
-    }
-    deps[key] = key
-    return deps
-  }, {})
-  const alias = packages
-    .map((v) => path.join(packagesDir, v))
-    .filter((v) => {
-      return !fs.statSync(v).isFile()
+const getWorkspaceAlias = () => {
+  const basePath = path.resolve(__dirname, '../../../')
+  const pkg = fs.readJSONSync(path.resolve(basePath, 'package.json')) || {}
+  const results = {}
+  const workspaces = pkg.workspaces
+  if (Array.isArray(workspaces)) {
+    workspaces.forEach((pattern) => {
+      const { found } = new GlobSync(pattern, { cwd: basePath })
+      found.forEach((name) => {
+        const pkg = fs.readJSONSync(
+          path.resolve(basePath, name, './package.json')
+        )
+        results[pkg.name] = path.resolve(basePath, name, './src')
+      })
     })
-    .reduce((buf, _path) => {
-      const name = path.basename(_path)
-      return {
-        ...buf,
-        [`@designable/${name}$`]: `${_path}/src`,
-      }
-    }, deps)
-  return alias
+  }
+  return results
 }
+
 export default {
   mode: 'development',
   devtool: 'inline-source-map', // 嵌入到源文件中
@@ -39,16 +31,16 @@ export default {
     children: false,
   },
   entry: {
-    playground: path.resolve(__dirname, '../src/main'),
+    playground: path.resolve(__dirname, './main'),
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, '../public'),
     filename: '[name].[hash].bundle.js',
   },
   resolve: {
     modules: ['node_modules'],
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-    alias: getAlias(),
+    alias: getWorkspaceAlias(),
   },
   externals: {
     '@formily/reactive': 'Formily.Reactive',
