@@ -8,3 +8,5 @@ export function build({
 }: CopyBaseOptions & { allStylesOutputFile: string }) {
   return Promise.all([buildAllStyles(allStylesOutputFile), runCopy(opts)])
 }
+
+export { runCopy }
