@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-beta.58(2021-05-27)
+
+### :tada: Enhancements
+
+1. [feat(next): add ArrayCollapse (#1513)](https://github.com/alibaba/formily/commit/ebddc015) :point_right: ( [Lind](https://github.com/Lind) )
+
+### :beetle: Bug Fixes
+
+1. [fix(vue): remove empty default slots of fields (#1517)](https://github.com/alibaba/formily/commit/00a80b4b) :point_right: ( [月落音阑](https://github.com/月落音阑) )
+
+1. [docs(core): fix typo (#1512)](https://github.com/alibaba/formily/commit/c568de99) :point_right: ( [后浪](https://github.com/后浪) )
+
+### :memo: Documents Changes
+
+1. [docs(json-schema): add definitions and doc](https://github.com/alibaba/formily/commit/e729e007) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [docs(core): fix typo (#1512)](https://github.com/alibaba/formily/commit/c568de99) :point_right: ( [后浪](https://github.com/后浪) )
+
+### :blush: Other Changes
+
+1. [chore(workflow): update ci action](https://github.com/alibaba/formily/commit/d3dd91ca) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [chore(github): update pr template](https://github.com/alibaba/formily/commit/b3149307) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.57(2021-05-27)
 
 ### :tada: Enhancements
@@ -1257,7 +1281,3 @@
 ### :beetle: Bug Fixes
 
 1. [fix(antd): return null while time field get falsy value (#372)](https://github.com/alibaba/formily/commit/269a1706) :point_right: ( [腰花](https://github.com/腰花) )
-
-## v0.4.3(2019-09-30)
-
-### No Change Log
