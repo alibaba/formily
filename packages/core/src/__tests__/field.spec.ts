@@ -964,3 +964,118 @@ test('initialValue', () => {
   expect(field.value).toEqual(123)
   expect(field.initialValue).toEqual(123)
 })
+
+test('array path calculation with none index', async () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  await array.push({})
+  const input = attach(
+    form.createField({
+      name: '0.input',
+      basePath: 'array',
+    })
+  )
+  expect(input.path.toString()).toEqual('array.0.input')
+})
+
+test('array path calculation with none index and void nested', async () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  await array.push({})
+  attach(
+    form.createVoidField({
+      name: '0.column',
+      basePath: 'array',
+    })
+  )
+  const input = attach(
+    form.createField({
+      name: 'input',
+      basePath: 'array.0.column',
+    })
+  )
+  expect(input.path.toString()).toEqual('array.0.input')
+})
+
+test('array path calculation with object index', async () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  await array.push({})
+  attach(
+    form.createObjectField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  const input = attach(
+    form.createField({
+      name: 'input',
+      basePath: 'array.0',
+    })
+  )
+  expect(input.path.toString()).toEqual('array.0.input')
+})
+
+test('array path calculation with void index', async () => {
+  const form = attach(createForm())
+  const array = attach(
+    form.createArrayField({
+      name: 'array',
+    })
+  )
+  await array.push('')
+  attach(
+    form.createVoidField({
+      name: '0',
+      basePath: 'array',
+    })
+  )
+  const input = attach(
+    form.createField({
+      name: 'input',
+      basePath: 'array.0',
+    })
+  )
+  expect(input.path.toString()).toEqual('array.0')
+})
+
+test('array path calculation with void index and void wrapper', async () => {
+  const form = attach(createForm())
+  attach(
+    form.createVoidField({
+      name: 'layout',
+    })
+  )
+  const array_in_layout = attach(
+    form.createArrayField({
+      name: 'array_in_layout',
+      basePath: 'layout',
+    })
+  )
+  await array_in_layout.push('')
+  attach(
+    form.createVoidField({
+      name: '0',
+      basePath: 'layout.array_in_layout',
+    })
+  )
+  const input = attach(
+    form.createField({
+      name: 'input',
+      basePath: 'layout.array_in_layout.0',
+    })
+  )
+  expect(input.path.toString()).toEqual('array_in_layout.0')
+})
