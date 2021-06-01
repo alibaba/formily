@@ -44,7 +44,6 @@ export interface IFormItemProps {
   asterisk?: boolean
   gridSpan?: number
   bordered?: boolean
-  htmlProps?: HTMLAttributes<HTMLDivElement> & { [key: string]: any }
 }
 
 type ComposeFormItem = React.FC<IFormItemProps> & {

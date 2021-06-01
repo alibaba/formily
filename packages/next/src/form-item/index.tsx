@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import cls from 'classnames'
-import { usePrefixCls } from '../__builtins__'
+import { usePrefixCls, pickDataProps } from '../__builtins__'
 import { isVoidField } from '@formily/core'
 import { connect, mapProps } from '@formily/react'
 import { useFormLayout, FormLayoutShallowContext } from '../form-layout'
@@ -176,6 +176,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
 
   return (
     <div
+      {...pickDataProps(props)}
       ref={popoverContainerRef}
       style={{
         ...style,
