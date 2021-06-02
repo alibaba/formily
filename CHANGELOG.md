@@ -1,5 +1,27 @@
 # Changelog
 
+## v2.0.0-beta.60(2021-06-02)
+
+### :tada: Enhancements
+
+1. [feat(json-schema): add silent static method](https://github.com/alibaba/formily/commit/f1277ba2) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(antd/next): support data props to FormItem](https://github.com/alibaba/formily/commit/a3750ec5) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [feat(designable): add SchemaRenderWidget](https://github.com/alibaba/formily/commit/ef49b45f) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :beetle: Bug Fixes
+
+1. [fix(react): fix ci](https://github.com/alibaba/formily/commit/f7fdbcd3) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(antd): fix typings](https://github.com/alibaba/formily/commit/6d8b1f22) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(core): fix array path calculation #1533](https://github.com/alibaba/formily/commit/29249000) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :blush: Other Changes
+
+1. [chore(pkg): add workspaces](https://github.com/alibaba/formily/commit/d8af530e) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.59(2021-06-01)
 
 ### :tada: Enhancements
@@ -1061,241 +1083,3 @@
 ### :rocket: Improve Performance
 
 1. [perf(array): shorten the code (#678)](https://github.com/alibaba/formily/commit/f8706760) :point_right: ( [Neil](https://github.com/Neil) )
-
-## v1.0.1(2020-02-22)
-
-### :tada: Enhancements
-
-1. [feat(meet): add meet components (#657)](https://github.com/alibaba/formily/commit/7af90eda) :point_right: ( [DarK-AleX-alibaba](https://github.com/DarK-AleX-alibaba) )
-
-1. [feat(project): update formily code and docs (#651)](https://github.com/alibaba/formily/commit/2acd958e) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: schema editor support json to schema (#639)](https://github.com/alibaba/formily/commit/8c4782ab) :point_right: ( [大康](https://github.com/大康) )
-
-1. [feat(@uform/devtools): update lerna config (#635)](https://github.com/alibaba/formily/commit/7ca92451) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(@uform/core): reset add clearInitialValue (#627)](https://github.com/alibaba/formily/commit/02e715ce) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(@uform/react-schema-renderer): export markup context (#625)](https://github.com/alibaba/formily/commit/1aa77dbc) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: use react-drag-listview instead of ReactDnD and support antd draggable table (#609)](https://github.com/alibaba/formily/commit/88ce573b) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-1. [feat(@uform/core)support visible cache values and intialValues sync action (#588)](https://github.com/alibaba/formily/commit/7bceed76) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: support change fieldKey](https://github.com/alibaba/formily/commit/ffc8f6a7) :point_right: ( [ziyi.hzy](https://github.com/ziyi.hzy) )
-
-1. [feat: add button](https://github.com/alibaba/formily/commit/700e3fe0) :point_right: ( [ziyi.hzy](https://github.com/ziyi.hzy) )
-
-1. [feat: add dragable to @uform/next table field (#561)](https://github.com/alibaba/formily/commit/4c947306) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-1. [Merge pull request #495 from quirkyshop/feat-fix-type](https://github.com/alibaba/formily/commit/2de0b321) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat: FieldEditor UI 优化](https://github.com/alibaba/formily/commit/071058e4) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [feat: update unitest and document (#476)](https://github.com/alibaba/formily/commit/8c49ca9a) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat: json to basic schema (#450)](https://github.com/alibaba/formily/commit/785a760d) :point_right: ( [大康](https://github.com/大康) )
-
-1. [feat: 表达式 value](https://github.com/alibaba/formily/commit/73c90914) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [feat: fix bug](https://github.com/alibaba/formily/commit/bfd76328) :point_right: ( [ascoders](https://github.com/ascoders) )
-
-1. [feat(@uform/next): update next features (#439)](https://github.com/alibaba/formily/commit/15b6b43e) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(@uform/react): actions support clearErrors (#434)](https://github.com/alibaba/formily/commit/551d74c1) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: 规则](https://github.com/alibaba/formily/commit/fa6215dc) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [feat(@uform/react): remove raf and fix unittest (#422)](https://github.com/alibaba/formily/commit/670fadbe) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat(@uform/core): support pass visible/display of register method (#421)](https://github.com/alibaba/formily/commit/908882a2) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: support useFormEffects (#403)](https://github.com/alibaba/formily/commit/dff959c8) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: 临时交互对焦](https://github.com/alibaba/formily/commit/bed060ff) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [feat: add docs and some test cases (#395)](https://github.com/alibaba/formily/commit/ecff8eff) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: add react/actions tests](https://github.com/alibaba/formily/commit/21ee40b1) :point_right: ( [anyuxuan](https://github.com/anyuxuan) )
-
-1. [feat: 添加 next components schema](https://github.com/alibaba/formily/commit/1b184a6c) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [feat: add silent option (#377)](https://github.com/alibaba/formily/commit/43771809) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat(shared): add unit test (#374)](https://github.com/alibaba/formily/commit/9cd72725) :point_right: ( [s0ngyee](https://github.com/s0ngyee) )
-
-1. [feat: rename schema-editor -> react-schema-editor](https://github.com/alibaba/formily/commit/be68d3df) :point_right: ( [ziyi.hzy](https://github.com/ziyi.hzy) )
-
-### :beetle: Bug Fixes
-
-1. [fix(@formily/core): fix onChange trigger times issue#644 (#667)](https://github.com/alibaba/formily/commit/4499f9f0) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(project): compat uform (#666)](https://github.com/alibaba/formily/commit/74008983) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(devtools): fix ui (#663)](https://github.com/alibaba/formily/commit/1706d66f) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs(project): fix docs codesandbox config](https://github.com/alibaba/formily/commit/0c65601d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(meet): fix ci (#660)](https://github.com/alibaba/formily/commit/0aba4483) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [improve docs and bugfix (#655)](https://github.com/alibaba/formily/commit/a2f7f33d) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(@formily/meet): fix pacakge config (#659)](https://github.com/alibaba/formily/commit/06837f9e) :point_right: ( [DarK-AleX-alibaba](https://github.com/DarK-AleX-alibaba) )
-
-1. [fix: upload children (#631)](https://github.com/alibaba/formily/commit/9c0095c1) :point_right: ( [JeromeYangtao](https://github.com/JeromeYangtao) )
-
-1. [refactor(project): fix typings (#629)](https://github.com/alibaba/formily/commit/46249fdb) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: fix type lint (#628)](https://github.com/alibaba/formily/commit/8215d7f4) :point_right: ( [soulwu](https://github.com/soulwu) )
-
-1. [fix(antd/next): fix antd/next table arr[0] path (#624)](https://github.com/alibaba/formily/commit/fb64eae7) :point_right: ( [WingGao](https://github.com/WingGao) )
-
-1. [fix: 616 (#622)](https://github.com/alibaba/formily/commit/23ff1447) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(@uform/core/react): fix #613 #615 (#618)](https://github.com/alibaba/formily/commit/8dc609f9) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(@uform/shared): fix isValid (#604)](https://github.com/alibaba/formily/commit/4136691d) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(@uform/core): fix submit catch error (#603)](https://github.com/alibaba/formily/commit/406f9fb9) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs(examples): fix FormStep examples (#593)](https://github.com/alibaba/formily/commit/27018c6c) :point_right: ( [常泽清](https://github.com/常泽清) )
-
-1. [fix(@uform/antd): time picker throw errors (#589)](https://github.com/alibaba/formily/commit/9d8c1a09) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(uform/core): recover field visible/display state after parent changed (#567)](https://github.com/alibaba/formily/commit/d270ef78) :point_right: ( [小黄黄](https://github.com/小黄黄) )
-
-1. [fix(@uform/antd/next): fix components error](https://github.com/alibaba/formily/commit/8edf2e98) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix: issue#540 (#549)](https://github.com/alibaba/formily/commit/4ae1759d) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix: build on windows (#539)](https://github.com/alibaba/formily/commit/8ad99322) :point_right: ( [WingGao](https://github.com/WingGao) )
-
-1. [bugfix: add config files and fix the build error messages](https://github.com/alibaba/formily/commit/2da0edae) :point_right: ( [云数](https://github.com/云数) )
-
-1. [fix(@uform/core): add onFormReset hook](https://github.com/alibaba/formily/commit/8633ae5f) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [fix(@uform/core): add values to submit resolve callback params (#508)](https://github.com/alibaba/formily/commit/06c4f631) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix(@uform/shared/react): fix depreated and get schema (#502)](https://github.com/alibaba/formily/commit/dbeb2f6b) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix: form effect demo (#499)](https://github.com/alibaba/formily/commit/93f87ad2) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix schema property `minItems ` (#493)](https://github.com/alibaba/formily/commit/26e12aa1) :point_right: ( [李力](https://github.com/李力) )
-
-1. [Merge pull request #495 from quirkyshop/feat-fix-type](https://github.com/alibaba/formily/commit/2de0b321) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix: use omit to elegant &](https://github.com/alibaba/formily/commit/72e51a61) :point_right: ( [quirkyshop](https://github.com/quirkyshop) )
-
-1. [fix: types merge error](https://github.com/alibaba/formily/commit/950a1930) :point_right: ( [quirkyshop](https://github.com/quirkyshop) )
-
-1. [fix(@uform/antd): Warning Received `true` for a non-boolean attribute `inline` (#494)](https://github.com/alibaba/formily/commit/46fbcb44) :point_right: ( [GODI13](https://github.com/GODI13) )
-
-1. [fix(@uform/core): fix init visible can not remove value (#492)](https://github.com/alibaba/formily/commit/a6dcc18d) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: merge uform master](https://github.com/alibaba/formily/commit/84d2bf17) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [fix: printer get api and add get form schema to doc (#482)](https://github.com/alibaba/formily/commit/f01988ff) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix(@uform/validator): fix maximum rule get message logic (#468)](https://github.com/alibaba/formily/commit/752c09e3) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [fix: Not in the browser](https://github.com/alibaba/formily/commit/676ff5f5) :point_right: ( [jinc.cjc](https://github.com/jinc.cjc) )
-
-1. [fix: in miniapp, globalSelf is existing](https://github.com/alibaba/formily/commit/4b6a9c08) :point_right: ( [jinc.cjc](https://github.com/jinc.cjc) )
-
-1. [fix: in miniapp (worker runtime) , globalThis is not a function](https://github.com/alibaba/formily/commit/745a0d9f) :point_right: ( [jinc.cjc](https://github.com/jinc.cjc) )
-
-1. [fix(@uform/antd): fix FormItem supports className (#444)](https://github.com/alibaba/formily/commit/8b3d633d) :point_right: ( [cds803](https://github.com/cds803) )
-
-1. [feat: fix bug](https://github.com/alibaba/formily/commit/bfd76328) :point_right: ( [ascoders](https://github.com/ascoders) )
-
-1. [feat(@uform/react): remove raf and fix unittest (#422)](https://github.com/alibaba/formily/commit/670fadbe) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [core: fix remove function of object field mutator (#410)](https://github.com/alibaba/formily/commit/d5922f73) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [fix: 引入 next 样式](https://github.com/alibaba/formily/commit/9d12b489) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [fix: [onFieldChange] types](https://github.com/alibaba/formily/commit/dc4fa80c) :point_right: ( [jinc.cjc](https://github.com/jinc.cjc) )
-
-1. [V1 fix subscribe (#358)](https://github.com/alibaba/formily/commit/985aca38) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :memo: Documents Changes
-
-1. [docs(project): add devtools doc (#665)](https://github.com/alibaba/formily/commit/02ed0b63) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs: update next/antd (#661)](https://github.com/alibaba/formily/commit/611125c7) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [docs(project): fix docs codesandbox config](https://github.com/alibaba/formily/commit/0c65601d) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [improve docs and bugfix (#655)](https://github.com/alibaba/formily/commit/a2f7f33d) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(project): update formily code and docs (#651)](https://github.com/alibaba/formily/commit/2acd958e) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs(examples): fix FormStep examples (#593)](https://github.com/alibaba/formily/commit/27018c6c) :point_right: ( [常泽清](https://github.com/常泽清) )
-
-1. [fix: printer get api and add get form schema to doc (#482)](https://github.com/alibaba/formily/commit/f01988ff) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [feat: update unitest and document (#476)](https://github.com/alibaba/formily/commit/8c49ca9a) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [[WIP]doc(@uform/react): add react doc (#401)](https://github.com/alibaba/formily/commit/570a81c3) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [docs(@uform/core): improve docs (#402)](https://github.com/alibaba/formily/commit/ded9b937) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [Fix docs typo (#397)](https://github.com/alibaba/formily/commit/88fd3eb7) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: add docs and some test cases (#395)](https://github.com/alibaba/formily/commit/ecff8eff) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :rose: Improve code quality
-
-1. [refactor(project): fix typings (#629)](https://github.com/alibaba/formily/commit/46249fdb) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [refactor(@uform/shared): update cool-path version](https://github.com/alibaba/formily/commit/1061fd9f) :point_right: ( [janrywang](https://github.com/janrywang) )
-
-1. [refactor(@uform/react-schema-editor): improve code (#566)](https://github.com/alibaba/formily/commit/cab64d2b) :point_right: ( [henryybai](https://github.com/henryybai) )
-
-1. [Schema editor refactor (#524)](https://github.com/alibaba/formily/commit/74b1e9be) :point_right: ( [Andy](https://github.com/Andy) )
-
-1. [refactor:code and style refactor (#522)](https://github.com/alibaba/formily/commit/24b3503e) :point_right: ( [Andy](https://github.com/Andy) )
-
-1. [refactor(antd): adjust the handling of importing components on demand (#485)](https://github.com/alibaba/formily/commit/2fb41e9a) :point_right: ( [atzcl](https://github.com/atzcl) )
-
-1. [refactor(typings): update FormStep、dispatch、notify typings](https://github.com/alibaba/formily/commit/929ef2c6) :point_right: ( [atzcl](https://github.com/atzcl) )
-
-1. [refactor: update scheduler (#465)](https://github.com/alibaba/formily/commit/b8467e28) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [refactor: 代码优化](https://github.com/alibaba/formily/commit/e9f2c04e) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [refactor: x-component-props](https://github.com/alibaba/formily/commit/f0953555) :point_right: ( [秋逢](https://github.com/秋逢) )
-
-1. [refactor: improve test case (#375)](https://github.com/alibaba/formily/commit/dfec008a) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [refactor(@uform/core): remove processing test case](https://github.com/alibaba/formily/commit/56835f9e) :point_right: ( [janryWang](https://github.com/janryWang) )
-
-### :rocket: Improve Performance
-
-1. [Improve perf (#452)](https://github.com/alibaba/formily/commit/25eb8dca) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :hammer_and_wrench: Update Workflow Scripts
-
-1. [fix: build on windows (#539)](https://github.com/alibaba/formily/commit/8ad99322) :point_right: ( [WingGao](https://github.com/WingGao) )
-
-1. [bugfix: add config files and fix the build error messages](https://github.com/alibaba/formily/commit/2da0edae) :point_right: ( [云数](https://github.com/云数) )
-
-### :construction: Add/Update Test Cases
-
-1. [feat: update unitest and document (#476)](https://github.com/alibaba/formily/commit/8c49ca9a) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [test(@uform/react): improve field and virtualField test cases (#438)](https://github.com/alibaba/formily/commit/853e051f) :point_right: ( [dahuang](https://github.com/dahuang) )
-
-1. [feat(@uform/react): remove raf and fix unittest (#422)](https://github.com/alibaba/formily/commit/670fadbe) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-1. [Fix isFn can't test async function (#411)](https://github.com/alibaba/formily/commit/e17ebaed) :point_right: ( [dahuang](https://github.com/dahuang) )
-
-1. [feat: add docs and some test cases (#395)](https://github.com/alibaba/formily/commit/ecff8eff) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat: add react/actions tests](https://github.com/alibaba/formily/commit/21ee40b1) :point_right: ( [anyuxuan](https://github.com/anyuxuan) )
-
-1. [refactor: improve test case (#375)](https://github.com/alibaba/formily/commit/dfec008a) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [feat(shared): add unit test (#374)](https://github.com/alibaba/formily/commit/9cd72725) :point_right: ( [s0ngyee](https://github.com/s0ngyee) )
-
-1. [refactor(@uform/core): remove processing test case](https://github.com/alibaba/formily/commit/56835f9e) :point_right: ( [janryWang](https://github.com/janryWang) )

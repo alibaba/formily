@@ -1,6 +1,6 @@
 {
   "name": "@formily/next",
-  "version": "2.0.0-beta.60",
+  "version": "2.0.0-beta.61",
   "license": "MIT",
   "main": "lib",
   "umd:main": "dist/formily.next.umd.production.js",
@@ -44,12 +44,12 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.0.0",
-    "@formily/core": "2.0.0-beta.60",
-    "@formily/json-schema": "2.0.0-beta.60",
-    "@formily/react": "2.0.0-beta.60",
-    "@formily/reactive": "2.0.0-beta.60",
-    "@formily/reactive-react": "2.0.0-beta.60",
-    "@formily/shared": "2.0.0-beta.60",
+    "@formily/core": "2.0.0-beta.61",
+    "@formily/json-schema": "2.0.0-beta.61",
+    "@formily/react": "2.0.0-beta.61",
+    "@formily/reactive": "2.0.0-beta.61",
+    "@formily/reactive-react": "2.0.0-beta.61",
+    "@formily/shared": "2.0.0-beta.61",
     "@juggle/resize-observer": "^3.3.1",
     "classnames": "^2.2.6",
     "react-sortable-hoc": "^1.11.0",
@@ -58,5 +58,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "2c44ae410a73f02735c63c6430e021a50e21f3ec"
+  "gitHead": "ac79c196ae9324889aca5e0501146f9b37b04283"
 }
