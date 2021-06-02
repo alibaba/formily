@@ -36,6 +36,7 @@ https://formilyjs.org
 
 ## 集团其他产品
 
+- [designable](https://github.com/alibaba/designable)
 - [icejs](https://github.com/alibaba/ice)
 
 ## 如何贡献

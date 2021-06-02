@@ -58,8 +58,8 @@ export default {
         title: 'Tools',
         children: [
           {
-            title: 'Form Editor',
-            path: 'https://github.com/alibaba/formily-editor',
+            title: 'Designable',
+            path: 'https://github.com/alibaba/designable',
           },
           {
             title: 'Chrome Extension',
@@ -133,8 +133,8 @@ export default {
         title: '工具',
         children: [
           {
-            title: '表单编辑器',
-            path: 'https://github.com/alibaba/formily-editor',
+            title: '通用搭建引擎',
+            path: 'https://github.com/alibaba/designable',
           },
           {
             title: 'Chrome扩展',

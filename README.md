@@ -36,6 +36,7 @@ https://formilyjs.org
 
 ## Community
 
+- [designable](https://github.com/alibaba/designable)
 - [icejs](https://github.com/alibaba/ice)
 
 ## How to contribute?
