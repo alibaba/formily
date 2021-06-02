@@ -1,5 +1,29 @@
 # Changelog
 
+## v2.0.0-beta.59(2021-06-01)
+
+### :tada: Enhancements
+
+1. [Revert "feat(antd/next): add rollup tree-shaking support (#1525)" (#1530)](https://github.com/alibaba/formily/commit/3cce4bbf) :point_right: ( [Janry](https://github.com/Janry) )
+
+### :beetle: Bug Fixes
+
+1. [fix(react): fix useFormEffects not support StrictMode #1491](https://github.com/alibaba/formily/commit/0198b0c4) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [fix(core): fix field value restored incorrectly when hidden toggled (#1529)](https://github.com/alibaba/formily/commit/047c98af) :point_right: ( [JustDs](https://github.com/JustDs) )
+
+1. [fix(core): fix array field path calculation](https://github.com/alibaba/formily/commit/cdae914c) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+### :rose: Improve code quality
+
+1. [refactor(designable): update directory structure](https://github.com/alibaba/formily/commit/bb300a00) :point_right: ( [janrywang](https://github.com/janrywang) )
+
+1. [refactor(reactive-react): refactor observer function (#1523)](https://github.com/alibaba/formily/commit/55b93420) :point_right: ( [liuwei](https://github.com/liuwei) )
+
+### :blush: Other Changes
+
+1. [chore(readme): update readme](https://github.com/alibaba/formily/commit/96140630) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.58(2021-05-27)
 
 ### :tada: Enhancements
@@ -1275,9 +1299,3 @@
 1. [feat(shared): add unit test (#374)](https://github.com/alibaba/formily/commit/9cd72725) :point_right: ( [s0ngyee](https://github.com/s0ngyee) )
 
 1. [refactor(@uform/core): remove processing test case](https://github.com/alibaba/formily/commit/56835f9e) :point_right: ( [janryWang](https://github.com/janryWang) )
-
-## v0.4.4(2019-11-10)
-
-### :beetle: Bug Fixes
-
-1. [fix(antd): return null while time field get falsy value (#372)](https://github.com/alibaba/formily/commit/269a1706) :point_right: ( [腰花](https://github.com/腰花) )
