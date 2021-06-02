@@ -20,7 +20,7 @@ export const SchemaRenderWidget: React.FC<ISchemaRenderWidgetProps> = observer(
     const form = useMemo(
       () =>
         createForm({
-          controlled: true,
+          designable: true,
         }),
       []
     )

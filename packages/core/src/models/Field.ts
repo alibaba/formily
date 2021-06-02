@@ -104,13 +104,13 @@ export class Field<
     address: FormPathPattern,
     props: IFieldProps<Decorator, Component, TextType, ValueType>,
     form: Form,
-    controlled: boolean
+    designable: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable(controlled)
-    this.makeReactive(controlled)
-    this.onInit(controlled)
+    this.makeObservable(designable)
+    this.makeReactive(designable)
+    this.onInit(designable)
   }
 
   protected makeIndexes(address: FormPathPattern) {
@@ -151,8 +151,8 @@ export class Field<
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable(controlled: boolean) {
-    if (controlled) return
+  protected makeObservable(designable: boolean) {
+    if (designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -223,8 +223,8 @@ export class Field<
     })
   }
 
-  protected makeReactive(controlled: boolean) {
-    if (controlled) return
+  protected makeReactive(designable: boolean) {
+    if (designable) return
     this.disposers.push(
       reaction(
         () => this.value,
@@ -663,10 +663,10 @@ export class Field<
 
   getState: IModelGetter<IFieldState> = modelStateGetter(this)
 
-  onInit = (controlled: boolean) => {
+  onInit = (designable: boolean) => {
     this.initialized = true
     batch.scope(() => {
-      initFieldValue(this, controlled)
+      initFieldValue(this, designable)
     })
     batch.scope(() => {
       initFieldUpdate(this)

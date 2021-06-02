@@ -57,12 +57,12 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     address: FormPathPattern,
     props: IVoidFieldProps<Decorator, Component>,
     form: Form,
-    controlled: boolean
+    designable: boolean
   ) {
     this.initialize(props, form)
     this.makeIndexes(address)
-    this.makeObservable(controlled)
-    this.makeReactive(controlled)
+    this.makeObservable(designable)
+    this.makeReactive(designable)
     this.onInit()
   }
 
@@ -93,8 +93,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     this.component = toArr(this.props.component)
   }
 
-  protected makeObservable(controlled: boolean) {
-    if (controlled) return
+  protected makeObservable(designable: boolean) {
+    if (designable) return
     define(this, {
       title: observable.ref,
       description: observable.ref,
@@ -132,8 +132,8 @@ export class VoidField<Decorator = any, Component = any, TextType = any> {
     })
   }
 
-  protected makeReactive(controlled: boolean) {
-    if (controlled) return
+  protected makeReactive(designable: boolean) {
+    if (designable) return
     this.form.addEffects(this, () => {
       toArr(this.props.reactions).forEach((reaction) => {
         if (isFn(reaction)) {
