@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.0-beta.61(2021-06-02)
+
+### :rose: Improve code quality
+
+1. [refactor(core): controlled ==> designable](https://github.com/alibaba/formily/commit/ac79c196) :point_right: ( [janrywang](https://github.com/janrywang) )
+
 ## v2.0.0-beta.60(2021-06-02)
 
 ### :tada: Enhancements
@@ -1057,29 +1063,3 @@
 1. [fix: doc typo of antd (#699)](https://github.com/alibaba/formily/commit/a10efdf9) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
 
 1. [feat: update doc of component (#695)](https://github.com/alibaba/formily/commit/a80a77ea) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-## v1.0.3(2020-02-29)
-
-### :tada: Enhancements
-
-1. [feat: url type support rtmp (#686)](https://github.com/alibaba/formily/commit/084cbc03) :point_right: ( [Desen Meng](https://github.com/Desen Meng) )
-
-1. [feat: add components and hooks (#670)](https://github.com/alibaba/formily/commit/ef9bc68e) :point_right: ( [quirkyvar](https://github.com/quirkyvar) )
-
-### :beetle: Bug Fixes
-
-1. [Support antd4 & Bugfix (#687)](https://github.com/alibaba/formily/commit/1ae91b48) :point_right: ( [Janry](https://github.com/Janry) )
-
-1. [docs(@formily/react-schema-renderer): fix docs example (#681)](https://github.com/alibaba/formily/commit/a546e6a2) :point_right: ( [朱建](https://github.com/朱建) )
-
-1. [fix(antd-components): fix password component bugs (#672)](https://github.com/alibaba/formily/commit/bf6128eb) :point_right: ( [JerryLyu](https://github.com/JerryLyu) )
-
-1. [fix(project): fix typings (#669)](https://github.com/alibaba/formily/commit/bf5a09e0) :point_right: ( [Janry](https://github.com/Janry) )
-
-### :memo: Documents Changes
-
-1. [docs(@formily/react-schema-renderer): fix docs example (#681)](https://github.com/alibaba/formily/commit/a546e6a2) :point_right: ( [朱建](https://github.com/朱建) )
-
-### :rocket: Improve Performance
-
-1. [perf(array): shorten the code (#678)](https://github.com/alibaba/formily/commit/f8706760) :point_right: ( [Neil](https://github.com/Neil) )
