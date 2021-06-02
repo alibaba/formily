@@ -26,7 +26,12 @@ export const SchemaRenderWidget: React.FC<ISchemaRenderWidgetProps> = observer(
     )
     if (!tree?.children?.length) return null
     return (
-      <Form {...tree.props} className={prefix} form={form}>
+      <Form
+        {...tree.props}
+        feedbackLayout="terse"
+        className={prefix}
+        form={form}
+      >
         <SchemaRenderContext.Provider value={props}>
           {tree.children.map((node) => {
             return <SchemaNode node={node} key={node.id} />

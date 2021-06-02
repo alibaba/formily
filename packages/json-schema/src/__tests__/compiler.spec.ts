@@ -1,4 +1,4 @@
-import { compile, registerCompiler, shallowCompile } from '../compiler'
+import { compile, silent, registerCompiler, shallowCompile } from '../compiler'
 import { Schema } from '../schema'
 
 test('compile', () => {
@@ -110,6 +110,17 @@ test('shallowCompile', () => {
   })
   expect(shallowCompile(['{{123}}'])).toEqual([123])
   expect(shallowCompile([{ kk: '{{123}}' }])).toEqual([{ kk: '{{123}}' }])
+})
+
+test('unsilent', () => {
+  silent(false)
+  expect(() => compile('{{ ( }}')).toThrowError()
+})
+
+test('silent', () => {
+  silent(true)
+  expect(() => compile('{{ ( }}')).not.toThrowError()
+  silent(false)
 })
 
 test('registerCompiler', () => {

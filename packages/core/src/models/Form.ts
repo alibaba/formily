@@ -125,7 +125,6 @@ export class Form<ValueType extends object = any> {
   }
 
   protected makeObservable() {
-    if (this.props.controlled) return
     define(this, {
       fields: observable.shallow,
       initialized: observable.ref,

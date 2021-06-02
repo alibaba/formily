@@ -15,6 +15,8 @@ export interface ISchemaNodeProps {
   node: TreeNode
 }
 
+Schema.silent()
+
 export const SchemaNode: React.FC<ISchemaNodeProps> = observer((props) => {
   const context = useContext(SchemaRenderContext)
   const designer = useDesigner()
@@ -23,14 +25,14 @@ export const SchemaNode: React.FC<ISchemaNodeProps> = observer((props) => {
   if (!node) return null
 
   const getFieldProps = () => {
-    const base = new Schema(node.props)
+    const base = new Schema(node.props).compile()
     const props = base.toFieldProps({
       components: context.components,
     })
     if (props.decorator?.[0]) {
       props.decorator[1] = props.decorator[1] || {}
       FormPath.setIn(props.decorator[1], designer.props.nodeIdAttrName, node.id)
-    } else if (props.component?.[1]) {
+    } else if (props.component?.[0]) {
       props.component[1] = props.component[1] || {}
       FormPath.setIn(props.component[1], designer.props.nodeIdAttrName, node.id)
     }
@@ -50,20 +52,20 @@ export const SchemaNode: React.FC<ISchemaNodeProps> = observer((props) => {
     const props = getFieldProps()
     if (node.props.type === 'object') {
       return (
-        <ObjectField {...props} name={props.name || node.id}>
+        <ObjectField {...props} name={node.id}>
           {renderChildren()}
         </ObjectField>
       )
     } else if (node.props.type === 'array') {
-      return <ArrayField {...props} name={props.name || node.id} />
+      return <ArrayField {...props} name={node.id} />
     } else if (node.props.type === 'void') {
       return (
-        <VoidField {...props} name={props.name || node.id}>
+        <VoidField {...props} name={node.id}>
           {renderChildren()}
         </VoidField>
       )
     }
-    return <Field {...props} name={props.name || node.id} />
+    return <Field {...props} name={node.id} />
   }
   return (
     <TreeNodeContext.Provider value={node}>

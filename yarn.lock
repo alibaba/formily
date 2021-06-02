@@ -1155,39 +1155,39 @@
   resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
   integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
 
-"@designable/core@0.1.2", "@designable/core@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.1.2.tgz#8f574fb11de11f2462ce72752dbd76a2782e3663"
-  integrity sha512-1VFN5umGEDx4qcClQ5/UF90z3uSe6z3yYPtff+a31neboJSw8VldC+JxDUAPRZfc3waEE9REwcS4++cr384cJQ==
+"@designable/core@0.1.4", "@designable/core@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@designable/core/-/core-0.1.4.tgz#000296b30a4a22e57ccfc4fc0d80aeb48777312d"
+  integrity sha512-2aKoDbc/c5vvG2QBpApgOlDRoTSgiFl2mEbHeS00PGIn0vFNkkOkQs7gvc3OExCMGXBtu/qv/EOgjo81kKj6JA==
   dependencies:
-    "@designable/shared" "0.1.2"
+    "@designable/shared" "0.1.4"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/react-settings-form@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.1.2.tgz#804d8e630a78cc8445250c49eec71d3be33d3407"
-  integrity sha512-7MnnJieuCpMlQ/siKYow+k22JtBQ804wErAnj2P1g/CjBldzen6lSzXrEMVA0W2D1ePvpqs1QO6XS771gM0ZEg==
+"@designable/react-settings-form@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@designable/react-settings-form/-/react-settings-form-0.1.4.tgz#00f1f563820214d916d65ad022cb1ffb8bc78d52"
+  integrity sha512-lbvHdn5cvpYXsW4sUbIrnizX2jW5JFsgD1/DqjqPmqHsDHIGUmsy2YHbVD9qsfrUfVFDVJ1iSYokDXscNaSqFQ==
   dependencies:
-    "@designable/core" "0.1.2"
-    "@designable/react" "0.1.2"
+    "@designable/core" "0.1.4"
+    "@designable/react" "0.1.4"
     "@formily/antd" "^2.0.0-beta.57"
     "@formily/core" "^2.0.0-beta.57"
     "@formily/react" "^2.0.0-beta.57"
     react-color "^2.19.3"
 
-"@designable/react@0.1.2", "@designable/react@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.1.2.tgz#e2a67313c7ef22b0e1f95d1c4b19ec82b4c79a95"
-  integrity sha512-HXrmxSKjs8dB1mDqXnNKhVM8zTG8djD08jsTOWC8dIn1tcnUKgyKa63v1YdOveAjIOAeLYqfeHb1Jq9a1MoseQ==
+"@designable/react@0.1.4", "@designable/react@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@designable/react/-/react-0.1.4.tgz#27891b7b307dc1e91bc4d5e1e83081d3a98dc673"
+  integrity sha512-o2bSThlLrPADBIvRiX+2nKrwQJrkYLgP6uVtp2sch1Zc4yE4SAU2nFt5mAELT5p6Y48E8ueraIwzcs4fE3ENdA==
   dependencies:
-    "@designable/core" "0.1.2"
-    "@designable/shared" "0.1.2"
+    "@designable/core" "0.1.4"
+    "@designable/shared" "0.1.4"
     "@juggle/resize-observer" "^3.3.1"
 
-"@designable/shared@0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.1.2.tgz#9fbcd5064993b5fb68201afcf9f872534f9b4692"
-  integrity sha512-9o76Z/me5NqxoUZ0XXc43K8eASoWEjp+lRnlPlX3nA8qKmNxUz38uocovxU+jfMDzukKaPOTLu3rCoZqILd8lQ==
+"@designable/shared@0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@designable/shared/-/shared-0.1.4.tgz#7d018945f4b734ad4cb59dc27bb8edde3bca9113"
+  integrity sha512-NUdywjYF6/AhX/nbIQEv1jmGOJVOIC1wBlm/9RL4K5/W5CSmKCyYD6E5OONjTuJJvtLdBTv7msDGokK5G7cBbg==
   dependencies:
     requestidlecallback "^0.3.0"
 

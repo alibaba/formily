@@ -380,6 +380,20 @@ interface shallowCompile {
 }
 ```
 
+### silent
+
+#### 描述
+
+是否静默编译，如果是，则表达式报错不会有任何提醒
+
+#### 签名
+
+```ts
+interface silent {
+  (value?: boolean): void
+}
+```
+
 ### isSchemaInstance
 
 #### 描述

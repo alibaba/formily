@@ -8,7 +8,7 @@ import {
   ISchemaTransformerOptions,
 } from './types'
 import { map, each, isFn, instOf, FormPath, isStr } from '@formily/shared'
-import { compile, shallowCompile, registerCompiler } from './compiler'
+import { compile, silent, shallowCompile, registerCompiler } from './compiler'
 import { transformSchemaToFieldProps } from './transformer'
 import {
   reducePatches,
@@ -593,4 +593,6 @@ export class Schema<
   static registerPolyfills = registerPolyfills
 
   static enablePolyfills = enablePolyfills
+
+  static silent = silent
 }

@@ -31,7 +31,7 @@
   "devDependencies": {
     "@umijs/plugin-sass": "^1.1.1",
     "dumi": "^1.1.0-rc.8",
-    "@designable/core": "^0.1.2"
+    "@designable/core": "^0.1.4"
   },
   "peerDependencies": {
     "@alifd/next": "^1.19.0",
@@ -40,7 +40,7 @@
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0 || >=17.0.0",
-    "@designable/core": "^0.1.2"
+    "@designable/core": "^0.1.4"
   },
   "dependencies": {},
   "publishConfig": {

@@ -40,9 +40,9 @@
     "webpack-bundle-analyzer": "^3.9.0",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
-    "@designable/core": "^0.1.2",
-    "@designable/react": "^0.1.2",
-    "@designable/react-settings-form": "^0.1.2",
+    "@designable/core": "^0.1.4",
+    "@designable/react": "^0.1.4",
+    "@designable/react-settings-form": "^0.1.4",
     "antd": "^4.0.0"
   },
   "peerDependencies": {
@@ -52,9 +52,9 @@
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0 || >=17.0.0",
-    "@designable/core": "^0.1.2",
-    "@designable/react": "^0.1.2",
-    "@designable/react-settings-form": "^0.1.2"
+    "@designable/core": "^0.1.4",
+    "@designable/react": "^0.1.4",
+    "@designable/react-settings-form": "^0.1.4"
   },
   "dependencies": {},
   "publishConfig": {

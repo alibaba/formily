@@ -17,11 +17,19 @@ import {
 } from '@designable/react'
 import { Input, Select, Radio, Checkbox, FormItem } from '@formily/antd'
 import { SettingsForm } from '@designable/react-settings-form'
-import { createDesigner, registry } from '@designable/core'
-import { Space, Button } from 'antd'
+import { createDesigner, registry, TreeNode } from '@designable/core'
+import { Space, Button, Card } from 'antd'
 import { GithubOutlined } from '@ant-design/icons'
 import { SchemaRenderWidget } from '../src'
 import 'antd/dist/antd.less'
+
+const isContainer = (node: TreeNode) => {
+  return (
+    node.props.type === 'void' ||
+    node.props.type === 'array' ||
+    node.props.type === 'object'
+  )
+}
 
 registry.registerDesignerProps({
   Root: {
@@ -31,80 +39,85 @@ registry.registerDesignerProps({
       wrapperCol: 12,
     },
   },
-  Field: {
-    draggable: true,
-    propsSchema: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-          title: '标题',
-          'x-decorator': 'FormItem',
-          'x-component': 'Input',
-        },
-        'style.width': {
-          type: 'string',
-          title: '宽度',
-          'x-decorator': 'FormItem',
-          'x-component': 'SizeInput',
-        },
-        'style.height': {
-          type: 'string',
-          title: '高度',
-          'x-decorator': 'FormItem',
-          'x-component': 'SizeInput',
-        },
-        hidden: {
-          type: 'string',
-          title: '是否隐藏',
-          'x-decorator': 'FormItem',
-          'x-component': 'Switch',
-        },
-        default: {
-          title: '默认值',
-          'x-decorator': 'FormItem',
-          'x-component': 'ValueInput',
-        },
-        'style.display': {
-          title: '展示',
-          'x-component': 'DisplayStyleSetter',
-        },
-        'style.background': {
-          title: '背景',
-          'x-component': 'BackgroundStyleSetter',
-        },
-        'style.boxShadow': {
-          title: '阴影',
-          'x-component': 'BoxShadowStyleSetter',
-        },
-        'style.font': {
-          title: '字体',
-          'x-component': 'FontStyleSetter',
-        },
-        'style.margin': {
-          title: '外边距',
-          'x-component': 'BoxStyleSetter',
-        },
-        'style.padding': {
-          title: '内边距',
-          'x-component': 'BoxStyleSetter',
-        },
-        'style.borderRadius': {
-          title: '圆角',
-          'x-component': 'BorderRadiusStyleSetter',
-        },
-        'style.border': {
-          title: '边框',
-          'x-component': 'BorderStyleSetter',
+  SchemaNode: (node) => {
+    return {
+      title: isContainer(node) ? '容器' : '节点',
+      draggable: true,
+      droppable: true,
+      allowAppend: isContainer,
+      propsSchema: {
+        type: 'object',
+        properties: {
+          title: {
+            type: 'string',
+            title: '标题',
+            'x-decorator': 'FormItem',
+            'x-component': 'Input',
+          },
+          'style.width': {
+            type: 'string',
+            title: '宽度',
+            'x-decorator': 'FormItem',
+            'x-component': 'SizeInput',
+          },
+          'style.height': {
+            type: 'string',
+            title: '高度',
+            'x-decorator': 'FormItem',
+            'x-component': 'SizeInput',
+          },
+          hidden: {
+            type: 'string',
+            title: '是否隐藏',
+            'x-decorator': 'FormItem',
+            'x-component': 'Switch',
+          },
+          default: {
+            title: '默认值',
+            'x-decorator': 'FormItem',
+            'x-component': 'ValueInput',
+          },
+          'style.display': {
+            title: '展示',
+            'x-component': 'DisplayStyleSetter',
+          },
+          'style.background': {
+            title: '背景',
+            'x-component': 'BackgroundStyleSetter',
+          },
+          'style.boxShadow': {
+            title: '阴影',
+            'x-component': 'BoxShadowStyleSetter',
+          },
+          'style.font': {
+            title: '字体',
+            'x-component': 'FontStyleSetter',
+          },
+          'style.margin': {
+            title: '外边距',
+            'x-component': 'BoxStyleSetter',
+          },
+          'style.padding': {
+            title: '内边距',
+            'x-component': 'BoxStyleSetter',
+          },
+          'style.borderRadius': {
+            title: '圆角',
+            'x-component': 'BorderRadiusStyleSetter',
+          },
+          'style.border': {
+            title: '边框',
+            'x-component': 'BorderStyleSetter',
+          },
         },
       },
-    },
+    }
   },
 })
 
 registry.registerSourcesByGroup('inputs', [
   {
-    componentName: 'Field',
+    componentName: 'SchemaNode',
     props: {
       title: '输入框',
       type: 'string',
@@ -113,7 +126,7 @@ registry.registerSourcesByGroup('inputs', [
     },
   },
   {
-    componentName: 'Field',
+    componentName: 'SchemaNode',
     props: {
       title: '下拉框',
       type: 'string',
@@ -122,21 +135,43 @@ registry.registerSourcesByGroup('inputs', [
     },
   },
   {
-    componentName: 'Field',
+    componentName: 'SchemaNode',
     props: {
       title: '单选框',
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'Radio.Group',
+      enum: [
+        { label: '选项1', value: 1 },
+        { label: '选项2', value: 2 },
+      ],
     },
   },
   {
-    componentName: 'Field',
+    componentName: 'SchemaNode',
     props: {
-      title: '单选框',
+      title: '复选框',
       type: 'string',
       'x-decorator': 'FormItem',
       'x-component': 'Checkbox.Group',
+      enum: [
+        { label: '选项1', value: 1 },
+        { label: '选项2', value: 2 },
+      ],
+    },
+  },
+])
+
+registry.registerSourcesByGroup('layouts', [
+  {
+    componentName: 'SchemaNode',
+    props: {
+      title: '卡片',
+      type: 'void',
+      'x-component': 'Card',
+      'x-component-props': {
+        title: '卡片',
+      },
     },
   },
 ])
@@ -228,6 +263,11 @@ const App = () => {
                       Select,
                       Radio,
                       Checkbox,
+                      Card: (props) => (
+                        <div {...props}>
+                          <Card {...props} />
+                        </div>
+                      ),
                     }}
                   />
                 </Viewport>
