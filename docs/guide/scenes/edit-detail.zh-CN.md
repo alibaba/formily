@@ -883,7 +883,7 @@ export default () => {
                         component={[Editable.Popover]}
                         reactions={(field) => {
                           field.title =
-                            field.query('.[].name').value() || field.title
+                            field.query(`.[${index}].name`).value() || field.title
                         }}
                       >
                         <VoidField
@@ -1841,7 +1841,7 @@ export default () => {
                           component={[Editable.Popover]}
                           reactions={(field) => {
                             field.title =
-                              field.query('.[].name').value() || field.title
+                              field.query(`.[${index}].name`).value() || field.title
                           }}
                         >
                           <VoidField
