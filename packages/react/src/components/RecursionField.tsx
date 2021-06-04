@@ -19,13 +19,10 @@ export const RecursionField: React.FC<IRecursionFieldProps> = (props) => {
   const options = useContext(SchemaOptionsContext)
   const scope = useContext(SchemaExpressionScopeContext)
   const fieldSchema = useMemo(() => {
-    return schema?.compile({
-      ...options.scope,
-      ...scope,
-    })
+    return schema?.compile(scope)
   }, [schema])
   const fieldProps = useMemo(
-    () => fieldSchema?.toFieldProps(options) as any,
+    () => fieldSchema?.toFieldProps({ ...options, scope }) as any,
     [fieldSchema]
   )
   const getBasePath = () => {
