@@ -486,3 +486,70 @@ test('schema reactions', async () => {
     expect(queryByTestId('ccc')).toBeVisible()
   })
 })
+
+test('expression scope', async () => {
+  let aa = false
+  let bb = false
+  let cc = false
+  const form = createForm()
+  const SchemaField = createSchemaField({
+    components: {
+      Input,
+    },
+    scope: {
+      aa() {
+        aa = true
+      },
+    },
+  })
+
+  const scope = {
+    bb() {
+      bb = true
+    },
+    cc() {
+      cc = true
+    },
+  }
+
+  const schema = {
+    type: 'object',
+    properties: {
+      aa: {
+        type: 'string',
+        'x-component': 'Input',
+        'x-reactions': '{{ aa }}',
+      },
+      bb: {
+        type: 'string',
+        'x-component': 'Input',
+        'x-reactions': '{{ bb }}',
+      },
+      cc: {
+        type: 'string',
+        'x-component': 'Input',
+        'x-reactions': {
+          dependencies: ['aa'],
+          fulfill: {
+            run: '{{ cc() }}',
+          },
+        },
+      },
+    },
+  }
+
+  const { queryByTestId } = render(
+    <FormProvider form={form}>
+      <SchemaField schema={schema} scope={scope} />
+    </FormProvider>
+  )
+
+  await waitFor(() => queryByTestId('aa'))
+  expect(aa).toBeTruthy()
+
+  await waitFor(() => queryByTestId('bb'))
+  expect(bb).toBeTruthy()
+
+  await waitFor(() => queryByTestId('cc'))
+  expect(cc).toBeTruthy()
+})
