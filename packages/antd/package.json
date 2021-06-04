@@ -8,6 +8,12 @@
   "unpkg": "dist/formily.antd.umd.production.js",
   "jsdelivr": "dist/formily.antd.umd.production.js",
   "jsnext:main": "esm",
+  "sideEffects": [
+    "dist/*",
+    "esm/*.js",
+    "lib/*.js",
+    "*.less"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alibaba/formily.git"
