@@ -19,12 +19,14 @@ const getIn = FormPath.getIn
 
 const self: any = globalThisPolyfill
 
+const defaultLanguage = 'en'
+
 const getBrowserlanguage = () => {
   /* istanbul ignore next */
   if (!self.navigator) {
-    return 'en'
+    return defaultLanguage
   }
-  return self.navigator.browserlanguage || self.navigator.language || 'en'
+  return self.navigator.browserlanguage || self.navigator.language || defaultLanguage
 }
 
 const registry = {
@@ -57,7 +59,7 @@ const getISOCode = (language: string) => {
 export const getValidateLocaleIOSCode = getISOCode;
 
 export const setValidateLanguage = (lang: string) => {
-  registry.locales.language = lang
+  registry.locales.language = lang || defaultLanguage
 }
 
 export const getValidateLanguage = () => registry.locales.language

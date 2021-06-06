@@ -21,9 +21,8 @@ export const Form: React.FC<FormProps> = ({
   // @ts-ignore
   const lang = ConfigProvider.getContext()?.locale?.momentLocale
   useMemo(() => {
-    if (getValidateLocaleIOSCode(lang)) {
-      setValidateLanguage(lang)
-    }
+    const validateLanguage = getValidateLocaleIOSCode(lang);
+    setValidateLanguage(validateLanguage)
   }, [lang])
 
   return (
