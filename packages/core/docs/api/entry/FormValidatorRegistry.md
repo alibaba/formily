@@ -13,7 +13,7 @@ order: 6
 #### 签名
 
 ```ts
-interface setValidationLanguage {
+interface setValidateLanguage{
   (language: string): void
 }
 ```
@@ -21,7 +21,7 @@ interface setValidationLanguage {
 #### 用例
 
 ```ts
-import { setValidationLanguage } from '@formily/core'
+import { setValidateLanguage} from '@formily/core'
 
 setValidationLanguage('en-US')
 
