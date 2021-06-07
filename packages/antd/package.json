@@ -12,6 +12,7 @@
     "dist/*",
     "esm/*.js",
     "lib/*.js",
+    "src/*.ts",
     "*.less"
   ],
   "repository": {
