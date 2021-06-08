@@ -17,10 +17,11 @@ const ElCheckboxGroup = getComponentByTag<CheckboxGroupProps>(
 )
 
 const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
-  setup(empty, { attrs, slots }) {
+  props: ['options'],
+  setup(customProps, { attrs, slots, listeners }) {
     return () => {
       const props = attrs as unknown as CheckboxGroupProps
-      const options = props.options || []
+      const options = customProps.options || []
       const children =
         options.length !== 0
           ? {
@@ -45,6 +46,7 @@ const CheckboxGroupOption = defineComponent<CheckboxGroupProps>({
             value: props.value || [],
             ...props,
           },
+          on: listeners,
         },
         children
       )

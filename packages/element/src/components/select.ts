@@ -15,10 +15,11 @@ const ElSelect = getComponentByTag('el-select')
 const ElOption = getComponentByTag('el-option')
 
 const SelectOption = defineComponent<SelectProps>({
-  setup(empty, { attrs, slots }) {
+  props: ['options'],
+  setup(customProps, { attrs, slots, listeners }) {
     return () => {
       const props = attrs as unknown as SelectProps
-      const options = props.options || []
+      const options = customProps.options || []
       const children =
         options.length !== 0
           ? {
@@ -36,7 +37,7 @@ const SelectOption = defineComponent<SelectProps>({
                 }),
             }
           : slots
-      return h(ElSelect, { props }, children)
+      return h(ElSelect, { props, attrs, on: listeners }, children)
     }
   },
 })

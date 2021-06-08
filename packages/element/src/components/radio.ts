@@ -21,10 +21,11 @@ const ElRadioGroup = getComponentByTag('el-radio-group', { change: 'input' })
 const ElRadio = getComponentByTag('el-radio')
 
 const RadioGroupOption = defineComponent<RadioGroupProps>({
-  setup(empty, { attrs, slots }) {
+  props: ['options'],
+  setup(customProps, { attrs, slots, listeners }) {
     return () => {
       const props = attrs as unknown as RadioGroupProps
-      const options = props.options || []
+      const options = customProps.options || []
       const children =
         options.length !== 0
           ? {
@@ -59,6 +60,7 @@ const RadioGroupOption = defineComponent<RadioGroupProps>({
             value: props.value || [],
             props,
           },
+          on: listeners,
         },
         children
       )

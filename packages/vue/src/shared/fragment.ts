@@ -31,7 +31,7 @@ if (isVue2) {
   FragmentComponent = defineComponent({
     name: 'Fragment',
     setup(props: Record<string, any>, { slots, attrs }) {
-      return () => slots?.default(attrs)
+      return () => slots?.default?.(attrs)
     },
   })
 }

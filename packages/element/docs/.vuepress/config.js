@@ -38,6 +38,7 @@ module.exports = {
         'form-button-group',
         'array-table',
         'space',
+        'select',
       ],
     },
     lastUpdated: 'Last Updated',
