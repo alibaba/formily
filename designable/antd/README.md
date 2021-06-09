@@ -1,4 +1,4 @@
-# @formily/antd
+# @formily/designable-antd
 
 ### Install
 
