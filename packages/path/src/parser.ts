@@ -244,19 +244,22 @@ export class Parser extends Tokenizer {
       .replace(
         /\[\s*([\+\-\*\/])?\s*([^,\]\s]*)\s*\]/,
         (match, operator, target) => {
-          if (operator) {
-            if (target) {
-              return calculate(this.relative, target, operator)
+          if (this.relative !== undefined) {
+            if (operator) {
+              if (target) {
+                return calculate(this.relative, target, operator)
+              } else {
+                return calculate(this.relative, 1, operator)
+              }
             } else {
-              return calculate(this.relative, 1, operator)
-            }
-          } else {
-            if (target) {
-              return calculate(this.relative, target, '+')
-            } else {
-              return String(this.relative)
+              if (target) {
+                return calculate(this.relative, target, '+')
+              } else {
+                return String(this.relative)
+              }
             }
           }
+          return match
         }
       )
       .replace(/\s*\.\s*/g, '')
