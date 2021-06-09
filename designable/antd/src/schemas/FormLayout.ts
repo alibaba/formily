@@ -1,0 +1,97 @@
+import { ISchema } from '@formily/react'
+
+export const FormLayout: ISchema = {
+  type: 'object',
+  properties: {
+    labelCol: {
+      type: 'number',
+      'x-decorator': 'FormItem',
+      'x-component': 'NumberPicker',
+    },
+    wrapperCol: {
+      type: 'number',
+      'x-decorator': 'FormItem',
+      'x-component': 'NumberPicker',
+    },
+    labelWidth: {
+      'x-decorator': 'FormItem',
+      'x-component': 'SizeInput',
+    },
+    wrapperWidth: {
+      'x-decorator': 'FormItem',
+      'x-component': 'SizeInput',
+    },
+    colon: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+    size: {
+      type: 'string',
+      enum: ['large', 'small', 'default'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Select',
+    },
+    layout: {
+      type: 'string',
+      enum: ['vertical', 'horizontal', 'inline'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Select',
+    },
+    feedbackLayout: {
+      type: 'string',
+      enum: ['loose', 'terse', 'popover', 'none'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Select',
+    },
+    tooltipLayout: {
+      type: 'string',
+      enum: ['icon', 'text'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Select',
+    },
+    labelAlign: {
+      type: 'string',
+      enum: ['left', 'right'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Select',
+    },
+    wrapperAlign: {
+      type: 'string',
+      enum: ['left', 'right'],
+      'x-decorator': 'FormItem',
+      'x-component': 'Select',
+    },
+    labelWrap: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+    wrapperWrap: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+
+    fullness: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+    inset: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+    shallow: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+    bordered: {
+      type: 'boolean',
+      'x-decorator': 'FormItem',
+      'x-component': 'Switch',
+    },
+  },
+}

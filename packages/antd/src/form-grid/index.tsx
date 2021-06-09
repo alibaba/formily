@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState, useContext } from 'react'
-import { usePrefixCls } from '../__builtins__'
+import { usePrefixCls, pickDataProps } from '../__builtins__'
 import cls from 'classnames'
 import { isValid, isNum, isBool, isEqual } from '@formily/shared'
 import { ResizeObserver } from '@juggle/resize-observer'
@@ -105,7 +105,7 @@ const useLayout = (props: ILayoutProps): ILayout => {
     }
 
     const takeColwrap = (): boolean => {
-      return colWrap?.[index] || colWrap as any || true
+      return colWrap?.[index] || (colWrap as any) || true
     }
 
     const takeMinWidth = () => {
@@ -247,14 +247,8 @@ export const useGridSpan = (gridSpan = 1) => {
   if (!isValid(params)) {
     return gridSpan
   }
-  const {
-    colWrap,
-    columns,
-    clientWidth,
-    minWidth,
-    columnGap,
-    maxColumns,
-  } = params
+  const { colWrap, columns, clientWidth, minWidth, columnGap, maxColumns } =
+    params
   const calc = Math.floor((clientWidth + columnGap) / (minWidth + columnGap)) // 算出实际一行最多能塞进的格子数
   if (colWrap === true) {
     if (Math.min(calc, columns) >= gridSpan) {
@@ -324,14 +318,15 @@ export const FormGrid: ComposedFormGrid = (props) => {
   }
   const { children } = props
   const normalizedProps = normalizeProps(props)
-  const { ref, formGridPrefixCls, layoutParams, styles } = useLayout(
-    normalizedProps
-  )
+  const { ref, formGridPrefixCls, layoutParams, styles } =
+    useLayout(normalizedProps)
+  const dataProps = pickDataProps(props)
   return (
     <FormGridContext.Provider
       value={{ columnGap: props.columnGap, ...layoutParams }}
     >
       <div
+        {...dataProps}
         className={cls(`${formGridPrefixCls}-layout`)}
         style={styles}
         ref={ref}

@@ -83,7 +83,6 @@ export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
     }
     return props.tab
   }
-
   return (
     <Tabs
       {...props}
@@ -96,8 +95,8 @@ export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
     >
       {tabs.map(({ props, schema, name }, key) => (
         <Tabs.TabPane
-          {...props}
           key={key}
+          {...props}
           tab={badgedTab(name, props)}
           forceRender
         >

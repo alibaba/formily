@@ -21,17 +21,26 @@
     "npm": ">=3.0.0"
   },
   "scripts": {
-    "start": "dumi dev",
     "build": "rimraf -rf lib esm dist && npm run build:cjs && npm run build:esm && npm run build:umd && ts-node copy",
     "build:cjs": "tsc --declaration",
     "build:esm": "tsc --declaration --module es2015 --outDir esm",
     "build:umd": "rollup --config",
-    "build:docs": "dumi build"
+    "start": "webpack-dev-server --config playground/webpack.dev.ts"
   },
   "devDependencies": {
-    "@umijs/plugin-sass": "^1.1.1",
-    "dumi": "^1.1.0-rc.8",
-    "@designable/core": "^0.1.4"
+    "file-loader": "^5.0.2",
+    "fs-extra": "^8.1.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^1.6.0",
+    "raw-loader": "^4.0.0",
+    "style-loader": "^1.1.3",
+    "ts-loader": "^7.0.4",
+    "typescript": "4.1.5",
+    "webpack": "^4.41.5",
+    "webpack-bundle-analyzer": "^3.9.0",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.1",
+    "@designable/react-settings-form": "^0.1.21"
   },
   "peerDependencies": {
     "@types/react": ">=16.8.0 || >=17.0.0",
@@ -39,10 +48,15 @@
     "antd": "^4.0.0",
     "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
-    "react-is": ">=16.8.0 || >=17.0.0",
-    "@designable/core": "^0.1.4"
+    "react-is": ">=16.8.0 || >=17.0.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@formily/core": "2.0.0-beta.62",
+    "@formily/react": "2.0.0-beta.62",
+    "@formily/antd": "2.0.0-beta.62",
+    "@designable/core": "^0.1.21",
+    "@designable/react": "^0.1.21"
+  },
   "publishConfig": {
     "access": "public"
   },
