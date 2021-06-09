@@ -7,7 +7,7 @@ import {
   deleteInByDestructor,
   existInByDestructor,
 } from './destructor'
-import { Segments, Node, Pattern, IRegistry, IAccessors } from './types'
+import { Segments, Node, Pattern } from './types'
 import { LRUMap } from './lru'
 import { Matcher } from './matcher'
 

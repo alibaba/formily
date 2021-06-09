@@ -99,7 +99,7 @@ export const FormTab: ComposedFormTab = observer(({ formTab, ...props }) => {
       lazyLoad={false}
     >
       {tabs.map(({ props, schema, name }, key) => (
-        <Tabs.Item {...props} key={key} tab={badgedTab(name, props)}>
+        <Tabs.Item key={key} {...props} tab={badgedTab(name, props)}>
           <RecursionField schema={schema} name={name} />
         </Tabs.Item>
       ))}
