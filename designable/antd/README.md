@@ -3,5 +3,5 @@
 ### Install
 
 ```bash
-npm install --save @formily/antd
+npm install --save @formily/designable-antd
 ```

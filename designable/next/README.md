@@ -1,7 +1,7 @@
-# @formily/antd
+# @formily/designable-next
 
 ### Install
 
 ```bash
-npm install --save @formily/antd
+npm install --save @formily/designable-next
 ```
