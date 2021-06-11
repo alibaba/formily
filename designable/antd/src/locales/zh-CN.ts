@@ -300,6 +300,7 @@ const FieldLocale = {
   },
   'x-validator': '校验规则',
   'x-reactions': '响应器规则',
+  'x-decorator': '启用容器组件',
   'x-decorator-props': {
     ...ComponentLocale,
     tab_property: '容器属性',

@@ -200,32 +200,33 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
           'x-component': 'Input.TextArea',
           'x-index': 2,
         },
-        'x-decorator': {
-          type: 'string',
-          'x-decorator': 'FormItem',
-          'x-component': FormItemSwitcher,
-          'x-index': 3,
-        },
+
         'x-validator': {
           'x-component': 'ValidatorSetter',
-          'x-index': 7,
+          'x-index': 6,
         },
         'x-reactions': {
           'x-component': 'ReactionsSetter',
-          'x-index': 8,
+          'x-index': 7,
         },
         'x-display': {
           type: 'string',
           enum: ['visible', 'hidden', 'none'],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
-          'x-index': 9,
+          'x-index': 8,
         },
         'x-pattern': {
           type: 'string',
           enum: ['editable', 'disabled', 'readOnly', 'readPretty'],
           'x-decorator': 'FormItem',
           'x-component': 'Select',
+          'x-index': 9,
+        },
+        'x-decorator': {
+          type: 'string',
+          'x-decorator': 'FormItem',
+          'x-component': FormItemSwitcher,
           'x-index': 10,
         },
         'x-component-props':
@@ -243,18 +244,18 @@ export const createDesignableField = (options: IDesignableFieldProps = {}) => {
           default: {
             'x-decorator': 'FormItem',
             'x-component': 'ValueInput',
-            'x-index': 4,
+            'x-index': 3,
           },
           enum: {
             type: 'array',
             'x-component': 'DataSourceSetter',
-            'x-index': 5,
+            'x-index': 4,
           },
           required: {
             type: 'boolean',
             'x-decorator': 'FormItem',
             'x-component': 'Switch',
-            'x-index': 6,
+            'x-index': 5,
           },
         },
       }
