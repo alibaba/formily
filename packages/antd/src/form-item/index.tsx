@@ -209,7 +209,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
         }
       }}
     >
-      {label !== undefined && (
+      {label && (
         <div
           className={cls({
             [`${prefixCls}-label`]: true,
@@ -240,7 +240,7 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
               </Tooltip>
             </span>
           )}
-          {label && (
+          {colon && (
             <span className={cls(`${prefixCls}-colon`)}>
               {colon ? ':' : ''}
             </span>
@@ -251,7 +251,8 @@ export const BaseItem: React.FC<IFormItemProps> = (props) => {
       <div
         className={cls({
           [`${prefixCls}-control`]: true,
-          [`${prefixCls}-item-col-${wrapperCol}`]: enableCol && !!wrapperCol,
+          [`${prefixCls}-item-col-${wrapperCol}`]:
+            enableCol && !!wrapperCol && label,
         })}
       >
         <div className={cls(`${prefixCls}-control-content`)}>
